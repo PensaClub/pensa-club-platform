@@ -110,6 +110,18 @@
   background: linear-gradient(90deg, #059669, #10b981);
 }
 
+.activity-type-event::before {
+  background: linear-gradient(90deg, #f59e0b, #fbbf24);
+}
+
+.activity-type-trip::before {
+  background: linear-gradient(90deg, #8b5cf6, #a78bfa);
+}
+
+.activity-type-course::before {
+  background: linear-gradient(90deg, #06b6d4, #67e8f9);
+}
+
 .general-activity-card:hover {
   transform: translateY(-10px);
   box-shadow: 0 25px 70px rgba(0, 0, 0, 0.12);
@@ -127,6 +139,23 @@
   font-size: 2rem;
   margin-bottom: 2rem;
   align-self: center;
+  position: relative;
+}
+
+.general-activity-featured-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: #f59e0b;
+  color: white;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
 }
 
 .general-activity-content {
@@ -140,6 +169,19 @@
   color: #1e293b;
   margin: 0 0 1.5rem 0;
   line-height: 1.3;
+}
+
+.general-activity-type-badge {
+  background: rgba(99, 102, 241, 0.1);
+  color: #6366f1;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  text-align: center;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  display: inline-block;
 }
 
 .general-activity-details {
@@ -173,6 +215,24 @@
   font-size: 1.1rem;
 }
 
+.general-activity-duration {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+  border-radius: 15px;
+  border: 1px solid #a5b4fc;
+  color: #3730a3;
+  font-weight: 600;
+}
+
+.general-activity-duration svg {
+  color: #6366f1;
+  font-size: 1.1rem;
+}
+
 .general-activity-instructor {
   display: flex;
   align-items: center;
@@ -189,6 +249,37 @@
 .general-activity-instructor svg {
   color: #d97706;
   font-size: 1.1rem;
+}
+
+.general-activity-location {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+  border-radius: 15px;
+  border: 1px solid #c4b5fd;
+  color: #7c3aed;
+  font-weight: 600;
+}
+
+.general-activity-location svg {
+  color: #8b5cf6;
+  font-size: 1.1rem;
+}
+
+.general-activity-price {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, #fef3c7, #fed7aa);
+  border-radius: 15px;
+  border: 1px solid #fbbf24;
+  color: #92400e;
+  font-weight: 600;
 }
 
 .general-activity-description {
@@ -218,6 +309,42 @@
 
 .general-activity-participants svg {
   color: #3b82f6;
+  font-size: 1.1rem;
+}
+
+.general-activity-highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.general-highlight-tag {
+  background: rgba(99, 102, 241, 0.1);
+  color: #6366f1;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+}
+
+.general-activity-age-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, #fef7ed, #fed7aa);
+  border-radius: 15px;
+  border: 1px solid #fdba74;
+  color: #9a3412;
+  font-weight: 600;
+}
+
+.general-activity-age-group svg {
+  color: #ea580c;
   font-size: 1.1rem;
 }
 
@@ -347,6 +474,12 @@
   font-weight: 600;
   line-height: 1.3;
   margin-bottom: 0.5rem;
+}
+
+.general-schedule-type {
+  font-size: 0.8rem;
+  text-align: center;
+  margin-top: 0.25rem;
 }
 
 .general-schedule-participants {
@@ -710,49 +843,4 @@
   .general-weekly-schedule {
     padding: 2rem;
   }
-}
-/* Добавки към существуващия CSS */
-
-.activity-type-event {
-  border-left: 4px solid #f59e0b !important;
-}
-
-.activity-type-trip {
-  border-left: 4px solid #8b5cf6 !important;
-}
-
-.activity-type-course {
-  border-left: 4px solid #06b6d4 !important;
-}
-
-.general-activity-type-badge {
-  background: rgba(99, 102, 241, 0.1);
-  color: #6366f1;
-  padding: 0.25rem 0.75rem;
-  border-radius: 20px;
-  font-size: 0.8rem;
-  font-weight: 500;
-  margin-bottom: 1rem;
-  text-align: center;
-  border: 1px solid rgba(99, 102, 241, 0.2);
-}
-
-.general-activity-location,
-.general-activity-price {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  padding: 1rem;
-  background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
-  border-radius: 15px;
-  border: 1px solid #c4b5fd;
-  color: #7c3aed;
-  font-weight: 600;
-}
-
-.general-schedule-type {
-  font-size: 0.8rem;
-  text-align: center;
-  margin-top: 0.25rem;
 }

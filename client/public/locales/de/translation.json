@@ -3209,6 +3209,7 @@
       "navigation": {
         "title": "Navigation",
         "home": "Start",
+        "pensionersServices": "Seniorendienste",
         "aboutClub": "Über den Club",
         "activities": "Aktivitäten",
         "events": "Veranstaltungen",
@@ -4061,6 +4062,127 @@
       "noArticles": "Keine Artikel verfügbar",
       "errors": {
         "loadingArticles": "Fehler beim Laden der Artikel:"
+      }
+    },
+    "pensioners": {
+      "sectionTitle": "Seniorendienstleistungen",
+      "sectionSubtitle": "Spezialisierte Programme und Dienstleistungen, die auf die Bedürfnisse älterer Menschen zugeschnitten sind",
+      "tabs": {
+        "healthServices": "Gesundheitsdienste",
+        "supportServices": "Unterstützungsdienste",
+        "accessibility": "Barrierefreiheit",
+        "specialPrograms": "Spezielle Programme",
+        "ageSpecificNeeds": "Altersspezifische Bedürfnisse"
+      },
+      "healthServices": {
+        "basicServices": "Grundlegende Gesundheitsdienste",
+        "regularCheckups": {
+          "title": "Regelmäßige Untersuchungen",
+          "description": "Regelmäßige Gesundheitsuntersuchungen zur Früherkennung von Problemen"
+        },
+        "bloodPressureMonitoring": {
+          "title": "Blutdrucküberwachung",
+          "description": "Regelmäßige Messung und Überwachung des Blutdrucks"
+        },
+        "healthLectures": {
+          "title": "Gesundheitsvorträge"
+        },
+        "medicalPartners": {
+          "title": "Medizinische Partner"
+        },
+        "emergencyProtocol": {
+          "title": "Notfallprotokoll"
+        }
+      },
+      "supportServices": {
+        "homeVisits": {
+          "title": "Hausbesuche",
+          "description": "Regelmäßige Besuche von Freiwilligen in den Häusern der Mitglieder"
+        },
+        "shoppingAssistance": {
+          "title": "Einkaufshilfe",
+          "description": "Unterstützung beim täglichen Einkauf und Lebensmittellieferung"
+        },
+        "documentHelp": {
+          "title": "Dokumentenhilfe",
+          "description": "Unterstützung beim Ausfüllen von Formularen und Verwaltungsverfahren"
+        },
+        "companionship": {
+          "title": "Gesellschaft und Kommunikation",
+          "description": "Regelmäßige Kommunikation und freundliche Gesellschaft gegen Isolation"
+        },
+        "transportService": {
+          "title": "Transportdienste",
+          "description": "Begleitung zu Ärzten, Apotheken und wichtigen Orten"
+        },
+        "mealDelivery": {
+          "title": "Essenslieferung",
+          "description": "Zubereitung und Lieferung von gesunden Mahlzeiten nach Hause"
+        },
+        "cleaningHelp": {
+          "title": "Reinigungshilfe",
+          "description": "Leichte Hilfe bei Hausarbeiten und Hauswartung"
+        },
+        "techSupport": {
+          "title": "Technische Unterstützung",
+          "description": "Schulung und Hilfe bei der Nutzung von Technologien und Internet"
+        }
+      },
+      "accessibility": {
+        "wheelchairAccess": {
+          "title": "Rollstuhlzugang",
+          "description": "Vollständiger Zugang für Menschen mit Mobilitätsbeeinträchtigungen"
+        },
+        "elevatorAccess": {
+          "title": "Aufzugszugang",
+          "description": "Aufzug für den Zugang zu allen Stockwerken des Gebäudes"
+        },
+        "hearingLoop": {
+          "title": "Hörschleife",
+          "description": "Assistive Technologie für Menschen mit Hörproblemen"
+        },
+        "largeTextMaterials": {
+          "title": "Großdruck-Materialien",
+          "description": "Druckmaterialien mit vergrößerter Schrift für leichteres Lesen"
+        },
+        "handrails": {
+          "title": "Handläufe",
+          "description": "Handläufe an Treppen und Korridoren für die Sicherheit"
+        },
+        "nonSlipFloors": {
+          "title": "Rutschfeste Böden",
+          "description": "Spezielle Bodenbeläge zur Sturzprävention"
+        },
+        "goodLighting": {
+          "title": "Gute Beleuchtung",
+          "description": "Ausreichende und hochwertige Beleuchtung in allen Räumen"
+        },
+        "restingAreas": {
+          "title": "Ruhebereiche",
+          "description": "Bequeme Sitz- und Ruheplätze in verschiedenen Bereichen"
+        }
+      },
+      "specialPrograms": {
+        "memoryActivities": {
+          "title": "Gedächtnisaktivitäten"
+        },
+        "intergenerationalPrograms": {
+          "title": "Generationsübergreifende Programme"
+        },
+        "volunteerPrograms": {
+          "title": "Freiwilligenprogramme"
+        },
+        "mentalHealthSupport": {
+          "title": "Unterstützung für psychische Gesundheit"
+        }
+      },
+      "ageSpecificNeeds": {
+        "lowImpactActivities": {
+          "title": "Niedrig-Impact-Aktivitäten"
+        },
+        "nutritionSupport": {
+          "title": "Ernährungsunterstützung"
+        }
       }
     },
     "AllClubs": {
@@ -7523,67 +7645,7 @@
         "linkCopied": "Link in die Zwischenablage kopiert!"
       }
     },
-    "SportsGallery": {
-      "header": {
-        "badge": "Our gallery",
-        "title": "Moments from club life",
-        "subtitle": "Browse photos and videos from our activities, events and achievements"
-      },
-      "stats": {
-        "photos": "Photos",
-        "videos": "Videos",
-        "events": "Events"
-      },
-      "searchPlaceholder": "Search in gallery...",
-      "viewModes": {
-        "grid": "Grid",
-        "masonry": "Masonry",
-        "list": "List"
-      },
-      "filters": {
-        "all": "All",
-        "gallery": "Gallery",
-        "videos": "Videos",
-        "events": "Events",
-        "achievements": "Achievements",
-        "fitness": "Fitness",
-        "aquaFitness": "Aqua fitness",
-        "yoga": "Yoga"
-      },
-      "sortOptions": {
-        "newest": "Newest",
-        "oldest": "Oldest",
-        "name": "By name"
-      },
-      "categories": {
-        "gallery": "gallery",
-        "video": "video",
-        "event": "event",
-        "award": "award",
-        "achievement": "achievement",
-        "general": "general"
-      },
-      "defaultTitles": {
-        "photo": "Photo {{number}}",
-        "video": "Video {{number}}"
-      },
-      "actions": {
-        "like": "Like",
-        "share": "Share"
-      },
-      "results": {
-        "showing": "Showing {{filtered}} of {{total}} items{{search}}",
-        "forSearch": " for \"{{term}}\""
-      },
-      "lightbox": {
-        "close": "Close",
-        "previous": "Previous",
-        "next": "Next"
-      },
-      "messages": {
-        "linkCopied": "Link copied to clipboard!"
-      }
-    },
+   
     "SportsPartners": {
       "header": {
         "badge": "Unser Netzwerk",

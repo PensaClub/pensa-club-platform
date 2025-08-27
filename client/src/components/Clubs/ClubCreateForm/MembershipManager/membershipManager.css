@@ -1711,3 +1711,164 @@
     max-width: 120px;
   }
 }
+/* ===============================
+   MEMBERSHIP FEE SUMMARY SECTION
+   =============================== */
+
+.membership-manager-fee-summary {
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  border: 2px solid #f59e0b;
+  border-radius: 15px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.membership-manager-fee-summary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #f59e0b, #d97706);
+}
+
+.membership-manager-fee-summary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(245, 158, 11, 0.2);
+}
+
+.membership-manager-fee-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.membership-manager-fee-summary-item {
+  background: white;
+  border: 2px solid #fbbf24;
+  border-radius: 15px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(251, 191, 36, 0.1);
+}
+
+.membership-manager-fee-summary-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #f59e0b, #d97706);
+}
+
+.membership-manager-fee-summary-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(245, 158, 11, 0.2);
+  border-color: #f59e0b;
+}
+
+.membership-manager-fee-summary-amount {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #92400e;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 4px rgba(146, 64, 14, 0.1);
+}
+
+.membership-manager-fee-summary-period {
+  font-size: 1rem;
+  color: #d97706;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: rgba(217, 119, 6, 0.1);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  display: inline-block;
+  border: 1px solid rgba(217, 119, 6, 0.2);
+}
+
+/* ===============================
+   RESPONSIVE DESIGN FOR FEE SUMMARY
+   =============================== */
+
+@media (max-width: 768px) {
+  .membership-manager-fee-summary {
+    padding: 1.2rem;
+  }
+  
+  .membership-manager-fee-summary-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .membership-manager-fee-summary-item {
+    padding: 1.5rem;
+  }
+  
+  .membership-manager-fee-summary-amount {
+    font-size: 1rem;
+  }
+  
+  .membership-manager-fee-summary-period {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .membership-manager-fee-summary {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .membership-manager-fee-summary-item {
+    padding: 1rem;
+  }
+  
+  .membership-manager-fee-summary-amount {
+    font-size: 1rem;
+  }
+  
+  .membership-manager-fee-summary-period {
+    font-size: 0.85rem;
+    padding: 0.2rem 0.6rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .membership-manager-fee-summary {
+    padding: 0.75rem;
+  }
+  
+  .membership-manager-fee-summary-item {
+    padding: 0.75rem;
+  }
+  
+  .membership-manager-fee-summary-amount {
+    font-size: 0.8rem;
+  }
+  
+  .membership-manager-fee-summary-period {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 350px) {
+  .membership-manager-fee-summary-amount {
+    font-size: 1.3rem;
+  }
+  
+  .membership-manager-fee-summary-period {
+    font-size: 0.75rem;
+  }
+}

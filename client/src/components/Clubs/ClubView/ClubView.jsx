@@ -42,7 +42,8 @@ import {
     faMedkit,
     faAppleAlt,
     faWalking,
-    faBicycle
+    faBicycle,
+    faUserMd
 } from '@fortawesome/free-solid-svg-icons';
 
 import './clubView.css';
@@ -76,6 +77,7 @@ export const ClubView = () => {
         { id: 'general-activities', label: t('clubs.ClubView.navigation.activities'), icon: faRunning },
         { id: 'general-events', label: t('clubs.ClubView.navigation.events'), icon: faCalendarAlt },
         { id: 'general-management', label: t('clubs.ClubView.navigation.management'), icon: faCrown },
+        { id: 'club-pensioners-specific', label: t('clubs.ClubView.navigation.pensionersServices'), icon: faUserMd },
         { id: 'general-location', label: t('clubs.ClubView.navigation.location'), icon: faMapPin },
         { id: 'general-contact', label: t('clubs.ClubView.navigation.contacts'), icon: faEnvelope },
         { id: 'cultural-hero', label: t('clubs.ClubView.navigation.home'), icon: faTheaterMasks },

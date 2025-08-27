@@ -77,13 +77,12 @@ const ActivitiesManager = ({
     requirements: '',
     equipment: []
   });
-console.log("newRegularActivity", newRegularActivity);
   const [newEvent, setNewEvent] = useState({
     title: '',
     date: '',
     time: '10:00',
     type: 'cultural',
-    participants: 0,
+    participants: '',
     description: '',
     location: '',
     organizer: '',
@@ -97,15 +96,15 @@ console.log("newRegularActivity", newRegularActivity);
   const [newTrip, setNewTrip] = useState({
     destination: '',
     date: '',
-    participants: 0,
-    price: 0,
+    participants: '',
+    price: '',
     description: ''
   });
 
   const [newCourse, setNewCourse] = useState({
     name: '',
     duration: '4 седмици',
-    participants: 0,
+    participants: '',
     instructor: '',
     description: ''
   });
@@ -215,16 +214,26 @@ console.log("newRegularActivity", newRegularActivity);
     handleRegularActivityChange('equipment', updatedEquipment);
   };
   const handleEventChange = (field, value) => {
-    setNewEvent(prev => ({ ...prev, [field]: value }));
-  };
+    setNewEvent(prev => ({ 
+        ...prev, 
+        [field]: field === 'participants' ? (value === '' ? '' : parseInt(value) || '') : value 
+    }));
+};
 
   const handleTripChange = (field, value) => {
-    setNewTrip(prev => ({ ...prev, [field]: value }));
-  };
+    setNewTrip(prev => ({ 
+        ...prev, 
+        [field]: field === 'participants' ? (value === '' ? '' : parseInt(value) || '') :
+                field === 'price' ? (value === '' ? '' : parseFloat(value) || '') : value
+    }));
+};
 
-  const handleCourseChange = (field, value) => {
-    setNewCourse(prev => ({ ...prev, [field]: value }));
-  };
+ const handleCourseChange = (field, value) => {
+    setNewCourse(prev => ({ 
+        ...prev, 
+        [field]: field === 'participants' ? (value === '' ? '' : parseInt(value) || '') : value
+    }));
+};
 
   // Handle highlights for events
   const addHighlight = () => {
@@ -430,7 +439,7 @@ console.log("newRegularActivity", newRegularActivity);
       date: '',
       time: '10:00',
       type: 'cultural',
-      participants: 0,
+      participants: '',
       description: '',
       location: '',
       organizer: '',
@@ -452,8 +461,8 @@ console.log("newRegularActivity", newRegularActivity);
     setNewTrip({
       destination: '',
       date: '',
-      participants: 0,
-      price: 0,
+      participants: '',
+      price: '',
       description: ''
     });
   };
@@ -468,7 +477,7 @@ console.log("newRegularActivity", newRegularActivity);
     setNewCourse({
       name: '',
       duration: '4 седмици',
-      participants: 0,
+      participants: '',
       instructor: '',
       description: ''
     });
@@ -1120,6 +1129,7 @@ console.log("newRegularActivity", newRegularActivity);
                     value={newEvent.participants}
                     onChange={(e) => handleEventChange('participants', parseInt(e.target.value) || 0)}
                     min="0"
+                   placeholder="Брой участници"
                   />
                 </div>
 
@@ -1304,6 +1314,7 @@ console.log("newRegularActivity", newRegularActivity);
                     value={newTrip.participants}
                     onChange={(e) => handleTripChange('participants', parseInt(e.target.value) || 0)}
                     min="0"
+                    placeholder="Брой участници"
                   />
                 </div>
 
@@ -1315,6 +1326,7 @@ console.log("newRegularActivity", newRegularActivity);
                     onChange={(e) => handleTripChange('price', parseFloat(e.target.value) || 0)}
                     min="0"
                     step="0.01"
+                    placeholder="Цена (лв./евро)"
                   />
                 </div>
               </div>
@@ -1414,6 +1426,7 @@ console.log("newRegularActivity", newRegularActivity);
                     value={newCourse.participants}
                     onChange={(e) => handleCourseChange('participants', parseInt(e.target.value) || 0)}
                     min="0"
+                    placeholder="Брой участници"
                   />
                 </div>
 

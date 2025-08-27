@@ -1473,3 +1473,82 @@
     gap: 1rem;
   }
 }
+/* Edit Form Styles */
+.members-manager-member-card.editing {
+  border-color: #6366f1;
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.2);
+}
+
+.members-manager-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.members-manager-edit-name-row {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.members-manager-edit-input,
+.members-manager-edit-select,
+.members-manager-edit-textarea {
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.members-manager-edit-input:focus,
+.members-manager-edit-select:focus,
+.members-manager-edit-textarea:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+}
+
+.members-manager-edit-textarea {
+  resize: vertical;
+  font-family: inherit;
+}
+
+.members-manager-edit-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.members-manager-edit-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.members-manager-edit-btn.save {
+  background: #10b981;
+  color: white;
+}
+
+.members-manager-edit-btn.save:hover {
+  background: #059669;
+}
+
+.members-manager-edit-btn.cancel {
+  background: #6b7280;
+  color: white;
+}
+
+.members-manager-edit-btn.cancel:hover {
+  background: #4b5563;
+}

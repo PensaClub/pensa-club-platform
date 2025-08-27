@@ -1,0 +1,526 @@
+
+
+.club-pensioners-specific {
+  padding: 4rem 0;
+  background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+  border-top: 1px solid #e2e8f0;
+}
+
+.club-pensioners-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.club-pensioners-header .section-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.club-pensioners-header .section-title svg {
+  color: #059669;
+  font-size: 2rem;
+}
+
+.club-pensioners-header .section-subtitle {
+  font-size: 1.2rem;
+  color: #64748b;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* Tabs */
+.club-pensioners-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+}
+
+.club-pensioners-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.club-pensioners-tab:hover {
+  border-color: #059669;
+  color: #059669;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(5, 150, 105, 0.15);
+}
+
+.club-pensioners-tab.active {
+  background: linear-gradient(135deg, #059669, #047857);
+  border-color: #047857;
+  color: white;
+  box-shadow: 0 8px 25px rgba(5, 150, 105, 0.3);
+}
+
+.club-pensioners-tab svg {
+  font-size: 1.1rem;
+}
+
+/* Content */
+.club-pensioners-content {
+  background: white;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+}
+
+.club-pensioners-tab-content {
+  min-height: 300px;
+}
+
+/* Sections */
+.club-pensioners-section {
+  margin-bottom: 3rem;
+}
+
+.club-pensioners-section:last-child {
+  margin-bottom: 0;
+}
+
+.club-pensioners-section-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.club-pensioners-section-title svg {
+  color: #059669;
+  font-size: 1.3rem;
+}
+
+/* Services Grid */
+.club-pensioners-services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.club-pensioners-service-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.club-pensioners-service-item:hover {
+  border-color: #059669;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(5, 150, 105, 0.1);
+}
+
+.club-pensioners-service-item .service-icon {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  color: #059669;
+  flex-shrink: 0;
+}
+
+.club-pensioners-service-item .service-content h5 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 0.5rem 0;
+}
+
+.club-pensioners-service-item .service-content p {
+  color: #64748b;
+  margin: 0;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+/* Lectures */
+.club-pensioners-lectures-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.club-pensioners-lecture-item {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.club-pensioners-lecture-item:hover {
+  border-color: #059669;
+  box-shadow: 0 4px 15px rgba(5, 150, 105, 0.1);
+}
+
+.lecture-content h5 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 1rem 0;
+}
+
+.lecture-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #f0f9ff;
+  color: #0369a1;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 1px solid #bae6fd;
+}
+
+.meta-item.next-date {
+  background: #fef3c7;
+  color: #92400e;
+  border-color: #fbbf24;
+}
+
+.meta-item.price {
+  background: #dcfce7;
+  color: #166534;
+  border-color: #bbf7d0;
+}
+
+.meta-item svg {
+  font-size: 0.75rem;
+}
+
+/* Partners */
+.club-pensioners-partners-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.club-pensioners-partner-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.club-pensioners-partner-item:hover {
+  border-color: #059669;
+  box-shadow: 0 4px 15px rgba(5, 150, 105, 0.1);
+}
+
+.partner-icon {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  color: #059669;
+  flex-shrink: 0;
+}
+
+.partner-content h5 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 1rem 0;
+}
+
+.partner-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.partner-detail {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.partner-detail svg {
+  color: #059669;
+  width: 16px;
+}
+
+.partner-discount {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #fef3c7;
+  color: #92400e;
+  padding: 0.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+.partner-discount svg {
+  color: #f59e0b;
+}
+
+/* Emergency Protocol */
+.club-pensioners-emergency-info {
+  background: #fef2f2;
+  border: 2px solid #fecaca;
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.emergency-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #fee2e2;
+  color: #dc2626;
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.emergency-badge svg {
+  color: #ef4444;
+}
+
+.emergency-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #fecaca;
+}
+
+.emergency-item:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.emergency-item svg {
+  color: #dc2626;
+  font-size: 1.1rem;
+  margin-top: 0.2rem;
+  flex-shrink: 0;
+}
+
+.emergency-item strong {
+  color: #b91c1c;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.emergency-contacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.emergency-contact {
+  background: #ddd6fe;
+  color: #5b21b6;
+  padding: 0.25rem 0.75rem;
+  border-radius: 15px;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.special-needs-list {
+  margin: 0.5rem 0 0 0;
+  padding-left: 1rem;
+}
+
+.special-needs-list li {
+  color: #7f1d1d;
+  margin-bottom: 0.25rem;
+}
+
+/* Programs */
+.club-pensioners-programs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.club-pensioners-program-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.club-pensioners-program-item:hover {
+  border-color: #059669;
+  box-shadow: 0 4px 15px rgba(5, 150, 105, 0.1);
+}
+
+.program-icon {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  color: #059669;
+  flex-shrink: 0;
+}
+
+.program-content h5 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 1rem 0;
+}
+
+.program-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.program-description {
+  color: #64748b;
+  margin: 0;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .club-pensioners-specific {
+    padding: 2rem 0;
+  }
+
+  .club-pensioners-header .section-title {
+    font-size: 2rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .club-pensioners-tabs {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .club-pensioners-tab {
+    width: 100%;
+    max-width: 300px;
+    justify-content: center;
+  }
+
+  .club-pensioners-content {
+    padding: 1.5rem;
+  }
+
+  .club-pensioners-services-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .club-pensioners-service-item,
+  .club-pensioners-partner-item,
+  .club-pensioners-program-item {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .partner-details,
+  .program-meta {
+    justify-content: center;
+  }
+
+  .lecture-meta {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .club-pensioners-header .section-title {
+    font-size: 1.6rem;
+  }
+
+  .club-pensioners-tab {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .club-pensioners-content {
+    padding: 1rem;
+  }
+
+  .club-pensioners-service-item,
+  .club-pensioners-lecture-item,
+  .club-pensioners-partner-item,
+  .club-pensioners-program-item {
+    padding: 1rem;
+  }
+
+  .emergency-item {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+  }
+
+  .emergency-contacts {
+    justify-content: center;
+  }
+}

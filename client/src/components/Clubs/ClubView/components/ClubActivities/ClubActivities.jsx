@@ -24,7 +24,8 @@ import {
   faTheaterMasks,
   faRunning,
   faCalendarDay,
-  faRoute
+  faRoute,
+  faStar
 } from '@fortawesome/free-solid-svg-icons';
 import './clubActivities.css';
 
@@ -64,7 +65,7 @@ export const ClubActivities = ({ club }) => {
     
     try {
       const date = new Date(dateString);
-      if (isNaN(date.getTime())) return ''; // Проверка за невалидна дата
+      if (isNaN(date.getTime())) return '';
       
       const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
       return dayNames[date.getDay()] || '';
@@ -74,12 +75,12 @@ export const ClubActivities = ({ club }) => {
     }
   };
 
-  // ОБЕДИНЯВАНЕ НА ВСИЧКИ ДЕЙНОСТИ със защити
+  // ОБЕДИНЯВАНЕ НА ВСИЧКИ ДЕЙНОСТИ със защити - ОБНОВЕНО ЗА НОВАТА СТРУКТУРА
   const getAllActivities = () => {
     const allActivities = [];
 
     try {
-      // Regular activities
+      // Regular activities - ОБНОВЕНО
       if (club?.activities?.regular && Array.isArray(club.activities.regular)) {
         club.activities.regular.forEach((activity, index) => {
           try {
@@ -91,7 +92,14 @@ export const ClubActivities = ({ club }) => {
                 day: getNumericDayName(activity.schedule?.dayOfWeek),
                 time: activity.schedule?.startTime || '—',
                 duration: activity.schedule?.duration || null,
-                participants: activity.capacity?.max || activity.participants || 0,
+                participants: activity.capacity?.max || 0,
+                instructor: activity.instructor || null,
+                location: activity.location || null,
+                price: activity.fee?.required ? `${activity.fee.amount} лв. / ${activity.fee.period}` : null,
+                category: activity.category || 'general',
+                requirements: activity.requirements || null,
+                equipment: activity.equipment || [],
+                ageGroup: activity.ageGroup || null,
                 id: activity.id || `regular-${index}`
               });
             }
@@ -101,7 +109,7 @@ export const ClubActivities = ({ club }) => {
         });
       }
 
-      // Events
+      // Events - ОБНОВЕНО
       if (club?.activities?.events && Array.isArray(club.activities.events)) {
         club.activities.events.forEach((event, index) => {
           try {
@@ -115,6 +123,13 @@ export const ClubActivities = ({ club }) => {
                 time: event.time || '—',
                 participants: event.participants || 0,
                 instructor: event.organizer || null,
+                location: event.location || null,
+                price: event.price || null,
+                featured: event.featured || false,
+                highlights: event.highlights || [],
+                images: event.images || [],
+                videos: event.videos || [],
+                date: event.date || null,
                 id: event.id || `event-${index}`
               });
             }
@@ -124,7 +139,7 @@ export const ClubActivities = ({ club }) => {
         });
       }
 
-      // Trips
+      // Trips - ОБНОВЕНО
       if (club?.activities?.trips && Array.isArray(club.activities.trips)) {
         club.activities.trips.forEach((trip, index) => {
           try {
@@ -138,6 +153,9 @@ export const ClubActivities = ({ club }) => {
                 time: '—',
                 participants: trip.participants || 0,
                 instructor: null,
+                location: trip.destination,
+                price: trip.price ? `${trip.price} лв.` : null,
+                date: trip.date || null,
                 id: trip.id || `trip-${index}`
               });
             }
@@ -147,7 +165,7 @@ export const ClubActivities = ({ club }) => {
         });
       }
 
-      // Courses
+      // Courses - ОБНОВЕНО  
       if (club?.activities?.courses && Array.isArray(club.activities.courses)) {
         club.activities.courses.forEach((course, index) => {
           try {
@@ -160,6 +178,10 @@ export const ClubActivities = ({ club }) => {
                 day: '—',
                 time: '—',
                 participants: course.participants || 0,
+                instructor: course.instructor || null,
+                location: null,
+                price: null,
+                duration: course.duration || null,
                 id: course.id || `course-${index}`
               });
             }
@@ -176,7 +198,6 @@ export const ClubActivities = ({ club }) => {
   };
 
   const activities = getAllActivities();
-
 
   // Ако няма дейности, не показваме компонента
   if (!activities || activities.length === 0) {
@@ -223,7 +244,7 @@ export const ClubActivities = ({ club }) => {
                activityName.includes('walk') || activityName.includes('tourism') || activityName.includes('sport')) {
       return faRunning;
     } else {
-      return faHeart; // За общи дейности
+      return faHeart;
     }
   };
 
@@ -307,7 +328,6 @@ export const ClubActivities = ({ club }) => {
     
     setFormStatus('sending');
 
-    // Симулация на изпращане - в реалност би се изпратил към сървър
     const recipientEmail = club?.contacts?.basic?.email || club?.contacts?.email;
     
     if (recipientEmail) {
@@ -387,6 +407,11 @@ ${registrationForm.firstName} ${registrationForm.lastName}`);
             <div key={activity.id || index} className={`general-activity-card activity-type-${activity.type}`}>
               <div className="general-activity-icon">
                 <FontAwesomeIcon icon={getActivityIcon(activity)} />
+                {activity.featured && (
+                  <div className="general-activity-featured-badge">
+                    <FontAwesomeIcon icon={faStar} />
+                  </div>
+                )}
               </div>
               
               <div className="general-activity-content">
@@ -401,17 +426,32 @@ ${registrationForm.firstName} ${registrationForm.lastName}`);
                 </div>
                 
                 <div className="general-activity-details">
-                  <div className="general-activity-schedule">
-                    <div className="general-schedule-item">
-                      <FontAwesomeIcon icon={faCalendarWeek} />
-                      <span>{getDayInBulgarian(activity.day)}</span>
+                  {/* Schedule - само за дейности с ден и час */}
+                  {(activity.day !== '—' || activity.time !== '—') && (
+                    <div className="general-activity-schedule">
+                      {activity.day !== '—' && (
+                        <div className="general-schedule-item">
+                          <FontAwesomeIcon icon={faCalendarWeek} />
+                          <span>{getDayInBulgarian(activity.day)}</span>
+                        </div>
+                      )}
+                      {activity.time !== '—' && (
+                        <div className="general-schedule-item">
+                          <FontAwesomeIcon icon={faClock} />
+                          <span>{activity.time}</span>
+                          {activity.duration && <small>({activity.duration} мин)</small>}
+                        </div>
+                      )}
                     </div>
-                    <div className="general-schedule-item">
+                  )}
+                  
+                  {/* За курсове показваме продължителността */}
+                  {activity.type === 'course' && activity.duration && (
+                    <div className="general-activity-duration">
                       <FontAwesomeIcon icon={faClock} />
-                      <span>{activity.time || '—'}</span>
-                      {activity.duration && <small>({activity.duration} мин)</small>}
+                      <span>Продължителност: {activity.duration}</span>
                     </div>
-                  </div>
+                  )}
                   
                   {activity.instructor && (
                     <div className="general-activity-instructor">
@@ -437,10 +477,30 @@ ${registrationForm.firstName} ${registrationForm.lastName}`);
                     <p className="general-activity-description">{activity.description}</p>
                   )}
                   
-                  <div className="general-activity-participants">
-                    <FontAwesomeIcon icon={faUsers} />
-                    <span>{activity.participants || 0} участници</span>
-                  </div>
+                  {/* Показваме участниците само ако има стойност > 0 */}
+                  {activity.participants > 0 && (
+                    <div className="general-activity-participants">
+                      <FontAwesomeIcon icon={faUsers} />
+                      <span>{activity.participants} участници</span>
+                    </div>
+                  )}
+
+                  {/* За събития показваме highlights ако има */}
+                  {activity.type === 'event' && activity.highlights && activity.highlights.length > 0 && (
+                    <div className="general-activity-highlights">
+                      {activity.highlights.slice(0, 3).map((highlight, i) => (
+                        <span key={i} className="general-highlight-tag">{highlight}</span>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* За редовни дейности показваме възрастова група */}
+                  {activity.type === 'regular' && activity.ageGroup && (
+                    <div className="general-activity-age-group">
+                      <FontAwesomeIcon icon={faUsers} />
+                      <span>Възраст: {activity.ageGroup.min}-{activity.ageGroup.max} г.</span>
+                    </div>
+                  )}
                 </div>
               </div>
               

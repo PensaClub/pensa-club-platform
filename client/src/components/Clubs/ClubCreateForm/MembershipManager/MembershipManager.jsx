@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
@@ -19,7 +19,8 @@ import {
   faGavel,
   faHandshake,
   faAward,
-  faSpinner
+  faSpinner,
+  faCoins
 } from '@fortawesome/free-solid-svg-icons';
 import './membershipManager.css';
 
@@ -33,9 +34,16 @@ const MembershipManager = ({
   const [editingRole, setEditingRole] = useState(null);
   const [editingFee, setEditingFee] = useState(null);
   const [newRole, setNewRole] = useState({ name: '', description: '', responsibilities: '' });
-  const [newFee, setNewFee] = useState({ type: '', amount: '', period: 'yearly', description: '' });
-const [newRequirement, setNewRequirement] = useState('');
-const [newBenefit, setNewBenefit] = useState('');
+  const [newFee, setNewFee] = useState({ type: '', amount: '', period: 'yearly', description: '', currency: 'BGN' });
+  const [newRequirement, setNewRequirement] = useState('');
+  const [newBenefit, setNewBenefit] = useState('');
+
+  // Currency options
+  const currencyOptions = [
+    { value: 'BGN', label: 'лв. (BGN)', symbol: 'лв.' },
+    { value: 'EUR', label: '€ (EUR)', symbol: '€' }
+  ];
+
   // Membership types
   const membershipTypes = [
     { value: 'open', label: t('clubForm.membership.types.open'), icon: faHandshake },
@@ -87,6 +95,37 @@ const [newBenefit, setNewBenefit] = useState('');
     { value: 'yearly', label: t('clubForm.membership.fees.periods.yearly') },
     { value: 'onetime', label: t('clubForm.membership.fees.periods.onetime') }
   ];
+
+  // Auto-update membershipFee when fees list changes
+  useEffect(() => {
+    updateMembershipFee();
+  }, [membershipData?.fees?.list]);
+
+  // Function to update membershipFee based on fees.list
+  const updateMembershipFee = () => {
+    if (!membershipData?.fees?.list) return;
+
+    const monthlyFee = membershipData.fees.list.find(fee => fee.period === 'monthly');
+    const yearlyFee = membershipData.fees.list.find(fee => fee.period === 'yearly');
+    
+    // Get currency from the most recent fee or default to BGN
+    const latestFee = membershipData.fees.list[membershipData.fees.list.length - 1];
+    const currency = latestFee?.currency || 'BGN';
+
+    const updatedMembershipFee = {
+      monthly: monthlyFee ? parseFloat(monthlyFee.amount) || 0 : 0,
+      yearly: yearlyFee ? parseFloat(yearlyFee.amount) || 0 : 0,
+      currency: currency
+    };
+
+    // Only update if values have changed
+    const currentFee = membershipData?.membershipFee || {};
+    if (currentFee.monthly !== updatedMembershipFee.monthly ||
+        currentFee.yearly !== updatedMembershipFee.yearly ||
+        currentFee.currency !== updatedMembershipFee.currency) {
+      handleFieldChange('membershipFee', updatedMembershipFee);
+    }
+  };
 
   // Handle field changes
   const handleFieldChange = (field, value) => {
@@ -161,7 +200,7 @@ const [newBenefit, setNewBenefit] = useState('');
     updatedFees.push({ ...newFee, id: Date.now() });
     
     handleFieldChange('fees.list', updatedFees);
-    setNewFee({ type: '', amount: '', period: 'yearly', description: '' });
+    setNewFee({ type: '', amount: '', period: 'yearly', description: '', currency: 'BGN' });
   };
 
   // Remove fee
@@ -170,38 +209,40 @@ const [newBenefit, setNewBenefit] = useState('');
     updatedFees.splice(feeIndex, 1);
     handleFieldChange('fees.list', updatedFees);
   };
-const addRequirement = () => {
-  if (!newRequirement.trim()) return;
-  
-  const updatedRequirements = [...(membershipData?.requirements || [])];
-  updatedRequirements.push(newRequirement.trim());
-  
-  handleFieldChange('requirements', updatedRequirements);
-  setNewRequirement('');
-};
 
-const removeRequirement = (index) => {
-  const updatedRequirements = [...(membershipData?.requirements || [])];
-  updatedRequirements.splice(index, 1);
-  handleFieldChange('requirements', updatedRequirements);
-};
+  const addRequirement = () => {
+    if (!newRequirement.trim()) return;
+    
+    const updatedRequirements = [...(membershipData?.requirements || [])];
+    updatedRequirements.push(newRequirement.trim());
+    
+    handleFieldChange('requirements', updatedRequirements);
+    setNewRequirement('');
+  };
 
-// Benefits functions
-const addBenefit = () => {
-  if (!newBenefit.trim()) return;
-  
-  const updatedBenefits = [...(membershipData?.benefits || [])];
-  updatedBenefits.push(newBenefit.trim());
-  
-  handleFieldChange('benefits', updatedBenefits);
-  setNewBenefit('');
-};
+  const removeRequirement = (index) => {
+    const updatedRequirements = [...(membershipData?.requirements || [])];
+    updatedRequirements.splice(index, 1);
+    handleFieldChange('requirements', updatedRequirements);
+  };
 
-const removeBenefit = (index) => {
-  const updatedBenefits = [...(membershipData?.benefits || [])];
-  updatedBenefits.splice(index, 1);
-  handleFieldChange('benefits', updatedBenefits);
-};
+  // Benefits functions
+  const addBenefit = () => {
+    if (!newBenefit.trim()) return;
+    
+    const updatedBenefits = [...(membershipData?.benefits || [])];
+    updatedBenefits.push(newBenefit.trim());
+    
+    handleFieldChange('benefits', updatedBenefits);
+    setNewBenefit('');
+  };
+
+  const removeBenefit = (index) => {
+    const updatedBenefits = [...(membershipData?.benefits || [])];
+    updatedBenefits.splice(index, 1);
+    handleFieldChange('benefits', updatedBenefits);
+  };
+
   return (
     <div className="membership-manager">
       
@@ -215,6 +256,34 @@ const removeBenefit = (index) => {
           {t('clubForm.membership.subtitle')}
         </p>
       </div>
+
+      {/* Membership Fee Summary - НОВА СЕКЦИЯ */}
+      {(membershipData?.membershipFee?.monthly > 0 || membershipData?.membershipFee?.yearly > 0) && (
+        <div className="membership-manager-fee-summary">
+          <h4 className="membership-manager-section-title">
+            <FontAwesomeIcon icon={faCoins} />
+            Членски внос (обобщение)
+          </h4>
+          <div className="membership-manager-fee-summary-grid">
+            {membershipData.membershipFee.monthly > 0 && (
+              <div className="membership-manager-fee-summary-item">
+                <div className="membership-manager-fee-summary-amount">
+                  {membershipData.membershipFee.monthly} {currencyOptions.find(c => c.value === membershipData.membershipFee.currency)?.symbol || 'лв.'}
+                </div>
+                <div className="membership-manager-fee-summary-period">месечно</div>
+              </div>
+            )}
+            {membershipData.membershipFee.yearly > 0 && (
+              <div className="membership-manager-fee-summary-item">
+                <div className="membership-manager-fee-summary-amount">
+                  {membershipData.membershipFee.yearly} {currencyOptions.find(c => c.value === membershipData.membershipFee.currency)?.symbol || 'лв.'}
+                </div>
+                <div className="membership-manager-fee-summary-period">годишно</div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Membership Type */}
       <div className="membership-manager-section">
@@ -317,308 +386,311 @@ const removeBenefit = (index) => {
 
         </div>
       </div>
+
       {/* Membership Demographics */}
-<div className="membership-manager-section">
-  <h4 className="membership-manager-section-title">
-    <FontAwesomeIcon icon={faUsers} />
-    {t('clubForm.membership.demographicsSection')}
-  </h4>
+      <div className="membership-manager-section">
+        <h4 className="membership-manager-section-title">
+          <FontAwesomeIcon icon={faUsers} />
+          {t('clubForm.membership.demographicsSection')}
+        </h4>
 
-  {/* Total Members */}
-  <div className="membership-manager-demographics-header">
-    <div className="membership-manager-form-group">
-      <label className="membership-manager-form-label">
-        {t('clubForm.membership.fields.totalMembers')}
-      </label>
-      <input
-        type="number"
-        className="membership-manager-form-input"
-        placeholder="0"
-        value={membershipData?.totalMembers || ''}
-        onChange={(e) => handleFieldChange('totalMembers', parseInt(e.target.value) || 0)}
-        disabled={disabled}
-        min="0"
-      />
-      <div className="membership-manager-form-help">
-        {t('clubForm.membership.help.totalMembers')}
+        {/* Total Members */}
+        <div className="membership-manager-demographics-header">
+          <div className="membership-manager-form-group">
+            <label className="membership-manager-form-label">
+              {t('clubForm.membership.fields.totalMembers')}
+            </label>
+            <input
+              type="number"
+              className="membership-manager-form-input"
+              placeholder="0"
+              value={membershipData?.totalMembers || ''}
+              onChange={(e) => handleFieldChange('totalMembers', parseInt(e.target.value) || 0)}
+              disabled={disabled}
+              min="0"
+            />
+            <div className="membership-manager-form-help">
+              {t('clubForm.membership.help.totalMembers')}
+            </div>
+          </div>
+        </div>
+
+        {/* Age Groups Distribution */}
+        <div className="membership-manager-age-groups">
+          <h5 className="membership-manager-subsection-title">
+            <FontAwesomeIcon icon={faCalendarAlt} />
+            {t('clubForm.membership.ageGroups.title')}
+          </h5>
+          
+          <div className="membership-manager-age-groups-grid">
+            
+            {/* Under 60 */}
+            <div className="membership-manager-age-group-item">
+              <div className="membership-manager-age-group-header">
+                <div className="membership-manager-age-group-icon under-60">
+                  <FontAwesomeIcon icon={faUserGraduate} />
+                </div>
+                <div className="membership-manager-age-group-info">
+                  <h6>{t('clubForm.membership.ageGroups.under60')}</h6>
+                  <p>{t('clubForm.membership.ageGroups.under60Desc')}</p>
+                </div>
+              </div>
+              <div className="membership-manager-age-group-input">
+                <input
+                  type="number"
+                  className="membership-manager-form-input compact"
+                  placeholder="0"
+                  value={membershipData?.ageGroups?.['под-60'] || ''}
+                  onChange={(e) => handleFieldChange('ageGroups.под-60', parseInt(e.target.value) || 0)}
+                  disabled={disabled}
+                  min="0"
+                />
+                <span className="membership-manager-age-group-label">
+                  {t('clubForm.membership.ageGroups.members')}
+                </span>
+              </div>
+            </div>
+
+            {/* 60-70 */}
+            <div className="membership-manager-age-group-item">
+              <div className="membership-manager-age-group-header">
+                <div className="membership-manager-age-group-icon age-60-70">
+                  <FontAwesomeIcon icon={faUserTie} />
+                </div>
+                <div className="membership-manager-age-group-info">
+                  <h6>{t('clubForm.membership.ageGroups.age60to70')}</h6>
+                  <p>{t('clubForm.membership.ageGroups.age60to70Desc')}</p>
+                </div>
+              </div>
+              <div className="membership-manager-age-group-input">
+                <input
+                  type="number"
+                  className="membership-manager-form-input compact"
+                  placeholder="0"
+                  value={membershipData?.ageGroups?.['60-70'] || ''}
+                  onChange={(e) => handleFieldChange('ageGroups.60-70', parseInt(e.target.value) || 0)}
+                  disabled={disabled}
+                  min="0"
+                />
+                <span className="membership-manager-age-group-label">
+                  {t('clubForm.membership.ageGroups.members')}
+                </span>
+              </div>
+            </div>
+
+            {/* 70-80 */}
+            <div className="membership-manager-age-group-item">
+              <div className="membership-manager-age-group-header">
+                <div className="membership-manager-age-group-icon age-70-80">
+                  <FontAwesomeIcon icon={faUserShield} />
+                </div>
+                <div className="membership-manager-age-group-info">
+                  <h6>{t('clubForm.membership.ageGroups.age70to80')}</h6>
+                  <p>{t('clubForm.membership.ageGroups.age70to80Desc')}</p>
+                </div>
+              </div>
+              <div className="membership-manager-age-group-input">
+                <input
+                  type="number"
+                  className="membership-manager-form-input compact"
+                  placeholder="0"
+                  value={membershipData?.ageGroups?.['70-80'] || ''}
+                  onChange={(e) => handleFieldChange('ageGroups.70-80', parseInt(e.target.value) || 0)}
+                  disabled={disabled}
+                  min="0"
+                />
+                <span className="membership-manager-age-group-label">
+                  {t('clubForm.membership.ageGroups.members')}
+                </span>
+              </div>
+            </div>
+
+            {/* 80+ */}
+            <div className="membership-manager-age-group-item">
+              <div className="membership-manager-age-group-header">
+                <div className="membership-manager-age-group-icon age-80-plus">
+                  <FontAwesomeIcon icon={faCrown} />
+                </div>
+                <div className="membership-manager-age-group-info">
+                  <h6>{t('clubForm.membership.ageGroups.age80plus')}</h6>
+                  <p>{t('clubForm.membership.ageGroups.age80plusDesc')}</p>
+                </div>
+              </div>
+              <div className="membership-manager-age-group-input">
+                <input
+                  type="number"
+                  className="membership-manager-form-input compact"
+                  placeholder="0"
+                  value={membershipData?.ageGroups?.['80+'] || ''}
+                  onChange={(e) => handleFieldChange('ageGroups.80+', parseInt(e.target.value) || 0)}
+                  disabled={disabled}
+                  min="0"
+                />
+                <span className="membership-manager-age-group-label">
+                  {t('clubForm.membership.ageGroups.members')}
+                </span>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Age Groups Summary */}
+          <div className="membership-manager-age-groups-summary">
+            <div className="membership-manager-summary-item">
+              <span className="membership-manager-summary-label">
+                {t('clubForm.membership.ageGroups.totalCalculated')}:
+              </span>
+              <span className="membership-manager-summary-value">
+                {(membershipData?.ageGroups?.['под-60'] || 0) + 
+                 (membershipData?.ageGroups?.['60-70'] || 0) + 
+                 (membershipData?.ageGroups?.['70-80'] || 0) + 
+                 (membershipData?.ageGroups?.['80+'] || 0)} 
+                {t('clubForm.membership.ageGroups.members')}
+              </span>
+            </div>
+            
+            {/* Warning if totals don't match */}
+            {membershipData?.totalMembers && 
+             membershipData.totalMembers !== 
+             ((membershipData?.ageGroups?.['под-60'] || 0) + 
+              (membershipData?.ageGroups?.['60-70'] || 0) + 
+              (membershipData?.ageGroups?.['70-80'] || 0) + 
+              (membershipData?.ageGroups?.['80+'] || 0)) && (
+              <div className="membership-manager-age-warning">
+                <FontAwesomeIcon icon={faInfoCircle} />
+                <span>{t('clubForm.membership.ageGroups.totalMismatch')}</span>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
 
-  {/* Age Groups Distribution */}
-  <div className="membership-manager-age-groups">
-    <h5 className="membership-manager-subsection-title">
-      <FontAwesomeIcon icon={faCalendarAlt} />
-      {t('clubForm.membership.ageGroups.title')}
-    </h5>
-    
-    <div className="membership-manager-age-groups-grid">
-      
-      {/* Under 60 */}
-      <div className="membership-manager-age-group-item">
-        <div className="membership-manager-age-group-header">
-          <div className="membership-manager-age-group-icon under-60">
-            <FontAwesomeIcon icon={faUserGraduate} />
-          </div>
-          <div className="membership-manager-age-group-info">
-            <h6>{t('clubForm.membership.ageGroups.under60')}</h6>
-            <p>{t('clubForm.membership.ageGroups.under60Desc')}</p>
-          </div>
-        </div>
-        <div className="membership-manager-age-group-input">
-          <input
-            type="number"
-            className="membership-manager-form-input compact"
-            placeholder="0"
-            value={membershipData?.ageGroups?.['под-60'] || ''}
-            onChange={(e) => handleFieldChange('ageGroups.под-60', parseInt(e.target.value) || 0)}
-            disabled={disabled}
-            min="0"
-          />
-          <span className="membership-manager-age-group-label">
-            {t('clubForm.membership.ageGroups.members')}
-          </span>
-        </div>
-      </div>
+      {/* Membership Requirements & Benefits */}
+      <div className="membership-manager-section">
+        <h4 className="membership-manager-section-title">
+          <FontAwesomeIcon icon={faGavel} />
+          {t('clubForm.membership.requirementsBenefitsSection')}
+        </h4>
 
-      {/* 60-70 */}
-      <div className="membership-manager-age-group-item">
-        <div className="membership-manager-age-group-header">
-          <div className="membership-manager-age-group-icon age-60-70">
-            <FontAwesomeIcon icon={faUserTie} />
-          </div>
-          <div className="membership-manager-age-group-info">
-            <h6>{t('clubForm.membership.ageGroups.age60to70')}</h6>
-            <p>{t('clubForm.membership.ageGroups.age60to70Desc')}</p>
-          </div>
-        </div>
-        <div className="membership-manager-age-group-input">
-          <input
-            type="number"
-            className="membership-manager-form-input compact"
-            placeholder="0"
-            value={membershipData?.ageGroups?.['60-70'] || ''}
-            onChange={(e) => handleFieldChange('ageGroups.60-70', parseInt(e.target.value) || 0)}
-            disabled={disabled}
-            min="0"
-          />
-          <span className="membership-manager-age-group-label">
-            {t('clubForm.membership.ageGroups.members')}
-          </span>
-        </div>
-      </div>
-
-      {/* 70-80 */}
-      <div className="membership-manager-age-group-item">
-        <div className="membership-manager-age-group-header">
-          <div className="membership-manager-age-group-icon age-70-80">
+        {/* Requirements */}
+        <div className="membership-manager-subsection">
+          <h5 className="membership-manager-subsection-title">
             <FontAwesomeIcon icon={faUserShield} />
+            {t('clubForm.membership.requirements.title')}
+          </h5>
+          
+          {/* Requirements List */}
+          <div className="membership-manager-list">
+            {(membershipData?.requirements || []).map((requirement, index) => (
+              <div key={index} className="membership-manager-list-item">
+                <div className="membership-manager-list-content">
+                  <span className="membership-manager-list-text">{requirement}</span>
+                </div>
+                <button
+                  type="button"
+                  className="membership-manager-remove-item-btn"
+                  onClick={() => removeRequirement(index)}
+                  disabled={disabled}
+                  title={t('clubForm.membership.actions.removeRequirement')}
+                >
+                  <FontAwesomeIcon icon={faTimes} />
+                </button>
+              </div>
+            ))}
+            
+            {(membershipData?.requirements || []).length === 0 && (
+              <div className="membership-manager-empty-state">
+                <FontAwesomeIcon icon={faInfoCircle} />
+                <p>{t('clubForm.membership.requirements.empty')}</p>
+              </div>
+            )}
           </div>
-          <div className="membership-manager-age-group-info">
-            <h6>{t('clubForm.membership.ageGroups.age70to80')}</h6>
-            <p>{t('clubForm.membership.ageGroups.age70to80Desc')}</p>
+
+          {/* Add Requirement */}
+          <div className="membership-manager-add-item">
+            <div className="membership-manager-add-item-form">
+              <input
+                type="text"
+                className="membership-manager-form-input"
+                placeholder={t('clubForm.membership.requirements.placeholder')}
+                value={newRequirement}
+                onChange={(e) => setNewRequirement(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && addRequirement()}
+                disabled={disabled}
+              />
+              <button
+                type="button"
+                className="membership-manager-add-btn compact"
+                onClick={addRequirement}
+                disabled={disabled || !newRequirement.trim()}
+              >
+                <FontAwesomeIcon icon={faPlus} />
+                {t('clubForm.membership.actions.addRequirement')}
+              </button>
+            </div>
           </div>
         </div>
-        <div className="membership-manager-age-group-input">
-          <input
-            type="number"
-            className="membership-manager-form-input compact"
-            placeholder="0"
-            value={membershipData?.ageGroups?.['70-80'] || ''}
-            onChange={(e) => handleFieldChange('ageGroups.70-80', parseInt(e.target.value) || 0)}
-            disabled={disabled}
-            min="0"
-          />
-          <span className="membership-manager-age-group-label">
-            {t('clubForm.membership.ageGroups.members')}
-          </span>
+
+        {/* Benefits */}
+        <div className="membership-manager-subsection">
+          <h5 className="membership-manager-subsection-title">
+            <FontAwesomeIcon icon={faAward} />
+            {t('clubForm.membership.benefits.title')}
+          </h5>
+          
+          {/* Benefits List */}
+          <div className="membership-manager-list">
+            {(membershipData?.benefits || []).map((benefit, index) => (
+              <div key={index} className="membership-manager-list-item">
+                <div className="membership-manager-list-content">
+                  <span className="membership-manager-list-text">{benefit}</span>
+                </div>
+                <button
+                  type="button"
+                  className="membership-manager-remove-item-btn"
+                  onClick={() => removeBenefit(index)}
+                  disabled={disabled}
+                  title={t('clubForm.membership.actions.removeBenefit')}
+                >
+                  <FontAwesomeIcon icon={faTimes} />
+                </button>
+              </div>
+            ))}
+            
+            {(membershipData?.benefits || []).length === 0 && (
+              <div className="membership-manager-empty-state">
+                <FontAwesomeIcon icon={faInfoCircle} />
+                <p>{t('clubForm.membership.benefits.empty')}</p>
+              </div>
+            )}
+          </div>
+
+          {/* Add Benefit */}
+          <div className="membership-manager-add-item">
+            <div className="membership-manager-add-item-form">
+              <input
+                type="text"
+                className="membership-manager-form-input"
+                placeholder={t('clubForm.membership.benefits.placeholder')}
+                value={newBenefit}
+                onChange={(e) => setNewBenefit(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && addBenefit()}
+                disabled={disabled}
+              />
+              <button
+                type="button"
+                className="membership-manager-add-btn compact"
+                onClick={addBenefit}
+                disabled={disabled || !newBenefit.trim()}
+              >
+                <FontAwesomeIcon icon={faPlus} />
+                {t('clubForm.membership.actions.addBenefit')}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* 80+ */}
-      <div className="membership-manager-age-group-item">
-        <div className="membership-manager-age-group-header">
-          <div className="membership-manager-age-group-icon age-80-plus">
-            <FontAwesomeIcon icon={faCrown} />
-          </div>
-          <div className="membership-manager-age-group-info">
-            <h6>{t('clubForm.membership.ageGroups.age80plus')}</h6>
-            <p>{t('clubForm.membership.ageGroups.age80plusDesc')}</p>
-          </div>
-        </div>
-        <div className="membership-manager-age-group-input">
-          <input
-            type="number"
-            className="membership-manager-form-input compact"
-            placeholder="0"
-            value={membershipData?.ageGroups?.['80+'] || ''}
-            onChange={(e) => handleFieldChange('ageGroups.80+', parseInt(e.target.value) || 0)}
-            disabled={disabled}
-            min="0"
-          />
-          <span className="membership-manager-age-group-label">
-            {t('clubForm.membership.ageGroups.members')}
-          </span>
-        </div>
-      </div>
-
-    </div>
-
-    {/* Age Groups Summary */}
-    <div className="membership-manager-age-groups-summary">
-      <div className="membership-manager-summary-item">
-        <span className="membership-manager-summary-label">
-          {t('clubForm.membership.ageGroups.totalCalculated')}:
-        </span>
-        <span className="membership-manager-summary-value">
-          {(membershipData?.ageGroups?.['под-60'] || 0) + 
-           (membershipData?.ageGroups?.['60-70'] || 0) + 
-           (membershipData?.ageGroups?.['70-80'] || 0) + 
-           (membershipData?.ageGroups?.['80+'] || 0)} 
-          {t('clubForm.membership.ageGroups.members')}
-        </span>
-      </div>
-      
-      {/* Warning if totals don't match */}
-      {membershipData?.totalMembers && 
-       membershipData.totalMembers !== 
-       ((membershipData?.ageGroups?.['под-60'] || 0) + 
-        (membershipData?.ageGroups?.['60-70'] || 0) + 
-        (membershipData?.ageGroups?.['70-80'] || 0) + 
-        (membershipData?.ageGroups?.['80+'] || 0)) && (
-        <div className="membership-manager-age-warning">
-          <FontAwesomeIcon icon={faInfoCircle} />
-          <span>{t('clubForm.membership.ageGroups.totalMismatch')}</span>
-        </div>
-      )}
-    </div>
-  </div>
-</div>
-{/* Membership Requirements & Benefits */}
-<div className="membership-manager-section">
-  <h4 className="membership-manager-section-title">
-    <FontAwesomeIcon icon={faGavel} />
-    {t('clubForm.membership.requirementsBenefitsSection')}
-  </h4>
-
-  {/* Requirements */}
-  <div className="membership-manager-subsection">
-    <h5 className="membership-manager-subsection-title">
-      <FontAwesomeIcon icon={faUserShield} />
-      {t('clubForm.membership.requirements.title')}
-    </h5>
-    
-    {/* Requirements List */}
-    <div className="membership-manager-list">
-      {(membershipData?.requirements || []).map((requirement, index) => (
-        <div key={index} className="membership-manager-list-item">
-          <div className="membership-manager-list-content">
-            <span className="membership-manager-list-text">{requirement}</span>
-          </div>
-          <button
-            type="button"
-            className="membership-manager-remove-item-btn"
-            onClick={() => removeRequirement(index)}
-            disabled={disabled}
-            title={t('clubForm.membership.actions.removeRequirement')}
-          >
-            <FontAwesomeIcon icon={faTimes} />
-          </button>
-        </div>
-      ))}
-      
-      {(membershipData?.requirements || []).length === 0 && (
-        <div className="membership-manager-empty-state">
-          <FontAwesomeIcon icon={faInfoCircle} />
-          <p>{t('clubForm.membership.requirements.empty')}</p>
-        </div>
-      )}
-    </div>
-
-    {/* Add Requirement */}
-    <div className="membership-manager-add-item">
-      <div className="membership-manager-add-item-form">
-        <input
-          type="text"
-          className="membership-manager-form-input"
-          placeholder={t('clubForm.membership.requirements.placeholder')}
-          value={newRequirement}
-          onChange={(e) => setNewRequirement(e.target.value)}
-          onKeyPress={(e) => e.key === 'Enter' && addRequirement()}
-          disabled={disabled}
-        />
-        <button
-          type="button"
-          className="membership-manager-add-btn compact"
-          onClick={addRequirement}
-          disabled={disabled || !newRequirement.trim()}
-        >
-          <FontAwesomeIcon icon={faPlus} />
-          {t('clubForm.membership.actions.addRequirement')}
-        </button>
-      </div>
-    </div>
-  </div>
-
-  {/* Benefits */}
-  <div className="membership-manager-subsection">
-    <h5 className="membership-manager-subsection-title">
-      <FontAwesomeIcon icon={faAward} />
-      {t('clubForm.membership.benefits.title')}
-    </h5>
-    
-    {/* Benefits List */}
-    <div className="membership-manager-list">
-      {(membershipData?.benefits || []).map((benefit, index) => (
-        <div key={index} className="membership-manager-list-item">
-          <div className="membership-manager-list-content">
-            <span className="membership-manager-list-text">{benefit}</span>
-          </div>
-          <button
-            type="button"
-            className="membership-manager-remove-item-btn"
-            onClick={() => removeBenefit(index)}
-            disabled={disabled}
-            title={t('clubForm.membership.actions.removeBenefit')}
-          >
-            <FontAwesomeIcon icon={faTimes} />
-          </button>
-        </div>
-      ))}
-      
-      {(membershipData?.benefits || []).length === 0 && (
-        <div className="membership-manager-empty-state">
-          <FontAwesomeIcon icon={faInfoCircle} />
-          <p>{t('clubForm.membership.benefits.empty')}</p>
-        </div>
-      )}
-    </div>
-
-    {/* Add Benefit */}
-    <div className="membership-manager-add-item">
-      <div className="membership-manager-add-item-form">
-        <input
-          type="text"
-          className="membership-manager-form-input"
-          placeholder={t('clubForm.membership.benefits.placeholder')}
-          value={newBenefit}
-          onChange={(e) => setNewBenefit(e.target.value)}
-          onKeyPress={(e) => e.key === 'Enter' && addBenefit()}
-          disabled={disabled}
-        />
-        <button
-          type="button"
-          className="membership-manager-add-btn compact"
-          onClick={addBenefit}
-          disabled={disabled || !newBenefit.trim()}
-        >
-          <FontAwesomeIcon icon={faPlus} />
-          {t('clubForm.membership.actions.addBenefit')}
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
       {/* Management Structure */}
       <div className="membership-manager-section">
         <h4 className="membership-manager-section-title">
@@ -788,7 +860,7 @@ const removeBenefit = (index) => {
                 <div className="membership-manager-fee-main">
                   <h6>{fee.type}</h6>
                   <div className="membership-manager-fee-amount">
-                    {fee.amount} лв. / {feePeriods.find(p => p.value === fee.period)?.label}
+                    {fee.amount} {currencyOptions.find(c => c.value === fee.currency)?.symbol || 'лв.'} / {feePeriods.find(p => p.value === fee.period)?.label}
                   </div>
                 </div>
                 {fee.description && (
@@ -842,6 +914,19 @@ const removeBenefit = (index) => {
                 {feePeriods.map(period => (
                   <option key={period.value} value={period.value}>
                     {period.label}
+                  </option>
+                ))}
+              </select>
+              {/* НОВА СЕКЦИЯ ЗА ВАЛУТА */}
+              <select
+                className="membership-manager-form-select"
+                value={newFee.currency}
+                onChange={(e) => setNewFee({...newFee, currency: e.target.value})}
+                disabled={disabled}
+              >
+                {currencyOptions.map(currency => (
+                  <option key={currency.value} value={currency.value}>
+                    {currency.label}
                   </option>
                 ))}
               </select>

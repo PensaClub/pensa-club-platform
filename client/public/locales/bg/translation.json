@@ -3712,6 +3712,7 @@
       "navigation": {
         "title": "Навигация",
         "home": "Начало",
+        "pensionersServices": "Услуги за пенсионери",
         "aboutClub": "За клуба",
         "activities": "Дейности",
         "events": "Събития",
@@ -4477,6 +4478,128 @@
       },
       "founded": "Основан"
     },
+    "pensioners": {
+      "sectionTitle": "Услуги за пенсионери",
+      "sectionSubtitle": "Специализирани програми и услуги, адаптирани за нуждите на възрастните хора",
+      "tabs": {
+        "healthServices": "Здравни услуги",
+        "supportServices": "Поддържащи услуги",
+        "accessibility": "Достъпност",
+        "specialPrograms": "Специални програми",
+        "ageSpecificNeeds": "Възрастови потребности"
+      },
+      "healthServices": {
+        "basicServices": "Основни здравни услуги",
+        "regularCheckups": {
+          "title": "Редовни прегледи",
+          "description": "Периодични здравни прегледи за ранно откриване на проблеми"
+        },
+        "bloodPressureMonitoring": {
+          "title": "Мониторинг на кръвно налягане",
+          "description": "Редовно измерване и проследяване на кръвното налягане"
+        },
+        "healthLectures": {
+          "title": "Здравни лекции"
+        },
+        "medicalPartners": {
+          "title": "Медицински партньори"
+        },
+        "emergencyProtocol": {
+          "title": "Протокол за спешни случаи"
+        }
+      },
+      "supportServices": {
+        "homeVisits": {
+          "title": "Домашни посещения",
+          "description": "Редовни посещения на доброволци в домовете на членовете"
+        },
+        "shoppingAssistance": {
+          "title": "Помощ при пазаруване",
+          "description": "Съдействие при ежедневни покупки и доставка на храни"
+        },
+        "documentHelp": {
+          "title": "Помощ с документи",
+          "description": "Съдействие при попълване на формуляри и административни процедури"
+        },
+        "companionship": {
+          "title": "Компания и общуване",
+          "description": "Редовно общуване и дружеско присъствие за борба с изолацията"
+        },
+        "transportService": {
+          "title": "Транспортни услуги",
+          "description": "Придружаване до лекари, аптеки и важни места"
+        },
+        "mealDelivery": {
+          "title": "Доставка на храна",
+          "description": "Приготвяне и доставка на здравословни ястия за дома"
+        },
+        "cleaningHelp": {
+          "title": "Помощ за почистване",
+          "description": "Лека помощ при домакинската работа и поддръжката на дома"
+        },
+        "techSupport": {
+          "title": "Техническа поддръжка",
+          "description": "Обучение и помощ при използване на технологии и интернет"
+        }
+      },
+      "accessibility": {
+        "wheelchairAccess": {
+          "title": "Достъп за инвалидни колички",
+          "description": "Пълен достъп за хора с увреждания с подвижност"
+        },
+        "elevatorAccess": {
+          "title": "Асансьорен достъп",
+          "description": "Асансьор за достъп до всички етажи на сградата"
+        },
+        "hearingLoop": {
+          "title": "Слухова индукционна примка",
+          "description": "Асистивна технология за хора със слухови проблеми"
+        },
+        "largeTextMaterials": {
+          "title": "Материали с едър шрифт",
+          "description": "Печатни материали с увеличен шрифт за по-лесно четене"
+        },
+        "handrails": {
+          "title": "Парапети и поръчки",
+          "description": "Поръчки по стълбища и коридори за безопасност"
+        },
+        "nonSlipFloors": {
+          "title": "Нехлъзгави подове",
+          "description": "Специални подови настилки за предотвратяване на падания"
+        },
+        "goodLighting": {
+          "title": "Добро осветление",
+          "description": "Достатъчно и качествено осветление във всички помещения"
+        },
+        "restingAreas": {
+          "title": "Места за почивка",
+          "description": "Удобни места за сядане и почивка в различни зони"
+        }
+      },
+      "specialPrograms": {
+        "memoryActivities": {
+          "title": "Дейности за паметта"
+        },
+        "intergenerationalPrograms": {
+          "title": "Междупоколенчески програми"
+        },
+        "volunteerPrograms": {
+          "title": "Доброволчески програми"
+        },
+        "mentalHealthSupport": {
+          "title": "Подкрепа за психично здраве"
+        }
+      },
+      "ageSpecificNeeds": {
+        "lowImpactActivities": {
+          "title": "Дейности с ниско натоварване"
+        },
+        "nutritionSupport": {
+          "title": "Хранителна подкрепа"
+        }
+      }
+      
+  },
     "ClubsHero": {
       "title": {
         "prefix": "Открийте своя",
@@ -9936,7 +10059,8 @@
         "city": "Град",
         "postalCode": "Пощенски код",
         "country": "Държава",
-        "poBox": "Пощенска кутия"
+        "poBox": "Пощенска кутия",
+        "mobile": "Мобилен телефон"
       },
       "placeholders": {
         "phone": "+359 2 123 4567",
@@ -9954,7 +10078,8 @@
         "personPhone": "+359 888 123 456",
         "personEmail": "ivan@klub.bg",
         "personDescription": "Отговаря за дейностите в събота и неделя",
-        "specialHours": "През юли и август - съкратено работно време\nПрез празници - затворено"
+        "specialHours": "През юли и август - съкратено работно време\nПрез празници - затворено",
+        "mobile": "+359 888 123 456"
       },
       "days": {
         "monday": "Понеделник",

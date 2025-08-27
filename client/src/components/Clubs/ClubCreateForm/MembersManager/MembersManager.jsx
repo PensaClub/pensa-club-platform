@@ -33,6 +33,7 @@ import {
   faSquare,
   faSpinner
 } from '@fortawesome/free-solid-svg-icons';
+import { useFirebaseUpload } from '../../../hooks/useFirebaseUpload';
 import './membersManager.css';
 
 const MembersManager = ({ 
@@ -41,6 +42,7 @@ const MembersManager = ({
   disabled = false 
 }) => {
   const { t } = useTranslation();
+  const { uploadFile, uploading, uploadProgress } = useFirebaseUpload();
   
   const [activeTab, setActiveTab] = useState('members');
   const [searchQuery, setSearchQuery] = useState('');
@@ -49,6 +51,7 @@ const MembersManager = ({
   const [sortOrder, setSortOrder] = useState('asc');
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingMember, setEditingMember] = useState(null);
+  const [editForm, setEditForm] = useState({});
   const [selectedMembers, setSelectedMembers] = useState([]);
   const [bulkActions, setBulkActions] = useState(false);
   const [uploadingPhoto, setUploadingPhoto] = useState({});
@@ -202,28 +205,56 @@ const MembersManager = ({
     }
   };
 
-  // Handle photo upload
+  // Start editing
+  const startEditMember = (member) => {
+    setEditingMember(member.id);
+    setEditForm({ ...member });
+  };
+
+  // Save edit
+  const saveEditMember = () => {
+    if (activeTab === 'members') {
+      updateMember(editingMember, editForm);
+    } else {
+      updateMember(editingMember, editForm, 'board');
+    }
+    setEditingMember(null);
+    setEditForm({});
+  };
+
+  // Cancel edit
+  const cancelEditMember = () => {
+    setEditingMember(null);
+    setEditForm({});
+  };
+
+  // Handle photo upload - ОБНОВЕНО ЗА FIREBASE
   const handlePhotoUpload = async (file, memberId, type = 'members') => {
     if (!file) return;
     
     setUploadingPhoto(prev => ({ ...prev, [memberId]: true }));
     
-    // Simulate upload
-    const photoUrl = URL.createObjectURL(file);
-    
-    setTimeout(() => {
+    try {
+      // Upload към Firebase
+      const uploadResult = await uploadFile(file, `clubs/members/photos`);
+      
       if (type === 'members') {
         updateMember(memberId, { 
           photo: { 
-            src: photoUrl, 
+            src: uploadResult.url, 
             alt: `${t('clubForm.members.photoAlt')} ${memberId}` 
           } 
         });
       } else {
-        updateMember(memberId, { avatar: photoUrl }, 'board');
+        updateMember(memberId, { avatar: uploadResult.url }, 'board');
       }
+      
+    } catch (error) {
+      console.error('Photo upload failed:', error);
+      // Можеш да добавиш error notification тук
+    } finally {
       setUploadingPhoto(prev => ({ ...prev, [memberId]: false }));
-    }, 1000);
+    }
   };
 
   // Filter and sort members
@@ -322,16 +353,17 @@ const MembersManager = ({
     setBulkActions(false);
   };
 
-  // Render member card
+  // Render member card - ОБНОВЕНО С EDIT ФОРМА
   const renderMemberCard = (member) => {
     const isSelected = selectedMembers.includes(member.id);
     const isBoard = activeTab === 'board';
     const isUploading = uploadingPhoto[member.id];
+    const isEditing = editingMember === member.id;
     
     return (
-      <div key={member.id} className={`members-manager-member-card ${isSelected ? 'selected' : ''}`}>
+      <div key={member.id} className={`members-manager-member-card ${isSelected ? 'selected' : ''} ${isEditing ? 'editing' : ''}`}>
         
-        {bulkActions && (
+        {bulkActions && !isEditing && (
           <div className="members-manager-selection-checkbox">
             <button
               className="members-manager-checkbox-btn"
@@ -360,90 +392,180 @@ const MembersManager = ({
                 </div>
               )}
               
-              <div className="members-manager-photo-overlay">
-                <button
-                  className="members-manager-photo-upload-btn"
-                  onClick={() => {
-                    photoInputRef.current?.click();
-                    photoInputRef.current.onchange = (e) => {
-                      if (e.target.files[0]) {
-                        handlePhotoUpload(e.target.files[0], member.id, activeTab);
-                      }
-                    };
-                  }}
-                  title={t('clubForm.members.actions.uploadPhoto')}
-                >
-                  <FontAwesomeIcon icon={faUpload} />
-                </button>
-              </div>
+              {!isEditing && (
+                <div className="members-manager-photo-overlay">
+                  <button
+                    className="members-manager-photo-upload-btn"
+                    onClick={() => {
+                      photoInputRef.current?.click();
+                      photoInputRef.current.onchange = (e) => {
+                        if (e.target.files[0]) {
+                          handlePhotoUpload(e.target.files[0], member.id, activeTab);
+                        }
+                      };
+                    }}
+                    title={t('clubForm.members.actions.uploadPhoto')}
+                  >
+                    <FontAwesomeIcon icon={faUpload} />
+                  </button>
+                </div>
+              )}
             </>
           )}
         </div>
 
         <div className="members-manager-member-info">
-          <h4 className="members-manager-member-name">
-            {isBoard ? member.name : `${member.firstName} ${member.lastName}`}
-          </h4>
-          
-          <div className="members-manager-member-role">
-            <span className={`members-manager-role-badge ${member.role === 'председател' ? 'president' : ''}`}>
-              {member.role === 'председател' && <FontAwesomeIcon icon={faCrown} />}
-              {member.role}
-            </span>
-          </div>
+          {isEditing ? (
+            // EDIT РЕЖИМ
+            <div className="members-manager-edit-form">
+              {isBoard ? (
+                <input
+                  type="text"
+                  className="members-manager-edit-input"
+                  value={editForm.name || ''}
+                  onChange={(e) => setEditForm({...editForm, name: e.target.value})}
+                  placeholder="Име"
+                />
+              ) : (
+                <div className="members-manager-edit-name-row">
+                  <input
+                    type="text"
+                    className="members-manager-edit-input"
+                    value={editForm.firstName || ''}
+                    onChange={(e) => setEditForm({...editForm, firstName: e.target.value})}
+                    placeholder="Име"
+                  />
+                  <input
+                    type="text"
+                    className="members-manager-edit-input"
+                    value={editForm.lastName || ''}
+                    onChange={(e) => setEditForm({...editForm, lastName: e.target.value})}
+                    placeholder="Фамилия"
+                  />
+                </div>
+              )}
+              
+              <select
+                className="members-manager-edit-select"
+                value={editForm.role || ''}
+                onChange={(e) => setEditForm({...editForm, role: e.target.value})}
+              >
+                {(isBoard ? boardRoles : memberRoles).map(role => (
+                  <option key={role} value={role}>{role}</option>
+                ))}
+              </select>
+              
+              <input
+                type="tel"
+                className="members-manager-edit-input"
+                value={editForm.phone || ''}
+                onChange={(e) => setEditForm({...editForm, phone: e.target.value})}
+                placeholder="Телефон"
+              />
+              
+              <input
+                type="email"
+                className="members-manager-edit-input"
+                value={editForm.email || ''}
+                onChange={(e) => setEditForm({...editForm, email: e.target.value})}
+                placeholder="Email"
+              />
+              
+              {isBoard && (
+                <textarea
+                  className="members-manager-edit-textarea"
+                  value={editForm.bio || ''}
+                  onChange={(e) => setEditForm({...editForm, bio: e.target.value})}
+                  placeholder="Биография"
+                  rows={3}
+                />
+              )}
+              
+              <div className="members-manager-edit-actions">
+                <button
+                  className="members-manager-edit-btn save"
+                  onClick={saveEditMember}
+                >
+                  <FontAwesomeIcon icon={faCheck} />
+                </button>
+                <button
+                  className="members-manager-edit-btn cancel"
+                  onClick={cancelEditMember}
+                >
+                  <FontAwesomeIcon icon={faTimes} />
+                </button>
+              </div>
+            </div>
+          ) : (
+            // НОРМАЛЕН РЕЖИМ
+            <>
+              <h4 className="members-manager-member-name">
+                {isBoard ? member.name : `${member.firstName} ${member.lastName}`}
+              </h4>
+              
+              <div className="members-manager-member-role">
+                <span className={`members-manager-role-badge ${member.role === 'председател' ? 'president' : ''}`}>
+                  {member.role === 'председател' && <FontAwesomeIcon icon={faCrown} />}
+                  {member.role}
+                </span>
+              </div>
 
-          <div className="members-manager-member-details">
-            {member.phone && (
-              <div className="members-manager-detail">
-                <FontAwesomeIcon icon={faPhone} />
-                <span>{member.phone}</span>
+              <div className="members-manager-member-details">
+                {member.phone && (
+                  <div className="members-manager-detail">
+                    <FontAwesomeIcon icon={faPhone} />
+                    <span>{member.phone}</span>
+                  </div>
+                )}
+                
+                {member.email && (
+                  <div className="members-manager-detail">
+                    <FontAwesomeIcon icon={faEnvelope} />
+                    <span>{member.email}</span>
+                  </div>
+                )}
+                
+                {!isBoard && member.joinDate && (
+                  <div className="members-manager-detail">
+                    <FontAwesomeIcon icon={faCalendarAlt} />
+                    <span>{new Date(member.joinDate).toLocaleDateString()}</span>
+                  </div>
+                )}
+                
+                {!isBoard && (
+                  <div className="members-manager-detail">
+                    <FontAwesomeIcon icon={member.isActive ? faUserCheck : faUserMinus} />
+                    <span>{member.isActive ? t('clubForm.members.active') : t('clubForm.members.inactive')}</span>
+                  </div>
+                )}
               </div>
-            )}
-            
-            {member.email && (
-              <div className="members-manager-detail">
-                <FontAwesomeIcon icon={faEnvelope} />
-                <span>{member.email}</span>
-              </div>
-            )}
-            
-            {!isBoard && member.joinDate && (
-              <div className="members-manager-detail">
-                <FontAwesomeIcon icon={faCalendarAlt} />
-                <span>{new Date(member.joinDate).toLocaleDateString()}</span>
-              </div>
-            )}
-            
-            {!isBoard && (
-              <div className="members-manager-detail">
-                <FontAwesomeIcon icon={member.isActive ? faUserCheck : faUserMinus} />
-                <span>{member.isActive ? t('clubForm.members.active') : t('clubForm.members.inactive')}</span>
-              </div>
-            )}
-          </div>
 
-          {isBoard && member.bio && (
-            <p className="members-manager-member-bio">{member.bio}</p>
+              {isBoard && member.bio && (
+                <p className="members-manager-member-bio">{member.bio}</p>
+              )}
+            </>
           )}
         </div>
 
-        <div className="members-manager-member-actions">
-          <button
-            className="members-manager-action-btn edit"
-            onClick={() => setEditingMember(member)}
-            title={t('clubForm.members.actions.edit')}
-          >
-            <FontAwesomeIcon icon={faEdit} />
-          </button>
-          
-          <button
-            className="members-manager-action-btn delete"
-            onClick={() => removeMember(member.id, activeTab)}
-            title={t('clubForm.members.actions.delete')}
-          >
-            <FontAwesomeIcon icon={faTrash} />
-          </button>
-        </div>
+        {!isEditing && (
+          <div className="members-manager-member-actions">
+            <button
+              className="members-manager-action-btn edit"
+              onClick={() => startEditMember(member)}
+              title={t('clubForm.members.actions.edit')}
+            >
+              <FontAwesomeIcon icon={faEdit} />
+            </button>
+            
+            <button
+              className="members-manager-action-btn delete"
+              onClick={() => removeMember(member.id, activeTab)}
+              title={t('clubForm.members.actions.delete')}
+            >
+              <FontAwesomeIcon icon={faTrash} />
+            </button>
+          </div>
+        )}
       </div>
     );
   };
@@ -687,6 +809,8 @@ const MembersManager = ({
               setShowAddForm(false);
               setSelectedMembers([]);
               setBulkActions(false);
+              setEditingMember(null);
+              setEditForm({});
             }}
             disabled={disabled}
           >

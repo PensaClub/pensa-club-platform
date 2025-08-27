@@ -30,7 +30,8 @@ import {
     faDumbbell,
     faTrophy,
     faLeaf,
-    faChartLine
+    faChartLine,
+    faUserMd
 } from '@fortawesome/free-solid-svg-icons';
 
 import './clubPreview.css';
@@ -56,6 +57,7 @@ const ClubPreview = ({ formData, onClose, isPreviewMode = true }) => {
         { id: 'general-activities', label: t('clubs.ClubView.navigation.activities'), icon: faRunning },
         { id: 'general-events', label: t('clubs.ClubView.navigation.events'), icon: faCalendarAlt },
         { id: 'general-management', label: t('clubs.ClubView.navigation.management'), icon: faCrown },
+        { id: 'club-pensioners-specific', label: t('clubs.ClubView.navigation.pensionersServices'), icon: faUserMd },
         { id: 'general-location', label: t('clubs.ClubView.navigation.location'), icon: faMapPin },
         { id: 'general-contact', label: t('clubs.ClubView.navigation.contacts'), icon: faEnvelope },
 
@@ -319,7 +321,7 @@ const ClubPreview = ({ formData, onClose, isPreviewMode = true }) => {
     const scrollToSection = (sectionId) => {
         const element = document.getElementById(sectionId);
         if (element) {
-            const container = isPreviewMode 
+            const container = isPreviewMode
                 ? document.querySelector('.club-preview-modal-content')
                 : window;
 
@@ -336,7 +338,7 @@ const ClubPreview = ({ formData, onClose, isPreviewMode = true }) => {
             } else {
                 const yOffset = -120;
                 const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-                
+
                 window.scrollTo({
                     top: y,
                     behavior: 'smooth'
@@ -349,9 +351,9 @@ const ClubPreview = ({ formData, onClose, isPreviewMode = true }) => {
 
     const scrollToTop = () => {
         if (isPreviewMode) {
-            document.querySelector('.club-preview-modal-content')?.scrollTo({ 
-                top: 0, 
-                behavior: 'smooth' 
+            document.querySelector('.club-preview-modal-content')?.scrollTo({
+                top: 0,
+                behavior: 'smooth'
             });
         } else {
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -369,14 +371,14 @@ const ClubPreview = ({ formData, onClose, isPreviewMode = true }) => {
 
     useEffect(() => {
         const handleScroll = () => {
-            const scrollY = isPreviewMode 
+            const scrollY = isPreviewMode
                 ? document.querySelector('.club-preview-modal-content')?.scrollTop || 0
                 : window.scrollY;
-                
+
             setShowBackToTop(scrollY > 300);
         };
 
-        const scrollContainer = isPreviewMode 
+        const scrollContainer = isPreviewMode
             ? document.querySelector('.club-preview-modal-content')
             : window;
 
@@ -397,7 +399,7 @@ const ClubPreview = ({ formData, onClose, isPreviewMode = true }) => {
 
     return (
         <div className={`club-preview-container ${isPreviewMode ? 'preview-mode' : ''}`}>
-            
+
             {/* Preview Header */}
             <div className="club-preview-header">
                 <div className="club-preview-header-content">
@@ -410,7 +412,7 @@ const ClubPreview = ({ formData, onClose, isPreviewMode = true }) => {
                         <div className="club-preview-badge">
                             {t('clubForm.preview.badge')}
                         </div>
-                        
+
                         <div className="club-header-info">
                             <h1 className="club-header-title">{previewClub.name}</h1>
                             <div className="club-header-location">

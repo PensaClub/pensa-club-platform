@@ -20,7 +20,13 @@ import {
   faCheckCircle,
   faTimesCircle,
   faBuilding,
-  faUniversalAccess
+  faUniversalAccess,
+  faUserCheck,
+  faEuroSign,
+  faClock,
+  faCheck,
+  faTimes,
+  faCoins
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
@@ -46,11 +52,12 @@ export const ClubAbout = ({ club }) => {
       accessibility: {}
     };
     const regionalInfo = club.regionalInfo || null;
+    const membership = club.membership || {};
 
-    return { achievements, socialImpact, pensionersSpecific, regionalInfo };
+    return { achievements, socialImpact, pensionersSpecific, regionalInfo, membership };
   };
 
-  const { achievements, socialImpact, pensionersSpecific, regionalInfo } = getClubData();
+  const { achievements, socialImpact, pensionersSpecific, regionalInfo, membership } = getClubData();
 
   const toggleSection = (section) => {
     setExpandedSection(expandedSection === section ? null : section);
@@ -58,7 +65,7 @@ export const ClubAbout = ({ club }) => {
 
   // Изчисляване на възрастова структура
   const calculateAgeData = () => {
-      if (!club.membership?.ageGroups || !club.members?.length || !club.membership?.totalMembers ) {
+    if (!club.membership?.ageGroups || !club.members?.length || !club.membership?.totalMembers ) {
       return [];
     }
 
@@ -73,6 +80,25 @@ export const ClubAbout = ({ club }) => {
   };
 
   const ageData = calculateAgeData();
+
+  // Проверка дали има информация за членство
+  const hasMembershipInfo = () => {
+    return (membership.requirements && membership.requirements.length > 0) ||
+           membership.minimumAge ||
+           (membership.trialPeriod && membership.trialPeriod.enabled) ||
+           (membership.fees && membership.fees.list && membership.fees.list.length > 0) ||
+           (membership.membershipFee && (membership.membershipFee.monthly > 0 || membership.membershipFee.yearly > 0));
+  };
+
+  // Получаване на валутния символ
+  const getCurrencySymbol = (currency) => {
+    const symbols = {
+      'BGN': 'лв.',
+      'EUR': '€',
+      'USD': '$'
+    };
+    return symbols[currency] || 'лв.';
+  };
 
   // Проверка дали има постижения
   const hasAchievements = () => {
@@ -310,6 +336,178 @@ export const ClubAbout = ({ club }) => {
               </div>
             )}
           </div>
+
+          {/* НОВА СЕКЦИЯ - Членство - само ако има данни */}
+          {hasMembershipInfo() && (
+            <div className="general-about-section">
+              <div 
+                className="general-section-header"
+                onClick={() => toggleSection('membership')}
+              >
+                <div className="general-section-title">
+                  <FontAwesomeIcon icon={faUserCheck} />
+                  <h3>Условия за членство</h3>
+                </div>
+                <FontAwesomeIcon 
+                  icon={expandedSection === 'membership' ? faChevronUp : faChevronDown}
+                  className="general-toggle-icon"
+                />
+              </div>
+              
+              {expandedSection === 'membership' && (
+                <div className="general-section-content">
+                  <div className="general-membership-layout">
+                    
+                    {/* Основни условия */}
+                    <div className="general-membership-basics">
+                      <div className="general-membership-basic-info">
+                        
+                        {/* Минимална възраст */}
+                        {membership.minimumAge && (
+                          <div className="general-membership-basic-item">
+                            <div className="general-membership-basic-icon">
+                              <FontAwesomeIcon icon={faCalendarAlt} />
+                            </div>
+                            <div className="general-membership-basic-content">
+                              <span className="general-membership-basic-label">Минимална възраст</span>
+                              <span className="general-membership-basic-value">{membership.minimumAge} години</span>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Пробен период */}
+                        {membership.trialPeriod?.enabled && (
+                          <div className="general-membership-basic-item">
+                            <div className="general-membership-basic-icon">
+                              <FontAwesomeIcon icon={faClock} />
+                            </div>
+                            <div className="general-membership-basic-content">
+                              <span className="general-membership-basic-label">Пробен период</span>
+                              <span className="general-membership-basic-value">
+                                {membership.trialPeriod.days ? `${membership.trialPeriod.days} дни` : 'Наличен'}
+                              </span>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Тип членство */}
+                        {membership.type && (
+                          <div className="general-membership-basic-item">
+                            <div className="general-membership-basic-icon">
+                              <FontAwesomeIcon icon={faUserShield} />
+                            </div>
+                            <div className="general-membership-basic-content">
+                              <span className="general-membership-basic-label">Тип прием</span>
+                              <span className="general-membership-basic-value">
+                                {membership.type === 'open' && 'Отворено членство'}
+                                {membership.type === 'invitation' && 'По покана'}
+                                {membership.type === 'application' && 'По заявление'}
+                                {membership.type === 'recommendation' && 'По препоръка'}
+                              </span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Изисквания за членство */}
+                    {membership.requirements && membership.requirements.length > 0 && (
+                      <div className="general-membership-requirements">
+                        <h4>
+                          <FontAwesomeIcon icon={faCheck} />
+                          Изисквания за членство
+                        </h4>
+                        <div className="general-membership-requirements-list">
+                          {membership.requirements.map((requirement, index) => (
+                            <div key={index} className="general-membership-requirement-item">
+                              <FontAwesomeIcon icon={faCheck} />
+                              <span>{requirement}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Членски внос - показваме membershipFee или fees */}
+                    {((membership.membershipFee && (membership.membershipFee.monthly > 0 || membership.membershipFee.yearly > 0)) || 
+                      (membership.fees && membership.fees.list && membership.fees.list.length > 0)) && (
+                      <div className="general-membership-fees">
+                        <h4>
+                          <FontAwesomeIcon icon={faCoins} />
+                          Членски внос
+                        </h4>
+                        
+                        {/* Основен членски внос */}
+                        {membership.membershipFee && (membership.membershipFee.monthly > 0 || membership.membershipFee.yearly > 0) && (
+                          <div className="general-membership-fees-summary">
+                            {membership.membershipFee.monthly > 0 && (
+                              <div className="general-membership-fee-item primary">
+                                <div className="general-membership-fee-amount">
+                                  {membership.membershipFee.monthly} {getCurrencySymbol(membership.membershipFee.currency)}
+                                </div>
+                                <div className="general-membership-fee-period">месечно</div>
+                              </div>
+                            )}
+                            {membership.membershipFee.yearly > 0 && (
+                              <div className="general-membership-fee-item primary">
+                                <div className="general-membership-fee-amount">
+                                  {membership.membershipFee.yearly} {getCurrencySymbol(membership.membershipFee.currency)}
+                                </div>
+                                <div className="general-membership-fee-period">годишно</div>
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        {/* Детайлни такси */}
+                        {membership.fees?.list && membership.fees.list.length > 0 && (
+                          <div className="general-membership-fees-detailed">
+                            {membership.fees.list.map((fee, index) => (
+                              <div key={fee.id || index} className="general-membership-fee-detail">
+                                <div className="general-membership-fee-detail-header">
+                                  <span className="general-membership-fee-detail-type">{fee.type}</span>
+                                  <span className="general-membership-fee-detail-amount">
+                                    {fee.amount} {getCurrencySymbol(fee.currency || 'BGN')}
+                                    <span className="general-membership-fee-detail-period">
+                                      / {fee.period === 'monthly' ? 'месец' : 
+                                          fee.period === 'yearly' ? 'година' : 
+                                          fee.period === 'quarterly' ? 'тримесечие' : 
+                                          fee.period === 'onetime' ? 'еднократно' : fee.period}
+                                    </span>
+                                  </span>
+                                </div>
+                                {fee.description && (
+                                  <p className="general-membership-fee-detail-description">{fee.description}</p>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Ползи от членството */}
+                    {membership.benefits && membership.benefits.length > 0 && (
+                      <div className="general-membership-benefits">
+                        <h4>
+                          <FontAwesomeIcon icon={faHeart} />
+                          Ползи от членството
+                        </h4>
+                        <div className="general-membership-benefits-list">
+                          {membership.benefits.map((benefit, index) => (
+                            <div key={index} className="general-membership-benefit-item">
+                              <FontAwesomeIcon icon={faHeart} />
+                              <span>{benefit}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Постижения - само ако има данни */}
           {hasAchievements() && (

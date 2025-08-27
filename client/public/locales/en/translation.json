@@ -3673,6 +3673,7 @@
       "navigation": {
         "title": "Navigation",
         "home": "Home",
+        "pensionersServices": "Senior Services",
         "aboutClub": "About the club",
         "activities": "Activities",
         "events": "Events",
@@ -3712,6 +3713,127 @@
           "activePensioners": "active pensioners",
           "socialActivities": "social activities",
           "thirdAge": "third age"
+        }
+      }
+    },
+     "pensioners": {
+      "sectionTitle": "Senior Services",
+      "sectionSubtitle": "Specialized programs and services tailored to the needs of older adults",
+      "tabs": {
+        "healthServices": "Health Services",
+        "supportServices": "Support Services",
+        "accessibility": "Accessibility",
+        "specialPrograms": "Special Programs",
+        "ageSpecificNeeds": "Age-Specific Needs"
+      },
+      "healthServices": {
+        "basicServices": "Basic Health Services",
+        "regularCheckups": {
+          "title": "Regular Checkups",
+          "description": "Periodic health examinations for early detection of problems"
+        },
+        "bloodPressureMonitoring": {
+          "title": "Blood Pressure Monitoring",
+          "description": "Regular measurement and tracking of blood pressure"
+        },
+        "healthLectures": {
+          "title": "Health Lectures"
+        },
+        "medicalPartners": {
+          "title": "Medical Partners"
+        },
+        "emergencyProtocol": {
+          "title": "Emergency Protocol"
+        }
+      },
+      "supportServices": {
+        "homeVisits": {
+          "title": "Home Visits",
+          "description": "Regular visits by volunteers to members' homes"
+        },
+        "shoppingAssistance": {
+          "title": "Shopping Assistance",
+          "description": "Assistance with daily shopping and food delivery"
+        },
+        "documentHelp": {
+          "title": "Document Help",
+          "description": "Assistance with filling out forms and administrative procedures"
+        },
+        "companionship": {
+          "title": "Companionship",
+          "description": "Regular communication and friendly presence to combat isolation"
+        },
+        "transportService": {
+          "title": "Transport Service",
+          "description": "Accompaniment to doctors, pharmacies and important places"
+        },
+        "mealDelivery": {
+          "title": "Meal Delivery",
+          "description": "Preparation and delivery of healthy meals to the home"
+        },
+        "cleaningHelp": {
+          "title": "Cleaning Help",
+          "description": "Light assistance with housework and home maintenance"
+        },
+        "techSupport": {
+          "title": "Tech Support",
+          "description": "Training and assistance with using technology and internet"
+        }
+      },
+      "accessibility": {
+        "wheelchairAccess": {
+          "title": "Wheelchair Access",
+          "description": "Full access for people with mobility disabilities"
+        },
+        "elevatorAccess": {
+          "title": "Elevator Access",
+          "description": "Elevator for access to all floors of the building"
+        },
+        "hearingLoop": {
+          "title": "Hearing Loop",
+          "description": "Assistive technology for people with hearing problems"
+        },
+        "largeTextMaterials": {
+          "title": "Large Text Materials",
+          "description": "Printed materials with enlarged fonts for easier reading"
+        },
+        "handrails": {
+          "title": "Handrails",
+          "description": "Handrails on stairs and corridors for safety"
+        },
+        "nonSlipFloors": {
+          "title": "Non-Slip Floors",
+          "description": "Special flooring to prevent falls"
+        },
+        "goodLighting": {
+          "title": "Good Lighting",
+          "description": "Adequate and quality lighting in all rooms"
+        },
+        "restingAreas": {
+          "title": "Resting Areas",
+          "description": "Comfortable seating and rest areas in various zones"
+        }
+      },
+      "specialPrograms": {
+        "memoryActivities": {
+          "title": "Memory Activities"
+        },
+        "intergenerationalPrograms": {
+          "title": "Intergenerational Programs"
+        },
+        "volunteerPrograms": {
+          "title": "Volunteer Programs"
+        },
+        "mentalHealthSupport": {
+          "title": "Mental Health Support"
+        }
+      },
+      "ageSpecificNeeds": {
+        "lowImpactActivities": {
+          "title": "Low Impact Activities"
+        },
+        "nutritionSupport": {
+          "title": "Nutrition Support"
         }
       }
     },
