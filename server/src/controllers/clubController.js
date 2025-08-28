@@ -12,7 +12,7 @@ const {
     user_account,
 } = require('../sequelize/models');
 const CustomError = require('../utils/customError');
-const { transformClub } = require('../utils/clubUtils');
+const { transformToDB, transformClub, transformMemberToDB, transformActivityToDB } = require('../utils/clubUtils');
 const { findBySlugOrId } = require('../utils/modelLookup');
 const { transformComment, getCommentConfig } = require('../utils/commentUtils');
 const { comment } = require('../sequelize/models');
@@ -24,11 +24,10 @@ const { Op } = require('sequelize');
 
 clubController.post('/create', isAuth, async (req, res, next) => {
     try {
-        const validatedData = clubSchema.parse(req.body);
+        const validatedData = clubSchema.create.parse(req.body);
         const clubData = {
             ...validatedData,
             isDraft: false,
-            createdBy: validatedData.metadata?.createdBy || req.user.userId,
         };
 
         const existing = await club_Club.findOne({
@@ -40,7 +39,12 @@ clubController.post('/create', isAuth, async (req, res, next) => {
 
         if (existing) {
             req.params.identifier = existing.slug;
-            return updateClub(clubData, req, res, next, false);
+            const updateValidatedData = clubSchema.update.parse(req.body);
+            const updateClubData = {
+                ...updateValidatedData,
+                isDraft: false,
+            };
+            return updateClub(updateClubData, req, res, next, false);
         } else {
             return createClub(clubData, req, res, next);
         }
@@ -54,16 +58,15 @@ clubController.post('/draft/save/:identifier?', isAuth, async (req, res, next) =
         const { identifier } = req.params;
 
         if (!identifier) {
-            const validatedData = clubSchema.parse(req.body);
+            const validatedData = clubSchema.create.parse(req.body);
             const clubData = {
                 ...validatedData,
                 isDraft: true,
-                createdBy: validatedData.metadata?.createdBy || req.user.userId,
             };
             return createClub(clubData, req, res, next);
         }
 
-        const validatedData = clubSchema.parse(req.body);
+        const validatedData = clubSchema.update.parse(req.body);
         return updateClub(validatedData, req, res, next, true);
     } catch (err) {
         next(err);
@@ -88,7 +91,7 @@ clubController.get('/draft/:identifier', isAuth, async (req, res, next) => {
 
 clubController.put('/:identifier', isAuth, async (req, res, next) => {
     try {
-        const validatedData = clubSchema.parse(req.body);
+        const validatedData = clubSchema.update.parse(req.body);
         return updateClub(validatedData, req, res, next, false);
     } catch (err) {
         next(err);
@@ -339,75 +342,50 @@ clubController.get('/:identifier/management', async (req, res, next) => {
 const createClub = async (clubData, req, res, next) => {
     try {
         const result = await club_Club.sequelize.transaction(async (t) => {
-            const club = await club_Club.create(clubData, { transaction: t });
+            const dbData = transformToDB(clubData, { isCreate: true });
 
-            const detailsData = {
-                clubId: club.id,
-                fullDescription: clubData.fullDescription || null,
-                gallery: clubData.gallery || [],
-                media: clubData.media || {},
-                stats: clubData.stats || {},
-                management: clubData.management || {},
-                contacts: clubData.contacts || {},
-                finances: clubData.finances || {},
-                regionalInfo: clubData.regionalInfo || {},
-                achievements: clubData.achievements || {},
-                socialImpact: clubData.socialImpact || {},
-                pensionersSpecific: clubData.pensionersSpecific || {},
-                template: clubData.template || null,
-                preferences: clubData.preferences || {},
-            };
+            const club = await club_Club.create(
+                {
+                    ...dbData.club_Club,
+                },
+                { transaction: t }
+            );
 
-            await club_ClubDetails.create(detailsData, { transaction: t });
+            await club_ClubDetails.create(
+                {
+                    ...dbData.club_ClubDetails,
+                    clubId: club.id,
+                },
+                { transaction: t }
+            );
 
-            const locationData = {
-                clubId: club.id,
-                address: clubData.location?.address || null,
-                city: clubData.location?.city || null,
-                municipality: clubData.location?.municipality || null,
-                region: clubData.location?.region || null,
-                postalCode: clubData.location?.postalCode || null,
-                coordinates: clubData.location?.coordinates || {},
-                venue: clubData.location?.venue || {},
-            };
+            await club_ClubLocation.create(
+                {
+                    ...dbData.club_ClubLocation,
+                    clubId: club.id,
+                },
+                { transaction: t }
+            );
 
-            await club_ClubLocation.create(locationData, { transaction: t });
-
-            const membershipData = {
-                clubId: club.id,
-                totalMembers: clubData.membership?.totalMembers || 0,
-                maxMembers: clubData.membership?.maxMembers || 0,
-                ageGroups: clubData.membership?.ageGroups || {},
-                membershipFee: clubData.membership?.membershipFee || {},
-                type: clubData.membership?.type || null,
-                minimumAge: clubData.membership?.minimumAge || 0,
-                trialPeriod: clubData.membership?.trialPeriod || {},
-                fees: clubData.membership?.fees || {},
-                management: clubData.membership?.management || {},
-                requirements: clubData.membership?.requirements || [],
-                benefits: clubData.membership?.benefits || [],
-            };
-
-            await club_ClubMembership.create(membershipData, { transaction: t });
+            await club_ClubMembership.create(
+                {
+                    ...dbData.club_ClubMembership,
+                    clubId: club.id,
+                },
+                { transaction: t }
+            );
 
             if (clubData.members && Array.isArray(clubData.members)) {
                 for (const memberData of clubData.members) {
-                    const member = {
-                        clubId: club.id,
-                        firstName: memberData.firstName,
-                        lastName: memberData.lastName,
-                        phone: memberData.phone,
-                        email: memberData.email,
-                        address: memberData.address,
-                        photo: memberData.photo || {},
-                        joinDate: memberData.joinDate,
-                        isActive: memberData.isActive !== undefined ? memberData.isActive : true,
-                        role: memberData.role,
-                        status: memberData.status,
-                        preferences: memberData.preferences || {},
-                    };
+                    const memberDbData = transformMemberToDB(memberData, { isCreate: true });
 
-                    await club_ClubMember.create(member, { transaction: t });
+                    await club_ClubMember.create(
+                        {
+                            ...memberDbData,
+                            clubId: club.id,
+                        },
+                        { transaction: t }
+                    );
                 }
             }
 
@@ -418,19 +396,15 @@ const createClub = async (clubData, req, res, next) => {
 
                 if (Array.isArray(activities)) {
                     for (const activityData of activities) {
-                        const activity = {
-                            clubId: club.id,
-                            type: type,
-                            name: activityData.name,
-                            title: activityData.title,
-                            description: activityData.description,
-                            data: activityData,
-                            schedule: type === 'regular' ? { day: activityData.day, time: activityData.time } : {},
-                            isActive: true,
-                            featured: activityData.featured || false,
-                        };
+                        const activityDbData = transformActivityToDB(activityData, type, { isCreate: true });
 
-                        await club_ClubActivity.create(activity, { transaction: t });
+                        await club_ClubActivity.create(
+                            {
+                                ...activityDbData,
+                                clubId: club.id,
+                            },
+                            { transaction: t }
+                        );
                     }
                 }
             }
@@ -448,13 +422,13 @@ const createClub = async (clubData, req, res, next) => {
             ],
         });
 
-        const transformedClub = transformClub(completeClub);
+        const feData = transformClub(completeClub);
 
-        res.status(201).json({
-            ...transformedClub,
+        return res.status(201).json({
+            ...feData,
         });
-    } catch (err) {
-        next(err);
+    } catch (error) {
+        next(error);
     }
 };
 
@@ -543,6 +517,13 @@ const updateClub = async (clubData, req, res, next, isDraft) => {
         const result = await club_Club.sequelize.transaction(async (t) => {
             const club = await findBySlugOrId(club_Club, identifier, {
                 where: { isDraft },
+                include: [
+                    { model: club_ClubDetails, as: 'details' },
+                    { model: club_ClubLocation, as: 'location' },
+                    { model: club_ClubMembership, as: 'membership' },
+                    { model: club_ClubMember, as: 'members' },
+                    { model: club_ClubActivity, as: 'activities' },
+                ],
                 transaction: t,
             });
 
@@ -553,72 +534,138 @@ const updateClub = async (clubData, req, res, next, isDraft) => {
                 });
             }
 
-            await club.update(clubData, { transaction: t });
+            const dbData = transformToDB(clubData, { isCreate: false });
 
-            const detailsData = {
-                fullDescription: clubData.fullDescription || null,
-                gallery: clubData.gallery || [],
-                media: clubData.media || {},
-                stats: clubData.stats || {},
-                management: clubData.management || {},
-                contacts: clubData.contacts || {},
-                finances: clubData.finances || {},
-                regionalInfo: clubData.regionalInfo || {},
-                achievements: clubData.achievements || {},
-                socialImpact: clubData.socialImpact || {},
-                pensionersSpecific: clubData.pensionersSpecific || {},
-                template: clubData.template || null,
-                preferences: clubData.preferences || {},
-            };
+            // Update main club data (only provided fields)
+            const clubUpdateData = {};
+            Object.keys(dbData.club_Club).forEach((key) => {
+                if (clubData[key] !== undefined) {
+                    clubUpdateData[key] = dbData.club_Club[key];
+                }
+            });
 
-            await club_ClubDetails.upsert(
-                {
-                    clubId: club.id,
-                    ...detailsData,
-                },
-                { transaction: t }
-            );
+            if (Object.keys(clubUpdateData).length > 0) {
+                await club.update(clubUpdateData, { transaction: t });
+            }
 
-            const locationData = {
-                address: clubData.location?.address || null,
-                city: clubData.location?.city || null,
-                municipality: clubData.location?.municipality || null,
-                region: clubData.location?.region || null,
-                postalCode: clubData.location?.postalCode || null,
-                coordinates: clubData.location?.coordinates || {},
-                venue: clubData.location?.venue || {},
-            };
+            // Update details (only provided fields)
+            if (club.details) {
+                const detailsUpdateData = {};
+                Object.keys(dbData.club_ClubDetails).forEach((key) => {
+                    if (clubData[key] !== undefined) {
+                        detailsUpdateData[key] = dbData.club_ClubDetails[key];
+                    }
+                });
 
-            await club_ClubLocation.upsert(
-                {
-                    clubId: club.id,
-                    ...locationData,
-                },
-                { transaction: t }
-            );
+                if (Object.keys(detailsUpdateData).length > 0) {
+                    await club.details.update(detailsUpdateData, { transaction: t });
+                }
+            } else if (Object.keys(dbData.club_ClubDetails).some((key) => clubData[key] !== undefined)) {
+                // Create details if they don't exist but data is provided
+                await club_ClubDetails.create(
+                    {
+                        ...dbData.club_ClubDetails,
+                        clubId: club.id,
+                    },
+                    { transaction: t }
+                );
+            }
 
-            const membershipData = {
-                clubId: club.id,
-                totalMembers: clubData.membership?.totalMembers || 0,
-                maxMembers: clubData.membership?.maxMembers || 0,
-                ageGroups: clubData.membership?.ageGroups || {},
-                membershipFee: clubData.membership?.membershipFee || {},
-                type: clubData.membership?.type || null,
-                minimumAge: clubData.membership?.minimumAge || 0,
-                trialPeriod: clubData.membership?.trialPeriod || {},
-                fees: clubData.membership?.fees || {},
-                management: clubData.membership?.management || {},
-                requirements: clubData.membership?.requirements || [],
-                benefits: clubData.membership?.benefits || [],
-            };
+            // Update location (only if location data is provided)
+            if (clubData.location) {
+                if (club.location) {
+                    const locationUpdateData = {};
+                    Object.keys(dbData.club_ClubLocation).forEach((key) => {
+                        if (clubData.location[key] !== undefined) {
+                            locationUpdateData[key] = dbData.club_ClubLocation[key];
+                        }
+                    });
 
-            await club_ClubMembership.upsert(
-                {
-                    clubId: club.id,
-                    ...membershipData,
-                },
-                { transaction: t }
-            );
+                    if (Object.keys(locationUpdateData).length > 0) {
+                        await club.location.update(locationUpdateData, { transaction: t });
+                    }
+                } else {
+                    await club_ClubLocation.create(
+                        {
+                            ...dbData.club_ClubLocation,
+                            clubId: club.id,
+                        },
+                        { transaction: t }
+                    );
+                }
+            }
+
+            // Update membership (only provided fields)
+            if (club.membership) {
+                const membershipUpdateData = {};
+                Object.keys(dbData.club_ClubMembership).forEach((key) => {
+                    if (clubData.membership?.[key] !== undefined) {
+                        membershipUpdateData[key] = dbData.club_ClubMembership[key];
+                    }
+                });
+
+                if (Object.keys(membershipUpdateData).length > 0) {
+                    await club.membership.update(membershipUpdateData, { transaction: t });
+                }
+            } else if (clubData.membership) {
+                await club_ClubMembership.create(
+                    {
+                        ...dbData.club_ClubMembership,
+                        clubId: club.id,
+                    },
+                    { transaction: t }
+                );
+            }
+
+            // Handle members - replace entire collection (as expected by FE)
+            if (clubData.members !== undefined) {
+                await club_ClubMember.destroy({
+                    where: { clubId: club.id },
+                    transaction: t,
+                });
+
+                if (Array.isArray(clubData.members)) {
+                    for (const memberData of clubData.members) {
+                        const memberDbData = transformMemberToDB(memberData, { isCreate: true });
+
+                        await club_ClubMember.create(
+                            {
+                                ...memberDbData,
+                                clubId: club.id,
+                            },
+                            { transaction: t }
+                        );
+                    }
+                }
+            }
+
+            // Handle activities - replace entire collection (as expected by FE)
+            if (clubData.activities !== undefined) {
+                await club_ClubActivity.destroy({
+                    where: { clubId: club.id },
+                    transaction: t,
+                });
+
+                const activityTypes = ['regular', 'events', 'trips', 'courses'];
+
+                for (const type of activityTypes) {
+                    const activities = clubData.activities[type] || [];
+
+                    if (Array.isArray(activities)) {
+                        for (const activityData of activities) {
+                            const activityDbData = transformActivityToDB(activityData, type, { isCreate: true });
+
+                            await club_ClubActivity.create(
+                                {
+                                    ...activityDbData,
+                                    clubId: club.id,
+                                },
+                                { transaction: t }
+                            );
+                        }
+                    }
+                }
+            }
 
             return club.id;
         });

@@ -1,13 +1,82 @@
-const { Club, ClubDetails, ClubLocation, ClubMembership, ClubMember, ClubActivity } = require('../sequelize/models');
+const transformToDB = (feData, options = {}) => {
+    const { isCreate = false } = options;
 
-/**
- * Transform club data from database format to frontend format
- */
+    const dbData = {
+        club_Club: {
+            slug: feData.slug || '',
+            name: feData.name || '',
+            shortDescription: feData.shortDescription || '',
+            foundedYear: feData.foundedYear || 0,
+            status: feData.status || '',
+            category: feData.category || '',
+            logo: feData.logo || '',
+            mainImage: feData.mainImage || '',
+            createdBy: feData.createdBy || '',
+            isVerified: feData.isVerified !== undefined ? feData.isVerified : false,
+            isPublic: feData.isPublic !== undefined ? feData.isPublic : false,
+            isDraft: feData.isDraft,
+            rating: feData.rating || 0,
+            views: feData.views || 0,
+            followers: feData.followers || 0,
+            tags: Array.isArray(feData.tags) ? feData.tags : [],
+        },
+
+        club_ClubDetails: {
+            fullDescription: feData.fullDescription || '',
+            gallery: feData.gallery || [],
+            media: feData.media || {},
+            stats: feData.stats || {},
+            management: feData.management || {},
+            contacts: feData.contacts || {},
+            finances: feData.finances || {},
+            regionalInfo: feData.regionalInfo || {},
+            achievements: feData.achievements || {},
+            socialImpact: feData.socialImpact || {},
+            pensionersSpecific: feData.pensionersSpecific || {},
+            template: feData.template || '',
+            preferences: feData.preferences || {},
+        },
+
+        club_ClubLocation: {
+            address: feData.location?.address || '',
+            city: feData.location?.city || '',
+            municipality: feData.location?.municipality || '',
+            region: feData.location?.region || '',
+            postalCode: feData.location?.postalCode || '',
+            coordinates: feData.location?.coordinates || {},
+            venue: feData.location?.venue || {},
+        },
+
+        club_ClubMembership: {
+            totalMembers: feData.membership?.totalMembers || 0,
+            maxMembers: feData.membership?.maxMembers || 0,
+            ageGroups: feData.membership?.ageGroups || {},
+            membershipFee: feData.membership?.membershipFee || {},
+            type: feData.membership?.type || '',
+            minimumAge: feData.membership?.minimumAge || 0,
+            trialPeriod: feData.membership?.trialPeriod || {},
+            fees: feData.membership?.fees || {},
+            management: feData.membership?.management || {},
+            requirements: feData.membership?.requirements || [],
+            benefits: feData.membership?.benefits || [],
+        },
+    };
+
+    if (isCreate) {
+        delete dbData.club_Club.id;
+        delete dbData.club_ClubDetails.id;
+        delete dbData.club_ClubLocation.id;
+        delete dbData.club_ClubMembership.id;
+    }
+
+    return dbData;
+};
+
 const transformClub = (clubData) => {
     const club = clubData.get ? clubData.get() : clubData;
 
     return {
-        // ОСНОВНА ИНФОРМАЦИЯ
+        // Basic fields
         id: club.id?.toString() || '',
         slug: club.slug || '',
         name: club.name || '',
@@ -20,7 +89,7 @@ const transformClub = (clubData) => {
         gallery: club.details?.gallery || [],
         category: club.category || '',
 
-        // МЕСТОПОЛОЖЕНИЕ
+        // Location
         location: club.location
             ? {
                   address: club.location.address || '',
@@ -39,7 +108,7 @@ const transformClub = (clubData) => {
               }
             : null,
 
-        // ЧЛЕНСТВО
+        // Membership
         membership: club.membership
             ? {
                   totalMembers: club.membership.totalMembers || 0,
@@ -65,14 +134,13 @@ const transformClub = (clubData) => {
               }
             : null,
 
-        // ЧЛЕНОВЕ
+        // Members
         members: club.members
             ? club.members.map((member) => {
                   const memberData = member.get ? member.get() : member;
                   return {
                       id: memberData.id?.toString() || '',
                       clubId: memberData.clubId?.toString() || '',
-                      userId: memberData.userId?.toString() || '',
                       firstName: memberData.firstName || '',
                       lastName: memberData.lastName || '',
                       phone: memberData.phone || '',
@@ -88,14 +156,14 @@ const transformClub = (clubData) => {
               })
             : [],
 
-        // МЕДИЯ
+        // Media
         media: club.details?.media || {
             videos: [],
             virtualTour: '',
             audioFiles: [],
         },
 
-        // СТАТИСТИКИ
+        // Stats
         stats: club.details?.stats || {
             totalMembers: 0,
             programs: 0,
@@ -108,15 +176,15 @@ const transformClub = (clubData) => {
             avgWeeklyWorkouts: 0,
         },
 
-        // УПРАВЛЕНИЕ
+        // Management
         management: club.details?.management || {
             board: [],
         },
 
-        // ДЕЙНОСТИ
+        // Activities
         activities: transformActivities(club.activities),
 
-        // КОНТАКТИ
+        // Contacts
         contacts: club.details?.contacts || {
             phone: '',
             mobile: '',
@@ -156,27 +224,27 @@ const transformClub = (clubData) => {
             },
         },
 
-        // ФИНАНСИ
+        // Finances
         finances: club.details?.finances || {
             budget: { yearly: 0, currency: '' },
             funding: [],
             sponsors: [],
         },
 
-        // МЕТАДАННИ
+        // Metadata
         metadata: {
             createdAt: club.createdAt?.toISOString() || '',
             updatedAt: club.updatedAt?.toISOString() || '',
             createdBy: club.createdBy || '',
             isVerified: club.isVerified || false,
             isPublic: club.isPublic || false,
-            tags: club.tags || [],
-            rating: club.rating || 0.0,
+            tags: Array.isArray(club.tags) ? club.tags : [],
+            rating: club.rating || 0,
             views: club.views || 0,
             followers: club.followers || 0,
         },
 
-        // РЕГИОНАЛНА ИНФОРМАЦИЯ
+        // Regional info
         regionalInfo: club.details?.regionalInfo || {
             isCentralClub: false,
             centralClubId: '',
@@ -185,21 +253,21 @@ const transformClub = (clubData) => {
             regionalRole: '',
         },
 
-        // ПОСТИЖЕНИЯ
+        // Achievements
         achievements: club.details?.achievements || {
             awards: [],
             certificates: [],
             recognitions: [],
         },
 
-        // СОЦИАЛНО ВЪЗДЕЙСТВИЕ
+        // Social impact
         socialImpact: club.details?.socialImpact || {
             volunteering: [],
             communityProjects: [],
             partnerships: [],
         },
 
-        // СПЕЦИФИЧНИ ЗА ПЕНСИОНЕРИ
+        // Pensioners specific
         pensionersSpecific: club.details?.pensionersSpecific || {
             healthServices: {
                 regularCheckups: false,
@@ -249,10 +317,10 @@ const transformClub = (clubData) => {
             },
         },
 
-        // ШАБЛОН
+        // Template
         template: club.details?.template || '',
 
-        // НАСТРОЙКИ
+        // Preferences
         preferences: club.details?.preferences || {
             showFinances: false,
             showMembersList: false,
@@ -363,59 +431,57 @@ const transformActivities = (activities) => {
     return transformed;
 };
 
-/**
- * Get club configuration for includes and associations
- */
-const getClubConfig = (includeDetails = true, includeLocation = true, includeMembership = true, includeMembers = true, includeActivities = true) => {
-    const config = {
-        include: [],
+const transformMemberToDB = (memberData, options = {}) => {
+    const { isCreate = false } = options;
+
+    const dbData = {
+        firstName: memberData.firstName || '',
+        lastName: memberData.lastName || '',
+        phone: memberData.phone || '',
+        email: memberData.email || '',
+        address: memberData.address || '',
+        photo: memberData.photo || {},
+        joinDate: memberData.joinDate || '',
+        isActive: memberData.isActive !== undefined ? memberData.isActive : true,
+        role: memberData.role || '',
+        status: memberData.status || '',
+        preferences: memberData.preferences || {},
     };
 
-    if (includeDetails) {
-        config.include.push({
-            model: ClubDetails,
-            as: 'details',
-            required: false,
-        });
+    if (isCreate) {
+        delete dbData.id;
+        delete dbData.clubId;
     }
 
-    if (includeLocation) {
-        config.include.push({
-            model: ClubLocation,
-            as: 'location',
-            required: false,
-        });
+    return dbData;
+};
+
+const transformActivityToDB = (activityData, type, options = {}) => {
+    const { isCreate = false } = options;
+
+    const dbData = {
+        type: type,
+        name: activityData.name || '',
+        title: activityData.title || '',
+        description: activityData.description || '',
+        data: activityData,
+        schedule: type === 'regular' ? activityData.schedule || {} : {},
+        isActive: true,
+        featured: activityData.featured || false,
+    };
+
+    if (isCreate) {
+        delete dbData.id;
+        delete dbData.clubId;
     }
 
-    if (includeMembership) {
-        config.include.push({
-            model: ClubMembership,
-            as: 'membership',
-            required: false,
-        });
-    }
-
-    if (includeMembers) {
-        config.include.push({
-            model: ClubMember,
-            as: 'members',
-            required: false,
-        });
-    }
-
-    if (includeActivities) {
-        config.include.push({
-            model: ClubActivity,
-            as: 'activities',
-            required: false,
-        });
-    }
-
-    return config;
+    return dbData;
 };
 
 module.exports = {
+    transformToDB,
     transformClub,
     transformActivities,
-    getClubConfig,
+    transformMemberToDB,
+    transformActivityToDB,
 };

@@ -6,7 +6,7 @@ const membershipSchema = require('./membership.schema');
 const membersSchema = require('./members.schema');
 const activitiesSchema = require('./activities.schema');
 
-const clubSchema = z.object({
+const baseSchema = z.object({
     ...basicSchema.shape,
     ...detailsSchema.shape,
     location: locationSchema.optional(),
@@ -15,11 +15,10 @@ const clubSchema = z.object({
     activities: activitiesSchema.optional(),
 });
 
-module.exports = clubSchema;
+const create = baseSchema;
+const update = baseSchema.omit({ slug: true });
 
-module.exports.basic = basicSchema;
-module.exports.details = detailsSchema;
-module.exports.location = locationSchema;
-module.exports.membership = membershipSchema;
-module.exports.members = membersSchema;
-module.exports.activities = activitiesSchema;
+module.exports = {
+    create,
+    update,
+};

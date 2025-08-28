@@ -147,6 +147,11 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: true,
                 defaultValue: 0,
             },
+            tags: {
+                type: DataTypes.JSONB,
+                allowNull: true,
+                defaultValue: [],
+            },
             totalMembers: {
                 type: DataTypes.INTEGER,
                 allowNull: true,
