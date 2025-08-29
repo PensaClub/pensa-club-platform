@@ -1,4 +1,17 @@
-const { image, initiative, story, publication, section, downloadMaterial, contact, sponsor, partner, milestone, user_account } = require('../sequelize/models');
+const {
+    image,
+    initiative,
+    story,
+    publication,
+    section,
+    downloadMaterial,
+    contact,
+    sponsor,
+    partner,
+    milestone,
+    user_account,
+    beneficiaries,
+} = require('../sequelize/models');
 
 const projectConfig = [
     {
@@ -113,6 +126,12 @@ const projectConfig = [
         as: 'milestones',
         required: false,
         attributes: ['id', 'title', 'dueDate', 'status'],
+    },
+    {
+        model: beneficiaries,
+        as: 'beneficiaries',
+        required: false,
+        attributes: ['id', 'totalCount', 'totalAmountDistributed', 'currency', 'list'],
     },
 ];
 

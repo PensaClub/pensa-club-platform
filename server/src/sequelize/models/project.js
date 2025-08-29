@@ -124,6 +124,11 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'projectId',
                 as: 'applications',
             });
+
+            project.hasOne(models.beneficiaries, {
+                foreignKey: 'projectId',
+                as: 'beneficiaries',
+            });
         }
     }
 
