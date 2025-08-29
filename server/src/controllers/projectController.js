@@ -15,6 +15,7 @@ const {
     partner,
     milestone,
     project_application,
+    beneficiaries,
 } = require('../sequelize/models');
 const CustomError = require('../utils/customError');
 const { transformProject, projectConfig } = require('../utils/projectUtils');
@@ -783,6 +784,17 @@ const createProject = async (projectData, req, res, next) => {
                 );
             }
 
+            // Create beneficiaries if provided
+            if (projectData.beneficiaries) {
+                await beneficiaries.create(
+                    {
+                        projectId: newProject.id,
+                        ...projectData.beneficiaries,
+                    },
+                    { transaction: t }
+                );
+            }
+
             const completeProject = await project.findByPk(newProject.id, {
                 include: projectConfig,
                 transaction: t,
@@ -1069,6 +1081,25 @@ const updateProject = async (projectData, req, res, next, isDraft = false) => {
                                 { transaction: t }
                             )
                         )
+                    );
+                }
+            }
+
+            if (projectData.beneficiaries !== undefined) {
+                await beneficiaries.destroy({
+                    where: {
+                        projectId: foundProject.id,
+                    },
+                    transaction: t,
+                });
+
+                if (projectData.beneficiaries) {
+                    await beneficiaries.create(
+                        {
+                            projectId: foundProject.id,
+                            ...projectData.beneficiaries,
+                        },
+                        { transaction: t }
                     );
                 }
             }
