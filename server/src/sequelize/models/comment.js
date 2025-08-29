@@ -35,6 +35,15 @@ module.exports = (sequelize, DataTypes) => {
                     comment_link_connection: 'project',
                 },
             });
+
+            Comment.belongsTo(models.club_Club, {
+                foreignKey: 'commentableId',
+                as: 'club',
+                constraints: false,
+                scope: {
+                    comment_link_connection: 'club',
+                },
+            });
         }
     }
     Comment.init(

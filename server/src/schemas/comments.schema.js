@@ -11,7 +11,7 @@ const CreateCommentSchema = z
 
         commentableId: z.union([z.string(), z.number()]),
 
-        commentsLinkConnection: z.enum(['initiative', 'project', 'publication', 'story']),
+        commentsLinkConnection: z.enum(['initiative', 'project', 'publication', 'story', 'club']),
 
         parentId: z
             .union([z.string(), z.number(), z.null()])

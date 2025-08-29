@@ -102,6 +102,13 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'userId',
                 as: 'projectApplications',
             });
+
+            user_account.belongsToMany(models.club_Club, {
+                through: 'club_bookmarks',
+                as: 'bookmarkedClubs',
+                foreignKey: 'user_id',
+                otherKey: 'club_id',
+            });
         }
     }
 

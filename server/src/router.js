@@ -14,6 +14,7 @@ const publicationController = require('./controllers/publicationController');
 const projectController = require('./controllers/projectController');
 const applicationController = require('./controllers/applicationController');
 const storyController = require('./controllers/storyController');
+const clubController = require('./controllers/clubController');
 
 router.use('/auth', authController);
 router.use('/user', userController);
@@ -28,6 +29,7 @@ router.use('/projects', projectController);
 router.use('/publications', publicationController);
 router.use('/applications', applicationController);
 router.use('/stories', storyController);
+router.use('/clubs', clubController);
 
 router.use((err, req, res, next) => {
     errorHandler(err, req, res, err.statusCode || 500);
