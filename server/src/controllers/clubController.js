@@ -2,6 +2,7 @@ const clubController = require('express').Router();
 const isAuth = require('../middlewares/isAuth');
 const { checkPermission } = require('../middlewares/rbac');
 const clubSchema = require('../schemas/club/index.schema');
+const transferOwnershipSchema = require('../schemas/club/transferOwnership.schema');
 const {
     club_Club,
     club_ClubDetails,
@@ -227,7 +228,7 @@ clubController.get('/user-bookmarks/:email', async (req, res, next) => {
     }
 });
 
-clubController.get('/user-clubs/:email', async (req, res, next) => {
+clubController.get('/my-clubs/:email', async (req, res, next) => {
     try {
         const { email } = req.params;
         const { page = 1, limit = 12 } = req.query;
@@ -281,6 +282,111 @@ clubController.get('/user-clubs/:email', async (req, res, next) => {
                 totalItems: totalCount,
                 itemsPerPage: parseInt(limit),
             },
+        });
+    } catch (err) {
+        next(err);
+    }
+});
+
+clubController.get('/user-clubs', isAuth, async (req, res, next) => {
+    try {
+        const { page = 1, limit = 12 } = req.query;
+        const offset = (page - 1) * limit;
+        const userEmail = req.user.email;
+
+        const totalCount = await club_Club.count({
+            where: {
+                isDraft: false,
+                owner: userEmail,
+            },
+        });
+
+        const clubs = await club_Club.findAll({
+            where: {
+                isDraft: false,
+                owner: userEmail,
+            },
+            limit: parseInt(limit),
+            offset: parseInt(offset),
+            include: [
+                { model: club_ClubDetails, as: 'details' },
+                { model: club_ClubLocation, as: 'location' },
+                { model: club_ClubMembership, as: 'membership' },
+                { model: club_ClubMember, as: 'members' },
+                { model: club_ClubActivity, as: 'activities' },
+            ],
+            order: [['createdAt', 'DESC']],
+        });
+
+        const clubsWithComments = await Promise.all(
+            clubs.map(async (club) => {
+                const comments = await comment.findAll(getCommentConfig(club.id, 'club'));
+                const transformed = transformClub(club);
+                transformed.comments = comments.map((comment) => transformComment(comment));
+                return transformed;
+            })
+        );
+
+        return res.status(200).json({
+            clubs: clubsWithComments,
+            pagination: {
+                currentPage: parseInt(page),
+                totalPages: Math.ceil(totalCount / limit),
+                totalItems: totalCount,
+                itemsPerPage: parseInt(limit),
+            },
+        });
+    } catch (err) {
+        next(err);
+    }
+});
+
+clubController.patch('/:identifier/transfer-ownership', isAuth, async (req, res, next) => {
+    try {
+        const { identifier } = req.params;
+        const { email } = transferOwnershipSchema.parse(req.body);
+
+        // TODO: Add checkPermission('admin')
+
+        const result = await club_Club.sequelize.transaction(async (t) => {
+            const club = await findBySlugOrId(club_Club, identifier, {
+                where: { isDraft: false },
+                transaction: t,
+            });
+
+            if (!club) {
+                throw new CustomError({
+                    message: 'Club not found',
+                    statusCode: 404,
+                });
+            }
+
+            const newOwner = await user_account.findOne({
+                where: { email: email },
+                transaction: t,
+            });
+
+            if (!newOwner) {
+                throw new CustomError({
+                    message: 'New owner must be a registered user',
+                    statusCode: 400,
+                });
+            }
+
+            const oldOwner = club.owner;
+            await club.update({ owner: email }, { transaction: t });
+
+            return {
+                clubSlug: club.slug,
+                clubName: club.name,
+                oldOwner,
+                newOwner: email,
+            };
+        });
+
+        return res.status(200).json({
+            message: `Club ownership transferred successfully from ${result.oldOwner} to ${result.newOwner}`,
+            transfer: result,
         });
     } catch (err) {
         next(err);
@@ -343,6 +449,8 @@ const createClub = async (clubData, req, res, next) => {
     try {
         const result = await club_Club.sequelize.transaction(async (t) => {
             const dbData = transformToDB(clubData, { isCreate: true });
+
+            dbData.club_Club.owner = req.user.email;
 
             const club = await club_Club.create(
                 {
