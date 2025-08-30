@@ -163,6 +163,11 @@ module.exports = (sequelize, DataTypes) => {
                 field: 'total_members',
                 comment: 'Denormalized field for performance - actual members in club_members table',
             },
+            adminComment: {
+                type: DataTypes.STRING,
+                allowNull: true,
+                field: 'admin_comment',
+            },
         },
         {
             sequelize,

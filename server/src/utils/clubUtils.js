@@ -12,6 +12,7 @@ const transformToDB = (feData, options = {}) => {
             logo: feData.logo || '',
             mainImage: feData.mainImage || '',
             createdBy: feData.createdBy || '',
+            adminComment: feData.adminComment || '',
             isVerified: feData.isVerified !== undefined ? feData.isVerified : false,
             isPublic: feData.isPublic !== undefined ? feData.isPublic : false,
             isDraft: feData.isDraft,

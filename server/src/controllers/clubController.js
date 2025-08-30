@@ -18,6 +18,7 @@ const { findBySlugOrId } = require('../utils/modelLookup');
 const { transformComment, getCommentConfig } = require('../utils/commentUtils');
 const { comment } = require('../sequelize/models');
 const { Op } = require('sequelize');
+const { forwardEmailsViaZoho } = require('../utils/zohoEmails');
 
 // ========================================
 // ENDPOINTS
@@ -439,6 +440,22 @@ clubController.get('/:identifier/members', async (req, res, next) => {
 
 clubController.get('/:identifier/management', async (req, res, next) => {
     return getClubSpecificData(req.params.identifier, 'management', req, res, next);
+});
+
+clubController.patch('/:identifier/toggle-status', isAuth, async (req, res, next) => {
+    return performAdminAction(req.params.identifier, 'toggle-status', req, res, next);
+});
+
+clubController.patch('/:identifier/verify', isAuth, async (req, res, next) => {
+    return performAdminAction(req.params.identifier, 'verify', req, res, next);
+});
+
+clubController.patch('/:identifier/approve', isAuth, async (req, res, next) => {
+    return performAdminAction(req.params.identifier, 'approve', req, res, next);
+});
+
+clubController.patch('/:identifier/reject', isAuth, async (req, res, next) => {
+    return performAdminAction(req.params.identifier, 'reject', req, res, next);
 });
 
 // ========================================
@@ -1000,6 +1017,125 @@ const getClubSpecificData = async (identifier, dataType, req, res, next) => {
         }
 
         return res.status(200).json(response);
+    } catch (err) {
+        next(err);
+    }
+};
+
+const performAdminAction = async (identifier, action, req, res, next) => {
+    try {
+        const { reason, sendEmail = true } = req.body;
+
+        // TODO: Add checkPermission('admin')
+
+        const result = await club_Club.sequelize.transaction(async (t) => {
+            const club = await findBySlugOrId(club_Club, identifier, {
+                where: { isDraft: false },
+                include: [
+                    { model: club_ClubDetails, as: 'details' },
+                    { model: club_ClubLocation, as: 'location' },
+                ],
+                transaction: t,
+            });
+
+            if (!club) {
+                throw new CustomError({
+                    message: 'Club not found',
+                    statusCode: 404,
+                });
+            }
+
+            let updateData = {};
+            let emailData = null;
+
+            switch (action) {
+                case 'toggle-status':
+                    const newStatus = club.status === 'active' ? 'inactive' : 'active';
+                    updateData = { status: newStatus };
+                    emailData = {
+                        subject: `Club Status Updated - ${club.name}`,
+                        message: `Your club "${club.name}" status has been changed to ${newStatus}.`,
+                        type: 'status_update',
+                    };
+                    break;
+
+                case 'verify':
+                    updateData = { isVerified: true };
+                    emailData = {
+                        subject: `Club Verified - ${club.name}`,
+                        message: `Congratulations! Your club "${club.name}" has been verified by our team.`,
+                        type: 'verification',
+                    };
+                    break;
+
+                case 'approve':
+                    updateData = { status: 'active', isVerified: true };
+                    emailData = {
+                        subject: `Club Approved - ${club.name}`,
+                        message: `Great news! Your club "${club.name}" has been approved and is now live on our platform.`,
+                        type: 'approval',
+                    };
+                    break;
+
+                case 'reject':
+                    if (!reason) {
+                        throw new CustomError({
+                            message: 'Reason is required for rejection',
+                            statusCode: 400,
+                        });
+                    }
+                    updateData = { status: 'rejected' };
+                    emailData = {
+                        subject: `Club Application Update - ${club.name}`,
+                        message: `We regret to inform you that your club "${club.name}" application has been rejected.\n\nReason: ${reason}\n\nPlease review the feedback and feel free to resubmit with the necessary changes.`,
+                        type: 'rejection',
+                    };
+                    break;
+
+                default:
+                    throw new CustomError({
+                        message: 'Invalid action',
+                        statusCode: 400,
+                    });
+            }
+
+            await club.update(updateData, { transaction: t });
+
+            if (sendEmail && club.owner && emailData) {
+                try {
+                    await forwardEmailsViaZoho({
+                        name: 'Pensa Club Admin',
+                        userEmail: club.owner,
+                        subject: emailData.subject,
+                        body: emailData.message,
+                        // toAddresses: [club.owner],
+                        toAddresses: 'kolev93@abv.bg',
+                    });
+                } catch (emailError) {
+                    console.error('Failed to send email notification:', emailError);
+                    // Don't fail the transaction if email fails
+                }
+            }
+
+            return {
+                clubId: club.id,
+                clubName: club.name,
+                clubOwner: club.owner,
+                action,
+                previousData: {
+                    status: club.status,
+                    isVerified: club.isVerified,
+                },
+                newData: updateData,
+                emailSent: sendEmail && club.owner && emailData,
+                reason: action === 'reject' ? reason : null,
+            };
+        });
+
+        return res.status(200).json({
+            message: `Club ${action} completed successfully`,
+            result,
+        });
     } catch (err) {
         next(err);
     }
