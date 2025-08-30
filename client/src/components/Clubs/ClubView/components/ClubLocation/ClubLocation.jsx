@@ -80,7 +80,7 @@ export const ClubLocation = ({ club }) => {
   const [showVenueModal, setShowVenueModal] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
 
-  // ПРОВЕРКА ЗА ДАННИ
+  // ПРОВЕРКА ЗА ДАННИ - активираме основните проверки
   // if (!club?.location || !club.location.coordinates || 
   //     !club.location.coordinates.lat || !club.location.coordinates.lng) {
   //   return null;
@@ -208,8 +208,8 @@ export const ClubLocation = ({ club }) => {
 
           {/* Quick Actions */}
           <div className="general-location-actions">
-            <a
-              href={getGoogleMapsUrl()}
+            
+            <a  href={getGoogleMapsUrl()}
               target="_blank"
               rel="noopener noreferrer"
               className="general-quick-action maps"
@@ -217,12 +217,12 @@ export const ClubLocation = ({ club }) => {
               <FontAwesomeIcon icon={faMapPin} />
               Google Maps
             </a>
-            <a
-              href={getDirectionsUrl()}
+            
+             <a href={getDirectionsUrl()}
               target="_blank"
               rel="noopener noreferrer"
               className="general-quick-action directions"
-            >
+            >1
               <FontAwesomeIcon icon={faRoute} />
               {t('clubs.ClubLocation.actions.directions')}
             </a>
@@ -253,8 +253,8 @@ export const ClubLocation = ({ club }) => {
                 >
                   <FontAwesomeIcon icon={mapExpanded ? faCompress : faExpand} />
                 </button>
-                <a
-                  href={getGoogleMapsUrl()}
+                
+                  <a href={getGoogleMapsUrl()}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="general-map-action"
@@ -286,6 +286,7 @@ export const ClubLocation = ({ club }) => {
                         <h4>{club.name}</h4>
                         <p>{club.location.address}</p>
                         <div className="general-popup-actions">
+
                           <a
                             href={getDirectionsUrl()}
                             target="_blank"
@@ -295,8 +296,8 @@ export const ClubLocation = ({ club }) => {
                             <FontAwesomeIcon icon={faRoute} />
                             {t('clubs.ClubLocation.actions.directions')}
                           </a>
-                          <a
-                            href={getGoogleMapsUrl()}
+                          
+                            <a href={getGoogleMapsUrl()}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="general-popup-btn"
@@ -468,8 +469,8 @@ export const ClubLocation = ({ club }) => {
                 </div>
               )}
 
-              {/* Quick Contacts */}
-              {(club.contacts?.phone || club.contacts?.email) && (
+              {/* Quick Contacts - показва се само ако showContactForm е true */}
+              {club.preferences?.showContactForm && (club.contacts?.phone || club.contacts?.email) && (
                 <div className="general-info-card contacts">
                   <div className="general-card-header">
                     <FontAwesomeIcon icon={faPhoneAlt} />
@@ -583,8 +584,8 @@ export const ClubLocation = ({ club }) => {
         </div>
       )}
 
-      {/* Contact Details Modal */}
-      {showContactModal && club.contacts && (
+      {/* Contact Details Modal - показва се само ако showContactForm е true */}
+      {club.preferences?.showContactForm && showContactModal && club.contacts && (
         <div className="general-modal-overlay" onClick={() => setShowContactModal(false)}>
           <div className="general-modal" onClick={(e) => e.stopPropagation()}>
             <div className="general-modal-header">
@@ -642,22 +643,22 @@ export const ClubLocation = ({ club }) => {
                 )}
 
                 {club.contacts.workingHours && (
-  <div className="general-working-hours-section">
-    <h4>{t('clubs.ClubLocation.modals.contact.detailedWorkingHours')}</h4>
-    <div className="general-hours-detailed">
-      {Object.entries(club.contacts.workingHours)
-        .filter(([day, hours]) => typeof hours === 'string') // ДОБАВИ ТАЗИ ПРОВЕРКА
-        .map(([day, hours]) => (
-          <div key={day} className="general-hours-detail">
-            <span className="general-hours-day">{getDayName(day)}</span>
-            <span className={`general-hours-time ${hours === 'closed' ? 'closed' : ''}`}>
-              {hours === 'closed' ? t('clubs.ClubLocation.hours.closed') : hours}
-            </span>
-          </div>
-        ))}
-    </div>
-  </div>
-)}
+                  <div className="general-working-hours-section">
+                    <h4>{t('clubs.ClubLocation.modals.contact.detailedWorkingHours')}</h4>
+                    <div className="general-hours-detailed">
+                      {Object.entries(club.contacts.workingHours)
+                        .filter(([day, hours]) => typeof hours === 'string') // ДОБАВИ ТАЗИ ПРОВЕРКА
+                        .map(([day, hours]) => (
+                          <div key={day} className="general-hours-detail">
+                            <span className="general-hours-day">{getDayName(day)}</span>
+                            <span className={`general-hours-time ${hours === 'closed' ? 'closed' : ''}`}>
+                              {hours === 'closed' ? t('clubs.ClubLocation.hours.closed') : hours}
+                            </span>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>

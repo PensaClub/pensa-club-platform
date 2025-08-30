@@ -452,16 +452,26 @@ export const ClubProvider = ({ children }) => {
     }
   };
 
-  const getUserClubs = async (email) => {
-    try {
-      const userClubs = await clubService.getUserClubs(email);
-      return userClubs;
-    } catch (e) {
-      console.error('Грешка при получаване на потребителски клубове:', e);
-      notify('error', e);
+ // В ClubContext.jsx, поправи getUserClubs функцията:
+const getUserClubs = async (email) => {
+  try {
+    const response = await clubService.getUserClubs(email);
+    
+    // ПОПРАВКА: Върни clubs масива, не целия response
+    if (response && Array.isArray(response.clubs)) {
+      return response.clubs;
+    } else if (Array.isArray(response)) {
+      return response;
+    } else {
+      console.warn('Unexpected getUserClubs response:', response);
       return [];
     }
-  };
+  } catch (e) {
+    console.error('Грешка при получаване на потребителски клубове:', e);
+    notify('error', e);
+    return [];
+  }
+};
 
   // ===============================
   // 🆕 ТЪРСЕНЕ И ФИЛТРИРАНЕ

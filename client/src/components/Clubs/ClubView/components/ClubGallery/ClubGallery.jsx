@@ -47,7 +47,8 @@ export const ClubGallery = ({ club }) => {
       (event.videos && event.videos.length > 0)
     );
 
-  if (!hasGallery && !hasVideos && !hasEventMedia) {
+  // ПРОВЕРКА ЗА PREFERENCES - ако publicGallery е false, не показваме компонента
+  if (!club?.preferences?.publicGallery || (!hasGallery && !hasVideos && !hasEventMedia)) {
     return null;
   }
 
@@ -293,29 +294,31 @@ export const ClubGallery = ({ club }) => {
             {t('clubs.ClubGallery.header.subtitle')}
           </p>
           
-          {/* Stats */}
-          <div className="general-gallery-stats">
-            <div className="general-gallery-stat">
-              <FontAwesomeIcon icon={faImages} />
-              <span>{stats.images}</span>
-              <label>{t('clubs.ClubGallery.stats.images')}</label>
+          {/* Stats - само ако showStatistics е true */}
+          {club.preferences?.showStatistics && (
+            <div className="general-gallery-stats">
+              <div className="general-gallery-stat">
+                <FontAwesomeIcon icon={faImages} />
+                <span>{stats.images}</span>
+                <label>{t('clubs.ClubGallery.stats.images')}</label>
+              </div>
+              <div className="general-gallery-stat">
+                <FontAwesomeIcon icon={faVideo} />
+                <span>{stats.videos}</span>
+                <label>{t('clubs.ClubGallery.stats.videos')}</label>
+              </div>
+              <div className="general-gallery-stat">
+                <FontAwesomeIcon icon={faCalendarAlt} />
+                <span>{stats.events}</span>
+                <label>{t('clubs.ClubGallery.stats.fromEvents')}</label>
+              </div>
+              <div className="general-gallery-stat">
+                <FontAwesomeIcon icon={faEye} />
+                <span>{stats.total}</span>
+                <label>{t('clubs.ClubGallery.stats.totalFiles')}</label>
+              </div>
             </div>
-            <div className="general-gallery-stat">
-              <FontAwesomeIcon icon={faVideo} />
-              <span>{stats.videos}</span>
-              <label>{t('clubs.ClubGallery.stats.videos')}</label>
-            </div>
-            <div className="general-gallery-stat">
-              <FontAwesomeIcon icon={faCalendarAlt} />
-              <span>{stats.events}</span>
-              <label>{t('clubs.ClubGallery.stats.fromEvents')}</label>
-            </div>
-            <div className="general-gallery-stat">
-              <FontAwesomeIcon icon={faEye} />
-              <span>{stats.total}</span>
-              <label>{t('clubs.ClubGallery.stats.totalFiles')}</label>
-            </div>
-          </div>
+          )}
         </div>
 
         {/* Controls */}

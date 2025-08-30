@@ -37,15 +37,15 @@ const ClubPreviewModal = ({ isOpen, onClose, formData }) => {
     return (
         <div className="club-preview-modal-overlay" onClick={onClose}>
             <div className="club-preview-modal" onClick={(e) => e.stopPropagation()}>
-                
+
                 {/* Modal Header */}
                 <div className="club-preview-modal-header">
                     <div className="club-preview-modal-title">
                         <FontAwesomeIcon icon={faEye} />
                         <span>{t('clubForm.preview.title')}</span>
                     </div>
-                    <button 
-                        className="club-preview-modal-close" 
+                    <button
+                        className="club-preview-modal-close"
                         onClick={onClose}
                         title={t('clubForm.preview.close')}
                     >
@@ -55,11 +55,13 @@ const ClubPreviewModal = ({ isOpen, onClose, formData }) => {
 
                 {/* Modal Content */}
                 <div className="club-preview-modal-content">
-                    <ClubPreview 
-                        formData={formData} 
-                        onClose={onClose}
-                        isPreviewMode={true}
-                    />
+                    <div style={{ position: 'relative', minHeight: '100%' }}>
+                        <ClubPreview
+                            formData={formData}
+                            onClose={onClose}
+                            isPreviewMode={true}
+                        />
+                    </div>
                 </div>
             </div>
         </div>

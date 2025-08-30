@@ -384,21 +384,23 @@ ${registrationForm.firstName} ${registrationForm.lastName}`);
             Разнообразна програма за активен и здравословен живот
           </p>
           
-          {/* Stats overview */}
-          <div className="general-activities-stats">
-            <div className="general-activities-stat">
-              <span>{activities.length}</span>
-              <label>Дейности</label>
+          {/* Stats overview - показва се само ако showStatistics е true */}
+          {club.preferences?.showStatistics && (
+            <div className="general-activities-stats">
+              <div className="general-activities-stat">
+                <span>{activities.length}</span>
+                <label>Дейности</label>
+              </div>
+              <div className="general-activities-stat">
+                <span>{activities.reduce((sum, act) => sum + (act.participants || 0), 0)}</span>
+                <label>Участници</label>
+              </div>
+              <div className="general-activities-stat">
+                <span>{new Set(activities.filter(act => act.day && act.day !== '—' && act.day !== '').map(act => act.day)).size}</span>
+                <label>Дни в седмицата</label>
+              </div>
             </div>
-            <div className="general-activities-stat">
-              <span>{activities.reduce((sum, act) => sum + (act.participants || 0), 0)}</span>
-              <label>Участници</label>
-            </div>
-            <div className="general-activities-stat">
-              <span>{new Set(activities.filter(act => act.day && act.day !== '—' && act.day !== '').map(act => act.day)).size}</span>
-              <label>Дни в седмицата</label>
-            </div>
-          </div>
+          )}
         </div>
 
         {/* Activities Grid */}
@@ -467,7 +469,8 @@ ${registrationForm.firstName} ${registrationForm.lastName}`);
                     </div>
                   )}
 
-                  {activity.price && (
+                  {/* Price - показва се само ако showFinances е true */}
+                  {activity.price && club.preferences?.showFinances && (
                     <div className="general-activity-price">
                       <span>💰 {activity.price}</span>
                     </div>
@@ -504,69 +507,74 @@ ${registrationForm.firstName} ${registrationForm.lastName}`);
                 </div>
               </div>
               
-              <div className="general-activity-actions">
-                <button 
-                  className="general-register-btn"
-                  onClick={() => openRegistrationModal(activity)}
-                >
-                  <FontAwesomeIcon icon={faUserPlus} />
-                  Записване
-                </button>
-              </div>
+              {/* Registration button - показва се само ако allowOnlineRegistration е true */}
+              {club.preferences?.allowOnlineRegistration && (
+                <div className="general-activity-actions">
+                  <button 
+                    className="general-register-btn"
+                    onClick={() => openRegistrationModal(activity)}
+                  >
+                    <FontAwesomeIcon icon={faUserPlus} />
+                    Записване
+                  </button>
+                </div>
+              )}
             </div>
           ))}
         </div>
 
-        {/* Weekly Schedule */}
-        <div className="general-weekly-schedule">
-          <h3>
-            <FontAwesomeIcon icon={faCalendarWeek} />
-            Седмичен график
-          </h3>
-          
-          <div className="general-schedule-grid">
-            {Object.entries(weeklySchedule).map(([day, dayActivities]) => (
-              <div key={day} className="general-day-column">
-                <div className="general-day-header">
-                  <h4>{getDayInBulgarian(day)}</h4>
-                </div>
-                
-                <div className="general-day-activities">
-                  {dayActivities && dayActivities.length > 0 ? (
-                    dayActivities.map((activity, index) => (
-                      <div key={activity.id || index} className="general-schedule-activity">
-                        <div className="general-schedule-time">
-                          {activity.time || '—'}
-                        </div>
-                        <div className="general-schedule-name">
-                          {activity.displayName || 'Без име'}
-                        </div>
-                        <div className="general-schedule-type">
-                          {activity.type === 'event' ? '📅' : 
-                           activity.type === 'trip' ? '🚌' : 
-                           activity.type === 'course' ? '📚' : '🔄'}
-                        </div>
-                        {activity.participants > 0 && (
-                          <div className="general-schedule-participants">
-                            {activity.participants} души
+        {/* Weekly Schedule - показва се само ако enableCalendar е true */}
+        {club.preferences?.enableCalendar && (
+          <div className="general-weekly-schedule">
+            <h3>
+              <FontAwesomeIcon icon={faCalendarWeek} />
+              Седмичен график
+            </h3>
+            
+            <div className="general-schedule-grid">
+              {Object.entries(weeklySchedule).map(([day, dayActivities]) => (
+                <div key={day} className="general-day-column">
+                  <div className="general-day-header">
+                    <h4>{getDayInBulgarian(day)}</h4>
+                  </div>
+                  
+                  <div className="general-day-activities">
+                    {dayActivities && dayActivities.length > 0 ? (
+                      dayActivities.map((activity, index) => (
+                        <div key={activity.id || index} className="general-schedule-activity">
+                          <div className="general-schedule-time">
+                            {activity.time || '—'}
                           </div>
-                        )}
+                          <div className="general-schedule-name">
+                            {activity.displayName || 'Без име'}
+                          </div>
+                          <div className="general-schedule-type">
+                            {activity.type === 'event' ? '📅' : 
+                             activity.type === 'trip' ? '🚌' : 
+                             activity.type === 'course' ? '📚' : '🔄'}
+                          </div>
+                          {activity.participants > 0 && (
+                            <div className="general-schedule-participants">
+                              {activity.participants} души
+                            </div>
+                          )}
+                        </div>
+                      ))
+                    ) : (
+                      <div className="general-no-activity">
+                        Няма дейности
                       </div>
-                    ))
-                  ) : (
-                    <div className="general-no-activity">
-                      Няма дейности
-                    </div>
-                  )}
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
-      {/* Registration Modal */}
-      {showRegistrationModal && selectedActivity && (
+      {/* Registration Modal - показва се само ако allowOnlineRegistration е true */}
+      {club.preferences?.allowOnlineRegistration && showRegistrationModal && selectedActivity && (
         <div className="general-modal-overlay" onClick={closeRegistrationModal}>
           <div className="general-modal" onClick={(e) => e.stopPropagation()}>
             <div className="general-modal-header">
@@ -596,7 +604,7 @@ ${registrationForm.firstName} ${registrationForm.lastName}`);
                     {selectedActivity.location && (
                       <span>📍 {selectedActivity.location}</span>
                     )}
-                    {selectedActivity.price && (
+                    {selectedActivity.price && club.preferences?.showFinances && (
                       <span>💰 {selectedActivity.price}</span>
                     )}
                   </div>

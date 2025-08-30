@@ -212,7 +212,8 @@ const ClubPensionersSpecific = ({ club }) => {
                           <span>{partner.service}</span>
                         </div>
                       )}
-                      {partner.contact && (
+                      {/* Contact info - показва се само ако showContactForm е true */}
+                      {club.preferences?.showContactForm && partner.contact && (
                         <div className="partner-detail">
                           <FontAwesomeIcon icon={faPhone} />
                           <span>{partner.contact}</span>
@@ -230,7 +231,8 @@ const ClubPensionersSpecific = ({ club }) => {
                           <span>{partner.workingHours}</span>
                         </div>
                       )}
-                      {partner.discount && (
+                      {/* Discount info - показва се само ако showFinances е true */}
+                      {club.preferences?.showFinances && partner.discount && (
                         <div className="partner-discount">
                           <FontAwesomeIcon icon={faChartLine} />
                           <span>Отстъпка: {partner.discount}</span>
@@ -270,7 +272,8 @@ const ClubPensionersSpecific = ({ club }) => {
                 </div>
               )}
 
-              {healthData.emergencyProtocol.emergencyContacts?.length > 0 && (
+              {/* Emergency contacts - показва се само ако showContactForm е true */}
+              {club.preferences?.showContactForm && healthData.emergencyProtocol.emergencyContacts?.length > 0 && (
                 <div className="emergency-item">
                   <FontAwesomeIcon icon={faPhone} />
                   <div>
@@ -495,7 +498,8 @@ const ClubPensionersSpecific = ({ club }) => {
                           {support.frequency}
                         </span>
                       )}
-                      {support.price && (
+                      {/* Price info - показва се само ако showFinances е true */}
+                      {club.preferences?.showFinances && support.price && (
                         <span className="meta-item price">
                           <FontAwesomeIcon icon={faChartLine} />
                           {support.price}

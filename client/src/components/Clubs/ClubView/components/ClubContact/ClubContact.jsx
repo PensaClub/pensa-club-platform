@@ -54,6 +54,7 @@ export const ClubContact = ({ club }) => {
   const [showHoursModal, setShowHoursModal] = useState(false);
   const [expandedFAQ, setExpandedFAQ] = useState(null);
   console.log("club", club);
+  
   // ПРОВЕРКА ЗА ДАННИ
   if (!club?.contacts || (!club.contacts.phone && !club.contacts.email)) {
     return null;
@@ -416,8 +417,8 @@ export const ClubContact = ({ club }) => {
                   </div>
 
                   <div className="general-location-actions">
-                    <a
-                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${club.location.address}, ${club.location.city}`)}`}
+                    
+                    <a  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${club.location.address}, ${club.location.city}`)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="general-location-btn maps"
@@ -470,138 +471,140 @@ export const ClubContact = ({ club }) => {
             )}
           </div>
 
-          {/* Contact Form */}
-          <div className="general-contact-form-section">
-            <div className="general-form-wrapper">
-              <div className="general-form-header">
-                <h3>
-                  <FontAwesomeIcon icon={faPaperPlane} />
-                  {t('clubs.ClubContact.form.title')}
-                </h3>
-                <p>{t('clubs.ClubContact.form.subtitle')}</p>
-              </div>
+          {/* Contact Form - показва се само ако showContactForm е true */}
+          {club.preferences?.showContactForm && (
+            <div className="general-contact-form-section">
+              <div className="general-form-wrapper">
+                <div className="general-form-header">
+                  <h3>
+                    <FontAwesomeIcon icon={faPaperPlane} />
+                    {t('clubs.ClubContact.form.title')}
+                  </h3>
+                  <p>{t('clubs.ClubContact.form.subtitle')}</p>
+                </div>
 
-              <form onSubmit={handleSubmit} className="general-contact-form">
-                <div className="general-form-grid">
-                  <div className="general-form-field">
-                    <label htmlFor="name">{t('clubs.ClubContact.form.fields.name')} *</label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      placeholder={t('clubs.ClubContact.form.placeholders.name')}
-                      required
-                    />
-                    <FontAwesomeIcon icon={faUser} className="general-field-icon" />
+                <form onSubmit={handleSubmit} className="general-contact-form">
+                  <div className="general-form-grid">
+                    <div className="general-form-field">
+                      <label htmlFor="name">{t('clubs.ClubContact.form.fields.name')} *</label>
+                      <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        placeholder={t('clubs.ClubContact.form.placeholders.name')}
+                        required
+                      />
+                      <FontAwesomeIcon icon={faUser} className="general-field-icon" />
+                    </div>
+
+                    <div className="general-form-field">
+                      <label htmlFor="email">{t('clubs.ClubContact.form.fields.email')} *</label>
+                      <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        placeholder={t('clubs.ClubContact.form.placeholders.email')}
+                        required
+                      />
+                      <FontAwesomeIcon icon={faEnvelope} className="general-field-icon" />
+                    </div>
+
+                    <div className="general-form-field">
+                      <label htmlFor="phone">{t('clubs.ClubContact.form.fields.phone')}</label>
+                      <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        placeholder={t('clubs.ClubContact.form.placeholders.phone')}
+                      />
+                      <FontAwesomeIcon icon={faPhone} className="general-field-icon" />
+                    </div>
+
+                    <div className="general-form-field">
+                      <label htmlFor="preferredContact">{t('clubs.ClubContact.form.fields.preferredContact')}</label>
+                      <select
+                        id="preferredContact"
+                        name="preferredContact"
+                        value={formData.preferredContact}
+                        onChange={handleInputChange}
+                      >
+                        <option value="email">{t('clubs.ClubContact.form.email')}</option>
+                        <option value="phone">{t('clubs.ClubContact.form.phone')}</option>
+                      </select>
+                      <FontAwesomeIcon icon={faHandshake} className="general-field-icon" />
+                    </div>
                   </div>
 
                   <div className="general-form-field">
-                    <label htmlFor="email">{t('clubs.ClubContact.form.fields.email')} *</label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      placeholder={t('clubs.ClubContact.form.placeholders.email')}
-                      required
-                    />
-                    <FontAwesomeIcon icon={faEnvelope} className="general-field-icon" />
-                  </div>
-
-                  <div className="general-form-field">
-                    <label htmlFor="phone">{t('clubs.ClubContact.form.fields.phone')}</label>
-                    <input
-                      type="tel"
-                      id="phone"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      placeholder={t('clubs.ClubContact.form.placeholders.phone')}
-                    />
-                    <FontAwesomeIcon icon={faPhone} className="general-field-icon" />
-                  </div>
-
-                  <div className="general-form-field">
-                    <label htmlFor="preferredContact">{t('clubs.ClubContact.form.fields.preferredContact')}</label>
+                    <label htmlFor="subject">{t('clubs.ClubContact.form.fields.subject')}</label>
                     <select
-                      id="preferredContact"
-                      name="preferredContact"
-                      value={formData.preferredContact}
+                      id="subject"
+                      name="subject"
+                      value={formData.subject}
                       onChange={handleInputChange}
                     >
-                      <option value="email">{t('clubs.ClubContact.form.email')}</option>
-                      <option value="phone">{t('clubs.ClubContact.form.phone')}</option>
+                      <option value="membership">{t('clubs.ClubContact.form.subjects.membership')}</option>
+                      <option value="activities">{t('clubs.ClubContact.form.subjects.activities')}</option>
+                      <option value="events">{t('clubs.ClubContact.form.subjects.events')}</option>
+                      <option value="volunteer">{t('clubs.ClubContact.form.subjects.volunteer')}</option>
+                      <option value="partnership">{t('clubs.ClubContact.form.subjects.partnership')}</option>
+                      <option value="donation">{t('clubs.ClubContact.form.subjects.donation')}</option>
+                      <option value="general">{t('clubs.ClubContact.form.subjects.general')}</option>
+                      <option value="complaint">{t('clubs.ClubContact.form.subjects.complaint')}</option>
                     </select>
-                    <FontAwesomeIcon icon={faHandshake} className="general-field-icon" />
+                    <FontAwesomeIcon icon={faTag} className="general-field-icon" />
                   </div>
-                </div>
 
-                <div className="general-form-field">
-                  <label htmlFor="subject">{t('clubs.ClubContact.form.fields.subject')}</label>
-                  <select
-                    id="subject"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleInputChange}
-                  >
-                    <option value="membership">{t('clubs.ClubContact.form.subjects.membership')}</option>
-                    <option value="activities">{t('clubs.ClubContact.form.subjects.activities')}</option>
-                    <option value="events">{t('clubs.ClubContact.form.subjects.events')}</option>
-                    <option value="volunteer">{t('clubs.ClubContact.form.subjects.volunteer')}</option>
-                    <option value="partnership">{t('clubs.ClubContact.form.subjects.partnership')}</option>
-                    <option value="donation">{t('clubs.ClubContact.form.subjects.donation')}</option>
-                    <option value="general">{t('clubs.ClubContact.form.subjects.general')}</option>
-                    <option value="complaint">{t('clubs.ClubContact.form.subjects.complaint')}</option>
-                  </select>
-                  <FontAwesomeIcon icon={faTag} className="general-field-icon" />
-                </div>
-
-                <div className="general-form-field">
-                  <label htmlFor="message">{t('clubs.ClubContact.form.fields.message')} *</label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleInputChange}
-                    placeholder={t('clubs.ClubContact.form.placeholders.message')}
-                    rows="5"
-                    required
-                  ></textarea>
-                  <FontAwesomeIcon icon={faComments} className="general-field-icon" />
-                </div>
-
-                {formStatus.message && (
-                  <div className={`general-form-alert ${formStatus.type}`}>
-                    <FontAwesomeIcon
-                      icon={formStatus.type === 'success' ? faCheckCircle : faExclamationTriangle}
-                    />
-                    <span>{formStatus.message}</span>
+                  <div className="general-form-field">
+                    <label htmlFor="message">{t('clubs.ClubContact.form.fields.message')} *</label>
+                    <textarea
+                      id="message"
+                      name="message"
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      placeholder={t('clubs.ClubContact.form.placeholders.message')}
+                      rows="5"
+                      required
+                    ></textarea>
+                    <FontAwesomeIcon icon={faComments} className="general-field-icon" />
                   </div>
-                )}
 
-                <button
-                  type="submit"
-                  className="general-submit-button"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? (
-                    <>
-                      <FontAwesomeIcon icon={faSpinner} className="general-spinning" />
-                      {t('clubs.ClubContact.form.submitting')}
-                    </>
-                  ) : (
-                    <>
-                      <FontAwesomeIcon icon={faPaperPlane} />
-                      {t('clubs.ClubContact.form.submit')}
-                    </>
+                  {formStatus.message && (
+                    <div className={`general-form-alert ${formStatus.type}`}>
+                      <FontAwesomeIcon
+                        icon={formStatus.type === 'success' ? faCheckCircle : faExclamationTriangle}
+                      />
+                      <span>{formStatus.message}</span>
+                    </div>
                   )}
-                </button>
-              </form>
+
+                  <button
+                    type="submit"
+                    className="general-submit-button"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <FontAwesomeIcon icon={faSpinner} className="general-spinning" />
+                        {t('clubs.ClubContact.form.submitting')}
+                      </>
+                    ) : (
+                      <>
+                        <FontAwesomeIcon icon={faPaperPlane} />
+                        {t('clubs.ClubContact.form.submit')}
+                      </>
+                    )}
+                  </button>
+                </form>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
 

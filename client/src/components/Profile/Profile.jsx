@@ -68,6 +68,7 @@ import ArticlePreviewPage from "../Articles/ArticleCreateForm/ArticlePreviewPage
 import { AllPublications } from "../Initiatives/CreatePublication/AllPublications/AllPublications";
 import PublicationForm from '../Initiatives/CreatePublication/MainForm/MainFormPublication';
 import ClubCreateForm from "../Clubs/ClubCreateForm/ClubCreateForm";
+import MyClubs from "../Clubs/MyClubs/MyClubs";
 // import { InitiativePreviewPage } from "../Initiatives/CreateIniciative/InitiativePreviewPage/InitiativePreviewPage";
 
 export const Profile = () => {
@@ -143,7 +144,7 @@ export const Profile = () => {
       "/profile/project-preview": t("profile.projectPreview"),
       "/profile/publications": t("profile.publications"),
       "/profile/publication-create": t("profile.publicationCreate"),
-      "/profile/clubs": t("profile.clubs"),
+      "/profile/clubs": t("myClubs.clubs"),
       "/profile/club-create": t("profile.clubCreate"),
       "/profile/club-drafts": t("profile.clubDrafts"),
       "/profile/clubs-admin": t("profile.clubsAdmin")
@@ -588,7 +589,7 @@ export const Profile = () => {
                   >
                     <span className="link-content">
                       <UsersIcon className="icon" />
-                      {t("profile.clubs")}
+                      {t("myClubs.clubs")}
                     </span>
                     <span className={`arrow-icon ${subMenuStates.clubs ? 'rotated' : ''}`}>
                       {subMenuStates.clubs ? <DownArrowIcon /> : <ArrowIcon />}
@@ -945,7 +946,7 @@ export const Profile = () => {
             <Route path="messages" element={<ProfileMessages />} />
             <Route path="bookmarks" element={<BookmarkedItems />} />
             <Route path="avatars" element={<ProfessionalAvatarBuilder />} />
-            {/* <Route path="clubs" element={<MyClubs />} /> */}
+            <Route path="clubs" element={<MyClubs />} />
             <Route path="club-create" element={<ClubCreateForm />} />
             {/* <Route path="club-drafts" element={<DraftClubs />} /> */}
             {/* Management routes (Admin & Moderator) */}

@@ -281,7 +281,105 @@
     }
   },
   "profile": {
-    "clubs": "Clubs",
+    "clubs": {
+      "title": "My Clubs",
+      "subtitle": "Manage and view all clubs you have created",
+      "createNew": "Create New Club",
+      "loading": "Loading clubs...",
+      "search": {
+        "placeholder": "Search clubs by name, description, location..."
+      },
+      "filters": {
+        "all": "All Clubs",
+        "active": "Active",
+        "inactive": "Inactive", 
+        "draft": "Draft",
+        "general": "General",
+        "cultural": "Cultural",
+        "traditional": "Traditional",
+        "social": "Social",
+        "sports": "Sports"
+      },
+      "sort": {
+        "newest": "Newest First",
+        "oldest": "Oldest First", 
+        "name": "Name A-Z",
+        "members": "Most Members",
+        "location": "Location"
+      },
+      "stats": {
+        "totalClubs": "Total Clubs",
+        "totalClubsDesc": "Number of clubs you have created",
+        "activeClubs": "Active Clubs", 
+        "activeClubsDesc": "Clubs that are currently active",
+        "totalMembers": "Total Members",
+        "totalMembersDesc": "Combined members across all clubs",
+        "avgMembers": "Avg Members",
+        "avgMembersDesc": "Average members per club"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive",
+        "draft": "Draft"
+      },
+      "categories": {
+        "general": "General",
+        "cultural": "Cultural", 
+        "traditional": "Traditional",
+        "social": "Social",
+        "sports": "Sports"
+      },
+      "actions": {
+        "view": "View Club",
+        "edit": "Edit Club"
+      },
+      "noDescription": "No description available",
+      "members": "members",
+      "views": "Views",
+      "events": "Events", 
+      "lastUpdated": "Last updated",
+      "showing": "Showing",
+      "of": "of",
+      "clubs": "clubs",
+      "error": {
+        "title": "Error Loading Clubs",
+        "retry": "Retry"
+      },
+      "empty": {
+        "noClubs": {
+          "title": "You haven't created any clubs yet",
+          "description": "Create your first club to start building a community around shared interests and activities.",
+          "createButton": "Create Your First Club"
+        },
+        "noResults": {
+          "title": "No clubs found",
+          "searchDescription": "No clubs match your search for \"{{term}}\"",
+          "filterDescription": "No clubs match the selected filters",
+          "clearFilters": "Clear Filters",
+          "createButton": "Create New Club"
+        },
+        "suggestions": {
+          "title": "Try these suggestions:",
+          "clearSearch": "Clear your search and try again",
+          "tryDifferentFilter": "Try a different filter",
+          "checkSpelling": "Check your spelling"
+        },
+        "features": {
+          "community": {
+            "title": "Build Community",
+            "description": "Connect people with shared interests and create lasting relationships"
+          },
+          "visibility": {
+            "title": "Increase Visibility", 
+            "description": "Make your activities discoverable and attract new members"
+          }
+        },
+        "default": {
+          "title": "Something went wrong",
+          "description": "We couldn't load your clubs right now"
+        }
+      }
+    },
     "clubCreate": "Register Club",
     "newClub": "New Club",
     "clubDrafts": "Club Drafts",
@@ -10620,5 +10718,8 @@
       "noLocation": "No location specified",
       "close": "Close Preview"
     }
+  },
+    "myClubs":{
+    "clubs": "My Clubs"
   }
 }

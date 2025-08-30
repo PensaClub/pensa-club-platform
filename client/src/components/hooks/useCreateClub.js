@@ -174,16 +174,16 @@ export const useCreateClub = (clubId = null) => {
 
     // Настройки
     preferences: {
-      showFinances: false,
-      showMembersList: false,
-      allowOnlineRegistration: false,
-      showContactForm: false,
-      enableCalendar: false,
-      showTestimonials: false,
-      publicGallery: false,
-      showStatistics: false,
-      allowComments: false,
-      showNewsSection: false
+      showFinances: true,
+      showMembersList: true,
+      allowOnlineRegistration: true,
+      showContactForm: true,
+      enableCalendar: true,
+      showTestimonials: true,
+      publicGallery: true,
+      showStatistics: true,
+      allowComments: true,
+      showNewsSection: true
     },
 
     // Шаблон

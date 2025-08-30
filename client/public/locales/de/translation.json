@@ -210,7 +210,105 @@
     }
   },
   "profile": {
-    "clubs": "Vereine",
+    "clubs": {
+      "title": "Meine Vereine",
+      "subtitle": "Verwalten und betrachten Sie alle Vereine, die Sie erstellt haben",
+      "createNew": "Neuen Verein Erstellen",
+      "loading": "Lade Ihre Vereine...",
+      "search": {
+        "placeholder": "Vereine nach Name, Beschreibung, Standort suchen..."
+      },
+      "filters": {
+        "all": "Alle Vereine",
+        "active": "Aktiv",
+        "inactive": "Inaktiv",
+        "draft": "Entwurf",
+        "general": "Allgemein",
+        "cultural": "Kulturell",
+        "traditional": "Traditionell",
+        "social": "Sozial",
+        "sports": "Sport"
+      },
+      "sort": {
+        "newest": "Neueste Zuerst",
+        "oldest": "Älteste Zuerst",
+        "name": "Name A-Z",
+        "members": "Meiste Mitglieder",
+        "location": "Standort"
+      },
+      "stats": {
+        "totalClubs": "Gesamt Vereine",
+        "totalClubsDesc": "Anzahl der von Ihnen erstellten Vereine",
+        "activeClubs": "Aktive Vereine",
+        "activeClubsDesc": "Derzeit aktive Vereine",
+        "totalMembers": "Gesamt Mitglieder",
+        "totalMembersDesc": "Mitglieder aller Vereine zusammen",
+        "avgMembers": "Durchschn. Mitglieder",
+        "avgMembersDesc": "Durchschnittliche Mitglieder pro Verein"
+      },
+      "status": {
+        "active": "Aktiv",
+        "inactive": "Inaktiv",
+        "draft": "Entwurf"
+      },
+      "categories": {
+        "general": "Allgemein",
+        "cultural": "Kulturell",
+        "traditional": "Traditionell",
+        "social": "Sozial",
+        "sports": "Sport"
+      },
+      "actions": {
+        "view": "Verein Ansehen",
+        "edit": "Verein Bearbeiten"
+      },
+      "noDescription": "Keine Beschreibung verfügbar",
+      "members": "Mitglieder",
+      "views": "Aufrufe",
+      "events": "Veranstaltungen",
+      "lastUpdated": "Zuletzt aktualisiert",
+      "showing": "Zeigt",
+      "of": "von",
+      "clubs": "Vereine",
+      "error": {
+        "title": "Fehler beim Laden der Vereine",
+        "retry": "Erneut Versuchen"
+      },
+      "empty": {
+        "noClubs": {
+          "title": "Sie haben noch keine Vereine erstellt",
+          "description": "Erstellen Sie Ihren ersten Verein, um eine Gemeinschaft um gemeinsame Interessen und Aktivitäten aufzubauen.",
+          "createButton": "Erstellen Sie Ihren Ersten Verein"
+        },
+        "noResults": {
+          "title": "Keine Vereine gefunden",
+          "searchDescription": "Keine Vereine entsprechen Ihrer Suche nach \"{{term}}\"",
+          "filterDescription": "Keine Vereine entsprechen den ausgewählten Filtern",
+          "clearFilters": "Filter Löschen",
+          "createButton": "Neuen Verein Erstellen"
+        },
+        "suggestions": {
+          "title": "Versuchen Sie diese Vorschläge:",
+          "clearSearch": "Löschen Sie Ihre Suche und versuchen Sie es erneut",
+          "tryDifferentFilter": "Versuchen Sie einen anderen Filter",
+          "checkSpelling": "Überprüfen Sie Ihre Rechtschreibung"
+        },
+        "features": {
+          "community": {
+            "title": "Gemeinschaft Aufbauen",
+            "description": "Verbinden Sie Menschen mit gemeinsamen Interessen und schaffen Sie dauerhafte Beziehungen"
+          },
+          "visibility": {
+            "title": "Sichtbarkeit Erhöhen",
+            "description": "Machen Sie Ihre Aktivitäten auffindbar und gewinnen Sie neue Mitglieder"
+          }
+        },
+        "default": {
+          "title": "Etwas ist schiefgelaufen",
+          "description": "Wir konnten Ihre Vereine gerade nicht laden"
+        }
+      }
+    },
     "clubCreate": "Verein registrieren",
     "newClub": "Neuer Verein",
     "clubDrafts": "Vereinsentwürfe",
@@ -10178,5 +10276,8 @@
       "noLocation": "Kein Ort angegeben",
       "close": "Vorschau schließen"
     }
+  },
+    "myClubs":{
+    "clubs": "Meine Clubs"
   }
 }

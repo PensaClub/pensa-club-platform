@@ -37,12 +37,10 @@ export const ClubAbout = ({ club }) => {
   const { t } = useTranslation();
   const [expandedSection, setExpandedSection] = useState('description');
 
-  // ОСНОВНА ПРОВЕРКА - ако няма достатъчно данни, не показваме компонента
   if (!club?.name || (!club.fullDescription && !club.shortDescription)) {
     return null;
   }
 
-  // Безопасно извличане на данни с fallbacks
   const getClubData = () => {
     const achievements = club.achievements || { awards: [], recognitions: [], certificates: [] };
     const socialImpact = club.socialImpact || { volunteering: [], communityProjects: [], partnerships: [] };
@@ -63,7 +61,6 @@ export const ClubAbout = ({ club }) => {
     setExpandedSection(expandedSection === section ? null : section);
   };
 
-  // Изчисляване на възрастова структура
   const calculateAgeData = () => {
     if (!club.membership?.ageGroups || !club.members?.length || !club.membership?.totalMembers ) {
       return [];
@@ -81,7 +78,6 @@ export const ClubAbout = ({ club }) => {
 
   const ageData = calculateAgeData();
 
-  // Проверка дали има информация за членство
   const hasMembershipInfo = () => {
     return (membership.requirements && membership.requirements.length > 0) ||
            membership.minimumAge ||
@@ -90,7 +86,6 @@ export const ClubAbout = ({ club }) => {
            (membership.membershipFee && (membership.membershipFee.monthly > 0 || membership.membershipFee.yearly > 0));
   };
 
-  // Получаване на валутния символ
   const getCurrencySymbol = (currency) => {
     const symbols = {
       'BGN': 'лв.',
@@ -100,21 +95,18 @@ export const ClubAbout = ({ club }) => {
     return symbols[currency] || 'лв.';
   };
 
-  // Проверка дали има постижения
   const hasAchievements = () => {
     return achievements.awards.length > 0 || 
            achievements.recognitions.length > 0 || 
            achievements.certificates.length > 0;
   };
 
-  // Проверка дали има социално въздействие
   const hasSocialImpact = () => {
     return socialImpact.volunteering.length > 0 || 
            socialImpact.communityProjects.length > 0 || 
            socialImpact.partnerships.length > 0;
   };
 
-  // Проверка дали има услуги
   const hasServices = () => {
     const healthServices = pensionersSpecific.healthServices || {};
     const supportServices = pensionersSpecific.supportServices || {};
@@ -125,7 +117,6 @@ export const ClubAbout = ({ club }) => {
            Object.values(accessibility).some(value => value === true);
   };
 
-  // Получаване на активни услуги
   const getActiveServices = () => {
     const healthServices = pensionersSpecific.healthServices || {};
     const supportServices = pensionersSpecific.supportServices || {};
@@ -137,7 +128,6 @@ export const ClubAbout = ({ club }) => {
       accessibility: []
     };
 
-    // Health services
     Object.entries(healthServices).forEach(([key, value]) => {
       if (value === true || (Array.isArray(value) && value.length > 0)) {
         const label = t(`clubs.ClubAbout.services.health.${key}`);
@@ -152,7 +142,6 @@ export const ClubAbout = ({ club }) => {
       }
     });
 
-    // Support services
     Object.entries(supportServices).forEach(([key, value]) => {
       if (value === true) {
         const label = t(`clubs.ClubAbout.services.support.${key}`);
@@ -166,7 +155,6 @@ export const ClubAbout = ({ club }) => {
       }
     });
 
-    // Accessibility
     Object.entries(accessibility).forEach(([key, value]) => {
       const label = t(`clubs.ClubAbout.services.accessibility.${key}`);
       if (label) {
@@ -187,7 +175,6 @@ export const ClubAbout = ({ club }) => {
     <section id="general-club-about" className="general-about-main">
       <div className="general-about-container">
         
-        {/* Header с динамичен дизайн */}
         <div className="general-about-header">
           <div className="general-about-header-content">
             <div className="general-about-badge">
@@ -200,29 +187,31 @@ export const ClubAbout = ({ club }) => {
             </p>
           </div>
           
-          {/* Stats overview */}
-          <div className="general-about-stats">
-            <div className="general-about-stat">
-              <FontAwesomeIcon icon={faHistory} />
-              <span>{club.foundedYear ? new Date().getFullYear() - club.foundedYear : '—'}</span>
-              <label>{t('clubs.ClubAbout.stats.years')}</label>
+          {club.preferences?.showStatistics && (
+            <div className="general-about-stats">
+              <div className="general-about-stat">
+                <FontAwesomeIcon icon={faHistory} />
+                <span>{club.foundedYear ? new Date().getFullYear() - club.foundedYear : '—'}</span>
+                <label>{t('clubs.ClubAbout.stats.years')}</label>
+              </div>
+              {club.preferences?.showMembersList && (
+                <div className="general-about-stat">
+                  <FontAwesomeIcon icon={faUsers} />
+                  <span>{club.membership?.totalMembers || '—'}</span>
+                  <label>{t('clubs.ClubAbout.stats.members')}</label>
+                </div>
+              )}
+              <div className="general-about-stat">
+                <FontAwesomeIcon icon={faMapMarkerAlt} />
+                <span>{club.location?.city || '—'}</span>
+                <label>{t('clubs.ClubAbout.stats.city')}</label>
+              </div>
             </div>
-            <div className="general-about-stat">
-              <FontAwesomeIcon icon={faUsers} />
-              <span>{club.membership?.totalMembers || '—'}</span>
-              <label>{t('clubs.ClubAbout.stats.members')}</label>
-            </div>
-            <div className="general-about-stat">
-              <FontAwesomeIcon icon={faMapMarkerAlt} />
-              <span>{club.location?.city || '—'}</span>
-              <label>{t('clubs.ClubAbout.stats.city')}</label>
-            </div>
-          </div>
+          )}
         </div>
 
         <div className="general-about-content">
           
-          {/* Основна информация - винаги показваме */}
           <div className="general-about-section">
             <div 
               className="general-section-header"
@@ -242,13 +231,11 @@ export const ClubAbout = ({ club }) => {
               <div className="general-section-content">
                 <div className="general-description-layout">
                   
-                  {/* Основен текст */}
                   <div className="general-description-main">
                     <div className="general-description-text">
                       <p>{club.fullDescription || club.shortDescription}</p>
                     </div>
                     
-                    {/* Ключови факти */}
                     <div className="general-key-facts">
                       {club.foundedYear && (
                         <div className="general-fact-card">
@@ -278,7 +265,7 @@ export const ClubAbout = ({ club }) => {
                         </div>
                       )}
                       
-                      {club.membership?.totalMembers && (
+                      {club.membership?.totalMembers && club.preferences?.showMembersList && (
                         <div className="general-fact-card">
                           <div className="general-fact-icon">
                             <FontAwesomeIcon icon={faUsers} />
@@ -306,8 +293,7 @@ export const ClubAbout = ({ club }) => {
                     </div>
                   </div>
                   
-                  {/* Възрастова статистика - само ако има данни */}
-                  {ageData.length > 0 && (
+                  {ageData.length > 0 && club.preferences?.showStatistics && club.preferences?.showMembersList && (
                     <div className="general-age-demographics">
                       <h4>
                         <FontAwesomeIcon icon={faCalendarAlt} />
@@ -337,8 +323,7 @@ export const ClubAbout = ({ club }) => {
             )}
           </div>
 
-          {/* НОВА СЕКЦИЯ - Членство - само ако има данни */}
-          {hasMembershipInfo() && (
+          {hasMembershipInfo() && club.preferences?.allowOnlineRegistration && (
             <div className="general-about-section">
               <div 
                 className="general-section-header"
@@ -358,11 +343,9 @@ export const ClubAbout = ({ club }) => {
                 <div className="general-section-content">
                   <div className="general-membership-layout">
                     
-                    {/* Основни условия */}
                     <div className="general-membership-basics">
                       <div className="general-membership-basic-info">
                         
-                        {/* Минимална възраст */}
                         {membership.minimumAge && (
                           <div className="general-membership-basic-item">
                             <div className="general-membership-basic-icon">
@@ -375,7 +358,6 @@ export const ClubAbout = ({ club }) => {
                           </div>
                         )}
 
-                        {/* Пробен период */}
                         {membership.trialPeriod?.enabled && (
                           <div className="general-membership-basic-item">
                             <div className="general-membership-basic-icon">
@@ -390,7 +372,6 @@ export const ClubAbout = ({ club }) => {
                           </div>
                         )}
 
-                        {/* Тип членство */}
                         {membership.type && (
                           <div className="general-membership-basic-item">
                             <div className="general-membership-basic-icon">
@@ -410,7 +391,6 @@ export const ClubAbout = ({ club }) => {
                       </div>
                     </div>
 
-                    {/* Изисквания за членство */}
                     {membership.requirements && membership.requirements.length > 0 && (
                       <div className="general-membership-requirements">
                         <h4>
@@ -428,8 +408,7 @@ export const ClubAbout = ({ club }) => {
                       </div>
                     )}
 
-                    {/* Членски внос - показваме membershipFee или fees */}
-                    {((membership.membershipFee && (membership.membershipFee.monthly > 0 || membership.membershipFee.yearly > 0)) || 
+                    {club.preferences?.showFinances && ((membership.membershipFee && (membership.membershipFee.monthly > 0 || membership.membershipFee.yearly > 0)) || 
                       (membership.fees && membership.fees.list && membership.fees.list.length > 0)) && (
                       <div className="general-membership-fees">
                         <h4>
@@ -437,7 +416,6 @@ export const ClubAbout = ({ club }) => {
                           Членски внос
                         </h4>
                         
-                        {/* Основен членски внос */}
                         {membership.membershipFee && (membership.membershipFee.monthly > 0 || membership.membershipFee.yearly > 0) && (
                           <div className="general-membership-fees-summary">
                             {membership.membershipFee.monthly > 0 && (
@@ -459,7 +437,6 @@ export const ClubAbout = ({ club }) => {
                           </div>
                         )}
 
-                        {/* Детайлни такси */}
                         {membership.fees?.list && membership.fees.list.length > 0 && (
                           <div className="general-membership-fees-detailed">
                             {membership.fees.list.map((fee, index) => (
@@ -486,7 +463,6 @@ export const ClubAbout = ({ club }) => {
                       </div>
                     )}
 
-                    {/* Ползи от членството */}
                     {membership.benefits && membership.benefits.length > 0 && (
                       <div className="general-membership-benefits">
                         <h4>
@@ -509,7 +485,6 @@ export const ClubAbout = ({ club }) => {
             </div>
           )}
 
-          {/* Постижения - само ако има данни */}
           {hasAchievements() && (
             <div className="general-about-section">
               <div 
@@ -533,7 +508,6 @@ export const ClubAbout = ({ club }) => {
                 <div className="general-section-content">
                   <div className="general-achievements-grid">
                     
-                    {/* Награди */}
                     {achievements.awards.map((award, index) => (
                       <div key={`award-${index}`} className="general-achievement-card award">
                         <div className="general-achievement-icon">
@@ -550,7 +524,6 @@ export const ClubAbout = ({ club }) => {
                       </div>
                     ))}
                     
-                    {/* Признания */}
                     {achievements.recognitions.map((recognition, index) => (
                       <div key={`recognition-${index}`} className="general-achievement-card recognition">
                         <div className="general-achievement-icon">
@@ -563,7 +536,6 @@ export const ClubAbout = ({ club }) => {
                       </div>
                     ))}
 
-                    {/* Сертификати */}
                     {achievements.certificates.map((certificate, index) => (
                       <div key={`certificate-${index}`} className="general-achievement-card certificate">
                         <div className="general-achievement-icon">
@@ -585,7 +557,6 @@ export const ClubAbout = ({ club }) => {
             </div>
           )}
 
-          {/* Социално въздействие - само ако има данни */}
           {hasSocialImpact() && (
             <div className="general-about-section">
               <div 
@@ -609,7 +580,6 @@ export const ClubAbout = ({ club }) => {
                 <div className="general-section-content">
                   <div className="general-impact-layout">
                     
-                    {/* Доброволчество */}
                     {socialImpact.volunteering.length > 0 && (
                       <div className="general-impact-category">
                         <h4>
@@ -635,7 +605,6 @@ export const ClubAbout = ({ club }) => {
                       </div>
                     )}
                     
-                    {/* Проекти за общността */}
                     {socialImpact.communityProjects.length > 0 && (
                       <div className="general-impact-category">
                         <h4>
@@ -663,7 +632,6 @@ export const ClubAbout = ({ club }) => {
                       </div>
                     )}
 
-                    {/* Партньорства */}
                     {socialImpact.partnerships.length > 0 && (
                       <div className="general-impact-category">
                         <h4>
@@ -689,7 +657,6 @@ export const ClubAbout = ({ club }) => {
             </div>
           )}
 
-          {/* Услуги и грижи - само ако има данни */}
           {hasServices() && (
             <div className="general-about-section">
               <div 
@@ -710,7 +677,6 @@ export const ClubAbout = ({ club }) => {
                 <div className="general-section-content">
                   <div className="general-services-grid">
                     
-                    {/* Здравни услуги */}
                     {activeServices.health.length > 0 && (
                       <div className="general-service-category">
                         <h4>
@@ -728,7 +694,6 @@ export const ClubAbout = ({ club }) => {
                       </div>
                     )}
 
-                    {/* Помощни услуги */}
                     {activeServices.support.length > 0 && (
                       <div className="general-service-category">
                         <h4>
@@ -746,7 +711,6 @@ export const ClubAbout = ({ club }) => {
                       </div>
                     )}
 
-                    {/* Достъпност */}
                     {activeServices.accessibility.length > 0 && (
                       <div className="general-service-category">
                         <h4>
@@ -769,7 +733,6 @@ export const ClubAbout = ({ club }) => {
             </div>
           )}
 
-          {/* Регионална информация - само ако има данни */}
           {regionalInfo && (
             <div className="general-about-section">
               <div 
