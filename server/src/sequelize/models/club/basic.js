@@ -114,6 +114,10 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: true,
                 field: 'created_by',
             },
+            owner: {
+                type: DataTypes.STRING,
+                allowNull: true,
+            },
             isVerified: {
                 type: DataTypes.BOOLEAN,
                 allowNull: true,
