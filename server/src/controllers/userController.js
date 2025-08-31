@@ -237,10 +237,9 @@ userController.post('/contact-form', async (req, res, next) => {
         }
 
         await forwardEmailsViaZoho({
-            name,
             userEmail: email,
-            subject: subject || 'Contact Form Submission',
-            body: message,
+            subject: `Съобщение от контактна форма - ${subject}`,
+            body: `Име: ${name}<br><br>Съобщение:<br>${message}`,
             toAddresses: ['help@pensa.club', 'pensa.club@gmail.com'],
         });
 

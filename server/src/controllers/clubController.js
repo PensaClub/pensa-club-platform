@@ -1024,17 +1024,13 @@ const getClubSpecificData = async (identifier, dataType, req, res, next) => {
 
 const performAdminAction = async (identifier, action, req, res, next) => {
     try {
-        const { reason, sendEmail = true } = req.body;
+        const { status, reason, message: customMessage } = req.body;
 
         // TODO: Add checkPermission('admin')
 
         const result = await club_Club.sequelize.transaction(async (t) => {
             const club = await findBySlugOrId(club_Club, identifier, {
                 where: { isDraft: false },
-                include: [
-                    { model: club_ClubDetails, as: 'details' },
-                    { model: club_ClubLocation, as: 'location' },
-                ],
                 transaction: t,
             });
 
@@ -1046,35 +1042,50 @@ const performAdminAction = async (identifier, action, req, res, next) => {
             }
 
             let updateData = {};
-            let emailData = null;
+            let emailMessage = '';
+            let emailSubject = '';
+
+            const clubLink = `${process.env.FRONTEND_SERVER}/clubs/${club.slug}`;
+            const clubLinkMessage = `<br><br>Можете да видите клуба тук: <a href="${clubLink}" style="color: #1a73e8; text-decoration: underline;">${clubLink}</a>`;
+
+            // Status translations
+            const statusTranslations = {
+                active: 'активен',
+                inactive: 'неактивен',
+                suspended: 'спрян',
+            };
 
             switch (action) {
                 case 'toggle-status':
-                    const newStatus = club.status === 'active' ? 'inactive' : 'active';
-                    updateData = { status: newStatus };
-                    emailData = {
-                        subject: `Club Status Updated - ${club.name}`,
-                        message: `Your club "${club.name}" status has been changed to ${newStatus}.`,
-                        type: 'status_update',
-                    };
+                    if (!status) {
+                        throw new CustomError({
+                            message: 'Status is required for toggle-status action',
+                            statusCode: 400,
+                        });
+                    }
+
+                    const statusText = statusTranslations[status] || status;
+                    updateData = { status };
+                    emailSubject = `Промяна на статуса на клуб "${club.name}"`;
+                    emailMessage = customMessage || `Статусът на вашия клуб "${club.name}" беше променен на ${statusText}.`;
+
+                    if (status === 'active') {
+                        emailMessage += clubLinkMessage;
+                    }
                     break;
 
                 case 'verify':
                     updateData = { isVerified: true };
-                    emailData = {
-                        subject: `Club Verified - ${club.name}`,
-                        message: `Congratulations! Your club "${club.name}" has been verified by our team.`,
-                        type: 'verification',
-                    };
+                    emailSubject = `Потвърждение на клуб "${club.name}"`;
+                    emailMessage = customMessage || `Поздравления! Вашият клуб "${club.name}" беше потвърден от нашия екип.`;
+                    emailMessage += clubLinkMessage;
                     break;
 
                 case 'approve':
                     updateData = { status: 'active', isVerified: true };
-                    emailData = {
-                        subject: `Club Approved - ${club.name}`,
-                        message: `Great news! Your club "${club.name}" has been approved and is now live on our platform.`,
-                        type: 'approval',
-                    };
+                    emailSubject = `Одобрение на клуб "${club.name}"`;
+                    emailMessage = customMessage || `Отлични новини! Вашият клуб "${club.name}" беше одобрен и вече е активен в нашата платформа.`;
+                    emailMessage += clubLinkMessage;
                     break;
 
                 case 'reject':
@@ -1085,11 +1096,10 @@ const performAdminAction = async (identifier, action, req, res, next) => {
                         });
                     }
                     updateData = { status: 'rejected' };
-                    emailData = {
-                        subject: `Club Application Update - ${club.name}`,
-                        message: `We regret to inform you that your club "${club.name}" application has been rejected.\n\nReason: ${reason}\n\nPlease review the feedback and feel free to resubmit with the necessary changes.`,
-                        type: 'rejection',
-                    };
+                    emailSubject = `Отхвърляне на заявка за клуб "${club.name}"`;
+                    emailMessage =
+                        customMessage ||
+                        `Съжаляваме да ви информираме, че заявката ви за клуб "${club.name}" беше отхвърлена.<br><br>Причина: ${reason}<br><br>Моля, прегледайте обратната връзка и не се колебайте да подадете отново с необходимите промени.`;
                     break;
 
                 default:
@@ -1101,41 +1111,44 @@ const performAdminAction = async (identifier, action, req, res, next) => {
 
             await club.update(updateData, { transaction: t });
 
-            if (sendEmail && club.owner && emailData) {
+            try {
+                await forwardEmailsViaZoho({
+                    userEmail: req.user.email,
+                    subject: emailSubject,
+                    body: emailMessage,
+                    toAddresses: 'kolev93@abv.bg', // or club.owner when ready
+                });
+            } catch (emailError) {
                 try {
                     await forwardEmailsViaZoho({
-                        name: 'Pensa Club Admin',
-                        userEmail: club.owner,
-                        subject: emailData.subject,
-                        body: emailData.message,
-                        // toAddresses: [club.owner],
-                        toAddresses: 'kolev93@abv.bg',
+                        userEmail: req.user.email,
+                        subject: `EMAIL FAILED - ${emailSubject}`,
+                        body: `Failed to send email to club owner ${club.owner} for club "${club.name}". Original message: ${emailMessage}`,
+                        toAddresses: 'admin@pensa.club',
                     });
-                } catch (emailError) {
-                    console.error('Failed to send email notification:', emailError);
-                    // Don't fail the transaction if email fails
+                } catch (fallbackError) {
+                    console.error('Failed to send fallback email notification:', fallbackError);
                 }
             }
 
-            return {
-                clubId: club.id,
-                clubName: club.name,
-                clubOwner: club.owner,
-                action,
-                previousData: {
-                    status: club.status,
-                    isVerified: club.isVerified,
-                },
-                newData: updateData,
-                emailSent: sendEmail && club.owner && emailData,
-                reason: action === 'reject' ? reason : null,
-            };
+            return club.id;
         });
 
-        return res.status(200).json({
-            message: `Club ${action} completed successfully`,
-            result,
+        const completeClub = await club_Club.findByPk(result, {
+            include: [
+                { model: club_ClubDetails, as: 'details' },
+                { model: club_ClubLocation, as: 'location' },
+                { model: club_ClubMembership, as: 'membership' },
+                { model: club_ClubMember, as: 'members' },
+                { model: club_ClubActivity, as: 'activities' },
+            ],
         });
+
+        const comments = await comment.findAll(getCommentConfig(completeClub.id, 'club'));
+        const transformedClub = transformClub(completeClub);
+        transformedClub.comments = comments.map((comment) => transformComment(comment));
+
+        return res.status(200).json(transformedClub);
     } catch (err) {
         next(err);
     }
