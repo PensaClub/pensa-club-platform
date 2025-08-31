@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faCheck,
@@ -44,7 +44,10 @@ import ClubPreviewModal from './ClubPreviewModal/ClubPreviewModal';
 const ClubCreateForm = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-
+    const [searchParams] = useSearchParams();
+    const editId = searchParams.get('editId');
+    const mode = searchParams.get('mode');
+    const isEditMode = mode === 'edit' && editId;
     const {
         formData,
         errors,
@@ -57,16 +60,16 @@ const ClubCreateForm = () => {
         submitClub,
         validateForm,
         resetForm
-    } = useCreateClub();
+    } = useCreateClub(isEditMode ? editId : null,isEditMode);
 
     const [currentStep, setCurrentStep] = useState(1);
     const [showPreview, setShowPreview] = useState(false);
     const [showPreviewModal, setShowPreviewModal] = useState(false);
- const handleActivitiesChange = useCallback((type, data) => {
-    
-    updateField(`activities.${type}`, data);
+    const handleActivitiesChange = useCallback((type, data) => {
 
-}, [updateField, formData.activities]);
+        updateField(`activities.${type}`, data);
+
+    }, [updateField, formData.activities]);
 
     const steps = [
         {
@@ -220,11 +223,11 @@ const ClubCreateForm = () => {
             return true;
         }
 
-        if (stepId === 9) {  
-            return true; 
+        if (stepId === 9) {
+            return true;
         }
 
-        if (stepId === 10) {  
+        if (stepId === 10) {
 
             return (formData.activities?.regular && formData.activities.regular.length > 0) ||
                 (formData.activities?.events && formData.activities.events.length > 0) ||
@@ -259,15 +262,19 @@ const ClubCreateForm = () => {
 
     // Handle форма submission
     const handleSubmit = async () => {
-        try {
-            const result = await submitClub();
-            if (result) {
+    try {
+        const result = await submitClub();
+        if (result) {
+            if (isEditMode) {
+                navigate(`/clubs/${result.slug}`);
+            } else {
                 navigate('/profile/clubs');
             }
-        } catch (error) {
-            console.error('Error submitting club:', error);
         }
-    };
+    } catch (error) {
+        console.error('Error submitting club:', error);
+    }
+};
 
     // Handle draft save
     const handleSaveDraft = async () => {
@@ -712,32 +719,32 @@ const ClubCreateForm = () => {
             />
         </div>
     );
-   const renderActivitiesStep = () => {
-    
-    if (!formData.activities) {
-        updateField('activities', {
-            regular: [],
-            events: [],
-            trips: [],
-            courses: []
-        });
-    }
+    const renderActivitiesStep = () => {
 
-    return (
-        <div className="club-form-step">
-            <ActivitiesManager
-                activitiesData={formData.activities || {
-                    regular: [],
-                    events: [],
-                    trips: [],
-                    courses: []
-                }}
-                onActivitiesChange={handleActivitiesChange}
-                disabled={isLoading}
-            />
-        </div>
-    );
-};
+        if (!formData.activities) {
+            updateField('activities', {
+                regular: [],
+                events: [],
+                trips: [],
+                courses: []
+            });
+        }
+
+        return (
+            <div className="club-form-step">
+                <ActivitiesManager
+                    activitiesData={formData.activities || {
+                        regular: [],
+                        events: [],
+                        trips: [],
+                        courses: []
+                    }}
+                    onActivitiesChange={handleActivitiesChange}
+                    disabled={isLoading}
+                />
+            </div>
+        );
+    };
     const renderSocialImpactStep = () => (
         <div className="club-form-step">
             <SocialImpactManager
@@ -747,58 +754,58 @@ const ClubCreateForm = () => {
             />
         </div>
     );
-   const renderPensionersStep = () => (
-  <div className="club-form-step">
-    <PensionersSpecificManager
-      pensionersData={formData.pensionersSpecific || {
-        healthServices: { 
-          regularCheckups: false,
-          bloodPressureMonitoring: false,
-          healthLectures: [], 
-          medicalPartners: [], 
-          emergencyProtocol: {
-            hasEmergencyPlan: false,
-            emergencyContacts: [],
-            nearestHospital: '',
-            specialNeeds: []
-          }
-        },
-        supportServices: {
-          homeVisits: false,
-          shoppingAssistance: false,
-          documentHelp: false,
-          companionship: false,
-          transportService: false,
-          mealDelivery: false,
-          cleaningHelp: false,
-          techSupport: false
-        },
-        accessibility: {
-          wheelchairAccess: false,
-          elevatorAccess: false,
-          hearingLoop: false,
-          largeTextMaterials: false,
-          handrails: false,
-          nonSlipFloors: false,
-          goodLighting: false,
-          restingAreas: false
-        },
-        specialPrograms: { 
-          memoryActivities: [], 
-          intergenerationalPrograms: [], 
-          volunteerPrograms: [], 
-          mentalHealthSupport: [] 
-        },
-        ageSpecificNeeds: { 
-          lowImpactActivities: [], 
-          nutritionSupport: [] 
-        }
-      }}
-      onPensionersChange={(pensionersData) => updateField('pensionersSpecific', pensionersData)}
-      disabled={isLoading}
-    />
-  </div>
-);
+    const renderPensionersStep = () => (
+        <div className="club-form-step">
+            <PensionersSpecificManager
+                pensionersData={formData.pensionersSpecific || {
+                    healthServices: {
+                        regularCheckups: false,
+                        bloodPressureMonitoring: false,
+                        healthLectures: [],
+                        medicalPartners: [],
+                        emergencyProtocol: {
+                            hasEmergencyPlan: false,
+                            emergencyContacts: [],
+                            nearestHospital: '',
+                            specialNeeds: []
+                        }
+                    },
+                    supportServices: {
+                        homeVisits: false,
+                        shoppingAssistance: false,
+                        documentHelp: false,
+                        companionship: false,
+                        transportService: false,
+                        mealDelivery: false,
+                        cleaningHelp: false,
+                        techSupport: false
+                    },
+                    accessibility: {
+                        wheelchairAccess: false,
+                        elevatorAccess: false,
+                        hearingLoop: false,
+                        largeTextMaterials: false,
+                        handrails: false,
+                        nonSlipFloors: false,
+                        goodLighting: false,
+                        restingAreas: false
+                    },
+                    specialPrograms: {
+                        memoryActivities: [],
+                        intergenerationalPrograms: [],
+                        volunteerPrograms: [],
+                        mentalHealthSupport: []
+                    },
+                    ageSpecificNeeds: {
+                        lowImpactActivities: [],
+                        nutritionSupport: []
+                    }
+                }}
+                onPensionersChange={(pensionersData) => updateField('pensionersSpecific', pensionersData)}
+                disabled={isLoading}
+            />
+        </div>
+    );
     const renderMediaStep = () => {
         const handleMediaChange = (value, path) => {
 
@@ -850,8 +857,12 @@ const ClubCreateForm = () => {
             {/* Header */}
             <div className="club-form-header">
                 <div className="club-form-title-section">
-                    <h1 className="club-form-title">{t('clubForm.title')}</h1>
-                    <p className="club-form-subtitle">{t('clubForm.subtitle')}</p>
+                    <h1 className="club-form-title">
+                        {isEditMode ? `Редактиране на ${formData.name || 'клуб'}` : t('clubForm.title')}
+                    </h1>
+                    <p className="club-form-subtitle">
+                        {isEditMode ? 'Обновете информацията за вашия клуб' : t('clubForm.subtitle')}
+                    </p>
                 </div>
 
                 {/* Status indicators */}
@@ -990,7 +1001,7 @@ const ClubCreateForm = () => {
                             ) : (
                                 <FontAwesomeIcon icon={faCheck} />
                             )}
-                            {t('clubForm.actions.submit')}
+                            {isEditMode ? 'Обнови клуб' : t('clubForm.actions.submit')}
                         </button>
                     )}
                 </div>

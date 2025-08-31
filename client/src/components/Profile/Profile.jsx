@@ -69,6 +69,7 @@ import { AllPublications } from "../Initiatives/CreatePublication/AllPublication
 import PublicationForm from '../Initiatives/CreatePublication/MainForm/MainFormPublication';
 import ClubCreateForm from "../Clubs/ClubCreateForm/ClubCreateForm";
 import MyClubs from "../Clubs/MyClubs/MyClubs";
+import DraftClubs from "../Clubs/DraftClubs/DraftClubs";
 // import { InitiativePreviewPage } from "../Initiatives/CreateIniciative/InitiativePreviewPage/InitiativePreviewPage";
 
 export const Profile = () => {
@@ -948,7 +949,7 @@ export const Profile = () => {
             <Route path="avatars" element={<ProfessionalAvatarBuilder />} />
             <Route path="clubs" element={<MyClubs />} />
             <Route path="club-create" element={<ClubCreateForm />} />
-            {/* <Route path="club-drafts" element={<DraftClubs />} /> */}
+            <Route path="club-drafts" element={<DraftClubs />} />
             {/* Management routes (Admin & Moderator) */}
             <Route path="ads-admin" element={<ManagementGuard><AllAnnouncements /></ManagementGuard>} />
             <Route path="article-create" element={<ManagementGuard><ArticleCreateForm /></ManagementGuard>} />

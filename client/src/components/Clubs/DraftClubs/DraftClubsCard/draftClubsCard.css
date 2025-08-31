@@ -1,0 +1,430 @@
+.draftclubscard-wrapper {
+  height: 100%;
+}
+
+.draftclubscard-container {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.draftclubscard-container:hover {
+  border-color: #f59e0b;
+  box-shadow: 0 8px 25px rgba(245, 158, 11, 0.15);
+  transform: translateY(-2px);
+}
+
+.draftclubscard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-bottom: 1px solid #f59e0b20;
+}
+
+.draftclubscard-completion-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.draftclubscard-completion-circle {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.draftclubscard-completion-circle.minimal {
+  border: 3px solid #ef4444;
+}
+
+.draftclubscard-completion-circle.low {
+  border: 3px solid #f59e0b;
+}
+
+.draftclubscard-completion-circle.medium {
+  border: 3px solid #3b82f6;
+}
+
+.draftclubscard-completion-circle.high {
+  border: 3px solid #10b981;
+}
+
+.draftclubscard-completion-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--completion);
+  background: currentColor;
+  opacity: 0.2;
+  transition: height 0.3s ease;
+}
+
+.draftclubscard-completion-text {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: inherit;
+  z-index: 1;
+}
+
+.draftclubscard-completion-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.draftclubscard-actions {
+  display: flex;
+  gap: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.draftclubscard-container:hover .draftclubscard-actions {
+  opacity: 1;
+}
+
+.draftclubscard-action-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.875rem;
+}
+
+.draftclubscard-action-btn--view {
+  background: #3b82f6;
+  color: white;
+}
+
+.draftclubscard-action-btn--view:hover {
+  background: #2563eb;
+  transform: scale(1.1);
+}
+
+.draftclubscard-action-btn--continue {
+  background: #10b981;
+  color: white;
+}
+
+.draftclubscard-action-btn--continue:hover {
+  background: #059669;
+  transform: scale(1.1);
+}
+
+.draftclubscard-action-btn--delete {
+  background: #ef4444;
+  color: white;
+}
+
+.draftclubscard-action-btn--delete:hover:not(:disabled) {
+  background: #dc2626;
+  transform: scale(1.1);
+}
+
+.draftclubscard-action-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.draftclubscard-preview {
+  position: relative;
+  height: 160px;
+  background: #f8fafc;
+}
+
+.draftclubscard-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.draftclubscard-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  font-size: 0.875rem;
+  gap: 0.5rem;
+}
+
+.draftclubscard-placeholder svg {
+  font-size: 2rem;
+}
+
+.draftclubscard-content {
+  padding: 1.25rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.draftclubscard-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 0.75rem 0;
+  line-height: 1.4;
+}
+
+.draftclubscard-unnamed {
+  color: #9ca3af;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.draftclubscard-description {
+  color: #6b7280;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin: 0 0 1rem 0;
+  flex: 1;
+}
+
+.draftclubscard-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.draftclubscard-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  color: #6b7280;
+}
+
+.draftclubscard-meta-item svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.draftclubscard-status {
+  margin-bottom: 1rem;
+}
+
+.draftclubscard-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.draftclubscard-status-badge.minimal {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.draftclubscard-status-badge.low {
+  background: #fffbeb;
+  color: #d97706;
+}
+
+.draftclubscard-status-badge.medium {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.draftclubscard-status-badge.high {
+  background: #ecfdf5;
+  color: #059669;
+}
+
+.draftclubscard-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  margin-top: auto;
+}
+
+.draftclubscard-primary-btn {
+  background: #f59e0b;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.draftclubscard-primary-btn:hover {
+  background: #d97706;
+  transform: translateY(-1px);
+}
+
+.draftclubscard-completion-mini {
+  font-size: 0.75rem;
+  color: #6b7280;
+  font-weight: 600;
+}
+
+/* Modal Styles */
+.draftclubscard-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.draftclubscard-modal {
+  background: white;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+}
+
+.draftclubscard-modal-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.draftclubscard-modal-icon {
+  color: #f59e0b;
+  font-size: 1.5rem;
+}
+
+.draftclubscard-modal-header h3 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.draftclubscard-modal-body {
+  padding: 1.5rem;
+}
+
+.draftclubscard-modal-body p {
+  margin: 0 0 1rem 0;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+.draftclubscard-modal-body p:last-child {
+  margin-bottom: 0;
+}
+
+.draftclubscard-modal-footer {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  border-top: 1px solid #e2e8f0;
+  justify-content: flex-end;
+}
+
+.draftclubscard-modal-btn {
+  padding: 0.625rem 1.25rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: none;
+}
+
+.draftclubscard-modal-btn--cancel {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.draftclubscard-modal-btn--cancel:hover:not(:disabled) {
+  background: #e5e7eb;
+}
+
+.draftclubscard-modal-btn--delete {
+  background: #ef4444;
+  color: white;
+}
+
+.draftclubscard-modal-btn--delete:hover:not(:disabled) {
+  background: #dc2626;
+}
+
+.draftclubscard-modal-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .draftclubscard-header {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 0.875rem;
+  }
+
+  .draftclubscard-completion-badge {
+    align-self: stretch;
+    justify-content: space-between;
+  }
+
+  .draftclubscard-actions {
+    opacity: 1;
+    justify-content: center;
+  }
+
+  .draftclubscard-content {
+    padding: 1rem;
+  }
+
+  .draftclubscard-footer {
+    flex-direction: column;
+    gap: 0.75rem;
+    text-align: center;
+  }
+
+  .draftclubscard-primary-btn {
+    align-self: stretch;
+    justify-content: center;
+  }
+}

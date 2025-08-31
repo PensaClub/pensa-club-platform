@@ -1,0 +1,437 @@
+/* src/components/Profile/DraftClubs/DraftClubsEmptyState/draftClubsEmptyState.css */
+.draftclubsemptystate-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+  padding: 2rem 1rem;
+}
+
+.draftclubsemptystate-content {
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+}
+
+.draftclubsemptystate-illustration {
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+/* No drafts illustration */
+.draftclubsemptystate-illustration-bg {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 30px rgba(245, 158, 11, 0.2);
+}
+
+.draftclubsemptystate-main-icon {
+  font-size: 3rem;
+  color: #f59e0b;
+}
+
+.draftclubsemptystate-floating-icons {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.draftclubsemptystate-floating-icons svg {
+  position: absolute;
+  font-size: 1rem;
+  color: #d97706;
+  animation: draftclubsemptystate-float 3s ease-in-out infinite;
+}
+
+.draftclubsemptystate-float-1 {
+  top: 15%;
+  right: 15%;
+  animation-delay: 0s;
+}
+
+.draftclubsemptystate-float-2 {
+  bottom: 20%;
+  left: 10%;
+  animation-delay: 1s;
+}
+
+.draftclubsemptystate-float-3 {
+  top: 25%;
+  left: 20%;
+  animation-delay: 2s;
+}
+
+/* Search illustration */
+.draftclubsemptystate-search-bg {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.draftclubsemptystate-search-icon {
+  font-size: 2.5rem;
+  color: #6b7280;
+  z-index: 2;
+}
+
+.draftclubsemptystate-search-rings {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.draftclubsemptystate-search-rings > div {
+  position: absolute;
+  border: 2px solid #e5e7eb;
+  border-radius: 50%;
+  animation: draftclubsemptystate-pulse 2s ease-in-out infinite;
+}
+
+.draftclubsemptystate-ring-1 {
+  width: 60px;
+  height: 60px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation-delay: 0s;
+}
+
+.draftclubsemptystate-ring-2 {
+  width: 80px;
+  height: 80px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation-delay: 0.5s;
+}
+
+.draftclubsemptystate-ring-3 {
+  width: 100px;
+  height: 100px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation-delay: 1s;
+}
+
+.draftclubsemptystate-text {
+  margin-bottom: 2rem;
+}
+
+.draftclubsemptystate-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 1rem 0;
+  line-height: 1.3;
+}
+
+.draftclubsemptystate-description {
+  font-size: 1rem;
+  color: #6b7280;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.draftclubsemptystate-benefits {
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.draftclubsemptystate-benefits-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 1rem 0;
+  text-align: center;
+}
+
+.draftclubsemptystate-benefits-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.draftclubsemptystate-benefits-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+.draftclubsemptystate-benefits-list svg {
+  color: #10b981;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+.draftclubsemptystate-filters {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.draftclubsemptystate-filters-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #991b1b;
+  margin: 0 0 0.75rem 0;
+}
+
+.draftclubsemptystate-filter-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.draftclubsemptystate-filter-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  background: #dc2626;
+  color: white;
+  padding: 0.375rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.draftclubsemptystate-filter-tag svg {
+  font-size: 0.75rem;
+}
+
+.draftclubsemptystate-suggestions {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  padding: 1.25rem;
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.draftclubsemptystate-suggestions-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1e40af;
+  margin: 0 0 0.75rem 0;
+  text-align: center;
+}
+
+.draftclubsemptystate-suggestions-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.draftclubsemptystate-suggestions-list li {
+  font-size: 0.8125rem;
+  color: #1e40af;
+  position: relative;
+  padding-left: 1rem;
+}
+
+.draftclubsemptystate-suggestions-list li::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: #3b82f6;
+}
+
+.draftclubsemptystate-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.draftclubsemptystate-primary-btn {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.875rem 1.75rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 2px 4px rgba(245, 158, 11, 0.15);
+}
+
+.draftclubsemptystate-primary-btn:hover {
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  box-shadow: 0 4px 8px rgba(245, 158, 11, 0.25);
+  transform: translateY(-1px);
+}
+
+.draftclubsemptystate-secondary-btn {
+  background: white;
+  color: #6b7280;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.draftclubsemptystate-secondary-btn:hover {
+  border-color: #d1d5db;
+  background: #f9fafb;
+  color: #374151;
+}
+
+.draftclubsemptystate-no-results .draftclubsemptystate-actions {
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Animations */
+@keyframes draftclubsemptystate-float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes draftclubsemptystate-pulse {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  50% {
+    opacity: 0.3;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.3);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .draftclubsemptystate-container {
+    padding: 1.5rem 0.75rem;
+    min-height: 350px;
+  }
+
+  .draftclubsemptystate-title {
+    font-size: 1.25rem;
+  }
+
+  .draftclubsemptystate-description {
+    font-size: 0.9rem;
+  }
+
+  .draftclubsemptystate-illustration-bg {
+    width: 100px;
+    height: 100px;
+  }
+
+  .draftclubsemptystate-main-icon {
+    font-size: 2.5rem;
+  }
+
+  .draftclubsemptystate-benefits,
+  .draftclubsemptystate-filters,
+  .draftclubsemptystate-suggestions {
+    padding: 1rem;
+  }
+
+  .draftclubsemptystate-no-results .draftclubsemptystate-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .draftclubsemptystate-primary-btn,
+  .draftclubsemptystate-secondary-btn {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .draftclubsemptystate-container {
+    padding: 1rem 0.5rem;
+  }
+
+  .draftclubsemptystate-title {
+    font-size: 1.125rem;
+  }
+
+  .draftclubsemptystate-illustration-bg {
+    width: 80px;
+    height: 80px;
+  }
+
+  .draftclubsemptystate-main-icon {
+    font-size: 2rem;
+  }
+
+  .draftclubsemptystate-filter-tags {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .draftclubsemptystate-floating-icons svg,
+  .draftclubsemptystate-search-rings > div {
+    animation: none;
+  }
+
+  .draftclubsemptystate-primary-btn,
+  .draftclubsemptystate-secondary-btn {
+    transition: none;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .draftclubsemptystate-benefits {
+    border: 2px solid #d1d5db;
+  }
+
+  .draftclubsemptystate-suggestions {
+    border: 2px solid #3b82f6;
+  }
+
+  .draftclubsemptystate-filters {
+    border: 2px solid #dc2626;
+  }
+}

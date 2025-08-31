@@ -3375,7 +3375,12 @@
         "years": "Jahre",
         "activities": "Aktivitäten",
         "events": "Veranstaltungen",
-        "views": "Aufrufe"
+        "views": "Aufrufe",
+         "firstYear": "Erstes Jahr",
+        "member": "Mitglied",
+        "activity": "Aktivität", 
+        "event": "Veranstaltung",
+        "year": "Jahr"
       },
       "contact": {
         "title": "Kontaktieren Sie uns"
@@ -10279,5 +10284,137 @@
   },
     "myClubs":{
     "clubs": "Meine Clubs"
+  },
+  "draftClubs": {
+    "title": "Club Drafts",
+    "subtitle": "Manage and complete your unfinished clubs",
+    "createNew": "Create New Club",
+    "loading": "Loading drafts...",
+    "errorTitle": "Error Loading Drafts",
+    "retry": "Try Again",
+    "searchPlaceholder": "Search drafts by name, description, location...",
+    "filters": {
+      "all": "All Drafts",
+      "complete": "Complete",
+      "incomplete": "Incomplete",
+      "general": "General",
+      "cultural": "Cultural",
+      "traditional": "Traditional",
+      "social": "Social",
+      "sports": "Sports"
+    },
+    "sorting": {
+      "newest": "Newest First",
+      "oldest": "Oldest First",
+      "name": "Name A-Z",
+      "category": "Category",
+      "completion": "By Completion"
+    },
+    "resultsInfo": "Showing {{showing}} of {{total}} drafts"
+  },
+  "draftClubsCard": {
+    "categories": {
+      "general": "Allgemein",
+      "cultural": "Kulturell",
+      "traditional": "Traditionell",
+      "social": "Sozial", 
+      "sports": "Sport"
+    },
+    "completionStatus": {
+      "minimal": "Begonnen",
+      "low": "Teilweise",
+      "medium": "Fortgeschritten",
+      "high": "Bereit"
+    },
+    "actions": {
+      "view": "Ansehen",
+      "continue": "Fortsetzen",
+      "delete": "Löschen"
+    },
+    "unnamedDraft": "Unbenannter Entwurf",
+    "noPreview": "Kein Bild",
+    "noDescription": "Keine Beschreibung",
+    "neverModified": "Nie geändert",
+    "modifiedMinutesAgo": "Vor Minuten",
+    "modifiedHoursAgo": "Vor {{hours}} Stunden",
+    "modifiedDaysAgo": "Vor {{days}} Tagen",
+    "status": {
+      "readyToPublish": "Bereit zur Veröffentlichung",
+      "needsWork": "Braucht Arbeit"
+    },
+    "continueEditing": "Bearbeitung fortsetzen",
+    "complete": "vollständig",
+    "deleteModal": {
+      "title": "Löschen bestätigen",
+      "message": "Sind Sie sicher, dass Sie den Entwurf \"{{name}}\" löschen möchten?",
+      "warning": "Diese Aktion ist irreversibel und wird alle Entwurfsdaten löschen.",
+      "cancel": "Abbrechen",
+      "delete": "Löschen",
+      "deleting": "Lösche..."
+    }
+  },
+   "searchDraftClubsBar": {
+    "defaultPlaceholder": "Entwürfe durchsuchen...",
+    "clearSearch": "Suche löschen", 
+    "searchingFor": "Suche nach"
+  },
+  "draftClubsFilterDropdown": {
+    "allDrafts": "Alle Entwürfe",
+    "clearFilter": "Filter löschen",
+    "clearAllFilters": "Alle Filter löschen",
+    "groups": {
+      "status": "Status",
+      "category": "Kategorie"
+    }
+  },
+  "draftClubsSortDropdown": {
+    "defaultSort": "Sortierung",
+    "sortBy": "Sortieren nach",
+    "descriptions": {
+      "newest": "Zuletzt geänderte Entwürfe zuerst",
+      "oldest": "Älteste Entwürfe zuerst",
+      "name": "Alphabetische Reihenfolge", 
+      "category": "Nach Kategorie gruppieren",
+      "completion": "Vollständigste Entwürfe zuerst"
+    }
+  },
+  "draftStatsOverview": {
+    "totalDrafts": "Gesamte Entwürfe",
+    "completeDrafts": "Vollständig",
+    "incompleteDrafts": "Unvollständig",
+    "completionRate": "Fortschritt",
+    "lastActivity": "Letzte Aktivität", 
+    "noRecentActivity": "Keine kürzliche Aktivität",
+    "modifiedMinutesAgo": "vor Minuten",
+    "modifiedHoursAgo": "vor {{hours}}Std",
+    "modifiedDaysAgo": "vor {{days}}T",
+    "insights": {
+      "highCompletion": "Großartiger Fortschritt! Die meisten Entwürfe sind bereit",
+      "moreIncomplete": "Konzentrieren Sie sich auf die Fertigstellung Ihrer Entwürfe", 
+      "manyDrafts": "Sie haben viele Entwürfe - Zeit zu organisieren"
+    }
+  },
+  "draftClubsEmptyState": {
+    "noDrafts": {
+      "title": "Sie haben noch keine Club-Entwürfe",
+      "description": "Beginnen Sie mit der Erstellung Ihres ersten Clubs, indem Sie einen Entwurf speichern, den Sie später fertigstellen können.",
+      "benefitsTitle": "Warum Entwürfe verwenden?",
+      "benefit1": "Speichern Sie Ihre Arbeit während der schrittweisen Fertigstellung",
+      "benefit2": "Verlieren Sie nie Ihren Fortschritt",
+      "benefit3": "Kehren Sie jederzeit zurück und bearbeiten Sie",
+      "createFirst": "Erstellen Sie Ihren ersten Entwurf"
+    },
+    "noResults": {
+      "title": "Keine Entwürfe gefunden",
+      "searchDescription": "Wir konnten keine Entwürfe finden, die \"{{term}}\" entsprechen",
+      "filterDescription": "Keine Entwürfe entsprechen den aktuellen Filtern",
+      "currentFilters": "Aktive Filter:",
+      "suggestionsTitle": "Vorschläge:",
+      "suggestion1": "Versuchen Sie andere Suchbegriffe",
+      "suggestion2": "Überprüfen Sie die Rechtschreibung Ihres Suchbegriffs",
+      "suggestion3": "Entfernen Sie einige Filter für breitere Ergebnisse", 
+      "clearFilters": "Filter löschen",
+      "createNew": "Neuen Entwurf erstellen"
+    }
   }
 }

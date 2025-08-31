@@ -1,0 +1,235 @@
+/* src/components/Profile/DraftClubs/SearchBar/searchDraftClubsBar.css */
+.searchdraftclubsbar-container {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+}
+
+.searchdraftclubsbar-container {
+  display: flex;
+  align-items: center;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.searchdraftclubsbar-container:hover {
+  border-color: #cbd5e1;
+}
+
+.searchdraftclubsbar-focused {
+  border-color: #f59e0b !important;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+}
+
+.searchdraftclubsbar-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.75rem;
+  color: #9ca3af;
+  transition: color 0.2s;
+}
+
+.searchdraftclubsbar-focused .searchdraftclubsbar-icon-wrapper {
+  color: #f59e0b;
+}
+
+.searchdraftclubsbar-search-icon {
+  font-size: 1rem;
+}
+
+.searchdraftclubsbar-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 0.75rem 0.5rem;
+  font-size: 0.95rem;
+  color: #374151;
+  background: transparent;
+}
+
+.searchdraftclubsbar-input::placeholder {
+  color: #9ca3af;
+  transition: color 0.2s;
+}
+
+.searchdraftclubsbar-focused .searchdraftclubsbar-input::placeholder {
+  color: #d1d5db;
+}
+
+.searchdraftclubsbar-clear-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border: none;
+  background: none;
+  color: #9ca3af;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-radius: 4px;
+  margin-right: 0.25rem;
+}
+
+.searchdraftclubsbar-clear-btn:hover {
+  color: #ef4444;
+  background: #fef2f2;
+}
+
+.searchdraftclubsbar-clear-btn svg {
+  font-size: 0.875rem;
+}
+
+.searchdraftclubsbar-search-info {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #f59e0b;
+  color: white;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8125rem;
+  border-radius: 0 0 6px 6px;
+  z-index: 10;
+  animation: searchdraftclubsbar-slideDown 0.2s ease;
+}
+
+.searchdraftclubsbar-search-term {
+  font-weight: 500;
+}
+
+@keyframes searchdraftclubsbar-slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Loading state */
+.searchdraftclubsbar-container.searchdraftclubsbar-loading {
+  pointer-events: none;
+}
+
+.searchdraftclubsbar-loading .searchdraftclubsbar-search-icon {
+  animation: searchdraftclubsbar-spin 1s linear infinite;
+}
+
+@keyframes searchdraftclubsbar-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Different states */
+.searchdraftclubsbar-container.searchdraftclubsbar-has-results {
+  border-color: #10b981;
+}
+
+.searchdraftclubsbar-container.searchdraftclubsbar-no-results {
+  border-color: #ef4444;
+}
+
+.searchdraftclubsbar-has-results .searchdraftclubsbar-search-info {
+  background: #10b981;
+}
+
+.searchdraftclubsbar-no-results .searchdraftclubsbar-search-info {
+  background: #ef4444;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .searchdraftclubsbar-container {
+    max-width: none;
+  }
+
+  .searchdraftclubsbar-input {
+    font-size: 16px; /* Prevents zoom on iOS */
+    padding: 0.875rem 0.5rem;
+  }
+
+  .searchdraftclubsbar-search-info {
+    font-size: 0.75rem;
+    padding: 0.375rem 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .searchdraftclubsbar-icon-wrapper {
+    padding: 0 0.5rem;
+  }
+
+  .searchdraftclubsbar-input {
+    padding: 0.75rem 0.375rem;
+  }
+
+  .searchdraftclubsbar-clear-btn {
+    padding: 0.375rem;
+    margin-right: 0.125rem;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .searchdraftclubsbar-container {
+    border-width: 3px;
+  }
+
+  .searchdraftclubsbar-focused {
+    box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.3);
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .searchdraftclubsbar-container,
+  .searchdraftclubsbar-icon-wrapper,
+  .searchdraftclubsbar-input::placeholder,
+  .searchdraftclubsbar-clear-btn {
+    transition: none;
+  }
+
+  @keyframes searchdraftclubsbar-slideDown {
+    from, to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes searchdraftclubsbar-spin {
+    from, to {
+      transform: rotate(0deg);
+    }
+  }
+}
+
+/* Dark mode support (if needed) */
+@media (prefers-color-scheme: dark) {
+  .searchdraftclubsbar-container {
+    background: #374151;
+    border-color: #4b5563;
+  }
+
+  .searchdraftclubsbar-input {
+    color: #f9fafb;
+  }
+
+  .searchdraftclubsbar-input::placeholder {
+    color: #9ca3af;
+  }
+
+  .searchdraftclubsbar-clear-btn:hover {
+    background: #4b5563;
+  }
+}

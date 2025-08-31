@@ -3960,7 +3960,13 @@
         "years": "Years",
         "activities": "Activities",
         "events": "Events",
-        "views": "views"
+        "views": "views",
+        "firstYear": "First year",
+        "member": "member",
+        "activity": "activity",
+        "event": "event",
+        "year": "year"
+
       },
       "contact": {
         "title": "Contact us"
@@ -10721,5 +10727,164 @@
   },
     "myClubs":{
     "clubs": "My Clubs"
+  },
+  "draftClubs": {
+    "title": "Club Drafts",
+    "subtitle": "Manage and complete your unfinished clubs",
+    "createNew": "Create New Club",
+    "loading": "Loading drafts...",
+    "errorTitle": "Error Loading Drafts",
+    "retry": "Try Again",
+    "searchPlaceholder": "Search drafts by name, description, location...",
+    "filters": {
+      "all": "All Drafts",
+      "complete": "Complete",
+      "incomplete": "Incomplete",
+      "general": "General",
+      "cultural": "Cultural",
+      "traditional": "Traditional",
+      "social": "Social",
+      "sports": "Sports"
+    },
+    "sorting": {
+      "newest": "Newest First",
+      "oldest": "Oldest First",
+      "name": "Name A-Z",
+      "category": "Category",
+      "completion": "By Completion"
+    },
+    "resultsInfo": "Showing {{showing}} of {{total}} drafts"
+  },
+  "draftClubs": {
+    "title": "Club-Entwürfe",
+    "subtitle": "Verwalten und vervollständigen Sie Ihre unvollendeten Clubs",
+    "createNew": "Neuen Club erstellen",
+    "loading": "Lade Entwürfe...",
+    "errorTitle": "Fehler beim Laden der Entwürfe",
+    "retry": "Erneut versuchen",
+    "searchPlaceholder": "Entwürfe nach Name, Beschreibung, Ort durchsuchen...",
+    "filters": {
+      "all": "Alle Entwürfe",
+      "complete": "Vollständig",
+      "incomplete": "Unvollständig",
+      "general": "Allgemein",
+      "cultural": "Kulturell",
+      "traditional": "Traditionell",
+      "social": "Sozial",
+      "sports": "Sport"
+    },
+    "sorting": {
+      "newest": "Neueste zuerst",
+      "oldest": "Älteste zuerst",
+      "name": "Name A-Z",
+      "category": "Kategorie",
+      "completion": "Nach Vollständigkeit"
+    },
+    "resultsInfo": "Zeige {{showing}} von {{total}} Entwürfen"
+  },
+  "draftClubsCard": {
+    "categories": {
+      "general": "General",
+      "cultural": "Cultural",
+      "traditional": "Traditional", 
+      "social": "Social",
+      "sports": "Sports"
+    },
+    "completionStatus": {
+      "minimal": "Started",
+      "low": "Partial",
+      "medium": "Advanced",
+      "high": "Ready"
+    },
+    "actions": {
+      "view": "View",
+      "continue": "Continue",
+      "delete": "Delete"
+    },
+    "unnamedDraft": "Unnamed Draft",
+    "noPreview": "No Image",
+    "noDescription": "No description",
+    "neverModified": "Never modified",
+    "modifiedMinutesAgo": "Minutes ago",
+    "modifiedHoursAgo": "{{hours}} hours ago",
+    "modifiedDaysAgo": "{{days}} days ago",
+    "status": {
+      "readyToPublish": "Ready to publish",
+      "needsWork": "Needs work"
+    },
+    "continueEditing": "Continue Editing",
+    "complete": "complete",
+    "deleteModal": {
+      "title": "Confirm Deletion",
+      "message": "Are you sure you want to delete the draft \"{{name}}\"?",
+      "warning": "This action is irreversible and will delete all draft data.",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "deleting": "Deleting..."
+    }
+  },
+    "searchDraftClubsBar": {
+    "defaultPlaceholder": "Search drafts...",
+    "clearSearch": "Clear search",
+    "searchingFor": "Searching for"
+  },
+  "draftClubsFilterDropdown": {
+    "allDrafts": "All Drafts",
+    "clearFilter": "Clear filter",
+    "clearAllFilters": "Clear all filters",
+    "groups": {
+      "status": "Status",
+      "category": "Category"
+    }
+  },
+  "draftClubsSortDropdown": {
+    "defaultSort": "Sort",
+    "sortBy": "Sort by", 
+    "descriptions": {
+      "newest": "Most recently modified drafts first",
+      "oldest": "Oldest drafts first",
+      "name": "Alphabetical order",
+      "category": "Group by category", 
+      "completion": "Most complete drafts first"
+    }
+  },
+  "draftStatsOverview": {
+    "totalDrafts": "Total Drafts",
+    "completeDrafts": "Complete",
+    "incompleteDrafts": "Incomplete",
+    "completionRate": "Progress", 
+    "lastActivity": "Last activity",
+    "noRecentActivity": "No recent activity",
+    "modifiedMinutesAgo": "minutes ago",
+    "modifiedHoursAgo": "{{hours}}h ago",
+    "modifiedDaysAgo": "{{days}}d ago",
+    "insights": {
+      "highCompletion": "Great progress! Most drafts are ready",
+      "moreIncomplete": "Focus on completing your drafts",
+      "manyDrafts": "You have many drafts - time to organize"
+    }
+  },
+  "draftClubsEmptyState": {
+    "noDrafts": {
+      "title": "You don't have any club drafts yet",
+      "description": "Start creating your first club by saving a draft that you can finish later.",
+      "benefitsTitle": "Why use drafts?",
+      "benefit1": "Save your work while completing it gradually",
+      "benefit2": "Never lose your progress",
+      "benefit3": "Return and edit anytime you want",
+      "createFirst": "Create your first draft"
+    },
+    "noResults": {
+      "title": "No drafts found",
+      "searchDescription": "We couldn't find any drafts matching \"{{term}}\"",
+      "filterDescription": "No drafts match the current filters",
+      "currentFilters": "Active filters:",
+      "suggestionsTitle": "Suggestions:",
+      "suggestion1": "Try different keywords",
+      "suggestion2": "Check the spelling of your search term",
+      "suggestion3": "Remove some filters for broader results",
+      "clearFilters": "Clear filters",
+      "createNew": "Create new draft"
+    }
   }
 }

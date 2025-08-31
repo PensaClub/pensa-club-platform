@@ -29,7 +29,9 @@ const MyClubs = () => {
         setRedirectAfterLogin
     } = useAuthContext();
 
-    const { getUserClubs } = useClubContext();
+    const { getUserClubs,
+        deleteClub
+    } = useClubContext();
 
     // State management
     const [clubs, setClubs] = useState([]);
@@ -58,7 +60,7 @@ const MyClubs = () => {
                 setError(null);
 
                 const userClubs = await getUserClubs(userEmail);
-                
+
                 if (Array.isArray(userClubs)) {
                     setClubs(userClubs);
                 } else {
@@ -164,13 +166,23 @@ const MyClubs = () => {
     const handleCreateNew = () => {
         navigate('/profile/club-create');
     };
-
+    const handleDeleteClub = async (club) => {
+        try {
+            const success = await deleteClub(club.id || club.slug);
+            if (success) {
+                setClubs(prevClubs => prevClubs.filter(c => c.id !== club.id));
+            }
+        } catch (error) {
+            console.error('Error deleting club:', error);
+        }
+    };
     const handleClubClick = (club) => {
-        navigate(`/club/${club.slug}`);
+        console.log('Navigating to club:', club.slug);
+        navigate(`/clubs/${club.slug}`);
     };
 
     const handleEditClub = (club) => {
-        navigate(`/profile/club-edit/${club.id}`);
+        navigate(`/profile/club-create?editId=${club.id}&mode=edit`);
     };
 
     // Show loading state
@@ -277,12 +289,13 @@ const MyClubs = () => {
                                 club={club}
                                 onView={() => handleClubClick(club)}
                                 onEdit={() => handleEditClub(club)}
+                                onDelete={() => handleDeleteClub(club)}
                                 isOwner={true}
                             />
                         ))}
                     </div>
                 ) : (
-                    <MyClubsEmptyState 
+                    <MyClubsEmptyState
                         searchTerm={searchTerm}
                         filterBy={filterBy}
                         totalClubs={clubs.length}

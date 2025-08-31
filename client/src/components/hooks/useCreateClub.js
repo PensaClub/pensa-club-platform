@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useClubContext } from '../contexts/ClubContext';
 import { notify } from '../../utils/notify';
 
-export const useCreateClub = (clubId = null) => {
+export const useCreateClub = (clubId = null,isEditMode = false) => {
   // Initial form state с обновена медия структура
   const initialState = {
     // Основна информация
@@ -198,7 +198,8 @@ export const useCreateClub = (clubId = null) => {
     saveDraftClub,
     updateDraftClub,
     getDraftById,
-    deleteDraftClub
+    deleteDraftClub,
+    getClubById,
   } = useClubContext();
 
   // State
@@ -283,14 +284,13 @@ export const useCreateClub = (clubId = null) => {
   }, []);
 
   // Auto-generate slug - САМО ако НЕ е заредено от localStorage
-  useEffect(() => {
-
-    if (formData.name && !clubId && (!isDraft || nameChangedByUser)) {
-      const newSlug = generateSlug(formData.name);
-      setFormData(prev => ({ ...prev, slug: newSlug }));
-      setNameChangedByUser(false); // Reset флага
+ useEffect(() => {
+    if (formData.name && ((!clubId && (!isDraft || nameChangedByUser)) || (isEditMode && nameChangedByUser))) {
+        const newSlug = generateSlug(formData.name);
+        setFormData(prev => ({ ...prev, slug: newSlug }));
+        setNameChangedByUser(false); // Reset флага
     }
-  }, [formData.name, generateSlug, clubId, isDraft, nameChangedByUser]);
+}, [formData.name, generateSlug, clubId, isDraft, nameChangedByUser, isEditMode]);
 
   // LocalStorage key с fallback
   const getLocalStorageKey = useCallback(() => {
@@ -319,28 +319,27 @@ export const useCreateClub = (clubId = null) => {
   //   }
   // }, []);
 
-  // Load existing draft при редактиране
-  useEffect(() => {
-    const loadExistingDraft = async () => {
-      if (clubId) {
-        try {
-          setIsLoading(true);
-          const draft = await getDraftById(clubId);
-          if (draft) {
-            setFormData(draft);
-            setDraftId(clubId);
-            setIsDraft(true);
-          }
-        } catch (error) {
-          console.error('Error loading existing draft:', error);
-        } finally {
-          setIsLoading(false);
+  // Load existing club при редактиране
+useEffect(() => {
+    const loadExistingClub = async () => {
+        if (clubId && !isLoadedFromStorage) {
+            try {
+                setIsLoading(true);
+                const clubData = await getClubById(clubId);
+                if (clubData) {
+                    setFormData(clubData);
+                    setIsLoadedFromStorage(true);
+                }
+            } catch (error) {
+                console.error('Error loading existing club:', error);
+            } finally {
+                setIsLoading(false);
+            }
         }
-      }
     };
 
-    loadExistingDraft();
-  }, [clubId, getDraftById]);
+    loadExistingClub();
+}, [clubId, getClubById, isLoadedFromStorage]);
 
   // Валидация
   const validateForm = useCallback(() => {
@@ -483,11 +482,9 @@ export const useCreateClub = (clubId = null) => {
       if (clubId || formData.id) {
         // UPDATE - редактираме съществуващ клуб
         const updateIdentifier = clubId || formData.id;
-        console.log('🔄 UPDATE клуб с identifier:', updateIdentifier);
         result = await updateClub(updateIdentifier, formData);
       } else {
         // CREATE - създаваме нов клуб (slug е в formData)
-        console.log('✅ CREATE нов клуб със slug:', formData.slug);
         result = await createClub(formData);
       }
 
@@ -561,7 +558,6 @@ export const useCreateClub = (clubId = null) => {
     saveToLocalStorage,
     getIdentifier,
     hasValidIdentifier,
-
     // CRUD операции
     saveDraft,
     submitClub,

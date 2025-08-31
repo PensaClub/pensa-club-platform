@@ -73,7 +73,7 @@ export const clubServiceFactory = (token) => {
     },
 
     getUserClubs: async (email) => {
-      return requester.get(`${apiUrl}/clubs/user-clubs/${email}`);
+      return requester.get(`${apiUrl}/clubs/user-clubs`);
     },
 
     // ===============================

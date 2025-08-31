@@ -1,0 +1,364 @@
+.draftstatsoverview-container {
+  width: 100%;
+}
+
+.draftstatsoverview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.draftstatsoverview-stat-card {
+  background: white;
+  border-radius: 8px;
+  padding: 1.25rem;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.draftstatsoverview-stat-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.draftstatsoverview-total {
+  border-left: 4px solid #3b82f6;
+}
+
+.draftstatsoverview-complete {
+  border-left: 4px solid #10b981;
+}
+
+.draftstatsoverview-incomplete {
+  border-left: 4px solid #f59e0b;
+}
+
+.draftstatsoverview-completion.high {
+  border-left: 4px solid #10b981;
+}
+
+.draftstatsoverview-completion.medium {
+  border-left: 4px solid #3b82f6;
+}
+
+.draftstatsoverview-completion.low {
+  border-left: 4px solid #f59e0b;
+}
+
+.draftstatsoverview-completion.minimal {
+  border-left: 4px solid #ef4444;
+}
+
+.draftstatsoverview-stat-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.draftstatsoverview-total .draftstatsoverview-stat-icon {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+
+.draftstatsoverview-complete .draftstatsoverview-stat-icon {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.draftstatsoverview-incomplete .draftstatsoverview-stat-icon {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+
+.draftstatsoverview-completion .draftstatsoverview-stat-icon {
+  background: rgba(99, 102, 241, 0.1);
+  color: #6366f1;
+}
+
+.draftstatsoverview-stat-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.draftstatsoverview-stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1f2937;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.draftstatsoverview-stat-label {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.draftstatsoverview-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #f1f5f9;
+  overflow: hidden;
+}
+
+.draftstatsoverview-progress-fill {
+  height: 100%;
+  background: #6366f1;
+  width: var(--completion);
+  transition: width 0.5s ease;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+}
+
+.draftstatsoverview-activity {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.draftstatsoverview-activity-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.draftstatsoverview-activity-icon {
+  color: #6b7280;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.draftstatsoverview-activity-text {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-size: 0.875rem;
+}
+
+.draftstatsoverview-activity-label {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.draftstatsoverview-activity-time {
+  color: #374151;
+  font-weight: 600;
+}
+
+.draftstatsoverview-activity-draft {
+  color: #9ca3af;
+  font-style: italic;
+}
+
+.draftstatsoverview-insights {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border: 1px solid #bae6fd;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.draftstatsoverview-insights-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.draftstatsoverview-insight {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  padding: 0.5rem 0;
+}
+
+.draftstatsoverview-insight-positive {
+  color: #059669;
+}
+
+.draftstatsoverview-insight-warning {
+  color: #d97706;
+}
+
+.draftstatsoverview-insight-info {
+  color: #2563eb;
+}
+
+.draftstatsoverview-insight svg {
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
+/* Empty state */
+.draftstatsoverview-empty {
+  text-align: center;
+  padding: 2rem;
+  color: #9ca3af;
+}
+
+.draftstatsoverview-empty-icon {
+  font-size: 2.5rem;
+  color: #d1d5db;
+  margin-bottom: 1rem;
+}
+
+.draftstatsoverview-empty-text {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.draftstatsoverview-empty-subtext {
+  font-size: 0.875rem;
+  color: #9ca3af;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .draftstatsoverview-grid {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .draftstatsoverview-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.875rem;
+  }
+
+  .draftstatsoverview-stat-card {
+    padding: 1rem;
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+  }
+
+  .draftstatsoverview-stat-value {
+    font-size: 1.5rem;
+  }
+
+  .draftstatsoverview-stat-label {
+    font-size: 0.8125rem;
+  }
+
+  .draftstatsoverview-activity {
+    padding: 0.875rem;
+  }
+
+  .draftstatsoverview-activity-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .draftstatsoverview-activity-text {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .draftstatsoverview-insights {
+    padding: 0.875rem;
+  }
+
+  .draftstatsoverview-insight {
+    font-size: 0.75rem;
+    padding: 0.375rem 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .draftstatsoverview-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .draftstatsoverview-stat-card {
+    padding: 0.875rem;
+    flex-direction: row;
+    text-align: left;
+  }
+
+  .draftstatsoverview-stat-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+
+  .draftstatsoverview-stat-value {
+    font-size: 1.375rem;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .draftstatsoverview-stat-card {
+    background: #374151;
+    border-color: #4b5563;
+    color: #f9fafb;
+  }
+
+  .draftstatsoverview-stat-value {
+    color: #f9fafb;
+  }
+
+  .draftstatsoverview-stat-label {
+    color: #d1d5db;
+  }
+
+  .draftstatsoverview-activity {
+    background: #374151;
+    border-color: #4b5563;
+  }
+
+  .draftstatsoverview-insights {
+    background: #1f2937;
+    border-color: #374151;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .draftstatsoverview-stat-card {
+    transition: none;
+  }
+
+  .draftstatsoverview-progress-fill {
+    transition: none;
+  }
+}
+
+/* Loading state */
+.draftstatsoverview-loading .draftstatsoverview-stat-value {
+  background: #e5e7eb;
+  color: transparent;
+  border-radius: 4px;
+  animation: draftstatsoverview-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes draftstatsoverview-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}

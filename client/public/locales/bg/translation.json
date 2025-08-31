@@ -3801,6 +3801,7 @@
         "message": "Съжаляваме, но клубът който търсите не съществува или е бил премахнат.",
         "backButton": "Обратно към клубовете"
       },
+      
       "actions": {
         "allClubs": "Всички клубове",
         "addToFavorites": "Добави в любими",
@@ -3878,7 +3879,12 @@
         "years": "Години",
         "activities": "Дейности",
         "events": "Събития",
-        "views": "прегледа"
+        "views": "прегледа",
+        "firstYear": "Първа година",
+        "member": "член",
+        "activity": "дейност", 
+        "event": "събитие",
+        "year": "година"
       },
       "contact": {
         "title": "Свържете се с нас"
@@ -4307,6 +4313,10 @@
         "badge": "Местоположение и достъп",
         "title": "Как да ни намерите",
         "subtitle": "Подробна информация за местоположението, транспорт и удобства"
+      },
+       "noMap": {
+        "title": "Картата не е налична",
+        "description": "Няма точни координати за този клуб, но можете да го намерите в Google Maps."
       },
       "actions": {
         "directions": "Маршрут",
@@ -10960,5 +10970,137 @@
   },
   "myClubs":{
     "clubs": "Клубове"
+  },
+  "draftClubs": {
+    "title": "Черновите на клубове",
+    "subtitle": "Управлявайте и довършете незавършените клубове",
+    "createNew": "Създай нов клуб",
+    "loading": "Зареждам черновите...",
+    "errorTitle": "Грешка при зареждане на черновите",
+    "retry": "Опитай отново",
+    "searchPlaceholder": "Търсете чернови по име, описание, локация...",
+    "filters": {
+      "all": "Всички чернови",
+      "complete": "Завършени",
+      "incomplete": "Незавършени",
+      "general": "Общи",
+      "cultural": "Културни",
+      "traditional": "Традиционни",
+      "social": "Социални",
+      "sports": "Спортни"
+    },
+    "sorting": {
+      "newest": "Най-нови първо",
+      "oldest": "Най-стари първо",
+      "name": "Име А-Я",
+      "category": "Категория",
+      "completion": "По завършеност"
+    },
+    "resultsInfo": "Показвани {{showing}} от {{total}} чернови"
+  },
+  "draftClubsCard": {
+    "categories": {
+      "general": "Общ",
+      "cultural": "Културен", 
+      "traditional": "Традиционен",
+      "social": "Социален",
+      "sports": "Спортен"
+    },
+    "completionStatus": {
+      "minimal": "Започнат",
+      "low": "Частично",
+      "medium": "Напреднал",
+      "high": "Готов"
+    },
+    "actions": {
+      "view": "Преглед",
+      "continue": "Продължи",
+      "delete": "Изтрий"
+    },
+    "unnamedDraft": "Неименована чернова",
+    "noPreview": "Няма изображение",
+    "noDescription": "Няма описание",
+    "neverModified": "Никога не е променян",
+    "modifiedMinutesAgo": "Преди минути",
+    "modifiedHoursAgo": "Преди {{hours}} часа",
+    "modifiedDaysAgo": "Преди {{days}} дни",
+    "status": {
+      "readyToPublish": "Готов за публикуване",
+      "needsWork": "Нужна е работа"
+    },
+    "continueEditing": "Продължи редактирането",
+    "complete": "завършен",
+    "deleteModal": {
+      "title": "Потвърдете изтриването",
+      "message": "Сигурни ли сте, че искате да изтриете черновата \"{{name}}\"?",
+      "warning": "Това действие е необратимо и ще изтрие всички данни от черновата.",
+      "cancel": "Откажи",
+      "delete": "Изтрий",
+      "deleting": "Изтриване..."
+    }
+  },
+   "searchDraftClubsBar": {
+    "defaultPlaceholder": "Търсете чернови...",
+    "clearSearch": "Изчисти търсенето",
+    "searchingFor": "Търсене за"
+  },
+  "draftClubsFilterDropdown": {
+    "allDrafts": "Всички чернови",
+    "clearFilter": "Изчисти филтъра",
+    "clearAllFilters": "Изчисти всички филтри",
+    "groups": {
+      "status": "Състояние",
+      "category": "Категория"
+    }
+  },
+  "draftClubsSortDropdown": {
+    "defaultSort": "Подредба",
+    "sortBy": "Подреди по",
+    "descriptions": {
+      "newest": "Най-скоро променените чернови отгоре",
+      "oldest": "Най-старите чернови отгоре", 
+      "name": "Подредба по азбучен ред",
+      "category": "Групиране по категория",
+      "completion": "Най-завършените чернови отгоре"
+    }
+  },
+    "draftStatsOverview": {
+    "totalDrafts": "Общо чернови",
+    "completeDrafts": "Завършени",
+    "incompleteDrafts": "Незавършени", 
+    "completionRate": "Прогрес",
+    "lastActivity": "Последна промяна",
+    "noRecentActivity": "Няма скорошна активност",
+    "modifiedMinutesAgo": "преди минути",
+    "modifiedHoursAgo": "преди {{hours}} ч",
+    "modifiedDaysAgo": "преди {{days}} дни",
+    "insights": {
+      "highCompletion": "Отличен прогрес! Повечето чернови са готови",
+      "moreIncomplete": "Фокусирайте се върху довършването на черновите",
+      "manyDrafts": "Имате много чернови - време за организация"
+    }
+  },
+    "draftClubsEmptyState": {
+    "noDrafts": {
+      "title": "Все още нямате чернови на клубове",
+      "description": "Започнете да създавате своя първи клуб като запазите чернова, която можете да довършите по-късно.",
+      "benefitsTitle": "Защо да използвам чернови?",
+      "benefit1": "Запазете работата си докато я довършвате постепенно",
+      "benefit2": "Никога няма да загубите напредъка си",
+      "benefit3": "Можете да се върнете и да редактирате всеки момент",
+      "createFirst": "Създайте първата си чернова"
+    },
+    "noResults": {
+      "title": "Няма намерени чернови",
+      "searchDescription": "Не намерихме чернови, съответстващи на \"{{term}}\"",
+      "filterDescription": "Няма чернови, отговарящи на текущите филтри",
+      "currentFilters": "Активни филтри:",
+      "suggestionsTitle": "Предложения:",
+      "suggestion1": "Опитайте с различни ключови думи",
+      "suggestion2": "Проверете правописа на търсения термин", 
+      "suggestion3": "Премахнете някои филтри за по-широки резултати",
+      "clearFilters": "Изчисти филтрите",
+      "createNew": "Създай нова чернова"
+    }
   }
 }

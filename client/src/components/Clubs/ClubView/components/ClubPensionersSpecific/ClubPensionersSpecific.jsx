@@ -1,4 +1,3 @@
-// src/components/Clubs/ClubView/components/ClubPensionersSpecific/ClubPensionersSpecific.jsx
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -53,16 +52,51 @@ const ClubPensionersSpecific = ({ club }) => {
 
   const pensionersData = club.pensionersSpecific || {};
 
-  // Проверка дали има данни за показване
-  const hasData = Object.keys(pensionersData).length > 0 && 
-    Object.values(pensionersData).some(section => {
-      if (typeof section === 'object' && section !== null) {
-        return Object.keys(section).length > 0;
-      }
-      return false;
-    });
+  // По-стриктна проверка за реални данни
+  const hasRealData = () => {
+    if (!pensionersData || Object.keys(pensionersData).length === 0) return false;
 
-  if (!hasData) {
+    // Проверяваме healthServices
+    const healthServices = pensionersData.healthServices || {};
+    const hasHealthData = 
+      healthServices.regularCheckups === true ||
+      healthServices.bloodPressureMonitoring === true ||
+      (healthServices.healthLectures && healthServices.healthLectures.length > 0) ||
+      (healthServices.medicalPartners && healthServices.medicalPartners.length > 0) ||
+      (healthServices.emergencyProtocol && (
+        healthServices.emergencyProtocol.hasEmergencyPlan === true ||
+        healthServices.emergencyProtocol.nearestHospital ||
+        (healthServices.emergencyProtocol.specialNeeds && healthServices.emergencyProtocol.specialNeeds.length > 0) ||
+        (healthServices.emergencyProtocol.emergencyContacts && healthServices.emergencyProtocol.emergencyContacts.length > 0)
+      ));
+
+    // Проверяваме supportServices
+    const supportServices = pensionersData.supportServices || {};
+    const hasSupportData = Object.values(supportServices).some(value => value === true);
+
+    // Проверяваме accessibility
+    const accessibility = pensionersData.accessibility || {};
+    const hasAccessibilityData = Object.values(accessibility).some(value => value === true);
+
+    // Проверяваме specialPrograms
+    const specialPrograms = pensionersData.specialPrograms || {};
+    const hasSpecialProgramsData = 
+      (specialPrograms.memoryActivities && specialPrograms.memoryActivities.length > 0) ||
+      (specialPrograms.volunteerPrograms && specialPrograms.volunteerPrograms.length > 0) ||
+      (specialPrograms.mentalHealthSupport && specialPrograms.mentalHealthSupport.length > 0) ||
+      (specialPrograms.intergenerationalPrograms && specialPrograms.intergenerationalPrograms.length > 0);
+
+    // Проверяваме ageSpecificNeeds
+    const ageSpecificNeeds = pensionersData.ageSpecificNeeds || {};
+    const hasAgeSpecificData = 
+      (ageSpecificNeeds.nutritionSupport && ageSpecificNeeds.nutritionSupport.length > 0) ||
+      (ageSpecificNeeds.lowImpactActivities && ageSpecificNeeds.lowImpactActivities.length > 0);
+
+    return hasHealthData || hasSupportData || hasAccessibilityData || hasSpecialProgramsData || hasAgeSpecificData;
+  };
+
+  // Ако няма реални данни, не показваме компонента
+  if (!hasRealData()) {
     return null;
   }
 
@@ -71,33 +105,71 @@ const ClubPensionersSpecific = ({ club }) => {
       id: 'healthServices', 
       label: t('clubs.pensioners.tabs.healthServices'), 
       icon: faUserMd,
-      hasData: pensionersData.healthServices && Object.keys(pensionersData.healthServices).length > 0
+      hasData: (() => {
+        const healthServices = pensionersData.healthServices || {};
+        return healthServices.regularCheckups === true ||
+               healthServices.bloodPressureMonitoring === true ||
+               (healthServices.healthLectures && healthServices.healthLectures.length > 0) ||
+               (healthServices.medicalPartners && healthServices.medicalPartners.length > 0) ||
+               (healthServices.emergencyProtocol && (
+                 healthServices.emergencyProtocol.hasEmergencyPlan === true ||
+                 healthServices.emergencyProtocol.nearestHospital ||
+                 (healthServices.emergencyProtocol.specialNeeds && healthServices.emergencyProtocol.specialNeeds.length > 0) ||
+                 (healthServices.emergencyProtocol.emergencyContacts && healthServices.emergencyProtocol.emergencyContacts.length > 0)
+               ));
+      })()
     },
     { 
       id: 'supportServices', 
       label: t('clubs.pensioners.tabs.supportServices'), 
       icon: faHandsHelping,
-      hasData: pensionersData.supportServices && Object.keys(pensionersData.supportServices).length > 0
+      hasData: (() => {
+        const supportServices = pensionersData.supportServices || {};
+        return Object.values(supportServices).some(value => value === true);
+      })()
     },
     { 
       id: 'accessibility', 
       label: t('clubs.pensioners.tabs.accessibility'), 
       icon: faUniversalAccess,
-      hasData: pensionersData.accessibility && Object.keys(pensionersData.accessibility).length > 0
+      hasData: (() => {
+        const accessibility = pensionersData.accessibility || {};
+        return Object.values(accessibility).some(value => value === true);
+      })()
     },
     { 
       id: 'specialPrograms', 
       label: t('clubs.pensioners.tabs.specialPrograms'), 
       icon: faBrain,
-      hasData: pensionersData.specialPrograms && Object.keys(pensionersData.specialPrograms).length > 0
+      hasData: (() => {
+        const specialPrograms = pensionersData.specialPrograms || {};
+        return (specialPrograms.memoryActivities && specialPrograms.memoryActivities.length > 0) ||
+               (specialPrograms.volunteerPrograms && specialPrograms.volunteerPrograms.length > 0) ||
+               (specialPrograms.mentalHealthSupport && specialPrograms.mentalHealthSupport.length > 0) ||
+               (specialPrograms.intergenerationalPrograms && specialPrograms.intergenerationalPrograms.length > 0);
+      })()
     },
     { 
       id: 'ageSpecificNeeds', 
       label: t('clubs.pensioners.tabs.ageSpecificNeeds'), 
       icon: faHeartbeat,
-      hasData: pensionersData.ageSpecificNeeds && Object.keys(pensionersData.ageSpecificNeeds).length > 0
+      hasData: (() => {
+        const ageSpecificNeeds = pensionersData.ageSpecificNeeds || {};
+        return (ageSpecificNeeds.nutritionSupport && ageSpecificNeeds.nutritionSupport.length > 0) ||
+               (ageSpecificNeeds.lowImpactActivities && ageSpecificNeeds.lowImpactActivities.length > 0);
+      })()
     }
   ].filter(tab => tab.hasData);
+
+  // Ако няма табове с данни, не показваме компонента
+  if (tabs.length === 0) {
+    return null;
+  }
+
+  // Задаваме активния таб към първия наличен
+  if (!tabs.find(tab => tab.id === activeTab)) {
+    setActiveTab(tabs[0].id);
+  }
 
   const toggleSection = (sectionId) => {
     setExpandedSections(prev => ({
@@ -212,7 +284,6 @@ const ClubPensionersSpecific = ({ club }) => {
                           <span>{partner.service}</span>
                         </div>
                       )}
-                      {/* Contact info - показва се само ако showContactForm е true */}
                       {club.preferences?.showContactForm && partner.contact && (
                         <div className="partner-detail">
                           <FontAwesomeIcon icon={faPhone} />
@@ -231,7 +302,6 @@ const ClubPensionersSpecific = ({ club }) => {
                           <span>{partner.workingHours}</span>
                         </div>
                       )}
-                      {/* Discount info - показва се само ако showFinances е true */}
                       {club.preferences?.showFinances && partner.discount && (
                         <div className="partner-discount">
                           <FontAwesomeIcon icon={faChartLine} />
@@ -247,7 +317,10 @@ const ClubPensionersSpecific = ({ club }) => {
         )}
 
         {/* Emergency Protocol */}
-        {healthData.emergencyProtocol && (
+        {(healthData.emergencyProtocol?.hasEmergencyPlan || 
+          healthData.emergencyProtocol?.nearestHospital ||
+          healthData.emergencyProtocol?.specialNeeds?.length > 0 ||
+          healthData.emergencyProtocol?.emergencyContacts?.length > 0) && (
           <div className="club-pensioners-section">
             <h4 className="club-pensioners-section-title">
               <FontAwesomeIcon icon={faExclamationTriangle} />
@@ -272,7 +345,6 @@ const ClubPensionersSpecific = ({ club }) => {
                 </div>
               )}
 
-              {/* Emergency contacts - показва се само ако showContactForm е true */}
               {club.preferences?.showContactForm && healthData.emergencyProtocol.emergencyContacts?.length > 0 && (
                 <div className="emergency-item">
                   <FontAwesomeIcon icon={faPhone} />
@@ -321,7 +393,7 @@ const ClubPensionersSpecific = ({ club }) => {
       { key: 'techSupport', icon: faLaptop, title: 'techSupport' }
     ];
 
-    const availableServices = servicesList.filter(service => supportData[service.key]);
+    const availableServices = servicesList.filter(service => supportData[service.key] === true);
 
     return (
       <div className="club-pensioners-tab-content">
@@ -354,7 +426,7 @@ const ClubPensionersSpecific = ({ club }) => {
       { key: 'restingAreas', icon: faCouch, title: 'restingAreas' }
     ];
 
-    const availableFeatures = accessibilityFeatures.filter(feature => accessibilityData[feature.key]);
+    const availableFeatures = accessibilityFeatures.filter(feature => accessibilityData[feature.key] === true);
 
     return (
       <div className="club-pensioners-tab-content">
@@ -424,7 +496,169 @@ const ClubPensionersSpecific = ({ club }) => {
           </div>
         )}
 
-        {/* Similar sections for other program types... */}
+        {/* Volunteer Programs */}
+        {programsData.volunteerPrograms?.length > 0 && (
+          <div className="club-pensioners-section">
+            <h4 className="club-pensioners-section-title">
+              <FontAwesomeIcon icon={faHandsHelping} />
+              {t('clubs.pensioners.specialPrograms.volunteerPrograms.title')}
+            </h4>
+            
+            <div className="club-pensioners-programs-list">
+              {programsData.volunteerPrograms.map((program, index) => (
+                <div key={index} className="club-pensioners-program-item">
+                  <div className="program-icon">
+                    <FontAwesomeIcon icon={faHandsHelping} />
+                  </div>
+                  <div className="program-content">
+                    <h5>{program.name}</h5>
+                    <div className="program-meta">
+                      {program.coordinator && (
+                        <span className="meta-item">
+                          <FontAwesomeIcon icon={faUserFriends} />
+                          {program.coordinator}
+                        </span>
+                      )}
+                      {program.volunteers > 0 && (
+                        <span className="meta-item">
+                          <FontAwesomeIcon icon={faUsers} />
+                          {program.volunteers} доброволци
+                        </span>
+                      )}
+                      {program.hoursPerWeek > 0 && (
+                        <span className="meta-item">
+                          <FontAwesomeIcon icon={faClock} />
+                          {program.hoursPerWeek} часа седмично
+                        </span>
+                      )}
+                    </div>
+                    {program.description && (
+                      <p className="program-description">{program.description}</p>
+                    )}
+                    {program.training && (
+                      <p className="program-training">
+                        <strong>Обучение:</strong> {program.training}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Mental Health Support */}
+        {programsData.mentalHealthSupport?.length > 0 && (
+          <div className="club-pensioners-section">
+            <h4 className="club-pensioners-section-title">
+              <FontAwesomeIcon icon={faHeartbeat} />
+              {t('clubs.pensioners.specialPrograms.mentalHealthSupport.title')}
+            </h4>
+            
+            <div className="club-pensioners-programs-list">
+              {programsData.mentalHealthSupport.map((support, index) => (
+                <div key={index} className="club-pensioners-program-item">
+                  <div className="program-icon">
+                    <FontAwesomeIcon icon={faHeartbeat} />
+                  </div>
+                  <div className="program-content">
+                    <h5>{support.focus}</h5>
+                    <div className="program-meta">
+                      {support.therapist && (
+                        <span className="meta-item">
+                          <FontAwesomeIcon icon={faUserMd} />
+                          {support.therapist}
+                        </span>
+                      )}
+                      {support.frequency && (
+                        <span className="meta-item">
+                          <FontAwesomeIcon icon={faCalendarAlt} />
+                          {support.frequency}
+                        </span>
+                      )}
+                      {support.availability && (
+                        <span className="meta-item">
+                          <FontAwesomeIcon icon={faClock} />
+                          {support.availability}
+                        </span>
+                      )}
+                      {support.participants > 0 && (
+                        <span className="meta-item">
+                          <FontAwesomeIcon icon={faUsers} />
+                          {support.participants} участници
+                        </span>
+                      )}
+                    </div>
+                    {club.preferences?.showContactForm && support.contact && (
+                      <div className="program-contact">
+                        <FontAwesomeIcon icon={faPhone} />
+                        <span>Контакт: {support.contact}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Intergenerational Programs */}
+        {programsData.intergenerationalPrograms?.length > 0 && (
+          <div className="club-pensioners-section">
+            <h4 className="club-pensioners-section-title">
+              <FontAwesomeIcon icon={faChild} />
+              {t('clubs.pensioners.specialPrograms.intergenerationalPrograms.title')}
+            </h4>
+            
+            <div className="club-pensioners-programs-list">
+              {programsData.intergenerationalPrograms.map((program, index) => (
+                <div key={index} className="club-pensioners-program-item">
+                  <div className="program-icon">
+                    <FontAwesomeIcon icon={faChild} />
+                  </div>
+                  <div className="program-content">
+                    <h5>{program.name}</h5>
+                    <div className="program-meta">
+                      {program.venue && (
+                        <span className="meta-item">
+                          <FontAwesomeIcon icon={faBuilding} />
+                          {program.venue}
+                        </span>
+                      )}
+                      {program.ageRange && (
+                        <span className="meta-item">
+                          <FontAwesomeIcon icon={faUsers} />
+                          {program.ageRange}
+                        </span>
+                      )}
+                      {program.frequency && (
+                        <span className="meta-item">
+                          <FontAwesomeIcon icon={faCalendarAlt} />
+                          {program.frequency}
+                        </span>
+                      )}
+                      {program.coordinator && (
+                        <span className="meta-item">
+                          <FontAwesomeIcon icon={faUserFriends} />
+                          {program.coordinator}
+                        </span>
+                      )}
+                      {program.participants > 0 && (
+                        <span className="meta-item">
+                          <FontAwesomeIcon icon={faUsers} />
+                          {program.participants} участници
+                        </span>
+                      )}
+                    </div>
+                    {program.description && (
+                      <p className="program-description">{program.description}</p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     );
   };
@@ -498,7 +732,6 @@ const ClubPensionersSpecific = ({ club }) => {
                           {support.frequency}
                         </span>
                       )}
-                      {/* Price info - показва се само ако showFinances е true */}
                       {club.preferences?.showFinances && support.price && (
                         <span className="meta-item price">
                           <FontAwesomeIcon icon={faChartLine} />
@@ -535,10 +768,6 @@ const ClubPensionersSpecific = ({ club }) => {
         return null;
     }
   };
-
-  if (tabs.length === 0) {
-    return null;
-  }
 
   return (
     <section id="club-pensioners-specific" className="club-pensioners-specific">

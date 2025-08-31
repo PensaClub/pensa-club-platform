@@ -41,6 +41,25 @@ export const ClubHero = ({ club }) => {
     return null;
   }
 
+  // Функция за изчисляване на години дейност
+  const calculateYearsSinceFoundation = (foundedYear) => {
+    if (!foundedYear) return null;
+    
+    const currentYear = new Date().getFullYear();
+    const years = currentYear - foundedYear;
+    
+    if (years <= 0) {
+      return { value: t('clubs.ClubHero.stats.firstYear'), isText: true };
+    }
+    
+    return { value: years, isText: false };
+  };
+
+  // Функция за правилно число (единствено/множествено)
+  const getPluralForm = (count, singularKey, pluralKey) => {
+    return count === 1 ? t(singularKey) : t(pluralKey);
+  };
+
   const getImages = () => {
     if (!club.preferences?.publicGallery) {
       return [];
@@ -112,33 +131,68 @@ export const ClubHero = ({ club }) => {
     
     return stars;
   };
-
-  const getStats = () => {
-    const totalMembers = club.membership?.totalMembers || 
-                        club.membership?.activeMembers || 
-                        club.stats?.totalMembers ||
-                        (club.members ? club.members.filter(m => m.isActive !== false).length : 0) ||
-                        (club.management?.board?.length || 0) + 20;
-    
-    const yearsActive = club.foundedYear ? 
-                       new Date().getFullYear() - club.foundedYear : 
-                       club.stats?.yearsActive ||
-                       5;
-    
-    const activitiesCount = (club.activities?.regular?.length || 0) + 
-                           (club.activities?.events?.length || 0) + 
-                           (club.activities?.classes?.length || 0) ||
-                           club.stats?.programs ||
-                           3;
-
-    const eventsCount = club.activities?.events?.length || 
-                       club.stats?.events || 
-                       12;
-
-    return { totalMembers, yearsActive, activitiesCount, eventsCount };
+  const openMembersModal = () => {
+    if (!club.preferences?.showMembersList) {
+      return;
+    }
+    setShowMembersModal(true);
+    setMemberSearchTerm('');
   };
 
-  const stats = getStats();
+  // Изчислява реални статистики - само ако има данни
+  const getRealStats = () => {
+    const stats = [];
+
+    // Членове - само ако има реални данни
+    const totalMembers = club.membership?.totalMembers || 
+                        (club.members ? club.members.filter(m => m.isActive !== false).length : 0);
+    
+    if (totalMembers > 0) {
+      stats.push({
+        icon: faUsers,
+        value: totalMembers,
+        label: getPluralForm(totalMembers, 'clubs.ClubHero.stats.member', 'clubs.ClubHero.stats.members'),
+        action: club.preferences?.showMembersList,
+        onClick: openMembersModal
+      });
+    }
+
+    // Години дейност - само ако има foundedYear
+    const yearsData = calculateYearsSinceFoundation(club.foundedYear);
+    if (yearsData !== null) {
+      stats.push({
+        icon: faCalendarAlt,
+        value: yearsData.value,
+        label: yearsData.isText ? '' : getPluralForm(yearsData.value, 'clubs.ClubHero.stats.year', 'clubs.ClubHero.stats.years')
+      });
+    }
+
+    // Дейности - само ако има реални дейности
+    const regularActivities = club.activities?.regular?.length || 0;
+    const totalActivities = regularActivities + (club.activities?.events?.length || 0);
+    
+    if (totalActivities > 0) {
+      stats.push({
+        icon: faPlay,
+        value: totalActivities,
+        label: getPluralForm(totalActivities, 'clubs.ClubHero.stats.activity', 'clubs.ClubHero.stats.activities')
+      });
+    }
+
+    // События - само ако има реални събития
+    const eventsCount = club.activities?.events?.length || 0;
+    if (eventsCount > 0) {
+      stats.push({
+        icon: faStar,
+        value: eventsCount,
+        label: getPluralForm(eventsCount, 'clubs.ClubHero.stats.event', 'clubs.ClubHero.stats.events')
+      });
+    }
+
+    return stats;
+  };
+
+  const stats = getRealStats();
 
   const getMembers = () => {
     const members = [];
@@ -185,22 +239,6 @@ export const ClubHero = ({ club }) => {
           existingMember.avatar = existingMember.avatar || boardMember.avatar;
         }
       });
-    }
-    
-    if (members.length === 0 && stats.totalMembers > 0) {
-      const sampleNames = [
-        'Мария Иванова', 'Георги Петров', 'Елена Стоянова', 'Иван Димитров',
-        'Анна Николова', 'Стоян Георгиев', 'Рада Христова', 'Петър Милев'
-      ];
-      
-      for (let i = 0; i < Math.min(8, stats.totalMembers); i++) {
-        members.push({
-          name: sampleNames[i] || `${t('clubs.ClubHero.members.defaultRole', { defaultValue: 'Член' })} ${i + 1}`,
-          role: i === 0 ? 'Председател' : t('clubs.ClubHero.members.defaultRole', { defaultValue: 'Член' }),
-          isBoard: i < 3,
-          memberSince: 2018 + Math.floor(Math.random() * 6)
-        });
-      }
     }
     
     return members.sort((a, b) => {
@@ -264,14 +302,6 @@ export const ClubHero = ({ club }) => {
       navigator.clipboard.writeText(window.location.href);
       alert(t('clubs.ClubHero.messages.linkCopied'));
     }
-  };
-
-  const openMembersModal = () => {
-    if (!club.preferences?.showMembersList) {
-      return;
-    }
-    setShowMembersModal(true);
-    setMemberSearchTerm('');
   };
 
   const closeMembersModal = () => {
@@ -346,52 +376,29 @@ export const ClubHero = ({ club }) => {
               {club.shortDescription || club.description || t('clubs.ClubHero.messages.defaultDescription')}
             </p>
 
-            {club.preferences?.showStatistics && (
+            {/* Показваме статистики само ако има данни И е разрешено в настройките */}
+            {club.preferences?.showStatistics && stats.length > 0 && (
               <div className="general-stats-grid">
-                {club.preferences?.showMembersList && (
-                  <div className="general-stat-card" onClick={openMembersModal}>
+                {stats.map((stat, index) => (
+                  <div 
+                    key={index}
+                    className={`general-stat-card ${stat.action ? 'clickable' : ''}`}
+                    onClick={stat.onClick || (() => {})}
+                  >
                     <div className="general-stat-icon">
-                      <FontAwesomeIcon icon={faUsers} />
+                      <FontAwesomeIcon icon={stat.icon} />
                     </div>
                     <div className="general-stat-content">
-                      <div className="general-stat-value">{stats.totalMembers}</div>
-                      <div className="general-hero-stat-label">{t('clubs.ClubHero.stats.members')}</div>
+                      <div className="general-stat-value">{stat.value}</div>
+                      <div className="general-hero-stat-label">{stat.label}</div>
                     </div>
-                    <div className="general-stat-action">
-                      <FontAwesomeIcon icon={faEye} />
-                    </div>
+                    {stat.action && (
+                      <div className="general-stat-action">
+                        <FontAwesomeIcon icon={faEye} />
+                      </div>
+                    )}
                   </div>
-                )}
-                
-                <div className="general-stat-card">
-                  <div className="general-stat-icon">
-                    <FontAwesomeIcon icon={faCalendarAlt} />
-                  </div>
-                  <div className="general-stat-content">
-                    <div className="general-stat-value">{stats.yearsActive}</div>
-                    <div className="general-hero-stat-label">{t('clubs.ClubHero.stats.years')}</div>
-                  </div>
-                </div>
-                
-                <div className="general-stat-card">
-                  <div className="general-stat-icon">
-                    <FontAwesomeIcon icon={faPlay} />
-                  </div>
-                  <div className="general-stat-content">
-                    <div className="general-stat-value">{stats.activitiesCount}</div>
-                    <div className="general-hero-stat-label">{t('clubs.ClubHero.stats.activities')}</div>
-                  </div>
-                </div>
-
-                <div className="general-stat-card">
-                  <div className="general-stat-icon">
-                    <FontAwesomeIcon icon={faStar} />
-                  </div>
-                  <div className="general-stat-content">
-                    <div className="general-stat-value">{stats.eventsCount}</div>
-                    <div className="general-hero-stat-label">{t('clubs.ClubHero.stats.events')}</div>
-                  </div>
-                </div>
+                ))}
               </div>
             )}
 

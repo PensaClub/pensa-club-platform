@@ -161,10 +161,7 @@ export const ClubProvider = ({ children }) => {
  const getClubBySlug = async (slug) => {
   try {
     setIsLoading(true);
-    
-    console.log('🔄 Fetching club by slug:', slug);
-    
-    // 🌐 Използваме реалния API
+
     const fetchedClub = await clubService.getClubByIdentifier(slug);
     
     console.log('✅ Club fetched from API:', fetchedClub);
@@ -183,7 +180,6 @@ export const ClubProvider = ({ children }) => {
     
     // Fallback към mock data
     try {
-      console.log('🔄 Using fallback mock data for slug:', slug);
       
       const club = mockClubsData.find(club => club.slug === slug);
       
@@ -199,7 +195,6 @@ export const ClubProvider = ({ children }) => {
         fallbackClub.metadata.views = (fallbackClub.metadata.views || 0) + 1;
       }
       
-      console.log('✅ Using fallback club data:', fallbackClub);
       return fallbackClub;
       
     } catch (fallbackError) {
@@ -217,12 +212,9 @@ export const ClubProvider = ({ children }) => {
   try {
     setIsLoading(true);
     
-    console.log('🔄 Fetching club by ID:', id);
     
     // 🌐 Използваме реалния API
     const fetchedClub = await clubService.getClubByIdentifier(id);
-    
-    console.log('✅ Club fetched from API by ID:', fetchedClub);
     
     return fetchedClub;
     
@@ -255,11 +247,11 @@ export const ClubProvider = ({ children }) => {
 };
 
   const updateClub = async (identifier, clubData) => {
-    if (!isAdmin) {
-      console.warn('Потребителят не е администратор, не може да редактира клуб');
-      notify('unauthorized-action');
-      return null;
-    }
+    // if (!isAdmin) {
+    //   console.warn('Потребителят не е администратор, не може да редактира клуб');
+    //   notify('unauthorized-action');
+    //   return null;
+    // }
     
     try {
       setIsLoading(true);
@@ -292,11 +284,11 @@ export const ClubProvider = ({ children }) => {
   };
 
   const deleteClub = async (identifier) => {
-    if (!isAdmin) {
-      console.warn('Потребителят не е администратор, не може да изтрие клуб');
-      notify('unauthorized-action');
-      return false;
-    }
+    // if (!isAdmin) {
+    //   console.warn('Потребителят не е администратор, не може да изтрие клуб');
+    //   notify('unauthorized-action');
+    //   return false;
+    // }
     
     try {
       setIsLoading(true);
@@ -363,20 +355,51 @@ export const ClubProvider = ({ children }) => {
     }
   };
 
-  const getAllDrafts = async (page = 1, limit = 12) => {
-    try {
-      setIsLoading(true);
-      const drafts = await clubService.getAllDrafts(page, limit);
-      return drafts;
-    } catch (e) {
-      console.error('Грешка при получаване на чернови:', e);
-      notify('error', e);
-      showErrorAndSetTimeouts(e.message);
-      return [];
-    } finally {
-      setIsLoading(false);
+ const getAllDrafts = async (page = 1, limit = 12) => {
+  try {
+    setIsLoading(true);
+    const response = await clubService.getAllDrafts(page, limit);
+    
+    console.log('🔄 Raw drafts API response:', response);
+    
+    // Използвай СЪЩАТА логика като при getAllClubs
+    let fetchedDrafts = [];
+    
+    if (Array.isArray(response)) {
+      fetchedDrafts = response;
+    } else if (response && Array.isArray(response.data)) {
+      fetchedDrafts = response.data;
+    } else if (response && Array.isArray(response.clubs)) {
+      fetchedDrafts = response.clubs; // ✅ ТОВА БЕШЕ ПРОБЛЕМЪТ
+    } else if (response && Array.isArray(response.drafts)) {
+      fetchedDrafts = response.drafts;
+    } else {
+      console.warn('⚠️ Unexpected drafts response format:', response);
+      fetchedDrafts = [];
     }
-  };
+    
+    console.log('📊 Processed drafts data:', fetchedDrafts);
+    
+    return {
+      drafts: fetchedDrafts,
+      pagination: response?.pagination || null,
+      total: response?.total || fetchedDrafts.length
+    };
+    
+  } catch (e) {
+    console.error('❌ Грешка при получаване на чернови:', e);
+    notify('error', e);
+    showErrorAndSetTimeouts(e.message);
+    return {
+      drafts: [],
+      pagination: null,
+      total: 0,
+      error: e.message
+    };
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   const getDraftById = async (id) => {
     try {
