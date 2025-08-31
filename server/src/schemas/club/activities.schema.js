@@ -5,7 +5,7 @@ const activitiesSchema = z.object({
     regular: z
         .array(
             z.object({
-                id: optionalString(), // Frontend generates: regular_{timestamp}_{randomString}
+                id: optionalString(),
                 name: optionalString(),
                 description: optionalString(),
                 type: optionalString(), // TODO: change to enum when FE values are finalized
@@ -13,7 +13,13 @@ const activitiesSchema = z.object({
                 schedule: z
                     .object({
                         frequency: optionalString(), // TODO: change to enum when FE values are finalized
-                        dayOfWeek: optionalNumber(1, 7), // 1-7 for Monday-Sunday
+                        dayOfWeek: z
+                            .number()
+                            .min(0)
+                            .max(7)
+                            .transform((val) => (val === 0 ? null : val))
+                            .nullable()
+                            .optional(),
                         startTime: optionalString(),
                         duration: optionalNumber(0), // in minutes
                     })

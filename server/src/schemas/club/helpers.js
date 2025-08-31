@@ -9,7 +9,7 @@ const emptyStringToNull = (value) => {
 };
 
 // Helper for string fields that can be empty
-const optionalString = () => z.string().transform(emptyStringToNull).optional();
+const optionalString = () => z.string().transform(emptyStringToNull).nullish();
 
 // Helper for required string fields
 const requiredString = (errorMessage = 'This field is required') =>
