@@ -16,7 +16,7 @@ const baseSchema = z.object({
 });
 
 const create = baseSchema;
-const update = baseSchema.omit({ slug: true });
+const update = baseSchema;
 
 module.exports = {
     create,

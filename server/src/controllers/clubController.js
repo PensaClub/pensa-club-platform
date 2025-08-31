@@ -18,6 +18,7 @@ const { findBySlugOrId } = require('../utils/modelLookup');
 const { transformComment, getCommentConfig } = require('../utils/commentUtils');
 const { comment } = require('../sequelize/models');
 const { Op } = require('sequelize');
+const { forwardEmailsViaZoho } = require('../utils/zohoEmails');
 
 // ========================================
 // ENDPOINTS
@@ -439,6 +440,22 @@ clubController.get('/:identifier/members', async (req, res, next) => {
 
 clubController.get('/:identifier/management', async (req, res, next) => {
     return getClubSpecificData(req.params.identifier, 'management', req, res, next);
+});
+
+clubController.patch('/:identifier/toggle-status', isAuth, async (req, res, next) => {
+    return performAdminAction(req.params.identifier, 'toggle-status', req, res, next);
+});
+
+clubController.patch('/:identifier/verify', isAuth, async (req, res, next) => {
+    return performAdminAction(req.params.identifier, 'verify', req, res, next);
+});
+
+clubController.patch('/:identifier/approve', isAuth, async (req, res, next) => {
+    return performAdminAction(req.params.identifier, 'approve', req, res, next);
+});
+
+clubController.patch('/:identifier/reject', isAuth, async (req, res, next) => {
+    return performAdminAction(req.params.identifier, 'reject', req, res, next);
 });
 
 // ========================================
@@ -1000,6 +1017,138 @@ const getClubSpecificData = async (identifier, dataType, req, res, next) => {
         }
 
         return res.status(200).json(response);
+    } catch (err) {
+        next(err);
+    }
+};
+
+const performAdminAction = async (identifier, action, req, res, next) => {
+    try {
+        const { status, reason, message: customMessage } = req.body;
+
+        // TODO: Add checkPermission('admin')
+
+        const result = await club_Club.sequelize.transaction(async (t) => {
+            const club = await findBySlugOrId(club_Club, identifier, {
+                where: { isDraft: false },
+                transaction: t,
+            });
+
+            if (!club) {
+                throw new CustomError({
+                    message: 'Club not found',
+                    statusCode: 404,
+                });
+            }
+
+            let updateData = {};
+            let emailMessage = '';
+            let emailSubject = '';
+
+            const clubLink = `${process.env.FRONTEND_SERVER}/clubs/${club.slug}`;
+            const clubLinkMessage = `<br><br>Посетете клуба тук: <a href="${clubLink}" style="color: #1a73e8; text-decoration: underline;">${clubLink}</a>`;
+
+            // Status translations
+            const statusTranslations = {
+                active: 'активен',
+                inactive: 'неактивен',
+                suspended: 'спрян',
+            };
+
+            switch (action) {
+                case 'toggle-status':
+                    if (!status) {
+                        throw new CustomError({
+                            message: 'Status is required for toggle-status action',
+                            statusCode: 400,
+                        });
+                    }
+
+                    const statusText = statusTranslations[status] || status;
+                    updateData = { status };
+                    emailSubject = `Промяна на статуса на клуб "${club.name}"`;
+                    emailMessage = customMessage || `Статусът на вашия клуб "${club.name}" беше променен на ${statusText}.`;
+
+                    if (status === 'active') {
+                        emailMessage += clubLinkMessage;
+                    }
+                    break;
+
+                case 'verify':
+                    updateData = { isVerified: true };
+                    emailSubject = `Потвърждение на клуб "${club.name}"`;
+                    emailMessage = customMessage || `Поздравления! Вашият клуб "${club.name}" беше потвърден от нашия екип.`;
+                    emailMessage += clubLinkMessage;
+                    break;
+
+                case 'approve':
+                    updateData = { status: 'active', isVerified: true };
+                    emailSubject = `Одобрение на клуб "${club.name}"`;
+                    emailMessage = customMessage || `Отлични новини! Вашият клуб "${club.name}" беше одобрен и вече е активен в нашата платформа.`;
+                    emailMessage += clubLinkMessage;
+                    break;
+
+                case 'reject':
+                    if (!reason) {
+                        throw new CustomError({
+                            message: 'Reason is required for rejection',
+                            statusCode: 400,
+                        });
+                    }
+                    updateData = { status: 'rejected' };
+                    emailSubject = `Отхвърляне на заявка за клуб "${club.name}"`;
+                    emailMessage =
+                        customMessage ||
+                        `Съжаляваме да ви информираме, че заявката ви за клуб "${club.name}" беше отхвърлена.<br><br>Причина: ${reason}<br><br>Моля, прегледайте обратната връзка и не се колебайте да подадете отново с необходимите промени.`;
+                    break;
+
+                default:
+                    throw new CustomError({
+                        message: 'Invalid action',
+                        statusCode: 400,
+                    });
+            }
+
+            await club.update(updateData, { transaction: t });
+
+            try {
+                await forwardEmailsViaZoho({
+                    userEmail: req.user.email,
+                    subject: emailSubject,
+                    body: emailMessage,
+                    toAddresses: 'kolev93@abv.bg', // or club.owner when ready
+                });
+            } catch (emailError) {
+                try {
+                    await forwardEmailsViaZoho({
+                        userEmail: req.user.email,
+                        subject: `EMAIL FAILED - ${emailSubject}`,
+                        body: `Failed to send email to club owner ${club.owner} for club "${club.name}". Original message: ${emailMessage}`,
+                        toAddresses: 'admin@pensa.club',
+                    });
+                } catch (fallbackError) {
+                    console.error('Failed to send fallback email notification:', fallbackError);
+                }
+            }
+
+            return club.id;
+        });
+
+        const completeClub = await club_Club.findByPk(result, {
+            include: [
+                { model: club_ClubDetails, as: 'details' },
+                { model: club_ClubLocation, as: 'location' },
+                { model: club_ClubMembership, as: 'membership' },
+                { model: club_ClubMember, as: 'members' },
+                { model: club_ClubActivity, as: 'activities' },
+            ],
+        });
+
+        const comments = await comment.findAll(getCommentConfig(completeClub.id, 'club'));
+        const transformedClub = transformClub(completeClub);
+        transformedClub.comments = comments.map((comment) => transformComment(comment));
+
+        return res.status(200).json(transformedClub);
     } catch (err) {
         next(err);
     }
