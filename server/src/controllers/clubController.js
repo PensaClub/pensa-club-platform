@@ -1046,7 +1046,7 @@ const performAdminAction = async (identifier, action, req, res, next) => {
             let emailSubject = '';
 
             const clubLink = `${process.env.FRONTEND_SERVER}/clubs/${club.slug}`;
-            const clubLinkMessage = `<br><br>Можете да видите клуба тук: <a href="${clubLink}" style="color: #1a73e8; text-decoration: underline;">${clubLink}</a>`;
+            const clubLinkMessage = `<br><br>Посетете клуба тук: <a href="${clubLink}" style="color: #1a73e8; text-decoration: underline;">${clubLink}</a>`;
 
             // Status translations
             const statusTranslations = {
