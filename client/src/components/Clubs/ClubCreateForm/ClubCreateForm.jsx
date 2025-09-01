@@ -46,8 +46,10 @@ const ClubCreateForm = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const editId = searchParams.get('editId');
+      const draftId = searchParams.get('draftId');
     const mode = searchParams.get('mode');
     const isEditMode = mode === 'edit' && editId;
+    const isContinueMode = mode === 'continue' && draftId;
     const {
         formData,
         errors,
@@ -60,7 +62,7 @@ const ClubCreateForm = () => {
         submitClub,
         validateForm,
         resetForm
-    } = useCreateClub(isEditMode ? editId : null,isEditMode);
+    } = useCreateClub(editId || draftId, isEditMode, mode);
 
     const [currentStep, setCurrentStep] = useState(1);
     const [showPreview, setShowPreview] = useState(false);
@@ -70,7 +72,17 @@ const ClubCreateForm = () => {
         updateField(`activities.${type}`, data);
 
     }, [updateField, formData.activities]);
+const getFormTitle = () => {
+        if (isEditMode) return `Редактиране на ${formData.name || 'клуб'}`;
+        if (isContinueMode) return `Продължи работа по ${formData.name || 'драфт'}`;
+        return t('clubForm.title');
+    };
 
+    const getFormSubtitle = () => {
+        if (isEditMode) return 'Обновете информацията за вашия клуб';
+        if (isContinueMode) return 'Завършете създаването на вашия клуб';
+        return t('clubForm.subtitle');
+    };
     const steps = [
         {
             id: 1,
@@ -858,10 +870,10 @@ const ClubCreateForm = () => {
             <div className="club-form-header">
                 <div className="club-form-title-section">
                     <h1 className="club-form-title">
-                        {isEditMode ? `Редактиране на ${formData.name || 'клуб'}` : t('clubForm.title')}
+                        {getFormTitle()}
                     </h1>
                     <p className="club-form-subtitle">
-                        {isEditMode ? 'Обновете информацията за вашия клуб' : t('clubForm.subtitle')}
+                        {getFormSubtitle()}
                     </p>
                 </div>
 

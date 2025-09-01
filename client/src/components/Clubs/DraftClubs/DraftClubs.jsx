@@ -1,5 +1,5 @@
 // src/components/Profile/DraftClubs/DraftClubs.jsx
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -43,8 +43,9 @@ const DraftClubs = () => {
     const [sortBy, setSortBy] = useState('newest');
     const [initialLoading, setInitialLoading] = useState(true);
     const [error, setError] = useState(null);
- const [showPreviewModal, setShowPreviewModal] = useState(false);
+    const [showPreviewModal, setShowPreviewModal] = useState(false);
     const [previewDraft, setPreviewDraft] = useState(null);
+
     // Authentication check
     useEffect(() => {
         if (!isAuthentication) {
@@ -54,40 +55,76 @@ const DraftClubs = () => {
         }
     }, [isAuthentication, navigate, setRedirectAfterLogin]);
 
+    // Функция за определяне на завършеност на драфт
+    const isClubComplete = useCallback((draft) => {
+        // Основна информация (ЗАДЪЛЖИТЕЛНО)
+        const hasBasicInfo = draft.name && draft.name.trim().length > 0 && 
+                            draft.shortDescription && draft.shortDescription.trim().length > 0;
+        
+        // Местоположение
+        const hasLocation = (draft.location?.address && draft.location.address.trim()) ||
+                           (draft.location?.city && draft.location.city.trim()) ||
+                           (draft.location?.coordinates?.lat && draft.location?.coordinates?.lng);
+        
+        // Дейности
+        const hasActivities = (draft.activities?.regular && draft.activities.regular.length > 0) ||
+                             (draft.activities?.events && draft.activities.events.length > 0) ||
+                             (draft.activities?.trips && draft.activities.trips.length > 0) ||
+                             (draft.activities?.courses && draft.activities.courses.length > 0);
+        
+        // Членове или управление
+        const hasMembers = (draft.members && draft.members.length > 0) ||
+                          (draft.management?.board && draft.management.board.length > 0);
+        
+        // Контакти
+        const hasContacts = (draft.contacts?.phone && draft.contacts.phone.trim()) ||
+                           (draft.contacts?.email && draft.contacts.email.trim()) ||
+                           (draft.contacts?.mobile && draft.contacts.mobile.trim());
+        
+        // Членство
+        const hasMembership = draft.membership?.type && draft.membership.type.trim() !== '';
+        
+        // Draft е завършен ако има основна информация + поне още 3 от другите секции
+        const completedSections = [hasLocation, hasActivities, hasMembers, hasContacts, hasMembership].filter(Boolean).length;
+        
+        return hasBasicInfo && completedSections >= 3;
+    }, []);
+
     // Fetch user drafts
-    // В DraftClubs.jsx - замени fetchUserDrafts функцията
-useEffect(() => {
-  const fetchUserDrafts = async () => {
-    if (!isAuthentication || !userEmail) return;
+    useEffect(() => {
+        const fetchUserDrafts = async () => {
+            if (!isAuthentication || !userEmail) return;
 
-    try {
-      setInitialLoading(true);
-      setError(null);
+            try {
+                setInitialLoading(true);
+                setError(null);
 
-      const response = await getAllDrafts();
-      
-      // Обработваме отговора правилно
-      let userDrafts = [];
-      if (response && Array.isArray(response.drafts)) {
-        userDrafts = response.drafts;
-      } else if (Array.isArray(response)) {
-        userDrafts = response;
-      } else if (response && Array.isArray(response.data)) {
-        userDrafts = response.data;
-      }
+                const response = await getAllDrafts();
+                
+                // Обработваме отговора правилно
+                let userDrafts = [];
+                if (response && Array.isArray(response.drafts)) {
+                    userDrafts = response.drafts;
+                } else if (Array.isArray(response)) {
+                    userDrafts = response;
+                } else if (response && Array.isArray(response.data)) {
+                    userDrafts = response.data;
+                } else if (response && Array.isArray(response.clubs)) {
+                    userDrafts = response.clubs;
+                }
 
-      setDrafts(userDrafts);
-    } catch (err) {
-      console.error('Error fetching user drafts:', err);
-      setError(err.message || 'Failed to fetch drafts');
-      setDrafts([]);
-    } finally {
-      setInitialLoading(false);
-    }
-  };
+                setDrafts(userDrafts);
+            } catch (err) {
+                console.error('Error fetching user drafts:', err);
+                setError(err.message || 'Failed to fetch drafts');
+                setDrafts([]);
+            } finally {
+                setInitialLoading(false);
+            }
+        };
 
-  fetchUserDrafts();
-}, [userEmail, isAuthentication]); 
+        fetchUserDrafts();
+    }, [userEmail, isAuthentication]); 
 
     // Filter and search drafts
     const filteredAndSortedDrafts = useMemo(() => {
@@ -123,9 +160,9 @@ useEffect(() => {
                     case 'sports':
                         return draft.category === 'sports';
                     case 'complete':
-                        return draft.name && draft.name.trim().length > 0;
+                        return isClubComplete(draft);
                     case 'incomplete':
-                        return !draft.name || draft.name.trim().length === 0;
+                        return !isClubComplete(draft);
                     default:
                         return true;
                 }
@@ -146,9 +183,9 @@ useEffect(() => {
                 case 'category':
                     return (a.category || '').localeCompare(b.category || '');
                 case 'completion':
-                    // Sort by completion level (name presence as basic indicator)
-                    const aComplete = a.name && a.name.trim().length > 0 ? 1 : 0;
-                    const bComplete = b.name && b.name.trim().length > 0 ? 1 : 0;
+                    // Sort by completion level с новата логика
+                    const aComplete = isClubComplete(a) ? 1 : 0;
+                    const bComplete = isClubComplete(b) ? 1 : 0;
                     return bComplete - aComplete;
                 default:
                     return 0;
@@ -156,7 +193,7 @@ useEffect(() => {
         });
 
         return sorted;
-    }, [drafts, searchTerm, filterBy, sortBy]);
+    }, [drafts, searchTerm, filterBy, sortBy, isClubComplete]);
 
     // Calculate statistics
     const stats = useMemo(() => {
@@ -165,9 +202,7 @@ useEffect(() => {
         }
 
         const total = drafts.length;
-        const complete = drafts.filter(draft => 
-            draft.name && draft.name.trim().length > 0
-        ).length;
+        const complete = drafts.filter(draft => isClubComplete(draft)).length;
         const incomplete = total - complete;
         
         // Find most recently modified draft
@@ -180,7 +215,7 @@ useEffect(() => {
             : null;
 
         return { total, complete, incomplete, lastModified };
-    }, [drafts]);
+    }, [drafts, isClubComplete]);
 
     const handleCreateNew = () => {
         navigate('/profile/club-create');
@@ -201,7 +236,7 @@ useEffect(() => {
         navigate(`/profile/club-create?draftId=${draft.id}&mode=continue`);
     };
 
-     const handleViewDraft = (draft) => {
+    const handleViewDraft = (draft) => {
         setPreviewDraft(draft);
         setShowPreviewModal(true);
     };
@@ -338,6 +373,8 @@ useEffect(() => {
                     </p>
                 </div>
             )}
+
+            {/* Preview Modal */}
             {showPreviewModal && previewDraft && (
                 <ClubPreviewModal
                     isOpen={showPreviewModal}
