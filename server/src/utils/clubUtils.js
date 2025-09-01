@@ -566,7 +566,7 @@ const processClubAdminAction = async (club, action, options, adminEmail) => {
             userEmail: adminEmail,
             subject: emailSubject,
             body: emailMessage,
-            toAddresses: 'kolev93@abv.bg', // or club.owner when ready
+            toAddresses: club.owner,
         });
         return { updateData, emailSent: true };
     } catch (emailError) {
