@@ -1,3 +1,6 @@
+const { forwardEmailsViaZoho } = require('./zohoEmails');
+const CustomError = require('./customError');
+
 const transformToDB = (feData, options = {}) => {
     const { isCreate = false } = options;
 
@@ -89,6 +92,7 @@ const transformClub = (clubData) => {
         mainImage: club.mainImage || '',
         gallery: club.details?.gallery || [],
         category: club.category || '',
+        owner: club.owner || '',
 
         // Location
         location: club.location
@@ -479,10 +483,112 @@ const transformActivityToDB = (activityData, type, options = {}) => {
     return dbData;
 };
 
+const processClubAdminAction = async (club, action, options, adminEmail) => {
+    const { status, reason, customMessage } = options;
+
+    const statusTranslations = {
+        active: 'активен',
+        inactive: 'неактивен',
+        suspended: 'спрян',
+        rejected: 'отхвърлен',
+    };
+
+    const clubLink = `${process.env.FRONTEND_SERVER}/clubs/${club.slug}`;
+    const clubLinkMessage = `<br><br>Посетете клуба тук: <a href="${clubLink}" style="color: #1a73e8; text-decoration: underline;">${clubLink}</a>`;
+
+    let updateData = {};
+    let emailMessage = '';
+    let emailSubject = '';
+
+    switch (action) {
+        case 'toggle-status':
+            if (!status) {
+                throw new CustomError({
+                    message: 'Status is required for toggle-status action',
+                    statusCode: 400,
+                });
+            }
+
+            const statusText = statusTranslations[status] || status;
+            updateData = { status };
+            emailSubject = `Промяна на статуса на клуб "${club.name}"`;
+            emailMessage = customMessage || `Статусът на вашия клуб "${club.name}" беше променен на ${statusText}.`;
+
+            if (status === 'active') {
+                emailMessage += clubLinkMessage;
+            }
+            break;
+
+        case 'verify':
+            updateData = { isVerified: true };
+            emailSubject = `Потвърждение на клуб "${club.name}"`;
+            emailMessage = customMessage || `Поздравления! Вашият клуб "${club.name}" беше потвърден от нашия екип.`;
+            emailMessage += clubLinkMessage;
+            break;
+
+        case 'approve':
+            updateData = { status: 'active', isVerified: true };
+            emailSubject = `Одобрение на клуб "${club.name}"`;
+            emailMessage = customMessage || `Отлични новини! Вашият клуб "${club.name}" беше одобрен и вече е активен в нашата платформа.`;
+            emailMessage += clubLinkMessage;
+            break;
+
+        case 'reject':
+            if (!reason) {
+                throw new CustomError({
+                    message: 'Reason is required for rejection',
+                    statusCode: 400,
+                });
+            }
+            updateData = { status: 'rejected' };
+            emailSubject = `Отхвърляне на заявка за клуб "${club.name}"`;
+            emailMessage =
+                customMessage ||
+                `Съжаляваме да ви информираме, че заявката ви за клуб "${club.name}" беше отхвърлена.<br><br>Причина: ${reason}<br><br>Моля, прегледайте обратната връзка и не се колебайте да подадете отново с необходимите промени.`;
+            break;
+
+        case 'delete':
+            updateData = null;
+            emailSubject = `Изтриване на клуб "${club.name}"`;
+            emailMessage = customMessage || `Вашият клуб "${club.name}" беше изтрит поради неактивност. За повече информация, моля свържете се с нас.`;
+            break;
+
+        default:
+            throw new CustomError({
+                message: 'Invalid action',
+                statusCode: 400,
+            });
+    }
+
+    // Send email
+    try {
+        await forwardEmailsViaZoho({
+            userEmail: adminEmail,
+            subject: emailSubject,
+            body: emailMessage,
+            toAddresses: club.owner,
+        });
+        return { updateData, emailSent: true };
+    } catch (emailError) {
+        try {
+            await forwardEmailsViaZoho({
+                userEmail: adminEmail,
+                subject: `EMAIL FAILED - ${emailSubject}`,
+                body: `Failed to send email to club owner ${club.owner} for club "${club.name}". Original message: ${emailMessage}`,
+                toAddresses: 'admin@pensa.club',
+            });
+        } catch (fallbackError) {
+            console.error('Failed to send fallback email notification:', fallbackError);
+        }
+        return { updateData, emailSent: false, emailError: emailError.message };
+    }
+};
+
 module.exports = {
     transformToDB,
     transformClub,
     transformActivities,
     transformMemberToDB,
     transformActivityToDB,
+    processClubAdminAction,
 };
