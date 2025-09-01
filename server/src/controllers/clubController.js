@@ -13,12 +13,11 @@ const {
     user_account,
 } = require('../sequelize/models');
 const CustomError = require('../utils/customError');
-const { transformToDB, transformClub, transformMemberToDB, transformActivityToDB } = require('../utils/clubUtils');
+const { transformToDB, transformClub, transformMemberToDB, transformActivityToDB, processClubAdminAction } = require('../utils/clubUtils');
 const { findBySlugOrId } = require('../utils/modelLookup');
 const { transformComment, getCommentConfig } = require('../utils/commentUtils');
 const { comment } = require('../sequelize/models');
 const { Op } = require('sequelize');
-const { forwardEmailsViaZoho } = require('../utils/zohoEmails');
 
 // ========================================
 // ENDPOINTS
@@ -100,12 +99,40 @@ clubController.put('/:identifier', isAuth, async (req, res, next) => {
     }
 });
 
+clubController.patch('/bulk-update', isAuth, async (req, res, next) => {
+    return performAdminAction(req, res, next, 'toggle-status', true);
+});
+
+clubController.delete('/bulk-delete', isAuth, async (req, res, next) => {
+    return performAdminAction(req, res, next, 'delete', true);
+});
+
+clubController.patch('/bulk-approve', isAuth, async (req, res, next) => {
+    return performAdminAction(req, res, next, 'approve', true);
+});
+
 clubController.delete('/:identifier', isAuth, async (req, res, next) => {
     return deleteClubByDraftStatus(false, req, res, next);
 });
 
-clubController.delete('/draft/:identifier', isAuth, async (req, res, next) => {
+clubController.patch('/toggle-draft/:identifier', isAuth, async (req, res, next) => {
     return deleteClubByDraftStatus(true, req, res, next);
+});
+
+clubController.patch('/:identifier/toggle-status', isAuth, async (req, res, next) => {
+    return performAdminAction(req, res, next, 'toggle-status', false);
+});
+
+clubController.patch('/:identifier/verify', isAuth, async (req, res, next) => {
+    return performAdminAction(req, res, next, 'verify', false);
+});
+
+clubController.patch('/:identifier/approve', isAuth, async (req, res, next) => {
+    return performAdminAction(req, res, next, 'approve', false);
+});
+
+clubController.patch('/:identifier/reject', isAuth, async (req, res, next) => {
+    return performAdminAction(req, res, next, 'reject', false);
 });
 
 clubController.patch('/toggle-draft/:identifier', isAuth, async (req, res, next) => {
@@ -440,22 +467,6 @@ clubController.get('/:identifier/members', async (req, res, next) => {
 
 clubController.get('/:identifier/management', async (req, res, next) => {
     return getClubSpecificData(req.params.identifier, 'management', req, res, next);
-});
-
-clubController.patch('/:identifier/toggle-status', isAuth, async (req, res, next) => {
-    return performAdminAction(req.params.identifier, 'toggle-status', req, res, next);
-});
-
-clubController.patch('/:identifier/verify', isAuth, async (req, res, next) => {
-    return performAdminAction(req.params.identifier, 'verify', req, res, next);
-});
-
-clubController.patch('/:identifier/approve', isAuth, async (req, res, next) => {
-    return performAdminAction(req.params.identifier, 'approve', req, res, next);
-});
-
-clubController.patch('/:identifier/reject', isAuth, async (req, res, next) => {
-    return performAdminAction(req.params.identifier, 'reject', req, res, next);
 });
 
 // ========================================
@@ -1022,133 +1033,153 @@ const getClubSpecificData = async (identifier, dataType, req, res, next) => {
     }
 };
 
-const performAdminAction = async (identifier, action, req, res, next) => {
+const performAdminAction = async (req, res, next, action, bulkFlag = false) => {
     try {
-        const { status, reason, message: customMessage } = req.body;
+        if (bulkFlag) {
+            const { clubIds } = req.body;
+            const status = action === 'toggle-status' ? req.body.status : null;
 
-        // TODO: Add checkPermission('admin')
+            if (!clubIds || !Array.isArray(clubIds) || clubIds.length === 0) {
+                throw new CustomError({
+                    message: 'clubIds array is required for bulk actions',
+                    statusCode: 400,
+                });
+            }
 
-        const result = await club_Club.sequelize.transaction(async (t) => {
-            const club = await findBySlugOrId(club_Club, identifier, {
-                where: { isDraft: false },
-                transaction: t,
+            if (action === 'toggle-status' && !status) {
+                throw new CustomError({
+                    message: 'status is required for toggle-status action',
+                    statusCode: 400,
+                });
+            }
+
+            // TODO: Add checkPermission('admin')
+
+            const results = await club_Club.sequelize.transaction(async (t) => {
+                const clubs = [];
+                const remainingClubIds = [];
+
+                for (const identifier of clubIds) {
+                    const club = await findBySlugOrId(club_Club, identifier, {
+                        where: { isDraft: false },
+                        transaction: t,
+                    });
+
+                    if (club) {
+                        clubs.push(club);
+                    }
+                }
+
+                if (clubs.length === 0) {
+                    throw new CustomError({
+                        message: 'No clubs found for bulk action',
+                        statusCode: 404,
+                    });
+                }
+
+                for (const club of clubs) {
+                    const { updateData, emailSent, emailError } = await processClubAdminAction(
+                        club,
+                        action,
+                        { status, reason: null, customMessage: null },
+                        req.user.email
+                    );
+
+                    if (action === 'delete') {
+                        await club.destroy({ transaction: t });
+                    } else {
+                        if (updateData) {
+                            await club.update(updateData, { transaction: t });
+                        }
+                        remainingClubIds.push(club.id);
+                    }
+
+                    if (!emailSent) {
+                        console.error('Email sending failed for club:', club.id, emailError);
+                    }
+                }
+
+                return remainingClubIds;
             });
 
-            if (!club) {
+            if (results.length === 0) {
+                return res.status(200).json([]);
+            }
+
+            const completeClubs = await Promise.all(
+                results.map(async (clubId) => {
+                    const completeClub = await club_Club.findByPk(clubId, {
+                        include: [
+                            { model: club_ClubDetails, as: 'details' },
+                            { model: club_ClubLocation, as: 'location' },
+                            { model: club_ClubMembership, as: 'membership' },
+                            { model: club_ClubMember, as: 'members' },
+                            { model: club_ClubActivity, as: 'activities' },
+                        ],
+                    });
+
+                    const comments = await comment.findAll(getCommentConfig(completeClub.id, 'club'));
+                    const transformedClub = transformClub(completeClub);
+                    transformedClub.comments = comments.map((comment) => transformComment(comment));
+
+                    return transformedClub;
+                })
+            );
+
+            return res.status(200).json(completeClubs);
+        } else {
+            const { status, reason, message: customMessage } = req.body;
+            const identifier = req.params.identifier;
+
+            if (!identifier) {
                 throw new CustomError({
-                    message: 'Club not found',
-                    statusCode: 404,
+                    message: 'Identifier is required for single club actions',
+                    statusCode: 400,
                 });
             }
 
-            let updateData = {};
-            let emailMessage = '';
-            let emailSubject = '';
+            // TODO: Add checkPermission('admin')
 
-            const clubLink = `${process.env.FRONTEND_SERVER}/clubs/${club.slug}`;
-            const clubLinkMessage = `<br><br>Посетете клуба тук: <a href="${clubLink}" style="color: #1a73e8; text-decoration: underline;">${clubLink}</a>`;
+            const result = await club_Club.sequelize.transaction(async (t) => {
+                const club = await findBySlugOrId(club_Club, identifier, {
+                    where: { isDraft: false },
+                    transaction: t,
+                });
 
-            // Status translations
-            const statusTranslations = {
-                active: 'активен',
-                inactive: 'неактивен',
-                suspended: 'спрян',
-            };
-
-            switch (action) {
-                case 'toggle-status':
-                    if (!status) {
-                        throw new CustomError({
-                            message: 'Status is required for toggle-status action',
-                            statusCode: 400,
-                        });
-                    }
-
-                    const statusText = statusTranslations[status] || status;
-                    updateData = { status };
-                    emailSubject = `Промяна на статуса на клуб "${club.name}"`;
-                    emailMessage = customMessage || `Статусът на вашия клуб "${club.name}" беше променен на ${statusText}.`;
-
-                    if (status === 'active') {
-                        emailMessage += clubLinkMessage;
-                    }
-                    break;
-
-                case 'verify':
-                    updateData = { isVerified: true };
-                    emailSubject = `Потвърждение на клуб "${club.name}"`;
-                    emailMessage = customMessage || `Поздравления! Вашият клуб "${club.name}" беше потвърден от нашия екип.`;
-                    emailMessage += clubLinkMessage;
-                    break;
-
-                case 'approve':
-                    updateData = { status: 'active', isVerified: true };
-                    emailSubject = `Одобрение на клуб "${club.name}"`;
-                    emailMessage = customMessage || `Отлични новини! Вашият клуб "${club.name}" беше одобрен и вече е активен в нашата платформа.`;
-                    emailMessage += clubLinkMessage;
-                    break;
-
-                case 'reject':
-                    if (!reason) {
-                        throw new CustomError({
-                            message: 'Reason is required for rejection',
-                            statusCode: 400,
-                        });
-                    }
-                    updateData = { status: 'rejected' };
-                    emailSubject = `Отхвърляне на заявка за клуб "${club.name}"`;
-                    emailMessage =
-                        customMessage ||
-                        `Съжаляваме да ви информираме, че заявката ви за клуб "${club.name}" беше отхвърлена.<br><br>Причина: ${reason}<br><br>Моля, прегледайте обратната връзка и не се колебайте да подадете отново с необходимите промени.`;
-                    break;
-
-                default:
+                if (!club) {
                     throw new CustomError({
-                        message: 'Invalid action',
-                        statusCode: 400,
+                        message: 'Club not found',
+                        statusCode: 404,
                     });
-            }
-
-            await club.update(updateData, { transaction: t });
-
-            try {
-                await forwardEmailsViaZoho({
-                    userEmail: req.user.email,
-                    subject: emailSubject,
-                    body: emailMessage,
-                    toAddresses: 'kolev93@abv.bg', // or club.owner when ready
-                });
-            } catch (emailError) {
-                try {
-                    await forwardEmailsViaZoho({
-                        userEmail: req.user.email,
-                        subject: `EMAIL FAILED - ${emailSubject}`,
-                        body: `Failed to send email to club owner ${club.owner} for club "${club.name}". Original message: ${emailMessage}`,
-                        toAddresses: 'admin@pensa.club',
-                    });
-                } catch (fallbackError) {
-                    console.error('Failed to send fallback email notification:', fallbackError);
                 }
-            }
 
-            return club.id;
-        });
+                const { updateData, emailSent, emailError } = await processClubAdminAction(club, action, { status, reason, customMessage }, req.user.email);
 
-        const completeClub = await club_Club.findByPk(result, {
-            include: [
-                { model: club_ClubDetails, as: 'details' },
-                { model: club_ClubLocation, as: 'location' },
-                { model: club_ClubMembership, as: 'membership' },
-                { model: club_ClubMember, as: 'members' },
-                { model: club_ClubActivity, as: 'activities' },
-            ],
-        });
+                await club.update(updateData, { transaction: t });
 
-        const comments = await comment.findAll(getCommentConfig(completeClub.id, 'club'));
-        const transformedClub = transformClub(completeClub);
-        transformedClub.comments = comments.map((comment) => transformComment(comment));
+                if (!emailSent) {
+                    console.error('Email sending failed for club:', club.id, emailError);
+                }
 
-        return res.status(200).json(transformedClub);
+                return club.id;
+            });
+
+            const completeClub = await club_Club.findByPk(result, {
+                include: [
+                    { model: club_ClubDetails, as: 'details' },
+                    { model: club_ClubLocation, as: 'location' },
+                    { model: club_ClubMembership, as: 'membership' },
+                    { model: club_ClubMember, as: 'members' },
+                    { model: club_ClubActivity, as: 'activities' },
+                ],
+            });
+
+            const comments = await comment.findAll(getCommentConfig(completeClub.id, 'club'));
+            const transformedClub = transformClub(completeClub);
+            transformedClub.comments = comments.map((comment) => transformComment(comment));
+
+            return res.status(200).json(transformedClub);
+        }
     } catch (err) {
         next(err);
     }
