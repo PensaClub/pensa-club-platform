@@ -281,6 +281,7 @@
     }
   },
   "profile": {
+    "clubMembership": "Club Membership",
     "clubs": {
       "title": "My Clubs",
       "subtitle": "Manage and view all clubs you have created",
@@ -10886,5 +10887,111 @@
       "clearFilters": "Clear filters",
       "createNew": "Create new draft"
     }
+  },
+  "membershipClubs": {
+    "title": "My Memberships",
+    "subtitle": "Clubs where I am a member",
+    "loading": "Loading memberships...",
+    "discoverClubs": "Discover Clubs",
+    "searchPlaceholder": "Search in my memberships...",
+    "errorTitle": "Error Loading",
+    "retry": "Try Again",
+    "resultsInfo": "Showing {{showing}} of {{total}} memberships",
+    "filters": {
+      "all": "All Memberships",
+      "active": "Active",
+      "inactive": "Inactive",
+      "recent": "New Memberships", 
+      "general": "General",
+      "cultural": "Cultural",
+      "traditional": "Traditional",
+      "social": "Social",
+      "sports": "Sports"
+    },
+    "sorting": {
+      "newest": "Newest Memberships",
+      "oldest": "Oldest Memberships",
+      "name": "Name A-Z", 
+      "members": "Most Members",
+      "activity": "Most Active",
+      "location": "By Location"
+    }
+  },
+  "membershipClubsCard": {
+    "memberBadge": "Member",
+    "noDescription": "No description available",
+    "memberFor": "Member for",
+    "actions": {
+      "view": "View club"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "categories": {
+      "general": "General",
+      "cultural": "Cultural",
+      "traditional": "Traditional",
+      "social": "Social",
+      "sports": "Sports"
+    },
+    "memberSince": {
+      "unknown": "Unknown",
+      "days": "{{count}} days",
+      "months": "{{count}} months", 
+      "years": "{{count}} years"
+    },
+    "activity": {
+      "high": "Very active",
+      "medium": "Active",
+      "low": "Less active", 
+      "none": "Inactive"
+    },
+    "membersCount": "{{count}} members",
+    "eventsCount": "{{count}} events"
+  },
+    "searchMembershipClubsBar": {
+    "defaultPlaceholder": "Search in my memberships...",
+    "clear": "Clear search",
+    "searching": "Searching for"
+  },
+  "membershipClubsFilterDropdown": {
+    "defaultLabel": "Filter",
+    "title": "Filter by"
+  },
+   "membershipClubsSortDropdown": {
+    "defaultLabel": "Sort",
+    "title": "Sort by"
+  },
+  "membershipStatsOverview": {
+    "total": "Total Memberships",
+    "active": "Active Clubs",
+    "recent": "New Memberships", 
+    "avgSize": "Average Size"
+  },
+   "membershipClubsEmptyState": {
+    "noMemberships": {
+      "title": "You're not a member of any clubs yet",
+      "description": "Start exploring and join clubs that match your interests.",
+      "discoverButton": "Discover Clubs",
+      "tipsTitle": "How to find suitable clubs:",
+      "tip1": "Use filters by category and location",
+      "tip2": "Browse recommended clubs",
+      "tip3": "Contact organizers directly"
+    },
+    "noSearchResults": {
+      "title": "No results found",
+      "description": "We couldn't find any clubs you're a member of that match your search for:",
+      "clearButton": "Clear Search",
+      "discoverButton": "Discover New Clubs"
+    },
+    "noFilterResults": {
+      "title": "No clubs for this filter",
+      "description": "There are no clubs you're a member of that match the selected filter.",
+      "filterInfo": "Try a different filter or view all memberships",
+      "clearButton": "Clear Filters", 
+      "discoverButton": "Discover Clubs"
+    }
   }
+
 }

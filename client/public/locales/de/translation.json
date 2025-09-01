@@ -210,6 +210,8 @@
     }
   },
   "profile": {
+    "clubMembership": "Clubmitgliedschaft",
+
     "clubs": {
       "title": "Meine Vereine",
       "subtitle": "Verwalten und betrachten Sie alle Vereine, die Sie erstellt haben",
@@ -10415,6 +10417,111 @@
       "suggestion3": "Entfernen Sie einige Filter für breitere Ergebnisse", 
       "clearFilters": "Filter löschen",
       "createNew": "Neuen Entwurf erstellen"
+    }
+  },
+    "membershipClubs": {
+    "title": "Meine Mitgliedschaften",
+    "subtitle": "Vereine, in denen ich Mitglied bin",
+    "loading": "Mitgliedschaften werden geladen...",
+    "discoverClubs": "Vereine Entdecken",
+    "searchPlaceholder": "In meinen Mitgliedschaften suchen...",
+    "errorTitle": "Fehler beim Laden",
+    "retry": "Erneut Versuchen",
+    "resultsInfo": "{{showing}} von {{total}} Mitgliedschaften angezeigt",
+    "filters": {
+      "all": "Alle Mitgliedschaften",
+      "active": "Aktiv",
+      "inactive": "Inaktiv",
+      "recent": "Neue Mitgliedschaften",
+      "general": "Allgemein", 
+      "cultural": "Kulturell",
+      "traditional": "Traditionell",
+      "social": "Sozial",
+      "sports": "Sport"
+    },
+    "sorting": {
+      "newest": "Neueste Mitgliedschaften",
+      "oldest": "Älteste Mitgliedschaften",
+      "name": "Name A-Z",
+      "members": "Meiste Mitglieder", 
+      "activity": "Aktivste",
+      "location": "Nach Standort"
+    }
+  },
+  "membershipClubsCard": {
+    "memberBadge": "Mitglied",
+    "noDescription": "Keine Beschreibung verfügbar",
+    "memberFor": "Mitglied seit",
+    "actions": {
+      "view": "Verein ansehen"
+    },
+    "status": {
+      "active": "Aktiv",
+      "inactive": "Inaktiv"
+    },
+    "categories": {
+      "general": "Allgemein",
+      "cultural": "Kulturell",
+      "traditional": "Traditionell",
+      "social": "Sozial", 
+      "sports": "Sport"
+    },
+    "memberSince": {
+      "unknown": "Unbekannt",
+      "days": "{{count}} Tage",
+      "months": "{{count}} Monate",
+      "years": "{{count}} Jahre"
+    },
+    "activity": {
+      "high": "Sehr aktiv",
+      "medium": "Aktiv",
+      "low": "Weniger aktiv",
+      "none": "Inaktiv"
+    },
+    "membersCount": "{{count}} Mitglieder",
+    "eventsCount": "{{count}} Veranstaltungen"
+  },
+  "searchMembershipClubsBar": {
+    "defaultPlaceholder": "In meinen Mitgliedschaften suchen...",
+    "clear": "Suche löschen", 
+    "searching": "Suche nach"
+  },
+  "membershipClubsFilterDropdown": {
+    "defaultLabel": "Filter",
+    "title": "Filtern nach"
+  },
+  "membershipClubsSortDropdown": {
+    "defaultLabel": "Sortieren",
+    "title": "Sortieren nach"
+  },
+  "membershipStatsOverview": {
+    "total": "Gesamte Mitgliedschaften",
+    "active": "Aktive Vereine",
+    "recent": "Neue Mitgliedschaften",
+    "avgSize": "Durchschnittsgröße"
+  },
+  "membershipClubsEmptyState": {
+    "noMemberships": {
+      "title": "Sie sind noch in keinem Verein Mitglied",
+      "description": "Beginnen Sie zu erkunden und treten Sie Vereinen bei, die Ihren Interessen entsprechen.",
+      "discoverButton": "Vereine Entdecken",
+      "tipsTitle": "So finden Sie passende Vereine:",
+      "tip1": "Verwenden Sie Filter nach Kategorie und Standort",
+      "tip2": "Durchsuchen Sie empfohlene Vereine",
+      "tip3": "Kontaktieren Sie Organisatoren direkt"
+    },
+    "noSearchResults": {
+      "title": "Keine Ergebnisse gefunden",
+      "description": "Wir konnten keine Vereine finden, in denen Sie Mitglied sind, die Ihrer Suche entsprechen:",
+      "clearButton": "Suche Löschen",
+      "discoverButton": "Neue Vereine Entdecken"
+    },
+    "noFilterResults": {
+      "title": "Keine Vereine für diesen Filter",
+      "description": "Es gibt keine Vereine, in denen Sie Mitglied sind, die dem ausgewählten Filter entsprechen.",
+      "filterInfo": "Versuchen Sie einen anderen Filter oder zeigen Sie alle Mitgliedschaften an",
+      "clearButton": "Filter Löschen",
+      "discoverButton": "Vereine Entdecken"
     }
   }
 }

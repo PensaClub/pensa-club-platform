@@ -1,3 +1,5 @@
+// В MyClubs.jsx - добави функцията и prop-а
+
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -29,8 +31,10 @@ const MyClubs = () => {
         setRedirectAfterLogin
     } = useAuthContext();
 
-    const { getUserClubs,
-        deleteClub
+    const { 
+        getUserClubs,
+        deleteClub,
+        transferClubOwnership // ДОБАВЕНО
     } = useClubContext();
 
     // State management
@@ -79,7 +83,7 @@ const MyClubs = () => {
         fetchUserClubs();
     }, [getUserClubs, userEmail, isAuthentication]);
 
-    // Filter and search clubs
+    // Filter and search clubs (останалия код същия...)
     const filteredAndSortedClubs = useMemo(() => {
         if (!Array.isArray(clubs)) {
             return [];
@@ -147,7 +151,7 @@ const MyClubs = () => {
         return sorted;
     }, [clubs, searchTerm, filterBy, sortBy]);
 
-    // Calculate statistics
+    // Calculate statistics (останалия код същия...)
     const stats = useMemo(() => {
         if (!Array.isArray(clubs)) {
             return { total: 0, active: 0, totalMembers: 0, avgMembers: 0 };
@@ -166,6 +170,7 @@ const MyClubs = () => {
     const handleCreateNew = () => {
         navigate('/profile/club-create');
     };
+    
     const handleDeleteClub = async (club) => {
         try {
             const success = await deleteClub(club.id || club.slug);
@@ -176,6 +181,20 @@ const MyClubs = () => {
             console.error('Error deleting club:', error);
         }
     };
+
+    // ДОБАВЕНА ФУНКЦИЯ ЗА ПРЕХВЪРЛЯНЕ НА СОБСТВЕНОСТ
+    const handleTransferOwnership = async (club, newOwnerEmail) => {
+        try {
+            const success = await transferClubOwnership(club.id || club.slug, newOwnerEmail);
+            if (success) {
+                // Премахни клуба от списъка тъй като вече не е твой
+                setClubs(prevClubs => prevClubs.filter(c => c.id !== club.id));
+            }
+        } catch (error) {
+            console.error('Error transferring ownership:', error);
+        }
+    };
+    
     const handleClubClick = (club) => {
         console.log('Navigating to club:', club.slug);
         navigate(`/clubs/${club.slug}`);
@@ -185,7 +204,7 @@ const MyClubs = () => {
         navigate(`/profile/club-create?editId=${club.id}&mode=edit`);
     };
 
-    // Show loading state
+    // Show loading state (останалия код същия...)
     if (initialLoading) {
         return (
             <div className="myclubs-loading">
@@ -290,6 +309,7 @@ const MyClubs = () => {
                                 onView={() => handleClubClick(club)}
                                 onEdit={() => handleEditClub(club)}
                                 onDelete={() => handleDeleteClub(club)}
+                                onTransferOwnership={handleTransferOwnership} // ДОБАВЕНО
                                 isOwner={true}
                             />
                         ))}

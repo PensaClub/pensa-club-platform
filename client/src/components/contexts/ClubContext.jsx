@@ -15,7 +15,7 @@ export const ClubProvider = ({ children }) => {
   const [clubsLoaded, setClubsLoaded] = useState(false);
   const [currentClub, setCurrentClub] = useState(null);
   const [regionalClubs, setRegionalClubs] = useState([]);
-  const { isAdmin, user } = useAuthContext(); // 👈 Добавяме user за token
+  const { isAdmin, user,isAuthentication } = useAuthContext(); // 👈 Добавяме user за token
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -282,6 +282,27 @@ export const ClubProvider = ({ children }) => {
       setIsLoading(false);
     }
   };
+// В ClubContext.jsx - добави функцията
+
+const getUserMembershipClubs = async (email) => {
+  try {
+    const response = await clubService.getUserMembershipClubs(email);
+    
+    // Обработи response-а правилно
+    if (response && Array.isArray(response.clubs)) {
+      return response.clubs;
+    } else if (Array.isArray(response)) {
+      return response;
+    } else {
+      console.warn('Unexpected getUserMembershipClubs response:', response);
+      return [];
+    }
+  } catch (e) {
+    console.error('Грешка при получаване на членски клубове:', e);
+    notify('error', e);
+    return [];
+  }
+};
 
   const deleteClub = async (identifier) => {
     // if (!isAdmin) {
@@ -378,8 +399,6 @@ export const ClubProvider = ({ children }) => {
       fetchedDrafts = [];
     }
     
-    console.log('📊 Processed drafts data:', fetchedDrafts);
-    
     return {
       drafts: fetchedDrafts,
       pagination: response?.pagination || null,
@@ -448,6 +467,42 @@ export const ClubProvider = ({ children }) => {
     }
   };
 
+// В ClubContext.jsx - добави тази функция към другите
+// В ClubContext.jsx - обнови функцията
+
+const transferClubOwnership = async (identifier, newOwnerEmail) => {
+  // Проверка за автентикиран потребител
+  if (!isAuthentication) {
+    notify('error', 'Трябва да сте влезли в профила си, за да прехвърлите собственост на клуб');
+    return false;
+  }
+
+  try {
+    setIsLoading(true);
+    
+    const result = await clubService.transferClubOwnership(identifier, newOwnerEmail);
+    
+    // Премахни клуба от локалния списък (тъй като вече не е твой)
+    setClubs(prevClubs => 
+      prevClubs.filter(club => club.id !== identifier && club.slug !== identifier)
+    );
+    
+    // Ако е текущо избрания клуб, изчисти го
+    if (currentClub && (currentClub.id === identifier || currentClub.slug === identifier)) {
+      setCurrentClub(null);
+    }
+    
+    notify('success', `Клубът беше успешно прехвърлен на ${newOwnerEmail}`);
+    return result;
+  } catch (e) {
+    console.error('Грешка при прехвърляне на собственост:', e);
+    notify('error', e.message || 'Грешка при прехвърляне на собственост');
+    showErrorAndSetTimeouts(e.message);
+    return false;
+  } finally {
+    setIsLoading(false);
+  }
+};
   // ===============================
   // 🆕 FAVORITES/BOOKMARKS
   // ===============================
@@ -775,7 +830,8 @@ const getUserClubs = async (email) => {
     getClubById,           // 📌 Mock data (запазен)
     updateClub,            // 🌐 API
     deleteClub,            // 🌐 API
-    
+    transferClubOwnership, // 🆕 API
+    getUserMembershipClubs, // 🆕 API
     // ===============================
     // DRAFT ФУНКЦИОНАЛНОСТИ
     // ===============================

@@ -1,0 +1,251 @@
+/* MembershipClubsEmptyState Container */
+.membershipclubsemptystate-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  padding: 3rem 1rem;
+}
+
+.membershipclubsemptystate-content {
+  background: white;
+  border-radius: 20px;
+  padding: 3rem;
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f1f5f9;
+}
+
+/* Icon */
+.membershipclubsemptystate-icon-wrapper {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem auto;
+  position: relative;
+}
+
+.membershipclubsemptystate-icon-wrapper--primary {
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border: 3px solid #bfdbfe;
+}
+
+.membershipclubsemptystate-icon-wrapper--search {
+  background: linear-gradient(135deg, #fef3c7, #fed7aa);
+  border: 3px solid #fcd34d;
+}
+
+.membershipclubsemptystate-icon-wrapper--filter {
+  background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+  border: 3px solid #86efac;
+}
+
+.membershipclubsemptystate-icon {
+  font-size: 2rem;
+}
+
+.membershipclubsemptystate-icon-wrapper--primary .membershipclubsemptystate-icon {
+  color: #3b82f6;
+}
+
+.membershipclubsemptystate-icon-wrapper--search .membershipclubsemptystate-icon {
+  color: #f59e0b;
+}
+
+.membershipclubsemptystate-icon-wrapper--filter .membershipclubsemptystate-icon {
+  color: #10b981;
+}
+
+/* Text Content */
+.membershipclubsemptystate-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 1rem 0;
+  line-height: 1.3;
+}
+
+.membershipclubsemptystate-description {
+  font-size: 1rem;
+  color: #64748b;
+  line-height: 1.6;
+  margin: 0 0 1.5rem 0;
+}
+
+/* Search Term Display */
+.membershipclubsemptystate-search-term {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin: 1rem 0 1.5rem 0;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  color: #1e293b;
+}
+
+/* Filter Info */
+.membershipclubsemptystate-filter-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #fef3c7;
+  border: 1px solid #fcd34d;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin: 1rem 0 1.5rem 0;
+  color: #92400e;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Actions */
+.membershipclubsemptystate-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.membershipclubsemptystate-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.5rem;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.membershipclubsemptystate-btn--primary {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+}
+
+.membershipclubsemptystate-btn--primary:hover {
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+}
+
+.membershipclubsemptystate-btn--secondary {
+  background: #f8fafc;
+  color: #475569;
+  border: 2px solid #e2e8f0;
+}
+
+.membershipclubsemptystate-btn--secondary:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
+}
+
+/* Tips Section */
+.membershipclubsemptystate-tips {
+  text-align: left;
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+}
+
+.membershipclubsemptystate-tips h4 {
+  margin: 0 0 1rem 0;
+  color: #1e293b;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.membershipclubsemptystate-tips ul {
+  margin: 0;
+  padding-left: 1.25rem;
+  color: #64748b;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.membershipclubsemptystate-tips li {
+  margin-bottom: 0.5rem;
+}
+
+.membershipclubsemptystate-tips li:last-child {
+  margin-bottom: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .membershipclubsemptystate-container {
+    padding: 2rem 1rem;
+    min-height: 350px;
+  }
+
+  .membershipclubsemptystate-content {
+    padding: 2rem 1.5rem;
+  }
+
+  .membershipclubsemptystate-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 1rem;
+  }
+
+  .membershipclubsemptystate-icon {
+    font-size: 1.5rem;
+  }
+
+  .membershipclubsemptystate-title {
+    font-size: 1.5rem;
+  }
+
+  .membershipclubsemptystate-description {
+    font-size: 0.9rem;
+  }
+
+  .membershipclubsemptystate-actions {
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .membershipclubsemptystate-content {
+    padding: 1.5rem 1rem;
+  }
+
+  .membershipclubsemptystate-title {
+    font-size: 1.25rem;
+  }
+
+  .membershipclubsemptystate-tips {
+    text-align: center;
+  }
+
+  .membershipclubsemptystate-tips ul {
+    text-align: left;
+  }
+}
+
+/* Animation */
+.membershipclubsemptystate-content {
+  animation: membershipclubsemptystate-fade-in 0.5s ease-out;
+}
+
+@keyframes membershipclubsemptystate-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

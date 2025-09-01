@@ -227,6 +227,7 @@
     "skills": "Умения",
     "workOptions": "Работни възможности",
     "interestOptions": "Интереси",
+    "clubMembership": "Членство в Клуб",
     "clubs": {
       "title": "Моите Клубове",
       "subtitle": "Управлявайте и прегледайте всички клубове, които сте създали",
@@ -11102,5 +11103,111 @@
       "clearFilters": "Изчисти филтрите",
       "createNew": "Създай нова чернова"
     }
+  },
+  "membershipClubs": {
+    "title": "Моите членства",
+    "subtitle": "Клубове в които членувам",
+    "loading": "Зареждане на членства...",
+    "discoverClubs": "Открий клубове",
+    "searchPlaceholder": "Търси в моите членства...",
+    "errorTitle": "Грешка при зареждане",
+    "retry": "Опитай отново",
+    "resultsInfo": "Показани {{showing}} от {{total}} членства",
+    "filters": {
+      "all": "Всички членства",
+      "active": "Активни",
+      "inactive": "Неактивни", 
+      "recent": "Нови членства",
+      "general": "Общи",
+      "cultural": "Културни",
+      "traditional": "Традиционни",
+      "social": "Социални",
+      "sports": "Спортни"
+    },
+    "sorting": {
+      "newest": "Най-нови членства",
+      "oldest": "Най-стари членства", 
+      "name": "По име А-Я",
+      "members": "Най-много членове",
+      "activity": "Най-активни",
+      "location": "По местоположение"
+    }
+  },
+  "membershipClubsCard": {
+    "memberBadge": "Член",
+    "noDescription": "Няма налично описание",
+    "memberFor": "Член от",
+    "actions": {
+      "view": "Преглед на клуб"
+    },
+    "status": {
+      "active": "Активен",
+      "inactive": "Неактивен"
+    },
+    "categories": {
+      "general": "Общ",
+      "cultural": "Културен",
+      "traditional": "Традиционен",
+      "social": "Социален",
+      "sports": "Спортен"
+    },
+    "memberSince": {
+      "unknown": "Неизвестно",
+      "days": "{{count}} дни",
+      "months": "{{count}} месеца",
+      "years": "{{count}} години"
+    },
+    "activity": {
+      "high": "Много активен",
+      "medium": "Активен", 
+      "low": "Слабо активен",
+      "none": "Неактивен"
+    },
+    "membersCount": "{{count}} членове",
+    "eventsCount": "{{count}} събитие"
+  },
+  "searchMembershipClubsBar": {
+    "defaultPlaceholder": "Търси в моите членства...",
+    "clear": "Изчисти търсенето",
+    "searching": "Търсене за"
+  },
+  "membershipClubsFilterDropdown": {
+    "defaultLabel": "Филтрирай",
+    "title": "Филтрирай по"
+  },
+  "membershipClubsSortDropdown": {
+    "defaultLabel": "Сортирай",
+    "title": "Сортирай по"
+  },
+  "membershipStatsOverview": {
+    "total": "Общо членства",
+    "active": "Активни клубове", 
+    "recent": "Нови членства",
+    "avgSize": "Средний размер"
+  },
+  "membershipClubsEmptyState": {
+    "noMemberships": {
+      "title": "Все още не членувате в клубове",
+      "description": "Започнете да изследвате и се присъединете към клубове, които отговарят на вашите интереси.",
+      "discoverButton": "Открий клубове",
+      "tipsTitle": "Как да намерите подходящи клубове:",
+      "tip1": "Използвайте филтрите по категория и локация",
+      "tip2": "Разгледайте препоръчаните клубове",
+      "tip3": "Свържете се директно с организаторите"
+    },
+    "noSearchResults": {
+      "title": "Няма намерени резултати",
+      "description": "Не намерихме клубове в които членувате, които да съответстват на търсенето:",
+      "clearButton": "Изчисти търсенето",
+      "discoverButton": "Открий нови клубове"
+    },
+    "noFilterResults": {
+      "title": "Няма клубове за този филтър",
+      "description": "Няма клубове в които членувате, които да съответстват на избрания филтър.",
+      "filterInfo": "Опитайте с различен филтър или разгледайте всички членства",
+      "clearButton": "Изчисти филтрите",
+      "discoverButton": "Открий клубове"
+    }
   }
+
 }

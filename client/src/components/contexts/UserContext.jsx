@@ -128,7 +128,7 @@ const onRegisterSubmit = async (data) => {
         // Провери дали има запазена страница за redirect
         if (redirectPath) {
           const pathToNavigate = redirectPath;
-          setRedirectPath(null); // Изчисти запазената страница
+          setRedirectPath(null); 
           navigate(pathToNavigate);
         } else {
           navigate('/'); // Default redirect

@@ -70,6 +70,7 @@ import PublicationForm from '../Initiatives/CreatePublication/MainForm/MainFormP
 import ClubCreateForm from "../Clubs/ClubCreateForm/ClubCreateForm";
 import MyClubs from "../Clubs/MyClubs/MyClubs";
 import DraftClubs from "../Clubs/DraftClubs/DraftClubs";
+import MembershipClubs from "../Clubs/MembershipClubs/MembershipClubs";
 // import { InitiativePreviewPage } from "../Initiatives/CreateIniciative/InitiativePreviewPage/InitiativePreviewPage";
 
 export const Profile = () => {
@@ -148,7 +149,8 @@ export const Profile = () => {
       "/profile/clubs": t("myClubs.clubs"),
       "/profile/club-create": t("profile.clubCreate"),
       "/profile/club-drafts": t("profile.clubDrafts"),
-      "/profile/clubs-admin": t("profile.clubsAdmin")
+      "/profile/clubs-admin": t("profile.clubsAdmin"),
+      "/profile/club-membership": t("profile.clubMembership")
 
     };
 
@@ -185,7 +187,8 @@ export const Profile = () => {
     "/profile/clubs",
     "/profile/club-create",
     "/profile/club-drafts",
-    "/profile/clubs-admin"
+    "/profile/clubs-admin",
+    "/profile/club-membership"
   ];
 
   const isAdminPanel = adminPaths.some(path => location.pathname.startsWith(path));
@@ -595,8 +598,15 @@ export const Profile = () => {
                     <span className={`arrow-icon ${subMenuStates.clubs ? 'rotated' : ''}`}>
                       {subMenuStates.clubs ? <DownArrowIcon /> : <ArrowIcon />}
                     </span>
+                   
                   </NavLink>
                   <ul className={`sub-menu ${subMenuStates.clubs ? 'expanded' : ''}`}>
+                    <li>
+                      <NavLink to="club-membership" className={({ isActive }) => isActive ? 'active' : ''}>
+                        <CircleIcon className="icon" />
+                        {t("profile.clubMembership")}
+                      </NavLink>
+                    </li>
                     <li>
                       <NavLink to="club-create" className={({ isActive }) => isActive ? 'active' : ''}>
                         <CircleIcon className="icon" />
@@ -950,6 +960,7 @@ export const Profile = () => {
             <Route path="clubs" element={<MyClubs />} />
             <Route path="club-create" element={<ClubCreateForm />} />
             <Route path="club-drafts" element={<DraftClubs />} />
+            <Route path="club-membership" element={<MembershipClubs isEditMode={true} />} />
             {/* Management routes (Admin & Moderator) */}
             <Route path="ads-admin" element={<ManagementGuard><AllAnnouncements /></ManagementGuard>} />
             <Route path="article-create" element={<ManagementGuard><ArticleCreateForm /></ManagementGuard>} />

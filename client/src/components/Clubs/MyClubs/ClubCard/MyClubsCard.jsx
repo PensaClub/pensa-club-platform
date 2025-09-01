@@ -7,12 +7,17 @@ import {
     faUsers, 
     faMapMarkerAlt,
     faSpinner,
-    faExclamationTriangle 
+    faExclamationTriangle,
+    faExchangeAlt  // ДОБАВЕНО
 } from '@fortawesome/free-solid-svg-icons';
 import './myClubsCard.css';
-const MyClubsCard = ({ club, onView, onEdit, onDelete, isOwner }) => {
+import TransferOwnershipModal from '../TransferOwnershipModal/TransferOwnershipModal'; // ДОБАВЕНО
+
+const MyClubsCard = ({ club, onView, onEdit, onDelete, onTransferOwnership, isOwner }) => { // ДОБАВЕНО onTransferOwnership
     const [isDeleting, setIsDeleting] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showTransferModal, setShowTransferModal] = useState(false); // ДОБАВЕНО
+    const [isTransferring, setIsTransferring] = useState(false); // ДОБАВЕНО
 
     const handleDeleteClick = (e) => {
         e.stopPropagation();
@@ -28,6 +33,24 @@ const MyClubsCard = ({ club, onView, onEdit, onDelete, isOwner }) => {
             console.error('Error deleting club:', error);
         } finally {
             setIsDeleting(false);
+        }
+    };
+
+    // ДОБАВЕНИ ФУНКЦИИ
+    const handleTransferClick = (e) => {
+        e.stopPropagation();
+        setShowTransferModal(true);
+    };
+
+    const handleTransferConfirm = async (newOwnerEmail) => {
+        setIsTransferring(true);
+        try {
+            await onTransferOwnership(club, newOwnerEmail);
+            setShowTransferModal(false);
+        } catch (error) {
+            console.error('Error transferring ownership:', error);
+        } finally {
+            setIsTransferring(false);
         }
     };
 
@@ -61,6 +84,19 @@ const MyClubsCard = ({ club, onView, onEdit, onDelete, isOwner }) => {
                                             title="Редактирай клуб"
                                         >
                                             <FontAwesomeIcon icon={faEdit} />
+                                        </button>
+                                        {/* ДОБАВЕН TRANSFER БУТОН */}
+                                        <button
+                                            className="myclubscard-action-btn myclubscard-action-btn--transfer"
+                                            onClick={handleTransferClick}
+                                            title="Прехвърли собственост"
+                                            disabled={isTransferring}
+                                        >
+                                            {isTransferring ? (
+                                                <FontAwesomeIcon icon={faSpinner} spin />
+                                            ) : (
+                                                <FontAwesomeIcon icon={faExchangeAlt} />
+                                            )}
                                         </button>
                                         <button
                                             className="myclubscard-action-btn myclubscard-action-btn--delete"
@@ -143,6 +179,15 @@ const MyClubsCard = ({ club, onView, onEdit, onDelete, isOwner }) => {
                     </div>
                 </div>
             )}
+
+            {/* ДОБАВЕН TRANSFER MODAL */}
+            <TransferOwnershipModal
+                isOpen={showTransferModal}
+                onClose={() => setShowTransferModal(false)}
+                onTransfer={handleTransferConfirm}
+                club={club}
+                isLoading={isTransferring}
+            />
         </>
     );
 };
