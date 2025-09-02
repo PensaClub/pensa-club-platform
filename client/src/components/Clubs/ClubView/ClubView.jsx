@@ -55,12 +55,19 @@ import TraditionalTemplate from './templates/TraditionalTemplate';
 import SocialTemplate from './templates/SocialTemplate';
 import SportsTemplate from './templates/SportsTemplate';
 import ShareModal from './components/ShareModal/ShareModal';
+import { useAuthContext } from '../../contexts/UserContext';
 
 export const ClubView = () => {
     const { slug } = useParams();
     const navigate = useNavigate();
     const { t } = useTranslation();
-    const { getClubBySlug, currentClub, isLoading } = useClubContext();
+    const { 
+        getClubBySlug,
+         currentClub,
+         isLoading, 
+        toggleBookmarkClub,
+        isBookmarkedClub } = useClubContext();
+const {isAuthentication } = useAuthContext();
     const [club, setClub] = useState(null);
     const [notFound, setNotFound] = useState(false);
     const [isFavorited, setIsFavorited] = useState(false);
@@ -126,12 +133,12 @@ export const ClubView = () => {
         if (!club) return {};
 
         const title = t('clubs.ClubView.seo.clubTitle', { clubName: club.name, city: club.location.city });
-        const description = club.shortDescription || club.fullDescription?.substring(0, 160) || 
-            t('clubs.ClubView.seo.clubDescription', { 
+        const description = club.shortDescription || club.fullDescription?.substring(0, 160) ||
+            t('clubs.ClubView.seo.clubDescription', {
                 city: club.location.city,
                 activity: t(`clubs.ClubView.seo.activities.${club.category}`, { defaultValue: t('clubs.ClubView.seo.activities.general') })
             });
-        
+
         const keywords = [
             t('clubs.ClubView.seo.keywords.clubForPensioners'),
             t('clubs.ClubView.seo.keywords.pensionersClub'),
@@ -208,11 +215,11 @@ export const ClubView = () => {
 
     const findActiveSection = () => {
         const scrollPosition = window.scrollY + 250;
-        
+
         for (let i = availableNavItems.length - 1; i >= 0; i--) {
             const item = availableNavItems[i];
             const element = document.getElementById(item.id);
-            
+
             if (element) {
                 const { offsetTop } = element;
                 if (scrollPosition >= offsetTop) {
@@ -236,8 +243,8 @@ export const ClubView = () => {
                     setClub(clubData);
                     setNotFound(false);
 
-                    const favorites = JSON.parse(localStorage.getItem('favoriteClubs') || '[]');
-                    setIsFavorited(favorites.includes(clubData.id));
+                    // const favorites = JSON.parse(localStorage.getItem('favoriteClubs') || '[]');
+                    // setIsFavorited(favorites.includes(clubData.id));
                 } else {
                     setNotFound(true);
                 }
@@ -341,21 +348,21 @@ export const ClubView = () => {
         }
     };
 
-    const handleFavorite = () => {
-        if (!club) return;
+    // const handleFavorite = () => {
+    //     if (!club) return;
 
-        const favorites = JSON.parse(localStorage.getItem('favoriteClubs') || '[]');
+    //     const favorites = JSON.parse(localStorage.getItem('favoriteClubs') || '[]');
 
-        if (isFavorited) {
-            const newFavorites = favorites.filter(id => id !== club.id);
-            localStorage.setItem('favoriteClubs', JSON.stringify(newFavorites));
-            setIsFavorited(false);
-        } else {
-            const newFavorites = [...favorites, club.id];
-            localStorage.setItem('favoriteClubs', JSON.stringify(newFavorites));
-            setIsFavorited(true);
-        }
-    };
+    //     if (isFavorited) {
+    //         const newFavorites = favorites.filter(id => id !== club.id);
+    //         localStorage.setItem('favoriteClubs', JSON.stringify(newFavorites));
+    //         setIsFavorited(false);
+    //     } else {
+    //         const newFavorites = [...favorites, club.id];
+    //         localStorage.setItem('favoriteClubs', JSON.stringify(newFavorites));
+    //         setIsFavorited(true);
+    //     }
+    // };
 
     const seoData = club ? generateSEOData(club) : {};
 
@@ -462,14 +469,15 @@ export const ClubView = () => {
                     </div>
 
                     <div className="club-header-actions">
+                        {isAuthentication  && (
                         <button
-                            onClick={handleFavorite}
-                            className={`club-action-btn ${isFavorited ? 'favorited' : ''}`}
-                            title={isFavorited ? t('clubs.ClubView.actions.removeFromFavorites') : t('clubs.ClubView.actions.addToFavorites')}
+                            onClick={() => toggleBookmarkClub(club.id)}
+                            className={`club-action-btn ${isBookmarkedClub(club.id) ? 'favorited' : ''}`}
+                            title={isBookmarkedClub(club.id) ? t('clubs.ClubView.actions.removeFromFavorites') : t('clubs.ClubView.actions.addToFavorites')}
                         >
                             <FontAwesomeIcon icon={faHeart} />
                         </button>
-
+                        )}
                         <button
                             onClick={handleShare}
                             className="club-action-btn"

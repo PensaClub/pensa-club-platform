@@ -5,6 +5,7 @@ import { UserContext } from "../contexts/UserContext";
 import { useTranslation } from "react-i18next";
 import AlertModal from "./AlertModal/AlertModal";
 import { useInitiativeContext } from "../contexts/InitiativeProvider";
+import { useClubContext } from "../contexts/ClubContext"; // Добавено
 import { BookmarkIcon, BookmarkIconHeader } from "../Initiatives/Icons/InitiativeIcons";
 import { LanguageSwitcher } from "../LanguageSwitcher/LanguageSwitcher";
 import { faGamepad } from "@fortawesome/free-solid-svg-icons";
@@ -17,6 +18,10 @@ export const Header = ({ additionalClasses }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isAuthentication, isFinish, profileData } = useContext(UserContext);
   const { bookmarkedInitiatives, hasBookmarks, hasBookmarksProjects, bookMarkedProjects } = useInitiativeContext();
+  
+  // Добавено за клубове
+  const { bookmarkedClubs = [], hasBookmarkedClubs } = useClubContext();
+  
   const [isModalOpen, setModalOpen] = useState(false);
   const [mobileCommunityOpen, setMobileCommunityOpen] = useState(false);
   const profileRef = useRef(null);
@@ -106,6 +111,13 @@ export const Header = ({ additionalClasses }) => {
 
   const currentLanguage = i18n.language;
 
+  // Обновен общ брой bookmarks
+  const totalBookmarks = (bookmarkedInitiatives?.length || 0) + 
+                          (bookMarkedProjects?.length || 0) + 
+                          (bookmarkedClubs?.length || 0);
+
+  const hasAnyBookmarks = hasBookmarks || hasBookmarksProjects || hasBookmarkedClubs || totalBookmarks > 0;
+
   return (
     <>
       <header className={`${scrolled ? "scrolled" : ""} ${additionalClasses || ""}`}>
@@ -165,13 +177,6 @@ export const Header = ({ additionalClasses }) => {
                   </svg>
                   {t("header.map")}
                 </Link>
-
-                {/* <Link to="/community" className="dropdown-link">
-                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 12.75C13.63 12.75 15.07 13.14 16.24 13.65C17.32 14.13 18 15.21 18 16.38V18H6V16.39C6 15.21 6.68 14.13 7.76 13.66C8.93 13.14 10.37 12.75 12 12.75ZM4 13H8V11H4V13ZM16 13H20V11H16V13ZM12 10.5C10.34 10.5 9 9.16 9 7.5C9 5.84 10.34 4.5 12 4.5C13.66 4.5 15 5.84 15 7.5C15 9.16 13.66 10.5 12 10.5ZM21 9.75C21 11.16 19.16 12 18 12C18.84 12 20 10.84 20 9.75C20 8.66 18.84 7.5 18 7.5C19.16 7.5 21 8.36 21 9.75ZM3 9.75C3 8.36 4.84 7.5 6 7.5C5.16 7.5 4 8.66 4 9.75C4 10.84 5.16 12 6 12C4.84 12 3 11.16 3 9.75Z" fill="currentColor" />
-                  </svg>
-                  {t("header.community")}
-                </Link> */}
               </div>
             </div>
 
@@ -208,15 +213,17 @@ export const Header = ({ additionalClasses }) => {
               </svg>
             )}
           </button>
-          {/* Bookmark иконка - само за desktop */}
-          {(hasBookmarks || hasBookmarksProjects) && isAuthentication && (
+          
+          {/* Bookmark иконка - обновена за всички типове */}
+          {hasAnyBookmarks && isAuthentication && (
             <div className="bookmark-header-section desktop-bookmark">
               <Link to="profile/bookmarks" className="bookmark-header-button">
                 <BookmarkIconHeader />
-                <span className="bookmark-count">{bookmarkedInitiatives.length + bookMarkedProjects.length}</span>
+                <span className="bookmark-count">{totalBookmarks}</span>
               </Link>
             </div>
           )}
+          
           <div className="profile-section-home" ref={profileRef}>
             {isAuthentication && !isFinish && (
               <span
@@ -249,16 +256,16 @@ export const Header = ({ additionalClasses }) => {
               </div>
 
               <div className="dropdown-menu-links">
-                {/* В mobile-menu-links, преди mobile-menu-divider */}
-
-                {(hasBookmarks || hasBookmarksProjects) && isAuthentication && (
-                  <Link to="profile/bookmarks" className="mobile-nav-item" onClick={toggleMobileMenu}>
+                {/* Обновен bookmark линк в dropdown */}
+                {hasAnyBookmarks && isAuthentication && (
+                  <Link to="profile/bookmarks" className="menu-link" onClick={() => setProfileOpen(false)}>
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M19 21L12 16L5 21V5C5 3.89543 5.89543 3 7 3H17C18.1046 3 19 3.89543 19 5V21Z" fill="currentColor" />
                     </svg>
-                    За четене ({bookmarkedInitiatives.length + bookMarkedProjects.length})
+                    За четене ({totalBookmarks})
                   </Link>
                 )}
+                
                 {!isAuthentication ? (
                   <>
                     <Link to="/sign-up?view=login" className="menu-link">
@@ -463,7 +470,16 @@ export const Header = ({ additionalClasses }) => {
               {t("header.games")}
             </NavLink>
 
-            {/* <div className="mobile-menu-divider"></div> */}
+            {/* Обновен bookmark линк в мобилното меню */}
+            {hasAnyBookmarks && isAuthentication && (
+              <Link to="profile/bookmarks" className="mobile-nav-item" onClick={toggleMobileMenu}>
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M19 21L12 16L5 21V5C5 3.89543 5.89543 3 7 3H17C18.1046 3 19 3.89543 19 5V21Z" fill="currentColor" />
+                </svg>
+                За четене ({totalBookmarks})
+              </Link>
+            )}
+
             <LanguageSwitcher isMobile={true} onMobileMenuToggle={toggleMobileMenu} />
             {!isAuthentication ? (
               <>
@@ -502,18 +518,6 @@ export const Header = ({ additionalClasses }) => {
                 </Link>
               </>
             )}
-
-            {/* <div className="mobile-language-switcher">
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12.87 15.07L10.33 12.56L10.36 12.53C12.1 10.59 13.34 8.36 14.07 6H17V4H10V2H8V4H1V6H12.17C11.5 7.92 10.44 9.75 9 11.35C8.07 10.32 7.3 9.19 6.69 8H4.69C5.42 9.63 6.42 11.17 7.67 12.56L2.58 17.58L4 19L9 14L12.11 17.11L12.87 15.07ZM18.5 10H16.5L12 22H14L15.12 19H19.87L21 22H23L18.5 10ZM15.88 17L17.5 12.67L19.12 17H15.88Z" fill="currentColor" />
-              </svg>
-              <button onClick={() => {
-                changeLanguage(currentLanguage !== "bg" ? "bg" : "en");
-                toggleMobileMenu();
-              }}>
-                {currentLanguage !== "bg" ? "Български" : "English"}
-              </button>
-            </div> */}
           </div>
         </div>
       </div>

@@ -13,7 +13,9 @@
     "initiatives": "Инициативи",
     "projects": "Проекти",
     "games": "Игри",
-    "clubs": "Клубове"
+    "clubs": "Клубове",
+    "bookmarks": "За четене",
+    "publications": "Публикации"
   },
   "footer": {
     "site-map": "Карта на сайта",
@@ -2051,11 +2053,13 @@
     "tabs": {
       "all": "Всички",
       "initiatives": "Инициативи",
-      "projects": "Проекти"
+      "projects": "Проекти",
+       "clubs": "Клубове"
     },
     "type": {
       "initiative": "Инициатива",
-      "project": "Проект"
+      "project": "Проект",
+      "club": "Клуб"
     },
     "empty": {
       "title": "Нямате отметки",

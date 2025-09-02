@@ -12,7 +12,9 @@
     "home": "Startseite",
     "projects": "Projekte",
     "games": "Spiele",
-    "clubs": "Clubs"
+    "clubs": "Clubs",
+    "bookmarks": "Lesezeichen",
+    "publications": "Veröffentlichungen"
   },
   "footer": {
     "site-map": "Sitemap",
@@ -2027,11 +2029,13 @@
     "tabs": {
       "all": "Alle",
       "initiatives": "Initiativen",
-      "projects": "Projekte"
+      "projects": "Projekte",
+      "clubs": "Clubs"
     },
     "type": {
       "initiative": "Initiative",
-      "project": "Projekt"
+      "project": "Projekt",
+      "club": "Club"
     },
     "empty": {
       "title": "Sie haben keine Lesezeichen",

@@ -5,7 +5,8 @@ import {
     faSearch,
     faFilter,
     faPlus,
-    faExclamationTriangle
+    faExclamationTriangle,
+    faTimes
 } from '@fortawesome/free-solid-svg-icons';
 import './membershipClubsEmptyState.css';
 

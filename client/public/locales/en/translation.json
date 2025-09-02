@@ -13,7 +13,9 @@
     "initiatives": "Initiatives",
     "projects": "Projects",
     "games": "Games",
-    "clubs": "Clubs"
+    "clubs": "Clubs",
+    "bookmarks": "Bookmarks",
+    "publications": "Publications"
   },
   "footer": {
     "site-map": "Site Map",
@@ -2051,11 +2053,13 @@
     "tabs": {
       "all": "All",
       "initiatives": "Initiatives",
-      "projects": "Projects"
+      "projects": "Projects",
+      "clubs": "Clubs"
     },
     "type": {
       "initiative": "Initiative",
-      "project": "Project"
+      "project": "Project",
+      "club": "Club"
     },
     "empty": {
       "title": "No bookmarks yet",

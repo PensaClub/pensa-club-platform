@@ -662,3 +662,17 @@
     background-size: 200% 100%;
     animation: loading 1.5s infinite;
 }
+.type-badge.club {
+    background: #FFF3E0;
+    color: #F57C00;
+}
+
+.status-badge-bookmarks.active {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.status-badge-bookmarks.draft {
+    background: #fff3e0;
+    color: #f57c00;
+}

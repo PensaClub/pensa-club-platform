@@ -3,12 +3,13 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useInitiativeContext } from '../../contexts/InitiativeProvider';
+import { useClubContext } from '../../contexts/ClubContext'; // Добави това
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-    faBookmark, 
-    faTrash, 
-    faEye, 
-    faClock, 
+import {
+    faBookmark,
+    faTrash,
+    faEye,
+    faClock,
     faMapMarkerAlt,
     faUsers,
     faCalendar,
@@ -16,15 +17,17 @@ import {
     faTimes,
     faSearch,
     faThList,
-    faThLarge
+    faThLarge,
+    faHeart // Добави икона за клубове
 } from '@fortawesome/free-solid-svg-icons';
 import './bookmarkedItems.css';
 import { SkeletonCard } from './SkeletonCard';
 import ScrollToTop from '../../ScrollToTop/ScrollToTop';
+import { useAuthContext } from '../../contexts/UserContext';
 
 export const BookmarkedItems = () => {
     const { t } = useTranslation();
-    const { 
+    const {
         bookmarkedInitiatives,
         bookMarkedProjects,
         toggleBookmark,
@@ -33,17 +36,32 @@ export const BookmarkedItems = () => {
         projects,
         getInitiativeById,
         getProjectById,
-        isLoading
+        isLoading,
     } = useInitiativeContext();
 
+    // Добави club context
+    const {
+        bookmarkedClubs,
+        toggleBookmarkClub,
+        clubs,
+        getClubById,
+        getAllBookmarkedClubs,
+        bookmarksLoaded
+    } = useClubContext();
+    const {
+        isAuthentication,
+        userEmail
+    } = useAuthContext();
     const [activeTab, setActiveTab] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
-     const [viewMode, setViewMode] = useState('grid')
+    const [viewMode, setViewMode] = useState('grid')
     const [bookmarkedItemsData, setBookmarkedItemsData] = useState({
         initiatives: [],
-        projects: []
+        projects: [],
+        clubs: [] 
     });
     const [isLoadingData, setIsLoadingData] = useState(true);
+
     useEffect(() => {
         window.scrollTo({
             top: 0,
@@ -51,75 +69,113 @@ export const BookmarkedItems = () => {
         });
     }, []);
 
-    useEffect(() => {
-        const loadBookmarkedData = async () => {
-            setIsLoadingData(true);           
-          
-            const initiativesData = [];
-            for (const id of bookmarkedInitiatives) {
-                try {
-          
-                    const existingInitiative = initiatives.find(init => init.id === id);
-                    if (existingInitiative) {
-                        initiativesData.push(existingInitiative);
-                    } else {
-                  
-                        const data = await getInitiativeById(id);
-                        if (data) initiativesData.push(data);
-                    }
-                } catch (error) {
-                    console.error(`Error loading initiative ${id}:`, error);
-                }
+   useEffect(() => {
+    const loadBookmarkedData = async () => {
+        setIsLoadingData(true);
+
+        // Зареди bookmarks от API ако е нужно (но само веднъж)
+        if (isAuthentication && userEmail && !bookmarksLoaded && bookmarkedClubs.length === 0) {
+            try {
+                await getAllBookmarkedClubs(userEmail);
+            } catch (error) {
+                console.error('Error loading bookmarked clubs:', error);
             }
+        }
 
-            const projectsData = [];
-            for (const id of bookMarkedProjects) {
-                try {
-
-                    const existingProject = projects.find(proj => proj.id === id);
-                    if (existingProject) {
-                        projectsData.push(existingProject);
-                    } else {
-                  
-                        const data = await getProjectById(id);
-                        if (data) projectsData.push(data);
-                    }
-                } catch (error) {
-                    console.error(`Error loading project ${id}:`, error);
+        const initiativesData = [];
+        for (const id of bookmarkedInitiatives || []) {
+            try {
+                const existingInitiative = initiatives.find(init => init.id === id);
+                if (existingInitiative) {
+                    initiativesData.push(existingInitiative);
+                } else {
+                    const data = await getInitiativeById(id);
+                    if (data) initiativesData.push(data);
                 }
+            } catch (error) {
+                console.error(`Error loading initiative ${id}:`, error);
             }
+        }
 
-            setBookmarkedItemsData({
-                initiatives: initiativesData,
-                projects: projectsData
-            });
-            setIsLoadingData(false);
-        };
+        const projectsData = [];
+        for (const id of bookMarkedProjects || []) {
+            try {
+                const existingProject = projects.find(proj => proj.id === id);
+                if (existingProject) {
+                    projectsData.push(existingProject);
+                } else {
+                    const data = await getProjectById(id);
+                    if (data) projectsData.push(data);
+                }
+            } catch (error) {
+                console.error(`Error loading project ${id}:`, error);
+            }
+        }
 
-        loadBookmarkedData();
-    }, [bookmarkedInitiatives, bookMarkedProjects]);
+        // Зареждане на клубове
+        const clubsData = [];
+        for (const id of bookmarkedClubs || []) {
+            try {
+                const existingClub = clubs.find(club => club.id === id);
+                if (existingClub) {
+                    clubsData.push(existingClub);
+                } else {
+                    const data = await getClubById(id);
+                    if (data) clubsData.push(data);
+                }
+            } catch (error) {
+                console.error(`Error loading club ${id}:`, error);
+            }
+        }
+
+        setBookmarkedItemsData({
+            initiatives: initiativesData,
+            projects: projectsData,
+            clubs: clubsData
+        });
+        setIsLoadingData(false);
+    };
+
+    loadBookmarkedData();
+}, [
+    bookmarkedInitiatives?.length,
+    bookMarkedProjects?.length, 
+    bookmarkedClubs?.length,
+    isAuthentication,
+    userEmail
+]); 
 
     const getFilteredItems = () => {
         let items = [];
 
         if (activeTab === 'all' || activeTab === 'initiatives') {
-            items = [...items, ...bookmarkedItemsData.initiatives.map(item => ({ 
-                ...item, 
-                type: 'initiative' 
+            items = [...items, ...bookmarkedItemsData.initiatives.map(item => ({
+                ...item,
+                type: 'initiative'
             }))];
         }
 
         if (activeTab === 'all' || activeTab === 'projects') {
-            items = [...items, ...bookmarkedItemsData.projects.map(item => ({ 
-                ...item, 
-                type: 'project' 
+            items = [...items, ...bookmarkedItemsData.projects.map(item => ({
+                ...item,
+                type: 'project'
+            }))];
+        }
+
+        // Добави клубове
+        if (activeTab === 'all' || activeTab === 'clubs') {
+            items = [...items, ...bookmarkedItemsData.clubs.map(item => ({
+                ...item,
+                type: 'club'
             }))];
         }
 
         if (searchTerm) {
-            items = items.filter(item => 
+            items = items.filter(item =>
                 item.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                item.shortDescription?.toLowerCase().includes(searchTerm.toLowerCase())
+                item.name?.toLowerCase().includes(searchTerm.toLowerCase()) || // За клубове
+                item.shortDescription?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                item.fullDescription?.toLowerCase().includes(searchTerm.toLowerCase()) // За клубове
             );
         }
 
@@ -129,26 +185,29 @@ export const BookmarkedItems = () => {
     const handleUnbookmark = async (id, type) => {
         if (type === 'initiative') {
             await toggleBookmark(id);
-        } else {
+        } else if (type === 'project') {
             await toggleBookmarkProjects(id);
+        } else if (type === 'club') { // Добави обработка за клубове
+            await toggleBookmarkClub(id);
         }
     };
-const extractCityAndCountry = (fullAddress) => {
-    if (!fullAddress) return '';
-    
-    const parts = fullAddress.split(',').map(part => part.trim());
-    
-    if (parts.length >= 2) {
-        return parts.slice(-2).join(', ');
-    }
-    
-    return parts[0] || fullAddress;
-};
+
+    const extractCityAndCountry = (fullAddress) => {
+        if (!fullAddress) return '';
+
+        const parts = fullAddress.split(',').map(part => part.trim());
+
+        if (parts.length >= 2) {
+            return parts.slice(-2).join(', ');
+        }
+
+        return parts[0] || fullAddress;
+    };
 
     const filteredItems = getFilteredItems();
-    const totalCount = bookmarkedInitiatives.length + bookMarkedProjects.length;
+    const totalCount = bookmarkedInitiatives.length + bookMarkedProjects.length + (bookmarkedClubs?.length || 0); // Добави клубове с проверка
 
-  return (
+    return (
         <div className="bookmarked-items-container">
             {/* Header */}
             <div className="bookmarked-header">
@@ -169,7 +228,7 @@ const extractCityAndCountry = (fullAddress) => {
                         className="search-input-bookmarks"
                     />
                     {searchTerm && (
-                        <button 
+                        <button
                             className="clear-search-bookmarks"
                             onClick={() => setSearchTerm('')}
                         >
@@ -202,6 +261,14 @@ const extractCityAndCountry = (fullAddress) => {
                     >
                         <FontAwesomeIcon icon={faMapMarkerAlt} />
                         {t('bookmarks.tabs.projects')} ({bookMarkedProjects.length})
+                    </button>
+                    {/* Добави таб за клубове */}
+                    <button
+                        className={`tab-button ${activeTab === 'clubs' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('clubs')}
+                    >
+                        <FontAwesomeIcon icon={faHeart} />
+                        {t('bookmarks.tabs.clubs')} ({bookmarkedClubs?.length || 0})
                     </button>
                 </div>
 
@@ -243,19 +310,21 @@ const extractCityAndCountry = (fullAddress) => {
                     <div className={`bookmarked-${viewMode}`}>
                         {filteredItems.map(item => (
                             <div key={`${item.type}-${item.id}`} className={`bookmarked-card ${viewMode}`}>
-                                {/* Card Image - позицията се променя според viewMode */}
-                                {item.mainImage?.src && (
+                                {/* Card Image */}
+                                {(item.mainImage?.src || item.mainImage || item.logo) && (
                                     <div className="bookmarked-card-image">
-                                        <img 
-                                            src={item.mainImage.src} 
-                                            alt={item.title}
+                                        <img
+                                            src={item.mainImage?.src || item.mainImage || item.logo}
+                                            alt={item.title || item.name}
                                             loading="lazy"
                                         />
                                         <div className="image-overlay">
-                                            <Link 
-                                                to={item.type === 'initiative' 
-                                                    ? `/initiatives/${item.slug || item.id}` 
-                                                    : `/projects/${item.slug || item.id}`}
+                                            <Link
+                                                to={item.type === 'initiative'
+                                                    ? `/initiatives/${item.slug || item.id}`
+                                                    : item.type === 'project'
+                                                        ? `/projects/${item.slug || item.id}`
+                                                        : `/clubs/${item.slug || item.id}`} // Добави route за клубове
                                                 className="view-button"
                                             >
                                                 <FontAwesomeIcon icon={faEye} />
@@ -265,12 +334,16 @@ const extractCityAndCountry = (fullAddress) => {
                                     </div>
                                 )}
 
-                                {/* Card Content Wrapper - за list view */}
+                                {/* Card Content Wrapper */}
                                 <div className="bookmarked-card-content-wrapper">
                                     {/* Type Badge */}
                                     <div className="bookmarked-card-header">
                                         <span className={`type-badge ${item.type}`}>
-                                            {item.type === 'initiative' ? t('bookmarks.type.initiative') : t('bookmarks.type.project')}
+                                            {item.type === 'initiative'
+                                                ? t('bookmarks.type.initiative')
+                                                : item.type === 'project'
+                                                    ? t('bookmarks.type.project')
+                                                    : t('bookmarks.type.club')} {/* Добави текст за клубове */}
                                         </span>
                                         <button
                                             className="unbookmark-button"
@@ -284,32 +357,42 @@ const extractCityAndCountry = (fullAddress) => {
                                     {/* Card Content */}
                                     <div className="bookmarked-card-content">
                                         <h3 className="card-title">
-                                            <Link 
-                                                to={item.type === 'initiative' 
-                                                    ? `/initiatives/${item.slug || item.id}` 
-                                                    : `/projects/${item.slug || item.id}`}
+                                            <Link
+                                                to={item.type === 'initiative'
+                                                    ? `/initiatives/${item.slug || item.id}`
+                                                    : item.type === 'project'
+                                                        ? `/projects/${item.slug || item.id}`
+                                                        : `/clubs/${item.slug || item.id}`} // Добави route за клубове
                                             >
-                                                {item.title}
+                                                {item.title || item.name} {/* За клубове използвай name */}
                                             </Link>
                                         </h3>
 
                                         <p className="card-description">
-                                            {item.shortDescription || item.description}
+                                            {item.shortDescription || item.fullDescription || item.description}
                                         </p>
 
                                         {/* Meta Information */}
                                         <div className="card-meta">
-                                            {item.location?.address && (
+                                            {(item.location?.address || item.location?.city) && (
                                                 <div className="meta-item">
                                                     <FontAwesomeIcon icon={faMapMarkerAlt} />
-                                                    <span>{extractCityAndCountry(item.location.address)}</span>
+                                                    <span>
+                                                        {item.type === 'club'
+                                                            ? item.location.city
+                                                            : extractCityAndCountry(item.location.address)}
+                                                    </span>
                                                 </div>
                                             )}
 
-                                            {item.startDate && (
+                                            {(item.startDate || item.foundedYear) && (
                                                 <div className="meta-item">
                                                     <FontAwesomeIcon icon={faCalendar} />
-                                                    <span>{new Date(item.startDate).toLocaleDateString()}</span>
+                                                    <span>
+                                                        {item.startDate
+                                                            ? new Date(item.startDate).toLocaleDateString()
+                                                            : item.foundedYear} {/* За клубове показвай година на основаване */}
+                                                    </span>
                                                 </div>
                                             )}
 
@@ -324,10 +407,12 @@ const extractCityAndCountry = (fullAddress) => {
 
                                         {/* Action Footer */}
                                         <div className="card-footer">
-                                            <Link 
-                                                to={item.type === 'initiative' 
-                                                    ? `/initiatives/${item.slug || item.id}` 
-                                                    : `/projects/${item.slug || item.id}`}
+                                            <Link
+                                                to={item.type === 'initiative'
+                                                    ? `/initiatives/${item.slug || item.id}`
+                                                    : item.type === 'project'
+                                                        ? `/projects/${item.slug || item.id}`
+                                                        : `/clubs/${item.slug || item.id}`} // Добави route за клубове
                                                 className="read-more-link"
                                             >
                                                 {t('bookmarks.readMore')} →
