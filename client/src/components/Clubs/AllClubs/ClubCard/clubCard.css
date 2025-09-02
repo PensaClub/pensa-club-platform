@@ -546,7 +546,10 @@
   .club-card {
     margin-bottom: 1rem;
   }
-
+.club-card-rating {
+    flex-direction: column;
+    align-items: flex-end;
+  }
   .club-card-container {
     border-radius: 12px;
     max-width: none;

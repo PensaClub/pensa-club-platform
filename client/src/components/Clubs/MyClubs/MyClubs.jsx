@@ -196,7 +196,6 @@ const MyClubs = () => {
     };
     
     const handleClubClick = (club) => {
-        console.log('Navigating to club:', club.slug);
         navigate(`/clubs/${club.slug}`);
     };
 

@@ -149,14 +149,137 @@
   border-radius: 6px;
 }
 
-/* Responsive Design */
-@media (max-width: 1024px) {
+/* ========================================= */
+/* RESPONSIVE DESIGN - FULL COVERAGE */
+/* ========================================= */
+
+/* Extra small devices (300px - 319px) */
+@media screen and (max-width: 319px) {
+  .draftclubs-container {
+    padding: 0.5rem 0.25rem;
+  }
+
+  .draftclubs-header {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 8px;
+  }
+
+  .draftclubs-header-content {
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .draftclubs-page-title {
+    font-size: 1.25rem;
+    text-align: center;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .draftclubs-page-subtitle {
+    font-size: 0.9rem;
+    text-align: center;
+  }
+
+  .draftclubs-create-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .draftclubs-controls {
+    padding: 0.75rem;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .draftclubs-controls-right {
+    width: 100%;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
   .draftclubs-grid {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .draftclubs-error-content {
+    padding: 1rem;
+    margin: 0.5rem;
   }
 }
 
-@media (max-width: 768px) {
+/* Small phones (320px - 479px) */
+@media screen and (min-width: 320px) and (max-width: 479px) {
+  .draftclubs-container {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .draftclubs-header {
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .draftclubs-header-content {
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .draftclubs-page-title {
+    font-size: 1.5rem;
+    text-align: center;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .draftclubs-page-subtitle {
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  .draftclubs-create-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 1rem 1.5rem;
+  }
+
+  .draftclubs-controls {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .draftclubs-controls-right {
+    width: 100%;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .draftclubs-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .draftclubs-loading,
+  .draftclubs-error {
+    min-height: 300px;
+    padding: 1rem;
+  }
+
+  .draftclubs-error-content {
+    padding: 1.5rem;
+    max-width: 100%;
+  }
+}
+
+/* Large phones (480px - 767px) */
+@media screen and (min-width: 480px) and (max-width: 767px) {
   .draftclubs-container {
     padding: 1rem 0.75rem;
   }
@@ -168,30 +291,390 @@
 
   .draftclubs-header-content {
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;
+    text-align: center;
     gap: 1.5rem;
-    margin-bottom: 1.5rem;
   }
 
   .draftclubs-page-title {
     font-size: 1.75rem;
-    text-align: center;
+    justify-content: center;
+  }
+
+  .draftclubs-page-subtitle {
+    font-size: 1.1rem;
   }
 
   .draftclubs-create-btn {
-    align-self: center;
-    padding: 1rem 2rem;
+    width: auto;
+    min-width: 200px;
   }
 
   .draftclubs-controls {
     flex-direction: column;
     align-items: stretch;
     gap: 1rem;
-    padding: 1rem;
+    padding: 1.25rem;
   }
 
   .draftclubs-controls-right {
     justify-content: center;
+    flex-direction: row;
+    gap: 1rem;
+  }
+
+  .draftclubs-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+}
+
+/* Tablets Portrait (768px - 1023px) */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .draftclubs-container {
+    padding: 1.5rem 1rem;
+  }
+
+  .draftclubs-header {
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .draftclubs-header-content {
+    flex-direction: row;
+    align-items: flex-start;
+    text-align: left;
+    gap: 2rem;
+  }
+
+  .draftclubs-page-title {
+    font-size: 2rem;
+    justify-content: flex-start;
+  }
+
+  .draftclubs-page-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .draftclubs-create-btn {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .draftclubs-controls {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+  }
+
+  .draftclubs-controls-right {
+    flex-direction: row;
+    width: auto;
+  }
+
+  .draftclubs-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+/* Tablets Landscape & Small Laptops (1024px - 1279px) */
+@media screen and (min-width: 1024px) and (max-width: 1279px) {
+  .draftclubs-container {
+    padding: 2rem 1.5rem;
+    max-width: 1200px;
+  }
+
+  .draftclubs-grid {
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.75rem;
+  }
+
+  .draftclubs-page-title {
+    font-size: 2.25rem;
+  }
+
+  .draftclubs-create-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.25);
+  }
+}
+
+/* Standard Laptops & Small Desktops (1280px - 1439px) */
+@media screen and (min-width: 1280px) and (max-width: 1439px) {
+  .draftclubs-container {
+    max-width: 1300px;
+    padding: 2rem;
+  }
+
+  .draftclubs-grid {
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+  }
+
+  .draftclubs-page-title {
+    font-size: 2.5rem;
+  }
+
+  .draftclubs-header {
+    padding: 2.5rem;
+  }
+}
+
+/* Large Desktops (1440px - 1679px) */
+@media screen and (min-width: 1440px) and (max-width: 1679px) {
+  .draftclubs-container {
+    max-width: 1400px;
+    padding: 2.5rem;
+  }
+
+  .draftclubs-grid {
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 2.5rem;
+  }
+
+  .draftclubs-page-title {
+    font-size: 2.75rem;
+  }
+
+  .draftclubs-header {
+    padding: 3rem;
+    border-radius: 16px;
+  }
+
+  .draftclubs-controls {
+    padding: 2rem;
+    border-radius: 12px;
+  }
+}
+
+/* Extra Large Screens (1680px - 1919px) */
+@media screen and (min-width: 1680px) and (max-width: 1919px) {
+  .draftclubs-container {
+    max-width: 1600px;
+    padding: 3rem;
+  }
+
+  .draftclubs-grid {
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 3rem;
+  }
+
+  .draftclubs-page-title {
+    font-size: 3rem;
+  }
+
+  .draftclubs-header {
+    padding: 3.5rem;
+  }
+}
+
+/* Ultra-wide Screens (1920px+) */
+@media screen and (min-width: 1920px) {
+  .draftclubs-container {
+    max-width: 1800px;
+    padding: 3rem;
+  }
+
+  .draftclubs-grid {
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+    gap: 3rem;
+  }
+
+  .draftclubs-page-title {
+    font-size: 3.25rem;
+  }
+}
+
+/* ========================================= */
+/* DEVICE-SPECIFIC OPTIMIZATIONS */
+/* ========================================= */
+
+/* iPhone SE (375px width) */
+@media screen and (width: 375px) {
+  .draftclubs-page-title {
+    font-size: 1.6rem;
+  }
+
+  .draftclubs-create-btn {
+    padding: 0.875rem 1.25rem;
+  }
+}
+
+/* iPhone 12/13/14 (390px width) */
+@media screen and (width: 390px) {
+  .draftclubs-page-title {
+    font-size: 1.65rem;
+  }
+}
+
+/* iPad Mini (768px width) */
+@media screen and (width: 768px) {
+  .draftclubs-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.75rem;
+  }
+}
+
+/* iPad Pro 11" (834px width) */
+@media screen and (width: 834px) {
+  .draftclubs-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+}
+
+/* ========================================= */
+/* ORIENTATION-SPECIFIC STYLES */
+/* ========================================= */
+
+/* Landscape on mobile devices */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+  .draftclubs-container {
+    padding: 1rem;
+  }
+
+  .draftclubs-header {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .draftclubs-header-content {
+    flex-direction: row;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .draftclubs-page-title {
+    font-size: 1.5rem;
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  .draftclubs-create-btn {
+    width: auto;
+    flex-shrink: 0;
+  }
+
+  .draftclubs-controls {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .draftclubs-loading,
+  .draftclubs-error {
+    min-height: 250px;
+  }
+
+  .draftclubs-error-content {
+    padding: 1.5rem;
+  }
+}
+
+/* ========================================= */
+/* ACCESSIBILITY & PERFORMANCE */
+/* ========================================= */
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .draftclubs-header,
+  .draftclubs-controls {
+    border: 2px solid #000;
+  }
+
+  .draftclubs-create-btn {
+    border: 2px solid transparent;
+  }
+
+  .draftclubs-create-btn:focus {
+    border-color: #fff;
+    outline: 2px solid #000;
+    outline-offset: 2px;
+  }
+
+  .draftclubs-retry-button:focus {
+    outline: 2px solid #000;
+    outline-offset: 2px;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .draftclubs-create-btn:hover,
+  .draftclubs-retry-button:hover {
+    transform: none;
+  }
+
+  .draftclubs-create-btn,
+  .draftclubs-retry-button {
+    transition: background-color 0.2s ease;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .draftclubs-container {
+    background: #0f172a;
+  }
+
+  .draftclubs-header {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    border-color: #334155;
+    color: #f1f5f9;
+  }
+
+  .draftclubs-controls {
+    background: #1e293b;
+    border-color: #334155;
+    color: #f1f5f9;
+  }
+
+  .draftclubs-page-title {
+    color: #f1f5f9;
+  }
+
+  .draftclubs-page-subtitle,
+  .draftclubs-results-info {
+    color: #94a3b8;
+  }
+
+  .draftclubs-results-info {
+    background: #1e293b;
+  }
+
+  .draftclubs-error-content {
+    background: #1e293b;
+    border-color: #7f1d1d;
+    color: #f1f5f9;
+  }
+
+  .draftclubs-loading {
+    color: #f1f5f9;
+  }
+
+  .draftclubs-loading-icon {
+    color: #60a5fa;
+  }
+}
+
+/* Print styles */
+@media print {
+  .draftclubs-container {
+    background: white;
+    padding: 1rem;
+  }
+
+  .draftclubs-create-btn,
+  .draftclubs-controls {
+    display: none;
+  }
+
+  .draftclubs-header {
+    background: white;
+    box-shadow: none;
+    border: 1px solid #ccc;
   }
 
   .draftclubs-grid {
@@ -200,13 +683,42 @@
   }
 }
 
-@media (max-width: 480px) {
-  .draftclubs-page-title {
-    font-size: 1.5rem;
+/* Touch device optimizations */
+@media (pointer: coarse) {
+  .draftclubs-create-btn,
+  .draftclubs-retry-button {
+    min-height: 44px;
+    min-width: 44px;
   }
 
-  .draftclubs-controls-right {
-    flex-direction: column;
-    align-items: stretch;
+  .draftclubs-controls-right > * {
+    min-height: 44px;
+  }
+}
+
+/* Hover capability detection */
+@media (hover: hover) {
+  .draftclubs-create-btn:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    box-shadow: 0 4px 8px rgba(59, 130, 246, 0.25);
+    transform: translateY(-1px);
+  }
+
+  .draftclubs-retry-button:hover {
+    background: #b91c1c;
+    transform: translateY(-1px);
+  }
+}
+
+/* No hover capability (touch devices) */
+@media (hover: none) {
+  .draftclubs-create-btn:active {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    transform: scale(0.98);
+  }
+
+  .draftclubs-retry-button:active {
+    background: #b91c1c;
+    transform: scale(0.98);
   }
 }
