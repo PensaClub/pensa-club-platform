@@ -401,6 +401,15 @@
   text-align: center;
   padding: 0.5rem;
 }
+.club-card-favorite-btn.favorited {
+  background: #fed7d7;
+  color: #e53e3e;
+  border-color: #feb2b2;
+}
+
+.club-card-favorite-btn.favorited:hover {
+  background: #feb2b2;
+}
 
 /* Компактен председател */
 .club-card-chairman {
