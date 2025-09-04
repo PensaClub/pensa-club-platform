@@ -152,20 +152,57 @@ const MyClubs = () => {
     }, [clubs, searchTerm, filterBy, sortBy]);
 
     // Calculate statistics (останалия код същия...)
-    const stats = useMemo(() => {
-        if (!Array.isArray(clubs)) {
-            return { total: 0, active: 0, totalMembers: 0, avgMembers: 0 };
-        }
+   const stats = useMemo(() => {
+    if (!Array.isArray(clubs)) {
+        return {
+            total: 0,
+            active: 0,
+            inactive: 0,
+            draft: 0,
+            suspended: 0,
+            rejected: 0,
+            verified: 0,
+            unverified: 0,
+            totalMembers: 0,
+            avgMembers: 0
+        };
+    }
 
-        const total = clubs.length;
-        const active = clubs.filter(club => club.status === 'active').length;
-        const totalMembers = clubs.reduce((sum, club) =>
-            sum + (club.membership?.totalMembers || 0), 0
-        );
-        const avgMembers = total > 0 ? Math.round(totalMembers / total) : 0;
+    const total = clubs.length;
+    
+    // Статистики по статус
+    const active = clubs.filter(club => club.status === 'active').length;
+    const inactive = clubs.filter(club => club.status === 'inactive').length;
+    const draft = clubs.filter(club => club.status === 'draft').length;
+    const suspended = clubs.filter(club => club.status === 'suspended').length;
+    const rejected = clubs.filter(club => club.status === 'rejected').length;
+    
+    // Статистики по верификация (ВАЖНО за "чакащи одобрение")
+    const verified = clubs.filter(club => club.metadata?.isVerified === true).length;
+    const unverified = clubs.filter(club => 
+        club.metadata?.isVerified === false || 
+        club.metadata?.isVerified == null
+    ).length;
+    
+    // Членове
+    const totalMembers = clubs.reduce((sum, club) =>
+        sum + (club.membership?.totalMembers || 0), 0
+    );
+    const avgMembers = total > 0 ? Math.round(totalMembers / total) : 0;
 
-        return { total, active, totalMembers, avgMembers };
-    }, [clubs]);
+    return {
+        total,
+        active,
+        inactive,
+        draft,
+        suspended,
+        rejected,
+        verified,
+        unverified, // Това са клубовете "чакащи одобрение"
+        totalMembers,
+        avgMembers
+    };
+}, [clubs]);
 
     const handleCreateNew = () => {
         navigate('/profile/club-create');

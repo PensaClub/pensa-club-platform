@@ -5,12 +5,9 @@ import {
     faUsers,
     faCheckCircle,
     faExclamationCircle,
-    faFileAlt,
     faPause,
     faBan,
-   
     faShieldAlt,
-
     faChartLine
 } from '@fortawesome/free-solid-svg-icons';
 import './adminStatsOverview.css';
@@ -32,11 +29,14 @@ const AdminStatsOverview = ({ stats }) => {
 
         const activePercentage = Math.round((stats.active / stats.total) * 100);
         const verifiedPercentage = Math.round((stats.verified / stats.total) * 100);
-        const pendingCount = stats.draft + stats.inactive;
+        
+        // ПОПРАВЕНО: Pending = unverified клубове (isVerified: false)
+        // Това са клубовете които чакат административно одобрение
+        const pendingCount = stats.unverified || 0;
         const pendingPercentage = Math.round((pendingCount / stats.total) * 100);
         const averageMembers = Math.round(stats.totalMembers / stats.total);
         
-        // Health score based on active and verified clubs
+        // Health score базиран на активни И верифицирани клубове
         const healthScore = Math.round(((stats.active + stats.verified) / (stats.total * 2)) * 100);
 
         return {
@@ -73,7 +73,7 @@ const AdminStatsOverview = ({ stats }) => {
         {
             key: 'pending',
             title: t('adminStatsOverview.cards.pending.title'),
-            value: calculations.pendingCount,
+            value: calculations.pendingCount, // unverified клубове
             icon: faExclamationCircle,
             color: '#f59e0b',
             bgColor: '#fef3c7',
@@ -97,12 +97,6 @@ const AdminStatsOverview = ({ stats }) => {
             label: t('adminStatsOverview.detailed.inactive'),
             value: stats?.inactive || 0,
             icon: faPause,
-            color: '#6b7280'
-        },
-        {
-            label: t('adminStatsOverview.detailed.draft'),
-            value: stats?.draft || 0,
-            icon: faFileAlt,
             color: '#6b7280'
         },
         {
@@ -277,6 +271,7 @@ const AdminStatsOverview = ({ stats }) => {
 
                     {/* Quick Insights */}
                     <div className="adminstatsoverview-quick-insights">
+                        {/* ПОПРАВЕНО: unverified клубове чакат одобрение */}
                         {calculations.pendingCount > 0 && (
                             <div className="adminstatsoverview-insight warning">
                                 <FontAwesomeIcon icon={faExclamationCircle} />

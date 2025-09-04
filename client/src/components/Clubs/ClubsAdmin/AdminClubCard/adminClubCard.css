@@ -608,3 +608,103 @@
     transform: translateY(0) scale(1);
   }
 }
+/* Info button */
+.adminclubcard-action-btn--info {
+    background: rgba(99, 102, 241, 0.9);
+    color: white;
+}
+
+.adminclubcard-action-btn--info:hover:not(:disabled) {
+    background: rgba(99, 102, 241, 1);
+    transform: scale(1.1);
+}
+
+/* Info Modal */
+.adminclubcard-info-modal {
+    max-width: 650px;
+    width: 95%;
+}
+
+.adminclubcard-modal-icon--info {
+    color: #6366f1;
+}
+
+.adminclubcard-info-close {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: #f3f4f6;
+    color: #6b7280;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    margin-left: auto;
+}
+
+.adminclubcard-info-close:hover {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+.adminclubcard-info-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+.adminclubcard-info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 8px;
+    border-left: 3px solid #6366f1;
+}
+
+.adminclubcard-info-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #475569;
+}
+
+.adminclubcard-info-label svg {
+    color: #6366f1;
+    width: 14px;
+}
+
+.adminclubcard-info-value {
+    font-size: 0.9rem;
+    color: #1e293b;
+    font-weight: 500;
+    word-break: break-word;
+}
+
+/* Responsive design for info modal */
+@media (max-width: 768px) {
+    .adminclubcard-info-modal {
+        margin: 1rem;
+        max-width: none;
+    }
+    
+    .adminclubcard-info-item {
+        padding: 0.75rem;
+    }
+    
+    .adminclubcard-modal-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+    }
+    
+    .adminclubcard-info-close {
+        align-self: flex-end;
+        margin-left: 0;
+    }
+}

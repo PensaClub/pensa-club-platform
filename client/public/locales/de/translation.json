@@ -10544,14 +10544,31 @@
       "suspended": "Gesperrt",
       "rejected": "Abgelehnt"
     },
-    
+     "info": {
+    "title": "Club-Informationen",
+    "clubName": "Club-Name",
+    "owner": "Besitzer", 
+    "email": "E-Mail",
+    "phone": "Telefon",
+    "createdDate": "Erstellungsdatum",
+    "location": "Standort",
+    "members": "Mitglieder",
+    "people": "Personen",
+    "verificationStatus": "Verifizierungsstatus",
+    "verified": "Verifiziert",
+    "notVerified": "Nicht verifiziert",
+    "status": "Status", 
+    "notSpecified": "Nicht angegeben",
+    "notSpecifiedFeminine": "Nicht angegeben"
+  },
     "actions": {
       "view": "Ansehen",
       "edit": "Bearbeiten",
       "changeStatus": "Status ändern",
       "verify": "Verifizieren",
       "approve": "Genehmigen",
-      "reject": "Ablehnen"
+      "reject": "Ablehnen",
+       "info": "Informationen"
     },
     
     "rejectModal": {
@@ -10834,5 +10851,9 @@
     "statusChange": {
       "info": "Neuer Status wird sein: {{status}}"
     }
-  }
+  },
+  "pending": {
+  "title": "Wartend auf Genehmigung",
+  "description": "Clubs zur administrativen Genehmigung eingereicht"
+}
 }

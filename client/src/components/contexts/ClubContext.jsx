@@ -886,7 +886,7 @@ export const ClubProvider = ({ children }) => {
     try {
       setIsLoading(true);
 
-      const updatedClub = await clubService.toggleClubStatus(identifier, status);
+      const updatedClub = await clubService.updateClub(identifier, status);
 
       // Актуализиране на локалното състояние
       setClubs(prevClubs =>

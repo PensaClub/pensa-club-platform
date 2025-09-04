@@ -11,13 +11,15 @@ import {
     faExclamationTriangle,
     faCheck,
     faTimes,
-    
     faCrown,
     faEnvelope,
     faCalendarAlt,
     faToggleOn,
     faToggleOff,
-    faShield
+    faShield,
+    faInfo, // ДОБАВЕНО
+    faUser,
+    faPhone
 } from '@fortawesome/free-solid-svg-icons';
 import './adminClubCard.css';
 
@@ -35,6 +37,7 @@ const AdminClubCard = ({
     const [isProcessing, setIsProcessing] = useState(false);
     const [showStatusMenu, setShowStatusMenu] = useState(false);
     const [showRejectModal, setShowRejectModal] = useState(false);
+    const [showInfoModal, setShowInfoModal] = useState(false); // ДОБАВЕНО
     const [rejectReason, setRejectReason] = useState('');
 
     // Status configuration
@@ -104,6 +107,12 @@ const AdminClubCard = ({
         window.open(`/profile/club-create?editId=${club.id}&mode=edit`, '_blank');
     };
 
+    // ДОБАВЕНА ФУНКЦИЯ
+    const handleInfoClick = (e) => {
+        e.stopPropagation();
+        setShowInfoModal(true);
+    };
+
     const formatDate = (date) => {
         if (!date) return t('adminClubCard.noDate');
         return new Date(date).toLocaleDateString('bg-BG', {
@@ -153,6 +162,16 @@ const AdminClubCard = ({
                         {/* Quick Actions Overlay */}
                         <div className="adminclubcard-overlay">
                             <div className="adminclubcard-quick-actions">
+                                {/* ДОБАВЕН INFO БУТОН */}
+                                <button
+                                    className="adminclubcard-action-btn adminclubcard-action-btn--info"
+                                    onClick={handleInfoClick}
+                                    title={t('adminClubCard.actions.info')}
+                                    disabled={isProcessing}
+                                >
+                                    <FontAwesomeIcon icon={faInfo} />
+                                </button>
+
                                 <button
                                     className="adminclubcard-action-btn adminclubcard-action-btn--view"
                                     onClick={handleViewClub}
@@ -365,6 +384,124 @@ const AdminClubCard = ({
                                     </>
                                 )}
                             </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* ДОБАВЕН INFO MODAL */}
+            {showInfoModal && (
+                <div className="adminclubcard-modal-overlay">
+                    <div className="adminclubcard-modal adminclubcard-info-modal">
+                        <div className="adminclubcard-modal-header">
+                            <FontAwesomeIcon icon={faInfo} className="adminclubcard-modal-icon adminclubcard-modal-icon--info" />
+                            <h3>{t('adminClubCard.info.title')}</h3>
+                            <button
+                                className="adminclubcard-info-close"
+                                onClick={() => setShowInfoModal(false)}
+                            >
+                                <FontAwesomeIcon icon={faTimes} />
+                            </button>
+                        </div>
+                        <div className="adminclubcard-modal-body">
+                            <div className="adminclubcard-info-grid">
+                                <div className="adminclubcard-info-item">
+                                    <div className="adminclubcard-info-label">
+                                        <FontAwesomeIcon icon={faUser} />
+                                        <span>{t('adminClubCard.info.clubName')}</span>
+                                    </div>
+                                    <div className="adminclubcard-info-value">
+                                        {club.name}
+                                    </div>
+                                </div>
+
+                                <div className="adminclubcard-info-item">
+                                    <div className="adminclubcard-info-label">
+                                        <FontAwesomeIcon icon={faUser} />
+                                        <span>{t('adminClubCard.info.owner')}</span>
+                                    </div>
+                                    <div className="adminclubcard-info-value">
+                                        {club.owner || t('adminClubCard.info.notSpecified')}
+                                    </div>
+                                </div>
+
+                                <div className="adminclubcard-info-item">
+                                    <div className="adminclubcard-info-label">
+                                        <FontAwesomeIcon icon={faEnvelope} />
+                                        <span>{t('adminClubCard.info.email')}</span>
+                                    </div>
+                                    <div className="adminclubcard-info-value">
+                                        {club.contacts?.email || t('adminClubCard.info.notSpecified')}
+                                    </div>
+                                </div>
+
+                                <div className="adminclubcard-info-item">
+                                    <div className="adminclubcard-info-label">
+                                        <FontAwesomeIcon icon={faPhone} />
+                                        <span>{t('adminClubCard.info.phone')}</span>
+                                    </div>
+                                    <div className="adminclubcard-info-value">
+                                        {club.contacts?.phone || club.contacts?.mobile || t('adminClubCard.info.notSpecified')}
+                                    </div>
+                                </div>
+
+                                <div className="adminclubcard-info-item">
+                                    <div className="adminclubcard-info-label">
+                                        <FontAwesomeIcon icon={faCalendarAlt} />
+                                        <span>{t('adminClubCard.info.createdDate')}</span>
+                                    </div>
+                                    <div className="adminclubcard-info-value">
+                                        {formatDate(club.metadata?.createdAt)}
+                                    </div>
+                                </div>
+
+                                <div className="adminclubcard-info-item">
+                                    <div className="adminclubcard-info-label">
+                                        <FontAwesomeIcon icon={faMapMarkerAlt} />
+                                        <span>{t('adminClubCard.info.location')}</span>
+                                    </div>
+                                    <div className="adminclubcard-info-value">
+                                        {club.location?.city && club.location?.region 
+                                            ? `${club.location.city}, ${club.location.region}`
+                                            : club.location?.city || t('adminClubCard.info.notSpecifiedFeminine')
+                                        }
+                                    </div>
+                                </div>
+
+                                <div className="adminclubcard-info-item">
+                                    <div className="adminclubcard-info-label">
+                                        <FontAwesomeIcon icon={faUsers} />
+                                        <span>{t('adminClubCard.info.members')}</span>
+                                    </div>
+                                    <div className="adminclubcard-info-value">
+                                        {club.membership?.totalMembers || 0} {t('adminClubCard.info.people')}
+                                    </div>
+                                </div>
+
+                                {/* ДОБАВЕНИ ADMIN СПЕЦИФИЧНИ ПОЛЕТА */}
+                                <div className="adminclubcard-info-item">
+                                    <div className="adminclubcard-info-label">
+                                        <FontAwesomeIcon icon={faShield} />
+                                        <span>{t('adminClubCard.info.verificationStatus')}</span>
+                                    </div>
+                                    <div className="adminclubcard-info-value">
+                                        {club.metadata?.isVerified 
+                                            ? t('adminClubCard.info.verified') 
+                                            : t('adminClubCard.info.notVerified')
+                                        }
+                                    </div>
+                                </div>
+
+                                <div className="adminclubcard-info-item">
+                                    <div className="adminclubcard-info-label">
+                                        <FontAwesomeIcon icon={faToggleOn} />
+                                        <span>{t('adminClubCard.info.status')}</span>
+                                    </div>
+                                    <div className="adminclubcard-info-value">
+                                        {currentStatus.label}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

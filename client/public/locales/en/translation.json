@@ -11089,14 +11089,31 @@
       "suspended": "Suspended",
       "rejected": "Rejected"
     },
-    
+    "info": {
+    "title": "Club Information",
+    "clubName": "Club Name",
+    "owner": "Owner",
+    "email": "Email",
+    "phone": "Phone",
+    "createdDate": "Creation Date", 
+    "location": "Location",
+    "members": "Members",
+    "people": "people",
+    "verificationStatus": "Verification Status",
+    "verified": "Verified",
+    "notVerified": "Not Verified",
+    "status": "Status",
+    "notSpecified": "Not specified",
+    "notSpecifiedFeminine": "Not specified"
+  },
     "actions": {
       "view": "View",
       "edit": "Edit",
       "changeStatus": "Change status",
       "verify": "Verify",
       "approve": "Approve",
-      "reject": "Reject"
+      "reject": "Reject",
+      "info": "Information"
     },
     
     "rejectModal": {
@@ -11341,6 +11358,10 @@
     "statusChange": {
       "info": "New status will be: {{status}}"
     }
-  }
+  },
+  "pending": {
+  "title": "Pending approval",
+  "description": "Clubs submitted for administrative approval"
+}
 
 }
