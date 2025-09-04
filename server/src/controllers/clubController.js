@@ -13,7 +13,14 @@ const {
     user_account,
 } = require('../sequelize/models');
 const CustomError = require('../utils/customError');
-const { transformToDB, transformClub, transformMemberToDB, transformActivityToDB, processClubAdminAction } = require('../utils/clubUtils');
+const {
+    transformToDB,
+    transformClub,
+    transformMemberToDB,
+    transformActivityToDB,
+    processClubAdminAction,
+    handleMailingFormEmail,
+} = require('../utils/clubUtils');
 const { findBySlugOrId } = require('../utils/modelLookup');
 const { transformComment, getCommentConfig } = require('../utils/commentUtils');
 const { comment } = require('../sequelize/models');
@@ -119,7 +126,7 @@ clubController.patch('/toggle-draft/:identifier', isAuth, async (req, res, next)
     return deleteClubByDraftStatus(true, req, res, next);
 });
 
-clubController.patch('/:identifier/toggle-status', isAuth, async (req, res, next) => {
+clubController.patch('/:identifier/status', isAuth, async (req, res, next) => {
     return performAdminAction(req, res, next, 'toggle-status', false);
 });
 
@@ -467,6 +474,38 @@ clubController.get('/:identifier/members', async (req, res, next) => {
 
 clubController.get('/:identifier/management', async (req, res, next) => {
     return getClubSpecificData(req.params.identifier, 'management', req, res, next);
+});
+
+clubController.post('/:identifier/contact', async (req, res, next) => {
+    return handleMailingForm(req, res, next, 'contact');
+});
+
+clubController.post('/:identifier/membership-application', async (req, res, next) => {
+    return handleMailingForm(req, res, next, 'membership');
+});
+
+clubController.post('/:identifier/volunteer-application', async (req, res, next) => {
+    return handleMailingForm(req, res, next, 'volunteer');
+});
+
+clubController.post('/:identifier/partnership-inquiry', async (req, res, next) => {
+    return handleMailingForm(req, res, next, 'partnership');
+});
+
+clubController.post('/:identifier/sponsorship-inquiry', async (req, res, next) => {
+    return handleMailingForm(req, res, next, 'sponsorship');
+});
+
+clubController.post('/:identifier/events/:eventId/register', async (req, res, next) => {
+    return handleMailingForm(req, res, next, 'event', req.params.eventId);
+});
+
+clubController.post('/:identifier/courses/:courseId/register', async (req, res, next) => {
+    return handleMailingForm(req, res, next, 'course', req.params.courseId);
+});
+
+clubController.post('/:identifier/trips/:tripId/register', async (req, res, next) => {
+    return handleMailingForm(req, res, next, 'trip', req.params.tripId);
 });
 
 // ========================================
@@ -1181,6 +1220,75 @@ const performAdminAction = async (req, res, next, action, bulkFlag = false) => {
             return res.status(200).json(transformedClub);
         }
     } catch (err) {
+        next(err);
+    }
+};
+
+const handleMailingForm = async (req, res, next, formType, itemId = null) => {
+    try {
+        const { identifier } = req.params;
+        let validatedData;
+
+        switch (formType) {
+            case 'contact':
+                validatedData = clubSchema.mailing.contactFormSchema.parse(req.body);
+                break;
+            case 'membership':
+                validatedData = clubSchema.mailing.membershipApplicationSchema.parse(req.body);
+                break;
+            case 'volunteer':
+                validatedData = clubSchema.mailing.volunteerApplicationSchema.parse(req.body);
+                break;
+            case 'partnership':
+                validatedData = clubSchema.mailing.partnershipInquirySchema.parse(req.body);
+                break;
+            case 'sponsorship':
+                validatedData = clubSchema.mailing.sponsorshipInquirySchema.parse(req.body);
+                break;
+            case 'event':
+                validatedData = clubSchema.mailing.eventRegistrationSchema.parse(req.body);
+                break;
+            case 'course':
+                validatedData = clubSchema.mailing.courseRegistrationSchema.parse(req.body);
+                break;
+            case 'trip':
+                validatedData = clubSchema.mailing.tripRegistrationSchema.parse(req.body);
+                break;
+            default:
+                throw new CustomError({
+                    message: 'Invalid form type',
+                    statusCode: 400,
+                });
+        }
+
+        const club = await findBySlugOrId(club_Club, identifier, {
+            where: { isDraft: false },
+            attributes: ['id', 'name', 'slug', 'owner'],
+        });
+
+        if (!club) {
+            throw new CustomError({
+                message: 'Club not found',
+                statusCode: 404,
+            });
+        }
+
+        const { emailSent, emailError } = await handleMailingFormEmail(club, formType, validatedData, itemId);
+
+        if (!emailSent) {
+            console.error('Email sending failed:', emailError);
+            throw new CustomError({
+                message: 'Failed to send email',
+                statusCode: 500,
+            });
+        }
+
+        return res.status(200).json({
+            message: 'Your message has been sent successfully to the club owner.',
+            clubName: club.name,
+        });
+    } catch (err) {
+        console.log(err);
         next(err);
     }
 };

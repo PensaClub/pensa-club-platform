@@ -5,7 +5,7 @@ const basicSchema = z.object({
     // Core identification
     id: z.string().optional(),
 
-    slug: requiredString('Slug is required'),
+    slug: optionalString(),
 
     name: optionalString(),
 

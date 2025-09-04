@@ -584,11 +584,227 @@ const processClubAdminAction = async (club, action, options, adminEmail) => {
     }
 };
 
+const handleMailingFormEmail = async (club, formType, validatedData, itemId = null) => {
+    try {
+        let emailTitle;
+        let mainInfoContent;
+        let messageContent;
+
+        switch (formType) {
+            case 'contact':
+                emailTitle = 'Контактна форма';
+                mainInfoContent = `
+                    <p><strong>Име:</strong> ${validatedData.name || '—'}</p>
+                    <p><strong>Имейл:</strong> <a href="mailto:${validatedData.email || ''}" style="color: #0066cc; text-decoration: underline;">${
+                    validatedData.email || '—'
+                }</a></p>
+                    ${validatedData.phone ? `<p><strong>Телефон:</strong> ${validatedData.phone}</p>` : ''}
+                    <p><strong>Предпочитан начин за контакт:</strong> ${validatedData.preferredContact || '—'}</p>
+                `;
+                messageContent = `
+                    <p>${validatedData.message || '—'}</p>
+                `;
+                break;
+
+            case 'membership':
+                emailTitle = 'Кандидатстване за членство';
+                mainInfoContent = `
+                    <p><strong>Име:</strong> ${validatedData.name || '—'}</p>
+                    <p><strong>Имейл:</strong> <a href="mailto:${validatedData.email || ''}" style="color: #0066cc; text-decoration: underline;">${
+                    validatedData.email || '—'
+                }</a></p>
+                    ${validatedData.phone ? `<p><strong>Телефон:</strong> ${validatedData.phone}</p>` : ''}
+                    ${validatedData.age ? `<p><strong>Възраст:</strong> ${validatedData.age}</p>` : ''}
+                    ${validatedData.address ? `<p><strong>Адрес:</strong> ${validatedData.address}</p>` : ''}
+                    ${validatedData.experience ? `<p><strong>Опит:</strong> ${validatedData.experience}</p>` : ''}
+                `;
+                messageContent = `
+                    <p><strong>Мотивация:</strong></p>
+                    <p>${validatedData.motivation || '—'}</p>
+                `;
+                break;
+
+            case 'volunteer':
+                emailTitle = 'Кандидатстване за доброволчество';
+                mainInfoContent = `
+                    <p><strong>Име:</strong> ${validatedData.name || '—'}</p>
+                    <p><strong>Имейл:</strong> <a href="mailto:${validatedData.email || ''}" style="color: #0066cc; text-decoration: underline;">${
+                    validatedData.email || '—'
+                }</a></p>
+                    ${validatedData.phone ? `<p><strong>Телефон:</strong> ${validatedData.phone}</p>` : ''}
+                    <p><strong>Умения:</strong> ${validatedData.skills || '—'}</p>
+                    <p><strong>Наличност:</strong> ${validatedData.availability || '—'}</p>
+                `;
+                messageContent = `
+                    <p><strong>Мотивация:</strong></p>
+                    <p>${validatedData.motivation || '—'}</p>
+                `;
+                break;
+
+            case 'partnership':
+                emailTitle = 'Запитване за партньорство';
+                mainInfoContent = `
+                    <p><strong>Организация:</strong> ${validatedData.organizationName || '—'}</p>
+                    <p><strong>Лице за контакт:</strong> ${validatedData.contactPerson || '—'}</p>
+                    <p><strong>Имейл:</strong> <a href="mailto:${validatedData.email || ''}" style="color: #0066cc; text-decoration: underline;">${
+                    validatedData.email || '—'
+                }</a></p>
+                    ${validatedData.phone ? `<p><strong>Телефон:</strong> ${validatedData.phone}</p>` : ''}
+                    <p><strong>Тип на предложението:</strong> ${validatedData.proposalType || '—'}</p>
+                `;
+                messageContent = `
+                    <p><strong>Описание:</strong></p>
+                    <p>${validatedData.description || '—'}</p>
+                `;
+                break;
+
+            case 'sponsorship':
+                emailTitle = 'Запитване за спонсорство';
+                mainInfoContent = `
+                    <p><strong>Компания:</strong> ${validatedData.companyName || '—'}</p>
+                    <p><strong>Лице за контакт:</strong> ${validatedData.contactPerson || '—'}</p>
+                    <p><strong>Имейл:</strong> <a href="mailto:${validatedData.email || ''}" style="color: #0066cc; text-decoration: underline;">${
+                    validatedData.email || '—'
+                }</a></p>
+                    ${validatedData.phone ? `<p><strong>Телефон:</strong> ${validatedData.phone}</p>` : ''}
+                    <p><strong>Тип на спонсорството:</strong> ${validatedData.sponsorshipType || '—'}</p>
+                    ${validatedData.amount ? `<p><strong>Сума:</strong> ${validatedData.amount}</p>` : ''}
+                `;
+                messageContent = `
+                    <p><strong>Описание:</strong></p>
+                    <p>${validatedData.description || '—'}</p>
+                `;
+                break;
+
+            case 'event':
+                emailTitle = 'Записване за събитие';
+                mainInfoContent = `
+                    <p><strong>ID на събитието:</strong> ${itemId}</p>
+                    <p><strong>Име:</strong> ${validatedData.name || '—'}</p>
+                    <p><strong>Имейл:</strong> <a href="mailto:${validatedData.email || ''}" style="color: #0066cc; text-decoration: underline;">${
+                    validatedData.email || '—'
+                }</a></p>
+                    ${validatedData.phone ? `<p><strong>Телефон:</strong> ${validatedData.phone}</p>` : ''}
+                    ${validatedData.numberOfParticipants ? `<p><strong>Брой участници:</strong> ${validatedData.numberOfParticipants}</p>` : ''}
+                `;
+                messageContent = `
+                    <p><strong>Специални искания:</strong></p>
+                    <p>${validatedData.specialRequests || '—'}</p>
+                `;
+                break;
+
+            case 'course':
+                emailTitle = 'Записване за курс';
+                mainInfoContent = `
+                    <p><strong>ID на курса:</strong> ${itemId}</p>
+                    <p><strong>Име:</strong> ${validatedData.name || '—'}</p>
+                    <p><strong>Имейл:</strong> <a href="mailto:${validatedData.email || ''}" style="color: #0066cc; text-decoration: underline;">${
+                    validatedData.email || '—'
+                }</a></p>
+                    ${validatedData.phone ? `<p><strong>Телефон:</strong> ${validatedData.phone}</p>` : ''}
+                    ${validatedData.experience ? `<p><strong>Опит:</strong> ${validatedData.experience}</p>` : ''}
+                `;
+                messageContent = `
+                    <p><strong>Очаквания:</strong></p>
+                    <p>${validatedData.expectations || '—'}</p>
+                `;
+                break;
+
+            case 'trip':
+                emailTitle = 'Записване за екскурзия';
+                mainInfoContent = `
+                    <p><strong>ID на екскурзията:</strong> ${itemId}</p>
+                    <p><strong>Име:</strong> ${validatedData.name || '—'}</p>
+                    <p><strong>Имейл:</strong> <a href="mailto:${validatedData.email || ''}" style="color: #0066cc; text-decoration: underline;">${
+                    validatedData.email || '—'
+                }</a></p>
+                    ${validatedData.phone ? `<p><strong>Телефон:</strong> ${validatedData.phone}</p>` : ''}
+                    ${validatedData.numberOfParticipants ? `<p><strong>Брой участници:</strong> ${validatedData.numberOfParticipants}</p>` : ''}
+                    ${validatedData.emergencyContact ? `<p><strong>Спешен контакт:</strong> ${validatedData.emergencyContact}</p>` : ''}
+                `;
+                messageContent = `
+                    <p><strong>Специални искания:</strong></p>
+                    <p>${validatedData.specialRequests || '—'}</p>
+                `;
+                break;
+
+            default:
+                throw new Error('Invalid form type');
+        }
+
+        const customFormattedBody = `
+            <html>
+                <body style="font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f9f9f9;">
+                    <div style="background: #fff; padding: 0; border-radius: 8px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); margin: 0; max-width: 100%;">
+                        <h2 style="color: #222; margin: 0 0 12px 0; text-align: center;">${emailTitle}</h2>
+                        <p style="color: #222; font-size: 16px; margin: 0 0 8px 0; text-align: center; font-weight: 500;">Клуб: <strong style="color: #000;">${
+                            club.name
+                        }</strong></p>
+                        ${
+                            formType === 'contact'
+                                ? `<p style="color: #222; font-size: 16px; margin: 0 0 12px 0; text-align: center; font-weight: 500;">Тема: <strong style="color: #000;">${
+                                      validatedData.subject || 'Без тема'
+                                  }</strong></p>`
+                                : ''
+                        }
+
+                        <table cellpadding="0" cellspacing="0" style="margin: 0 0 8px 0; width: 100%;">
+                            <tr>
+                                <td width="8" style="background: linear-gradient(to bottom, #f47920, #2986c7); background-color: #f47920; border-radius: 4px;">&nbsp;</td>
+                                <td style="padding: 4px 0 4px 12px; color: #222; font-size: 18px; font-weight: bold;">Основна Информация:</td>
+                            </tr>
+                        </table>
+                        <div style="background: #f7f7f7; padding: 8px; border-radius: 6px; color: #222; font-size: 16px; line-height: 1.2; max-height: 300px; overflow-y: auto; word-break: break-word; margin-bottom: 12px;">
+                            ${mainInfoContent}
+                        </div>
+
+                        <table cellpadding="0" cellspacing="0" style="margin: 0 0 8px 0; width: 100%;">
+                            <tr>
+                                <td width="8" style="background: linear-gradient(to bottom, #f47920, #2986c7); background-color: #f47920; border-radius: 4px;">&nbsp;</td>
+                                <td style="padding: 4px 0 4px 12px; color: #222; font-size: 18px; font-weight: bold;">Съобщение:</td>
+                            </tr>
+                        </table>
+                        <div style="background: #f7f7f7; padding: 8px; border-radius: 6px; color: #222; font-size: 16px; line-height: 1.2; max-height: 300px; overflow-y: auto; word-break: break-word;">
+                            ${messageContent}
+                        </div>
+                    </div>
+                </body>
+            </html>
+        `;
+
+        // Send email
+        try {
+            await forwardEmailsViaZoho({
+                userEmail: 'info@pensa.club',
+                subject: `${emailTitle} - ${club.name}`,
+                body: messageContent,
+                toAddresses: club.owner,
+                formattedBody: customFormattedBody,
+            });
+            return { emailSent: true };
+        } catch (emailError) {
+            try {
+                await forwardEmailsViaZoho({
+                    userEmail: 'info@pensa.club',
+                    subject: `EMAIL FAILED - ${emailTitle} - ${club.name}`,
+                    body: `Failed to send email to club owner ${club.owner} for club "${club.name}". Original message: ${messageContent}`,
+                    toAddresses: 'admin@pensa.club',
+                });
+            } catch (fallbackError) {
+                console.error('Failed to send fallback email notification:', fallbackError);
+            }
+            return { emailSent: false, emailError: emailError.message };
+        }
+    } catch (err) {
+        return { emailSent: false, emailError: err.message };
+    }
+};
+
 module.exports = {
     transformToDB,
     transformClub,
-    transformActivities,
     transformMemberToDB,
     transformActivityToDB,
     processClubAdminAction,
+    handleMailingFormEmail,
 };

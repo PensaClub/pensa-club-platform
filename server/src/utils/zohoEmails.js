@@ -18,7 +18,7 @@ async function sendResetEmail(email, resetToken) {
     return sendZohoEmailRaw(data);
 }
 
-async function forwardEmailsViaZoho({ userEmail, subject, body, toAddresses }) {
+async function forwardEmailsViaZoho({ userEmail, subject, body, toAddresses, formattedBody }) {
     const { user_account } = require('../sequelize/models');
     const admin = await user_account.findOne({
         where: { email: userEmail },
@@ -34,7 +34,9 @@ async function forwardEmailsViaZoho({ userEmail, subject, body, toAddresses }) {
     const adminName = admin?.details?.username || admin?.details?.firstName || 'Pensa Club Staff';
     const roleDisplay = admin?.role === 'admin' ? 'Администратор' : admin?.role === 'moderator' ? 'Модератор' : 'Персонал';
 
-    const formattedBody = `
+    const finalBody =
+        formattedBody ||
+        `
         <html>
             <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #f9f9f9;">
                 <div style="background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); margin-top: 20px;">
@@ -73,7 +75,7 @@ async function forwardEmailsViaZoho({ userEmail, subject, body, toAddresses }) {
         fromAddress: 'info@pensa.club',
         toAddress: Array.isArray(toAddresses) ? toAddresses.join(',') : toAddresses,
         subject: subject,
-        content: formattedBody,
+        content: finalBody,
     };
     return sendZohoEmailRaw(data);
 }

@@ -117,7 +117,7 @@ const BaseProjectSchema = z
         location: z.array(LocationSchema).nullable().optional(),
 
         // Application fields
-        applicationStatus: z.enum(['open', 'closed']).nullable().optional(),
+        applicationStatus: z.enum(['open', 'closed', 'coming-soon']).nullable().optional(),
         applicationDeadline: z
             .union([z.string(), z.date(), z.null()])
             .transform((val) => {
