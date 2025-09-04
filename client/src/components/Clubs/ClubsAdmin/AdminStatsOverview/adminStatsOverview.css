@@ -1,0 +1,414 @@
+/* AdminStatsOverview Container */
+.adminstatsoverview-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* Main Stats Cards */
+.adminstatsoverview-main-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.adminstatsoverview-stat-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  padding: 1.5rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.adminstatsoverview-stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+  animation: adminstatsoverview-shimmer 2s infinite;
+}
+
+.adminstatsoverview-stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.adminstatsoverview-stat-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.adminstatsoverview-stat-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.adminstatsoverview-stat-content {
+  flex: 1;
+}
+
+.adminstatsoverview-stat-value {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1e293b;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.adminstatsoverview-stat-percentage {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.adminstatsoverview-stat-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.adminstatsoverview-stat-description {
+  font-size: 0.8rem;
+  color: #64748b;
+  line-height: 1.4;
+  margin-bottom: 1rem;
+}
+
+.adminstatsoverview-progress-container {
+  margin-top: 1rem;
+}
+
+.adminstatsoverview-progress-bar {
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  overflow: hidden;
+  border: 1px solid;
+}
+
+.adminstatsoverview-progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: adminstatsoverview-progress-grow 1s ease-out;
+}
+
+/* Secondary Section */
+.adminstatsoverview-secondary-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.adminstatsoverview-section-title {
+  margin: 0 0 1.5rem 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Detailed Stats */
+.adminstatsoverview-detailed-stats {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  padding: 1.5rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.adminstatsoverview-detailed-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 1rem;
+}
+
+.adminstatsoverview-detailed-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1rem;
+  background: #f8fafc;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.adminstatsoverview-detailed-item:hover {
+  background: #f1f5f9;
+  transform: translateY(-2px);
+}
+
+.adminstatsoverview-detailed-icon {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.adminstatsoverview-detailed-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.25rem;
+}
+
+.adminstatsoverview-detailed-label {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* Insights Section */
+.adminstatsoverview-insights {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  padding: 1.5rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Health Score */
+.adminstatsoverview-health-score {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: #f8fafc;
+  border-radius: 12px;
+}
+
+.adminstatsoverview-health-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.adminstatsoverview-health-icon {
+  font-size: 1.5rem;
+  color: #3b82f6;
+}
+
+.adminstatsoverview-health-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.adminstatsoverview-health-value {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #1e293b;
+}
+
+.adminstatsoverview-health-bar {
+  width: 100%;
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 0.75rem;
+}
+
+.adminstatsoverview-health-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: adminstatsoverview-health-grow 1.5s ease-out;
+}
+
+.adminstatsoverview-health-description {
+  font-size: 0.8rem;
+  color: #64748b;
+  text-align: center;
+  font-weight: 500;
+}
+
+/* Key Metrics */
+.adminstatsoverview-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.adminstatsoverview-metric {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: #f8fafc;
+  border-radius: 12px;
+}
+
+.adminstatsoverview-metric-icon {
+  font-size: 1.25rem;
+  color: #3b82f6;
+}
+
+.adminstatsoverview-metric-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.adminstatsoverview-metric-label {
+  font-size: 0.75rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* Quick Insights */
+.adminstatsoverview-quick-insights {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.adminstatsoverview-insight {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.adminstatsoverview-insight.warning {
+  background: #fef3c7;
+  color: #92400e;
+  border-left: 3px solid #f59e0b;
+}
+
+.adminstatsoverview-insight.error {
+  background: #fef2f2;
+  color: #991b1b;
+  border-left: 3px solid #ef4444;
+}
+
+.adminstatsoverview-insight.info {
+  background: #dbeafe;
+  color: #1e40af;
+  border-left: 3px solid #3b82f6;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .adminstatsoverview-secondary-section {
+    grid-template-columns: 1fr;
+  }
+
+  .adminstatsoverview-main-stats {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .adminstatsoverview-container {
+    gap: 1.5rem;
+  }
+
+  .adminstatsoverview-main-stats {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .adminstatsoverview-stat-card {
+    padding: 1.25rem;
+  }
+
+  .adminstatsoverview-stat-value {
+    font-size: 1.75rem;
+  }
+
+  .adminstatsoverview-detailed-grid {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  }
+
+  .adminstatsoverview-metrics {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .adminstatsoverview-main-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .adminstatsoverview-stat-header {
+    gap: 0.75rem;
+  }
+
+  .adminstatsoverview-stat-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 1.25rem;
+  }
+
+  .adminstatsoverview-stat-value {
+    font-size: 1.5rem;
+  }
+
+  .adminstatsoverview-detailed-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Animations */
+@keyframes adminstatsoverview-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes adminstatsoverview-progress-grow {
+  from {
+    width: 0%;
+  }
+}
+
+@keyframes adminstatsoverview-health-grow {
+  from {
+    width: 0%;
+  }
+}
+
+.adminstatsoverview-container {
+  animation: adminstatsoverview-fade-in 0.6s ease-out;
+}
+
+@keyframes adminstatsoverview-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

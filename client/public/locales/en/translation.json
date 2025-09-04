@@ -10996,6 +10996,351 @@
       "clearButton": "Clear Filters", 
       "discoverButton": "Discover Clubs"
     }
+  },
+  "clubsAdmin": {
+    "title": "Clubs Administration",
+    "subtitle": "Manage all clubs in the system",
+    "loading": "Loading clubs...",
+    "searchPlaceholder": "Search by name, description, owner, location...",
+    "selectAll": "Select all on this page",
+    
+    "errors": {
+      "noAccess": "You don't have administrative rights to access this page",
+      "fetchFailed": "Failed to load clubs",
+      "title": "An error occurred"
+    },
+    
+    "sort": {
+      "newest": "Newest first",
+      "oldest": "Oldest first",
+      "name": "By name (A-Z)",
+      "status": "By status", 
+      "members": "By members",
+      "location": "By location"
+    },
+    
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next",
+      "info": "Page {{current}} of {{total}}"
+    },
+    
+    "empty": {
+      "title": "No clubs found",
+      "message": "No clubs match your search criteria",
+      "clearFilters": "Clear filters"
+    },
+    
+    "results": {
+      "showing": "Showing {{showing}} of {{total}} clubs (total {{allTotal}})"
+    }
+  },
+  "clubsAdmin": {
+    "title": "Clubs-Verwaltung",
+    "subtitle": "Verwalten Sie alle Clubs im System",
+    "loading": "Clubs werden geladen...",
+    "searchPlaceholder": "Suchen nach Name, Beschreibung, Besitzer, Ort...",
+    "selectAll": "Alle auf dieser Seite auswählen",
+    
+    "errors": {
+      "noAccess": "Sie haben keine Administratorrechte für den Zugriff auf diese Seite",
+      "fetchFailed": "Laden der Clubs fehlgeschlagen", 
+      "title": "Ein Fehler ist aufgetreten"
+    },
+    
+    "sort": {
+      "newest": "Neueste zuerst",
+      "oldest": "Älteste zuerst",
+      "name": "Nach Name (A-Z)",
+      "status": "Nach Status",
+      "members": "Nach Mitgliedern", 
+      "location": "Nach Ort"
+    },
+    
+    "pagination": {
+      "previous": "Vorherige",
+      "next": "Nächste",
+      "info": "Seite {{current}} von {{total}}"
+    },
+    
+    "empty": {
+      "title": "Keine Clubs gefunden",
+      "message": "Keine Clubs entsprechen Ihren Suchkriterien",
+      "clearFilters": "Filter löschen"
+    },
+    
+    "results": {
+      "showing": "Zeige {{showing}} von {{total}} Clubs (gesamt {{allTotal}})"
+    }
+  },
+   "adminClubCard": {
+    "verified": "Verified club",
+    "noDescription": "No description",
+    "noLocation": "No location",
+    "noOwner": "No owner",
+    "noDate": "No date",
+    "members": "members",
+    "created": "Created",
+    
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "draft": "Draft",
+      "suspended": "Suspended",
+      "rejected": "Rejected"
+    },
+    
+    "actions": {
+      "view": "View",
+      "edit": "Edit",
+      "changeStatus": "Change status",
+      "verify": "Verify",
+      "approve": "Approve",
+      "reject": "Reject"
+    },
+    
+    "rejectModal": {
+      "title": "Reject club",
+      "description": "Are you sure you want to reject club \"{{clubName}}\"?",
+      "reasonLabel": "Reason for rejection",
+      "reasonPlaceholder": "Enter the reason for rejection...",
+      "cancel": "Cancel",
+      "confirm": "Reject club",
+      "rejecting": "Rejecting..."
+    }
+  },
+  "adminStatsOverview": {
+    "cards": {
+      "total": {
+        "title": "Total clubs",
+        "description": "Total number of clubs in the system"
+      },
+      "active": {
+        "title": "Active",
+        "description": "Clubs with active status"
+      },
+      "pending": {
+        "title": "Pending",
+        "description": "Clubs awaiting approval"
+      },
+      "verified": {
+        "title": "Verified",
+        "description": "Verified clubs"
+      }
+    },
+    
+    "detailed": {
+      "title": "Detailed statistics",
+      "inactive": "Inactive",
+      "draft": "Draft",
+      "suspended": "Suspended",
+      "rejected": "Rejected",
+      "unverified": "Unverified"
+    },
+    
+    "insights": {
+      "title": "Insights and metrics",
+      "healthScore": "Health score",
+      "healthGood": "Excellent system condition",
+      "healthMedium": "Good condition, room for improvement",
+      "healthPoor": "System needs attention",
+      "avgMembers": "Average members",
+      "totalMembers": "Total members",
+      "pendingClubs": "{{count}} clubs awaiting approval",
+      "suspendedClubs": "{{count}} suspended clubs",
+      "lowVerification": "Low verification rate"
+    }
+  },
+  "adminClubFilters": {
+    "filterBy": "Filter by",
+    "clearFilter": "Clear filter",
+    "viewAll": "View all",
+    
+    "options": {
+      "all": "All clubs",
+      "active": "Active",
+      "inactive": "Inactive",
+      "draft": "Draft", 
+      "suspended": "Suspended",
+      "rejected": "Rejected",
+      "verified": "Verified",
+      "unverified": "Unverified",
+      "pending": "Pending approval"
+    },
+    
+    "descriptions": {
+      "all": "All clubs in the system",
+      "active": "Clubs with active status",
+      "inactive": "Clubs with inactive status", 
+      "draft": "Clubs in draft state",
+      "suspended": "Temporarily suspended clubs",
+      "rejected": "Rejected clubs",
+      "verified": "Verified by administrator",
+      "unverified": "Not yet verified",
+      "pending": "Awaiting administrative approval"
+    }
+  },
+  "adminSearchBar": {
+    "placeholder": "Search clubs by name, description, owner, location...",
+    "voiceSearch": "Voice search",
+    "advancedSearch": "Advanced search",
+    "clear": "Clear",
+    "recentSearches": "Recent searches",
+    "clearHistory": "Clear history",
+    "advancedFilters": "Advanced filters",
+    "search": "Search",
+    "reset": "Reset",
+    
+    "searchIn": {
+      "label": "Search in",
+      "all": "All fields",
+      "name": "Club name",
+      "description": "Description",
+      "location": "Location",
+      "owner": "Owner"
+    },
+    
+    "dateRange": {
+      "label": "Date range",
+      "any": "Any time",
+      "today": "Today",
+      "week": "This week",
+      "month": "This month",
+      "year": "This year"
+    },
+    
+    "shortcuts": {
+      "esc": "ESC to clear/close"
+    }
+  },
+  "adminClubActions": {
+    "selected": "{{count}} selected",
+    "bulkAction": "Bulk action",
+    "processing": "Processing...",
+    "cancel": "Cancel",
+    "confirmAction": "Confirm action on {{count}} clubs",
+    "affectedClubs": "{{count}} clubs will be affected",
+    "newStatus": "New status",
+    
+    "buttons": {
+      "approve": "Approve",
+      "changeStatus": "Change status",
+      "delete": "Delete"
+    },
+    
+    "tooltips": {
+      "approve": "Approve selected clubs",
+      "changeStatus": "Change status of selected clubs",
+      "delete": "Delete selected clubs",
+      "clear": "Clear selection"
+    },
+    
+    "statusOptions": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "suspended": "Suspended"
+    },
+    
+    "actions": {
+      "approve": {
+        "title": "Approve clubs",
+        "description": "Selected clubs will be approved and activated. Their owners will receive email notifications.",
+        "confirm": "Approve clubs",
+        "button": "Approve all"
+      },
+      "delete": {
+        "title": "Delete clubs",
+        "description": "Selected clubs will be permanently deleted. This action cannot be undone!",
+        "confirm": "Delete clubs",
+        "button": "Delete all"
+      },
+      "updateStatus": {
+        "title": "Change status",
+        "description": "The status of selected clubs will be changed. Their owners will receive notifications.",
+        "confirm": "Change status",
+        "button": "Apply changes"
+      }
+    }
+  },
+  "adminClubModal": {
+    "cancel": "Cancel",
+    "processing": "Processing...",
+    "members": "members", 
+    "verified": "Verified",
+    "warningTitle": "Warning!",
+    "infoTitle": "Information",
+    "dangerousAction": "This action may have serious consequences.",
+    "actionInfo": "Please review carefully before proceeding.",
+    
+    "statuses": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "draft": "Draft", 
+      "suspended": "Suspended",
+      "rejected": "Rejected"
+    },
+    
+    "reject": {
+      "title": "Reject club",
+      "description": "Are you sure you want to reject club \"{{clubName}}\"?",
+      "confirm": "Reject club"
+    },
+    
+    "approve": {
+      "title": "Approve club",
+      "description": "Club \"{{clubName}}\" will be approved and activated.",
+      "confirm": "Approve club"
+    },
+    
+    "delete": {
+      "title": "Delete club",
+      "description": "Club \"{{clubName}}\" will be permanently deleted. This action cannot be undone!",
+      "confirm": "Delete club"
+    },
+    
+    "verify": {
+      "title": "Verify club",
+      "description": "Club \"{{clubName}}\" will be marked as verified.",
+      "confirm": "Verify club"
+    },
+    
+    "status": {
+      "title": "Change status",
+      "description": "The status of club \"{{clubName}}\" will be changed to {{status}}.",
+      "confirm": "Change status"
+    },
+    
+    "transfer": {
+      "title": "Transfer ownership",
+      "description": "Ownership of club \"{{clubName}}\" will be transferred.",
+      "confirm": "Transfer ownership"
+    },
+    
+    "fields": {
+      "reason": {
+        "label": "Reason for rejection",
+        "placeholder": "Enter a detailed reason for rejection..."
+      },
+      "email": {
+        "label": "New owner's email",
+        "placeholder": "example@email.com"
+      },
+      "confirmation": {
+        "label": "Confirmation",
+        "instruction": "Please type \"{{clubName}}\" to confirm:"
+      }
+    },
+    
+    "validation": {
+      "reasonRequired": "Reason is required",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Invalid email format",
+      "confirmationMismatch": "Confirmation does not match club name"
+    },
+    
+    "statusChange": {
+      "info": "New status will be: {{status}}"
+    }
   }
 
 }

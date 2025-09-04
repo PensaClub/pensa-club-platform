@@ -1,0 +1,610 @@
+/* AdminClubCard Container */
+.adminclubcard-wrapper {
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.adminclubcard-wrapper.selected {
+  transform: scale(1.02);
+}
+
+.adminclubcard-container {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 2px solid transparent;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.adminclubcard-wrapper.selected .adminclubcard-container {
+  border-color: #667eea;
+  box-shadow: 0 8px 30px rgba(102, 126, 234, 0.2);
+}
+
+.adminclubcard-container:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* Selection Checkbox */
+.adminclubcard-selection {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 10;
+}
+
+.adminclubcard-checkbox {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.adminclubcard-checkbox input[type="checkbox"] {
+  display: none;
+}
+
+.adminclubcard-checkmark {
+  width: 24px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 2px solid #e2e8f0;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  backdrop-filter: blur(10px);
+}
+
+.adminclubcard-checkbox input[type="checkbox"]:checked + .adminclubcard-checkmark {
+  background: #667eea;
+  border-color: #667eea;
+}
+
+.adminclubcard-checkbox input[type="checkbox"]:checked + .adminclubcard-checkmark::after {
+  content: '✓';
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* Header */
+.adminclubcard-header {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+
+.adminclubcard-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.adminclubcard-container:hover .adminclubcard-image {
+  transform: scale(1.05);
+}
+
+/* Verification Badge */
+.adminclubcard-verified-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(16, 185, 129, 0.9);
+  color: white;
+  padding: 0.5rem;
+  border-radius: 50%;
+  backdrop-filter: blur(10px);
+  font-size: 0.9rem;
+  z-index: 5;
+}
+
+/* Overlay and Quick Actions */
+.adminclubcard-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent 50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 1rem;
+}
+
+.adminclubcard-container:hover .adminclubcard-overlay {
+  opacity: 1;
+}
+
+.adminclubcard-quick-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.adminclubcard-action-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  color: #334155;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  backdrop-filter: blur(10px);
+}
+
+.adminclubcard-action-btn:hover:not(:disabled) {
+  background: white;
+  transform: scale(1.1);
+}
+
+.adminclubcard-action-btn--view:hover {
+  color: #3b82f6;
+}
+
+.adminclubcard-action-btn--edit:hover {
+  color: #f59e0b;
+}
+
+.adminclubcard-action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Content */
+.adminclubcard-content {
+  padding: 1.5rem;
+}
+
+/* Title and Status Section */
+.adminclubcard-title-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+.adminclubcard-title {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.3;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.adminclubcard-status-section {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.adminclubcard-status-badge {
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.adminclubcard-status-dropdown {
+  position: relative;
+}
+
+.adminclubcard-status-toggle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: #f1f5f9;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.adminclubcard-status-toggle:hover:not(:disabled) {
+  background: #e2e8f0;
+  color: #475569;
+}
+
+.adminclubcard-status-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  z-index: 20;
+  min-width: 160px;
+  padding: 0.5rem 0;
+  animation: adminclubcard-menu-appear 0.2s ease-out;
+}
+
+.adminclubcard-status-option {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  border: none;
+  background: none;
+  color: #334155;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  transition: background-color 0.2s;
+}
+
+.adminclubcard-status-option:hover:not(:disabled) {
+  background: #f8fafc;
+}
+
+.adminclubcard-status-option:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.adminclubcard-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+/* Description */
+.adminclubcard-description {
+  margin: 0 0 1rem 0;
+  color: #64748b;
+  line-height: 1.6;
+  font-size: 0.9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+/* Meta Information */
+.adminclubcard-meta {
+  margin-bottom: 1.5rem;
+}
+
+.adminclubcard-meta-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.adminclubcard-meta-row:last-child {
+  margin-bottom: 0;
+}
+
+.adminclubcard-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #64748b;
+  font-size: 0.8rem;
+  flex: 1;
+}
+
+.adminclubcard-meta-item svg {
+  color: #94a3b8;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+.adminclubcard-owner-email {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Admin Actions */
+.adminclubcard-admin-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 1rem;
+}
+
+.adminclubcard-admin-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+  flex: 1;
+  min-width: fit-content;
+  justify-content: center;
+}
+
+.adminclubcard-admin-btn--verify {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+}
+
+.adminclubcard-admin-btn--verify:hover:not(:disabled) {
+  background: linear-gradient(135deg, #059669, #047857);
+  transform: translateY(-1px);
+}
+
+.adminclubcard-admin-btn--approve {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+}
+
+.adminclubcard-admin-btn--approve:hover:not(:disabled) {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  transform: translateY(-1px);
+}
+
+.adminclubcard-admin-btn--reject {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+}
+
+.adminclubcard-admin-btn--reject:hover:not(:disabled) {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  transform: translateY(-1px);
+}
+
+.adminclubcard-admin-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Modal Styles */
+.adminclubcard-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  animation: adminclubcard-fade-in 0.2s ease-out;
+}
+
+.adminclubcard-modal {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: adminclubcard-slide-up 0.3s ease-out;
+}
+
+.adminclubcard-modal-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem 2rem 1rem 2rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.adminclubcard-modal-icon {
+  font-size: 1.75rem;
+  color: #f59e0b;
+}
+
+.adminclubcard-modal-header h3 {
+  margin: 0;
+  color: #1f2937;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.adminclubcard-modal-body {
+  padding: 1.5rem 2rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.adminclubcard-modal-body p {
+  margin: 0 0 1.5rem 0;
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+.adminclubcard-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.adminclubcard-form-group label {
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.9rem;
+}
+
+.adminclubcard-textarea {
+  padding: 0.75rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.adminclubcard-textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.adminclubcard-textarea:disabled {
+  background: #f9fafb;
+  color: #6b7280;
+  cursor: not-allowed;
+}
+
+.adminclubcard-modal-footer {
+  padding: 1.5rem 2rem;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.adminclubcard-modal-btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: none;
+  min-width: 120px;
+  justify-content: center;
+}
+
+.adminclubcard-modal-btn--cancel {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.adminclubcard-modal-btn--cancel:hover:not(:disabled) {
+  background: #e5e7eb;
+}
+
+.adminclubcard-modal-btn--reject {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+}
+
+.adminclubcard-modal-btn--reject:hover:not(:disabled) {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  transform: translateY(-1px);
+}
+
+.adminclubcard-modal-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .adminclubcard-admin-actions {
+    flex-direction: column;
+  }
+
+  .adminclubcard-admin-btn {
+    flex: none;
+  }
+
+  .adminclubcard-meta-row {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .adminclubcard-title-section {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .adminclubcard-modal {
+    margin: 0.5rem;
+    max-width: none;
+  }
+
+  .adminclubcard-modal-footer {
+    flex-direction: column;
+  }
+
+  .adminclubcard-modal-btn {
+    min-width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .adminclubcard-content {
+    padding: 1rem;
+  }
+
+  .adminclubcard-header {
+    height: 160px;
+  }
+
+  .adminclubcard-quick-actions {
+    gap: 0.25rem;
+  }
+
+  .adminclubcard-action-btn {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* Animations */
+@keyframes adminclubcard-menu-appear {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes adminclubcard-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes adminclubcard-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

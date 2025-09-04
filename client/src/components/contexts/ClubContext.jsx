@@ -872,7 +872,283 @@ export const ClubProvider = ({ children }) => {
   const clearCurrentClub = () => {
     setCurrentClub(null);
   };
+  // ===============================
+  // 🆕 АДМИНИСТРАТИВНИ ФУНКЦИИ
+  // ===============================
 
+  const toggleClubStatus = async (identifier, status) => {
+    if (!isAdmin) {
+      console.warn('Потребителят не е администратор, не може да променя статус на клуб');
+      notify('unauthorized-action');
+      return false;
+    }
+
+    try {
+      setIsLoading(true);
+
+      const updatedClub = await clubService.toggleClubStatus(identifier, status);
+
+      // Актуализиране на локалното състояние
+      setClubs(prevClubs =>
+        prevClubs.map(club =>
+          club.id === identifier || club.slug === identifier ? updatedClub : club
+        )
+      );
+
+      if (currentClub && (currentClub.id === identifier || currentClub.slug === identifier)) {
+        setCurrentClub(updatedClub);
+      }
+
+      invalidateClubsCache();
+      notify('success', `Статусът на клуба беше променен на: ${status}`);
+      return updatedClub;
+    } catch (e) {
+      console.error('Грешка при промяна на статус:', e);
+      notify('error', e.message);
+      showErrorAndSetTimeouts(e.message);
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const verifyClub = async (identifier) => {
+    if (!isAdmin) {
+      console.warn('Потребителят не е администратор, не може да верифицира клуб');
+      notify('unauthorized-action');
+      return false;
+    }
+
+    try {
+      setIsLoading(true);
+
+      const verifiedClub = await clubService.verifyClub(identifier);
+
+      // Актуализиране на локалното състояние
+      setClubs(prevClubs =>
+        prevClubs.map(club =>
+          club.id === identifier || club.slug === identifier ? verifiedClub : club
+        )
+      );
+
+      if (currentClub && (currentClub.id === identifier || currentClub.slug === identifier)) {
+        setCurrentClub(verifiedClub);
+      }
+
+      invalidateClubsCache();
+      notify('success', 'Клубът беше успешно верифициран');
+      return verifiedClub;
+    } catch (e) {
+      console.error('Грешка при верифициране:', e);
+      notify('error', e.message);
+      showErrorAndSetTimeouts(e.message);
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const approveClub = async (identifier) => {
+    if (!isAdmin) {
+      console.warn('Потребителят не е администратор, не може да одобрява клубове');
+      notify('unauthorized-action');
+      return false;
+    }
+
+    try {
+      setIsLoading(true);
+
+      const approvedClub = await clubService.approveClub(identifier);
+
+      // Актуализиране на локалното състояние
+      setClubs(prevClubs =>
+        prevClubs.map(club =>
+          club.id === identifier || club.slug === identifier ? approvedClub : club
+        )
+      );
+
+      if (currentClub && (currentClub.id === identifier || currentClub.slug === identifier)) {
+        setCurrentClub(approvedClub);
+      }
+
+      invalidateClubsCache();
+      notify('success', 'Клубът беше успешно одобрен');
+      return approvedClub;
+    } catch (e) {
+      console.error('Грешка при одобрение:', e);
+      notify('error', e.message);
+      showErrorAndSetTimeouts(e.message);
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const rejectClub = async (identifier, reason) => {
+    if (!isAdmin) {
+      console.warn('Потребителят не е администратор, не може да отхвърля клубове');
+      notify('unauthorized-action');
+      return false;
+    }
+
+    if (!reason?.trim()) {
+      notify('error', 'Моля, въведете причина за отхвърлянето');
+      return false;
+    }
+
+    try {
+      setIsLoading(true);
+
+      const result = await clubService.rejectClub(identifier, reason);
+
+      // Актуализиране на локалното състояние
+      setClubs(prevClubs =>
+        prevClubs.map(club =>
+          club.id === identifier || club.slug === identifier
+            ? { ...club, status: 'rejected' }
+            : club
+        )
+      );
+
+      if (currentClub && (currentClub.id === identifier || currentClub.slug === identifier)) {
+        setCurrentClub(prev => prev ? { ...prev, status: 'rejected' } : prev);
+      }
+
+      invalidateClubsCache();
+      notify('success', 'Клубът беше отхвърлен');
+      return result;
+    } catch (e) {
+      console.error('Грешка при отхвърляне:', e);
+      notify('error', e.message);
+      showErrorAndSetTimeouts(e.message);
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const bulkUpdateClubs = async (clubIds, updateData) => {
+    if (!isAdmin) {
+      console.warn('Потребителят не е администратор, не може да прави bulk операции');
+      notify('unauthorized-action');
+      return false;
+    }
+
+    if (!Array.isArray(clubIds) || clubIds.length === 0) {
+      notify('error', 'Моля, изберете клубове за актуализация');
+      return false;
+    }
+
+    try {
+      setIsLoading(true);
+
+      const updatedClubs = await clubService.bulkUpdateClubs(clubIds, updateData);
+
+      // Актуализиране на локалното състояние
+      setClubs(prevClubs =>
+        prevClubs.map(club => {
+          const updatedClub = updatedClubs.find(updated =>
+            updated.id === club.id || updated.slug === club.slug
+          );
+          return updatedClub || club;
+        })
+      );
+
+      invalidateClubsCache();
+      notify('success', `${updatedClubs.length} клуба бяха актуализирани успешно`);
+      return updatedClubs;
+    } catch (e) {
+      console.error('Грешка при bulk актуализация:', e);
+      notify('error', e.message);
+      showErrorAndSetTimeouts(e.message);
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const bulkApproveClubs = async (clubIds) => {
+    if (!isAdmin) {
+      console.warn('Потребителят не е администратор, не може да прави bulk одобрения');
+      notify('unauthorized-action');
+      return false;
+    }
+
+    if (!Array.isArray(clubIds) || clubIds.length === 0) {
+      notify('error', 'Моля, изберете клубове за одобрение');
+      return false;
+    }
+
+    try {
+      setIsLoading(true);
+
+      const approvedClubs = await clubService.bulkApproveClubs(clubIds);
+
+      // Актуализиране на локалното състояние
+      setClubs(prevClubs =>
+        prevClubs.map(club => {
+          const approvedClub = approvedClubs.find(approved =>
+            approved.id === club.id || approved.slug === club.slug
+          );
+          return approvedClub || club;
+        })
+      );
+
+      invalidateClubsCache();
+      notify('success', `${approvedClubs.length} клуба бяха одобрени успешно`);
+      return approvedClubs;
+    } catch (e) {
+      console.error('Грешка при bulk одобрение:', e);
+      notify('error', e.message);
+      showErrorAndSetTimeouts(e.message);
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const bulkDeleteClubs = async (clubIds) => {
+    if (!isAdmin) {
+      console.warn('Потребителят не е администратор, не може да прави bulk изтривания');
+      notify('unauthorized-action');
+      return false;
+    }
+
+    if (!Array.isArray(clubIds) || clubIds.length === 0) {
+      notify('error', 'Моля, изберете клубове за изтриване');
+      return false;
+    }
+
+    try {
+      setIsLoading(true);
+
+      await clubService.bulkDeleteClubs(clubIds);
+
+      // Премахваме изтритите клубове от локалното състояние
+      setClubs(prevClubs =>
+        prevClubs.filter(club =>
+          !clubIds.includes(club.id) && !clubIds.includes(club.slug)
+        )
+      );
+
+      // Ако текущия клуб е сред изтритите
+      if (currentClub &&
+        (clubIds.includes(currentClub.id) || clubIds.includes(currentClub.slug))) {
+        setCurrentClub(null);
+      }
+
+      invalidateClubsCache();
+      notify('success', `${clubIds.length} клуба бяха изтрити успешно`);
+      return true;
+    } catch (e) {
+      console.error('Грешка при bulk изтриване:', e);
+      notify('error', e.message);
+      showErrorAndSetTimeouts(e.message);
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
   // Context service обект
   const contextService = {
     // ===============================
@@ -953,7 +1229,16 @@ export const ClubProvider = ({ children }) => {
     isLoading,
     clubsLoaded,
     errorMessage,
-
+    // ===============================
+    // АДМИНИСТРАТИВНИ ФУНКЦИИ
+    // ===============================
+    toggleClubStatus,      // 🆕 Admin only
+    verifyClub,           // 🆕 Admin only  
+    approveClub,          // 🆕 Admin only
+    rejectClub,           // 🆕 Admin only
+    bulkUpdateClubs,      // 🆕 Admin only
+    bulkApproveClubs,     // 🆕 Admin only
+    bulkDeleteClubs,      // 🆕 Admin only
     // ===============================
     // 🆕 ДИРЕКТЕН ДОСТЪП ДО SERVICE
     // ===============================

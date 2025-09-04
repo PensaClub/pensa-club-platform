@@ -71,6 +71,7 @@ import ClubCreateForm from "../Clubs/ClubCreateForm/ClubCreateForm";
 import MyClubs from "../Clubs/MyClubs/MyClubs";
 import DraftClubs from "../Clubs/DraftClubs/DraftClubs";
 import MembershipClubs from "../Clubs/MembershipClubs/MembershipClubs";
+import ClubsAdmin from "../Clubs/ClubsAdmin/ClubsAdmin";
 // import { InitiativePreviewPage } from "../Initiatives/CreateIniciative/InitiativePreviewPage/InitiativePreviewPage";
 
 export const Profile = () => {
@@ -975,7 +976,7 @@ export const Profile = () => {
             <Route path="publications" element={<ManagementGuard><AllPublications /></ManagementGuard>} />
             <Route path="initiative-drafts" element={<ManagementGuard><DraftInitiatives /></ManagementGuard>} />
             <Route path="publication-create" element={<ManagementGuard><PublicationForm /></ManagementGuard>} />
-            {/* <Route path="clubs-admin" element={<AdminGuard><ClubsAdmin /></AdminGuard>} /> */}
+            <Route path="clubs-admin" element={<AdminGuard><ClubsAdmin /></AdminGuard>} />
             {/* <Route path="/profile/initiative-edit/:id" element={<ManagementGuard><AllInitiatives isEditMode={true}/></ManagementGuard>} /> */}
 
             {/* <Route path="initiative-preview" element={<ManagementGuard><InitiativePreviewPage /></ManagementGuard>}  /> */}

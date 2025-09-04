@@ -10527,5 +10527,312 @@
       "clearButton": "Filter Löschen",
       "discoverButton": "Vereine Entdecken"
     }
+  },
+   "adminClubCard": {
+    "verified": "Verifizierter Club",
+    "noDescription": "Keine Beschreibung",
+    "noLocation": "Kein Standort",
+    "noOwner": "Kein Besitzer",
+    "noDate": "Kein Datum",
+    "members": "Mitglieder",
+    "created": "Erstellt",
+    
+    "status": {
+      "active": "Aktiv",
+      "inactive": "Inaktiv",
+      "draft": "Entwurf",
+      "suspended": "Gesperrt",
+      "rejected": "Abgelehnt"
+    },
+    
+    "actions": {
+      "view": "Ansehen",
+      "edit": "Bearbeiten",
+      "changeStatus": "Status ändern",
+      "verify": "Verifizieren",
+      "approve": "Genehmigen",
+      "reject": "Ablehnen"
+    },
+    
+    "rejectModal": {
+      "title": "Club ablehnen",
+      "description": "Sind Sie sicher, dass Sie den Club \"{{clubName}}\" ablehnen möchten?",
+      "reasonLabel": "Grund für Ablehnung",
+      "reasonPlaceholder": "Geben Sie den Grund für die Ablehnung ein...",
+      "cancel": "Abbrechen",
+      "confirm": "Club ablehnen",
+      "rejecting": "Ablehnung läuft..."
+    }
+  },
+   "clubsAdmin": {
+    "title": "Clubs-Verwaltung",
+    "subtitle": "Verwalten Sie alle Clubs im System",
+    "loading": "Clubs werden geladen...",
+    "searchPlaceholder": "Suchen nach Name, Beschreibung, Besitzer, Ort...",
+    "selectAll": "Alle auf dieser Seite auswählen",
+    
+    "errors": {
+      "noAccess": "Sie haben keine Administratorrechte für den Zugriff auf diese Seite",
+      "fetchFailed": "Laden der Clubs fehlgeschlagen", 
+      "title": "Ein Fehler ist aufgetreten"
+    },
+    
+    "sort": {
+      "newest": "Neueste zuerst",
+      "oldest": "Älteste zuerst",
+      "name": "Nach Name (A-Z)",
+      "status": "Nach Status",
+      "members": "Nach Mitgliedern", 
+      "location": "Nach Ort"
+    },
+    
+    "pagination": {
+      "previous": "Vorherige",
+      "next": "Nächste",
+      "info": "Seite {{current}} von {{total}}"
+    },
+    
+    "empty": {
+      "title": "Keine Clubs gefunden",
+      "message": "Keine Clubs entsprechen Ihren Suchkriterien",
+      "clearFilters": "Filter löschen"
+    },
+    
+    "results": {
+      "showing": "Zeige {{showing}} von {{total}} Clubs (gesamt {{allTotal}})"
+    }
+  },
+  "adminStatsOverview": {
+    "cards": {
+      "total": {
+        "title": "Clubs insgesamt",
+        "description": "Gesamtzahl der Clubs im System"
+      },
+      "active": {
+        "title": "Aktiv",
+        "description": "Clubs mit aktivem Status"
+      },
+      "pending": {
+        "title": "Wartend",
+        "description": "Clubs, die auf Genehmigung warten"
+      },
+      "verified": {
+        "title": "Verifiziert",
+        "description": "Verifizierte Clubs"
+      }
+    },
+    
+    "detailed": {
+      "title": "Detaillierte Statistiken",
+      "inactive": "Inaktiv",
+      "draft": "Entwurf",
+      "suspended": "Gesperrt",
+      "rejected": "Abgelehnt",
+      "unverified": "Unverifiziert"
+    },
+    
+    "insights": {
+      "title": "Einblicke und Metriken",
+      "healthScore": "Gesundheitsbewertung",
+      "healthGood": "Ausgezeichneter Systemzustand",
+      "healthMedium": "Guter Zustand, Verbesserungspotenzial vorhanden",
+      "healthPoor": "System benötigt Aufmerksamkeit",
+      "avgMembers": "Durchschnittliche Mitglieder",
+      "totalMembers": "Mitglieder insgesamt",
+      "pendingClubs": "{{count}} Clubs warten auf Genehmigung",
+      "suspendedClubs": "{{count}} gesperrte Clubs",
+      "lowVerification": "Niedrige Verifizierungsrate"
+    }
+  },
+  "adminClubFilters": {
+    "filterBy": "Filtern nach",
+    "clearFilter": "Filter löschen", 
+    "viewAll": "Alle anzeigen",
+    
+    "options": {
+      "all": "Alle Clubs",
+      "active": "Aktiv",
+      "inactive": "Inaktiv",
+      "draft": "Entwurf",
+      "suspended": "Gesperrt",
+      "rejected": "Abgelehnt", 
+      "verified": "Verifiziert",
+      "unverified": "Unverifiziert",
+      "pending": "Wartend auf Genehmigung"
+    },
+    
+    "descriptions": {
+      "all": "Alle Clubs im System",
+      "active": "Clubs mit aktivem Status",
+      "inactive": "Clubs mit inaktivem Status",
+      "draft": "Clubs im Entwurfszustand",
+      "suspended": "Temporär gesperrte Clubs",
+      "rejected": "Abgelehnte Clubs",
+      "verified": "Vom Administrator verifiziert",
+      "unverified": "Noch nicht verifiziert", 
+      "pending": "Warten auf administrative Genehmigung"
+    }
+  },
+  "adminSearchBar": {
+    "placeholder": "Clubs nach Name, Beschreibung, Besitzer, Ort suchen...",
+    "voiceSearch": "Sprachsuche",
+    "advancedSearch": "Erweiterte Suche",
+    "clear": "Löschen",
+    "recentSearches": "Letzte Suchanfragen",
+    "clearHistory": "Verlauf löschen",
+    "advancedFilters": "Erweiterte Filter",
+    "search": "Suchen",
+    "reset": "Zurücksetzen",
+    
+    "searchIn": {
+      "label": "Suchen in",
+      "all": "Alle Felder",
+      "name": "Club-Name",
+      "description": "Beschreibung",
+      "location": "Standort",
+      "owner": "Besitzer"
+    },
+    
+    "dateRange": {
+      "label": "Zeitraum",
+      "any": "Jederzeit",
+      "today": "Heute",
+      "week": "Diese Woche",
+      "month": "Diesen Monat",
+      "year": "Dieses Jahr"
+    },
+    
+    "shortcuts": {
+      "esc": "ESC zum Löschen/Schließen"
+    }
+  },
+  "adminClubActions": {
+    "selected": "{{count}} ausgewählt",
+    "bulkAction": "Massenoperation",
+    "processing": "Verarbeitung...",
+    "cancel": "Abbrechen",
+    "confirmAction": "Aktion für {{count}} Clubs bestätigen",
+    "affectedClubs": "{{count}} Clubs werden betroffen sein",
+    "newStatus": "Neuer Status",
+    
+    "buttons": {
+      "approve": "Genehmigen",
+      "changeStatus": "Status ändern",
+      "delete": "Löschen"
+    },
+    
+    "tooltips": {
+      "approve": "Ausgewählte Clubs genehmigen",
+      "changeStatus": "Status ausgewählter Clubs ändern",
+      "delete": "Ausgewählte Clubs löschen",
+      "clear": "Auswahl löschen"
+    },
+    
+    "statusOptions": {
+      "active": "Aktiv",
+      "inactive": "Inaktiv", 
+      "suspended": "Gesperrt"
+    },
+    
+    "actions": {
+      "approve": {
+        "title": "Clubs genehmigen",
+        "description": "Ausgewählte Clubs werden genehmigt und aktiviert. Ihre Besitzer erhalten E-Mail-Benachrichtigungen.",
+        "confirm": "Clubs genehmigen",
+        "button": "Alle genehmigen"
+      },
+      "delete": {
+        "title": "Clubs löschen",
+        "description": "Ausgewählte Clubs werden dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden!",
+        "confirm": "Clubs löschen",
+        "button": "Alle löschen"
+      },
+      "updateStatus": {
+        "title": "Status ändern",
+        "description": "Der Status der ausgewählten Clubs wird geändert. Ihre Besitzer erhalten Benachrichtigungen.",
+        "confirm": "Status ändern",
+        "button": "Änderungen anwenden"
+      }
+    }
+  },
+  "adminClubModal": {
+    "cancel": "Abbrechen",
+    "processing": "Verarbeitung...",
+    "members": "Mitglieder",
+    "verified": "Verifiziert", 
+    "warningTitle": "Warnung!",
+    "infoTitle": "Information",
+    "dangerousAction": "Diese Aktion kann schwerwiegende Folgen haben.",
+    "actionInfo": "Bitte überprüfen Sie sorgfältig, bevor Sie fortfahren.",
+    
+    "statuses": {
+      "active": "Aktiv",
+      "inactive": "Inaktiv",
+      "draft": "Entwurf",
+      "suspended": "Gesperrt",
+      "rejected": "Abgelehnt"
+    },
+    
+    "reject": {
+      "title": "Club ablehnen",
+      "description": "Sind Sie sicher, dass Sie den Club \"{{clubName}}\" ablehnen möchten?",
+      "confirm": "Club ablehnen"
+    },
+    
+    "approve": {
+      "title": "Club genehmigen",
+      "description": "Club \"{{clubName}}\" wird genehmigt und aktiviert.",
+      "confirm": "Club genehmigen"
+    },
+    
+    "delete": {
+      "title": "Club löschen",
+      "description": "Club \"{{clubName}}\" wird dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden!",
+      "confirm": "Club löschen"
+    },
+    
+    "verify": {
+      "title": "Club verifizieren",
+      "description": "Club \"{{clubName}}\" wird als verifiziert markiert.",
+      "confirm": "Club verifizieren"
+    },
+    
+    "status": {
+      "title": "Status ändern",
+      "description": "Der Status des Clubs \"{{clubName}}\" wird auf {{status}} geändert.",
+      "confirm": "Status ändern"
+    },
+    
+    "transfer": {
+      "title": "Besitz übertragen",
+      "description": "Das Eigentum an Club \"{{clubName}}\" wird übertragen.",
+      "confirm": "Besitz übertragen"
+    },
+    
+    "fields": {
+      "reason": {
+        "label": "Grund für Ablehnung",
+        "placeholder": "Geben Sie einen detaillierten Grund für die Ablehnung ein..."
+      },
+      "email": {
+        "label": "E-Mail des neuen Besitzers",
+        "placeholder": "example@email.com"
+      },
+      "confirmation": {
+        "label": "Bestätigung",
+        "instruction": "Bitte geben Sie \"{{clubName}}\" zur Bestätigung ein:"
+      }
+    },
+    
+    "validation": {
+      "reasonRequired": "Grund ist erforderlich",
+      "emailRequired": "E-Mail ist erforderlich",
+      "emailInvalid": "Ungültiges E-Mail-Format",
+      "confirmationMismatch": "Bestätigung stimmt nicht mit dem Club-Namen überein"
+    },
+    
+    "statusChange": {
+      "info": "Neuer Status wird sein: {{status}}"
+    }
   }
 }
