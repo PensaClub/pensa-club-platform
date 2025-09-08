@@ -913,3 +913,138 @@
     font-size: 1rem;
   }
 }
+/* Контактна форма модал */
+.general-contact-modal {
+  max-width: 600px;
+}
+
+.general-contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.general-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.general-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.general-form-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: #1a202c;
+  font-size: 0.9rem;
+}
+
+.general-form-group label .required {
+  color: #ef4444;
+}
+
+.general-form-group input,
+.general-form-group select,
+.general-form-group textarea {
+  padding: 0.75rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.general-form-group input:focus,
+.general-form-group select:focus,
+.general-form-group textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.general-form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.general-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.general-btn-primary,
+.general-btn-secondary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.general-btn-primary {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+}
+
+.general-btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+}
+
+.general-btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.general-btn-secondary {
+  background: #f8fafc;
+  color: #4a5568;
+  border: 1px solid #e2e8f0;
+}
+
+.general-btn-secondary:hover:not(:disabled) {
+  background: #e2e8f0;
+}
+
+.general-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: generalSpin 1s linear infinite;
+}
+
+@keyframes generalSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive за контактната форма */
+@media (max-width: 768px) {
+  .general-form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .general-form-actions {
+    flex-direction: column;
+  }
+  
+  .general-contact-modal {
+    margin: 1rem;
+    max-width: none;
+  }
+}

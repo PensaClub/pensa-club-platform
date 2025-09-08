@@ -1,0 +1,346 @@
+/* Transfer Ownership Modal */
+.transfer-ownership-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.transfer-ownership-modal {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.transfer-ownership-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 2rem 2rem 1rem 2rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.transfer-ownership-modal-title-section {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  flex: 1;
+}
+
+.transfer-ownership-modal-icon {
+  font-size: 1.75rem;
+  color: #f59e0b;
+  margin-top: 0.25rem;
+}
+
+.transfer-ownership-modal-title-section h3 {
+  margin: 0 0 0.5rem 0;
+  color: #1f2937;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.transfer-ownership-modal-title-section p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.transfer-ownership-modal-close {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: #f3f4f6;
+  color: #6b7280;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.transfer-ownership-modal-close:hover:not(:disabled) {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.transfer-ownership-modal-close:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Body */
+.transfer-ownership-modal-body {
+  padding: 1.5rem 2rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Warning */
+.transfer-ownership-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  background: #fef3c7;
+  border: 1px solid #f59e0b;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+}
+
+.transfer-ownership-warning svg {
+  color: #f59e0b;
+  font-size: 1.25rem;
+  margin-top: 0.25rem;
+  flex-shrink: 0;
+}
+
+.transfer-ownership-warning h4 {
+  margin: 0 0 0.5rem 0;
+  color: #92400e;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.transfer-ownership-warning p {
+  margin: 0;
+  color: #92400e;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Form */
+.transfer-ownership-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.transfer-ownership-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.transfer-ownership-form-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.transfer-ownership-form-label.required::after {
+  content: '*';
+  color: #ef4444;
+  margin-left: 0.25rem;
+}
+
+.transfer-ownership-form-label svg {
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+.transfer-ownership-form-input {
+  padding: 0.75rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  background: white;
+}
+
+.transfer-ownership-form-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.transfer-ownership-form-input.error {
+  border-color: #ef4444;
+}
+
+.transfer-ownership-form-input.error:focus {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.transfer-ownership-form-input:disabled {
+  background: #f9fafb;
+  color: #6b7280;
+  cursor: not-allowed;
+}
+
+.transfer-ownership-form-error {
+  color: #ef4444;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
+
+.transfer-ownership-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* Note */
+.transfer-ownership-note {
+  padding: 1rem;
+  background: #f8fafc;
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+.transfer-ownership-note p {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.8rem;
+  line-height: 1.4;
+}
+
+/* Footer */
+.transfer-ownership-modal-footer {
+  padding: 1.5rem 2rem;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.transfer-ownership-btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: none;
+  min-width: 140px;
+  justify-content: center;
+}
+
+.transfer-ownership-btn--cancel {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.transfer-ownership-btn--cancel:hover:not(:disabled) {
+  background: #e5e7eb;
+}
+
+.transfer-ownership-btn--transfer {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+}
+
+.transfer-ownership-btn--transfer:hover:not(:disabled) {
+  background: linear-gradient(135deg, #d97706, #b45309);
+  transform: translateY(-1px);
+}
+
+.transfer-ownership-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .transfer-ownership-modal-overlay {
+    padding: 0.5rem;
+  }
+
+  .transfer-ownership-modal {
+    max-height: 95vh;
+  }
+
+  .transfer-ownership-modal-header {
+    padding: 1.5rem 1.5rem 1rem 1.5rem;
+  }
+
+  .transfer-ownership-modal-body {
+    padding: 1rem 1.5rem;
+  }
+
+  .transfer-ownership-modal-footer {
+    padding: 1rem 1.5rem;
+    flex-direction: column;
+  }
+
+  .transfer-ownership-form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .transfer-ownership-btn {
+    min-width: auto;
+    width: 100%;
+  }
+
+  .transfer-ownership-modal-title-section {
+    gap: 0.75rem;
+  }
+
+  .transfer-ownership-modal-title-section h3 {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .transfer-ownership-warning {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .transfer-ownership-warning svg {
+    margin-top: 0;
+    align-self: center;
+  }
+}
+
+/* Animation */
+.transfer-ownership-modal-overlay {
+  animation: transfer-ownership-fade-in 0.2s ease-out;
+}
+
+.transfer-ownership-modal {
+  animation: transfer-ownership-slide-up 0.3s ease-out;
+}
+
+@keyframes transfer-ownership-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes transfer-ownership-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

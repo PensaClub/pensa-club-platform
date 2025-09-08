@@ -9,7 +9,7 @@ export const clubServiceFactory = (token) => {
     // ===============================
     // ОСНОВНИ CRUD ОПЕРАЦИИ
     // ===============================
-    
+
     createClub: async (clubData) => {
       return requester.post(`${apiUrl}/clubs/create`, clubData);
     },
@@ -31,7 +31,12 @@ export const clubServiceFactory = (token) => {
       // identifier може да е ID или slug
       return requester.del(`${apiUrl}/clubs/${identifier}`);
     },
-
+    transferClubOwnership: async (identifier, newOwnerEmail) => {
+      // identifier може да е ID или slug, newOwnerEmail: string
+      return requester.patch(`${apiUrl}/clubs/${identifier}/transfer-ownership`, {
+        email: newOwnerEmail
+      });
+    },
     // ===============================
     // DRAFT ФУНКЦИОНАЛНОСТИ
     // ===============================
@@ -73,7 +78,7 @@ export const clubServiceFactory = (token) => {
     },
 
     getUserClubs: async (email) => {
-      return requester.get(`${apiUrl}/clubs/user-clubs/${email}`);
+      return requester.get(`${apiUrl}/clubs/user-clubs`);
     },
 
     // ===============================
@@ -137,7 +142,9 @@ export const clubServiceFactory = (token) => {
     getClubManagement: async (clubId) => {
       return requester.get(`${apiUrl}/clubs/${clubId}/management`);
     },
-
+    getUserMembershipClubs: async (email) => {
+      return requester.get(`${apiUrl}/clubs/my-clubs/${email}`);
+    },
     // ===============================
     // КОМЕНТАРИ СИСТЕМА
     // ===============================

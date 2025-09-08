@@ -1,0 +1,1068 @@
+/* ===============================
+   FINANCES MANAGER STYLES
+   =============================== */
+
+.finances-manager {
+  width: 100%;
+  padding: 1rem 0;
+}
+
+/* ===============================
+   SVG ICON STYLES
+   =============================== */
+
+.finances-manager .finances-manager-title svg {
+  color: #6366f1;
+  font-size: 1.5rem;
+}
+
+.finances-manager .finances-manager-tab svg {
+  font-size: 1rem;
+}
+
+.finances-manager .finances-manager-budget-icon svg {
+  font-size: 1.8rem;
+  color: white;
+}
+
+.finances-manager .finances-manager-item-icon svg {
+  font-size: 1.2rem;
+  color: #6366f1;
+}
+
+.finances-manager .finances-manager-sponsor-icon svg {
+  font-size: 1.2rem;
+  color: #6366f1;
+}
+
+.finances-manager .finances-manager-action-btn svg {
+  font-size: 0.9rem;
+}
+
+.finances-manager .finances-manager-form-label svg {
+  color: #6366f1;
+  font-size: 0.9rem;
+}
+
+.finances-manager .finances-manager-sponsor-detail svg {
+  color: #9ca3af;
+  font-size: 0.8rem;
+}
+
+.finances-manager .finances-manager-privacy-btn svg {
+  font-size: 0.9rem;
+}
+
+.finances-manager .finances-manager-help-icon svg {
+  font-size: 1rem;
+}
+
+.finances-manager .finances-manager-empty svg {
+  font-size: 4rem;
+  color: #d1d5db;
+}
+
+/* ===============================
+   HEADER SECTION
+   =============================== */
+
+.finances-manager-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.finances-manager-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 1rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.finances-manager-subtitle {
+  font-size: 1.1rem;
+  color: #64748b;
+  margin: 0 0 1rem 0;
+  line-height: 1.6;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.finances-manager-privacy {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.finances-manager-privacy-btn {
+  background: rgba(99, 102, 241, 0.1);
+  color: #6366f1;
+  border: 2px solid rgba(99, 102, 241, 0.2);
+  border-radius: 10px;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.finances-manager-privacy-btn:hover {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: #6366f1;
+  transform: translateY(-1px);
+}
+
+/* ===============================
+   TABS
+   =============================== */
+
+.finances-manager-tabs {
+  display: flex;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 15px;
+  padding: 0.5rem;
+  margin-bottom: 2rem;
+  overflow-x: auto;
+  gap: 0.5rem;
+}
+
+.finances-manager-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  position: relative;
+  flex: 1;
+  justify-content: center;
+}
+
+.finances-manager-tab:hover {
+  background: #f8fafc;
+  color: #374151;
+}
+
+.finances-manager-tab.active {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+}
+
+/* ===============================
+   CONTENT SECTIONS
+   =============================== */
+
+.finances-manager-content {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 15px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.finances-manager-section {
+  min-height: 400px;
+}
+
+.finances-manager-section-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.finances-manager-section-header h4 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 0.5rem 0;
+}
+
+.finances-manager-section-header p {
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.finances-manager-section-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* ===============================
+   BUDGET OVERVIEW
+   =============================== */
+
+.finances-manager-budget-overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.finances-manager-budget-card {
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  border: 2px solid #e2e8f0;
+  border-radius: 15px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.3s ease;
+}
+
+.finances-manager-budget-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  border-color: #cbd5e1;
+}
+
+.finances-manager-budget-card.main {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  border-color: #6366f1;
+}
+
+.finances-manager-budget-card.main:hover {
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+}
+
+.finances-manager-budget-icon {
+  width: 60px;
+  height: 60px;
+  background: rgba(99, 102, 241, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.finances-manager-budget-card.main .finances-manager-budget-icon {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.finances-manager-budget-icon.funding {
+  background: rgba(34, 197, 94, 0.2);
+}
+
+.finances-manager-budget-icon.funding svg {
+  color: #22c55e;
+}
+
+.finances-manager-budget-icon.sponsors {
+  background: rgba(245, 158, 11, 0.2);
+}
+
+.finances-manager-budget-icon.sponsors svg {
+  color: #f59e0b;
+}
+
+.finances-manager-budget-info h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+  color: inherit;
+}
+
+.finances-manager-budget-amount {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: inherit;
+}
+
+/* ===============================
+   BUDGET FORM
+   =============================== */
+
+.finances-manager-budget-form {
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.finances-manager-form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.finances-manager-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.finances-manager-form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.finances-manager-form-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.finances-manager-form-input,
+.finances-manager-form-select,
+.finances-manager-form-textarea {
+  padding: 0.875rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  background: white;
+  color: #374151;
+  font-family: inherit;
+}
+
+.finances-manager-form-input:focus,
+.finances-manager-form-select:focus,
+.finances-manager-form-textarea:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  transform: translateY(-1px);
+}
+
+.finances-manager-form-input:disabled,
+.finances-manager-form-select:disabled,
+.finances-manager-form-textarea:disabled {
+  background: #f3f4f6;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.finances-manager-form-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* ===============================
+   ADD FORM
+   =============================== */
+
+.finances-manager-add-form {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 15px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+}
+
+.finances-manager-add-form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.finances-manager-add-form-header h4 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0;
+}
+
+.finances-manager-close-form-btn {
+  background: #fee2e2;
+  color: #dc2626;
+  border: none;
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.finances-manager-close-form-btn:hover {
+  background: #fecaca;
+  transform: scale(1.1);
+}
+
+.finances-manager-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.finances-manager-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid #e2e8f0;
+}
+
+.finances-manager-form-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.5rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.finances-manager-form-btn.cancel {
+  background: #f1f5f9;
+  color: #475569;
+  border-color: #cbd5e1;
+}
+
+.finances-manager-form-btn.cancel:hover {
+  background: #e2e8f0;
+  border-color: #94a3b8;
+}
+
+.finances-manager-form-btn.add {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+}
+
+.finances-manager-form-btn.add:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(34, 197, 94, 0.4);
+}
+
+.finances-manager-form-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* ===============================
+   FUNDING LIST
+   =============================== */
+
+.finances-manager-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.finances-manager-item-card {
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.3s ease;
+}
+
+.finances-manager-item-card:hover {
+  border-color: #6366f1;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.finances-manager-item-icon {
+  width: 50px;
+  height: 50px;
+  background: rgba(99, 102, 241, 0.1);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.finances-manager-item-info {
+  flex: 1;
+}
+
+.finances-manager-item-info h5 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 0.5rem 0;
+}
+
+.finances-manager-item-details {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.finances-manager-amount {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #22c55e;
+}
+
+.finances-manager-type-badge {
+  background: rgba(99, 102, 241, 0.1);
+  color: #6366f1;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.finances-manager-item-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.finances-manager-action-btn {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.finances-manager-action-btn:hover {
+  transform: scale(1.1);
+}
+
+.finances-manager-action-btn.edit {
+  color: #3b82f6;
+  border-color: rgba(59, 130, 246, 0.2);
+  background: rgba(59, 130, 246, 0.05);
+}
+
+.finances-manager-action-btn.edit:hover {
+  border-color: #3b82f6;
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.finances-manager-action-btn.delete {
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.2);
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.finances-manager-action-btn.delete:hover {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* ===============================
+   SPONSORS GRID
+   =============================== */
+
+.finances-manager-sponsors-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.finances-manager-sponsor-card {
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 15px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.finances-manager-sponsor-card:hover {
+  border-color: #6366f1;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
+}
+
+.finances-manager-sponsor-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.finances-manager-sponsor-icon {
+  width: 50px;
+  height: 50px;
+  background: rgba(99, 102, 241, 0.1);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.finances-manager-sponsor-name {
+  flex: 1;
+}
+
+.finances-manager-sponsor-name h5 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 0.25rem 0;
+}
+
+.finances-manager-sponsor-type {
+  font-size: 0.8rem;
+  color: #6b7280;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.finances-manager-sponsor-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.finances-manager-sponsor-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.finances-manager-sponsor-contribution {
+  font-size: 0.95rem;
+  color: #6b7280;
+  line-height: 1.4;
+  margin: 0;
+  font-style: italic;
+}
+
+.finances-manager-sponsor-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.finances-manager-sponsor-detail {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+.finances-manager-sponsor-detail.discount {
+  background: rgba(245, 158, 11, 0.1);
+  color: #d97706;
+  padding: 0.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.finances-manager-sponsor-detail a {
+  color: #6366f1;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.finances-manager-sponsor-detail a:hover {
+  color: #4f46e5;
+  text-decoration: underline;
+}
+
+/* ===============================
+   ADD SECTION
+   =============================== */
+
+.finances-manager-add-section {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.finances-manager-add-btn {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.3);
+}
+
+.finances-manager-add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+}
+
+.finances-manager-add-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* ===============================
+   EMPTY STATE
+   =============================== */
+
+.finances-manager-empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #9ca3af;
+}
+
+.finances-manager-empty h4 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #6b7280;
+  margin: 1.5rem 0 0.5rem 0;
+}
+
+.finances-manager-empty p {
+  margin: 0;
+  line-height: 1.5;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ===============================
+   HELP SECTION
+   =============================== */
+
+.finances-manager-help {
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border: 2px solid #bfdbfe;
+  border-radius: 15px;
+  padding: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-top: 2rem;
+}
+
+.finances-manager-help-icon {
+  background: #3b82f6;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.finances-manager-help-content h5 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1e40af;
+  margin: 0 0 0.5rem 0;
+}
+
+.finances-manager-help-content p {
+  color: #1e40af;
+  line-height: 1.5;
+  margin: 0 0 1rem 0;
+  opacity: 0.8;
+  font-size: 0.9rem;
+}
+
+.finances-manager-help-content ul {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: #1e40af;
+  opacity: 0.8;
+}
+
+.finances-manager-help-content li {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* ===============================
+   RESPONSIVE DESIGN
+   =============================== */
+
+@media (max-width: 1024px) {
+  .finances-manager-budget-overview {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  
+  .finances-manager-sponsors-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+  
+  .finances-manager-form-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  
+  .finances-manager-item-card {
+    flex-wrap: wrap;
+    text-align: center;
+  }
+  
+  .finances-manager-item-details {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .finances-manager-title {
+    font-size: 1.5rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .finances-manager-tabs {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .finances-manager-tab {
+    justify-content: center;
+    padding: 0.75rem 1rem;
+  }
+  
+  .finances-manager-content {
+    padding: 1.5rem;
+  }
+  
+  .finances-manager-budget-overview {
+    grid-template-columns: 1fr;
+  }
+  
+  .finances-manager-budget-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .finances-manager-form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .finances-manager-form-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .finances-manager-sponsors-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .finances-manager-sponsor-header {
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .finances-manager-item-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .finances-manager-item-actions {
+    justify-content: center;
+  }
+  
+  .finances-manager-form-actions {
+    flex-direction: column;
+  }
+  
+  .finances-manager-form-btn {
+    justify-content: center;
+  }
+  
+  .finances-manager-help {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .finances-manager-content {
+    padding: 1rem;
+  }
+  
+  .finances-manager-add-form {
+    padding: 1rem;
+  }
+  
+  .finances-manager-add-form-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .finances-manager-budget-card {
+    padding: 1rem;
+  }
+  
+  .finances-manager-budget-icon {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .finances-manager-budget-amount {
+    font-size: 1.2rem;
+  }
+  
+  .finances-manager-sponsor-card {
+    padding: 1rem;
+  }
+  
+  .finances-manager-sponsor-header {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .finances-manager-sponsor-icon {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .finances-manager-item-card {
+    padding: 1rem;
+  }
+  
+  .finances-manager-privacy-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+  }
+  
+  .finances-manager-help {
+    padding: 1rem;
+  }
+}
+
+/* ===============================
+   ACCESSIBILITY IMPROVEMENTS
+   =============================== */
+
+.finances-manager-tab:focus-visible,
+.finances-manager-privacy-btn:focus-visible,
+.finances-manager-form-input:focus-visible,
+.finances-manager-form-select:focus-visible,
+.finances-manager-form-textarea:focus-visible,
+.finances-manager-action-btn:focus-visible,
+.finances-manager-form-btn:focus-visible,
+.finances-manager-add-btn:focus-visible,
+.finances-manager-close-form-btn:focus-visible {
+  outline: 3px solid #6366f1;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .finances-manager-tab,
+  .finances-manager-budget-card,
+  .finances-manager-item-card,
+  .finances-manager-sponsor-card,
+  .finances-manager-form-input,
+  .finances-manager-form-select,
+  .finances-manager-form-textarea,
+  .finances-manager-action-btn,
+  .finances-manager-form-btn,
+  .finances-manager-add-btn,
+  .finances-manager-privacy-btn {
+    transition: none;
+  }
+}
+
+/* ===============================
+   HIGH CONTRAST MODE
+   =============================== */
+
+@media (prefers-contrast: high) {
+  .finances-manager-tabs,
+  .finances-manager-content,
+  .finances-manager-budget-card,
+  .finances-manager-item-card,
+  .finances-manager-sponsor-card,
+  .finances-manager-add-form {
+    border-width: 3px;
+  }
+  
+  .finances-manager-form-input,
+  .finances-manager-form-select,
+  .finances-manager-form-textarea {
+    border-width: 3px;
+  }
+  
+  .finances-manager-action-btn,
+  .finances-manager-form-btn {
+    border-width: 3px;
+  }
+  
+  .finances-manager-help {
+    border-width: 3px;
+  }
+}
+
+/* ===============================
+   PRINT STYLES
+   =============================== */
+
+@media print {
+  .finances-manager-tabs,
+  .finances-manager-add-form,
+  .finances-manager-add-section,
+  .finances-manager-privacy,
+  .finances-manager-action-btn,
+  .finances-manager-item-actions,
+  .finances-manager-sponsor-actions {
+    display: none;
+  }
+  
+  .finances-manager-content {
+    border: 1px solid #000;
+    break-inside: avoid;
+  }
+  
+  .finances-manager-budget-card,
+  .finances-manager-item-card,
+  .finances-manager-sponsor-card {
+    break-inside: avoid;
+    border: 1px solid #000;
+  }
+  
+  .finances-manager-sponsors-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+}

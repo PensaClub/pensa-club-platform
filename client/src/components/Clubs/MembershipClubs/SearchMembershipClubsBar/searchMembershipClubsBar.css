@@ -1,0 +1,109 @@
+/* SearchMembershipClubsBar Container */
+.searchmembershipclubsbar-container {
+  width: 100%;
+  max-width: 400px;
+  position: relative;
+}
+
+.searchmembershipclubsbar-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.searchmembershipclubsbar-container--focused .searchmembershipclubsbar-input-wrapper {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.searchmembershipclubsbar-search-icon {
+  position: absolute;
+  left: 1rem;
+  color: #9ca3af;
+  font-size: 1rem;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.searchmembershipclubsbar-input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.75rem;
+  border: none;
+  outline: none;
+  font-size: 0.9rem;
+  color: #374151;
+  background: transparent;
+}
+
+.searchmembershipclubsbar-input::placeholder {
+  color: #9ca3af;
+}
+
+.searchmembershipclubsbar-clear-btn {
+  position: absolute;
+  right: 0.5rem;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: #f3f4f6;
+  color: #6b7280;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  font-size: 0.8rem;
+}
+
+.searchmembershipclubsbar-clear-btn:hover {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.searchmembershipclubsbar-results-info {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  color: #6b7280;
+  z-index: 10;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .searchmembershipclubsbar-container {
+    max-width: 100%;
+  }
+  
+  .searchmembershipclubsbar-input {
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+}
+
+/* Animation */
+.searchmembershipclubsbar-input-wrapper {
+  animation: searchmembershipclubsbar-fade-in 0.3s ease-out;
+}
+
+@keyframes searchmembershipclubsbar-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

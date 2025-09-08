@@ -21,10 +21,9 @@ import {
   faCrown,
   faUserCircle,
   faIdCard,
-  faBirthdayCake,
-  faVenus,
-  faMars,
-  faSearch
+  faSearch,
+  faPaperPlane,
+  faUser
 } from '@fortawesome/free-solid-svg-icons';
 import { 
   faFacebook,
@@ -33,33 +32,62 @@ import {
   faTwitter
 } from '@fortawesome/free-brands-svg-icons';
 import './clubHero.css';
+import { useClubContext } from '../../../../contexts/ClubContext';
 
 export const ClubHero = ({ club }) => {
   const { t } = useTranslation();
+  const { sendContactForm } = useClubContext();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showMembersModal, setShowMembersModal] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
   const [memberSearchTerm, setMemberSearchTerm] = useState('');
+  const [contactFormData, setContactFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    subject: '',
+    message: ''
+  });
+  const [isSubmittingContact, setIsSubmittingContact] = useState(false);
 
-  // ПРОВЕРКА ЗА ДАННИ - ако няма основни данни, не показваме компонента
   if (!club?.name) {
     return null;
   }
 
-  // Безопасно извличане на изображения
+  // Функция за изчисляване на години дейност
+  const calculateYearsSinceFoundation = (foundedYear) => {
+    if (!foundedYear) return null;
+    
+    const currentYear = new Date().getFullYear();
+    const years = currentYear - foundedYear;
+    
+    if (years <= 0) {
+      return { value: t('clubs.ClubHero.stats.firstYear'), isText: true };
+    }
+    
+    return { value: years, isText: false };
+  };
+
+  // Функция за правилно число (единствено/множествено)
+  const getPluralForm = (count, singularKey, pluralKey) => {
+    return count === 1 ? t(singularKey) : t(pluralKey);
+  };
+
   const getImages = () => {
+    if (!club.preferences?.publicGallery) {
+      return [];
+    }
+    
     const images = [];
     
-    // От галерия
     if (club.gallery && Array.isArray(club.gallery)) {
       images.push(...club.gallery.map(img => typeof img === 'string' ? img : img.src || img.url));
     }
     
-    // Основно изображение
     if (club.mainImage) {
       images.push(club.mainImage);
     }
     
-    // От събития
     if (club.activities?.events) {
       club.activities.events.forEach(event => {
         if (event.images) {
@@ -68,7 +96,7 @@ export const ClubHero = ({ club }) => {
       });
     }
     
-    return images.filter(Boolean).slice(0, 8); // Макс 8 снимки
+    return images.filter(Boolean).slice(0, 8);
   };
 
   const images = getImages();
@@ -117,42 +145,75 @@ export const ClubHero = ({ club }) => {
     return stars;
   };
 
-  // Безопасно извличане на статистики
-  const getStats = () => {
-    const totalMembers = club.membership?.totalMembers || 
-                        club.membership?.activeMembers || 
-                        club.stats?.totalMembers ||
-                        (club.members ? club.members.filter(m => m.isActive !== false).length : 0) ||
-                        (club.management?.board?.length || 0) + 20; // Fallback
-    
-    const yearsActive = club.foundedYear ? 
-                       new Date().getFullYear() - club.foundedYear : 
-                       club.stats?.yearsActive ||
-                       5; // Fallback
-    
-    const activitiesCount = (club.activities?.regular?.length || 0) + 
-                           (club.activities?.events?.length || 0) + 
-                           (club.activities?.classes?.length || 0) ||
-                           club.stats?.programs ||
-                           3; // Fallback
-
-    const eventsCount = club.activities?.events?.length || 
-                       club.stats?.events || 
-                       12; // Fallback
-
-    return { totalMembers, yearsActive, activitiesCount, eventsCount };
+  const openMembersModal = () => {
+    if (!club.preferences?.showMembersList) {
+      return;
+    }
+    setShowMembersModal(true);
+    setMemberSearchTerm('');
   };
 
-  const stats = getStats();
+  // Изчислява реални статистики - само ако има данни
+  const getRealStats = () => {
+    const stats = [];
 
-  // Получаване на членове за модала - ИЗПОЛЗВА РЕАЛНИ ДАННИ
+    // Членове - само ако има реални данни
+    const totalMembers = club.membership?.totalMembers || 
+                        (club.members ? club.members.filter(m => m.isActive !== false).length : 0);
+    
+    if (totalMembers > 0) {
+      stats.push({
+        icon: faUsers,
+        value: totalMembers,
+        label: getPluralForm(totalMembers, 'clubs.ClubHero.stats.member', 'clubs.ClubHero.stats.members'),
+        action: club.preferences?.showMembersList,
+        onClick: openMembersModal
+      });
+    }
+
+    // Години дейност - само ако има foundedYear
+    const yearsData = calculateYearsSinceFoundation(club.foundedYear);
+    if (yearsData !== null) {
+      stats.push({
+        icon: faCalendarAlt,
+        value: yearsData.value,
+        label: yearsData.isText ? '' : getPluralForm(yearsData.value, 'clubs.ClubHero.stats.year', 'clubs.ClubHero.stats.years')
+      });
+    }
+
+    // Дейности - само ако има реални дейности
+    const regularActivities = club.activities?.regular?.length || 0;
+    const totalActivities = regularActivities + (club.activities?.events?.length || 0);
+    
+    if (totalActivities > 0) {
+      stats.push({
+        icon: faPlay,
+        value: totalActivities,
+        label: getPluralForm(totalActivities, 'clubs.ClubHero.stats.activity', 'clubs.ClubHero.stats.activities')
+      });
+    }
+
+    // События - само ако има реални събития
+    const eventsCount = club.activities?.events?.length || 0;
+    if (eventsCount > 0) {
+      stats.push({
+        icon: faStar,
+        value: eventsCount,
+        label: getPluralForm(eventsCount, 'clubs.ClubHero.stats.event', 'clubs.ClubHero.stats.events')
+      });
+    }
+
+    return stats;
+  };
+
+  const stats = getRealStats();
+
   const getMembers = () => {
     const members = [];
     
-    // От реалния списък с членове
     if (club.members && Array.isArray(club.members)) {
       club.members.forEach(member => {
-        if (member.isActive !== false) { // Показваме само активните
+        if (member.isActive !== false) {
           members.push({
             id: member.id,
             name: `${member.firstName} ${member.lastName}`,
@@ -164,13 +225,12 @@ export const ClubHero = ({ club }) => {
             isBoard: ['председател', 'секретар', 'касиер', 'заместник-председател'].includes(member.role?.toLowerCase()),
             memberSince: member.joinDate ? new Date(member.joinDate).getFullYear() : null,
             joinDate: member.joinDate,
-            bio: null // Членовете обикновено нямат био
+            bio: null
           });
         }
       });
     }
     
-    // Добавяме от управленски борд ако не са в списъка
     if (club.management?.board) {
       club.management.board.forEach(boardMember => {
         const existingMember = members.find(m => 
@@ -189,31 +249,12 @@ export const ClubHero = ({ club }) => {
             isBoard: true
           });
         } else {
-          // Обновяваме със данни от борда
           existingMember.bio = boardMember.bio;
           existingMember.avatar = existingMember.avatar || boardMember.avatar;
         }
       });
     }
     
-    // Ако няма никакви данни, използваме fallback
-    if (members.length === 0 && stats.totalMembers > 0) {
-      const sampleNames = [
-        'Мария Иванова', 'Георги Петров', 'Елена Стоянова', 'Иван Димитров',
-        'Анна Николова', 'Стоян Георгиев', 'Рада Христова', 'Петър Милев'
-      ];
-      
-      for (let i = 0; i < Math.min(8, stats.totalMembers); i++) {
-        members.push({
-          name: sampleNames[i] || `${t('clubs.ClubHero.members.defaultRole', { defaultValue: 'Член' })} ${i + 1}`,
-          role: i === 0 ? 'Председател' : t('clubs.ClubHero.members.defaultRole', { defaultValue: 'Член' }),
-          isBoard: i < 3,
-          memberSince: 2018 + Math.floor(Math.random() * 6)
-        });
-      }
-    }
-    
-    // Сортираме - първо борда, после останалите
     return members.sort((a, b) => {
       if (a.isBoard && !b.isBoard) return -1;
       if (!a.isBoard && b.isBoard) return 1;
@@ -225,13 +266,11 @@ export const ClubHero = ({ club }) => {
 
   const members = getMembers();
 
-  // Филтриране на членове
   const filteredMembers = members.filter(member =>
     member.name?.toLowerCase().includes(memberSearchTerm.toLowerCase()) ||
     member.role?.toLowerCase().includes(memberSearchTerm.toLowerCase())
   );
 
-  // Функционални бутони
   const handleCall = () => {
     const phone = club.contacts?.phone || club.contacts?.mobile;
     if (phone) {
@@ -243,7 +282,7 @@ export const ClubHero = ({ club }) => {
 
   const handleEmail = () => {
     if (club.contacts?.email) {
-      window.location.href = `mailto:${club.contacts.email}`;
+      setShowContactModal(true);
     } else {
       alert(t('clubs.ClubHero.messages.emailNotAvailable'));
     }
@@ -279,21 +318,70 @@ export const ClubHero = ({ club }) => {
     }
   };
 
-  const openMembersModal = () => {
-    setShowMembersModal(true);
-    setMemberSearchTerm('');
-  };
-
   const closeMembersModal = () => {
     setShowMembersModal(false);
     setMemberSearchTerm('');
+  };
+
+  const closeContactModal = () => {
+    setShowContactModal(false);
+    setContactFormData({
+      name: '',
+      email: '',
+      phone: '',
+      subject: '',
+      message: ''
+    });
+  };
+
+  const handleContactFormChange = (e) => {
+    const { name, value } = e.target;
+    setContactFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleContactFormSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!contactFormData.name.trim() || !contactFormData.email.trim() || !contactFormData.message.trim()) {
+      alert('Моля, попълнете всички задължителни полета');
+      return;
+    }
+
+    // Валидация на имейл
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(contactFormData.email)) {
+      alert('Моля, въведете валиден имейл адрес');
+      return;
+    }
+
+    setIsSubmittingContact(true);
+    
+    try {
+      const success = await sendContactForm(club.id, {
+        ...contactFormData,
+        clubName: club.name,
+        timestamp: new Date().toISOString()
+      });
+
+      if (success) {
+        closeContactModal();
+        alert('Вашето съобщение беше изпратено успешно!');
+      }
+    } catch (error) {
+      console.error('Грешка при изпращане на контактна форма:', error);
+      alert('Възникна грешка при изпращането на съобщението. Моля, опитайте отново.');
+    } finally {
+      setIsSubmittingContact(false);
+    }
   };
 
   return (
     <section id="general-club-hero" className="general-hero-main">
       <div className="general-hero-container">
         
-        {/* Горна лента с бадж и рейтинг */}
         <div className="general-hero-top-bar">
           <div className="general-hero-badges">
             <span className="general-status-badge active">
@@ -317,10 +405,8 @@ export const ClubHero = ({ club }) => {
           </div>
         </div>
 
-        {/* Основно съдържание */}
         <div className="general-hero-content">
           
-          {/* Лява страна - Hero информация */}
           <div className="general-hero-main-info">
             <div className="general-hero-title-section">
               <div className="general-hero-title-row">
@@ -359,101 +445,79 @@ export const ClubHero = ({ club }) => {
               {club.shortDescription || club.description || t('clubs.ClubHero.messages.defaultDescription')}
             </p>
 
-            {/* Статистики в карточки */}
-            <div className="general-stats-grid">
-              <div className="general-stat-card" onClick={openMembersModal}>
-                <div className="general-stat-icon">
-                  <FontAwesomeIcon icon={faUsers} />
-                </div>
-                <div className="general-stat-content">
-                  <div className="general-stat-value">{stats.totalMembers}</div>
-                  <div className="general-hero-stat-label">{t('clubs.ClubHero.stats.members')}</div>
-                </div>
-                <div className="general-stat-action">
-                  <FontAwesomeIcon icon={faEye} />
-                </div>
+            {/* Показваме статистики само ако има данни И е разрешено в настройките */}
+            {club.preferences?.showStatistics && stats.length > 0 && (
+              <div className="general-stats-grid">
+                {stats.map((stat, index) => (
+                  <div 
+                    key={index}
+                    className={`general-stat-card ${stat.action ? 'clickable' : ''}`}
+                    onClick={stat.onClick || (() => {})}
+                  >
+                    <div className="general-stat-icon">
+                      <FontAwesomeIcon icon={stat.icon} />
+                    </div>
+                    <div className="general-stat-content">
+                      <div className="general-stat-value">{stat.value}</div>
+                      <div className="general-hero-stat-label">{stat.label}</div>
+                    </div>
+                    {stat.action && (
+                      <div className="general-stat-action">
+                        <FontAwesomeIcon icon={faEye} />
+                      </div>
+                    )}
+                  </div>
+                ))}
               </div>
-              
-              <div className="general-stat-card">
-                <div className="general-stat-icon">
-                  <FontAwesomeIcon icon={faCalendarAlt} />
-                </div>
-                <div className="general-stat-content">
-                  <div className="general-stat-value">{stats.yearsActive}</div>
-                  <div className="general-hero-stat-label">{t('clubs.ClubHero.stats.years')}</div>
-                </div>
-              </div>
-              
-              <div className="general-stat-card">
-                <div className="general-stat-icon">
-                  <FontAwesomeIcon icon={faPlay} />
-                </div>
-                <div className="general-stat-content">
-                  <div className="general-stat-value">{stats.activitiesCount}</div>
-                  <div className="general-hero-stat-label">{t('clubs.ClubHero.stats.activities')}</div>
-                </div>
-              </div>
+            )}
 
-              <div className="general-stat-card">
-                <div className="general-stat-icon">
-                  <FontAwesomeIcon icon={faStar} />
-                </div>
-                <div className="general-stat-content">
-                  <div className="general-stat-value">{stats.eventsCount}</div>
-                  <div className="general-hero-stat-label">{t('clubs.ClubHero.stats.events')}</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Контакти и членство */}
             <div className="general-hero-bottom-section">
-              {/* Бързи контакти */}
-              <div className="general-quick-contacts">
-                <h3>{t('clubs.ClubHero.contact.title')}</h3>
-                <div className="general-contact-buttons">
-                  {club.contacts?.phone && (
-                    <button className="general-contact-btn phone" onClick={handleCall}>
-                      <FontAwesomeIcon icon={faPhone} />
-                      <span>{t('clubs.ClubHero.actions.call')}</span>
-                    </button>
-                  )}
-                  
-                  {club.contacts?.email && (
-                    <button className="general-contact-btn email" onClick={handleEmail}>
-                      <FontAwesomeIcon icon={faEnvelope} />
-                      <span>{t('clubs.ClubHero.actions.email')}</span>
-                    </button>
-                  )}
-                  
-                  {club.contacts?.website && (
-                    <button className="general-contact-btn website" onClick={handleWebsite}>
-                      <FontAwesomeIcon icon={faGlobe} />
-                      <span>{t('clubs.ClubHero.actions.website')}</span>
-                    </button>
-                  )}
-                  
-                  {club.contacts?.socialMedia?.facebook && (
-                    <button className="general-contact-btn facebook" onClick={() => handleSocial('facebook')}>
-                      <FontAwesomeIcon icon={faFacebook} />
-                      <span>Facebook</span>
-                    </button>
-                  )}
+              {club.preferences?.showContactForm && (
+                <div className="general-quick-contacts">
+                  <h3>{t('clubs.ClubHero.contact.title')}</h3>
+                  <div className="general-contact-buttons">
+                    {club.contacts?.phone && (
+                      <button className="general-contact-btn phone" onClick={handleCall}>
+                        <FontAwesomeIcon icon={faPhone} />
+                        <span>{t('clubs.ClubHero.actions.call')}</span>
+                      </button>
+                    )}
+                    
+                    {club.contacts?.email && (
+                      <button className="general-contact-btn email" onClick={handleEmail}>
+                        <FontAwesomeIcon icon={faEnvelope} />
+                        <span>{t('clubs.ClubHero.actions.email')}</span>
+                      </button>
+                    )}
+                    
+                    {club.contacts?.website && (
+                      <button className="general-contact-btn website" onClick={handleWebsite}>
+                        <FontAwesomeIcon icon={faGlobe} />
+                        <span>{t('clubs.ClubHero.actions.website')}</span>
+                      </button>
+                    )}
+                    
+                    {club.contacts?.socialMedia?.facebook && (
+                      <button className="general-contact-btn facebook" onClick={() => handleSocial('facebook')}>
+                        <FontAwesomeIcon icon={faFacebook} />
+                        <span>Facebook</span>
+                      </button>
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
 
-              {/* Членство информация */}
-              {club.membership && (
+              {club.preferences?.allowOnlineRegistration && club.membership && (
                 <div className="general-membership-card">
                   <div className="general-membership-header">
                     <FontAwesomeIcon icon={faUserPlus} />
                     <h3>{t('clubs.ClubHero.membership.title')}</h3>
                   </div>
                   
-                  {club.membership.membershipFee && (
+                  {club.membership.membershipFee && club.preferences?.showFinances && (
                     <div className="general-membership-fee">
                       <span className="general-fee-amount">
-                        {club.membership.membershipFee.monthly || 'По договаряне'}
-                        {club.membership.membershipFee.monthly && ' лв.'}
+                        {club.membership.membershipFee.monthly} {' лв.'}
                       </span>
                       <span className="general-fee-period">{t('clubs.ClubHero.membership.monthly')}</span>
                     </div>
@@ -478,69 +542,70 @@ export const ClubHero = ({ club }) => {
             </div>
           </div>
 
-          {/* Дясна страна - Галерия */}
-          <div className="general-hero-gallery">
-            {images.length > 0 ? (
-              <div className="general-gallery-container">
-                <div className="general-main-image-container">
-                  <img 
-                    src={images[currentImageIndex]} 
-                    alt={`${club.name} - снимка ${currentImageIndex + 1}`}
-                    className="general-main-image"
-                  />
+          {club.preferences?.publicGallery && (
+            <div className="general-hero-gallery">
+              {images.length > 0 ? (
+                <div className="general-gallery-container">
+                  <div className="general-main-image-container">
+                    <img 
+                      src={images[currentImageIndex]} 
+                      alt={`${club.name} - снимка ${currentImageIndex + 1}`}
+                      className="general-main-image"
+                    />
+                    
+                    {images.length > 1 && (
+                      <>
+                        <button className="general-nav-btn prev" onClick={prevImage}>
+                          <FontAwesomeIcon icon={faChevronLeft} />
+                        </button>
+                        <button className="general-nav-btn next" onClick={nextImage}>
+                          <FontAwesomeIcon icon={faChevronRight} />
+                        </button>
+                      </>
+                    )}
+                    
+                    <div className="general-image-counter">
+                      {currentImageIndex + 1} / {images.length}
+                    </div>
+                  </div>
                   
                   {images.length > 1 && (
-                    <>
-                      <button className="general-nav-btn prev" onClick={prevImage}>
-                        <FontAwesomeIcon icon={faChevronLeft} />
-                      </button>
-                      <button className="general-nav-btn next" onClick={nextImage}>
-                        <FontAwesomeIcon icon={faChevronRight} />
-                      </button>
-                    </>
+                    <div className="general-thumbnails">
+                      {images.slice(0, 6).map((image, index) => (
+                        <div 
+                          key={index}
+                          className={`general-thumbnail ${index === currentImageIndex ? 'active' : ''}`}
+                          onClick={() => setCurrentImageIndex(index)}
+                        >
+                          <img src={image} alt={`Thumbnail ${index + 1}`} />
+                          {images.length > 6 && index === 5 && (
+                            <div className="general-more-images">+{images.length - 6}</div>
+                          )}
+                        </div>
+                      ))}
+                    </div>
                   )}
-                  
-                  <div className="general-image-counter">
-                    {currentImageIndex + 1} / {images.length}
+                </div>
+              ) : (
+                <div className="general-gallery-placeholder">
+                  <div className="general-placeholder-content">
+                    {club.logo ? (
+                      <img src={club.logo} alt={club.name} className="general-placeholder-logo" />
+                    ) : (
+                      <FontAwesomeIcon icon={faUsers} className="general-placeholder-icon" />
+                    )}
+                    <h3>{club.name}</h3>
+                    <p>{t('clubs.ClubHero.gallery.placeholder')}</p>
                   </div>
                 </div>
-                
-                {images.length > 1 && (
-                  <div className="general-thumbnails">
-                    {images.slice(0, 6).map((image, index) => (
-                      <div 
-                        key={index}
-                        className={`general-thumbnail ${index === currentImageIndex ? 'active' : ''}`}
-                        onClick={() => setCurrentImageIndex(index)}
-                      >
-                        <img src={image} alt={`Thumbnail ${index + 1}`} />
-                        {images.length > 6 && index === 5 && (
-                          <div className="general-more-images">+{images.length - 6}</div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className="general-gallery-placeholder">
-                <div className="general-placeholder-content">
-                  {club.logo ? (
-                    <img src={club.logo} alt={club.name} className="general-placeholder-logo" />
-                  ) : (
-                    <FontAwesomeIcon icon={faUsers} className="general-placeholder-icon" />
-                  )}
-                  <h3>{club.name}</h3>
-                  <p>{t('clubs.ClubHero.gallery.placeholder')}</p>
-                </div>
-              </div>
-            )}
-          </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
       {/* Модал за членове */}
-      {showMembersModal && (
+      {club.preferences?.showMembersList && showMembersModal && (
         <div className="general-modal-overlay" onClick={closeMembersModal}>
           <div className="general-modal" onClick={(e) => e.stopPropagation()}>
             <div className="general-modal-header">
@@ -597,13 +662,13 @@ export const ClubHero = ({ club }) => {
                             {t('clubs.ClubHero.members.memberSince')} {member.memberSince}
                           </span>
                         )}
-                        {member.phone && (
+                        {member.phone && club.preferences?.showContactForm && (
                           <span>
                             <FontAwesomeIcon icon={faPhone} />
                             <a href={`tel:${member.phone}`}>{member.phone}</a>
                           </span>
                         )}
-                        {member.email && (
+                        {member.email && club.preferences?.showContactForm && (
                           <span>
                             <FontAwesomeIcon icon={faEnvelope} />
                             <a href={`mailto:${member.email}`}>{member.email.split('@')[0]}</a>
@@ -628,6 +693,144 @@ export const ClubHero = ({ club }) => {
                   <p>{t('clubs.ClubHero.members.noResults')}</p>
                 </div>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Модал за контактна форма */}
+      {showContactModal && (
+        <div className="general-modal-overlay" onClick={closeContactModal}>
+          <div className="general-modal general-contact-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="general-modal-header">
+              <h3>
+                <FontAwesomeIcon icon={faEnvelope} />
+                Свържете се с {club.name}
+              </h3>
+              <button className="general-modal-close" onClick={closeContactModal}>
+                <FontAwesomeIcon icon={faTimes} />
+              </button>
+            </div>
+            
+            <div className="general-modal-content">
+              <form onSubmit={handleContactFormSubmit} className="general-contact-form">
+                <div className="general-form-row">
+                  <div className="general-form-group">
+                    <label htmlFor="name">
+                      <FontAwesomeIcon icon={faUser} />
+                      Име <span className="required">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      value={contactFormData.name}
+                      onChange={handleContactFormChange}
+                      placeholder="Вашето име"
+                      required
+                    />
+                  </div>
+                  
+                  <div className="general-form-group">
+                    <label htmlFor="email">
+                      <FontAwesomeIcon icon={faEnvelope} />
+                      Имейл <span className="required">*</span>
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={contactFormData.email}
+                      onChange={handleContactFormChange}
+                      placeholder="your@email.com"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="general-form-row">
+                  <div className="general-form-group">
+                    <label htmlFor="phone">
+                      <FontAwesomeIcon icon={faPhone} />
+                      Телефон
+                    </label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      value={contactFormData.phone}
+                      onChange={handleContactFormChange}
+                      placeholder="+359 888 123 456"
+                    />
+                  </div>
+                  
+                  <div className="general-form-group">
+                    <label htmlFor="subject">
+                      <FontAwesomeIcon icon={faInfoCircle} />
+                      Тема <span className="required">*</span>
+                    </label>
+                    <select
+                      id="subject"
+                      name="subject"
+                      value={contactFormData.subject}
+                      onChange={handleContactFormChange}
+                      required
+                    >
+                      <option value="">Изберете тема</option>
+                      <option value="membership">Запитване за членство</option>
+                      <option value="activities">Въпроси за дейности</option>
+                      <option value="partnership">Предложение за партньорство</option>
+                      <option value="volunteer">Доброволчество</option>
+                      <option value="general">Общи въпроси</option>
+                      <option value="other">Друго</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="general-form-group">
+                  <label htmlFor="message">
+                    <FontAwesomeIcon icon={faPaperPlane} />
+                    Съобщение <span className="required">*</span>
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    value={contactFormData.message}
+                    onChange={handleContactFormChange}
+                    placeholder="Напишете вашето съобщение тук..."
+                    rows={5}
+                    required
+                  />
+                </div>
+
+                <div className="general-form-actions">
+                  <button 
+                    type="button" 
+                    className="general-btn-secondary"
+                    onClick={closeContactModal}
+                    disabled={isSubmittingContact}
+                  >
+                    Отказ
+                  </button>
+                  <button 
+                    type="submit" 
+                    className="general-btn-primary"
+                    disabled={isSubmittingContact}
+                  >
+                    {isSubmittingContact ? (
+                      <>
+                        <span className="general-spinner"></span>
+                        Изпращане...
+                      </>
+                    ) : (
+                      <>
+                        <FontAwesomeIcon icon={faPaperPlane} />
+                        Изпрати съобщение
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>

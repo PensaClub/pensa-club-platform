@@ -1,0 +1,2326 @@
+/* =================== PENSIONERS SPECIFIC MANAGER STYLES =================== */
+
+.pensioners-specific-manager {
+  width: 100%;
+  padding: 1rem 0;
+}
+
+/* =================== HEADER =================== */
+
+.pensioners-specific-manager-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.pensioners-specific-manager-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 1rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.pensioners-specific-manager .pensioners-specific-manager-title-icon {
+  color: #0ea5e9;
+  font-size: 1.5rem;
+}
+
+.pensioners-specific-manager-subtitle {
+  font-size: 1.1rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* =================== TABS =================== */
+
+.pensioners-specific-manager-tabs {
+  display: flex;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 15px;
+  padding: 0.5rem;
+  margin-bottom: 2rem;
+  overflow-x: auto;
+  gap: 0.5rem;
+}
+
+.pensioners-specific-manager-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  min-height: 60px;
+}
+
+.pensioners-specific-manager-tab:hover {
+  background: #f8fafc;
+  color: #374151;
+}
+
+.pensioners-specific-manager-tab.active {
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  color: white;
+  box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+}
+
+.pensioners-specific-manager .pensioners-specific-manager-tab-icon {
+  font-size: 1.1rem;
+}
+
+/* =================== CONTENT =================== */
+
+.pensioners-specific-manager-content {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 15px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  min-height: 500px;
+}
+
+.pensioners-specific-manager-tab-content {
+  width: 100%;
+}
+
+.pensioners-specific-manager-section-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.pensioners-specific-manager-section-header h4 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 0.5rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.pensioners-specific-manager .pensioners-specific-manager-section-icon {
+  color: #0ea5e9;
+  font-size: 1.3rem;
+}
+
+.pensioners-specific-manager-section-header p {
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+/* =================== SUBSECTIONS =================== */
+
+.pensioners-specific-manager-subsection {
+  margin-bottom: 3rem;
+  padding: 1.5rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+}
+
+.pensioners-specific-manager-subsection h5 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 1.5rem 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+/* =================== CHECKBOXES GRID =================== */
+
+.pensioners-specific-manager-checkboxes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+.pensioners-specific-manager-checkbox-item {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.pensioners-specific-manager-checkbox-item:hover {
+  border-color: #0ea5e9;
+  box-shadow: 0 4px 15px rgba(14, 165, 233, 0.1);
+  transform: translateY(-2px);
+}
+
+.pensioners-specific-manager-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  cursor: pointer;
+  width: 100%;
+}
+
+.pensioners-specific-manager-checkbox input[type="checkbox"] {
+  opacity: 0;
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+.pensioners-specific-manager-checkbox-checkmark {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  background: white;
+  border: 3px solid #cbd5e1;
+  border-radius: 6px;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+  margin-top: 2px;
+}
+
+.pensioners-specific-manager-checkbox-checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+  left: 6px;
+  top: 2px;
+  width: 6px;
+  height: 12px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+.pensioners-specific-manager-checkbox input:checked ~ .pensioners-specific-manager-checkbox-checkmark {
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  border-color: #0284c7;
+}
+
+.pensioners-specific-manager-checkbox input:checked ~ .pensioners-specific-manager-checkbox-checkmark:after {
+  display: block;
+}
+
+.pensioners-specific-manager-checkbox-content {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.pensioners-specific-manager .pensioners-specific-manager-checkbox-icon {
+  color: #0ea5e9;
+  font-size: 1.5rem;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.pensioners-specific-manager-checkbox-content h6 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.4;
+}
+
+.pensioners-specific-manager-checkbox-content p {
+  font-size: 0.9rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* =================== FORMS =================== */
+
+.pensioners-specific-manager-add-form {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.pensioners-specific-manager-form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.pensioners-specific-manager-form-header h6 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0;
+}
+
+.pensioners-specific-manager-close-btn {
+  background: #fee2e2;
+  color: #dc2626;
+  border: none;
+  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pensioners-specific-manager-close-btn:hover {
+  background: #fecaca;
+  transform: scale(1.1);
+}
+
+.pensioners-specific-manager .pensioners-specific-manager-close-icon {
+  font-size: 1rem;
+}
+
+.pensioners-specific-manager-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.pensioners-specific-manager-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.pensioners-specific-manager-form-group.pensioners-specific-manager-full-width {
+  grid-column: 1 / -1;
+}
+
+.pensioners-specific-manager-form-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pensioners-specific-manager .pensioners-specific-manager-label-icon {
+  color: #0ea5e9;
+  font-size: 1rem;
+}
+
+.pensioners-specific-manager-form-input,
+.pensioners-specific-manager-form-select,
+.pensioners-specific-manager-form-textarea {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: white;
+  color: #374151;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.pensioners-specific-manager-form-input:focus,
+.pensioners-specific-manager-form-select:focus,
+.pensioners-specific-manager-form-textarea:focus {
+  outline: none;
+  border-color: #0ea5e9;
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+  transform: translateY(-1px);
+}
+
+.pensioners-specific-manager-form-textarea {
+  min-height: 100px;
+}
+
+.pensioners-specific-manager-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.pensioners-specific-manager-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  min-height: 50px;
+}
+
+.pensioners-specific-manager-btn-cancel {
+  background: #f1f5f9;
+  color: #475569;
+  border-color: #cbd5e1;
+}
+
+.pensioners-specific-manager-btn-cancel:hover {
+  background: #e2e8f0;
+  border-color: #94a3b8;
+}
+
+.pensioners-specific-manager-btn-add {
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  color: white;
+  box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
+}
+
+.pensioners-specific-manager-btn-add:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(14, 165, 233, 0.4);
+}
+
+.pensioners-specific-manager-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.pensioners-specific-manager .pensioners-specific-manager-btn-icon {
+  font-size: 1rem;
+}
+
+/* =================== LECTURES LIST =================== */
+
+.pensioners-specific-manager-lectures-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.pensioners-specific-manager-lecture-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.pensioners-specific-manager-lecture-item:hover {
+  border-color: #0ea5e9;
+  box-shadow: 0 4px 15px rgba(14, 165, 233, 0.1);
+}
+
+.pensioners-specific-manager-lecture-content {
+  flex: 1;
+}
+
+.pensioners-specific-manager-lecture-content h6 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 0.75rem 0;
+}
+
+.pensioners-specific-manager-lecture-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.pensioners-specific-manager-lecture-meta span {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: #f0f9ff;
+  color: #0369a1;
+  padding: 0.25rem 0.75rem;
+  border-radius: 15px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.pensioners-specific-manager .pensioners-specific-manager-meta-icon {
+  font-size: 0.8rem;
+}
+
+.pensioners-specific-manager-lecture-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.pensioners-specific-manager-action-btn {
+  background: white;
+  color: #6b7280;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pensioners-specific-manager-action-btn:hover {
+  transform: scale(1.05);
+}
+
+.pensioners-specific-manager-edit-btn:hover {
+  border-color: #0ea5e9;
+  color: #0ea5e9;
+}
+
+.pensioners-specific-manager-delete-btn:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.pensioners-specific-manager .pensioners-specific-manager-action-icon {
+  font-size: 1rem;
+}
+
+/* =================== ACTIVITIES LIST =================== */
+
+.pensioners-specific-manager-activities-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.pensioners-specific-manager-activity-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.pensioners-specific-manager-activity-item:hover {
+  border-color: #8b5cf6;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.1);
+}
+
+.pensioners-specific-manager-activity-icon {
+  background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+  border-radius: 12px;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.pensioners-specific-manager .pensioners-specific-manager-brain-icon {
+  color: #7c3aed;
+  font-size: 1.5rem;
+}
+
+.pensioners-specific-manager-activity-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.pensioners-specific-manager-activity-content h6 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 0.75rem 0;
+}
+
+.pensioners-specific-manager-activity-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.pensioners-specific-manager-activity-meta span {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: #faf5ff;
+  color: #6b21a8;
+  padding: 0.25rem 0.75rem;
+  border-radius: 15px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.pensioners-specific-manager-activity-description {
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+.pensioners-specific-manager-activity-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+/* =================== EMERGENCY FORM =================== */
+
+.pensioners-specific-manager-emergency-form {
+  background: #fef2f2;
+  border: 2px solid #fecaca;
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.pensioners-specific-manager-emergency-form .pensioners-specific-manager-checkbox-item {
+  background: white;
+  margin-bottom: 1rem;
+}
+
+.pensioners-specific-manager-emergency-form .pensioners-specific-manager-form-group {
+  margin-bottom: 0;
+}
+
+/* =================== EMPTY STATES =================== */
+
+.pensioners-specific-manager-empty-state {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: #9ca3af;
+}
+
+.pensioners-specific-manager .pensioners-specific-manager-empty-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: #d1d5db;
+}
+
+.pensioners-specific-manager-empty-state p {
+  font-size: 1rem;
+  margin: 0;
+  line-height: 1.5;
+  color: #6b7280;
+}
+
+/* =================== ADD SECTION =================== */
+
+.pensioners-specific-manager-add-section {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.pensioners-specific-manager-add-btn {
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 6px 20px rgba(14, 165, 233, 0.3);
+  min-height: 50px;
+}
+
+.pensioners-specific-manager-add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(14, 165, 233, 0.4);
+}
+
+.pensioners-specific-manager-add-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.pensioners-specific-manager .pensioners-specific-manager-add-icon {
+  font-size: 1rem;
+}
+
+/* =================== RESPONSIVE =================== */
+
+@media (max-width: 1024px) {
+  .pensioners-specific-manager-checkboxes-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .pensioners-specific-manager-form-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+  
+  .pensioners-specific-manager-lecture-item,
+  .pensioners-specific-manager-activity-item {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .pensioners-specific-manager-lecture-actions,
+  .pensioners-specific-manager-activity-actions {
+    flex-direction: row;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .pensioners-specific-manager-title {
+    font-size: 1.5rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .pensioners-specific-manager-tabs {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .pensioners-specific-manager-tab {
+    justify-content: center;
+    padding: 0.75rem 1rem;
+  }
+  
+  .pensioners-specific-manager-content {
+    padding: 1.5rem;
+  }
+  
+  .pensioners-specific-manager-subsection {
+    padding: 0.5rem;
+  }
+  
+  .pensioners-specific-manager-form-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .pensioners-specific-manager-form-actions {
+    flex-direction: column;
+  }
+  
+  .pensioners-specific-manager-checkbox-content {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .pensioners-specific-manager-lecture-meta,
+  .pensioners-specific-manager-activity-meta {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .pensioners-specific-manager-content {
+    padding: 0.2rem;
+  }
+  .pensioners-specific-manager-subsection {
+    padding: 0.2rem;
+  } 
+  .pensioners-specific-manager-add-form {
+    padding: 0.5rem;
+  }
+  
+  .pensioners-specific-manager-checkbox-item {
+    padding: 1rem;
+  }
+  .pensioners-specific-manager-btn{
+    font-size: 0.8rem;
+    justify-content: center;
+  }
+  .pensioners-specific-manager-add-btn{
+    font-size: 0.8rem;
+    justify-content: center;
+  }
+  .pensioners-specific-manager .pensioners-specific-manager-checkbox-icon {
+    font-size: 1.2rem;
+  }
+  
+  .pensioners-specific-manager-activity-icon {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .pensioners-specific-manager .pensioners-specific-manager-brain-icon {
+    font-size: 1.3rem;
+  }
+}
+
+/* =================== ACCESSIBILITY =================== */
+
+.pensioners-specific-manager-tab:focus-visible,
+.pensioners-specific-manager-checkbox:focus-visible,
+.pensioners-specific-manager-close-btn:focus-visible,
+.pensioners-specific-manager-action-btn:focus-visible,
+.pensioners-specific-manager-form-input:focus-visible,
+.pensioners-specific-manager-form-select:focus-visible,
+.pensioners-specific-manager-form-textarea:focus-visible,
+.pensioners-specific-manager-btn:focus-visible,
+.pensioners-specific-manager-add-btn:focus-visible {
+  outline: 3px solid #0ea5e9;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pensioners-specific-manager-tab,
+  .pensioners-specific-manager-checkbox-item,
+  .pensioners-specific-manager-lecture-item,
+  .pensioners-specific-manager-activity-item,
+  .pensioners-specific-manager-action-btn,
+  .pensioners-specific-manager-btn,
+  .pensioners-specific-manager-add-btn {
+    transition: none;
+  }
+}
+
+/* =================== HIGH CONTRAST MODE =================== */
+
+@media (prefers-contrast: high) {
+  .pensioners-specific-manager-content,
+  .pensioners-specific-manager-checkbox-item,
+  .pensioners-specific-manager-lecture-item,
+  .pensioners-specific-manager-activity-item,
+  .pensioners-specific-manager-add-form,
+  .pensioners-specific-manager-subsection {
+    border-width: 3px;
+  }
+  
+  .pensioners-specific-manager-tab,
+  .pensioners-specific-manager-action-btn,
+  .pensioners-specific-manager-btn,
+  .pensioners-specific-manager-checkbox-checkmark {
+    border-width: 3px;
+  }
+}
+
+/* =================== PRINT STYLES =================== */
+
+@media print {
+  .pensioners-specific-manager-tabs,
+  .pensioners-specific-manager-add-form,
+  .pensioners-specific-manager-lecture-actions,
+  .pensioners-specific-manager-activity-actions,
+  .pensioners-specific-manager-add-section {
+    display: none;
+  }
+  
+  .pensioners-specific-manager-content {
+    border: 1px solid #000;
+    break-inside: avoid;
+  }
+  
+  .pensioners-specific-manager-checkbox-item,
+  .pensioners-specific-manager-lecture-item,
+  .pensioners-specific-manager-activity-item {
+    break-inside: avoid;
+    border: 1px solid #000;
+    margin-bottom: 1rem;
+  }
+}
+
+/* =================== SPECIAL PENSIONERS COLORS =================== */
+
+.pensioners-specific-manager-tab.active {
+  background: linear-gradient(135deg, #059669, #047857);
+  box-shadow: 0 4px 15px rgba(5, 150, 105, 0.3);
+}
+
+.pensioners-specific-manager .pensioners-specific-manager-section-icon,
+.pensioners-specific-manager .pensioners-specific-manager-title-icon,
+.pensioners-specific-manager .pensioners-specific-manager-label-icon,
+.pensioners-specific-manager .pensioners-specific-manager-checkbox-icon {
+  color: #059669;
+}
+
+.pensioners-specific-manager-btn-add {
+  background: linear-gradient(135deg, #059669, #047857);
+  box-shadow: 0 4px 15px rgba(5, 150, 105, 0.3);
+}
+
+.pensioners-specific-manager-btn-add:hover {
+  box-shadow: 0 8px 25px rgba(5, 150, 105, 0.4);
+}
+
+.pensioners-specific-manager-add-btn {
+  background: linear-gradient(135deg, #059669, #047857);
+  box-shadow: 0 6px 20px rgba(5, 150, 105, 0.3);
+}
+
+.pensioners-specific-manager-add-btn:hover {
+  box-shadow: 0 10px 30px rgba(5, 150, 105, 0.4);
+}
+
+.pensioners-specific-manager-checkbox input:checked ~ .pensioners-specific-manager-checkbox-checkmark {
+  background: linear-gradient(135deg, #059669, #047857);
+  border-color: #047857;
+}
+
+.pensioners-specific-manager-form-input:focus,
+.pensioners-specific-manager-form-select:focus,
+.pensioners-specific-manager-form-textarea:focus {
+  border-color: #059669;
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+}
+
+.pensioners-specific-manager-edit-btn:hover {
+  border-color: #059669;
+  color: #059669;
+}
+
+.pensioners-specific-manager-lecture-meta span,
+.pensioners-specific-manager-activity-meta span {
+  background: #d1fae5;
+  color: #065f46;
+}
+/* =================== ADDITIONAL STYLES FOR NEW COMPONENTS =================== */
+
+/* Partners List Styles */
+.pensioners-specific-manager-partners-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.pensioners-specific-manager-partner-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.pensioners-specific-manager-partner-item:hover {
+  border-color: #059669;
+  box-shadow: 0 4px 15px rgba(5, 150, 105, 0.1);
+}
+
+.pensioners-specific-manager-partner-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.pensioners-specific-manager-partner-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.pensioners-specific-manager-partner-address {
+  color: #6b7280;
+  margin: 0.5rem 0 0 0;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.pensioners-specific-manager-partner-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+/* Tags List for Arrays */
+.pensioners-specific-manager-tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.pensioners-specific-manager-tag {
+  background: #f0f9ff;
+  color: #0369a1;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid #bae6fd;
+}
+
+.pensioners-specific-manager-tag-remove {
+  background: transparent;
+  border: none;
+  color: #0369a1;
+  cursor: pointer;
+  padding: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.pensioners-specific-manager-tag-remove:hover {
+  background: #0369a1;
+  color: white;
+}
+
+.pensioners-specific-manager-add-input {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.pensioners-specific-manager-add-input-btn {
+  background: #059669;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.pensioners-specific-manager-add-input-btn:hover {
+  background: #047857;
+  transform: scale(1.05);
+}
+
+.pensioners-specific-manager-add-input-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Emergency Form Enhanced Styles */
+.pensioners-specific-manager-emergency-form .pensioners-specific-manager-form-group {
+  margin-bottom: 1.5rem;
+}
+
+.pensioners-specific-manager-emergency-form .pensioners-specific-manager-checkbox-item {
+  margin-bottom: 1.5rem;
+}
+
+/* Responsive Updates */
+@media (max-width: 768px) {
+  .pensioners-specific-manager-partner-item {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .pensioners-specific-manager-partner-actions {
+    flex-direction: row;
+    justify-content: center;
+  }
+  
+  .pensioners-specific-manager-add-input {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .pensioners-specific-manager-add-input-btn {
+    width: 100%;
+    height: 44px;
+  }
+  
+  .pensioners-specific-manager-tags-list {
+    justify-content: center;
+  }
+}
+
+/* Enhanced Color Scheme for Pensioners */
+.pensioners-specific-manager .pensioners-specific-manager-brain-icon {
+  color: #059669;
+}
+
+.pensioners-specific-manager-activity-item:hover {
+  border-color: #059669;
+  box-shadow: 0 4px 15px rgba(5, 150, 105, 0.1);
+}
+
+.pensioners-specific-manager-activity-meta span {
+  background: #d1fae5;
+  color: #065f46;
+}
+/* =================== ENHANCED RESPONSIVE DESIGN =================== */
+
+/* Large screens (1200px and up) */
+@media (min-width: 1200px) {
+  .pensioners-specific-manager-checkboxes-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .pensioners-specific-manager-form-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Medium screens (768px - 1024px) */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .pensioners-specific-manager-checkboxes-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .pensioners-specific-manager-form-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  
+  .pensioners-specific-manager-tabs {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .pensioners-specific-manager-tab {
+    flex: 1 1 calc(50% - 0.25rem);
+    min-width: 200px;
+  }
+}
+
+/* Tablets (768px and below) */
+@media (max-width: 768px) {
+  .pensioners-specific-manager {
+    padding: 0.5rem 0;
+  }
+  
+  .pensioners-specific-manager-title {
+    font-size: 1.4rem;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+  
+  .pensioners-specific-manager-subtitle {
+    font-size: 1rem;
+    text-align: center;
+  }
+  
+  /* Tabs for tablets */
+  .pensioners-specific-manager-tabs {
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.25rem;
+  }
+  
+  .pensioners-specific-manager-tab {
+    justify-content: flex-start;
+    padding: 0.875rem 1rem;
+    min-height: 50px;
+  }
+  
+  .pensioners-specific-manager-content {
+    padding: 1.25rem;
+  }
+  
+  .pensioners-specific-manager-subsection {
+    padding: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .pensioners-specific-manager-form-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .pensioners-specific-manager-form-actions {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .pensioners-specific-manager-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 1rem;
+    font-size: 0.95rem;
+  }
+  
+  .pensioners-specific-manager-checkboxes-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .pensioners-specific-manager-checkbox-content {
+    flex-direction: column;
+    gap: 0.75rem;
+    text-align: center;
+  }
+  
+  .pensioners-specific-manager-lecture-item,
+  .pensioners-specific-manager-partner-item,
+  .pensioners-specific-manager-activity-item {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .pensioners-specific-manager-lecture-actions,
+  .pensioners-specific-manager-partner-actions,
+  .pensioners-specific-manager-activity-actions {
+    flex-direction: row;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+  
+  .pensioners-specific-manager-lecture-meta,
+  .pensioners-specific-manager-partner-meta,
+  .pensioners-specific-manager-activity-meta {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+
+/* Small tablets and large phones (600px - 767px) */
+@media (max-width: 767px) and (min-width: 481px) {
+  .pensioners-specific-manager-header {
+    margin-bottom: 1.5rem;
+  }
+  
+  .pensioners-specific-manager-tabs {
+    margin-bottom: 1.5rem;
+  }
+  
+  .pensioners-specific-manager-tab {
+    font-size: 0.9rem;
+    padding: 0.75rem 0.875rem;
+  }
+  
+  .pensioners-specific-manager-section-header h4 {
+    font-size: 1.2rem;
+  }
+  
+  .pensioners-specific-manager-subsection h5 {
+    font-size: 1.1rem;
+  }
+  
+  .pensioners-specific-manager-checkbox-item {
+    padding: 1.25rem;
+  }
+  
+  .pensioners-specific-manager-checkbox-content h6 {
+    font-size: 0.95rem;
+  }
+  
+  .pensioners-specific-manager-checkbox-content p {
+    font-size: 0.875rem;
+  }
+  
+  .pensioners-specific-manager-add-btn {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Mobile phones (480px and below) */
+@media (max-width: 480px) {
+  .pensioners-specific-manager {
+    padding: 0.25rem 0;
+  }
+  
+  .pensioners-specific-manager-header {
+    margin-bottom: 1rem;
+    padding: 0 0.5rem;
+  }
+  
+  .pensioners-specific-manager-title {
+    font-size: 1.2rem;
+  }
+  
+  .pensioners-specific-manager-subtitle {
+    font-size: 0.9rem;
+  }
+  
+  .pensioners-specific-manager-tabs {
+    padding: 0.25rem;
+    margin-bottom: 1rem;
+    border-radius: 12px;
+  }
+  
+  .pensioners-specific-manager-tab {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.85rem;
+    min-height: 44px;
+    border-radius: 8px;
+  }
+  
+  .pensioners-specific-manager-content {
+    padding: 0.75rem;
+    border-radius: 12px;
+    min-height: 400px;
+  }
+  
+  .pensioners-specific-manager-section-header {
+    margin-bottom: 1.5rem;
+  }
+  
+  .pensioners-specific-manager-section-header h4 {
+    font-size: 1.1rem;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .pensioners-specific-manager-section-header p {
+    font-size: 0.85rem;
+  }
+  
+  .pensioners-specific-manager-subsection {
+    padding: 0.75rem;
+    margin-bottom: 1.5rem;
+    border-radius: 10px;
+  }
+  
+  .pensioners-specific-manager-subsection h5 {
+    font-size: 1rem;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  /* Checkboxes for mobile */
+  .pensioners-specific-manager-checkboxes-grid {
+    gap: 0.75rem;
+  }
+  
+  .pensioners-specific-manager-checkbox-item {
+    padding: 1rem;
+    border-radius: 10px;
+  }
+  
+  .pensioners-specific-manager-checkbox {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.75rem;
+  }
+  
+  .pensioners-specific-manager-checkbox-content {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .pensioners-specific-manager-checkbox-content h6 {
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .pensioners-specific-manager-checkbox-content p {
+    font-size: 0.8rem;
+    line-height: 1.4;
+  }
+  
+  .pensioners-specific-manager .pensioners-specific-manager-checkbox-icon {
+    font-size: 1.25rem;
+  }
+  
+  /* Forms for mobile */
+  .pensioners-specific-manager-add-form {
+    padding: 1rem;
+    border-radius: 10px;
+  }
+  
+  .pensioners-specific-manager-form-header {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .pensioners-specific-manager-form-header h6 {
+    font-size: 0.95rem;
+  }
+  
+  .pensioners-specific-manager-close-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    width: 30px;
+    height: 30px;
+  }
+  
+  .pensioners-specific-manager-form-group {
+    gap: 0.5rem;
+  }
+  
+  .pensioners-specific-manager-form-label {
+    font-size: 0.85rem;
+    flex-direction: column;
+    gap: 0.25rem;
+    text-align: center;
+  }
+  
+  .pensioners-specific-manager .pensioners-specific-manager-label-icon {
+    font-size: 0.9rem;
+  }
+  
+  .pensioners-specific-manager-form-input,
+  .pensioners-specific-manager-form-select,
+  .pensioners-specific-manager-form-textarea {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+    border-radius: 8px;
+  }
+  
+  .pensioners-specific-manager-form-textarea {
+    min-height: 80px;
+  }
+  
+  .pensioners-specific-manager-btn {
+    padding: 0.75rem;
+    font-size: 0.85rem;
+    min-height: 44px;
+    border-radius: 8px;
+  }
+  
+  /* Lists for mobile */
+  .pensioners-specific-manager-lectures-list,
+  .pensioners-specific-manager-partners-list,
+  .pensioners-specific-manager-activities-list {
+    gap: 1rem;
+  }
+  
+  .pensioners-specific-manager-lecture-item,
+  .pensioners-specific-manager-partner-item,
+  .pensioners-specific-manager-activity-item {
+    padding: 1rem;
+    border-radius: 10px;
+    gap: 0.75rem;
+  }
+  
+  .pensioners-specific-manager-lecture-content h6,
+  .pensioners-specific-manager-partner-content h6,
+  .pensioners-specific-manager-activity-content h6 {
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .pensioners-specific-manager-lecture-meta,
+  .pensioners-specific-manager-partner-meta,
+  .pensioners-specific-manager-activity-meta {
+    gap: 0.5rem;
+    justify-content: center;
+  }
+  
+  .pensioners-specific-manager-lecture-meta span,
+  .pensioners-specific-manager-partner-meta span,
+  .pensioners-specific-manager-activity-meta span {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+  
+  .pensioners-specific-manager .pensioners-specific-manager-meta-icon {
+    font-size: 0.7rem;
+  }
+  
+  .pensioners-specific-manager-action-btn {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .pensioners-specific-manager .pensioners-specific-manager-action-icon {
+    font-size: 0.9rem;
+  }
+  
+  /* Activity specific styles */
+  .pensioners-specific-manager-activity-icon {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .pensioners-specific-manager .pensioners-specific-manager-brain-icon {
+    font-size: 1.25rem;
+  }
+  
+  .pensioners-specific-manager-activity-description {
+    font-size: 0.8rem;
+    text-align: center;
+  }
+  
+  /* Tags for mobile */
+  .pensioners-specific-manager-tags-list {
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  
+  .pensioners-specific-manager-tag {
+    font-size: 0.8rem;
+    padding: 0.4rem 0.75rem;
+  }
+  
+  .pensioners-specific-manager-tag-remove {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .pensioners-specific-manager-add-input {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .pensioners-specific-manager-add-input-btn {
+    width: 100%;
+    height: 44px;
+    border-radius: 8px;
+  }
+  
+  /* Empty states */
+  .pensioners-specific-manager-empty-state {
+    padding: 2rem 1rem;
+  }
+  
+  .pensioners-specific-manager .pensioners-specific-manager-empty-icon {
+    font-size: 2.5rem;
+  }
+  
+  .pensioners-specific-manager-empty-state p {
+    font-size: 0.85rem;
+  }
+  
+  /* Add buttons */
+  .pensioners-specific-manager-add-btn {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.85rem;
+    width: 100%;
+    justify-content: center;
+    min-height: 44px;
+    border-radius: 10px;
+  }
+  
+  /* Emergency form specific */
+  .pensioners-specific-manager-emergency-form {
+    padding: 1rem;
+    border-radius: 10px;
+  }
+  
+  .pensioners-specific-manager-emergency-form .pensioners-specific-manager-checkbox-item {
+    margin-bottom: 1rem;
+  }
+}
+
+/* Extra small phones (360px and below) */
+@media (max-width: 360px) {
+  .pensioners-specific-manager {
+    padding: 0;
+  }
+  
+  .pensioners-specific-manager-header {
+    padding: 0 0.25rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .pensioners-specific-manager-title {
+    font-size: 1.1rem;
+  }
+  
+  .pensioners-specific-manager .pensioners-specific-manager-title-icon {
+    font-size: 1.2rem;
+  }
+  
+  .pensioners-specific-manager-subtitle {
+    font-size: 0.85rem;
+  }
+  
+  .pensioners-specific-manager-tabs {
+    padding: 0.15rem;
+    margin-bottom: 0.75rem;
+    border-radius: 10px;
+  }
+  
+  .pensioners-specific-manager-tab {
+    padding: 0.6rem 0.4rem;
+    font-size: 0.8rem;
+    min-height: 40px;
+    border-radius: 6px;
+  }
+  
+  .pensioners-specific-manager .pensioners-specific-manager-tab-icon {
+    font-size: 0.9rem;
+  }
+  
+  .pensioners-specific-manager-content {
+    padding: 0.5rem;
+    border-radius: 10px;
+    min-height: 350px;
+  }
+  
+  .pensioners-specific-manager-section-header {
+    margin-bottom: 1rem;
+    padding: 0 0.25rem;
+  }
+  
+  .pensioners-specific-manager-section-header h4 {
+    font-size: 1rem;
+  }
+  
+  .pensioners-specific-manager .pensioners-specific-manager-section-icon {
+    font-size: 1rem;
+  }
+  
+  .pensioners-specific-manager-section-header p {
+    font-size: 0.8rem;
+  }
+  
+  .pensioners-specific-manager-subsection {
+    padding: 0.6rem;
+    margin-bottom: 1.2rem;
+    border-radius: 8px;
+  }
+  
+  .pensioners-specific-manager-subsection h5 {
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  /* Extra small checkboxes */
+  .pensioners-specific-manager-checkboxes-grid {
+    gap: 0.6rem;
+  }
+  
+  .pensioners-specific-manager-checkbox-item {
+    padding: 0.75rem;
+    border-radius: 8px;
+  }
+  
+  .pensioners-specific-manager-checkbox {
+    gap: 0.6rem;
+  }
+  
+  .pensioners-specific-manager-checkbox-checkmark {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .pensioners-specific-manager-checkbox-content h6 {
+    font-size: 0.85rem;
+    margin-bottom: 0.2rem;
+  }
+  
+  .pensioners-specific-manager-checkbox-content p {
+    font-size: 0.75rem;
+    line-height: 1.3;
+  }
+  
+  .pensioners-specific-manager .pensioners-specific-manager-checkbox-icon {
+    font-size: 1.1rem;
+  }
+  
+  /* Extra small forms */
+  .pensioners-specific-manager-add-form {
+    padding: 0.75rem;
+    border-radius: 8px;
+    position: relative;
+  }
+  
+  .pensioners-specific-manager-form-header h6 {
+    font-size: 0.85rem;
+  }
+  
+  .pensioners-specific-manager-close-btn {
+    width: 28px;
+    height: 28px;
+    top: 0.4rem;
+    right: 0.4rem;
+  }
+  
+  .pensioners-specific-manager .pensioners-specific-manager-close-icon {
+    font-size: 0.8rem;
+  }
+  
+  .pensioners-specific-manager-form-label {
+    font-size: 0.8rem;
+  }
+  
+  .pensioners-specific-manager-form-input,
+  .pensioners-specific-manager-form-select,
+  .pensioners-specific-manager-form-textarea {
+    padding: 0.6rem;
+    font-size: 0.8rem;
+    border-radius: 6px;
+  }
+  
+  .pensioners-specific-manager-form-textarea {
+    min-height: 70px;
+  }
+  
+  .pensioners-specific-manager-btn {
+    padding: 0.6rem;
+    font-size: 0.8rem;
+    min-height: 40px;
+    border-radius: 6px;
+  }
+  
+  .pensioners-specific-manager .pensioners-specific-manager-btn-icon {
+    font-size: 0.8rem;
+  }
+  
+  /* Extra small lists */
+  .pensioners-specific-manager-lecture-item,
+  .pensioners-specific-manager-partner-item,
+  .pensioners-specific-manager-activity-item {
+    padding: 0.75rem;
+    border-radius: 8px;
+  }
+  
+  .pensioners-specific-manager-lecture-content h6,
+  .pensioners-specific-manager-partner-content h6,
+  .pensioners-specific-manager-activity-content h6 {
+    font-size: 0.85rem;
+    margin-bottom: 0.4rem;
+  }
+  
+  .pensioners-specific-manager-lecture-meta span,
+  .pensioners-specific-manager-partner-meta span,
+  .pensioners-specific-manager-activity-meta span {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.4rem;
+    border-radius: 12px;
+  }
+  
+  .pensioners-specific-manager-action-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+  }
+  
+  .pensioners-specific-manager .pensioners-specific-manager-action-icon {
+    font-size: 0.8rem;
+  }
+  
+  /* Extra small activity icons */
+  .pensioners-specific-manager-activity-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 10px;
+  }
+  
+  .pensioners-specific-manager .pensioners-specific-manager-brain-icon {
+    font-size: 1.1rem;
+  }
+  
+  .pensioners-specific-manager-activity-description {
+    font-size: 0.75rem;
+    margin-top: 0.4rem;
+  }
+  
+  /* Extra small tags */
+  .pensioners-specific-manager-tag {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 15px;
+  }
+  
+  .pensioners-specific-manager-tag-remove {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .pensioners-specific-manager-add-input-btn {
+    height: 40px;
+    border-radius: 6px;
+  }
+  
+  /* Extra small empty states */
+  .pensioners-specific-manager-empty-state {
+    padding: 1.5rem 0.75rem;
+  }
+  
+  .pensioners-specific-manager .pensioners-specific-manager-empty-icon {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .pensioners-specific-manager-empty-state p {
+    font-size: 0.8rem;
+  }
+  
+  /* Extra small add buttons */
+  .pensioners-specific-manager-add-btn {
+    padding: 0.6rem 1rem;
+    font-size: 0.8rem;
+    min-height: 40px;
+    border-radius: 8px;
+  }
+  
+  .pensioners-specific-manager .pensioners-specific-manager-add-icon {
+    font-size: 0.8rem;
+  }
+}
+
+/* Ultra small screens (320px and below) */
+@media (max-width: 320px) {
+  .pensioners-specific-manager-title {
+    font-size: 1rem;
+  }
+  
+  .pensioners-specific-manager-subtitle {
+    font-size: 0.8rem;
+  }
+  
+  .pensioners-specific-manager-tab {
+    padding: 0.5rem 0.3rem;
+    font-size: 0.75rem;
+    min-height: 38px;
+  }
+  
+  .pensioners-specific-manager-content {
+    padding: 0.4rem;
+  }
+  
+  .pensioners-specific-manager-section-header h4 {
+    font-size: 0.95rem;
+  }
+  
+  .pensioners-specific-manager-subsection {
+    padding: 0.5rem;
+  }
+  
+  .pensioners-specific-manager-subsection h5 {
+    font-size: 0.85rem;
+  }
+  
+  .pensioners-specific-manager-checkbox-item {
+    padding: 0.6rem;
+  }
+  
+  .pensioners-specific-manager-checkbox-content h6 {
+    font-size: 0.8rem;
+  }
+  
+  .pensioners-specific-manager-checkbox-content p {
+    font-size: 0.7rem;
+  }
+  
+  .pensioners-specific-manager-add-form {
+    padding: 0.6rem;
+  }
+  
+  .pensioners-specific-manager-form-input,
+  .pensioners-specific-manager-form-select,
+  .pensioners-specific-manager-form-textarea {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+  
+  .pensioners-specific-manager-btn {
+    font-size: 0.75rem;
+    padding: 0.5rem;
+    min-height: 38px;
+  }
+  
+  .pensioners-specific-manager-activity-icon {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .pensioners-specific-manager-action-btn {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* Touch device enhancements */
+@media (hover: none) and (pointer: coarse) {
+  .pensioners-specific-manager-tab,
+  .pensioners-specific-manager-btn,
+  .pensioners-specific-manager-add-btn,
+  .pensioners-specific-manager-action-btn,
+  .pensioners-specific-manager-close-btn,
+  .pensioners-specific-manager-tag-remove,
+  .pensioners-specific-manager-add-input-btn {
+    min-height: 24px;
+    min-width: 24px;
+  }
+  
+  .pensioners-specific-manager-checkbox-checkmark {
+    min-width: 24px;
+    min-height: 24px;
+  }
+  
+  .pensioners-specific-manager-form-input,
+  .pensioners-specific-manager-form-select,
+  .pensioners-specific-manager-form-textarea {
+    min-height: 44px;
+  }
+}
+
+/* Landscape orientation for small screens */
+@media (max-width: 768px) and (orientation: landscape) {
+  .pensioners-specific-manager-tabs {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .pensioners-specific-manager-tab {
+    flex: 0 1 auto;
+    min-width: 120px;
+  }
+  
+  .pensioners-specific-manager-content {
+    max-height: 70vh;
+    overflow-y: auto;
+  }
+  
+  .pensioners-specific-manager-checkboxes-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .pensioners-specific-manager-form-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* High DPI / Retina display adjustments */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .pensioners-specific-manager-checkbox-checkmark {
+    border-width: 2px;
+  }
+  
+  .pensioners-specific-manager-form-input,
+  .pensioners-specific-manager-form-select,
+  .pensioners-specific-manager-form-textarea {
+    border-width: 2px;
+  }
+}
+/* =================== PARTNERS LIST STYLES =================== */
+
+.pensioners-specific-manager-partners-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.pensioners-specific-manager-partner-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.pensioners-specific-manager-partner-item:hover {
+  border-color: #059669;
+  box-shadow: 0 4px 15px rgba(5, 150, 105, 0.1);
+  transform: translateY(-2px);
+}
+
+.pensioners-specific-manager-partner-icon {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #059669;
+  font-size: 1.4rem;
+}
+
+.pensioners-specific-manager-partner-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.pensioners-specific-manager-partner-content h6 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0 0 0.75rem 0;
+  line-height: 1.3;
+}
+
+.pensioners-specific-manager-partner-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.pensioners-specific-manager-partner-meta span {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #d1fae5;
+  color: #065f46;
+  padding: 0.4rem 0.8rem;
+  border-radius: 15px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 1px solid rgba(5, 150, 105, 0.2);
+}
+
+.pensioners-specific-manager .pensioners-specific-manager-partner-meta-icon {
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.pensioners-specific-manager-partner-address {
+  color: #6b7280;
+  margin: 0.5rem 0 0 0;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  line-height: 1.4;
+}
+
+.pensioners-specific-manager-partner-description {
+  color: #6b7280;
+  margin: 0.75rem 0 0 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+.pensioners-specific-manager-partner-contact-info {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.pensioners-specific-manager-partner-contact-info h7 {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 0.5rem 0;
+  display: block;
+}
+
+.pensioners-specific-manager-partner-contact-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.pensioners-specific-manager-partner-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.pensioners-specific-manager .pensioners-specific-manager-contact-icon {
+  color: #059669;
+  font-size: 0.8rem;
+}
+
+.pensioners-specific-manager-partner-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.pensioners-specific-manager-partner-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: linear-gradient(135deg, #059669, #047857);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.pensioners-specific-manager-partner-discount {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+  padding: 0.3rem 0.8rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.5rem;
+}
+
+.pensioners-specific-manager .pensioners-specific-manager-discount-icon {
+  font-size: 0.7rem;
+}
+
+.pensioners-specific-manager-partner-schedule {
+  background: #fef3c7;
+  border: 1px solid #fbbf24;
+  border-radius: 8px;
+  padding: 0.6rem;
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+  color: #92400e;
+}
+
+.pensioners-specific-manager-partner-schedule-title {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.pensioners-specific-manager .pensioners-specific-manager-schedule-icon {
+  font-size: 0.8rem;
+  color: #f59e0b;
+}
+
+/* =================== PARTNERS LIST RESPONSIVE =================== */
+
+@media (max-width: 768px) {
+  .pensioners-specific-manager-partners-list {
+    gap: 1rem;
+  }
+  
+  .pensioners-specific-manager-partner-item {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.25rem;
+    text-align: center;
+  }
+  
+  .pensioners-specific-manager-partner-icon {
+    align-self: center;
+    margin-bottom: 0.5rem;
+  }
+  
+  .pensioners-specific-manager-partner-content {
+    text-align: center;
+  }
+  
+  .pensioners-specific-manager-partner-meta {
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  
+  .pensioners-specific-manager-partner-address {
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .pensioners-specific-manager-partner-actions {
+    flex-direction: row;
+    justify-content: center;
+    align-self: center;
+  }
+  
+  .pensioners-specific-manager-partner-badge {
+    position: static;
+    align-self: center;
+    margin-bottom: 0.5rem;
+  }
+  
+  .pensioners-specific-manager-partner-contact-details {
+    justify-content: center;
+    gap: 0.75rem;
+  }
+  
+  .pensioners-specific-manager-partner-contact-item {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .pensioners-specific-manager-partner-item {
+    padding: 1rem;
+    gap: 0.75rem;
+  }
+  
+  .pensioners-specific-manager-partner-icon {
+    width: 45px;
+    height: 45px;
+    font-size: 1.2rem;
+  }
+  
+  .pensioners-specific-manager-partner-content h6 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .pensioners-specific-manager-partner-meta {
+    gap: 0.4rem;
+  }
+  
+  .pensioners-specific-manager-partner-meta span {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.6rem;
+  }
+  
+  .pensioners-specific-manager .pensioners-specific-manager-partner-meta-icon {
+    font-size: 0.7rem;
+  }
+  
+  .pensioners-specific-manager-partner-address,
+  .pensioners-specific-manager-partner-description {
+    font-size: 0.85rem;
+  }
+  
+  .pensioners-specific-manager-partner-contact-info {
+    padding: 0.6rem;
+  }
+  
+  .pensioners-specific-manager-partner-contact-info h7 {
+    font-size: 0.8rem;
+  }
+  
+  .pensioners-specific-manager-partner-contact-item {
+    font-size: 0.8rem;
+  }
+  
+  .pensioners-specific-manager-partner-badge {
+    font-size: 0.7rem;
+    padding: 0.2rem 0.6rem;
+  }
+  
+  .pensioners-specific-manager-partner-discount {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.6rem;
+  }
+  
+  .pensioners-specific-manager-partner-schedule {
+    font-size: 0.8rem;
+    padding: 0.5rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .pensioners-specific-manager-partner-item {
+    padding: 0.75rem;
+  }
+  
+  .pensioners-specific-manager-partner-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+  }
+  
+  .pensioners-specific-manager-partner-content h6 {
+    font-size: 0.95rem;
+  }
+  
+  .pensioners-specific-manager-partner-meta span {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
+  }
+  
+  .pensioners-specific-manager-partner-address,
+  .pensioners-specific-manager-partner-description {
+    font-size: 0.8rem;
+  }
+  
+  .pensioners-specific-manager-partner-contact-item {
+    font-size: 0.75rem;
+  }
+  
+  .pensioners-specific-manager-partner-actions {
+    gap: 0.4rem;
+  }
+}
+
+@media (max-width: 320px) {
+  .pensioners-specific-manager-partner-item {
+    padding: 0.6rem;
+  }
+  
+  .pensioners-specific-manager-partner-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+  
+  .pensioners-specific-manager-partner-content h6 {
+    font-size: 0.9rem;
+  }
+  
+  .pensioners-specific-manager-partner-meta span {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.4rem;
+  }
+  
+  .pensioners-specific-manager-partner-contact-info {
+    padding: 0.4rem;
+  }
+  
+  .pensioners-specific-manager-partner-contact-details {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+}
+
+/* =================== ACCESSIBILITY =================== */
+
+.pensioners-specific-manager-partner-item:focus-within {
+  outline: 3px solid #059669;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pensioners-specific-manager-partner-item {
+    transition: none;
+  }
+}
+
+@media (prefers-contrast: high) {
+  .pensioners-specific-manager-partner-item {
+    border-width: 3px;
+  }
+  
+  .pensioners-specific-manager-partner-meta span {
+    border-width: 2px;
+  }
+}
+
+@media print {
+  .pensioners-specific-manager-partner-actions {
+    display: none;
+  }
+  
+  .pensioners-specific-manager-partner-item {
+    break-inside: avoid;
+    border: 1px solid #000;
+    margin-bottom: 1rem;
+  }
+}

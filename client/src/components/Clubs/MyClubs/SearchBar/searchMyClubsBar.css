@@ -1,0 +1,61 @@
+/* src/components/Profile/MyClubs/components/SearchMyClubsBar.css */
+.searchmyclubs-bar {
+  flex: 1;
+  min-width: 300px;
+}
+
+.searchmyclubs-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.searchmyclubs-input {
+  width: 100%;
+  padding: 1rem 1rem 1rem 3rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 1rem;
+  background: white;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.searchmyclubs-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.15);
+}
+
+.searchmyclubs-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  font-size: 1.1rem;
+}
+
+.searchmyclubs-clear-button {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.searchmyclubs-clear-button:hover {
+  color: #6b7280;
+  background: #f3f4f6;
+}
+
+@media (max-width: 768px) {
+  .searchmyclubs-bar {
+    min-width: unset;
+  }
+}

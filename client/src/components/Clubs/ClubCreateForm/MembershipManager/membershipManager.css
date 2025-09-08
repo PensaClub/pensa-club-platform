@@ -1,0 +1,1874 @@
+/* ===============================
+   MEMBERSHIP MANAGER STYLES
+   =============================== */
+
+.membership-manager {
+  width: 100%;
+  padding: 1rem 0;
+}
+
+/* ===============================
+   SVG ICON STYLES
+   =============================== */
+
+.membership-manager .membership-manager-title svg {
+  color: #6366f1;
+  font-size: 1.5rem;
+}
+
+.membership-manager .membership-manager-section-title svg {
+  color: #6366f1;
+  font-size: 1.1rem;
+}
+
+.membership-manager .membership-manager-type-icon svg {
+  font-size: 1.8rem;
+  transition: all 0.3s ease;
+}
+
+.membership-manager .membership-manager-role-icon svg {
+  font-size: 1.2rem;
+  color: #6366f1;
+}
+
+.membership-manager .membership-manager-remove-btn svg,
+.membership-manager .membership-manager-remove-fee-btn svg {
+  font-size: 0.9rem;
+}
+
+.membership-manager .membership-manager-add-btn svg {
+  font-size: 0.9rem;
+}
+
+.membership-manager .membership-manager-help-icon svg {
+  font-size: 1rem;
+}
+
+/* ===============================
+   HEADER SECTION
+   =============================== */
+
+.membership-manager-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.membership-manager-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 1rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.membership-manager-subtitle {
+  font-size: 1.1rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ===============================
+   SECTION STYLES
+   =============================== */
+
+.membership-manager-section {
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 15px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  transition: all 0.3s ease;
+}
+
+.membership-manager-section:hover {
+  border-color: #cbd5e1;
+  background: #f1f5f9;
+}
+
+.membership-manager-section-title {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 1.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+/* ===============================
+   MEMBERSHIP TYPES
+   =============================== */
+
+.membership-manager-types-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.membership-manager-type-card {
+  background: white;
+  border: 3px solid #e2e8f0;
+  border-radius: 15px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.membership-manager-type-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  border-color: #6366f1;
+}
+
+.membership-manager-type-card.selected {
+  border-color: #6366f1;
+  background: linear-gradient(135deg, #f8fafc, #eff6ff);
+  transform: translateY(-3px);
+  box-shadow: 0 15px 35px rgba(99, 102, 241, 0.2);
+}
+
+.membership-manager-type-card input[type="radio"] {
+  display: none;
+}
+
+.membership-manager-type-icon {
+  width: 60px;
+  height: 60px;
+  background: rgba(99, 102, 241, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem auto;
+  color: #6366f1;
+}
+
+.membership-manager-type-card.selected .membership-manager-type-icon {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  transform: scale(1.1);
+}
+
+.membership-manager-type-label {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.membership-manager-type-description {
+  font-size: 0.9rem;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+/* ===============================
+   TYPE SETTINGS
+   =============================== */
+
+.membership-manager-type-settings {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 2px solid #e2e8f0;
+}
+
+/* ===============================
+   FORM ELEMENTS
+   =============================== */
+
+.membership-manager-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.membership-manager-form-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.membership-manager-form-input,
+.membership-manager-form-select,
+.membership-manager-form-textarea {
+  padding: 0.875rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  background: white;
+  color: #374151;
+  font-family: inherit;
+}
+
+.membership-manager-form-input:focus,
+.membership-manager-form-select:focus,
+.membership-manager-form-textarea:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  transform: translateY(-1px);
+}
+
+.membership-manager-form-input:disabled,
+.membership-manager-form-select:disabled,
+.membership-manager-form-textarea:disabled {
+  background: #f3f4f6;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.membership-manager-form-textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* ===============================
+   CHECKBOX STYLES
+   =============================== */
+
+.membership-manager-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  padding: 0.75rem;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.membership-manager-checkbox-label:hover {
+  border-color: #6366f1;
+  background: #f8fafc;
+}
+
+.membership-manager-checkbox-label input[type="checkbox"] {
+  display: none;
+}
+
+.membership-manager-checkbox {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #d1d5db;
+  border-radius: 4px;
+  position: relative;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.membership-manager-checkbox-label input[type="checkbox"]:checked + .membership-manager-checkbox {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border-color: #6366f1;
+}
+
+.membership-manager-checkbox-label input[type="checkbox"]:checked + .membership-manager-checkbox::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+/* ===============================
+   MANAGEMENT ROLES
+   =============================== */
+
+.membership-manager-roles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.membership-manager-role-card {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.membership-manager-role-card:hover {
+  border-color: #6366f1;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+.membership-manager-role-card.custom {
+  border-left: 4px solid #f59e0b;
+}
+
+.membership-manager-role-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.membership-manager-role-icon {
+  width: 40px;
+  height: 40px;
+  background: rgba(99, 102, 241, 0.1);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.membership-manager-role-info {
+  flex: 1;
+}
+
+.membership-manager-role-info h5 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 0.25rem 0;
+}
+
+.membership-manager-required-badge {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.membership-manager-custom-badge {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.membership-manager-role-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.membership-manager-role-description {
+  font-size: 0.9rem;
+  color: #6b7280;
+  line-height: 1.4;
+  margin: 0;
+  font-style: italic;
+}
+
+.membership-manager-remove-btn {
+  background: #fee2e2;
+  color: #dc2626;
+  border: none;
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.membership-manager-remove-btn:hover {
+  background: #fecaca;
+  transform: scale(1.1);
+}
+
+/* ===============================
+   ADD ROLE/FEE SECTIONS
+   =============================== */
+
+.membership-manager-add-role,
+.membership-manager-add-fee {
+  background: white;
+  border: 2px dashed #cbd5e1;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.membership-manager-add-role h5,
+.membership-manager-add-fee h5 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 1rem 0;
+}
+
+.membership-manager-add-role-form,
+.membership-manager-add-fee-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.membership-manager-fee-form-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 1rem;
+}
+
+.membership-manager-add-btn {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 0.875rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  align-self: flex-start;
+}
+
+.membership-manager-add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(34, 197, 94, 0.3);
+}
+
+.membership-manager-add-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ===============================
+   FEES SECTION
+   =============================== */
+
+.membership-manager-fees-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.membership-manager-fee-item {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  transition: all 0.3s ease;
+}
+
+.membership-manager-fee-item:hover {
+  border-color: #6366f1;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.membership-manager-fee-content {
+  flex: 1;
+}
+
+.membership-manager-fee-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.membership-manager-fee-main h6 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0;
+}
+
+.membership-manager-fee-amount {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #22c55e;
+  background: rgba(34, 197, 94, 0.1);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+}
+
+.membership-manager-fee-description {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.membership-manager-remove-fee-btn {
+  background: #fee2e2;
+  color: #dc2626;
+  border: none;
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.membership-manager-remove-fee-btn:hover {
+  background: #fecaca;
+  transform: scale(1.1);
+}
+
+/* ===============================
+   HELP SECTION
+   =============================== */
+
+.membership-manager-help {
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border: 2px solid #bfdbfe;
+  border-radius: 15px;
+  padding: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-top: 2rem;
+}
+
+.membership-manager-help-icon {
+  background: #3b82f6;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.membership-manager-help-content h5 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1e40af;
+  margin: 0 0 0.5rem 0;
+}
+
+.membership-manager-help-content p {
+  color: #1e40af;
+  line-height: 1.5;
+  margin: 0;
+  opacity: 0.8;
+  font-size: 0.9rem;
+}
+
+/* ===============================
+   RESPONSIVE DESIGN
+   =============================== */
+
+@media (max-width: 1024px) {
+  .membership-manager-types-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  
+  .membership-manager-roles-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+  
+  .membership-manager-type-settings {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+  }
+  
+  .membership-manager-fee-form-row {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .membership-manager-title {
+    font-size: 1.5rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .membership-manager-section {
+    padding: 1.5rem;
+  }
+  
+  .membership-manager-types-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .membership-manager-roles-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .membership-manager-type-settings {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .membership-manager-role-header {
+    flex-wrap: wrap;
+  }
+  
+  .membership-manager-fee-main {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .membership-manager-help {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .membership-manager-section {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .membership-manager-section-title {
+    font-size: 1.1rem;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+  
+  .membership-manager-type-card {
+    padding: 1rem;
+  }
+  
+  .membership-manager-type-icon {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .membership-manager-role-card {
+    padding: 1rem;
+  }
+  
+  .membership-manager-role-header {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .membership-manager-fee-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .membership-manager-help {
+    padding: 1rem;
+  }
+}
+/* ===============================
+   FIX FOR 350px - 400px RANGE - MEMBERSHIP MANAGER
+   =============================== */
+
+@media (max-width: 400px) {
+  .membership-manager {
+    padding: 0.5rem 0;
+  }
+
+  .membership-manager-section {
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .membership-manager-section-title {
+    font-size: 1rem;
+    flex-direction: column;
+    gap: 0.25rem;
+    text-align: center;
+  }
+
+  /* Membership Types Grid */
+  .membership-manager-types-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .membership-manager-type-card {
+    padding: 1rem;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .membership-manager-type-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .membership-manager-type-icon svg {
+    font-size: 1.4rem;
+  }
+
+  .membership-manager-type-label {
+    font-size: 1rem;
+  }
+
+  .membership-manager-type-description {
+    font-size: 0.85rem;
+  }
+
+  /* Type Settings */
+  .membership-manager-type-settings {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  /* Form Elements */
+  .membership-manager-form-input,
+  .membership-manager-form-select,
+  .membership-manager-form-textarea {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .membership-manager-form-label {
+    font-size: 0.9rem;
+  }
+
+  /* Checkbox Labels */
+  .membership-manager-checkbox-label {
+    padding: 0.5rem;
+    font-size: 0.85rem;
+    gap: 0.5rem;
+  }
+
+  .membership-manager-checkbox {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Management Roles Grid */
+  .membership-manager-roles-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .membership-manager-role-card {
+    padding: 1rem;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .membership-manager-role-header {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .membership-manager-role-icon {
+    width: 35px;
+    height: 35px;
+  }
+
+  .membership-manager-role-info h5 {
+    font-size: 1rem;
+  }
+
+  .membership-manager-required-badge,
+  .membership-manager-custom-badge {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.4rem;
+  }
+
+  .membership-manager-role-description {
+    font-size: 0.85rem;
+  }
+
+  .membership-manager-role-content {
+    gap: 0.75rem;
+  }
+
+  .membership-manager-remove-btn {
+    width: 28px;
+    height: 28px;
+  }
+
+  /* Add Role/Fee Forms */
+  .membership-manager-add-role,
+  .membership-manager-add-fee {
+    padding: 1rem;
+    margin-top: 1rem;
+  }
+
+  .membership-manager-add-role h5,
+  .membership-manager-add-fee h5 {
+    font-size: 0.95rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .membership-manager-add-role-form,
+  .membership-manager-add-fee-form {
+    gap: 0.75rem;
+  }
+
+  /* Fee Form Row */
+  .membership-manager-fee-form-row {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .membership-manager-add-btn {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.85rem;
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Fees List */
+  .membership-manager-fees-list {
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .membership-manager-fee-item {
+    padding: 0.75rem;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .membership-manager-fee-main {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .membership-manager-fee-main h6 {
+    font-size: 0.95rem;
+  }
+
+  .membership-manager-fee-amount {
+    font-size: 0.8rem;
+    padding: 0.2rem 0.6rem;
+  }
+
+  .membership-manager-fee-description {
+    font-size: 0.8rem;
+  }
+
+  .membership-manager-remove-fee-btn {
+    width: 28px;
+    height: 28px;
+    align-self: flex-end;
+  }
+
+  /* Help Section */
+  .membership-manager-help {
+    padding: 1rem;
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  .membership-manager-help-content h5 {
+    font-size: 0.95rem;
+  }
+
+  .membership-manager-help-content p {
+    font-size: 0.85rem;
+  }
+
+  /* Осигуряване че нищо не излиза от контейнера */
+  .membership-manager *,
+  .membership-manager *:before,
+  .membership-manager *:after {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 350px) {
+  .membership-manager-section {
+    padding: 0.5rem;
+  }
+
+  .membership-manager-type-card {
+    padding: 0.75rem;
+  }
+
+  .membership-manager-type-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .membership-manager-type-icon svg {
+    font-size: 1.2rem;
+  }
+
+  .membership-manager-type-label {
+    font-size: 0.95rem;
+  }
+
+  .membership-manager-type-description {
+    font-size: 0.8rem;
+  }
+
+  .membership-manager-type-settings {
+    padding: 0.75rem;
+  }
+
+  .membership-manager-form-input,
+  .membership-manager-form-select,
+  .membership-manager-form-textarea {
+    padding: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .membership-manager-form-label {
+    font-size: 0.85rem;
+  }
+
+  .membership-manager-checkbox-label {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .membership-manager-role-card {
+    padding: 0.75rem;
+  }
+
+  .membership-manager-role-icon {
+    width: 30px;
+    height: 30px;
+  }
+
+  .membership-manager-role-info h5 {
+    font-size: 0.95rem;
+  }
+
+  .membership-manager-role-description {
+    font-size: 0.8rem;
+  }
+
+  .membership-manager-add-role,
+  .membership-manager-add-fee {
+    padding: 0.75rem;
+  }
+
+  .membership-manager-add-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+  }
+
+  .membership-manager-fee-item {
+    padding: 0.5rem;
+  }
+
+  .membership-manager-fee-main h6 {
+    font-size: 0.9rem;
+  }
+
+  .membership-manager-fee-amount {
+    font-size: 0.75rem;
+  }
+
+  .membership-manager-fee-description {
+    font-size: 0.75rem;
+  }
+
+  .membership-manager-help {
+    padding: 0.75rem;
+  }
+
+  .membership-manager-remove-btn,
+  .membership-manager-remove-fee-btn {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* ===============================
+   ДОПОЛНИТЕЛНИ ПОПРАВКИ ЗА МАЛКИ ЕКРАНИ
+   =============================== */
+
+@media (max-width: 400px) {
+  /* Header поправки */
+  .membership-manager-title {
+    font-size: 1.4rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .membership-manager-subtitle {
+    font-size: 1rem;
+  }
+
+  /* Role Header подреждане */
+  .membership-manager-role-header {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .membership-manager-role-info {
+    text-align: center;
+  }
+
+  /* Fee item подреждане */
+  .membership-manager-fee-item {
+    text-align: center;
+  }
+
+  .membership-manager-fee-content {
+    text-align: left;
+  }
+
+  /* Form group spacing */
+  .membership-manager-form-group {
+    gap: 0.4rem;
+  }
+
+  /* Badge подреждане */
+  .membership-manager-required-badge,
+  .membership-manager-custom-badge {
+    display: inline-block;
+    margin-top: 0.25rem;
+  }
+
+  /* Input placeholder font size */
+  .membership-manager-form-input::placeholder,
+  .membership-manager-form-textarea::placeholder {
+    font-size: 0.85rem;
+  }
+
+  /* Select styling */
+  .membership-manager-form-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    padding-right: 2.5rem;
+  }
+}
+
+@media (max-width: 350px) {
+  .membership-manager-title {
+    font-size: 1.2rem;
+  }
+
+  .membership-manager-subtitle {
+    font-size: 0.95rem;
+  }
+
+  .membership-manager-form-input::placeholder,
+  .membership-manager-form-textarea::placeholder {
+    font-size: 0.8rem;
+  }
+
+  .membership-manager-form-select {
+    padding-right: 2rem;
+    background-size: 1.2em 1.2em;
+  }
+}
+/* ===============================
+   ACCESSIBILITY IMPROVEMENTS
+   =============================== */
+
+.membership-manager-form-input:focus-visible,
+.membership-manager-form-select:focus-visible,
+.membership-manager-form-textarea:focus-visible,
+.membership-manager-type-card:focus-visible,
+.membership-manager-checkbox-label:focus-visible,
+.membership-manager-add-btn:focus-visible,
+.membership-manager-remove-btn:focus-visible {
+  outline: 3px solid #6366f1;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .membership-manager-type-card,
+  .membership-manager-role-card,
+  .membership-manager-fee-item,
+  .membership-manager-form-input,
+  .membership-manager-form-select,
+  .membership-manager-form-textarea,
+  .membership-manager-add-btn,
+  .membership-manager-remove-btn,
+  .membership-manager-checkbox-label {
+    transition: none;
+  }
+  
+  .membership-manager-type-icon svg {
+    transition: none;
+  }
+}
+
+/* ===============================
+   HIGH CONTRAST MODE
+   =============================== */
+
+@media (prefers-contrast: high) {
+  .membership-manager-section,
+  .membership-manager-type-card,
+  .membership-manager-role-card,
+  .membership-manager-fee-item {
+    border-width: 3px;
+  }
+  
+  .membership-manager-form-input,
+  .membership-manager-form-select,
+  .membership-manager-form-textarea {
+    border-width: 3px;
+  }
+  
+  .membership-manager-help {
+    border-width: 3px;
+  }
+}
+
+/* ===============================
+   PRINT STYLES
+   =============================== */
+
+@media print {
+  .membership-manager-add-role,
+  .membership-manager-add-fee,
+  .membership-manager-remove-btn,
+  .membership-manager-remove-fee-btn {
+    display: none;
+  }
+  
+  .membership-manager-section {
+    break-inside: avoid;
+    border: 1px solid #000;
+  }
+}
+/* ===============================
+   REQUIREMENTS & BENEFITS SECTION
+   =============================== */
+
+.membership-manager-subsection {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 2px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.membership-manager-subsection:hover {
+  border-color: #6366f1;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.membership-manager-subsection-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.membership-manager-subsection-title svg {
+  color: #6366f1;
+  font-size: 1rem;
+}
+
+/* ===============================
+   LIST ITEMS
+   =============================== */
+
+.membership-manager-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.membership-manager-list-item {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.3s ease;
+}
+
+.membership-manager-list-item:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.membership-manager-list-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.membership-manager-list-text {
+  font-size: 0.9rem;
+  color: #374151;
+  line-height: 1.4;
+}
+
+.membership-manager-remove-item-btn {
+  background: #fee2e2;
+  color: #dc2626;
+  border: none;
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.membership-manager-remove-item-btn:hover {
+  background: #fecaca;
+  transform: scale(1.1);
+}
+
+.membership-manager-remove-item-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ===============================
+   EMPTY STATE
+   =============================== */
+
+.membership-manager-empty-state {
+  background: #f9fafb;
+  border: 2px dashed #d1d5db;
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  color: #6b7280;
+}
+
+.membership-manager-empty-state svg {
+  font-size: 1.5rem;
+  color: #9ca3af;
+  margin-bottom: 0.5rem;
+}
+
+.membership-manager-empty-state p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/* ===============================
+   ADD ITEM FORM
+   =============================== */
+
+.membership-manager-add-item {
+  background: white;
+  border: 2px dashed #cbd5e1;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.membership-manager-add-item-form {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-end;
+}
+
+.membership-manager-add-item-form .membership-manager-form-input {
+  flex: 1;
+  margin: 0;
+}
+
+.membership-manager-add-btn.compact {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.membership-manager-add-btn.compact:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+}
+
+.membership-manager-add-btn.compact:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ===============================
+   RESPONSIVE DESIGN
+   =============================== */
+
+@media (max-width: 768px) {
+  .membership-manager-add-item-form {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+  
+  .membership-manager-add-btn.compact {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .membership-manager-list-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+  
+  .membership-manager-remove-item-btn {
+    align-self: flex-end;
+  }
+}
+
+@media (max-width: 480px) {
+  .membership-manager-subsection {
+    padding: 1rem;
+  }
+  
+  .membership-manager-subsection-title {
+    font-size: 1rem;
+    flex-direction: column;
+    gap: 0.25rem;
+    text-align: center;
+  }
+  
+  .membership-manager-list-item {
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .membership-manager-list-text {
+    font-size: 0.85rem;
+  }
+  
+  .membership-manager-add-item {
+    padding: 0.75rem;
+  }
+  
+  .membership-manager-add-btn.compact {
+    font-size: 0.8rem;
+    padding: 0.625rem 0.875rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .membership-manager-subsection {
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  
+  .membership-manager-empty-state {
+    padding: 1.5rem 1rem;
+  }
+  
+  .membership-manager-empty-state svg {
+    font-size: 1.2rem;
+  }
+  
+  .membership-manager-empty-state p {
+    font-size: 0.85rem;
+  }
+  
+  .membership-manager-list-item {
+    padding: 0.5rem;
+  }
+  
+  .membership-manager-add-item {
+    padding: 0.5rem;
+  }
+  
+  .membership-manager-remove-item-btn {
+    width: 24px;
+    height: 24px;
+  }
+}
+/* ===============================
+   DEMOGRAPHICS SECTION
+   =============================== */
+
+.membership-manager-demographics-header {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border: 2px solid #e2e8f0;
+}
+
+.membership-manager-form-help {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-top: 0.25rem;
+  font-style: italic;
+}
+
+/* ===============================
+   AGE GROUPS
+   =============================== */
+
+.membership-manager-age-groups {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 2px solid #e2e8f0;
+}
+
+.membership-manager-age-groups-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.membership-manager-age-group-item {
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 1rem;
+  transition: all 0.3s ease;
+}
+
+.membership-manager-age-group-item:hover {
+  border-color: #6366f1;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.membership-manager-age-group-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.membership-manager-age-group-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  flex-shrink: 0;
+}
+
+.membership-manager-age-group-icon.under-60 {
+  background: linear-gradient(135deg, #10b981, #059669);
+}
+
+.membership-manager-age-group-icon.age-60-70 {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+
+.membership-manager-age-group-icon.age-70-80 {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.membership-manager-age-group-icon.age-80-plus {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+}
+
+.membership-manager-age-group-info {
+  flex: 1;
+}
+
+.membership-manager-age-group-info h6 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 0.25rem 0;
+}
+
+.membership-manager-age-group-info p {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.membership-manager-age-group-input {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: white;
+  border-radius: 8px;
+  padding: 0.5rem;
+  border: 1px solid #e2e8f0;
+}
+
+.membership-manager-form-input.compact {
+  width: 80px;
+  padding: 0.5rem;
+  margin: 0;
+  text-align: center;
+  font-weight: 600;
+}
+
+.membership-manager-age-group-label {
+  font-size: 0.85rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* ===============================
+   AGE GROUPS SUMMARY
+   =============================== */
+
+.membership-manager-age-groups-summary {
+  background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+  border: 2px solid #bae6fd;
+  border-radius: 10px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.membership-manager-summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.membership-manager-summary-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #0c4a6e;
+}
+
+.membership-manager-summary-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0369a1;
+  background: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  border: 1px solid #bae6fd;
+}
+
+.membership-manager-age-warning {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #fef3c7;
+  border: 1px solid #f59e0b;
+  border-radius: 8px;
+  padding: 0.75rem;
+  color: #92400e;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.membership-manager-age-warning svg {
+  color: #f59e0b;
+  flex-shrink: 0;
+}
+
+/* ===============================
+   RESPONSIVE DESIGN FOR AGE GROUPS
+   =============================== */
+
+@media (max-width: 768px) {
+  .membership-manager-age-groups-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .membership-manager-age-group-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
+  
+  .membership-manager-age-group-info {
+    text-align: center;
+  }
+  
+  .membership-manager-summary-item {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .membership-manager-demographics-header,
+  .membership-manager-age-groups {
+    padding: 1rem;
+  }
+  
+  .membership-manager-age-group-item {
+    padding: 0.75rem;
+  }
+  
+  .membership-manager-age-group-icon {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .membership-manager-age-group-info h6 {
+    font-size: 0.95rem;
+  }
+  
+  .membership-manager-age-group-info p {
+    font-size: 0.8rem;
+  }
+  
+  .membership-manager-form-input.compact {
+    width: 60px;
+  }
+  
+  .membership-manager-age-groups-summary {
+    padding: 0.75rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .membership-manager-age-groups-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .membership-manager-age-group-item {
+    padding: 0.5rem;
+  }
+  
+  .membership-manager-age-group-input {
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+  
+  .membership-manager-form-input.compact {
+    width: 100%;
+    max-width: 120px;
+  }
+}
+/* ===============================
+   MEMBERSHIP FEE SUMMARY SECTION
+   =============================== */
+
+.membership-manager-fee-summary {
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  border: 2px solid #f59e0b;
+  border-radius: 15px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.membership-manager-fee-summary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #f59e0b, #d97706);
+}
+
+.membership-manager-fee-summary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(245, 158, 11, 0.2);
+}
+
+.membership-manager-fee-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.membership-manager-fee-summary-item {
+  background: white;
+  border: 2px solid #fbbf24;
+  border-radius: 15px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(251, 191, 36, 0.1);
+}
+
+.membership-manager-fee-summary-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #f59e0b, #d97706);
+}
+
+.membership-manager-fee-summary-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(245, 158, 11, 0.2);
+  border-color: #f59e0b;
+}
+
+.membership-manager-fee-summary-amount {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #92400e;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 2px 4px rgba(146, 64, 14, 0.1);
+}
+
+.membership-manager-fee-summary-period {
+  font-size: 1rem;
+  color: #d97706;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: rgba(217, 119, 6, 0.1);
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  display: inline-block;
+  border: 1px solid rgba(217, 119, 6, 0.2);
+}
+
+/* ===============================
+   RESPONSIVE DESIGN FOR FEE SUMMARY
+   =============================== */
+
+@media (max-width: 768px) {
+  .membership-manager-fee-summary {
+    padding: 1.2rem;
+  }
+  
+  .membership-manager-fee-summary-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .membership-manager-fee-summary-item {
+    padding: 1.5rem;
+  }
+  
+  .membership-manager-fee-summary-amount {
+    font-size: 1rem;
+  }
+  
+  .membership-manager-fee-summary-period {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .membership-manager-fee-summary {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .membership-manager-fee-summary-item {
+    padding: 1rem;
+  }
+  
+  .membership-manager-fee-summary-amount {
+    font-size: 1rem;
+  }
+  
+  .membership-manager-fee-summary-period {
+    font-size: 0.85rem;
+    padding: 0.2rem 0.6rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .membership-manager-fee-summary {
+    padding: 0.75rem;
+  }
+  
+  .membership-manager-fee-summary-item {
+    padding: 0.75rem;
+  }
+  
+  .membership-manager-fee-summary-amount {
+    font-size: 0.8rem;
+  }
+  
+  .membership-manager-fee-summary-period {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 350px) {
+  .membership-manager-fee-summary-amount {
+    font-size: 1.3rem;
+  }
+  
+  .membership-manager-fee-summary-period {
+    font-size: 0.75rem;
+  }
+}

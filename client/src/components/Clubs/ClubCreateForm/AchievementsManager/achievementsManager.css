@@ -1,0 +1,799 @@
+/* =================== ACHIEVEMENTS MANAGER STYLES =================== */
+
+.achievements-manager {
+  width: 100%;
+  padding: 1rem 0;
+}
+
+/* =================== HEADER =================== */
+
+.achievements-manager-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.achievements-manager-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 1rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.achievements-manager .achievements-manager-title-icon {
+  color: #f59e0b;
+  font-size: 1.5rem;
+}
+
+.achievements-manager-subtitle {
+  font-size: 1.1rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* =================== TABS =================== */
+
+.achievements-manager-tabs {
+  display: flex;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 15px;
+  padding: 0.5rem;
+  margin-bottom: 2rem;
+  overflow-x: auto;
+  gap: 0.5rem;
+}
+
+.achievements-manager-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.achievements-manager-tab:hover {
+  background: #f8fafc;
+  color: #374151;
+}
+
+.achievements-manager-tab.active {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+}
+
+.achievements-manager .achievements-manager-tab-icon {
+  font-size: 1rem;
+}
+
+/* =================== CONTENT =================== */
+
+.achievements-manager-content {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 15px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.achievements-manager-tab-content {
+  min-height: 400px;
+}
+
+.achievements-manager-section-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.achievements-manager-section-header h4 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 0.5rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.achievements-manager .achievements-manager-section-icon {
+  color: #f59e0b;
+  font-size: 1.2rem;
+}
+
+.achievements-manager-section-header p {
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* =================== FORMS =================== */
+
+.achievements-manager-add-form {
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.achievements-manager-form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.achievements-manager-form-header h5 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0;
+}
+
+.achievements-manager-close-btn {
+  background: #fee2e2;
+  color: #dc2626;
+  border: none;
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.achievements-manager-close-btn:hover {
+  background: #fecaca;
+  transform: scale(1.1);
+}
+
+.achievements-manager .achievements-manager-close-icon {
+  font-size: 0.9rem;
+}
+
+.achievements-manager-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.achievements-manager-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.achievements-manager-form-group.achievements-manager-full-width {
+  grid-column: 1 / -1;
+}
+
+.achievements-manager-form-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.achievements-manager .achievements-manager-label-icon {
+  color: #f59e0b;
+  font-size: 0.9rem;
+}
+
+.achievements-manager-form-input,
+.achievements-manager-form-select,
+.achievements-manager-form-textarea {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  background: white;
+  color: #374151;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.achievements-manager-form-input:focus,
+.achievements-manager-form-select:focus,
+.achievements-manager-form-textarea:focus {
+  outline: none;
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+  transform: translateY(-1px);
+}
+
+.achievements-manager-form-textarea {
+  min-height: 80px;
+}
+
+.achievements-manager-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.achievements-manager-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.achievements-manager-btn-cancel {
+  background: #f1f5f9;
+  color: #475569;
+  border-color: #cbd5e1;
+}
+
+.achievements-manager-btn-cancel:hover {
+  background: #e2e8f0;
+  border-color: #94a3b8;
+}
+
+.achievements-manager-btn-add,
+.achievements-manager-btn-save {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+}
+
+.achievements-manager-btn-add:hover,
+.achievements-manager-btn-save:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(34, 197, 94, 0.4);
+}
+
+.achievements-manager-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.achievements-manager .achievements-manager-btn-icon {
+  font-size: 0.9rem;
+}
+
+/* =================== AWARDS =================== */
+
+.achievements-manager-awards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.achievements-manager-award-item {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.achievements-manager-award-item:hover {
+  border-color: #f59e0b;
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.1);
+}
+
+.achievements-manager-award-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+.achievements-manager-award-icon {
+  background: linear-gradient(135deg, #fef3c7, #fed7aa);
+  border-radius: 12px;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.achievements-manager .achievements-manager-trophy-icon {
+  color: #d97706;
+  font-size: 1.5rem;
+}
+
+.achievements-manager-award-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.achievements-manager-award-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 0.5rem 0;
+}
+
+.achievements-manager-award-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.achievements-manager-award-year {
+  background: #e0e7ff;
+  color: #4338ca;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.achievements-manager-award-by {
+  color: #6b7280;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+.achievements-manager-award-description {
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+.achievements-manager-award-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.achievements-manager-action-btn {
+  background: white;
+  color: #6b7280;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.achievements-manager-action-btn:hover {
+  transform: scale(1.05);
+}
+
+.achievements-manager-edit-btn:hover {
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+
+.achievements-manager-delete-btn:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.achievements-manager .achievements-manager-action-icon {
+  font-size: 0.9rem;
+}
+
+/* =================== CERTIFICATES =================== */
+
+.achievements-manager-certificates-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.achievements-manager-certificate-item {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.achievements-manager-certificate-item:hover {
+  border-color: #6366f1;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.1);
+}
+
+.achievements-manager-certificate-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+.achievements-manager-certificate-icon {
+  background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+  border-radius: 12px;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.achievements-manager .achievements-manager-cert-icon {
+  color: #4338ca;
+  font-size: 1.5rem;
+}
+
+.achievements-manager-certificate-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.achievements-manager-certificate-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 0.75rem 0;
+}
+
+.achievements-manager-certificate-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.achievements-manager-certificate-date,
+.achievements-manager-certificate-valid,
+.achievements-manager-certificate-by {
+  color: #6b7280;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.achievements-manager-certificate-date {
+  color: #059669;
+}
+
+.achievements-manager-certificate-valid {
+  color: #dc2626;
+}
+
+.achievements-manager-certificate-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+/* =================== RECOGNITIONS =================== */
+
+.achievements-manager-recognitions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.achievements-manager-recognition-item {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.achievements-manager-recognition-item:hover {
+  border-color: #8b5cf6;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.1);
+}
+
+.achievements-manager-recognition-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.25rem;
+}
+
+.achievements-manager-recognition-icon {
+  background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+  border-radius: 10px;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.achievements-manager .achievements-manager-star-icon {
+  color: #7c3aed;
+  font-size: 1.3rem;
+}
+
+.achievements-manager-recognition-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.achievements-manager-recognition-content p {
+  margin: 0;
+  color: #374151;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+.achievements-manager-recognition-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.achievements-manager-recognition-edit {
+  padding: 1rem;
+}
+
+.achievements-manager-recognition-edit .achievements-manager-form-textarea {
+  margin: 0;
+}
+
+/* =================== EDIT FORMS =================== */
+
+.achievements-manager-edit-form {
+  background: #f8fafc;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 2px solid #e2e8f0;
+}
+
+/* =================== EMPTY STATES =================== */
+
+.achievements-manager-empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #9ca3af;
+}
+
+.achievements-manager .achievements-manager-empty-icon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  color: #d1d5db;
+}
+
+.achievements-manager-empty-state h4 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #6b7280;
+  margin: 0 0 0.5rem 0;
+}
+
+.achievements-manager-empty-state p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* =================== ADD SECTION =================== */
+
+.achievements-manager-add-section {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.achievements-manager-add-btn {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.3);
+}
+
+.achievements-manager-add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(245, 158, 11, 0.4);
+}
+
+.achievements-manager-add-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.achievements-manager .achievements-manager-add-icon {
+  font-size: 1rem;
+}
+
+/* =================== RESPONSIVE =================== */
+
+@media (max-width: 1024px) {
+  .achievements-manager-form-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+  
+  .achievements-manager-award-card,
+  .achievements-manager-certificate-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .achievements-manager-award-actions,
+  .achievements-manager-certificate-actions {
+    flex-direction: row;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .achievements-manager-title {
+    font-size: 1.5rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .achievements-manager-tabs {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .achievements-manager-tab {
+    justify-content: center;
+    padding: 0.75rem 1rem;
+  }
+  
+  .achievements-manager-content {
+    padding: 1.5rem;
+  }
+  
+  .achievements-manager-form-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .achievements-manager-form-actions {
+    flex-direction: column;
+  }
+  
+  .achievements-manager-award-card,
+  .achievements-manager-certificate-card,
+  .achievements-manager-recognition-card {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .achievements-manager-content {
+    padding: 1rem;
+  }
+  
+  .achievements-manager-add-form {
+    padding: 1rem;
+  }
+  
+  .achievements-manager-award-icon,
+  .achievements-manager-certificate-icon {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .achievements-manager .achievements-manager-trophy-icon,
+  .achievements-manager .achievements-manager-cert-icon {
+    font-size: 1.3rem;
+  }
+  
+  .achievements-manager-recognition-icon {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .achievements-manager .achievements-manager-star-icon {
+    font-size: 1.1rem;
+  }
+}
+
+/* =================== ACCESSIBILITY =================== */
+
+.achievements-manager-tab:focus-visible,
+.achievements-manager-close-btn:focus-visible,
+.achievements-manager-action-btn:focus-visible,
+.achievements-manager-form-input:focus-visible,
+.achievements-manager-form-select:focus-visible,
+.achievements-manager-form-textarea:focus-visible,
+.achievements-manager-btn:focus-visible,
+.achievements-manager-add-btn:focus-visible {
+  outline: 3px solid #f59e0b;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .achievements-manager-tab,
+  .achievements-manager-award-item,
+  .achievements-manager-certificate-item,
+  .achievements-manager-recognition-item,
+  .achievements-manager-action-btn,
+  .achievements-manager-btn,
+  .achievements-manager-add-btn {
+    transition: none;
+  }
+}
+
+/* =================== HIGH CONTRAST MODE =================== */
+
+@media (prefers-contrast: high) {
+  .achievements-manager-content,
+  .achievements-manager-award-item,
+  .achievements-manager-certificate-item,
+  .achievements-manager-recognition-item,
+  .achievements-manager-add-form {
+    border-width: 3px;
+  }
+  
+  .achievements-manager-tab,
+  .achievements-manager-action-btn,
+  .achievements-manager-btn {
+    border-width: 3px;
+  }
+}
+
+/* =================== PRINT STYLES =================== */
+
+@media print {
+  .achievements-manager-tabs,
+  .achievements-manager-add-form,
+  .achievements-manager-award-actions,
+  .achievements-manager-certificate-actions,
+  .achievements-manager-recognition-actions,
+  .achievements-manager-add-section {
+    display: none;
+  }
+  
+  .achievements-manager-content {
+    border: 1px solid #000;
+    break-inside: avoid;
+  }
+  
+  .achievements-manager-award-item,
+  .achievements-manager-certificate-item,
+  .achievements-manager-recognition-item {
+    break-inside: avoid;
+    border: 1px solid #000;
+    margin-bottom: 1rem;
+  }
+}

@@ -508,93 +508,299 @@ background: linear-gradient(
 .all-clubs-sidebar-left::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(180deg, #ea580c, #c2410c);
 }
-/* Responsive дизайн */
-@media (max-width: 1400px) {
+/* ========================================= */
+/* RESPONSIVE DESIGN - COMPLETE COVERAGE */
+/* ========================================= */
+
+/* Extra small devices (300px - 319px) */
+@media screen and (max-width: 319px) {
+  .all-clubs-container {
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* Background - hidden on tiny screens */
+  .all-clubs-bg-layer {
+    display: none;
+  }
+
+  .bg-image,
+  .decorative-elements,
+  .warm-dot {
+    display: none;
+  }
+
+  /* Header section */
+  .all-clubs-header-section {
+    padding: 1rem 0 0.5rem;
+  }
+
   .all-clubs-header-container {
+    margin: 1rem auto 0.5rem auto;
+    padding: 0 0.5rem;
     flex-direction: column;
-    text-align: center;
+    gap: 1rem;
   }
 
   .all-clubs-header-content {
     max-width: 100%;
+    text-align: center;
+  }
+
+  .all-clubs-main-title {
+    font-size: 1.25rem;
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+  }
+
+  .all-clubs-subtitle {
+    font-size: 0.8125rem;
+    text-align: center;
   }
 
   .all-clubs-stats {
+    flex-direction: column;
+    gap: 0.375rem;
     width: 100%;
-    justify-content: center;
-  }
-}
-
-@media (max-width: 1200px) {
-  .all-clubs-main-layout {
-    grid-template-columns: 1fr 280px;
-    gap: 2rem;
-    padding: 2rem 2rem 3rem;
-  }
-.all-clubs-map-full-width .clubs-map-container{
-    padding: 0 0.9rem;
-    height: 600px;
-}
-  .all-clubs-sidebar-articles {
-    display: none;
-  }
-
-  .all-clubs-header-container {
-    padding: 0 2rem;
-  }
-  .all-clubs-sidebar-left{
-    display: none;
-};
-}
-
-@media (max-width: 1024px) {
-  .all-clubs-main-layout {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
-    padding: 2rem 1.5rem 3rem;
-    gap: 2rem;
-  }
-  
-  /* Скриваме левия sidebar */
-  .all-clubs-sidebar-left {
-    display: none;
-  }
-  
-  /* Показваме дясния sidebar (търсачка) отгоре */
-  .all-clubs-sidebar-right {
-    display: block;
-    position: static;
-    order: 1;
-    max-height: none;
-    border: 1px solid rgba(146, 64, 14, 0.2);
-    border-radius: 8px;
-    margin-bottom: 0;
-  }
-  
-  /* Главното съдържание отдолу */
-  .all-clubs-main-content {
-    order: 2;
   }
 
   .stat-card-clubs {
-    padding: 0.75rem 1rem;
-    min-width: 80px;
-  }
-
-  .stat-value {
-    font-size: 1.5rem;
+    padding: 0.375rem 0.5rem;
+    min-width: 0;
+    width: 100%;
   }
 
   .stat-icon {
-    font-size: 1.25rem;
+    font-size: 1rem;
+    margin-bottom: 0.125rem;
+  }
+
+  .stat-value {
+    font-size: 1rem;
+    margin-bottom: 0.0625rem;
+  }
+
+  .stat-label {
+    font-size: 0.625rem;
+  }
+
+  .all-clubs-decorative-line {
+    margin: 1rem auto 0;
+    height: 2px;
+  }
+
+  .all-clubs-decorative-line::after {
+    font-size: 0.875rem;
+    padding: 0 0.5rem;
+  }
+
+  /* Main layout */
+  .all-clubs-main-layout {
+    max-width: 100%;
+    grid-template-columns: 1fr;
+    padding: 0.75rem 0.5rem 1rem;
+    gap: 0.75rem;
+  }
+
+  .all-clubs-sidebar-left,
+  .all-clubs-sidebar-right,
+  .all-clubs-sidebar-articles {
+    position: static;
+    max-height: none;
+    order: -1;
+    border-radius: 4px;
+    margin-bottom: 0.75rem;
+    border: 1px solid rgba(146, 64, 14, 0.2);
+    background: rgba(254, 252, 232, 0.8);
+  }
+
+  .all-clubs-main-content {
+    order: 1;
+    width: 100%;
+  }
+
+  .all-clubs-list-container {
+    min-height: auto;
+  }
+
+  .all-clubs-grid {
+    gap: 0.75rem;
+  }
+
+  /* Map */
+  .all-clubs-map-full-width .clubs-map-container {
+    padding: 0 0.5rem;
+    height: 200px;
+  }
+
+  /* No clubs found */
+  .all-clubs-no-clubs-found {
+    padding: 1.5rem 0.75rem;
+    margin: 1.5rem auto;
+    border-radius: 12px;
+  }
+
+  .all-clubs-no-clubs-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .all-clubs-no-clubs-found h3 {
+    font-size: 1rem;
+    margin-bottom: 0.375rem;
+  }
+
+  .all-clubs-no-clubs-found p {
+    font-size: 0.8125rem;
+  }
+
+  /* Loading */
+  .all-clubs-loading-container {
+    min-height: 30vh;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .all-clubs-loading-text {
+    font-size: 1rem;
   }
 }
 
-@media (max-width: 768px) {
-  .all-clubs-main-title {
-    font-size: 2rem;
+/* Small phones (320px - 479px) */
+@media screen and (min-width: 320px) and (max-width: 479px) {
+  .all-clubs-container {
+    overflow-x: hidden;
   }
-  
+
+  /* Background - minimal */
+  .bg-image,
+  .decorative-elements {
+    display: none;
+  }
+
+  /* Header */
+  .all-clubs-header-section {
+    padding: 1.5rem 0 0.75rem;
+  }
+
+  .all-clubs-header-container {
+    margin: 2rem auto 0.75rem auto;
+    padding: 0 0.75rem;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .all-clubs-main-title {
+    font-size: 1.5rem;
+    line-height: 1.1;
+    margin-bottom: 0.75rem;
+  }
+
+  .all-clubs-subtitle {
+    font-size: 0.9375rem;
+  }
+
+  .all-clubs-stats {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+
+  .stat-card-clubs {
+    flex: 1 1 calc(50% - 0.25rem);
+    min-width: 0;
+    padding: 0.5rem 0.625rem;
+  }
+
+  .stat-value {
+    font-size: 1.125rem;
+  }
+
+  .stat-label {
+    font-size: 0.6875rem;
+  }
+
+  /* Main layout */
+  .all-clubs-main-layout {
+    grid-template-columns: 1fr;
+    padding: 1rem 0.75rem 1.5rem;
+    gap: 1rem;
+  }
+
+  .all-clubs-sidebar-left {
+    display: none;
+  }
+
+  .all-clubs-sidebar-right {
+    position: static;
+    order: -1;
+    max-height: none;
+    margin-bottom: 1rem;
+    border-radius: 6px;
+  }
+
+  .all-clubs-main-content {
+    order: 1;
+  }
+
+  .all-clubs-grid {
+    gap: 1rem;
+  }
+
+  /* Map */
+  .all-clubs-map-full-width .clubs-map-container {
+    padding: 0 0.75rem;
+    height: 250px;
+  }
+}
+
+/* Large phones (480px - 767px) */
+@media screen and (min-width: 480px) and (max-width: 767px) {
+  /* Background - very subtle */
+  .bg-image {
+    opacity: 0.03;
+  }
+
+  .bg-image-1,
+  .bg-image-3 {
+    display: none;
+  }
+
+  .bg-image-2 {
+    width: 150px;
+    height: 120px;
+    top: 20%;
+    right: 10%;
+  }
+
+  .bg-image-4 {
+    width: 160px;
+    height: 120px;
+    bottom: 15%;
+    right: 15%;
+  }
+
+  .decorative-elements {
+    display: none;
+  }
+
+  /* Header */
+  .all-clubs-header-section {
+    padding: 2rem 0 1rem;
+  }
+
+  .all-clubs-header-container {
+    margin: 3rem auto 1rem auto;
+    padding: 0 1rem;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .all-clubs-main-title {
+    font-size: 1.875rem;
+    margin-bottom: 1rem;
+  }
+
   .all-clubs-subtitle {
     font-size: 1rem;
   }
@@ -602,51 +808,748 @@ background: linear-gradient(
   .all-clubs-stats {
     flex-wrap: wrap;
     gap: 0.75rem;
+    justify-content: center;
   }
 
   .stat-card-clubs {
     flex: 1 1 calc(50% - 0.375rem);
-    min-width: 0;
+    padding: 0.75rem 1rem;
   }
-  
+
+  /* Main layout */
+  .all-clubs-main-layout {
+    grid-template-columns: 1fr;
+    padding: 1.5rem 1rem 2rem;
+    gap: 1.5rem;
+  }
+
+  .all-clubs-sidebar-left {
+    display: none;
+  }
+
+  .all-clubs-sidebar-right {
+    position: static;
+    order: -1;
+    max-height: none;
+    margin-bottom: 1.25rem;
+    border-radius: 8px;
+  }
+
+  .all-clubs-main-content {
+    order: 1;
+  }
+
+  .all-clubs-grid {
+    gap: 1.25rem;
+  }
+
+  /* Map */
+  .all-clubs-map-full-width .clubs-map-container {
+    padding: 0 1rem;
+    height: 300px;
+  }
+}
+
+/* Tablets Portrait (768px - 1023px) */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  /* Background - subtle */
+  .bg-image {
+    opacity: 0.08;
+  }
+
+  .bg-image-1 {
+    width: 250px;
+    height: 180px;
+    top: 12%;
+    left: 8%;
+  }
+
+  .bg-image-2 {
+    width: 200px;
+    height: 150px;
+    top: 28%;
+    right: 8%;
+  }
+
+  .bg-image-3 {
+    display: none;
+  }
+
+  .bg-image-4 {
+    width: 280px;
+    height: 200px;
+    bottom: 12%;
+    right: 15%;
+  }
+
+  .decorative-elements {
+    opacity: 0.6;
+  }
+
+  /* Header */
+  .all-clubs-header-section {
+    padding: 2.5rem 0 1.25rem;
+  }
+
+  .all-clubs-header-container {
+    margin: 4rem auto 1.25rem auto;
+    padding: 0 1.5rem;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .all-clubs-main-title {
+    font-size: 2.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .all-clubs-subtitle {
+    font-size: 1.0625rem;
+  }
+
+  .all-clubs-stats {
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .stat-card-clubs {
+    padding: 0.875rem 1.125rem;
+    min-width: 100px;
+  }
+
+  /* Main layout - single column with sidebar on top */
+  .all-clubs-main-layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    padding: 1.5rem 1.5rem 2.5rem;
+    gap: 2rem;
+  }
+
+  .all-clubs-sidebar-left {
+    display: none;
+  }
+
+  .all-clubs-sidebar-right {
+    position: static;
+    order: -1;
+    max-height: none;
+    margin-bottom: 0;
+    border-radius: 8px;
+  }
+
+  .all-clubs-main-content {
+    order: 1;
+  }
+
   .all-clubs-grid {
     gap: 1.5rem;
   }
-  
-  /* Скриваме фоновите снимки на мобилни */
+
+  /* Map */
+  .all-clubs-map-full-width .clubs-map-container {
+    padding: 0 1.5rem;
+    height: 400px;
+  }
+}
+
+/* Tablets Landscape & Small Laptops (1024px - 1199px) */
+@media screen and (min-width: 1024px) and (max-width: 1199px) {
+  /* Background - more visible */
   .bg-image {
+    opacity: 0.12;
+  }
+
+  .bg-image-1 {
+    width: 300px;
+    height: 220px;
+  }
+
+  .bg-image-2 {
+    width: 250px;
+    height: 180px;
+  }
+
+  .bg-image-3 {
+    width: 200px;
+    height: 280px;
+  }
+
+  .bg-image-4 {
+    width: 320px;
+    height: 240px;
+  }
+
+  /* Header */
+  .all-clubs-header-section {
+    padding: 3rem 0 1.5rem;
+  }
+
+  .all-clubs-header-container {
+    margin: 4.5rem auto 1.5rem auto;
+    padding: 0 2rem;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .all-clubs-main-title {
+    font-size: 2.5rem;
+  }
+
+  /* Main layout - 2 column */
+  .all-clubs-main-layout {
+    grid-template-columns: 1fr 280px;
+    gap: 2rem;
+    padding: 2rem 2rem 3rem;
+  }
+
+  .all-clubs-sidebar-left {
+    display: none;
+  }
+
+  .all-clubs-sidebar-right {
+    position: sticky;
+    top: 110px;
+    order: 2;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+  }
+
+  .all-clubs-main-content {
+    order: 1;
+  }
+
+  /* Map */
+  .all-clubs-map-full-width .clubs-map-container {
+    padding: 0 2rem;
+    height: 500px;
+  }
+}
+
+/* Medium Desktops (1200px - 1399px) */
+@media screen and (min-width: 1200px) and (max-width: 1399px) {
+  /* Background - standard visibility */
+  .bg-image {
+    opacity: 0.15;
+  }
+
+  /* Header */
+  .all-clubs-header-container {
+    padding: 0 2.5rem;
+  }
+
+  /* Main layout - 2 column improved */
+  .all-clubs-main-layout {
+    grid-template-columns: 1fr 300px;
+    gap: 2.5rem;
+    padding: 2rem 2.5rem 3rem;
+  }
+
+  .all-clubs-sidebar-left {
+    display: none;
+  }
+
+  .all-clubs-sidebar-articles {
+    display: none;
+  }
+
+  .all-clubs-sidebar-right {
+    position: sticky;
+    top: 110px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+  }
+
+  .all-clubs-main-content {
+    order: 1;
+  }
+
+  /* Map */
+  .all-clubs-map-full-width .clubs-map-container {
+    padding: 0 2.5rem;
+    height: 600px;
+  }
+}
+
+/* Large Desktops (1400px - 1599px) */
+@media screen and (min-width: 1400px) and (max-width: 1599px) {
+  /* Header layout change */
+  .all-clubs-header-container {
+    flex-direction: row;
+    text-align: left;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0 2.5rem;
+  }
+
+  .all-clubs-header-content {
+    text-align: left;
+  }
+
+  .all-clubs-subtitle {
+    text-align: left;
+  }
+
+  .all-clubs-stats {
+    justify-content: flex-end;
+    flex-shrink: 0;
+  }
+
+  /* Main layout - 3 column begins */
+  .all-clubs-main-layout {
+    grid-template-columns: 280px 1fr 300px;
+    gap: 2.5rem;
+    padding: 2rem 2.5rem 4rem;
+  }
+
+  .all-clubs-sidebar-left {
+    display: block;
+    position: sticky;
+    top: 110px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    order: 1;
+  }
+
+  .all-clubs-main-content {
+    order: 2;
+  }
+
+  .all-clubs-sidebar-right {
+    position: sticky;
+    top: 110px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    order: 3;
+  }
+
+  .all-clubs-sidebar-articles {
     display: none;
   }
 }
 
-@media (max-width: 480px) {
-  .all-clubs-main-title {
-    font-size: 1.6rem;
-  }
-
+/* Extra Large Screens (1600px - 1799px) */
+@media screen and (min-width: 1600px) and (max-width: 1799px) {
+  /* Header */
   .all-clubs-header-container {
-    padding: 0 1rem;
+    max-width: 1600px;
+    padding: 0 3rem;
   }
-  
+
+  .all-clubs-main-title {
+    font-size: 2.8rem;
+  }
+
+  /* Main layout - full 3 column */
   .all-clubs-main-layout {
-    padding: 1.5rem 1rem 2rem;
+    max-width: 1750px;
+    grid-template-columns: 300px 1fr 300px;
+    gap: 3rem;
+    padding: 2rem 3rem 4rem;
   }
 
-  .stat-card-clubs {
-    padding: 0.5rem 0.75rem;
+  .all-clubs-sidebar-left {
+    display: block;
+    order: 1;
   }
 
-  .stat-value {
-    font-size: 1.25rem;
+  .all-clubs-main-content {
+    order: 2;
+  }
+
+  .all-clubs-sidebar-right {
+    order: 3;
+  }
+
+  .all-clubs-sidebar-articles {
+    display: block;
+    position: sticky;
+    top: 110px;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+  }
+
+  /* Map */
+  .all-clubs-map-full-width .clubs-map-container {
+    max-width: 1600px;
+    padding: 0 3rem;
+    height: 700px;
   }
 }
 
-/* .all-clubs-sidebar-articles {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 20px;
-  height: fit-content;
-  max-height: calc(100vh - 40px);
-  overflow-y: auto;
-  z-index: 15; 
-} */
+/* Ultra-wide Screens (1800px+) */
+@media screen and (min-width: 1800px) {
+  .all-clubs-main-layout {
+    max-width: 1800px;
+    grid-template-columns: 320px 1fr 320px;
+    gap: 3.5rem;
+    padding: 2.5rem 3rem 4rem;
+  }
+
+  .all-clubs-header-container {
+    max-width: 1700px;
+    padding: 0 3rem;
+  }
+
+  .all-clubs-main-title {
+    font-size: 3.2rem;
+  }
+
+  .all-clubs-subtitle {
+    font-size: 1.3rem;
+  }
+
+  .stat-card-clubs {
+    padding: 1.25rem 1.5rem;
+    min-width: 120px;
+  }
+
+  .stat-value {
+    font-size: 2rem;
+  }
+
+  .all-clubs-grid {
+    gap: 2.5rem;
+  }
+
+  /* Map */
+  .all-clubs-map-full-width .clubs-map-container {
+    height: 800px;
+  }
+}
+
+/* ========================================= */
+/* MAIN CONTENT RESPONSIVE STYLES */
+/* ========================================= */
+
+.all-clubs-main-content {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Extra small devices */
+@media screen and (max-width: 319px) {
+  .all-clubs-main-content {
+    min-height: auto;
+    padding: 0;
+    margin: 0;
+  }
+}
+
+/* Small phones */
+@media screen and (min-width: 320px) and (max-width: 479px) {
+  .all-clubs-main-content {
+    min-height: auto;
+    padding: 0;
+  }
+}
+
+/* Large phones */
+@media screen and (min-width: 480px) and (max-width: 767px) {
+  .all-clubs-main-content {
+    min-height: auto;
+    padding: 0;
+  }
+}
+
+/* Tablets */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .all-clubs-main-content {
+    min-height: 70vh;
+    padding: 0;
+  }
+}
+
+/* Small laptops and up */
+@media screen and (min-width: 1024px) {
+  .all-clubs-main-content {
+    min-height: 100vh;
+    padding: 0;
+    position: relative;
+    z-index: 1;
+  }
+}
+
+/* ========================================= */
+/* DEVICE-SPECIFIC OPTIMIZATIONS */
+/* ========================================= */
+
+/* iPhone SE (375px width) */
+@media screen and (width: 375px) {
+  .all-clubs-main-title {
+    font-size: 1.625rem;
+  }
+
+  .stat-card-clubs {
+    padding: 0.625rem 0.75rem;
+  }
+}
+
+/* iPhone 12/13/14 (390px width) */
+@media screen and (width: 390px) {
+  .all-clubs-main-title {
+    font-size: 1.75rem;
+  }
+}
+
+/* iPad Mini (768px width) */
+@media screen and (width: 768px) {
+  .all-clubs-main-layout {
+    padding: 2rem 2rem 3rem;
+  }
+}
+
+/* iPad Pro 11" (834px width) */
+@media screen and (width: 834px) {
+  .all-clubs-main-layout {
+    padding: 2rem 2.5rem 3rem;
+  }
+}
+
+/* ========================================= */
+/* ORIENTATION-SPECIFIC STYLES */
+/* ========================================= */
+
+/* Landscape on mobile devices */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+  .all-clubs-header-section {
+    padding: 0.5rem 0 0.25rem;
+  }
+
+  .all-clubs-header-container {
+    margin: 0.5rem auto 0.25rem auto;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .all-clubs-header-content {
+    text-align: left;
+    flex: 1;
+  }
+
+  .all-clubs-main-title {
+    font-size: 1.25rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .all-clubs-subtitle {
+    font-size: 0.8125rem;
+  }
+
+  .all-clubs-stats {
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .stat-card-clubs {
+    padding: 0.375rem 0.5rem;
+  }
+
+  .stat-value {
+    font-size: 1rem;
+  }
+
+  .all-clubs-main-layout {
+    padding: 0.5rem;
+    gap: 0.5rem;
+  }
+
+  .all-clubs-main-content {
+    min-height: auto;
+  }
+
+  .all-clubs-map-full-width .clubs-map-container {
+    height: 200px;
+  }
+
+  /* Hide all background elements in landscape */
+  .bg-image,
+  .decorative-elements {
+    display: none;
+  }
+}
+
+/* ========================================= */
+/* ACCESSIBILITY & PERFORMANCE */
+/* ========================================= */
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .all-clubs-container {
+    background: #fff;
+  }
+
+  .all-clubs-bg-layer {
+    display: none;
+  }
+
+  .club-card {
+    border: 2px solid #000;
+  }
+
+  .stat-card-clubs {
+    border: 2px solid #000;
+  }
+
+  .all-clubs-sidebar-left,
+  .all-clubs-sidebar-right {
+    border: 2px solid #000;
+    background: #f0f0f0;
+  }
+
+  .all-clubs-main-title {
+    color: #000;
+    background: none;
+    -webkit-text-fill-color: inherit;
+  }
+
+  .stat-value {
+    color: #000;
+    background: none;
+    -webkit-text-fill-color: inherit;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .bg-image {
+    animation: none;
+  }
+
+  .warm-dot {
+    animation: none;
+  }
+
+  .club-card,
+  .stat-card-clubs {
+    transition: none;
+  }
+
+  .club-card:hover,
+  .stat-card-clubs:hover {
+    transform: none;
+  }
+
+  @keyframes gentleFloat {
+    0%, 100% { transform: none; }
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.4; }
+  }
+}
+
+/* Touch device optimizations */
+@media (pointer: coarse) {
+  .stat-card-clubs {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+  }
+
+  .club-card {
+    cursor: pointer;
+  }
+
+  /* Adjust sticky positioning for touch */
+  .all-clubs-sidebar-left,
+  .all-clubs-sidebar-right {
+    top: 80px;
+    max-height: calc(100vh - 100px);
+  }
+}
+
+/* Hover capability detection */
+@media (hover: hover) {
+  .club-card:hover {
+    box-shadow: 
+      0 8px 30px rgba(245, 158, 11, 0.15),
+      0 4px 10px rgba(0, 0, 0, 0.08);
+    border-color: rgba(245, 158, 11, 0.3);
+  }
+
+  .stat-card-clubs:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 20px rgba(245, 158, 11, 0.12);
+    border-color: rgba(245, 158, 11, 0.3);
+  }
+}
+
+/* No hover capability */
+@media (hover: none) {
+  .club-card:active {
+    transform: scale(0.98);
+  }
+
+  .stat-card-clubs:active {
+    transform: scale(0.98);
+  }
+}
+
+/* Print styles */
+@media print {
+  .all-clubs-container {
+    background: white;
+  }
+
+  .bg-image,
+  .decorative-elements,
+  .all-clubs-sidebar-left,
+  .all-clubs-sidebar-right,
+  .all-clubs-sidebar-articles {
+    display: none;
+  }
+
+  .all-clubs-main-layout {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .all-clubs-main-content {
+    order: 1;
+  }
+
+  .club-card {
+    box-shadow: none;
+    border: 1px solid #ccc;
+    page-break-inside: avoid;
+  }
+
+  .all-clubs-map-full-width {
+    display: none;
+  }
+}
+
+/* High resolution displays */
+@media screen and (min-resolution: 2dppx) {
+  .club-card {
+    box-shadow: 
+      0 4px 20px rgba(0, 0, 0, 0.1),
+      0 2px 4px rgba(0, 0, 0, 0.06);
+  }
+
+  .club-card:hover {
+    box-shadow: 
+      0 8px 30px rgba(245, 158, 11, 0.18),
+      0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .stat-card-clubs {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  }
+}
+
+/* Low bandwidth / slow connections */
+@media (prefers-reduced-data: reduce) {
+  .bg-image,
+  .decorative-elements {
+    display: none;
+  }
+
+  .all-clubs-bg-layer {
+    display: none;
+  }
+}

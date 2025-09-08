@@ -1,0 +1,873 @@
+/* ===============================
+   REGIONAL INFO MANAGER STYLES
+   =============================== */
+
+.regional-manager {
+  width: 100%;
+  padding: 1rem 0;
+}
+
+/* ===============================
+   SVG ICON STYLES
+   =============================== */
+
+.regional-manager .regional-manager-title svg {
+  color: #6366f1;
+  font-size: 1.5rem;
+}
+
+.regional-manager .regional-manager-status-icon svg {
+  font-size: 1.8rem;
+  color: #6366f1;
+}
+
+.regional-manager .regional-manager-role-icon svg {
+  font-size: 1.5rem;
+  color: #6366f1;
+}
+
+.regional-manager .regional-manager-role-check svg {
+  font-size: 1rem;
+  color: white;
+}
+
+.regional-manager .regional-manager-club-icon svg {
+  font-size: 1rem;
+  color: #6366f1;
+}
+
+.regional-manager .regional-manager-remove-club-btn svg {
+  font-size: 0.8rem;
+}
+
+.regional-manager .regional-manager-form-label svg {
+  color: #6366f1;
+  font-size: 0.9rem;
+}
+
+.regional-manager .regional-manager-coverage-display svg {
+  color: #22c55e;
+  font-size: 0.9rem;
+}
+
+.regional-manager .regional-manager-help-icon svg {
+  font-size: 1rem;
+}
+
+.regional-manager .regional-manager-empty-clubs svg {
+  font-size: 3rem;
+  color: #d1d5db;
+}
+
+/* ===============================
+   HEADER SECTION
+   =============================== */
+
+.regional-manager-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.regional-manager-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 1rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.regional-manager-subtitle {
+  font-size: 1.1rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.6;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ===============================
+   OVERVIEW SECTION
+   =============================== */
+
+.regional-manager-overview {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 15px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.regional-manager-status-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.regional-manager-status-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+  border: 2px solid rgba(99, 102, 241, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.regional-manager-status-info h4 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 0.25rem 0;
+}
+
+.regional-manager-status-info p {
+  color: #6b7280;
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.regional-manager-coverage-display {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(34, 197, 94, 0.1);
+  color: #16a34a;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+/* ===============================
+   CONTENT SECTIONS
+   =============================== */
+
+.regional-manager-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.regional-manager-role-section,
+.regional-manager-central-section,
+.regional-manager-affiliated-section,
+.regional-manager-coverage-section {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 15px;
+  padding: 2rem;
+}
+
+.regional-manager-role-section h4,
+.regional-manager-central-section h4,
+.regional-manager-affiliated-section h4,
+.regional-manager-coverage-section h4 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 0.5rem 0;
+  text-align: center;
+}
+
+.regional-manager-role-section p,
+.regional-manager-central-section p,
+.regional-manager-affiliated-section p,
+.regional-manager-coverage-section p {
+  color: #6b7280;
+  margin: 0 0 2rem 0;
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* ===============================
+   ROLE SELECTION
+   =============================== */
+
+.regional-manager-role-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.regional-manager-role-card {
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 15px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-height: 160px;
+}
+
+.regional-manager-role-card:hover {
+  border-color: #6366f1;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
+}
+
+.regional-manager-role-card.selected {
+  border-color: #6366f1;
+  background: linear-gradient(135deg, #f0f4ff, #e0e7ff);
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.2);
+}
+
+.regional-manager-role-icon {
+  width: 60px;
+  height: 60px;
+  background: rgba(99, 102, 241, 0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+}
+
+.regional-manager-role-card.selected .regional-manager-role-icon {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+}
+
+.regional-manager-role-card.selected .regional-manager-role-icon svg {
+  color: white;
+}
+
+.regional-manager-role-info {
+  flex: 1;
+}
+
+.regional-manager-role-info h5 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 0.5rem 0;
+}
+
+.regional-manager-role-info p {
+  color: #6b7280;
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.regional-manager-role-check {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
+}
+
+/* ===============================
+   FORM ELEMENTS
+   =============================== */
+
+.regional-manager-form-group {
+  margin-bottom: 1.5rem;
+}
+
+.regional-manager-form-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.regional-manager-form-input {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  background: white;
+  color: #374151;
+  font-family: inherit;
+}
+
+.regional-manager-form-input:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  transform: translateY(-1px);
+}
+
+.regional-manager-form-input:disabled {
+  background: #f3f4f6;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.regional-manager-form-help {
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin-top: 0.5rem;
+  line-height: 1.4;
+}
+
+/* ===============================
+   COVERAGE SUGGESTIONS
+   =============================== */
+
+.regional-manager-coverage-input {
+  margin-bottom: 1rem;
+}
+
+.regional-manager-coverage-suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.regional-manager-suggestions-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.regional-manager-suggestions-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.regional-manager-suggestion-btn {
+  background: rgba(99, 102, 241, 0.1);
+  color: #6366f1;
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: 20px;
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.regional-manager-suggestion-btn:hover {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: #6366f1;
+  transform: translateY(-1px);
+}
+
+.regional-manager-suggestion-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* ===============================
+   ADD FORM
+   =============================== */
+
+.regional-manager-add-form {
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.regional-manager-add-form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.regional-manager-add-form-header h5 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0;
+}
+
+.regional-manager-close-form-btn {
+  background: #fee2e2;
+  color: #dc2626;
+  border: none;
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.regional-manager-close-form-btn:hover {
+  background: #fecaca;
+  transform: scale(1.1);
+}
+
+.regional-manager-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.regional-manager-form-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.regional-manager-form-btn.cancel {
+  background: #f1f5f9;
+  color: #475569;
+  border-color: #cbd5e1;
+}
+
+.regional-manager-form-btn.cancel:hover {
+  background: #e2e8f0;
+  border-color: #94a3b8;
+}
+
+.regional-manager-form-btn.add {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+}
+
+.regional-manager-form-btn.add:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(34, 197, 94, 0.4);
+}
+
+.regional-manager-form-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* ===============================
+   AFFILIATED CLUBS LIST
+   =============================== */
+
+.regional-manager-clubs-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.regional-manager-club-item {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: all 0.3s ease;
+}
+
+.regional-manager-club-item:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.regional-manager-club-icon {
+  width: 40px;
+  height: 40px;
+  background: rgba(99, 102, 241, 0.1);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.regional-manager-club-name {
+  flex: 1;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.regional-manager-remove-club-btn {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.regional-manager-remove-club-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: #ef4444;
+  transform: scale(1.1);
+}
+
+.regional-manager-remove-club-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* ===============================
+   EMPTY STATE
+   =============================== */
+
+.regional-manager-empty-clubs {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: #9ca3af;
+}
+
+.regional-manager-empty-clubs p {
+  margin: 1rem 0 0 0;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+/* ===============================
+   ADD SECTION
+   =============================== */
+
+.regional-manager-add-section {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.regional-manager-add-btn {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 0.875rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+}
+
+.regional-manager-add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+}
+
+.regional-manager-add-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* ===============================
+   HELP SECTION
+   =============================== */
+
+.regional-manager-help {
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border: 2px solid #bfdbfe;
+  border-radius: 15px;
+  padding: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-top: 2rem;
+}
+
+.regional-manager-help-icon {
+  background: #3b82f6;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.regional-manager-help-content h5 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1e40af;
+  margin: 0 0 0.5rem 0;
+}
+
+.regional-manager-help-content p {
+  color: #1e40af;
+  line-height: 1.5;
+  margin: 0 0 1rem 0;
+  opacity: 0.8;
+  font-size: 0.9rem;
+}
+
+.regional-manager-help-content ul {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: #1e40af;
+  opacity: 0.8;
+}
+
+.regional-manager-help-content li {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* ===============================
+   RESPONSIVE DESIGN
+   =============================== */
+
+@media (max-width: 1024px) {
+  .regional-manager-role-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  
+  .regional-manager-overview {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+  
+  .regional-manager-status-card {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .regional-manager-title {
+    font-size: 1.5rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .regional-manager-role-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .regional-manager-role-section,
+  .regional-manager-central-section,
+  .regional-manager-affiliated-section,
+  .regional-manager-coverage-section {
+    padding: 1.5rem;
+  }
+  
+  .regional-manager-overview {
+    padding: 1rem;
+  }
+  
+  .regional-manager-status-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+  }
+  
+  .regional-manager-coverage-display {
+    justify-content: center;
+  }
+  
+  .regional-manager-suggestions-list {
+    justify-content: center;
+  }
+  
+  .regional-manager-form-actions {
+    flex-direction: column;
+  }
+  
+  .regional-manager-form-btn {
+    justify-content: center;
+  }
+  
+  .regional-manager-help {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .regional-manager-role-section,
+  .regional-manager-central-section,
+  .regional-manager-affiliated-section,
+  .regional-manager-coverage-section {
+    padding: 1rem;
+  }
+  
+  .regional-manager-add-form {
+    padding: 1rem;
+  }
+  
+  .regional-manager-add-form-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .regional-manager-role-card {
+    padding: 1rem;
+    min-height: 140px;
+  }
+  
+  .regional-manager-role-icon {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .regional-manager-status-icon {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .regional-manager-club-item {
+    padding: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .regional-manager-club-icon {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .regional-manager-help {
+    padding: 1rem;
+  }
+}
+
+/* ===============================
+   ACCESSIBILITY IMPROVEMENTS
+   =============================== */
+
+.regional-manager-role-card:focus-visible,
+.regional-manager-form-input:focus-visible,
+.regional-manager-suggestion-btn:focus-visible,
+.regional-manager-form-btn:focus-visible,
+.regional-manager-add-btn:focus-visible,
+.regional-manager-remove-club-btn:focus-visible,
+.regional-manager-close-form-btn:focus-visible {
+  outline: 3px solid #6366f1;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .regional-manager-role-card,
+  .regional-manager-form-input,
+  .regional-manager-suggestion-btn,
+  .regional-manager-form-btn,
+  .regional-manager-add-btn,
+  .regional-manager-remove-club-btn,
+  .regional-manager-close-form-btn,
+  .regional-manager-club-item,
+  .regional-manager-role-icon {
+    transition: none;
+  }
+}
+
+/* ===============================
+   HIGH CONTRAST MODE
+   =============================== */
+
+@media (prefers-contrast: high) {
+  .regional-manager-overview,
+  .regional-manager-role-section,
+  .regional-manager-central-section,
+  .regional-manager-affiliated-section,
+  .regional-manager-coverage-section,
+  .regional-manager-role-card,
+  .regional-manager-club-item,
+  .regional-manager-add-form {
+    border-width: 3px;
+  }
+  
+  .regional-manager-form-input {
+    border-width: 3px;
+  }
+  
+  .regional-manager-form-btn,
+  .regional-manager-add-btn {
+    border-width: 3px;
+  }
+  
+  .regional-manager-help {
+    border-width: 3px;
+  }
+}
+
+/* ===============================
+   PRINT STYLES
+   =============================== */
+
+@media print {
+  .regional-manager-add-form,
+  .regional-manager-add-section,
+  .regional-manager-remove-club-btn,
+  .regional-manager-form-actions,
+  .regional-manager-suggestions-list {
+    display: none;
+  }
+  
+  .regional-manager-overview,
+  .regional-manager-role-section,
+  .regional-manager-central-section,
+  .regional-manager-affiliated-section,
+  .regional-manager-coverage-section {
+    border: 1px solid #000;
+    break-inside: avoid;
+  }
+  
+  .regional-manager-role-card,
+  .regional-manager-club-item {
+    break-inside: avoid;
+    border: 1px solid #000;
+  }
+  
+  .regional-manager-role-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+}
