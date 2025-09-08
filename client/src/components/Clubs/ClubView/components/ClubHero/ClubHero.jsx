@@ -21,7 +21,9 @@ import {
   faCrown,
   faUserCircle,
   faIdCard,
-  faSearch
+  faSearch,
+  faPaperPlane,
+  faUser
 } from '@fortawesome/free-solid-svg-icons';
 import { 
   faFacebook,
@@ -30,12 +32,23 @@ import {
   faTwitter
 } from '@fortawesome/free-brands-svg-icons';
 import './clubHero.css';
+import { useClubContext } from '../../../../contexts/ClubContext';
 
 export const ClubHero = ({ club }) => {
   const { t } = useTranslation();
+  const { sendContactForm } = useClubContext();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showMembersModal, setShowMembersModal] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
   const [memberSearchTerm, setMemberSearchTerm] = useState('');
+  const [contactFormData, setContactFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    subject: '',
+    message: ''
+  });
+  const [isSubmittingContact, setIsSubmittingContact] = useState(false);
 
   if (!club?.name) {
     return null;
@@ -131,6 +144,7 @@ export const ClubHero = ({ club }) => {
     
     return stars;
   };
+
   const openMembersModal = () => {
     if (!club.preferences?.showMembersList) {
       return;
@@ -268,7 +282,7 @@ export const ClubHero = ({ club }) => {
 
   const handleEmail = () => {
     if (club.contacts?.email) {
-      window.location.href = `mailto:${club.contacts.email}`;
+      setShowContactModal(true);
     } else {
       alert(t('clubs.ClubHero.messages.emailNotAvailable'));
     }
@@ -307,6 +321,61 @@ export const ClubHero = ({ club }) => {
   const closeMembersModal = () => {
     setShowMembersModal(false);
     setMemberSearchTerm('');
+  };
+
+  const closeContactModal = () => {
+    setShowContactModal(false);
+    setContactFormData({
+      name: '',
+      email: '',
+      phone: '',
+      subject: '',
+      message: ''
+    });
+  };
+
+  const handleContactFormChange = (e) => {
+    const { name, value } = e.target;
+    setContactFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleContactFormSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!contactFormData.name.trim() || !contactFormData.email.trim() || !contactFormData.message.trim()) {
+      alert('Моля, попълнете всички задължителни полета');
+      return;
+    }
+
+    // Валидация на имейл
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(contactFormData.email)) {
+      alert('Моля, въведете валиден имейл адрес');
+      return;
+    }
+
+    setIsSubmittingContact(true);
+    
+    try {
+      const success = await sendContactForm(club.id, {
+        ...contactFormData,
+        clubName: club.name,
+        timestamp: new Date().toISOString()
+      });
+
+      if (success) {
+        closeContactModal();
+        alert('Вашето съобщение беше изпратено успешно!');
+      }
+    } catch (error) {
+      console.error('Грешка при изпращане на контактна форма:', error);
+      alert('Възникна грешка при изпращането на съобщението. Моля, опитайте отново.');
+    } finally {
+      setIsSubmittingContact(false);
+    }
   };
 
   return (
@@ -535,6 +604,7 @@ export const ClubHero = ({ club }) => {
         </div>
       </div>
 
+      {/* Модал за членове */}
       {club.preferences?.showMembersList && showMembersModal && (
         <div className="general-modal-overlay" onClick={closeMembersModal}>
           <div className="general-modal" onClick={(e) => e.stopPropagation()}>
@@ -623,6 +693,144 @@ export const ClubHero = ({ club }) => {
                   <p>{t('clubs.ClubHero.members.noResults')}</p>
                 </div>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Модал за контактна форма */}
+      {showContactModal && (
+        <div className="general-modal-overlay" onClick={closeContactModal}>
+          <div className="general-modal general-contact-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="general-modal-header">
+              <h3>
+                <FontAwesomeIcon icon={faEnvelope} />
+                Свържете се с {club.name}
+              </h3>
+              <button className="general-modal-close" onClick={closeContactModal}>
+                <FontAwesomeIcon icon={faTimes} />
+              </button>
+            </div>
+            
+            <div className="general-modal-content">
+              <form onSubmit={handleContactFormSubmit} className="general-contact-form">
+                <div className="general-form-row">
+                  <div className="general-form-group">
+                    <label htmlFor="name">
+                      <FontAwesomeIcon icon={faUser} />
+                      Име <span className="required">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      value={contactFormData.name}
+                      onChange={handleContactFormChange}
+                      placeholder="Вашето име"
+                      required
+                    />
+                  </div>
+                  
+                  <div className="general-form-group">
+                    <label htmlFor="email">
+                      <FontAwesomeIcon icon={faEnvelope} />
+                      Имейл <span className="required">*</span>
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={contactFormData.email}
+                      onChange={handleContactFormChange}
+                      placeholder="your@email.com"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="general-form-row">
+                  <div className="general-form-group">
+                    <label htmlFor="phone">
+                      <FontAwesomeIcon icon={faPhone} />
+                      Телефон
+                    </label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      value={contactFormData.phone}
+                      onChange={handleContactFormChange}
+                      placeholder="+359 888 123 456"
+                    />
+                  </div>
+                  
+                  <div className="general-form-group">
+                    <label htmlFor="subject">
+                      <FontAwesomeIcon icon={faInfoCircle} />
+                      Тема <span className="required">*</span>
+                    </label>
+                    <select
+                      id="subject"
+                      name="subject"
+                      value={contactFormData.subject}
+                      onChange={handleContactFormChange}
+                      required
+                    >
+                      <option value="">Изберете тема</option>
+                      <option value="membership">Запитване за членство</option>
+                      <option value="activities">Въпроси за дейности</option>
+                      <option value="partnership">Предложение за партньорство</option>
+                      <option value="volunteer">Доброволчество</option>
+                      <option value="general">Общи въпроси</option>
+                      <option value="other">Друго</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="general-form-group">
+                  <label htmlFor="message">
+                    <FontAwesomeIcon icon={faPaperPlane} />
+                    Съобщение <span className="required">*</span>
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    value={contactFormData.message}
+                    onChange={handleContactFormChange}
+                    placeholder="Напишете вашето съобщение тук..."
+                    rows={5}
+                    required
+                  />
+                </div>
+
+                <div className="general-form-actions">
+                  <button 
+                    type="button" 
+                    className="general-btn-secondary"
+                    onClick={closeContactModal}
+                    disabled={isSubmittingContact}
+                  >
+                    Отказ
+                  </button>
+                  <button 
+                    type="submit" 
+                    className="general-btn-primary"
+                    disabled={isSubmittingContact}
+                  >
+                    {isSubmittingContact ? (
+                      <>
+                        <span className="general-spinner"></span>
+                        Изпращане...
+                      </>
+                    ) : (
+                      <>
+                        <FontAwesomeIcon icon={faPaperPlane} />
+                        Изпрати съобщение
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
