@@ -1263,7 +1263,14 @@ const handleMailingForm = async (req, res, next, formType, itemId = null) => {
 
         const club = await findBySlugOrId(club_Club, identifier, {
             where: { isDraft: false },
-            attributes: ['id', 'name', 'slug', 'owner'],
+            include: [
+                {
+                    model: club_ClubDetails,
+                    as: 'details',
+                    attributes: ['contacts'],
+                },
+            ],
+            attributes: ['id', 'name'],
         });
 
         if (!club) {

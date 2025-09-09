@@ -735,7 +735,7 @@ const handleMailingFormEmail = async (club, formType, validatedData, itemId = nu
         const customFormattedBody = `
             <html>
                 <body style="font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f9f9f9;">
-                    <div style="background: #fff; padding: 0; border-radius: 8px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); margin: 0; max-width: 100%;">
+                    <div style="background: #fff; padding: 10px; border-radius: 8px; margin: 0; max-width: 100%;">
                         <h2 style="color: #222; margin: 0 0 12px 0; text-align: center;">${emailTitle}</h2>
                         <p style="color: #222; font-size: 16px; margin: 0 0 8px 0; text-align: center; font-weight: 500;">Клуб: <strong style="color: #000;">${
                             club.name
@@ -774,11 +774,17 @@ const handleMailingFormEmail = async (club, formType, validatedData, itemId = nu
 
         // Send email
         try {
+            const recipientEmail = club.details?.contacts?.email;
+
+            if (!recipientEmail) {
+                throw new Error('Club contact email not found');
+            }
+
             await forwardEmailsViaZoho({
                 userEmail: 'info@pensa.club',
                 subject: `${emailTitle} - ${club.name}`,
                 body: messageContent,
-                toAddresses: club.owner,
+                toAddresses: recipientEmail,
                 formattedBody: customFormattedBody,
             });
             return { emailSent: true };
@@ -787,7 +793,7 @@ const handleMailingFormEmail = async (club, formType, validatedData, itemId = nu
                 await forwardEmailsViaZoho({
                     userEmail: 'info@pensa.club',
                     subject: `EMAIL FAILED - ${emailTitle} - ${club.name}`,
-                    body: `Failed to send email to club owner ${club.owner} for club "${club.name}". Original message: ${messageContent}`,
+                    body: `Failed to send email to club contact ${club.details?.contacts?.email} for club "${club.name}". Original message: ${messageContent}`,
                     toAddresses: 'admin@pensa.club',
                 });
             } catch (fallbackError) {
