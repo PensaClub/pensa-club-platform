@@ -20,6 +20,7 @@ const {
     transformActivityToDB,
     processClubAdminAction,
     handleMailingFormEmail,
+    handlePersonalEmail,
 } = require('../utils/clubUtils');
 const { findBySlugOrId } = require('../utils/modelLookup');
 const { transformComment, getCommentConfig } = require('../utils/commentUtils');
@@ -496,16 +497,38 @@ clubController.post('/:identifier/sponsorship-inquiry', async (req, res, next) =
     return handleMailingForm(req, res, next, 'sponsorship');
 });
 
-clubController.post('/:identifier/events/:eventId/register', async (req, res, next) => {
-    return handleMailingForm(req, res, next, 'event', req.params.eventId);
+clubController.post('/:identifier/events/:eventTitle/register', async (req, res, next) => {
+    return handleMailingForm(req, res, next, 'event');
 });
 
-clubController.post('/:identifier/courses/:courseId/register', async (req, res, next) => {
-    return handleMailingForm(req, res, next, 'course', req.params.courseId);
+clubController.post('/:identifier/courses/:courseName/register', async (req, res, next) => {
+    return handleMailingForm(req, res, next, 'course');
 });
 
-clubController.post('/:identifier/trips/:tripId/register', async (req, res, next) => {
-    return handleMailingForm(req, res, next, 'trip', req.params.tripId);
+clubController.post('/:identifier/trips/:tripDestination/register', async (req, res, next) => {
+    return handleMailingForm(req, res, next, 'trip');
+});
+
+clubController.post('/personal-email', isAuth, async (req, res, next) => {
+    try {
+        const validatedData = clubSchema.mailing.personalEmailSchema.parse(req.body);
+
+        const { emailSent, emailError } = await handlePersonalEmail(validatedData);
+
+        if (!emailSent) {
+            throw new CustomError({
+                message: 'Failed to send email',
+                statusCode: 500,
+                details: emailError,
+            });
+        }
+
+        return res.status(200).json({
+            message: `Personal email sent successfully from ${validatedData.from} to ${validatedData.to} about "${validatedData.subject}"`,
+        });
+    } catch (error) {
+        next(error);
+    }
 });
 
 // ========================================
@@ -1224,7 +1247,7 @@ const performAdminAction = async (req, res, next, action, bulkFlag = false) => {
     }
 };
 
-const handleMailingForm = async (req, res, next, formType, itemId = null) => {
+const handleMailingForm = async (req, res, next, formType) => {
     try {
         const { identifier } = req.params;
         let validatedData;
@@ -1280,7 +1303,12 @@ const handleMailingForm = async (req, res, next, formType, itemId = null) => {
             });
         }
 
-        const { emailSent, emailError } = await handleMailingFormEmail(club, formType, validatedData, itemId);
+        const { emailSent, emailError } = await handleMailingFormEmail(
+            club,
+            formType,
+            validatedData,
+            req.params.eventTitle || req.params.courseName || req.params.tripDestination
+        );
 
         if (!emailSent) {
             console.error('Email sending failed:', emailError);
@@ -1291,7 +1319,7 @@ const handleMailingForm = async (req, res, next, formType, itemId = null) => {
         }
 
         return res.status(200).json({
-            message: 'Your message has been sent successfully to the club owner.',
+            message: 'Your message has been sent successfully to the club contact.',
             clubName: club.name,
         });
     } catch (err) {

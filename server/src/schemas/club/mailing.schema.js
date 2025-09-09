@@ -61,6 +61,7 @@ const eventRegistrationSchema = z.object({
     email: optionalString,
     phone: optionalString,
     numberOfParticipants: optionalNumber,
+    emergencyContact: optionalString,
     specialRequests: optionalString,
 });
 
@@ -70,6 +71,7 @@ const courseRegistrationSchema = z.object({
     email: optionalString,
     phone: optionalString,
     experience: optionalString,
+    emergencyContact: optionalString,
     expectations: optionalString,
 });
 
@@ -83,6 +85,13 @@ const tripRegistrationSchema = z.object({
     specialRequests: optionalString,
 });
 
+const personalEmailSchema = z.object({
+    from: optionalString,
+    to: optionalString,
+    subject: optionalString,
+    message: optionalString,
+});
+
 module.exports = {
     contactFormSchema,
     membershipApplicationSchema,
@@ -92,4 +101,5 @@ module.exports = {
     eventRegistrationSchema,
     courseRegistrationSchema,
     tripRegistrationSchema,
+    personalEmailSchema,
 };
