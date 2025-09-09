@@ -65,6 +65,7 @@ const activitiesSchema = z.object({
                 highlights: z.array(z.string()).optional(),
                 featured: z.boolean().optional(),
                 price: optionalString(),
+                emergencyContact: optionalString(),
                 images: z
                     .array(
                         z.object({
@@ -98,6 +99,7 @@ const activitiesSchema = z.object({
                 participants: optionalNumber(0),
                 price: optionalNumber(0),
                 description: optionalString(),
+                emergencyContact: optionalString(),
             })
         )
         .optional(),
@@ -110,6 +112,7 @@ const activitiesSchema = z.object({
                 participants: optionalNumber(0),
                 instructor: optionalString(),
                 description: optionalString(),
+                emergencyContact: optionalString(),
             })
         )
         .optional(),
