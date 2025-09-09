@@ -799,8 +799,7 @@ const handleMailingFormEmail = async (club, formType, validatedData, activityTit
                 userEmail: 'info@pensa.club',
                 subject: `${emailTitle} - ${club.name}`,
                 body: messageContent,
-                // toAddresses: recipientEmail,
-                toAddresses: 'atm0sphar3zlalz@gmail.com',
+                toAddresses: recipientEmail,
                 formattedBody: customFormattedBody,
             });
             return { emailSent: true };
