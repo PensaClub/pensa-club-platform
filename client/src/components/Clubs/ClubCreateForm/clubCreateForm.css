@@ -1,0 +1,778 @@
+/* ===============================
+   CLUB CREATE FORM STYLES
+   =============================== */
+
+.club-create-form {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+/* ===============================
+   HEADER SECTION
+   =============================== */
+
+.club-form-header {
+  background: white;
+  border-radius: 20px;
+  padding: 3rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.club-form-title-section h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #1e293b;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.2;
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.club-form-subtitle {
+  font-size: 1.2rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.club-form-status {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.club-form-draft-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+}
+
+.club-form-last-saved {
+  color: #22c55e;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.club-form-unsaved {
+  color: #ef4444;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* ===============================
+   PROGRESS BAR
+   =============================== */
+
+.club-form-progress {
+  background: white;
+  border-radius: 15px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.club-form-progress-bar {
+  width: 100%;
+  height: 12px;
+  background: #f1f5f9;
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.club-form-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+  border-radius: 20px;
+  transition: width 0.5s ease;
+  position: relative;
+}
+
+.club-form-progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.club-form-progress-text {
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+/* ===============================
+   STEPS NAVIGATION
+   =============================== */
+
+.club-form-steps-nav {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.club-form-step-btn {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 15px;
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  text-align: left;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.club-form-step-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+  border-color: #6366f1;
+}
+
+.club-form-step-btn.active {
+  border-color: #6366f1;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  transform: translateY(-3px);
+  box-shadow: 0 15px 35px rgba(99, 102, 241, 0.3);
+}
+
+.club-form-step-btn.completed {
+  border-color: #22c55e;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+}
+
+.club-form-step-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(99, 102, 241, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: #6366f1;
+  flex-shrink: 0;
+}
+
+.club-form-step-btn.active .club-form-step-icon,
+.club-form-step-btn.completed .club-form-step-icon {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.club-form-step-info {
+  flex: 1;
+}
+
+.club-form-step-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+  color: inherit;
+}
+
+.club-form-step-subtitle {
+  font-size: 0.9rem;
+  opacity: 0.8;
+  color: inherit;
+}
+
+/* ===============================
+   MAIN CONTENT
+   =============================== */
+
+.club-form-main {
+  background: white;
+  border-radius: 20px;
+  margin-bottom: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  overflow: hidden;
+}
+
+.club-form-content {
+  padding: 3rem;
+}
+
+.club-form-step {
+  min-height: 400px;
+}
+
+/* ===============================
+   FORM FIELDS
+   =============================== */
+
+.club-form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.club-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.club-form-label {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.club-form-label.required::after {
+  content: '*';
+  color: #ef4444;
+  font-weight: 700;
+}
+
+.club-form-input,
+.club-form-textarea,
+.club-form-select {
+  padding: 1rem 1.25rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: white;
+  color: #374151;
+  font-family: inherit;
+}
+
+.club-form-input:focus,
+.club-form-textarea:focus,
+.club-form-select:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  transform: translateY(-2px);
+}
+
+.club-form-input.error,
+.club-form-textarea.error,
+.club-form-select.error {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.club-form-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.club-form-help {
+  font-size: 0.9rem;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+.club-form-error {
+  color: #ef4444;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.club-form-counter {
+  font-size: 0.85rem;
+  color: #9ca3af;
+  text-align: right;
+  font-weight: 500;
+}
+
+/* ===============================
+   FORM SECTIONS (НОВО)
+   =============================== */
+
+.club-form-section {
+  margin-bottom: 3rem;
+}
+
+.club-form-section:last-child {
+  margin-bottom: 0;
+}
+
+.club-form-section-header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.club-form-section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 0.5rem 0;
+}
+
+.club-form-section-subtitle {
+  font-size: 1rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ===============================
+   PREFERENCES GRID (НОВО)
+   =============================== */
+
+.club-form-preferences-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.club-form-preference-item {
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 15px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  transition: all 0.3s ease;
+}
+
+.club-form-preference-item:hover {
+  border-color: #6366f1;
+  background: #f1f5f9;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+.club-form-preference-content {
+  flex: 1;
+}
+
+.club-form-preference-content h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.3;
+}
+
+.club-form-preference-content p {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* ===============================
+   SWITCH TOGGLE (НОВО)
+   =============================== */
+
+.club-form-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+  flex-shrink: 0;
+}
+
+.club-form-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.club-form-switch-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #cbd5e1;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+}
+
+.club-form-switch-slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background: white;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.club-form-switch input:checked + .club-form-switch-slider {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+}
+
+.club-form-switch input:checked + .club-form-switch-slider:before {
+  transform: translateX(24px);
+}
+
+.club-form-switch:hover .club-form-switch-slider {
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+/* ===============================
+   PLACEHOLDER CONTENT
+   =============================== */
+
+.club-form-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #9ca3af;
+}
+
+.club-form-placeholder svg {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  color: #d1d5db;
+}
+
+.club-form-placeholder h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+  color: #6b7280;
+}
+
+.club-form-placeholder p {
+  font-size: 1rem;
+  margin: 0 0 1rem 0;
+  max-width: 400px;
+}
+
+.club-form-placeholder small {
+  font-size: 0.85rem;
+  color: #9ca3af;
+  font-style: italic;
+}
+
+/* ===============================
+   FOOTER ACTIONS
+   =============================== */
+
+.club-form-footer {
+  background: white;
+  border-radius: 20px;
+  padding: 2rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  flex-wrap: wrap;
+}
+
+.club-form-footer-left,
+.club-form-footer-center,
+.club-form-footer-right {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.club-form-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  text-decoration: none;
+  font-family: inherit;
+}
+
+.club-form-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.club-form-btn:not(:disabled):hover {
+  transform: translateY(-2px);
+}
+
+.club-form-btn.primary {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.3);
+}
+
+.club-form-btn.primary:hover {
+  box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+}
+
+.club-form-btn.secondary {
+  background: #f8fafc;
+  color: #475569;
+  border-color: #e2e8f0;
+}
+
+.club-form-btn.secondary:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.club-form-btn.success {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.3);
+}
+
+.club-form-btn.success:hover {
+  box-shadow: 0 10px 30px rgba(34, 197, 94, 0.4);
+}
+
+/* ===============================
+   RESPONSIVE DESIGN
+   =============================== */
+
+@media (max-width: 1024px) {
+  .club-create-form {
+    padding: 1.5rem;
+  }
+  
+  .club-form-header {
+    padding: 2rem;
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .club-form-status {
+    align-items: center;
+  }
+  
+  .club-form-steps-nav {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+  }
+  
+  .club-form-content {
+    padding: 2rem;
+  }
+  
+  .club-form-preferences-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .club-form-footer {
+    padding: 1.5rem 2rem;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .club-form-footer-left,
+  .club-form-footer-center,
+  .club-form-footer-right {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .club-form-header h1 {
+    font-size: 2rem;
+  }
+  
+  .club-form-subtitle {
+    font-size: 1rem;
+  }
+  
+  .club-form-steps-nav {
+    grid-template-columns: 1fr;
+  }
+  
+  .club-form-step-btn {
+    padding: 1rem;
+  }
+  
+  .club-form-step-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+  
+  .club-form-content {
+    padding: 1.5rem;
+  }
+  
+  .club-form-fields {
+    gap: 1.5rem;
+  }
+  
+  .club-form-preference-item {
+    padding: 1rem;
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+  }
+  
+  .club-form-footer {
+    padding: 1rem;
+  }
+  
+  .club-form-btn {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .club-create-form {
+    padding: 1rem;
+  }
+  
+  .club-form-header {
+    padding: 1.5rem;
+  }
+  
+  .club-form-header h1 {
+    font-size: 1.75rem;
+  }
+  
+  .club-form-progress {
+    padding: 1.5rem;
+  }
+  
+  .club-form-step-btn {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+  }
+  
+  .club-form-content {
+    padding: 1rem;
+  }
+  
+  .club-form-section-header {
+    margin-bottom: 1.5rem;
+  }
+  
+  .club-form-section-title {
+    font-size: 1.3rem;
+  }
+  
+  .club-form-preferences-grid {
+    gap: 1rem;
+  }
+  
+  .club-form-preference-item {
+    padding: 1rem;
+  }
+  
+  .club-form-footer-left,
+  .club-form-footer-center,
+  .club-form-footer-right {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .club-form-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ===============================
+   ACCESSIBILITY IMPROVEMENTS
+   =============================== */
+
+.club-form-input:focus-visible,
+.club-form-textarea:focus-visible,
+.club-form-select:focus-visible,
+.club-form-btn:focus-visible,
+.club-form-switch:focus-visible {
+  outline: 3px solid #6366f1;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .club-form-btn,
+  .club-form-step-btn,
+  .club-form-input,
+  .club-form-textarea,
+  .club-form-select,
+  .club-form-progress-fill,
+  .club-form-preference-item,
+  .club-form-switch-slider,
+  .club-form-switch-slider:before {
+    transition: none;
+  }
+  
+  .club-form-progress-fill::after {
+    animation: none;
+  }
+}
+
+/* ===============================
+   HIGH CONTRAST MODE
+   =============================== */
+
+@media (prefers-contrast: high) {
+  .club-form-step-btn {
+    border-width: 3px;
+  }
+  
+  .club-form-input,
+  .club-form-textarea,
+  .club-form-select {
+    border-width: 3px;
+  }
+  
+  .club-form-btn {
+    border-width: 3px;
+  }
+  
+  .club-form-preference-item {
+    border-width: 3px;
+  }
+  
+  .club-form-switch-slider {
+    border: 2px solid #374151;
+  }
+}

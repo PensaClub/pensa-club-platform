@@ -59,6 +59,32 @@ const TimelineSchema = z
         }
     );
 
+// Individual beneficiary schema
+const BeneficiaryItemSchema = z.object({
+    id: z.string().min(1, 'Beneficiary ID is required').optional(),
+    firstName: z.string().min(1, 'First name is required').max(100, 'First name too long').optional(),
+    lastName: z.string().min(1, 'Last name is required').max(100, 'Last name too long').optional(),
+    email: z.string().email('Invalid email format').nullable().optional(),
+    profileImage: z.string().nullable().optional(),
+    amountReceived: z.number().min(0, 'Amount must be positive').max(999999999, 'Amount too large').nullable().optional(),
+    dateAdded: z.string().nullable().optional(),
+    status: z.enum(['active', 'completed']).nullable().optional(),
+    phone: z.string().nullable().optional(),
+    age: z.number().min(0, 'Age must be positive').max(150, 'Invalid age').nullable().optional(),
+    location: z.string().nullable().optional(),
+    notes: z.string().max(1000, 'Notes too long').nullable().optional(),
+});
+
+// Beneficiaries schema
+const BeneficiariesSchema = z
+    .object({
+        totalCount: z.number().min(0, 'Total count must be positive').max(999999, 'Total count too large').optional(),
+        totalAmountDistributed: z.number().min(0, 'Total amount must be positive').max(999999999, 'Total amount too large').optional(),
+        currency: z.string().min(1, 'Currency is required').max(10, 'Currency too long').optional(),
+        list: z.array(BeneficiaryItemSchema).max(1000, 'Too many beneficiaries').optional(),
+    })
+    .optional();
+
 // Base schema with all fields optional for flexibility
 const BaseProjectSchema = z
     .object({
@@ -91,7 +117,7 @@ const BaseProjectSchema = z
         location: z.array(LocationSchema).nullable().optional(),
 
         // Application fields
-        applicationStatus: z.enum(['open', 'closed']).nullable().optional(),
+        applicationStatus: z.enum(['open', 'closed', 'coming-soon']).nullable().optional(),
         applicationDeadline: z
             .union([z.string(), z.date(), z.null()])
             .transform((val) => {
@@ -149,6 +175,9 @@ const BaseProjectSchema = z
 
         // Social media and content
         socialMedia: SocialMediaSchema.nullable().optional(),
+
+        // Beneficiaries
+        beneficiaries: BeneficiariesSchema.nullable().optional(),
     })
     .refine(
         (data) => {

@@ -6,11 +6,19 @@ module.exports = {
         'plugin:react/recommended',
         'plugin:react/jsx-runtime',
         'plugin:react-hooks/recommended',
+        'plugin:import/recommended', // ⬅️ ДОБАВИ
     ],
     ignorePatterns: ['dist', '.eslintrc.cjs'],
     parserOptions: { ecmaVersion: 'latest', sourceType: 'module' },
-    settings: { react: { version: '18.2' } },
-    plugins: ['react-refresh'],
+    settings: { 
+        react: { version: '18.2' },
+        'import/resolver': { // ⬅️ ДОБАВИ
+            node: {
+                extensions: ['.js', '.jsx', '.ts', '.tsx']
+            }
+        }
+    },
+    plugins: ['react-refresh', 'import'], // ⬅️ ДОБАВИ import
     rules: {
         // 🔧 Твои custom правила:
         'react-refresh/only-export-components': [
@@ -38,8 +46,29 @@ module.exports = {
         'no-duplicate-imports': 'error',
         'no-console': ['error', { allow: ['warn', 'error', 'log'] }],
 
-        'no-multiple-empty-lines': ['error', { max: 1 }],
+        // ⬅️ ОБНОВЕНО: Максимум 2 празни реда, повече = грешка
+        'no-multiple-empty-lines': ['error', { max: 2, maxEOF: 1, maxBOF: 0 }],
         'object-curly-spacing': ['error', 'always'],
         'array-bracket-spacing': ['error', 'never'],
+
+        // ⬅️ НОВО: Import правила
+        'import/no-unresolved': 'error', // Грешка за липсващи импорти
+        'import/named': 'error', // Проверка за named imports
+        'import/default': 'error', // Проверка за default imports
+        'import/namespace': 'error', // Проверка за namespace imports
+        'import/no-duplicates': 'error', // Забрана за дублирани импорти
+        'import/order': ['warn', { // Подреждане на импортите
+            'groups': [
+                'builtin',
+                'external',
+                'internal',
+                'parent',
+                'sibling',
+                'index'
+            ],
+            'newlines-between': 'never'
+        }],
+        'import/newline-after-import': 'warn', // Нов ред след импортите
+        'import/no-unused-modules': 'warn', // Предупреждение за неизползвани модули
     },
 };

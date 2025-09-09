@@ -1,0 +1,602 @@
+/* AdminClubActions Container */
+.adminclubactions-container {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  animation: adminclubactions-slide-up 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  max-width: 90vw;
+  width: 1200px;
+}
+
+.adminclubactions-container.hiding {
+  animation: adminclubactions-slide-down 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.adminclubactions-wrapper {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 20px;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 20px 40px rgba(102, 126, 234, 0.4);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  color: white;
+  position: relative;
+  /* overflow: hidden; */
+}
+
+.adminclubactions-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: adminclubactions-shimmer 3s infinite;
+}
+
+/* Selection Info */
+.adminclubactions-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.adminclubactions-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  backdrop-filter: blur(10px);
+}
+
+.adminclubactions-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.adminclubactions-count {
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.adminclubactions-label {
+  font-size: 0.85rem;
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+/* Action Buttons */
+.adminclubactions-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.adminclubactions-btn {
+  padding: 0.75rem 1.25rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  backdrop-filter: blur(10px);
+  white-space: nowrap;
+}
+
+.adminclubactions-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.adminclubactions-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.adminclubactions-btn--approve {
+  background: rgba(16, 185, 129, 0.9);
+  color: white;
+}
+
+.adminclubactions-btn--approve:hover:not(:disabled) {
+  background: rgba(16, 185, 129, 1);
+}
+
+.adminclubactions-btn--status {
+  background: rgba(59, 130, 246, 0.9);
+  color: white;
+}
+
+.adminclubactions-btn--status:hover:not(:disabled) {
+  background: rgba(59, 130, 246, 1);
+}
+
+.adminclubactions-btn--delete {
+  background: rgba(239, 68, 68, 0.9);
+  color: white;
+}
+
+.adminclubactions-btn--delete:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 1);
+}
+
+.adminclubactions-btn-text {
+  display: block;
+}
+
+.adminclubactions-chevron {
+  font-size: 0.8rem;
+  transition: transform 0.3s ease;
+  margin-left: 0.25rem;
+}
+
+.adminclubactions-chevron.rotated {
+  transform: rotate(180deg);
+}
+
+/* Dropdown */
+.adminclubactions-dropdown {
+  position: relative;
+}
+
+.adminclubactions-dropdown-menu {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+  margin-bottom: 0.5rem;
+  overflow: hidden;
+  animation: adminclubactions-dropdown-appear 0.2s ease-out;
+  min-width: 180px;
+}
+
+.adminclubactions-dropdown-item {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: none;
+  background: none;
+  color: #334155;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.adminclubactions-dropdown-item:hover {
+  background: #f8fafc;
+}
+
+.adminclubactions-status-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+}
+
+/* Quick Stats */
+.adminclubactions-stats {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.adminclubactions-stat {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  opacity: 0.9;
+  font-weight: 500;
+  padding-right: 1rem;
+}
+
+.adminclubactions-stat svg {
+  font-size: 0.75rem;
+}
+
+/* Close Button */
+.adminclubactions-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  backdrop-filter: blur(10px);
+  flex-shrink: 0;
+}
+
+.adminclubactions-close:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.1);
+}
+
+.adminclubactions-close:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Processing Overlay */
+.adminclubactions-processing-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(5px);
+}
+
+.adminclubactions-processing-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: white;
+  font-weight: 600;
+}
+
+.adminclubactions-processing-spinner {
+  font-size: 1.25rem;
+}
+
+/* Confirmation Modal */
+.adminclubactions-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  animation: adminclubactions-fade-in 0.2s ease-out;
+}
+
+.adminclubactions-modal {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow: hidden;
+  animation: adminclubactions-modal-appear 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.adminclubactions-modal-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 2rem 2rem 1rem 2rem;
+}
+
+.adminclubactions-modal-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.adminclubactions-modal-title h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.adminclubactions-modal-title p {
+  margin: 0;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+.adminclubactions-modal-body {
+  padding: 0 2rem 1rem 2rem;
+}
+
+.adminclubactions-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.adminclubactions-warning.info {
+  background: #dbeafe;
+  color: #1e40af;
+  border-left: 4px solid #3b82f6;
+}
+
+.adminclubactions-warning.danger {
+  background: #fef2f2;
+  color: #991b1b;
+  border-left: 4px solid #ef4444;
+}
+
+.adminclubactions-warning svg {
+  font-size: 1.25rem;
+  margin-top: 0.25rem;
+  flex-shrink: 0;
+}
+
+.adminclubactions-warning p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.adminclubactions-status-preview {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  font-weight: 600;
+}
+
+.adminclubactions-status-badge {
+  padding: 0.25rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.adminclubactions-selection-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: #f8fafc;
+  border-radius: 12px;
+  color: #475569;
+  font-weight: 600;
+}
+
+.adminclubactions-modal-footer {
+  padding: 1.5rem 2rem;
+  border-top: 1px solid #e5e7eb;
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.adminclubactions-modal-btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: none;
+  min-width: 120px;
+  justify-content: center;
+}
+
+.adminclubactions-modal-btn--cancel {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.adminclubactions-modal-btn--cancel:hover:not(:disabled) {
+  background: #e5e7eb;
+}
+
+.adminclubactions-modal-btn--confirm {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+}
+
+.adminclubactions-modal-btn--confirm:hover:not(:disabled) {
+  background: linear-gradient(135deg, #059669, #047857);
+  transform: translateY(-1px);
+}
+
+.adminclubactions-modal-btn--danger {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+}
+
+.adminclubactions-modal-btn--danger:hover:not(:disabled) {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  transform: translateY(-1px);
+}
+
+.adminclubactions-modal-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .adminclubactions-container {
+    bottom: 1rem;
+    max-width: 95vw;
+  }
+
+  .adminclubactions-wrapper {
+    padding: 1.25rem 1.5rem;
+    gap: 1.5rem;
+  }
+
+  .adminclubactions-btn-text {
+    display: none;
+  }
+
+  .adminclubactions-btn {
+    padding: 0.75rem;
+    min-width: 44px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .adminclubactions-wrapper {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+  }
+
+  .adminclubactions-actions {
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  .adminclubactions-stats {
+    display: none;
+  }
+
+  .adminclubactions-modal {
+    margin: 0.5rem;
+    max-width: none;
+  }
+
+  .adminclubactions-modal-footer {
+    flex-direction: column;
+  }
+
+  .adminclubactions-modal-btn {
+    min-width: auto;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .adminclubactions-wrapper {
+    gap: 0.75rem;
+    padding: 0.875rem 1rem;
+  }
+
+  .adminclubactions-info {
+    gap: 0.75rem;
+  }
+
+  .adminclubactions-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+  }
+
+  .adminclubactions-count {
+    font-size: 1.25rem;
+  }
+
+  .adminclubactions-actions {
+    gap: 0.5rem;
+  }
+
+  .adminclubactions-btn {
+    padding: 0.65rem;
+    min-width: 40px;
+  }
+}
+
+/* Animations */
+@keyframes adminclubactions-slide-up {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+@keyframes adminclubactions-slide-down {
+  from {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-50%) translateY(100px);
+  }
+}
+
+@keyframes adminclubactions-shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+@keyframes adminclubactions-dropdown-appear {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes adminclubactions-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes adminclubactions-modal-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

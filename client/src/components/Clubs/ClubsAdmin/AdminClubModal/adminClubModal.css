@@ -1,0 +1,456 @@
+/* AdminClubModal Overlay */
+.adminclubmodal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  animation: adminclubmodal-fade-in 0.2s ease-out;
+  backdrop-filter: blur(4px);
+}
+
+/* Modal Container */
+.adminclubmodal-container {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow: hidden;
+  animation: adminclubmodal-slide-up 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.adminclubmodal-form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Header */
+.adminclubmodal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 2rem 2rem 1rem 2rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.adminclubmodal-header-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  flex: 1;
+}
+
+.adminclubmodal-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.adminclubmodal-title-section {
+  flex: 1;
+}
+
+.adminclubmodal-title {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  line-height: 1.2;
+}
+
+.adminclubmodal-description {
+  margin: 0;
+  color: #6b7280;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.adminclubmodal-close {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: #f3f4f6;
+  color: #6b7280;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.adminclubmodal-close:hover:not(:disabled) {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.adminclubmodal-close:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Body */
+.adminclubmodal-body {
+  padding: 1rem 2rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Club Info */
+.adminclubmodal-club-info {
+  margin-bottom: 1.5rem;
+}
+
+.adminclubmodal-club-preview {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.adminclubmodal-club-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.adminclubmodal-club-details {
+  flex: 1;
+}
+
+.adminclubmodal-club-name {
+  margin: 0 0 0.25rem 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.adminclubmodal-club-meta {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.adminclubmodal-club-status {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.adminclubmodal-status-badge {
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.adminclubmodal-verified-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0.5rem;
+  background: #ede9fe;
+  color: #8b5cf6;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+/* Warning/Info Messages */
+.adminclubmodal-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+}
+
+.adminclubmodal-warning.info {
+  background: #dbeafe;
+  color: #1e40af;
+  border-left: 4px solid #3b82f6;
+}
+
+.adminclubmodal-warning.danger {
+  background: #fef2f2;
+  color: #991b1b;
+  border-left: 4px solid #ef4444;
+}
+
+.adminclubmodal-warning svg {
+  font-size: 1.25rem;
+  margin-top: 0.25rem;
+  flex-shrink: 0;
+}
+
+.adminclubmodal-warning-content h5 {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.adminclubmodal-warning-content p {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+/* Form Fields */
+.adminclubmodal-form-fields {
+  margin-bottom: 1.5rem;
+}
+
+.adminclubmodal-field {
+  margin-bottom: 1.5rem;
+}
+
+.adminclubmodal-field:last-child {
+  margin-bottom: 0;
+}
+
+.adminclubmodal-label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.adminclubmodal-input,
+.adminclubmodal-textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+  background: white;
+  color: #1f2937;
+  font-family: inherit;
+}
+
+.adminclubmodal-input:focus,
+.adminclubmodal-textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.adminclubmodal-input.error,
+.adminclubmodal-textarea.error {
+  border-color: #ef4444;
+}
+
+.adminclubmodal-input.error:focus,
+.adminclubmodal-textarea.error:focus {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.adminclubmodal-input:disabled,
+.adminclubmodal-textarea:disabled {
+  background: #f9fafb;
+  color: #6b7280;
+  cursor: not-allowed;
+}
+
+.adminclubmodal-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.adminclubmodal-error {
+  display: block;
+  color: #ef4444;
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+.adminclubmodal-confirmation-instruction {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.85rem;
+  color: #6b7280;
+  padding: 0.75rem;
+  background: #f8fafc;
+  border-radius: 8px;
+  border-left: 3px solid #f59e0b;
+}
+
+/* Status Info */
+.adminclubmodal-status-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: #f0f9ff;
+  border-radius: 10px;
+  color: #0c4a6e;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-top: 1rem;
+}
+
+/* Footer */
+.adminclubmodal-footer {
+  padding: 1.5rem 2rem;
+  border-top: 1px solid #f1f5f9;
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.adminclubmodal-btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: none;
+  min-width: 120px;
+  justify-content: center;
+}
+
+.adminclubmodal-btn--cancel {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.adminclubmodal-btn--cancel:hover:not(:disabled) {
+  background: #e5e7eb;
+}
+
+.adminclubmodal-btn--confirm {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+}
+
+.adminclubmodal-btn--confirm:hover:not(:disabled) {
+  background: linear-gradient(135deg, #059669, #047857);
+  transform: translateY(-1px);
+}
+
+.adminclubmodal-btn--danger {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+}
+
+.adminclubmodal-btn--danger:hover:not(:disabled) {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  transform: translateY(-1px);
+}
+
+.adminclubmodal-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .adminclubmodal-overlay {
+    padding: 0.5rem;
+  }
+
+  .adminclubmodal-container {
+    max-width: none;
+    max-height: 95vh;
+  }
+
+  .adminclubmodal-header {
+    padding: 1.5rem 1.5rem 1rem 1.5rem;
+  }
+
+  .adminclubmodal-body {
+    padding: 1rem 1.5rem;
+  }
+
+  .adminclubmodal-footer {
+    padding: 1rem 1.5rem;
+    flex-direction: column;
+  }
+
+  .adminclubmodal-btn {
+    min-width: auto;
+    width: 100%;
+  }
+
+  .adminclubmodal-club-preview {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .adminclubmodal-club-image {
+    align-self: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .adminclubmodal-header-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+
+  .adminclubmodal-icon {
+    align-self: center;
+  }
+
+  .adminclubmodal-title {
+    font-size: 1.25rem;
+  }
+
+  .adminclubmodal-warning {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+/* Animations */
+@keyframes adminclubmodal-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes adminclubmodal-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

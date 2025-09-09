@@ -5,16 +5,19 @@ import { ClubsSearch } from './ClubsSearch/ClubsSearch';
 import { ClubsMap } from './ClubsMap/ClubsMap';
 import { ClubCard } from './ClubCard/ClubCard';
 import { LoadingSpinner } from '../../common/LoadingSpinner/LoadingSpinner';
-import './allClubs.css';
-import { mockClubsData } from '../data/mockClubsData';
 import { RecentArticles } from './RecentArticles/RecentArticles';
 import { TextZoom } from '../../TextZoom/TextZoom';
+import './allClubs.css';
+import { useClubContext } from '../../contexts/ClubContext';
 
 export const AllClubs = () => {
   const { t, i18n } = useTranslation();
+  
+  // ✅ Използваме ClubContext вместо mockClubsData
+  const { getAllClubs, isLoading } = useClubContext();
+  
   const [clubs, setClubs] = useState([]);
   const [filteredClubs, setFilteredClubs] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [showMap, setShowMap] = useState(false);
   const [selectedClub, setSelectedClub] = useState(null);
   const [searchFilters, setSearchFilters] = useState({
@@ -25,20 +28,41 @@ export const AllClubs = () => {
   });
   const mapRef = useRef(null);
   
-  // Симулираме заявка към сървър
+  // ✅ Заменяме fetchClubs да използва ClubContext
   const fetchClubs = useCallback(async () => {
-    setIsLoading(true);
     try {
-      // Симулираме network delay
-      await new Promise(resolve => setTimeout(resolve, 1200));
-      setClubs(mockClubsData);
-      setFilteredClubs(mockClubsData);
+      console.log('🔄 Fetching clubs from API...');
+      const response = await getAllClubs(false, 1, 100); // forceRefresh=false, page=1, limit=100
+      
+      // Обработваме response-а
+      let clubsData = [];
+      if (response.clubs) {
+        // Ако response има clubs array (пагиниран отговор)
+        clubsData = response.clubs;
+      } else if (Array.isArray(response)) {
+        // Ако response е директно array
+        clubsData = response;
+      } else {
+        console.warn('Unexpected response format:', response);
+        clubsData = [];
+      }
+      
+      console.log('✅ Clubs loaded:', clubsData.length);
+      setClubs(clubsData);
+      setFilteredClubs(clubsData);
+      
+      // Показваме информация за fallback ако има
+      if (response.isFromFallback) {
+        console.info('📋 Using fallback mock data due to API error');
+      }
+      
     } catch (error) {
-      console.error(t('clubs.AllClubs.errors.loadingClubs'), error);
-    } finally {
-      setIsLoading(false);
+      console.error('❌ Error fetching clubs:', error);
+      // В случай на грешка, се ползва fallback-ът от контекста
+      setClubs([]);
+      setFilteredClubs([]);
     }
-  }, [t]);
+  }, [getAllClubs]);
 
   useEffect(() => {
     fetchClubs();
@@ -54,15 +78,15 @@ export const AllClubs = () => {
     if (filters.searchTerm) {
       const searchLower = filters.searchTerm.toLowerCase();
       filtered = filtered.filter(club =>
-        club.name.toLowerCase().includes(searchLower) ||
-        club.shortDescription.toLowerCase().includes(searchLower) ||
-        club.location.city.toLowerCase().includes(searchLower)
+        club.name?.toLowerCase().includes(searchLower) ||
+        club.shortDescription?.toLowerCase().includes(searchLower) ||
+        club.location?.city?.toLowerCase().includes(searchLower)
       );
     }
 
     // Филтриране по град
     if (filters.city && filters.city !== 'all') {
-      filtered = filtered.filter(club => club.location.city === filters.city);
+      filtered = filtered.filter(club => club.location?.city === filters.city);
     }
 
     // Филтриране по категория
@@ -74,13 +98,13 @@ export const AllClubs = () => {
     filtered.sort((a, b) => {
       switch (filters.sortBy) {
         case 'name':
-          return a.name.localeCompare(b.name);
+          return (a.name || '').localeCompare(b.name || '');
         case 'members':
-          return b.membership.totalMembers - a.membership.totalMembers;
+          return (b.membership?.totalMembers || 0) - (a.membership?.totalMembers || 0);
         case 'rating':
-          return b.metadata.rating - a.metadata.rating;
+          return (b.metadata?.rating || 0) - (a.metadata?.rating || 0);
         case 'newest':
-          return new Date(b.metadata.createdAt) - new Date(a.metadata.createdAt);
+          return new Date(b.metadata?.createdAt || 0) - new Date(a.metadata?.createdAt || 0);
         default:
           return 0;
       }
@@ -98,11 +122,10 @@ export const AllClubs = () => {
       const newShowMap = !prev;
       
       if (newShowMap) {
-        // Използваме requestAnimationFrame за по-гладко скролване
         requestAnimationFrame(() => {
           setTimeout(() => {
             if (mapRef.current) {
-              const headerHeight = 90; // височината на sticky header-а
+              const headerHeight = 90;
               const elementTop = mapRef.current.offsetTop - headerHeight;
               
               window.scrollTo({
@@ -120,18 +143,18 @@ export const AllClubs = () => {
 
   // Мемоизирани градове и категории за филтрите
   const availableCities = useMemo(() => {
-    return [...new Set(clubs.map(club => club.location.city))].sort();
+    return [...new Set(clubs.map(club => club.location?.city).filter(Boolean))].sort();
   }, [clubs]);
 
   const availableCategories = useMemo(() => {
-    return [...new Set(clubs.map(club => club.category))].sort();
+    return [...new Set(clubs.map(club => club.category).filter(Boolean))].sort();
   }, [clubs]);
 
   // Изчисляване на статистики
   const statistics = useMemo(() => {
-    const totalMembers = clubs.reduce((sum, club) => sum + club.membership.totalMembers, 0);
-    const activeClubs = clubs.filter(club => club.metadata.isActive).length;
-    const cities = [...new Set(clubs.map(club => club.location.city))].length;
+    const totalMembers = clubs.reduce((sum, club) => sum + (club.membership?.totalMembers || 0), 0);
+    const activeClubs = clubs.filter(club => club.status === 'active' || club.metadata?.isActive).length;
+    const cities = [...new Set(clubs.map(club => club.location?.city).filter(Boolean))].length;
     
     return {
       totalClubs: clubs.length,
@@ -147,7 +170,7 @@ export const AllClubs = () => {
     
     setTimeout(() => {
       if (mapRef.current) {
-        const headerHeight = 90; // височината на sticky header-а
+        const headerHeight = 90;
         const elementTop = mapRef.current.offsetTop - headerHeight;
         
         window.scrollTo({
@@ -235,6 +258,7 @@ export const AllClubs = () => {
 
   return (
     <>
+      {/* Helmet и останалата част от компонента остават същите */}
       <Helmet>
         <title>{metaData.title}</title>
         <meta name="description" content={metaData.description} />
@@ -283,12 +307,12 @@ export const AllClubs = () => {
                 "description": club.shortDescription,
                 "address": {
                   "@type": "PostalAddress",
-                  "streetAddress": club.location.address,
-                  "addressLocality": club.location.city,
-                  "postalCode": club.location.postalCode,
+                  "streetAddress": club.location?.address,
+                  "addressLocality": club.location?.city,
+                  "postalCode": club.location?.postalCode,
                   "addressCountry": "BG"
                 },
-                "foundingDate": club.foundedYear.toString(),
+                "foundingDate": club.foundedYear?.toString(),
                 "memberOf": t('clubs.AllClubs.meta.memberOf')
               }))
             },

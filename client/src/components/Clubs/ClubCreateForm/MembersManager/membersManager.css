@@ -1,0 +1,1554 @@
+/* ===============================
+   MEMBERS MANAGER STYLES
+   =============================== */
+
+.members-manager {
+  width: 100%;
+  padding: 1rem 0;
+}
+
+/* ===============================
+   SVG ICON STYLES
+   =============================== */
+
+.members-manager .members-manager-title svg {
+  color: #6366f1;
+  font-size: 1.5rem;
+}
+
+.members-manager .members-manager-tab svg {
+  font-size: 1rem;
+}
+
+.members-manager .members-manager-search svg {
+  color: #9ca3af;
+  font-size: 1rem;
+}
+
+.members-manager .members-manager-action-btn svg {
+  font-size: 0.9rem;
+}
+
+.members-manager .members-manager-sort-order-btn svg {
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.members-manager .members-manager-checkbox-btn svg {
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.members-manager .members-manager-form-label svg {
+  color: #6366f1;
+  font-size: 0.9rem;
+}
+
+.members-manager .members-manager-detail svg {
+  color: #9ca3af;
+  font-size: 0.8rem;
+}
+
+.members-manager .members-manager-role-badge svg {
+  font-size: 0.8rem;
+  color: #f59e0b;
+}
+
+.members-manager .members-manager-photo-upload-btn svg {
+  font-size: 0.9rem;
+}
+
+.members-manager .members-manager-help-icon svg {
+  font-size: 1rem;
+}
+
+.members-manager .members-manager-empty svg {
+  font-size: 4rem;
+  color: #d1d5db;
+}
+
+/* ===============================
+   HEADER SECTION
+   =============================== */
+
+.members-manager-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.members-manager-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 1rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.members-manager-subtitle {
+  font-size: 1.1rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ===============================
+   TABS
+   =============================== */
+
+.members-manager-tabs {
+  display: flex;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 15px;
+  padding: 0.5rem;
+  margin-bottom: 2rem;
+  overflow-x: auto;
+  gap: 0.5rem;
+}
+
+.members-manager-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  position: relative;
+}
+
+.members-manager-tab:hover {
+  background: #f8fafc;
+  color: #374151;
+}
+
+.members-manager-tab.active {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+}
+
+.members-manager-tab-count {
+  background: rgba(255, 255, 255, 0.2);
+  color: inherit;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.members-manager-tab.active .members-manager-tab-count {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* ===============================
+   CONTROLS
+   =============================== */
+
+.members-manager-controls {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 15px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.members-manager-search-filters {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.members-manager-search {
+  position: relative;
+  min-width: 250px;
+}
+
+.members-manager-search svg {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.members-manager-search input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.75rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  background: white;
+  color: #374151;
+}
+
+.members-manager-search input:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.members-manager-filters {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.members-manager-filters select {
+  padding: 0.75rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  background: white;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.members-manager-filters select:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.members-manager-sort-order-btn {
+  background: white;
+  color: #6b7280;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.members-manager-sort-order-btn:hover {
+  border-color: #6366f1;
+  color: #6366f1;
+  transform: scale(1.05);
+}
+
+.members-manager-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.members-manager-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.members-manager-action-btn.add-new {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+}
+
+.members-manager-action-btn.add-new:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(34, 197, 94, 0.4);
+}
+
+.members-manager-action-btn.bulk {
+  background: #f1f5f9;
+  color: #475569;
+  border-color: #cbd5e1;
+}
+
+.members-manager-action-btn.bulk:hover {
+  background: #e2e8f0;
+  border-color: #94a3b8;
+}
+
+.members-manager-action-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* ===============================
+   BULK ACTIONS BAR
+   =============================== */
+
+.members-manager-bulk-bar {
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border: 2px solid #bfdbfe;
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.members-manager-bulk-info {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1e40af;
+}
+
+.members-manager-bulk-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.members-manager-bulk-btn {
+  background: white;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.members-manager-bulk-btn:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.members-manager-bulk-btn.delete {
+  color: #ef4444;
+  border-color: #fecaca;
+  background: #fef2f2;
+}
+
+.members-manager-bulk-btn.delete:hover {
+  border-color: #ef4444;
+  background: #fee2e2;
+}
+
+.members-manager-bulk-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===============================
+   MEMBERS GRID
+   =============================== */
+
+.members-manager-content {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 15px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.members-manager-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.members-manager-member-card {
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 15px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.members-manager-member-card:hover {
+  border-color: #6366f1;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
+}
+
+.members-manager-member-card.selected {
+  border-color: #22c55e;
+  background: #f0fdf4;
+  box-shadow: 0 8px 25px rgba(34, 197, 94, 0.2);
+}
+
+.members-manager-selection-checkbox {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 10;
+}
+
+.members-manager-checkbox-btn {
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.members-manager-checkbox-btn:hover {
+  background: rgba(0, 0, 0, 0.9);
+  transform: scale(1.1);
+}
+
+.members-manager-member-photo {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  position: relative;
+  border: 3px solid white;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.members-manager-member-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.members-manager-photo-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  font-size: 1.5rem;
+}
+
+.members-manager-photo-uploading {
+  width: 100%;
+  height: 100%;
+  background: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6366f1;
+  font-size: 1.2rem;
+}
+
+.members-manager-photo-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.members-manager-member-photo:hover .members-manager-photo-overlay {
+  opacity: 1;
+}
+
+.members-manager-photo-upload-btn {
+  background: rgba(255, 255, 255, 0.9);
+  color: #374151;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.members-manager-photo-upload-btn:hover {
+  background: white;
+  transform: scale(1.1);
+}
+
+.members-manager-member-info {
+  flex: 1;
+  width: 100%;
+}
+
+.members-manager-member-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 0.5rem 0;
+}
+
+.members-manager-member-role {
+  margin-bottom: 1rem;
+}
+
+.members-manager-role-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: rgba(99, 102, 241, 0.1);
+  color: #6366f1;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.members-manager-role-badge.president {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+}
+
+.members-manager-member-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.members-manager-detail {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: #6b7280;
+  justify-content: center;
+}
+
+.members-manager-member-bio {
+  font-size: 0.9rem;
+  color: #6b7280;
+  line-height: 1.4;
+  margin: 0 0 1rem 0;
+  font-style: italic;
+}
+
+.members-manager-member-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.members-manager-member-actions .members-manager-action-btn {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.members-manager-member-actions .members-manager-action-btn.edit {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+  border-color: rgba(59, 130, 246, 0.2);
+}
+
+.members-manager-member-actions .members-manager-action-btn.edit:hover {
+  background: rgba(59, 130, 246, 0.2);
+  border-color: #3b82f6;
+}
+
+.members-manager-member-actions .members-manager-action-btn.delete {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.members-manager-member-actions .members-manager-action-btn.delete:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: #ef4444;
+}
+
+/* ===============================
+   ADD FORM
+   =============================== */
+
+.members-manager-add-form {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 15px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+}
+
+.members-manager-add-form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.members-manager-add-form-header h4 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0;
+}
+
+.members-manager-close-form-btn {
+  background: #fee2e2;
+  color: #dc2626;
+  border: none;
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.members-manager-close-form-btn:hover {
+  background: #fecaca;
+  transform: scale(1.1);
+}
+
+.members-manager-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.members-manager-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.members-manager-form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.members-manager-form-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.members-manager-form-input,
+.members-manager-form-select,
+.members-manager-form-textarea {
+  padding: 0.875rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  background: white;
+  color: #374151;
+  font-family: inherit;
+}
+
+.members-manager-form-input:focus,
+.members-manager-form-select:focus,
+.members-manager-form-textarea:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  transform: translateY(-1px);
+}
+
+.members-manager-form-input:disabled,
+.members-manager-form-select:disabled,
+.members-manager-form-textarea:disabled {
+  background: #f3f4f6;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.members-manager-form-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.members-manager-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: #374151;
+  margin-top: 0.5rem;
+}
+
+.members-manager-checkbox-label input[type="checkbox"] {
+  display: none;
+}
+
+.members-manager-checkbox {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #d1d5db;
+  border-radius: 4px;
+  position: relative;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.members-manager-checkbox-label input[type="checkbox"]:checked + .members-manager-checkbox {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border-color: #6366f1;
+}
+
+.members-manager-checkbox-label input[type="checkbox"]:checked + .members-manager-checkbox::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.members-manager-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid #e2e8f0;
+}
+
+.members-manager-form-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.5rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.members-manager-form-btn.cancel {
+  background: #f1f5f9;
+  color: #475569;
+  border-color: #cbd5e1;
+}
+
+.members-manager-form-btn.cancel:hover {
+  background: #e2e8f0;
+  border-color: #94a3b8;
+}
+
+.members-manager-form-btn.add {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+}
+
+.members-manager-form-btn.add:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(34, 197, 94, 0.4);
+}
+
+.members-manager-form-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* ===============================
+   EMPTY STATE
+   =============================== */
+
+.members-manager-empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #9ca3af;
+}
+
+.members-manager-empty h4 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #6b7280;
+  margin: 1.5rem 0 0.5rem 0;
+}
+
+.members-manager-empty p {
+  margin: 0 0 2rem 0;
+  line-height: 1.5;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.members-manager-empty-add-btn {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.3);
+}
+
+.members-manager-empty-add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+}
+
+/* ===============================
+   HELP SECTION
+   =============================== */
+
+.members-manager-help {
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border: 2px solid #bfdbfe;
+  border-radius: 15px;
+  padding: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-top: 2rem;
+}
+
+.members-manager-help-icon {
+  background: #3b82f6;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.members-manager-help-content h5 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1e40af;
+  margin: 0 0 0.5rem 0;
+}
+
+.members-manager-help-content p {
+  color: #1e40af;
+  line-height: 1.5;
+  margin: 0 0 1rem 0;
+  opacity: 0.8;
+  font-size: 0.9rem;
+}
+
+.members-manager-help-content ul {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: #1e40af;
+  opacity: 0.8;
+}
+
+.members-manager-help-content li {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* ===============================
+   RESPONSIVE DESIGN
+   =============================== */
+
+@media (max-width: 1024px) {
+  .members-manager-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+  
+  .members-manager-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+  
+  .members-manager-search-filters {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .members-manager-search {
+    min-width: auto;
+  }
+  
+  .members-manager-actions {
+    justify-content: center;
+  }
+  
+  .members-manager-form-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .members-manager-title {
+    font-size: 1.5rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .members-manager-tabs {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .members-manager-tab {
+    justify-content: center;
+    padding: 0.75rem 1rem;
+  }
+  
+  .members-manager-controls {
+    padding: 1rem;
+  }
+  
+  .members-manager-search-filters {
+    width: 100%;
+  }
+  
+  .members-manager-filters {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .members-manager-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .members-manager-member-card {
+    padding: 1rem;
+  }
+  
+  .members-manager-bulk-bar {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .members-manager-bulk-actions {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .members-manager-form-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .members-manager-form-actions {
+    flex-direction: column;
+  }
+  
+  .members-manager-form-btn {
+    justify-content: center;
+  }
+  
+  .members-manager-help {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .members-manager-content {
+    padding: 1rem;
+  }
+  
+  .members-manager-add-form {
+    padding: 1rem;
+  }
+  
+  .members-manager-add-form-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .members-manager-member-photo {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .members-manager-member-card {
+    padding: 1rem;
+  }
+  
+  .members-manager-member-details {
+    gap: 0.75rem;
+  }
+  
+  .members-manager-detail {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.25rem;
+  }
+  
+  .members-manager-help {
+    padding: 1rem;
+  }
+}
+/* ===============================
+   FIX FOR 350px - 400px RANGE - MEMBERS MANAGER
+   =============================== */
+
+@media (max-width: 400px) {
+  .members-manager {
+    padding: 0.5rem 0;
+  }
+
+  .members-manager-tabs {
+    padding: 0.25rem;
+    gap: 0.25rem;
+    flex-direction: column;
+  }
+
+  .members-manager-tab {
+    padding: 0.75rem;
+    justify-content: center;
+    font-size: 0.9rem;
+  }
+
+  .members-manager-controls {
+    padding: 0.75rem;
+    gap: 1rem;
+  }
+
+  .members-manager-search-filters {
+    gap: 0.75rem;
+  }
+
+  .members-manager-search {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .members-manager-filters {
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .members-manager-filters select {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .members-manager-actions {
+    width: 100%;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .members-manager-action-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  /* Основната поправка - grid за member cards */
+  .members-manager-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .members-manager-member-card {
+    padding: 0.75rem;
+    min-width: 0; /* Важно за предотвратяване на overflow */
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .members-manager-content {
+    padding: 0.75rem;
+  }
+
+  .members-manager-member-photo {
+    width: 60px;
+    height: 60px;
+  }
+
+  .members-manager-member-name {
+    font-size: 1rem;
+    word-break: break-word;
+  }
+
+  .members-manager-member-details {
+    gap: 0.5rem;
+  }
+
+  .members-manager-detail {
+    font-size: 0.8rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.25rem;
+  }
+
+  /* Add form */
+  .members-manager-add-form {
+    padding: 0.75rem;
+  }
+
+  .members-manager-add-form-header {
+    flex-direction: column;
+    gap: 0.75rem;
+    text-align: center;
+  }
+
+  .members-manager-add-form-header h4 {
+    font-size: 1.1rem;
+  }
+
+  .members-manager-form-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .members-manager-form-input,
+  .members-manager-form-select,
+  .members-manager-form-textarea {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .members-manager-form-actions {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .members-manager-form-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 1rem;
+    font-size: 0.9rem;
+  }
+
+  /* Bulk actions */
+  .members-manager-bulk-bar {
+    padding: 0.75rem;
+    flex-direction: column;
+    gap: 0.75rem;
+    text-align: center;
+  }
+
+  .members-manager-bulk-actions {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .members-manager-bulk-btn {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+  }
+
+  /* Empty state */
+  .members-manager-empty {
+    padding: 2rem 1rem;
+  }
+
+  .members-manager-empty h4 {
+    font-size: 1.1rem;
+  }
+
+  .members-manager-empty-add-btn {
+    width: 100%;
+    padding: 1rem;
+    font-size: 0.9rem;
+  }
+
+  /* Help section */
+  .members-manager-help {
+    padding: 1rem;
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+  }
+
+  .members-manager-help-content h5 {
+    font-size: 0.95rem;
+  }
+
+  .members-manager-help-content p,
+  .members-manager-help-content li {
+    font-size: 0.85rem;
+  }
+
+  /* Осигуряване че нищо не излиза от контейнера */
+  .members-manager *,
+  .members-manager *:before,
+  .members-manager *:after {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* Selection checkbox positioning */
+  .members-manager-selection-checkbox {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+  }
+
+  .members-manager-checkbox-btn {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+@media (max-width: 350px) {
+  .members-manager-controls {
+    padding: 0.5rem;
+  }
+
+  .members-manager-content {
+    padding: 0.5rem;
+  }
+
+  .members-manager-add-form {
+    padding: 0.5rem;
+  }
+
+  .members-manager-member-card {
+    padding: 0.5rem;
+  }
+
+  .members-manager-member-photo {
+    width: 50px;
+    height: 50px;
+  }
+
+  .members-manager-member-name {
+    font-size: 0.95rem;
+  }
+
+  .members-manager-detail {
+    font-size: 0.75rem;
+  }
+
+  .members-manager-form-input,
+  .members-manager-form-select,
+  .members-manager-form-textarea {
+    padding: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .members-manager-form-btn {
+    padding: 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  .members-manager-bulk-bar {
+    padding: 0.5rem;
+  }
+
+  .members-manager-bulk-btn {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .members-manager-help {
+    padding: 0.75rem;
+  }
+
+  .members-manager-empty {
+    padding: 1.5rem 0.75rem;
+  }
+
+  .members-manager-tab {
+    padding: 0.5rem;
+    font-size: 0.85rem;
+  }
+
+  .members-manager-action-btn {
+    padding: 0.5rem;
+    font-size: 0.85rem;
+  }
+}
+
+/* ===============================
+   ДОПОЛНИТЕЛНИ ПОПРАВКИ ЗА FLEX WRAP
+   =============================== */
+
+@media (max-width: 400px) {
+  .members-manager-member-actions {
+    gap: 0.25rem;
+  }
+
+  .members-manager-member-actions .members-manager-action-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .members-manager-role-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    word-break: break-word;
+    text-align: center;
+  }
+
+  .members-manager-member-bio {
+    font-size: 0.85rem;
+    line-height: 1.3;
+  }
+
+  .members-manager-search input {
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    font-size: 0.9rem;
+  }
+
+  .members-manager-search svg {
+    left: 0.75rem;
+  }
+
+  .members-manager-sort-order-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  /* Checkbox positioning improvements */
+  .members-manager-checkbox-label {
+    font-size: 0.85rem;
+    gap: 0.5rem;
+    text-align: left;
+  }
+
+  .members-manager-checkbox {
+    width: 16px;
+    height: 16px;
+  }
+}
+/* ===============================
+   ACCESSIBILITY IMPROVEMENTS
+   =============================== */
+
+.members-manager-tab:focus-visible,
+.members-manager-search input:focus-visible,
+.members-manager-filters select:focus-visible,
+.members-manager-sort-order-btn:focus-visible,
+.members-manager-action-btn:focus-visible,
+.members-manager-checkbox-btn:focus-visible,
+.members-manager-form-input:focus-visible,
+.members-manager-form-select:focus-visible,
+.members-manager-form-textarea:focus-visible,
+.members-manager-checkbox-label:focus-visible,
+.members-manager-form-btn:focus-visible {
+  outline: 3px solid #6366f1;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .members-manager-tab,
+  .members-manager-member-card,
+  .members-manager-action-btn,
+  .members-manager-form-input,
+  .members-manager-form-select,
+  .members-manager-form-textarea,
+  .members-manager-checkbox,
+  .members-manager-sort-order-btn,
+  .members-manager-photo-overlay,
+  .members-manager-photo-upload-btn {
+    transition: none;
+  }
+}
+
+/* ===============================
+   HIGH CONTRAST MODE
+   =============================== */
+
+@media (prefers-contrast: high) {
+  .members-manager-tabs,
+  .members-manager-controls,
+  .members-manager-content,
+  .members-manager-member-card,
+  .members-manager-add-form {
+    border-width: 3px;
+  }
+  
+  .members-manager-form-input,
+  .members-manager-form-select,
+  .members-manager-form-textarea {
+    border-width: 3px;
+  }
+  
+  .members-manager-action-btn,
+  .members-manager-form-btn {
+    border-width: 3px;
+  }
+  
+  .members-manager-help {
+    border-width: 3px;
+  }
+}
+
+/* ===============================
+   PRINT STYLES
+   =============================== */
+
+@media print {
+  .members-manager-tabs,
+  .members-manager-controls,
+  .members-manager-bulk-bar,
+  .members-manager-add-form,
+  .members-manager-member-actions,
+  .members-manager-photo-overlay {
+    display: none;
+  }
+  
+  .members-manager-content {
+    border: 1px solid #000;
+    break-inside: avoid;
+  }
+  
+  .members-manager-member-card {
+    break-inside: avoid;
+    border: 1px solid #000;
+    page-break-inside: avoid;
+  }
+  
+  .members-manager-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+}
+/* Edit Form Styles */
+.members-manager-member-card.editing {
+  border-color: #6366f1;
+  box-shadow: 0 4px 20px rgba(99, 102, 241, 0.2);
+}
+
+.members-manager-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.members-manager-edit-name-row {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.members-manager-edit-input,
+.members-manager-edit-select,
+.members-manager-edit-textarea {
+  padding: 0.5rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.members-manager-edit-input:focus,
+.members-manager-edit-select:focus,
+.members-manager-edit-textarea:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.1);
+}
+
+.members-manager-edit-textarea {
+  resize: vertical;
+  font-family: inherit;
+}
+
+.members-manager-edit-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.members-manager-edit-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.members-manager-edit-btn.save {
+  background: #10b981;
+  color: white;
+}
+
+.members-manager-edit-btn.save:hover {
+  background: #059669;
+}
+
+.members-manager-edit-btn.cancel {
+  background: #6b7280;
+  color: white;
+}
+
+.members-manager-edit-btn.cancel:hover {
+  background: #4b5563;
+}

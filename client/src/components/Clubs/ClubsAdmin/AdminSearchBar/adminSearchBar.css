@@ -1,0 +1,420 @@
+/* AdminSearchBar Container */
+.adminsearchbar-container {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+}
+
+/* Search Wrapper */
+.adminsearchbar-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 0.75rem 1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.adminsearchbar-wrapper:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.adminsearchbar-wrapper.focused {
+  border-color: #667eea;
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1), 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Left Icon */
+.adminsearchbar-icon-left {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  color: #64748b;
+  font-size: 1.1rem;
+}
+
+.adminsearchbar-spinner {
+  color: #667eea;
+}
+
+.adminsearchbar-search-icon {
+  transition: color 0.2s ease;
+}
+
+.adminsearchbar-wrapper.focused .adminsearchbar-search-icon {
+  color: #667eea;
+}
+
+/* Search Input */
+.adminsearchbar-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  color: #1e293b;
+  background: transparent;
+  padding: 0.25rem 0;
+}
+
+.adminsearchbar-input::placeholder {
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+.adminsearchbar-input:focus::placeholder {
+  color: #cbd5e1;
+}
+
+/* Action Buttons */
+.adminsearchbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: 0.75rem;
+}
+
+.adminsearchbar-action-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  background: #f8fafc;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+}
+
+.adminsearchbar-action-btn:hover:not(:disabled) {
+  background: #f1f5f9;
+  color: #475569;
+  transform: scale(1.05);
+}
+
+.adminsearchbar-action-btn.active {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+}
+
+.adminsearchbar-action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.adminsearchbar-clear-btn:hover {
+  background: #fef2f2;
+  color: #ef4444;
+}
+
+/* History Dropdown */
+.adminsearchbar-history-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  z-index: 50;
+  margin-top: 0.5rem;
+  overflow: hidden;
+  animation: adminsearchbar-dropdown-appear 0.2s ease-out;
+}
+
+.adminsearchbar-history-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background: #f8fafc;
+  border-bottom: 1px solid #f1f5f9;
+  color: #64748b;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.adminsearchbar-history-header svg {
+  margin-right: 0.5rem;
+}
+
+.adminsearchbar-history-clear {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  background: #f1f5f9;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  font-size: 0.75rem;
+}
+
+.adminsearchbar-history-clear:hover {
+  background: #e2e8f0;
+  color: #475569;
+}
+
+.adminsearchbar-history-list {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.adminsearchbar-history-item {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: none;
+  background: none;
+  color: #334155;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-align: left;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.adminsearchbar-history-item:hover {
+  background: #f8fafc;
+}
+
+.adminsearchbar-history-item svg {
+  color: #94a3b8;
+  font-size: 0.8rem;
+}
+
+/* Advanced Search Panel */
+.adminsearchbar-advanced-panel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  z-index: 50;
+  margin-top: 0.5rem;
+  overflow: hidden;
+  animation: adminsearchbar-dropdown-appear 0.3s ease-out;
+}
+
+.adminsearchbar-advanced-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  font-weight: 600;
+}
+
+.adminsearchbar-advanced-header svg {
+  margin-right: 0.5rem;
+}
+
+.adminsearchbar-advanced-close {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.adminsearchbar-advanced-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.adminsearchbar-advanced-content {
+  padding: 1.5rem;
+}
+
+.adminsearchbar-advanced-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.adminsearchbar-advanced-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.adminsearchbar-advanced-field label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.adminsearchbar-advanced-select {
+  padding: 0.5rem 0.75rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  background: white;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.adminsearchbar-advanced-select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.adminsearchbar-advanced-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.adminsearchbar-advanced-btn {
+  padding: 0.6rem 1.2rem;
+  border-radius: 8px;
+  border: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+}
+
+.adminsearchbar-advanced-btn--search {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+}
+
+.adminsearchbar-advanced-btn--search:hover {
+  background: linear-gradient(135deg, #5a67d8, #6b46c1);
+  transform: translateY(-1px);
+}
+
+.adminsearchbar-advanced-btn--reset {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.adminsearchbar-advanced-btn--reset:hover {
+  background: #e5e7eb;
+}
+
+/* Keyboard Shortcuts */
+.adminsearchbar-shortcuts {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.5rem;
+  opacity: 0.7;
+}
+
+.adminsearchbar-shortcut {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.7rem;
+  color: #64748b;
+}
+
+.adminsearchbar-shortcut svg {
+  font-size: 0.6rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .adminsearchbar-container {
+    max-width: 100%;
+  }
+
+  .adminsearchbar-wrapper {
+    padding: 0.65rem 0.875rem;
+  }
+
+  .adminsearchbar-input {
+    font-size: 0.95rem;
+  }
+
+  .adminsearchbar-advanced-row {
+    grid-template-columns: 1fr;
+  }
+
+  .adminsearchbar-advanced-actions {
+    flex-direction: column;
+  }
+
+  .adminsearchbar-advanced-btn {
+    justify-content: center;
+  }
+
+  .adminsearchbar-shortcuts {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .adminsearchbar-actions {
+    gap: 0.25rem;
+  }
+
+  .adminsearchbar-action-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 0.8rem;
+  }
+
+  .adminsearchbar-advanced-content {
+    padding: 1rem;
+  }
+}
+
+/* Animations */
+@keyframes adminsearchbar-dropdown-appear {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Custom Scrollbar */
+.adminsearchbar-history-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.adminsearchbar-history-list::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.adminsearchbar-history-list::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 2px;
+}
+
+.adminsearchbar-history-list::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

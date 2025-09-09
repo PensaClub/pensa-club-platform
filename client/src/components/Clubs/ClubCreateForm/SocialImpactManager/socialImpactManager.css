@@ -1,0 +1,851 @@
+/* =================== SOCIAL IMPACT MANAGER STYLES =================== */
+
+.social-impact-manager {
+  width: 100%;
+  padding: 1rem 0;
+}
+
+/* =================== HEADER =================== */
+
+.social-impact-manager-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.social-impact-manager-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 1rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.social-impact-manager .social-impact-manager-title-icon {
+  color: #22c55e;
+  font-size: 1.5rem;
+}
+
+.social-impact-manager-subtitle {
+  font-size: 1.1rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* =================== TABS =================== */
+
+.social-impact-manager-tabs {
+  display: flex;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 15px;
+  padding: 0.5rem;
+  margin-bottom: 2rem;
+  overflow-x: auto;
+  gap: 0.5rem;
+}
+
+.social-impact-manager-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.social-impact-manager-tab:hover {
+  background: #f8fafc;
+  color: #374151;
+}
+
+.social-impact-manager-tab.active {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+}
+
+.social-impact-manager .social-impact-manager-tab-icon {
+  font-size: 1rem;
+}
+
+/* =================== CONTENT =================== */
+
+.social-impact-manager-content {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 15px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.social-impact-manager-tab-content {
+  min-height: 400px;
+}
+
+.social-impact-manager-section-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.social-impact-manager-section-header h4 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 0.5rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.social-impact-manager .social-impact-manager-section-icon {
+  color: #22c55e;
+  font-size: 1.2rem;
+}
+
+.social-impact-manager-section-header p {
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* =================== FORMS =================== */
+
+.social-impact-manager-add-form {
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.social-impact-manager-form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.social-impact-manager-form-header h5 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0;
+}
+
+.social-impact-manager-close-btn {
+  background: #fee2e2;
+  color: #dc2626;
+  border: none;
+  border-radius: 8px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.social-impact-manager-close-btn:hover {
+  background: #fecaca;
+  transform: scale(1.1);
+}
+
+.social-impact-manager .social-impact-manager-close-icon {
+  font-size: 0.9rem;
+}
+
+.social-impact-manager-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.social-impact-manager-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.social-impact-manager-form-group.social-impact-manager-full-width {
+  grid-column: 1 / -1;
+}
+
+.social-impact-manager-form-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.social-impact-manager .social-impact-manager-label-icon {
+  color: #22c55e;
+  font-size: 0.9rem;
+}
+
+.social-impact-manager-form-input,
+.social-impact-manager-form-select,
+.social-impact-manager-form-textarea {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  background: white;
+  color: #374151;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.social-impact-manager-form-input:focus,
+.social-impact-manager-form-select:focus,
+.social-impact-manager-form-textarea:focus {
+  outline: none;
+  border-color: #22c55e;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+  transform: translateY(-1px);
+}
+
+.social-impact-manager-form-textarea {
+  min-height: 80px;
+}
+
+.social-impact-manager-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.social-impact-manager-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.social-impact-manager-btn-cancel {
+  background: #f1f5f9;
+  color: #475569;
+  border-color: #cbd5e1;
+}
+
+.social-impact-manager-btn-cancel:hover {
+  background: #e2e8f0;
+  border-color: #94a3b8;
+}
+
+.social-impact-manager-btn-add,
+.social-impact-manager-btn-save {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+}
+
+.social-impact-manager-btn-add:hover,
+.social-impact-manager-btn-save:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(34, 197, 94, 0.4);
+}
+
+.social-impact-manager-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.social-impact-manager .social-impact-manager-btn-icon {
+  font-size: 0.9rem;
+}
+
+/* =================== VOLUNTEERING =================== */
+
+.social-impact-manager-volunteering-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.social-impact-manager-volunteering-item {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.social-impact-manager-volunteering-item:hover {
+  border-color: #22c55e;
+  box-shadow: 0 4px 15px rgba(34, 197, 94, 0.1);
+}
+
+.social-impact-manager-volunteering-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+.social-impact-manager-volunteering-icon {
+  background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+  border-radius: 12px;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.social-impact-manager .social-impact-manager-helping-icon {
+  color: #16a34a;
+  font-size: 1.5rem;
+}
+
+.social-impact-manager-volunteering-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.social-impact-manager-volunteering-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 0.75rem 0;
+}
+
+.social-impact-manager-volunteering-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.social-impact-manager-volunteering-participants,
+.social-impact-manager-volunteering-hours,
+.social-impact-manager-volunteering-coordinator,
+.social-impact-manager-volunteering-frequency {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: #f0fdf4;
+  color: #166534;
+  padding: 0.25rem 0.75rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.social-impact-manager .social-impact-manager-meta-icon {
+  font-size: 0.8rem;
+}
+
+.social-impact-manager-volunteering-description {
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+.social-impact-manager-volunteering-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.social-impact-manager-action-btn {
+  background: white;
+  color: #6b7280;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.social-impact-manager-action-btn:hover {
+  transform: scale(1.05);
+}
+
+.social-impact-manager-edit-btn:hover {
+  border-color: #3b82f6;
+  color: #3b82f6;
+}
+
+.social-impact-manager-delete-btn:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.social-impact-manager .social-impact-manager-action-icon {
+  font-size: 0.9rem;
+}
+
+/* =================== PROJECTS =================== */
+
+.social-impact-manager-projects-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.social-impact-manager-project-item {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.social-impact-manager-project-item:hover {
+  border-color: #6366f1;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.1);
+}
+
+.social-impact-manager-project-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+.social-impact-manager-project-icon {
+  background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+  border-radius: 12px;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.social-impact-manager .social-impact-manager-diagram-icon {
+  color: #4338ca;
+  font-size: 1.5rem;
+}
+
+.social-impact-manager-project-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.social-impact-manager-project-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.social-impact-manager-project-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0;
+}
+
+.social-impact-manager-project-status {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid currentColor;
+}
+
+.social-impact-manager .social-impact-manager-status-icon {
+  font-size: 0.8rem;
+}
+
+.social-impact-manager-project-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.social-impact-manager-project-beneficiaries,
+.social-impact-manager-project-budget {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: #eff6ff;
+  color: #1d4ed8;
+  padding: 0.25rem 0.75rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.social-impact-manager-project-description {
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+.social-impact-manager-project-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+/* =================== PARTNERSHIPS =================== */
+
+.social-impact-manager-partnerships-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.social-impact-manager-partnership-item {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.social-impact-manager-partnership-item:hover {
+  border-color: #8b5cf6;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.1);
+}
+
+.social-impact-manager-partnership-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.5rem;
+}
+
+.social-impact-manager-partnership-icon {
+  background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
+  border-radius: 12px;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.social-impact-manager .social-impact-manager-handshake-icon {
+  color: #7c3aed;
+  font-size: 1.5rem;
+}
+
+.social-impact-manager-partnership-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.social-impact-manager-partnership-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 0.75rem 0;
+}
+
+.social-impact-manager-partnership-meta {
+  margin-bottom: 0.75rem;
+}
+
+.social-impact-manager-partnership-type {
+  background: #faf5ff;
+  color: #6b21a8;
+  padding: 0.25rem 0.75rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.social-impact-manager-partnership-description {
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+  font-size: 0.95rem;
+}
+
+.social-impact-manager-partnership-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+/* =================== EDIT FORMS =================== */
+
+.social-impact-manager-edit-form {
+  background: #f8fafc;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 2px solid #e2e8f0;
+}
+
+/* =================== EMPTY STATES =================== */
+
+.social-impact-manager-empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #9ca3af;
+}
+
+.social-impact-manager .social-impact-manager-empty-icon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  color: #d1d5db;
+}
+
+.social-impact-manager-empty-state h4 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #6b7280;
+  margin: 0 0 0.5rem 0;
+}
+
+.social-impact-manager-empty-state p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* =================== ADD SECTION =================== */
+
+.social-impact-manager-add-section {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.social-impact-manager-add-btn {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 6px 20px rgba(34, 197, 94, 0.3);
+}
+
+.social-impact-manager-add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(34, 197, 94, 0.4);
+}
+
+.social-impact-manager-add-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.social-impact-manager .social-impact-manager-add-icon {
+  font-size: 1rem;
+}
+
+/* =================== RESPONSIVE =================== */
+
+@media (max-width: 1024px) {
+  .social-impact-manager-form-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  }
+  
+  .social-impact-manager-volunteering-card,
+  .social-impact-manager-project-card,
+  .social-impact-manager-partnership-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .social-impact-manager-volunteering-actions,
+  .social-impact-manager-project-actions,
+  .social-impact-manager-partnership-actions {
+    flex-direction: row;
+    justify-content: center;
+  }
+  
+  .social-impact-manager-project-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .social-impact-manager-title {
+    font-size: 1.5rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .social-impact-manager-tabs {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .social-impact-manager-tab {
+    justify-content: center;
+    padding: 0.75rem 1rem;
+  }
+  
+  .social-impact-manager-content {
+    padding: 1.5rem;
+  }
+  
+  .social-impact-manager-form-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .social-impact-manager-form-actions {
+    flex-direction: column;
+  }
+  
+  .social-impact-manager-volunteering-card,
+  .social-impact-manager-project-card,
+  .social-impact-manager-partnership-card {
+    padding: 1rem;
+  }
+  
+  .social-impact-manager-volunteering-meta,
+  .social-impact-manager-project-meta {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .social-impact-manager-content {
+    padding: 1rem;
+  }
+  
+  .social-impact-manager-add-form {
+    padding: 1rem;
+  }
+  
+  .social-impact-manager-volunteering-icon,
+  .social-impact-manager-project-icon,
+  .social-impact-manager-partnership-icon {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .social-impact-manager .social-impact-manager-helping-icon,
+  .social-impact-manager .social-impact-manager-diagram-icon,
+  .social-impact-manager .social-impact-manager-handshake-icon {
+    font-size: 1.3rem;
+  }
+}
+
+/* =================== ACCESSIBILITY =================== */
+
+.social-impact-manager-tab:focus-visible,
+.social-impact-manager-close-btn:focus-visible,
+.social-impact-manager-action-btn:focus-visible,
+.social-impact-manager-form-input:focus-visible,
+.social-impact-manager-form-select:focus-visible,
+.social-impact-manager-form-textarea:focus-visible,
+.social-impact-manager-btn:focus-visible,
+.social-impact-manager-add-btn:focus-visible {
+  outline: 3px solid #22c55e;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .social-impact-manager-tab,
+  .social-impact-manager-volunteering-item,
+  .social-impact-manager-project-item,
+  .social-impact-manager-partnership-item,
+  .social-impact-manager-action-btn,
+  .social-impact-manager-btn,
+  .social-impact-manager-add-btn {
+    transition: none;
+  }
+}
+
+/* =================== HIGH CONTRAST MODE =================== */
+
+@media (prefers-contrast: high) {
+  .social-impact-manager-content,
+  .social-impact-manager-volunteering-item,
+  .social-impact-manager-project-item,
+  .social-impact-manager-partnership-item,
+  .social-impact-manager-add-form {
+    border-width: 3px;
+  }
+  
+  .social-impact-manager-tab,
+  .social-impact-manager-action-btn,
+  .social-impact-manager-btn {
+    border-width: 3px;
+  }
+}
+
+/* =================== PRINT STYLES =================== */
+
+@media print {
+  .social-impact-manager-tabs,
+  .social-impact-manager-add-form,
+  .social-impact-manager-volunteering-actions,
+  .social-impact-manager-project-actions,
+  .social-impact-manager-partnership-actions,
+  .social-impact-manager-add-section {
+    display: none;
+  }
+  
+  .social-impact-manager-content {
+    border: 1px solid #000;
+    break-inside: avoid;
+  }
+  
+  .social-impact-manager-volunteering-item,
+  .social-impact-manager-project-item,
+  .social-impact-manager-partnership-item {
+    break-inside: avoid;
+    border: 1px solid #000;
+    margin-bottom: 1rem;
+  }
+}

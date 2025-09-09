@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
+import {
   faEnvelope,
   faPhone,
   faClock,
@@ -29,24 +29,27 @@ import {
   faChevronDown,
   faChevronUp
 } from '@fortawesome/free-solid-svg-icons';
-import { 
-  faFacebook, 
-  faInstagram, 
+import {
+  faFacebook,
+  faInstagram,
   faYoutube,
   faTwitter,
   faLinkedin
 } from '@fortawesome/free-brands-svg-icons';
 import './clubContact.css';
+import { useClubContext } from '../../../../contexts/ClubContext';
 
 export const ClubContact = ({ club }) => {
   const { t, i18n } = useTranslation();
+  const { sendContactForm } = useClubContext();
+  
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
-    subject: 'membership',
+    subject: '',
     message: '',
-    preferredContact: 'email'
+    preferredContact: ''
   });
   const [formStatus, setFormStatus] = useState({ type: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -54,8 +57,11 @@ export const ClubContact = ({ club }) => {
   const [showHoursModal, setShowHoursModal] = useState(false);
   const [expandedFAQ, setExpandedFAQ] = useState(null);
 
+  // Обновена проверка за данни - използваме новата структура
+  const contacts = club?.clubDetails?.contacts || club?.contacts || {};
+  
   // ПРОВЕРКА ЗА ДАННИ
-  if (!club?.contacts || (!club.contacts.phone && !club.contacts.email)) {
+  if (!contacts || (!contacts.phone && !contacts.email)) {
     return null;
   }
 
@@ -72,7 +78,7 @@ export const ClubContact = ({ club }) => {
     setIsSubmitting(true);
     setFormStatus({ type: '', message: '' });
 
-    if (!formData.name || !formData.email || !formData.message) {
+    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
       setFormStatus({
         type: 'error',
         message: t('clubs.ClubContact.form.validation.required')
@@ -81,48 +87,53 @@ export const ClubContact = ({ club }) => {
       return;
     }
 
-    // Изпращане на имейл чрез mailto
-    const recipientEmail = club.contacts.email;
-    const subject = encodeURIComponent(`${getSubjectLabel(formData.subject)} - ${formData.name}`);
-    const body = encodeURIComponent(t('clubs.ClubContact.form.emailBody', {
-      name: formData.name,
-      email: formData.email,
-      phone: formData.phone || t('clubs.ClubContact.form.notSpecified'),
-      preferredContact: formData.preferredContact === 'email' ? t('clubs.ClubContact.form.email') : t('clubs.ClubContact.form.phone'),
-      subject: getSubjectLabel(formData.subject),
-      message: formData.message,
-      clubName: club.name,
-      date: new Date().toLocaleDateString(i18n.language === 'bg' ? 'bg-BG' : i18n.language === 'en' ? 'en-US' : 'de-DE')
-    }));
+    // Валидация на имейл
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setFormStatus({
+        type: 'error',
+        message: 'Моля, въведете валиден имейл адрес'
+      });
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
-      // Симулация на изпращане
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Отваряне на mailto
-      if (recipientEmail) {
-        window.location.href = `mailto:${recipientEmail}?subject=${subject}&body=${body}`;
-      }
-      
-      setFormStatus({
-        type: 'success',
-        message: t('clubs.ClubContact.form.messages.success')
+      const success = await sendContactForm(club.id, {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        subject: formData.subject,
+        message: formData.message,
+        preferredContact: formData.preferredContact
       });
-      
-      // Изчистване на формата след успех
-      setTimeout(() => {
-        setFormData({
-          name: '',
-          email: '',
-          phone: '',
-          subject: 'membership',
-          message: '',
-          preferredContact: 'email'
+
+      if (success) {
+        setFormStatus({
+          type: 'success',
+          message: t('clubs.ClubContact.form.messages.success')
         });
-        setFormStatus({ type: '', message: '' });
-      }, 3000);
-      
+
+        // Изчистване на формата след успех
+        setTimeout(() => {
+          setFormData({
+            name: '',
+            email: '',
+            phone: '',
+            subject: '',
+            message: '',
+            preferredContact: ''
+          });
+          setFormStatus({ type: '', message: '' });
+        }, 3000);
+      } else {
+        setFormStatus({
+          type: 'error',
+          message: t('clubs.ClubContact.form.messages.error')
+        });
+      }
     } catch (error) {
+      console.error('Грешка при изпращане на контактна форма:', error);
       setFormStatus({
         type: 'error',
         message: t('clubs.ClubContact.form.messages.error')
@@ -148,8 +159,11 @@ export const ClubContact = ({ club }) => {
   };
 
   const getSocialUrl = (platform, handle) => {
+    // Проверка за null/undefined/празен string
+    if (!handle || typeof handle !== 'string') return '#';
+
     if (handle.startsWith('http')) return handle;
-    
+
     const urls = {
       'facebook': `https://${handle}`,
       'instagram': `https://instagram.com/${handle.replace('@', '')}`,
@@ -157,16 +171,39 @@ export const ClubContact = ({ club }) => {
       'twitter': `https://twitter.com/${handle.replace('@', '')}`,
       'linkedin': `https://linkedin.com/company/${handle}`
     };
-    
+
     return urls[platform.toLowerCase()] || `https://${handle}`;
   };
 
   const getTodayHours = () => {
-    if (!club.contacts?.workingHours) return t('clubs.ClubContact.workingHours.notSpecified');
-    
+    if (!contacts?.workingHours || typeof contacts.workingHours !== 'object') {
+      return t('clubs.ClubContact.workingHours.notSpecified');
+    }
+
     const today = new Date().getDay();
     const dayIndex = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][today];
-    return club.contacts.workingHours[dayIndex] || 'closed';
+
+    let hours;
+
+    // Проверява дали има нова структура с days
+    if (contacts.workingHours.days && contacts.workingHours.days[dayIndex]) {
+      const dayData = contacts.workingHours.days[dayIndex];
+      if (dayData.enabled && dayData.open && dayData.close) {
+        hours = `${dayData.open}-${dayData.close}`;
+      } else {
+        hours = 'closed';
+      }
+    } else {
+      // Legacy структура
+      hours = contacts.workingHours[dayIndex];
+    }
+
+    // Проверяваме дали часовете са string или валидна стойност
+    if (!hours || typeof hours !== 'string') {
+      return 'closed';
+    }
+
+    return hours;
   };
 
   const getTodayName = () => {
@@ -181,8 +218,8 @@ export const ClubContact = ({ club }) => {
 
   const handleShare = () => {
     const text = t('clubs.ClubContact.actions.shareText', { clubName: club.name });
-    const contactInfo = `📞 ${club.contacts.phone || ''} 📧 ${club.contacts.email || ''}`;
-    
+    const contactInfo = `📞 ${contacts.phone || ''} 📧 ${contacts.email || ''}`;
+
     if (navigator.share) {
       navigator.share({
         title: text,
@@ -203,7 +240,7 @@ export const ClubContact = ({ club }) => {
     },
     {
       question: t('clubs.ClubContact.faq.questions.membershipCost'),
-      answer: club.membership?.membershipFee ? 
+      answer: club.membership?.membershipFee ?
         t('clubs.ClubContact.faq.answers.membershipCostWithPrices', {
           monthly: club.membership.membershipFee.monthly,
           currency: club.membership.membershipFee.currency,
@@ -234,7 +271,7 @@ export const ClubContact = ({ club }) => {
   return (
     <section id="general-contact" className="general-contact-main">
       <div className="general-contact-container">
-        
+
         {/* Header */}
         <div className="general-contact-header">
           <div className="general-contact-badge">
@@ -245,17 +282,17 @@ export const ClubContact = ({ club }) => {
           <p className="general-contact-subtitle">
             {t('clubs.ClubContact.header.subtitle')}
           </p>
-          
+
           {/* Quick actions */}
           <div className="general-contact-actions">
-            <button 
+            <button
               className="general-quick-action faq"
               onClick={() => setShowFAQ(true)}
             >
               <FontAwesomeIcon icon={faQuestionCircle} />
               {t('clubs.ClubContact.actions.faq')}
             </button>
-            <button 
+            <button
               className="general-quick-action share"
               onClick={handleShare}
             >
@@ -266,65 +303,65 @@ export const ClubContact = ({ club }) => {
         </div>
 
         <div className="general-contact-layout">
-          
+
           {/* Contact Methods */}
           <div className="general-contact-methods">
-            
+
             {/* Primary Contact */}
             <div className="general-contact-card primary">
               <div className="general-card-header">
                 <FontAwesomeIcon icon={faHeadset} />
                 <h3>{t('clubs.ClubContact.contactMethods.primary.title')}</h3>
               </div>
-              
+
               <div className="general-contact-options">
-                {club.contacts.phone && (
-                  <a href={`tel:${club.contacts.phone}`} className="general-contact-option phone">
+                {contacts.phone && (
+                  <a href={`tel:${contacts.phone}`} className="general-contact-option phone">
                     <div className="general-option-icon">
                       <FontAwesomeIcon icon={faPhone} />
                     </div>
                     <div className="general-option-content">
                       <span className="general-option-label">{t('clubs.ClubContact.contactMethods.phone.label')}</span>
-                      <span className="general-option-value">{club.contacts.phone}</span>
+                      <span className="general-option-value">{contacts.phone}</span>
                       <span className="general-option-desc">{t('clubs.ClubContact.contactMethods.phone.description')}</span>
                     </div>
                   </a>
                 )}
-                
-                {club.contacts.mobile && club.contacts.mobile !== club.contacts.phone && (
-                  <a href={`tel:${club.contacts.mobile}`} className="general-contact-option mobile">
+
+                {contacts.mobile && contacts.mobile !== contacts.phone && (
+                  <a href={`tel:${contacts.mobile}`} className="general-contact-option mobile">
                     <div className="general-option-icon">
                       <FontAwesomeIcon icon={faMobileAlt} />
                     </div>
                     <div className="general-option-content">
                       <span className="general-option-label">{t('clubs.ClubContact.contactMethods.mobile.label')}</span>
-                      <span className="general-option-value">{club.contacts.mobile}</span>
+                      <span className="general-option-value">{contacts.mobile}</span>
                       <span className="general-option-desc">{t('clubs.ClubContact.contactMethods.mobile.description')}</span>
                     </div>
                   </a>
                 )}
-                
-                {club.contacts.email && (
-                  <a href={`mailto:${club.contacts.email}`} className="general-contact-option email">
+
+                {contacts.email && (
+                  <a href={`mailto:${contacts.email}`} className="general-contact-option email">
                     <div className="general-option-icon">
                       <FontAwesomeIcon icon={faEnvelope} />
                     </div>
                     <div className="general-option-content">
                       <span className="general-option-label">{t('clubs.ClubContact.contactMethods.email.label')}</span>
-                      <span className="general-option-value">{club.contacts.email}</span>
+                      <span className="general-option-value">{contacts.email}</span>
                       <span className="general-option-desc">{t('clubs.ClubContact.contactMethods.email.description')}</span>
                     </div>
                   </a>
                 )}
 
-                {club.contacts.website && (
-                  <a href={club.contacts.website} target="_blank" rel="noopener noreferrer" className="general-contact-option website">
+                {contacts.website && (
+                  <a href={contacts.website} target="_blank" rel="noopener noreferrer" className="general-contact-option website">
                     <div className="general-option-icon">
                       <FontAwesomeIcon icon={faGlobe} />
                     </div>
                     <div className="general-option-content">
                       <span className="general-option-label">{t('clubs.ClubContact.contactMethods.website.label')}</span>
-                      <span className="general-option-value">{club.contacts.website}</span>
+                      <span className="general-option-value">{contacts.website}</span>
                       <span className="general-option-desc">{t('clubs.ClubContact.contactMethods.website.description')}</span>
                     </div>
                   </a>
@@ -333,12 +370,12 @@ export const ClubContact = ({ club }) => {
             </div>
 
             {/* Working Hours */}
-            {club.contacts?.workingHours && (
+            {contacts?.workingHours && Object.keys(contacts.workingHours).length > 0 && (
               <div className="general-contact-card hours">
                 <div className="general-card-header">
                   <FontAwesomeIcon icon={faBusinessTime} />
                   <h3>{t('clubs.ClubContact.workingHours.title')}</h3>
-                  <button 
+                  <button
                     className="general-card-action"
                     onClick={() => setShowHoursModal(true)}
                     title={t('clubs.ClubContact.workingHours.detailed')}
@@ -346,7 +383,7 @@ export const ClubContact = ({ club }) => {
                     <FontAwesomeIcon icon={faInfoCircle} />
                   </button>
                 </div>
-                
+
                 <div className="general-today-status">
                   <div className="general-today-info">
                     <span className="general-today-label">{getTodayName()}</span>
@@ -354,14 +391,14 @@ export const ClubContact = ({ club }) => {
                       {getTodayHours() === 'closed' ? t('clubs.ClubContact.workingHours.closed') : getTodayHours()}
                     </span>
                   </div>
-                  
+
                   {getTodayHours() !== 'closed' && (
                     <div className="general-status-indicator open">
                       <div className="general-status-dot"></div>
                       <span>{t('clubs.ClubContact.workingHours.openNow')}</span>
                     </div>
                   )}
-                  
+
                   {getTodayHours() === 'closed' && (
                     <div className="general-status-indicator closed">
                       <div className="general-status-dot"></div>
@@ -379,7 +416,7 @@ export const ClubContact = ({ club }) => {
                   <FontAwesomeIcon icon={faLocationDot} />
                   <h3>{t('clubs.ClubContact.location.title')}</h3>
                 </div>
-                
+
                 <div className="general-location-info">
                   <div className="general-address">
                     <FontAwesomeIcon icon={faMapMarkerAlt} />
@@ -388,10 +425,10 @@ export const ClubContact = ({ club }) => {
                       <span className="general-city-line">{club.location.city}{club.location.region && `, ${club.location.region}`}</span>
                     </div>
                   </div>
-                  
+
                   <div className="general-location-actions">
-                    <a 
-                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${club.location.address}, ${club.location.city}`)}`}
+                    
+                    <a  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${club.location.address}, ${club.location.city}`)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="general-location-btn maps"
@@ -399,10 +436,10 @@ export const ClubContact = ({ club }) => {
                       <FontAwesomeIcon icon={faMapMarkerAlt} />
                       Google Maps
                     </a>
-                    
+
                     {club.location.coordinates && (
-                      <a 
-                        href={`https://www.google.com/maps/dir/?api=1&destination=${club.location.coordinates.lat},${club.location.coordinates.lng}`}
+                      
+                       <a href={`https://www.google.com/maps/dir/?api=1&destination=${club.location.coordinates.lat},${club.location.coordinates.lng}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="general-location-btn directions"
@@ -416,163 +453,163 @@ export const ClubContact = ({ club }) => {
               </div>
             )}
 
+          
             {/* Social Media */}
-            {club.contacts?.socialMedia && Object.keys(club.contacts.socialMedia).length > 0 && (
+            {contacts?.socialMedia && Object.keys(contacts.socialMedia).length > 0 && (
               <div className="general-contact-card social">
                 <div className="general-card-header">
                   <FontAwesomeIcon icon={faUserFriends} />
                   <h3>{t('clubs.ClubContact.socialMedia.title')}</h3>
                 </div>
-                
+
                 <div className="general-social-links">
-                  {Object.entries(club.contacts.socialMedia).map(([platform, handle]) => (
-                    <a key={platform}
-                      href={getSocialUrl(platform, handle)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`general-social-link ${platform.toLowerCase()}`}
-                    >
-                      <FontAwesomeIcon icon={getSocialIcon(platform)} />
-                      <span>{platform}</span>
-                    </a>
-                  ))}
+                  {Object.entries(contacts.socialMedia)
+                    .filter(([platform, handle]) => handle && typeof handle === 'string' && handle.trim() !== '') // Филтрирай null/undefined/празни
+                    .map(([platform, handle]) => (
+                      <a key={platform}
+                        href={getSocialUrl(platform, handle)}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`general-social-link ${platform.toLowerCase()}`}
+                      >
+                        <FontAwesomeIcon icon={getSocialIcon(platform)} />
+                        <span>{platform}</span>
+                      </a>
+                    ))}
                 </div>
               </div>
             )}
           </div>
 
-          {/* Contact Form */}
-          <div className="general-contact-form-section">
-            <div className="general-form-wrapper">
-              <div className="general-form-header">
-                <h3>
-                  <FontAwesomeIcon icon={faPaperPlane} />
-                  {t('clubs.ClubContact.form.title')}
-                </h3>
-                <p>{t('clubs.ClubContact.form.subtitle')}</p>
-              </div>
-              
-              <form onSubmit={handleSubmit} className="general-contact-form">
-                <div className="general-form-grid">
+          {/* Contact Form - показва се само ако showContactForm е true */}
+          {club.preferences?.showContactForm && (
+            <div className="general-contact-form-section">
+              <div className="general-form-wrapper">
+                <div className="general-form-header">
+                  <h3>
+                    <FontAwesomeIcon icon={faPaperPlane} />
+                    {t('clubs.ClubContact.form.title')}
+                  </h3>
+                  <p>{t('clubs.ClubContact.form.subtitle')}</p>
+                </div>
+
+                <form onSubmit={handleSubmit} className="general-contact-form">
+                  <div className="general-form-grid">
+                    <div className="general-form-field">
+                      <label htmlFor="name">{t('clubs.ClubContact.form.fields.name')} *</label>
+                      <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        placeholder={t('clubs.ClubContact.form.placeholders.name')}
+                        required
+                      />
+                      <FontAwesomeIcon icon={faUser} className="general-field-icon" />
+                    </div>
+
+                    <div className="general-form-field">
+                      <label htmlFor="email">{t('clubs.ClubContact.form.fields.email')} *</label>
+                      <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        placeholder={t('clubs.ClubContact.form.placeholders.email')}
+                        required
+                      />
+                      <FontAwesomeIcon icon={faEnvelope} className="general-field-icon" />
+                    </div>
+
+                    <div className="general-form-field">
+                      <label htmlFor="phone">{t('clubs.ClubContact.form.fields.phone')}</label>
+                      <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        placeholder={t('clubs.ClubContact.form.placeholders.phone')}
+                      />
+                      <FontAwesomeIcon icon={faPhone} className="general-field-icon" />
+                    </div>
+
+                    <div className="general-form-field">
+                      <label htmlFor="preferredContact">{t('clubs.ClubContact.form.fields.preferredContact')}</label>
+                      <select
+                        id="preferredContact"
+                        name="preferredContact"
+                        value={formData.preferredContact}
+                        onChange={handleInputChange}
+                      >
+                        <option value="">Избери</option>
+                        <option value="email">{t('clubs.ClubContact.form.email')}</option>
+                        <option value="phone">{t('clubs.ClubContact.form.phone')}</option>
+                        <option value="both">И двете</option>
+                      </select>
+                      <FontAwesomeIcon icon={faHandshake} className="general-field-icon" />
+                    </div>
+                  </div>
+
                   <div className="general-form-field">
-                    <label htmlFor="name">{t('clubs.ClubContact.form.fields.name')} *</label>
+                    <label htmlFor="subject">{t('clubs.ClubContact.form.fields.subject')}</label>
                     <input
                       type="text"
-                      id="name"
-                      name="name"
-                      value={formData.name}
+                      id="subject"
+                      name="subject"
+                      value={formData.subject}
                       onChange={handleInputChange}
-                      placeholder={t('clubs.ClubContact.form.placeholders.name')}
+                      placeholder="Тема на съобщението"
+                    />
+                    <FontAwesomeIcon icon={faTag} className="general-field-icon" />
+                  </div>
+
+                  <div className="general-form-field">
+                    <label htmlFor="message">{t('clubs.ClubContact.form.fields.message')} *</label>
+                    <textarea
+                      id="message"
+                      name="message"
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      placeholder={t('clubs.ClubContact.form.placeholders.message')}
+                      rows="5"
                       required
-                    />
-                    <FontAwesomeIcon icon={faUser} className="general-field-icon" />
-                  </div>
-                  
-                  <div className="general-form-field">
-                    <label htmlFor="email">{t('clubs.ClubContact.form.fields.email')} *</label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      placeholder={t('clubs.ClubContact.form.placeholders.email')}
-                      required
-                    />
-                    <FontAwesomeIcon icon={faEnvelope} className="general-field-icon" />
+                    ></textarea>
+                    <FontAwesomeIcon icon={faComments} className="general-field-icon" />
                   </div>
 
-                  <div className="general-form-field">
-                    <label htmlFor="phone">{t('clubs.ClubContact.form.fields.phone')}</label>
-                    <input
-                      type="tel"
-                      id="phone"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleInputChange}
-                      placeholder={t('clubs.ClubContact.form.placeholders.phone')}
-                    />
-                    <FontAwesomeIcon icon={faPhone} className="general-field-icon" />
-                  </div>
-                  
-                  <div className="general-form-field">
-                    <label htmlFor="preferredContact">{t('clubs.ClubContact.form.fields.preferredContact')}</label>
-                    <select
-                      id="preferredContact"
-                      name="preferredContact"
-                      value={formData.preferredContact}
-                      onChange={handleInputChange}
-                    >
-                      <option value="email">{t('clubs.ClubContact.form.email')}</option>
-                      <option value="phone">{t('clubs.ClubContact.form.phone')}</option>
-                    </select>
-                    <FontAwesomeIcon icon={faHandshake} className="general-field-icon" />
-                  </div>
-                </div>
-
-                <div className="general-form-field">
-                  <label htmlFor="subject">{t('clubs.ClubContact.form.fields.subject')}</label>
-                  <select
-                    id="subject"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleInputChange}
-                  >
-                    <option value="membership">{t('clubs.ClubContact.form.subjects.membership')}</option>
-                    <option value="activities">{t('clubs.ClubContact.form.subjects.activities')}</option>
-                    <option value="events">{t('clubs.ClubContact.form.subjects.events')}</option>
-                    <option value="volunteer">{t('clubs.ClubContact.form.subjects.volunteer')}</option>
-                    <option value="partnership">{t('clubs.ClubContact.form.subjects.partnership')}</option>
-                    <option value="donation">{t('clubs.ClubContact.form.subjects.donation')}</option>
-                    <option value="general">{t('clubs.ClubContact.form.subjects.general')}</option>
-                    <option value="complaint">{t('clubs.ClubContact.form.subjects.complaint')}</option>
-                  </select>
-                  <FontAwesomeIcon icon={faTag} className="general-field-icon" />
-                </div>
-
-                <div className="general-form-field">
-                  <label htmlFor="message">{t('clubs.ClubContact.form.fields.message')} *</label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleInputChange}
-                    placeholder={t('clubs.ClubContact.form.placeholders.message')}
-                    rows="5"
-                    required
-                  ></textarea>
-                  <FontAwesomeIcon icon={faComments} className="general-field-icon" />
-                </div>
-
-                {formStatus.message && (
-                  <div className={`general-form-alert ${formStatus.type}`}>
-                    <FontAwesomeIcon 
-                      icon={formStatus.type === 'success' ? faCheckCircle : faExclamationTriangle} 
-                    />
-                    <span>{formStatus.message}</span>
-                  </div>
-                )}
-
-                <button 
-                  type="submit" 
-                  className="general-submit-button"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? (
-                    <>
-                      <FontAwesomeIcon icon={faSpinner} className="general-spinning" />
-                      {t('clubs.ClubContact.form.submitting')}
-                    </>
-                  ) : (
-                    <>
-                      <FontAwesomeIcon icon={faPaperPlane} />
-                      {t('clubs.ClubContact.form.submit')}
-                    </>
+                  {formStatus.message && (
+                    <div className={`general-form-alert ${formStatus.type}`}>
+                      <FontAwesomeIcon
+                        icon={formStatus.type === 'success' ? faCheckCircle : faExclamationTriangle}
+                      />
+                      <span>{formStatus.message}</span>
+                    </div>
                   )}
-                </button>
-              </form>
+
+                  <button
+                    type="submit"
+                    className="general-submit-button"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <FontAwesomeIcon icon={faSpinner} className="general-spinning" />
+                        {t('clubs.ClubContact.form.submitting')}
+                      </>
+                    ) : (
+                      <>
+                        <FontAwesomeIcon icon={faPaperPlane} />
+                        {t('clubs.ClubContact.form.submit')}
+                      </>
+                    )}
+                  </button>
+                </form>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
 
@@ -589,7 +626,7 @@ export const ClubContact = ({ club }) => {
                 <FontAwesomeIcon icon={faTimes} />
               </button>
             </div>
-            
+
             <div className="general-modal-content">
               <div className="general-faq-list">
                 {faqData.map((faq, index) => (
@@ -599,11 +636,11 @@ export const ClubContact = ({ club }) => {
                       onClick={() => setExpandedFAQ(expandedFAQ === index ? null : index)}
                     >
                       <span>{faq.question}</span>
-                      <FontAwesomeIcon 
-                        icon={expandedFAQ === index ? faChevronUp : faChevronDown} 
+                      <FontAwesomeIcon
+                        icon={expandedFAQ === index ? faChevronUp : faChevronDown}
                       />
                     </button>
-                    
+
                     {expandedFAQ === index && (
                       <div className="general-faq-answer">
                         <p>{faq.answer}</p>
@@ -612,10 +649,10 @@ export const ClubContact = ({ club }) => {
                   </div>
                 ))}
               </div>
-              
+
               <div className="general-faq-footer">
                 <p>{t('clubs.ClubContact.faq.footer.question')}</p>
-                <button 
+                <button
                   className="general-contact-us-btn"
                   onClick={() => setShowFAQ(false)}
                 >
@@ -629,7 +666,7 @@ export const ClubContact = ({ club }) => {
       )}
 
       {/* Working Hours Modal */}
-      {showHoursModal && club.contacts?.workingHours && (
+      {showHoursModal && contacts?.workingHours && (
         <div className="general-modal-overlay" onClick={() => setShowHoursModal(false)}>
           <div className="general-modal" onClick={(e) => e.stopPropagation()}>
             <div className="general-modal-header">
@@ -641,29 +678,62 @@ export const ClubContact = ({ club }) => {
                 <FontAwesomeIcon icon={faTimes} />
               </button>
             </div>
-            
+
             <div className="general-modal-content">
               <div className="general-hours-detailed">
-                {Object.entries(club.contacts.workingHours).map(([day, hours]) => {
-                  const today = new Date().getDay();
-                  const dayIndex = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][today];
-                  const isToday = day === dayIndex;
-                  
-                  return (
-                    <div key={day} className={`general-hours-row ${isToday ? 'today' : ''}`}>
-                      <div className="general-hours-day">
-                        <FontAwesomeIcon icon={faCalendarAlt} />
-                        <span>{getDayName(day)}</span>
-                        {isToday && <span className="general-today-badge">{t('clubs.ClubContact.workingHours.today')}</span>}
+                {(() => {
+                  const workingHours = contacts.workingHours;
+                  let hoursEntries = [];
+
+                  // Определяме дните на седмицата в правилен ред
+                  const daysOrder = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+
+                  // Ако има нова структура с days обекти
+                  if (workingHours.days && typeof workingHours.days === 'object') {
+                    hoursEntries = daysOrder.map(day => {
+                      const dayData = workingHours.days[day];
+                      let hours;
+
+                      if (dayData && typeof dayData === 'object' && dayData.enabled && dayData.open && dayData.close) {
+                        hours = `${dayData.open}-${dayData.close}`;
+                      } else {
+                        hours = 'closed';
+                      }
+
+                      return [day, hours];
+                    }).filter(([day, hours]) => day && hours !== undefined);
+                  } else {
+                    // Legacy структура - директно string стойности
+                    hoursEntries = daysOrder.map(day => {
+                      const hours = workingHours[day];
+                      return [day, hours || 'closed'];
+                    }).filter(([day, hours]) => day && typeof hours === 'string');
+                  }
+
+                  return hoursEntries.map(([day, hours]) => {
+                    const today = new Date().getDay();
+                    const dayIndex = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][today];
+                    const isToday = day === dayIndex;
+
+                    return (
+                      <div key={day} className={`general-hours-row ${isToday ? 'today' : ''}`}>
+                        <div className="general-hours-day">
+                          <FontAwesomeIcon icon={faCalendarAlt} />
+                          <span>{getDayName(day)}</span>
+                          {isToday && <span className="general-today-badge">{t('clubs.ClubContact.workingHours.today')}</span>}
+                        </div>
+                        <div className={`general-hours-time ${hours === 'closed' ? 'closed' : 'open'}`}>
+                          {hours === 'closed' ?
+                            t('clubs.ClubContact.workingHours.closed') :
+                            (hours || t('clubs.ClubContact.workingHours.notSpecified'))
+                          }
+                        </div>
                       </div>
-                      <div className={`general-hours-time ${hours === 'closed' ? 'closed' : 'open'}`}>
-                        {hours === 'closed' ? t('clubs.ClubContact.workingHours.closed') : hours}
-                      </div>
-                    </div>
-                  );
-                })}
+                    );
+                  });
+                })()}
               </div>
-              
+
               <div className="general-hours-note">
                 <FontAwesomeIcon icon={faInfoCircle} />
                 <p>{t('clubs.ClubContact.workingHours.note')}</p>

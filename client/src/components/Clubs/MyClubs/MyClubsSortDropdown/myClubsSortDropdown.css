@@ -1,0 +1,272 @@
+/* src/components/Profile/MyClubs/components/MyClubsSortDropdown.css */
+.myclubssort-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.myclubssort-trigger {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #374151;
+  transition: all 0.3s ease;
+  min-width: 160px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.myclubssort-trigger:hover {
+  border-color: #8b5cf6;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.15);
+}
+
+.myclubssort-trigger--active {
+  border-color: #8b5cf6;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.15);
+}
+
+.myclubssort-trigger-content {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.myclubssort-trigger-icon {
+  color: #8b5cf6;
+  font-size: 0.95rem;
+}
+
+.myclubssort-trigger-text {
+  white-space: nowrap;
+}
+
+.myclubssort-trigger-arrow {
+  color: #9ca3af;
+  font-size: 0.8rem;
+  transition: transform 0.3s ease;
+}
+
+.myclubssort-trigger-arrow--rotated {
+  transform: rotate(180deg);
+}
+
+.myclubssort-menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+  z-index: 1000;
+  overflow: hidden;
+  animation: myclubssort-dropdown-enter 0.2s ease;
+}
+
+@keyframes myclubssort-dropdown-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.myclubssort-menu-header {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #f3f4f6;
+  background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.myclubssort-options {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.myclubssort-option-wrapper {
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.myclubssort-option-wrapper:last-child {
+  border-bottom: none;
+}
+
+.myclubssort-option {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  color: #374151;
+  transition: all 0.2s ease;
+}
+
+.myclubssort-option:hover {
+  background: #f8fafc;
+  color: #1f2937;
+}
+
+.myclubssort-option--selected {
+  background: #faf5ff;
+  color: #7c3aed;
+  font-weight: 600;
+}
+
+.myclubssort-option--selected:hover {
+  background: #f3e8ff;
+}
+
+.myclubssort-option-text {
+  flex: 1;
+}
+
+.myclubssort-option-check {
+  color: #8b5cf6;
+  font-size: 0.9rem;
+}
+
+/* Custom scrollbar for options */
+.myclubssort-options::-webkit-scrollbar {
+  width: 6px;
+}
+
+.myclubssort-options::-webkit-scrollbar-track {
+  background: #f8fafc;
+}
+
+.myclubssort-options::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+.myclubssort-options::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Sort option indicators */
+.myclubssort-option[data-sort="newest"] .myclubssort-option-text::before {
+  content: "🆕";
+  margin-right: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.myclubssort-option[data-sort="oldest"] .myclubssort-option-text::before {
+  content: "📅";
+  margin-right: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.myclubssort-option[data-sort="name"] .myclubssort-option-text::before {
+  content: "🔤";
+  margin-right: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.myclubssort-option[data-sort="members"] .myclubssort-option-text::before {
+  content: "👥";
+  margin-right: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.myclubssort-option[data-sort="location"] .myclubssort-option-text::before {
+  content: "📍";
+  margin-right: 0.5rem;
+  font-size: 0.8rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .myclubssort-trigger {
+    min-width: 120px;
+    padding: 0.875rem 1.25rem;
+    font-size: 0.9rem;
+  }
+
+  .myclubssort-menu {
+    left: -50%;
+    right: -50%;
+    min-width: 180px;
+  }
+
+  .myclubssort-option[data-sort] .myclubssort-option-text::before {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .myclubssort-dropdown {
+    width: 100%;
+  }
+
+  .myclubssort-trigger {
+    min-width: unset;
+    width: 100%;
+  }
+
+  .myclubssort-menu {
+    left: 0;
+    right: 0;
+  }
+}
+
+/* Focus states for accessibility */
+.myclubssort-trigger:focus {
+  outline: 2px solid #8b5cf6;
+  outline-offset: 2px;
+}
+
+.myclubssort-option:focus {
+  outline: 2px solid #8b5cf6;
+  outline-offset: -2px;
+}
+
+/* Loading state */
+.myclubssort-dropdown--loading .myclubssort-trigger {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.myclubssort-dropdown--loading .myclubssort-trigger-text {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: myclubssort-loading 1.5s infinite;
+  color: transparent;
+}
+
+@keyframes myclubssort-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Hover effect for better UX */
+.myclubssort-trigger:hover .myclubssort-trigger-icon {
+  transform: scale(1.1);
+  color: #7c3aed;
+}

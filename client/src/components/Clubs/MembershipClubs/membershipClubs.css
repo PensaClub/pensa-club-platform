@@ -1,0 +1,676 @@
+/* MembershipClubs Container */
+.membershipclubs-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: #f8fafc;
+  min-height: 100vh;
+}
+
+/* Header */
+.membershipclubs-header {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.membershipclubs-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.membershipclubs-header-text {
+  flex: 1;
+}
+
+.membershipclubs-page-title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 0 0.5rem 0;
+  color: #1e293b;
+  font-size: 2.5rem;
+  font-weight: 800;
+}
+
+.membershipclubs-title-icon {
+  color: #3b82f6;
+  font-size: 2rem;
+}
+
+.membershipclubs-page-subtitle {
+  margin: 0;
+  color: #64748b;
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
+.membershipclubs-discover-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.5rem;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.membershipclubs-discover-btn:hover {
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+}
+
+/* Controls */
+.membershipclubs-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.membershipclubs-controls-right {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+/* Content Grid */
+.membershipclubs-content {
+  margin-bottom: 2rem;
+}
+
+.membershipclubs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Results Info */
+.membershipclubs-results-info {
+  text-align: center;
+  padding: 1rem;
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+/* Loading State */
+.membershipclubs-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  background: white;
+  border-radius: 16px;
+  margin: 2rem auto;
+  max-width: 500px;
+  padding: 3rem;
+}
+
+.membershipclubs-loading-icon {
+  font-size: 3rem;
+  color: #3b82f6;
+  margin-bottom: 1rem;
+}
+
+.membershipclubs-loading p {
+  margin: 0;
+  color: #64748b;
+  font-size: 1.1rem;
+}
+
+/* Error State */
+.membershipclubs-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  padding: 2rem;
+}
+
+.membershipclubs-error-content {
+  background: white;
+  border-radius: 16px;
+  padding: 3rem;
+  text-align: center;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.membershipclubs-error-content h3 {
+  margin: 0 0 1rem 0;
+  color: #dc2626;
+  font-size: 1.5rem;
+}
+
+.membershipclubs-error-content p {
+  margin: 0 0 2rem 0;
+  color: #64748b;
+  line-height: 1.6;
+}
+
+.membershipclubs-retry-button {
+  padding: 0.75rem 1.5rem;
+  background: #dc2626;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.membershipclubs-retry-button:hover {
+  background: #b91c1c;
+}
+
+/* ========================================= */
+/* RESPONSIVE DESIGN - FULL COVERAGE */
+/* ========================================= */
+
+/* Extra small devices (300px - 319px) */
+@media screen and (max-width: 319px) {
+  .membershipclubs-container {
+    padding: 0.5rem;
+  }
+
+  .membershipclubs-header,
+  .membershipclubs-controls {
+    padding: 0.75rem;
+    border-radius: 8px;
+  }
+
+  .membershipclubs-page-title {
+    font-size: 1.5rem;
+    flex-direction: column;
+    text-align: center;
+    gap: 0.25rem;
+  }
+
+  .membershipclubs-title-icon {
+    font-size: 1.5rem;
+  }
+
+  .membershipclubs-page-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .membershipclubs-discover-btn {
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .membershipclubs-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+}
+
+/* Small phones (320px - 479px) */
+@media screen and (min-width: 320px) and (max-width: 479px) {
+  .membershipclubs-container {
+    padding: 0.75rem;
+  }
+
+  .membershipclubs-header {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .membershipclubs-header-content {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .membershipclubs-page-title {
+    font-size: 1.75rem;
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
+
+  .membershipclubs-title-icon {
+    font-size: 1.75rem;
+  }
+
+  .membershipclubs-page-subtitle {
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  .membershipclubs-discover-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 1rem 1.5rem;
+  }
+
+  .membershipclubs-controls {
+    flex-direction: column;
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .membershipclubs-controls-right {
+    width: 100%;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .membershipclubs-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .membershipclubs-loading,
+  .membershipclubs-error-content {
+    padding: 2rem 1rem;
+    margin: 1rem;
+  }
+
+  .membershipclubs-error-content h3 {
+    font-size: 1.25rem;
+  }
+}
+
+/* Large phones (480px - 767px) */
+@media screen and (min-width: 480px) and (max-width: 767px) {
+  .membershipclubs-container {
+    padding: 1rem;
+  }
+
+  .membershipclubs-header {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .membershipclubs-header-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5rem;
+  }
+
+  .membershipclubs-page-title {
+    font-size: 2rem;
+    justify-content: center;
+  }
+
+  .membershipclubs-page-subtitle {
+    font-size: 1.1rem;
+  }
+
+  .membershipclubs-discover-btn {
+    width: auto;
+    min-width: 200px;
+  }
+
+  .membershipclubs-controls {
+    flex-direction: column;
+    padding: 1.25rem;
+    gap: 1.25rem;
+  }
+
+  .membershipclubs-controls-right {
+    width: 100%;
+    justify-content: space-between;
+    flex-direction: row;
+    gap: 1rem;
+  }
+
+  .membershipclubs-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+}
+
+/* Tablets Portrait (768px - 1023px) */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .membershipclubs-container {
+    padding: 1.5rem;
+  }
+
+  .membershipclubs-header {
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .membershipclubs-header-content {
+    flex-direction: row;
+    align-items: flex-start;
+    text-align: left;
+    gap: 2rem;
+  }
+
+  .membershipclubs-page-title {
+    font-size: 2.25rem;
+    justify-content: flex-start;
+  }
+
+  .membershipclubs-page-subtitle {
+    font-size: 1.125rem;
+  }
+
+  .membershipclubs-discover-btn {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .membershipclubs-controls {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+  }
+
+  .membershipclubs-controls-right {
+    flex-direction: row;
+    width: auto;
+  }
+
+  .membershipclubs-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+/* Tablets Landscape & Small Laptops (1024px - 1279px) */
+@media screen and (min-width: 1024px) and (max-width: 1279px) {
+  .membershipclubs-container {
+    padding: 2rem;
+    max-width: 1200px;
+  }
+
+  .membershipclubs-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+
+  .membershipclubs-page-title {
+    font-size: 2.5rem;
+  }
+
+  .membershipclubs-discover-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+  }
+}
+
+/* Standard Laptops & Small Desktops (1280px - 1439px) */
+@media screen and (min-width: 1280px) and (max-width: 1439px) {
+  .membershipclubs-container {
+    max-width: 1300px;
+    padding: 2.5rem;
+  }
+
+  .membershipclubs-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .membershipclubs-loading,
+  .membershipclubs-error-content {
+    padding: 3rem;
+  }
+}
+
+/* Large Desktops (1440px - 1679px) */
+@media screen and (min-width: 1440px) and (max-width: 1679px) {
+  .membershipclubs-container {
+    max-width: 1400px;
+    padding: 2.5rem;
+  }
+
+  .membershipclubs-grid {
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 2.5rem;
+  }
+
+  .membershipclubs-page-title {
+    font-size: 2.75rem;
+  }
+
+  .membershipclubs-header {
+    padding: 2.5rem;
+  }
+}
+
+/* Extra Large Screens (1680px - 1919px) */
+@media screen and (min-width: 1680px) and (max-width: 1919px) {
+  .membershipclubs-container {
+    max-width: 1600px;
+    padding: 3rem;
+  }
+
+  .membershipclubs-grid {
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 3rem;
+  }
+
+  .membershipclubs-page-title {
+    font-size: 3rem;
+  }
+
+  .membershipclubs-header {
+    padding: 3rem;
+  }
+}
+
+/* Ultra-wide Screens (1920px+) */
+@media screen and (min-width: 1920px) {
+  .membershipclubs-container {
+    max-width: 1800px;
+    padding: 3rem;
+  }
+
+  .membershipclubs-grid {
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+    gap: 3rem;
+  }
+
+  .membershipclubs-page-title {
+    font-size: 3.25rem;
+  }
+}
+
+/* ========================================= */
+/* DEVICE-SPECIFIC OPTIMIZATIONS */
+/* ========================================= */
+
+/* iPhone SE and similar (375px width) */
+@media screen and (width: 375px) {
+  .membershipclubs-page-title {
+    font-size: 1.85rem;
+  }
+
+  .membershipclubs-discover-btn {
+    padding: 0.875rem 1.25rem;
+  }
+}
+
+/* iPhone 12/13/14 (390px width) */
+@media screen and (width: 390px) {
+  .membershipclubs-page-title {
+    font-size: 1.9rem;
+  }
+}
+
+/* iPad Mini (768px width) */
+@media screen and (width: 768px) {
+  .membershipclubs-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.75rem;
+  }
+}
+
+/* iPad Pro 11" (834px width) */
+@media screen and (width: 834px) {
+  .membershipclubs-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+}
+
+/* ========================================= */
+/* ORIENTATION-SPECIFIC STYLES */
+/* ========================================= */
+
+/* Landscape on mobile devices */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+  .membershipclubs-container {
+    padding: 1rem;
+  }
+
+  .membershipclubs-header {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .membershipclubs-header-content {
+    flex-direction: row;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .membershipclubs-page-title {
+    font-size: 1.5rem;
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  .membershipclubs-discover-btn {
+    width: auto;
+    flex-shrink: 0;
+  }
+
+  .membershipclubs-loading {
+    min-height: 250px;
+    padding: 2rem;
+  }
+
+  .membershipclubs-error-content {
+    padding: 2rem;
+  }
+}
+
+/* ========================================= */
+/* ACCESSIBILITY & PERFORMANCE */
+/* ========================================= */
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .membershipclubs-header,
+  .membershipclubs-controls {
+    border: 2px solid #000;
+  }
+
+  .membershipclubs-discover-btn {
+    border: 2px solid transparent;
+  }
+
+  .membershipclubs-discover-btn:focus {
+    border-color: #fff;
+    outline: 2px solid #000;
+    outline-offset: 2px;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .membershipclubs-discover-btn:hover {
+    transform: none;
+  }
+
+  .membershipclubs-discover-btn {
+    transition: background-color 0.2s ease;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .membershipclubs-container {
+    background: #0f172a;
+  }
+
+  .membershipclubs-header,
+  .membershipclubs-controls {
+    background: #1e293b;
+    color: #f1f5f9;
+  }
+
+  .membershipclubs-page-title {
+    color: #f1f5f9;
+  }
+
+  .membershipclubs-page-subtitle,
+  .membershipclubs-results-info {
+    color: #94a3b8;
+  }
+
+  .membershipclubs-error-content {
+    background: #1e293b;
+    color: #f1f5f9;
+  }
+
+  .membershipclubs-loading {
+    background: #1e293b;
+    color: #f1f5f9;
+  }
+}
+
+/* Print styles */
+@media print {
+  .membershipclubs-container {
+    background: white;
+    padding: 1rem;
+  }
+
+  .membershipclubs-discover-btn,
+  .membershipclubs-controls {
+    display: none;
+  }
+
+  .membershipclubs-header {
+    box-shadow: none;
+    border: 1px solid #ccc;
+  }
+
+  .membershipclubs-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+/* Touch device optimizations */
+@media (pointer: coarse) {
+  .membershipclubs-discover-btn,
+  .membershipclubs-retry-button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .membershipclubs-controls-right > * {
+    min-height: 44px;
+  }
+}

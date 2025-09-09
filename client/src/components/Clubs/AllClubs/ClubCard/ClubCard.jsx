@@ -17,14 +17,19 @@ import {
   faUserTie
 } from '@fortawesome/free-solid-svg-icons';
 import './clubCard.css';
-
+import { useClubContext } from '../../../contexts/ClubContext';
+import { useAuthContext } from '../../../contexts/UserContext';
 export const ClubCard = ({ club, index, isSelected, onSelect, onSelectOnMap }) => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+  
   const [imageLoaded, setImageLoaded] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isOpeningMap, setIsOpeningMap] = useState(false);
-  
+  const {  isLoading, 
+        toggleBookmarkClub,
+        isBookmarkedClub} = useClubContext();
+  const { isAuthentication } = useAuthContext();
   const isEven = index % 2 === 0;
   
   const handleCardClick = () => {
@@ -175,13 +180,15 @@ export const ClubCard = ({ club, index, isSelected, onSelect, onSelectOnMap }) =
               >
                 <FontAwesomeIcon icon={faMapMarkerAlt} />
               </button>
+               {isAuthentication && (
               <button 
-                className="club-card-favorite-btn" 
+                className={`club-card-favorite-btn ${isBookmarkedClub(club.id) ? 'favorited' : ''}`}
                 title={t('clubs.ClubCard.actions.addToFavorites')}
-                onClick={handleSelectClick}
+                onClick={() => toggleBookmarkClub(club.id)}
               >
                 <FontAwesomeIcon icon={faHeart} />
               </button>
+                )}
             </div>
           </div>
 

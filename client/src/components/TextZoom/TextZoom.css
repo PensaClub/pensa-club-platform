@@ -329,3 +329,26 @@
     height: 250px;
   }
 }
+
+@media screen and (min-width: 320px) and (max-width: 479px){
+  .text-zoom-expanded {
+    width: 200px;
+  }
+  .collapsed-btn{
+    display: none;
+  }
+  .collapsed-content{
+    padding: 0.4rem 0.2rem;
+  }
+  .collapsed-reset{
+    flex-direction: row;
+    writing-mode: sideways-lr;
+  }
+  .collapsed-slider{
+    padding: initial;
+  }
+  .text-zoom-collapsed {
+    width: 25px;
+  }
+
+}

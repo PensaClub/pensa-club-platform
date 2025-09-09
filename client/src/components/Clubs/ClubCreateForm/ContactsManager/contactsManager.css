@@ -1,0 +1,978 @@
+/* ===============================
+   CONTACTS MANAGER STYLES
+   =============================== */
+
+.contacts-manager {
+  width: 100%;
+  padding: 1rem 0;
+}
+
+/* ===============================
+   SVG ICON STYLES
+   =============================== */
+
+.contacts-manager .contacts-manager-title svg {
+  color: #6366f1;
+  font-size: 1.5rem;
+}
+
+.contacts-manager .contacts-manager-nav-btn svg {
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.contacts-manager .contacts-manager-form-label svg {
+  color: #6366f1;
+  font-size: 0.9rem;
+}
+
+.contacts-manager .contacts-manager-social-icon svg {
+  font-size: 1.2rem;
+  color: white;
+}
+
+.contacts-manager .contacts-manager-action-btn svg {
+  font-size: 0.9rem;
+}
+
+.contacts-manager .contacts-manager-social-link svg {
+  font-size: 0.8rem;
+}
+
+.contacts-manager .contacts-manager-person-icon svg {
+  font-size: 1.2rem;
+  color: #6366f1;
+}
+
+.contacts-manager .contacts-manager-person-contact svg {
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+.contacts-manager .contacts-manager-remove-person-btn svg {
+  font-size: 0.9rem;
+}
+
+.contacts-manager .contacts-manager-add-btn svg {
+  font-size: 0.9rem;
+}
+
+.contacts-manager .contacts-manager-help-icon svg {
+  font-size: 1rem;
+}
+
+.contacts-manager .contacts-manager-address-note svg {
+  color: #3b82f6;
+  font-size: 1rem;
+}
+
+.contacts-manager .contacts-manager-qr-placeholder svg {
+  font-size: 4rem;
+  color: #d1d5db;
+}
+
+/* ===============================
+   HEADER SECTION
+   =============================== */
+
+.contacts-manager-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.contacts-manager-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 1rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.contacts-manager-subtitle {
+  font-size: 1.1rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ===============================
+   NAVIGATION
+   =============================== */
+
+.contacts-manager-nav {
+  display: flex;
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 15px;
+  padding: 0.5rem;
+  margin-bottom: 2rem;
+  overflow-x: auto;
+  gap: 0.5rem;
+}
+
+.contacts-manager-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  position: relative;
+}
+
+.contacts-manager-nav-btn:hover {
+  background: #f8fafc;
+  color: #374151;
+}
+
+.contacts-manager-nav-btn.active {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+}
+
+/* ===============================
+   CONTENT SECTIONS
+   =============================== */
+
+.contacts-manager-content {
+  background: white;
+  border: 2px solid #e2e8f0;
+  border-radius: 15px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.contacts-manager-section {
+  min-height: 400px;
+}
+
+.contacts-manager-section-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.contacts-manager-section-header h4 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 0.5rem 0;
+}
+
+.contacts-manager-section-header p {
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.contacts-manager-section-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* ===============================
+   FORM ELEMENTS
+   =============================== */
+
+.contacts-manager-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.contacts-manager-form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.contacts-manager-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.contacts-manager-form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.contacts-manager-form-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.contacts-manager-form-input,
+.contacts-manager-form-textarea,
+.contacts-manager-time-input {
+  padding: 0.875rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+  background: white;
+  color: #374151;
+  font-family: inherit;
+}
+
+.contacts-manager-form-input:focus,
+.contacts-manager-form-textarea:focus,
+.contacts-manager-time-input:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+  transform: translateY(-1px);
+}
+
+.contacts-manager-form-input:disabled,
+.contacts-manager-form-textarea:disabled,
+.contacts-manager-time-input:disabled {
+  background: #f3f4f6;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.contacts-manager-form-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* ===============================
+   CHECKBOX STYLES
+   =============================== */
+
+.contacts-manager-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.contacts-manager-checkbox-label input[type="checkbox"] {
+  display: none;
+}
+
+.contacts-manager-checkbox {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #d1d5db;
+  border-radius: 4px;
+  position: relative;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.contacts-manager-checkbox-label input[type="checkbox"]:checked + .contacts-manager-checkbox {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border-color: #6366f1;
+}
+
+.contacts-manager-checkbox-label input[type="checkbox"]:checked + .contacts-manager-checkbox::after {
+  content: '✓';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+/* ===============================
+   SOCIAL MEDIA SECTION
+   =============================== */
+
+.contacts-manager-social-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.contacts-manager-social-item {
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.contacts-manager-social-item:hover {
+  border-color: #6366f1;
+  background: #f1f5f9;
+}
+
+.contacts-manager-social-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.contacts-manager-social-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.contacts-manager-social-label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.contacts-manager-social-link {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(99, 102, 241, 0.1);
+  color: #6366f1;
+  border: none;
+  border-radius: 6px;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.contacts-manager-social-link:hover {
+  background: #6366f1;
+  color: white;
+  transform: scale(1.1);
+}
+
+/* ===============================
+   ADDRESS SECTION
+   =============================== */
+
+.contacts-manager-address-note {
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border: 2px solid #bfdbfe;
+  border-radius: 10px;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  color: #1e40af;
+  font-weight: 500;
+}
+
+/* ===============================
+   WORKING HOURS SECTION
+   =============================== */
+
+.contacts-manager-hours-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.contacts-manager-hours-item {
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 1rem;
+  transition: all 0.3s ease;
+}
+
+.contacts-manager-hours-item:hover {
+  border-color: #6366f1;
+  background: #f1f5f9;
+}
+
+.contacts-manager-hours-header {
+  margin-bottom: 0.75rem;
+}
+
+.contacts-manager-day-label {
+  font-weight: 600;
+  color: #374151;
+}
+
+.contacts-manager-hours-times {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.contacts-manager-time-input {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.9rem;
+}
+
+.contacts-manager-time-separator {
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.contacts-manager-special-hours {
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.contacts-manager-special-hours h5 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 1rem 0;
+}
+
+/* ===============================
+   CONTACT PEOPLE SECTION
+   =============================== */
+
+.contacts-manager-people-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.contacts-manager-person-card {
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.contacts-manager-person-card:hover {
+  border-color: #6366f1;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.contacts-manager-person-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.contacts-manager-person-icon {
+  width: 50px;
+  height: 50px;
+  background: rgba(99, 102, 241, 0.1);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.contacts-manager-person-info {
+  flex: 1;
+}
+
+.contacts-manager-person-info h6 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 0.25rem 0;
+}
+
+.contacts-manager-person-role {
+  font-size: 0.9rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.contacts-manager-remove-person-btn {
+  background: #fee2e2;
+  color: #dc2626;
+  border: none;
+  border-radius: 8px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.contacts-manager-remove-person-btn:hover {
+  background: #fecaca;
+  transform: scale(1.1);
+}
+
+.contacts-manager-person-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.contacts-manager-person-contact {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+.contacts-manager-person-description {
+  font-size: 0.9rem;
+  color: #6b7280;
+  line-height: 1.4;
+  margin: 0;
+  font-style: italic;
+}
+
+/* ===============================
+   ADD PERSON SECTION
+   =============================== */
+
+.contacts-manager-add-person {
+  background: white;
+  border: 2px dashed #cbd5e1;
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.contacts-manager-add-person h5 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 1rem 0;
+}
+
+.contacts-manager-add-person-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ===============================
+   ACTION BUTTONS
+   =============================== */
+
+.contacts-manager-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin: 2rem 0;
+  flex-wrap: wrap;
+}
+
+.contacts-manager-action-btn {
+  background: white;
+  color: #374151;
+  border: 2px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.contacts-manager-action-btn:hover {
+  border-color: #6366f1;
+  color: #6366f1;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.contacts-manager-action-btn.copy {
+  color: #22c55e;
+  border-color: #bbf7d0;
+  background: #f0fdf4;
+}
+
+.contacts-manager-action-btn.copy:hover {
+  border-color: #22c55e;
+  background: #dcfce7;
+}
+
+.contacts-manager-action-btn.qr {
+  color: #6366f1;
+  border-color: #c7d2fe;
+  background: #eef2ff;
+}
+
+.contacts-manager-action-btn.qr:hover {
+  border-color: #6366f1;
+  background: #e0e7ff;
+}
+
+.contacts-manager-add-btn {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 0.875rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  align-self: flex-start;
+}
+
+.contacts-manager-add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(34, 197, 94, 0.3);
+}
+
+.contacts-manager-add-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ===============================
+   QR CODE SECTION
+   =============================== */
+
+.contacts-manager-qr-section {
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.contacts-manager-qr-section h5 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 0.5rem 0;
+}
+
+.contacts-manager-qr-section p {
+  color: #6b7280;
+  margin: 0 0 1rem 0;
+  font-size: 0.9rem;
+}
+
+.contacts-manager-qr-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem;
+  background: white;
+  border: 2px dashed #cbd5e1;
+  border-radius: 10px;
+  color: #9ca3af;
+}
+
+.contacts-manager-qr-placeholder span {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* ===============================
+   HELP SECTION
+   =============================== */
+
+.contacts-manager-help {
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border: 2px solid #bfdbfe;
+  border-radius: 15px;
+  padding: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-top: 2rem;
+}
+
+.contacts-manager-help-icon {
+  background: #3b82f6;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.contacts-manager-help-content h5 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1e40af;
+  margin: 0 0 0.5rem 0;
+}
+
+.contacts-manager-help-content p {
+  color: #1e40af;
+  line-height: 1.5;
+  margin: 0 0 1rem 0;
+  opacity: 0.8;
+  font-size: 0.9rem;
+}
+
+.contacts-manager-help-content ul {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: #1e40af;
+  opacity: 0.8;
+}
+
+.contacts-manager-help-content li {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* ===============================
+   RESPONSIVE DESIGN
+   =============================== */
+
+@media (max-width: 1024px) {
+  .contacts-manager-form-grid {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  
+  .contacts-manager-social-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+  
+  .contacts-manager-hours-grid {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+  
+  .contacts-manager-nav {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .contacts-manager-title {
+    font-size: 1.5rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .contacts-manager-nav {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .contacts-manager-nav-btn {
+    justify-content: center;
+    padding: 0.75rem 1rem;
+  }
+  
+  .contacts-manager-content {
+    padding: 1.5rem;
+  }
+  
+  .contacts-manager-form-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .contacts-manager-form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .contacts-manager-social-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .contacts-manager-hours-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .contacts-manager-person-header {
+    flex-wrap: wrap;
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .contacts-manager-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .contacts-manager-action-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .contacts-manager-help {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .contacts-manager-content {
+    padding: 1rem;
+  }
+  
+  .contacts-manager-section-header {
+    margin-bottom: 1.5rem;
+  }
+  
+  .contacts-manager-social-item {
+    padding: 1rem;
+  }
+  
+  .contacts-manager-person-card {
+    padding: 1rem;
+  }
+  
+  .contacts-manager-person-header {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .contacts-manager-person-icon {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .contacts-manager-hours-times {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .contacts-manager-time-separator {
+    display: none;
+  }
+  
+  .contacts-manager-add-person {
+    padding: 1rem;
+  }
+  
+  .contacts-manager-help {
+    padding: 1rem;
+  }
+}
+
+/* ===============================
+   ACCESSIBILITY IMPROVEMENTS
+   =============================== */
+
+.contacts-manager-nav-btn:focus-visible,
+.contacts-manager-form-input:focus-visible,
+.contacts-manager-form-textarea:focus-visible,
+.contacts-manager-time-input:focus-visible,
+.contacts-manager-checkbox-label:focus-visible,
+.contacts-manager-action-btn:focus-visible,
+.contacts-manager-add-btn:focus-visible,
+.contacts-manager-remove-person-btn:focus-visible,
+.contacts-manager-social-link:focus-visible {
+  outline: 3px solid #6366f1;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contacts-manager-nav-btn,
+  .contacts-manager-social-item,
+  .contacts-manager-hours-item,
+  .contacts-manager-person-card,
+  .contacts-manager-form-input,
+  .contacts-manager-form-textarea,
+  .contacts-manager-time-input,
+  .contacts-manager-action-btn,
+  .contacts-manager-add-btn,
+  .contacts-manager-remove-person-btn,
+  .contacts-manager-social-link,
+  .contacts-manager-checkbox {
+    transition: none;
+  }
+}
+
+/* ===============================
+   HIGH CONTRAST MODE
+   =============================== */
+
+@media (prefers-contrast: high) {
+  .contacts-manager-nav,
+  .contacts-manager-content,
+  .contacts-manager-social-item,
+  .contacts-manager-hours-item,
+  .contacts-manager-person-card {
+    border-width: 3px;
+  }
+  
+  .contacts-manager-form-input,
+  .contacts-manager-form-textarea,
+  .contacts-manager-time-input {
+    border-width: 3px;
+  }
+  
+  .contacts-manager-action-btn,
+  .contacts-manager-nav-btn {
+    border-width: 3px;
+  }
+  
+  .contacts-manager-help {
+    border-width: 3px;
+  }
+}
+
+/* ===============================
+   PRINT STYLES
+   =============================== */
+
+@media print {
+  .contacts-manager-nav,
+  .contacts-manager-actions,
+  .contacts-manager-add-person,
+  .contacts-manager-remove-person-btn,
+  .contacts-manager-qr-section {
+    display: none;
+  }
+  
+  .contacts-manager-content {
+    border: 1px solid #000;
+    break-inside: avoid;
+  }
+  
+  .contacts-manager-person-card,
+  .contacts-manager-social-item {
+    break-inside: avoid;
+    border: 1px solid #000;
+  }
+}

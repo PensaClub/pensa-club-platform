@@ -607,12 +607,14 @@ export const InitiativeProvider = ({ children }) => {
       throw error;
     }
   }, [isAuthentication, initiativeService]);
+
   const invalidateProjectDraftsCache = useCallback(() => {
     setProjectDraftsLoaded(false);
     setProjectDrafts([]);
     setProjectDraftsCurrentPage(1);
     setProjectDraftsHasMore(true);
   }, []);
+
   const getDraftInitiative = useCallback(async (userId) => {
     try {
       const response = await initiativeService.getDraftInitiative(userId);
@@ -852,6 +854,7 @@ export const InitiativeProvider = ({ children }) => {
       setBookmarksLoaded(true);
     }
   }, [isAuthentication, userEmail, initiativeService]);
+  
   const loadProjectBookmarks = useCallback(async () => {
     if (!isAuthentication || !userEmail) return;
 

@@ -67,6 +67,11 @@ import { ProfessionalAvatarBuilder } from "../AvatarDemo/ProfessionalAvatarBuild
 import ArticlePreviewPage from "../Articles/ArticleCreateForm/ArticlePreviewPage";
 import { AllPublications } from "../Initiatives/CreatePublication/AllPublications/AllPublications";
 import PublicationForm from '../Initiatives/CreatePublication/MainForm/MainFormPublication';
+import ClubCreateForm from "../Clubs/ClubCreateForm/ClubCreateForm";
+import MyClubs from "../Clubs/MyClubs/MyClubs";
+import DraftClubs from "../Clubs/DraftClubs/DraftClubs";
+import MembershipClubs from "../Clubs/MembershipClubs/MembershipClubs";
+import ClubsAdmin from "../Clubs/ClubsAdmin/ClubsAdmin";
 // import { InitiativePreviewPage } from "../Initiatives/CreateIniciative/InitiativePreviewPage/InitiativePreviewPage";
 
 export const Profile = () => {
@@ -98,7 +103,8 @@ export const Profile = () => {
     projects: false,
     community: false,
     messages: false,
-    applications: false
+    applications: false,
+    clubs: false
   });
   const [applicationsStats, setApplicationsStats] = useState({
     total: 0,
@@ -140,7 +146,12 @@ export const Profile = () => {
       "/profile/project-create": t("profile.projectCreate"),
       "/profile/project-preview": t("profile.projectPreview"),
       "/profile/publications": t("profile.publications"),
-      "/profile/publication-create": t("profile.publicationCreate")
+      "/profile/publication-create": t("profile.publicationCreate"),
+      "/profile/clubs": t("myClubs.clubs"),
+      "/profile/club-create": t("profile.clubCreate"),
+      "/profile/club-drafts": t("profile.clubDrafts"),
+      "/profile/clubs-admin": t("profile.clubsAdmin"),
+      "/profile/club-membership": t("profile.clubMembership")
 
     };
 
@@ -173,7 +184,12 @@ export const Profile = () => {
     "/profile/article-preview",
     "/profile/publications",
     "/profile/publication-create",
-    "/profile/applications-admin"
+    "/profile/applications-admin",
+    "/profile/clubs",
+    "/profile/club-create",
+    "/profile/club-drafts",
+    "/profile/clubs-admin",
+    "/profile/club-membership"
   ];
 
   const isAdminPanel = adminPaths.some(path => location.pathname.startsWith(path));
@@ -558,6 +574,7 @@ export const Profile = () => {
                       {t("profile.bookmarks")}
                     </span>
                   </NavLink>
+
                   <NavLink
                     to="avatars"
                     className={({ isActive }) => isActive ? 'active' : ''}
@@ -568,6 +585,43 @@ export const Profile = () => {
                     </span>
                   </NavLink>
                 </li>
+                {/* ➕ НОВА СЕКЦИЯ ЗА КЛУБОВЕ */}
+                <li>
+                  <NavLink
+                    to="clubs"
+                    onClick={() => toggleSubMenu('clubs')}
+                    className={({ isActive }) => isActive ? 'active' : ''}
+                  >
+                    <span className="link-content">
+                      <UsersIcon className="icon" />
+                      {t("myClubs.clubs")}
+                    </span>
+                    <span className={`arrow-icon ${subMenuStates.clubs ? 'rotated' : ''}`}>
+                      {subMenuStates.clubs ? <DownArrowIcon /> : <ArrowIcon />}
+                    </span>
+                   
+                  </NavLink>
+                  <ul className={`sub-menu ${subMenuStates.clubs ? 'expanded' : ''}`}>
+                    <li>
+                      <NavLink to="club-membership" className={({ isActive }) => isActive ? 'active' : ''}>
+                        <CircleIcon className="icon" />
+                        {t("profile.clubMembership")}
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink to="club-create" className={({ isActive }) => isActive ? 'active' : ''}>
+                        <CircleIcon className="icon" />
+                        {t("profile.newClub")}
+                      </NavLink>
+                    </li>
+                    <li>
+                      <NavLink to="club-drafts" className={({ isActive }) => isActive ? 'active' : ''}>
+                        <CircleIcon className="icon" />
+                        {t("profile.clubDrafts")}
+                      </NavLink>
+                    </li>
+                  </ul>
+                </li>
               </ul>
             </div>
 
@@ -575,6 +629,18 @@ export const Profile = () => {
               <div className="menu-section admin">
                 <h3>{t("profile.admin_dashboard")}</h3>
                 <ul>
+                  <li>
+                    <NavLink
+                      to="clubs-admin"
+                      className={({ isActive }) => isActive ? 'active' : ''}
+                    >
+                      <span className="link-content">
+                        <UsersIcon className="icon" />
+                        {t("profile.clubsAdmin")}
+                      </span>
+                      {/* <ArrowIcon className="icon-arrow" /> */}
+                    </NavLink>
+                  </li>
                   <li>
                     <NavLink
                       to="ads-admin"
@@ -892,7 +958,10 @@ export const Profile = () => {
             <Route path="messages" element={<ProfileMessages />} />
             <Route path="bookmarks" element={<BookmarkedItems />} />
             <Route path="avatars" element={<ProfessionalAvatarBuilder />} />
-
+            <Route path="clubs" element={<MyClubs />} />
+            <Route path="club-create" element={<ClubCreateForm />} />
+            <Route path="club-drafts" element={<DraftClubs />} />
+            <Route path="club-membership" element={<MembershipClubs isEditMode={true} />} />
             {/* Management routes (Admin & Moderator) */}
             <Route path="ads-admin" element={<ManagementGuard><AllAnnouncements /></ManagementGuard>} />
             <Route path="article-create" element={<ManagementGuard><ArticleCreateForm /></ManagementGuard>} />
@@ -907,6 +976,7 @@ export const Profile = () => {
             <Route path="publications" element={<ManagementGuard><AllPublications /></ManagementGuard>} />
             <Route path="initiative-drafts" element={<ManagementGuard><DraftInitiatives /></ManagementGuard>} />
             <Route path="publication-create" element={<ManagementGuard><PublicationForm /></ManagementGuard>} />
+            <Route path="clubs-admin" element={<AdminGuard><ClubsAdmin /></AdminGuard>} />
             {/* <Route path="/profile/initiative-edit/:id" element={<ManagementGuard><AllInitiatives isEditMode={true}/></ManagementGuard>} /> */}
 
             {/* <Route path="initiative-preview" element={<ManagementGuard><InitiativePreviewPage /></ManagementGuard>}  /> */}

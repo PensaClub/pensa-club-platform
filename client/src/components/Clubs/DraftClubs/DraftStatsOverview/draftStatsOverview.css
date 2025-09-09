@@ -1,0 +1,951 @@
+.draftstatsoverview-container {
+  width: 100%;
+}
+
+.draftstatsoverview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.draftstatsoverview-stat-card {
+  background: white;
+  border-radius: 8px;
+  padding: 1.25rem;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.draftstatsoverview-stat-card:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.draftstatsoverview-total {
+  border-left: 4px solid #3b82f6;
+}
+
+.draftstatsoverview-complete {
+  border-left: 4px solid #10b981;
+}
+
+.draftstatsoverview-incomplete {
+  border-left: 4px solid #f59e0b;
+}
+
+.draftstatsoverview-completion.high {
+  border-left: 4px solid #10b981;
+}
+
+.draftstatsoverview-completion.medium {
+  border-left: 4px solid #3b82f6;
+}
+
+.draftstatsoverview-completion.low {
+  border-left: 4px solid #f59e0b;
+}
+
+.draftstatsoverview-completion.minimal {
+  border-left: 4px solid #ef4444;
+}
+
+.draftstatsoverview-stat-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.draftstatsoverview-total .draftstatsoverview-stat-icon {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+
+.draftstatsoverview-complete .draftstatsoverview-stat-icon {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.draftstatsoverview-incomplete .draftstatsoverview-stat-icon {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+
+.draftstatsoverview-completion .draftstatsoverview-stat-icon {
+  background: rgba(99, 102, 241, 0.1);
+  color: #6366f1;
+}
+
+.draftstatsoverview-stat-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.draftstatsoverview-stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1f2937;
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.draftstatsoverview-stat-label {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.draftstatsoverview-progress-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #f1f5f9;
+  overflow: hidden;
+}
+
+.draftstatsoverview-progress-fill {
+  height: 100%;
+  background: #6366f1;
+  width: var(--completion);
+  transition: width 0.5s ease;
+  background: linear-gradient(90deg, #6366f1, #8b5cf6);
+}
+
+.draftstatsoverview-activity {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.draftstatsoverview-activity-content {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.draftstatsoverview-activity-icon {
+  color: #6b7280;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.draftstatsoverview-activity-text {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-size: 0.875rem;
+}
+
+.draftstatsoverview-activity-label {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.draftstatsoverview-activity-time {
+  color: #374151;
+  font-weight: 600;
+}
+
+.draftstatsoverview-activity-draft {
+  color: #9ca3af;
+  font-style: italic;
+}
+
+.draftstatsoverview-insights {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border: 1px solid #bae6fd;
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.draftstatsoverview-insights-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.draftstatsoverview-insight {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  padding: 0.5rem 0;
+}
+
+.draftstatsoverview-insight-positive {
+  color: #059669;
+}
+
+.draftstatsoverview-insight-warning {
+  color: #d97706;
+}
+
+.draftstatsoverview-insight-info {
+  color: #2563eb;
+}
+
+.draftstatsoverview-insight svg {
+  font-size: 0.875rem;
+  flex-shrink: 0;
+}
+
+/* Empty state */
+.draftstatsoverview-empty {
+  text-align: center;
+  padding: 2rem;
+  color: #9ca3af;
+}
+
+.draftstatsoverview-empty-icon {
+  font-size: 2.5rem;
+  color: #d1d5db;
+  margin-bottom: 1rem;
+}
+
+.draftstatsoverview-empty-text {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.draftstatsoverview-empty-subtext {
+  font-size: 0.875rem;
+  color: #9ca3af;
+}
+
+/* ========================================= */
+/* RESPONSIVE DESIGN - FULL COVERAGE */
+/* ========================================= */
+
+/* Extra small devices (300px - 319px) */
+@media screen and (max-width: 319px) {
+  .draftstatsoverview-grid {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .draftstatsoverview-stat-card {
+    padding: 0.75rem;
+    flex-direction: row;
+    gap: 0.75rem;
+  }
+
+  .draftstatsoverview-stat-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+    border-radius: 8px;
+  }
+
+  .draftstatsoverview-stat-value {
+    font-size: 1.25rem;
+    margin-bottom: 0.125rem;
+  }
+
+  .draftstatsoverview-stat-label {
+    font-size: 0.75rem;
+  }
+
+  .draftstatsoverview-activity {
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .draftstatsoverview-activity-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .draftstatsoverview-activity-text {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+    font-size: 0.8125rem;
+  }
+
+  .draftstatsoverview-insights {
+    padding: 0.75rem;
+  }
+
+  .draftstatsoverview-insight {
+    font-size: 0.75rem;
+    padding: 0.375rem 0;
+  }
+
+  .draftstatsoverview-empty {
+    padding: 1.5rem;
+  }
+
+  .draftstatsoverview-empty-icon {
+    font-size: 2rem;
+  }
+}
+
+/* Small phones (320px - 479px) */
+@media screen and (min-width: 320px) and (max-width: 479px) {
+  .draftstatsoverview-grid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .draftstatsoverview-stat-card {
+    padding: 1rem;
+    flex-direction: row;
+    gap: 1rem;
+  }
+
+  .draftstatsoverview-stat-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.125rem;
+    border-radius: 10px;
+  }
+
+  .draftstatsoverview-stat-value {
+    font-size: 1.375rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .draftstatsoverview-stat-label {
+    font-size: 0.8125rem;
+  }
+
+  .draftstatsoverview-activity {
+    padding: 0.875rem;
+    margin-bottom: 1rem;
+  }
+
+  .draftstatsoverview-activity-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .draftstatsoverview-activity-text {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .draftstatsoverview-insights {
+    padding: 0.875rem;
+  }
+
+  .draftstatsoverview-insight {
+    font-size: 0.75rem;
+    padding: 0.375rem 0;
+  }
+
+  .draftstatsoverview-empty {
+    padding: 1.5rem;
+  }
+}
+
+/* Large phones (480px - 767px) */
+@media screen and (min-width: 480px) and (max-width: 767px) {
+  .draftstatsoverview-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.875rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .draftstatsoverview-stat-card {
+    padding: 1rem;
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+  }
+
+  .draftstatsoverview-stat-icon {
+    width: 44px;
+    height: 44px;
+    font-size: 1.25rem;
+    align-self: center;
+  }
+
+  .draftstatsoverview-stat-value {
+    font-size: 1.5rem;
+  }
+
+  .draftstatsoverview-stat-label {
+    font-size: 0.8125rem;
+  }
+
+  .draftstatsoverview-activity {
+    padding: 0.875rem;
+  }
+
+  .draftstatsoverview-activity-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .draftstatsoverview-activity-text {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .draftstatsoverview-insights {
+    padding: 0.875rem;
+  }
+
+  .draftstatsoverview-insight {
+    font-size: 0.75rem;
+    padding: 0.375rem 0;
+  }
+}
+
+/* Tablets Portrait (768px - 1023px) */
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  .draftstatsoverview-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .draftstatsoverview-stat-card {
+    padding: 1.25rem;
+    flex-direction: row;
+    text-align: left;
+    gap: 1rem;
+  }
+
+  .draftstatsoverview-stat-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 1.25rem;
+  }
+
+  .draftstatsoverview-stat-value {
+    font-size: 1.625rem;
+  }
+
+  .draftstatsoverview-stat-label {
+    font-size: 0.875rem;
+  }
+
+  .draftstatsoverview-activity {
+    padding: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .draftstatsoverview-activity-content {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .draftstatsoverview-activity-text {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+  }
+
+  .draftstatsoverview-insights {
+    padding: 1rem;
+  }
+
+  .draftstatsoverview-insight {
+    font-size: 0.8125rem;
+    padding: 0.5rem 0;
+  }
+}
+
+/* Tablets Landscape & Small Laptops (1024px - 1279px) */
+@media screen and (min-width: 1024px) and (max-width: 1279px) {
+  .draftstatsoverview-grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.125rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .draftstatsoverview-stat-card {
+    padding: 1.25rem;
+    flex-direction: row;
+    gap: 1rem;
+  }
+
+  .draftstatsoverview-stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  }
+
+  .draftstatsoverview-stat-value {
+    font-size: 1.75rem;
+  }
+
+  .draftstatsoverview-activity-content {
+    gap: 0.75rem;
+  }
+
+  .draftstatsoverview-insights-content {
+    gap: 0.875rem;
+  }
+}
+
+/* Standard Laptops & Small Desktops (1280px - 1439px) */
+@media screen and (min-width: 1280px) and (max-width: 1439px) {
+  .draftstatsoverview-grid {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .draftstatsoverview-stat-card {
+    padding: 1.5rem;
+    border-radius: 10px;
+  }
+
+  .draftstatsoverview-stat-icon {
+    width: 52px;
+    height: 52px;
+    font-size: 1.375rem;
+    border-radius: 14px;
+  }
+
+  .draftstatsoverview-stat-value {
+    font-size: 2rem;
+  }
+
+  .draftstatsoverview-stat-label {
+    font-size: 0.9375rem;
+  }
+
+  .draftstatsoverview-activity {
+    padding: 1.25rem;
+    border-radius: 10px;
+  }
+
+  .draftstatsoverview-insights {
+    padding: 1.25rem;
+    border-radius: 10px;
+  }
+}
+
+/* Large Desktops (1440px - 1679px) */
+@media screen and (min-width: 1440px) and (max-width: 1679px) {
+  .draftstatsoverview-grid {
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .draftstatsoverview-stat-card {
+    padding: 1.75rem;
+    border-radius: 12px;
+  }
+
+  .draftstatsoverview-stat-icon {
+    width: 56px;
+    height: 56px;
+    font-size: 1.5rem;
+    border-radius: 16px;
+  }
+
+  .draftstatsoverview-stat-value {
+    font-size: 2.25rem;
+  }
+
+  .draftstatsoverview-stat-label {
+    font-size: 1rem;
+  }
+
+  .draftstatsoverview-activity {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: 12px;
+  }
+
+  .draftstatsoverview-insights {
+    padding: 1.5rem;
+    border-radius: 12px;
+  }
+
+  .draftstatsoverview-insight {
+    font-size: 0.875rem;
+    padding: 0.625rem 0;
+  }
+}
+
+/* Extra Large Screens (1680px - 1919px) */
+@media screen and (min-width: 1680px) and (max-width: 1919px) {
+  .draftstatsoverview-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.75rem;
+    margin-bottom: 2.25rem;
+  }
+
+  .draftstatsoverview-stat-card {
+    padding: 2rem;
+    border-radius: 14px;
+  }
+
+  .draftstatsoverview-stat-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 1.625rem;
+    border-radius: 18px;
+  }
+
+  .draftstatsoverview-stat-value {
+    font-size: 2.5rem;
+  }
+
+  .draftstatsoverview-stat-label {
+    font-size: 1.0625rem;
+  }
+
+  .draftstatsoverview-activity {
+    padding: 1.75rem;
+    margin-bottom: 1.75rem;
+    border-radius: 14px;
+  }
+
+  .draftstatsoverview-insights {
+    padding: 1.75rem;
+    border-radius: 14px;
+  }
+}
+
+/* Ultra-wide Screens (1920px+) */
+@media screen and (min-width: 1920px) {
+  .draftstatsoverview-grid {
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .draftstatsoverview-stat-card {
+    padding: 2.25rem;
+    border-radius: 16px;
+  }
+
+  .draftstatsoverview-stat-icon {
+    width: 64px;
+    height: 64px;
+    font-size: 1.75rem;
+    border-radius: 20px;
+  }
+
+  .draftstatsoverview-stat-value {
+    font-size: 2.75rem;
+  }
+
+  .draftstatsoverview-stat-label {
+    font-size: 1.125rem;
+  }
+
+  .draftstatsoverview-activity {
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border-radius: 16px;
+  }
+
+  .draftstatsoverview-insights {
+    padding: 2rem;
+    border-radius: 16px;
+  }
+
+  .draftstatsoverview-insight {
+    font-size: 0.9375rem;
+    padding: 0.75rem 0;
+  }
+}
+
+/* ========================================= */
+/* DEVICE-SPECIFIC OPTIMIZATIONS */
+/* ========================================= */
+
+/* iPhone SE (375px width) */
+@media screen and (width: 375px) {
+  .draftstatsoverview-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.625rem;
+  }
+
+  .draftstatsoverview-stat-card {
+    padding: 0.875rem;
+  }
+
+  .draftstatsoverview-stat-value {
+    font-size: 1.4375rem;
+  }
+}
+
+/* iPhone 12/13/14 (390px width) */
+@media screen and (width: 390px) {
+  .draftstatsoverview-stat-card {
+    padding: 0.9375rem;
+  }
+}
+
+/* iPad Mini (768px width) */
+@media screen and (width: 768px) {
+  .draftstatsoverview-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.125rem;
+  }
+}
+
+/* iPad Pro 11" (834px width) */
+@media screen and (width: 834px) {
+  .draftstatsoverview-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+/* ========================================= */
+/* ORIENTATION-SPECIFIC STYLES */
+/* ========================================= */
+
+/* Landscape on mobile devices */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+  .draftstatsoverview-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .draftstatsoverview-stat-card {
+    padding: 0.75rem;
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
+
+  .draftstatsoverview-stat-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 0.875rem;
+    align-self: center;
+  }
+
+  .draftstatsoverview-stat-value {
+    font-size: 1.25rem;
+  }
+
+  .draftstatsoverview-stat-label {
+    font-size: 0.75rem;
+    line-height: 1.1;
+  }
+
+  .draftstatsoverview-activity,
+  .draftstatsoverview-insights {
+    padding: 0.75rem;
+  }
+
+  .draftstatsoverview-empty {
+    padding: 1rem;
+  }
+}
+
+/* ========================================= */
+/* ACCESSIBILITY & PERFORMANCE */
+/* ========================================= */
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .draftstatsoverview-stat-card {
+    border: 2px solid #000;
+  }
+
+  .draftstatsoverview-activity,
+  .draftstatsoverview-insights {
+    border: 2px solid #000;
+  }
+
+  .draftstatsoverview-progress-bar {
+    border: 1px solid #000;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .draftstatsoverview-stat-card {
+    transition: none;
+  }
+
+  .draftstatsoverview-stat-card:hover {
+    transform: none;
+  }
+
+  .draftstatsoverview-progress-fill {
+    transition: none;
+  }
+
+  .draftstatsoverview-loading .draftstatsoverview-stat-value {
+    animation: none;
+    background: #e5e7eb;
+  }
+}
+
+/* Dark mode support - Enhanced */
+@media (prefers-color-scheme: dark) {
+  .draftstatsoverview-stat-card {
+    background: #1f2937;
+    border-color: #374151;
+    color: #f9fafb;
+  }
+
+  .draftstatsoverview-stat-card:hover {
+    border-color: #4b5563;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .draftstatsoverview-stat-value {
+    color: #f9fafb;
+  }
+
+  .draftstatsoverview-stat-label {
+    color: #d1d5db;
+  }
+
+  .draftstatsoverview-activity {
+    background: #1f2937;
+    border-color: #374151;
+    color: #f9fafb;
+  }
+
+  .draftstatsoverview-activity-label {
+    color: #d1d5db;
+  }
+
+  .draftstatsoverview-activity-time {
+    color: #f3f4f6;
+  }
+
+  .draftstatsoverview-activity-draft {
+    color: #9ca3af;
+  }
+
+  .draftstatsoverview-insights {
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+    border-color: #374151;
+  }
+
+  .draftstatsoverview-progress-bar {
+    background: #374151;
+  }
+
+  .draftstatsoverview-empty {
+    color: #9ca3af;
+  }
+
+  .draftstatsoverview-empty-icon {
+    color: #6b7280;
+  }
+
+  .draftstatsoverview-loading .draftstatsoverview-stat-value {
+    background: #374151;
+  }
+}
+
+/* Print styles */
+@media print {
+  .draftstatsoverview-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    page-break-inside: avoid;
+  }
+
+  .draftstatsoverview-stat-card {
+    background: white;
+    border: 1px solid #ccc;
+    box-shadow: none;
+    page-break-inside: avoid;
+  }
+
+  .draftstatsoverview-stat-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .draftstatsoverview-activity,
+  .draftstatsoverview-insights {
+    background: white;
+    border: 1px solid #ccc;
+    page-break-inside: avoid;
+  }
+
+  .draftstatsoverview-progress-fill {
+    background: #666 !important;
+  }
+}
+
+/* Touch device optimizations */
+@media (pointer: coarse) {
+  .draftstatsoverview-stat-card {
+    min-height: 80px;
+  }
+
+  .draftstatsoverview-stat-icon {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+/* Hover capability detection */
+@media (hover: hover) {
+  .draftstatsoverview-stat-card:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+  }
+}
+
+/* No hover capability */
+@media (hover: none) {
+  .draftstatsoverview-stat-card:active {
+    background: #f8fafc;
+    transform: scale(0.98);
+  }
+}
+
+/* Fine pointer (mouse) */
+@media (pointer: fine) {
+  .draftstatsoverview-stat-card {
+    cursor: pointer;
+  }
+}
+
+/* Low resolution displays */
+@media screen and (max-resolution: 150dpi) {
+  .draftstatsoverview-stat-card {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+}
+
+/* High resolution displays */
+@media screen and (min-resolution: 2dppx) {
+  .draftstatsoverview-stat-card {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  .draftstatsoverview-stat-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.08);
+  }
+}

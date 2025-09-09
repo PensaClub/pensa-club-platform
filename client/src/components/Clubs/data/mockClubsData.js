@@ -831,7 +831,7 @@ export const mockClubsData = [
             }
         },
 
-        template: "cultural",           // ОПЦИИ: "cultural"/"sports"/"traditional"/"social"/"educational"/"active"
+        template: "traditional",           // ОПЦИИ: "cultural"/"sports"/"traditional"/"social"/"educational"/"active"
 
         preferences: {
             showFinances: false,          // true/false - показвай ли финансите публично

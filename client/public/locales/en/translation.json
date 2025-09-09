@@ -13,7 +13,9 @@
     "initiatives": "Initiatives",
     "projects": "Projects",
     "games": "Games",
-    "clubs": "Clubs"
+    "clubs": "Clubs",
+    "bookmarks": "Bookmarks",
+    "publications": "Publications"
   },
   "footer": {
     "site-map": "Site Map",
@@ -281,6 +283,110 @@
     }
   },
   "profile": {
+    "clubMembership": "Club Membership",
+    "clubs": {
+      "title": "My Clubs",
+      "subtitle": "Manage and view all clubs you have created",
+      "createNew": "Create New Club",
+      "loading": "Loading clubs...",
+      "search": {
+        "placeholder": "Search clubs by name, description, location..."
+      },
+      "filters": {
+        "all": "All Clubs",
+        "active": "Active",
+        "inactive": "Inactive", 
+        "draft": "Draft",
+        "general": "General",
+        "cultural": "Cultural",
+        "traditional": "Traditional",
+        "social": "Social",
+        "sports": "Sports"
+      },
+      "sort": {
+        "newest": "Newest First",
+        "oldest": "Oldest First", 
+        "name": "Name A-Z",
+        "members": "Most Members",
+        "location": "Location"
+      },
+      "stats": {
+        "totalClubs": "Total Clubs",
+        "totalClubsDesc": "Number of clubs you have created",
+        "activeClubs": "Active Clubs", 
+        "activeClubsDesc": "Clubs that are currently active",
+        "totalMembers": "Total Members",
+        "totalMembersDesc": "Combined members across all clubs",
+        "avgMembers": "Avg Members",
+        "avgMembersDesc": "Average members per club"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive",
+        "draft": "Draft"
+      },
+      "categories": {
+        "general": "General",
+        "cultural": "Cultural", 
+        "traditional": "Traditional",
+        "social": "Social",
+        "sports": "Sports"
+      },
+      "actions": {
+        "view": "View Club",
+        "edit": "Edit Club"
+      },
+      "noDescription": "No description available",
+      "members": "members",
+      "views": "Views",
+      "events": "Events", 
+      "lastUpdated": "Last updated",
+      "showing": "Showing",
+      "of": "of",
+      "clubs": "clubs",
+      "error": {
+        "title": "Error Loading Clubs",
+        "retry": "Retry"
+      },
+      "empty": {
+        "noClubs": {
+          "title": "You haven't created any clubs yet",
+          "description": "Create your first club to start building a community around shared interests and activities.",
+          "createButton": "Create Your First Club"
+        },
+        "noResults": {
+          "title": "No clubs found",
+          "searchDescription": "No clubs match your search for \"{{term}}\"",
+          "filterDescription": "No clubs match the selected filters",
+          "clearFilters": "Clear Filters",
+          "createButton": "Create New Club"
+        },
+        "suggestions": {
+          "title": "Try these suggestions:",
+          "clearSearch": "Clear your search and try again",
+          "tryDifferentFilter": "Try a different filter",
+          "checkSpelling": "Check your spelling"
+        },
+        "features": {
+          "community": {
+            "title": "Build Community",
+            "description": "Connect people with shared interests and create lasting relationships"
+          },
+          "visibility": {
+            "title": "Increase Visibility", 
+            "description": "Make your activities discoverable and attract new members"
+          }
+        },
+        "default": {
+          "title": "Something went wrong",
+          "description": "We couldn't load your clubs right now"
+        }
+      }
+    },
+    "clubCreate": "Register Club",
+    "newClub": "New Club",
+    "clubDrafts": "Club Drafts",
+    "clubsAdmin": "Clubs Management",
     "skills": "Skills",
     "workOptions": "Work Options",
     "interestOptions": "Interests",
@@ -1947,11 +2053,13 @@
     "tabs": {
       "all": "All",
       "initiatives": "Initiatives",
-      "projects": "Projects"
+      "projects": "Projects",
+      "clubs": "Clubs"
     },
     "type": {
       "initiative": "Initiative",
-      "project": "Project"
+      "project": "Project",
+      "club": "Club"
     },
     "empty": {
       "title": "No bookmarks yet",
@@ -3187,7 +3295,6 @@
       "resetButton": "Clear filters"
     }
   },
-
   "publications": {
     "common": {
       "title": "Publications",
@@ -3632,21 +3739,21 @@
         "description": "Try changing your search criteria or clearing the filters."
       }
     },
-        "sections": {
+    "sections": {
       "featured": "Latest Publication",
       "recentlyViewed": "Recently Viewed",
       "allPublications": "All Publications"
     },
     "pagination": {
       "previous": "Previous",
-      "next": "Next", 
+      "next": "Next",
       "showing": "Showing",
       "of": "of",
       "publications": "publications",
       "stories": "stories"
     }
   },
-    "clubs": {
+  "clubs": {
     "ClubView": {
       "loading": {
         "title": "Loading... - Pensa Club",
@@ -3669,6 +3776,7 @@
       "navigation": {
         "title": "Navigation",
         "home": "Home",
+        "pensionersServices": "Senior Services",
         "aboutClub": "About the club",
         "activities": "Activities",
         "events": "Events",
@@ -3711,6 +3819,127 @@
         }
       }
     },
+     "pensioners": {
+      "sectionTitle": "Senior Services",
+      "sectionSubtitle": "Specialized programs and services tailored to the needs of older adults",
+      "tabs": {
+        "healthServices": "Health Services",
+        "supportServices": "Support Services",
+        "accessibility": "Accessibility",
+        "specialPrograms": "Special Programs",
+        "ageSpecificNeeds": "Age-Specific Needs"
+      },
+      "healthServices": {
+        "basicServices": "Basic Health Services",
+        "regularCheckups": {
+          "title": "Regular Checkups",
+          "description": "Periodic health examinations for early detection of problems"
+        },
+        "bloodPressureMonitoring": {
+          "title": "Blood Pressure Monitoring",
+          "description": "Regular measurement and tracking of blood pressure"
+        },
+        "healthLectures": {
+          "title": "Health Lectures"
+        },
+        "medicalPartners": {
+          "title": "Medical Partners"
+        },
+        "emergencyProtocol": {
+          "title": "Emergency Protocol"
+        }
+      },
+      "supportServices": {
+        "homeVisits": {
+          "title": "Home Visits",
+          "description": "Regular visits by volunteers to members' homes"
+        },
+        "shoppingAssistance": {
+          "title": "Shopping Assistance",
+          "description": "Assistance with daily shopping and food delivery"
+        },
+        "documentHelp": {
+          "title": "Document Help",
+          "description": "Assistance with filling out forms and administrative procedures"
+        },
+        "companionship": {
+          "title": "Companionship",
+          "description": "Regular communication and friendly presence to combat isolation"
+        },
+        "transportService": {
+          "title": "Transport Service",
+          "description": "Accompaniment to doctors, pharmacies and important places"
+        },
+        "mealDelivery": {
+          "title": "Meal Delivery",
+          "description": "Preparation and delivery of healthy meals to the home"
+        },
+        "cleaningHelp": {
+          "title": "Cleaning Help",
+          "description": "Light assistance with housework and home maintenance"
+        },
+        "techSupport": {
+          "title": "Tech Support",
+          "description": "Training and assistance with using technology and internet"
+        }
+      },
+      "accessibility": {
+        "wheelchairAccess": {
+          "title": "Wheelchair Access",
+          "description": "Full access for people with mobility disabilities"
+        },
+        "elevatorAccess": {
+          "title": "Elevator Access",
+          "description": "Elevator for access to all floors of the building"
+        },
+        "hearingLoop": {
+          "title": "Hearing Loop",
+          "description": "Assistive technology for people with hearing problems"
+        },
+        "largeTextMaterials": {
+          "title": "Large Text Materials",
+          "description": "Printed materials with enlarged fonts for easier reading"
+        },
+        "handrails": {
+          "title": "Handrails",
+          "description": "Handrails on stairs and corridors for safety"
+        },
+        "nonSlipFloors": {
+          "title": "Non-Slip Floors",
+          "description": "Special flooring to prevent falls"
+        },
+        "goodLighting": {
+          "title": "Good Lighting",
+          "description": "Adequate and quality lighting in all rooms"
+        },
+        "restingAreas": {
+          "title": "Resting Areas",
+          "description": "Comfortable seating and rest areas in various zones"
+        }
+      },
+      "specialPrograms": {
+        "memoryActivities": {
+          "title": "Memory Activities"
+        },
+        "intergenerationalPrograms": {
+          "title": "Intergenerational Programs"
+        },
+        "volunteerPrograms": {
+          "title": "Volunteer Programs"
+        },
+        "mentalHealthSupport": {
+          "title": "Mental Health Support"
+        }
+      },
+      "ageSpecificNeeds": {
+        "lowImpactActivities": {
+          "title": "Low Impact Activities"
+        },
+        "nutritionSupport": {
+          "title": "Nutrition Support"
+        }
+      }
+    },
     "ClubHero": {
       "status": {
         "activeClub": "Active club"
@@ -3736,7 +3965,13 @@
         "years": "Years",
         "activities": "Activities",
         "events": "Events",
-        "views": "views"
+        "views": "views",
+        "firstYear": "First year",
+        "member": "member",
+        "activity": "activity",
+        "event": "event",
+        "year": "year"
+
       },
       "contact": {
         "title": "Contact us"
@@ -3941,7 +4176,7 @@
         "directContact": "You can also contact us directly:"
       }
     },
-     "ClubEvents": {
+    "ClubEvents": {
       "header": {
         "badge": "Events and activities",
         "title": "Our events",
@@ -4247,7 +4482,8 @@
         "thursdayShort": "Thu",
         "fridayShort": "Fri",
         "saturdayShort": "Sat",
-        "sundayShort": "Sun"
+        "sundayShort": "Sun",
+        "specialShort": "Special"
       },
       "modals": {
         "venue": {
@@ -4269,7 +4505,7 @@
         "infoCopied": "Information copied to clipboard!"
       }
     },
-     "ClubContact": {
+    "ClubContact": {
       "header": {
         "badge": "Contact us",
         "title": "We're here for you",
@@ -4433,7 +4669,7 @@
       },
       "founded": "Founded"
     },
-     "ClubsHero": {
+    "ClubsHero": {
       "title": {
         "prefix": "Discover your",
         "highlight": "club"
@@ -4469,7 +4705,7 @@
         "shown": "Showing {{count}} clubs in Bulgaria"
       }
     },
-     "ClubsSearch": {
+    "ClubsSearch": {
       "title": "Search",
       "results_one": "{{count}} result",
       "results_other": "{{count}} results",
@@ -4565,7 +4801,7 @@
       },
       "breadcrumb": "All clubs"
     },
-     "CulturalHero": {
+    "CulturalHero": {
       "badge": {
         "culturalClub": "Cultural Club"
       },
@@ -4700,7 +4936,7 @@
         "noMessage": "No additional message"
       }
     },
-     "CulturalActivities": {
+    "CulturalActivities": {
       "header": {
         "badge": "Activities and programs",
         "title": "Our cultural activities",
@@ -4799,7 +5035,7 @@
         }
       }
     },
-     "CulturalEvents": {
+    "CulturalEvents": {
       "header": {
         "badge": "Events and activities",
         "title": "Our cultural calendar",
@@ -5168,7 +5404,7 @@
       "defaultImageDescription": "Memory from the club",
       "tripTitle": "Trip to {{destination}}"
     },
-     "CulturalLocation": {
+    "CulturalLocation": {
       "header": {
         "badge": "Location and access",
         "title": "How to find us",
@@ -5468,7 +5704,7 @@
         "noAddress": "Address not available"
       }
     },
-     "SocialHero": {
+    "SocialHero": {
       "badge": "Social club for seniors",
       "stats": {
         "members": "Members",
@@ -5618,7 +5854,7 @@
         }
       }
     },
-     "SocialProjects": {
+    "SocialProjects": {
       "header": {
         "badge": "Our projects",
         "title": "How we make a difference",
@@ -5671,11 +5907,28 @@
         "description": "Volunteer activity with {{participants}} participants"
       },
       "categories": {
-        "healthTerms": ["health", "medical"],
-        "educationTerms": ["education", "learning"],
-        "supportTerms": ["home", "support"],
-        "volunteerSupportTerms": ["lonely", "home", "food", "meal"],
-        "volunteerHealthTerms": ["medicine", "health"]
+        "healthTerms": [
+          "health",
+          "medical"
+        ],
+        "educationTerms": [
+          "education",
+          "learning"
+        ],
+        "supportTerms": [
+          "home",
+          "support"
+        ],
+        "volunteerSupportTerms": [
+          "lonely",
+          "home",
+          "food",
+          "meal"
+        ],
+        "volunteerHealthTerms": [
+          "medicine",
+          "health"
+        ]
       },
       "noResults": {
         "title": "No projects found",
@@ -5687,7 +5940,7 @@
       },
       "currency": "BGN"
     },
-     "SocialVolunteering": {
+    "SocialVolunteering": {
       "header": {
         "badge": "Volunteering",
         "title": "Together we make a difference",
@@ -5717,10 +5970,22 @@
         "coordinator": "Coordinator"
       },
       "categories": {
-        "elderlyTerms": ["lonely", "elderly"],
-        "foodTerms": ["food", "meal"],
-        "healthTerms": ["medicine", "health"],
-        "homeTerms": ["home", "cleaning"]
+        "elderlyTerms": [
+          "lonely",
+          "elderly"
+        ],
+        "foodTerms": [
+          "food",
+          "meal"
+        ],
+        "healthTerms": [
+          "medicine",
+          "health"
+        ],
+        "homeTerms": [
+          "home",
+          "cleaning"
+        ]
       },
       "volunteers": {
         "introTitle": "Meet our coordinators",
@@ -5814,7 +6079,7 @@
         "body": "Hello,\n\nYou have received a new volunteer application:\n\nName: {{name}}\nEmail: {{email}}\nPhone: {{phone}}\nAge: {{age}}\n\nPrevious experience: {{experience}}\nAreas of interest: {{interests}}\nAvailability: {{availability}}\n\nMessage:\n{{message}}\n\n---\nSent from {{clubName}} website"
       }
     },
-     "SocialSupport": {
+    "SocialSupport": {
       "header": {
         "badge": "Our services",
         "title": "We care for your needs",
@@ -5991,11 +6256,26 @@
         "planned": "planned"
       },
       "categories": {
-        "homeTerms": ["home", "warm"],
-        "foodTerms": ["food", "meal"],
-        "healthTerms": ["health", "medical"],
-        "educationTerms": ["education", "learning"],
-        "environmentTerms": ["environment", "park"]
+        "homeTerms": [
+          "home",
+          "warm"
+        ],
+        "foodTerms": [
+          "food",
+          "meal"
+        ],
+        "healthTerms": [
+          "health",
+          "medical"
+        ],
+        "educationTerms": [
+          "education",
+          "learning"
+        ],
+        "environmentTerms": [
+          "environment",
+          "park"
+        ]
       },
       "cta": {
         "title": "Become part of the change",
@@ -6037,7 +6317,7 @@
       },
       "currency": "BGN"
     },
-     "CommunityEvents": {
+    "CommunityEvents": {
       "header": {
         "badge": "Events and activities",
         "title": "Together we make every day more special",
@@ -6065,16 +6345,55 @@
         "nature": "Nature"
       },
       "categoryTerms": {
-        "music": ["concert", "music"],
-        "food": ["food", "meal", "culinary"],
-        "health": ["health", "lecture", "medical"],
-        "education": ["education", "lesson", "course"],
-        "entertainment": ["game", "entertainment", "contest"],
-        "celebration": ["celebration", "birthday", "ceremony"],
-        "volunteer": ["volunteer", "help", "charity"],
-        "sports": ["sport", "physical", "exercise"],
-        "culture": ["exhibition", "theater", "cultural"],
-        "nature": ["nature", "walk", "excursion"]
+        "music": [
+          "concert",
+          "music"
+        ],
+        "food": [
+          "food",
+          "meal",
+          "culinary"
+        ],
+        "health": [
+          "health",
+          "lecture",
+          "medical"
+        ],
+        "education": [
+          "education",
+          "lesson",
+          "course"
+        ],
+        "entertainment": [
+          "game",
+          "entertainment",
+          "contest"
+        ],
+        "celebration": [
+          "celebration",
+          "birthday",
+          "ceremony"
+        ],
+        "volunteer": [
+          "volunteer",
+          "help",
+          "charity"
+        ],
+        "sports": [
+          "sport",
+          "physical",
+          "exercise"
+        ],
+        "culture": [
+          "exhibition",
+          "theater",
+          "cultural"
+        ],
+        "nature": [
+          "nature",
+          "walk",
+          "excursion"
+        ]
       },
       "statuses": {
         "today": "Today",
@@ -6100,10 +6419,26 @@
         "winter": "winter"
       },
       "seasonMonths": {
-        "spring": [2, 3, 4],
-        "summer": [5, 6, 7],
-        "autumn": [8, 9, 10],
-        "winter": [11, 0, 1]
+        "spring": [
+          2,
+          3,
+          4
+        ],
+        "summer": [
+          5,
+          6,
+          7
+        ],
+        "autumn": [
+          8,
+          9,
+          10
+        ],
+        "winter": [
+          11,
+          0,
+          1
+        ]
       },
       "details": {
         "participants": "{{count}} participants"
@@ -6218,37 +6553,104 @@
       },
       "categoryTerms": {
         "sponsor": {
-          "type": ["sponsor", "спонсор"],
+          "type": [
+            "sponsor",
+            "спонсор"
+          ],
           "name": []
         },
         "government": {
-          "type": ["government", "municipal", "държав", "общин"],
-          "name": ["municipal", "city hall", "общин", "кметств"]
+          "type": [
+            "government",
+            "municipal",
+            "държав",
+            "общин"
+          ],
+          "name": [
+            "municipal",
+            "city hall",
+            "общин",
+            "кметств"
+          ]
         },
         "healthcare": {
-          "type": ["medical", "hospital", "health", "медицин", "болниц"],
-          "name": ["hospital", "clinic", "болниц", "поликлиник"]
+          "type": [
+            "medical",
+            "hospital",
+            "health",
+            "медицин",
+            "болниц"
+          ],
+          "name": [
+            "hospital",
+            "clinic",
+            "болниц",
+            "поликлиник"
+          ]
         },
         "education": {
-          "type": ["education", "school", "university", "образов", "школа", "университ"],
-          "name": ["school", "university", "училищ", "университ"]
+          "type": [
+            "education",
+            "school",
+            "university",
+            "образов",
+            "школа",
+            "университ"
+          ],
+          "name": [
+            "school",
+            "university",
+            "училищ",
+            "университ"
+          ]
         },
         "business": {
-          "type": ["business", "company", "corporate", "бизнес", "фирма", "компани"],
+          "type": [
+            "business",
+            "company",
+            "corporate",
+            "бизнес",
+            "фирма",
+            "компани"
+          ],
           "name": []
         },
         "ngo": {
-          "type": ["ngo", "organization", "nonprofit", "нпо"],
-          "name": ["club", "association", "клуб", "сдружение"]
+          "type": [
+            "ngo",
+            "organization",
+            "nonprofit",
+            "нпо"
+          ],
+          "name": [
+            "club",
+            "association",
+            "клуб",
+            "сдружение"
+          ]
         },
         "culture": {
-          "type": ["culture", "arts", "cultural", "култур", "изкуств"],
+          "type": [
+            "culture",
+            "arts",
+            "cultural",
+            "култур",
+            "изкуств"
+          ],
           "name": []
         }
       },
       "priorityTerms": {
-        "high": ["strategic", "sponsor", "стратег", "спонсор"],
-        "medium": ["long-term", "дългосроч"]
+        "high": [
+          "strategic",
+          "sponsor",
+          "стратег",
+          "спонсор"
+        ],
+        "medium": [
+          "long-term",
+          "дългосроч"
+        ]
       },
       "details": {
         "since": "Since",
@@ -6270,7 +6672,7 @@
         "showAll": "Show all partners"
       }
     },
-      "SocialLocation": {
+    "SocialLocation": {
       "defaultCity": "Sofia",
       "header": {
         "badge": "Our location",
@@ -6411,7 +6813,7 @@
       },
       "emailTemplate": "Hello,\n\nYou have received a new message from the website:\n\nName: {{name}}\nEmail: {{email}}\nPhone: {{phone}}\nInquiry type: {{type}}\n\nSubject: {{subject}}\n\nMessage:\n{{message}}\n\n---\nSent from {{clubName}} website"
     },
-     "SportsHero": {
+    "SportsHero": {
       "badge": "Active aging",
       "actions": {
         "writeToUs": "Write to us",
@@ -6433,11 +6835,29 @@
         "yearsActive": "Years active"
       },
       "activityIconTerms": {
-        "yoga": ["yoga", "meditation"],
-        "cardio": ["aerobics", "pool", "swimming"],
-        "strength": ["strength", "fitness", "gym"],
-        "running": ["walking", "running", "jogging"],
-        "dance": ["dance", "dancing"]
+        "yoga": [
+          "yoga",
+          "meditation"
+        ],
+        "cardio": [
+          "aerobics",
+          "pool",
+          "swimming"
+        ],
+        "strength": [
+          "strength",
+          "fitness",
+          "gym"
+        ],
+        "running": [
+          "walking",
+          "running",
+          "jogging"
+        ],
+        "dance": [
+          "dance",
+          "dancing"
+        ]
       },
       "membersButton": "Members ({{count}})",
       "members": {
@@ -6557,18 +6977,53 @@
       },
       "foundedYear": "Founded in {{year}} ({{yearsActive}} years of activity)",
       "facilityTerms": {
-        "aquatic": ["pool", "water", "swimming"],
-        "fitness": ["fitness", "gym", "equipment"],
-        "wellness": ["sauna", "spa", "massage"],
-        "support": ["changing", "room", "office"]
+        "aquatic": [
+          "pool",
+          "water",
+          "swimming"
+        ],
+        "fitness": [
+          "fitness",
+          "gym",
+          "equipment"
+        ],
+        "wellness": [
+          "sauna",
+          "spa",
+          "massage"
+        ],
+        "support": [
+          "changing",
+          "room",
+          "office"
+        ]
       },
       "facilityIconTerms": {
-        "swimming": ["pool", "swimming"],
-        "fitness": ["fitness", "gym", "equipment"],
-        "wellness": ["sauna", "spa"],
-        "sports": ["hall", "room"],
-        "changing": ["changing", "locker"],
-        "medical": ["therapeutic", "medical"]
+        "swimming": [
+          "pool",
+          "swimming"
+        ],
+        "fitness": [
+          "fitness",
+          "gym",
+          "equipment"
+        ],
+        "wellness": [
+          "sauna",
+          "spa"
+        ],
+        "sports": [
+          "hall",
+          "room"
+        ],
+        "changing": [
+          "changing",
+          "locker"
+        ],
+        "medical": [
+          "therapeutic",
+          "medical"
+        ]
       },
       "facilityDescriptions": {
         "swimming": "Suitable for water aerobics and swimming",
@@ -6579,7 +7034,13 @@
         "medical": "For rehabilitation and therapeutic gymnastics",
         "default": "Part of the sports complex"
       },
-      "instructorKeywords": ["trainer", "instructor", "fitness", "sports", "coach"],
+      "instructorKeywords": [
+        "trainer",
+        "instructor",
+        "fitness",
+        "sports",
+        "coach"
+      ],
       "intensityLevels": {
         "low": "low",
         "medium": "medium",
@@ -6663,25 +7124,71 @@
         "every day": "daily"
       },
       "activityIconTerms": {
-        "yoga": ["yoga", "meditation"],
-        "cardio": ["aerobics", "pool", "swimming"],
-        "strength": ["strength", "fitness", "gym"],
-        "running": ["walking", "running", "marathon"],
-        "dance": ["dance"],
-        "gymnastics": ["gymnastics"],
-        "mountain": ["mountain", "hiking"]
+        "yoga": [
+          "yoga",
+          "meditation"
+        ],
+        "cardio": [
+          "aerobics",
+          "pool",
+          "swimming"
+        ],
+        "strength": [
+          "strength",
+          "fitness",
+          "gym"
+        ],
+        "running": [
+          "walking",
+          "running",
+          "marathon"
+        ],
+        "dance": [
+          "dance"
+        ],
+        "gymnastics": [
+          "gymnastics"
+        ],
+        "mountain": [
+          "mountain",
+          "hiking"
+        ]
       },
       "activityColorTerms": {
-        "yoga": ["yoga", "meditation"],
-        "cardio": ["aerobics", "pool"],
-        "strength": ["strength", "fitness"],
-        "running": ["walking", "running"],
-        "dance": ["dance"],
-        "gymnastics": ["gymnastics"]
+        "yoga": [
+          "yoga",
+          "meditation"
+        ],
+        "cardio": [
+          "aerobics",
+          "pool"
+        ],
+        "strength": [
+          "strength",
+          "fitness"
+        ],
+        "running": [
+          "walking",
+          "running"
+        ],
+        "dance": [
+          "dance"
+        ],
+        "gymnastics": [
+          "gymnastics"
+        ]
       },
       "intensityTerms": {
-        "low": ["yoga", "meditation", "light"],
-        "high": ["strength", "running", "intensive"]
+        "low": [
+          "yoga",
+          "meditation",
+          "light"
+        ],
+        "high": [
+          "strength",
+          "running",
+          "intensive"
+        ]
       },
       "intensityLabels": {
         "low": "Low",
@@ -6787,8 +7294,16 @@
         "dance": "Dance"
       },
       "intensityTerms": {
-        "low": ["light", "yoga", "meditation"],
-        "high": ["intensive", "strength", "running"]
+        "low": [
+          "light",
+          "yoga",
+          "meditation"
+        ],
+        "high": [
+          "intensive",
+          "strength",
+          "running"
+        ]
       },
       "intensityLevels": {
         "low": "low",
@@ -6796,26 +7311,71 @@
         "high": "high"
       },
       "categoryTerms": {
-        "aquatic": ["pool", "swimming", "aerobics"],
-        "dance": ["dance"],
-        "wellness": ["yoga", "meditation", "light"],
-        "cardio": ["running", "gymnastics"]
+        "aquatic": [
+          "pool",
+          "swimming",
+          "aerobics"
+        ],
+        "dance": [
+          "dance"
+        ],
+        "wellness": [
+          "yoga",
+          "meditation",
+          "light"
+        ],
+        "cardio": [
+          "running",
+          "gymnastics"
+        ]
       },
       "activityIconTerms": {
-        "wellness": ["yoga", "meditation"],
-        "aquatic": ["pool", "swimming"],
-        "strength": ["strength", "fitness"],
-        "cardio": ["running", "gymnastics"],
-        "dance": ["dance"],
-        "walking": ["walking"]
+        "wellness": [
+          "yoga",
+          "meditation"
+        ],
+        "aquatic": [
+          "pool",
+          "swimming"
+        ],
+        "strength": [
+          "strength",
+          "fitness"
+        ],
+        "cardio": [
+          "running",
+          "gymnastics"
+        ],
+        "dance": [
+          "dance"
+        ],
+        "walking": [
+          "walking"
+        ]
       },
       "activityColorTerms": {
-        "wellness": ["yoga", "meditation"],
-        "aquatic": ["pool", "swimming"],
-        "strength": ["strength", "fitness"],
-        "cardio": ["running", "gymnastics"],
-        "dance": ["dance"],
-        "walking": ["walking"]
+        "wellness": [
+          "yoga",
+          "meditation"
+        ],
+        "aquatic": [
+          "pool",
+          "swimming"
+        ],
+        "strength": [
+          "strength",
+          "fitness"
+        ],
+        "cardio": [
+          "running",
+          "gymnastics"
+        ],
+        "dance": [
+          "dance"
+        ],
+        "walking": [
+          "walking"
+        ]
       },
       "duration": "{{minutes}} min",
       "defaultDuration": "60 min",
@@ -6946,10 +7506,19 @@
       },
       "benefits": "Benefits",
       "frequencies": {
-        "weekly": ["weekly"],
-        "monthly": ["monthly"],
-        "quarterly": ["quarterly"],
-        "yearly": ["yearly", "annually"]
+        "weekly": [
+          "weekly"
+        ],
+        "monthly": [
+          "monthly"
+        ],
+        "quarterly": [
+          "quarterly"
+        ],
+        "yearly": [
+          "yearly",
+          "annually"
+        ]
       },
       "frequencyLabels": {
         "weekly": "Weekly",
@@ -7014,9 +7583,15 @@
       },
       "participants": "{{count}} participants",
       "frequencies": {
-        "weekly": ["weekly"],
-        "monthly": ["monthly"],
-        "daily": ["daily"]
+        "weekly": [
+          "weekly"
+        ],
+        "monthly": [
+          "monthly"
+        ],
+        "daily": [
+          "daily"
+        ]
       },
       "frequencyLabels": {
         "weekly": "Weekly",
@@ -7093,31 +7668,93 @@
         "awards": "Awards"
       },
       "categoryTerms": {
-        "aquatic": ["swimming", "pool", "water"],
-        "team": ["football", "volleyball", "basketball"],
-        "fitness": ["running", "fitness", "marathon"],
-        "outdoor": ["mountain", "trip", "hiking"],
-        "competition": ["competition", "tournament", "championship"]
+        "aquatic": [
+          "swimming",
+          "pool",
+          "water"
+        ],
+        "team": [
+          "football",
+          "volleyball",
+          "basketball"
+        ],
+        "fitness": [
+          "running",
+          "fitness",
+          "marathon"
+        ],
+        "outdoor": [
+          "mountain",
+          "trip",
+          "hiking"
+        ],
+        "competition": [
+          "competition",
+          "tournament",
+          "championship"
+        ]
       },
       "iconTerms": {
-        "swimming": ["swimming", "pool"],
-        "football": ["football"],
-        "volleyball": ["volleyball"],
-        "basketball": ["basketball"],
-        "tennis": ["tennis"],
-        "bowling": ["bowling"],
-        "running": ["running", "marathon"],
-        "cycling": ["cycling", "bike"],
-        "hiking": ["mountain", "hiking"],
-        "competition": ["competition", "tournament"]
+        "swimming": [
+          "swimming",
+          "pool"
+        ],
+        "football": [
+          "football"
+        ],
+        "volleyball": [
+          "volleyball"
+        ],
+        "basketball": [
+          "basketball"
+        ],
+        "tennis": [
+          "tennis"
+        ],
+        "bowling": [
+          "bowling"
+        ],
+        "running": [
+          "running",
+          "marathon"
+        ],
+        "cycling": [
+          "cycling",
+          "bike"
+        ],
+        "hiking": [
+          "mountain",
+          "hiking"
+        ],
+        "competition": [
+          "competition",
+          "tournament"
+        ]
       },
       "colorTerms": {
-        "aquatic": ["swimming", "pool"],
-        "team": ["football", "volleyball"],
-        "running": ["running", "marathon"],
-        "cycling": ["cycling"],
-        "outdoor": ["mountain", "hiking"],
-        "competition": ["competition", "tournament"]
+        "aquatic": [
+          "swimming",
+          "pool"
+        ],
+        "team": [
+          "football",
+          "volleyball"
+        ],
+        "running": [
+          "running",
+          "marathon"
+        ],
+        "cycling": [
+          "cycling"
+        ],
+        "outdoor": [
+          "mountain",
+          "hiking"
+        ],
+        "competition": [
+          "competition",
+          "tournament"
+        ]
       },
       "tripTitle": "Sports trip to {{destination}}",
       "defaultEventType": "Sports event",
@@ -7195,7 +7832,7 @@
         "none": "None"
       }
     },
-      "SportsEventsCalendar": {
+    "SportsEventsCalendar": {
       "header": {
         "badge": "Dynamic calendar",
         "title": "Never miss an important event",
@@ -7219,10 +7856,28 @@
         "education": "Education",
         "trips": "Trips"
       },
-      "weekDaysShort": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+      "weekDaysShort": [
+        "Sun",
+        "Mon",
+        "Tue",
+        "Wed",
+        "Thu",
+        "Fri",
+        "Sat"
+      ],
       "monthNames": [
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
       ],
       "dayMapping": {
         "sunday": 0,
@@ -7235,23 +7890,71 @@
       },
       "everyDay": "every day",
       "categoryTerms": {
-        "sports": ["sport", "gymnastics", "yoga", "fitness", "running", "swimming", "workout"],
-        "cultural": ["choir", "dance", "music", "concert", "performance"],
-        "health": ["health", "lecture", "medical", "checkup"],
-        "education": ["course", "training", "computer", "education"],
-        "trips": ["trip", "travel", "hiking"]
+        "sports": [
+          "sport",
+          "gymnastics",
+          "yoga",
+          "fitness",
+          "running",
+          "swimming",
+          "workout"
+        ],
+        "cultural": [
+          "choir",
+          "dance",
+          "music",
+          "concert",
+          "performance"
+        ],
+        "health": [
+          "health",
+          "lecture",
+          "medical",
+          "checkup"
+        ],
+        "education": [
+          "course",
+          "training",
+          "computer",
+          "education"
+        ],
+        "trips": [
+          "trip",
+          "travel",
+          "hiking"
+        ]
       },
       "priorityTerms": {
-        "high": ["special", "tournament", "competition"],
-        "medium": ["course", "lecture", "trip"]
+        "high": [
+          "special",
+          "tournament",
+          "competition"
+        ],
+        "medium": [
+          "course",
+          "lecture",
+          "trip"
+        ]
       },
       "iconTerms": {
-        "yoga": ["yoga"],
-        "swimming": ["swimming"],
-        "gymnastics": ["gymnastics"],
-        "choir": ["choir"],
-        "dance": ["dance"],
-        "trip": ["trip"]
+        "yoga": [
+          "yoga"
+        ],
+        "swimming": [
+          "swimming"
+        ],
+        "gymnastics": [
+          "gymnastics"
+        ],
+        "choir": [
+          "choir"
+        ],
+        "dance": [
+          "dance"
+        ],
+        "trip": [
+          "trip"
+        ]
       },
       "tripTitle": "Trip: {{destination}}",
       "healthLectureDescription": "Health lecture: {{topic}}",
@@ -7551,9 +8254,15 @@
         "education": "Educational partnership"
       },
       "partnershipTerms": {
-        "health": ["health"],
-        "sports": ["sports"],
-        "education": ["educational"]
+        "health": [
+          "health"
+        ],
+        "sports": [
+          "sports"
+        ],
+        "education": [
+          "educational"
+        ]
       },
       "labels": {
         "discount": "Discount",
@@ -7708,21 +8417,33 @@
           "price": "Usually free",
           "maxTime": "According to workouts",
           "workingHours": "According to complex hours",
-          "features": ["Security", "Video surveillance", "Close to locker rooms"]
+          "features": [
+            "Security",
+            "Video surveillance",
+            "Close to locker rooms"
+          ]
         },
         "street": {
           "type": "Street parking",
           "price": "According to zone",
           "maxTime": "According to regulations",
           "workingHours": "Check road signs",
-          "features": ["Different zones", "Variable prices", "Limited time"]
+          "features": [
+            "Different zones",
+            "Variable prices",
+            "Limited time"
+          ]
         },
         "underground": {
           "type": "Underground parking",
           "price": "Paid",
           "maxTime": "No limit",
           "workingHours": "24/7",
-          "features": ["Security", "Weather protection", "Reservation possible"]
+          "features": [
+            "Security",
+            "Weather protection",
+            "Reservation possible"
+          ]
         }
       },
       "nearby": {
@@ -8321,7 +9042,7 @@
         "emailPrepared": "Email has been prepared for sending!"
       }
     },
-     "TraditionalCostumes": {
+    "TraditionalCostumes": {
       "header": {
         "badge": "Traditions and costumes",
         "title": "Our cultural heritage",
@@ -8746,5 +9467,1901 @@
     "navigation": {
       "home": "Home"
     }
-  }
+  },
+  "clubForm": {
+    "title": "Club Registration",
+    "subtitle": "Create your club profile and share it with the community",
+    "progress": "Step {{current}} of {{total}}",
+    "status": {
+      "draft": "Draft",
+      "lastSaved": "Saved at {{time}}",
+      "unsavedChanges": "Unsaved changes",
+      "active": "Active",
+      "inactive": "Inactive",
+      "suspended": "Suspended"
+    },
+    "steps": {
+      "basic": {
+        "title": "Basic Information",
+        "subtitle": "Name, description and basic details"
+      },
+       "pensioners": {
+        "title": "Pensioners",
+        "subtitle": "Specific services"
+      },
+        "socialImpact": {
+        "title": "Social Impact",
+        "subtitle": "Volunteering and projects"
+      },
+        "achievements": {
+        "title": "Achievements",
+        "subtitle": "Awards and recognitions"
+      },
+      "regional": {
+        "title": "Regional Information",
+        "subtitle": "Define regional role and coverage"
+      },
+      "finances": {
+        "title": "Finances & Sponsors",
+        "subtitle": "Manage budget and partnerships"
+      },
+      "members": {
+        "title": "Members & Management",
+        "subtitle": "Add members and board of directors"
+      },
+      "location": {
+        "title": "Location",
+        "subtitle": "Address and venue information"
+      },
+      "membership": {
+        "title": "Membership",
+        "subtitle": "Member information"
+      },
+      "activities": {
+        "title": "Activities",
+        "subtitle": "Programs and events"
+      },
+      "media": {
+        "title": "Photos & Media",
+        "subtitle": "Gallery and video materials"
+      },
+      "contacts": {
+        "title": "Contacts",
+        "subtitle": "Phone, email and social media"
+      },
+      "settings": {
+        "title": "Settings",
+        "subtitle": "Template and preferences"
+      }
+    },
+    "fields": {
+      "name": {
+        "label": "Club Name",
+        "placeholder": "Enter your club name",
+        "help": "This is the main name that will be displayed everywhere"
+      },
+      "status": {
+        "label": "Club Status",
+        "help": "Current state of the club"
+      },
+      "slug": {
+        "label": "Web Address (URL)",
+        "placeholder": "auto-generated-address",
+        "help": "Automatically generated from the name. You can change it if desired."
+      },
+      "shortDescription": {
+        "label": "Short Description",
+        "placeholder": "Describe your club in a few sentences..."
+      },
+      "fullDescription": {
+        "label": "Full Description",
+        "placeholder": "Tell more about the history, goals and activities of the club...",
+        "help": "This description will be shown on the main club page"
+      },
+      "category": {
+        "label": "Club Category"
+      },
+      "foundedYear": {
+        "label": "Founded Year",
+        "placeholder": "e.g. 1995"
+      }
+    },
+    "categories": {
+      "general": "General Club",
+      "cultural": "Cultural Club",
+      "sports": "Sports Club",
+      "social": "Social Club",
+      "traditional": "Traditional Club"
+    },
+    "template": {
+      "title": "Choose a template for your club",
+      "subtitle": "Each template is specially designed for different types of activities and offers unique features",
+      "recommended": "Recommended",
+      "features": "Features",
+      "moreFeatures": "more features",
+      "select": "Select",
+      "selected": "Selected",
+      "selectThis": "Select this template",
+      "viewPreview": "Preview",
+      "previewAlt": "Preview of {{name}} template",
+      "noPreview": "No preview",
+      "noPreviewAvailable": "Preview not available",
+      "allFeatures": "All features",
+      "difficulty": {
+        "easy": "Easy",
+        "easyDesc": "Perfect for beginners, simple to use",
+        "medium": "Medium",
+        "mediumDesc": "Balanced functionality, suitable for most clubs",
+        "hard": "Advanced",
+        "hardDesc": "Feature-rich, for experienced users"
+      },
+      "help": {
+        "title": "Need help choosing?",
+        "description": "We recommend starting with the 'General Club' template. You can always change the template later from settings."
+      }
+    },
+    "settings": {
+      "visibility": {
+        "title": "Visibility Settings",
+        "subtitle": "Choose what you want to share with visitors"
+      },
+      "preferences": {
+        "publicGallery": {
+          "title": "Public Gallery",
+          "description": "Allows visitors to view the club's photos"
+        },
+        "showFinances": {
+          "title": "Show Financial Information",
+          "description": "Budget, sponsors and other financial data"
+        },
+        "showMembersList": {
+          "title": "Show Members List",
+          "description": "Public list of club members"
+        },
+        "showTestimonials": {
+          "title": "Show Testimonials",
+          "description": "Reviews and opinions from members"
+        },
+        "showNewsSection": {
+          "title": "Show News Section",
+          "description": "News and announcements from the club"
+        },
+        "showStatistics": {
+          "title": "Show Statistics",
+          "description": "Displays information about member count, years of activity, etc."
+        },
+        "showContactForm": {
+          "title": "Contact Form",
+          "description": "Allows visitors to send messages directly"
+        },
+        "allowOnlineRegistration": {
+          "title": "Online Registration",
+          "description": "People can register for events and activities online"
+        },
+        "enableCalendar": {
+          "title": "Event Calendar",
+          "description": "Shows upcoming events and activities in a calendar"
+        },
+        "allowComments": {
+          "title": "Comments",
+          "description": "Allows visitors to leave comments"
+        }
+      }
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "saveDraft": "Save Draft",
+      "preview": "Preview",
+      "previous": "Previous",
+      "next": "Next",
+      "submit": "Publish Club"
+    },
+    "location": {
+      "title": "Club Location",
+      "subtitle": "Specify the address and details of where activities take place",
+      "addressSection": "Address Information",
+      "mapSection": "Map and Location",
+      "venueSection": "Building Details",
+      "fields": {
+        "address": "Address",
+        "city": "City",
+        "municipality": "Municipality",
+        "region": "Region",
+        "postalCode": "Postal Code",
+        "venueType": "Building Type",
+        "size": "Size",
+        "capacity": "Capacity",
+        "accessibility": "Accessible for people with disabilities"
+      },
+      "placeholders": {
+        "address": "Vitosha Str. 1",
+        "city": "Sofia",
+        "municipality": "Sofia Capital",
+        "region": "Select region",
+        "postalCode": "1000",
+        "size": "150 sq.m",
+        "capacity": "50"
+      },
+      "venueTypes": {
+        "municipal": "Municipal Building",
+        "rented": "Rented Building",
+        "owned": "Owned Building",
+        "sportsComplex": "Sports Complex",
+        "culturalCenter": "Cultural Center",
+        "communityCenter": "Community Center",
+        "private": "Private Building"
+      },
+      "facilities": {
+        "title": "Available Facilities",
+        "parking": "Parking",
+        "wifi": "Wi-Fi",
+        "kitchen": "Kitchen",
+        "restroom": "Restroom",
+        "projector": "Projector",
+        "soundSystem": "Sound System",
+        "airConditioning": "Air Conditioning",
+        "heating": "Heating",
+        "storage": "Storage",
+        "garden": "Garden"
+      },
+      "searchPlaceholder": "Search for address or place...",
+      "getCurrentLocation": "My Location",
+      "showMap": "Show Map",
+      "hideMap": "Hide Map",
+      "selectedLocation": "Selected Location",
+      "coordinates": "Coordinates",
+      "geolocationNotSupported": "Geolocation is not supported by your browser",
+      "geolocationError": "Error determining location",
+      "help": {
+       "title": "How to fill in the location?",
+        "description": "Choose your club's location with easy steps:",
+        "addressTip": "Enter address and city - coordinates will be determined automatically",
+        "autoGeocode": "Automatic coordinate finding when entering complete address",
+        "mapClick": "Click on the map for precise positioning",
+        "search": "Use the search function to find specific places"
+      }
+    },
+    "membership": {
+      "title": "Membership & Management",
+      "subtitle": "Configure how the club is managed and membership conditions",
+      "typeSection": "Membership Type",
+      "managementSection": "Management Structure",
+      "feesSection": "Membership Fees",
+      "required": "Required",
+      "custom": "Custom Role",
+      "addCustomRole": "Add Custom Role",
+      "addFee": "Add Membership Fee",
+      
+      "types": {
+        "open": "Open Membership",
+        "openDesc": "Anyone can join freely",
+        "invitation": "By Invitation",
+        "invitationDesc": "Only invited people can join",
+        "application": "By Application",
+        "applicationDesc": "Application approval required",
+        "recommendation": "By Recommendation",
+        "recommendationDesc": "Recommendation from existing member required"
+      },
+      "demographicsSection": "Demographics and Statistics", 
+      "requirementsBenefitsSection": "Requirements and Benefits",
+      "requirements": {
+        "title": "Membership Requirements",
+        "placeholder": "Enter membership requirement...",
+        "empty": "No membership requirements added"
+      },
+       "benefits": {
+        "title": "Membership Benefits",
+        "placeholder": "Enter membership benefit...",
+        "empty": "No membership benefits added"
+      },
+      "fields": {
+        "minimumAge": "Minimum Age",
+        "maxMembers": "Maximum Number of Members",
+        "trialPeriod": "Trial Period (days)",
+        "personName": "Person's Name",
+        "contactInfo": "Contact Information",
+        "termLength": "Term Duration",
+        "totalMembers": "Total Members"
+      },
+      "placeholders": {
+        "unlimited": "Unlimited",
+        "personName": "John Smith",
+        "contactInfo": "john@example.com, +1234567890",
+        "roleName": "Role Name",
+        "roleResponsibilities": "Responsibilities and tasks...",
+        "feeType": "Membership Fee",
+        "feeDescription": "Fee description..."
+      },
+      "ageGroups": {
+        "title": "Age Group Distribution",
+        "members": " members",
+        "under60": "Under 60 years",
+        "under60Desc": "Early retirees and active seniors",
+        "age60to70": "60-70 years",
+        "age60to70Desc": "Newly retired, active members", 
+        "age70to80": "70-80 years",
+        "age70to80Desc": "Experienced members with rich life experience",
+        "age80plus": "Over 80 years",
+        "age80plusDesc": "Honorary and wise club members",
+        "totalCalculated": "Total calculated",
+        "totalMismatch": "Total count doesn't match age group distribution"
+      },
+      "roles": {
+        "president": "President",
+        "presidentDesc": "Leads club activities and represents the club to third parties",
+        "vicePresident": "Vice President",
+        "vicePresidentDesc": "Assists the president and substitutes when necessary",
+        "secretary": "Secretary",
+        "secretaryDesc": "Keeps meeting minutes and manages documentation",
+        "treasurer": "Treasurer",
+        "treasurerDesc": "Responsible for finances and club budget"
+      },
+      "terms": {
+        "yearly": "1 year",
+        "biannual": "2 years",
+        "permanent": "Permanent"
+      },
+      "fees": {
+        "periods": {
+          "monthly": "monthly",
+          "quarterly": "quarterly",
+          "yearly": "yearly",
+          "onetime": "one-time"
+        }
+      },
+      "actions": {
+        "addRole": "Add Role",
+        "addFee": "Add Fee",
+             "addRequirement": "Add Requirement",
+        "removeRequirement": "Remove Requirement", 
+        "addBenefit": "Add Benefit",
+        "removeBenefit": "Remove Benefit"
+      },
+      "help": {
+        "title": "Why is management structure important?",
+        "description": "Clear organization helps the club function better and builds trust among members.",
+        "totalMembers": "Enter the total number of club members"
+      }
+    },
+    "activities": {
+      "title": "Activities & Events",
+      "subtitle": "Create a program of activities and events for your club",
+      "currentActivities": "Current Activities",
+      "addNewActivity": "Add New Activity",
+      "scheduleSection": "Schedule",
+      "participantsSection": "Participants",
+      "feeSection": "Fees",
+      "additionalSection": "Additional Information",
+      "ageRange": "Age group",
+      "years": "years",
+      "capacity": "Capacity",
+      "people": "people",
+      
+      "types": {
+        "regular": "Regular Activity",
+        "event": "Event",
+        "workshop": "Workshop",
+        "seasonal": "Seasonal Activity"
+      },
+       "tabs": {
+        "regular": "Regular Activities",
+        "events": "Events",
+        "trips": "Trips", 
+        "courses": "Courses"
+      },
+      "eventTypes": {
+        "cultural": "Cultural",
+        "traditional": "Traditional",
+        "social": "Social",
+        "charity": "Charity",
+        "community": "Community",
+        "sportsCompetition": "Sports Competition",
+        "wellnessEvent": "Wellness Event",
+        "sportsFestival": "Sports Festival",
+        "swimmingCompetition": "Swimming Competition"
+      },
+      "categories": {
+        "general": "General Activities",
+        "cultural": "Cultural Activities",
+        "sports": "Sports Activities",
+        "educational": "Educational Activities",
+        "social": "Social Activities",
+        "entertainment": "Entertainment Activities",
+        "music": "Music Activities",
+        "arts": "Arts",
+        "charity": "Charity Activities"
+      },
+      "frequency": {
+        "daily": "Daily",
+        "weekly": "Weekly",
+        "biweekly": "Biweekly",
+        "monthly": "Monthly",
+        "onetime": "One-time"
+      },
+      "days": {
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday",
+        "sunday": "Sunday"
+      },
+      "feePeriods": {
+        "session": "per session",
+        "monthly": "monthly",
+        "package": "per package",
+        "annual": "annually"
+      },
+      "fields": {
+        "name": "Activity Name",
+        "type": "Activity Type",
+        "category": "Category",
+        "description": "Description",
+        "frequency": "Frequency",
+        "dayOfWeek": "Day of Week",
+        "startTime": "Start Time",
+        "duration": "Duration",
+        "minAge": "Minimum Age",
+        "maxAge": "Maximum Age",
+        "minCapacity": "Minimum Participants",
+        "maxCapacity": "Maximum Participants",
+        "feeRequired": "Fee Required",
+        "feeAmount": "Fee Amount",
+        "feePeriod": "Fee Period",
+        "instructor": "Instructor/Leader",
+        "requirements": "Requirements",
+        "equipment": "Required Equipment",
+         "day": "Day",
+        "title": "Title",
+        "destination": "Destination",
+        "highlights": "Highlights",
+        "featured": "Featured",
+        "location": "Location",
+        "organizer": "Organizer",
+        "time": "Time",
+         "date": "Date",
+        "price": "Price",
+        "participants": "Participants"
+      },
+      "placeholders": {
+        "name": "Beginner Yoga",
+        "description": "Describe what the activity includes...",
+        "instructor": "Mary Johnson",
+        "requirements": "Comfortable clothes, towel...",
+          "activityName": "Activity name",
+        "eventTitle": "Event title",
+        "eventDescription": "Event description",
+        "destination": "Trip destination",
+        "tripDescription": "Trip description",
+        "courseName": "Course name",
+        "courseDescription": "Course description",
+         "location": "Location",
+        "organizer": "Organizer"
+      },
+      "actions": {
+        "addActivity": "Add Activity",
+         "addEvent": "Add Event",
+        "addTrip": "Add Trip",
+        "addCourse": "Add Course"
+      },
+      "help": {
+        "title": "How to create an attractive program?",
+        "description": "Diverse activities attract different age groups and interests. Include both regular activities and special events."
+      },
+       "uploadImages": "Upload Images",
+      "uploadVideos": "Upload Videos",
+      "imageCaption": "Image caption",
+      "videoCaption": "Video caption",
+      "setMainImage": "Set as main image",
+      "addHighlight": "Add Highlight",
+      "eventMedia": "Event Media",
+      "eventImages": "Event Images",
+      "eventVideos": "Event Videos",
+      "regularActivities": "Regular Activities",
+      "regularActivitiesDesc": "Weekly and recurring club activities",
+      "events": "Events",
+      "eventsDesc": "Special events and celebrations",
+      "trips": "Trips",
+      "tripsDesc": "Organized trips and excursions",
+      "courses": "Courses",
+      "coursesDesc": "Educational courses and workshops",
+      "addRegularActivity": "Add Regular Activity",
+      "addEvent": "Add Event",
+      "addTrip": "Add Trip",
+      "addCourse": "Add Course",
+      
+      "prompts": {
+        "addHighlight": "Enter event highlight:"
+        
+      }
+    },
+    "media": {
+      "title": "Photos & Media",
+      "subtitle": "Upload logo, photos and videos for your club",
+      "tabs": {
+        "logo": "Logo",
+        "mainImage": "Main Image",
+        "gallery": "Gallery",
+        "videos": "Videos",
+        "virtualTour": "Virtual Tour",
+        "audioFiles": "Audio Files"
+      },
+      "categories": {
+        "all": "All",
+        "events": "Events",
+        "activities": "Activities",
+        "members": "Members",
+        "facility": "Facility",
+        "achievements": "Achievements"
+      },
+      "upload": {
+        "logoTitle": "Upload club logo",
+        "logoDescription": "Recommended size: 300x300 pixels, maximum 2MB",
+        "mainImageTitle": "Upload main image",
+        "mainImageDescription": "Image that will be shown on the profile, maximum 5MB",
+        "galleryTitle": "Upload gallery photos",
+        "galleryDescription": "Add photos from events and activities, maximum 10MB each",
+        "videosTitle": "Upload videos",
+        "videosDescription": "Add videos from activities, maximum 100MB each",
+        "virtualTourTitle": "Add Virtual Tour",
+        "virtualTourDescription": "Add URL to virtual 360° tour of the club",
+        "audioFilesTitle": "Upload Audio File",
+        "audioFilesDescription": "Select audio file from your computer"
+      },
+      "formats": {
+        "image": "JPG, PNG, WebP up to 10MB",
+        "video": "MP4, WebM, OGG up to 100MB",
+        "audio": "MP3, WAV, OGG, M4A up to 50MB"
+      },
+      "logo": {
+        "title": "Club Logo",
+        "description": "Upload your club's logo. It will be displayed everywhere in the profile."
+      },
+      "mainImage": {
+        "title": "Main Image",
+        "description": "The main image is displayed at the top of the club profile."
+      },
+      "gallery": {
+        "title": "Photo Gallery",
+        "description": "Share moments from club life - events, activities, celebrations.",
+        "filter": "Filter",
+        "gridView": "Grid",
+        "listView": "List",
+        "mosaicView": "Mosaic",
+        "selectMode": "Select Multiple",
+        "selectAll": "Select All",
+        "clearSelection": "Clear Selection",
+        "deleteSelected": "Delete Selected",
+        "empty": {
+          "title": "No photos yet",
+          "description": "Upload the first photos from club activities"
+        }
+      },
+      "videos": {
+        "title": "Video Gallery",
+        "description": "Upload videos from events, performances and other moments.",
+        "empty": {
+          "title": "No videos yet",
+          "description": "Upload the first videos from club activities"
+        }
+      },
+      "actions": {
+        "preview": "Preview",
+        "edit": "Edit",
+        "delete": "Delete",
+        "star": "Mark as featured",
+        "unstar": "Remove featured mark",
+        "copyLink": "Copy link"
+      },
+      "placeholders": {
+        "title": "Add a title...",
+        "tags": "tags, separated, by commas"
+      },
+      "errors": {
+        "invalidImageFormat": "Invalid image format",
+        "invalidVideoFormat": "Invalid video format",
+        "fileTooLarge": "File is too large (maximum {{size}}MB)",
+        "invalidAudioFormat": "Invalid audio format. Allowed: MP3, WAV, OGG, M4A"
+      },
+      "virtualTour": {
+        "title": "Virtual Tour",
+        "description": "Add URL to interactive 360° tour of the club",
+        "urlLabel": "URL Address",
+        "urlPlaceholder": "https://example.com/virtual-tour",
+        "help": "Enter link to virtual tour from platforms like Google Street View, Matterport or other 360° services",
+        "preview": "Preview",
+        "iframeTitle": "Club Virtual Tour",
+        "openExternal": "Open in new window",
+        "remove": "Remove"
+      },
+      "audioFiles": {
+        "title": "Audio Files",
+        "description": "Add audio recordings related to the club - anthem, songs, speeches etc.",
+        "addNew": "Add Audio File",
+        "fields": {
+          "file": "Audio File",
+          "title": "Title",
+          "description": "Description",
+          "duration": "Duration"
+        },
+        "placeholders": {
+          "title": "Enter audio title",
+          "description": "Brief description of the audio file"
+        },
+        "unsupported": "Your browser does not support audio playback",
+        "empty": {
+          "title": "No audio files added",
+          "description": "Add audio recordings to enrich the club profile"
+        }
+      },
+      "help": {
+        "title": "Tips for good photos",
+        "description": "Quality photos make the club more attractive and help people learn about activities.",
+        "tip1": "Use clear, well-lit photos",
+        "tip2": "Include photos from different activities and events",
+        "tip3": "Add descriptions for easier searching"
+      }
+    },
+    "members": {
+      "title": "Members & Management",
+      "subtitle": "Manage club members and board of directors",
+      "addMember": "Add Member",
+      "tabs": {
+        "members": "Members",
+        "board": "Board of Directors"
+      },
+      "addBoardMember": "Add Board Member",
+
+      "fields": {
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "fullName": "Full Name",
+        "phone": "Phone",
+        "email": "Email",
+        "address": "Address",
+        "role": "Role",
+        "joinDate": "Join Date",
+        "isActive": "Active Member",
+        "bio": "Biography"
+      },
+      "placeholders": {
+        "firstName": "John",
+        "lastName": "Smith",
+        "fullName": "John Smith",
+        "phone": "+1 555 123 4567",
+        "email": "john@example.com",
+        "address": "123 Main Street, New York",
+        "bio": "Brief biography and experience..."
+      },
+      "actions": {
+        "addMember": "Add Member",
+        "addBoardMember": "Add to Board",
+        "edit": "Edit",
+        "delete": "Delete",
+        "uploadPhoto": "Upload Photo",
+        "cancel": "Cancel",
+        "add": "Add"
+      },
+      "search": {
+        "placeholder": "Search by name, email or phone..."
+      },
+      "filter": {
+        "allRoles": "All Roles"
+      },
+      "sort": {
+        "name": "Name",
+        "role": "Role",
+        "joinDate": "Join Date",
+        "ascending": "Ascending",
+        "descending": "Descending"
+      },
+      "bulkActions": "Bulk Actions",
+      "selectAll": "Select All",
+      "clearSelection": "Clear Selection",
+      "deleteSelected": "Delete Selected",
+      "selected": "Selected: {{count}}",
+      "selectMembers": "Select members for bulk actions",
+      "addFirstMember": "Add First Member",
+      "addFirstBoardMember": "Add First Board Member",
+      "active": "Active",
+      "inactive": "Inactive",
+      "photoAlt": "Member photo",
+      "empty": {
+        "title": "No members yet",
+        "description": "Add the first members of the club"
+      },
+      "help": {
+        "title": "Member Management Tips",
+        "description": "Add members and board of directors for a more professional club appearance.",
+        "tip1": "Start by adding the board of directors",
+        "tip2": "Upload photos for a more personal approach",
+        "tip3": "Use bulk actions for efficiency"
+      }
+    },
+    "finances": {
+      "title": "Finances & Sponsors",
+      "subtitle": "Manage club budget, funding sources and sponsors",
+      "tabs": {
+        "budget": "Budget",
+        "funding": "Funding",
+        "sponsors": "Sponsors"
+      },
+      "budget": {
+        "title": "Annual Budget",
+        "description": "Set the annual budget for the club",
+        "yearlyBudget": "Annual Budget",
+        "totalFunding": "Total Funding",
+        "sponsors": "Sponsors"
+      },
+      "funding": {
+        "title": "Funding Sources",
+        "description": "Add different sources of income for the club",
+        "empty": {
+          "title": "No funding sources yet",
+          "description": "Add the first sources of income"
+        }
+      },
+      "sponsors": {
+        "title": "Sponsors & Partners",
+        "description": "Manage club sponsors and business partners",
+        "empty": {
+          "title": "No sponsors yet",
+          "description": "Add the first sponsors and partners"
+        }
+      },
+      "fields": {
+        "yearlyBudget": "Annual Budget",
+        "currency": "Currency",
+        "source": "Source",
+        "amount": "Amount",
+        "type": "Type",
+        "sponsorName": "Sponsor Name",
+        "sponsorType": "Sponsor Type",
+        "contribution": "Contribution",
+        "contact": "Contact",
+        "website": "Website",
+        "address": "Address",
+        "workingHours": "Working Hours",
+        "discount": "Discount",
+        "description": "Description"
+      },
+      "placeholders": {
+        "yearlyBudget": "10000",
+        "source": "Municipal subsidies",
+        "amount": "5000",
+        "sponsorName": "Local Pharmacy",
+        "contribution": "Medical consultations and discounts",
+        "contact": "+1 555 123 4567",
+        "website": "https://sponsor.com",
+        "address": "123 Main Street, New York",
+        "workingHours": "09:00 - 18:00",
+        "discount": "10% discount for members",
+        "description": "Additional information about the sponsor..."
+      },
+      "fundingTypes": {
+        "subsidy": "Subsidies",
+        "membership": "Membership Fees",
+        "donations": "Donations",
+        "events": "Events",
+        "sponsorship": "Sponsorship"
+      },
+      "sponsorTypes": {
+        "services": "Services",
+        "discounts": "Discounts",
+        "goods": "Goods",
+        "money": "Money"
+      },
+      "actions": {
+        "edit": "Edit",
+        "delete": "Delete",
+        "cancel": "Cancel",
+        "add": "Add"
+      },
+      "addFunding": "Add Funding",
+      "addSponsor": "Add Sponsor",
+      "showAmounts": "Show Amounts",
+      "hideAmounts": "Hide Amounts",
+      "help": {
+        "title": "Financial Management Tips",
+        "description": "Transparent financial management builds trust with members and sponsors.",
+        "tip1": "Add all income sources for a clearer picture",
+        "tip2": "Maintain good relationships with sponsors",
+        "tip3": "Regularly update financial information"
+      }
+    },
+    "regional": {
+      "title": "Regional Information",
+      "subtitle": "Define whether the club is central, branch or local, and its regional coverage",
+      "roleTitle": "Regional Role",
+      "roleDescription": "Choose the club's role in the regional network",
+      "roles": {
+        "local": "Local Club",
+        "localDescription": "Independent club serving the local community",
+        "central": "Central Club",
+        "centralDescription": "Main club that coordinates branches in the region",
+        "branch": "Branch",
+        "branchDescription": "Club that is part of a larger regional network"
+      },
+      "centralClub": {
+        "title": "Central Club Connection",
+        "description": "Specify which central club this branch belongs to",
+        "help": "Enter the name or ID of the central club"
+      },
+      "affiliated": {
+        "title": "Affiliated Clubs",
+        "description": "Manage branches and affiliated clubs",
+        "addNew": "Add Affiliated Club",
+        "empty": "No affiliated clubs yet"
+      },
+      "coverage": {
+        "title": "Coverage Area",
+        "description": "Define the geographical area the club serves",
+        "suggestions": "Suggestions",
+        "neighborhood": "Neighborhood",
+        "district": "District",
+        "city": "City",
+        "region": "Region",
+        "national": "National"
+      },
+      "fields": {
+        "centralClubId": "Central Club ID",
+        "clubName": "Club Name",
+        "coverageArea": "Coverage Area"
+      },
+      "placeholders": {
+        "centralClubId": "Senior Club 'Health' - New York",
+        "clubName": "Senior Club 'Westside'",
+        "coverageArea": "Westside District, New York"
+      },
+      "actions": {
+        "cancel": "Cancel",
+        "add": "Add",
+        "remove": "Remove"
+      },
+      "help": {
+        "title": "Regional Organization Tips",
+        "description": "Proper regional organization helps with better coordination and collaboration.",
+        "tip1": "Central clubs coordinate the activities of branches",
+        "tip2": "Branches receive support from the central club",
+        "tip3": "Local clubs work independently in the community"
+      }
+    },
+    "achievements": {
+      "title": "Achievements Management",
+      "subtitle": "Add awards, certificates and recognitions for your club",
+      "tabs": {
+        "awards": "Awards",
+        "certificates": "Certificates",
+        "recognitions": "Recognitions"
+      },
+      "awards": {
+        "title": "Awards and distinctions",
+        "description": "Add important awards and distinctions your club has received",
+        "addNew": "Add award",
+        "by": "by",
+        "fields": {
+          "name": "Award name",
+          "year": "Year",
+          "awardedBy": "Awarded by",
+          "description": "Description"
+        },
+        "placeholders": {
+          "name": "Enter the award name",
+          "year": "Year received",
+          "awardedBy": "Organization that gave the award",
+          "description": "Brief description of the award"
+        },
+        "empty": {
+          "title": "No awards added",
+          "description": "Add your club's first award"
+        }
+      },
+      "certificates": {
+        "title": "Certificates and licenses",
+        "description": "Manage your club's certificates and licenses",
+        "addNew": "Add certificate",
+        "by": "by",
+        "issued": "Issued",
+        "validUntil": "Valid until",
+        "fields": {
+          "name": "Certificate name",
+          "issueDate": "Issue date",
+          "validUntil": "Valid until",
+          "issuedBy": "Issued by"
+        },
+        "placeholders": {
+          "name": "Enter the certificate name",
+          "issuedBy": "Organization that issued the certificate"
+        },
+        "empty": {
+          "title": "No certificates added",
+          "description": "Add your club's first certificate"
+        }
+      },
+      "recognitions": {
+        "title": "Recognitions and testimonials",
+        "description": "Add public recognitions and positive testimonials for the club",
+        "addNew": "Add recognition",
+        "fields": {
+          "recognition": "Recognition"
+        },
+        "placeholders": {
+          "recognition": "Describe the recognition or testimonial"
+        },
+        "empty": {
+          "title": "No recognitions added",
+          "description": "Add the first recognition for your club"
+        }
+      },
+      "actions": {
+        "add": "Add",
+        "edit": "Edit",
+        "save": "Save",
+        "cancel": "Cancel",
+        "delete": "Delete"
+      }
+    },
+    "socialImpact": {
+      "title": "Social Impact Management",
+      "subtitle": "Add volunteer projects, community initiatives and partnerships",
+      "tabs": {
+        "volunteering": "Volunteering",
+        "projects": "Projects",
+        "partnerships": "Partnerships"
+      },
+      "volunteering": {
+        "title": "Volunteer activities",
+        "description": "Manage the club's volunteer projects and initiatives",
+        "addNew": "Add volunteer project",
+        "participants": "participants",
+        "hoursPerMonth": "hours per month",
+        "fields": {
+          "project": "Project name",
+          "participants": "Number of participants",
+          "hoursPerMonth": "Hours per month",
+          "coordinator": "Coordinator",
+          "description": "Description",
+          "frequency": "Frequency",
+          "duration": "Duration"
+        },
+        "placeholders": {
+          "project": "Enter the volunteer project name",
+          "participants": "Number of volunteers",
+          "hoursPerMonth": "Work hours per month",
+          "coordinator": "Responsible person/coordinator",
+          "description": "Description of activities",
+          "frequency": "How often it takes place",
+          "duration": "How long the project lasts"
+        },
+        "empty": {
+          "title": "No volunteer projects added",
+          "description": "Add the club's first volunteer project"
+        }
+      },
+      "projects": {
+        "title": "Community projects",
+        "description": "Manage projects that the club implements for the benefit of the community",
+        "addNew": "Add project",
+        "beneficiaries": "beneficiaries",
+        "statuses": {
+          "active": "Active",
+          "completed": "Completed",
+          "planned": "Planned",
+          "stopped": "Stopped",
+          "seasonal": "Seasonal"
+        },
+        "fields": {
+          "name": "Project name",
+          "description": "Description",
+          "beneficiaries": "Number of beneficiaries",
+          "status": "Status",
+          "budget": "Budget"
+        },
+        "placeholders": {
+          "name": "Enter the project name",
+          "description": "Project description and goals",
+          "beneficiaries": "How many people will benefit",
+          "budget": "Total budget"
+        },
+        "empty": {
+          "title": "No projects added",
+          "description": "Add the first community project"
+        }
+      },
+      "partnerships": {
+        "title": "Partnerships",
+        "description": "Manage partnerships with other organizations and institutions",
+        "addNew": "Add partnership",
+        "types": {
+          "social": "Social",
+          "educational": "Educational",
+          "health": "Health",
+          "cultural": "Cultural",
+          "sports": "Sports",
+          "charity": "Charity"
+        },
+        "fields": {
+          "partner": "Partner",
+          "type": "Partnership type",
+          "description": "Description"
+        },
+        "placeholders": {
+          "partner": "Partner organization name",
+          "description": "Description of the collaboration"
+        },
+        "empty": {
+          "title": "No partnerships added",
+          "description": "Add the club's first partnership"
+        }
+      },
+      "actions": {
+        "add": "Add",
+        "edit": "Edit",
+        "save": "Save",
+        "cancel": "Cancel",
+        "delete": "Delete"
+      }
+    },
+     "pensioners": {
+      "title": "Pensioner Services Management",
+      "subtitle": "Configure specialized services and programs for elderly members",
+      "participants": "participants",
+      "tabs": {
+        "healthServices": "Health Services",
+        "supportServices": "Support Services",
+        "accessibility": "Accessibility",
+        "specialPrograms": "Special Programs",
+        "ageSpecificNeeds": "Age-Specific Needs"
+      },
+      "frequency": {
+        "daily": "Daily",
+        "weekly": "Weekly",
+        "biweekly": "Bi-weekly",
+        "monthly": "Monthly",
+        "quarterly": "Quarterly",
+        "yearly": "Yearly",
+        "24_7": "24/7"
+      },
+      "intensity": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High",
+        "lowToMedium": "Low to Medium"
+      },
+      "healthServices": {
+        "title": "Health Services and Care",
+        "description": "Management of health services and medical support for members",
+        "basic": {
+          "title": "Basic Health Services",
+          "regularCheckups": {
+            "title": "Regular Health Checkups",
+            "description": "Periodic medical consultations and monitoring"
+          },
+          "bloodPressureMonitoring": {
+            "title": "Blood Pressure Monitoring",
+            "description": "Regular measurement and tracking of blood pressure"
+          }
+        },
+        "healthLectures": {
+          "title": "Health Lectures and Seminars",
+          "addNew": "Add Health Lecture",
+          "empty": "No health lectures added",
+          "fields": {
+            "topic": "Lecture Topic",
+            "lecturer": "Lecturer",
+            "frequency": "Frequency",
+            "nextDate": "Next Date",
+            "duration": "Duration"
+          },
+          "placeholders": {
+            "topic": "Enter the lecture topic",
+            "lecturer": "Name of lecturer/specialist",
+            "duration": "E.g.: 90 minutes"
+          }
+        },
+        "medicalPartners": {
+          "title": "Medical Partners",
+          "addNew": "Add Medical Partner",
+          "empty": "No medical partners added"
+        },
+        "emergencyProtocol": {
+          "title": "Emergency Protocol",
+          "hasEmergencyPlan": {
+            "title": "Has Emergency Plan",
+            "description": "The club has a written emergency action plan"
+          },
+          "nearestHospital": "Nearest Hospital",
+          "nearestHospitalPlaceholder": "Name and address of nearest hospital"
+        }
+      },
+      "supportServices": {
+        "title": "Support Services",
+        "description": "Services to assist members with daily activities",
+        "homeVisits": {
+          "title": "Home Visits"
+        },
+        "homeVisitsDesc": "Regular visits to members' homes",
+        "shoppingAssistance": {
+          "title": "Shopping Assistance"
+        },
+        "shoppingAssistanceDesc": "Help with purchases and deliveries",
+        "documentHelp": {
+          "title": "Document Assistance"
+        },
+        "documentHelpDesc": "Help with filling out documents and forms",
+        "companionship": {
+          "title": "Companionship"
+        },
+        "companionshipDesc": "Social visits and friendly support",
+        "transportService": {
+          "title": "Transport Service"
+        },
+        "transportServiceDesc": "Organized transport to and from the club",
+        "mealDelivery": {
+          "title": "Meal Delivery"
+        },
+        "mealDeliveryDesc": "Delivery of prepared meals to homes",
+        "cleaningHelp": {
+          "title": "Cleaning Help"
+        },
+        "cleaningHelpDesc": "Assistance with household chores",
+        "techSupport": {
+          "title": "Tech Support"
+        },
+        "techSupportDesc": "Help with computers, phones and technology"
+      },
+      "accessibility": {
+        "title": "Accessibility and Adaptability",
+        "description": "Measures to ensure an accessible environment for people with disabilities",
+        "wheelchairAccess": {
+          "title": "Wheelchair Access"
+        },
+        "wheelchairAccessDesc": "Ramps and wide entrances for wheelchairs",
+        "elevatorAccess": {
+          "title": "Elevator Access"
+        },
+        "elevatorAccessDesc": "Elevator for access to upper floors",
+        "hearingLoop": {
+          "title": "Hearing Loop"
+        },
+        "hearingLoopDesc": "Hearing assistance system",
+        "largeTextMaterials": {
+          "title": "Large Text Materials"
+        },
+        "largeTextMaterialsDesc": "Printed materials with enlarged font size",
+        "handrails": {
+          "title": "Handrails"
+        },
+        "handrailsDesc": "Handrails along stairs and corridors",
+        "nonSlipFloors": {
+          "title": "Non-slip Floors"
+        },
+        "nonSlipFloorsDesc": "Special flooring to prevent slipping",
+        "goodLighting": {
+          "title": "Good Lighting"
+        },
+        "goodLightingDesc": "Adequate bright lighting in all rooms",
+        "restingAreas": {
+          "title": "Resting Areas"
+        },
+        "restingAreasDesc": "Seating and rest areas throughout the building"
+      },
+      "specialPrograms": {
+        "title": "Special Programs",
+        "description": "Programs specially adapted for the needs of elderly people",
+        "memoryActivities": {
+          "title": "Memory Activities",
+          "addNew": "Add Memory Activity",
+          "empty": "No memory activities added",
+          "fields": {
+            "name": "Activity Name",
+            "frequency": "Frequency",
+            "description": "Description",
+            "instructor": "Instructor",
+            "participants": "Participants"
+          },
+          "placeholders": {
+            "name": "Enter the activity name",
+            "description": "Description of the activity and its goals",
+            "instructor": "Instructor's name",
+            "participants": "Number of participants"
+          }
+        },
+        "intergenerationalPrograms": {
+          "title": "Intergenerational Programs",
+          "addNew": "Add Intergenerational Program",
+          "empty": "No intergenerational programs added"
+        },
+        "volunteerPrograms": {
+          "title": "Volunteer Programs",
+          "addNew": "Add Volunteer Program",
+          "empty": "No volunteer programs added"
+        },
+        "mentalHealthSupport": {
+          "title": "Mental Health Support",
+          "addNew": "Add Mental Health Support",
+          "empty": "No mental health support added"
+        }
+      },
+      "mentalHealth": {
+        "types": {
+          "individual": "Individual",
+          "group": "Group",
+          "family": "Family",
+          "crisis": "Crisis Intervention",
+          "support": "Support Groups",
+          "sports": "Sports Psychology"
+        }
+      },
+      "ageSpecificNeeds": {
+        "title": "Age-Specific Needs",
+        "description": "Services and programs adapted for age-specific requirements",
+        "medicationReminders": {
+          "title": "Medication Reminders",
+          "description": "System for reminding about medication intake"
+        },
+        "lowImpactActivities": {
+          "title": "Low-Impact Activities",
+          "addNew": "Add Low-Impact Activity",
+          "empty": "No low-impact activities added"
+        },
+        "nutritionSupport": {
+          "title": "Nutrition Support",
+          "addNew": "Add Nutrition Support",
+          "empty": "No nutrition support added"
+        }
+      },
+      "actions": {
+        "add": "Add",
+        "edit": "Edit",
+        "save": "Save",
+        "cancel": "Cancel",
+        "delete": "Delete"
+      }
+    },
+      "preview": {
+      "title": "Club Preview",
+      "badge": "PREVIEW",
+      "backToForm": "Back to Form",
+      "loading": "Loading preview...",
+      "defaultName": "New Club",
+      "noLocation": "No location specified",
+      "close": "Close Preview"
+    }
+  },
+    "myClubs":{
+    "clubs": "My Clubs"
+  },
+  "draftClubs": {
+    "title": "Club Drafts",
+    "subtitle": "Manage and complete your unfinished clubs",
+    "createNew": "Create New Club",
+    "loading": "Loading drafts...",
+    "errorTitle": "Error Loading Drafts",
+    "retry": "Try Again",
+    "searchPlaceholder": "Search drafts by name, description, location...",
+    "filters": {
+      "all": "All Drafts",
+      "complete": "Complete",
+      "incomplete": "Incomplete",
+      "general": "General",
+      "cultural": "Cultural",
+      "traditional": "Traditional",
+      "social": "Social",
+      "sports": "Sports"
+    },
+    "sorting": {
+      "newest": "Newest First",
+      "oldest": "Oldest First",
+      "name": "Name A-Z",
+      "category": "Category",
+      "completion": "By Completion"
+    },
+    "resultsInfo": "Showing {{showing}} of {{total}} drafts"
+  },
+  "draftClubs": {
+    "title": "Club-Entwürfe",
+    "subtitle": "Verwalten und vervollständigen Sie Ihre unvollendeten Clubs",
+    "createNew": "Neuen Club erstellen",
+    "loading": "Lade Entwürfe...",
+    "errorTitle": "Fehler beim Laden der Entwürfe",
+    "retry": "Erneut versuchen",
+    "searchPlaceholder": "Entwürfe nach Name, Beschreibung, Ort durchsuchen...",
+    "filters": {
+      "all": "Alle Entwürfe",
+      "complete": "Vollständig",
+      "incomplete": "Unvollständig",
+      "general": "Allgemein",
+      "cultural": "Kulturell",
+      "traditional": "Traditionell",
+      "social": "Sozial",
+      "sports": "Sport"
+    },
+    "sorting": {
+      "newest": "Neueste zuerst",
+      "oldest": "Älteste zuerst",
+      "name": "Name A-Z",
+      "category": "Kategorie",
+      "completion": "Nach Vollständigkeit"
+    },
+    "resultsInfo": "Zeige {{showing}} von {{total}} Entwürfen"
+  },
+  "draftClubsCard": {
+    "categories": {
+      "general": "General",
+      "cultural": "Cultural",
+      "traditional": "Traditional", 
+      "social": "Social",
+      "sports": "Sports"
+    },
+    "completionStatus": {
+      "minimal": "Started",
+      "low": "Partial",
+      "medium": "Advanced",
+      "high": "Ready"
+    },
+    "actions": {
+      "view": "View",
+      "continue": "Continue",
+      "delete": "Delete"
+    },
+    "unnamedDraft": "Unnamed Draft",
+    "noPreview": "No Image",
+    "noDescription": "No description",
+    "neverModified": "Never modified",
+    "modifiedMinutesAgo": "Minutes ago",
+    "modifiedHoursAgo": "{{hours}} hours ago",
+    "modifiedDaysAgo": "{{days}} days ago",
+    "status": {
+      "readyToPublish": "Ready to publish",
+      "needsWork": "Needs work"
+    },
+    "continueEditing": "Continue Editing",
+    "complete": "complete",
+    "deleteModal": {
+      "title": "Confirm Deletion",
+      "message": "Are you sure you want to delete the draft \"{{name}}\"?",
+      "warning": "This action is irreversible and will delete all draft data.",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "deleting": "Deleting..."
+    }
+  },
+    "searchDraftClubsBar": {
+    "defaultPlaceholder": "Search drafts...",
+    "clearSearch": "Clear search",
+    "searchingFor": "Searching for"
+  },
+  "draftClubsFilterDropdown": {
+    "allDrafts": "All Drafts",
+    "clearFilter": "Clear filter",
+    "clearAllFilters": "Clear all filters",
+    "groups": {
+      "status": "Status",
+      "category": "Category"
+    }
+  },
+  "draftClubsSortDropdown": {
+    "defaultSort": "Sort",
+    "sortBy": "Sort by", 
+    "descriptions": {
+      "newest": "Most recently modified drafts first",
+      "oldest": "Oldest drafts first",
+      "name": "Alphabetical order",
+      "category": "Group by category", 
+      "completion": "Most complete drafts first"
+    }
+  },
+  "draftStatsOverview": {
+    "totalDrafts": "Total Drafts",
+    "completeDrafts": "Complete",
+    "incompleteDrafts": "Incomplete",
+    "completionRate": "Progress", 
+    "lastActivity": "Last activity",
+    "noRecentActivity": "No recent activity",
+    "modifiedMinutesAgo": "minutes ago",
+    "modifiedHoursAgo": "{{hours}}h ago",
+    "modifiedDaysAgo": "{{days}}d ago",
+    "insights": {
+      "highCompletion": "Great progress! Most drafts are ready",
+      "moreIncomplete": "Focus on completing your drafts",
+      "manyDrafts": "You have many drafts - time to organize"
+    }
+  },
+  "draftClubsEmptyState": {
+    "noDrafts": {
+      "title": "You don't have any club drafts yet",
+      "description": "Start creating your first club by saving a draft that you can finish later.",
+      "benefitsTitle": "Why use drafts?",
+      "benefit1": "Save your work while completing it gradually",
+      "benefit2": "Never lose your progress",
+      "benefit3": "Return and edit anytime you want",
+      "createFirst": "Create your first draft"
+    },
+    "noResults": {
+      "title": "No drafts found",
+      "searchDescription": "We couldn't find any drafts matching \"{{term}}\"",
+      "filterDescription": "No drafts match the current filters",
+      "currentFilters": "Active filters:",
+      "suggestionsTitle": "Suggestions:",
+      "suggestion1": "Try different keywords",
+      "suggestion2": "Check the spelling of your search term",
+      "suggestion3": "Remove some filters for broader results",
+      "clearFilters": "Clear filters",
+      "createNew": "Create new draft"
+    }
+  },
+  "membershipClubs": {
+    "title": "My Memberships",
+    "subtitle": "Clubs where I am a member",
+    "loading": "Loading memberships...",
+    "discoverClubs": "Discover Clubs",
+    "searchPlaceholder": "Search in my memberships...",
+    "errorTitle": "Error Loading",
+    "retry": "Try Again",
+    "resultsInfo": "Showing {{showing}} of {{total}} memberships",
+    "filters": {
+      "all": "All Memberships",
+      "active": "Active",
+      "inactive": "Inactive",
+      "recent": "New Memberships", 
+      "general": "General",
+      "cultural": "Cultural",
+      "traditional": "Traditional",
+      "social": "Social",
+      "sports": "Sports"
+    },
+    "sorting": {
+      "newest": "Newest Memberships",
+      "oldest": "Oldest Memberships",
+      "name": "Name A-Z", 
+      "members": "Most Members",
+      "activity": "Most Active",
+      "location": "By Location"
+    }
+  },
+  "membershipClubsCard": {
+    "memberBadge": "Member",
+    "noDescription": "No description available",
+    "memberFor": "Member for",
+    "actions": {
+      "view": "View club"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "categories": {
+      "general": "General",
+      "cultural": "Cultural",
+      "traditional": "Traditional",
+      "social": "Social",
+      "sports": "Sports"
+    },
+    "memberSince": {
+      "unknown": "Unknown",
+      "days": "{{count}} days",
+      "months": "{{count}} months", 
+      "years": "{{count}} years"
+    },
+    "activity": {
+      "high": "Very active",
+      "medium": "Active",
+      "low": "Less active", 
+      "none": "Inactive"
+    },
+    "membersCount": "{{count}} members",
+    "eventsCount": "{{count}} events"
+  },
+    "searchMembershipClubsBar": {
+    "defaultPlaceholder": "Search in my memberships...",
+    "clear": "Clear search",
+    "searching": "Searching for"
+  },
+  "membershipClubsFilterDropdown": {
+    "defaultLabel": "Filter",
+    "title": "Filter by"
+  },
+   "membershipClubsSortDropdown": {
+    "defaultLabel": "Sort",
+    "title": "Sort by"
+  },
+  "membershipStatsOverview": {
+    "total": "Total Memberships",
+    "active": "Active Clubs",
+    "recent": "New Memberships", 
+    "avgSize": "Average Size"
+  },
+   "membershipClubsEmptyState": {
+    "noMemberships": {
+      "title": "You're not a member of any clubs yet",
+      "description": "Start exploring and join clubs that match your interests.",
+      "discoverButton": "Discover Clubs",
+      "tipsTitle": "How to find suitable clubs:",
+      "tip1": "Use filters by category and location",
+      "tip2": "Browse recommended clubs",
+      "tip3": "Contact organizers directly"
+    },
+    "noSearchResults": {
+      "title": "No results found",
+      "description": "We couldn't find any clubs you're a member of that match your search for:",
+      "clearButton": "Clear Search",
+      "discoverButton": "Discover New Clubs"
+    },
+    "noFilterResults": {
+      "title": "No clubs for this filter",
+      "description": "There are no clubs you're a member of that match the selected filter.",
+      "filterInfo": "Try a different filter or view all memberships",
+      "clearButton": "Clear Filters", 
+      "discoverButton": "Discover Clubs"
+    }
+  },
+  "clubsAdmin": {
+    "title": "Clubs Administration",
+    "subtitle": "Manage all clubs in the system",
+    "loading": "Loading clubs...",
+    "searchPlaceholder": "Search by name, description, owner, location...",
+    "selectAll": "Select all on this page",
+    
+    "errors": {
+      "noAccess": "You don't have administrative rights to access this page",
+      "fetchFailed": "Failed to load clubs",
+      "title": "An error occurred"
+    },
+    
+    "sort": {
+      "newest": "Newest first",
+      "oldest": "Oldest first",
+      "name": "By name (A-Z)",
+      "status": "By status", 
+      "members": "By members",
+      "location": "By location"
+    },
+    
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next",
+      "info": "Page {{current}} of {{total}}"
+    },
+    
+    "empty": {
+      "title": "No clubs found",
+      "message": "No clubs match your search criteria",
+      "clearFilters": "Clear filters"
+    },
+    
+    "results": {
+      "showing": "Showing {{showing}} of {{total}} clubs (total {{allTotal}})"
+    }
+  },
+  "clubsAdmin": {
+    "title": "Clubs-Verwaltung",
+    "subtitle": "Verwalten Sie alle Clubs im System",
+    "loading": "Clubs werden geladen...",
+    "searchPlaceholder": "Suchen nach Name, Beschreibung, Besitzer, Ort...",
+    "selectAll": "Alle auf dieser Seite auswählen",
+    
+    "errors": {
+      "noAccess": "Sie haben keine Administratorrechte für den Zugriff auf diese Seite",
+      "fetchFailed": "Laden der Clubs fehlgeschlagen", 
+      "title": "Ein Fehler ist aufgetreten"
+    },
+    
+    "sort": {
+      "newest": "Neueste zuerst",
+      "oldest": "Älteste zuerst",
+      "name": "Nach Name (A-Z)",
+      "status": "Nach Status",
+      "members": "Nach Mitgliedern", 
+      "location": "Nach Ort"
+    },
+    
+    "pagination": {
+      "previous": "Vorherige",
+      "next": "Nächste",
+      "info": "Seite {{current}} von {{total}}"
+    },
+    
+    "empty": {
+      "title": "Keine Clubs gefunden",
+      "message": "Keine Clubs entsprechen Ihren Suchkriterien",
+      "clearFilters": "Filter löschen"
+    },
+    
+    "results": {
+      "showing": "Zeige {{showing}} von {{total}} Clubs (gesamt {{allTotal}})"
+    }
+  },
+   "adminClubCard": {
+    "verified": "Verified club",
+    "noDescription": "No description",
+    "noLocation": "No location",
+    "noOwner": "No owner",
+    "noDate": "No date",
+    "members": "members",
+    "created": "Created",
+    
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "draft": "Draft",
+      "suspended": "Suspended",
+      "rejected": "Rejected"
+    },
+    "info": {
+    "title": "Club Information",
+    "clubName": "Club Name",
+    "owner": "Owner",
+    "email": "Email",
+    "phone": "Phone",
+    "createdDate": "Creation Date", 
+    "location": "Location",
+    "members": "Members",
+    "people": "people",
+    "verificationStatus": "Verification Status",
+    "verified": "Verified",
+    "notVerified": "Not Verified",
+    "status": "Status",
+    "notSpecified": "Not specified",
+    "notSpecifiedFeminine": "Not specified"
+  },
+    "actions": {
+      "view": "View",
+      "edit": "Edit",
+      "changeStatus": "Change status",
+      "verify": "Verify",
+      "approve": "Approve",
+      "reject": "Reject",
+      "info": "Information"
+    },
+    
+    "rejectModal": {
+      "title": "Reject club",
+      "description": "Are you sure you want to reject club \"{{clubName}}\"?",
+      "reasonLabel": "Reason for rejection",
+      "reasonPlaceholder": "Enter the reason for rejection...",
+      "cancel": "Cancel",
+      "confirm": "Reject club",
+      "rejecting": "Rejecting..."
+    }
+  },
+  "adminStatsOverview": {
+    "cards": {
+      "total": {
+        "title": "Total clubs",
+        "description": "Total number of clubs in the system"
+      },
+      "active": {
+        "title": "Active",
+        "description": "Clubs with active status"
+      },
+      "pending": {
+        "title": "Pending",
+        "description": "Clubs awaiting approval"
+      },
+      "verified": {
+        "title": "Verified",
+        "description": "Verified clubs"
+      }
+    },
+    
+    "detailed": {
+      "title": "Detailed statistics",
+      "inactive": "Inactive",
+      "draft": "Draft",
+      "suspended": "Suspended",
+      "rejected": "Rejected",
+      "unverified": "Unverified"
+    },
+    
+    "insights": {
+      "title": "Insights and metrics",
+      "healthScore": "Health score",
+      "healthGood": "Excellent system condition",
+      "healthMedium": "Good condition, room for improvement",
+      "healthPoor": "System needs attention",
+      "avgMembers": "Average members",
+      "totalMembers": "Total members",
+      "pendingClubs": "{{count}} clubs awaiting approval",
+      "suspendedClubs": "{{count}} suspended clubs",
+      "lowVerification": "Low verification rate"
+    }
+  },
+  "adminClubFilters": {
+    "filterBy": "Filter by",
+    "clearFilter": "Clear filter",
+    "viewAll": "View all",
+    
+    "options": {
+      "all": "All clubs",
+      "active": "Active",
+      "inactive": "Inactive",
+      "draft": "Draft", 
+      "suspended": "Suspended",
+      "rejected": "Rejected",
+      "verified": "Verified",
+      "unverified": "Unverified",
+      "pending": "Pending approval"
+    },
+    
+    "descriptions": {
+      "all": "All clubs in the system",
+      "active": "Clubs with active status",
+      "inactive": "Clubs with inactive status", 
+      "draft": "Clubs in draft state",
+      "suspended": "Temporarily suspended clubs",
+      "rejected": "Rejected clubs",
+      "verified": "Verified by administrator",
+      "unverified": "Not yet verified",
+      "pending": "Awaiting administrative approval"
+    }
+  },
+  "adminSearchBar": {
+    "placeholder": "Search clubs by name, description, owner, location...",
+    "voiceSearch": "Voice search",
+    "advancedSearch": "Advanced search",
+    "clear": "Clear",
+    "recentSearches": "Recent searches",
+    "clearHistory": "Clear history",
+    "advancedFilters": "Advanced filters",
+    "search": "Search",
+    "reset": "Reset",
+    
+    "searchIn": {
+      "label": "Search in",
+      "all": "All fields",
+      "name": "Club name",
+      "description": "Description",
+      "location": "Location",
+      "owner": "Owner"
+    },
+    
+    "dateRange": {
+      "label": "Date range",
+      "any": "Any time",
+      "today": "Today",
+      "week": "This week",
+      "month": "This month",
+      "year": "This year"
+    },
+    
+    "shortcuts": {
+      "esc": "ESC to clear/close"
+    }
+  },
+  "adminClubActions": {
+    "selected": "{{count}} selected",
+    "bulkAction": "Bulk action",
+    "processing": "Processing...",
+    "cancel": "Cancel",
+    "confirmAction": "Confirm action on {{count}} clubs",
+    "affectedClubs": "{{count}} clubs will be affected",
+    "newStatus": "New status",
+    
+    "buttons": {
+      "approve": "Approve",
+      "changeStatus": "Change status",
+      "delete": "Delete"
+    },
+    
+    "tooltips": {
+      "approve": "Approve selected clubs",
+      "changeStatus": "Change status of selected clubs",
+      "delete": "Delete selected clubs",
+      "clear": "Clear selection"
+    },
+    
+    "statusOptions": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "suspended": "Suspended"
+    },
+    
+    "actions": {
+      "approve": {
+        "title": "Approve clubs",
+        "description": "Selected clubs will be approved and activated. Their owners will receive email notifications.",
+        "confirm": "Approve clubs",
+        "button": "Approve all"
+      },
+      "delete": {
+        "title": "Delete clubs",
+        "description": "Selected clubs will be permanently deleted. This action cannot be undone!",
+        "confirm": "Delete clubs",
+        "button": "Delete all"
+      },
+      "updateStatus": {
+        "title": "Change status",
+        "description": "The status of selected clubs will be changed. Their owners will receive notifications.",
+        "confirm": "Change status",
+        "button": "Apply changes"
+      }
+    }
+  },
+  "adminClubModal": {
+    "cancel": "Cancel",
+    "processing": "Processing...",
+    "members": "members", 
+    "verified": "Verified",
+    "warningTitle": "Warning!",
+    "infoTitle": "Information",
+    "dangerousAction": "This action may have serious consequences.",
+    "actionInfo": "Please review carefully before proceeding.",
+    
+    "statuses": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "draft": "Draft", 
+      "suspended": "Suspended",
+      "rejected": "Rejected"
+    },
+    
+    "reject": {
+      "title": "Reject club",
+      "description": "Are you sure you want to reject club \"{{clubName}}\"?",
+      "confirm": "Reject club"
+    },
+    
+    "approve": {
+      "title": "Approve club",
+      "description": "Club \"{{clubName}}\" will be approved and activated.",
+      "confirm": "Approve club"
+    },
+    
+    "delete": {
+      "title": "Delete club",
+      "description": "Club \"{{clubName}}\" will be permanently deleted. This action cannot be undone!",
+      "confirm": "Delete club"
+    },
+    
+    "verify": {
+      "title": "Verify club",
+      "description": "Club \"{{clubName}}\" will be marked as verified.",
+      "confirm": "Verify club"
+    },
+    
+    "status": {
+      "title": "Change status",
+      "description": "The status of club \"{{clubName}}\" will be changed to {{status}}.",
+      "confirm": "Change status"
+    },
+    
+    "transfer": {
+      "title": "Transfer ownership",
+      "description": "Ownership of club \"{{clubName}}\" will be transferred.",
+      "confirm": "Transfer ownership"
+    },
+    
+    "fields": {
+      "reason": {
+        "label": "Reason for rejection",
+        "placeholder": "Enter a detailed reason for rejection..."
+      },
+      "email": {
+        "label": "New owner's email",
+        "placeholder": "example@email.com"
+      },
+      "confirmation": {
+        "label": "Confirmation",
+        "instruction": "Please type \"{{clubName}}\" to confirm:"
+      }
+    },
+    
+    "validation": {
+      "reasonRequired": "Reason is required",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Invalid email format",
+      "confirmationMismatch": "Confirmation does not match club name"
+    },
+    
+    "statusChange": {
+      "info": "New status will be: {{status}}"
+    }
+  },
+  "pending": {
+  "title": "Pending approval",
+  "description": "Clubs submitted for administrative approval"
+}
+
 }
