@@ -28,18 +28,27 @@ import {
   faStar
 } from '@fortawesome/free-solid-svg-icons';
 import './clubActivities.css';
+import { useClubContext } from '../../../../contexts/ClubContext';
 
 export const ClubActivities = ({ club }) => {
   const { t } = useTranslation();
+  const { 
+    registerForEvent,
+    sendMembershipApplication,
+    sendVolunteerApplication
+  } = useClubContext();
+  
   const [showRegistrationModal, setShowRegistrationModal] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [registrationForm, setRegistrationForm] = useState({
-    firstName: '',
-    lastName: '',
-    phone: '',
+    name: '',
     email: '',
+    phone: '',
     experience: '',
-    notes: ''
+    numberOfParticipants: 1,
+    specialRequests: '',
+    emergencyContact: '',
+    expectations: ''
   });
   const [formStatus, setFormStatus] = useState(null);
 
@@ -300,12 +309,14 @@ export const ClubActivities = ({ club }) => {
     setShowRegistrationModal(true);
     setFormStatus(null);
     setRegistrationForm({
-      firstName: '',
-      lastName: '',
-      phone: '',
+      name: '',
       email: '',
+      phone: '',
       experience: '',
-      notes: ''
+      numberOfParticipants: 1,
+      specialRequests: '',
+      emergencyContact: '',
+      expectations: ''
     });
   };
 
@@ -322,50 +333,236 @@ export const ClubActivities = ({ club }) => {
     setRegistrationForm(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleRegistrationSubmit = (e) => {
+  const handleRegistrationSubmit = async (e) => {
     e.preventDefault();
     if (!selectedActivity) return;
     
+    // Валидация
+    if (!registrationForm.name.trim() || !registrationForm.email.trim() || !registrationForm.phone.trim()) {
+      alert('Моля, попълнете всички задължителни полета');
+      return;
+    }
+
+    // Валидация на имейл
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(registrationForm.email)) {
+      alert('Моля, въведете валиден имейл адрес');
+      return;
+    }
+    
     setFormStatus('sending');
 
-    const recipientEmail = club?.contacts?.basic?.email || club?.contacts?.email;
-    
-    if (recipientEmail) {
-      try {
-        const subject = encodeURIComponent(`Записване за ${selectedActivity.displayName || 'дейност'}`);
-        
-        const body = encodeURIComponent(`Здравейте,
+    try {
+      let success = false;
+      
+      // Избираме правилната API функция според типа дейност
+      if (selectedActivity.type === 'event') {
+        // За събития използваме eventRegistrationSchema
+        success = await registerForEvent(club.id, selectedActivity.id, {
+          name: registrationForm.name,
+          email: registrationForm.email,
+          phone: registrationForm.phone,
+          numberOfParticipants: registrationForm.numberOfParticipants || 1,
+          specialRequests: registrationForm.specialRequests || ''
+        });
+      } else if (selectedActivity.type === 'course') {
+        // За курсове използваме courseRegistrationSchema чрез registerForEvent
+        success = await registerForEvent(club.id, selectedActivity.id, {
+          name: registrationForm.name,
+          email: registrationForm.email,
+          phone: registrationForm.phone,
+          experience: registrationForm.experience || '',
+          expectations: registrationForm.expectations || ''
+        });
+      } else if (selectedActivity.type === 'trip') {
+        // За екскурзии използваме tripRegistrationSchema чрез registerForEvent
+        success = await registerForEvent(club.id, selectedActivity.id, {
+          name: registrationForm.name,
+          email: registrationForm.email,
+          phone: registrationForm.phone,
+          numberOfParticipants: registrationForm.numberOfParticipants || 1,
+          emergencyContact: registrationForm.emergencyContact || '',
+          specialRequests: registrationForm.specialRequests || ''
+        });
+      } else {
+        // За редовни дейности използваме membershipApplicationSchema
+        success = await sendMembershipApplication(club.id, {
+          name: registrationForm.name,
+          email: registrationForm.email,
+          phone: registrationForm.phone,
+          experience: registrationForm.experience || '',
+          motivation: `Искам да се запиша за: ${selectedActivity.displayName}`
+        });
+      }
 
-Искам да се запиша за: ${selectedActivity.displayName || 'дейност'}
-Ден: ${getDayInBulgarian(selectedActivity.day)}
-Час: ${selectedActivity.time || '—'}
-${selectedActivity.instructor ? `Инструктор: ${selectedActivity.instructor}` : ''}
-
-Моите данни:
-Име: ${registrationForm.firstName}
-Фамилия: ${registrationForm.lastName}
-Телефон: ${registrationForm.phone}
-Email: ${registrationForm.email}
-${registrationForm.experience ? `Опит: ${registrationForm.experience}` : ''}
-${registrationForm.notes ? `Бележки: ${registrationForm.notes}` : ''}
-
-С уважение,
-${registrationForm.firstName} ${registrationForm.lastName}`);
-
-        window.location.href = `mailto:${recipientEmail}?subject=${subject}&body=${body}`;
+      if (success) {
         setFormStatus('success');
-        
         setTimeout(() => {
           closeRegistrationModal();
         }, 2000);
-      } catch (error) {
-        console.error('Error sending email:', error);
+      } else {
         setFormStatus('error');
-        setTimeout(() => setFormStatus(null), 3000);
       }
-    } else {
+    } catch (error) {
+      console.error('Error submitting registration:', error);
       setFormStatus('error');
+    }
+    
+    if (formStatus === 'error') {
       setTimeout(() => setFormStatus(null), 3000);
+    }
+  };
+
+  // Функция за рендериране на различни полета според типа дейност
+  const renderFormFields = () => {
+    if (!selectedActivity) return null;
+
+    const commonFields = (
+      <>
+        <div className="general-form-row">
+          <div className="general-form-group">
+            <label>Име *</label>
+            <input
+              type="text"
+              value={registrationForm.name}
+              onChange={(e) => handleFormChange('name', e.target.value)}
+              placeholder="Въведете вашето име"
+              required
+            />
+          </div>
+          
+          <div className="general-form-group">
+            <label>Email *</label>
+            <input
+              type="email"
+              value={registrationForm.email}
+              onChange={(e) => handleFormChange('email', e.target.value)}
+              placeholder="име@email.com"
+              required
+            />
+          </div>
+        </div>
+        
+        <div className="general-form-group">
+          <label>Телефон *</label>
+          <input
+            type="tel"
+            value={registrationForm.phone}
+            onChange={(e) => handleFormChange('phone', e.target.value)}
+            placeholder="0888 123 456"
+            required
+          />
+        </div>
+      </>
+    );
+
+    if (selectedActivity.type === 'event') {
+      return (
+        <>
+          {commonFields}
+          <div className="general-form-group">
+            <label>Брой участници</label>
+            <input
+              type="number"
+              min="1"
+              max="10"
+              value={registrationForm.numberOfParticipants}
+              onChange={(e) => handleFormChange('numberOfParticipants', parseInt(e.target.value))}
+            />
+          </div>
+          <div className="general-form-group">
+            <label>Специални изисквания</label>
+            <textarea
+              value={registrationForm.specialRequests}
+              onChange={(e) => handleFormChange('specialRequests', e.target.value)}
+              placeholder="Диетични ограничения, нужда от достъпност и др."
+              rows="3"
+            />
+          </div>
+        </>
+      );
+    } else if (selectedActivity.type === 'course') {
+      return (
+        <>
+          {commonFields}
+          <div className="general-form-group">
+            <label>Опит</label>
+            <select
+              value={registrationForm.experience}
+              onChange={(e) => handleFormChange('experience', e.target.value)}
+            >
+              <option value="">Изберете ниво</option>
+              <option value="none">Няма опит</option>
+              <option value="beginner">Начинаещ</option>
+              <option value="intermediate">Среднонапреднал</option>
+              <option value="advanced">Напреднал</option>
+            </select>
+          </div>
+          <div className="general-form-group">
+            <label>Очаквания от курса</label>
+            <textarea
+              value={registrationForm.expectations}
+              onChange={(e) => handleFormChange('expectations', e.target.value)}
+              placeholder="Какво се надявате да научите..."
+              rows="3"
+            />
+          </div>
+        </>
+      );
+    } else if (selectedActivity.type === 'trip') {
+      return (
+        <>
+          {commonFields}
+          <div className="general-form-group">
+            <label>Брой участници</label>
+            <input
+              type="number"
+              min="1"
+              max="10"
+              value={registrationForm.numberOfParticipants}
+              onChange={(e) => handleFormChange('numberOfParticipants', parseInt(e.target.value))}
+            />
+          </div>
+          <div className="general-form-group">
+            <label>Спешен контакт</label>
+            <input
+              type="text"
+              value={registrationForm.emergencyContact}
+              onChange={(e) => handleFormChange('emergencyContact', e.target.value)}
+              placeholder="Име и телефон на близък човек"
+            />
+          </div>
+          <div className="general-form-group">
+            <label>Специални изисквания</label>
+            <textarea
+              value={registrationForm.specialRequests}
+              onChange={(e) => handleFormChange('specialRequests', e.target.value)}
+              placeholder="Медицински условия, диетични ограничения и др."
+              rows="3"
+            />
+          </div>
+        </>
+      );
+    } else {
+      // За редовни дейности
+      return (
+        <>
+          {commonFields}
+          <div className="general-form-group">
+            <label>Опит</label>
+            <select
+              value={registrationForm.experience}
+              onChange={(e) => handleFormChange('experience', e.target.value)}
+            >
+              <option value="">Изберете ниво</option>
+              <option value="none">Няма опит</option>
+              <option value="beginner">Начинаещ</option>
+              <option value="intermediate">Среднонапреднал</option>
+              <option value="advanced">Напреднал</option>
+            </select>
+          </div>
+        </>
+      );
     }
   };
 
@@ -613,76 +810,7 @@ ${registrationForm.firstName} ${registrationForm.lastName}`);
 
               {/* Registration Form */}
               <form onSubmit={handleRegistrationSubmit} className="general-registration-form">
-                <div className="general-form-row">
-                  <div className="general-form-group">
-                    <label>Име *</label>
-                    <input
-                      type="text"
-                      value={registrationForm.firstName}
-                      onChange={(e) => handleFormChange('firstName', e.target.value)}
-                      placeholder="Въведете вашето име"
-                      required
-                    />
-                  </div>
-                  
-                  <div className="general-form-group">
-                    <label>Фамилия *</label>
-                    <input
-                      type="text"
-                      value={registrationForm.lastName}
-                      onChange={(e) => handleFormChange('lastName', e.target.value)}
-                      placeholder="Въведете вашата фамилия"
-                      required
-                    />
-                  </div>
-                </div>
-                
-                <div className="general-form-row">
-                  <div className="general-form-group">
-                    <label>Телефон *</label>
-                    <input
-                      type="tel"
-                      value={registrationForm.phone}
-                      onChange={(e) => handleFormChange('phone', e.target.value)}
-                      placeholder="0888 123 456"
-                      required
-                    />
-                  </div>
-                  
-                  <div className="general-form-group">
-                    <label>Email</label>
-                    <input
-                      type="email"
-                      value={registrationForm.email}
-                      onChange={(e) => handleFormChange('email', e.target.value)}
-                      placeholder="име@email.com"
-                    />
-                  </div>
-                </div>
-                
-                <div className="general-form-group">
-                  <label>Опит</label>
-                  <select
-                    value={registrationForm.experience}
-                    onChange={(e) => handleFormChange('experience', e.target.value)}
-                  >
-                    <option value="">Изберете ниво</option>
-                    <option value="none">Няма опит</option>
-                    <option value="beginner">Начинаещ</option>
-                    <option value="intermediate">Среднонапреднал</option>
-                    <option value="advanced">Напреднал</option>
-                  </select>
-                </div>
-                
-                <div className="general-form-group">
-                  <label>Бележки</label>
-                  <textarea
-                    value={registrationForm.notes}
-                    onChange={(e) => handleFormChange('notes', e.target.value)}
-                    placeholder="Допълнителна информация или въпроси..."
-                    rows="3"
-                  />
-                </div>
+                {renderFormFields()}
                 
                 <button 
                   type="submit" 
@@ -721,16 +849,16 @@ ${registrationForm.firstName} ${registrationForm.lastName}`);
               <div className="general-contact-info">
                 <p>Можете да се свържете директно:</p>
                 <div className="general-contact-methods">
-                  {(club?.contacts?.basic?.phone || club?.contacts?.phone) && (
-                    <a href={`tel:${club.contacts.basic?.phone || club.contacts.phone}`} className="general-contact-method">
+                  {(club?.clubDetails?.contacts?.phone || club?.contacts?.phone) && (
+                    <a href={`tel:${club.clubDetails?.contacts?.phone || club.contacts?.phone}`} className="general-contact-method">
                       <FontAwesomeIcon icon={faPhone} />
-                      {club.contacts.basic?.phone || club.contacts.phone}
+                      {club.clubDetails?.contacts?.phone || club.contacts?.phone}
                     </a>
                   )}
-                  {(club?.contacts?.basic?.email || club?.contacts?.email) && (
-                    <a href={`mailto:${club.contacts.basic?.email || club.contacts.email}`} className="general-contact-method">
+                  {(club?.clubDetails?.contacts?.email || club?.contacts?.email) && (
+                    <a href={`mailto:${club.clubDetails?.contacts?.email || club.contacts?.email}`} className="general-contact-method">
                       <FontAwesomeIcon icon={faEnvelope} />
-                      {club.contacts.basic?.email || club.contacts.email}
+                      {club.clubDetails?.contacts?.email || club.contacts?.email}
                     </a>
                   )}
                 </div>

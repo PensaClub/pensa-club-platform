@@ -27,9 +27,16 @@ import {
   faChevronRight
 } from '@fortawesome/free-solid-svg-icons';
 import './clubEvents.css';
+import { useClubContext } from '../../../../contexts/ClubContext';
 
 export const ClubEvents = ({ club }) => {
   const { t } = useTranslation();
+  const { 
+    registerForEvent,
+    sendMembershipApplication,
+    sendVolunteerApplication
+  } = useClubContext();
+  
   const [activeTab, setActiveTab] = useState('upcoming');
   const [showEventModal, setShowEventModal] = useState(false);
   const [showTripModal, setShowTripModal] = useState(false);
@@ -38,11 +45,14 @@ export const ClubEvents = ({ club }) => {
   const [selectedTrip, setSelectedTrip] = useState(null);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [registrationForm, setRegistrationForm] = useState({
-    firstName: '',
-    lastName: '',
-    phone: '',
+    name: '',
     email: '',
-    notes: ''
+    phone: '',
+    numberOfParticipants: 1,
+    specialRequests: '',
+    emergencyContact: '',
+    experience: '',
+    expectations: ''
   });
   const [formStatus, setFormStatus] = useState(null);
 
@@ -149,6 +159,17 @@ export const ClubEvents = ({ club }) => {
   const openEventModal = (event) => {
     setSelectedEvent(event);
     setShowEventModal(true);
+    setFormStatus(null);
+    setRegistrationForm({
+      name: '',
+      email: '',
+      phone: '',
+      numberOfParticipants: 1,
+      specialRequests: '',
+      emergencyContact: '',
+      experience: '',
+      expectations: ''
+    });
   };
 
   const openTripModal = (trip) => {
@@ -156,17 +177,31 @@ export const ClubEvents = ({ club }) => {
     setShowTripModal(true);
     setFormStatus(null);
     setRegistrationForm({
-      firstName: '',
-      lastName: '',
-      phone: '',
+      name: '',
       email: '',
-      notes: ''
+      phone: '',
+      numberOfParticipants: 1,
+      specialRequests: '',
+      emergencyContact: '',
+      experience: '',
+      expectations: ''
     });
   };
 
   const openCourseModal = (course) => {
     setSelectedCourse(course);
     setShowCourseModal(true);
+    setFormStatus(null);
+    setRegistrationForm({
+      name: '',
+      email: '',
+      phone: '',
+      numberOfParticipants: 1,
+      specialRequests: '',
+      emergencyContact: '',
+      experience: '',
+      expectations: ''
+    });
   };
 
   const closeModals = () => {
@@ -184,42 +219,143 @@ export const ClubEvents = ({ club }) => {
     setRegistrationForm(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleTripRegistration = (e) => {
+  // Записване за събитие
+  const handleEventRegistration = async (e) => {
     e.preventDefault();
+    if (!selectedEvent) return;
+    
+    // Валидация
+    if (!registrationForm.name.trim() || !registrationForm.email.trim() || !registrationForm.phone.trim()) {
+      alert('Моля, попълнете всички задължителни полета');
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(registrationForm.email)) {
+      alert('Моля, въведете валиден имейл адрес');
+      return;
+    }
+    
     setFormStatus('sending');
 
-    const recipientEmail = club.contacts?.email;
-    
-    if (recipientEmail) {
-      const subject = encodeURIComponent(t('clubs.ClubEvents.trips.emailSubject', { 
-        destination: selectedTrip.destination 
-      }));
-      
-      const body = encodeURIComponent(t('clubs.ClubEvents.trips.emailBody', {
-        firstName: registrationForm.firstName,
-        lastName: registrationForm.lastName,
-        phone: registrationForm.phone,
+    try {
+      const success = await registerForEvent(club.id, selectedEvent.id, {
+        name: registrationForm.name,
         email: registrationForm.email,
-        destination: selectedTrip.destination,
-        date: formatDate(selectedTrip.date).fullDate,
-        price: selectedTrip.price,
-        notes: registrationForm.notes || t('clubs.ClubEvents.form.none'),
-        clubName: club.name
-      }));
+        phone: registrationForm.phone,
+        numberOfParticipants: registrationForm.numberOfParticipants || 1,
+        specialRequests: registrationForm.specialRequests || ''
+      });
 
-      try {
-        window.location.href = `mailto:${recipientEmail}?subject=${subject}&body=${body}`;
+      if (success) {
         setFormStatus('success');
-        
         setTimeout(() => {
           closeModals();
         }, 2000);
-      } catch (error) {
+      } else {
         setFormStatus('error');
-        setTimeout(() => setFormStatus(null), 3000);
       }
-    } else {
+    } catch (error) {
+      console.error('Error registering for event:', error);
       setFormStatus('error');
+    }
+    
+    if (formStatus === 'error') {
+      setTimeout(() => setFormStatus(null), 3000);
+    }
+  };
+
+  // Записване за екскурзия
+  const handleTripRegistration = async (e) => {
+    e.preventDefault();
+    if (!selectedTrip) return;
+    
+    // Валидация
+    if (!registrationForm.name.trim() || !registrationForm.email.trim() || !registrationForm.phone.trim()) {
+      alert('Моля, попълнете всички задължителни полета');
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(registrationForm.email)) {
+      alert('Моля, въведете валиден имейл адрес');
+      return;
+    }
+    
+    setFormStatus('sending');
+
+    try {
+      // За екскурзии използваме tripRegistrationSchema чрез registerForEvent
+      const success = await registerForEvent(club.id, selectedTrip.id || `trip-${selectedTrip.destination}`, {
+        name: registrationForm.name,
+        email: registrationForm.email,
+        phone: registrationForm.phone,
+        numberOfParticipants: registrationForm.numberOfParticipants || 1,
+        emergencyContact: registrationForm.emergencyContact || '',
+        specialRequests: registrationForm.specialRequests || ''
+      });
+
+      if (success) {
+        setFormStatus('success');
+        setTimeout(() => {
+          closeModals();
+        }, 2000);
+      } else {
+        setFormStatus('error');
+      }
+    } catch (error) {
+      console.error('Error registering for trip:', error);
+      setFormStatus('error');
+    }
+    
+    if (formStatus === 'error') {
+      setTimeout(() => setFormStatus(null), 3000);
+    }
+  };
+
+  // Записване за курс
+  const handleCourseRegistration = async (e) => {
+    e.preventDefault();
+    if (!selectedCourse) return;
+    
+    // Валидация
+    if (!registrationForm.name.trim() || !registrationForm.email.trim() || !registrationForm.phone.trim()) {
+      alert('Моля, попълнете всички задължителни полета');
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(registrationForm.email)) {
+      alert('Моля, въведете валиден имейл адрес');
+      return;
+    }
+    
+    setFormStatus('sending');
+
+    try {
+      // За курсове използваме courseRegistrationSchema чрез registerForEvent
+      const success = await registerForEvent(club.id, selectedCourse.id || `course-${selectedCourse.name}`, {
+        name: registrationForm.name,
+        email: registrationForm.email,
+        phone: registrationForm.phone,
+        experience: registrationForm.experience || '',
+        expectations: registrationForm.expectations || ''
+      });
+
+      if (success) {
+        setFormStatus('success');
+        setTimeout(() => {
+          closeModals();
+        }, 2000);
+      } else {
+        setFormStatus('error');
+      }
+    } catch (error) {
+      console.error('Error registering for course:', error);
+      setFormStatus('error');
+    }
+    
+    if (formStatus === 'error') {
       setTimeout(() => setFormStatus(null), 3000);
     }
   };
@@ -325,6 +461,137 @@ export const ClubEvents = ({ club }) => {
     } else {
       navigator.clipboard.writeText(`${event.title} - ${window.location.href}`);
       alert(t('clubs.ClubEvents.messages.linkCopied'));
+    }
+  };
+
+  // Функция за рендериране на различни полета според типа
+  const renderRegistrationFields = (type) => {
+    const commonFields = (
+      <>
+        <div className="general-form-group">
+          <label>Име *</label>
+          <input
+            type="text"
+            value={registrationForm.name}
+            onChange={(e) => handleFormChange('name', e.target.value)}
+            placeholder="Въведете вашето име"
+            required
+          />
+        </div>
+        
+        <div className="general-form-row">
+          <div className="general-form-group">
+            <label>Email *</label>
+            <input
+              type="email"
+              value={registrationForm.email}
+              onChange={(e) => handleFormChange('email', e.target.value)}
+              placeholder="име@email.com"
+              required
+            />
+          </div>
+          
+          <div className="general-form-group">
+            <label>Телефон *</label>
+            <input
+              type="tel"
+              value={registrationForm.phone}
+              onChange={(e) => handleFormChange('phone', e.target.value)}
+              placeholder="0888 123 456"
+              required
+            />
+          </div>
+        </div>
+      </>
+    );
+
+    if (type === 'event') {
+      return (
+        <>
+          {commonFields}
+          <div className="general-form-group">
+            <label>Брой участници</label>
+            <input
+              type="number"
+              min="1"
+              max="10"
+              value={registrationForm.numberOfParticipants}
+              onChange={(e) => handleFormChange('numberOfParticipants', parseInt(e.target.value))}
+            />
+          </div>
+          <div className="general-form-group">
+            <label>Специални изисквания</label>
+            <textarea
+              value={registrationForm.specialRequests}
+              onChange={(e) => handleFormChange('specialRequests', e.target.value)}
+              placeholder="Диетични ограничения, нужда от достъпност и др."
+              rows="3"
+            />
+          </div>
+        </>
+      );
+    } else if (type === 'trip') {
+      return (
+        <>
+          {commonFields}
+          <div className="general-form-group">
+            <label>Брой участници</label>
+            <input
+              type="number"
+              min="1"
+              max="10"
+              value={registrationForm.numberOfParticipants}
+              onChange={(e) => handleFormChange('numberOfParticipants', parseInt(e.target.value))}
+            />
+          </div>
+          <div className="general-form-group">
+            <label>Спешен контакт</label>
+            <input
+              type="text"
+              value={registrationForm.emergencyContact}
+              onChange={(e) => handleFormChange('emergencyContact', e.target.value)}
+              placeholder="Име и телефон на близък човек"
+            />
+          </div>
+          <div className="general-form-group">
+            <label>Специални изисквания</label>
+            <textarea
+              value={registrationForm.specialRequests}
+              onChange={(e) => handleFormChange('specialRequests', e.target.value)}
+              placeholder="Медицински условия, диетични ограничения и др."
+              rows="3"
+            />
+          </div>
+        </>
+      );
+    } else if (type === 'course') {
+      return (
+        <>
+          {commonFields}
+          <div className="general-form-group">
+            <label>Опит</label>
+            <select
+              value={registrationForm.experience}
+              onChange={(e) => handleFormChange('experience', e.target.value)}
+            >
+              <option value="">Изберете ниво</option>
+              <option value="none">Няма опит</option>
+              <option value="beginner">Начинаещ</option>
+              <option value="intermediate">Среднонапреднал</option>
+              <option value="advanced">Напреднал</option>
+            </select>
+          </div>
+          <div className="general-form-group">
+            <label>Очаквания от курса</label>
+            <textarea
+              value={registrationForm.expectations}
+              onChange={(e) => handleFormChange('expectations', e.target.value)}
+              placeholder="Какво се надявате да научите..."
+              rows="3"
+            />
+          </div>
+        </>
+      );
     }
   };
 
@@ -497,8 +764,8 @@ export const ClubEvents = ({ club }) => {
                     className="general-course-btn"
                     onClick={() => openCourseModal(course)}
                   >
-                    <FontAwesomeIcon icon={faInfoCircle} />
-                    {t('clubs.ClubEvents.courses.learnMore')}
+                    <FontAwesomeIcon icon={faUserPlus} />
+                    Записване
                   </button>
                 </div>
               ))}
@@ -507,14 +774,14 @@ export const ClubEvents = ({ club }) => {
         )}
       </div>
 
-      {/* Event Details Modal */}
+      {/* Event Registration Modal */}
       {showEventModal && selectedEvent && (
         <div className="general-modal-overlay" onClick={closeModals}>
           <div className="general-modal" onClick={(e) => e.stopPropagation()}>
             <div className="general-modal-header">
               <h3>
-                <FontAwesomeIcon icon={faEye} />
-                {t('clubs.ClubEvents.modals.eventDetails.title')}
+                <FontAwesomeIcon icon={faUserPlus} />
+                Записване за {selectedEvent.title}
               </h3>
               <button className="general-modal-close" onClick={closeModals}>
                 <FontAwesomeIcon icon={faTimes} />
@@ -528,46 +795,52 @@ export const ClubEvents = ({ club }) => {
                 </div>
               )}
               
-              <h4>{selectedEvent.title}</h4>
-              <p>{selectedEvent.description}</p>
-              
-              <div className="general-modal-details">
-                <div className="general-modal-detail">
-                  <FontAwesomeIcon icon={faCalendarAlt} />
-                  <span>{formatDate(selectedEvent.date).fullDate}</span>
+              <div className="general-selected-event">
+                <h4>{selectedEvent.title}</h4>
+                <p>{selectedEvent.description}</p>
+                <div className="general-event-info">
+                  <span>📅 {formatDate(selectedEvent.date).fullDate}</span>
+                  <span>🕐 {selectedEvent.time}</span>
+                  {selectedEvent.location && <span>📍 {selectedEvent.location}</span>}
+                  {selectedEvent.price && <span>💰 {selectedEvent.price}</span>}
                 </div>
-                <div className="general-modal-detail">
-                  <FontAwesomeIcon icon={faClock} />
-                  <span>{selectedEvent.time}</span>
-                </div>
-                <div className="general-modal-detail">
-                  <FontAwesomeIcon icon={faUsers} />
-                  <span>{selectedEvent.participants} {t('clubs.ClubEvents.event.participants')}</span>
-                </div>
-                {selectedEvent.location && (
-                  <div className="general-modal-detail">
-                    <FontAwesomeIcon icon={faMapMarkerAlt} />
-                    <span>{selectedEvent.location}</span>
-                  </div>
-                )}
-                {selectedEvent.organizer && (
-                  <div className="general-modal-detail">
-                    <FontAwesomeIcon icon={faUsers} />
-                    <span>{t('clubs.ClubEvents.modals.eventDetails.organizer')}: {selectedEvent.organizer}</span>
-                  </div>
-                )}
               </div>
 
-              {selectedEvent.highlights && selectedEvent.highlights.length > 0 && (
-                <div className="general-event-highlights">
-                  <h5>{t('clubs.ClubEvents.modals.eventDetails.highlights')}</h5>
-                  <ul>
-                    {selectedEvent.highlights.map((highlight, index) => (
-                      <li key={index}>{highlight}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+              <form onSubmit={handleEventRegistration} className="general-registration-form">
+                {renderRegistrationFields('event')}
+                
+                <button 
+                  type="submit" 
+                  className="general-submit-btn"
+                  disabled={formStatus === 'sending'}
+                >
+                  {formStatus === 'sending' ? (
+                    <>
+                      <div className="general-spinner"></div>
+                      Изпращане...
+                    </>
+                  ) : (
+                    <>
+                      <FontAwesomeIcon icon={faCheck} />
+                      Изпрати заявка
+                    </>
+                  )}
+                </button>
+                
+                {formStatus === 'success' && (
+                  <div className="general-success-message">
+                    <FontAwesomeIcon icon={faCheck} />
+                    Заявката е изпратена успешно!
+                  </div>
+                )}
+
+                {formStatus === 'error' && (
+                  <div className="general-error-message">
+                    <FontAwesomeIcon icon={faExclamationTriangle} />
+                    Възникна грешка при изпращането!
+                  </div>
+                )}
+              </form>
             </div>
           </div>
         </div>
@@ -599,62 +872,7 @@ export const ClubEvents = ({ club }) => {
               </div>
 
               <form onSubmit={handleTripRegistration} className="general-registration-form">
-                <div className="general-form-row">
-                  <div className="general-form-group">
-                    <label>{t('clubs.ClubEvents.form.firstName')} *</label>
-                    <input
-                      type="text"
-                      value={registrationForm.firstName}
-                      onChange={(e) => handleFormChange('firstName', e.target.value)}
-                      placeholder={t('clubs.ClubEvents.form.firstNamePlaceholder')}
-                      required
-                    />
-                  </div>
-                  
-                  <div className="general-form-group">
-                    <label>{t('clubs.ClubEvents.form.lastName')} *</label>
-                    <input
-                      type="text"
-                      value={registrationForm.lastName}
-                      onChange={(e) => handleFormChange('lastName', e.target.value)}
-                      placeholder={t('clubs.ClubEvents.form.lastNamePlaceholder')}
-                      required
-                    />
-                  </div>
-                </div>
-                
-                <div className="general-form-row">
-                  <div className="general-form-group">
-                    <label>{t('clubs.ClubEvents.form.phone')} *</label>
-                    <input
-                      type="tel"
-                      value={registrationForm.phone}
-                      onChange={(e) => handleFormChange('phone', e.target.value)}
-                      placeholder={t('clubs.ClubEvents.form.phonePlaceholder')}
-                      required
-                    />
-                  </div>
-                  
-                  <div className="general-form-group">
-                    <label>{t('clubs.ClubEvents.form.email')}</label>
-                    <input
-                      type="email"
-                      value={registrationForm.email}
-                      onChange={(e) => handleFormChange('email', e.target.value)}
-                      placeholder={t('clubs.ClubEvents.form.emailPlaceholder')}
-                    />
-                  </div>
-                </div>
-                
-                <div className="general-form-group">
-                  <label>{t('clubs.ClubEvents.form.notes')}</label>
-                  <textarea
-                    value={registrationForm.notes}
-                    onChange={(e) => handleFormChange('notes', e.target.value)}
-                    placeholder={t('clubs.ClubEvents.form.notesPlaceholder')}
-                    rows="3"
-                  />
-                </div>
+                {renderRegistrationFields('trip')}
                 
                 <button 
                   type="submit" 
@@ -693,14 +911,14 @@ export const ClubEvents = ({ club }) => {
         </div>
       )}
 
-      {/* Course Details Modal */}
+      {/* Course Registration Modal */}
       {showCourseModal && selectedCourse && (
         <div className="general-modal-overlay" onClick={closeModals}>
           <div className="general-modal" onClick={(e) => e.stopPropagation()}>
             <div className="general-modal-header">
               <h3>
                 <FontAwesomeIcon icon={faGraduationCap} />
-                {t('clubs.ClubEvents.modals.courseDetails.title')}
+                Записване за {selectedCourse.name}
               </h3>
               <button className="general-modal-close" onClick={closeModals}>
                 <FontAwesomeIcon icon={faTimes} />
@@ -708,39 +926,65 @@ export const ClubEvents = ({ club }) => {
             </div>
             
             <div className="general-modal-content">
-              <h4>{selectedCourse.name}</h4>
-              <p>{selectedCourse.description}</p>
-              
-              <div className="general-modal-details">
-                <div className="general-modal-detail">
-                  <FontAwesomeIcon icon={faClock} />
-                  <span>{selectedCourse.duration}</span>
+              <div className="general-selected-course">
+                <h4>{selectedCourse.name}</h4>
+                <p>{selectedCourse.description}</p>
+                <div className="general-course-info">
+                  <span>⏱️ {selectedCourse.duration}</span>
+                  <span>👥 {selectedCourse.participants} участници</span>
+                  {selectedCourse.instructor && <span>👨‍🏫 {selectedCourse.instructor}</span>}
                 </div>
-                <div className="general-modal-detail">
-                  <FontAwesomeIcon icon={faUsers} />
-                  <span>{selectedCourse.participants} {t('clubs.ClubEvents.courses.participants')}</span>
-                </div>
-                {selectedCourse.instructor && (
-                  <div className="general-modal-detail">
-                    <FontAwesomeIcon icon={faUsers} />
-                    <span>{t('clubs.ClubEvents.modals.courseDetails.instructor')}: {selectedCourse.instructor}</span>
-                  </div>
-                )}
               </div>
 
+              <form onSubmit={handleCourseRegistration} className="general-registration-form">
+                {renderRegistrationFields('course')}
+                
+                <button 
+                  type="submit" 
+                  className="general-submit-btn"
+                  disabled={formStatus === 'sending'}
+                >
+                  {formStatus === 'sending' ? (
+                    <>
+                      <div className="general-spinner"></div>
+                      Изпращане...
+                    </>
+                  ) : (
+                    <>
+                      <FontAwesomeIcon icon={faCheck} />
+                      Изпрати заявка
+                    </>
+                  )}
+                </button>
+                
+                {formStatus === 'success' && (
+                  <div className="general-success-message">
+                    <FontAwesomeIcon icon={faCheck} />
+                    Заявката е изпратена успешно!
+                  </div>
+                )}
+
+                {formStatus === 'error' && (
+                  <div className="general-error-message">
+                    <FontAwesomeIcon icon={faExclamationTriangle} />
+                    Възникна грешка при изпращането!
+                  </div>
+                )}
+              </form>
+
               <div className="general-contact-info">
-                <p>{t('clubs.ClubEvents.contact.forRegistration')}</p>
+                <p>Можете да се свържете директно:</p>
                 <div className="general-contact-methods">
-                  {club.contacts?.phone && (
-                    <a href={`tel:${club.contacts.phone}`} className="general-contact-method">
+                  {(club?.clubDetails?.contacts?.phone || club?.contacts?.phone) && (
+                    <a href={`tel:${club.clubDetails?.contacts?.phone || club.contacts?.phone}`} className="general-contact-method">
                       <FontAwesomeIcon icon={faPhone} />
-                      {club.contacts.phone}
+                      {club.clubDetails?.contacts?.phone || club.contacts?.phone}
                     </a>
                   )}
-                  {club.contacts?.email && (
-                    <a href={`mailto:${club.contacts.email}`} className="general-contact-method">
+                  {(club?.clubDetails?.contacts?.email || club?.contacts?.email) && (
+                    <a href={`mailto:${club.clubDetails?.contacts?.email || club.contacts?.email}`} className="general-contact-method">
                       <FontAwesomeIcon icon={faEnvelope} />
-                      {club.contacts.email}
+                      {club.clubDetails?.contacts?.email || club.contacts?.email}
                     </a>
                   )}
                 </div>
