@@ -362,8 +362,8 @@ export const ClubHero = ({ club }) => {
     try {
       const success = await sendContactForm(club.id, {
         ...contactFormData,
-        clubName: club.name,
-        timestamp: new Date().toISOString()
+        // clubName: club.name,
+        // timestamp: new Date().toISOString()
       });
 
       if (success) {

@@ -37,26 +37,31 @@ import {
   faLinkedin
 } from '@fortawesome/free-brands-svg-icons';
 import './clubContact.css';
+import { useClubContext } from '../../../../contexts/ClubContext';
 
 export const ClubContact = ({ club }) => {
   const { t, i18n } = useTranslation();
+  const { sendContactForm } = useClubContext();
+  
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
-    subject: 'membership',
+    subject: '',
     message: '',
-    preferredContact: 'email'
+    preferredContact: ''
   });
   const [formStatus, setFormStatus] = useState({ type: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showFAQ, setShowFAQ] = useState(false);
   const [showHoursModal, setShowHoursModal] = useState(false);
   const [expandedFAQ, setExpandedFAQ] = useState(null);
-  console.log("club", club);
+
+  // Обновена проверка за данни - използваме новата структура
+  const contacts = club?.clubDetails?.contacts || club?.contacts || {};
   
   // ПРОВЕРКА ЗА ДАННИ
-  if (!club?.contacts || (!club.contacts.phone && !club.contacts.email)) {
+  if (!contacts || (!contacts.phone && !contacts.email)) {
     return null;
   }
 
@@ -73,7 +78,7 @@ export const ClubContact = ({ club }) => {
     setIsSubmitting(true);
     setFormStatus({ type: '', message: '' });
 
-    if (!formData.name || !formData.email || !formData.message) {
+    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) {
       setFormStatus({
         type: 'error',
         message: t('clubs.ClubContact.form.validation.required')
@@ -82,48 +87,53 @@ export const ClubContact = ({ club }) => {
       return;
     }
 
-    // Изпращане на имейл чрез mailto
-    const recipientEmail = club.contacts.email;
-    const subject = encodeURIComponent(`${getSubjectLabel(formData.subject)} - ${formData.name}`);
-    const body = encodeURIComponent(t('clubs.ClubContact.form.emailBody', {
-      name: formData.name,
-      email: formData.email,
-      phone: formData.phone || t('clubs.ClubContact.form.notSpecified'),
-      preferredContact: formData.preferredContact === 'email' ? t('clubs.ClubContact.form.email') : t('clubs.ClubContact.form.phone'),
-      subject: getSubjectLabel(formData.subject),
-      message: formData.message,
-      clubName: club.name,
-      date: new Date().toLocaleDateString(i18n.language === 'bg' ? 'bg-BG' : i18n.language === 'en' ? 'en-US' : 'de-DE')
-    }));
+    // Валидация на имейл
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setFormStatus({
+        type: 'error',
+        message: 'Моля, въведете валиден имейл адрес'
+      });
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
-      // Симулация на изпращане
-      await new Promise(resolve => setTimeout(resolve, 1500));
-
-      // Отваряне на mailto
-      if (recipientEmail) {
-        window.location.href = `mailto:${recipientEmail}?subject=${subject}&body=${body}`;
-      }
-
-      setFormStatus({
-        type: 'success',
-        message: t('clubs.ClubContact.form.messages.success')
+      const success = await sendContactForm(club.id, {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        subject: formData.subject,
+        message: formData.message,
+        preferredContact: formData.preferredContact
       });
 
-      // Изчистване на формата след успех
-      setTimeout(() => {
-        setFormData({
-          name: '',
-          email: '',
-          phone: '',
-          subject: 'membership',
-          message: '',
-          preferredContact: 'email'
+      if (success) {
+        setFormStatus({
+          type: 'success',
+          message: t('clubs.ClubContact.form.messages.success')
         });
-        setFormStatus({ type: '', message: '' });
-      }, 3000);
 
+        // Изчистване на формата след успех
+        setTimeout(() => {
+          setFormData({
+            name: '',
+            email: '',
+            phone: '',
+            subject: '',
+            message: '',
+            preferredContact: ''
+          });
+          setFormStatus({ type: '', message: '' });
+        }, 3000);
+      } else {
+        setFormStatus({
+          type: 'error',
+          message: t('clubs.ClubContact.form.messages.error')
+        });
+      }
     } catch (error) {
+      console.error('Грешка при изпращане на контактна форма:', error);
       setFormStatus({
         type: 'error',
         message: t('clubs.ClubContact.form.messages.error')
@@ -166,7 +176,7 @@ export const ClubContact = ({ club }) => {
   };
 
   const getTodayHours = () => {
-    if (!club.contacts?.workingHours || typeof club.contacts.workingHours !== 'object') {
+    if (!contacts?.workingHours || typeof contacts.workingHours !== 'object') {
       return t('clubs.ClubContact.workingHours.notSpecified');
     }
 
@@ -176,8 +186,8 @@ export const ClubContact = ({ club }) => {
     let hours;
 
     // Проверява дали има нова структура с days
-    if (club.contacts.workingHours.days && club.contacts.workingHours.days[dayIndex]) {
-      const dayData = club.contacts.workingHours.days[dayIndex];
+    if (contacts.workingHours.days && contacts.workingHours.days[dayIndex]) {
+      const dayData = contacts.workingHours.days[dayIndex];
       if (dayData.enabled && dayData.open && dayData.close) {
         hours = `${dayData.open}-${dayData.close}`;
       } else {
@@ -185,7 +195,7 @@ export const ClubContact = ({ club }) => {
       }
     } else {
       // Legacy структура
-      hours = club.contacts.workingHours[dayIndex];
+      hours = contacts.workingHours[dayIndex];
     }
 
     // Проверяваме дали часовете са string или валидна стойност
@@ -208,7 +218,7 @@ export const ClubContact = ({ club }) => {
 
   const handleShare = () => {
     const text = t('clubs.ClubContact.actions.shareText', { clubName: club.name });
-    const contactInfo = `📞 ${club.contacts.phone || ''} 📧 ${club.contacts.email || ''}`;
+    const contactInfo = `📞 ${contacts.phone || ''} 📧 ${contacts.email || ''}`;
 
     if (navigator.share) {
       navigator.share({
@@ -305,53 +315,53 @@ export const ClubContact = ({ club }) => {
               </div>
 
               <div className="general-contact-options">
-                {club.contacts.phone && (
-                  <a href={`tel:${club.contacts.phone}`} className="general-contact-option phone">
+                {contacts.phone && (
+                  <a href={`tel:${contacts.phone}`} className="general-contact-option phone">
                     <div className="general-option-icon">
                       <FontAwesomeIcon icon={faPhone} />
                     </div>
                     <div className="general-option-content">
                       <span className="general-option-label">{t('clubs.ClubContact.contactMethods.phone.label')}</span>
-                      <span className="general-option-value">{club.contacts.phone}</span>
+                      <span className="general-option-value">{contacts.phone}</span>
                       <span className="general-option-desc">{t('clubs.ClubContact.contactMethods.phone.description')}</span>
                     </div>
                   </a>
                 )}
 
-                {club.contacts.mobile && club.contacts.mobile !== club.contacts.phone && (
-                  <a href={`tel:${club.contacts.mobile}`} className="general-contact-option mobile">
+                {contacts.mobile && contacts.mobile !== contacts.phone && (
+                  <a href={`tel:${contacts.mobile}`} className="general-contact-option mobile">
                     <div className="general-option-icon">
                       <FontAwesomeIcon icon={faMobileAlt} />
                     </div>
                     <div className="general-option-content">
                       <span className="general-option-label">{t('clubs.ClubContact.contactMethods.mobile.label')}</span>
-                      <span className="general-option-value">{club.contacts.mobile}</span>
+                      <span className="general-option-value">{contacts.mobile}</span>
                       <span className="general-option-desc">{t('clubs.ClubContact.contactMethods.mobile.description')}</span>
                     </div>
                   </a>
                 )}
 
-                {club.contacts.email && (
-                  <a href={`mailto:${club.contacts.email}`} className="general-contact-option email">
+                {contacts.email && (
+                  <a href={`mailto:${contacts.email}`} className="general-contact-option email">
                     <div className="general-option-icon">
                       <FontAwesomeIcon icon={faEnvelope} />
                     </div>
                     <div className="general-option-content">
                       <span className="general-option-label">{t('clubs.ClubContact.contactMethods.email.label')}</span>
-                      <span className="general-option-value">{club.contacts.email}</span>
+                      <span className="general-option-value">{contacts.email}</span>
                       <span className="general-option-desc">{t('clubs.ClubContact.contactMethods.email.description')}</span>
                     </div>
                   </a>
                 )}
 
-                {club.contacts.website && (
-                  <a href={club.contacts.website} target="_blank" rel="noopener noreferrer" className="general-contact-option website">
+                {contacts.website && (
+                  <a href={contacts.website} target="_blank" rel="noopener noreferrer" className="general-contact-option website">
                     <div className="general-option-icon">
                       <FontAwesomeIcon icon={faGlobe} />
                     </div>
                     <div className="general-option-content">
                       <span className="general-option-label">{t('clubs.ClubContact.contactMethods.website.label')}</span>
-                      <span className="general-option-value">{club.contacts.website}</span>
+                      <span className="general-option-value">{contacts.website}</span>
                       <span className="general-option-desc">{t('clubs.ClubContact.contactMethods.website.description')}</span>
                     </div>
                   </a>
@@ -360,7 +370,7 @@ export const ClubContact = ({ club }) => {
             </div>
 
             {/* Working Hours */}
-            {club.contacts?.workingHours && Object.keys(club.contacts.workingHours).length > 0 && (
+            {contacts?.workingHours && Object.keys(contacts.workingHours).length > 0 && (
               <div className="general-contact-card hours">
                 <div className="general-card-header">
                   <FontAwesomeIcon icon={faBusinessTime} />
@@ -428,8 +438,8 @@ export const ClubContact = ({ club }) => {
                     </a>
 
                     {club.location.coordinates && (
-                      <a
-                        href={`https://www.google.com/maps/dir/?api=1&destination=${club.location.coordinates.lat},${club.location.coordinates.lng}`}
+                      
+                       <a href={`https://www.google.com/maps/dir/?api=1&destination=${club.location.coordinates.lat},${club.location.coordinates.lng}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="general-location-btn directions"
@@ -445,7 +455,7 @@ export const ClubContact = ({ club }) => {
 
           
             {/* Social Media */}
-            {club.contacts?.socialMedia && Object.keys(club.contacts.socialMedia).length > 0 && (
+            {contacts?.socialMedia && Object.keys(contacts.socialMedia).length > 0 && (
               <div className="general-contact-card social">
                 <div className="general-card-header">
                   <FontAwesomeIcon icon={faUserFriends} />
@@ -453,7 +463,7 @@ export const ClubContact = ({ club }) => {
                 </div>
 
                 <div className="general-social-links">
-                  {Object.entries(club.contacts.socialMedia)
+                  {Object.entries(contacts.socialMedia)
                     .filter(([platform, handle]) => handle && typeof handle === 'string' && handle.trim() !== '') // Филтрирай null/undefined/празни
                     .map(([platform, handle]) => (
                       <a key={platform}
@@ -534,8 +544,10 @@ export const ClubContact = ({ club }) => {
                         value={formData.preferredContact}
                         onChange={handleInputChange}
                       >
+                        <option value="">Избери</option>
                         <option value="email">{t('clubs.ClubContact.form.email')}</option>
                         <option value="phone">{t('clubs.ClubContact.form.phone')}</option>
+                        <option value="both">И двете</option>
                       </select>
                       <FontAwesomeIcon icon={faHandshake} className="general-field-icon" />
                     </div>
@@ -543,21 +555,14 @@ export const ClubContact = ({ club }) => {
 
                   <div className="general-form-field">
                     <label htmlFor="subject">{t('clubs.ClubContact.form.fields.subject')}</label>
-                    <select
+                    <input
+                      type="text"
                       id="subject"
                       name="subject"
                       value={formData.subject}
                       onChange={handleInputChange}
-                    >
-                      <option value="membership">{t('clubs.ClubContact.form.subjects.membership')}</option>
-                      <option value="activities">{t('clubs.ClubContact.form.subjects.activities')}</option>
-                      <option value="events">{t('clubs.ClubContact.form.subjects.events')}</option>
-                      <option value="volunteer">{t('clubs.ClubContact.form.subjects.volunteer')}</option>
-                      <option value="partnership">{t('clubs.ClubContact.form.subjects.partnership')}</option>
-                      <option value="donation">{t('clubs.ClubContact.form.subjects.donation')}</option>
-                      <option value="general">{t('clubs.ClubContact.form.subjects.general')}</option>
-                      <option value="complaint">{t('clubs.ClubContact.form.subjects.complaint')}</option>
-                    </select>
+                      placeholder="Тема на съобщението"
+                    />
                     <FontAwesomeIcon icon={faTag} className="general-field-icon" />
                   </div>
 
@@ -661,7 +666,7 @@ export const ClubContact = ({ club }) => {
       )}
 
       {/* Working Hours Modal */}
-      {showHoursModal && club.contacts?.workingHours && (
+      {showHoursModal && contacts?.workingHours && (
         <div className="general-modal-overlay" onClick={() => setShowHoursModal(false)}>
           <div className="general-modal" onClick={(e) => e.stopPropagation()}>
             <div className="general-modal-header">
@@ -677,7 +682,7 @@ export const ClubContact = ({ club }) => {
             <div className="general-modal-content">
               <div className="general-hours-detailed">
                 {(() => {
-                  const workingHours = club.contacts.workingHours;
+                  const workingHours = contacts.workingHours;
                   let hoursEntries = [];
 
                   // Определяме дните на седмицата в правилен ред

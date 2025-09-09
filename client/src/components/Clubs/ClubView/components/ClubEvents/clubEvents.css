@@ -797,6 +797,8 @@
 }
 
 .general-contact-method {
+  flex-direction: column;
+  align-items: center;
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -806,6 +808,7 @@
   border-radius: 12px;
   color: #8b5cf6;
   text-decoration: none;
+  теxt-align: center;
   font-weight: 500;
   transition: all 0.3s ease;
 }
