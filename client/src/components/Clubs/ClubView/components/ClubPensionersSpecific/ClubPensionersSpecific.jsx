@@ -43,7 +43,7 @@ import {
   faChevronUp
 } from '@fortawesome/free-solid-svg-icons';
 
-import './clubPensionersSpecific.css';
+import './ClubPensionersSpecific.css';
 
 const ClubPensionersSpecific = ({ club }) => {
   const { t } = useTranslation();
