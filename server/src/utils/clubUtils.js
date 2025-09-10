@@ -410,6 +410,7 @@ const transformActivities = (activities) => {
                     price: data.price || '',
                     images: data.images || [],
                     videos: data.videos || [],
+                    emergencyContact: data.emergencyContact || '',
                 });
                 break;
             case 'trips':
@@ -419,6 +420,7 @@ const transformActivities = (activities) => {
                     participants: data.participants || 0,
                     price: data.price || 0,
                     description: activityData.description || '',
+                    emergencyContact: data.emergencyContact || '',
                 });
                 break;
             case 'courses':
@@ -428,6 +430,7 @@ const transformActivities = (activities) => {
                     participants: data.participants || 0,
                     instructor: data.instructor || '',
                     description: activityData.description || '',
+                    emergencyContact: data.emergencyContact || '',
                 });
                 break;
         }
@@ -584,7 +587,17 @@ const processClubAdminAction = async (club, action, options, adminEmail) => {
     }
 };
 
-const handleMailingFormEmail = async (club, formType, validatedData, itemId = null) => {
+const translateExperience = (experience) => {
+    const translations = {
+        none: 'Без опит',
+        beginner: 'Начинаещ',
+        intermediate: 'Среднонапреднал',
+        advanced: 'Напреднал',
+    };
+    return translations[experience] || experience;
+};
+
+const handleMailingFormEmail = async (club, formType, validatedData, activityTitle = null) => {
     try {
         let emailTitle;
         let mainInfoContent;
@@ -616,7 +629,7 @@ const handleMailingFormEmail = async (club, formType, validatedData, itemId = nu
                     ${validatedData.phone ? `<p><strong>Телефон:</strong> ${validatedData.phone}</p>` : ''}
                     ${validatedData.age ? `<p><strong>Възраст:</strong> ${validatedData.age}</p>` : ''}
                     ${validatedData.address ? `<p><strong>Адрес:</strong> ${validatedData.address}</p>` : ''}
-                    ${validatedData.experience ? `<p><strong>Опит:</strong> ${validatedData.experience}</p>` : ''}
+                    ${validatedData.experience ? `<p><strong>Опит:</strong> ${translateExperience(validatedData.experience)}</p>` : ''}
                 `;
                 messageContent = `
                     <p><strong>Мотивация:</strong></p>
@@ -679,13 +692,14 @@ const handleMailingFormEmail = async (club, formType, validatedData, itemId = nu
             case 'event':
                 emailTitle = 'Записване за събитие';
                 mainInfoContent = `
-                    <p><strong>ID на събитието:</strong> ${itemId}</p>
+                    <p><strong>Събитие:</strong> ${activityTitle}</p>
                     <p><strong>Име:</strong> ${validatedData.name || '—'}</p>
                     <p><strong>Имейл:</strong> <a href="mailto:${validatedData.email || ''}" style="color: #0066cc; text-decoration: underline;">${
                     validatedData.email || '—'
                 }</a></p>
                     ${validatedData.phone ? `<p><strong>Телефон:</strong> ${validatedData.phone}</p>` : ''}
                     ${validatedData.numberOfParticipants ? `<p><strong>Брой участници:</strong> ${validatedData.numberOfParticipants}</p>` : ''}
+                    ${validatedData.emergencyContact ? `<p><strong>Спешен контакт:</strong> ${validatedData.emergencyContact}</p>` : ''}
                 `;
                 messageContent = `
                     <p><strong>Специални искания:</strong></p>
@@ -696,13 +710,14 @@ const handleMailingFormEmail = async (club, formType, validatedData, itemId = nu
             case 'course':
                 emailTitle = 'Записване за курс';
                 mainInfoContent = `
-                    <p><strong>ID на курса:</strong> ${itemId}</p>
+                    <p><strong>Курс:</strong> ${activityTitle}</p>
                     <p><strong>Име:</strong> ${validatedData.name || '—'}</p>
                     <p><strong>Имейл:</strong> <a href="mailto:${validatedData.email || ''}" style="color: #0066cc; text-decoration: underline;">${
                     validatedData.email || '—'
                 }</a></p>
                     ${validatedData.phone ? `<p><strong>Телефон:</strong> ${validatedData.phone}</p>` : ''}
-                    ${validatedData.experience ? `<p><strong>Опит:</strong> ${validatedData.experience}</p>` : ''}
+                    ${validatedData.experience ? `<p><strong>Опит:</strong> ${translateExperience(validatedData.experience)}</p>` : ''}
+                    ${validatedData.emergencyContact ? `<p><strong>Спешен контакт:</strong> ${validatedData.emergencyContact}</p>` : ''}
                 `;
                 messageContent = `
                     <p><strong>Очаквания:</strong></p>
@@ -713,7 +728,7 @@ const handleMailingFormEmail = async (club, formType, validatedData, itemId = nu
             case 'trip':
                 emailTitle = 'Записване за екскурзия';
                 mainInfoContent = `
-                    <p><strong>ID на екскурзията:</strong> ${itemId}</p>
+                    <p><strong>Екскурзия:</strong> ${activityTitle}</p>
                     <p><strong>Име:</strong> ${validatedData.name || '—'}</p>
                     <p><strong>Имейл:</strong> <a href="mailto:${validatedData.email || ''}" style="color: #0066cc; text-decoration: underline;">${
                     validatedData.email || '—'
@@ -806,6 +821,63 @@ const handleMailingFormEmail = async (club, formType, validatedData, itemId = nu
     }
 };
 
+const handlePersonalEmail = async (emailData) => {
+    try {
+        const { from, to, subject, message } = emailData;
+
+        const customFormattedBody = `
+            <html>
+                <body style="font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f9f9f9;">
+                    <div style="background: #fff; padding: 20px; border-radius: 8px; margin: 0; max-width: 100%;">
+                        <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                            <div style="width: 6px; height: 40px; background: linear-gradient(to bottom, #f47920, #2986c7); border-radius: 3px; margin-right: 12px;"></div>
+                            <div>
+                                <h2 style="color: #222; margin: 0; font-size: 24px; font-weight: bold;">${subject || 'Без тема'}</h2>
+                            </div>
+                        </div>
+
+                        <div style="background: #f7f7f7; padding: 16px; border-radius: 6px; margin-bottom: 16px;">
+                            <p style="color: #222; margin: 0 0 8px 0; font-size: 16px;"><strong>От:</strong> <a href="mailto:${
+                                from || ''
+                            }" style="color: #0066cc; text-decoration: underline;">${from || '—'}</a></p>
+                        </div>
+
+                        <div style="background: #f7f7f7; padding: 16px; border-radius: 6px;">
+                            <p style="color: #222; margin: 0; font-size: 16px; line-height: 1.5; white-space: pre-wrap;">${message || '—'}</p>
+                        </div>
+                    </div>
+                </body>
+            </html>
+        `;
+
+        // Send email
+        try {
+            await forwardEmailsViaZoho({
+                userEmail: 'info@pensa.club',
+                subject: `Лично съобщение: ${subject || 'Без тема'}`,
+                body: message,
+                toAddresses: to,
+                formattedBody: customFormattedBody,
+            });
+            return { emailSent: true };
+        } catch (emailError) {
+            try {
+                await forwardEmailsViaZoho({
+                    userEmail: 'info@pensa.club',
+                    subject: `EMAIL FAILED - Лично съобщение`,
+                    body: `Failed to send personal email from ${from} to ${to}. Original message: ${message}`,
+                    toAddresses: 'admin@pensa.club',
+                });
+            } catch (fallbackError) {
+                console.error('Failed to send fallback email notification:', fallbackError);
+            }
+            return { emailSent: false, emailError: emailError.message };
+        }
+    } catch (err) {
+        return { emailSent: false, emailError: err.message };
+    }
+};
+
 module.exports = {
     transformToDB,
     transformClub,
@@ -813,4 +885,5 @@ module.exports = {
     transformActivityToDB,
     processClubAdminAction,
     handleMailingFormEmail,
+    handlePersonalEmail,
 };

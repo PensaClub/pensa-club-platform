@@ -1,6 +1,6 @@
-/* General Club Hero - НОВ ДИЗАЙН */
+/* General Club Hero - ПЪЛЕН РЕСПОНСИВ ДИЗАЙН */
 .general-hero-main {
-  padding: 4rem 0;
+  padding: 2rem 0;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   min-height: 100vh;
@@ -11,8 +11,9 @@
 .general-hero-container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 1rem;
   width: 100%;
+  box-sizing: border-box;
 }
 
 /* Горна лента */
@@ -20,12 +21,16 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .general-hero-badges {
   display: flex;
-  gap: 1rem;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .general-status-badge {
@@ -36,9 +41,10 @@
   border: 1px solid rgba(34, 197, 94, 0.4);
   padding: 0.5rem 1rem;
   border-radius: 25px;
-  font-size: 0.875rem;
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
   font-weight: 600;
   backdrop-filter: blur(10px);
+  white-space: nowrap;
 }
 
 .general-status-dot {
@@ -47,6 +53,7 @@
   background: #22c55e;
   border-radius: 50%;
   animation: generalPulse 2s infinite;
+  flex-shrink: 0;
 }
 
 .general-category-badge {
@@ -54,15 +61,17 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
   padding: 0.5rem 1rem;
   border-radius: 25px;
-  font-size: 0.875rem;
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
   font-weight: 600;
   backdrop-filter: blur(10px);
+  white-space: nowrap;
 }
 
 .general-hero-actions {
   display: none;
   /* display: flex; */
-  gap: 1rem;
+  gap: 0.75rem;
+  flex-wrap: wrap;
 }
 
 .general-action-btn {
@@ -72,11 +81,13 @@
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: white;
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem 1.25rem;
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
+  white-space: nowrap;
 }
 
 .general-action-btn:hover {
@@ -91,8 +102,8 @@
 /* Основно съдържание */
 .general-hero-content {
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 4rem;
+  grid-template-columns: 1fr;
+  gap: 2rem;
   align-items: start;
 }
 
@@ -101,12 +112,13 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 2rem;
+  gap: 1rem;
   margin-bottom: 1rem;
+  flex-wrap: wrap;
 }
 
 .general-club-name {
-  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-size: clamp(1.75rem, 6vw, 4rem);
   font-weight: 800;
   line-height: 1.2;
   margin: 0;
@@ -114,11 +126,14 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  flex: 1;
+  min-width: 0;
+  word-break: break-word;
 }
 
 .general-club-logo {
-  width: 100px;
-  height: 100px;
+  width: clamp(60px, 15vw, 100px);
+  height: clamp(60px, 15vw, 100px);
   border-radius: 50%;
   overflow: hidden;
   border: 4px solid rgba(255, 255, 255, 0.3);
@@ -137,6 +152,8 @@
   align-items: center;
   gap: 1rem;
   margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: flex-start;
 }
 
 .general-stars {
@@ -145,7 +162,7 @@
 }
 
 .general-star {
-  font-size: 1.25rem;
+  font-size: clamp(1rem, 3vw, 1.25rem);
 }
 
 .general-star.filled {
@@ -163,12 +180,12 @@
 
 .general-rating-value {
   font-weight: 700;
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 3vw, 1.2rem);
 }
 
 .general-rating-count {
   color: rgba(255, 255, 255, 0.7);
-  font-size: 0.9rem;
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
 }
 
 .general-location-info {
@@ -176,35 +193,37 @@
   align-items: center;
   gap: 0.75rem;
   margin-bottom: 2rem;
-  font-size: 1.1rem;
+  font-size: clamp(0.95rem, 3vw, 1.1rem);
   color: rgba(255, 255, 255, 0.9);
+  flex-wrap: wrap;
 }
 
 .general-location-info svg {
   color: #ef4444;
-  font-size: 1.3rem;
+  font-size: clamp(1.1rem, 3vw, 1.3rem);
+  flex-shrink: 0;
 }
 
 .general-club-description {
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 3vw, 1.2rem);
   line-height: 1.6;
   color: rgba(255, 255, 255, 0.9);
-  margin: 0 0 3rem 0;
+  margin: 0 0 2rem 0;
 }
 
 /* Статистики */
 .general-stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 3rem;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-bottom: 2rem;
 }
 
 .general-stat-card {
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
-  padding: 2rem 1.5rem;
+  border-radius: 15px;
+  padding: 1.5rem 1rem;
   text-align: center;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -235,20 +254,20 @@
 }
 
 .general-stat-icon {
-  font-size: 2rem;
+  font-size: clamp(1.5rem, 4vw, 2rem);
   color: #fbbf24;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
 }
 
 .general-stat-value {
-  font-size: 2.5rem;
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
   font-weight: 800;
   line-height: 1;
   margin-bottom: 0.5rem;
 }
 
 .general-hero-stat-label {
-  font-size: 0.9rem;
+  font-size: clamp(0.75rem, 2vw, 0.9rem);
   color: rgba(255, 255, 255, 0.8);
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -260,19 +279,19 @@
   top: 1rem;
   right: 1rem;
   color: rgba(255, 255, 255, 0.6);
-  font-size: 0.9rem;
+  font-size: 0.8rem;
 }
 
 /* Долна секция */
 .general-hero-bottom-section {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 2rem;
 }
 
 .general-quick-contacts h3,
 .general-membership-card h3 {
-  font-size: 1.3rem;
+  font-size: clamp(1.1rem, 3vw, 1.3rem);
   font-weight: 700;
   margin: 0 0 1.5rem 0;
   color: white;
@@ -281,21 +300,26 @@
 .general-contact-buttons {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 0.75rem;
+  justify-content: flex-start;
 }
 
 .general-contact-btn {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 1rem 1.5rem;
-  border-radius: 15px;
+  gap: 0.5rem;
+  padding: 0.875rem 1.25rem;
+  border-radius: 12px;
   border: none;
   cursor: pointer;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
+  white-space: nowrap;
+  flex: 1;
+  justify-content: center;
+  min-width: 120px;
 }
 
 .general-contact-btn.phone {
@@ -346,8 +370,8 @@
 .general-membership-card {
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
-  padding: 2rem;
+  border-radius: 15px;
+  padding: 1.5rem;
   backdrop-filter: blur(10px);
 }
 
@@ -356,11 +380,12 @@
   align-items: center;
   gap: 0.75rem;
   margin-bottom: 1.5rem;
+  flex-wrap: wrap;
 }
 
 .general-membership-header svg {
   color: #fbbf24;
-  font-size: 1.3rem;
+  font-size: clamp(1.1rem, 3vw, 1.3rem);
 }
 
 .general-membership-fee {
@@ -368,17 +393,18 @@
   align-items: baseline;
   gap: 0.75rem;
   margin-bottom: 1.5rem;
+  flex-wrap: wrap;
 }
 
 .general-fee-amount {
-  font-size: 2.5rem;
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
   font-weight: 800;
   color: #fbbf24;
 }
 
 .general-fee-period {
   color: rgba(255, 255, 255, 0.8);
-  font-size: 1rem;
+  font-size: clamp(0.85rem, 2vw, 1rem);
 }
 
 .general-membership-benefits {
@@ -389,15 +415,16 @@
 
 .general-benefit-item {
   color: rgba(255, 255, 255, 0.9);
-  font-size: 0.9rem;
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  line-height: 1.4;
 }
 
 .general-more-benefits {
   color: #fbbf24;
-  font-size: 0.9rem;
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
   font-weight: 600;
   font-style: italic;
 }
@@ -415,9 +442,9 @@
 
 .general-main-image-container {
   position: relative;
-  border-radius: 25px;
+  border-radius: 20px;
   overflow: hidden;
-  height: 500px;
+  height: clamp(250px, 50vh, 500px);
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
@@ -438,8 +465,8 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: 50px;
-  height: 50px;
+  width: clamp(40px, 8vw, 50px);
+  height: clamp(40px, 8vw, 50px);
   border-radius: 50%;
   border: none;
   background: rgba(255, 255, 255, 0.9);
@@ -449,7 +476,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.2rem;
+  font-size: clamp(1rem, 2vw, 1.2rem);
   backdrop-filter: blur(10px);
 }
 
@@ -459,39 +486,55 @@
 }
 
 .general-nav-btn.prev {
-  left: 1rem;
+  left: 0.5rem;
 }
 
 .general-nav-btn.next {
-  right: 1rem;
+  right: 0.5rem;
 }
 
 .general-image-counter {
   position: absolute;
-  bottom: 1rem;
-  right: 1rem;
+  bottom: 0.75rem;
+  right: 0.75rem;
   background: rgba(0, 0, 0, 0.7);
   color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  font-size: 0.875rem;
+  padding: 0.5rem 0.875rem;
+  border-radius: 15px;
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
   font-weight: 600;
   backdrop-filter: blur(10px);
 }
 
 .general-thumbnails {
   display: flex;
-  gap: 1rem;
+  gap: 0.75rem;
   margin-top: 1rem;
   overflow-x: auto;
-  padding: 0.5rem;
+  padding: 0.5rem 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+.general-thumbnails::-webkit-scrollbar {
+  height: 4px;
+}
+
+.general-thumbnails::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+}
+
+.general-thumbnails::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
 }
 
 .general-thumbnail {
   position: relative;
-  width: 80px;
-  height: 60px;
-  border-radius: 12px;
+  width: clamp(60px, 15vw, 80px);
+  height: clamp(45px, 12vw, 60px);
+  border-radius: 10px;
   overflow: hidden;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -526,13 +569,13 @@
   align-items: center;
   justify-content: center;
   font-weight: 700;
-  font-size: 0.8rem;
+  font-size: clamp(0.7rem, 2vw, 0.8rem);
 }
 
 /* Placeholder */
 .general-gallery-placeholder {
-  height: 500px;
-  border-radius: 25px;
+  height: clamp(250px, 50vh, 500px);
+  border-radius: 20px;
   background: rgba(255, 255, 255, 0.1);
   border: 2px dashed rgba(255, 255, 255, 0.3);
   display: flex;
@@ -544,32 +587,33 @@
 .general-placeholder-content {
   text-align: center;
   color: rgba(255, 255, 255, 0.8);
+  padding: 1rem;
 }
 
 .general-placeholder-logo {
-  width: 100px;
-  height: 100px;
+  width: clamp(60px, 15vw, 100px);
+  height: clamp(60px, 15vw, 100px);
   border-radius: 50%;
   margin-bottom: 1rem;
   object-fit: cover;
 }
 
 .general-placeholder-icon {
-  font-size: 4rem;
+  font-size: clamp(2.5rem, 8vw, 4rem);
   margin-bottom: 1rem;
   display: block;
   color: rgba(255, 255, 255, 0.5);
 }
 
 .general-placeholder-content h3 {
-  font-size: 1.5rem;
+  font-size: clamp(1.2rem, 4vw, 1.5rem);
   font-weight: 700;
   margin: 0 0 0.5rem 0;
 }
 
 .general-placeholder-content p {
   margin: 0;
-  font-size: 1rem;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
 }
 
 /* Модал за членове */
@@ -584,13 +628,13 @@
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  padding: 2rem;
+  padding: 1rem;
   animation: generalFadeIn 0.3s ease;
 }
 
 .general-modal {
   background: white;
-  border-radius: 25px;
+  border-radius: 20px;
   max-width: 800px;
   width: 100%;
   max-height: 90vh;
@@ -603,30 +647,35 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 2rem;
+  padding: 1.5rem;
   border-bottom: 1px solid #e2e8f0;
   background: linear-gradient(135deg, #667eea, #764ba2);
   color: white;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .general-modal-header h3 {
-  font-size: 1.5rem;
+  font-size: clamp(1.2rem, 3vw, 1.5rem);
   font-weight: 700;
   margin: 0;
   display: flex;
   align-items: center;
   gap: 0.75rem;
+  flex: 1;
+  min-width: 0;
 }
 
 .general-modal-close {
   background: none;
   border: none;
   color: white;
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   cursor: pointer;
   padding: 0.5rem;
   border-radius: 50%;
   transition: all 0.3s ease;
+  flex-shrink: 0;
 }
 
 .general-modal-close:hover {
@@ -634,14 +683,14 @@
 }
 
 .general-modal-content {
-  padding: 2rem;
+  padding: 1.5rem;
   max-height: 60vh;
   overflow-y: auto;
 }
 
 .general-search-box {
   position: relative;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .general-search-box svg {
@@ -650,15 +699,17 @@
   top: 50%;
   transform: translateY(-50%);
   color: #9ca3af;
+  font-size: 1rem;
 }
 
 .general-search-box input {
   width: 100%;
   padding: 1rem 1rem 1rem 3rem;
   border: 2px solid #e2e8f0;
-  border-radius: 15px;
-  font-size: 1rem;
+  border-radius: 12px;
+  font-size: clamp(0.9rem, 2vw, 1rem);
   transition: all 0.3s ease;
+  box-sizing: border-box;
 }
 
 .general-search-box input:focus {
@@ -669,28 +720,28 @@
 
 .general-members-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: 1fr;
+  gap: 1rem;
 }
 
 .general-member-card {
   background: #f8fafc;
-  border-radius: 20px;
-  padding: 1.5rem;
+  border-radius: 15px;
+  padding: 1.25rem;
   text-align: center;
   transition: all 0.3s ease;
   border: 1px solid #e2e8f0;
 }
 
 .general-member-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-3px);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 .general-member-avatar {
   position: relative;
-  width: 80px;
-  height: 80px;
+  width: clamp(60px, 15vw, 80px);
+  height: clamp(60px, 15vw, 80px);
   margin: 0 auto 1rem auto;
   border-radius: 50%;
   overflow: hidden;
@@ -707,7 +758,7 @@
 }
 
 .general-member-avatar svg {
-  font-size: 2.5rem;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
   color: #9ca3af;
 }
 
@@ -717,32 +768,33 @@
   right: -5px;
   background: #fbbf24;
   color: white;
-  width: 25px;
-  height: 25px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
 }
 
 .general-member-info h4 {
-  font-size: 1.1rem;
+  font-size: clamp(1rem, 3vw, 1.1rem);
   font-weight: 700;
   color: #1a202c;
   margin: 0 0 0.5rem 0;
+  word-break: break-word;
 }
 
 .general-member-role {
   color: #667eea;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
   margin: 0 0 1rem 0;
 }
 
 .general-member-bio {
   color: #6b7280;
-  font-size: 0.8rem;
+  font-size: clamp(0.75rem, 2vw, 0.8rem);
   margin: 0 0 1rem 0;
   font-style: italic;
   line-height: 1.3;
@@ -751,7 +803,7 @@
 .general-member-details {
   display: flex;
   justify-content: center;
-  gap: 1rem;
+  gap: 0.75rem;
   flex-wrap: wrap;
   margin-bottom: 0.75rem;
 }
@@ -761,16 +813,18 @@
   align-items: center;
   gap: 0.25rem;
   color: #6b7280;
-  font-size: 0.8rem;
+  font-size: clamp(0.7rem, 1.8vw, 0.8rem);
 }
 
 .general-member-details svg {
   font-size: 0.7rem;
+  flex-shrink: 0;
 }
 
 .general-member-details a {
   color: inherit;
   text-decoration: none;
+  word-break: break-all;
 }
 
 .general-member-details a:hover {
@@ -786,7 +840,7 @@
   align-items: flex-start;
   gap: 0.5rem;
   color: #6b7280;
-  font-size: 0.8rem;
+  font-size: clamp(0.7rem, 1.8vw, 0.8rem);
 }
 
 .general-member-address svg {
@@ -796,123 +850,23 @@
 
 .general-member-address span {
   line-height: 1.3;
+  word-break: break-word;
 }
 
 .general-no-results {
   text-align: center;
-  padding: 3rem 1rem;
+  padding: 2rem 1rem;
   color: #6b7280;
 }
 
 .general-no-results svg {
-  font-size: 3rem;
+  font-size: clamp(2rem, 6vw, 3rem);
   margin-bottom: 1rem;
   display: block;
   margin-left: auto;
   margin-right: auto;
 }
 
-/* Анимации */
-@keyframes generalPulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
-}
-
-@keyframes generalFadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes generalSlideUp {
-  from { 
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to { 
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Responsive дизайн */
-@media (max-width: 1200px) {
-  .general-hero-content {
-    grid-template-columns: 1fr;
-    gap: 3rem;
-  }
-  
-  .general-hero-bottom-section {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 768px) {
-  .general-hero-main {
-    padding: 2rem 0;
-    min-height: auto;
-  }
-  
-  .general-hero-container {
-    padding: 0 1rem;
-  }
-  
-  .general-hero-top-bar {
-    flex-direction: column;
-    gap: 1rem;
-    align-items: stretch;
-  }
-  
-  .general-hero-badges,
-  .general-hero-actions {
-    justify-content: center;
-  }
-  
-  .general-club-name {
-    font-size: 2.5rem;
-  }
-  
-  .general-hero-title-row {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-  
-  .general-stats-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  
-  .general-contact-buttons {
-    justify-content: center;
-  }
-  
-  .general-main-image-container {
-    height: 300px;
-  }
-  
-  .general-modal-content {
-    padding: 1rem;
-  }
-  
-  .general-members-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 480px) {
-  .general-stats-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .general-contact-buttons {
-    flex-direction: column;
-  }
-  
-  .general-nav-btn {
-    width: 40px;
-    height: 40px;
-    font-size: 1rem;
-  }
-}
 /* Контактна форма модал */
 .general-contact-modal {
   max-width: 600px;
@@ -921,12 +875,12 @@
 .general-contact-form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.25rem;
 }
 
 .general-form-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: 1rem;
 }
 
@@ -942,7 +896,7 @@
   gap: 0.5rem;
   font-weight: 600;
   color: #1a202c;
-  font-size: 0.9rem;
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
 }
 
 .general-form-group label .required {
@@ -955,9 +909,11 @@
   padding: 0.75rem 1rem;
   border: 2px solid #e2e8f0;
   border-radius: 10px;
-  font-size: 1rem;
+  font-size: clamp(0.9rem, 2vw, 1rem);
   transition: all 0.3s ease;
   font-family: inherit;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .general-form-group input:focus,
@@ -970,7 +926,7 @@
 
 .general-form-group textarea {
   resize: vertical;
-  min-height: 120px;
+  min-height: 100px;
 }
 
 .general-form-actions {
@@ -978,6 +934,7 @@
   justify-content: flex-end;
   gap: 1rem;
   margin-top: 1rem;
+  flex-wrap: wrap;
 }
 
 .general-btn-primary,
@@ -988,10 +945,14 @@
   padding: 0.75rem 1.5rem;
   border-radius: 10px;
   font-weight: 600;
-  font-size: 0.9rem;
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
   cursor: pointer;
   transition: all 0.3s ease;
   border: none;
+  white-space: nowrap;
+  flex: 1;
+  justify-content: center;
+  min-width: 120px;
 }
 
 .general-btn-primary {
@@ -1028,23 +989,375 @@
   animation: generalSpin 1s linear infinite;
 }
 
+/* Анимации */
+@keyframes generalPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes generalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes generalSlideUp {
+  from { 
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes generalSpin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
 
-/* Responsive за контактната форма */
-@media (max-width: 768px) {
-  .general-form-row {
+/* РЕСПОНСИВ ДИЗАЙН - ДЕТАЙЛНИ BREAKPOINTS */
+
+/* Extra Small Devices (300px - 480px) */
+@media (max-width: 480px) {
+  .general-hero-main {
+    padding: 5.5rem 0;
+    min-height: auto;
+  }
+  
+  .general-hero-container {
+    padding: 0 0.75rem;
+  }
+  
+  .general-hero-top-bar {
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: stretch;
+    margin-bottom: 1.5rem;
+  }
+  
+  .general-hero-badges {
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  
+  .general-status-badge,
+  .general-category-badge {
+    padding: 0.375rem 0.875rem;
+    font-size: 0.75rem;
+  }
+  
+  .general-hero-title-row {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .general-club-rating {
+    justify-content: center;
+    gap: 0.75rem;
+  }
+  
+  .general-location-info {
+    justify-content: center;
+    text-align: center;
+  }
+  
+  .general-stats-grid {
     grid-template-columns: 1fr;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .general-stat-card {
+    padding: 1.25rem 1rem;
+    border-radius: 12px;
+  }
+  
+  .general-contact-buttons {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .general-contact-btn {
+    padding: 1rem;
+    justify-content: center;
+  }
+  
+  .general-membership-card {
+    padding: 1.25rem;
+  }
+  
+  .general-nav-btn.prev {
+    left: 0.25rem;
+  }
+  
+  .general-nav-btn.next {
+    right: 0.25rem;
+  }
+  
+  .general-thumbnails {
+    gap: 0.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    align-items: center;
+    justify-items: center;
+  }
+  
+  .general-modal-content {
+    padding: 1rem;
   }
   
   .general-form-actions {
     flex-direction: column;
   }
   
-  .general-contact-modal {
-    margin: 1rem;
-    max-width: none;
+}
+
+/* Small Devices (481px - 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+  .general-hero-main {
+    padding: 2rem 0;
+  }
+  
+  .general-hero-container {
+    padding: 0 1rem;
+  }
+  
+  .general-hero-top-bar {
+    gap: 1rem;
+  }
+  
+  .general-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  
+  .general-hero-bottom-section {
+    gap: 1.5rem;
+  }
+  
+  .general-contact-buttons {
+    gap: 0.75rem;
+  }
+  
+  .general-contact-btn {
+    flex: 1;
+    min-width: 140px;
+  }
+  
+  .general-members-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  
+  .general-form-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Medium Devices (769px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .general-hero-main {
+    padding: 3rem 0;
+  }
+  
+  .general-hero-container {
+    padding: 0 1.5rem;
+  }
+  
+  .general-hero-content {
+    grid-template-columns: 1.5fr 1fr;
+    gap: 3rem;
+  }
+  
+  .general-stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+  
+  .general-hero-bottom-section {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+  
+  .general-members-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+/* Large Devices (1025px - 1200px) */
+@media (min-width: 1025px) and (max-width: 1200px) {
+  .general-hero-main {
+    padding: 4rem 0;
+  }
+  
+  .general-hero-content {
+    grid-template-columns: 1.3fr 0.7fr;
+    gap: 3rem;
+  }
+  
+  .general-stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+  
+  .general-members-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+/* Extra Large Devices (1201px+) */
+@media (min-width: 1201px) {
+  .general-hero-main {
+    padding: 4rem 0;
+  }
+  
+  .general-hero-container {
+    padding: 0 2rem;
+  }
+  
+  .general-hero-top-bar {
+    margin-bottom: 3rem;
+  }
+  
+  .general-hero-content {
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 4rem;
+  }
+  
+  .general-stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+  
+  .general-stat-card {
+    padding: 2rem 1.5rem;
+    border-radius: 20px;
+  }
+  
+  .general-hero-bottom-section {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+  
+  .general-membership-card {
+    padding: 2rem;
+    border-radius: 20px;
+  }
+  
+  .general-main-image-container {
+    border-radius: 25px;
+  }
+  
+  .general-members-grid {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .general-member-card {
+    padding: 1.5rem;
+    border-radius: 20px;
+  }
+}
+
+/* Landscape ориентация на малки устройства */
+@media (max-width: 768px) and (orientation: landscape) {
+  .general-hero-main {
+    min-height: auto;
+    padding: 1.5rem 0;
+  }
+  
+  .general-main-image-container {
+    height: 40vh;
+  }
+  
+  .general-modal {
+    max-height: 85vh;
+  }
+  
+  .general-modal-content {
+    max-height: 50vh;
+  }
+}
+
+/* Touch устройства */
+@media (hover: none) and (pointer: coarse) {
+  .general-contact-btn,
+  .general-action-btn,
+  .general-nav-btn {
+    min-height: 44px;
+  }
+  
+  .general-form-group input,
+  .general-form-group select,
+  .general-form-group textarea {
+    font-size: 16px; /* Предотвратява zoom на iOS */
+    min-height: 44px;
+  }
+  
+  .general-btn-primary,
+  .general-btn-secondary {
+    min-height: 44px;
+  }
+}
+
+/* High Resolution Displays */
+@media (min-width: 1401px) {
+  .general-stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  .general-members-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Print Styles */
+@media print {
+  .general-hero-main {
+    background: white;
+    color: black;
+    padding: 1rem 0;
+  }
+  
+  .general-hero-actions,
+  .general-contact-buttons,
+  .general-nav-btn {
+    display: none;
+  }
+  
+  .general-modal-overlay {
+    display: none;
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .general-stat-card:hover,
+  .general-member-card:hover,
+  .general-main-image:hover {
+    transform: none;
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .general-stat-card,
+  .general-membership-card,
+  .general-contact-btn {
+    border: 2px solid;
   }
 }
