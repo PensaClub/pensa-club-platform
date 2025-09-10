@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faUsers, 
+import {
+  faUsers,
   faPhone,
   faEnvelope,
   faMapMarkerAlt,
@@ -23,23 +23,60 @@ import {
   faUserShield,
   faHandshake,
   faAward,
-  faGraduationCap
+  faGraduationCap,
+  faCheck,
+  faExclamationTriangle,
+  faPaperPlane,
+  faCommentDots
 } from '@fortawesome/free-solid-svg-icons';
 import './clubManagement.css';
+import { useClubContext } from '../../../../contexts/ClubContext';
 
 export const ClubManagement = ({ club }) => {
   const { t } = useTranslation();
+  const { sendPersonalEmail } = useClubContext();
+
   const [showAllMembers, setShowAllMembers] = useState(false);
   const [showMemberModal, setShowMemberModal] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
   const [showContactDetails, setShowContactDetails] = useState({});
+  const [contactForm, setContactForm] = useState({
+    from: '',
+    to: '',
+    subject: '',
+    message: ''
+  });
+  const [formStatus, setFormStatus] = useState(null);
+
+  // Keyboard handling за правилна работа на Ctrl+C
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      // Затваряме модала само при ESC и без modifier keys
+      if (event.key === 'Escape' && !event.ctrlKey && !event.altKey && !event.shiftKey && !event.metaKey) {
+        if (showMemberModal || showContactModal) {
+          closeModals();
+        }
+      }
+    };
+
+    // Добавяме listener само когато има отворен модал
+    if (showMemberModal || showContactModal) {
+      document.addEventListener('keydown', handleKeyDown);
+    }
+
+    // Cleanup
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [showMemberModal, showContactModal]);
 
   // ПРОВЕРКА ЗА ДАННИ - ако няма ръководство, не показваме компонента
   if (!club?.management?.board || club.management.board.length === 0) {
     return null;
   }
 
-  const boardMembers = club.management.board.filter(member => 
+  const boardMembers = club.management.board.filter(member =>
     member && member.name && member.role
   );
 
@@ -107,9 +144,9 @@ export const ClubManagement = ({ club }) => {
       'sports coordinator': { priority: 6, key: 'sportsCoordinator' },
       'sportkoordinator': { priority: 6, key: 'sportsCoordinator' }
     };
-    
+
     const roleData = baseRoleData[normalizedRole] || { priority: 10, key: 'member' };
-    
+
     const colors = {
       president: { color: '#f59e0b', bgColor: '#fef3c7' },
       vicePresident: { color: '#3b82f6', bgColor: '#dbeafe' },
@@ -119,9 +156,9 @@ export const ClubManagement = ({ club }) => {
       sportsCoordinator: { color: '#f97316', bgColor: '#fed7aa' },
       member: { color: '#6b7280', bgColor: '#f3f4f6' }
     };
-    
+
     const colorInfo = colors[roleData.key] || colors.member;
-    
+
     return {
       ...colorInfo,
       priority: roleData.priority,
@@ -143,9 +180,23 @@ export const ClubManagement = ({ club }) => {
     setShowMemberModal(true);
   };
 
-  const closeMemberModal = () => {
+  const openContactModal = (member) => {
+    setSelectedMember(member);
+    setShowContactModal(true);
+    setFormStatus(null);
+    setContactForm({
+      from: '',
+      to: member.email || '',
+      subject: `Съобщение до ${member.name} - ${member.role}`,
+      message: ''
+    });
+  };
+
+  const closeModals = () => {
     setShowMemberModal(false);
+    setShowContactModal(false);
     setSelectedMember(null);
+    setFormStatus(null);
   };
 
   const formatPhone = (phone, reveal = false) => {
@@ -176,10 +227,10 @@ export const ClubManagement = ({ club }) => {
   };
 
   const handleShare = (member) => {
-    const text = t('clubs.ClubManagement.shareText', { 
-      name: member.name, 
-      role: member.role, 
-      clubName: club.name 
+    const text = t('clubs.ClubManagement.shareText', {
+      name: member.name,
+      role: member.role,
+      clubName: club.name
     });
     if (navigator.share) {
       navigator.share({
@@ -193,6 +244,60 @@ export const ClubManagement = ({ club }) => {
     }
   };
 
+  // Обработка на форма за лично съобщение
+  const handleFormChange = (field, value) => {
+    setContactForm(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleContactSubmit = async (e) => {
+    e.preventDefault();
+
+    // Валидация
+    if (!contactForm.from.trim() || !contactForm.to.trim() || !contactForm.subject.trim() || !contactForm.message.trim()) {
+      alert('Моля, попълнете всички полета');
+      return;
+    }
+
+    // Валидация на имейл адреси
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(contactForm.from)) {
+      alert('Моля, въведете валиден имейл адрес в полето "От"');
+      return;
+    }
+    if (!emailRegex.test(contactForm.to)) {
+      alert('Моля, въведете валиден имейл адрес в полето "До"');
+      return;
+    }
+
+    setFormStatus('sending');
+
+    try {
+      // Използваме personalEmail ендпойнта
+      const success = await sendPersonalEmail({
+        from: contactForm.from,
+        to: contactForm.to,
+        subject: contactForm.subject,
+        message: contactForm.message
+      });
+
+      if (success) {
+        setFormStatus('success');
+        setTimeout(() => {
+          closeModals();
+        }, 2000);
+      } else {
+        setFormStatus('error');
+      }
+    } catch (error) {
+      console.error('Error sending personal email:', error);
+      setFormStatus('error');
+    }
+
+    if (formStatus === 'error') {
+      setTimeout(() => setFormStatus(null), 3000);
+    }
+  };
+
   const sortedMembers = [...boardMembers].sort((a, b) => {
     const priorityA = getRoleInfo(a.role).priority;
     const priorityB = getRoleInfo(b.role).priority;
@@ -202,7 +307,7 @@ export const ClubManagement = ({ club }) => {
   return (
     <section id="general-management" className="general-management-main">
       <div className="general-management-container">
-        
+
         {/* Header */}
         <div className="general-management-header">
           <div className="general-management-badge">
@@ -213,7 +318,7 @@ export const ClubManagement = ({ club }) => {
           <p className="general-management-subtitle">
             {t('clubs.ClubManagement.header.subtitle')}
           </p>
-          
+
           {/* Stats */}
           <div className="general-management-stats">
             <div className="general-management-stat">
@@ -235,10 +340,10 @@ export const ClubManagement = ({ club }) => {
         <div className="general-management-grid">
           {visibleMembers.map((member, index) => {
             const roleInfo = getRoleInfo(member.role);
-            
+
             return (
-              <div 
-                key={member.name || index} 
+              <div
+                key={member.name || index}
                 className="general-member-card"
                 style={{ '--role-color': roleInfo.color, '--role-bg': roleInfo.bgColor }}
               >
@@ -255,7 +360,7 @@ export const ClubManagement = ({ club }) => {
                       <FontAwesomeIcon icon={getRoleIcon(member.role)} />
                     </div>
                   </div>
-                  
+
                   <div className="general-member-info">
                     <h3 className="general-member-name">{member.name}</h3>
                     <p className="general-member-role">{member.role}</p>
@@ -267,34 +372,43 @@ export const ClubManagement = ({ club }) => {
                   </div>
 
                   <div className="general-member-actions">
-                    <button 
+                    <button
                       className="general-action-btn"
                       onClick={() => handleShare(member)}
                       title={t('clubs.ClubManagement.actions.share')}
                     >
                       <FontAwesomeIcon icon={faShare} />
                     </button>
-                    <button 
+                    <button
                       className="general-action-btn"
                       onClick={() => openMemberModal(member)}
                       title={t('clubs.ClubManagement.actions.moreInfo')}
                     >
                       <FontAwesomeIcon icon={faInfoCircle} />
                     </button>
+                    {member.email && (
+                      <button
+                        className="general-action-btn"
+                        onClick={() => openContactModal(member)}
+                        title="Изпрати лично съобщение"
+                      >
+                        <FontAwesomeIcon icon={faCommentDots} />
+                      </button>
+                    )}
                   </div>
                 </div>
 
                 <div className="general-member-contact">
-                  <button 
+                  <button
                     className="general-contact-toggle"
                     onClick={() => toggleContactDetails(member.name)}
                   >
-                    <FontAwesomeIcon 
-                      icon={showContactDetails[member.name] ? faEyeSlash : faEye} 
+                    <FontAwesomeIcon
+                      icon={showContactDetails[member.name] ? faEyeSlash : faEye}
                     />
                     <span>
-                      {showContactDetails[member.name] 
-                        ? t('clubs.ClubManagement.contact.hideContacts') 
+                      {showContactDetails[member.name]
+                        ? t('clubs.ClubManagement.contact.hideContacts')
                         : t('clubs.ClubManagement.contact.showContacts')
                       }
                     </span>
@@ -306,7 +420,7 @@ export const ClubManagement = ({ club }) => {
                         <div className="general-contact-item">
                           <FontAwesomeIcon icon={faPhone} />
                           <span>{formatPhone(member.phone, true)}</span>
-                          <button 
+                          <button
                             className="general-contact-action"
                             onClick={() => handleCall(member.phone)}
                             title={t('clubs.ClubManagement.contact.call')}
@@ -315,21 +429,35 @@ export const ClubManagement = ({ club }) => {
                           </button>
                         </div>
                       )}
-                      
                       {member.email && (
                         <div className="general-contact-item">
                           <FontAwesomeIcon icon={faEnvelope} />
-                          <span>{formatEmail(member.email, true)}</span>
-                          <button 
-                            className="general-contact-action"
-                            onClick={() => handleEmail(member.email)}
-                            title={t('clubs.ClubManagement.contact.sendEmail')}
+                          <span
+                            className="general-email-clickable"
+                            onClick={() => openContactModal(member)}
+                            title="Изпрати лично съобщение"
                           >
-                            <FontAwesomeIcon icon={faEnvelope} />
-                          </button>
+                            {formatEmail(member.email, true)}
+                          </span>
+                          <div className="general-contact-actions">
+                            <button
+                              className="general-contact-action"
+                              onClick={() => handleEmail(member.email)}
+                              title={t('clubs.ClubManagement.contact.sendEmail')}
+                            >
+                              <FontAwesomeIcon icon={faEnvelope} />
+                            </button>
+                            <button
+                              className="general-contact-action"
+                              onClick={() => openContactModal(member)}
+                              title="Изпрати лично съобщение"
+                            >
+                              <FontAwesomeIcon icon={faCommentDots} />
+                            </button>
+                          </div>
                         </div>
                       )}
-                      
+
                       {member.address && (
                         <div className="general-contact-item">
                           <FontAwesomeIcon icon={faMapMarkerAlt} />
@@ -347,18 +475,18 @@ export const ClubManagement = ({ club }) => {
         {/* Show More Button */}
         {boardMembers.length > 4 && (
           <div className="general-show-more-section">
-            <button 
+            <button
               className="general-show-more-btn"
               onClick={() => setShowAllMembers(!showAllMembers)}
             >
               <span>
-                {showAllMembers 
-                  ? t('clubs.ClubManagement.actions.showLess') 
+                {showAllMembers
+                  ? t('clubs.ClubManagement.actions.showLess')
                   : t('clubs.ClubManagement.actions.showAll', { count: boardMembers.length - 4 })
                 }
               </span>
-              <FontAwesomeIcon 
-                icon={showAllMembers ? faChevronUp : faChevronDown} 
+              <FontAwesomeIcon
+                icon={showAllMembers ? faChevronUp : faChevronDown}
               />
             </button>
           </div>
@@ -374,7 +502,7 @@ export const ClubManagement = ({ club }) => {
             {sortedMembers.map((member, index) => {
               const roleInfo = getRoleInfo(member.role);
               return (
-                <div 
+                <div
                   key={member.name || index}
                   className="general-structure-item"
                   style={{ '--role-color': roleInfo.color, '--role-bg': roleInfo.bgColor }}
@@ -399,7 +527,7 @@ export const ClubManagement = ({ club }) => {
             <FontAwesomeIcon icon={faHandshake} />
             {t('clubs.ClubManagement.contactSection.title')}
           </h3>
-          
+
           <div className="general-contact-methods">
             {club.contacts?.phone && (
               <div className="general-contact-method">
@@ -413,7 +541,7 @@ export const ClubManagement = ({ club }) => {
                 </div>
               </div>
             )}
-            
+
             {club.contacts?.email && (
               <div className="general-contact-method">
                 <div className="general-contact-icon">
@@ -426,7 +554,7 @@ export const ClubManagement = ({ club }) => {
                 </div>
               </div>
             )}
-            
+
             {club.location && (
               <div className="general-contact-method">
                 <div className="general-contact-icon">
@@ -448,18 +576,18 @@ export const ClubManagement = ({ club }) => {
 
       {/* Member Details Modal */}
       {showMemberModal && selectedMember && (
-        <div className="general-modal-overlay" onClick={closeMemberModal}>
+        <div className="general-modal-overlay" onClick={closeModals}>
           <div className="general-modal" onClick={(e) => e.stopPropagation()}>
             <div className="general-modal-header">
               <h3>
                 <FontAwesomeIcon icon={faIdCard} />
                 {t('clubs.ClubManagement.modal.title')}
               </h3>
-              <button className="general-modal-close" onClick={closeMemberModal}>
+              <button className="general-modal-close" onClick={closeModals}>
                 <FontAwesomeIcon icon={faTimes} />
               </button>
             </div>
-            
+
             <div className="general-modal-content">
               <div className="general-member-profile">
                 <div className="general-profile-avatar">
@@ -474,11 +602,11 @@ export const ClubManagement = ({ club }) => {
                     <FontAwesomeIcon icon={getRoleIcon(selectedMember.role)} />
                   </div>
                 </div>
-                
+
                 <div className="general-profile-info">
                   <h4>{selectedMember.name}</h4>
                   <p className="general-profile-role">{selectedMember.role}</p>
-                  
+
                   {selectedMember.bio && (
                     <div className="general-profile-bio">
                       <h5>{t('clubs.ClubManagement.modal.biography')}</h5>
@@ -495,7 +623,7 @@ export const ClubManagement = ({ club }) => {
                     <div className="general-profile-contact">
                       <FontAwesomeIcon icon={faPhone} />
                       <span>{selectedMember.phone}</span>
-                      <button 
+                      <button
                         className="general-profile-action"
                         onClick={() => handleCall(selectedMember.phone)}
                       >
@@ -503,12 +631,12 @@ export const ClubManagement = ({ club }) => {
                       </button>
                     </div>
                   )}
-                  
+
                   {selectedMember.email && (
                     <div className="general-profile-contact">
                       <FontAwesomeIcon icon={faEnvelope} />
                       <span>{selectedMember.email}</span>
-                      <button 
+                      <button
                         className="general-profile-action"
                         onClick={() => handleEmail(selectedMember.email)}
                       >
@@ -516,7 +644,7 @@ export const ClubManagement = ({ club }) => {
                       </button>
                     </div>
                   )}
-                  
+
                   {selectedMember.address && (
                     <div className="general-profile-contact">
                       <FontAwesomeIcon icon={faMapMarkerAlt} />
@@ -532,7 +660,7 @@ export const ClubManagement = ({ club }) => {
               </div>
 
               <div className="general-profile-actions">
-                <button 
+                <button
                   className="general-profile-btn share"
                   onClick={() => handleShare(selectedMember)}
                 >
@@ -540,7 +668,7 @@ export const ClubManagement = ({ club }) => {
                   {t('clubs.ClubManagement.actions.share')}
                 </button>
                 {selectedMember.phone && (
-                  <button 
+                  <button
                     className="general-profile-btn call"
                     onClick={() => handleCall(selectedMember.phone)}
                   >
@@ -549,7 +677,7 @@ export const ClubManagement = ({ club }) => {
                   </button>
                 )}
                 {selectedMember.email && (
-                  <button 
+                  <button
                     className="general-profile-btn email"
                     onClick={() => handleEmail(selectedMember.email)}
                   >
@@ -557,6 +685,138 @@ export const ClubManagement = ({ club }) => {
                     {t('clubs.ClubManagement.contact.sendEmail')}
                   </button>
                 )}
+                {selectedMember.email && (
+                  <button
+                    className="general-profile-btn contact"
+                    onClick={() => openContactModal(selectedMember)}
+                  >
+                    <FontAwesomeIcon icon={faCommentDots} />
+                    Изпрати лично съобщение
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Personal Contact Modal */}
+      {showContactModal && selectedMember && (
+        <div className="general-modal-overlay" onClick={closeModals}>
+          <div className="general-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="general-modal-header">
+              <h3>
+                <FontAwesomeIcon icon={faPaperPlane} />
+                Лично съобщение до {selectedMember.name}
+              </h3>
+              <button className="general-modal-close" onClick={closeModals}>
+                <FontAwesomeIcon icon={faTimes} />
+              </button>
+            </div>
+
+            <div className="general-modal-content">
+              <div className="general-contact-recipient">
+                <div className="general-recipient-info">
+                  <div className="general-recipient-avatar">
+                    {selectedMember.avatar ? (
+                      <img src={selectedMember.avatar} alt={selectedMember.name} />
+                    ) : (
+                      <div className="general-recipient-placeholder">
+                        <FontAwesomeIcon icon={faUsers} />
+                      </div>
+                    )}
+                  </div>
+                  <div className="general-recipient-details">
+                    <h4>{selectedMember.name}</h4>
+                    <p>{selectedMember.role}</p>
+                    <span>{selectedMember.email}</span>
+                  </div>
+                </div>
+              </div>
+
+              <form onSubmit={handleContactSubmit} className="general-contact-form">
+                <div className="general-form-row">
+                  <div className="general-form-group">
+                    <label>От (вашия имейл) *</label>
+                    <input
+                      type="email"
+                      value={contactForm.from}
+                      onChange={(e) => handleFormChange('from', e.target.value)}
+                      placeholder="вашия@email.com"
+                      required
+                    />
+                  </div>
+
+                  <div className="general-form-group">
+                    <label>До *</label>
+                    <input
+                      type="email"
+                      value={contactForm.to}
+                      onChange={(e) => handleFormChange('to', e.target.value)}
+                      placeholder="получател@email.com"
+                      required
+                      readOnly
+                    />
+                  </div>
+                </div>
+
+                <div className="general-form-group">
+                  <label>Тема *</label>
+                  <input
+                    type="text"
+                    value={contactForm.subject}
+                    onChange={(e) => handleFormChange('subject', e.target.value)}
+                    placeholder="Тема на съобщението"
+                    required
+                  />
+                </div>
+
+                <div className="general-form-group">
+                  <label>Съобщение *</label>
+                  <textarea
+                    value={contactForm.message}
+                    onChange={(e) => handleFormChange('message', e.target.value)}
+                    placeholder="Напишете вашето съобщение тук..."
+                    rows="6"
+                    required
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="general-submit-btn"
+                  disabled={formStatus === 'sending'}
+                >
+                  {formStatus === 'sending' ? (
+                    <>
+                      <div className="general-spinner"></div>
+                      Изпращане...
+                    </>
+                  ) : (
+                    <>
+                      <FontAwesomeIcon icon={faPaperPlane} />
+                      Изпрати съобщение
+                    </>
+                  )}
+                </button>
+
+                {formStatus === 'success' && (
+                  <div className="general-success-message">
+                    <FontAwesomeIcon icon={faCheck} />
+                    Съобщението е изпратено успешно!
+                  </div>
+                )}
+
+                {formStatus === 'error' && (
+                  <div className="general-error-message">
+                    <FontAwesomeIcon icon={faExclamationTriangle} />
+                    Възникна грешка при изпращането!
+                  </div>
+                )}
+              </form>
+
+              <div className="general-contact-note">
+                <p><FontAwesomeIcon icon={faInfoCircle} /> Съобщението ще бъде изпратено директно на имейла на избрания член от управлението.</p>
               </div>
             </div>
           </div>

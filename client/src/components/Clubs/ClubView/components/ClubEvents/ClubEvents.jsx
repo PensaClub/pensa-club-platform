@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
@@ -33,8 +33,8 @@ export const ClubEvents = ({ club }) => {
   const { t } = useTranslation();
   const { 
     registerForEvent,
-    sendMembershipApplication,
-    sendVolunteerApplication
+    registerForCourse,
+    registerForTrip
   } = useClubContext();
   
   const [activeTab, setActiveTab] = useState('upcoming');
@@ -55,6 +55,28 @@ export const ClubEvents = ({ club }) => {
     expectations: ''
   });
   const [formStatus, setFormStatus] = useState(null);
+
+  // Keyboard handling за правилна работа на Ctrl+C
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      // Затваряме модала само при ESC и без modifier keys
+      if (event.key === 'Escape' && !event.ctrlKey && !event.altKey && !event.shiftKey && !event.metaKey) {
+        if (showEventModal || showTripModal || showCourseModal) {
+          closeModals();
+        }
+      }
+    };
+
+    // Добавяме listener само когато има отворен модал
+    if (showEventModal || showTripModal || showCourseModal) {
+      document.addEventListener('keydown', handleKeyDown);
+    }
+
+    // Cleanup
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [showEventModal, showTripModal, showCourseModal]);
 
   // ПРОВЕРКА ЗА ДАННИ - ако няма събития, не показваме компонента
   const hasEvents = club?.activities?.events && club.activities.events.length > 0;
@@ -219,7 +241,7 @@ export const ClubEvents = ({ club }) => {
     setRegistrationForm(prev => ({ ...prev, [field]: value }));
   };
 
-  // Записване за събитие
+  // Записване за събитие - eventRegistrationSchema
   const handleEventRegistration = async (e) => {
     e.preventDefault();
     if (!selectedEvent) return;
@@ -239,11 +261,13 @@ export const ClubEvents = ({ club }) => {
     setFormStatus('sending');
 
     try {
-      const success = await registerForEvent(club.id, selectedEvent.id, {
+      // Използваме registerForEvent с eventRegistrationSchema
+      const success = await registerForEvent(club.id, selectedEvent.title, {
         name: registrationForm.name,
         email: registrationForm.email,
         phone: registrationForm.phone,
         numberOfParticipants: registrationForm.numberOfParticipants || 1,
+        emergencyContact: registrationForm.emergencyContact || '',
         specialRequests: registrationForm.specialRequests || ''
       });
 
@@ -265,7 +289,7 @@ export const ClubEvents = ({ club }) => {
     }
   };
 
-  // Записване за екскурзия
+  // Записване за екскурзия - tripRegistrationSchema
   const handleTripRegistration = async (e) => {
     e.preventDefault();
     if (!selectedTrip) return;
@@ -285,8 +309,8 @@ export const ClubEvents = ({ club }) => {
     setFormStatus('sending');
 
     try {
-      // За екскурзии използваме tripRegistrationSchema чрез registerForEvent
-      const success = await registerForEvent(club.id, selectedTrip.id || `trip-${selectedTrip.destination}`, {
+      // Използваме registerForTrip с tripRegistrationSchema
+      const success = await registerForTrip(club.id, selectedTrip.destination, {
         name: registrationForm.name,
         email: registrationForm.email,
         phone: registrationForm.phone,
@@ -313,7 +337,7 @@ export const ClubEvents = ({ club }) => {
     }
   };
 
-  // Записване за курс
+  // Записване за курс - courseRegistrationSchema
   const handleCourseRegistration = async (e) => {
     e.preventDefault();
     if (!selectedCourse) return;
@@ -333,12 +357,13 @@ export const ClubEvents = ({ club }) => {
     setFormStatus('sending');
 
     try {
-      // За курсове използваме courseRegistrationSchema чрез registerForEvent
-      const success = await registerForEvent(club.id, selectedCourse.id || `course-${selectedCourse.name}`, {
+      // Използваме registerForCourse с courseRegistrationSchema
+      const success = await registerForCourse(club.id, selectedCourse.name, {
         name: registrationForm.name,
         email: registrationForm.email,
         phone: registrationForm.phone,
         experience: registrationForm.experience || '',
+        emergencyContact: registrationForm.emergencyContact || '',
         expectations: registrationForm.expectations || ''
       });
 
@@ -506,6 +531,7 @@ export const ClubEvents = ({ club }) => {
     );
 
     if (type === 'event') {
+      // eventRegistrationSchema: name, email, phone, numberOfParticipants, emergencyContact, specialRequests
       return (
         <>
           {commonFields}
@@ -520,6 +546,15 @@ export const ClubEvents = ({ club }) => {
             />
           </div>
           <div className="general-form-group">
+            <label>Спешен контакт</label>
+            <input
+              type="text"
+              value={registrationForm.emergencyContact}
+              onChange={(e) => handleFormChange('emergencyContact', e.target.value)}
+              placeholder="Име и телефон на близък човек"
+            />
+          </div>
+          <div className="general-form-group">
             <label>Специални изисквания</label>
             <textarea
               value={registrationForm.specialRequests}
@@ -531,6 +566,7 @@ export const ClubEvents = ({ club }) => {
         </>
       );
     } else if (type === 'trip') {
+      // tripRegistrationSchema: name, email, phone, numberOfParticipants, emergencyContact, specialRequests
       return (
         <>
           {commonFields}
@@ -565,6 +601,7 @@ export const ClubEvents = ({ club }) => {
         </>
       );
     } else if (type === 'course') {
+      // courseRegistrationSchema: name, email, phone, experience, emergencyContact, expectations
       return (
         <>
           {commonFields}
@@ -580,6 +617,15 @@ export const ClubEvents = ({ club }) => {
               <option value="intermediate">Среднонапреднал</option>
               <option value="advanced">Напреднал</option>
             </select>
+          </div>
+          <div className="general-form-group">
+            <label>Спешен контакт</label>
+            <input
+              type="text"
+              value={registrationForm.emergencyContact}
+              onChange={(e) => handleFormChange('emergencyContact', e.target.value)}
+              placeholder="Име и телефон на близък човек"
+            />
           </div>
           <div className="general-form-group">
             <label>Очаквания от курса</label>
