@@ -221,23 +221,26 @@ export const clubServiceFactory = (token) => {
     },
 
     // Записване за събитие
-    registerForEvent: async (clubId, eventId, registrationData) => {
+    registerForEvent: async (clubId, eventTitle, registrationData) => {
       // registrationData: { name, email, phone, numberOfParticipants?, specialRequests? }
-      return requester.post(`${apiUrl}/clubs/${clubId}/events/${eventId}/register`, registrationData);
+      return requester.post(`${apiUrl}/clubs/${clubId}/events/${eventTitle}/register`, registrationData);
     },
 
     // Записване за курс
-    registerForCourse: async (clubId, courseId, registrationData) => {
+    registerForCourse: async (clubId, courseName, registrationData) => {
       // registrationData: { name, email, phone, experience, expectations }
-      return requester.post(`${apiUrl}/clubs/${clubId}/courses/${courseId}/register`, registrationData);
+      return requester.post(`${apiUrl}/clubs/${clubId}/courses/${courseName}/register`, registrationData);
     },
 
     // Записване за екскурзия
-    registerForTrip: async (clubId, tripId, registrationData) => {
+    registerForTrip: async (clubId, tripDestination, registrationData) => {
       // registrationData: { name, email, phone, numberOfParticipants, emergencyContact, specialRequests }
-      return requester.post(`${apiUrl}/clubs/${clubId}/trips/${tripId}/register`, registrationData);
+      return requester.post(`${apiUrl}/clubs/${clubId}/trips/${tripDestination}/register`, registrationData);
     },
-
+    personalEmail: async (personalInfo) => {
+      // personalInfo: { name, email, phone, numberOfParticipants, emergencyContact, specialRequests }
+      return requester.post(`${apiUrl}/clubs/personal-email`, personalInfo);
+    },
     // ===============================
     // АДМИНИСТРАТИВНИ ФУНКЦИИ
     // ===============================

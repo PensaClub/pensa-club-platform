@@ -66,7 +66,7 @@ export const AllClubs = () => {
 
   useEffect(() => {
     fetchClubs();
-  }, [fetchClubs]);
+  }, []);
 
   // Филтриране на клубове
   const handleFilterChange = useCallback((filters) => {

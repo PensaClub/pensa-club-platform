@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
@@ -34,8 +34,9 @@ export const ClubActivities = ({ club }) => {
   const { t } = useTranslation();
   const { 
     registerForEvent,
-    sendMembershipApplication,
-    sendVolunteerApplication
+    registerForCourse,
+    registerForTrip,
+    sendMembershipApplication
   } = useClubContext();
   
   const [showRegistrationModal, setShowRegistrationModal] = useState(false);
@@ -44,6 +45,9 @@ export const ClubActivities = ({ club }) => {
     name: '',
     email: '',
     phone: '',
+    age: '',
+    address: '',
+    motivation: '',
     experience: '',
     numberOfParticipants: 1,
     specialRequests: '',
@@ -51,7 +55,27 @@ export const ClubActivities = ({ club }) => {
     expectations: ''
   });
   const [formStatus, setFormStatus] = useState(null);
+// Добави този useEffect за правилно handling на keyboard събития
+useEffect(() => {
+  const handleKeyDown = (event) => {
+    // Затваряме модала само при ESC и без modifier keys
+    if (event.key === 'Escape' && !event.ctrlKey && !event.altKey && !event.shiftKey && !event.metaKey) {
+      if (showRegistrationModal) {
+        closeRegistrationModal();
+      }
+    }
+  };
 
+  // Добавяме listener само когато модала е отворен
+  if (showRegistrationModal) {
+    document.addEventListener('keydown', handleKeyDown);
+  }
+
+  // Cleanup
+  return () => {
+    document.removeEventListener('keydown', handleKeyDown);
+  };
+}, [showRegistrationModal]);
   // Безопасна функция за конвертиране на номер на ден в име на ден
   const getNumericDayName = (dayOfWeek) => {
     if (dayOfWeek === undefined || dayOfWeek === null) return '';
@@ -312,6 +336,9 @@ export const ClubActivities = ({ club }) => {
       name: '',
       email: '',
       phone: '',
+      age: '',
+      address: '',
+      motivation: '',
       experience: '',
       numberOfParticipants: 1,
       specialRequests: '',
@@ -337,7 +364,7 @@ export const ClubActivities = ({ club }) => {
     e.preventDefault();
     if (!selectedActivity) return;
     
-    // Валидация
+    // Основна валидация
     if (!registrationForm.name.trim() || !registrationForm.email.trim() || !registrationForm.phone.trim()) {
       alert('Моля, попълнете всички задължителни полета');
       return;
@@ -358,25 +385,27 @@ export const ClubActivities = ({ club }) => {
       // Избираме правилната API функция според типа дейност
       if (selectedActivity.type === 'event') {
         // За събития използваме eventRegistrationSchema
-        success = await registerForEvent(club.id, selectedActivity.id, {
+        success = await registerForEvent(club.id, selectedActivity.title || selectedActivity.name, {
           name: registrationForm.name,
           email: registrationForm.email,
           phone: registrationForm.phone,
           numberOfParticipants: registrationForm.numberOfParticipants || 1,
+          emergencyContact: registrationForm.emergencyContact || '',
           specialRequests: registrationForm.specialRequests || ''
         });
       } else if (selectedActivity.type === 'course') {
-        // За курсове използваме courseRegistrationSchema чрез registerForEvent
-        success = await registerForEvent(club.id, selectedActivity.id, {
+        // За курсове използваме courseRegistrationSchema
+        success = await registerForCourse(club.id, selectedActivity.name, {
           name: registrationForm.name,
           email: registrationForm.email,
           phone: registrationForm.phone,
           experience: registrationForm.experience || '',
+          emergencyContact: registrationForm.emergencyContact || '',
           expectations: registrationForm.expectations || ''
         });
       } else if (selectedActivity.type === 'trip') {
-        // За екскурзии използваме tripRegistrationSchema чрез registerForEvent
-        success = await registerForEvent(club.id, selectedActivity.id, {
+        // За екскурзии използваме tripRegistrationSchema
+        success = await registerForTrip(club.id, selectedActivity.destination || selectedActivity.name, {
           name: registrationForm.name,
           email: registrationForm.email,
           phone: registrationForm.phone,
@@ -390,8 +419,10 @@ export const ClubActivities = ({ club }) => {
           name: registrationForm.name,
           email: registrationForm.email,
           phone: registrationForm.phone,
-          experience: registrationForm.experience || '',
-          motivation: `Искам да се запиша за: ${selectedActivity.displayName}`
+          age: registrationForm.age ? parseInt(registrationForm.age) : undefined,
+          address: registrationForm.address || '',
+          motivation: registrationForm.motivation || `Искам да се запиша за: ${selectedActivity.displayName}`,
+          experience: registrationForm.experience || ''
         });
       }
 
@@ -457,6 +488,7 @@ export const ClubActivities = ({ club }) => {
     );
 
     if (selectedActivity.type === 'event') {
+      // eventRegistrationSchema
       return (
         <>
           {commonFields}
@@ -471,6 +503,15 @@ export const ClubActivities = ({ club }) => {
             />
           </div>
           <div className="general-form-group">
+            <label>Спешен контакт</label>
+            <input
+              type="text"
+              value={registrationForm.emergencyContact}
+              onChange={(e) => handleFormChange('emergencyContact', e.target.value)}
+              placeholder="Име и телефон на близък човек"
+            />
+          </div>
+          <div className="general-form-group">
             <label>Специални изисквания</label>
             <textarea
               value={registrationForm.specialRequests}
@@ -482,6 +523,7 @@ export const ClubActivities = ({ club }) => {
         </>
       );
     } else if (selectedActivity.type === 'course') {
+      // courseRegistrationSchema
       return (
         <>
           {commonFields}
@@ -499,6 +541,15 @@ export const ClubActivities = ({ club }) => {
             </select>
           </div>
           <div className="general-form-group">
+            <label>Спешен контакт</label>
+            <input
+              type="text"
+              value={registrationForm.emergencyContact}
+              onChange={(e) => handleFormChange('emergencyContact', e.target.value)}
+              placeholder="Име и телефон на близък човек"
+            />
+          </div>
+          <div className="general-form-group">
             <label>Очаквания от курса</label>
             <textarea
               value={registrationForm.expectations}
@@ -510,6 +561,7 @@ export const ClubActivities = ({ club }) => {
         </>
       );
     } else if (selectedActivity.type === 'trip') {
+      // tripRegistrationSchema
       return (
         <>
           {commonFields}
@@ -544,22 +596,56 @@ export const ClubActivities = ({ club }) => {
         </>
       );
     } else {
-      // За редовни дейности
+      // membershipApplicationSchema за редовни дейности
       return (
         <>
           {commonFields}
+          <div className="general-form-row">
+            <div className="general-form-group">
+              <label>Възраст</label>
+              <input
+                type="number"
+                min="1"
+                max="120"
+                value={registrationForm.age}
+                onChange={(e) => handleFormChange('age', e.target.value)}
+                placeholder="Години"
+              />
+            </div>
+            
+            <div className="general-form-group">
+              <label>Опит</label>
+              <select
+                value={registrationForm.experience}
+                onChange={(e) => handleFormChange('experience', e.target.value)}
+              >
+                <option value="">Изберете ниво</option>
+                <option value="none">Няма опит</option>
+                <option value="beginner">Начинаещ</option>
+                <option value="intermediate">Среднонапреднал</option>
+                <option value="advanced">Напреднал</option>
+              </select>
+            </div>
+          </div>
+          
           <div className="general-form-group">
-            <label>Опит</label>
-            <select
-              value={registrationForm.experience}
-              onChange={(e) => handleFormChange('experience', e.target.value)}
-            >
-              <option value="">Изберете ниво</option>
-              <option value="none">Няма опит</option>
-              <option value="beginner">Начинаещ</option>
-              <option value="intermediate">Среднонапреднал</option>
-              <option value="advanced">Напреднал</option>
-            </select>
+            <label>Адрес</label>
+            <input
+              type="text"
+              value={registrationForm.address}
+              onChange={(e) => handleFormChange('address', e.target.value)}
+              placeholder="Вашия адрес"
+            />
+          </div>
+          
+          <div className="general-form-group">
+            <label>Мотивация</label>
+            <textarea
+              value={registrationForm.motivation}
+              onChange={(e) => handleFormChange('motivation', e.target.value)}
+              placeholder="Защо искате да участвате в тази дейност?"
+              rows="3"
+            />
           </div>
         </>
       );

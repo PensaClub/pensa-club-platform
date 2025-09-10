@@ -749,14 +749,63 @@ export const ClubProvider = ({ children }) => {
     }
   };
 
-  const registerForEvent = async (clubId, eventId, registrationData) => {
+  // ===============================
+  // 🆕 ОБНОВЕНИ REGISTRATION ФУНКЦИИ
+  // ===============================
+
+  const registerForEvent = async (clubId, eventTitle, registrationData) => {
     try {
       setIsLoading(true);
-      await clubService.registerForEvent(clubId, eventId, registrationData);
+      await clubService.registerForEvent(clubId, eventTitle, registrationData);
       notify('event-registration-sent');
       return true;
     } catch (e) {
       console.error('Грешка при записване за събитие:', e);
+      notify('error', e);
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const registerForCourse = async (clubId, courseName, registrationData) => {
+    try {
+      setIsLoading(true);
+      await clubService.registerForCourse(clubId, courseName, registrationData);
+      notify('course-registration-sent');
+      return true;
+    } catch (e) {
+      console.error('Грешка при записване за курс:', e);
+      notify('error', e);
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const registerForTrip = async (clubId, tripDestination, registrationData) => {
+    try {
+      setIsLoading(true);
+      await clubService.registerForTrip(clubId, tripDestination, registrationData);
+      notify('trip-registration-sent');
+      return true;
+    } catch (e) {
+      console.error('Грешка при записване за екскурзия:', e);
+      notify('error', e);
+      return false;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const sendPersonalEmail = async (personalInfo) => {
+    try {
+      setIsLoading(true);
+      await clubService.personalEmail(personalInfo);
+      notify('personal-email-sent');
+      return true;
+    } catch (e) {
+      console.error('Грешка при изпращане на персонален имейл:', e);
       notify('error', e);
       return false;
     } finally {
@@ -1204,19 +1253,26 @@ export const ClubProvider = ({ children }) => {
     subscribeToNewsletter,     // 🆕 API
     sendVolunteerApplication,  // 🆕 API
     sendPartnershipInquiry,    // 🆕 API
-    registerForEvent,          // 🆕 API
+    
+    // ===============================
+    // 🆕 РЕГИСТРАЦИИ
+    // ===============================
+    registerForEvent,          // 🆕 ОБНОВЕН - използва title
+    registerForCourse,         // 🆕 НОВА ФУНКЦИЯ
+    registerForTrip,           // 🆕 НОВА ФУНКЦИЯ
+    sendPersonalEmail,        // 🆕 НОВА ФУНКЦИЯ
 
     // ===============================
     // РЕГИОНАЛНИ ФУНКЦИИ
     // ===============================
-    getRegionalClubs,      // 📌 Mock data (запазен)
-    getCentralClub,        // 📌 Mock data (запазен)
+    getRegionalClubs,    
+    getCentralClub,        
 
     // ===============================
     // UTILITY ФУНКЦИИ
     // ===============================
-    getAvailableCities,    // 📌 Mock data (запазен)
-    getAvailableCategories,// 📌 Mock data (запазен)
+    getAvailableCities,
+    getAvailableCategories,
     invalidateClubsCache,
     clearCurrentClub,
 
