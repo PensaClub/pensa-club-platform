@@ -38,7 +38,7 @@ export const ClubActivities = ({ club }) => {
     registerForTrip,
     sendMembershipApplication
   } = useClubContext();
-  
+  console.log('ClubActivities club:', club);
   const [showRegistrationModal, setShowRegistrationModal] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [registrationForm, setRegistrationForm] = useState({
@@ -793,13 +793,13 @@ useEffect(() => {
               {/* Registration button - показва се само ако allowOnlineRegistration е true */}
               {club.preferences?.allowOnlineRegistration && (
                 <div className="general-activity-actions">
-                  <button 
+                 { club.contacts?.email && <button 
                     className="general-register-btn"
                     onClick={() => openRegistrationModal(activity)}
                   >
                     <FontAwesomeIcon icon={faUserPlus} />
                     Записване
-                  </button>
+                  </button>}
                 </div>
               )}
             </div>

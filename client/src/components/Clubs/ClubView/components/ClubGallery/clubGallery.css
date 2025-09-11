@@ -742,13 +742,26 @@
 
 @media (max-width: 480px) {
   .general-gallery-controls {
-    padding: 1.5rem;
+    padding:1rem 0.2rem;
   }
-  
+  .general-gallery-container {
+    padding: 0 0.5rem;
+  }
   .general-media-actions {
     gap: 0.5rem;
   }
-  
+  .general-media-title {
+    font-size: 1.1rem;
+  }
+  .general-meta-item span{
+    font-size: 0.9rem;
+  }
+  .general-event-link span{
+    font-size: 1rem;
+  }
+  .general-media-info{
+    padding: 1rem;
+  }
   .general-media-action {
     width: 40px;
     height: 40px;

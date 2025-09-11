@@ -494,15 +494,47 @@
 }
 
 @media (max-width: 480px) {
-  .club-pensioners-header .section-title {
+  .club-pensioners-header {
     font-size: 1.6rem;
   }
-
+  .section-title{
+    font-size: 2rem;
+  }
   .club-pensioners-tab {
     padding: 0.75rem 1rem;
     font-size: 0.9rem;
   }
-
+.club-pensioners-header .section-subtitle {
+    font-size: 0.9rem;
+  }
+  .section-title::after{
+    margin-left: 0;
+  }
+  .container-specific{
+    padding: 0 0.7rem;
+  }
+  .club-pensioners-service-item .service-content p{
+    font-size: 0.9rem;
+  }
+  .partner-detail span{
+    font-size: 0.9rem;
+  }
+  .club-pensioners-tab span{
+    font-size: 1rem;
+  }
+  .partner-discount span{
+    font-size: 1rem;
+  }
+  .emergency-badge span{
+    font-size: 1rem;
+  }
+  .emergency-item span{
+    font-size: 0.8rem;
+  }
+  .club-pensioners-section-title {
+    font-size: 1.2rem;
+    text-align: center;
+  }
   .club-pensioners-content {
     padding: 1rem;
   }

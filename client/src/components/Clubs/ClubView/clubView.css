@@ -114,7 +114,7 @@
 
 /* Основно съдържание */
 .club-view-main {
-  max-width: 1400px;
+  max-width: 1500px;
   margin: 0 auto;
   padding: 2rem;
   position: relative;
@@ -465,7 +465,7 @@
   }
   
   .club-view-main {
-    padding: 1rem;
+    padding: 0.5rem;
   }
   
   .mobile-nav-toggle {
