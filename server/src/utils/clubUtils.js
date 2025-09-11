@@ -227,6 +227,7 @@ const transformClub = (clubData) => {
                 postalCode: '',
                 poBox: '',
             },
+            people: [],
         },
 
         // Finances

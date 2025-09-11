@@ -161,6 +161,18 @@ const detailsSchema = z.object({
                     poBox: optionalString(),
                 })
                 .optional(),
+            people: z
+                .array(
+                    z.object({
+                        id: optionalNumber(),
+                        name: optionalString(),
+                        role: optionalString(),
+                        phone: optionalString(),
+                        email: optionalString(),
+                        description: optionalString(),
+                    })
+                )
+                .optional(),
         })
         .optional(),
 
