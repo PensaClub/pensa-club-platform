@@ -1065,13 +1065,25 @@
     padding: 0.625rem 1.25rem;
     font-size: 0.8rem;
   }
-  
+  .general-management-badge span {
+    font-size: 1rem;
+  }
+  .general-management-title {
+    font-size: 2.2rem;
+  }
+  .general-management-subtitle {
+    font-size: 0.9rem;
+    text-align: center;
+  }
+  .general-management-stat span {
+    font-size: 2.5rem;
+  }
   .general-management-stats {
     gap: 1rem;
   }
   
   .general-member-card {
-    padding: 1.25rem;
+    padding: 0.8rem;
     border-radius: 15px;
   }
   
@@ -1097,8 +1109,20 @@
   .general-member-actions {
     justify-content: center;
     width: 100%;
+    flex-direction: row;
   }
-  
+  .general-contact-toggle span{
+    font-size: 1rem;
+  }
+  .general-contact-toggle {
+    justify-content: center ;
+  }
+  .general-member-contact span{
+    font-size: 1rem;
+  }
+  .general-management-structure{
+    padding: 0.8rem;
+  }
   .general-action-btn {
     width: 32px;
     height: 32px;
@@ -1123,15 +1147,19 @@
   .general-structure-item {
     flex-direction: column;
     text-align: center;
-    padding: 1.25rem;
+    padding: 1rem;
   }
-  
+  .general-management-container{
+    padding: 0;
+  }
   .general-structure-icon {
     width: 40px;
     height: 40px;
     font-size: 1rem;
   }
-  
+  .general-contact-section{
+    padding: 0.8rem;
+  }
   .general-contact-method {
     flex-direction: column;
     text-align: center;

@@ -194,7 +194,7 @@ export const ClubAbout = ({ club }) => {
                 <span>{club.foundedYear ? new Date().getFullYear() - club.foundedYear : '—'}</span>
                 <label>{t('clubs.ClubAbout.stats.years')}</label>
               </div>
-              {club.preferences?.showMembersList && (
+              {(club.preferences?.showMembersList && club.membership?.totalMembers > 0) && (
                 <div className="general-about-stat">
                   <FontAwesomeIcon icon={faUsers} />
                   <span>{club.membership?.totalMembers || '—'}</span>

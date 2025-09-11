@@ -1093,17 +1093,50 @@
     align-items: flex-start;
     gap: 0.5rem;
   }
-  
+  .general-location-container {
+    padding: 0 0.8rem;
+  }
+  .general-info-card {
+    padding:1.5rem 1rem;
+  }
+  .general-card-header h3 {
+    font-size: 1.4rem;
+  }
   .general-transport-details {
     text-align: left;
+  }
+  .general-address-item span{
+    font-size: 1rem;
+    
+  }
+  .general-address-item {
+    justify-content: center;
+  }
+  .general-main-address {
+    font-size: 1.1rem;
+    font-weight: 600;
   }
   
   .general-contact-detail {
     flex-direction: column;
     text-align: center;
   }
-  
+  .general-transport-option.active{
+    padding: 1.4rem 0.8rem;
+  }
+  .general-transport-details h4 {
+    font-size: 1rem;
+  }
+  .general-transport-details p{
+    font-size: 0.8rem;
+  }
   .general-popup-actions {
     flex-direction: column;
+  }
+  .general-facility-item span{
+    font-size: 1rem;
+  }
+  .general-map-header h3 {
+    font-size: 1rem;
   }
 }

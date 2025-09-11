@@ -771,7 +771,7 @@ const ClubPensionersSpecific = ({ club }) => {
 
   return (
     <section id="club-pensioners-specific" className="club-pensioners-specific">
-      <div className="container">
+      <div className="container-specific">
         <div className="club-pensioners-header">
           <h2 className="section-title">
             <FontAwesomeIcon icon={faUserMd} />
