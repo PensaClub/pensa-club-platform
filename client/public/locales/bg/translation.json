@@ -4437,6 +4437,19 @@
         "share": "Споделяне",
         "shareText": "Свържете се с {{clubName}}"
       },
+      "mobile-club":"- на клуба",
+        "contactPeople": {
+        "title": "Лица за контакт",
+        "divider": "Лица за контакт",
+        "contactPerson": "Лице за контакт",
+        "role": "Роля",
+        "phone": "Телефон",
+        "email": "Имейл",
+        "description": "Описание",
+        "callPerson": "Обади се на {name}",
+        "emailPerson": "Изпрати имейл до {name}",
+        "noContactInfo": "Няма налична контактна информация"
+      },
       "contactMethods": {
         "primary": {
           "title": "Основни контакти"

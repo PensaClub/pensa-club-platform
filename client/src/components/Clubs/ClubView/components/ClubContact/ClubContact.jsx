@@ -42,7 +42,7 @@ import { useClubContext } from '../../../../contexts/ClubContext';
 export const ClubContact = ({ club }) => {
   const { t, i18n } = useTranslation();
   const { sendContactForm } = useClubContext();
-  
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -59,7 +59,7 @@ export const ClubContact = ({ club }) => {
 
   // Обновена проверка за данни - използваме новата структура
   const contacts = club?.clubDetails?.contacts || club?.contacts || {};
-  
+
   // ПРОВЕРКА ЗА ДАННИ
   if (!contacts || (!contacts.phone && !contacts.email)) {
     return null;
@@ -302,10 +302,10 @@ export const ClubContact = ({ club }) => {
           </div>
         </div>
 
-        <div className="general-contact-layout">
+        <div className={`general-contact-layout ${!club.preferences?.showContactForm ? 'no-form' : ''}`}>
 
           {/* Contact Methods */}
-          <div className="general-contact-methods">
+          <div className={`general-contact-methods ${!club.preferences?.showContactForm ? 'full-width' : ''}`}>
 
             {/* Primary Contact */}
             <div className="general-contact-card primary">
@@ -315,58 +315,100 @@ export const ClubContact = ({ club }) => {
               </div>
 
               <div className="general-contact-options">
-                {contacts.phone && (
-                  <a href={`tel:${contacts.phone}`} className="general-contact-option phone">
-                    <div className="general-option-icon">
-                      <FontAwesomeIcon icon={faPhone} />
-                    </div>
-                    <div className="general-option-content">
-                      <span className="general-option-label">{t('clubs.ClubContact.contactMethods.phone.label')}</span>
-                      <span className="general-option-value">{contacts.phone}</span>
-                      <span className="general-option-desc">{t('clubs.ClubContact.contactMethods.phone.description')}</span>
-                    </div>
-                  </a>
-                )}
+  {contacts.phone && (
+    <a href={`tel:${contacts.phone}`} className="general-contact-option phone">
+      <div className="general-option-icon">
+        <FontAwesomeIcon icon={faPhone} />
+      </div>
+      <div className="general-option-content">
+        <span className="general-option-label">{t('clubs.ClubContact.contactMethods.phone.label')}</span>
+        <span className="general-option-value">{contacts.phone} {t('clubs.ClubContact.mobile-club')}</span>
+        <span className="general-option-desc">{t('clubs.ClubContact.contactMethods.phone.description')}</span>
+      </div>
+    </a>
+  )}
 
-                {contacts.mobile && contacts.mobile !== contacts.phone && (
-                  <a href={`tel:${contacts.mobile}`} className="general-contact-option mobile">
-                    <div className="general-option-icon">
-                      <FontAwesomeIcon icon={faMobileAlt} />
-                    </div>
-                    <div className="general-option-content">
-                      <span className="general-option-label">{t('clubs.ClubContact.contactMethods.mobile.label')}</span>
-                      <span className="general-option-value">{contacts.mobile}</span>
-                      <span className="general-option-desc">{t('clubs.ClubContact.contactMethods.mobile.description')}</span>
-                    </div>
-                  </a>
-                )}
+  {contacts.mobile && contacts.mobile !== contacts.phone && (
+    <a href={`tel:${contacts.mobile}`} className="general-contact-option mobile">
+      <div className="general-option-icon">
+        <FontAwesomeIcon icon={faMobileAlt} />
+      </div>
+      <div className="general-option-content">
+        <span className="general-option-label">{t('clubs.ClubContact.contactMethods.mobile.label')}</span>
+        <span className="general-option-value">{contacts.mobile}</span>
+        <span className="general-option-desc">{t('clubs.ClubContact.contactMethods.mobile.description')}</span>
+      </div>
+    </a>
+  )}
 
-                {contacts.email && (
-                  <a href={`mailto:${contacts.email}`} className="general-contact-option email">
-                    <div className="general-option-icon">
-                      <FontAwesomeIcon icon={faEnvelope} />
-                    </div>
-                    <div className="general-option-content">
-                      <span className="general-option-label">{t('clubs.ClubContact.contactMethods.email.label')}</span>
-                      <span className="general-option-value">{contacts.email}</span>
-                      <span className="general-option-desc">{t('clubs.ClubContact.contactMethods.email.description')}</span>
-                    </div>
-                  </a>
-                )}
+  {contacts.email && (
+    <a href={`mailto:${contacts.email}`} className="general-contact-option email">
+      <div className="general-option-icon">
+        <FontAwesomeIcon icon={faEnvelope} />
+      </div>
+      <div className="general-option-content">
+        <span className="general-option-label">{t('clubs.ClubContact.contactMethods.email.label')}</span>
+        <span className="general-option-value">{contacts.email}</span>
+        <span className="general-option-desc">{t('clubs.ClubContact.contactMethods.email.description')}</span>
+      </div>
+    </a>
+  )}
 
-                {contacts.website && (
-                  <a href={contacts.website} target="_blank" rel="noopener noreferrer" className="general-contact-option website">
-                    <div className="general-option-icon">
-                      <FontAwesomeIcon icon={faGlobe} />
-                    </div>
-                    <div className="general-option-content">
-                      <span className="general-option-label">{t('clubs.ClubContact.contactMethods.website.label')}</span>
-                      <span className="general-option-value">{contacts.website}</span>
-                      <span className="general-option-desc">{t('clubs.ClubContact.contactMethods.website.description')}</span>
-                    </div>
-                  </a>
-                )}
-              </div>
+  {contacts.website && (
+    <a href={contacts.website} target="_blank" rel="noopener noreferrer" className="general-contact-option website">
+      <div className="general-option-icon">
+        <FontAwesomeIcon icon={faGlobe} />
+      </div>
+      <div className="general-option-content">
+        <span className="general-option-label">{t('clubs.ClubContact.contactMethods.website.label')}</span>
+        <span className="general-option-value">{contacts.website}</span>
+        <span className="general-option-desc">{t('clubs.ClubContact.contactMethods.website.description')}</span>
+      </div>
+    </a>
+  )}
+
+  {/* Хора за връзка */}
+  {contacts.people && contacts.people.length > 0 && (
+    <>
+      <div className="general-people-divider">
+        <span className="general-divider-text">Лица за контакт</span>
+      </div>
+      
+      {contacts.people.map((person) => (
+        <div key={person.id} className="general-contact-person">
+          <div className="general-person-header">
+            <div className="general-person-icon">
+              <FontAwesomeIcon icon={faUserTie} />
+            </div>
+            <div className="general-person-info">
+              <span className="general-person-name">{person.name}</span>
+              <span className="general-person-role">{person.role}</span>
+              {person.description && (
+                <span className="general-person-desc">{person.description}</span>
+              )}
+            </div>
+          </div>
+          
+          <div className="general-person-contacts">
+            {person.phone && (
+              <a href={`tel:${person.phone}`} className="general-person-contact-btn phone">
+                <FontAwesomeIcon icon={faPhone} />
+                <span>{person.phone}</span>
+              </a>
+            )}
+            
+            {person.email && (
+              <a href={`mailto:${person.email}`} className="general-person-contact-btn email">
+                <FontAwesomeIcon icon={faEnvelope} />
+                <span>{person.email}</span>
+              </a>
+            )}
+          </div>
+        </div>
+      ))}
+    </>
+  )}
+</div>
             </div>
 
             {/* Working Hours */}
@@ -427,8 +469,8 @@ export const ClubContact = ({ club }) => {
                   </div>
 
                   <div className="general-location-actions">
-                    
-                    <a  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${club.location.address}, ${club.location.city}`)}`}
+
+                    <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${club.location.address}, ${club.location.city}`)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="general-location-btn maps"
@@ -438,8 +480,8 @@ export const ClubContact = ({ club }) => {
                     </a>
 
                     {club.location.coordinates && (
-                      
-                       <a href={`https://www.google.com/maps/dir/?api=1&destination=${club.location.coordinates.lat},${club.location.coordinates.lng}`}
+
+                      <a href={`https://www.google.com/maps/dir/?api=1&destination=${club.location.coordinates.lat},${club.location.coordinates.lng}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="general-location-btn directions"
@@ -453,7 +495,7 @@ export const ClubContact = ({ club }) => {
               </div>
             )}
 
-          
+
             {/* Social Media */}
             {contacts?.socialMedia && Object.keys(contacts.socialMedia).length > 0 && (
               <div className="general-contact-card social">

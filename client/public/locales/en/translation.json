@@ -4516,6 +4516,19 @@
         "share": "Share",
         "shareText": "Contact {{clubName}}"
       },
+      "mobile-club":"- club's",
+      "contactPeople": {
+        "title": "Contact Persons",
+        "divider": "Contact Persons", 
+        "contactPerson": "Contact Person",
+        "role": "Role",
+        "phone": "Phone",
+        "email": "Email", 
+        "description": "Description",
+        "callPerson": "Call {name}",
+        "emailPerson": "Email {name}",
+        "noContactInfo": "No contact information available"
+      },
       "contactMethods": {
         "primary": {
           "title": "Primary contacts"
