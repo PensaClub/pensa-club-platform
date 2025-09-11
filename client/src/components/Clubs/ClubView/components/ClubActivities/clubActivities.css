@@ -6,7 +6,7 @@
 }
 
 .general-activities-container {
-  max-width: 1400px;
+  max-width: 1500px;
   margin: 0 auto;
   padding: 0 2rem;
 }
@@ -437,13 +437,14 @@
 }
 
 .general-day-activities {
-  padding: 1.5rem;
+  padding: 0.5rem;
   min-height: 150px;
+
 }
 
 .general-schedule-activity {
   background: white;
-  padding: 1rem;
+  padding: 0.5rem;
   border-radius: 12px;
   margin-bottom: 1rem;
   border: 1px solid #e2e8f0;
@@ -797,7 +798,7 @@
   }
   
   .general-activities-container {
-    padding: 0 1rem;
+    padding: 0 ;
   }
   
   .general-activities-stats {
@@ -835,12 +836,63 @@
   .general-schedule-grid {
     grid-template-columns: 1fr;
   }
-  
+  .general-activities-stat span {
+    font-size: 2.5rem;
+  }
+  .general-schedule-item span{
+    font-size: 1rem;
+  }
+  .general-activity-instructor span{
+    font-size: 1rem;
+  }
+  .general-activity-location span{
+    font-size: 1rem;
+  }
+  .general-activity-price span{
+    font-size: 1rem;
+  }
+  .general-activity-participants span{
+    font-size: 1rem;
+  }
+  .general-register-btn {
+    font-size: 1rem;
+    padding: 1rem;
+  }
+  .general-activity-duration span{
+    font-size: 1rem;
+  }
+  .general-activity-duration {
+    align-items: center;
+  }
+  .general-weekly-schedule h3 {
+    font-size: 1.5rem;
+  }
+  .general-day-header h4 {
+    font-size: 0.9rem;
+ 
+  }
+  .general-activities-badge span{
+    font-size: 0.9rem;
+  }
+  .general-day-header {
+    padding: 1rem 0.5rem;
+  }
+  .general-weekly-schedule {
+    padding: 0.5rem;
+  }
+  .general-activities-subtitle {
+    font-size: 1rem;
+
+    padding: 0 1rem;
+  }
   .general-contact-methods {
     flex-direction: column;
   }
   
   .general-weekly-schedule {
-    padding: 2rem;
+    padding: 1rem;
+  }
+  .general-activity-card {
+    padding: 1rem;
   }
 }
