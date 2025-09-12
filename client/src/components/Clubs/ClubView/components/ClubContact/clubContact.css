@@ -6,7 +6,7 @@
 }
 
 .general-contact-container {
-  max-width: 1400px;
+  max-width: 1500px;
   margin: 0 auto;
   padding: 0 2rem;
 }
@@ -133,7 +133,7 @@
 
 /* Останалите карти в grid */
 .general-contact-layout.no-form .general-contact-card:not(.primary) {
-  min-height: 200px;
+  max-height: 330px;
 }
 
 /* Center съдържанието на картите */
@@ -169,7 +169,7 @@
 .general-contact-card {
   background: white;
   border-radius: 25px;
-  padding: 2.5rem;
+  padding: 1rem;
   box-shadow: 0 15px 50px rgba(0, 0, 0, 0.08);
   border: 1px solid rgba(226, 232, 240, 0.8);
   transition: all 0.3s ease;
@@ -1217,6 +1217,7 @@
 .general-person-contacts {
   display: flex;
   gap: 0.75rem;
+  flex-direction: column;
   flex-wrap: wrap;
 }
 
@@ -1289,5 +1290,188 @@
     width: 45px;
     height: 45px;
     font-size: 1.1rem;
+  }
+}
+/* Personal Email Button */
+.general-person-contact-btn.personal-email {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  color: white;
+  border: 1px solid #a855f7;
+}
+
+.general-person-contact-btn.personal-email:hover {
+  background: #7c3aed;
+  transform: translateY(-2px);
+}
+
+/* Personal Email Modal */
+.general-personal-email-modal {
+  max-width: 600px;
+}
+
+.general-personal-email-recipient {
+  background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+  border-radius: 15px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border: 1px solid #bae6fd;
+}
+
+.general-recipient-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.general-recipient-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+  color: #6366f1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.general-recipient-details h4 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 0.25rem 0;
+}
+
+.general-recipient-details p {
+  color: #6366f1;
+  font-weight: 600;
+  margin: 0 0 0.25rem 0;
+}
+
+.general-recipient-details span {
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.general-personal-email-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.general-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.general-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.general-form-group label {
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.9rem;
+}
+
+.general-form-group input,
+.general-form-group textarea {
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.general-form-group input:focus,
+.general-form-group textarea:focus {
+  outline: none;
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.general-form-group input[readonly] {
+  background-color: #f3f4f6;
+  color: #6b7280;
+}
+
+.general-personal-email-submit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.general-personal-email-submit-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #059669, #047857);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+}
+
+.general-personal-email-submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.general-personal-email-alert {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  margin-top: 1rem;
+}
+
+.general-personal-email-alert.success {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.general-personal-email-alert.error {
+  background: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+.general-personal-email-note {
+  background: #f0f9ff;
+  border-radius: 10px;
+  padding: 1rem;
+  margin-top: 1.5rem;
+  border: 1px solid #bae6fd;
+}
+
+.general-personal-email-note p {
+  color: #0369a1;
+  margin: 0;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .general-form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .general-recipient-info {
+    flex-direction: column;
+    text-align: center;
   }
 }

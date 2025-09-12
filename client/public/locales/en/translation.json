@@ -4567,13 +4567,13 @@
         "title": "Social media"
       },
       "days": {
-        "monday": "Monday",
-        "tuesday": "Tuesday",
-        "wednesday": "Wednesday",
-        "thursday": "Thursday",
-        "friday": "Friday",
-        "saturday": "Saturday",
-        "sunday": "Sunday"
+        "monday": "Monday: ",
+        "tuesday": "Tuesday: ",
+        "wednesday": "Wednesday: ",
+        "thursday": "Thursday: ",
+        "friday": "Friday: ",
+        "saturday": "Saturday: ",
+        "sunday": "Sunday: "
       },
       "form": {
         "title": "Send a message",

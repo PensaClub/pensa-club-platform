@@ -4488,13 +4488,13 @@
         "title": "Социални мрежи"
       },
       "days": {
-        "monday": "Понеделник",
-        "tuesday": "Вторник",
-        "wednesday": "Сряда",
-        "thursday": "Четвъртък",
-        "friday": "Петък",
-        "saturday": "Събота",
-        "sunday": "Неделя"
+        "monday": "Понеделник:",
+        "tuesday": "Вторник:",
+        "wednesday": "Сряда:",
+        "thursday": "Четвъртък:",
+        "friday": "Петък:",
+        "saturday": "Събота:",
+        "sunday": "Неделя:"
       },
       "form": {
         "title": "Изпратете съобщение",
