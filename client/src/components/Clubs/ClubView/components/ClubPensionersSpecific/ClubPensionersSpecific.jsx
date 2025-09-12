@@ -317,10 +317,7 @@ const ClubPensionersSpecific = ({ club }) => {
         )}
 
         {/* Emergency Protocol */}
-        {(healthData.emergencyProtocol?.hasEmergencyPlan || 
-          healthData.emergencyProtocol?.nearestHospital ||
-          healthData.emergencyProtocol?.specialNeeds?.length > 0 ||
-          healthData.emergencyProtocol?.emergencyContacts?.length > 0) && (
+        {healthData.emergencyProtocol && (
           <div className="club-pensioners-section">
             <h4 className="club-pensioners-section-title">
               <FontAwesomeIcon icon={faExclamationTriangle} />
@@ -340,7 +337,7 @@ const ClubPensionersSpecific = ({ club }) => {
                   <FontAwesomeIcon icon={faAmbulance} />
                   <div>
                     <strong>Най-близка болница:</strong>
-                    <span>{healthData.emergencyProtocol.nearestHospital}</span>
+                    <span>{healthData.emergencyProtocol?.nearestHospital}</span>
                   </div>
                 </div>
               )}
@@ -351,7 +348,7 @@ const ClubPensionersSpecific = ({ club }) => {
                   <div>
                     <strong>Телефони за спешни случаи:</strong>
                     <div className="emergency-contacts">
-                      {healthData.emergencyProtocol.emergencyContacts.map((contact, index) => (
+                      {healthData.emergencyProtocol?.emergencyContacts.map((contact, index) => (
                         <span key={index} className="emergency-contact">{contact}</span>
                       ))}
                     </div>
@@ -359,13 +356,13 @@ const ClubPensionersSpecific = ({ club }) => {
                 </div>
               )}
 
-              {healthData.emergencyProtocol.specialNeeds?.length > 0 && (
+              {healthData.emergencyProtocol?.specialNeeds?.length > 0 && (
                 <div className="emergency-item">
                   <FontAwesomeIcon icon={faInfoCircle} />
                   <div>
                     <strong>Специални нужди:</strong>
                     <ul className="special-needs-list">
-                      {healthData.emergencyProtocol.specialNeeds.map((need, index) => (
+                      {healthData.emergencyProtocol?.specialNeeds.map((need, index) => (
                         <li key={index}>{need}</li>
                       ))}
                     </ul>

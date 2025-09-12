@@ -27,7 +27,9 @@ import {
   faHandshake,
   faUserFriends,
   faChevronDown,
-  faChevronUp
+  faChevronUp,
+  faUserTie,
+  faCommentDots
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faFacebook,
@@ -41,8 +43,8 @@ import { useClubContext } from '../../../../contexts/ClubContext';
 
 export const ClubContact = ({ club }) => {
   const { t, i18n } = useTranslation();
-  const { sendContactForm } = useClubContext();
-  
+  const { sendContactForm, sendPersonalEmail } = useClubContext();
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -57,9 +59,21 @@ export const ClubContact = ({ club }) => {
   const [showHoursModal, setShowHoursModal] = useState(false);
   const [expandedFAQ, setExpandedFAQ] = useState(null);
 
+  // Нови state променливи за личното съобщение
+  const [showPersonalEmailModal, setShowPersonalEmailModal] = useState(false);
+  const [selectedPerson, setSelectedPerson] = useState(null);
+  const [personalEmailForm, setPersonalEmailForm] = useState({
+    from: '',
+    to: '',
+    subject: '',
+    message: ''
+  });
+  const [personalEmailStatus, setPersonalEmailStatus] = useState({ type: '', message: '' });
+  const [isSubmittingPersonalEmail, setIsSubmittingPersonalEmail] = useState(false);
+
   // Обновена проверка за данни - използваме новата структура
   const contacts = club?.clubDetails?.contacts || club?.contacts || {};
-  
+
   // ПРОВЕРКА ЗА ДАННИ
   if (!contacts || (!contacts.phone && !contacts.email)) {
     return null;
@@ -140,6 +154,102 @@ export const ClubContact = ({ club }) => {
       });
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  // Нова функция за отваряне на модала за лично съобщение
+  const openPersonalEmailModal = (person) => {
+    setSelectedPerson(person);
+    setShowPersonalEmailModal(true);
+    setPersonalEmailStatus({ type: '', message: '' });
+    setPersonalEmailForm({
+      from: '',
+      to: person.email,
+      subject: `Съобщение до ${person.name} - ${person.role}`,
+      message: ''
+    });
+  };
+
+  // Функция за затваряне на модала
+  const closePersonalEmailModal = () => {
+    setShowPersonalEmailModal(false);
+    setSelectedPerson(null);
+    setPersonalEmailStatus({ type: '', message: '' });
+    setPersonalEmailForm({
+      from: '',
+      to: '',
+      subject: '',
+      message: ''
+    });
+  };
+
+  // Обработка на промени в формата за лично съобщение
+  const handlePersonalEmailChange = (field, value) => {
+    setPersonalEmailForm(prev => ({ ...prev, [field]: value }));
+  };
+
+  // Изпращане на лично съобщение
+  const handlePersonalEmailSubmit = async (e) => {
+    e.preventDefault();
+
+    // Валидация
+    if (!personalEmailForm.from.trim() || !personalEmailForm.to.trim() || !personalEmailForm.subject.trim() || !personalEmailForm.message.trim()) {
+      setPersonalEmailStatus({
+        type: 'error',
+        message: 'Моля, попълнете всички полета'
+      });
+      return;
+    }
+
+    // Валидация на имейл адреси
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(personalEmailForm.from)) {
+      setPersonalEmailStatus({
+        type: 'error',
+        message: 'Моля, въведете валиден имейл адрес в полето "От"'
+      });
+      return;
+    }
+    if (!emailRegex.test(personalEmailForm.to)) {
+      setPersonalEmailStatus({
+        type: 'error',
+        message: 'Моля, въведете валиден имейл адрес в полето "До"'
+      });
+      return;
+    }
+
+    setIsSubmittingPersonalEmail(true);
+
+    try {
+      const success = await sendPersonalEmail({
+        from: personalEmailForm.from,
+        to: personalEmailForm.to,
+        subject: personalEmailForm.subject,
+        message: personalEmailForm.message
+      });
+
+      if (success) {
+        setPersonalEmailStatus({
+          type: 'success',
+          message: 'Съобщението е изпратено успешно!'
+        });
+        setTimeout(() => {
+          closePersonalEmailModal();
+        }, 2000);
+      } else {
+        setPersonalEmailStatus({
+          type: 'error',
+          message: 'Възникна грешка при изпращането!'
+        });
+      }
+    } catch (error) {
+      console.error('Error sending personal email:', error);
+      setPersonalEmailStatus({
+        type: 'error',
+        message: 'Възникна грешка при изпращането!'
+      });
+    } finally {
+      setIsSubmittingPersonalEmail(false);
     }
   };
 
@@ -302,10 +412,10 @@ export const ClubContact = ({ club }) => {
           </div>
         </div>
 
-        <div className="general-contact-layout">
+        <div className={`general-contact-layout ${!club.preferences?.showContactForm ? 'no-form' : ''}`}>
 
           {/* Contact Methods */}
-          <div className="general-contact-methods">
+          <div className={`general-contact-methods ${!club.preferences?.showContactForm ? 'full-width' : ''}`}>
 
             {/* Primary Contact */}
             <div className="general-contact-card primary">
@@ -322,7 +432,7 @@ export const ClubContact = ({ club }) => {
                     </div>
                     <div className="general-option-content">
                       <span className="general-option-label">{t('clubs.ClubContact.contactMethods.phone.label')}</span>
-                      <span className="general-option-value">{contacts.phone}</span>
+                      <span className="general-option-value">{contacts.phone} {t('clubs.ClubContact.mobile-club')}</span>
                       <span className="general-option-desc">{t('clubs.ClubContact.contactMethods.phone.description')}</span>
                     </div>
                   </a>
@@ -366,6 +476,59 @@ export const ClubContact = ({ club }) => {
                     </div>
                   </a>
                 )}
+
+                {/* Хора за връзка */}
+                {contacts.people && contacts.people.length > 0 && (
+                  <>
+                    <div className="general-people-divider">
+                      <span className="general-divider-text">{t('clubs.ClubContact.contactPeople.divider')}</span>
+                    </div>
+
+                    {contacts.people.map((person) => (
+                      <div key={person.id} className="general-contact-person">
+                        <div className="general-person-header">
+                          <div className="general-person-icon">
+                            <FontAwesomeIcon icon={faUserTie} />
+                          </div>
+                          <div className="general-person-info">
+                            <span className="general-person-name">{person.name}</span>
+                            <span className="general-person-role">{person.role}</span>
+                            {person.description && (
+                              <span className="general-person-desc">{person.description}</span>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="general-person-contacts">
+                          {person.phone && (
+                            <a href={`tel:${person.phone}`} className="general-person-contact-btn phone">
+                              <FontAwesomeIcon icon={faPhone} />
+                              <span>{person.phone}</span>
+                            </a>
+                          )}
+
+                          {person.email && (
+                            <>
+                              <a href={`mailto:${person.email}`} className="general-person-contact-btn email">
+                                <FontAwesomeIcon icon={faEnvelope} />
+                                <span>{person.email}</span>
+                              </a>
+
+                              <button
+                                onClick={() => openPersonalEmailModal(person)}
+                                className="general-person-contact-btn personal-email"
+                                title={t('clubs.ClubContact.contactPeople.emailPerson', { name: person.name })}
+                              >
+                                <FontAwesomeIcon icon={faCommentDots} />
+                                <span>Лично съобщение</span>
+                              </button>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </>
+                )}
               </div>
             </div>
 
@@ -386,7 +549,7 @@ export const ClubContact = ({ club }) => {
 
                 <div className="general-today-status">
                   <div className="general-today-info">
-                    <span className="general-today-label">{getTodayName()}</span>
+                    <span className="general-today-label">{getTodayName()} </span>
                     <span className={`general-today-hours ${getTodayHours() === 'closed' ? 'closed' : 'open'}`}>
                       {getTodayHours() === 'closed' ? t('clubs.ClubContact.workingHours.closed') : getTodayHours()}
                     </span>
@@ -427,8 +590,7 @@ export const ClubContact = ({ club }) => {
                   </div>
 
                   <div className="general-location-actions">
-                    
-                    <a  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${club.location.address}, ${club.location.city}`)}`}
+                    <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${club.location.address}, ${club.location.city}`)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="general-location-btn maps"
@@ -438,8 +600,7 @@ export const ClubContact = ({ club }) => {
                     </a>
 
                     {club.location.coordinates && (
-                      
-                       <a href={`https://www.google.com/maps/dir/?api=1&destination=${club.location.coordinates.lat},${club.location.coordinates.lng}`}
+                      <a href={`https://www.google.com/maps/dir/?api=1&destination=${club.location.coordinates.lat},${club.location.coordinates.lng}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="general-location-btn directions"
@@ -453,9 +614,8 @@ export const ClubContact = ({ club }) => {
               </div>
             )}
 
-          
             {/* Social Media */}
-            {contacts?.socialMedia && Object.keys(contacts.socialMedia).length > 0 && (
+            {contacts?.socialMedia && Object.entries(contacts.socialMedia).some(([platform, handle]) => handle && typeof handle === 'string' && handle.trim() !== '') && (
               <div className="general-contact-card social">
                 <div className="general-card-header">
                   <FontAwesomeIcon icon={faUserFriends} />
@@ -737,6 +897,118 @@ export const ClubContact = ({ club }) => {
               <div className="general-hours-note">
                 <FontAwesomeIcon icon={faInfoCircle} />
                 <p>{t('clubs.ClubContact.workingHours.note')}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Personal Email Modal */}
+      {showPersonalEmailModal && selectedPerson && (
+        <div className="general-modal-overlay" onClick={closePersonalEmailModal}>
+          <div className="general-modal general-personal-email-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="general-modal-header">
+              <h3>
+                <FontAwesomeIcon icon={faPaperPlane} />
+                Лично съобщение до {selectedPerson.name}
+              </h3>
+              <button className="general-modal-close" onClick={closePersonalEmailModal}>
+                <FontAwesomeIcon icon={faTimes} />
+              </button>
+            </div>
+
+            <div className="general-modal-content">
+              <div className="general-personal-email-recipient">
+                <div className="general-recipient-info">
+                  <div className="general-recipient-avatar">
+                    <FontAwesomeIcon icon={faUserTie} />
+                  </div>
+                  <div className="general-recipient-details">
+                    <h4>{selectedPerson.name}</h4>
+                    <p>{selectedPerson.role}</p>
+                    <span>{selectedPerson.email}</span>
+                  </div>
+                </div>
+              </div>
+
+              <form onSubmit={handlePersonalEmailSubmit} className="general-personal-email-form">
+                <div className="general-form-row">
+                  <div className="general-form-group">
+                    <label>От (вашия имейл) *</label>
+                    <input
+                      type="email"
+                      value={personalEmailForm.from}
+                      onChange={(e) => handlePersonalEmailChange('from', e.target.value)}
+                      placeholder="вашия@email.com"
+                      required
+                    />
+                  </div>
+
+                  <div className="general-form-group">
+                    <label>До *</label>
+                    <input
+                      type="email"
+                      value={personalEmailForm.to}
+                      onChange={(e) => handlePersonalEmailChange('to', e.target.value)}
+                      placeholder="получател@email.com"
+                      required
+                      readOnly
+                    />
+                  </div>
+                </div>
+
+                <div className="general-form-group">
+                  <label>Тема *</label>
+                  <input
+                    type="text"
+                    value={personalEmailForm.subject}
+                    onChange={(e) => handlePersonalEmailChange('subject', e.target.value)}
+                    placeholder="Тема на съобщението"
+                    required
+                  />
+                </div>
+
+                <div className="general-form-group">
+                  <label>Съобщение *</label>
+                  <textarea
+                    value={personalEmailForm.message}
+                    onChange={(e) => handlePersonalEmailChange('message', e.target.value)}
+                    placeholder="Напишете вашето съобщение тук..."
+                    rows="6"
+                    required
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="general-personal-email-submit-btn"
+                  disabled={isSubmittingPersonalEmail}
+                >
+                  {isSubmittingPersonalEmail ? (
+                    <>
+                      <FontAwesomeIcon icon={faSpinner} className="general-spinning" />
+                      Изпращане...
+                    </>
+                  ) : (
+                    <>
+                      <FontAwesomeIcon icon={faPaperPlane} />
+                      Изпрати съобщение
+                    </>
+                  )}
+                </button>
+
+                {personalEmailStatus.message && (
+                  <div className={`general-personal-email-alert ${personalEmailStatus.type}`}>
+                    <FontAwesomeIcon
+                      icon={personalEmailStatus.type === 'success' ? faCheckCircle : faExclamationTriangle}
+                    />
+                    <span>{personalEmailStatus.message}</span>
+                  </div>
+                )}
+              </form>
+
+              <div className="general-personal-email-note">
+                <p><FontAwesomeIcon icon={faInfoCircle} /> Съобщението ще бъде изпратено директно на имейла на избраното лице за контакт.</p>
               </div>
             </div>
           </div>
