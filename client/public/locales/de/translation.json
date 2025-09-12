@@ -3922,10 +3922,24 @@
       }
     },
     "ClubContact": {
+      "mobile-club":"- des Vereins",
+
       "header": {
         "badge": "Kontaktieren Sie uns",
         "title": "Wir sind für Sie da",
         "subtitle": "Bereit, alle Ihre Fragen zu beantworten und Ihnen zu helfen"
+      },
+       "contactPeople": {
+        "title": "Ansprechpartner",
+        "divider": "Ansprechpartner",
+        "contactPerson": "Ansprechpartner", 
+        "role": "Rolle",
+        "phone": "Telefon",
+        "email": "E-Mail",
+        "description": "Beschreibung",
+        "callPerson": "{name} anrufen",
+        "emailPerson": "E-Mail an {name}",
+        "noContactInfo": "Keine Kontaktinformationen verfügbar"
       },
       "actions": {
         "faq": "Häufig gestellte Fragen",
@@ -3970,13 +3984,13 @@
         "title": "Soziale Medien"
       },
       "days": {
-        "monday": "Montag",
-        "tuesday": "Dienstag",
-        "wednesday": "Mittwoch",
-        "thursday": "Donnerstag",
-        "friday": "Freitag",
-        "saturday": "Samstag",
-        "sunday": "Sonntag"
+        "monday": "Montag: ",
+        "tuesday": "Dienstag: ",
+        "wednesday": "Mittwoch: ",
+        "thursday": "Donnerstag: ",
+        "friday": "Freitag: ",
+        "saturday": "Samstag: ",
+        "sunday": "Sonntag: "
       },
       "form": {
         "title": "Nachricht senden",

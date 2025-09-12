@@ -275,8 +275,8 @@
 }
 
 .general-main-address {
-  font-size: 1.3rem;
-  font-weight: 700;
+  font-size: 1.1rem;
+  font-weight: 600;
   color: #1e293b;
   margin: 0 0 0.5rem 0;
   line-height: 1.4;
@@ -1113,7 +1113,7 @@
     justify-content: center;
   }
   .general-main-address {
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 600;
   }
   
