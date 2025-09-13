@@ -237,7 +237,7 @@ export const ClubAbout = ({ club }) => {
                     </div>
                     
                     <div className="general-key-facts">
-                      {club.foundedYear && (
+                      {club.preferences?.showStatistics && (
                         <div className="general-fact-card">
                           <div className="general-fact-icon">
                             <FontAwesomeIcon icon={faHistory} />
