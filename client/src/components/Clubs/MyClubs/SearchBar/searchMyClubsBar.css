@@ -1,61 +1,153 @@
-/* src/components/Profile/MyClubs/components/SearchMyClubsBar.css */
 .searchmyclubs-bar {
-  flex: 1;
-  min-width: 300px;
+  width: 100%;
+  max-width: 500px;
+  position: relative;
 }
 
 .searchmyclubs-input-wrapper {
   position: relative;
-  width: 100%;
-}
-
-.searchmyclubs-input {
-  width: 100%;
-  padding: 1rem 1rem 1rem 3rem;
+  display: flex;
+  align-items: center;
+  background: white;
   border: 2px solid #e2e8f0;
   border-radius: 12px;
-  font-size: 1rem;
-  background: white;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s;
 }
 
-.searchmyclubs-input:focus {
-  outline: none;
+.searchmyclubs-input-wrapper:focus-within {
   border-color: #3b82f6;
-  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.15);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .searchmyclubs-icon {
   position: absolute;
   left: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #9ca3af;
-  font-size: 1.1rem;
+  color: #64748b;
+  z-index: 2;
+  font-size: 0.9rem;
+}
+
+.searchmyclubs-input {
+  flex: 1;
+  padding: 0.875rem 1rem 0.875rem 2.75rem;
+  border: none;
+  background: transparent;
+  font-size: 0.95rem;
+  color: #334155;
+  outline: none;
+}
+
+.searchmyclubs-input::placeholder {
+  color: #94a3b8;
 }
 
 .searchmyclubs-clear-button {
   position: absolute;
-  right: 1rem;
-  top: 50%;
-  transform: translateY(-50%);
+  right: 120px; /* Space for search button */
   background: none;
   border: none;
-  color: #9ca3af;
+  color: #64748b;
   cursor: pointer;
-  padding: 0.25rem;
-  border-radius: 4px;
-  transition: all 0.2s ease;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
 }
 
 .searchmyclubs-clear-button:hover {
-  color: #6b7280;
-  background: #f3f4f6;
+  color: #ef4444;
+  background: #fef2f2;
 }
 
+.searchmyclubs-search-button {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  border: none;
+  padding: 0.75rem 1rem;
+  border-radius: 0 10px 10px 0;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  font-size: 0.9rem;
+  min-width: 100px;
+  justify-content: center;
+}
+
+.searchmyclubs-search-button:hover {
+  background: linear-gradient(135deg, #1d4ed8, #1e40af);
+  transform: translateY(-1px);
+}
+
+.searchmyclubs-search-button:active {
+  transform: translateY(0);
+}
+
+.searchmyclubs-search-text {
+  font-size: 0.85rem;
+}
+
+.searchmyclubs-hint {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  color: #64748b;
+  z-index: 10;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile responsive */
 @media (max-width: 768px) {
-  .searchmyclubs-bar {
-    min-width: unset;
+  .searchmyclubs-search-text {
+    display: none;
+  }
+  
+  .searchmyclubs-search-button {
+    min-width: 60px;
+    padding: 0.75rem;
+  }
+  
+  .searchmyclubs-clear-button {
+    right: 70px;
+  }
+}
+
+@media (max-width: 480px) {
+  .searchmyclubs-input {
+    font-size: 0.9rem;
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+  }
+  
+  .searchmyclubs-search-button {
+    min-width: 50px;
+    padding: 0.75rem 0.5rem;
+  }
+  
+  .searchmyclubs-clear-button {
+    right: 60px;
+    padding: 0.25rem;
   }
 }
