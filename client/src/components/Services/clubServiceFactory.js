@@ -77,10 +77,15 @@ export const clubServiceFactory = (token) => {
       return requester.get(`${apiUrl}/clubs/user-bookmarks/${email}`);
     },
 
-    getUserClubs: async (email) => {
-      return requester.get(`${apiUrl}/clubs/user-clubs`);
-    },
-
+   // В clubService или clubServiceFactory
+getUserClubs: async (email, page = 1, limit = 12) => {
+  const params = new URLSearchParams();
+  if (email) params.append('email', email);
+  params.append('page', page.toString());
+  params.append('limit', limit.toString());
+  
+  return requester.get(`${apiUrl}/clubs/user-clubs?${params.toString()}`);
+},
     // ===============================
     // ТЪРСЕНЕ И ФИЛТРИРАНЕ
     // ===============================

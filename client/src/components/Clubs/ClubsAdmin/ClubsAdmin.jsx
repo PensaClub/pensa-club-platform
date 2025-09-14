@@ -23,10 +23,9 @@ import AdminClubModal from './AdminClubModal/AdminClubModal';
 import AdminStatsOverview from './AdminStatsOverview/AdminStatsOverview';
 import AdminSearchBar from './AdminSearchBar/AdminSearchBar';
 
-
 const ClubsAdmin = () => {
     const { t } = useTranslation();
-    const { isAdmin, isAuthentication,isModerator } = useAuthContext();
+    const { isAdmin, isAuthentication, isModerator } = useAuthContext();
     
     const {
         getAllClubs,
@@ -42,6 +41,7 @@ const ClubsAdmin = () => {
 
     // State management
     const [clubs, setClubs] = useState([]);
+    const [allClubs, setAllClubs] = useState([]); // За client-side филтриране
     const [selectedClubs, setSelectedClubs] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [filterBy, setFilterBy] = useState('all');
@@ -52,52 +52,87 @@ const ClubsAdmin = () => {
     const [error, setError] = useState(null);
     const [showBulkActions, setShowBulkActions] = useState(false);
     
+    // Pagination info from server
+    const [totalItems, setTotalItems] = useState(0);
+    const [totalPages, setTotalPages] = useState(1);
+    const [isServerSidePagination, setIsServerSidePagination] = useState(true);
+    
     // Modal states
     const [modalState, setModalState] = useState({
         isOpen: false,
-        type: null, // 'status', 'verify', 'approve', 'reject'
+        type: null,
         club: null,
         data: null
     });
 
     // Check admin access
     useEffect(() => {
-        if (!isAuthentication || !isAdmin || !isModerator) {
+        if (!isAuthentication || (!isAdmin && !isModerator)) {
             setError(t('clubsAdmin.errors.noAccess'));
             return;
         }
     }, [isAuthentication, isAdmin, isModerator, t]);
 
-    // Fetch all clubs
+    // Determine if we need client-side filtering
+    const needsClientSideFiltering = useMemo(() => {
+        return searchTerm.trim() !== '' || filterBy !== 'all' || sortBy !== 'newest';
+    }, [searchTerm, filterBy, sortBy]);
+
+    // Fetch clubs based on pagination strategy
     useEffect(() => {
-        const fetchAllClubs = async () => {
-            if (!isAuthentication || !isAdmin ) return;
+        const fetchClubs = async () => {
+            if (!isAuthentication || (!isAdmin && !isModerator)) return;
 
             try {
                 setInitialLoading(true);
                 setError(null);
 
-                const response = await getAllClubs(true, 1, 1000); 
-                const allClubs = response?.clubs || response || [];
-                
-                setClubs(Array.isArray(allClubs) ? allClubs : []);
+                if (needsClientSideFiltering) {
+                    // Client-side filtering: load all clubs
+                    setIsServerSidePagination(false);
+                    const response = await getAllClubs(true, 1, 1000);
+                    const fetchedClubs = response?.clubs || response || [];
+                    setAllClubs(Array.isArray(fetchedClubs) ? fetchedClubs : []);
+                    setTotalItems(fetchedClubs.length);
+                } else {
+                    // Server-side pagination: load current page only
+                    setIsServerSidePagination(true);
+                    const response = await getAllClubs(true, currentPage, itemsPerPage);
+                    const fetchedClubs = response?.clubs || response || [];
+                    
+                    setClubs(Array.isArray(fetchedClubs) ? fetchedClubs : []);
+                    setTotalItems(response?.total || response?.pagination?.totalItems || fetchedClubs.length);
+                    setTotalPages(response?.pagination?.totalPages || Math.ceil((response?.total || fetchedClubs.length) / itemsPerPage));
+                }
             } catch (err) {
                 console.error('Error fetching clubs for admin:', err);
                 setError(err.message || t('clubsAdmin.errors.fetchFailed'));
                 setClubs([]);
+                setAllClubs([]);
             } finally {
                 setInitialLoading(false);
             }
         };
 
-        fetchAllClubs();
-    }, [ isAuthentication, isAdmin, t]);
+        fetchClubs();
+    }, [isAuthentication, isAdmin, isModerator, currentPage, needsClientSideFiltering, itemsPerPage, t]);
 
-    // Filter, search and sort clubs
+    // Reset to first page when filters change
+    useEffect(() => {
+        if (currentPage !== 1) {
+            setCurrentPage(1);
+        }
+    }, [searchTerm, filterBy, sortBy]);
+
+    // Filter, search and sort clubs for client-side
     const filteredAndSortedClubs = useMemo(() => {
-        if (!Array.isArray(clubs)) return [];
+        if (!needsClientSideFiltering) {
+            return clubs; // Use server-side data
+        }
 
-        let filtered = [...clubs];
+        if (!Array.isArray(allClubs)) return [];
+
+        let filtered = [...allClubs];
 
         // Apply search filter
         if (searchTerm.trim()) {
@@ -160,33 +195,53 @@ const ClubsAdmin = () => {
         });
 
         return sorted;
-    }, [clubs, searchTerm, filterBy, sortBy]);
+    }, [allClubs, clubs, searchTerm, filterBy, sortBy, needsClientSideFiltering]);
 
-    // Pagination
+    // Pagination for display
     const paginatedClubs = useMemo(() => {
+        if (!needsClientSideFiltering) {
+            return clubs; // Server-side pagination already handled
+        }
+
         const startIndex = (currentPage - 1) * itemsPerPage;
         const endIndex = startIndex + itemsPerPage;
         return filteredAndSortedClubs.slice(startIndex, endIndex);
-    }, [filteredAndSortedClubs, currentPage, itemsPerPage]);
+    }, [filteredAndSortedClubs, clubs, currentPage, itemsPerPage, needsClientSideFiltering]);
 
-    const totalPages = Math.ceil(filteredAndSortedClubs.length / itemsPerPage);
+    // Calculate total pages
+    const calculatedTotalPages = useMemo(() => {
+        if (!needsClientSideFiltering) {
+            return totalPages; // Use server-side pagination
+        }
+        return Math.ceil(filteredAndSortedClubs.length / itemsPerPage);
+    }, [filteredAndSortedClubs.length, itemsPerPage, totalPages, needsClientSideFiltering]);
 
     // Calculate statistics
     const stats = useMemo(() => {
-        if (!Array.isArray(clubs)) return {};
+        const dataToAnalyze = needsClientSideFiltering ? allClubs : clubs;
+        if (!Array.isArray(dataToAnalyze)) return {};
 
         return {
-            total: clubs.length,
-            active: clubs.filter(club => club.status === 'active').length,
-            inactive: clubs.filter(club => club.status === 'inactive').length,
-            draft: clubs.filter(club => club.status === 'draft').length,
-            suspended: clubs.filter(club => club.status === 'suspended').length,
-            rejected: clubs.filter(club => club.status === 'rejected').length,
-            verified: clubs.filter(club => club.metadata?.isVerified === true).length,
-            unverified: clubs.filter(club => club.metadata?.isVerified === false).length,
-            totalMembers: clubs.reduce((sum, club) => sum + (club.membership?.totalMembers || 0), 0)
+            total: dataToAnalyze.length,
+            active: dataToAnalyze.filter(club => club.status === 'active').length,
+            inactive: dataToAnalyze.filter(club => club.status === 'inactive').length,
+            draft: dataToAnalyze.filter(club => club.status === 'draft').length,
+            suspended: dataToAnalyze.filter(club => club.status === 'suspended').length,
+            rejected: dataToAnalyze.filter(club => club.status === 'rejected').length,
+            verified: dataToAnalyze.filter(club => club.metadata?.isVerified === true).length,
+            unverified: dataToAnalyze.filter(club => club.metadata?.isVerified === false).length,
+            totalMembers: dataToAnalyze.reduce((sum, club) => sum + (club.membership?.totalMembers || 0), 0)
         };
-    }, [clubs]);
+    }, [clubs, allClubs, needsClientSideFiltering]);
+
+    // Handle page change
+    const handlePageChange = (newPage) => {
+        if (newPage >= 1 && newPage <= calculatedTotalPages) {
+            setCurrentPage(newPage);
+            // Clear selections when changing pages
+            setSelectedClubs([]);
+        }
+    };
 
     // Handle club selection
     const handleClubSelect = (clubId, isSelected) => {
@@ -215,7 +270,11 @@ const ClubsAdmin = () => {
         try {
             const updatedClub = await toggleClubStatus(club.id || club.slug, newStatus);
             if (updatedClub) {
+                // Update both clubs arrays
                 setClubs(prev => prev.map(c => 
+                    c.id === club.id ? updatedClub : c
+                ));
+                setAllClubs(prev => prev.map(c => 
                     c.id === club.id ? updatedClub : c
                 ));
             }
@@ -231,6 +290,9 @@ const ClubsAdmin = () => {
                 setClubs(prev => prev.map(c => 
                     c.id === club.id ? verifiedClub : c
                 ));
+                setAllClubs(prev => prev.map(c => 
+                    c.id === club.id ? verifiedClub : c
+                ));
             }
         } catch (error) {
             console.error('Error verifying club:', error);
@@ -244,6 +306,9 @@ const ClubsAdmin = () => {
                 setClubs(prev => prev.map(c => 
                     c.id === club.id ? approvedClub : c
                 ));
+                setAllClubs(prev => prev.map(c => 
+                    c.id === club.id ? approvedClub : c
+                ));
             }
         } catch (error) {
             console.error('Error approving club:', error);
@@ -254,8 +319,12 @@ const ClubsAdmin = () => {
         try {
             const result = await rejectClub(club.id || club.slug, reason);
             if (result) {
+                const updatedClub = { ...club, status: 'rejected' };
                 setClubs(prev => prev.map(c => 
-                    c.id === club.id ? { ...c, status: 'rejected' } : c
+                    c.id === club.id ? updatedClub : c
+                ));
+                setAllClubs(prev => prev.map(c => 
+                    c.id === club.id ? updatedClub : c
                 ));
             }
         } catch (error) {
@@ -286,11 +355,20 @@ const ClubsAdmin = () => {
             if (result) {
                 if (action === 'delete') {
                     setClubs(prev => prev.filter(club => !selectedClubs.includes(club.id)));
+                    setAllClubs(prev => prev.filter(club => !selectedClubs.includes(club.id)));
                 } else {
-                    // Refresh clubs after bulk actions
-                    const response = await getAllClubs(true, 1, 1000);
+                    // Refresh current page data
+                    const response = await getAllClubs(true, 
+                        needsClientSideFiltering ? 1 : currentPage, 
+                        needsClientSideFiltering ? 1000 : itemsPerPage
+                    );
                     const updatedClubs = response?.clubs || response || [];
-                    setClubs(Array.isArray(updatedClubs) ? updatedClubs : []);
+                    
+                    if (needsClientSideFiltering) {
+                        setAllClubs(Array.isArray(updatedClubs) ? updatedClubs : []);
+                    } else {
+                        setClubs(Array.isArray(updatedClubs) ? updatedClubs : []);
+                    }
                 }
                 setSelectedClubs([]);
                 setShowBulkActions(false);
@@ -416,30 +494,57 @@ const ClubsAdmin = () => {
                             ))}
                         </div>
 
-                        {/* Pagination */}
-                        {totalPages > 1 && (
+                        {/* Enhanced Pagination */}
+                        {calculatedTotalPages > 1 && (
                             <div className="clubsadmin-pagination">
                                 <button
                                     className="clubsadmin-pagination-btn"
-                                    onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                                    onClick={() => handlePageChange(1)}
+                                    disabled={currentPage === 1}
+                                    title={t('clubsAdmin.pagination.first')}
+                                >
+                                    ⟪
+                                </button>
+                                
+                                <button
+                                    className="clubsadmin-pagination-btn"
+                                    onClick={() => handlePageChange(currentPage - 1)}
                                     disabled={currentPage === 1}
                                 >
                                     {t('clubsAdmin.pagination.previous')}
                                 </button>
                                 
                                 <div className="clubsadmin-pagination-info">
-                                    {t('clubsAdmin.pagination.info', { 
-                                        current: currentPage, 
-                                        total: totalPages 
-                                    })}
+                                    <span>
+                                        {t('clubsAdmin.pagination.info', { 
+                                            current: currentPage, 
+                                            total: calculatedTotalPages 
+                                        })}
+                                    </span>
+                                    <div className="clubsadmin-pagination-details">
+                                        {t('clubsAdmin.results.showing', {
+                                            showing: paginatedClubs.length,
+                                            total: needsClientSideFiltering ? filteredAndSortedClubs.length : totalItems,
+                                            allTotal: needsClientSideFiltering ? allClubs.length : totalItems
+                                        })}
+                                    </div>
                                 </div>
                                 
                                 <button
                                     className="clubsadmin-pagination-btn"
-                                    onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                                    disabled={currentPage === totalPages}
+                                    onClick={() => handlePageChange(currentPage + 1)}
+                                    disabled={currentPage === calculatedTotalPages}
                                 >
                                     {t('clubsAdmin.pagination.next')}
+                                </button>
+                                
+                                <button
+                                    className="clubsadmin-pagination-btn"
+                                    onClick={() => handlePageChange(calculatedTotalPages)}
+                                    disabled={currentPage === calculatedTotalPages}
+                                    title={t('clubsAdmin.pagination.last')}
+                                >
+                                    ⟫
                                 </button>
                             </div>
                         )}
@@ -455,6 +560,7 @@ const ClubsAdmin = () => {
                                 onClick={() => {
                                     setSearchTerm('');
                                     setFilterBy('all');
+                                    setSortBy('newest');
                                 }}
                             >
                                 {t('clubsAdmin.empty.clearFilters')}
@@ -463,19 +569,6 @@ const ClubsAdmin = () => {
                     </div>
                 )}
             </div>
-
-            {/* Results Info */}
-            {filteredAndSortedClubs.length > 0 && (
-                <div className="clubsadmin-results-info">
-                    <p>
-                        {t('clubsAdmin.results.showing', {
-                            showing: paginatedClubs.length,
-                            total: filteredAndSortedClubs.length,
-                            allTotal: clubs.length
-                        })}
-                    </p>
-                </div>
-            )}
 
             {/* Admin Modal */}
             <AdminClubModal

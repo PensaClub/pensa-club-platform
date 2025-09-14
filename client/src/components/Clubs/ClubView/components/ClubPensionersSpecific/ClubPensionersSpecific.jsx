@@ -342,7 +342,7 @@ const ClubPensionersSpecific = ({ club }) => {
                 </div>
               )}
 
-              {club.preferences?.showContactForm && healthData.emergencyProtocol.emergencyContacts?.length > 0 && (
+              { healthData.emergencyProtocol.emergencyContacts?.length > 0 && (
                 <div className="emergency-item">
                   <FontAwesomeIcon icon={faPhone} />
                   <div>

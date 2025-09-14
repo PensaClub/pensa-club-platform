@@ -137,32 +137,7 @@ export const ClubProvider = ({ children }) => {
       console.error('❌ Грешка при получаване на клубове:', e);
       notify('error', e);
       showErrorAndSetTimeouts(e.message);
-
-      // Fallback към mock data в случай на грешка
-      try {
-        const fallbackClubs = await simulateApiCall(mockClubsData);
-        const sortedFallback = fallbackClubs.sort((a, b) => {
-          return new Date(b.metadata.updatedAt) - new Date(a.metadata.updatedAt);
-        });
-        setClubs(sortedFallback);
-        setClubsLoaded(true);
-        return {
-          clubs: sortedFallback,
-          pagination: null,
-          total: sortedFallback.length,
-          isFromFallback: true
-        };
-      } catch (fallbackError) {
-        console.error('❌ Грешка и с fallback данните:', fallbackError);
-        setClubs([]);
-        setClubsLoaded(true);
-        return {
-          clubs: [],
-          pagination: null,
-          total: 0,
-          error: e.message
-        };
-      }
+     
     } finally {
       setIsLoading(false);
     }
@@ -584,27 +559,49 @@ export const ClubProvider = ({ children }) => {
     setBookmarkedClubs([]);
     setBookmarksLoaded(false);
   }, []);
-  // В ClubContext.jsx, поправи getUserClubs функцията:
-  const getUserClubs = async (email) => {
-    try {
-      const response = await clubService.getUserClubs(email);
+  // В ClubContext.jsx - обнови getUserClubs функцията
+// В ClubContext.jsx - обнови getUserClubs функцията
+const getUserClubs = async (email, page = 1, limit = 12) => {
+  try {
+    const params = new URLSearchParams();
+    if (email) params.append('email', email);
+    params.append('page', page.toString());
+    params.append('limit', limit.toString());
+    
+    const response = await clubService.getUserClubs(email, page, limit);
 
-      // ПОПРАВКА: Върни clubs масива, не целия response
-      if (response && Array.isArray(response.clubs)) {
-        return response.clubs;
-      } else if (Array.isArray(response)) {
-        return response;
-      } else {
-        console.warn('Unexpected getUserClubs response:', response);
-        return [];
-      }
-    } catch (e) {
-      console.error('Грешка при получаване на потребителски клубове:', e);
-      notify('error', e);
-      return [];
+    // Handle different response formats
+    if (response && Array.isArray(response.clubs)) {
+      return {
+        clubs: response.clubs,
+        pagination: response.pagination || null,
+        total: response.total || response.pagination?.totalItems || response.clubs.length
+      };
+    } else if (Array.isArray(response)) {
+      return {
+        clubs: response,
+        pagination: null,
+        total: response.length
+      };
+    } else {
+      console.warn('Unexpected getUserClubs response:', response);
+      return {
+        clubs: [],
+        pagination: null,
+        total: 0
+      };
     }
-  };
-
+  } catch (e) {
+    console.error('Грешка при получаване на потребителски клубове:', e);
+    notify('error', e);
+    return {
+      clubs: [],
+      pagination: null,
+      total: 0,
+      error: e.message
+    };
+  }
+};
   // ===============================
   // 🆕 ТЪРСЕНЕ И ФИЛТРИРАНЕ
   // ===============================
