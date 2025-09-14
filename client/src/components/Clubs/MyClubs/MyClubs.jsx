@@ -1,6 +1,4 @@
-// В MyClubs.jsx - добави функцията и prop-а
-
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -33,17 +31,28 @@ const MyClubs = () => {
 
     const { 
         getUserClubs,
+        searchClubs,
+        getClubsByCategory,
+        getActiveClubs,
         deleteClub,
-        transferClubOwnership // ДОБАВЕНО
+        transferClubOwnership
     } = useClubContext();
 
     // State management
     const [clubs, setClubs] = useState([]);
+    const [allUserClubs, setAllUserClubs] = useState([]); // За статистики
     const [searchTerm, setSearchTerm] = useState('');
+    const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(''); // Debounced search
     const [filterBy, setFilterBy] = useState('all');
     const [sortBy, setSortBy] = useState('newest');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(6);
     const [initialLoading, setInitialLoading] = useState(true);
     const [error, setError] = useState(null);
+    
+    // Pagination info from server
+    const [totalItems, setTotalItems] = useState(0);
+    const [totalPages, setTotalPages] = useState(1);
 
     // Authentication check
     useEffect(() => {
@@ -54,25 +63,168 @@ const MyClubs = () => {
         }
     }, [isAuthentication, navigate, setRedirectAfterLogin]);
 
-    // Fetch user clubs
+    // Debounce search term
     useEffect(() => {
-        const fetchUserClubs = async () => {
+        const timer = setTimeout(() => {
+            setDebouncedSearchTerm(searchTerm);
+        }, 500); // 500ms delay
+
+        return () => clearTimeout(timer);
+    }, [searchTerm]);
+
+    // Зареждаме всички клубове веднъж за статистики
+    useEffect(() => {
+        const fetchAllUserClubs = async () => {
+            if (!isAuthentication || !userEmail) return;
+
+            try {
+                const response = await getUserClubs(userEmail, 1, 6);
+                let userClubs = [];
+                
+                if (Array.isArray(response)) {
+                    userClubs = response;
+                } else if (response && Array.isArray(response.clubs)) {
+                    userClubs = response.clubs;
+                }
+                
+                setAllUserClubs(userClubs);
+            } catch (err) {
+                console.error('Error fetching all user clubs for stats:', err);
+                setAllUserClubs([]);
+            }
+        };
+
+        fetchAllUserClubs();
+    }, [getUserClubs, userEmail, isAuthentication]);
+
+    // Reset to first page when filters change
+    useEffect(() => {
+        if (currentPage !== 1) {
+            setCurrentPage(1);
+        }
+    }, [debouncedSearchTerm, filterBy, sortBy]);
+
+    // Main data fetching effect
+    useEffect(() => {
+        const fetchClubs = async () => {
             if (!isAuthentication || !userEmail) return;
 
             try {
                 setInitialLoading(true);
                 setError(null);
 
-                const userClubs = await getUserClubs(userEmail);
+                let response;
+                let fetchedClubs = [];
+                let pagination = null;
+                let total = 0;
 
-                if (Array.isArray(userClubs)) {
-                    setClubs(userClubs);
+                // Determine which endpoint to use based on filters
+                if (debouncedSearchTerm.trim()) {
+                    // Use search endpoint
+                    const searchParams = {
+                        query: debouncedSearchTerm,
+                        page: currentPage,
+                        limit: itemsPerPage,
+                        owner: userEmail // Filter by owner to get only user's clubs
+                    };
+
+                    response = await searchClubs(searchParams);
+                } else if (filterBy === 'active') {
+                    // Use active clubs endpoint, then filter by owner
+                    response = await getActiveClubs(currentPage, itemsPerPage);
+                    
+                    // Filter only user's clubs from active clubs
+                    if (response && Array.isArray(response.clubs)) {
+                        response.clubs = response.clubs.filter(club => club.owner === userEmail);
+                    } else if (Array.isArray(response)) {
+                        response = response.filter(club => club.owner === userEmail);
+                    }
+                } else if (['general', 'cultural', 'traditional', 'social', 'sports'].includes(filterBy)) {
+                    // Use category endpoint, then filter by owner
+                    response = await getClubsByCategory(filterBy, currentPage, itemsPerPage);
+                    
+                    // Filter only user's clubs from category clubs
+                    if (response && Array.isArray(response.clubs)) {
+                        response.clubs = response.clubs.filter(club => club.owner === userEmail);
+                    } else if (Array.isArray(response)) {
+                        response = response.filter(club => club.owner === userEmail);
+                    }
                 } else {
-                    console.warn('getUserClubs did not return an array:', userClubs);
-                    setClubs([]);
+                    // Default: get user clubs with status filter if needed
+                    response = await getUserClubs(userEmail, currentPage, itemsPerPage);
+                    
+                    // Apply client-side status filtering if needed
+                    if (filterBy !== 'all' && response) {
+                        let clubsToFilter = [];
+                        
+                        if (Array.isArray(response)) {
+                            clubsToFilter = response;
+                        } else if (response && Array.isArray(response.clubs)) {
+                            clubsToFilter = response.clubs;
+                        }
+
+                        const filteredClubs = clubsToFilter.filter(club => {
+                            switch (filterBy) {
+                                case 'inactive':
+                                    return club.status === 'inactive';
+                                case 'draft':
+                                    return club.status === 'draft';
+                                case 'verified':
+                                    return club.metadata?.isVerified === true;
+                                case 'unverified':
+                                    return club.metadata?.isVerified === false || club.metadata?.isVerified == null;
+                                default:
+                                    return true;
+                            }
+                        });
+
+                        if (Array.isArray(response)) {
+                            response = filteredClubs;
+                        } else {
+                            response.clubs = filteredClubs;
+                            response.total = filteredClubs.length;
+                        }
+                    }
                 }
+
+                // Process response
+                if (Array.isArray(response)) {
+                    fetchedClubs = response;
+                    total = response.length;
+                } else if (response && Array.isArray(response.clubs)) {
+                    fetchedClubs = response.clubs;
+                    pagination = response.pagination;
+                    total = response.total || response.pagination?.totalItems || fetchedClubs.length;
+                } else {
+                    console.warn('Unexpected response format:', response);
+                    fetchedClubs = [];
+                }
+
+                // Apply sorting if not default
+                if (sortBy !== 'newest') {
+                    fetchedClubs.sort((a, b) => {
+                        switch (sortBy) {
+                            case 'oldest':
+                                return new Date(a.metadata?.createdAt || a.createdAt || 0) -
+                                    new Date(b.metadata?.createdAt || b.createdAt || 0);
+                            case 'name':
+                                return (a.name || '').localeCompare(b.name || '');
+                            case 'members':
+                                return (b.membership?.totalMembers || 0) - (a.membership?.totalMembers || 0);
+                            case 'location':
+                                return (a.location?.city || '').localeCompare(b.location?.city || '');
+                            default:
+                                return 0;
+                        }
+                    });
+                }
+
+                setClubs(fetchedClubs);
+                setTotalItems(total);
+                setTotalPages(pagination?.totalPages || Math.ceil(total / itemsPerPage));
+
             } catch (err) {
-                console.error('Error fetching user clubs:', err);
+                console.error('Error fetching clubs:', err);
                 setError(err.message || 'Failed to fetch clubs');
                 setClubs([]);
             } finally {
@@ -80,129 +232,88 @@ const MyClubs = () => {
             }
         };
 
-        fetchUserClubs();
-    }, [getUserClubs, userEmail, isAuthentication]);
+        fetchClubs();
+    }, [
+        getUserClubs, 
+        searchClubs, 
+        getClubsByCategory, 
+        getActiveClubs,
+        userEmail, 
+        isAuthentication, 
+        currentPage, 
+        itemsPerPage, 
+        debouncedSearchTerm, 
+        filterBy, 
+        sortBy
+    ]);
 
-    // Filter and search clubs (останалия код същия...)
-    const filteredAndSortedClubs = useMemo(() => {
-        if (!Array.isArray(clubs)) {
-            return [];
+    // Calculate statistics from all user clubs
+    const stats = useMemo(() => {
+        if (!Array.isArray(allUserClubs)) {
+            return {
+                total: 0,
+                active: 0,
+                inactive: 0,
+                draft: 0,
+                suspended: 0,
+                rejected: 0,
+                verified: 0,
+                unverified: 0,
+                totalMembers: 0,
+                avgMembers: 0
+            };
         }
 
-        let filtered = clubs;
+        const total = allUserClubs.length;
+        
+        // Статистики по статус
+        const active = allUserClubs.filter(club => club.status === 'active').length;
+        const inactive = allUserClubs.filter(club => club.status === 'inactive').length;
+        const draft = allUserClubs.filter(club => club.status === 'draft').length;
+        const suspended = allUserClubs.filter(club => club.status === 'suspended').length;
+        const rejected = allUserClubs.filter(club => club.status === 'rejected').length;
+        
+        // Статистики по верификация
+        const verified = allUserClubs.filter(club => club.metadata?.isVerified === true).length;
+        const unverified = allUserClubs.filter(club => 
+            club.metadata?.isVerified === false || 
+            club.metadata?.isVerified == null
+        ).length;
+        
+        // Членове
+        const totalMembers = allUserClubs.reduce((sum, club) =>
+            sum + (club.membership?.totalMembers || 0), 0
+        );
+        const avgMembers = total > 0 ? Math.round(totalMembers / total) : 0;
 
-        // Apply search filter
-        if (searchTerm.trim()) {
-            const searchLower = searchTerm.toLowerCase();
-            filtered = filtered.filter(club =>
-                club.name?.toLowerCase().includes(searchLower) ||
-                club.shortDescription?.toLowerCase().includes(searchLower) ||
-                club.location?.city?.toLowerCase().includes(searchLower) ||
-                club.category?.toLowerCase().includes(searchLower)
-            );
-        }
-
-        // Apply category filter
-        if (filterBy !== 'all') {
-            filtered = filtered.filter(club => {
-                switch (filterBy) {
-                    case 'active':
-                        return club.status === 'active';
-                    case 'inactive':
-                        return club.status === 'inactive';
-                    case 'draft':
-                        return club.status === 'draft';
-                    case 'general':
-                        return club.category === 'general';
-                    case 'cultural':
-                        return club.category === 'cultural';
-                    case 'traditional':
-                        return club.category === 'traditional';
-                    case 'social':
-                        return club.category === 'social';
-                    case 'sports':
-                        return club.category === 'sports';
-                    default:
-                        return true;
-                }
-            });
-        }
-
-        // Apply sorting
-        const sorted = [...filtered].sort((a, b) => {
-            switch (sortBy) {
-                case 'newest':
-                    return new Date(b.metadata?.createdAt || b.createdAt || 0) -
-                        new Date(a.metadata?.createdAt || a.createdAt || 0);
-                case 'oldest':
-                    return new Date(a.metadata?.createdAt || a.createdAt || 0) -
-                        new Date(b.metadata?.createdAt || b.createdAt || 0);
-                case 'name':
-                    return (a.name || '').localeCompare(b.name || '');
-                case 'members':
-                    return (b.membership?.totalMembers || 0) - (a.membership?.totalMembers || 0);
-                case 'location':
-                    return (a.location?.city || '').localeCompare(b.location?.city || '');
-                default:
-                    return 0;
-            }
-        });
-
-        return sorted;
-    }, [clubs, searchTerm, filterBy, sortBy]);
-
-    // Calculate statistics (останалия код същия...)
-   const stats = useMemo(() => {
-    if (!Array.isArray(clubs)) {
         return {
-            total: 0,
-            active: 0,
-            inactive: 0,
-            draft: 0,
-            suspended: 0,
-            rejected: 0,
-            verified: 0,
-            unverified: 0,
-            totalMembers: 0,
-            avgMembers: 0
+            total,
+            active,
+            inactive,
+            draft,
+            suspended,
+            rejected,
+            verified,
+            unverified,
+            totalMembers,
+            avgMembers
         };
-    }
+    }, [allUserClubs]);
 
-    const total = clubs.length;
-    
-    // Статистики по статус
-    const active = clubs.filter(club => club.status === 'active').length;
-    const inactive = clubs.filter(club => club.status === 'inactive').length;
-    const draft = clubs.filter(club => club.status === 'draft').length;
-    const suspended = clubs.filter(club => club.status === 'suspended').length;
-    const rejected = clubs.filter(club => club.status === 'rejected').length;
-    
-    // Статистики по верификация (ВАЖНО за "чакащи одобрение")
-    const verified = clubs.filter(club => club.metadata?.isVerified === true).length;
-    const unverified = clubs.filter(club => 
-        club.metadata?.isVerified === false || 
-        club.metadata?.isVerified == null
-    ).length;
-    
-    // Членове
-    const totalMembers = clubs.reduce((sum, club) =>
-        sum + (club.membership?.totalMembers || 0), 0
-    );
-    const avgMembers = total > 0 ? Math.round(totalMembers / total) : 0;
+    // Handle manual search (when search button is clicked)
+    const handleManualSearch = useCallback(() => {
+        setDebouncedSearchTerm(searchTerm);
+        if (currentPage !== 1) {
+            setCurrentPage(1);
+        }
+    }, [searchTerm, currentPage]);
 
-    return {
-        total,
-        active,
-        inactive,
-        draft,
-        suspended,
-        rejected,
-        verified,
-        unverified, // Това са клубовете "чакащи одобрение"
-        totalMembers,
-        avgMembers
+    // Handle page change
+    const handlePageChange = (newPage) => {
+        if (newPage >= 1 && newPage <= totalPages) {
+            setCurrentPage(newPage);
+        }
     };
-}, [clubs]);
 
     const handleCreateNew = () => {
         navigate('/profile/club-create');
@@ -212,20 +323,24 @@ const MyClubs = () => {
         try {
             const success = await deleteClub(club.id || club.slug);
             if (success) {
+                // Remove from current view
                 setClubs(prevClubs => prevClubs.filter(c => c.id !== club.id));
+                // Remove from all clubs for stats
+                setAllUserClubs(prevClubs => prevClubs.filter(c => c.id !== club.id));
             }
         } catch (error) {
             console.error('Error deleting club:', error);
         }
     };
 
-    // ДОБАВЕНА ФУНКЦИЯ ЗА ПРЕХВЪРЛЯНЕ НА СОБСТВЕНОСТ
     const handleTransferOwnership = async (club, newOwnerEmail) => {
         try {
             const success = await transferClubOwnership(club.id || club.slug, newOwnerEmail);
             if (success) {
-                // Премахни клуба от списъка тъй като вече не е твой
+                // Remove from current view
                 setClubs(prevClubs => prevClubs.filter(c => c.id !== club.id));
+                // Remove from all clubs for stats
+                setAllUserClubs(prevClubs => prevClubs.filter(c => c.id !== club.id));
             }
         } catch (error) {
             console.error('Error transferring ownership:', error);
@@ -240,7 +355,7 @@ const MyClubs = () => {
         navigate(`/profile/club-create?editId=${club.id}&mode=edit`);
     };
 
-    // Show loading state (останалия код същия...)
+    // Show loading state
     if (initialLoading) {
         return (
             <div className="myclubs-loading">
@@ -300,7 +415,8 @@ const MyClubs = () => {
                 <SearchMyClubsBar
                     value={searchTerm}
                     onChange={setSearchTerm}
-                    placeholder="Search clubs by name, description, location..."
+                    onSearch={handleManualSearch}
+                    placeholder="Search your clubs by name, description, location..."
                 />
 
                 <div className="myclubs-controls-right">
@@ -312,6 +428,8 @@ const MyClubs = () => {
                             { value: 'active', label: 'Active' },
                             { value: 'inactive', label: 'Inactive' },
                             { value: 'draft', label: 'Draft' },
+                            { value: 'verified', label: 'Verified' },
+                            { value: 'unverified', label: 'Unverified' },
                             { value: 'general', label: 'General' },
                             { value: 'cultural', label: 'Cultural' },
                             { value: 'traditional', label: 'Traditional' },
@@ -336,42 +454,85 @@ const MyClubs = () => {
 
             {/* Clubs Grid */}
             <div className="myclubs-content">
-                {filteredAndSortedClubs.length > 0 ? (
-                    <div className="myclubs-grid">
-                        {filteredAndSortedClubs.map((club) => (
-                            <MyClubsCard
-                                key={club.id}
-                                club={club}
-                                onView={() => handleClubClick(club)}
-                                onEdit={() => handleEditClub(club)}
-                                onDelete={() => handleDeleteClub(club)}
-                                onTransferOwnership={handleTransferOwnership} // ДОБАВЕНО
-                                isOwner={true}
-                            />
-                        ))}
-                    </div>
+                {clubs.length > 0 ? (
+                    <>
+                        <div className="myclubs-grid">
+                            {clubs.map((club) => (
+                                <MyClubsCard
+                                    key={club.id}
+                                    club={club}
+                                    onView={() => handleClubClick(club)}
+                                    onEdit={() => handleEditClub(club)}
+                                    onDelete={() => handleDeleteClub(club)}
+                                    onTransferOwnership={handleTransferOwnership}
+                                    isOwner={true}
+                                />
+                            ))}
+                        </div>
+
+                        {/* Enhanced Pagination */}
+                        {totalPages > 1 && (
+                            <div className="myclubs-pagination">
+                                <button
+                                    className="myclubs-pagination-btn"
+                                    onClick={() => handlePageChange(1)}
+                                    disabled={currentPage === 1}
+                                    title="First Page"
+                                >
+                                    ⟪
+                                </button>
+                                
+                                <button
+                                    className="myclubs-pagination-btn"
+                                    onClick={() => handlePageChange(currentPage - 1)}
+                                    disabled={currentPage === 1}
+                                >
+                                    Previous
+                                </button>
+                                
+                                <div className="myclubs-pagination-info">
+                                    <span>
+                                        Page {currentPage} of {totalPages}
+                                    </span>
+                                    <div className="myclubs-pagination-details">
+                                        Showing {clubs.length} of {totalItems} clubs
+                                    </div>
+                                </div>
+                                
+                                <button
+                                    className="myclubs-pagination-btn"
+                                    onClick={() => handlePageChange(currentPage + 1)}
+                                    disabled={currentPage === totalPages}
+                                >
+                                    Next
+                                </button>
+                                
+                                <button
+                                    className="myclubs-pagination-btn"
+                                    onClick={() => handlePageChange(totalPages)}
+                                    disabled={currentPage === totalPages}
+                                    title="Last Page"
+                                >
+                                    ⟫
+                                </button>
+                            </div>
+                        )}
+                    </>
                 ) : (
                     <MyClubsEmptyState
-                        searchTerm={searchTerm}
+                        searchTerm={debouncedSearchTerm}
                         filterBy={filterBy}
-                        totalClubs={clubs.length}
+                        totalClubs={allUserClubs.length}
                         onCreateNew={handleCreateNew}
                         onClearFilters={() => {
                             setSearchTerm('');
+                            setDebouncedSearchTerm('');
                             setFilterBy('all');
+                            setSortBy('newest');
                         }}
                     />
                 )}
             </div>
-
-            {/* Results info */}
-            {filteredAndSortedClubs.length > 0 && (
-                <div className="myclubs-results-info">
-                    <p>
-                        Showing {filteredAndSortedClubs.length} of {clubs.length} clubs
-                    </p>
-                </div>
-            )}
         </div>
     );
 };
