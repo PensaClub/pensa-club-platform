@@ -3358,7 +3358,16 @@
     },
     "ClubHero": {
       "status": {
-        "activeClub": "Aktiver Club"
+        "activeClub": "Aktiver Verein",
+        "inactiveClub": "Inaktiver Verein",
+        "suspendedClub": "Gesperrter Verein",
+        "draftClub": "Entwurf", 
+        "rejectedClub": "Abgelehnter Verein",
+        "unknownStatus": "Unbekannter Status"
+      },
+       "location": {
+        "address": "Adresse"
+  
       },
       "categories": {
         "cultural": "Kulturclub",
@@ -3450,7 +3459,10 @@
         "members": "Mitglieder",
         "people": "Personen",
         "venue": "Räumlichkeiten",
-        "seats": "Plätze"
+        "seats": "Plätze",
+        "foundedNotSpecified": "Nicht angegeben",
+        "membersNotSpecified": "Anzahl der Mitglieder nicht angegeben"
+
       },
       "demographics": {
         "title": "Altersstruktur",

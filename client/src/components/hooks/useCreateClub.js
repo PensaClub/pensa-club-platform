@@ -11,7 +11,7 @@ export const useCreateClub = (clubId = null, isEditMode = false, mode = 'create'
     slug: '',
     shortDescription: '',
     fullDescription: '',
-    foundedYear: new Date().getFullYear(),
+    foundedYear: '',
     category: 'general',
     status: 'active',
     logo: '',              // ОБНОВЕНО: string URL

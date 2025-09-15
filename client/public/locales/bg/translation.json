@@ -3859,8 +3859,13 @@
       }
     },
     "ClubHero": {
-      "status": {
-        "activeClub": "Активен клуб"
+     "status": {
+        "activeClub": "Активен клуб",
+        "inactiveClub": "Неактивен клуб", 
+        "suspendedClub": "Спрян клуб",
+        "draftClub": "Чернова",
+        "rejectedClub": "Отхвърлен клуб",
+        "unknownStatus": "Неизвестен статус"
       },
       "categories": {
         "cultural": "Културен клуб",
@@ -3914,6 +3919,10 @@
         "websiteNotAvailable": "Уебсайт не е наличен",
         "socialNotAvailable": "профил не е наличен",
         "linkCopied": "Линкът е копиран в клипборда!"
+      },
+      "location": {
+        "address": "Адрес"
+  
       }
     },
     "ClubAbout": {
@@ -3952,7 +3961,9 @@
         "members": "Членове",
         "people": "души",
         "venue": "Помещение",
-        "seats": "места"
+        "seats": "места",
+        "foundedNotSpecified": "Не е посочена година на основаване",
+        "membersNotSpecified": "Броят членове не е посочен"
       },
       "demographics": {
         "title": "Възрастова структура",

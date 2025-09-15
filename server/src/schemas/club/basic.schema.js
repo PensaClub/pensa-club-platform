@@ -12,7 +12,10 @@ const basicSchema = z.object({
     shortDescription: optionalString(),
 
     // Club information
-    foundedYear: optionalNumber(1900, new Date().getFullYear()),
+    foundedYear: z.union([
+        z.literal(0),
+        optionalNumber(1900, new Date().getFullYear())
+    ]).optional(),
 
     status: optionalString(), // TODO: change to enum when FE values are finalized
 

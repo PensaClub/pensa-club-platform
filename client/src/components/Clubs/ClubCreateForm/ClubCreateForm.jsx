@@ -46,7 +46,7 @@ const ClubCreateForm = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const editId = searchParams.get('editId');
-      const draftId = searchParams.get('draftId');
+    const draftId = searchParams.get('draftId');
     const mode = searchParams.get('mode');
     const isEditMode = mode === 'edit' && editId;
     const isContinueMode = mode === 'continue' && draftId;
@@ -72,7 +72,7 @@ const ClubCreateForm = () => {
         updateField(`activities.${type}`, data);
 
     }, [updateField, formData.activities]);
-const getFormTitle = () => {
+    const getFormTitle = () => {
         if (isEditMode) return `Редактиране на ${formData.name || 'клуб'}`;
         if (isContinueMode) return `Продължи работа по ${formData.name || 'драфт'}`;
         return t('clubForm.title');
@@ -274,19 +274,19 @@ const getFormTitle = () => {
 
     // Handle форма submission
     const handleSubmit = async () => {
-    try {
-        const result = await submitClub();
-        if (result) {
-            if (isEditMode) {
-                navigate(`/clubs/${result.slug}`);
-            } else {
-                navigate('/profile/clubs');
+        try {
+            const result = await submitClub();
+            if (result) {
+                if (isEditMode) {
+                    navigate(`/clubs/${result.slug}`);
+                } else {
+                    navigate('/profile/clubs');
+                }
             }
+        } catch (error) {
+            console.error('Error submitting club:', error);
         }
-    } catch (error) {
-        console.error('Error submitting club:', error);
-    }
-};
+    };
 
     // Handle draft save
     const handleSaveDraft = async () => {
@@ -433,6 +433,7 @@ const getFormTitle = () => {
                 </div>
 
                 {/* Година на основаване */}
+                {/* Година на основаване */}
                 <div className="club-form-group">
                     <label className="club-form-label">
                         {t('clubForm.fields.foundedYear.label')}
@@ -442,10 +443,13 @@ const getFormTitle = () => {
                         className="club-form-input"
                         placeholder={t('clubForm.fields.foundedYear.placeholder')}
                         value={formData.foundedYear}
-                        onChange={(e) => updateField('foundedYear', parseInt(e.target.value) || new Date().getFullYear())}
+                        onChange={(e) => updateField('foundedYear', e.target.value ? parseInt(e.target.value) : '')}
                         min="1900"
                         max={new Date().getFullYear()}
                     />
+                    <div className="club-form-help">
+                        {t('clubForm.fields.foundedYear.help')}
+                    </div>
                 </div>
 
                 {/* Пълно описание */}
