@@ -3395,7 +3395,8 @@
         "member": "Mitglied",
         "activity": "Aktivität", 
         "event": "Veranstaltung",
-        "year": "Jahr"
+        "year": "Jahr",
+        "foundedNotSpecified": "Gründungsjahr nicht angegeben"
       },
       "contact": {
         "title": "Kontaktieren Sie uns"

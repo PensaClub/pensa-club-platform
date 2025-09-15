@@ -3978,7 +3978,8 @@
         "member": "member",
         "activity": "activity",
         "event": "event",
-        "year": "year"
+        "year": "year",
+        "foundedNotSpecified": "Foundation year not specified"
       },
       "contact": {
         "title": "Contact us"

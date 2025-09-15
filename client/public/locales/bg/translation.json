@@ -3893,7 +3893,8 @@
         "member": "член",
         "activity": "дейност",
         "event": "събитие",
-        "year": "година"
+        "year": "година",
+        "foundedNotSpecified": "Не е посочена година"
       },
       "contact": {
         "title": "Свържете се с нас"
