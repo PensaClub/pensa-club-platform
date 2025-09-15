@@ -295,7 +295,7 @@
       "filters": {
         "all": "All Clubs",
         "active": "Active",
-        "inactive": "Inactive", 
+        "inactive": "Inactive",
         "draft": "Draft",
         "general": "General",
         "cultural": "Cultural",
@@ -305,7 +305,7 @@
       },
       "sort": {
         "newest": "Newest First",
-        "oldest": "Oldest First", 
+        "oldest": "Oldest First",
         "name": "Name A-Z",
         "members": "Most Members",
         "location": "Location"
@@ -313,7 +313,7 @@
       "stats": {
         "totalClubs": "Total Clubs",
         "totalClubsDesc": "Number of clubs you have created",
-        "activeClubs": "Active Clubs", 
+        "activeClubs": "Active Clubs",
         "activeClubsDesc": "Clubs that are currently active",
         "totalMembers": "Total Members",
         "totalMembersDesc": "Combined members across all clubs",
@@ -327,7 +327,7 @@
       },
       "categories": {
         "general": "General",
-        "cultural": "Cultural", 
+        "cultural": "Cultural",
         "traditional": "Traditional",
         "social": "Social",
         "sports": "Sports"
@@ -339,7 +339,7 @@
       "noDescription": "No description available",
       "members": "members",
       "views": "Views",
-      "events": "Events", 
+      "events": "Events",
       "lastUpdated": "Last updated",
       "showing": "Showing",
       "of": "of",
@@ -373,7 +373,7 @@
             "description": "Connect people with shared interests and create lasting relationships"
           },
           "visibility": {
-            "title": "Increase Visibility", 
+            "title": "Increase Visibility",
             "description": "Make your activities discoverable and attract new members"
           }
         },
@@ -3819,7 +3819,7 @@
         }
       }
     },
-     "pensioners": {
+    "pensioners": {
       "sectionTitle": "Senior Services",
       "sectionSubtitle": "Specialized programs and services tailored to the needs of older adults",
       "tabs": {
@@ -3942,7 +3942,15 @@
     },
     "ClubHero": {
       "status": {
-        "activeClub": "Active club"
+        "activeClub": "Active Club",
+        "inactiveClub": "Inactive Club",
+        "suspendedClub": "Suspended Club",
+        "draftClub": "Draft",
+        "rejectedClub": "Rejected Club",
+        "unknownStatus": "Unknown Status"
+      },
+      "location": {
+        "address": "Address"
       },
       "categories": {
         "cultural": "Cultural club",
@@ -3971,7 +3979,6 @@
         "activity": "activity",
         "event": "event",
         "year": "year"
-
       },
       "contact": {
         "title": "Contact us"
@@ -4035,7 +4042,9 @@
         "members": "Members",
         "people": "people",
         "venue": "Venue",
-        "seats": "seats"
+        "seats": "seats",
+        "foundedNotSpecified": "Not specified",
+        "membersNotSpecified": "Броят членове не е посочен"
       },
       "demographics": {
         "title": "Age structure",
@@ -4516,14 +4525,14 @@
         "share": "Share",
         "shareText": "Contact {{clubName}}"
       },
-      "mobile-club":"- club's",
+      "mobile-club": "- club's",
       "contactPeople": {
         "title": "Contact Persons",
-        "divider": "Contact Persons", 
+        "divider": "Contact Persons",
         "contactPerson": "Contact Person",
         "role": "Role",
         "phone": "Phone",
-        "email": "Email", 
+        "email": "Email",
         "description": "Description",
         "callPerson": "Call {name}",
         "emailPerson": "Email {name}",
@@ -9498,15 +9507,15 @@
         "title": "Basic Information",
         "subtitle": "Name, description and basic details"
       },
-       "pensioners": {
+      "pensioners": {
         "title": "Pensioners",
         "subtitle": "Specific services"
       },
-        "socialImpact": {
+      "socialImpact": {
         "title": "Social Impact",
         "subtitle": "Volunteering and projects"
       },
-        "achievements": {
+      "achievements": {
         "title": "Achievements",
         "subtitle": "Awards and recognitions"
       },
@@ -9726,7 +9735,7 @@
       "geolocationNotSupported": "Geolocation is not supported by your browser",
       "geolocationError": "Error determining location",
       "help": {
-       "title": "How to fill in the location?",
+        "title": "How to fill in the location?",
         "description": "Choose your club's location with easy steps:",
         "addressTip": "Enter address and city - coordinates will be determined automatically",
         "autoGeocode": "Automatic coordinate finding when entering complete address",
@@ -9744,7 +9753,6 @@
       "custom": "Custom Role",
       "addCustomRole": "Add Custom Role",
       "addFee": "Add Membership Fee",
-      
       "types": {
         "open": "Open Membership",
         "openDesc": "Anyone can join freely",
@@ -9755,14 +9763,14 @@
         "recommendation": "By Recommendation",
         "recommendationDesc": "Recommendation from existing member required"
       },
-      "demographicsSection": "Demographics and Statistics", 
+      "demographicsSection": "Demographics and Statistics",
       "requirementsBenefitsSection": "Requirements and Benefits",
       "requirements": {
         "title": "Membership Requirements",
         "placeholder": "Enter membership requirement...",
         "empty": "No membership requirements added"
       },
-       "benefits": {
+      "benefits": {
         "title": "Membership Benefits",
         "placeholder": "Enter membership benefit...",
         "empty": "No membership benefits added"
@@ -9791,7 +9799,7 @@
         "under60": "Under 60 years",
         "under60Desc": "Early retirees and active seniors",
         "age60to70": "60-70 years",
-        "age60to70Desc": "Newly retired, active members", 
+        "age60to70Desc": "Newly retired, active members",
         "age70to80": "70-80 years",
         "age70to80Desc": "Experienced members with rich life experience",
         "age80plus": "Over 80 years",
@@ -9825,8 +9833,8 @@
       "actions": {
         "addRole": "Add Role",
         "addFee": "Add Fee",
-             "addRequirement": "Add Requirement",
-        "removeRequirement": "Remove Requirement", 
+        "addRequirement": "Add Requirement",
+        "removeRequirement": "Remove Requirement",
         "addBenefit": "Add Benefit",
         "removeBenefit": "Remove Benefit"
       },
@@ -9849,17 +9857,16 @@
       "years": "years",
       "capacity": "Capacity",
       "people": "people",
-      
       "types": {
         "regular": "Regular Activity",
         "event": "Event",
         "workshop": "Workshop",
         "seasonal": "Seasonal Activity"
       },
-       "tabs": {
+      "tabs": {
         "regular": "Regular Activities",
         "events": "Events",
-        "trips": "Trips", 
+        "trips": "Trips",
         "courses": "Courses"
       },
       "eventTypes": {
@@ -9925,7 +9932,7 @@
         "instructor": "Instructor/Leader",
         "requirements": "Requirements",
         "equipment": "Required Equipment",
-         "day": "Day",
+        "day": "Day",
         "title": "Title",
         "destination": "Destination",
         "highlights": "Highlights",
@@ -9933,7 +9940,7 @@
         "location": "Location",
         "organizer": "Organizer",
         "time": "Time",
-         "date": "Date",
+        "date": "Date",
         "price": "Price",
         "participants": "Participants"
       },
@@ -9942,19 +9949,19 @@
         "description": "Describe what the activity includes...",
         "instructor": "Mary Johnson",
         "requirements": "Comfortable clothes, towel...",
-          "activityName": "Activity name",
+        "activityName": "Activity name",
         "eventTitle": "Event title",
         "eventDescription": "Event description",
         "destination": "Trip destination",
         "tripDescription": "Trip description",
         "courseName": "Course name",
         "courseDescription": "Course description",
-         "location": "Location",
+        "location": "Location",
         "organizer": "Organizer"
       },
       "actions": {
         "addActivity": "Add Activity",
-         "addEvent": "Add Event",
+        "addEvent": "Add Event",
         "addTrip": "Add Trip",
         "addCourse": "Add Course"
       },
@@ -9962,7 +9969,7 @@
         "title": "How to create an attractive program?",
         "description": "Diverse activities attract different age groups and interests. Include both regular activities and special events."
       },
-       "uploadImages": "Upload Images",
+      "uploadImages": "Upload Images",
       "uploadVideos": "Upload Videos",
       "imageCaption": "Image caption",
       "videoCaption": "Video caption",
@@ -9983,10 +9990,8 @@
       "addEvent": "Add Event",
       "addTrip": "Add Trip",
       "addCourse": "Add Course",
-      
       "prompts": {
         "addHighlight": "Enter event highlight:"
-        
       }
     },
     "media": {
@@ -10125,7 +10130,6 @@
         "board": "Board of Directors"
       },
       "addBoardMember": "Add Board Member",
-
       "fields": {
         "firstName": "First Name",
         "lastName": "Last Name",
@@ -10516,7 +10520,7 @@
         "delete": "Delete"
       }
     },
-     "pensioners": {
+    "pensioners": {
       "title": "Pensioner Services Management",
       "subtitle": "Configure specialized services and programs for elderly members",
       "participants": "participants",
@@ -10733,7 +10737,7 @@
         "delete": "Delete"
       }
     },
-      "preview": {
+    "preview": {
       "title": "Club Preview",
       "badge": "PREVIEW",
       "backToForm": "Back to Form",
@@ -10743,7 +10747,7 @@
       "close": "Close Preview"
     }
   },
-    "myClubs":{
+  "myClubs": {
     "clubs": "My Clubs"
   },
   "draftClubs": {
@@ -10804,7 +10808,7 @@
     "categories": {
       "general": "General",
       "cultural": "Cultural",
-      "traditional": "Traditional", 
+      "traditional": "Traditional",
       "social": "Social",
       "sports": "Sports"
     },
@@ -10841,7 +10845,7 @@
       "deleting": "Deleting..."
     }
   },
-    "searchDraftClubsBar": {
+  "searchDraftClubsBar": {
     "defaultPlaceholder": "Search drafts...",
     "clearSearch": "Clear search",
     "searchingFor": "Searching for"
@@ -10857,12 +10861,12 @@
   },
   "draftClubsSortDropdown": {
     "defaultSort": "Sort",
-    "sortBy": "Sort by", 
+    "sortBy": "Sort by",
     "descriptions": {
       "newest": "Most recently modified drafts first",
       "oldest": "Oldest drafts first",
       "name": "Alphabetical order",
-      "category": "Group by category", 
+      "category": "Group by category",
       "completion": "Most complete drafts first"
     }
   },
@@ -10870,7 +10874,7 @@
     "totalDrafts": "Total Drafts",
     "completeDrafts": "Complete",
     "incompleteDrafts": "Incomplete",
-    "completionRate": "Progress", 
+    "completionRate": "Progress",
     "lastActivity": "Last activity",
     "noRecentActivity": "No recent activity",
     "modifiedMinutesAgo": "minutes ago",
@@ -10918,7 +10922,7 @@
       "all": "All Memberships",
       "active": "Active",
       "inactive": "Inactive",
-      "recent": "New Memberships", 
+      "recent": "New Memberships",
       "general": "General",
       "cultural": "Cultural",
       "traditional": "Traditional",
@@ -10928,7 +10932,7 @@
     "sorting": {
       "newest": "Newest Memberships",
       "oldest": "Oldest Memberships",
-      "name": "Name A-Z", 
+      "name": "Name A-Z",
       "members": "Most Members",
       "activity": "Most Active",
       "location": "By Location"
@@ -10955,19 +10959,19 @@
     "memberSince": {
       "unknown": "Unknown",
       "days": "{{count}} days",
-      "months": "{{count}} months", 
+      "months": "{{count}} months",
       "years": "{{count}} years"
     },
     "activity": {
       "high": "Very active",
       "medium": "Active",
-      "low": "Less active", 
+      "low": "Less active",
       "none": "Inactive"
     },
     "membersCount": "{{count}} members",
     "eventsCount": "{{count}} events"
   },
-    "searchMembershipClubsBar": {
+  "searchMembershipClubsBar": {
     "defaultPlaceholder": "Search in my memberships...",
     "clear": "Clear search",
     "searching": "Searching for"
@@ -10976,17 +10980,17 @@
     "defaultLabel": "Filter",
     "title": "Filter by"
   },
-   "membershipClubsSortDropdown": {
+  "membershipClubsSortDropdown": {
     "defaultLabel": "Sort",
     "title": "Sort by"
   },
   "membershipStatsOverview": {
     "total": "Total Memberships",
     "active": "Active Clubs",
-    "recent": "New Memberships", 
+    "recent": "New Memberships",
     "avgSize": "Average Size"
   },
-   "membershipClubsEmptyState": {
+  "membershipClubsEmptyState": {
     "noMemberships": {
       "title": "You're not a member of any clubs yet",
       "description": "Start exploring and join clubs that match your interests.",
@@ -11006,7 +11010,7 @@
       "title": "No clubs for this filter",
       "description": "There are no clubs you're a member of that match the selected filter.",
       "filterInfo": "Try a different filter or view all memberships",
-      "clearButton": "Clear Filters", 
+      "clearButton": "Clear Filters",
       "discoverButton": "Discover Clubs"
     }
   },
@@ -11016,34 +11020,29 @@
     "loading": "Loading clubs...",
     "searchPlaceholder": "Search by name, description, owner, location...",
     "selectAll": "Select all on this page",
-    
     "errors": {
       "noAccess": "You don't have administrative rights to access this page",
       "fetchFailed": "Failed to load clubs",
       "title": "An error occurred"
     },
-    
     "sort": {
       "newest": "Newest first",
       "oldest": "Oldest first",
       "name": "By name (A-Z)",
-      "status": "By status", 
+      "status": "By status",
       "members": "By members",
       "location": "By location"
     },
-    
     "pagination": {
       "previous": "Previous",
       "next": "Next",
       "info": "Page {{current}} of {{total}}"
     },
-    
     "empty": {
       "title": "No clubs found",
       "message": "No clubs match your search criteria",
       "clearFilters": "Clear filters"
     },
-    
     "results": {
       "showing": "Showing {{showing}} of {{total}} clubs (total {{allTotal}})"
     }
@@ -11054,39 +11053,34 @@
     "loading": "Clubs werden geladen...",
     "searchPlaceholder": "Suchen nach Name, Beschreibung, Besitzer, Ort...",
     "selectAll": "Alle auf dieser Seite auswählen",
-    
     "errors": {
       "noAccess": "Sie haben keine Administratorrechte für den Zugriff auf diese Seite",
-      "fetchFailed": "Laden der Clubs fehlgeschlagen", 
+      "fetchFailed": "Laden der Clubs fehlgeschlagen",
       "title": "Ein Fehler ist aufgetreten"
     },
-    
     "sort": {
       "newest": "Neueste zuerst",
       "oldest": "Älteste zuerst",
       "name": "Nach Name (A-Z)",
       "status": "Nach Status",
-      "members": "Nach Mitgliedern", 
+      "members": "Nach Mitgliedern",
       "location": "Nach Ort"
     },
-    
     "pagination": {
       "previous": "Vorherige",
       "next": "Nächste",
       "info": "Seite {{current}} von {{total}}"
     },
-    
     "empty": {
       "title": "Keine Clubs gefunden",
       "message": "Keine Clubs entsprechen Ihren Suchkriterien",
       "clearFilters": "Filter löschen"
     },
-    
     "results": {
       "showing": "Zeige {{showing}} von {{total}} Clubs (gesamt {{allTotal}})"
     }
   },
-   "adminClubCard": {
+  "adminClubCard": {
     "verified": "Verified club",
     "noDescription": "No description",
     "noLocation": "No location",
@@ -11094,7 +11088,6 @@
     "noDate": "No date",
     "members": "members",
     "created": "Created",
-    
     "status": {
       "active": "Active",
       "inactive": "Inactive",
@@ -11103,22 +11096,22 @@
       "rejected": "Rejected"
     },
     "info": {
-    "title": "Club Information",
-    "clubName": "Club Name",
-    "owner": "Owner",
-    "email": "Email",
-    "phone": "Phone",
-    "createdDate": "Creation Date", 
-    "location": "Location",
-    "members": "Members",
-    "people": "people",
-    "verificationStatus": "Verification Status",
-    "verified": "Verified",
-    "notVerified": "Not Verified",
-    "status": "Status",
-    "notSpecified": "Not specified",
-    "notSpecifiedFeminine": "Not specified"
-  },
+      "title": "Club Information",
+      "clubName": "Club Name",
+      "owner": "Owner",
+      "email": "Email",
+      "phone": "Phone",
+      "createdDate": "Creation Date",
+      "location": "Location",
+      "members": "Members",
+      "people": "people",
+      "verificationStatus": "Verification Status",
+      "verified": "Verified",
+      "notVerified": "Not Verified",
+      "status": "Status",
+      "notSpecified": "Not specified",
+      "notSpecifiedFeminine": "Not specified"
+    },
     "actions": {
       "view": "View",
       "edit": "Edit",
@@ -11128,7 +11121,6 @@
       "reject": "Reject",
       "info": "Information"
     },
-    
     "rejectModal": {
       "title": "Reject club",
       "description": "Are you sure you want to reject club \"{{clubName}}\"?",
@@ -11158,7 +11150,6 @@
         "description": "Verified clubs"
       }
     },
-    
     "detailed": {
       "title": "Detailed statistics",
       "inactive": "Inactive",
@@ -11167,7 +11158,6 @@
       "rejected": "Rejected",
       "unverified": "Unverified"
     },
-    
     "insights": {
       "title": "Insights and metrics",
       "healthScore": "Health score",
@@ -11185,23 +11175,21 @@
     "filterBy": "Filter by",
     "clearFilter": "Clear filter",
     "viewAll": "View all",
-    
     "options": {
       "all": "All clubs",
       "active": "Active",
       "inactive": "Inactive",
-      "draft": "Draft", 
+      "draft": "Draft",
       "suspended": "Suspended",
       "rejected": "Rejected",
       "verified": "Verified",
       "unverified": "Unverified",
       "pending": "Pending approval"
     },
-    
     "descriptions": {
       "all": "All clubs in the system",
       "active": "Clubs with active status",
-      "inactive": "Clubs with inactive status", 
+      "inactive": "Clubs with inactive status",
       "draft": "Clubs in draft state",
       "suspended": "Temporarily suspended clubs",
       "rejected": "Rejected clubs",
@@ -11220,7 +11208,6 @@
     "advancedFilters": "Advanced filters",
     "search": "Search",
     "reset": "Reset",
-    
     "searchIn": {
       "label": "Search in",
       "all": "All fields",
@@ -11229,7 +11216,6 @@
       "location": "Location",
       "owner": "Owner"
     },
-    
     "dateRange": {
       "label": "Date range",
       "any": "Any time",
@@ -11238,7 +11224,6 @@
       "month": "This month",
       "year": "This year"
     },
-    
     "shortcuts": {
       "esc": "ESC to clear/close"
     }
@@ -11251,26 +11236,22 @@
     "confirmAction": "Confirm action on {{count}} clubs",
     "affectedClubs": "{{count}} clubs will be affected",
     "newStatus": "New status",
-    
     "buttons": {
       "approve": "Approve",
       "changeStatus": "Change status",
       "delete": "Delete"
     },
-    
     "tooltips": {
       "approve": "Approve selected clubs",
       "changeStatus": "Change status of selected clubs",
       "delete": "Delete selected clubs",
       "clear": "Clear selection"
     },
-    
     "statusOptions": {
       "active": "Active",
       "inactive": "Inactive",
       "suspended": "Suspended"
     },
-    
     "actions": {
       "approve": {
         "title": "Approve clubs",
@@ -11295,57 +11276,49 @@
   "adminClubModal": {
     "cancel": "Cancel",
     "processing": "Processing...",
-    "members": "members", 
+    "members": "members",
     "verified": "Verified",
     "warningTitle": "Warning!",
     "infoTitle": "Information",
     "dangerousAction": "This action may have serious consequences.",
     "actionInfo": "Please review carefully before proceeding.",
-    
     "statuses": {
       "active": "Active",
       "inactive": "Inactive",
-      "draft": "Draft", 
+      "draft": "Draft",
       "suspended": "Suspended",
       "rejected": "Rejected"
     },
-    
     "reject": {
       "title": "Reject club",
       "description": "Are you sure you want to reject club \"{{clubName}}\"?",
       "confirm": "Reject club"
     },
-    
     "approve": {
       "title": "Approve club",
       "description": "Club \"{{clubName}}\" will be approved and activated.",
       "confirm": "Approve club"
     },
-    
     "delete": {
       "title": "Delete club",
       "description": "Club \"{{clubName}}\" will be permanently deleted. This action cannot be undone!",
       "confirm": "Delete club"
     },
-    
     "verify": {
       "title": "Verify club",
       "description": "Club \"{{clubName}}\" will be marked as verified.",
       "confirm": "Verify club"
     },
-    
     "status": {
       "title": "Change status",
       "description": "The status of club \"{{clubName}}\" will be changed to {{status}}.",
       "confirm": "Change status"
     },
-    
     "transfer": {
       "title": "Transfer ownership",
       "description": "Ownership of club \"{{clubName}}\" will be transferred.",
       "confirm": "Transfer ownership"
     },
-    
     "fields": {
       "reason": {
         "label": "Reason for rejection",
@@ -11360,21 +11333,18 @@
         "instruction": "Please type \"{{clubName}}\" to confirm:"
       }
     },
-    
     "validation": {
       "reasonRequired": "Reason is required",
       "emailRequired": "Email is required",
       "emailInvalid": "Invalid email format",
       "confirmationMismatch": "Confirmation does not match club name"
     },
-    
     "statusChange": {
       "info": "New status will be: {{status}}"
     }
   },
   "pending": {
-  "title": "Pending approval",
-  "description": "Clubs submitted for administrative approval"
-}
-
+    "title": "Pending approval",
+    "description": "Clubs submitted for administrative approval"
+  }
 }

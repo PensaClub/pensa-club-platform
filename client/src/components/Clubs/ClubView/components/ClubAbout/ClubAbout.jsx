@@ -1,13 +1,13 @@
-import { 
-  faAward, 
-  faChevronDown, 
-  faChevronUp, 
-  faHandHoldingHeart, 
-  faHandsHelping, 
-  faHeart, 
-  faHistory, 
-  faMapMarkerAlt, 
-  faTrophy, 
+import {
+  faAward,
+  faChevronDown,
+  faChevronUp,
+  faHandHoldingHeart,
+  faHandsHelping,
+  faHeart,
+  faHistory,
+  faMapMarkerAlt,
+  faTrophy,
   faUsers,
   faCalendarAlt,
   faInfoCircle,
@@ -62,13 +62,13 @@ export const ClubAbout = ({ club }) => {
   };
 
   const calculateAgeData = () => {
-    if (!club.membership?.ageGroups || !club.members?.length || !club.membership?.totalMembers ) {
+    if (!club.membership?.ageGroups || !club.members?.length || !club.membership?.totalMembers) {
       return [];
     }
 
     const total = club.membership.totalMembers || club.members.length;
     const ageGroups = club.membership.ageGroups;
-    
+
     return Object.entries(ageGroups).map(([range, count]) => ({
       range,
       count,
@@ -80,10 +80,10 @@ export const ClubAbout = ({ club }) => {
 
   const hasMembershipInfo = () => {
     return (membership.requirements && membership.requirements.length > 0) ||
-           membership.minimumAge ||
-           (membership.trialPeriod && membership.trialPeriod.enabled) ||
-           (membership.fees && membership.fees.list && membership.fees.list.length > 0) ||
-           (membership.membershipFee && (membership.membershipFee.monthly > 0 || membership.membershipFee.yearly > 0));
+      membership.minimumAge ||
+      (membership.trialPeriod && membership.trialPeriod.enabled) ||
+      (membership.fees && membership.fees.list && membership.fees.list.length > 0) ||
+      (membership.membershipFee && (membership.membershipFee.monthly > 0 || membership.membershipFee.yearly > 0));
   };
 
   const getCurrencySymbol = (currency) => {
@@ -96,15 +96,15 @@ export const ClubAbout = ({ club }) => {
   };
 
   const hasAchievements = () => {
-    return achievements.awards.length > 0 || 
-           achievements.recognitions.length > 0 || 
-           achievements.certificates.length > 0;
+    return achievements.awards.length > 0 ||
+      achievements.recognitions.length > 0 ||
+      achievements.certificates.length > 0;
   };
 
   const hasSocialImpact = () => {
-    return socialImpact.volunteering.length > 0 || 
-           socialImpact.communityProjects.length > 0 || 
-           socialImpact.partnerships.length > 0;
+    return socialImpact.volunteering.length > 0 ||
+      socialImpact.communityProjects.length > 0 ||
+      socialImpact.partnerships.length > 0;
   };
 
   const hasServices = () => {
@@ -113,8 +113,8 @@ export const ClubAbout = ({ club }) => {
     const accessibility = pensionersSpecific.accessibility || {};
 
     return Object.values(healthServices).some(value => value === true || (Array.isArray(value) && value.length > 0)) ||
-           Object.values(supportServices).some(value => value === true) ||
-           Object.values(accessibility).some(value => value === true);
+      Object.values(supportServices).some(value => value === true) ||
+      Object.values(accessibility).some(value => value === true);
   };
 
   const getActiveServices = () => {
@@ -174,7 +174,7 @@ export const ClubAbout = ({ club }) => {
   return (
     <section id="general-club-about" className="general-about-main">
       <div className="general-about-container">
-        
+
         <div className="general-about-header">
           <div className="general-about-header-content">
             <div className="general-about-badge">
@@ -186,7 +186,7 @@ export const ClubAbout = ({ club }) => {
               {t('clubs.ClubAbout.header.subtitle')}
             </p>
           </div>
-          
+
           {club.preferences?.showStatistics && (
             <div className="general-about-stats">
               <div className="general-about-stat">
@@ -211,9 +211,9 @@ export const ClubAbout = ({ club }) => {
         </div>
 
         <div className="general-about-content">
-          
+
           <div className="general-about-section">
-            <div 
+            <div
               className="general-section-header"
               onClick={() => toggleSection('description')}
             >
@@ -221,21 +221,21 @@ export const ClubAbout = ({ club }) => {
                 <FontAwesomeIcon icon={faUsers} />
                 <h3>{t('clubs.ClubAbout.sections.description.title')}</h3>
               </div>
-              <FontAwesomeIcon 
+              <FontAwesomeIcon
                 icon={expandedSection === 'description' ? faChevronUp : faChevronDown}
                 className="general-toggle-icon"
               />
             </div>
-            
+
             {expandedSection === 'description' && (
               <div className="general-section-content">
                 <div className="general-description-layout">
-                  
+
                   <div className="general-description-main">
                     <div className="general-description-text">
                       <p>{club.fullDescription || club.shortDescription}</p>
                     </div>
-                    
+
                     <div className="general-key-facts">
                       {club.preferences?.showStatistics && (
                         <div className="general-fact-card">
@@ -245,12 +245,15 @@ export const ClubAbout = ({ club }) => {
                           <div className="general-fact-content">
                             <span className="general-fact-label">{t('clubs.ClubAbout.facts.founded')}</span>
                             <span className="general-fact-value">
-                              {club.foundedYear} {t('clubs.ClubAbout.facts.year')} ({new Date().getFullYear() - club.foundedYear} {t('clubs.ClubAbout.facts.yearsActivity')})
+                              {club.foundedYear && club.foundedYear > 0
+                                ? `${club.foundedYear} ${t('clubs.ClubAbout.facts.year')} (${new Date().getFullYear() - club.foundedYear} ${t('clubs.ClubAbout.facts.yearsActivity')})`
+                                : t('clubs.ClubAbout.facts.foundedNotSpecified')
+                              }
                             </span>
                           </div>
                         </div>
                       )}
-                      
+
                       {(club.location?.city || club.location?.region) && (
                         <div className="general-fact-card">
                           <div className="general-fact-icon">
@@ -264,15 +267,20 @@ export const ClubAbout = ({ club }) => {
                           </div>
                         </div>
                       )}
-                      
-                      {club.membership?.totalMembers && club.preferences?.showMembersList && (
+
+                      {club.preferences?.showMembersList && (
                         <div className="general-fact-card">
                           <div className="general-fact-icon">
                             <FontAwesomeIcon icon={faUsers} />
                           </div>
                           <div className="general-fact-content">
                             <span className="general-fact-label">{t('clubs.ClubAbout.facts.members')}</span>
-                            <span className="general-fact-value">{club.membership.totalMembers} {t('clubs.ClubAbout.facts.people')}</span>
+                            <span className="general-fact-value">
+                              {club.membership?.totalMembers && club.membership.totalMembers > 0
+                                ? `${club.membership.totalMembers} ${t('clubs.ClubAbout.facts.people')}`
+                                : t('clubs.ClubAbout.facts.membersNotSpecified')
+                              }
+                            </span>
                           </div>
                         </div>
                       )}
@@ -292,7 +300,7 @@ export const ClubAbout = ({ club }) => {
                       )}
                     </div>
                   </div>
-                  
+
                   {ageData.length > 0 && club.preferences?.showStatistics && club.preferences?.showMembersList && (
                     <div className="general-age-demographics">
                       <h4>
@@ -307,7 +315,7 @@ export const ClubAbout = ({ club }) => {
                               <span className="general-age-percentage">{percentage}%</span>
                             </div>
                             <div className="general-age-bar">
-                              <div 
+                              <div
                                 className="general-age-fill"
                                 style={{ width: `${percentage}%` }}
                               />
@@ -325,7 +333,7 @@ export const ClubAbout = ({ club }) => {
 
           {hasMembershipInfo() && club.preferences?.allowOnlineRegistration && (
             <div className="general-about-section">
-              <div 
+              <div
                 className="general-section-header"
                 onClick={() => toggleSection('membership')}
               >
@@ -333,19 +341,19 @@ export const ClubAbout = ({ club }) => {
                   <FontAwesomeIcon icon={faUserCheck} />
                   <h3>Условия за членство</h3>
                 </div>
-                <FontAwesomeIcon 
+                <FontAwesomeIcon
                   icon={expandedSection === 'membership' ? faChevronUp : faChevronDown}
                   className="general-toggle-icon"
                 />
               </div>
-              
+
               {expandedSection === 'membership' && (
                 <div className="general-section-content">
                   <div className="general-membership-layout">
-                    
+
                     <div className="general-membership-basics">
                       <div className="general-membership-basic-info">
-                        
+
                         {membership.minimumAge && (
                           <div className="general-membership-basic-item">
                             <div className="general-membership-basic-icon">
@@ -408,60 +416,60 @@ export const ClubAbout = ({ club }) => {
                       </div>
                     )}
 
-                    {club.preferences?.showFinances && ((membership.membershipFee && (membership.membershipFee.monthly > 0 || membership.membershipFee.yearly > 0)) || 
+                    {club.preferences?.showFinances && ((membership.membershipFee && (membership.membershipFee.monthly > 0 || membership.membershipFee.yearly > 0)) ||
                       (membership.fees && membership.fees.list && membership.fees.list.length > 0)) && (
-                      <div className="general-membership-fees">
-                        <h4>
-                          <FontAwesomeIcon icon={faCoins} />
-                          Членски внос
-                        </h4>
-                        
-                        {membership.membershipFee && (membership.membershipFee.monthly > 0 || membership.membershipFee.yearly > 0) && (
-                          <div className="general-membership-fees-summary">
-                            {membership.membershipFee.monthly > 0 && (
-                              <div className="general-membership-fee-item primary">
-                                <div className="general-membership-fee-amount">
-                                  {membership.membershipFee.monthly} {getCurrencySymbol(membership.membershipFee.currency)}
-                                </div>
-                                <div className="general-membership-fee-period">месечно</div>
-                              </div>
-                            )}
-                            {membership.membershipFee.yearly > 0 && (
-                              <div className="general-membership-fee-item primary">
-                                <div className="general-membership-fee-amount">
-                                  {membership.membershipFee.yearly} {getCurrencySymbol(membership.membershipFee.currency)}
-                                </div>
-                                <div className="general-membership-fee-period">годишно</div>
-                              </div>
-                            )}
-                          </div>
-                        )}
+                        <div className="general-membership-fees">
+                          <h4>
+                            <FontAwesomeIcon icon={faCoins} />
+                            Членски внос
+                          </h4>
 
-                        {membership.fees?.list && membership.fees.list.length > 0 && (
-                          <div className="general-membership-fees-detailed">
-                            {membership.fees.list.map((fee, index) => (
-                              <div key={fee.id || index} className="general-membership-fee-detail">
-                                <div className="general-membership-fee-detail-header">
-                                  <span className="general-membership-fee-detail-type">{fee.type}</span>
-                                  <span className="general-membership-fee-detail-amount">
-                                    {fee.amount} {getCurrencySymbol(fee.currency || 'BGN')}
-                                    <span className="general-membership-fee-detail-period">
-                                      / {fee.period === 'monthly' ? 'месец' : 
-                                          fee.period === 'yearly' ? 'година' : 
-                                          fee.period === 'quarterly' ? 'тримесечие' : 
-                                          fee.period === 'onetime' ? 'еднократно' : fee.period}
-                                    </span>
-                                  </span>
+                          {membership.membershipFee && (membership.membershipFee.monthly > 0 || membership.membershipFee.yearly > 0) && (
+                            <div className="general-membership-fees-summary">
+                              {membership.membershipFee.monthly > 0 && (
+                                <div className="general-membership-fee-item primary">
+                                  <div className="general-membership-fee-amount">
+                                    {membership.membershipFee.monthly} {getCurrencySymbol(membership.membershipFee.currency)}
+                                  </div>
+                                  <div className="general-membership-fee-period">месечно</div>
                                 </div>
-                                {fee.description && (
-                                  <p className="general-membership-fee-detail-description">{fee.description}</p>
-                                )}
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    )}
+                              )}
+                              {membership.membershipFee.yearly > 0 && (
+                                <div className="general-membership-fee-item primary">
+                                  <div className="general-membership-fee-amount">
+                                    {membership.membershipFee.yearly} {getCurrencySymbol(membership.membershipFee.currency)}
+                                  </div>
+                                  <div className="general-membership-fee-period">годишно</div>
+                                </div>
+                              )}
+                            </div>
+                          )}
+
+                          {membership.fees?.list && membership.fees.list.length > 0 && (
+                            <div className="general-membership-fees-detailed">
+                              {membership.fees.list.map((fee, index) => (
+                                <div key={fee.id || index} className="general-membership-fee-detail">
+                                  <div className="general-membership-fee-detail-header">
+                                    <span className="general-membership-fee-detail-type">{fee.type}</span>
+                                    <span className="general-membership-fee-detail-amount">
+                                      {fee.amount} {getCurrencySymbol(fee.currency || 'BGN')}
+                                      <span className="general-membership-fee-detail-period">
+                                        / {fee.period === 'monthly' ? 'месец' :
+                                          fee.period === 'yearly' ? 'година' :
+                                            fee.period === 'quarterly' ? 'тримесечие' :
+                                              fee.period === 'onetime' ? 'еднократно' : fee.period}
+                                      </span>
+                                    </span>
+                                  </div>
+                                  {fee.description && (
+                                    <p className="general-membership-fee-detail-description">{fee.description}</p>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      )}
 
                     {membership.benefits && membership.benefits.length > 0 && (
                       <div className="general-membership-benefits">
@@ -487,7 +495,7 @@ export const ClubAbout = ({ club }) => {
 
           {hasAchievements() && (
             <div className="general-about-section">
-              <div 
+              <div
                 className="general-section-header"
                 onClick={() => toggleSection('achievements')}
               >
@@ -498,16 +506,16 @@ export const ClubAbout = ({ club }) => {
                     {achievements.awards.length + achievements.recognitions.length + achievements.certificates.length}
                   </span>
                 </div>
-                <FontAwesomeIcon 
+                <FontAwesomeIcon
                   icon={expandedSection === 'achievements' ? faChevronUp : faChevronDown}
                   className="general-toggle-icon"
                 />
               </div>
-              
+
               {expandedSection === 'achievements' && (
                 <div className="general-section-content">
                   <div className="general-achievements-grid">
-                    
+
                     {achievements.awards.map((award, index) => (
                       <div key={`award-${index}`} className="general-achievement-card award">
                         <div className="general-achievement-icon">
@@ -523,7 +531,7 @@ export const ClubAbout = ({ club }) => {
                         </div>
                       </div>
                     ))}
-                    
+
                     {achievements.recognitions.map((recognition, index) => (
                       <div key={`recognition-${index}`} className="general-achievement-card recognition">
                         <div className="general-achievement-icon">
@@ -559,7 +567,7 @@ export const ClubAbout = ({ club }) => {
 
           {hasSocialImpact() && (
             <div className="general-about-section">
-              <div 
+              <div
                 className="general-section-header"
                 onClick={() => toggleSection('impact')}
               >
@@ -570,16 +578,16 @@ export const ClubAbout = ({ club }) => {
                     {socialImpact.volunteering.length + socialImpact.communityProjects.length + socialImpact.partnerships.length}
                   </span>
                 </div>
-                <FontAwesomeIcon 
+                <FontAwesomeIcon
                   icon={expandedSection === 'impact' ? faChevronUp : faChevronDown}
                   className="general-toggle-icon"
                 />
               </div>
-              
+
               {expandedSection === 'impact' && (
                 <div className="general-section-content">
                   <div className="general-impact-layout">
-                    
+
                     {socialImpact.volunteering.length > 0 && (
                       <div className="general-impact-category">
                         <h4>
@@ -604,7 +612,7 @@ export const ClubAbout = ({ club }) => {
                         </div>
                       </div>
                     )}
-                    
+
                     {socialImpact.communityProjects.length > 0 && (
                       <div className="general-impact-category">
                         <h4>
@@ -659,7 +667,7 @@ export const ClubAbout = ({ club }) => {
 
           {hasServices() && (
             <div className="general-about-section">
-              <div 
+              <div
                 className="general-section-header"
                 onClick={() => toggleSection('services')}
               >
@@ -667,16 +675,16 @@ export const ClubAbout = ({ club }) => {
                   <FontAwesomeIcon icon={faHeart} />
                   <h3>{t('clubs.ClubAbout.sections.services.title')}</h3>
                 </div>
-                <FontAwesomeIcon 
+                <FontAwesomeIcon
                   icon={expandedSection === 'services' ? faChevronUp : faChevronDown}
                   className="general-toggle-icon"
                 />
               </div>
-              
+
               {expandedSection === 'services' && (
                 <div className="general-section-content">
                   <div className="general-services-grid">
-                    
+
                     {activeServices.health.length > 0 && (
                       <div className="general-service-category">
                         <h4>
@@ -735,7 +743,7 @@ export const ClubAbout = ({ club }) => {
 
           {regionalInfo && (
             <div className="general-about-section">
-              <div 
+              <div
                 className="general-section-header"
                 onClick={() => toggleSection('regional')}
               >
@@ -743,12 +751,12 @@ export const ClubAbout = ({ club }) => {
                   <FontAwesomeIcon icon={faMapMarkerAlt} />
                   <h3>{t('clubs.ClubAbout.sections.regional.title')}</h3>
                 </div>
-                <FontAwesomeIcon 
+                <FontAwesomeIcon
                   icon={expandedSection === 'regional' ? faChevronUp : faChevronDown}
                   className="general-toggle-icon"
                 />
               </div>
-              
+
               {expandedSection === 'regional' && (
                 <div className="general-section-content">
                   <div className="general-regional-info">
@@ -764,7 +772,7 @@ export const ClubAbout = ({ club }) => {
                           </span>
                         </div>
                       </div>
-                      
+
                       <div className="general-regional-item">
                         <div className="general-regional-icon">
                           <FontAwesomeIcon icon={faMapMarkerAlt} />
@@ -774,7 +782,7 @@ export const ClubAbout = ({ club }) => {
                           <span className="general-regional-value">{regionalInfo.coverageArea}</span>
                         </div>
                       </div>
-                      
+
                       {regionalInfo.affiliatedClubs?.length > 0 && (
                         <div className="general-regional-item">
                           <div className="general-regional-icon">

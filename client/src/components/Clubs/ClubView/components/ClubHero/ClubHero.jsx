@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
-  faUsers, 
-  faCalendarAlt, 
+import {
+  faUsers,
+  faCalendarAlt,
   faStar,
   faMapMarkerAlt,
   faPhone,
@@ -25,7 +25,7 @@ import {
   faPaperPlane,
   faUser
 } from '@fortawesome/free-solid-svg-icons';
-import { 
+import {
   faFacebook,
   faInstagram,
   faYoutube,
@@ -33,6 +33,7 @@ import {
 } from '@fortawesome/free-brands-svg-icons';
 import './clubHero.css';
 import { useClubContext } from '../../../../contexts/ClubContext';
+import { useClubStatus } from './useClubStatus';
 
 export const ClubHero = ({ club }) => {
   const { t } = useTranslation();
@@ -57,14 +58,14 @@ export const ClubHero = ({ club }) => {
   // Функция за изчисляване на години дейност
   const calculateYearsSinceFoundation = (foundedYear) => {
     if (!foundedYear) return null;
-    
+
     const currentYear = new Date().getFullYear();
     const years = currentYear - foundedYear;
-    
+
     if (years <= 0) {
       return { value: t('clubs.ClubHero.stats.firstYear'), isText: true };
     }
-    
+
     return { value: years, isText: false };
   };
 
@@ -77,17 +78,17 @@ export const ClubHero = ({ club }) => {
     if (!club.preferences?.publicGallery) {
       return [];
     }
-    
+
     const images = [];
-    
+
     if (club.gallery && Array.isArray(club.gallery)) {
       images.push(...club.gallery.map(img => typeof img === 'string' ? img : img.src || img.url));
     }
-    
+
     if (club.mainImage) {
       images.push(club.mainImage);
     }
-    
+
     if (club.activities?.events) {
       club.activities.events.forEach(event => {
         if (event.images) {
@@ -95,7 +96,7 @@ export const ClubHero = ({ club }) => {
         }
       });
     }
-    
+
     return images.filter(Boolean).slice(0, 8);
   };
 
@@ -103,7 +104,7 @@ export const ClubHero = ({ club }) => {
 
   const nextImage = () => {
     if (images.length > 1) {
-      setCurrentImageIndex((prev) => 
+      setCurrentImageIndex((prev) =>
         prev === images.length - 1 ? 0 : prev + 1
       );
     }
@@ -111,15 +112,15 @@ export const ClubHero = ({ club }) => {
 
   const prevImage = () => {
     if (images.length > 1) {
-      setCurrentImageIndex((prev) => 
+      setCurrentImageIndex((prev) =>
         prev === 0 ? images.length - 1 : prev - 1
       );
     }
   };
 
   const getCategoryLabel = (category) => {
-    return t(`clubs.ClubHero.categories.${category}`, { 
-      defaultValue: t('clubs.ClubHero.categories.general') 
+    return t(`clubs.ClubHero.categories.${category}`, {
+      defaultValue: t('clubs.ClubHero.categories.general')
     });
   };
 
@@ -128,20 +129,20 @@ export const ClubHero = ({ club }) => {
     const safeRating = rating || 0;
     const fullStars = Math.floor(safeRating);
     const hasHalfStar = safeRating % 1 !== 0;
-    
+
     for (let i = 0; i < fullStars; i++) {
       stars.push(<FontAwesomeIcon key={i} icon={faStar} className="general-star filled" />);
     }
-    
+
     if (hasHalfStar) {
       stars.push(<FontAwesomeIcon key="half" icon={faStar} className="general-star half" />);
     }
-    
+
     const remainingStars = 5 - Math.ceil(safeRating);
     for (let i = 0; i < remainingStars; i++) {
       stars.push(<FontAwesomeIcon key={`empty-${i}`} icon={faStar} className="general-star empty" />);
     }
-    
+
     return stars;
   };
 
@@ -153,14 +154,15 @@ export const ClubHero = ({ club }) => {
     setMemberSearchTerm('');
   };
 
+  const statusInfo = useClubStatus(club.status);
   // Изчислява реални статистики - само ако има данни
   const getRealStats = () => {
     const stats = [];
 
     // Членове - само ако има реални данни
-    const totalMembers = club.membership?.totalMembers || 
-                        (club.members ? club.members.filter(m => m.isActive !== false).length : 0);
-    
+    const totalMembers = club.membership?.totalMembers ||
+      (club.members ? club.members.filter(m => m.isActive !== false).length : 0);
+
     if (totalMembers > 0) {
       stats.push({
         icon: faUsers,
@@ -184,7 +186,7 @@ export const ClubHero = ({ club }) => {
     // Дейности - само ако има реални дейности
     const regularActivities = club.activities?.regular?.length || 0;
     const totalActivities = regularActivities + (club.activities?.events?.length || 0);
-    
+
     if (totalActivities > 0) {
       stats.push({
         icon: faPlay,
@@ -210,7 +212,7 @@ export const ClubHero = ({ club }) => {
 
   const getMembers = () => {
     const members = [];
-    
+
     if (club.members && Array.isArray(club.members)) {
       club.members.forEach(member => {
         if (member.isActive !== false) {
@@ -230,13 +232,13 @@ export const ClubHero = ({ club }) => {
         }
       });
     }
-    
+
     if (club.management?.board) {
       club.management.board.forEach(boardMember => {
-        const existingMember = members.find(m => 
+        const existingMember = members.find(m =>
           m.name.toLowerCase() === boardMember.name.toLowerCase()
         );
-        
+
         if (!existingMember) {
           members.push({
             name: boardMember.name,
@@ -254,7 +256,7 @@ export const ClubHero = ({ club }) => {
         }
       });
     }
-    
+
     return members.sort((a, b) => {
       if (a.isBoard && !b.isBoard) return -1;
       if (!a.isBoard && b.isBoard) return 1;
@@ -344,7 +346,7 @@ export const ClubHero = ({ club }) => {
 
   const handleContactFormSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!contactFormData.name.trim() || !contactFormData.email.trim() || !contactFormData.message.trim()) {
       alert('Моля, попълнете всички задължителни полета');
       return;
@@ -358,7 +360,7 @@ export const ClubHero = ({ club }) => {
     }
 
     setIsSubmittingContact(true);
-    
+
     try {
       const success = await sendContactForm(club.id, {
         ...contactFormData,
@@ -381,18 +383,25 @@ export const ClubHero = ({ club }) => {
   return (
     <section id="general-club-hero" className="general-hero-main">
       <div className="general-hero-container">
-        
+
         <div className="general-hero-top-bar">
           <div className="general-hero-badges">
-            <span className="general-status-badge active">
+            <span
+              className={`general-status-badge ${statusInfo.className}`}
+              style={{
+                backgroundColor: statusInfo.bgColor,
+                color: statusInfo.color,
+                borderColor: statusInfo.borderColor
+              }}
+            >
               <div className="general-status-dot"></div>
-              {t('clubs.ClubHero.status.activeClub')}
+              {statusInfo.label}
             </span>
             <span className="general-category-badge">
               {getCategoryLabel(club.category)}
             </span>
           </div>
-          
+
           <div className="general-hero-actions">
             <button className="general-action-btn" onClick={handleShare}>
               <FontAwesomeIcon icon={faShare} />
@@ -406,7 +415,7 @@ export const ClubHero = ({ club }) => {
         </div>
 
         <div className="general-hero-content">
-          
+
           <div className="general-hero-main-info">
             <div className="general-hero-title-section">
               <div className="general-hero-title-row">
@@ -417,7 +426,7 @@ export const ClubHero = ({ club }) => {
                   </div>
                 )}
               </div>
-              
+
               {club.metadata?.rating && (
                 <div className="general-club-rating">
                   <div className="general-stars">
@@ -432,8 +441,10 @@ export const ClubHero = ({ club }) => {
             </div>
 
             {(club.location?.address || club.location?.city) && (
-              <div className="general-location-info">
-                <FontAwesomeIcon icon={faMapMarkerAlt} />
+              <div className="general-location-info-hero">
+                <div className='general-location-hero-wrapper'>
+                  <FontAwesomeIcon icon={faMapMarkerAlt} /> {t('clubs.ClubHero.location.address')}:
+                </div>
                 <span>
                   {club.location.address ? `${club.location.address}, ` : ''}
                   {club.location.city || 'София'}
@@ -449,10 +460,10 @@ export const ClubHero = ({ club }) => {
             {club.preferences?.showStatistics && stats.length > 0 && (
               <div className="general-stats-grid">
                 {stats.map((stat, index) => (
-                  <div 
+                  <div
                     key={index}
                     className={`general-stat-card ${stat.action ? 'clickable' : ''}`}
-                    onClick={stat.onClick || (() => {})}
+                    onClick={stat.onClick || (() => { })}
                   >
                     <div className="general-stat-icon">
                       <FontAwesomeIcon icon={stat.icon} />
@@ -482,21 +493,21 @@ export const ClubHero = ({ club }) => {
                         <span>{t('clubs.ClubHero.actions.call')}</span>
                       </button>
                     )}
-                    
+
                     {club.contacts?.email && (
                       <button className="general-contact-btn email" onClick={handleEmail}>
                         <FontAwesomeIcon icon={faEnvelope} />
                         <span>{t('clubs.ClubHero.actions.email')}</span>
                       </button>
                     )}
-                    
+
                     {club.contacts?.website && (
                       <button className="general-contact-btn website" onClick={handleWebsite}>
                         <FontAwesomeIcon icon={faGlobe} />
                         <span>{t('clubs.ClubHero.actions.website')}</span>
                       </button>
                     )}
-                    
+
                     {club.contacts?.socialMedia?.facebook && (
                       <button className="general-contact-btn facebook" onClick={() => handleSocial('facebook')}>
                         <FontAwesomeIcon icon={faFacebook} />
@@ -513,7 +524,7 @@ export const ClubHero = ({ club }) => {
                     <FontAwesomeIcon icon={faUserPlus} />
                     <h3>{t('clubs.ClubHero.membership.title')}</h3>
                   </div>
-                  
+
                   {club.membership.membershipFee && club.preferences?.showFinances && (
                     <div className="general-membership-fee">
                       <span className="general-fee-amount">
@@ -522,7 +533,7 @@ export const ClubHero = ({ club }) => {
                       <span className="general-fee-period">{t('clubs.ClubHero.membership.monthly')}</span>
                     </div>
                   )}
-                  
+
                   {club.membership.benefits && (
                     <div className="general-membership-benefits">
                       {club.membership.benefits.slice(0, 3).map((benefit, index) => (
@@ -547,12 +558,12 @@ export const ClubHero = ({ club }) => {
               {images.length > 0 ? (
                 <div className="general-gallery-container">
                   <div className="general-main-image-container">
-                    <img 
-                      src={images[currentImageIndex]} 
+                    <img
+                      src={images[currentImageIndex]}
                       alt={`${club.name} - снимка ${currentImageIndex + 1}`}
                       className="general-main-image"
                     />
-                    
+
                     {images.length > 1 && (
                       <>
                         <button className="general-nav-btn prev" onClick={prevImage}>
@@ -563,16 +574,16 @@ export const ClubHero = ({ club }) => {
                         </button>
                       </>
                     )}
-                    
+
                     <div className="general-image-counter">
                       {currentImageIndex + 1} / {images.length}
                     </div>
                   </div>
-                  
+
                   {images.length > 1 && (
                     <div className="general-thumbnails">
                       {images.slice(0, 6).map((image, index) => (
-                        <div 
+                        <div
                           key={index}
                           className={`general-thumbnail ${index === currentImageIndex ? 'active' : ''}`}
                           onClick={() => setCurrentImageIndex(index)}
@@ -617,7 +628,7 @@ export const ClubHero = ({ club }) => {
                 <FontAwesomeIcon icon={faTimes} />
               </button>
             </div>
-            
+
             <div className="general-modal-content">
               {members.length > 5 && (
                 <div className="general-search-box">
@@ -630,7 +641,7 @@ export const ClubHero = ({ club }) => {
                   />
                 </div>
               )}
-              
+
               <div className="general-members-grid">
                 {filteredMembers.map((member, index) => (
                   <div key={member.id || index} className="general-member-card">
@@ -646,15 +657,15 @@ export const ClubHero = ({ club }) => {
                         </div>
                       )}
                     </div>
-                    
+
                     <div className="general-member-info">
                       <h4>{member.name}</h4>
                       <p className="general-member-role">{member.role}</p>
-                      
+
                       {member.bio && (
                         <p className="general-member-bio">{member.bio}</p>
                       )}
-                      
+
                       <div className="general-member-details">
                         {member.memberSince && (
                           <span>
@@ -675,7 +686,7 @@ export const ClubHero = ({ club }) => {
                           </span>
                         )}
                       </div>
-                      
+
                       {member.address && (
                         <div className="general-member-address">
                           <FontAwesomeIcon icon={faMapMarkerAlt} />
@@ -686,7 +697,7 @@ export const ClubHero = ({ club }) => {
                   </div>
                 ))}
               </div>
-              
+
               {filteredMembers.length === 0 && memberSearchTerm && (
                 <div className="general-no-results">
                   <FontAwesomeIcon icon={faInfoCircle} />
@@ -711,7 +722,7 @@ export const ClubHero = ({ club }) => {
                 <FontAwesomeIcon icon={faTimes} />
               </button>
             </div>
-            
+
             <div className="general-modal-content">
               <form onSubmit={handleContactFormSubmit} className="general-contact-form">
                 <div className="general-form-row">
@@ -730,7 +741,7 @@ export const ClubHero = ({ club }) => {
                       required
                     />
                   </div>
-                  
+
                   <div className="general-form-group">
                     <label htmlFor="email">
                       <FontAwesomeIcon icon={faEnvelope} />
@@ -763,7 +774,7 @@ export const ClubHero = ({ club }) => {
                       placeholder="+359 888 123 456"
                     />
                   </div>
-                  
+
                   <div className="general-form-group">
                     <label htmlFor="subject">
                       <FontAwesomeIcon icon={faInfoCircle} />
@@ -804,16 +815,16 @@ export const ClubHero = ({ club }) => {
                 </div>
 
                 <div className="general-form-actions">
-                  <button 
-                    type="button" 
+                  <button
+                    type="button"
                     className="general-btn-secondary"
                     onClick={closeContactModal}
                     disabled={isSubmittingContact}
                   >
                     Отказ
                   </button>
-                  <button 
-                    type="submit" 
+                  <button
+                    type="submit"
                     className="general-btn-primary"
                     disabled={isSubmittingContact}
                   >
