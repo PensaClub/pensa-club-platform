@@ -188,7 +188,7 @@
   font-size: clamp(0.8rem, 2vw, 0.9rem);
 }
 
-.general-location-info {
+.general-location-info-hero {
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -196,9 +196,52 @@
   font-size: clamp(0.95rem, 3vw, 1.1rem);
   color: rgba(255, 255, 255, 0.9);
   flex-wrap: wrap;
+  position: relative;
+  padding-bottom: 1.5rem;
 }
 
-.general-location-info svg {
+.general-location-info-hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0.05) 0%, 
+    rgba(255, 255, 255, 0.2) 50%, 
+    rgba(255, 255, 255, 0.05) 100%
+  );
+  border-radius: 2px;
+}
+
+.general-location-info-hero::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: -50%;
+  width: 50%;
+  height: 1px;
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(255, 255, 255, 0.9) 50%, 
+    transparent 100%
+  );
+  border-radius: 2px;
+  animation: slide 6.5s ease-in-out infinite;
+  filter: blur(0.5px);
+}
+
+@keyframes slide {
+  0% {
+    left: -50%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+.general-location-info-hero svg {
   color: #ef4444;
   font-size: clamp(1.1rem, 3vw, 1.3rem);
   flex-shrink: 0;
@@ -1059,7 +1102,7 @@
     gap: 0.75rem;
   }
   
-  .general-location-info {
+  .general-location-info-hero {
     justify-content: center;
     text-align: center;
   }
@@ -1359,5 +1402,74 @@
   .general-membership-card,
   .general-contact-btn {
     border: 2px solid;
+  }
+}
+/* В clubHero.css файла */
+
+.general-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 500;
+  font-size: 0.875rem;
+  text-transform: capitalize;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+}
+
+/* ВАЖНО: Използвай точния CSS selector */
+.general-status-badge.active {
+  background: rgba(34, 197, 94, 0.1) !important;
+  color: #22c55e !important;
+  border-color: rgba(34, 197, 94, 0.3) !important;
+}
+
+.general-status-badge.inactive {
+  background: rgba(156, 163, 175, 0.1) !important;
+  color: #9ca3af !important;
+  border-color: rgba(156, 163, 175, 0.3) !important;
+}
+
+.general-status-badge.suspended {
+  background: rgba(239, 68, 68, 0.1) !important;
+  color: #ef4444 !important;
+  border-color: rgba(239, 68, 68, 0.3) !important;
+}
+
+.general-status-badge.draft {
+  background: rgba(245, 158, 11, 0.1) !important;
+  color: #f59e0b !important;
+  border-color: rgba(245, 158, 11, 0.3) !important;
+}
+
+.general-status-badge.rejected {
+  background: rgba(220, 38, 38, 0.1) !important;
+  color: #dc2626 !important;
+  border-color: rgba(220, 38, 38, 0.3) !important;
+}
+
+.general-status-badge.unknown {
+  background: rgba(107, 114, 128, 0.1) !important;
+  color: #6b7280 !important;
+  border-color: rgba(107, 114, 128, 0.3) !important;
+}
+
+/* Точката също трябва да наследи цвета */
+.general-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
   }
 }
