@@ -37,7 +37,7 @@ export const ClubAbout = ({ club }) => {
   const { t } = useTranslation();
   const [expandedSection, setExpandedSection] = useState('description');
 
-  if (!club?.name || (!club.fullDescription && !club.shortDescription)) {
+  if (!club?.name || ( !club.shortDescription)) {
     return null;
   }
 

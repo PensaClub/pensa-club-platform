@@ -57,7 +57,13 @@ export const ClubHero = ({ club }) => {
 
   // Функция за изчисляване на години дейност
   const calculateYearsSinceFoundation = (foundedYear) => {
-    if (!foundedYear) return null;
+    // Ако няма година или е 0, върни съобщение
+    if (!foundedYear || foundedYear === 0) {
+      return {
+        value: t('clubs.ClubHero.stats.foundedNotSpecified'),
+        isText: true
+      };
+    }
 
     const currentYear = new Date().getFullYear();
     const years = currentYear - foundedYear;
@@ -68,7 +74,6 @@ export const ClubHero = ({ club }) => {
 
     return { value: years, isText: false };
   };
-
   // Функция за правилно число (единствено/множествено)
   const getPluralForm = (count, singularKey, pluralKey) => {
     return count === 1 ? t(singularKey) : t(pluralKey);
@@ -175,13 +180,12 @@ export const ClubHero = ({ club }) => {
 
     // Години дейност - само ако има foundedYear
     const yearsData = calculateYearsSinceFoundation(club.foundedYear);
-    if (yearsData !== null) {
-      stats.push({
-        icon: faCalendarAlt,
-        value: yearsData.value,
-        label: yearsData.isText ? '' : getPluralForm(yearsData.value, 'clubs.ClubHero.stats.year', 'clubs.ClubHero.stats.years')
-      });
-    }
+
+    stats.push({
+      icon: faCalendarAlt,
+      value: yearsData.value,
+      label: yearsData.isText ? '' : getPluralForm(yearsData.value, 'clubs.ClubHero.stats.year', 'clubs.ClubHero.stats.years')
+    });
 
     // Дейности - само ако има реални дейности
     const regularActivities = club.activities?.regular?.length || 0;
