@@ -1,0 +1,110 @@
+.ps-hero-new {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 48px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.ps-hero-new::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  opacity: 0.3;
+}
+
+.ps-hero-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 1;
+}
+
+.ps-hero-content {
+  flex: 1;
+  max-width: 500px;
+}
+
+.ps-hero-badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+  backdrop-filter: blur(10px);
+}
+
+.ps-hero-title {
+  font-size: clamp(28px, 4vw, 42px);
+  font-weight: 700;
+  line-height: 1.2;
+  margin: 0 0 16px;
+}
+
+.ps-hero-description {
+  font-size: 18px;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+}
+
+.ps-hero-visual {
+  flex-shrink: 0;
+  margin-left: 32px;
+}
+
+.ps-hero-icon-wrapper {
+  width: 80px;
+  height: 80px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.ps-hero-icon-wrapper svg {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .ps-hero-new {
+    padding: 32px 0;
+  }
+  
+  .ps-hero-container {
+    flex-direction: column;
+    text-align: center;
+    gap: 24px;
+  }
+  
+  .ps-hero-visual {
+    margin-left: 0;
+  }
+  
+  .ps-hero-icon-wrapper {
+    width: 64px;
+    height: 64px;
+  }
+  
+  .ps-hero-icon-wrapper svg {
+    width: 24px;
+    height: 24px;
+  }
+}

@@ -1,4 +1,4 @@
-const { initiative, section, image, comment, story, user_account } = require('../sequelize/models');
+const { initiative, project, section, image, comment, story, user_account } = require('../sequelize/models');
 
 const storyConfig = [
     {
@@ -9,7 +9,12 @@ const storyConfig = [
     {
         model: initiative,
         as: 'initiatives',
-        attributes: ['id', 'title', 'slug'],
+        attributes: ['id', 'title', 'slug', 'isDraft'],
+    },
+    {
+        model: project,
+        as: 'projects',
+        attributes: ['id', 'title', 'slug', 'isDraft'],
     },
     {
         model: section,
@@ -17,7 +22,7 @@ const storyConfig = [
         include: [
             {
                 model: image,
-                as: 'sectionImages',
+                as: 'sectionImage',
             },
         ],
     },
@@ -32,7 +37,7 @@ const storyConfig = [
     {
         model: story,
         as: 'relatedStories',
-        attributes: ['id', 'slug', 'title', 'shortDescription'],
+        attributes: ['id', 'slug', 'title', 'shortDescription', 'isDraft'],
     },
 ];
 
@@ -41,35 +46,83 @@ const transformStory = async (storyData) => {
 
     const plainStory = storyData.get({ plain: true });
 
-    // Remove junction table data and isDraft flag
-    const { story_bookmarks, story_likes, related_stories, isDraft, ...cleanStoryData } = plainStory;
+    const { story_bookmarks, story_likes, related_stories, project_stories, initiative_stories, likedBy, ...cleanStoryData } = plainStory;
 
-    // Add userEmail from creator and remove creator object
     if (cleanStoryData.creator) {
         cleanStoryData.userEmail = cleanStoryData.creator.email;
         delete cleanStoryData.creator;
         delete cleanStoryData.creatorId;
     }
 
-    // Transform sections
+    const currentStoryIsDraft = cleanStoryData.isDraft;
+
+    if (cleanStoryData.initiatives) {
+        cleanStoryData.initiatives = cleanStoryData.initiatives
+            .filter((initiative) => {
+                if (currentStoryIsDraft) {
+                    return true;
+                } else {
+                    return !initiative.isDraft;
+                }
+            })
+            .map((initiative) => {
+                const { initiative_stories, ...cleanInitiative } = initiative;
+                return {
+                    id: cleanInitiative.id,
+                    title: cleanInitiative.title,
+                    slug: cleanInitiative.slug,
+                };
+            });
+    }
+
+    if (cleanStoryData.projects) {
+        cleanStoryData.projects = cleanStoryData.projects
+            .filter((project) => {
+                if (currentStoryIsDraft) {
+                    return true;
+                } else {
+                    return !project.isDraft;
+                }
+            })
+            .map((project) => {
+                const { project_stories, ...cleanProject } = project;
+                return {
+                    id: cleanProject.id,
+                    title: cleanProject.title,
+                    slug: cleanProject.slug,
+                };
+            });
+    }
+
+    if (cleanStoryData.relatedStories) {
+        cleanStoryData.relatedStories = cleanStoryData.relatedStories
+            .filter((relatedStory) => {
+                if (currentStoryIsDraft) {
+                    return true;
+                } else {
+                    return !relatedStory.isDraft;
+                }
+            })
+            .map((relatedStory) => {
+                const { related_stories, ...cleanRelatedStory } = relatedStory;
+                return {
+                    id: cleanRelatedStory.id,
+                    title: cleanRelatedStory.title,
+                    slug: cleanRelatedStory.slug,
+                };
+            });
+    }
+
     if (cleanStoryData.sections) {
         cleanStoryData.sections = cleanStoryData.sections.map((section) => {
-            if (section.sectionImages) {
-                const { sectionImages, ...singleSection } = section;
+            if (section.sectionImage) {
+                const { sectionImage, ...singleSection } = section;
                 return {
                     ...singleSection,
-                    images: sectionImages,
+                    image: sectionImage,
                 };
             }
             return section;
-        });
-    }
-
-    // Clean up related stories
-    if (cleanStoryData.relatedStories) {
-        cleanStoryData.relatedStories = cleanStoryData.relatedStories.map((relatedStory) => {
-            const { related_stories, ...cleanRelatedStory } = relatedStory;
-            return cleanRelatedStory.id;
         });
     }
 

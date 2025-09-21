@@ -164,6 +164,12 @@ module.exports = (sequelize, DataTypes) => {
                 defaultValue: true,
                 field: 'is_draft',
             },
+            showAuthor: {
+                type: DataTypes.BOOLEAN,
+                allowNull: false,
+                defaultValue: true,
+                field: 'show_author',
+            },
         },
         {
             sequelize,
