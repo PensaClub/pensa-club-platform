@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet';
@@ -136,7 +136,10 @@ export const ProjectView = () => {
             navLinks.removeEventListener('mousemove', handleMouseMove);
         };
     }, []);
-
+   const sortedSections = useMemo(() => {
+        if (!currentProject?.sections) return [];
+        return [...currentProject.sections].sort((a, b) => a.id - b.id);
+    }, [currentProject?.sections]);
     const loadCommentsCount = async () => {
         if (currentProject?.id) {
             try {
@@ -541,7 +544,7 @@ export const ProjectView = () => {
                 <nav className="project-view-nav">
                     <div className="container">
                         <div className="project-view-nav-links">
-                            {currentProject.sections?.map((section) => (
+                            {sortedSections.sections?.map((section) => (
                                 <button
                                     key={section.titleSlug}
                                     className={`project-view-nav-link ${activeSection === section.titleSlug ? 'active' : ''}`}
@@ -624,7 +627,7 @@ export const ProjectView = () => {
                 <div className="project-view-content">
                     <div className="container">
                         {/* Project Sections */}
-                        {currentProject.sections?.map((section, index) => (
+                        {sortedSections?.map((section, index) => (
                             <section
                                 key={section.titleSlug}
                                 id={section.titleSlug}
