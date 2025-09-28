@@ -1257,12 +1257,17 @@ useEffect(() => {
   }, []);
 
   // Milestone management
-  const addMilestone = useCallback(() => {
-    setValues(prev => ({
-      ...prev,
-      milestones: [...prev.milestones, { date: '', description: '' }]
-    }));
-  }, []);
+ const addMilestone = useCallback(() => {
+  setValues(prev => ({
+    ...prev,
+    milestones: [...prev.milestones, { 
+      title: '',
+      description: '', 
+      dueDate: '',
+      status: 'pending' // 🆕 ДОБАВИ СТАТУС
+    }]
+  }));
+}, []);
 
   const removeMilestone = useCallback((index) => {
     setValues(prev => ({
@@ -1814,7 +1819,7 @@ useEffect(() => {
       if (htmlValues.milestones && htmlValues.milestones.length > 0) {
         htmlValues.milestones = htmlValues.milestones.map(milestone => ({
           ...milestone,
-          date: convertDateToISO(milestone.date)
+          dueDate: convertDateToISO(milestone.dueDate)
         }));
       }
 

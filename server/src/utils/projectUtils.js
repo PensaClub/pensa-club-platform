@@ -125,7 +125,7 @@ const projectConfig = [
         model: milestone,
         as: 'milestones',
         required: false,
-        attributes: ['id', 'title', 'dueDate', 'status'],
+        attributes: ['id', 'title', 'dueDate', 'status', 'description'],
     },
     {
         model: beneficiaries,

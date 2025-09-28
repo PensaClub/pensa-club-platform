@@ -21,10 +21,10 @@ export const Milestones = ({ milestones = [] }) => {
                 return '✅';
             case 'in-progress':
                 return '🔄';
-            case 'upcoming':
+            case 'pending':
                 return '⏳';
-            case 'overdue':
-                return '⚠️';
+            case 'cancelled':
+                return '❌';
             default:
                 return '📅';
         }
@@ -36,37 +36,31 @@ export const Milestones = ({ milestones = [] }) => {
                 return '#059669';
             case 'in-progress':
                 return '#1B8B8A';
-            case 'upcoming':
+            case 'pending':
                 return '#f59e0b';
-            case 'overdue':
+            case 'cancelled':
                 return '#dc2626';
             default:
                 return '#64748b';
         }
     };
 
-    const isOverdue = (dueDate, status) => {
-        if (status === 'completed') return false;
-        return new Date(dueDate) < new Date();
-    };
-
     return (
         <div className="milestones-component">
             <div className="milestones-timeline">
                 {sortedMilestones.map((milestone, index) => {
-                    const actualStatus = isOverdue(milestone.dueDate, milestone.status) ? 'overdue' : milestone.status;
-                    const statusColor = getStatusColor(actualStatus);
+                    const statusColor = getStatusColor(milestone.status);
                     const isLast = index === sortedMilestones.length - 1;
 
                     return (
                         <div key={milestone.id} className="milestone-item">
                             <div className="milestone-timeline-container">
                                 <div 
-                                    className={`milestone-dot ${actualStatus}`}
+                                    className={`milestone-dot ${milestone.status}`}
                                     style={{ backgroundColor: statusColor }}
                                 >
                                     <span className="milestone-icon">
-                                        {getStatusIcon(actualStatus)}
+                                        {getStatusIcon(milestone.status)}
                                     </span>
                                 </div>
                                 
@@ -79,10 +73,10 @@ export const Milestones = ({ milestones = [] }) => {
                                 <div className="milestone-header">
                                     <h4 className="milestone-title">{milestone.title}</h4>
                                     <span 
-                                        className={`milestone-status ${actualStatus}`}
+                                        className={`milestone-status ${milestone.status}`}
                                         style={{ color: statusColor }}
                                     >
-                                        {t(`projectView.milestones.status.${actualStatus}`)}
+                                        {t(`projects.milestones.status.${milestone.status}`)}
                                     </span>
                                 </div>
                                 
@@ -115,21 +109,28 @@ export const Milestones = ({ milestones = [] }) => {
                         <span className="stat-value">
                             {sortedMilestones.filter(m => m.status === 'completed').length}
                         </span>
-                        <span className="stat-label">{t('projectView.milestones.completed')}</span>
+                        <span className="stat-label">{t('projects.milestones.completed')}</span>
                     </div>
                     
                     <div className="summary-stat">
                         <span className="stat-value">
                             {sortedMilestones.filter(m => m.status === 'in-progress').length}
                         </span>
-                        <span className="stat-label">{t('projectView.milestones.inProgress')}</span>
+                        <span className="stat-label">{t('projects.milestones.inProgress')}</span>
                     </div>
                     
                     <div className="summary-stat">
                         <span className="stat-value">
-                            {sortedMilestones.filter(m => m.status === 'upcoming' || (!m.status && new Date(m.dueDate) > new Date())).length}
+                            {sortedMilestones.filter(m => m.status === 'pending').length}
                         </span>
-                        <span className="stat-label">{t('projectView.milestones.upcoming')}</span>
+                        <span className="stat-label">{t('projects.milestones.pending')}</span>
+                    </div>
+
+                    <div className="summary-stat">
+                        <span className="stat-value">
+                            {sortedMilestones.filter(m => m.status === 'cancelled').length}
+                        </span>
+                        <span className="stat-label">{t('projects.milestones.cancelled')}</span>
                     </div>
                 </div>
             </div>
