@@ -2562,6 +2562,7 @@
       "budgetTimeline": "Бюджет и график",
       "application": "Кандидатстване",
       "sections": "Секции",
+       "milestoneStatus": "Статус",
       "team": "Екип",
       "updateProject": "Обнови проект",
       "partnersSponsors": "Партньори и спонсори",
@@ -2943,6 +2944,20 @@
       "contact-role-max-length": "Длъжността не може да надвишава 100 символа",
       "contact-additional-info-max-length": "Допълнителната информация не може да надвишава 1000 символа",
       "contact-image-size-too-large": "Снимката е твърде голяма (максимум 2MB)"
+    },
+
+    "milestones": {
+      "status": {
+        "pending": "Предстои",
+        "inProgress": "В процес",
+        "in-progress": "В процес",
+        "completed": "Завършен",
+        "cancelled": "Отменен"
+      },
+      "completed": "Завършени",
+      "inProgress": "В процес",
+      "pending": "Предстоящи",
+      "cancelled": "Отменени"
     }
   },
   "location": {

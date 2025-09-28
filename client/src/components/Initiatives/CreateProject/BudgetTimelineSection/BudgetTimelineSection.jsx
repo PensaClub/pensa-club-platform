@@ -256,75 +256,100 @@ const BudgetTimelineSection = ({
                                         </button>
                                     </div>
 
-                                    <div className="project-milestone-fields">
-                                        <div className="project-milestone-title-field">
-                                            <label>{t('projects.create.milestoneTitle')}</label>
-                                            <input
-                                                type="text"
-                                                value={milestone.title || ''}
-                                                onChange={(e) => {
-                                                    const updatedMilestones = [...values.milestones];
-                                                    updatedMilestones[index] = {
-                                                        ...updatedMilestones[index],
-                                                        title: e.target.value
-                                                    };
-                                                    setValues(prev => ({ ...prev, milestones: updatedMilestones }));
-                                                }}
-                                                placeholder={t('projects.create.milestoneTitlePlaceholder')}
-                                                className={errors[`milestones[${index}].title`] ? 'error' : ''}
-                                            />
-                                            {errors[`milestones[${index}].title`] && (
-                                                <div className="project-error-message">{errors[`milestones[${index}].title`]}</div>
-                                            )}
-                                        </div>
+                                  <div className="project-milestone-fields">
+  <div className="project-milestone-title-field">
+    <label>{t('projects.create.milestoneTitle')}</label>
+    <input
+      type="text"
+      value={milestone.title || ''}
+      onChange={(e) => {
+        const updatedMilestones = [...values.milestones];
+        updatedMilestones[index] = {
+          ...updatedMilestones[index],
+          title: e.target.value
+        };
+        setValues(prev => ({ ...prev, milestones: updatedMilestones }));
+      }}
+      placeholder={t('projects.create.milestoneTitlePlaceholder')}
+      className={errors[`milestones[${index}].title`] ? 'error' : ''}
+    />
+    {errors[`milestones[${index}].title`] && (
+      <div className="project-error-message">{errors[`milestones[${index}].title`]}</div>
+    )}
+  </div>
 
-                                        <div className="project-milestone-date-field">
-                                            <label>{t('projects.create.milestoneDate')}</label>
-                                            <input
-                                                type="date"
-                                                value={milestone.dueDate ? new Date(milestone.dueDate).toISOString().split('T')[0] : ''}
-                                                onChange={(e) => {
-                                                    const updatedMilestones = [...values.milestones];
-                                                    updatedMilestones[index] = {
-                                                        ...updatedMilestones[index],
-                                                        dueDate: e.target.value
-                                                    };
-                                                    setValues(prev => ({ ...prev, milestones: updatedMilestones }));
-                                                }}
-                                                min={values.timeline?.startDate ? new Date(values.timeline.startDate).toISOString().split('T')[0] : ''}
-                                                max={values.timeline?.endDate ? new Date(values.timeline.endDate).toISOString().split('T')[0] : ''}
-                                                className={errors[`milestones[${index}].dueDate`] ? 'error' : ''}
-                                            />
-                                            {errors[`milestones[${index}].dueDate`] && (
-                                                <div className="project-error-message">{errors[`milestones[${index}].dueDate`]}</div>
-                                            )}
-                                        </div>
+  <div className="project-milestone-date-field">
+    <label>{t('projects.create.milestoneDate')}</label>
+    <input
+      type="date"
+      value={milestone.dueDate ? new Date(milestone.dueDate).toISOString().split('T')[0] : ''}
+      onChange={(e) => {
+        const updatedMilestones = [...values.milestones];
+        updatedMilestones[index] = {
+          ...updatedMilestones[index],
+          dueDate: e.target.value
+        };
+        setValues(prev => ({ ...prev, milestones: updatedMilestones }));
+      }}
+      min={values.timeline?.startDate ? new Date(values.timeline.startDate).toISOString().split('T')[0] : ''}
+      max={values.timeline?.endDate ? new Date(values.timeline.endDate).toISOString().split('T')[0] : ''}
+      className={errors[`milestones[${index}].dueDate`] ? 'error' : ''}
+    />
+    {errors[`milestones[${index}].dueDate`] && (
+      <div className="project-error-message">{errors[`milestones[${index}].dueDate`]}</div>
+    )}
+  </div>
 
-                                        <div className="project-milestone-description-field">
-                                            <label>{t('projects.create.milestoneDescription')}</label>
-                                            <textarea
-                                                value={milestone.description || ''}
-                                                onChange={(e) => {
-                                                    const updatedMilestones = [...values.milestones];
-                                                    updatedMilestones[index] = {
-                                                        ...updatedMilestones[index],
-                                                        description: e.target.value
-                                                    };
-                                                    setValues(prev => ({ ...prev, milestones: updatedMilestones }));
-                                                }}
-                                                placeholder={t('projects.create.milestoneDescriptionPlaceholder')}
-                                                rows={2}
-                                                className={errors[`milestones[${index}].description`] ? 'error' : ''}
-                                                maxLength={500}
-                                            />
-                                            <div className="project-character-count">
-                                                {milestone.description?.length || 0}/500
-                                            </div>
-                                            {errors[`milestones[${index}].description`] && (
-                                                <div className="project-error-message">{errors[`milestones[${index}].description`]}</div>
-                                            )}
-                                        </div>
-                                    </div>
+  {/* 🆕 ДОБАВИ СТАТУС ПОЛЕТО */}
+  <div className="project-milestone-status-field">
+    <label>{t('projects.create.milestoneStatus')}</label>
+    <select
+      value={milestone.status || 'pending'}
+      onChange={(e) => {
+        const updatedMilestones = [...values.milestones];
+        updatedMilestones[index] = {
+          ...updatedMilestones[index],
+          status: e.target.value
+        };
+        setValues(prev => ({ ...prev, milestones: updatedMilestones }));
+      }}
+      className={errors[`milestones[${index}].status`] ? 'error' : ''}
+    >
+      <option value="pending">{t('projects.milestones.status.pending')}</option>
+      <option value="in-progress">{t('projects.milestones.status.inProgress')}</option>
+      <option value="completed">{t('projects.milestones.status.completed')}</option>
+      <option value="cancelled">{t('projects.milestones.status.cancelled')}</option>
+    </select>
+    {errors[`milestones[${index}].status`] && (
+      <div className="project-error-message">{errors[`milestones[${index}].status`]}</div>
+    )}
+  </div>
+
+  <div className="project-milestone-description-field">
+    <label>{t('projects.create.milestoneDescription')}</label>
+    <textarea
+      value={milestone.description || ''}
+      onChange={(e) => {
+        const updatedMilestones = [...values.milestones];
+        updatedMilestones[index] = {
+          ...updatedMilestones[index],
+          description: e.target.value
+        };
+        setValues(prev => ({ ...prev, milestones: updatedMilestones }));
+      }}
+      placeholder={t('projects.create.milestoneDescriptionPlaceholder')}
+      rows={2}
+      className={errors[`milestones[${index}].description`] ? 'error' : ''}
+      maxLength={500}
+    />
+    <div className="project-character-count">
+      {milestone.description?.length || 0}/500
+    </div>
+    {errors[`milestones[${index}].description`] && (
+      <div className="project-error-message">{errors[`milestones[${index}].description`]}</div>
+    )}
+  </div>
+</div>
                                 </div>
                             ))}
                         </div>

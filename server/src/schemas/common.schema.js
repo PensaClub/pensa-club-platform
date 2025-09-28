@@ -94,8 +94,10 @@ const DownloadMaterialSchema = z.object({
 });
 
 const MilestoneSchema = z.object({
-    date: z.string().nullable().optional(),
+    title: z.string().nullable().optional(),
     description: z.string().min(5, 'Milestone description must be at least 5 characters').nullable().optional(),
+    dueDate: z.string().nullable().optional(),
+    status: z.enum(['pending', 'in-progress', 'completed', 'delayed']).nullable().optional(),
 });
 
 const SocialMediaSchema = z.object({

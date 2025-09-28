@@ -908,3 +908,38 @@
         font-size: 1rem;
     }
 }
+.project-milestone-status-field {
+  grid-column: span 1;
+}
+
+.project-milestone-status-field select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  background-color: white;
+  transition: border-color 0.2s;
+}
+
+.project-milestone-status-field select:focus {
+  outline: none;
+  border-color: #1B8B8A;
+  box-shadow: 0 0 0 3px rgba(27, 139, 138, 0.1);
+}
+
+.project-milestone-status-field select option[value="pending"] {
+  color: #f59e0b;
+}
+
+.project-milestone-status-field select option[value="in-progress"] {
+  color: #3b82f6;
+}
+
+.project-milestone-status-field select option[value="completed"] {
+  color: #10b981;
+}
+
+.project-milestone-status-field select option[value="cancelled"] {
+  color: #ef4444;
+}
