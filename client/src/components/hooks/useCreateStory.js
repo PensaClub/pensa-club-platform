@@ -26,7 +26,7 @@ const useCreateStory = (initialValues, onSubmitHandler) => {
         showAuthor: true,
 
         author: '',
-        authorEmail: userEmail || '',
+        authorEmail: '',
         authorImage: '',
 
         // Main image

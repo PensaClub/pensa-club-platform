@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 
-import { createContext, useContext, useState, useCallback, useEffect } from "react";
+import { createContext, useContext, useState, useCallback, useEffect, useMemo } from "react";
 import { Loader } from "../Loader/Loader";
 import { notify } from "../../utils/notify.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -98,7 +98,7 @@ export const InitiativeProvider = ({ children }) => {
   const [projectDraftsHasMore, setProjectDraftsHasMore] = useState(true);
   const [projectDraftsCurrentPage, setProjectDraftsCurrentPage] = useState(1);
   const initiativeService = initiativeServiceFactory();
-  const storyPubService = storyPubServiceFactory();
+  const storyPubService = useMemo(() => storyPubServiceFactory(), []);
   const [projectsHasMore, setProjectsHasMore] = useState(true);
   const [projectsCurrentPage, setProjectsCurrentPage] = useState(1);
   const location = useLocation();
