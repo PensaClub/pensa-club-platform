@@ -213,7 +213,6 @@
   },
   "profile": {
     "clubMembership": "Clubmitgliedschaft",
-
     "clubs": {
       "title": "Meine Vereine",
       "subtitle": "Verwalten und betrachten Sie alle Vereine, die Sie erstellt haben",
@@ -1819,12 +1818,17 @@
       "status": {
         "completed": "Abgeschlossen",
         "in-progress": "In Bearbeitung",
+        "inProgress": "In Bearbeitung",
         "upcoming": "Bevorstehend",
-        "overdue": "Überfällig"
+        "overdue": "Überfällig",
+        "cancelled": "Abgebrochen",
+        "pending": "Ausstehend"
       },
       "completed": "Abgeschlossen",
       "inProgress": "In Bearbeitung",
-      "upcoming": "Bevorstehend"
+      "upcoming": "Bevorstehend",
+       "pending": "Ausstehend",
+       "cancelled": "Abgebrochen"
     }
   },
   "applicationForm": {
@@ -3361,13 +3365,12 @@
         "activeClub": "Aktiver Verein",
         "inactiveClub": "Inaktiver Verein",
         "suspendedClub": "Gesperrter Verein",
-        "draftClub": "Entwurf", 
+        "draftClub": "Entwurf",
         "rejectedClub": "Abgelehnter Verein",
         "unknownStatus": "Unbekannter Status"
       },
-       "location": {
+      "location": {
         "address": "Adresse"
-  
       },
       "categories": {
         "cultural": "Kulturclub",
@@ -3391,9 +3394,9 @@
         "activities": "Aktivitäten",
         "events": "Veranstaltungen",
         "views": "Aufrufe",
-         "firstYear": "Erstes Jahr",
+        "firstYear": "Erstes Jahr",
         "member": "Mitglied",
-        "activity": "Aktivität", 
+        "activity": "Aktivität",
         "event": "Veranstaltung",
         "year": "Jahr",
         "foundedNotSpecified": "Gründungsjahr nicht angegeben"
@@ -3463,7 +3466,6 @@
         "seats": "Plätze",
         "foundedNotSpecified": "Nicht angegeben",
         "membersNotSpecified": "Anzahl der Mitglieder nicht angegeben"
-
       },
       "demographics": {
         "title": "Altersstruktur",
@@ -3912,7 +3914,6 @@
         "saturdayShort": "Sa",
         "sundayShort": "So",
         "specialShort": "Spezial"
-
       },
       "modals": {
         "venue": {
@@ -3935,17 +3936,16 @@
       }
     },
     "ClubContact": {
-      "mobile-club":"- des Vereins",
-
+      "mobile-club": "- des Vereins",
       "header": {
         "badge": "Kontaktieren Sie uns",
         "title": "Wir sind für Sie da",
         "subtitle": "Bereit, alle Ihre Fragen zu beantworten und Ihnen zu helfen"
       },
-       "contactPeople": {
+      "contactPeople": {
         "title": "Ansprechpartner",
         "divider": "Ansprechpartner",
-        "contactPerson": "Ansprechpartner", 
+        "contactPerson": "Ansprechpartner",
         "role": "Rolle",
         "phone": "Telefon",
         "email": "E-Mail",
@@ -7781,7 +7781,6 @@
         "linkCopied": "Link in die Zwischenablage kopiert!"
       }
     },
-   
     "SportsPartners": {
       "header": {
         "badge": "Unser Netzwerk",
@@ -9049,15 +9048,15 @@
         "title": "Grundinformationen",
         "subtitle": "Name, Beschreibung und grundlegende Details"
       },
-       "pensioners": {
+      "pensioners": {
         "title": "Rentner",
         "subtitle": "Spezielle Dienste"
       },
-        "socialImpact": {
+      "socialImpact": {
         "title": "Soziale Wirkung",
         "subtitle": "Freiwilligenarbeit und Projekte"
       },
-         "achievements": {
+      "achievements": {
         "title": "Auszeichnungen",
         "subtitle": "Preise und Anerkennungen"
       },
@@ -9277,7 +9276,7 @@
       "geolocationNotSupported": "Geolokalisierung wird von Ihrem Browser nicht unterstützt",
       "geolocationError": "Fehler bei der Standortbestimmung",
       "help": {
-         "title": "Wie fülle ich den Standort aus?",
+        "title": "Wie fülle ich den Standort aus?",
         "description": "Wählen Sie den Standort Ihres Vereins in einfachen Schritten:",
         "addressTip": "Adresse und Stadt eingeben - Koordinaten werden automatisch bestimmt",
         "autoGeocode": "Automatische Koordinatenermittlung bei Eingabe einer vollständigen Adresse",
@@ -9361,9 +9360,9 @@
       "actions": {
         "addRole": "Rolle hinzufügen",
         "addFee": "Beitrag hinzufügen",
-          "addRequirement": "Anforderung hinzufügen",
+        "addRequirement": "Anforderung hinzufügen",
         "removeRequirement": "Anforderung entfernen",
-        "addBenefit": "Vorteil hinzufügen", 
+        "addBenefit": "Vorteil hinzufügen",
         "removeBenefit": "Vorteil entfernen"
       },
       "help": {
@@ -9371,14 +9370,14 @@
         "description": "Eine klare Organisation hilft dem Verein besser zu funktionieren und schafft Vertrauen bei den Mitgliedern.",
         "totalMembers": "Geben Sie die Gesamtzahl der Vereinsmitglieder ein"
       },
-       "ageGroups": {
+      "ageGroups": {
         "title": "Altersgruppen-Verteilung",
         "members": " Mitglieder",
         "under60": "Unter 60 Jahre",
         "under60Desc": "Frührentner und aktive Senioren",
         "age60to70": "60-70 Jahre",
         "age60to70Desc": "Neupensionierte, aktive Mitglieder",
-        "age70to80": "70-80 Jahre", 
+        "age70to80": "70-80 Jahre",
         "age70to80Desc": "Erfahrene Mitglieder mit reicher Lebenserfahrung",
         "age80plus": "Über 80 Jahre",
         "age80plusDesc": "Ehrenmitglieder und weise Vereinsmitglieder",
@@ -9408,7 +9407,7 @@
       "tabs": {
         "regular": "Regelmäßige Aktivitäten",
         "events": "Veranstaltungen",
-        "trips": "Ausflüge", 
+        "trips": "Ausflüge",
         "courses": "Kurse"
       },
       "eventTypes": {
@@ -9474,7 +9473,7 @@
         "instructor": "Kursleiter/Leiter",
         "requirements": "Anforderungen",
         "equipment": "Erforderliche Ausrüstung",
-         "day": "Tag",
+        "day": "Tag",
         "title": "Titel",
         "destination": "Reiseziel",
         "highlights": "Höhepunkte",
@@ -9482,29 +9481,28 @@
         "location": "Ort",
         "organizer": "Organisator",
         "time": "Uhrzeit",
-         "date": "Datum",
+        "date": "Datum",
         "price": "Preis",
         "participants": "Participants"
-
       },
       "placeholders": {
         "name": "Yoga für Anfänger",
         "description": "Beschreiben Sie was die Aktivität beinhaltet...",
         "instructor": "Maria Schmidt",
         "requirements": "Bequeme Kleidung, Handtuch...",
-          "activityName": "Name der Aktivität",
+        "activityName": "Name der Aktivität",
         "eventTitle": "Titel der Veranstaltung",
         "eventDescription": "Beschreibung der Veranstaltung",
         "destination": "Reiseziel des Ausflugs",
         "tripDescription": "Beschreibung des Ausflugs",
         "courseName": "Name des Kurses",
         "courseDescription": "Beschreibung des Kurses",
-         "location": "Ort",
+        "location": "Ort",
         "organizer": "Organisator"
       },
       "actions": {
         "addActivity": "Aktivität hinzufügen",
-            "addEvent": "Veranstaltung hinzufügen",
+        "addEvent": "Veranstaltung hinzufügen",
         "addTrip": "Ausflug hinzufügen",
         "addCourse": "Kurs hinzufügen"
       },
@@ -9512,7 +9510,7 @@
         "title": "Wie erstelle ich ein attraktives Programm?",
         "description": "Vielfältige Aktivitäten ziehen verschiedene Altersgruppen und Interessen an. Schließen Sie sowohl regelmäßige Aktivitäten als auch besondere Veranstaltungen ein."
       },
-        "uploadImages": "Bilder hochladen",
+      "uploadImages": "Bilder hochladen",
       "uploadVideos": "Videos hochladen",
       "imageCaption": "Bildbeschreibung",
       "videoCaption": "Videobeschreibung",
@@ -9533,7 +9531,6 @@
       "addEvent": "Veranstaltung hinzufügen",
       "addTrip": "Ausflug hinzufügen",
       "addCourse": "Kurs hinzufügen",
-      
       "prompts": {
         "addHighlight": "Höhepunkt der Veranstaltung eingeben:"
       }
@@ -9542,7 +9539,7 @@
       "title": "Fotos & Medien",
       "subtitle": "Logo, Fotos und Videos für Ihren Verein hochladen",
       "tabs": {
-       "logo": "Logo",
+        "logo": "Logo",
         "mainImage": "Hauptbild",
         "gallery": "Galerie",
         "videos": "Videos",
@@ -9566,7 +9563,7 @@
         "galleryDescription": "Fotos von Veranstaltungen und Aktivitäten hinzufügen, maximal 10MB pro Bild",
         "videosTitle": "Videos hochladen",
         "videosDescription": "Videos von Aktivitäten hinzufügen, maximal 100MB pro Video",
-          "virtualTourTitle": "Virtuelle Tour hinzufügen",
+        "virtualTourTitle": "Virtuelle Tour hinzufügen",
         "virtualTourDescription": "URL zur virtuellen 360° Tour des Vereins hinzufügen",
         "audioFilesTitle": "Audio-Datei hochladen",
         "audioFilesDescription": "Wählen Sie eine Audio-Datei von Ihrem Computer"
@@ -9595,7 +9592,7 @@
         "selectAll": "Alle auswählen",
         "clearSelection": "Auswahl löschen",
         "deleteSelected": "Ausgewählte löschen",
-       "empty": {
+        "empty": {
           "title": "Leere Galerie",
           "description": "Fügen Sie Bilder hinzu, um eine Galerie zu erstellen"
         }
@@ -9610,7 +9607,7 @@
         "yoga": "Yoga",
         "charity": "Wohltätigkeit"
       },
-       "virtualTour": {
+      "virtualTour": {
         "title": "Virtuelle Tour",
         "description": "URL zu einer interaktiven 360° Tour des Vereins hinzufügen",
         "urlLabel": "URL-Adresse",
@@ -9660,7 +9657,6 @@
           "description": "Kurze Beschreibung der Video-Datei"
         },
         "unsupported": "Ihr Browser unterstützt keine Video-Wiedergabe"
-      
       },
       "actions": {
         "preview": "Vorschau",
@@ -9697,7 +9693,6 @@
         "board": "Vorstand"
       },
       "addBoardMember": "Vorstandsmitglied hinzufügen",
-
       "fields": {
         "firstName": "Vorname",
         "lastName": "Nachname",
@@ -9987,12 +9982,12 @@
         "delete": "Löschen"
       }
     },
-     "socialImpact": {
+    "socialImpact": {
       "title": "Verwaltung der sozialen Wirkung",
       "subtitle": "Freiwilligenprojekte, Gemeinschaftsinitiativen und Partnerschaften hinzufügen",
       "tabs": {
         "volunteering": "Freiwilligenarbeit",
-        "projects": "Projekte", 
+        "projects": "Projekte",
         "partnerships": "Partnerschaften"
       },
       "volunteering": {
@@ -10032,7 +10027,7 @@
         "statuses": {
           "active": "Aktiv",
           "completed": "Abgeschlossen",
-          "planned": "Geplant", 
+          "planned": "Geplant",
           "stopped": "Gestoppt",
           "seasonal": "Saisonal"
         },
@@ -10305,7 +10300,7 @@
         "delete": "Löschen"
       }
     },
-     "preview": {
+    "preview": {
       "title": "Club-Vorschau",
       "badge": "VORSCHAU",
       "backToForm": "Zurück zum Formular",
@@ -10315,7 +10310,7 @@
       "close": "Vorschau schließen"
     }
   },
-    "myClubs":{
+  "myClubs": {
     "clubs": "Meine Clubs"
   },
   "draftClubs": {
@@ -10350,7 +10345,7 @@
       "general": "Allgemein",
       "cultural": "Kulturell",
       "traditional": "Traditionell",
-      "social": "Sozial", 
+      "social": "Sozial",
       "sports": "Sport"
     },
     "completionStatus": {
@@ -10386,9 +10381,9 @@
       "deleting": "Lösche..."
     }
   },
-   "searchDraftClubsBar": {
+  "searchDraftClubsBar": {
     "defaultPlaceholder": "Entwürfe durchsuchen...",
-    "clearSearch": "Suche löschen", 
+    "clearSearch": "Suche löschen",
     "searchingFor": "Suche nach"
   },
   "draftClubsFilterDropdown": {
@@ -10406,7 +10401,7 @@
     "descriptions": {
       "newest": "Zuletzt geänderte Entwürfe zuerst",
       "oldest": "Älteste Entwürfe zuerst",
-      "name": "Alphabetische Reihenfolge", 
+      "name": "Alphabetische Reihenfolge",
       "category": "Nach Kategorie gruppieren",
       "completion": "Vollständigste Entwürfe zuerst"
     }
@@ -10416,14 +10411,14 @@
     "completeDrafts": "Vollständig",
     "incompleteDrafts": "Unvollständig",
     "completionRate": "Fortschritt",
-    "lastActivity": "Letzte Aktivität", 
+    "lastActivity": "Letzte Aktivität",
     "noRecentActivity": "Keine kürzliche Aktivität",
     "modifiedMinutesAgo": "vor Minuten",
     "modifiedHoursAgo": "vor {{hours}}Std",
     "modifiedDaysAgo": "vor {{days}}T",
     "insights": {
       "highCompletion": "Großartiger Fortschritt! Die meisten Entwürfe sind bereit",
-      "moreIncomplete": "Konzentrieren Sie sich auf die Fertigstellung Ihrer Entwürfe", 
+      "moreIncomplete": "Konzentrieren Sie sich auf die Fertigstellung Ihrer Entwürfe",
       "manyDrafts": "Sie haben viele Entwürfe - Zeit zu organisieren"
     }
   },
@@ -10445,12 +10440,12 @@
       "suggestionsTitle": "Vorschläge:",
       "suggestion1": "Versuchen Sie andere Suchbegriffe",
       "suggestion2": "Überprüfen Sie die Rechtschreibung Ihres Suchbegriffs",
-      "suggestion3": "Entfernen Sie einige Filter für breitere Ergebnisse", 
+      "suggestion3": "Entfernen Sie einige Filter für breitere Ergebnisse",
       "clearFilters": "Filter löschen",
       "createNew": "Neuen Entwurf erstellen"
     }
   },
-    "membershipClubs": {
+  "membershipClubs": {
     "title": "Meine Mitgliedschaften",
     "subtitle": "Vereine, in denen ich Mitglied bin",
     "loading": "Mitgliedschaften werden geladen...",
@@ -10464,7 +10459,7 @@
       "active": "Aktiv",
       "inactive": "Inaktiv",
       "recent": "Neue Mitgliedschaften",
-      "general": "Allgemein", 
+      "general": "Allgemein",
       "cultural": "Kulturell",
       "traditional": "Traditionell",
       "social": "Sozial",
@@ -10474,7 +10469,7 @@
       "newest": "Neueste Mitgliedschaften",
       "oldest": "Älteste Mitgliedschaften",
       "name": "Name A-Z",
-      "members": "Meiste Mitglieder", 
+      "members": "Meiste Mitglieder",
       "activity": "Aktivste",
       "location": "Nach Standort"
     }
@@ -10494,7 +10489,7 @@
       "general": "Allgemein",
       "cultural": "Kulturell",
       "traditional": "Traditionell",
-      "social": "Sozial", 
+      "social": "Sozial",
       "sports": "Sport"
     },
     "memberSince": {
@@ -10514,7 +10509,7 @@
   },
   "searchMembershipClubsBar": {
     "defaultPlaceholder": "In meinen Mitgliedschaften suchen...",
-    "clear": "Suche löschen", 
+    "clear": "Suche löschen",
     "searching": "Suche nach"
   },
   "membershipClubsFilterDropdown": {
@@ -10555,7 +10550,7 @@
       "discoverButton": "Vereine Entdecken"
     }
   },
-   "adminClubCard": {
+  "adminClubCard": {
     "verified": "Verifizierter Club",
     "noDescription": "Keine Beschreibung",
     "noLocation": "Kein Standort",
@@ -10563,7 +10558,6 @@
     "noDate": "Kein Datum",
     "members": "Mitglieder",
     "created": "Erstellt",
-    
     "status": {
       "active": "Aktiv",
       "inactive": "Inaktiv",
@@ -10571,23 +10565,23 @@
       "suspended": "Gesperrt",
       "rejected": "Abgelehnt"
     },
-     "info": {
-    "title": "Club-Informationen",
-    "clubName": "Club-Name",
-    "owner": "Besitzer", 
-    "email": "E-Mail",
-    "phone": "Telefon",
-    "createdDate": "Erstellungsdatum",
-    "location": "Standort",
-    "members": "Mitglieder",
-    "people": "Personen",
-    "verificationStatus": "Verifizierungsstatus",
-    "verified": "Verifiziert",
-    "notVerified": "Nicht verifiziert",
-    "status": "Status", 
-    "notSpecified": "Nicht angegeben",
-    "notSpecifiedFeminine": "Nicht angegeben"
-  },
+    "info": {
+      "title": "Club-Informationen",
+      "clubName": "Club-Name",
+      "owner": "Besitzer",
+      "email": "E-Mail",
+      "phone": "Telefon",
+      "createdDate": "Erstellungsdatum",
+      "location": "Standort",
+      "members": "Mitglieder",
+      "people": "Personen",
+      "verificationStatus": "Verifizierungsstatus",
+      "verified": "Verifiziert",
+      "notVerified": "Nicht verifiziert",
+      "status": "Status",
+      "notSpecified": "Nicht angegeben",
+      "notSpecifiedFeminine": "Nicht angegeben"
+    },
     "actions": {
       "view": "Ansehen",
       "edit": "Bearbeiten",
@@ -10595,9 +10589,8 @@
       "verify": "Verifizieren",
       "approve": "Genehmigen",
       "reject": "Ablehnen",
-       "info": "Informationen"
+      "info": "Informationen"
     },
-    
     "rejectModal": {
       "title": "Club ablehnen",
       "description": "Sind Sie sicher, dass Sie den Club \"{{clubName}}\" ablehnen möchten?",
@@ -10608,40 +10601,35 @@
       "rejecting": "Ablehnung läuft..."
     }
   },
-   "clubsAdmin": {
+  "clubsAdmin": {
     "title": "Clubs-Verwaltung",
     "subtitle": "Verwalten Sie alle Clubs im System",
     "loading": "Clubs werden geladen...",
     "searchPlaceholder": "Suchen nach Name, Beschreibung, Besitzer, Ort...",
     "selectAll": "Alle auf dieser Seite auswählen",
-    
     "errors": {
       "noAccess": "Sie haben keine Administratorrechte für den Zugriff auf diese Seite",
-      "fetchFailed": "Laden der Clubs fehlgeschlagen", 
+      "fetchFailed": "Laden der Clubs fehlgeschlagen",
       "title": "Ein Fehler ist aufgetreten"
     },
-    
     "sort": {
       "newest": "Neueste zuerst",
       "oldest": "Älteste zuerst",
       "name": "Nach Name (A-Z)",
       "status": "Nach Status",
-      "members": "Nach Mitgliedern", 
+      "members": "Nach Mitgliedern",
       "location": "Nach Ort"
     },
-    
     "pagination": {
       "previous": "Vorherige",
       "next": "Nächste",
       "info": "Seite {{current}} von {{total}}"
     },
-    
     "empty": {
       "title": "Keine Clubs gefunden",
       "message": "Keine Clubs entsprechen Ihren Suchkriterien",
       "clearFilters": "Filter löschen"
     },
-    
     "results": {
       "showing": "Zeige {{showing}} von {{total}} Clubs (gesamt {{allTotal}})"
     }
@@ -10665,7 +10653,6 @@
         "description": "Verifizierte Clubs"
       }
     },
-    
     "detailed": {
       "title": "Detaillierte Statistiken",
       "inactive": "Inaktiv",
@@ -10674,7 +10661,6 @@
       "rejected": "Abgelehnt",
       "unverified": "Unverifiziert"
     },
-    
     "insights": {
       "title": "Einblicke und Metriken",
       "healthScore": "Gesundheitsbewertung",
@@ -10690,21 +10676,19 @@
   },
   "adminClubFilters": {
     "filterBy": "Filtern nach",
-    "clearFilter": "Filter löschen", 
+    "clearFilter": "Filter löschen",
     "viewAll": "Alle anzeigen",
-    
     "options": {
       "all": "Alle Clubs",
       "active": "Aktiv",
       "inactive": "Inaktiv",
       "draft": "Entwurf",
       "suspended": "Gesperrt",
-      "rejected": "Abgelehnt", 
+      "rejected": "Abgelehnt",
       "verified": "Verifiziert",
       "unverified": "Unverifiziert",
       "pending": "Wartend auf Genehmigung"
     },
-    
     "descriptions": {
       "all": "Alle Clubs im System",
       "active": "Clubs mit aktivem Status",
@@ -10713,7 +10697,7 @@
       "suspended": "Temporär gesperrte Clubs",
       "rejected": "Abgelehnte Clubs",
       "verified": "Vom Administrator verifiziert",
-      "unverified": "Noch nicht verifiziert", 
+      "unverified": "Noch nicht verifiziert",
       "pending": "Warten auf administrative Genehmigung"
     }
   },
@@ -10727,7 +10711,6 @@
     "advancedFilters": "Erweiterte Filter",
     "search": "Suchen",
     "reset": "Zurücksetzen",
-    
     "searchIn": {
       "label": "Suchen in",
       "all": "Alle Felder",
@@ -10736,7 +10719,6 @@
       "location": "Standort",
       "owner": "Besitzer"
     },
-    
     "dateRange": {
       "label": "Zeitraum",
       "any": "Jederzeit",
@@ -10745,7 +10727,6 @@
       "month": "Diesen Monat",
       "year": "Dieses Jahr"
     },
-    
     "shortcuts": {
       "esc": "ESC zum Löschen/Schließen"
     }
@@ -10758,26 +10739,22 @@
     "confirmAction": "Aktion für {{count}} Clubs bestätigen",
     "affectedClubs": "{{count}} Clubs werden betroffen sein",
     "newStatus": "Neuer Status",
-    
     "buttons": {
       "approve": "Genehmigen",
       "changeStatus": "Status ändern",
       "delete": "Löschen"
     },
-    
     "tooltips": {
       "approve": "Ausgewählte Clubs genehmigen",
       "changeStatus": "Status ausgewählter Clubs ändern",
       "delete": "Ausgewählte Clubs löschen",
       "clear": "Auswahl löschen"
     },
-    
     "statusOptions": {
       "active": "Aktiv",
-      "inactive": "Inaktiv", 
+      "inactive": "Inaktiv",
       "suspended": "Gesperrt"
     },
-    
     "actions": {
       "approve": {
         "title": "Clubs genehmigen",
@@ -10803,12 +10780,11 @@
     "cancel": "Abbrechen",
     "processing": "Verarbeitung...",
     "members": "Mitglieder",
-    "verified": "Verifiziert", 
+    "verified": "Verifiziert",
     "warningTitle": "Warnung!",
     "infoTitle": "Information",
     "dangerousAction": "Diese Aktion kann schwerwiegende Folgen haben.",
     "actionInfo": "Bitte überprüfen Sie sorgfältig, bevor Sie fortfahren.",
-    
     "statuses": {
       "active": "Aktiv",
       "inactive": "Inaktiv",
@@ -10816,43 +10792,36 @@
       "suspended": "Gesperrt",
       "rejected": "Abgelehnt"
     },
-    
     "reject": {
       "title": "Club ablehnen",
       "description": "Sind Sie sicher, dass Sie den Club \"{{clubName}}\" ablehnen möchten?",
       "confirm": "Club ablehnen"
     },
-    
     "approve": {
       "title": "Club genehmigen",
       "description": "Club \"{{clubName}}\" wird genehmigt und aktiviert.",
       "confirm": "Club genehmigen"
     },
-    
     "delete": {
       "title": "Club löschen",
       "description": "Club \"{{clubName}}\" wird dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden!",
       "confirm": "Club löschen"
     },
-    
     "verify": {
       "title": "Club verifizieren",
       "description": "Club \"{{clubName}}\" wird als verifiziert markiert.",
       "confirm": "Club verifizieren"
     },
-    
     "status": {
       "title": "Status ändern",
       "description": "Der Status des Clubs \"{{clubName}}\" wird auf {{status}} geändert.",
       "confirm": "Status ändern"
     },
-    
     "transfer": {
       "title": "Besitz übertragen",
       "description": "Das Eigentum an Club \"{{clubName}}\" wird übertragen.",
       "confirm": "Besitz übertragen"
     },
-    
     "fields": {
       "reason": {
         "label": "Grund für Ablehnung",
@@ -10867,20 +10836,18 @@
         "instruction": "Bitte geben Sie \"{{clubName}}\" zur Bestätigung ein:"
       }
     },
-    
     "validation": {
       "reasonRequired": "Grund ist erforderlich",
       "emailRequired": "E-Mail ist erforderlich",
       "emailInvalid": "Ungültiges E-Mail-Format",
       "confirmationMismatch": "Bestätigung stimmt nicht mit dem Club-Namen überein"
     },
-    
     "statusChange": {
       "info": "Neuer Status wird sein: {{status}}"
     }
   },
   "pending": {
-  "title": "Wartend auf Genehmigung",
-  "description": "Clubs zur administrativen Genehmigung eingereicht"
-}
+    "title": "Wartend auf Genehmigung",
+    "description": "Clubs zur administrativen Genehmigung eingereicht"
+  }
 }
