@@ -53,7 +53,10 @@ const calculateBasicInfoProgress = (values) => {
         { key: 'shortDescription', required: true },
         { key: 'category', required: false },
         { key: 'readTime', required: false },
-        { key: 'tags', required: false, isArray: true }
+        { key: 'tags', required: false, isArray: true },
+        { key: 'author', required: false },
+        { key: 'authorEmail', required: false },
+        { key: 'authorImage', required: false, isObject: true }
     ];
 
     let completed = 0;
@@ -64,6 +67,10 @@ const calculateBasicInfoProgress = (values) => {
 
         if (field.isArray) {
             if (values[field.key] && values[field.key].length > 0) {
+                completed++;
+            }
+        } else if (field.isObject) {
+            if (values[field.key] && values[field.key].src) {
                 completed++;
             }
         } else if (field.required) {

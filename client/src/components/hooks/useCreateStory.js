@@ -477,6 +477,135 @@ const useCreateStory = (initialValues, onSubmitHandler) => {
         }));
     }, []);
 
+    // Author image management
+    const handleAuthorImageUpload = useCallback(async (e) => {
+        const files = e.target.files;
+        if (!files || files.length === 0) return;
+
+        const file = files[0];
+        let blobUrl = null;
+
+        try {
+            blobUrl = URL.createObjectURL(file);
+
+            // Update UI immediately with blob URL
+            setValues(prev => ({
+                ...prev,
+                authorImage: {
+                    src: blobUrl,
+                    alt: '',
+                    caption: '',
+                    isUploading: true
+                }
+            }));
+
+            e.target.value = '';
+
+            // Upload to Firebase
+            const compressedFile = await compressImage(file, {
+                maxSizeMB: 2,
+                maxWidthOrHeight: 1920
+            });
+
+            const url = await uploadFileWithProgress(
+                compressedFile,
+                'stories/author-images',
+                () => {} // Progress callback
+            );
+
+            // Replace blob URL with Firebase URL
+            setValues(prev => ({
+                ...prev,
+                authorImage: {
+                    src: url,
+                    alt: prev.authorImage?.alt || '',
+                    caption: prev.authorImage?.caption || '',
+                    isUploading: false
+                }
+            }));
+
+            // Clean up blob URL
+            if (blobUrl) {
+                URL.revokeObjectURL(blobUrl);
+            }
+
+            notify('success', 'Author image uploaded successfully!');
+
+        } catch (error) {
+            notify('error', 'Error uploading author image');
+
+            // Reset on error
+            setValues(prev => ({
+                ...prev,
+                authorImage: null
+            }));
+
+            if (blobUrl) {
+                URL.revokeObjectURL(blobUrl);
+            }
+        }
+    }, []);
+
+    // Add author image from URL
+    const addAuthorImageFromUrl = useCallback((imageUrl) => {
+        if (!imageUrl.trim()) return;
+
+        setValues(prev => ({
+            ...prev,
+            authorImage: {
+                src: imageUrl.trim(),
+                alt: '',
+                caption: '',
+                isUploading: false
+            }
+        }));
+    }, []);
+
+    // Remove author image
+    const removeAuthorImage = useCallback(() => {
+        setValues(prev => {
+            const imageToDelete = prev.authorImage;
+
+            // Delete from Firebase if needed
+            if (imageToDelete?.src && !imageToDelete.isUploading && !imageToDelete.src.startsWith('blob:')) {
+                deleteSingleImage(imageToDelete.src).catch(() => {
+                    // Silently fail
+                });
+            }
+
+            if (imageToDelete?.src?.startsWith('blob:')) {
+                URL.revokeObjectURL(imageToDelete.src);
+            }
+
+            return {
+                ...prev,
+                authorImage: null
+            };
+        });
+    }, []);
+
+    // Update author image alt
+    const updateAuthorImageAlt = useCallback((altText) => {
+        setValues(prev => ({
+            ...prev,
+            authorImage: {
+                ...prev.authorImage,
+                alt: altText
+            }
+        }));
+    }, []);
+
+    // Update author image caption
+    const updateAuthorImageCaption = useCallback((caption) => {
+        setValues(prev => ({
+            ...prev,
+            authorImage: {
+                ...prev.authorImage,
+                caption: caption
+            }
+        }));
+    }, []);
+
     return {
         // State
         values,
@@ -507,7 +636,14 @@ const useCreateStory = (initialValues, onSubmitHandler) => {
         addMainImageFromUrl,
         removeMainImage,
         updateMainImageAlt,
-        updateMainImageCaption
+        updateMainImageCaption,
+
+        // Author image management
+        handleAuthorImageUpload,
+        addAuthorImageFromUrl,
+        removeAuthorImage,
+        updateAuthorImageAlt,
+        updateAuthorImageCaption
     };
 };
 

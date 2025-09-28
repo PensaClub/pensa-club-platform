@@ -391,8 +391,11 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                             {type === 'story' && content.author && (
                                 <div className="story-pub-author">
                                     <div className="author-avatar">
-                                        {content.authorImage ? (
-                                            <img src={content.authorImage} alt={content.author} />
+                                        {content.authorImage?.src ? (
+                                            <img
+                                                src={content.authorImage.src}
+                                                alt={content.authorImage.alt || content.author}
+                                            />
                                         ) : (
                                             <div className="author-placeholder">
                                                 {content.author.charAt(0)}
@@ -401,13 +404,8 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                                     </div>
                                     <div className="author-info">
                                         <h4 className="author-name">{content.author}</h4>
-                                        <p className="author-title">
-                                            {t('publications.view.author.label')}
-                                        </p>
                                         {content.authorEmail && (
-                                            <a href={`mailto:${content.authorEmail}`} className="author-email">
-                                                {content.authorEmail}
-                                            </a>
+                                            <p className="author-email">{content.authorEmail}</p>
                                         )}
                                     </div>
                                 </div>

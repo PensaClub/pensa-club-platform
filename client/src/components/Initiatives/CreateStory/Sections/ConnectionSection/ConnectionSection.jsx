@@ -17,23 +17,23 @@ const ConnectionSection = ({
     const { token } = useAuthContext();
     const [initiatives, setInitiatives] = useState([]);
     const [projects, setProjects] = useState([]);
-    const [publications, setPublications] = useState([]);
+    const [stories, setStories] = useState([]);
     const [loadingInitiatives, setLoadingInitiatives] = useState(false);
     const [loadingProjects, setLoadingProjects] = useState(false);
-    const [loadingPublications, setLoadingPublications] = useState(false);
+    const [loadingStories, setLoadingStories] = useState(false);
 
     // Search states
     const [initiativeSearch, setInitiativeSearch] = useState('');
     const [projectSearch, setProjectSearch] = useState('');
-    const [publicationSearch, setPublicationSearch] = useState('');
+    const [storySearch, setStorySearch] = useState('');
     const [showInitiativeDropdown, setShowInitiativeDropdown] = useState(false);
     const [showProjectDropdown, setShowProjectDropdown] = useState(false);
-    const [showPublicationDropdown, setShowPublicationDropdown] = useState(false);
+    const [showStoryDropdown, setShowStoryDropdown] = useState(false);
 
     // Refs for click outside detection
     const initiativeRef = useRef(null);
     const projectRef = useRef(null);
-    const publicationRef = useRef(null);
+    const storyRef = useRef(null);
 
     // Create service instance
     const service = useMemo(() => initiativeServiceFactory(token), [token]);
@@ -47,8 +47,8 @@ const ConnectionSection = ({
             if (projectRef.current && !projectRef.current.contains(event.target)) {
                 setShowProjectDropdown(false);
             }
-            if (publicationRef.current && !publicationRef.current.contains(event.target)) {
-                setShowPublicationDropdown(false);
+            if (storyRef.current && !storyRef.current.contains(event.target)) {
+                setShowStoryDropdown(false);
             }
         };
 
@@ -104,27 +104,27 @@ const ConnectionSection = ({
         fetchProjects();
     }, [service, token]);
 
-    // Fetch ALL publications (both drafts and published)
+    // Fetch ALL stories (both drafts and published)
     useEffect(() => {
-        const fetchPublications = async () => {
+        const fetchStories = async () => {
             if (!token) return;
 
-            setLoadingPublications(true);
+            setLoadingStories(true);
             try {
-                const response = await service.getAllPublicationsForConnections();
+                const response = await service.getAllStoriesForConnections();
                 if (response && response.data) {
-                    setPublications(response.data);
+                    setStories(response.data);
                 } else {
-                    console.error('Invalid response format for publications:', response);
+                    console.error('Invalid response format for stories:', response);
                 }
             } catch (error) {
-                console.error('Error fetching publications:', error);
+                console.error('Error fetching stories:', error);
             } finally {
-                setLoadingPublications(false);
+                setLoadingStories(false);
             }
         };
 
-        fetchPublications();
+        fetchStories();
     }, [service, token]);
 
     // Filter initiatives based on search (limit to 6 results)
@@ -145,14 +145,14 @@ const ConnectionSection = ({
         ).slice(0, 6);
     }, [projects, projectSearch]);
 
-    // Filter publications based on search (limit to 6 results)
-    const filteredPublications = useMemo(() => {
-        if (!publicationSearch.trim()) return publications.slice(0, 6);
-        return publications.filter(pub =>
-            pub.title.toLowerCase().includes(publicationSearch.toLowerCase()) ||
-            pub.slug.toLowerCase().includes(publicationSearch.toLowerCase())
+    // Filter stories based on search (limit to 6 results)
+    const filteredStories = useMemo(() => {
+        if (!storySearch.trim()) return stories.slice(0, 6);
+        return stories.filter(story =>
+            story.title.toLowerCase().includes(storySearch.toLowerCase()) ||
+            story.slug.toLowerCase().includes(storySearch.toLowerCase())
         ).slice(0, 6);
-    }, [publications, publicationSearch]);
+    }, [stories, storySearch]);
 
     // Handle initiative selection (multi-select)
     const handleInitiativeSelect = (initiative) => {
@@ -200,27 +200,27 @@ const ConnectionSection = ({
         setShowProjectDropdown(false);
     };
 
-    // Handle publication selection (multi-select)
-    const handlePublicationSelect = (pub) => {
-        const currentIds = values.relatedPublications || [];
-        const isSelected = currentIds.includes(pub.id);
+    // Handle story selection (multi-select)
+    const handleStorySelect = (story) => {
+        const currentIds = values.relatedStories || [];
+        const isSelected = currentIds.includes(story.id);
 
         if (isSelected) {
             // Remove if already selected
             setValues(prev => ({
                 ...prev,
-                relatedPublications: currentIds.filter(id => id !== pub.id)
+                relatedStories: currentIds.filter(id => id !== story.id)
             }));
         } else {
             // Add if not selected
             setValues(prev => ({
                 ...prev,
-                relatedPublications: [...currentIds, pub.id]
+                relatedStories: [...currentIds, story.id]
             }));
         }
 
-        setPublicationSearch('');
-        setShowPublicationDropdown(false);
+        setStorySearch('');
+        setShowStoryDropdown(false);
     };
 
     // Remove specific initiative connection
@@ -239,11 +239,11 @@ const ConnectionSection = ({
         }));
     };
 
-    // Remove specific publication connection
-    const removePublicationConnection = (publicationId) => {
+    // Remove specific story connection
+    const removeStoryConnection = (storyId) => {
         setValues(prev => ({
             ...prev,
-            relatedPublications: (prev.relatedPublications || []).filter(id => id !== publicationId)
+            relatedStories: (prev.relatedStories || []).filter(id => id !== storyId)
         }));
     };
 
@@ -257,9 +257,9 @@ const ConnectionSection = ({
         (values.connectedProjectIds || []).includes(proj.id)
     );
 
-    // Get selected publications
-    const selectedPublications = publications.filter(pub =>
-        (values.relatedPublications || []).includes(pub.id)
+    // Get selected stories
+    const selectedStories = stories.filter(story =>
+        (values.relatedStories || []).includes(story.id)
     );
 
     return (
@@ -267,19 +267,19 @@ const ConnectionSection = ({
             <div className="publication-form-section-header">
                 <h2 className="publication-form-section-title">
                     <FontAwesomeIcon icon={faLink} />
-                    {t('publications.sections.connections')}
+                    {t('stories.sections.connections')}
                 </h2>
             </div>
 
             <div className="publication-form-section-content">
                 <div className="publication-connections-help">
-                    <p>{t('publications.connections.connectionsHelp')}</p>
+                    <p>{t('stories.connections.connectionsHelp')}</p>
                 </div>
 
                 {/* Initiative Connection */}
                 <div className="publication-connection-group" ref={initiativeRef}>
                     <label className="publication-connection-label">
-                        {t('publications.connections.connectInitiatives')}
+                        {t('stories.connections.connectInitiatives')}
                     </label>
 
                     <div className="publication-connection-search-container">
@@ -290,7 +290,7 @@ const ConnectionSection = ({
                                 value={initiativeSearch}
                                 onChange={(e) => setInitiativeSearch(e.target.value)}
                                 onFocus={() => setShowInitiativeDropdown(true)}
-                                placeholder={t('publications.connections.searchInitiatives')}
+                                placeholder={t('stories.connections.searchInitiatives')}
                                 className="publication-connection-search-input"
                                 disabled={loadingInitiatives}
                             />
@@ -318,7 +318,7 @@ const ConnectionSection = ({
                         <div className="publication-connection-dropdown">
                             {filteredInitiatives.length === 0 ? (
                                 <div className="publication-connection-dropdown-empty">
-                                    {initiativeSearch ? t('publications.connections.noInitiativesFound') : t('publications.connections.noInitiativesAvailable')}
+                                    {initiativeSearch ? t('stories.connections.noInitiativesFound') : t('stories.connections.noInitiativesAvailable')}
                                 </div>
                             ) : (
                                 filteredInitiatives.map(initiative => {
@@ -332,7 +332,7 @@ const ConnectionSection = ({
                                             <div className="publication-connection-dropdown-title">
                                                 {initiative.title}
                                                 {initiative.isDraft && (
-                                                    <span className="publication-connection-draft-badge">{t('publications.connections.draft')}</span>
+                                                    <span className="publication-connection-draft-badge">{t('stories.connections.draft')}</span>
                                                 )}
                                             </div>
                                             <div className="publication-connection-dropdown-slug">
@@ -358,7 +358,7 @@ const ConnectionSection = ({
                 {/* Project Connection */}
                 <div className="publication-connection-group" ref={projectRef}>
                     <label className="publication-connection-label">
-                        {t('publications.connections.connectProjects')}
+                        {t('stories.connections.connectProjects')}
                     </label>
 
                     <div className="publication-connection-search-container">
@@ -369,7 +369,7 @@ const ConnectionSection = ({
                                 value={projectSearch}
                                 onChange={(e) => setProjectSearch(e.target.value)}
                                 onFocus={() => setShowProjectDropdown(true)}
-                                placeholder={t('publications.connections.searchProjects')}
+                                placeholder={t('stories.connections.searchProjects')}
                                 className="publication-connection-search-input"
                                 disabled={loadingProjects}
                             />
@@ -397,7 +397,7 @@ const ConnectionSection = ({
                         <div className="publication-connection-dropdown">
                             {filteredProjects.length === 0 ? (
                                 <div className="publication-connection-dropdown-empty">
-                                    {projectSearch ? t('publications.connections.noProjectsFound') : t('publications.connections.noProjectsAvailable')}
+                                    {projectSearch ? t('stories.connections.noProjectsFound') : t('stories.connections.noProjectsAvailable')}
                                 </div>
                             ) : (
                                 filteredProjects.map(project => {
@@ -411,7 +411,7 @@ const ConnectionSection = ({
                                             <div className="publication-connection-dropdown-title">
                                                 {project.title}
                                                 {project.isDraft && (
-                                                    <span className="publication-connection-draft-badge">{t('publications.connections.draft')}</span>
+                                                    <span className="publication-connection-draft-badge">{t('stories.connections.draft')}</span>
                                                 )}
                                             </div>
                                             <div className="publication-connection-dropdown-slug">
@@ -434,10 +434,10 @@ const ConnectionSection = ({
                     )}
                 </div>
 
-                {/* Publication Connection */}
-                <div className="publication-connection-group" ref={publicationRef}>
+                {/* Story Connection */}
+                <div className="publication-connection-group" ref={storyRef}>
                     <label className="publication-connection-label">
-                        {t('publications.connections.connectPublications')}
+                        {t('stories.connections.connectStories')}
                     </label>
 
                     <div className="publication-connection-search-container">
@@ -445,24 +445,24 @@ const ConnectionSection = ({
                             <FontAwesomeIcon icon={faSearch} className="publication-connection-search-icon" />
                             <input
                                 type="text"
-                                value={publicationSearch}
-                                onChange={(e) => setPublicationSearch(e.target.value)}
-                                onFocus={() => setShowPublicationDropdown(true)}
-                                placeholder={t('publications.connections.searchPublications')}
+                                value={storySearch}
+                                onChange={(e) => setStorySearch(e.target.value)}
+                                onFocus={() => setShowStoryDropdown(true)}
+                                placeholder={t('stories.connections.searchStories')}
                                 className="publication-connection-search-input"
-                                disabled={loadingPublications}
+                                disabled={loadingStories}
                             />
                             <button
                                 type="button"
-                                onClick={() => setShowPublicationDropdown(!showPublicationDropdown)}
+                                onClick={() => setShowStoryDropdown(!showStoryDropdown)}
                                 className="publication-connection-dropdown-toggle"
-                                disabled={loadingPublications}
+                                disabled={loadingStories}
                             >
                                 <FontAwesomeIcon icon={faChevronDown} />
                             </button>
                         </div>
 
-                        {loadingPublications && (
+                        {loadingStories && (
                             <FontAwesomeIcon
                                 icon={faSpinner}
                                 className="publication-connection-loading"
@@ -471,30 +471,30 @@ const ConnectionSection = ({
                         )}
                     </div>
 
-                    {/* Publication Dropdown */}
-                    {showPublicationDropdown && (
+                    {/* Story Dropdown */}
+                    {showStoryDropdown && (
                         <div className="publication-connection-dropdown">
-                            {filteredPublications.length === 0 ? (
+                            {filteredStories.length === 0 ? (
                                 <div className="publication-connection-dropdown-empty">
-                                    {publicationSearch ? t('publications.connections.noPublicationsFound') : t('publications.connections.noPublicationsAvailable')}
+                                    {storySearch ? t('stories.connections.noStoriesFound') : t('stories.connections.noStoriesAvailable')}
                                 </div>
                             ) : (
-                                filteredPublications.map(pub => {
-                                    const isSelected = (values.relatedPublications || []).includes(pub.id);
+                                filteredStories.map(story => {
+                                    const isSelected = (values.relatedStories || []).includes(story.id);
                                     return (
                                         <div
-                                            key={pub.id}
+                                            key={story.id}
                                             className={`publication-connection-dropdown-item ${isSelected ? 'selected' : ''}`}
-                                            onClick={() => handlePublicationSelect(pub)}
+                                            onClick={() => handleStorySelect(story)}
                                         >
                                             <div className="publication-connection-dropdown-title">
-                                                {pub.title}
-                                                {pub.isDraft && (
-                                                    <span className="publication-connection-draft-badge">{t('publications.connections.draft')}</span>
+                                                {story.title}
+                                                {story.isDraft && (
+                                                    <span className="publication-connection-draft-badge">{t('stories.connections.draft')}</span>
                                                 )}
                                             </div>
                                             <div className="publication-connection-dropdown-slug">
-                                                {pub.slug}
+                                                {story.slug}
                                             </div>
                                             {isSelected && (
                                                 <FontAwesomeIcon icon={faCheck} className="publication-connection-dropdown-check" />
@@ -506,9 +506,9 @@ const ConnectionSection = ({
                         </div>
                     )}
 
-                    {errors.relatedPublications && (
+                    {errors.relatedStories && (
                         <div className="publication-connection-error">
-                            {errors.relatedPublications}
+                            {errors.relatedStories}
                         </div>
                     )}
                 </div>
@@ -518,10 +518,10 @@ const ConnectionSection = ({
                     <div className="publication-connection-status-section">
                         <div className="publication-connection-status-header">
                             <span className="publication-connection-status-label">
-                                {t('publications.connections.initiativeConnections')}:
+                                {t('stories.connections.initiativeConnections')}:
                             </span>
                             <span className={`publication-connection-status-value ${selectedInitiatives.length > 0 ? 'connected' : 'not-connected'}`}>
-                                {selectedInitiatives.length > 0 ? `${selectedInitiatives.length} ${t('publications.connections.connected')}` : t('publications.connections.notConnected')}
+                                {selectedInitiatives.length > 0 ? `${selectedInitiatives.length} ${t('stories.connections.connected')}` : t('stories.connections.notConnected')}
                             </span>
                         </div>
 
@@ -533,7 +533,7 @@ const ConnectionSection = ({
                                             <div className="publication-connection-status-item-title">
                                                 {initiative.title}
                                                 {initiative.isDraft && (
-                                                    <span className="publication-connection-draft-badge">{t('publications.connections.draft')}</span>
+                                                    <span className="publication-connection-draft-badge">{t('stories.connections.draft')}</span>
                                                 )}
                                             </div>
                                             <div className="publication-connection-status-item-slug">
@@ -544,7 +544,7 @@ const ConnectionSection = ({
                                             type="button"
                                             onClick={() => removeInitiativeConnection(initiative.id)}
                                             className="publication-connection-status-remove"
-                                            title={t('publications.connections.removeConnection')}
+                                            title={t('stories.connections.removeConnection')}
                                         >
                                             <FontAwesomeIcon icon={faTimes} />
                                         </button>
@@ -557,10 +557,10 @@ const ConnectionSection = ({
                     <div className="publication-connection-status-section">
                         <div className="publication-connection-status-header">
                             <span className="publication-connection-status-label">
-                                {t('publications.connections.projectConnections')}:
+                                {t('stories.connections.projectConnections')}:
                             </span>
                             <span className={`publication-connection-status-value ${selectedProjects.length > 0 ? 'connected' : 'not-connected'}`}>
-                                {selectedProjects.length > 0 ? `${selectedProjects.length} ${t('publications.connections.connected')}` : t('publications.connections.notConnected')}
+                                {selectedProjects.length > 0 ? `${selectedProjects.length} ${t('stories.connections.connected')}` : t('stories.connections.notConnected')}
                             </span>
                         </div>
 
@@ -572,7 +572,7 @@ const ConnectionSection = ({
                                             <div className="publication-connection-status-item-title">
                                                 {project.title}
                                                 {project.isDraft && (
-                                                    <span className="publication-connection-draft-badge">{t('publications.connections.draft')}</span>
+                                                    <span className="publication-connection-draft-badge">{t('stories.connections.draft')}</span>
                                                 )}
                                             </div>
                                             <div className="publication-connection-status-item-slug">
@@ -583,7 +583,7 @@ const ConnectionSection = ({
                                             type="button"
                                             onClick={() => removeProjectConnection(project.id)}
                                             className="publication-connection-status-remove"
-                                            title={t('publications.connections.removeConnection')}
+                                            title={t('stories.connections.removeConnection')}
                                         >
                                             <FontAwesomeIcon icon={faTimes} />
                                         </button>
@@ -596,33 +596,33 @@ const ConnectionSection = ({
                     <div className="publication-connection-status-section">
                         <div className="publication-connection-status-header">
                             <span className="publication-connection-status-label">
-                                {t('publications.connections.publicationConnections')}:
+                                {t('stories.connections.storyConnections')}:
                             </span>
-                            <span className={`publication-connection-status-value ${selectedPublications.length > 0 ? 'connected' : 'not-connected'}`}>
-                                {selectedPublications.length > 0 ? `${selectedPublications.length} ${t('publications.connections.connected')}` : t('publications.connections.notConnected')}
+                            <span className={`publication-connection-status-value ${selectedStories.length > 0 ? 'connected' : 'not-connected'}`}>
+                                {selectedStories.length > 0 ? `${selectedStories.length} ${t('stories.connections.connected')}` : t('stories.connections.notConnected')}
                             </span>
                         </div>
 
-                        {selectedPublications.length > 0 && (
+                        {selectedStories.length > 0 && (
                             <div className="publication-connection-status-items">
-                                {selectedPublications.map(pub => (
-                                    <div key={pub.id} className="publication-connection-status-item">
+                                {selectedStories.map(story => (
+                                    <div key={story.id} className="publication-connection-status-item">
                                         <div className="publication-connection-status-item-content">
                                             <div className="publication-connection-status-item-title">
-                                                {pub.title}
-                                                {pub.isDraft && (
-                                                    <span className="publication-connection-draft-badge">{t('publications.connections.draft')}</span>
+                                                {story.title}
+                                                {story.isDraft && (
+                                                    <span className="publication-connection-draft-badge">{t('stories.connections.draft')}</span>
                                                 )}
                                             </div>
                                             <div className="publication-connection-status-item-slug">
-                                                {pub.slug}
+                                                {story.slug}
                                             </div>
                                         </div>
                                         <button
                                             type="button"
-                                            onClick={() => removePublicationConnection(pub.id)}
+                                            onClick={() => removeStoryConnection(story.id)}
                                             className="publication-connection-status-remove"
-                                            title={t('publications.connections.removeConnection')}
+                                            title={t('stories.connections.removeConnection')}
                                         >
                                             <FontAwesomeIcon icon={faTimes} />
                                         </button>

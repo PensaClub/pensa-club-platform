@@ -111,7 +111,12 @@ const StoryForm = ({
         addMainImageFromUrl,
         removeMainImage,
         updateMainImageAlt,
-        updateMainImageCaption
+        updateMainImageCaption,
+        handleAuthorImageUpload,
+        addAuthorImageFromUrl,
+        removeAuthorImage,
+        updateAuthorImageAlt,
+        updateAuthorImageCaption
     } = useCreateStory(initialValues, onSubmitHandler);
 
     // Transform server data to form format for inline editing
@@ -329,6 +334,11 @@ const StoryForm = ({
                                 removeMainImage={removeMainImage}
                                 updateMainImageAlt={updateMainImageAlt}
                                 updateMainImageCaption={updateMainImageCaption}
+                                handleAuthorImageUpload={handleAuthorImageUpload}
+                                addAuthorImageFromUrl={addAuthorImageFromUrl}
+                                removeAuthorImage={removeAuthorImage}
+                                updateAuthorImageAlt={updateAuthorImageAlt}
+                                updateAuthorImageCaption={updateAuthorImageCaption}
                             />
                         )}
 

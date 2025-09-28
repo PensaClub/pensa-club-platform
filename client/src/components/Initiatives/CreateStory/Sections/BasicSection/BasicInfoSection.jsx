@@ -34,7 +34,12 @@ const BasicInfoSection = ({
     addMainImageFromUrl,
     removeMainImage,
     updateMainImageAlt,
-    updateMainImageCaption
+    updateMainImageCaption,
+    handleAuthorImageUpload,
+    addAuthorImageFromUrl,
+    removeAuthorImage,
+    updateAuthorImageAlt,
+    updateAuthorImageCaption
 }) => {
     const { t } = useTranslation();
     const { userEmail, username } = useAuthContext();
@@ -491,24 +496,7 @@ const BasicInfoSection = ({
                                             <input
                                                 type="file"
                                                 accept="image/*"
-                                                onChange={(e) => {
-                                                    const file = e.target.files[0];
-                                                    if (file) {
-                                                        const reader = new FileReader();
-                                                        reader.onload = (event) => {
-                                                            setValues(prev => ({
-                                                                ...prev,
-                                                                authorImage: {
-                                                                    src: event.target.result,
-                                                                    alt: '',
-                                                                    caption: '',
-                                                                    isUploading: false
-                                                                }
-                                                            }));
-                                                        };
-                                                        reader.readAsDataURL(file);
-                                                    }
-                                                }}
+                                                onChange={handleAuthorImageUpload}
                                                 style={{ display: 'none' }}
                                             />
                                         </label>
@@ -530,12 +518,7 @@ const BasicInfoSection = ({
                                             <button
                                                 type="button"
                                                 className="publication-sections-clear-btn"
-                                                onClick={() => {
-                                                    setValues(prev => ({
-                                                        ...prev,
-                                                        authorImage: null
-                                                    }));
-                                                }}
+                                                onClick={removeAuthorImage}
                                             >
                                                 <FontAwesomeIcon icon={faTrash} />
                                                 {t('stories.media.clearImage')}
@@ -559,15 +542,7 @@ const BasicInfoSection = ({
                                             className="publication-sections-url-add-btn"
                                             onClick={() => {
                                                 if (authorImageUrl?.trim()) {
-                                                    setValues(prev => ({
-                                                        ...prev,
-                                                        authorImage: {
-                                                            src: authorImageUrl.trim(),
-                                                            alt: '',
-                                                            caption: '',
-                                                            isUploading: false
-                                                        }
-                                                    }));
+                                                    addAuthorImageFromUrl(authorImageUrl.trim());
                                                     setAuthorImageUrl('');
                                                     setShowAuthorImageUrlInput(false);
                                                 }
@@ -592,12 +567,7 @@ const BasicInfoSection = ({
                                                     <button
                                                         type="button"
                                                         className="publication-sections-image-remove-btn"
-                                                        onClick={() => {
-                                                            setValues(prev => ({
-                                                                ...prev,
-                                                                authorImage: null
-                                                            }));
-                                                        }}
+                                                        onClick={removeAuthorImage}
                                                         title={t('stories.media.removeImage')}
                                                     >
                                                         <FontAwesomeIcon icon={faTrash} />
@@ -619,15 +589,7 @@ const BasicInfoSection = ({
                                                     type="text"
                                                     placeholder={t('stories.media.imageDescription')}
                                                     value={values.authorImage.alt || ''}
-                                                    onChange={(e) => {
-                                                        setValues(prev => ({
-                                                            ...prev,
-                                                            authorImage: {
-                                                                ...prev.authorImage,
-                                                                alt: e.target.value
-                                                            }
-                                                        }));
-                                                    }}
+                                                    onChange={(e) => updateAuthorImageAlt(e.target.value)}
                                                     className="publication-sections-image-input"
                                                     maxLength={100}
                                                 />
@@ -642,15 +604,7 @@ const BasicInfoSection = ({
                                                     type="text"
                                                     placeholder={t('stories.media.imageCaption')}
                                                     value={values.authorImage.caption || ''}
-                                                    onChange={(e) => {
-                                                        setValues(prev => ({
-                                                            ...prev,
-                                                            authorImage: {
-                                                                ...prev.authorImage,
-                                                                caption: e.target.value
-                                                            }
-                                                        }));
-                                                    }}
+                                                    onChange={(e) => updateAuthorImageCaption(e.target.value)}
                                                     className="publication-sections-image-input"
                                                     maxLength={150}
                                                 />

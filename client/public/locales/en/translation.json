@@ -11429,12 +11429,13 @@
     "content": "Content",
     "connections": "Connections"
   },
-  "categories": {
-    "technology": "Technology",
-    "health": "Health",
-    "lifestyle": "Lifestyle",
-    "education": "Education",
+ "categories": {
+    "personal": "Personal",
     "community": "Community",
+    "educational": "Educational",
+    "inspirational": "Inspirational",
+    "caseStudy": "Case Study",
+    "testimonial": "Testimonial",
     "other": "Other"
   },
   "progress": {
@@ -11442,8 +11443,17 @@
     "completed": "Completed"
   },
   "preview": {
-    "previewMode": "Preview Mode",
-    "noImageAvailable": "No image available"
+    "noTitle": "No Title",
+    "noDescription": "No Description",
+    "noAuthor": "Unknown Author",
+    "noReadTime": "No Read Time",
+    "noCategory": "No Category",
+    "noImageAvailable": "No image available",
+    "noContentSections": "No content sections added yet",
+    "addContentSections": "Add some content sections to see them in the preview.",
+    "authorInfo": "About the Author",
+    "writtenBy": "Written by",
+    "previewMode": "Preview Mode"
   },
   "view": {
     "readTime": "min read"
@@ -11456,6 +11466,7 @@
     "shortDescription": "Short Description",
     "shortDescriptionPlaceholder": "Brief description of your story (max 200 characters)",
     "category": "Category",
+    "selectCategory": "Select a category",
     "categoryPlaceholder": "Select a category",
     "tags": "Tags",
     "tagsPlaceholder": "Add tags to help people find your story",
@@ -11510,7 +11521,7 @@
     "sectionImage": "Section Image"
   },
   "connections": {
-    "connectionsHelp": "Connect your story to related initiatives, projects, or publications",
+   "connectionsHelp": "Connect your story to related initiatives, projects, or other stories",
     "connectInitiatives": "Connect to Initiatives",
     "searchInitiatives": "Search initiatives...",
     "noInitiativesFound": "No initiatives found",
@@ -11519,13 +11530,13 @@
     "searchProjects": "Search projects...",
     "noProjectsFound": "No projects found",
     "noProjectsAvailable": "No projects available",
-    "connectPublications": "Connect to Publications",
-    "searchPublications": "Search publications...",
-    "noPublicationsFound": "No publications found",
-    "noPublicationsAvailable": "No publications available",
+    "connectStories": "Connect to Stories",
+    "searchStories": "Search stories...",
+    "noStoriesFound": "No stories found",
+    "noStoriesAvailable": "No stories available",
     "initiativeConnections": "Initiative Connections",
     "projectConnections": "Project Connections",
-    "publicationConnections": "Publication Connections",
+    "storyConnections": "Story Connections",
     "connected": "connected",
     "notConnected": "not connected",
     "removeConnection": "Remove Connection",
