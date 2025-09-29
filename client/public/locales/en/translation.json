@@ -11414,6 +11414,7 @@
     "statusDraft": "Draft",
     "statusPublished": "Published",
     "filters": {
+      "sortBy": "Sort by",
       "category": "Category",
       "allCategories": "All Categories",
       "newest": "Newest First",

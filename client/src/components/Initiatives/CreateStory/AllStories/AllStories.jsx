@@ -346,8 +346,8 @@ export const AllStories = () => {
                             <div key={`${viewMode}-${item.id}`} className="all-stories-card">
                                 <div className="all-stories-card-header">
                                     <img
-                                        src={item.image?.src || item.logo || getDefaultImage()}
-                                        alt={item.image?.alt || item.title}
+                                        src={item.mainImage?.src || item.logo || getDefaultImage()}
+                                        alt={item.mainImage?.alt || item.title}
                                         className="all-stories-card-image"
                                         onError={(e) => {
                                             e.target.src = getDefaultImage();

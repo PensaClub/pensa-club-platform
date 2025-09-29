@@ -18,6 +18,10 @@ storyController.post('/create', isAuth, checkPermission('stories', 'create'), as
         const validatedData = await StorySchema.parseAsync(req.body);
         const storyData = { ...validatedData };
 
+        if (!storyData.isDraft && !storyData.publishedAt) {
+            storyData.publishedAt = new Date();
+        }
+
         const result = await story.sequelize.transaction(async (t) => {
             const newStory = await story.create(
                 {

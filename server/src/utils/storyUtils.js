@@ -126,6 +126,12 @@ const transformStory = async (storyData) => {
         });
     }
 
+    // Transform main image
+    if (cleanStoryData.image) {
+        cleanStoryData.mainImage = cleanStoryData.image;
+        delete cleanStoryData.image;
+    }
+
     return cleanStoryData;
 };
 

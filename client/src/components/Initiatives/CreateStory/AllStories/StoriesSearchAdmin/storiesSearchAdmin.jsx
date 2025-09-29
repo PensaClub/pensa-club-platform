@@ -73,11 +73,12 @@ export const StoriesSearchAdmin = ({
                         onChange={(e) => handleFilterChange('category', e.target.value)}
                     >
                         <option value="all">{t('stories.admin.filters.allCategories')}</option>
-                        <option value="technology">{t('stories.categories.technology')}</option>
-                        <option value="health">{t('stories.categories.health')}</option>
-                        <option value="lifestyle">{t('stories.categories.lifestyle')}</option>
-                        <option value="education">{t('stories.categories.education')}</option>
+                        <option value="personal">{t('stories.categories.personal')}</option>
                         <option value="community">{t('stories.categories.community')}</option>
+                        <option value="educational">{t('stories.categories.educational')}</option>
+                        <option value="inspirational">{t('stories.categories.inspirational')}</option>
+                        <option value="case-study">{t('stories.categories.caseStudy')}</option>
+                        <option value="testimonial">{t('stories.categories.testimonial')}</option>
                         <option value="other">{t('stories.categories.other')}</option>
                     </select>
                 </div>

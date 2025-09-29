@@ -171,7 +171,7 @@ const transformToServer = (data, contentType, { isDraft = true } = {}) => {
 
         author: nullIfEmpty(data.author),
         authorEmail: nullIfEmpty(data.authorEmail),
-        authorImage: nullIfEmpty(data.authorImage),
+        authorImage: data.authorImage?.src ? data.authorImage.src : (data.authorImage || null),
 
         mainImage: data.mainImage?.src ? {
             src: data.mainImage.src,
@@ -266,7 +266,11 @@ const transformToDisplay = (data, contentType, { userEmail, username, t, story, 
             src: data.mainImage.src,
             alt: data.mainImage.alt || data.title || 'Story',
             caption: data.mainImage.caption || ''
-        } : null,
+        } : (data.image ? {
+            src: data.image.src,
+            alt: data.image.alt || data.title || 'Story',
+            caption: data.image.caption || ''
+        } : null),
         mainImage: data.mainImage || data.image || null,
 
         sections: getDisplaySections(),

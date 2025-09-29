@@ -559,10 +559,10 @@ const BasicInfoSection = ({
                             {/* Author Image Preview with controls on the right */}
                             {values.authorImage?.src && (
                                 <div className="publication-sections-image-preview">
-                                    <div className="publication-sections-image-container">
+                                    <div className="publication-sections-image-container" style={{ justifyContent: 'center' }}>
                                         <div className="publication-sections-image-item">
                                             <div className="publication-sections-image-preview">
-                                                <img src={values.authorImage.src} alt={values.authorImage.alt || 'Author image'} />
+                                                <img src={values.authorImage.src} alt={getAuthorName() || 'Author image'} />
                                                 <div className="publication-sections-image-overlay">
                                                     <button
                                                         type="button"
@@ -578,39 +578,6 @@ const BasicInfoSection = ({
                                                         <div className="publication-sections-uploading-spinner"></div>
                                                     </div>
                                                 )}
-                                            </div>
-                                        </div>
-
-                                        {/* Controls on the right side */}
-                                        <div className="publication-sections-image-controls">
-                                            <div className="publication-sections-image-input-group">
-                                                <label>{t('stories.media.altText')}:</label>
-                                                <input
-                                                    type="text"
-                                                    placeholder={t('stories.media.imageDescription')}
-                                                    value={values.authorImage.alt || ''}
-                                                    onChange={(e) => updateAuthorImageAlt(e.target.value)}
-                                                    className="publication-sections-image-input"
-                                                    maxLength={100}
-                                                />
-                                                <div className="publication-sections-char-count">
-                                                    {values.authorImage.alt?.length || 0}/100
-                                                </div>
-                                            </div>
-
-                                            <div className="publication-sections-image-input-group">
-                                                <label>{t('stories.media.caption')}:</label>
-                                                <input
-                                                    type="text"
-                                                    placeholder={t('stories.media.imageCaption')}
-                                                    value={values.authorImage.caption || ''}
-                                                    onChange={(e) => updateAuthorImageCaption(e.target.value)}
-                                                    className="publication-sections-image-input"
-                                                    maxLength={150}
-                                                />
-                                                <div className="publication-sections-char-count">
-                                                    {values.authorImage.caption?.length || 0}/150
-                                                </div>
                                             </div>
                                         </div>
                                     </div>

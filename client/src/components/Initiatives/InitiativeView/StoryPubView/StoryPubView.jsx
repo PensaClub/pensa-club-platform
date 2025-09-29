@@ -391,10 +391,10 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                             {type === 'story' && content.author && (
                                 <div className="story-pub-author">
                                     <div className="author-avatar">
-                                        {content.authorImage?.src ? (
+                                        {content.authorImage ? (
                                             <img
-                                                src={content.authorImage.src}
-                                                alt={content.authorImage.alt || content.author}
+                                                src={content.authorImage}
+                                                alt={content.author}
                                             />
                                         ) : (
                                             <div className="author-placeholder">

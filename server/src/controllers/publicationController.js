@@ -14,6 +14,10 @@ publicationController.post('/create', isAuth, checkPermission('publications', 'c
         const validatedData = await PublicationSchema.parseAsync(req.body);
         const publicationData = { ...validatedData };
 
+        if (!publicationData.isDraft && !publicationData.publishedAt) {
+            publicationData.publishedAt = new Date();
+        }
+
         const result = await publication.sequelize.transaction(async (t) => {
             const newPublication = await publication.create(
                 {
