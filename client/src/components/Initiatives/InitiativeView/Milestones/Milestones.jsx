@@ -10,10 +10,8 @@ export const Milestones = ({ milestones = [] }) => {
         return null;
     }
 
-    // Сортиране на milestones по дата
-    const sortedMilestones = [...milestones].sort((a, b) => {
-        return new Date(a.dueDate) - new Date(b.dueDate);
-    });
+    // Сортиране на milestones по ID
+    const sortedMilestones = [...milestones].sort((a, b) => a.id - b.id);
 
     const getStatusIcon = (status) => {
         switch (status) {
@@ -45,12 +43,22 @@ export const Milestones = ({ milestones = [] }) => {
         }
     };
 
+    // Проверка дали датата е валидна
+    const isValidDate = (dateString) => {
+        if (!dateString) return false;
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        // Проверяваме дали годината е разумна (не е 1970 или друга "мокната" година)
+        return !isNaN(date.getTime()) && year > 1970 && year < 2100;
+    };
+
     return (
         <div className="milestones-component">
             <div className="milestones-timeline">
                 {sortedMilestones.map((milestone, index) => {
                     const statusColor = getStatusColor(milestone.status);
                     const isLast = index === sortedMilestones.length - 1;
+                    const hasValidDate = isValidDate(milestone.dueDate);
 
                     return (
                         <div key={milestone.id} className="milestone-item">
@@ -81,16 +89,18 @@ export const Milestones = ({ milestones = [] }) => {
                                 </div>
                                 
                                 <div className="milestone-meta">
-                                    <div className="milestone-date">
-                                        <span className="date-icon">📅</span>
-                                        <span className="date-text">
-                                            {new Date(milestone.dueDate).toLocaleDateString('bg-BG', {
-                                                day: 'numeric',
-                                                month: 'long',
-                                                year: 'numeric'
-                                            })}
-                                        </span>
-                                    </div>
+                                    {hasValidDate && (
+                                        <div className="milestone-date">
+                                            <span className="date-icon">📅</span>
+                                            <span className="date-text">
+                                                {new Date(milestone.dueDate).toLocaleDateString('bg-BG', {
+                                                    day: 'numeric',
+                                                    month: 'long',
+                                                    year: 'numeric'
+                                                })}
+                                            </span>
+                                        </div>
+                                    )}
                                     
                                     {milestone.description && (
                                         <p className="milestone-description">{milestone.description}</p>
