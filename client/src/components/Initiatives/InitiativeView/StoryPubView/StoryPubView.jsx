@@ -62,7 +62,7 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                         // Only load analytics for non-preview mode
                         await trackStoryOrPublication(data.id, data.title, type);
 
-                        const updatedData = await getPublicationById(slug); // Use getPublicationById with slug
+                        const updatedData = type === 'story' ? await getStoryBySlug(slug) : await getPublicationById(slug);
                         setContent(updatedData);
 
                         await loadContentViewCounts([data.id], type);
@@ -172,10 +172,20 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
 
     // Check if there are any connections to show
     const hasConnections = () => {
-        if (!content || type !== 'publication') return false;
-        return (content.initiatives && content.initiatives.length > 0) ||
-               (content.projects && content.projects.length > 0) ||
-               (content.relatedPublications && content.relatedPublications.length > 0);
+        if (!content) return false;
+
+        // Check for both publications and stories
+        if (type === 'publication') {
+            return (content.initiatives && content.initiatives.length > 0) ||
+                   (content.projects && content.projects.length > 0) ||
+                   (content.relatedPublications && content.relatedPublications.length > 0);
+        } else if (type === 'story') {
+            return (content.initiatives && content.initiatives.length > 0) ||
+                   (content.projects && content.projects.length > 0) ||
+                   (content.relatedStories && content.relatedStories.length > 0);
+        }
+
+        return false;
     };
 
     // Generate a slug for section if it doesn't have one
@@ -238,10 +248,10 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                     <h1>{t('publications.view.notFound.title')}</h1>
                     <p>{t('publications.view.notFound.description')}</p>
                     <Link
-                        to='/publications'
+                        to={type === 'story' ? '/stories' : '/publications'}
                         className="back-link"
                     >
-                        {t('publications.view.notFound.backToPublications')}
+                        {t(`publications.view.notFound.backTo${type === 'story' ? 'Stories' : 'Publications'}`)}
                     </Link>
                 </div>
             </div>
@@ -392,7 +402,10 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                                 <div className="story-pub-author">
                                     <div className="author-avatar">
                                         {content.authorImage ? (
-                                            <img src={content.authorImage} alt={content.author} />
+                                            <img
+                                                src={content.authorImage}
+                                                alt={content.author}
+                                            />
                                         ) : (
                                             <div className="author-placeholder">
                                                 {content.author.charAt(0)}
@@ -401,13 +414,8 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                                     </div>
                                     <div className="author-info">
                                         <h4 className="author-name">{content.author}</h4>
-                                        <p className="author-title">
-                                            {t('publications.view.author.label')}
-                                        </p>
                                         {content.authorEmail && (
-                                            <a href={`mailto:${content.authorEmail}`} className="author-email">
-                                                {content.authorEmail}
-                                            </a>
+                                            <p className="author-email">{content.authorEmail}</p>
                                         )}
                                     </div>
                                 </div>
@@ -546,6 +554,32 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                                                                     <span className="connection-text">
                                                                         {publication.title}
                                                                         {publication.isDraft && (
+                                                                            <span className="draft-badge"> ({t('publications.connections.draft')})</span>
+                                                                        )}
+                                                                    </span>
+                                                                </Link>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </>
+                                            )}
+
+                                            {/* Related Stories Connections - for stories only */}
+                                            {type === 'story' && content.relatedStories && content.relatedStories.length > 0 && (
+                                                <>
+                                                    <h4 className="connections-group-title">
+                                                        {t('publications.view.connections.stories')}
+                                                    </h4>
+                                                    <ul className="connections-list">
+                                                        {content.relatedStories.map((story, index) => (
+                                                            <li key={`related-story-${story.id || index}`} className="connection-item">
+                                                                <Link
+                                                                    to={`/stories/${story.slug}`}
+                                                                    className="connection-link"
+                                                                >
+                                                                    <span className="connection-text">
+                                                                        {story.title}
+                                                                        {story.isDraft && (
                                                                             <span className="draft-badge"> ({t('publications.connections.draft')})</span>
                                                                         )}
                                                                     </span>

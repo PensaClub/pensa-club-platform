@@ -68,16 +68,30 @@ export const initiativeServiceFactory = (token) => {
     // STORIES
     // ========================================
 
-    getStoryBySlug: async (slug) => {
-      return requester.get(`${apiUrl}/stories/single/${slug}`);
+    getStoryById: async (id) => {
+      return requester.get(`${apiUrl}/stories/single/${id}`);
     },
 
-    getAllStories: async (page = 1, limit = 10) => {
-      return requester.get(`${apiUrl}/stories/all?page=${page}&limit=${limit}`);
+    getAllStories: async (page = 1, limit = 10, isDraft = null) => {
+      const params = new URLSearchParams({ page, limit });
+      if (isDraft !== null) params.append('isDraft', isDraft);
+      return requester.get(`${apiUrl}/stories/all?${params}`);
     },
 
-    getStoriesByInitiative: async (initiativeId) => {
-      return requester.get(`${apiUrl}/stories/initiative/${initiativeId}`);
+    createStory: async (storyData) => {
+      return requester.post(`${apiUrl}/stories/create`, storyData);
+    },
+
+    updateStory: async (id, storyData) => {
+      return requester.patch(`${apiUrl}/stories/${id}`, storyData);
+    },
+
+    deleteStory: async (id) => {
+      return requester.del(`${apiUrl}/stories/${id}`);
+    },
+
+    toggleStoryDraftStatus: async (id) => {
+      return requester.patch(`${apiUrl}/stories/toggle-draft/${id}`);
     },
 
     // Story interactions
@@ -86,7 +100,7 @@ export const initiativeServiceFactory = (token) => {
     },
 
     trackStoryView: async (storyId) => {
-      return requester.post(`${apiUrl}/stories/${storyId}/view`);
+      return requester.patch(`${apiUrl}/stories/${storyId}/view`);
     },
 
     // Story bookmarks
@@ -98,8 +112,22 @@ export const initiativeServiceFactory = (token) => {
       return requester.get(`${apiUrl}/stories/user-stories/${email}`);
     },
 
+    // Story connections
+    getAllStoriesForConnections: async () => {
+      return requester.get(`${apiUrl}/stories/all-for-connections`);
+    },
+
+    // Legacy story methods (keeping for backward compatibility)
+    getStoryBySlug: async (slug) => {
+      return requester.get(`${apiUrl}/stories/single/${slug}`);
+    },
+
+    getStoriesByInitiative: async (initiativeId) => {
+      return requester.get(`${apiUrl}/stories/initiative/${initiativeId}`);
+    },
+
     // ========================================
-    // COMMENTS
+    // COMMENTS (UNIFIED SYSTEM)
     // ========================================
 
     getPublicationComments: async (publicationId) => {
@@ -107,39 +135,39 @@ export const initiativeServiceFactory = (token) => {
     },
 
     getStoryComments: async (storyId) => {
-      return requester.get(`${apiUrl}/stories/${storyId}/comments`);
+      return requester.get(`${apiUrl}/comments/all/story/${storyId}`);
     },
 
     addPublicationComment: async (commentData) => {
       return requester.post(`${apiUrl}/comments/create`, commentData);
     },
 
-    addStoryComment: async (storyId, commentData) => {
-      return requester.post(`${apiUrl}/stories/${storyId}/comments`, commentData);
+    addStoryComment: async (commentData) => {
+      return requester.post(`${apiUrl}/comments/create`, commentData);
     },
 
     updatePublicationComment: async (commentId, content) => {
       return requester.patch(`${apiUrl}/comments/${commentId}`, { content });
     },
 
-    updateStoryComment: async (storyId, commentId, commentData) => {
-      return requester.patch(`${apiUrl}/stories/${storyId}/comments/${commentId}`, commentData);
+    updateStoryComment: async (commentId, content) => {
+      return requester.patch(`${apiUrl}/comments/${commentId}`, { content });
     },
 
     deletePublicationComment: async (commentId) => {
       return requester.del(`${apiUrl}/comments/${commentId}`);
     },
 
-    deleteStoryComment: async (storyId, commentId) => {
-      return requester.del(`${apiUrl}/stories/${storyId}/comments/${commentId}`);
+    deleteStoryComment: async (commentId) => {
+      return requester.del(`${apiUrl}/comments/${commentId}`);
     },
 
     likePublicationComment: async (commentId) => {
       return requester.post(`${apiUrl}/comments/like/${commentId}`);
     },
 
-    likeStoryComment: async (storyId, commentId) => {
-      return requester.post(`${apiUrl}/stories/${storyId}/comments/${commentId}/like`);
+    likeStoryComment: async (commentId) => {
+      return requester.post(`${apiUrl}/comments/like/${commentId}`);
     },
 
     // ========================================

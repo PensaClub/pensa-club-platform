@@ -1,0 +1,178 @@
+/* storiesHeaderAdmin.css - Уникални класове */
+.stories-header-admin-container {
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border-radius: 16px;
+  color: white;
+  box-shadow: 0 8px 32px rgba(30, 41, 59, 0.12);
+}
+
+.stories-header-admin-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+}
+
+.stories-header-admin-title-section {
+  flex: 1;
+}
+
+.stories-header-admin-main-title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+  color: white;
+}
+
+.stories-header-admin-icon {
+  width: 36px;
+  height: 36px;
+  color: #60a5fa;
+}
+
+.stories-header-admin-subtitle {
+  font-size: 1.125rem;
+  color: #cbd5e1;
+  margin: 0;
+  font-weight: 400;
+}
+
+.stories-header-admin-stats {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.stories-header-admin-stat-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  min-width: 140px; /* Make it wider */
+  padding: 1rem 1.5rem; /* Add more padding */
+}
+
+.stories-header-admin-stat-card .stories-header-admin-stat-number svg {
+  width: 24px;
+  height: 24px;
+  color: #3b82f6; /* Blue color for the plus icon */
+}
+
+.stories-header-admin-stat-number {
+  display: block;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #60a5fa;
+  margin-bottom: 0.25rem;
+}
+
+.stories-header-admin-stat-label {
+  font-size: 0.875rem;
+  color: #cbd5e1;
+  font-weight: 500;
+}
+
+.stories-header-admin-view-mode-toggle {
+  display: flex;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 0.5rem;
+  gap: 0.5rem;
+}
+
+.stories-header-admin-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 1.5rem;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: #cbd5e1;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.stories-header-admin-toggle-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.stories-header-admin-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.stories-header-admin-toggle-btn.active {
+  background: white;
+  color: #1e293b;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.stories-header-admin-toggle-btn.active svg {
+  color: #3b82f6;
+}
+
+.stories-header-admin-stat-card.invisible {
+  visibility: hidden;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .stories-header-admin-container {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .stories-header-admin-content {
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .stories-header-admin-main-title {
+    font-size: 1.75rem;
+  }
+
+  .stories-header-admin-subtitle {
+    font-size: 1rem;
+  }
+
+  .stories-header-admin-view-mode-toggle {
+    flex-direction: column;
+  }
+
+  .stories-header-admin-toggle-btn {
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .stories-header-admin-stat-card {
+    min-width: 100px;
+    padding: 1.25rem;
+  }
+
+  .stories-header-admin-stat-number {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .stories-header-admin-stats {
+    justify-content: center;
+  }
+
+  .stories-header-admin-stat-card {
+    min-width: 80px;
+    padding: 1rem;
+  }
+}

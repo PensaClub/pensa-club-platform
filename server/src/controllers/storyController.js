@@ -15,64 +15,452 @@ const { StorySchema, UpdateStorySchema } = require('../schemas/stories.schema');
 
 storyController.post('/create', isAuth, checkPermission('stories', 'create'), async (req, res, next) => {
     try {
-        // Validate request body
-        const validatedData = StorySchema.parse(req.body);
-        const storyData = { ...validatedData, isDraft: false };
-        return createStory(storyData, req, res, next);
-    } catch (err) {
-        next(err);
-    }
-});
+        const validatedData = await StorySchema.parseAsync(req.body);
+        const storyData = { ...validatedData };
 
-storyController.post('/draft/save/:id?', isAuth, checkPermission('stories', 'draft', 'create'), async (req, res, next) => {
-    try {
-        const { id } = req.params;
-
-        if (!id) {
-            // For new drafts, use minimal validation since it's a draft
-            const validatedData = UpdateStorySchema.parse(req.body);
-            const storyData = { ...validatedData, isDraft: true };
-            return createStory(storyData, req, res, next);
+        if (!storyData.isDraft && !storyData.publishedAt) {
+            storyData.publishedAt = new Date();
         }
 
-        // For updating existing drafts
-        const validatedData = UpdateStorySchema.parse(req.body);
-        return updateStory(validatedData, req, res, next, true);
+        const result = await story.sequelize.transaction(async (t) => {
+            const newStory = await story.create(
+                {
+                    creatorId: req.user.userId,
+                    ...storyData,
+                },
+                { transaction: t }
+            );
+
+            if (storyData.mainImage) {
+                await image.create(
+                    {
+                        ...storyData.mainImage,
+                        imageableId: newStory.id,
+                        imageLinkConnection: 'story',
+                    },
+                    { transaction: t }
+                );
+            }
+
+            if (storyData.sections?.length > 0) {
+                await Promise.all(
+                    storyData.sections.map(async (sectionData) => {
+                        const { image: sectionImage, ...sectionFields } = sectionData;
+
+                        const createdSection = await section.create(
+                            {
+                                ...sectionFields,
+                                sectionableId: newStory.id,
+                                sectionLinkConnection: 'story',
+                            },
+                            { transaction: t }
+                        );
+
+                        if (sectionImage?.src) {
+                            await image.create(
+                                {
+                                    ...sectionImage,
+                                    imageableId: createdSection.id,
+                                    imageLinkConnection: 'section',
+                                },
+                                { transaction: t }
+                            );
+                        }
+                    })
+                );
+            }
+
+            if (storyData.relatedStories?.length > 0) {
+                const relatedLinks = storyData.relatedStories.map((relatedStoryId) => ({
+                    story_id: newStory.id,
+                    related_story_id: relatedStoryId,
+                }));
+                await story.sequelize.models.related_stories.bulkCreate(relatedLinks, { transaction: t });
+            }
+
+            if (storyData.connectedInitiativeIds?.length > 0) {
+                const initiativeLinks = storyData.connectedInitiativeIds.map((initiativeId) => ({
+                    story_id: newStory.id,
+                    initiative_id: initiativeId,
+                }));
+                await story.sequelize.models.initiative_stories.bulkCreate(initiativeLinks, { transaction: t });
+            }
+
+            if (storyData.connectedProjectIds?.length > 0) {
+                const projectLinks = storyData.connectedProjectIds.map((projectId) => ({
+                    story_id: newStory.id,
+                    project_id: projectId,
+                }));
+                await story.sequelize.models.project_stories.bulkCreate(projectLinks, { transaction: t });
+            }
+
+            const completeStory = await story.findByPk(newStory.id, {
+                include: storyConfig,
+                transaction: t,
+            });
+            return completeStory;
+        });
+
+        const transformedResponse = await transformStory(result);
+        return res.status(201).json(transformedResponse);
     } catch (err) {
         next(err);
     }
 });
 
-storyController.get('/draft/:id', isAuth, checkPermission('stories', 'draft', 'read'), async (req, res, next) => {
-    console.log('asd');
-    return getSingleStoryByDraftStatus(true, req, res, next);
+storyController.patch('/:id', isAuth, checkPermission('stories', 'update'), async (req, res, next) => {
+    try {
+        const validatedData = UpdateStorySchema.parse(req.body);
+        const storyId = parseInt(req.params.id, 10);
+
+        const result = await story.sequelize.transaction(async (t) => {
+            const foundStory = await story.findByPk(storyId, {
+                include: storyConfig,
+                transaction: t,
+            });
+
+            if (!foundStory) {
+                throw new CustomError({
+                    message: 'Story not found',
+                    statusCode: 404,
+                });
+            }
+
+            await foundStory.update(validatedData, { transaction: t });
+
+            if (validatedData.mainImage !== undefined) {
+                await image.destroy({
+                    where: {
+                        imageableId: foundStory.id,
+                        imageLinkConnection: 'story',
+                    },
+                    transaction: t,
+                });
+
+                if (validatedData.mainImage) {
+                    await image.create(
+                        {
+                            ...validatedData.mainImage,
+                            imageableId: foundStory.id,
+                            imageLinkConnection: 'story',
+                        },
+                        { transaction: t }
+                    );
+                }
+            }
+
+            if (validatedData.sections !== undefined) {
+                await section.destroy({
+                    where: {
+                        sectionableId: foundStory.id,
+                        sectionLinkConnection: 'story',
+                    },
+                    transaction: t,
+                });
+
+                if (validatedData.sections?.length > 0) {
+                    await Promise.all(
+                        validatedData.sections.map(async (sectionData) => {
+                            const { image: sectionImage, ...sectionFields } = sectionData;
+
+                            const createdSection = await section.create(
+                                {
+                                    ...sectionFields,
+                                    sectionableId: foundStory.id,
+                                    sectionLinkConnection: 'story',
+                                },
+                                { transaction: t }
+                            );
+
+                            if (sectionImage?.src) {
+                                await image.create(
+                                    {
+                                        ...sectionImage,
+                                        imageableId: createdSection.id,
+                                        imageLinkConnection: 'section',
+                                    },
+                                    { transaction: t }
+                                );
+                            }
+                        })
+                    );
+                }
+            }
+
+            if (validatedData.relatedStories !== undefined) {
+                await story.sequelize.models.related_stories.destroy({
+                    where: { story_id: foundStory.id },
+                    transaction: t,
+                });
+
+                if (validatedData.relatedStories.length > 0) {
+                    const relatedLinks = validatedData.relatedStories.map((relatedStoryId) => ({
+                        story_id: foundStory.id,
+                        related_story_id: relatedStoryId,
+                    }));
+                    await story.sequelize.models.related_stories.bulkCreate(relatedLinks, { transaction: t });
+                }
+            }
+
+            if (validatedData.connectedInitiativeIds !== undefined) {
+                await story.sequelize.models.initiative_stories.destroy({
+                    where: { story_id: foundStory.id },
+                    transaction: t,
+                });
+
+                if (validatedData.connectedInitiativeIds.length > 0) {
+                    const initiativeLinks = validatedData.connectedInitiativeIds.map((initiativeId) => ({
+                        story_id: foundStory.id,
+                        initiative_id: initiativeId,
+                    }));
+                    await story.sequelize.models.initiative_stories.bulkCreate(initiativeLinks, { transaction: t });
+                }
+            }
+
+            if (validatedData.connectedProjectIds !== undefined) {
+                await story.sequelize.models.project_stories.destroy({
+                    where: { story_id: foundStory.id },
+                    transaction: t,
+                });
+
+                if (validatedData.connectedProjectIds.length > 0) {
+                    const projectLinks = validatedData.connectedProjectIds.map((projectId) => ({
+                        story_id: foundStory.id,
+                        project_id: projectId,
+                    }));
+                    await story.sequelize.models.project_stories.bulkCreate(projectLinks, { transaction: t });
+                }
+            }
+
+            const updatedStory = await story.findByPk(foundStory.id, {
+                include: storyConfig,
+                transaction: t,
+            });
+
+            return updatedStory;
+        });
+
+        const transformedResponse = await transformStory(result);
+        return res.status(200).json(transformedResponse);
+    } catch (err) {
+        next(err);
+    }
 });
 
-storyController.get('/single/:id', checkPermission('stories', 'read'), async (req, res, next) => {
-    return getSingleStoryByDraftStatus(false, req, res, next);
-});
+storyController.get('/single/:id', isAuth.allowGuest, checkPermission('stories', 'read'), async (req, res, next) => {
+    try {
+        const param = req.params.id;
+        const userId = req.user?.userId ? parseInt(req.user.userId, 10) : null;
 
-storyController.get('/drafts', isAuth, checkPermission('stories', 'draft', 'read'), async (req, res, next) => {
-    return getStoriesByDraftStatus(true, req, res, next);
+        const foundStory = await findBySlugOrId(story, param, {
+            include: storyConfig,
+        });
+
+        if (!foundStory) {
+            throw new CustomError({
+                message: 'Story not found',
+                statusCode: 404,
+            });
+        }
+
+        const [comments, actualLikesCount, currentUserLiked] = await Promise.all([
+            comment.findAll(getCommentConfig(foundStory.id, 'story')),
+            story.sequelize.models.story_likes.count({
+                where: { story_id: foundStory.id },
+            }),
+            userId
+                ? story.sequelize.models.story_likes.findOne({
+                      where: {
+                          story_id: foundStory.id,
+                          user_id: userId,
+                      },
+                  })
+                : Promise.resolve(null),
+        ]);
+
+        const transformed = await transformStory(foundStory);
+        transformed.comments = comments.map((comment) => transformComment(comment));
+        transformed.likes = actualLikesCount;
+        transformed.isLiked = !!currentUserLiked;
+
+        delete transformed.likedBy;
+
+        return res.status(200).json(transformed);
+    } catch (err) {
+        next(err);
+    }
 });
 
 storyController.get('/all', checkPermission('stories', 'read'), async (req, res, next) => {
-    return getStoriesByDraftStatus(false, req, res, next);
-});
+    try {
+        const { page = 1, limit = 10, isDraft } = req.query;
 
-storyController.delete('/draft/:id', isAuth, checkPermission('stories', 'draft', 'delete'), async (req, res, next) => {
-    return deleteStoryByDraftStatus(true, req, res, next);
+        let whereClause = {};
+        if (isDraft !== undefined && isDraft !== null) {
+            whereClause.isDraft = isDraft === 'true';
+        }
+
+        const totalCount = await story.count({
+            distinct: true,
+            where: whereClause,
+        });
+
+        const totalPages = Math.ceil(totalCount / limit);
+
+        if (totalCount === 0) {
+            return res.status(200).json({
+                data: [],
+                pagination: {
+                    page: 1,
+                    limit: limit,
+                    totalStories: 0,
+                    totalPages: 0,
+                    hasNextPage: false,
+                    hasPrevPage: false,
+                },
+            });
+        }
+
+        const actualPage = Math.min(page, totalPages);
+        const offset = (actualPage - 1) * limit;
+
+        const stories = await story.findAll({
+            where: whereClause,
+            include: storyConfig,
+            limit: limit,
+            offset: offset,
+            order: [['createdAt', 'DESC']],
+        });
+
+        const transformedList = await Promise.all(
+            stories.map(async (story) => {
+                const comments = await comment.findAll(getCommentConfig(story.id, 'story'));
+                const transformed = await transformStory(story);
+                transformed.comments = comments.map((comment) => transformComment(comment));
+                return transformed;
+            })
+        );
+
+        return res.status(200).json({
+            data: transformedList,
+            pagination: {
+                page: actualPage,
+                limit: limit,
+                totalStories: totalCount,
+                totalPages,
+                hasNextPage: actualPage < totalPages,
+                hasPrevPage: actualPage > 1,
+            },
+        });
+    } catch (err) {
+        next(err);
+    }
 });
 
 storyController.delete('/:id', isAuth, checkPermission('stories', 'delete'), async (req, res, next) => {
-    return deleteStoryByDraftStatus(false, req, res, next);
-});
-
-storyController.put('/:id', isAuth, checkPermission('stories', 'update'), async (req, res, next) => {
     try {
-        // Validate request body for updates
-        const validatedData = UpdateStorySchema.parse(req.body);
-        return updateStory(validatedData, req, res, next, false);
+        const storyId = parseInt(req.params.id, 10);
+
+        await story.sequelize.transaction(async (t) => {
+            const foundStory = await story.findByPk(storyId, {
+                include: [
+                    {
+                        model: user_account,
+                        as: 'creator',
+                        attributes: ['id', 'email'],
+                    },
+                ],
+                transaction: t,
+            });
+
+            if (!foundStory) {
+                throw new CustomError({
+                    message: 'Story not found',
+                    statusCode: 404,
+                });
+            }
+
+            await story.sequelize.models.related_stories.destroy({
+                where: {
+                    [Op.or]: [{ story_id: foundStory.id }, { related_story_id: foundStory.id }],
+                },
+                transaction: t,
+            });
+
+            await story.sequelize.models.initiative_stories.destroy({
+                where: { story_id: foundStory.id },
+                transaction: t,
+            });
+
+            await story.sequelize.models.project_stories.destroy({
+                where: { story_id: foundStory.id },
+                transaction: t,
+            });
+
+            await image.destroy({
+                where: {
+                    imageableId: foundStory.id,
+                    imageLinkConnection: 'story',
+                },
+                transaction: t,
+            });
+
+            await story.sequelize.models.story_bookmarks.destroy({
+                where: { story_id: foundStory.id },
+                transaction: t,
+            });
+
+            await story.sequelize.models.story_likes.destroy({
+                where: { story_id: foundStory.id },
+                transaction: t,
+            });
+
+            const storySections = await section.findAll({
+                where: {
+                    sectionableId: foundStory.id,
+                    sectionLinkConnection: 'story',
+                },
+                attributes: ['id'],
+                transaction: t,
+            });
+
+            const sectionIds = storySections.map((s) => s.id);
+
+            if (sectionIds.length > 0) {
+                await image.destroy({
+                    where: {
+                        imageableId: {
+                            [Op.in]: sectionIds,
+                        },
+                        imageLinkConnection: 'section',
+                    },
+                    transaction: t,
+                });
+            }
+
+            // Delete sections
+            await section.destroy({
+                where: {
+                    sectionableId: foundStory.id,
+                    sectionLinkConnection: 'story',
+                },
+                transaction: t,
+            });
+
+            await comment.destroy({
+                where: {
+                    commentableId: foundStory.id,
+                    commentsLinkConnection: 'story',
+                },
+                transaction: t,
+            });
+
+            await foundStory.destroy({ transaction: t });
+        });
+
+        return res.status(200).json({
+            message: 'Story deleted successfully',
+        });
     } catch (err) {
         next(err);
     }
@@ -80,10 +468,10 @@ storyController.put('/:id', isAuth, checkPermission('stories', 'update'), async 
 
 storyController.patch('/toggle-draft/:id', isAuth, checkPermission('stories', 'update'), async (req, res, next) => {
     try {
-        const param = req.params.id;
+        const storyId = parseInt(req.params.id, 10);
 
         const result = await story.sequelize.transaction(async (t) => {
-            const foundStory = await findBySlugOrId(story, param, { transaction: t });
+            const foundStory = await story.findByPk(storyId, { transaction: t });
 
             if (!foundStory) {
                 throw new CustomError({
@@ -93,21 +481,28 @@ storyController.patch('/toggle-draft/:id', isAuth, checkPermission('stories', 'u
             }
 
             const wasDraft = foundStory.isDraft;
-            await foundStory.update({ isDraft: !foundStory.isDraft }, { transaction: t });
+
+            const updateData = {
+                isDraft: !foundStory.isDraft,
+                publishedAt: foundStory.isDraft ? new Date() : null,
+            };
+
+            await foundStory.update(updateData, { transaction: t });
 
             return {
+                id: foundStory.id,
                 slug: foundStory.slug,
                 wasDraft: wasDraft,
                 isNowDraft: !wasDraft,
+                publishedAt: updateData.publishedAt,
             };
         });
 
-        const statusMessage = result.wasDraft
-            ? `Story with slug '${result.slug}' has been changed from draft to published.`
-            : `Story with slug '${result.slug}' has been changed from published to draft.`;
+        const statusMessage = result.wasDraft ? `Story '${result.slug}' has been published.` : `Story '${result.slug}' has been converted to draft.`;
 
         return res.status(200).json({
             message: statusMessage,
+            data: result,
         });
     } catch (err) {
         next(err);
@@ -117,9 +512,9 @@ storyController.patch('/toggle-draft/:id', isAuth, checkPermission('stories', 'u
 storyController.post('/bookmark/:id', isAuth, checkPermission('stories', 'read'), async (req, res, next) => {
     try {
         const userId = req.user.userId;
-        const param = req.params.id;
+        const storyId = parseInt(req.params.id, 10);
 
-        const existing = await findBySlugOrId(story, param, {
+        const existing = await story.findByPk(storyId, {
             where: { isDraft: false },
             include: [
                 {
@@ -187,15 +582,15 @@ storyController.get('/user-stories/:email', checkPermission('stories', 'read'), 
 
 storyController.post('/:id/like', isAuth, checkPermission('stories', 'read'), async (req, res, next) => {
     try {
-        const userId = req.user.userId;
-        const param = req.params.id;
+        const userId = parseInt(req.user.userId, 10);
+        const storyId = parseInt(req.params.id, 10);
 
-        const foundStory = await findBySlugOrId(story, param, {
+        const foundStory = await story.findByPk(storyId, {
             where: { isDraft: false },
         });
 
         if (!foundStory) {
-            return res.status(404).json({ error: 'Story not found' });
+            return res.status(404).json({ error: 'Published story not found' });
         }
 
         // Toggle like
@@ -209,421 +604,79 @@ storyController.post('/:id/like', isAuth, checkPermission('stories', 'read'), as
         if (existingLike) {
             await existingLike.destroy();
             await foundStory.decrement('likes');
-            return res.status(200).json({ message: 'Like removed', liked: false });
+
+            const updatedCount = await story.sequelize.models.story_likes.count({
+                where: { story_id: foundStory.id },
+            });
+
+            return res.status(200).json({
+                message: 'Like removed',
+                liked: false,
+                likes: updatedCount,
+            });
         } else {
             await story.sequelize.models.story_likes.create({
                 story_id: foundStory.id,
                 user_id: userId,
             });
             await foundStory.increment('likes');
-            return res.status(201).json({ message: 'Story liked', liked: true });
+
+            const updatedCount = await story.sequelize.models.story_likes.count({
+                where: { story_id: foundStory.id },
+            });
+
+            return res.status(201).json({
+                message: 'Story liked',
+                liked: true,
+                likes: updatedCount,
+            });
         }
     } catch (err) {
         next(err);
     }
 });
 
-storyController.post('/:id/view', checkPermission('stories', 'read'), async (req, res, next) => {
+storyController.patch('/:id/view', checkPermission('stories', 'read'), async (req, res, next) => {
     try {
-        const param = req.params.id;
+        const storyId = parseInt(req.params.id, 10);
 
-        const foundStory = await findBySlugOrId(story, param, {
+        const foundStory = await story.findByPk(storyId, {
             where: { isDraft: false },
         });
 
         if (!foundStory) {
-            return res.status(404).json({ error: 'Story not found' });
+            return res.status(404).json({ error: 'Published story not found' });
         }
 
         await foundStory.increment('views');
-        return res.status(200).json({ message: 'View tracked' });
+        return res.status(200).json({ message: 'View tracked', views: foundStory.views + 1 });
     } catch (err) {
         next(err);
     }
 });
 
-// ========================================
-// FUNCTIONS
-// ========================================
-
-const getSingleStoryByDraftStatus = async (isDraft, req, res, next) => {
+storyController.get('/all-for-connections', isAuth, checkPermission('stories', 'read'), async (req, res, next) => {
     try {
-        const param = req.params.id;
-
-        const foundStory = await findBySlugOrId(story, param, {
-            where: { isDraft: isDraft },
-            include: storyConfig,
-        });
-
-        if (!foundStory) {
-            throw new CustomError({
-                message: `Story not found${isDraft ? ' or not a draft' : ''}`,
-                statusCode: 404,
-            });
-        }
-
-        const comments = await comment.findAll(getCommentConfig(foundStory.id, 'story'));
-
-        const transformed = await transformStory(foundStory);
-        transformed.comments = comments.map((comment) => transformComment(comment));
-
-        return res.status(200).json(transformed);
-    } catch (err) {
-        next(err);
-    }
-};
-
-const deleteStoryByDraftStatus = async (isDraft, req, res, next) => {
-    try {
-        const param = req.params.id;
-
-        await story.sequelize.transaction(async (t) => {
-            const foundStory = await findBySlugOrId(story, param, {
-                where: { isDraft: isDraft },
-                include: [
-                    {
-                        model: user_account,
-                        as: 'creator',
-                        attributes: ['id', 'email'],
-                    },
-                ],
-                transaction: t,
-            });
-
-            if (!foundStory) {
-                throw new CustomError({
-                    message: `Story not found${isDraft ? ' or not a draft' : ''}`,
-                    statusCode: 404,
-                });
-            }
-
-            // Delete related stories (both directions)
-            await story.sequelize.models.related_stories.destroy({
-                where: {
-                    [Op.or]: [{ story_id: foundStory.id }, { related_story_id: foundStory.id }],
-                },
-                transaction: t,
-            });
-
-            await image.destroy({
-                where: {
-                    imageableId: foundStory.id,
-                    imageLinkConnection: 'story',
-                },
-                transaction: t,
-            });
-
-            await story.sequelize.models.story_bookmarks.destroy({
-                where: { story_id: foundStory.id },
-                transaction: t,
-            });
-
-            await story.sequelize.models.story_likes.destroy({
-                where: { story_id: foundStory.id },
-                transaction: t,
-            });
-
-            await section.destroy({
-                where: {
-                    sectionableId: foundStory.id,
-                    sectionLinkConnection: 'story',
-                },
-                transaction: t,
-            });
-
-            await comment.destroy({
-                where: {
-                    commentableId: foundStory.id,
-                    commentsLinkConnection: 'story',
-                },
-                transaction: t,
-            });
-
-            await foundStory.destroy({ transaction: t });
-        });
-
-        return res.status(200).json({
-            message: `${isDraft ? 'Draft ' : ''}Story deleted successfully`,
-        });
-    } catch (err) {
-        next(err);
-    }
-};
-
-const getStoriesByDraftStatus = async (isDraft, req, res, next) => {
-    try {
-        const { page = 1, limit = 10 } = req.query;
-
-        const totalCount = await story.count({
-            distinct: true,
-            where: {
-                isDraft: isDraft,
-            },
-        });
-
-        const totalPages = Math.ceil(totalCount / limit);
-
-        if (totalCount === 0) {
-            return res.status(200).json({
-                data: [],
-                pagination: {
-                    page: 1,
-                    limit: limit,
-                    totalStories: 0,
-                    totalPages: 0,
-                    hasNextPage: false,
-                    hasPrevPage: false,
-                },
-            });
-        }
-
-        const actualPage = Math.min(page, totalPages);
-        const offset = (actualPage - 1) * limit;
-
         const stories = await story.findAll({
-            where: {
-                isDraft: isDraft,
-            },
-            include: storyConfig,
-            limit: limit,
-            offset: offset,
-            order: [['id', 'ASC']],
+            attributes: ['id', 'slug', 'title', 'shortDescription', 'isDraft', 'createdAt'],
+            order: [['createdAt', 'DESC']],
         });
 
-        const transformedList = await Promise.all(
-            stories.map(async (story) => {
-                const comments = await comment.findAll(getCommentConfig(story.id, 'story'));
-                const transformed = await transformStory(story);
-                transformed.comments = comments.map((comment) => transformComment(comment));
-                return transformed;
-            })
-        );
+        const transformedStories = stories.map((story) => ({
+            id: story.id,
+            slug: story.slug,
+            title: story.title,
+            shortDescription: story.shortDescription,
+            isDraft: story.isDraft,
+            createdAt: story.createdAt,
+        }));
 
         return res.status(200).json({
-            data: transformedList,
-            pagination: {
-                page: actualPage,
-                limit: limit,
-                totalStories: totalCount,
-                totalPages,
-                hasNextPage: actualPage < totalPages,
-                hasPrevPage: actualPage > 1,
-            },
+            data: transformedStories,
         });
     } catch (err) {
         next(err);
     }
-};
-
-const createStory = async (storyData, req, res, next) => {
-    try {
-        const result = await story.sequelize.transaction(async (t) => {
-            const newStory = await story.create(
-                {
-                    creatorId: req.user.userId,
-                    ...storyData,
-                },
-                { transaction: t }
-            );
-
-            // Create main image if provided
-            if (storyData.mainImage) {
-                await image.create(
-                    {
-                        ...storyData.mainImage,
-                        imageableId: newStory.id,
-                        imageLinkConnection: 'story',
-                    },
-                    { transaction: t }
-                );
-            }
-
-            // Create sections with their images
-            if (storyData.sections?.length > 0) {
-                await Promise.all(
-                    storyData.sections.map(async (sectionData) => {
-                        const { images: sectionImages, ...sectionFields } = sectionData;
-                        const createdSection = await section.create(
-                            {
-                                ...sectionFields,
-                                sectionableId: newStory.id,
-                                sectionLinkConnection: 'story',
-                            },
-                            { transaction: t }
-                        );
-
-                        if (sectionImages && Array.isArray(sectionImages)) {
-                            await Promise.all(
-                                sectionImages.map((imageData) =>
-                                    image.create(
-                                        {
-                                            ...imageData,
-                                            imageableId: createdSection.id,
-                                            imageLinkConnection: 'section',
-                                        },
-                                        { transaction: t }
-                                    )
-                                )
-                            );
-                        }
-                    })
-                );
-            }
-
-            // Handle related stories
-            if (storyData.relatedStories?.length > 0) {
-                await Promise.all(
-                    storyData.relatedStories.map((relatedStoryId) =>
-                        story.sequelize.models.related_stories.create(
-                            {
-                                story_id: newStory.id,
-                                related_story_id: relatedStoryId,
-                            },
-                            { transaction: t }
-                        )
-                    )
-                );
-            }
-
-            const completeStory = await story.findByPk(newStory.id, {
-                include: storyConfig,
-                transaction: t,
-            });
-            return completeStory;
-        });
-
-        const transformedResponse = await transformStory(result);
-        return res.status(201).json(transformedResponse);
-    } catch (err) {
-        next(err);
-    }
-};
-
-const updateStory = async (storyData, req, res, next, isDraft = false) => {
-    try {
-        const param = req.params.id;
-
-        const result = await story.sequelize.transaction(async (t) => {
-            const foundStory = await findBySlugOrId(story, param, {
-                where: { isDraft: isDraft },
-                include: [
-                    ...storyConfig,
-                    {
-                        model: user_account,
-                        as: 'creator',
-                        attributes: ['id', 'email'],
-                    },
-                ],
-                transaction: t,
-            });
-
-            if (!foundStory) {
-                throw new CustomError({
-                    message: `Story not found${isDraft ? ' or not a draft' : ''}`,
-                    statusCode: 404,
-                });
-            }
-
-            await foundStory.update({ ...storyData, isDraft: isDraft }, { transaction: t });
-
-            // Update main image if provided
-            if (storyData.mainImage) {
-                await image.destroy({
-                    where: {
-                        imageableId: foundStory.id,
-                        imageLinkConnection: 'story',
-                    },
-                    transaction: t,
-                });
-
-                await image.create(
-                    {
-                        ...storyData.mainImage,
-                        imageableId: foundStory.id,
-                        imageLinkConnection: 'story',
-                    },
-                    { transaction: t }
-                );
-            }
-
-            // Update sections if provided
-            if (storyData.sections !== undefined) {
-                await section.destroy({
-                    where: {
-                        sectionableId: foundStory.id,
-                        sectionLinkConnection: 'story',
-                    },
-                    transaction: t,
-                });
-                if (storyData.sections?.length > 0) {
-                    await Promise.all(
-                        storyData.sections.map(async (sectionData) => {
-                            const { images: sectionImages, ...sectionFields } = sectionData;
-                            const createdSection = await section.create(
-                                {
-                                    ...sectionFields,
-                                    sectionableId: foundStory.id,
-                                    sectionLinkConnection: 'story',
-                                },
-                                { transaction: t }
-                            );
-
-                            if (sectionImages && Array.isArray(sectionImages)) {
-                                await Promise.all(
-                                    sectionImages.map((imageData) =>
-                                        image.create(
-                                            {
-                                                ...imageData,
-                                                imageableId: createdSection.id,
-                                                imageLinkConnection: 'section',
-                                            },
-                                            { transaction: t }
-                                        )
-                                    )
-                                );
-                            }
-                        })
-                    );
-                }
-            }
-
-            // Handle related stories
-            if (storyData.relatedStories !== undefined) {
-                // Delete existing relations
-                await story.sequelize.models.related_stories.destroy({
-                    where: { story_id: foundStory.id },
-                    transaction: t,
-                });
-
-                // Create new relations
-                if (storyData.relatedStories.length > 0) {
-                    await Promise.all(
-                        storyData.relatedStories.map((relatedStoryId) =>
-                            story.sequelize.models.related_stories.create(
-                                {
-                                    story_id: foundStory.id,
-                                    related_story_id: relatedStoryId,
-                                },
-                                { transaction: t }
-                            )
-                        )
-                    );
-                }
-            }
-
-            const updatedStory = await story.findByPk(foundStory.id, {
-                include: storyConfig,
-                transaction: t,
-            });
-
-            return updatedStory;
-        });
-
-        const transformedResponse = await transformStory(result);
-        return res.status(200).json(transformedResponse);
-    } catch (err) {
-        next(err);
-    }
-};
+});
 
 module.exports = storyController;

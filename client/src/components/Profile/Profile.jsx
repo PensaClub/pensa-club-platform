@@ -66,6 +66,7 @@ import { LanguageSwitcherAdmin } from "../LanguageSwitcher/LanguageSwitcherAdmin
 import { ProfessionalAvatarBuilder } from "../AvatarDemo/ProfessionalAvatarBuilder";
 import ArticlePreviewPage from "../Articles/ArticleCreateForm/ArticlePreviewPage";
 import { AllPublications } from "../Initiatives/CreatePublication/AllPublications/AllPublications";
+import { AllStories } from "../Initiatives/CreateStory/AllStories/AllStories";
 import PublicationForm from '../Initiatives/CreatePublication/MainForm/MainFormPublication';
 import ClubCreateForm from "../Clubs/ClubCreateForm/ClubCreateForm";
 import MyClubs from "../Clubs/MyClubs/MyClubs";
@@ -146,6 +147,7 @@ export const Profile = () => {
       "/profile/project-create": t("profile.projectCreate"),
       "/profile/project-preview": t("profile.projectPreview"),
       "/profile/publications": t("profile.publications"),
+      "/profile/stories": t("profile.stories"),
       "/profile/publication-create": t("profile.publicationCreate"),
       "/profile/clubs": t("myClubs.clubs"),
       "/profile/club-create": t("profile.clubCreate"),
@@ -183,6 +185,7 @@ export const Profile = () => {
     "/profile/project-preview",
     "/profile/article-preview",
     "/profile/publications",
+    "/profile/stories",
     "/profile/publication-create",
     "/profile/applications-admin",
     "/profile/clubs",
@@ -599,7 +602,7 @@ export const Profile = () => {
                     <span className={`arrow-icon ${subMenuStates.clubs ? 'rotated' : ''}`}>
                       {subMenuStates.clubs ? <DownArrowIcon /> : <ArrowIcon />}
                     </span>
-                   
+
                   </NavLink>
                   <ul className={`sub-menu ${subMenuStates.clubs ? 'expanded' : ''}`}>
                     <li>
@@ -882,6 +885,20 @@ export const Profile = () => {
                       </span>
                     </NavLink>
                   </li>
+                  <li>
+                    <NavLink
+                      to="stories"
+                      className={({ isActive }) => isActive ? 'active' : ''}
+                    >
+                      <span className="link-content">
+                        <DashboardIcon className="icon" />
+                        {t("profile.stories")}
+                      </span>
+                      <span className="arrow-icon">
+                        <ArrowIcon />
+                      </span>
+                    </NavLink>
+                  </li>
                 </ul>
               </div>
             )}
@@ -974,6 +991,7 @@ export const Profile = () => {
             <Route path="project-preview" element={<ManagementGuard><ProjectPreview /></ManagementGuard>} />
             <Route path="article-preview" element={<ManagementGuard><ArticlePreviewPage /></ManagementGuard>} />
             <Route path="publications" element={<ManagementGuard><AllPublications /></ManagementGuard>} />
+            <Route path="stories" element={<ManagementGuard><AllStories /></ManagementGuard>} />
             <Route path="initiative-drafts" element={<ManagementGuard><DraftInitiatives /></ManagementGuard>} />
             <Route path="publication-create" element={<ManagementGuard><PublicationForm /></ManagementGuard>} />
             <Route path="clubs-admin" element={<AdminGuard><ClubsAdmin /></AdminGuard>} />

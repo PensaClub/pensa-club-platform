@@ -14,6 +14,10 @@ publicationController.post('/create', isAuth, checkPermission('publications', 'c
         const validatedData = await PublicationSchema.parseAsync(req.body);
         const publicationData = { ...validatedData };
 
+        if (!publicationData.isDraft && !publicationData.publishedAt) {
+            publicationData.publishedAt = new Date();
+        }
+
         const result = await publication.sequelize.transaction(async (t) => {
             const newPublication = await publication.create(
                 {
@@ -389,10 +393,42 @@ publicationController.delete('/:id', isAuth, checkPermission('publications', 'de
                 transaction: t,
             });
 
+            const publicationSections = await section.findAll({
+                where: {
+                    sectionableId: foundPublication.id,
+                    sectionLinkConnection: 'publication',
+                },
+                attributes: ['id'],
+                transaction: t,
+            });
+
+            const sectionIds = publicationSections.map((s) => s.id);
+
+            if (sectionIds.length > 0) {
+                await image.destroy({
+                    where: {
+                        imageableId: {
+                            [Op.in]: sectionIds,
+                        },
+                        imageLinkConnection: 'section',
+                    },
+                    transaction: t,
+                });
+            }
+
             await image.destroy({
                 where: {
                     imageableId: foundPublication.id,
                     imageLinkConnection: 'publication',
+                },
+                transaction: t,
+            });
+
+            // Delete sections
+            await section.destroy({
+                where: {
+                    sectionableId: foundPublication.id,
+                    sectionLinkConnection: 'publication',
                 },
                 transaction: t,
             });
@@ -404,14 +440,6 @@ publicationController.delete('/:id', isAuth, checkPermission('publications', 'de
 
             await publication.sequelize.models.publication_likes.destroy({
                 where: { publication_id: foundPublication.id },
-                transaction: t,
-            });
-
-            await section.destroy({
-                where: {
-                    sectionableId: foundPublication.id,
-                    sectionLinkConnection: 'publication',
-                },
                 transaction: t,
             });
 

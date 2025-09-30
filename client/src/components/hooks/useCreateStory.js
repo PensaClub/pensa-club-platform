@@ -1,0 +1,650 @@
+// useCreateStory.js
+import { useState, useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useAuthContext } from '../contexts/UserContext';
+import { notify } from '../../utils/notify';
+import { createSlateEditorState } from '../Initiatives/CreateIniciative/Utils/initiativeEditorUtils';
+import {
+    uploadFileWithProgress,
+    compressImage,
+} from '../Articles/articleUtils/file-utils';
+import { deleteSingleImage } from '../../utils/initiative-firebase-utils';
+
+const useCreateStory = (initialValues, onSubmitHandler) => {
+    const { t } = useTranslation();
+    const { userEmail } = useAuthContext();
+
+    const defaultValues = useMemo(() => ({
+        // Basic info
+        title: '',
+        slug: '',
+        shortDescription: '',
+        category: '',
+        tags: [],
+        readTime: '',
+        commentsEnabled: true,
+        showAuthor: true,
+
+        author: '',
+        authorEmail: '',
+        authorImage: '',
+
+        // Main image
+        mainImage: {
+            src: '',
+            alt: '',
+            caption: '',
+            gallery: []
+        },
+
+        // Always start with 1 section
+        sections: [{
+            titleSlug: 'introduction',
+            title: 'Въведение',
+            content: createSlateEditorState(),
+            order: 1,
+            image: null
+        }],
+
+        relatedStories: [],
+        connectedInitiativeIds: [],
+        connectedProjectIds: [],
+
+        // Meta
+        userEmail: userEmail || '',
+        isDraft: true
+    }), [userEmail]);
+
+    const [values, setValues] = useState(initialValues || defaultValues);
+
+    // Generate slug from title
+    const generateSlug = useCallback((title) => {
+        if (!title) return '';
+
+        return title
+            .toLowerCase()
+            // Convert Bulgarian characters to Latin
+            .replace(/а/g, 'a').replace(/б/g, 'b').replace(/в/g, 'v')
+            .replace(/г/g, 'g').replace(/д/g, 'd').replace(/е/g, 'e')
+            .replace(/ж/g, 'zh').replace(/з/g, 'z').replace(/и/g, 'i')
+            .replace(/й/g, 'y').replace(/к/g, 'k').replace(/л/g, 'l')
+            .replace(/м/g, 'm').replace(/н/g, 'n').replace(/о/g, 'o')
+            .replace(/п/g, 'p').replace(/р/g, 'r').replace(/с/g, 's')
+            .replace(/т/g, 't').replace(/у/g, 'u').replace(/ф/g, 'f')
+            .replace(/х/g, 'h').replace(/ц/g, 'ts').replace(/ч/g, 'ch')
+            .replace(/ш/g, 'sh').replace(/щ/g, 'sht').replace(/ъ/g, 'a')
+            .replace(/ь/g, 'y').replace(/ю/g, 'yu').replace(/я/g, 'ya')
+            // Remove all characters that are not a-z, 0-9 or spaces
+            .replace(/[^a-z0-9\s]/g, '')
+            // Replace spaces with hyphens
+            .replace(/\s+/g, '-')
+            // Remove multiple hyphens
+            .replace(/-+/g, '-')
+            // Remove hyphens from start and end
+            .replace(/^-+|-+$/g, '')
+            .trim();
+    }, []);
+
+    // Basic form handlers
+    const onChangeHandler = useCallback((e) => {
+        const { name, value, type, checked } = e.target;
+
+        // Handle checkboxes differently
+        const fieldValue = type === 'checkbox' ? checked : value;
+
+        // Auto-generate slug when title changes
+        if (name === 'title') {
+            setValues(prev => ({
+                ...prev,
+                title: fieldValue,
+                slug: generateSlug(fieldValue)
+            }));
+        } else {
+            setValues(prev => ({
+                ...prev,
+                [name]: fieldValue
+            }));
+        }
+    }, [generateSlug]);
+
+    // Form submission
+    const onSubmit = useCallback(async (e) => {
+        e.preventDefault();
+
+        try {
+            // Call the onSubmitHandler if provided
+            if (onSubmitHandler) {
+                await onSubmitHandler(values);
+            }
+        } catch (error) {
+            notify('error', 'Error submitting form');
+        }
+    }, [values, onSubmitHandler]);
+
+    // Section management
+    const addSection = useCallback(() => {
+        const newSection = {
+            titleSlug: `section-${Date.now()}`,
+            title: '',
+            content: createSlateEditorState(),
+            image: null
+        };
+
+        setValues(prev => ({
+            ...prev,
+            sections: [...(prev.sections || []), newSection]
+        }));
+    }, []);
+
+    const removeSection = useCallback((index) => {
+        setValues(prev => ({
+            ...prev,
+            sections: (prev.sections || []).filter((_, i) => i !== index)
+        }));
+    }, []);
+
+    const updateSection = useCallback((index, field, value) => {
+        setValues(prev => {
+            const updatedSections = [...(prev.sections || [])];
+            updatedSections[index] = {
+                ...updatedSections[index],
+                [field]: value
+            };
+            return { ...prev, sections: updatedSections };
+        });
+    }, []);
+
+    // Section image management
+    const handleSectionImageUpload = useCallback(async (e, sectionIndex) => {
+        const files = e.target.files;
+        if (!files || files.length === 0) return;
+
+        const file = files[0];
+        let blobUrl = null;
+
+        try {
+            blobUrl = URL.createObjectURL(file);
+
+            // Update UI immediately with blob URL
+            setValues(prev => {
+                const updatedSections = [...(prev.sections || [])];
+                updatedSections[sectionIndex] = {
+                    ...updatedSections[sectionIndex],
+                    image: {
+                        src: blobUrl,
+                        alt: '',
+                        caption: '',
+                        isUploading: true
+                    }
+                };
+                return { ...prev, sections: updatedSections };
+            });
+
+            e.target.value = '';
+
+            // Upload to Firebase
+            const compressedFile = await compressImage(file, {
+                maxSizeMB: 2,
+                maxWidthOrHeight: 1920
+            });
+
+            const url = await uploadFileWithProgress(
+                compressedFile,
+                'stories/section-images',
+                () => {}
+            );
+
+            // Replace blob URL with Firebase URL
+            setValues(prev => {
+                const updatedSections = [...(prev.sections || [])];
+                updatedSections[sectionIndex] = {
+                    ...updatedSections[sectionIndex],
+                    image: {
+                        src: url,
+                        alt: '',
+                        caption: '',
+                        isUploading: false
+                    }
+                };
+                return { ...prev, sections: updatedSections };
+            });
+
+            // Clean up blob URL
+            if (blobUrl) {
+                URL.revokeObjectURL(blobUrl);
+            }
+
+            notify('success', 'Section image uploaded successfully!');
+
+        } catch (error) {
+            notify('error', 'Error uploading section image');
+
+            // Reset on error
+            setValues(prev => {
+                const updatedSections = [...(prev.sections || [])];
+                updatedSections[sectionIndex] = {
+                    ...updatedSections[sectionIndex],
+                    image: null
+                };
+                return { ...prev, sections: updatedSections };
+            });
+
+            if (blobUrl) {
+                URL.revokeObjectURL(blobUrl);
+            }
+        }
+    }, []);
+
+    // Add section image from URL
+    const addSectionImageFromUrl = useCallback((sectionIndex, imageUrl) => {
+        if (!imageUrl.trim()) return;
+
+        const newImage = {
+            src: imageUrl.trim(),
+            alt: '',
+            caption: ''
+        };
+
+        setValues(prev => {
+            const updatedSections = [...(prev.sections || [])];
+            updatedSections[sectionIndex] = {
+                ...updatedSections[sectionIndex],
+                image: newImage
+            };
+            return { ...prev, sections: updatedSections };
+        });
+    }, []);
+
+    // Remove section image
+    const removeSectionImage = useCallback((sectionIndex) => {
+        setValues(prev => {
+            const updatedSections = [...(prev.sections || [])];
+            const imageToDelete = updatedSections[sectionIndex].image;
+
+            // Delete from Firebase if needed
+            if (imageToDelete?.src && !imageToDelete.isUploading && !imageToDelete.src.startsWith('blob:')) {
+                deleteSingleImage(imageToDelete.src).catch(() => {
+                    // Silently fail - image might already be deleted
+                });
+            }
+
+            if (imageToDelete?.src?.startsWith('blob:')) {
+                URL.revokeObjectURL(imageToDelete.src);
+            }
+
+            // Set image to null to remove it
+            updatedSections[sectionIndex] = {
+                ...updatedSections[sectionIndex],
+                image: null
+            };
+
+            return { ...prev, sections: updatedSections };
+        });
+    }, []);
+
+    // Update section image alt
+    const updateSectionImageAlt = useCallback((sectionIndex, altText) => {
+        setValues(prev => {
+            const updatedSections = [...(prev.sections || [])];
+            const updatedImage = { ...updatedSections[sectionIndex].image };
+            updatedImage.alt = altText;
+            updatedSections[sectionIndex] = {
+                ...updatedSections[sectionIndex],
+                image: updatedImage
+            };
+            return { ...prev, sections: updatedSections };
+        });
+    }, []);
+
+    // Update section image caption
+    const updateSectionImageCaption = useCallback((sectionIndex, caption) => {
+        setValues(prev => {
+            const updatedSections = [...(prev.sections || [])];
+            const updatedImage = { ...updatedSections[sectionIndex].image };
+            updatedImage.caption = caption;
+            updatedSections[sectionIndex] = {
+                ...updatedSections[sectionIndex],
+                image: updatedImage
+            };
+            return { ...prev, sections: updatedSections };
+        });
+    }, []);
+
+    // Clear all section images
+    const clearSectionImages = useCallback((sectionIndex) => {
+        setValues(prev => {
+            const updatedSections = [...(prev.sections || [])];
+            const imageToDelete = updatedSections[sectionIndex].image;
+
+            // Delete from Firebase
+            if (imageToDelete?.src && !imageToDelete.isUploading && !imageToDelete.src.startsWith('blob:')) {
+                deleteSingleImage(imageToDelete.src).catch(() => {
+                    // Silently fail
+                });
+            }
+            if (imageToDelete?.src?.startsWith('blob:')) {
+                URL.revokeObjectURL(imageToDelete.src);
+            }
+
+            updatedSections[sectionIndex] = {
+                ...updatedSections[sectionIndex],
+                image: null
+            };
+
+            return { ...prev, sections: updatedSections };
+        });
+    }, []);
+
+    // Main image management
+    const handleMainImageUpload = useCallback(async (e) => {
+        const files = e.target.files;
+        if (!files || files.length === 0) return;
+
+        const file = files[0];
+        let blobUrl = null;
+
+        try {
+            blobUrl = URL.createObjectURL(file);
+
+            // Update UI immediately with blob URL
+            setValues(prev => ({
+                ...prev,
+                mainImage: {
+                    ...prev.mainImage,
+                    src: blobUrl,
+                    alt: '',
+                    caption: '',
+                    isUploading: true
+                }
+            }));
+
+            e.target.value = '';
+
+            // Upload to Firebase
+            const compressedFile = await compressImage(file, {
+                maxSizeMB: 2,
+                maxWidthOrHeight: 1920
+            });
+
+            const url = await uploadFileWithProgress(
+                compressedFile,
+                'stories/main-images',
+                () => {} // Progress callback
+            );
+
+            // Replace blob URL with Firebase URL
+            setValues(prev => ({
+                ...prev,
+                mainImage: {
+                    ...prev.mainImage,
+                    src: url,
+                    alt: prev.mainImage.alt || '',
+                    caption: prev.mainImage.caption || '',
+                    isUploading: false
+                }
+            }));
+
+            // Clean up blob URL
+            if (blobUrl) {
+                URL.revokeObjectURL(blobUrl);
+            }
+
+            notify('success', 'Main image uploaded successfully!');
+
+        } catch (error) {
+            notify('error', 'Error uploading main image');
+
+            // Reset on error
+            setValues(prev => ({
+                ...prev,
+                mainImage: {
+                    ...prev.mainImage,
+                    src: '',
+                    alt: '',
+                    caption: '',
+                    isUploading: false
+                }
+            }));
+
+            if (blobUrl) {
+                URL.revokeObjectURL(blobUrl);
+            }
+        }
+    }, []);
+
+    // Add main image from URL
+    const addMainImageFromUrl = useCallback((imageUrl) => {
+        if (!imageUrl.trim()) return;
+
+        setValues(prev => ({
+            ...prev,
+            mainImage: {
+                ...prev.mainImage,
+                src: imageUrl.trim(),
+                alt: '',
+                caption: ''
+            }
+        }));
+    }, []);
+
+    // Remove main image
+    const removeMainImage = useCallback(() => {
+        setValues(prev => {
+            const imageToDelete = prev.mainImage;
+
+            // Delete from Firebase if needed
+            if (imageToDelete?.src && !imageToDelete.isUploading && !imageToDelete.src.startsWith('blob:')) {
+                deleteSingleImage(imageToDelete.src).catch(() => {
+                    // Silently fail
+                });
+            }
+
+            if (imageToDelete?.src?.startsWith('blob:')) {
+                URL.revokeObjectURL(imageToDelete.src);
+            }
+
+            return {
+                ...prev,
+                mainImage: {
+                    src: '',
+                    alt: '',
+                    caption: '',
+                    gallery: []
+                }
+            };
+        });
+    }, []);
+
+    // Update main image alt
+    const updateMainImageAlt = useCallback((altText) => {
+        setValues(prev => ({
+            ...prev,
+            mainImage: {
+                ...prev.mainImage,
+                alt: altText
+            }
+        }));
+    }, []);
+
+    // Update main image caption
+    const updateMainImageCaption = useCallback((caption) => {
+        setValues(prev => ({
+            ...prev,
+            mainImage: {
+                ...prev.mainImage,
+                caption: caption
+            }
+        }));
+    }, []);
+
+    // Author image management
+    const handleAuthorImageUpload = useCallback(async (e) => {
+        const files = e.target.files;
+        if (!files || files.length === 0) return;
+
+        const file = files[0];
+        let blobUrl = null;
+
+        try {
+            blobUrl = URL.createObjectURL(file);
+
+            // Update UI immediately with blob URL
+            setValues(prev => ({
+                ...prev,
+                authorImage: {
+                    src: blobUrl,
+                    alt: '',
+                    caption: '',
+                    isUploading: true
+                }
+            }));
+
+            e.target.value = '';
+
+            // Upload to Firebase
+            const compressedFile = await compressImage(file, {
+                maxSizeMB: 2,
+                maxWidthOrHeight: 1920
+            });
+
+            const url = await uploadFileWithProgress(
+                compressedFile,
+                'stories/author-images',
+                () => {} // Progress callback
+            );
+
+            // Replace blob URL with Firebase URL
+            setValues(prev => ({
+                ...prev,
+                authorImage: {
+                    src: url,
+                    alt: prev.authorImage?.alt || '',
+                    caption: prev.authorImage?.caption || '',
+                    isUploading: false
+                }
+            }));
+
+            // Clean up blob URL
+            if (blobUrl) {
+                URL.revokeObjectURL(blobUrl);
+            }
+
+            notify('success', 'Author image uploaded successfully!');
+
+        } catch (error) {
+            notify('error', 'Error uploading author image');
+
+            // Reset on error
+            setValues(prev => ({
+                ...prev,
+                authorImage: null
+            }));
+
+            if (blobUrl) {
+                URL.revokeObjectURL(blobUrl);
+            }
+        }
+    }, []);
+
+    // Add author image from URL
+    const addAuthorImageFromUrl = useCallback((imageUrl) => {
+        if (!imageUrl.trim()) return;
+
+        setValues(prev => ({
+            ...prev,
+            authorImage: {
+                src: imageUrl.trim(),
+                alt: '',
+                caption: '',
+                isUploading: false
+            }
+        }));
+    }, []);
+
+    // Remove author image
+    const removeAuthorImage = useCallback(() => {
+        setValues(prev => {
+            const imageToDelete = prev.authorImage;
+
+            // Delete from Firebase if needed
+            if (imageToDelete?.src && !imageToDelete.isUploading && !imageToDelete.src.startsWith('blob:')) {
+                deleteSingleImage(imageToDelete.src).catch(() => {
+                    // Silently fail
+                });
+            }
+
+            if (imageToDelete?.src?.startsWith('blob:')) {
+                URL.revokeObjectURL(imageToDelete.src);
+            }
+
+            return {
+                ...prev,
+                authorImage: null
+            };
+        });
+    }, []);
+
+    // Update author image alt
+    const updateAuthorImageAlt = useCallback((altText) => {
+        setValues(prev => ({
+            ...prev,
+            authorImage: {
+                ...prev.authorImage,
+                alt: altText
+            }
+        }));
+    }, []);
+
+    // Update author image caption
+    const updateAuthorImageCaption = useCallback((caption) => {
+        setValues(prev => ({
+            ...prev,
+            authorImage: {
+                ...prev.authorImage,
+                caption: caption
+            }
+        }));
+    }, []);
+
+    return {
+        // State
+        values,
+        setValues,
+        errors: {}, // Add this if validation is needed
+
+        // Form handlers
+        onChangeHandler,
+        onBlurHandler: () => {}, // Add this if needed
+        onSubmit,
+        generateSlug,
+
+        // Section management
+        addSection,
+        removeSection,
+        updateSection,
+
+        // Section image management
+        handleSectionImageUpload,
+        addSectionImageFromUrl,
+        removeSectionImage,
+        updateSectionImageAlt,
+        updateSectionImageCaption,
+        clearSectionImages,
+
+        // Main image management
+        handleMainImageUpload,
+        addMainImageFromUrl,
+        removeMainImage,
+        updateMainImageAlt,
+        updateMainImageCaption,
+
+        // Author image management
+        handleAuthorImageUpload,
+        addAuthorImageFromUrl,
+        removeAuthorImage,
+        updateAuthorImageAlt,
+        updateAuthorImageCaption
+    };
+};
+
+export default useCreateStory;

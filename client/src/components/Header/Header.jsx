@@ -18,10 +18,10 @@ export const Header = ({ additionalClasses }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isAuthentication, isFinish, profileData } = useContext(UserContext);
   const { bookmarkedInitiatives, hasBookmarks, hasBookmarksProjects, bookMarkedProjects } = useInitiativeContext();
-  
+
   // Добавено за клубове
   const { bookmarkedClubs = [], hasBookmarkedClubs } = useClubContext();
-  
+
   const [isModalOpen, setModalOpen] = useState(false);
   const [mobileCommunityOpen, setMobileCommunityOpen] = useState(false);
   const profileRef = useRef(null);
@@ -112,8 +112,8 @@ export const Header = ({ additionalClasses }) => {
   const currentLanguage = i18n.language;
 
   // Обновен общ брой bookmarks
-  const totalBookmarks = (bookmarkedInitiatives?.length || 0) + 
-                          (bookMarkedProjects?.length || 0) + 
+  const totalBookmarks = (bookmarkedInitiatives?.length || 0) +
+                          (bookMarkedProjects?.length || 0) +
                           (bookmarkedClubs?.length || 0);
 
   const hasAnyBookmarks = hasBookmarks || hasBookmarksProjects || hasBookmarkedClubs || totalBookmarks > 0;
@@ -171,6 +171,12 @@ export const Header = ({ additionalClasses }) => {
                   </svg>
                   {t("header.publications")}
                 </Link>
+                <Link to="/stories" className="dropdown-link">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" fill="currentColor" />
+                  </svg>
+                  {t("header.stories")}
+                </Link>
                 <Link to="/map" className="dropdown-link">
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" fill="currentColor" />
@@ -213,7 +219,7 @@ export const Header = ({ additionalClasses }) => {
               </svg>
             )}
           </button>
-          
+
           {/* Bookmark иконка - обновена за всички типове */}
           {hasAnyBookmarks && isAuthentication && (
             <div className="bookmark-header-section desktop-bookmark">
@@ -223,7 +229,7 @@ export const Header = ({ additionalClasses }) => {
               </Link>
             </div>
           )}
-          
+
           <div className="profile-section-home" ref={profileRef}>
             {isAuthentication && !isFinish && (
               <span
@@ -265,7 +271,7 @@ export const Header = ({ additionalClasses }) => {
                     За четене ({totalBookmarks})
                   </Link>
                 )}
-                
+
                 {!isAuthentication ? (
                   <>
                     <Link to="/sign-up?view=login" className="menu-link">
@@ -429,6 +435,16 @@ export const Header = ({ additionalClasses }) => {
                     <path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.89 22 5.99 22H18C19.1 22 20 21.1 20 20V8L14 2ZM18 20H6V4H13V9H18V20ZM16 11V13H8V11H16ZM8 15H16V17H8V15ZM8 7H10V9H8V7Z" fill="currentColor" />
                   </svg>
                   {t("header.publications")}
+                </NavLink>
+                <NavLink
+                  to="/stories"
+                  className={({ isActive }) => `mobile-dropdown-item ${isActive ? "active" : ""}`}
+                  onClick={toggleMobileMenu}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" fill="currentColor" />
+                  </svg>
+                  {t("header.stories")}
                 </NavLink>
                 <NavLink
                   to="/map"
