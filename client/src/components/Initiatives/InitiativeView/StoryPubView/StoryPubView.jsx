@@ -62,7 +62,7 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                         // Only load analytics for non-preview mode
                         await trackStoryOrPublication(data.id, data.title, type);
 
-                        const updatedData = await getPublicationById(slug); // Use getPublicationById with slug
+                        const updatedData = type === 'story' ? await getStoryBySlug(slug) : await getPublicationById(slug);
                         setContent(updatedData);
 
                         await loadContentViewCounts([data.id], type);
@@ -248,10 +248,10 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                     <h1>{t('publications.view.notFound.title')}</h1>
                     <p>{t('publications.view.notFound.description')}</p>
                     <Link
-                        to='/publications'
+                        to={type === 'story' ? '/stories' : '/publications'}
                         className="back-link"
                     >
-                        {t('publications.view.notFound.backToPublications')}
+                        {t(`publications.view.notFound.backTo${type === 'story' ? 'Stories' : 'Publications'}`)}
                     </Link>
                 </div>
             </div>

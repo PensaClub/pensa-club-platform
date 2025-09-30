@@ -325,7 +325,7 @@ const PublicationStoriesList = () => {
               {featuredPublication && (
                 <section className="ps-featured-section">
                   <h2 className="ps-section-title">
-                    {t('publicationStories.sections.featured')}
+                  {t(`publicationStories.sections.featured${contentType === 'stories' ? 'Story' : 'Publication'}`)}
                   </h2>
                   <div className="ps-featured-wrapper">
                     <PublicationStoriesCard
@@ -363,7 +363,10 @@ const PublicationStoriesList = () => {
               {/* All Publications Section - ВИНАГИ се показва */}
               <section className="ps-all-publications-section">
                 <h2 className="ps-section-title">
-                  {t('publicationStories.sections.allPublications')}
+                  {contentType === 'stories'
+                    ? t('publicationStories.sections.allStories')
+                    : t('publicationStories.sections.allPublications')
+                  }
                 </h2>
                 {allPublicationsForGrid.length > 0 ? (
                   <div className={`ps-content-${viewMode}`}>
@@ -380,7 +383,10 @@ const PublicationStoriesList = () => {
                   </div>
                 ) : (
                   <p style={{ textAlign: 'center', color: '#6b7280', padding: '2rem' }}>
-                    Няма други публикации на тази страница.
+                    {contentType === 'stories'
+                      ? t('publicationStories.noResults.stories.description')
+                      : 'Няма други публикации на тази страница.'
+                    }
                   </p>
                 )}
 
@@ -392,7 +398,7 @@ const PublicationStoriesList = () => {
               {paginationInfo && (
                 <div className="ps-pagination-info">
                   <span>
-                    {t('publicationStories.pagination.showing')} {((paginationInfo.page - 1) * 6) + 1} - {Math.min(paginationInfo.page * 6, paginationInfo.totalPublications)} {t('publicationStories.pagination.of')} {paginationInfo.totalPublications} {t(`publicationStories.pagination.${contentType}`)}
+                    {t('publicationStories.pagination.showing')} {((paginationInfo.page - 1) * 6) + 1} - {Math.min(paginationInfo.page * 6, paginationInfo.totalPublications || paginationInfo.totalStories)} {t('publicationStories.pagination.of')} {paginationInfo.totalPublications || paginationInfo.totalStories} {t(`publicationStories.pagination.${contentType}`)}
                   </span>
                 </div>
               )}

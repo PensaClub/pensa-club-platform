@@ -2067,45 +2067,33 @@ const getAllPublications = useCallback(async (page = 1, forceRefresh = false, is
 
   //Stories functions
   const getStoryBySlug = useCallback(async (slug) => {
-    try {
-      // setIsLoading(true);
+    if (!slug || slug === 'undefined' || slug === 'null') {
+      const error = new Error(`Invalid story slug: ${slug}`);
+      console.error('getStoryBySlug called with invalid slug:', slug);
+      throw error;
+    }
 
-      const story = storiesData.stories.find(story => story.slug === slug || story.titleSlug === slug);
+    try {
+      setIsLoading(true);
+      const response = await storyPubService.getStoryById(slug);
+
+      const story = response.data || response;
 
       if (!story) {
         throw new Error(`Story not found with slug: ${slug}`);
       }
-      if (story.comments && Array.isArray(story.comments)) {
-        const processedComments = story.comments
-          .filter(comment => !comment.parentId)
-          .map(comment => {
-            const replies = story.comments
-              .filter(reply => reply.parentId === comment.id && reply.id !== comment.id)
-              .map(reply => ({
-                ...reply,
-                id: reply.id === comment.id ? generateId() : reply.id
-              }));
-            return {
-              ...comment,
-              replies: replies
-            };
-          });
 
-        setComments(prev => ({
-          ...prev,
-          [`story-${story.id}`]: processedComments,
-          [`story-${story.slug}`]: processedComments
-        }));
-      }
-
+      setCurrentStory(story);
       return story;
     } catch (e) {
       console.error('Error fetching story by slug:', e);
+      notify('error', e.message || 'Failed to fetch story');
+      showErrorAndSetTimeouts(e.message);
       throw e;
     } finally {
-      // setIsLoading(false);
+      setIsLoading(false);
     }
-  }, [generateId]);
+  }, [storyPubService, showErrorAndSetTimeouts]);
 
   // NEW STORY FUNCTIONS
   const getAllStories = useCallback(async (page = 1, forceRefresh = false, isDraft = null) => {
@@ -2587,6 +2575,7 @@ const getAllPublications = useCallback(async (page = 1, forceRefresh = false, is
     // NEW STORY FUNCTIONS
     getAllStories,
     getStoryById,
+    getStoryBySlug,
     createStory,
     updateStory,
     deleteStory,
