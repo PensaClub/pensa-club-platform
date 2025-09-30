@@ -415,6 +415,30 @@ storyController.delete('/:id', isAuth, checkPermission('stories', 'delete'), asy
                 transaction: t,
             });
 
+            const storySections = await section.findAll({
+                where: {
+                    sectionableId: foundStory.id,
+                    sectionLinkConnection: 'story',
+                },
+                attributes: ['id'],
+                transaction: t,
+            });
+
+            const sectionIds = storySections.map((s) => s.id);
+
+            if (sectionIds.length > 0) {
+                await image.destroy({
+                    where: {
+                        imageableId: {
+                            [Op.in]: sectionIds,
+                        },
+                        imageLinkConnection: 'section',
+                    },
+                    transaction: t,
+                });
+            }
+
+            // Delete sections
             await section.destroy({
                 where: {
                     sectionableId: foundStory.id,

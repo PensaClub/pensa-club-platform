@@ -3576,7 +3576,8 @@
         "title": "Connected",
         "initiatives": "Initiatives",
         "projects": "Projects",
-        "publications": "Publications"
+        "publications": "Publications",
+        "stories": "Stories"
       },
       "toc": {
         "title": "Table of Contents"
@@ -11382,7 +11383,8 @@
     "updateDraft": "Update Draft",
     "publishDraft": "Publish Draft",
     "updatePublished": "Update Published Story",
-    "notFound": "Story not found"
+    "notFound": "Story not found",
+    "convertToDraft": "Convert to Draft"
   },
   "admin": {
     "title": "Story Management",
@@ -11541,7 +11543,12 @@
     "connected": "connected",
     "notConnected": "not connected",
     "removeConnection": "Remove Connection",
-    "draft": "Draft"
+    "draft": "Draft",
+    "title": "Connected",
+    "initiatives": "Initiatives",
+    "projects": "Projects",
+    "publications": "Publications",
+    "stories": "Stories"
   },
   "helpTexts": {
     "sectionImageHelp": "Add an image to make your story more engaging",

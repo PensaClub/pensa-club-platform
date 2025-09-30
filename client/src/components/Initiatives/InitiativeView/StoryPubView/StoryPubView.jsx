@@ -172,10 +172,20 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
 
     // Check if there are any connections to show
     const hasConnections = () => {
-        if (!content || type !== 'publication') return false;
-        return (content.initiatives && content.initiatives.length > 0) ||
-               (content.projects && content.projects.length > 0) ||
-               (content.relatedPublications && content.relatedPublications.length > 0);
+        if (!content) return false;
+
+        // Check for both publications and stories
+        if (type === 'publication') {
+            return (content.initiatives && content.initiatives.length > 0) ||
+                   (content.projects && content.projects.length > 0) ||
+                   (content.relatedPublications && content.relatedPublications.length > 0);
+        } else if (type === 'story') {
+            return (content.initiatives && content.initiatives.length > 0) ||
+                   (content.projects && content.projects.length > 0) ||
+                   (content.relatedStories && content.relatedStories.length > 0);
+        }
+
+        return false;
     };
 
     // Generate a slug for section if it doesn't have one
@@ -544,6 +554,32 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                                                                     <span className="connection-text">
                                                                         {publication.title}
                                                                         {publication.isDraft && (
+                                                                            <span className="draft-badge"> ({t('publications.connections.draft')})</span>
+                                                                        )}
+                                                                    </span>
+                                                                </Link>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                </>
+                                            )}
+
+                                            {/* Related Stories Connections - for stories only */}
+                                            {type === 'story' && content.relatedStories && content.relatedStories.length > 0 && (
+                                                <>
+                                                    <h4 className="connections-group-title">
+                                                        {t('publications.view.connections.stories')}
+                                                    </h4>
+                                                    <ul className="connections-list">
+                                                        {content.relatedStories.map((story, index) => (
+                                                            <li key={`related-story-${story.id || index}`} className="connection-item">
+                                                                <Link
+                                                                    to={`/stories/${story.slug}`}
+                                                                    className="connection-link"
+                                                                >
+                                                                    <span className="connection-text">
+                                                                        {story.title}
+                                                                        {story.isDraft && (
                                                                             <span className="draft-badge"> ({t('publications.connections.draft')})</span>
                                                                         )}
                                                                     </span>

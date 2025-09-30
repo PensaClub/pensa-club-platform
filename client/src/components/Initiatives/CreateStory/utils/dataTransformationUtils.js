@@ -137,9 +137,9 @@ const transformToForm = (data, contentType) => {
 
         author: data.author || '',
         authorEmail: data.authorEmail || '',
-        authorImage: data.authorImage || '',
+        authorImage: normalizeImageData(data.authorImage),
 
-        mainImage: normalizeImageData(data.image),
+        mainImage: normalizeImageData(data.mainImage),
 
         sections: data.sections?.map((section, index) => ({
             id: section.id || `section-${index + 1}`,
@@ -256,7 +256,7 @@ const transformToDisplay = (data, contentType, { userEmail, username, t, story, 
         // Story-specific author fields
         author: data.showAuthor ? (data.author || username || userEmail || data.authorEmail || t?.('stories.preview.noAuthor') || 'Unknown Author') : null,
         authorEmail: data.showAuthor ? (data.authorEmail || userEmail) : null,
-        authorImage: data.authorImage || null,
+        authorImage: data.authorImage?.src ? data.authorImage.src : (data.authorImage || null),
 
         readTime: data.readTime || t?.('stories.preview.noReadTime') || 'No Read Time',
         category: data.category || t?.('stories.preview.noCategory') || 'No Category',

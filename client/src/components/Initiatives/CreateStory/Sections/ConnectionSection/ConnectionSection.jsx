@@ -11,7 +11,8 @@ const ConnectionSection = ({
     errors,
     onChangeHandler,
     onBlurHandler,
-    setValues
+    setValues,
+    currentStoryId // Add this prop
 }) => {
     const { t } = useTranslation();
     const { token } = useAuthContext();
@@ -145,14 +146,21 @@ const ConnectionSection = ({
         ).slice(0, 6);
     }, [projects, projectSearch]);
 
-    // Filter stories based on search (limit to 6 results)
+    // Filter stories based on search (limit to 6 results) and exclude current story
     const filteredStories = useMemo(() => {
-        if (!storySearch.trim()) return stories.slice(0, 6);
-        return stories.filter(story =>
+        let filtered = stories;
+
+        // Exclude current story if we're in edit mode
+        if (currentStoryId) {
+            filtered = stories.filter(story => story.id !== currentStoryId);
+        }
+
+        if (!storySearch.trim()) return filtered.slice(0, 6);
+        return filtered.filter(story =>
             story.title.toLowerCase().includes(storySearch.toLowerCase()) ||
             story.slug.toLowerCase().includes(storySearch.toLowerCase())
         ).slice(0, 6);
-    }, [stories, storySearch]);
+    }, [stories, storySearch, currentStoryId]);
 
     // Handle initiative selection (multi-select)
     const handleInitiativeSelect = (initiative) => {

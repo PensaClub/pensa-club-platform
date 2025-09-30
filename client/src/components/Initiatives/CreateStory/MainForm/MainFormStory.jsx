@@ -32,7 +32,7 @@ const StoryForm = ({
 }) => {
     const { t } = useTranslation();
     const { userEmail, username } = useAuthContext();
-    const { getStoryById, createStory, updateStory } = useInitiativeContext();
+    const { getStoryById, createStory, updateStory, initiatives, projects, stories } = useInitiativeContext();
     const navigate = useNavigate();
     const { slug } = useParams();
 
@@ -241,13 +241,51 @@ const StoryForm = ({
 
     // Get preview data
     const getPreviewData = () => {
-        return transformStoryForDisplay(values, {
+        const previewData = transformStoryForDisplay(values, {
             userEmail,
             username,
             t,
             story,
             includeConnections: true
+            // Don't use isEditMode: true to avoid Slate content issues
         });
+
+        // Manually add connections by resolving IDs to full objects
+        const resolvedInitiatives = initiatives.filter(init =>
+            (values.connectedInitiativeIds || []).includes(init.id)
+        );
+
+        const resolvedProjects = projects.filter(proj =>
+            (values.connectedProjectIds || []).includes(proj.id)
+        );
+
+        const resolvedStories = stories.filter(story =>
+            (values.relatedStories || []).includes(story.id)
+        );
+
+        // Override with resolved connections
+        previewData.initiatives = resolvedInitiatives;
+        previewData.projects = resolvedProjects;
+        previewData.relatedStories = resolvedStories;
+
+        return previewData;
+    };
+
+    // Get the current story ID from multiple possible sources
+    const getCurrentStoryId = () => {
+        // Try story state first
+        if (story?.id) return story.id;
+
+        // Try values.id (from form data)
+        if (values.id) return values.id;
+
+        // Try initialValues.id (from props)
+        if (initialValues?.id) return initialValues.id;
+
+        // Try slug (if it's numeric, it might be an ID)
+        if (slug && !isNaN(slug)) return parseInt(slug);
+
+        return null;
     };
 
     return (
@@ -369,6 +407,7 @@ const StoryForm = ({
                                 onChangeHandler={onChangeHandler}
                                 onBlurHandler={onBlurHandler}
                                 setValues={setValues}
+                                currentStoryId={getCurrentStoryId()}
                             />
                         )}
 
