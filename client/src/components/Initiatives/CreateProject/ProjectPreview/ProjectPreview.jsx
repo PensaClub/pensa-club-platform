@@ -58,7 +58,23 @@ export const ProjectPreview = () => {
 
     // Handle navigation back to form
     const handleBackToForm = () => {
-        navigate('/profile/projects-create', {
+        // Запазваме данните в localStorage преди да се върнем
+        try {
+            const dataToSave = {
+                ...previewData,
+                timestamp: new Date().toISOString()
+            };
+            localStorage.setItem('project_draft', JSON.stringify(dataToSave));
+            localStorage.setItem('project_draft_timestamp', new Date().toISOString());
+        } catch (error) {
+            console.error('Error saving to localStorage:', error);
+        }
+
+        // Връщаме се към формата
+        const editIdParam = previewData?.editId ? `?editId=${previewData.editId}&mode=edit` : '';
+        const draftIdParam = previewData?.draftId && !previewData?.editId ? `?draftId=${previewData.draftId}` : '';
+        
+        navigate(`/profile/projects-create${editIdParam || draftIdParam}`, {
             state: { formData: previewData }
         });
     };
@@ -150,6 +166,12 @@ export const ProjectPreview = () => {
             element.scrollIntoView({ behavior: 'smooth' });
             setActiveSection(sectionId);
         }
+    };
+
+    // Проверка дали да се показва секцията с участници
+    const shouldShowParticipants = (project) => {
+        return (project.currentParticipants && project.currentParticipants > 0) || 
+               (project.maxParticipants && project.maxParticipants > 0);
     };
 
     if (!previewData) {
@@ -309,7 +331,7 @@ export const ProjectPreview = () => {
                                             </div>
                                         )}
 
-                                        {(previewData.currentParticipants !== undefined || previewData.maxParticipants !== undefined) && (
+                                        {shouldShowParticipants(previewData) && (
                                             <div className="project-view-meta-item">
                                                 <span className="project-view-meta-label">{t('projectView.meta.participants')}:</span>
                                                 <span className="project-view-meta-value">
@@ -356,11 +378,11 @@ export const ProjectPreview = () => {
                 <nav className="project-view-nav">
                     <div className="container">
                         <div className="project-view-nav-links">
-                            {previewData.sections?.map((section) => (
+                            {previewData.sections?.map((section, index) => (
                                 <button
-                                    key={section.titleSlug}
-                                    className={`project-view-nav-link ${activeSection === section.titleSlug ? 'active' : ''}`}
-                                    onClick={() => scrollToSection(section.titleSlug)}
+                                    key={section.titleSlug || `section-${index}`}  
+                                    className={`project-view-nav-link ${activeSection === (section.titleSlug || `section-${index}`) ? 'active' : ''}`}
+                                    onClick={() => scrollToSection(section.titleSlug || `section-${index}`)}
                                 >
                                     {section.title}
                                 </button>
@@ -368,6 +390,7 @@ export const ProjectPreview = () => {
 
                             {previewData.downloadMaterials?.length > 0 && (
                                 <button
+                                    key="download-materials"
                                     className={`project-view-nav-link ${activeSection === 'download-materials' ? 'active' : ''}`}
                                     onClick={() => scrollToSection('download-materials')}
                                 >
@@ -377,6 +400,7 @@ export const ProjectPreview = () => {
 
                             {(previewData.budget?.goal || previewData.budget?.total || previewData.budget?.funded) && (
                                 <button
+                                    key="budget" 
                                     className={`project-view-nav-link ${activeSection === 'budget' ? 'active' : ''}`}
                                     onClick={() => scrollToSection('budget')}
                                 >
@@ -387,6 +411,7 @@ export const ProjectPreview = () => {
                             {((previewData.sponsors && previewData.sponsors.length > 0) ||
                                 (previewData.partners && previewData.partners.length > 0)) && (
                                     <button
+                                        key="sponsors-partners"
                                         className={`project-view-nav-link ${activeSection === 'sponsors-partners' ? 'active' : ''}`}
                                         onClick={() => scrollToSection('sponsors-partners')}
                                     >
@@ -396,6 +421,7 @@ export const ProjectPreview = () => {
 
                             {previewData.team?.length > 0 && (
                                 <button
+                                    key="team"  
                                     className={`project-view-nav-link ${activeSection === 'team' ? 'active' : ''}`}
                                     onClick={() => scrollToSection('team')}
                                 >
@@ -405,6 +431,7 @@ export const ProjectPreview = () => {
 
                             {previewData.contact?.name && (
                                 <button
+                                    key="contact"  
                                     className={`project-view-nav-link ${activeSection === 'contact' ? 'active' : ''}`}
                                     onClick={() => scrollToSection('contact')}
                                 >
@@ -421,8 +448,8 @@ export const ProjectPreview = () => {
                         {/* Project Sections */}
                         {previewData.sections?.map((section, index) => (
                             <section
-                                key={section.titleSlug}
-                                id={section.titleSlug}
+                                key={section.titleSlug || `section-${index}`}
+                                id={section.titleSlug || `section-${index}`}
                                 className={`project-view-section ${index % 2 === 0 ? 'project-view-section-left' : 'project-view-section-right'}`}
                             >
                                 <div className="project-view-section-content">

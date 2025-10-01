@@ -67,7 +67,9 @@ const ArticlesList = lazy(() => import('./components/Articles/ArticlesList/Artic
 const InitiativesList = lazy(() => import('./components/Initiatives/InitiativesList/InitiativesList.jsx'));
 const ProjectsList = lazy(() => import('./components/Initiatives/ProjectsList/ProjectsList.jsx'));
 const PublicationForm = lazy(() => import('./components/Initiatives/CreatePublication/MainForm/MainFormPublication'));
+const StoryForm = lazy(() => import('./components/Initiatives/CreateStory/MainForm/MainFormStory'));
 const PublicationsList = lazy(() => import('./components/Initiatives/CreatePublication/PublicationStoriesList/PublicationStoriesList.jsx'));
+const StoriesList = lazy(() => import('./components/Initiatives/CreateStory/PublicationStoriesList/PublicationStoriesList.jsx'));
 
 // ✅ LOADING FALLBACK КОМПОНЕНТ
 const LazyLoadingFallback = ({ type = 'page' }) => {
@@ -185,6 +187,16 @@ function App() {
                                   <Route path="/projects/:slug" element={<ProjectView />} />
                                   <Route path="/articles/:slug" element={<ArticleView />} />
                                   <Route path="/elite-membership" element={<EliteMembershipPage />} />
+                                  <Route
+                                    path="/stories"
+                                    element={
+                                      <Suspense fallback={<LazyLoadingFallback type="stories" />}>
+                                        <StoriesList />
+                                      </Suspense>
+                                    }
+                                  />
+                                  <Route path="/stories/:slug" element={<StoryView />} />
+                                  <Route path="/stories/edit/:slug" element={<StoryForm isEditMode={true} />} />
 
                                   <Route element={<AuthGuard />}>
                                     <Route path="/initiative-preview" element={<InitiativePreviewPage />} />

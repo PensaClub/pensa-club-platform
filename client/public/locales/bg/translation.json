@@ -1773,7 +1773,8 @@
       "category": "Категория",
       "location": "Локация",
       "participants": "Участници",
-      "timeline": "Времева линия"
+      "timeline": "Времева линия",
+      "beneficiaries": "Бенефициенти"
     },
     "buttons": {
       "apply": "Кандидатствай",
@@ -2554,6 +2555,14 @@
       "tryChangingCriteria": "Опитайте да промените критериите за търсене"
     },
     "create": {
+       "participantsAndBeneficiaries": "Участници и Бенефициенти",
+      "beneficiaries": "Брой бенефициенти",
+      "beneficiaries-help": "Въведете общия брой хора, които ще се възползват от проекта",
+      "beneficiaries-section-help": "Бенефициентите са всички хора, които ще се възползват от резултатите на проекта - участници, техни семейства, общността и други",
+      "projectImpact": "Въздействие на проекта",
+      "impactOverview": "Обобщение на въздействието",
+      "activeParticipants": "Активни участници",
+      "totalBeneficiaries": "Общо бенефициенти",
       "newTitle": "Създай нов проект",
       "editTitle": "Редактирай проект",
       "subtitle": "Създайте вашия проект и привлечете участници",
@@ -3612,7 +3621,9 @@
       "notFound": {
         "title": "Съдържанието не е намерено",
         "description": "Съдържанието, което търсите, не съществува или е премахнато.",
-        "backToInitiatives": "Обратно към инициативите"
+        "backToInitiatives": "Обратно към инициативите",
+        "backToStories": "Назад към историите",
+        "backToPublications": "Назад към публикациите"
       },
       "readTime": "мин четене",
       "author": {
@@ -3626,7 +3637,8 @@
         "title": "Свързани",
         "initiatives": "Инициативи",
         "projects": "Проекти",
-        "publications": "Публикации"
+        "publications": "Публикации",
+        "stories": "Истории"
       },
       "toc": {
         "title": "Съдържание"
@@ -3795,8 +3807,11 @@
     },
     "sections": {
       "featured": "Най-нова публикация",
+      "featuredPublication": "Най-нова публикация",
+      "featuredStory": "Най-нова история",
       "recentlyViewed": "Последно разгледани",
-      "allPublications": "Всички публикации"
+      "allPublications": "Всички публикации",
+      "allStories": "Всички истории"
     },
     "pagination": {
       "previous": "Назад",
@@ -3876,7 +3891,7 @@
     "ClubHero": {
      "status": {
         "activeClub": "Активен клуб",
-        "inactiveClub": "Неактивен клуб", 
+        "inactiveClub": "Неактивен клуб",
         "suspendedClub": "Спрян клуб",
         "draftClub": "Чернова",
         "rejectedClub": "Отхвърлен клуб",
@@ -3938,7 +3953,7 @@
       },
       "location": {
         "address": "Адрес"
-  
+
       }
     },
     "ClubAbout": {
@@ -11535,5 +11550,233 @@
   "pending": {
     "title": "Чакащи одобрение",
     "description": "Клубове изпратени за административно одобрение"
+  },
+  "stories": {
+    "common": {
+      "title": "Истории",
+      "next": "Напред",
+      "back": "Назад",
+      "generate": "Генерирай",
+      "add": "Добави",
+      "remove": "Премахни",
+      "save": "Запази",
+      "preview": "Преглед",
+      "loading": "Зареждане...",
+      "view": "Преглед",
+      "edit": "Редактирай",
+      "delete": "Изтрий",
+      "publish": "Публикувай",
+      "convertToDraft": "Преобразувай в чернова"
+    },
+    "create": {
+      "title": "Създай нова история",
+      "description": "Сподели своята вдъхновяваща история с общността",
+      "saveDraft": "Запази като чернова",
+      "publishStory": "Публикувай историята"
+    },
+    "edit": {
+      "title": "Редактирай история",
+      "editDraft": "Редактирай чернова",
+      "editPublished": "Редактирай публикувана история",
+      "editDraftDescription": "Направи промени в черновата си история",
+      "editPublishedDescription": "Актуализирай публикуваната си история",
+      "updateDraft": "Актуализирай чернова",
+      "publishDraft": "Публикувай чернова",
+      "updatePublished": "Актуализирай публикувана история",
+      "notFound": "Историята не е намерена",
+      "convertToDraft": "Преобразувай в чернова"
+    },
+    "admin": {
+      "title": "Управление на истории",
+      "subtitle": "Прегледай и управлявай всички истории и чернови",
+      "totalStories": "Общо истории",
+      "totalDrafts": "Общо чернови",
+      "published": "Публикувани истории",
+      "drafts": "Чернови истории",
+      "stories": "истории",
+      "searchPlaceholder": "Търси по заглавие, описание или автор...",
+      "resultsCount": "Намерени {{count}} резултата",
+      "noDate": "Без дата",
+      "unknownAuthor": "Неизвестен автор",
+      "loadMore": "Зареди още",
+      "loading": "Зареждане...",
+      "noItemsFound": "Няма намерени елементи",
+      "tryChangingCriteria": "Опитай да промениш критериите за търсене",
+      "createStory": "Създай история",
+      "confirmDeleteDraft": "Сигурен ли си, че искаш да изтриеш тази чернова?",
+      "confirmDeleteStory": "Сигурен ли си, че искаш да изтриеш тази история?",
+      "draftDeletedSuccess": "Черновата е изтрита успешно",
+      "storyDeletedSuccess": "Историята е изтрита успешно",
+      "storyCreatedSuccess": "Историята е създадена успешно",
+      "storyUpdatedSuccess": "Историята е актуализирана успешно",
+      "draftCreatedSuccess": "Черновата е създадена успешно",
+      "draftUpdatedSuccess": "Черновата е актуализирана успешно",
+      "statusUpdatedSuccess": "Статусът е актуализиран успешно",
+      "actionError": "Възникна грешка при изпълнение на действието",
+      "statusDraft": "Чернова",
+      "statusPublished": "Публикувана",
+      "filters": {
+        "sortBy": "Сортирай по",
+        "category": "Категория",
+        "allCategories": "Всички категории",
+        "newest": "Най-нови първо",
+        "oldest": "Най-стари първо",
+        "updated": "Наскоро актуализирани",
+        "published": "Наскоро публикувани",
+        "likes": "Най-харесвани",
+        "views": "Най-гледани"
+      }
+    },
+    "sections": {
+      "basicInfo": "Основна информация",
+      "content": "Съдържание",
+      "connections": "Връзки"
+    },
+    "categories": {
+      "personal": "Лична",
+      "community": "Общност",
+      "educational": "Образователна",
+      "inspirational": "Вдъхновяваща",
+      "caseStudy": "Казус",
+      "testimonial": "Свидетелство",
+      "other": "Друга"
+    },
+    "progress": {
+      "formProgress": "Прогрес на формата",
+      "completed": "Завършено"
+    },
+    "preview": {
+      "noTitle": "Без заглавие",
+      "noDescription": "Без описание",
+      "noAuthor": "Неизвестен автор",
+      "noReadTime": "Без време за четене",
+      "noCategory": "Без категория",
+      "noImageAvailable": "Няма налична снимка",
+      "noContentSections": "Все още няма добавени секции със съдържание",
+      "addContentSections": "Добави секции със съдържание, за да ги видиш в прегледа.",
+      "authorInfo": "За автора",
+      "writtenBy": "Написано от",
+      "previewMode": "Режим на преглед"
+    },
+    "view": {
+      "readTime": "мин четене"
+    },
+    "basic": {
+      "title": "Заглавие на историята",
+      "titlePlaceholder": "Въведи привлекателно заглавие за историята си",
+      "slug": "URL адрес",
+      "slugAutoGenerated": "Автоматично генериран от заглавието",
+      "shortDescription": "Кратко описание",
+      "shortDescriptionPlaceholder": "Кратко описание на историята ти (макс. 200 символа)",
+      "category": "Категория",
+      "selectCategory": "Избери категория",
+      "categoryPlaceholder": "Избери категория",
+      "tags": "Етикети",
+      "tagsPlaceholder": "Добави етикети, за да помогнеш на хората да намерят историята ти",
+      "commentsEnabled": "Разреши коментари",
+      "commentsDescription": "Позволи на читателите да коментират историята ти",
+      "readTime": "Време за четене",
+      "readTimePlaceholder": "Време за четене (в минути)",
+      "addTagPlaceholder": "Добави етикет...",
+      "showAuthor": "Покажи автора",
+      "showAuthorDescription": "Покажи информацията за автора в историята",
+      "authorVisible": "Авторът ще бъде видим",
+      "authorHidden": "Авторът ще бъде скрит",
+      "author": "Име на автора",
+      "authorPlaceholder": "Въведи името на автора",
+      "authorEmail": "Имейл на автора",
+      "authorEmailPlaceholder": "Въведи имейл адреса на автора",
+      "authorImage": "Снимка на автора"
+    },
+    "content": {
+      "sections": "Секции на историята",
+      "addSection": "Добави секция",
+      "noSections": "Все още няма секции",
+      "sectionsDescription": "Създай секции, за да организираш съдържанието на историята си",
+      "addFirstSection": "Добави първа секция",
+      "untitled": "Без заглавие",
+      "moveUp": "Премести нагоре",
+      "moveDown": "Премести надолу",
+      "removeSection": "Премахни секция",
+      "sectionTitle": "Заглавие на секцията",
+      "sectionTitlePlaceholder": "Въведи заглавие на секцията",
+      "sectionContent": "Съдържание на секцията",
+      "sectionContentPlaceholder": "Напиши съдържанието на историята си тук...",
+      "sectionsSummary": "Резюме на секциите",
+      "totalSections": "Общо секции",
+      "completeSections": "Завършени секции",
+      "completionRate": "Процент на завършеност"
+    },
+    "media": {
+      "mainImage": "Основна снимка",
+      "uploadImage": "Качи снимка",
+      "changeImage": "Смени снимка",
+      "addImageUrl": "Добави URL на снимка",
+      "changeImageUrl": "Смени URL на снимка",
+      "clearImage": "Изчисти снимка",
+      "imageUrl": "URL на снимка",
+      "addImage": "Добави снимка",
+      "removeImage": "Премахни снимка",
+      "altText": "Алтернативен текст",
+      "imageDescription": "Описание на снимката за достъпност",
+      "caption": "Надпис",
+      "imageCaption": "Надпис на снимката",
+      "sectionImage": "Снимка на секцията"
+    },
+    "connections": {
+      "connectionsHelp": "Свържи историята си с свързани инициативи, проекти или други истории",
+      "connectInitiatives": "Свържи с инициативи",
+      "searchInitiatives": "Търси инициативи...",
+      "noInitiativesFound": "Няма намерени инициативи",
+      "noInitiativesAvailable": "Няма налични инициативи",
+      "connectProjects": "Свържи с проекти",
+      "searchProjects": "Търси проекти...",
+      "noProjectsFound": "Няма намерени проекти",
+      "noProjectsAvailable": "Няма налични проекти",
+      "connectStories": "Свържи с истории",
+      "searchStories": "Търси истории...",
+      "noStoriesFound": "Няма намерени истории",
+      "noStoriesAvailable": "Няма налични истории",
+      "initiativeConnections": "Връзки с инициативи",
+      "projectConnections": "Връзки с проекти",
+      "storyConnections": "Връзки с истории",
+      "connected": "свързано",
+      "notConnected": "не е свързано",
+      "removeConnection": "Премахни връзката",
+      "draft": "Чернова",
+      "title": "Свързано",
+      "initiatives": "Инициативи",
+      "projects": "Проекти",
+      "publications": "Публикации",
+      "stories": "Истории"
+    },
+    "helpTexts": {
+      "sectionImageHelp": "Добави снимка, за да направиш историята си по-привлекателна",
+      "sectionContentHelp": "Използвай богатия текстов редактор, за да форматираш съдържанието",
+      "sectionsHelp": "Организирай историята си в секции за по-добра четимост",
+      "authorImageHelp": "Добави снимка на автора, за да персонализираш историята"
+    },
+    "settings": {
+      "commentsEnabled": "Коментарите са разрешени",
+      "commentsEnabledDescription": "Позволи на читателите да коментират историята ти",
+      "commentsAllowed": "Коментарите са позволени",
+      "commentsDisabled": "Коментарите са забранени"
+    },
+    "fileUpload": {
+      "uploadFile": "Качи файл",
+      "uploadingDescription": "Качване на файл...",
+      "uploadingHint": "Моля, изчакай, докато файлът ти се качва",
+      "clickToUpload": "Кликни за качване или плъзни и пусни",
+      "supportedFormats": "Поддържани формати",
+      "maxSize": "Максимален размер на файла",
+      "fileInfo": "Информация за файла",
+      "fileType": "Тип на файла",
+      "fileSize": "Размер на файла",
+      "downloadUrl": "URL за изтегляне",
+      "downloadFile": "Изтегли файл",
+      "viewUrl": "URL за преглед",
+      "viewFile": "Прегледай файл"
+    },
+    "unnamedFile": "Неименуван файл"
   }
 }

@@ -527,16 +527,24 @@ const ProjectCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false 
     };
 
     const handlePreview = () => {
-        if (!values.title?.trim()) {
-            notify('warning', t('projects.create.enterTitleForPreview'));
-            return;
-        }
+  if (!values.title?.trim()) {
+    notify('warning', t('projects.create.enterTitleForPreview'));
+    return;
+  }
 
-        navigate('/profile/project-preview', {
-            state: { previewData: values }
-        });
-    };
+  // 🔧 ЗАПАЗВАМЕ В localStorage ПРЕДИ PREVIEW
+  saveToLocalStorage(values);
 
+  navigate('/profile/project-preview', {
+    state: { 
+      previewData: {
+        ...values,
+        draftId: draftId,
+        editId: editId
+      }
+    }
+  });
+};
     return (
         <div className="project-create-container">
             {/* 🎯 Header */}

@@ -1754,7 +1754,8 @@
       "category": "Kategorie",
       "location": "Standort",
       "participants": "Teilnehmer",
-      "timeline": "Zeitleiste"
+      "timeline": "Zeitleiste",
+      "beneficiaries": "Begünstigte"
     },
     "buttons": {
       "apply": "Bewerben",
@@ -2533,6 +2534,14 @@
       "tryChangingCriteria": "Versuchen Sie, die Suchkriterien zu ändern"
     },
     "create": {
+      "participantsAndBeneficiaries": "Participants & Beneficiaries",
+      "beneficiaries": "Number of beneficiaries",
+      "beneficiaries-help": "Enter the total number of people who will benefit from the project",
+      "beneficiaries-section-help": "Beneficiaries are all people who will benefit from the project outcomes - participants, their families, community members and others",
+      "projectImpact": "Project Impact",
+      "impactOverview": "Impact Overview",
+      "activeParticipants": "Active Participants",
+      "totalBeneficiaries": "Total Beneficiaries",
       "newTitle": "Neues Projekt erstellen",
       "editTitle": "Projekt bearbeiten",
       "subtitle": "Erstellen Sie Ihr Projekt und gewinnen Sie Teilnehmer",

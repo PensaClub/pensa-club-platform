@@ -1,0 +1,432 @@
+.ps-card-new {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 1px solid #f1f5f9;
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.ps-card-new:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-color: #e2e8f0;
+}
+
+.ps-card-link {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  height: 100%;
+}
+
+/* 🔧 ДОБАВЕНО - List View Layout */
+.ps-card-new.list {
+  height: auto;
+  min-height: 120px;
+}
+
+.ps-card-new.list .ps-card-link {
+  flex-direction: row;
+  align-items: center;
+}
+
+/* Image Wrapper - унифицирани размери */
+.ps-card-image-wrapper {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  flex-shrink: 0;
+}
+
+/* Featured - голяма снимка */
+.ps-card-new.featured .ps-card-image-wrapper {
+  height: 280px;
+}
+
+/* Standard - средна снимка */
+.ps-card-new.standard .ps-card-image-wrapper {
+  height: 200px;
+}
+
+/* Compact - малка снимка */
+.ps-card-new.compact .ps-card-image-wrapper {
+  height: 160px;
+}
+
+/* 🔧 ДОБАВЕНО - List View Image */
+.ps-card-new.list .ps-card-image-wrapper {
+  width: 140px;
+  height: 100px;
+  margin-right: 16px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.ps-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.ps-card-new:hover .ps-card-image {
+  transform: scale(1.03);
+}
+
+.ps-card-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.ps-card-category {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(59, 130, 246, 0.9);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(10px);
+}
+
+/* 🔧 ДОБАВЕНО - List View Category */
+.ps-card-new.list .ps-card-category {
+  top: 8px;
+  left: 8px;
+  font-size: 10px;
+  padding: 3px 6px;
+}
+
+/* Content - фиксирани размери за консистентност */
+.ps-card-content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-height: 0;
+}
+
+.ps-card-new.featured .ps-card-content {
+  padding: 24px;
+  gap: 12px;
+}
+
+.ps-card-new.compact .ps-card-content {
+  padding: 12px;
+  gap: 6px;
+}
+
+/* 🔧 ДОБАВЕНО - List View Content */
+.ps-card-new.list .ps-card-content {
+  padding: 16px;
+  gap: 6px;
+  justify-content: center;
+}
+
+/* Meta */
+.ps-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 11px;
+  color: #64748b;
+  font-weight: 500;
+  flex-shrink: 0;
+}
+
+.ps-card-new.featured .ps-card-meta {
+  font-size: 12px;
+  gap: 16px;
+}
+
+/* 🔧 ДОБАВЕНО - List View Meta */
+.ps-card-new.list .ps-card-meta {
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.ps-card-date,
+.ps-card-reading-time {
+  white-space: nowrap;
+}
+
+.ps-card-views {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+/* Title - фиксирани височини */
+.ps-card-title {
+  font-weight: 700;
+  line-height: 1.3;
+  color: #0f172a;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.ps-card-new.featured .ps-card-title {
+  font-size: 24px;
+  -webkit-line-clamp: 3;
+  min-height: 93px; /* 3 lines * 31px line-height */
+}
+
+.ps-card-new.standard .ps-card-title {
+  font-size: 18px;
+  -webkit-line-clamp: 2;
+  min-height: 46px; /* 2 lines * 23px line-height */
+}
+
+.ps-card-new.compact .ps-card-title {
+  font-size: 16px;
+  -webkit-line-clamp: 2;
+  min-height: 41px; /* 2 lines * 20.5px line-height */
+}
+
+/* 🔧 ДОБАВЕНО - List View Title */
+.ps-card-new.list .ps-card-title {
+  font-size: 16px;
+  -webkit-line-clamp: 2;
+  min-height: auto;
+  margin-bottom: 4px;
+}
+
+/* Description - фиксирани височини */
+.ps-card-description {
+  color: #4b5563;
+  line-height: 1.5;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
+  min-height: 0;
+}
+
+.ps-card-new.featured .ps-card-description {
+  font-size: 16px;
+  -webkit-line-clamp: 4;
+  min-height: 96px; /* 4 lines * 24px line-height */
+}
+
+.ps-card-new.standard .ps-card-description {
+  font-size: 14px;
+  -webkit-line-clamp: 3;
+  min-height: 63px; /* 3 lines * 21px line-height */
+}
+
+.ps-card-new.compact .ps-card-description {
+  font-size: 13px;
+  -webkit-line-clamp: 2;
+  min-height: 39px; /* 2 lines * 19.5px line-height */
+}
+
+/* 🔧 ДОБАВЕНО - List View Description */
+.ps-card-new.list .ps-card-description {
+  font-size: 13px;
+  -webkit-line-clamp: 2;
+  min-height: auto;
+  flex: 0;
+}
+
+/* Author */
+.ps-card-author {
+  margin-top: auto;
+  flex-shrink: 0;
+}
+
+/* 🔧 ДОБАВЕНО - List View Author */
+.ps-card-new.list .ps-card-author {
+  margin-top: 8px;
+}
+
+.ps-author-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ps-author-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #f1f5f9;
+  flex-shrink: 0;
+}
+
+.ps-card-new.featured .ps-author-avatar {
+  width: 32px;
+  height: 32px;
+}
+
+.ps-author-avatar-placeholder {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 10px;
+  flex-shrink: 0;
+}
+
+.ps-card-new.featured .ps-author-avatar-placeholder {
+  width: 32px;
+  height: 32px;
+  font-size: 12px;
+}
+
+.ps-author-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ps-card-new.featured .ps-author-name {
+  font-size: 14px;
+}
+
+/* Footer */
+.ps-card-footer {
+  margin-top: auto;
+  padding-top: 8px;
+  border-top: 1px solid #f1f5f9;
+  flex-shrink: 0;
+}
+
+.ps-card-new.compact .ps-card-footer,
+.ps-card-new.list .ps-card-footer {
+  display: none; /* Hide footer in compact and list modes */
+}
+
+.ps-read-more-text {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #3b82f6;
+  transition: color 0.2s ease;
+}
+
+.ps-card-new.featured .ps-read-more-text {
+  font-size: 14px;
+}
+
+.ps-card-new:hover .ps-read-more-text {
+  color: #1d4ed8;
+}
+
+.ps-read-more-text svg {
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.ps-card-new:hover .ps-read-more-text svg {
+  transform: translateX(2px);
+}
+
+/* 🔧 ДОБАВЕНО - Responsive за List View */
+@media (max-width: 768px) {
+  .ps-card-content {
+    padding: 12px;
+  }
+  
+  .ps-card-new.featured .ps-card-content {
+    padding: 16px;
+  }
+  
+  .ps-card-new.list {
+    min-height: 100px;
+  }
+  
+  .ps-card-new.list .ps-card-link {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .ps-card-new.list .ps-card-image-wrapper {
+    width: 100%;
+    height: 120px;
+    margin-right: 0;
+    margin-bottom: 12px;
+    border-radius: 8px 8px 0 0;
+  }
+  
+  .ps-card-new.featured .ps-card-title {
+    font-size: 20px;
+    min-height: 78px; /* Adjust for mobile */
+  }
+  
+  .ps-card-new.standard .ps-card-title {
+    font-size: 16px;
+    min-height: 41px;
+  }
+  
+  .ps-card-new.compact .ps-card-title {
+    font-size: 14px;
+    min-height: 36px;
+  }
+  
+  .ps-card-new.featured .ps-card-description {
+    font-size: 14px;
+    min-height: 84px;
+  }
+  
+  .ps-card-new.standard .ps-card-description {
+    font-size: 13px;
+    min-height: 58px;
+  }
+  
+  .ps-card-new.compact .ps-card-description {
+    font-size: 12px;
+    min-height: 36px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ps-card-new.featured .ps-card-image-wrapper {
+    height: 200px;
+  }
+  
+  .ps-card-new.standard .ps-card-image-wrapper {
+    height: 160px;
+  }
+  
+  .ps-card-new.compact .ps-card-image-wrapper {
+    height: 120px;
+  }
+  
+  .ps-card-new.list .ps-card-image-wrapper {
+    height: 100px;
+  }
+}

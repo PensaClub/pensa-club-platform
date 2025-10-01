@@ -1,8 +1,8 @@
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faTrash, faUserCheck, faClock, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faTrash, faUserCheck, faClock, faUsers, faBullseye } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
-import './applicationSection.css'; 
+import './applicationSection.css';
+
 const ApplicationSection = ({
     values,
     errors,
@@ -27,7 +27,7 @@ const ApplicationSection = ({
                 {/* 📝 APPLICATION STATUS */}
                 <div className="project-application-status-section">
                     <h3>📝 {t('projects.create.applicationSettings')}</h3>
-                    
+
                     <div className="project-application-form-row">
                         {/* Application Status */}
                         <div className="project-application-form-group">
@@ -97,10 +97,10 @@ const ApplicationSection = ({
                     )}
                 </div>
 
-                {/* 👥 PARTICIPANTS */}
+                {/* 👥 PARTICIPANTS & BENEFICIARIES */}
                 <div className="project-application-participants-section">
-                    <h3>👥 {t('projects.create.participants')}</h3>
-                    
+                    <h3>👥 {t('projects.create.participantsAndBeneficiaries')}</h3>
+
                     <div className="project-application-form-row">
                         {/* Max Participants */}
                         <div className="project-application-form-group">
@@ -156,10 +156,10 @@ const ApplicationSection = ({
                         <div className="project-application-participants-progress">
                             <h4>📊 {t('projects.create.participantsProgress')}</h4>
                             <div className="project-application-progress-bar">
-                                <div 
+                                <div
                                     className="project-application-progress-fill"
-                                    style={{ 
-                                        width: `${Math.min((values.currentParticipants / values.maxParticipants) * 100, 100)}%` 
+                                    style={{
+                                        width: `${Math.min((values.currentParticipants / values.maxParticipants) * 100, 100)}%`
                                     }}
                                 ></div>
                             </div>
@@ -176,6 +176,66 @@ const ApplicationSection = ({
                             </div>
                         </div>
                     )}
+
+                    {/* 🎯 BENEFICIARIES */}
+                    <div className="project-application-beneficiaries-subsection">
+                        <h4>
+                            <FontAwesomeIcon icon={faBullseye} />
+                            {t('projects.create.projectImpact')}
+                        </h4>
+                        <div className="project-application-field-help">
+                            {t('projects.create.beneficiaries-section-help')}
+                        </div>
+
+                        <div className="project-application-form-group">
+                            <label htmlFor="beneficiariesTotalCount">
+                                {t('projects.create.beneficiaries')}
+                            </label>
+                            <input
+                                type="number"
+                                id="beneficiariesTotalCount"
+                                name="beneficiaries.totalCount"
+                                value={values.beneficiaries?.totalCount || ''}
+                                onChange={onChangeHandler}
+                                onBlur={onBlurHandler}
+                                className={`project-application-participants-input ${errors['beneficiaries.totalCount'] ? 'error' : ''}`}
+                                placeholder="0"
+                                min="0"
+                                step="1"
+                            />
+                            <div className="project-application-field-help">
+                                {t('projects.create.beneficiaries-help')}
+                            </div>
+                            {errors['beneficiaries.totalCount'] && (
+                                <div className="project-application-error-message">
+                                    {errors['beneficiaries.totalCount']}
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Impact Summary */}
+                        {(values.maxParticipants || values.beneficiaries?.totalCount) && (
+                            <div className="project-application-impact-summary">
+                                <h5>📈 {t('projects.create.impactOverview')}</h5>
+                                <div className="project-application-impact-cards">
+                                    {values.maxParticipants && (
+                                        <div className="project-application-impact-card">
+                                            <span className="impact-card-icon">👥</span>
+                                            <span className="impact-card-value">{values.maxParticipants}</span>
+                                            <span className="impact-card-label">{t('projects.create.activeParticipants')}</span>
+                                        </div>
+                                    )}
+                                    {values.beneficiaries?.totalCount && (
+                                        <div className="project-application-impact-card highlight">
+                                            <span className="impact-card-icon">🎯</span>
+                                            <span className="impact-card-value">{values.beneficiaries.totalCount}</span>
+                                            <span className="impact-card-label">{t('projects.create.totalBeneficiaries')}</span>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        )}
+                    </div>
                 </div>
 
                 {/* 📋 REQUIREMENTS */}

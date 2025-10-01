@@ -157,16 +157,22 @@ const transformProject = (project) => {
 
     // Transform sections
     if (projectData.sections) {
-        projectData.sections = projectData.sections.map((section) => {
-            if (section.sectionImages) {
-                const { sectionImages, ...singleSection } = section;
-                return {
-                    ...singleSection,
-                    images: sectionImages,
-                };
-            }
-            return section;
-        });
+        projectData.sections = projectData.sections
+            .map((section) => {
+                if (section.sectionImages) {
+                    const { sectionImages, ...singleSection } = section;
+                    return {
+                        ...singleSection,
+                        images: sectionImages,
+                    };
+                }
+                return section;
+            })
+            .sort((a, b) => a.id - b.id);
+    }
+
+    if (projectData.milestones) {
+        projectData.milestones = projectData.milestones.sort((a, b) => a.id - b.id);
     }
 
     // Clean up stories and publications

@@ -1,4 +1,4 @@
- import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useInitiativeContext } from '../../../contexts/InitiativeProvider';
@@ -66,14 +66,20 @@ const ProjectCard = ({ project, featured = false }) => {
         };
         return priorityMap[priority] || priorityMap.medium;
     };
- const handleInitiativeClick = (e) => {
+
+    const handleInitiativeClick = (e) => {
         e.preventDefault();
         e.stopPropagation();
         navigate(`/initiatives/${project.initiativeSlug}`);
     };
+
     const statusInfo = getStatusInfo(project.status);
     const priorityInfo = getPriorityInfo(project.priority);
     const progressPercentage = getProgressPercentage();
+
+    // Проверка дали да се показва секцията с участници
+    const shouldShowParticipants = (project.currentParticipants && project.currentParticipants > 0) || 
+                                    (project.maxParticipants && project.maxParticipants > 0);
 
     return (
         <article className={`proj-card ${featured ? 'proj-card--featured' : ''}`}>
@@ -155,7 +161,7 @@ const ProjectCard = ({ project, featured = false }) => {
                             </div>
                         )}
 
-                        {(project.currentParticipants !== undefined || project.maxParticipants !== undefined) && (
+                        {shouldShowParticipants && (
                             <div className="proj-card__metric">
                                 <span className="proj-card__metric-label">{t('projects.card.participants')}</span>
                                 <span className="proj-card__metric-value">

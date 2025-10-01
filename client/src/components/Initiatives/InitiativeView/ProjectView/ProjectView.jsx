@@ -136,7 +136,7 @@ export const ProjectView = () => {
             navLinks.removeEventListener('mousemove', handleMouseMove);
         };
     }, []);
-   const sortedSections = useMemo(() => {
+    const sortedSections = useMemo(() => {
         if (!currentProject?.sections) return [];
         return [...currentProject.sections].sort((a, b) => a.id - b.id);
     }, [currentProject?.sections]);
@@ -446,6 +446,15 @@ export const ProjectView = () => {
                                                 {currentProject.currentParticipants && <span className="project-view-meta-value">
                                                     {currentProject.currentParticipants || 0} / {currentProject.maxParticipants || '∞'}
                                                 </span>}
+                                            </div>
+                                        )}
+                                        {/* 🆕 БЕНЕФИЦИЕНТИ */}
+                                        {currentProject.beneficiaries?.totalCount && currentProject.beneficiaries.totalCount > 0 && (
+                                            <div className="project-view-meta-item">
+                                                <span className="project-view-meta-label">{t('projectView.meta.beneficiaries')}:</span>
+                                                <span className="project-view-meta-value">
+                                                    {currentProject.beneficiaries.totalCount}
+                                                </span>
                                             </div>
                                         )}
                                     </div>
