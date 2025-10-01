@@ -30,6 +30,8 @@ export const StoriesHeaderAdmin = ({
         </div>
 
         {/* Keep the stats section but make it invisible in create mode */}
+        
+        {/* Keep the stats section but make it invisible in create mode */}
         <div className="stories-header-admin-stats">
           <div className={`stories-header-admin-stat-card ${viewMode === 'create' ? 'invisible' : ''}`}>
             <span className="stories-header-admin-stat-number">
