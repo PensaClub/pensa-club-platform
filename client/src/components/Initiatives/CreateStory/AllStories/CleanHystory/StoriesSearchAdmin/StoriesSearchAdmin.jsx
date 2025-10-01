@@ -83,7 +83,6 @@ export const StoriesSearchAdmin = ({
                     </select>
                 </div>
 
-                {/* Sort By Filter */}
                 <div className="stories-search-admin-filter-group">
                     <label className="stories-search-admin-filter-label">
                         {t('stories.admin.filters.sortBy')}
@@ -110,4 +109,5 @@ export const StoriesSearchAdmin = ({
             </div>
         </div>
     );
+
 };
