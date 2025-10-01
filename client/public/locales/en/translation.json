@@ -1787,7 +1787,8 @@
       "category": "Category",
       "location": "Location",
       "participants": "Participants",
-      "timeline": "Timeline"
+      "timeline": "Timeline",
+      "beneficiaries": "Beneficiaries"
     },
     "buttons": {
       "apply": "Apply",
@@ -2526,6 +2527,14 @@
       "tryChangingCriteria": "Try changing the search criteria"
     },
     "create": {
+      "participantsAndBeneficiaries": "Teilnehmer & Begünstigte",
+      "beneficiaries": "Anzahl der Begünstigten",
+      "beneficiaries-help": "Geben Sie die Gesamtzahl der Personen ein, die vom Projekt profitieren werden",
+      "beneficiaries-section-help": "Begünstigte sind alle Personen, die von den Projektergebnissen profitieren werden - Teilnehmer, ihre Familien, Gemeindemitglieder und andere",
+      "projectImpact": "Projektwirkung",
+      "impactOverview": "Wirkungsübersicht",
+      "activeParticipants": "Aktive Teilnehmer",
+      "totalBeneficiaries": "Gesamtzahl der Begünstigten",
       "newTitle": "Create New Project",
       "editTitle": "Edit Project",
       "subtitle": "Create your project and attract participants",

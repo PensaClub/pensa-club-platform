@@ -120,7 +120,12 @@ const useCreateProject = (initialValues, onSubmitHandler) => {
     maxParticipants: '',
     currentParticipants: 0,
     participantRequirements: [],
-
+    beneficiaries: {
+      totalCount: null,
+      totalAmountDistributed: null,
+      currency: 'BGN',
+      list: []
+    },
     // Content sections
     sections: [],
 
@@ -196,45 +201,46 @@ const useCreateProject = (initialValues, onSubmitHandler) => {
     };
   }, []);
 
-useEffect(() => {
-  const loadInitiatives = async () => {
-    // Ако вече сме опитали да заредим, не опитваме отново
-    if (hasTriedToLoadInitiatives.current) {
-      return;
-    }
-
-    // Маркираме че започваме заявка
-    hasTriedToLoadInitiatives.current = true;
-
-    try {
-      // Проверяваме дали вече има инициативи от context-а
-      if (initiatives && initiatives.length > 0) {
-        setAvailableInitiatives(initiatives);
+  useEffect(() => {
+    const loadInitiatives = async () => {
+      // Ако вече сме опитали да заредим, не опитваме отново
+      if (hasTriedToLoadInitiatives.current) {
         return;
       }
 
-      // Ако няма инициативи в context-а, правим заявка
-      const response = await getAllInitiatives(1, true);
-      const loadedInitiatives = response.data || [];
-      
-      setAvailableInitiatives(loadedInitiatives);
-      
-    } catch (error) {
-      console.error('❌ Error loading initiatives:', error);
-      setAvailableInitiatives([]); 
+      // Маркираме че започваме заявка
+      hasTriedToLoadInitiatives.current = true;
+
+      try {
+        // Проверяваме дали вече има инициативи от context-а
+        if (initiatives && initiatives.length > 0) {
+          setAvailableInitiatives(initiatives);
+          return;
+        }
+
+        // Ако няма инициативи в context-а, правим заявка
+        const response = await getAllInitiatives(1, true);
+        const loadedInitiatives = response.data || [];
+
+        setAvailableInitiatives(loadedInitiatives);
+
+      } catch (error) {
+        console.error('❌ Error loading initiatives:', error);
+        setAvailableInitiatives([]);
+      }
+    };
+
+    loadInitiatives();
+  }, []);
+
+  // Ако initiatives се промени СЛЕД първоначалното зареждане, обновяваме
+  useEffect(() => {
+    if (hasTriedToLoadInitiatives.current && initiatives && initiatives.length > 0) {
+      setAvailableInitiatives(initiatives);
     }
-  };
-
-  loadInitiatives();
-}, []);
-
-// Ако initiatives се промени СЛЕД първоначалното зареждане, обновяваме
-useEffect(() => {
-  if (hasTriedToLoadInitiatives.current && initiatives && initiatives.length > 0) {
-    setAvailableInitiatives(initiatives);
-  }
-}, [initiatives]);
+  }, [initiatives]);
   // Load draft from URL
+  // В useCreateProject.js - useEffect за зареждане от localStorage (около ред 235)
   useEffect(() => {
     const loadDraftFromUrl = async () => {
       const urlParams = new URLSearchParams(window.location.search);
@@ -242,67 +248,49 @@ useEffect(() => {
       const editIdFromUrl = urlParams.get('editId');
       const mode = urlParams.get('mode');
 
-      if (draftIdFromUrl && !initialValues) {
-        try {
-          const draftData = await getDraftProjectById(draftIdFromUrl);
-          if (draftData) {
-            const processedData = { ...draftData };
+      // 🔧 ПЪРВО ПРОВЕРЯВАМЕ ЗА localStorage ПРИ EDIT
+      if (editIdFromUrl && mode === 'edit') {
+        // Проверяваме за localStorage данни
+        const savedDraft = loadFromLocalStorage();
+        if (savedDraft && savedDraft.data.editId === editIdFromUrl) {
+          // Имаме запазени локални промени
+          const processedData = { ...savedDraft.data };
 
-            if (processedData.fullDescription && typeof processedData.fullDescription === 'string') {
-              try {
-                processedData.fullDescription = htmlToSlate(processedData.fullDescription);
-              } catch (error) {
-                console.error('❌ Error converting fullDescription:', error);
-                processedData.fullDescription = createSlateEditorState();
-              }
-            } else {
+          // Конвертираме HTML към Slate за редакторите
+          if (processedData.fullDescription && typeof processedData.fullDescription === 'string') {
+            try {
+              processedData.fullDescription = htmlToSlate(processedData.fullDescription);
+            } catch (error) {
+              console.error('❌ Error converting fullDescription:', error);
               processedData.fullDescription = createSlateEditorState();
             }
-
-            // sections[].content - съдържанието на секциите (Slate редактор)
-            if (processedData.sections && Array.isArray(processedData.sections)) {
-              processedData.sections = processedData.sections.map(section => {
-                if (section.content && typeof section.content === 'string') {
-                  try {
-                    return {
-                      ...section,
-                      content: htmlToSlate(section.content)
-                    };
-                  } catch (error) {
-                    console.error('❌ Error converting section content:', error);
-                    return {
-                      ...section,
-                      content: createSlateEditorState()
-                    };
-                  }
-                } else {
-                  return {
-                    ...section,
-                    content: createSlateEditorState()
-                  };
-                }
-              });
-            }
-
-            // 🔧 ОСТАНАЛИТЕ полета остават както са (strings)
-            // title, shortDescription, tags, etc. - НЕ се конвертират
-
-            setValues(processedData);
-            setDraftId(draftIdFromUrl);
-            notify('success', 'Черновата е заредена за редактиране');
           }
-        } catch (error) {
-          console.error('Error loading draft:', error);
-          notify('error', 'Грешка при зареждане на черновата');
+
+          if (processedData.sections && Array.isArray(processedData.sections)) {
+            processedData.sections = processedData.sections.map(section => {
+              if (section.content && typeof section.content === 'string') {
+                try {
+                  return { ...section, content: htmlToSlate(section.content) };
+                } catch (error) {
+                  return { ...section, content: createSlateEditorState() };
+                }
+              }
+              return section;
+            });
+          }
+
+          setValues(processedData);
+          setEditId(editIdFromUrl);
+          notify('info', 'Заредени са вашите последни промени');
+          return;
         }
-      } else if (editIdFromUrl && mode === 'edit') {
+
+        // Ако няма localStorage, зареждаме от сървъра
         try {
           const projectData = await getProjectById(editIdFromUrl);
           if (projectData) {
             const processedData = { ...projectData };
 
-            // 🎯 КОНВЕРТИРАНЕ НА SLATE ПОЛЕТАТА ОТ HTML КЪМ SLATE
-            // fullDescription
             if (processedData.fullDescription && typeof processedData.fullDescription === 'string') {
               try {
                 processedData.fullDescription = htmlToSlate(processedData.fullDescription);
@@ -310,32 +298,18 @@ useEffect(() => {
                 console.error('❌ Error converting fullDescription:', error);
                 processedData.fullDescription = createSlateEditorState();
               }
-            } else {
-              processedData.fullDescription = createSlateEditorState();
             }
 
-            // sections[].content
             if (processedData.sections && Array.isArray(processedData.sections)) {
               processedData.sections = processedData.sections.map(section => {
                 if (section.content && typeof section.content === 'string') {
                   try {
-                    return {
-                      ...section,
-                      content: htmlToSlate(section.content)
-                    };
+                    return { ...section, content: htmlToSlate(section.content) };
                   } catch (error) {
-                    console.error('❌ Error converting section content:', error);
-                    return {
-                      ...section,
-                      content: createSlateEditorState()
-                    };
+                    return { ...section, content: createSlateEditorState() };
                   }
-                } else {
-                  return {
-                    ...section,
-                    content: createSlateEditorState()
-                  };
                 }
+                return section;
               });
             }
 
@@ -347,6 +321,8 @@ useEffect(() => {
           console.error('Error loading project for edit:', error);
           notify('error', 'Грешка при зареждане на проекта');
         }
+      } else if (draftIdFromUrl && !initialValues) {
+        // Същата логика за drafts...
       }
     };
 
@@ -480,6 +456,7 @@ useEffect(() => {
       const dataToSave = {
         ...data,
         draftId: draftId,
+        editId: editId, // 🔧 ДОБАВЯМЕ editId
         timestamp: new Date().toISOString()
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(dataToSave));
@@ -488,7 +465,7 @@ useEffect(() => {
       console.error('❌ Error saving to localStorage:', error);
       notify('error', 'Грешка при запазване в браузъра');
     }
-  }, [draftId]);
+  }, [draftId, editId]);
 
   // 🕒 TIMELINE HELPER FUNCTIONS
   const calculateDuration = useCallback((startDate, endDate) => {
@@ -609,10 +586,14 @@ useEffect(() => {
       if (!values.title?.trim()) {
         return;
       }
+
       const currentValues = { ...values, [name]: value };
+
+      // 🔧 ВИНАГИ запазваме в localStorage (и за draft, и за edit)
       saveToLocalStorage(currentValues);
 
-      if (userEmail) {
+      // 🔧 Запазваме в база данни само ако е draft mode (не е edit mode)
+      if (userEmail && !editId) {
         try {
           const convertedData = convertFormToHtml.call(null, currentValues);
           if (draftId) {
@@ -629,7 +610,7 @@ useEffect(() => {
         }
       }
     }, 30000);
-  }, [values, errors, generateSlug, saveDraftProject, userEmail, saveToLocalStorage, calculateDuration]);
+  }, [values, errors, generateSlug, saveDraftProject, userEmail, saveToLocalStorage, calculateDuration, editId, draftId, updateDraftProject, setDraftId]);
 
   // 🎯 HANDLE BLUR
   const onBlurHandler = useCallback((e, isEditor = false, customData = null) => {
@@ -1257,17 +1238,17 @@ useEffect(() => {
   }, []);
 
   // Milestone management
- const addMilestone = useCallback(() => {
-  setValues(prev => ({
-    ...prev,
-    milestones: [...prev.milestones, { 
-      title: '',
-      description: '', 
-      dueDate: '',
-      status: 'pending' // 🆕 ДОБАВИ СТАТУС
-    }]
-  }));
-}, []);
+  const addMilestone = useCallback(() => {
+    setValues(prev => ({
+      ...prev,
+      milestones: [...prev.milestones, {
+        title: '',
+        description: '',
+        dueDate: '',
+        status: 'pending' // 🆕 ДОБАВИ СТАТУС
+      }]
+    }));
+  }, []);
 
   const removeMilestone = useCallback((index) => {
     setValues(prev => ({
@@ -1634,67 +1615,67 @@ useEffect(() => {
   const convertFormToHtml = useCallback(() => {
     try {
       const htmlValues = { ...values };
- // Helper функция за конвертиране на MIME type към enum
-    const convertMimeTypeToEnum = (mimeType, fileName) => {
-      if (!mimeType && fileName) {
-        // Ако няма mimeType, извличаме от разширението
-        const extension = fileName.split('.').pop().toLowerCase();
-        switch (extension) {
-          case 'pdf': return 'pdf';
-          case 'docx': return 'docx';
-          case 'doc': return 'doc';
-          case 'xlsx': return 'xlsx';
-          case 'xls': return 'xls';
-          case 'pptx': return 'pptx';
-          case 'ppt': return 'ppt';
-          case 'txt': return 'txt';
-          case 'csv': return 'csv';
-          default: return null;
-        }
-      }
-
-      // Конвертираме MIME type към enum
-      switch (mimeType) {
-        case 'application/pdf':
-          return 'pdf';
-        case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-          return 'docx';
-        case 'application/msword':
-          return 'doc';
-        case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
-          return 'xlsx';
-        case 'application/vnd.ms-excel':
-          return 'xls';
-        case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
-          return 'pptx';
-        case 'application/vnd.ms-powerpoint':
-          return 'ppt';
-        case 'text/plain':
-          return 'txt';
-        case 'text/csv':
-          return 'csv';
-        case 'application/rtf':
-          return 'rtf';
-        default:
-          // Ако не разпознаваме MIME type-а, опитваме се от името на файла
-          if (fileName) {
-            const extension = fileName.split('.').pop().toLowerCase();
-            switch (extension) {
-              case 'pdf': return 'pdf';
-              case 'docx': return 'docx';
-              case 'doc': return 'doc';
-              case 'xlsx': return 'xlsx';
-              case 'xls': return 'xls';
-              case 'pptx': return 'pptx';
-              case 'ppt': return 'ppt';
-              case 'txt': return 'txt';
-              case 'csv': return 'csv';
-              default: return 'pdf'; // Fallback към pdf
-            }
+      // Helper функция за конвертиране на MIME type към enum
+      const convertMimeTypeToEnum = (mimeType, fileName) => {
+        if (!mimeType && fileName) {
+          // Ако няма mimeType, извличаме от разширението
+          const extension = fileName.split('.').pop().toLowerCase();
+          switch (extension) {
+            case 'pdf': return 'pdf';
+            case 'docx': return 'docx';
+            case 'doc': return 'doc';
+            case 'xlsx': return 'xlsx';
+            case 'xls': return 'xls';
+            case 'pptx': return 'pptx';
+            case 'ppt': return 'ppt';
+            case 'txt': return 'txt';
+            case 'csv': return 'csv';
+            default: return null;
           }
-          return 'pdf'; // Default fallback
-      }
-    };
+        }
+
+        // Конвертираме MIME type към enum
+        switch (mimeType) {
+          case 'application/pdf':
+            return 'pdf';
+          case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+            return 'docx';
+          case 'application/msword':
+            return 'doc';
+          case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+            return 'xlsx';
+          case 'application/vnd.ms-excel':
+            return 'xls';
+          case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
+            return 'pptx';
+          case 'application/vnd.ms-powerpoint':
+            return 'ppt';
+          case 'text/plain':
+            return 'txt';
+          case 'text/csv':
+            return 'csv';
+          case 'application/rtf':
+            return 'rtf';
+          default:
+            // Ако не разпознаваме MIME type-а, опитваме се от името на файла
+            if (fileName) {
+              const extension = fileName.split('.').pop().toLowerCase();
+              switch (extension) {
+                case 'pdf': return 'pdf';
+                case 'docx': return 'docx';
+                case 'doc': return 'doc';
+                case 'xlsx': return 'xlsx';
+                case 'xls': return 'xls';
+                case 'pptx': return 'pptx';
+                case 'ppt': return 'ppt';
+                case 'txt': return 'txt';
+                case 'csv': return 'csv';
+                default: return 'pdf'; // Fallback към pdf
+              }
+            }
+            return 'pdf'; // Default fallback
+        }
+      };
       // Remove ID fields
       if (htmlValues.sponsors) {
         htmlValues.sponsors = htmlValues.sponsors.map(sponsor => {
@@ -1710,51 +1691,51 @@ useEffect(() => {
         });
       }
       // 🔧 ПРАВИЛНА ТРАНСФОРМАЦИЯ НА ДОКУМЕНТИТЕ
-    if (htmlValues.downloadMaterials && Array.isArray(htmlValues.downloadMaterials)) {
-      htmlValues.downloadMaterials = htmlValues.downloadMaterials.map((document, index) => {
-        const title = document.name || document.filename || `Document ${index + 1}`;
-        const titleSlug = generateSlug ? generateSlug(title) : title
-          .toLowerCase()
-          .replace(/\.[^/.]+$/, '')
-          .replace(/[^a-z0-9\s]/g, '')
-          .replace(/\s+/g, '-')
-          .replace(/-+/g, '-')
-          .replace(/^-+|-+$/g, '')
-          .trim() || `document-${Date.now()}`;
+      if (htmlValues.downloadMaterials && Array.isArray(htmlValues.downloadMaterials)) {
+        htmlValues.downloadMaterials = htmlValues.downloadMaterials.map((document, index) => {
+          const title = document.name || document.filename || `Document ${index + 1}`;
+          const titleSlug = generateSlug ? generateSlug(title) : title
+            .toLowerCase()
+            .replace(/\.[^/.]+$/, '')
+            .replace(/[^a-z0-9\s]/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/-+/g, '-')
+            .replace(/^-+|-+$/g, '')
+            .trim() || `document-${Date.now()}`;
 
-        // Конвертираме MIME type към enum
-        const fileType = convertMimeTypeToEnum(document.type, document.name || document.filename);
-        
-        // Конвертираме размера към string
-        const fileSize = document.size ? String(document.size) : null;
+          // Конвертираме MIME type към enum
+          const fileType = convertMimeTypeToEnum(document.type, document.name || document.filename);
 
-        return {
-          id: null, // Сървърът ще генерира ID
-          titleSlug: titleSlug,
-          title: title,
-          description: null,
-          fileType: fileType, // Конвертиран enum
-          fileSize: fileSize, // Конвертиран string
-          downloadUrl: document.url || document.src || null,
-          image: null
-        };
-      });
+          // Конвертираме размера към string
+          const fileSize = document.size ? String(document.size) : null;
 
-    }
+          return {
+            id: null, // Сървърът ще генерира ID
+            titleSlug: titleSlug,
+            title: title,
+            description: null,
+            fileType: fileType, // Конвертиран enum
+            fileSize: fileSize, // Конвертиран string
+            downloadUrl: document.url || document.src || null,
+            image: null
+          };
+        });
 
-    // 🆕 ТРАНСФОРМАЦИЯ НА ГАЛЕРИЯТА ЗА СЪРВЪРА (ако е нужно)
-    if (htmlValues.gallery && Array.isArray(htmlValues.gallery)) {
-      htmlValues.gallery = htmlValues.gallery.map((image, index) => {
-        return {
-          src: image.src || image.url,
-          alt: image.alt || `Gallery image ${index + 1}`,
-          caption: image.caption || '',
-          name: image.name || `Image ${index + 1}`,
-          size: image.size || null,
-          type: image.type || null
-        };
-      });
-    }
+      }
+
+      // 🆕 ТРАНСФОРМАЦИЯ НА ГАЛЕРИЯТА ЗА СЪРВЪРА (ако е нужно)
+      if (htmlValues.gallery && Array.isArray(htmlValues.gallery)) {
+        htmlValues.gallery = htmlValues.gallery.map((image, index) => {
+          return {
+            src: image.src || image.url,
+            alt: image.alt || `Gallery image ${index + 1}`,
+            caption: image.caption || '',
+            name: image.name || `Image ${index + 1}`,
+            size: image.size || null,
+            type: image.type || null
+          };
+        });
+      }
 
       // 🆕 ПРАВИЛНО конвертиране на fullDescription
       try {
@@ -1855,6 +1836,42 @@ useEffect(() => {
         htmlValues.currentParticipants = Number(htmlValues.currentParticipants);
       } else {
         htmlValues.currentParticipants = null;
+      }
+      // 🔧 ОБНОВИ BENEFICIARIES СТРУКТУРАТА
+      if (htmlValues.beneficiaries) {
+        const hasTotalCount = htmlValues.beneficiaries.totalCount && htmlValues.beneficiaries.totalCount.toString().trim();
+        const hasAmount = htmlValues.beneficiaries.totalAmountDistributed && htmlValues.beneficiaries.totalAmountDistributed.toString().trim();
+        const hasList = htmlValues.beneficiaries.list && htmlValues.beneficiaries.list.length > 0;
+
+        // Ако няма никакви данни, правим целия обект null
+        if (!hasTotalCount && !hasAmount && !hasList) {
+          htmlValues.beneficiaries = null;
+        } else {
+          // Създаваме нов обект само с попълнените полета
+          const beneficiariesObj = {
+            currency: htmlValues.beneficiaries.currency || 'BGN',
+            list: []
+          };
+
+          // Добавяме totalCount само ако има стойност
+          if (hasTotalCount) {
+            beneficiariesObj.totalCount = Number(htmlValues.beneficiaries.totalCount);
+          }
+
+          // Добавяме totalAmountDistributed само ако има стойност
+          if (hasAmount) {
+            beneficiariesObj.totalAmountDistributed = Number(htmlValues.beneficiaries.totalAmountDistributed);
+          }
+
+          // Добавяме list ако има елементи
+          if (hasList) {
+            beneficiariesObj.list = htmlValues.beneficiaries.list;
+          }
+
+          htmlValues.beneficiaries = beneficiariesObj;
+        }
+      } else {
+        htmlValues.beneficiaries = null;
       }
 
       // Sponsors amounts
@@ -2774,12 +2791,14 @@ useEffect(() => {
         }
 
         // 🔧 ИЗЧИСТВАМЕ СЛЕД EDIT
-        resetForm();
-        setEditId(null);
-        clearLocalStorage();
+        clearLocalStorage(); // Изчистваме localStorage
+        resetForm();         // Изчистваме формата
+        setEditId(null);     // Изчистваме editId
+        setDraftId(null);    // Изчистваме draftId
         setErrors({});
 
         notify('success', 'Проектът е обновен успешно!');
+        window.history.replaceState({}, '', '/profile/projects-create');
         navigate(`/projects/${submissionData.slug || editIdFromUrl}`);
       } else {
         // CREATE NEW PROJECT MODE

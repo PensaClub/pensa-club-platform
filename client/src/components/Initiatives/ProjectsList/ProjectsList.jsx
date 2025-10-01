@@ -5,6 +5,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { useInitiativeContext } from '../../contexts/InitiativeProvider';
 import { useLoading } from '../../contexts/LoadingContext';
+import { getLocationFromCoordinates } from '../../../utils/getLocationFromCoordinates';
 
 import ProjectCard from './ProjectCard/ProjectCard';
 import ProjectFilters from './ProjectFilters/ProjectFilters';
@@ -13,7 +14,6 @@ import ProjectsSlider from './ProjectsSlider/ProjectsSlider';
 import ScrollToTop from '../../ScrollToTop/ScrollToTop';
 
 import './projectsList.css';
-import { formatLocation } from '../../../utils/formatLocation';
 
 const ProjectsList = () => {
     const { t } = useTranslation();
@@ -24,14 +24,15 @@ const ProjectsList = () => {
         getAllProjects,
         projects: contextProjects,
         projectsLoaded,
-        projectsHasMore,          // Добавих това
-        projectsCurrentPage,      // Добавих това
-        isLoading: contextLoading // Добавих това
+        projectsHasMore,
+        projectsCurrentPage,
+        isLoading: contextLoading
     } = useInitiativeContext();
 
     // State management
     const [allProjects, setAllProjects] = useState([]);
     const [featuredProject, setFeaturedProject] = useState(null);
+    const [featuredLocationText, setFeaturedLocationText] = useState('');
     const [sliderProjects, setSliderProjects] = useState([]);
     const [filteredProjects, setFilteredProjects] = useState([]);
     const [isSearchActive, setIsSearchActive] = useState(false);
@@ -48,6 +49,23 @@ const ProjectsList = () => {
     });
 
     const [sortBy, setSortBy] = useState('newest');
+
+    // Зареждаме локацията за featured project
+    useEffect(() => {
+        const loadFeaturedLocation = async () => {
+            if (featuredProject?.location?.[0]?.coordinates) {
+                const coords = featuredProject.location[0].coordinates;
+                const location = await getLocationFromCoordinates(coords.lat, coords.lng);
+                setFeaturedLocationText(location);
+            } else {
+                setFeaturedLocationText(t('location.unknownLocation'));
+            }
+        };
+
+        if (featuredProject) {
+            loadFeaturedLocation();
+        }
+    }, [featuredProject, t]);
 
     // Initial load
     useEffect(() => {
@@ -113,10 +131,10 @@ const ProjectsList = () => {
 
         setAllProjects(sortedProjects);
         setFeaturedProject(sortedProjects[0]);
-        setSliderProjects(sortedProjects.slice(1, 7)); // Show 6 in slider
+        setSliderProjects(sortedProjects.slice(1, 7));
     }, []);
 
-    // Handle Load More - СЪЩИЯ ПОДХОД КАТО В ADMIN
+    // Handle Load More
     const handleLoadMore = useCallback(() => {
         if (projectsHasMore && !contextLoading) {
             getAllProjects(projectsCurrentPage + 1);
@@ -236,7 +254,6 @@ const ProjectsList = () => {
     // Get displayed projects
     const displayedProjects = isSearchActive ? filteredProjects : allProjects;
 
-    // ПОКАЗВАЙ БУТОНА САМО КОГАТО НЕ СЕ ТЪРСИ/ФИЛТРИРА И ИМА ОЩЕ ПРОЕКТИ
     const hasMoreProjects = !isSearchActive && projectsHasMore;
 
     useEffect(() => {
@@ -255,7 +272,6 @@ const ProjectsList = () => {
             setSliderProjects(newSliderProjects);
         }
 
-        // Smooth scroll to featured
         setTimeout(() => {
             document.querySelector('.featured-project')?.scrollIntoView({
                 behavior: 'smooth',
@@ -281,6 +297,12 @@ const ProjectsList = () => {
             month: 'short',
             year: 'numeric'
         });
+    };
+
+    // Проверка дали да се показва секцията с участници
+    const shouldShowParticipants = (project) => {
+        return (project.currentParticipants && project.currentParticipants > 0) || 
+               (project.maxParticipants && project.maxParticipants > 0);
     };
 
     // Calculate stats
@@ -369,7 +391,6 @@ const ProjectsList = () => {
                 <meta name="description" content={getPageDescription()} />
                 <meta name="keywords" content={getKeywords()} />
 
-                {/* Open Graph мета данни */}
                 <meta property="og:title" content={getPageTitle()} />
                 <meta property="og:description" content={getPageDescription()} />
                 <meta property="og:image" content="https://www.pensa.club/images/projects-og-image.jpg" />
@@ -377,23 +398,19 @@ const ProjectsList = () => {
                 <meta property="og:type" content="website" />
                 <meta property="og:site_name" content="Pensa Club" />
 
-                {/* Twitter Card */}
                 <meta name="twitter:card" content="summary_large_image" />
                 <meta name="twitter:title" content={getPageTitle()} />
                 <meta name="twitter:description" content={getPageDescription()} />
                 <meta name="twitter:image" content="https://www.pensa.club/images/projects-twitter-image.jpg" />
 
-                {/* Допълнителни мета данни */}
                 <meta name="robots" content="index, follow" />
                 <meta name="author" content="Pensa Club" />
                 <link rel="canonical" href="https://www.pensa.club/projects" />
 
-                {/* Structured Data */}
                 <script type="application/ld+json">
                     {JSON.stringify(getStructuredData())}
                 </script>
 
-                {/* Алтернативни езици */}
                 <link rel="alternate" hreflang="bg" href="https://www.pensa.club/bg/projects" />
                 <link rel="alternate" hreflang="en" href="https://www.pensa.club/en/projects" />
             </Helmet>
@@ -402,7 +419,6 @@ const ProjectsList = () => {
                 <div className="starfield"></div>
                 <section className="projects-hero">
                     <div className="projects-hero-content-wrapper">
-                        {/* ЛЯВО: Floating keywords + Connecting lines */}
                         <div className="floating-keywords">
                             <div className="connecting-lines">
                                 <svg className="line-svg">
@@ -433,7 +449,6 @@ const ProjectsList = () => {
                             <div className="keyword-tag">{t('projects.hero.keywords.development')}</div>
                         </div>
 
-                        {/* СРЕДАТА: Hero content */}
                         <div className="hero-content">
                             <div className="hero-badge">
                                 <span className="badge-icon">🚀</span>
@@ -443,7 +458,6 @@ const ProjectsList = () => {
                             <p className="hero-subtitle">{t('projects.list.subtitle')}</p>
                         </div>
 
-                        {/* ДЯСНО: Right floating keywords + Right connecting lines */}
                         <div className="hero-visual">
                             <div className="right-connecting-lines">
                                 <svg className="line-svg">
@@ -536,7 +550,6 @@ const ProjectsList = () => {
                                             </div>
                                         )}
 
-                                        {/* Badges */}
                                         <div className="featured-project-badges">
                                             {featuredProject.status && (
                                                 <span className={`featured-status-badge featured-status-${featuredProject.status}`}>
@@ -583,7 +596,7 @@ const ProjectsList = () => {
                                                 </div>
                                             )}
 
-                                            {(featuredProject.currentParticipants !== undefined || featuredProject.maxParticipants !== undefined) && (
+                                            {shouldShowParticipants(featuredProject) && (
                                                 <div className="featured-detail-item">
                                                     <span className="featured-detail-icon">👥</span>
                                                     <span className="featured-detail-label">{t('projects.card.participants')}</span>
@@ -593,16 +606,15 @@ const ProjectsList = () => {
                                                 </div>
                                             )}
 
-                                            {featuredProject.location?.[0]?.address && (
+                                            {featuredLocationText && (
                                                 <div className="featured-detail-item">
                                                     <span className="featured-detail-icon">📍</span>
                                                     <span className="featured-detail-label">{t('projects.card.location')}</span>
-                                                    <span className="featured-detail-value">{formatLocation(featuredProject.location)}</span>
+                                                    <span className="featured-detail-value">{featuredLocationText}</span>
                                                 </div>
                                             )}
                                         </div>
 
-                                        {/* Progress if available */}
                                         {featuredProject.milestones?.length > 0 && (
                                             <div className="featured-progress-section">
                                                 <div className="featured-progress-header">
@@ -622,7 +634,6 @@ const ProjectsList = () => {
                                             </div>
                                         )}
 
-                                        {/* Initiative Link */}
                                         {featuredProject.initiativeSlug && (
                                             <div className="featured-initiative-link">
                                                 <span className="featured-link-icon">🔗</span>
