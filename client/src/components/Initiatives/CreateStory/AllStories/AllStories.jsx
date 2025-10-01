@@ -32,8 +32,9 @@ export const AllStories = () => {
     });
     const [openDropdownId, setOpenDropdownId] = useState(null);
     const [showPreview, setShowPreview] = useState(false);
-    const [previewData, setPreviewData] = useState(null);
 
+    const [previewData, setPreviewData] = useState(null);
+  // Form state
     // Form state
     const [formMode, setFormMode] = useState(null); // null, 'create', or 'edit'
     const [editingItem, setEditingItem] = useState(null);
