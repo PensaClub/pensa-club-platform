@@ -3,14 +3,14 @@ import { useEffect, useState, useCallback, useMemo } from 'react';
 import './allStories.css';
 import { useTranslation } from 'react-i18next';
 import { useInitiativeContext } from '../../../contexts/InitiativeProvider';
-import { StoriesSearchAdmin } from './StoriesSearchAdmin/StoriesSearchAdmin';
-import { StoriesHeaderAdmin } from './StoriesHeaderAdmin/StoriesHeaderAdmin';
 import { notify } from '../../../../utils/notify';
 import StoryForm from '../MainForm/MainFormStory';
 import { StoryPubView } from '../../InitiativeView/StoryPubView/StoryPubView';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { transformStoryForDisplay } from '../utils/dataTransformationUtils';
+import { StoriesSearchAdmin } from './CleanHystory/StoriesSearchAdmin/StoriesSearchAdmin';
+import { StoriesHeaderAdmin } from './CleanHystory/StoriesHeaderAdmin/StoriesHeaderAdmin';
 
 export const AllStories = () => {
     const { t } = useTranslation();
