@@ -627,3 +627,75 @@
         font-size: 0.8rem;
     }
 }
+.project-application-beneficiaries-subsection {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.project-application-beneficiaries-subsection h4 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 1rem;
+}
+
+.project-application-impact-summary {
+    margin-top: 1.5rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border-radius: 12px;
+    border: 1px solid #bae6fd;
+}
+
+.project-application-impact-summary h5 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #0369a1;
+    margin-bottom: 1rem;
+}
+
+.project-application-impact-cards {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+}
+
+.project-application-impact-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem 1.5rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.project-application-impact-card.highlight {
+    background: linear-gradient(135deg, #1e40af 0%, #0369a1 100%);
+}
+
+.project-application-impact-card.highlight .impact-card-value,
+.project-application-impact-card.highlight .impact-card-label {
+    color: white;
+}
+
+.impact-card-icon {
+    font-size: 2rem;
+}
+
+.impact-card-value {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #0284c7;
+}
+
+.impact-card-label {
+    font-size: 0.875rem;
+    color: #64748b;
+    text-align: center;
+}
