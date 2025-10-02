@@ -10,6 +10,8 @@ export const ApplicationForm = ({ project, onSubmit }) => {
   const { recentApplications } = useInitiativeContext();
   const [isLoading, setIsLoading] = useState(false);
   const [hasApplied, setHasApplied] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [touched, setTouched] = useState({});
   const [formData, setFormData] = useState({
     firstName: profileData?.details?.firstName || '',
     lastName: profileData?.details?.lastName || '',
@@ -18,7 +20,6 @@ export const ApplicationForm = ({ project, onSubmit }) => {
     isAnonymous: false
   });
 
-  // Проверяваме дали потребителят вече е кандидатствал
   useEffect(() => {
     if (profileData?.email && recentApplications) {
       const userApplication = recentApplications.find(app => app.email === profileData.email);
@@ -26,11 +27,101 @@ export const ApplicationForm = ({ project, onSubmit }) => {
     }
   }, [profileData?.email, recentApplications]);
 
+  // Валидация на полетата
+  const validateField = (name, value) => {
+    switch (name) {
+      case 'firstName':
+        if (!value.trim()) {
+          return t('applicationForm.validation.firstNameRequired');
+        }
+        if (value.trim().length < 2) {
+          return t('applicationForm.validation.firstNameTooShort');
+        }
+        return '';
+
+      case 'lastName':
+        if (!value.trim()) {
+          return t('applicationForm.validation.lastNameRequired');
+        }
+        if (value.trim().length < 2) {
+          return t('applicationForm.validation.lastNameTooShort');
+        }
+        return '';
+
+      case 'email':
+        if (!value.trim()) {
+          return t('applicationForm.validation.emailRequired');
+        }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value)) {
+          return t('applicationForm.validation.emailInvalid');
+        }
+        return '';
+
+      case 'phone':
+        if (!value.trim()) {
+          return t('applicationForm.validation.phoneRequired');
+        }
+        // Проверка за валиден телефонен номер (поне 9 цифри)
+        const phoneRegex = /^[+]?[\d\s()-]{9,}$/;
+        if (!phoneRegex.test(value)) {
+          return t('applicationForm.validation.phoneInvalid');
+        }
+        return '';
+
+      default:
+        return '';
+    }
+  };
+
+  // Валидация на всички полета
+  const validateForm = () => {
+    const newErrors = {};
+    
+    newErrors.firstName = validateField('firstName', formData.firstName);
+    newErrors.lastName = validateField('lastName', formData.lastName);
+    newErrors.email = validateField('email', formData.email);
+    newErrors.phone = validateField('phone', formData.phone);
+
+    // Премахваме празните грешки
+    Object.keys(newErrors).forEach(key => {
+      if (!newErrors[key]) delete newErrors[key];
+    });
+
+    return newErrors;
+  };
+
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
+    const newValue = type === 'checkbox' ? checked : value;
+    
     setFormData(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: newValue
+    }));
+
+    // Валидираме полето при промяна, ако вече е било докоснато
+    if (touched[name]) {
+      const error = validateField(name, newValue);
+      setErrors(prev => ({
+        ...prev,
+        [name]: error
+      }));
+    }
+  };
+
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    
+    setTouched(prev => ({
+      ...prev,
+      [name]: true
+    }));
+
+    const error = validateField(name, value);
+    setErrors(prev => ({
+      ...prev,
+      [name]: error
     }));
   };
 
@@ -44,6 +135,35 @@ export const ApplicationForm = ({ project, onSubmit }) => {
 
     if (hasApplied) {
       alert(t('applicationForm.alerts.alreadyApplied'));
+      return;
+    }
+
+    // Маркираме всички полета като докоснати
+    setTouched({
+      firstName: true,
+      lastName: true,
+      email: true,
+      phone: true
+    });
+
+    // Валидираме формата
+    const formErrors = validateForm();
+    
+    if (Object.keys(formErrors).length > 0) {
+      setErrors(formErrors);
+      
+      // Показваме алерт с първата грешка
+      const firstError = Object.values(formErrors)[0];
+      alert(firstError);
+      
+      // Скролваме до първото невалидно поле
+      const firstErrorField = Object.keys(formErrors)[0];
+      const element = document.getElementById(firstErrorField);
+      if (element) {
+        element.focus();
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      
       return;
     }
 
@@ -77,7 +197,6 @@ export const ApplicationForm = ({ project, onSubmit }) => {
     });
   };
 
-  // Подреждаме кандидатурите по дата (най-новите първо)
   const sortedApplications = recentApplications ? 
     [...recentApplications].sort((a, b) => new Date(b.appliedAt) - new Date(a.appliedAt)) : [];
 
@@ -115,7 +234,7 @@ export const ApplicationForm = ({ project, onSubmit }) => {
       </div>
 
       {!hasApplied && (
-        <form className="application-form-form" onSubmit={handleSubmit}>
+        <form className="application-form-form" onSubmit={handleSubmit} noValidate>
           <div className="application-form-row">
             <div className="application-form-field">
               <label htmlFor="firstName" className="application-form-label required">
@@ -127,10 +246,14 @@ export const ApplicationForm = ({ project, onSubmit }) => {
                 name="firstName"
                 value={formData.firstName}
                 onChange={handleInputChange}
-                className="application-form-input"
+                onBlur={handleBlur}
+                className={`application-form-input ${errors.firstName && touched.firstName ? 'error' : ''}`}
                 required
                 disabled={isLoading}
               />
+              {errors.firstName && touched.firstName && (
+                <span className="application-form-error">{errors.firstName}</span>
+              )}
             </div>
 
             <div className="application-form-field">
@@ -143,10 +266,14 @@ export const ApplicationForm = ({ project, onSubmit }) => {
                 name="lastName"
                 value={formData.lastName}
                 onChange={handleInputChange}
-                className="application-form-input"
+                onBlur={handleBlur}
+                className={`application-form-input ${errors.lastName && touched.lastName ? 'error' : ''}`}
                 required
                 disabled={isLoading}
               />
+              {errors.lastName && touched.lastName && (
+                <span className="application-form-error">{errors.lastName}</span>
+              )}
             </div>
           </div>
 
@@ -161,14 +288,18 @@ export const ApplicationForm = ({ project, onSubmit }) => {
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                className="application-form-input"
+                onBlur={handleBlur}
+                className={`application-form-input ${errors.email && touched.email ? 'error' : ''}`}
                 required
                 disabled={isLoading}
               />
+              {errors.email && touched.email && (
+                <span className="application-form-error">{errors.email}</span>
+              )}
             </div>
 
             <div className="application-form-field">
-              <label htmlFor="phone" className="application-form-label">
+              <label htmlFor="phone" className="application-form-label required">
                 {t('applicationForm.fields.phone')}
               </label>
               <input
@@ -177,10 +308,15 @@ export const ApplicationForm = ({ project, onSubmit }) => {
                 name="phone"
                 value={formData.phone}
                 onChange={handleInputChange}
-                className="application-form-input"
+                onBlur={handleBlur}
+                className={`application-form-input ${errors.phone && touched.phone ? 'error' : ''}`}
                 placeholder={t('applicationForm.placeholders.phone')}
+                required
                 disabled={isLoading}
               />
+              {errors.phone && touched.phone && (
+                <span className="application-form-error">{errors.phone}</span>
+              )}
             </div>
           </div>
 
@@ -220,7 +356,6 @@ export const ApplicationForm = ({ project, onSubmit }) => {
         </form>
       )}
 
-      {/* Recent Applications */}
       <div className="application-form-recent-applications">
         <h3 className="application-form-recent-title">
           {t('applicationForm.recentApplications.title', { count: sortedApplications?.length || 0 })}

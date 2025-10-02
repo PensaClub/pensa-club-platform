@@ -1856,6 +1856,16 @@
       "alreadyApplied": "You have already applied for this project!",
       "error": "An error occurred while submitting your application. Please try again."
     },
+    "validation": {
+      "firstNameRequired": "Please enter your first name",
+      "firstNameTooShort": "First name must be at least 2 characters",
+      "lastNameRequired": "Please enter your last name",
+      "lastNameTooShort": "Last name must be at least 2 characters",
+      "emailRequired": "Please enter your email",
+      "emailInvalid": "Please enter a valid email address",
+      "phoneRequired": "Please enter your phone number",
+      "phoneInvalid": "Please enter a valid phone number"
+    },
     "loginRequired": {
       "title": "Login Required",
       "subtitle": "To apply for this project, please log in to your account."
