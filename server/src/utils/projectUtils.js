@@ -174,7 +174,9 @@ const transformProject = (project) => {
     if (projectData.milestones) {
         projectData.milestones = projectData.milestones.sort((a, b) => a.id - b.id);
     }
-
+    if (projectData.team) {
+        projectData.team = projectData.team.sort((a, b) => a.id - b.id);
+    }
     // Clean up stories and publications
     if (projectData.stories) {
         projectData.stories = projectData.stories.map((story) => {
