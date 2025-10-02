@@ -120,12 +120,12 @@
     cursor: pointer;
 }
 
-.application-form-checkbox input:checked + .application-form-checkbox-mark {
+.application-form-checkbox input:checked+.application-form-checkbox-mark {
     background: #1B8B8A;
     border-color: #1B8B8A;
 }
 
-.application-form-checkbox input:checked + .application-form-checkbox-mark::after {
+.application-form-checkbox input:checked+.application-form-checkbox-mark::after {
     content: '✓';
     position: absolute;
     top: 50%;
@@ -174,7 +174,7 @@
 }
 
 .application-form-btn-submit {
-   background: linear-gradient(to right, var(--orange-primary), var(--orange-light));
+    background: linear-gradient(to right, var(--orange-primary), var(--orange-light));
     color: white;
     box-shadow: 0 8px 25px rgba(27, 139, 138, 0.3);
 }
@@ -289,6 +289,10 @@
         gap: 1rem;
     }
 
+    .application-form-recent-user {
+        font-size: 0.95rem;
+    }
+
     .application-form-actions {
         flex-direction: column;
     }
@@ -319,6 +323,7 @@
         font-size: 1rem;
     }
 }
+
 .application-form-input.error {
     border-color: #ef4444;
     background-color: #fef2f2;
