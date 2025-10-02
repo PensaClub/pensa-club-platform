@@ -1839,6 +1839,16 @@
       "alreadyApplied": "Sie haben sich bereits für dieses Projekt beworben!",
       "error": "Bei der Bewerbung ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut."
     },
+    "validation": {
+      "firstNameRequired": "Bitte geben Sie Ihren Vornamen ein",
+      "firstNameTooShort": "Vorname muss mindestens 2 Zeichen lang sein",
+      "lastNameRequired": "Bitte geben Sie Ihren Nachnamen ein",
+      "lastNameTooShort": "Nachname muss mindestens 2 Zeichen lang sein",
+      "emailRequired": "Bitte geben Sie Ihre E-Mail ein",
+      "emailInvalid": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+      "phoneRequired": "Bitte geben Sie Ihre Telefonnummer ein",
+      "phoneInvalid": "Bitte geben Sie eine gültige Telefonnummer ein"
+    },
     "loginRequired": {
       "title": "Anmeldung erforderlich",
       "subtitle": "Um sich für dieses Projekt zu bewerben, melden Sie sich bitte an."
