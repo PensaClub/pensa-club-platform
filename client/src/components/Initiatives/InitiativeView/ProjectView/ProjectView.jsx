@@ -668,6 +668,7 @@ export const ProjectView = () => {
                             </section>
                         ))}
                         {/* Gallery Section */}
+                        
                         {currentProject.gallery?.length > 0 && (
                             <section id="gallery" className="project-view-section project-view-gallery-section">
                                 <h2 className="project-view-section-title">{t('projectView.sections.gallery')}</h2>
