@@ -6,7 +6,7 @@
 /* Hero Section - Modern Split Design */
 .project-view-hero {
     position: relative;
-    height: 80vh;
+    max-height: 85vh;
     min-height: 700px;
     overflow: hidden;
     margin-top: 80px;
