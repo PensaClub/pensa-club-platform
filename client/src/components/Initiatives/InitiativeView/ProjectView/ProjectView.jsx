@@ -788,7 +788,6 @@ export const ProjectView = () => {
                             </section>
                         )}
                         {/* Team Section */}
-                        
                         {currentProject.team?.length > 0 && (
                             <section id="team" className="project-view-section project-view-team-section">
                                 <h2 className="project-view-section-title">{t('projectView.sections.team')}</h2>
