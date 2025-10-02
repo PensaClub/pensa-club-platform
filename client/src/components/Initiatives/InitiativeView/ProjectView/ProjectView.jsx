@@ -954,7 +954,7 @@ export const ProjectView = () => {
                                                             currentProject.contact.name,
                                                             currentProject.contact.email
                                                         )}
-                                                        className="contact-item-button"
+                                                        className="contact-item-button-project"
                                                     >
                                                         {currentProject.contact.email}
                                                     </button>
