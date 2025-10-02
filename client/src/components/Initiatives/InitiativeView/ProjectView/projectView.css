@@ -2194,7 +2194,7 @@ background: linear-gradient(to right, var(--orange-primary), var(--orange-light)
     cursor: not-allowed;
 }
 
-.contact-item-button,
+.contact-item-button-project,
 .project-view-contact-button {
     background: none;
     border: none;
@@ -2206,10 +2206,9 @@ background: linear-gradient(to right, var(--orange-primary), var(--orange-light)
     transition: color 0.2s;
 }
 
-.contact-item-button:hover,
-.project-view-contact-button:hover {
+/* .contact-item-button-project:hover {
     color: #2563eb;
-}
+} */
 
 .project-view-contact-button {
     margin-right: 1rem;
@@ -2361,7 +2360,7 @@ background: linear-gradient(to right, var(--orange-primary), var(--orange-light)
     letter-spacing: 0.05em;
 }
 
-.contact-item-button {
+.contact-item-button-project {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -2381,18 +2380,18 @@ background: linear-gradient(to right, var(--orange-primary), var(--orange-light)
     max-width: 300px;
 }
 
-.contact-item-button::before {
+.contact-item-button-project::before {
     content: "✉";
     font-size: 1.25rem;
 }
 
-.contact-item-button:hover {
+.contact-item-button-project:hover {
     background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
     transform: translateY(-2px);
     box-shadow: 0 4px 16px rgba(59, 130, 246, 0.35);
 }
 
-.contact-item-button:active {
+.contact-item-button-project:active {
     transform: translateY(0);
 }
 
@@ -2435,7 +2434,7 @@ background: linear-gradient(to right, var(--orange-primary), var(--orange-light)
         width: 100%;
     }
 
-    .contact-item-button,
+    .contact-item-button-project,
     .contact-item-value {
         max-width: 100%;
     }
