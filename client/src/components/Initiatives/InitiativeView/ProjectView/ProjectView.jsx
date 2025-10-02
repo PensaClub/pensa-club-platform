@@ -20,6 +20,7 @@ import { SponsorsPartners } from '../SponsorsPartners/SponsorsPartners';
 import { Milestones } from '../Milestones/Milestones';
 import ScrollToTop from '../../../ScrollToTop/ScrollToTop';
 import ProjectGallery from '../ProjectGallery/ProjectGallery';
+import { TextZoom } from '../../../TextZoom/TextZoom.jsx';
 
 export const ProjectView = () => {
     const { slug } = useParams();
@@ -1128,6 +1129,7 @@ export const ProjectView = () => {
                 )}
 
                 <ScrollToTop />
+                <TextZoom />
             </div>
         </>
     );
