@@ -53,8 +53,8 @@
     width: 100%;
     display: grid;
     grid-template-columns: 1fr auto;
-    gap: 6rem;
-    margin: 2rem auto 0 auto;
+    /* gap: 6rem; */
+    margin: 0rem auto 0 auto;
     align-items: center;
     padding: 0 2rem;
     justify-content: center;
@@ -1115,10 +1115,15 @@ background: linear-gradient(to right, var(--orange-primary), var(--orange-light)
 
 /* Responsive Design */
 @media (max-width: 1440px) {
-    .project-view-hero-main {
+    /* .project-view-hero-main {
         gap: 4rem;
-        /* margin: 0 auto; */
+        grid-template-columns: 1fr 150px;
+        margin: 0 auto;
     }
+    .project-view-meta {
+       grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+    } */
 }
 
 @media (max-width: 1024px) {
@@ -2429,7 +2434,12 @@ background: linear-gradient(to right, var(--orange-primary), var(--orange-light)
         flex-direction: column;
         text-align: center;
     }
-
+ .project-view-contact-info {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        justify-content: center;
+    }
     .project-view-member-contact {
         width: 100%;
     }
@@ -2437,7 +2447,25 @@ background: linear-gradient(to right, var(--orange-primary), var(--orange-light)
     .contact-item-button-project,
     .contact-item-value {
         max-width: 100%;
+        font-size: 0.75rem;
     }
+    .contact-item-header {
+        justify-content: center;
+    }
+    .project-view-contact-link{
+        font-size: 0.75rem;
+    }
+    .project-view-contact-button {
+        width: 100%;
+        font-size: 0.75rem;
+    }
+    .project-view-section:nth-child(even) .project-view-section-content {
+        display: flex;
+        flex-direction: column;
+    }
+    /* .project-view-section:nth-child(odd){
+        grid-template-rows: 1fr;
+    } */
 }
 
 /* ===============================

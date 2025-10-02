@@ -216,6 +216,15 @@
         font-size: 1.2rem;
         justify-content: center;
     }
+    .sponsor-content,
+.partner-content {
+        align-items: center;
+}
+.sponsor-card,
+    .partner-card {
+        padding: 1rem;
+        align-items: center;
+    }
 }
 
 @media (max-width: 480px) {
@@ -223,10 +232,14 @@
     .partners-section {
         padding: 1rem;
     }
-    
+    .sponsor-content,
+.partner-content {
+        align-items: center;
+}
     .sponsor-card,
     .partner-card {
         padding: 1rem;
+        align-items: center;
     }
     
     .sponsor-logo,
