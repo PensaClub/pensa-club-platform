@@ -1,6 +1,8 @@
 name: Manual Deploy to VPS
 
 on:
+  push:
+    branches: [ main ]
   workflow_dispatch:
     inputs:
       backup:
@@ -23,10 +25,8 @@ jobs:
         script: |
           cd /root/Digital-Literacy-Wellbeing-60-plus
           
-          if [ "${{ github.event.inputs.backup }}" = "true" ]; then
-            docker exec digital-literacy-wellbeing-60-plus-db-1 pg_dump -U postgres pensaclub_db | gzip > /root/backups/pensaclub_db_before_deploy_$(date +%Y%m%d_%H%M%S).sql.gz
-            echo "Backup created"
-          fi
+          docker exec digital-literacy-wellbeing-60-plus-db-1 pg_dump -U postgres pensaclub_db | gzip > /root/backups/pensaclub_db_before_deploy_$(date +%Y%m%d_%H%M%S).sql.gz
+          echo "Backup created"
           
           git pull origin main
           docker compose down
