@@ -94,6 +94,27 @@ const permissions = {
         delete: ['admin', 'moderator', 'user'],
         sendEmails: ['admin', 'moderator'],
     },
+    club: {
+        create: ['admin', 'moderator', 'user'],
+        read: ['admin', 'moderator', 'user', 'guest', 'limited'],
+        update: ['admin', 'moderator', 'user'],
+        delete: ['admin', 'moderator', 'user'],
+        approve: ['admin', 'moderator'],
+        verify: ['admin', 'moderator'],
+        transferOwnership: ['admin', 'moderator'],
+        bulkUpdate: ['admin', 'moderator'],
+        bulkDelete: ['admin', 'moderator'],
+        bulkApprove: ['admin', 'moderator'],
+        draft: {
+            read: ['admin', 'moderator', 'user'],
+            create: ['admin', 'moderator', 'user'],
+            update: ['admin', 'moderator', 'user'],
+            delete: ['admin', 'moderator', 'user'],
+        },
+        mailing: {
+            sendEmails: ['admin', 'moderator'],
+        },
+    },
 };
 
 module.exports = permissions;

@@ -31,7 +31,7 @@ const { Op } = require('sequelize');
 // ENDPOINTS
 // ========================================
 
-clubController.post('/create', isAuth, async (req, res, next) => {
+clubController.post('/create', isAuth, checkPermission('club', 'create'), async (req, res, next) => {
     try {
         const validatedData = clubSchema.create.parse(req.body);
         const clubData = {
@@ -62,7 +62,7 @@ clubController.post('/create', isAuth, async (req, res, next) => {
     }
 });
 
-clubController.post('/draft/save/:identifier?', isAuth, async (req, res, next) => {
+clubController.post('/draft/save/:identifier?', isAuth, checkPermission('club', 'draft', 'create'), async (req, res, next) => {
     try {
         const { identifier } = req.params;
 
@@ -82,23 +82,23 @@ clubController.post('/draft/save/:identifier?', isAuth, async (req, res, next) =
     }
 });
 
-clubController.get('/all', async (req, res, next) => {
+clubController.get('/all', checkPermission('club', 'read'), async (req, res, next) => {
     return getClubsByDraftStatus(false, req, res, next);
 });
 
-clubController.get('/drafts', isAuth, async (req, res, next) => {
+clubController.get('/drafts', isAuth, checkPermission('club', 'draft', 'read'), async (req, res, next) => {
     return getClubsByDraftStatus(true, req, res, next);
 });
 
-clubController.get('/single/:identifier', async (req, res, next) => {
+clubController.get('/single/:identifier', checkPermission('club', 'read'), async (req, res, next) => {
     return getSingleClubByDraftStatus(false, req, res, next);
 });
 
-clubController.get('/draft/:identifier', isAuth, async (req, res, next) => {
+clubController.get('/draft/:identifier', isAuth, checkPermission('club', 'draft', 'read'), async (req, res, next) => {
     return getSingleClubByDraftStatus(true, req, res, next);
 });
 
-clubController.put('/:identifier', isAuth, async (req, res, next) => {
+clubController.put('/:identifier', isAuth, checkPermission('club', 'update'), async (req, res, next) => {
     try {
         const validatedData = clubSchema.update.parse(req.body);
         return updateClub(validatedData, req, res, next, false);
@@ -107,39 +107,39 @@ clubController.put('/:identifier', isAuth, async (req, res, next) => {
     }
 });
 
-clubController.patch('/bulk-update', isAuth, async (req, res, next) => {
+clubController.patch('/bulk-update', isAuth, checkPermission('club', 'bulkUpdate'), async (req, res, next) => {
     return performAdminAction(req, res, next, 'toggle-status', true);
 });
 
-clubController.delete('/bulk-delete', isAuth, async (req, res, next) => {
+clubController.delete('/bulk-delete', isAuth, checkPermission('club', 'bulkDelete'), async (req, res, next) => {
     return performAdminAction(req, res, next, 'delete', true);
 });
 
-clubController.patch('/bulk-approve', isAuth, async (req, res, next) => {
+clubController.patch('/bulk-approve', isAuth, checkPermission('club', 'bulkApprove'), async (req, res, next) => {
     return performAdminAction(req, res, next, 'approve', true);
 });
 
-clubController.delete('/:identifier', isAuth, async (req, res, next) => {
+clubController.delete('/:identifier', isAuth, checkPermission('club', 'delete'), async (req, res, next) => {
     return deleteClubByDraftStatus(false, req, res, next);
 });
 
-clubController.patch('/toggle-draft/:identifier', isAuth, async (req, res, next) => {
+clubController.patch('/toggle-draft/:identifier', isAuth, checkPermission('club', 'draft', 'delete'), async (req, res, next) => {
     return deleteClubByDraftStatus(true, req, res, next);
 });
 
-clubController.patch('/:identifier/status', isAuth, async (req, res, next) => {
+clubController.patch('/:identifier/status', isAuth, checkPermission('club', 'approve'), async (req, res, next) => {
     return performAdminAction(req, res, next, 'toggle-status', false);
 });
 
-clubController.patch('/:identifier/verify', isAuth, async (req, res, next) => {
+clubController.patch('/:identifier/verify', isAuth, checkPermission('club', 'verify'), async (req, res, next) => {
     return performAdminAction(req, res, next, 'verify', false);
 });
 
-clubController.patch('/:identifier/approve', isAuth, async (req, res, next) => {
+clubController.patch('/:identifier/approve', isAuth, checkPermission('club', 'approve'), async (req, res, next) => {
     return performAdminAction(req, res, next, 'approve', false);
 });
 
-clubController.patch('/:identifier/reject', isAuth, async (req, res, next) => {
+clubController.patch('/:identifier/reject', isAuth, checkPermission('club', 'approve'), async (req, res, next) => {
     return performAdminAction(req, res, next, 'reject', false);
 });
 
@@ -179,7 +179,7 @@ clubController.patch('/toggle-draft/:identifier', isAuth, async (req, res, next)
     }
 });
 
-clubController.post('/bookmark/:identifier', isAuth, async (req, res, next) => {
+clubController.post('/bookmark/:identifier', isAuth, checkPermission('club', 'read'), async (req, res, next) => {
     try {
         const { identifier } = req.params;
         const userId = req.user.userId;
@@ -324,7 +324,7 @@ clubController.get('/my-clubs/:email', async (req, res, next) => {
     }
 });
 
-clubController.get('/user-clubs', isAuth, async (req, res, next) => {
+clubController.get('/user-clubs', isAuth, checkPermission('club', 'read'), async (req, res, next) => {
     try {
         const { page = 1, limit = 12 } = req.query;
         const offset = (page - 1) * limit;
@@ -377,7 +377,7 @@ clubController.get('/user-clubs', isAuth, async (req, res, next) => {
     }
 });
 
-clubController.patch('/:identifier/transfer-ownership', isAuth, async (req, res, next) => {
+clubController.patch('/:identifier/transfer-ownership', isAuth, checkPermission('club', 'transferOwnership'), async (req, res, next) => {
     try {
         const { identifier } = req.params;
         const { email } = transferOwnershipSchema.parse(req.body);
@@ -509,7 +509,7 @@ clubController.post('/:identifier/trips/:tripDestination/register', async (req, 
     return handleMailingForm(req, res, next, 'trip');
 });
 
-clubController.post('/personal-email', isAuth, async (req, res, next) => {
+clubController.post('/personal-email', isAuth, checkPermission('club', 'mailing', 'sendEmails'), async (req, res, next) => {
     try {
         const validatedData = clubSchema.mailing.personalEmailSchema.parse(req.body);
 
