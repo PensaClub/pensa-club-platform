@@ -6,11 +6,11 @@ import { Helmet } from 'react-helmet';
 import './projectView.css';
 import { useInitiativeContext } from '../../../contexts/InitiativeProvider';
 import { useAuthContext } from '../../../contexts/UserContext';
+import { useClubContext } from '../../../contexts/ClubContext';
 import { BookmarkIcon } from '../../Icons/InitiativeIcons';
 import { StoriesPublications } from '../StoriesPublications/StoriesPublications';
 import { Comments } from '../Comments/Comments';
 import { ApplicationForm } from '../ApplicationForm/ApplicationForm';
-// Добави import за утилитите
 import { renderSlateContent } from '../../../../utils/slateRenderer.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImage } from '@fortawesome/free-solid-svg-icons';
@@ -38,20 +38,128 @@ export const ProjectView = () => {
     } = useInitiativeContext();
 
     const { isAuthentication, profileData } = useAuthContext();
+    const { sendPersonalEmail } = useClubContext();
+    
     const [activeSection, setActiveSection] = useState('overview');
     const [commentsCount, setCommentsCount] = useState(0);
     const applicationsLoadedRef = useRef(false);
     const [locationText, setLocationText] = useState('');
+    
+    // Email Modal States
+    const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+    const [emailRecipient, setEmailRecipient] = useState({ name: '', email: '' });
+    const [emailForm, setEmailForm] = useState({
+        from: '',
+        to: '',
+        subject: '',
+        message: ''
+    });
+    const [emailStatus, setEmailStatus] = useState({ type: '', message: '' });
+    const [isSubmittingEmail, setIsSubmittingEmail] = useState(false);
+
     const isDeadlinePassed = useCallback(() => {
         if (!currentProject?.applicationDeadline) return false;
-
         const deadline = new Date(currentProject.applicationDeadline);
         const now = new Date();
         return now > deadline;
     }, [currentProject?.applicationDeadline]);
-    // Проверяваме дали потребителят вече е кандидатствал
+
     const hasUserApplied = hasUserAppliedToProject(currentProject?.id);
     const deadlinePassed = isDeadlinePassed();
+
+    // Email Modal Functions
+    const openEmailModal = (name, email) => {
+        setEmailRecipient({ name, email });
+        setEmailForm({
+            from: profileData?.email || '',
+            to: email,
+            subject: `Запитване относно проект: ${currentProject.title}`,
+            message: ''
+        });
+        setEmailStatus({ type: '', message: '' });
+        setIsEmailModalOpen(true);
+    };
+
+    const closeEmailModal = () => {
+        setIsEmailModalOpen(false);
+        setEmailForm({
+            from: '',
+            to: '',
+            subject: '',
+            message: ''
+        });
+        setEmailStatus({ type: '', message: '' });
+    };
+
+    const handleEmailFormChange = (e) => {
+        const { name, value } = e.target;
+        setEmailForm(prev => ({ ...prev, [name]: value }));
+        if (emailStatus.type === 'error') {
+            setEmailStatus({ type: '', message: '' });
+        }
+    };
+
+    const handleEmailSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!emailForm.from.trim() || !emailForm.to.trim() || !emailForm.subject.trim() || !emailForm.message.trim()) {
+            setEmailStatus({
+                type: 'error',
+                message: 'Моля, попълнете всички полета'
+            });
+            return;
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(emailForm.from)) {
+            setEmailStatus({
+                type: 'error',
+                message: 'Моля, въведете валиден имейл адрес в полето "От"'
+            });
+            return;
+        }
+        if (!emailRegex.test(emailForm.to)) {
+            setEmailStatus({
+                type: 'error',
+                message: 'Моля, въведете валиден имейл адрес в полето "До"'
+            });
+            return;
+        }
+
+        setIsSubmittingEmail(true);
+
+        try {
+            const success = await sendPersonalEmail({
+                from: emailForm.from,
+                to: emailForm.to,
+                subject: emailForm.subject,
+                message: emailForm.message
+            });
+
+            if (success) {
+                setEmailStatus({
+                    type: 'success',
+                    message: 'Съобщението е изпратено успешно!'
+                });
+                setTimeout(() => {
+                    closeEmailModal();
+                }, 2000);
+            } else {
+                setEmailStatus({
+                    type: 'error',
+                    message: 'Възникна грешка при изпращането!'
+                });
+            }
+        } catch (error) {
+            console.error('Error sending email:', error);
+            setEmailStatus({
+                type: 'error',
+                message: 'Възникна грешка при изпращането!'
+            });
+        } finally {
+            setIsSubmittingEmail(false);
+        }
+    };
 
     useEffect(() => {
         const loadLocation = async () => {
@@ -79,7 +187,6 @@ export const ProjectView = () => {
         }
     }, [currentProject?.id]);
 
-    // Зареждаме кандидатурите за проекта - само веднъж
     useEffect(() => {
         if (currentProject?.id && !applicationsLoadedRef.current) {
             getProjectApplications(currentProject.id);
@@ -136,14 +243,16 @@ export const ProjectView = () => {
             navLinks.removeEventListener('mousemove', handleMouseMove);
         };
     }, []);
+
     const sortedSections = useMemo(() => {
         if (!currentProject?.sections) return [];
         return [...currentProject.sections].sort((a, b) => a.id - b.id);
     }, [currentProject?.sections]);
+
     const loadCommentsCount = async () => {
         if (currentProject?.id) {
             try {
-                const projectComments = await getProjectComments(currentProject.id || currentProject.slug);;
+                const projectComments = await getProjectComments(currentProject.id || currentProject.slug);
                 setCommentsCount(projectComments.length);
             } catch (error) {
                 console.error('Error loading comments count:', error);
@@ -159,10 +268,8 @@ export const ProjectView = () => {
     const handleApplicationSubmit = async (applicationData) => {
         try {
             const result = await applyToProject(currentProject.id, applicationData);
-
             if (result.success) {
-
-                // console.log('Application submitted successfully:', result);
+                // Success
             }
         } catch (error) {
             console.error('Application failed:', error);
@@ -217,28 +324,22 @@ export const ProjectView = () => {
         return icons[fileType?.toLowerCase()] || '📁';
     };
 
-    // ФУНКЦИЯ ЗА РЕНДЕРИРАНЕ НА СЪДЪРЖАНИЕ
     const renderContent = (content) => {
         if (!content) {
             return <p>Няма съдържание</p>;
         }
 
-        // Ако е string (HTML или обикновен текст)
         if (typeof content === 'string') {
-            // Ако изглежда като HTML
             if (content.includes('<') && content.includes('>')) {
                 return <div dangerouslySetInnerHTML={{ __html: content }} />;
             }
-            // Ако е обикновен текст
             return <p>{content}</p>;
         }
 
-        // Ако е Slate.js структура (array)
         if (Array.isArray(content)) {
             return renderSlateContent(content);
         }
 
-        // Ако е обект, опитай се да го обработиш като Slate.js
         if (typeof content === 'object') {
             try {
                 return renderSlateContent(content);
@@ -248,24 +349,24 @@ export const ProjectView = () => {
             }
         }
 
-        // Fallback
         return <p>{String(content)}</p>;
     };
 
     if (isLoading || !currentProject) {
         return <div className="project-view-loading">{t('projectView.loading')}</div>;
     }
+
     const getProjectMetaImage = () => {
         if (currentProject?.mainImage?.src) {
             return currentProject.mainImage.src;
         }
-        return 'https://www.pensa.club/default-project-image.jpg'; // fallback image
+        return 'https://www.pensa.club/default-project-image.jpg';
     };
+
     const getProjectDescription = () => {
         let description = '';
 
         if (currentProject?.fullDescription) {
-            // Ако е HTML, махаме таговете
             if (typeof currentProject.fullDescription === 'string') {
                 description = currentProject.fullDescription.replace(/<[^>]*>/g, '');
             }
@@ -275,9 +376,9 @@ export const ProjectView = () => {
             }
         }
 
-        // Ограничаваме до 160 символа за мета описанието
         return description.substring(0, 160) || 'Проект от Pensa Club за пенсионери в България';
     };
+
     const getProjectStructuredData = () => {
         if (!currentProject) return null;
 
@@ -292,10 +393,9 @@ export const ProjectView = () => {
         };
     };
 
-    // ЗАЩИТЕНИ ПРОВЕРКИ
     const canApply = currentProject?.applicationStatus === 'open' &&
         (currentProject.currentParticipants || 0) < (currentProject.maxParticipants || Infinity) &&
-        !deadlinePassed
+        !deadlinePassed;
 
     return (
         <>
@@ -303,7 +403,6 @@ export const ProjectView = () => {
                 <title>{currentProject?.title ? `${currentProject.title} | Pensa Club` : 'Проект | Pensa Club'}</title>
                 <meta name="description" content={getProjectDescription()} />
 
-                {/* Open Graph метаданни */}
                 <meta property="og:title" content={currentProject?.title || 'Проект | Pensa Club'} />
                 <meta property="og:description" content={getProjectDescription()} />
                 <meta property="og:image" content={getProjectMetaImage()} />
@@ -311,7 +410,6 @@ export const ProjectView = () => {
                 <meta property="og:type" content="article" />
                 <meta property="og:site_name" content="Pensa Club" />
 
-                {/* Допълнителни метаданни за проекти */}
                 {currentProject?.category && (
                     <meta property="article:section" content={currentProject.category} />
                 )}
@@ -322,7 +420,6 @@ export const ProjectView = () => {
                 <script type="application/ld+json">
                     {JSON.stringify(getProjectStructuredData())}
                 </script>
-                {/* Twitter Card */}
                 <meta name="twitter:card" content="summary_large_image" />
                 <meta name="twitter:title" content={currentProject?.title || 'Проект | Pensa Club'} />
                 <meta name="twitter:description" content={getProjectDescription()} />
@@ -332,7 +429,6 @@ export const ProjectView = () => {
                 {/* Hero Section */}
                 <section className="project-view-hero">
                     <div className="project-view-hero-background">
-                        {/* ПОПРАВЕНА ПРОВЕРКА ЗА MAIN IMAGE */}
                         {currentProject.mainImage?.src ? (
                             <img
                                 src={currentProject.mainImage.src}
@@ -350,13 +446,11 @@ export const ProjectView = () => {
 
                     <div className="project-view-hero-content">
                         <div className="container">
-                            {/* Breadcrumb */}
                             <div className="project-view-breadcrumb">
                                 <Link to="/initiatives" className="project-view-breadcrumb-link">
                                     {t('projectView.breadcrumb.initiatives')}
                                 </Link>
                                 <span className="project-view-breadcrumb-separator">›</span>
-                                {/* ЗАЩИТЕНА ПРОВЕРКА ЗА INITIATIVE SLUG */}
                                 {currentProject.initiativeSlug && (
                                     <>
                                         <Link
@@ -393,7 +487,6 @@ export const ProjectView = () => {
 
                                     <h1 className="project-view-title">{currentProject.title}</h1>
 
-                                    {/* ЗАЩИТЕНА ПРОВЕРКА ЗА ОПИСАНИЕ */}
                                     {(currentProject.fullDescription || currentProject.shortDescription) && (
                                         <div className="project-view-description">
                                             {renderContent(currentProject.fullDescription || currentProject.shortDescription)}
@@ -401,7 +494,6 @@ export const ProjectView = () => {
                                     )}
 
                                     <div className="project-view-meta">
-                                        {/* Timeline dates като meta item */}
                                         {(currentProject.timeline?.startDate || currentProject.timeline?.endDate) && (
                                             <div className="project-view-meta-item project-view-meta-timeline">
                                                 <span className="project-view-meta-label">{t('projectView.meta.timeline')}:</span>
@@ -429,7 +521,6 @@ export const ProjectView = () => {
                                             </div>
                                         )}
 
-                                        {/* ЗАЩИТЕНА ПРОВЕРКА ЗА LOCATION */}
                                         {currentProject.location && (
                                             <div className="project-view-meta-item">
                                                 <span className="project-view-meta-label">{t('projectView.meta.location')}:</span>
@@ -439,7 +530,6 @@ export const ProjectView = () => {
                                             </div>
                                         )}
 
-                                        {/* ЗАЩИТЕНА ПРОВЕРКА ЗА PARTICIPANTS */}
                                         {(currentProject.currentParticipants !== undefined || currentProject.maxParticipants !== undefined) && (
                                             <div className="project-view-meta-item">
                                                 {currentProject.currentParticipants && <span className="project-view-meta-label">{t('projectView.meta.participants')}:</span>}
@@ -448,7 +538,7 @@ export const ProjectView = () => {
                                                 </span>}
                                             </div>
                                         )}
-                                        {/* 🆕 БЕНЕФИЦИЕНТИ */}
+
                                         {currentProject.beneficiaries?.totalCount && currentProject.beneficiaries.totalCount > 0 && (
                                             <div className="project-view-meta-item">
                                                 <span className="project-view-meta-label">{t('projectView.meta.beneficiaries')}:</span>
@@ -487,10 +577,7 @@ export const ProjectView = () => {
                                     </div>
                                 </div>
 
-                                {/* ЗАЩИТЕНА ПРОВЕРКА ЗА STATS */}
-
                                 {(() => {
-                                    // Проверяваме дали имаме валидни данни за показване
                                     const hasBudget = currentProject.budget?.funded && currentProject.budget?.total &&
                                         Number(currentProject.budget.funded) > 0 && Number(currentProject.budget.total) > 0;
 
@@ -504,7 +591,6 @@ export const ProjectView = () => {
                                         Array.isArray(currentProject.team) &&
                                         currentProject.team.length > 0;
 
-                                    // Показваме секцията само ако има поне една валидна стойност
                                     return (hasBudget || hasDuration || hasTeam) ? (
                                         <div className="project-view-stats-card">
                                             {hasBudget && (
@@ -535,7 +621,6 @@ export const ProjectView = () => {
                             </div>
 
                         </div>
-                        {/* Показваме deadline информация ако има */}
                         {currentProject?.applicationDeadline && !hasUserApplied && (
                             <div className="project-view-deadline-info">
                                 <span className={`deadline-status ${deadlinePassed ? 'passed' : 'active'}`}>
@@ -553,7 +638,7 @@ export const ProjectView = () => {
                 <nav className="project-view-nav">
                     <div className="container">
                         <div className="project-view-nav-links">
-                            {sortedSections.sections?.map((section) => (
+                            {sortedSections?.map((section) => (
                                 <button
                                     key={section.titleSlug}
                                     className={`project-view-nav-link ${activeSection === section.titleSlug ? 'active' : ''}`}
@@ -650,7 +735,6 @@ export const ProjectView = () => {
                                         </div>
                                     </div>
 
-                                    {/* ЗАЩИТЕНА ПРОВЕРКА ЗА SECTION IMAGE */}
                                     {(section.image?.src || (section.images && section.images.length > 0)) && (
                                         <div className="project-view-section-image">
                                             <img
@@ -668,7 +752,6 @@ export const ProjectView = () => {
                             </section>
                         ))}
                         {/* Gallery Section */}
-                        
                         {currentProject.gallery?.length > 0 && (
                             <section id="gallery" className="project-view-section project-view-gallery-section">
                                 <h2 className="project-view-section-title">{t('projectView.sections.gallery')}</h2>
@@ -743,8 +826,8 @@ export const ProjectView = () => {
                                                         )}
                                                     </div>
 
-                                                    <a
-                                                        href={material.downloadUrl}
+                                                    
+                                                    <a    href={material.downloadUrl}
                                                         className="download-card-button"
                                                         download
                                                         target="_blank"
@@ -807,9 +890,12 @@ export const ProjectView = () => {
                                                 )}
                                                 <div className="project-view-member-contact">
                                                     {member.email && (
-                                                        <a href={`mailto:${member.email}`} className="project-view-contact-link">
+                                                        <button
+                                                            onClick={() => openEmailModal(member.name, member.email)}
+                                                            className="project-view-contact-button"
+                                                        >
                                                             {member.email}
-                                                        </a>
+                                                        </button>
                                                     )}
                                                     {member.phone && (
                                                         <a href={`tel:${member.phone}`} className="project-view-contact-link">
@@ -863,12 +949,15 @@ export const ProjectView = () => {
                                                         <span className="contact-item-icon">✉</span>
                                                         <span className="contact-item-label">{t('projectView.contact.email')}</span>
                                                     </div>
-                                                    <a
-                                                        href={`mailto:${currentProject.contact.email}`}
-                                                        className="contact-item-value"
+                                                    <button
+                                                        onClick={() => openEmailModal(
+                                                            currentProject.contact.name,
+                                                            currentProject.contact.email
+                                                        )}
+                                                        className="contact-item-button"
                                                     >
                                                         {currentProject.contact.email}
-                                                    </a>
+                                                    </button>
                                                 </div>
                                             )}
 
@@ -878,8 +967,8 @@ export const ProjectView = () => {
                                                         <span className="contact-item-icon">📞</span>
                                                         <span className="contact-item-label">{t('projectView.contact.phone')}</span>
                                                     </div>
-                                                    <a
-                                                        href={`tel:${currentProject.contact.phone}`}
+
+                                                    <a href={`tel:${currentProject.contact.phone}`}
                                                         className="contact-item-value"
                                                     >
                                                         {currentProject.contact.phone}
@@ -891,7 +980,7 @@ export const ProjectView = () => {
                                 </div>
                             </section>
                         )}
-                        {/* Application Form Section - Винаги видима */}
+                        {/* Application Form Section */}
                         {isAuthentication && !deadlinePassed && currentProject?.applicationStatus === 'open' && (
                             <section id="application-form" className="project-view-section">
                                 <ApplicationForm
@@ -900,7 +989,6 @@ export const ProjectView = () => {
                                 />
                             </section>
                         )}
-                        {/* Или показваме съобщение ако deadline е изминал */}
                         {isAuthentication && deadlinePassed && (
                             <section id="application-form" className="project-view-section">
                                 <div className="application-deadline-message">
@@ -920,6 +1008,125 @@ export const ProjectView = () => {
                         </section>
                     </div>
                 </div>
+
+                {/* Email Modal */}
+                {isEmailModalOpen && (
+                    <div className="email-modal-overlay" onClick={closeEmailModal}>
+                        <div className="email-modal-container" onClick={(e) => e.stopPropagation()}>
+                            <div className="email-modal-header">
+                                <h3>Изпрати имейл до {emailRecipient.name}</h3>
+                                <button 
+                                    className="email-modal-close" 
+                                    onClick={closeEmailModal}
+                                    aria-label="Затвори"
+                                >
+                                    ✕
+                                </button>
+                            </div>
+
+                            <form onSubmit={handleEmailSubmit} className="email-modal-form">
+                                <div className="email-form-group">
+                                    <label htmlFor="emailFrom">
+                                        От (Вашият имейл)
+                                        <span className="required">*</span>
+                                    </label>
+                                    <input
+                                        type="email"
+                                        id="emailFrom"
+                                        name="from"
+                                        value={emailForm.from}
+                                        onChange={handleEmailFormChange}
+                                        placeholder="your-email@example.com"
+                                        required
+                                        disabled={!isAuthentication}
+                                    />
+                                    {!isAuthentication && (
+                                        <small className="email-form-hint">
+                                            Влезте в профила си, за да изпратите имейл
+                                        </small>
+                                    )}
+                                </div>
+
+                                <div className="email-form-group">
+                                    <label htmlFor="emailTo">
+                                        До
+                                        <span className="required">*</span>
+                                    </label>
+                                    <input
+                                        type="email"
+                                        id="emailTo"
+                                        name="to"
+                                        value={emailForm.to}
+                                        readOnly
+                                        className="email-readonly"
+                                    />
+                                </div>
+
+                                <div className="email-form-group">
+                                    <label htmlFor="emailSubject">
+                                        Относно
+                                        <span className="required">*</span>
+                                    </label>
+                                    <input
+                                        type="text"
+                                        id="emailSubject"
+                                        name="subject"
+                                        value={emailForm.subject}
+                                        onChange={handleEmailFormChange}
+                                        placeholder="Относно..."
+                                        required
+                                        maxLength={200}
+                                    />
+                                </div>
+
+                                <div className="email-form-group">
+                                    <label htmlFor="emailMessage">
+                                        Съобщение
+                                        <span className="required">*</span>
+                                    </label>
+                                    <textarea
+                                        id="emailMessage"
+                                        name="message"
+                                        value={emailForm.message}
+                                        onChange={handleEmailFormChange}
+                                        placeholder="Напишете вашето съобщение тук..."
+                                        required
+                                        rows={8}
+                                        maxLength={2000}
+                                    />
+                                    <small className="email-char-count">
+                                        {emailForm.message.length}/2000 символа
+                                    </small>
+                                </div>
+
+                                {emailStatus.message && (
+                                    <div className={`email-status-message ${emailStatus.type}`}>
+                                        {emailStatus.message}
+                                    </div>
+                                )}
+
+                                <div className="email-modal-actions">
+                                    <button
+                                        type="button"
+                                        onClick={closeEmailModal}
+                                        className="email-btn-cancel"
+                                        disabled={isSubmittingEmail}
+                                    >
+                                        Отказ
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="email-btn-submit"
+                                        disabled={isSubmittingEmail || !isAuthentication}
+                                    >
+                                        {isSubmittingEmail ? 'Изпращане...' : 'Изпрати'}
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                )}
+
                 <ScrollToTop />
             </div>
         </>
