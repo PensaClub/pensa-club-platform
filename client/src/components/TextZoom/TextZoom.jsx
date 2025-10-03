@@ -31,21 +31,23 @@ useEffect(() => {
     strong, b, em, i, u, blockquote, cite, code, pre,
     input, textarea, button, label, 
     .club-card-title, .club-card-description, .club-card-stat-label,
-    .clubs-search-input, .clubs-filter-select
+    .clubs-search-input, .clubs-filter-select,
+    .project-view-section-description, .project-view-section-description *,
+    .slate-content, .slate-content *,
+    .project-view-description, .project-view-description *
   `);
   
   textElements.forEach(element => {
     if (!element.closest('.text-zoom-widget')) {
-      // Запомняме оригиналния размер в data attribute
       if (!element.hasAttribute('data-original-font-size')) {
         const computedStyle = window.getComputedStyle(element);
         const originalSize = parseFloat(computedStyle.fontSize);
         element.setAttribute('data-original-font-size', originalSize);
       }
       
-      // Взимаме оригиналния размер и го мащабираме
       const originalSize = parseFloat(element.getAttribute('data-original-font-size'));
-      element.style.fontSize = `${originalSize * scale}px`;
+      // Използваме setProperty с !important
+      element.style.setProperty('font-size', `${originalSize * scale}px`, 'important');
     }
   });
   
@@ -65,12 +67,12 @@ useEffect(() => {
 const resetTextSize = () => {
   setFontSize(100);
   
-  // Възстановяваме към оригиналните размери от data attributes
   const textElements = document.querySelectorAll('[data-original-font-size]');
   textElements.forEach(element => {
     if (!element.closest('.text-zoom-widget')) {
       const originalSize = element.getAttribute('data-original-font-size');
-      element.style.fontSize = `${originalSize}px`;
+      // Използваме setProperty с !important
+      element.style.setProperty('font-size', `${originalSize}px`, 'important');
     }
   });
 };
