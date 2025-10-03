@@ -301,3 +301,243 @@
     align-self: center;
   }
 }
+/* Email Modal Styles */
+.email-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 1rem;
+  backdrop-filter: blur(4px);
+}
+
+.email-modal-container {
+  background: white;
+  border-radius: 16px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.email-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.email-modal-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #1a202c;
+  font-weight: 600;
+}
+
+.email-modal-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #6b7280;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s;
+}
+
+.email-modal-close:hover {
+  background-color: #f3f4f6;
+  color: #1a202c;
+}
+
+.email-modal-form {
+  padding: 2rem;
+}
+
+.email-form-group {
+  margin-bottom: 1.5rem;
+}
+
+.email-form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #374151;
+  font-size: 0.95rem;
+}
+
+.email-form-group .required {
+  color: #dc2626;
+  margin-left: 0.25rem;
+}
+
+.email-form-group input,
+.email-form-group textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.email-form-group input:focus,
+.email-form-group textarea:focus {
+  outline: none;
+  border-color: #1B8B8A;
+  box-shadow: 0 0 0 3px rgba(27, 139, 138, 0.1);
+}
+
+.email-form-group textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.email-readonly {
+  background-color: #f9fafb;
+  cursor: not-allowed;
+}
+
+.email-form-hint {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-style: italic;
+}
+
+.email-char-count {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: #9ca3af;
+  text-align: right;
+}
+
+.email-status-message {
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.email-status-message.success {
+  background-color: #d1fae5;
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+}
+
+.email-status-message.error {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+.email-modal-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 2rem;
+}
+
+.email-btn-cancel,
+.email-btn-submit {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.email-btn-cancel {
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.email-btn-cancel:hover:not(:disabled) {
+  background-color: #e5e7eb;
+}
+
+.email-btn-submit {
+  background: linear-gradient(135deg, #1B8B8A, #17a2b8);
+  color: white;
+}
+
+.email-btn-submit:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(27, 139, 138, 0.3);
+}
+
+.email-btn-cancel:disabled,
+.email-btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Contact Email Button */
+.contact-email-button {
+  background: none;
+  border: none;
+  /* color: #1B8B8A; */
+  cursor: pointer;
+  text-decoration: none;
+  padding: 0;
+  font-size: inherit;
+  font-family: inherit;
+  text-align: left;
+  transition: color 0.2s;
+}
+
+.contact-email-button:hover {
+  color: #17a2b8;
+  text-decoration: underline;
+}
+
+.contact-item .contact-email-button {
+  font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .email-modal-container {
+    max-width: 95%;
+    max-height: 95vh;
+  }
+
+  .email-modal-header {
+    padding: 1rem 1.5rem;
+  }
+
+  .email-modal-header h3 {
+    font-size: 1.25rem;
+  }
+
+  .email-modal-form {
+    padding: 1.5rem;
+  }
+
+  .email-modal-actions {
+    flex-direction: column;
+  }
+
+  .email-btn-cancel,
+  .email-btn-submit {
+    width: 100%;
+  }
+}
