@@ -315,17 +315,17 @@ export const validateInitiativeForm = (values, t) => {
 
     // 🎯 PROGRESS & RESULTS валидации
     // KPIs - name и target са задължителни ако е добавен KPI
-    if (values.kpis && values.kpis.length > 0) {
-        values.kpis.forEach((kpi, index) => {
-            if (!kpi.name?.trim()) {
-                newErrors[`kpis[${index}].name`] = t('validation.kpi-name-required');
-            }
+    // if (values.kpis && values.kpis.length > 0) {
+    //     values.kpis.forEach((kpi, index) => {
+    //         if (!kpi.name?.trim()) {
+    //             newErrors[`kpis[${index}].name`] = t('validation.kpi-name-required');
+    //         }
 
-            if (!kpi.target?.trim()) {
-                newErrors[`kpis[${index}].target`] = t('validation.kpi-target-required');
-            }
-        });
-    }
+    //         if (!kpi.target?.trim()) {
+    //             newErrors[`kpis[${index}].target`] = t('validation.kpi-target-required');
+    //         }
+    //     });
+    // }
 
     // Expected Results - опционално, но минимум 10 символа ако е попълнено
     if (values.expectedResults) {
