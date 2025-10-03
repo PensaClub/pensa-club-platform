@@ -170,7 +170,7 @@ async function transformInitiative(initiative) {
                 };
             }
             return section;
-        });
+        }).sort((a, b) => a.id - b.id);
     }
 
     // Clean up projects, stories, and publications
