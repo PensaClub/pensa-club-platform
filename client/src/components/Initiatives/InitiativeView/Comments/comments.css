@@ -200,3 +200,13 @@
     padding: 3rem 1.5rem;
   }
 }
+@media (max-width: 480px) {
+  .initiative-comments-header {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+  .initiative-comments-section-title {
+    font-size: 1.8rem;
+  }
+}
