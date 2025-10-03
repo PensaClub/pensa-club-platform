@@ -305,13 +305,13 @@ export const validateInitiativeForm = (values, t) => {
     }
 
     // Gallery - alt текст е препоръчителен (warning, не error)
-    if (values.gallery && values.gallery.length > 0) {
-        values.gallery.forEach((image, index) => {
-            if (!image.alt?.trim()) {
-                newErrors[`gallery[${index}].alt`] = t('validation.gallery-alt-recommended');
-            }
-        });
-    }
+    // if (values.gallery && values.gallery.length > 0) {
+    //     values.gallery.forEach((image, index) => {
+    //         if (!image.alt?.trim()) {
+    //             newErrors[`gallery[${index}].alt`] = t('validation.gallery-alt-recommended');
+    //         }
+    //     });
+    // }
 
     // 🎯 PROGRESS & RESULTS валидации
     // KPIs - name и target са задължителни ако е добавен KPI
