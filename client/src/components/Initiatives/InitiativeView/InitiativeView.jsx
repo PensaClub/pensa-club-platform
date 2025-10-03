@@ -3,6 +3,8 @@ import { useParams, Link } from 'react-router-dom';
 import './initiativeView.css';
 import { useTranslation } from 'react-i18next';
 import { useInitiativeContext } from '../../contexts/InitiativeProvider';
+import { useAuthContext } from '../../contexts/UserContext';
+import { useClubContext } from '../../contexts/ClubContext';
 import { Loader } from '../../Loader/Loader';
 import { StoriesPublications } from './StoriesPublications/StoriesPublications';
 import { InitiativesMap } from '../InitiativesList/InitiativesMap/InitiativesMap';
@@ -12,14 +14,13 @@ import { Comments } from './Comments/Comments';
 import { truncateText } from '../../../utils/truncateText';
 import { useAnalytics } from '../../contexts/AnalyticsContext';
 import ImageSlider from '../../Articles/ArticleView/ImageSlider/ImageSlider';
-// Import вашите съществуващи утилити
-import { getDescriptionParts, handleSmoothScroll, renderSlateContent } from '../../../utils/slateRenderer.jsx';
+import { getDescriptionParts, renderSlateContent } from '../../../utils/slateRenderer.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-    faCalendar, faUsers, faHandshake, faTrophy, faTag,
+    faCalendar, faHandshake, faTrophy, faTag,
     faQuestionCircle, faMapMarkerAlt, faEnvelope, faPhone,
-    faGlobe, faUser, faBullseye, faMoneyBillWave, faImage,
-    faBuilding, faChartLine
+    faGlobe, faBullseye, faMoneyBillWave, faImage,
+    faBuilding
 } from '@fortawesome/free-solid-svg-icons';
 import {
     faFacebook, faInstagram, faLinkedin, faTwitter
@@ -29,6 +30,9 @@ export const InitiativeView = () => {
     const { slug } = useParams();
     const { t } = useTranslation();
     const { getInitiativeById } = useInitiativeContext();
+    const { profileData, isAuthentication } = useAuthContext();
+    const { sendPersonalEmail } = useClubContext();
+    
     const [initiative, setInitiative] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [showMap, setShowMap] = useState(true);
@@ -36,6 +40,112 @@ export const InitiativeView = () => {
     const [openFaqIndex, setOpenFaqIndex] = useState(null);
     const [activeSection, setActiveSection] = useState('detailed-description');
     const sectionsRef = useRef(new Map());
+
+    // Email Modal States
+    const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+    const [emailRecipient, setEmailRecipient] = useState({ name: '', email: '' });
+    const [emailForm, setEmailForm] = useState({
+        from: '',
+        to: '',
+        subject: '',
+        message: ''
+    });
+    const [emailStatus, setEmailStatus] = useState({ type: '', message: '' });
+    const [isSubmittingEmail, setIsSubmittingEmail] = useState(false);
+
+    // Email Modal Functions
+    const openEmailModal = (name, email) => {
+        setEmailRecipient({ name, email });
+        setEmailForm({
+            from: profileData?.email || '',
+            to: email,
+            subject: `Запитване относно инициатива: ${initiative.title}`,
+            message: ''
+        });
+        setEmailStatus({ type: '', message: '' });
+        setIsEmailModalOpen(true);
+    };
+
+    const closeEmailModal = () => {
+        setIsEmailModalOpen(false);
+        setEmailForm({
+            from: '',
+            to: '',
+            subject: '',
+            message: ''
+        });
+        setEmailStatus({ type: '', message: '' });
+    };
+
+    const handleEmailFormChange = (e) => {
+        const { name, value } = e.target;
+        setEmailForm(prev => ({ ...prev, [name]: value }));
+        if (emailStatus.type === 'error') {
+            setEmailStatus({ type: '', message: '' });
+        }
+    };
+
+    const handleEmailSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!emailForm.from.trim() || !emailForm.to.trim() || !emailForm.subject.trim() || !emailForm.message.trim()) {
+            setEmailStatus({
+                type: 'error',
+                message: 'Моля, попълнете всички полета'
+            });
+            return;
+        }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(emailForm.from)) {
+            setEmailStatus({
+                type: 'error',
+                message: 'Моля, въведете валиден имейл адрес в полето "От"'
+            });
+            return;
+        }
+        if (!emailRegex.test(emailForm.to)) {
+            setEmailStatus({
+                type: 'error',
+                message: 'Моля, въведете валиден имейл адрес в полето "До"'
+            });
+            return;
+        }
+
+        setIsSubmittingEmail(true);
+
+        try {
+            const success = await sendPersonalEmail({
+                from: emailForm.from,
+                to: emailForm.to,
+                subject: emailForm.subject,
+                message: emailForm.message
+            });
+
+            if (success) {
+                setEmailStatus({
+                    type: 'success',
+                    message: 'Съобщението е изпратено успешно!'
+                });
+                setTimeout(() => {
+                    closeEmailModal();
+                }, 2000);
+            } else {
+                setEmailStatus({
+                    type: 'error',
+                    message: 'Възникна грешка при изпращането!'
+                });
+            }
+        } catch (error) {
+            console.error('Error sending email:', error);
+            setEmailStatus({
+                type: 'error',
+                message: 'Възникна грешка при изпращането!'
+            });
+        } finally {
+            setIsSubmittingEmail(false);
+        }
+    };
 
     useEffect(() => {
         window.scrollTo({
@@ -106,12 +216,10 @@ export const InitiativeView = () => {
         };
     }, [initiative]);
 
-    // Функция за рендериране на снимки с или без slider
     const renderImages = (images, className = "") => {
         if (!images || images.length === 0) return null;
 
         if (images.length === 1) {
-            // Една снимка = обикновен img
             return (
                 <img
                     src={images[0].src}
@@ -120,7 +228,6 @@ export const InitiativeView = () => {
                 />
             );
         } else {
-            // Повече снимки = slider
             return (
                 <div className={`image-slider-container ${className}`}>
                     <ImageSlider images={images} />
@@ -152,7 +259,6 @@ export const InitiativeView = () => {
 
         const transformedProjects = projects
             .filter(project => {
-                // Проверка за coordinates директно в проекта
                 return project.coordinates &&
                     project.coordinates.lat &&
                     project.coordinates.lng;
@@ -160,12 +266,10 @@ export const InitiativeView = () => {
             .map((project) => ({
                 id: project.id,
                 title: project.title,
-                // Използвай description вместо shortDescription
                 shortDescription: project.description,
                 category: "Проект",
                 status: project.status,
                 location: {
-                    // Използвай coordinates директно от проекта
                     address: project.address || "",
                     coordinates: project.coordinates
                 },
@@ -173,6 +277,34 @@ export const InitiativeView = () => {
             }));
 
         return transformedProjects;
+    };
+
+    const renderContent = (content) => {
+        if (!content) {
+            return <p>{t('initiatives.view.placeholders.noContent')}</p>;
+        }
+
+        if (typeof content === 'string') {
+            if (content.includes('<') && content.includes('>')) {
+                return <div dangerouslySetInnerHTML={{ __html: content }} />;
+            }
+            return <p>{content}</p>;
+        }
+
+        if (Array.isArray(content)) {
+            return renderSlateContent(content);
+        }
+
+        if (typeof content === 'object') {
+            try {
+                return renderSlateContent(content);
+            } catch (error) {
+                console.warn('Failed to render content as Slate:', error);
+                return <p>{JSON.stringify(content)}</p>;
+            }
+        }
+
+        return <p>{String(content)}</p>;
     };
 
     if (isLoading) {
@@ -192,6 +324,12 @@ export const InitiativeView = () => {
 
     const { firstSentence, restSentences } = getDescriptionParts(initiative.shortDescription);
     const projectsForMap = transformProjectsForMap(initiative.projects);
+
+    // Check if Progress & Results section has any data
+    const hasKpis = initiative.kpis?.length > 0;
+    const hasExpectedResults = !!initiative.expectedResults;
+    const hasProgressReport = !!initiative.progressReport;
+    const hasProgressResultsData = hasKpis || hasExpectedResults || hasProgressReport;
 
     return (
         <div className="initiative-view">
@@ -214,7 +352,6 @@ export const InitiativeView = () => {
 
                 <div className="initiative-hero-content">
                     <div className="initiative-header">
-                        {/* Initiative Logo */}
                         {initiative.logo && (
                             <div className="initiative-logo">
                                 <img src={initiative.logo} alt="Initiative Logo" />
@@ -234,13 +371,13 @@ export const InitiativeView = () => {
                 </div>
             </div>
 
-            {/* NEW: Sticky Navigation */}
+            {/* Sticky Navigation */}
             <nav className="initiative-sticky-nav">
                 <div className="container">
                     <div className="sticky-nav-links">
                         {initiative.detailedDescription && (
-                            <a
-                                href="#detailed-description"
+                            
+                               <a href="#detailed-description"
                                 onClick={handleSmoothScroll}
                                 className={`sticky-nav-link ${activeSection === 'detailed-description' ? 'active' : ''}`}
                             >
@@ -249,8 +386,8 @@ export const InitiativeView = () => {
                         )}
 
                         {initiative.sections && initiative.sections.length > 0 && (
-                            <a
-                                href="#sections"
+                            
+                              <a href="#sections"
                                 onClick={handleSmoothScroll}
                                 className={`sticky-nav-link ${activeSection === 'sections' ? 'active' : ''}`}
                             >
@@ -258,8 +395,8 @@ export const InitiativeView = () => {
                             </a>
                         )}
                         {((initiative.stories && initiative.stories.length > 0) || (initiative.publications && initiative.publications.length > 0)) && (
-                            <a
-                                href='#stories'
+                            
+                               <a href='#stories'
                                 onClick={handleSmoothScroll}
                                 className={`sticky-nav-link ${(activeSection === 'stories') ? 'active' : ''}`}
                             >
@@ -267,8 +404,8 @@ export const InitiativeView = () => {
                             </a>
                         )}
                         {initiative.projects?.length > 0 && (
-                            <a
-                                href={projectsForMap.length > 0 ? "#projects" : "#projects-grid"}
+                            
+                               <a href={projectsForMap.length > 0 ? "#projects" : "#projects-grid"}
                                 onClick={handleSmoothScroll}
                                 className={`sticky-nav-link ${(activeSection === 'projects' || activeSection === 'projects-grid') ? 'active' : ''}`}
                             >
@@ -277,8 +414,8 @@ export const InitiativeView = () => {
                         )}
 
                         {(initiative.startDate || initiative.endDate || initiative.milestones?.length > 0) && (
-                            <a
-                                href="#timeline"
+                            
+                                <a href="#timeline"
                                 onClick={handleSmoothScroll}
                                 className={`sticky-nav-link ${activeSection === 'timeline' ? 'active' : ''}`}
                             >
@@ -287,8 +424,8 @@ export const InitiativeView = () => {
                         )}
 
                         {(initiative.targetAge?.length > 0 || initiative.targetAudience?.length > 0 || initiative.expectedBudget) && (
-                            <a
-                                href="#target-scope"
+                            
+                               <a href="#target-scope"
                                 onClick={handleSmoothScroll}
                                 className={`sticky-nav-link ${activeSection === 'target-scope' ? 'active' : ''}`}
                             >
@@ -296,9 +433,9 @@ export const InitiativeView = () => {
                             </a>
                         )}
 
-                        {(initiative.kpis?.length > 0 || initiative.expectedResults || initiative.progressReport) && (
-                            <a
-                                href="#progress-results"
+                        {hasProgressResultsData && (
+                            
+                             <a href="#progress-results"
                                 onClick={handleSmoothScroll}
                                 className={`sticky-nav-link ${activeSection === 'progress-results' ? 'active' : ''}`}
                             >
@@ -307,8 +444,8 @@ export const InitiativeView = () => {
                         )}
 
                         {(initiative.partners?.length > 0 || initiative.sponsors?.length > 0) && (
-                            <a
-                                href="#partners-sponsors"
+                            
+                               <a href="#partners-sponsors"
                                 onClick={handleSmoothScroll}
                                 className={`sticky-nav-link ${activeSection === 'partners-sponsors' ? 'active' : ''}`}
                             >
@@ -324,8 +461,8 @@ export const InitiativeView = () => {
                             </a>
                         )}
                         {initiative.faq?.length > 0 && (
-                            <a
-                                href="#faq"
+                            
+                               <a href="#faq"
                                 onClick={handleSmoothScroll}
                                 className={`sticky-nav-link ${activeSection === 'faq' ? 'active' : ''}`}
                             >
@@ -334,8 +471,8 @@ export const InitiativeView = () => {
                         )}
 
                         {initiative.commentsEnabled && (
-                            <a
-                                href="#comments"
+                            
+                               <a href="#comments"
                                 onClick={handleSmoothScroll}
                                 className={`sticky-nav-link ${activeSection === 'comments' ? 'active' : ''}`}
                             >
@@ -349,51 +486,17 @@ export const InitiativeView = () => {
             <div className="initiative-content"></div>
             <div className="initiative-content">
 
-                {/* 📖 NEW: Detailed Description */}
+                {/* Detailed Description */}
                 {initiative.detailedDescription && (
                     <section id="detailed-description" className="detailed-description-section">
                         <h2 className="section-title">{t('initiatives.view.sectionTitles.detailedDescription')}</h2>
                         <div className="detailed-content slate-content" data-editor="slate">
-                            {(() => {
-                                // Ако няма съдържание
-                                if (!initiative.detailedDescription) {
-                                    return <p>{t('initiatives.view.placeholders.noContent')}</p>
-                                }
-
-                                // Ако е string (HTML или обикновен текст)
-                                if (typeof initiative.detailedDescription === 'string') {
-                                    // Ако изглежда като HTML
-                                    if (initiative.detailedDescription.includes('<') && initiative.detailedDescription.includes('>')) {
-                                        return <div dangerouslySetInnerHTML={{ __html: initiative.detailedDescription }} />;
-                                    }
-                                    // Ако е обикновен текст
-                                    return <p>{initiative.detailedDescription}</p>;
-                                }
-
-                                // Ако е Slate.js структура (array)
-                                if (Array.isArray(initiative.detailedDescription)) {
-                                    return renderSlateContent(initiative.detailedDescription);
-                                }
-
-                                // Ако е обект, опитай се да го обработиш като Slate.js
-                                if (typeof initiative.detailedDescription === 'object') {
-                                    try {
-                                        return renderSlateContent(initiative.detailedDescription);
-                                    } catch (error) {
-                                        console.warn('Failed to render detailed description as Slate:', error);
-                                        return <p>{JSON.stringify(initiative.detailedDescription)}</p>;
-                                    }
-                                }
-
-                                // Fallback
-                                return <p>{String(initiative.detailedDescription)}</p>;
-                            })()}
+                            {renderContent(initiative.detailedDescription)}
                         </div>
                     </section>
                 )}
 
-                {/* EXISTING: Sections -*/}
-
+                {/* Sections */}
                 {initiative.sections && Array.isArray(initiative.sections) && initiative.sections.length > 0 && (
                     <section id="sections" className="initiative-sections">
                         <h2 className="section-title">
@@ -402,7 +505,6 @@ export const InitiativeView = () => {
 
                         <div className="sections-grid">
                             {initiative.sections.map((section, index) => {
-                                // Проверка дали има снимки
                                 const hasImages = (section.images && section.images.length > 0) ||
                                     (section.image && Array.isArray(section.image) && section.image.length > 0);
 
@@ -414,51 +516,15 @@ export const InitiativeView = () => {
                                         <div className="section-content-initiative">
                                             <h3 className="section-heading">{section.title}</h3>
                                             <div className="section-text slate-content" data-editor="slate">
-                                                {/* Умна проверка за типа на съдържанието */}
-                                            {(() => {
-                                                // Ако няма съдържание
-                                                if (!section.content) {
-                                                    return <p>{t('initiatives.view.placeholders.noContent')}</p>;
-                                                }
-
-                                                // Ако е string (HTML или обикновен текст)
-                                                if (typeof section.content === 'string') {
-                                                    // Ако изглежда като HTML
-                                                    if (section.content.includes('<') && section.content.includes('>')) {
-                                                        return <div dangerouslySetInnerHTML={{ __html: section.content }} />;
-                                                    }
-                                                    // Ако е обикновен текст
-                                                    return <p>{section.content}</p>;
-                                                }
-
-                                                // Ако е Slate.js структура (array)
-                                                if (Array.isArray(section.content)) {
-                                                    return renderSlateContent(section.content);
-                                                }
-
-                                                // Ако е обект, опитай се да го обработиш като Slate.js
-                                                if (typeof section.content === 'object') {
-                                                    try {
-                                                        return renderSlateContent(section.content);
-                                                    } catch (error) {
-                                                        console.warn('Failed to render section content as Slate:', error);
-                                                        return <p>{JSON.stringify(section.content)}</p>;
-                                                    }
-                                                }
-
-                                                // Fallback
-                                                return <p>{String(section.content)}</p>;
-                                            })()}
+                                                {renderContent(section.content)}
                                             </div>
                                         </div>
 
-                                        {/* Поддръжка за нови images структури */}
                                         {section.images?.length > 0 && (
                                             <div className="section-image">
                                                 {renderImages(section.images, "section-slider")}
                                             </div>
                                         )}
-                                        {/* Fallback за стари image структури */}
                                         {!section.images && section.image && Array.isArray(section.image) && section.image.length > 0 && (
                                             <div className="section-image">
                                                 <img
@@ -474,7 +540,7 @@ export const InitiativeView = () => {
                     </section>
                 )}
 
-                {/* 🖼️ NEW: Gallery */}
+                {/* Gallery */}
                 {initiative.gallery?.length > 0 && (
                     <section id="gallery" className="gallery-section">
                         <h2 className="section-title">{t('initiatives.view.sectionTitles.gallery')}</h2>
@@ -491,7 +557,7 @@ export const InitiativeView = () => {
                     </section>
                 )}
 
-                {/* EXISTING: Download Materials - остават същите */}
+                {/* Download Materials */}
                 {initiative.downloadMaterials && Array.isArray(initiative.downloadMaterials) && initiative.downloadMaterials.length > 0 && (
                     <section className="download-materials">
                         <h2 className="section-title">
@@ -534,7 +600,7 @@ export const InitiativeView = () => {
                     </section>
                 )}
 
-                {/* EXISTING: Stories & Publications - остават същите */}
+                {/* Stories & Publications */}
                 {((initiative.stories && initiative.stories.length > 0) || (initiative.publications && initiative.publications.length > 0)) && (
                     <StoriesPublications
                         stories={initiative.stories || []}
@@ -542,7 +608,7 @@ export const InitiativeView = () => {
                     />
                 )}
 
-                {/* EXISTING: Projects Map Section - остава същата */}
+                {/* Projects Map Section */}
                 {projectsForMap.length > 0 && (
                     <section id="projects" className="projects-section">
                         <h2 className="section-title">
@@ -567,7 +633,7 @@ export const InitiativeView = () => {
                     </section>
                 )}
 
-                {/* EXISTING: Projects Grid - остава същата */}
+                {/* Projects Grid */}
                 {initiative.projects && Array.isArray(initiative.projects) && initiative.projects.length > 0 && (
                     <section id="projects-grid" className="projects-grid-section">
                         <h2 className="section-title">
@@ -582,7 +648,7 @@ export const InitiativeView = () => {
                     </section>
                 )}
 
-                {/* ⏰ NEW: Timeline Section */}
+                {/* Timeline Section */}
                 {(initiative.startDate || initiative.endDate || initiative.milestones?.length > 0) && (
                     <section id="timeline" className="timeline-section">
                         <h2 className="section-title">
@@ -627,7 +693,7 @@ export const InitiativeView = () => {
                     </section>
                 )}
 
-                {/* 🎯 NEW: Target Scope */}
+                {/* Target Scope */}
                 {(initiative.targetAge?.length > 0 || initiative.targetAudience?.length > 0 || initiative.expectedBudget || initiative.customAudience) && (
                     <section id="target-scope" className="target-scope-section">
                         <h2 className="section-title">
@@ -688,15 +754,16 @@ export const InitiativeView = () => {
                         </div>
                     </section>
                 )}
-                {/* 🏆 NEW: Progress & Results */}
-                {(initiative.kpis?.length > 0 || initiative.expectedResults || initiative.progressReport) && (
+
+                {/* Progress & Results - Conditional Rendering */}
+                {hasProgressResultsData && (
                     <section id="progress-results" className="progress-results-section">
                         <h2 className="section-title">
                             <FontAwesomeIcon icon={faTrophy} />
                             {t('initiatives.view.sectionTitles.progressResults')}
                         </h2>
 
-                        {initiative.kpis?.length > 0 && (
+                        {hasKpis && (
                             <div className="kpis-preview">
                                 <h3>{t('initiatives.view.progressResults.kpis')}</h3>
                                 <div className="kpis-grid">
@@ -710,93 +777,27 @@ export const InitiativeView = () => {
                             </div>
                         )}
 
-                        {initiative.expectedResults && (
+                        {hasExpectedResults && (
                             <div className="expected-results-preview">
                                 <h3>{t('initiatives.view.progressResults.expectedResults')}</h3>
                                 <div className="results-content slate-content" data-editor="slate">
-                                    {(() => {
-                                        // Ако няма съдържание
-                                        if (!initiative.expectedResults) {
-                                            return <p>{t('initiatives.view.placeholders.noContent')}</p>
-                                        }
-
-                                        // Ако е string (HTML или обикновен текст)
-                                        if (typeof initiative.expectedResults === 'string') {
-                                            // Ако изглежда като HTML
-                                            if (initiative.expectedResults.includes('<') && initiative.expectedResults.includes('>')) {
-                                                return <div dangerouslySetInnerHTML={{ __html: initiative.expectedResults }} />;
-                                            }
-                                            // Ако е обикновен текст
-                                            return <p>{initiative.expectedResults}</p>;
-                                        }
-
-                                        // Ако е Slate.js структура (array)
-                                        if (Array.isArray(initiative.expectedResults)) {
-                                            return renderSlateContent(initiative.expectedResults);
-                                        }
-
-                                        // Ако е обект, опитай се да го обработиш като Slate.js
-                                        if (typeof initiative.expectedResults === 'object') {
-                                            try {
-                                                return renderSlateContent(initiative.expectedResults);
-                                            } catch (error) {
-                                                console.warn('Failed to render expected results as Slate:', error);
-                                                return <p>{JSON.stringify(initiative.expectedResults)}</p>;
-                                            }
-                                        }
-
-                                        // Fallback
-                                        return <p>{String(initiative.expectedResults)}</p>;
-                                    })()}
+                                    {renderContent(initiative.expectedResults)}
                                 </div>
                             </div>
                         )}
 
-                        {initiative.progressReport && (
+                        {hasProgressReport && (
                             <div className="progress-report-preview">
                                 <h3>{t('initiatives.view.progressResults.progressReport')}</h3>
                                 <div className="report-content slate-content" data-editor="slate">
-                                    {(() => {
-                                        // Ако няма съдържание
-                                        if (!initiative.progressReport) {
-                                            return <p>{t('initiatives.view.placeholders.noContent')}</p>
-                                        }
-
-                                        // Ако е string (HTML или обикновен текст)
-                                        if (typeof initiative.progressReport === 'string') {
-                                            // Ако изглежда като HTML
-                                            if (initiative.progressReport.includes('<') && initiative.progressReport.includes('>')) {
-                                                return <div dangerouslySetInnerHTML={{ __html: initiative.progressReport }} />;
-                                            }
-                                            // Ако е обикновен текст
-                                            return <p>{initiative.progressReport}</p>;
-                                        }
-
-                                        // Ако е Slate.js структура (array)
-                                        if (Array.isArray(initiative.progressReport)) {
-                                            return renderSlateContent(initiative.progressReport);
-                                        }
-
-                                        // Ако е обект, опитай се да го обработиш като Slate.js
-                                        if (typeof initiative.progressReport === 'object') {
-                                            try {
-                                                return renderSlateContent(initiative.progressReport);
-                                            } catch (error) {
-                                                console.warn('Failed to render progress report as Slate:', error);
-                                                return <p>{JSON.stringify(initiative.progressReport)}</p>;
-                                            }
-                                        }
-
-                                        // Fallback
-                                        return <p>{String(initiative.progressReport)}</p>;
-                                    })()}
+                                    {renderContent(initiative.progressReport)}
                                 </div>
                             </div>
                         )}
                     </section>
                 )}
 
-                {/* 🤝 NEW: Partners & Sponsors */}
+                {/* Partners & Sponsors */}
                 {(initiative.partners?.length > 0 || initiative.sponsors?.length > 0) && (
                     <section id="partners-sponsors" className="partners-sponsors-section">
                         <h2 className="section-title">
@@ -866,12 +867,11 @@ export const InitiativeView = () => {
                     </section>
                 )}
 
-                {/* 🏢 NEW: Organization Information */}
+                {/* Organization Information */}
                 {(initiative.responsible?.name || initiative.organization?.name || Object.values(initiative.socialMedia || {}).some(link => link)) && (
                     <section className="organization-contact-section">
-                        {t('initiatives.view.sectionTitles.organizationInfo')}
+                        <h2 className="section-title">{t('initiatives.view.sectionTitles.organizationInfo')}</h2>
 
-                        {/* Responsible Person */}
                         {initiative.responsible?.name && (
                             <div className="responsible-preview">
                                 <h3>{t('initiatives.view.organization.responsiblePerson')}</h3>
@@ -884,9 +884,12 @@ export const InitiativeView = () => {
                                         {initiative.responsible.email && (
                                             <div className="contact-item">
                                                 <FontAwesomeIcon icon={faEnvelope} className="contact-icon" />
-                                                <a href={`mailto:${initiative.responsible.email}`}>
+                                                <button
+                                                    onClick={() => openEmailModal(initiative.responsible.name, initiative.responsible.email)}
+                                                    className="contact-email-button"
+                                                >
                                                     {initiative.responsible.email}
-                                                </a>
+                                                </button>
                                             </div>
                                         )}
                                         {initiative.responsible.phone && (
@@ -902,7 +905,6 @@ export const InitiativeView = () => {
                             </div>
                         )}
 
-                        {/* Organization */}
                         {initiative.organization?.name && (
                             <div className="organization-preview">
                                 <h3 className='organization-title-h3'>
@@ -925,7 +927,6 @@ export const InitiativeView = () => {
                             </div>
                         )}
 
-                        {/* Social Media */}
                         {Object.values(initiative.socialMedia || {}).some(link => link) && (
                             <div className="social-media-preview">
                                 <h3>{t('initiatives.view.organization.socialMedia')}</h3>
@@ -956,13 +957,14 @@ export const InitiativeView = () => {
                     </section>
                 )}
 
-                {/* EXISTING: Contact Section - остава същата */}
+                {/* Contact Section */}
                 <ContactSection
                     contact={initiative.contact}
                     additionalContacts={initiative.additionalContacts}
+                    openEmailModal={openEmailModal}
                 />
 
-                {/* 🏷️ NEW: Tags */}
+                {/* Tags */}
                 {initiative.tags?.length > 0 && (
                     <section className="tags-section">
                         <h2 className="section-title">
@@ -977,7 +979,7 @@ export const InitiativeView = () => {
                     </section>
                 )}
 
-                {/* ❓ NEW: FAQ */}
+                {/* FAQ */}
                 {initiative.faq?.length > 0 && (
                     <section id="faq" className="faq-section">
                         <h2 className="section-title">
@@ -1003,12 +1005,130 @@ export const InitiativeView = () => {
                     </section>
                 )}
 
-                {/* EXISTING: Comments Section - остава същата */}
+                {/* Comments Section */}
                 <Comments
                     initiativeId={initiative.id || initiative.slug}
                     commentsEnabled={initiative.commentsEnabled}
                 />
             </div>
+
+            {/* Email Modal */}
+            {isEmailModalOpen && (
+                <div className="email-modal-overlay" onClick={closeEmailModal}>
+                    <div className="email-modal-container" onClick={(e) => e.stopPropagation()}>
+                        <div className="email-modal-header">
+                            <h3>Изпрати имейл до {emailRecipient.name}</h3>
+                            <button 
+                                className="email-modal-close" 
+                                onClick={closeEmailModal}
+                                aria-label="Затвори"
+                            >
+                                ✕
+                            </button>
+                        </div>
+
+                        <form onSubmit={handleEmailSubmit} className="email-modal-form">
+                            <div className="email-form-group">
+                                <label htmlFor="emailFrom">
+                                    От (Вашият имейл)
+                                    <span className="required">*</span>
+                                </label>
+                                <input
+                                    type="email"
+                                    id="emailFrom"
+                                    name="from"
+                                    value={emailForm.from}
+                                    onChange={handleEmailFormChange}
+                                    placeholder="your-email@example.com"
+                                    required
+                                    disabled={!isAuthentication}
+                                />
+                                {!isAuthentication && (
+                                    <small className="email-form-hint">
+                                        Влезте в профила си, за да изпратите имейл
+                                    </small>
+                                )}
+                            </div>
+
+                            <div className="email-form-group">
+                                <label htmlFor="emailTo">
+                                    До
+                                    <span className="required">*</span>
+                                </label>
+                                <input
+                                    type="email"
+                                    id="emailTo"
+                                    name="to"
+                                    value={emailForm.to}
+                                    readOnly
+                                    className="email-readonly"
+                                />
+                            </div>
+
+                            <div className="email-form-group">
+                                <label htmlFor="emailSubject">
+                                    Относно
+                                    <span className="required">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    id="emailSubject"
+                                    name="subject"
+                                    value={emailForm.subject}
+                                    onChange={handleEmailFormChange}
+                                    placeholder="Относно..."
+                                    required
+                                    maxLength={200}
+                                />
+                            </div>
+
+                            <div className="email-form-group">
+                                <label htmlFor="emailMessage">
+                                    Съобщение
+                                    <span className="required">*</span>
+                                </label>
+                                <textarea
+                                    id="emailMessage"
+                                    name="message"
+                                    value={emailForm.message}
+                                    onChange={handleEmailFormChange}
+                                    placeholder="Напишете вашето съобщение тук..."
+                                    required
+                                    rows={8}
+                                    maxLength={2000}
+                                />
+                                <small className="email-char-count">
+                                    {emailForm.message.length}/2000 символа
+                                </small>
+                            </div>
+
+                            {emailStatus.message && (
+                                <div className={`email-status-message ${emailStatus.type}`}>
+                                    {emailStatus.message}
+                                </div>
+                            )}
+
+                            <div className="email-modal-actions">
+                                <button
+                                    type="button"
+                                    onClick={closeEmailModal}
+                                    className="email-btn-cancel"
+                                    disabled={isSubmittingEmail}
+                                >
+                                    Отказ
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="email-btn-submit"
+                                    disabled={isSubmittingEmail || !isAuthentication}
+                                >
+                                    {isSubmittingEmail ? 'Изпращане...' : 'Изпрати'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div >
     );
 };

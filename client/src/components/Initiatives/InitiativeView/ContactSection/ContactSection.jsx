@@ -2,22 +2,19 @@ import React from 'react';
 import './contactSection.css';
 import { useTranslation } from 'react-i18next';
 
-export const ContactSection = ({ contact, additionalContacts }) => {
+export const ContactSection = ({ contact, additionalContacts, openEmailModal }) => {
   const { t } = useTranslation();
   
-  // Безопасна функция за получаване на първия символ
   const getFirstChar = (name) => {
     if (!name || typeof name !== 'string') return '?';
     return name.trim().charAt(0).toUpperCase();
   };
 
-  // Безопасна функция за получаване на първото име
   const getFirstName = (name) => {
     if (!name || typeof name !== 'string') return 'N/A';
     return name.trim().split(' ')[0];
   };
 
-  // Проверка дали стойността е валидна
   const isValid = (value) => {
     return value && typeof value === 'string' && value.trim().length > 0;
   };
@@ -73,14 +70,32 @@ export const ContactSection = ({ contact, additionalContacts }) => {
                 <span className="contact-label-initiatives">
                   {t('initiatives.view.email')}
                 </span>
-                <a href={`mailto:${contact.email}`} className="contact-value-initiatives">
-                  {contact.email}
-                </a>
+                {openEmailModal ? (
+                  <button
+                    onClick={() => openEmailModal(contact.name, contact.email)}
+                    className="contact-value-initiatives contact-email-button"
+                  >
+                    {contact.email}
+                  </button>
+                ) : (
+                  <a href={`mailto:${contact.email}`} className="contact-value-initiatives">
+                    {contact.email}
+                  </a>
+                )}
               </div>
             )}
           </div>
           
-          {isValid(contact.email) && (
+          {isValid(contact.email) && openEmailModal && (
+            <button 
+              onClick={() => openEmailModal(contact.name, contact.email)}
+              className="email-contact-btn-initiatives"
+            >
+              <span className="email-icon-initiatives">✉️</span>
+              {t('initiatives.view.emailTo')} {getFirstName(contact.name)}
+            </button>
+          )}
+          {isValid(contact.email) && !openEmailModal && (
             <a 
               href={`mailto:${contact.email}`}
               className="email-contact-btn-initiatives"
@@ -125,10 +140,22 @@ export const ContactSection = ({ contact, additionalContacts }) => {
                     )}
                     
                     {isValid(additionalContact.email) && (
-                      <a href={`mailto:${additionalContact.email}`} className="additional-contact-item-initiatives">
-                        <span className="contact-icon-initiatives">✉️</span>
-                        {additionalContact.email}
-                      </a>
+                      <>
+                        {openEmailModal ? (
+                          <button
+                            onClick={() => openEmailModal(additionalContact.name, additionalContact.email)}
+                            className="additional-contact-item-initiatives contact-email-button"
+                          >
+                            <span className="contact-icon-initiatives">✉️</span>
+                            {additionalContact.email}
+                          </button>
+                        ) : (
+                          <a href={`mailto:${additionalContact.email}`} className="additional-contact-item-initiatives">
+                            <span className="contact-icon-initiatives">✉️</span>
+                            {additionalContact.email}
+                          </a>
+                        )}
+                      </>
                     )}
                   </div>
                 </div>
