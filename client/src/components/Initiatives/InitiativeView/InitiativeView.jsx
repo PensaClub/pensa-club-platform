@@ -325,10 +325,34 @@ export const InitiativeView = () => {
     const { firstSentence, restSentences } = getDescriptionParts(initiative.shortDescription);
     const projectsForMap = transformProjectsForMap(initiative.projects);
 
+    // Helper функции за валидация
+    const hasRealContent = (content) => {
+        if (!content) return false;
+        
+        if (typeof content === 'string') {
+            const textOnly = content.replace(/<[^>]*>/g, '').trim();
+            return textOnly.length > 0;
+        }
+        
+        if (Array.isArray(content)) {
+            return content.length > 0;
+        }
+        
+        return !!content;
+    };
+
+    const hasValidKpis = (kpis) => {
+        if (!kpis || !Array.isArray(kpis) || kpis.length === 0) return false;
+        return kpis.some(kpi => 
+            (kpi.name && kpi.name !== null && kpi.name.trim() !== '') ||
+            (kpi.target && kpi.target !== null && String(kpi.target).trim() !== '')
+        );
+    };
+
     // Check if Progress & Results section has any data
-    const hasKpis = initiative.kpis?.length > 0;
-    const hasExpectedResults = !!initiative.expectedResults;
-    const hasProgressReport = !!initiative.progressReport;
+    const hasKpis = hasValidKpis(initiative.kpis);
+    const hasExpectedResults = hasRealContent(initiative.expectedResults);
+    const hasProgressReport = hasRealContent(initiative.progressReport);
     const hasProgressResultsData = hasKpis || hasExpectedResults || hasProgressReport;
 
     return (
@@ -767,7 +791,10 @@ export const InitiativeView = () => {
                             <div className="kpis-preview">
                                 <h3>{t('initiatives.view.progressResults.kpis')}</h3>
                                 <div className="kpis-grid">
-                                    {initiative.kpis.map((kpi, index) => (
+                                    {initiative.kpis.filter(kpi => 
+                                        (kpi.name && kpi.name !== null && kpi.name.trim() !== '') ||
+                                        (kpi.target && kpi.target !== null && String(kpi.target).trim() !== '')
+                                    ).map((kpi, index) => (
                                         <div key={index} className="kpi-preview-card">
                                             <h4>{kpi.name}</h4>
                                             <div className="kpi-target">{t('initiatives.view.progressResults.target')} {kpi.target}</div>
