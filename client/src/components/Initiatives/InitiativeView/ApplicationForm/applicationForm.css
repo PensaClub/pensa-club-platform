@@ -315,12 +315,26 @@
         margin: 1.5rem 0;
     }
 
+    .application-form-checkbox-container {
+        flex-direction: column;
+    }
+
     .application-form-title {
         font-size: 1.6rem;
     }
 
     .application-form-subtitle {
         font-size: 1rem;
+    }
+    .application-form-input {
+        font-size: 0.8rem;
+    }
+    .application-form-checkbox-label{
+        font-size: 0.9rem;
+    }
+    .application-form-btn{
+        font-size: 0.9rem;
+        padding: 0.8rem 1.5rem;
     }
 }
 
