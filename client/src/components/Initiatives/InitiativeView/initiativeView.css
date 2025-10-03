@@ -2234,3 +2234,201 @@
     font-size: 0.95rem;
   }
 }
+.organization-contact-content{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2rem;
+}
+/* Organization Contact Section - Email Fix & Responsive */
+.responsible-contacts .contact-item a,
+.organization-info a,
+.contact-item .contact-email-button {
+  word-break: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+  display: inline-block;
+}
+
+.contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  word-break: break-word;
+}
+
+.contact-icon {
+  flex-shrink: 0;
+  margin-top: 0.2rem;
+}
+
+.responsible-preview,
+.organization-preview,
+.social-media-preview {
+  overflow: hidden;
+}
+
+.responsible-info,
+.organization-info {
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Responsive для organization-contact-content */
+@media (max-width: 992px) {
+  .organization-contact-content {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .responsible-preview,
+  .organization-preview,
+  .social-media-preview {
+    padding: 1.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .organization-contact-content {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  
+  .responsible-preview h3,
+  .organization-preview h3,
+  .social-media-preview h3 {
+    font-size: 1.2rem;
+  }
+  
+  .responsible-info h4,
+  .organization-info h4 {
+    font-size: 1rem;
+  }
+  
+  .responsible-contacts .contact-item a,
+  .organization-info a {
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+  
+  .social-links {
+    gap: 0.75rem;
+  }
+  
+  .social-link {
+    width: 45px;
+    height: 45px;
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .organization-contact-content {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .responsible-preview,
+  .organization-preview,
+  .social-media-preview {
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  
+  .responsible-preview h3,
+  .organization-preview h3,
+  .social-media-preview h3 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .responsible-info h4,
+  .organization-info h4 {
+    font-size: 0.95rem;
+  }
+  
+  .responsible-position {
+    font-size: 0.85rem;
+  }
+  
+  .responsible-contacts .contact-item a,
+  .organization-info a {
+    font-size: 0.85rem;
+  }
+  
+  .contact-item {
+    gap: 0.6rem;
+  }
+  
+  .social-link {
+    width: 42px;
+    height: 42px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .organization-contact-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .responsible-preview,
+  .organization-preview,
+  .social-media-preview {
+    padding: 1.25rem;
+    margin: 1rem 0;
+  }
+  
+  .responsible-preview h3,
+  .organization-preview h3,
+  .social-media-preview h3 {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .responsible-info h4,
+  .organization-info h4 {
+    font-size: 0.9rem;
+    word-break: break-word;
+  }
+  
+  .responsible-position {
+    font-size: 0.8rem;
+  }
+  
+  .responsible-contacts {
+    gap: 0.5rem;
+  }
+  
+  .responsible-contacts .contact-item a,
+  .organization-info a,
+  .contact-email-button {
+    font-size: 0.8rem;
+    line-height: 1.3;
+  }
+  
+  .contact-item {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .contact-icon {
+    font-size: 0.9rem;
+  }
+  
+  .organization-info p {
+    font-size: 0.85rem;
+  }
+  
+  .social-links {
+    gap: 0.6rem;
+  }
+  
+  .social-link {
+    width: 38px;
+    height: 38px;
+    font-size: 0.95rem;
+  }
+}

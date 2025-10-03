@@ -32,7 +32,7 @@ export const InitiativeView = () => {
     const { getInitiativeById } = useInitiativeContext();
     const { profileData, isAuthentication } = useAuthContext();
     const { sendPersonalEmail } = useClubContext();
-    
+
     const [initiative, setInitiative] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [showMap, setShowMap] = useState(true);
@@ -239,7 +239,7 @@ export const InitiativeView = () => {
     const toggleFaq = (index) => {
         setOpenFaqIndex(openFaqIndex === index ? null : index);
     };
-    
+
     const handleSmoothScroll = (e) => {
         e.preventDefault();
         const targetId = e.currentTarget.getAttribute('href').substring(1);
@@ -328,22 +328,22 @@ export const InitiativeView = () => {
     // Helper функции за валидация
     const hasRealContent = (content) => {
         if (!content) return false;
-        
+
         if (typeof content === 'string') {
             const textOnly = content.replace(/<[^>]*>/g, '').trim();
             return textOnly.length > 0;
         }
-        
+
         if (Array.isArray(content)) {
             return content.length > 0;
         }
-        
+
         return !!content;
     };
 
     const hasValidKpis = (kpis) => {
         if (!kpis || !Array.isArray(kpis) || kpis.length === 0) return false;
-        return kpis.some(kpi => 
+        return kpis.some(kpi =>
             (kpi.name && kpi.name !== null && kpi.name.trim() !== '') ||
             (kpi.target && kpi.target !== null && String(kpi.target).trim() !== '')
         );
@@ -400,8 +400,8 @@ export const InitiativeView = () => {
                 <div className="container">
                     <div className="sticky-nav-links">
                         {initiative.detailedDescription && (
-                            
-                               <a href="#detailed-description"
+
+                            <a href="#detailed-description"
                                 onClick={handleSmoothScroll}
                                 className={`sticky-nav-link ${activeSection === 'detailed-description' ? 'active' : ''}`}
                             >
@@ -410,8 +410,8 @@ export const InitiativeView = () => {
                         )}
 
                         {initiative.sections && initiative.sections.length > 0 && (
-                            
-                              <a href="#sections"
+
+                            <a href="#sections"
                                 onClick={handleSmoothScroll}
                                 className={`sticky-nav-link ${activeSection === 'sections' ? 'active' : ''}`}
                             >
@@ -419,8 +419,8 @@ export const InitiativeView = () => {
                             </a>
                         )}
                         {((initiative.stories && initiative.stories.length > 0) || (initiative.publications && initiative.publications.length > 0)) && (
-                            
-                               <a href='#stories'
+
+                            <a href='#stories'
                                 onClick={handleSmoothScroll}
                                 className={`sticky-nav-link ${(activeSection === 'stories') ? 'active' : ''}`}
                             >
@@ -428,8 +428,8 @@ export const InitiativeView = () => {
                             </a>
                         )}
                         {initiative.projects?.length > 0 && (
-                            
-                               <a href={projectsForMap.length > 0 ? "#projects" : "#projects-grid"}
+
+                            <a href={projectsForMap.length > 0 ? "#projects" : "#projects-grid"}
                                 onClick={handleSmoothScroll}
                                 className={`sticky-nav-link ${(activeSection === 'projects' || activeSection === 'projects-grid') ? 'active' : ''}`}
                             >
@@ -438,8 +438,8 @@ export const InitiativeView = () => {
                         )}
 
                         {(initiative.startDate || initiative.endDate || initiative.milestones?.length > 0) && (
-                            
-                                <a href="#timeline"
+
+                            <a href="#timeline"
                                 onClick={handleSmoothScroll}
                                 className={`sticky-nav-link ${activeSection === 'timeline' ? 'active' : ''}`}
                             >
@@ -448,8 +448,8 @@ export const InitiativeView = () => {
                         )}
 
                         {(initiative.targetAge?.length > 0 || initiative.targetAudience?.length > 0 || initiative.expectedBudget) && (
-                            
-                               <a href="#target-scope"
+
+                            <a href="#target-scope"
                                 onClick={handleSmoothScroll}
                                 className={`sticky-nav-link ${activeSection === 'target-scope' ? 'active' : ''}`}
                             >
@@ -458,8 +458,8 @@ export const InitiativeView = () => {
                         )}
 
                         {hasProgressResultsData && (
-                            
-                             <a href="#progress-results"
+
+                            <a href="#progress-results"
                                 onClick={handleSmoothScroll}
                                 className={`sticky-nav-link ${activeSection === 'progress-results' ? 'active' : ''}`}
                             >
@@ -468,8 +468,8 @@ export const InitiativeView = () => {
                         )}
 
                         {(initiative.partners?.length > 0 || initiative.sponsors?.length > 0) && (
-                            
-                               <a href="#partners-sponsors"
+
+                            <a href="#partners-sponsors"
                                 onClick={handleSmoothScroll}
                                 className={`sticky-nav-link ${activeSection === 'partners-sponsors' ? 'active' : ''}`}
                             >
@@ -485,8 +485,8 @@ export const InitiativeView = () => {
                             </a>
                         )}
                         {initiative.faq?.length > 0 && (
-                            
-                               <a href="#faq"
+
+                            <a href="#faq"
                                 onClick={handleSmoothScroll}
                                 className={`sticky-nav-link ${activeSection === 'faq' ? 'active' : ''}`}
                             >
@@ -495,8 +495,8 @@ export const InitiativeView = () => {
                         )}
 
                         {initiative.commentsEnabled && (
-                            
-                               <a href="#comments"
+
+                            <a href="#comments"
                                 onClick={handleSmoothScroll}
                                 className={`sticky-nav-link ${activeSection === 'comments' ? 'active' : ''}`}
                             >
@@ -791,7 +791,7 @@ export const InitiativeView = () => {
                             <div className="kpis-preview">
                                 <h3>{t('initiatives.view.progressResults.kpis')}</h3>
                                 <div className="kpis-grid">
-                                    {initiative.kpis.filter(kpi => 
+                                    {initiative.kpis.filter(kpi =>
                                         (kpi.name && kpi.name !== null && kpi.name.trim() !== '') ||
                                         (kpi.target && kpi.target !== null && String(kpi.target).trim() !== '')
                                     ).map((kpi, index) => (
@@ -898,89 +898,90 @@ export const InitiativeView = () => {
                 {(initiative.responsible?.name || initiative.organization?.name || Object.values(initiative.socialMedia || {}).some(link => link)) && (
                     <section className="organization-contact-section">
                         <h2 className="section-title">{t('initiatives.view.sectionTitles.organizationInfo')}</h2>
-
-                        {initiative.responsible?.name && (
-                            <div className="responsible-preview">
-                                <h3>{t('initiatives.view.organization.responsiblePerson')}</h3>
-                                <div className="responsible-info">
-                                    <h4>{initiative.responsible.name}</h4>
-                                    {initiative.responsible.position && (
-                                        <p className="responsible-position">{initiative.responsible.position}</p>
-                                    )}
-                                    <div className="responsible-contacts">
-                                        {initiative.responsible.email && (
-                                            <div className="contact-item">
-                                                <FontAwesomeIcon icon={faEnvelope} className="contact-icon" />
-                                                <button
-                                                    onClick={() => openEmailModal(initiative.responsible.name, initiative.responsible.email)}
-                                                    className="contact-email-button"
-                                                >
-                                                    {initiative.responsible.email}
-                                                </button>
-                                            </div>
+                        <div className="organization-contact-content">
+                            {initiative.responsible?.name && (
+                                <div className="responsible-preview">
+                                    <h3>{t('initiatives.view.organization.responsiblePerson')}</h3>
+                                    <div className="responsible-info">
+                                        <h4>{initiative.responsible.name}</h4>
+                                        {initiative.responsible.position && (
+                                            <p className="responsible-position">{initiative.responsible.position}</p>
                                         )}
-                                        {initiative.responsible.phone && (
-                                            <div className="contact-item">
-                                                <FontAwesomeIcon icon={faPhone} className="contact-icon" />
-                                                <a href={`tel:${initiative.responsible.phone}`}>
-                                                    {initiative.responsible.phone}
-                                                </a>
-                                            </div>
+                                        <div className="responsible-contacts">
+                                            {initiative.responsible.email && (
+                                                <div className="contact-item">
+                                                    <FontAwesomeIcon icon={faEnvelope} className="contact-icon" />
+                                                    <button
+                                                        onClick={() => openEmailModal(initiative.responsible.name, initiative.responsible.email)}
+                                                        className="contact-email-button"
+                                                    >
+                                                        {initiative.responsible.email}
+                                                    </button>
+                                                </div>
+                                            )}
+                                            {initiative.responsible.phone && (
+                                                <div className="contact-item">
+                                                    <FontAwesomeIcon icon={faPhone} className="contact-icon" />
+                                                    <a href={`tel:${initiative.responsible.phone}`}>
+                                                        {initiative.responsible.phone}
+                                                    </a>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {initiative.organization?.name && (
+                                <div className="organization-preview">
+                                    <h3 className='organization-title-h3'>
+                                        <FontAwesomeIcon icon={faBuilding} />
+                                        {t('initiatives.view.organization.organization')}
+                                    </h3>
+                                    <div className="organization-info">
+                                        <h4>{initiative.organization.name}</h4>
+                                        {initiative.organization.website && (
+                                            <a href={initiative.organization.website} target="_blank" rel="noopener noreferrer">
+                                                <FontAwesomeIcon icon={faGlobe} /> {initiative.organization.website}
+                                            </a>
+                                        )}
+                                        {initiative.organization.address && (
+                                            <p>
+                                                <FontAwesomeIcon icon={faMapMarkerAlt} /> {initiative.organization.address}
+                                            </p>
                                         )}
                                     </div>
                                 </div>
-                            </div>
-                        )}
+                            )}
 
-                        {initiative.organization?.name && (
-                            <div className="organization-preview">
-                                <h3 className='organization-title-h3'>
-                                    <FontAwesomeIcon icon={faBuilding} />
-                                    {t('initiatives.view.organization.organization')}
-                                </h3>
-                                <div className="organization-info">
-                                    <h4>{initiative.organization.name}</h4>
-                                    {initiative.organization.website && (
-                                        <a href={initiative.organization.website} target="_blank" rel="noopener noreferrer">
-                                            <FontAwesomeIcon icon={faGlobe} /> {initiative.organization.website}
-                                        </a>
-                                    )}
-                                    {initiative.organization.address && (
-                                        <p>
-                                            <FontAwesomeIcon icon={faMapMarkerAlt} /> {initiative.organization.address}
-                                        </p>
-                                    )}
+                            {Object.values(initiative.socialMedia || {}).some(link => link) && (
+                                <div className="social-media-preview">
+                                    <h3>{t('initiatives.view.organization.socialMedia')}</h3>
+                                    <div className="social-links">
+                                        {initiative.socialMedia?.facebook && (
+                                            <a href={initiative.socialMedia.facebook} target="_blank" rel="noopener noreferrer" className="social-link facebook">
+                                                <FontAwesomeIcon icon={faFacebook} />
+                                            </a>
+                                        )}
+                                        {initiative.socialMedia?.instagram && (
+                                            <a href={initiative.socialMedia.instagram} target="_blank" rel="noopener noreferrer" className="social-link instagram">
+                                                <FontAwesomeIcon icon={faInstagram} />
+                                            </a>
+                                        )}
+                                        {initiative.socialMedia?.linkedin && (
+                                            <a href={initiative.socialMedia.linkedin} target="_blank" rel="noopener noreferrer" className="social-link linkedin">
+                                                <FontAwesomeIcon icon={faLinkedin} />
+                                            </a>
+                                        )}
+                                        {initiative.socialMedia?.twitter && (
+                                            <a href={initiative.socialMedia.twitter} target="_blank" rel="noopener noreferrer" className="social-link twitter">
+                                                <FontAwesomeIcon icon={faTwitter} />
+                                            </a>
+                                        )}
+                                    </div>
                                 </div>
-                            </div>
-                        )}
-
-                        {Object.values(initiative.socialMedia || {}).some(link => link) && (
-                            <div className="social-media-preview">
-                                <h3>{t('initiatives.view.organization.socialMedia')}</h3>
-                                <div className="social-links">
-                                    {initiative.socialMedia?.facebook && (
-                                        <a href={initiative.socialMedia.facebook} target="_blank" rel="noopener noreferrer" className="social-link facebook">
-                                            <FontAwesomeIcon icon={faFacebook} />
-                                        </a>
-                                    )}
-                                    {initiative.socialMedia?.instagram && (
-                                        <a href={initiative.socialMedia.instagram} target="_blank" rel="noopener noreferrer" className="social-link instagram">
-                                            <FontAwesomeIcon icon={faInstagram} />
-                                        </a>
-                                    )}
-                                    {initiative.socialMedia?.linkedin && (
-                                        <a href={initiative.socialMedia.linkedin} target="_blank" rel="noopener noreferrer" className="social-link linkedin">
-                                            <FontAwesomeIcon icon={faLinkedin} />
-                                        </a>
-                                    )}
-                                    {initiative.socialMedia?.twitter && (
-                                        <a href={initiative.socialMedia.twitter} target="_blank" rel="noopener noreferrer" className="social-link twitter">
-                                            <FontAwesomeIcon icon={faTwitter} />
-                                        </a>
-                                    )}
-                                </div>
-                            </div>
-                        )}
+                            )}
+                        </div>
                     </section>
                 )}
 
@@ -1045,8 +1046,8 @@ export const InitiativeView = () => {
                     <div className="email-modal-container" onClick={(e) => e.stopPropagation()}>
                         <div className="email-modal-header">
                             <h3>Изпрати имейл до {emailRecipient.name}</h3>
-                            <button 
-                                className="email-modal-close" 
+                            <button
+                                className="email-modal-close"
                                 onClick={closeEmailModal}
                                 aria-label="Затвори"
                             >
