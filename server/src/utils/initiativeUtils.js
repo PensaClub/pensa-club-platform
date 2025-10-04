@@ -74,19 +74,19 @@ const initiativeConfig = [
         model: contact,
         as: 'contact',
         required: false,
-        attributes: ['id', 'name', 'position', 'email', 'phone', 'image'],
+        attributes: ['id', 'name', 'position', 'email', 'phone', 'role','image'],
     },
     {
         model: contact,
         as: 'additionalContacts',
         required: false,
-        attributes: ['id', 'name', 'email', 'phone'],
+        attributes: ['id', 'name', 'email', 'position', 'phone', 'role','image'],
     },
     {
         model: contact,
         as: 'responsible',
         required: false,
-        attributes: ['id', 'name', 'position', 'email', 'phone'],
+        attributes: ['id', 'name', 'email', 'position', 'phone', 'role','image'],
     },
     {
         model: section,

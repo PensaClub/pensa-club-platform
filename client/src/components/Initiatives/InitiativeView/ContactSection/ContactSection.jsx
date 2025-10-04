@@ -49,9 +49,20 @@ export const ContactSection = ({ contact, additionalContacts, openEmailModal }) 
           <h3 className="contact-name-initiatives">
             {contact.name || 'Няма име'}
           </h3>
-          <p className="contact-position-initiatives">
-            {contact.position || 'Няма позиция'}
-          </p>
+          
+          {/* Position and Role */}
+          <div className="contact-roles-initiatives">
+            {isValid(contact.position) && (
+              <p className="contact-position-initiatives">
+                {contact.position}
+              </p>
+            )}
+            {isValid(contact.role) && (
+              <p className="contact-role-initiatives">
+                <span className="role-label">Роля:</span> {contact.role}
+              </p>
+            )}
+          </div>
           
           <div className="contact-details-initiatives">
             {isValid(contact.phone) && (
@@ -122,14 +133,41 @@ export const ContactSection = ({ contact, additionalContacts, openEmailModal }) 
                 key={`additional-contact-${additionalContact.email || index}-${index}`} 
                 className="additional-contact-card-initiatives"
               >
-                <div className="additional-contact-avatar-initiatives">
-                  {getFirstChar(additionalContact.name)}
+                {/* Image or Avatar */}
+                <div className="additional-contact-image-section">
+                  {additionalContact.image ? (
+                    <img 
+                      src={additionalContact.image} 
+                      alt={additionalContact.name || 'Contact'}
+                      className="additional-contact-photo-initiatives"
+                    />
+                  ) : (
+                    <div className="additional-contact-avatar-initiatives">
+                      {getFirstChar(additionalContact.name)}
+                    </div>
+                  )}
                 </div>
                 
                 <div className="additional-contact-info-initiatives">
                   <h5 className="additional-contact-name-initiatives">
                     {additionalContact.name || 'Няма име'}
                   </h5>
+                  
+                  {/* Position and Role */}
+                  {(isValid(additionalContact.position) || isValid(additionalContact.role)) && (
+                    <div className="additional-contact-roles">
+                      {isValid(additionalContact.position) && (
+                        <p className="additional-contact-position">
+                          {additionalContact.position}
+                        </p>
+                      )}
+                      {isValid(additionalContact.role) && (
+                        <p className="additional-contact-role">
+                          <span className="role-label">Роля:</span> {additionalContact.role}
+                        </p>
+                      )}
+                    </div>
+                  )}
                   
                   <div className="additional-contact-details-initiatives">
                     {isValid(additionalContact.phone) && (

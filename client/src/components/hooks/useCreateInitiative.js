@@ -112,7 +112,7 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
         logo: null,
 
         // Контакти
-        responsible: { name: '', position: '', email: '', phone: '' },
+        responsible: { name: '', position: '', email: '', phone: '', image: '', role: '' },
         organization: { name: '', address: '', website: '' },
         socialMedia: { facebook: '', instagram: '', linkedin: '', twitter: '' },
 
@@ -1813,6 +1813,145 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
             }));
         }
     }, []);
+    // 📷 ADDITIONAL CONTACT IMAGE UPLOAD
+    const handleAdditionalContactImageUpload = useCallback(async (index, e) => {
+        const file = e.target.files[0];
+        if (!file || !allowedImageTypes.includes(file.type)) {
+            notify('invalid-image-file-type');
+            return;
+        }
+
+        try {
+            setIsUploading(true);
+            setUploadProgress(0);
+
+            const compressedFile = await compressImage(file, {
+                maxSizeMB: 1,
+                maxWidthOrHeight: 400
+            });
+
+            const uploadedUrl = await uploadFileWithProgress(
+                compressedFile,
+                'initiatives/additional-contacts',
+                (progress) => setUploadProgress(progress)
+            );
+
+            setValues(prev => {
+                const updatedContacts = [...prev.additionalContacts];
+                updatedContacts[index] = {
+                    ...updatedContacts[index],
+                    image: uploadedUrl
+                };
+                return { ...prev, additionalContacts: updatedContacts };
+            });
+
+            notify('contact-image-upload-success');
+        } catch (error) {
+            console.error('Additional contact image upload error:', error);
+            notify('contact-image-upload-failed');
+        } finally {
+            setIsUploading(false);
+            setUploadProgress(0);
+        }
+    }, []);
+
+    // 🗑️ REMOVE ADDITIONAL CONTACT IMAGE
+    const removeAdditionalContactImage = useCallback(async (index) => {
+        const imageToDelete = values.additionalContacts?.[index]?.image;
+
+        setValues(prev => {
+            const updatedContacts = [...prev.additionalContacts];
+            updatedContacts[index] = {
+                ...updatedContacts[index],
+                image: ''
+            };
+            return { ...prev, additionalContacts: updatedContacts };
+        });
+
+        // 🔥 В BACKGROUND изтриваме от Firebase
+        if (imageToDelete && !imageToDelete.startsWith('blob:')) {
+            try {
+                await deleteSingleImage(imageToDelete);
+            } catch (error) {
+                console.error('Грешка при изтриване от Firebase:', error);
+            }
+        }
+
+        if (imageToDelete?.startsWith('blob:')) {
+            URL.revokeObjectURL(imageToDelete);
+        }
+
+        notify('contact-image-removed');
+    }, [values.additionalContacts]);
+
+    // 📷 RESPONSIBLE PERSON IMAGE UPLOAD
+    const handleResponsibleImageUpload = useCallback(async (e) => {
+        const file = e.target.files[0];
+        if (!file || !allowedImageTypes.includes(file.type)) {
+            notify('invalid-image-file-type');
+            return;
+        }
+
+        try {
+            setIsUploading(true);
+            setUploadProgress(0);
+
+            const compressedFile = await compressImage(file, {
+                maxSizeMB: 1,
+                maxWidthOrHeight: 400
+            });
+
+            const uploadedUrl = await uploadFileWithProgress(
+                compressedFile,
+                'initiatives/responsible',
+                (progress) => setUploadProgress(progress)
+            );
+
+            setValues(prev => ({
+                ...prev,
+                responsible: {
+                    ...prev.responsible,
+                    image: uploadedUrl
+                }
+            }));
+
+            notify('contact-image-upload-success');
+        } catch (error) {
+            console.error('Responsible image upload error:', error);
+            notify('contact-image-upload-failed');
+        } finally {
+            setIsUploading(false);
+            setUploadProgress(0);
+        }
+    }, []);
+
+    // 🗑️ REMOVE RESPONSIBLE IMAGE
+    const removeResponsibleImage = useCallback(async () => {
+        const imageToDelete = values.responsible?.image;
+
+        setValues(prev => ({
+            ...prev,
+            responsible: {
+                ...prev.responsible,
+                image: ''
+            }
+        }));
+
+        // 🔥 В BACKGROUND изтриваме от Firebase
+        if (imageToDelete && !imageToDelete.startsWith('blob:')) {
+            try {
+                await deleteSingleImage(imageToDelete);
+            } catch (error) {
+                console.error('Грешка при изтриване от Firebase:', error);
+            }
+        }
+
+        if (imageToDelete?.startsWith('blob:')) {
+            URL.revokeObjectURL(imageToDelete);
+        }
+
+        notify('contact-image-removed');
+    }, [values.responsible?.image]);
 
     // ✅ FORM VALIDATION с новите утилити
     const validateForm = useCallback(() => {
@@ -2272,7 +2411,10 @@ const useCreateInitiative = (initialValues, onSubmitHandler) => {
         updateSection,
         addSectionImage,
         removeSectionImage,
-
+        handleAdditionalContactImageUpload,
+        removeAdditionalContactImage,
+        handleResponsibleImageUpload,
+        removeResponsibleImage,
         // DOWNLOAD MATERIALS HANDLERS
         addDownloadMaterial,
         removeDownloadMaterial,
