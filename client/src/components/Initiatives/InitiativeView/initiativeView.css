@@ -1052,7 +1052,7 @@
 .sponsor-amount {
   background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(21, 128, 61, 0.1));
   color: #15803d;
-  padding: 0.5rem 1rem;
+  padding: 0.2rem 0.6rem;
   border-radius: 20px;
   font-weight: 600;
   margin-bottom: 1rem;
@@ -1440,6 +1440,7 @@
 }
 .organization-title-h3{
   display: flex;
+  gap: 5px;
 }
 /* Image Slider интеграция */
 .image-slider-container {
@@ -2431,4 +2432,82 @@
     height: 38px;
     font-size: 0.95rem;
   }
+}
+/* Responsible Person Card */
+.responsible-card {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+    align-items: flex-start;
+}
+
+.responsible-image-section {
+    flex-shrink: 0;
+}
+
+.responsible-photo {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #1B8B8A;
+}
+
+.responsible-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1B8B8A 0%, #45B7B8 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-weight: bold;
+}
+
+.responsible-info h4 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.3rem;
+    color: #2d3748;
+}
+
+.responsible-roles {
+    margin-bottom: 1rem;
+}
+
+.responsible-position {
+    color: #666;
+    font-size: 1rem;
+    margin: 0.25rem 0;
+}
+
+.responsible-role {
+    color: #1B8B8A;
+    font-size: 0.95rem;
+    font-weight: 500;
+    margin: 0.5rem 0 0.1rem 0;
+}
+.responsible-role span.role-label{
+ font-size: 0.9rem;
+}
+.responsible-contacts {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+    .responsible-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .responsible-contacts {
+        width: 100%;
+    }
 }
