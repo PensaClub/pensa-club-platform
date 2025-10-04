@@ -180,7 +180,12 @@
 .website-icon {
     font-size: 0.9rem;
 }
-
+.sponsor-info{
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    align-items: center;
+}
 /* Responsive Design */
 @media (max-width: 768px) {
     .sponsors-partners-container {

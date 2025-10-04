@@ -112,6 +112,10 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler }) => {
         handleSetMainImage,
         formatDate,
         calculateDuration,
+        handleAdditionalContactImageUpload,
+        removeAdditionalContactImage,
+        handleResponsibleImageUpload,
+        removeResponsibleImage,
         generateId,
         handleContactImageUpload,
         removeContactImage,
@@ -3250,105 +3254,148 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler }) => {
                                             <p className="initiative-section-description">{t('initiatives.create.responsiblePersonDescription')}</p>
                                         </div>
 
-                                        <div className="initiative-responsible-form-grid">
-                                            {/* Name */}
-                                            <div className="initiative-form-group-contact">
-                                                <label>
-                                                    {t('initiatives.create.fullName')}
-                                                    {/* 🔧 ПРЕМАХНАТО: <span className="required-indicator">*</span> */}
-                                                </label>
-                                                <input
-                                                    type="text"
-                                                    value={values.responsible?.name || ''}
-                                                    onChange={(e) => {
-                                                        setValues(prev => ({
-                                                            ...prev,
-                                                            responsible: {
-                                                                ...prev.responsible,
-                                                                name: e.target.value
-                                                            }
-                                                        }));
-                                                    }}
-                                                    placeholder={t('initiatives.create.fullNamePlaceholder')}
-                                                    className={errors['responsible.name'] ? 'error' : ''}
-                                                />
-                                                {errors['responsible.name'] && (
-                                                    <div className="error-message">{errors['responsible.name']}</div>
-                                                )}
+                                        <div className="initiative-main-contact-form-grid">
+                                            {/* Contact Image */}
+                                            <div className="initiative-form-group-contact-image">
+                                                <label>{t('initiatives.create.contactImage')}</label>
+                                                <div className="contact-image-upload">
+                                                    {values.responsible?.image ? (
+                                                        <div className="contact-image-preview">
+                                                            <img src={values.responsible.image} alt={values.responsible.name || 'Responsible'} />
+                                                            <button type="button" onClick={removeResponsibleImage}>
+                                                                <FontAwesomeIcon icon={faTimes} />
+                                                            </button>
+                                                        </div>
+                                                    ) : (
+                                                        <label className="contact-image-upload-placeholder">
+                                                            <FontAwesomeIcon icon={faUser} />
+                                                            <span>Качи снимка</span>
+                                                            <input
+                                                                type="file"
+                                                                accept="image/*"
+                                                                onChange={handleResponsibleImageUpload}
+                                                                style={{ display: 'none' }}
+                                                            />
+                                                        </label>
+                                                    )}
+                                                </div>
                                             </div>
 
-                                            {/* Position */}
-                                            <div className="initiative-form-group-contact">
-                                                <label>{t('initiatives.create.position')}</label>
-                                                <input
-                                                    type="text"
-                                                    value={values.responsible?.position || ''}
-                                                    onChange={(e) => {
-                                                        setValues(prev => ({
-                                                            ...prev,
-                                                            responsible: {
-                                                                ...prev.responsible,
-                                                                position: e.target.value
-                                                            }
-                                                        }));
-                                                    }}
-                                                    placeholder={t('initiatives.create.positionPlaceholder')}
-                                                    className={errors['responsible.position'] ? 'error' : ''}
-                                                />
-                                                {/* 🆕 ДОБАВЕНО: Error message */}
-                                                {errors['responsible.position'] && (
-                                                    <div className="error-message">{errors['responsible.position']}</div>
-                                                )}
-                                            </div>
+                                            <div className="initiative-contact-details">
+                                                {/* Name */}
+                                                <div className="initiative-form-group-contact">
+                                                    <label>{t('initiatives.create.fullName')}</label>
+                                                    <input
+                                                        type="text"
+                                                        value={values.responsible?.name || ''}
+                                                        onChange={(e) => {
+                                                            setValues(prev => ({
+                                                                ...prev,
+                                                                responsible: {
+                                                                    ...prev.responsible,
+                                                                    name: e.target.value
+                                                                }
+                                                            }));
+                                                        }}
+                                                        placeholder={t('initiatives.create.fullNamePlaceholder')}
+                                                        className={errors['responsible.name'] ? 'error' : ''}
+                                                    />
+                                                    {errors['responsible.name'] && (
+                                                        <div className="error-message">{errors['responsible.name']}</div>
+                                                    )}
+                                                </div>
 
-                                            {/* Email */}
-                                            <div className="initiative-form-group-contact">
-                                                <label>
-                                                    {t('initiatives.create.email')}
-                                                    {/* 🔧 ПРЕМАХНАТО: <span className="required-indicator">*</span> */}
-                                                </label>
-                                                <input
-                                                    type="email"
-                                                    value={values.responsible?.email || ''}
-                                                    onChange={(e) => {
-                                                        setValues(prev => ({
-                                                            ...prev,
-                                                            responsible: {
-                                                                ...prev.responsible,
-                                                                email: e.target.value
-                                                            }
-                                                        }));
-                                                    }}
-                                                    placeholder={t('initiatives.create.emailPlaceholder')}
-                                                    className={errors['responsible.email'] ? 'error' : ''}
-                                                />
-                                                {errors['responsible.email'] && (
-                                                    <div className="error-message">{errors['responsible.email']}</div>
-                                                )}
-                                            </div>
+                                                {/* Position */}
+                                                <div className="initiative-form-group-contact">
+                                                    <label>{t('initiatives.create.position')}</label>
+                                                    <input
+                                                        type="text"
+                                                        value={values.responsible?.position || ''}
+                                                        onChange={(e) => {
+                                                            setValues(prev => ({
+                                                                ...prev,
+                                                                responsible: {
+                                                                    ...prev.responsible,
+                                                                    position: e.target.value
+                                                                }
+                                                            }));
+                                                        }}
+                                                        placeholder={t('initiatives.create.positionPlaceholder')}
+                                                        className={errors['responsible.position'] ? 'error' : ''}
+                                                    />
+                                                    {errors['responsible.position'] && (
+                                                        <div className="error-message">{errors['responsible.position']}</div>
+                                                    )}
+                                                </div>
 
-                                            {/* Phone */}
-                                            <div className="initiative-form-group-contact">
-                                                <label>{t('initiatives.create.phone')}</label>
-                                                <input
-                                                    type="tel"
-                                                    value={values.responsible?.phone || ''}
-                                                    onChange={(e) => {
-                                                        setValues(prev => ({
-                                                            ...prev,
-                                                            responsible: {
-                                                                ...prev.responsible,
-                                                                phone: e.target.value
-                                                            }
-                                                        }));
-                                                    }}
-                                                    placeholder={t('initiatives.create.phonePlaceholder')}
-                                                    className={errors['responsible.phone'] ? 'error' : ''}
-                                                />
-                                                {/* 🆕 ДОБАВЕНО: Error message */}
-                                                {errors['responsible.phone'] && (
-                                                    <div className="error-message">{errors['responsible.phone']}</div>
-                                                )}
+                                                {/* 🆕 Role */}
+                                                <div className="initiative-form-group-contact">
+                                                    <label>Роля в инициативата</label>
+                                                    <input
+                                                        type="text"
+                                                        value={values.responsible?.role || ''}
+                                                        onChange={(e) => {
+                                                            setValues(prev => ({
+                                                                ...prev,
+                                                                responsible: {
+                                                                    ...prev.responsible,
+                                                                    role: e.target.value
+                                                                }
+                                                            }));
+                                                        }}
+                                                        placeholder="напр. Координатор, Ментор, Експерт"
+                                                        className={errors['responsible.role'] ? 'error' : ''}
+                                                    />
+                                                    {errors['responsible.role'] && (
+                                                        <div className="error-message">{errors['responsible.role']}</div>
+                                                    )}
+                                                </div>
+
+                                                {/* Email */}
+                                                <div className="initiative-form-group-contact">
+                                                    <label>{t('initiatives.create.email')}</label>
+                                                    <input
+                                                        type="email"
+                                                        value={values.responsible?.email || ''}
+                                                        onChange={(e) => {
+                                                            setValues(prev => ({
+                                                                ...prev,
+                                                                responsible: {
+                                                                    ...prev.responsible,
+                                                                    email: e.target.value
+                                                                }
+                                                            }));
+                                                        }}
+                                                        placeholder={t('initiatives.create.emailPlaceholder')}
+                                                        className={errors['responsible.email'] ? 'error' : ''}
+                                                    />
+                                                    {errors['responsible.email'] && (
+                                                        <div className="error-message">{errors['responsible.email']}</div>
+                                                    )}
+                                                </div>
+
+                                                {/* Phone */}
+                                                <div className="initiative-form-group-contact">
+                                                    <label>{t('initiatives.create.phone')}</label>
+                                                    <input
+                                                        type="tel"
+                                                        value={values.responsible?.phone || ''}
+                                                        onChange={(e) => {
+                                                            setValues(prev => ({
+                                                                ...prev,
+                                                                responsible: {
+                                                                    ...prev.responsible,
+                                                                    phone: e.target.value
+                                                                }
+                                                            }));
+                                                        }}
+                                                        placeholder={t('initiatives.create.phonePlaceholder')}
+                                                        className={errors['responsible.phone'] ? 'error' : ''}
+                                                    />
+                                                    {errors['responsible.phone'] && (
+                                                        <div className="error-message">{errors['responsible.phone']}</div>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -3581,7 +3628,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler }) => {
                                                         ...prev,
                                                         additionalContacts: [
                                                             ...(prev.additionalContacts || []),
-                                                            { id: generateId(), name: '', position: '', email: '', phone: '' }
+                                                            { id: generateId(), name: '', position: '', email: '', phone: '', image: '', role: '' }
                                                         ]
                                                     }));
                                                 }}
@@ -3624,101 +3671,143 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler }) => {
                                                         </div>
 
                                                         <div className="initiative-additional-contact-content">
-                                                            <div className="initiative-additional-contact-grid">
-                                                                {/* Contact Name */}
-                                                                <div className="initiative-form-group-additional-contact">
-                                                                    <label>
-                                                                        {t('initiatives.create.contactName')}
-                                                                        {/* 🔧 ПРЕМАХНАТО: <span className="required-indicator">*</span> */}
-                                                                    </label>
-                                                                    <input
-                                                                        type="text"
-                                                                        value={contact.name || ''}
-                                                                        onChange={(e) => {
-                                                                            const updatedContacts = [...values.additionalContacts];
-                                                                            updatedContacts[index] = {
-                                                                                ...updatedContacts[index],
-                                                                                name: e.target.value
-                                                                            };
-                                                                            setValues(prev => ({ ...prev, additionalContacts: updatedContacts }));
-                                                                        }}
-                                                                        placeholder={t('initiatives.create.contactNamePlaceholder')}
-                                                                        className={errors[`additionalContacts[${index}].name`] ? 'error' : ''}
-                                                                    />
-                                                                    {errors[`additionalContacts[${index}].name`] && (
-                                                                        <div className="error-message">{errors[`additionalContacts[${index}].name`]}</div>
-                                                                    )}
+                                                            <div className="initiative-main-contact-form-grid">
+                                                                {/* Contact Image */}
+                                                                <div className="initiative-form-group-contact-image">
+                                                                    <label>Снимка</label>
+                                                                    <div className="contact-image-upload">
+                                                                        {contact.image ? (
+                                                                            <div className="contact-image-preview">
+                                                                                <img src={contact.image} alt={contact.name || 'Contact'} />
+                                                                                <button type="button" onClick={() => removeAdditionalContactImage(index)}>
+                                                                                    <FontAwesomeIcon icon={faTimes} />
+                                                                                </button>
+                                                                            </div>
+                                                                        ) : (
+                                                                            <label className="contact-image-upload-placeholder">
+                                                                                <FontAwesomeIcon icon={faUser} />
+                                                                                <span>Качи снимка</span>
+                                                                                <input
+                                                                                    type="file"
+                                                                                    accept="image/*"
+                                                                                    onChange={(e) => handleAdditionalContactImageUpload(index, e)}
+                                                                                    style={{ display: 'none' }}
+                                                                                />
+                                                                            </label>
+                                                                        )}
+                                                                    </div>
                                                                 </div>
 
-                                                                {/* Contact Position */}
-                                                                <div className="initiative-form-group-additional-contact">
-                                                                    <label>{t('initiatives.create.contactPosition')}</label>
-                                                                    <input
-                                                                        type="text"
-                                                                        value={contact.position || ''}
-                                                                        onChange={(e) => {
-                                                                            const updatedContacts = [...values.additionalContacts];
-                                                                            updatedContacts[index] = {
-                                                                                ...updatedContacts[index],
-                                                                                position: e.target.value
-                                                                            };
-                                                                            setValues(prev => ({ ...prev, additionalContacts: updatedContacts }));
-                                                                        }}
-                                                                        placeholder={t('initiatives.create.contactPositionPlaceholder')}
-                                                                        className={errors[`additionalContacts[${index}].position`] ? 'error' : ''}
-                                                                    />
-                                                                    {/* 🆕 ДОБАВЕНО: Error message */}
-                                                                    {errors[`additionalContacts[${index}].position`] && (
-                                                                        <div className="error-message">{errors[`additionalContacts[${index}].position`]}</div>
-                                                                    )}
-                                                                </div>
+                                                                <div className="initiative-additional-contact-grid">
+                                                                    {/* Contact Name */}
+                                                                    <div className="initiative-form-group-additional-contact">
+                                                                        <label>{t('initiatives.create.contactName')}</label>
+                                                                        <input
+                                                                            type="text"
+                                                                            value={contact.name || ''}
+                                                                            onChange={(e) => {
+                                                                                const updatedContacts = [...values.additionalContacts];
+                                                                                updatedContacts[index] = {
+                                                                                    ...updatedContacts[index],
+                                                                                    name: e.target.value
+                                                                                };
+                                                                                setValues(prev => ({ ...prev, additionalContacts: updatedContacts }));
+                                                                            }}
+                                                                            placeholder={t('initiatives.create.contactNamePlaceholder')}
+                                                                            className={errors[`additionalContacts[${index}].name`] ? 'error' : ''}
+                                                                        />
+                                                                        {errors[`additionalContacts[${index}].name`] && (
+                                                                            <div className="error-message">{errors[`additionalContacts[${index}].name`]}</div>
+                                                                        )}
+                                                                    </div>
 
-                                                                {/* Contact Email */}
-                                                                <div className="initiative-form-group-additional-contact">
-                                                                    <label>
-                                                                        {t('initiatives.create.contactEmail')}
-                                                                        {/* 🔧 ПРЕМАХНАТО: <span className="required-indicator">*</span> */}
-                                                                    </label>
-                                                                    <input
-                                                                        type="email"
-                                                                        value={contact.email || ''}
-                                                                        onChange={(e) => {
-                                                                            const updatedContacts = [...values.additionalContacts];
-                                                                            updatedContacts[index] = {
-                                                                                ...updatedContacts[index],
-                                                                                email: e.target.value
-                                                                            };
-                                                                            setValues(prev => ({ ...prev, additionalContacts: updatedContacts }));
-                                                                        }}
-                                                                        placeholder={t('initiatives.create.contactEmailPlaceholder')}
-                                                                        className={errors[`additionalContacts[${index}].email`] ? 'error' : ''}
-                                                                    />
-                                                                    {errors[`additionalContacts[${index}].email`] && (
-                                                                        <div className="error-message">{errors[`additionalContacts[${index}].email`]}</div>
-                                                                    )}
-                                                                </div>
+                                                                    {/* Contact Position */}
+                                                                    <div className="initiative-form-group-additional-contact">
+                                                                        <label>{t('initiatives.create.contactPosition')}</label>
+                                                                        <input
+                                                                            type="text"
+                                                                            value={contact.position || ''}
+                                                                            onChange={(e) => {
+                                                                                const updatedContacts = [...values.additionalContacts];
+                                                                                updatedContacts[index] = {
+                                                                                    ...updatedContacts[index],
+                                                                                    position: e.target.value
+                                                                                };
+                                                                                setValues(prev => ({ ...prev, additionalContacts: updatedContacts }));
+                                                                            }}
+                                                                            placeholder={t('initiatives.create.contactPositionPlaceholder')}
+                                                                            className={errors[`additionalContacts[${index}].position`] ? 'error' : ''}
+                                                                        />
+                                                                        {errors[`additionalContacts[${index}].position`] && (
+                                                                            <div className="error-message">{errors[`additionalContacts[${index}].position`]}</div>
+                                                                        )}
+                                                                    </div>
 
-                                                                {/* Contact Phone */}
-                                                                <div className="initiative-form-group-additional-contact">
-                                                                    <label>{t('initiatives.create.contactPhone')}</label>
-                                                                    <input
-                                                                        type="tel"
-                                                                        value={contact.phone || ''}
-                                                                        onChange={(e) => {
-                                                                            const updatedContacts = [...values.additionalContacts];
-                                                                            updatedContacts[index] = {
-                                                                                ...updatedContacts[index],
-                                                                                phone: e.target.value
-                                                                            };
-                                                                            setValues(prev => ({ ...prev, additionalContacts: updatedContacts }));
-                                                                        }}
-                                                                        placeholder={t('initiatives.create.contactPhonePlaceholder')}
-                                                                        className={errors[`additionalContacts[${index}].phone`] ? 'error' : ''}
-                                                                    />
-                                                                    {/* 🆕 ДОБАВЕНО: Error message */}
-                                                                    {errors[`additionalContacts[${index}].phone`] && (
-                                                                        <div className="error-message">{errors[`additionalContacts[${index}].phone`]}</div>
-                                                                    )}
+                                                                    {/* 🆕 Contact Role */}
+                                                                    <div className="initiative-form-group-additional-contact">
+                                                                        <label>Роля в инициативата</label>
+                                                                        <input
+                                                                            type="text"
+                                                                            value={contact.role || ''}
+                                                                            onChange={(e) => {
+                                                                                const updatedContacts = [...values.additionalContacts];
+                                                                                updatedContacts[index] = {
+                                                                                    ...updatedContacts[index],
+                                                                                    role: e.target.value
+                                                                                };
+                                                                                setValues(prev => ({ ...prev, additionalContacts: updatedContacts }));
+                                                                            }}
+                                                                            placeholder="напр. Координатор, Ментор, Експерт"
+                                                                            className={errors[`additionalContacts[${index}].role`] ? 'error' : ''}
+                                                                        />
+                                                                        {errors[`additionalContacts[${index}].role`] && (
+                                                                            <div className="error-message">{errors[`additionalContacts[${index}].role`]}</div>
+                                                                        )}
+                                                                    </div>
+
+                                                                    {/* Contact Email */}
+                                                                    <div className="initiative-form-group-additional-contact">
+                                                                        <label>{t('initiatives.create.contactEmail')}</label>
+                                                                        <input
+                                                                            type="email"
+                                                                            value={contact.email || ''}
+                                                                            onChange={(e) => {
+                                                                                const updatedContacts = [...values.additionalContacts];
+                                                                                updatedContacts[index] = {
+                                                                                    ...updatedContacts[index],
+                                                                                    email: e.target.value
+                                                                                };
+                                                                                setValues(prev => ({ ...prev, additionalContacts: updatedContacts }));
+                                                                            }}
+                                                                            placeholder={t('initiatives.create.contactEmailPlaceholder')}
+                                                                            className={errors[`additionalContacts[${index}].email`] ? 'error' : ''}
+                                                                        />
+                                                                        {errors[`additionalContacts[${index}].email`] && (
+                                                                            <div className="error-message">{errors[`additionalContacts[${index}].email`]}</div>
+                                                                        )}
+                                                                    </div>
+
+                                                                    {/* Contact Phone */}
+                                                                    <div className="initiative-form-group-additional-contact">
+                                                                        <label>{t('initiatives.create.contactPhone')}</label>
+                                                                        <input
+                                                                            type="tel"
+                                                                            value={contact.phone || ''}
+                                                                            onChange={(e) => {
+                                                                                const updatedContacts = [...values.additionalContacts];
+                                                                                updatedContacts[index] = {
+                                                                                    ...updatedContacts[index],
+                                                                                    phone: e.target.value
+                                                                                };
+                                                                                setValues(prev => ({ ...prev, additionalContacts: updatedContacts }));
+                                                                            }}
+                                                                            placeholder={t('initiatives.create.contactPhonePlaceholder')}
+                                                                            className={errors[`additionalContacts[${index}].phone`] ? 'error' : ''}
+                                                                        />
+                                                                        {errors[`additionalContacts[${index}].phone`] && (
+                                                                            <div className="error-message">{errors[`additionalContacts[${index}].phone`]}</div>
+                                                                        )}
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>

@@ -902,31 +902,60 @@ export const InitiativeView = () => {
                             {initiative.responsible?.name && (
                                 <div className="responsible-preview">
                                     <h3>{t('initiatives.view.organization.responsiblePerson')}</h3>
-                                    <div className="responsible-info">
-                                        <h4>{initiative.responsible.name}</h4>
-                                        {initiative.responsible.position && (
-                                            <p className="responsible-position">{initiative.responsible.position}</p>
-                                        )}
-                                        <div className="responsible-contacts">
-                                            {initiative.responsible.email && (
-                                                <div className="contact-item">
-                                                    <FontAwesomeIcon icon={faEnvelope} className="contact-icon" />
-                                                    <button
-                                                        onClick={() => openEmailModal(initiative.responsible.name, initiative.responsible.email)}
-                                                        className="contact-email-button"
-                                                    >
-                                                        {initiative.responsible.email}
-                                                    </button>
+                                    <div className="responsible-card">
+                                        {/* Image Section */}
+                                        <div className="responsible-image-section">
+                                            {initiative.responsible.image ? (
+                                                <img
+                                                    src={initiative.responsible.image}
+                                                    alt={initiative.responsible.name}
+                                                    className="responsible-photo"
+                                                />
+                                            ) : (
+                                                <div className="responsible-avatar">
+                                                    {initiative.responsible.name.charAt(0).toUpperCase()}
                                                 </div>
                                             )}
-                                            {initiative.responsible.phone && (
-                                                <div className="contact-item">
-                                                    <FontAwesomeIcon icon={faPhone} className="contact-icon" />
-                                                    <a href={`tel:${initiative.responsible.phone}`}>
-                                                        {initiative.responsible.phone}
-                                                    </a>
-                                                </div>
-                                            )}
+                                        </div>
+
+                                        {/* Info Section */}
+                                        <div className="responsible-info">
+                                            <h4>{initiative.responsible.name}</h4>
+
+                                            {/* Position and Role */}
+                                            <div className="responsible-roles">
+                                                {initiative.responsible.position && (
+                                                    <p className="responsible-position">{initiative.responsible.position}</p>
+                                                )}
+                                                {initiative.responsible.role && (
+                                                    <p className="responsible-role">
+                                                        <span className="role-label">Роля:</span> {initiative.responsible.role}
+                                                    </p>
+                                                )}
+                                            </div>
+
+                                            {/* Contacts */}
+                                            <div className="responsible-contacts">
+                                                {initiative.responsible.email && (
+                                                    <div className="contact-item">
+                                                        <FontAwesomeIcon icon={faEnvelope} className="contact-icon" />
+                                                        <button
+                                                            onClick={() => openEmailModal(initiative.responsible.name, initiative.responsible.email)}
+                                                            className="contact-email-button"
+                                                        >
+                                                            {initiative.responsible.email}
+                                                        </button>
+                                                    </div>
+                                                )}
+                                                {initiative.responsible.phone && (
+                                                    <div className="contact-item">
+                                                        <FontAwesomeIcon icon={faPhone} className="contact-icon" />
+                                                        <a href={`tel:${initiative.responsible.phone}`}>
+                                                            {initiative.responsible.phone}
+                                                        </a>
+                                                    </div>
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

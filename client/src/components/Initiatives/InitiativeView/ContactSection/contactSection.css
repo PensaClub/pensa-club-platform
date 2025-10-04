@@ -203,7 +203,7 @@
   font-size: 1.1rem;
   font-weight: 600;
   color: #1a202c;
-  margin: 0 0 0.8rem 0;
+  margin: 0 0 0.1rem 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
   word-break: break-word;
   overflow-wrap: break-word;
@@ -500,6 +500,9 @@
   .email-contact-btn-initiatives {
     align-self: center;
   }
+   .contact-value-initiatives {
+    text-align: center;
+  }
 }
 
 @media (max-width: 768px) {
@@ -517,6 +520,7 @@
 
   .contact-value-initiatives {
     font-size: 1rem;
+    text-align: center;
   }
   
   .contact-photo-initiatives,
@@ -579,6 +583,7 @@
 
   .contact-value-initiatives {
     font-size: 0.9rem;
+    text-align: center;
   }
   
   .additional-contact-card-initiatives {
@@ -620,6 +625,7 @@
 
   .contact-value-initiatives {
     font-size: 0.85rem;
+    text-align: center;
   }
 
   .contact-item-initiatives {
@@ -648,4 +654,54 @@
   .additional-contact-item-initiatives {
     font-size: 0.85rem;
   }
+}
+/* Contact roles container */
+.contact-roles-initiatives {
+  margin-bottom: 1rem;
+}
+
+.contact-position-initiatives {
+  color: #666;
+  font-size: 0.95rem;
+  margin: 0.25rem 0;
+}
+
+.contact-role-initiatives,
+.additional-contact-role {
+  color: #1B8B8A;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin: 0.25rem 0;
+}
+
+.role-label {
+  color: #666;
+  font-weight: 400;
+  margin-right: 0.25rem;
+}
+.additional-contact-role span.role-label {
+  font-size: 0.9rem;
+}
+/* Additional contacts image */
+.additional-contact-image-section {
+  width: 60px;
+  height: 60px;
+  flex-shrink: 0;
+}
+
+.additional-contact-photo-initiatives {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.additional-contact-roles {
+  margin: 0.5rem 0;
+}
+
+.additional-contact-position {
+  color: #666;
+  font-size: 0.85rem;
+  margin: 0.15rem 0 1rem 0 ;
 }
