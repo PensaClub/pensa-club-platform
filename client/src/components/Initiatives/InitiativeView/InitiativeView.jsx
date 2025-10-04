@@ -25,6 +25,7 @@ import {
 import {
     faFacebook, faInstagram, faLinkedin, faTwitter
 } from '@fortawesome/free-brands-svg-icons';
+import { TextZoom } from '../../TextZoom/TextZoom.jsx';
 
 export const InitiativeView = () => {
     const { slug } = useParams();
@@ -1186,6 +1187,7 @@ export const InitiativeView = () => {
                     </div>
                 </div>
             )}
+            <TextZoom/>
         </div >
     );
 };
