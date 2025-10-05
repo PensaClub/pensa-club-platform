@@ -18,7 +18,7 @@ export const AllClubs = () => {
   
   const [clubs, setClubs] = useState([]);
   const [filteredClubs, setFilteredClubs] = useState([]);
-  const [showMap, setShowMap] = useState(false);
+  const [showMap, setShowMap] = useState(true);
   const [selectedClub, setSelectedClub] = useState(null);
   const [searchFilters, setSearchFilters] = useState({
     searchTerm: '',

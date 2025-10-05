@@ -27,15 +27,15 @@ L.Icon.Default.mergeOptions({
 const createCustomIcon = (category, isSelected = false) => {
   const colors = {
     'cultural': '#3182ce',
-    'general': '#4a5568', 
+    'general': '#0c55d3ff', 
     'sports': '#38a169',
     'educational': '#805ad5',
     'traditional': '#d97706'
   };
   
   const color = colors[category] || '#4a5568';
-  const size = isSelected ? 35 : 25;
-  const opacity = isSelected ? 1 : 0.8;
+  const size = isSelected ? 40 : 40;
+  const opacity = isSelected ? 1 : 0.9;
   
   return L.divIcon({
     html: `
@@ -47,7 +47,7 @@ const createCustomIcon = (category, isSelected = false) => {
         border: ${isSelected ? '3px solid white' : '2px solid white'};
         box-shadow: ${isSelected ? '0 0 20px rgba(0,0,0,0.3)' : '0 2px 8px rgba(0,0,0,0.2)'};
       ">
-        <i class="fas fa-home"></i>
+        📍
       </div>
     `,
     className: 'custom-div-icon',
