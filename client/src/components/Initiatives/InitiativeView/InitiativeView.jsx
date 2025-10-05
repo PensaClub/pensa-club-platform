@@ -1187,7 +1187,7 @@ export const InitiativeView = () => {
                     </div>
                 </div>
             )}
-            <TextZoom/>
+            <TextZoom />
         </div >
     );
 };
