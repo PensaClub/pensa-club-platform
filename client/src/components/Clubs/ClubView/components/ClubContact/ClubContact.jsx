@@ -74,10 +74,16 @@ export const ClubContact = ({ club }) => {
   // Обновена проверка за данни - използваме новата структура
   const contacts = club?.clubDetails?.contacts || club?.contacts || {};
 
-  // ПРОВЕРКА ЗА ДАННИ
-  if (!contacts || (!contacts.phone && !contacts.email)) {
+if (!contacts || (
+    !contacts.phone && 
+    !contacts.email && 
+    !contacts.mobile && 
+    !contacts.website && 
+    (!contacts.people || contacts.people.length === 0) &&
+    (!contacts.socialMedia || Object.values(contacts.socialMedia).every(v => !v))
+)) {
     return null;
-  }
+}
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
