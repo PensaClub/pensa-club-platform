@@ -852,6 +852,9 @@
   .club-card-right .club-card-image-section {
     width: 100%;
   }
+  .all-clubs-main-layout{
+    gap: 1rem;
+  }
 }
 
 /* Средни лаптопи 1201px - 1400px */
