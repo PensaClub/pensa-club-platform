@@ -998,7 +998,7 @@ background: linear-gradient(
   /* Main layout - 2 column */
   .all-clubs-main-layout {
     grid-template-columns: 1fr 280px;
-    gap: 2rem;
+    gap: 1rem;
     padding: 2rem 2rem 3rem;
   }
 
