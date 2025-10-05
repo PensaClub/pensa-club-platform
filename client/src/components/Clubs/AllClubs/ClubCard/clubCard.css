@@ -834,15 +834,23 @@
 @media (min-width: 1025px) and (max-width: 1200px) {
   .club-card-left .club-card-container,
   .club-card-right .club-card-container {
-    grid-template-columns: 300px 1fr;
+    grid-template-columns: 1fr 1fr;
   }
 
   .club-card-image-section {
-    width: 300px;
+    width: 260px;
   }
 
   .club-card-content {
     padding: 1.5rem;
+    padding: 4rem;
+  }
+  .club-card-header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .club-card-right .club-card-image-section {
+    width: 100%;
   }
 }
 
