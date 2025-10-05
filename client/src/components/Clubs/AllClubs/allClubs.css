@@ -1039,9 +1039,10 @@ background: linear-gradient(
 
   /* Main layout - 2 column improved */
   .all-clubs-main-layout {
-    grid-template-columns: 1fr 300px;
+    grid-template-columns: 300px 1fr;
     gap: 2.5rem;
     padding: 2rem 2.5rem 3rem;
+    
   }
 
   .all-clubs-sidebar-left {
@@ -1133,6 +1134,8 @@ background: linear-gradient(
   .all-clubs-header-container {
     max-width: 1600px;
     padding: 0 3rem;
+    flex-direction: column;
+    align-items: center;
   }
 
   .all-clubs-main-title {
