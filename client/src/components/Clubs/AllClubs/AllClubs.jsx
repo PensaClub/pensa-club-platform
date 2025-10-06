@@ -9,6 +9,7 @@ import { RecentArticles } from './RecentArticles/RecentArticles';
 import { TextZoom } from '../../TextZoom/TextZoom';
 import './allClubs.css';
 import { useClubContext } from '../../contexts/ClubContext';
+import ScrollToTop from '../../ScrollToTop/ScrollToTop';
 
 export const AllClubs = () => {
   const { t, i18n } = useTranslation();
@@ -473,6 +474,7 @@ export const AllClubs = () => {
             </div>
           </div>
         </div>
+        <ScrollToTop />
       </div>
     </>
   );

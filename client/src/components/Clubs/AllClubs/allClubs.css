@@ -630,7 +630,7 @@ background: linear-gradient(
   /* Map */
   .all-clubs-map-full-width .clubs-map-container {
     padding: 0 0.5rem;
-    height: 200px;
+    height: 500px;
   }
 
   /* No clubs found */
@@ -750,7 +750,7 @@ background: linear-gradient(
   /* Map */
   .all-clubs-map-full-width .clubs-map-container {
     padding: 0 0.75rem;
-    height: 250px;
+    height: 500px;
   }
 }
 
@@ -1363,7 +1363,7 @@ background: linear-gradient(
   }
 
   .all-clubs-map-full-width .clubs-map-container {
-    height: 200px;
+    height: 500px;
   }
 
   /* Hide all background elements in landscape */
