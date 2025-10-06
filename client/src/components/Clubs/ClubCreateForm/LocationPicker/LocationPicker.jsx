@@ -221,7 +221,7 @@ const LocationPicker = ({
           <FontAwesomeIcon icon={faMapMarkerAlt} />
           {t('clubForm.location.title')}
         </h3>
-        <p className="location-picker-subtitle">
+        <p className="location-picker-subtitle-create-form">
           {t('clubForm.location.subtitle')}
         </p>
       </div>
