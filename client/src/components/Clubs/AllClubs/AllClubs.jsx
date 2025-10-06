@@ -33,7 +33,7 @@ export const AllClubs = () => {
   const fetchClubs = useCallback(async () => {
     try {
       console.log('🔄 Fetching clubs from API...');
-      const response = await getAllClubs(false, 1, 100); // forceRefresh=false, page=1, limit=100
+      const response = await getAllClubs(false, 1, 500); // forceRefresh=false, page=1, limit=100
       
       // Обработваме response-а
       let clubsData = [];
