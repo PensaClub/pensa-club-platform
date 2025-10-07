@@ -15,7 +15,8 @@
     "games": "Игри",
     "clubs": "Клубове",
     "bookmarks": "За четене",
-    "publications": "Публикации"
+    "publications": "Публикации",
+    "stories": "Истории"
   },
   "footer": {
     "site-map": "Карта на сайта",
@@ -9641,7 +9642,8 @@
       },
       "foundedYear": {
         "label": "Година на основаване",
-        "placeholder": "напр. 1995"
+        "placeholder": "напр. 1995",
+        "help": "Годината, в която клубът е официално регистриран"
       }
     },
     "categories": {

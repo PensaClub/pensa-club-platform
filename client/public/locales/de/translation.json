@@ -14,7 +14,8 @@
     "games": "Spiele",
     "clubs": "Clubs",
     "bookmarks": "Lesezeichen",
-    "publications": "Veröffentlichungen"
+    "publications": "Veröffentlichungen",
+     "stories": "Geschichten"
   },
   "footer": {
     "site-map": "Sitemap",
@@ -9145,7 +9146,8 @@
       },
       "foundedYear": {
         "label": "Gründungsjahr",
-        "placeholder": "z.B. 1995"
+        "placeholder": "z.B. 1995",
+        "help": "Das Jahr, in dem der Verein gegründet wurde"
       }
     },
     "categories": {
