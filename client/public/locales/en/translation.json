@@ -9613,7 +9613,8 @@
       },
       "foundedYear": {
         "label": "Founded Year",
-        "placeholder": "e.g. 1995"
+        "placeholder": "e.g. 1995",
+        "help": "The year the club was officially registered"
       }
     },
     "categories": {
