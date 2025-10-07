@@ -5,11 +5,9 @@ import { UserContext } from "../contexts/UserContext";
 import { useTranslation } from "react-i18next";
 import AlertModal from "./AlertModal/AlertModal";
 import { useInitiativeContext } from "../contexts/InitiativeProvider";
-import { useClubContext } from "../contexts/ClubContext"; // Добавено
+import { useClubContext } from "../contexts/ClubContext";
 import { BookmarkIcon, BookmarkIconHeader } from "../Initiatives/Icons/InitiativeIcons";
 import { LanguageSwitcher } from "../LanguageSwitcher/LanguageSwitcher";
-import { faGamepad } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export const Header = ({ additionalClasses }) => {
   const { t, i18n } = useTranslation();
@@ -18,8 +16,6 @@ export const Header = ({ additionalClasses }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isAuthentication, isFinish, profileData } = useContext(UserContext);
   const { bookmarkedInitiatives, hasBookmarks, hasBookmarksProjects, bookMarkedProjects } = useInitiativeContext();
-
-  // Добавено за клубове
   const { bookmarkedClubs = [], hasBookmarkedClubs } = useClubContext();
 
   const [isModalOpen, setModalOpen] = useState(false);
@@ -111,7 +107,6 @@ export const Header = ({ additionalClasses }) => {
 
   const currentLanguage = i18n.language;
 
-  // Обновен общ брой bookmarks
   const totalBookmarks = (bookmarkedInitiatives?.length || 0) +
                           (bookMarkedProjects?.length || 0) +
                           (bookmarkedClubs?.length || 0);
@@ -151,32 +146,39 @@ export const Header = ({ additionalClasses }) => {
                   {t("header.craigslist")}
                 </Link>
 
+                {/* НОВА ИКОНКА - Initiatives (лампичка) */}
                 <Link to="/initiatives" className="dropdown-link">
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2L3.09 8.26L4 21L12 17L20 21L20.91 8.26L12 2ZM12 4.15L18.09 8.72L17.34 18.28L12 15.28L6.66 18.28L5.91 8.72L12 4.15Z" fill="currentColor" />
+                    <path d="M9 21H15M12 3V4M18.3636 5.63636L17.6565 6.34347M21 12H20M4 12H3M6.34347 6.34347L5.63636 5.63636M12 17C9.79086 17 8 15.2091 8 13C8 11.3644 8.9298 9.95264 10.2764 9.2764C10.7461 9.02499 11.2461 8.84269 11.7686 8.73754C11.9174 8.70857 12 8.5772 12 8.42632V8C12 7.44772 12.4477 7 13 7C13.5523 7 14 7.44772 14 8V8.42632C14 8.5772 14.0826 8.70857 14.2314 8.73754C15.4154 8.98941 16.4362 9.71459 17.0786 10.7158C17.3694 11.1749 17.5819 11.6874 17.6998 12.2323C17.7311 12.3693 17.8789 12.4303 17.9951 12.3493C18.5542 11.9732 19.2734 12.0686 19.7266 12.5819C20.264 13.1926 20.2155 14.1414 19.6156 14.6909C19.1296 15.1382 18.4048 15.1609 17.892 14.7565C17.7782 14.6686 17.6142 14.6964 17.5332 14.8261C17.2094 15.3624 16.7768 15.8233 16.2639 16.176C15.5635 16.6637 14.7486 16.9545 13.8952 16.9923C13.792 16.9968 13.7024 17.0673 13.6711 17.166C13.5671 17.4946 13.3048 17.7524 12.9749 17.8554C12.3432 18.0486 11.6568 18.0486 11.0251 17.8554C10.6952 17.7524 10.4329 17.4946 10.3289 17.166C10.2976 17.0673 10.208 16.9968 10.1048 16.9923C8.91304 16.9488 7.83094 16.3914 7.10558 15.5003C7.03802 15.4186 6.91813 15.4015 6.82973 15.462C6.31421 15.8248 5.62028 15.7626 5.17381 15.3161C4.61784 14.7602 4.61784 13.8506 5.17381 13.2947C5.64106 12.8274 6.36334 12.7551 6.91352 13.0781C7.01893 13.1384 7.15409 13.0987 7.21484 12.9937C7.47484 12.5375 7.8273 12.1424 8.25 11.8333" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                   {t("header.initiatives")}
                 </Link>
-                <Link
-                  to="/projects"
-                  className="dropdown-link">
+
+                {/* НОВА ИКОНКА - Projects (папка) */}
+                <Link to="/projects" className="dropdown-link">
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" fill="currentColor" />
+                    <path d="M3 7C3 5.89543 3.89543 5 5 5H9.58579C9.851 5 10.1054 5.10536 10.2929 5.29289L12 7H19C20.1046 7 21 7.89543 21 9V18C21 19.1046 20.1046 20 19 20H5C3.89543 20 3 19.1046 3 18V7Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                   {t("header.projects")}
                 </Link>
+
+                {/* НОВА ИКОНКА - Publications (книга) */}
                 <Link to="/publications" className="dropdown-link">
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.89 22 5.99 22H18C19.1 22 20 21.1 20 20V8L14 2ZM18 20H6V4H13V9H18V20ZM16 11V13H8V11H16ZM8 15H16V17H8V15ZM8 7H10V9H8V7Z" fill="currentColor" />
+                    <path d="M4 19.5C4 18.1193 5.11929 17 6.5 17H20M4 19.5C4 20.8807 5.11929 22 6.5 22H20V2H6.5C5.11929 2 4 3.11929 4 4.5V19.5Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M8 7H16M8 11H16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                   </svg>
                   {t("header.publications")}
                 </Link>
+
+                {/* НОВА ИКОНКА - Stories (чат балонче) */}
                 <Link to="/stories" className="dropdown-link">
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" fill="currentColor" />
+                    <path d="M7 9H17M7 13H13M21 20L17.6757 18.3378C17.4237 18.2118 17.2977 18.1488 17.1656 18.1044C17.0484 18.065 16.9277 18.0365 16.8052 18.0193C16.6672 18 16.5263 18 16.2446 18H6.2C5.07989 18 4.51984 18 4.09202 17.782C3.71569 17.5903 3.40973 17.2843 3.21799 16.908C3 16.4802 3 15.9201 3 14.8V7.2C3 6.07989 3 5.51984 3.21799 5.09202C3.40973 4.71569 3.71569 4.40973 4.09202 4.21799C4.51984 4 5.07989 4 6.2 4H17.8C18.9201 4 19.4802 4 19.908 4.21799C20.2843 4.40973 20.5903 4.71569 20.782 5.09202C21 5.51984 21 6.07989 21 7.2V20Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                   {t("header.stories")}
                 </Link>
+
                 <Link to="/map" className="dropdown-link">
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" fill="currentColor" />
@@ -192,18 +194,23 @@ export const Header = ({ additionalClasses }) => {
             >
               {t("header.ad-create")}
             </NavLink>
+
+            {/* НОВА ИКОНКА - Clubs (група хора) */}
             <NavLink
               to="/clubs"
               className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
             >
               {t("header.clubs")}
             </NavLink>
-             <NavLink
+
+            {/* НОВА ИКОНКА - Games (контролер) */}
+            <NavLink
               to="/games"
               className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
             >
               {t("header.games")}
             </NavLink>
+
             <LanguageSwitcher />
           </nav>
 
@@ -220,7 +227,7 @@ export const Header = ({ additionalClasses }) => {
             )}
           </button>
 
-          {/* Bookmark иконка - обновена за всички типове */}
+          {/* Bookmark иконка */}
           {hasAnyBookmarks && isAuthentication && (
             <div className="bookmark-header-section desktop-bookmark">
               <Link to="profile/bookmarks" className="bookmark-header-button">
@@ -262,7 +269,6 @@ export const Header = ({ additionalClasses }) => {
               </div>
 
               <div className="dropdown-menu-links">
-                {/* Обновен bookmark линк в dropdown */}
                 {hasAnyBookmarks && isAuthentication && (
                   <Link to="profile/bookmarks" className="menu-link" onClick={() => setProfileOpen(false)}>
                     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -326,7 +332,6 @@ export const Header = ({ additionalClasses }) => {
               </div>
             </div>
           </div>
-
         </div>
       </header>
 
@@ -344,8 +349,6 @@ export const Header = ({ additionalClasses }) => {
           </div>
 
           <div className="mobile-menu-links">
-
-            {/* Добавен линк към началната страница */}
             {location.pathname !== "/" && (
               <NavLink
                 to="/"
@@ -394,7 +397,6 @@ export const Header = ({ additionalClasses }) => {
               </button>
 
               <div className={`mobile-dropdown-content ${mobileCommunityOpen ? 'active' : ''}`}>
-
                 <NavLink
                   to="/craigslist?reset=true"
                   className={({ isActive }) => `mobile-dropdown-item ${isActive ? "active" : ""}`}
@@ -406,46 +408,55 @@ export const Header = ({ additionalClasses }) => {
                   {t("header.craigslist")}
                 </NavLink>
 
+                {/* MOBILE - НОВА ИКОНКА - Initiatives */}
                 <NavLink
                   to="/initiatives"
                   className={({ isActive }) => `mobile-dropdown-item ${isActive ? "active" : ""}`}
                   onClick={toggleMobileMenu}
                 >
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2L3.09 8.26L4 21L12 17L20 21L20.91 8.26L12 2ZM12 4.15L18.09 8.72L17.34 18.28L12 15.28L6.66 18.28L5.91 8.72L12 4.15Z" fill="currentColor" />
+                    <path d="M9 21H15M12 3V4M18.3636 5.63636L17.6565 6.34347M21 12H20M4 12H3M6.34347 6.34347L5.63636 5.63636M12 17C9.79086 17 8 15.2091 8 13C8 11.3644 8.9298 9.95264 10.2764 9.2764C10.7461 9.02499 11.2461 8.84269 11.7686 8.73754C11.9174 8.70857 12 8.5772 12 8.42632V8C12 7.44772 12.4477 7 13 7C13.5523 7 14 7.44772 14 8V8.42632C14 8.5772 14.0826 8.70857 14.2314 8.73754C15.4154 8.98941 16.4362 9.71459 17.0786 10.7158C17.3694 11.1749 17.5819 11.6874 17.6998 12.2323C17.7311 12.3693 17.8789 12.4303 17.9951 12.3493C18.5542 11.9732 19.2734 12.0686 19.7266 12.5819C20.264 13.1926 20.2155 14.1414 19.6156 14.6909C19.1296 15.1382 18.4048 15.1609 17.892 14.7565C17.7782 14.6686 17.6142 14.6964 17.5332 14.8261C17.2094 15.3624 16.7768 15.8233 16.2639 16.176C15.5635 16.6637 14.7486 16.9545 13.8952 16.9923C13.792 16.9968 13.7024 17.0673 13.6711 17.166C13.5671 17.4946 13.3048 17.7524 12.9749 17.8554C12.3432 18.0486 11.6568 18.0486 11.0251 17.8554C10.6952 17.7524 10.4329 17.4946 10.3289 17.166C10.2976 17.0673 10.208 16.9968 10.1048 16.9923C8.91304 16.9488 7.83094 16.3914 7.10558 15.5003C7.03802 15.4186 6.91813 15.4015 6.82973 15.462C6.31421 15.8248 5.62028 15.7626 5.17381 15.3161C4.61784 14.7602 4.61784 13.8506 5.17381 13.2947C5.64106 12.8274 6.36334 12.7551 6.91352 13.0781C7.01893 13.1384 7.15409 13.0987 7.21484 12.9937C7.47484 12.5375 7.8273 12.1424 8.25 11.8333" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                   {t("header.initiatives")}
                 </NavLink>
+
+                {/* MOBILE - НОВА ИКОНКА - Projects */}
                 <NavLink
                   to="/projects"
                   className={({ isActive }) => `mobile-dropdown-item ${isActive ? "active" : ""}`}
                   onClick={toggleMobileMenu}
                 >
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" fill="currentColor" />
+                    <path d="M3 7C3 5.89543 3.89543 5 5 5H9.58579C9.851 5 10.1054 5.10536 10.2929 5.29289L12 7H19C20.1046 7 21 7.89543 21 9V18C21 19.1046 20.1046 20 19 20H5C3.89543 20 3 19.1046 3 18V7Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                   {t("header.projects")}
                 </NavLink>
+
+                {/* MOBILE - НОВА ИКОНКА - Publications */}
                 <NavLink
                   to="/publications"
                   className={({ isActive }) => `mobile-dropdown-item ${isActive ? "active" : ""}`}
                   onClick={toggleMobileMenu}
                 >
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.89 22 5.99 22H18C19.1 22 20 21.1 20 20V8L14 2ZM18 20H6V4H13V9H18V20ZM16 11V13H8V11H16ZM8 15H16V17H8V15ZM8 7H10V9H8V7Z" fill="currentColor" />
+                    <path d="M4 19.5C4 18.1193 5.11929 17 6.5 17H20M4 19.5C4 20.8807 5.11929 22 6.5 22H20V2H6.5C5.11929 2 4 3.11929 4 4.5V19.5Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M8 7H16M8 11H16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
                   </svg>
                   {t("header.publications")}
                 </NavLink>
+
+                {/* MOBILE - НОВА ИКОНКА - Stories */}
                 <NavLink
                   to="/stories"
                   className={({ isActive }) => `mobile-dropdown-item ${isActive ? "active" : ""}`}
                   onClick={toggleMobileMenu}
                 >
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z" fill="currentColor" />
+                    <path d="M7 9H17M7 13H13M21 20L17.6757 18.3378C17.4237 18.2118 17.2977 18.1488 17.1656 18.1044C17.0484 18.065 16.9277 18.0365 16.8052 18.0193C16.6672 18 16.5263 18 16.2446 18H6.2C5.07989 18 4.51984 18 4.09202 17.782C3.71569 17.5903 3.40973 17.2843 3.21799 16.908C3 16.4802 3 15.9201 3 14.8V7.2C3 6.07989 3 5.51984 3.21799 5.09202C3.40973 4.71569 3.71569 4.40973 4.09202 4.21799C4.51984 4 5.07989 4 6.2 4H17.8C18.9201 4 19.4802 4 19.908 4.21799C20.2843 4.40973 20.5903 4.71569 20.782 5.09202C21 5.51984 21 6.07989 21 7.2V20Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                   {t("header.stories")}
                 </NavLink>
+
                 <NavLink
                   to="/map"
                   className={({ isActive }) => `mobile-dropdown-item ${isActive ? "active" : ""}`}
@@ -469,24 +480,31 @@ export const Header = ({ additionalClasses }) => {
               </svg>
               {t("header.ad-create")}
             </NavLink>
+
+            {/* MOBILE - НОВА ИКОНКА - Clubs */}
             <NavLink
               to="/clubs"
               className={({ isActive }) => `mobile-nav-item ${isActive ? "active" : ""}`}
               onClick={toggleMobileMenu}
             >
-               <FontAwesomeIcon icon={faGamepad} />
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M17 20C17 18.3431 14.7614 17 12 17C9.23858 17 7 18.3431 7 20M21 17C21 15.7635 19.7085 14.7012 18 14.25M3 17C3 15.7635 4.29153 14.7012 6 14.25M18 10.5C19.1046 10.5 20 9.60457 20 8.5C20 7.39543 19.1046 6.5 18 6.5M6 10.5C4.89543 10.5 4 9.60457 4 8.5C4 7.39543 4.89543 6.5 6 6.5M12 14C10.3431 14 9 12.6569 9 11C9 9.34315 10.3431 8 12 8C13.6569 8 15 9.34315 15 11C15 12.6569 13.6569 14 12 14Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
               {t("header.clubs")}
             </NavLink>
-             <NavLink
+
+            {/* MOBILE - НОВА ИКОНКА - Games */}
+            <NavLink
               to="/games"
               className={({ isActive }) => `mobile-nav-item ${isActive ? "active" : ""}`}
               onClick={toggleMobileMenu}
             >
-               <FontAwesomeIcon icon={faGamepad} />
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 11H10M8 9V13M15.5 12H15.51M18.5 12H18.51M7 16.4L4.56569 18.8343C3.78526 19.6147 3.39505 20.0049 3.00394 19.9952C2.66557 19.9867 2.35037 19.8241 2.14346 19.5528C2 19.3555 2 18.8062 2 17.7077V11C2 8.17157 2 6.75736 2.87868 5.87868C3.75736 5 5.17157 5 8 5H16C18.8284 5 20.2426 5 21.1213 5.87868C22 6.75736 22 8.17157 22 11V12C22 14.8284 22 16.2426 21.1213 17.1213C20.2426 18 18.8284 18 16 18H11.4C10.5074 18 10.0611 18 9.64386 18.1118C9.27242 18.2099 8.9195 18.3644 8.5979 18.5692C8.23183 18.8005 7.91464 19.1177 7.28026 19.7521L6 21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
               {t("header.games")}
             </NavLink>
 
-            {/* Обновен bookmark линк в мобилното меню */}
             {hasAnyBookmarks && isAuthentication && (
               <Link to="profile/bookmarks" className="mobile-nav-item" onClick={toggleMobileMenu}>
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -497,6 +515,7 @@ export const Header = ({ additionalClasses }) => {
             )}
 
             <LanguageSwitcher isMobile={true} onMobileMenuToggle={toggleMobileMenu} />
+
             {!isAuthentication ? (
               <>
                 <Link to="/sign-up?view=login" className="mobile-nav-item" onClick={toggleMobileMenu}>
