@@ -123,7 +123,7 @@ clubController.delete('/:identifier', isAuth, checkPermission('club', 'delete'),
     return deleteClubByDraftStatus(false, req, res, next);
 });
 
-clubController.patch('/toggle-draft/:identifier', isAuth, checkPermission('club', 'draft', 'delete'), async (req, res, next) => {
+clubController.delete('/draft/:identifier', isAuth, checkPermission('club', 'draft', 'delete'), async (req, res, next) => {
     return deleteClubByDraftStatus(true, req, res, next);
 });
 
