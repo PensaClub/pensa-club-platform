@@ -180,9 +180,10 @@ export const useCreateClub = (clubId = null, isEditMode = false, mode = 'create'
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [isLoadedFromStorage, setIsLoadedFromStorage] = useState(false);
   const [nameChangedByUser, setNameChangedByUser] = useState(false);
-  
-  // ✅ НОВ ФЛАГ - показва дали е зареждано от localStorage
   const [hasLocalStorageData, setHasLocalStorageData] = useState(false);
+  
+  // ✅ ЕДИНСТВЕНАТА ДОБАВКА - запазва оригиналния identifier
+  const [originalIdentifier, setOriginalIdentifier] = useState(null);
 
   const getIdentifier = useCallback((data = formData) => {
     if (data.slug && data.slug.trim()) {
@@ -239,11 +240,17 @@ export const useCreateClub = (clubId = null, isEditMode = false, mode = 'create'
   }, [formData.name, generateSlug, clubId, isDraft, nameChangedByUser, isEditMode, isContinueMode]);
 
   const getLocalStorageKey = useCallback(() => {
-    if (!clubId) {
-      return 'club-draft-new';
+
+    if (draftId) {
+      return `club-draft-${draftId}`;
     }
-    return `club-draft-${clubId}`;
-  }, [clubId]);
+
+    if (clubId) {
+      return `club-draft-${clubId}`;
+    }
+
+    return 'club-draft-new';
+  }, [clubId, draftId]);
 
   useEffect(() => {
     const loadExistingData = async () => {
@@ -256,8 +263,10 @@ export const useCreateClub = (clubId = null, isEditMode = false, mode = 'create'
             dataToLoad = await getDraftById(clubId);
             setIsDraft(true);
             setDraftId(clubId);
+            setOriginalIdentifier(clubId); // ✅
           } else if (isEditMode) {
             dataToLoad = await getClubById(clubId);
+            setOriginalIdentifier(clubId); // ✅
           }
 
           if (dataToLoad) {
@@ -288,11 +297,13 @@ export const useCreateClub = (clubId = null, isEditMode = false, mode = 'create'
           setFormData(loadedData);
           setLastSaved(new Date(parsed.timestamp));
           setIsDraft(true);
-          
           setHasLocalStorageData(true);
           
           if (parsed.draftId) {
             setDraftId(parsed.draftId);
+            setOriginalIdentifier(parsed.draftId); // ✅
+          } else if (loadedData.slug) {
+            setOriginalIdentifier(loadedData.slug); // ✅
           }
         } catch (error) {
           console.error('Error loading draft:', error);
@@ -329,18 +340,27 @@ export const useCreateClub = (clubId = null, isEditMode = false, mode = 'create'
     return Object.keys(newErrors).length === 0;
   }, [formData, hasValidIdentifier, clubId, generateSlug]);
 
-  const saveToLocalStorage = useCallback(() => {
-    const key = getLocalStorageKey();
+  const saveToLocalStorage = useCallback((customIdentifier = null) => {
+    const oldKey = getLocalStorageKey();
+
+    const newKey = customIdentifier 
+      ? `club-draft-${customIdentifier}` 
+      : getLocalStorageKey();
+    
     const dataToSave = {
       data: formData,
       timestamp: new Date().toISOString(),
-      draftId: draftId
+      draftId: customIdentifier || draftId || originalIdentifier
     };
 
-    localStorage.setItem(key, JSON.stringify(dataToSave));
+    if (oldKey !== newKey && oldKey === 'club-draft-new') {
+      localStorage.removeItem(oldKey);
+    }
+
+    localStorage.setItem(newKey, JSON.stringify(dataToSave));
     setLastSaved(new Date());
     setHasUnsavedChanges(false);
-  }, [formData, getLocalStorageKey, draftId]);
+  }, [formData, getLocalStorageKey, draftId, originalIdentifier]);
 
   useEffect(() => {
     if (hasUnsavedChanges) {
@@ -380,11 +400,13 @@ export const useCreateClub = (clubId = null, isEditMode = false, mode = 'create'
     }
   }, [errors, isLoadedFromStorage]);
 
+  // ✅ ПРОСТАТА ЛОГИКА
   const saveDraft = useCallback(async () => {
     try {
       setIsLoading(true);
-
       let result;
+
+      const slugChanged = originalIdentifier && formData.slug !== originalIdentifier;
 
       if (isContinueMode && clubId) {
         result = await updateDraftClub(clubId, formData);
@@ -393,29 +415,47 @@ export const useCreateClub = (clubId = null, isEditMode = false, mode = 'create'
       } else if (isEditMode && !draftId) {
         result = await saveDraftClub(formData);
         if (result && result.id) {
+          const newIdentifier = result.id || result.slug;
           setDraftId(result.id);
+          setOriginalIdentifier(newIdentifier);
+          saveToLocalStorage(newIdentifier); 
+          return result;
         }
-      } else if (draftId) {
-        const identifier = getIdentifier();
+      } else if (slugChanged) {
+        // ✅ SLUG Е ПРОМЕНЕН - UPDATE С ОРИГИНАЛНИЯ
+        result = await updateDraftClub(originalIdentifier, formData);
+        if (result) {
+          const newIdentifier = result.id || result.slug || formData.slug;
+          setOriginalIdentifier(newIdentifier);
+          if (result.id) setDraftId(result.id);
+          saveToLocalStorage(newIdentifier); 
+          setIsDraft(true);
+          setLastSaved(new Date());
+          setHasUnsavedChanges(false);
+          return result;
+        }
+      } else if (draftId || originalIdentifier) {
+        const identifier = draftId || originalIdentifier || getIdentifier();
         result = await updateDraftClub(identifier, formData);
-      } else if (hasLocalStorageData && formData.slug) {
-
-        result = await updateDraftClub(formData.slug, formData);
-        if (result && result.id) {
-          setDraftId(result.id);
-        }
       } else {
-
+        // CREATE
         result = await saveDraftClub(formData);
         if (result && result.id) {
+          const newIdentifier = result.id || result.slug || formData.slug;
           setDraftId(result.id);
+          setOriginalIdentifier(newIdentifier);
+          saveToLocalStorage(newIdentifier); 
+          setIsDraft(true);
+          setLastSaved(new Date());
+          setHasUnsavedChanges(false);
+          return result;
         }
       }
 
       setIsDraft(true);
       setLastSaved(new Date());
       setHasUnsavedChanges(false);
-      saveToLocalStorage();
+      saveToLocalStorage(); 
 
       return result;
     } catch (error) {
@@ -424,7 +464,7 @@ export const useCreateClub = (clubId = null, isEditMode = false, mode = 'create'
     } finally {
       setIsLoading(false);
     }
-  }, [formData, draftId, clubId, isContinueMode, isEditMode, hasLocalStorageData, saveDraftClub, updateDraftClub, saveToLocalStorage, getIdentifier]);
+  }, [formData, draftId, clubId, isContinueMode, isEditMode, originalIdentifier, saveDraftClub, updateDraftClub, saveToLocalStorage, getIdentifier]);
 
   const submitClub = useCallback(async () => {
     if (!validateForm()) {
@@ -462,6 +502,7 @@ export const useCreateClub = (clubId = null, isEditMode = false, mode = 'create'
         setDraftId(null);
         setHasUnsavedChanges(false);
         setHasLocalStorageData(false);
+        setOriginalIdentifier(null); // ✅
 
         return result;
       }
@@ -486,6 +527,7 @@ export const useCreateClub = (clubId = null, isEditMode = false, mode = 'create'
     setIsLoadedFromStorage(false);
     setNameChangedByUser(false);
     setHasLocalStorageData(false);
+    setOriginalIdentifier(null); // ✅
   }, [getLocalStorageKey]);
 
   const clearDraft = useCallback(async () => {
