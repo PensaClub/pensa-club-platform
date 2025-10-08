@@ -277,7 +277,6 @@ export const useCreateClub = (clubId = null, isEditMode = false, mode = 'create'
     loadExistingData();
   }, [clubId, isEditMode, isContinueMode]);
 
-  // ✅ ОБНОВЕН - сетва флага при зареждане от localStorage
   useEffect(() => {
     if (isLoadedFromStorage) {
       const savedData = localStorage.getItem(getLocalStorageKey());
@@ -290,7 +289,6 @@ export const useCreateClub = (clubId = null, isEditMode = false, mode = 'create'
           setLastSaved(new Date(parsed.timestamp));
           setIsDraft(true);
           
-          // ✅ ФЛАГ - има данни от localStorage
           setHasLocalStorageData(true);
           
           if (parsed.draftId) {
@@ -382,7 +380,6 @@ export const useCreateClub = (clubId = null, isEditMode = false, mode = 'create'
     }
   }, [errors, isLoadedFromStorage]);
 
-  // ✅ ГЛАВНАТА ПОПРАВКА
   const saveDraft = useCallback(async () => {
     try {
       setIsLoading(true);
@@ -402,13 +399,13 @@ export const useCreateClub = (clubId = null, isEditMode = false, mode = 'create'
         const identifier = getIdentifier();
         result = await updateDraftClub(identifier, formData);
       } else if (hasLocalStorageData && formData.slug) {
-        // ✅ АКО Е ЗАРЕДЕНО ОТ localStorage - UPDATE СЪС SLUG
+
         result = await updateDraftClub(formData.slug, formData);
         if (result && result.id) {
           setDraftId(result.id);
         }
       } else {
-        // Създай нова чернова
+
         result = await saveDraftClub(formData);
         if (result && result.id) {
           setDraftId(result.id);
