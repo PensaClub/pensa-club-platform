@@ -1,0 +1,446 @@
+/* ============================================
+   ABOUT HERO SECTION - СВЕЖ ДИЗАЙН
+   ============================================ */
+
+.abouthero-section {
+  position: relative;
+  width: 100%;
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 120px 60px 80px;
+  background: linear-gradient(to bottom, #f0f9ff 0%, #ffffff 100%);
+}
+
+.abouthero-container {
+  position: relative;
+  width: 100%;
+}
+
+/* ============================================
+   ГЛАВНА ПОДРЕДБА - СНИМКИ & ТЕКСТ
+   ============================================ */
+
+.abouthero-content-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 100px;
+  align-items: center;
+  margin-bottom: 100px;
+  max-width: 1600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ============================================
+   СНИМКИ GRID
+   ============================================ */
+
+.abouthero-images-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: repeat(12, 1fr);
+  height: 600px;
+  gap: 20px;
+}
+
+.abouthero-image-item {
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.abouthero-image-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+}
+
+.abouthero-image-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Голям кръг - ляво горе */
+.abouthero-image-circle-large {
+  grid-column: 1 / 8;
+  grid-row: 1 / 8;
+  border-radius: 50%;
+  border: 6px solid #ffffff;
+}
+
+/* Закръглен правоъгълник - дясно горе */
+.abouthero-image-rounded-top {
+  grid-column: 7 / 13;
+  grid-row: 2 / 7;
+  border-radius: 28px;
+  border: 5px solid #ffffff;
+}
+
+/* Закръглен правоъгълник - ляво долу */
+.abouthero-image-rounded-bottom {
+  grid-column: 2 / 7;
+  grid-row: 7 / 13;
+  border-radius: 28px;
+  border: 5px solid #ffffff;
+}
+
+/* Малък кръг - дясно долу */
+.abouthero-image-circle-small {
+  grid-column: 8 / 13;
+  grid-row: 8 / 13;
+  border-radius: 50%;
+  border: 6px solid #ffffff;
+}
+
+/* ============================================
+   ТЕКСТОВО СЪДЪРЖАНИЕ
+   ============================================ */
+
+.abouthero-text-content {
+  padding-left: 20px;
+}
+
+.abouthero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 24px;
+  background: #fef3c7;
+  border-radius: 30px;
+  border: 2px solid #fbbf24;
+  font-size: 14px;
+  font-weight: 700;
+  color: #92400e;
+  margin-bottom: 28px;
+}
+
+.abouthero-badge svg {
+  font-size: 16px;
+  color: #ef4444;
+}
+
+.abouthero-title {
+  font-size: 58px;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 28px;
+  color: #111827;
+}
+
+.abouthero-subtitle {
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 1.7;
+  color: #6b7280;
+}
+
+/* ============================================
+   ДОЛНИ STAT КАРТИ - ХОРИЗОНТАЛЕН LAYOUT
+   ============================================ */
+
+.abouthero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.abouthero-stat-item {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 28px 32px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+  border: 2px solid #f3f4f6;
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.abouthero-stat-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+  border-color: #3b82f6;
+}
+
+.abouthero-stat-item:nth-child(1) .abouthero-stat-icon {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.abouthero-stat-item:nth-child(2) .abouthero-stat-icon {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.abouthero-stat-item:nth-child(3) .abouthero-stat-icon {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+.abouthero-stat-icon {
+  width: 56px;
+  height: 56px;
+  min-width: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  color: #ffffff;
+}
+
+.abouthero-stat-content {
+  flex: 1;
+}
+
+.abouthero-stat-content h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #111827;
+}
+
+.abouthero-stat-content p {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ============================================
+   RESPONSIVE - МАЛКИ ТЕЛЕФОНИ (320px - 480px)
+   ============================================ */
+
+@media (max-width: 480px) {
+  .abouthero-section {
+    min-height: auto;
+    padding: 60px 16px 50px;
+  }
+
+  .abouthero-content-wrapper {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    margin-bottom: 50px;
+    margin-top: 3rem;
+  }
+
+  .abouthero-images-grid {
+    height: 400px;
+    gap: 12px;
+  }
+
+  .abouthero-image-circle-large {
+    grid-column: 1 / 7;
+    grid-row: 1 / 7;
+  }
+
+  .abouthero-image-rounded-top {
+    grid-column: 6 / 13;
+    grid-row: 1 / 6;
+  }
+
+  .abouthero-image-rounded-bottom {
+    grid-column: 1 / 8;
+    grid-row: 6 / 13;
+  }
+
+  .abouthero-image-circle-small {
+    grid-column: 7 / 13;
+    grid-row: 7 / 13;
+  }
+
+  .abouthero-text-content {
+    text-align: center;
+    padding-left: 0;
+  }
+
+  .abouthero-badge {
+    font-size: 12px;
+    padding: 8px 16px;
+    margin-bottom: 20px;
+  }
+
+  .abouthero-title {
+    font-size: 32px;
+    margin-bottom: 16px;
+  }
+
+  .abouthero-subtitle {
+    font-size: 16px;
+  }
+
+  .abouthero-stats {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .abouthero-stat-item {
+    padding: 20px 20px;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .abouthero-stat-icon {
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+    font-size: 24px;
+    margin: 0 auto;
+  }
+
+  .abouthero-stat-content h3 {
+    font-size: 16px;
+    margin-bottom: 6px;
+  }
+
+  .abouthero-stat-content p {
+    font-size: 13px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - СРЕДНИ ТЕЛЕФОНИ (481px - 768px)
+   ============================================ */
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .abouthero-section {
+    padding: 70px 24px 60px;
+  }
+
+  .abouthero-content-wrapper {
+    grid-template-columns: 1fr;
+    gap: 50px;
+    margin-bottom: 60px;
+  }
+
+  .abouthero-images-grid {
+    height: 500px;
+  }
+
+  .abouthero-text-content {
+    padding-left: 0;
+  }
+
+  .abouthero-title {
+    font-size: 42px;
+  }
+
+  .abouthero-subtitle {
+    font-size: 18px;
+  }
+
+  .abouthero-stats {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .abouthero-stat-item {
+    padding: 24px 24px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - ТАБЛЕТИ (769px - 1024px)
+   ============================================ */
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .abouthero-section {
+    padding: 80px 32px 70px;
+  }
+
+  .abouthero-content-wrapper {
+    gap: 60px;
+  }
+
+  .abouthero-images-grid {
+    height: 550px;
+  }
+
+  .abouthero-text-content {
+    padding-left: 10px;
+  }
+
+  .abouthero-title {
+    font-size: 48px;
+  }
+
+  .abouthero-subtitle {
+    font-size: 19px;
+  }
+
+  .abouthero-stats {
+    gap: 28px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - МАЛКИ ЛАПТОПИ (1025px - 1440px)
+   ============================================ */
+
+@media (min-width: 1025px) and (max-width: 1440px) {
+  .abouthero-section {
+    padding: 100px 40px 80px;
+  }
+
+  .abouthero-content-wrapper {
+    gap: 80px;
+  }
+
+  .abouthero-title {
+    font-size: 52px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - ГОЛЕМИ ЕКРАНИ (1441px+)
+   ============================================ */
+
+@media (min-width: 1441px) {
+  .abouthero-section {
+    padding: 140px 80px 100px;
+  }
+
+  .abouthero-content-wrapper {
+    gap: 120px;
+    margin-bottom: 120px;
+  }
+
+  .abouthero-images-grid {
+    height: 700px;
+    gap: 24px;
+  }
+
+  .abouthero-title {
+    font-size: 68px;
+  }
+
+  .abouthero-subtitle {
+    font-size: 22px;
+  }
+
+  .abouthero-stats {
+    gap: 40px;
+  }
+
+  .abouthero-stat-item {
+    padding: 32px 36px;
+  }
+
+  .abouthero-stat-icon {
+    width: 64px;
+    height: 64px;
+    min-width: 64px;
+    font-size: 30px;
+  }
+
+  .abouthero-stat-content h3 {
+    font-size: 20px;
+  }
+
+  .abouthero-stat-content p {
+    font-size: 15px;
+  }
+}

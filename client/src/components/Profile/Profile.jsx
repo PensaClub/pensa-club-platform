@@ -77,38 +77,38 @@ import ClubsAdmin from "../Clubs/ClubsAdmin/ClubsAdmin";
 // 🎨 НОВИ ИКОНКИ КОМПОНЕНТИ
 const HomeIcon = () => (
   <svg className="menu-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M3 12L5 10M5 10L12 3L19 10M5 10V20C5 20.5523 5.44772 21 6 21H9M19 10L21 12M19 10V20C19 20.5523 18.5523 21 18 21H15M9 21C9.55228 21 10 20.5523 10 20V16C10 15.4477 10.4477 15 11 15H13C13.5523 15 14 15.4477 14 16V20C14 20.5523 14.4477 21 15 21M9 21H15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M3 12L5 10M5 10L12 3L19 10M5 10V20C5 20.5523 5.44772 21 6 21H9M19 10L21 12M19 10V20C19 20.5523 18.5523 21 18 21H15M9 21C9.55228 21 10 20.5523 10 20V16C10 15.4477 10.4477 15 11 15H13C13.5523 15 14 15.4477 14 16V20C14 20.5523 14.4477 21 15 21M9 21H15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
 const InitiativesIcon = () => (
   <svg className="menu-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M9 21H15M12 3V4M18.3636 5.63636L17.6565 6.34347M21 12H20M4 12H3M6.34347 6.34347L5.63636 5.63636M12 17C9.79086 17 8 15.2091 8 13C8 11.3644 8.9298 9.95264 10.2764 9.2764C10.7461 9.02499 11.2461 8.84269 11.7686 8.73754C11.9174 8.70857 12 8.5772 12 8.42632V8C12 7.44772 12.4477 7 13 7C13.5523 7 14 7.44772 14 8V8.42632C14 8.5772 14.0826 8.70857 14.2314 8.73754C15.4154 8.98941 16.4362 9.71459 17.0786 10.7158C17.3694 11.1749 17.5819 11.6874 17.6998 12.2323C17.7311 12.3693 17.8789 12.4303 17.9951 12.3493C18.5542 11.9732 19.2734 12.0686 19.7266 12.5819C20.264 13.1926 20.2155 14.1414 19.6156 14.6909C19.1296 15.1382 18.4048 15.1609 17.892 14.7565C17.7782 14.6686 17.6142 14.6964 17.5332 14.8261C17.2094 15.3624 16.7768 15.8233 16.2639 16.176C15.5635 16.6637 14.7486 16.9545 13.8952 16.9923C13.792 16.9968 13.7024 17.0673 13.6711 17.166C13.5671 17.4946 13.3048 17.7524 12.9749 17.8554C12.3432 18.0486 11.6568 18.0486 11.0251 17.8554C10.6952 17.7524 10.4329 17.4946 10.3289 17.166C10.2976 17.0673 10.208 16.9968 10.1048 16.9923C8.91304 16.9488 7.83094 16.3914 7.10558 15.5003C7.03802 15.4186 6.91813 15.4015 6.82973 15.462C6.31421 15.8248 5.62028 15.7626 5.17381 15.3161C4.61784 14.7602 4.61784 13.8506 5.17381 13.2947C5.64106 12.8274 6.36334 12.7551 6.91352 13.0781C7.01893 13.1384 7.15409 13.0987 7.21484 12.9937C7.47484 12.5375 7.8273 12.1424 8.25 11.8333" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M9 21H15M12 3V4M18.3636 5.63636L17.6565 6.34347M21 12H20M4 12H3M6.34347 6.34347L5.63636 5.63636M12 17C9.79086 17 8 15.2091 8 13C8 11.3644 8.9298 9.95264 10.2764 9.2764C10.7461 9.02499 11.2461 8.84269 11.7686 8.73754C11.9174 8.70857 12 8.5772 12 8.42632V8C12 7.44772 12.4477 7 13 7C13.5523 7 14 7.44772 14 8V8.42632C14 8.5772 14.0826 8.70857 14.2314 8.73754C15.4154 8.98941 16.4362 9.71459 17.0786 10.7158C17.3694 11.1749 17.5819 11.6874 17.6998 12.2323C17.7311 12.3693 17.8789 12.4303 17.9951 12.3493C18.5542 11.9732 19.2734 12.0686 19.7266 12.5819C20.264 13.1926 20.2155 14.1414 19.6156 14.6909C19.1296 15.1382 18.4048 15.1609 17.892 14.7565C17.7782 14.6686 17.6142 14.6964 17.5332 14.8261C17.2094 15.3624 16.7768 15.8233 16.2639 16.176C15.5635 16.6637 14.7486 16.9545 13.8952 16.9923C13.792 16.9968 13.7024 17.0673 13.6711 17.166C13.5671 17.4946 13.3048 17.7524 12.9749 17.8554C12.3432 18.0486 11.6568 18.0486 11.0251 17.8554C10.6952 17.7524 10.4329 17.4946 10.3289 17.166C10.2976 17.0673 10.208 16.9968 10.1048 16.9923C8.91304 16.9488 7.83094 16.3914 7.10558 15.5003C7.03802 15.4186 6.91813 15.4015 6.82973 15.462C6.31421 15.8248 5.62028 15.7626 5.17381 15.3161C4.61784 14.7602 4.61784 13.8506 5.17381 13.2947C5.64106 12.8274 6.36334 12.7551 6.91352 13.0781C7.01893 13.1384 7.15409 13.0987 7.21484 12.9937C7.47484 12.5375 7.8273 12.1424 8.25 11.8333" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
 const ProjectsIcon = () => (
   <svg className="menu-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M3 7C3 5.89543 3.89543 5 5 5H9.58579C9.851 5 10.1054 5.10536 10.2929 5.29289L12 7H19C20.1046 7 21 7.89543 21 9V18C21 19.1046 20.1046 20 19 20H5C3.89543 20 3 19.1046 3 18V7Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M3 7C3 5.89543 3.89543 5 5 5H9.58579C9.851 5 10.1054 5.10536 10.2929 5.29289L12 7H19C20.1046 7 21 7.89543 21 9V18C21 19.1046 20.1046 20 19 20H5C3.89543 20 3 19.1046 3 18V7Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
 const PublicationsIcon = () => (
   <svg className="menu-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M4 19.5C4 18.1193 5.11929 17 6.5 17H20M4 19.5C4 20.8807 5.11929 22 6.5 22H20V2H6.5C5.11929 2 4 3.11929 4 4.5V19.5Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M8 7H16M8 11H16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    <path d="M4 19.5C4 18.1193 5.11929 17 6.5 17H20M4 19.5C4 20.8807 5.11929 22 6.5 22H20V2H6.5C5.11929 2 4 3.11929 4 4.5V19.5Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M8 7H16M8 11H16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
   </svg>
 );
 
 const StoriesIcon = () => (
   <svg className="menu-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M7 9H17M7 13H13M21 20L17.6757 18.3378C17.4237 18.2118 17.2977 18.1488 17.1656 18.1044C17.0484 18.065 16.9277 18.0365 16.8052 18.0193C16.6672 18 16.5263 18 16.2446 18H6.2C5.07989 18 4.51984 18 4.09202 17.782C3.71569 17.5903 3.40973 17.2843 3.21799 16.908C3 16.4802 3 15.9201 3 14.8V7.2C3 6.07989 3 5.51984 3.21799 5.09202C3.40973 4.71569 3.71569 4.40973 4.09202 4.21799C4.51984 4 5.07989 4 6.2 4H17.8C18.9201 4 19.4802 4 19.908 4.21799C20.2843 4.40973 20.5903 4.71569 20.782 5.09202C21 5.51984 21 6.07989 21 7.2V20Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M7 9H17M7 13H13M21 20L17.6757 18.3378C17.4237 18.2118 17.2977 18.1488 17.1656 18.1044C17.0484 18.065 16.9277 18.0365 16.8052 18.0193C16.6672 18 16.5263 18 16.2446 18H6.2C5.07989 18 4.51984 18 4.09202 17.782C3.71569 17.5903 3.40973 17.2843 3.21799 16.908C3 16.4802 3 15.9201 3 14.8V7.2C3 6.07989 3 5.51984 3.21799 5.09202C3.40973 4.71569 3.71569 4.40973 4.09202 4.21799C4.51984 4 5.07989 4 6.2 4H17.8C18.9201 4 19.4802 4 19.908 4.21799C20.2843 4.40973 20.5903 4.71569 20.782 5.09202C21 5.51984 21 6.07989 21 7.2V20Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
 const BookmarkIcon = () => (
   <svg className="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M19 21L12 16L5 21V5C5 3.89543 5.89543 3 7 3H17C18.1046 3 19 3.89543 19 5V21Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M19 21L12 16L5 21V5C5 3.89543 5.89543 3 7 3H17C18.1046 3 19 3.89543 19 5V21Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
@@ -120,20 +120,26 @@ const MapIcon = () => (
 
 const GamesIcon = () => (
   <svg className="menu-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M6 11H10M8 9V13M15.5 12H15.51M18.5 12H18.51M7 16.4L4.56569 18.8343C3.78526 19.6147 3.39505 20.0049 3.00394 19.9952C2.66557 19.9867 2.35037 19.8241 2.14346 19.5528C2 19.3555 2 18.8062 2 17.7077V11C2 8.17157 2 6.75736 2.87868 5.87868C3.75736 5 5.17157 5 8 5H16C18.8284 5 20.2426 5 21.1213 5.87868C22 6.75736 22 8.17157 22 11V12C22 14.8284 22 16.2426 21.1213 17.1213C20.2426 18 18.8284 18 16 18H11.4C10.5074 18 10.0611 18 9.64386 18.1118C9.27242 18.2099 8.9195 18.3644 8.5979 18.5692C8.23183 18.8005 7.91464 19.1177 7.28026 19.7521L6 21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M6 11H10M8 9V13M15.5 12H15.51M18.5 12H18.51M7 16.4L4.56569 18.8343C3.78526 19.6147 3.39505 20.0049 3.00394 19.9952C2.66557 19.9867 2.35037 19.8241 2.14346 19.5528C2 19.3555 2 18.8062 2 17.7077V11C2 8.17157 2 6.75736 2.87868 5.87868C3.75736 5 5.17157 5 8 5H16C18.8284 5 20.2426 5 21.1213 5.87868C22 6.75736 22 8.17157 22 11V12C22 14.8284 22 16.2426 21.1213 17.1213C20.2426 18 18.8284 18 16 18H11.4C10.5074 18 10.0611 18 9.64386 18.1118C9.27242 18.2099 8.9195 18.3644 8.5979 18.5692C8.23183 18.8005 7.91464 19.1177 7.28026 19.7521L6 21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
-
+const AboutIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5" />
+    <path d="M12 17V11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    <circle cx="12" cy="8" r="1" fill="currentColor" />
+  </svg>
+);
 const ClubsIcon = () => (
   <svg className="menu-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M17 20C17 18.3431 14.7614 17 12 17C9.23858 17 7 18.3431 7 20M21 17C21 15.7635 19.7085 14.7012 18 14.25M3 17C3 15.7635 4.29153 14.7012 6 14.25M18 10.5C19.1046 10.5 20 9.60457 20 8.5C20 7.39543 19.1046 6.5 18 6.5M6 10.5C4.89543 10.5 4 9.60457 4 8.5C4 7.39543 4.89543 6.5 6 6.5M12 14C10.3431 14 9 12.6569 9 11C9 9.34315 10.3431 8 12 8C13.6569 8 15 9.34315 15 11C15 12.6569 13.6569 14 12 14Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M17 20C17 18.3431 14.7614 17 12 17C9.23858 17 7 18.3431 7 20M21 17C21 15.7635 19.7085 14.7012 18 14.25M3 17C3 15.7635 4.29153 14.7012 6 14.25M18 10.5C19.1046 10.5 20 9.60457 20 8.5C20 7.39543 19.1046 6.5 18 6.5M6 10.5C4.89543 10.5 4 9.60457 4 8.5C4 7.39543 4.89543 6.5 6 6.5M12 14C10.3431 14 9 12.6569 9 11C9 9.34315 10.3431 8 12 8C13.6569 8 15 9.34315 15 11C15 12.6569 13.6569 14 12 14Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
 const AvatarIcon = () => (
   <svg className="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="1.5"/>
-    <path d="M5 20C5 16.6863 7.68629 14 11 14H13C16.3137 14 19 16.6863 19 20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+    <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="1.5" />
+    <path d="M5 20C5 16.6863 7.68629 14 11 14H13C16.3137 14 19 16.6863 19 20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
   </svg>
 );
 
@@ -385,180 +391,188 @@ export const Profile = () => {
 
             {/* 🎨 ОПРАВЕНО ПАДАЩО МЕНЮ */}
             {profileMenuOpen && (
-              <div className="profile-dropdown-new">
-                <div className="dropdown-header">
-                  <img
-                    src={profileData?.details?.imageURL || "/images/homePage/user-it.png"}
-                    alt="User"
-                    className="dropdown-profile-image"
-                    onError={(e) => {
-                      e.target.src = "/images/homePage/user-it.png";
-                    }}
-                  />
-                  <div className="dropdown-username">
-                    {profileData?.details?.username || profileData?.email}
-                  </div>
-                </div>
-                <div className="dropdown-links">
-                  {/* ✅ НАЧАЛО - Нова иконка */}
-                  <NavLink to="/" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
-                    <span className="link-content">
-                      <HomeIcon />
-                      {t("header.home")}
-                    </span>
-                  </NavLink>
+  <div className="profile-dropdown-new">
+    <div className="dropdown-header">
+      <img
+        src={profileData?.details?.imageURL || "/images/homePage/user-it.png"}
+        alt="User"
+        className="dropdown-profile-image"
+        onError={(e) => {
+          e.target.src = "/images/homePage/user-it.png";
+        }}
+      />
+      <div className="dropdown-username">
+        {profileData?.details?.username || profileData?.email}
+      </div>
+    </div>
+    <div className="dropdown-links">
+      {/* ✅ НАЧАЛО */}
+      <NavLink to="/" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
+        <span className="link-content">
+          <HomeIcon />
+          {t("header.home")}
+        </span>
+      </NavLink>
 
-                  {/* ✅ СТАТИИ - OK */}
-                  <NavLink to="/articles" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
-                    <span className="link-content">
-                      <ForumIcon className="menu-icon" />
-                      {t("header.articles")}
-                    </span>
-                  </NavLink>
+      {/* ✅ СТАТИИ */}
+      <NavLink to="/articles" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
+        <span className="link-content">
+          <ForumIcon className="menu-icon" />
+          {t("header.articles")}
+        </span>
+      </NavLink>
 
-                  {/* ✅ ОБЩНОСТ DROPDOWN - Нови иконки */}
-                  <div className="profile-dropdown-container">
-                    <button
-                      className={`dropdown-item-new-profile profile-dropdown-toggle ${profileCommunityOpen ? 'active' : ''}`}
-                      onClick={toggleProfileCommunity}
-                    >
-                      <span className="link-content">
-                        <UsersIcon className="menu-icon" />
-                        {t("header.craigslist")}
-                        <svg
-                          className={`profile-dropdown-arrow ${profileCommunityOpen ? 'rotated' : ''}`}
-                          width="12"
-                          height="6"
-                          viewBox="0 0 12 6"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path d="M1 1L6 5L11 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      </span>
-                    </button>
+      {/* ✅ ОБЩНОСТ DROPDOWN */}
+      <div className="profile-dropdown-container">
+        <button
+          className={`dropdown-item-new-profile profile-dropdown-toggle ${profileCommunityOpen ? 'active' : ''}`}
+          onClick={toggleProfileCommunity}
+        >
+          <span className="link-content">
+            <UsersIcon className="menu-icon" />
+            {t("header.craigslist")}
+            <svg
+              className={`profile-dropdown-arrow ${profileCommunityOpen ? 'rotated' : ''}`}
+              width="12"
+              height="6"
+              viewBox="0 0 12 6"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M1 1L6 5L11 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </span>
+        </button>
 
-                    <div className={`profile-dropdown-content ${profileCommunityOpen ? 'active' : ''}`}>
-                      {/* Craigslist */}
-                      <NavLink
-                        to="/craigslist?reset=true"
-                        className="profile-dropdown-item-new-profile"
-                        onClick={() => {
-                          setProfileMenuOpen(false);
-                          setProfileCommunityOpen(false);
-                        }}
-                      >
-                        <UsersIcon className="menu-icon" />
-                        {t("header.craigslist")}
-                      </NavLink>
+        <div className={`profile-dropdown-content ${profileCommunityOpen ? 'active' : ''}`}>
+          {/* Craigslist */}
+          <NavLink
+            to="/craigslist?reset=true"
+            className="profile-dropdown-item-new-profile"
+            onClick={() => {
+              setProfileMenuOpen(false);
+              setProfileCommunityOpen(false);
+            }}
+          >
+            <UsersIcon className="menu-icon" />
+            {t("header.craigslist")}
+          </NavLink>
 
-                      {/* ✅ Инициативи - Нова иконка */}
-                      <NavLink
-                        to="/initiatives"
-                        className="profile-dropdown-item-new-profile"
-                        onClick={() => {
-                          setProfileMenuOpen(false);
-                          setProfileCommunityOpen(false);
-                        }}
-                      >
-                        <InitiativesIcon />
-                        {t("header.initiatives")}
-                      </NavLink>
+          {/* ✅ Инициативи */}
+          <NavLink
+            to="/initiatives"
+            className="profile-dropdown-item-new-profile"
+            onClick={() => {
+              setProfileMenuOpen(false);
+              setProfileCommunityOpen(false);
+            }}
+          >
+            <InitiativesIcon className="menu-icon" />
+            {t("header.initiatives")}
+          </NavLink>
 
-                      {/* ✅ Проекти - Нова иконка */}
-                      <NavLink
-                        to="/projects"
-                        className="profile-dropdown-item-new-profile"
-                        onClick={() => {
-                          setProfileMenuOpen(false);
-                          setProfileCommunityOpen(false);
-                        }}
-                      >
-                        <ProjectsIcon />
-                        {t("header.projects")}
-                      </NavLink>
+          {/* ✅ Проекти */}
+          <NavLink
+            to="/projects"
+            className="profile-dropdown-item-new-profile"
+            onClick={() => {
+              setProfileMenuOpen(false);
+              setProfileCommunityOpen(false);
+            }}
+          >
+            <ProjectsIcon className="menu-icon" />
+            {t("header.projects")}
+          </NavLink>
 
-                      {/* ✅ ПУБЛИКАЦИИ - ДОБАВЕНА */}
-                      <NavLink
-                        to="/publications"
-                        className="profile-dropdown-item-new-profile"
-                        onClick={() => {
-                          setProfileMenuOpen(false);
-                          setProfileCommunityOpen(false);
-                        }}
-                      >
-                        <PublicationsIcon />
-                        {t("header.publications")}
-                      </NavLink>
+          {/* ✅ ПУБЛИКАЦИИ */}
+          <NavLink
+            to="/publications"
+            className="profile-dropdown-item-new-profile"
+            onClick={() => {
+              setProfileMenuOpen(false);
+              setProfileCommunityOpen(false);
+            }}
+          >
+            <PublicationsIcon className="menu-icon" />
+            {t("header.publications")}
+          </NavLink>
 
-                      {/* ✅ ИСТОРИИ - ДОБАВЕНА */}
-                      <NavLink
-                        to="/stories"
-                        className="profile-dropdown-item-new-profile"
-                        onClick={() => {
-                          setProfileMenuOpen(false);
-                          setProfileCommunityOpen(false);
-                        }}
-                      >
-                        <StoriesIcon />
-                        {t("header.stories")}
-                      </NavLink>
+          {/* ✅ ИСТОРИИ */}
+          <NavLink
+            to="/stories"
+            className="profile-dropdown-item-new-profile"
+            onClick={() => {
+              setProfileMenuOpen(false);
+              setProfileCommunityOpen(false);
+            }}
+          >
+            <StoriesIcon className="menu-icon" />
+            {t("header.stories")}
+          </NavLink>
 
-                      {/* ✅ Карта - Нова иконка */}
-                      <NavLink
-                        to="/map"
-                        className="profile-dropdown-item-new-profile"
-                        onClick={() => {
-                          setProfileMenuOpen(false);
-                          setProfileCommunityOpen(false);
-                        }}
-                      >
-                        <MapIcon />
-                        {t("header.map")}
-                      </NavLink>
-                    </div>
-                  </div>
+          {/* ✅ Карта */}
+          <NavLink
+            to="/map"
+            className="profile-dropdown-item-new-profile"
+            onClick={() => {
+              setProfileMenuOpen(false);
+              setProfileCommunityOpen(false);
+            }}
+          >
+            <MapIcon className="menu-icon" />
+            {t("header.map")}
+          </NavLink>
+        </div>
+      </div>
 
-                  {/* ✅ КЛУБОВЕ - ДОБАВЕНИ */}
-                  <NavLink to="/clubs" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
-                    <span className="link-content">
-                      <ClubsIcon />
-                      {t("header.clubs")}
-                    </span>
-                  </NavLink>
+      {/* ✅ КЛУБОВЕ */}
+      <NavLink to="/clubs" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
+        <span className="link-content">
+          <ClubsIcon className="menu-icon" />
+          {t("header.clubs")}
+        </span>
+      </NavLink>
 
-                  {/* ✅ ИГРИ - Нова иконка */}
-                  <NavLink to="/games" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
-                    <span className="link-content">
-                      <GamesIcon />
-                      {t("header.games")}
-                    </span>
-                  </NavLink>
+      {/* ✅ ИГРИ */}
+      <NavLink to="/games" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
+        <span className="link-content">
+          <GamesIcon className="menu-icon" />
+          {t("header.games")}
+        </span>
+      </NavLink>
 
-                  {/* ✅ СЪЗДАЙ ОБЯВА - OK */}
-                  <NavLink to="/ad/create" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
-                    <span className="link-content">
-                      <JobsAdsIcon className="menu-icon" />
-                      {t("header.ad-create")}
-                    </span>
-                  </NavLink>
+      {/* ✅ СЪЗДАЙ ОБЯВА */}
+      <NavLink to="/ad/create" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
+        <span className="link-content">
+          <JobsAdsIcon className="menu-icon" />
+          {t("header.ad-create")}
+        </span>
+      </NavLink>
 
-                  {/* Език суич */}
-                  <LanguageSwitcherAdmin isMobile={true} onClick={() => {
-                    setProfileMenuOpen(false);
-                    setProfileCommunityOpen(false);
-                  }} />
+      {/* ✅ ЗА НАС */}
+      <NavLink to="/about" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
+        <span className="link-content">
+          <AboutIcon className="menu-icon" />
+          {t("header.about")}
+        </span>
+      </NavLink>
 
-                  {/* Logout */}
-                  <NavLink to="/logout" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
-                    <span className="link-content">
-                      <LogoutIcon className="menu-icon" />
-                      {t("header.logout")}
-                    </span>
-                  </NavLink>
-                </div>
-              </div>
-            )}
+      {/* Език суич */}
+      <LanguageSwitcherAdmin isMobile={true} onClick={() => {
+        setProfileMenuOpen(false);
+        setProfileCommunityOpen(false);
+      }} />
+
+      {/* Logout */}
+      <NavLink to="/logout" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
+        <span className="link-content">
+          <LogoutIcon className="menu-icon" />
+          {t("header.logout")}
+        </span>
+      </NavLink>
+    </div>
+  </div>
+)}
           </div>
         </div>
       </header>
