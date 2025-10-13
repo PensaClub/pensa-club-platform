@@ -1,0 +1,497 @@
+/* ============================================
+   ABOUT PLATFORM SECTION
+   ============================================ */
+
+.aboutplatform-section {
+  width: 100%;
+  padding: 100px 60px;
+  background: #ffffff;
+  position: relative;
+}
+
+.aboutplatform-container {
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.aboutplatform-header {
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.aboutplatform-label {
+  display: inline-block;
+  padding: 8px 20px;
+  background: #dbeafe;
+  color: #1e40af;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  letter-spacing: 0.5px;
+}
+
+.aboutplatform-title {
+  font-size: 48px;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 20px;
+  line-height: 1.2;
+}
+
+.aboutplatform-description {
+  font-size: 18px;
+  color: #6b7280;
+  max-width: 800px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* ============================================
+   FEATURES SECTION
+   ============================================ */
+
+.aboutplatform-features-section {
+  margin-bottom: 100px;
+}
+
+.aboutplatform-section-title {
+  font-size: 32px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 50px;
+  text-align: center;
+}
+
+.aboutplatform-features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.aboutplatform-feature-card {
+  background: #ffffff;
+  border: 2px solid #f3f4f6;
+  border-radius: 20px;
+  padding: 36px 28px;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.aboutplatform-feature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  border-color: transparent;
+}
+
+/* Асиметрични стилове за различните карти */
+.aboutplatform-card-1:hover {
+  box-shadow: 0 20px 40px rgba(59, 130, 246, 0.15);
+}
+
+.aboutplatform-card-2:hover {
+  box-shadow: 0 20px 40px rgba(16, 185, 129, 0.15);
+}
+
+.aboutplatform-card-3:hover {
+  box-shadow: 0 20px 40px rgba(245, 158, 11, 0.15);
+}
+
+.aboutplatform-card-4:hover {
+  box-shadow: 0 20px 40px rgba(236, 72, 153, 0.15);
+}
+
+.aboutplatform-card-5:hover {
+  box-shadow: 0 20px 40px rgba(139, 92, 246, 0.15);
+}
+
+.aboutplatform-card-6:hover {
+  box-shadow: 0 20px 40px rgba(6, 182, 212, 0.15);
+}
+
+.aboutplatform-feature-icon {
+  width: 70px;
+  height: 70px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  color: #ffffff;
+  transition: transform 0.3s ease;
+}
+
+.aboutplatform-feature-card:hover .aboutplatform-feature-icon {
+  transform: scale(1.1) rotate(-5deg);
+}
+
+.aboutplatform-feature-content h4 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 10px;
+}
+
+.aboutplatform-feature-content p {
+  font-size: 15px;
+  color: #6b7280;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ============================================
+   GOALS SECTION
+   ============================================ */
+
+.aboutplatform-goals-section {
+  position: relative;
+}
+
+.aboutplatform-goals-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+.aboutplatform-goal-card {
+  background: #f9fafb;
+  border-radius: 24px;
+  padding: 40px 32px;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.aboutplatform-goal-card:hover {
+  transform: translateY(-8px);
+  background: #ffffff;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+}
+
+.aboutplatform-goal-icon-wrapper {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  transition: transform 0.3s ease;
+}
+
+.aboutplatform-goal-card:hover .aboutplatform-goal-icon-wrapper {
+  transform: scale(1.1);
+}
+
+.aboutplatform-goal-icon {
+  font-size: 44px;
+}
+
+.aboutplatform-goal-content h4 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 12px;
+}
+
+.aboutplatform-goal-content p {
+  font-size: 16px;
+  color: #6b7280;
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ============================================
+   RESPONSIVE - МАЛКИ ТЕЛЕФОНИ (320px - 480px)
+   ============================================ */
+
+@media (max-width: 480px) {
+  .aboutplatform-section {
+    padding: 60px 16px;
+  }
+
+  .aboutplatform-header {
+    margin-bottom: 50px;
+  }
+
+  .aboutplatform-label {
+    font-size: 12px;
+    padding: 6px 16px;
+    margin-bottom: 16px;
+  }
+
+  .aboutplatform-title {
+    font-size: 28px;
+    margin-bottom: 16px;
+  }
+
+  .aboutplatform-description {
+    font-size: 15px;
+  }
+
+  .aboutplatform-features-section {
+    margin-bottom: 60px;
+  }
+
+  .aboutplatform-section-title {
+    font-size: 24px;
+    margin-bottom: 32px;
+  }
+
+  .aboutplatform-features-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .aboutplatform-feature-card {
+    padding: 28px 24px;
+    gap: 16px;
+  }
+
+  .aboutplatform-feature-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 28px;
+  }
+
+  .aboutplatform-feature-content h4 {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+
+  .aboutplatform-feature-content p {
+    font-size: 14px;
+  }
+
+  .aboutplatform-goals-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .aboutplatform-goal-card {
+    padding: 32px 24px;
+  }
+
+  .aboutplatform-goal-icon-wrapper {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 20px;
+  }
+
+  .aboutplatform-goal-icon {
+    font-size: 36px;
+  }
+
+  .aboutplatform-goal-content h4 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+
+  .aboutplatform-goal-content p {
+    font-size: 14px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - СРЕДНИ ТЕЛЕФОНИ (481px - 768px)
+   ============================================ */
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .aboutplatform-section {
+    padding: 70px 24px;
+  }
+
+  .aboutplatform-header {
+    margin-bottom: 60px;
+  }
+
+  .aboutplatform-title {
+    font-size: 36px;
+  }
+
+  .aboutplatform-description {
+    font-size: 16px;
+  }
+
+  .aboutplatform-features-section {
+    margin-bottom: 70px;
+  }
+
+  .aboutplatform-section-title {
+    font-size: 28px;
+    margin-bottom: 40px;
+  }
+
+  .aboutplatform-features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  .aboutplatform-feature-card {
+    padding: 32px 26px;
+  }
+
+  .aboutplatform-goals-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .aboutplatform-goal-card {
+    padding: 36px 28px;
+  }
+
+  .aboutplatform-goal-icon-wrapper {
+    width: 90px;
+    height: 90px;
+  }
+
+  .aboutplatform-goal-icon {
+    font-size: 40px;
+  }
+
+  .aboutplatform-goal-content h4 {
+    font-size: 22px;
+  }
+
+  .aboutplatform-goal-content p {
+    font-size: 15px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - ТАБЛЕТИ (769px - 1024px)
+   ============================================ */
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .aboutplatform-section {
+    padding: 80px 32px;
+  }
+
+  .aboutplatform-header {
+    margin-bottom: 70px;
+  }
+
+  .aboutplatform-title {
+    font-size: 42px;
+  }
+
+  .aboutplatform-features-section {
+    margin-bottom: 80px;
+  }
+
+  .aboutplatform-section-title {
+    font-size: 30px;
+  }
+
+  .aboutplatform-features-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 26px;
+  }
+
+  .aboutplatform-goals-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - МАЛКИ ЛАПТОПИ (1025px - 1440px)
+   ============================================ */
+
+@media (min-width: 1025px) and (max-width: 1440px) {
+  .aboutplatform-section {
+    padding: 90px 40px;
+  }
+
+  .aboutplatform-title {
+    font-size: 44px;
+  }
+
+  .aboutplatform-features-section {
+    margin-bottom: 90px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - ГОЛЕМИ ЕКРАНИ (1441px+)
+   ============================================ */
+
+@media (min-width: 1441px) {
+  .aboutplatform-section {
+    padding: 120px 80px;
+  }
+
+  .aboutplatform-header {
+    margin-bottom: 100px;
+  }
+
+  .aboutplatform-title {
+    font-size: 54px;
+  }
+
+  .aboutplatform-description {
+    font-size: 20px;
+  }
+
+  .aboutplatform-features-section {
+    margin-bottom: 120px;
+  }
+
+  .aboutplatform-section-title {
+    font-size: 38px;
+    margin-bottom: 60px;
+  }
+
+  .aboutplatform-features-grid {
+    gap: 36px;
+  }
+
+  .aboutplatform-feature-card {
+    padding: 44px 36px;
+  }
+
+  .aboutplatform-feature-icon {
+    width: 80px;
+    height: 80px;
+    font-size: 36px;
+  }
+
+  .aboutplatform-feature-content h4 {
+    font-size: 22px;
+  }
+
+  .aboutplatform-feature-content p {
+    font-size: 16px;
+  }
+
+  .aboutplatform-goals-grid {
+    gap: 40px;
+  }
+
+  .aboutplatform-goal-card {
+    padding: 48px 40px;
+  }
+
+  .aboutplatform-goal-icon-wrapper {
+    width: 110px;
+    height: 110px;
+    margin-bottom: 28px;
+  }
+
+  .aboutplatform-goal-icon {
+    font-size: 48px;
+  }
+
+  .aboutplatform-goal-content h4 {
+    font-size: 26px;
+  }
+
+  .aboutplatform-goal-content p {
+    font-size: 17px;
+  }
+}

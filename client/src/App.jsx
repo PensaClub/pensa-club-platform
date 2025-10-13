@@ -61,6 +61,7 @@ import GamesPage from './components/GamesPage/GamesPage.jsx';
 import { AllClubs } from './components/Clubs/AllClubs/AllClubs.jsx';
 import { ClubProvider } from './components/contexts/ClubContext.jsx';
 import ClubView from './components/Clubs/ClubView/ClubView.jsx';
+import AboutPage from './components/AboutPage/AboutPage.jsx';
 
 // ✅ LAZY LOADING КОМПОНЕНТИ
 const ArticlesList = lazy(() => import('./components/Articles/ArticlesList/ArticlesList.jsx'));
@@ -142,6 +143,7 @@ function App() {
                                 <Routes>
                                   <Route path="/" element={<Home />} />
                                   <Route path="/contact" element={<ContactForm />} />
+                                  <Route path="/about" element={<AboutPage />} />
                                   <Route path="/server-error" element={<ServerError />} />
                                   <Route path="/forget-password" element={<ForgetPassword />} />
                                   <Route path="/resend-email" element={<ReSendEmail />} />

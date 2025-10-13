@@ -15,7 +15,8 @@
     "clubs": "Clubs",
     "bookmarks": "Lesezeichen",
     "publications": "Veröffentlichungen",
-     "stories": "Geschichten"
+    "stories": "Geschichten",
+    "about": "Über uns"
   },
   "footer": {
     "site-map": "Sitemap",
@@ -80,7 +81,163 @@
     "about_image_alt": "Über Pensa",
     "vision_image_alt": "Ältere Menschen in der digitalen Welt",
     "overlay_pensa": "Pensa",
-    "overlay_vision": "Vision"
+    "overlay_vision": "Vision",
+    "hero": {
+      "badge": "Über uns",
+      "title": "Pensa Stiftung und Pensa.club",
+      "subtitle": "Eine innovative Plattform zur Verbesserung der Lebensqualität älterer Menschen durch digitale Inklusion und aktive Gemeinschaft",
+      "stats": {
+        "community": "Gemeinschaft",
+        "communityDesc": "Wir vereinen Menschen gleichen Alters mit gemeinsamen Interessen",
+        "innovation": "Innovation",
+        "innovationDesc": "Wir schaffen eine Brücke zwischen den Generationen mit Technologie",
+        "support": "Unterstützung",
+        "supportDesc": "Zugängliche Hilfe für den Einstieg in die digitale Welt"
+      }
+    },
+    "platform": {
+      "label": "Die Plattform",
+      "title": "Pensa.club - Digitale Gemeinschaft",
+      "description": "Eine innovative, digitale und interaktive Plattform zur Verbesserung der Lebensqualität älterer Menschen",
+      "featuresTitle": "Was wir anbieten",
+      "features": {
+        "interactiveMap": {
+          "title": "Interaktive Karte",
+          "description": "Sehen Sie alle registrierten Rentner und Clubs auf einer interaktiven Karte von Bulgarien"
+        },
+        "announcements": {
+          "title": "Ankündigungen",
+          "description": "Plattform zum Teilen von Ankündigungen, Nachrichten und aktuellen Ereignissen"
+        },
+        "articles": {
+          "title": "Artikel und Schulungen",
+          "description": "Bildungsartikel und Schulungsmaterialien zu verschiedenen Themen"
+        },
+        "clubsMap": {
+          "title": "Clubkarte",
+          "description": "Finden Sie Clubs in ganz Bulgarien und bewerben Sie sich direkt über die Plattform"
+        },
+        "games": {
+          "title": "Online-Spiele",
+          "description": "Spielen Sie Schach, Backgammon, Sudoku, Solitär und andere lustige Spiele"
+        },
+        "mentorship": {
+          "title": "Mentoring-Programm",
+          "description": "Online- und Offline-Schulungen für sichere Internetnutzung"
+        }
+      },
+      "mission": {
+        "title": "Mission",
+        "description": "Rentnern in Bulgarien zu helfen, ihre Nutzung der digitalen Welt zu verbessern. Wir schaffen ein Werkzeug zum Aufbau einer Gemeinschaft, die Menschen mit gemeinsamen Interessen, neuen Ideen und Wissen vereint."
+      },
+      "vision": {
+        "title": "Vision",
+        "description": "Eine Welt, in der das Alter kein Hindernis für die digitale Inklusion ist. Wir schaffen eine Brücke zwischen den Generationen, wo ältere Menschen zugängliche Unterstützung beim Einstieg in die Technologie erhalten."
+      },
+      "goal": {
+        "title": "Ziel",
+        "description": "Verbesserung der Lebensqualität durch aktive Einbeziehung in die Moderne, Unterstützung beim Erwerb neuer Fähigkeiten und Förderung eines gesunden, erfüllten und würdigen Lebens."
+      }
+    },
+    "foundation": {
+      "label": "Die Stiftung",
+      "title": "Pensa Stiftung",
+      "description": "Gegründet mit der Mission, die Lebensqualität älterer Menschen durch digitale Inklusion und aktive Gemeinschaft zu verbessern",
+      "missionTitle": "Unsere Mission",
+      "missionText": "Eine Gemeinschaft aufzubauen, die auf Interaktion und gegenseitiger Hilfe basiert. Wir streben danach, Menschen gleichen Alters mit gemeinsamen Interessen, neuen Ideen und Wissen zu vereinen und die aktive Teilnahme an der modernen Gesellschaft zu fördern.",
+      "valuesTitle": "Unsere Werte",
+      "values": {
+        "community": {
+          "title": "Gemeinschaft",
+          "description": "Wir bauen eine Brücke zwischen den Generationen durch gegenseitige Hilfe und gemeinsame Erfahrung"
+        },
+        "quality": {
+          "title": "Qualität",
+          "description": "Wir bieten hochwertige Dienstleistungen und Bildungsmaterialien"
+        },
+        "trust": {
+          "title": "Vertrauen",
+          "description": "Wir arbeiten transparent und verantwortungsbewusst für das Vertrauen unserer Gemeinschaft"
+        },
+        "care": {
+          "title": "Fürsorge",
+          "description": "Wir kümmern uns um jedes Mitglied unserer Gemeinschaft"
+        }
+      }
+    },
+    "team": {
+      "label": "Unser Team",
+      "title": "Lernen Sie das Team kennen",
+      "description": "Menschen mit Erfahrung und Leidenschaft, die daran arbeiten, das Leben älterer Menschen zu verbessern",
+      "contactEmail": "E-Mail senden",
+      "contactPhone": "Anrufen",
+      "sendMessage": "Nachricht senden",
+      "modalTitle": "Nachricht an {{name}}",
+      "members": {
+        "borislav": {
+          "role": "IT-Spezialist",
+          "bio": "Abschluss in Software Engineering mit JavaScript an der SoftUni im Jahr 2023 als Jahrgangsbester. Leitender IT-Berater bei der PENSA Stiftung und direkt an der Erstellung der Plattform pensa.club beteiligt. Zeichnet sich durch Ausdauer, Disziplin und Beständigkeit im Arbeitsprozess aus."
+        },
+        "lubima": {
+          "role": "Technische Mitarbeiterin",
+          "bio": "Abschluss an der Technischen Universität Sofia und über 25 Jahre Erfahrung im Handels- und Vertriebsbereich. Durchlief die Rollen als Produkt- und Marketingspezialistin und anschließend Marketingmanagerin bei Robert Bosch EOOD."
+        },
+        "lena": {
+          "role": "Vorstandsmitglied",
+          "bio": "Wirtschaftsstudium in Deutschland, zahlreiche Spezialisierungen im Personal- und Finanzmanagement. 30 Jahre lang Geschäftsführerin und Prokuristin bei Robert Bosch EOOD - einem Unternehmen der Bosch-Gruppe in Bulgarien."
+        },
+        "elina": {
+          "role": "Vorstandsvorsitzende",
+          "bio": "Gründerin der PENSA Stiftung. Gründerin und Präsidentin des ABC (American-Bulgarian Council). Direktorin des Nationalen Tourismus-Forschungsinstituts. Expertin und Beraterin mit langjähriger Erfahrung im Nichtregierungssektor und bei internationalen Projekten."
+        }
+      },
+      "form": {
+        "from": "Von (Ihre E-Mail)",
+        "fromPlaceholder": "ihre@email.com",
+        "to": "An",
+        "toPlaceholder": "empfaenger@email.com",
+        "subject": "Betreff",
+        "subjectPlaceholder": "Nachrichtenbetreff",
+        "message": "Nachricht",
+        "messagePlaceholder": "Schreiben Sie Ihre Nachricht hier...",
+        "sending": "Wird gesendet...",
+        "send": "Nachricht senden",
+        "note": "Die Nachricht wird direkt an die E-Mail-Adresse des ausgewählten Teammitglieds gesendet"
+      }
+    },
+    "contact": {
+      "label": "Kontaktieren Sie uns",
+      "title": "Haben Sie Fragen?",
+      "description": "Kontaktieren Sie uns und wir beantworten gerne alle Ihre Fragen",
+      "info": {
+        "email": "E-Mail",
+        "website": "Webseite"
+      },
+      "form": {
+        "fields": {
+          "name": "Name",
+          "email": "E-Mail",
+          "subject": "Betreff",
+          "message": "Nachricht"
+        },
+        "placeholders": {
+          "name": "Ihr Name",
+          "email": "ihre@email.com",
+          "subject": "Nachrichtenbetreff",
+          "message": "Schreiben Sie Ihre Nachricht hier..."
+        },
+        "validation": {
+          "required": "Bitte füllen Sie alle erforderlichen Felder aus",
+          "invalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein"
+        },
+        "messages": {
+          "success": "Nachricht erfolgreich gesendet! Wir werden uns bald bei Ihnen melden.",
+          "error": "Beim Senden ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut."
+        },
+        "submitting": "Wird gesendet...",
+        "submit": "Nachricht senden"
+      }
+    }
   },
   "news-subscribe": {
     "title": "Bleiben Sie auf dem Laufenden mit",
@@ -1829,8 +1986,8 @@
       "completed": "Abgeschlossen",
       "inProgress": "In Bearbeitung",
       "upcoming": "Bevorstehend",
-       "pending": "Ausstehend",
-       "cancelled": "Abgebrochen"
+      "pending": "Ausstehend",
+      "cancelled": "Abgebrochen"
     }
   },
   "applicationForm": {
