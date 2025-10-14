@@ -1,0 +1,49 @@
+/* ============================================
+   ABOUT PAGE - MAIN WRAPPER
+   ============================================ */
+
+.aboutpage-wrapper {
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  overflow-x: hidden;
+}
+
+/* ============================================
+   RESPONSIVE BREAKPOINTS
+   ============================================ */
+
+/* Малки телефони (320px - 480px) */
+@media (max-width: 480px) {
+  .aboutpage-wrapper {
+    padding: 0;
+  }
+}
+
+/* Средни телефони (481px - 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+  .aboutpage-wrapper {
+    padding: 0;
+  }
+}
+
+/* Таблети (769px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .aboutpage-wrapper {
+    padding: 0;
+  }
+}
+
+/* Малки лаптопи (1025px - 1440px) */
+@media (min-width: 1025px) and (max-width: 1440px) {
+  .aboutpage-wrapper {
+    padding: 0;
+  }
+}
+
+/* Големи екрани (1441px+) */
+@media (min-width: 1441px) {
+  .aboutpage-wrapper {
+    padding: 0;
+  }
+}

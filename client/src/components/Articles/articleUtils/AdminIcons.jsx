@@ -268,7 +268,7 @@ export const DashboardIcon = ({ fill = "#C6C6C6", width = "24px", height = "24px
         <path d="M18.0161 8.01611L18 8" stroke={fill} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     );
-    
+   
     export const RightArrowIcon = ({ fill = "#C6C6C6", width = "24px", height = "24px" }) => (
       <svg fill="none" width={width} height={height} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" className="icon line">
         <polyline points="14 5 21 12 14 19" style={{fill: "none", stroke: fill, strokeLinecap: "round", strokeLinejoin: "round", strokeWidth: 1.5}}></polyline>

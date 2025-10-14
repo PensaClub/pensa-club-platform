@@ -1,0 +1,380 @@
+/* ============================================
+   ABOUT FOUNDATION SECTION
+   ============================================ */
+
+.aboutfoundation-section {
+  width: 100%;
+  padding: 80px 20px;
+  background: #ffffff;
+}
+
+.aboutfoundation-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.aboutfoundation-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.aboutfoundation-label {
+  display: inline-block;
+  padding: 6px 14px;
+  background: #dcfce7;
+  color: #15803d;
+  border-radius: 16px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.aboutfoundation-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+.aboutfoundation-description {
+  font-size: 16px;
+  color: #6b7280;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* ============================================
+   CONTENT
+   ============================================ */
+
+.aboutfoundation-content {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+}
+
+/* ============================================
+   MISSION
+   ============================================ */
+
+.aboutfoundation-mission {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 40px;
+  text-align: center;
+}
+
+.aboutfoundation-mission h3 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 16px;
+}
+
+.aboutfoundation-mission p {
+  font-size: 16px;
+  color: #6b7280;
+  line-height: 1.7;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ============================================
+   VALUES
+   ============================================ */
+
+.aboutfoundation-values h3 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.aboutfoundation-values-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.aboutfoundation-value-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 32px 24px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.aboutfoundation-value-card:hover {
+  border-color: #10b981;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1);
+  transform: translateY(-4px);
+}
+
+.aboutfoundation-value-icon {
+  font-size: 40px;
+  color: #10b981;
+  margin-bottom: 16px;
+}
+
+.aboutfoundation-value-card h4 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 8px;
+}
+
+.aboutfoundation-value-card p {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+/* ============================================
+   RESPONSIVE - МАЛКИ ТЕЛЕФОНИ (320px - 480px)
+   ============================================ */
+
+@media (max-width: 480px) {
+  .aboutfoundation-section {
+    padding: 50px 16px;
+  }
+
+  .aboutfoundation-header {
+    margin-bottom: 40px;
+  }
+
+  .aboutfoundation-label {
+    font-size: 12px;
+    padding: 5px 12px;
+    margin-bottom: 12px;
+  }
+
+  .aboutfoundation-title {
+    font-size: 26px;
+    margin-bottom: 12px;
+  }
+
+  .aboutfoundation-description {
+    font-size: 14px;
+  }
+
+  .aboutfoundation-content {
+    gap: 40px;
+  }
+
+  .aboutfoundation-mission {
+    padding: 24px 20px;
+  }
+
+  .aboutfoundation-mission h3 {
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
+
+  .aboutfoundation-mission p {
+    font-size: 14px;
+  }
+
+  .aboutfoundation-values h3 {
+    font-size: 20px;
+    margin-bottom: 24px;
+  }
+
+  .aboutfoundation-values-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .aboutfoundation-value-card {
+    padding: 24px 20px;
+  }
+
+  .aboutfoundation-value-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+  }
+
+  .aboutfoundation-value-card h4 {
+    font-size: 16px;
+    margin-bottom: 6px;
+  }
+
+  .aboutfoundation-value-card p {
+    font-size: 13px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - СРЕДНИ ТЕЛЕФОНИ (481px - 768px)
+   ============================================ */
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .aboutfoundation-section {
+    padding: 60px 24px;
+  }
+
+  .aboutfoundation-header {
+    margin-bottom: 50px;
+  }
+
+  .aboutfoundation-title {
+    font-size: 30px;
+  }
+
+  .aboutfoundation-description {
+    font-size: 15px;
+  }
+
+  .aboutfoundation-content {
+    gap: 50px;
+  }
+
+  .aboutfoundation-mission {
+    padding: 32px 24px;
+  }
+
+  .aboutfoundation-mission h3 {
+    font-size: 22px;
+    margin-bottom: 14px;
+  }
+
+  .aboutfoundation-mission p {
+    font-size: 15px;
+  }
+
+  .aboutfoundation-values h3 {
+    font-size: 22px;
+    margin-bottom: 28px;
+  }
+
+  .aboutfoundation-values-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .aboutfoundation-value-card {
+    padding: 28px 22px;
+  }
+
+  .aboutfoundation-value-icon {
+    font-size: 36px;
+  }
+
+  .aboutfoundation-value-card h4 {
+    font-size: 17px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - ТАБЛЕТИ (769px - 1024px)
+   ============================================ */
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .aboutfoundation-section {
+    padding: 70px 32px;
+  }
+
+  .aboutfoundation-title {
+    font-size: 32px;
+  }
+
+  .aboutfoundation-mission {
+    padding: 36px 28px;
+  }
+
+  .aboutfoundation-values-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .aboutfoundation-value-card {
+    padding: 28px 20px;
+  }
+
+  .aboutfoundation-value-icon {
+    font-size: 36px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - МАЛКИ ЛАПТОПИ (1025px - 1440px)
+   ============================================ */
+
+@media (min-width: 1025px) and (max-width: 1440px) {
+  .aboutfoundation-section {
+    padding: 80px 40px;
+  }
+
+  .aboutfoundation-title {
+    font-size: 34px;
+  }
+
+  .aboutfoundation-values-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - ГОЛЕМИ ЕКРАНИ (1441px+)
+   ============================================ */
+
+@media (min-width: 1441px) {
+  .aboutfoundation-section {
+    padding: 100px 60px;
+  }
+
+  .aboutfoundation-title {
+    font-size: 40px;
+  }
+
+  .aboutfoundation-description {
+    font-size: 17px;
+    max-width: 800px;
+  }
+
+  .aboutfoundation-mission {
+    padding: 48px 40px;
+  }
+
+  .aboutfoundation-mission h3 {
+    font-size: 26px;
+  }
+
+  .aboutfoundation-mission p {
+    font-size: 17px;
+  }
+
+  .aboutfoundation-values h3 {
+    font-size: 26px;
+  }
+
+  .aboutfoundation-values-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 28px;
+  }
+
+  .aboutfoundation-value-card {
+    padding: 36px 28px;
+  }
+
+  .aboutfoundation-value-icon {
+    font-size: 44px;
+  }
+
+  .aboutfoundation-value-card h4 {
+    font-size: 19px;
+  }
+
+  .aboutfoundation-value-card p {
+    font-size: 15px;
+  }
+}

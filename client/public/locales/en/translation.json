@@ -16,7 +16,8 @@
     "clubs": "Clubs",
     "bookmarks": "Bookmarks",
     "publications": "Publications",
-    "stories": "Stories"
+    "stories": "Stories",
+    "about": "About us"
   },
   "footer": {
     "site-map": "Site Map",
@@ -138,7 +139,163 @@
     "about_image_alt": "About Pensa",
     "vision_image_alt": "Elderly people in the digital world",
     "overlay_pensa": "Pensa",
-    "overlay_vision": "Vision"
+    "overlay_vision": "Vision",
+    "hero": {
+      "badge": "About Us",
+      "title": "Pensa Foundation and Pensa.club",
+      "subtitle": "An innovative platform for improving the quality of life of older adults through digital inclusion and active community",
+      "stats": {
+        "community": "Community",
+        "communityDesc": "We unite people of the same age with common interests",
+        "innovation": "Innovation",
+        "innovationDesc": "We create a bridge between generations with technology",
+        "support": "Support",
+        "supportDesc": "Accessible help for entering the digital world"
+      }
+    },
+    "platform": {
+      "label": "The Platform",
+      "title": "Pensa.club - Digital Community",
+      "description": "An innovative, digital and interactive platform aimed at improving the quality of life of older adults",
+      "featuresTitle": "What We Offer",
+      "features": {
+        "interactiveMap": {
+          "title": "Interactive Map",
+          "description": "See all registered pensioners and clubs on an interactive map of Bulgaria"
+        },
+        "announcements": {
+          "title": "Announcements",
+          "description": "Platform for sharing announcements, news and current events"
+        },
+        "articles": {
+          "title": "Articles and Training",
+          "description": "Educational articles and training materials on various topics"
+        },
+        "clubsMap": {
+          "title": "Clubs Map",
+          "description": "Find clubs across Bulgaria and apply directly through the platform"
+        },
+        "games": {
+          "title": "Online Games",
+          "description": "Play chess, backgammon, sudoku, solitaire and other fun games"
+        },
+        "mentorship": {
+          "title": "Mentorship Program",
+          "description": "Online and offline training for safe internet usage"
+        }
+      },
+      "mission": {
+        "title": "Mission",
+        "description": "To help pensioners in Bulgaria improve their use of the digital world. We create a tool for building a community that unites people with common interests, new ideas and knowledge."
+      },
+      "vision": {
+        "title": "Vision",
+        "description": "A world where age is not a barrier to digital inclusion. We create a bridge between generations, where older people receive accessible support when entering technology."
+      },
+      "goal": {
+        "title": "Goal",
+        "description": "Improving quality of life through active inclusion in modernity, support for acquiring new skills and promoting a healthy, fulfilling and dignified life."
+      }
+    },
+    "foundation": {
+      "label": "The Foundation",
+      "title": "Pensa Foundation",
+      "description": "Created with the mission to improve the quality of life of older adults through digital inclusion and active community",
+      "missionTitle": "Our Mission",
+      "missionText": "To build a community based on interaction and mutual assistance. We strive to unite people of the same age with common interests, new ideas and knowledge, encouraging active participation in modern society.",
+      "valuesTitle": "Our Values",
+      "values": {
+        "community": {
+          "title": "Community",
+          "description": "We build a bridge between generations through mutual help and shared experience"
+        },
+        "quality": {
+          "title": "Quality",
+          "description": "We offer high-quality services and educational materials"
+        },
+        "trust": {
+          "title": "Trust",
+          "description": "We work transparently and responsibly for the trust of our community"
+        },
+        "care": {
+          "title": "Care",
+          "description": "We care for every member of our community"
+        }
+      }
+    },
+    "team": {
+      "label": "Our Team",
+      "title": "Meet the Team",
+      "description": "People with experience and passion who work to improve the lives of older adults",
+      "contactEmail": "Send email",
+      "contactPhone": "Call",
+      "sendMessage": "Send message",
+      "modalTitle": "Message to {{name}}",
+      "members": {
+        "borislav": {
+          "role": "IT Specialist",
+          "bio": "Graduated in Software Engineering with JavaScript from SoftUni in 2023, ranking first in his class. Chief IT consultant at PENSA Foundation and directly involved in creating the pensa.club platform. Distinguished by persistence, discipline and consistency in the work process."
+        },
+        "lubima": {
+          "role": "Technical Associate",
+          "bio": "Graduated from the Technical University - Sofia and has over 25 years of experience in trade and distribution. Moved through the roles of product and marketing specialist, and subsequently - marketing manager at Robert Bosch EOOD."
+        },
+        "lena": {
+          "role": "Board Member",
+          "bio": "Graduated in economics in Germany, has numerous specializations in personnel and finance management. 30 years as executive director and attorney at Robert Bosch EOOD - a company of the Bosch group in Bulgaria."
+        },
+        "elina": {
+          "role": "Board Chairperson",
+          "bio": "Founder of PENSA Foundation. Founder and president of ABC (American-Bulgarian Council). Director of the National Tourism Research Institute. Expert and consultant with many years of experience in the non-governmental sector and international projects."
+        }
+      },
+      "form": {
+        "from": "From (your email)",
+        "fromPlaceholder": "your@email.com",
+        "to": "To",
+        "toPlaceholder": "recipient@email.com",
+        "subject": "Subject",
+        "subjectPlaceholder": "Message subject",
+        "message": "Message",
+        "messagePlaceholder": "Write your message here...",
+        "sending": "Sending...",
+        "send": "Send message",
+        "note": "The message will be sent directly to the email of the selected team member"
+      }
+    },
+    "contact": {
+      "label": "Contact Us",
+      "title": "Have Questions?",
+      "description": "Get in touch with us and we'll be happy to answer all your questions",
+      "info": {
+        "email": "Email",
+        "website": "Website"
+      },
+      "form": {
+        "fields": {
+          "name": "Name",
+          "email": "Email",
+          "subject": "Subject",
+          "message": "Message"
+        },
+        "placeholders": {
+          "name": "Your name",
+          "email": "your@email.com",
+          "subject": "Message subject",
+          "message": "Write your message here..."
+        },
+        "validation": {
+          "required": "Please fill in all required fields",
+          "invalidEmail": "Please enter a valid email address"
+        },
+        "messages": {
+          "success": "Message sent successfully! We will contact you soon.",
+          "error": "An error occurred while sending. Please try again."
+        },
+        "submitting": "Sending...",
+        "submit": "Send Message"
+      }
+    }
   },
   "news-subscribe": {
     "title": "Stay up to date with",
@@ -11376,232 +11533,232 @@
     "title": "Pending approval",
     "description": "Clubs submitted for administrative approval"
   },
- "stories": {
-  "common": {
-    "title": "Stories",
-    "next": "Next",
-    "back": "Back",
-    "generate": "Generate",
-    "add": "Add",
-    "remove": "Remove",
-    "save": "Save",
-    "preview": "Preview",
-    "loading": "Loading...",
-    "view": "View",
-    "edit": "Edit",
-    "delete": "Delete",
-    "publish": "Publish",
-    "convertToDraft": "Convert to Draft"
-  },
-  "create": {
-    "title": "Create New Story",
-    "description": "Share your inspiring story with the community",
-    "saveDraft": "Save as Draft",
-    "publishStory": "Publish Story"
-  },
-  "edit": {
-    "title": "Edit Story",
-    "editDraft": "Edit Draft",
-    "editPublished": "Edit Published Story",
-    "editDraftDescription": "Make changes to your draft story",
-    "editPublishedDescription": "Update your published story",
-    "updateDraft": "Update Draft",
-    "publishDraft": "Publish Draft",
-    "updatePublished": "Update Published Story",
-    "notFound": "Story not found",
-    "convertToDraft": "Convert to Draft"
-  },
-  "admin": {
-    "title": "Story Management",
-    "subtitle": "View and manage all stories and drafts",
-    "totalStories": "Total Stories",
-    "totalDrafts": "Total Drafts",
-    "published": "Published Stories",
-    "drafts": "Draft Stories",
-    "stories": "stories",
-    "searchPlaceholder": "Search by title, description or author...",
-    "resultsCount": "{{count}} results found",
-    "noDate": "No date",
-    "unknownAuthor": "Unknown author",
-    "loadMore": "Load more",
-    "loading": "Loading...",
-    "noItemsFound": "No items found",
-    "tryChangingCriteria": "Try changing the search criteria",
-    "createStory": "Create Story",
-    "confirmDeleteDraft": "Are you sure you want to delete this draft?",
-    "confirmDeleteStory": "Are you sure you want to delete this story?",
-    "draftDeletedSuccess": "Draft deleted successfully",
-    "storyDeletedSuccess": "Story deleted successfully",
-    "storyCreatedSuccess": "Story created successfully",
-    "storyUpdatedSuccess": "Story updated successfully",
-    "draftCreatedSuccess": "Draft created successfully",
-    "draftUpdatedSuccess": "Draft updated successfully",
-    "statusUpdatedSuccess": "Status updated successfully",
-    "actionError": "An error occurred while performing the action",
-    "statusDraft": "Draft",
-    "statusPublished": "Published",
-    "filters": {
-      "sortBy": "Sort by",
+  "stories": {
+    "common": {
+      "title": "Stories",
+      "next": "Next",
+      "back": "Back",
+      "generate": "Generate",
+      "add": "Add",
+      "remove": "Remove",
+      "save": "Save",
+      "preview": "Preview",
+      "loading": "Loading...",
+      "view": "View",
+      "edit": "Edit",
+      "delete": "Delete",
+      "publish": "Publish",
+      "convertToDraft": "Convert to Draft"
+    },
+    "create": {
+      "title": "Create New Story",
+      "description": "Share your inspiring story with the community",
+      "saveDraft": "Save as Draft",
+      "publishStory": "Publish Story"
+    },
+    "edit": {
+      "title": "Edit Story",
+      "editDraft": "Edit Draft",
+      "editPublished": "Edit Published Story",
+      "editDraftDescription": "Make changes to your draft story",
+      "editPublishedDescription": "Update your published story",
+      "updateDraft": "Update Draft",
+      "publishDraft": "Publish Draft",
+      "updatePublished": "Update Published Story",
+      "notFound": "Story not found",
+      "convertToDraft": "Convert to Draft"
+    },
+    "admin": {
+      "title": "Story Management",
+      "subtitle": "View and manage all stories and drafts",
+      "totalStories": "Total Stories",
+      "totalDrafts": "Total Drafts",
+      "published": "Published Stories",
+      "drafts": "Draft Stories",
+      "stories": "stories",
+      "searchPlaceholder": "Search by title, description or author...",
+      "resultsCount": "{{count}} results found",
+      "noDate": "No date",
+      "unknownAuthor": "Unknown author",
+      "loadMore": "Load more",
+      "loading": "Loading...",
+      "noItemsFound": "No items found",
+      "tryChangingCriteria": "Try changing the search criteria",
+      "createStory": "Create Story",
+      "confirmDeleteDraft": "Are you sure you want to delete this draft?",
+      "confirmDeleteStory": "Are you sure you want to delete this story?",
+      "draftDeletedSuccess": "Draft deleted successfully",
+      "storyDeletedSuccess": "Story deleted successfully",
+      "storyCreatedSuccess": "Story created successfully",
+      "storyUpdatedSuccess": "Story updated successfully",
+      "draftCreatedSuccess": "Draft created successfully",
+      "draftUpdatedSuccess": "Draft updated successfully",
+      "statusUpdatedSuccess": "Status updated successfully",
+      "actionError": "An error occurred while performing the action",
+      "statusDraft": "Draft",
+      "statusPublished": "Published",
+      "filters": {
+        "sortBy": "Sort by",
+        "category": "Category",
+        "allCategories": "All Categories",
+        "newest": "Newest First",
+        "oldest": "Oldest First",
+        "updated": "Recently Updated",
+        "published": "Recently Published",
+        "likes": "Most Liked",
+        "views": "Most Viewed"
+      }
+    },
+    "sections": {
+      "basicInfo": "Basic Information",
+      "content": "Content",
+      "connections": "Connections"
+    },
+    "categories": {
+      "personal": "Personal",
+      "community": "Community",
+      "educational": "Educational",
+      "inspirational": "Inspirational",
+      "caseStudy": "Case Study",
+      "testimonial": "Testimonial",
+      "other": "Other"
+    },
+    "progress": {
+      "formProgress": "Form Progress",
+      "completed": "Completed"
+    },
+    "preview": {
+      "noTitle": "No Title",
+      "noDescription": "No Description",
+      "noAuthor": "Unknown Author",
+      "noReadTime": "No Read Time",
+      "noCategory": "No Category",
+      "noImageAvailable": "No image available",
+      "noContentSections": "No content sections added yet",
+      "addContentSections": "Add some content sections to see them in the preview.",
+      "authorInfo": "About the Author",
+      "writtenBy": "Written by",
+      "previewMode": "Preview Mode"
+    },
+    "view": {
+      "readTime": "min read"
+    },
+    "basic": {
+      "title": "Story Title",
+      "titlePlaceholder": "Enter a compelling title for your story",
+      "slug": "URL Slug",
+      "slugAutoGenerated": "Auto-generated from title",
+      "shortDescription": "Short Description",
+      "shortDescriptionPlaceholder": "Brief description of your story (max 200 characters)",
       "category": "Category",
-      "allCategories": "All Categories",
-      "newest": "Newest First",
-      "oldest": "Oldest First",
-      "updated": "Recently Updated",
-      "published": "Recently Published",
-      "likes": "Most Liked",
-      "views": "Most Viewed"
-    }
-  },
-  "sections": {
-    "basicInfo": "Basic Information",
-    "content": "Content",
-    "connections": "Connections"
-  },
- "categories": {
-    "personal": "Personal",
-    "community": "Community",
-    "educational": "Educational",
-    "inspirational": "Inspirational",
-    "caseStudy": "Case Study",
-    "testimonial": "Testimonial",
-    "other": "Other"
-  },
-  "progress": {
-    "formProgress": "Form Progress",
-    "completed": "Completed"
-  },
-  "preview": {
-    "noTitle": "No Title",
-    "noDescription": "No Description",
-    "noAuthor": "Unknown Author",
-    "noReadTime": "No Read Time",
-    "noCategory": "No Category",
-    "noImageAvailable": "No image available",
-    "noContentSections": "No content sections added yet",
-    "addContentSections": "Add some content sections to see them in the preview.",
-    "authorInfo": "About the Author",
-    "writtenBy": "Written by",
-    "previewMode": "Preview Mode"
-  },
-  "view": {
-    "readTime": "min read"
-  },
-  "basic": {
-   "title": "Story Title",
-    "titlePlaceholder": "Enter a compelling title for your story",
-    "slug": "URL Slug",
-    "slugAutoGenerated": "Auto-generated from title",
-    "shortDescription": "Short Description",
-    "shortDescriptionPlaceholder": "Brief description of your story (max 200 characters)",
-    "category": "Category",
-    "selectCategory": "Select a category",
-    "categoryPlaceholder": "Select a category",
-    "tags": "Tags",
-    "tagsPlaceholder": "Add tags to help people find your story",
-    "commentsEnabled": "Enable Comments",
-    "commentsDescription": "Allow readers to comment on your story",
-    "readTime": "Read Time",
-    "readTimePlaceholder": "Reading time (in minutes)",
-    "addTagPlaceholder": "Add a tag...",
-    "showAuthor": "Show Author",
-    "showAuthorDescription": "Display the author information in the story",
-    "authorVisible": "Author will be visible",
-    "authorHidden": "Author will be hidden",
-    "author": "Author Name",
-    "authorPlaceholder": "Enter the author's name",
-    "authorEmail": "Author Email",
-    "authorEmailPlaceholder": "Enter the author's email address",
-    "authorImage": "Author Image"
-  },
-  "content": {
-    "sections": "Story Sections",
-    "addSection": "Add Section",
-    "noSections": "No sections yet",
-    "sectionsDescription": "Create sections to organize your story content",
-    "addFirstSection": "Add First Section",
-    "untitled": "Untitled",
-    "moveUp": "Move Up",
-    "moveDown": "Move Down",
-    "removeSection": "Remove Section",
-    "sectionTitle": "Section Title",
-    "sectionTitlePlaceholder": "Enter section title",
-    "sectionContent": "Section Content",
-    "sectionContentPlaceholder": "Write your story content here...",
-    "sectionsSummary": "Sections Summary",
-    "totalSections": "Total Sections",
-    "completeSections": "Complete Sections",
-    "completionRate": "Completion Rate"
-  },
-  "media": {
-    "mainImage": "Main Image",
-    "uploadImage": "Upload Image",
-    "changeImage": "Change Image",
-    "addImageUrl": "Add Image URL",
-    "changeImageUrl": "Change Image URL",
-    "clearImage": "Clear Image",
-    "imageUrl": "Image URL",
-    "addImage": "Add Image",
-    "removeImage": "Remove Image",
-    "altText": "Alt Text",
-    "imageDescription": "Image description for accessibility",
-    "caption": "Caption",
-    "imageCaption": "Image caption",
-    "sectionImage": "Section Image"
-  },
-  "connections": {
-   "connectionsHelp": "Connect your story to related initiatives, projects, or other stories",
-    "connectInitiatives": "Connect to Initiatives",
-    "searchInitiatives": "Search initiatives...",
-    "noInitiativesFound": "No initiatives found",
-    "noInitiativesAvailable": "No initiatives available",
-    "connectProjects": "Connect to Projects",
-    "searchProjects": "Search projects...",
-    "noProjectsFound": "No projects found",
-    "noProjectsAvailable": "No projects available",
-    "connectStories": "Connect to Stories",
-    "searchStories": "Search stories...",
-    "noStoriesFound": "No stories found",
-    "noStoriesAvailable": "No stories available",
-    "initiativeConnections": "Initiative Connections",
-    "projectConnections": "Project Connections",
-    "storyConnections": "Story Connections",
-    "connected": "connected",
-    "notConnected": "not connected",
-    "removeConnection": "Remove Connection",
-    "draft": "Draft",
-    "title": "Connected",
-    "initiatives": "Initiatives",
-    "projects": "Projects",
-    "publications": "Publications",
-    "stories": "Stories"
-  },
-  "helpTexts": {
-    "sectionImageHelp": "Add an image to make your story more engaging",
-    "sectionContentHelp": "Use the rich text editor to format your content",
-    "sectionsHelp": "Organize your story into sections for better readability",
-    "authorImageHelp": "Add an author photo to personalize the story"
-  },
-  "settings": {
-    "commentsEnabled": "Comments Enabled",
-    "commentsEnabledDescription": "Allow readers to comment on your story",
-    "commentsAllowed": "Comments Allowed",
-    "commentsDisabled": "Comments Disabled"
-  },
-  "fileUpload": {
-    "uploadFile": "Upload File",
-    "uploadingDescription": "Uploading file...",
-    "uploadingHint": "Please wait while your file is being uploaded",
-    "clickToUpload": "Click to upload or drag and drop",
-    "supportedFormats": "Supported formats",
-    "maxSize": "Maximum file size",
-    "fileInfo": "File Information",
-    "fileType": "File Type",
-    "fileSize": "File Size",
-    "downloadUrl": "Download URL",
-    "downloadFile": "Download File",
-    "viewUrl": "View URL",
-    "viewFile": "View File"
-  },
-  "unnamedFile": "Unnamed File"
-}
+      "selectCategory": "Select a category",
+      "categoryPlaceholder": "Select a category",
+      "tags": "Tags",
+      "tagsPlaceholder": "Add tags to help people find your story",
+      "commentsEnabled": "Enable Comments",
+      "commentsDescription": "Allow readers to comment on your story",
+      "readTime": "Read Time",
+      "readTimePlaceholder": "Reading time (in minutes)",
+      "addTagPlaceholder": "Add a tag...",
+      "showAuthor": "Show Author",
+      "showAuthorDescription": "Display the author information in the story",
+      "authorVisible": "Author will be visible",
+      "authorHidden": "Author will be hidden",
+      "author": "Author Name",
+      "authorPlaceholder": "Enter the author's name",
+      "authorEmail": "Author Email",
+      "authorEmailPlaceholder": "Enter the author's email address",
+      "authorImage": "Author Image"
+    },
+    "content": {
+      "sections": "Story Sections",
+      "addSection": "Add Section",
+      "noSections": "No sections yet",
+      "sectionsDescription": "Create sections to organize your story content",
+      "addFirstSection": "Add First Section",
+      "untitled": "Untitled",
+      "moveUp": "Move Up",
+      "moveDown": "Move Down",
+      "removeSection": "Remove Section",
+      "sectionTitle": "Section Title",
+      "sectionTitlePlaceholder": "Enter section title",
+      "sectionContent": "Section Content",
+      "sectionContentPlaceholder": "Write your story content here...",
+      "sectionsSummary": "Sections Summary",
+      "totalSections": "Total Sections",
+      "completeSections": "Complete Sections",
+      "completionRate": "Completion Rate"
+    },
+    "media": {
+      "mainImage": "Main Image",
+      "uploadImage": "Upload Image",
+      "changeImage": "Change Image",
+      "addImageUrl": "Add Image URL",
+      "changeImageUrl": "Change Image URL",
+      "clearImage": "Clear Image",
+      "imageUrl": "Image URL",
+      "addImage": "Add Image",
+      "removeImage": "Remove Image",
+      "altText": "Alt Text",
+      "imageDescription": "Image description for accessibility",
+      "caption": "Caption",
+      "imageCaption": "Image caption",
+      "sectionImage": "Section Image"
+    },
+    "connections": {
+      "connectionsHelp": "Connect your story to related initiatives, projects, or other stories",
+      "connectInitiatives": "Connect to Initiatives",
+      "searchInitiatives": "Search initiatives...",
+      "noInitiativesFound": "No initiatives found",
+      "noInitiativesAvailable": "No initiatives available",
+      "connectProjects": "Connect to Projects",
+      "searchProjects": "Search projects...",
+      "noProjectsFound": "No projects found",
+      "noProjectsAvailable": "No projects available",
+      "connectStories": "Connect to Stories",
+      "searchStories": "Search stories...",
+      "noStoriesFound": "No stories found",
+      "noStoriesAvailable": "No stories available",
+      "initiativeConnections": "Initiative Connections",
+      "projectConnections": "Project Connections",
+      "storyConnections": "Story Connections",
+      "connected": "connected",
+      "notConnected": "not connected",
+      "removeConnection": "Remove Connection",
+      "draft": "Draft",
+      "title": "Connected",
+      "initiatives": "Initiatives",
+      "projects": "Projects",
+      "publications": "Publications",
+      "stories": "Stories"
+    },
+    "helpTexts": {
+      "sectionImageHelp": "Add an image to make your story more engaging",
+      "sectionContentHelp": "Use the rich text editor to format your content",
+      "sectionsHelp": "Organize your story into sections for better readability",
+      "authorImageHelp": "Add an author photo to personalize the story"
+    },
+    "settings": {
+      "commentsEnabled": "Comments Enabled",
+      "commentsEnabledDescription": "Allow readers to comment on your story",
+      "commentsAllowed": "Comments Allowed",
+      "commentsDisabled": "Comments Disabled"
+    },
+    "fileUpload": {
+      "uploadFile": "Upload File",
+      "uploadingDescription": "Uploading file...",
+      "uploadingHint": "Please wait while your file is being uploaded",
+      "clickToUpload": "Click to upload or drag and drop",
+      "supportedFormats": "Supported formats",
+      "maxSize": "Maximum file size",
+      "fileInfo": "File Information",
+      "fileType": "File Type",
+      "fileSize": "File Size",
+      "downloadUrl": "Download URL",
+      "downloadFile": "Download File",
+      "viewUrl": "View URL",
+      "viewFile": "View File"
+    },
+    "unnamedFile": "Unnamed File"
+  }
 }
