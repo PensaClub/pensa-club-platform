@@ -169,7 +169,7 @@ export const AboutTeam = () => {
           {teamMembers.map((member) => {
             const bioText = t(`about.team.members.${member.id}.bio`);
             const isExpanded = expandedBios[member.id];
-            const shouldShowToggle = bioText.length > 120;
+            const shouldShowToggle = bioText.length > 90;
 
             return (
               <div key={member.id} className="aboutteam-card">
