@@ -12,6 +12,7 @@ import {
   faGlobe
 } from '@fortawesome/free-solid-svg-icons';
 import './aboutContact.css';
+
 import { useClubContext } from '../../contexts/ClubContext';
 
 export const AboutContact = () => {
