@@ -11949,7 +11949,7 @@
   "platformStats": {
     "clubs": {
       "singular": "Клуб",
-      "plural": "Клубове"
+      "plural": "Клуба"
     },
     "articles": {
       "singular": "Статия",
@@ -11965,7 +11965,7 @@
     },
     "projects": {
       "singular": "Проект",
-      "plural": "Проекти"
+      "plural": "Проекта"
     }
   }
 }
