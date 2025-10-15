@@ -47,8 +47,7 @@ export const AllClubs = () => {
         console.warn('Unexpected response format:', response);
         clubsData = [];
       }
-      
-      console.log('✅ Clubs loaded:', clubsData.length);
+
       setClubs(clubsData);
       setFilteredClubs(clubsData);
       
