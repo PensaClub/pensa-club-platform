@@ -11760,5 +11760,27 @@
       "viewFile": "View File"
     },
     "unnamedFile": "Unnamed File"
+  },
+  "platformStats": {
+    "clubs": {
+      "singular": "Club",
+      "plural": "Clubs"
+    },
+    "articles": {
+      "singular": "Article",
+      "plural": "Articles"
+    },
+    "initiatives": {
+      "singular": "Initiative",
+      "plural": "Initiatives"
+    },
+    "publications": {
+      "singular": "Publication",
+      "plural": "Publications"
+    },
+    "projects": {
+      "singular": "Project",
+      "plural": "Projects"
+    }
   }
 }
