@@ -11,6 +11,8 @@ import { FeaturedArticles } from "./FeaturedArticles/FeaturedArticles";
 import { InitiativesShowcase } from "./InitiativesShowcase/InitiativesShowcase";
 import { ConstellationShowcase } from "./ConstellationShowcase/ConstellationShowcase";
 import { PlatformStats } from "./PlatformStats/PlatformStats";
+import ScrollToTop from "../ScrollToTop/ScrollToTop";
+import { TextZoom } from "../TextZoom/TextZoom";
 
 export const Home = () => {
   useEffect(() => {
@@ -32,6 +34,8 @@ export const Home = () => {
         {/* </Slide> */}
         {/* <Fade delay="10" duration="2000" triggerOnce="true"> */}
           <NewsSubscribe />
+          <ScrollToTop />
+          <TextZoom/>
         {/* </Fade> */}
       </div>
     </>
