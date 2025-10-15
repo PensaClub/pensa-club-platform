@@ -11945,5 +11945,27 @@
       "viewFile": "Прегледай файл"
     },
     "unnamedFile": "Неименуван файл"
+  },
+  "platformStats": {
+    "clubs": {
+      "singular": "Клуб",
+      "plural": "Клубове"
+    },
+    "articles": {
+      "singular": "Статия",
+      "plural": "Статии"
+    },
+    "initiatives": {
+      "singular": "Инициатива",
+      "plural": "Инициативи"
+    },
+    "publications": {
+      "singular": "Публикация",
+      "plural": "Публикации"
+    },
+    "projects": {
+      "singular": "Проект",
+      "plural": "Проекти"
+    }
   }
 }

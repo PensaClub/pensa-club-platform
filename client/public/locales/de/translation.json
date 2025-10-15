@@ -11027,5 +11027,27 @@
   "pending": {
     "title": "Wartend auf Genehmigung",
     "description": "Clubs zur administrativen Genehmigung eingereicht"
+  },
+   "platformStats": {
+    "clubs": {
+      "singular": "Klub",
+      "plural": "Klubs"
+    },
+    "articles": {
+      "singular": "Artikel",
+      "plural": "Artikel"
+    },
+    "initiatives": {
+      "singular": "Initiative",
+      "plural": "Initiativen"
+    },
+    "publications": {
+      "singular": "Publikation",
+      "plural": "Publikationen"
+    },
+    "projects": {
+      "singular": "Projekt",
+      "plural": "Projekte"
+    }
   }
 }

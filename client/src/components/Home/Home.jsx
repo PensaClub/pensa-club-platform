@@ -10,6 +10,7 @@ import { UserSuggestion } from "../UserSuggestion/UserSuggestion";
 import { FeaturedArticles } from "./FeaturedArticles/FeaturedArticles";
 import { InitiativesShowcase } from "./InitiativesShowcase/InitiativesShowcase";
 import { ConstellationShowcase } from "./ConstellationShowcase/ConstellationShowcase";
+import { PlatformStats } from "./PlatformStats/PlatformStats";
 
 export const Home = () => {
   useEffect(() => {
@@ -19,6 +20,7 @@ export const Home = () => {
     <>
       <div className="home-container">
         <Hero />
+        <PlatformStats />
         {/* <Fade delay="30" duration="3000" fraction="0.1" triggerOnce='true'>
                     <MottoSection />
                 </Fade> */}
