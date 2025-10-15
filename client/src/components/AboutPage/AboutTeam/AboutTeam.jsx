@@ -38,16 +38,9 @@ export const AboutTeam = () => {
       id: 'elina',
       name: 'Елина Кирова',
       email: 'elinakirova@yahoo.com',
-      phone: '+359 877 777 421',
+      phone: null,
       image: '/images/about/elina.jpg'
     },  
-    {
-      id: 'lubima',
-      name: 'Любима Милкоева',
-      email: 'milkoeva@abv.bg',
-      phone: null,
-      image: '/images/about/luba.png'
-    },
     {
       id: 'lena',
       name: 'Лена Петкова',
@@ -55,11 +48,18 @@ export const AboutTeam = () => {
       phone: '+359 888 569890',
       image: '/images/about/lena.JPG'
     },
+       {
+      id: 'lubima',
+      name: 'Любима Милкоева',
+      email: 'milkoeva@abv.bg',
+      phone: "+359 888 315769",
+      image: '/images/about/luba.png'
+    },
     {
       id: 'borislav',
       name: 'Борислав Илиев',
       email: 'borislaviliev47@gmail.com',
-      phone: '0894371779',
+      phone: '+359 894371779',
       image: '/images/about/borislav.jpg'
     },
   ];
