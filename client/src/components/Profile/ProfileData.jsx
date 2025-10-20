@@ -20,7 +20,7 @@ export const ProfileData = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const { onEditProfileDataSubmit, profileData } = useContext(UserContext);
+  const { onEditProfileDataSubmit, onProfileDataSubmit, profileData } = useContext(UserContext);
 
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedMonth, setSelectedMonth] = useState("");
@@ -62,6 +62,7 @@ export const ProfileData = () => {
 
     setIsFormChanged(true);
   };
+  
   const handleGenderChange = (e) => {
     setForm({ ...form, gender: e.target.value });
     setIsFormChanged(true);
@@ -165,59 +166,100 @@ export const ProfileData = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const adjustedForm = { ...form };
-    if (!selectedDate) adjustedForm.birthDate = null;
-    if (!selectedMonth) adjustedForm.birthDate = null;
-    if (!selectedYear) adjustedForm.birthDate = null;
+  const adjustedForm = { ...form };
+  if (!selectedDate) adjustedForm.birthDate = null;
+  if (!selectedMonth) adjustedForm.birthDate = null;
+  if (!selectedYear) adjustedForm.birthDate = null;
 
-    const trimmedForm = trimObjectStrings(adjustedForm);
-    setForm(trimmedForm);
+  const trimmedForm = trimObjectStrings(adjustedForm);
+  setForm(trimmedForm);
 
-    const isValid = Object.keys(trimmedForm).every((field) => {
-      const value = trimmedForm[field];
-      const error = validateField(field, value);
-      setErrors((prevErrors) => ({ ...prevErrors, [field]: error }));
-      return !error;
-    });
+  const isValid = Object.keys(trimmedForm).every((field) => {
+    const value = trimmedForm[field];
+    const error = validateField(field, value);
+    setErrors((prevErrors) => ({ ...prevErrors, [field]: error }));
+    return !error;
+  });
 
-    if (isValid) {
-      try {
-        let updatedForm;
-        if (images.length > 0) {
-          updatedForm = await uploadImages(
-            trimmedForm,
-            profileData.details.firebaseImagePath
-          );
-        } else {
-          updatedForm = trimmedForm;
+  if (isValid) {
+    try {
+      let updatedForm;
+      if (images.length > 0) {
+        updatedForm = await uploadImages(
+          trimmedForm,
+          profileData.details.firebaseImagePath
+        );
+      } else {
+        updatedForm = trimmedForm;
+      }
+
+      const changedData = {};
+      Object.keys(updatedForm).forEach((key) => {
+        if (updatedForm[key] !== initialFormState[key]) {
+          changedData[key] = updatedForm[key];
         }
+      });
 
-        const changedData = {};
+      // ✅ ФИЛТРИРАЙ - изпращай само полета с реална стойност
+      const cleanedData = {};
+      Object.keys(changedData).forEach((key) => {
+        const value = changedData[key];
+        
+        // ❌ НЕ изпращай imageURL ако е data URI
+        if (key === 'imageURL' && typeof value === 'string' && value.startsWith('data:')) {
+          return; // Прескачаме data URI снимки
+        }
+        
+        // Добави само ако не е празен string, null или undefined
+        if (value !== '' && value !== null && value !== undefined && 
+            !(typeof value === 'string' && value.trim() === '')) {
+          cleanedData[key] = value;
+        }
+      });
+
+      // Проверка дали има вече username
+      const hasExistingUsername = profileData?.details?.username && 
+                                  profileData.details.username.trim() !== '';
+
+      if (hasExistingUsername) {
+        // Редакция - изпраща само променените данни (филтрирани)
+        await onEditProfileDataSubmit(cleanedData);
+      } else {
+        // Първо попълване - изпраща всички данни (също филтрирани)
+        const cleanedFullData = {};
         Object.keys(updatedForm).forEach((key) => {
-          if (updatedForm[key] !== initialFormState[key]) {
-            changedData[key] = updatedForm[key];
+          const value = updatedForm[key];
+          
+          // ❌ НЕ изпращай imageURL ако е data URI
+          if (key === 'imageURL' && typeof value === 'string' && value.startsWith('data:')) {
+            return;
+          }
+          
+          // Добави само ако не е празен string или null
+          if (value !== '' && value !== null && value !== undefined &&
+              !(typeof value === 'string' && value.trim() === '')) {
+            cleanedFullData[key] = value;
           }
         });
-
-        await onEditProfileDataSubmit(changedData);
-
-        window.scrollTo(0, 0);
-        navigate("/profile/data");
-      } catch (error) {
-        return toast.error(
-          t("errors.profile_data_submit", { error: error.message })
-        );
+        await onProfileDataSubmit(cleanedFullData);
       }
+
+      window.scrollTo(0, 0);
+      navigate("/profile/data");
+    } catch (error) {
+      return toast.error(
+        t("errors.profile_data_submit", { error: error.message })
+      );
     }
-  };
+  }
+};
 
   const onBlurHandler = (e) => {
     setIsYearSelectOpen(false);
     const { name, value } = e.target;
     const error = validateField(name, value, form, t);
-    console.log(`Field ${name} value ${value} blurred with error: ${error}`);
 
     setErrors((prevErrors) => ({ ...prevErrors, [name]: error }));
   };
@@ -458,13 +500,6 @@ export const ProfileData = () => {
           >
             {t("profile.save_btn")}
           </button>
-          {/* <button
-            type="button"
-            className="btn-general btn-red"
-            onClick={handleResetForm}
-          >
-            {t("profile.close_btn")}
-          </button> */}
         </div>
       </form>
     </section>

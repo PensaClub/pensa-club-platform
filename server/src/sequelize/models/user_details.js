@@ -38,16 +38,16 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
                 allowNull: true,
                 validate: {
-                    notEmpty: {
-                        msg: 'Username is required.',
-                    },
+                    // notEmpty: {
+                    //     msg: 'Username is required.',
+                    // },
                     len: {
-                        args: [6, 16],
-                        msg: 'Username must be between 6 and 16 characters.',
+                        args: [3, 15],
+                        msg: 'Username must be between 3 and 15 characters.',
                     },
                     is: {
-                        args: /^[a-zA-Zа-яА-Я][a-zA-Zа-яА-Я0-9_-]{6,16}$/,
-                        msg: 'Username must start with a letter and can only contain letters, numbers, and underscores.',
+                        args: /^(?=.*[a-zA-Zа-яА-Я])[a-zA-Zа-яА-Я0-9_@.!?&$-]{3,15}$/,
+                        msg: 'Username must contain at least one letter. Allowed characters: letters, numbers, and _ - @ . ! ? & $',
                     },
                 },
             },
@@ -91,9 +91,9 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
                 allowNull: true,
                 validate: {
-                    notEmpty: {
-                        msg: 'Region is required.',
-                    },
+                    // notEmpty: {
+                    //     msg: 'Region is required.',
+                    // },
                 },
             },
             workOptions: {

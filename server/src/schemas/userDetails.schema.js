@@ -1,6 +1,6 @@
 const { z } = require('zod');
 
-const usernameRegex = /^[a-zA-Zа-яА-Я][a-zA-Zа-яА-Я0-9_-]{6,16}$/;
+const usernameRegex = /^(?=.*[a-zA-Zа-яА-Я])[a-zA-Zа-яА-Я0-9_@.!?&$-]{3,15}$/;
 const phoneRegex = /^(?:\+\d{7,15}|\d{10})$/;
 const nameRegex = /^[a-zA-Zа-яА-Я0-9_]+(-[a-zA-Zа-яА-Я0-9_]+)*$/i;
 const dateRegex = /^\d{4}-\d{1,2}-\d{1,2}$/;
@@ -8,7 +8,7 @@ const dateRegex = /^\d{4}-\d{1,2}-\d{1,2}$/;
 const baseUserDetailsSchema = z.object({
     username: z
         .string()
-        .regex(usernameRegex, 'Username must be 6-16 chars, using letters, numbers, or underscores, and include both Cyrillic or Latin alphabets.')
+        .regex(usernameRegex, 'Username must be between 3 and 15 characters and contain at least one letter. Allowed characters: letters, numbers, and _ - @ . ! ? & $')
         .min(1, 'Username is required.'),
     firstName: z
         .string()
@@ -32,7 +32,7 @@ const baseUserDetailsSchema = z.object({
         .refine((date) => new Date(date) <= new Date(), 'Birth date cannot be in the future')
         .nullable()
         .optional(),
-    region: z.string().min(1, 'Region is required.'),
+    region: z.string().nullable().optional(),  // ← OPTIONAL!
     skills: z.array(z.string()).default([]),
     interestOptions: z.array(z.string()).default([]),
     workOptions: z.array(z.string()).default([]),
@@ -43,12 +43,11 @@ const baseUserDetailsSchema = z.object({
 const userDetailsSchema = baseUserDetailsSchema
     .refine(
         (data) => {
-            const requiredFields = ['username', 'region'];
-            return requiredFields.every((field) => data[field] && data[field].trim() !== '');
+            return data.username && data.username.trim() !== '';
         },
         {
-            message: 'Required fields cannot be empty',
-            path: ['username', 'region'],
+            message: 'Username is required',
+            path: ['username'],
         }
     )
     .transform((data) => {
@@ -60,6 +59,7 @@ const userDetailsSchema = baseUserDetailsSchema
         return data;
     });
 
+// За update - всичко е optional
 const updateUserDetailsSchema = baseUserDetailsSchema
     .partial()
     .transform((data) => {
@@ -69,18 +69,7 @@ const updateUserDetailsSchema = baseUserDetailsSchema
             }
         });
         return data;
-    })
-    .refine(
-        (data) => {
-            if ('region' in data && (data.region === null || data.region === '')) return false;
-            if ('username' in data && (data.username === null || data.username === '')) return false;
-            return true;
-        },
-        {
-            message: 'Region and username cannot be empty or null if provided.',
-            path: ['region', 'username'],
-        }
-    );
+    });
 
 module.exports = {
     userDetailsSchema,
