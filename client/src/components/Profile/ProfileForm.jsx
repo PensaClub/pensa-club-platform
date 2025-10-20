@@ -280,7 +280,7 @@ const ProfileForm = () => {
   // };
   return (
     <>
-      <form onSubmit={handleSubmit} className="profile-form">
+      {/* <form onSubmit={handleSubmit} className="profile-form">
         <h3>{t("profile.profile_form_title")}</h3>
         <div className="user-data">
           <div>
@@ -323,77 +323,15 @@ const ProfileForm = () => {
           </select>
           {errors.region && <span className="error">{errors.region}</span>}
         </label>
-        {/* <label>
-          {t("profile.municipality")}: <span>*</span>
-          <select
-            name="municipality"
-            value={form.municipalityId}
-            onChange={handleMunicipalityChange}
-            onBlur={onBlurHandler}
-            // required
-            style={{ borderColor: errors.municipality ? "#BB1D3D" : "" }}
-          >
-            <option value="">{t("profile.select_municipality")}</option>
-            {municipalities.map((municipality, index) => (
-              <option key={index} value={municipality.id}>
-                {currentLanguage === "bg" && `${municipality.bg}`}
-                {currentLanguage === "en" && `${municipality.en}`}
-              </option>
-            ))}
-          </select>
-          {errors.municipality && (
-            <span className="error">{errors.municipality}</span>
-          )}
-        </label>
-        <label>
-          {t("profile.settlement")}: <span>*</span>
-          <select
-            name="settlement"
-            value={form.settlementId}
-            onChange={handleSettlementChange}
-            onBlur={onBlurHandler}
-            // required
-            style={{ borderColor: errors.settlement ? "#BB1D3D" : "" }}
-          >
-            <option value="">{t("profile.select_settlement")}</option>
-            {settlements.map((settlement, index) => (
-              <option key={index} value={settlement.id}>
-                {currentLanguage === "bg" && `${settlement.bg}`}
-                {currentLanguage === "en" && `${settlement.en}`}
-              </option>
-            ))}
-          </select>
-          {errors.settlement && (
-            <span className="error">{errors.settlement}</span>
-          )}
-        </label>
-        <label>
-          {t("profile.street")}: <span>*</span>
-          <input
-            type="text"
-            name="street"
-            value={form.street}
-            onChange={handleInputChange}
-            onBlur={onBlurHandler}
-            // required
-            style={{ borderColor: errors.street ? "#BB1D3D" : "" }}
-          />
-          {errors.street && <span className="error">{errors.street}</span>}
-        </label> */}
+       
         <span className="required-fields">{t("profile.required_fields")}</span>
         <div className="btn-inline">
           <button type="submit" className="btn-general btn-green">
             {t("profile.save_btn")}
           </button>
-          {/* <button
-            type="submit"
-            className="btn-general btn-red"
-            onClick={handleResetForm}
-          >
-            {t("profile.close_btn")}
-          </button> */}
+        
         </div>
-      </form>
+      </form> */}
     </>
   );
 };

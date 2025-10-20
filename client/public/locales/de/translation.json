@@ -545,7 +545,7 @@
     "settlement_required": "Ort ist erforderlich",
     "street_required": "Straße ist erforderlich",
     "username_required": "Benutzername ist erforderlich",
-    "username_error": "Der Benutzername muss zwischen 7 und 16 Zeichen lang sein. Er muss mit einem Klein- oder Großbuchstaben beginnen. Er kann Groß- und Kleinbuchstaben, Ziffern, - und _ enthalten. Verboten sind: !, @, #, $, %, ^, &, *, ( ), +, =, { }, [ ], |, \\, :, ;, < >, ?, /, ~",
+    "username_error": "Der Benutzername muss zwischen 3 und 15 Zeichen lang sein und mindestens einen Buchstaben enthalten. Erlaubte Zeichen: Buchstaben, Zahlen und _ - @ . ! ? & $",
     "email_required": "E-Mail ist erforderlich",
     "email_error": "Die E-Mail ist nicht gültig",
     "name_required": "Name ist erforderlich",

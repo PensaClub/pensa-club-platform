@@ -621,7 +621,7 @@
     "settlement_required": "Settlement is required",
     "street_required": "Street is required",
     "username_required": "Username is required",
-    "username_error": "Username must be between 7 and 16 characters. It should start with small or capital letter. May contain uppercase letters, lowercase letters, numbers, _ and –. They are forbidden: !, @, # ,$ ,% ,^ ,&, *, ( ) , +, =. { }, [ ], | ,\\, :, ;,< ,> ,?, /, ~",
+"username_error": "Username must be between 3 and 15 characters and contain at least one letter. Allowed characters: letters, numbers, and _ - @ . ! ? & $",
     "email_required": "Email is required",
     "email_error": "Email is invalid",
     "name_required": "Name is required",
