@@ -266,12 +266,12 @@ export const Profile = () => {
 
   useEffect(() => {
     window.scrollTo({ top: 0 });
-    if (!profileData) {
-      navigate("/profile/profile-form");
-    }
-    if (!isFinish) {
-      navigate("/profile/profile-form");
-    }
+    // if (!profileData) {
+    //   navigate("/profile/profile-form");
+    // }
+    // if (!isFinish) {
+    //   navigate("/profile/profile-form");
+    // }
   }, [isFinish, navigate, profileData]);
 
   useEffect(() => {
@@ -996,7 +996,7 @@ export const Profile = () => {
         </nav>
 
         <main className="profile-content">
-          {!isFinish && (
+          {/* {!isFinish && (
             <div className="unfinished-profiles">
               <p className="warning-info">{t('profile.warning')}</p>
               <p>{t('profile.warning_desc')}</p>
@@ -1018,7 +1018,7 @@ export const Profile = () => {
                 </NavLink>
               </div>
             </div>
-          )}
+          )} */}
 
           <Outlet />
           <Routes>

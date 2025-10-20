@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-export const usernameRegex = /^[a-zA-Zа-яА-Я][a-zA-Zа-яА-Я0-9_-]{6,16}$/;
+export const usernameRegex = /^(?=.*[a-zA-Zа-яА-Я])[a-zA-Zа-яА-Я0-9_@.!?&$-]{3,15}$/;
 export const nameRegex = /^[a-zA-Zа-яА-Я0-9_]{3,20}(-[a-zA-Zа-яА-Я0-9_]{3,20})*$/i;
 export const streetRegex = /^[a-zA-Zа-яА-Я0-9\s]{3,60}$/;
 export const emailRegex = /^(([^<>()\\[\]\\.,;:\s@"]+(\.[^<>()\\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -11,8 +11,8 @@ export const validateField = (name, value, form = {}, t) => {
     let error = '';
     switch (name) {
         case 'username':
-            if (!value) error = t('profile.username_required');
-            else if (!usernameRegex.test(value)) error = t('profile.username_error');
+            // if (!value) error = t('profile.username_required');
+             if (!usernameRegex.test(value)) error = t('profile.username_error');
             break;
         case 'email':
             if (!value) error = t('profile.email_required');
@@ -38,9 +38,9 @@ export const validateField = (name, value, form = {}, t) => {
                 error = t('profile.phone_number_invalid');
             }
             break;
-        case 'region':
-            if (!value) error = t('profile.region_required');
-            break;
+        // case 'region':
+        //     if (!value) error = t('profile.region_required');
+        //     break;
         case 'password':
             if (!passwordRegex.test(value)) {
                 error = t('profile.password_error');

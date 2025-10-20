@@ -100,7 +100,7 @@ const onRegisterSubmit = async (data) => {
     
     setProfileData(userWithDefaults);
     setIsAdmin(response.user.role === 'admin');
-    navigate('/profile/profile-form');
+    navigate('/profile/data');
     notify('success-register');
   } catch (error) {
     notify(error.message === 'User already exists with this email.' ? 'user-already-exists' : 'error');
