@@ -1,0 +1,211 @@
+/* ===================================
+   FEATURES SECTION
+   =================================== */
+
+.digibridge-features {
+  padding: 100px 20px;
+  background: #ffffff;
+  position: relative;
+}
+
+.digibridge-features-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header */
+.digibridge-features-header {
+  text-align: center;
+  margin-bottom: 70px;
+}
+
+.digibridge-features-label {
+  display: inline-block;
+  padding: 8px 20px;
+  background: linear-gradient(135deg, rgba(255, 99, 71, 0.1) 0%, rgba(255, 127, 80, 0.1) 100%);
+  color: #ff6347;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 50px;
+  margin-bottom: 20px;
+}
+
+.digibridge-features-title {
+  font-size: 2.75rem;
+  font-weight: 800;
+  color: #2c3e50;
+  margin: 0 0 16px 0;
+  line-height: 1.2;
+}
+
+.digibridge-features-subtitle {
+  font-size: 1.1rem;
+  color: #6c757d;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* Grid */
+.digibridge-features-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+}
+
+.digibridge-features-card {
+  position: relative;
+  background: linear-gradient(135deg, #fff 0%, #fff5f0 100%);
+  padding: 45px 35px;
+  border-radius: 24px;
+  text-decoration: none;
+  transition: all 0.4s ease;
+  overflow: hidden;
+  border: 2px solid transparent;
+}
+
+.digibridge-features-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, var(--feature-color, #ff6347) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 0;
+}
+
+.digibridge-features-card:hover::before {
+  opacity: 0.08;
+}
+
+.digibridge-features-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 40px rgba(255, 99, 71, 0.15);
+  border-color: var(--feature-color, #ff6347);
+}
+
+.digibridge-features-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.digibridge-features-card-icon {
+  font-size: 3.5rem;
+  margin-bottom: 20px;
+  line-height: 1;
+  display: inline-block;
+  transition: transform 0.4s ease;
+}
+
+.digibridge-features-card:hover .digibridge-features-card-icon {
+  transform: scale(1.1);
+}
+
+.digibridge-features-card-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0 0 12px 0;
+  line-height: 1.3;
+}
+
+.digibridge-features-card-description {
+  font-size: 1rem;
+  color: #6c757d;
+  margin: 0 0 20px 0;
+  line-height: 1.7;
+}
+
+.digibridge-features-card-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: var(--feature-color, #ff6347);
+  color: #ffffff;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.digibridge-features-card-arrow svg {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s ease;
+}
+
+.digibridge-features-card:hover .digibridge-features-card-arrow {
+  transform: scale(1.15);
+}
+
+.digibridge-features-card:hover .digibridge-features-card-arrow svg {
+  transform: translateX(3px);
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+@media (max-width: 1024px) {
+  .digibridge-features {
+    padding: 80px 20px;
+  }
+
+  .digibridge-features-title {
+    font-size: 2.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .digibridge-features {
+    padding: 60px 20px;
+  }
+
+  .digibridge-features-header {
+    margin-bottom: 50px;
+  }
+
+  .digibridge-features-title {
+    font-size: 2rem;
+  }
+
+  .digibridge-features-subtitle {
+    font-size: 1rem;
+  }
+
+  .digibridge-features-grid {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+
+  .digibridge-features-card {
+    padding: 35px 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .digibridge-features {
+    padding: 50px 15px;
+  }
+
+  .digibridge-features-title {
+    font-size: 1.75rem;
+  }
+
+  .digibridge-features-card {
+    padding: 30px 25px;
+  }
+
+  .digibridge-features-card-icon {
+    font-size: 3rem;
+  }
+
+  .digibridge-features-card-title {
+    font-size: 1.3rem;
+  }
+}

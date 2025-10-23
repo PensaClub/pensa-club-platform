@@ -1,0 +1,179 @@
+/* ===================================
+   DIGIBRIDGE HERO SECTION
+   =================================== */
+
+.digibridge-hero {
+  position: relative;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, #ff6347 0%, #ff7f50 50%, #ffa07a 100%);
+  overflow: hidden;
+  padding-top: 80px;
+}
+
+.digibridge-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 60%;
+  height: 100%;
+  background-image: url('https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=1200&q=80');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.3;
+  mix-blend-mode: overlay;
+}
+
+.digibridge-hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 99, 71, 0.9) 0%, rgba(255, 127, 80, 0.85) 50%, transparent 100%);
+  pointer-events: none;
+}
+
+.digibridge-hero-container {
+  position: relative;
+  z-index: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 80px 40px;
+  width: 100%;
+}
+
+.digibridge-hero-content {
+  max-width: 650px;
+}
+
+.digibridge-hero-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.15;
+  margin: 0 0 24px 0;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  animation: digibridge-hero-fade-in 0.8s ease;
+}
+
+.digibridge-hero-subtitle {
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.95);
+  line-height: 1.6;
+  margin: 0 0 40px 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  animation: digibridge-hero-fade-in 0.8s ease 0.2s backwards;
+}
+
+.digibridge-hero-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  animation: digibridge-hero-fade-in 0.8s ease 0.4s backwards;
+}
+
+.digibridge-hero-button {
+  padding: 14px 32px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.digibridge-hero-button-primary {
+  background: #ffffff;
+  color: #ff6347;
+}
+
+.digibridge-hero-button-primary:hover {
+  background: #fff;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.digibridge-hero-button-secondary {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.digibridge-hero-button-secondary:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.8);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes digibridge-hero-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+@media (max-width: 768px) {
+  .digibridge-hero {
+    min-height: 500px;
+    padding-top: 70px;
+  }
+
+  .digibridge-hero-container {
+    padding: 60px 25px;
+  }
+
+  .digibridge-hero-title {
+    font-size: 2.5rem;
+  }
+
+  .digibridge-hero-subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 32px;
+  }
+
+  .digibridge-hero-actions {
+    flex-direction: column;
+  }
+
+  .digibridge-hero-button {
+    width: 100%;
+    padding: 14px 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .digibridge-hero {
+    min-height: 450px;
+    padding-top: 65px;
+  }
+
+  .digibridge-hero-container {
+    padding: 50px 18px;
+  }
+
+  .digibridge-hero-title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+
+  .digibridge-hero-subtitle {
+    font-size: 1rem;
+    margin-bottom: 28px;
+  }
+}

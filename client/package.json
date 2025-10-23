@@ -9,6 +9,7 @@
     "@react-google-maps/api": "^2.20.6",
     "@react-oauth/google": "^0.12.1",
     "browser-image-compression": "^2.0.2",
+    "caniuse-lite": "^1.0.30001751",
     "draft-js": "^0.11.7",
     "draftjs-to-html": "^0.9.1",
     "env-cmd": "^10.1.0",

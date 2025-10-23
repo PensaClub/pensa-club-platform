@@ -1,0 +1,440 @@
+/* ===================================
+   PARTNERS SECTION
+   =================================== */
+
+.digibridge-partners {
+  padding: 100px 20px;
+  background: linear-gradient(180deg, #fff5f0 0%, #ffffff 100%);
+  position: relative;
+}
+
+.digibridge-partners-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ===================================
+   HEADER
+   =================================== */
+
+.digibridge-partners-header {
+  text-align: center;
+  margin-bottom: 70px;
+}
+
+.digibridge-partners-label {
+  display: inline-block;
+  padding: 8px 20px;
+  background: linear-gradient(135deg, rgba(255, 99, 71, 0.1) 0%, rgba(255, 127, 80, 0.1) 100%);
+  color: #ff6347;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 50px;
+  margin-bottom: 20px;
+}
+
+.digibridge-partners-title {
+  font-size: 2.75rem;
+  font-weight: 800;
+  color: #2c3e50;
+  margin: 0 0 16px 0;
+  line-height: 1.2;
+}
+
+.digibridge-partners-subtitle {
+  font-size: 1.1rem;
+  color: #6c757d;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* ===================================
+   MAIN PARTNERS (Large Cards)
+   =================================== */
+
+.digibridge-partners-main {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  margin-bottom: 60px;
+}
+
+.digibridge-partners-card-main {
+  position: relative;
+  background: #ffffff;
+  padding: 40px 35px;
+  border-radius: 24px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: 2px solid #f0f0f0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow: hidden;
+}
+
+.digibridge-partners-card-main::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #ff6347 0%, #ff7f50 100%);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.digibridge-partners-card-main:hover::before {
+  transform: scaleX(1);
+}
+
+.digibridge-partners-card-main:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
+  border-color: rgba(255, 99, 71, 0.3);
+}
+
+/* НОВА СТИЛИЗАЦИЯ - Оригинални Лога */
+.digibridge-partners-logo-wrapper {
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  padding: 25px;
+  border: 2px solid #f0f0f0;
+  transition: all 0.3s ease;
+}
+
+.digibridge-partners-card-main:hover .digibridge-partners-logo-wrapper {
+  border-color: rgba(255, 99, 71, 0.2);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+.digibridge-partners-logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  /* ПРЕМАХНАТИ ФИЛТРИ - Оригиналните цветове */
+}
+
+.digibridge-partners-logo-placeholder {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #2c3e50;
+  text-align: center;
+}
+
+.digibridge-partners-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.digibridge-partners-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.digibridge-partners-description {
+  font-size: 1rem;
+  color: #6c757d;
+  margin: 0;
+  line-height: 1.7;
+}
+
+.digibridge-partners-link-icon {
+  align-self: flex-end;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 99, 71, 0.1);
+  border-radius: 50%;
+  color: #ff6347;
+  transition: all 0.3s ease;
+}
+
+.digibridge-partners-card-main:hover .digibridge-partners-link-icon {
+  background: #ff6347;
+  color: #ffffff;
+  transform: scale(1.1);
+}
+
+.digibridge-partners-link-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* ===================================
+   OTHER PARTNERS (Small Cards)
+   =================================== */
+
+.digibridge-partners-other {
+  margin-bottom: 60px;
+}
+
+.digibridge-partners-section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0 0 30px 0;
+  text-align: center;
+}
+
+.digibridge-partners-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
+}
+
+.digibridge-partners-card-small {
+  background: #ffffff;
+  padding: 30px;
+  border-radius: 20px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  border: 2px solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.digibridge-partners-card-small:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  border-color: rgba(255, 99, 71, 0.3);
+}
+
+/* НОВА СТИЛИЗАЦИЯ - Малки Лога */
+.digibridge-partners-logo-wrapper-small {
+  width: 90px;
+  height: 90px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  padding: 15px;
+  border: 2px solid #f0f0f0;
+  transition: all 0.3s ease;
+}
+
+.digibridge-partners-card-small:hover .digibridge-partners-logo-wrapper-small {
+  border-color: rgba(255, 99, 71, 0.2);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.digibridge-partners-logo-small {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  /* ПРЕМАХНАТИ ФИЛТРИ - Оригиналните цветове */
+}
+
+.digibridge-partners-logo-placeholder-small {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #ff6347;
+}
+
+.digibridge-partners-info-small {
+  flex: 1;
+  min-width: 0;
+}
+
+.digibridge-partners-name-small {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0 0 8px 0;
+  line-height: 1.3;
+}
+
+.digibridge-partners-description-small {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ===================================
+   EU SUPPORT BADGE
+   =================================== */
+
+.digibridge-partners-eu-badge {
+ display: flex;
+  align-items: center;
+  gap: 25px;
+  padding: 30px 35px;
+  background: linear-gradient(135deg, rgba(0, 51, 153, 0.05) 0%, rgba(255, 204, 0, 0.05) 100%);
+  border-radius: 20px;
+  border: 2px solid rgba(0, 51, 153, 0.1);
+}
+.digibridge-partners-eu-logo {
+  width: 140px;
+  height: auto;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+.digibridge-partners-eu-icon {
+  width: 60px;
+  height: 60px;
+  color: #003399;
+  flex-shrink: 0;
+}
+
+.digibridge-partners-eu-text {
+  flex: 1;
+}
+
+.digibridge-partners-eu-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #003399;
+  margin: 0 0 8px 0;
+  line-height: 1.3;
+}
+
+.digibridge-partners-eu-description {
+  font-size: 0.95rem;
+  color: #6c757d;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+@media (max-width: 1024px) {
+  .digibridge-partners {
+    padding: 80px 20px;
+  }
+
+  .digibridge-partners-title {
+    font-size: 2.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .digibridge-partners {
+    padding: 60px 20px;
+  }
+
+  .digibridge-partners-header {
+    margin-bottom: 50px;
+  }
+
+  .digibridge-partners-title {
+    font-size: 2rem;
+  }
+
+  .digibridge-partners-subtitle {
+    font-size: 1rem;
+  }
+
+  .digibridge-partners-main {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+
+  .digibridge-partners-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .digibridge-partners-card-main {
+    padding: 30px 25px;
+  }
+
+  .digibridge-partners-eu-badge {
+    flex-direction: column;
+    text-align: center;
+    padding: 25px;
+    gap: 20px;
+  }
+   .digibridge-partners-eu-logo {
+    width: 90px;
+  }
+}
+
+@media (max-width: 600px) {
+  .digibridge-partners {
+    padding: 50px 15px;
+  }
+
+  .digibridge-partners-title {
+    font-size: 1.75rem;
+  }
+
+  .digibridge-partners-card-main {
+    padding: 25px 20px;
+    gap: 20px;
+  }
+
+  .digibridge-partners-logo-wrapper {
+    height: 100px;
+    padding: 20px;
+  }
+
+  .digibridge-partners-name {
+    font-size: 1.3rem;
+  }
+
+  .digibridge-partners-description {
+    font-size: 0.95rem;
+  }
+
+  .digibridge-partners-card-small {
+    flex-direction: column;
+    text-align: center;
+    padding: 25px 20px;
+  }
+
+  .digibridge-partners-logo-wrapper-small {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .digibridge-partners-section-title {
+    font-size: 1.3rem;
+  }
+  .digibridge-partners-eu-logo {
+    width: 70px;
+  }
+  .digibridge-partners-logo-wrapper {
+    height: 90px;
+    padding: 15px;
+  }
+
+  .digibridge-partners-logo-wrapper-small {
+    width: 70px;
+    height: 70px;
+  }
+
+  .digibridge-partners-eu-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .digibridge-partners-eu-title {
+    font-size: 1.1rem;
+  }
+
+  .digibridge-partners-eu-description {
+    font-size: 0.9rem;
+  }
+}

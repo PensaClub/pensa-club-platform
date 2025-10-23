@@ -11049,5 +11049,244 @@
       "singular": "Projekt",
       "plural": "Projekte"
     }
+  },
+   "digiBridge": {
+     "meta": {
+      "title": "DigiBridge Akademie - Digitale Kompetenzen für alle Altersgruppen",
+      "description": "Kostenlose Lernplattform für Senioren. Lernen Sie digitale Fähigkeiten mit Hilfe junger Mentoren. Teil des BRIDGE-Projekts.",
+      "keywords": "digitale Kompetenz, Seniorenbildung, Mentoren, Medienkompetenz, Bürgerbeteiligung, kostenlose Kurse"
+    },
+    "header": {
+      "tagline": "Brücke zwischen Generationen",
+      "backToPensa": "Zu Pensa Club",
+      "changeLanguage": "Sprache wechseln",
+      "userMenu": "Benutzermenü",
+      "mobileMenu": "Menü",
+      "login": "Anmelden",
+      "nav": {
+        "home": "Startseite",
+        "courses": "Kurse",
+        "mentors": "Mentoren",
+        "events": "Veranstaltungen",
+        "library": "Bibliothek",
+        "community": "Community",
+        "about": "Über das Projekt"
+      },
+      "dropdown": {
+        "dashboard": "Mein Fortschritt",
+        "myCourses": "Meine Kurse",
+        "myMentor": "Mein Mentor",
+        "profile": "Profil",
+        "logout": "Abmelden"
+      }
+    },
+    "hero": {
+      "title": "DigiBridge Akademie",
+      "subtitle": "Digitale Kompetenzen für alle Altersgruppen",
+      "startLearning": "Lernen beginnen",
+      "becomeMentor": "Mentor werden"
+    },
+     "about": {
+      "label": "Über das Projekt",
+      "title": "Was ist die DigiBridge Akademie?",
+      "description": "DigiBridge ist eine kostenlose Bildungsplattform, die Generationen durch digitales Lernen verbindet. Junge Mentoren helfen Senioren, Vertrauen im Umgang mit Technologie zu gewinnen und aktiv an der digitalen Gesellschaft teilzunehmen.",
+      "stat1": "Kostenlose Kurse",
+      "stat2": "Junge Mentoren",
+      "stat3": "Länder"
+    },
+    "howItWorks": {
+      "label": "Einfach und Zugänglich",
+      "title": "Wie funktioniert die Plattform?",
+      "subtitle": "Vier einfache Schritte zu Ihrer digitalen Bildung",
+      "step1": {
+        "title": "Registrieren Sie sich",
+        "description": "Erstellen Sie in wenigen Minuten ein kostenloses Profil - wir helfen Ihnen"
+      },
+      "step2": {
+        "title": "Wählen Sie einen Kurs",
+        "description": "Durchsuchen Sie unsere kostenlosen Kurse und wählen Sie, was Sie interessiert"
+      },
+      "step3": {
+        "title": "Lernen Sie in Ihrem Tempo",
+        "description": "Sehen Sie sich Videolektionen an und üben Sie, wann es Ihnen passt"
+      },
+      "step4": {
+        "title": "Holen Sie sich Hilfe",
+        "description": "Ihr Mentor steht Ihnen immer für Fragen und Unterstützung zur Verfügung"
+      }
+    },
+    "features": {
+      "label": "Was Wir Anbieten",
+      "title": "Alles Was Sie Brauchen an Einem Ort",
+      "subtitle": "Kostenlose Kurse, Mentoren, Live-Events und vieles mehr",
+      "courses": {
+        "title": "Kostenlose Kurse",
+        "description": "Digitale Sicherheit, Medienkompetenz, Bürgerbeteiligung - lernen Sie in Ihrem eigenen Tempo"
+      },
+      "mentors": {
+        "title": "Persönliche Mentoren",
+        "description": "Junge Menschen helfen Ihnen individuell bei jeder Frage"
+      },
+      "events": {
+        "title": "Live-Veranstaltungen",
+        "description": "Jede Woche Live-Seminare - schauen Sie zu, fragen Sie, nehmen Sie teil"
+      },
+      "library": {
+        "title": "Bibliothek",
+        "description": "Video-Tutorials, PDF-Anleitungen und Materialien immer verfügbar"
+      }
+    },
+    "mentors": {
+      "label": "Unsere Mentoren",
+      "title": "Wer sind die DigiBridge Mentoren?",
+      "description": "Unsere Mentoren sind junge Menschen (18-35 Jahre alt), speziell geschult für die Arbeit mit Senioren. Sie sind hier, um mit Geduld, Verständnis und ohne Urteil zu helfen.",
+      "quality1": {
+        "title": "Jung und Motiviert",
+        "description": "Zwischen 18 und 35 Jahren, mit dem Wunsch zu helfen und Wissen zu teilen"
+      },
+      "quality2": {
+        "title": "Ausgebildete Spezialisten",
+        "description": "Absolvierte spezielle Schulung für die Arbeit mit älteren Erwachsenen"
+      },
+      "quality3": {
+        "title": "Geduldig und Verständnisvoll",
+        "description": "Immer bereit, erneut zu erklären und Fragen zu beantworten"
+      },
+      "quality4": {
+        "title": "Hier um zu Helfen",
+        "description": "Sie urteilen nicht, sondern unterstützen beim Lernen und Überwinden von Herausforderungen"
+      },
+      "findMentor": "Mentor Finden",
+      "becomeMentor": "Mentor Werden",
+      "activeMentors": "Aktive Mentoren",
+      "satisfaction": "Zufriedenheitsrate"
+    },
+    "testimonials": {
+      "label": "Echte Geschichten",
+      "title": "Was Sagen die Teilnehmer?",
+      "subtitle": "Geschichten von Menschen, die mit Hilfe von DigiBridge die digitale Kluft überwunden haben",
+      "testimonial1": {
+        "name": "Maria Ivanova",
+        "role": "Programmteilnehmerin, 68 Jahre alt",
+        "text": "Vor DigiBridge konnte ich nicht einmal eine E-Mail senden. Jetzt führe ich jeden Tag Videoanrufe mit meinen Enkelkindern! Mein Mentor Stefan war unglaublich geduldig und erklärte alles klar. Vielen Dank!"
+      },
+      "testimonial2": {
+        "name": "Georgi Petrov",
+        "role": "Programmteilnehmer, 72 Jahre alt",
+        "text": "Technologie erschien mir immer kompliziert, aber mit der Hilfe meines jungen Mentors lernte ich, Rechnungen online zu bezahlen und sogar im Internet einzukaufen. Ich fühle mich jetzt viel unabhängiger!"
+      },
+      "testimonial3": {
+        "name": "Elena Dimitrova",
+        "role": "DigiBridge Mentorin",
+        "text": "Mentoring bei DigiBridge hat auch mein Leben verändert! Ich habe gelernt, wie wertvoll generationsübergreifende Verbindungen sind. Die Arbeit mit Senioren lehrte mich Geduld und Verständnis. Ich empfehle es jedem jungen Menschen!"
+      }
+    },
+     "cta": {
+      "badge": "Kostenlos für Alle",
+      "title": "Bereit, Ihre Digitale Reise zu Beginnen?",
+      "description": "Schließen Sie sich Hunderten von Menschen an, die bereits die digitale Kluft überwunden haben. Starten Sie heute - völlig kostenlos!",
+      "startLearning": "Mit dem Lernen Beginnen",
+      "becomeMentor": "Mentor Werden",
+      "feature1": "100% Kostenlos",
+      "feature2": "Persönliche Unterstützung",
+      "feature3": "In Ihrem Tempo Lernen"
+    },
+     "partners": {
+      "label": "Partner",
+      "title": "Unsere Partner",
+      "subtitle": "Das BRIDGE-Projekt wird dank der Unterstützung führender europäischer Organisationen umgesetzt",
+      "cif": {
+        "description": "Civic Innovation Fund unterstützt innovative Initiativen für Bürgerbildung und Beteiligung in Europa"
+      },
+      "coalition": {
+        "name": "Koalition für Medienkompetenz",
+        "description": "Bulgarische Organisation zur Förderung von Medienkompetenz und kritischem Denken"
+      },
+      "austausch": {
+        "description": "Berliner Organisation für Bürgerdialog und interkulturellen Austausch in Europa"
+      },
+      "pensa": {
+        "description": "Bulgarische Stiftung für Bürgerbildung, Demokratie und Jugendbeteiligung"
+      },
+      "projectPartners": "Projektpartner",
+      "euSupport": {
+        "title": "Unterstützt von der Europäischen Union",
+        "description": "Dieses Projekt wird mit Unterstützung des Civic Innovation Fund und europäischer Bürgerbildungsprogramme finanziert"
+      }
+    },
+     "faq": {
+      "label": "Häufig Gestellte Fragen",
+      "title": "Haben Sie Fragen? Wir Haben Antworten!",
+      "subtitle": "Hier finden Sie Antworten auf die am häufigsten gestellten Fragen zur DigiBridge Akademie",
+      "q1": {
+        "question": "Was ist DigiBridge und für wen ist es geeignet?",
+        "answer": "DigiBridge ist eine kostenlose Bildungsplattform, die Generationen durch digitales Lernen verbindet. Sie ist für alle Senioren (50+) geeignet, die mehr über Technologie lernen möchten, sowie für junge Menschen (18-35), die Mentoren werden möchten."
+      },
+      "q2": {
+        "question": "Ist die Plattform kostenpflichtig?",
+        "answer": "Nein! DigiBridge ist völlig kostenlos. Alle Kurse, Materialien und Mentoring-Unterstützung sind ohne Kosten verfügbar. Das Projekt wird vom Civic Innovation Fund und europäischen Programmen finanziert."
+      },
+      "q3": {
+        "question": "Wie kann ich mich registrieren?",
+        "answer": "Die Registrierung ist einfach und schnell! Klicken Sie auf die Schaltfläche 'Mit dem Lernen Beginnen' oben auf der Seite, geben Sie grundlegende Informationen ein und Ihr Profil ist in Minuten fertig. Bei Schwierigkeiten stehen unsere Mentoren immer zur Verfügung."
+      },
+      "q4": {
+        "question": "Welche Kurse bieten Sie an?",
+        "answer": "Wir bieten verschiedene Kurse zu digitaler Sicherheit, Medienkompetenz, Bürgerbeteiligung, Social-Media-Nutzung, Online-Banking und vielem mehr. Alle Kurse beinhalten Videolektionen, praktische Übungen und herunterladbare Materialien."
+      },
+      "q5": {
+        "question": "Wie funktioniert das Mentoring-Programm?",
+        "answer": "Jeder Teilnehmer erhält einen persönlichen jungen Mentor, der eine spezielle Schulung absolviert hat. Der Mentor steht für Fragen per Chat, Videoanrufen oder Live-Events zur Verfügung. Sie können sich jederzeit an ihn wenden, wenn Sie Hilfe benötigen."
+      },
+      "q6": {
+        "question": "Wie kann ich Mentor werden?",
+        "answer": "Wenn Sie zwischen 18 und 35 Jahre alt sind und Senioren bei der Navigation durch Technologie helfen möchten, klicken Sie auf 'Mentor Werden'. Sie absolvieren eine kurze Schulung und erhalten ein Zertifikat. Mentoring ist freiwillig, bietet aber wertvolle Erfahrung und Fähigkeiten."
+      },
+      "stillHaveQuestions": "Haben Sie Noch Fragen?",
+      "contactUs": "Kontaktieren Sie uns und wir antworten so schnell wie möglich",
+      "contactButton": "Kontaktieren Sie Uns"
+    },
+    "contact": {
+      "modalTitle": "Kontaktieren Sie Uns",
+      "modalDescription": "Füllen Sie das untenstehende Formular aus und wir melden uns so schnell wie möglich bei Ihnen",
+      "nameLabel": "Ihr Name",
+      "namePlaceholder": "Max Mustermann",
+      "emailLabel": "Ihre E-Mail",
+      "emailPlaceholder": "max@beispiel.de",
+      "subjectLabel": "Betreff",
+      "subjectPlaceholder": "Frage zu...",
+      "messageLabel": "Nachricht",
+      "messagePlaceholder": "Schreiben Sie Ihre Nachricht hier...",
+      "cancelButton": "Abbrechen",
+      "sendButton": "Senden",
+      "sendingButton": "Wird gesendet...",
+      "fillAllFields": "Bitte füllen Sie alle Felder aus",
+      "invalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein",
+      "successMessage": "Nachricht erfolgreich gesendet! Wir werden uns bald bei Ihnen melden.",
+      "errorMessage": "Fehler beim Senden. Bitte versuchen Sie es erneut."
+    },
+    "testimonialForm": {
+      "title": "Teilen Sie Ihre Geschichte",
+      "subtitle": "Helfen Sie anderen, über DigiBridge zu erfahren - teilen Sie Ihre Erfahrung!",
+      "nameLabel": "Ihr Name",
+      "namePlaceholder": "Max Mustermann",
+      "roleLabel": "Sie sind",
+      "roleSelect": "Wählen...",
+      "roleParticipant": "Programmteilnehmer",
+      "roleMentor": "Mentor",
+      "emailLabel": "Ihre E-Mail",
+      "emailPlaceholder": "max@beispiel.de",
+      "emailHint": "Wird nicht öffentlich angezeigt",
+      "ratingLabel": "Bewertung",
+      "textLabel": "Ihre Geschichte",
+      "textPlaceholder": "Erzählen Sie uns, wie DigiBridge Ihnen geholfen hat oder was Sie als Mentor gelernt haben...",
+      "consentText": "Ich stimme zu, dass meine Geschichte auf der DigiBridge Academy-Website veröffentlicht werden kann",
+      "sendButton": "Geschichte Teilen",
+      "sendingButton": "Wird gesendet...",
+      "fillAllFields": "Bitte füllen Sie alle Felder aus",
+      "consentRequired": "Bitte geben Sie Ihre Zustimmung zur Veröffentlichung",
+      "successMessage": "Vielen Dank! Ihre Geschichte wurde eingereicht und wird nach Genehmigung veröffentlicht.",
+      "errorMessage": "Fehler beim Senden. Bitte versuchen Sie es erneut."
+    }
   }
 }

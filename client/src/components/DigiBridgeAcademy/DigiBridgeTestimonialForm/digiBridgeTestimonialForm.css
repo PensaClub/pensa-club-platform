@@ -1,0 +1,272 @@
+/* ===================================
+   TESTIMONIAL FORM
+   =================================== */
+
+.digibridge-testimonial-form {
+  padding: 100px 20px;
+  background: linear-gradient(180deg, #ffffff 0%, #fff5f0 100%);
+  position: relative;
+}
+
+.digibridge-testimonial-form-container {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* Header */
+.digibridge-testimonial-form-header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.digibridge-testimonial-form-icon {
+  font-size: 3.5rem;
+  margin-bottom: 20px;
+  line-height: 1;
+}
+
+.digibridge-testimonial-form-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #2c3e50;
+  margin: 0 0 16px 0;
+  line-height: 1.2;
+}
+
+.digibridge-testimonial-form-subtitle {
+  font-size: 1.1rem;
+  color: #6c757d;
+  margin: 0;
+  line-height: 1.7;
+}
+
+/* Form */
+.digibridge-testimonial-form-form {
+  background: #ffffff;
+  padding: 45px;
+  border-radius: 24px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.digibridge-testimonial-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.digibridge-testimonial-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.digibridge-testimonial-form-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.digibridge-testimonial-form-label .required {
+  color: #ff6347;
+}
+
+.digibridge-testimonial-form-input,
+.digibridge-testimonial-form-textarea {
+  width: 100%;
+  padding: 14px 18px;
+  font-size: 1rem;
+  font-family: inherit;
+  color: #2c3e50;
+  background: #f8f9fa;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.digibridge-testimonial-form-input:focus,
+.digibridge-testimonial-form-textarea:focus {
+  outline: none;
+  background: #ffffff;
+  border-color: #ff6347;
+  box-shadow: 0 0 0 4px rgba(255, 99, 71, 0.1);
+}
+
+.digibridge-testimonial-form-input:disabled,
+.digibridge-testimonial-form-textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.digibridge-testimonial-form-textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.digibridge-testimonial-form-hint {
+  font-size: 0.85rem;
+  color: #6c757d;
+  font-style: italic;
+}
+
+.digibridge-testimonial-form-char-count {
+  font-size: 0.85rem;
+  color: #6c757d;
+  text-align: right;
+}
+
+/* Rating */
+.digibridge-testimonial-form-rating {
+  display: flex;
+  gap: 8px;
+}
+
+.digibridge-testimonial-form-star {
+  background: none;
+  border: none;
+  font-size: 2.5rem;
+  color: #e0e0e0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+  line-height: 1;
+}
+
+.digibridge-testimonial-form-star:hover,
+.digibridge-testimonial-form-star.active {
+  color: #ffa500;
+  transform: scale(1.1);
+}
+
+.digibridge-testimonial-form-star:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Consent */
+.digibridge-testimonial-form-consent {
+  padding: 20px;
+  background: rgba(255, 99, 71, 0.05);
+  border-radius: 12px;
+  border: 2px solid rgba(255, 99, 71, 0.1);
+}
+
+.digibridge-testimonial-form-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  color: #2c3e50;
+  line-height: 1.6;
+}
+
+.digibridge-testimonial-form-checkbox input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  cursor: pointer;
+  margin-top: 2px;
+}
+
+/* Button */
+.digibridge-testimonial-form-button {
+  width: 100%;
+  padding: 16px 32px;
+  background: linear-gradient(135deg, #ff6347 0%, #ff7f50 100%);
+  color: #ffffff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 4px 16px rgba(255, 99, 71, 0.3);
+  margin-top: 10px;
+}
+
+.digibridge-testimonial-form-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #ff7f50 0%, #ff6347 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 99, 71, 0.4);
+}
+
+.digibridge-testimonial-form-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Spinner */
+.digibridge-testimonial-form-spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: digibridge-testimonial-spin 0.8s linear infinite;
+}
+
+@keyframes digibridge-testimonial-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+@media (max-width: 768px) {
+  .digibridge-testimonial-form {
+    padding: 80px 20px;
+  }
+
+  .digibridge-testimonial-form-header {
+    margin-bottom: 40px;
+  }
+
+  .digibridge-testimonial-form-title {
+    font-size: 2rem;
+  }
+
+  .digibridge-testimonial-form-subtitle {
+    font-size: 1rem;
+  }
+
+  .digibridge-testimonial-form-form {
+    padding: 35px 30px;
+  }
+
+  .digibridge-testimonial-form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .digibridge-testimonial-form-star {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .digibridge-testimonial-form {
+    padding: 60px 15px;
+  }
+
+  .digibridge-testimonial-form-title {
+    font-size: 1.75rem;
+  }
+
+  .digibridge-testimonial-form-form {
+    padding: 30px 20px;
+    gap: 20px;
+  }
+
+  .digibridge-testimonial-form-icon {
+    font-size: 3rem;
+  }
+}
