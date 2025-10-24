@@ -64,6 +64,7 @@ import ClubView from './components/Clubs/ClubView/ClubView.jsx';
 import AboutPage from './components/AboutPage/AboutPage.jsx';
 import { DigiBridgeAcademy } from './components/DigiBridgeAcademy/DigiBridgeAcademy.jsx';
 import { AcademyProvider } from './components/contexts/AcademyProvider.jsx';
+import { DigiBridgeMentorsPage } from './components/DigiBridge/DigiBridgeMentorsPage/DigiBridgeMentorsPage.jsx';
 
 // ✅ LAZY LOADING КОМПОНЕНТИ
 const ArticlesList = lazy(() => import('./components/Articles/ArticlesList/ArticlesList.jsx'));
@@ -146,6 +147,7 @@ function App() {
                                       <Routes>
                                         <Route path="/" element={<Home />} />
                                         <Route path="/academy" element={<DigiBridgeAcademy />} />
+                                        <Route path="/academy/mentors" element={<DigiBridgeMentorsPage />} />
                                         <Route path="/contact" element={<ContactForm />} />
                                         <Route path="/about" element={<AboutPage />} />
                                         <Route path="/server-error" element={<ServerError />} />

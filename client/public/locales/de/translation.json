@@ -11287,6 +11287,44 @@
       "consentRequired": "Bitte geben Sie Ihre Zustimmung zur Veröffentlichung",
       "successMessage": "Vielen Dank! Ihre Geschichte wurde eingereicht und wird nach Genehmigung veröffentlicht.",
       "errorMessage": "Fehler beim Senden. Bitte versuchen Sie es erneut."
+    },
+    "mentorsPage": {
+      "meta": {
+        "title": "Unsere Mentoren | DigiBridge Akademie",
+        "description": "Lernen Sie unsere jungen Mentoren kennen, die Senioren beim Erlernen digitaler Technologien helfen"
+      },
+     "hero": {
+        "title": "Treffen Sie Unsere Mentoren",
+        "subtitle": "Junge Menschen, speziell geschult, um mit Geduld, Verständnis und ohne Vorurteile zu helfen",
+        "findMentor": "Finde einen Mentor",
+        "becomeButton": "Mentor Werden"
+      },
+      "searchPlaceholder": "Nach Name oder Spezialisierung suchen...",
+      "filters": {
+        "all": "Alle",
+        "digitalSecurity": "Digitale Sicherheit",
+        "mediaLiteracy": "Medienkompetenz",
+        "socialMedia": "Soziale Medien",
+        "onlineBanking": "Online-Banking",
+        "basicSkills": "Grundkenntnisse"
+      },
+      "stats": {
+        "mentors": "Mentoren",
+        "available": "Verfügbar",
+        "specializations": "Spezialisierungen"
+      },
+      "card": {
+        "available": "Verfügbar",
+        "busy": "Beschäftigt",
+        "years": "Jahre alt",
+        "students": "Studenten",
+        "viewProfile": "Profil Ansehen"
+      },
+      "noResults": {
+        "title": "Keine Mentoren Gefunden",
+        "description": "Versuchen Sie, die Filter oder die Suche zu ändern"
+      }
     }
   }
+  
 }
