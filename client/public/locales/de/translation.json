@@ -11324,7 +11324,117 @@
         "title": "Keine Mentoren Gefunden",
         "description": "Versuchen Sie, die Filter oder die Suche zu ändern"
       }
+    },
+    "becomeMentor": {
+    "meta": {
+      "title": "Werden Sie Mentor | DigiBridge Academy",
+      "description": "Bewerben Sie sich als Mentor bei der DigiBridge Academy und helfen Sie jungen Menschen"
+    },
+    "authRequired": {
+      "icon": "🔒",
+      "title": "Sie müssen sich anmelden",
+      "description": "Um sich als Mentor zu bewerben, melden Sie sich bitte an oder registrieren Sie sich.",
+      "loginButton": "Anmelden",
+      "registerButton": "Registrieren"
+    },
+    "hero": {
+      "title": "Werden Sie Mentor bei DigiBridge",
+      "subtitle": "Helfen Sie jungen Menschen, digitale Fähigkeiten zu erwerben und verändern Sie ihre Zukunft"
+    },
+    "intro": {
+      "icon": "🎓",
+      "title": "Warum Mentor werden?",
+      "description": "Als Mentor bei DigiBridge haben Sie die Möglichkeit, Ihr Wissen und Ihre Erfahrung mit jungen Menschen zu teilen, die Orientierung in der digitalen Welt benötigen. Sie werden die Brücke zwischen Technologie und Menschen sein, die sie verstehen wollen.",
+      "benefits": {
+        "change": {
+          "icon": "✨",
+          "title": "Veränderung",
+          "description": "Machen Sie einen echten Unterschied im Leben junger Menschen"
+        },
+        "community": {
+          "icon": "🤝",
+          "title": "Gemeinschaft",
+          "description": "Werden Sie Teil einer dynamischen Mentoren-Community"
+        },
+        "development": {
+          "icon": "📈",
+          "title": "Entwicklung",
+          "description": "Entwickeln Sie Ihre Kommunikations- und Lehrerfahrungen"
+        }
+      }
+    },
+    "form": {
+      "title": "Jetzt bewerben",
+      "subtitle": "Füllen Sie das Formular unten aus und wir werden uns innerhalb von 5 Werktagen bei Ihnen melden",
+      "sections": {
+        "personal": "Persönliche Informationen",
+        "professional": "Berufliche Informationen",
+        "languages": "Sprachen",
+        "motivation": "Warum möchten Sie Mentor werden?",
+        "cv": "Lebenslauf (optional)"
+      },
+      "fields": {
+        "name": {
+          "label": "Vollständiger Name",
+          "placeholder": "Vor- und Nachname"
+        },
+        "email": {
+          "label": "E-Mail",
+          "placeholder": "email@beispiel.de"
+        },
+        "phone": {
+          "label": "Telefon",
+          "placeholder": "+49 123 456 789"
+        },
+        "age": {
+          "label": "Alter",
+          "placeholder": "25"
+        },
+        "education": {
+          "label": "Bildung",
+          "placeholder": "Universität - Informatik, Master 2023"
+        },
+        "specialization": {
+          "label": "Spezialisierung",
+          "placeholder": "Spezialisierung wählen"
+        },
+        "experience": {
+          "label": "Erfahrung (Jahre)",
+          "placeholder": "3 Jahre"
+        },
+        "availability": {
+          "label": "Verfügbarkeit",
+          "placeholder": "Wochenenden und Abende nach 18 Uhr"
+        },
+        "motivation": {
+          "label": "Motivation",
+          "placeholder": "Erzählen Sie uns, warum Sie jungen Menschen helfen möchten und was Sie ihnen bieten können... (mindestens 50 Zeichen)"
+        },
+        "cv": {
+          "label": "Lebenslauf hochladen",
+          "placeholder": "Lebenslauf hochladen (PDF, DOC, DOCX - max. 5MB)"
+        }
+      },
+      "errors": {
+        "name": "Name ist erforderlich",
+        "email": "E-Mail ist erforderlich",
+        "phone": "Telefon ist erforderlich",
+        "age": "Mindestalter 18 Jahre",
+        "education": "Bildung ist erforderlich",
+        "specialization": "Bitte wählen Sie eine Spezialisierung",
+        "experience": "Erfahrung ist erforderlich",
+        "motivation": "Motivation muss mindestens 50 Zeichen lang sein",
+        "availability": "Verfügbarkeit ist erforderlich",
+        "languages": "Bitte wählen Sie mindestens eine Sprache",
+        "fillAll": "Bitte füllen Sie alle Pflichtfelder korrekt aus",
+        "fileTooBig": "Datei ist zu groß! Maximum 5MB."
+      },
+      "counter": "Zeichen mindestens",
+      "submitButton": "Bewerbung absenden",
+      "submitting": "Wird gesendet...",
+      "note": "* Alle Felder sind Pflichtfelder außer Lebenslauf"
     }
+  }
   }
   
 }

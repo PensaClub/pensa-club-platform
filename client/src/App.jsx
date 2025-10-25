@@ -65,6 +65,7 @@ import AboutPage from './components/AboutPage/AboutPage.jsx';
 import { DigiBridgeAcademy } from './components/DigiBridgeAcademy/DigiBridgeAcademy.jsx';
 import { AcademyProvider } from './components/contexts/AcademyProvider.jsx';
 import { DigiBridgeMentorsPage } from './components/DigiBridge/DigiBridgeMentorsPage/DigiBridgeMentorsPage.jsx';
+import { DigiBridgeBecomeMentor } from './components/DigiBridge/DigiBridgeBecomeMentor/DigiBridgeBecomeMentor.jsx';
 
 // ✅ LAZY LOADING КОМПОНЕНТИ
 const ArticlesList = lazy(() => import('./components/Articles/ArticlesList/ArticlesList.jsx'));
@@ -207,6 +208,7 @@ function App() {
                                         <Route path="/stories/edit/:slug" element={<StoryForm isEditMode={true} />} />
 
                                         <Route element={<AuthGuard />}>
+                                          <Route path="/academy/become-mentor" element={<DigiBridgeBecomeMentor />} />
                                           <Route path="/initiative-preview" element={<InitiativePreviewPage />} />
                                           <Route path="/ad/details/:adId" element={<AdDetails />} />
                                           <Route path="/ad/edit/:adId" element={<EditAd />} />
