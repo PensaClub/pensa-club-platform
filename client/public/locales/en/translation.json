@@ -11782,5 +11782,282 @@
       "singular": "Project",
       "plural": "Projects"
     }
+  },
+  "digiBridge": {
+    "meta": {
+      "title": "DigiBridge Academy - Digital Skills for All Ages",
+      "description": "Free learning platform for seniors. Learn digital skills with help from young mentors. Part of the BRIDGE project.",
+      "keywords": "digital literacy, senior education, mentors, media literacy, civic participation, free courses"
+    },
+    "header": {
+      "tagline": "Bridge Between Generations",
+      "backToPensa": "To Pensa Club",
+      "changeLanguage": "Change language",
+      "userMenu": "User menu",
+      "mobileMenu": "Menu",
+      "login": "Sign In",
+      "nav": {
+        "home": "Home",
+        "courses": "Courses",
+        "mentors": "Mentors",
+        "events": "Events",
+        "library": "Library",
+        "community": "Community",
+        "about": "About"
+      },
+      "dropdown": {
+        "dashboard": "My Progress",
+        "myCourses": "My Courses",
+        "myMentor": "My Mentor",
+        "profile": "Profile",
+        "logout": "Logout"
+      }
+    },
+    "hero": {
+      "title": "DigiBridge Academy",
+     "subtitle": "Empowering Seniors with Digital Skills",
+      "startLearning": "Start Learning",
+      "becomeMentor": "Become a Mentor"
+    },
+    "about": {
+      "label": "About the Project",
+      "title": "What is DigiBridge Academy?",
+      "description": "DigiBridge is a free educational platform that connects generations through digital learning. Young mentors help seniors gain confidence in using technology and participate actively in the digital society.",
+      "stat1": "Free Courses",
+      "stat2": "Young Mentors",
+      "stat3": "Countries"
+    },
+    "howItWorks": {
+      "label": "Easy and Accessible",
+      "title": "How Does the Platform Work?",
+      "subtitle": "Four simple steps to your digital education",
+      "step1": {
+        "title": "Sign Up",
+        "description": "Create a free profile in minutes - we'll help you"
+      },
+      "step2": {
+        "title": "Choose a Course",
+        "description": "Browse our free courses and pick what interests you"
+      },
+      "step3": {
+        "title": "Learn at Your Pace",
+        "description": "Watch video lessons and practice whenever it's convenient for you"
+      },
+      "step4": {
+        "title": "Get Help",
+        "description": "Your mentor is always available for questions and support"
+      }
+    },
+    "features": {
+      "label": "What We Offer",
+      "title": "Everything You Need in One Place",
+      "subtitle": "Free courses, mentors, live events and much more",
+      "courses": {
+        "title": "Free Courses",
+        "description": "Digital security, media literacy, civic participation - learn at your own pace"
+      },
+      "mentors": {
+        "title": "Personal Mentors",
+        "description": "Young people will help you individually with every question"
+      },
+      "events": {
+        "title": "Live Events",
+        "description": "Live seminars every week - watch, ask, participate"
+      },
+      "library": {
+        "title": "Library",
+        "description": "Video tutorials, PDF guides and materials always available"
+      }
+    },
+    "mentors": {
+      "label": "Our Mentors",
+      "title": "Who Are the DigiBridge Mentors?",
+      "description": "Our mentors are young people (18-35 years old), specially trained to work with seniors. They are here to help with patience, understanding and without judgment.",
+      "quality1": {
+        "title": "Young and Motivated",
+        "description": "Between 18 and 35 years old, eager to help and share knowledge"
+      },
+      "quality2": {
+        "title": "Trained Specialists",
+        "description": "Completed special training for working with older adults"
+      },
+      "quality3": {
+        "title": "Patient and Understanding",
+        "description": "Always ready to explain again and answer questions"
+      },
+      "quality4": {
+        "title": "Here to Help",
+        "description": "They don't judge, but support learning and overcoming challenges"
+      },
+      "findMentor": "Find a Mentor",
+      "becomeMentor": "Become a Mentor",
+      "activeMentors": "Active Mentors",
+      "satisfaction": "Satisfaction Rate"
+    },
+    "testimonials": {
+      "label": "Real Stories",
+      "title": "What Do Participants Say?",
+      "subtitle": "Stories from people who bridged the digital divide with DigiBridge's help",
+      "testimonial1": {
+        "name": "Maria Ivanova",
+        "role": "Program Participant, 68 years old",
+        "text": "Before DigiBridge, I couldn't even send an email. Now I use video calls with my grandchildren every day! My mentor Stefan was incredibly patient and explained everything clearly. Thank you!"
+      },
+      "testimonial2": {
+        "name": "Georgi Petrov",
+        "role": "Program Participant, 72 years old",
+        "text": "Technology always seemed complicated to me, but with my young mentor's help, I learned to pay bills online and even shop on the internet. I feel much more independent now!"
+      },
+      "testimonial3": {
+        "name": "Elena Dimitrova",
+        "role": "DigiBridge Mentor",
+        "text": "Mentoring at DigiBridge changed my life too! I learned how valuable intergenerational connections are. Working with seniors taught me patience and understanding. I recommend it to every young person!"
+      }
+    },
+    "cta": {
+      "badge": "Free for Everyone",
+      "title": "Ready to Start Your Digital Journey?",
+      "description": "Join hundreds of people who have already bridged the digital divide. Start today - completely free!",
+      "startLearning": "Start Learning",
+      "becomeMentor": "Become a Mentor",
+      "feature1": "100% Free",
+      "feature2": "Personal Support",
+      "feature3": "Learn at Your Pace"
+    },
+    "partners": {
+      "label": "Partners",
+      "title": "Our Partners",
+      "subtitle": "The BRIDGE project is implemented thanks to the support of leading European organizations",
+      "cif": {
+        "description": "Civic Innovation Fund supports innovative initiatives for civic education and participation in Europe"
+      },
+      "coalition": {
+        "name": "Media Literacy Coalition",
+        "description": "Bulgarian organization working to increase media literacy and critical thinking"
+      },
+      "austausch": {
+        "description": "Berlin-based organization for civic dialogue and intercultural exchange in Europe"
+      },
+      "pensa": {
+        "description": "Bulgarian foundation for civic education, democracy and youth participation"
+      },
+      "projectPartners": "Project Partners",
+      "euSupport": {
+        "title": "Supported by the European Union",
+        "description": "This project is funded with the support of Civic Innovation Fund and European civic education programs"
+      }
+    },
+    "faq": {
+      "label": "Frequently Asked Questions",
+      "title": "Have Questions? We Have Answers!",
+      "subtitle": "Here you'll find answers to the most frequently asked questions about DigiBridge Academy",
+      "q1": {
+        "question": "What is DigiBridge and who is it for?",
+        "answer": "DigiBridge is a free educational platform that connects generations through digital learning. It's suitable for all seniors (50+) who want to learn more about technology, as well as young people (18-35) who want to become mentors."
+      },
+      "q2": {
+        "question": "Is the platform paid?",
+        "answer": "No! DigiBridge is completely free. All courses, materials and mentoring support are available at no cost. The project is funded by Civic Innovation Fund and European programs."
+      },
+      "q3": {
+        "question": "How can I register?",
+        "answer": "Registration is easy and quick! Click the 'Start Learning' button at the top of the page, fill in basic information and your profile will be ready in minutes. If you have difficulties, our mentors are always here to help."
+      },
+      "q4": {
+        "question": "What courses do you offer?",
+        "answer": "We offer various courses on digital security, media literacy, civic participation, social media use, online banking and much more. All courses include video lessons, practical exercises and downloadable materials."
+      },
+      "q5": {
+        "question": "How does the mentoring program work?",
+        "answer": "Each participant gets a personal young mentor who has completed special training. The mentor is available for questions via chat, video calls or live events. You can contact them whenever you need help."
+      },
+      "q6": {
+        "question": "How can I become a mentor?",
+        "answer": "If you're between 18 and 35 years old and want to help seniors navigate technology, click 'Become a Mentor'. You'll complete a short training and receive a certificate. Mentoring is voluntary but provides valuable experience and skills."
+      },
+      "stillHaveQuestions": "Still Have Questions?",
+      "contactUs": "Contact us and we'll respond as soon as possible",
+      "contactButton": "Contact Us"
+    },
+    "contact": {
+      "modalTitle": "Contact Us",
+      "modalDescription": "Fill out the form below and we'll get back to you as soon as possible",
+      "nameLabel": "Your Name",
+      "namePlaceholder": "John Doe",
+      "emailLabel": "Your Email",
+      "emailPlaceholder": "john@example.com",
+      "subjectLabel": "Subject",
+      "subjectPlaceholder": "Question about...",
+      "messageLabel": "Message",
+      "messagePlaceholder": "Write your message here...",
+      "cancelButton": "Cancel",
+      "sendButton": "Send",
+      "sendingButton": "Sending...",
+      "fillAllFields": "Please fill in all fields",
+      "invalidEmail": "Please enter a valid email address",
+      "successMessage": "Message sent successfully! We'll contact you soon.",
+      "errorMessage": "Error sending message. Please try again."
+    },
+    "testimonialForm": {
+      "title": "Share Your Story",
+      "subtitle": "Help others learn about DigiBridge - share your experience!",
+      "nameLabel": "Your Name",
+      "namePlaceholder": "John Doe",
+      "roleLabel": "You are",
+      "roleSelect": "Select...",
+      "roleParticipant": "Program Participant",
+      "roleMentor": "Mentor",
+      "emailLabel": "Your Email",
+      "emailPlaceholder": "john@example.com",
+      "emailHint": "Will not be shown publicly",
+      "ratingLabel": "Rating",
+      "textLabel": "Your Story",
+      "textPlaceholder": "Tell us how DigiBridge helped you or what you learned as a mentor...",
+      "consentText": "I agree that my story can be published on the DigiBridge Academy website",
+      "sendButton": "Share Story",
+      "sendingButton": "Sending...",
+      "fillAllFields": "Please fill in all fields",
+      "consentRequired": "Please give your consent to publish",
+      "successMessage": "Thank you! Your story has been submitted and will be published after approval.",
+      "errorMessage": "Error sending. Please try again."
+    },
+    "mentorsPage": {
+      "meta": {
+        "title": "Our Mentors | DigiBridge Academy",
+        "description": "Meet our young mentors who help seniors master digital technologies"
+      },
+     "hero": {
+        "title": "Meet Our Mentors",
+        "subtitle": "Young people specially trained to help with patience, understanding and without prejudice",
+        "findMentor": "Find a Mentor",
+        "becomeButton": "Become a Mentor"
+      },
+      "searchPlaceholder": "Search by name or specialization...",
+      "filters": {
+        "all": "All",
+        "digitalSecurity": "Digital Security",
+        "mediaLiteracy": "Media Literacy",
+        "socialMedia": "Social Media",
+        "onlineBanking": "Online Banking",
+        "basicSkills": "Basic Skills"
+      },
+      "stats": {
+        "mentors": "Mentors",
+        "available": "Available",
+        "specializations": "Specializations"
+      },
+      "card": {
+        "available": "Available",
+        "busy": "Busy",
+        "years": "years old",
+        "students": "students",
+        "viewProfile": "View Profile"
+      },
+      "noResults": {
+        "title": "No Mentors Found",
+        "description": "Try changing the filters or search query"
+      }
+    }
   }
+
 }
