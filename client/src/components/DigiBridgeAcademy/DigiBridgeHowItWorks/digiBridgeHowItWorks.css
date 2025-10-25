@@ -1,0 +1,190 @@
+/* ===================================
+   HOW IT WORKS SECTION
+   =================================== */
+
+.digibridge-how-it-works {
+  padding: 100px 20px;
+  background: linear-gradient(180deg, #fff5f0 0%, #ffffff 100%);
+  position: relative;
+}
+
+.digibridge-how-it-works-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header */
+.digibridge-how-it-works-header {
+  text-align: center;
+  margin-bottom: 70px;
+}
+
+.digibridge-how-it-works-label {
+  display: inline-block;
+  padding: 8px 20px;
+  background: linear-gradient(135deg, rgba(255, 99, 71, 0.1) 0%, rgba(255, 127, 80, 0.1) 100%);
+  color: #ff6347;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 50px;
+  margin-bottom: 20px;
+}
+
+.digibridge-how-it-works-title {
+  font-size: 2.75rem;
+  font-weight: 800;
+  color: #2c3e50;
+  margin: 0 0 16px 0;
+  line-height: 1.2;
+}
+
+.digibridge-how-it-works-subtitle {
+  font-size: 1.1rem;
+  color: #6c757d;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* Steps */
+.digibridge-how-it-works-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  position: relative;
+}
+
+.digibridge-how-it-works-step {
+  position: relative;
+  background: #ffffff;
+  padding: 40px 30px;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.digibridge-how-it-works-step:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 32px rgba(255, 99, 71, 0.15);
+}
+
+.digibridge-how-it-works-step-number {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 3rem;
+  font-weight: 800;
+  color: rgba(255, 99, 71, 0.1);
+  line-height: 1;
+}
+
+.digibridge-how-it-works-step-icon {
+  font-size: 3.5rem;
+  margin-bottom: 20px;
+  line-height: 1;
+}
+
+.digibridge-how-it-works-step-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0 0 12px 0;
+  line-height: 1.3;
+}
+
+.digibridge-how-it-works-step-description {
+  font-size: 0.95rem;
+  color: #6c757d;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.digibridge-how-it-works-step-arrow {
+  position: absolute;
+  top: 50%;
+  right: -25px;
+  transform: translateY(-50%);
+  font-size: 2rem;
+  color: #ff6347;
+  z-index: 1;
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+@media (max-width: 1024px) {
+  .digibridge-how-it-works {
+    padding: 80px 20px;
+  }
+
+  .digibridge-how-it-works-steps {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 25px;
+  }
+
+  .digibridge-how-it-works-step:nth-child(2) .digibridge-how-it-works-step-arrow,
+  .digibridge-how-it-works-step:nth-child(4) .digibridge-how-it-works-step-arrow {
+    display: none;
+  }
+
+  .digibridge-how-it-works-step:nth-child(1) .digibridge-how-it-works-step-arrow,
+  .digibridge-how-it-works-step:nth-child(3) .digibridge-how-it-works-step-arrow {
+    right: -20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .digibridge-how-it-works {
+    padding: 60px 20px;
+  }
+
+  .digibridge-how-it-works-header {
+    margin-bottom: 50px;
+  }
+
+  .digibridge-how-it-works-title {
+    font-size: 2rem;
+  }
+
+  .digibridge-how-it-works-subtitle {
+    font-size: 1rem;
+  }
+
+  .digibridge-how-it-works-steps {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .digibridge-how-it-works-step-arrow {
+    display: none !important;
+  }
+
+  .digibridge-how-it-works-step {
+    padding: 35px 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  .digibridge-how-it-works {
+    padding: 50px 15px;
+  }
+
+  .digibridge-how-it-works-title {
+    font-size: 1.75rem;
+  }
+
+  .digibridge-how-it-works-step {
+    padding: 30px 20px;
+  }
+
+  .digibridge-how-it-works-step-icon {
+    font-size: 3rem;
+  }
+}

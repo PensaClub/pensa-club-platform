@@ -1,0 +1,358 @@
+/* ===================================
+   FAQ SECTION
+   =================================== */
+
+.digibridge-faq {
+  padding: 100px 20px;
+  background: #ffffff;
+  position: relative;
+}
+
+.digibridge-faq-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+/* ===================================
+   HEADER
+   =================================== */
+
+.digibridge-faq-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.digibridge-faq-label {
+  display: inline-block;
+  padding: 8px 20px;
+  background: linear-gradient(135deg, rgba(255, 99, 71, 0.1) 0%, rgba(255, 127, 80, 0.1) 100%);
+  color: #ff6347;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 50px;
+  margin-bottom: 20px;
+}
+
+.digibridge-faq-title {
+  font-size: 2.75rem;
+  font-weight: 800;
+  color: #2c3e50;
+  margin: 0 0 16px 0;
+  line-height: 1.2;
+}
+
+.digibridge-faq-subtitle {
+  font-size: 1.1rem;
+  color: #6c757d;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* ===================================
+   FAQ ACCORDION
+   =================================== */
+
+.digibridge-faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 60px;
+}
+
+.digibridge-faq-item {
+  background: #ffffff;
+  border: 2px solid #f0f0f0;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.digibridge-faq-item:hover {
+  border-color: rgba(255, 99, 71, 0.2);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+.digibridge-faq-item-open {
+  border-color: rgba(255, 99, 71, 0.3);
+  box-shadow: 0 6px 20px rgba(255, 99, 71, 0.12);
+}
+
+/* Question Button */
+.digibridge-faq-question {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 24px 28px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.3s ease;
+}
+
+.digibridge-faq-item:hover .digibridge-faq-question {
+  background: rgba(255, 99, 71, 0.02);
+}
+
+.digibridge-faq-question-text {
+  flex: 1;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #2c3e50;
+  line-height: 1.4;
+}
+
+/* Icon */
+.digibridge-faq-icon {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 99, 71, 0.1);
+  border-radius: 50%;
+  color: #ff6347;
+  transition: all 0.3s ease;
+}
+
+.digibridge-faq-item-open .digibridge-faq-icon {
+  background: #ff6347;
+  color: #ffffff;
+  transform: rotate(45deg);
+}
+
+.digibridge-faq-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.digibridge-faq-icon-horizontal {
+  transition: opacity 0.3s ease;
+}
+
+.digibridge-faq-item-open .digibridge-faq-icon-horizontal {
+  opacity: 0;
+}
+
+/* Answer */
+.digibridge-faq-answer-wrapper {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+
+.digibridge-faq-item-open .digibridge-faq-answer-wrapper {
+  max-height: 500px;
+}
+
+.digibridge-faq-answer {
+  padding: 0 28px 28px 28px;
+  border-top: 1px solid rgba(255, 99, 71, 0.1);
+  animation: digibridge-faq-fade-in 0.3s ease;
+}
+
+.digibridge-faq-answer p {
+  font-size: 1rem;
+  color: #6c757d;
+  line-height: 1.7;
+  margin: 20px 0 0 0;
+}
+
+/* ===================================
+   CONTACT CTA
+   =================================== */
+
+.digibridge-faq-contact {
+  text-align: center;
+  padding: 50px 40px;
+  background: linear-gradient(135deg, rgba(255, 99, 71, 0.05) 0%, rgba(255, 127, 80, 0.05) 100%);
+  border-radius: 24px;
+  border: 2px solid rgba(255, 99, 71, 0.1);
+}
+
+.digibridge-faq-contact-icon {
+  font-size: 3.5rem;
+  margin-bottom: 20px;
+  line-height: 1;
+}
+
+.digibridge-faq-contact-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0 0 12px 0;
+  line-height: 1.3;
+}
+
+.digibridge-faq-contact-description {
+  font-size: 1.05rem;
+  color: #6c757d;
+  margin: 0 0 30px 0;
+  line-height: 1.6;
+}
+
+.digibridge-faq-contact-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 32px;
+  background: linear-gradient(135deg, #ff6347 0%, #ff7f50 100%);
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(255, 99, 71, 0.2);
+}
+
+.digibridge-faq-contact-button:hover {
+  background: linear-gradient(135deg, #ff7f50 0%, #ff6347 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(255, 99, 71, 0.3);
+}
+
+/* ===================================
+   ANIMATIONS
+   =================================== */
+
+@keyframes digibridge-faq-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+@media (max-width: 1024px) {
+  .digibridge-faq {
+    padding: 80px 20px;
+  }
+
+  .digibridge-faq-title {
+    font-size: 2.25rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .digibridge-faq {
+    padding: 60px 20px;
+  }
+
+  .digibridge-faq-header {
+    margin-bottom: 50px;
+  }
+
+  .digibridge-faq-title {
+    font-size: 2rem;
+  }
+
+  .digibridge-faq-subtitle {
+    font-size: 1rem;
+  }
+
+  .digibridge-faq-question {
+    padding: 20px 24px;
+  }
+
+  .digibridge-faq-question-text {
+    font-size: 1.05rem;
+  }
+
+  .digibridge-faq-answer {
+    padding: 0 24px 24px 24px;
+  }
+
+  .digibridge-faq-contact {
+    padding: 40px 30px;
+  }
+}
+
+@media (max-width: 600px) {
+  .digibridge-faq {
+    padding: 50px 15px;
+  }
+
+  .digibridge-faq-title {
+    font-size: 1.75rem;
+  }
+
+  .digibridge-faq-question {
+    padding: 18px 20px;
+    gap: 16px;
+  }
+
+  .digibridge-faq-question-text {
+    font-size: 1rem;
+  }
+
+  .digibridge-faq-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .digibridge-faq-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .digibridge-faq-answer {
+    padding: 0 20px 20px 20px;
+  }
+
+  .digibridge-faq-answer p {
+    font-size: 0.95rem;
+  }
+
+  .digibridge-faq-contact {
+    padding: 35px 25px;
+  }
+
+  .digibridge-faq-contact-icon {
+    font-size: 3rem;
+  }
+
+  .digibridge-faq-contact-title {
+    font-size: 1.5rem;
+  }
+
+  .digibridge-faq-contact-description {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .digibridge-faq-contact-button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ===================================
+   ACCESSIBILITY
+   =================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .digibridge-faq-item,
+  .digibridge-faq-answer-wrapper,
+  .digibridge-faq-icon {
+    transition: none;
+  }
+
+  .digibridge-faq-answer {
+    animation: none;
+  }
+}

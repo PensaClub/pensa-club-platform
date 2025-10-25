@@ -1,0 +1,318 @@
+/* ===================================
+   MENTORS SECTION
+   =================================== */
+
+.digibridge-mentors {
+  padding: 100px 20px;
+  background: linear-gradient(180deg, #ffffff 0%, #fff5f0 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.digibridge-mentors-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+/* ===================================
+   CONTENT
+   =================================== */
+
+.digibridge-mentors-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.digibridge-mentors-label {
+  display: inline-block;
+  padding: 8px 20px;
+  background: linear-gradient(135deg, rgba(255, 99, 71, 0.1) 0%, rgba(255, 127, 80, 0.1) 100%);
+  color: #ff6347;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 50px;
+  align-self: flex-start;
+}
+
+.digibridge-mentors-title {
+  font-size: 2.75rem;
+  font-weight: 800;
+  color: #2c3e50;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.digibridge-mentors-description {
+  font-size: 1.1rem;
+  color: #6c757d;
+  line-height: 1.8;
+  margin: 0;
+}
+
+/* Qualities */
+.digibridge-mentors-qualities {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+.digibridge-mentors-quality {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 16px;
+  border-left: 4px solid #ff6347;
+  transition: all 0.3s ease;
+}
+
+.digibridge-mentors-quality:hover {
+  transform: translateX(8px);
+  box-shadow: 0 8px 24px rgba(255, 99, 71, 0.12);
+}
+
+.digibridge-mentors-quality-icon {
+  font-size: 2rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.digibridge-mentors-quality-content {
+  flex: 1;
+}
+
+.digibridge-mentors-quality-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0 0 6px 0;
+  line-height: 1.3;
+}
+
+.digibridge-mentors-quality-description {
+  font-size: 0.95rem;
+  color: #6c757d;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Actions */
+.digibridge-mentors-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.digibridge-mentors-button {
+  padding: 14px 32px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.digibridge-mentors-button-primary {
+  background: linear-gradient(135deg, #ff6347 0%, #ff7f50 100%);
+  color: #ffffff;
+}
+
+.digibridge-mentors-button-primary:hover {
+  background: linear-gradient(135deg, #ff7f50 0%, #ff6347 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(255, 99, 71, 0.3);
+}
+
+.digibridge-mentors-button-secondary {
+  background: #ffffff;
+  color: #ff6347;
+  border: 2px solid #ff6347;
+}
+
+.digibridge-mentors-button-secondary:hover {
+  background: #ff6347;
+  color: #ffffff;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(255, 99, 71, 0.3);
+}
+
+/* ===================================
+   IMAGE
+   =================================== */
+
+.digibridge-mentors-image {
+  position: relative;
+}
+
+.digibridge-mentors-image-wrapper {
+  position: relative;
+  border-radius: 24px;
+  overflow: visible;
+}
+
+.digibridge-mentors-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+/* Stats Card */
+.digibridge-mentors-stats-card {
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ffffff;
+  padding: 25px 35px;
+  border-radius: 20px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  min-width: 350px;
+}
+
+.digibridge-mentors-stat-item {
+  text-align: center;
+  flex: 1;
+}
+
+.digibridge-mentors-stat-number {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #ff6347;
+  margin: 0 0 8px 0;
+  line-height: 1;
+}
+
+.digibridge-mentors-stat-label {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin: 0;
+  font-weight: 500;
+}
+
+.digibridge-mentors-stat-divider {
+  width: 2px;
+  height: 50px;
+  background: linear-gradient(180deg, transparent 0%, #e0e0e0 50%, transparent 100%);
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+@media (max-width: 1024px) {
+  .digibridge-mentors {
+    padding: 80px 20px;
+  }
+
+  .digibridge-mentors-container {
+    gap: 60px;
+  }
+
+  .digibridge-mentors-title {
+    font-size: 2.25rem;
+  }
+
+  .digibridge-mentors-stats-card {
+    min-width: 300px;
+    padding: 20px 25px;
+    gap: 20px;
+  }
+
+  .digibridge-mentors-stat-number {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .digibridge-mentors {
+    padding: 60px 20px;
+  }
+
+  .digibridge-mentors-container {
+    grid-template-columns: 1fr;
+    gap: 50px;
+  }
+
+  .digibridge-mentors-title {
+    font-size: 2rem;
+  }
+
+  .digibridge-mentors-description {
+    font-size: 1rem;
+  }
+
+  .digibridge-mentors-image {
+    order: -1;
+  }
+
+  .digibridge-mentors-stats-card {
+    position: static;
+    transform: none;
+    margin-top: 30px;
+    min-width: unset;
+    width: 100%;
+  }
+
+  .digibridge-mentors-actions {
+    flex-direction: column;
+  }
+
+  .digibridge-mentors-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .digibridge-mentors {
+    padding: 50px 15px;
+  }
+
+  .digibridge-mentors-title {
+    font-size: 1.75rem;
+  }
+
+  .digibridge-mentors-quality {
+    padding: 16px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .digibridge-mentors-quality-icon {
+    font-size: 1.75rem;
+  }
+
+  .digibridge-mentors-stats-card {
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+  }
+
+  .digibridge-mentors-stat-divider {
+    width: 80%;
+    height: 2px;
+  }
+
+  .digibridge-mentors-stat-number {
+    font-size: 1.75rem;
+  }
+}

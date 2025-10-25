@@ -1,0 +1,199 @@
+/* ===================================
+   ABOUT SECTION
+   =================================== */
+
+.digibridge-about {
+  padding: 100px 20px;
+  background: #ffffff;
+  position: relative;
+  overflow: hidden;
+}
+
+.digibridge-about-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.digibridge-about-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+/* Text Content */
+.digibridge-about-text {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.digibridge-about-label {
+  display: inline-block;
+  padding: 8px 20px;
+  background: linear-gradient(135deg, rgba(255, 99, 71, 0.1) 0%, rgba(255, 127, 80, 0.1) 100%);
+  color: #ff6347;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 50px;
+  align-self: flex-start;
+}
+
+.digibridge-about-title {
+  font-size: 2.75rem;
+  font-weight: 800;
+  color: #2c3e50;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.digibridge-about-description {
+  font-size: 1.1rem;
+  color: #6c757d;
+  line-height: 1.8;
+  margin: 0;
+}
+
+/* Stats */
+.digibridge-about-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.digibridge-about-stat {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px;
+  background: linear-gradient(135deg, #fff5f0 0%, #ffe8df 100%);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+
+.digibridge-about-stat:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(255, 99, 71, 0.15);
+}
+
+.digibridge-about-stat-icon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.digibridge-about-stat-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.digibridge-about-stat-number {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #ff6347;
+  margin: 0;
+  line-height: 1;
+}
+
+.digibridge-about-stat-text {
+  font-size: 0.85rem;
+  color: #6c757d;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Image */
+.digibridge-about-image {
+  position: relative;
+}
+
+.digibridge-about-image-wrapper {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.digibridge-about-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 24px;
+}
+
+.digibridge-about-image-decoration {
+  position: absolute;
+  top: -30px;
+  right: -30px;
+  width: 200px;
+  height: 200px;
+  background: linear-gradient(135deg, rgba(255, 99, 71, 0.2) 0%, rgba(255, 127, 80, 0.2) 100%);
+  border-radius: 50%;
+  z-index: -1;
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+@media (max-width: 1024px) {
+  .digibridge-about {
+    padding: 80px 20px;
+  }
+
+  .digibridge-about-content {
+    gap: 60px;
+  }
+
+  .digibridge-about-title {
+    font-size: 2.25rem;
+  }
+
+  .digibridge-about-stats {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .digibridge-about {
+    padding: 60px 20px;
+  }
+
+  .digibridge-about-content {
+    grid-template-columns: 1fr;
+    gap: 50px;
+  }
+
+  .digibridge-about-title {
+    font-size: 2rem;
+  }
+
+  .digibridge-about-description {
+    font-size: 1rem;
+  }
+
+  .digibridge-about-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .digibridge-about-image {
+    order: -1;
+  }
+}
+
+@media (max-width: 480px) {
+  .digibridge-about {
+    padding: 50px 15px;
+  }
+
+  .digibridge-about-title {
+    font-size: 1.75rem;
+  }
+
+  .digibridge-about-stat {
+    padding: 16px;
+  }
+}

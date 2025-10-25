@@ -1,0 +1,399 @@
+/* ===================================
+   CTA SECTION
+   =================================== */
+
+.digibridge-cta {
+  position: relative;
+  padding: 120px 20px;
+  background: linear-gradient(135deg, #ff6347 0%, #ff7f50 50%, #ffa07a 100%);
+  overflow: hidden;
+}
+
+.digibridge-cta-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&q=80');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.15;
+  mix-blend-mode: overlay;
+}
+
+.digibridge-cta-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 99, 71, 0.95) 0%,
+    rgba(255, 127, 80, 0.9) 50%,
+    rgba(255, 160, 122, 0.85) 100%
+  );
+  pointer-events: none;
+}
+
+.digibridge-cta-container {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.digibridge-cta-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+}
+
+/* ===================================
+   BADGE
+   =================================== */
+
+.digibridge-cta-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50px;
+  animation: digibridge-cta-pulse 2s ease-in-out infinite;
+}
+
+.digibridge-cta-badge-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+  animation: digibridge-cta-rotate 3s linear infinite;
+}
+
+.digibridge-cta-badge-text {
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ===================================
+   TEXT CONTENT
+   =================================== */
+
+.digibridge-cta-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.2;
+  margin: 0;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  animation: digibridge-cta-fade-in 0.8s ease;
+}
+
+.digibridge-cta-description {
+  font-size: 1.3rem;
+  color: rgba(255, 255, 255, 0.95);
+  line-height: 1.7;
+  margin: 0;
+  max-width: 700px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  animation: digibridge-cta-fade-in 0.8s ease 0.2s backwards;
+}
+
+/* ===================================
+   BUTTONS
+   =================================== */
+
+.digibridge-cta-actions {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  animation: digibridge-cta-fade-in 0.8s ease 0.4s backwards;
+}
+
+.digibridge-cta-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 40px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+  white-space: nowrap;
+}
+
+.digibridge-cta-button-icon {
+  width: 24px;
+  height: 24px;
+  transition: transform 0.3s ease;
+}
+
+.digibridge-cta-button-primary {
+  background: #ffffff;
+  color: #ff6347;
+}
+
+.digibridge-cta-button-primary:hover {
+  background: #fff;
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.digibridge-cta-button-primary:hover .digibridge-cta-button-icon {
+  transform: scale(1.2);
+}
+
+.digibridge-cta-button-secondary {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border: 3px solid rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+}
+
+.digibridge-cta-button-secondary:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.8);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.digibridge-cta-button-secondary:hover .digibridge-cta-button-icon {
+  transform: scale(1.2);
+}
+
+/* ===================================
+   FEATURES LIST
+   =================================== */
+
+.digibridge-cta-features {
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 20px;
+  animation: digibridge-cta-fade-in 0.8s ease 0.6s backwards;
+}
+
+.digibridge-cta-feature {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.digibridge-cta-feature-icon {
+  width: 20px;
+  height: 20px;
+  stroke-width: 3px;
+  flex-shrink: 0;
+}
+
+/* ===================================
+   DECORATIVE ELEMENTS
+   =================================== */
+
+.digibridge-cta-decoration {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+.digibridge-cta-decoration-1 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 70%);
+  top: -100px;
+  right: -100px;
+  animation: digibridge-cta-float 10s ease-in-out infinite;
+}
+
+.digibridge-cta-decoration-2 {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+  bottom: -80px;
+  left: -80px;
+  animation: digibridge-cta-float 12s ease-in-out infinite reverse;
+}
+
+.digibridge-cta-decoration-3 {
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+  top: 50%;
+  left: 10%;
+  animation: digibridge-cta-float 8s ease-in-out infinite;
+}
+
+/* ===================================
+   ANIMATIONS
+   =================================== */
+
+@keyframes digibridge-cta-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes digibridge-cta-pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
+  }
+}
+
+@keyframes digibridge-cta-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes digibridge-cta-float {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(30px, -30px) scale(1.1);
+  }
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+@media (max-width: 1024px) {
+  .digibridge-cta {
+    padding: 100px 20px;
+  }
+
+  .digibridge-cta-title {
+    font-size: 3rem;
+  }
+
+  .digibridge-cta-description {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .digibridge-cta {
+    padding: 80px 20px;
+  }
+
+  .digibridge-cta-title {
+    font-size: 2.5rem;
+  }
+
+  .digibridge-cta-description {
+    font-size: 1.1rem;
+  }
+
+  .digibridge-cta-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .digibridge-cta-button {
+    width: 100%;
+    justify-content: center;
+    padding: 16px 32px;
+  }
+
+  .digibridge-cta-features {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .digibridge-cta {
+    padding: 70px 20px;
+  }
+
+  .digibridge-cta-title {
+    font-size: 2rem;
+  }
+
+  .digibridge-cta-description {
+    font-size: 1rem;
+  }
+
+  .digibridge-cta-badge {
+    padding: 10px 20px;
+  }
+
+  .digibridge-cta-badge-icon {
+    font-size: 1.3rem;
+  }
+
+  .digibridge-cta-badge-text {
+    font-size: 0.8rem;
+  }
+
+  .digibridge-cta-button {
+    font-size: 1rem;
+    padding: 14px 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .digibridge-cta {
+    padding: 60px 15px;
+  }
+
+  .digibridge-cta-title {
+    font-size: 1.75rem;
+  }
+
+  .digibridge-cta-description {
+    font-size: 0.95rem;
+  }
+
+  .digibridge-cta-content {
+    gap: 24px;
+  }
+}
+
+/* ===================================
+   ACCESSIBILITY
+   =================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .digibridge-cta-badge,
+  .digibridge-cta-badge-icon,
+  .digibridge-cta-decoration {
+    animation: none;
+  }
+
+  .digibridge-cta-title,
+  .digibridge-cta-description,
+  .digibridge-cta-actions,
+  .digibridge-cta-features {
+    animation: none;
+  }
+}
