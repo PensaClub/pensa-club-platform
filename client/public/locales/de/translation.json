@@ -1,6 +1,7 @@
 {
   "header": {
     "articles": "Artikel",
+    "chats": "Chats",
     "craigslist": "Gemeinschaft",
     "initiatives": "Initiativen",
     "map": "Karte",
@@ -11028,7 +11029,7 @@
     "title": "Wartend auf Genehmigung",
     "description": "Clubs zur administrativen Genehmigung eingereicht"
   },
-   "platformStats": {
+  "platformStats": {
     "clubs": {
       "singular": "Klub",
       "plural": "Klubs"
@@ -11050,8 +11051,8 @@
       "plural": "Projekte"
     }
   },
-   "digiBridge": {
-     "meta": {
+  "digiBridge": {
+    "meta": {
       "title": "DigiBridge Akademie - Digitale Kompetenzen für alle Altersgruppen",
       "description": "Kostenlose Lernplattform für Senioren. Lernen Sie digitale Fähigkeiten mit Hilfe junger Mentoren. Teil des BRIDGE-Projekts.",
       "keywords": "digitale Kompetenz, Seniorenbildung, Mentoren, Medienkompetenz, Bürgerbeteiligung, kostenlose Kurse"
@@ -11086,7 +11087,7 @@
       "startLearning": "Lernen beginnen",
       "becomeMentor": "Mentor werden"
     },
-     "about": {
+    "about": {
       "label": "Über das Projekt",
       "title": "Was ist die DigiBridge Akademie?",
       "description": "DigiBridge ist eine kostenlose Bildungsplattform, die Generationen durch digitales Lernen verbindet. Junge Mentoren helfen Senioren, Vertrauen im Umgang mit Technologie zu gewinnen und aktiv an der digitalen Gesellschaft teilzunehmen.",
@@ -11181,7 +11182,7 @@
         "text": "Mentoring bei DigiBridge hat auch mein Leben verändert! Ich habe gelernt, wie wertvoll generationsübergreifende Verbindungen sind. Die Arbeit mit Senioren lehrte mich Geduld und Verständnis. Ich empfehle es jedem jungen Menschen!"
       }
     },
-     "cta": {
+    "cta": {
       "badge": "Kostenlos für Alle",
       "title": "Bereit, Ihre Digitale Reise zu Beginnen?",
       "description": "Schließen Sie sich Hunderten von Menschen an, die bereits die digitale Kluft überwunden haben. Starten Sie heute - völlig kostenlos!",
@@ -11191,7 +11192,7 @@
       "feature2": "Persönliche Unterstützung",
       "feature3": "In Ihrem Tempo Lernen"
     },
-     "partners": {
+    "partners": {
       "label": "Partner",
       "title": "Unsere Partner",
       "subtitle": "Das BRIDGE-Projekt wird dank der Unterstützung führender europäischer Organisationen umgesetzt",
@@ -11214,7 +11215,7 @@
         "description": "Dieses Projekt wird mit Unterstützung des Civic Innovation Fund und europäischer Bürgerbildungsprogramme finanziert"
       }
     },
-     "faq": {
+    "faq": {
       "label": "Häufig Gestellte Fragen",
       "title": "Haben Sie Fragen? Wir Haben Antworten!",
       "subtitle": "Hier finden Sie Antworten auf die am häufigsten gestellten Fragen zur DigiBridge Akademie",
@@ -11293,7 +11294,7 @@
         "title": "Unsere Mentoren | DigiBridge Akademie",
         "description": "Lernen Sie unsere jungen Mentoren kennen, die Senioren beim Erlernen digitaler Technologien helfen"
       },
-     "hero": {
+      "hero": {
         "title": "Treffen Sie Unsere Mentoren",
         "subtitle": "Junge Menschen, speziell geschult, um mit Geduld, Verständnis und ohne Vorurteile zu helfen",
         "findMentor": "Finde einen Mentor",
@@ -11326,115 +11327,219 @@
       }
     },
     "becomeMentor": {
-    "meta": {
-      "title": "Werden Sie Mentor | DigiBridge Academy",
-      "description": "Bewerben Sie sich als Mentor bei der DigiBridge Academy und helfen Sie jungen Menschen"
-    },
-    "authRequired": {
-      "icon": "🔒",
-      "title": "Sie müssen sich anmelden",
-      "description": "Um sich als Mentor zu bewerben, melden Sie sich bitte an oder registrieren Sie sich.",
-      "loginButton": "Anmelden",
-      "registerButton": "Registrieren"
-    },
-    "hero": {
-      "title": "Werden Sie Mentor bei DigiBridge",
-      "subtitle": "Helfen Sie jungen Menschen, digitale Fähigkeiten zu erwerben und verändern Sie ihre Zukunft"
-    },
-    "intro": {
-      "icon": "🎓",
-      "title": "Warum Mentor werden?",
-      "description": "Als Mentor bei DigiBridge haben Sie die Möglichkeit, Ihr Wissen und Ihre Erfahrung mit jungen Menschen zu teilen, die Orientierung in der digitalen Welt benötigen. Sie werden die Brücke zwischen Technologie und Menschen sein, die sie verstehen wollen.",
-      "benefits": {
-        "change": {
-          "icon": "✨",
-          "title": "Veränderung",
-          "description": "Machen Sie einen echten Unterschied im Leben junger Menschen"
-        },
-        "community": {
-          "icon": "🤝",
-          "title": "Gemeinschaft",
-          "description": "Werden Sie Teil einer dynamischen Mentoren-Community"
-        },
-        "development": {
-          "icon": "📈",
-          "title": "Entwicklung",
-          "description": "Entwickeln Sie Ihre Kommunikations- und Lehrerfahrungen"
+      "meta": {
+        "title": "Werden Sie Mentor | DigiBridge Academy",
+        "description": "Bewerben Sie sich als Mentor bei der DigiBridge Academy und helfen Sie jungen Menschen"
+      },
+      "authRequired": {
+        "icon": "🔒",
+        "title": "Sie müssen sich anmelden",
+        "description": "Um sich als Mentor zu bewerben, melden Sie sich bitte an oder registrieren Sie sich.",
+        "loginButton": "Anmelden",
+        "registerButton": "Registrieren"
+      },
+      "hero": {
+        "title": "Werden Sie Mentor bei DigiBridge",
+        "subtitle": "Helfen Sie jungen Menschen, digitale Fähigkeiten zu erwerben und verändern Sie ihre Zukunft"
+      },
+      "intro": {
+        "icon": "🎓",
+        "title": "Warum Mentor werden?",
+        "description": "Als Mentor bei DigiBridge haben Sie die Möglichkeit, Ihr Wissen und Ihre Erfahrung mit jungen Menschen zu teilen, die Orientierung in der digitalen Welt benötigen. Sie werden die Brücke zwischen Technologie und Menschen sein, die sie verstehen wollen.",
+        "benefits": {
+          "change": {
+            "icon": "✨",
+            "title": "Veränderung",
+            "description": "Machen Sie einen echten Unterschied im Leben junger Menschen"
+          },
+          "community": {
+            "icon": "🤝",
+            "title": "Gemeinschaft",
+            "description": "Werden Sie Teil einer dynamischen Mentoren-Community"
+          },
+          "development": {
+            "icon": "📈",
+            "title": "Entwicklung",
+            "description": "Entwickeln Sie Ihre Kommunikations- und Lehrerfahrungen"
+          }
         }
+      },
+      "form": {
+        "title": "Jetzt bewerben",
+        "subtitle": "Füllen Sie das Formular unten aus und wir werden uns innerhalb von 5 Werktagen bei Ihnen melden",
+        "sections": {
+          "personal": "Persönliche Informationen",
+          "professional": "Berufliche Informationen",
+          "languages": "Sprachen",
+          "motivation": "Warum möchten Sie Mentor werden?",
+          "cv": "Lebenslauf (optional)"
+        },
+        "fields": {
+          "name": {
+            "label": "Vollständiger Name",
+            "placeholder": "Vor- und Nachname"
+          },
+          "email": {
+            "label": "E-Mail",
+            "placeholder": "email@beispiel.de"
+          },
+          "phone": {
+            "label": "Telefon",
+            "placeholder": "+49 123 456 789"
+          },
+          "age": {
+            "label": "Alter",
+            "placeholder": "25"
+          },
+          "education": {
+            "label": "Bildung",
+            "placeholder": "Universität - Informatik, Master 2023"
+          },
+          "specialization": {
+            "label": "Spezialisierung",
+            "placeholder": "Spezialisierung wählen"
+          },
+          "experience": {
+            "label": "Erfahrung (Jahre)",
+            "placeholder": "3 Jahre"
+          },
+          "availability": {
+            "label": "Verfügbarkeit",
+            "placeholder": "Wochenenden und Abende nach 18 Uhr"
+          },
+          "motivation": {
+            "label": "Motivation",
+            "placeholder": "Erzählen Sie uns, warum Sie jungen Menschen helfen möchten und was Sie ihnen bieten können... (mindestens 50 Zeichen)"
+          },
+          "cv": {
+            "label": "Lebenslauf hochladen",
+            "placeholder": "Lebenslauf hochladen (PDF, DOC, DOCX - max. 5MB)"
+          }
+        },
+        "errors": {
+          "name": "Name ist erforderlich",
+          "email": "E-Mail ist erforderlich",
+          "phone": "Telefon ist erforderlich",
+          "age": "Mindestalter 18 Jahre",
+          "education": "Bildung ist erforderlich",
+          "specialization": "Bitte wählen Sie eine Spezialisierung",
+          "experience": "Erfahrung ist erforderlich",
+          "motivation": "Motivation muss mindestens 50 Zeichen lang sein",
+          "availability": "Verfügbarkeit ist erforderlich",
+          "languages": "Bitte wählen Sie mindestens eine Sprache",
+          "fillAll": "Bitte füllen Sie alle Pflichtfelder korrekt aus",
+          "fileTooBig": "Datei ist zu groß! Maximum 5MB."
+        },
+        "counter": "Zeichen mindestens",
+        "submitButton": "Bewerbung absenden",
+        "submitting": "Wird gesendet...",
+        "note": "* Alle Felder sind Pflichtfelder außer Lebenslauf"
       }
     },
-    "form": {
-      "title": "Jetzt bewerben",
-      "subtitle": "Füllen Sie das Formular unten aus und wir werden uns innerhalb von 5 Werktagen bei Ihnen melden",
-      "sections": {
-        "personal": "Persönliche Informationen",
-        "professional": "Berufliche Informationen",
-        "languages": "Sprachen",
-        "motivation": "Warum möchten Sie Mentor werden?",
-        "cv": "Lebenslauf (optional)"
-      },
-      "fields": {
-        "name": {
-          "label": "Vollständiger Name",
-          "placeholder": "Vor- und Nachname"
-        },
-        "email": {
-          "label": "E-Mail",
-          "placeholder": "email@beispiel.de"
-        },
-        "phone": {
-          "label": "Telefon",
-          "placeholder": "+49 123 456 789"
-        },
-        "age": {
-          "label": "Alter",
-          "placeholder": "25"
-        },
-        "education": {
-          "label": "Bildung",
-          "placeholder": "Universität - Informatik, Master 2023"
-        },
-        "specialization": {
-          "label": "Spezialisierung",
-          "placeholder": "Spezialisierung wählen"
-        },
-        "experience": {
-          "label": "Erfahrung (Jahre)",
-          "placeholder": "3 Jahre"
-        },
-        "availability": {
-          "label": "Verfügbarkeit",
-          "placeholder": "Wochenenden und Abende nach 18 Uhr"
-        },
-        "motivation": {
-          "label": "Motivation",
-          "placeholder": "Erzählen Sie uns, warum Sie jungen Menschen helfen möchten und was Sie ihnen bieten können... (mindestens 50 Zeichen)"
-        },
-        "cv": {
-          "label": "Lebenslauf hochladen",
-          "placeholder": "Lebenslauf hochladen (PDF, DOC, DOCX - max. 5MB)"
-        }
-      },
-      "errors": {
-        "name": "Name ist erforderlich",
-        "email": "E-Mail ist erforderlich",
-        "phone": "Telefon ist erforderlich",
-        "age": "Mindestalter 18 Jahre",
-        "education": "Bildung ist erforderlich",
-        "specialization": "Bitte wählen Sie eine Spezialisierung",
-        "experience": "Erfahrung ist erforderlich",
-        "motivation": "Motivation muss mindestens 50 Zeichen lang sein",
-        "availability": "Verfügbarkeit ist erforderlich",
-        "languages": "Bitte wählen Sie mindestens eine Sprache",
-        "fillAll": "Bitte füllen Sie alle Pflichtfelder korrekt aus",
-        "fileTooBig": "Datei ist zu groß! Maximum 5MB."
-      },
-      "counter": "Zeichen mindestens",
-      "submitButton": "Bewerbung absenden",
-      "submitting": "Wird gesendet...",
-      "note": "* Alle Felder sind Pflichtfelder außer Lebenslauf"
-    }
+    "chatButton": {
+      "help": "Hilfe",
+      "ariaLabel": "Hilfe-Chat öffnen"
+    },
+    "chatWindow": {
+      "online": "Online",
+      "searching": "Searching for mentor...",
+      "needHelp": "Need help?",
+      "ended": "Chat ended",
+      "searchingMentor": "Searching for available mentor...",
+      "errorSearching": "Error searching for mentor",
+      "errorSending": "Error sending message",
+      "fileTooLarge": "File is too large (max 10MB)",
+      "fileUploaded": "File uploaded successfully",
+      "errorUploading": "Error uploading file",
+      "chatEnded": "Chat ended successfully",
+      "errorEnding": "Error ending chat",
+      "inputPlaceholder": "Type a message...",
+      "endChat": "End conversation",
+      "startTitle": "How can we help you?",
+      "startDescription": "Choose a category or describe your problem briefly",
+      "searchingTitle": "Searching for available mentor...",
+      "searchingDescription": "Please wait. We're connecting you with a mentor.",
+      "welcomeMessage": "Hello! You're connected with {{mentorName}}. How can I help you?",
+      "endedTitle": "Thank you for using DigiBridge!",
+      "endedDescription": "We hope we were able to help you.",
+      "categories": {
+        "general": "General question",
+        "banking": "Online banking",
+        "socialMedia": "Social media",
+        "security": "Security",
+        "email": "Email",
+        "computer": "Computer skills"
+      }
+    },
+    "dashboard": {
+      "active": "Aktiv",
+      "completed": "Abgeschlossen",
+      "completedAt": "Abgeschlossen am",
+      "lastMessage": "Letzte Nachricht",
+      "started": "Gestartet",
+      "viewChat": "Chat ansehen",
+      "openChat": "Chat öffnen",
+      "endChat": "Chat beenden",
+      "ending": "Wird beendet...",
+      "confirmEndChat": "Möchten Sie diesen Chat wirklich beenden?",
+      "chatEnded": "Chat erfolgreich beendet",
+      "errorEndingChat": "Fehler beim Beenden des Chats",
+      "problem": "Problem",
+      "waitingForMentor": "Wartet auf Mentor",
+      "acceptRequest": "Anfrage annehmen",
+      "accepting": "Wird angenommen...",
+      "timeJustNow": "Gerade eben",
+      "timeMinutesAgo": "Vor {{count}} Min",
+      "timeHoursAgo": "Vor {{count}} Std",
+      "timeDaysAgo": "Vor {{count}} Tagen",
+      "title": "Mentor Dashboard",
+      "subtitle": "Anfragen und Gespräche mit Benutzern verwalten",
+      "adminMode": "Admin-Modus",
+      "pendingRequests": "Ausstehende Anfragen",
+      "activeChats": "Aktive Chats",
+      "completedChats": "Abgeschlossene Chats",
+      "allCategories": "Alle Kategorien",
+      "searchPlaceholder": "Nach Name, E-Mail oder Problem suchen...",
+      "noPendingRequests": "Keine ausstehenden Anfragen",
+      "noPendingRequestsDesc": "Großartige Arbeit! Alle Anfragen wurden bearbeitet.",
+      "noActiveChats": "Keine aktiven Chats",
+      "noActiveChatsDesc": "Wenn Sie eine Anfrage annehmen, wird sie hier angezeigt.",
+      "noCompletedChats": "Keine abgeschlossenen Chats",
+      "noCompletedChatsDesc": "Abgeschlossene Gespräche werden hier angezeigt.",
+      "requestAccepted": "Anfrage erfolgreich angenommen!",
+      "errorAccepting": "Fehler beim Annehmen der Anfrage",
+      "stats": {
+        "pending": "Ausstehend",
+        "pendingDesc": "Hilfeanfragen",
+        "active": "Aktiv",
+        "activeDesc": "Aktuelle Gespräche",
+        "completed": "Abgeschlossen",
+        "completedDesc": "Beendete Chats"
+      }
+    },
+    "stats": {
+      "pending": "Ausstehend",
+      "pendingDesc": "Hilfeanfragen",
+      "active": "Aktiv",
+      "activeDesc": "Aktuelle Gespräche",
+      "completed": "Abgeschlossen",
+      "completedDesc": "Beendete Chats"
+    },
+    "mentorChat": {
+  "errorSending": "Fehler beim Senden der Nachricht",
+  "noMessages": "Noch keine Nachrichten",
+  "startConversation": "Beginnen Sie das Gespräch mit dem Benutzer",
+  "inputPlaceholder": "Nachricht eingeben..."
+},
+"userChats": {
+  "title": "Meine Chats",
+  "subtitle": "Alle Gespräche mit Mentoren anzeigen",
+  "activeChats": "Aktive Chats",
+  "completedChats": "Abgeschlossene Chats",
+  "noActiveChats": "Keine aktiven Chats",
+  "noActiveChatsDesc": "Starten Sie ein neues Gespräch mit einem Mentor über die Hilfe-Schaltfläche.",
+  "noCompletedChats": "Keine abgeschlossenen Chats",
+  "noCompletedChatsDesc": "Abgeschlossene Gespräche werden hier angezeigt."
+}
   }
-  }
-  
 }

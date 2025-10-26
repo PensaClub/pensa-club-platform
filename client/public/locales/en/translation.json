@@ -1,6 +1,7 @@
 {
   "header": {
     "map": "Map",
+    "chats": "Chats",
     "craigslist": "Community",
     "login": "Login",
     "register": "Register",
@@ -621,7 +622,7 @@
     "settlement_required": "Settlement is required",
     "street_required": "Street is required",
     "username_required": "Username is required",
-"username_error": "Username must be between 3 and 15 characters and contain at least one letter. Allowed characters: letters, numbers, and _ - @ . ! ? & $",
+    "username_error": "Username must be between 3 and 15 characters and contain at least one letter. Allowed characters: letters, numbers, and _ - @ . ! ? & $",
     "email_required": "Email is required",
     "email_error": "Email is invalid",
     "name_required": "Name is required",
@@ -11815,7 +11816,7 @@
     },
     "hero": {
       "title": "DigiBridge Academy",
-     "subtitle": "Empowering Seniors with Digital Skills",
+      "subtitle": "Empowering Seniors with Digital Skills",
       "startLearning": "Start Learning",
       "becomeMentor": "Become a Mentor"
     },
@@ -12026,7 +12027,7 @@
         "title": "Our Mentors | DigiBridge Academy",
         "description": "Meet our young mentors who help seniors master digital technologies"
       },
-     "hero": {
+      "hero": {
         "title": "Meet Our Mentors",
         "subtitle": "Young people specially trained to help with patience, understanding and without prejudice",
         "findMentor": "Find a Mentor",
@@ -12057,7 +12058,111 @@
         "title": "No Mentors Found",
         "description": "Try changing the filters or search query"
       }
-    }
+    },
+    "chatButton": {
+      "help": "Help",
+      "ariaLabel": "Open help chat"
+    },
+    "chatWindow": {
+      "online": "Online",
+      "searching": "Mentor wird gesucht...",
+      "needHelp": "Brauchst du Hilfe?",
+      "ended": "Chat beendet",
+      "searchingMentor": "Verfügbarer Mentor wird gesucht...",
+      "errorSearching": "Fehler bei der Mentorsuche",
+      "errorSending": "Fehler beim Senden der Nachricht",
+      "fileTooLarge": "Datei ist zu groß (max 10MB)",
+      "fileUploaded": "Datei erfolgreich hochgeladen",
+      "errorUploading": "Fehler beim Hochladen der Datei",
+      "chatEnded": "Chat erfolgreich beendet",
+      "errorEnding": "Fehler beim Beenden des Chats",
+      "inputPlaceholder": "Nachricht eingeben...",
+      "endChat": "Gespräch beenden",
+      "startTitle": "Wie können wir dir helfen?",
+      "startDescription": "Wähle eine Kategorie oder beschreibe dein Problem kurz",
+      "searchingTitle": "Verfügbarer Mentor wird gesucht...",
+      "searchingDescription": "Bitte warten. Wir verbinden dich mit einem Mentor.",
+      "welcomeMessage": "Hallo! Du bist mit {{mentorName}} verbunden. Wie kann ich dir helfen?",
+      "endedTitle": "Vielen Dank für die Nutzung von DigiBridge!",
+      "endedDescription": "Wir hoffen, wir konnten dir helfen.",
+      "categories": {
+        "general": "Allgemeine Frage",
+        "banking": "Online-Banking",
+        "socialMedia": "Soziale Medien",
+        "security": "Sicherheit",
+        "email": "E-Mail",
+        "computer": "Computerkenntnisse"
+      }
+    },
+    "dashboard": {
+      "active": "Active",
+"completed": "Completed",
+"completedAt": "Completed at",
+"lastMessage": "Last message",
+"started": "Started",
+"viewChat": "View Chat",
+"openChat": "Open Chat",
+"endChat": "End Chat",
+"ending": "Ending...",
+"confirmEndChat": "Are you sure you want to end this chat?",
+"chatEnded": "Chat ended successfully",
+"errorEndingChat": "Error ending chat",
+      "problem": "Problem",
+      "waitingForMentor": "Waiting for mentor",
+      "acceptRequest": "Accept Request",
+      "accepting": "Accepting...",
+      "timeJustNow": "Just now",
+      "timeMinutesAgo": "{{count}} min ago",
+      "timeHoursAgo": "{{count}} hrs ago",
+      "timeDaysAgo": "{{count}} days ago",
+      "title": "Mentor Dashboard",
+      "subtitle": "Manage requests and conversations with users",
+      "adminMode": "Admin Mode",
+      "pendingRequests": "Pending Requests",
+      "activeChats": "Active Chats",
+      "completedChats": "Completed Chats",
+      "allCategories": "All Categories",
+      "searchPlaceholder": "Search by name, email or problem...",
+      "noPendingRequests": "No pending requests",
+      "noPendingRequestsDesc": "Great job! All requests have been processed.",
+      "noActiveChats": "No active chats",
+      "noActiveChatsDesc": "When you accept a request, it will appear here.",
+      "noCompletedChats": "No completed chats",
+      "noCompletedChatsDesc": "Completed conversations will be shown here.",
+      "requestAccepted": "Request accepted successfully!",
+      "errorAccepting": "Error accepting request",
+      "stats": {
+        "pending": "Pending",
+        "pendingDesc": "Help requests",
+        "active": "Active",
+        "activeDesc": "Current conversations",
+        "completed": "Completed",
+        "completedDesc": "Finished chats"
+      }
+    },
+    "stats": {
+      "pending": "Pending",
+      "pendingDesc": "Help requests",
+      "active": "Active",
+      "activeDesc": "Current conversations",
+      "completed": "Completed",
+      "completedDesc": "Finished chats"
+    },
+    "mentorChat": {
+  "errorSending": "Error sending message",
+  "noMessages": "No messages yet",
+  "startConversation": "Start the conversation with the user",
+  "inputPlaceholder": "Type a message..."
+},
+"userChats": {
+  "title": "My Chats",
+  "subtitle": "View all conversations with mentors",
+  "activeChats": "Active Chats",
+  "completedChats": "Completed Chats",
+  "noActiveChats": "No active chats",
+  "noActiveChatsDesc": "Start a new conversation with a mentor using the help button.",
+  "noCompletedChats": "No completed chats",
+  "noCompletedChatsDesc": "Completed conversations will be shown here."
+}
   }
-
 }
