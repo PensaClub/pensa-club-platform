@@ -14,6 +14,7 @@ import {
 import { DigiBridgeChatWindow } from '../DigiBridgeChatWindow/DigiBridgeChatWindow';
 import { ChatWindowManager } from '../ChatWindowManager/ChatWindowManager';
 import { MentorChatHub } from '../MentorChatHub/MentorChatHub';
+
 export const DigiBridgeChatButton = ({ onClick }) => {
   const { t } = useTranslation();
   const { isAuthentication, profileData } = useAuthContext();
@@ -22,7 +23,8 @@ export const DigiBridgeChatButton = ({ onClick }) => {
   const [mentorUnreadCount, setMentorUnreadCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [activeConversation, setActiveConversation] = useState(null);
-  const [openChats, setOpenChats] = useState([]); // ✅ STATE ТУК
+  const [pendingRequest, setPendingRequest] = useState(null); // ✅ ДОБАВИ
+  const [openChats, setOpenChats] = useState([]);
 
   const userEmail = profileData?.email || '';
   const userId = userEmail.replace(/\./g, '_dot_').replace(/@/g, '_at_');
@@ -100,13 +102,16 @@ export const DigiBridgeChatButton = ({ onClick }) => {
     };
   }, [isAuthentication, isMentor, userId]);
 
-  // Слушай за активен conversation (само за users)
+  // ✅ Слушай за активен conversation И pending request (само за users)
   useEffect(() => {
     if (!isAuthentication || !userId || isMentor) return;
 
     const unsubscribe = listenToUserConversations(userId, (conversations) => {
       const active = conversations.find(c => c.status === 'active');
+      const pending = conversations.find(c => c.status === 'pending');
+      
       setActiveConversation(active || null);
+      setPendingRequest(pending || null);
     });
 
     return () => {
@@ -120,21 +125,21 @@ export const DigiBridgeChatButton = ({ onClick }) => {
     setIsOpen(true);
   };
 
-  // ✅ Функции за управление на чатове
+  // Функции за управление на чатове
   const handleOpenChat = (conversation) => {
-  
-  if (openChats.find(c => c.id === conversation.id)) {
-    console.log('⚠️ Chat already open');
-    return;
-  }
-  
-  const newChats = [...openChats, conversation];
-  console.log('🔵 Setting openChats to:', newChats);
-  setOpenChats(newChats);
-};
+    if (openChats.find(c => c.id === conversation.id)) {
+      return;
+    }
+    setOpenChats([...openChats, conversation]);
+  };
 
   const handleCloseChat = (conversationId) => {
     setOpenChats(openChats.filter(c => c.id !== conversationId));
+  };
+
+  // ✅ Callback когато се създаде request
+  const handleRequestCreated = (request) => {
+    setPendingRequest(request);
   };
 
   const badgeCount = isMentor ? (pendingCount + mentorUnreadCount) : unreadCount;
@@ -188,10 +193,12 @@ export const DigiBridgeChatButton = ({ onClick }) => {
         <DigiBridgeChatWindow 
           onClose={() => setIsOpen(false)}
           existingConversation={activeConversation}
+          pendingRequest={pendingRequest}
+          onRequestCreated={handleRequestCreated}
         />
       )}
 
-      {/* ✅ CHAT WINDOWS MANAGER - извън Hub-а */}
+      {/* CHAT WINDOWS MANAGER - извън Hub-а */}
       {isMentor && (
         <ChatWindowManager 
           openChats={openChats}

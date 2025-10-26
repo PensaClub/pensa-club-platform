@@ -12064,6 +12064,8 @@
       "ariaLabel": "Open help chat"
     },
     "chatWindow": {
+      "waitingForMentor": "Waiting for mentor",
+      "canStartChatting": "You can start chatting now!",
       "requestSent": "Request sent successfully!",
       "requestCreated": "You'll be notified when a mentor accepts your request",
       "online": "Online",
