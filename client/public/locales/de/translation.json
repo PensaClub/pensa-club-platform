@@ -11441,6 +11441,8 @@
       "ariaLabel": "Hilfe-Chat öffnen"
     },
     "chatWindow": {
+      "requestSent": "Anfrage erfolgreich gesendet!",
+      "requestCreated": "Sie werden benachrichtigt, wenn ein Mentor Ihre Anfrage annimmt",
       "online": "Online",
       "searching": "Searching for mentor...",
       "needHelp": "Need help?",
@@ -11526,20 +11528,31 @@
       "completedDesc": "Beendete Chats"
     },
     "mentorChat": {
-  "errorSending": "Fehler beim Senden der Nachricht",
-  "noMessages": "Noch keine Nachrichten",
-  "startConversation": "Beginnen Sie das Gespräch mit dem Benutzer",
-  "inputPlaceholder": "Nachricht eingeben..."
-},
-"userChats": {
-  "title": "Meine Chats",
-  "subtitle": "Alle Gespräche mit Mentoren anzeigen",
-  "activeChats": "Aktive Chats",
-  "completedChats": "Abgeschlossene Chats",
-  "noActiveChats": "Keine aktiven Chats",
-  "noActiveChatsDesc": "Starten Sie ein neues Gespräch mit einem Mentor über die Hilfe-Schaltfläche.",
-  "noCompletedChats": "Keine abgeschlossenen Chats",
-  "noCompletedChatsDesc": "Abgeschlossene Gespräche werden hier angezeigt."
-}
+      "errorSending": "Fehler beim Senden der Nachricht",
+      "noMessages": "Noch keine Nachrichten",
+      "startConversation": "Beginnen Sie das Gespräch mit dem Benutzer",
+      "inputPlaceholder": "Nachricht eingeben..."
+    },
+    "userChats": {
+      "title": "Meine Chats",
+      "subtitle": "Alle Gespräche mit Mentoren anzeigen",
+      "activeChats": "Aktive Chats",
+      "completedChats": "Abgeschlossene Chats",
+      "noActiveChats": "Keine aktiven Chats",
+      "noActiveChatsDesc": "Starten Sie ein neues Gespräch mit einem Mentor über die Hilfe-Schaltfläche.",
+      "noCompletedChats": "Keine abgeschlossenen Chats",
+      "noCompletedChatsDesc": "Abgeschlossene Gespräche werden hier angezeigt."
+    },
+    "mentorHub": {
+      "chatHub": "Chats",
+      "all": "Alle",
+      "requests": "Anfragen",
+      "activeChats": "Aktiv",
+      "newRequests": "Neue Anfragen",
+      "newRequest": "Neue Anfrage",
+      "nothingHere": "Keine Anfragen oder Chats",
+      "requestAccepted": "Anfrage erfolgreich angenommen!",
+      "errorAccepting": "Fehler beim Annehmen der Anfrage"
+    }
   }
 }

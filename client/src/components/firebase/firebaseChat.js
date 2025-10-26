@@ -1,6 +1,6 @@
 // src/firebase/firebaseChat.js
 
-import { getDatabase, ref, push, set, onValue, off, update, query, orderByChild, equalTo, limitToLast, remove } from 'firebase/database';
+import { getDatabase, ref, push, set, onValue, off, update, query, orderByChild, equalTo, limitToLast, remove,get } from 'firebase/database';
 import { ref as storageRef, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage';
 import { firebaseStorage } from '../../firebase';
 import { initializeApp, getApps, getApp } from 'firebase/app';
@@ -105,44 +105,86 @@ export const listenToChatRequests = (callback) => {
   // Връщаме unsubscribe функция
   return () => off(waitingQuery);
 };
+/**
+ * Слуша за pending requests (за всички ментори)
+ */
+export const listenToPendingRequests = (callback) => {
+  const requestsRef = ref(database, 'chat_requests');
+  const pendingQuery = query(requestsRef, orderByChild('status'), equalTo('waiting'));
 
+  const unsubscribe = onValue(pendingQuery, (snapshot) => {
+    const requests = [];
+    snapshot.forEach((childSnapshot) => {
+      requests.push({
+        id: childSnapshot.key,
+        ...childSnapshot.val()
+      });
+    });
+    
+    // Сортирай по най-нови
+    requests.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+    
+    callback(requests);
+  });
+
+  return unsubscribe;
+};
 /**
  * Ментор приема заявка
  * @param {string} requestId
  * @param {Object} mentorData - { mentorId, mentorName }
  * @returns {Promise<string>} - conversationId
  */
-export const acceptChatRequest = async (requestId, mentorData) => {
+export const acceptChatRequest = async (requestId, mentorId, mentorName) => {
+  // ✅ ДОБАВИ ВАЛИДАЦИЯ
+  if (!requestId || !mentorId || !mentorName) {
+    throw new Error('Missing required parameters: requestId, mentorId, or mentorName');
+  }
+
   try {
+    // Вземи request данните
     const requestRef = ref(database, `chat_requests/${requestId}`);
+    const requestSnapshot = await get(requestRef);
     
-    // Вземи данните на заявката
-    const snapshot = await new Promise((resolve) => {
-      onValue(requestRef, (snap) => {
-        resolve(snap);
-      }, { onlyOnce: true });
-    });
-    
-    const requestData = snapshot.val();
-    
-    // Обнови заявката като приета
-    await update(requestRef, {
-      status: 'accepted',
-      mentorId: mentorData.mentorId,
-      mentorName: mentorData.mentorName,
-      assignedAt: Date.now()
-    });
-    
-    // Създай нов разговор
-    const conversationId = await createConversation({
+    if (!requestSnapshot.exists()) {
+      throw new Error('Chat request not found');
+    }
+
+    const requestData = requestSnapshot.val();
+
+    // Създай conversation
+    const conversationRef = push(ref(database, 'chat_conversations'));
+    const conversationId = conversationRef.key;
+
+    const conversationData = {
       userId: requestData.userId,
       userName: requestData.userName,
-      mentorId: mentorData.mentorId,
-      mentorName: mentorData.mentorName,
+      userEmail: requestData.userEmail,
+      mentorId: mentorId,
+      mentorName: mentorName,
       problem: requestData.problem,
-      category: requestData.category
+      category: requestData.category,
+      status: 'active',
+      createdAt: Date.now(),
+      requestId: requestId
+    };
+
+    // Запази conversation
+    await set(conversationRef, conversationData);
+
+    // Update request status
+    await update(requestRef, {
+      status: 'accepted',
+      mentorId: mentorId,
+      mentorName: mentorName,
+      conversationId: conversationId,
+      acceptedAt: Date.now()
     });
-    
+
+    // Изтрий unread count за user-а (ако има)
+    const userUnreadRef = ref(database, `user_unread_counts/${requestData.userId}/${conversationId}`);
+    await set(userUnreadRef, 0);
+
     return conversationId;
   } catch (error) {
     console.error('Error accepting chat request:', error);
@@ -198,24 +240,24 @@ const createConversation = async (conversationData) => {
 export const listenToUserConversations = (userId, callback) => {
   const conversationsRef = ref(database, 'chat_conversations');
   const userQuery = query(conversationsRef, orderByChild('userId'), equalTo(userId));
-  
-  onValue(userQuery, (snapshot) => {
+
+  const unsubscribe = onValue(userQuery, (snapshot) => {
     const conversations = [];
     snapshot.forEach((childSnapshot) => {
-      const conv = childSnapshot.val();
-      if (conv.status === 'active') {
-        conversations.push({
-          id: childSnapshot.key,
-          ...conv
-        });
-      }
+      conversations.push({
+        id: childSnapshot.key,
+        ...childSnapshot.val()
+      });
     });
+    
+    // Сортирай по най-нови
+    conversations.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    
     callback(conversations);
   });
-  
-  return () => off(userQuery);
-};
 
+  return unsubscribe;
+};
 /**
  * Слуша за активните разговори на ментор
  */

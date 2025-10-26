@@ -12359,6 +12359,8 @@
       "ariaLabel": "Отвори чат за помощ"
     },
     "chatWindow": {
+      "requestSent": "Заявката е изпратена успешно!",
+      "requestCreated": "Ще получиш известие когато ментор приеме заявката ти",
       "online": "Онлайн",
       "searching": "Търсим ментор...",
       "needHelp": "Трябва ти помощ?",
@@ -12458,7 +12460,17 @@
       "noActiveChatsDesc": "Започни нов разговор с ментор чрез бутона за помощ.",
       "noCompletedChats": "Няма завършени чатове",
       "noCompletedChatsDesc": "Завършените разговори ще се показват тук."
+    },
+    "mentorHub": {
+      "chatHub": "Чатове",
+      "all": "Всички",
+      "requests": "Заявки",
+      "activeChats": "Активни",
+      "newRequests": "Нови заявки",
+      "newRequest": "Нова заявка",
+      "nothingHere": "Няма заявки или чатове",
+      "requestAccepted": "Заявката е приета успешно!",
+      "errorAccepting": "Грешка при приемане на заявката"
     }
-    
   }
 }

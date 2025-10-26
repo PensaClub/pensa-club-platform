@@ -12064,6 +12064,8 @@
       "ariaLabel": "Open help chat"
     },
     "chatWindow": {
+      "requestSent": "Request sent successfully!",
+      "requestCreated": "You'll be notified when a mentor accepts your request",
       "online": "Online",
       "searching": "Mentor wird gesucht...",
       "needHelp": "Brauchst du Hilfe?",
@@ -12096,17 +12098,17 @@
     },
     "dashboard": {
       "active": "Active",
-"completed": "Completed",
-"completedAt": "Completed at",
-"lastMessage": "Last message",
-"started": "Started",
-"viewChat": "View Chat",
-"openChat": "Open Chat",
-"endChat": "End Chat",
-"ending": "Ending...",
-"confirmEndChat": "Are you sure you want to end this chat?",
-"chatEnded": "Chat ended successfully",
-"errorEndingChat": "Error ending chat",
+      "completed": "Completed",
+      "completedAt": "Completed at",
+      "lastMessage": "Last message",
+      "started": "Started",
+      "viewChat": "View Chat",
+      "openChat": "Open Chat",
+      "endChat": "End Chat",
+      "ending": "Ending...",
+      "confirmEndChat": "Are you sure you want to end this chat?",
+      "chatEnded": "Chat ended successfully",
+      "errorEndingChat": "Error ending chat",
       "problem": "Problem",
       "waitingForMentor": "Waiting for mentor",
       "acceptRequest": "Accept Request",
@@ -12149,20 +12151,31 @@
       "completedDesc": "Finished chats"
     },
     "mentorChat": {
-  "errorSending": "Error sending message",
-  "noMessages": "No messages yet",
-  "startConversation": "Start the conversation with the user",
-  "inputPlaceholder": "Type a message..."
-},
-"userChats": {
-  "title": "My Chats",
-  "subtitle": "View all conversations with mentors",
-  "activeChats": "Active Chats",
-  "completedChats": "Completed Chats",
-  "noActiveChats": "No active chats",
-  "noActiveChatsDesc": "Start a new conversation with a mentor using the help button.",
-  "noCompletedChats": "No completed chats",
-  "noCompletedChatsDesc": "Completed conversations will be shown here."
-}
+      "errorSending": "Error sending message",
+      "noMessages": "No messages yet",
+      "startConversation": "Start the conversation with the user",
+      "inputPlaceholder": "Type a message..."
+    },
+    "userChats": {
+      "title": "My Chats",
+      "subtitle": "View all conversations with mentors",
+      "activeChats": "Active Chats",
+      "completedChats": "Completed Chats",
+      "noActiveChats": "No active chats",
+      "noActiveChatsDesc": "Start a new conversation with a mentor using the help button.",
+      "noCompletedChats": "No completed chats",
+      "noCompletedChatsDesc": "Completed conversations will be shown here."
+    },
+    "mentorHub": {
+      "chatHub": "Chats",
+      "all": "All",
+      "requests": "Requests",
+      "activeChats": "Active",
+      "newRequests": "New Requests",
+      "newRequest": "New Request",
+      "nothingHere": "No requests or chats",
+      "requestAccepted": "Request accepted successfully!",
+      "errorAccepting": "Error accepting request"
+    }
   }
 }

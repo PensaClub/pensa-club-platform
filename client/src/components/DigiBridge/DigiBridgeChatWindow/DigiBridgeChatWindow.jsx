@@ -4,7 +4,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   createChatRequest,
-  listenToUserConversations,
   listenToMessages,
   sendMessage,
   markMessagesAsRead,
@@ -19,7 +18,7 @@ import { useAuthContext } from '../../contexts/UserContext';
 export const DigiBridgeChatWindow = ({ onClose, existingConversation = null }) => {
   const { t } = useTranslation();
   const { profileData } = useAuthContext();
-  const [status, setStatus] = useState('idle'); // 'idle' | 'searching' | 'connected' | 'ended'
+  const [status, setStatus] = useState('idle');
   const [conversationId, setConversationId] = useState(null);
   const [mentorName, setMentorName] = useState('');
   const [mentorId, setMentorId] = useState(null);
@@ -53,26 +52,13 @@ export const DigiBridgeChatWindow = ({ onClose, existingConversation = null }) =
     }
   }, [existingConversation]);
 
-  // Слушай за активни разговори (само ако НЯМА existingConversation)
-  useEffect(() => {
-    if (!userId || status !== 'idle' || existingConversation) return;
+  // ❌ ИЗТРИЙ ТОЗИ useEffect - не слушай автоматично за conversations
+  // useEffect(() => {
+  //   if (!userId || status !== 'idle' || existingConversation) return;
+  //   ...
+  // }, [userId, status, existingConversation]);
 
-    const unsubscribe = listenToUserConversations(userId, (conversations) => {
-      if (conversations.length > 0) {
-        const activeConv = conversations[0];
-        setConversationId(activeConv.id);
-        setMentorName(activeConv.mentorName);
-        setMentorId(activeConv.mentorId);
-        setStatus('connected');
-      }
-    });
-
-    return () => {
-      if (unsubscribe) unsubscribe();
-    };
-  }, [userId, status, existingConversation]);
-
-  // Слушай за съобщения
+  // Слушай за съобщения само ако има conversation
   useEffect(() => {
     if (!conversationId) return;
 
@@ -91,7 +77,7 @@ export const DigiBridgeChatWindow = ({ onClose, existingConversation = null }) =
     };
   }, [conversationId, userId]);
 
-  // Търси ментор
+  // ✅ ОБНОВИ: Търси ментор
   const handleSearchMentor = async (problem, category) => {
     setStatus('searching');
 
@@ -104,7 +90,14 @@ export const DigiBridgeChatWindow = ({ onClose, existingConversation = null }) =
         category: category
       });
 
-      toast.info(t('digiBridge.chatWindow.searchingMentor'));
+      toast.info(t('digiBridge.chatWindow.requestSent'));
+      
+      // ✅ ЗАТВОРИ прозореца след 2 секунди
+      setTimeout(() => {
+        onClose();
+        toast.success(t('digiBridge.chatWindow.requestCreated'));
+      }, 2000);
+
     } catch (error) {
       console.error('Error creating chat request:', error);
       toast.error(t('digiBridge.chatWindow.errorSearching'));
@@ -141,7 +134,6 @@ export const DigiBridgeChatWindow = ({ onClose, existingConversation = null }) =
     const file = e.target.files[0];
     if (!file || !conversationId || !mentorId) return;
 
-    // Проверка за размер (10MB)
     if (file.size > 10 * 1024 * 1024) {
       toast.error(t('digiBridge.chatWindow.fileTooLarge'));
       return;
@@ -157,7 +149,6 @@ export const DigiBridgeChatWindow = ({ onClose, existingConversation = null }) =
         (progress) => setUploadProgress(progress)
       );
 
-      // Изпрати съобщение с файла
       const messageData = {
         senderId: userId,
         senderName: userName,
