@@ -15,7 +15,6 @@ export const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const [isAuth, setIsAuth] = useLocalStorage('auth', {});
   const [profileData, setProfileData] = useLocalStorage('userDetails', {});
-  console.log('Profile Data:', profileData);
   const [addressId, setAddressId] = useLocalStorage('addressId', {});
   const [isAdmin, setIsAdmin] = useLocalStorage('isAdmin', false);
   const [isModerator, setIsModerator] = useLocalStorage('isModerator', false);

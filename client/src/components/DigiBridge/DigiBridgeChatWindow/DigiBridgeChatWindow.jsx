@@ -1,11 +1,11 @@
-// src/components/DigiBridge/DigiBridgeChatWindow/DigiBridgeChatWindow.jsx
-
 import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   createChatRequest,
   listenToMessages,
+  listenToRequestMessages,
   sendMessage,
+  sendMessageToRequest,
   markMessagesAsRead,
   endConversation,
   uploadChatFile
@@ -15,10 +15,16 @@ import { toast } from 'react-toastify';
 import './digiBridgeChatWindow.css';
 import { useAuthContext } from '../../contexts/UserContext';
 
-export const DigiBridgeChatWindow = ({ onClose, existingConversation = null }) => {
+export const DigiBridgeChatWindow = ({ 
+  onClose, 
+  existingConversation = null,
+  pendingRequest = null,
+  onRequestCreated
+}) => {
   const { t } = useTranslation();
   const { profileData } = useAuthContext();
-  const [status, setStatus] = useState('idle');
+  const [step, setStep] = useState('category');
+  const [currentRequest, setCurrentRequest] = useState(pendingRequest);
   const [conversationId, setConversationId] = useState(null);
   const [mentorName, setMentorName] = useState('');
   const [mentorId, setMentorId] = useState(null);
@@ -33,7 +39,7 @@ export const DigiBridgeChatWindow = ({ onClose, existingConversation = null }) =
   const userId = userEmail.replace(/\./g, '_dot_').replace(/@/g, '_at_');
   const userName = profileData?.details?.username || profileData?.details?.firstName || userEmail.split('@')[0] || 'Потребител';
 
-  // Scroll до дъното при нови съобщения
+  // Scroll до дъното
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -42,97 +48,128 @@ export const DigiBridgeChatWindow = ({ onClose, existingConversation = null }) =
     scrollToBottom();
   }, [messages]);
 
-  // Ако има existingConversation, използвай го
+  // ✅ Update pending request
+  useEffect(() => {
+    if (pendingRequest) {
+      setCurrentRequest(pendingRequest);
+    }
+  }, [pendingRequest]);
+
+  // ✅ Ако има conversation - използвай го
   useEffect(() => {
     if (existingConversation) {
       setConversationId(existingConversation.id);
       setMentorName(existingConversation.mentorName);
       setMentorId(existingConversation.mentorId);
-      setStatus('connected');
+      setStep('chat');
     }
   }, [existingConversation]);
 
-  // ❌ ИЗТРИЙ ТОЗИ useEffect - не слушай автоматично за conversations
-  // useEffect(() => {
-  //   if (!userId || status !== 'idle' || existingConversation) return;
-  //   ...
-  // }, [userId, status, existingConversation]);
-
-  // Слушай за съобщения само ако има conversation
+  // ✅ Ако има request или conversation - покажи chat
   useEffect(() => {
-    if (!conversationId) return;
+    if (existingConversation || currentRequest) {
+      setStep('chat');
+    } else {
+      setStep('category');
+    }
+  }, [existingConversation, currentRequest]);
 
-    const unsubscribe = listenToMessages(conversationId, (msgs) => {
-      setMessages(msgs);
-      // Set mentorId from first message if not already set
-      if (msgs.length > 0 && !mentorId) {
-        setMentorId(msgs[0].mentorId);
-      }
-      // Маркирай като прочетени
-      markMessagesAsRead(conversationId, userId);
-    });
+  // ✅ Слушай за messages (или от request или от conversation)
+  useEffect(() => {
+    let unsubscribe;
+
+    if (existingConversation?.id) {
+      unsubscribe = listenToMessages(existingConversation.id, (msgs) => {
+        setMessages(msgs);
+        if (msgs.length > 0) {
+          markMessagesAsRead(existingConversation.id, userId);
+        }
+      });
+    } else if (currentRequest?.id) {
+      unsubscribe = listenToRequestMessages(currentRequest.id, (msgs) => {
+        setMessages(msgs);
+      });
+    }
 
     return () => {
       if (unsubscribe) unsubscribe();
     };
-  }, [conversationId, userId]);
+  }, [existingConversation?.id, currentRequest?.id, userId]);
 
-  // ✅ ОБНОВИ: Търси ментор
-  const handleSearchMentor = async (problem, category) => {
-    setStatus('searching');
+  // ✅ Избор на категория - създай request и отвори chat
+  const handleCategorySelect = async (category, problem) => {
+    if (!userId || !userName) return;
 
     try {
-      await createChatRequest({
-        userId: userId,
-        userName: userName,
-        userEmail: profileData?.email,
-        problem: problem,
-        category: category
-      });
+      const requestData = {
+        userId,
+        userName,
+        userEmail: userEmail,
+        problem,
+        category,
+        timestamp: Date.now(),
+        status: 'pending'
+      };
 
-      toast.info(t('digiBridge.chatWindow.requestSent'));
+      const requestId = await createChatRequest(requestData);
       
-      // ✅ ЗАТВОРИ прозореца след 2 секунди
-      setTimeout(() => {
-        onClose();
-        toast.success(t('digiBridge.chatWindow.requestCreated'));
-      }, 2000);
-
+      const newRequest = {
+        id: requestId,
+        ...requestData
+      };
+      
+      setCurrentRequest(newRequest);
+      onRequestCreated?.(newRequest);
+      setStep('chat');
+      toast.success('Можеш да започнеш да пишеш!');
     } catch (error) {
-      console.error('Error creating chat request:', error);
-      toast.error(t('digiBridge.chatWindow.errorSearching'));
-      setStatus('idle');
+      console.error('Error creating request:', error);
+      toast.error('Грешка при създаване на заявка');
     }
   };
 
-  // Изпрати съобщение
+  // ✅ Изпрати съобщение (в request или conversation)
   const handleSendMessage = async (e) => {
     e.preventDefault();
-
-    if (!inputMessage.trim() || !conversationId || !mentorId) return;
+    if (!inputMessage.trim()) return;
 
     const messageData = {
       senderId: userId,
       senderName: userName,
       senderType: 'user',
-      message: inputMessage.trim(),
-      userId: userId,
-      mentorId: mentorId
+      message: inputMessage.trim()
     };
 
     try {
-      await sendMessage(conversationId, messageData);
+      if (currentRequest && !existingConversation) {
+        // Изпращане в REQUEST
+        await sendMessageToRequest(currentRequest.id, messageData);
+      } else if (existingConversation) {
+        // Изпращане в CONVERSATION
+        await sendMessage(existingConversation.id, {
+          ...messageData,
+          userId: userId,
+          mentorId: existingConversation.mentorId
+        });
+      }
+      
       setInputMessage('');
     } catch (error) {
-      console.error('Error sending message:', error);
-      toast.error(t('digiBridge.chatWindow.errorSending'));
+      console.error('❌ Error sending message:', error);
+      toast.error('Грешка при изпращане на съобщение');
     }
   };
 
   // Upload файл
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
-    if (!file || !conversationId || !mentorId) return;
+    if (!file) return;
+
+    const activeConvId = existingConversation?.id;
+    if (!activeConvId) {
+      toast.error('Моля изчакайте да бъде приет чатът');
+      return;
+    }
 
     if (file.size > 10 * 1024 * 1024) {
       toast.error(t('digiBridge.chatWindow.fileTooLarge'));
@@ -145,7 +182,7 @@ export const DigiBridgeChatWindow = ({ onClose, existingConversation = null }) =
     try {
       const fileInfo = await uploadChatFile(
         file,
-        conversationId,
+        activeConvId,
         (progress) => setUploadProgress(progress)
       );
 
@@ -159,10 +196,10 @@ export const DigiBridgeChatWindow = ({ onClose, existingConversation = null }) =
         fileName: fileInfo.name,
         fileSize: fileInfo.size,
         userId: userId,
-        mentorId: mentorId
+        mentorId: existingConversation.mentorId
       };
 
-      await sendMessage(conversationId, messageData);
+      await sendMessage(activeConvId, messageData);
       toast.success(t('digiBridge.chatWindow.fileUploaded'));
     } catch (error) {
       console.error('Error uploading file:', error);
@@ -178,11 +215,12 @@ export const DigiBridgeChatWindow = ({ onClose, existingConversation = null }) =
 
   // Приключи чат
   const handleEndChat = async () => {
-    if (!conversationId) return;
+    const activeConvId = existingConversation?.id;
+    if (!activeConvId) return;
 
     try {
-      await endConversation(conversationId);
-      setStatus('ended');
+      await endConversation(activeConvId);
+      setStep('ended');
       toast.success(t('digiBridge.chatWindow.chatEnded'));
       setTimeout(() => {
         onClose();
@@ -200,7 +238,7 @@ export const DigiBridgeChatWindow = ({ onClose, existingConversation = null }) =
         {/* HEADER */}
         <div className="digibridge-chat-header">
           <div className="digibridge-chat-header-info">
-            {status === 'connected' && (
+            {existingConversation && (
               <>
                 <div className="digibridge-chat-mentor-avatar">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -217,13 +255,13 @@ export const DigiBridgeChatWindow = ({ onClose, existingConversation = null }) =
                 </div>
               </>
             )}
-            {status === 'searching' && (
-              <h3>{t('digiBridge.chatWindow.searching')}</h3>
+            {currentRequest && !existingConversation && (
+              <h3>⏳ Чака се ментор</h3>
             )}
-            {status === 'idle' && (
+            {!currentRequest && !existingConversation && step === 'category' && (
               <h3>{t('digiBridge.chatWindow.needHelp')}</h3>
             )}
-            {status === 'ended' && (
+            {step === 'ended' && (
               <h3>{t('digiBridge.chatWindow.ended')}</h3>
             )}
           </div>
@@ -239,70 +277,65 @@ export const DigiBridgeChatWindow = ({ onClose, existingConversation = null }) =
         {/* BODY */}
         <div className="digibridge-chat-body">
 
-          {/* IDLE - Избор на проблем */}
-          {status === 'idle' && (
+          {/* CATEGORY SELECTION */}
+          {step === 'category' && !currentRequest && !existingConversation && (
             <div className="digibridge-chat-start">
               <div className="digibridge-chat-start-icon">💬</div>
               <h3>{t('digiBridge.chatWindow.startTitle')}</h3>
               <p>{t('digiBridge.chatWindow.startDescription')}</p>
 
               <div className="digibridge-chat-categories">
-                <button onClick={() => handleSearchMentor('Общ въпрос', 'General')}>
+                <button onClick={() => handleCategorySelect('General', 'Общ въпрос')}>
                   ❓ {t('digiBridge.chatWindow.categories.general')}
                 </button>
-                <button onClick={() => handleSearchMentor('Онлайн банкиране', 'Online Banking')}>
+                <button onClick={() => handleCategorySelect('Online Banking', 'Онлайн банкиране')}>
                   🏦 {t('digiBridge.chatWindow.categories.banking')}
                 </button>
-                <button onClick={() => handleSearchMentor('Социални мрежи', 'Social Media')}>
+                <button onClick={() => handleCategorySelect('Social Media', 'Социални мрежи')}>
                   📱 {t('digiBridge.chatWindow.categories.socialMedia')}
                 </button>
-                <button onClick={() => handleSearchMentor('Сигурност', 'Digital Security')}>
+                <button onClick={() => handleCategorySelect('Digital Security', 'Сигурност')}>
                   🔒 {t('digiBridge.chatWindow.categories.security')}
                 </button>
-                <button onClick={() => handleSearchMentor('Email и съобщения', 'Email')}>
+                <button onClick={() => handleCategorySelect('Email', 'Email и съобщения')}>
                   📧 {t('digiBridge.chatWindow.categories.email')}
                 </button>
-                <button onClick={() => handleSearchMentor('Компютърни умения', 'Basic Computer Skills')}>
+                <button onClick={() => handleCategorySelect('Basic Computer Skills', 'Компютърни умения')}>
                   💻 {t('digiBridge.chatWindow.categories.computer')}
                 </button>
               </div>
             </div>
           )}
 
-          {/* SEARCHING - Търси ментор */}
-          {status === 'searching' && (
-            <div className="digibridge-chat-searching">
-              <div className="digibridge-chat-searching-spinner">
-                <div className="digibridge-spinner"></div>
-              </div>
-              <h3>{t('digiBridge.chatWindow.searchingTitle')}</h3>
-              <p>{t('digiBridge.chatWindow.searchingDescription')}</p>
-            </div>
-          )}
-
-          {/* CONNECTED - Съобщения */}
-          {status === 'connected' && (
+          {/* CHAT - Съобщения */}
+          {step === 'chat' && (
             <div className="digibridge-chat-messages">
               {messages.length === 0 && (
                 <div className="digibridge-chat-welcome">
-                  <p>{t('digiBridge.chatWindow.welcomeMessage', { mentorName })}</p>
+                  <p>
+                    {existingConversation 
+                      ? t('digiBridge.chatWindow.welcomeMessage', { mentorName })
+                      : '👋 Можеш да започнеш да пишеш. Ментор ще ти отговори скоро!'}
+                  </p>
                 </div>
               )}
 
-              {messages.map((message) => (
-                <DigiBridgeChatMessage
-                  key={message.id}
-                  message={message}
-                  isOwn={message.senderId === userId}
-                />
-              ))}
+              {messages.map((message) => {
+                return (
+                  <DigiBridgeChatMessage
+                    key={message.id}
+                    message={message}
+                    isOwn={message.senderId === userId}
+                  />
+                );
+              })}
 
               <div ref={messagesEndRef} />
             </div>
           )}
 
-          {/* ENDED - Чатът приключи */}
-          {status === 'ended' && (
+          {/* ENDED */}
+          {step === 'ended' && (
             <div className="digibridge-chat-ended">
               <div className="digibridge-chat-ended-icon">✅</div>
               <h3>{t('digiBridge.chatWindow.endedTitle')}</h3>
@@ -312,7 +345,7 @@ export const DigiBridgeChatWindow = ({ onClose, existingConversation = null }) =
         </div>
 
         {/* FOOTER - Input за съобщения */}
-        {status === 'connected' && (
+        {step === 'chat' && (
           <div className="digibridge-chat-footer">
 
             {/* Upload progress */}
@@ -327,26 +360,30 @@ export const DigiBridgeChatWindow = ({ onClose, existingConversation = null }) =
 
             <form onSubmit={handleSendMessage} className="digibridge-chat-input-form">
 
-              {/* Бутон за файлове */}
-              <input
-                type="file"
-                ref={fileInputRef}
-                onChange={handleFileUpload}
-                accept="image/*,.pdf,.doc,.docx"
-                style={{ display: 'none' }}
-              />
-              <button
-                type="button"
-                className="digibridge-chat-attach-btn"
-                onClick={() => fileInputRef.current?.click()}
-                disabled={isUploading}
-              >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
-                </svg>
-              </button>
+              {/* Файлове - само ако е accepted */}
+              {existingConversation && (
+                <>
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleFileUpload}
+                    accept="image/*,.pdf,.doc,.docx"
+                    style={{ display: 'none' }}
+                  />
+                  <button
+                    type="button"
+                    className="digibridge-chat-attach-btn"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={isUploading}
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
+                    </svg>
+                  </button>
+                </>
+              )}
 
-              {/* Input за текст */}
+              {/* Input */}
               <input
                 type="text"
                 className="digibridge-chat-input"
@@ -356,7 +393,7 @@ export const DigiBridgeChatWindow = ({ onClose, existingConversation = null }) =
                 disabled={isUploading}
               />
 
-              {/* Бутон за изпращане */}
+              {/* Send */}
               <button
                 type="submit"
                 className="digibridge-chat-send-btn"
@@ -369,13 +406,15 @@ export const DigiBridgeChatWindow = ({ onClose, existingConversation = null }) =
               </button>
             </form>
 
-            {/* Бутон за приключване на чат */}
-            <button
-              className="digibridge-chat-end-btn"
-              onClick={handleEndChat}
-            >
-              {t('digiBridge.chatWindow.endChat')}
-            </button>
+            {/* End chat - само ако е accepted */}
+            {existingConversation && (
+              <button
+                className="digibridge-chat-end-btn"
+                onClick={handleEndChat}
+              >
+                {t('digiBridge.chatWindow.endChat')}
+              </button>
+            )}
           </div>
         )}
 

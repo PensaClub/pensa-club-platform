@@ -40,8 +40,7 @@ export const database = getDatabase(databaseApp);
 
 export const createChatRequest = async (requestData) => {
   try {
-    console.log('🔷 Creating chat request with data:', requestData); // ✅ ДОБАВИ
-
+  
     // Валидация
     if (!requestData.userId) {
       throw new Error('userId is required');
@@ -51,10 +50,8 @@ export const createChatRequest = async (requestData) => {
     }
 
     const requestsRef = ref(database, 'chat_requests');
-    console.log('🔷 requestsRef created:', requestsRef); // ✅ ДОБАВИ
     
     const newRequestRef = push(requestsRef);
-    console.log('🔷 newRequestRef key:', newRequestRef.key); // ✅ ДОБАВИ
     
     const request = {
       userId: requestData.userId,
@@ -68,11 +65,8 @@ export const createChatRequest = async (requestData) => {
       createdAt: Date.now(),
       assignedAt: null
     };
-    
-    console.log('🔷 Request object to save:', request); // ✅ ДОБАВИ
-    
+       
     await set(newRequestRef, request);
-    console.log('✅ Request saved successfully with ID:', newRequestRef.key); // ✅ ДОБАВИ
     
     return newRequestRef.key;
   } catch (error) {
@@ -135,56 +129,106 @@ export const listenToPendingRequests = (callback) => {
  * @param {Object} mentorData - { mentorId, mentorName }
  * @returns {Promise<string>} - conversationId
  */
-export const acceptChatRequest = async (requestId, mentorId, mentorName) => {
-  // ✅ ДОБАВИ ВАЛИДАЦИЯ
-  if (!requestId || !mentorId || !mentorName) {
-    throw new Error('Missing required parameters: requestId, mentorId, or mentorName');
-  }
+// ========================================
+// CHAT REQUEST MESSAGES (ПРЕДИ ПРИЕМАНЕ)
+// ========================================
 
+// Изпращане на съобщение В REQUEST (преди приемане от ментор)
+export const sendMessageToRequest = async (requestId, messageData) => {
   try {
-    // Вземи request данните
+    const requestMessagesRef = ref(database, `chat_request_messages/${requestId}`);
+    const newMessageRef = push(requestMessagesRef);
+    
+    const messageToSave = {
+      ...messageData,
+      timestamp: Date.now(),
+      read: false,
+      id: newMessageRef.key
+    };
+    
+    await set(newMessageRef, messageToSave);
+    
+    return messageToSave;
+  } catch (error) {
+    console.error('Error sending message to request:', error);
+    throw error;
+  }
+};
+
+// Слушане за съобщения В REQUEST
+export const listenToRequestMessages = (requestId, callback) => {
+  const messagesRef = ref(database, `chat_request_messages/${requestId}`);
+  
+  const unsubscribe = onValue(messagesRef, (snapshot) => {
+    const messages = [];
+    
+    snapshot.forEach((childSnapshot) => {
+      messages.push({
+        id: childSnapshot.key,
+        ...childSnapshot.val()
+      });
+    });
+    
+    messages.sort((a, b) => a.timestamp - b.timestamp);
+    callback(messages);
+  });
+  
+  return unsubscribe;
+};
+
+// ОБНОВИ acceptChatRequest функцията - намери я и замени я с тази:
+export const acceptChatRequest = async (requestId, mentorId, mentorName) => {
+  try {
     const requestRef = ref(database, `chat_requests/${requestId}`);
     const requestSnapshot = await get(requestRef);
     
     if (!requestSnapshot.exists()) {
-      throw new Error('Chat request not found');
+      throw new Error('Request not found');
     }
-
+    
     const requestData = requestSnapshot.val();
-
+    const conversationId = `-${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    
     // Създай conversation
-    const conversationRef = push(ref(database, 'chat_conversations'));
-    const conversationId = conversationRef.key;
-
     const conversationData = {
+      id: conversationId,
       userId: requestData.userId,
       userName: requestData.userName,
-      userEmail: requestData.userEmail,
       mentorId: mentorId,
       mentorName: mentorName,
       problem: requestData.problem,
       category: requestData.category,
       status: 'active',
-      createdAt: Date.now(),
-      requestId: requestId
+      startedAt: Date.now()
     };
-
-    // Запази conversation
+    
+    const conversationRef = ref(database, `chat_conversations/${conversationId}`);
     await set(conversationRef, conversationData);
-
-    // Update request status
-    await update(requestRef, {
-      status: 'accepted',
-      mentorId: mentorId,
-      mentorName: mentorName,
-      conversationId: conversationId,
-      acceptedAt: Date.now()
-    });
-
-    // Изтрий unread count за user-а (ако има)
-    const userUnreadRef = ref(database, `user_unread_counts/${requestData.userId}/${conversationId}`);
-    await set(userUnreadRef, 0);
-
+    
+    // ✅ ПРЕХВЪРЛИ съобщенията от request в conversation
+    const requestMessagesRef = ref(database, `chat_request_messages/${requestId}`);
+    const requestMessagesSnapshot = await get(requestMessagesRef);
+    
+    if (requestMessagesSnapshot.exists()) {
+      const conversationMessagesRef = ref(database, `chat_messages/${conversationId}`);
+      const messages = requestMessagesSnapshot.val();
+      
+      // Копирай всички съобщения
+      for (const messageKey in messages) {
+        const messageRef = push(conversationMessagesRef);
+        await set(messageRef, {
+          ...messages[messageKey],
+          id: messageRef.key
+        });
+      }
+      
+      // Изтрий request messages след прехвърлянето
+      await remove(requestMessagesRef);
+    }
+    
+    // Изтрий request
+    await remove(requestRef);
+    
     return conversationId;
   } catch (error) {
     console.error('Error accepting chat request:', error);
