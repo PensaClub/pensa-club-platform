@@ -1,0 +1,409 @@
+/* src/components/DigiBridge/DigiBridgeChatMessage/digiBridgeChatMessage.css */
+
+/* ===================================
+   CHAT MESSAGE CONTAINER
+   =================================== */
+
+.digibridge-chat-message {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+  animation: digibridge-message-slide-in 0.3s ease-out;
+}
+
+@keyframes digibridge-message-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Собствени съобщения (дясно) */
+.digibridge-chat-message-own {
+  flex-direction: row-reverse;
+}
+
+/* Съобщения от другия (ляво) */
+.digibridge-chat-message-other {
+  flex-direction: row;
+}
+
+/* ===================================
+   AVATAR
+   =================================== */
+
+.digibridge-chat-message-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff6347 0%, #ff7f50 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.digibridge-chat-message-avatar svg {
+  width: 20px;
+  height: 20px;
+  color: #ffffff;
+}
+
+/* ===================================
+   CONTENT WRAPPER
+   =================================== */
+
+.digibridge-chat-message-content {
+  max-width: 75%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.digibridge-chat-message-own .digibridge-chat-message-content {
+  align-items: flex-end;
+}
+
+.digibridge-chat-message-other .digibridge-chat-message-content {
+  align-items: flex-start;
+}
+
+/* ===================================
+   SENDER NAME
+   =================================== */
+
+.digibridge-chat-message-sender {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #6c757d;
+  padding: 0 12px;
+}
+
+/* ===================================
+   MESSAGE BUBBLE
+   =================================== */
+
+.digibridge-chat-message-bubble {
+  position: relative;
+  padding: 12px 16px;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Собствени съобщения */
+.digibridge-chat-message-own .digibridge-chat-message-bubble {
+  background: linear-gradient(135deg, #ff6347 0%, #ff7f50 100%);
+  color: #ffffff;
+  border-bottom-right-radius: 4px;
+}
+
+/* Съобщения от другия */
+.digibridge-chat-message-other .digibridge-chat-message-bubble {
+  background: #ffffff;
+  color: #2c3e50;
+  border: 2px solid #e9ecef;
+  border-bottom-left-radius: 4px;
+}
+
+/* ===================================
+   TEXT MESSAGE
+   =================================== */
+
+.digibridge-chat-message-text {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+
+.digibridge-chat-message-own .digibridge-chat-message-text {
+  color: #ffffff;
+}
+
+.digibridge-chat-message-other .digibridge-chat-message-text {
+  color: #2c3e50;
+}
+
+/* ===================================
+   IMAGE MESSAGE
+   =================================== */
+
+.digibridge-chat-message-image-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0;
+  margin: -4px;
+}
+
+.digibridge-chat-message-image-link {
+  position: relative;
+  display: block;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.digibridge-chat-message-image-link:hover {
+  transform: scale(1.02);
+}
+
+.digibridge-chat-message-image {
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+}
+
+.digibridge-chat-message-image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.digibridge-chat-message-image-link:hover .digibridge-chat-message-image-overlay {
+  background: rgba(0, 0, 0, 0.3);
+  opacity: 1;
+}
+
+.digibridge-chat-message-image-overlay svg {
+  width: 32px;
+  height: 32px;
+  color: #ffffff;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.digibridge-chat-message-caption {
+  margin: 4px 8px 0 8px;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.digibridge-chat-message-own .digibridge-chat-message-caption {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.digibridge-chat-message-other .digibridge-chat-message-caption {
+  color: #2c3e50;
+}
+
+/* ===================================
+   FILE MESSAGE
+   =================================== */
+
+.digibridge-chat-message-file {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  min-width: 240px;
+}
+
+.digibridge-chat-message-own .digibridge-chat-message-file {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.digibridge-chat-message-file:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.digibridge-chat-message-file-icon {
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 99, 71, 0.1);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.digibridge-chat-message-file-icon svg {
+  width: 22px;
+  height: 22px;
+  color: #ff6347;
+}
+
+.digibridge-chat-message-own .digibridge-chat-message-file-icon {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.digibridge-chat-message-own .digibridge-chat-message-file-icon svg {
+  color: #ffffff;
+}
+
+.digibridge-chat-message-file-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.digibridge-chat-message-file-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.digibridge-chat-message-own .digibridge-chat-message-file-name {
+  color: #ffffff;
+}
+
+.digibridge-chat-message-other .digibridge-chat-message-file-name {
+  color: #2c3e50;
+}
+
+.digibridge-chat-message-file-size {
+  font-size: 0.8rem;
+}
+
+.digibridge-chat-message-own .digibridge-chat-message-file-size {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.digibridge-chat-message-other .digibridge-chat-message-file-size {
+  color: #6c757d;
+}
+
+.digibridge-chat-message-file-download {
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 99, 71, 0.1);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.digibridge-chat-message-file-download svg {
+  width: 18px;
+  height: 18px;
+  color: #ff6347;
+}
+
+.digibridge-chat-message-own .digibridge-chat-message-file-download {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.digibridge-chat-message-own .digibridge-chat-message-file-download svg {
+  color: #ffffff;
+}
+
+/* ===================================
+   TIME & READ STATUS
+   =================================== */
+
+.digibridge-chat-message-time {
+  margin-top: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.digibridge-chat-message-own .digibridge-chat-message-time {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.digibridge-chat-message-other .digibridge-chat-message-time {
+  color: #adb5bd;
+}
+
+.digibridge-chat-message-read-icon {
+  width: 14px;
+  height: 14px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+@media (max-width: 768px) {
+  .digibridge-chat-message-content {
+    max-width: 80%;
+  }
+
+  .digibridge-chat-message-avatar {
+    width: 32px;
+    height: 32px;
+  }
+
+  .digibridge-chat-message-avatar svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .digibridge-chat-message-bubble {
+    padding: 10px 14px;
+  }
+
+  .digibridge-chat-message-text {
+    font-size: 0.9rem;
+  }
+
+  .digibridge-chat-message-image {
+    max-width: 220px;
+  }
+
+  .digibridge-chat-message-file {
+    min-width: 200px;
+  }
+}
+
+@media (max-width: 480px) {
+  .digibridge-chat-message-content {
+    max-width: 85%;
+  }
+
+  .digibridge-chat-message-bubble {
+    padding: 8px 12px;
+  }
+
+  .digibridge-chat-message-text {
+    font-size: 0.85rem;
+  }
+
+  .digibridge-chat-message-image {
+    max-width: 180px;
+  }
+}
+
+/* ===================================
+   ACCESSIBILITY
+   =================================== */
+
+/* Disable animations за хора с motion sensitivity */
+@media (prefers-reduced-motion: reduce) {
+  .digibridge-chat-message,
+  .digibridge-chat-message-image-link {
+    animation: none !important;
+    transition: none !important;
+  }
+}

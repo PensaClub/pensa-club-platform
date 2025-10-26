@@ -1,0 +1,452 @@
+/* src/components/DigiBridge/DigiBridgeMentorDashboard/conversationCard.css */
+
+/* ===================================
+   CONVERSATION CARD
+   =================================== */
+
+.digibridge-conversation-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  animation: digibridge-card-slide-in 0.4s ease-out;
+  position: relative;
+}
+
+@keyframes digibridge-card-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Active conversations - green left border */
+.digibridge-conversation-card.active {
+  border-left: 4px solid #28a745;
+}
+
+/* Completed conversations - blue left border */
+.digibridge-conversation-card.completed {
+  border-left: 4px solid #007bff;
+  opacity: 0.9;
+}
+
+.digibridge-conversation-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* ===================================
+   HEADER
+   =================================== */
+
+.digibridge-conversation-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.digibridge-conversation-card-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.digibridge-conversation-card-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #007bff 0%, #4da3ff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ffffff;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
+
+.digibridge-conversation-card.active .digibridge-conversation-card-avatar {
+  background: linear-gradient(135deg, #28a745 0%, #5cb85c 100%);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.digibridge-conversation-card-user-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.digibridge-conversation-card-user-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0 0 6px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.digibridge-conversation-card-category {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.digibridge-conversation-card-category-emoji {
+  font-size: 1rem;
+}
+
+/* ===================================
+   STATUS BADGE
+   =================================== */
+
+.digibridge-conversation-card-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.digibridge-conversation-card-status.active {
+  background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+  color: #155724;
+}
+
+.digibridge-conversation-card-status.completed {
+  background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+  color: #004085;
+}
+
+.digibridge-conversation-card-status svg {
+  width: 14px;
+  height: 14px;
+}
+
+.digibridge-conversation-card-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #28a745;
+  animation: digibridge-status-pulse 2s ease-in-out infinite;
+}
+
+@keyframes digibridge-status-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.2);
+  }
+}
+
+/* ===================================
+   CONTENT
+   =================================== */
+
+.digibridge-conversation-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.digibridge-conversation-card-problem {
+  font-size: 0.95rem;
+  color: #495057;
+  line-height: 1.6;
+  padding: 12px 16px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border-left: 3px solid #dee2e6;
+}
+
+.digibridge-conversation-card.active .digibridge-conversation-card-problem {
+  border-left-color: #28a745;
+}
+
+.digibridge-conversation-card.completed .digibridge-conversation-card-problem {
+  border-left-color: #007bff;
+}
+
+.digibridge-conversation-card-problem strong {
+  color: #2c3e50;
+  font-weight: 700;
+}
+
+.digibridge-conversation-card-last-message {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #fff5f0 0%, #ffffff 100%);
+  border-radius: 12px;
+  border: 2px solid rgba(255, 99, 71, 0.1);
+}
+
+.digibridge-conversation-card-last-message svg {
+  width: 18px;
+  height: 18px;
+  color: #ff6347;
+  flex-shrink: 0;
+}
+
+.digibridge-conversation-card-last-message-text {
+  font-size: 0.9rem;
+  color: #495057;
+  font-style: italic;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ===================================
+   FOOTER
+   =================================== */
+
+.digibridge-conversation-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding-top: 16px;
+  border-top: 2px solid #f8f9fa;
+}
+
+.digibridge-conversation-card-time {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.digibridge-conversation-card-time svg {
+  width: 16px;
+  height: 16px;
+}
+
+.digibridge-conversation-card-open-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #007bff 0%, #4da3ff 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
+
+.digibridge-conversation-card.active .digibridge-conversation-card-open-btn {
+  background: linear-gradient(135deg, #28a745 0%, #5cb85c 100%);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.digibridge-conversation-card-open-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 123, 255, 0.4);
+}
+
+.digibridge-conversation-card.active .digibridge-conversation-card-open-btn:hover {
+  box-shadow: 0 6px 16px rgba(40, 167, 69, 0.4);
+}
+
+.digibridge-conversation-card-open-btn:active {
+  transform: translateY(0);
+}
+
+.digibridge-conversation-card-open-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+@media (max-width: 768px) {
+  .digibridge-conversation-card {
+    padding: 20px;
+  }
+
+  .digibridge-conversation-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .digibridge-conversation-card-avatar {
+    width: 44px;
+    height: 44px;
+    font-size: 1.1rem;
+  }
+
+  .digibridge-conversation-card-footer {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .digibridge-conversation-card-open-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .digibridge-conversation-card {
+    padding: 16px;
+  }
+
+  .digibridge-conversation-card-user-name {
+    font-size: 1rem;
+  }
+
+  .digibridge-conversation-card-problem {
+    font-size: 0.9rem;
+    padding: 10px 14px;
+  }
+
+  .digibridge-conversation-card-last-message {
+    padding: 10px 14px;
+  }
+}
+
+/* ===================================
+   ACCESSIBILITY
+   =================================== */
+
+.digibridge-conversation-card-open-btn:focus-visible {
+  outline: 3px solid #007bff;
+  outline-offset: 2px;
+}
+
+.digibridge-conversation-card.active .digibridge-conversation-card-open-btn:focus-visible {
+  outline-color: #28a745;
+}
+
+/* Disable animations за хора с motion sensitivity */
+@media (prefers-reduced-motion: reduce) {
+  .digibridge-conversation-card,
+  .digibridge-conversation-card-status-dot {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+/* ===================================
+   BUTTONS GROUP
+   =================================== */
+
+.digibridge-conversation-card-buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.digibridge-conversation-card-end-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+.digibridge-conversation-card-end-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(220, 53, 69, 0.4);
+}
+
+.digibridge-conversation-card-end-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.digibridge-conversation-card-end-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.digibridge-conversation-card-end-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Spinner (reuse from request card) */
+.digibridge-conversation-card-spinner {
+  width: 18px;
+  height: 18px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: digibridge-spinner-rotate 0.8s linear infinite;
+}
+
+/* ===================================
+   RESPONSIVE - UPDATE
+   =================================== */
+
+@media (max-width: 768px) {
+  .digibridge-conversation-card-buttons {
+    width: 100%;
+  }
+
+  .digibridge-conversation-card-open-btn,
+  .digibridge-conversation-card-end-btn {
+    flex: 1;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .digibridge-conversation-card-buttons {
+    flex-direction: column;
+  }
+
+  .digibridge-conversation-card-open-btn,
+  .digibridge-conversation-card-end-btn {
+    width: 100%;
+  }
+}
+
+/* ===================================
+   ACCESSIBILITY
+   =================================== */
+
+.digibridge-conversation-card-end-btn:focus-visible {
+  outline: 3px solid #dc3545;
+  outline-offset: 2px;
+}
