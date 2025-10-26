@@ -4,26 +4,34 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import './digiBridgeChatButton.css';
 import { useAuthContext } from '../../contexts/UserContext';
-import { listenToUnreadCounts, listenToUserConversations } from '../../firebase/firebaseChat';
+import { 
+  listenToUnreadCounts, 
+  listenToUserConversations,
+  listenToPendingRequests,
+  listenToMentorConversations,
+  listenToMessages
+} from '../../firebase/firebaseChat';
 import { DigiBridgeChatWindow } from '../DigiBridgeChatWindow/DigiBridgeChatWindow';
+import { ChatWindowManager } from '../ChatWindowManager/ChatWindowManager';
 import { MentorChatHub } from '../MentorChatHub/MentorChatHub';
-
 export const DigiBridgeChatButton = ({ onClick }) => {
   const { t } = useTranslation();
   const { isAuthentication, profileData } = useAuthContext();
   const [unreadCount, setUnreadCount] = useState(0);
+  const [pendingCount, setPendingCount] = useState(0);
+  const [mentorUnreadCount, setMentorUnreadCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
-  const [activeConversation, setActiveConversation] = useState(null); // ✅ ДОБАВИ
+  const [activeConversation, setActiveConversation] = useState(null);
+  const [openChats, setOpenChats] = useState([]); // ✅ STATE ТУК
 
   const userEmail = profileData?.email || '';
   const userId = userEmail.replace(/\./g, '_dot_').replace(/@/g, '_at_');
   const userRole = profileData?.role || 'user';
+  const isMentor = userRole === 'admin' || userRole === 'mentor';
 
-  // Слушай за непрочетени
+  // Слушай за непрочетени (само за users)
   useEffect(() => {
-    if (!isAuthentication || !profileData) return;
-
-    if (!userId) return;
+    if (!isAuthentication || !userId || isMentor) return;
 
     const unsubscribe = listenToUnreadCounts(userId, ({ totalUnread }) => {
       setUnreadCount(totalUnread);
@@ -32,17 +40,71 @@ export const DigiBridgeChatButton = ({ onClick }) => {
     return () => {
       if (unsubscribe) unsubscribe();
     };
-  }, [isAuthentication, profileData, userId]);
+  }, [isAuthentication, userId, isMentor]);
 
-  // ✅ ДОБАВИ: Слушай за активен conversation (само за users)
+  // Слушай за pending requests (само за mentors)
   useEffect(() => {
-    if (!isAuthentication || !userId) return;
-    
-    // Само за обикновени users (не admin/mentor)
-    if (userRole === 'admin' || userRole === 'mentor') return;
+    if (!isAuthentication || !isMentor) return;
+
+    const unsubscribe = listenToPendingRequests((requests) => {
+      setPendingCount(requests.length);
+    });
+
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, [isAuthentication, isMentor]);
+
+  // Слушай за unread messages в активните conversations (само за mentors)
+  useEffect(() => {
+    if (!isAuthentication || !isMentor || !userId) return;
+
+    let conversationUnsubscribes = [];
+    let conversationsUnsubscribe = null;
+
+    conversationsUnsubscribe = listenToMentorConversations(userId, (conversations) => {
+      conversationUnsubscribes.forEach(unsub => unsub && unsub());
+      conversationUnsubscribes = [];
+
+      const activeConversations = conversations.filter(c => c.status === 'active');
+
+      if (activeConversations.length === 0) {
+        setMentorUnreadCount(0);
+        return;
+      }
+
+      let totalUnread = 0;
+      let processedCount = 0;
+
+      activeConversations.forEach(conv => {
+        const unsubscribe = listenToMessages(conv.id, (messages) => {
+          const unreadMessages = messages.filter(
+            msg => msg.senderId !== userId && !msg.read
+          );
+
+          totalUnread += unreadMessages.length;
+          processedCount++;
+
+          if (processedCount === activeConversations.length) {
+            setMentorUnreadCount(totalUnread);
+          }
+        });
+
+        conversationUnsubscribes.push(unsubscribe);
+      });
+    });
+
+    return () => {
+      if (conversationsUnsubscribe) conversationsUnsubscribe();
+      conversationUnsubscribes.forEach(unsub => unsub && unsub());
+    };
+  }, [isAuthentication, isMentor, userId]);
+
+  // Слушай за активен conversation (само за users)
+  useEffect(() => {
+    if (!isAuthentication || !userId || isMentor) return;
 
     const unsubscribe = listenToUserConversations(userId, (conversations) => {
-      // Вземи първия активен conversation
       const active = conversations.find(c => c.status === 'active');
       setActiveConversation(active || null);
     });
@@ -50,18 +112,32 @@ export const DigiBridgeChatButton = ({ onClick }) => {
     return () => {
       if (unsubscribe) unsubscribe();
     };
-  }, [isAuthentication, userId, userRole]);
+  }, [isAuthentication, userId, isMentor]);
 
-  // Не показвай бутона ако не е логнат
   if (!isAuthentication) return null;
 
-  // Ако е admin или mentor - различен UI
-  const isMentor = userRole === 'admin' || userRole === 'mentor';
-
-  // ✅ ОБНОВИ: Handle click
   const handleClick = () => {
     setIsOpen(true);
   };
+
+  // ✅ Функции за управление на чатове
+  const handleOpenChat = (conversation) => {
+  
+  if (openChats.find(c => c.id === conversation.id)) {
+    console.log('⚠️ Chat already open');
+    return;
+  }
+  
+  const newChats = [...openChats, conversation];
+  console.log('🔵 Setting openChats to:', newChats);
+  setOpenChats(newChats);
+};
+
+  const handleCloseChat = (conversationId) => {
+    setOpenChats(openChats.filter(c => c.id !== conversationId));
+  };
+
+  const badgeCount = isMentor ? (pendingCount + mentorUnreadCount) : unreadCount;
 
   return (
     <>
@@ -71,14 +147,12 @@ export const DigiBridgeChatButton = ({ onClick }) => {
           onClick={handleClick}
           aria-label={isMentor ? 'Open chat hub' : t('digiBridge.chatButton.ariaLabel')}
         >
-          {/* Badge за непрочетени */}
-          {unreadCount > 0 && (
+          {badgeCount > 0 && (
             <span className="digibridge-chat-button-badge">
-              {unreadCount > 9 ? '9+' : unreadCount}
+              {badgeCount > 9 ? '9+' : badgeCount}
             </span>
           )}
 
-          {/* Икона за чат */}
           <svg
             className="digibridge-chat-button-icon"
             viewBox="0 0 24 24"
@@ -93,26 +167,35 @@ export const DigiBridgeChatButton = ({ onClick }) => {
             <path d="M8 14h4" />
           </svg>
 
-          {/* Текст - различен за mentor/user */}
           <span className="digibridge-chat-button-text">
             {isMentor ? '💬 Чат' : t('digiBridge.chatButton.help')}
           </span>
         </button>
 
-        {/* Пулсиращ индикатор */}
         <span className="digibridge-chat-button-pulse"></span>
       </div>
 
-      {/* За MENTOR - Multi Chat Hub */}
+      {/* Hub за MENTOR */}
       {isMentor && isOpen && (
-        <MentorChatHub onClose={() => setIsOpen(false)} />
+        <MentorChatHub 
+          onClose={() => setIsOpen(false)}
+          onOpenChat={handleOpenChat}
+        />
       )}
 
-      {/* За USER - Single Chat Window */}
+      {/* Chat за USER */}
       {!isMentor && isOpen && (
         <DigiBridgeChatWindow 
           onClose={() => setIsOpen(false)}
-          existingConversation={activeConversation} 
+          existingConversation={activeConversation}
+        />
+      )}
+
+      {/* ✅ CHAT WINDOWS MANAGER - извън Hub-а */}
+      {isMentor && (
+        <ChatWindowManager 
+          openChats={openChats}
+          onCloseChat={handleCloseChat}
         />
       )}
     </>

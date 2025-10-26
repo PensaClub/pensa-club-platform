@@ -14,7 +14,7 @@ import { DigiBridgeChatMessage } from '../DigiBridgeChatMessage/DigiBridgeChatMe
 import { toast } from 'react-toastify';
 import './miniChatWindow.css';
 
-export const MiniChatWindow = ({ conversation, position, onClose }) => {
+export const MiniChatWindow = ({ conversation, getPosition, onClose, isMobile }) => {
   const { t } = useTranslation();
   const { profileData } = useAuthContext();
   
@@ -31,7 +31,9 @@ export const MiniChatWindow = ({ conversation, position, onClose }) => {
   const mentorId = mentorEmail.replace(/\./g, '_dot_').replace(/@/g, '_at_');
   const mentorName = profileData?.details?.username || profileData?.details?.firstName || mentorEmail.split('@')[0] || 'Mentor';
 
-  // Scroll до дъното
+  // ✅ Изчисли позицията динамично според minimized state
+  const position = getPosition(isMinimized);
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -40,13 +42,11 @@ export const MiniChatWindow = ({ conversation, position, onClose }) => {
     scrollToBottom();
   }, [messages]);
 
-  // Слушай за съобщения
   useEffect(() => {
     if (!conversation?.id) return;
 
     const unsubscribe = listenToMessages(conversation.id, (msgs) => {
       setMessages(msgs);
-      // Маркирай като прочетени
       markMessagesAsRead(conversation.id, mentorId);
     });
 
@@ -55,7 +55,6 @@ export const MiniChatWindow = ({ conversation, position, onClose }) => {
     };
   }, [conversation?.id, mentorId]);
 
-  // Изпрати съобщение
   const handleSendMessage = async (e) => {
     e.preventDefault();
 
@@ -79,7 +78,6 @@ export const MiniChatWindow = ({ conversation, position, onClose }) => {
     }
   };
 
-  // Upload файл
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
     if (!file || !conversation?.id) return;
@@ -126,7 +124,6 @@ export const MiniChatWindow = ({ conversation, position, onClose }) => {
     }
   };
 
-  // Приключи чат
   const handleEndChat = async () => {
     if (!conversation?.id) return;
 
@@ -144,48 +141,70 @@ export const MiniChatWindow = ({ conversation, position, onClose }) => {
 
   return (
     <div 
-      className={`mini-chat-window ${isMinimized ? 'minimized' : ''}`}
-      style={{ right: `${position.right}px`, bottom: `${position.bottom}px` }}
+      className={`mini-chat-window ${isMinimized ? 'minimized' : ''} ${isMobile ? 'mobile' : ''}`}
+      style={{ 
+        right: position.right ? `${position.right}px` : 'auto',
+        bottom: `${position.bottom}px`,
+        left: position.left === 'auto' ? 'auto' : (position.left ? `${position.left}px` : 'auto'),
+        width: position.width ? (typeof position.width === 'number' ? `${position.width}px` : position.width) : undefined,
+        height: position.height ? `${position.height}px` : undefined
+      }}
     >
       {/* HEADER */}
       <div className="mini-chat-window-header">
         <div className="mini-chat-window-user-info">
-          <div className="mini-chat-window-avatar">
-            {conversation.userName?.charAt(0)?.toUpperCase() || 'U'}
-          </div>
-          <div className="mini-chat-window-user-details">
-            <h4>{conversation.userName}</h4>
-            <span>{conversation.problem}</span>
-          </div>
+          {/* ✅ Показвай само аватар ако е minimized на mobile */}
+          {isMinimized && isMobile ? (
+            <div 
+              className="mini-chat-window-avatar-only"
+              onClick={() => setIsMinimized(false)}
+            >
+              {conversation.userName?.charAt(0)?.toUpperCase() || 'U'}
+            </div>
+          ) : (
+            <>
+              <div className="mini-chat-window-avatar">
+                {conversation.userName?.charAt(0)?.toUpperCase() || 'U'}
+              </div>
+              <div className="mini-chat-window-user-details">
+                <h4>{conversation.userName}</h4>
+                <span>{conversation.problem}</span>
+              </div>
+            </>
+          )}
         </div>
-        <div className="mini-chat-window-actions">
-          <button 
-            className="mini-chat-window-btn"
-            onClick={() => setIsMinimized(!isMinimized)}
-            title={isMinimized ? t('digiBridge.mentorHub.maximize') : t('digiBridge.mentorHub.minimize')}
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              {isMinimized ? (
-                <path d="M4 14h6v6M20 10h-6V4"/>
-              ) : (
-                <line x1="5" y1="12" x2="19" y2="12"/>
-              )}
-            </svg>
-          </button>
-          <button 
-            className="mini-chat-window-btn"
-            onClick={onClose}
-            title={t('digiBridge.mentorHub.close')}
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <line x1="18" y1="6" x2="6" y2="18"/>
-              <line x1="6" y1="6" x2="18" y2="18"/>
-            </svg>
-          </button>
-        </div>
+        
+        {/* ✅ Скрий actions на mobile minimized */}
+        {!(isMinimized && isMobile) && (
+          <div className="mini-chat-window-actions">
+            <button 
+              className="mini-chat-window-btn"
+              onClick={() => setIsMinimized(!isMinimized)}
+              title={isMinimized ? t('digiBridge.mentorHub.maximize') : t('digiBridge.mentorHub.minimize')}
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                {isMinimized ? (
+                  <path d="M4 14h6v6M20 10h-6V4"/>
+                ) : (
+                  <line x1="5" y1="12" x2="19" y2="12"/>
+                )}
+              </svg>
+            </button>
+            <button 
+              className="mini-chat-window-btn"
+              onClick={onClose}
+              title={t('digiBridge.mentorHub.close')}
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+          </div>
+        )}
       </div>
 
-      {/* BODY - показва се само ако не е minimized */}
+      {/* BODY */}
       {!isMinimized && (
         <>
           <div className="mini-chat-window-body">
@@ -203,7 +222,6 @@ export const MiniChatWindow = ({ conversation, position, onClose }) => {
 
           {/* FOOTER */}
           <div className="mini-chat-window-footer">
-            {/* Upload progress */}
             {isUploading && (
               <div className="mini-chat-window-upload-progress">
                 <div
@@ -214,7 +232,6 @@ export const MiniChatWindow = ({ conversation, position, onClose }) => {
             )}
 
             <form onSubmit={handleSendMessage} className="mini-chat-window-input-form">
-              {/* Attach button */}
               <input
                 type="file"
                 ref={fileInputRef}
@@ -233,7 +250,6 @@ export const MiniChatWindow = ({ conversation, position, onClose }) => {
                 </svg>
               </button>
 
-              {/* Input */}
               <input
                 type="text"
                 className="mini-chat-window-input"
@@ -243,7 +259,6 @@ export const MiniChatWindow = ({ conversation, position, onClose }) => {
                 disabled={isUploading}
               />
 
-              {/* Send button */}
               <button
                 type="submit"
                 className="mini-chat-window-send-btn"
@@ -256,7 +271,6 @@ export const MiniChatWindow = ({ conversation, position, onClose }) => {
               </button>
             </form>
 
-            {/* End chat button */}
             <button
               className="mini-chat-window-end-btn"
               onClick={handleEndChat}
