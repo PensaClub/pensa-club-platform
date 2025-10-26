@@ -1,0 +1,206 @@
+/* src/components/DigiBridge/DigiBridgeMentorDashboard/dashboardStats.css */
+
+/* ===================================
+   STATS CARDS
+   =================================== */
+
+.digibridge-dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.digibridge-dashboard-stat-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.digibridge-dashboard-stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.digibridge-dashboard-stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.digibridge-dashboard-stat-card:hover::before {
+  width: 100%;
+  opacity: 0.05;
+}
+
+/* Orange - Pending */
+.digibridge-dashboard-stat-orange::before {
+  background: #ff9800;
+}
+
+.digibridge-dashboard-stat-orange .digibridge-dashboard-stat-icon {
+  background: linear-gradient(135deg, #ff9800 0%, #ffb74d 100%);
+}
+
+/* Green - Active */
+.digibridge-dashboard-stat-green::before {
+  background: #28a745;
+}
+
+.digibridge-dashboard-stat-green .digibridge-dashboard-stat-icon {
+  background: linear-gradient(135deg, #28a745 0%, #5cb85c 100%);
+}
+
+/* Blue - Completed */
+.digibridge-dashboard-stat-blue::before {
+  background: #007bff;
+}
+
+.digibridge-dashboard-stat-blue .digibridge-dashboard-stat-icon {
+  background: linear-gradient(135deg, #007bff 0%, #4da3ff 100%);
+}
+
+/* ===================================
+   STAT ICON
+   =================================== */
+
+.digibridge-dashboard-stat-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: digibridge-stat-icon-pulse 3s ease-in-out infinite;
+}
+
+@keyframes digibridge-stat-icon-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* ===================================
+   STAT CONTENT
+   =================================== */
+
+.digibridge-dashboard-stat-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.digibridge-dashboard-stat-value {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #2c3e50;
+  line-height: 1;
+  animation: digibridge-stat-value-count 1s ease-out;
+}
+
+@keyframes digibridge-stat-value-count {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.digibridge-dashboard-stat-label {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #495057;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.digibridge-dashboard-stat-description {
+  font-size: 0.875rem;
+  color: #6c757d;
+  line-height: 1.4;
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+@media (max-width: 768px) {
+  .digibridge-dashboard-stats {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .digibridge-dashboard-stat-card {
+    padding: 20px;
+  }
+
+  .digibridge-dashboard-stat-icon {
+    width: 56px;
+    height: 56px;
+    font-size: 1.75rem;
+  }
+
+  .digibridge-dashboard-stat-value {
+    font-size: 2rem;
+  }
+
+  .digibridge-dashboard-stat-label {
+    font-size: 0.95rem;
+  }
+
+  .digibridge-dashboard-stat-description {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .digibridge-dashboard-stat-card {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .digibridge-dashboard-stat-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 1.5rem;
+    border-radius: 12px;
+  }
+
+  .digibridge-dashboard-stat-value {
+    font-size: 1.75rem;
+  }
+}
+
+/* ===================================
+   ACCESSIBILITY
+   =================================== */
+
+/* Disable animations за хора с motion sensitivity */
+@media (prefers-reduced-motion: reduce) {
+  .digibridge-dashboard-stat-icon,
+  .digibridge-dashboard-stat-value,
+  .digibridge-dashboard-stat-card {
+    animation: none !important;
+    transition: none !important;
+  }
+}

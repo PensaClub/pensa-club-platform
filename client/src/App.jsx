@@ -38,7 +38,7 @@ import { CookieConsent } from './components/CookieConsent/CookieConsent.jsx';
 import { useCookies } from 'react-cookie';
 import { PrivacyPolicy } from './components/PrivacyPolicy/PrivacyPolicy.jsx';
 import { setNavigator } from './utils/handle401Error.jsx';
-import { useEffect, Suspense, lazy } from 'react'; // ✅ Добави Suspense
+import { useEffect, Suspense, lazy, useState } from 'react'; // ✅ Добави Suspense
 import ArticleView from './components/Articles/ArticleView/ArticleView.jsx';
 import FooterWithLoading from './FooterWithLoading/FooterWithLoading.jsx';
 import { LoadingProvider } from './components/contexts/LoadingContext.jsx';
@@ -66,6 +66,11 @@ import { DigiBridgeAcademy } from './components/DigiBridgeAcademy/DigiBridgeAcad
 import { AcademyProvider } from './components/contexts/AcademyProvider.jsx';
 import { DigiBridgeMentorsPage } from './components/DigiBridge/DigiBridgeMentorsPage/DigiBridgeMentorsPage.jsx';
 import { DigiBridgeBecomeMentor } from './components/DigiBridge/DigiBridgeBecomeMentor/DigiBridgeBecomeMentor.jsx';
+import { DigiBridgeChatButton } from './components/DigiBridge/DigiBridgeChatButton/DigiBridgeChatButton.jsx';
+import { DigiBridgeChatWindow } from './components/DigiBridge/DigiBridgeChatWindow/DigiBridgeChatWindow.jsx';
+import { MentorGuard } from './components/Guards/MentorGuard.jsx';
+import { DigiBridgeMentorDashboard } from './components/DigiBridge/DigiBridgeMentorDashboard/DigiBridgeMentorDashboard.jsx';
+import { UserChatsPage } from './components/DigiBridge/UserChatsPage/UserChatsPage.jsx';
 
 // ✅ LAZY LOADING КОМПОНЕНТИ
 const ArticlesList = lazy(() => import('./components/Articles/ArticlesList/ArticlesList.jsx'));
@@ -103,6 +108,7 @@ function App() {
   const [cookies] = useCookies(["cookieConsent"]);
   const navigate = useNavigate();
   const isAcademyPage = location.pathname.startsWith('/academy');
+  const [isChatOpen, setIsChatOpen] = useState(false);
   useEffect(() => {
     const GA_TRACKING_ID = import.meta.env.VITE_GA_TRACKING_ID || 'G-GE8XZREVM6';
     initGA(GA_TRACKING_ID);
@@ -144,7 +150,10 @@ function App() {
                                         limit={3}
                                         position="bottom-right"
                                       />
-
+                                      <DigiBridgeChatButton onClick={() => setIsChatOpen(true)} />
+                                      {/* ✅ Chat Window */}
+                                      {isChatOpen && <DigiBridgeChatWindow onClose={() => setIsChatOpen(false)} />}
+                                      {/* {isChatOpen && <DigiBridgeChatWindow onClose={() => setIsChatOpen(false)} />} */}
                                       <Routes>
                                         <Route path="/" element={<Home />} />
                                         <Route path="/academy" element={<DigiBridgeAcademy />} />
@@ -217,8 +226,11 @@ function App() {
                                           <Route path="/ad/create" element={<CreateAd />} />
                                           <Route path="/logout" element={<Logout />} />
                                           <Route path="/profile/*" element={<Profile />} />
+                                          <Route path="/my-chats" element={<UserChatsPage />} />
                                         </Route>
-
+                                        <Route element={<MentorGuard />}>
+                                          <Route path="/academy/mentor-dashboard" element={<DigiBridgeMentorDashboard />} />
+                                        </Route>
                                         <Route element={<PublicGuard />}>
                                           <Route path="/sign-up" element={<LoginRegister />} />
                                         </Route>

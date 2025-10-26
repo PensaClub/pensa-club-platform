@@ -1,0 +1,206 @@
+/* src/components/DigiBridge/DigiBridgeChatButton/digiBridgeChatButton.css */
+
+/* ===================================
+   FLOATING CHAT BUTTON
+   =================================== */
+
+.digibridge-chat-button-wrapper {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.digibridge-chat-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #ff6347 0%, #ff7f50 50%, #ffa07a 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 50px;
+  box-shadow: 0 8px 24px rgba(255, 99, 71, 0.4);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: visible;
+}
+
+.digibridge-chat-button:hover {
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 12px 32px rgba(255, 99, 71, 0.5);
+  background: linear-gradient(135deg, #ff5733 0%, #ff6f45 50%, #ff9568 100%);
+}
+
+.digibridge-chat-button:active {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 20px rgba(255, 99, 71, 0.4);
+}
+
+/* Икона за чат */
+.digibridge-chat-button-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  animation: digibridge-chat-button-icon-bounce 2s ease-in-out infinite;
+}
+
+@keyframes digibridge-chat-button-icon-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+/* Текст */
+.digibridge-chat-button-text {
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+}
+
+/* Badge за непрочетени */
+.digibridge-chat-button-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  min-width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+  background: #dc3545;
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 12px;
+  border: 3px solid #ffffff;
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+  animation: digibridge-chat-button-badge-pulse 2s ease-in-out infinite;
+}
+
+@keyframes digibridge-chat-button-badge-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Пулсиращ индикатор (зелена точка за онлайн) */
+.digibridge-chat-button-pulse {
+  position: absolute;
+  bottom: -6px;
+  right: -6px;
+  width: 16px;
+  height: 16px;
+  background: #28a745;
+  border-radius: 50%;
+  border: 3px solid #ffffff;
+  box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7);
+  animation: digibridge-chat-button-pulse-ring 2s ease-out infinite;
+}
+
+@keyframes digibridge-chat-button-pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 12px rgba(40, 167, 69, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(40, 167, 69, 0);
+  }
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+@media (max-width: 768px) {
+  .digibridge-chat-button-wrapper {
+    bottom: 20px;
+    right: 20px;
+  }
+
+  .digibridge-chat-button {
+    padding: 14px 20px;
+    font-size: 0.95rem;
+    gap: 10px;
+  }
+
+  .digibridge-chat-button-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .digibridge-chat-button-text {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .digibridge-chat-button-wrapper {
+    bottom: 16px;
+    right: 16px;
+  }
+
+  .digibridge-chat-button {
+    padding: 12px 16px;
+    font-size: 0.9rem;
+    gap: 8px;
+  }
+
+  .digibridge-chat-button-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .digibridge-chat-button-text {
+    display: none; /* Скрий текста на малки екрани */
+  }
+
+  /* Направи бутона кръгъл на mobile */
+  .digibridge-chat-button {
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    padding: 0;
+    justify-content: center;
+  }
+}
+
+/* ===================================
+   ACCESSIBILITY
+   =================================== */
+
+.digibridge-chat-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(255, 99, 71, 0.3), 0 12px 32px rgba(255, 99, 71, 0.5);
+}
+
+.digibridge-chat-button:focus-visible {
+  outline: 3px solid #ff6347;
+  outline-offset: 4px;
+}
+
+/* Disable animations за хора с motion sensitivity */
+@media (prefers-reduced-motion: reduce) {
+  .digibridge-chat-button,
+  .digibridge-chat-button-icon,
+  .digibridge-chat-button-badge,
+  .digibridge-chat-button-pulse {
+    animation: none !important;
+    transition: none !important;
+  }
+}

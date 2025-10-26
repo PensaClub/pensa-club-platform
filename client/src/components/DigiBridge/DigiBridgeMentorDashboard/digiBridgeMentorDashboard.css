@@ -1,0 +1,346 @@
+/* src/components/DigiBridge/DigiBridgeMentorDashboard/digiBridgeMentorDashboard.css */
+
+/* ===================================
+   DASHBOARD CONTAINER
+   =================================== */
+
+.digibridge-dashboard {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 40px 20px;
+}
+
+/* ===================================
+   HEADER
+   =================================== */
+
+.digibridge-dashboard-header {
+  max-width: 1200px;
+  margin: 0 auto 40px;
+  text-align: center;
+}
+
+.digibridge-dashboard-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.digibridge-dashboard-title h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.digibridge-dashboard-admin-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  color: #2c3e50;
+  font-size: 0.9rem;
+  font-weight: 700;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+}
+
+.digibridge-dashboard-subtitle {
+  font-size: 1.1rem;
+  color: #6c757d;
+  margin: 0;
+}
+
+/* ===================================
+   STATS (placeholder - ще добавим след малко)
+   =================================== */
+
+.digibridge-dashboard-stats {
+  max-width: 1200px;
+  margin: 0 auto 40px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+/* ===================================
+   TABS
+   =================================== */
+
+.digibridge-dashboard-tabs {
+  max-width: 1200px;
+  margin: 0 auto 32px;
+  display: flex;
+  gap: 12px;
+  background: #ffffff;
+  padding: 8px;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.digibridge-dashboard-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 20px;
+  background: transparent;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #6c757d;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.digibridge-dashboard-tab:hover {
+  background: #f8f9fa;
+  color: #2c3e50;
+}
+
+.digibridge-dashboard-tab.active {
+  background: linear-gradient(135deg, #ff6347 0%, #ff7f50 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(255, 99, 71, 0.3);
+}
+
+.digibridge-dashboard-tab-icon {
+  font-size: 1.2rem;
+}
+
+.digibridge-dashboard-tab-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  min-width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 6px;
+  background: #dc3545;
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.4);
+}
+
+.digibridge-dashboard-tab.active .digibridge-dashboard-tab-badge {
+  background: #ffffff;
+  color: #ff6347;
+}
+
+/* ===================================
+   FILTERS
+   =================================== */
+
+.digibridge-dashboard-filters {
+  max-width: 1200px;
+  margin: 0 auto 32px;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.digibridge-dashboard-search {
+  flex: 1;
+  min-width: 280px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.digibridge-dashboard-search svg {
+  position: absolute;
+  left: 16px;
+  width: 20px;
+  height: 20px;
+  color: #adb5bd;
+  pointer-events: none;
+}
+
+.digibridge-dashboard-search input {
+  width: 100%;
+  padding: 14px 16px 14px 48px;
+  background: #ffffff;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  font-size: 1rem;
+  color: #2c3e50;
+  transition: all 0.2s ease;
+}
+
+.digibridge-dashboard-search input:focus {
+  outline: none;
+  border-color: #ff6347;
+  box-shadow: 0 0 0 4px rgba(255, 99, 71, 0.1);
+}
+
+.digibridge-dashboard-search input::placeholder {
+  color: #adb5bd;
+}
+
+.digibridge-dashboard-category-filter {
+  min-width: 220px;
+  padding: 14px 16px;
+  background: #ffffff;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2c3e50;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.digibridge-dashboard-category-filter:focus {
+  outline: none;
+  border-color: #ff6347;
+  box-shadow: 0 0 0 4px rgba(255, 99, 71, 0.1);
+}
+
+/* ===================================
+   CONTENT
+   =================================== */
+
+.digibridge-dashboard-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.digibridge-dashboard-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ===================================
+   EMPTY STATE
+   =================================== */
+
+.digibridge-dashboard-empty {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 60px 40px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.digibridge-dashboard-empty-icon {
+  font-size: 4rem;
+  margin-bottom: 16px;
+  animation: digibridge-empty-float 3s ease-in-out infinite;
+}
+
+@keyframes digibridge-empty-float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.digibridge-dashboard-empty h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0 0 12px 0;
+}
+
+.digibridge-dashboard-empty p {
+  font-size: 1rem;
+  color: #6c757d;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+@media (max-width: 768px) {
+  .digibridge-dashboard {
+    padding: 20px 16px;
+  }
+
+  .digibridge-dashboard-header {
+    margin-bottom: 24px;
+  }
+
+  .digibridge-dashboard-title h1 {
+    font-size: 1.8rem;
+  }
+
+  .digibridge-dashboard-subtitle {
+    font-size: 1rem;
+  }
+
+  .digibridge-dashboard-tabs {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .digibridge-dashboard-tab {
+    padding: 12px 16px;
+  }
+
+  .digibridge-dashboard-filters {
+    flex-direction: column;
+  }
+
+  .digibridge-dashboard-search {
+    min-width: 100%;
+  }
+
+  .digibridge-dashboard-category-filter {
+    min-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .digibridge-dashboard-title {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .digibridge-dashboard-title h1 {
+    font-size: 1.5rem;
+  }
+
+  .digibridge-dashboard-empty {
+    padding: 40px 20px;
+  }
+
+  .digibridge-dashboard-empty h3 {
+    font-size: 1.3rem;
+  }
+}
+
+/* ===================================
+   ACCESSIBILITY
+   =================================== */
+
+.digibridge-dashboard-tab:focus-visible,
+.digibridge-dashboard-search input:focus-visible,
+.digibridge-dashboard-category-filter:focus-visible {
+  outline: 3px solid #ff6347;
+  outline-offset: 2px;
+}
+
+/* Disable animations за хора с motion sensitivity */
+@media (prefers-reduced-motion: reduce) {
+  .digibridge-dashboard-empty-icon,
+  .digibridge-dashboard-tab {
+    animation: none !important;
+    transition: none !important;
+  }
+}

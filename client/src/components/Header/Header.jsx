@@ -8,7 +8,7 @@ import { useInitiativeContext } from "../contexts/InitiativeProvider";
 import { useClubContext } from "../contexts/ClubContext";
 import { BookmarkIcon, BookmarkIconHeader } from "../Initiatives/Icons/InitiativeIcons";
 import { LanguageSwitcher } from "../LanguageSwitcher/LanguageSwitcher";
-
+import { useActiveChatCount } from "../hooks/useActiveChatCount";
 export const Header = ({ additionalClasses }) => {
   const { t, i18n } = useTranslation();
   const [scrolled, setScrolled] = useState(false);
@@ -17,13 +17,17 @@ export const Header = ({ additionalClasses }) => {
   const { isAuthentication, isFinish, profileData } = useContext(UserContext);
   const { bookmarkedInitiatives, hasBookmarks, hasBookmarksProjects, bookMarkedProjects } = useInitiativeContext();
   const { bookmarkedClubs = [], hasBookmarkedClubs } = useClubContext();
-
+  const [activeDropdown, setActiveDropdown] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
   const [mobileCommunityOpen, setMobileCommunityOpen] = useState(false);
   const profileRef = useRef(null);
   const mobileMenuRef = useRef(null);
   const location = useLocation();
-
+  const [activeMobileSubmenu, setActiveMobileSubmenu] = useState(null);
+  const userEmail = profileData?.email || '';
+  const userId = userEmail.replace(/\./g, '_dot_').replace(/@/g, '_at_');
+  const userRole = profileData?.role || 'user';
+  const activeChatCount = useActiveChatCount(userId, userRole);
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 50) {
@@ -202,7 +206,43 @@ export const Header = ({ additionalClasses }) => {
             >
               {t("header.clubs")}
             </NavLink>
+            {/* ЧАТ ЛИНК */}
+            {isAuthentication && (
+              <>
+                {(profileData?.role === 'admin' || profileData?.role === 'mentor') ? (
+                  <div style={{ position: 'relative', display: 'inline-block' }}>
+                    <NavLink
+                      to="/academy/mentor-dashboard"
+                      className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
+                    >
+                      {t("header.chats")}
+                    </NavLink>
+                    {/* ✅ BADGE */}
+                    {activeChatCount > 0 && (
+                      <span className="header-nav-badge">
+                        {activeChatCount > 99 ? '99+' : activeChatCount}
+                      </span>
+                    )}
+                  </div>
+                ) : (
+                  <div style={{ position: 'relative', display: 'inline-block' }}>
+                    <NavLink
+                      to="/my-chats"
+                      className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
+                    >
+                      {t("header.chats")}
 
+                    </NavLink>
+                    {/* ✅ BADGE */}
+                    {activeChatCount > 0 && (
+                      <span className="header-nav-badge">
+                        {activeChatCount > 99 ? '99+' : activeChatCount}
+                      </span>
+                    )}
+                  </div>
+                )}
+              </>
+            )}
             {/* НОВА ИКОНКА - Games (контролер) */}
             <NavLink
               to="/games"
@@ -498,7 +538,38 @@ export const Header = ({ additionalClasses }) => {
               </svg>
               {t("header.clubs")}
             </NavLink>
-
+            {/* ✅ ЧАТ ЛИНК MOBILE */}
+            {isAuthentication && (
+              <>
+                {(profileData?.role === 'admin' || profileData?.role === 'mentor') ? (
+                  <NavLink
+                    to="/academy/mentor-dashboard"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "header__mobile-menu-item header__mobile-menu-item--active"
+                        : "header__mobile-menu-item"
+                    }
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <span className="header__mobile-menu-icon">💬</span>
+                    Dashboard
+                  </NavLink>
+                ) : (
+                  <NavLink
+                    to="/my-chats"
+                    className={({ isActive }) =>
+                      isActive
+                        ? "header__mobile-menu-item header__mobile-menu-item--active"
+                        : "header__mobile-menu-item"
+                    }
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <span className="header__mobile-menu-icon">💬</span>
+                    Чат
+                  </NavLink>
+                )}
+              </>
+            )}
             {/* MOBILE - НОВА ИКОНКА - Games */}
             <NavLink
               to="/games"
