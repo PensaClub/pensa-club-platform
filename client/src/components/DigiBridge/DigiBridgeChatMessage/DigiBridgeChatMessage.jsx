@@ -1,3 +1,4 @@
+// src/components/DigiBridge/DigiBridgeChatMessage/DigiBridgeChatMessage.jsx
 
 import { useTranslation } from 'react-i18next';
 import './digiBridgeChatMessage.css';
@@ -45,13 +46,6 @@ export const DigiBridgeChatMessage = ({ message, isOwn }) => {
         {/* Bubble със съобщението */}
         <div className="digibridge-chat-message-bubble">
           
-          {/* ТЕКСТОВО СЪОБЩЕНИЕ */}
-          {message.type === 'text' && (
-            <p className="digibridge-chat-message-text">
-              {message.message}
-            </p>
-          )}
-
           {/* ИЗОБРАЖЕНИЕ */}
           {message.type === 'image' && (
             <div className="digibridge-chat-message-image-wrapper">
@@ -111,6 +105,13 @@ export const DigiBridgeChatMessage = ({ message, isOwn }) => {
                 </svg>
               </div>
             </a>
+          )}
+
+          {/* ✅ ТЕКСТОВО СЪОБЩЕНИЕ - показвай ако НЯМА type или е 'text' */}
+          {(!message.type || message.type === 'text') && message.message && (
+            <p className="digibridge-chat-message-text">
+              {message.message}
+            </p>
           )}
 
           {/* Време */}
