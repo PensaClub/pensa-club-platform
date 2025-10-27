@@ -7,7 +7,7 @@ import './digiBridgeHeader.css';
 export const DigiBridgeHeader = () => {
   const { t, i18n } = useTranslation();
   const location = useLocation();
-  const { isAuthentication, isFinish, profileData } = useContext(UserContext);
+  const { isAuthentication, isFinish, profileData, isAdmin, isModerator } = useContext(UserContext);
 
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -17,7 +17,11 @@ export const DigiBridgeHeader = () => {
   const userDropdownRef = useRef(null);
   const langDropdownRef = useRef(null);
 
-  const navigationItems = [
+  // ✅ Проверка дали е ментор или админ
+  const isMentorOrAdmin = isAdmin || isModerator || profileData?.role === 'mentor';
+
+  // ✅ ОСНОВНИ ЛИНКОВЕ (ВИНАГИ ВИДИМИ)
+  const baseNavigationItems = [
     { key: 'home', label: t('digiBridge.header.nav.home'), path: '/academy' },
     { key: 'courses', label: t('digiBridge.header.nav.courses'), path: '/academy/courses' },
     { key: 'mentors', label: t('digiBridge.header.nav.mentors'), path: '/academy/mentors' },
@@ -26,6 +30,22 @@ export const DigiBridgeHeader = () => {
     { key: 'community', label: t('digiBridge.header.nav.community'), path: '/academy/community' },
     { key: 'about', label: t('digiBridge.header.nav.about'), path: '/academy/about' },
   ];
+
+  // ✅ CHAT ЛИНК (САМО ЗА LOGGED IN USERS)
+  const chatNavigationItem = isAuthentication
+    ? {
+        key: 'chat',
+        label: isMentorOrAdmin
+          ? t('digiBridge.header.nav.mentorDashboard')
+          : t('digiBridge.header.nav.myChats'),
+        path: isMentorOrAdmin ? '/academy/mentor-dashboard' : '/my-chats',
+      }
+    : null;
+
+  // ✅ ОБЕДИНЕНИ ЛИНКОВЕ (основни + chat ако е logged in)
+  const allNavigationItems = chatNavigationItem
+    ? [...baseNavigationItems, chatNavigationItem]
+    : baseNavigationItems;
 
   const languages = [
     { code: 'bg', name: 'Български', flag: '🇧🇬' },
@@ -89,17 +109,17 @@ export const DigiBridgeHeader = () => {
       <div className="digibridge-header-container">
         
         {/* Logo */}
-       <Link to="/academy" className="digibridge-header-logo">
-  <span className="digibridge-header-logo-icon">🌉</span>
-  <div className="digibridge-header-logo-content">
-    <span className="digibridge-header-logo-title">DigiBridge</span>
-    <span className="digibridge-header-logo-subtitle">{t('digiBridge.header.tagline')}</span>
-  </div>
-</Link>
+        <Link to="/academy" className="digibridge-header-logo">
+          <span className="digibridge-header-logo-icon">🌉</span>
+          <div className="digibridge-header-logo-content">
+            <span className="digibridge-header-logo-title">DigiBridge</span>
+            <span className="digibridge-header-logo-subtitle">{t('digiBridge.header.tagline')}</span>
+          </div>
+        </Link>
 
-        {/* Desktop Navigation */}
+        {/* ✅ НАВИГАЦИЯ (всички линкове + chat ако е logged in) */}
         <nav className="digibridge-header-navigation">
-          {navigationItems.map((item) => (
+          {allNavigationItems.map((item) => (
             <Link
               key={item.key}
               to={item.path}
@@ -285,7 +305,7 @@ export const DigiBridgeHeader = () => {
         <>
           <nav className="digibridge-header-mobile-nav">
             <div className="digibridge-header-mobile-nav-content">
-              {navigationItems.map((item) => (
+              {allNavigationItems.map((item) => (
                 <Link
                   key={item.key}
                   to={item.path}

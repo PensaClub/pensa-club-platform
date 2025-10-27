@@ -95,26 +95,39 @@ export const AcademyProvider = ({ children }) => {
       const emailMessage = `
 🎓 НОВА КАНДИДАТУРА ЗА МЕНТОР
 
+=== ЛИЧНА ИНФОРМАЦИЯ ===
 Име: ${applicationData.name}
 Email: ${applicationData.email}
 Телефон: ${applicationData.phone}
 Възраст: ${applicationData.age}
 
-Образование: ${applicationData.education}
-Специализация: ${applicationData.specialization}
-Опит: ${applicationData.experience}
-Наличност: ${applicationData.availability}
-Езици: ${applicationData.languages.join(', ')}
+=== НАЧИНИ ЗА ВРЪЗКА ===
+${applicationData.viber ? `Viber: ${applicationData.viber}` : ''}
+${applicationData.facebook ? `Facebook: ${applicationData.facebook}` : ''}
+${applicationData.linkedin ? `LinkedIn: ${applicationData.linkedin}` : ''}
+${applicationData.otherContact ? `Друг контакт: ${applicationData.otherContact}` : ''}
 
-Мотивация:
-${applicationData.motivation}
+=== ОБРАЗОВАНИЕ И ОПИТ ===
+Образование: ${applicationData.education || 'Не е посочено'}
+Специализация: ${applicationData.specialization || 'Не е посочена'}
+Опит: ${applicationData.experience || 'Не е посочен'}
 
-${applicationData.cv ? 'CV: Прикачено' : 'CV: Не е прикачено'}
+=== ГРАФИК И ЕЗИЦИ ===
+График: ${applicationData.availability || 'Не е посочен'}
+Езици: ${applicationData.languages && applicationData.languages.length > 0 ? applicationData.languages.join(', ') : 'Не са посочени'}
+
+=== МОТИВАЦИЯ ===
+${applicationData.motivation || 'Не е посочена'}
+
+=== ФАЙЛОВЕ ===
+${applicationData.photoUrl ? `✅ Снимка: ${applicationData.photoUrl}` : '❌ Снимка: Не е качена'}
+${applicationData.cvUrl ? `✅ CV: ${applicationData.cvOriginalName || 'CV.pdf'}\nURL: ${applicationData.cvUrl}` : '❌ CV: Не е качено'}
 
 ---
 Изпратено от DigiBridge Academy - Become Mentor Form
 Дата: ${new Date().toLocaleString('bg-BG')}
-      `.trim();
+Application ID: ${response.applicationId || response.id || 'N/A'}
+    `.trim();
 
       await sendPersonalEmail({
         from: applicationData.email,
@@ -127,11 +140,15 @@ ${applicationData.cv ? 'CV: Прикачено' : 'CV: Не е прикачен�
       await academyService.createAdminNotification({
         type: 'mentor_application',
         title: 'Нова кандидатура за ментор',
-        message: `${applicationData.name} кандидатства за ментор - ${applicationData.specialization}`,
+        message: `${applicationData.name} кандидатства за ментор${applicationData.specialization ? ` - ${applicationData.specialization}` : ''}`,
         data: {
           applicantName: applicationData.name,
           applicantEmail: applicationData.email,
-          specialization: applicationData.specialization,
+          applicantPhone: applicationData.phone,
+          specialization: applicationData.specialization || null,
+          photoUrl: applicationData.photoUrl || null,
+          cvUrl: applicationData.cvUrl || null,
+          cvOriginalName: applicationData.cvOriginalName || null,
           applicationId: response.applicationId || response.id
         }
       });
@@ -187,13 +204,13 @@ ${applicationData.cv ? 'CV: Прикачено' : 'CV: Не е прикачен�
     fetchStats,
     fetchFeaturedMentors,
     fetchFeaturedTestimonials,
-    
+
     // Email
     sendPersonalEmail,
-    
+
     // Mentor Application
     applyAsMentor,
-    
+
     // Admin Notifications
     getAdminNotifications,
     markNotificationAsRead,

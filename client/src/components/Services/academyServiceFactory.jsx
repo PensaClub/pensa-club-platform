@@ -4,8 +4,8 @@ import { requestFactory } from "./requester";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
-export const academyServiceFactory = (token) => {
-  const requester = requestFactory(token);
+export const academyServiceFactory = () => {
+  const requester = requestFactory();
 
   return {
     // ===============================
@@ -205,76 +205,67 @@ export const academyServiceFactory = (token) => {
     },
 
     // 5. Кандидатстване за ментор
-    applyAsMentor: async (applicationData) => {
-      /*
-        BACKEND TODO:
-        POST /api/academy/mentors/apply
-        Content-Type: multipart/form-data (ако има CV) ИЛИ application/json (без CV)
-        
-        Request Body (FormData ако има CV, JSON ако няма):
-        {
-          name: string,
-          email: string,
-          phone: string,
-          age: number,
-          education: string,
-          specialization: string,
-          experience: string,
-          motivation: string,
-          availability: string,
-          languages: string[] (като JSON string в FormData или array в JSON),
-          cv?: File (само в FormData)
-        }
-        
-        Response: {
-          success: true,
-          message: "Кандидатурата е изпратена успешно!",
-          applicationId: 123,
-          status: "pending"
-        }
-      */
 
-      // ✅ ВАЖНО: За FormData НЕ използваме стандартния requester
-      // Защото той сетва 'content-type': 'application/json'
-      if (applicationData.cv) {
-        const formData = new FormData();
-        Object.keys(applicationData).forEach(key => {
-          if (key === 'languages') {
-            formData.append(key, JSON.stringify(applicationData[key]));
-          } else {
-            formData.append(key, applicationData[key]);
-          }
-        });
+applyAsMentor: async (applicationData) => {
+  /*
+    BACKEND TODO:
+    POST /api/academy/mentors/apply
+    Content-Type: application/json
+    
+    Request Body:
+    {
+      name: string,
+      email: string,
+      phone: string,
+      age: number,
+      education: string,
+      specialization: string,
+      experience: string,
+      motivation: string,
+      availability: string,
+      languages: string[],
+      viber: string,
+      facebook: string,
+      linkedin: string,
+      otherContact: string,
+      photoUrl: string | null,
+      cvUrl: string | null,
+      cvOriginalName: string | null,
+      cvStoragePath: string | null
+    }
+    
+    Response: {
+      success: true,
+      message: "Кандидатурата е изпратена успешно!",
+      applicationId: 123,
+      status: "pending"
+    }
+  */
 
-        // ✅ Директен fetch call за FormData (не минава през requester)
-        const serializedAuth = localStorage.getItem('auth');
-        const headers = {};
-        
-        if (serializedAuth) {
-          const auth = JSON.parse(serializedAuth);
-          if (auth.token) {
-            headers.Authorization = `Bearer ${auth.token}`;
-          }
-        }
+  // ✅ Изпращаме само JSON с Firebase URLs (не изпращаме файловете директно)
+  const payload = {
+    name: applicationData.name,
+    email: applicationData.email,
+    phone: applicationData.phone,
+    age: applicationData.age,
+    education: applicationData.education || '',
+    specialization: applicationData.specialization || '',
+    experience: applicationData.experience || '',
+    motivation: applicationData.motivation || '',
+    availability: applicationData.availability || '',
+    languages: applicationData.languages || [],
+    viber: applicationData.viber || '',
+    facebook: applicationData.facebook || '',
+    linkedin: applicationData.linkedin || '',
+    otherContact: applicationData.otherContact || '',
+    photoUrl: applicationData.photoUrl || null,
+    cvUrl: applicationData.cvUrl || null,
+    cvOriginalName: applicationData.cvOriginalName || null,
+    cvStoragePath: applicationData.cvStoragePath || null,
+  };
 
-        const response = await fetch(`${apiUrl}/academy/mentors/apply`, {
-          method: 'POST',
-          credentials: 'include',
-          headers: headers, // ✅ НЕ сетваме Content-Type - браузърът го прави автоматично за FormData
-          body: formData
-        });
-
-        if (!response.ok) {
-          throw await response.json();
-        }
-
-        return response.json();
-      }
-
-      // ✅ Без CV - обикновен JSON през requester
-      return requester.post(`${apiUrl}/academy/mentors/apply`, applicationData);
-    },
-
+  return requester.post(`${apiUrl}/academy/mentors/apply`, payload);
+},
     // 6. Контактна форма към ментор
     contactMentor: async (mentorId, contactData) => {
       /*

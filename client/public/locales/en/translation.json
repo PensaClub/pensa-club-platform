@@ -660,6 +660,12 @@
     "upload_image_btn": "Upload photo"
   },
   "admin": {
+     "mentors": {
+    "title": "Mentors",
+    "overview": "Mentors Overview",
+    "applications": "Applications",
+    "statistics": "Statistics"
+  },
     "pending_announcements": "Pending Announcements",
     "search": "Search",
     "name": "Name",
@@ -10964,33 +10970,6 @@
     },
     "resultsInfo": "Showing {{showing}} of {{total}} drafts"
   },
-  "draftClubs": {
-    "title": "Club-Entwürfe",
-    "subtitle": "Verwalten und vervollständigen Sie Ihre unvollendeten Clubs",
-    "createNew": "Neuen Club erstellen",
-    "loading": "Lade Entwürfe...",
-    "errorTitle": "Fehler beim Laden der Entwürfe",
-    "retry": "Erneut versuchen",
-    "searchPlaceholder": "Entwürfe nach Name, Beschreibung, Ort durchsuchen...",
-    "filters": {
-      "all": "Alle Entwürfe",
-      "complete": "Vollständig",
-      "incomplete": "Unvollständig",
-      "general": "Allgemein",
-      "cultural": "Kulturell",
-      "traditional": "Traditionell",
-      "social": "Sozial",
-      "sports": "Sport"
-    },
-    "sorting": {
-      "newest": "Neueste zuerst",
-      "oldest": "Älteste zuerst",
-      "name": "Name A-Z",
-      "category": "Kategorie",
-      "completion": "Nach Vollständigkeit"
-    },
-    "resultsInfo": "Zeige {{showing}} von {{total}} Entwürfen"
-  },
   "draftClubsCard": {
     "categories": {
       "general": "General",
@@ -11799,6 +11778,8 @@
       "login": "Sign In",
       "nav": {
         "home": "Home",
+        "myChats": "My Chats",
+        "mentorDashboard": "Chats",
         "courses": "Courses",
         "mentors": "Mentors",
         "events": "Events",
@@ -11811,7 +11792,9 @@
         "myCourses": "My Courses",
         "myMentor": "My Mentor",
         "profile": "Profile",
-        "logout": "Logout"
+        "logout": "Logout",
+        "myChats": "My Chats",
+        "mentorDashboard": "Chats"
       }
     },
     "hero": {
@@ -11998,6 +11981,112 @@
       "invalidEmail": "Please enter a valid email address",
       "successMessage": "Message sent successfully! We'll contact you soon.",
       "errorMessage": "Error sending message. Please try again."
+    },
+    "becomeMentor": {
+      "authRequired": {
+        "title": "Log in to your account",
+        "description": "To apply as a mentor, please log in or register.",
+        "login": "Log In",
+        "register": "Sign Up"
+      },
+      "hero": {
+        "title": "Become a Mentor",
+        "subtitle": "Share your knowledge and help seniors master the digital world"
+      },
+      "intro": {
+        "title": "Why become a mentor?",
+        "description": "As a mentor at DigiBridge Academy, you will help seniors overcome the digital divide and feel confident online. This is an opportunity to make a real difference in people's lives."
+      },
+      "benefits": {
+        "benefit1": {
+          "title": "Develop Professionally",
+          "description": "Improve your communication skills and gain teaching experience"
+        },
+        "benefit2": {
+          "title": "Build Connections",
+          "description": "Meet inspiring people of all ages and create intergenerational friendships"
+        },
+        "benefit3": {
+          "title": "Make a Difference",
+          "description": "Help seniors feel confident and independent in the digital world"
+        }
+      },
+      "form": {
+        "schedule": "Preferred Schedule",
+        "schedulePlaceholder": "Select schedule",
+        "scheduleHelper": "When do you prefer to conduct training sessions?",
+        "languagesHelper": "Which languages can you teach in? (optional)",
+        "title": "Apply Now",
+        "subtitle": "Fill out the form below and we'll contact you soon",
+        "name": "Full Name",
+        "namePlaceholder": "John Doe",
+        "age": "Age",
+        "email": "Email Address",
+        "education": "Education",
+        "educationPlaceholder": "E.g. MIT - Computer Science, Bachelor 2023",
+        "specialization": "Specialization",
+        "specializationPlaceholder": "Select specialization",
+        "experience": "Experience",
+        "experiencePlaceholder": "E.g. 2 years teaching experience",
+        "motivation": "Motivation",
+        "motivationPlaceholder": "Why do you want to become a mentor? (max 500 characters)",
+        "availability": "Availability",
+        "availabilityPlaceholder": "Select availability",
+        "languages": "Languages",
+        "submit": "Submit Application",
+        "submitting": "Submitting...",
+        "submitNote": "We will review your application and contact you soon"
+      },
+      "photo": {
+        "label": "Photo",
+        "upload": "Upload Photo",
+        "uploading": "Uploading...",
+        "change": "Change Photo",
+        "error": "Error uploading photo",
+        "formatError": "Please upload an image in JPG, PNG or WEBP format"
+      },
+      "contactMethods": {
+        "title": "Contact Methods",
+        "phone": "Phone",
+        "viber": "Viber",
+        "facebook": "Facebook",
+        "linkedin": "LinkedIn",
+        "other": "Other",
+        "otherPlaceholder": "E.g. Telegram, WhatsApp, Skype..."
+      },
+      "specialization": {
+        "other": "Other"
+      },
+      "cv": {
+        "label": "CV (Resume)",
+        "optional": "Optional",
+        "upload": "Upload CV",
+        "uploading": "Uploading...",
+        "change": "Change File",
+        "error": "Error uploading CV",
+        "formatError": "Please upload a file in PDF, DOC, DOCX or TXT format (max 10MB)"
+      },
+      "sections": {
+        "personalInfo": "Personal Information",
+        "education": "Education and Experience",
+        "schedule": "Schedule and Languages"
+      },
+      "errors": {
+        "nameRequired": "Name is required",
+        "emailRequired": "Email is required",
+        "emailInvalid": "Invalid email address",
+        "ageRequired": "Age is required",
+        "ageInvalid": "Age must be between 16 and 100",
+        "educationRequired": "Education is required",
+        "specializationRequired": "Specialization is required",
+        "experienceRequired": "Experience is required",
+        "motivationRequired": "Motivation is required",
+        "availabilityRequired": "Availability is required",
+        "languagesRequired": "Select at least one language",
+        "fillRequired": "Please fill in all required fields",
+        "submitError": "Error submitting application. Please try again."
+      },
+      "success": "Application submitted successfully! We will contact you soon."
     },
     "testimonialForm": {
       "title": "Share Your Story",
