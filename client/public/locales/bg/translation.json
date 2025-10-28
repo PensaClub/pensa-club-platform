@@ -12653,5 +12653,40 @@
     "successMessage": "Данните бяха обновени успешно!",
     "errorMessage": "Грешка при обновяване на данните"
   }
+  },
+  "AdminDigiBridgeMentorApplications": {
+    "title": "Кандидатури за ментори",
+    "description": "Преглед и управление на постъпили кандидатури за ментори в DigiBridge Academy",
+    
+    "stats": {
+      "totalApplications": "Общо кандидатури",
+      "newToday": "Нови днес",
+      "pending": "Изчакващи"
+    },
+    
+    "filters": {
+      "searchPlaceholder": "Търсене по име или имейл...",
+      "specializationLabel": "Специализация",
+      "specializationAll": "Всички специализации",
+      "sortByLabel": "Подреди по",
+      "sortNewest": "Най-нови първо",
+      "sortOldest": "Най-стари първо",
+      "sortName": "По име (А-Я)"
+    },
+    
+    "loading": "Зареждане на кандидатури...",
+    
+    "noApplications": "Няма кандидатури",
+    "noApplicationsDescription": "В момента няма постъпили кандидатури за ментори",
+    
+    "approveSuccess": "Кандидатурата беше одобрена успешно!",
+    "approveError": "Грешка при одобряване на кандидатурата",
+    "rejectSuccess": "Кандидатурата беше отхвърлена",
+    "rejectError": "Грешка при отхвърляне на кандидатурата",
+    
+    "viewDetails": "Виж детайли",
+    "sendEmail": "Изпрати имейл",
+    "approve": "Одобри",
+    "reject": "Отхвърли"
   }
 }

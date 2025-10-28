@@ -285,7 +285,31 @@ Application ID: ${response.applicationId || response.id || 'N/A'}
       throw error;
     }
   }, []);
+// ===============================
+// ADMIN MENTOR APPLICATIONS (ДОБАВИ ТОВА)
+// ===============================
 
+const getPendingMentorApplications = useCallback(async () => {
+  try {
+    const data = await academyService.getPendingMentorApplications();
+    return data.applications || data;
+  } catch (error) {
+    console.error('Error fetching pending applications:', error);
+    throw error;
+  }
+}, []);
+
+const rejectMentorApplication = useCallback(async (applicationId, rejectionReason) => {
+  try {
+    const response = await academyService.rejectMentorApplication(applicationId, rejectionReason);
+    toast.success('Кандидатурата беше отхвърлена');
+    return response;
+  } catch (error) {
+    console.error('Error rejecting application:', error);
+    toast.error('Грешка при отхвърляне на кандидатурата');
+    throw error;
+  }
+}, []);
   // ===============================
   // CONTEXT VALUE
   // ===============================
@@ -322,6 +346,9 @@ Application ID: ${response.applicationId || response.id || 'N/A'}
     bulkDeleteMentors,
     updateMentorAdminNotes,
     updateMentorPriorityContact,
+    // Admin Applications (ДОБАВИ)
+  getPendingMentorApplications,
+  rejectMentorApplication,
   };
 
   return (

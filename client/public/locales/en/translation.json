@@ -12404,42 +12404,77 @@
       "rejectedAt": "Rejected",
       "close": "Close",
       "approveNow": "Approve Now",
-       "confirmApprove": "Are you sure you want to approve this application?"
+      "confirmApprove": "Are you sure you want to approve this application?"
     },
     "EditModal": {
-    "title": "Edit Mentor",
-    "editingMentor": "Editing",
-    "draftRestored": "Draft Restored",
-    "basicInfo": "Basic Information",
-    "nameLabel": "Name",
-    "ageLabel": "Age",
-    "specializationLabel": "Specialization",
-    "selectSpecialization": "Select specialization",
-    "contactInfo": "Contact Information",
-    "phoneLabel": "Phone",
-    "otherContactLabel": "Other Contact",
-    "priorityContactLabel": "Priority Contact",
-    "selectPriorityContact": "Select priority contact",
-    "educationExperience": "Education & Experience",
-    "educationLabel": "Education",
-    "experienceLabel": "Experience",
-    "availabilityLanguages": "Schedule & Languages",
-    "availabilityLabel": "Schedule",
-    "languagesLabel": "Languages",
-    "motivation": "Motivation",
-    "motivationLabel": "Motivation to participate",
-    "adminNotes": "Admin Notes",
-    "adminNotesLabel": "Notes (visible only to administrators)",
-    "adminNotesPlaceholder": "Add internal notes for this mentor...",
-    "fillRequiredFields": "Please fill in all required fields",
-    "invalidEmail": "Invalid email address",
-    "confirmLeave": "You have unsaved changes. Are you sure you want to leave?",
-    "keepDraft": "Do you want to keep the draft changes?",
-    "cancelButton": "Cancel",
-    "saveButton": "Save Changes",
-    "savingButton": "Saving...",
-    "successMessage": "Data was updated successfully!",
-    "errorMessage": "Error updating data"
-  }
+      "title": "Edit Mentor",
+      "editingMentor": "Editing",
+      "draftRestored": "Draft Restored",
+      "basicInfo": "Basic Information",
+      "nameLabel": "Name",
+      "ageLabel": "Age",
+      "specializationLabel": "Specialization",
+      "selectSpecialization": "Select specialization",
+      "contactInfo": "Contact Information",
+      "phoneLabel": "Phone",
+      "otherContactLabel": "Other Contact",
+      "priorityContactLabel": "Priority Contact",
+      "selectPriorityContact": "Select priority contact",
+      "educationExperience": "Education & Experience",
+      "educationLabel": "Education",
+      "experienceLabel": "Experience",
+      "availabilityLanguages": "Schedule & Languages",
+      "availabilityLabel": "Schedule",
+      "languagesLabel": "Languages",
+      "motivation": "Motivation",
+      "motivationLabel": "Motivation to participate",
+      "adminNotes": "Admin Notes",
+      "adminNotesLabel": "Notes (visible only to administrators)",
+      "adminNotesPlaceholder": "Add internal notes for this mentor...",
+      "fillRequiredFields": "Please fill in all required fields",
+      "invalidEmail": "Invalid email address",
+      "confirmLeave": "You have unsaved changes. Are you sure you want to leave?",
+      "keepDraft": "Do you want to keep the draft changes?",
+      "cancelButton": "Cancel",
+      "saveButton": "Save Changes",
+      "savingButton": "Saving...",
+      "successMessage": "Data was updated successfully!",
+      "errorMessage": "Error updating data"
+    }
+  },
+  "AdminDigiBridgeMentorApplications": {
+    "title": "Mentor Applications",
+    "description": "Review and manage incoming mentor applications for DigiBridge Academy",
+    
+    "stats": {
+      "totalApplications": "Total Applications",
+      "newToday": "New Today",
+      "pending": "Pending"
+    },
+    
+    "filters": {
+      "searchPlaceholder": "Search by name or email...",
+      "specializationLabel": "Specialization",
+      "specializationAll": "All Specializations",
+      "sortByLabel": "Sort by",
+      "sortNewest": "Newest First",
+      "sortOldest": "Oldest First",
+      "sortName": "By Name (A-Z)"
+    },
+    
+    "loading": "Loading applications...",
+    
+    "noApplications": "No Applications",
+    "noApplicationsDescription": "There are currently no mentor applications",
+    
+    "approveSuccess": "Application approved successfully!",
+    "approveError": "Error approving application",
+    "rejectSuccess": "Application rejected",
+    "rejectError": "Error rejecting application",
+    
+    "viewDetails": "View Details",
+    "sendEmail": "Send Email",
+    "approve": "Approve",
+    "reject": "Reject"
   }
 }
