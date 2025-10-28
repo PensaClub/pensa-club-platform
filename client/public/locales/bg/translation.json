@@ -12615,7 +12615,43 @@
       "createdAt": "Създадена",
       "rejectedAt": "Отказана",
       "close": "Затвори",
-      "approveNow": "Одобри сега"
-    }
+      "approveNow": "Одобри сега",
+      "confirmApprove": "Сигурни ли сте, че искате да одобрите тази кандидатура?"
+    },
+    "EditModal": {
+    "title": "Редактирай ментор",
+    "editingMentor": "Редактиране на",
+    "draftRestored": "Възстановен чернови",
+    "basicInfo": "Основна информация",
+    "nameLabel": "Име",
+    "ageLabel": "Възраст",
+    "specializationLabel": "Специализация",
+    "selectSpecialization": "Изберете специализация",
+    "contactInfo": "Контактна информация",
+    "phoneLabel": "Телефон",
+    "otherContactLabel": "Друг контакт",
+    "priorityContactLabel": "Приоритетен контакт",
+    "selectPriorityContact": "Изберете приоритетен контакт",
+    "educationExperience": "Образование и опит",
+    "educationLabel": "Образование",
+    "experienceLabel": "Опит",
+    "availabilityLanguages": "График и езици",
+    "availabilityLabel": "График",
+    "languagesLabel": "Езици",
+    "motivation": "Мотивация",
+    "motivationLabel": "Мотивация за участие",
+    "adminNotes": "Административни бележки",
+    "adminNotesLabel": "Бележки (видими само за администратори)",
+    "adminNotesPlaceholder": "Добавете вътрешни бележки за този ментор...",
+    "fillRequiredFields": "Моля, попълнете всички задължителни полета",
+    "invalidEmail": "Невалиден имейл адрес",
+    "confirmLeave": "Имате незапазени промени. Сигурни ли сте, че искате да излезете?",
+    "keepDraft": "Искате ли да запазите черновата на промените?",
+    "cancelButton": "Откажи",
+    "saveButton": "Запази промени",
+    "savingButton": "Запазване...",
+    "successMessage": "Данните бяха обновени успешно!",
+    "errorMessage": "Грешка при обновяване на данните"
+  }
   }
 }

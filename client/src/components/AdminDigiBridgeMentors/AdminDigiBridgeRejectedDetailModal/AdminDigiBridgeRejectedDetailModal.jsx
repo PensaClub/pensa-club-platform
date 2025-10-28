@@ -5,9 +5,14 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import './adminDigiBridgeRejectedDetailModal.css';
 
-export const AdminDigiBridgeRejectedDetailModal = ({ application, onClose, onApprove }) => {
+export const AdminDigiBridgeRejectedDetailModal = ({ application, onClose, onApprove, onSendEmail }) => {
   const { t } = useTranslation();
   const [copiedField, setCopiedField] = useState(null);
+
+  // ЗАЩИТА
+  if (!application) {
+    return null;
+  }
 
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
@@ -36,8 +41,18 @@ export const AdminDigiBridgeRejectedDetailModal = ({ application, onClose, onApp
   };
 
   const handleApprove = () => {
-    onApprove(application.id);
-    onClose();
+    if (window.confirm(t('AdminDigiBridgeMentors.RejectedDetailModal.confirmApprove'))) {
+      onApprove(application.id);
+      onClose();
+    }
+  };
+
+  const handleSendEmail = () => {
+    if (onSendEmail) {
+      onSendEmail();
+    } else {
+      console.warn('onSendEmail handler is not provided');
+    }
   };
 
   return (
@@ -117,9 +132,18 @@ export const AdminDigiBridgeRejectedDetailModal = ({ application, onClose, onApp
               <div className="admin-digibridge-rejected-detail-info-item-with-copy">
                 <div className="admin-digibridge-rejected-detail-info-item">
                   <span className="admin-digibridge-rejected-detail-info-label">Email:</span>
-                  <a href={`mailto:${application.email}`} className="admin-digibridge-rejected-detail-info-value">
-                    {application.email}
-                  </a>
+                  {onSendEmail ? (
+                    <button 
+                      className="admin-digibridge-rejected-detail-info-value admin-digibridge-rejected-detail-email-link"
+                      onClick={handleSendEmail}
+                    >
+                      {application.email}
+                    </button>
+                  ) : (
+                    <a href={`mailto:${application.email}`} className="admin-digibridge-rejected-detail-info-value">
+                      {application.email}
+                    </a>
+                  )}
                 </div>
                 <button
                   className={`admin-digibridge-rejected-detail-copy-btn ${copiedField === 'email' ? 'copied' : ''}`}
@@ -313,7 +337,7 @@ export const AdminDigiBridgeRejectedDetailModal = ({ application, onClose, onApp
           )}
 
           {/* AVAILABILITY & LANGUAGES */}
-          {(application.availability || application.languages) && (
+          {(application.availability || (application.languages && application.languages.length > 0)) && (
             <div className="admin-digibridge-rejected-detail-section">
               <h4 className="admin-digibridge-rejected-detail-section-title">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

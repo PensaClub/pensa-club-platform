@@ -1,0 +1,340 @@
+/* src/components/AdminDigiBridgeMentors/AdminDigiBridgeSendEmailToRejectedModal/adminDigiBridgeSendEmailToRejectedModal.css */
+
+/* ===================================
+   MODAL OVERLAY
+   =================================== */
+
+.admin-digibridge-send-email-rejected-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10002;
+  padding: 20px;
+  animation: admin-digibridge-send-email-rejected-fade-in 0.3s ease;
+}
+
+@keyframes admin-digibridge-send-email-rejected-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ===================================
+   MODAL
+   =================================== */
+
+.admin-digibridge-send-email-rejected-modal {
+  background: #ffffff;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 650px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: admin-digibridge-send-email-rejected-slide-up 0.3s ease;
+  overflow: hidden;
+}
+
+@keyframes admin-digibridge-send-email-rejected-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===================================
+   HEADER - ЧЕРВЕНА ТЕМА
+   =================================== */
+
+.admin-digibridge-send-email-rejected-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 28px 32px;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  gap: 20px;
+}
+
+.admin-digibridge-send-email-rejected-modal-title {
+  font-size: 1.75rem;
+  font-weight: 900;
+  color: #ffffff;
+  margin: 0 0 8px 0;
+  line-height: 1.2;
+}
+
+.admin-digibridge-send-email-rejected-modal-subtitle {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  font-weight: 500;
+}
+
+.admin-digibridge-send-email-rejected-modal-subtitle strong {
+  font-weight: 700;
+}
+
+.admin-digibridge-send-email-rejected-modal-close {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  padding: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.admin-digibridge-send-email-rejected-modal-close svg {
+  width: 22px;
+  height: 22px;
+  color: #ffffff;
+}
+
+.admin-digibridge-send-email-rejected-modal-close:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: rotate(90deg);
+}
+
+.admin-digibridge-send-email-rejected-modal-close:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===================================
+   FORM
+   =================================== */
+
+.admin-digibridge-send-email-rejected-modal-form {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.admin-digibridge-send-email-rejected-modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-digibridge-send-email-rejected-modal-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.admin-digibridge-send-email-rejected-modal-label .required {
+  color: #ef4444;
+  margin-left: 4px;
+}
+
+.admin-digibridge-send-email-rejected-modal-input,
+.admin-digibridge-send-email-rejected-modal-textarea {
+  width: 100%;
+  padding: 14px 16px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #1f2937;
+  background: #f9fafb;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  resize: vertical;
+}
+
+.admin-digibridge-send-email-rejected-modal-input:focus,
+.admin-digibridge-send-email-rejected-modal-textarea:focus {
+  outline: none;
+  background: #ffffff;
+  border-color: #ef4444;
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+}
+
+.admin-digibridge-send-email-rejected-modal-input:disabled,
+.admin-digibridge-send-email-rejected-modal-textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.admin-digibridge-send-email-rejected-modal-input::placeholder,
+.admin-digibridge-send-email-rejected-modal-textarea::placeholder {
+  color: #9ca3af;
+}
+
+.admin-digibridge-send-email-rejected-modal-textarea {
+  min-height: 180px;
+  line-height: 1.6;
+}
+
+/* ===================================
+   ACTIONS
+   =================================== */
+
+.admin-digibridge-send-email-rejected-modal-actions {
+  display: flex;
+  gap: 12px;
+  padding-top: 8px;
+}
+
+.admin-digibridge-send-email-rejected-modal-button {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 24px;
+  font-size: 1rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.admin-digibridge-send-email-rejected-modal-button svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.admin-digibridge-send-email-rejected-modal-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.admin-digibridge-send-email-rejected-modal-button-cancel {
+  background: #f3f4f6;
+  color: #374151;
+  border: 2px solid #e5e7eb;
+}
+
+.admin-digibridge-send-email-rejected-modal-button-cancel:hover:not(:disabled) {
+  background: #e5e7eb;
+  border-color: #d1d5db;
+  transform: translateY(-2px);
+}
+
+.admin-digibridge-send-email-rejected-modal-button-submit {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.admin-digibridge-send-email-rejected-modal-button-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+}
+
+/* ===================================
+   SPINNER
+   =================================== */
+
+.admin-digibridge-send-email-rejected-modal-spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: admin-digibridge-send-email-rejected-spin 0.8s linear infinite;
+}
+
+@keyframes admin-digibridge-send-email-rejected-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+@media (max-width: 768px) {
+  .admin-digibridge-send-email-rejected-modal {
+    max-width: 100%;
+  }
+
+  .admin-digibridge-send-email-rejected-modal-header {
+    padding: 24px;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .admin-digibridge-send-email-rejected-modal-close {
+    align-self: flex-end;
+  }
+
+  .admin-digibridge-send-email-rejected-modal-title {
+    font-size: 1.5rem;
+  }
+
+  .admin-digibridge-send-email-rejected-modal-form {
+    padding: 24px;
+    gap: 20px;
+  }
+
+  .admin-digibridge-send-email-rejected-modal-actions {
+    flex-direction: column;
+  }
+
+  .admin-digibridge-send-email-rejected-modal-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-digibridge-send-email-rejected-modal-overlay {
+    padding: 10px;
+  }
+
+  .admin-digibridge-send-email-rejected-modal-header {
+    padding: 20px;
+  }
+
+  .admin-digibridge-send-email-rejected-modal-title {
+    font-size: 1.35rem;
+  }
+
+  .admin-digibridge-send-email-rejected-modal-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .admin-digibridge-send-email-rejected-modal-form {
+    padding: 20px;
+  }
+
+  .admin-digibridge-send-email-rejected-modal-input,
+  .admin-digibridge-send-email-rejected-modal-textarea {
+    padding: 13px 14px;
+    font-size: 0.95rem;
+  }
+
+  .admin-digibridge-send-email-rejected-modal-textarea {
+    min-height: 160px;
+  }
+
+  .admin-digibridge-send-email-rejected-modal-button {
+    padding: 13px 20px;
+    font-size: 0.95rem;
+  }
+}

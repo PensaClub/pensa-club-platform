@@ -17,6 +17,8 @@ import { AdminDigiBridgeMentorCard } from './AdminDigiBridgeMentorCard/AdminDigi
 import { AdminDigiBridgeMentorDetailModal } from './AdminDigiBridgeMentorDetailModal/AdminDigiBridgeMentorDetailModal';
 import { AdminDigiBridgeSendEmailModal } from './AdminDigiBridgeSendEmailModal/AdminDigiBridgeSendEmailModal';
 import { AdminDigiBridgeRejectedDetailModal } from './AdminDigiBridgeRejectedDetailModal/AdminDigiBridgeRejectedDetailModal';
+import { AdminDigiBridgeMentorEditModal } from './AdminDigiBridgeMentorEditModal/adminDigiBridgeMentorEditModal';
+import { AdminDigiBridgeSendEmailToRejectedModal } from './AdminDigiBridgeSendEmailToRejectedModal/AdminDigiBridgeSendEmailToRejectedModal';
 
 // ===================================
 // МОКНАТИ ДАННИ ЗА ТЕСТВАНЕ
@@ -120,13 +122,24 @@ const MOCK_MENTORS = [
 const MOCK_REJECTED = [
     {
         id: 4,
+        userId: "user_004",                    // ✅ ДОБАВЕНО
         name: "Петър Иванов",
         email: "borislaviliev47@gmail.com",
         phone: "+359888777666",
         age: 22,
         photoUrl: "https://randomuser.me/api/portraits/men/75.jpg",
         specialization: "Media Literacy",
-        education: "Студент",
+        education: "Студент в СУ - Журналистика",  // ✅ РАЗШИРЕНО
+        experience: "6 месеца стаж в местна медия", // ✅ ДОБАВЕНО
+        motivation: "Искам да помагам на хората да разпознават фалшиви новини", // ✅ ДОБАВЕНО
+        availability: "Уикенди",                // ✅ ДОБАВЕНО
+        languages: ["bg"],                      // ✅ ДОБАВЕНО
+        viber: "+359888777666",                 // ✅ ДОБАВЕНО
+        facebook: "facebook.com/peter.ivanov",  // ✅ ДОБАВЕНО
+        linkedin: "",                           // ✅ ДОБАВЕНО
+        otherContact: "",                       // ✅ ДОБАВЕНО
+        cvUrl: "https://example.com/cv_peter.pdf",        // ✅ ДОБАВЕНО
+        cvOriginalName: "Peter_Ivanov_CV.pdf",  // ✅ ДОБАВЕНО
         status: "rejected",
         createdAt: "2025-01-20T11:00:00Z",
         rejectedAt: "2025-01-21T09:00:00Z",
@@ -160,6 +173,7 @@ export const AdminDigiBridgeMentors = () => {
     const [emailModalOpen, setEmailModalOpen] = useState(false);
     const [rejectedDetailModalOpen, setRejectedDetailModalOpen] = useState(false);
     const [selectedRejectedApplication, setSelectedRejectedApplication] = useState(null);
+    const [emailRejectedModalOpen, setEmailRejectedModalOpen] = useState(false);
     // FILTERS
     const [filters, setFilters] = useState({
         search: '',
@@ -557,18 +571,30 @@ export const AdminDigiBridgeMentors = () => {
                     application={selectedRejectedApplication}
                     onClose={() => setRejectedDetailModalOpen(false)}
                     onApprove={handleApproveRejected}
+                    onSendEmail={() => {
+                        setRejectedDetailModalOpen(false);
+                        setEmailRejectedModalOpen(true);
+                    }}
                 />
             )}
-            {/* {editModalOpen && (
-        <AdminDigiBridgeMentorEditModal
-          mentor={selectedMentor}
-          onClose={() => setEditModalOpen(false)}
-          onSave={(updated) => {
-            setEditModalOpen(false);
-            fetchMentors();
-          }}
-        />
-      )} */}
+
+            {emailRejectedModalOpen && (
+                <AdminDigiBridgeSendEmailToRejectedModal
+                    application={selectedRejectedApplication}
+                    onClose={() => setEmailRejectedModalOpen(false)}
+                />
+            )}
+            {editModalOpen && (
+                <AdminDigiBridgeMentorEditModal
+                    mentor={selectedMentor}
+                    onClose={() => setEditModalOpen(false)}
+                    onSave={(updated) => {
+                        setEditModalOpen(false);
+                        // fetchMentors();
+                        toast.success(t('AdminDigiBridgeMentors.EditModal.successMessage'));
+                    }}
+                />
+            )}
 
             {/* {emailModalOpen && (
         <AdminDigiBridgeSendEmailModal

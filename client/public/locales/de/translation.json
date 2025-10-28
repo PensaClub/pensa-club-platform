@@ -11697,7 +11697,43 @@
       "createdAt": "Erstellt",
       "rejectedAt": "Abgelehnt",
       "close": "Schließen",
-      "approveNow": "Jetzt genehmigen"
-    }
+      "approveNow": "Jetzt genehmigen",
+      "confirmApprove": "Möchten Sie diese Bewerbung wirklich genehmigen?"
+    },
+    "EditModal": {
+    "title": "Mentor bearbeiten",
+    "editingMentor": "Bearbeitung von",
+    "draftRestored": "Entwurf wiederhergestellt",
+    "basicInfo": "Grundinformationen",
+    "nameLabel": "Name",
+    "ageLabel": "Alter",
+    "specializationLabel": "Spezialisierung",
+    "selectSpecialization": "Spezialisierung auswählen",
+    "contactInfo": "Kontaktinformationen",
+    "phoneLabel": "Telefon",
+    "otherContactLabel": "Anderer Kontakt",
+    "priorityContactLabel": "Prioritätskontakt",
+    "selectPriorityContact": "Prioritätskontakt auswählen",
+    "educationExperience": "Bildung & Erfahrung",
+    "educationLabel": "Bildung",
+    "experienceLabel": "Erfahrung",
+    "availabilityLanguages": "Zeitplan & Sprachen",
+    "availabilityLabel": "Zeitplan",
+    "languagesLabel": "Sprachen",
+    "motivation": "Motivation",
+    "motivationLabel": "Motivation zur Teilnahme",
+    "adminNotes": "Admin-Notizen",
+    "adminNotesLabel": "Notizen (nur für Administratoren sichtbar)",
+    "adminNotesPlaceholder": "Interne Notizen für diesen Mentor hinzufügen...",
+    "fillRequiredFields": "Bitte füllen Sie alle Pflichtfelder aus",
+    "invalidEmail": "Ungültige E-Mail-Adresse",
+    "confirmLeave": "Sie haben nicht gespeicherte Änderungen. Möchten Sie wirklich verlassen?",
+    "keepDraft": "Möchten Sie die Entwurfsänderungen behalten?",
+    "cancelButton": "Abbrechen",
+    "saveButton": "Änderungen speichern",
+    "savingButton": "Wird gespeichert...",
+    "successMessage": "Daten wurden erfolgreich aktualisiert!",
+    "errorMessage": "Fehler beim Aktualisieren der Daten"
+  }
   }
 }
