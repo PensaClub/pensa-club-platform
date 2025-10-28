@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import { createContext, useContext, useState, useCallback } from 'react';
 import { useAuthContext } from './UserContext';
 import academyServiceFactory from '../Services/academyServiceFactory';
 import clubServiceFactory from '../Services/clubServiceFactory';
@@ -88,10 +88,8 @@ export const AcademyProvider = ({ children }) => {
   const applyAsMentor = useCallback(async (applicationData) => {
     setIsLoading(true);
     try {
-      // 1. Изпрати към backend
       const response = await academyService.applyAsMentor(applicationData);
 
-      // 2. Изпрати email към info@pensa.club
       const emailMessage = `
 🎓 НОВА КАНДИДАТУРА ЗА МЕНТОР
 
@@ -127,7 +125,7 @@ ${applicationData.cvUrl ? `✅ CV: ${applicationData.cvOriginalName || 'CV.pdf'}
 Изпратено от DigiBridge Academy - Become Mentor Form
 Дата: ${new Date().toLocaleString('bg-BG')}
 Application ID: ${response.applicationId || response.id || 'N/A'}
-    `.trim();
+      `.trim();
 
       await sendPersonalEmail({
         from: applicationData.email,
@@ -136,7 +134,6 @@ Application ID: ${response.applicationId || response.id || 'N/A'}
         message: emailMessage
       });
 
-      // 3. Създай нотификация за админ
       await academyService.createAdminNotification({
         type: 'mentor_application',
         title: 'Нова кандидатура за ментор',
@@ -190,6 +187,106 @@ Application ID: ${response.applicationId || response.id || 'N/A'}
   }, []);
 
   // ===============================
+  // ADMIN MENTOR MANAGEMENT
+  // ===============================
+
+  const getApprovedMentors = useCallback(async () => {
+    try {
+      const data = await academyService.getApprovedMentors();
+      return data.mentors || data;
+    } catch (error) {
+      console.error('Error fetching approved mentors:', error);
+      throw error;
+    }
+  }, []);
+
+  const getRejectedMentorApplications = useCallback(async () => {
+    try {
+      const data = await academyService.getRejectedMentorApplications();
+      return data.applications || data;
+    } catch (error) {
+      console.error('Error fetching rejected applications:', error);
+      throw error;
+    }
+  }, []);
+
+  const updateMentor = useCallback(async (mentorId, data) => {
+    try {
+      const response = await academyService.updateMentor(mentorId, data);
+      toast.success('Менторът е обновен успешно');
+      return response;
+    } catch (error) {
+      console.error('Error updating mentor:', error);
+      toast.error('Грешка при обновяване на ментор');
+      throw error;
+    }
+  }, []);
+
+  const deactivateMentor = useCallback(async (mentorId) => {
+    try {
+      const response = await academyService.deactivateMentor(mentorId);
+      return response;
+    } catch (error) {
+      console.error('Error deactivating mentor:', error);
+      throw error;
+    }
+  }, []);
+
+  const deleteMentor = useCallback(async (mentorId) => {
+    try {
+      const response = await academyService.deleteMentor(mentorId);
+      return response;
+    } catch (error) {
+      console.error('Error deleting mentor:', error);
+      throw error;
+    }
+  }, []);
+
+  const approveMentor = useCallback(async (applicationId) => {
+    try {
+      const response = await academyService.approveMentor(applicationId);
+      return response;
+    } catch (error) {
+      console.error('Error approving mentor:', error);
+      throw error;
+    }
+  }, []);
+
+  const bulkDeleteMentors = useCallback(async (mentorIds) => {
+    try {
+      const response = await academyService.bulkDeleteMentors(mentorIds);
+      return response;
+    } catch (error) {
+      console.error('Error bulk deleting mentors:', error);
+      throw error;
+    }
+  }, []);
+
+  const updateMentorAdminNotes = useCallback(async (mentorId, notes) => {
+    try {
+      const response = await academyService.updateMentorAdminNotes(mentorId, notes);
+      toast.success('Бележките са обновени успешно');
+      return response;
+    } catch (error) {
+      console.error('Error updating admin notes:', error);
+      toast.error('Грешка при обновяване на бележки');
+      throw error;
+    }
+  }, []);
+
+  const updateMentorPriorityContact = useCallback(async (mentorId, priorityContact) => {
+    try {
+      const response = await academyService.updateMentorPriorityContact(mentorId, priorityContact);
+      toast.success('Приоритетният контакт е обновен успешно');
+      return response;
+    } catch (error) {
+      console.error('Error updating priority contact:', error);
+      toast.error('Грешка при обновяване на приоритетен контакт');
+      throw error;
+    }
+  }, []);
+
+  // ===============================
   // CONTEXT VALUE
   // ===============================
 
@@ -214,6 +311,17 @@ Application ID: ${response.applicationId || response.id || 'N/A'}
     // Admin Notifications
     getAdminNotifications,
     markNotificationAsRead,
+
+    // Admin Mentor Management
+    getApprovedMentors,
+    getRejectedMentorApplications,
+    updateMentor,
+    deactivateMentor,
+    deleteMentor,
+    approveMentor,
+    bulkDeleteMentors,
+    updateMentorAdminNotes,
+    updateMentorPriorityContact,
   };
 
   return (

@@ -73,6 +73,7 @@ import MyClubs from "../Clubs/MyClubs/MyClubs";
 import DraftClubs from "../Clubs/DraftClubs/DraftClubs";
 import MembershipClubs from "../Clubs/MembershipClubs/MembershipClubs";
 import ClubsAdmin from "../Clubs/ClubsAdmin/ClubsAdmin";
+import { AdminDigiBridgeMentors } from "../AdminDigiBridgeMentors/AdminDigiBridgeMentors";
 
 // 🎨 НОВИ ИКОНКИ КОМПОНЕНТИ
 const HomeIcon = () => (
@@ -1102,9 +1103,9 @@ export const Profile = () => {
             <Route path="suggest-resolved-users" element={<ManagementGuard><SuggestResolvedUsers setResolvedUsers={setResolvedUsers} /></ManagementGuard>} />
             <Route path="users-statistic" element={<AdminGuard><AllUsersStatistics /></AdminGuard>} />
             <Route path="applications-admin" element={<ManagementGuard><ApplicationsAdmin setApplicationsStats={setApplicationsStats} /></ManagementGuard>} />
-            {/* <Route path="mentors-overview" element={<AdminGuard><AdminDigiBridgeMentors /></AdminGuard>} />
-<Route path="mentors-applications" element={<AdminGuard><AdminDigiBridgeMentorApplications /></AdminGuard>} />
-<Route path="mentors-statistics" element={<AdminGuard><AdminDigiBridgeMentorStatistics /></AdminGuard>} /> */}
+            <Route path="mentors-overview" element={<AdminGuard><AdminDigiBridgeMentors /></AdminGuard>} /> 
+{/* <Route path="mentors-applications" element={<AdminGuard><AdminDigiBridgeMentorApplications /></AdminGuard>} /> */}
+{/* <Route path="mentors-statistics" element={<AdminGuard><AdminDigiBridgeMentorStatistics /></AdminGuard>} />  */}
             <Route path="users-admin" element={<AdminGuard><AllUsers setAllUsers={setAllUsers} /></AdminGuard>} />
             <Route path="users-unfinished" element={<AdminGuard><UnfinishedProfiles setUnfinishedUsers={setUnfinishedUsers} /></AdminGuard>} />
           </Routes>

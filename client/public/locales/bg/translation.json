@@ -602,14 +602,12 @@
     "upload_image_btn": "Качи снимка"
   },
   "admin": {
-   
-  "mentors": {
-    "title": "Ментори",
-    "overview": "Преглед на ментори",
-    "applications": "Кандидатури",
-    "statistics": "Статистики"
-  },
-
+    "mentors": {
+      "title": "Ментори",
+      "overview": "Преглед на ментори",
+      "applications": "Кандидатури",
+      "statistics": "Статистики"
+    },
     "pending_announcements": "Неодобрени обяви",
     "search": "Търси",
     "name": "Име",
@@ -11763,7 +11761,6 @@
       "convertToDraft": "Преобразувай в чернова"
     },
     "admin": {
-      
       "title": "Управление на истории",
       "subtitle": "Прегледай и управлявай всички истории и чернови",
       "totalStories": "Общо истории",
@@ -12483,7 +12480,142 @@
       "requestAccepted": "Заявката е приета успешно!",
       "errorAccepting": "Грешка при приемане на заявката"
     }
-    
+  },
+  "AdminDigiBridgeMentors": {
+    "title": "Управление на ментори",
+    "subtitle": "Преглед, редакция и управление на одобрени ментори в DigiBridge Academy",
+    "exportCSV": "Експорт CSV",
+    "bulkActions": "Групови действия",
+    "cancelBulk": "Откажи",
+    "selectedCount": "Избрани: {{count}}",
+    "deleteSelected": "Изтрий избраните",
+    "selectAll": "Избери всички",
+    "loading": "Зареждане на ментори...",
+    "noResults": "Няма намерени ментори",
+    "noResultsDescription": "Опитайте да промените филтрите или да изчистите търсенето",
+    "rejectedApplications": "Отказани кандидатури",
+    "rejectionReason": "Причина за отказ",
+    "approveNow": "Одобри сега",
+    "confirmDeactivate": "Сигурни ли сте, че искате да деактивирате този ментор?",
+    "confirmDelete": "Сигурни ли сте, че искате да изтриете този ментор? Това действие е необратимо!",
+    "confirmApprove": "Сигурни ли сте, че искате да одобрите този ментор?",
+    "confirmBulkDelete": "Сигурни ли сте, че искате да изтриете {{count}} ментора? Това действие е необратимо!",
+    "deactivateSuccess": "Менторът беше деактивиран успешно",
+    "deleteSuccess": "Менторът беше изтрит успешно",
+    "approveSuccess": "Менторът беше одобрен успешно",
+    "bulkDeleteSuccess": "Менторите бяха изтрити успешно",
+    "exportSuccess": "CSV файлът беше експортиран успешно",
+    "errors": {
+      "fetchError": "Грешка при зареждане на менторите",
+      "deactivateError": "Грешка при деактивиране на ментор",
+      "deleteError": "Грешка при изтриване на ментор",
+      "approveError": "Грешка при одобряване на ментор",
+      "bulkDeleteError": "Грешка при групово изтриване"
+    },
+    "Stats": {
+      "totalMentors": "Общо ментори",
+      "onlineMentors": "Онлайн",
+      "totalStudents": "Студенти",
+      "averageRating": "Среден рейтинг"
+    },
+    "Filters": {
+      "searchPlaceholder": "Търси по име, email или специализация...",
+      "allSpecializations": "Всички специализации",
+      "digitalSecurity": "Дигитална сигурност",
+      "mediaLiteracy": "Медийна грамотност",
+      "socialMedia": "Социални мрежи",
+      "onlineBanking": "Онлайн банкиране",
+      "basicSkills": "Основни компютърни умения",
+      "allStatuses": "Всички статуси",
+      "online": "Онлайн",
+      "offline": "Офлайн",
+      "sortByName": "Сортирай по име",
+      "sortByStudents": "Сортирай по студенти",
+      "sortByRating": "Сортирай по рейтинг",
+      "sortByDate": "Сортирай по дата",
+      "clearFilters": "Изчисти филтрите",
+      "resultsCount": "{{count}} ментора намерени"
+    },
+    "Card": {
+      "online": "Online",
+      "offline": "Offline",
+      "years": "years",
+      "students": "Students",
+      "rating": "Rating",
+      "sessions": "Sessions",
+      "priorityContact": "Priority Contact",
+      "phone": "Phone",
+      "other": "Other",
+      "viewDetails": "Details",
+      "edit": "Edit",
+      "sendEmail": "Send Email",
+      "deactivate": "Deactivate",
+      "delete": "Delete"
+    },
+    "DetailModal": {
+      "title": "Детайли за ментор",
+      "years": "години",
+      "online": "Онлайн",
+      "offline": "Офлайн",
+      "students": "Студенти",
+      "rating": "Рейтинг",
+      "sessions": "Сесии",
+      "contactInfo": "Контактна информация",
+      "phone": "Телефон",
+      "otherContact": "Друг контакт",
+      "priorityContact": "Приоритетен контакт",
+      "educationExperience": "Образование и опит",
+      "education": "Образование",
+      "experience": "Опит",
+      "availabilityLanguages": "График и езици",
+      "availability": "График",
+      "languages": "Езици",
+      "motivation": "Мотивация",
+      "downloadCV": "Свали CV",
+      "adminNotes": "Административни бележки",
+      "importantDates": "Важни дати",
+      "createdAt": "Създадена",
+      "approvedAt": "Одобрена",
+      "lastActiveAt": "Последна активност",
+      "close": "Затвори"
+    },
+    "SendEmailModal": {
+      "title": "Изпрати имейл до ментор",
+      "sendingTo": "Изпращане до",
+      "subjectLabel": "Тема",
+      "subjectPlaceholder": "Въведете тема на имейла...",
+      "messageLabel": "Съобщение",
+      "messagePlaceholder": "Напишете вашето съобщение тук...",
+      "fillAllFields": "Моля, попълнете всички полета",
+      "cancelButton": "Откажи",
+      "sendButton": "Изпрати",
+      "sendingButton": "Изпращане...",
+      "successMessage": "Имейлът беше изпратен успешно!",
+      "errorMessage": "Грешка при изпращане на имейл"
+    },
+    "RejectedDetailModal": {
+      "title": "Детайли за отказана кандидатура",
+      "years": "години",
+      "rejectionReason": "Причина за отказ",
+      "contactInfo": "Контактна информация",
+      "phone": "Телефон",
+      "otherContact": "Друг контакт",
+      "copyToClipboard": "Копирай",
+      "copied": "Копирано!",
+      "copyError": "Грешка при копиране",
+      "educationExperience": "Образование и опит",
+      "education": "Образование",
+      "experience": "Опит",
+      "availabilityLanguages": "График и езици",
+      "availability": "График",
+      "languages": "Езици",
+      "motivation": "Мотивация",
+      "downloadCV": "Свали CV",
+      "importantDates": "Важни дати",
+      "createdAt": "Създадена",
+      "rejectedAt": "Отказана",
+      "close": "Затвори",
+      "approveNow": "Одобри сега"
+    }
   }
- 
 }
