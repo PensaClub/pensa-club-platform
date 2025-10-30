@@ -1,0 +1,298 @@
+/* src/components/AdminDigiBridgeMentorStatistics/TopMentorsByCourses/topMentorsByCourses.css */
+
+/* ===================================
+   TOP MENTORS BY COURSES - MAIN
+   =================================== */
+
+.top-mentors-by-courses {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 2px solid #f3f4f6;
+  padding: 28px;
+  transition: all 0.3s ease;
+}
+
+.top-mentors-by-courses:hover {
+  border-color: #e5e7eb;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* ===================================
+   HEADER
+   =================================== */
+
+.top-mentors-by-courses-header {
+  margin-bottom: 24px;
+}
+
+.top-mentors-by-courses-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #1f2937;
+  margin: 0 0 8px 0;
+}
+
+.top-mentors-by-courses-title svg {
+  width: 28px;
+  height: 28px;
+  color: #8b5cf6;
+  flex-shrink: 0;
+}
+
+.top-mentors-by-courses-subtitle {
+  font-size: 0.95rem;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ===================================
+   CHART WRAPPER
+   =================================== */
+
+.top-mentors-by-courses-chart-wrapper {
+  margin-top: 20px;
+}
+
+/* ===================================
+   CUSTOM TOOLTIP
+   =================================== */
+
+.top-mentors-by-courses-tooltip {
+  background: #ffffff;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 2px solid #e5e7eb;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.top-mentors-by-courses-tooltip-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 4px 0;
+}
+
+.top-mentors-by-courses-tooltip-spec {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin: 0 0 8px 0;
+}
+
+.top-mentors-by-courses-tooltip-value {
+  font-size: 0.9rem;
+  color: #374151;
+  margin: 0;
+}
+
+.top-mentors-by-courses-tooltip-value strong {
+  color: #8b5cf6;
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+/* ===================================
+   EMPTY STATE
+   =================================== */
+
+.top-mentors-by-courses-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  gap: 16px;
+}
+
+.top-mentors-by-courses-empty-icon {
+  font-size: 3rem;
+  opacity: 0.5;
+}
+
+.top-mentors-by-courses-empty p {
+  font-size: 1rem;
+  color: #9ca3af;
+  margin: 0;
+  font-weight: 600;
+}
+
+/* ===================================
+   RESPONSIVE DESIGN
+   =================================== */
+
+/* Large Desktops (1440px+) */
+@media (min-width: 1440px) {
+  .top-mentors-by-courses {
+    padding: 32px;
+  }
+
+  .top-mentors-by-courses-title {
+    font-size: 1.65rem;
+  }
+
+  .top-mentors-by-courses-title svg {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* Standard Desktops (1024px - 1439px) */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .top-mentors-by-courses {
+    padding: 26px;
+  }
+
+  .top-mentors-by-courses-title {
+    font-size: 1.4rem;
+  }
+
+  .top-mentors-by-courses-title svg {
+    width: 26px;
+    height: 26px;
+  }
+}
+
+/* Tablets (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .top-mentors-by-courses {
+    padding: 24px;
+  }
+
+  .top-mentors-by-courses-title {
+    font-size: 1.35rem;
+  }
+
+  .top-mentors-by-courses-title svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .top-mentors-by-courses-subtitle {
+    font-size: 0.9rem;
+  }
+}
+
+/* Small Tablets / Large Phones (576px - 767px) */
+@media (min-width: 576px) and (max-width: 767px) {
+  .top-mentors-by-courses {
+    padding: 22px 18px;
+  }
+
+  .top-mentors-by-courses-title {
+    font-size: 1.25rem;
+  }
+
+  .top-mentors-by-courses-title svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .top-mentors-by-courses-subtitle {
+    font-size: 0.88rem;
+  }
+
+  .top-mentors-by-courses-chart-wrapper {
+    margin-top: 18px;
+  }
+}
+
+/* Phones (480px - 575px) */
+@media (min-width: 480px) and (max-width: 575px) {
+  .top-mentors-by-courses {
+    padding: 20px 16px;
+  }
+
+  .top-mentors-by-courses-title {
+    font-size: 1.2rem;
+    gap: 10px;
+  }
+
+  .top-mentors-by-courses-title svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .top-mentors-by-courses-subtitle {
+    font-size: 0.85rem;
+  }
+
+  .top-mentors-by-courses-tooltip {
+    padding: 10px 14px;
+  }
+
+  .top-mentors-by-courses-tooltip-name {
+    font-size: 0.9rem;
+  }
+
+  .top-mentors-by-courses-tooltip-spec {
+    font-size: 0.8rem;
+  }
+
+  .top-mentors-by-courses-tooltip-value {
+    font-size: 0.85rem;
+  }
+
+  .top-mentors-by-courses-tooltip-value strong {
+    font-size: 1rem;
+  }
+}
+
+/* Small Phones (320px - 479px) */
+@media (max-width: 479px) {
+  .top-mentors-by-courses {
+    padding: 18px 14px;
+  }
+
+  .top-mentors-by-courses-title {
+    font-size: 1.15rem;
+    gap: 8px;
+  }
+
+  .top-mentors-by-courses-title svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .top-mentors-by-courses-subtitle {
+    font-size: 0.82rem;
+  }
+
+  .top-mentors-by-courses-chart-wrapper {
+    margin-top: 16px;
+  }
+
+  .top-mentors-by-courses-tooltip {
+    padding: 9px 12px;
+  }
+
+  .top-mentors-by-courses-tooltip-name {
+    font-size: 0.88rem;
+  }
+
+  .top-mentors-by-courses-tooltip-spec {
+    font-size: 0.78rem;
+  }
+
+  .top-mentors-by-courses-tooltip-value {
+    font-size: 0.82rem;
+  }
+
+  .top-mentors-by-courses-tooltip-value strong {
+    font-size: 0.95rem;
+  }
+
+  .top-mentors-by-courses-empty {
+    padding: 50px 16px;
+  }
+
+  .top-mentors-by-courses-empty-icon {
+    font-size: 2.5rem;
+  }
+
+  .top-mentors-by-courses-empty p {
+    font-size: 0.9rem;
+  }
+}

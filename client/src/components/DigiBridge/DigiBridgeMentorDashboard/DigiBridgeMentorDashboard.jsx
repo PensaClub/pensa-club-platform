@@ -16,6 +16,7 @@ import './digiBridgeMentorDashboard.css';
 import { RequestCard } from './RequestCard';
 import { DashboardStats } from './DashboardStats';
 import { ConversationCard } from './ConversationCard';
+import { Header } from '../../Header/Header';
 
 export const DigiBridgeMentorDashboard = () => {
   const { t } = useTranslation();
@@ -129,6 +130,7 @@ export const DigiBridgeMentorDashboard = () => {
       
       {/* HEADER */}
       <div className="digibridge-dashboard-header">
+        <Header />
         <div className="digibridge-dashboard-title">
           <h1>{t('digiBridge.dashboard.title')}</h1>
           {isAdmin && (

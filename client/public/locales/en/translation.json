@@ -660,6 +660,12 @@
     "upload_image_btn": "Upload photo"
   },
   "admin": {
+    "mentors": {
+      "title": "Mentors",
+      "overview": "Mentors Overview",
+      "applications": "Applications",
+      "statistics": "Statistics"
+    },
     "pending_announcements": "Pending Announcements",
     "search": "Search",
     "name": "Name",
@@ -10964,33 +10970,6 @@
     },
     "resultsInfo": "Showing {{showing}} of {{total}} drafts"
   },
-  "draftClubs": {
-    "title": "Club-Entwürfe",
-    "subtitle": "Verwalten und vervollständigen Sie Ihre unvollendeten Clubs",
-    "createNew": "Neuen Club erstellen",
-    "loading": "Lade Entwürfe...",
-    "errorTitle": "Fehler beim Laden der Entwürfe",
-    "retry": "Erneut versuchen",
-    "searchPlaceholder": "Entwürfe nach Name, Beschreibung, Ort durchsuchen...",
-    "filters": {
-      "all": "Alle Entwürfe",
-      "complete": "Vollständig",
-      "incomplete": "Unvollständig",
-      "general": "Allgemein",
-      "cultural": "Kulturell",
-      "traditional": "Traditionell",
-      "social": "Sozial",
-      "sports": "Sport"
-    },
-    "sorting": {
-      "newest": "Neueste zuerst",
-      "oldest": "Älteste zuerst",
-      "name": "Name A-Z",
-      "category": "Kategorie",
-      "completion": "Nach Vollständigkeit"
-    },
-    "resultsInfo": "Zeige {{showing}} von {{total}} Entwürfen"
-  },
   "draftClubsCard": {
     "categories": {
       "general": "General",
@@ -11799,6 +11778,8 @@
       "login": "Sign In",
       "nav": {
         "home": "Home",
+        "myChats": "My Chats",
+        "mentorDashboard": "Chats",
         "courses": "Courses",
         "mentors": "Mentors",
         "events": "Events",
@@ -11811,7 +11792,9 @@
         "myCourses": "My Courses",
         "myMentor": "My Mentor",
         "profile": "Profile",
-        "logout": "Logout"
+        "logout": "Logout",
+        "myChats": "My Chats",
+        "mentorDashboard": "Chats"
       }
     },
     "hero": {
@@ -11999,6 +11982,112 @@
       "successMessage": "Message sent successfully! We'll contact you soon.",
       "errorMessage": "Error sending message. Please try again."
     },
+    "becomeMentor": {
+      "authRequired": {
+        "title": "Log in to your account",
+        "description": "To apply as a mentor, please log in or register.",
+        "login": "Log In",
+        "register": "Sign Up"
+      },
+      "hero": {
+        "title": "Become a Mentor",
+        "subtitle": "Share your knowledge and help seniors master the digital world"
+      },
+      "intro": {
+        "title": "Why become a mentor?",
+        "description": "As a mentor at DigiBridge Academy, you will help seniors overcome the digital divide and feel confident online. This is an opportunity to make a real difference in people's lives."
+      },
+      "benefits": {
+        "benefit1": {
+          "title": "Develop Professionally",
+          "description": "Improve your communication skills and gain teaching experience"
+        },
+        "benefit2": {
+          "title": "Build Connections",
+          "description": "Meet inspiring people of all ages and create intergenerational friendships"
+        },
+        "benefit3": {
+          "title": "Make a Difference",
+          "description": "Help seniors feel confident and independent in the digital world"
+        }
+      },
+      "form": {
+        "schedule": "Preferred Schedule",
+        "schedulePlaceholder": "Select schedule",
+        "scheduleHelper": "When do you prefer to conduct training sessions?",
+        "languagesHelper": "Which languages can you teach in? (optional)",
+        "title": "Apply Now",
+        "subtitle": "Fill out the form below and we'll contact you soon",
+        "name": "Full Name",
+        "namePlaceholder": "John Doe",
+        "age": "Age",
+        "email": "Email Address",
+        "education": "Education",
+        "educationPlaceholder": "E.g. MIT - Computer Science, Bachelor 2023",
+        "specialization": "Specialization",
+        "specializationPlaceholder": "Select specialization",
+        "experience": "Experience",
+        "experiencePlaceholder": "E.g. 2 years teaching experience",
+        "motivation": "Motivation",
+        "motivationPlaceholder": "Why do you want to become a mentor? (max 500 characters)",
+        "availability": "Availability",
+        "availabilityPlaceholder": "Select availability",
+        "languages": "Languages",
+        "submit": "Submit Application",
+        "submitting": "Submitting...",
+        "submitNote": "We will review your application and contact you soon"
+      },
+      "photo": {
+        "label": "Photo",
+        "upload": "Upload Photo",
+        "uploading": "Uploading...",
+        "change": "Change Photo",
+        "error": "Error uploading photo",
+        "formatError": "Please upload an image in JPG, PNG or WEBP format"
+      },
+      "contactMethods": {
+        "title": "Contact Methods",
+        "phone": "Phone",
+        "viber": "Viber",
+        "facebook": "Facebook",
+        "linkedin": "LinkedIn",
+        "other": "Other",
+        "otherPlaceholder": "E.g. Telegram, WhatsApp, Skype..."
+      },
+      "specialization": {
+        "other": "Other"
+      },
+      "cv": {
+        "label": "CV (Resume)",
+        "optional": "Optional",
+        "upload": "Upload CV",
+        "uploading": "Uploading...",
+        "change": "Change File",
+        "error": "Error uploading CV",
+        "formatError": "Please upload a file in PDF, DOC, DOCX or TXT format (max 10MB)"
+      },
+      "sections": {
+        "personalInfo": "Personal Information",
+        "education": "Education and Experience",
+        "schedule": "Schedule and Languages"
+      },
+      "errors": {
+        "nameRequired": "Name is required",
+        "emailRequired": "Email is required",
+        "emailInvalid": "Invalid email address",
+        "ageRequired": "Age is required",
+        "ageInvalid": "Age must be between 16 and 100",
+        "educationRequired": "Education is required",
+        "specializationRequired": "Specialization is required",
+        "experienceRequired": "Experience is required",
+        "motivationRequired": "Motivation is required",
+        "availabilityRequired": "Availability is required",
+        "languagesRequired": "Select at least one language",
+        "fillRequired": "Please fill in all required fields",
+        "submitError": "Error submitting application. Please try again."
+      },
+      "success": "Application submitted successfully! We will contact you soon."
+    },
     "testimonialForm": {
       "title": "Share Your Story",
       "subtitle": "Help others learn about DigiBridge - share your experience!",
@@ -12179,5 +12268,418 @@
       "requestAccepted": "Request accepted successfully!",
       "errorAccepting": "Error accepting request"
     }
+  },
+  "AdminDigiBridgeMentors": {
+    "title": "Mentors Management",
+    "subtitle": "View, edit and manage approved mentors in DigiBridge Academy",
+    "exportCSV": "Export CSV",
+    "bulkActions": "Bulk Actions",
+    "cancelBulk": "Cancel",
+    "selectedCount": "Selected: {{count}}",
+    "deleteSelected": "Delete Selected",
+    "selectAll": "Select All",
+    "loading": "Loading mentors...",
+    "noResults": "No mentors found",
+    "noResultsDescription": "Try changing the filters or clearing the search",
+    "rejectedApplications": "Rejected Applications",
+    "rejectionReason": "Rejection Reason",
+    "approveNow": "Approve Now",
+    "confirmDeactivate": "Are you sure you want to deactivate this mentor?",
+    "confirmDelete": "Are you sure you want to delete this mentor? This action is irreversible!",
+    "confirmApprove": "Are you sure you want to approve this mentor?",
+    "confirmBulkDelete": "Are you sure you want to delete {{count}} mentors? This action is irreversible!",
+    "deactivateSuccess": "Mentor was deactivated successfully",
+    "deleteSuccess": "Mentor was deleted successfully",
+    "approveSuccess": "Mentor was approved successfully",
+    "bulkDeleteSuccess": "Mentors were deleted successfully",
+    "exportSuccess": "CSV file was exported successfully",
+    "errors": {
+      "fetchError": "Error loading mentors",
+      "deactivateError": "Error deactivating mentor",
+      "deleteError": "Error deleting mentor",
+      "approveError": "Error approving mentor",
+      "bulkDeleteError": "Error bulk deleting"
+    },
+    "Stats": {
+      "totalMentors": "Total Mentors",
+      "onlineMentors": "Online",
+      "totalStudents": "Students",
+      "averageRating": "Average Rating"
+    },
+    "Filters": {
+      "searchPlaceholder": "Search by name, email or specialization...",
+      "allSpecializations": "All Specializations",
+      "digitalSecurity": "Digital Security",
+      "mediaLiteracy": "Media Literacy",
+      "socialMedia": "Social Media",
+      "onlineBanking": "Online Banking",
+      "basicSkills": "Basic Computer Skills",
+      "allStatuses": "All Statuses",
+      "online": "Online",
+      "offline": "Offline",
+      "sortByName": "Sort by Name",
+      "sortByStudents": "Sort by Students",
+      "sortByRating": "Sort by Rating",
+      "sortByDate": "Sort by Date",
+      "clearFilters": "Clear Filters",
+      "resultsCount": "{{count}} mentors found"
+    },
+    "Card": {
+      "online": "Online",
+      "offline": "Offline",
+      "years": "years",
+      "students": "Students",
+      "rating": "Rating",
+      "sessions": "Sessions",
+      "priorityContact": "Priority Contact",
+      "phone": "Phone",
+      "other": "Other",
+      "viewDetails": "Details",
+      "edit": "Edit",
+      "sendEmail": "Send Email",
+      "deactivate": "Deactivate",
+      "delete": "Delete"
+    },
+    "DetailModal": {
+      "title": "Mentor Details",
+      "years": "years",
+      "online": "Online",
+      "offline": "Offline",
+      "students": "Students",
+      "rating": "Rating",
+      "sessions": "Sessions",
+      "contactInfo": "Contact Information",
+      "phone": "Phone",
+      "otherContact": "Other Contact",
+      "priorityContact": "Priority Contact",
+      "educationExperience": "Education & Experience",
+      "education": "Education",
+      "experience": "Experience",
+      "availabilityLanguages": "Schedule & Languages",
+      "availability": "Schedule",
+      "languages": "Languages",
+      "motivation": "Motivation",
+      "downloadCV": "Download CV",
+      "adminNotes": "Admin Notes",
+      "importantDates": "Important Dates",
+      "createdAt": "Created",
+      "approvedAt": "Approved",
+      "lastActiveAt": "Last Active",
+      "close": "Close"
+    },
+    "SendEmailModal": {
+      "title": "Send Email to Mentor",
+      "sendingTo": "Sending to",
+      "subjectLabel": "Subject",
+      "subjectPlaceholder": "Enter email subject...",
+      "messageLabel": "Message",
+      "messagePlaceholder": "Write your message here...",
+      "fillAllFields": "Please fill in all fields",
+      "cancelButton": "Cancel",
+      "sendButton": "Send",
+      "sendingButton": "Sending...",
+      "successMessage": "Email was sent successfully!",
+      "errorMessage": "Error sending email"
+    },
+    "RejectedDetailModal": {
+      "title": "Rejected Application Details",
+      "years": "years",
+      "rejectionReason": "Rejection Reason",
+      "contactInfo": "Contact Information",
+      "phone": "Phone",
+      "otherContact": "Other Contact",
+      "copyToClipboard": "Copy",
+      "copied": "Copied!",
+      "copyError": "Copy error",
+      "educationExperience": "Education & Experience",
+      "education": "Education",
+      "experience": "Experience",
+      "availabilityLanguages": "Schedule & Languages",
+      "availability": "Schedule",
+      "languages": "Languages",
+      "motivation": "Motivation",
+      "downloadCV": "Download CV",
+      "importantDates": "Important Dates",
+      "createdAt": "Created",
+      "rejectedAt": "Rejected",
+      "close": "Close",
+      "approveNow": "Approve Now",
+      "confirmApprove": "Are you sure you want to approve this application?"
+    },
+    "EditModal": {
+      "title": "Edit Mentor",
+      "editingMentor": "Editing",
+      "draftRestored": "Draft Restored",
+      "basicInfo": "Basic Information",
+      "nameLabel": "Name",
+      "ageLabel": "Age",
+      "specializationLabel": "Specialization",
+      "selectSpecialization": "Select specialization",
+      "contactInfo": "Contact Information",
+      "phoneLabel": "Phone",
+      "otherContactLabel": "Other Contact",
+      "priorityContactLabel": "Priority Contact",
+      "selectPriorityContact": "Select priority contact",
+      "educationExperience": "Education & Experience",
+      "educationLabel": "Education",
+      "experienceLabel": "Experience",
+      "availabilityLanguages": "Schedule & Languages",
+      "availabilityLabel": "Schedule",
+      "languagesLabel": "Languages",
+      "motivation": "Motivation",
+      "motivationLabel": "Motivation to participate",
+      "adminNotes": "Admin Notes",
+      "adminNotesLabel": "Notes (visible only to administrators)",
+      "adminNotesPlaceholder": "Add internal notes for this mentor...",
+      "fillRequiredFields": "Please fill in all required fields",
+      "invalidEmail": "Invalid email address",
+      "confirmLeave": "You have unsaved changes. Are you sure you want to leave?",
+      "keepDraft": "Do you want to keep the draft changes?",
+      "cancelButton": "Cancel",
+      "saveButton": "Save Changes",
+      "savingButton": "Saving...",
+      "successMessage": "Data was updated successfully!",
+      "errorMessage": "Error updating data"
+    }
+  },
+  "AdminNotificationBell": {
+    "title": "Notifications",
+    "new": "new",
+    "loading": "Loading...",
+    "noNotifications": "No notifications",
+    "viewAll": "View all",
+    "justNow": "Just now",
+    "minutesAgo": "min ago",
+    "hoursAgo": "h ago",
+    "daysAgo": "days ago"
+  },
+  "AdminDigiBridgeMentorApplications": {
+    "title": "Mentor Applications",
+    "description": "Review and manage incoming mentor applications for DigiBridge Academy",
+    
+    "stats": {
+      "totalApplications": "Total Applications",
+      "newToday": "New Today",
+      "pending": "Pending"
+    },
+    
+    "filters": {
+      "searchPlaceholder": "Search by name or email...",
+      "specializationLabel": "Specialization",
+      "specializationAll": "All Specializations",
+      "sortByLabel": "Sort by",
+      "sortNewest": "Newest First",
+      "sortOldest": "Oldest First",
+      "sortName": "By Name (A-Z)"
+    },
+    
+    "loading": "Loading applications...",
+    
+    "noApplications": "No Applications",
+    "noApplicationsDescription": "There are currently no mentor applications",
+    
+    "approveSuccess": "Application approved successfully!",
+    "approveError": "Error approving application",
+    "rejectSuccess": "Application rejected",
+    "rejectError": "Error rejecting application",
+    
+    "viewDetails": "View Details",
+    "sendEmail": "Send Email",
+    "approve": "Approve",
+    "reject": "Reject"
+  },
+   "ApplicationsStats": {
+    "totalApplications": "Total Applications",
+    "newToday": "New Today",
+    "pending": "Pending"
+  },
+  "ApplicationsFilters": {
+    "searchPlaceholder": "Search by name or email...",
+    "specializationLabel": "Specialization",
+    "specializationAll": "All Specializations",
+    "digitalSecurity": "Digital Security",
+    "socialMedia": "Social Media",
+    "onlineBanking": "Online Banking",
+    "mediaLiteracy": "Media Literacy",
+    "eGovernment": "E-Government",
+    "sortByLabel": "Sort by",
+    "sortNewest": "Newest First",
+    "sortOldest": "Oldest First",
+    "sortName": "By Name (A-Z)",
+    "clearFilters": "Clear Filters"
+  },
+  "AdminDigiBridgeApplicationCard": {
+    "pending": "Pending",
+    "viewDetails": "View Details",
+    "sendEmail": "Send Email",
+    "approve": "Approve",
+    "reject": "Reject"
+  },
+  "AdminDigiBridgeApplicationDetailModal": {
+    "appliedOn": "Applied on",
+    "contactInfo": "Contact Information",
+    "email": "Email",
+    "phone": "Phone",
+    "age": "Age",
+    "years": "years",
+    "languages": "Languages",
+    "langBulgarian": "Bulgarian",
+    "langEnglish": "English",
+    "langGerman": "German",
+    "langFrench": "French",
+    "langSpanish": "Spanish",
+    "langItalian": "Italian",
+    "education": "Education",
+    "experience": "Experience",
+    "motivation": "Motivation",
+    "availability": "Availability",
+    "socialMedia": "Social Media & Contacts",
+    "other": "Other",
+    "cv": "Curriculum Vitae (CV)",
+    "downloadCV": "Download CV",
+    "rejectionReason": "Rejection Reason",
+    "rejectionReasonPlaceholder": "Please describe the reason for rejecting this application...",
+    "rejectionReasonRequired": "Please enter a rejection reason",
+    "sendEmail": "Send Email",
+    "approve": "Approve Application",
+    "approving": "Approving...",
+    "reject": "Reject Application",
+    "rejecting": "Rejecting...",
+    "cancel": "Cancel",
+    "confirmRejectBtn": "Confirm Rejection",
+    "confirmApprove": "Are you sure you want to approve this application?",
+    "confirmReject": "Are you sure you want to reject this application?",
+    "priorityContact": "Priority Contact"
+  },
+  "AdminDigiBridgeSendEmailToApplicantModal": {
+    "title": "Send Email to Applicant",
+    "sendingTo": "Sending to",
+    "quickTemplates": "Quick Templates",
+    "templateWelcomeName": "Welcome",
+    "templateMoreInfoName": "More Information",
+    "templateInterviewName": "Interview Invitation",
+    "templateWelcomeSubject": "Thank you for your application",
+    "templateWelcomeMessage": "Hello {{name}},\n\nThank you for your interest in the Mentor position in the DigiBridge program!\n\nYour application has been received and is currently being reviewed by our team. We will contact you soon with more information.\n\nBest regards,\nThe Pensa Club Team",
+    "templateMoreInfoSubject": "Additional information needed for your application",
+    "templateMoreInfoMessage": "Hello {{name}},\n\nThank you for your application for the Mentor position in the DigiBridge program.\n\nTo continue reviewing your application, we would like to receive some additional information from you.\n\nPlease reply to this email with details about [specific information].\n\nBest regards,\nThe Pensa Club Team",
+    "templateInterviewSubject": "Interview Invitation - DigiBridge Mentor",
+    "templateInterviewMessage": "Hello {{name}},\n\nWe are pleased to inform you that your application for the Mentor position in the DigiBridge program has successfully passed the initial review stage!\n\nWe would like to invite you to an interview to discuss more details about your participation in the program.\n\nPlease reply to this email with a convenient time for you to meet.\n\nBest regards,\nThe Pensa Club Team",
+    "subjectLabel": "Email Subject",
+    "subjectPlaceholder": "Enter email subject...",
+    "messageLabel": "Message",
+    "messagePlaceholder": "Write your message here...",
+    "fillAllFields": "Please fill in all fields",
+    "successMessage": "Email sent successfully!",
+    "errorMessage": "Error sending email",
+    "cancelButton": "Cancel",
+    "sendButton": "Send Email",
+    "sendingButton": "Sending..."
+  },
+  "AdminDigiBridgeMentorStatistics": {
+    "title": "Mentor Statistics",
+    "description": "Overview of mentor activity and performance in DigiBridge Academy",
+    "thisMonth": "This Month",
+    "lastMonth": "Last Month",
+    "last3Months": "Last 3 Months",
+    "allTime": "All Time",
+    "refresh": "Refresh",
+    "loading": "Loading statistics..."
+  },
+  "StatisticsOverviewCards": {
+    "activeMentors": "Active Mentors",
+    "mentors": "mentors",
+    "totalStudents": "Total Students",
+    "students": "students",
+    "averageRating": "Average Rating",
+    "coursesCompleted": "Courses Completed",
+    "courses": "courses",
+    "sessionsThisMonth": "Sessions This Month",
+    "sessions": "sessions",
+    "onlineHours": "Online Hours",
+    "hours": "hours",
+    "completionRate": "Completion Rate",
+    "totalReviews": "Total Reviews",
+    "reviews": "reviews"
+  },
+  "TopMentorsByCourses": {
+    "title": "Top Mentors by Completed Courses",
+    "subtitle": "Ranking of mentors with the most completed courses",
+    "yAxisLabel": "Number of Courses",
+    "courses": "courses",
+    "noData": "No data to display"
+  },
+  "TopMentorsByOnlineTime": {
+    "title": "Top Mentors by Online Time",
+    "subtitle": "Ranking of mentors with the most online hours this month",
+    "yAxisLabel": "Online Hours",
+    "hours": "hours",
+    "thisMonth": "This Month",
+    "total": "Total",
+    "noData": "No data to display"
+  },
+  "ActivityTrendChart": {
+    "title": "Activity Trend",
+    "subtitle": "Tracking sessions and online hours over the last 6 months",
+    "sessionsLabel": "Number of Sessions",
+    "hoursLabel": "Online Hours",
+    "sessions": "Sessions",
+    "hours": "Hours",
+    "noData": "No data to display"
+  },
+    "SessionQualityChart": {
+    "title": "Session Quality",
+    "subtitle": "Distribution of completed, canceled, and no-show sessions",
+    "completed": "Completed",
+    "canceled": "Canceled",
+    "noShow": "No Show",
+    "sessions": "Sessions",
+    "percentage": "Percentage",
+    "noData": "No data to display"
+  },
+  "ResponseTimeChart": {
+    "title": "Response Time",
+    "subtitle": "Average mentor response time to student inquiries",
+    "xAxisLabel": "Response Time (minutes)",
+    "responseTime": "Response Time",
+    "rating": "Rating",
+    "minutes": "min",
+    "min": "min",
+    "excellent": "Excellent",
+    "veryGood": "Very Good",
+    "good": "Good",
+    "needsImprovement": "Needs Improvement",
+    "noData": "No data to display"
+  },
+  "MentorsBySpecialization": {
+    "title": "Mentors by Specialization",
+    "subtitle": "Distribution of mentors across different specializations",
+    "yAxisLabel": "Number of Mentors",
+    "mentors": "mentors",
+    "students": "students",
+    "avgRating": "Avg Rating",
+    "noData": "No data to display"
+  },
+  "DetailedMentorsTable": {
+    "title": "Detailed Mentor Information",
+    "subtitle": "Complete overview of all {{count}} mentors with detailed metrics",
+    "name": "Name",
+    "specialization": "Specialization",
+    "students": "Students",
+    "courses": "Courses",
+    "rating": "Rating",
+    "onlineHours": "Online Hours",
+    "responseTime": "Response Time",
+    "status": "Status",
+    "online": "Online",
+    "offline": "Offline"
+  },
+  "ExportStatistics": {
+    "exportPDF": "Export PDF",
+    "generating": "Generating...",
+    "selectPeriod": "Select Period",
+    "oneMonth": "Last Month",
+    "threeMonths": "Last 3 Months",
+    "oneYear": "Last Year",
+    "error": "Error generating PDF report"
   }
 }

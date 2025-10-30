@@ -1,0 +1,288 @@
+/* src/components/AdminDigiBridgeMentorStatistics/adminDigiBridgeMentorStatistics.css */
+
+/* ===================================
+   ADMIN DIGIBRIDGE MENTOR STATISTICS - MAIN
+   =================================== */
+
+.admin-digibridge-mentor-statistics {
+  min-height: 100vh;
+  background: #f9fafb;
+}
+
+/* ===================================
+   HERO SECTION
+   =================================== */
+
+.admin-digibridge-mentor-statistics-hero {
+  padding: 40px 40px 30px;
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+
+.admin-digibridge-mentor-statistics-hero-content h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 8px 0;
+}
+
+.admin-digibridge-mentor-statistics-hero-content p {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+}
+
+/* ===================================
+   FILTERS
+   =================================== */
+
+.admin-digibridge-mentor-statistics-filters {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.admin-digibridge-mentor-statistics-select {
+  padding: 12px 16px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: inherit;
+  color: #1f2937;
+  background: #ffffff;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  outline: none;
+  appearance: none;
+  min-width: 180px;
+}
+
+.admin-digibridge-mentor-statistics-select:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.admin-digibridge-mentor-statistics-select:focus {
+  border-color: #ffffff;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+}
+
+.admin-digibridge-mentor-statistics-refresh-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  font-family: inherit;
+  color: #8b5cf6;
+  background: #ffffff;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.admin-digibridge-mentor-statistics-refresh-btn svg {
+  width: 18px;
+  height: 18px;
+  transition: transform 0.6s ease;
+}
+
+.admin-digibridge-mentor-statistics-refresh-btn:hover {
+  background: #f3f4f6;
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.admin-digibridge-mentor-statistics-refresh-btn:hover svg {
+  transform: rotate(180deg);
+}
+
+.admin-digibridge-mentor-statistics-refresh-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.admin-digibridge-mentor-statistics-refresh-btn:disabled svg {
+  animation: admin-digibridge-mentor-statistics-spin 1s linear infinite;
+}
+
+@keyframes admin-digibridge-mentor-statistics-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===================================
+   LOADING STATE
+   =================================== */
+
+.admin-digibridge-mentor-statistics-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 20px;
+  gap: 20px;
+}
+
+.admin-digibridge-mentor-statistics-spinner {
+  width: 60px;
+  height: 60px;
+  border: 4px solid #e5e7eb;
+  border-top-color: #8b5cf6;
+  border-radius: 50%;
+  animation: admin-digibridge-mentor-statistics-spin 0.8s linear infinite;
+}
+
+.admin-digibridge-mentor-statistics-loading p {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* ===================================
+   CHARTS SECTION
+   =================================== */
+
+.admin-digibridge-mentor-statistics-charts {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  padding: 0 40px 40px;
+}
+
+/* ===================================
+   RESPONSIVE DESIGN
+   =================================== */
+
+/* Large Desktops (1440px+) */
+@media (min-width: 1440px) {
+  .admin-digibridge-mentor-statistics-hero {
+    padding: 50px 50px 35px;
+  }
+
+  .admin-digibridge-mentor-statistics-hero-content h1 {
+    font-size: 2.25rem;
+  }
+
+  .admin-digibridge-mentor-statistics-charts {
+    padding: 0 50px 50px;
+    gap: 28px;
+  }
+}
+
+/* Tablets (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .admin-digibridge-mentor-statistics-hero {
+    padding: 35px 25px 25px;
+  }
+
+  .admin-digibridge-mentor-statistics-hero-content h1 {
+    font-size: 1.75rem;
+  }
+
+  .admin-digibridge-mentor-statistics-charts {
+    grid-template-columns: 1fr;
+    padding: 0 25px 25px;
+    gap: 20px;
+  }
+}
+
+/* Small Tablets / Large Phones (576px - 767px) */
+@media (min-width: 576px) and (max-width: 767px) {
+  .admin-digibridge-mentor-statistics-hero {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 30px 20px 20px;
+  }
+
+  .admin-digibridge-mentor-statistics-hero-content h1 {
+    font-size: 1.6rem;
+  }
+
+  .admin-digibridge-mentor-statistics-filters {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .admin-digibridge-mentor-statistics-select,
+  .admin-digibridge-mentor-statistics-refresh-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .admin-digibridge-mentor-statistics-charts {
+    grid-template-columns: 1fr;
+    padding: 0 20px 20px;
+    gap: 18px;
+  }
+}
+
+/* Phones (320px - 575px) */
+@media (max-width: 575px) {
+  .admin-digibridge-mentor-statistics-hero {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 25px 18px 18px;
+  }
+
+  .admin-digibridge-mentor-statistics-hero-content h1 {
+    font-size: 1.5rem;
+  }
+
+  .admin-digibridge-mentor-statistics-hero-content p {
+    font-size: 0.95rem;
+  }
+
+  .admin-digibridge-mentor-statistics-filters {
+    width: 100%;
+    flex-direction: column;
+  }
+
+  .admin-digibridge-mentor-statistics-select {
+    width: 100%;
+    min-width: auto;
+    padding: 11px 14px;
+    font-size: 0.9rem;
+  }
+
+  .admin-digibridge-mentor-statistics-refresh-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 11px 18px;
+    font-size: 0.9rem;
+  }
+
+  .admin-digibridge-mentor-statistics-refresh-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .admin-digibridge-mentor-statistics-loading {
+    padding: 80px 18px;
+  }
+
+  .admin-digibridge-mentor-statistics-spinner {
+    width: 50px;
+    height: 50px;
+  }
+
+  .admin-digibridge-mentor-statistics-loading p {
+    font-size: 1rem;
+  }
+
+  .admin-digibridge-mentor-statistics-charts {
+    grid-template-columns: 1fr;
+    padding: 0 18px 18px;
+    gap: 16px;
+  }
+}

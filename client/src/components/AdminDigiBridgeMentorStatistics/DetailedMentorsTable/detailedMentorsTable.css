@@ -1,0 +1,473 @@
+/* src/components/AdminDigiBridgeMentorStatistics/DetailedMentorsTable/detailedMentorsTable.css */
+
+/* ===================================
+   DETAILED MENTORS TABLE - MAIN
+   =================================== */
+
+.detailed-mentors-table {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 2px solid #f3f4f6;
+  padding: 28px;
+  margin-top: 24px;
+  transition: all 0.3s ease;
+}
+
+.detailed-mentors-table:hover {
+  border-color: #e5e7eb;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* ===================================
+   HEADER
+   =================================== */
+
+.detailed-mentors-table-header {
+  margin-bottom: 24px;
+}
+
+.detailed-mentors-table-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #1f2937;
+  margin: 0 0 8px 0;
+}
+
+.detailed-mentors-table-title svg {
+  width: 28px;
+  height: 28px;
+  color: #6366f1;
+  flex-shrink: 0;
+}
+
+.detailed-mentors-table-subtitle {
+  font-size: 0.95rem;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ===================================
+   TABLE WRAPPER
+   =================================== */
+
+.detailed-mentors-table-wrapper {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 2px solid #f3f4f6;
+}
+
+.detailed-mentors-table-content {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+}
+
+/* ===================================
+   TABLE HEADER
+   =================================== */
+
+.detailed-mentors-table-content thead tr {
+  background: #f9fafb;
+}
+
+.detailed-mentors-table-th {
+  padding: 16px 12px;
+  text-align: left;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: #f9fafb;
+  border-bottom: 2px solid #e5e7eb;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.detailed-mentors-table-th.center {
+  text-align: center;
+}
+
+.detailed-mentors-table-th-content {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.detailed-mentors-table-th.center .detailed-mentors-table-th-content {
+  justify-content: center;
+}
+
+.detailed-mentors-table-th.sortable {
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+}
+
+.detailed-mentors-table-th.sortable:hover {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.detailed-mentors-table-th-content svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* ===================================
+   TABLE BODY
+   =================================== */
+
+.detailed-mentors-table-row {
+  transition: background 0.2s ease;
+}
+
+.detailed-mentors-table-row:hover {
+  background: #f9fafb;
+}
+
+.detailed-mentors-table-td {
+  padding: 14px 12px;
+  font-size: 0.9rem;
+  color: #374151;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.detailed-mentors-table-td-center {
+  text-align: center;
+}
+
+/* ===================================
+   MENTOR CELL
+   =================================== */
+
+.detailed-mentors-table-mentor-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.detailed-mentors-table-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #e5e7eb;
+  flex-shrink: 0;
+}
+
+.detailed-mentors-table-name {
+  font-weight: 700;
+  color: #1f2937;
+}
+
+/* ===================================
+   SPECIALIZATION
+   =================================== */
+
+.detailed-mentors-table-specialization {
+  display: inline-block;
+  padding: 4px 10px;
+  background: rgba(139, 92, 246, 0.1);
+  color: #8b5cf6;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+/* ===================================
+   RATING
+   =================================== */
+
+.detailed-mentors-table-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: center;
+}
+
+.detailed-mentors-table-rating-star {
+  font-size: 1rem;
+}
+
+/* ===================================
+   UNIT
+   =================================== */
+
+.detailed-mentors-table-unit {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  font-weight: 600;
+  margin-left: 2px;
+}
+
+/* ===================================
+   RESPONSE BADGE
+   =================================== */
+
+.detailed-mentors-table-response-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.detailed-mentors-table-response-badge.excellent {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.detailed-mentors-table-response-badge.good {
+  background: rgba(132, 204, 22, 0.1);
+  color: #84cc16;
+}
+
+.detailed-mentors-table-response-badge.average {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+
+.detailed-mentors-table-response-badge.slow {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+/* ===================================
+   STATUS BADGE
+   =================================== */
+
+.detailed-mentors-table-status-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.detailed-mentors-table-status-badge.online {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.detailed-mentors-table-status-badge.offline {
+  background: rgba(107, 114, 128, 0.1);
+  color: #6b7280;
+}
+
+/* ===================================
+   MOBILE CARDS (Hidden by default)
+   =================================== */
+
+.detailed-mentors-table-mobile {
+  display: none;
+}
+
+/* ===================================
+   RESPONSIVE DESIGN
+   =================================== */
+
+/* Tablets and below - Show cards instead of table */
+@media (max-width: 1023px) {
+  .detailed-mentors-table-wrapper {
+    display: none;
+  }
+
+  .detailed-mentors-table-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .detailed-mentors-table-card {
+    background: #f9fafb;
+    border: 2px solid #f3f4f6;
+    border-radius: 12px;
+    padding: 16px;
+    transition: all 0.3s ease;
+  }
+
+  .detailed-mentors-table-card:hover {
+    background: #ffffff;
+    border-color: #e5e7eb;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  }
+
+  .detailed-mentors-table-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #e5e7eb;
+  }
+
+  .detailed-mentors-table-card-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e5e7eb;
+    flex-shrink: 0;
+  }
+
+  .detailed-mentors-table-card-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .detailed-mentors-table-card-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0 0 4px 0;
+  }
+
+  .detailed-mentors-table-card-spec {
+    font-size: 0.85rem;
+    color: #6b7280;
+    margin: 0;
+  }
+
+  .detailed-mentors-table-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .detailed-mentors-table-card-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .detailed-mentors-table-card-label {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #6b7280;
+  }
+
+  .detailed-mentors-table-card-row strong {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #1f2937;
+  }
+}
+
+/* Large Desktops (1440px+) */
+@media (min-width: 1440px) {
+  .detailed-mentors-table {
+    padding: 32px;
+  }
+
+  .detailed-mentors-table-title {
+    font-size: 1.65rem;
+  }
+
+  .detailed-mentors-table-title svg {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* Standard Desktops (1024px - 1439px) */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .detailed-mentors-table {
+    padding: 26px;
+  }
+
+  .detailed-mentors-table-title {
+    font-size: 1.4rem;
+  }
+
+  .detailed-mentors-table-title svg {
+    width: 26px;
+    height: 26px;
+  }
+}
+
+/* Small Tablets / Large Phones (576px - 767px) */
+@media (min-width: 576px) and (max-width: 767px) {
+  .detailed-mentors-table {
+    padding: 22px 18px;
+  }
+
+  .detailed-mentors-table-title {
+    font-size: 1.25rem;
+  }
+
+  .detailed-mentors-table-title svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .detailed-mentors-table-subtitle {
+    font-size: 0.88rem;
+  }
+}
+
+/* Phones (320px - 575px) */
+@media (max-width: 575px) {
+  .detailed-mentors-table {
+    padding: 18px 14px;
+  }
+
+  .detailed-mentors-table-title {
+    font-size: 1.15rem;
+    gap: 8px;
+  }
+
+  .detailed-mentors-table-title svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .detailed-mentors-table-subtitle {
+    font-size: 0.82rem;
+  }
+
+  .detailed-mentors-table-mobile {
+    gap: 14px;
+  }
+
+  .detailed-mentors-table-card {
+    padding: 14px;
+  }
+
+  .detailed-mentors-table-card-header {
+    margin-bottom: 14px;
+    padding-bottom: 14px;
+  }
+
+  .detailed-mentors-table-card-avatar {
+    width: 46px;
+    height: 46px;
+  }
+
+  .detailed-mentors-table-card-name {
+    font-size: 0.95rem;
+  }
+
+  .detailed-mentors-table-card-spec {
+    font-size: 0.82rem;
+  }
+
+  .detailed-mentors-table-card-body {
+    gap: 10px;
+  }
+
+  .detailed-mentors-table-card-label {
+    font-size: 0.82rem;
+  }
+
+  .detailed-mentors-table-card-row strong {
+    font-size: 0.9rem;
+  }
+}

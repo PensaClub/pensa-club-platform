@@ -1,0 +1,317 @@
+/* src/components/AdminDigiBridgeMentors/AdminDigiBridgeMentorStats/adminDigiBridgeMentorStats.css */
+
+/* ===================================
+   MENTOR STATS
+   =================================== */
+
+.admin-digibridge-mentor-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  padding: 40px;
+  background: #f8f9fa;
+}
+
+.admin-digibridge-mentor-stats-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 24px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.admin-digibridge-mentor-stats-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  border-color: rgba(14, 165, 233, 0.2);
+}
+
+.admin-digibridge-mentor-stats-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.admin-digibridge-mentor-stats-icon svg {
+  width: 32px;
+  height: 32px;
+  color: #ffffff;
+}
+
+.admin-digibridge-mentor-stats-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.admin-digibridge-mentor-stats-value {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #1f2937;
+  line-height: 1;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.admin-digibridge-mentor-stats-suffix {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #6b7280;
+}
+
+.admin-digibridge-mentor-stats-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+/* Large Desktops (1920px+) */
+@media (min-width: 1920px) {
+  .admin-digibridge-mentor-stats {
+    padding: 50px 60px;
+    gap: 28px;
+  }
+
+  .admin-digibridge-mentor-stats-card {
+    padding: 28px;
+  }
+
+  .admin-digibridge-mentor-stats-icon {
+    width: 72px;
+    height: 72px;
+  }
+
+  .admin-digibridge-mentor-stats-icon svg {
+    width: 36px;
+    height: 36px;
+  }
+
+  .admin-digibridge-mentor-stats-value {
+    font-size: 2.75rem;
+  }
+}
+
+/* Laptops (1200px - 1439px) */
+@media (min-width: 1200px) and (max-width: 1439px) {
+  .admin-digibridge-mentor-stats {
+    padding: 35px;
+    gap: 22px;
+  }
+
+  .admin-digibridge-mentor-stats-card {
+    padding: 22px;
+  }
+
+  .admin-digibridge-mentor-stats-icon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .admin-digibridge-mentor-stats-icon svg {
+    width: 30px;
+    height: 30px;
+  }
+
+  .admin-digibridge-mentor-stats-value {
+    font-size: 2.25rem;
+  }
+}
+
+/* Small Laptops / Large Tablets (992px - 1199px) */
+@media (min-width: 992px) and (max-width: 1199px) {
+  .admin-digibridge-mentor-stats {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 30px;
+    gap: 20px;
+  }
+
+  .admin-digibridge-mentor-stats-card {
+    padding: 20px;
+  }
+
+  .admin-digibridge-mentor-stats-icon {
+    width: 56px;
+    height: 56px;
+  }
+
+  .admin-digibridge-mentor-stats-icon svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .admin-digibridge-mentor-stats-value {
+    font-size: 2.1rem;
+  }
+
+  .admin-digibridge-mentor-stats-label {
+    font-size: 0.9rem;
+  }
+}
+
+/* Tablets (768px - 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+  .admin-digibridge-mentor-stats {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 25px;
+    gap: 18px;
+  }
+
+  .admin-digibridge-mentor-stats-card {
+    padding: 18px;
+    gap: 16px;
+  }
+
+  .admin-digibridge-mentor-stats-icon {
+    width: 52px;
+    height: 52px;
+  }
+
+  .admin-digibridge-mentor-stats-icon svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .admin-digibridge-mentor-stats-value {
+    font-size: 2rem;
+  }
+
+  .admin-digibridge-mentor-stats-suffix {
+    font-size: 1.35rem;
+  }
+
+  .admin-digibridge-mentor-stats-label {
+    font-size: 0.88rem;
+  }
+}
+
+/* Small Tablets / Large Phones (576px - 767px) */
+@media (min-width: 576px) and (max-width: 767px) {
+  .admin-digibridge-mentor-stats {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 20px;
+    gap: 16px;
+  }
+
+  .admin-digibridge-mentor-stats-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 20px 16px;
+    gap: 14px;
+  }
+
+  .admin-digibridge-mentor-stats-icon {
+    width: 56px;
+    height: 56px;
+  }
+
+  .admin-digibridge-mentor-stats-icon svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .admin-digibridge-mentor-stats-value {
+    font-size: 2rem;
+    justify-content: center;
+  }
+
+  .admin-digibridge-mentor-stats-label {
+    font-size: 0.85rem;
+  }
+}
+
+/* Phones (480px - 575px) */
+@media (min-width: 480px) and (max-width: 575px) {
+  .admin-digibridge-mentor-stats {
+    grid-template-columns: 1fr;
+    padding: 18px;
+    gap: 14px;
+  }
+
+  .admin-digibridge-mentor-stats-card {
+    flex-direction: row;
+    padding: 18px;
+    gap: 16px;
+  }
+
+  .admin-digibridge-mentor-stats-icon {
+    width: 52px;
+    height: 52px;
+  }
+
+  .admin-digibridge-mentor-stats-icon svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .admin-digibridge-mentor-stats-value {
+    font-size: 1.9rem;
+  }
+
+  .admin-digibridge-mentor-stats-suffix {
+    font-size: 1.25rem;
+  }
+
+  .admin-digibridge-mentor-stats-label {
+    font-size: 0.85rem;
+  }
+}
+
+/* Small Phones (320px - 479px) */
+@media (max-width: 479px) {
+  .admin-digibridge-mentor-stats {
+    grid-template-columns: 1fr;
+    padding: 15px;
+    gap: 12px;
+  }
+
+  .admin-digibridge-mentor-stats-card {
+    flex-direction: column;
+    text-align: center;
+    padding: 18px 14px;
+    gap: 12px;
+  }
+
+  .admin-digibridge-mentor-stats-icon {
+    width: 50px;
+    height: 50px;
+  }
+
+  .admin-digibridge-mentor-stats-icon svg {
+    width: 25px;
+    height: 25px;
+  }
+
+  .admin-digibridge-mentor-stats-content {
+    gap: 4px;
+  }
+
+  .admin-digibridge-mentor-stats-value {
+    font-size: 1.8rem;
+    justify-content: center;
+  }
+
+  .admin-digibridge-mentor-stats-suffix {
+    font-size: 1.2rem;
+  }
+
+  .admin-digibridge-mentor-stats-label {
+    font-size: 0.82rem;
+  }
+}

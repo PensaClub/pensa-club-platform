@@ -1,64 +1,286 @@
-import React, { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Helmet } from 'react-helmet-async';
-import { toast } from 'react-toastify';
-import './digiBridgeBecomeMentor.css';
 import { UserContext } from '../../contexts/UserContext';
 import { useAcademy } from '../../contexts/AcademyProvider';
+
+import './digiBridgeBecomeMentor.css';
+import { toast } from 'react-toastify';
+import { uploadMentorPhoto, uploadMentorCV  } from '../../firebase/firebaseMentorStorage';
 import { DigiBridgeHeader } from '../../DigiBridgeAcademy/DigiBridgeHeader/DigiBridgeHeader';
+const FORM_STORAGE_KEY = 'digibridge_mentor_application_form';
 
 export const DigiBridgeBecomeMentor = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { isAuthentication } = useContext(UserContext);
-  const { applyAsMentor, isLoading } = useAcademy();
+  const { isAuthentication, profileData } = useContext(UserContext);
+  const { applyAsMentor } = useAcademy();
+
+  const loadSavedData = () => {
+    try {
+      const saved = localStorage.getItem(FORM_STORAGE_KEY);
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    } catch (error) {
+      console.error('Error loading saved form data:', error);
+    }
+    return null;
+  };
+
+  const savedData = loadSavedData();
 
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    age: '',
-    education: '',
-    specialization: '',
-    experience: '',
-    motivation: '',
-    availability: '',
-    languages: [],
-    cv: null
+    name: savedData?.name || profileData?.details?.username || '',
+    email: savedData?.email || profileData?.email || '',
+    phone: savedData?.phone || '',
+    age: savedData?.age || '',
+    education: savedData?.education || '',
+    specialization: savedData?.specialization || '',
+    experience: savedData?.experience || '',
+    motivation: savedData?.motivation || '',
+    availability: savedData?.availability || '',
+    languages: savedData?.languages || [],
+    viber: savedData?.viber || '',
+    facebook: savedData?.facebook || '',
+    linkedin: savedData?.linkedin || '',
+    otherContact: savedData?.otherContact || '',
+    priorityContact: savedData?.priorityContact || 'email',
   });
 
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Ако не е логнат
+  const [photo, setPhoto] = useState(null);
+  const [photoUrl, setPhotoUrl] = useState(savedData?.photoUrl || null);
+  const [photoUploading, setPhotoUploading] = useState(false);
+  const [photoProgress, setPhotoProgress] = useState(0);
+  const [photoError, setPhotoError] = useState('');
+
+  const [cv, setCv] = useState(null);
+  const [cvUrl, setCvUrl] = useState(savedData?.cvUrl || null);
+  const [cvOriginalName, setCvOriginalName] = useState(savedData?.cvOriginalName || '');
+  const [cvStoragePath, setCvStoragePath] = useState(savedData?.cvStoragePath || '');
+  const [cvUploading, setCvUploading] = useState(false);
+  const [cvProgress, setCvProgress] = useState(0);
+  const [cvError, setCvError] = useState('');
+
+  const specializations = [
+    'Digital Security',
+    'Media Literacy',
+    'Online Banking',
+    'Social Media',
+    'Email & Communication',
+    'E-Government Services',
+    t('digiBridge.becomeMentor.specialization.other')
+  ];
+
+  const availabilityOptions = [
+    'Flexible',
+    'Weekdays',
+    'Weekends',
+    'Evenings'
+  ];
+
+  const languageOptions = [
+    { code: 'bg', name: 'Български' },
+    { code: 'en', name: 'English' },
+    { code: 'de', name: 'Deutsch' }
+  ];
+
+  useEffect(() => {
+    const dataToSave = {
+      ...formData,
+      photoUrl,
+      cvUrl,
+      cvOriginalName,
+      cvStoragePath,
+    };
+    
+    try {
+      localStorage.setItem(FORM_STORAGE_KEY, JSON.stringify(dataToSave));
+    } catch (error) {
+      console.error('Error saving form data:', error);
+    }
+  }, [formData, photoUrl, cvUrl, cvOriginalName, cvStoragePath]);
+
+  const handlePhotoChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const allowedFormats = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+    if (!allowedFormats.includes(file.type)) {
+      setPhotoError(t('digiBridge.becomeMentor.photo.formatError'));
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setPhotoError('Снимката не трябва да е по-голяма от 5MB');
+      return;
+    }
+
+    setPhotoError('');
+    setPhotoUploading(true);
+    setPhotoProgress(0);
+
+    try {
+      const result = await uploadMentorPhoto(file, (progress) => {
+        setPhotoProgress(progress);
+      });
+
+      setPhoto(file);
+      setPhotoUrl(result.url);
+      setPhotoUploading(false);
+      toast.success('Снимката е качена успешно!');
+    } catch (error) {
+      console.error('Error uploading photo:', error);
+      setPhotoError(t('digiBridge.becomeMentor.photo.error'));
+      setPhotoUploading(false);
+    }
+  };
+
+  const handleCvChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const allowedFormats = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'text/plain'
+    ];
+    
+    const allowedExtensions = ['.pdf', '.doc', '.docx', '.txt'];
+    const fileExtension = file.name.toLowerCase().substring(file.name.lastIndexOf('.'));
+    
+    if (!allowedFormats.includes(file.type) && !allowedExtensions.includes(fileExtension)) {
+      setCvError(t('digiBridge.becomeMentor.cv.formatError'));
+      return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      setCvError('CV не трябва да е по-голямо от 10MB');
+      return;
+    }
+
+    setCvError('');
+    setCvUploading(true);
+    setCvProgress(0);
+
+    try {
+      const result = await uploadMentorCV(file, (progress) => {
+        setCvProgress(progress);
+      });
+
+      setCv(file);
+      setCvUrl(result.url);
+      setCvOriginalName(result.originalName);
+      setCvStoragePath(result.storagePath);
+      setCvUploading(false);
+      toast.success('CV е качено успешно!');
+    } catch (error) {
+      console.error('Error uploading CV:', error);
+      setCvError(t('digiBridge.becomeMentor.cv.error'));
+      setCvUploading(false);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
+  };
+
+  const handleLanguageToggle = (langCode) => {
+    setFormData(prev => ({
+      ...prev,
+      languages: prev.languages.includes(langCode)
+        ? prev.languages.filter(l => l !== langCode)
+        : [...prev.languages, langCode]
+    }));
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    // САМО ЗАДЪЛЖИТЕЛНИТЕ ПОЛЕТА
+    if (!formData.name.trim()) newErrors.name = t('digiBridge.becomeMentor.errors.nameRequired');
+    if (!formData.email.trim()) newErrors.email = t('digiBridge.becomeMentor.errors.emailRequired');
+    if (!formData.phone.trim()) newErrors.phone = 'Телефонът е задължителен';
+    if (!formData.age) newErrors.age = t('digiBridge.becomeMentor.errors.ageRequired');
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (formData.email && !emailRegex.test(formData.email)) {
+      newErrors.email = t('digiBridge.becomeMentor.errors.emailInvalid');
+    }
+
+    if (formData.age && (formData.age < 16 || formData.age > 100)) {
+      newErrors.age = t('digiBridge.becomeMentor.errors.ageInvalid');
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!validateForm()) {
+      toast.error(t('digiBridge.becomeMentor.errors.fillRequired'));
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const applicationData = {
+        ...formData,
+        photoUrl: photoUrl || null,
+        cvUrl: cvUrl || null,
+        cvOriginalName: cvOriginalName || null,
+        cvStoragePath: cvStoragePath || null,
+      };
+
+      await applyAsMentor(applicationData);
+      
+      localStorage.removeItem(FORM_STORAGE_KEY);
+      
+      toast.success(t('digiBridge.becomeMentor.success'));
+      navigate('/academy');
+      
+    } catch (error) {
+      console.error('Error submitting application:', error);
+      toast.error(t('digiBridge.becomeMentor.errors.submitError'));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   if (!isAuthentication) {
     return (
       <>
-        <Helmet>
-          <title>{t('digiBridge.becomeMentor.meta.title')}</title>
-          <meta name="description" content={t('digiBridge.becomeMentor.meta.description')} />
-        </Helmet>
-        
+        <DigiBridgeHeader />
         <div className="become-mentor-page">
-          <DigiBridgeHeader />
-          
           <div className="become-mentor-auth-required">
-            <div className="auth-required-card">
-              <div className="auth-required-icon">{t('digiBridge.becomeMentor.authRequired.icon')}</div>
+            <div className="become-mentor-auth-card">
+              <div className="become-mentor-auth-icon">🔒</div>
               <h2>{t('digiBridge.becomeMentor.authRequired.title')}</h2>
               <p>{t('digiBridge.becomeMentor.authRequired.description')}</p>
-              <div className="auth-required-actions">
+              <div className="become-mentor-auth-actions">
                 <button 
-                  className="auth-btn auth-btn-primary"
-                  onClick={() => navigate('/login')}
+                  className="become-mentor-auth-btn become-mentor-auth-btn-primary"
+                  onClick={() => navigate('/sign-up?view=login')}
                 >
-                  {t('digiBridge.becomeMentor.authRequired.loginButton')}
+                  {t('digiBridge.becomeMentor.authRequired.login')}
                 </button>
                 <button 
-                  className="auth-btn auth-btn-secondary"
-                  onClick={() => navigate('/register')}
+                  className="become-mentor-auth-btn become-mentor-auth-btn-secondary"
+                  onClick={() => navigate('/sign-up?view=register')}
                 >
-                  {t('digiBridge.becomeMentor.authRequired.registerButton')}
+                  {t('digiBridge.becomeMentor.authRequired.register')}
                 </button>
               </div>
             </div>
@@ -68,95 +290,12 @@ export const DigiBridgeBecomeMentor = () => {
     );
   }
 
-  const specializations = [
-    'Digital Security',
-    'Media Literacy',
-    'Social Media',
-    'Online Banking',
-    'Basic Computer Skills',
-    'Advanced Digital Skills'
-  ];
-
-  const languageOptions = ['Български', 'English', 'Deutsch', 'Français'];
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-    if (errors[name]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
-    }
-  };
-
-  const handleLanguageToggle = (lang) => {
-    setFormData(prev => ({
-      ...prev,
-      languages: prev.languages.includes(lang)
-        ? prev.languages.filter(l => l !== lang)
-        : [...prev.languages, lang]
-    }));
-  };
-
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      if (file.size > 5000000) { // 5MB
-        toast.error(t('digiBridge.becomeMentor.form.errors.fileTooBig'));
-        return;
-      }
-      setFormData(prev => ({ ...prev, cv: file }));
-    }
-  };
-
-  const validate = () => {
-    const newErrors = {};
-    
-    if (!formData.name.trim()) newErrors.name = t('digiBridge.becomeMentor.form.errors.name');
-    if (!formData.email.trim()) newErrors.email = t('digiBridge.becomeMentor.form.errors.email');
-    if (!formData.phone.trim()) newErrors.phone = t('digiBridge.becomeMentor.form.errors.phone');
-    if (!formData.age || formData.age < 18) newErrors.age = t('digiBridge.becomeMentor.form.errors.age');
-    if (!formData.education.trim()) newErrors.education = t('digiBridge.becomeMentor.form.errors.education');
-    if (!formData.specialization) newErrors.specialization = t('digiBridge.becomeMentor.form.errors.specialization');
-    if (!formData.experience.trim()) newErrors.experience = t('digiBridge.becomeMentor.form.errors.experience');
-    if (!formData.motivation.trim() || formData.motivation.length < 50) {
-      newErrors.motivation = t('digiBridge.becomeMentor.form.errors.motivation');
-    }
-    if (!formData.availability.trim()) newErrors.availability = t('digiBridge.becomeMentor.form.errors.availability');
-    if (formData.languages.length === 0) newErrors.languages = t('digiBridge.becomeMentor.form.errors.languages');
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    if (!validate()) {
-      toast.error(t('digiBridge.becomeMentor.form.errors.fillAll'));
-      return;
-    }
-
-    try {
-      await applyAsMentor(formData);
-      navigate('/academy/mentors');
-    } catch (error) {
-      console.error('Error applying as mentor:', error);
-    }
-  };
-
   return (
     <>
-      <Helmet>
-        <title>{t('digiBridge.becomeMentor.meta.title')}</title>
-        <meta name="description" content={t('digiBridge.becomeMentor.meta.description')} />
-      </Helmet>
-
+      <DigiBridgeHeader />
+      
       <div className="become-mentor-page">
-        <DigiBridgeHeader />
-
-        {/* HERO */}
+        
         <section className="become-mentor-hero">
           <div className="become-mentor-hero-content">
             <h1 className="become-mentor-hero-title">
@@ -168,291 +307,484 @@ export const DigiBridgeBecomeMentor = () => {
           </div>
         </section>
 
-        {/* INTRO */}
         <section className="become-mentor-intro-section">
           <div className="become-mentor-intro-container">
-            <div className="intro-icon">{t('digiBridge.becomeMentor.intro.icon')}</div>
+            <div className="become-mentor-intro-icon">🎓</div>
             <h2>{t('digiBridge.becomeMentor.intro.title')}</h2>
-            <p className="intro-text">
+            <p className="become-mentor-intro-text">
               {t('digiBridge.becomeMentor.intro.description')}
             </p>
-            <div className="intro-benefits">
-              <div className="intro-benefit">
-                <div className="benefit-icon">{t('digiBridge.becomeMentor.intro.benefits.change.icon')}</div>
-                <h3>{t('digiBridge.becomeMentor.intro.benefits.change.title')}</h3>
-                <p>{t('digiBridge.becomeMentor.intro.benefits.change.description')}</p>
+
+            <div className="become-mentor-intro-benefits">
+              <div className="become-mentor-intro-benefit">
+                <div className="become-mentor-benefit-icon">💡</div>
+                <h3>{t('digiBridge.becomeMentor.benefits.benefit1.title')}</h3>
+                <p>{t('digiBridge.becomeMentor.benefits.benefit1.description')}</p>
               </div>
-              <div className="intro-benefit">
-                <div className="benefit-icon">{t('digiBridge.becomeMentor.intro.benefits.community.icon')}</div>
-                <h3>{t('digiBridge.becomeMentor.intro.benefits.community.title')}</h3>
-                <p>{t('digiBridge.becomeMentor.intro.benefits.community.description')}</p>
+              <div className="become-mentor-intro-benefit">
+                <div className="become-mentor-benefit-icon">🤝</div>
+                <h3>{t('digiBridge.becomeMentor.benefits.benefit2.title')}</h3>
+                <p>{t('digiBridge.becomeMentor.benefits.benefit2.description')}</p>
               </div>
-              <div className="intro-benefit">
-                <div className="benefit-icon">{t('digiBridge.becomeMentor.intro.benefits.development.icon')}</div>
-                <h3>{t('digiBridge.becomeMentor.intro.benefits.development.title')}</h3>
-                <p>{t('digiBridge.becomeMentor.intro.benefits.development.description')}</p>
+              <div className="become-mentor-intro-benefit">
+                <div className="become-mentor-benefit-icon">🌟</div>
+                <h3>{t('digiBridge.becomeMentor.benefits.benefit3.title')}</h3>
+                <p>{t('digiBridge.becomeMentor.benefits.benefit3.description')}</p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* FORM */}
         <section className="become-mentor-form-section">
           <div className="become-mentor-form-container">
             
-            <div className="mentor-form-intro">
+            <div className="become-mentor-form-intro">
               <h2>{t('digiBridge.becomeMentor.form.title')}</h2>
               <p>{t('digiBridge.becomeMentor.form.subtitle')}</p>
             </div>
 
-            <form onSubmit={handleSubmit} className="mentor-application-form">
+            <form className="become-mentor-application-form" onSubmit={handleSubmit}>
               
-              {/* Personal Info */}
-              <div className="form-section">
-                <h3 className="form-section-title">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              {/* СНИМКА */}
+              <div className="become-mentor-form-section">
+                <h3 className="become-mentor-form-section-title">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                    <polyline points="21 15 16 10 5 21"/>
+                  </svg>
+                  {t('digiBridge.becomeMentor.photo.label')}
+                </h3>
+
+                <div className="become-mentor-photo-upload">
+                  {photoUrl ? (
+                    <div className="become-mentor-photo-preview">
+                      <img src={photoUrl} alt="Preview" />
+                    </div>
+                  ) : (
+                    <div className="become-mentor-photo-placeholder">
+                      📷
+                    </div>
+                  )}
+
+                  <div className="become-mentor-photo-actions">
+                    <input
+                      type="file"
+                      id="become-mentor-photo-input"
+                      accept="image/jpeg,image/jpg,image/png,image/webp"
+                      onChange={handlePhotoChange}
+                      style={{ display: 'none' }}
+                      disabled={photoUploading}
+                    />
+                    
+                    <label htmlFor="become-mentor-photo-input">
+                      <button
+                        type="button"
+                        className="become-mentor-photo-btn"
+                        onClick={() => document.getElementById('become-mentor-photo-input').click()}
+                        disabled={photoUploading}
+                      >
+                        {photoUploading ? (
+                          <>
+                            <div className="become-mentor-btn-spinner"></div>
+                            {t('digiBridge.becomeMentor.photo.uploading')}
+                          </>
+                        ) : photoUrl ? (
+                          <>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                              <polyline points="17 8 12 3 7 8"/>
+                              <line x1="12" y1="3" x2="12" y2="15"/>
+                            </svg>
+                            {t('digiBridge.becomeMentor.photo.change')}
+                          </>
+                        ) : (
+                          <>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                              <polyline points="17 8 12 3 7 8"/>
+                              <line x1="12" y1="3" x2="12" y2="15"/>
+                            </svg>
+                            {t('digiBridge.becomeMentor.photo.upload')}
+                          </>
+                        )}
+                      </button>
+                    </label>
+
+                    {photoUploading && (
+                      <div className="become-mentor-photo-progress">
+                        <div 
+                          className="become-mentor-photo-progress-bar" 
+                          style={{ width: `${photoProgress}%` }}
+                        />
+                      </div>
+                    )}
+
+                    {photoError && (
+                      <p className="become-mentor-photo-error">{photoError}</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* ЛИЧНА ИНФОРМАЦИЯ */}
+              <div className="become-mentor-form-section">
+                <h3 className="become-mentor-form-section-title">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
                     <circle cx="12" cy="7" r="4"/>
                   </svg>
-                  {t('digiBridge.becomeMentor.form.sections.personal')}
+                  {t('digiBridge.becomeMentor.sections.personalInfo')}
                 </h3>
-                
-                <div className="form-grid">
-                  <div className="form-field">
-                    <label>{t('digiBridge.becomeMentor.form.fields.name.label')} *</label>
+
+                <div className="become-mentor-form-grid">
+                  <div className="become-mentor-form-field">
+                    <label>
+                      {t('digiBridge.becomeMentor.form.name')}
+                      <span style={{ color: '#ef4444' }}>*</span>
+                    </label>
                     <input
                       type="text"
                       name="name"
                       value={formData.name}
-                      onChange={handleChange}
-                      className={errors.name ? 'error' : ''}
-                      placeholder={t('digiBridge.becomeMentor.form.fields.name.placeholder')}
+                      onChange={handleInputChange}
+                      className={errors.name ? 'become-mentor-input-error' : ''}
+                      placeholder={t('digiBridge.becomeMentor.form.namePlaceholder')}
                     />
-                    {errors.name && <span className="field-error">{errors.name}</span>}
+                    {errors.name && <span className="become-mentor-field-error">{errors.name}</span>}
                   </div>
 
-                  <div className="form-field">
-                    <label>{t('digiBridge.becomeMentor.form.fields.email.label')} *</label>
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      className={errors.email ? 'error' : ''}
-                      placeholder={t('digiBridge.becomeMentor.form.fields.email.placeholder')}
-                    />
-                    {errors.email && <span className="field-error">{errors.email}</span>}
-                  </div>
-
-                  <div className="form-field">
-                    <label>{t('digiBridge.becomeMentor.form.fields.phone.label')} *</label>
-                    <input
-                      type="tel"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      className={errors.phone ? 'error' : ''}
-                      placeholder={t('digiBridge.becomeMentor.form.fields.phone.placeholder')}
-                    />
-                    {errors.phone && <span className="field-error">{errors.phone}</span>}
-                  </div>
-
-                  <div className="form-field">
-                    <label>{t('digiBridge.becomeMentor.form.fields.age.label')} *</label>
+                  <div className="become-mentor-form-field">
+                    <label>
+                      {t('digiBridge.becomeMentor.form.age')}
+                      <span style={{ color: '#ef4444' }}>*</span>
+                    </label>
                     <input
                       type="number"
                       name="age"
                       value={formData.age}
-                      onChange={handleChange}
-                      className={errors.age ? 'error' : ''}
-                      placeholder={t('digiBridge.becomeMentor.form.fields.age.placeholder')}
-                      min="18"
+                      onChange={handleInputChange}
+                      className={errors.age ? 'become-mentor-input-error' : ''}
+                      min="16"
+                      max="100"
                     />
-                    {errors.age && <span className="field-error">{errors.age}</span>}
+                    {errors.age && <span className="become-mentor-field-error">{errors.age}</span>}
+                  </div>
+
+                  <div className="become-mentor-form-field">
+                    <label>
+                      {t('digiBridge.becomeMentor.form.email')}
+                      <span style={{ color: '#ef4444' }}>*</span>
+                    </label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      className={errors.email ? 'become-mentor-input-error' : ''}
+                      placeholder="example@email.com"
+                    />
+                    {errors.email && <span className="become-mentor-field-error">{errors.email}</span>}
+                  </div>
+
+                  <div className="become-mentor-form-field">
+                    <label>
+                      {t('digiBridge.becomeMentor.contactMethods.phone')}
+                      <span style={{ color: '#ef4444' }}>*</span>
+                    </label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      className={errors.phone ? 'become-mentor-input-error' : ''}
+                      placeholder="+359 888 123 456"
+                    />
+                    {errors.phone && <span className="become-mentor-field-error">{errors.phone}</span>}
                   </div>
                 </div>
               </div>
 
-              {/* Professional Info */}
-              <div className="form-section">
-                <h3 className="form-section-title">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
-                    <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+              {/* НАЧИНИ ЗА ВРЪЗКА */}
+              <div className="become-mentor-form-section">
+                <h3 className="become-mentor-form-section-title">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
                   </svg>
-                  {t('digiBridge.becomeMentor.form.sections.professional')}
+                  {t('digiBridge.becomeMentor.contactMethods.title')}
                 </h3>
-                
-                <div className="form-grid">
-                  <div className="form-field form-field-full">
-                    <label>{t('digiBridge.becomeMentor.form.fields.education.label')} *</label>
+
+                <div className="become-mentor-contact-methods">
+                  <div className="become-mentor-contact-field become-mentor-contact-field-optional">
+                    <label>{t('digiBridge.becomeMentor.contactMethods.viber')}</label>
+                    <input
+                      type="text"
+                      name="viber"
+                      value={formData.viber}
+                      onChange={handleInputChange}
+                      placeholder="+359 888 123 456"
+                    />
+                  </div>
+
+                  <div className="become-mentor-contact-field become-mentor-contact-field-optional">
+                    <label>{t('digiBridge.becomeMentor.contactMethods.facebook')}</label>
+                    <input
+                      type="text"
+                      name="facebook"
+                      value={formData.facebook}
+                      onChange={handleInputChange}
+                      placeholder="facebook.com/yourprofile"
+                    />
+                  </div>
+
+                  <div className="become-mentor-contact-field become-mentor-contact-field-optional">
+                    <label>{t('digiBridge.becomeMentor.contactMethods.linkedin')}</label>
+                    <input
+                      type="text"
+                      name="linkedin"
+                      value={formData.linkedin}
+                      onChange={handleInputChange}
+                      placeholder="linkedin.com/in/yourprofile"
+                    />
+                  </div>
+
+                  <div className="become-mentor-contact-field become-mentor-contact-field-optional">
+                    <label>{t('digiBridge.becomeMentor.contactMethods.other')}</label>
+                    <input
+                      type="text"
+                      name="otherContact"
+                      value={formData.otherContact}
+                      onChange={handleInputChange}
+                      placeholder={t('digiBridge.becomeMentor.contactMethods.otherPlaceholder')}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* ОБРАЗОВАНИЕ И ОПИТ */}
+              <div className="become-mentor-form-section">
+                <h3 className="become-mentor-form-section-title">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                    <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                  </svg>
+                  {t('digiBridge.becomeMentor.sections.education')}
+                </h3>
+
+                <div className="become-mentor-form-grid">
+                  <div className="become-mentor-form-field become-mentor-form-field-full">
+                    <label>{t('digiBridge.becomeMentor.form.education')}</label>
                     <input
                       type="text"
                       name="education"
                       value={formData.education}
-                      onChange={handleChange}
-                      className={errors.education ? 'error' : ''}
-                      placeholder={t('digiBridge.becomeMentor.form.fields.education.placeholder')}
+                      onChange={handleInputChange}
+                      placeholder={t('digiBridge.becomeMentor.form.educationPlaceholder')}
                     />
-                    {errors.education && <span className="field-error">{errors.education}</span>}
                   </div>
 
-                  <div className="form-field">
-                    <label>{t('digiBridge.becomeMentor.form.fields.specialization.label')} *</label>
+                  <div className="become-mentor-form-field">
+                    <label>{t('digiBridge.becomeMentor.form.specialization')}</label>
                     <select
                       name="specialization"
                       value={formData.specialization}
-                      onChange={handleChange}
-                      className={errors.specialization ? 'error' : ''}
+                      onChange={handleInputChange}
                     >
-                      <option value="">{t('digiBridge.becomeMentor.form.fields.specialization.placeholder')}</option>
+                      <option value="">{t('digiBridge.becomeMentor.form.specializationPlaceholder')}</option>
                       {specializations.map(spec => (
                         <option key={spec} value={spec}>{spec}</option>
                       ))}
                     </select>
-                    {errors.specialization && <span className="field-error">{errors.specialization}</span>}
                   </div>
 
-                  <div className="form-field">
-                    <label>{t('digiBridge.becomeMentor.form.fields.experience.label')} *</label>
+                  <div className="become-mentor-form-field">
+                    <label>{t('digiBridge.becomeMentor.form.experience')}</label>
                     <input
                       type="text"
                       name="experience"
                       value={formData.experience}
-                      onChange={handleChange}
-                      className={errors.experience ? 'error' : ''}
-                      placeholder={t('digiBridge.becomeMentor.form.fields.experience.placeholder')}
+                      onChange={handleInputChange}
+                      placeholder={t('digiBridge.becomeMentor.form.experiencePlaceholder')}
                     />
-                    {errors.experience && <span className="field-error">{errors.experience}</span>}
                   </div>
 
-                  <div className="form-field form-field-full">
-                    <label>{t('digiBridge.becomeMentor.form.fields.availability.label')} *</label>
-                    <input
-                      type="text"
+                  <div className="become-mentor-form-field become-mentor-form-field-full">
+                    <label>{t('digiBridge.becomeMentor.form.motivation')}</label>
+                    <textarea
+                      name="motivation"
+                      value={formData.motivation}
+                      onChange={handleInputChange}
+                      rows="5"
+                      maxLength="500"
+                      placeholder={t('digiBridge.becomeMentor.form.motivationPlaceholder')}
+                    />
+                    <div className="become-mentor-textarea-counter">{formData.motivation.length}/500</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* ГРАФИК И ЕЗИЦИ */}
+              <div className="become-mentor-form-section">
+                <h3 className="become-mentor-form-section-title">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12 6 12 12 16 14"/>
+                  </svg>
+                  {t('digiBridge.becomeMentor.sections.schedule')}
+                </h3>
+
+                <div className="become-mentor-form-grid">
+                  <div className="become-mentor-form-field">
+                    <label>{t('digiBridge.becomeMentor.form.schedule')}</label>
+                    <select
                       name="availability"
                       value={formData.availability}
-                      onChange={handleChange}
-                      className={errors.availability ? 'error' : ''}
-                      placeholder={t('digiBridge.becomeMentor.form.fields.availability.placeholder')}
-                    />
-                    {errors.availability && <span className="field-error">{errors.availability}</span>}
+                      onChange={handleInputChange}
+                    >
+                      <option value="">{t('digiBridge.becomeMentor.form.schedulePlaceholder')}</option>
+                      {availabilityOptions.map(option => (
+                        <option key={option} value={option}>{option}</option>
+                      ))}
+                    </select>
+                    <p className="become-mentor-field-helper">
+                      {t('digiBridge.becomeMentor.form.scheduleHelper')}
+                    </p>
+                  </div>
+
+                  <div className="become-mentor-form-field become-mentor-form-field-full">
+                    <label>{t('digiBridge.becomeMentor.form.languages')}</label>
+                    <div className="become-mentor-language-checkboxes">
+                      {languageOptions.map(lang => (
+                        <label key={lang.code} className="become-mentor-language-checkbox">
+                          <input
+                            type="checkbox"
+                            checked={formData.languages.includes(lang.code)}
+                            onChange={() => handleLanguageToggle(lang.code)}
+                          />
+                          <span>{lang.name}</span>
+                        </label>
+                      ))}
+                    </div>
+                    <p className="become-mentor-field-helper">
+                      {t('digiBridge.becomeMentor.form.languagesHelper')}
+                    </p>
                   </div>
                 </div>
               </div>
 
-              {/* Languages */}
-              <div className="form-section">
-                <h3 className="form-section-title">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <circle cx="12" cy="12" r="10"/>
-                    <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              {/* CV UPLOAD */}
+              <div className="become-mentor-form-section">
+                <h3 className="become-mentor-form-section-title">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                    <polyline points="10 9 9 9 8 9"/>
                   </svg>
-                  {t('digiBridge.becomeMentor.form.sections.languages')} *
+                  {t('digiBridge.becomeMentor.cv.label')}
+                  <span style={{ color: '#9ca3af', fontSize: '0.9rem', fontWeight: 500 }}>
+                    ({t('digiBridge.becomeMentor.cv.optional')})
+                  </span>
                 </h3>
-                
-                <div className="language-checkboxes">
-                  {languageOptions.map(lang => (
-                    <label key={lang} className="language-checkbox">
-                      <input
-                        type="checkbox"
-                        checked={formData.languages.includes(lang)}
-                        onChange={() => handleLanguageToggle(lang)}
-                      />
-                      <span>{lang}</span>
-                    </label>
-                  ))}
-                </div>
-                {errors.languages && <span className="field-error">{errors.languages}</span>}
-              </div>
 
-              {/* Motivation */}
-              <div className="form-section">
-                <h3 className="form-section-title">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                  </svg>
-                  {t('digiBridge.becomeMentor.form.sections.motivation')} *
-                </h3>
-                
-                <div className="form-field form-field-full">
-                  <textarea
-                    name="motivation"
-                    value={formData.motivation}
-                    onChange={handleChange}
-                    className={errors.motivation ? 'error' : ''}
-                    placeholder={t('digiBridge.becomeMentor.form.fields.motivation.placeholder')}
-                    rows="6"
-                  />
-                  <div className="textarea-counter">
-                    {formData.motivation.length} / 50 {t('digiBridge.becomeMentor.form.counter')}
-                  </div>
-                  {errors.motivation && <span className="field-error">{errors.motivation}</span>}
-                </div>
-              </div>
-
-              {/* CV Upload */}
-              <div className="form-section">
-                <h3 className="form-section-title">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                    <polyline points="17 8 12 3 7 8"/>
-                    <line x1="12" y1="3" x2="12" y2="15"/>
-                  </svg>
-                  {t('digiBridge.becomeMentor.form.sections.cv')}
-                </h3>
-                
-                <div className="file-upload">
-                  <input
-                    type="file"
-                    id="cv-upload"
-                    accept=".pdf,.doc,.docx"
-                    onChange={handleFileChange}
-                    className="file-input"
-                  />
-                  <label htmlFor="cv-upload" className="file-upload-label">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                      <polyline points="17 8 12 3 7 8"/>
-                      <line x1="12" y1="3" x2="12" y2="15"/>
-                    </svg>
-                    <span>
-                      {formData.cv ? formData.cv.name : t('digiBridge.becomeMentor.form.fields.cv.placeholder')}
-                    </span>
-                  </label>
-                </div>
-              </div>
-
-              {/* Submit */}
-              <div className="form-submit">
-                <button 
-                  type="submit" 
-                  className="mentor-submit-btn"
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
+                <div className="become-mentor-cv-upload">
+                  {!cvUrl ? (
                     <>
-                      <span className="btn-spinner"></span>
+                      <input
+                        type="file"
+                        id="become-mentor-cv-input"
+                        className="become-mentor-cv-input"
+                        accept=".pdf,.doc,.docx,.txt"
+                        onChange={handleCvChange}
+                        disabled={cvUploading}
+                      />
+                      
+                      <label htmlFor="become-mentor-cv-input" className="become-mentor-cv-label">
+                        {cvUploading ? (
+                          <>
+                            <div className="become-mentor-btn-spinner"></div>
+                            {t('digiBridge.becomeMentor.cv.uploading')}
+                          </>
+                        ) : (
+                          <>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                              <polyline points="17 8 12 3 7 8"/>
+                              <line x1="12" y1="3" x2="12" y2="15"/>
+                            </svg>
+                            {t('digiBridge.becomeMentor.cv.upload')}
+                          </>
+                        )}
+                      </label>
+                    </>
+                  ) : (
+                    <div className="become-mentor-cv-file-info">
+                      <div className="become-mentor-cv-file-details">
+                        <div className="become-mentor-cv-file-icon">
+                          {cvOriginalName.endsWith('.pdf') ? 'PDF' : 'DOC'}
+                        </div>
+                        <div className="become-mentor-cv-file-name">{cvOriginalName}</div>
+                      </div>
+                      <button
+                        type="button"
+                        className="become-mentor-cv-change-btn"
+                        onClick={() => {
+                          setCvUrl(null);
+                          setCv(null);
+                          setCvOriginalName('');
+                          setCvStoragePath('');
+                        }}
+                      >
+                        {t('digiBridge.becomeMentor.cv.change')}
+                      </button>
+                    </div>
+                  )}
+
+                  {cvUploading && (
+                    <div className="become-mentor-cv-progress">
+                      <div 
+                        className="become-mentor-cv-progress-bar" 
+                        style={{ width: `${cvProgress}%` }}
+                      />
+                    </div>
+                  )}
+
+                  {cvError && (
+                    <p className="become-mentor-cv-error">{cvError}</p>
+                  )}
+                </div>
+              </div>
+
+              {/* SUBMIT */}
+              <div className="become-mentor-form-submit">
+                <button
+                  type="submit"
+                  className="become-mentor-submit-btn"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <div className="become-mentor-btn-spinner"></div>
                       {t('digiBridge.becomeMentor.form.submitting')}
                     </>
                   ) : (
                     <>
-                      {t('digiBridge.becomeMentor.form.submitButton')}
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                      {t('digiBridge.becomeMentor.form.submit')}
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                        <polyline points="12 5 19 12 12 19"/>
                       </svg>
                     </>
                   )}
                 </button>
-                <p className="form-submit-note">
-                  {t('digiBridge.becomeMentor.form.note')}
+                <p className="become-mentor-form-submit-note">
+                  {t('digiBridge.becomeMentor.form.submitNote')}
                 </p>
               </div>
-
             </form>
           </div>
         </section>
-
       </div>
     </>
   );

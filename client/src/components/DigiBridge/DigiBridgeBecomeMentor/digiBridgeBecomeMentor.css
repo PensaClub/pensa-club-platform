@@ -19,7 +19,7 @@
   padding: 60px 20px;
 }
 
-.auth-required-card {
+.become-mentor-auth-card {
   max-width: 500px;
   width: 100%;
   background: #ffffff;
@@ -29,33 +29,33 @@
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
 }
 
-.auth-required-icon {
+.become-mentor-auth-icon {
   font-size: 5rem;
   margin-bottom: 24px;
   opacity: 0.8;
 }
 
-.auth-required-card h2 {
+.become-mentor-auth-card h2 {
   font-size: 2rem;
   font-weight: 800;
   color: #1f2937;
   margin: 0 0 16px 0;
 }
 
-.auth-required-card p {
+.become-mentor-auth-card p {
   font-size: 1.1rem;
   color: #6b7280;
   margin: 0 0 32px 0;
   line-height: 1.6;
 }
 
-.auth-required-actions {
+.become-mentor-auth-actions {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.auth-btn {
+.become-mentor-auth-btn {
   padding: 16px 32px;
   font-size: 1.05rem;
   font-weight: 700;
@@ -66,24 +66,24 @@
   width: 100%;
 }
 
-.auth-btn-primary {
+.become-mentor-auth-btn-primary {
   background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
   color: #ffffff;
   box-shadow: 0 6px 20px rgba(14, 165, 233, 0.3);
 }
 
-.auth-btn-primary:hover {
+.become-mentor-auth-btn-primary:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 28px rgba(14, 165, 233, 0.4);
 }
 
-.auth-btn-secondary {
+.become-mentor-auth-btn-secondary {
   background: #ffffff;
   color: #0ea5e9;
   border: 2px solid #0ea5e9;
 }
 
-.auth-btn-secondary:hover {
+.become-mentor-auth-btn-secondary:hover {
   background: #f0f9ff;
   transform: translateY(-2px);
 }
@@ -150,13 +150,13 @@
   text-align: center;
 }
 
-.intro-icon {
+.become-mentor-intro-icon {
   font-size: 5rem;
   margin-bottom: 30px;
-  animation: float 3s ease-in-out infinite;
+  animation: become-mentor-float 3s ease-in-out infinite;
 }
 
-@keyframes float {
+@keyframes become-mentor-float {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-10px); }
 }
@@ -171,21 +171,21 @@
   margin: 0 0 24px 0;
 }
 
-.intro-text {
+.become-mentor-intro-text {
   font-size: 1.2rem;
   color: #4b5563;
   line-height: 1.8;
   margin: 0 0 50px 0;
 }
 
-.intro-benefits {
+.become-mentor-intro-benefits {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 40px;
   margin-top: 50px;
 }
 
-.intro-benefit {
+.become-mentor-intro-benefit {
   padding: 30px;
   background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
   border-radius: 20px;
@@ -193,25 +193,25 @@
   transition: all 0.3s ease;
 }
 
-.intro-benefit:hover {
+.become-mentor-intro-benefit:hover {
   transform: translateY(-6px);
   box-shadow: 0 12px 32px rgba(14, 165, 233, 0.15);
   border-color: rgba(14, 165, 233, 0.3);
 }
 
-.benefit-icon {
+.become-mentor-benefit-icon {
   font-size: 3rem;
   margin-bottom: 16px;
 }
 
-.intro-benefit h3 {
+.become-mentor-intro-benefit h3 {
   font-size: 1.4rem;
   font-weight: 800;
   color: #0ea5e9;
   margin: 0 0 12px 0;
 }
 
-.intro-benefit p {
+.become-mentor-intro-benefit p {
   font-size: 1rem;
   color: #6b7280;
   margin: 0;
@@ -232,12 +232,12 @@
   margin: 0 auto;
 }
 
-.mentor-form-intro {
+.become-mentor-form-intro {
   text-align: center;
   margin-bottom: 50px;
 }
 
-.mentor-form-intro h2 {
+.become-mentor-form-intro h2 {
   font-size: 2.5rem;
   font-weight: 900;
   background: linear-gradient(135deg, #0ea5e9, #0284c7);
@@ -247,7 +247,7 @@
   margin: 0 0 16px 0;
 }
 
-.mentor-form-intro p {
+.become-mentor-form-intro p {
   font-size: 1.15rem;
   color: #6b7280;
   margin: 0;
@@ -257,26 +257,26 @@
    FORM
    =================================== */
 
-.mentor-application-form {
+.become-mentor-application-form {
   background: #ffffff;
   border-radius: 24px;
   padding: 50px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
 }
 
-.form-section {
+.become-mentor-form-section {
   margin-bottom: 45px;
   padding-bottom: 45px;
   border-bottom: 2px solid #e5e7eb;
 }
 
-.form-section:last-of-type {
+.become-mentor-form-section:last-of-type {
   border-bottom: none;
   margin-bottom: 0;
   padding-bottom: 0;
 }
 
-.form-section-title {
+.become-mentor-form-section-title {
   display: flex;
   align-items: center;
   gap: 14px;
@@ -286,30 +286,30 @@
   margin: 0 0 30px 0;
 }
 
-.form-section-title svg {
+.become-mentor-form-section-title svg {
   width: 28px;
   height: 28px;
   color: #0ea5e9;
   flex-shrink: 0;
 }
 
-.form-grid {
+.become-mentor-form-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 24px;
 }
 
-.form-field {
+.become-mentor-form-field {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.form-field-full {
+.become-mentor-form-field-full {
   grid-column: 1 / -1;
 }
 
-.form-field label {
+.become-mentor-form-field label {
   font-size: 0.95rem;
   font-weight: 700;
   color: #374151;
@@ -318,9 +318,9 @@
   gap: 4px;
 }
 
-.form-field input,
-.form-field select,
-.form-field textarea {
+.become-mentor-form-field input,
+.become-mentor-form-field select,
+.become-mentor-form-field textarea {
   width: 100%;
   padding: 14px 18px;
   font-size: 1rem;
@@ -332,43 +332,50 @@
   transition: all 0.3s ease;
 }
 
-.form-field input:focus,
-.form-field select:focus,
-.form-field textarea:focus {
+.become-mentor-form-field input:focus,
+.become-mentor-form-field select:focus,
+.become-mentor-form-field textarea:focus {
   outline: none;
   background: #ffffff;
   border-color: #0ea5e9;
   box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
 }
 
-.form-field input.error,
-.form-field select.error,
-.form-field textarea.error {
-  border-color: #ef4444;
-  background: #fef2f2;
+.become-mentor-input-error {
+  border-color: #ef4444 !important;
+  background: #fef2f2 !important;
 }
 
-.field-error {
+.become-mentor-field-error {
   font-size: 0.85rem;
   color: #ef4444;
   font-weight: 600;
 }
 
-.textarea-counter {
+.become-mentor-field-helper {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin: 4px 0 0 0;
+}
+
+.become-mentor-textarea-counter {
   font-size: 0.85rem;
   color: #9ca3af;
   text-align: right;
   margin-top: -4px;
 }
 
-/* Languages */
-.language-checkboxes {
+/* ===================================
+   LANGUAGES
+   =================================== */
+
+.become-mentor-language-checkboxes {
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
 }
 
-.language-checkbox {
+.become-mentor-language-checkbox {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -382,37 +389,187 @@
   color: #374151;
 }
 
-.language-checkbox:hover {
+.become-mentor-language-checkbox:hover {
   background: #f0f9ff;
   border-color: #0ea5e9;
 }
 
-.language-checkbox input[type="checkbox"] {
+.become-mentor-language-checkbox input[type="checkbox"] {
   width: 20px;
   height: 20px;
   cursor: pointer;
   accent-color: #0ea5e9;
 }
 
-.language-checkbox input[type="checkbox"]:checked + span {
+.become-mentor-language-checkbox input[type="checkbox"]:checked + span {
   color: #0ea5e9;
 }
 
-/* File Upload */
-.file-upload {
+/* ===================================
+   PHOTO UPLOAD
+   =================================== */
+
+.become-mentor-photo-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 30px;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border-radius: 16px;
+  border: 2px dashed #cbd5e1;
+}
+
+.become-mentor-photo-preview {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid #0ea5e9;
+  box-shadow: 0 8px 24px rgba(14, 165, 233, 0.2);
+}
+
+.become-mentor-photo-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.become-mentor-photo-placeholder {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  border: 4px dashed #0ea5e9;
+}
+
+.become-mentor-photo-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.become-mentor-photo-btn {
+  padding: 12px 28px;
+  background: #0ea5e9;
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.become-mentor-photo-btn:hover:not(:disabled) {
+  background: #0284c7;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(14, 165, 233, 0.3);
+}
+
+.become-mentor-photo-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.become-mentor-photo-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.become-mentor-photo-progress {
+  width: 100%;
+  max-width: 200px;
+  height: 6px;
+  background: #e0f2fe;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.become-mentor-photo-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #0ea5e9, #06b6d4);
+  transition: width 0.3s ease;
+  border-radius: 10px;
+}
+
+.become-mentor-photo-error {
+  font-size: 0.85rem;
+  color: #ef4444;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* ===================================
+   CONTACT METHODS
+   =================================== */
+
+.become-mentor-contact-methods {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.become-mentor-contact-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.become-mentor-contact-field label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.become-mentor-contact-field input {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 0.95rem;
+  color: #1f2937;
+  background: #f9fafb;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.become-mentor-contact-field input:focus {
+  outline: none;
+  background: #ffffff;
+  border-color: #0ea5e9;
+  box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
+}
+
+.become-mentor-contact-field-optional {
+  opacity: 0.8;
+}
+
+/* ===================================
+   CV UPLOAD
+   =================================== */
+
+.become-mentor-cv-upload {
   margin-top: 10px;
 }
 
-.file-input {
+.become-mentor-cv-input {
   display: none;
 }
 
-.file-upload-label {
+.become-mentor-cv-label {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 14px;
-  padding: 20px 30px;
+  padding: 24px 30px;
   background: #f9fafb;
   border: 2px dashed #cbd5e1;
   border-radius: 14px;
@@ -422,24 +579,105 @@
   color: #64748b;
 }
 
-.file-upload-label:hover {
+.become-mentor-cv-label:hover {
   background: #f0f9ff;
   border-color: #0ea5e9;
   color: #0ea5e9;
 }
 
-.file-upload-label svg {
-  width: 24px;
-  height: 24px;
+.become-mentor-cv-label svg {
+  width: 28px;
+  height: 28px;
 }
 
-/* Submit */
-.form-submit {
+.become-mentor-cv-file-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: #f0f9ff;
+  border: 2px solid #0ea5e9;
+  border-radius: 12px;
+  margin-top: 12px;
+}
+
+.become-mentor-cv-file-details {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.become-mentor-cv-file-icon {
+  width: 40px;
+  height: 40px;
+  background: #0ea5e9;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.become-mentor-cv-file-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1f2937;
+  word-break: break-word;
+}
+
+.become-mentor-cv-change-btn {
+  padding: 8px 16px;
+  background: #0ea5e9;
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.become-mentor-cv-change-btn:hover {
+  background: #0284c7;
+}
+
+.become-mentor-cv-progress {
+  width: 100%;
+  height: 6px;
+  background: #e0f2fe;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 12px;
+}
+
+.become-mentor-cv-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #0ea5e9, #06b6d4);
+  transition: width 0.3s ease;
+  border-radius: 10px;
+}
+
+.become-mentor-cv-error {
+  font-size: 0.85rem;
+  color: #ef4444;
+  margin-top: 8px;
+  font-weight: 600;
+}
+
+/* ===================================
+   SUBMIT
+   =================================== */
+
+.become-mentor-form-submit {
   margin-top: 50px;
   text-align: center;
 }
 
-.mentor-submit-btn {
+.become-mentor-submit-btn {
   padding: 18px 48px;
   background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
   color: #ffffff;
@@ -456,41 +694,41 @@
   margin-bottom: 16px;
 }
 
-.mentor-submit-btn:hover:not(:disabled) {
+.become-mentor-submit-btn:hover:not(:disabled) {
   transform: translateY(-3px);
   box-shadow: 0 12px 32px rgba(14, 165, 233, 0.45);
   gap: 18px;
 }
 
-.mentor-submit-btn:disabled {
+.become-mentor-submit-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
 
-.mentor-submit-btn svg {
+.become-mentor-submit-btn svg {
   width: 22px;
   height: 22px;
   transition: transform 0.3s ease;
 }
 
-.mentor-submit-btn:hover:not(:disabled) svg {
+.become-mentor-submit-btn:hover:not(:disabled) svg {
   transform: translateX(4px);
 }
 
-.btn-spinner {
+.become-mentor-btn-spinner {
   width: 20px;
   height: 20px;
   border: 3px solid rgba(255, 255, 255, 0.3);
   border-top-color: #ffffff;
   border-radius: 50%;
-  animation: spin 0.8s linear infinite;
+  animation: become-mentor-spin 0.8s linear infinite;
 }
 
-@keyframes spin {
+@keyframes become-mentor-spin {
   to { transform: rotate(360deg); }
 }
 
-.form-submit-note {
+.become-mentor-form-submit-note {
   font-size: 0.9rem;
   color: #9ca3af;
   margin: 0;
@@ -517,28 +755,28 @@
     padding: 60px 20px 80px 20px;
   }
 
-  .mentor-application-form {
+  .become-mentor-application-form {
     padding: 35px 25px;
   }
 
-  .form-grid {
+  .become-mentor-form-grid {
     grid-template-columns: 1fr;
   }
 
-  .form-section-title {
+  .become-mentor-form-section-title {
     font-size: 1.3rem;
   }
 
-  .language-checkboxes {
+  .become-mentor-language-checkboxes {
     flex-direction: column;
   }
 
-  .mentor-submit-btn {
+  .become-mentor-submit-btn {
     width: 100%;
     justify-content: center;
   }
 
-  .intro-benefits {
+  .become-mentor-intro-benefits {
     grid-template-columns: 1fr;
     gap: 24px;
   }
@@ -547,13 +785,27 @@
     font-size: 2rem;
   }
   
-  .intro-text {
+  .become-mentor-intro-text {
     font-size: 1.1rem;
+  }
+
+  .become-mentor-contact-methods {
+    grid-template-columns: 1fr;
+  }
+  
+  .become-mentor-photo-upload {
+    padding: 25px 20px;
+  }
+  
+  .become-mentor-photo-preview,
+  .become-mentor-photo-placeholder {
+    width: 120px;
+    height: 120px;
   }
 }
 
 @media (max-width: 480px) {
-  .auth-required-card {
+  .become-mentor-auth-card {
     padding: 40px 25px;
   }
 
@@ -561,15 +813,15 @@
     font-size: 2rem;
   }
 
-  .mentor-form-intro h2 {
+  .become-mentor-form-intro h2 {
     font-size: 2rem;
   }
 
-  .mentor-application-form {
+  .become-mentor-application-form {
     padding: 30px 20px;
   }
 
-  .form-section {
+  .become-mentor-form-section {
     margin-bottom: 35px;
     padding-bottom: 35px;
   }

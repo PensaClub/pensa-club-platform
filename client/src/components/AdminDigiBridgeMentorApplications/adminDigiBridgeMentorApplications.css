@@ -1,0 +1,305 @@
+/* src/components/AdminDigiBridgeMentorApplications/adminDigiBridgeMentorApplications.css */
+
+/* ===================================
+   ADMIN DIGIBRIDGE MENTOR APPLICATIONS - MAIN
+   =================================== */
+
+.admin-digibridge-mentor-applications {
+  width: 100%;
+  min-height: 100vh;
+  background: #f8f9fa;
+  padding: 0;
+}
+
+/* ===================================
+   HERO SECTION
+   =================================== */
+
+.admin-digibridge-mentor-applications-hero {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  padding: 60px 40px;
+  box-shadow: 0 4px 20px rgba(139, 92, 246, 0.2);
+}
+
+.admin-digibridge-mentor-applications-hero-content h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 12px 0;
+  line-height: 1.2;
+}
+
+.admin-digibridge-mentor-applications-hero-content p {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  font-weight: 500;
+}
+
+/* ===================================
+   APPLICATIONS LIST
+   =================================== */
+
+.admin-digibridge-mentor-applications-list {
+  padding: 40px;
+}
+
+.admin-digibridge-mentor-applications-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 28px;
+}
+
+/* ===================================
+   LOADING STATE
+   =================================== */
+
+.admin-digibridge-mentor-applications-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100px 20px;
+  gap: 24px;
+}
+
+.admin-digibridge-mentor-applications-spinner {
+  width: 60px;
+  height: 60px;
+  border: 5px solid #e5e7eb;
+  border-top-color: #8b5cf6;
+  border-radius: 50%;
+  animation: admin-digibridge-mentor-applications-spin 0.8s linear infinite;
+}
+
+@keyframes admin-digibridge-mentor-applications-spin {
+  to { transform: rotate(360deg); }
+}
+
+.admin-digibridge-mentor-applications-loading p {
+  font-size: 1.1rem;
+  color: #6b7280;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* ===================================
+   EMPTY STATE
+   =================================== */
+
+.admin-digibridge-mentor-applications-empty {
+  text-align: center;
+  padding: 100px 20px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.admin-digibridge-mentor-applications-empty-icon {
+  font-size: 5rem;
+  margin-bottom: 24px;
+  opacity: 0.3;
+  filter: grayscale(1);
+}
+
+.admin-digibridge-mentor-applications-empty h3 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #1f2937;
+  margin: 0 0 12px 0;
+}
+
+.admin-digibridge-mentor-applications-empty p {
+  font-size: 1.05rem;
+  color: #6b7280;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* ===================================
+   RESPONSIVE DESIGN
+   =================================== */
+
+/* Large Desktops (1440px+) */
+@media (min-width: 1440px) {
+  .admin-digibridge-mentor-applications-hero {
+    padding: 70px 50px;
+  }
+
+  .admin-digibridge-mentor-applications-hero-content h1 {
+    font-size: 2.75rem;
+  }
+
+  .admin-digibridge-mentor-applications-list {
+    padding: 50px;
+  }
+
+  .admin-digibridge-mentor-applications-grid {
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+    gap: 32px;
+  }
+}
+
+/* Standard Desktops (1024px - 1439px) */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .admin-digibridge-mentor-applications-hero {
+    padding: 55px 35px;
+  }
+
+  .admin-digibridge-mentor-applications-hero-content h1 {
+    font-size: 2.25rem;
+  }
+
+  .admin-digibridge-mentor-applications-list {
+    padding: 35px;
+  }
+
+  .admin-digibridge-mentor-applications-grid {
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 24px;
+  }
+}
+
+/* Tablets (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .admin-digibridge-mentor-applications-hero {
+    padding: 45px 25px;
+  }
+
+  .admin-digibridge-mentor-applications-hero-content h1 {
+    font-size: 2rem;
+  }
+
+  .admin-digibridge-mentor-applications-hero-content p {
+    font-size: 1rem;
+  }
+
+  .admin-digibridge-mentor-applications-list {
+    padding: 25px;
+  }
+
+  .admin-digibridge-mentor-applications-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+/* Small Tablets / Large Phones (576px - 767px) */
+@media (min-width: 576px) and (max-width: 767px) {
+  .admin-digibridge-mentor-applications-hero {
+    padding: 40px 20px;
+  }
+
+  .admin-digibridge-mentor-applications-hero-content h1 {
+    font-size: 1.85rem;
+  }
+
+  .admin-digibridge-mentor-applications-hero-content p {
+    font-size: 0.98rem;
+  }
+
+  .admin-digibridge-mentor-applications-list {
+    padding: 20px;
+  }
+
+  .admin-digibridge-mentor-applications-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+}
+
+/* Phones (480px - 575px) */
+@media (min-width: 480px) and (max-width: 575px) {
+  .admin-digibridge-mentor-applications-hero {
+    padding: 35px 18px;
+  }
+
+  .admin-digibridge-mentor-applications-hero-content h1 {
+    font-size: 1.75rem;
+  }
+
+  .admin-digibridge-mentor-applications-hero-content p {
+    font-size: 0.95rem;
+  }
+
+  .admin-digibridge-mentor-applications-list {
+    padding: 18px;
+  }
+
+  .admin-digibridge-mentor-applications-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .admin-digibridge-mentor-applications-empty {
+    padding: 80px 18px;
+  }
+
+  .admin-digibridge-mentor-applications-empty-icon {
+    font-size: 4.5rem;
+  }
+
+  .admin-digibridge-mentor-applications-empty h3 {
+    font-size: 1.6rem;
+  }
+
+  .admin-digibridge-mentor-applications-empty p {
+    font-size: 1rem;
+  }
+}
+
+/* Small Phones (320px - 479px) */
+@media (max-width: 479px) {
+  .admin-digibridge-mentor-applications-hero {
+    padding: 30px 15px;
+  }
+
+  .admin-digibridge-mentor-applications-hero-content h1 {
+    font-size: 1.6rem;
+    line-height: 1.3;
+  }
+
+  .admin-digibridge-mentor-applications-hero-content p {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .admin-digibridge-mentor-applications-list {
+    padding: 15px;
+  }
+
+  .admin-digibridge-mentor-applications-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .admin-digibridge-mentor-applications-loading {
+    padding: 70px 15px;
+  }
+
+  .admin-digibridge-mentor-applications-spinner {
+    width: 50px;
+    height: 50px;
+    border-width: 4px;
+  }
+
+  .admin-digibridge-mentor-applications-loading p {
+    font-size: 1rem;
+  }
+
+  .admin-digibridge-mentor-applications-empty {
+    padding: 70px 15px;
+  }
+
+  .admin-digibridge-mentor-applications-empty-icon {
+    font-size: 4rem;
+  }
+
+  .admin-digibridge-mentor-applications-empty h3 {
+    font-size: 1.5rem;
+  }
+
+  .admin-digibridge-mentor-applications-empty p {
+    font-size: 0.95rem;
+  }
+}

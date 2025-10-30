@@ -1,0 +1,447 @@
+/* src/components/AdminDigiBridgeMentors/AdminDigiBridgeMentorFilters/adminDigiBridgeMentorFilters.css */
+
+/* ===================================
+   MENTOR FILTERS
+   =================================== */
+
+.admin-digibridge-mentor-filters {
+  padding: 0 40px 30px 40px;
+  background: #f8f9fa;
+}
+
+.admin-digibridge-mentor-filters-container {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 24px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border: 2px solid #e5e7eb;
+}
+
+/* ===================================
+   SEARCH
+   =================================== */
+
+.admin-digibridge-mentor-filters-search {
+  flex: 1;
+  min-width: 280px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.admin-digibridge-mentor-filters-search svg:first-child {
+  position: absolute;
+  left: 16px;
+  width: 20px;
+  height: 20px;
+  color: #0ea5e9;
+  pointer-events: none;
+}
+
+.admin-digibridge-mentor-filters-search input {
+  width: 100%;
+  padding: 14px 48px 14px 48px;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #1f2937;
+  background: #f9fafb;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.admin-digibridge-mentor-filters-search input:focus {
+  outline: none;
+  background: #ffffff;
+  border-color: #0ea5e9;
+  box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
+}
+
+.admin-digibridge-mentor-filters-search input::placeholder {
+  color: #9ca3af;
+}
+
+.admin-digibridge-mentor-filters-clear-search {
+  position: absolute;
+  right: 12px;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: #ef4444;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.admin-digibridge-mentor-filters-clear-search svg {
+  width: 16px;
+  height: 16px;
+  color: #ffffff;
+}
+
+.admin-digibridge-mentor-filters-clear-search:hover {
+  background: #dc2626;
+  transform: scale(1.05);
+}
+
+/* ===================================
+   SELECT DROPDOWNS
+   =================================== */
+
+.admin-digibridge-mentor-filters-select-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 200px;
+}
+
+.admin-digibridge-mentor-filters-select-wrapper svg {
+  position: absolute;
+  left: 14px;
+  width: 18px;
+  height: 18px;
+  color: #0ea5e9;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.admin-digibridge-mentor-filters-select {
+  width: 100%;
+  padding: 14px 16px 14px 44px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #1f2937;
+  background: #f9fafb;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%230ea5e9' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 40px;
+}
+
+.admin-digibridge-mentor-filters-select:hover {
+  background-color: #ffffff;
+  border-color: rgba(14, 165, 233, 0.3);
+}
+
+.admin-digibridge-mentor-filters-select:focus {
+  outline: none;
+  background: #ffffff;
+  border-color: #0ea5e9;
+  box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.1);
+}
+
+/* ===================================
+   CLEAR FILTERS BUTTON
+   =================================== */
+
+.admin-digibridge-mentor-filters-clear-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 24px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+  border: 2px solid rgba(239, 68, 68, 0.3);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.admin-digibridge-mentor-filters-clear-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.admin-digibridge-mentor-filters-clear-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.5);
+  transform: translateY(-2px);
+}
+
+/* ===================================
+   RESULTS COUNT
+   =================================== */
+
+.admin-digibridge-mentor-filters-results {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 24px;
+  margin-top: 16px;
+  background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+  border-radius: 12px;
+  border: 2px solid #7dd3fc;
+}
+
+.admin-digibridge-mentor-filters-results svg {
+  width: 22px;
+  height: 22px;
+  color: #0284c7;
+  flex-shrink: 0;
+}
+
+.admin-digibridge-mentor-filters-results span {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0369a1;
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+/* Large Desktops (1920px+) */
+@media (min-width: 1920px) {
+  .admin-digibridge-mentor-filters {
+    padding: 0 60px 40px 60px;
+  }
+
+  .admin-digibridge-mentor-filters-container {
+    padding: 28px;
+    gap: 18px;
+  }
+
+  .admin-digibridge-mentor-filters-search {
+    min-width: 320px;
+  }
+
+  .admin-digibridge-mentor-filters-select-wrapper {
+    min-width: 220px;
+  }
+}
+
+/* Laptops (1200px - 1439px) */
+@media (min-width: 1200px) and (max-width: 1439px) {
+  .admin-digibridge-mentor-filters {
+    padding: 0 35px 28px 35px;
+  }
+
+  .admin-digibridge-mentor-filters-container {
+    padding: 22px;
+    gap: 14px;
+  }
+
+  .admin-digibridge-mentor-filters-search {
+    min-width: 260px;
+  }
+
+  .admin-digibridge-mentor-filters-select-wrapper {
+    min-width: 190px;
+  }
+}
+
+/* Small Laptops / Large Tablets (992px - 1199px) */
+@media (min-width: 992px) and (max-width: 1199px) {
+  .admin-digibridge-mentor-filters {
+    padding: 0 30px 26px 30px;
+  }
+
+  .admin-digibridge-mentor-filters-container {
+    padding: 20px;
+    gap: 12px;
+  }
+
+  .admin-digibridge-mentor-filters-search {
+    min-width: 240px;
+  }
+
+  .admin-digibridge-mentor-filters-select-wrapper {
+    min-width: 180px;
+  }
+
+  .admin-digibridge-mentor-filters-search input,
+  .admin-digibridge-mentor-filters-select,
+  .admin-digibridge-mentor-filters-clear-btn {
+    padding: 12px 16px 12px 44px;
+    font-size: 0.93rem;
+  }
+}
+
+/* Tablets (768px - 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+  .admin-digibridge-mentor-filters {
+    padding: 0 25px 24px 25px;
+  }
+
+  .admin-digibridge-mentor-filters-container {
+    padding: 18px;
+    gap: 12px;
+  }
+
+  .admin-digibridge-mentor-filters-search {
+    flex: 1 1 100%;
+    min-width: 100%;
+  }
+
+  .admin-digibridge-mentor-filters-select-wrapper {
+    flex: 1;
+    min-width: 160px;
+  }
+
+  .admin-digibridge-mentor-filters-clear-btn {
+    flex: 1 1 100%;
+    justify-content: center;
+  }
+}
+
+/* Small Tablets / Large Phones (576px - 767px) */
+@media (min-width: 576px) and (max-width: 767px) {
+  .admin-digibridge-mentor-filters {
+    padding: 0 20px 22px 20px;
+  }
+
+  .admin-digibridge-mentor-filters-container {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .admin-digibridge-mentor-filters-search {
+    flex: 1 1 100%;
+    min-width: 100%;
+  }
+
+  .admin-digibridge-mentor-filters-select-wrapper {
+    flex: 1 1 calc(50% - 6px);
+    min-width: calc(50% - 6px);
+  }
+
+  .admin-digibridge-mentor-filters-clear-btn {
+    flex: 1 1 100%;
+    justify-content: center;
+  }
+
+  .admin-digibridge-mentor-filters-search input,
+  .admin-digibridge-mentor-filters-select,
+  .admin-digibridge-mentor-filters-clear-btn {
+    padding: 13px 16px 13px 44px;
+    font-size: 0.93rem;
+  }
+}
+
+/* Phones (480px - 575px) */
+@media (min-width: 480px) and (max-width: 575px) {
+  .admin-digibridge-mentor-filters {
+    padding: 0 18px 20px 18px;
+  }
+
+  .admin-digibridge-mentor-filters-container {
+    padding: 16px;
+    gap: 10px;
+  }
+
+  .admin-digibridge-mentor-filters-search,
+  .admin-digibridge-mentor-filters-select-wrapper,
+  .admin-digibridge-mentor-filters-clear-btn {
+    flex: 1 1 100%;
+    min-width: 100%;
+  }
+
+  .admin-digibridge-mentor-filters-search input,
+  .admin-digibridge-mentor-filters-select {
+    padding: 12px 16px 12px 44px;
+    font-size: 0.9rem;
+  }
+
+  .admin-digibridge-mentor-filters-clear-btn {
+    padding: 12px 20px;
+    font-size: 0.9rem;
+    justify-content: center;
+  }
+
+  .admin-digibridge-mentor-filters-results {
+    padding: 14px 18px;
+    margin-top: 14px;
+  }
+
+  .admin-digibridge-mentor-filters-results span {
+    font-size: 0.95rem;
+  }
+}
+
+/* Small Phones (320px - 479px) */
+@media (max-width: 479px) {
+  .admin-digibridge-mentor-filters {
+    padding: 0 15px 18px 15px;
+  }
+
+  .admin-digibridge-mentor-filters-container {
+    padding: 14px;
+    gap: 10px;
+  }
+
+  .admin-digibridge-mentor-filters-search,
+  .admin-digibridge-mentor-filters-select-wrapper,
+  .admin-digibridge-mentor-filters-clear-btn {
+    flex: 1 1 100%;
+    min-width: 100%;
+  }
+
+  .admin-digibridge-mentor-filters-search input,
+  .admin-digibridge-mentor-filters-select {
+    padding: 11px 14px 11px 40px;
+    font-size: 0.88rem;
+  }
+
+  .admin-digibridge-mentor-filters-search svg:first-child,
+  .admin-digibridge-mentor-filters-select-wrapper svg {
+    width: 16px;
+    height: 16px;
+    left: 12px;
+  }
+
+  .admin-digibridge-mentor-filters-clear-search {
+    width: 26px;
+    height: 26px;
+    right: 10px;
+  }
+
+  .admin-digibridge-mentor-filters-clear-search svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .admin-digibridge-mentor-filters-clear-btn {
+    padding: 11px 18px;
+    font-size: 0.88rem;
+    justify-content: center;
+  }
+
+  .admin-digibridge-mentor-filters-clear-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .admin-digibridge-mentor-filters-results {
+    padding: 12px 16px;
+    margin-top: 12px;
+    gap: 8px;
+  }
+
+  .admin-digibridge-mentor-filters-results svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .admin-digibridge-mentor-filters-results span {
+    font-size: 0.9rem;
+  }
+}
