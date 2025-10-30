@@ -1,0 +1,484 @@
+/* src/components/AdminDigiBridgeMentorStatistics/MentorsBySpecialization/mentorsBySpecialization.css */
+
+/* ===================================
+   MENTORS BY SPECIALIZATION - MAIN
+   =================================== */
+
+.mentors-by-specialization {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 2px solid #f3f4f6;
+  padding: 28px;
+  transition: all 0.3s ease;
+}
+
+.mentors-by-specialization:hover {
+  border-color: #e5e7eb;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* ===================================
+   HEADER
+   =================================== */
+
+.mentors-by-specialization-header {
+  margin-bottom: 24px;
+}
+
+.mentors-by-specialization-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #1f2937;
+  margin: 0 0 8px 0;
+}
+
+.mentors-by-specialization-title svg {
+  width: 28px;
+  height: 28px;
+  color: #8b5cf6;
+  flex-shrink: 0;
+}
+
+.mentors-by-specialization-subtitle {
+  font-size: 0.95rem;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ===================================
+   CHART WRAPPER
+   =================================== */
+
+.mentors-by-specialization-wrapper {
+  margin-top: 20px;
+}
+
+/* ===================================
+   CUSTOM TOOLTIP
+   =================================== */
+
+.mentors-by-specialization-tooltip {
+  background: #ffffff;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 2px solid #e5e7eb;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.mentors-by-specialization-tooltip-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 10px 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.mentors-by-specialization-tooltip-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.mentors-by-specialization-tooltip-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.mentors-by-specialization-tooltip-label {
+  font-size: 0.88rem;
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.mentors-by-specialization-tooltip-row strong {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #8b5cf6;
+}
+
+/* ===================================
+   STATS CARDS
+   =================================== */
+
+.mentors-by-specialization-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 28px;
+  padding-top: 28px;
+  border-top: 2px solid #f3f4f6;
+}
+
+.mentors-by-specialization-stat-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  background: #f9fafb;
+  border-radius: 12px;
+  border: 2px solid #f3f4f6;
+  transition: all 0.3s ease;
+}
+
+.mentors-by-specialization-stat-card:hover {
+  background: #ffffff;
+  border-color: #e5e7eb;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.mentors-by-specialization-stat-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #ffffff;
+  border-radius: 10px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.mentors-by-specialization-stat-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.mentors-by-specialization-stat-label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 6px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mentors-by-specialization-stat-values {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.mentors-by-specialization-stat-value {
+  font-size: 0.82rem;
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.mentors-by-specialization-stat-value strong {
+  color: #1f2937;
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+.mentors-by-specialization-stat-divider {
+  color: #d1d5db;
+  font-weight: 600;
+}
+
+/* ===================================
+   EMPTY STATE
+   =================================== */
+
+.mentors-by-specialization-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  gap: 16px;
+}
+
+.mentors-by-specialization-empty-icon {
+  font-size: 3rem;
+  opacity: 0.5;
+}
+
+.mentors-by-specialization-empty p {
+  font-size: 1rem;
+  color: #9ca3af;
+  margin: 0;
+  font-weight: 600;
+}
+
+/* ===================================
+   RESPONSIVE DESIGN
+   =================================== */
+
+/* Large Desktops (1440px+) */
+@media (min-width: 1440px) {
+  .mentors-by-specialization {
+    padding: 32px;
+  }
+
+  .mentors-by-specialization-title {
+    font-size: 1.65rem;
+  }
+
+  .mentors-by-specialization-title svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .mentors-by-specialization-stat-icon {
+    width: 52px;
+    height: 52px;
+    font-size: 1.5rem;
+  }
+}
+
+/* Standard Desktops (1024px - 1439px) */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .mentors-by-specialization {
+    padding: 26px;
+  }
+
+  .mentors-by-specialization-title {
+    font-size: 1.4rem;
+  }
+
+  .mentors-by-specialization-title svg {
+    width: 26px;
+    height: 26px;
+  }
+}
+
+/* Tablets (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .mentors-by-specialization {
+    padding: 24px;
+  }
+
+  .mentors-by-specialization-title {
+    font-size: 1.35rem;
+  }
+
+  .mentors-by-specialization-title svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .mentors-by-specialization-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .mentors-by-specialization-stats {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+}
+
+/* Small Tablets / Large Phones (576px - 767px) */
+@media (min-width: 576px) and (max-width: 767px) {
+  .mentors-by-specialization {
+    padding: 22px 18px;
+  }
+
+  .mentors-by-specialization-title {
+    font-size: 1.25rem;
+  }
+
+  .mentors-by-specialization-title svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .mentors-by-specialization-subtitle {
+    font-size: 0.88rem;
+  }
+
+  .mentors-by-specialization-wrapper {
+    margin-top: 18px;
+  }
+
+  .mentors-by-specialization-stats {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 24px;
+  }
+
+  .mentors-by-specialization-stat-card {
+    padding: 14px;
+  }
+
+  .mentors-by-specialization-stat-icon {
+    width: 46px;
+    height: 46px;
+    font-size: 1.3rem;
+  }
+
+  .mentors-by-specialization-stat-label {
+    font-size: 0.88rem;
+  }
+
+  .mentors-by-specialization-stat-value {
+    font-size: 0.8rem;
+  }
+
+  .mentors-by-specialization-stat-value strong {
+    font-size: 1.05rem;
+  }
+}
+
+/* Phones (480px - 575px) */
+@media (min-width: 480px) and (max-width: 575px) {
+  .mentors-by-specialization {
+    padding: 20px 16px;
+  }
+
+  .mentors-by-specialization-title {
+    font-size: 1.2rem;
+    gap: 10px;
+  }
+
+  .mentors-by-specialization-title svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .mentors-by-specialization-subtitle {
+    font-size: 0.85rem;
+  }
+
+  .mentors-by-specialization-stats {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-top: 22px;
+    padding-top: 22px;
+  }
+
+  .mentors-by-specialization-stat-card {
+    padding: 13px;
+    gap: 12px;
+  }
+
+  .mentors-by-specialization-stat-icon {
+    width: 44px;
+    height: 44px;
+    font-size: 1.2rem;
+  }
+
+  .mentors-by-specialization-stat-label {
+    font-size: 0.85rem;
+  }
+
+  .mentors-by-specialization-stat-value {
+    font-size: 0.78rem;
+  }
+
+  .mentors-by-specialization-stat-value strong {
+    font-size: 1rem;
+  }
+
+  .mentors-by-specialization-tooltip {
+    padding: 10px 14px;
+  }
+
+  .mentors-by-specialization-tooltip-title {
+    font-size: 0.9rem;
+  }
+
+  .mentors-by-specialization-tooltip-label {
+    font-size: 0.82rem;
+  }
+
+  .mentors-by-specialization-tooltip-row strong {
+    font-size: 0.9rem;
+  }
+}
+
+/* Small Phones (320px - 479px) */
+@media (max-width: 479px) {
+  .mentors-by-specialization {
+    padding: 18px 14px;
+  }
+
+  .mentors-by-specialization-title {
+    font-size: 1.15rem;
+    gap: 8px;
+  }
+
+  .mentors-by-specialization-title svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .mentors-by-specialization-subtitle {
+    font-size: 0.82rem;
+  }
+
+  .mentors-by-specialization-wrapper {
+    margin-top: 16px;
+  }
+
+  .mentors-by-specialization-stats {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 20px;
+  }
+
+  .mentors-by-specialization-stat-card {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .mentors-by-specialization-stat-icon {
+    width: 42px;
+    height: 42px;
+    font-size: 1.1rem;
+    border-radius: 8px;
+  }
+
+  .mentors-by-specialization-stat-label {
+    font-size: 0.82rem;
+  }
+
+  .mentors-by-specialization-stat-value {
+    font-size: 0.76rem;
+  }
+
+  .mentors-by-specialization-stat-value strong {
+    font-size: 0.95rem;
+  }
+
+  .mentors-by-specialization-tooltip {
+    padding: 9px 12px;
+  }
+
+  .mentors-by-specialization-tooltip-title {
+    font-size: 0.88rem;
+  }
+
+  .mentors-by-specialization-tooltip-label {
+    font-size: 0.78rem;
+  }
+
+  .mentors-by-specialization-tooltip-row strong {
+    font-size: 0.85rem;
+  }
+
+  .mentors-by-specialization-empty {
+    padding: 50px 16px;
+  }
+
+  .mentors-by-specialization-empty-icon {
+    font-size: 2.5rem;
+  }
+
+  .mentors-by-specialization-empty p {
+    font-size: 0.9rem;
+  }
+}

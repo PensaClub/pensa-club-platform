@@ -1,0 +1,430 @@
+/* src/components/AdminNotifications/adminNotificationBell.css */
+
+/* ===================================
+   ADMIN NOTIFICATION BELL - MAIN
+   =================================== */
+
+.admin-notification-bell {
+  position: relative;
+  display: inline-block;
+}
+
+/* ===================================
+   BELL BUTTON
+   =================================== */
+
+.admin-notification-bell-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: transparent;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  padding: 0;
+}
+
+.admin-notification-bell-button:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.admin-notification-bell-button:active {
+  transform: scale(0.95);
+}
+
+.admin-notification-bell-icon {
+  width: 24px;
+  height: 24px;
+  color: #374151;
+  transition: color 0.3s ease;
+}
+
+.admin-notification-bell-button:hover .admin-notification-bell-icon {
+  color: #0ea5e9;
+}
+
+/* BADGE */
+.admin-notification-bell-badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  min-width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: #ffffff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: 10px;
+  padding: 0 6px;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+  animation: admin-notification-bell-pulse 2s ease-in-out infinite;
+}
+
+@keyframes admin-notification-bell-pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* ===================================
+   DROPDOWN
+   =================================== */
+
+.admin-notification-bell-dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  width: 420px;
+  max-height: 600px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  animation: admin-notification-bell-dropdown-appear 0.3s ease;
+  overflow: hidden;
+}
+
+@keyframes admin-notification-bell-dropdown-appear {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Arrow pointer */
+.admin-notification-bell-dropdown::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  right: 18px;
+  width: 16px;
+  height: 16px;
+  background: #ffffff;
+  transform: rotate(45deg);
+  box-shadow: -2px -2px 5px rgba(0, 0, 0, 0.05);
+}
+
+/* ===================================
+   HEADER
+   =================================== */
+
+.admin-notification-bell-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 2px solid #f3f4f6;
+  background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
+}
+
+.admin-notification-bell-header h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #1f2937;
+  margin: 0;
+}
+
+.admin-notification-bell-count {
+  padding: 4px 12px;
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(14, 165, 233, 0.3);
+}
+
+/* ===================================
+   NOTIFICATION LIST
+   =================================== */
+
+.admin-notification-bell-list {
+  flex: 1;
+  overflow-y: auto;
+  max-height: 450px;
+  padding: 8px 0;
+}
+
+/* Custom scrollbar */
+.admin-notification-bell-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.admin-notification-bell-list::-webkit-scrollbar-track {
+  background: #f3f4f6;
+}
+
+.admin-notification-bell-list::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+.admin-notification-bell-list::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* ===================================
+   LOADING STATE
+   =================================== */
+
+.admin-notification-bell-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  gap: 16px;
+}
+
+.admin-notification-bell-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e5e7eb;
+  border-top-color: #0ea5e9;
+  border-radius: 50%;
+  animation: admin-notification-bell-spin 0.8s linear infinite;
+}
+
+@keyframes admin-notification-bell-spin {
+  to { transform: rotate(360deg); }
+}
+
+.admin-notification-bell-loading p {
+  font-size: 0.95rem;
+  color: #6b7280;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* ===================================
+   EMPTY STATE
+   =================================== */
+
+.admin-notification-bell-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.admin-notification-bell-empty-icon {
+  font-size: 3.5rem;
+  margin-bottom: 16px;
+  opacity: 0.3;
+  filter: grayscale(1);
+}
+
+.admin-notification-bell-empty p {
+  font-size: 1rem;
+  color: #6b7280;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* ===================================
+   FOOTER
+   =================================== */
+
+.admin-notification-bell-footer {
+  padding: 16px 24px;
+  border-top: 2px solid #f3f4f6;
+  background: #fafbfc;
+}
+
+.admin-notification-bell-view-all {
+  width: 100%;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.admin-notification-bell-view-all:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(14, 165, 233, 0.3);
+}
+
+.admin-notification-bell-view-all:active {
+  transform: translateY(0);
+}
+
+/* ===================================
+   RESPONSIVE DESIGN
+   =================================== */
+
+/* Tablets (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .admin-notification-bell-dropdown {
+    width: 380px;
+    max-height: 550px;
+  }
+
+  .admin-notification-bell-list {
+    max-height: 400px;
+  }
+}
+
+/* Small Tablets / Large Phones (576px - 767px) */
+@media (min-width: 576px) and (max-width: 767px) {
+  .admin-notification-bell-dropdown {
+    width: 360px;
+    max-height: 500px;
+  }
+
+  .admin-notification-bell-header {
+    padding: 18px 20px;
+  }
+
+  .admin-notification-bell-header h3 {
+    font-size: 1.15rem;
+  }
+
+  .admin-notification-bell-list {
+    max-height: 350px;
+  }
+
+  .admin-notification-bell-footer {
+    padding: 14px 20px;
+  }
+}
+
+/* Phones (480px - 575px) */
+@media (min-width: 480px) and (max-width: 575px) {
+  .admin-notification-bell-dropdown {
+    width: 340px;
+    max-height: 480px;
+    right: -10px;
+  }
+
+  .admin-notification-bell-header {
+    padding: 16px 18px;
+  }
+
+  .admin-notification-bell-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .admin-notification-bell-count {
+    font-size: 0.8rem;
+    padding: 3px 10px;
+  }
+
+  .admin-notification-bell-list {
+    max-height: 320px;
+  }
+
+  .admin-notification-bell-footer {
+    padding: 14px 18px;
+  }
+
+  .admin-notification-bell-view-all {
+    padding: 11px 18px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Small Phones (320px - 479px) */
+@media (max-width: 479px) {
+  .admin-notification-bell-dropdown {
+    width: 300px;
+    max-height: 450px;
+    right: -20px;
+  }
+
+  .admin-notification-bell-dropdown::before {
+    right: 30px;
+  }
+
+  .admin-notification-bell-button {
+    width: 40px;
+    height: 40px;
+  }
+
+  .admin-notification-bell-icon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .admin-notification-bell-badge {
+    min-width: 18px;
+    height: 18px;
+    font-size: 0.65rem;
+    padding: 0 5px;
+  }
+
+  .admin-notification-bell-header {
+    padding: 14px 16px;
+  }
+
+  .admin-notification-bell-header h3 {
+    font-size: 1.05rem;
+  }
+
+  .admin-notification-bell-count {
+    font-size: 0.75rem;
+    padding: 3px 8px;
+  }
+
+  .admin-notification-bell-list {
+    max-height: 300px;
+  }
+
+  .admin-notification-bell-loading {
+    padding: 50px 16px;
+  }
+
+  .admin-notification-bell-spinner {
+    width: 36px;
+    height: 36px;
+    border-width: 3px;
+  }
+
+  .admin-notification-bell-loading p {
+    font-size: 0.9rem;
+  }
+
+  .admin-notification-bell-empty {
+    padding: 50px 16px;
+  }
+
+  .admin-notification-bell-empty-icon {
+    font-size: 3rem;
+  }
+
+  .admin-notification-bell-empty p {
+    font-size: 0.95rem;
+  }
+
+  .admin-notification-bell-footer {
+    padding: 12px 16px;
+  }
+
+  .admin-notification-bell-view-all {
+    padding: 10px 16px;
+    font-size: 0.88rem;
+  }
+}

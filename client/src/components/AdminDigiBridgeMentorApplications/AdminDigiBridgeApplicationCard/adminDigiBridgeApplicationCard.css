@@ -1,0 +1,561 @@
+/* src/components/AdminDigiBridgeMentorApplications/AdminDigiBridgeApplicationCard/adminDigiBridgeApplicationCard.css */
+
+/* ===================================
+   ADMIN DIGIBRIDGE APPLICATION CARD - MAIN
+   =================================== */
+
+.admin-digibridge-application-card {
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 2px solid #f3f4f6;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.admin-digibridge-application-card:hover {
+  border-color: #8b5cf6;
+  box-shadow: 0 12px 32px rgba(139, 92, 246, 0.15);
+  transform: translateY(-4px);
+}
+
+/* ===================================
+   HEADER
+   =================================== */
+
+.admin-digibridge-application-card-header {
+  position: relative;
+  padding: 24px;
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.admin-digibridge-application-card-photo {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #ffffff;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.admin-digibridge-application-card:hover .admin-digibridge-application-card-photo {
+  transform: scale(1.05);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+}
+
+.admin-digibridge-application-card-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.admin-digibridge-application-card-badge-icon {
+  font-size: 1.1rem;
+}
+
+.admin-digibridge-application-card-badge-text {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #f59e0b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ===================================
+   CONTENT
+   =================================== */
+
+.admin-digibridge-application-card-content {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+}
+
+.admin-digibridge-application-card-name {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #1f2937;
+  margin: 0;
+  text-align: center;
+}
+
+.admin-digibridge-application-card-specialization {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(124, 58, 237, 0.1) 100%);
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #8b5cf6;
+}
+
+.admin-digibridge-application-card-spec-icon {
+  font-size: 1.2rem;
+}
+
+/* ===================================
+   INFO ITEMS
+   =================================== */
+
+.admin-digibridge-application-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-digibridge-application-card-info-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.admin-digibridge-application-card-icon {
+  width: 18px;
+  height: 18px;
+  color: #9ca3af;
+  flex-shrink: 0;
+}
+
+.admin-digibridge-application-card-languages {
+  font-size: 1.2rem;
+  letter-spacing: 4px;
+}
+
+/* ===================================
+   EDUCATION & EXPERIENCE
+   =================================== */
+
+.admin-digibridge-application-card-education,
+.admin-digibridge-application-card-experience {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px;
+  background: #f9fafb;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  color: #4b5563;
+  line-height: 1.5;
+}
+
+.admin-digibridge-application-card-education .admin-digibridge-application-card-icon,
+.admin-digibridge-application-card-experience .admin-digibridge-application-card-icon {
+  margin-top: 2px;
+}
+
+/* ===================================
+   ACTIONS
+   =================================== */
+
+.admin-digibridge-application-card-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px 24px;
+  background: #f9fafb;
+  border-top: 2px solid #f3f4f6;
+}
+
+.admin-digibridge-application-card-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 18px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  font-family: inherit;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.admin-digibridge-application-card-btn svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.admin-digibridge-application-card-btn:active {
+  transform: scale(0.97);
+}
+
+/* View Details Button */
+.admin-digibridge-application-card-btn-view {
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  color: #ffffff;
+}
+
+.admin-digibridge-application-card-btn-view:hover {
+  box-shadow: 0 6px 20px rgba(14, 165, 233, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Send Email Button */
+.admin-digibridge-application-card-btn-email {
+  background: #ffffff;
+  color: #6b7280;
+  border: 2px solid #e5e7eb;
+}
+
+.admin-digibridge-application-card-btn-email:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+  color: #374151;
+}
+
+/* Action Group */
+.admin-digibridge-application-card-action-group {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+/* Approve Button */
+.admin-digibridge-application-card-btn-approve {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+}
+
+.admin-digibridge-application-card-btn-approve:hover {
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Reject Button */
+.admin-digibridge-application-card-btn-reject {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: #ffffff;
+}
+
+.admin-digibridge-application-card-btn-reject:hover {
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.3);
+  transform: translateY(-2px);
+}
+
+/* ===================================
+   RESPONSIVE DESIGN
+   =================================== */
+
+/* Large Desktops (1440px+) */
+@media (min-width: 1440px) {
+  .admin-digibridge-application-card-header {
+    padding: 28px;
+  }
+
+  .admin-digibridge-application-card-photo {
+    width: 110px;
+    height: 110px;
+  }
+
+  .admin-digibridge-application-card-content {
+    padding: 28px;
+    gap: 18px;
+  }
+
+  .admin-digibridge-application-card-name {
+    font-size: 1.45rem;
+  }
+
+  .admin-digibridge-application-card-actions {
+    padding: 22px 28px;
+  }
+}
+
+/* Standard Desktops (1024px - 1439px) */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .admin-digibridge-application-card-header {
+    padding: 22px;
+  }
+
+  .admin-digibridge-application-card-photo {
+    width: 95px;
+    height: 95px;
+  }
+
+  .admin-digibridge-application-card-content {
+    padding: 22px;
+  }
+
+  .admin-digibridge-application-card-name {
+    font-size: 1.3rem;
+  }
+
+  .admin-digibridge-application-card-actions {
+    padding: 18px 22px;
+  }
+}
+
+/* Tablets (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .admin-digibridge-application-card-header {
+    padding: 20px;
+  }
+
+  .admin-digibridge-application-card-photo {
+    width: 90px;
+    height: 90px;
+  }
+
+  .admin-digibridge-application-card-content {
+    padding: 20px;
+    gap: 14px;
+  }
+
+  .admin-digibridge-application-card-name {
+    font-size: 1.25rem;
+  }
+
+  .admin-digibridge-application-card-specialization {
+    font-size: 0.93rem;
+    padding: 9px 14px;
+  }
+
+  .admin-digibridge-application-card-actions {
+    padding: 18px 20px;
+  }
+
+  .admin-digibridge-application-card-btn {
+    padding: 11px 16px;
+    font-size: 0.88rem;
+  }
+}
+
+/* Small Tablets / Large Phones (576px - 767px) */
+@media (min-width: 576px) and (max-width: 767px) {
+  .admin-digibridge-application-card-header {
+    padding: 18px;
+  }
+
+  .admin-digibridge-application-card-photo {
+    width: 85px;
+    height: 85px;
+  }
+
+  .admin-digibridge-application-card-badge {
+    top: 14px;
+    right: 14px;
+    padding: 7px 12px;
+  }
+
+  .admin-digibridge-application-card-badge-text {
+    font-size: 0.8rem;
+  }
+
+  .admin-digibridge-application-card-content {
+    padding: 18px;
+    gap: 13px;
+  }
+
+  .admin-digibridge-application-card-name {
+    font-size: 1.2rem;
+  }
+
+  .admin-digibridge-application-card-specialization {
+    font-size: 0.9rem;
+  }
+
+  .admin-digibridge-application-card-info-item {
+    font-size: 0.88rem;
+  }
+
+  .admin-digibridge-application-card-actions {
+    padding: 16px 18px;
+    gap: 9px;
+  }
+
+  .admin-digibridge-application-card-btn {
+    padding: 11px 14px;
+    font-size: 0.88rem;
+  }
+
+  .admin-digibridge-application-card-action-group {
+    gap: 9px;
+  }
+}
+
+/* Phones (480px - 575px) */
+@media (min-width: 480px) and (max-width: 575px) {
+  .admin-digibridge-application-card-header {
+    padding: 16px;
+  }
+
+  .admin-digibridge-application-card-photo {
+    width: 80px;
+    height: 80px;
+  }
+
+  .admin-digibridge-application-card-badge {
+    top: 12px;
+    right: 12px;
+    padding: 6px 10px;
+  }
+
+  .admin-digibridge-application-card-badge-icon {
+    font-size: 1rem;
+  }
+
+  .admin-digibridge-application-card-badge-text {
+    font-size: 0.78rem;
+  }
+
+  .admin-digibridge-application-card-content {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .admin-digibridge-application-card-name {
+    font-size: 1.15rem;
+  }
+
+  .admin-digibridge-application-card-specialization {
+    font-size: 0.88rem;
+    padding: 8px 12px;
+  }
+
+  .admin-digibridge-application-card-info-item {
+    font-size: 0.85rem;
+    gap: 8px;
+  }
+
+  .admin-digibridge-application-card-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .admin-digibridge-application-card-education,
+  .admin-digibridge-application-card-experience {
+    padding: 10px;
+    font-size: 0.85rem;
+  }
+
+  .admin-digibridge-application-card-actions {
+    padding: 14px 16px;
+    gap: 8px;
+  }
+
+  .admin-digibridge-application-card-btn {
+    padding: 10px 12px;
+    font-size: 0.85rem;
+  }
+
+  .admin-digibridge-application-card-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .admin-digibridge-application-card-action-group {
+    gap: 8px;
+  }
+}
+
+/* Small Phones (320px - 479px) */
+@media (max-width: 479px) {
+  .admin-digibridge-application-card-header {
+    padding: 14px;
+  }
+
+  .admin-digibridge-application-card-photo {
+    width: 75px;
+    height: 75px;
+  }
+
+  .admin-digibridge-application-card-badge {
+    top: 10px;
+    right: 10px;
+    padding: 5px 9px;
+  }
+
+  .admin-digibridge-application-card-badge-icon {
+    font-size: 0.95rem;
+  }
+
+  .admin-digibridge-application-card-badge-text {
+    font-size: 0.75rem;
+  }
+
+  .admin-digibridge-application-card-content {
+    padding: 14px;
+    gap: 11px;
+  }
+
+  .admin-digibridge-application-card-name {
+    font-size: 1.1rem;
+  }
+
+  .admin-digibridge-application-card-specialization {
+    font-size: 0.85rem;
+    padding: 7px 11px;
+    gap: 6px;
+  }
+
+  .admin-digibridge-application-card-spec-icon {
+    font-size: 1.1rem;
+  }
+
+  .admin-digibridge-application-card-info-item {
+    font-size: 0.82rem;
+    gap: 7px;
+  }
+
+  .admin-digibridge-application-card-icon {
+    width: 15px;
+    height: 15px;
+  }
+
+  .admin-digibridge-application-card-languages {
+    font-size: 1.1rem;
+    letter-spacing: 3px;
+  }
+
+  .admin-digibridge-application-card-education,
+  .admin-digibridge-application-card-experience {
+    padding: 9px;
+    font-size: 0.82rem;
+    gap: 8px;
+  }
+
+  .admin-digibridge-application-card-actions {
+    padding: 12px 14px;
+    gap: 8px;
+  }
+
+  .admin-digibridge-application-card-btn {
+    padding: 9px 11px;
+    font-size: 0.82rem;
+    gap: 6px;
+  }
+
+  .admin-digibridge-application-card-btn svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .admin-digibridge-application-card-action-group {
+    gap: 8px;
+  }
+
+  .admin-digibridge-application-card:hover {
+    transform: translateY(-2px);
+  }
+}

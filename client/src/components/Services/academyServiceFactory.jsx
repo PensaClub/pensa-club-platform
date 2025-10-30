@@ -4,8 +4,8 @@ import { requestFactory } from "./requester";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
-export const academyServiceFactory = (token) => {
-  const requester = requestFactory(token);
+export const academyServiceFactory = () => {
+  const requester = requestFactory();
 
   return {
     // ===============================
@@ -15,7 +15,7 @@ export const academyServiceFactory = (token) => {
     // Статистики за About секцията
     getStats: async () => {
       return requester.get(`${apiUrl}/academy/stats`);
-      
+
       /* 
         BACKEND TODO:
         GET /api/academy/stats
@@ -33,7 +33,7 @@ export const academyServiceFactory = (token) => {
     // Featured отзиви за Testimonials секцията (3-5 отзива)
     getFeaturedTestimonials: async (limit = 5) => {
       return requester.get(`${apiUrl}/academy/testimonials/featured?limit=${limit}`);
-      
+
       /* 
         BACKEND TODO:
         GET /api/academy/testimonials/featured?limit=5
@@ -205,13 +205,14 @@ export const academyServiceFactory = (token) => {
     },
 
     // 5. Кандидатстване за ментор
+
     applyAsMentor: async (applicationData) => {
       /*
         BACKEND TODO:
         POST /api/academy/mentors/apply
-        Content-Type: multipart/form-data (ако има CV) ИЛИ application/json (без CV)
+        Content-Type: application/json
         
-        Request Body (FormData ако има CV, JSON ако няма):
+        Request Body:
         {
           name: string,
           email: string,
@@ -222,8 +223,15 @@ export const academyServiceFactory = (token) => {
           experience: string,
           motivation: string,
           availability: string,
-          languages: string[] (като JSON string в FormData или array в JSON),
-          cv?: File (само в FormData)
+          languages: string[],
+          viber: string,
+          facebook: string,
+          linkedin: string,
+          otherContact: string,
+          photoUrl: string | null,
+          cvUrl: string | null,
+          cvOriginalName: string | null,
+          cvStoragePath: string | null
         }
         
         Response: {
@@ -234,47 +242,30 @@ export const academyServiceFactory = (token) => {
         }
       */
 
-      // ✅ ВАЖНО: За FormData НЕ използваме стандартния requester
-      // Защото той сетва 'content-type': 'application/json'
-      if (applicationData.cv) {
-        const formData = new FormData();
-        Object.keys(applicationData).forEach(key => {
-          if (key === 'languages') {
-            formData.append(key, JSON.stringify(applicationData[key]));
-          } else {
-            formData.append(key, applicationData[key]);
-          }
-        });
+      // ✅ Изпращаме само JSON с Firebase URLs (не изпращаме файловете директно)
+      const payload = {
+        name: applicationData.name,
+        email: applicationData.email,
+        phone: applicationData.phone,
+        age: applicationData.age,
+        education: applicationData.education || '',
+        specialization: applicationData.specialization || '',
+        experience: applicationData.experience || '',
+        motivation: applicationData.motivation || '',
+        availability: applicationData.availability || '',
+        languages: applicationData.languages || [],
+        viber: applicationData.viber || '',
+        facebook: applicationData.facebook || '',
+        linkedin: applicationData.linkedin || '',
+        otherContact: applicationData.otherContact || '',
+        photoUrl: applicationData.photoUrl || null,
+        cvUrl: applicationData.cvUrl || null,
+        cvOriginalName: applicationData.cvOriginalName || null,
+        cvStoragePath: applicationData.cvStoragePath || null,
+      };
 
-        // ✅ Директен fetch call за FormData (не минава през requester)
-        const serializedAuth = localStorage.getItem('auth');
-        const headers = {};
-        
-        if (serializedAuth) {
-          const auth = JSON.parse(serializedAuth);
-          if (auth.token) {
-            headers.Authorization = `Bearer ${auth.token}`;
-          }
-        }
-
-        const response = await fetch(`${apiUrl}/academy/mentors/apply`, {
-          method: 'POST',
-          credentials: 'include',
-          headers: headers, // ✅ НЕ сетваме Content-Type - браузърът го прави автоматично за FormData
-          body: formData
-        });
-
-        if (!response.ok) {
-          throw await response.json();
-        }
-
-        return response.json();
-      }
-
-      // ✅ Без CV - обикновен JSON през requester
-      return requester.post(`${apiUrl}/academy/mentors/apply`, applicationData);
+      return requester.post(`${apiUrl}/academy/mentors/apply`, payload);
     },
-
     // 6. Контактна форма към ментор
     contactMentor: async (mentorId, contactData) => {
       /*
@@ -379,36 +370,143 @@ export const academyServiceFactory = (token) => {
       */
       return requester.put(`${apiUrl}/academy/admin/notifications/${notificationId}/read`);
     },
-
-    // ===============================
-    // CHAT SYSTEM (FIREBASE)
-    // ===============================
+// Маркира ВСИЧКИ нотификации като прочетени
+markAllNotificationsAsRead: async () => {
+  return requester.put(`${apiUrl}/academy/admin/notifications/mark-all-read`);
+  
+  /* 
+    BACKEND TODO:
+    PUT /api/academy/admin/notifications/mark-all-read
+    Auth: Required (Admin only)
     
-    /*
-      ❌ НЕ СА НУЖНИ BACKEND ENDPOINTS ЗА ЧАТА!
-      
-      Цялата чат система работи с Firebase Realtime Database директно от frontend:
-      - createChatRequest → Firebase
-      - acceptChatRequest → Firebase
-      - sendMessage → Firebase
-      - listenToMessages → Firebase
-      - endConversation → Firebase
-      - uploadChatFile → Firebase Storage
-      
-      Всички функции са в src/firebase/firebaseChat.js
-      
-      OPTIONAL: Ако искаш email notifications за админите при нов чат request,
-      можеш да добавиш webhook endpoint:
-      
-      POST /api/academy/webhooks/chat-notification
-      {
-        type: 'new_chat_request',
-        requestId: string,
-        userId: string,
-        userName: string,
-        problem: string
-      }
-    */
+    Response: {
+      success: true,
+      markedCount: 15
+    }
+  */
+},
+
+// Изтрива нотификация
+deleteNotification: async (notificationId) => {
+  return requester.delete(`${apiUrl}/academy/admin/notifications/${notificationId}`);
+  
+  /* 
+    BACKEND TODO:
+    DELETE /api/academy/admin/notifications/:notificationId
+    Auth: Required (Admin only)
+    
+    Response: {
+      success: true
+    }
+  */
+},
+    // Вземане на pending кандидатури
+    getPendingMentorApplications: async () => {
+      return requester.get(`${apiUrl}/academy/mentors/applications/pending`);
+
+      /* 
+        BACKEND TODO:
+        GET /api/academy/mentors/applications/pending
+        Auth: Required (Admin only)
+        
+        Response: {
+          success: true,
+          applications: [
+            {
+              id: 101,
+              name: "Даниела Стоянова",
+              email: "daniela@example.com",
+              phone: "+359888111222",
+              age: 25,
+              photoUrl: "https://...",
+              specialization: "Digital Security",
+              education: "ВТУ - Информационна сигурност",
+              experience: "1 година опит",
+              motivation: "...",
+              availability: "Гъвкав график",
+              languages: ["bg", "en"],
+              viber: "+359888111222",
+              facebook: "...",
+              linkedin: "...",
+              otherContact: "",
+              cvUrl: "https://...",
+              cvOriginalName: "CV.pdf",
+              status: "pending",
+              createdAt: "2025-01-28T09:30:00Z"
+            }
+          ],
+          total: 15
+        }
+      */
+    },
+
+    // Отхвърляне на кандидатура
+    rejectMentorApplication: async (applicationId, rejectionReason) => {
+      return requester.post(`${apiUrl}/academy/mentors/applications/${applicationId}/reject`, {
+        rejectionReason
+      });
+
+      /* 
+        BACKEND TODO:
+        POST /api/academy/mentors/applications/:applicationId/reject
+        Auth: Required (Admin only)
+        
+        Request Body:
+        {
+          "rejectionReason": "Недостатъчен опит в областта"
+        }
+        
+        Response: {
+          success: true,
+          message: "Кандидатурата беше отхвърлена",
+          applicationId: 101
+        }
+        
+        BACKEND ACTION:
+        1. Обнови status на кандидатурата от "pending" → "rejected"
+        2. Запази rejection reason
+        3. Запази rejected_at timestamp
+        4. (Опционално) Изпрати email до кандидата
+      */
+    },
+    // ===============================
+// MENTOR STATISTICS
+// ===============================
+
+/**
+ * Взема подробна статистика за всички ментори
+ */
+getMentorStatistics: async (timeFilter = 'thisMonth') => {
+  return requester.get(`${apiUrl}/academy/mentors/statistics?timeFilter=${timeFilter}`);
+},
+
+/**
+ * Взема само обща статистика (overview)
+ */
+getMentorStatisticsOverview: async () => {
+  return requester.get(`${apiUrl}/academy/mentors/statistics/overview`);
+},
+
+/**
+ * Взема разпределение по специализация
+ */
+getMentorsBySpecialization: async () => {
+  return requester.get(`${apiUrl}/academy/mentors/statistics/by-specialization`);
+},
+
+/**
+ * Взема тренд на активност през времето
+ */
+getMentorActivityTrend: async (months = 6) => {
+  return requester.get(`${apiUrl}/academy/mentors/statistics/activity-trend?months=${months}`);
+},
+
+/**
+ * Взема детайлна статистика за конкретен ментор
+ */
+getMentorDetailedStatistics: async (mentorId) => {
+  return requester.get(`${apiUrl}/academy/mentors/${mentorId}/detailed-statistics`);
+},
   };
 };
 

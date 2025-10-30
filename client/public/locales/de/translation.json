@@ -584,6 +584,12 @@
     "upload_image_btn": "Bild hochladen"
   },
   "admin": {
+    "mentors": {
+      "title": "Mentoren",
+      "overview": "Mentoren-Übersicht",
+      "applications": "Bewerbungen",
+      "statistics": "Statistiken"
+    },
     "pending_announcements": "Nicht genehmigte Anzeigen",
     "search": "Suchen",
     "name": "Name",
@@ -11065,6 +11071,8 @@
       "mobileMenu": "Menü",
       "login": "Anmelden",
       "nav": {
+        "myChats": "Chats",
+        "mentorDashboard": "Chats",
         "home": "Startseite",
         "courses": "Kurse",
         "mentors": "Mentoren",
@@ -11078,7 +11086,9 @@
         "myCourses": "Meine Kurse",
         "myMentor": "Mein Mentor",
         "profile": "Profil",
-        "logout": "Abmelden"
+        "logout": "Abmelden",
+        "myChats": "Chats",
+        "mentorDashboard": "Chats"
       }
     },
     "hero": {
@@ -11327,121 +11337,117 @@
       }
     },
     "becomeMentor": {
-      "meta": {
-        "title": "Werden Sie Mentor | DigiBridge Academy",
-        "description": "Bewerben Sie sich als Mentor bei der DigiBridge Academy und helfen Sie jungen Menschen"
-      },
       "authRequired": {
-        "icon": "🔒",
-        "title": "Sie müssen sich anmelden",
+        "title": "Melden Sie sich an",
         "description": "Um sich als Mentor zu bewerben, melden Sie sich bitte an oder registrieren Sie sich.",
-        "loginButton": "Anmelden",
-        "registerButton": "Registrieren"
+        "login": "Anmelden",
+        "register": "Registrieren"
       },
       "hero": {
-        "title": "Werden Sie Mentor bei DigiBridge",
-        "subtitle": "Helfen Sie jungen Menschen, digitale Fähigkeiten zu erwerben und verändern Sie ihre Zukunft"
+        "title": "Werden Sie Mentor",
+        "subtitle": "Teilen Sie Ihr Wissen und helfen Sie Senioren, die digitale Welt zu meistern"
       },
       "intro": {
-        "icon": "🎓",
         "title": "Warum Mentor werden?",
-        "description": "Als Mentor bei DigiBridge haben Sie die Möglichkeit, Ihr Wissen und Ihre Erfahrung mit jungen Menschen zu teilen, die Orientierung in der digitalen Welt benötigen. Sie werden die Brücke zwischen Technologie und Menschen sein, die sie verstehen wollen.",
-        "benefits": {
-          "change": {
-            "icon": "✨",
-            "title": "Veränderung",
-            "description": "Machen Sie einen echten Unterschied im Leben junger Menschen"
-          },
-          "community": {
-            "icon": "🤝",
-            "title": "Gemeinschaft",
-            "description": "Werden Sie Teil einer dynamischen Mentoren-Community"
-          },
-          "development": {
-            "icon": "📈",
-            "title": "Entwicklung",
-            "description": "Entwickeln Sie Ihre Kommunikations- und Lehrerfahrungen"
-          }
+        "description": "Als Mentor an der DigiBridge Academy helfen Sie Senioren, die digitale Kluft zu überwinden und sich online sicher zu fühlen. Dies ist eine Gelegenheit, einen echten Unterschied im Leben der Menschen zu machen."
+      },
+      "benefits": {
+        "benefit1": {
+          "title": "Beruflich entwickeln",
+          "description": "Verbessern Sie Ihre Kommunikationsfähigkeiten und sammeln Sie Lehrerfahrung"
+        },
+        "benefit2": {
+          "title": "Verbindungen aufbauen",
+          "description": "Treffen Sie inspirierende Menschen jeden Alters und schaffen Sie generationsübergreifende Freundschaften"
+        },
+        "benefit3": {
+          "title": "Einen Unterschied machen",
+          "description": "Helfen Sie Senioren, sich in der digitalen Welt sicher und unabhängig zu fühlen"
         }
       },
       "form": {
+        "schedule": "Bevorzugter Zeitplan",
+        "schedulePlaceholder": "Zeitplan wählen",
+        "scheduleHelper": "Wann führen Sie am liebsten Schulungen durch?",
+        "languagesHelper": "In welchen Sprachen können Sie unterrichten? (optional)",
         "title": "Jetzt bewerben",
-        "subtitle": "Füllen Sie das Formular unten aus und wir werden uns innerhalb von 5 Werktagen bei Ihnen melden",
-        "sections": {
-          "personal": "Persönliche Informationen",
-          "professional": "Berufliche Informationen",
-          "languages": "Sprachen",
-          "motivation": "Warum möchten Sie Mentor werden?",
-          "cv": "Lebenslauf (optional)"
-        },
-        "fields": {
-          "name": {
-            "label": "Vollständiger Name",
-            "placeholder": "Vor- und Nachname"
-          },
-          "email": {
-            "label": "E-Mail",
-            "placeholder": "email@beispiel.de"
-          },
-          "phone": {
-            "label": "Telefon",
-            "placeholder": "+49 123 456 789"
-          },
-          "age": {
-            "label": "Alter",
-            "placeholder": "25"
-          },
-          "education": {
-            "label": "Bildung",
-            "placeholder": "Universität - Informatik, Master 2023"
-          },
-          "specialization": {
-            "label": "Spezialisierung",
-            "placeholder": "Spezialisierung wählen"
-          },
-          "experience": {
-            "label": "Erfahrung (Jahre)",
-            "placeholder": "3 Jahre"
-          },
-          "availability": {
-            "label": "Verfügbarkeit",
-            "placeholder": "Wochenenden und Abende nach 18 Uhr"
-          },
-          "motivation": {
-            "label": "Motivation",
-            "placeholder": "Erzählen Sie uns, warum Sie jungen Menschen helfen möchten und was Sie ihnen bieten können... (mindestens 50 Zeichen)"
-          },
-          "cv": {
-            "label": "Lebenslauf hochladen",
-            "placeholder": "Lebenslauf hochladen (PDF, DOC, DOCX - max. 5MB)"
-          }
-        },
-        "errors": {
-          "name": "Name ist erforderlich",
-          "email": "E-Mail ist erforderlich",
-          "phone": "Telefon ist erforderlich",
-          "age": "Mindestalter 18 Jahre",
-          "education": "Bildung ist erforderlich",
-          "specialization": "Bitte wählen Sie eine Spezialisierung",
-          "experience": "Erfahrung ist erforderlich",
-          "motivation": "Motivation muss mindestens 50 Zeichen lang sein",
-          "availability": "Verfügbarkeit ist erforderlich",
-          "languages": "Bitte wählen Sie mindestens eine Sprache",
-          "fillAll": "Bitte füllen Sie alle Pflichtfelder korrekt aus",
-          "fileTooBig": "Datei ist zu groß! Maximum 5MB."
-        },
-        "counter": "Zeichen mindestens",
-        "submitButton": "Bewerbung absenden",
+        "subtitle": "Füllen Sie das Formular aus und wir werden uns bald bei Ihnen melden",
+        "name": "Vollständiger Name",
+        "namePlaceholder": "Max Mustermann",
+        "age": "Alter",
+        "email": "E-Mail-Adresse",
+        "education": "Ausbildung",
+        "educationPlaceholder": "Z.B. TU München - Informatik, Bachelor 2023",
+        "specialization": "Spezialisierung",
+        "specializationPlaceholder": "Spezialisierung wählen",
+        "experience": "Erfahrung",
+        "experiencePlaceholder": "Z.B. 2 Jahre Lehrerfahrung",
+        "motivation": "Motivation",
+        "motivationPlaceholder": "Warum möchten Sie Mentor werden? (max. 500 Zeichen)",
+        "availability": "Verfügbarkeit",
+        "availabilityPlaceholder": "Verfügbarkeit wählen",
+        "languages": "Sprachen",
+        "submit": "Bewerbung absenden",
         "submitting": "Wird gesendet...",
-        "note": "* Alle Felder sind Pflichtfelder außer Lebenslauf"
-      }
+        "submitNote": "Wir werden Ihre Bewerbung prüfen und uns bald bei Ihnen melden"
+      },
+      "photo": {
+        "label": "Foto",
+        "upload": "Foto hochladen",
+        "uploading": "Hochladen...",
+        "change": "Foto ändern",
+        "error": "Fehler beim Hochladen des Fotos",
+        "formatError": "Bitte laden Sie ein Bild im JPG-, PNG- oder WEBP-Format hoch"
+      },
+      "contactMethods": {
+        "title": "Kontaktmethoden",
+        "phone": "Telefon",
+        "viber": "Viber",
+        "facebook": "Facebook",
+        "linkedin": "LinkedIn",
+        "other": "Andere",
+        "otherPlaceholder": "Z.B. Telegram, WhatsApp, Skype..."
+      },
+      "specialization": {
+        "other": "Andere"
+      },
+      "cv": {
+        "label": "Lebenslauf",
+        "optional": "Optional",
+        "upload": "Lebenslauf hochladen",
+        "uploading": "Hochladen...",
+        "change": "Datei ändern",
+        "error": "Fehler beim Hochladen des Lebenslaufs",
+        "formatError": "Bitte laden Sie eine Datei im PDF-, DOC-, DOCX- oder TXT-Format hoch (max 10MB)"
+      },
+      "sections": {
+        "personalInfo": "Persönliche Informationen",
+        "education": "Ausbildung und Erfahrung",
+        "schedule": "Zeitplan und Sprachen"
+      },
+      "errors": {
+        "nameRequired": "Name ist erforderlich",
+        "emailRequired": "E-Mail ist erforderlich",
+        "emailInvalid": "Ungültige E-Mail-Adresse",
+        "ageRequired": "Alter ist erforderlich",
+        "ageInvalid": "Alter muss zwischen 16 und 100 sein",
+        "educationRequired": "Ausbildung ist erforderlich",
+        "specializationRequired": "Spezialisierung ist erforderlich",
+        "experienceRequired": "Erfahrung ist erforderlich",
+        "motivationRequired": "Motivation ist erforderlich",
+        "availabilityRequired": "Verfügbarkeit ist erforderlich",
+        "languagesRequired": "Wählen Sie mindestens eine Sprache",
+        "fillRequired": "Bitte füllen Sie alle Pflichtfelder aus",
+        "submitError": "Fehler beim Absenden der Bewerbung. Bitte versuchen Sie es erneut."
+      },
+      "success": "Bewerbung erfolgreich abgeschickt! Wir werden uns bald bei Ihnen melden."
     },
     "chatButton": {
       "help": "Hilfe",
       "ariaLabel": "Hilfe-Chat öffnen"
     },
     "chatWindow": {
-       "waitingForMentor": "Warten auf Mentor...",
+      "waitingForMentor": "Warten auf Mentor...",
       "canStartChatting": "Sie können jetzt mit dem Chatten beginnen!",
       "requestSent": "Anfrage erfolgreich gesendet!",
       "requestCreated": "Sie werden benachrichtigt, wenn ein Mentor Ihre Anfrage annimmt",
@@ -11556,5 +11562,419 @@
       "requestAccepted": "Anfrage erfolgreich angenommen!",
       "errorAccepting": "Fehler beim Annehmen der Anfrage"
     }
+  },
+  "AdminDigiBridgeMentors": {
+    "title": "Mentoren-Verwaltung",
+    "subtitle": "Ansehen, bearbeiten und verwalten Sie genehmigte Mentoren in der DigiBridge Academy",
+    "exportCSV": "CSV exportieren",
+    "bulkActions": "Massenaktionen",
+    "cancelBulk": "Abbrechen",
+    "selectedCount": "Ausgewählt: {{count}}",
+    "deleteSelected": "Ausgewählte löschen",
+    "selectAll": "Alle auswählen",
+    "loading": "Mentoren werden geladen...",
+    "noResults": "Keine Mentoren gefunden",
+    "noResultsDescription": "Versuchen Sie, die Filter zu ändern oder die Suche zu löschen",
+    "rejectedApplications": "Abgelehnte Bewerbungen",
+    "rejectionReason": "Ablehnungsgrund",
+    "approveNow": "Jetzt genehmigen",
+    "confirmDeactivate": "Sind Sie sicher, dass Sie diesen Mentor deaktivieren möchten?",
+    "confirmDelete": "Sind Sie sicher, dass Sie diesen Mentor löschen möchten? Diese Aktion ist unwiderruflich!",
+    "confirmApprove": "Sind Sie sicher, dass Sie diesen Mentor genehmigen möchten?",
+    "confirmBulkDelete": "Sind Sie sicher, dass Sie {{count}} Mentoren löschen möchten? Diese Aktion ist unwiderruflich!",
+    "deactivateSuccess": "Mentor wurde erfolgreich deaktiviert",
+    "deleteSuccess": "Mentor wurde erfolgreich gelöscht",
+    "approveSuccess": "Mentor wurde erfolgreich genehmigt",
+    "bulkDeleteSuccess": "Mentoren wurden erfolgreich gelöscht",
+    "exportSuccess": "CSV-Datei wurde erfolgreich exportiert",
+    "errors": {
+      "fetchError": "Fehler beim Laden der Mentoren",
+      "deactivateError": "Fehler beim Deaktivieren des Mentors",
+      "deleteError": "Fehler beim Löschen des Mentors",
+      "approveError": "Fehler beim Genehmigen des Mentors",
+      "bulkDeleteError": "Fehler beim Massenlöschen"
+    },
+    "Stats": {
+      "totalMentors": "Gesamt Mentoren",
+      "onlineMentors": "Online",
+      "totalStudents": "Studenten",
+      "averageRating": "Durchschnittliche Bewertung"
+    },
+    "Filters": {
+      "searchPlaceholder": "Nach Name, E-Mail oder Spezialisierung suchen...",
+      "allSpecializations": "Alle Spezialisierungen",
+      "digitalSecurity": "Digitale Sicherheit",
+      "mediaLiteracy": "Medienkompetenz",
+      "socialMedia": "Soziale Medien",
+      "onlineBanking": "Online-Banking",
+      "basicSkills": "Grundlegende Computerkenntnisse",
+      "allStatuses": "Alle Status",
+      "online": "Online",
+      "offline": "Offline",
+      "sortByName": "Nach Name sortieren",
+      "sortByStudents": "Nach Studenten sortieren",
+      "sortByRating": "Nach Bewertung sortieren",
+      "sortByDate": "Nach Datum sortieren",
+      "clearFilters": "Filter löschen",
+      "resultsCount": "{{count}} Mentoren gefunden"
+    },
+    "Card": {
+      "online": "Online",
+      "offline": "Offline",
+      "years": "Jahre",
+      "students": "Studenten",
+      "rating": "Bewertung",
+      "sessions": "Sitzungen",
+      "priorityContact": "Prioritätskontakt",
+      "phone": "Telefon",
+      "other": "Andere",
+      "viewDetails": "Details",
+      "edit": "Bearbeiten",
+      "sendEmail": "E-Mail senden",
+      "deactivate": "Deaktivieren",
+      "delete": "Löschen"
+    },
+    "DetailModal": {
+      "title": "Mentor-Details",
+      "years": "Jahre",
+      "online": "Online",
+      "offline": "Offline",
+      "students": "Studenten",
+      "rating": "Bewertung",
+      "sessions": "Sitzungen",
+      "contactInfo": "Kontaktinformationen",
+      "phone": "Telefon",
+      "otherContact": "Anderer Kontakt",
+      "priorityContact": "Prioritätskontakt",
+      "educationExperience": "Bildung & Erfahrung",
+      "education": "Bildung",
+      "experience": "Erfahrung",
+      "availabilityLanguages": "Zeitplan & Sprachen",
+      "availability": "Zeitplan",
+      "languages": "Sprachen",
+      "motivation": "Motivation",
+      "downloadCV": "Lebenslauf herunterladen",
+      "adminNotes": "Admin-Notizen",
+      "importantDates": "Wichtige Daten",
+      "createdAt": "Erstellt",
+      "approvedAt": "Genehmigt",
+      "lastActiveAt": "Zuletzt aktiv",
+      "close": "Schließen"
+    },
+    "SendEmailModal": {
+      "title": "E-Mail an Mentor senden",
+      "sendingTo": "Senden an",
+      "subjectLabel": "Betreff",
+      "subjectPlaceholder": "E-Mail-Betreff eingeben...",
+      "messageLabel": "Nachricht",
+      "messagePlaceholder": "Schreiben Sie hier Ihre Nachricht...",
+      "fillAllFields": "Bitte füllen Sie alle Felder aus",
+      "cancelButton": "Abbrechen",
+      "sendButton": "Senden",
+      "sendingButton": "Wird gesendet...",
+      "successMessage": "E-Mail wurde erfolgreich gesendet!",
+      "errorMessage": "Fehler beim Senden der E-Mail"
+    },
+    "RejectedDetailModal": {
+      "title": "Details zur abgelehnten Bewerbung",
+      "years": "Jahre",
+      "rejectionReason": "Ablehnungsgrund",
+      "contactInfo": "Kontaktinformationen",
+      "phone": "Telefon",
+      "otherContact": "Anderer Kontakt",
+      "copyToClipboard": "Kopieren",
+      "copied": "Kopiert!",
+      "copyError": "Fehler beim Kopieren",
+      "educationExperience": "Bildung & Erfahrung",
+      "education": "Bildung",
+      "experience": "Erfahrung",
+      "availabilityLanguages": "Zeitplan & Sprachen",
+      "availability": "Zeitplan",
+      "languages": "Sprachen",
+      "motivation": "Motivation",
+      "downloadCV": "Lebenslauf herunterladen",
+      "importantDates": "Wichtige Daten",
+      "createdAt": "Erstellt",
+      "rejectedAt": "Abgelehnt",
+      "close": "Schließen",
+      "approveNow": "Jetzt genehmigen",
+      "confirmApprove": "Möchten Sie diese Bewerbung wirklich genehmigen?"
+    },
+    "EditModal": {
+      "title": "Mentor bearbeiten",
+      "editingMentor": "Bearbeitung von",
+      "draftRestored": "Entwurf wiederhergestellt",
+      "basicInfo": "Grundinformationen",
+      "nameLabel": "Name",
+      "ageLabel": "Alter",
+      "specializationLabel": "Spezialisierung",
+      "selectSpecialization": "Spezialisierung auswählen",
+      "contactInfo": "Kontaktinformationen",
+      "phoneLabel": "Telefon",
+      "otherContactLabel": "Anderer Kontakt",
+      "priorityContactLabel": "Prioritätskontakt",
+      "selectPriorityContact": "Prioritätskontakt auswählen",
+      "educationExperience": "Bildung & Erfahrung",
+      "educationLabel": "Bildung",
+      "experienceLabel": "Erfahrung",
+      "availabilityLanguages": "Zeitplan & Sprachen",
+      "availabilityLabel": "Zeitplan",
+      "languagesLabel": "Sprachen",
+      "motivation": "Motivation",
+      "motivationLabel": "Motivation zur Teilnahme",
+      "adminNotes": "Admin-Notizen",
+      "adminNotesLabel": "Notizen (nur für Administratoren sichtbar)",
+      "adminNotesPlaceholder": "Interne Notizen für diesen Mentor hinzufügen...",
+      "fillRequiredFields": "Bitte füllen Sie alle Pflichtfelder aus",
+      "invalidEmail": "Ungültige E-Mail-Adresse",
+      "confirmLeave": "Sie haben nicht gespeicherte Änderungen. Möchten Sie wirklich verlassen?",
+      "keepDraft": "Möchten Sie die Entwurfsänderungen behalten?",
+      "cancelButton": "Abbrechen",
+      "saveButton": "Änderungen speichern",
+      "savingButton": "Wird gespeichert...",
+      "successMessage": "Daten wurden erfolgreich aktualisiert!",
+      "errorMessage": "Fehler beim Aktualisieren der Daten"
+    }
+  },
+  "AdminNotificationBell": {
+    "title": "Benachrichtigungen",
+    "new": "neu",
+    "loading": "Laden...",
+    "noNotifications": "Keine Benachrichtigungen",
+    "viewAll": "Alle anzeigen",
+    "justNow": "Gerade eben",
+    "minutesAgo": "Min. her",
+    "hoursAgo": "Std. her",
+    "daysAgo": "Tage her"
+  },
+   "AdminDigiBridgeMentorApplications": {
+    "title": "Mentoren-Bewerbungen",
+    "description": "Überprüfen und verwalten Sie eingehende Mentoren-Bewerbungen für die DigiBridge Academy",
+    
+    "stats": {
+      "totalApplications": "Gesamte Bewerbungen",
+      "newToday": "Neu heute",
+      "pending": "Ausstehend"
+    },
+    
+    "filters": {
+      "searchPlaceholder": "Nach Name oder E-Mail suchen...",
+      "specializationLabel": "Spezialisierung",
+      "specializationAll": "Alle Spezialisierungen",
+      "sortByLabel": "Sortieren nach",
+      "sortNewest": "Neueste zuerst",
+      "sortOldest": "Älteste zuerst",
+      "sortName": "Nach Name (A-Z)"
+    },
+    
+    "loading": "Bewerbungen werden geladen...",
+    
+    "noApplications": "Keine Bewerbungen",
+    "noApplicationsDescription": "Derzeit gibt es keine Mentoren-Bewerbungen",
+    
+    "approveSuccess": "Bewerbung erfolgreich genehmigt!",
+    "approveError": "Fehler beim Genehmigen der Bewerbung",
+    "rejectSuccess": "Bewerbung abgelehnt",
+    "rejectError": "Fehler beim Ablehnen der Bewerbung",
+    
+    "viewDetails": "Details ansehen",
+    "sendEmail": "E-Mail senden",
+    "approve": "Genehmigen",
+    "reject": "Ablehnen"
+  },
+  "ApplicationsStats": {
+    "totalApplications": "Gesamte Bewerbungen",
+    "newToday": "Neu heute",
+    "pending": "Ausstehend"
+  },
+  "ApplicationsFilters": {
+    "searchPlaceholder": "Nach Name oder E-Mail suchen...",
+    "specializationLabel": "Spezialisierung",
+    "specializationAll": "Alle Spezialisierungen",
+    "digitalSecurity": "Digitale Sicherheit",
+    "socialMedia": "Soziale Medien",
+    "onlineBanking": "Online-Banking",
+    "mediaLiteracy": "Medienkompetenz",
+    "eGovernment": "E-Government",
+    "sortByLabel": "Sortieren nach",
+    "sortNewest": "Neueste zuerst",
+    "sortOldest": "Älteste zuerst",
+    "sortName": "Nach Name (A-Z)",
+    "clearFilters": "Filter löschen"
+  },
+  "AdminDigiBridgeApplicationCard": {
+    "pending": "Ausstehend",
+    "viewDetails": "Details ansehen",
+    "sendEmail": "E-Mail senden",
+    "approve": "Genehmigen",
+    "reject": "Ablehnen"
+  },
+   "AdminDigiBridgeApplicationDetailModal": {
+    "appliedOn": "Beworben am",
+    "contactInfo": "Kontaktinformationen",
+    "email": "E-Mail",
+    "phone": "Telefon",
+    "age": "Alter",
+    "years": "Jahre",
+    "languages": "Sprachen",
+    "langBulgarian": "Bulgarisch",
+    "langEnglish": "Englisch",
+    "langGerman": "Deutsch",
+    "langFrench": "Französisch",
+    "langSpanish": "Spanisch",
+    "langItalian": "Italienisch",
+    "education": "Ausbildung",
+    "experience": "Erfahrung",
+    "motivation": "Motivation",
+    "availability": "Verfügbarkeit",
+    "socialMedia": "Soziale Medien & Kontakte",
+    "other": "Andere",
+    "cv": "Lebenslauf (CV)",
+    "downloadCV": "CV herunterladen",
+    "rejectionReason": "Ablehnungsgrund",
+    "rejectionReasonPlaceholder": "Bitte beschreiben Sie den Grund für die Ablehnung dieser Bewerbung...",
+    "rejectionReasonRequired": "Bitte geben Sie einen Ablehnungsgrund ein",
+    "sendEmail": "E-Mail senden",
+    "approve": "Bewerbung genehmigen",
+    "approving": "Genehmigung läuft...",
+    "reject": "Bewerbung ablehnen",
+    "rejecting": "Ablehnung läuft...",
+    "cancel": "Abbrechen",
+    "confirmRejectBtn": "Ablehnung bestätigen",
+    "confirmApprove": "Sind Sie sicher, dass Sie diese Bewerbung genehmigen möchten?",
+    "confirmReject": "Sind Sie sicher, dass Sie diese Bewerbung ablehnen möchten?",
+    "priorityContact": "Prioritätskontakt"
+  },
+
+  "AdminDigiBridgeSendEmailToApplicantModal": {
+    "title": "E-Mail an Bewerber senden",
+    "sendingTo": "Senden an",
+    "quickTemplates": "Schnellvorlagen",
+    "templateWelcomeName": "Willkommen",
+    "templateMoreInfoName": "Weitere Informationen",
+    "templateInterviewName": "Einladung zum Interview",
+    "templateWelcomeSubject": "Vielen Dank für Ihre Bewerbung",
+    "templateWelcomeMessage": "Hallo {{name}},\n\nVielen Dank für Ihr Interesse an der Mentor-Position im DigiBridge-Programm!\n\nIhre Bewerbung ist eingegangen und wird derzeit von unserem Team geprüft. Wir werden uns bald mit weiteren Informationen bei Ihnen melden.\n\nMit freundlichen Grüßen,\nDas Pensa Club Team",
+    "templateMoreInfoSubject": "Zusätzliche Informationen für Ihre Bewerbung erforderlich",
+    "templateMoreInfoMessage": "Hallo {{name}},\n\nVielen Dank für Ihre Bewerbung für die Mentor-Position im DigiBridge-Programm.\n\nUm die Prüfung Ihrer Bewerbung fortzusetzen, möchten wir einige zusätzliche Informationen von Ihnen erhalten.\n\nBitte antworten Sie auf diese E-Mail mit Details zu [spezifische Informationen].\n\nMit freundlichen Grüßen,\nDas Pensa Club Team",
+    "templateInterviewSubject": "Einladung zum Interview - DigiBridge Mentor",
+    "templateInterviewMessage": "Hallo {{name}},\n\nWir freuen uns, Ihnen mitteilen zu können, dass Ihre Bewerbung für die Mentor-Position im DigiBridge-Programm die erste Prüfungsstufe erfolgreich bestanden hat!\n\nWir möchten Sie zu einem Interview einladen, um weitere Details über Ihre Teilnahme am Programm zu besprechen.\n\nBitte antworten Sie auf diese E-Mail mit einem für Sie passenden Zeitpunkt für ein Treffen.\n\nMit freundlichen Grüßen,\nDas Pensa Club Team",
+    "subjectLabel": "E-Mail-Betreff",
+    "subjectPlaceholder": "E-Mail-Betreff eingeben...",
+    "messageLabel": "Nachricht",
+    "messagePlaceholder": "Schreiben Sie Ihre Nachricht hier...",
+    "fillAllFields": "Bitte füllen Sie alle Felder aus",
+    "successMessage": "E-Mail erfolgreich gesendet!",
+    "errorMessage": "Fehler beim Senden der E-Mail",
+    "cancelButton": "Abbrechen",
+    "sendButton": "E-Mail senden",
+    "sendingButton": "Wird gesendet..."
+  },
+  "AdminDigiBridgeMentorStatistics": {
+    "title": "Mentor-Statistiken",
+    "description": "Übersicht über Mentor-Aktivität und Leistung in der DigiBridge Academy",
+    "thisMonth": "Dieser Monat",
+    "lastMonth": "Letzter Monat",
+    "last3Months": "Letzte 3 Monate",
+    "allTime": "Gesamte Zeit",
+    "refresh": "Aktualisieren",
+    "loading": "Statistiken werden geladen..."
+  },
+  "StatisticsOverviewCards": {
+    "activeMentors": "Aktive Mentoren",
+    "mentors": "Mentoren",
+    "totalStudents": "Gesamte Studenten",
+    "students": "Studenten",
+    "averageRating": "Durchschnittliche Bewertung",
+    "coursesCompleted": "Abgeschlossene Kurse",
+    "courses": "Kurse",
+    "sessionsThisMonth": "Sitzungen diesen Monat",
+    "sessions": "Sitzungen",
+    "onlineHours": "Online-Stunden",
+    "hours": "Stunden",
+    "completionRate": "Abschlussrate",
+    "totalReviews": "Gesamte Bewertungen",
+    "reviews": "Bewertungen"
+  },
+  "TopMentorsByCourses": {
+    "title": "Top-Mentoren nach abgeschlossenen Kursen",
+    "subtitle": "Rangliste der Mentoren mit den meisten abgeschlossenen Kursen",
+    "yAxisLabel": "Anzahl der Kurse",
+    "courses": "Kurse",
+    "noData": "Keine Daten zum Anzeigen"
+  },
+  "TopMentorsByOnlineTime": {
+    "title": "Top-Mentoren nach Online-Zeit",
+    "subtitle": "Rangliste der Mentoren mit den meisten Online-Stunden in diesem Monat",
+    "yAxisLabel": "Online-Stunden",
+    "hours": "Stunden",
+    "thisMonth": "Dieser Monat",
+    "total": "Gesamt",
+    "noData": "Keine Daten zum Anzeigen"
+  },
+  "ActivityTrendChart": {
+    "title": "Aktivitätstrend",
+    "subtitle": "Verfolgung von Sitzungen und Online-Stunden in den letzten 6 Monaten",
+    "sessionsLabel": "Anzahl der Sitzungen",
+    "hoursLabel": "Online-Stunden",
+    "sessions": "Sitzungen",
+    "hours": "Stunden",
+    "noData": "Keine Daten zum Anzeigen"
+  },
+  "SessionQualityChart": {
+    "title": "Sitzungsqualität",
+    "subtitle": "Verteilung von abgeschlossenen, abgesagten und nicht wahrgenommenen Sitzungen",
+    "completed": "Abgeschlossen",
+    "canceled": "Abgesagt",
+    "noShow": "Nicht erschienen",
+    "sessions": "Sitzungen",
+    "percentage": "Prozent",
+    "noData": "Keine Daten zum Anzeigen"
+  },
+  "ResponseTimeChart": {
+    "title": "Antwortzeit",
+    "subtitle": "Durchschnittliche Mentor-Antwortzeit auf Schüleranfragen",
+    "xAxisLabel": "Antwortzeit (Minuten)",
+    "responseTime": "Antwortzeit",
+    "rating": "Bewertung",
+    "minutes": "Min",
+    "min": "Min",
+    "excellent": "Ausgezeichnet",
+    "veryGood": "Sehr gut",
+    "good": "Gut",
+    "needsImprovement": "Verbesserungsbedürftig",
+    "noData": "Keine Daten zum Anzeigen"
+  },
+  "MentorsBySpecialization": {
+    "title": "Mentoren nach Fachgebiet",
+    "subtitle": "Verteilung der Mentoren auf verschiedene Fachgebiete",
+    "yAxisLabel": "Anzahl der Mentoren",
+    "mentors": "Mentoren",
+    "students": "Studenten",
+    "avgRating": "Durchschn. Bewertung",
+    "noData": "Keine Daten zum Anzeigen"
+  },
+  "DetailedMentorsTable": {
+    "title": "Detaillierte Mentorinformationen",
+    "subtitle": "Vollständiger Überblick über alle {{count}} Mentoren mit detaillierten Metriken",
+    "name": "Name",
+    "specialization": "Fachgebiet",
+    "students": "Studenten",
+    "courses": "Kurse",
+    "rating": "Bewertung",
+    "onlineHours": "Online-Stunden",
+    "responseTime": "Antwortzeit",
+    "status": "Status",
+    "online": "Online",
+    "offline": "Offline"
+  },
+  "ExportStatistics": {
+    "exportPDF": "PDF exportieren",
+    "generating": "Wird generiert...",
+    "selectPeriod": "Zeitraum wählen",
+    "oneMonth": "Letzter Monat",
+    "threeMonths": "Letzte 3 Monate",
+    "oneYear": "Letztes Jahr",
+    "error": "Fehler beim Generieren des PDF-Berichts"
   }
 }

@@ -10,6 +10,7 @@
   z-index: 1000;
   background: transparent;
   transition: all 0.4s ease;
+  padding: 0 2% 0 3%;
 }
 
 .digibridge-header-scrolled {
@@ -20,9 +21,10 @@
 }
 
 .digibridge-header-container {
-  max-width: 1400px;
+  width: 100%;
+  max-width: 100%;
   margin: 0 auto;
-  padding: 0 40px;
+  padding: 0 10px;
   height: 80px;
   display: flex;
   align-items: center;
@@ -84,7 +86,7 @@
   align-items: center;
   gap: 8px;
   flex: 1;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .digibridge-header-nav-item {
@@ -724,5 +726,61 @@
 
   .digibridge-header-nav-item-active {
     outline: 2px solid #fff;
+  }
+}
+/* ===================================
+   NAVIGATION - РАЗДЕЛЕНА НА ДВЕ ЧАСТИ
+   =================================== */
+
+.digibridge-header-navigation {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ЛЯВА НАВИГАЦИЯ */
+.digibridge-header-navigation-left {
+  flex: 1;
+  justify-content: flex-start;
+  margin-left: 10px; /* Отместване от логото */
+}
+
+/* ДЯСНА НАВИГАЦИЯ */
+.digibridge-header-navigation-right {
+  flex: 0 0 auto;
+  justify-content: flex-end;
+  margin-right: 20px; /* Отместване преди Pensa Club */
+}
+
+/* Останалите nav стилове си остават същите */
+.digibridge-header-nav-item {
+  padding: 10px 12px;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.digibridge-header-nav-item:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.digibridge-header-nav-item-active {
+  background: rgba(255, 255, 255, 0.25);
+  font-weight: 600;
+}
+
+/* RESPONSIVE - скриваме navigation */
+@media (max-width: 1280px) {
+  .digibridge-header-navigation-left,
+  .digibridge-header-navigation-right {
+    display: none;
+  }
+
+  .digibridge-header-mobile-toggle {
+    display: flex;
   }
 }

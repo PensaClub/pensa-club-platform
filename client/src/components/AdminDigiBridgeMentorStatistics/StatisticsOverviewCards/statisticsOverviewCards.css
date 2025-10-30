@@ -1,0 +1,407 @@
+/* src/components/AdminDigiBridgeMentorStatistics/StatisticsOverviewCards/statisticsOverviewCards.css */
+
+/* ===================================
+   STATISTICS OVERVIEW CARDS - MAIN
+   =================================== */
+
+.statistics-overview-cards {
+  padding: 30px 40px;
+  background: #ffffff;
+}
+
+.statistics-overview-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+/* ===================================
+   STAT CARD
+   =================================== */
+
+.statistics-overview-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 28px 24px;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 2px solid #f3f4f6;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  cursor: default;
+}
+
+.statistics-overview-card:hover {
+  border-color: transparent;
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+
+.statistics-overview-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--card-gradient);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+
+.statistics-overview-card:hover::before {
+  transform: scaleX(1);
+}
+
+/* ===================================
+   ICON WRAPPER
+   =================================== */
+
+.statistics-overview-card-icon-wrapper {
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.statistics-overview-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  font-size: 1.8rem;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+.statistics-overview-card:hover .statistics-overview-card-icon {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+}
+
+/* ===================================
+   CONTENT
+   =================================== */
+
+.statistics-overview-card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+  z-index: 2;
+  min-width: 0; /* ✅ ВАЖНО за text overflow */
+}
+
+.statistics-overview-card-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #6b7280;
+  margin: 0;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+  white-space: nowrap; /* ✅ Не пренася на нов ред */
+  overflow: hidden;
+  text-overflow: ellipsis; /* ✅ Добавя ... */
+}
+
+.statistics-overview-card:hover .statistics-overview-card-label {
+  color: #374151;
+}
+
+.statistics-overview-card-value-wrapper {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap; /* ✅ Позволява пренасяне */
+}
+
+.statistics-overview-card-value {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #1f2937;
+  margin: 0;
+  line-height: 1;
+  transition: transform 0.3s ease;
+}
+
+.statistics-overview-card:hover .statistics-overview-card-value {
+  transform: scale(1.05);
+}
+
+.statistics-overview-card-total {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #9ca3af;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.statistics-overview-card-suffix {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #6b7280;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* ===================================
+   ANIMATED GLOW
+   =================================== */
+
+.statistics-overview-card-glow {
+  position: absolute;
+  bottom: -50%;
+  right: -50%;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  opacity: 0;
+  filter: blur(40px);
+  transition: opacity 0.5s ease;
+  z-index: 1;
+}
+
+.statistics-overview-card:hover .statistics-overview-card-glow {
+  opacity: 0.15;
+  animation: statistics-overview-glow-pulse 3s ease-in-out infinite;
+}
+
+@keyframes statistics-overview-glow-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.15;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.25;
+  }
+}
+
+/* ===================================
+   RESPONSIVE DESIGN
+   =================================== */
+
+/* Large Desktops (1440px+) */
+@media (min-width: 1440px) {
+  .statistics-overview-cards {
+    padding: 40px 50px;
+  }
+
+  .statistics-overview-cards-grid {
+    gap: 28px;
+  }
+
+  .statistics-overview-card {
+    padding: 32px 28px;
+  }
+
+  .statistics-overview-card-icon {
+    width: 70px;
+    height: 70px;
+    font-size: 2rem;
+  }
+
+  .statistics-overview-card-value {
+    font-size: 2.75rem;
+  }
+}
+
+/* Standard Desktops (1024px - 1439px) */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .statistics-overview-cards {
+    padding: 28px 35px;
+  }
+
+  .statistics-overview-cards-grid {
+    gap: 22px;
+  }
+
+  .statistics-overview-card {
+    padding: 26px 22px;
+  }
+
+  .statistics-overview-card-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 1.7rem;
+  }
+
+  .statistics-overview-card-value {
+    font-size: 2.3rem;
+  }
+}
+
+/* Tablets (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .statistics-overview-cards {
+    padding: 25px;
+  }
+
+  .statistics-overview-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+
+  .statistics-overview-card {
+    padding: 24px 20px;
+    gap: 18px;
+  }
+
+  .statistics-overview-card-icon {
+    width: 58px;
+    height: 58px;
+    font-size: 1.6rem;
+    border-radius: 12px;
+  }
+
+  .statistics-overview-card-label {
+    font-size: 0.85rem;
+  }
+
+  .statistics-overview-card-value {
+    font-size: 2.2rem;
+  }
+
+  .statistics-overview-card-total {
+    font-size: 1.2rem;
+  }
+
+  .statistics-overview-card-suffix {
+    font-size: 0.85rem;
+  }
+}
+
+/* Small Tablets / Large Phones (576px - 767px) */
+@media (min-width: 576px) and (max-width: 767px) {
+  .statistics-overview-cards {
+    padding: 20px;
+  }
+
+  .statistics-overview-cards-grid {
+    grid-template-columns: 1fr; /* ✅ 1 колона за по-добро четене */
+    gap: 16px;
+  }
+
+  .statistics-overview-card {
+    padding: 24px 20px;
+    gap: 18px;
+  }
+
+  .statistics-overview-card-icon {
+    width: 56px;
+    height: 56px;
+    font-size: 1.5rem;
+  }
+
+  .statistics-overview-card-label {
+    font-size: 0.82rem;
+    white-space: normal; /* ✅ Позволява пренасяне на текста */
+    line-height: 1.3;
+  }
+
+  .statistics-overview-card-value {
+    font-size: 2rem;
+  }
+
+  .statistics-overview-card-total {
+    font-size: 1.1rem;
+  }
+
+  .statistics-overview-card-suffix {
+    font-size: 0.82rem;
+  }
+}
+
+/* Phones (480px - 575px) */
+@media (min-width: 480px) and (max-width: 575px) {
+  .statistics-overview-cards {
+    padding: 18px;
+  }
+
+  .statistics-overview-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .statistics-overview-card {
+    padding: 22px 18px;
+    gap: 16px;
+  }
+
+  .statistics-overview-card-icon {
+    width: 54px;
+    height: 54px;
+    font-size: 1.4rem;
+    border-radius: 12px;
+  }
+
+  .statistics-overview-card-label {
+    font-size: 0.8rem;
+    white-space: normal;
+    line-height: 1.3;
+  }
+
+  .statistics-overview-card-value {
+    font-size: 1.9rem;
+  }
+
+  .statistics-overview-card-total {
+    font-size: 1.05rem;
+  }
+
+  .statistics-overview-card-suffix {
+    font-size: 0.8rem;
+  }
+}
+
+/* Small Phones (320px - 479px) */
+@media (max-width: 479px) {
+  .statistics-overview-cards {
+    padding: 15px;
+  }
+
+  .statistics-overview-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .statistics-overview-card {
+    padding: 20px 16px;
+    gap: 14px;
+  }
+
+  .statistics-overview-card-icon {
+    width: 52px;
+    height: 52px;
+    font-size: 1.3rem;
+    border-radius: 10px;
+  }
+
+  .statistics-overview-card-label {
+    font-size: 0.78rem;
+    white-space: normal;
+    line-height: 1.3;
+  }
+
+  .statistics-overview-card-value {
+    font-size: 1.8rem;
+  }
+
+  .statistics-overview-card-total {
+    font-size: 1rem;
+  }
+
+  .statistics-overview-card-suffix {
+    font-size: 0.78rem;
+  }
+
+  .statistics-overview-card:hover {
+    transform: translateY(-2px);
+  }
+}

@@ -1,0 +1,155 @@
+/* src/components/AdminDigiBridgeMentorStatistics/ExportStatisticsButton/exportStatisticsButton.css */
+
+.export-statistics-button {
+  position: relative;
+}
+
+.export-statistics-trigger {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.export-statistics-trigger:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+}
+
+.export-statistics-trigger:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.export-statistics-trigger svg {
+  width: 20px;
+  height: 20px;
+}
+
+.export-statistics-chevron {
+  transition: transform 0.3s ease;
+}
+
+.export-statistics-button.open .export-statistics-chevron {
+  transform: rotate(180deg);
+}
+
+.export-statistics-spinner {
+  width: 18px;
+  height: 18px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.export-statistics-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 998;
+}
+
+.export-statistics-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: #ffffff;
+  border-radius: 12px;
+  border: 2px solid #e5e7eb;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  min-width: 250px;
+  z-index: 999;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.export-statistics-dropdown-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 2px solid #f3f4f6;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.export-statistics-dropdown-header svg {
+  width: 18px;
+  height: 18px;
+  color: #6366f1;
+}
+
+.export-statistics-dropdown-options {
+  padding: 8px;
+}
+
+.export-statistics-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.export-statistics-option:hover {
+  background: #f9fafb;
+  color: #6366f1;
+}
+
+.export-statistics-option svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .export-statistics-trigger {
+    padding: 10px 16px;
+    font-size: 0.9rem;
+  }
+
+  .export-statistics-trigger svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .export-statistics-dropdown {
+    min-width: 220px;
+  }
+}

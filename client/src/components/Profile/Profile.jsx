@@ -73,6 +73,10 @@ import MyClubs from "../Clubs/MyClubs/MyClubs";
 import DraftClubs from "../Clubs/DraftClubs/DraftClubs";
 import MembershipClubs from "../Clubs/MembershipClubs/MembershipClubs";
 import ClubsAdmin from "../Clubs/ClubsAdmin/ClubsAdmin";
+import { AdminDigiBridgeMentors } from "../AdminDigiBridgeMentors/AdminDigiBridgeMentors";
+import { AdminDigiBridgeMentorApplications } from "../AdminDigiBridgeMentorApplications/AdminDigiBridgeMentorApplications";
+import { AdminNotificationBell } from "../AdminNotifications/AdminNotificationBell";
+import { AdminDigiBridgeMentorStatistics } from "../AdminDigiBridgeMentorStatistics/AdminDigiBridgeMentorStatistics";
 
 // 🎨 НОВИ ИКОНКИ КОМПОНЕНТИ
 const HomeIcon = () => (
@@ -222,7 +226,10 @@ export const Profile = () => {
       "/profile/club-create": t("profile.clubCreate"),
       "/profile/club-drafts": t("profile.clubDrafts"),
       "/profile/clubs-admin": t("profile.clubsAdmin"),
-      "/profile/club-membership": t("profile.clubMembership")
+      "/profile/club-membership": t("profile.clubMembership"),
+      "/profile/mentors-overview": t("admin.mentors.overview"),
+      "/profile/mentors-applications": t("admin.mentors.applications"),
+      "/profile/mentors-statistics": t("admin.mentors.statistics")
     };
 
     const matchedPath = Object.keys(pathTitleMap).find(key => path.includes(key));
@@ -259,7 +266,10 @@ export const Profile = () => {
     "/profile/club-create",
     "/profile/club-drafts",
     "/profile/clubs-admin",
-    "/profile/club-membership"
+    "/profile/club-membership",
+    "/profile/mentors-overview",
+    "/profile/mentors-applications",
+    "/profile/mentors-statistics"
   ];
 
   const isAdminPanel = adminPaths.some(path => location.pathname.startsWith(path));
@@ -357,6 +367,7 @@ export const Profile = () => {
   return (
     <div className={`profile-panel ${menuOpen ? 'menu-open' : ''}`}>
       <header className="profile-header">
+
         <button onClick={toggleMenu} className="menu-toggle" data-testid="menu-toggle">
           <MenuIcon />
         </button>
@@ -373,7 +384,8 @@ export const Profile = () => {
 
         <div className="header-right">
           <LanguageSwitcherAdmin />
-
+          {/* 🔔 NOTIFICATION BELL - ДОБАВИ ТУК */}
+          {(isAdmin || isModerator) && <AdminNotificationBell />}
           <div className="profile-menu" ref={profileMenuRef}>
             <button className="profile-button" onClick={toggleProfileMenu}>
               <img
@@ -391,190 +403,191 @@ export const Profile = () => {
 
             {/* 🎨 ОПРАВЕНО ПАДАЩО МЕНЮ */}
             {profileMenuOpen && (
-  <div className="profile-dropdown-new">
-    <div className="dropdown-header">
-      <img
-        src={profileData?.details?.imageURL || "/images/homePage/user-it.png"}
-        alt="User"
-        className="dropdown-profile-image"
-        onError={(e) => {
-          e.target.src = "/images/homePage/user-it.png";
-        }}
-      />
-      <div className="dropdown-username">
-        {profileData?.details?.username || profileData?.email}
-      </div>
-    </div>
-    <div className="dropdown-links">
-      {/* ✅ НАЧАЛО */}
-      <NavLink to="/" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
-        <span className="link-content">
-          <HomeIcon />
-          {t("header.home")}
-        </span>
-      </NavLink>
+              <div className="profile-dropdown-new">
+                <div className="dropdown-header">
+                  <img
+                    src={profileData?.details?.imageURL || "/images/homePage/user-it.png"}
+                    alt="User"
+                    className="dropdown-profile-image"
+                    onError={(e) => {
+                      e.target.src = "/images/homePage/user-it.png";
+                    }}
+                  />
+                  <div className="dropdown-username">
+                    {profileData?.details?.username || profileData?.email}
+                  </div>
+                </div>
+                <div className="dropdown-links">
+                  {/* ✅ НАЧАЛО */}
+                  <NavLink to="/" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
+                    <span className="link-content">
+                      <HomeIcon />
+                      {t("header.home")}
+                    </span>
+                  </NavLink>
 
-      {/* ✅ СТАТИИ */}
-      <NavLink to="/articles" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
-        <span className="link-content">
-          <ForumIcon className="menu-icon" />
-          {t("header.articles")}
-        </span>
-      </NavLink>
+                  {/* ✅ СТАТИИ */}
+                  <NavLink to="/articles" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
+                    <span className="link-content">
+                      <ForumIcon className="menu-icon" />
+                      {t("header.articles")}
+                    </span>
+                  </NavLink>
 
-      {/* ✅ ОБЩНОСТ DROPDOWN */}
-      <div className="profile-dropdown-container">
-        <button
-          className={`dropdown-item-new-profile profile-dropdown-toggle ${profileCommunityOpen ? 'active' : ''}`}
-          onClick={toggleProfileCommunity}
-        >
-          <span className="link-content">
-            <UsersIcon className="menu-icon" />
-            {t("header.craigslist")}
-            <svg
-              className={`profile-dropdown-arrow ${profileCommunityOpen ? 'rotated' : ''}`}
-              width="12"
-              height="6"
-              viewBox="0 0 12 6"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M1 1L6 5L11 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </span>
-        </button>
+                  {/* ✅ ОБЩНОСТ DROPDOWN */}
+                  <div className="profile-dropdown-container">
+                    <button
+                      className={`dropdown-item-new-profile profile-dropdown-toggle ${profileCommunityOpen ? 'active' : ''}`}
+                      onClick={toggleProfileCommunity}
+                    >
+                      <span className="link-content">
+                        <UsersIcon className="menu-icon" />
+                        {t("header.craigslist")}
+                        <svg
+                          className={`profile-dropdown-arrow ${profileCommunityOpen ? 'rotated' : ''}`}
+                          width="12"
+                          height="6"
+                          viewBox="0 0 12 6"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path d="M1 1L6 5L11 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      </span>
+                    </button>
 
-        <div className={`profile-dropdown-content ${profileCommunityOpen ? 'active' : ''}`}>
-          {/* Craigslist */}
-          <NavLink
-            to="/craigslist?reset=true"
-            className="profile-dropdown-item-new-profile"
-            onClick={() => {
-              setProfileMenuOpen(false);
-              setProfileCommunityOpen(false);
-            }}
-          >
-            <UsersIcon className="menu-icon" />
-            {t("header.craigslist")}
-          </NavLink>
+                    <div className={`profile-dropdown-content ${profileCommunityOpen ? 'active' : ''}`}>
+                      {/* Craigslist */}
+                      <NavLink
+                        to="/craigslist?reset=true"
+                        className="profile-dropdown-item-new-profile"
+                        onClick={() => {
+                          setProfileMenuOpen(false);
+                          setProfileCommunityOpen(false);
+                        }}
+                      >
+                        <UsersIcon className="menu-icon" />
+                        {t("header.craigslist")}
+                      </NavLink>
 
-          {/* ✅ Инициативи */}
-          <NavLink
-            to="/initiatives"
-            className="profile-dropdown-item-new-profile"
-            onClick={() => {
-              setProfileMenuOpen(false);
-              setProfileCommunityOpen(false);
-            }}
-          >
-            <InitiativesIcon className="menu-icon" />
-            {t("header.initiatives")}
-          </NavLink>
+                      {/* ✅ Инициативи */}
+                      <NavLink
+                        to="/initiatives"
+                        className="profile-dropdown-item-new-profile"
+                        onClick={() => {
+                          setProfileMenuOpen(false);
+                          setProfileCommunityOpen(false);
+                        }}
+                      >
+                        <InitiativesIcon className="menu-icon" />
+                        {t("header.initiatives")}
+                      </NavLink>
 
-          {/* ✅ Проекти */}
-          <NavLink
-            to="/projects"
-            className="profile-dropdown-item-new-profile"
-            onClick={() => {
-              setProfileMenuOpen(false);
-              setProfileCommunityOpen(false);
-            }}
-          >
-            <ProjectsIcon className="menu-icon" />
-            {t("header.projects")}
-          </NavLink>
+                      {/* ✅ Проекти */}
+                      <NavLink
+                        to="/projects"
+                        className="profile-dropdown-item-new-profile"
+                        onClick={() => {
+                          setProfileMenuOpen(false);
+                          setProfileCommunityOpen(false);
+                        }}
+                      >
+                        <ProjectsIcon className="menu-icon" />
+                        {t("header.projects")}
+                      </NavLink>
 
-          {/* ✅ ПУБЛИКАЦИИ */}
-          <NavLink
-            to="/publications"
-            className="profile-dropdown-item-new-profile"
-            onClick={() => {
-              setProfileMenuOpen(false);
-              setProfileCommunityOpen(false);
-            }}
-          >
-            <PublicationsIcon className="menu-icon" />
-            {t("header.publications")}
-          </NavLink>
+                      {/* ✅ ПУБЛИКАЦИИ */}
+                      <NavLink
+                        to="/publications"
+                        className="profile-dropdown-item-new-profile"
+                        onClick={() => {
+                          setProfileMenuOpen(false);
+                          setProfileCommunityOpen(false);
+                        }}
+                      >
+                        <PublicationsIcon className="menu-icon" />
+                        {t("header.publications")}
+                      </NavLink>
 
-          {/* ✅ ИСТОРИИ */}
-          <NavLink
-            to="/stories"
-            className="profile-dropdown-item-new-profile"
-            onClick={() => {
-              setProfileMenuOpen(false);
-              setProfileCommunityOpen(false);
-            }}
-          >
-            <StoriesIcon className="menu-icon" />
-            {t("header.stories")}
-          </NavLink>
+                      {/* ✅ ИСТОРИИ */}
+                      <NavLink
+                        to="/stories"
+                        className="profile-dropdown-item-new-profile"
+                        onClick={() => {
+                          setProfileMenuOpen(false);
+                          setProfileCommunityOpen(false);
+                        }}
+                      >
+                        <StoriesIcon className="menu-icon" />
+                        {t("header.stories")}
+                      </NavLink>
 
-          {/* ✅ Карта */}
-          <NavLink
-            to="/map"
-            className="profile-dropdown-item-new-profile"
-            onClick={() => {
-              setProfileMenuOpen(false);
-              setProfileCommunityOpen(false);
-            }}
-          >
-            <MapIcon className="menu-icon" />
-            {t("header.map")}
-          </NavLink>
-        </div>
-      </div>
+                      {/* ✅ Карта */}
+                      <NavLink
+                        to="/map"
+                        className="profile-dropdown-item-new-profile"
+                        onClick={() => {
+                          setProfileMenuOpen(false);
+                          setProfileCommunityOpen(false);
+                        }}
+                      >
+                        <MapIcon className="menu-icon" />
+                        {t("header.map")}
+                      </NavLink>
+                    </div>
+                  </div>
 
-      {/* ✅ КЛУБОВЕ */}
-      <NavLink to="/clubs" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
-        <span className="link-content">
-          <ClubsIcon className="menu-icon" />
-          {t("header.clubs")}
-        </span>
-      </NavLink>
+                  {/* ✅ КЛУБОВЕ */}
+                  <NavLink to="/clubs" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
+                    <span className="link-content">
+                      <ClubsIcon className="menu-icon" />
+                      {t("header.clubs")}
+                    </span>
+                  </NavLink>
 
-      {/* ✅ ИГРИ */}
-      <NavLink to="/games" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
-        <span className="link-content">
-          <GamesIcon className="menu-icon" />
-          {t("header.games")}
-        </span>
-      </NavLink>
+                  {/* ✅ ИГРИ */}
+                  <NavLink to="/games" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
+                    <span className="link-content">
+                      <GamesIcon className="menu-icon" />
+                      {t("header.games")}
+                    </span>
+                  </NavLink>
 
-      {/* ✅ СЪЗДАЙ ОБЯВА */}
-      <NavLink to="/ad/create" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
-        <span className="link-content">
-          <JobsAdsIcon className="menu-icon" />
-          {t("header.ad-create")}
-        </span>
-      </NavLink>
+                  {/* ✅ СЪЗДАЙ ОБЯВА */}
+                  <NavLink to="/ad/create" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
+                    <span className="link-content">
+                      <JobsAdsIcon className="menu-icon" />
+                      {t("header.ad-create")}
+                    </span>
+                  </NavLink>
 
-      {/* ✅ ЗА НАС */}
-      <NavLink to="/about" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
-        <span className="link-content">
-          <AboutIcon className="menu-icon" />
-          {t("header.about")}
-        </span>
-      </NavLink>
+                  {/* ✅ ЗА НАС */}
+                  <NavLink to="/about" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
+                    <span className="link-content">
+                      <AboutIcon className="menu-icon" />
+                      {t("header.about")}
+                    </span>
+                  </NavLink>
 
-      {/* Език суич */}
-      <LanguageSwitcherAdmin isMobile={true} onClick={() => {
-        setProfileMenuOpen(false);
-        setProfileCommunityOpen(false);
-      }} />
+                  {/* Език суич */}
+                  <LanguageSwitcherAdmin isMobile={true} onClick={() => {
+                    setProfileMenuOpen(false);
+                    setProfileCommunityOpen(false);
+                  }} />
 
-      {/* Logout */}
-      <NavLink to="/logout" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
-        <span className="link-content">
-          <LogoutIcon className="menu-icon" />
-          {t("header.logout")}
-        </span>
-      </NavLink>
-    </div>
-  </div>
-)}
+                  {/* Logout */}
+                  <NavLink to="/logout" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
+                    <span className="link-content">
+                      <LogoutIcon className="menu-icon" />
+                      {t("header.logout")}
+                    </span>
+                  </NavLink>
+                </div>
+              </div>
+            )}
           </div>
         </div>
+
       </header>
 
       <div className="profile-container">
@@ -812,6 +825,41 @@ export const Profile = () => {
                           </span>
                           <ArrowIcon className="icon-arrow" />
                         </NavLink>
+                      </li>
+                      <li>
+                        <NavLink
+                          to="mentors-overview"
+                          onClick={() => toggleSubMenu('mentors')}
+                          className={({ isActive }) => isActive ? 'active' : ''}
+                        >
+                          <span className="link-content">
+                            <UsersIcon className="icon" />
+                            {t("admin.mentors.title")}
+                          </span>
+                          <span className={`arrow-icon ${subMenuStates.mentors ? 'rotated' : ''}`}>
+                            {subMenuStates.mentors ? <DownArrowIcon /> : <ArrowIcon />}
+                          </span>
+                        </NavLink>
+                        <ul className={`sub-menu ${subMenuStates.mentors ? 'expanded' : ''}`}>
+                          <li>
+                            <NavLink to="mentors-overview" className={({ isActive }) => isActive ? 'active' : ''}>
+                              <CircleIcon className="icon" />
+                              {t("admin.mentors.overview")}
+                            </NavLink>
+                          </li>
+                          <li>
+                            <NavLink to="mentors-applications" className={({ isActive }) => isActive ? 'active' : ''}>
+                              <CircleIcon className="icon" />
+                              {t("admin.mentors.applications")}
+                            </NavLink>
+                          </li>
+                          <li>
+                            <NavLink to="mentors-statistics" className={({ isActive }) => isActive ? 'active' : ''}>
+                              <CircleIcon className="icon" />
+                              {t("admin.mentors.statistics")}
+                            </NavLink>
+                          </li>
+                        </ul>
                       </li>
                     </>
                   )}
@@ -1061,6 +1109,9 @@ export const Profile = () => {
             <Route path="suggest-resolved-users" element={<ManagementGuard><SuggestResolvedUsers setResolvedUsers={setResolvedUsers} /></ManagementGuard>} />
             <Route path="users-statistic" element={<AdminGuard><AllUsersStatistics /></AdminGuard>} />
             <Route path="applications-admin" element={<ManagementGuard><ApplicationsAdmin setApplicationsStats={setApplicationsStats} /></ManagementGuard>} />
+            <Route path="mentors-overview" element={<AdminGuard><AdminDigiBridgeMentors /></AdminGuard>} />
+            <Route path="mentors-applications" element={<AdminGuard><AdminDigiBridgeMentorApplications /></AdminGuard>} />
+            <Route path="mentors-statistics" element={<AdminGuard><AdminDigiBridgeMentorStatistics /></AdminGuard>} /> 
             <Route path="users-admin" element={<AdminGuard><AllUsers setAllUsers={setAllUsers} /></AdminGuard>} />
             <Route path="users-unfinished" element={<AdminGuard><UnfinishedProfiles setUnfinishedUsers={setUnfinishedUsers} /></AdminGuard>} />
           </Routes>
