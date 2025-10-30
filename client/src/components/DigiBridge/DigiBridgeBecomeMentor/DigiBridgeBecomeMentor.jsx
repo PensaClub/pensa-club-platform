@@ -45,6 +45,7 @@ export const DigiBridgeBecomeMentor = () => {
     facebook: savedData?.facebook || '',
     linkedin: savedData?.linkedin || '',
     otherContact: savedData?.otherContact || '',
+    priorityContact: savedData?.priorityContact || 'email',
   });
 
   const [errors, setErrors] = useState({});

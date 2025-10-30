@@ -1,0 +1,732 @@
+/* src/components/AdminDigiBridgeMentorApplications/AdminDigiBridgeApplicationDetailModal/adminDigiBridgeApplicationDetailModal.css */
+
+/* ===================================
+   ADMIN DIGIBRIDGE APPLICATION DETAIL MODAL - OVERLAY
+   =================================== */
+
+.admin-digibridge-application-detail-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+  animation: admin-digibridge-application-detail-modal-fade-in 0.3s ease;
+}
+
+@keyframes admin-digibridge-application-detail-modal-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ===================================
+   MODAL CONTAINER
+   =================================== */
+
+.admin-digibridge-application-detail-modal {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  max-height: 90vh;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  animation: admin-digibridge-application-detail-modal-slide-up 0.4s ease;
+  overflow: hidden;
+}
+
+@keyframes admin-digibridge-application-detail-modal-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ===================================
+   CLOSE BUTTON
+   =================================== */
+
+.admin-digibridge-application-detail-modal-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.admin-digibridge-application-detail-modal-close svg {
+  width: 20px;
+  height: 20px;
+  color: #6b7280;
+}
+
+.admin-digibridge-application-detail-modal-close:hover {
+  background: #ef4444;
+  transform: rotate(90deg) scale(1.1);
+}
+
+.admin-digibridge-application-detail-modal-close:hover svg {
+  color: #ffffff;
+}
+
+/* ===================================
+   HEADER
+   =================================== */
+
+.admin-digibridge-application-detail-modal-header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 40px;
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  position: relative;
+}
+
+.admin-digibridge-application-detail-modal-photo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 5px solid #ffffff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  flex-shrink: 0;
+}
+
+.admin-digibridge-application-detail-modal-header-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-digibridge-application-detail-modal-header-info h2 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+}
+
+.admin-digibridge-application-detail-modal-specialization {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+  backdrop-filter: blur(10px);
+  width: fit-content;
+}
+
+.admin-digibridge-application-detail-modal-spec-icon {
+  font-size: 1.3rem;
+}
+
+.admin-digibridge-application-detail-modal-date {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+}
+
+.admin-digibridge-application-detail-modal-date svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ===================================
+   CONTENT
+   =================================== */
+
+.admin-digibridge-application-detail-modal-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 32px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* Custom scrollbar */
+.admin-digibridge-application-detail-modal-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.admin-digibridge-application-detail-modal-content::-webkit-scrollbar-track {
+  background: #f3f4f6;
+}
+
+.admin-digibridge-application-detail-modal-content::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 4px;
+}
+
+.admin-digibridge-application-detail-modal-content::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* ===================================
+   SECTION
+   =================================== */
+
+.admin-digibridge-application-detail-modal-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.admin-digibridge-application-detail-modal-section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #1f2937;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.admin-digibridge-application-detail-modal-section-title svg {
+  width: 22px;
+  height: 22px;
+  color: #8b5cf6;
+  flex-shrink: 0;
+}
+
+/* ===================================
+   FIELDS
+   =================================== */
+
+.admin-digibridge-application-detail-modal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.admin-digibridge-application-detail-modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.admin-digibridge-application-detail-modal-field label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.admin-digibridge-application-detail-modal-field span {
+  font-size: 1rem;
+  color: #1f2937;
+  font-weight: 600;
+}
+
+.admin-digibridge-application-detail-modal-text {
+  font-size: 1rem;
+  color: #4b5563;
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ===================================
+   SOCIAL MEDIA
+   =================================== */
+
+.admin-digibridge-application-detail-modal-social {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-digibridge-application-detail-modal-social-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #f9fafb;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  color: #4b5563;
+}
+
+.admin-digibridge-application-detail-modal-social-item strong {
+  color: #1f2937;
+  font-weight: 700;
+  min-width: 100px;
+}
+
+/* ===================================
+   CV LINK
+   =================================== */
+
+.admin-digibridge-application-detail-modal-cv-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  width: fit-content;
+}
+
+.admin-digibridge-application-detail-modal-cv-link svg {
+  width: 20px;
+  height: 20px;
+}
+
+.admin-digibridge-application-detail-modal-cv-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(14, 165, 233, 0.3);
+}
+
+/* ===================================
+   REJECT SECTION
+   =================================== */
+
+.admin-digibridge-application-detail-modal-reject-section {
+  background: #fef2f2;
+  border: 2px solid #fecaca;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.admin-digibridge-application-detail-modal-textarea {
+  width: 100%;
+  padding: 14px 16px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: #1f2937;
+  background: #ffffff;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  resize: vertical;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.admin-digibridge-application-detail-modal-textarea:focus {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.admin-digibridge-application-detail-modal-textarea::placeholder {
+  color: #9ca3af;
+}
+
+/* ===================================
+   ACTIONS
+   =================================== */
+
+.admin-digibridge-application-detail-modal-actions {
+  display: flex;
+  gap: 12px;
+  padding: 24px 40px;
+  background: #f9fafb;
+  border-top: 2px solid #f3f4f6;
+}
+
+.admin-digibridge-application-detail-modal-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px 24px;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: inherit;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.admin-digibridge-application-detail-modal-btn svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.admin-digibridge-application-detail-modal-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.admin-digibridge-application-detail-modal-btn:not(:disabled):active {
+  transform: scale(0.97);
+}
+
+/* Email Button */
+.admin-digibridge-application-detail-modal-btn-email {
+  background: #ffffff;
+  color: #6b7280;
+  border: 2px solid #e5e7eb;
+}
+
+.admin-digibridge-application-detail-modal-btn-email:hover:not(:disabled) {
+  background: #f9fafb;
+  border-color: #d1d5db;
+  color: #374151;
+}
+
+/* Approve Button */
+.admin-digibridge-application-detail-modal-btn-approve {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+}
+
+.admin-digibridge-application-detail-modal-btn-approve:hover:not(:disabled) {
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Reject Button */
+.admin-digibridge-application-detail-modal-btn-reject {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: #ffffff;
+}
+
+.admin-digibridge-application-detail-modal-btn-reject:hover:not(:disabled) {
+  box-shadow: 0 8px 24px rgba(239, 68, 68, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Cancel Button */
+.admin-digibridge-application-detail-modal-btn-cancel {
+  background: #ffffff;
+  color: #6b7280;
+  border: 2px solid #e5e7eb;
+}
+
+.admin-digibridge-application-detail-modal-btn-cancel:hover:not(:disabled) {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+/* ===================================
+   RESPONSIVE DESIGN
+   =================================== */
+
+/* Tablets (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .admin-digibridge-application-detail-modal {
+    max-width: 750px;
+  }
+
+  .admin-digibridge-application-detail-modal-header {
+    padding: 35px;
+    gap: 20px;
+  }
+
+  .admin-digibridge-application-detail-modal-photo {
+    width: 100px;
+    height: 100px;
+  }
+
+  .admin-digibridge-application-detail-modal-header-info h2 {
+    font-size: 1.75rem;
+  }
+
+  .admin-digibridge-application-detail-modal-content {
+    padding: 28px 35px;
+    gap: 24px;
+  }
+
+  .admin-digibridge-application-detail-modal-actions {
+    padding: 20px 35px;
+  }
+}
+
+/* Small Tablets / Large Phones (576px - 767px) */
+@media (min-width: 576px) and (max-width: 767px) {
+  .admin-digibridge-application-detail-modal-overlay {
+    padding: 15px;
+  }
+
+  .admin-digibridge-application-detail-modal {
+    max-width: 100%;
+  }
+
+  .admin-digibridge-application-detail-modal-close {
+    top: 15px;
+    right: 15px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .admin-digibridge-application-detail-modal-close svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .admin-digibridge-application-detail-modal-header {
+    flex-direction: column;
+    text-align: center;
+    padding: 30px 25px;
+    gap: 16px;
+  }
+
+  .admin-digibridge-application-detail-modal-photo {
+    width: 90px;
+    height: 90px;
+  }
+
+  .admin-digibridge-application-detail-modal-header-info {
+    align-items: center;
+  }
+
+  .admin-digibridge-application-detail-modal-header-info h2 {
+    font-size: 1.6rem;
+  }
+
+  .admin-digibridge-application-detail-modal-content {
+    padding: 24px 25px;
+    gap: 22px;
+  }
+
+  .admin-digibridge-application-detail-modal-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .admin-digibridge-application-detail-modal-actions {
+    flex-direction: column;
+    padding: 20px 25px;
+  }
+
+  .admin-digibridge-application-detail-modal-btn {
+    padding: 14px 20px;
+  }
+}
+
+/* Phones (480px - 575px) */
+@media (min-width: 480px) and (max-width: 575px) {
+  .admin-digibridge-application-detail-modal-overlay {
+    padding: 12px;
+  }
+
+  .admin-digibridge-application-detail-modal-header {
+    padding: 25px 20px;
+  }
+
+  .admin-digibridge-application-detail-modal-photo {
+    width: 85px;
+    height: 85px;
+  }
+
+  .admin-digibridge-application-detail-modal-header-info h2 {
+    font-size: 1.5rem;
+  }
+
+  .admin-digibridge-application-detail-modal-specialization {
+    font-size: 0.95rem;
+    padding: 9px 16px;
+  }
+
+  .admin-digibridge-application-detail-modal-date {
+    font-size: 0.9rem;
+  }
+
+  .admin-digibridge-application-detail-modal-content {
+    padding: 22px 20px;
+    gap: 20px;
+  }
+
+  .admin-digibridge-application-detail-modal-section-title {
+    font-size: 1.05rem;
+  }
+
+  .admin-digibridge-application-detail-modal-actions {
+    padding: 18px 20px;
+  }
+
+  .admin-digibridge-application-detail-modal-btn {
+    padding: 13px 18px;
+    font-size: 0.95rem;
+  }
+}
+
+/* Small Phones (320px - 479px) */
+@media (max-width: 479px) {
+  .admin-digibridge-application-detail-modal-overlay {
+    padding: 10px;
+  }
+
+  .admin-digibridge-application-detail-modal {
+    border-radius: 16px;
+  }
+
+  .admin-digibridge-application-detail-modal-close {
+    top: 12px;
+    right: 12px;
+    width: 34px;
+    height: 34px;
+  }
+
+  .admin-digibridge-application-detail-modal-close svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .admin-digibridge-application-detail-modal-header {
+    flex-direction: column;
+    text-align: center;
+    padding: 22px 18px;
+    gap: 14px;
+  }
+
+  .admin-digibridge-application-detail-modal-photo {
+    width: 80px;
+    height: 80px;
+    border-width: 4px;
+  }
+
+  .admin-digibridge-application-detail-modal-header-info {
+    align-items: center;
+  }
+
+  .admin-digibridge-application-detail-modal-header-info h2 {
+    font-size: 1.4rem;
+  }
+
+  .admin-digibridge-application-detail-modal-specialization {
+    font-size: 0.9rem;
+    padding: 8px 14px;
+    gap: 6px;
+  }
+
+  .admin-digibridge-application-detail-modal-spec-icon {
+    font-size: 1.15rem;
+  }
+
+  .admin-digibridge-application-detail-modal-date {
+    font-size: 0.88rem;
+    gap: 6px;
+  }
+
+  .admin-digibridge-application-detail-modal-date svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .admin-digibridge-application-detail-modal-content {
+    padding: 20px 18px;
+    gap: 18px;
+  }
+
+  .admin-digibridge-application-detail-modal-section {
+    gap: 12px;
+  }
+
+  .admin-digibridge-application-detail-modal-section-title {
+    font-size: 1rem;
+    gap: 8px;
+  }
+
+  .admin-digibridge-application-detail-modal-section-title svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .admin-digibridge-application-detail-modal-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .admin-digibridge-application-detail-modal-field label {
+    font-size: 0.8rem;
+  }
+
+  .admin-digibridge-application-detail-modal-field span {
+    font-size: 0.95rem;
+  }
+
+  .admin-digibridge-application-detail-modal-text {
+    font-size: 0.95rem;
+  }
+
+  .admin-digibridge-application-detail-modal-social-item {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px 14px;
+    font-size: 0.9rem;
+  }
+
+  .admin-digibridge-application-detail-modal-social-item strong {
+    min-width: auto;
+  }
+
+  .admin-digibridge-application-detail-modal-cv-link {
+    padding: 12px 18px;
+    font-size: 0.9rem;
+  }
+
+  .admin-digibridge-application-detail-modal-cv-link svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .admin-digibridge-application-detail-modal-reject-section {
+    padding: 16px;
+  }
+
+  .admin-digibridge-application-detail-modal-textarea {
+    padding: 12px 14px;
+    font-size: 0.9rem;
+  }
+
+  .admin-digibridge-application-detail-modal-actions {
+    flex-direction: column;
+    padding: 16px 18px;
+    gap: 10px;
+  }
+
+  .admin-digibridge-application-detail-modal-btn {
+    padding: 12px 16px;
+    font-size: 0.9rem;
+    gap: 8px;
+  }
+
+  .admin-digibridge-application-detail-modal-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+}

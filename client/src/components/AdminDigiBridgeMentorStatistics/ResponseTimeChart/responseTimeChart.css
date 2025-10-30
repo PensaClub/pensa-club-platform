@@ -1,0 +1,414 @@
+/* src/components/AdminDigiBridgeMentorStatistics/ResponseTimeChart/responseTimeChart.css */
+
+/* ===================================
+   RESPONSE TIME CHART - MAIN
+   =================================== */
+
+.response-time-chart {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 2px solid #f3f4f6;
+  padding: 28px;
+  transition: all 0.3s ease;
+}
+
+.response-time-chart:hover {
+  border-color: #e5e7eb;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* ===================================
+   HEADER
+   =================================== */
+
+.response-time-chart-header {
+  margin-bottom: 24px;
+}
+
+.response-time-chart-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #1f2937;
+  margin: 0 0 8px 0;
+}
+
+.response-time-chart-title svg {
+  width: 28px;
+  height: 28px;
+  color: #10b981;
+  flex-shrink: 0;
+}
+
+.response-time-chart-subtitle {
+  font-size: 0.95rem;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ===================================
+   CHART WRAPPER
+   =================================== */
+
+.response-time-chart-wrapper {
+  margin-top: 20px;
+}
+
+/* ===================================
+   CUSTOM TOOLTIP
+   =================================== */
+
+.response-time-chart-tooltip {
+  background: #ffffff;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 2px solid #e5e7eb;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.response-time-chart-tooltip-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 4px 0;
+}
+
+.response-time-chart-tooltip-spec {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin: 0 0 10px 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.response-time-chart-tooltip-values {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.response-time-chart-tooltip-value {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.88rem;
+  color: #374151;
+  margin: 0;
+  gap: 12px;
+}
+
+.response-time-chart-tooltip-value span {
+  color: #6b7280;
+  font-weight: 600;
+}
+
+.response-time-chart-tooltip-value strong {
+  color: #10b981;
+  font-weight: 800;
+  font-size: 1rem;
+}
+
+/* ===================================
+   LEGEND
+   =================================== */
+
+.response-time-chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 2px solid #f3f4f6;
+  justify-content: center;
+}
+
+.response-time-chart-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.response-time-chart-legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.response-time-chart-legend-label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+/* ===================================
+   EMPTY STATE
+   =================================== */
+
+.response-time-chart-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  gap: 16px;
+}
+
+.response-time-chart-empty-icon {
+  font-size: 3rem;
+  opacity: 0.5;
+}
+
+.response-time-chart-empty p {
+  font-size: 1rem;
+  color: #9ca3af;
+  margin: 0;
+  font-weight: 600;
+}
+
+/* ===================================
+   RESPONSIVE DESIGN
+   =================================== */
+
+/* Large Desktops (1440px+) */
+@media (min-width: 1440px) {
+  .response-time-chart {
+    padding: 32px;
+  }
+
+  .response-time-chart-title {
+    font-size: 1.65rem;
+  }
+
+  .response-time-chart-title svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .response-time-chart-legend {
+    gap: 20px;
+  }
+
+  .response-time-chart-legend-label {
+    font-size: 0.92rem;
+  }
+}
+
+/* Standard Desktops (1024px - 1439px) */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .response-time-chart {
+    padding: 26px;
+  }
+
+  .response-time-chart-title {
+    font-size: 1.4rem;
+  }
+
+  .response-time-chart-title svg {
+    width: 26px;
+    height: 26px;
+  }
+}
+
+/* Tablets (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .response-time-chart {
+    padding: 24px;
+  }
+
+  .response-time-chart-title {
+    font-size: 1.35rem;
+  }
+
+  .response-time-chart-title svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .response-time-chart-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .response-time-chart-legend {
+    gap: 14px;
+  }
+
+  .response-time-chart-legend-label {
+    font-size: 0.85rem;
+  }
+}
+
+/* Small Tablets / Large Phones (576px - 767px) */
+@media (min-width: 576px) and (max-width: 767px) {
+  .response-time-chart {
+    padding: 22px 18px;
+  }
+
+  .response-time-chart-title {
+    font-size: 1.25rem;
+  }
+
+  .response-time-chart-title svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .response-time-chart-subtitle {
+    font-size: 0.88rem;
+  }
+
+  .response-time-chart-wrapper {
+    margin-top: 18px;
+  }
+
+  .response-time-chart-legend {
+    gap: 12px;
+    margin-top: 20px;
+    padding-top: 20px;
+  }
+
+  .response-time-chart-legend-item {
+    gap: 6px;
+  }
+
+  .response-time-chart-legend-dot {
+    width: 10px;
+    height: 10px;
+  }
+
+  .response-time-chart-legend-label {
+    font-size: 0.82rem;
+  }
+}
+
+/* Phones (480px - 575px) */
+@media (min-width: 480px) and (max-width: 575px) {
+  .response-time-chart {
+    padding: 20px 16px;
+  }
+
+  .response-time-chart-title {
+    font-size: 1.2rem;
+    gap: 10px;
+  }
+
+  .response-time-chart-title svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .response-time-chart-subtitle {
+    font-size: 0.85rem;
+  }
+
+  .response-time-chart-legend {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .response-time-chart-legend-label {
+    font-size: 0.8rem;
+  }
+
+  .response-time-chart-tooltip {
+    padding: 10px 14px;
+  }
+
+  .response-time-chart-tooltip-name {
+    font-size: 0.9rem;
+  }
+
+  .response-time-chart-tooltip-spec {
+    font-size: 0.8rem;
+  }
+
+  .response-time-chart-tooltip-value {
+    font-size: 0.85rem;
+  }
+
+  .response-time-chart-tooltip-value strong {
+    font-size: 0.95rem;
+  }
+}
+
+/* Small Phones (320px - 479px) */
+@media (max-width: 479px) {
+  .response-time-chart {
+    padding: 18px 14px;
+  }
+
+  .response-time-chart-title {
+    font-size: 1.15rem;
+    gap: 8px;
+  }
+
+  .response-time-chart-title svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .response-time-chart-subtitle {
+    font-size: 0.82rem;
+  }
+
+  .response-time-chart-wrapper {
+    margin-top: 16px;
+  }
+
+  .response-time-chart-legend {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+    margin-top: 18px;
+    padding-top: 18px;
+  }
+
+  .response-time-chart-legend-item {
+    gap: 6px;
+  }
+
+  .response-time-chart-legend-dot {
+    width: 10px;
+    height: 10px;
+  }
+
+  .response-time-chart-legend-label {
+    font-size: 0.78rem;
+  }
+
+  .response-time-chart-tooltip {
+    padding: 9px 12px;
+  }
+
+  .response-time-chart-tooltip-name {
+    font-size: 0.88rem;
+  }
+
+  .response-time-chart-tooltip-spec {
+    font-size: 0.78rem;
+  }
+
+  .response-time-chart-tooltip-value {
+    font-size: 0.82rem;
+  }
+
+  .response-time-chart-tooltip-value strong {
+    font-size: 0.9rem;
+  }
+
+  .response-time-chart-empty {
+    padding: 50px 16px;
+  }
+
+  .response-time-chart-empty-icon {
+    font-size: 2.5rem;
+  }
+
+  .response-time-chart-empty p {
+    font-size: 0.9rem;
+  }
+}

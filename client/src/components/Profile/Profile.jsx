@@ -75,6 +75,8 @@ import MembershipClubs from "../Clubs/MembershipClubs/MembershipClubs";
 import ClubsAdmin from "../Clubs/ClubsAdmin/ClubsAdmin";
 import { AdminDigiBridgeMentors } from "../AdminDigiBridgeMentors/AdminDigiBridgeMentors";
 import { AdminDigiBridgeMentorApplications } from "../AdminDigiBridgeMentorApplications/AdminDigiBridgeMentorApplications";
+import { AdminNotificationBell } from "../AdminNotifications/AdminNotificationBell";
+import { AdminDigiBridgeMentorStatistics } from "../AdminDigiBridgeMentorStatistics/AdminDigiBridgeMentorStatistics";
 
 // 🎨 НОВИ ИКОНКИ КОМПОНЕНТИ
 const HomeIcon = () => (
@@ -365,6 +367,7 @@ export const Profile = () => {
   return (
     <div className={`profile-panel ${menuOpen ? 'menu-open' : ''}`}>
       <header className="profile-header">
+
         <button onClick={toggleMenu} className="menu-toggle" data-testid="menu-toggle">
           <MenuIcon />
         </button>
@@ -381,7 +384,8 @@ export const Profile = () => {
 
         <div className="header-right">
           <LanguageSwitcherAdmin />
-
+          {/* 🔔 NOTIFICATION BELL - ДОБАВИ ТУК */}
+          {(isAdmin || isModerator) && <AdminNotificationBell />}
           <div className="profile-menu" ref={profileMenuRef}>
             <button className="profile-button" onClick={toggleProfileMenu}>
               <img
@@ -583,6 +587,7 @@ export const Profile = () => {
             )}
           </div>
         </div>
+
       </header>
 
       <div className="profile-container">
@@ -1104,9 +1109,9 @@ export const Profile = () => {
             <Route path="suggest-resolved-users" element={<ManagementGuard><SuggestResolvedUsers setResolvedUsers={setResolvedUsers} /></ManagementGuard>} />
             <Route path="users-statistic" element={<AdminGuard><AllUsersStatistics /></AdminGuard>} />
             <Route path="applications-admin" element={<ManagementGuard><ApplicationsAdmin setApplicationsStats={setApplicationsStats} /></ManagementGuard>} />
-            <Route path="mentors-overview" element={<AdminGuard><AdminDigiBridgeMentors /></AdminGuard>} /> 
-<Route path="mentors-applications" element={<AdminGuard><AdminDigiBridgeMentorApplications /></AdminGuard>} />
-{/* <Route path="mentors-statistics" element={<AdminGuard><AdminDigiBridgeMentorStatistics /></AdminGuard>} />  */}
+            <Route path="mentors-overview" element={<AdminGuard><AdminDigiBridgeMentors /></AdminGuard>} />
+            <Route path="mentors-applications" element={<AdminGuard><AdminDigiBridgeMentorApplications /></AdminGuard>} />
+            <Route path="mentors-statistics" element={<AdminGuard><AdminDigiBridgeMentorStatistics /></AdminGuard>} /> 
             <Route path="users-admin" element={<AdminGuard><AllUsers setAllUsers={setAllUsers} /></AdminGuard>} />
             <Route path="users-unfinished" element={<AdminGuard><UnfinishedProfiles setUnfinishedUsers={setUnfinishedUsers} /></AdminGuard>} />
           </Routes>

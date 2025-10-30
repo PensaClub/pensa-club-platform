@@ -185,7 +185,29 @@ Application ID: ${response.applicationId || response.id || 'N/A'}
       return false;
     }
   }, []);
+const markAllNotificationsAsRead = useCallback(async () => {
+  try {
+    const response = await academyService.markAllNotificationsAsRead();
+    toast.success('Всички нотификации са маркирани като прочетени');
+    return response;
+  } catch (error) {
+    console.error('Error marking all notifications as read:', error);
+    toast.error('Грешка при маркиране на нотификации');
+    throw error;
+  }
+}, []);
 
+const deleteNotification = useCallback(async (notificationId) => {
+  try {
+    const response = await academyService.deleteNotification(notificationId);
+    toast.success('Нотификацията е изтрита');
+    return response;
+  } catch (error) {
+    console.error('Error deleting notification:', error);
+    toast.error('Грешка при изтриване на нотификация');
+    throw error;
+  }
+}, []);
   // ===============================
   // ADMIN MENTOR MANAGEMENT
   // ===============================
@@ -310,6 +332,61 @@ const rejectMentorApplication = useCallback(async (applicationId, rejectionReaso
     throw error;
   }
 }, []);
+
+// ===============================
+// MENTOR STATISTICS
+// ===============================
+
+const getMentorStatistics = useCallback(async (timeFilter = 'thisMonth') => {
+  try {
+    const data = await academyService.getMentorStatistics(timeFilter);
+    return data;
+  } catch (error) {
+    console.error('Error fetching mentor statistics:', error);
+    throw error;
+  }
+}, []);
+
+const getMentorStatisticsOverview = useCallback(async () => {
+  try {
+    const data = await academyService.getMentorStatisticsOverview();
+    return data;
+  } catch (error) {
+    console.error('Error fetching statistics overview:', error);
+    throw error;
+  }
+}, []);
+
+const getMentorsBySpecialization = useCallback(async () => {
+  try {
+    const data = await academyService.getMentorsBySpecialization();
+    return data.specializations || data;
+  } catch (error) {
+    console.error('Error fetching mentors by specialization:', error);
+    throw error;
+  }
+}, []);
+
+const getMentorActivityTrend = useCallback(async (months = 6) => {
+  try {
+    const data = await academyService.getMentorActivityTrend(months);
+    return data.trend || data;
+  } catch (error) {
+    console.error('Error fetching activity trend:', error);
+    throw error;
+  }
+}, []);
+
+const getMentorDetailedStatistics = useCallback(async (mentorId) => {
+  try {
+    const data = await academyService.getMentorDetailedStatistics(mentorId);
+    return data;
+  } catch (error) {
+    console.error('Error fetching detailed statistics:', error);
+    throw error;
+  }
+}, []);
+
   // ===============================
   // CONTEXT VALUE
   // ===============================
@@ -335,6 +412,8 @@ const rejectMentorApplication = useCallback(async (applicationId, rejectionReaso
     // Admin Notifications
     getAdminNotifications,
     markNotificationAsRead,
+    markAllNotificationsAsRead,     // ✅ ДОБАВИ
+  deleteNotification,   
 
     // Admin Mentor Management
     getApprovedMentors,
@@ -346,7 +425,13 @@ const rejectMentorApplication = useCallback(async (applicationId, rejectionReaso
     bulkDeleteMentors,
     updateMentorAdminNotes,
     updateMentorPriorityContact,
-    // Admin Applications (ДОБАВИ)
+    // Mentor Statistics
+  getMentorStatistics,
+  getMentorStatisticsOverview,
+  getMentorsBySpecialization,
+  getMentorActivityTrend,
+  getMentorDetailedStatistics,
+    // Admin Applications 
   getPendingMentorApplications,
   rejectMentorApplication,
   };

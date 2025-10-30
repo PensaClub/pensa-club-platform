@@ -370,7 +370,36 @@ export const academyServiceFactory = () => {
       */
       return requester.put(`${apiUrl}/academy/admin/notifications/${notificationId}/read`);
     },
+// Маркира ВСИЧКИ нотификации като прочетени
+markAllNotificationsAsRead: async () => {
+  return requester.put(`${apiUrl}/academy/admin/notifications/mark-all-read`);
+  
+  /* 
+    BACKEND TODO:
+    PUT /api/academy/admin/notifications/mark-all-read
+    Auth: Required (Admin only)
+    
+    Response: {
+      success: true,
+      markedCount: 15
+    }
+  */
+},
 
+// Изтрива нотификация
+deleteNotification: async (notificationId) => {
+  return requester.delete(`${apiUrl}/academy/admin/notifications/${notificationId}`);
+  
+  /* 
+    BACKEND TODO:
+    DELETE /api/academy/admin/notifications/:notificationId
+    Auth: Required (Admin only)
+    
+    Response: {
+      success: true
+    }
+  */
+},
     // Вземане на pending кандидатури
     getPendingMentorApplications: async () => {
       return requester.get(`${apiUrl}/academy/mentors/applications/pending`);
@@ -440,6 +469,44 @@ export const academyServiceFactory = () => {
         4. (Опционално) Изпрати email до кандидата
       */
     },
+    // ===============================
+// MENTOR STATISTICS
+// ===============================
+
+/**
+ * Взема подробна статистика за всички ментори
+ */
+getMentorStatistics: async (timeFilter = 'thisMonth') => {
+  return requester.get(`${apiUrl}/academy/mentors/statistics?timeFilter=${timeFilter}`);
+},
+
+/**
+ * Взема само обща статистика (overview)
+ */
+getMentorStatisticsOverview: async () => {
+  return requester.get(`${apiUrl}/academy/mentors/statistics/overview`);
+},
+
+/**
+ * Взема разпределение по специализация
+ */
+getMentorsBySpecialization: async () => {
+  return requester.get(`${apiUrl}/academy/mentors/statistics/by-specialization`);
+},
+
+/**
+ * Взема тренд на активност през времето
+ */
+getMentorActivityTrend: async (months = 6) => {
+  return requester.get(`${apiUrl}/academy/mentors/statistics/activity-trend?months=${months}`);
+},
+
+/**
+ * Взема детайлна статистика за конкретен ментор
+ */
+getMentorDetailedStatistics: async (mentorId) => {
+  return requester.get(`${apiUrl}/academy/mentors/${mentorId}/detailed-statistics`);
+},
   };
 };
 
