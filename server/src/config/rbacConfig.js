@@ -131,7 +131,7 @@ const permissions = {
         delete: ['admin'],
     },
       notification: {
-    create: ['admin', 'moderator'],
+    create: ['admin', 'moderator','user'],
     read: ['admin', 'moderator'],
     update: ['admin', 'moderator'],
     delete: ['admin', 'moderator'],
