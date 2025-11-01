@@ -11,7 +11,6 @@ module.exports = {
         });
 
         if (projects.length === 0) {
-            console.log('No projects found. Please run the demo-project seeder first.');
             return;
         }
 
@@ -21,7 +20,6 @@ module.exports = {
         );
 
         if (users.length < 3) {
-            console.log('Not enough users found. Please run the demo-user seeder first.');
             return;
         }
 
@@ -73,7 +71,6 @@ module.exports = {
 
         await queryInterface.bulkInsert('project_applications', applications, { returning: true });
 
-        console.log('Demo project applications created successfully!');
     },
 
     async down(queryInterface, Sequelize) {

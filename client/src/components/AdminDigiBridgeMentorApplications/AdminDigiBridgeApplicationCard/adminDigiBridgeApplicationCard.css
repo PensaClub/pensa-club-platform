@@ -559,3 +559,203 @@
     transform: translateY(-2px);
   }
 }
+/* ===================================
+   REJECT MODAL
+   =================================== */
+
+.admin-digibridge-reject-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+}
+
+.admin-digibridge-reject-modal {
+  background: #ffffff;
+  border-radius: 16px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.admin-digibridge-reject-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px;
+  border-bottom: 2px solid #f3f4f6;
+}
+
+.admin-digibridge-reject-modal-header h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #1f2937;
+}
+
+.admin-digibridge-reject-modal-close {
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  color: #9ca3af;
+  transition: all 0.2s ease;
+  border-radius: 8px;
+}
+
+.admin-digibridge-reject-modal-close:hover {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.admin-digibridge-reject-modal-close svg {
+  width: 20px;
+  height: 20px;
+}
+
+.admin-digibridge-reject-modal-body {
+  padding: 24px;
+}
+
+.admin-digibridge-reject-modal-warning {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px;
+  background: #fef3c7;
+  border: 2px solid #fbbf24;
+  border-radius: 12px;
+  color: #78350f;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.admin-digibridge-reject-modal-warning svg {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  color: #f59e0b;
+  margin-top: 2px;
+}
+
+.admin-digibridge-reject-modal-warning strong {
+  color: #92400e;
+}
+
+.admin-digibridge-reject-modal-label {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #374151;
+  margin-bottom: 8px;
+}
+
+.admin-digibridge-reject-modal-label .required {
+  color: #ef4444;
+  margin-left: 4px;
+}
+
+.admin-digibridge-reject-modal-textarea {
+  width: 100%;
+  padding: 12px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  resize: vertical;
+  transition: all 0.2s ease;
+}
+
+.admin-digibridge-reject-modal-textarea:focus {
+  outline: none;
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.admin-digibridge-reject-modal-textarea::placeholder {
+  color: #9ca3af;
+}
+
+.admin-digibridge-reject-modal-footer {
+  display: flex;
+  gap: 12px;
+  padding: 20px 24px;
+  border-top: 2px solid #f3f4f6;
+}
+
+.admin-digibridge-reject-modal-btn-cancel,
+.admin-digibridge-reject-modal-btn-confirm {
+  flex: 1;
+  padding: 12px 20px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  font-family: inherit;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.admin-digibridge-reject-modal-btn-cancel {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.admin-digibridge-reject-modal-btn-cancel:hover {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.admin-digibridge-reject-modal-btn-confirm {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: #ffffff;
+}
+
+.admin-digibridge-reject-modal-btn-confirm:hover:not(:disabled) {
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.3);
+  transform: translateY(-2px);
+}
+
+.admin-digibridge-reject-modal-btn-confirm:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+  .admin-digibridge-reject-modal {
+    max-width: 100%;
+    margin: 20px;
+  }
+
+  .admin-digibridge-reject-modal-header,
+  .admin-digibridge-reject-modal-body {
+    padding: 20px;
+  }
+
+  .admin-digibridge-reject-modal-footer {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
