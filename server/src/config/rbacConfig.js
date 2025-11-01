@@ -112,7 +112,7 @@ const permissions = {
             delete: ['admin', 'moderator', 'user'],
         },
         mailing: {
-            sendEmails: ['admin', 'moderator'],
+            sendEmails: ['admin', 'moderator', 'user'],
         },
     },
     mentorApplication: {
