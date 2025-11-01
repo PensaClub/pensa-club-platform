@@ -115,6 +115,27 @@ const permissions = {
             sendEmails: ['admin', 'moderator'],
         },
     },
+    mentorApplication: {
+        create: ['user', 'admin', 'moderator'], 
+        read: ['admin'],             
+        update: ['admin'],           
+        delete: ['admin'],  
+        approve: ['admin'],
+        reject: ['admin', ], 
+    },
+
+    mentor: {
+        create: ['admin', ],           
+        read: ['admin', 'moderator', 'user', 'guest'], 
+        update: ['admin', ],
+        delete: ['admin'],
+    },
+      notification: {
+    create: ['admin', 'moderator'],
+    read: ['admin', 'moderator'],
+    update: ['admin', 'moderator'],
+    delete: ['admin', 'moderator'],
+  },
 };
 
 module.exports = permissions;

@@ -109,6 +109,19 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'user_id',
                 otherKey: 'club_id',
             });
+            // Mentor application
+            user_account.hasOne(models.mentor_application, {
+                foreignKey: 'userId',
+                sourceKey: 'id',
+                as: 'mentorApplication',
+            });
+
+            // Mentor profile
+            user_account.hasOne(models.mentor, {
+                foreignKey: 'userId',
+                sourceKey: 'id',
+                as: 'mentorProfile',
+            });
         }
     }
 
@@ -146,12 +159,12 @@ module.exports = (sequelize, DataTypes) => {
             token_expiration: DataTypes.DATE,
             role: {
                 type: DataTypes.STRING,
-                values: ['admin', 'moderator', 'user', 'guest', 'limited'],
+                values: ['admin', 'moderator', 'user', 'guest', 'limited','mentor'],
                 allowNull: false,
                 defaultValue: 'user',
                 validate: {
                     isIn: {
-                        args: [['admin', 'moderator', 'user', 'guest', 'limited']],
+                        args: [['admin', 'moderator', 'user', 'guest', 'limited','mentor']],
                         msg: 'Role must be one of the following: admin, moderator, user, limited or guest.',
                     },
                 },

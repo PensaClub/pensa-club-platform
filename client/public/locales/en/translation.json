@@ -12337,6 +12337,8 @@
       "viewDetails": "Details",
       "edit": "Edit",
       "sendEmail": "Send Email",
+      "activate": "Activate",
+
       "deactivate": "Deactivate",
       "delete": "Delete"
     },
