@@ -1,7 +1,6 @@
 
 const academyController = require('express').Router();
-
-const { mentor_application, mentor, mentor_course, user_account } = require('../sequelize/models/index');
+const { mentor_application, mentor, mentor_course, user_account,admin_notification  } = require('../sequelize/models/index');
 const isAuth = require('../middlewares/isAuth.js');
 const rbac = require('../middlewares/rbac.js');
 const { mentorApplicationSchema } = require('../schemas/mentorApplication.schema');
@@ -646,6 +645,217 @@ academyController.post(
       });
 
     } catch (err) {
+      next(err);
+    }
+  }
+);
+// ===============================
+// POST /api/academy/admin/notifications
+// Създаване на нова нотификация
+// ===============================
+academyController.post(
+  '/admin/notifications',
+  isAuth,
+  rbac.checkPermission('notification', 'create'),
+  async (req, res, next) => {
+    
+    try {
+      const { type, title, message, data } = req.body;
+
+      // Validation
+      if (!type || !title || !message) {
+        return res.status(400).json({ 
+          message: 'Type, title, and message are required.' 
+        });
+      }
+
+      const notification = await admin_notification.create({
+        type,
+        title,
+        message,
+        data: data || {},
+        read: false,
+      });
+
+      res.status(201).json({
+        success: true,
+        message: 'Notification created successfully!',
+        notification,
+      });
+
+    } catch (err) {
+      console.error('❌ [CREATE NOTIFICATION] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// GET /api/academy/admin/notifications
+// Вземане на нотификации с филтриране
+// ===============================
+academyController.get(
+  '/admin/notifications',
+  isAuth,
+  rbac.checkPermission('notification', 'read'),
+  async (req, res, next) => {
+    
+    try {
+      const {
+        page = 1,
+        limit = 20,
+        read,
+        type,
+      } = req.query;
+
+      const pageNum = parseInt(page);
+      const limitNum = parseInt(limit);
+      const offset = (pageNum - 1) * limitNum;
+
+      // Build WHERE clause
+      const where = {};
+
+      if (read !== undefined) {
+        where.read = read === 'true';
+      }
+
+      if (type) {
+        where.type = type;
+      }
+
+      // Fetch notifications
+      const { count, rows: notifications } = await admin_notification.findAndCountAll({
+        where,
+        limit: limitNum,
+        offset,
+        order: [['createdAt', 'DESC']],
+      });
+
+      // Count unread
+      const unreadCount = await admin_notification.count({
+        where: { read: false },
+      });
+
+      const totalPages = Math.ceil(count / limitNum);
+
+      res.status(200).json({
+        success: true,
+        notifications,
+        unreadCount,
+        pagination: {
+          page: pageNum,
+          limit: limitNum,
+          total: count,
+          totalPages,
+        },
+      });
+
+    } catch (err) {
+      console.error('❌ [GET NOTIFICATIONS] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// PUT /api/academy/admin/notifications/:id/read
+// Маркиране на нотификация като прочетена
+// ===============================
+academyController.put(
+  '/admin/notifications/:id/read',
+  isAuth,
+  rbac.checkPermission('notification', 'update'),
+  async (req, res, next) => {
+    
+    try {
+      const notificationId = parseInt(req.params.id);
+
+      const notification = await admin_notification.findByPk(notificationId);
+
+      if (!notification) {
+        return res.status(404).json({ message: 'Notification not found.' });
+      }
+
+      await notification.update({
+        read: true,
+        readAt: new Date(),
+      });
+
+      res.status(200).json({
+        success: true,
+        message: 'Notification marked as read.',
+        notification,
+      });
+
+    } catch (err) {
+      console.error('❌ [MARK AS READ] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// PUT /api/academy/admin/notifications/mark-all-read
+// Маркиране на всички нотификации като прочетени
+// ===============================
+academyController.put(
+  '/admin/notifications/mark-all-read',
+  isAuth,
+  rbac.checkPermission('notification', 'update'),
+  async (req, res, next) => {
+    
+    try {
+      const [updatedCount] = await admin_notification.update(
+        {
+          read: true,
+          readAt: new Date(),
+        },
+        {
+          where: { read: false },
+        }
+      );
+
+      res.status(200).json({
+        success: true,
+        message: `${updatedCount} notifications marked as read.`,
+        markedCount: updatedCount,
+      });
+
+    } catch (err) {
+      console.error('❌ [MARK ALL AS READ] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// DELETE /api/academy/admin/notifications/:id
+// Изтриване на нотификация
+// ===============================
+academyController.delete(
+  '/admin/notifications/:id',
+  isAuth,
+  rbac.checkPermission('notification', 'delete'),
+  async (req, res, next) => {
+    
+    try {
+      const notificationId = parseInt(req.params.id);
+
+      const notification = await admin_notification.findByPk(notificationId);
+
+      if (!notification) {
+        return res.status(404).json({ message: 'Notification not found.' });
+      }
+
+      await notification.destroy();
+
+      res.status(200).json({
+        success: true,
+        message: 'Notification deleted successfully.',
+      });
+
+    } catch (err) {
+      console.error('❌ [DELETE NOTIFICATION] Error:', err);
       next(err);
     }
   }

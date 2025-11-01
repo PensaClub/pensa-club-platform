@@ -58,8 +58,6 @@ export const AdminDigiBridgeMentorApplications = () => {
             setIsLoading(true);
             const data = await getPendingMentorApplications();
             
-            console.log('📥 Pending Applications:', data);
-            
             setApplications(data);
             setFilteredApplications(data);
         } catch (error) {
@@ -125,9 +123,7 @@ export const AdminDigiBridgeMentorApplications = () => {
     const handleApprove = async (applicationId, additionalNotes = '') => {
         try {
             setIsLoading(true);
-            
-            console.log('🎯 Approving application:', applicationId);
-            
+
             await approveMentor(applicationId);
 
             // Премахва от списъка
@@ -149,8 +145,6 @@ export const AdminDigiBridgeMentorApplications = () => {
     const handleReject = async (applicationId, rejectionReason) => {
         try {
             setIsLoading(true);
-            
-            console.log('❌ Rejecting application:', applicationId, rejectionReason);
             
             await rejectMentorApplication(applicationId, rejectionReason);
 

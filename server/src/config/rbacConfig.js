@@ -130,6 +130,12 @@ const permissions = {
         update: ['admin', ],
         delete: ['admin'],
     },
+      notification: {
+    create: ['admin', 'moderator'],
+    read: ['admin', 'moderator'],
+    update: ['admin', 'moderator'],
+    delete: ['admin', 'moderator'],
+  },
 };
 
 module.exports = permissions;

@@ -134,21 +134,21 @@ Application ID: ${response.applicationId || response.id || 'N/A'}
         message: emailMessage
       });
 
-      // await academyService.createAdminNotification({
-      //   type: 'mentor_application',
-      //   title: 'Нова кандидатура за ментор',
-      //   message: `${applicationData.name} кандидатства за ментор${applicationData.specialization ? ` - ${applicationData.specialization}` : ''}`,
-      //   data: {
-      //     applicantName: applicationData.name,
-      //     applicantEmail: applicationData.email,
-      //     applicantPhone: applicationData.phone,
-      //     specialization: applicationData.specialization || null,
-      //     photoUrl: applicationData.photoUrl || null,
-      //     cvUrl: applicationData.cvUrl || null,
-      //     cvOriginalName: applicationData.cvOriginalName || null,
-      //     applicationId: response.applicationId || response.id
-      //   }
-      // });
+      await academyService.createAdminNotification({
+        type: 'mentor_application',
+        title: 'Нова кандидатура за ментор',
+        message: `${applicationData.name} кандидатства за ментор${applicationData.specialization ? ` - ${applicationData.specialization}` : ''}`,
+        data: {
+          applicantName: applicationData.name,
+          applicantEmail: applicationData.email,
+          applicantPhone: applicationData.phone,
+          specialization: applicationData.specialization || null,
+          photoUrl: applicationData.photoUrl || null,
+          cvUrl: applicationData.cvUrl || null,
+          cvOriginalName: applicationData.cvOriginalName || null,
+          applicationId: response.applicationId || response.id
+        }
+      });
 
       toast.success('Кандидатурата е изпратена успешно!');
       return response;
@@ -312,14 +312,26 @@ Application ID: ${response.applicationId || response.id || 'N/A'}
   }, []);
 
   const approveMentor = useCallback(async (applicationId) => {
-    try {
-      const response = await academyService.approveMentor(applicationId);
-      return response;
-    } catch (error) {
-      console.error('Error approving mentor:', error);
-      throw error;
-    }
-  }, []);
+  try {
+    const response = await academyService.approveMentor(applicationId);
+    
+    // ✅ СЪЗДАЙ НОТИФИКАЦИЯ
+    await academyService.createAdminNotification({
+      type: 'mentor_approved',
+      title: 'Ментор одобрен',
+      message: `Кандидатурата беше одобрена успешно`,
+      data: {
+        applicationId,
+        mentorId: response.mentor?.id
+      }
+    });
+    
+    return response;
+  } catch (error) {
+    console.error('Error approving mentor:', error);
+    throw error;
+  }
+}, []);
 
   const bulkDeleteMentors = useCallback(async (mentorIds) => {
     try {
@@ -368,17 +380,29 @@ Application ID: ${response.applicationId || response.id || 'N/A'}
     }
   }, []);
 
-  const rejectMentorApplication = useCallback(async (applicationId, rejectionReason) => {
-    try {
-      const response = await academyService.rejectMentorApplication(applicationId, rejectionReason);
-      toast.success('Кандидатурата беше отхвърлена');
-      return response;
-    } catch (error) {
-      console.error('Error rejecting application:', error);
-      toast.error('Грешка при отхвърляне на кандидатурата');
-      throw error;
-    }
-  }, []);
+ const rejectMentorApplication = useCallback(async (applicationId, rejectionReason) => {
+  try {
+    const response = await academyService.rejectMentorApplication(applicationId, rejectionReason);
+    
+    // ✅ СЪЗДАЙ НОТИФИКАЦИЯ
+    await academyService.createAdminNotification({
+      type: 'mentor_rejected',
+      title: 'Кандидатура отхвърлена',
+      message: `Кандидатурата беше отхвърлена: ${rejectionReason}`,
+      data: {
+        applicationId,
+        rejectionReason
+      }
+    });
+    
+    toast.success('Кандидатурата беше отхвърлена');
+    return response;
+  } catch (error) {
+    console.error('Error rejecting application:', error);
+    toast.error('Грешка при отхвърляне на кандидатурата');
+    throw error;
+  }
+}, []);
 
   // ===============================
   // MENTOR STATISTICS
