@@ -812,3 +812,53 @@
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
+/* ✅ STATUS BADGES CONTAINER */
+.admin-digibridge-mentor-detail-status-badges {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+/* EXISTING ONLINE/OFFLINE - UPDATE IF NEEDED */
+.admin-digibridge-mentor-detail-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ✅ NEW ACTIVE/INACTIVE BADGE */
+.admin-digibridge-mentor-detail-account-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.admin-digibridge-mentor-detail-account-status svg {
+  width: 14px;
+  height: 14px;
+}
+
+.admin-digibridge-mentor-detail-account-status.active {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
+}
+
+.admin-digibridge-mentor-detail-account-status.inactive {
+  background: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(251, 146, 60, 0.3);
+}

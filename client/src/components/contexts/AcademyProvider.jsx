@@ -134,21 +134,21 @@ Application ID: ${response.applicationId || response.id || 'N/A'}
         message: emailMessage
       });
 
-      await academyService.createAdminNotification({
-        type: 'mentor_application',
-        title: 'Нова кандидатура за ментор',
-        message: `${applicationData.name} кандидатства за ментор${applicationData.specialization ? ` - ${applicationData.specialization}` : ''}`,
-        data: {
-          applicantName: applicationData.name,
-          applicantEmail: applicationData.email,
-          applicantPhone: applicationData.phone,
-          specialization: applicationData.specialization || null,
-          photoUrl: applicationData.photoUrl || null,
-          cvUrl: applicationData.cvUrl || null,
-          cvOriginalName: applicationData.cvOriginalName || null,
-          applicationId: response.applicationId || response.id
-        }
-      });
+      // await academyService.createAdminNotification({
+      //   type: 'mentor_application',
+      //   title: 'Нова кандидатура за ментор',
+      //   message: `${applicationData.name} кандидатства за ментор${applicationData.specialization ? ` - ${applicationData.specialization}` : ''}`,
+      //   data: {
+      //     applicantName: applicationData.name,
+      //     applicantEmail: applicationData.email,
+      //     applicantPhone: applicationData.phone,
+      //     specialization: applicationData.specialization || null,
+      //     photoUrl: applicationData.photoUrl || null,
+      //     cvUrl: applicationData.cvUrl || null,
+      //     cvOriginalName: applicationData.cvOriginalName || null,
+      //     applicationId: response.applicationId || response.id
+      //   }
+      // });
 
       toast.success('Кандидатурата е изпратена успешно!');
       return response;
@@ -162,6 +162,42 @@ Application ID: ${response.applicationId || response.id || 'N/A'}
     }
   }, [sendPersonalEmail]);
 
+  const createMentor = useCallback(async (mentorData) => {
+    setIsLoading(true);
+    try {
+
+      const response = await academyService.createMentor(mentorData);
+
+      toast.success('Менторът беше създаден успешно!');
+      return response;
+    } catch (error) {
+      console.error('Error creating mentor:', error);
+      toast.error('Грешка при създаване на ментор');
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const getAllMentors = useCallback(async (params = {}) => {
+    try {
+      const data = await academyService.getAllMentors(params);
+      return data;
+    } catch (error) {
+      console.error('Error fetching all mentors:', error);
+      throw error;
+    }
+  }, []);
+
+  const getMentorById = useCallback(async (mentorId) => {
+    try {
+      const data = await academyService.getMentorById(mentorId);
+      return data.mentor || data;
+    } catch (error) {
+      console.error('Error fetching mentor details:', error);
+      throw error;
+    }
+  }, []);
   // ===============================
   // ADMIN NOTIFICATIONS
   // ===============================
@@ -185,29 +221,29 @@ Application ID: ${response.applicationId || response.id || 'N/A'}
       return false;
     }
   }, []);
-const markAllNotificationsAsRead = useCallback(async () => {
-  try {
-    const response = await academyService.markAllNotificationsAsRead();
-    toast.success('Всички нотификации са маркирани като прочетени');
-    return response;
-  } catch (error) {
-    console.error('Error marking all notifications as read:', error);
-    toast.error('Грешка при маркиране на нотификации');
-    throw error;
-  }
-}, []);
+  const markAllNotificationsAsRead = useCallback(async () => {
+    try {
+      const response = await academyService.markAllNotificationsAsRead();
+      toast.success('Всички нотификации са маркирани като прочетени');
+      return response;
+    } catch (error) {
+      console.error('Error marking all notifications as read:', error);
+      toast.error('Грешка при маркиране на нотификации');
+      throw error;
+    }
+  }, []);
 
-const deleteNotification = useCallback(async (notificationId) => {
-  try {
-    const response = await academyService.deleteNotification(notificationId);
-    toast.success('Нотификацията е изтрита');
-    return response;
-  } catch (error) {
-    console.error('Error deleting notification:', error);
-    toast.error('Грешка при изтриване на нотификация');
-    throw error;
-  }
-}, []);
+  const deleteNotification = useCallback(async (notificationId) => {
+    try {
+      const response = await academyService.deleteNotification(notificationId);
+      toast.success('Нотификацията е изтрита');
+      return response;
+    } catch (error) {
+      console.error('Error deleting notification:', error);
+      toast.error('Грешка при изтриване на нотификация');
+      throw error;
+    }
+  }, []);
   // ===============================
   // ADMIN MENTOR MANAGEMENT
   // ===============================
@@ -243,6 +279,17 @@ const deleteNotification = useCallback(async (notificationId) => {
       throw error;
     }
   }, []);
+
+  const activateMentor = useCallback(async (mentorId) => {
+  try {
+    const response = await academyService.activateMentor(mentorId);
+    toast.success('Менторът беше активиран');
+    return response;
+  } catch (error) {
+    console.error('Error activating mentor:', error);
+    throw error;
+  }
+}, []);
 
   const deactivateMentor = useCallback(async (mentorId) => {
     try {
@@ -307,85 +354,85 @@ const deleteNotification = useCallback(async (notificationId) => {
       throw error;
     }
   }, []);
-// ===============================
-// ADMIN MENTOR APPLICATIONS (ДОБАВИ ТОВА)
-// ===============================
+  // ===============================
+  // ADMIN MENTOR APPLICATIONS (ДОБАВИ ТОВА)
+  // ===============================
 
-const getPendingMentorApplications = useCallback(async () => {
-  try {
-    const data = await academyService.getPendingMentorApplications();
-    return data.applications || data;
-  } catch (error) {
-    console.error('Error fetching pending applications:', error);
-    throw error;
-  }
-}, []);
+  const getPendingMentorApplications = useCallback(async () => {
+    try {
+      const data = await academyService.getPendingMentorApplications();
+      return data.applications || data;
+    } catch (error) {
+      console.error('Error fetching pending applications:', error);
+      throw error;
+    }
+  }, []);
 
-const rejectMentorApplication = useCallback(async (applicationId, rejectionReason) => {
-  try {
-    const response = await academyService.rejectMentorApplication(applicationId, rejectionReason);
-    toast.success('Кандидатурата беше отхвърлена');
-    return response;
-  } catch (error) {
-    console.error('Error rejecting application:', error);
-    toast.error('Грешка при отхвърляне на кандидатурата');
-    throw error;
-  }
-}, []);
+  const rejectMentorApplication = useCallback(async (applicationId, rejectionReason) => {
+    try {
+      const response = await academyService.rejectMentorApplication(applicationId, rejectionReason);
+      toast.success('Кандидатурата беше отхвърлена');
+      return response;
+    } catch (error) {
+      console.error('Error rejecting application:', error);
+      toast.error('Грешка при отхвърляне на кандидатурата');
+      throw error;
+    }
+  }, []);
 
-// ===============================
-// MENTOR STATISTICS
-// ===============================
+  // ===============================
+  // MENTOR STATISTICS
+  // ===============================
 
-const getMentorStatistics = useCallback(async (timeFilter = 'thisMonth') => {
-  try {
-    const data = await academyService.getMentorStatistics(timeFilter);
-    return data;
-  } catch (error) {
-    console.error('Error fetching mentor statistics:', error);
-    throw error;
-  }
-}, []);
+  const getMentorStatistics = useCallback(async (timeFilter = 'thisMonth') => {
+    try {
+      const data = await academyService.getMentorStatistics(timeFilter);
+      return data;
+    } catch (error) {
+      console.error('Error fetching mentor statistics:', error);
+      throw error;
+    }
+  }, []);
 
-const getMentorStatisticsOverview = useCallback(async () => {
-  try {
-    const data = await academyService.getMentorStatisticsOverview();
-    return data;
-  } catch (error) {
-    console.error('Error fetching statistics overview:', error);
-    throw error;
-  }
-}, []);
+  const getMentorStatisticsOverview = useCallback(async () => {
+    try {
+      const data = await academyService.getMentorStatisticsOverview();
+      return data;
+    } catch (error) {
+      console.error('Error fetching statistics overview:', error);
+      throw error;
+    }
+  }, []);
 
-const getMentorsBySpecialization = useCallback(async () => {
-  try {
-    const data = await academyService.getMentorsBySpecialization();
-    return data.specializations || data;
-  } catch (error) {
-    console.error('Error fetching mentors by specialization:', error);
-    throw error;
-  }
-}, []);
+  const getMentorsBySpecialization = useCallback(async () => {
+    try {
+      const data = await academyService.getMentorsBySpecialization();
+      return data.specializations || data;
+    } catch (error) {
+      console.error('Error fetching mentors by specialization:', error);
+      throw error;
+    }
+  }, []);
 
-const getMentorActivityTrend = useCallback(async (months = 6) => {
-  try {
-    const data = await academyService.getMentorActivityTrend(months);
-    return data.trend || data;
-  } catch (error) {
-    console.error('Error fetching activity trend:', error);
-    throw error;
-  }
-}, []);
+  const getMentorActivityTrend = useCallback(async (months = 6) => {
+    try {
+      const data = await academyService.getMentorActivityTrend(months);
+      return data.trend || data;
+    } catch (error) {
+      console.error('Error fetching activity trend:', error);
+      throw error;
+    }
+  }, []);
 
-const getMentorDetailedStatistics = useCallback(async (mentorId) => {
-  try {
-    const data = await academyService.getMentorDetailedStatistics(mentorId);
-    return data;
-  } catch (error) {
-    console.error('Error fetching detailed statistics:', error);
-    throw error;
-  }
-}, []);
+  const getMentorDetailedStatistics = useCallback(async (mentorId) => {
+    try {
+      const data = await academyService.getMentorDetailedStatistics(mentorId);
+      return data;
+    } catch (error) {
+      console.error('Error fetching detailed statistics:', error);
+      throw error;
+    }
+  }, []);
 
   // ===============================
   // CONTEXT VALUE
@@ -408,17 +455,21 @@ const getMentorDetailedStatistics = useCallback(async (mentorId) => {
 
     // Mentor Application
     applyAsMentor,
-
+    // Mentor Management (✅ ДОБАВЕНИ)
+    createMentor,
+    getAllMentors,
+    getMentorById,
     // Admin Notifications
     getAdminNotifications,
     markNotificationAsRead,
     markAllNotificationsAsRead,     // ✅ ДОБАВИ
-  deleteNotification,   
+    deleteNotification,
 
     // Admin Mentor Management
     getApprovedMentors,
     getRejectedMentorApplications,
     updateMentor,
+    activateMentor,
     deactivateMentor,
     deleteMentor,
     approveMentor,
@@ -426,14 +477,14 @@ const getMentorDetailedStatistics = useCallback(async (mentorId) => {
     updateMentorAdminNotes,
     updateMentorPriorityContact,
     // Mentor Statistics
-  getMentorStatistics,
-  getMentorStatisticsOverview,
-  getMentorsBySpecialization,
-  getMentorActivityTrend,
-  getMentorDetailedStatistics,
+    getMentorStatistics,
+    getMentorStatisticsOverview,
+    getMentorsBySpecialization,
+    getMentorActivityTrend,
+    getMentorDetailedStatistics,
     // Admin Applications 
-  getPendingMentorApplications,
-  rejectMentorApplication,
+    getPendingMentorApplications,
+    rejectMentorApplication,
   };
 
   return (

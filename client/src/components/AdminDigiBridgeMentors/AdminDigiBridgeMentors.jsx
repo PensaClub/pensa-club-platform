@@ -3,12 +3,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAcademy } from '../contexts/AcademyProvider';
-// import { AdminDigiBridgeMentorFilters } from './AdminDigiBridgeMentorFilters/AdminDigiBridgeMentorFilters';
-// import { AdminDigiBridgeMentorStats } from './AdminDigiBridgeMentorStats/AdminDigiBridgeMentorStats';
-// import { AdminDigiBridgeMentorCard } from './AdminDigiBridgeMentorCard/AdminDigiBridgeMentorCard';
-// import { AdminDigiBridgeMentorDetailModal } from './AdminDigiBridgeMentorDetailModal/AdminDigiBridgeMentorDetailModal';
-// import { AdminDigiBridgeMentorEditModal } from './AdminDigiBridgeMentorEditModal/AdminDigiBridgeMentorEditModal';
-// import { AdminDigiBridgeSendEmailModal } from './AdminDigiBridgeSendEmailModal/AdminDigiBridgeSendEmailModal';
 import { toast } from 'react-toastify';
 import './adminDigiBridgeMentors.css';
 import { AdminDigiBridgeMentorStats } from './AdminDigiBridgeMentorStats/AdminDigiBridgeMentorStats';
@@ -20,150 +14,25 @@ import { AdminDigiBridgeRejectedDetailModal } from './AdminDigiBridgeRejectedDet
 import { AdminDigiBridgeMentorEditModal } from './AdminDigiBridgeMentorEditModal/adminDigiBridgeMentorEditModal';
 import { AdminDigiBridgeSendEmailToRejectedModal } from './AdminDigiBridgeSendEmailToRejectedModal/AdminDigiBridgeSendEmailToRejectedModal';
 
-// ===================================
-// МОКНАТИ ДАННИ ЗА ТЕСТВАНЕ
-// ===================================
-const MOCK_MENTORS = [
-    {
-        id: 1,
-        userId: "user_001",
-        name: "Мария Петрова",
-        email: "borislaviliev47@gmail.com",
-        phone: "+359888123456",
-        age: 24,
-        photoUrl: "https://randomuser.me/api/portraits/women/44.jpg",
-        specialization: "Digital Security",
-        education: "СУ - Киберсигурност, Бакалавър 2023",
-        experience: "2 години опит в обучение на възрастни хора",
-        motivation: "Искам да помагам на хората да се чувстват по-сигурни онлайн",
-        availability: "Гъвкав график",
-        languages: ["bg", "en"],
-        viber: "+359888123456",
-        facebook: "facebook.com/maria.petrova",
-        linkedin: "linkedin.com/in/mariapetrova",
-        otherContact: "",
-        cvUrl: "https://example.com/cv_maria.pdf",
-        cvOriginalName: "Maria_Petrova_CV.pdf",
-        status: "approved",
-        isOnline: true,
-        studentsCount: 12,
-        rating: 4.9,
-        sessionsCount: 45,
-        createdAt: "2025-01-10T10:00:00Z",
-        approvedAt: "2025-01-11T14:30:00Z",
-        lastActiveAt: "2025-01-28T11:00:00Z",
-        priorityContact: "viber",
-        adminNotes: "Много добър ментор, отзивчив и професионален"
-    },
-    {
-        id: 2,
-        userId: "user_002",
-        name: "Иван Георгиев",
-        email: "borislaviliev47@gmail.com",
-        phone: "+359887654321",
-        age: 28,
-        photoUrl: "https://randomuser.me/api/portraits/men/32.jpg",
-        specialization: "Social Media",
-        education: "НБУ - Комуникации и дигитални медии",
-        experience: "3 години опит като социален мениджър",
-        motivation: "Обичам да споделям знания за социалните мрежи",
-        availability: "Вечер и уикенди",
-        languages: ["bg", "en", "de"],
-        viber: "+359887654321",
-        facebook: "facebook.com/ivan.georgiev",
-        linkedin: "linkedin.com/in/ivangeorgiev",
-        otherContact: "Telegram: @ivangeorgiev",
-        cvUrl: "https://example.com/cv_ivan.pdf",
-        cvOriginalName: "Ivan_Georgiev_CV.pdf",
-        status: "approved",
-        isOnline: false,
-        studentsCount: 8,
-        rating: 4.7,
-        sessionsCount: 32,
-        createdAt: "2025-01-12T09:00:00Z",
-        approvedAt: "2025-01-13T16:00:00Z",
-        lastActiveAt: "2025-01-27T18:30:00Z",
-        priorityContact: "facebook",
-        adminNotes: ""
-    },
-    {
-        id: 3,
-        userId: "user_003",
-        name: "Елена Димитрова",
-        email: "borislaviliev47@gmail.com",
-        phone: "+359889999888",
-        age: 26,
-        photoUrl: "https://randomuser.me/api/portraits/women/65.jpg",
-        specialization: "Online Banking",
-        education: "УНСС - Финанси и банкиране",
-        experience: "4 години в банков сектор",
-        motivation: "Желая да помогна на възрастните хора с онлайн банкиране",
-        availability: "Работни дни следобед",
-        languages: ["bg", "en"],
-        viber: "",
-        facebook: "",
-        linkedin: "linkedin.com/in/elenadimitrova",
-        otherContact: "",
-        cvUrl: "https://example.com/cv_elena.pdf",
-        cvOriginalName: "Elena_Dimitrova_CV.pdf",
-        status: "approved",
-        isOnline: true,
-        studentsCount: 15,
-        rating: 5.0,
-        sessionsCount: 58,
-        createdAt: "2025-01-08T14:00:00Z",
-        approvedAt: "2025-01-09T10:30:00Z",
-        lastActiveAt: "2025-01-28T09:15:00Z",
-        priorityContact: "linkedin",
-        adminNotes: "Топ ментор! Много отговорна и компетентна"
-    }
-];
-
-const MOCK_REJECTED = [
-    {
-        id: 4,
-        userId: "user_004",                    // ✅ ДОБАВЕНО
-        name: "Петър Иванов",
-        email: "borislaviliev47@gmail.com",
-        phone: "+359888777666",
-        age: 22,
-        photoUrl: "https://randomuser.me/api/portraits/men/75.jpg",
-        specialization: "Media Literacy",
-        education: "Студент в СУ - Журналистика",  // ✅ РАЗШИРЕНО
-        experience: "6 месеца стаж в местна медия", // ✅ ДОБАВЕНО
-        motivation: "Искам да помагам на хората да разпознават фалшиви новини", // ✅ ДОБАВЕНО
-        availability: "Уикенди",                // ✅ ДОБАВЕНО
-        languages: ["bg"],                      // ✅ ДОБАВЕНО
-        viber: "+359888777666",                 // ✅ ДОБАВЕНО
-        facebook: "facebook.com/peter.ivanov",  // ✅ ДОБАВЕНО
-        linkedin: "",                           // ✅ ДОБАВЕНО
-        otherContact: "",                       // ✅ ДОБАВЕНО
-        cvUrl: "https://example.com/cv_peter.pdf",        // ✅ ДОБАВЕНО
-        cvOriginalName: "Peter_Ivanov_CV.pdf",  // ✅ ДОБАВЕНО
-        status: "rejected",
-        createdAt: "2025-01-20T11:00:00Z",
-        rejectedAt: "2025-01-21T09:00:00Z",
-        rejectionReason: "Недостатъчен опит в областта"
-    }
-];
-
 export const AdminDigiBridgeMentors = () => {
     const { t } = useTranslation();
     const {
         sendPersonalEmail,
-        // getApprovedMentors,
-        // getRejectedMentorApplications,
+        getAllMentors,
+        getRejectedMentorApplications,
+        activateMentor,
         deactivateMentor,
         deleteMentor,
         approveMentor,
-        bulkDeleteMentors
+        bulkDeleteMentors,
+        updateMentor,
     } = useAcademy();
 
     // STATE
-    const [mentors, setMentors] = useState(MOCK_MENTORS); // МОКНАТИ ДАННИ
-    const [filteredMentors, setFilteredMentors] = useState(MOCK_MENTORS); // МОКНАТИ ДАННИ
-    const [rejectedApplications, setRejectedApplications] = useState(MOCK_REJECTED); // МОКНАТИ ДАННИ
-    const [isLoading, setIsLoading] = useState(false); // false защото не зареждаме от API
+    const [mentors, setMentors] = useState([]);
+    const [filteredMentors, setFilteredMentors] = useState([]);
+    const [rejectedApplications, setRejectedApplications] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     const [showRejected, setShowRejected] = useState(false);
     const [selectedMentor, setSelectedMentor] = useState(null);
 
@@ -174,6 +43,7 @@ export const AdminDigiBridgeMentors = () => {
     const [rejectedDetailModalOpen, setRejectedDetailModalOpen] = useState(false);
     const [selectedRejectedApplication, setSelectedRejectedApplication] = useState(null);
     const [emailRejectedModalOpen, setEmailRejectedModalOpen] = useState(false);
+
     // FILTERS
     const [filters, setFilters] = useState({
         search: '',
@@ -186,31 +56,35 @@ export const AdminDigiBridgeMentors = () => {
     const [selectedMentors, setSelectedMentors] = useState([]);
     const [bulkActionMode, setBulkActionMode] = useState(false);
 
-    // FETCH MENTORS - ЗАКОМЕНТИРАНО ЗА СЕГА
-    // useEffect(() => {
-    //   fetchMentors();
-    // }, []);
+    // ===============================
+    // FETCH MENTORS
+    // ===============================
+    useEffect(() => {
+        fetchMentors();
+    }, []);
 
-    // const fetchMentors = async () => {
-    //   setIsLoading(true);
-    //   try {
-    //     const [approvedData, rejectedData] = await Promise.all([
-    //       getApprovedMentors(),
-    //       getRejectedMentorApplications()
-    //     ]);
+    const fetchMentors = async () => {
+        setIsLoading(true);
+        try {
+            const [approvedData, rejectedData] = await Promise.all([
+                getAllMentors({ page: 1, limit: 100 }),
+                getRejectedMentorApplications()
+            ]);
 
-    //     setMentors(approvedData);
-    //     setFilteredMentors(approvedData);
-    //     setRejectedApplications(rejectedData);
-    //   } catch (error) {
-    //     console.error('Error fetching mentors:', error);
-    //     toast.error(t('AdminDigiBridgeMentors.errors.fetchError'));
-    //   } finally {
-    //     setIsLoading(false);
-    //   }
-    // };
+            setMentors(approvedData.mentors || approvedData);
+            setFilteredMentors(approvedData.mentors || approvedData);
+            setRejectedApplications(rejectedData.applications || rejectedData);
+        } catch (error) {
+            console.error('Error fetching mentors:', error);
+            toast.error('Грешка при зареждане на менторите');
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
+    // ===============================
     // FILTER & SORT
+    // ===============================
     useEffect(() => {
         let filtered = [...mentors];
 
@@ -218,7 +92,7 @@ export const AdminDigiBridgeMentors = () => {
             filtered = filtered.filter(m =>
                 m.name.toLowerCase().includes(filters.search.toLowerCase()) ||
                 m.email.toLowerCase().includes(filters.search.toLowerCase()) ||
-                m.specialization.toLowerCase().includes(filters.search.toLowerCase())
+                (m.specialization && m.specialization.toLowerCase().includes(filters.search.toLowerCase()))
             );
         }
 
@@ -237,11 +111,11 @@ export const AdminDigiBridgeMentors = () => {
                 case 'name':
                     return a.name.localeCompare(b.name);
                 case 'students':
-                    return b.studentsCount - a.studentsCount;
+                    return (b.studentsCount || 0) - (a.studentsCount || 0);
                 case 'rating':
-                    return b.rating - a.rating;
+                    return (b.rating || 0) - (a.rating || 0);
                 case 'date':
-                    return new Date(b.approvedAt) - new Date(a.approvedAt);
+                    return new Date(b.approvedAt || b.createdAt) - new Date(a.approvedAt || a.createdAt);
                 default:
                     return 0;
             }
@@ -250,7 +124,9 @@ export const AdminDigiBridgeMentors = () => {
         setFilteredMentors(filtered);
     }, [filters, mentors]);
 
+    // ===============================
     // HANDLERS
+    // ===============================
     const handleViewDetails = (mentor) => {
         setSelectedMentor(mentor);
         setDetailModalOpen(true);
@@ -265,58 +141,69 @@ export const AdminDigiBridgeMentors = () => {
         setSelectedMentor(mentor);
         setEmailModalOpen(true);
     };
-
-    const handleDeactivate = async (mentorId) => {
-        if (!window.confirm(t('AdminDigiBridgeMentors.confirmDeactivate'))) return;
+    const handleActivate = async (mentorId) => {
+        if (!window.confirm('Сигурни ли сте, че искате да активирате този ментор?')) return;
 
         try {
-            // await deactivateMentor(mentorId);
-            toast.success(t('AdminDigiBridgeMentors.deactivateSuccess'));
-            // fetchMentors();
+            await activateMentor(mentorId);
+            toast.success('Менторът беше активиран');
+            fetchMentors();
+        } catch (error) {
+            console.error('Error activating mentor:', error);
+            toast.error('Грешка при активиране на ментор');
+        }
+    };
+    const handleDeactivate = async (mentorId) => {
+        if (!window.confirm('Сигурни ли сте, че искате да деактивирате този ментор?')) return;
+
+        try {
+            await deactivateMentor(mentorId);
+            toast.success('Менторът беше деактивиран');
+            fetchMentors();
         } catch (error) {
             console.error('Error deactivating mentor:', error);
-            toast.error(t('AdminDigiBridgeMentors.errors.deactivateError'));
+            toast.error('Грешка при деактивиране на ментор');
         }
     };
 
     const handleDelete = async (mentorId) => {
-        if (!window.confirm(t('AdminDigiBridgeMentors.confirmDelete'))) return;
+        if (!window.confirm('Сигурни ли сте, че искате да изтриете този ментор?')) return;
 
         try {
-            // await deleteMentor(mentorId);
-            toast.success(t('AdminDigiBridgeMentors.deleteSuccess'));
-            // fetchMentors();
+            await deleteMentor(mentorId);
+            toast.success('Менторът беше изтрит');
+            fetchMentors();
         } catch (error) {
             console.error('Error deleting mentor:', error);
-            toast.error(t('AdminDigiBridgeMentors.errors.deleteError'));
+            toast.error('Грешка при изтриване на ментор');
         }
     };
 
     const handleApproveRejected = async (applicationId) => {
-        if (!window.confirm(t('AdminDigiBridgeMentors.confirmApprove'))) return;
+        if (!window.confirm('Сигурни ли сте, че искате да одобрите тази кандидатура?')) return;
 
         try {
-            // await approveMentor(applicationId);
-            toast.success(t('AdminDigiBridgeMentors.approveSuccess'));
-            // fetchMentors();
+            await approveMentor(applicationId);
+            toast.success('Кандидатурата беше одобрена');
+            fetchMentors();
         } catch (error) {
             console.error('Error approving mentor:', error);
-            toast.error(t('AdminDigiBridgeMentors.errors.approveError'));
+            toast.error('Грешка при одобряване на кандидатура');
         }
     };
 
     const handleBulkDelete = async () => {
-        if (!window.confirm(t('AdminDigiBridgeMentors.confirmBulkDelete', { count: selectedMentors.length }))) return;
+        if (!window.confirm(`Сигурни ли сте, че искате да изтриете ${selectedMentors.length} ментор(и)?`)) return;
 
         try {
-            // await bulkDeleteMentors(selectedMentors);
-            toast.success(t('AdminDigiBridgeMentors.bulkDeleteSuccess'));
+            await bulkDeleteMentors(selectedMentors);
+            toast.success('Менторите бяха изтрити');
             setSelectedMentors([]);
             setBulkActionMode(false);
-            // fetchMentors();
+            fetchMentors();
         } catch (error) {
             console.error('Error bulk deleting:', error);
-            toast.error(t('AdminDigiBridgeMentors.errors.bulkDeleteError'));
+            toast.error('Грешка при масово изтриване');
         }
     };
 
@@ -324,7 +211,14 @@ export const AdminDigiBridgeMentors = () => {
         const csv = [
             ['Име', 'Email', 'Телефон', 'Специализация', 'Студенти', 'Рейтинг'].join(','),
             ...filteredMentors.map(m =>
-                [m.name, m.email, m.phone, m.specialization, m.studentsCount, m.rating].join(',')
+                [
+                    m.name,
+                    m.email,
+                    m.phone,
+                    m.specialization || '',
+                    m.studentsCount || 0,
+                    m.rating || 0
+                ].join(',')
             )
         ].join('\n');
 
@@ -335,7 +229,7 @@ export const AdminDigiBridgeMentors = () => {
         a.download = `mentors_${new Date().toISOString().split('T')[0]}.csv`;
         a.click();
 
-        toast.success(t('AdminDigiBridgeMentors.exportSuccess'));
+        toast.success('CSV файлът беше експортиран');
     };
 
     const toggleMentorSelection = (mentorId) => {
@@ -356,12 +250,11 @@ export const AdminDigiBridgeMentors = () => {
 
     return (
         <div className="admin-digibridge-mentors">
-
             {/* HERO */}
             <div className="admin-digibridge-mentors-hero">
                 <div className="admin-digibridge-mentors-hero-content">
-                    <h1>{t('AdminDigiBridgeMentors.title')}</h1>
-                    <p>{t('AdminDigiBridgeMentors.subtitle')}</p>
+                    <h1>{t('AdminDigiBridgeMentors.title') || 'Управление на ментори'}</h1>
+                    <p>{t('AdminDigiBridgeMentors.subtitle') || 'Преглед и управление на всички одобрени ментори'}</p>
                 </div>
 
                 <div className="admin-digibridge-mentors-hero-actions">
@@ -374,7 +267,7 @@ export const AdminDigiBridgeMentors = () => {
                             <polyline points="7 10 12 15 17 10" />
                             <line x1="12" y1="15" x2="12" y2="3" />
                         </svg>
-                        {t('AdminDigiBridgeMentors.exportCSV')}
+                        Експорт CSV
                     </button>
 
                     <button
@@ -393,7 +286,7 @@ export const AdminDigiBridgeMentors = () => {
                                     <line x1="18" y1="6" x2="6" y2="18" />
                                     <line x1="6" y1="6" x2="18" y2="18" />
                                 </svg>
-                                {t('AdminDigiBridgeMentors.cancelBulk')}
+                                Откажи
                             </>
                         ) : (
                             <>
@@ -401,7 +294,7 @@ export const AdminDigiBridgeMentors = () => {
                                     <path d="M9 11l3 3L22 4" />
                                     <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
                                 </svg>
-                                {t('AdminDigiBridgeMentors.bulkActions')}
+                                Масови действия
                             </>
                         )}
                     </button>
@@ -411,7 +304,7 @@ export const AdminDigiBridgeMentors = () => {
             {/* BULK ACTION BAR */}
             {bulkActionMode && selectedMentors.length > 0 && (
                 <div className="admin-digibridge-mentors-bulk-bar">
-                    <span>{t('AdminDigiBridgeMentors.selectedCount', { count: selectedMentors.length })}</span>
+                    <span>Избрани: {selectedMentors.length}</span>
                     <button
                         className="admin-digibridge-mentors-bulk-btn admin-digibridge-mentors-bulk-btn-delete"
                         onClick={handleBulkDelete}
@@ -420,7 +313,7 @@ export const AdminDigiBridgeMentors = () => {
                             <polyline points="3 6 5 6 21 6" />
                             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
                         </svg>
-                        {t('AdminDigiBridgeMentors.deleteSelected')}
+                        Изтрий избраните
                     </button>
                 </div>
             )}
@@ -429,8 +322,8 @@ export const AdminDigiBridgeMentors = () => {
             <AdminDigiBridgeMentorStats
                 totalMentors={mentors.length}
                 onlineMentors={mentors.filter(m => m.isOnline).length}
-                totalStudents={mentors.reduce((sum, m) => sum + m.studentsCount, 0)}
-                averageRating={(mentors.reduce((sum, m) => sum + m.rating, 0) / mentors.length || 0).toFixed(1)}
+                totalStudents={mentors.reduce((sum, m) => sum + (m.studentsCount || 0), 0)}
+                averageRating={(mentors.reduce((sum, m) => sum + (m.rating || 0), 0) / mentors.length || 0).toFixed(1)}
             />
 
             {/* FILTERS */}
@@ -450,7 +343,7 @@ export const AdminDigiBridgeMentors = () => {
                                 checked={selectedMentors.length === filteredMentors.length && filteredMentors.length > 0}
                                 onChange={toggleSelectAll}
                             />
-                            <span>{t('AdminDigiBridgeMentors.selectAll')}</span>
+                            <span>Избери всички</span>
                         </label>
                     </div>
                 )}
@@ -458,7 +351,7 @@ export const AdminDigiBridgeMentors = () => {
                 {isLoading ? (
                     <div className="admin-digibridge-mentors-loading">
                         <div className="admin-digibridge-mentors-spinner"></div>
-                        <p>{t('AdminDigiBridgeMentors.loading')}</p>
+                        <p>Зареждане...</p>
                     </div>
                 ) : filteredMentors.length > 0 ? (
                     <div className="admin-digibridge-mentors-grid">
@@ -469,6 +362,7 @@ export const AdminDigiBridgeMentors = () => {
                                 onViewDetails={handleViewDetails}
                                 onEdit={handleEdit}
                                 onSendEmail={handleSendEmail}
+                                onActivate={handleActivate}  
                                 onDeactivate={handleDeactivate}
                                 onDelete={handleDelete}
                                 bulkMode={bulkActionMode}
@@ -480,8 +374,8 @@ export const AdminDigiBridgeMentors = () => {
                 ) : (
                     <div className="admin-digibridge-mentors-empty">
                         <div className="admin-digibridge-mentors-empty-icon">🔍</div>
-                        <h3>{t('AdminDigiBridgeMentors.noResults')}</h3>
-                        <p>{t('AdminDigiBridgeMentors.noResultsDescription')}</p>
+                        <h3>Няма намерени ментори</h3>
+                        <p>Опитайте да промените филтрите</p>
                     </div>
                 )}
             </div>
@@ -494,7 +388,7 @@ export const AdminDigiBridgeMentors = () => {
                         onClick={() => setShowRejected(!showRejected)}
                     >
                         <h2>
-                            {t('AdminDigiBridgeMentors.rejectedApplications')} ({rejectedApplications.length})
+                            Отхвърлени кандидатури ({rejectedApplications.length})
                         </h2>
                         <svg
                             className={`admin-digibridge-mentors-toggle-arrow ${showRejected ? 'open' : ''}`}
@@ -527,7 +421,7 @@ export const AdminDigiBridgeMentors = () => {
                                             {app.specialization}
                                         </span>
                                         <span className="admin-digibridge-mentors-rejected-reason">
-                                            {t('AdminDigiBridgeMentors.rejectionReason')}: {app.rejectionReason}
+                                            Причина: {app.rejectionReason}
                                         </span>
                                     </div>
                                     <button
@@ -540,7 +434,7 @@ export const AdminDigiBridgeMentors = () => {
                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                                             <polyline points="20 6 9 17 4 12" />
                                         </svg>
-                                        {t('AdminDigiBridgeMentors.approveNow')}
+                                        Одобри сега
                                     </button>
                                 </div>
                             ))}
@@ -549,8 +443,8 @@ export const AdminDigiBridgeMentors = () => {
                 </div>
             )}
 
-            {/* MODALS - ВРЕМЕННО ЗАКОМЕНТИРАНИ */}
-            {detailModalOpen && (
+            {/* MODALS */}
+            {detailModalOpen && selectedMentor && (
                 <AdminDigiBridgeMentorDetailModal
                     mentor={selectedMentor}
                     onClose={() => setDetailModalOpen(false)}
@@ -560,13 +454,15 @@ export const AdminDigiBridgeMentors = () => {
                     }}
                 />
             )}
-            {emailModalOpen && (
+
+            {emailModalOpen && selectedMentor && (
                 <AdminDigiBridgeSendEmailModal
                     mentor={selectedMentor}
                     onClose={() => setEmailModalOpen(false)}
                 />
             )}
-            {rejectedDetailModalOpen && (
+
+            {rejectedDetailModalOpen && selectedRejectedApplication && (
                 <AdminDigiBridgeRejectedDetailModal
                     application={selectedRejectedApplication}
                     onClose={() => setRejectedDetailModalOpen(false)}
@@ -578,35 +474,29 @@ export const AdminDigiBridgeMentors = () => {
                 />
             )}
 
-            {emailRejectedModalOpen && (
+            {emailRejectedModalOpen && selectedRejectedApplication && (
                 <AdminDigiBridgeSendEmailToRejectedModal
                     application={selectedRejectedApplication}
                     onClose={() => setEmailRejectedModalOpen(false)}
                 />
             )}
-            {editModalOpen && (
+
+            {editModalOpen && selectedMentor && (
                 <AdminDigiBridgeMentorEditModal
                     mentor={selectedMentor}
                     onClose={() => setEditModalOpen(false)}
-                    onSave={(updated) => {
-                        setEditModalOpen(false);
-                        // fetchMentors();
-                        toast.success(t('AdminDigiBridgeMentors.EditModal.successMessage'));
+                    onSave={async (updatedData) => {
+                        try {
+                            await updateMentor(selectedMentor.id, updatedData);
+                            setEditModalOpen(false);
+                            fetchMentors();
+                            toast.success('Менторът беше обновен успешно');
+                        } catch (error) {
+                            toast.error('Грешка при обновяване на ментор');
+                        }
                     }}
                 />
             )}
-
-            {/* {emailModalOpen && (
-        <AdminDigiBridgeSendEmailModal
-          mentor={selectedMentor}
-          onClose={() => setEmailModalOpen(false)}
-          onSend={async (emailData) => {
-            await sendPersonalEmail(emailData);
-            setEmailModalOpen(false);
-          }}
-        />
-      )} */}
-
         </div>
     );
 };

@@ -9,6 +9,7 @@ export const AdminDigiBridgeMentorCard = ({
   onViewDetails, 
   onEdit, 
   onSendEmail, 
+  onActivate,
   onDeactivate, 
   onDelete,
   bulkMode,
@@ -74,10 +75,18 @@ export const AdminDigiBridgeMentorCard = ({
           className="admin-digibridge-mentor-card-avatar"
         />
         
-        {/* ONLINE BADGE */}
-        <div className={`admin-digibridge-mentor-card-status ${mentor.isOnline ? 'online' : 'offline'}`}>
-          <span className="admin-digibridge-mentor-card-status-dot"></span>
-          {mentor.isOnline ? t('AdminDigiBridgeMentors.Card.online') : t('AdminDigiBridgeMentors.Card.offline')}
+     {/* ✅ ДОБАВИ STATUS BADGES */}
+        <div className="admin-digibridge-mentor-card-badges">
+          {/* ONLINE/OFFLINE BADGE */}
+          <div className={`admin-digibridge-mentor-card-status ${mentor.isOnline ? 'online' : 'offline'}`}>
+            <span className="admin-digibridge-mentor-card-status-dot"></span>
+            {mentor.isOnline ? t('AdminDigiBridgeMentors.Card.online') : t('AdminDigiBridgeMentors.Card.offline')}
+          </div>
+
+          {/* ACTIVE/INACTIVE BADGE */}
+          <div className={`admin-digibridge-mentor-card-account-status ${mentor.status}`}>
+            {mentor.status === 'active' ? '✓ Active' : '⏸ Inactive'}
+          </div>
         </div>
       </div>
 
@@ -121,7 +130,7 @@ export const AdminDigiBridgeMentorCard = ({
             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
           </svg>
           <div>
-            <span className="admin-digibridge-mentor-card-stat-value">{mentor.rating.toFixed(1)}</span>
+            <span className="admin-digibridge-mentor-card-stat-value">{parseFloat(mentor.rating || 0).toFixed(1)}</span>
             <span className="admin-digibridge-mentor-card-stat-label">{t('AdminDigiBridgeMentors.Card.rating')}</span>
           </div>
         </div>
@@ -209,14 +218,25 @@ export const AdminDigiBridgeMentorCard = ({
               {t('AdminDigiBridgeMentors.Card.sendEmail')}
             </button>
 
-            <button onClick={() => { onDeactivate(mentor.id); setShowActions(false); }}>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="12" cy="12" r="10"/>
-                <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
-              </svg>
-              {t('AdminDigiBridgeMentors.Card.deactivate')}
-            </button>
+            {/* ✅ ДОБАВИ УСЛОВНА ЛОГИКА: */}
+      {mentor.status === 'inactive' ? (
+        <button onClick={() => { onActivate(mentor.id); setShowActions(false); }}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <polygon points="5 3 19 12 5 21 5 3"/>
+          </svg>
+           {t('AdminDigiBridgeMentors.Card.activate')}
+        </button>
+      ) : (
+        <button onClick={() => { onDeactivate(mentor.id); setShowActions(false); }}>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+          </svg>
+          {t('AdminDigiBridgeMentors.Card.deactivate')}
+        </button>
+      )}
 
+             
             <button 
               className="admin-digibridge-mentor-card-dropdown-delete"
               onClick={() => { onDelete(mentor.id); setShowActions(false); }}
