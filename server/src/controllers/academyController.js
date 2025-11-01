@@ -860,5 +860,35 @@ academyController.delete(
     }
   }
 );
+academyController.post(
+  '/mentors/bulk-delete',
+  isAuth,
+  rbac.checkPermission('mentor', 'delete'),
+  async (req, res, next) => {
+    try {
+      const { mentorIds } = req.body;
 
+      if (!mentorIds || !Array.isArray(mentorIds) || mentorIds.length === 0) {
+        return res.status(400).json({ 
+          message: 'mentorIds array is required and must not be empty.' 
+        });
+      }
+
+      const deletedCount = await mentor.destroy({
+        where: {
+          id: mentorIds
+        }
+      });
+
+      res.status(200).json({
+        success: true,
+        message: `Successfully deleted ${deletedCount} mentors.`,
+        deletedCount
+      });
+
+    } catch (err) {
+      next(err);
+    }
+  }
+);
 module.exports = academyController;
