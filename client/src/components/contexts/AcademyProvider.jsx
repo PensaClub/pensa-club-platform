@@ -13,13 +13,7 @@ export const AcademyProvider = ({ children }) => {
   const clubService = clubServiceFactory(token);
 
   // State САМО за landing page данни
-  const [stats, setStats] = useState({
-    totalCourses: 15,
-    activeMentors: 12,
-    totalParticipants: 250,
-    countries: 3,
-    satisfactionRate: 98
-  });
+  const [stats, setStats] = useState(null);
 
   const [featuredMentors, setFeaturedMentors] = useState([]);
   const [featuredTestimonials, setFeaturedTestimonials] = useState([]);
@@ -30,16 +24,21 @@ export const AcademyProvider = ({ children }) => {
   // ===============================
 
   const fetchStats = useCallback(async () => {
-    try {
-      const data = await academyService.getStats();
-      setStats(data);
-      return data;
-    } catch (error) {
-      console.error('Error fetching stats:', error);
-      return stats;
-    }
-  }, []);
+  try {
+    const response = await academyService.getStats();
 
+    if (response && response.success && response.stats) {
+      setStats(response.stats); 
+      return response.stats;    
+    }
+    
+    console.warn('⚠️ Invalid response format');
+    return null;
+  } catch (error) {
+    console.error('❌ Error fetching stats:', error);
+    return null;
+  }
+}, []);
   const fetchFeaturedMentors = useCallback(async (limit = 3) => {
     try {
       const data = await academyService.getFeaturedMentors(limit);
@@ -429,14 +428,22 @@ Application ID: ${response.applicationId || response.id || 'N/A'}
   }, []);
 
   const getMentorsBySpecialization = useCallback(async () => {
-    try {
-      const data = await academyService.getMentorsBySpecialization();
-      return data.specializations || data;
-    } catch (error) {
-      console.error('Error fetching mentors by specialization:', error);
-      throw error;
+  try {
+    const response = await academyService.getMentorsBySpecialization();
+
+    if (response.success && response.specializations) {
+      return {
+        success: true,
+        specializations: response.specializations
+      };
     }
-  }, []);
+    
+    return { success: false, specializations: [] };
+  } catch (error) {
+    console.error('Error fetching mentors by specialization:', error);
+    return { success: false, specializations: [] };
+  }
+}, []);
 
   const getMentorActivityTrend = useCallback(async (months = 6) => {
     try {

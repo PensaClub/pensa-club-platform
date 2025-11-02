@@ -1,40 +1,15 @@
 // src/components/AdminDigiBridgeMentorStatistics/MentorsBySpecialization/MentorsBySpecialization.jsx
 
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import './mentorsBySpecialization.css';
 
-export const MentorsBySpecialization = ({ mentors }) => {
+export const MentorsBySpecialization = ({ data }) => {
   const { t } = useTranslation();
 
-  // Групира менторите по специализация
-  const specializationData = useMemo(() => {
-    const grouped = mentors.reduce((acc, mentor) => {
-      const spec = mentor.specialization || 'Other';
-      if (!acc[spec]) {
-        acc[spec] = {
-          specialization: spec,
-          count: 0,
-          totalStudents: 0,
-          averageRating: 0,
-          ratings: []
-        };
-      }
-      acc[spec].count++;
-      acc[spec].totalStudents += mentor.studentsCount;
-      acc[spec].ratings.push(mentor.rating);
-      return acc;
-    }, {});
-
-    // Изчислява средна оценка и сортира
-    return Object.values(grouped)
-      .map(item => ({
-        ...item,
-        averageRating: (item.ratings.reduce((sum, r) => sum + r, 0) / item.ratings.length).toFixed(1)
-      }))
-      .sort((a, b) => b.count - a.count);
-  }, [mentors]);
+  // ✅ ВЕЧЕ НЕ ПРАВИМ useMemo - ДАННИТЕ ИДВАТ ГОТОВИ
+  const specializationData = data || [];
 
   // Цветове за различните специализации
   const COLORS = {
@@ -42,7 +17,8 @@ export const MentorsBySpecialization = ({ mentors }) => {
     'Social Media': '#0ea5e9',
     'Online Banking': '#10b981',
     'Media Literacy': '#f59e0b',
-    'E-Government': '#ec4899',
+    'Communication Tools': '#ec4899',
+    'E-Commerce': '#f97316',
     'Other': '#6b7280'
   };
 
@@ -144,30 +120,32 @@ export const MentorsBySpecialization = ({ mentors }) => {
       </div>
 
       {/* STATS CARDS */}
-      <div className="mentors-by-specialization-stats">
-        {specializationData.slice(0, 3).map((spec, index) => (
-          <div key={index} className="mentors-by-specialization-stat-card">
-            <div 
-              className="mentors-by-specialization-stat-icon"
-              style={{ backgroundColor: COLORS[spec.specialization] || COLORS['Other'] }}
-            >
-              {index + 1}
-            </div>
-            <div className="mentors-by-specialization-stat-content">
-              <p className="mentors-by-specialization-stat-label">{spec.specialization}</p>
-              <div className="mentors-by-specialization-stat-values">
-                <span className="mentors-by-specialization-stat-value">
-                  <strong>{spec.count}</strong> {t('MentorsBySpecialization.mentors')}
-                </span>
-                <span className="mentors-by-specialization-stat-divider">•</span>
-                <span className="mentors-by-specialization-stat-value">
-                  ⭐ {spec.averageRating}
-                </span>
+      {specializationData.length > 0 && (
+        <div className="mentors-by-specialization-stats">
+          {specializationData.slice(0, 3).map((spec, index) => (
+            <div key={index} className="mentors-by-specialization-stat-card">
+              <div 
+                className="mentors-by-specialization-stat-icon"
+                style={{ backgroundColor: COLORS[spec.specialization] || COLORS['Other'] }}
+              >
+                {index + 1}
+              </div>
+              <div className="mentors-by-specialization-stat-content">
+                <p className="mentors-by-specialization-stat-label">{spec.specialization}</p>
+                <div className="mentors-by-specialization-stat-values">
+                  <span className="mentors-by-specialization-stat-value">
+                    <strong>{spec.count}</strong> {t('MentorsBySpecialization.mentors')}
+                  </span>
+                  <span className="mentors-by-specialization-stat-divider">•</span>
+                  <span className="mentors-by-specialization-stat-value">
+                    ⭐ {spec.averageRating}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

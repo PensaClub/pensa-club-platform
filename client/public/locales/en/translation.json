@@ -12035,7 +12035,9 @@
         "languages": "Languages",
         "submit": "Submit Application",
         "submitting": "Submitting...",
-        "submitNote": "We will review your application and contact you soon"
+        "submitNote": "We will review your application and contact you soon",
+        "country": "Country"
+
       },
       "photo": {
         "label": "Photo",
@@ -12084,7 +12086,9 @@
         "availabilityRequired": "Availability is required",
         "languagesRequired": "Select at least one language",
         "fillRequired": "Please fill in all required fields",
-        "submitError": "Error submitting application. Please try again."
+        "submitError": "Error submitting application. Please try again.",
+        "countryRequired": "Country is required"
+
       },
       "success": "Application submitted successfully! We will contact you soon."
     },
@@ -12293,6 +12297,7 @@
     "approveSuccess": "Mentor was approved successfully",
     "bulkDeleteSuccess": "Mentors were deleted successfully",
     "exportSuccess": "CSV file was exported successfully",
+    "country": "Country",
     "errors": {
       "fetchError": "Error loading mentors",
       "deactivateError": "Error deactivating mentor",
@@ -12367,7 +12372,9 @@
       "createdAt": "Created",
       "approvedAt": "Approved",
       "lastActiveAt": "Last Active",
-      "close": "Close"
+      "close": "Close",
+      "copyToClipboard": "Copy to Clipboard",
+      "country": "Country"
     },
     "SendEmailModal": {
       "title": "Send Email to Mentor",
@@ -12441,7 +12448,9 @@
       "saveButton": "Save Changes",
       "savingButton": "Saving...",
       "successMessage": "Data was updated successfully!",
-      "errorMessage": "Error updating data"
+      "errorMessage": "Error updating data",
+      "country": "Country"
+
     }
   },
   "AdminNotificationBell": {
@@ -12551,7 +12560,9 @@
     "confirmRejectBtn": "Confirm Rejection",
     "confirmApprove": "Are you sure you want to approve this application?",
     "confirmReject": "Are you sure you want to reject this application?",
-    "priorityContact": "Priority Contact"
+    "priorityContact": "Priority Contact",
+    "country": "Country"
+
   },
   "AdminDigiBridgeSendEmailToApplicantModal": {
     "title": "Send Email to Applicant",

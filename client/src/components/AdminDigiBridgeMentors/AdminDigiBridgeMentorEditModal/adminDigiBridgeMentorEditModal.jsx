@@ -7,7 +7,7 @@ import './adminDigiBridgeMentorEditModal.css';
 
 export const AdminDigiBridgeMentorEditModal = ({ mentor, onClose, onSave }) => {
   const { t } = useTranslation();
-  
+
   const STORAGE_KEY = `mentor_edit_draft_${mentor.id}`;
 
   // Функция за зареждане на данни от sessionStorage
@@ -34,6 +34,7 @@ export const AdminDigiBridgeMentorEditModal = ({ mentor, onClose, onSave }) => {
       email: mentor.email || '',
       phone: mentor.phone || '',
       age: mentor.age || '',
+      country: mentor.country || 'BG',
       specialization: mentor.specialization || '',
       education: mentor.education || '',
       experience: mentor.experience || '',
@@ -60,7 +61,17 @@ export const AdminDigiBridgeMentorEditModal = ({ mentor, onClose, onSave }) => {
     'Media Literacy',
     'Communication Tools'
   ];
-
+  const countryOptions = [
+    { code: 'BG', name: '🇧🇬 България' },
+    { code: 'DE', name: '🇩🇪 Германия' },
+    { code: 'AT', name: '🇦🇹 Австрия' },
+    { code: 'GR', name: '🇬🇷 Гърция' },
+    { code: 'RO', name: '🇷🇴 Румъния' },
+    { code: 'RS', name: '🇷🇸 Сърбия' },
+    { code: 'MK', name: '🇲🇰 Северна Македония' },
+    { code: 'TR', name: '🇹🇷 Турция' },
+    { code: 'OTHER', name: '🌍 Друга' }
+  ];
   const availableLanguages = ['bg', 'en', 'de', 'fr', 'es', 'ru'];
   const priorityOptions = ['email', 'phone', 'viber', 'facebook', 'linkedin'];
 
@@ -129,12 +140,12 @@ export const AdminDigiBridgeMentorEditModal = ({ mentor, onClose, onSave }) => {
     try {
       // Тук ще викаме API функцията за update
       // await updateMentor(mentor.id, formData);
-      
+
       toast.success(t('AdminDigiBridgeMentors.EditModal.successMessage'));
-      
+
       // ВАЖНО: Изчистваме draft данните след успешен save
       clearDraftData();
-      
+
       onSave(formData);
       onClose();
     } catch (error) {
@@ -150,7 +161,7 @@ export const AdminDigiBridgeMentorEditModal = ({ mentor, onClose, onSave }) => {
       const confirmLeave = window.confirm(t('AdminDigiBridgeMentors.EditModal.confirmLeave'));
       if (!confirmLeave) return;
     }
-    
+
     // Питаме дали да запазим draft
     if (hasUnsavedChanges) {
       const keepDraft = window.confirm(t('AdminDigiBridgeMentors.EditModal.keepDraft'));
@@ -158,7 +169,7 @@ export const AdminDigiBridgeMentorEditModal = ({ mentor, onClose, onSave }) => {
         clearDraftData();
       }
     }
-    
+
     onClose();
   };
 
@@ -173,11 +184,11 @@ export const AdminDigiBridgeMentorEditModal = ({ mentor, onClose, onSave }) => {
 
   return (
     <div className="admin-digibridge-mentor-edit-modal-overlay" onClick={handleBackdropClick}>
-      <div 
+      <div
         className="admin-digibridge-mentor-edit-modal"
         onClick={(e) => e.stopPropagation()}
       >
-        
+
         {/* HEADER */}
         <div className="admin-digibridge-mentor-edit-modal-header">
           <div>
@@ -193,21 +204,21 @@ export const AdminDigiBridgeMentorEditModal = ({ mentor, onClose, onSave }) => {
               {t('AdminDigiBridgeMentors.EditModal.editingMentor')}: <strong>{mentor.name}</strong>
             </p>
           </div>
-          <button 
+          <button
             className="admin-digibridge-mentor-edit-modal-close"
             onClick={handleCancel}
             disabled={loading}
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <line x1="18" y1="6" x2="6" y2="18"/>
-              <line x1="6" y1="6" x2="18" y2="18"/>
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
             </svg>
           </button>
         </div>
 
         {/* FORM */}
         <form className="admin-digibridge-mentor-edit-modal-form" onSubmit={handleSubmit}>
-          
+
           {/* BASIC INFO */}
           <div className="admin-digibridge-mentor-edit-modal-section">
             <h3 className="admin-digibridge-mentor-edit-modal-section-title">
@@ -243,6 +254,24 @@ export const AdminDigiBridgeMentorEditModal = ({ mentor, onClose, onSave }) => {
                   className="admin-digibridge-mentor-edit-modal-input"
                   disabled={loading}
                 />
+              </div>
+              <div className="admin-digibridge-mentor-edit-modal-field">
+                <label className="admin-digibridge-mentor-edit-modal-label">
+                  {t('AdminDigiBridgeMentors.EditModal.countryLabel')} <span className="required">*</span>
+                </label>
+                <select
+                  name="country"
+                  value={formData.country}
+                  onChange={handleChange}
+                  className="admin-digibridge-mentor-edit-modal-select"
+                  disabled={loading}
+                >
+                  {countryOptions.map(country => (
+                    <option key={country.code} value={country.code}>
+                      {country.name}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
 
@@ -523,9 +552,9 @@ export const AdminDigiBridgeMentorEditModal = ({ mentor, onClose, onSave }) => {
               ) : (
                 <>
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
-                    <polyline points="17 21 17 13 7 13 7 21"/>
-                    <polyline points="7 3 7 8 15 8"/>
+                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                    <polyline points="17 21 17 13 7 13 7 21" />
+                    <polyline points="7 3 7 8 15 8" />
                   </svg>
                   {t('AdminDigiBridgeMentors.EditModal.saveButton')}
                 </>

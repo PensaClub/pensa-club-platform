@@ -1,6 +1,8 @@
 
 const academyController = require('express').Router();
-const { mentor_application, mentor, mentor_course, user_account,admin_notification  } = require('../sequelize/models/index');
+const { Op } = require('sequelize');
+
+const { mentor_application, mentor, mentor_course, user_account, admin_notification, sequelize } = require('../sequelize/models/index');
 const isAuth = require('../middlewares/isAuth.js');
 const rbac = require('../middlewares/rbac.js');
 const { mentorApplicationSchema } = require('../schemas/mentorApplication.schema');
@@ -18,6 +20,7 @@ academyController.post('/mentors', isAuth, rbac.checkPermission('mentor', 'creat
       email,
       phone,
       age,
+      country,
       photoUrl,
       specialization,
       education,
@@ -36,9 +39,9 @@ academyController.post('/mentors', isAuth, rbac.checkPermission('mentor', 'creat
     } = req.body;
 
     // Валидация
-    if (!userId || !name || !email || !phone || !age) {
-      return res.status(400).json({ 
-        message: 'Missing required fields: userId, name, email, phone, age' 
+   if (!userId || !name || !email || !phone || !age) {
+      return res.status(400).json({
+        message: 'Missing required fields: userId, name, email, phone, age'
       });
     }
 
@@ -64,6 +67,7 @@ academyController.post('/mentors', isAuth, rbac.checkPermission('mentor', 'creat
       email,
       phone,
       age,
+      country: country || 'BG',
       photoUrl: photoUrl || null,
       specialization: specialization || null,
       education: education || null,
@@ -226,6 +230,7 @@ academyController.patch('/mentors/:id', isAuth, rbac.checkPermission('mentor', '
       'email',
       'phone',
       'age',
+      'country',
       'photoUrl',
       'specialization',
       'education',
@@ -313,48 +318,42 @@ academyController.delete('/mentors/:id', isAuth, rbac.checkPermission('mentor', 
 // server/controllers/academyController.js
 
 academyController.post('/mentors/apply', isAuth, async (req, res, next) => {
-
   try {
-    // Валидирам с Zod
     const validationResult = mentorApplicationSchema.safeParse(req.body);
-    
+
     if (!validationResult.success) {
       throw validationResult.error;
     }
 
     const userId = req.user.userId;
 
-    // Проверявам дали user вече има pending или approved кандидатура
-    
     const existingApplication = await mentor_application.findOne({
-      where: { 
+      where: {
         userId,
         status: ['pending', 'approved']
       }
     });
 
-
     if (existingApplication) {
-      
       if (existingApplication.status === 'approved') {
-        return res.status(400).json({ 
-          message: 'You are already an approved mentor.' 
+        return res.status(400).json({
+          message: 'You are already an approved mentor.'
         });
       }
-      return res.status(400).json({ 
-        message: 'You already have a pending mentor application.' 
+      return res.status(400).json({
+        message: 'You already have a pending mentor application.'
       });
     }
-    
+
     const applicationData = {
       userId,
       ...validationResult.data,
+      country: validationResult.data.country || 'BG', // ✅ ДОБАВЕНО
     };
 
     const application = await mentor_application.create(applicationData);
 
-
-    res.status(201).json({ 
+    res.status(201).json({
       message: 'Mentor application submitted successfully!',
       applicationId: application.id,
       status: 'pending'
@@ -489,6 +488,7 @@ academyController.post(
         email: application.email,
         phone: application.phone,
         age: application.age,
+        country: application.country || 'BG',
         photoUrl: application.photoUrl,
         specialization: application.specialization,
         education: application.education,
@@ -887,6 +887,177 @@ academyController.post(
       });
 
     } catch (err) {
+      next(err);
+    }
+  }
+);
+academyController.get('/stats', async (req, res, next) => {
+  try {
+    const totalMentors = await mentor.count();
+    const activeMentors = await mentor.count({
+      where: { status: 'active' }
+    });
+
+    const mentorsData = await mentor.findAll({
+      attributes: [[sequelize.fn('SUM', sequelize.col('students_count')), 'totalStudents']]
+    });
+    const totalStudents = parseInt(mentorsData[0].dataValues.totalStudents) || 0;
+
+    const totalCourses = await mentor_course.count();
+
+    const ratingData = await mentor.findAll({
+      attributes: [[sequelize.fn('AVG', sequelize.col('rating')), 'avgRating']]
+    });
+    const averageRating = parseFloat(ratingData[0].dataValues.avgRating) || 0;
+
+    // ✅ РЕАЛНО ИЗЧИСЛЕНИЕ НА ДЪРЖАВИ
+    const countriesData = await mentor.findAll({
+      attributes: ['country'],
+      where: {
+        country: {
+         [Op.ne]: null
+        }
+      },
+      group: ['country'],
+      raw: true
+    });
+    const countries = countriesData.length;
+
+    res.status(200).json({
+      success: true,
+      stats: {
+        totalMentors,
+        activeMentors,
+        totalStudents,
+        totalCourses,
+        averageRating: parseFloat(averageRating.toFixed(1)),
+        countries, // ✅ РЕАЛНО ОТ БАЗАТА
+        satisfaction: 100
+      }
+    });
+
+  } catch (err) {
+    next(err);
+  }
+});
+// ===============================
+// GET /api/academy/mentors/statistics/overview
+// Dashboard Overview Cards
+// ===============================
+academyController.get(
+  '/mentors/statistics/overview',
+  isAuth,
+  rbac.checkPermission('mentor', 'read'),
+  async (req, res, next) => {
+    try {
+      // Брой активни ментори
+      const activeMentors = await mentor.count({
+        where: { status: 'active' }
+      });
+
+      // Общ брой ментори
+      const totalMentors = await mentor.count();
+
+      // Общ брой студенти
+      const mentorsData = await mentor.findAll({
+        attributes: [[sequelize.fn('SUM', sequelize.col('students_count')), 'totalStudents']]
+      });
+      const totalStudents = parseInt(mentorsData[0].dataValues.totalStudents) || 0;
+
+      // Средна оценка
+      const ratingData = await mentor.findAll({
+        attributes: [[sequelize.fn('AVG', sequelize.col('rating')), 'avgRating']]
+      });
+      const averageRating = parseFloat(ratingData[0].dataValues.avgRating) || 0;
+
+      // Завършени курсове
+      const coursesData = await mentor_course.findAll({
+        attributes: [[sequelize.fn('SUM', sequelize.col('completed_count')), 'totalCompleted']]
+      });
+      const totalCoursesCompleted = parseInt(coursesData[0].dataValues.totalCompleted) || 0;
+
+      // Активни курсове
+      const totalCoursesActive = await mentor_course.count({
+        where: { status: 'active' }
+      });
+
+      // Общ брой сесии (от mentors таблица)
+      const sessionsData = await mentor.findAll({
+        attributes: [[sequelize.fn('SUM', sequelize.col('sessions_count')), 'totalSessions']]
+      });
+      const totalSessionsThisMonth = parseInt(sessionsData[0].dataValues.totalSessions) || 0;
+
+      // Online hours (засега 0, чака ФАЗА 2)
+      const totalOnlineHours = 0;
+
+      // Completion rate (засега средна стойност)
+      const averageCompletionRate = 95;
+
+      // Общ брой отзиви (засега 0)
+      const totalReviews = 0;
+
+      res.status(200).json({
+        success: true,
+        stats: {
+          activeMentors,
+          totalMentors,
+          totalStudents,
+          averageRating: parseFloat(averageRating.toFixed(1)),
+          totalCoursesCompleted,
+          totalSessionsThisMonth,
+          totalOnlineHours,
+          averageCompletionRate,
+          totalReviews
+        }
+      });
+
+    } catch (err) {
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// GET /api/academy/mentors/statistics/by-specialization
+// Ментори по специализация
+// ===============================
+academyController.get(
+  '/mentors/statistics/by-specialization',
+  isAuth,
+  rbac.checkPermission('mentor', 'read'),
+  async (req, res, next) => {
+    try {
+      const specializations = await mentor.findAll({
+        attributes: [
+          'specialization',
+          [sequelize.fn('COUNT', sequelize.col('id')), 'count'],
+          [sequelize.fn('SUM', sequelize.col('students_count')), 'totalStudents'],
+          [sequelize.fn('AVG', sequelize.col('rating')), 'averageRating']
+        ],
+        where: {
+          specialization: {
+            [Op.ne]: null
+          }
+        },
+        group: ['specialization'],
+        order: [[sequelize.literal('count'), 'DESC']],
+        raw: true
+      });
+
+      const formattedData = specializations.map(spec => ({
+        specialization: spec.specialization,
+        count: parseInt(spec.count),
+        totalStudents: parseInt(spec.totalStudents) || 0,
+        averageRating: parseFloat(parseFloat(spec.averageRating).toFixed(1))
+      }));
+
+      res.status(200).json({
+        success: true,
+        specializations: formattedData
+      });
+
+    } catch (err) {
+       console.error('❌ [BY-SPECIALIZATION] Error:', err); 
       next(err);
     }
   }

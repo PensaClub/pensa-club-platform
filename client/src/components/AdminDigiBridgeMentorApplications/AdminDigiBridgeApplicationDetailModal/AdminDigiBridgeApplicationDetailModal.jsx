@@ -38,7 +38,20 @@ export const AdminDigiBridgeApplicationDetailModal = ({
         };
         return languages[code] || code;
     };
-
+    const getCountryName = (code) => {
+        const countries = {
+            'BG': '🇧🇬 България',
+            'DE': '🇩🇪 Германия',
+            'AT': '🇦🇹 Австрия',
+            'GR': '🇬🇷 Гърция',
+            'RO': '🇷🇴 Румъния',
+            'RS': '🇷🇸 Сърбия',
+            'MK': '🇲🇰 Северна Македония',
+            'TR': '🇹🇷 Турция',
+            'OTHER': '🌍 Друга'
+        };
+        return countries[code] || code;
+    };
     const handleApprove = async () => {
         if (window.confirm(t('AdminDigiBridgeApplicationDetailModal.confirmApprove'))) {
             setIsSubmitting(true);
@@ -141,6 +154,10 @@ export const AdminDigiBridgeApplicationDetailModal = ({
                             <div className="admin-digibridge-application-detail-modal-field">
                                 <label>{t('AdminDigiBridgeApplicationDetailModal.age')}:</label>
                                 <span>{application.age} {t('AdminDigiBridgeApplicationDetailModal.years')}</span>
+                            </div>
+                            <div className="admin-digibridge-application-detail-modal-field">
+                                <label>{t('AdminDigiBridgeApplicationDetailModal.country')}:</label>
+                                <span>{getCountryName(application.country)}</span>
                             </div>
                             <div className="admin-digibridge-application-detail-modal-field">
                                 <label>{t('AdminDigiBridgeApplicationDetailModal.languages')}:</label>

@@ -20,29 +20,35 @@ export const DetailedMentorsTable = ({ mentors }) => {
           bValue = b.name;
           break;
         case 'specialization':
-          aValue = a.specialization;
-          bValue = b.specialization;
+          aValue = a.specialization || '';
+          bValue = b.specialization || '';
           break;
         case 'students':
-          aValue = a.studentsCount;
-          bValue = b.studentsCount;
+          aValue = a.studentsCount || 0;
+          bValue = b.studentsCount || 0;
           break;
         case 'courses':
-          aValue = a.courses.completed;
-          bValue = b.courses.completed;
+          aValue = a.courses?.length || 0;
+          bValue = b.courses?.length || 0;
           break;
         case 'rating':
-          aValue = a.rating;
-          bValue = b.rating;
+          aValue = a.rating || 0;
+          bValue = b.rating || 0;
           break;
-        case 'onlineHours':
-          aValue = a.onlineTime.thisMonth;
-          bValue = b.onlineTime.thisMonth;
+        case 'sessions':
+          aValue = a.sessionsCount || 0;
+          bValue = b.sessionsCount || 0;
           break;
-        case 'responseTime':
-          aValue = a.quality.responseTime;
-          bValue = b.quality.responseTime;
-          break;
+        // TODO ФАЗА 2: Online Hours Tracking
+        // case 'onlineHours':
+        //   aValue = a.onlineTime?.thisMonth || 0;
+        //   bValue = b.onlineTime?.thisMonth || 0;
+        //   break;
+        // TODO ФАЗА 2: Response Time Analytics
+        // case 'responseTime':
+        //   aValue = a.quality?.responseTime || 0;
+        //   bValue = b.quality?.responseTime || 0;
+        //   break;
         default:
           return 0;
       }
@@ -103,6 +109,7 @@ export const DetailedMentorsTable = ({ mentors }) => {
         </p>
       </div>
 
+      {/* DESKTOP TABLE */}
       <div className="detailed-mentors-table-wrapper">
         <table className="detailed-mentors-table-content">
           <thead>
@@ -137,18 +144,31 @@ export const DetailedMentorsTable = ({ mentors }) => {
                   <SortIcon columnKey="rating" />
                 </div>
               </th>
+              <th onClick={() => handleSort('sessions')} className="detailed-mentors-table-th sortable center">
+                <div className="detailed-mentors-table-th-content">
+                  {t('DetailedMentorsTable.sessions')}
+                  <SortIcon columnKey="sessions" />
+                </div>
+              </th>
+              
+              {/* TODO ФАЗА 2: Online Hours Tracking Column
               <th onClick={() => handleSort('onlineHours')} className="detailed-mentors-table-th sortable center">
                 <div className="detailed-mentors-table-th-content">
                   {t('DetailedMentorsTable.onlineHours')}
                   <SortIcon columnKey="onlineHours" />
                 </div>
               </th>
+              */}
+
+              {/* TODO ФАЗА 2: Response Time Analytics Column
               <th onClick={() => handleSort('responseTime')} className="detailed-mentors-table-th sortable center">
                 <div className="detailed-mentors-table-th-content">
                   {t('DetailedMentorsTable.responseTime')}
                   <SortIcon columnKey="responseTime" />
                 </div>
               </th>
+              */}
+
               <th className="detailed-mentors-table-th center">
                 <div className="detailed-mentors-table-th-content">
                   {t('DetailedMentorsTable.status')}
@@ -162,7 +182,7 @@ export const DetailedMentorsTable = ({ mentors }) => {
                 <td className="detailed-mentors-table-td">
                   <div className="detailed-mentors-table-mentor-cell">
                     <img
-                      src={mentor.photoUrl}
+                      src={mentor.photoUrl || "/images/homePage/user-it.png"}
                       alt={mentor.name}
                       className="detailed-mentors-table-avatar"
                       onError={(e) => {
@@ -174,34 +194,44 @@ export const DetailedMentorsTable = ({ mentors }) => {
                 </td>
                 <td className="detailed-mentors-table-td">
                   <span className="detailed-mentors-table-specialization">
-                    {mentor.specialization}
+                    {mentor.specialization || 'N/A'}
                   </span>
                 </td>
                 <td className="detailed-mentors-table-td detailed-mentors-table-td-center">
-                  <strong>{mentor.studentsCount}</strong>
+                  <strong>{mentor.studentsCount || 0}</strong>
                 </td>
                 <td className="detailed-mentors-table-td detailed-mentors-table-td-center">
-                  <strong>{mentor.courses.completed}</strong>
+                  <strong>{mentor.courses?.length || 0}</strong>
                 </td>
                 <td className="detailed-mentors-table-td detailed-mentors-table-td-center">
                   <div className="detailed-mentors-table-rating">
                     <span className="detailed-mentors-table-rating-star">⭐</span>
-                    <strong>{mentor.rating}</strong>
+                    <strong>{mentor.rating ? parseFloat(mentor.rating).toFixed(1) : '0.0'}</strong>
                   </div>
                 </td>
                 <td className="detailed-mentors-table-td detailed-mentors-table-td-center">
-                  <strong>{mentor.onlineTime.thisMonth}</strong>
+                  <strong>{mentor.sessionsCount || 0}</strong>
+                </td>
+
+                {/* TODO ФАЗА 2: Online Hours Cell
+                <td className="detailed-mentors-table-td detailed-mentors-table-td-center">
+                  <strong>{mentor.onlineTime?.thisMonth || 0}</strong>
                   <span className="detailed-mentors-table-unit">ч</span>
                 </td>
+                */}
+
+                {/* TODO ФАЗА 2: Response Time Cell
                 <td className="detailed-mentors-table-td detailed-mentors-table-td-center">
                   <span className={`detailed-mentors-table-response-badge ${
-                    mentor.quality.responseTime <= 10 ? 'excellent' :
-                    mentor.quality.responseTime <= 15 ? 'good' :
-                    mentor.quality.responseTime <= 20 ? 'average' : 'slow'
+                    (mentor.quality?.responseTime || 0) <= 10 ? 'excellent' :
+                    (mentor.quality?.responseTime || 0) <= 15 ? 'good' :
+                    (mentor.quality?.responseTime || 0) <= 20 ? 'average' : 'slow'
                   }`}>
-                    {mentor.quality.responseTime} мин
+                    {mentor.quality?.responseTime || 0} мин
                   </span>
                 </td>
+                */}
+
                 <td className="detailed-mentors-table-td detailed-mentors-table-td-center">
                   <span className={`detailed-mentors-table-status-badge ${mentor.isOnline ? 'online' : 'offline'}`}>
                     {mentor.isOnline ? t('DetailedMentorsTable.online') : t('DetailedMentorsTable.offline')}
@@ -213,12 +243,13 @@ export const DetailedMentorsTable = ({ mentors }) => {
         </table>
       </div>
 
+      {/* MOBILE VIEW */}
       <div className="detailed-mentors-table-mobile">
         {sortedMentors.map((mentor) => (
           <div key={mentor.id} className="detailed-mentors-table-card">
             <div className="detailed-mentors-table-card-header">
               <img
-                src={mentor.photoUrl}
+                src={mentor.photoUrl || "/images/homePage/user-it.png"}
                 alt={mentor.name}
                 className="detailed-mentors-table-card-avatar"
                 onError={(e) => {
@@ -227,7 +258,7 @@ export const DetailedMentorsTable = ({ mentors }) => {
               />
               <div className="detailed-mentors-table-card-info">
                 <h3 className="detailed-mentors-table-card-name">{mentor.name}</h3>
-                <p className="detailed-mentors-table-card-spec">{mentor.specialization}</p>
+                <p className="detailed-mentors-table-card-spec">{mentor.specialization || 'N/A'}</p>
               </div>
               <span className={`detailed-mentors-table-status-badge ${mentor.isOnline ? 'online' : 'offline'}`}>
                 {mentor.isOnline ? t('DetailedMentorsTable.online') : t('DetailedMentorsTable.offline')}
@@ -237,33 +268,43 @@ export const DetailedMentorsTable = ({ mentors }) => {
             <div className="detailed-mentors-table-card-body">
               <div className="detailed-mentors-table-card-row">
                 <span className="detailed-mentors-table-card-label">{t('DetailedMentorsTable.students')}:</span>
-                <strong>{mentor.studentsCount}</strong>
+                <strong>{mentor.studentsCount || 0}</strong>
               </div>
               <div className="detailed-mentors-table-card-row">
                 <span className="detailed-mentors-table-card-label">{t('DetailedMentorsTable.courses')}:</span>
-                <strong>{mentor.courses.completed}</strong>
+                <strong>{mentor.courses?.length || 0}</strong>
               </div>
               <div className="detailed-mentors-table-card-row">
                 <span className="detailed-mentors-table-card-label">{t('DetailedMentorsTable.rating')}:</span>
                 <div className="detailed-mentors-table-rating">
                   <span className="detailed-mentors-table-rating-star">⭐</span>
-                  <strong>{mentor.rating}</strong>
+                  <strong>{mentor.rating ? parseFloat(mentor.rating).toFixed(1) : '0.0'}</strong>
                 </div>
               </div>
               <div className="detailed-mentors-table-card-row">
-                <span className="detailed-mentors-table-card-label">{t('DetailedMentorsTable.onlineHours')}:</span>
-                <strong>{mentor.onlineTime.thisMonth} ч</strong>
+                <span className="detailed-mentors-table-card-label">{t('DetailedMentorsTable.sessions')}:</span>
+                <strong>{mentor.sessionsCount || 0}</strong>
               </div>
+
+              {/* TODO ФАЗА 2: Online Hours Row
+              <div className="detailed-mentors-table-card-row">
+                <span className="detailed-mentors-table-card-label">{t('DetailedMentorsTable.onlineHours')}:</span>
+                <strong>{mentor.onlineTime?.thisMonth || 0} ч</strong>
+              </div>
+              */}
+
+              {/* TODO ФАЗА 2: Response Time Row
               <div className="detailed-mentors-table-card-row">
                 <span className="detailed-mentors-table-card-label">{t('DetailedMentorsTable.responseTime')}:</span>
                 <span className={`detailed-mentors-table-response-badge ${
-                  mentor.quality.responseTime <= 10 ? 'excellent' :
-                  mentor.quality.responseTime <= 15 ? 'good' :
-                  mentor.quality.responseTime <= 20 ? 'average' : 'slow'
+                  (mentor.quality?.responseTime || 0) <= 10 ? 'excellent' :
+                  (mentor.quality?.responseTime || 0) <= 15 ? 'good' :
+                  (mentor.quality?.responseTime || 0) <= 20 ? 'average' : 'slow'
                 }`}>
-                  {mentor.quality.responseTime} мин
+                  {mentor.quality?.responseTime || 0} мин
                 </span>
               </div>
+              */}
             </div>
           </div>
         ))}

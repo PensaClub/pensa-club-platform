@@ -36,7 +36,20 @@ export const AdminDigiBridgeMentorDetailModal = ({ mentor, onClose, onSendEmail 
         return '📧';
     }
   };
-
+const getCountryName = (code) => {
+  const countries = {
+    'BG': '🇧🇬 България',
+    'DE': '🇩🇪 Германия',
+    'AT': '🇦🇹 Австрия',
+    'GR': '🇬🇷 Гърция',
+    'RO': '🇷🇴 Румъния',
+    'RS': '🇷🇸 Сърбия',
+    'MK': '🇲🇰 Северна Македония',
+    'TR': '🇹🇷 Турция',
+    'OTHER': '🌍 Друга'
+  };
+  return countries[code] || code;
+};
   // COPY TO CLIPBOARD ФУНКЦИЯ
   const handleCopy = async (text, fieldName) => {
     try {
@@ -229,7 +242,29 @@ export const AdminDigiBridgeMentorDetailModal = ({ mentor, onClose, onSendEmail 
                   )}
                 </button>
               </div>
-
+{/* COUNTRY */}
+<div className="admin-digibridge-mentor-detail-info-item-with-copy">
+  <div className="admin-digibridge-mentor-detail-info-item">
+    <span className="admin-digibridge-mentor-detail-info-label">{t('AdminDigiBridgeMentors.DetailModal.country')}:</span>
+    <span className="admin-digibridge-mentor-detail-info-value">{getCountryName(mentor.country)}</span>
+  </div>
+  <button
+    className={`admin-digibridge-mentor-detail-copy-btn ${copiedField === 'country' ? 'copied' : ''}`}
+    onClick={() => handleCopy(mentor.country, 'country')}
+    title={t('AdminDigiBridgeMentors.DetailModal.copyToClipboard')}
+  >
+    {copiedField === 'country' ? (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <polyline points="20 6 9 17 4 12" />
+      </svg>
+    ) : (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+      </svg>
+    )}
+  </button>
+</div>
               {/* VIBER */}
               {mentor.viber && (
                 <div className="admin-digibridge-mentor-detail-info-item-with-copy">
