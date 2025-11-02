@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { HelmetProvider, Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
@@ -14,20 +14,40 @@ import { DigiBridgeCTA } from './DigiBridgeCTA/DigiBridgeCTA';
 import { DigiBridgePartners } from './DigiBridgePartners/DigiBridgePartners';
 import { DigiBridgeFAQ } from './DigiBridgeFAQ/DigiBridgeFAQ';
 import { DigiBridgeTestimonialForm } from './DigiBridgeTestimonialForm/DigiBridgeTestimonialForm';
+import { useAcademy } from '../contexts/AcademyProvider';
 
 export const DigiBridgeAcademy = () => {
   const { t } = useTranslation();
   const location = useLocation();
+  const { fetchStats } = useAcademy(); 
 
-  // Scroll to top при навигация
+  const [stats, setStats] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
+  useEffect(() => {
+    const loadStats = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchStats(); 
+       
+        setStats(data);
+      } catch (error) {
+        console.error('Error fetching academy stats:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadStats();
+  }, [fetchStats]);
+
   return (
     <HelmetProvider>
       <div className="digibridge-academy-wrapper">
-        {/* SEO Meta Tags */}
         <Helmet>
           <title>{t('digiBridge.meta.title')}</title>
           <meta name="description" content={t('digiBridge.meta.description')} />
@@ -42,10 +62,10 @@ export const DigiBridgeAcademy = () => {
         <DigiBridgeHeader />
         <DigiBridgeHero />
 
-        <DigiBridgeAbout />
+        <DigiBridgeAbout stats={stats} loading={loading} />
         <DigiBridgeHowItWorks />
         <DigiBridgeFeatures />
-        <DigiBridgeMentors />
+        <DigiBridgeMentors stats={stats} loading={loading} />
         <DigiBridgeTestimonials />
         <DigiBridgeCTA />
         <DigiBridgePartners />

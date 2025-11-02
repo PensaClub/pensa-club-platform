@@ -11389,7 +11389,9 @@
         "languages": "Sprachen",
         "submit": "Bewerbung absenden",
         "submitting": "Wird gesendet...",
-        "submitNote": "Wir werden Ihre Bewerbung prüfen und uns bald bei Ihnen melden"
+        "submitNote": "Wir werden Ihre Bewerbung prüfen und uns bald bei Ihnen melden",
+        "country": "Land"
+
       },
       "photo": {
         "label": "Foto",
@@ -11438,7 +11440,9 @@
         "availabilityRequired": "Verfügbarkeit ist erforderlich",
         "languagesRequired": "Wählen Sie mindestens eine Sprache",
         "fillRequired": "Bitte füllen Sie alle Pflichtfelder aus",
-        "submitError": "Fehler beim Absenden der Bewerbung. Bitte versuchen Sie es erneut."
+        "submitError": "Fehler beim Absenden der Bewerbung. Bitte versuchen Sie es erneut.",
+        "countryRequired": "Land ist erforderlich"
+
       },
       "success": "Bewerbung erfolgreich abgeschickt! Wir werden uns bald bei Ihnen melden."
     },
@@ -11587,6 +11591,7 @@
     "approveSuccess": "Mentor wurde erfolgreich genehmigt",
     "bulkDeleteSuccess": "Mentoren wurden erfolgreich gelöscht",
     "exportSuccess": "CSV-Datei wurde erfolgreich exportiert",
+    "country": "Land",
     "errors": {
       "fetchError": "Fehler beim Laden der Mentoren",
       "deactivateError": "Fehler beim Deaktivieren des Mentors",
@@ -11661,7 +11666,9 @@
       "createdAt": "Erstellt",
       "approvedAt": "Genehmigt",
       "lastActiveAt": "Zuletzt aktiv",
-      "close": "Schließen"
+      "close": "Schließen",
+      "copyToClipboard": "Kopieren",
+      "country": "Land"
     },
     "SendEmailModal": {
       "title": "E-Mail an Mentor senden",
@@ -11735,7 +11742,9 @@
       "saveButton": "Änderungen speichern",
       "savingButton": "Wird gespeichert...",
       "successMessage": "Daten wurden erfolgreich aktualisiert!",
-      "errorMessage": "Fehler beim Aktualisieren der Daten"
+      "errorMessage": "Fehler beim Aktualisieren der Daten",
+    "country": "Land"
+
     }
   },
   "AdminNotificationBell": {
@@ -11845,7 +11854,9 @@
     "confirmRejectBtn": "Ablehnung bestätigen",
     "confirmApprove": "Sind Sie sicher, dass Sie diese Bewerbung genehmigen möchten?",
     "confirmReject": "Sind Sie sicher, dass Sie diese Bewerbung ablehnen möchten?",
-    "priorityContact": "Prioritätskontakt"
+    "priorityContact": "Prioritätskontakt",
+    "country": "Land"
+
   },
 
   "AdminDigiBridgeSendEmailToApplicantModal": {
