@@ -509,6 +509,47 @@ const getFirebaseOverviewStats = useCallback(async () => {
     throw error;
   }
 }, []);
+
+const getTopMentorsByOnlineTime = useCallback(async (limit = 5) => {
+  try {
+    const data = await academyService.getTopMentorsByOnlineTime(limit);
+    return data;
+  } catch (error) {
+    console.error('Error fetching top mentors by online time:', error);
+    throw error;
+  }
+}, []);
+
+const getResponseTimesStats = useCallback(async () => {
+  try {
+    const data = await academyService.getResponseTimesStats();
+    return data;
+  } catch (error) {
+    console.error('Error fetching response times stats:', error);
+    throw error;
+  }
+}, []);
+
+const getActivityTrendData = useCallback(async (months = 6) => {
+  try {
+    const data = await academyService.getActivityTrend(months);
+    return data;
+  } catch (error) {
+    console.error('Error fetching activity trend:', error);
+    throw error;
+  }
+}, []);
+
+const getSessionQualityData = useCallback(async () => {
+  try {
+    const data = await academyService.getSessionQuality();
+    return data;
+  } catch (error) {
+    console.error('Error fetching session quality:', error);
+    throw error;
+  }
+}, []);
+
   // ===============================
   // CONTEXT VALUE
   // ===============================
@@ -565,6 +606,11 @@ const getFirebaseOverviewStats = useCallback(async () => {
   getMentorFirebaseStats,
   refreshMentorStats,
   getFirebaseOverviewStats,
+    // Activity Tracking & Charts 📊
+  getTopMentorsByOnlineTime,
+  getResponseTimesStats,
+  getActivityTrendData,
+  getSessionQualityData,
   };
 
   return (

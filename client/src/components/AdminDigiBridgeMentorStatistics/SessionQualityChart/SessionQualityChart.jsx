@@ -5,43 +5,39 @@ import { useTranslation } from 'react-i18next';
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import './sessionQualityChart.css';
 
-export const SessionQualityChart = ({ mentors }) => {
+export const SessionQualityChart = ({ qualityData }) => {
   const { t } = useTranslation();
 
-  // Изчислява качествените метрики
-  const qualityData = useMemo(() => {
-    const totalSessions = mentors.reduce((sum, m) => sum + m.sessionsCount, 0);
-    const totalCanceled = mentors.reduce((sum, m) => sum + m.quality.canceledSessions, 0);
-    
-    // Изчисляваме завършени сесии
-    const averageCompletionRate = mentors.reduce((sum, m) => sum + m.quality.completionRate, 0) / mentors.length;
-    const completedSessions = Math.round((totalSessions * averageCompletionRate) / 100);
-    
-    // Изчисляваме не се явили (остатъка от 100%)
-    const noShowRate = 100 - averageCompletionRate - (totalCanceled / totalSessions * 100);
-    const noShowSessions = Math.round((totalSessions * noShowRate) / 100);
+  // ✅ Изчислява pie chart data от aggregated stats
+  const chartData = useMemo(() => {
+    if (!qualityData) return [];
+
+    const { totalSessions, completedSessions, activeSessions } = qualityData;
+
+    // Изчислява incomplete sessions (не са нито completed, нито active)
+    const incompleteSessions = totalSessions - completedSessions - activeSessions;
 
     return [
       {
         name: t('SessionQualityChart.completed'),
         value: completedSessions,
-        percentage: averageCompletionRate.toFixed(1),
+        percentage: totalSessions > 0 ? ((completedSessions / totalSessions) * 100).toFixed(1) : 0,
         color: '#10b981'
       },
       {
-        name: t('SessionQualityChart.canceled'),
-        value: totalCanceled,
-        percentage: ((totalCanceled / totalSessions) * 100).toFixed(1),
-        color: '#f59e0b'
+        name: t('SessionQualityChart.active'),
+        value: activeSessions,
+        percentage: totalSessions > 0 ? ((activeSessions / totalSessions) * 100).toFixed(1) : 0,
+        color: '#3b82f6'
       },
       {
-        name: t('SessionQualityChart.noShow'),
-        value: noShowSessions,
-        percentage: noShowRate.toFixed(1),
-        color: '#ef4444'
+        name: t('SessionQualityChart.incomplete'),
+        value: incompleteSessions > 0 ? incompleteSessions : 0,
+        percentage: totalSessions > 0 ? ((incompleteSessions / totalSessions) * 100).toFixed(1) : 0,
+        color: '#f59e0b'
       }
-    ];
-  }, [mentors, t]);
+    ].filter(item => item.value > 0); // ✅ Филтрира празни секции
+  }, [qualityData, t]);
 
   // Custom Label
   const renderCustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percentage }) => {
@@ -108,11 +104,11 @@ export const SessionQualityChart = ({ mentors }) => {
       </div>
 
       <div className="session-quality-chart-wrapper">
-        {qualityData.length > 0 ? (
+        {chartData.length > 0 ? (
           <ResponsiveContainer width="100%" height={400}>
             <PieChart>
               <Pie
-                data={qualityData}
+                data={chartData}
                 cx="50%"
                 cy="50%"
                 labelLine={false}
@@ -122,7 +118,7 @@ export const SessionQualityChart = ({ mentors }) => {
                 paddingAngle={5}
                 dataKey="value"
               >
-                {qualityData.map((entry, index) => (
+                {chartData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Pie>
@@ -148,26 +144,28 @@ export const SessionQualityChart = ({ mentors }) => {
       </div>
 
       {/* STATISTICS CARDS */}
-      <div className="session-quality-chart-stats">
-        {qualityData.map((item, index) => (
-          <div key={index} className="session-quality-chart-stat-card">
-            <div 
-              className="session-quality-chart-stat-icon"
-              style={{ backgroundColor: item.color }}
-            >
-              {index === 0 && '✅'}
-              {index === 1 && '⚠️'}
-              {index === 2 && '❌'}
+      {qualityData && (
+        <div className="session-quality-chart-stats">
+          {chartData.map((item, index) => (
+            <div key={index} className="session-quality-chart-stat-card">
+              <div 
+                className="session-quality-chart-stat-icon"
+                style={{ backgroundColor: item.color }}
+              >
+                {item.name === t('SessionQualityChart.completed') && '✅'}
+                {item.name === t('SessionQualityChart.active') && '🔄'}
+                {item.name === t('SessionQualityChart.incomplete') && '⚠️'}
+              </div>
+              <div className="session-quality-chart-stat-content">
+                <p className="session-quality-chart-stat-label">{item.name}</p>
+                <p className="session-quality-chart-stat-value">
+                  {item.value} <span>({item.percentage}%)</span>
+                </p>
+              </div>
             </div>
-            <div className="session-quality-chart-stat-content">
-              <p className="session-quality-chart-stat-label">{item.name}</p>
-              <p className="session-quality-chart-stat-value">
-                {item.value} <span>({item.percentage}%)</span>
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

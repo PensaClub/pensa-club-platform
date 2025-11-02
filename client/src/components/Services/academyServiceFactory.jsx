@@ -193,6 +193,25 @@ export const academyServiceFactory = () => {
     getFirebaseOverviewStats: async () => {
       return requester.get(`${apiUrl}/academy/mentors/statistics/firebase-overview`);
     },
+    // ===============================
+    // ACTIVITY TRACKING & CHARTS - ФАЗА 2.2 📊
+    // ===============================
+
+    getTopMentorsByOnlineTime: async (limit = 5) => {
+      return requester.get(`${apiUrl}/academy/mentors/statistics/top-by-online-time?limit=${limit}`);
+    },
+
+    getResponseTimesStats: async () => {
+      return requester.get(`${apiUrl}/academy/mentors/statistics/response-times`);
+    },
+
+    getActivityTrend: async (months = 6) => {
+      return requester.get(`${apiUrl}/academy/mentors/statistics/activity-trend?months=${months}`);
+    },
+
+    getSessionQuality: async () => {
+      return requester.get(`${apiUrl}/academy/mentors/statistics/session-quality`);
+    },
   };
 };
 

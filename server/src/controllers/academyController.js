@@ -1077,7 +1077,6 @@ academyController.get(
   rbac.checkPermission('mentor', 'read'),
   async (req, res, next) => {
     try {
-      console.log('📊 Fetching all mentors with Firebase stats...');
       
       const mentors = await getAllMentorsCombinedStats();
 
@@ -1106,8 +1105,6 @@ academyController.get(
     try {
       const mentorId = parseInt(req.params.id);
       
-      console.log(`📊 Fetching Firebase stats for mentor ${mentorId}...`);
-
       const stats = await getMentorCombinedStats(mentorId);
 
       res.status(200).json({
@@ -1142,9 +1139,6 @@ academyController.post(
     try {
       const mentorId = parseInt(req.params.id);
 
-      console.log(`🔄 Refreshing stats for mentor ${mentorId}...`);
-
-      // Вземи email от PostgreSQL
       const mentorData = await mentor.findByPk(mentorId, {
         include: [
           {
@@ -1193,7 +1187,6 @@ academyController.get(
   rbac.checkPermission('mentor', 'read'),
   async (req, res, next) => {
     try {
-      console.log('📊 Calculating Firebase overview stats...');
 
       const mentors = await getAllMentorsCombinedStats();
 
@@ -1234,6 +1227,224 @@ academyController.get(
 
     } catch (err) {
       console.error('❌ [FIREBASE-OVERVIEW] Error:', err);
+      next(err);
+    }
+  }
+  
+);
+// ===============================
+// GET /api/academy/mentors/statistics/top-by-online-time
+// Топ ментори по онлайн време
+// ===============================
+academyController.get(
+  '/mentors/statistics/top-by-online-time',
+  isAuth,
+  rbac.checkPermission('mentor', 'read'),
+  async (req, res, next) => {
+    try {
+      const { limit = 10 } = req.query;
+ 
+      const mentors = await getAllMentorsCombinedStats();
+
+      const topMentors = mentors
+        .sort((a, b) => {
+          const aHours = a.firebaseStats.totalOnlineHours || 0;
+          const bHours = b.firebaseStats.totalOnlineHours || 0;
+          return bHours - aHours;
+        })
+        .slice(0, parseInt(limit))
+        .map(mentor => ({
+          id: mentor.id,
+          name: mentor.name,
+          photoUrl: mentor.photoUrl,
+          specialization: mentor.specialization,
+          // ✅ ФОРМАТ КАКЪВТО ОЧАКВА КОМПОНЕНТА
+          onlineTime: {
+            thisMonth: mentor.firebaseStats.totalOnlineHours || 0,  // TODO: Разделяне на месеци идва от historical tracking
+            total: mentor.firebaseStats.totalOnlineHours || 0
+          }
+        }));
+
+      res.status(200).json({
+        success: true,
+        mentors: topMentors,
+        total: topMentors.length
+      });
+
+    } catch (err) {
+      console.error('❌ [TOP-BY-ONLINE-TIME] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// GET /api/academy/mentors/statistics/response-times
+// Response time статистики
+// ===============================
+academyController.get(
+  '/mentors/statistics/response-times',
+  isAuth,
+  rbac.checkPermission('mentor', 'read'),
+  async (req, res, next) => {
+    try {
+
+      const mentors = await getAllMentorsCombinedStats();
+
+      // Групирай по response time ranges
+      const ranges = {
+        excellent: [], // <= 10 min
+        good: [],      // 11-15 min
+        average: [],   // 16-20 min
+        slow: []       // > 20 min
+      };
+
+      mentors.forEach(mentor => {
+        const responseTime = mentor.firebaseStats.averageResponseTime || 0;
+        
+        if (responseTime === 0) return; // Skip ако няма данни
+
+        const mentorData = {
+          id: mentor.id,
+          name: mentor.name,
+          responseTime,
+          totalMessages: mentor.firebaseStats.totalMessages
+        };
+
+        if (responseTime <= 10) {
+          ranges.excellent.push(mentorData);
+        } else if (responseTime <= 15) {
+          ranges.good.push(mentorData);
+        } else if (responseTime <= 20) {
+          ranges.average.push(mentorData);
+        } else {
+          ranges.slow.push(mentorData);
+        }
+      });
+
+      const stats = {
+        excellent: ranges.excellent.length,
+        good: ranges.good.length,
+        average: ranges.average.length,
+        slow: ranges.slow.length,
+        totalMentorsWithData: mentors.filter(m => m.firebaseStats.averageResponseTime > 0).length,
+        mentorsByRange: ranges
+      };
+
+      res.status(200).json({
+        success: true,
+        stats
+      });
+
+    } catch (err) {
+      console.error('❌ [RESPONSE-TIMES] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// GET /api/academy/mentors/statistics/activity-trend
+// Activity trend (последните 6 месеца)
+// ===============================
+academyController.get(
+  '/mentors/statistics/activity-trend',
+  isAuth,
+  rbac.checkPermission('mentor', 'read'),
+  async (req, res, next) => {
+    try {
+      const { months = 6 } = req.query;
+      
+      // TODO ФАЗА 2.3: За сега връщаме текущите данни
+      // В бъдеще ще трябва да записваме historical data
+      
+      const mentors = await getAllMentorsCombinedStats();
+
+      // Агрегирани данни
+      const totalSessions = mentors.reduce((sum, m) => sum + (m.sessionsCount || 0), 0);
+      const totalOnlineHours = mentors.reduce((sum, m) => sum + (m.firebaseStats.totalOnlineHours || 0), 0);
+      const totalMessages = mentors.reduce((sum, m) => sum + (m.firebaseStats.totalMessages || 0), 0);
+
+      // За сега връщаме current month data
+      // TODO: Implement historical tracking
+      const currentMonth = new Date().toISOString().slice(0, 7); // "2025-11"
+
+      const trend = [
+        {
+          month: currentMonth,
+          sessions: totalSessions,
+          onlineHours: totalOnlineHours,
+          messages: totalMessages,
+          activeMentors: mentors.length
+        }
+      ];
+
+      res.status(200).json({
+        success: true,
+        trend,
+        note: 'Historical data tracking will be implemented in Phase 2.3'
+      });
+
+    } catch (err) {
+      console.error('❌ [ACTIVITY-TREND] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// GET /api/academy/mentors/statistics/session-quality
+// Session quality metrics
+// ===============================
+academyController.get(
+  '/mentors/statistics/session-quality',
+  isAuth,
+  rbac.checkPermission('mentor', 'read'),
+  async (req, res, next) => {
+    try {
+
+      const mentors = await getAllMentorsCombinedStats();
+
+      let totalSessions = 0;
+      let completedSessions = 0;
+      let activeSessions = 0;
+      let totalRatings = 0;
+      let ratedMentors = 0;
+
+      mentors.forEach(mentor => {
+        totalSessions += mentor.sessionsCount || 0;
+        completedSessions += mentor.firebaseStats.completedSessions || 0;
+        activeSessions += mentor.firebaseStats.activeSessions || 0;
+        
+        if (mentor.rating > 0) {
+          totalRatings += mentor.rating;
+          ratedMentors++;
+        }
+      });
+
+      const completionRate = totalSessions > 0 
+        ? Math.round((completedSessions / totalSessions) * 100) 
+        : 0;
+
+      const averageRating = ratedMentors > 0
+        ? (totalRatings / ratedMentors).toFixed(1)
+        : 0;
+
+      res.status(200).json({
+        success: true,
+        quality: {
+          totalSessions,
+          completedSessions,
+          activeSessions,
+          completionRate,
+          averageRating,
+          totalMentors: mentors.length,
+          ratedMentors
+        }
+      });
+
+    } catch (err) {
+      console.error('❌ [SESSION-QUALITY] Error:', err);
       next(err);
     }
   }

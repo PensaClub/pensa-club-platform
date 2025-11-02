@@ -12647,7 +12647,9 @@
     "noShow": "No Show",
     "sessions": "Sessions",
     "percentage": "Percentage",
-    "noData": "No data to display"
+    "noData": "No data to display",
+    "incomplete": "Incomplete"
+
   },
   "ResponseTimeChart": {
     "title": "Response Time",
@@ -12684,7 +12686,9 @@
     "responseTime": "Response Time",
     "status": "Status",
     "online": "Online",
-    "offline": "Offline"
+    "offline": "Offline",
+    "sessions": "Сесии"
+
   },
   "ExportStatistics": {
     "exportPDF": "Export PDF",

@@ -155,18 +155,16 @@ const getAllMentorsCombinedStats = async () => {
 
         const firebaseStats = await getMentorFirebaseStats(firebaseMentorId);
 
-        // ✅ СБОР на сесиите от двете бази
         const totalSessions = (firebaseStats.totalSessions || 0) + (mentorData.sessionsCount || 0);
         const totalStudentsCount = (mentorData.studentsCount || 0) + (firebaseStats.totalSessions || 0);
+        const totalOnlineHours = Math.round((firebaseStats.totalOnlineMinutes || 0) / 60 * 100) / 100; // ✅ DECIMAL
         mentorsWithStats.push({
           id: mentorData.id,
           name: displayName,
           email: user.email,
           photoUrl: mentorData.photoUrl,
           specialization: mentorData.specialization,
-          // ✅ Students: PostgreSQL first, Firebase fallback
           studentsCount: totalStudentsCount,
-          // ✅ Sessions: СБОР от Firebase + PostgreSQL
           sessionsCount: totalSessions,
           rating: parseFloat(mentorData.rating) || 0,
           isOnline: mentorData.isOnline || false,
@@ -174,13 +172,13 @@ const getAllMentorsCombinedStats = async () => {
           role: user.role,
           
           firebaseStats: {
-            totalSessions: firebaseStats.totalSessions,
-            activeSessions: firebaseStats.activeSessions,
-            completedSessions: firebaseStats.completedSessions,
-            totalOnlineMinutes: firebaseStats.totalOnlineMinutes,
-            totalOnlineHours: firebaseStats.totalOnlineHours,
-            averageResponseTime: firebaseStats.averageResponseTime,
-            totalMessages: firebaseStats.totalMessages
+          totalSessions: firebaseStats.totalSessions,
+  activeSessions: firebaseStats.activeSessions,
+  completedSessions: firebaseStats.completedSessions,
+  totalOnlineMinutes: firebaseStats.totalOnlineMinutes,
+  totalOnlineHours: totalOnlineHours, 
+  averageResponseTime: firebaseStats.averageResponseTime,
+  totalMessages: firebaseStats.totalMessages
           }
         });
       } catch (error) {

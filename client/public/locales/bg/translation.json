@@ -12855,7 +12855,8 @@
     "noShow": "Не се явили",
     "sessions": "Сесии",
     "percentage": "Процент",
-    "noData": "Няма данни за показване"
+    "noData": "Няма данни за показване",
+    "incomplete": "Незавършени"
   },
    "ResponseTimeChart": {
     "title": "Време за отговор",
@@ -12892,7 +12893,8 @@
     "responseTime": "Response Time",
     "status": "Статус",
     "online": "Онлайн",
-    "offline": "Офлайн"
+    "offline": "Офлайн",
+    "sessions": "Сесии"
   },
   "ExportStatistics": {
     "exportPDF": "Експорт PDF",

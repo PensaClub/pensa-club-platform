@@ -12,7 +12,6 @@ let firebaseDb = null;
  */
 const initializeFirebaseAdmin = () => {
   if (firebaseApp) {
-    console.log('✅ Firebase Admin already initialized');
     return { app: firebaseApp, db: firebaseDb };
   }
 
@@ -33,8 +32,6 @@ const initializeFirebaseAdmin = () => {
         databaseURL: 'https://pensaclub-909e0-default-rtdb.europe-west1.firebasedatabase.app'
       });
 
-      console.log('✅ Firebase Admin initialized (Development mode)');
-      console.log(`📁 Service account loaded from: ${serviceAccountPath}`);
     } 
     // Production: Use environment variables
     else {
@@ -47,7 +44,6 @@ const initializeFirebaseAdmin = () => {
         databaseURL: process.env.FIREBASE_DATABASE_URL
       });
 
-      console.log('✅ Firebase Admin initialized (Production mode)');
     }
 
     firebaseDb = admin.database();

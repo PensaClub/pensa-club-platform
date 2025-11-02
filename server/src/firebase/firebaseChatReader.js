@@ -127,72 +127,101 @@ const calculateConversationOnlineTime = (conversation) => {
 };
 
 /**
- * Вземи статистики за ментор
- * @param {string} mentorId 
- * @returns {Promise<Object>}
+ * Вземи статистики за конкретен ментор от Firebase
+ * @param {string} mentorId - Mentor email с _dot_ и _at_
+ * @returns {Object} - Статистики
  */
 const getMentorFirebaseStats = async (mentorId) => {
   try {
-    const conversations = await getMentorConversations(mentorId);
-    
-    if (conversations.length === 0) {
-      return {
-        totalSessions: 0,
-        activeSessions: 0,
-        completedSessions: 0,
-        totalOnlineMinutes: 0,
-        averageResponseTime: 0,
-        totalMessages: 0
-      };
-    }
+    const db = getFirebaseDb();
+
+    // ✅ 1. ВЗЕМИ РЕАЛНИ SESSIONS
+    const sessionsRef = db.ref(`mentor_sessions/${mentorId}`);
+    const sessionsSnapshot = await sessionsRef.once('value');
+    const sessions = sessionsSnapshot.val() || {};
 
     let totalOnlineMinutes = 0;
-    let responseTimes = [];
-    let totalMessages = 0;
-    let activeSessions = 0;
-    let completedSessions = 0;
+    let completedSessionsCount = 0;
 
-    // Изчисли статистики за всяка conversation
-    for (const conversation of conversations) {
-      // Online time
-      totalOnlineMinutes += calculateConversationOnlineTime(conversation);
-
-      // Response time
-      const responseTime = await calculateConversationResponseTime(conversation.id, mentorId);
-      if (responseTime > 0) {
-        responseTimes.push(responseTime);
+    Object.values(sessions).forEach(session => {
+      if (session.endTime && session.startTime) {
+        const durationMs = session.endTime - session.startTime;
+        const durationMinutes = Math.floor(durationMs / 60000);
+        totalOnlineMinutes += durationMinutes;
+        completedSessionsCount++;
       }
+    });
 
-      // Messages count
-      const messages = await getConversationMessages(conversation.id);
-      const mentorMessages = messages.filter(msg => msg.senderId === mentorId);
+    const totalOnlineHours = Math.round((totalOnlineMinutes / 60) * 100) / 100; 
+
+    // ✅ 2. ВЗЕМИ CONVERSATIONS
+    const conversationsRef = db.ref('chat_conversations');
+    const conversationsSnapshot = await conversationsRef
+      .orderByChild('mentorId')
+      .equalTo(mentorId)
+      .once('value');
+
+    const conversations = conversationsSnapshot.val() || {};
+    const conversationsList = Object.entries(conversations);
+
+    const totalSessions = conversationsList.length;
+    const activeSessions = conversationsList.filter(([_, conv]) => conv.status === 'active').length;
+    const completedSessions = conversationsList.filter(([_, conv]) => conv.status === 'completed').length;
+
+    // ✅ 3. ВЗЕМИ СЪОБЩЕНИЯ И RESPONSE TIME
+    let totalMessages = 0;
+    let responseTimes = [];
+
+    for (const [convId, conv] of conversationsList) {
+      const messagesRef = db.ref(`chat_messages/${convId}`);
+      const messagesSnapshot = await messagesRef.once('value');
+      const messages = messagesSnapshot.val() || {};
+      
+      const messagesList = Object.values(messages);
+      const mentorMessages = messagesList.filter(msg => msg.senderType === 'mentor');
       totalMessages += mentorMessages.length;
 
-      // Status counts
-      if (conversation.status === 'active') {
-        activeSessions++;
-      } else if (conversation.status === 'completed') {
-        completedSessions++;
-      }
+      // Изчисли response time
+      const userMessages = messagesList.filter(msg => msg.senderType === 'user');
+      
+      userMessages.forEach((userMsg, index) => {
+        const nextMentorMsg = mentorMessages.find(
+          mMsg => mMsg.timestamp > userMsg.timestamp
+        );
+        
+        if (nextMentorMsg) {
+          const responseTimeMs = nextMentorMsg.timestamp - userMsg.timestamp;
+          const responseTimeMinutes = Math.floor(responseTimeMs / 60000);
+          responseTimes.push(responseTimeMinutes);
+        }
+      });
     }
 
-    // Среден response time
     const averageResponseTime = responseTimes.length > 0
       ? Math.round(responseTimes.reduce((sum, time) => sum + time, 0) / responseTimes.length)
       : 0;
 
     return {
-      totalSessions: conversations.length,
+      totalSessions,
       activeSessions,
       completedSessions,
       totalOnlineMinutes,
-      totalOnlineHours: Math.round(totalOnlineMinutes / 60),
+      totalOnlineHours,
       averageResponseTime,
       totalMessages
     };
+
   } catch (error) {
     console.error('Error getting mentor Firebase stats:', error);
-    throw error;
+    return {
+      totalSessions: 0,
+      activeSessions: 0,
+      completedSessions: 0,
+      totalOnlineMinutes: 0,
+      totalOnlineHours: 0,
+      averageResponseTime: 0,
+      totalMessages: 0
+    };
   }
 };
 

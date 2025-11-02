@@ -6,7 +6,7 @@ import './adminDigiBridgeMentorStatistics.css';
 
 import { StatisticsOverviewCards } from './StatisticsOverviewCards/StatisticsOverviewCards';
 import { useAcademy } from '../contexts/AcademyProvider';
-import { MOCK_MENTORS_DETAILED } from './mockMentorStatisticsData'; 
+import { MOCK_MENTORS_DETAILED } from './mockMentorStatisticsData';
 import { TopMentorsByCourses } from './TopMentorsByCourses/TopMentorsByCourses';
 import { TopMentorsByOnlineTime } from './TopMentorsByOnlineTime/TopMentorsByOnlineTime';
 import { ActivityTrendChart } from './ActivityTrendChart/ActivityTrendChart';
@@ -18,16 +18,27 @@ import { ExportStatisticsButton } from './ExportStatisticsButton/ExportStatistic
 
 export const AdminDigiBridgeMentorStatistics = () => {
     const { t } = useTranslation();
-    const { getMentorStatisticsOverview, getMentorsBySpecialization, getAllMentors,getAllMentorsWithStats } = useAcademy(); 
+    const { getMentorStatisticsOverview,
+        getMentorsBySpecialization,
+        getAllMentors,
+        getAllMentorsWithStats,
+        getTopMentorsByOnlineTime,
+        getResponseTimesStats,
+        getActivityTrendData,
+        getSessionQualityData
+    } = useAcademy();
 
     // ✅ STATE ЗА РЕАЛНИ ДАННИ
     const [overviewStats, setOverviewStats] = useState(null);
     const [specializationData, setSpecializationData] = useState([]);
-    const [realMentors, setRealMentors] = useState([]); 
-    
+    const [realMentors, setRealMentors] = useState([]);
+    const [topMentorsByTime, setTopMentorsByTime] = useState([]);
+    const [responseTimesData, setResponseTimesData] = useState(null);
+    const [activityTrendData, setActivityTrendData] = useState([]);
+    const [sessionQualityData, setSessionQualityData] = useState(null);
     // ✅ ВРЕМЕННО - MOCK ДАННИ ЗА ФАЗА 2 КОМПОНЕНТИТЕ
     const [mockMentors] = useState(MOCK_MENTORS_DETAILED);
-    
+
     const [isLoading, setIsLoading] = useState(false);
     const [timeFilter, setTimeFilter] = useState('thisMonth');
 
@@ -59,6 +70,30 @@ export const AdminDigiBridgeMentorStatistics = () => {
             const mentorsResponse = await getAllMentorsWithStats();
             if (mentorsResponse?.success) {
                 setRealMentors(mentorsResponse.mentors);
+            }
+
+            // ✅ FETCH TOP MENTORS BY ONLINE TIME
+            const topMentorsResponse = await getTopMentorsByOnlineTime(5);
+            if (topMentorsResponse?.success) {
+                setTopMentorsByTime(topMentorsResponse.mentors);
+            }
+
+            // ✅ FETCH RESPONSE TIMES
+            const responseTimesResponse = await getResponseTimesStats();
+            if (responseTimesResponse?.success) {
+                setResponseTimesData(responseTimesResponse.stats);
+            }
+
+            // ✅ FETCH ACTIVITY TREND
+            const activityTrendResponse = await getActivityTrendData(6);
+            if (activityTrendResponse?.success) {
+                setActivityTrendData(activityTrendResponse.trend);
+            }
+
+            // ✅ FETCH SESSION QUALITY
+            const sessionQualityResponse = await getSessionQualityData();
+            if (sessionQualityResponse?.success) {
+                setSessionQualityData(sessionQualityResponse.quality);
             }
 
         } catch (error) {
@@ -137,11 +172,11 @@ export const AdminDigiBridgeMentorStatistics = () => {
                     <div className="admin-digibridge-mentor-statistics-charts">
                         {/* TODO ФАЗА 2 - ВРЕМЕННО MOCK ДАННИ */}
                         <TopMentorsByCourses mentors={mockMentors} />
-                        <TopMentorsByOnlineTime mentors={mockMentors} />
+                        <TopMentorsByOnlineTime mentors={topMentorsByTime} limit={10} />
                         <ActivityTrendChart mentors={mockMentors} />
-                        <SessionQualityChart mentors={mockMentors} />
+                        <SessionQualityChart qualityData={sessionQualityData} />
                         <ResponseTimeChart mentors={mockMentors} />
-                        
+
                         {/* ✅ SPECIALIZATION CHART - РЕАЛНИ ДАННИ */}
                         {specializationData.length > 0 && (
                             <MentorsBySpecialization data={specializationData} />

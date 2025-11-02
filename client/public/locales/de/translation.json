@@ -11391,7 +11391,6 @@
         "submitting": "Wird gesendet...",
         "submitNote": "Wir werden Ihre Bewerbung prüfen und uns bald bei Ihnen melden",
         "country": "Land"
-
       },
       "photo": {
         "label": "Foto",
@@ -11442,7 +11441,6 @@
         "fillRequired": "Bitte füllen Sie alle Pflichtfelder aus",
         "submitError": "Fehler beim Absenden der Bewerbung. Bitte versuchen Sie es erneut.",
         "countryRequired": "Land ist erforderlich"
-
       },
       "success": "Bewerbung erfolgreich abgeschickt! Wir werden uns bald bei Ihnen melden."
     },
@@ -11637,7 +11635,6 @@
       "edit": "Bearbeiten",
       "sendEmail": "E-Mail senden",
       "activate": "Aktivieren",
-
       "deactivate": "Deaktivieren",
       "delete": "Löschen"
     },
@@ -11743,8 +11740,7 @@
       "savingButton": "Wird gespeichert...",
       "successMessage": "Daten wurden erfolgreich aktualisiert!",
       "errorMessage": "Fehler beim Aktualisieren der Daten",
-    "country": "Land"
-
+      "country": "Land"
     }
   },
   "AdminNotificationBell": {
@@ -11758,16 +11754,14 @@
     "hoursAgo": "Std. her",
     "daysAgo": "Tage her"
   },
-   "AdminDigiBridgeMentorApplications": {
+  "AdminDigiBridgeMentorApplications": {
     "title": "Mentoren-Bewerbungen",
     "description": "Überprüfen und verwalten Sie eingehende Mentoren-Bewerbungen für die DigiBridge Academy",
-    
     "stats": {
       "totalApplications": "Gesamte Bewerbungen",
       "newToday": "Neu heute",
       "pending": "Ausstehend"
     },
-    
     "filters": {
       "searchPlaceholder": "Nach Name oder E-Mail suchen...",
       "specializationLabel": "Spezialisierung",
@@ -11777,17 +11771,13 @@
       "sortOldest": "Älteste zuerst",
       "sortName": "Nach Name (A-Z)"
     },
-    
     "loading": "Bewerbungen werden geladen...",
-    
     "noApplications": "Keine Bewerbungen",
     "noApplicationsDescription": "Derzeit gibt es keine Mentoren-Bewerbungen",
-    
     "approveSuccess": "Bewerbung erfolgreich genehmigt!",
     "approveError": "Fehler beim Genehmigen der Bewerbung",
     "rejectSuccess": "Bewerbung abgelehnt",
     "rejectError": "Fehler beim Ablehnen der Bewerbung",
-    
     "viewDetails": "Details ansehen",
     "sendEmail": "E-Mail senden",
     "approve": "Genehmigen",
@@ -11820,7 +11810,7 @@
     "approve": "Genehmigen",
     "reject": "Ablehnen"
   },
-   "AdminDigiBridgeApplicationDetailModal": {
+  "AdminDigiBridgeApplicationDetailModal": {
     "appliedOn": "Beworben am",
     "contactInfo": "Kontaktinformationen",
     "email": "E-Mail",
@@ -11856,9 +11846,7 @@
     "confirmReject": "Sind Sie sicher, dass Sie diese Bewerbung ablehnen möchten?",
     "priorityContact": "Prioritätskontakt",
     "country": "Land"
-
   },
-
   "AdminDigiBridgeSendEmailToApplicantModal": {
     "title": "E-Mail an Bewerber senden",
     "sendingTo": "Senden an",
@@ -11942,7 +11930,8 @@
     "noShow": "Nicht erschienen",
     "sessions": "Sitzungen",
     "percentage": "Prozent",
-    "noData": "Keine Daten zum Anzeigen"
+    "noData": "Keine Daten zum Anzeigen",
+    "incomplete": "Unvollständig"
   },
   "ResponseTimeChart": {
     "title": "Antwortzeit",
@@ -11979,7 +11968,8 @@
     "responseTime": "Antwortzeit",
     "status": "Status",
     "online": "Online",
-    "offline": "Offline"
+    "offline": "Offline",
+    "sessions": "Сесии"
   },
   "ExportStatistics": {
     "exportPDF": "PDF exportieren",
