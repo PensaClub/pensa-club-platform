@@ -174,6 +174,25 @@ export const academyServiceFactory = () => {
       return requester.del(`${apiUrl}/academy/admin/notifications/${notificationId}`);
       /* BACKEND TODO: DELETE /api/academy/admin/notifications/:id */
     },
+    // ===============================
+    // FIREBASE STATISTICS 🔥
+    // ===============================
+
+    getAllMentorsWithStats: async () => {
+      return requester.get(`${apiUrl}/academy/mentors/all-with-stats`);
+    },
+
+    getMentorFirebaseStats: async (mentorId) => {
+      return requester.get(`${apiUrl}/academy/mentors/${mentorId}/firebase-stats`);
+    },
+
+    refreshMentorStats: async (mentorId) => {
+      return requester.post(`${apiUrl}/academy/mentors/${mentorId}/refresh-stats`);
+    },
+
+    getFirebaseOverviewStats: async () => {
+      return requester.get(`${apiUrl}/academy/mentors/statistics/firebase-overview`);
+    },
   };
 };
 

@@ -18,7 +18,7 @@ import { ExportStatisticsButton } from './ExportStatisticsButton/ExportStatistic
 
 export const AdminDigiBridgeMentorStatistics = () => {
     const { t } = useTranslation();
-    const { getMentorStatisticsOverview, getMentorsBySpecialization, getAllMentors } = useAcademy(); 
+    const { getMentorStatisticsOverview, getMentorsBySpecialization, getAllMentors,getAllMentorsWithStats } = useAcademy(); 
 
     // ✅ STATE ЗА РЕАЛНИ ДАННИ
     const [overviewStats, setOverviewStats] = useState(null);
@@ -56,7 +56,7 @@ export const AdminDigiBridgeMentorStatistics = () => {
             }
 
             // ✅ FETCH ALL MENTORS FOR TABLE
-            const mentorsResponse = await getAllMentors({ status: 'active' });
+            const mentorsResponse = await getAllMentorsWithStats();
             if (mentorsResponse?.success) {
                 setRealMentors(mentorsResponse.mentors);
             }

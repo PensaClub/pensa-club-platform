@@ -6,9 +6,14 @@ const { mentor_application, mentor, mentor_course, user_account, admin_notificat
 const isAuth = require('../middlewares/isAuth.js');
 const rbac = require('../middlewares/rbac.js');
 const { mentorApplicationSchema } = require('../schemas/mentorApplication.schema');
+const { initializeFirebaseAdmin } = require('../firebase/firebaseAdmin');
+const { 
+  getMentorCombinedStats, 
+  getAllMentorsCombinedStats,
+  updateMentorCachedStats 
+} = require('../services/mentorActivityService');
 
-
-
+initializeFirebaseAdmin();
 // Директно създаване на ментор (БЕЗ кандидатура)
 // ===============================
 academyController.post('/mentors', isAuth, rbac.checkPermission('mentor', 'create'), async (req, res, next) => {
@@ -1058,6 +1063,177 @@ academyController.get(
 
     } catch (err) {
        console.error('❌ [BY-SPECIALIZATION] Error:', err); 
+      next(err);
+    }
+  }
+);
+// ===============================
+// GET /api/academy/mentors/all-with-stats
+// Всички ментори с Firebase статистики (за DetailedMentorsTable)
+// ===============================
+academyController.get(
+  '/mentors/all-with-stats',
+  isAuth,
+  rbac.checkPermission('mentor', 'read'),
+  async (req, res, next) => {
+    try {
+      console.log('📊 Fetching all mentors with Firebase stats...');
+      
+      const mentors = await getAllMentorsCombinedStats();
+
+      res.status(200).json({
+        success: true,
+        mentors,
+        total: mentors.length
+      });
+
+    } catch (err) {
+      console.error('❌ [ALL-WITH-STATS] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// GET /api/academy/mentors/:id/firebase-stats
+// Детайлни Firebase статистики за конкретен ментор
+// ===============================
+academyController.get(
+  '/mentors/:id/firebase-stats',
+  isAuth,
+  rbac.checkPermission('mentor', 'read'),
+  async (req, res, next) => {
+    try {
+      const mentorId = parseInt(req.params.id);
+      
+      console.log(`📊 Fetching Firebase stats for mentor ${mentorId}...`);
+
+      const stats = await getMentorCombinedStats(mentorId);
+
+      res.status(200).json({
+        success: true,
+        mentor: stats
+      });
+
+    } catch (err) {
+      console.error('❌ [FIREBASE-STATS] Error:', err);
+      
+      if (err.message === 'Mentor not found') {
+        return res.status(404).json({
+          success: false,
+          message: 'Mentor not found'
+        });
+      }
+      
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// POST /api/academy/mentors/:id/refresh-stats
+// Обнови кеширани статистики от Firebase
+// ===============================
+academyController.post(
+  '/mentors/:id/refresh-stats',
+  isAuth,
+  rbac.checkPermission('mentor', 'update'),
+  async (req, res, next) => {
+    try {
+      const mentorId = parseInt(req.params.id);
+
+      console.log(`🔄 Refreshing stats for mentor ${mentorId}...`);
+
+      // Вземи email от PostgreSQL
+      const mentorData = await mentor.findByPk(mentorId, {
+        include: [
+          {
+            model: user_account,
+            as: 'user',
+            attributes: ['email']
+          }
+        ]
+      });
+
+      if (!mentorData) {
+        return res.status(404).json({
+          success: false,
+          message: 'Mentor not found'
+        });
+      }
+
+      const email = mentorData.user.email;
+      const firebaseMentorId = email
+        .replace(/\./g, '_dot_')
+        .replace(/@/g, '_at_');
+
+      // Обнови статистиките
+      const result = await updateMentorCachedStats(mentorId, firebaseMentorId);
+
+      res.status(200).json({
+        success: true,
+        message: 'Stats refreshed successfully',
+        stats: result.stats
+      });
+
+    } catch (err) {
+      console.error('❌ [REFRESH-STATS] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// GET /api/academy/mentors/statistics/firebase-overview
+// Общи Firebase статистики (за Dashboard)
+// ===============================
+academyController.get(
+  '/mentors/statistics/firebase-overview',
+  isAuth,
+  rbac.checkPermission('mentor', 'read'),
+  async (req, res, next) => {
+    try {
+      console.log('📊 Calculating Firebase overview stats...');
+
+      const mentors = await getAllMentorsCombinedStats();
+
+      // Изчисли агрегирани статистики
+      let totalSessions = 0;
+      let totalOnlineHours = 0;
+      let totalMessages = 0;
+      let totalActiveSessions = 0;
+      let responseTimes = [];
+
+      mentors.forEach(mentor => {
+        const stats = mentor.firebaseStats;
+        totalSessions += stats.totalSessions || 0;
+        totalOnlineHours += stats.totalOnlineHours || 0;
+        totalMessages += stats.totalMessages || 0;
+        totalActiveSessions += stats.activeSessions || 0;
+        
+        if (stats.averageResponseTime > 0) {
+          responseTimes.push(stats.averageResponseTime);
+        }
+      });
+
+      const averageResponseTime = responseTimes.length > 0
+        ? Math.round(responseTimes.reduce((sum, time) => sum + time, 0) / responseTimes.length)
+        : 0;
+
+      res.status(200).json({
+        success: true,
+        stats: {
+          totalMentors: mentors.length,
+          totalSessions,
+          totalActiveSessions,
+          totalOnlineHours,
+          averageResponseTime,
+          totalMessages
+        }
+      });
+
+    } catch (err) {
+      console.error('❌ [FIREBASE-OVERVIEW] Error:', err);
       next(err);
     }
   }
