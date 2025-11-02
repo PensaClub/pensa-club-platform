@@ -72,6 +72,17 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
+      country: {
+        type: DataTypes.STRING(2),
+        allowNull: true,
+        defaultValue: 'BG',
+        validate: {
+          isIn: {
+            args: [['BG', 'DE', 'AT', 'GR', 'RO', 'RS', 'MK', 'TR', 'OTHER']],
+            msg: 'Country must be a valid country code'
+          }
+        }
+      },
       photoUrl: {
         type: DataTypes.STRING(2048),
         allowNull: true,

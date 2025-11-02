@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import './digiBridgeMentors.css';
 
-export const DigiBridgeMentors = () => {
+export const DigiBridgeMentors = ({ stats, loading }) => {
   const { t } = useTranslation();
 
   const mentorQualities = [
@@ -77,12 +77,16 @@ export const DigiBridgeMentors = () => {
             />
             <div className="digibridge-mentors-stats-card">
               <div className="digibridge-mentors-stat-item">
-                <h4 className="digibridge-mentors-stat-number">10+</h4>
+                <h4 className="digibridge-mentors-stat-number">
+                  {loading ? '...' : `${stats?.activeMentors || 0}+`}
+                </h4>
                 <p className="digibridge-mentors-stat-label">{t('digiBridge.mentors.activeMentors')}</p>
               </div>
               <div className="digibridge-mentors-stat-divider"></div>
               <div className="digibridge-mentors-stat-item">
-                <h4 className="digibridge-mentors-stat-number">100%</h4>
+                <h4 className="digibridge-mentors-stat-number">
+                  {loading ? '...' : `${stats?.satisfaction || 100}%`}
+                </h4>
                 <p className="digibridge-mentors-stat-label">{t('digiBridge.mentors.satisfaction')}</p>
               </div>
             </div>

@@ -83,6 +83,17 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
+      country: {
+  type: DataTypes.STRING(2),
+  allowNull: true,
+  defaultValue: 'BG',
+  validate: {
+    isIn: {
+      args: [['BG', 'DE', 'AT', 'GR', 'RO', 'RS', 'MK', 'TR', 'OTHER']],
+      msg: 'Country must be a valid country code'
+    }
+  }
+},
       education: {
         type: DataTypes.TEXT,
         allowNull: true,

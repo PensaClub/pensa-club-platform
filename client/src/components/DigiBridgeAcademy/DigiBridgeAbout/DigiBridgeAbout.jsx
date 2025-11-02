@@ -2,7 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import './digiBridgeAbout.css';
 
-export const DigiBridgeAbout = () => {
+export const DigiBridgeAbout = ({ stats, loading }) => {
   const { t } = useTranslation();
 
   return (
@@ -25,7 +25,9 @@ export const DigiBridgeAbout = () => {
               <div className="digibridge-about-stat">
                 <div className="digibridge-about-stat-icon">🎓</div>
                 <div className="digibridge-about-stat-content">
-                  <h3 className="digibridge-about-stat-number">100%</h3>
+                  <h3 className="digibridge-about-stat-number">
+                    {loading ? '...' : `${stats?.satisfaction || 100}%`}
+                  </h3>
                   <p className="digibridge-about-stat-text">{t('digiBridge.about.stat1')}</p>
                 </div>
               </div>
@@ -33,7 +35,9 @@ export const DigiBridgeAbout = () => {
               <div className="digibridge-about-stat">
                 <div className="digibridge-about-stat-icon">🤝</div>
                 <div className="digibridge-about-stat-content">
-                  <h3 className="digibridge-about-stat-number">10+</h3>
+                  <h3 className="digibridge-about-stat-number">
+                    {loading ? '...' : `${stats?.activeMentors || 0}+`}
+                  </h3>
                   <p className="digibridge-about-stat-text">{t('digiBridge.about.stat2')}</p>
                 </div>
               </div>
@@ -41,7 +45,9 @@ export const DigiBridgeAbout = () => {
               <div className="digibridge-about-stat">
                 <div className="digibridge-about-stat-icon">🌍</div>
                 <div className="digibridge-about-stat-content">
-                  <h3 className="digibridge-about-stat-number">3</h3>
+                  <h3 className="digibridge-about-stat-number">
+                    {loading ? '...' : stats?.countries || 0}
+                  </h3>
                   <p className="digibridge-about-stat-text">{t('digiBridge.about.stat3')}</p>
                 </div>
               </div>
