@@ -8,6 +8,25 @@ import './topMentorsByOnlineTime.css';
 export const TopMentorsByOnlineTime = ({ mentors, limit = 10 }) => {
   const { t } = useTranslation();
 
+  // ✅ Функция за форматиране на часове
+  const formatHours = (hours) => {
+    if (hours === 0) return '0 мин';
+    
+    if (hours < 1) {
+      const minutes = Math.round(hours * 60);
+      return `${minutes} мин`;
+    }
+    
+    const fullHours = Math.floor(hours);
+    const minutes = Math.round((hours - fullHours) * 60);
+    
+    if (minutes === 0) {
+      return `${fullHours} ч`;
+    }
+    
+    return `${fullHours}ч ${minutes}м`;
+  };
+
   // Сортира и взема top N ментори по часове онлайн този месец
   const topMentors = useMemo(() => {
     return [...mentors]
@@ -17,8 +36,10 @@ export const TopMentorsByOnlineTime = ({ mentors, limit = 10 }) => {
         name: mentor.name.split(' ')[0], // Само първо име
         fullName: mentor.name,
         hours: mentor.onlineTime.thisMonth,
+        hoursFormatted: formatHours(mentor.onlineTime.thisMonth), // ✅ ДОБАВЕНО
         specialization: mentor.specialization,
-        totalHours: mentor.onlineTime.total
+        totalHours: mentor.onlineTime.total,
+        totalHoursFormatted: formatHours(mentor.onlineTime.total) // ✅ ДОБАВЕНО
       }));
   }, [mentors, limit]);
 
@@ -49,13 +70,13 @@ export const TopMentorsByOnlineTime = ({ mentors, limit = 10 }) => {
               <span className="top-mentors-by-online-time-tooltip-label">
                 {t('TopMentorsByOnlineTime.thisMonth')}:
               </span>
-              <strong>{data.hours}</strong> {t('TopMentorsByOnlineTime.hours')}
+              <strong>{data.hoursFormatted}</strong>
             </p>
             <p className="top-mentors-by-online-time-tooltip-value">
               <span className="top-mentors-by-online-time-tooltip-label">
                 {t('TopMentorsByOnlineTime.total')}:
               </span>
-              <strong>{data.totalHours}</strong> {t('TopMentorsByOnlineTime.hours')}
+              <strong>{data.totalHoursFormatted}</strong>
             </p>
           </div>
         </div>

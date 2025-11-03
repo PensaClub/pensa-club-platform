@@ -8,7 +8,9 @@ import {
   sendMessage,
   markMessagesAsRead,
   endConversation,
-  uploadChatFile
+  uploadChatFile,
+  createMentorSession,   
+  endMentorSession 
 } from '../../firebase/firebaseChat';
 import { DigiBridgeChatMessage } from '../DigiBridgeChatMessage/DigiBridgeChatMessage';
 import { toast } from 'react-toastify';
@@ -23,7 +25,7 @@ export const MiniChatWindow = ({ conversation, getPosition, onClose, isMobile })
   const [isMinimized, setIsMinimized] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
-  
+  const [currentSessionId, setCurrentSessionId] = useState(null);
   const messagesEndRef = useRef(null);
   const fileInputRef = useRef(null);
 
@@ -37,7 +39,31 @@ export const MiniChatWindow = ({ conversation, getPosition, onClose, isMobile })
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
+// ✅ SESSION TRACKING
+useEffect(() => {
+  if (!conversation?.id || !mentorId) return;
 
+  let sessionId = null;
+
+  // Създай session при mount
+  const initSession = async () => {
+    try {
+      sessionId = await createMentorSession(mentorId, conversation.id);
+      setCurrentSessionId(sessionId);
+    } catch (error) {
+      console.error('Error starting session:', error);
+    }
+  };
+
+  initSession();
+
+  // Приключи session при unmount
+  return () => {
+    if (sessionId) {
+      endMentorSession(mentorId, sessionId);
+    }
+  };
+}, [conversation?.id, mentorId]);
   useEffect(() => {
     scrollToBottom();
   }, [messages]);

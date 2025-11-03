@@ -5,22 +5,30 @@ import { useTranslation } from 'react-i18next';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import './responseTimeChart.css';
 
-export const ResponseTimeChart = ({ mentors, limit = 10 }) => {
+export const ResponseTimeChart = ({ responseTimesData, limit = 10 }) => {
   const { t } = useTranslation();
 
-  // Сортира менторите по response time (по-малко е по-добре)
+  // ✅ Извлича всички ментори от ranges и сортира по response time
   const topMentors = useMemo(() => {
-    return [...mentors]
-      .sort((a, b) => a.quality.responseTime - b.quality.responseTime)
+    if (!responseTimesData || !responseTimesData.mentorsByRange) return [];
+
+    const allMentors = [
+      ...responseTimesData.mentorsByRange.excellent,
+      ...responseTimesData.mentorsByRange.good,
+      ...responseTimesData.mentorsByRange.average,
+      ...responseTimesData.mentorsByRange.slow
+    ];
+
+    return allMentors
+      .sort((a, b) => a.responseTime - b.responseTime)
       .slice(0, limit)
       .map(mentor => ({
         name: mentor.name.split(' ')[0], // Само първо име
         fullName: mentor.name,
-        responseTime: mentor.quality.responseTime,
-        specialization: mentor.specialization,
-        rating: mentor.rating
+        responseTime: mentor.responseTime,
+        totalMessages: mentor.totalMessages
       }));
-  }, [mentors, limit]);
+  }, [responseTimesData, limit]);
 
   // Динамични цветове базирани на response time (по-зелено за по-бързо)
   const getColor = (responseTime) => {
@@ -37,15 +45,14 @@ export const ResponseTimeChart = ({ mentors, limit = 10 }) => {
       return (
         <div className="response-time-chart-tooltip">
           <p className="response-time-chart-tooltip-name">{data.fullName}</p>
-          <p className="response-time-chart-tooltip-spec">{data.specialization}</p>
           <div className="response-time-chart-tooltip-values">
             <p className="response-time-chart-tooltip-value">
               <span>{t('ResponseTimeChart.responseTime')}:</span>
               <strong>{data.responseTime} {t('ResponseTimeChart.minutes')}</strong>
             </p>
             <p className="response-time-chart-tooltip-value">
-              <span>{t('ResponseTimeChart.rating')}:</span>
-              <strong>⭐ {data.rating}</strong>
+              <span>{t('ResponseTimeChart.totalMessages')}:</span>
+              <strong>{data.totalMessages}</strong>
             </p>
           </div>
         </div>
