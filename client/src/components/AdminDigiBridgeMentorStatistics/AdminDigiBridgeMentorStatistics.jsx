@@ -36,6 +36,7 @@ export const AdminDigiBridgeMentorStatistics = () => {
     const [responseTimesData, setResponseTimesData] = useState(null);
     const [activityTrendData, setActivityTrendData] = useState([]);
     const [sessionQualityData, setSessionQualityData] = useState(null);
+    const [allMentorsForCourses, setAllMentorsForCourses] = useState([]);
     // ✅ ВРЕМЕННО - MOCK ДАННИ ЗА ФАЗА 2 КОМПОНЕНТИТЕ
     const [mockMentors] = useState(MOCK_MENTORS_DETAILED);
 
@@ -59,7 +60,11 @@ export const AdminDigiBridgeMentorStatistics = () => {
             if (overviewResponse?.success) {
                 setOverviewStats(overviewResponse.stats);
             }
-
+            // ✅ FETCH ALL MENTORS FOR COURSES CHART
+            const allMentorsResponse = await getAllMentors({ limit: 100 });
+            if (allMentorsResponse?.success) {
+                setAllMentorsForCourses(allMentorsResponse.mentors);
+            }
             // ✅ FETCH SPECIALIZATION DATA
             const specializationResponse = await getMentorsBySpecialization();
             if (specializationResponse?.success) {
@@ -171,11 +176,11 @@ export const AdminDigiBridgeMentorStatistics = () => {
                     {/* CHARTS SECTION */}
                     <div className="admin-digibridge-mentor-statistics-charts">
                         {/* TODO ФАЗА 2 - ВРЕМЕННО MOCK ДАННИ */}
-                        <TopMentorsByCourses mentors={mockMentors} />
+                        <TopMentorsByCourses mentors={allMentorsForCourses} limit={10} />
                         <TopMentorsByOnlineTime mentors={topMentorsByTime} limit={10} />
                         <ActivityTrendChart mentors={mockMentors} />
                         <SessionQualityChart qualityData={sessionQualityData} />
-                        <ResponseTimeChart mentors={mockMentors} />
+                        <ResponseTimeChart responseTimesData={responseTimesData} limit={10} />
 
                         {/* ✅ SPECIALIZATION CHART - РЕАЛНИ ДАННИ */}
                         {specializationData.length > 0 && (

@@ -8,15 +8,15 @@ import './topMentorsByCourses.css';
 export const TopMentorsByCourses = ({ mentors, limit = 10 }) => {
   const { t } = useTranslation();
 
-  // Сортира и взема top N ментори по завършени курсове
   const topMentors = useMemo(() => {
     return [...mentors]
-      .sort((a, b) => b.courses.completed - a.courses.completed)
+      .sort((a, b) => (b.courses?.length || 0) - (a.courses?.length || 0))
       .slice(0, limit)
+      .filter(mentor => (mentor.courses?.length || 0) > 0) 
       .map(mentor => ({
-        name: mentor.name.split(' ')[0], // Само първо име за по-добра визуализация
+        name: mentor.name.split(' ')[0], 
         fullName: mentor.name,
-        courses: mentor.courses.completed,
+        courses: mentor.courses?.length || 0,
         specialization: mentor.specialization
       }));
   }, [mentors, limit]);

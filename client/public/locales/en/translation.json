@@ -12663,7 +12663,8 @@
     "veryGood": "Very Good",
     "good": "Good",
     "needsImprovement": "Needs Improvement",
-    "noData": "No data to display"
+    "noData": "No data to display",
+    "totalMessages": "Total Messages"
   },
   "MentorsBySpecialization": {
     "title": "Mentors by Specialization",

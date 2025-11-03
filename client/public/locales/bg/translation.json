@@ -12870,7 +12870,8 @@
     "veryGood": "Много добро",
     "good": "Добро",
     "needsImprovement": "Нужда от подобрение",
-    "noData": "Няма данни за показване"
+    "noData": "Няма данни за показване",
+     "totalMessages": "Общо съобщения"
   },
   "MentorsBySpecialization": {
     "title": "Ментори по специализация",

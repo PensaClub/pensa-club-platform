@@ -11945,7 +11945,8 @@
     "veryGood": "Sehr gut",
     "good": "Gut",
     "needsImprovement": "Verbesserungsbedürftig",
-    "noData": "Keine Daten zum Anzeigen"
+    "noData": "Keine Daten zum Anzeigen",
+     "totalMessages": "Gesamtanzahl der Nachrichten"
   },
   "MentorsBySpecialization": {
     "title": "Mentoren nach Fachgebiet",
