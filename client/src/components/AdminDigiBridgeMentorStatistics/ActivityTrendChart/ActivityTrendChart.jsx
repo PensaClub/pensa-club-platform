@@ -5,38 +5,21 @@ import { useTranslation } from 'react-i18next';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import './activityTrendChart.css';
 
-export const ActivityTrendChart = ({ mentors }) => {
+export const ActivityTrendChart = ({ trendData }) => {
   const { t } = useTranslation();
 
-  // Генерира данни за последните 6 месеца
-  const trendData = useMemo(() => {
-    const months = [];
-    const now = new Date();
-    
-    for (let i = 5; i >= 0; i--) {
-      const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
-      const monthName = date.toLocaleDateString('bg-BG', { month: 'short', year: '2-digit' });
-      
-      // Симулираме данни базирани на текущите ментори
-      // TODO: В реалния случай това ще идва от backend
-      const sessionsCount = mentors.reduce((sum, m) => {
-        // Разпределяме сесиите пропорционално през месеците
-        return sum + Math.floor(m.activity.sessionsThisMonth * (0.7 + Math.random() * 0.6));
-      }, 0);
-      
-      const onlineHours = mentors.reduce((sum, m) => {
-        return sum + Math.floor(m.onlineTime.thisMonth * (0.7 + Math.random() * 0.6));
-      }, 0);
-      
-      months.push({
-        month: monthName,
-        sessions: sessionsCount,
-        hours: onlineHours
-      });
-    }
-    
-    return months;
-  }, [mentors]);
+  // Форматира month labels
+  const chartData = useMemo(() => {
+    if (!trendData || trendData.length === 0) return [];
+
+    return trendData.map(item => ({
+      ...item,
+      monthLabel: new Date(item.month + '-01').toLocaleDateString('bg-BG', { 
+        month: 'short', 
+        year: '2-digit' 
+      })
+    }));
+  }, [trendData]);
 
   // Custom Tooltip
   const CustomTooltip = ({ active, payload, label }) => {
@@ -79,15 +62,15 @@ export const ActivityTrendChart = ({ mentors }) => {
       </div>
 
       <div className="activity-trend-chart-wrapper">
-        {trendData.length > 0 ? (
+        {chartData.length > 0 ? (
           <ResponsiveContainer width="100%" height={400}>
             <LineChart
-              data={trendData}
+              data={chartData}
               margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
             >
               <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
               <XAxis
-                dataKey="month"
+                dataKey="monthLabel"
                 tick={{ fill: '#6b7280', fontSize: 12, fontWeight: 600 }}
               />
               <YAxis
@@ -132,7 +115,7 @@ export const ActivityTrendChart = ({ mentors }) => {
               <Line
                 yAxisId="right"
                 type="monotone"
-                dataKey="hours"
+                dataKey="onlineHours"
                 name={t('ActivityTrendChart.hours')}
                 stroke="#ec4899"
                 strokeWidth={3}
@@ -145,6 +128,9 @@ export const ActivityTrendChart = ({ mentors }) => {
           <div className="activity-trend-chart-empty">
             <div className="activity-trend-chart-empty-icon">📈</div>
             <p>{t('ActivityTrendChart.noData')}</p>
+            <p style={{ fontSize: '14px', color: '#6b7280', marginTop: '10px' }}>
+              Данните ще се появят след първия автоматичен snapshot в 00:05 тази нощ
+            </p>
           </div>
         )}
       </div>

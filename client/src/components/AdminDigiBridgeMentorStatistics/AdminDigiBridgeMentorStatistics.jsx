@@ -112,11 +112,45 @@ export const AdminDigiBridgeMentorStatistics = () => {
     // HANDLERS
     // ===================================
 
-    const handleTimeFilterChange = (filter) => {
-        setTimeFilter(filter);
-        // TODO ФАЗА 2: Филтрирай данните според избрания период
-    };
-
+   const handleTimeFilterChange = async (filter) => {
+  setTimeFilter(filter);
+  
+  const monthsMap = {
+    'thisMonth': 1,
+    'lastMonth': 1,
+    'last3Months': 3,
+    'allTime': 12
+  };
+  
+  const months = monthsMap[filter] || 6;
+  
+  try {
+    setIsLoading(true);
+    
+    // ✅ ACTIVITY TREND
+    const activityTrendResponse = await getActivityTrendData(months);
+    if (activityTrendResponse?.success) {
+      setActivityTrendData(activityTrendResponse.trend);
+    }
+    
+    // ✅ TOP MENTORS (ако backend поддържа period filter)
+    // const topMentorsResponse = await getTopMentorsByOnlineTime(5, { period: filter });
+    // if (topMentorsResponse?.success) {
+    //   setTopMentorsByTime(topMentorsResponse.mentors);
+    // }
+    
+    // ✅ SESSION QUALITY (ако backend поддържа period filter)
+    // const sessionQualityResponse = await getSessionQualityData({ period: filter });
+    // if (sessionQualityResponse?.success) {
+    //   setSessionQualityData(sessionQualityResponse.quality);
+    // }
+    
+  } catch (error) {
+    console.error('❌ Error filtering statistics:', error);
+  } finally {
+    setIsLoading(false);
+  }
+};
     const handleRefresh = () => {
         fetchMentorStatistics();
     };
@@ -157,6 +191,8 @@ export const AdminDigiBridgeMentorStatistics = () => {
                         </svg>
                         {t('AdminDigiBridgeMentorStatistics.refresh')}
                     </button>
+                    <ExportStatisticsButton mentors={realMentors} stats={overviewStats} />
+
                 </div>
             </div>
 
@@ -178,7 +214,7 @@ export const AdminDigiBridgeMentorStatistics = () => {
                         {/* TODO ФАЗА 2 - ВРЕМЕННО MOCK ДАННИ */}
                         <TopMentorsByCourses mentors={allMentorsForCourses} limit={10} />
                         <TopMentorsByOnlineTime mentors={topMentorsByTime} limit={10} />
-                        <ActivityTrendChart mentors={mockMentors} />
+                        <ActivityTrendChart trendData={activityTrendData} />
                         <SessionQualityChart qualityData={sessionQualityData} />
                         <ResponseTimeChart responseTimesData={responseTimesData} limit={10} />
 

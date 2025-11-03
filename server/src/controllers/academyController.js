@@ -1345,7 +1345,7 @@ academyController.get(
 
 // ===============================
 // GET /api/academy/mentors/statistics/activity-trend
-// Activity trend (последните 6 месеца)
+// Activity trend (реални исторически данни от snapshots)
 // ===============================
 academyController.get(
   '/mentors/statistics/activity-trend',
@@ -1355,34 +1355,36 @@ academyController.get(
     try {
       const { months = 6 } = req.query;
       
-      // TODO ФАЗА 2.3: За сега връщаме текущите данни
-      // В бъдеще ще трябва да записваме historical data
-      
-      const mentors = await getAllMentorsCombinedStats();
+      const { getActivityTrendData } = require('../services/mentorActivitySnapshotService');
+      const trend = await getActivityTrendData(parseInt(months));
 
-      // Агрегирани данни
-      const totalSessions = mentors.reduce((sum, m) => sum + (m.sessionsCount || 0), 0);
-      const totalOnlineHours = mentors.reduce((sum, m) => sum + (m.firebaseStats.totalOnlineHours || 0), 0);
-      const totalMessages = mentors.reduce((sum, m) => sum + (m.firebaseStats.totalMessages || 0), 0);
+      // ✅ Ако няма snapshots, върни текущите данни като fallback
+      if (trend.length === 0) {
+        
+        const mentors = await getAllMentorsCombinedStats();
+        const totalSessions = mentors.reduce((sum, m) => sum + (m.sessionsCount || 0), 0);
+        const totalOnlineHours = mentors.reduce((sum, m) => sum + (m.firebaseStats.totalOnlineHours || 0), 0);
+        const totalMessages = mentors.reduce((sum, m) => sum + (m.firebaseStats.totalMessages || 0), 0);
+        const currentMonth = new Date().toISOString().slice(0, 7);
 
-      // За сега връщаме current month data
-      // TODO: Implement historical tracking
-      const currentMonth = new Date().toISOString().slice(0, 7); // "2025-11"
-
-      const trend = [
-        {
-          month: currentMonth,
-          sessions: totalSessions,
-          onlineHours: totalOnlineHours,
-          messages: totalMessages,
-          activeMentors: mentors.length
-        }
-      ];
+        return res.status(200).json({
+          success: true,
+          trend: [
+            {
+              month: currentMonth,
+              sessions: totalSessions,
+              onlineHours: Math.round(totalOnlineHours),
+              messages: totalMessages,
+              activeMentors: mentors.length
+            }
+          ],
+          note: 'No historical data yet. First snapshot will be created at 00:05 tonight. You can create a manual snapshot using POST /mentors/statistics/create-snapshot'
+        });
+      }
 
       res.status(200).json({
         success: true,
-        trend,
-        note: 'Historical data tracking will be implemented in Phase 2.3'
+        trend
       });
 
     } catch (err) {
@@ -1445,6 +1447,32 @@ academyController.get(
 
     } catch (err) {
       console.error('❌ [SESSION-QUALITY] Error:', err);
+      next(err);
+    }
+  }
+);
+// ===============================
+// POST /api/academy/mentors/statistics/create-snapshot
+// Manual snapshot creation (за testing и пропуснати дни)
+// ===============================
+academyController.post(
+  '/mentors/statistics/create-snapshot',
+  isAuth,
+  rbac.checkPermission('mentor', 'update'),
+  async (req, res, next) => {
+    try {
+      
+      const { createDailySnapshots } = require('../services/mentorActivitySnapshotService');
+      const result = await createDailySnapshots();
+      
+      res.status(200).json({
+        success: true,
+        message: 'Snapshot created successfully',
+        count: result.count,
+        date: new Date().toISOString().split('T')[0]
+      });
+    } catch (err) {
+      console.error('❌ [CREATE-SNAPSHOT] Error:', err);
       next(err);
     }
   }

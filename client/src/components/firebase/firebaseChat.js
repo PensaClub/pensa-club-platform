@@ -704,7 +704,6 @@ export const createMentorSession = async (mentorId, conversationId) => {
       status: 'disconnected'
     });
 
-    console.log('✅ Session created:', newSessionRef.key);
     return newSessionRef.key;
   } catch (error) {
     console.error('Error creating mentor session:', error);
@@ -725,7 +724,6 @@ export const endMentorSession = async (mentorId, sessionId) => {
       status: 'completed'
     });
 
-    console.log('✅ Session ended:', sessionId);
   } catch (error) {
     console.error('Error ending mentor session:', error);
   }

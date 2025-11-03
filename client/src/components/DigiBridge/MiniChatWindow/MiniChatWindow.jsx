@@ -50,7 +50,6 @@ useEffect(() => {
     try {
       sessionId = await createMentorSession(mentorId, conversation.id);
       setCurrentSessionId(sessionId);
-      console.log('📊 Session started:', sessionId);
     } catch (error) {
       console.error('Error starting session:', error);
     }
@@ -62,7 +61,6 @@ useEffect(() => {
   return () => {
     if (sessionId) {
       endMentorSession(mentorId, sessionId);
-      console.log('📊 Session ended:', sessionId);
     }
   };
 }, [conversation?.id, mentorId]);
