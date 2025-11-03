@@ -1,6 +1,6 @@
 // src/firebase/firebaseChat.js
 
-import { getDatabase, ref, push, set, onValue, off, update, query, orderByChild, equalTo, limitToLast, remove,get } from 'firebase/database';
+import { getDatabase, ref, push, set, onValue, off, update, query, orderByChild, equalTo, limitToLast, remove, get, onDisconnect } from 'firebase/database';
 import { ref as storageRef, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage';
 import { firebaseStorage } from '../../firebase';
 import { initializeApp, getApps, getApp } from 'firebase/app';
@@ -40,7 +40,7 @@ export const database = getDatabase(databaseApp);
 
 export const createChatRequest = async (requestData) => {
   try {
-  
+
     // Валидация
     if (!requestData.userId) {
       throw new Error('userId is required');
@@ -50,9 +50,9 @@ export const createChatRequest = async (requestData) => {
     }
 
     const requestsRef = ref(database, 'chat_requests');
-    
+
     const newRequestRef = push(requestsRef);
-    
+
     const request = {
       userId: requestData.userId,
       userName: requestData.userName,
@@ -65,9 +65,9 @@ export const createChatRequest = async (requestData) => {
       createdAt: Date.now(),
       assignedAt: null
     };
-       
+
     await set(newRequestRef, request);
-    
+
     return newRequestRef.key;
   } catch (error) {
     console.error('❌ Error creating chat request:', error); // Вече има
@@ -84,7 +84,7 @@ export const createChatRequest = async (requestData) => {
 export const listenToChatRequests = (callback) => {
   const requestsRef = ref(database, 'chat_requests');
   const waitingQuery = query(requestsRef, orderByChild('status'), equalTo('waiting'));
-  
+
   onValue(waitingQuery, (snapshot) => {
     const requests = [];
     snapshot.forEach((childSnapshot) => {
@@ -95,7 +95,7 @@ export const listenToChatRequests = (callback) => {
     });
     callback(requests);
   });
-  
+
   // Връщаме unsubscribe функция
   return () => off(waitingQuery);
 };
@@ -114,10 +114,10 @@ export const listenToPendingRequests = (callback) => {
         ...childSnapshot.val()
       });
     });
-    
+
     // Сортирай по най-нови
     requests.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-    
+
     callback(requests);
   });
 
@@ -138,16 +138,16 @@ export const sendMessageToRequest = async (requestId, messageData) => {
   try {
     const requestMessagesRef = ref(database, `chat_request_messages/${requestId}`);
     const newMessageRef = push(requestMessagesRef);
-    
+
     const messageToSave = {
       ...messageData,
       timestamp: Date.now(),
       read: false,
       id: newMessageRef.key
     };
-    
+
     await set(newMessageRef, messageToSave);
-    
+
     return messageToSave;
   } catch (error) {
     console.error('Error sending message to request:', error);
@@ -158,21 +158,21 @@ export const sendMessageToRequest = async (requestId, messageData) => {
 // Слушане за съобщения В REQUEST
 export const listenToRequestMessages = (requestId, callback) => {
   const messagesRef = ref(database, `chat_request_messages/${requestId}`);
-  
+
   const unsubscribe = onValue(messagesRef, (snapshot) => {
     const messages = [];
-    
+
     snapshot.forEach((childSnapshot) => {
       messages.push({
         id: childSnapshot.key,
         ...childSnapshot.val()
       });
     });
-    
+
     messages.sort((a, b) => a.timestamp - b.timestamp);
     callback(messages);
   });
-  
+
   return unsubscribe;
 };
 
@@ -181,15 +181,14 @@ export const acceptChatRequest = async (requestId, mentorId, mentorName) => {
   try {
     const requestRef = ref(database, `chat_requests/${requestId}`);
     const requestSnapshot = await get(requestRef);
-    
+
     if (!requestSnapshot.exists()) {
       throw new Error('Request not found');
     }
-    
+
     const requestData = requestSnapshot.val();
     const conversationId = `-${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    
-    // Създай conversation
+
     const conversationData = {
       id: conversationId,
       userId: requestData.userId,
@@ -201,18 +200,18 @@ export const acceptChatRequest = async (requestId, mentorId, mentorName) => {
       status: 'active',
       startedAt: Date.now()
     };
-    
+
     const conversationRef = ref(database, `chat_conversations/${conversationId}`);
     await set(conversationRef, conversationData);
-    
+
     // ✅ ПРЕХВЪРЛИ съобщенията от request в conversation
     const requestMessagesRef = ref(database, `chat_request_messages/${requestId}`);
     const requestMessagesSnapshot = await get(requestMessagesRef);
-    
+
     if (requestMessagesSnapshot.exists()) {
       const conversationMessagesRef = ref(database, `chat_messages/${conversationId}`);
       const messages = requestMessagesSnapshot.val();
-      
+
       // Копирай всички съобщения
       for (const messageKey in messages) {
         const messageRef = push(conversationMessagesRef);
@@ -221,14 +220,14 @@ export const acceptChatRequest = async (requestId, mentorId, mentorName) => {
           id: messageRef.key
         });
       }
-      
+
       // Изтрий request messages след прехвърлянето
       await remove(requestMessagesRef);
     }
-    
+
     // Изтрий request
     await remove(requestRef);
-    
+
     return conversationId;
   } catch (error) {
     console.error('Error accepting chat request:', error);
@@ -260,7 +259,7 @@ const createConversation = async (conversationData) => {
   try {
     const conversationsRef = ref(database, 'chat_conversations');
     const newConversationRef = push(conversationsRef);
-    
+
     const conversation = {
       ...conversationData,
       status: 'active',
@@ -269,7 +268,7 @@ const createConversation = async (conversationData) => {
       lastMessage: null,
       lastMessageAt: null
     };
-    
+
     await set(newConversationRef, conversation);
     return newConversationRef.key;
   } catch (error) {
@@ -293,10 +292,10 @@ export const listenToUserConversations = (userId, callback) => {
         ...childSnapshot.val()
       });
     });
-    
+
     // Сортирай по най-нови
     conversations.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-    
+
     callback(conversations);
   });
 
@@ -309,7 +308,7 @@ export const listenToUserConversations = (userId, callback) => {
 export const listenToMentorConversations = (mentorId, callback) => {
   const conversationsRef = ref(database, 'chat_conversations');
   const mentorQuery = query(conversationsRef, orderByChild('mentorId'), equalTo(mentorId));
-  
+
   onValue(mentorQuery, (snapshot) => {
     const conversations = [];
     snapshot.forEach((childSnapshot) => {
@@ -321,7 +320,7 @@ export const listenToMentorConversations = (mentorId, callback) => {
     });
     callback(conversations);
   });
-  
+
   return () => off(mentorQuery);
 };
 
@@ -357,9 +356,9 @@ export const sendMessage = async (conversationId, messageData) => {
         resolve(snap);
       }, { onlyOnce: true });
     });
-    
+
     const conversation = conversationSnapshot.val();
-    
+
     // Ако е completed, върни го на active
     if (conversation && conversation.status === 'completed') {
       await update(conversationRef, {
@@ -368,32 +367,32 @@ export const sendMessage = async (conversationId, messageData) => {
         reopenedAt: Date.now()
       });
     }
-    
+
     // ✅ ОРИГИНАЛНИЯТ КОД ПРОДЪЛЖАВА:
     const messagesRef = ref(database, `chat_messages/${conversationId}`);
     const newMessageRef = push(messagesRef);
-    
+
     const message = {
       ...messageData,
       timestamp: Date.now(),
       read: false,
       type: messageData.type || 'text'
     };
-    
+
     await set(newMessageRef, message);
-    
+
     // Обнови последното съобщение в разговора
     await update(conversationRef, {
       lastMessage: message.message || 'Изображение',
       lastMessageAt: message.timestamp
     });
-    
+
     // Увеличи броя непрочетени за получателя
     const recipientId = messageData.senderType === 'user' ? messageData.mentorId : messageData.userId;
     if (recipientId) {
       await incrementUnreadCount(recipientId, conversationId);
     }
-    
+
     return newMessageRef.key;
   } catch (error) {
     console.error('Error sending message:', error);
@@ -407,7 +406,7 @@ export const sendMessage = async (conversationId, messageData) => {
 export const listenToMessages = (conversationId, callback) => {
   const messagesRef = ref(database, `chat_messages/${conversationId}`);
   const messagesQuery = query(messagesRef, limitToLast(50)); // последните 50 съобщения
-  
+
   onValue(messagesQuery, (snapshot) => {
     const messages = [];
     snapshot.forEach((childSnapshot) => {
@@ -418,7 +417,7 @@ export const listenToMessages = (conversationId, callback) => {
     });
     callback(messages);
   });
-  
+
   return () => off(messagesQuery);
 };
 
@@ -433,7 +432,7 @@ export const markMessagesAsRead = async (conversationId, userId) => {
         resolve(snap);
       }, { onlyOnce: true });
     });
-    
+
     const updates = {};
     snapshot.forEach((childSnapshot) => {
       const message = childSnapshot.val();
@@ -442,11 +441,11 @@ export const markMessagesAsRead = async (conversationId, userId) => {
         updates[`${childSnapshot.key}/read`] = true;
       }
     });
-    
+
     if (Object.keys(updates).length > 0) {
       await update(messagesRef, updates);
     }
-    
+
     // Нулираме непрочетените за този разговор
     await resetUnreadCount(userId, conversationId);
   } catch (error) {
@@ -467,10 +466,10 @@ export const uploadChatFile = async (file, conversationId, onProgress = null) =>
     const fileId = `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const fileName = `${fileId}_${file.name}`;
     const filePath = `chat_files/${conversationId}/${fileName}`;
-    
+
     const fileRef = storageRef(firebaseStorage, filePath);
     const uploadTask = uploadBytesResumable(fileRef, file);
-    
+
     return new Promise((resolve, reject) => {
       uploadTask.on(
         'state_changed',
@@ -487,7 +486,7 @@ export const uploadChatFile = async (file, conversationId, onProgress = null) =>
         async () => {
           try {
             const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-            
+
             // Записваме информация за файла в Realtime Database
             const fileInfo = {
               id: fileId,
@@ -499,12 +498,12 @@ export const uploadChatFile = async (file, conversationId, onProgress = null) =>
               uploadedAt: Date.now(),
               conversationId: conversationId
             };
-            
+
             // Записваме в chat_files колекцията за да можем да ги изтриваме след време
             const filesRef = ref(database, `chat_files/${conversationId}`);
             const newFileRef = push(filesRef);
             await set(newFileRef, fileInfo);
-            
+
             resolve(fileInfo);
           } catch (error) {
             reject(error);
@@ -526,7 +525,7 @@ export const deleteChatFile = async (filePath, fileId, conversationId) => {
     // Изтрий от Storage
     const fileRef = storageRef(firebaseStorage, filePath);
     await deleteObject(fileRef);
-    
+
     // Изтрий записа от Database
     const fileDbRef = ref(database, `chat_files/${conversationId}/${fileId}`);
     await remove(fileDbRef);
@@ -547,10 +546,10 @@ export const getOldChatFiles = async (daysOld = 14) => {
         resolve(snap);
       }, { onlyOnce: true });
     });
-    
+
     const oldFiles = [];
     const cutoffTime = Date.now() - (daysOld * 24 * 60 * 60 * 1000);
-    
+
     snapshot.forEach((conversationSnapshot) => {
       conversationSnapshot.forEach((fileSnapshot) => {
         const file = fileSnapshot.val();
@@ -563,7 +562,7 @@ export const getOldChatFiles = async (daysOld = 14) => {
         }
       });
     });
-    
+
     return oldFiles;
   } catch (error) {
     console.error('Error getting old files:', error);
@@ -597,7 +596,7 @@ export const updateMentorStatus = async (mentorId, status) => {
 export const getOnlineMentors = (callback) => {
   const statusRef = ref(database, 'mentor_status');
   const onlineQuery = query(statusRef, orderByChild('status'), equalTo('online'));
-  
+
   onValue(onlineQuery, (snapshot) => {
     const mentors = [];
     snapshot.forEach((childSnapshot) => {
@@ -608,7 +607,7 @@ export const getOnlineMentors = (callback) => {
     });
     callback(mentors);
   });
-  
+
   return () => off(onlineQuery);
 };
 
@@ -617,11 +616,11 @@ export const getOnlineMentors = (callback) => {
  */
 export const listenToMentorStatus = (mentorId, callback) => {
   const statusRef = ref(database, `mentor_status/${mentorId}`);
-  
+
   onValue(statusRef, (snapshot) => {
     callback(snapshot.val());
   });
-  
+
   return () => off(statusRef);
 };
 
@@ -640,7 +639,7 @@ const incrementUnreadCount = async (userId, conversationId) => {
         resolve(snap);
       }, { onlyOnce: true });
     });
-    
+
     const currentCount = snapshot.val() || 0;
     await set(unreadRef, currentCount + 1);
   } catch (error) {
@@ -665,16 +664,98 @@ const resetUnreadCount = async (userId, conversationId) => {
  */
 export const listenToUnreadCounts = (userId, callback) => {
   const unreadRef = ref(database, `user_unread_counts/${userId}`);
-  
+
   onValue(unreadRef, (snapshot) => {
     const counts = snapshot.val() || {};
     const totalUnread = Object.values(counts).reduce((sum, count) => sum + count, 0);
     callback({ counts, totalUnread });
   });
-  
+
   return () => off(unreadRef);
 };
+// ===============================
+// MENTOR SESSION TRACKING 🕒
+// ===============================
 
+/**
+ * Създава нова session за ментор
+ * @param {string} mentorId - email-based ID (с _dot_ и _at_)
+ * @param {string} conversationId 
+ * @returns {Promise<string>} - sessionId
+ */
+export const createMentorSession = async (mentorId, conversationId) => {
+  try {
+    const sessionsRef = ref(database, `mentor_sessions/${mentorId}`);
+    const newSessionRef = push(sessionsRef);
+
+    const session = {
+      conversationId,
+      startTime: Date.now(),
+      endTime: null,
+      status: 'active'
+    };
+
+    await set(newSessionRef, session);
+
+    // ✅ Setup auto-cleanup при disconnect
+    const disconnectRef = ref(database, `mentor_sessions/${mentorId}/${newSessionRef.key}`);
+    await onDisconnect(disconnectRef).update({
+      endTime: Date.now(),
+      status: 'disconnected'
+    });
+
+    return newSessionRef.key;
+  } catch (error) {
+    console.error('Error creating mentor session:', error);
+    throw error;
+  }
+};
+
+/**
+ * Приключва активна session
+ * @param {string} mentorId 
+ * @param {string} sessionId 
+ */
+export const endMentorSession = async (mentorId, sessionId) => {
+  try {
+    const sessionRef = ref(database, `mentor_sessions/${mentorId}/${sessionId}`);
+    await update(sessionRef, {
+      endTime: Date.now(),
+      status: 'completed'
+    });
+
+  } catch (error) {
+    console.error('Error ending mentor session:', error);
+  }
+};
+
+/**
+ * Вземи всички sessions на ментор
+ * @param {string} mentorId 
+ * @returns {Promise<Array>}
+ */
+export const getMentorSessions = async (mentorId) => {
+  try {
+    const sessionsRef = ref(database, `mentor_sessions/${mentorId}`);
+    const snapshot = await get(sessionsRef);
+
+    const sessions = [];
+
+    if (snapshot.exists()) {
+      snapshot.forEach((childSnapshot) => {
+        sessions.push({
+          id: childSnapshot.key,
+          ...childSnapshot.val()
+        });
+      });
+    }
+
+    return sessions;
+  } catch (error) {
+    console.error('Error getting mentor sessions:', error);
+    return [];
+  }
+};
 // ===============================
 // EXPORT ALL
 // ===============================
@@ -685,27 +766,30 @@ export default {
   listenToChatRequests,
   acceptChatRequest,
   deleteChatRequest,
-  
+
   // Conversations
   listenToUserConversations,
   listenToMentorConversations,
   endConversation,
-  
+
   // Messages
   sendMessage,
   listenToMessages,
   markMessagesAsRead,
-  
+
   // Files
   uploadChatFile,
   deleteChatFile,
   getOldChatFiles,
-  
+
   // Mentor Status
   updateMentorStatus,
   getOnlineMentors,
   listenToMentorStatus,
-  
+
   // Unread Counts
-  listenToUnreadCounts
+  listenToUnreadCounts,
+  createMentorSession,
+  endMentorSession,
+  getMentorSessions
 };

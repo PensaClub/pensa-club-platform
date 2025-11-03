@@ -39,16 +39,14 @@ export const DetailedMentorsTable = ({ mentors }) => {
           aValue = a.sessionsCount || 0;
           bValue = b.sessionsCount || 0;
           break;
-        // TODO ФАЗА 2: Online Hours Tracking
-        // case 'onlineHours':
-        //   aValue = a.onlineTime?.thisMonth || 0;
-        //   bValue = b.onlineTime?.thisMonth || 0;
-        //   break;
-        // TODO ФАЗА 2: Response Time Analytics
-        // case 'responseTime':
-        //   aValue = a.quality?.responseTime || 0;
-        //   bValue = b.quality?.responseTime || 0;
-        //   break;
+        case 'onlineHours': // ✅ ДОБАВЕНО
+          aValue = a.firebaseStats?.totalOnlineHours || 0;
+          bValue = b.firebaseStats?.totalOnlineHours || 0;
+          break;
+        case 'responseTime': // ✅ ДОБАВЕНО
+          aValue = a.firebaseStats?.averageResponseTime || 0;
+          bValue = b.firebaseStats?.averageResponseTime || 0;
+          break;
         default:
           return 0;
       }
@@ -151,23 +149,21 @@ export const DetailedMentorsTable = ({ mentors }) => {
                 </div>
               </th>
               
-              {/* TODO ФАЗА 2: Online Hours Tracking Column
+              {/* ✅ ONLINE HOURS COLUMN */}
               <th onClick={() => handleSort('onlineHours')} className="detailed-mentors-table-th sortable center">
                 <div className="detailed-mentors-table-th-content">
                   {t('DetailedMentorsTable.onlineHours')}
                   <SortIcon columnKey="onlineHours" />
                 </div>
               </th>
-              */}
 
-              {/* TODO ФАЗА 2: Response Time Analytics Column
+              {/* ✅ RESPONSE TIME COLUMN */}
               <th onClick={() => handleSort('responseTime')} className="detailed-mentors-table-th sortable center">
                 <div className="detailed-mentors-table-th-content">
                   {t('DetailedMentorsTable.responseTime')}
                   <SortIcon columnKey="responseTime" />
                 </div>
               </th>
-              */}
 
               <th className="detailed-mentors-table-th center">
                 <div className="detailed-mentors-table-th-content">
@@ -177,137 +173,151 @@ export const DetailedMentorsTable = ({ mentors }) => {
             </tr>
           </thead>
           <tbody>
-            {sortedMentors.map((mentor) => (
-              <tr key={mentor.id} className="detailed-mentors-table-row">
-                <td className="detailed-mentors-table-td">
-                  <div className="detailed-mentors-table-mentor-cell">
-                    <img
-                      src={mentor.photoUrl || "/images/homePage/user-it.png"}
-                      alt={mentor.name}
-                      className="detailed-mentors-table-avatar"
-                      onError={(e) => {
-                        e.target.src = "/images/homePage/user-it.png";
-                      }}
-                    />
-                    <span className="detailed-mentors-table-name">{mentor.name}</span>
-                  </div>
-                </td>
-                <td className="detailed-mentors-table-td">
-                  <span className="detailed-mentors-table-specialization">
-                    {mentor.specialization || 'N/A'}
-                  </span>
-                </td>
-                <td className="detailed-mentors-table-td detailed-mentors-table-td-center">
-                  <strong>{mentor.studentsCount || 0}</strong>
-                </td>
-                <td className="detailed-mentors-table-td detailed-mentors-table-td-center">
-                  <strong>{mentor.courses?.length || 0}</strong>
-                </td>
-                <td className="detailed-mentors-table-td detailed-mentors-table-td-center">
-                  <div className="detailed-mentors-table-rating">
-                    <span className="detailed-mentors-table-rating-star">⭐</span>
-                    <strong>{mentor.rating ? parseFloat(mentor.rating).toFixed(1) : '0.0'}</strong>
-                  </div>
-                </td>
-                <td className="detailed-mentors-table-td detailed-mentors-table-td-center">
-                  <strong>{mentor.sessionsCount || 0}</strong>
-                </td>
+            {sortedMentors.map((mentor) => {
+              const onlineHours = mentor.firebaseStats?.totalOnlineHours || 0;
+              const responseTime = mentor.firebaseStats?.averageResponseTime || 0;
 
-                {/* TODO ФАЗА 2: Online Hours Cell
-                <td className="detailed-mentors-table-td detailed-mentors-table-td-center">
-                  <strong>{mentor.onlineTime?.thisMonth || 0}</strong>
-                  <span className="detailed-mentors-table-unit">ч</span>
-                </td>
-                */}
+              return (
+                <tr key={mentor.id} className="detailed-mentors-table-row">
+                  <td className="detailed-mentors-table-td">
+                    <div className="detailed-mentors-table-mentor-cell">
+                      <img
+                        src={mentor.photoUrl || "/images/homePage/user-it.png"}
+                        alt={mentor.name}
+                        className="detailed-mentors-table-avatar"
+                        onError={(e) => {
+                          e.target.src = "/images/homePage/user-it.png";
+                        }}
+                      />
+                      <span className="detailed-mentors-table-name">{mentor.name}</span>
+                    </div>
+                  </td>
+                  <td className="detailed-mentors-table-td">
+                    <span className="detailed-mentors-table-specialization">
+                      {mentor.specialization || 'N/A'}
+                    </span>
+                  </td>
+                  <td className="detailed-mentors-table-td detailed-mentors-table-td-center">
+                    <strong>{mentor.studentsCount || 0}</strong>
+                  </td>
+                  <td className="detailed-mentors-table-td detailed-mentors-table-td-center">
+                    <strong>{mentor.courses?.length || 0}</strong>
+                  </td>
+                  <td className="detailed-mentors-table-td detailed-mentors-table-td-center">
+                    <div className="detailed-mentors-table-rating">
+                      <span className="detailed-mentors-table-rating-star">⭐</span>
+                      <strong>{mentor.rating ? parseFloat(mentor.rating).toFixed(1) : '0.0'}</strong>
+                    </div>
+                  </td>
+                  <td className="detailed-mentors-table-td detailed-mentors-table-td-center">
+                    <strong>{mentor.sessionsCount || 0}</strong>
+                  </td>
 
-                {/* TODO ФАЗА 2: Response Time Cell
-                <td className="detailed-mentors-table-td detailed-mentors-table-td-center">
-                  <span className={`detailed-mentors-table-response-badge ${
-                    (mentor.quality?.responseTime || 0) <= 10 ? 'excellent' :
-                    (mentor.quality?.responseTime || 0) <= 15 ? 'good' :
-                    (mentor.quality?.responseTime || 0) <= 20 ? 'average' : 'slow'
-                  }`}>
-                    {mentor.quality?.responseTime || 0} мин
-                  </span>
-                </td>
-                */}
+                  {/* ✅ ONLINE HOURS CELL */}
+                  <td className="detailed-mentors-table-td detailed-mentors-table-td-center">
+                    <strong>{onlineHours.toFixed(2)}</strong>
+                    <span className="detailed-mentors-table-unit"> ч</span>
+                  </td>
 
-                <td className="detailed-mentors-table-td detailed-mentors-table-td-center">
-                  <span className={`detailed-mentors-table-status-badge ${mentor.isOnline ? 'online' : 'offline'}`}>
-                    {mentor.isOnline ? t('DetailedMentorsTable.online') : t('DetailedMentorsTable.offline')}
-                  </span>
-                </td>
-              </tr>
-            ))}
+                  {/* ✅ RESPONSE TIME CELL */}
+                  <td className="detailed-mentors-table-td detailed-mentors-table-td-center">
+                    {responseTime > 0 ? (
+                      <span className={`detailed-mentors-table-response-badge ${
+                        responseTime <= 10 ? 'excellent' :
+                        responseTime <= 15 ? 'good' :
+                        responseTime <= 20 ? 'average' : 'slow'
+                      }`}>
+                        {responseTime} мин
+                      </span>
+                    ) : (
+                      <span className="detailed-mentors-table-no-data">N/A</span>
+                    )}
+                  </td>
+
+                  <td className="detailed-mentors-table-td detailed-mentors-table-td-center">
+                    <span className={`detailed-mentors-table-status-badge ${mentor.isOnline ? 'online' : 'offline'}`}>
+                      {mentor.isOnline ? t('DetailedMentorsTable.online') : t('DetailedMentorsTable.offline')}
+                    </span>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
 
       {/* MOBILE VIEW */}
       <div className="detailed-mentors-table-mobile">
-        {sortedMentors.map((mentor) => (
-          <div key={mentor.id} className="detailed-mentors-table-card">
-            <div className="detailed-mentors-table-card-header">
-              <img
-                src={mentor.photoUrl || "/images/homePage/user-it.png"}
-                alt={mentor.name}
-                className="detailed-mentors-table-card-avatar"
-                onError={(e) => {
-                  e.target.src = "/images/homePage/user-it.png";
-                }}
-              />
-              <div className="detailed-mentors-table-card-info">
-                <h3 className="detailed-mentors-table-card-name">{mentor.name}</h3>
-                <p className="detailed-mentors-table-card-spec">{mentor.specialization || 'N/A'}</p>
-              </div>
-              <span className={`detailed-mentors-table-status-badge ${mentor.isOnline ? 'online' : 'offline'}`}>
-                {mentor.isOnline ? t('DetailedMentorsTable.online') : t('DetailedMentorsTable.offline')}
-              </span>
-            </div>
+        {sortedMentors.map((mentor) => {
+          const onlineHours = mentor.firebaseStats?.totalOnlineHours || 0;
+          const responseTime = mentor.firebaseStats?.averageResponseTime || 0;
 
-            <div className="detailed-mentors-table-card-body">
-              <div className="detailed-mentors-table-card-row">
-                <span className="detailed-mentors-table-card-label">{t('DetailedMentorsTable.students')}:</span>
-                <strong>{mentor.studentsCount || 0}</strong>
-              </div>
-              <div className="detailed-mentors-table-card-row">
-                <span className="detailed-mentors-table-card-label">{t('DetailedMentorsTable.courses')}:</span>
-                <strong>{mentor.courses?.length || 0}</strong>
-              </div>
-              <div className="detailed-mentors-table-card-row">
-                <span className="detailed-mentors-table-card-label">{t('DetailedMentorsTable.rating')}:</span>
-                <div className="detailed-mentors-table-rating">
-                  <span className="detailed-mentors-table-rating-star">⭐</span>
-                  <strong>{mentor.rating ? parseFloat(mentor.rating).toFixed(1) : '0.0'}</strong>
+          return (
+            <div key={mentor.id} className="detailed-mentors-table-card">
+              <div className="detailed-mentors-table-card-header">
+                <img
+                  src={mentor.photoUrl || "/images/homePage/user-it.png"}
+                  alt={mentor.name}
+                  className="detailed-mentors-table-card-avatar"
+                  onError={(e) => {
+                    e.target.src = "/images/homePage/user-it.png";
+                  }}
+                />
+                <div className="detailed-mentors-table-card-info">
+                  <h3 className="detailed-mentors-table-card-name">{mentor.name}</h3>
+                  <p className="detailed-mentors-table-card-spec">{mentor.specialization || 'N/A'}</p>
                 </div>
-              </div>
-              <div className="detailed-mentors-table-card-row">
-                <span className="detailed-mentors-table-card-label">{t('DetailedMentorsTable.sessions')}:</span>
-                <strong>{mentor.sessionsCount || 0}</strong>
-              </div>
-
-              {/* TODO ФАЗА 2: Online Hours Row
-              <div className="detailed-mentors-table-card-row">
-                <span className="detailed-mentors-table-card-label">{t('DetailedMentorsTable.onlineHours')}:</span>
-                <strong>{mentor.onlineTime?.thisMonth || 0} ч</strong>
-              </div>
-              */}
-
-              {/* TODO ФАЗА 2: Response Time Row
-              <div className="detailed-mentors-table-card-row">
-                <span className="detailed-mentors-table-card-label">{t('DetailedMentorsTable.responseTime')}:</span>
-                <span className={`detailed-mentors-table-response-badge ${
-                  (mentor.quality?.responseTime || 0) <= 10 ? 'excellent' :
-                  (mentor.quality?.responseTime || 0) <= 15 ? 'good' :
-                  (mentor.quality?.responseTime || 0) <= 20 ? 'average' : 'slow'
-                }`}>
-                  {mentor.quality?.responseTime || 0} мин
+                <span className={`detailed-mentors-table-status-badge ${mentor.isOnline ? 'online' : 'offline'}`}>
+                  {mentor.isOnline ? t('DetailedMentorsTable.online') : t('DetailedMentorsTable.offline')}
                 </span>
               </div>
-              */}
+
+              <div className="detailed-mentors-table-card-body">
+                <div className="detailed-mentors-table-card-row">
+                  <span className="detailed-mentors-table-card-label">{t('DetailedMentorsTable.students')}:</span>
+                  <strong>{mentor.studentsCount || 0}</strong>
+                </div>
+                <div className="detailed-mentors-table-card-row">
+                  <span className="detailed-mentors-table-card-label">{t('DetailedMentorsTable.courses')}:</span>
+                  <strong>{mentor.courses?.length || 0}</strong>
+                </div>
+                <div className="detailed-mentors-table-card-row">
+                  <span className="detailed-mentors-table-card-label">{t('DetailedMentorsTable.rating')}:</span>
+                  <div className="detailed-mentors-table-rating">
+                    <span className="detailed-mentors-table-rating-star">⭐</span>
+                    <strong>{mentor.rating ? parseFloat(mentor.rating).toFixed(1) : '0.0'}</strong>
+                  </div>
+                </div>
+                <div className="detailed-mentors-table-card-row">
+                  <span className="detailed-mentors-table-card-label">{t('DetailedMentorsTable.sessions')}:</span>
+                  <strong>{mentor.sessionsCount || 0}</strong>
+                </div>
+
+                {/* ✅ ONLINE HOURS ROW */}
+                <div className="detailed-mentors-table-card-row">
+                  <span className="detailed-mentors-table-card-label">{t('DetailedMentorsTable.onlineHours')}:</span>
+                  <strong>{onlineHours.toFixed(2)} ч</strong>
+                </div>
+
+                {/* ✅ RESPONSE TIME ROW */}
+                <div className="detailed-mentors-table-card-row">
+                  <span className="detailed-mentors-table-card-label">{t('DetailedMentorsTable.responseTime')}:</span>
+                  {responseTime > 0 ? (
+                    <span className={`detailed-mentors-table-response-badge ${
+                      responseTime <= 10 ? 'excellent' :
+                      responseTime <= 15 ? 'good' :
+                      responseTime <= 20 ? 'average' : 'slow'
+                    }`}>
+                      {responseTime} мин
+                    </span>
+                  ) : (
+                    <span className="detailed-mentors-table-no-data">N/A</span>
+                  )}
+                </div>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

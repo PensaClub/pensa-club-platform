@@ -464,6 +464,91 @@ Application ID: ${response.applicationId || response.id || 'N/A'}
       throw error;
     }
   }, []);
+// ===============================
+// FIREBASE STATISTICS - ФАЗА 2 🔥
+// ===============================
+
+const getAllMentorsWithStats = useCallback(async () => {
+  try {
+    const data = await academyService.getAllMentorsWithStats();
+    return data;
+  } catch (error) {
+    console.error('Error fetching mentors with stats:', error);
+    throw error;
+  }
+}, []);
+
+const getMentorFirebaseStats = useCallback(async (mentorId) => {
+  try {
+    const data = await academyService.getMentorFirebaseStats(mentorId);
+    return data;
+  } catch (error) {
+    console.error('Error fetching mentor Firebase stats:', error);
+    throw error;
+  }
+}, []);
+
+const refreshMentorStats = useCallback(async (mentorId) => {
+  try {
+    const response = await academyService.refreshMentorStats(mentorId);
+    toast.success('Статистиките са обновени успешно');
+    return response;
+  } catch (error) {
+    console.error('Error refreshing mentor stats:', error);
+    toast.error('Грешка при обновяване на статистики');
+    throw error;
+  }
+}, []);
+
+const getFirebaseOverviewStats = useCallback(async () => {
+  try {
+    const data = await academyService.getFirebaseOverviewStats();
+    return data;
+  } catch (error) {
+    console.error('Error fetching Firebase overview stats:', error);
+    throw error;
+  }
+}, []);
+
+const getTopMentorsByOnlineTime = useCallback(async (limit = 5) => {
+  try {
+    const data = await academyService.getTopMentorsByOnlineTime(limit);
+    return data;
+  } catch (error) {
+    console.error('Error fetching top mentors by online time:', error);
+    throw error;
+  }
+}, []);
+
+const getResponseTimesStats = useCallback(async () => {
+  try {
+    const data = await academyService.getResponseTimesStats();
+    return data;
+  } catch (error) {
+    console.error('Error fetching response times stats:', error);
+    throw error;
+  }
+}, []);
+
+const getActivityTrendData = useCallback(async (months = 6) => {
+  try {
+    const data = await academyService.getActivityTrend(months);
+    return data;
+  } catch (error) {
+    console.error('Error fetching activity trend:', error);
+    throw error;
+  }
+}, []);
+
+const getSessionQualityData = useCallback(async () => {
+  try {
+    const data = await academyService.getSessionQuality();
+    return data;
+  } catch (error) {
+    console.error('Error fetching session quality:', error);
+    throw error;
+  }
+}, []);
 
   // ===============================
   // CONTEXT VALUE
@@ -516,6 +601,16 @@ Application ID: ${response.applicationId || response.id || 'N/A'}
     // Admin Applications 
     getPendingMentorApplications,
     rejectMentorApplication,
+      // Firebase Statistics 
+  getAllMentorsWithStats,
+  getMentorFirebaseStats,
+  refreshMentorStats,
+  getFirebaseOverviewStats,
+    // Activity Tracking & Charts 📊
+  getTopMentorsByOnlineTime,
+  getResponseTimesStats,
+  getActivityTrendData,
+  getSessionQualityData,
   };
 
   return (

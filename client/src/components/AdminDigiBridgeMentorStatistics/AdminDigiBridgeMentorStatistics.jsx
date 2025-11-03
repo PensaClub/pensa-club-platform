@@ -6,7 +6,7 @@ import './adminDigiBridgeMentorStatistics.css';
 
 import { StatisticsOverviewCards } from './StatisticsOverviewCards/StatisticsOverviewCards';
 import { useAcademy } from '../contexts/AcademyProvider';
-import { MOCK_MENTORS_DETAILED } from './mockMentorStatisticsData'; 
+import { MOCK_MENTORS_DETAILED } from './mockMentorStatisticsData';
 import { TopMentorsByCourses } from './TopMentorsByCourses/TopMentorsByCourses';
 import { TopMentorsByOnlineTime } from './TopMentorsByOnlineTime/TopMentorsByOnlineTime';
 import { ActivityTrendChart } from './ActivityTrendChart/ActivityTrendChart';
@@ -18,16 +18,28 @@ import { ExportStatisticsButton } from './ExportStatisticsButton/ExportStatistic
 
 export const AdminDigiBridgeMentorStatistics = () => {
     const { t } = useTranslation();
-    const { getMentorStatisticsOverview, getMentorsBySpecialization, getAllMentors } = useAcademy(); 
+    const { getMentorStatisticsOverview,
+        getMentorsBySpecialization,
+        getAllMentors,
+        getAllMentorsWithStats,
+        getTopMentorsByOnlineTime,
+        getResponseTimesStats,
+        getActivityTrendData,
+        getSessionQualityData
+    } = useAcademy();
 
     // ✅ STATE ЗА РЕАЛНИ ДАННИ
     const [overviewStats, setOverviewStats] = useState(null);
     const [specializationData, setSpecializationData] = useState([]);
-    const [realMentors, setRealMentors] = useState([]); 
-    
+    const [realMentors, setRealMentors] = useState([]);
+    const [topMentorsByTime, setTopMentorsByTime] = useState([]);
+    const [responseTimesData, setResponseTimesData] = useState(null);
+    const [activityTrendData, setActivityTrendData] = useState([]);
+    const [sessionQualityData, setSessionQualityData] = useState(null);
+    const [allMentorsForCourses, setAllMentorsForCourses] = useState([]);
     // ✅ ВРЕМЕННО - MOCK ДАННИ ЗА ФАЗА 2 КОМПОНЕНТИТЕ
     const [mockMentors] = useState(MOCK_MENTORS_DETAILED);
-    
+
     const [isLoading, setIsLoading] = useState(false);
     const [timeFilter, setTimeFilter] = useState('thisMonth');
 
@@ -48,7 +60,11 @@ export const AdminDigiBridgeMentorStatistics = () => {
             if (overviewResponse?.success) {
                 setOverviewStats(overviewResponse.stats);
             }
-
+            // ✅ FETCH ALL MENTORS FOR COURSES CHART
+            const allMentorsResponse = await getAllMentors({ limit: 100 });
+            if (allMentorsResponse?.success) {
+                setAllMentorsForCourses(allMentorsResponse.mentors);
+            }
             // ✅ FETCH SPECIALIZATION DATA
             const specializationResponse = await getMentorsBySpecialization();
             if (specializationResponse?.success) {
@@ -56,9 +72,33 @@ export const AdminDigiBridgeMentorStatistics = () => {
             }
 
             // ✅ FETCH ALL MENTORS FOR TABLE
-            const mentorsResponse = await getAllMentors({ status: 'active' });
+            const mentorsResponse = await getAllMentorsWithStats();
             if (mentorsResponse?.success) {
                 setRealMentors(mentorsResponse.mentors);
+            }
+
+            // ✅ FETCH TOP MENTORS BY ONLINE TIME
+            const topMentorsResponse = await getTopMentorsByOnlineTime(5);
+            if (topMentorsResponse?.success) {
+                setTopMentorsByTime(topMentorsResponse.mentors);
+            }
+
+            // ✅ FETCH RESPONSE TIMES
+            const responseTimesResponse = await getResponseTimesStats();
+            if (responseTimesResponse?.success) {
+                setResponseTimesData(responseTimesResponse.stats);
+            }
+
+            // ✅ FETCH ACTIVITY TREND
+            const activityTrendResponse = await getActivityTrendData(6);
+            if (activityTrendResponse?.success) {
+                setActivityTrendData(activityTrendResponse.trend);
+            }
+
+            // ✅ FETCH SESSION QUALITY
+            const sessionQualityResponse = await getSessionQualityData();
+            if (sessionQualityResponse?.success) {
+                setSessionQualityData(sessionQualityResponse.quality);
             }
 
         } catch (error) {
@@ -72,11 +112,45 @@ export const AdminDigiBridgeMentorStatistics = () => {
     // HANDLERS
     // ===================================
 
-    const handleTimeFilterChange = (filter) => {
-        setTimeFilter(filter);
-        // TODO ФАЗА 2: Филтрирай данните според избрания период
-    };
-
+   const handleTimeFilterChange = async (filter) => {
+  setTimeFilter(filter);
+  
+  const monthsMap = {
+    'thisMonth': 1,
+    'lastMonth': 1,
+    'last3Months': 3,
+    'allTime': 12
+  };
+  
+  const months = monthsMap[filter] || 6;
+  
+  try {
+    setIsLoading(true);
+    
+    // ✅ ACTIVITY TREND
+    const activityTrendResponse = await getActivityTrendData(months);
+    if (activityTrendResponse?.success) {
+      setActivityTrendData(activityTrendResponse.trend);
+    }
+    
+    // ✅ TOP MENTORS (ако backend поддържа period filter)
+    // const topMentorsResponse = await getTopMentorsByOnlineTime(5, { period: filter });
+    // if (topMentorsResponse?.success) {
+    //   setTopMentorsByTime(topMentorsResponse.mentors);
+    // }
+    
+    // ✅ SESSION QUALITY (ако backend поддържа period filter)
+    // const sessionQualityResponse = await getSessionQualityData({ period: filter });
+    // if (sessionQualityResponse?.success) {
+    //   setSessionQualityData(sessionQualityResponse.quality);
+    // }
+    
+  } catch (error) {
+    console.error('❌ Error filtering statistics:', error);
+  } finally {
+    setIsLoading(false);
+  }
+};
     const handleRefresh = () => {
         fetchMentorStatistics();
     };
@@ -117,6 +191,8 @@ export const AdminDigiBridgeMentorStatistics = () => {
                         </svg>
                         {t('AdminDigiBridgeMentorStatistics.refresh')}
                     </button>
+                    <ExportStatisticsButton mentors={realMentors} stats={overviewStats} />
+
                 </div>
             </div>
 
@@ -136,12 +212,12 @@ export const AdminDigiBridgeMentorStatistics = () => {
                     {/* CHARTS SECTION */}
                     <div className="admin-digibridge-mentor-statistics-charts">
                         {/* TODO ФАЗА 2 - ВРЕМЕННО MOCK ДАННИ */}
-                        <TopMentorsByCourses mentors={mockMentors} />
-                        <TopMentorsByOnlineTime mentors={mockMentors} />
-                        <ActivityTrendChart mentors={mockMentors} />
-                        <SessionQualityChart mentors={mockMentors} />
-                        <ResponseTimeChart mentors={mockMentors} />
-                        
+                        <TopMentorsByCourses mentors={allMentorsForCourses} limit={10} />
+                        <TopMentorsByOnlineTime mentors={topMentorsByTime} limit={10} />
+                        <ActivityTrendChart trendData={activityTrendData} />
+                        <SessionQualityChart qualityData={sessionQualityData} />
+                        <ResponseTimeChart responseTimesData={responseTimesData} limit={10} />
+
                         {/* ✅ SPECIALIZATION CHART - РЕАЛНИ ДАННИ */}
                         {specializationData.length > 0 && (
                             <MentorsBySpecialization data={specializationData} />

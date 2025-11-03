@@ -12855,7 +12855,8 @@
     "noShow": "Не се явили",
     "sessions": "Сесии",
     "percentage": "Процент",
-    "noData": "Няма данни за показване"
+    "noData": "Няма данни за показване",
+    "incomplete": "Незавършени"
   },
    "ResponseTimeChart": {
     "title": "Време за отговор",
@@ -12869,7 +12870,8 @@
     "veryGood": "Много добро",
     "good": "Добро",
     "needsImprovement": "Нужда от подобрение",
-    "noData": "Няма данни за показване"
+    "noData": "Няма данни за показване",
+     "totalMessages": "Общо съобщения"
   },
   "MentorsBySpecialization": {
     "title": "Ментори по специализация",
@@ -12892,7 +12894,8 @@
     "responseTime": "Response Time",
     "status": "Статус",
     "online": "Онлайн",
-    "offline": "Офлайн"
+    "offline": "Офлайн",
+    "sessions": "Сесии"
   },
   "ExportStatistics": {
     "exportPDF": "Експорт PDF",

@@ -471,3 +471,43 @@
     font-size: 0.9rem;
   }
 }
+/* Response Time Badges */
+.detailed-mentors-table-response-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.detailed-mentors-table-response-badge.excellent {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+}
+
+.detailed-mentors-table-response-badge.good {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: white;
+}
+
+.detailed-mentors-table-response-badge.average {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+}
+
+.detailed-mentors-table-response-badge.slow {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+}
+
+.detailed-mentors-table-no-data {
+  color: #94a3b8;
+  font-style: italic;
+}
+
+.detailed-mentors-table-unit {
+  color: #64748b;
+  font-size: 0.85rem;
+  margin-left: 2px;
+}
