@@ -17,9 +17,10 @@ export const AdminNotificationBell = () => {
   const [unreadCount, setUnreadCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  
   const dropdownRef = useRef(null);
+  const intervalRef = useRef(null);
 
-  // Fetch notifications
   const fetchNotifications = async () => {
     try {
       setIsLoading(true);
@@ -33,11 +34,37 @@ export const AdminNotificationBell = () => {
     }
   };
 
-  // Load on mount and every 30 seconds
-  useEffect(() => {
+  const startPolling = () => {
+    if (intervalRef.current) return;
+    
     fetchNotifications();
-    const interval = setInterval(fetchNotifications, 30000);
-    return () => clearInterval(interval);
+    intervalRef.current = setInterval(fetchNotifications, 60000); // 1 минута
+  };
+
+  const stopPolling = () => {
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+  };
+
+  // Page Visibility API - спира polling когато tab е hidden
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        stopPolling();
+      } else {
+        startPolling();
+      }
+    };
+
+    startPolling();
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    return () => {
+      stopPolling();
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, []);
 
   // Close dropdown when clicking outside
@@ -54,26 +81,21 @@ export const AdminNotificationBell = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen]);
 
-  // Mark as read and navigate
   const handleNotificationClick = async (notification) => {
     try {
       await markNotificationAsRead(notification.id);
       setUnreadCount(prev => Math.max(0, prev - 1));
       
-      // 🔥 АВТОМАТИЧНА НАВИГАЦИЯ БАЗИРАНА НА CONFIG
       const config = getNotificationConfig(notification.type);
       navigate(config.route);
       
       setIsOpen(false);
-      
-      // Refresh след маркиране като прочетено
       fetchNotifications();
     } catch (error) {
       console.error('Error marking notification as read:', error);
     }
   };
 
-  // Format time ago
   const formatTimeAgo = (timestamp) => {
     const now = new Date();
     const notificationTime = new Date(timestamp);
@@ -87,7 +109,6 @@ export const AdminNotificationBell = () => {
 
   return (
     <div className="admin-notification-bell" ref={dropdownRef}>
-      {/* BELL ICON */}
       <button 
         className="admin-notification-bell-button"
         onClick={() => setIsOpen(!isOpen)}
@@ -111,7 +132,6 @@ export const AdminNotificationBell = () => {
         )}
       </button>
 
-      {/* DROPDOWN */}
       {isOpen && (
         <div className="admin-notification-bell-dropdown">
           <div className="admin-notification-bell-header">
@@ -162,3 +182,4 @@ export const AdminNotificationBell = () => {
     </div>
   );
 };
+ 

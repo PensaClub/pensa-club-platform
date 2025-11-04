@@ -122,17 +122,17 @@ export const academyServiceFactory = () => {
 
     getMentorStatisticsOverview: async () => {
       return requester.get(`${apiUrl}/academy/mentors/statistics/overview`);
-      /* BACKEND TODO: GET /api/academy/mentors/statistics/overview */
+
     },
 
     getMentorsBySpecialization: async () => {
       return requester.get(`${apiUrl}/academy/mentors/statistics/by-specialization`);
-      /* BACKEND TODO: GET /api/academy/mentors/statistics/by-specialization */
+
     },
 
     getMentorActivityTrend: async (months = 6) => {
       return requester.get(`${apiUrl}/academy/mentors/statistics/activity-trend?months=${months}`);
-      /* BACKEND TODO: GET /api/academy/mentors/statistics/activity-trend */
+
     },
 
     getMentorDetailedStatistics: async (mentorId) => {
@@ -142,11 +142,11 @@ export const academyServiceFactory = () => {
 
     getMentorsStats: async () => {
       return requester.get(`${apiUrl}/academy/mentors/stats`);
-      /* BACKEND TODO: GET /api/academy/mentors/stats */
+
     },
 
     // ===============================
-    // ADMIN NOTIFICATIONS (TODO - ПРАВИМ СЕГА)
+    // ADMIN NOTIFICATIONS 
     // ===============================
 
     createAdminNotification: async (notificationData) => {
@@ -167,12 +167,12 @@ export const academyServiceFactory = () => {
 
     markAllNotificationsAsRead: async () => {
       return requester.put(`${apiUrl}/academy/admin/notifications/mark-all-read`);
-      /* BACKEND TODO: PUT /api/academy/admin/notifications/mark-all-read */
+
     },
 
     deleteNotification: async (notificationId) => {
       return requester.del(`${apiUrl}/academy/admin/notifications/${notificationId}`);
-      /* BACKEND TODO: DELETE /api/academy/admin/notifications/:id */
+
     },
     // ===============================
     // FIREBASE STATISTICS 🔥
@@ -211,6 +211,34 @@ export const academyServiceFactory = () => {
 
     getSessionQuality: async () => {
       return requester.get(`${apiUrl}/academy/mentors/statistics/session-quality`);
+    },
+    getAllMentorsWithStatsFiltered: async (timeFilter) => {
+      return requester.get(`${apiUrl}/academy/mentors/all-with-stats-filtered?timeFilter=${timeFilter}`);
+    },
+    // ===============================
+    // SESSION SYNC 🔄
+    // ===============================
+
+    syncSession: async (sessionId, mentorEmail) => {
+      return requester.post(`${apiUrl}/academy/sync-session`, {
+        sessionId,
+        mentorEmail
+      });
+    },
+    // ===============================
+    // ACADEMY REVIEWS ✨
+    // ===============================
+
+    createAcademyReview: async (reviewData) => {
+      return requester.post(`${apiUrl}/reviews/academy`, reviewData);
+    },
+
+    getApprovedAcademyReviews: async () => {
+      return requester.get(`${apiUrl}/reviews/academy/approved`);
+    },
+
+    checkUserAcademyReviewStatus: async () => {
+      return requester.get(`${apiUrl}/reviews/academy/user-status`);
     },
   };
 };

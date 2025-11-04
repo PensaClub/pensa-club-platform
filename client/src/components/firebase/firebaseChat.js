@@ -4,6 +4,7 @@ import { getDatabase, ref, push, set, onValue, off, update, query, orderByChild,
 import { ref as storageRef, uploadBytesResumable, getDownloadURL, deleteObject } from 'firebase/storage';
 import { firebaseStorage } from '../../firebase';
 import { initializeApp, getApps, getApp } from 'firebase/app';
+
 // Initialize Firebase Database
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_apiKey,
@@ -715,17 +716,30 @@ export const createMentorSession = async (mentorId, conversationId) => {
  * Приключва активна session
  * @param {string} mentorId 
  * @param {string} sessionId 
+ * @param {Function} syncSessionCallback - callback от context за sync
  */
-export const endMentorSession = async (mentorId, sessionId) => {
+export const endMentorSession = async (mentorId, sessionId, syncSessionCallback = null) => {
   try {
+    
     const sessionRef = ref(database, `mentor_sessions/${mentorId}/${sessionId}`);
     await update(sessionRef, {
       endTime: Date.now(),
       status: 'completed'
     });
 
+    // ✅ SYNC TO BACKEND (ако има callback)
+    if (syncSessionCallback) {
+      const mentorEmail = mentorId.replace(/_dot_/g, '.').replace(/_at_/g, '@');
+      
+      try {
+        const result = await syncSessionCallback(sessionId, mentorEmail);
+      } catch (syncError) {
+        console.error('⚠️ Sync failed (non-critical):', syncError);
+      }
+    }
+
   } catch (error) {
-    console.error('Error ending mentor session:', error);
+    console.error('❌ Error ending mentor session:', error);
   }
 };
 

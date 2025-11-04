@@ -12037,7 +12037,6 @@
         "submitting": "Submitting...",
         "submitNote": "We will review your application and contact you soon",
         "country": "Country"
-
       },
       "photo": {
         "label": "Photo",
@@ -12088,7 +12087,6 @@
         "fillRequired": "Please fill in all required fields",
         "submitError": "Error submitting application. Please try again.",
         "countryRequired": "Country is required"
-
       },
       "success": "Application submitted successfully! We will contact you soon."
     },
@@ -12343,7 +12341,6 @@
       "edit": "Edit",
       "sendEmail": "Send Email",
       "activate": "Activate",
-
       "deactivate": "Deactivate",
       "delete": "Delete"
     },
@@ -12450,7 +12447,6 @@
       "successMessage": "Data was updated successfully!",
       "errorMessage": "Error updating data",
       "country": "Country"
-
     }
   },
   "AdminNotificationBell": {
@@ -12467,13 +12463,11 @@
   "AdminDigiBridgeMentorApplications": {
     "title": "Mentor Applications",
     "description": "Review and manage incoming mentor applications for DigiBridge Academy",
-    
     "stats": {
       "totalApplications": "Total Applications",
       "newToday": "New Today",
       "pending": "Pending"
     },
-    
     "filters": {
       "searchPlaceholder": "Search by name or email...",
       "specializationLabel": "Specialization",
@@ -12483,23 +12477,19 @@
       "sortOldest": "Oldest First",
       "sortName": "By Name (A-Z)"
     },
-    
     "loading": "Loading applications...",
-    
     "noApplications": "No Applications",
     "noApplicationsDescription": "There are currently no mentor applications",
-    
     "approveSuccess": "Application approved successfully!",
     "approveError": "Error approving application",
     "rejectSuccess": "Application rejected",
     "rejectError": "Error rejecting application",
-    
     "viewDetails": "View Details",
     "sendEmail": "Send Email",
     "approve": "Approve",
     "reject": "Reject"
   },
-   "ApplicationsStats": {
+  "ApplicationsStats": {
     "totalApplications": "Total Applications",
     "newToday": "New Today",
     "pending": "Pending"
@@ -12562,7 +12552,6 @@
     "confirmReject": "Are you sure you want to reject this application?",
     "priorityContact": "Priority Contact",
     "country": "Country"
-
   },
   "AdminDigiBridgeSendEmailToApplicantModal": {
     "title": "Send Email to Applicant",
@@ -12639,7 +12628,7 @@
     "hours": "Hours",
     "noData": "No data to display"
   },
-    "SessionQualityChart": {
+  "SessionQualityChart": {
     "title": "Session Quality",
     "subtitle": "Distribution of completed, canceled, and no-show sessions",
     "completed": "Completed",
@@ -12649,7 +12638,6 @@
     "percentage": "Percentage",
     "noData": "No data to display",
     "incomplete": "Incomplete"
-
   },
   "ResponseTimeChart": {
     "title": "Response Time",
@@ -12658,6 +12646,7 @@
     "responseTime": "Response Time",
     "rating": "Rating",
     "minutes": "min",
+    "seconds": "sec",
     "min": "min",
     "excellent": "Excellent",
     "veryGood": "Very Good",
@@ -12689,7 +12678,6 @@
     "online": "Online",
     "offline": "Offline",
     "sessions": "Сесии"
-
   },
   "ExportStatistics": {
     "exportPDF": "Export PDF",
@@ -12699,5 +12687,17 @@
     "threeMonths": "Last 3 Months",
     "oneYear": "Last Year",
     "error": "Error generating PDF report"
+  },
+  "OverviewCardsSkeleton": {
+    "loading": "Loading...",
+    "loadingStats": "Loading statistics..."
+  },
+  "ChartSkeleton": {
+    "loading": "Loading chart...",
+    "loadingData": "Loading data..."
+  },
+  "TableSkeleton": {
+    "loading": "Loading table...",
+    "loadingData": "Loading mentor data..."
   }
 }

@@ -3,12 +3,18 @@
 const { getMentorFirebaseStats } = require('../firebase/firebaseChatReader');
 const { mentor, user_account, user_details, mentor_course, sequelize } = require('../sequelize/models/index');
 
+// ✅ IN-MEMORY CACHE за getAllMentorsCombinedStats
+let allMentorsCache = null;
+let allMentorsCacheTimestamp = null;
+const ALL_MENTORS_CACHE_TTL = 5 * 60 * 1000; // 5 минути
+
 /**
  * Обнови кеширани статистики за ментор в PostgreSQL
  */
 const updateMentorCachedStats = async (mentorId, firebaseMentorId) => {
   try {
-    const firebaseStats = await getMentorFirebaseStats(firebaseMentorId);
+    // ✅ Pass postgresId за по-бързи queries
+    const firebaseStats = await getMentorFirebaseStats(firebaseMentorId, mentorId);
     const mentorData = await mentor.findByPk(mentorId);
 
     if (!mentorData) {
@@ -73,9 +79,9 @@ const getMentorCombinedStats = async (mentorId) => {
       .replace(/\./g, '_dot_')
       .replace(/@/g, '_at_');
 
-    const firebaseStats = await getMentorFirebaseStats(firebaseMentorId);
+    // ✅ Pass postgresId за оптимизация
+    const firebaseStats = await getMentorFirebaseStats(firebaseMentorId, mentorData.id);
 
-    // ✅ СБОР на сесиите от двете бази
     const totalSessions = (firebaseStats.totalSessions || 0) + (mentorData.sessionsCount || 0);
 
     return {
@@ -84,9 +90,7 @@ const getMentorCombinedStats = async (mentorId) => {
       email: user.email,
       photoUrl: mentorData.photoUrl,
       specialization: mentorData.specialization,
-      // ✅ Students: PostgreSQL first, Firebase fallback
       studentsCount: mentorData.studentsCount || firebaseStats.totalSessions || 0,
-      // ✅ Sessions: СБОР от Firebase + PostgreSQL
       sessionsCount: totalSessions,
       rating: parseFloat(mentorData.rating) || 0,
       isOnline: mentorData.isOnline || false,
@@ -112,6 +116,11 @@ const getMentorCombinedStats = async (mentorId) => {
  * Вземи статистики за всички ментори
  */
 const getAllMentorsCombinedStats = async () => {
+  // ✅ CHECK CACHE FIRST
+  if (allMentorsCache && allMentorsCacheTimestamp && (Date.now() - allMentorsCacheTimestamp < ALL_MENTORS_CACHE_TTL)) {
+    return allMentorsCache;
+  }
+
   try {
     const mentors = await mentor.findAll({
       where: { status: 'active' },
@@ -153,11 +162,13 @@ const getAllMentorsCombinedStats = async () => {
           .replace(/\./g, '_dot_')
           .replace(/@/g, '_at_');
 
-        const firebaseStats = await getMentorFirebaseStats(firebaseMentorId);
+        // ✅ Pass postgresId за оптимизация
+        const firebaseStats = await getMentorFirebaseStats(firebaseMentorId, mentorData.id);
 
         const totalSessions = (firebaseStats.totalSessions || 0) + (mentorData.sessionsCount || 0);
         const totalStudentsCount = (mentorData.studentsCount || 0) + (firebaseStats.totalSessions || 0);
-        const totalOnlineHours = Math.round((firebaseStats.totalOnlineMinutes || 0) / 60 * 100) / 100; // ✅ DECIMAL
+        const totalOnlineHours = Math.round((firebaseStats.totalOnlineMinutes || 0) / 60 * 100) / 100;
+        
         mentorsWithStats.push({
           id: mentorData.id,
           name: displayName,
@@ -172,19 +183,23 @@ const getAllMentorsCombinedStats = async () => {
           role: user.role,
           
           firebaseStats: {
-          totalSessions: firebaseStats.totalSessions,
-  activeSessions: firebaseStats.activeSessions,
-  completedSessions: firebaseStats.completedSessions,
-  totalOnlineMinutes: firebaseStats.totalOnlineMinutes,
-  totalOnlineHours: totalOnlineHours, 
-  averageResponseTime: firebaseStats.averageResponseTime,
-  totalMessages: firebaseStats.totalMessages
+            totalSessions: firebaseStats.totalSessions,
+            activeSessions: firebaseStats.activeSessions,
+            completedSessions: firebaseStats.completedSessions,
+            totalOnlineMinutes: firebaseStats.totalOnlineMinutes,
+            totalOnlineHours: totalOnlineHours,
+            averageResponseTime: firebaseStats.averageResponseTime,
+            totalMessages: firebaseStats.totalMessages
           }
         });
       } catch (error) {
         console.error(`Error getting stats for mentor ${mentorData.id}:`, error);
       }
     }
+
+    // ✅ STORE IN CACHE
+    allMentorsCache = mentorsWithStats;
+    allMentorsCacheTimestamp = Date.now();
 
     return mentorsWithStats;
   } catch (error) {

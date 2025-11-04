@@ -1,0 +1,136 @@
+/* src/components/AdminDigiBridgeMentorStatistics/Skeletons/chartSkeleton.css */
+
+.chart-skeleton {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.chart-skeleton-header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chart-skeleton-text {
+  background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+  background-size: 200% 100%;
+  animation: chart-skeleton-shimmer 1.5s infinite;
+  border-radius: 6px;
+}
+
+.chart-skeleton-title {
+  height: 24px;
+  width: 40%;
+}
+
+.chart-skeleton-subtitle {
+  height: 16px;
+  width: 60%;
+}
+
+.chart-skeleton-body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 350px;
+}
+
+.chart-skeleton-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chart-skeleton-placeholder svg {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+}
+
+.chart-skeleton-bar {
+  fill: #e5e7eb;
+  animation: chart-skeleton-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes chart-skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes chart-skeleton-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+/* Tablets (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .chart-skeleton {
+    padding: 20px;
+  }
+
+  .chart-skeleton-body {
+    min-height: 300px;
+  }
+}
+
+/* Small Tablets / Large Phones (576px - 767px) */
+@media (min-width: 576px) and (max-width: 767px) {
+  .chart-skeleton {
+    padding: 18px;
+  }
+
+  .chart-skeleton-title {
+    height: 22px;
+    width: 50%;
+  }
+
+  .chart-skeleton-subtitle {
+    height: 14px;
+    width: 70%;
+  }
+
+  .chart-skeleton-body {
+    min-height: 280px;
+  }
+}
+
+/* Phones (320px - 575px) */
+@media (max-width: 575px) {
+  .chart-skeleton {
+    padding: 16px;
+  }
+
+  .chart-skeleton-title {
+    height: 20px;
+    width: 60%;
+  }
+
+  .chart-skeleton-subtitle {
+    height: 14px;
+    width: 80%;
+  }
+
+  .chart-skeleton-body {
+    min-height: 250px;
+  }
+}

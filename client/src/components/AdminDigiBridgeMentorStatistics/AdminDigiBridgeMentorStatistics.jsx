@@ -1,20 +1,27 @@
 // src/components/AdminDigiBridgeMentorStatistics/AdminDigiBridgeMentorStatistics.jsx
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import './adminDigiBridgeMentorStatistics.css';
 
 import { StatisticsOverviewCards } from './StatisticsOverviewCards/StatisticsOverviewCards';
 import { useAcademy } from '../contexts/AcademyProvider';
 import { MOCK_MENTORS_DETAILED } from './mockMentorStatisticsData';
-import { TopMentorsByCourses } from './TopMentorsByCourses/TopMentorsByCourses';
-import { TopMentorsByOnlineTime } from './TopMentorsByOnlineTime/TopMentorsByOnlineTime';
-import { ActivityTrendChart } from './ActivityTrendChart/ActivityTrendChart';
-import { SessionQualityChart } from './SessionQualityChart/SessionQualityChart';
-import { ResponseTimeChart } from './ResponseTimeChart/ResponseTimeChart';
-import { MentorsBySpecialization } from './MentorsBySpecialization/MentorsBySpecialization';
 import { DetailedMentorsTable } from './DetailedMentorsTable/DetailedMentorsTable';
 import { ExportStatisticsButton } from './ExportStatisticsButton/ExportStatisticsButton';
+
+// ✅ SKELETON IMPORTS
+import { OverviewCardsSkeleton } from './Skeletons/OverviewCardsSkeleton';
+import { ChartSkeleton } from './Skeletons/ChartSkeleton';
+import { TableSkeleton } from './Skeletons/TableSkeleton';
+
+// ✅ LAZY LOADED CHART COMPONENTS
+const TopMentorsByCourses = lazy(() => import('./TopMentorsByCourses/TopMentorsByCourses').then(module => ({ default: module.TopMentorsByCourses })));
+const TopMentorsByOnlineTime = lazy(() => import('./TopMentorsByOnlineTime/TopMentorsByOnlineTime').then(module => ({ default: module.TopMentorsByOnlineTime })));
+const ActivityTrendChart = lazy(() => import('./ActivityTrendChart/ActivityTrendChart').then(module => ({ default: module.ActivityTrendChart })));
+const SessionQualityChart = lazy(() => import('./SessionQualityChart/SessionQualityChart').then(module => ({ default: module.SessionQualityChart })));
+const ResponseTimeChart = lazy(() => import('./ResponseTimeChart/ResponseTimeChart').then(module => ({ default: module.ResponseTimeChart })));
+const MentorsBySpecialization = lazy(() => import('./MentorsBySpecialization/MentorsBySpecialization').then(module => ({ default: module.MentorsBySpecialization })));
 
 export const AdminDigiBridgeMentorStatistics = () => {
     const { t } = useTranslation();
@@ -25,7 +32,8 @@ export const AdminDigiBridgeMentorStatistics = () => {
         getTopMentorsByOnlineTime,
         getResponseTimesStats,
         getActivityTrendData,
-        getSessionQualityData
+        getSessionQualityData,
+          getAllMentorsWithStatsFiltered,
     } = useAcademy();
 
     // ✅ STATE ЗА РЕАЛНИ ДАННИ
@@ -54,6 +62,9 @@ export const AdminDigiBridgeMentorStatistics = () => {
     const fetchMentorStatistics = async () => {
         try {
             setIsLoading(true);
+
+            // ⏱️ TODO: ПРЕМАХНИ ТОВА - САМО ЗА ТЕСТВАНЕ!
+            await new Promise(resolve => setTimeout(resolve, 2000));
 
             // ✅ FETCH OVERVIEW STATS
             const overviewResponse = await getMentorStatisticsOverview();
@@ -112,7 +123,7 @@ export const AdminDigiBridgeMentorStatistics = () => {
     // HANDLERS
     // ===================================
 
-   const handleTimeFilterChange = async (filter) => {
+ const handleTimeFilterChange = async (filter) => {
   setTimeFilter(filter);
   
   const monthsMap = {
@@ -126,24 +137,21 @@ export const AdminDigiBridgeMentorStatistics = () => {
   
   try {
     setIsLoading(true);
+
+    // // ⏱️ TODO: ПРЕМАХНИ ТОВА - САМО ЗА ТЕСТВАНЕ!
+    // await new Promise(resolve => setTimeout(resolve, 500));
     
-    // ✅ ACTIVITY TREND
+    // ✅ 1. FETCH FILTERED MENTORS
+    const mentorsResponse = await getAllMentorsWithStatsFiltered(filter);
+    if (mentorsResponse?.success) {
+      setRealMentors(mentorsResponse.mentors);
+    }
+    
+    // ✅ 2. FETCH ACTIVITY TREND
     const activityTrendResponse = await getActivityTrendData(months);
     if (activityTrendResponse?.success) {
       setActivityTrendData(activityTrendResponse.trend);
     }
-    
-    // ✅ TOP MENTORS (ако backend поддържа period filter)
-    // const topMentorsResponse = await getTopMentorsByOnlineTime(5, { period: filter });
-    // if (topMentorsResponse?.success) {
-    //   setTopMentorsByTime(topMentorsResponse.mentors);
-    // }
-    
-    // ✅ SESSION QUALITY (ако backend поддържа period filter)
-    // const sessionQualityResponse = await getSessionQualityData({ period: filter });
-    // if (sessionQualityResponse?.success) {
-    //   setSessionQualityData(sessionQualityResponse.quality);
-    // }
     
   } catch (error) {
     console.error('❌ Error filtering statistics:', error);
@@ -151,6 +159,7 @@ export const AdminDigiBridgeMentorStatistics = () => {
     setIsLoading(false);
   }
 };
+
     const handleRefresh = () => {
         fetchMentorStatistics();
     };
@@ -196,39 +205,59 @@ export const AdminDigiBridgeMentorStatistics = () => {
                 </div>
             </div>
 
-            {/* LOADING STATE */}
-            {isLoading ? (
-                <div className="admin-digibridge-mentor-statistics-loading">
-                    <div className="admin-digibridge-mentor-statistics-spinner"></div>
-                    <p>{t('AdminDigiBridgeMentorStatistics.loading')}</p>
+            {/* ✅ OVERVIEW CARDS - SKELETON OR REAL */}
+            {isLoading && !overviewStats ? (
+                <OverviewCardsSkeleton />
+            ) : (
+                overviewStats && <StatisticsOverviewCards stats={overviewStats} />
+            )}
+
+            {/* ✅ CHARTS SECTION - LAZY LOADED WITH SUSPENSE */}
+            {isLoading && !activityTrendData.length ? (
+                <div className="admin-digibridge-mentor-statistics-charts">
+                    <ChartSkeleton />
+                    <ChartSkeleton />
+                    <ChartSkeleton />
+                    <ChartSkeleton />
+                    <ChartSkeleton />
+                    <ChartSkeleton />
                 </div>
             ) : (
-                <>
-                    {/* ✅ OVERVIEW CARDS - РЕАЛНИ ДАННИ */}
-                    {overviewStats && (
-                        <StatisticsOverviewCards stats={overviewStats} />
-                    )}
-
-                    {/* CHARTS SECTION */}
-                    <div className="admin-digibridge-mentor-statistics-charts">
-                        {/* TODO ФАЗА 2 - ВРЕМЕННО MOCK ДАННИ */}
+                <div className="admin-digibridge-mentor-statistics-charts">
+                    <Suspense fallback={<ChartSkeleton />}>
                         <TopMentorsByCourses mentors={allMentorsForCourses} limit={10} />
+                    </Suspense>
+
+                    <Suspense fallback={<ChartSkeleton />}>
                         <TopMentorsByOnlineTime mentors={topMentorsByTime} limit={10} />
+                    </Suspense>
+
+                    <Suspense fallback={<ChartSkeleton />}>
                         <ActivityTrendChart trendData={activityTrendData} />
+                    </Suspense>
+
+                    <Suspense fallback={<ChartSkeleton />}>
                         <SessionQualityChart qualityData={sessionQualityData} />
+                    </Suspense>
+
+                    <Suspense fallback={<ChartSkeleton />}>
                         <ResponseTimeChart responseTimesData={responseTimesData} limit={10} />
+                    </Suspense>
 
-                        {/* ✅ SPECIALIZATION CHART - РЕАЛНИ ДАННИ */}
-                        {specializationData.length > 0 && (
+                    {/* ✅ SPECIALIZATION CHART - LAZY LOADED */}
+                    {specializationData.length > 0 && (
+                        <Suspense fallback={<ChartSkeleton />}>
                             <MentorsBySpecialization data={specializationData} />
-                        )}
-                    </div>
-
-                    {/* ✅ TABLE SECTION - РЕАЛНИ ДАННИ - недовършени полета , чака се фаза 2 */}
-                    {realMentors.length > 0 && (
-                        <DetailedMentorsTable mentors={realMentors} />
+                        </Suspense>
                     )}
-                </>
+                </div>
+            )}
+
+            {/* ✅ TABLE SECTION - SKELETON OR REAL */}
+            {isLoading && !realMentors.length ? (
+                <TableSkeleton rows={5} />
+            ) : (
+                realMentors.length > 0 && <DetailedMentorsTable mentors={realMentors} />
             )}
         </div>
     );
