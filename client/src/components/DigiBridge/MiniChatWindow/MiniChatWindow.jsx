@@ -15,11 +15,11 @@ import {
 import { DigiBridgeChatMessage } from '../DigiBridgeChatMessage/DigiBridgeChatMessage';
 import { toast } from 'react-toastify';
 import './miniChatWindow.css';
-
+import { useAcademy } from '../../contexts/AcademyProvider';  
 export const MiniChatWindow = ({ conversation, getPosition, onClose, isMobile }) => {
   const { t } = useTranslation();
   const { profileData } = useAuthContext();
-  
+  const { syncSession } = useAcademy(); 
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isMinimized, setIsMinimized] = useState(false);
@@ -41,29 +41,28 @@ export const MiniChatWindow = ({ conversation, getPosition, onClose, isMobile })
   };
 // ✅ SESSION TRACKING
 useEffect(() => {
-  if (!conversation?.id || !mentorId) return;
+    if (!conversation?.id || !mentorId) return;
 
-  let sessionId = null;
+    let sessionId = null;
 
-  // Създай session при mount
-  const initSession = async () => {
-    try {
-      sessionId = await createMentorSession(mentorId, conversation.id);
-      setCurrentSessionId(sessionId);
-    } catch (error) {
-      console.error('Error starting session:', error);
-    }
-  };
+    const initSession = async () => {
+      try {
+        sessionId = await createMentorSession(mentorId, conversation.id);
+        setCurrentSessionId(sessionId);
+      } catch (error) {
+        console.error('Error starting session:', error);
+      }
+    };
 
-  initSession();
+    initSession();
 
-  // Приключи session при unmount
-  return () => {
-    if (sessionId) {
-      endMentorSession(mentorId, sessionId);
-    }
-  };
-}, [conversation?.id, mentorId]);
+    return () => {
+      if (sessionId) {
+        endMentorSession(mentorId, sessionId, syncSession);  // ✅ ПОДАВАЙ syncSession
+      }
+    };
+  }, [conversation?.id, mentorId, syncSession]);
+
   useEffect(() => {
     scrollToBottom();
   }, [messages]);

@@ -1,0 +1,226 @@
+/* src/components/AdminDigiBridgeMentorStatistics/Skeletons/tableSkeleton.css */
+
+.table-skeleton {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  margin: 0 40px 40px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.table-skeleton-header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.table-skeleton-text {
+  background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+  background-size: 200% 100%;
+  animation: table-skeleton-shimmer 1.5s infinite;
+  border-radius: 6px;
+}
+
+.table-skeleton-title {
+  height: 28px;
+  width: 35%;
+}
+
+.table-skeleton-subtitle {
+  height: 16px;
+  width: 45%;
+}
+
+/* DESKTOP TABLE */
+.table-skeleton-wrapper {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.table-skeleton-content {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table-skeleton-th {
+  background: #f9fafb;
+  padding: 16px 12px;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.table-skeleton-th-text {
+  height: 16px;
+  width: 80%;
+  margin: 0 auto;
+}
+
+.table-skeleton-row {
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.table-skeleton-td {
+  padding: 16px 12px;
+}
+
+.table-skeleton-avatar-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.table-skeleton-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+  background-size: 200% 100%;
+  animation: table-skeleton-shimmer 1.5s infinite;
+  flex-shrink: 0;
+}
+
+.table-skeleton-name {
+  height: 16px;
+  width: 120px;
+}
+
+.table-skeleton-cell {
+  height: 16px;
+  width: 60%;
+  margin: 0 auto;
+}
+
+/* MOBILE CARDS */
+.table-skeleton-mobile {
+  display: none;
+}
+
+.table-skeleton-card {
+  background: #f9fafb;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.table-skeleton-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.table-skeleton-card-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.table-skeleton-card-name {
+  height: 18px;
+  width: 70%;
+}
+
+.table-skeleton-card-spec {
+  height: 14px;
+  width: 50%;
+}
+
+.table-skeleton-card-badge {
+  height: 24px;
+  width: 60px;
+  border-radius: 12px;
+}
+
+.table-skeleton-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.table-skeleton-card-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.table-skeleton-card-label {
+  height: 14px;
+  width: 40%;
+}
+
+.table-skeleton-card-value {
+  height: 16px;
+  width: 35%;
+}
+
+@keyframes table-skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+/* Large Desktops (1440px+) */
+@media (min-width: 1440px) {
+  .table-skeleton {
+    margin: 0 50px 50px;
+  }
+}
+
+/* Tablets (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .table-skeleton {
+    margin: 0 25px 25px;
+    padding: 20px;
+  }
+
+  .table-skeleton-wrapper {
+    overflow-x: scroll;
+  }
+}
+
+/* Small Tablets / Large Phones (576px - 767px) */
+@media (min-width: 576px) and (max-width: 767px) {
+  .table-skeleton {
+    margin: 0 20px 20px;
+    padding: 18px;
+  }
+
+  .table-skeleton-wrapper {
+    display: none;
+  }
+
+  .table-skeleton-mobile {
+    display: block;
+  }
+}
+
+/* Phones (320px - 575px) */
+@media (max-width: 575px) {
+  .table-skeleton {
+    margin: 0 18px 18px;
+    padding: 16px;
+  }
+
+  .table-skeleton-wrapper {
+    display: none;
+  }
+
+  .table-skeleton-mobile {
+    display: block;
+  }
+
+  .table-skeleton-card {
+    padding: 16px;
+  }
+}

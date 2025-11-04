@@ -1,0 +1,118 @@
+/* src/components/AdminDigiBridgeMentorStatistics/Skeletons/overviewCardsSkeleton.css */
+
+.overview-cards-skeleton {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  padding: 30px 40px;
+}
+
+.overview-cards-skeleton-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.overview-cards-skeleton-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.overview-cards-skeleton-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+  background-size: 200% 100%;
+  animation: overview-cards-skeleton-shimmer 1.5s infinite;
+}
+
+.overview-cards-skeleton-text-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.overview-cards-skeleton-text {
+  background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+  background-size: 200% 100%;
+  animation: overview-cards-skeleton-shimmer 1.5s infinite;
+  border-radius: 6px;
+}
+
+.overview-cards-skeleton-title {
+  height: 16px;
+  width: 60%;
+}
+
+.overview-cards-skeleton-value {
+  height: 28px;
+  width: 80%;
+}
+
+@keyframes overview-cards-skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+/* Large Desktops (1440px+) */
+@media (min-width: 1440px) {
+  .overview-cards-skeleton {
+    padding: 35px 50px;
+    gap: 28px;
+  }
+}
+
+/* Laptops (1024px - 1439px) */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .overview-cards-skeleton {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Tablets (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .overview-cards-skeleton {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 25px;
+    gap: 20px;
+  }
+}
+
+/* Small Tablets / Large Phones (576px - 767px) */
+@media (min-width: 576px) and (max-width: 767px) {
+  .overview-cards-skeleton {
+    grid-template-columns: 1fr;
+    padding: 20px;
+    gap: 18px;
+  }
+}
+
+/* Phones (320px - 575px) */
+@media (max-width: 575px) {
+  .overview-cards-skeleton {
+    grid-template-columns: 1fr;
+    padding: 18px;
+    gap: 16px;
+  }
+
+  .overview-cards-skeleton-card {
+    padding: 20px;
+  }
+
+  .overview-cards-skeleton-icon {
+    width: 40px;
+    height: 40px;
+  }
+}

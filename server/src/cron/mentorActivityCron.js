@@ -16,7 +16,6 @@ const startMentorActivityCron = () => {
     
     try {
       const result = await createDailySnapshots();
-      console.log(`✅ Snapshot completed: ${result.count} mentors`);
     } catch (error) {
       console.error('❌ Snapshot failed:', error);
     }

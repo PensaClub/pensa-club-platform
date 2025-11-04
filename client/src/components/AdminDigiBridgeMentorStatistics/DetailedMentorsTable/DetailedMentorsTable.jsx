@@ -39,11 +39,11 @@ export const DetailedMentorsTable = ({ mentors }) => {
           aValue = a.sessionsCount || 0;
           bValue = b.sessionsCount || 0;
           break;
-        case 'onlineHours': // ✅ ДОБАВЕНО
+        case 'onlineHours':
           aValue = a.firebaseStats?.totalOnlineHours || 0;
           bValue = b.firebaseStats?.totalOnlineHours || 0;
           break;
-        case 'responseTime': // ✅ ДОБАВЕНО
+        case 'responseTime':
           aValue = a.firebaseStats?.averageResponseTime || 0;
           bValue = b.firebaseStats?.averageResponseTime || 0;
           break;
@@ -176,6 +176,20 @@ export const DetailedMentorsTable = ({ mentors }) => {
             {sortedMentors.map((mentor) => {
               const onlineHours = mentor.firebaseStats?.totalOnlineHours || 0;
               const responseTime = mentor.firebaseStats?.averageResponseTime || 0;
+              const responseUnit = mentor.firebaseStats?.averageResponseUnit || 'sec';
+
+              // ✅ Динамични класове за response time badge
+              let responseClass = 'slow';
+              if (responseUnit === 'sec') {
+                if (responseTime <= 10) responseClass = 'excellent';
+                else if (responseTime <= 30) responseClass = 'good';
+                else if (responseTime <= 60) responseClass = 'average';
+              } else {
+                // минути
+                if (responseTime <= 1) responseClass = 'excellent';
+                else if (responseTime <= 3) responseClass = 'good';
+                else if (responseTime <= 5) responseClass = 'average';
+              }
 
               return (
                 <tr key={mentor.id} className="detailed-mentors-table-row">
@@ -219,15 +233,11 @@ export const DetailedMentorsTable = ({ mentors }) => {
                     <span className="detailed-mentors-table-unit"> ч</span>
                   </td>
 
-                  {/* ✅ RESPONSE TIME CELL */}
+                  {/* ✅ RESPONSE TIME CELL - ДИНАМИЧНО */}
                   <td className="detailed-mentors-table-td detailed-mentors-table-td-center">
                     {responseTime > 0 ? (
-                      <span className={`detailed-mentors-table-response-badge ${
-                        responseTime <= 10 ? 'excellent' :
-                        responseTime <= 15 ? 'good' :
-                        responseTime <= 20 ? 'average' : 'slow'
-                      }`}>
-                        {responseTime} мин
+                      <span className={`detailed-mentors-table-response-badge ${responseClass}`}>
+                        {responseTime} {responseUnit === 'sec' ? 'сек' : 'мин'}
                       </span>
                     ) : (
                       <span className="detailed-mentors-table-no-data">N/A</span>
@@ -251,6 +261,18 @@ export const DetailedMentorsTable = ({ mentors }) => {
         {sortedMentors.map((mentor) => {
           const onlineHours = mentor.firebaseStats?.totalOnlineHours || 0;
           const responseTime = mentor.firebaseStats?.averageResponseTime || 0;
+          const responseUnit = mentor.firebaseStats?.averageResponseUnit || 'sec';
+
+          let responseClass = 'slow';
+          if (responseUnit === 'sec') {
+            if (responseTime <= 10) responseClass = 'excellent';
+            else if (responseTime <= 30) responseClass = 'good';
+            else if (responseTime <= 60) responseClass = 'average';
+          } else {
+            if (responseTime <= 1) responseClass = 'excellent';
+            else if (responseTime <= 3) responseClass = 'good';
+            else if (responseTime <= 5) responseClass = 'average';
+          }
 
           return (
             <div key={mentor.id} className="detailed-mentors-table-card">
@@ -299,16 +321,12 @@ export const DetailedMentorsTable = ({ mentors }) => {
                   <strong>{onlineHours.toFixed(2)} ч</strong>
                 </div>
 
-                {/* ✅ RESPONSE TIME ROW */}
+                {/* ✅ RESPONSE TIME ROW - ДИНАМИЧНО */}
                 <div className="detailed-mentors-table-card-row">
                   <span className="detailed-mentors-table-card-label">{t('DetailedMentorsTable.responseTime')}:</span>
                   {responseTime > 0 ? (
-                    <span className={`detailed-mentors-table-response-badge ${
-                      responseTime <= 10 ? 'excellent' :
-                      responseTime <= 15 ? 'good' :
-                      responseTime <= 20 ? 'average' : 'slow'
-                    }`}>
-                      {responseTime} мин
+                    <span className={`detailed-mentors-table-response-badge ${responseClass}`}>
+                      {responseTime} {responseUnit === 'sec' ? 'сек' : 'мин'}
                     </span>
                   ) : (
                     <span className="detailed-mentors-table-no-data">N/A</span>

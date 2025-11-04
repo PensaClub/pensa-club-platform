@@ -3,8 +3,10 @@ const academyController = require('express').Router();
 const { Op } = require('sequelize');
 
 const { mentor_application, mentor, mentor_course, user_account, admin_notification, sequelize } = require('../sequelize/models/index');
+const { getFirebaseDb } = require('../firebase/firebaseAdmin');
 const isAuth = require('../middlewares/isAuth.js');
 const rbac = require('../middlewares/rbac.js');
+const { statisticsCache } = require('../middlewares/statisticsCache');
 const { mentorApplicationSchema } = require('../schemas/mentorApplication.schema');
 const { initializeFirebaseAdmin } = require('../firebase/firebaseAdmin');
 const { 
@@ -373,8 +375,7 @@ academyController.post('/mentors/apply', isAuth, async (req, res, next) => {
 // GET /api/academy/mentors/applications/pending
 // Admin: Вземи всички pending кандидатури
 // ===============================
-academyController.get(
-  '/mentors/applications/pending', 
+academyController.get('/mentors/applications/pending',
   isAuth, 
   rbac.checkPermission('mentorApplication', 'read'),
   async (req, res, next) => {
@@ -406,8 +407,7 @@ academyController.get(
 // GET /api/academy/mentors/applications/rejected
 // Вземане на отхвърлени кандидатури
 // ===============================
-academyController.get(
-  '/mentors/applications/rejected',
+academyController.get('/mentors/applications/rejected',
   isAuth,
   rbac.checkPermission('mentorApplication', 'read'),
   async (req, res, next) => {
@@ -441,8 +441,7 @@ academyController.get(
 // POST /api/academy/mentors/applications/:id/approve
 // Admin: Одобри кандидатура
 // ===============================
-academyController.post(
-  '/mentors/applications/:applicationId/approve',
+academyController.post('/mentors/applications/:applicationId/approve',
   isAuth,
   rbac.checkPermission('mentorApplication', 'approve'),
   async (req, res, next) => {
@@ -945,60 +944,93 @@ academyController.get('/stats', async (req, res, next) => {
     next(err);
   }
 });
-// ===============================
-// GET /api/academy/mentors/statistics/overview
-// Dashboard Overview Cards
-// ===============================
 academyController.get(
   '/mentors/statistics/overview',
   isAuth,
-  rbac.checkPermission('mentor', 'read'),
+  rbac.checkPermission('statistics', 'read'),
+  statisticsCache(300),
   async (req, res, next) => {
     try {
-      // Брой активни ментори
+      const db = getFirebaseDb();
+
+      // ✅ 1. ОСНОВНИ COUNTS
       const activeMentors = await mentor.count({
         where: { status: 'active' }
       });
 
-      // Общ брой ментори
       const totalMentors = await mentor.count();
 
-      // Общ брой студенти
+      // ✅ 2. ОБЩ БРОЙ СТУДЕНТИ
       const mentorsData = await mentor.findAll({
         attributes: [[sequelize.fn('SUM', sequelize.col('students_count')), 'totalStudents']]
       });
       const totalStudents = parseInt(mentorsData[0].dataValues.totalStudents) || 0;
 
-      // Средна оценка
+      // ✅ 3. СРЕДНА ОЦЕНКА
       const ratingData = await mentor.findAll({
         attributes: [[sequelize.fn('AVG', sequelize.col('rating')), 'avgRating']]
       });
       const averageRating = parseFloat(ratingData[0].dataValues.avgRating) || 0;
 
-      // Завършени курсове
+      // ✅ 4. ЗАВЪРШЕНИ КУРСОВЕ
       const coursesData = await mentor_course.findAll({
         attributes: [[sequelize.fn('SUM', sequelize.col('completed_count')), 'totalCompleted']]
       });
       const totalCoursesCompleted = parseInt(coursesData[0].dataValues.totalCompleted) || 0;
 
-      // Активни курсове
-      const totalCoursesActive = await mentor_course.count({
-        where: { status: 'active' }
-      });
-
-      // Общ брой сесии (от mentors таблица)
+      // ✅ 5. ОБЩ БРОЙ СЕСИИ
       const sessionsData = await mentor.findAll({
         attributes: [[sequelize.fn('SUM', sequelize.col('sessions_count')), 'totalSessions']]
       });
       const totalSessionsThisMonth = parseInt(sessionsData[0].dataValues.totalSessions) || 0;
 
-      // Online hours (засега 0, чака ФАЗА 2)
-      const totalOnlineHours = 0;
+      // ✅ 6. ONLINE HOURS - КОМБИНИРАНИ (PostgreSQL + Firebase)
+      // 6.1. ACCUMULATED ОТ PostgreSQL
+      const onlineMinutesData = await mentor.findAll({
+        attributes: [[sequelize.fn('SUM', sequelize.col('accumulated_online_minutes')), 'totalAccumulatedMinutes']]
+      });
+      const totalAccumulatedMinutes = parseInt(onlineMinutesData[0].dataValues.totalAccumulatedMinutes) || 0;
 
-      // Completion rate (засега средна стойност)
+      // 6.2. CURRENT ОТ Firebase (active/completed sessions)
+      let currentFirebaseMinutes = 0;
+
+      const allMentors = await mentor.findAll({
+        where: { status: 'active' },
+        include: [
+          {
+            model: user_account,
+            as: 'user',
+            attributes: ['email']
+          }
+        ]
+      });
+
+      for (const mentorData of allMentors) {
+        const firebaseMentorId = mentorData.user.email
+          .replace(/\./g, '_dot_')
+          .replace(/@/g, '_at_');
+
+        const sessionsRef = db.ref(`mentor_sessions/${firebaseMentorId}`);
+        const sessionsSnapshot = await sessionsRef.once('value');
+        const sessions = sessionsSnapshot.val() || {};
+
+        Object.values(sessions).forEach(session => {
+          if (session.endTime && session.startTime) {
+            const durationMs = session.endTime - session.startTime;
+            const durationMinutes = Math.floor(durationMs / 60000);
+            currentFirebaseMinutes += durationMinutes;
+          }
+        });
+      }
+
+      // 6.3. КОМБИНИРАЙ
+      const totalOnlineMinutes = totalAccumulatedMinutes + currentFirebaseMinutes;
+      const totalOnlineHours = Math.round((totalOnlineMinutes / 60) * 100) / 100;
+
+      // ✅ 7. COMPLETION RATE (засега средна стойност)
       const averageCompletionRate = 95;
 
-      // Общ брой отзиви (засега 0)
+      // ✅ 8. ОБЩ БРОЙ ОТЗИВИ (засега 0)
       const totalReviews = 0;
 
       res.status(200).json({
@@ -1010,13 +1042,14 @@ academyController.get(
           averageRating: parseFloat(averageRating.toFixed(1)),
           totalCoursesCompleted,
           totalSessionsThisMonth,
-          totalOnlineHours,
+          totalOnlineHours, // ✅ FIXED!
           averageCompletionRate,
           totalReviews
         }
       });
 
     } catch (err) {
+      console.error('❌ Error fetching overview stats:', err);
       next(err);
     }
   }
@@ -1029,7 +1062,8 @@ academyController.get(
 academyController.get(
   '/mentors/statistics/by-specialization',
   isAuth,
-  rbac.checkPermission('mentor', 'read'),
+  rbac.checkPermission('statistics', 'read'),
+    statisticsCache(600),
   async (req, res, next) => {
     try {
       const specializations = await mentor.findAll({
@@ -1073,8 +1107,9 @@ academyController.get(
 // ===============================
 academyController.get(
   '/mentors/all-with-stats',
+  statisticsCache(120),
   isAuth,
-  rbac.checkPermission('mentor', 'read'),
+  rbac.checkPermission('statistics', 'read'),
   async (req, res, next) => {
     try {
       
@@ -1093,18 +1128,32 @@ academyController.get(
   }
 );
 
-// ===============================
-// GET /api/academy/mentors/:id/firebase-stats
-// Детайлни Firebase статистики за конкретен ментор
-// ===============================
 academyController.get(
   '/mentors/:id/firebase-stats',
   isAuth,
-  rbac.checkPermission('mentor', 'read'),
+  rbac.checkPermission('statistics', 'readOwn'), 
+  statisticsCache(120),
   async (req, res, next) => {
     try {
       const mentorId = parseInt(req.params.id);
-      
+      const requestingUserId = req.user.userId;
+      const requestingUserRole = req.user.role;
+
+      // ✅ CHECK: Mentor може да вижда САМО СВОИТЕ stats
+      if (requestingUserRole !== 'admin') {
+        const mentorRecord = await mentor.findOne({
+          where: { userId: requestingUserId }
+        });
+
+        if (!mentorRecord || mentorRecord.id !== mentorId) {
+          return res.status(403).json({
+            success: false,
+            message: 'You can only view your own statistics'
+          });
+        }
+      }
+
+      // ✅ Admin или собственикът стигат до тук
       const stats = await getMentorCombinedStats(mentorId);
 
       res.status(200).json({
@@ -1126,7 +1175,6 @@ academyController.get(
     }
   }
 );
-
 // ===============================
 // POST /api/academy/mentors/:id/refresh-stats
 // Обнови кеширани статистики от Firebase
@@ -1134,11 +1182,28 @@ academyController.get(
 academyController.post(
   '/mentors/:id/refresh-stats',
   isAuth,
-  rbac.checkPermission('mentor', 'update'),
+  rbac.checkPermission('statistics', 'readOwn'), // ✅ Admin или mentor
   async (req, res, next) => {
     try {
       const mentorId = parseInt(req.params.id);
+      const requestingUserId = req.user.userId;
+      const requestingUserRole = req.user.role;
 
+      // ✅ CHECK: Mentor може да refresh-ва САМО СВОИТЕ stats
+      if (requestingUserRole !== 'admin') {
+        const mentorRecord = await mentor.findOne({
+          where: { userId: requestingUserId }
+        });
+
+        if (!mentorRecord || mentorRecord.id !== mentorId) {
+          return res.status(403).json({
+            success: false,
+            message: 'You can only refresh your own statistics'
+          });
+        }
+      }
+
+      // ✅ Admin или собственикът стигат до тук
       const mentorData = await mentor.findByPk(mentorId, {
         include: [
           {
@@ -1181,13 +1246,14 @@ academyController.post(
 // GET /api/academy/mentors/statistics/firebase-overview
 // Общи Firebase статистики (за Dashboard)
 // ===============================
+
 academyController.get(
   '/mentors/statistics/firebase-overview',
   isAuth,
-  rbac.checkPermission('mentor', 'read'),
+  rbac.checkPermission('statistics', 'read'), 
+  statisticsCache(180),
   async (req, res, next) => {
     try {
-
       const mentors = await getAllMentorsCombinedStats();
 
       // Изчисли агрегирани статистики
@@ -1230,7 +1296,6 @@ academyController.get(
       next(err);
     }
   }
-  
 );
 // ===============================
 // GET /api/academy/mentors/statistics/top-by-online-time
@@ -1239,7 +1304,8 @@ academyController.get(
 academyController.get(
   '/mentors/statistics/top-by-online-time',
   isAuth,
-  rbac.checkPermission('mentor', 'read'),
+  rbac.checkPermission('statistics', 'read'),
+  statisticsCache(300),
   async (req, res, next) => {
     try {
       const { limit = 10 } = req.query;
@@ -1285,7 +1351,8 @@ academyController.get(
 academyController.get(
   '/mentors/statistics/response-times',
   isAuth,
-  rbac.checkPermission('mentor', 'read'),
+  rbac.checkPermission('statistics', 'read'),
+  statisticsCache(300),
   async (req, res, next) => {
     try {
 
@@ -1350,7 +1417,8 @@ academyController.get(
 academyController.get(
   '/mentors/statistics/activity-trend',
   isAuth,
-  rbac.checkPermission('mentor', 'read'),
+  rbac.checkPermission('statistics', 'read'),
+  statisticsCache(600),
   async (req, res, next) => {
     try {
       const { months = 6 } = req.query;
@@ -1401,7 +1469,8 @@ academyController.get(
 academyController.get(
   '/mentors/statistics/session-quality',
   isAuth,
-  rbac.checkPermission('mentor', 'read'),
+  rbac.checkPermission('statistics', 'read'),
+  statisticsCache(300),
   async (req, res, next) => {
     try {
 
@@ -1473,6 +1542,121 @@ academyController.post(
       });
     } catch (err) {
       console.error('❌ [CREATE-SNAPSHOT] Error:', err);
+      next(err);
+    }
+  }
+);
+// ===============================
+// POST /api/academy/sync-session
+// SYNC SESSION STATS - извиква се от frontend след session end
+// ===============================
+academyController.post('/sync-session', async (req, res, next) => {
+  
+  try {
+    const { sessionId, mentorEmail } = req.body;
+
+    if (!sessionId || !mentorEmail) {
+      return res.status(400).json({ 
+        success: false, 
+        error: 'Missing sessionId or mentorEmail' 
+      });
+    }
+
+    const { syncCompletedSessionStats } = require('../services/sessionSyncService');
+
+    // Вземи PostgreSQL mentor ID
+    const userAccount = await user_account.findOne({ 
+      where: { email: mentorEmail } 
+    });
+
+    if (!userAccount) {
+      return res.status(404).json({ 
+        success: false, 
+        error: 'User not found' 
+      });
+    }
+
+    const mentorRecord = await mentor.findOne({ 
+      where: { userId: userAccount.id } 
+    });
+
+    if (!mentorRecord) {
+      return res.status(404).json({ 
+        success: false, 
+        error: 'Mentor not found' 
+      });
+    }
+
+    // Firebase mentor ID
+    const mentorFirebaseId = mentorEmail
+      .replace(/\./g, '_dot_')
+      .replace(/@/g, '_at_');
+
+    // Sync stats
+    const result = await syncCompletedSessionStats(
+      sessionId,
+      mentorFirebaseId,
+      mentorRecord.id
+    );
+
+    return res.json(result);
+
+  } catch (error) {
+    console.error('❌ Error syncing session stats:', error);
+    return res.status(500).json({ 
+      success: false, 
+      error: error.message 
+    });
+  }
+});
+// ===============================
+// GET /api/academy/mentors/all-with-stats-filtered
+// Ментори с филтрирани статистики по период
+// ===============================
+academyController.get(
+  '/mentors/all-with-stats-filtered',
+  isAuth,
+  rbac.checkPermission('statistics', 'read'),
+  statisticsCache(120),
+  async (req, res, next) => {
+    try {
+      const { timeFilter = 'thisMonth' } = req.query;
+
+      // Изчисли date range
+      const now = new Date();
+      let startDate;
+
+      switch (timeFilter) {
+        case 'thisMonth':
+          startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+          break;
+        case 'lastMonth':
+          startDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+          break;
+        case 'last3Months':
+          startDate = new Date(now.getFullYear(), now.getMonth() - 3, 1);
+          break;
+        case 'allTime':
+          startDate = new Date(2020, 0, 1); // От началото на проекта
+          break;
+        default:
+          startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+      }
+
+      const { getFilteredMentorStats } = require('../services/mentorActivitySnapshotService');
+      const mentors = await getFilteredMentorStats(startDate, now);
+
+      res.status(200).json({
+        success: true,
+        mentors,
+        total: mentors.length,
+        timeFilter,
+        startDate: startDate.toISOString(),
+        endDate: now.toISOString()
+      });
+
+    } catch (err) {
+      console.error('❌ [FILTERED-STATS] Error:', err);
       next(err);
     }
   }
