@@ -212,6 +212,9 @@ export const academyServiceFactory = () => {
     getSessionQuality: async () => {
       return requester.get(`${apiUrl}/academy/mentors/statistics/session-quality`);
     },
+    getAllMentorsWithStatsFiltered: async (timeFilter) => {
+  return requester.get(`${apiUrl}/academy/mentors/all-with-stats-filtered?timeFilter=${timeFilter}`);
+},
   };
 };
 

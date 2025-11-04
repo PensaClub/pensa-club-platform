@@ -488,6 +488,16 @@ const getMentorFirebaseStats = useCallback(async (mentorId) => {
   }
 }, []);
 
+const getAllMentorsWithStatsFiltered = useCallback(async (timeFilter) => {
+  try {
+    const data = await academyService.getAllMentorsWithStatsFiltered(timeFilter);
+    return data;
+  } catch (error) {
+    console.error('Error fetching filtered mentors with stats:', error);
+    throw error;
+  }
+}, []);
+
 const refreshMentorStats = useCallback(async (mentorId) => {
   try {
     const response = await academyService.refreshMentorStats(mentorId);
@@ -598,6 +608,7 @@ const getSessionQualityData = useCallback(async () => {
     getMentorsBySpecialization,
     getMentorActivityTrend,
     getMentorDetailedStatistics,
+    getAllMentorsWithStatsFiltered,
     // Admin Applications 
     getPendingMentorApplications,
     rejectMentorApplication,

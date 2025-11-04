@@ -12905,5 +12905,17 @@
     "threeMonths": "Последни 3 месеца",
     "oneYear": "Последна година",
     "error": "Грешка при генериране на PDF отчета"
-  }
+  },
+  "OverviewCardsSkeleton": {
+  "loading": "Зареждане...",
+  "loadingStats": "Зареждане на статистики..."
+},
+"ChartSkeleton": {
+  "loading": "Зареждане на графика...",
+  "loadingData": "Зареждане на данни..."
+},
+"TableSkeleton": {
+  "loading": "Зареждане на таблица...",
+  "loadingData": "Зареждане на данни за менторите..."
+}
 }

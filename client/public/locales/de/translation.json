@@ -11980,5 +11980,17 @@
     "threeMonths": "Letzte 3 Monate",
     "oneYear": "Letztes Jahr",
     "error": "Fehler beim Generieren des PDF-Berichts"
-  }
+  },
+  "OverviewCardsSkeleton": {
+  "loading": "Lädt...",
+  "loadingStats": "Statistiken werden geladen..."
+},
+"ChartSkeleton": {
+  "loading": "Diagramm wird geladen...",
+  "loadingData": "Daten werden geladen..."
+},
+"TableSkeleton": {
+  "loading": "Tabelle wird geladen...",
+  "loadingData": "Mentor-Daten werden geladen..."
+}
 }

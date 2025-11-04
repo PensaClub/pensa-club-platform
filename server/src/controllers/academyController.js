@@ -1477,4 +1477,117 @@ academyController.post(
     }
   }
 );
+// ===============================
+// POST /api/academy/sync-session
+// SYNC SESSION STATS - извиква се от frontend след session end
+// ===============================
+academyController.post('/sync-session', async (req, res, next) => {
+  try {
+    const { sessionId, mentorEmail } = req.body;
+
+    if (!sessionId || !mentorEmail) {
+      return res.status(400).json({ 
+        success: false, 
+        error: 'Missing sessionId or mentorEmail' 
+      });
+    }
+
+    const { syncCompletedSessionStats } = require('../services/sessionSyncService');
+
+    // Вземи PostgreSQL mentor ID
+    const userAccount = await user_account.findOne({ 
+      where: { email: mentorEmail } 
+    });
+
+    if (!userAccount) {
+      return res.status(404).json({ 
+        success: false, 
+        error: 'User not found' 
+      });
+    }
+
+    const mentorRecord = await mentor.findOne({ 
+      where: { userId: userAccount.id } 
+    });
+
+    if (!mentorRecord) {
+      return res.status(404).json({ 
+        success: false, 
+        error: 'Mentor not found' 
+      });
+    }
+
+    // Firebase mentor ID
+    const mentorFirebaseId = mentorEmail
+      .replace(/\./g, '_dot_')
+      .replace(/@/g, '_at_');
+
+    // Sync stats
+    const result = await syncCompletedSessionStats(
+      sessionId,
+      mentorFirebaseId,
+      mentorRecord.id
+    );
+
+    return res.json(result);
+
+  } catch (error) {
+    console.error('❌ Error syncing session stats:', error);
+    return res.status(500).json({ 
+      success: false, 
+      error: error.message 
+    });
+  }
+});
+// ===============================
+// GET /api/academy/mentors/all-with-stats-filtered
+// Ментори с филтрирани статистики по период
+// ===============================
+academyController.get(
+  '/mentors/all-with-stats-filtered',
+  isAuth,
+  rbac.checkPermission('mentor', 'read'),
+  async (req, res, next) => {
+    try {
+      const { timeFilter = 'thisMonth' } = req.query;
+
+      // Изчисли date range
+      const now = new Date();
+      let startDate;
+
+      switch (timeFilter) {
+        case 'thisMonth':
+          startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+          break;
+        case 'lastMonth':
+          startDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+          break;
+        case 'last3Months':
+          startDate = new Date(now.getFullYear(), now.getMonth() - 3, 1);
+          break;
+        case 'allTime':
+          startDate = new Date(2020, 0, 1); // От началото на проекта
+          break;
+        default:
+          startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+      }
+
+      const { getFilteredMentorStats } = require('../services/mentorActivitySnapshotService');
+      const mentors = await getFilteredMentorStats(startDate, now);
+
+      res.status(200).json({
+        success: true,
+        mentors,
+        total: mentors.length,
+        timeFilter,
+        startDate: startDate.toISOString(),
+        endDate: now.toISOString()
+      });
+
+    } catch (err) {
+      console.error('❌ [FILTERED-STATS] Error:', err);
+      next(err);
+    }
+  }
+);
 module.exports = academyController;

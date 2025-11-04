@@ -12699,5 +12699,17 @@
     "threeMonths": "Last 3 Months",
     "oneYear": "Last Year",
     "error": "Error generating PDF report"
-  }
+  },
+  "OverviewCardsSkeleton": {
+  "loading": "Loading...",
+  "loadingStats": "Loading statistics..."
+},
+"ChartSkeleton": {
+  "loading": "Loading chart...",
+  "loadingData": "Loading data..."
+},
+"TableSkeleton": {
+  "loading": "Loading table...",
+  "loadingData": "Loading mentor data..."
+}
 }

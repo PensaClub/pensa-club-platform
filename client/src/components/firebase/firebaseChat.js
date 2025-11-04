@@ -716,6 +716,11 @@ export const createMentorSession = async (mentorId, conversationId) => {
  * @param {string} mentorId 
  * @param {string} sessionId 
  */
+/**
+ * Приключва активна session
+ * @param {string} mentorId 
+ * @param {string} sessionId 
+ */
 export const endMentorSession = async (mentorId, sessionId) => {
   try {
     const sessionRef = ref(database, `mentor_sessions/${mentorId}/${sessionId}`);
@@ -723,6 +728,31 @@ export const endMentorSession = async (mentorId, sessionId) => {
       endTime: Date.now(),
       status: 'completed'
     });
+
+    // ✅ SYNC TO BACKEND
+    const mentorEmail = mentorId.replace(/_dot_/g, '.').replace(/_at_/g, '@');
+    
+    try {
+      const response = await fetch('/api/academy/sync-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          sessionId,
+          mentorEmail
+        })
+      });
+
+      if (response.ok) {
+        console.log('✅ Session stats synced to backend');
+      } else {
+        console.warn('⚠️ Failed to sync session stats:', response.status);
+      }
+    } catch (syncError) {
+      console.error('⚠️ Failed to sync session stats (non-critical):', syncError);
+      // Non-blocking - session е приключен във Firebase
+    }
 
   } catch (error) {
     console.error('Error ending mentor session:', error);

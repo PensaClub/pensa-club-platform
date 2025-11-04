@@ -204,6 +204,73 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
+      // ✅ NEW: ACCUMULATED PERSISTENT STATS
+      accumulatedOnlineMinutes: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+        field: 'accumulated_online_minutes',
+        validate: {
+          min: {
+            args: [0],
+            msg: 'Accumulated online minutes cannot be negative.',
+          },
+        },
+      },
+      accumulatedMessagesCount: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+        field: 'accumulated_messages_count',
+        validate: {
+          min: {
+            args: [0],
+            msg: 'Accumulated messages count cannot be negative.',
+          },
+        },
+      },
+      accumulatedResponseTimeSum: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+        field: 'accumulated_response_time_sum',
+        validate: {
+          min: {
+            args: [0],
+            msg: 'Accumulated response time sum cannot be negative.',
+          },
+        },
+      },
+      accumulatedResponseCount: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+        field: 'accumulated_response_count',
+        validate: {
+          min: {
+            args: [0],
+            msg: 'Accumulated response count cannot be negative.',
+          },
+        },
+      },
+      accumulatedCompletedSessions: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+        field: 'accumulated_completed_sessions',
+        validate: {
+          min: {
+            args: [0],
+            msg: 'Accumulated completed sessions cannot be negative.',
+          },
+        },
+      },
+      lastSessionSyncedAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        defaultValue: null,
+        field: 'last_session_synced_at',
+      },
       adminNotes: {
         type: DataTypes.TEXT,
         allowNull: true,
