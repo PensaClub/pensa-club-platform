@@ -270,3 +270,154 @@
     font-size: 3rem;
   }
 }
+/* ===================================
+   AUTH REQUIRED & STATUS STATES
+   =================================== */
+
+.digibridge-testimonial-form-auth-required,
+.digibridge-testimonial-form-already-reviewed,
+.digibridge-testimonial-form-loading {
+  text-align: center;
+  padding: 80px 40px;
+  background: #ffffff;
+  border-radius: 24px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.digibridge-testimonial-form-auth-required .digibridge-testimonial-form-icon,
+.digibridge-testimonial-form-already-reviewed .digibridge-testimonial-form-icon {
+  font-size: 4rem;
+  margin-bottom: 24px;
+  line-height: 1;
+}
+
+.digibridge-testimonial-form-auth-required h3,
+.digibridge-testimonial-form-already-reviewed h3 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0 0 16px 0;
+  line-height: 1.3;
+}
+
+.digibridge-testimonial-form-auth-required p,
+.digibridge-testimonial-form-already-reviewed p {
+  font-size: 1.1rem;
+  color: #6c757d;
+  margin: 0 0 32px 0;
+  line-height: 1.7;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Login Button */
+.digibridge-testimonial-form-login-button {
+  padding: 14px 36px;
+  background: linear-gradient(135deg, #ff6347 0%, #ff7f50 100%);
+  color: #ffffff;
+  font-size: 1.05rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(255, 99, 71, 0.3);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.digibridge-testimonial-form-login-button:hover {
+  background: linear-gradient(135deg, #ff7f50 0%, #ff6347 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 99, 71, 0.4);
+}
+
+/* Loading State */
+.digibridge-testimonial-form-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.digibridge-testimonial-form-loading .digibridge-testimonial-form-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(255, 99, 71, 0.2);
+  border-top-color: #ff6347;
+  border-radius: 50%;
+  animation: digibridge-testimonial-spin 0.8s linear infinite;
+}
+
+.digibridge-testimonial-form-loading p {
+  font-size: 1rem;
+  color: #6c757d;
+  margin: 0;
+}
+
+/* Already Reviewed - Success State */
+.digibridge-testimonial-form-already-reviewed {
+  background: linear-gradient(135deg, #f0fff4 0%, #e6ffed 100%);
+  border: 2px solid rgba(72, 187, 120, 0.3);
+}
+
+.digibridge-testimonial-form-already-reviewed .digibridge-testimonial-form-icon {
+  color: #48bb78;
+}
+
+.digibridge-testimonial-form-already-reviewed h3 {
+  color: #2f855a;
+}
+
+/* ===================================
+   RESPONSIVE - AUTH STATES
+   =================================== */
+
+@media (max-width: 768px) {
+  .digibridge-testimonial-form-auth-required,
+  .digibridge-testimonial-form-already-reviewed,
+  .digibridge-testimonial-form-loading {
+    padding: 60px 30px;
+  }
+
+  .digibridge-testimonial-form-auth-required .digibridge-testimonial-form-icon,
+  .digibridge-testimonial-form-already-reviewed .digibridge-testimonial-form-icon {
+    font-size: 3.5rem;
+  }
+
+  .digibridge-testimonial-form-auth-required h3,
+  .digibridge-testimonial-form-already-reviewed h3 {
+    font-size: 1.5rem;
+  }
+
+  .digibridge-testimonial-form-auth-required p,
+  .digibridge-testimonial-form-already-reviewed p {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .digibridge-testimonial-form-auth-required,
+  .digibridge-testimonial-form-already-reviewed,
+  .digibridge-testimonial-form-loading {
+    padding: 50px 25px;
+  }
+
+  .digibridge-testimonial-form-auth-required .digibridge-testimonial-form-icon,
+  .digibridge-testimonial-form-already-reviewed .digibridge-testimonial-form-icon {
+    font-size: 3rem;
+  }
+
+  .digibridge-testimonial-form-auth-required h3,
+  .digibridge-testimonial-form-already-reviewed h3 {
+    font-size: 1.35rem;
+  }
+
+  .digibridge-testimonial-form-login-button {
+    padding: 12px 28px;
+    font-size: 1rem;
+  }
+}

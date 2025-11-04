@@ -44,31 +44,14 @@ export const DigiBridgeTestimonials = () => {
     setActiveIndex(index);
   };
 
+  // Ако loading, не показваме нищо
   if (loading) {
-    return (
-      <section className="digibridge-testimonials">
-        <div className="digibridge-testimonials-container">
-          <div className="digibridge-testimonials-loading">
-            <div className="digibridge-testimonials-spinner"></div>
-            <p>{t('digiBridge.testimonials.loading')}</p>
-          </div>
-        </div>
-      </section>
-    );
+    return null;
   }
 
+  // Ако няма testimonials, не показваме компонента
   if (testimonials.length === 0) {
-    return (
-      <section className="digibridge-testimonials">
-        <div className="digibridge-testimonials-container">
-          <div className="digibridge-testimonials-empty">
-            <div className="digibridge-testimonials-empty-icon">💬</div>
-            <h3>{t('digiBridge.testimonials.noTestimonials')}</h3>
-            <p>{t('digiBridge.testimonials.noTestimonialsMessage')}</p>
-          </div>
-        </div>
-      </section>
-    );
+    return null;
   }
 
   return (
