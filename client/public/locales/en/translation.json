@@ -12111,7 +12111,10 @@
       "fillAllFields": "Please fill in all fields",
       "consentRequired": "Please give your consent to publish",
       "successMessage": "Thank you! Your story has been submitted and will be published after approval.",
-      "errorMessage": "Error sending. Please try again."
+      "errorMessage": "Error sending. Please try again.",
+      "loginRequired": "Login Required",
+      "loginRequiredMessage": "Please log in to share your experience and leave a review.",
+      "loginButton": "Log In"
     },
     "mentorsPage": {
       "meta": {

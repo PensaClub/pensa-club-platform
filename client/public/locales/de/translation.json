@@ -11297,6 +11297,9 @@
       "fillAllFields": "Bitte füllen Sie alle Felder aus",
       "consentRequired": "Bitte geben Sie Ihre Zustimmung zur Veröffentlichung",
       "successMessage": "Vielen Dank! Ihre Geschichte wurde eingereicht und wird nach Genehmigung veröffentlicht.",
+      "loginRequired": "Anmeldung erforderlich",
+      "loginRequiredMessage": "Bitte melden Sie sich an, um Ihre Erfahrung zu teilen und eine Bewertung zu hinterlassen.",
+      "loginButton": "Anmelden",
       "errorMessage": "Fehler beim Senden. Bitte versuchen Sie es erneut."
     },
     "mentorsPage": {

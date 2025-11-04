@@ -83,7 +83,7 @@ export const DigiBridgeTestimonialForm = () => {
 
   const handleLoginClick = () => {
     setRedirectAfterLogin(window.location.pathname);
-    navigate('/login');
+    navigate('/sign-up?view=login');
   };
 
   const handleSubmit = async (e) => {
