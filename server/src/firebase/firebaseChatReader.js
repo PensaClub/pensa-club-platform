@@ -28,7 +28,7 @@ const getMentorFirebaseStats = async (mentorId, postgresId = null) => {
       accumulatedOnlineMinutes: 0,
       accumulatedMessagesCount: 0,
       accumulatedCompletedSessions: 0,
-      accumulatedResponseTimeSum: 0,
+      accumulatedResponseTimeSum: 0, // В СЕКУНДИ!
       accumulatedResponseCount: 0
     };
 
@@ -48,7 +48,7 @@ const getMentorFirebaseStats = async (mentorId, postgresId = null) => {
           accumulatedOnlineMinutes: mentorRecord.accumulatedOnlineMinutes || 0,
           accumulatedMessagesCount: mentorRecord.accumulatedMessagesCount || 0,
           accumulatedCompletedSessions: mentorRecord.accumulatedCompletedSessions || 0,
-          accumulatedResponseTimeSum: mentorRecord.accumulatedResponseTimeSum || 0,
+          accumulatedResponseTimeSum: mentorRecord.accumulatedResponseTimeSum || 0, // секунди
           accumulatedResponseCount: mentorRecord.accumulatedResponseCount || 0
         };
       }
@@ -87,29 +87,29 @@ const getMentorFirebaseStats = async (mentorId, postgresId = null) => {
 
     // ✅ 4. ВЗЕМИ CURRENT СЪОБЩЕНИЯ И RESPONSE TIME
     let currentMessages = 0;
-    let currentResponseTimes = [];
+    let currentResponseTimes = []; // В СЕКУНДИ!
 
     for (const [convId, conv] of conversationsList) {
       const messagesRef = db.ref(`chat_messages/${convId}`);
       const messagesSnapshot = await messagesRef.once('value');
       const messages = messagesSnapshot.val() || {};
-      
+
       const messagesList = Object.values(messages);
       const mentorMessages = messagesList.filter(msg => msg.senderType === 'mentor');
       currentMessages += mentorMessages.length;
 
-      // Изчисли response time
+      // ✅ Изчисли response time В СЕКУНДИ!
       const userMessages = messagesList.filter(msg => msg.senderType === 'user');
-      
+
       userMessages.forEach((userMsg) => {
         const nextMentorMsg = mentorMessages.find(
           mMsg => mMsg.timestamp > userMsg.timestamp
         );
-        
+
         if (nextMentorMsg) {
           const responseTimeMs = nextMentorMsg.timestamp - userMsg.timestamp;
-          const responseTimeMinutes = Math.floor(responseTimeMs / 60000);
-          currentResponseTimes.push(responseTimeMinutes);
+          const responseTimeSeconds = Math.floor(responseTimeMs / 1000); // ✅ СЕКУНДИ!
+          currentResponseTimes.push(responseTimeSeconds);
         }
       });
     }
@@ -120,26 +120,42 @@ const getMentorFirebaseStats = async (mentorId, postgresId = null) => {
     const totalMessages = accumulatedStats.accumulatedMessagesCount + currentMessages;
     const totalCompletedSessions = accumulatedStats.accumulatedCompletedSessions + currentCompletedSessionsCount;
 
-    // Average Response Time = (accumulated sum + current sum) / (accumulated count + current count)
-    const totalResponseTimeSum = accumulatedStats.accumulatedResponseTimeSum + 
-                                 currentResponseTimes.reduce((sum, time) => sum + time, 0);
+    // ✅ Average Response Time = (accumulated sum + current sum) / (accumulated count + current count)
+    // Сумата е в СЕКУНДИ, конвертираме в МИНУТИ при връщане
+    const totalResponseTimeSum = accumulatedStats.accumulatedResponseTimeSum +
+      currentResponseTimes.reduce((sum, time) => sum + time, 0);
     const totalResponseCount = accumulatedStats.accumulatedResponseCount + currentResponseTimes.length;
-    
-    const averageResponseTime = totalResponseCount > 0
-      ? Math.round(totalResponseTimeSum / totalResponseCount)
-      : 0;
+
+    let averageResponseTime = 0;
+    let averageResponseUnit = 'sec'; 
+
+    if (totalResponseCount > 0) {
+      const avgSeconds = Math.round(totalResponseTimeSum / totalResponseCount);
+
+      if (avgSeconds >= 60) {
+        // Показвай в минути ако е >= 60 sec
+        averageResponseTime = Math.round(avgSeconds / 60);
+        averageResponseUnit = 'min';
+      } else {
+        // Показвай в секунди ако е < 60 sec
+        averageResponseTime = avgSeconds;
+        averageResponseUnit = 'sec';
+      }
+    }
 
     const stats = {
       // Current Firebase stats
       totalSessions,
       activeSessions,
       completedSessions: completedSessions + totalCompletedSessions,
-      
+
       // Combined stats (PERSISTENT - never resets)
       totalOnlineMinutes,
       totalOnlineHours,
-      averageResponseTime,
-      totalMessages
+      averageResponseTime, // в минути
+      averageResponseUnit,
+      totalMessages,
+      
     };
 
     // ✅ STORE IN CACHE
@@ -171,7 +187,7 @@ const getMentorConversations = async (mentorId) => {
   try {
     const db = getFirebaseDb();
     const conversationsRef = db.ref('chat_conversations');
-    
+
     const snapshot = await conversationsRef
       .orderByChild('mentorId')
       .equalTo(mentorId)
@@ -203,7 +219,7 @@ const getConversationMessages = async (conversationId) => {
   try {
     const db = getFirebaseDb();
     const messagesRef = db.ref(`chat_messages/${conversationId}`);
-    
+
     const snapshot = await messagesRef
       .orderByChild('timestamp')
       .once('value');
@@ -234,7 +250,7 @@ const getAllActiveConversations = async () => {
   try {
     const db = getFirebaseDb();
     const conversationsRef = db.ref('chat_conversations');
-    
+
     const snapshot = await conversationsRef
       .orderByChild('status')
       .equalTo('active')
@@ -266,7 +282,7 @@ const getPendingRequests = async () => {
   try {
     const db = getFirebaseDb();
     const requestsRef = db.ref('chat_requests');
-    
+
     const snapshot = await requestsRef
       .orderByChild('status')
       .equalTo('waiting')

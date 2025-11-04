@@ -559,7 +559,15 @@ const getSessionQualityData = useCallback(async () => {
     throw error;
   }
 }, []);
-
+const syncSession = useCallback(async (sessionId, mentorEmail) => {
+  try {
+    const data = await academyService.syncSession(sessionId, mentorEmail);
+    return data;
+  } catch (error) {
+    console.error('Error syncing session:', error);
+    return null;
+  }
+}, []);
   // ===============================
   // CONTEXT VALUE
   // ===============================
@@ -570,7 +578,7 @@ const getSessionQualityData = useCallback(async () => {
     featuredMentors,
     featuredTestimonials,
     isLoading,
-
+syncSession,
     // Functions
     fetchStats,
     fetchFeaturedMentors,

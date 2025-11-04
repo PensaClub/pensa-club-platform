@@ -13,8 +13,6 @@ const { mentor } = require('../sequelize/models/index');
  */
 const syncCompletedSessionStats = async (sessionId, mentorFirebaseId, mentorPostgresId) => {
   try {
-    console.log(`📊 Syncing session ${sessionId} stats for mentor ${mentorFirebaseId}...`);
-
     const db = getFirebaseDb();
 
     // ✅ 1. ВЗЕМИ SESSION DATA ОТ Firebase
@@ -37,46 +35,38 @@ const syncCompletedSessionStats = async (sessionId, mentorFirebaseId, mentorPost
     const durationMinutes = Math.floor(durationMs / 60000);
 
     // ✅ 3. ВЗЕМИ CONVERSATION DATA
-   // ✅ 3. ВЗЕМИ CONVERSATION DATA
-const conversationId = session.conversationId;
-let messagesCount = 0;
-let responseTimes = [];
+    const conversationId = session.conversationId;
+    let messagesCount = 0;
+    let responseTimes = [];
 
-console.log(`🔍 DEBUG: Session conversationId = ${conversationId}`);
+    if (conversationId) {
+      const messagesRef = db.ref(`chat_messages/${conversationId}`);
+      const messagesSnapshot = await messagesRef.once('value');
+      const messages = messagesSnapshot.val() || {};
+      
+      const messagesList = Object.values(messages);
+      
+      const mentorMessages = messagesList.filter(msg => msg.senderType === 'mentor');
+      const userMessages = messagesList.filter(msg => msg.senderType === 'user');
+      
+      messagesCount = mentorMessages.length;
 
-if (conversationId) {
-  const messagesRef = db.ref(`chat_messages/${conversationId}`);
-  const messagesSnapshot = await messagesRef.once('value');
-  const messages = messagesSnapshot.val() || {};
-  
-  const messagesList = Object.values(messages);
-  console.log(`🔍 DEBUG: Total messages in conversation: ${messagesList.length}`);
-  
-  const mentorMessages = messagesList.filter(msg => msg.senderType === 'mentor');
-  const userMessages = messagesList.filter(msg => msg.senderType === 'user');
-  
-  console.log(`🔍 DEBUG: Mentor messages: ${mentorMessages.length}, User messages: ${userMessages.length}`);
-  
-  messagesCount = mentorMessages.length;
-
-  // Изчисли response times
-  userMessages.forEach((userMsg, index) => {
-    const nextMentorMsg = mentorMessages.find(
-      mMsg => mMsg.timestamp > userMsg.timestamp
-    );
-    
-    if (nextMentorMsg) {
-      const responseTimeMs = nextMentorMsg.timestamp - userMsg.timestamp;
-      const responseTimeMinutes = Math.floor(responseTimeMs / 60000);
-      responseTimes.push(responseTimeMinutes);
-      console.log(`🔍 DEBUG: Response time ${index + 1}: ${responseTimeMinutes} min`);
+      // ✅ Изчисли response times В СЕКУНДИ!
+      userMessages.forEach((userMsg, index) => {
+        const nextMentorMsg = mentorMessages.find(
+          mMsg => mMsg.timestamp > userMsg.timestamp
+        );
+        
+        if (nextMentorMsg) {
+          const responseTimeMs = nextMentorMsg.timestamp - userMsg.timestamp;
+          const responseTimeSeconds = Math.floor(responseTimeMs / 1000); // ✅ СЕКУНДИ!
+          responseTimes.push(responseTimeSeconds);
+        }
+      });
+      
+    } else {
+      console.warn(`⚠️ No conversationId found in session`);
     }
-  });
-  
-  console.log(`🔍 DEBUG: Total response times calculated: ${responseTimes.length}`);
-} else {
-  console.warn(`⚠️ No conversationId found in session`);
-}
 
     // ✅ 4. UPDATE PostgreSQL - INCREMENT accumulated fields
     const mentorRecord = await mentor.findByPk(mentorPostgresId);
@@ -86,14 +76,14 @@ if (conversationId) {
       return { success: false, error: 'Mentor not found' };
     }
 
-    const responseTimeSum = responseTimes.reduce((sum, time) => sum + time, 0);
+    const responseTimeSum = responseTimes.reduce((sum, time) => sum + time, 0); // ✅ Сума в секунди
     const responseCount = responseTimes.length;
 
     await mentorRecord.increment({
       accumulatedOnlineMinutes: durationMinutes,
       accumulatedMessagesCount: messagesCount,
       accumulatedCompletedSessions: 1,
-      accumulatedResponseTimeSum: responseTimeSum,
+      accumulatedResponseTimeSum: responseTimeSum, // ✅ СЕКУНДИ!
       accumulatedResponseCount: responseCount
     });
 
@@ -101,18 +91,12 @@ if (conversationId) {
       lastSessionSyncedAt: new Date()
     });
 
-    console.log(`✅ Session ${sessionId} synced successfully:`, {
-      duration: durationMinutes,
-      messages: messagesCount,
-      responseTimes: responseCount
-    });
-
     return {
       success: true,
       stats: {
         durationMinutes,
         messagesCount,
-        responseTimeSum,
+        responseTimeSum, // в секунди
         responseCount
       }
     };
@@ -132,7 +116,6 @@ if (conversationId) {
  */
 const batchSyncMentorSessions = async (mentorFirebaseId, mentorPostgresId) => {
   try {
-    console.log(`📊 Batch syncing sessions for mentor ${mentorFirebaseId}...`);
 
     const db = getFirebaseDb();
 
@@ -145,15 +128,13 @@ const batchSyncMentorSessions = async (mentorFirebaseId, mentorPostgresId) => {
     let syncedCount = 0;
 
     for (const [sessionId, session] of sessionsList) {
-      if (session.status === 'disconnected' && session.endTime && session.startTime) {
+      if (session.status === 'completed' && session.endTime && session.startTime) {
         const result = await syncCompletedSessionStats(sessionId, mentorFirebaseId, mentorPostgresId);
         if (result.success) {
           syncedCount++;
         }
       }
     }
-
-    console.log(`✅ Batch sync completed: ${syncedCount}/${sessionsList.length} sessions synced`);
 
     return {
       success: true,
@@ -173,7 +154,6 @@ const batchSyncMentorSessions = async (mentorFirebaseId, mentorPostgresId) => {
  */
 const migrateAllMentorsSessions = async () => {
   try {
-    console.log('🔄 Starting full migration of all mentor sessions...');
 
     const { user_account } = require('../sequelize/models/index');
 
@@ -199,14 +179,12 @@ const migrateAllMentorsSessions = async () => {
         const result = await batchSyncMentorSessions(firebaseMentorId, mentorData.id);
         totalSynced += result.synced;
 
-        console.log(`✅ Migrated mentor ${mentorData.name}: ${result.synced} sessions`);
 
       } catch (error) {
         console.error(`❌ Error migrating mentor ${mentorData.id}:`, error);
       }
     }
 
-    console.log(`🎉 Migration completed! Total sessions synced: ${totalSynced}`);
 
     return {
       success: true,

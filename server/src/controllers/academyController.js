@@ -3,6 +3,7 @@ const academyController = require('express').Router();
 const { Op } = require('sequelize');
 
 const { mentor_application, mentor, mentor_course, user_account, admin_notification, sequelize } = require('../sequelize/models/index');
+const { getFirebaseDb } = require('../firebase/firebaseAdmin');
 const isAuth = require('../middlewares/isAuth.js');
 const rbac = require('../middlewares/rbac.js');
 const { mentorApplicationSchema } = require('../schemas/mentorApplication.schema');
@@ -945,60 +946,92 @@ academyController.get('/stats', async (req, res, next) => {
     next(err);
   }
 });
-// ===============================
-// GET /api/academy/mentors/statistics/overview
-// Dashboard Overview Cards
-// ===============================
 academyController.get(
   '/mentors/statistics/overview',
   isAuth,
   rbac.checkPermission('mentor', 'read'),
   async (req, res, next) => {
     try {
-      // Брой активни ментори
+      const db = getFirebaseDb();
+
+      // ✅ 1. ОСНОВНИ COUNTS
       const activeMentors = await mentor.count({
         where: { status: 'active' }
       });
 
-      // Общ брой ментори
       const totalMentors = await mentor.count();
 
-      // Общ брой студенти
+      // ✅ 2. ОБЩ БРОЙ СТУДЕНТИ
       const mentorsData = await mentor.findAll({
         attributes: [[sequelize.fn('SUM', sequelize.col('students_count')), 'totalStudents']]
       });
       const totalStudents = parseInt(mentorsData[0].dataValues.totalStudents) || 0;
 
-      // Средна оценка
+      // ✅ 3. СРЕДНА ОЦЕНКА
       const ratingData = await mentor.findAll({
         attributes: [[sequelize.fn('AVG', sequelize.col('rating')), 'avgRating']]
       });
       const averageRating = parseFloat(ratingData[0].dataValues.avgRating) || 0;
 
-      // Завършени курсове
+      // ✅ 4. ЗАВЪРШЕНИ КУРСОВЕ
       const coursesData = await mentor_course.findAll({
         attributes: [[sequelize.fn('SUM', sequelize.col('completed_count')), 'totalCompleted']]
       });
       const totalCoursesCompleted = parseInt(coursesData[0].dataValues.totalCompleted) || 0;
 
-      // Активни курсове
-      const totalCoursesActive = await mentor_course.count({
-        where: { status: 'active' }
-      });
-
-      // Общ брой сесии (от mentors таблица)
+      // ✅ 5. ОБЩ БРОЙ СЕСИИ
       const sessionsData = await mentor.findAll({
         attributes: [[sequelize.fn('SUM', sequelize.col('sessions_count')), 'totalSessions']]
       });
       const totalSessionsThisMonth = parseInt(sessionsData[0].dataValues.totalSessions) || 0;
 
-      // Online hours (засега 0, чака ФАЗА 2)
-      const totalOnlineHours = 0;
+      // ✅ 6. ONLINE HOURS - КОМБИНИРАНИ (PostgreSQL + Firebase)
+      // 6.1. ACCUMULATED ОТ PostgreSQL
+      const onlineMinutesData = await mentor.findAll({
+        attributes: [[sequelize.fn('SUM', sequelize.col('accumulated_online_minutes')), 'totalAccumulatedMinutes']]
+      });
+      const totalAccumulatedMinutes = parseInt(onlineMinutesData[0].dataValues.totalAccumulatedMinutes) || 0;
 
-      // Completion rate (засега средна стойност)
+      // 6.2. CURRENT ОТ Firebase (active/completed sessions)
+      let currentFirebaseMinutes = 0;
+
+      const allMentors = await mentor.findAll({
+        where: { status: 'active' },
+        include: [
+          {
+            model: user_account,
+            as: 'user',
+            attributes: ['email']
+          }
+        ]
+      });
+
+      for (const mentorData of allMentors) {
+        const firebaseMentorId = mentorData.user.email
+          .replace(/\./g, '_dot_')
+          .replace(/@/g, '_at_');
+
+        const sessionsRef = db.ref(`mentor_sessions/${firebaseMentorId}`);
+        const sessionsSnapshot = await sessionsRef.once('value');
+        const sessions = sessionsSnapshot.val() || {};
+
+        Object.values(sessions).forEach(session => {
+          if (session.endTime && session.startTime) {
+            const durationMs = session.endTime - session.startTime;
+            const durationMinutes = Math.floor(durationMs / 60000);
+            currentFirebaseMinutes += durationMinutes;
+          }
+        });
+      }
+
+      // 6.3. КОМБИНИРАЙ
+      const totalOnlineMinutes = totalAccumulatedMinutes + currentFirebaseMinutes;
+      const totalOnlineHours = Math.round((totalOnlineMinutes / 60) * 100) / 100;
+
+      // ✅ 7. COMPLETION RATE (засега средна стойност)
       const averageCompletionRate = 95;
 
-      // Общ брой отзиви (засега 0)
+      // ✅ 8. ОБЩ БРОЙ ОТЗИВИ (засега 0)
       const totalReviews = 0;
 
       res.status(200).json({
@@ -1010,13 +1043,14 @@ academyController.get(
           averageRating: parseFloat(averageRating.toFixed(1)),
           totalCoursesCompleted,
           totalSessionsThisMonth,
-          totalOnlineHours,
+          totalOnlineHours, // ✅ FIXED!
           averageCompletionRate,
           totalReviews
         }
       });
 
     } catch (err) {
+      console.error('❌ Error fetching overview stats:', err);
       next(err);
     }
   }
@@ -1482,6 +1516,7 @@ academyController.post(
 // SYNC SESSION STATS - извиква се от frontend след session end
 // ===============================
 academyController.post('/sync-session', async (req, res, next) => {
+  
   try {
     const { sessionId, mentorEmail } = req.body;
 

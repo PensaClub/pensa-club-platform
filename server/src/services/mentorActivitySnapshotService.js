@@ -10,10 +10,9 @@ const { mentor_activity_snapshot, sequelize } = require('../sequelize/models/ind
  */
 const createDailySnapshots = async () => {
   try {
-    console.log('📊 Creating daily mentor activity snapshots...');
     
     const mentors = await getAllMentorsCombinedStats();
-    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+    const today = new Date().toISOString().split('T')[0]; 
     
     const snapshots = [];
     
@@ -58,7 +57,6 @@ const createDailySnapshots = async () => {
       ]
     });
     
-    console.log(`✅ Created ${snapshots.length} daily snapshots for ${today}`);
     return { success: true, count: snapshots.length };
     
   } catch (error) {

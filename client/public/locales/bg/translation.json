@@ -12865,6 +12865,7 @@
     "responseTime": "Време за отговор",
     "rating": "Оценка",
     "minutes": "мин",
+    "seconds": "сек",
     "min": "мин",
     "excellent": "Отлично",
     "veryGood": "Много добро",

@@ -11940,6 +11940,8 @@
     "responseTime": "Antwortzeit",
     "rating": "Bewertung",
     "minutes": "Min",
+    "seconds": "sek",
+
     "min": "Min",
     "excellent": "Ausgezeichnet",
     "veryGood": "Sehr gut",

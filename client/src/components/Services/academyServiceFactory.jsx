@@ -215,6 +215,16 @@ export const academyServiceFactory = () => {
     getAllMentorsWithStatsFiltered: async (timeFilter) => {
   return requester.get(`${apiUrl}/academy/mentors/all-with-stats-filtered?timeFilter=${timeFilter}`);
 },
+// ===============================
+// SESSION SYNC 🔄
+// ===============================
+
+syncSession: async (sessionId, mentorEmail) => {
+  return requester.post(`${apiUrl}/academy/sync-session`, {
+    sessionId,
+    mentorEmail
+  });
+},
   };
 };
 

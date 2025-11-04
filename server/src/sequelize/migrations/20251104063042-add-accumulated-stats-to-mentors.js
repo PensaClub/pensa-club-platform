@@ -51,7 +51,6 @@ module.exports = {
       name: 'idx_mentors_last_session_synced'
     });
 
-    console.log('✅ Added accumulated stats columns to mentors table');
   },
 
   async down(queryInterface, Sequelize) {
@@ -63,6 +62,5 @@ module.exports = {
     await queryInterface.removeColumn('mentors', 'accumulated_messages_count');
     await queryInterface.removeColumn('mentors', 'accumulated_online_minutes');
     
-    console.log('✅ Removed accumulated stats columns from mentors table');
   }
 };
