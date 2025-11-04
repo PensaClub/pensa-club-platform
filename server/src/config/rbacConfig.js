@@ -130,6 +130,10 @@ const permissions = {
         update: ['admin', ],
         delete: ['admin'],
     },
+     statistics: {
+    read: ['admin'],              
+    readOwn: ['admin', 'mentor'], 
+  },
       notification: {
     create: ['admin', 'moderator','user'],
     read: ['admin', 'moderator'],

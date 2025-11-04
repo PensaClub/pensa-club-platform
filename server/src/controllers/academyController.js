@@ -949,7 +949,7 @@ academyController.get('/stats', async (req, res, next) => {
 academyController.get(
   '/mentors/statistics/overview',
   isAuth,
-  rbac.checkPermission('mentor', 'read'),
+  rbac.checkPermission('statistics', 'read'),
   async (req, res, next) => {
     try {
       const db = getFirebaseDb();
@@ -1063,7 +1063,7 @@ academyController.get(
 academyController.get(
   '/mentors/statistics/by-specialization',
   isAuth,
-  rbac.checkPermission('mentor', 'read'),
+  rbac.checkPermission('statistics', 'read'),
   async (req, res, next) => {
     try {
       const specializations = await mentor.findAll({
@@ -1108,7 +1108,7 @@ academyController.get(
 academyController.get(
   '/mentors/all-with-stats',
   isAuth,
-  rbac.checkPermission('mentor', 'read'),
+  rbac.checkPermission('statistics', 'read'),
   async (req, res, next) => {
     try {
       
@@ -1127,18 +1127,31 @@ academyController.get(
   }
 );
 
-// ===============================
-// GET /api/academy/mentors/:id/firebase-stats
-// Детайлни Firebase статистики за конкретен ментор
-// ===============================
 academyController.get(
   '/mentors/:id/firebase-stats',
   isAuth,
-  rbac.checkPermission('mentor', 'read'),
+  rbac.checkPermission('statistics', 'readOwn'), // ✅ Admin или mentor
   async (req, res, next) => {
     try {
       const mentorId = parseInt(req.params.id);
-      
+      const requestingUserId = req.user.userId;
+      const requestingUserRole = req.user.role;
+
+      // ✅ CHECK: Mentor може да вижда САМО СВОИТЕ stats
+      if (requestingUserRole !== 'admin') {
+        const mentorRecord = await mentor.findOne({
+          where: { userId: requestingUserId }
+        });
+
+        if (!mentorRecord || mentorRecord.id !== mentorId) {
+          return res.status(403).json({
+            success: false,
+            message: 'You can only view your own statistics'
+          });
+        }
+      }
+
+      // ✅ Admin или собственикът стигат до тук
       const stats = await getMentorCombinedStats(mentorId);
 
       res.status(200).json({
@@ -1160,7 +1173,6 @@ academyController.get(
     }
   }
 );
-
 // ===============================
 // POST /api/academy/mentors/:id/refresh-stats
 // Обнови кеширани статистики от Firebase
@@ -1168,11 +1180,28 @@ academyController.get(
 academyController.post(
   '/mentors/:id/refresh-stats',
   isAuth,
-  rbac.checkPermission('mentor', 'update'),
+  rbac.checkPermission('statistics', 'readOwn'), // ✅ Admin или mentor
   async (req, res, next) => {
     try {
       const mentorId = parseInt(req.params.id);
+      const requestingUserId = req.user.userId;
+      const requestingUserRole = req.user.role;
 
+      // ✅ CHECK: Mentor може да refresh-ва САМО СВОИТЕ stats
+      if (requestingUserRole !== 'admin') {
+        const mentorRecord = await mentor.findOne({
+          where: { userId: requestingUserId }
+        });
+
+        if (!mentorRecord || mentorRecord.id !== mentorId) {
+          return res.status(403).json({
+            success: false,
+            message: 'You can only refresh your own statistics'
+          });
+        }
+      }
+
+      // ✅ Admin или собственикът стигат до тук
       const mentorData = await mentor.findByPk(mentorId, {
         include: [
           {
@@ -1215,13 +1244,13 @@ academyController.post(
 // GET /api/academy/mentors/statistics/firebase-overview
 // Общи Firebase статистики (за Dashboard)
 // ===============================
+
 academyController.get(
   '/mentors/statistics/firebase-overview',
   isAuth,
-  rbac.checkPermission('mentor', 'read'),
+  rbac.checkPermission('statistics', 'read'), 
   async (req, res, next) => {
     try {
-
       const mentors = await getAllMentorsCombinedStats();
 
       // Изчисли агрегирани статистики
@@ -1264,7 +1293,6 @@ academyController.get(
       next(err);
     }
   }
-  
 );
 // ===============================
 // GET /api/academy/mentors/statistics/top-by-online-time
@@ -1273,7 +1301,7 @@ academyController.get(
 academyController.get(
   '/mentors/statistics/top-by-online-time',
   isAuth,
-  rbac.checkPermission('mentor', 'read'),
+  rbac.checkPermission('statistics', 'read'),
   async (req, res, next) => {
     try {
       const { limit = 10 } = req.query;
@@ -1319,7 +1347,7 @@ academyController.get(
 academyController.get(
   '/mentors/statistics/response-times',
   isAuth,
-  rbac.checkPermission('mentor', 'read'),
+  rbac.checkPermission('statistics', 'read'),
   async (req, res, next) => {
     try {
 
@@ -1384,7 +1412,7 @@ academyController.get(
 academyController.get(
   '/mentors/statistics/activity-trend',
   isAuth,
-  rbac.checkPermission('mentor', 'read'),
+  rbac.checkPermission('statistics', 'read'),
   async (req, res, next) => {
     try {
       const { months = 6 } = req.query;
@@ -1435,7 +1463,7 @@ academyController.get(
 academyController.get(
   '/mentors/statistics/session-quality',
   isAuth,
-  rbac.checkPermission('mentor', 'read'),
+  rbac.checkPermission('statistics', 'read'),
   async (req, res, next) => {
     try {
 
@@ -1581,7 +1609,7 @@ academyController.post('/sync-session', async (req, res, next) => {
 academyController.get(
   '/mentors/all-with-stats-filtered',
   isAuth,
-  rbac.checkPermission('mentor', 'read'),
+  rbac.checkPermission('statistics', 'read'),
   async (req, res, next) => {
     try {
       const { timeFilter = 'thisMonth' } = req.query;
