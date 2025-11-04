@@ -1,37 +1,36 @@
-import React, { useState } from 'react';
+// src/components/DigiBridgeAcademy/DigiBridgeTestimonials/DigiBridgeTestimonials.jsx
+
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useAcademy } from '../../contexts/AcademyProvider';
 import './digiBridgeTestimonials.css';
 
 export const DigiBridgeTestimonials = () => {
   const { t } = useTranslation();
+  const { getApprovedAcademyReviews } = useAcademy();
+  
   const [activeIndex, setActiveIndex] = useState(0);
+  const [testimonials, setTestimonials] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const testimonials = [
-    {
-      id: 1,
-      name: t('digiBridge.testimonials.testimonial1.name'),
-      role: t('digiBridge.testimonials.testimonial1.role'),
-      image: 'https://randomuser.me/api/portraits/women/44.jpg',
-      text: t('digiBridge.testimonials.testimonial1.text'),
-      rating: 5,
-    },
-    {
-      id: 2,
-      name: t('digiBridge.testimonials.testimonial2.name'),
-      role: t('digiBridge.testimonials.testimonial2.role'),
-      image: 'https://randomuser.me/api/portraits/men/32.jpg',
-      text: t('digiBridge.testimonials.testimonial2.text'),
-      rating: 5,
-    },
-    {
-      id: 3,
-      name: t('digiBridge.testimonials.testimonial3.name'),
-      role: t('digiBridge.testimonials.testimonial3.role'),
-      image: 'https://randomuser.me/api/portraits/women/65.jpg',
-      text: t('digiBridge.testimonials.testimonial3.text'),
-      rating: 5,
-    },
-  ];
+  useEffect(() => {
+    fetchTestimonials();
+  }, []);
+
+  const fetchTestimonials = async () => {
+    try {
+      setLoading(true);
+      const response = await getApprovedAcademyReviews();
+      
+      const reviews = response?.reviews || [];
+      setTestimonials(reviews);
+    } catch (error) {
+      console.error('Error fetching testimonials:', error);
+      setTestimonials([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const nextTestimonial = () => {
     setActiveIndex((prev) => (prev + 1) % testimonials.length);
@@ -44,6 +43,33 @@ export const DigiBridgeTestimonials = () => {
   const goToTestimonial = (index) => {
     setActiveIndex(index);
   };
+
+  if (loading) {
+    return (
+      <section className="digibridge-testimonials">
+        <div className="digibridge-testimonials-container">
+          <div className="digibridge-testimonials-loading">
+            <div className="digibridge-testimonials-spinner"></div>
+            <p>{t('digiBridge.testimonials.loading')}</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (testimonials.length === 0) {
+    return (
+      <section className="digibridge-testimonials">
+        <div className="digibridge-testimonials-container">
+          <div className="digibridge-testimonials-empty">
+            <div className="digibridge-testimonials-empty-icon">💬</div>
+            <h3>{t('digiBridge.testimonials.noTestimonials')}</h3>
+            <p>{t('digiBridge.testimonials.noTestimonialsMessage')}</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="digibridge-testimonials">
@@ -68,6 +94,7 @@ export const DigiBridgeTestimonials = () => {
             className="digibridge-testimonials-arrow digibridge-testimonials-arrow-prev"
             onClick={prevTestimonial}
             aria-label="Previous testimonial"
+            disabled={testimonials.length <= 1}
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <path d="M15 18l-6-6 6-6"/>
@@ -98,14 +125,24 @@ export const DigiBridgeTestimonials = () => {
                   </div>
 
                   <div className="digibridge-testimonials-author">
-                    <img 
-                      src={testimonial.image} 
-                      alt={testimonial.name}
-                      className="digibridge-testimonials-author-image"
-                    />
+                    {testimonial.imageUrl ? (
+                      <img 
+                        src={testimonial.imageUrl} 
+                        alt={testimonial.name}
+                        className="digibridge-testimonials-author-image"
+                      />
+                    ) : (
+                      <div className="digibridge-testimonials-author-avatar">
+                        {testimonial.name.charAt(0).toUpperCase()}
+                      </div>
+                    )}
                     <div className="digibridge-testimonials-author-info">
                       <h4 className="digibridge-testimonials-author-name">{testimonial.name}</h4>
-                      <p className="digibridge-testimonials-author-role">{testimonial.role}</p>
+                      <p className="digibridge-testimonials-author-role">
+                        {testimonial.role === 'participant' 
+                          ? t('digiBridge.testimonialForm.roleParticipant') 
+                          : t('digiBridge.testimonialForm.roleMentor')}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -117,6 +154,7 @@ export const DigiBridgeTestimonials = () => {
             className="digibridge-testimonials-arrow digibridge-testimonials-arrow-next"
             onClick={nextTestimonial}
             aria-label="Next testimonial"
+            disabled={testimonials.length <= 1}
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
               <path d="M9 18l6-6-6-6"/>
@@ -125,16 +163,18 @@ export const DigiBridgeTestimonials = () => {
         </div>
 
         {/* Dots */}
-        <div className="digibridge-testimonials-dots">
-          {testimonials.map((_, index) => (
-            <button
-              key={index}
-              className={`digibridge-testimonials-dot ${index === activeIndex ? 'digibridge-testimonials-dot-active' : ''}`}
-              onClick={() => goToTestimonial(index)}
-              aria-label={`Go to testimonial ${index + 1}`}
-            />
-          ))}
-        </div>
+        {testimonials.length > 1 && (
+          <div className="digibridge-testimonials-dots">
+            {testimonials.map((_, index) => (
+              <button
+                key={index}
+                className={`digibridge-testimonials-dot ${index === activeIndex ? 'digibridge-testimonials-dot-active' : ''}`}
+                onClick={() => goToTestimonial(index)}
+                aria-label={`Go to testimonial ${index + 1}`}
+              />
+            ))}
+          </div>
+        )}
 
       </div>
     </section>

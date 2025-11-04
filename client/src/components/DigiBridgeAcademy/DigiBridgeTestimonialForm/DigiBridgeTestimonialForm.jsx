@@ -1,10 +1,18 @@
-import React, { useState } from 'react';
+// src/components/DigiBridgeAcademy/DigiBridgeTestimonialForm/DigiBridgeTestimonialForm.jsx
+
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useAuthContext } from '../../contexts/UserContext';
+import { useAcademy } from '../../contexts/AcademyProvider';
 import './digiBridgeTestimonialForm.css';
 
 export const DigiBridgeTestimonialForm = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { isAuthentication, profileData, setRedirectAfterLogin } = useAuthContext();
+  const { createAcademyReview, checkUserAcademyReviewStatus } = useAcademy();
   
   const [formData, setFormData] = useState({
     name: '',
@@ -16,6 +24,50 @@ export const DigiBridgeTestimonialForm = () => {
   });
   
   const [loading, setLoading] = useState(false);
+  const [hasReviewed, setHasReviewed] = useState(false);
+  const [checkingStatus, setCheckingStatus] = useState(true);
+
+  useEffect(() => {
+    if (isAuthentication && profileData) {
+      setFormData(prev => ({
+        ...prev,
+        name: profileData.details?.firstName && profileData.details?.lastName 
+          ? `${profileData.details.firstName} ${profileData.details.lastName}`
+          : profileData.details?.username || '',
+        email: profileData.email || ''
+      }));
+
+      checkReviewStatus();
+    } else {
+      setCheckingStatus(false);
+    }
+  }, [isAuthentication, profileData]);
+
+  const checkReviewStatus = async () => {
+    try {
+      setCheckingStatus(true);
+      const hasLocalFlag = localStorage.getItem('hasReviewedAcademy') === 'true';
+      
+      if (hasLocalFlag) {
+        setHasReviewed(true);
+        setCheckingStatus(false);
+        return;
+      }
+
+      const response = await checkUserAcademyReviewStatus();
+      const hasReview = response?.hasReview || false;
+      
+      setHasReviewed(hasReview);
+      
+      if (hasReview) {
+        localStorage.setItem('hasReviewedAcademy', 'true');
+      }
+    } catch (error) {
+      console.error('Error checking review status:', error);
+    } finally {
+      setCheckingStatus(false);
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -29,10 +81,14 @@ export const DigiBridgeTestimonialForm = () => {
     setFormData(prev => ({ ...prev, rating }));
   };
 
+  const handleLoginClick = () => {
+    setRedirectAfterLogin(window.location.pathname);
+    navigate('/login');
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Валидация
     if (!formData.name || !formData.role || !formData.email || !formData.text) {
       toast.error(t('digiBridge.testimonialForm.fillAllFields'));
       return;
@@ -46,19 +102,25 @@ export const DigiBridgeTestimonialForm = () => {
     setLoading(true);
 
     try {
-      // ТУК ЩЕ ДОБАВИМ API CALL КОГАТО Е ГОТОВ
-      // await academyService.submitTestimonial(formData);
-      
-      // ЗА СЕГА - просто симулираме успех
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await createAcademyReview({
+        name: formData.name,
+        role: formData.role,
+        email: formData.email,
+        text: formData.text,
+        rating: formData.rating,
+      });
+
+      localStorage.setItem('hasReviewedAcademy', 'true');
+      setHasReviewed(true);
 
       toast.success(t('digiBridge.testimonialForm.successMessage'));
       
-      // Изчистване на формата
       setFormData({
-        name: '',
+        name: profileData.details?.firstName && profileData.details?.lastName 
+          ? `${profileData.details.firstName} ${profileData.details.lastName}`
+          : profileData.details?.username || '',
         role: '',
-        email: '',
+        email: profileData.email || '',
         text: '',
         rating: 5,
         consent: false,
@@ -71,6 +133,53 @@ export const DigiBridgeTestimonialForm = () => {
       setLoading(false);
     }
   };
+
+  if (!isAuthentication) {
+    return (
+      <section className="digibridge-testimonial-form">
+        <div className="digibridge-testimonial-form-container">
+          <div className="digibridge-testimonial-form-auth-required">
+            <div className="digibridge-testimonial-form-icon">🔒</div>
+            <h3>{t('digiBridge.testimonialForm.loginRequired')}</h3>
+            <p>{t('digiBridge.testimonialForm.loginRequiredMessage')}</p>
+            <button 
+              className="digibridge-testimonial-form-login-button"
+              onClick={handleLoginClick}
+            >
+              {t('digiBridge.testimonialForm.loginButton')}
+            </button>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (checkingStatus) {
+    return (
+      <section className="digibridge-testimonial-form">
+        <div className="digibridge-testimonial-form-container">
+          <div className="digibridge-testimonial-form-loading">
+            <div className="digibridge-testimonial-form-spinner"></div>
+            <p>{t('digiBridge.testimonialForm.checking')}</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (hasReviewed) {
+    return (
+      <section className="digibridge-testimonial-form">
+        <div className="digibridge-testimonial-form-container">
+          <div className="digibridge-testimonial-form-already-reviewed">
+            <div className="digibridge-testimonial-form-icon">✅</div>
+            <h3>{t('digiBridge.testimonialForm.alreadyReviewed')}</h3>
+            <p>{t('digiBridge.testimonialForm.alreadyReviewedMessage')}</p>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="digibridge-testimonial-form">
@@ -134,6 +243,7 @@ export const DigiBridgeTestimonialForm = () => {
               placeholder={t('digiBridge.testimonialForm.emailPlaceholder')}
               className="digibridge-testimonial-form-input"
               disabled={loading}
+              readOnly
             />
             <small className="digibridge-testimonial-form-hint">
               {t('digiBridge.testimonialForm.emailHint')}

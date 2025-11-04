@@ -6,6 +6,7 @@ const { mentor_application, mentor, mentor_course, user_account, admin_notificat
 const { getFirebaseDb } = require('../firebase/firebaseAdmin');
 const isAuth = require('../middlewares/isAuth.js');
 const rbac = require('../middlewares/rbac.js');
+const { statisticsCache } = require('../middlewares/statisticsCache');
 const { mentorApplicationSchema } = require('../schemas/mentorApplication.schema');
 const { initializeFirebaseAdmin } = require('../firebase/firebaseAdmin');
 const { 
@@ -374,8 +375,7 @@ academyController.post('/mentors/apply', isAuth, async (req, res, next) => {
 // GET /api/academy/mentors/applications/pending
 // Admin: Вземи всички pending кандидатури
 // ===============================
-academyController.get(
-  '/mentors/applications/pending', 
+academyController.get('/mentors/applications/pending',
   isAuth, 
   rbac.checkPermission('mentorApplication', 'read'),
   async (req, res, next) => {
@@ -407,8 +407,7 @@ academyController.get(
 // GET /api/academy/mentors/applications/rejected
 // Вземане на отхвърлени кандидатури
 // ===============================
-academyController.get(
-  '/mentors/applications/rejected',
+academyController.get('/mentors/applications/rejected',
   isAuth,
   rbac.checkPermission('mentorApplication', 'read'),
   async (req, res, next) => {
@@ -442,8 +441,7 @@ academyController.get(
 // POST /api/academy/mentors/applications/:id/approve
 // Admin: Одобри кандидатура
 // ===============================
-academyController.post(
-  '/mentors/applications/:applicationId/approve',
+academyController.post('/mentors/applications/:applicationId/approve',
   isAuth,
   rbac.checkPermission('mentorApplication', 'approve'),
   async (req, res, next) => {
@@ -950,6 +948,7 @@ academyController.get(
   '/mentors/statistics/overview',
   isAuth,
   rbac.checkPermission('statistics', 'read'),
+  statisticsCache(300),
   async (req, res, next) => {
     try {
       const db = getFirebaseDb();
@@ -1064,6 +1063,7 @@ academyController.get(
   '/mentors/statistics/by-specialization',
   isAuth,
   rbac.checkPermission('statistics', 'read'),
+    statisticsCache(600),
   async (req, res, next) => {
     try {
       const specializations = await mentor.findAll({
@@ -1107,6 +1107,7 @@ academyController.get(
 // ===============================
 academyController.get(
   '/mentors/all-with-stats',
+  statisticsCache(120),
   isAuth,
   rbac.checkPermission('statistics', 'read'),
   async (req, res, next) => {
@@ -1130,7 +1131,8 @@ academyController.get(
 academyController.get(
   '/mentors/:id/firebase-stats',
   isAuth,
-  rbac.checkPermission('statistics', 'readOwn'), // ✅ Admin или mentor
+  rbac.checkPermission('statistics', 'readOwn'), 
+  statisticsCache(120),
   async (req, res, next) => {
     try {
       const mentorId = parseInt(req.params.id);
@@ -1249,6 +1251,7 @@ academyController.get(
   '/mentors/statistics/firebase-overview',
   isAuth,
   rbac.checkPermission('statistics', 'read'), 
+  statisticsCache(180),
   async (req, res, next) => {
     try {
       const mentors = await getAllMentorsCombinedStats();
@@ -1302,6 +1305,7 @@ academyController.get(
   '/mentors/statistics/top-by-online-time',
   isAuth,
   rbac.checkPermission('statistics', 'read'),
+  statisticsCache(300),
   async (req, res, next) => {
     try {
       const { limit = 10 } = req.query;
@@ -1348,6 +1352,7 @@ academyController.get(
   '/mentors/statistics/response-times',
   isAuth,
   rbac.checkPermission('statistics', 'read'),
+  statisticsCache(300),
   async (req, res, next) => {
     try {
 
@@ -1413,6 +1418,7 @@ academyController.get(
   '/mentors/statistics/activity-trend',
   isAuth,
   rbac.checkPermission('statistics', 'read'),
+  statisticsCache(600),
   async (req, res, next) => {
     try {
       const { months = 6 } = req.query;
@@ -1464,6 +1470,7 @@ academyController.get(
   '/mentors/statistics/session-quality',
   isAuth,
   rbac.checkPermission('statistics', 'read'),
+  statisticsCache(300),
   async (req, res, next) => {
     try {
 
@@ -1610,6 +1617,7 @@ academyController.get(
   '/mentors/all-with-stats-filtered',
   isAuth,
   rbac.checkPermission('statistics', 'read'),
+  statisticsCache(120),
   async (req, res, next) => {
     try {
       const { timeFilter = 'thisMonth' } = req.query;

@@ -116,30 +116,36 @@ const permissions = {
         },
     },
     mentorApplication: {
-        create: ['user', 'admin', 'moderator'], 
-        read: ['admin'],             
-        update: ['admin'],           
-        delete: ['admin'],  
+        create: ['user', 'admin', 'moderator'],
+        read: ['admin'],
+        update: ['admin'],
+        delete: ['admin'],
         approve: ['admin'],
-        reject: ['admin', ], 
+        reject: ['admin',],
     },
 
     mentor: {
-        create: ['admin', ],           
-        read: ['admin', 'moderator', 'user', 'guest'], 
-        update: ['admin', ],
+        create: ['admin',],
+        read: ['admin', 'moderator', 'user', 'guest'],
+        update: ['admin',],
         delete: ['admin'],
     },
-     statistics: {
-    read: ['admin'],              
-    readOwn: ['admin', 'mentor'], 
-  },
-      notification: {
-    create: ['admin', 'moderator','user'],
-    read: ['admin', 'moderator'],
-    update: ['admin', 'moderator'],
-    delete: ['admin', 'moderator'],
-  },
+    statistics: {
+        read: ['admin'],
+        readOwn: ['admin', 'mentor'],
+    },
+    notification: {
+        create: ['admin', 'moderator', 'user'],
+        read: ['admin', 'moderator'],
+        update: ['admin', 'moderator'],
+        delete: ['admin', 'moderator'],
+    },
+    review: {
+        read: ['admin', 'moderator'],
+        approve: ['admin', 'moderator'],
+        reject: ['admin', 'moderator'],
+        delete: ['admin']
+    },
 };
 
 module.exports = permissions;
