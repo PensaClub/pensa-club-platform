@@ -17,6 +17,7 @@ const storyController = require('./controllers/storyController');
 const clubController = require('./controllers/clubController');
 const academyController = require('./controllers/academyController');
 const reviewsController = require('./controllers/reviewsController');
+const userNotificationsController = require('./controllers/userNotificationsController'); 
 
 router.use('/auth', authController);
 router.use('/user', userController);
@@ -34,6 +35,7 @@ router.use('/stories', storyController);
 router.use('/clubs', clubController);
 router.use('/academy', academyController); 
 router.use('/reviews', reviewsController);
+router.use('/user-notifications', userNotificationsController); 
 router.use((err, req, res, next) => {
     errorHandler(err, req, res, err.statusCode || 500);
 });

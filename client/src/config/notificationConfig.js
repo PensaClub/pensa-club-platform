@@ -1,6 +1,7 @@
 // src/config/notificationConfig.js
 
 export const NOTIFICATION_TYPES = {
+  // ADMIN NOTIFICATIONS
   MENTOR_APPLICATION: 'mentor_application',
   MENTOR_APPROVED: 'mentor_approved',
   MENTOR_REJECTED: 'mentor_rejected',
@@ -8,13 +9,17 @@ export const NOTIFICATION_TYPES = {
   COURSE_ENROLLMENT: 'course_enrollment',
   SYSTEM_ALERT: 'system_alert',
   USER_REPORT: 'user_report',
-   ARTICLE_PENDING: 'article_pending',
-  // ЛЕСНО ДА ДОБАВИШ НОВИ:
-  // ARTICLE_PENDING: 'article_pending',
-  // ANNOUNCEMENT_PENDING: 'announcement_pending',
+  ARTICLE_PENDING: 'article_pending',
+  ACADEMY_REVIEW: 'academy_review',
+  
+  // ✅ USER NOTIFICATIONS
+  REVIEW_APPROVED: 'review_approved',
+  REVIEW_REJECTED: 'review_rejected',
+  REVIEW_DELETED: 'review_deleted',
 };
 
 export const notificationConfig = {
+  // ADMIN NOTIFICATIONS
   [NOTIFICATION_TYPES.MENTOR_APPLICATION]: {
     icon: '🎓',
     color: '#8b5cf6',
@@ -57,19 +62,38 @@ export const notificationConfig = {
     route: '/profile/reports',
     priority: 'high'
   },
-   [NOTIFICATION_TYPES.ARTICLE_PENDING]: { // ✅ НОВО
+  [NOTIFICATION_TYPES.ARTICLE_PENDING]: {
     icon: '📝',
     color: '#6366f1',
     route: '/profile/articles',
     priority: 'medium'
   },
-  // ДОБАВИ НОВ ТИП ТУК:
-  // [NOTIFICATION_TYPES.ARTICLE_PENDING]: {
-  //   icon: '📝',
-  //   color: '#6366f1',
-  //   route: '/profile/articles',
-  //   priority: 'medium'
-  // },
+  [NOTIFICATION_TYPES.ACADEMY_REVIEW]: {
+    icon: '⭐',
+    color: '#ffa500',
+    route: '/profile/reviews-management',
+    priority: 'medium'
+  },
+  
+  // ✅ USER NOTIFICATIONS
+  [NOTIFICATION_TYPES.REVIEW_APPROVED]: {
+    icon: '✅',
+    color: '#10b981',
+    route: '/academy',
+    priority: 'medium'
+  },
+  [NOTIFICATION_TYPES.REVIEW_REJECTED]: {
+    icon: '❌',
+    color: '#ef4444',
+    route: '/academy',
+    priority: 'medium'
+  },
+  [NOTIFICATION_TYPES.REVIEW_DELETED]: {
+    icon: '🗑️',
+    color: '#6b7280',
+    route: '/academy',
+    priority: 'low'
+  },
 };
 
 // Helper функция за вземане на config
