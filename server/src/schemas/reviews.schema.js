@@ -9,7 +9,7 @@ const createAcademyReviewSchema = z.object({
     errorMap: () => ({ message: 'Role must be participant or mentor' })
   }),
   rating: z.number().int().min(1).max(5, 'Rating must be between 1 and 5'),
-  text: z.string().min(10, 'Review text must be at least 10 characters').max(500)
+  text: z.string().max(1000).optional() 
 });
 
 const createMentorReviewSchema = z.object({
@@ -18,7 +18,7 @@ const createMentorReviewSchema = z.object({
   email: z.string().email(),
   role: z.enum(['participant', 'mentor']),
   rating: z.number().int().min(1).max(5),
-  text: z.string().min(10).max(500)
+   text: z.string().max(1000).optional() 
 });
 
 const approveReviewSchema = z.object({

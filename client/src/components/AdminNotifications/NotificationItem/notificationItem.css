@@ -268,3 +268,72 @@
     right: 12px;
   }
 }
+/* ===================================
+   NOTIFICATION ITEM ACTIONS & DELETE
+   =================================== */
+
+.notification-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.notification-item:last-child {
+  border-bottom: none;
+}
+
+.notification-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.notification-item-delete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+  opacity: 0;
+  color: #6b7280;
+}
+
+/* Показва DELETE бутон при hover */
+.notification-item:hover .notification-item-delete {
+  opacity: 1;
+}
+
+.notification-item-delete:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  transform: scale(1.1);
+}
+
+.notification-item-delete:active {
+  transform: scale(0.95);
+}
+
+.notification-item-delete svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* На mobile винаги показва DELETE */
+@media (max-width: 768px) {
+  .notification-item-delete {
+    opacity: 1;
+  }
+}

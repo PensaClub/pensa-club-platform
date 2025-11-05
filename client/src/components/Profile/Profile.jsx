@@ -77,6 +77,10 @@ import { AdminDigiBridgeMentors } from "../AdminDigiBridgeMentors/AdminDigiBridg
 import { AdminDigiBridgeMentorApplications } from "../AdminDigiBridgeMentorApplications/AdminDigiBridgeMentorApplications";
 import { AdminNotificationBell } from "../AdminNotifications/AdminNotificationBell";
 import { AdminDigiBridgeMentorStatistics } from "../AdminDigiBridgeMentorStatistics/AdminDigiBridgeMentorStatistics";
+import { ReviewsManagement } from "../ReviewsManagement/ReviewsManagement";
+import { UserNotificationBell } from "../UserNotifications/UserNotificationBell";
+import { Notifications } from "./Notifications/Notifications";
+import { AdminNotifications } from "./AdminNotifications/AdminNotifications";
 
 // 🎨 НОВИ ИКОНКИ КОМПОНЕНТИ
 const HomeIcon = () => (
@@ -229,7 +233,8 @@ export const Profile = () => {
       "/profile/club-membership": t("profile.clubMembership"),
       "/profile/mentors-overview": t("admin.mentors.overview"),
       "/profile/mentors-applications": t("admin.mentors.applications"),
-      "/profile/mentors-statistics": t("admin.mentors.statistics")
+      "/profile/mentors-statistics": t("admin.mentors.statistics"),
+       "/profile/reviews-management": t("admin.reviews.management"),
     };
 
     const matchedPath = Object.keys(pathTitleMap).find(key => path.includes(key));
@@ -269,7 +274,8 @@ export const Profile = () => {
     "/profile/club-membership",
     "/profile/mentors-overview",
     "/profile/mentors-applications",
-    "/profile/mentors-statistics"
+    "/profile/mentors-statistics",
+     "/profile/reviews-management"
   ];
 
   const isAdminPanel = adminPaths.some(path => location.pathname.startsWith(path));
@@ -386,6 +392,7 @@ export const Profile = () => {
           <LanguageSwitcherAdmin />
           {/* 🔔 NOTIFICATION BELL - ДОБАВИ ТУК */}
           {(isAdmin || isModerator) && <AdminNotificationBell />}
+          {!isAdmin && !isModerator && <UserNotificationBell />}
           <div className="profile-menu" ref={profileMenuRef}>
             <button className="profile-button" onClick={toggleProfileMenu}>
               <img
@@ -749,6 +756,18 @@ export const Profile = () => {
                   </li>
                   <li>
                     <NavLink
+                      to="reviews-management"
+                      className={({ isActive }) => isActive ? 'active' : ''}
+                    >
+                      <span className="link-content">
+                        <StoriesIcon /> 
+                        {t("admin.reviews.management")}
+                      </span>
+                      <ArrowIcon className="icon-arrow" />
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
                       to="ads-admin"
                       onClick={() => toggleSubMenu('ads')}
                       className={({ isActive }) => isActive ? 'active' : ''}
@@ -1079,13 +1098,16 @@ export const Profile = () => {
             <Route path="announced" element={<ProfileAnnounced />} profileData={profileData} />
             <Route path="interestOptions" element={<ProfileInterests />} />
             <Route path="messages" element={<ProfileMessages />} />
+            <Route path="notifications" element={<Notifications />} />
             <Route path="bookmarks" element={<BookmarkedItems />} />
             <Route path="avatars" element={<ProfessionalAvatarBuilder />} />
             <Route path="clubs" element={<MyClubs />} />
             <Route path="club-create" element={<ClubCreateForm />} />
             <Route path="club-drafts" element={<DraftClubs />} />
             <Route path="club-membership" element={<MembershipClubs isEditMode={true} />} />
+            <Route path="admin-notifications" element={<ManagementGuard><AdminNotifications /></ManagementGuard>} />
             <Route path="ads-admin" element={<ManagementGuard><AllAnnouncements /></ManagementGuard>} />
+            <Route path="reviews-management" element={<ManagementGuard><ReviewsManagement /></ManagementGuard>} />
             <Route path="article-create" element={<ManagementGuard><ArticleCreateForm /></ManagementGuard>} />
             <Route path="articles" element={<ManagementGuard><AllArticles /></ManagementGuard>} />
             <Route path="projects" element={<ManagementGuard><AllProjects /></ManagementGuard>} />
@@ -1111,7 +1133,7 @@ export const Profile = () => {
             <Route path="applications-admin" element={<ManagementGuard><ApplicationsAdmin setApplicationsStats={setApplicationsStats} /></ManagementGuard>} />
             <Route path="mentors-overview" element={<AdminGuard><AdminDigiBridgeMentors /></AdminGuard>} />
             <Route path="mentors-applications" element={<AdminGuard><AdminDigiBridgeMentorApplications /></AdminGuard>} />
-            <Route path="mentors-statistics" element={<AdminGuard><AdminDigiBridgeMentorStatistics /></AdminGuard>} /> 
+            <Route path="mentors-statistics" element={<AdminGuard><AdminDigiBridgeMentorStatistics /></AdminGuard>} />
             <Route path="users-admin" element={<AdminGuard><AllUsers setAllUsers={setAllUsers} /></AdminGuard>} />
             <Route path="users-unfinished" element={<AdminGuard><UnfinishedProfiles setUnfinishedUsers={setUnfinishedUsers} /></AdminGuard>} />
           </Routes>

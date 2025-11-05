@@ -666,6 +666,10 @@
       "applications": "Applications",
       "statistics": "Statistics"
     },
+     "reviews": {
+      "management": "Manage Reviews"
+
+    },
     "pending_announcements": "Pending Announcements",
     "search": "Search",
     "name": "Name",
@@ -12114,6 +12118,10 @@
       "errorMessage": "Error sending. Please try again.",
       "loginRequired": "Login Required",
       "loginRequiredMessage": "Please log in to share your experience and leave a review.",
+      "checking": "Checking...",
+      "alreadyReviewed": "Thank You for Your Review!",
+      "alreadyReviewedMessage": "You have already submitted a review for DigiBridge Academy. We appreciate your feedback!",
+
       "loginButton": "Log In"
     },
     "mentorsPage": {
@@ -12702,5 +12710,77 @@
   "TableSkeleton": {
     "loading": "Loading table...",
     "loadingData": "Loading mentor data..."
+  },
+  "reviewsManagement": {
+    "title": "Platform Reviews",
+    "subtitle": "Manage and moderate all reviews submitted by users across the platform",
+    "allReviews": "All Reviews",
+    "pendingReviews": "Pending Reviews",
+    "approvedReviews": "Approved Reviews",
+    "rejectedReviews": "Rejected Reviews",
+    "academyReviews": "Academy Reviews",
+    "mentorReviews": "Mentor Reviews",
+    "courseReviews": "Course Reviews",
+    "approve": "Approve",
+    "reject": "Reject",
+    "delete": "Delete",
+    "viewReview": "View Full Review",
+    "confirmApprove": "Are you sure you want to approve this review?",
+    "confirmReject": "Are you sure you want to reject this review?",
+    "confirmDelete": "Are you sure you want to permanently delete this review?",
+    "rejectionReason": "Rejection Reason",
+    "enterRejectionReason": "Please enter a reason for rejection...",
+    "rejectionReasonRequired": "Rejection reason is required",
+    "filters": "Filters",
+    "filterByType": "Filter by Type",
+    "filterByStatus": "Filter by Status",
+    "searchReviews": "Search reviews...",
+    "rating": "Rating",
+    "submittedBy": "Submitted by",
+    "submittedOn": "Submitted on",
+    "noReviews": "No reviews found",
+    "loadingReviews": "Loading reviews...",
+    "reviewText": "Review Text",
+    "reviewerInfo": "Reviewer Information",
+    "actions": "Actions",
+    "errorFetching": "Error loading reviews",
+    "approveSuccess": "Review approved successfully!",
+    "rejectSuccess": "Review rejected successfully!",
+    "deleteSuccess": "Review deleted successfully!",
+    "actionError": "Error performing action"
+  },
+  "headerReviewsManagement": {
+    "searchReviews": "Search reviews...",
+    "filterByStatus": "Filter by Status",
+    "filterByType": "Filter by Type",
+    "allReviews": "All Reviews",
+    "pendingReviews": "Pending",
+    "approvedReviews": "Approved",
+    "rejectedReviews": "Rejected",
+    "allTypes": "All Types",
+    "academyReviews": "Academy",
+    "mentorReviews": "Mentors",
+    "courseReviews": "Courses",
+    "clearFilters": "Clear Filters"
+  },
+   "listReviewsManagement": {
+    "loading": "Loading reviews...",
+    "noReviews": "No Reviews Found",
+    "noReviewsMessage": "There are no reviews matching your filters. Try adjusting your search criteria.",
+    "statusPending": "Pending",
+    "statusApproved": "Approved",
+    "statusRejected": "Rejected",
+    "typeAcademy": "Academy",
+    "typeMentor": "Mentor",
+    "typeCourse": "Course",
+    "role": "Role",
+    "roleParticipant": "Participant",
+    "roleMentor": "Mentor",
+    "submittedOn": "Submitted On",
+    "rejectionReason": "Rejection Reason",
+    "view": "View",
+    "approve": "Approve",
+    "reject": "Reject",
+    "delete": "Delete"
   }
 }

@@ -382,6 +382,52 @@ const onProjectApplicationSubmit = async (applicationData) => {
     setIsLoading(false);
   }
 };
+// ===============================
+// USER NOTIFICATIONS
+// ===============================
+const getUserNotifications = async (params = {}) => {
+  try {
+    const data = await userService.getUserNotifications(params);
+    return data;
+  } catch (error) {
+    console.error('Error fetching user notifications:', error);
+    return { notifications: [], unreadCount: 0 };
+  }
+};
+
+const markNotificationAsRead = async (notificationId) => {
+  try {
+    await userService.markNotificationAsRead(notificationId);
+    return true;
+  } catch (error) {
+    console.error('Error marking notification as read:', error);
+    return false;
+  }
+};
+
+const markAllNotificationsAsRead = async () => {
+  try {
+    await userService.markAllNotificationsAsRead();
+    toast.success('Всички нотификации са маркирани като прочетени');
+    return true;
+  } catch (error) {
+    console.error('Error marking all notifications as read:', error);
+    toast.error('Грешка при маркиране на нотификации');
+    return false;
+  }
+};
+
+const deleteNotification = async (notificationId) => {
+  try {
+    await userService.deleteNotification(notificationId);
+    toast.success('Нотификацията е изтрита');
+    return true;
+  } catch (error) {
+    console.error('Error deleting notification:', error);
+    toast.error('Грешка при изтриване на нотификация');
+    return false;
+  }
+};
 
   const isUserAdmin = () => isAdmin;
 
@@ -408,7 +454,11 @@ const onProjectApplicationSubmit = async (applicationData) => {
     onChangeAdminRole,
     sendContactForm,
     setProfileData,
-
+  // ✅ USER NOTIFICATIONS
+  getUserNotifications,
+  markNotificationAsRead,
+  markAllNotificationsAsRead,
+  deleteNotification,
     setRedirectAfterLogin,
     redirectPath,
     setUser: (user) => {
