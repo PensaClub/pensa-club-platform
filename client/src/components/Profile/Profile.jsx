@@ -78,6 +78,9 @@ import { AdminDigiBridgeMentorApplications } from "../AdminDigiBridgeMentorAppli
 import { AdminNotificationBell } from "../AdminNotifications/AdminNotificationBell";
 import { AdminDigiBridgeMentorStatistics } from "../AdminDigiBridgeMentorStatistics/AdminDigiBridgeMentorStatistics";
 import { ReviewsManagement } from "../ReviewsManagement/ReviewsManagement";
+import { UserNotificationBell } from "../UserNotifications/UserNotificationBell";
+import { Notifications } from "./Notifications/Notifications";
+import { AdminNotifications } from "./AdminNotifications/AdminNotifications";
 
 // 🎨 НОВИ ИКОНКИ КОМПОНЕНТИ
 const HomeIcon = () => (
@@ -389,6 +392,7 @@ export const Profile = () => {
           <LanguageSwitcherAdmin />
           {/* 🔔 NOTIFICATION BELL - ДОБАВИ ТУК */}
           {(isAdmin || isModerator) && <AdminNotificationBell />}
+          {!isAdmin && !isModerator && <UserNotificationBell />}
           <div className="profile-menu" ref={profileMenuRef}>
             <button className="profile-button" onClick={toggleProfileMenu}>
               <img
@@ -1094,12 +1098,14 @@ export const Profile = () => {
             <Route path="announced" element={<ProfileAnnounced />} profileData={profileData} />
             <Route path="interestOptions" element={<ProfileInterests />} />
             <Route path="messages" element={<ProfileMessages />} />
+            <Route path="notifications" element={<Notifications />} />
             <Route path="bookmarks" element={<BookmarkedItems />} />
             <Route path="avatars" element={<ProfessionalAvatarBuilder />} />
             <Route path="clubs" element={<MyClubs />} />
             <Route path="club-create" element={<ClubCreateForm />} />
             <Route path="club-drafts" element={<DraftClubs />} />
             <Route path="club-membership" element={<MembershipClubs isEditMode={true} />} />
+            <Route path="admin-notifications" element={<ManagementGuard><AdminNotifications /></ManagementGuard>} />
             <Route path="ads-admin" element={<ManagementGuard><AllAnnouncements /></ManagementGuard>} />
             <Route path="reviews-management" element={<ManagementGuard><ReviewsManagement /></ManagementGuard>} />
             <Route path="article-create" element={<ManagementGuard><ArticleCreateForm /></ManagementGuard>} />

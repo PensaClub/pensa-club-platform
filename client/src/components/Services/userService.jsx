@@ -46,5 +46,22 @@ export const userServiceFactory = (token) => {
     applyToProject: (data) => {
       return requester.post(`${apiUrl}/projects/apply`, data);
     },
+    // ✅ USER NOTIFICATIONS
+    getUserNotifications: (params = {}) => {
+      const queryString = new URLSearchParams(params).toString();
+      return requester.get(`${apiUrl}/user-notifications?${queryString}`);
+    },
+    
+    markNotificationAsRead: (notificationId) => {
+      return requester.patch(`${apiUrl}/user-notifications/${notificationId}/read`);
+    },
+    
+    markAllNotificationsAsRead: () => {
+      return requester.patch(`${apiUrl}/user-notifications/mark-all-read`);
+    },
+    
+    deleteNotification: (notificationId) => {
+      return requester.del(`${apiUrl}/user-notifications/${notificationId}`);
+    },
   };
 };

@@ -1,19 +1,18 @@
-// src/components/AdminNotifications/AdminNotificationBell.jsx
+// src/components/UserNotifications/UserNotificationBell.jsx
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAcademy } from '../contexts/AcademyProvider';
+import { useAuthContext } from '../contexts/UserContext';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { getNotificationConfig } from '../../config/notificationConfig';
-import { NotificationItem } from './NotificationItem/NotificationItem';
-import './adminNotificationBell.css';
+import { NotificationItem } from '../AdminNotifications/NotificationItem/NotificationItem';
+import '../AdminNotifications/adminNotificationBell.css'; // ✅ Използва същия CSS
 
-export const AdminNotificationBell = () => {
+export const UserNotificationBell = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { getAdminNotifications, markNotificationAsRead,deleteNotification } = useAcademy();
-  
+  const { getUserNotifications, markNotificationAsRead, deleteNotification } = useAuthContext();
+
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
@@ -25,7 +24,7 @@ export const AdminNotificationBell = () => {
   const fetchNotifications = async () => {
     try {
       setIsLoading(true);
-      const data = await getAdminNotifications({ limit: 10, read: false });
+      const data = await getUserNotifications({ limit: 10, unreadOnly: false });
       setNotifications(data.notifications || []);
       setUnreadCount(data.unreadCount || 0);
     } catch (error) {
@@ -49,7 +48,7 @@ export const AdminNotificationBell = () => {
     }
   };
 
-  // Page Visibility API - спира polling когато tab е hidden
+  // Page Visibility API
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.hidden) {
@@ -84,8 +83,10 @@ export const AdminNotificationBell = () => {
 
   const handleNotificationClick = async (notification) => {
     try {
-      await markNotificationAsRead(notification.id);
-      setUnreadCount(prev => Math.max(0, prev - 1));
+      if (!notification.read) {
+        await markNotificationAsRead(notification.id);
+        setUnreadCount(prev => Math.max(0, prev - 1));
+      }
       
       const config = getNotificationConfig(notification.type);
       navigate(config.route);
@@ -109,12 +110,16 @@ export const AdminNotificationBell = () => {
   };
 const handleDeleteNotification = async (notificationId) => {
   try {
-    await deleteNotification(notificationId);
-    setNotifications(prev => prev.filter(n => n.id !== notificationId));
-    setUnreadCount(prev => Math.max(0, prev - 1));
-    toast.success('Изтрито');
+    const success = await deleteNotification(notificationId);
+    if (success) {
+      // Махни от списъка
+      setNotifications(prev => prev.filter(n => n.id !== notificationId));
+      
+      // Намали counter-а
+      setUnreadCount(prev => Math.max(0, prev - 1));
+    }
   } catch (error) {
-    console.error('Error:', error);
+    console.error('Error deleting notification:', error);
   }
 };
   return (
@@ -166,7 +171,7 @@ const handleDeleteNotification = async (notificationId) => {
                   notification={notification}
                   onClick={handleNotificationClick}
                   formatTimeAgo={formatTimeAgo}
-                  onDelete={handleDeleteNotification}
+                   onDelete={handleDeleteNotification}
                 />
               ))
             ) : (
@@ -181,7 +186,7 @@ const handleDeleteNotification = async (notificationId) => {
             <button 
               className="admin-notification-bell-view-all"
               onClick={() => {
-                navigate('/profile/admin-notifications');
+                navigate('/profile/notifications');
                 setIsOpen(false);
               }}
             >
@@ -193,4 +198,3 @@ const handleDeleteNotification = async (notificationId) => {
     </div>
   );
 };
- 
