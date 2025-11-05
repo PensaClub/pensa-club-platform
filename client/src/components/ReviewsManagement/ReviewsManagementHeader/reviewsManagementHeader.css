@@ -1,0 +1,317 @@
+/* ===================================
+   REVIEWS MANAGEMENT HEADER (FILTERS)
+   =================================== */
+
+.reviews-management-pensa-club-header {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  margin-bottom: 30px;
+}
+
+.reviews-management-pensa-club-header-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ===================================
+   SEARCH BAR
+   =================================== */
+
+.reviews-management-pensa-club-header-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.reviews-management-pensa-club-header-search-icon {
+  position: absolute;
+  left: 16px;
+  width: 20px;
+  height: 20px;
+  color: #6c757d;
+  pointer-events: none;
+}
+
+.reviews-management-pensa-club-header-search-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.reviews-management-pensa-club-header-search-input {
+  width: 100%;
+  padding: 14px 48px 14px 48px;
+  font-size: 1rem;
+  font-family: inherit;
+  color: #2c3e50;
+  background: #f8f9fa;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.reviews-management-pensa-club-header-search-input:focus {
+  outline: none;
+  background: #ffffff;
+  border-color: #667eea;
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+}
+
+.reviews-management-pensa-club-header-search-input::placeholder {
+  color: #adb5bd;
+}
+
+.reviews-management-pensa-club-header-search-clear {
+  position: absolute;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  color: #6c757d;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reviews-management-pensa-club-header-search-clear svg {
+  width: 18px;
+  height: 18px;
+}
+
+.reviews-management-pensa-club-header-search-clear:hover {
+  background: #f8f9fa;
+  color: #dc3545;
+}
+
+/* ===================================
+   FILTERS
+   =================================== */
+
+.reviews-management-pensa-club-header-filters {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.reviews-management-pensa-club-header-filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-width: 200px;
+}
+
+.reviews-management-pensa-club-header-filter-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #495057;
+}
+
+.reviews-management-pensa-club-header-filter-select {
+  padding: 12px 16px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: #2c3e50;
+  background: #f8f9fa;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236c757d' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 40px;
+}
+
+.reviews-management-pensa-club-header-filter-select:hover {
+  border-color: #667eea;
+  background-color: #ffffff;
+}
+
+.reviews-management-pensa-club-header-filter-select:focus {
+  outline: none;
+  background: #ffffff;
+  border-color: #667eea;
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+}
+
+/* ===================================
+   CLEAR FILTERS BUTTON
+   =================================== */
+
+.reviews-management-pensa-club-header-clear-filters {
+  padding: 12px 20px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #dc3545;
+  background: rgba(220, 53, 69, 0.1);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  align-self: flex-end;
+}
+
+.reviews-management-pensa-club-header-clear-filters svg {
+  width: 16px;
+  height: 16px;
+}
+
+.reviews-management-pensa-club-header-clear-filters:hover {
+  background: #dc3545;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+/* ===================================
+   RESPONSIVE - LARGE DESKTOPS (1920px+)
+   =================================== */
+
+@media (min-width: 1920px) {
+  .reviews-management-pensa-club-header {
+    padding: 28px;
+  }
+
+  .reviews-management-pensa-club-header-search-input {
+    padding: 16px 52px 16px 52px;
+    font-size: 1.05rem;
+  }
+
+  .reviews-management-pensa-club-header-filter-select {
+    padding: 14px 18px;
+    font-size: 1rem;
+  }
+}
+
+/* ===================================
+   RESPONSIVE - LARGE LAPTOP (1200px - 1439px)
+   =================================== */
+
+@media (min-width: 1200px) and (max-width: 1439px) {
+  .reviews-management-pensa-club-header-filter-group {
+    min-width: 180px;
+  }
+}
+
+/* ===================================
+   RESPONSIVE - LAPTOP (1024px - 1199px)
+   =================================== */
+
+@media (min-width: 1024px) and (max-width: 1199px) {
+  .reviews-management-pensa-club-header {
+    padding: 22px;
+  }
+
+  .reviews-management-pensa-club-header-filter-group {
+    min-width: 160px;
+  }
+}
+
+/* ===================================
+   RESPONSIVE - TABLET (768px - 1023px)
+   =================================== */
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .reviews-management-pensa-club-header {
+    padding: 20px;
+  }
+
+  .reviews-management-pensa-club-header-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .reviews-management-pensa-club-header-filter-group {
+    min-width: 100%;
+  }
+
+  .reviews-management-pensa-club-header-clear-filters {
+    align-self: stretch;
+    justify-content: center;
+  }
+}
+
+/* ===================================
+   RESPONSIVE - MOBILE (до 767px)
+   =================================== */
+
+@media (max-width: 767px) {
+  .reviews-management-pensa-club-header {
+    padding: 18px;
+  }
+
+  .reviews-management-pensa-club-header-container {
+    gap: 16px;
+  }
+
+  .reviews-management-pensa-club-header-search-input {
+    padding: 12px 44px 12px 44px;
+    font-size: 0.95rem;
+  }
+
+  .reviews-management-pensa-club-header-filters {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+
+  .reviews-management-pensa-club-header-filter-group {
+    min-width: 100%;
+  }
+
+  .reviews-management-pensa-club-header-filter-select {
+    padding: 11px 14px;
+    font-size: 0.9rem;
+  }
+
+  .reviews-management-pensa-club-header-clear-filters {
+    align-self: stretch;
+    justify-content: center;
+    padding: 11px 18px;
+    font-size: 0.9rem;
+  }
+}
+
+/* ===================================
+   RESPONSIVE - SMALL MOBILE (до 479px)
+   =================================== */
+
+@media (max-width: 479px) {
+  .reviews-management-pensa-club-header {
+    padding: 16px;
+  }
+
+  .reviews-management-pensa-club-header-search-input {
+    padding: 11px 40px 11px 40px;
+    font-size: 0.9rem;
+  }
+
+  .reviews-management-pensa-club-header-search-icon {
+    left: 12px;
+    width: 18px;
+    height: 18px;
+  }
+
+  .reviews-management-pensa-club-header-filter-label {
+    font-size: 0.85rem;
+  }
+
+  .reviews-management-pensa-club-header-filter-select {
+    padding: 10px 12px;
+    font-size: 0.88rem;
+  }
+}

@@ -77,6 +77,7 @@ import { AdminDigiBridgeMentors } from "../AdminDigiBridgeMentors/AdminDigiBridg
 import { AdminDigiBridgeMentorApplications } from "../AdminDigiBridgeMentorApplications/AdminDigiBridgeMentorApplications";
 import { AdminNotificationBell } from "../AdminNotifications/AdminNotificationBell";
 import { AdminDigiBridgeMentorStatistics } from "../AdminDigiBridgeMentorStatistics/AdminDigiBridgeMentorStatistics";
+import { ReviewsManagement } from "../ReviewsManagement/ReviewsManagement";
 
 // 🎨 НОВИ ИКОНКИ КОМПОНЕНТИ
 const HomeIcon = () => (

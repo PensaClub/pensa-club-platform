@@ -1,0 +1,366 @@
+/* ===================================
+   REVIEW ACTION MODAL
+   =================================== */
+
+.review-action-pensa-club-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+  animation: review-action-pensa-club-modal-fade-in 0.3s ease;
+}
+
+@keyframes review-action-pensa-club-modal-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.review-action-pensa-club-modal-content {
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.4);
+  max-width: 550px;
+  width: 100%;
+  padding: 36px;
+  text-align: center;
+  animation: review-action-pensa-club-modal-slide-up 0.3s ease;
+}
+
+@keyframes review-action-pensa-club-modal-slide-up {
+  from {
+    transform: translateY(40px) scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* ===================================
+   ICON
+   =================================== */
+
+.review-action-pensa-club-modal-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  border-radius: 50%;
+  animation: review-action-pensa-club-modal-icon-bounce 0.6s ease;
+}
+
+@keyframes review-action-pensa-club-modal-icon-bounce {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.review-action-pensa-club-modal-icon-approve {
+  background: rgba(16, 185, 129, 0.15);
+}
+
+.review-action-pensa-club-modal-icon-reject {
+  background: rgba(245, 158, 11, 0.15);
+}
+
+.review-action-pensa-club-modal-icon-delete {
+  background: rgba(239, 68, 68, 0.15);
+}
+
+/* ===================================
+   TITLE & MESSAGE
+   =================================== */
+
+.review-action-pensa-club-modal-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0 0 12px 0;
+}
+
+.review-action-pensa-club-modal-message {
+  font-size: 1rem;
+  color: #6c757d;
+  line-height: 1.6;
+  margin: 0 0 24px 0;
+}
+
+/* ===================================
+   REVIEW PREVIEW
+   =================================== */
+
+.review-action-pensa-club-modal-preview {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.review-action-pensa-club-modal-preview-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.review-action-pensa-club-modal-preview-avatar,
+.review-action-pensa-club-modal-preview-avatar-placeholder {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.review-action-pensa-club-modal-preview-avatar-placeholder {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: white;
+}
+
+.review-action-pensa-club-modal-preview-info {
+  flex: 1;
+}
+
+.review-action-pensa-club-modal-preview-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0 0 4px 0;
+}
+
+.review-action-pensa-club-modal-preview-email {
+  font-size: 0.88rem;
+  color: #6c757d;
+  margin: 0;
+}
+
+.review-action-pensa-club-modal-preview-rating {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.review-action-pensa-club-modal-preview-star {
+  font-size: 1.2rem;
+  color: #e0e0e0;
+  line-height: 1;
+}
+
+.review-action-pensa-club-modal-preview-star-filled {
+  color: #ffa500;
+}
+
+.review-action-pensa-club-modal-preview-text {
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: #495057;
+  margin: 0;
+}
+
+/* ===================================
+   REJECTION REASON INPUT
+   =================================== */
+
+.review-action-pensa-club-modal-reason {
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.review-action-pensa-club-modal-reason-label {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 8px;
+}
+
+.review-action-pensa-club-modal-reason-input {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: #2c3e50;
+  background: #ffffff;
+  border: 2px solid #e9ecef;
+  border-radius: 10px;
+  resize: vertical;
+  transition: all 0.3s ease;
+}
+
+.review-action-pensa-club-modal-reason-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+}
+
+.review-action-pensa-club-modal-reason-hint {
+  font-size: 0.85rem;
+  color: #dc3545;
+  margin: 8px 0 0 0;
+}
+
+/* ===================================
+   ACTION BUTTONS
+   =================================== */
+
+.review-action-pensa-club-modal-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.review-action-pensa-club-modal-btn {
+  flex: 1;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: inherit;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.review-action-pensa-club-modal-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.review-action-pensa-club-modal-btn-cancel {
+  background: #f8f9fa;
+  color: #6c757d;
+}
+
+.review-action-pensa-club-modal-btn-cancel:hover:not(:disabled) {
+  background: #e9ecef;
+  color: #495057;
+}
+
+.review-action-pensa-club-modal-btn-approve {
+  background: #10b981;
+  color: white;
+}
+
+.review-action-pensa-club-modal-btn-approve:hover:not(:disabled) {
+  background: #059669;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+.review-action-pensa-club-modal-btn-reject {
+  background: #f59e0b;
+  color: white;
+}
+
+.review-action-pensa-club-modal-btn-reject:hover:not(:disabled) {
+  background: #d97706;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+}
+
+.review-action-pensa-club-modal-btn-delete {
+  background: #ef4444;
+  color: white;
+}
+
+.review-action-pensa-club-modal-btn-delete:hover:not(:disabled) {
+  background: #dc2626;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+}
+
+/* ===================================
+   RESPONSIVE - MOBILE (до 767px)
+   =================================== */
+
+@media (max-width: 767px) {
+  .review-action-pensa-club-modal-overlay {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .review-action-pensa-club-modal-content {
+    max-width: 100%;
+    border-radius: 20px 20px 0 0;
+    padding: 32px 24px;
+  }
+
+  .review-action-pensa-club-modal-icon {
+    width: 70px;
+    height: 70px;
+    font-size: 2.5rem;
+  }
+
+  .review-action-pensa-club-modal-title {
+    font-size: 1.4rem;
+  }
+
+  .review-action-pensa-club-modal-actions {
+    flex-direction: column;
+  }
+
+  .review-action-pensa-club-modal-btn {
+    width: 100%;
+  }
+}
+
+/* ===================================
+   RESPONSIVE - SMALL MOBILE (до 479px)
+   =================================== */
+
+@media (max-width: 479px) {
+  .review-action-pensa-club-modal-content {
+    padding: 28px 20px;
+  }
+
+  .review-action-pensa-club-modal-icon {
+    width: 60px;
+    height: 60px;
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+  }
+
+  .review-action-pensa-club-modal-title {
+    font-size: 1.3rem;
+  }
+
+  .review-action-pensa-club-modal-message {
+    font-size: 0.95rem;
+  }
+
+  .review-action-pensa-club-modal-preview {
+    padding: 16px;
+  }
+
+  .review-action-pensa-club-modal-preview-avatar,
+  .review-action-pensa-club-modal-preview-avatar-placeholder {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+  }
+}

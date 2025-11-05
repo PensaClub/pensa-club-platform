@@ -1,0 +1,496 @@
+/* ===================================
+   REVIEWS MANAGEMENT LIST
+   =================================== */
+
+.reviews-management-pensa-club-list {
+  width: 100%;
+}
+
+.reviews-management-pensa-club-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ===================================
+   REVIEW CARD
+   =================================== */
+
+.reviews-management-pensa-club-list-card {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.reviews-management-pensa-club-list-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-color: #e9ecef;
+}
+
+/* ===================================
+   CARD HEADER
+   =================================== */
+
+.reviews-management-pensa-club-list-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.reviews-management-pensa-club-list-user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.reviews-management-pensa-club-list-user-avatar,
+.reviews-management-pensa-club-list-user-avatar-placeholder {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.reviews-management-pensa-club-list-user-avatar-placeholder {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: white;
+}
+
+.reviews-management-pensa-club-list-user-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.reviews-management-pensa-club-list-user-name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.reviews-management-pensa-club-list-user-email {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin: 0;
+}
+
+/* ===================================
+   BADGES
+   =================================== */
+
+.reviews-management-pensa-club-list-badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.reviews-management-pensa-club-list-status-badge,
+.reviews-management-pensa-club-list-type-badge {
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.reviews-management-pensa-club-list-status-badge-pending {
+  background: rgba(255, 193, 7, 0.15);
+  color: #f59e0b;
+}
+
+.reviews-management-pensa-club-list-status-badge-approved {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+}
+
+.reviews-management-pensa-club-list-status-badge-rejected {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+.reviews-management-pensa-club-list-type-badge {
+  background: rgba(102, 126, 234, 0.15);
+  color: #667eea;
+}
+
+/* ===================================
+   RATING
+   =================================== */
+
+.reviews-management-pensa-club-list-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.reviews-management-pensa-club-list-star {
+  font-size: 1.4rem;
+  color: #e0e0e0;
+  line-height: 1;
+}
+
+.reviews-management-pensa-club-list-star-filled {
+  color: #ffa500;
+}
+
+.reviews-management-pensa-club-list-rating-text {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #6c757d;
+  margin-left: 4px;
+}
+
+/* ===================================
+   REVIEW TEXT
+   =================================== */
+
+.reviews-management-pensa-club-list-text {
+  margin-bottom: 16px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border-left: 4px solid #667eea;
+}
+
+.reviews-management-pensa-club-list-text p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #495057;
+  margin: 0;
+}
+
+/* ===================================
+   METADATA
+   =================================== */
+
+.reviews-management-pensa-club-list-metadata {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.reviews-management-pensa-club-list-meta-item {
+  display: flex;
+  gap: 6px;
+  font-size: 0.9rem;
+}
+
+.reviews-management-pensa-club-list-meta-label {
+  font-weight: 600;
+  color: #6c757d;
+}
+
+.reviews-management-pensa-club-list-meta-value {
+  color: #2c3e50;
+}
+
+/* ===================================
+   REJECTION REASON
+   =================================== */
+
+.reviews-management-pensa-club-list-rejection {
+  padding: 14px;
+  background: rgba(239, 68, 68, 0.1);
+  border-radius: 10px;
+  border-left: 4px solid #ef4444;
+  margin-bottom: 16px;
+}
+
+.reviews-management-pensa-club-list-rejection strong {
+  display: block;
+  color: #dc2626;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+}
+
+.reviews-management-pensa-club-list-rejection p {
+  color: #495057;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ===================================
+   ACTIONS
+   =================================== */
+
+.reviews-management-pensa-club-list-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.reviews-management-pensa-club-list-action-btn {
+  padding: 10px 18px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: inherit;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.reviews-management-pensa-club-list-action-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.reviews-management-pensa-club-list-action-view {
+  background: rgba(102, 126, 234, 0.1);
+  color: #667eea;
+}
+
+.reviews-management-pensa-club-list-action-view:hover {
+  background: #667eea;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.reviews-management-pensa-club-list-action-approve {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.reviews-management-pensa-club-list-action-approve:hover {
+  background: #10b981;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.reviews-management-pensa-club-list-action-reject {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+
+.reviews-management-pensa-club-list-action-reject:hover {
+  background: #f59e0b;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.reviews-management-pensa-club-list-action-delete {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.reviews-management-pensa-club-list-action-delete:hover {
+  background: #ef4444;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+/* ===================================
+   LOADING STATE
+   =================================== */
+
+.reviews-management-pensa-club-list-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  gap: 20px;
+}
+
+.reviews-management-pensa-club-list-spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(102, 126, 234, 0.2);
+  border-top-color: #667eea;
+  border-radius: 50%;
+  animation: reviews-management-pensa-club-list-spin 0.8s linear infinite;
+}
+
+@keyframes reviews-management-pensa-club-list-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.reviews-management-pensa-club-list-loading p {
+  font-size: 1rem;
+  color: #6c757d;
+  margin: 0;
+}
+
+/* ===================================
+   EMPTY STATE
+   =================================== */
+
+.reviews-management-pensa-club-list-empty {
+  text-align: center;
+  padding: 80px 20px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.reviews-management-pensa-club-list-empty-icon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+}
+
+.reviews-management-pensa-club-list-empty h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0 0 12px 0;
+}
+
+.reviews-management-pensa-club-list-empty p {
+  font-size: 1rem;
+  color: #6c757d;
+  margin: 0;
+}
+
+/* ===================================
+   RESPONSIVE - LARGE DESKTOPS (1920px+)
+   =================================== */
+
+@media (min-width: 1920px) {
+  .reviews-management-pensa-club-list-card {
+    padding: 28px;
+  }
+
+  .reviews-management-pensa-club-list-user-avatar,
+  .reviews-management-pensa-club-list-user-avatar-placeholder {
+    width: 52px;
+    height: 52px;
+  }
+
+  .reviews-management-pensa-club-list-user-name {
+    font-size: 1.1rem;
+  }
+}
+
+/* ===================================
+   RESPONSIVE - TABLET (768px - 1023px)
+   =================================== */
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .reviews-management-pensa-club-list-card {
+    padding: 22px;
+  }
+
+  .reviews-management-pensa-club-list-actions {
+    gap: 8px;
+  }
+
+  .reviews-management-pensa-club-list-action-btn {
+    padding: 9px 16px;
+    font-size: 0.88rem;
+  }
+}
+
+/* ===================================
+   RESPONSIVE - MOBILE (до 767px)
+   =================================== */
+
+@media (max-width: 767px) {
+  .reviews-management-pensa-club-list-card {
+    padding: 20px;
+  }
+
+  .reviews-management-pensa-club-list-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .reviews-management-pensa-club-list-user-avatar,
+  .reviews-management-pensa-club-list-user-avatar-placeholder {
+    width: 44px;
+    height: 44px;
+  }
+
+  .reviews-management-pensa-club-list-user-name {
+    font-size: 1rem;
+  }
+
+  .reviews-management-pensa-club-list-metadata {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .reviews-management-pensa-club-list-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .reviews-management-pensa-club-list-action-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 11px 16px;
+  }
+}
+
+/* ===================================
+   RESPONSIVE - SMALL MOBILE (до 479px)
+   =================================== */
+
+@media (max-width: 479px) {
+  .reviews-management-pensa-club-list-container {
+    gap: 16px;
+  }
+
+  .reviews-management-pensa-club-list-card {
+    padding: 18px;
+  }
+
+  .reviews-management-pensa-club-list-user-avatar,
+  .reviews-management-pensa-club-list-user-avatar-placeholder {
+    width: 40px;
+    height: 40px;
+    font-size: 1.1rem;
+  }
+
+  .reviews-management-pensa-club-list-user-name {
+    font-size: 0.95rem;
+  }
+
+  .reviews-management-pensa-club-list-user-email {
+    font-size: 0.85rem;
+  }
+
+  .reviews-management-pensa-club-list-star {
+    font-size: 1.2rem;
+  }
+
+  .reviews-management-pensa-club-list-text {
+    padding: 14px;
+  }
+
+  .reviews-management-pensa-club-list-text p {
+    font-size: 0.9rem;
+  }
+
+  .reviews-management-pensa-club-list-action-btn {
+    padding: 10px 14px;
+    font-size: 0.87rem;
+  }
+}

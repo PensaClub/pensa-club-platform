@@ -1,0 +1,562 @@
+/* ===================================
+   REVIEW DETAILS MODAL
+   =================================== */
+
+.review-details-pensa-club-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+  animation: review-details-pensa-club-modal-fade-in 0.3s ease;
+}
+
+@keyframes review-details-pensa-club-modal-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.review-details-pensa-club-modal-content {
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  max-width: 700px;
+  width: 100%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  animation: review-details-pensa-club-modal-slide-up 0.3s ease;
+}
+
+@keyframes review-details-pensa-club-modal-slide-up {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ===================================
+   MODAL HEADER
+   =================================== */
+
+.review-details-pensa-club-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 28px;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.review-details-pensa-club-modal-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.review-details-pensa-club-modal-close {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f9fa;
+  border: none;
+  border-radius: 10px;
+  color: #6c757d;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.review-details-pensa-club-modal-close svg {
+  width: 20px;
+  height: 20px;
+}
+
+.review-details-pensa-club-modal-close:hover {
+  background: #dc3545;
+  color: #ffffff;
+  transform: rotate(90deg);
+}
+
+/* ===================================
+   MODAL BODY
+   =================================== */
+
+.review-details-pensa-club-modal-body {
+  padding: 28px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.review-details-pensa-club-modal-section {
+  margin-bottom: 24px;
+}
+
+.review-details-pensa-club-modal-section:last-child {
+  margin-bottom: 0;
+}
+
+.review-details-pensa-club-modal-section-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #495057;
+  margin: 0 0 12px 0;
+}
+
+.review-details-pensa-club-modal-section-title-success {
+  color: #10b981;
+}
+
+.review-details-pensa-club-modal-section-title-danger {
+  color: #ef4444;
+}
+
+/* ===================================
+   USER INFO SECTION
+   =================================== */
+
+.review-details-pensa-club-modal-user-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 12px;
+}
+
+.review-details-pensa-club-modal-user-avatar,
+.review-details-pensa-club-modal-user-avatar-placeholder {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.review-details-pensa-club-modal-user-avatar-placeholder {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: white;
+}
+
+.review-details-pensa-club-modal-user-info {
+  flex: 1;
+}
+
+.review-details-pensa-club-modal-user-name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0 0 4px 0;
+}
+
+.review-details-pensa-club-modal-user-email {
+  font-size: 0.95rem;
+  color: #6c757d;
+  margin: 0 0 4px 0;
+}
+
+.review-details-pensa-club-modal-user-username {
+  font-size: 0.9rem;
+  color: #667eea;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* ===================================
+   BADGES SECTION
+   =================================== */
+
+.review-details-pensa-club-modal-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.review-details-pensa-club-modal-badge-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.review-details-pensa-club-modal-badge-label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #6c757d;
+  min-width: 80px;
+}
+
+.review-details-pensa-club-modal-status-badge,
+.review-details-pensa-club-modal-type-badge,
+.review-details-pensa-club-modal-role-badge {
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.review-details-pensa-club-modal-status-badge-pending {
+  background: rgba(255, 193, 7, 0.15);
+  color: #f59e0b;
+}
+
+.review-details-pensa-club-modal-status-badge-approved {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+}
+
+.review-details-pensa-club-modal-status-badge-rejected {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+.review-details-pensa-club-modal-type-badge {
+  background: rgba(102, 126, 234, 0.15);
+  color: #667eea;
+}
+
+.review-details-pensa-club-modal-role-badge {
+  background: rgba(139, 92, 246, 0.15);
+  color: #8b5cf6;
+}
+
+/* ===================================
+   RATING SECTION
+   =================================== */
+
+.review-details-pensa-club-modal-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.review-details-pensa-club-modal-star {
+  font-size: 1.8rem;
+  color: #e0e0e0;
+  line-height: 1;
+}
+
+.review-details-pensa-club-modal-star-filled {
+  color: #ffa500;
+}
+
+.review-details-pensa-club-modal-rating-text {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-left: 8px;
+}
+
+/* ===================================
+   REVIEW TEXT SECTION
+   =================================== */
+
+.review-details-pensa-club-modal-text {
+  padding: 18px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  border-left: 4px solid #667eea;
+}
+
+.review-details-pensa-club-modal-text p {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: #495057;
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+/* ===================================
+   REJECTION SECTION
+   =================================== */
+
+.review-details-pensa-club-modal-rejection {
+  padding: 16px;
+  background: rgba(239, 68, 68, 0.1);
+  border-radius: 12px;
+  border-left: 4px solid #ef4444;
+}
+
+.review-details-pensa-club-modal-rejection p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #495057;
+  margin: 0 0 10px 0;
+}
+
+.review-details-pensa-club-modal-rejection p:last-child {
+  margin-bottom: 0;
+}
+
+.review-details-pensa-club-modal-rejection-by,
+.review-details-pensa-club-modal-rejection-date {
+  font-size: 0.88rem;
+  color: #6c757d;
+}
+
+/* ===================================
+   APPROVAL SECTION
+   =================================== */
+
+.review-details-pensa-club-modal-approval {
+  padding: 16px;
+  background: rgba(16, 185, 129, 0.1);
+  border-radius: 12px;
+  border-left: 4px solid #10b981;
+}
+
+.review-details-pensa-club-modal-approval p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #495057;
+  margin: 0 0 10px 0;
+}
+
+.review-details-pensa-club-modal-approval p:last-child {
+  margin-bottom: 0;
+}
+
+.review-details-pensa-club-modal-approval-date {
+  font-size: 0.88rem;
+  color: #6c757d;
+}
+
+/* ===================================
+   METADATA SECTION
+   =================================== */
+
+.review-details-pensa-club-modal-metadata {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.review-details-pensa-club-modal-meta-item {
+  display: flex;
+  gap: 8px;
+  font-size: 0.95rem;
+}
+
+.review-details-pensa-club-modal-meta-label {
+  font-weight: 600;
+  color: #6c757d;
+  min-width: 120px;
+}
+
+.review-details-pensa-club-modal-meta-value {
+  color: #2c3e50;
+}
+
+/* ===================================
+   MODAL FOOTER
+   =================================== */
+
+.review-details-pensa-club-modal-footer {
+  display: flex;
+  gap: 10px;
+  padding: 20px 28px;
+  border-top: 2px solid #e9ecef;
+  flex-wrap: wrap;
+}
+
+.review-details-pensa-club-modal-btn {
+  padding: 11px 20px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: inherit;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  justify-content: center;
+}
+
+.review-details-pensa-club-modal-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.review-details-pensa-club-modal-btn-approve {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.review-details-pensa-club-modal-btn-approve:hover {
+  background: #10b981;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.review-details-pensa-club-modal-btn-reject {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+
+.review-details-pensa-club-modal-btn-reject:hover {
+  background: #f59e0b;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.review-details-pensa-club-modal-btn-delete {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.review-details-pensa-club-modal-btn-delete:hover {
+  background: #ef4444;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.review-details-pensa-club-modal-btn-close {
+  background: #f8f9fa;
+  color: #6c757d;
+}
+
+.review-details-pensa-club-modal-btn-close:hover {
+  background: #e9ecef;
+  color: #495057;
+}
+
+/* ===================================
+   RESPONSIVE - TABLET (768px - 1023px)
+   =================================== */
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .review-details-pensa-club-modal-content {
+    max-width: 90%;
+  }
+
+  .review-details-pensa-club-modal-footer {
+    flex-wrap: wrap;
+  }
+
+  .review-details-pensa-club-modal-btn {
+    flex: 1 1 calc(50% - 5px);
+  }
+}
+
+/* ===================================
+   RESPONSIVE - MOBILE (до 767px)
+   =================================== */
+
+@media (max-width: 767px) {
+  .review-details-pensa-club-modal-overlay {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .review-details-pensa-club-modal-content {
+    max-height: 95vh;
+    border-radius: 20px 20px 0 0;
+    max-width: 100%;
+  }
+
+  .review-details-pensa-club-modal-header {
+    padding: 20px 22px;
+  }
+
+  .review-details-pensa-club-modal-title {
+    font-size: 1.3rem;
+  }
+
+  .review-details-pensa-club-modal-body {
+    padding: 22px;
+  }
+
+  .review-details-pensa-club-modal-user-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .review-details-pensa-club-modal-user-avatar,
+  .review-details-pensa-club-modal-user-avatar-placeholder {
+    width: 56px;
+    height: 56px;
+  }
+
+  .review-details-pensa-club-modal-badges {
+    gap: 10px;
+  }
+
+  .review-details-pensa-club-modal-badge-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .review-details-pensa-club-modal-badge-label {
+    min-width: auto;
+  }
+
+  .review-details-pensa-club-modal-footer {
+    flex-direction: column;
+    padding: 18px 22px;
+  }
+
+  .review-details-pensa-club-modal-btn {
+    width: 100%;
+    flex: none;
+  }
+}
+
+/* ===================================
+   RESPONSIVE - SMALL MOBILE (до 479px)
+   =================================== */
+
+@media (max-width: 479px) {
+  .review-details-pensa-club-modal-header {
+    padding: 18px 20px;
+  }
+
+  .review-details-pensa-club-modal-title {
+    font-size: 1.2rem;
+  }
+
+  .review-details-pensa-club-modal-body {
+    padding: 20px;
+  }
+
+  .review-details-pensa-club-modal-user-name {
+    font-size: 1.1rem;
+  }
+
+  .review-details-pensa-club-modal-star {
+    font-size: 1.5rem;
+  }
+
+  .review-details-pensa-club-modal-btn {
+    padding: 10px 18px;
+    font-size: 0.9rem;
+  }
+}

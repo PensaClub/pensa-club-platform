@@ -240,6 +240,23 @@ export const academyServiceFactory = () => {
     checkUserAcademyReviewStatus: async () => {
       return requester.get(`${apiUrl}/reviews/academy/user-status`);
     },
+    getPendingReviews: async (params = {}) => {
+      const queryString = new URLSearchParams(params).toString();
+      console.log(queryString);
+      return requester.get(`${apiUrl}/reviews/admin/all?${queryString}`);
+    },
+
+    approveReview: async (reviewId) => {
+      return requester.patch(`${apiUrl}/reviews/${reviewId}/approve`);
+    },
+
+    rejectReview: async (reviewId, rejectionReason) => {
+      return requester.patch(`${apiUrl}/reviews/${reviewId}/reject`, { rejectionReason });
+    },
+
+    deleteReview: async (reviewId) => {
+      return requester.del(`${apiUrl}/reviews/${reviewId}`);
+    },
   };
 };
 

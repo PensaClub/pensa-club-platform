@@ -606,6 +606,53 @@ Application ID: ${response.applicationId || response.id || 'N/A'}
       return { hasReview: false };
     }
   }, []);
+
+  const getPendingReviews = useCallback(async (params = {}) => {
+    try {
+      const data = await academyService.getPendingReviews(params);
+      return data;
+    } catch (error) {
+      console.error('Error fetching reviews:', error);
+      throw error;
+    }
+  }, []);
+
+  const approveReview = useCallback(async (reviewId) => {
+    try {
+      const response = await academyService.approveReview(reviewId);
+      toast.success('Ревюто е одобрено успешно');
+      return response;
+    } catch (error) {
+      console.error('Error approving review:', error);
+      toast.error('Грешка при одобряване на ревю');
+      throw error;
+    }
+  }, []);
+
+  const rejectReview = useCallback(async (reviewId, rejectionReason) => {
+    try {
+      const response = await academyService.rejectReview(reviewId, rejectionReason);
+      toast.success('Ревюто е отхвърлено');
+      return response;
+    } catch (error) {
+      console.error('Error rejecting review:', error);
+      toast.error('Грешка при отхвърляне на ревю');
+      throw error;
+    }
+  }, []);
+
+  const deleteReview = useCallback(async (reviewId) => {
+    try {
+      const response = await academyService.deleteReview(reviewId);
+      toast.success('Ревюто е изтрито');
+      return response;
+    } catch (error) {
+      console.error('Error deleting review:', error);
+      toast.error('Грешка при изтриване на ревю');
+      throw error;
+    }
+  }, []);
+
   // ===============================
   // CONTEXT VALUE
   // ===============================
@@ -672,6 +719,10 @@ Application ID: ${response.applicationId || response.id || 'N/A'}
     createAcademyReview,
     getApprovedAcademyReviews,
     checkUserAcademyReviewStatus,
+    getPendingReviews,
+    approveReview,
+    rejectReview,
+    deleteReview,
   };
 
   return (
