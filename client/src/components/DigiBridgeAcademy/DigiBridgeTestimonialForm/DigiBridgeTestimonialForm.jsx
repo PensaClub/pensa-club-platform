@@ -43,31 +43,22 @@ export const DigiBridgeTestimonialForm = () => {
     }
   }, [isAuthentication, profileData]);
 
-  const checkReviewStatus = async () => {
-    try {
-      setCheckingStatus(true);
-      const hasLocalFlag = localStorage.getItem('hasReviewedAcademy') === 'true';
-      
-      if (hasLocalFlag) {
-        setHasReviewed(true);
-        setCheckingStatus(false);
-        return;
-      }
-
-      const response = await checkUserAcademyReviewStatus();
-      const hasReview = response?.hasReview || false;
-      
-      setHasReviewed(hasReview);
-      
-      if (hasReview) {
-        localStorage.setItem('hasReviewedAcademy', 'true');
-      }
-    } catch (error) {
-      console.error('Error checking review status:', error);
-    } finally {
-      setCheckingStatus(false);
-    }
-  };
+ const checkReviewStatus = async () => {
+  try {
+    setCheckingStatus(true);
+    
+    // ✅ САМО BACKEND ПРОВЕРКА - махаме localStorage
+    const response = await checkUserAcademyReviewStatus();
+    const hasReview = response?.hasReview || false;
+    
+    setHasReviewed(hasReview);
+    
+  } catch (error) {
+    console.error('Error checking review status:', error);
+  } finally {
+    setCheckingStatus(false);
+  }
+};
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -89,7 +80,7 @@ export const DigiBridgeTestimonialForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.name || !formData.role || !formData.email || !formData.text) {
+    if (!formData.name || !formData.role || !formData.email ) {
       toast.error(t('digiBridge.testimonialForm.fillAllFields'));
       return;
     }
@@ -109,9 +100,6 @@ export const DigiBridgeTestimonialForm = () => {
         text: formData.text,
         rating: formData.rating,
       });
-
-      localStorage.setItem('hasReviewedAcademy', 'true');
-      setHasReviewed(true);
 
       toast.success(t('digiBridge.testimonialForm.successMessage'));
       
