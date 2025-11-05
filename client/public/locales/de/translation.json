@@ -590,6 +590,10 @@
       "applications": "Bewerbungen",
       "statistics": "Statistiken"
     },
+     "reviews": {
+      "management": "Bewertungen verwalten"
+
+    },
     "pending_announcements": "Nicht genehmigte Anzeigen",
     "search": "Suchen",
     "name": "Name",
@@ -11300,7 +11304,10 @@
       "loginRequired": "Anmeldung erforderlich",
       "loginRequiredMessage": "Bitte melden Sie sich an, um Ihre Erfahrung zu teilen und eine Bewertung zu hinterlassen.",
       "loginButton": "Anmelden",
-      "errorMessage": "Fehler beim Senden. Bitte versuchen Sie es erneut."
+      "errorMessage": "Fehler beim Senden. Bitte versuchen Sie es erneut.",
+       "checking": "Überprüfung läuft...",
+      "alreadyReviewed": "Vielen Dank für Ihre Bewertung!",
+      "alreadyReviewedMessage": "Sie haben bereits eine Bewertung für die DigiBridge Academy abgegeben. Wir schätzen Ihr Feedback!"
     },
     "mentorsPage": {
       "meta": {

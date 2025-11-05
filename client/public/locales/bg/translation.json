@@ -608,6 +608,10 @@
       "applications": "Кандидатури",
       "statistics": "Статистики"
     },
+    "reviews": {
+      "management": "Управление на Ревюта"
+
+    },
     "pending_announcements": "Неодобрени обяви",
     "search": "Търси",
     "name": "Име",
@@ -12218,7 +12222,10 @@
       "errorMessage": "Грешка при изпращане. Моля, опитай отново.",
       "loginRequired": "Необходимо е влизане",
       "loginRequiredMessage": "Моля, влезте в профила си, за да споделите Вашето мнение и да оставите отзив.",
-      "loginButton": "Вход"
+      "loginButton": "Вход",
+      "checking": "Проверяваме...",
+      "alreadyReviewed": "Благодарим Ви за отзива!",
+      "alreadyReviewedMessage": "Вие вече сте изпратили отзив за DigiBridge Academy. Благодарим Ви за обратната връзка!"
     },
     "mentorsPage": {
       "meta": {

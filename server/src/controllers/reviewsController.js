@@ -16,6 +16,7 @@ const {
 // POST /api/reviews/academy
 // Създаване на review за академията
 // ===============================
+// POST /api/reviews/academy
 reviewsController.post('/academy', isAuth, async (req, res, next) => {
   try {
     const validationResult = createAcademyReviewSchema.safeParse(req.body);
@@ -55,6 +56,23 @@ reviewsController.post('/academy', isAuth, async (req, res, next) => {
     };
 
     const newReview = await review.create(reviewData);
+
+    // ✅ СЪЗДАЙ ADMIN NOTIFICATION
+    const { admin_notification } = require('../sequelize/models/index');
+    
+    await admin_notification.create({
+      type: 'academy_review',
+      title: 'Ново ревю за академията',
+      message: `${reviewData.name} остави ревю с ${reviewData.rating} ${reviewData.rating === 1 ? 'звезда' : 'звезди'}`,
+      data: {
+        reviewId: newReview.id,
+        reviewerName: reviewData.name,
+        reviewerEmail: reviewData.email,
+        rating: reviewData.rating,
+        role: reviewData.role
+      },
+      read: false
+    });
 
     res.status(201).json({
       success: true,

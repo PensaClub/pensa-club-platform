@@ -8,10 +8,8 @@ export const NOTIFICATION_TYPES = {
   COURSE_ENROLLMENT: 'course_enrollment',
   SYSTEM_ALERT: 'system_alert',
   USER_REPORT: 'user_report',
-   ARTICLE_PENDING: 'article_pending',
-  // ЛЕСНО ДА ДОБАВИШ НОВИ:
-  // ARTICLE_PENDING: 'article_pending',
-  // ANNOUNCEMENT_PENDING: 'announcement_pending',
+  ARTICLE_PENDING: 'article_pending',
+  ACADEMY_REVIEW: 'academy_review', 
 };
 
 export const notificationConfig = {
@@ -57,19 +55,18 @@ export const notificationConfig = {
     route: '/profile/reports',
     priority: 'high'
   },
-   [NOTIFICATION_TYPES.ARTICLE_PENDING]: { // ✅ НОВО
+  [NOTIFICATION_TYPES.ARTICLE_PENDING]: {
     icon: '📝',
     color: '#6366f1',
     route: '/profile/articles',
     priority: 'medium'
   },
-  // ДОБАВИ НОВ ТИП ТУК:
-  // [NOTIFICATION_TYPES.ARTICLE_PENDING]: {
-  //   icon: '📝',
-  //   color: '#6366f1',
-  //   route: '/profile/articles',
-  //   priority: 'medium'
-  // },
+  [NOTIFICATION_TYPES.ACADEMY_REVIEW]: { 
+    icon: '⭐',
+    color: '#ffa500',
+    route: '/profile/reviews-management',
+    priority: 'medium'
+  },
 };
 
 // Helper функция за вземане на config

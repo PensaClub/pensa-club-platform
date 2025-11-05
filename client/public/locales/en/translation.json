@@ -666,6 +666,10 @@
       "applications": "Applications",
       "statistics": "Statistics"
     },
+     "reviews": {
+      "management": "Manage Reviews"
+
+    },
     "pending_announcements": "Pending Announcements",
     "search": "Search",
     "name": "Name",
@@ -12114,6 +12118,10 @@
       "errorMessage": "Error sending. Please try again.",
       "loginRequired": "Login Required",
       "loginRequiredMessage": "Please log in to share your experience and leave a review.",
+      "checking": "Checking...",
+      "alreadyReviewed": "Thank You for Your Review!",
+      "alreadyReviewedMessage": "You have already submitted a review for DigiBridge Academy. We appreciate your feedback!",
+
       "loginButton": "Log In"
     },
     "mentorsPage": {
