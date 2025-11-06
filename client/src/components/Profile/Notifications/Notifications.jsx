@@ -1,8 +1,8 @@
-// src/components/Profile/Notifications/Notifications.jsx
+// src/components/Profile/Notifications/Notifications.jsx- потребител
 
 import React, { useState, useEffect } from 'react';
 import { useAuthContext } from '../../contexts/UserContext';
-import { getNotificationConfig } from '../../../config/notificationConfig';
+import { getNotificationConfig,getNotificationRoute  } from '../../../config/notificationConfig';
 import { useNavigate } from 'react-router-dom';
 import './notifications.css';
 
@@ -39,21 +39,22 @@ export const Notifications = () => {
   }, [filter]);
 
   const handleNotificationClick = async (notification) => {
-    try {
-      if (!notification.read) {
-        await markNotificationAsRead(notification.id);
-        setUnreadCount(prev => Math.max(0, prev - 1));
-        setNotifications(prev => 
-          prev.map(n => n.id === notification.id ? { ...n, read: true } : n)
-        );
-      }
-      
-      const config = getNotificationConfig(notification.type);
-      navigate(config.route);
-    } catch (error) {
-      console.error('Error:', error);
+  try {
+    if (!notification.read) {
+      await markNotificationAsRead(notification.id);
+      setUnreadCount(prev => Math.max(0, prev - 1));
+      setNotifications(prev => 
+        prev.map(n => n.id === notification.id ? { ...n, read: true } : n)
+      );
     }
-  };
+    
+    // ✅ Използвай динамичния route helper
+    const route = getNotificationRoute(notification);
+    navigate(route);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
 
   const handleDeleteNotification = async (notificationId, e) => {
     e.stopPropagation();

@@ -2,24 +2,24 @@
 const academyController = require('express').Router();
 const { Op } = require('sequelize');
 
-const { mentor_application, mentor, mentor_course, user_account, admin_notification, sequelize } = require('../sequelize/models/index');
+const { mentor_application, mentor, mentor_course, user_account, admin_notification, sequelize,user_notification } = require('../sequelize/models/index');
 const { getFirebaseDb } = require('../firebase/firebaseAdmin');
 const isAuth = require('../middlewares/isAuth.js');
 const rbac = require('../middlewares/rbac.js');
 const { statisticsCache } = require('../middlewares/statisticsCache');
 const { mentorApplicationSchema } = require('../schemas/mentorApplication.schema');
 const { initializeFirebaseAdmin } = require('../firebase/firebaseAdmin');
-const { 
-  getMentorCombinedStats, 
+const {
+  getMentorCombinedStats,
   getAllMentorsCombinedStats,
-  updateMentorCachedStats 
+  updateMentorCachedStats
 } = require('../services/mentorActivityService');
 
 initializeFirebaseAdmin();
 // Директно създаване на ментор (БЕЗ кандидатура)
 // ===============================
 academyController.post('/mentors', isAuth, rbac.checkPermission('mentor', 'create'), async (req, res, next) => {
-  
+
   try {
     const {
       userId,
@@ -46,7 +46,7 @@ academyController.post('/mentors', isAuth, rbac.checkPermission('mentor', 'creat
     } = req.body;
 
     // Валидация
-   if (!userId || !name || !email || !phone || !age) {
+    if (!userId || !name || !email || !phone || !age) {
       return res.status(400).json({
         message: 'Missing required fields: userId, name, email, phone, age'
       });
@@ -62,14 +62,14 @@ academyController.post('/mentors', isAuth, rbac.checkPermission('mentor', 'creat
     });
 
     if (existingMentor) {
-      return res.status(400).json({ 
-        message: 'User is already a mentor.' 
+      return res.status(400).json({
+        message: 'User is already a mentor.'
       });
     }
 
     const mentorData = {
       userId,
-      applicationId: null, 
+      applicationId: null,
       name,
       email,
       phone,
@@ -120,14 +120,14 @@ academyController.post('/mentors', isAuth, rbac.checkPermission('mentor', 'creat
 // Преглед на всички ментори с filtering
 // ===============================
 academyController.get('/mentors', async (req, res, next) => {
-  
+
   try {
     const {
       page = 1,
       limit = 12,
       search = '',
       specialization = '',
-      status = 'all',  
+      status = 'all',
       sortBy = 'newest',
     } = req.query;
 
@@ -157,7 +157,7 @@ academyController.get('/mentors', async (req, res, next) => {
     }
 
     // Sort order
-    let order = [['createdAt', 'DESC']]; 
+    let order = [['createdAt', 'DESC']];
 
     switch (sortBy) {
       case 'oldest':
@@ -220,7 +220,7 @@ academyController.get('/mentors', async (req, res, next) => {
 // Редактиране на ментор
 // ===============================
 academyController.patch('/mentors/:id', isAuth, rbac.checkPermission('mentor', 'update'), async (req, res, next) => {
-  
+
   try {
     const mentorId = parseInt(req.params.id);
     const updates = req.body;
@@ -285,7 +285,7 @@ academyController.patch('/mentors/:id', isAuth, rbac.checkPermission('mentor', '
 // Изтриване на ментор
 // ===============================
 academyController.delete('/mentors/:id', isAuth, rbac.checkPermission('mentor', 'delete'), async (req, res, next) => {
-  
+
   try {
     const mentorId = parseInt(req.params.id);
 
@@ -376,7 +376,7 @@ academyController.post('/mentors/apply', isAuth, async (req, res, next) => {
 // Admin: Вземи всички pending кандидатури
 // ===============================
 academyController.get('/mentors/applications/pending',
-  isAuth, 
+  isAuth,
   rbac.checkPermission('mentorApplication', 'read'),
   async (req, res, next) => {
     try {
@@ -411,7 +411,7 @@ academyController.get('/mentors/applications/rejected',
   isAuth,
   rbac.checkPermission('mentorApplication', 'read'),
   async (req, res, next) => {
-    
+
     try {
       const applications = await mentor_application.findAll({
         where: { status: 'rejected' },
@@ -445,7 +445,7 @@ academyController.post('/mentors/applications/:applicationId/approve',
   isAuth,
   rbac.checkPermission('mentorApplication', 'approve'),
   async (req, res, next) => {
-    
+
     try {
       const applicationId = parseInt(req.params.applicationId);
 
@@ -472,8 +472,8 @@ academyController.post('/mentors/applications/:applicationId/approve',
       });
 
       if (existingMentor) {
-        return res.status(400).json({ 
-          message: 'User is already a mentor.' 
+        return res.status(400).json({
+          message: 'User is already a mentor.'
         });
       }
 
@@ -521,7 +521,20 @@ academyController.post('/mentors/applications/:applicationId/approve',
           { where: { id: application.userId } }
         );
       }
+      // const { user_notification } = require('../sequelize/models/index');
 
+      await user_notification.create({
+        userId: application.userId,
+        type: 'mentor_application_approved',
+        title: 'Поздравления! Вашата кандидатура за ментор беше одобрена! 🎉',
+        message: 'Добре дошли в екипа на менторите на DigiBridge Academy! Вече можете да започнете да помагате на ученици и да споделяте знанията си.',
+        data: {
+          applicationId: application.id,
+          mentorId: newMentor.id,
+          specialization: application.specialization
+        },
+        read: false
+      });
       res.status(201).json({
         success: true,
         message: 'Mentor application approved successfully!',
@@ -544,7 +557,7 @@ academyController.patch(
   isAuth,
   rbac.checkPermission('mentor', 'update'),
   async (req, res, next) => {
-    
+
     try {
       const mentorId = parseInt(req.params.id);
 
@@ -581,7 +594,7 @@ academyController.patch(
   isAuth,
   rbac.checkPermission('mentor', 'update'),
   async (req, res, next) => {
-    
+
     try {
       const mentorId = parseInt(req.params.id);
 
@@ -620,8 +633,8 @@ academyController.post(
       const { rejectionReason } = req.body;
 
       if (!rejectionReason) {
-        return res.status(400).json({ 
-          message: 'Rejection reason is required.' 
+        return res.status(400).json({
+          message: 'Rejection reason is required.'
         });
       }
 
@@ -632,8 +645,8 @@ academyController.post(
       }
 
       if (application.status !== 'pending') {
-        return res.status(400).json({ 
-          message: `Application is already ${application.status}.` 
+        return res.status(400).json({
+          message: `Application is already ${application.status}.`
         });
       }
 
@@ -642,6 +655,20 @@ academyController.post(
       application.rejectedAt = new Date();
       await application.save();
 
+      // const { user_notification } = require('../sequelize/models/index');
+
+      await user_notification.create({
+        userId: application.userId,
+        type: 'mentor_application_rejected',
+        title: 'Вашата кандидатура за ментор не беше одобрена',
+        message: 'За съжаление, вашата кандидатура за ментор не отговаря на нашите изисквания в момента.',
+        data: {
+          applicationId: application.id,
+          rejectionReason: rejectionReason,
+          specialization: application.specialization
+        },
+        read: false
+      });
       res.status(200).json({
         success: true,
         message: 'Mentor application rejected successfully.',
@@ -662,14 +689,14 @@ academyController.post(
   isAuth,
   rbac.checkPermission('notification', 'create'),
   async (req, res, next) => {
-    
+
     try {
       const { type, title, message, data } = req.body;
 
       // Validation
       if (!type || !title || !message) {
-        return res.status(400).json({ 
-          message: 'Type, title, and message are required.' 
+        return res.status(400).json({
+          message: 'Type, title, and message are required.'
         });
       }
 
@@ -703,7 +730,7 @@ academyController.get(
   isAuth,
   rbac.checkPermission('notification', 'read'),
   async (req, res, next) => {
-    
+
     try {
       const {
         page = 1,
@@ -770,7 +797,7 @@ academyController.put(
   isAuth,
   rbac.checkPermission('notification', 'update'),
   async (req, res, next) => {
-    
+
     try {
       const notificationId = parseInt(req.params.id);
 
@@ -807,7 +834,7 @@ academyController.put(
   isAuth,
   rbac.checkPermission('notification', 'update'),
   async (req, res, next) => {
-    
+
     try {
       const [updatedCount] = await admin_notification.update(
         {
@@ -841,7 +868,7 @@ academyController.delete(
   isAuth,
   rbac.checkPermission('notification', 'delete'),
   async (req, res, next) => {
-    
+
     try {
       const notificationId = parseInt(req.params.id);
 
@@ -873,8 +900,8 @@ academyController.post(
       const { mentorIds } = req.body;
 
       if (!mentorIds || !Array.isArray(mentorIds) || mentorIds.length === 0) {
-        return res.status(400).json({ 
-          message: 'mentorIds array is required and must not be empty.' 
+        return res.status(400).json({
+          message: 'mentorIds array is required and must not be empty.'
         });
       }
 
@@ -919,7 +946,7 @@ academyController.get('/stats', async (req, res, next) => {
       attributes: ['country'],
       where: {
         country: {
-         [Op.ne]: null
+          [Op.ne]: null
         }
       },
       group: ['country'],
@@ -1063,7 +1090,7 @@ academyController.get(
   '/mentors/statistics/by-specialization',
   isAuth,
   rbac.checkPermission('statistics', 'read'),
-    statisticsCache(600),
+  statisticsCache(600),
   async (req, res, next) => {
     try {
       const specializations = await mentor.findAll({
@@ -1096,7 +1123,7 @@ academyController.get(
       });
 
     } catch (err) {
-       console.error('❌ [BY-SPECIALIZATION] Error:', err); 
+      console.error('❌ [BY-SPECIALIZATION] Error:', err);
       next(err);
     }
   }
@@ -1112,7 +1139,7 @@ academyController.get(
   rbac.checkPermission('statistics', 'read'),
   async (req, res, next) => {
     try {
-      
+
       const mentors = await getAllMentorsCombinedStats();
 
       res.status(200).json({
@@ -1131,7 +1158,7 @@ academyController.get(
 academyController.get(
   '/mentors/:id/firebase-stats',
   isAuth,
-  rbac.checkPermission('statistics', 'readOwn'), 
+  rbac.checkPermission('statistics', 'readOwn'),
   statisticsCache(120),
   async (req, res, next) => {
     try {
@@ -1163,14 +1190,14 @@ academyController.get(
 
     } catch (err) {
       console.error('❌ [FIREBASE-STATS] Error:', err);
-      
+
       if (err.message === 'Mentor not found') {
         return res.status(404).json({
           success: false,
           message: 'Mentor not found'
         });
       }
-      
+
       next(err);
     }
   }
@@ -1250,7 +1277,7 @@ academyController.post(
 academyController.get(
   '/mentors/statistics/firebase-overview',
   isAuth,
-  rbac.checkPermission('statistics', 'read'), 
+  rbac.checkPermission('statistics', 'read'),
   statisticsCache(180),
   async (req, res, next) => {
     try {
@@ -1269,7 +1296,7 @@ academyController.get(
         totalOnlineHours += stats.totalOnlineHours || 0;
         totalMessages += stats.totalMessages || 0;
         totalActiveSessions += stats.activeSessions || 0;
-        
+
         if (stats.averageResponseTime > 0) {
           responseTimes.push(stats.averageResponseTime);
         }
@@ -1309,7 +1336,7 @@ academyController.get(
   async (req, res, next) => {
     try {
       const { limit = 10 } = req.query;
- 
+
       const mentors = await getAllMentorsCombinedStats();
 
       const topMentors = mentors
@@ -1368,7 +1395,7 @@ academyController.get(
 
       mentors.forEach(mentor => {
         const responseTime = mentor.firebaseStats.averageResponseTime || 0;
-        
+
         if (responseTime === 0) return; // Skip ако няма данни
 
         const mentorData = {
@@ -1422,13 +1449,13 @@ academyController.get(
   async (req, res, next) => {
     try {
       const { months = 6 } = req.query;
-      
+
       const { getActivityTrendData } = require('../services/mentorActivitySnapshotService');
       const trend = await getActivityTrendData(parseInt(months));
 
       // ✅ Ако няма snapshots, върни текущите данни като fallback
       if (trend.length === 0) {
-        
+
         const mentors = await getAllMentorsCombinedStats();
         const totalSessions = mentors.reduce((sum, m) => sum + (m.sessionsCount || 0), 0);
         const totalOnlineHours = mentors.reduce((sum, m) => sum + (m.firebaseStats.totalOnlineHours || 0), 0);
@@ -1486,15 +1513,15 @@ academyController.get(
         totalSessions += mentor.sessionsCount || 0;
         completedSessions += mentor.firebaseStats.completedSessions || 0;
         activeSessions += mentor.firebaseStats.activeSessions || 0;
-        
+
         if (mentor.rating > 0) {
           totalRatings += mentor.rating;
           ratedMentors++;
         }
       });
 
-      const completionRate = totalSessions > 0 
-        ? Math.round((completedSessions / totalSessions) * 100) 
+      const completionRate = totalSessions > 0
+        ? Math.round((completedSessions / totalSessions) * 100)
         : 0;
 
       const averageRating = ratedMentors > 0
@@ -1530,10 +1557,10 @@ academyController.post(
   rbac.checkPermission('mentor', 'update'),
   async (req, res, next) => {
     try {
-      
+
       const { createDailySnapshots } = require('../services/mentorActivitySnapshotService');
       const result = await createDailySnapshots();
-      
+
       res.status(200).json({
         success: true,
         message: 'Snapshot created successfully',
@@ -1551,39 +1578,39 @@ academyController.post(
 // SYNC SESSION STATS - извиква се от frontend след session end
 // ===============================
 academyController.post('/sync-session', async (req, res, next) => {
-  
+
   try {
     const { sessionId, mentorEmail } = req.body;
 
     if (!sessionId || !mentorEmail) {
-      return res.status(400).json({ 
-        success: false, 
-        error: 'Missing sessionId or mentorEmail' 
+      return res.status(400).json({
+        success: false,
+        error: 'Missing sessionId or mentorEmail'
       });
     }
 
     const { syncCompletedSessionStats } = require('../services/sessionSyncService');
 
     // Вземи PostgreSQL mentor ID
-    const userAccount = await user_account.findOne({ 
-      where: { email: mentorEmail } 
+    const userAccount = await user_account.findOne({
+      where: { email: mentorEmail }
     });
 
     if (!userAccount) {
-      return res.status(404).json({ 
-        success: false, 
-        error: 'User not found' 
+      return res.status(404).json({
+        success: false,
+        error: 'User not found'
       });
     }
 
-    const mentorRecord = await mentor.findOne({ 
-      where: { userId: userAccount.id } 
+    const mentorRecord = await mentor.findOne({
+      where: { userId: userAccount.id }
     });
 
     if (!mentorRecord) {
-      return res.status(404).json({ 
-        success: false, 
-        error: 'Mentor not found' 
+      return res.status(404).json({
+        success: false,
+        error: 'Mentor not found'
       });
     }
 
@@ -1603,9 +1630,9 @@ academyController.post('/sync-session', async (req, res, next) => {
 
   } catch (error) {
     console.error('❌ Error syncing session stats:', error);
-    return res.status(500).json({ 
-      success: false, 
-      error: error.message 
+    return res.status(500).json({
+      success: false,
+      error: error.message
     });
   }
 });
