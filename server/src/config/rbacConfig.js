@@ -1,3 +1,5 @@
+// src/config/rbacConfig.js
+
 const permissions = {
     ad: {
         create: ['admin', 'moderator', 'user'],
