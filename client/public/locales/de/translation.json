@@ -12076,5 +12076,22 @@
     "approve": "Genehmigen",
     "reject": "Ablehnen",
     "delete": "Löschen"
-  }
+  },
+  "mentorReviewModal": {
+  "title": "Wie war die Sitzung?",
+  "subtitle": "Teilen Sie Ihre Erfahrung mit diesem Mentor. Ihre Bewertung hilft anderen Nutzern.",
+  "ratingLabel": "Bewertung",
+  "ratingRequired": "Bitte wählen Sie eine Bewertung",
+  "rating1": "Sehr schlecht",
+  "rating2": "Schlecht",
+  "rating3": "Durchschnittlich",
+  "rating4": "Gut",
+  "rating5": "Ausgezeichnet!",
+  "textLabel": "Mehr teilen",
+  "optional": "optional",
+  "textPlaceholder": "Erzählen Sie, was Ihnen gefallen hat oder was verbessert werden kann...",
+  "skip": "Später",
+  "submit": "Bewertung senden",
+  "submitting": "Wird gesendet..."
+}
 }

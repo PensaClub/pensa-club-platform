@@ -90,41 +90,41 @@ export const AcademyProvider = ({ children }) => {
       const response = await academyService.applyAsMentor(applicationData);
 
       const emailMessage = `
-🎓 НОВА КАНДИДАТУРА ЗА МЕНТОР
+  🎓 НОВА КАНДИДАТУРА ЗА МЕНТОР
 
-=== ЛИЧНА ИНФОРМАЦИЯ ===
-Име: ${applicationData.name}
-Email: ${applicationData.email}
-Телефон: ${applicationData.phone}
-Възраст: ${applicationData.age}
+  === ЛИЧНА ИНФОРМАЦИЯ ===
+  Име: ${applicationData.name}
+  Email: ${applicationData.email}
+  Телефон: ${applicationData.phone}
+  Възраст: ${applicationData.age}
 
-=== НАЧИНИ ЗА ВРЪЗКА ===
-${applicationData.viber ? `Viber: ${applicationData.viber}` : ''}
-${applicationData.facebook ? `Facebook: ${applicationData.facebook}` : ''}
-${applicationData.linkedin ? `LinkedIn: ${applicationData.linkedin}` : ''}
-${applicationData.otherContact ? `Друг контакт: ${applicationData.otherContact}` : ''}
+  === НАЧИНИ ЗА ВРЪЗКА ===
+  ${applicationData.viber ? `Viber: ${applicationData.viber}` : ''}
+  ${applicationData.facebook ? `Facebook: ${applicationData.facebook}` : ''}
+  ${applicationData.linkedin ? `LinkedIn: ${applicationData.linkedin}` : ''}
+  ${applicationData.otherContact ? `Друг контакт: ${applicationData.otherContact}` : ''}
 
-=== ОБРАЗОВАНИЕ И ОПИТ ===
-Образование: ${applicationData.education || 'Не е посочено'}
-Специализация: ${applicationData.specialization || 'Не е посочена'}
-Опит: ${applicationData.experience || 'Не е посочен'}
+  === ОБРАЗОВАНИЕ И ОПИТ ===
+  Образование: ${applicationData.education || 'Не е посочено'}
+  Специализация: ${applicationData.specialization || 'Не е посочена'}
+  Опит: ${applicationData.experience || 'Не е посочен'}
 
-=== ГРАФИК И ЕЗИЦИ ===
-График: ${applicationData.availability || 'Не е посочен'}
-Езици: ${applicationData.languages && applicationData.languages.length > 0 ? applicationData.languages.join(', ') : 'Не са посочени'}
+  === ГРАФИК И ЕЗИЦИ ===
+  График: ${applicationData.availability || 'Не е посочен'}
+  Езици: ${applicationData.languages && applicationData.languages.length > 0 ? applicationData.languages.join(', ') : 'Не са посочени'}
 
-=== МОТИВАЦИЯ ===
-${applicationData.motivation || 'Не е посочена'}
+  === МОТИВАЦИЯ ===
+  ${applicationData.motivation || 'Не е посочена'}
 
-=== ФАЙЛОВЕ ===
-${applicationData.photoUrl ? `✅ Снимка: ${applicationData.photoUrl}` : '❌ Снимка: Не е качена'}
-${applicationData.cvUrl ? `✅ CV: ${applicationData.cvOriginalName || 'CV.pdf'}\nURL: ${applicationData.cvUrl}` : '❌ CV: Не е качено'}
+  === ФАЙЛОВЕ ===
+  ${applicationData.photoUrl ? `✅ Снимка: ${applicationData.photoUrl}` : '❌ Снимка: Не е качена'}
+  ${applicationData.cvUrl ? `✅ CV: ${applicationData.cvOriginalName || 'CV.pdf'}\nURL: ${applicationData.cvUrl}` : '❌ CV: Не е качено'}
 
----
-Изпратено от DigiBridge Academy - Become Mentor Form
-Дата: ${new Date().toLocaleString('bg-BG')}
-Application ID: ${response.applicationId || response.id || 'N/A'}
-      `.trim();
+  ---
+  Изпратено от DigiBridge Academy - Become Mentor Form
+  Дата: ${new Date().toLocaleString('bg-BG')}
+  Application ID: ${response.applicationId || response.id || 'N/A'}
+        `.trim();
 
       await sendPersonalEmail({
         from: applicationData.email,
@@ -607,6 +607,62 @@ Application ID: ${response.applicationId || response.id || 'N/A'}
     }
   }, []);
 
+  const createMentorReview = useCallback(async (mentorId, reviewData) => {
+    setIsLoading(true);
+    try {
+      const response = await academyService.createMentorReview(mentorId, reviewData);
+      toast.success('Благодарим за отзива за ментора! Ще бъде одобрен скоро.');
+      return response;
+    } catch (error) {
+      console.error('Error creating mentor review:', error);
+
+      // Handle specific errors
+      if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error('Грешка при изпращане на отзив за ментора');
+      }
+
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const getApprovedMentorReviews = useCallback(async (mentorId, limit = 10) => {
+    try {
+      const data = await academyService.getApprovedMentorReviews(mentorId, limit);
+      return data;
+    } catch (error) {
+      console.error('Error fetching approved mentor reviews:', error);
+      return { reviews: [] };
+    }
+  }, []);
+
+  const getMentorReviewStats = useCallback(async (mentorId) => {
+    try {
+      const data = await academyService.getMentorReviewStats(mentorId);
+      return data;
+    } catch (error) {
+      console.error('Error fetching mentor review stats:', error);
+      return {
+        stats: {
+          totalReviews: 0,
+          averageRating: 0,
+          ratingDistribution: { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 }
+        }
+      };
+    }
+  }, []);
+const checkUserMentorReviewStatus = useCallback(async (mentorId) => {
+  try {
+    const data = await academyService.checkUserMentorReviewStatus(mentorId);
+    return data;
+  } catch (error) {
+    console.error('Error checking mentor review status:', error);
+    return { hasReview: false };
+  }
+}, []);
   const getPendingReviews = useCallback(async (params = {}) => {
     try {
       const data = await academyService.getPendingReviews(params);
@@ -715,6 +771,11 @@ Application ID: ${response.applicationId || response.id || 'N/A'}
     getResponseTimesStats,
     getActivityTrendData,
     getSessionQualityData,
+    // Mentor Reviews:
+    createMentorReview,
+    getApprovedMentorReviews,
+    getMentorReviewStats,
+    checkUserMentorReviewStatus,
     // Academy Reviews
     createAcademyReview,
     getApprovedAcademyReviews,

@@ -192,6 +192,28 @@ module.exports = (sequelize, DataTypes) => {
           max: 5.0,
         },
       },
+      reviewsCount: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+        field: 'reviews_count',  
+        validate: {
+          min: {
+            args: [0],
+            msg: 'Reviews count cannot be negative.',
+          },
+        },
+      },
+      reviewsAvgRating: {
+        type: DataTypes.DECIMAL(2, 1),
+        allowNull: false,
+        defaultValue: 0.0,
+        field: 'reviews_avg_rating',  
+        validate: {
+          min: 0.0,
+          max: 5.0,
+        },
+      },
       sessionsCount: {
         type: DataTypes.INTEGER,
         allowNull: false,
