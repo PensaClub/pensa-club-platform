@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import './digiBridgeChatButton.css';
 import { useAuthContext } from '../../contexts/UserContext';
+import { useAcademy } from '../../contexts/AcademyProvider';
 import { 
   listenToUnreadCounts, 
   listenToUserConversations,
@@ -14,24 +15,30 @@ import {
 import { DigiBridgeChatWindow } from '../DigiBridgeChatWindow/DigiBridgeChatWindow';
 import { ChatWindowManager } from '../ChatWindowManager/ChatWindowManager';
 import { MentorChatHub } from '../MentorChatHub/MentorChatHub';
+import { MentorReviewModal } from '../MentorReviewModal/MentorReviewModal';
 
 export const DigiBridgeChatButton = ({ onClick }) => {
   const { t } = useTranslation();
   const { isAuthentication, profileData } = useAuthContext();
+  const { checkUserMentorReviewStatus, getAllMentors } = useAcademy();
+  
   const [unreadCount, setUnreadCount] = useState(0);
   const [pendingCount, setPendingCount] = useState(0);
   const [mentorUnreadCount, setMentorUnreadCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [activeConversation, setActiveConversation] = useState(null);
-  const [pendingRequest, setPendingRequest] = useState(null); // ✅ ДОБАВИ
+  const [pendingRequest, setPendingRequest] = useState(null);
   const [openChats, setOpenChats] = useState([]);
+
+  // ✅ Review Modal State
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [reviewModalMentor, setReviewModalMentor] = useState(null);
 
   const userEmail = profileData?.email || '';
   const userId = userEmail.replace(/\./g, '_dot_').replace(/@/g, '_at_');
   const userRole = profileData?.role || 'user';
   const isMentor = userRole === 'admin' || userRole === 'mentor';
 
-  // Слушай за непрочетени (само за users)
   useEffect(() => {
     if (!isAuthentication || !userId || isMentor) return;
 
@@ -44,7 +51,6 @@ export const DigiBridgeChatButton = ({ onClick }) => {
     };
   }, [isAuthentication, userId, isMentor]);
 
-  // Слушай за pending requests (само за mentors)
   useEffect(() => {
     if (!isAuthentication || !isMentor) return;
 
@@ -57,7 +63,6 @@ export const DigiBridgeChatButton = ({ onClick }) => {
     };
   }, [isAuthentication, isMentor]);
 
-  // Слушай за unread messages в активните conversations (само за mentors)
   useEffect(() => {
     if (!isAuthentication || !isMentor || !userId) return;
 
@@ -102,7 +107,6 @@ export const DigiBridgeChatButton = ({ onClick }) => {
     };
   }, [isAuthentication, isMentor, userId]);
 
-  // ✅ Слушай за активен conversation И pending request (само за users)
   useEffect(() => {
     if (!isAuthentication || !userId || isMentor) return;
 
@@ -125,7 +129,6 @@ export const DigiBridgeChatButton = ({ onClick }) => {
     setIsOpen(true);
   };
 
-  // Функции за управление на чатове
   const handleOpenChat = (conversation) => {
     if (openChats.find(c => c.id === conversation.id)) {
       return;
@@ -137,9 +140,44 @@ export const DigiBridgeChatButton = ({ onClick }) => {
     setOpenChats(openChats.filter(c => c.id !== conversationId));
   };
 
-  // ✅ Callback когато се създаде request
   const handleRequestCreated = (request) => {
     setPendingRequest(request);
+  };
+
+  // ✅ ОБНОВЕНА handleCloseChatButton с review check
+  const handleCloseChatButton = async (shouldCheckReview = false, firebaseMentorId = null) => {
+    setIsOpen(false);
+
+    if (shouldCheckReview && firebaseMentorId) {
+      setTimeout(async () => {
+        try {
+          const mentorEmail = firebaseMentorId
+            .replace(/_at_/g, '@')
+            .replace(/_dot_/g, '.');
+          
+          const mentorsResponse = await getAllMentors({ email: mentorEmail });
+          const mentor = mentorsResponse?.mentors?.[0];
+          
+          if (!mentor?.id) {
+            return;
+          }
+
+          const reviewStatus = await checkUserMentorReviewStatus(mentor.id);
+          
+          if (!reviewStatus.hasReview) {
+            setReviewModalMentor(mentor);
+            setShowReviewModal(true);
+          }
+        } catch (error) {
+          console.error('❌ Error checking review:', error);
+        }
+      }, 300);
+    }
+  };
+
+  const handleReviewModalClose = () => {
+    setShowReviewModal(false);
+    setReviewModalMentor(null);
   };
 
   const badgeCount = isMentor ? (pendingCount + mentorUnreadCount) : unreadCount;
@@ -180,7 +218,6 @@ export const DigiBridgeChatButton = ({ onClick }) => {
         <span className="digibridge-chat-button-pulse"></span>
       </div>
 
-      {/* Hub за MENTOR */}
       {isMentor && isOpen && (
         <MentorChatHub 
           onClose={() => setIsOpen(false)}
@@ -188,21 +225,28 @@ export const DigiBridgeChatButton = ({ onClick }) => {
         />
       )}
 
-      {/* Chat за USER */}
       {!isMentor && isOpen && (
         <DigiBridgeChatWindow 
-          onClose={() => setIsOpen(false)}
+          onClose={handleCloseChatButton}
           existingConversation={activeConversation}
           pendingRequest={pendingRequest}
           onRequestCreated={handleRequestCreated}
         />
       )}
 
-      {/* CHAT WINDOWS MANAGER - извън Hub-а */}
       {isMentor && (
         <ChatWindowManager 
           openChats={openChats}
           onCloseChat={handleCloseChat}
+        />
+      )}
+
+      {/* ✅ REVIEW MODAL */}
+      {showReviewModal && reviewModalMentor && (
+        <MentorReviewModal
+          mentor={reviewModalMentor}
+          onClose={handleReviewModalClose}
+          onSuccess={() => console.log('Review submitted')}
         />
       )}
     </>

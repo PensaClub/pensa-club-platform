@@ -240,9 +240,25 @@ export const academyServiceFactory = () => {
     checkUserAcademyReviewStatus: async () => {
       return requester.get(`${apiUrl}/reviews/academy/user-status`);
     },
+    // MENTOR REVIEWS 
+
+    createMentorReview: async (mentorId, reviewData) => {
+      return requester.post(`${apiUrl}/reviews/mentor/${mentorId}`, reviewData);
+    },
+
+    getApprovedMentorReviews: async (mentorId, limit = 10) => {
+      return requester.get(`${apiUrl}/reviews/mentor/${mentorId}/approved?limit=${limit}`);
+    },
+
+    getMentorReviewStats: async (mentorId) => {
+      return requester.get(`${apiUrl}/reviews/mentor/${mentorId}/stats`);
+    },
+    checkUserMentorReviewStatus: async (mentorId) => {
+  return requester.get(`${apiUrl}/reviews/mentor/${mentorId}/user-status`);
+},
     getPendingReviews: async (params = {}) => {
       const queryString = new URLSearchParams(params).toString();
-      console.log(queryString);
+
       return requester.get(`${apiUrl}/reviews/admin/all?${queryString}`);
     },
 

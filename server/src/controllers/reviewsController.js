@@ -3,7 +3,7 @@
 const reviewsController = require('express').Router();
 const { Op } = require('sequelize');
 
-const { review, user_account, mentor, sequelize, user_details, user_notification } = require('../sequelize/models/index');
+const { review, user_account, mentor, sequelize, user_details, user_notification, admin_notification } = require('../sequelize/models/index');
 const isAuth = require('../middlewares/isAuth.js');
 const rbac = require('../middlewares/rbac.js');
 const { 
@@ -11,6 +11,9 @@ const {
   createMentorReviewSchema,
   rejectReviewSchema
 } = require('../schemas/reviews.schema');
+
+// ✅ IMPORT SERVICE
+const { calculateAndUpdateMentorRating } = require('../services/mentorReviewService');
 
 // ===============================
 // POST /api/reviews/academy
@@ -54,8 +57,6 @@ reviewsController.post('/academy', isAuth, async (req, res, next) => {
     };
 
     const newReview = await review.create(reviewData);
-
-    const { admin_notification } = require('../sequelize/models/index');
     
     await admin_notification.create({
       type: 'academy_review',
@@ -79,6 +80,254 @@ reviewsController.post('/academy', isAuth, async (req, res, next) => {
 
   } catch (err) {
     console.error('❌ [CREATE ACADEMY REVIEW] Error:', err);
+    next(err);
+  }
+});
+
+// ===============================
+// POST /api/reviews/mentor/:mentorId
+// Създаване на review за ментор
+// ===============================
+reviewsController.post('/mentor/:mentorId', isAuth, async (req, res, next) => {
+  try {
+    const mentorId = parseInt(req.params.mentorId);
+    const userId = req.user.userId;
+
+    // ✅ ВАЛИДАЦИЯ
+    const validationResult = createMentorReviewSchema.safeParse(req.body);
+
+    if (!validationResult.success) {
+      return res.status(400).json({
+        success: false,
+        message: 'Validation failed',
+        errors: validationResult.error.errors
+      });
+    }
+
+    // ✅ ПРОВЕРИ ДАЛИ МЕНТОРА СЪЩЕСТВУВА
+    const mentorData = await mentor.findByPk(mentorId);
+
+    if (!mentorData) {
+      return res.status(404).json({
+        success: false,
+        message: 'Mentor not found'
+      });
+    }
+
+    // ✅ ПРОВЕРИ ДАЛИ USER ВЕЧЕ ИМА REVIEW ЗА ТОЗИ МЕНТОР
+    const existingReview = await review.findOne({
+      where: {
+        userId,
+        reviewType: 'mentor',
+        targetId: mentorId
+      }
+    });
+
+    if (existingReview) {
+      return res.status(400).json({
+        success: false,
+        message: 'You have already submitted a review for this mentor.'
+      });
+    }
+
+    // ✅ СЪЗДАЙ REVIEW
+    const reviewData = {
+      userId,
+      reviewType: 'mentor',
+      targetId: mentorId,
+      ...validationResult.data,
+      status: 'pending'
+    };
+
+    const newReview = await review.create(reviewData);
+
+    // ✅ СЪЗДАЙ ADMIN NOTIFICATION
+    await admin_notification.create({
+      type: 'mentor_review',
+      title: 'Ново ревю за ментор',
+      message: `${reviewData.name} остави ревю за ментор ${mentorData.name} с ${reviewData.rating} ${reviewData.rating === 1 ? 'звезда' : 'звезди'}`,
+      data: {
+        reviewId: newReview.id,
+        mentorId: mentorId,
+        mentorName: mentorData.name,
+        reviewerName: reviewData.name,
+        reviewerEmail: reviewData.email,
+        rating: reviewData.rating,
+        role: reviewData.role
+      },
+      read: false
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'Review submitted successfully! It will be reviewed by our team.',
+      review: newReview
+    });
+
+  } catch (err) {
+    console.error('❌ [CREATE MENTOR REVIEW] Error:', err);
+    next(err);
+  }
+});
+
+// ===============================
+// GET /api/reviews/mentor/:mentorId/approved
+// Вземи одобрени reviews за ментор
+// ===============================
+reviewsController.get('/mentor/:mentorId/approved', async (req, res, next) => {
+  try {
+    const mentorId = parseInt(req.params.mentorId);
+    const { limit = 10 } = req.query;
+
+    const reviews = await review.findAll({
+      where: {
+        reviewType: 'mentor',
+        targetId: mentorId,
+        status: 'approved'
+      },
+      include: [
+        {
+          model: user_account,
+          as: 'user',
+          attributes: ['id', 'email'],
+          include: [
+            {
+              model: user_details,
+              as: 'details',
+              attributes: ['imageURL', 'firstName', 'lastName', 'username']
+            }
+          ]
+        }
+      ],
+      order: [['approved_at', 'DESC']],
+      limit: parseInt(limit)
+    });
+
+    const reviewsWithImages = reviews.map(r => {
+      const reviewJson = r.get({ plain: true });
+      
+      return {
+        id: reviewJson.id,
+        userId: reviewJson.userId,
+        name: reviewJson.name,
+        email: reviewJson.email,
+        role: reviewJson.role,
+        rating: reviewJson.rating,
+        text: reviewJson.text,
+        status: reviewJson.status,
+        approvedAt: reviewJson.approvedAt,
+        createdAt: reviewJson.created_at,
+        imageUrl: reviewJson.user?.details?.imageURL || null,
+        user: {
+          id: reviewJson.user?.id,
+          email: reviewJson.user?.email,
+          username: reviewJson.user?.details?.username
+        }
+      };
+    });
+
+    res.status(200).json({
+      success: true,
+      reviews: reviewsWithImages,
+      total: reviewsWithImages.length
+    });
+
+  } catch (err) {
+    console.error('❌ [GET MENTOR APPROVED REVIEWS] Error:', err);
+    next(err);
+  }
+});
+
+// ===============================
+// GET /api/reviews/mentor/:mentorId/stats
+// Вземи rating статистики за ментор
+// ===============================
+reviewsController.get('/mentor/:mentorId/stats', async (req, res, next) => {
+  try {
+    const mentorId = parseInt(req.params.mentorId);
+
+    // ✅ ВЗЕМИ MENTOR DATA
+    const mentorData = await mentor.findByPk(mentorId, {
+      attributes: ['id', 'name', 'reviewsCount', 'reviewsAvgRating', 'rating']
+    });
+
+    if (!mentorData) {
+      return res.status(404).json({
+        success: false,
+        message: 'Mentor not found'
+      });
+    }
+
+    // ✅ ВЗЕМИ RATING DISTRIBUTION
+    const ratingDistribution = await review.findAll({
+      where: {
+        reviewType: 'mentor',
+        targetId: mentorId,
+        status: 'approved'
+      },
+      attributes: [
+        'rating',
+        [sequelize.fn('COUNT', sequelize.col('id')), 'count']
+      ],
+      group: ['rating'],
+      order: [['rating', 'DESC']],
+      raw: true
+    });
+
+    // ✅ FORMAT DISTRIBUTION
+    const distribution = {
+      5: 0,
+      4: 0,
+      3: 0,
+      2: 0,
+      1: 0
+    };
+
+    ratingDistribution.forEach(item => {
+      distribution[item.rating] = parseInt(item.count);
+    });
+
+    res.status(200).json({
+      success: true,
+      stats: {
+        mentorId: mentorData.id,
+        mentorName: mentorData.name,
+        totalReviews: mentorData.reviewsCount,
+        averageRating: parseFloat(mentorData.reviewsAvgRating),
+        ratingDistribution: distribution
+      }
+    });
+
+  } catch (err) {
+    console.error('❌ [GET MENTOR STATS] Error:', err);
+    next(err);
+  }
+});
+// ===============================
+// GET /api/reviews/mentor/:mentorId/user-status
+// Провери дали user има review за този ментор
+// ===============================
+reviewsController.get('/mentor/:mentorId/user-status', isAuth, async (req, res, next) => {
+  try {
+    const mentorId = parseInt(req.params.mentorId);
+    const userId = req.user.userId;
+
+    const existingReview = await review.findOne({
+      where: {
+        userId,
+        reviewType: 'mentor',
+        targetId: mentorId
+      }
+    });
+
+    res.status(200).json({
+      success: true,
+      hasReview: !!existingReview,
+      review: existingReview || null
+    });
+
+  } catch (err) {
+    console.error('❌ [CHECK USER MENTOR REVIEW STATUS] Error:', err);
     next(err);
   }
 });
@@ -408,7 +657,7 @@ reviewsController.get('/pending', isAuth, rbac.checkPermission('review', 'read')
 
 // ===============================
 // PATCH /api/reviews/:id/approve
-// Одобри review (ADMIN/MODERATOR) + ИЗПРАТИ НОТИФИКАЦИЯ
+// Одобри review (ADMIN/MODERATOR) + ИЗПРАТИ НОТИФИКАЦИЯ + КАЛКУЛИРАЙ RATING
 // ===============================
 reviewsController.patch('/:id/approve', isAuth, rbac.checkPermission('review', 'approve'), async (req, res, next) => {
   try {
@@ -445,7 +694,7 @@ reviewsController.patch('/:id/approve', isAuth, rbac.checkPermission('review', '
       userId: reviewData.userId,
       type: 'review_approved',
       title: 'Вашето ревю беше одобрено! ✅',
-      message: `Вашето ревю за ${reviewData.reviewType === 'academy' ? 'академията' : reviewData.reviewType} беше одобрено и вече е публично видимо. Благодарим ви за отзива!`,
+      message: `Вашето ревю за ${reviewData.reviewType === 'academy' ? 'академията' : 'ментор'} беше одобрено и вече е публично видимо. Благодарим ви за отзива!`,
       data: {
         reviewId: reviewData.id,
         reviewType: reviewData.reviewType,
@@ -454,6 +703,16 @@ reviewsController.patch('/:id/approve', isAuth, rbac.checkPermission('review', '
       },
       read: false
     });
+
+    // ✅ АКО Е MENTOR REVIEW → RECALCULATE RATING
+    if (reviewData.reviewType === 'mentor' && reviewData.targetId) {
+      try {
+        await calculateAndUpdateMentorRating(reviewData.targetId);
+      } catch (error) {
+        console.error('❌ Error updating mentor rating:', error);
+        // Не спираме процеса, само логваме грешката
+      }
+    }
 
     res.status(200).json({
       success: true,
@@ -507,7 +766,7 @@ reviewsController.patch('/:id/reject', isAuth, rbac.checkPermission('review', 'r
       userId: reviewData.userId,
       type: 'review_rejected',
       title: 'Вашето ревю беше отхвърлено ❌',
-      message: `Вашето ревю за ${reviewData.reviewType === 'academy' ? 'академията' : reviewData.reviewType} беше отхвърлено.`,
+      message: `Вашето ревю за ${reviewData.reviewType === 'academy' ? 'академията' : 'ментор'} беше отхвърлено.`,
       data: {
         reviewId: reviewData.id,
         reviewType: reviewData.reviewType,
@@ -532,7 +791,7 @@ reviewsController.patch('/:id/reject', isAuth, rbac.checkPermission('review', 'r
 
 // ===============================
 // DELETE /api/reviews/:id
-// Изтрий review (ADMIN) + ИЗПРАТИ НОТИФИКАЦИЯ
+// Изтрий review (ADMIN) + ИЗПРАТИ НОТИФИКАЦИЯ + RECALCULATE RATING
 // ===============================
 reviewsController.delete('/:id', isAuth, rbac.checkPermission('review', 'delete'), async (req, res, next) => {
   try {
@@ -550,13 +809,15 @@ reviewsController.delete('/:id', isAuth, rbac.checkPermission('review', 'delete'
     const userId = reviewData.userId;
     const reviewType = reviewData.reviewType;
     const rating = reviewData.rating;
+    const targetId = reviewData.targetId;
+    const wasApproved = reviewData.status === 'approved';
 
     // ✅ ИЗПРАТИ USER NOTIFICATION ПРЕДИ ИЗТРИВАНЕ
     await user_notification.create({
       userId: userId,
       type: 'review_deleted',
       title: 'Вашето ревю беше изтрито 🗑️',
-      message: `Вашето ревю за ${reviewType === 'academy' ? 'академията' : reviewType} беше изтрито от администратор.`,
+      message: `Вашето ревю за ${reviewType === 'academy' ? 'академията' : 'ментор'} беше изтрито от администратор.`,
       data: {
         reviewId: reviewId,
         reviewType: reviewType,
@@ -567,6 +828,15 @@ reviewsController.delete('/:id', isAuth, rbac.checkPermission('review', 'delete'
     });
 
     await reviewData.destroy();
+
+    // ✅ АКО Е APPROVED MENTOR REVIEW → RECALCULATE RATING
+    if (reviewType === 'mentor' && targetId && wasApproved) {
+      try {
+        await calculateAndUpdateMentorRating(targetId);
+      } catch (error) {
+        console.error('❌ Error updating mentor rating after deletion:', error);
+      }
+    }
 
     res.status(200).json({
       success: true,

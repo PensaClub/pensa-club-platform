@@ -12782,5 +12782,22 @@
     "approve": "Approve",
     "reject": "Reject",
     "delete": "Delete"
-  }
+  },
+  "mentorReviewModal": {
+  "title": "How was the session?",
+  "subtitle": "Share your experience with this mentor. Your review helps other users.",
+  "ratingLabel": "Rating",
+  "ratingRequired": "Please select a rating",
+  "rating1": "Very poor",
+  "rating2": "Poor",
+  "rating3": "Average",
+  "rating4": "Good",
+  "rating5": "Excellent!",
+  "textLabel": "Share more",
+  "optional": "optional",
+  "textPlaceholder": "Tell us what you liked or what could be improved...",
+  "skip": "Later",
+  "submit": "Submit review",
+  "submitting": "Submitting..."
+}
 }
