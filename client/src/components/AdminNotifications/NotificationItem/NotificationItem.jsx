@@ -6,6 +6,7 @@ import { getNotificationConfig } from '../../../config/notificationConfig';
 
 export const NotificationItem = ({ notification, onClick, formatTimeAgo,onDelete }) => {
   const config = getNotificationConfig(notification.type);
+  
  const handleDelete = (e) => {
     e.stopPropagation(); 
     if (onDelete) {

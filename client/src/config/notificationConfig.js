@@ -11,11 +11,14 @@ export const NOTIFICATION_TYPES = {
   USER_REPORT: 'user_report',
   ARTICLE_PENDING: 'article_pending',
   ACADEMY_REVIEW: 'academy_review',
-  
-  // ✅ USER NOTIFICATIONS
+  MENTOR_REVIEW: 'mentor_review',
+
+  // USER NOTIFICATIONS
   REVIEW_APPROVED: 'review_approved',
   REVIEW_REJECTED: 'review_rejected',
   REVIEW_DELETED: 'review_deleted',
+  MENTOR_APPLICATION_APPROVED: 'mentor_application_approved',
+  MENTOR_APPLICATION_REJECTED: 'mentor_application_rejected',
 };
 
 export const notificationConfig = {
@@ -74,8 +77,14 @@ export const notificationConfig = {
     route: '/profile/reviews-management',
     priority: 'medium'
   },
-  
-  // ✅ USER NOTIFICATIONS
+  [NOTIFICATION_TYPES.MENTOR_REVIEW]: {
+    icon: '⭐',
+    color: '#ffa500',
+    route: '/profile/reviews-management',
+    priority: 'medium'
+  },
+
+  // USER NOTIFICATIONS
   [NOTIFICATION_TYPES.REVIEW_APPROVED]: {
     icon: '✅',
     color: '#10b981',
@@ -94,9 +103,20 @@ export const notificationConfig = {
     route: '/academy',
     priority: 'low'
   },
+  [NOTIFICATION_TYPES.MENTOR_APPLICATION_APPROVED]: {
+    icon: '🎉',
+    color: '#10b981',
+    route: '/academy/mentors',
+    priority: 'high'
+  },
+  [NOTIFICATION_TYPES.MENTOR_APPLICATION_REJECTED]: {
+    icon: '❌',
+    color: '#ef4444',
+    route: '/profile',
+    priority: 'medium'
+  },
 };
 
-// Helper функция за вземане на config
 export const getNotificationConfig = (type) => {
   return notificationConfig[type] || {
     icon: '🔔',
@@ -104,4 +124,24 @@ export const getNotificationConfig = (type) => {
     route: '/profile',
     priority: 'low'
   };
+};
+
+export const getNotificationRoute = (notification) => {
+  const config = getNotificationConfig(notification.type);
+
+  if (
+    notification.type === NOTIFICATION_TYPES.REVIEW_APPROVED ||
+    notification.type === NOTIFICATION_TYPES.REVIEW_REJECTED ||
+    notification.type === NOTIFICATION_TYPES.REVIEW_DELETED
+  ) {
+    const reviewType = notification.data?.reviewType;
+
+    if (reviewType === 'mentor') {
+      return '/academy/mentors';
+    } else if (reviewType === 'academy') {
+      return '/academy';
+    }
+  }
+
+  return config.route;
 };

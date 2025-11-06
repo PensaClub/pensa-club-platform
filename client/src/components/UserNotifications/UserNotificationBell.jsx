@@ -4,9 +4,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuthContext } from '../contexts/UserContext';
 import { useNavigate } from 'react-router-dom';
-import { getNotificationConfig } from '../../config/notificationConfig';
+import { getNotificationConfig, getNotificationRoute } from '../../config/notificationConfig';
 import { NotificationItem } from '../AdminNotifications/NotificationItem/NotificationItem';
-import '../AdminNotifications/adminNotificationBell.css'; // ✅ Използва същия CSS
+import '../AdminNotifications/adminNotificationBell.css';
 
 export const UserNotificationBell = () => {
   const { t } = useTranslation();
@@ -38,7 +38,7 @@ export const UserNotificationBell = () => {
     if (intervalRef.current) return;
     
     fetchNotifications();
-    intervalRef.current = setInterval(fetchNotifications, 60000); // 1 минута
+    intervalRef.current = setInterval(fetchNotifications, 60000);
   };
 
   const stopPolling = () => {
@@ -48,7 +48,6 @@ export const UserNotificationBell = () => {
     }
   };
 
-  // Page Visibility API
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (document.hidden) {
@@ -67,7 +66,6 @@ export const UserNotificationBell = () => {
     };
   }, []);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -88,8 +86,9 @@ export const UserNotificationBell = () => {
         setUnreadCount(prev => Math.max(0, prev - 1));
       }
       
-      const config = getNotificationConfig(notification.type);
-      navigate(config.route);
+      // ✅ Използвай динамичния route helper
+      const route = getNotificationRoute(notification);
+      navigate(route);
       
       setIsOpen(false);
       fetchNotifications();
@@ -108,20 +107,19 @@ export const UserNotificationBell = () => {
     if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} ${t('AdminNotificationBell.hoursAgo')}`;
     return `${Math.floor(diffInSeconds / 86400)} ${t('AdminNotificationBell.daysAgo')}`;
   };
-const handleDeleteNotification = async (notificationId) => {
-  try {
-    const success = await deleteNotification(notificationId);
-    if (success) {
-      // Махни от списъка
-      setNotifications(prev => prev.filter(n => n.id !== notificationId));
-      
-      // Намали counter-а
-      setUnreadCount(prev => Math.max(0, prev - 1));
+
+  const handleDeleteNotification = async (notificationId) => {
+    try {
+      const success = await deleteNotification(notificationId);
+      if (success) {
+        setNotifications(prev => prev.filter(n => n.id !== notificationId));
+        setUnreadCount(prev => Math.max(0, prev - 1));
+      }
+    } catch (error) {
+      console.error('Error deleting notification:', error);
     }
-  } catch (error) {
-    console.error('Error deleting notification:', error);
-  }
-};
+  };
+
   return (
     <div className="admin-notification-bell" ref={dropdownRef}>
       <button 
@@ -171,7 +169,7 @@ const handleDeleteNotification = async (notificationId) => {
                   notification={notification}
                   onClick={handleNotificationClick}
                   formatTimeAgo={formatTimeAgo}
-                   onDelete={handleDeleteNotification}
+                  onDelete={handleDeleteNotification}
                 />
               ))
             ) : (
