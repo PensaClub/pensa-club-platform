@@ -63,8 +63,19 @@ async function cleanupOldArticles() {
         throw error;
     }
 }
+const transformArticle = (article) => {
+    const plainArticle = article.get({ plain: true });
+
+    // Сортирай секциите по order поле
+    if (plainArticle.sections && plainArticle.sections.length > 0) {
+        plainArticle.sections = plainArticle.sections.sort((a, b) => a.order - b.order);
+    }
+
+    return plainArticle;
+};
 
 module.exports = {
     updateArticleRelationships,
     cleanupOldArticles,
+    transformArticle,
 };
