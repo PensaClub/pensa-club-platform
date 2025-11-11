@@ -222,7 +222,19 @@ articleController.put('/:id', isAuth, checkPermission('article', 'update'), asyn
             });
         }
 
-        const { title, slug, summary, author, mainImage: mainImageData, sections, tags, relatedArticleId, nextArticleId, previousArticleId } = req.body;
+        const { 
+            title, 
+            slug, 
+            summary, 
+            author,
+            publishDate,  
+            mainImage: mainImageData, 
+            sections, 
+            tags, 
+            relatedArticleId, 
+            nextArticleId, 
+            previousArticleId 
+        } = req.body;
 
         const existingArticle = await article.findByPk(articleId, {
             include: articleIncludeConfig,
@@ -255,15 +267,15 @@ articleController.put('/:id', isAuth, checkPermission('article', 'update'), asyn
         const updatedArticle = await article.sequelize.transaction(async (t) => {
             await updateArticleRelationships(existingArticle, { relatedArticleId, nextArticleId, previousArticleId }, t);
 
-            const articleUpdate = {
-                ...(title !== undefined && { title }),
-                ...(slug !== undefined && { slug }),
-                ...(summary !== undefined && { summary }),
-                ...(author !== undefined && { author }),
-                ...(tags !== undefined && { tags }),
-                updatedBy: userDetails.username,
-            };
-
+             const articleUpdate = {
+            ...(title !== undefined && { title }),
+            ...(slug !== undefined && { slug }),
+            ...(summary !== undefined && { summary }),
+            ...(author !== undefined && { author }),
+            ...(publishDate !== undefined && { publishDate }), 
+            ...(tags !== undefined && { tags }),
+            updatedBy: userDetails.username,
+        };
             await existingArticle.update(articleUpdate, { transaction: t });
 
             if (mainImageData) {
