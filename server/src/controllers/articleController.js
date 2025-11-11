@@ -1,9 +1,10 @@
 const articleController = require('express').Router();
+const { updateArticleRelationships, transformArticle } = require('../utils/articleUtils');
 const customError = require('../utils/customError');
 const { article, mainImage, section, image, user_details } = require('../sequelize/models');
 const isAuth = require('../middlewares/isAuth');
 const { checkPermission } = require('../middlewares/rbac');
-const { updateArticleRelationships } = require('../utils/articleUtils');
+
 const { Op, where } = require('sequelize');
 const rateLimiter = require('../middlewares/rateLimiter');
 
@@ -87,11 +88,12 @@ articleController.get('/single/:id', isAuth.allowGuest, rateLimiter, checkPermis
             });
         }
 
-        return res.json(foundArticle);
+        return res.json(transformArticle(foundArticle)); // Използвай transform
     } catch (err) {
         next(err);
     }
 });
+
 
 articleController.post('/create', isAuth, checkPermission('article', 'create'), async (req, res, next) => {
     try {
@@ -204,7 +206,7 @@ articleController.post('/create', isAuth, checkPermission('article', 'create'), 
             attributes: articleAttributes,
         });
 
-        return res.status(201).json(createdArticle);
+        return res.status(201).json(transformArticle(createdArticle));
     } catch (err) {
         next(err);
     }
@@ -403,7 +405,7 @@ articleController.put('/:id', isAuth, checkPermission('article', 'update'), asyn
             });
         });
 
-        return res.json(updatedArticle);
+        return res.json(transformArticle(updatedArticle));
     } catch (err) {
         next(err);
     }
