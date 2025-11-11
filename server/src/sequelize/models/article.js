@@ -65,15 +65,12 @@ module.exports = (sequelize, DataTypes) => {
             publishDate: {
                 type: DataTypes.DATEONLY,
                 allowNull: true,
-               
                 set(value) {
                     if (value) {
                         const dateOnly = new Date(value).toISOString().split('T')[0];
                         this.setDataValue('publishDate', dateOnly);
-                    } else {
-                        const today = new Date().toISOString().split('T')[0];
-                        this.setDataValue('publishDate', today);
                     }
+
                 },
             },
             relatedArticleId: {
