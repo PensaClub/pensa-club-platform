@@ -1,0 +1,749 @@
+/* client/src/components/DigiMentorPanel/MentorMeetings/mentorMeetings.css */
+
+.mentor-meetings {
+  margin-top: 3rem;
+}
+
+.mentor-meetings-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+}
+
+.mentor-meetings-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.mentor-meetings-add-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.mentor-meetings-add-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.mentor-meetings-add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* TABS */
+.mentor-meetings-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.mentor-meetings-tab {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.25rem;
+  border: none;
+  background: transparent;
+  color: #6b7280;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+}
+
+.mentor-meetings-tab svg {
+  width: 18px;
+  height: 18px;
+}
+
+.mentor-meetings-tab:hover {
+  color: #667eea;
+}
+
+.mentor-meetings-tab-active {
+  color: #667eea;
+  border-bottom-color: #667eea;
+}
+
+.mentor-meetings-tab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 0.375rem;
+  border-radius: 9999px;
+  background: #f3f4f6;
+  color: #6b7280;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.mentor-meetings-tab-active .mentor-meetings-tab-badge {
+  background: #dbeafe;
+  color: #667eea;
+}
+
+/* LIST */
+.mentor-meetings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* CARD */
+.mentor-meetings-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.mentor-meetings-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.mentor-meetings-card-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.mentor-meetings-type-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mentor-meetings-type-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.mentor-meetings-type-icon-purple {
+  background: #e9d5ff;
+  color: #9333ea;
+}
+
+.mentor-meetings-type-icon-blue {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.mentor-meetings-type-icon-green {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.mentor-meetings-type-icon-orange {
+  background: #fed7aa;
+  color: #ea580c;
+}
+
+.mentor-meetings-type-icon-gray {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.mentor-meetings-card-title-section {
+  flex: 1;
+  min-width: 0;
+}
+
+.mentor-meetings-card-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 0.25rem 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mentor-meetings-type-label {
+  font-size: 0.8125rem;
+  color: #6b7280;
+}
+
+/* BODY */
+.mentor-meetings-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  margin-bottom: 1.25rem;
+}
+
+.mentor-meetings-info-row {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.mentor-meetings-info-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.mentor-meetings-info-item svg {
+  width: 18px;
+  height: 18px;
+  color: #9ca3af;
+  flex-shrink: 0;
+}
+
+.mentor-meetings-notes {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.875rem;
+  background: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.mentor-meetings-notes svg {
+  width: 18px;
+  height: 18px;
+  color: #9ca3af;
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.mentor-meetings-notes p {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* FOOTER */
+.mentor-meetings-card-footer {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.mentor-meetings-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 0.625rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mentor-meetings-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.mentor-meetings-btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  flex: 1;
+}
+
+.mentor-meetings-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+}
+
+.mentor-meetings-btn-secondary {
+  background: white;
+  color: #4b5563;
+  border: 1px solid #d1d5db;
+}
+
+.mentor-meetings-btn-secondary:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.mentor-meetings-btn-danger {
+  background: white;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.mentor-meetings-btn-danger:hover {
+  background: #fef2f2;
+  border-color: #dc2626;
+}
+
+.mentor-meetings-completed-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  background: #d1fae5;
+  color: #059669;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.mentor-meetings-completed-badge svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* EMPTY STATE */
+.mentor-meetings-empty,
+.mentor-meetings-no-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  background: white;
+  border: 1px dashed #d1d5db;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.mentor-meetings-empty svg,
+.mentor-meetings-no-results svg {
+  width: 64px;
+  height: 64px;
+  color: #d1d5db;
+  margin-bottom: 1rem;
+}
+
+.mentor-meetings-empty p,
+.mentor-meetings-no-results p {
+  font-size: 1rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* ============================================ */
+/* RESPONSIVE BREAKPOINTS */
+/* ============================================ */
+
+/* ГОЛЕМИ ЕКРАНИ (1920px+) */
+@media (min-width: 1920px) {
+  .mentor-meetings {
+    margin-top: 3.5rem;
+  }
+
+  .mentor-meetings-title {
+    font-size: 1.75rem;
+  }
+
+  .mentor-meetings-add-btn {
+    padding: 0.875rem 1.5rem;
+    font-size: 1rem;
+  }
+
+  .mentor-meetings-card {
+    padding: 2rem;
+  }
+
+  .mentor-meetings-type-icon {
+    width: 56px;
+    height: 56px;
+  }
+
+  .mentor-meetings-type-icon svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .mentor-meetings-card-title {
+    font-size: 1.25rem;
+  }
+}
+
+/* МАЛКИ ЛАПТОПИ (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .mentor-meetings {
+    margin-top: 2.5rem;
+  }
+
+  .mentor-meetings-title {
+    font-size: 1.375rem;
+  }
+
+  .mentor-meetings-card {
+    padding: 1.25rem;
+  }
+
+  .mentor-meetings-card-footer {
+    flex-direction: column;
+  }
+
+  .mentor-meetings-btn {
+    width: 100%;
+  }
+}
+
+/* ТАБЛЕТИ (481px - 767px) */
+@media (min-width: 481px) and (max-width: 767px) {
+  .mentor-meetings {
+    margin-top: 2rem;
+  }
+
+  .mentor-meetings-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .mentor-meetings-add-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .mentor-meetings-title {
+    font-size: 1.25rem;
+  }
+
+  .mentor-meetings-tabs {
+    width: 100%;
+  }
+
+  .mentor-meetings-tab {
+    flex: 1;
+    justify-content: center;
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .mentor-meetings-card {
+    padding: 1rem;
+  }
+
+  .mentor-meetings-type-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .mentor-meetings-type-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .mentor-meetings-card-title {
+    font-size: 1rem;
+  }
+
+  .mentor-meetings-info-row {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .mentor-meetings-card-footer {
+    flex-direction: column;
+  }
+
+  .mentor-meetings-btn {
+    width: 100%;
+  }
+}
+
+/* ГОЛЕМИ ТЕЛЕФОНИ (376px - 480px) */
+@media (min-width: 376px) and (max-width: 480px) {
+  .mentor-meetings {
+    margin-top: 1.75rem;
+  }
+
+  .mentor-meetings-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .mentor-meetings-title {
+    font-size: 1.125rem;
+  }
+
+  .mentor-meetings-add-btn {
+    width: 100%;
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .mentor-meetings-tabs {
+    gap: 0.375rem;
+  }
+
+  .mentor-meetings-tab {
+    flex: 1;
+    padding: 0.625rem 0.75rem;
+    font-size: 0.8125rem;
+  }
+
+  .mentor-meetings-tab svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .mentor-meetings-list {
+    gap: 1rem;
+  }
+
+  .mentor-meetings-card {
+    padding: 0.875rem;
+  }
+
+  .mentor-meetings-card-header {
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .mentor-meetings-type-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .mentor-meetings-type-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .mentor-meetings-card-title {
+    font-size: 0.9375rem;
+  }
+
+  .mentor-meetings-type-label {
+    font-size: 0.75rem;
+  }
+
+  .mentor-meetings-card-body {
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .mentor-meetings-info-row {
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+
+  .mentor-meetings-info-item {
+    font-size: 0.8125rem;
+  }
+
+  .mentor-meetings-card-footer {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .mentor-meetings-btn {
+    width: 100%;
+    padding: 0.5rem 0.875rem;
+    font-size: 0.8125rem;
+  }
+}
+
+/* МАЛКИ ТЕЛЕФОНИ (320px - 375px) */
+@media (min-width: 320px) and (max-width: 375px) {
+  .mentor-meetings {
+    margin-top: 1.5rem;
+  }
+
+  .mentor-meetings-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.625rem;
+    margin-bottom: 1rem;
+  }
+
+  .mentor-meetings-title {
+    font-size: 1rem;
+  }
+
+  .mentor-meetings-add-btn {
+    width: 100%;
+    padding: 0.5rem 0.875rem;
+    font-size: 0.8125rem;
+  }
+
+  .mentor-meetings-add-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .mentor-meetings-tabs {
+    gap: 0.25rem;
+  }
+
+  .mentor-meetings-tab {
+    flex: 1;
+    padding: 0.5rem 0.625rem;
+    font-size: 0.75rem;
+  }
+
+  .mentor-meetings-tab svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .mentor-meetings-tab-badge {
+    min-width: 18px;
+    height: 18px;
+    font-size: 0.6875rem;
+  }
+
+  .mentor-meetings-list {
+    gap: 0.875rem;
+  }
+
+  .mentor-meetings-card {
+    padding: 0.75rem;
+  }
+
+  .mentor-meetings-card-header {
+    gap: 0.625rem;
+    margin-bottom: 0.875rem;
+  }
+
+  .mentor-meetings-type-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .mentor-meetings-type-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .mentor-meetings-card-title {
+    font-size: 0.875rem;
+  }
+
+  .mentor-meetings-type-label {
+    font-size: 0.6875rem;
+  }
+
+  .mentor-meetings-card-body {
+    gap: 0.625rem;
+    margin-bottom: 0.875rem;
+  }
+
+  .mentor-meetings-info-row {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .mentor-meetings-info-item {
+    font-size: 0.75rem;
+  }
+
+  .mentor-meetings-info-item svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .mentor-meetings-notes {
+    padding: 0.625rem;
+  }
+
+  .mentor-meetings-notes svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .mentor-meetings-notes p {
+    font-size: 0.75rem;
+  }
+
+  .mentor-meetings-card-footer {
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  .mentor-meetings-btn {
+    width: 100%;
+    padding: 0.4375rem 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .mentor-meetings-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .mentor-meetings-completed-badge {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .mentor-meetings-completed-badge svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .mentor-meetings-empty,
+  .mentor-meetings-no-results {
+    padding: 2rem 0.75rem;
+  }
+
+  .mentor-meetings-empty svg,
+  .mentor-meetings-no-results svg {
+    width: 48px;
+    height: 48px;
+  }
+
+  .mentor-meetings-empty p,
+  .mentor-meetings-no-results p {
+    font-size: 0.875rem;
+  }
+}
+
+/* DISABLE HOVER ON TOUCH */
+@media (hover: none) and (pointer: coarse) {
+  .mentor-meetings-add-btn:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .mentor-meetings-card:hover {
+    transform: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .mentor-meetings-btn-primary:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .mentor-meetings-btn-secondary:hover {
+    background: white;
+    border-color: #d1d5db;
+  }
+
+  .mentor-meetings-btn-danger:hover {
+    background: white;
+    border-color: #fecaca;
+  }
+}

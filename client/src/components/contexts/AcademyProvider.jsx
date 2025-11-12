@@ -654,15 +654,15 @@ export const AcademyProvider = ({ children }) => {
       };
     }
   }, []);
-const checkUserMentorReviewStatus = useCallback(async (mentorId) => {
-  try {
-    const data = await academyService.checkUserMentorReviewStatus(mentorId);
-    return data;
-  } catch (error) {
-    console.error('Error checking mentor review status:', error);
-    return { hasReview: false };
-  }
-}, []);
+  const checkUserMentorReviewStatus = useCallback(async (mentorId) => {
+    try {
+      const data = await academyService.checkUserMentorReviewStatus(mentorId);
+      return data;
+    } catch (error) {
+      console.error('Error checking mentor review status:', error);
+      return { hasReview: false };
+    }
+  }, []);
   const getPendingReviews = useCallback(async (params = {}) => {
     try {
       const data = await academyService.getPendingReviews(params);
@@ -708,6 +708,138 @@ const checkUserMentorReviewStatus = useCallback(async (mentorId) => {
       throw error;
     }
   }, []);
+  //MENTOR PANEL
+  const getMentorDashboardStats = useCallback(async () => {
+    try {
+      const data = await academyService.getMentorDashboardStats();
+      return data;
+    } catch (error) {
+      console.error('Error fetching mentor dashboard stats:', error);
+      return { success: false, stats: {} };
+    }
+  }, []);
+
+  const getMentorRecentActivity = useCallback(async (limit = 10) => {
+    try {
+      const data = await academyService.getMentorRecentActivity(limit);
+      return data;
+    } catch (error) {
+      console.error('Error fetching mentor recent activity:', error);
+      return { success: false, activities: [] };
+    }
+  }, []);
+
+  const getMentorUpcomingSessions = useCallback(async (limit = 10) => {
+    try {
+      const data = await academyService.getMentorUpcomingSessions(limit);
+      return data;
+    } catch (error) {
+      console.error('Error fetching mentor upcoming sessions:', error);
+      return { success: false, sessions: [] };
+    }
+  }, []);
+
+  const getMentorStudents = useCallback(async () => {
+    try {
+      const data = await academyService.getMentorStudents();
+      return data;
+    } catch (error) {
+      console.error('Error fetching mentor students:', error);
+      return { success: false, students: [] };
+    }
+  }, []);
+
+  const getMentorPerformanceData = useCallback(async () => {
+    try {
+      const data = await academyService.getMentorPerformanceData();
+      return data;
+    } catch (error) {
+      console.error('Error fetching mentor performance data:', error);
+      return { success: false, data: {} };
+    }
+  }, []);
+
+  // MENTOR MEETINGS
+  const getMentorMeetings = useCallback(async (status = null) => {
+    try {
+      const data = await academyService.getMentorMeetings(status);
+      return data;
+    } catch (error) {
+      console.error('Error fetching mentor meetings:', error);
+      return { success: false, meetings: [] };
+    }
+  }, []);
+
+  const createMentorMeeting = useCallback(async (meetingData) => {
+    try {
+      const data = await academyService.createMentorMeeting(meetingData);
+      return data;
+    } catch (error) {
+      console.error('Error creating mentor meeting:', error);
+      return { success: false, message: error.message };
+    }
+  }, []);
+
+  const updateMentorMeeting = useCallback(async (meetingId, meetingData) => {
+    try {
+      const data = await academyService.updateMentorMeeting(meetingId, meetingData);
+      return data;
+    } catch (error) {
+      console.error('Error updating mentor meeting:', error);
+      return { success: false, message: error.message };
+    }
+  }, []);
+
+  const completeMentorMeeting = useCallback(async (meetingId, completionData) => {
+    try {
+      const data = await academyService.completeMentorMeeting(meetingId, completionData);
+      return data;
+    } catch (error) {
+      console.error('Error completing mentor meeting:', error);
+      return { success: false, message: error.message };
+    }
+  }, []);
+
+  const cancelMentorMeeting = useCallback(async (meetingId) => {
+    try {
+      const data = await academyService.cancelMentorMeeting(meetingId);
+      return data;
+    } catch (error) {
+      console.error('Error canceling mentor meeting:', error);
+      return { success: false, message: error.message };
+    }
+  }, []);
+
+  const deleteMentorMeeting = useCallback(async (meetingId) => {
+    try {
+      const data = await academyService.deleteMentorMeeting(meetingId);
+      return data;
+    } catch (error) {
+      console.error('Error deleting mentor meeting:', error);
+      return { success: false, message: error.message };
+    }
+  }, []);
+
+  // MENTOR PROFILE EDIT
+const getMentorProfile = useCallback(async () => {
+  try {
+    const data = await academyService.getMentorProfile();
+    return data;
+  } catch (error) {
+    console.error('Error fetching mentor profile:', error);
+    return { success: false, message: error.message };
+  }
+}, []);
+
+const updateMentorProfile = useCallback(async (profileData) => {
+  try {
+    const data = await academyService.updateMentorProfile(profileData);
+    return data;
+  } catch (error) {
+    console.error('Error updating mentor profile:', error);
+    return { success: false, message: error.message };
+  }
+}, []);
 
   // ===============================
   // CONTEXT VALUE
@@ -784,6 +916,20 @@ const checkUserMentorReviewStatus = useCallback(async (mentorId) => {
     approveReview,
     rejectReview,
     deleteReview,
+    // Mentor Panel
+    getMentorDashboardStats,
+    getMentorRecentActivity,
+    getMentorUpcomingSessions,
+    getMentorStudents,
+    getMentorPerformanceData,
+    getMentorMeetings,
+    createMentorMeeting,
+    updateMentorMeeting,
+    completeMentorMeeting,
+    cancelMentorMeeting,
+    deleteMentorMeeting,
+      getMentorProfile,
+  updateMentorProfile,
   };
 
   return (

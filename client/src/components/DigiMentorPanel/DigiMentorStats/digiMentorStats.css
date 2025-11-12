@@ -1,0 +1,345 @@
+/* client/src/components/DigiMentorPanel/DigiMentorStats/digiMentorStats.css */
+
+.digi-mentor-stats-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.digi-mentor-stats-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  transition: all 0.3s ease;
+}
+
+.digi-mentor-stats-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.digi-mentor-stats-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.digi-mentor-stats-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.digi-mentor-stats-icon-blue {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.digi-mentor-stats-icon-green {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.digi-mentor-stats-icon-purple {
+  background: #e9d5ff;
+  color: #9333ea;
+}
+
+.digi-mentor-stats-icon-orange {
+  background: #fed7aa;
+  color: #ea580c;
+}
+
+.digi-mentor-stats-icon-yellow {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.digi-mentor-stats-icon-pink {
+  background: #fce7f3;
+  color: #db2777;
+}
+
+.digi-mentor-stats-icon-teal {
+  background: #ccfbf1;
+  color: #0d9488;
+}
+
+.digi-mentor-stats-icon-indigo {
+  background: #e0e7ff;
+  color: #4f46e5;
+}
+
+.digi-mentor-stats-content {
+  flex: 1;
+}
+
+.digi-mentor-stats-label {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0 0 0.5rem 0;
+}
+
+.digi-mentor-stats-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.digi-mentor-stats-detail {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin: 0.25rem 0 0 0;
+}
+
+/* ============================================ */
+/* RESPONSIVE BREAKPOINTS */
+/* ============================================ */
+
+/* ГОЛЕМИ ЕКРАНИ (1920px+) */
+@media (min-width: 1920px) {
+  .digi-mentor-stats-container {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    margin-bottom: 3.5rem;
+  }
+
+  .digi-mentor-stats-card {
+    padding: 2rem;
+    gap: 1.25rem;
+  }
+
+  .digi-mentor-stats-icon {
+    width: 56px;
+    height: 56px;
+  }
+
+  .digi-mentor-stats-icon svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .digi-mentor-stats-label {
+    font-size: 1rem;
+  }
+
+  .digi-mentor-stats-value {
+    font-size: 2rem;
+  }
+
+  .digi-mentor-stats-detail {
+    font-size: 0.875rem;
+  }
+}
+
+/* МАЛКИ ЕКРАНИ / ГОЛЕМИ ЛАПТОПИ (1440px - 1919px) */
+@media (min-width: 1440px) and (max-width: 1919px) {
+  .digi-mentor-stats-container {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.75rem;
+    margin-bottom: 3rem;
+  }
+
+  .digi-mentor-stats-card {
+    padding: 1.75rem;
+  }
+
+  .digi-mentor-stats-icon {
+    width: 52px;
+    height: 52px;
+  }
+
+  .digi-mentor-stats-icon svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .digi-mentor-stats-value {
+    font-size: 1.85rem;
+  }
+}
+
+/* ГОЛЕМИ ЛАПТОПИ (1024px - 1439px) */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .digi-mentor-stats-container {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .digi-mentor-stats-card {
+    padding: 1.5rem;
+  }
+
+  .digi-mentor-stats-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .digi-mentor-stats-value {
+    font-size: 1.75rem;
+  }
+}
+
+/* МАЛКИ ЛАПТОПИ (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .digi-mentor-stats-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+  }
+
+  .digi-mentor-stats-card {
+    padding: 1.25rem;
+    gap: 0.875rem;
+  }
+
+  .digi-mentor-stats-icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .digi-mentor-stats-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .digi-mentor-stats-label {
+    font-size: 0.8125rem;
+  }
+
+  .digi-mentor-stats-value {
+    font-size: 1.5rem;
+  }
+
+  .digi-mentor-stats-detail {
+    font-size: 0.6875rem;
+  }
+}
+
+/* ТАБЛЕТИ (481px - 767px) */
+@media (min-width: 481px) and (max-width: 767px) {
+  .digi-mentor-stats-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .digi-mentor-stats-card {
+    padding: 1rem;
+    gap: 0.75rem;
+    border-radius: 10px;
+  }
+
+  .digi-mentor-stats-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+  }
+
+  .digi-mentor-stats-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .digi-mentor-stats-label {
+    font-size: 0.75rem;
+    margin-bottom: 0.375rem;
+  }
+
+  .digi-mentor-stats-value {
+    font-size: 1.35rem;
+  }
+
+  .digi-mentor-stats-detail {
+    font-size: 0.65rem;
+  }
+}
+
+/* ГОЛЕМИ ТЕЛЕФОНИ (376px - 480px) */
+@media (min-width: 376px) and (max-width: 480px) {
+  .digi-mentor-stats-container {
+    grid-template-columns: 1fr;
+    gap: 0.875rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .digi-mentor-stats-card {
+    padding: 0.875rem;
+    gap: 0.75rem;
+    border-radius: 8px;
+  }
+
+  .digi-mentor-stats-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+  }
+
+  .digi-mentor-stats-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .digi-mentor-stats-label {
+    font-size: 0.75rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .digi-mentor-stats-value {
+    font-size: 1.25rem;
+  }
+
+  .digi-mentor-stats-detail {
+    font-size: 0.625rem;
+  }
+}
+
+/* МАЛКИ ТЕЛЕФОНИ (320px - 375px) */
+@media (min-width: 320px) and (max-width: 375px) {
+  .digi-mentor-stats-container {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .digi-mentor-stats-card {
+    padding: 0.75rem;
+    gap: 0.625rem;
+    border-radius: 8px;
+  }
+
+  .digi-mentor-stats-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+  }
+
+  .digi-mentor-stats-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .digi-mentor-stats-label {
+    font-size: 0.6875rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .digi-mentor-stats-value {
+    font-size: 1.15rem;
+  }
+
+  .digi-mentor-stats-detail {
+    font-size: 0.6rem;
+    margin-top: 0.125rem;
+  }
+}

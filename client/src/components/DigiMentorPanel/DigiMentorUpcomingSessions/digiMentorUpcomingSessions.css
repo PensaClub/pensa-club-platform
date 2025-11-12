@@ -1,0 +1,766 @@
+/* client/src/components/DigiMentorPanel/DigiMentorUpcomingSessions/digiMentorUpcomingSessions.css */
+
+.digi-mentor-upcoming-sessions {
+  margin-top: 3rem;
+}
+
+.digi-mentor-upcoming-sessions-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.digi-mentor-upcoming-sessions-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.digi-mentor-upcoming-sessions-count {
+  font-size: 0.875rem;
+  color: #6b7280;
+  background: #f3f4f6;
+  padding: 0.375rem 0.75rem;
+  border-radius: 9999px;
+  font-weight: 600;
+}
+
+.digi-mentor-upcoming-sessions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* CARD */
+.digi-mentor-upcoming-sessions-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.digi-mentor-upcoming-sessions-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+/* HEADER */
+.digi-mentor-upcoming-sessions-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+  gap: 1rem;
+}
+
+.digi-mentor-upcoming-sessions-student {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+.digi-mentor-upcoming-sessions-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.digi-mentor-upcoming-sessions-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.digi-mentor-upcoming-sessions-avatar svg {
+  width: 24px;
+  height: 24px;
+  color: #9ca3af;
+}
+
+.digi-mentor-upcoming-sessions-student-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.digi-mentor-upcoming-sessions-student-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 0.25rem 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.digi-mentor-upcoming-sessions-topic {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.digi-mentor-upcoming-sessions-status {
+  padding: 0.375rem 0.875rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.digi-mentor-upcoming-sessions-status-green {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.digi-mentor-upcoming-sessions-status-yellow {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.digi-mentor-upcoming-sessions-status-red {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.digi-mentor-upcoming-sessions-status-gray {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+/* BODY */
+.digi-mentor-upcoming-sessions-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.digi-mentor-upcoming-sessions-info-row {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.digi-mentor-upcoming-sessions-info-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.digi-mentor-upcoming-sessions-info-item svg {
+  width: 18px;
+  height: 18px;
+  color: #9ca3af;
+  flex-shrink: 0;
+}
+
+.digi-mentor-upcoming-sessions-notes {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.875rem;
+  background: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.digi-mentor-upcoming-sessions-notes svg {
+  width: 18px;
+  height: 18px;
+  color: #9ca3af;
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.digi-mentor-upcoming-sessions-notes p {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* FOOTER */
+.digi-mentor-upcoming-sessions-card-footer {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.digi-mentor-upcoming-sessions-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 0.625rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.digi-mentor-upcoming-sessions-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.digi-mentor-upcoming-sessions-btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  flex: 1;
+}
+
+.digi-mentor-upcoming-sessions-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+}
+
+.digi-mentor-upcoming-sessions-btn-secondary {
+  background: white;
+  color: #4b5563;
+  border: 1px solid #d1d5db;
+}
+
+.digi-mentor-upcoming-sessions-btn-secondary:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.digi-mentor-upcoming-sessions-btn-danger {
+  background: white;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+.digi-mentor-upcoming-sessions-btn-danger:hover {
+  background: #fef2f2;
+  border-color: #dc2626;
+}
+
+/* EMPTY STATE */
+.digi-mentor-upcoming-sessions-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  background: white;
+  border: 1px dashed #d1d5db;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.digi-mentor-upcoming-sessions-empty svg {
+  width: 64px;
+  height: 64px;
+  color: #d1d5db;
+  margin-bottom: 1rem;
+}
+
+.digi-mentor-upcoming-sessions-empty p {
+  font-size: 1rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* ============================================ */
+/* RESPONSIVE BREAKPOINTS */
+/* ============================================ */
+
+/* ГОЛЕМИ ЕКРАНИ (1920px+) */
+@media (min-width: 1920px) {
+  .digi-mentor-upcoming-sessions {
+    margin-top: 3.5rem;
+  }
+
+  .digi-mentor-upcoming-sessions-header {
+    margin-bottom: 2rem;
+  }
+
+  .digi-mentor-upcoming-sessions-title {
+    font-size: 1.75rem;
+  }
+
+  .digi-mentor-upcoming-sessions-count {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+  }
+
+  .digi-mentor-upcoming-sessions-list {
+    gap: 2rem;
+  }
+
+  .digi-mentor-upcoming-sessions-card {
+    padding: 2rem;
+  }
+
+  .digi-mentor-upcoming-sessions-avatar {
+    width: 56px;
+    height: 56px;
+  }
+
+  .digi-mentor-upcoming-sessions-avatar svg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .digi-mentor-upcoming-sessions-student-name {
+    font-size: 1.125rem;
+  }
+
+  .digi-mentor-upcoming-sessions-topic {
+    font-size: 1rem;
+  }
+
+  .digi-mentor-upcoming-sessions-status {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .digi-mentor-upcoming-sessions-btn {
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
+  }
+
+  .digi-mentor-upcoming-sessions-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* МАЛКИ ЕКРАНИ / ГОЛЕМИ ЛАПТОПИ (1440px - 1919px) */
+@media (min-width: 1440px) and (max-width: 1919px) {
+  .digi-mentor-upcoming-sessions {
+    margin-top: 3.25rem;
+  }
+
+  .digi-mentor-upcoming-sessions-title {
+    font-size: 1.625rem;
+  }
+
+  .digi-mentor-upcoming-sessions-list {
+    gap: 1.75rem;
+  }
+
+  .digi-mentor-upcoming-sessions-card {
+    padding: 1.75rem;
+  }
+}
+
+/* ГОЛЕМИ ЛАПТОПИ (1024px - 1439px) */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .digi-mentor-upcoming-sessions {
+    margin-top: 3rem;
+  }
+
+  .digi-mentor-upcoming-sessions-title {
+    font-size: 1.5rem;
+  }
+
+  .digi-mentor-upcoming-sessions-list {
+    gap: 1.5rem;
+  }
+
+  .digi-mentor-upcoming-sessions-card {
+    padding: 1.5rem;
+  }
+}
+
+/* МАЛКИ ЛАПТОПИ (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .digi-mentor-upcoming-sessions {
+    margin-top: 2.5rem;
+  }
+
+  .digi-mentor-upcoming-sessions-title {
+    font-size: 1.375rem;
+  }
+
+  .digi-mentor-upcoming-sessions-list {
+    gap: 1.25rem;
+  }
+
+  .digi-mentor-upcoming-sessions-card {
+    padding: 1.25rem;
+  }
+
+  .digi-mentor-upcoming-sessions-avatar {
+    width: 44px;
+    height: 44px;
+  }
+
+  .digi-mentor-upcoming-sessions-avatar svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .digi-mentor-upcoming-sessions-student-name {
+    font-size: 0.9375rem;
+  }
+
+  .digi-mentor-upcoming-sessions-topic {
+    font-size: 0.8125rem;
+  }
+
+  .digi-mentor-upcoming-sessions-card-footer {
+    gap: 0.625rem;
+  }
+
+  .digi-mentor-upcoming-sessions-btn {
+    padding: 0.5rem 0.875rem;
+    font-size: 0.8125rem;
+  }
+}
+
+/* ТАБЛЕТИ (481px - 767px) */
+@media (min-width: 481px) and (max-width: 767px) {
+  .digi-mentor-upcoming-sessions {
+    margin-top: 2rem;
+  }
+
+  .digi-mentor-upcoming-sessions-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .digi-mentor-upcoming-sessions-title {
+    font-size: 1.25rem;
+  }
+
+  .digi-mentor-upcoming-sessions-list {
+    gap: 1rem;
+  }
+
+  .digi-mentor-upcoming-sessions-card {
+    padding: 1rem;
+    border-radius: 10px;
+  }
+
+  .digi-mentor-upcoming-sessions-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .digi-mentor-upcoming-sessions-avatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  .digi-mentor-upcoming-sessions-avatar svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .digi-mentor-upcoming-sessions-student-name {
+    font-size: 0.875rem;
+  }
+
+  .digi-mentor-upcoming-sessions-topic {
+    font-size: 0.75rem;
+  }
+
+  .digi-mentor-upcoming-sessions-info-item {
+    font-size: 0.8125rem;
+  }
+
+  .digi-mentor-upcoming-sessions-card-footer {
+    flex-direction: column;
+  }
+
+  .digi-mentor-upcoming-sessions-btn {
+    width: 100%;
+    padding: 0.625rem 1rem;
+  }
+}
+
+/* ГОЛЕМИ ТЕЛЕФОНИ (376px - 480px) */
+@media (min-width: 376px) and (max-width: 480px) {
+  .digi-mentor-upcoming-sessions {
+    margin-top: 1.75rem;
+  }
+
+  .digi-mentor-upcoming-sessions-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.625rem;
+    margin-bottom: 1rem;
+  }
+
+  .digi-mentor-upcoming-sessions-title {
+    font-size: 1.125rem;
+  }
+
+  .digi-mentor-upcoming-sessions-count {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.625rem;
+  }
+
+  .digi-mentor-upcoming-sessions-list {
+    gap: 0.875rem;
+  }
+
+  .digi-mentor-upcoming-sessions-card {
+    padding: 0.875rem;
+    border-radius: 8px;
+  }
+
+  .digi-mentor-upcoming-sessions-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+  }
+
+  .digi-mentor-upcoming-sessions-student {
+    gap: 0.75rem;
+  }
+
+  .digi-mentor-upcoming-sessions-avatar {
+    width: 36px;
+    height: 36px;
+  }
+
+  .digi-mentor-upcoming-sessions-avatar svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .digi-mentor-upcoming-sessions-student-name {
+    font-size: 0.8125rem;
+  }
+
+  .digi-mentor-upcoming-sessions-topic {
+    font-size: 0.6875rem;
+  }
+
+  .digi-mentor-upcoming-sessions-status {
+    padding: 0.25rem 0.625rem;
+    font-size: 0.6875rem;
+  }
+
+  .digi-mentor-upcoming-sessions-card-body {
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .digi-mentor-upcoming-sessions-info-row {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .digi-mentor-upcoming-sessions-info-item {
+    font-size: 0.75rem;
+  }
+
+  .digi-mentor-upcoming-sessions-info-item svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .digi-mentor-upcoming-sessions-notes {
+    padding: 0.625rem;
+  }
+
+  .digi-mentor-upcoming-sessions-notes p {
+    font-size: 0.75rem;
+  }
+
+  .digi-mentor-upcoming-sessions-card-footer {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .digi-mentor-upcoming-sessions-btn {
+    width: 100%;
+    padding: 0.5rem 0.875rem;
+    font-size: 0.75rem;
+  }
+
+  .digi-mentor-upcoming-sessions-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .digi-mentor-upcoming-sessions-empty {
+    padding: 2rem 0.75rem;
+  }
+
+  .digi-mentor-upcoming-sessions-empty svg {
+    width: 48px;
+    height: 48px;
+  }
+
+  .digi-mentor-upcoming-sessions-empty p {
+    font-size: 0.875rem;
+  }
+}
+
+/* МАЛКИ ТЕЛЕФОНИ (320px - 375px) */
+@media (min-width: 320px) and (max-width: 375px) {
+  .digi-mentor-upcoming-sessions {
+    margin-top: 1.5rem;
+  }
+
+  .digi-mentor-upcoming-sessions-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-bottom: 0.875rem;
+  }
+
+  .digi-mentor-upcoming-sessions-title {
+    font-size: 1rem;
+  }
+
+  .digi-mentor-upcoming-sessions-count {
+    font-size: 0.6875rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .digi-mentor-upcoming-sessions-list {
+    gap: 0.75rem;
+  }
+
+  .digi-mentor-upcoming-sessions-card {
+    padding: 0.75rem;
+    border-radius: 8px;
+  }
+
+  .digi-mentor-upcoming-sessions-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 0.875rem;
+  }
+
+  .digi-mentor-upcoming-sessions-student {
+    gap: 0.625rem;
+  }
+
+  .digi-mentor-upcoming-sessions-avatar {
+    width: 32px;
+    height: 32px;
+  }
+
+  .digi-mentor-upcoming-sessions-avatar svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .digi-mentor-upcoming-sessions-student-name {
+    font-size: 0.75rem;
+  }
+
+  .digi-mentor-upcoming-sessions-topic {
+    font-size: 0.625rem;
+  }
+
+  .digi-mentor-upcoming-sessions-status {
+    padding: 0.1875rem 0.5rem;
+    font-size: 0.625rem;
+  }
+
+  .digi-mentor-upcoming-sessions-card-body {
+    gap: 0.625rem;
+    margin-bottom: 0.875rem;
+  }
+
+  .digi-mentor-upcoming-sessions-info-row {
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  .digi-mentor-upcoming-sessions-info-item {
+    font-size: 0.6875rem;
+  }
+
+  .digi-mentor-upcoming-sessions-info-item svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .digi-mentor-upcoming-sessions-notes {
+    padding: 0.5rem;
+    border-radius: 6px;
+  }
+
+  .digi-mentor-upcoming-sessions-notes svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .digi-mentor-upcoming-sessions-notes p {
+    font-size: 0.6875rem;
+  }
+
+  .digi-mentor-upcoming-sessions-card-footer {
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  .digi-mentor-upcoming-sessions-btn {
+    width: 100%;
+    padding: 0.4375rem 0.75rem;
+    font-size: 0.6875rem;
+    border-radius: 4px;
+  }
+
+  .digi-mentor-upcoming-sessions-btn svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .digi-mentor-upcoming-sessions-empty {
+    padding: 1.5rem 0.5rem;
+  }
+
+  .digi-mentor-upcoming-sessions-empty svg {
+    width: 40px;
+    height: 40px;
+    margin-bottom: 0.75rem;
+  }
+
+  .digi-mentor-upcoming-sessions-empty p {
+    font-size: 0.8125rem;
+  }
+}
+
+/* DISABLE HOVER EFFECTS ON TOUCH DEVICES */
+@media (hover: none) and (pointer: coarse) {
+  .digi-mentor-upcoming-sessions-card:hover {
+    transform: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .digi-mentor-upcoming-sessions-btn-primary:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .digi-mentor-upcoming-sessions-btn-secondary:hover {
+    background: white;
+    border-color: #d1d5db;
+  }
+
+  .digi-mentor-upcoming-sessions-btn-danger:hover {
+    background: white;
+    border-color: #fecaca;
+  }
+
+  .digi-mentor-upcoming-sessions-btn:active {
+    transform: scale(0.98);
+  }
+}

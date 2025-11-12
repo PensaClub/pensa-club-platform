@@ -230,6 +230,10 @@ function App() {
                                         </Route>
                                         <Route element={<MentorGuard />}>
                                           <Route path="/academy/mentor-dashboard" element={<DigiBridgeMentorDashboard />} />
+
+                                        </Route>
+                                        <Route path="/mentor" element={<MentorGuard />}>
+                                          <Route path="students/:studentId/details" element={<StudentDetails />} />
                                         </Route>
                                         <Route element={<PublicGuard />}>
                                           <Route path="/sign-up" element={<LoginRegister />} />

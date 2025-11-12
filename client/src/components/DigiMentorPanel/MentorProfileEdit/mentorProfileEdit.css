@@ -1,0 +1,588 @@
+/* client/src/components/DigiMentorPanel/MentorProfileEdit/mentorProfileEdit.css */
+
+.mentor-profile-edit {
+  margin-top: 3rem;
+}
+
+.mentor-profile-edit-header {
+  margin-bottom: 2rem;
+}
+
+.mentor-profile-edit-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 0.5rem 0;
+}
+
+.mentor-profile-edit-subtitle {
+  font-size: 1rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* MESSAGES */
+.mentor-profile-edit-message {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.mentor-profile-edit-message svg {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.mentor-profile-edit-message p {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 500;
+}
+
+.mentor-profile-edit-message-success {
+  background: #d1fae5;
+  border: 1px solid #6ee7b7;
+  color: #059669;
+}
+
+.mentor-profile-edit-message-error {
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+}
+
+/* FORM */
+.mentor-profile-edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* SECTION */
+.mentor-profile-edit-section {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.mentor-profile-edit-section-header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #f3f4f6;
+}
+
+.mentor-profile-edit-section-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 0.5rem 0;
+}
+
+.mentor-profile-edit-section-description {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* READONLY SECTION */
+.mentor-profile-edit-readonly {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.mentor-profile-edit-photo {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #f3f4f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mentor-profile-edit-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mentor-profile-edit-photo-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mentor-profile-edit-photo-placeholder svg {
+  width: 48px;
+  height: 48px;
+  color: #9ca3af;
+}
+
+/* EDITABLE GRID */
+.mentor-profile-edit-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.mentor-profile-edit-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.mentor-profile-edit-field-full {
+  grid-column: 1 / -1;
+}
+
+.mentor-profile-edit-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.mentor-profile-edit-input,
+.mentor-profile-edit-textarea,
+.mentor-profile-edit-select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  color: #111827;
+  transition: all 0.2s ease;
+}
+
+.mentor-profile-edit-input:focus,
+.mentor-profile-edit-textarea:focus,
+.mentor-profile-edit-select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.mentor-profile-edit-input-disabled {
+  background: #f9fafb;
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.mentor-profile-edit-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.mentor-profile-edit-select {
+  cursor: pointer;
+}
+
+/* FOOTER */
+.mentor-profile-edit-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 1rem;
+}
+
+.mentor-profile-edit-submit {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 2rem;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.mentor-profile-edit-submit svg {
+  width: 20px;
+  height: 20px;
+}
+
+.mentor-profile-edit-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.mentor-profile-edit-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.mentor-profile-edit-spinner {
+  animation: mentor-profile-edit-spin 1s linear infinite;
+}
+
+@keyframes mentor-profile-edit-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================ */
+/* RESPONSIVE BREAKPOINTS */
+/* ============================================ */
+
+/* ГОЛЕМИ ЕКРАНИ (1920px+) */
+@media (min-width: 1920px) {
+  .mentor-profile-edit {
+    margin-top: 3.5rem;
+  }
+
+  .mentor-profile-edit-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .mentor-profile-edit-title {
+    font-size: 1.75rem;
+  }
+
+  .mentor-profile-edit-subtitle {
+    font-size: 1.125rem;
+  }
+
+  .mentor-profile-edit-section {
+    padding: 2rem;
+  }
+
+  .mentor-profile-edit-photo {
+    width: 140px;
+    height: 140px;
+  }
+
+  .mentor-profile-edit-photo-placeholder svg {
+    width: 56px;
+    height: 56px;
+  }
+}
+
+/* МАЛКИ ЕКРАНИ / ГОЛЕМИ ЛАПТОПИ (1440px - 1919px) */
+@media (min-width: 1440px) and (max-width: 1919px) {
+  .mentor-profile-edit {
+    margin-top: 3.25rem;
+  }
+
+  .mentor-profile-edit-title {
+    font-size: 1.625rem;
+  }
+
+  .mentor-profile-edit-section {
+    padding: 1.75rem;
+  }
+}
+
+/* ГОЛЕМИ ЛАПТОПИ (1024px - 1439px) */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .mentor-profile-edit {
+    margin-top: 3rem;
+  }
+
+  .mentor-profile-edit-title {
+    font-size: 1.5rem;
+  }
+}
+
+/* МАЛКИ ЛАПТОПИ (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .mentor-profile-edit {
+    margin-top: 2.5rem;
+  }
+
+  .mentor-profile-edit-title {
+    font-size: 1.375rem;
+  }
+
+  .mentor-profile-edit-section {
+    padding: 1.25rem;
+  }
+
+  .mentor-profile-edit-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mentor-profile-edit-readonly {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ТАБЛЕТИ (481px - 767px) */
+@media (min-width: 481px) and (max-width: 767px) {
+  .mentor-profile-edit {
+    margin-top: 2rem;
+  }
+
+  .mentor-profile-edit-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .mentor-profile-edit-title {
+    font-size: 1.25rem;
+  }
+
+  .mentor-profile-edit-subtitle {
+    font-size: 0.9375rem;
+  }
+
+  .mentor-profile-edit-form {
+    gap: 1.5rem;
+  }
+
+  .mentor-profile-edit-section {
+    padding: 1rem;
+  }
+
+  .mentor-profile-edit-section-header {
+    margin-bottom: 1.25rem;
+  }
+
+  .mentor-profile-edit-section-title {
+    font-size: 1.125rem;
+  }
+
+  .mentor-profile-edit-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .mentor-profile-edit-readonly {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .mentor-profile-edit-photo {
+    width: 100px;
+    height: 100px;
+  }
+
+  .mentor-profile-edit-photo-placeholder svg {
+    width: 40px;
+    height: 40px;
+  }
+
+  .mentor-profile-edit-submit {
+    width: 100%;
+  }
+}
+
+/* ГОЛЕМИ ТЕЛЕФОНИ (376px - 480px) */
+@media (min-width: 376px) and (max-width: 480px) {
+  .mentor-profile-edit {
+    margin-top: 1.75rem;
+  }
+
+  .mentor-profile-edit-header {
+    margin-bottom: 1.25rem;
+  }
+
+  .mentor-profile-edit-title {
+    font-size: 1.125rem;
+  }
+
+  .mentor-profile-edit-subtitle {
+    font-size: 0.875rem;
+  }
+
+  .mentor-profile-edit-message {
+    padding: 0.875rem 1rem;
+  }
+
+  .mentor-profile-edit-message svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .mentor-profile-edit-message p {
+    font-size: 0.875rem;
+  }
+
+  .mentor-profile-edit-form {
+    gap: 1.25rem;
+  }
+
+  .mentor-profile-edit-section {
+    padding: 0.875rem;
+  }
+
+  .mentor-profile-edit-section-header {
+    margin-bottom: 1rem;
+    padding-bottom: 0.875rem;
+  }
+
+  .mentor-profile-edit-section-title {
+    font-size: 1rem;
+  }
+
+  .mentor-profile-edit-section-description {
+    font-size: 0.8125rem;
+  }
+
+  .mentor-profile-edit-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .mentor-profile-edit-readonly {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .mentor-profile-edit-photo {
+    width: 90px;
+    height: 90px;
+  }
+
+  .mentor-profile-edit-photo-placeholder svg {
+    width: 36px;
+    height: 36px;
+  }
+
+  .mentor-profile-edit-label {
+    font-size: 0.8125rem;
+  }
+
+  .mentor-profile-edit-input,
+  .mentor-profile-edit-textarea,
+  .mentor-profile-edit-select {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.875rem;
+  }
+
+  .mentor-profile-edit-submit {
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.9375rem;
+  }
+
+  .mentor-profile-edit-submit svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* МАЛКИ ТЕЛЕФОНИ (320px - 375px) */
+@media (min-width: 320px) and (max-width: 375px) {
+  .mentor-profile-edit {
+    margin-top: 1.5rem;
+  }
+
+  .mentor-profile-edit-header {
+    margin-bottom: 1rem;
+  }
+
+  .mentor-profile-edit-title {
+    font-size: 1rem;
+  }
+
+  .mentor-profile-edit-subtitle {
+    font-size: 0.8125rem;
+  }
+
+  .mentor-profile-edit-message {
+    padding: 0.75rem 0.875rem;
+    gap: 0.625rem;
+  }
+
+  .mentor-profile-edit-message svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .mentor-profile-edit-message p {
+    font-size: 0.8125rem;
+  }
+
+  .mentor-profile-edit-form {
+    gap: 1rem;
+  }
+
+  .mentor-profile-edit-section {
+    padding: 0.75rem;
+  }
+
+  .mentor-profile-edit-section-header {
+    margin-bottom: 0.875rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .mentor-profile-edit-section-title {
+    font-size: 0.9375rem;
+  }
+
+  .mentor-profile-edit-section-description {
+    font-size: 0.75rem;
+  }
+
+  .mentor-profile-edit-grid {
+    grid-template-columns: 1fr;
+    gap: 0.875rem;
+  }
+
+  .mentor-profile-edit-readonly {
+    grid-template-columns: 1fr;
+    gap: 0.875rem;
+  }
+
+  .mentor-profile-edit-photo {
+    width: 80px;
+    height: 80px;
+  }
+
+  .mentor-profile-edit-photo-placeholder svg {
+    width: 32px;
+    height: 32px;
+  }
+
+  .mentor-profile-edit-label {
+    font-size: 0.75rem;
+  }
+
+  .mentor-profile-edit-input,
+  .mentor-profile-edit-textarea,
+  .mentor-profile-edit-select {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8125rem;
+  }
+
+  .mentor-profile-edit-textarea {
+    min-height: 70px;
+  }
+
+  .mentor-profile-edit-footer {
+    padding-top: 0.875rem;
+  }
+
+  .mentor-profile-edit-submit {
+    width: 100%;
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+  }
+
+  .mentor-profile-edit-submit svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* DISABLE HOVER ON TOUCH */
+@media (hover: none) and (pointer: coarse) {
+  .mentor-profile-edit-submit:hover:not(:disabled) {
+    transform: none;
+    box-shadow: none;
+  }
+}

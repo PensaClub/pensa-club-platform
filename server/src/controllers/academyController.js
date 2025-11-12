@@ -2,7 +2,7 @@
 const academyController = require('express').Router();
 const { Op } = require('sequelize');
 
-const { mentor_application, mentor, mentor_course, user_account, admin_notification, sequelize,user_notification } = require('../sequelize/models/index');
+const { mentor_application, mentor, mentor_course, user_account, admin_notification, sequelize, user_notification } = require('../sequelize/models/index');
 const { getFirebaseDb } = require('../firebase/firebaseAdmin');
 const isAuth = require('../middlewares/isAuth.js');
 const rbac = require('../middlewares/rbac.js');
@@ -98,7 +98,10 @@ academyController.post('/mentors', isAuth, rbac.checkPermission('mentor', 'creat
 
     if (user.role === 'user' || user.role === 'guest') {
       await user_account.update(
-        { role: 'mentor' },
+        {
+          role: 'mentor',
+          isMentor: true
+        },
         { where: { id: userId } }
       );
     }
@@ -303,7 +306,10 @@ academyController.delete('/mentors/:id', isAuth, rbac.checkPermission('mentor', 
     const user = await user_account.findByPk(userId);
     if (user && user.role === 'mentor') {
       await user_account.update(
-        { role: 'user' },
+        {
+          role: 'user',
+          isMentor: false
+        },
         { where: { id: userId } }
       );
     }
@@ -517,7 +523,10 @@ academyController.post('/mentors/applications/:applicationId/approve',
       const user = application.user;
       if (user && (user.role === 'user' || user.role === 'guest')) {
         await user_account.update(
-          { role: 'mentor' },
+          {
+            role: 'mentor',
+            isMentor: true  //
+          },
           { where: { id: application.userId } }
         );
       }

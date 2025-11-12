@@ -254,8 +254,8 @@ export const academyServiceFactory = () => {
       return requester.get(`${apiUrl}/reviews/mentor/${mentorId}/stats`);
     },
     checkUserMentorReviewStatus: async (mentorId) => {
-  return requester.get(`${apiUrl}/reviews/mentor/${mentorId}/user-status`);
-},
+      return requester.get(`${apiUrl}/reviews/mentor/${mentorId}/user-status`);
+    },
     getPendingReviews: async (params = {}) => {
       const queryString = new URLSearchParams(params).toString();
 
@@ -272,6 +272,57 @@ export const academyServiceFactory = () => {
 
     deleteReview: async (reviewId) => {
       return requester.del(`${apiUrl}/reviews/${reviewId}`);
+    },
+
+    // ✅ НОВИ ENDPOINTS:
+
+    getMentorDashboardStats: async () => {
+      return requester.get(`${apiUrl}/mentors/dashboard/stats`);
+    },
+    getMentorRecentActivity: async (limit = 10) => {
+      return requester.get(`${apiUrl}/mentors/dashboard/recent-activity?limit=${limit}`);
+    },
+    getMentorUpcomingSessions: async (limit = 10) => {
+      return requester.get(`${apiUrl}/mentors/dashboard/upcoming-sessions?limit=${limit}`);
+    },
+    getMentorStudents: async () => {
+      return requester.get(`${apiUrl}/mentors/dashboard/students`);
+    },
+    getMentorPerformanceData: async () => {
+      return requester.get(`${apiUrl}/mentors/dashboard/performance`);
+    },
+    // MENTOR MEETINGS ENDPOINTS
+    getMentorMeetings: async (status = null) => {
+      const query = status ? `?status=${status}` : '';
+      return requester.get(`${apiUrl}/mentors/dashboard/meetings${query}`);
+    },
+
+    createMentorMeeting: async (meetingData) => {
+      return requester.post(`${apiUrl}/mentors/dashboard/meetings`, meetingData);
+    },
+
+    updateMentorMeeting: async (meetingId, meetingData) => {
+      return requester.patch(`${apiUrl}/mentors/dashboard/meetings/${meetingId}`, meetingData);
+    },
+
+    completeMentorMeeting: async (meetingId, completionData) => {
+      return requester.post(`${apiUrl}/mentors/dashboard/meetings/${meetingId}/complete`, completionData);
+    },
+
+    cancelMentorMeeting: async (meetingId) => {
+      return requester.patch(`${apiUrl}/mentors/dashboard/meetings/${meetingId}/cancel`);
+    },
+
+    deleteMentorMeeting: async (meetingId) => {
+      return requester.delete(`${apiUrl}/mentors/dashboard/meetings/${meetingId}`);
+    },
+    // MENTOR PROFILE EDIT
+    getMentorProfile: async () => {
+      return requester.get(`${apiUrl}/mentors/dashboard/my-profile`);
+    },
+
+    updateMentorProfile: async (profileData) => {
+      return requester.patch(`${apiUrl}/mentors/dashboard/my-profile`, profileData);
     },
   };
 };
