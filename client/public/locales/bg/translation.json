@@ -13086,14 +13086,14 @@
     "minutes": "мин",
     "completionRate": "Процент завършване"
   },
-   "digiMentorQuickActions": {
+  "digiMentorQuickActions": {
     "title": "Бързи действия",
     "startSession": "Започни сесия",
     "viewMessages": "Виж съобщения",
     "myStudents": "Моите студенти",
     "viewReviews": "Виж отзиви"
   },
-    "digiMentorRecentActivity": {
+  "digiMentorRecentActivity": {
     "title": "Последна активност",
     "noActivity": "Все още няма активност",
     "types": {
@@ -13119,8 +13119,9 @@
     "editSession": "Редактирай",
     "cancelSession": "Откажи"
   },
-   "digiMentorStudentsList": {
+  "digiMentorStudentsList": {
     "title": "Моите студенти",
+    "loading": "Зареждане...",
     "studentsCount": "студенти",
     "noStudents": "Все още нямате студенти",
     "noResults": "Няма намерени студенти",
@@ -13237,7 +13238,7 @@
       "phone": "Телефон"
     }
   },
-   "addMeetingModal": {
+  "addMeetingModal": {
     "title": "Добави среща",
     "cancel": "Отказ",
     "save": "Запази",
@@ -13272,7 +13273,7 @@
       "saveFailed": "Грешка при запазване на срещата"
     }
   },
-   "editMeetingModal": {
+  "editMeetingModal": {
     "title": "Редактирай среща",
     "cancel": "Отказ",
     "save": "Запази промените",
@@ -13330,6 +13331,147 @@
     "errors": {
       "durationRequired": "Продължителността е задължителна",
       "saveFailed": "Грешка при завършване на срещата"
+    }
+  },
+  "studentDetails": {
+    "backToList": "Назад към студентите",
+    "notFound": "Студентът не е намерен",
+    "errorLoading": "Грешка при зареждане на данните",
+    "registeredSince": "Регистриран от",
+    "currentMentor": "Текущ ментор",
+    "totalCredits": "Общо кредити",
+    "activeCourses": "Активни курсове",
+    "completedCourses": "Завършени курсове",
+    "attendanceRate": "Присъственост",
+    "tabs": {
+      "overview": "Преглед",
+      "courses": "Курсове",
+      "activities": "Активности",
+      "attendance": "Присъственост",
+      "schedule": "График",
+      "notes": "Бележки"
+    },
+    "overview": {
+      "title": "Преглед",
+      "creditsBreakdown": "Разпределение на кредити",
+      "fromCourses": "От курсове",
+      "fromLectures": "От лекции",
+      "fromSeminars": "От семинари",
+      "fromPresentations": "От презентации",
+      "mentorInfo": "Информация за ментор",
+      "assignedDate": "Назначен на",
+      "progress": "Напредък",
+      "mentorHistory": "История на менторите",
+      "overallProgress": "Общ напредък",
+      "totalCourses": "Общо курсове"
+    },
+    "courses": {
+      "title": "Курсове",
+      "all": "Всички",
+      "inProgress": "В процес",
+      "completed": "Завършени",
+      "notStarted": "Непочнати",
+      "noCourses": "Няма намерени курсове",
+      "progress": "Напредък",
+      "lessons": "урока",
+      "credits": "кредита",
+      "startDate": "Начало",
+      "endDate": "Край"
+    },
+    "activities": {
+      "title": "Активности",
+      "all": "Всички",
+      "lectures": "Лекции",
+      "seminars": "Семинари",
+      "presentations": "Презентации",
+      "attended": "Присъствал",
+      "missed": "Пропуснал",
+      "scheduled": "Планирана",
+      "minutes": "мин",
+      "credits": "кредита",
+      "totalCredits": "Общо кредити",
+      "noActivities": "Няма намерени активности"
+    },
+    "attendance": {
+      "title": "Присъственост и помощ",
+      "overview": "Общ преглед",
+      "totalSessions": "Общо сесии",
+      "attended": "Присъствал",
+      "missed": "Пропуснал",
+      "rate": "Процент",
+      "mentorHelp": "Помощ от ментор",
+      "chatSessions": "Чат сесии",
+      "chatHours": "Часове онлайн",
+      "lastChat": "Последен чат",
+      "scheduledMeetings": "Планирани срещи",
+      "completedMeetings": "Завършени срещи",
+      "breakdown": "Разбивка",
+      "meetingCompletion": "Завършени срещи"
+    },
+    "schedule": {
+      "title": "График",
+      "all": "Всички",
+      "today": "Днес",
+      "meetings": "Срещи",
+      "lessons": "Уроци",
+      "lectures": "Лекции",
+      "addMeeting": "Добави среща",
+      "editMeeting": "Редактирай среща",
+      "loading": "Зареждане...",
+      "noEvents": "Няма предстоящи събития",
+      "minutes": "мин",
+      "edit": "Редактирай",
+      "cancel": "Отмени",
+      "delete": "Изтрий",
+      "confirmDelete": "Сигурни ли сте, че искате да изтриете тази среща?",
+      "confirmCancel": "Сигурни ли сте, че искате да отмените тази среща?",
+      "course_lesson": "Урок от курс",
+      "mentor_meeting": "Среща с ментор",
+      "lecture": "Лекция",
+      "seminar": "Семинар",
+      "close": "Затвори",
+      "presentation": "Презентация",
+      "status": {
+        "scheduled": "Планирана",
+        "completed": "Завършена",
+        "cancelled": "Отменена"
+      },
+      "form": {
+        "title": "Заглавие",
+        "titlePlaceholder": "Въведете заглавие на срещата",
+        "date": "Дата",
+        "time": "Час",
+        "duration": "Продължителност (мин)",
+        "type": "Тип",
+        "typeOnline": "Онлайн",
+        "typePhone": "Телефон",
+        "typeInPerson": "На живо",
+        "notes": "Бележки",
+        "notesPlaceholder": "Добавете бележки за срещата...",
+        "cancel": "Откажи",
+        "save": "Запази"
+      }
+    },
+    "notes": {
+      "title": "Лични бележки",
+      "notesCount": "бележки",
+      "addNote": "Добави бележка",
+      "addFirstNote": "Добави първа бележка",
+      "searchPlaceholder": "Търси в бележките...",
+      "loading": "Зареждане на бележки...",
+      "noNotes": "Все още няма бележки за този студент",
+      "noResults": "Няма резултати за това търсене",
+      "edit": "Редактирай",
+      "delete": "Изтрий",
+      "editNote": "Редактирай бележка",
+      "confirmDelete": "Сигурни ли сте, че искате да изтриете тази бележка?",
+      "form": {
+        "noteText": "Съдържание",
+        "notePlaceholder": "Напишете вашата бележка тук...",
+        "hint": "Тази бележка е лична и само вие ще я виждате",
+        "cancel": "Отказ",
+        "save": "Запази"
+      }
     }
   }
 }

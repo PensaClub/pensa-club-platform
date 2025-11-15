@@ -1,0 +1,590 @@
+/* client/src/components/DigiMentorPanel/StudentDetails/studentAttendanceTab.css */
+
+.student-attendance-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* SECTION */
+.student-attendance-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.student-attendance-section-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+/* ATTENDANCE CARDS */
+.student-attendance-cards {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2rem;
+  padding: 1.5rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+/* MAIN ATTENDANCE CIRCLE */
+.student-attendance-main-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.student-attendance-circle {
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
+
+.student-attendance-circle svg {
+  width: 100%;
+  height: 100%;
+}
+
+.student-attendance-circle-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.student-attendance-circle-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #059669;
+  line-height: 1;
+}
+
+.student-attendance-circle-label {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+/* STATS GRID */
+.student-attendance-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  align-content: start;
+}
+
+.student-attendance-stat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: #f9fafb;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.student-attendance-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.student-attendance-stat-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+}
+
+.student-attendance-stat-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.student-attendance-stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1;
+}
+
+.student-attendance-stat-label {
+  font-size: 0.8125rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* MENTOR HELP */
+.student-attendance-mentor-help {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.student-attendance-help-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.student-attendance-help-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.student-attendance-help-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+}
+
+.student-attendance-help-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.student-attendance-help-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1;
+}
+
+.student-attendance-help-label {
+  font-size: 0.8125rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* BREAKDOWN */
+.student-attendance-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.student-attendance-breakdown-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.student-attendance-breakdown-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.student-attendance-breakdown-label {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.student-attendance-breakdown-value {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+.student-attendance-breakdown-bar {
+  height: 12px;
+  background: #e5e7eb;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.student-attendance-breakdown-bar-fill {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 0.5s ease;
+}
+
+/* ============================================ */
+/* RESPONSIVE BREAKPOINTS */
+/* ============================================ */
+
+/* ГОЛЕМИ ЕКРАНИ (1920px+) */
+@media (min-width: 1920px) {
+  .student-attendance-tab {
+    gap: 2.5rem;
+  }
+
+  .student-attendance-section {
+    gap: 2rem;
+  }
+
+  .student-attendance-section-title {
+    font-size: 1.25rem;
+  }
+
+  .student-attendance-cards {
+    padding: 2rem;
+    gap: 2.5rem;
+  }
+
+  .student-attendance-circle {
+    width: 220px;
+    height: 220px;
+  }
+
+  .student-attendance-circle-value {
+    font-size: 3rem;
+  }
+
+  .student-attendance-stats-grid {
+    gap: 2rem;
+  }
+
+  .student-attendance-mentor-help {
+    gap: 2rem;
+  }
+}
+
+/* МАЛКИ ЛАПТОПИ (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .student-attendance-cards {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .student-attendance-stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+  }
+
+  .student-attendance-mentor-help {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ТАБЛЕТИ (481px - 767px) */
+@media (min-width: 481px) and (max-width: 767px) {
+  .student-attendance-tab {
+    gap: 1.5rem;
+  }
+
+  .student-attendance-section {
+    gap: 1.25rem;
+  }
+
+  .student-attendance-section-title {
+    font-size: 1rem;
+  }
+
+  .student-attendance-cards {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    padding: 1.25rem;
+  }
+
+  .student-attendance-circle {
+    width: 180px;
+    height: 180px;
+  }
+
+  .student-attendance-circle-value {
+    font-size: 2rem;
+  }
+
+  .student-attendance-circle-label {
+    font-size: 0.8125rem;
+  }
+
+  .student-attendance-stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+    gap: 1rem;
+  }
+
+  .student-attendance-stat-card {
+    padding: 1rem;
+  }
+
+  .student-attendance-stat-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 1.5rem;
+  }
+
+  .student-attendance-stat-value {
+    font-size: 1.5rem;
+  }
+
+  .student-attendance-mentor-help {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .student-attendance-help-card {
+    padding: 1.25rem;
+  }
+
+  .student-attendance-help-icon {
+    width: 56px;
+    height: 56px;
+    font-size: 1.75rem;
+  }
+
+  .student-attendance-help-value {
+    font-size: 1.25rem;
+  }
+
+  .student-attendance-breakdown {
+    padding: 1.25rem;
+    gap: 1.25rem;
+  }
+
+  .student-attendance-breakdown-bar {
+    height: 10px;
+  }
+}
+
+/* ГОЛЕМИ ТЕЛЕФОНИ (376px - 480px) */
+@media (min-width: 376px) and (max-width: 480px) {
+  .student-attendance-tab {
+    gap: 1.25rem;
+  }
+
+  .student-attendance-section {
+    gap: 1rem;
+  }
+
+  .student-attendance-section-title {
+    font-size: 0.9375rem;
+  }
+
+  .student-attendance-cards {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    padding: 1rem;
+  }
+
+  .student-attendance-circle {
+    width: 160px;
+    height: 160px;
+  }
+
+  .student-attendance-circle-value {
+    font-size: 1.75rem;
+  }
+
+  .student-attendance-circle-label {
+    font-size: 0.75rem;
+  }
+
+  .student-attendance-stats-grid {
+    grid-template-columns: 1fr;
+    width: 100%;
+    gap: 0.875rem;
+  }
+
+  .student-attendance-stat-card {
+    flex-direction: row;
+    justify-content: flex-start;
+    text-align: left;
+    padding: 0.875rem;
+  }
+
+  .student-attendance-stat-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 1.5rem;
+  }
+
+  .student-attendance-stat-content {
+    align-items: flex-start;
+  }
+
+  .student-attendance-stat-value {
+    font-size: 1.5rem;
+  }
+
+  .student-attendance-stat-label {
+    font-size: 0.75rem;
+  }
+
+  .student-attendance-mentor-help {
+    grid-template-columns: 1fr;
+    gap: 0.875rem;
+  }
+
+  .student-attendance-help-card {
+    flex-direction: row;
+    justify-content: flex-start;
+    text-align: left;
+    padding: 1rem;
+  }
+
+  .student-attendance-help-icon {
+    width: 56px;
+    height: 56px;
+    font-size: 1.75rem;
+  }
+
+  .student-attendance-help-content {
+    align-items: flex-start;
+  }
+
+  .student-attendance-help-value {
+    font-size: 1.25rem;
+  }
+
+  .student-attendance-help-label {
+    font-size: 0.75rem;
+  }
+
+  .student-attendance-breakdown {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .student-attendance-breakdown-label {
+    font-size: 0.8125rem;
+  }
+
+  .student-attendance-breakdown-value {
+    font-size: 0.9375rem;
+  }
+
+  .student-attendance-breakdown-bar {
+    height: 8px;
+  }
+}
+
+/* МАЛКИ ТЕЛЕФОНИ (320px - 375px) */
+@media (min-width: 320px) and (max-width: 375px) {
+  .student-attendance-tab {
+    gap: 1rem;
+  }
+
+  .student-attendance-section {
+    gap: 0.875rem;
+  }
+
+  .student-attendance-section-title {
+    font-size: 0.875rem;
+  }
+
+  .student-attendance-cards {
+    padding: 0.875rem;
+  }
+
+  .student-attendance-circle {
+    width: 140px;
+    height: 140px;
+  }
+
+  .student-attendance-circle-value {
+    font-size: 1.5rem;
+  }
+
+  .student-attendance-circle-label {
+    font-size: 0.6875rem;
+  }
+
+  .student-attendance-stats-grid {
+    gap: 0.75rem;
+  }
+
+  .student-attendance-stat-card {
+    padding: 0.75rem;
+  }
+
+  .student-attendance-stat-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.25rem;
+  }
+
+  .student-attendance-stat-value {
+    font-size: 1.25rem;
+  }
+
+  .student-attendance-stat-label {
+    font-size: 0.6875rem;
+  }
+
+  .student-attendance-mentor-help {
+    gap: 0.75rem;
+  }
+
+  .student-attendance-help-card {
+    padding: 0.875rem;
+  }
+
+  .student-attendance-help-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 1.5rem;
+  }
+
+  .student-attendance-help-value {
+    font-size: 1.125rem;
+  }
+
+  .student-attendance-help-label {
+    font-size: 0.6875rem;
+  }
+
+  .student-attendance-breakdown {
+    padding: 0.875rem;
+    gap: 0.875rem;
+  }
+
+  .student-attendance-breakdown-label {
+    font-size: 0.75rem;
+  }
+
+  .student-attendance-breakdown-value {
+    font-size: 0.875rem;
+  }
+
+  .student-attendance-breakdown-bar {
+    height: 8px;
+  }
+}
+
+/* DISABLE HOVER ON TOUCH */
+@media (hover: none) and (pointer: coarse) {
+  .student-attendance-stat-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .student-attendance-help-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}

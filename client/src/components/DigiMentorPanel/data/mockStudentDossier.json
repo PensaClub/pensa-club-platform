@@ -139,22 +139,48 @@
   "schedule": {
     "upcomingEvents": [
       {
-        "type": "course_lesson",
-        "title": "Урок 14: Word процесор",
-        "date": "2024-03-18",
-        "time": "10:00"
+        "type": "lecture",
+        "title": "Бъдещето на технологиите",
+        "date": "2025-11-15",
+        "time": "16:00",
+        "duration": 90
       },
       {
         "type": "mentor_meeting",
         "title": "Консултация с ментор",
-        "date": "2024-03-19",
-        "time": "14:00"
+        "date": "2025-11-14",
+        "time": "14:00",
+        "duration": 60,
+        "notes": "Преглед на напредъка по курса \"Основи на компютрите\". Обсъждане на трудностите при работа с текстови редактори.",
+        "status": "scheduled",
+        "meetingType": "online"
       },
       {
-        "type": "lecture",
-        "title": "Бъдещето на технологиите",
-        "date": "2024-03-15",
-        "time": "16:00"
+        "type": "mentor_meeting",
+        "title": "Среща по телефона",
+        "date": "2025-11-15",
+        "time": "10:30",
+        "duration": 30,
+        "notes": "Бърка проверка на домашното по Excel.",
+        "status": "scheduled",
+        "meetingType": "phone"
+      },
+      {
+        "type": "mentor_meeting",
+        "title": "Лична среща в клуба",
+        "date": "2025-11-16",
+        "time": "16:00",
+        "duration": 90,
+        "notes": "Практически урок за работа с имейл и прикачени файлове.",
+        "status": "scheduled",
+        "meetingType": "in_person"
+      },
+      {
+        "type": "seminar",
+        "title": "Работа с Google Drive",
+        "date": "2025-11-18",
+        "time": "14:00",
+        "duration": 90
       }
     ]
   },

@@ -324,6 +324,25 @@ export const academyServiceFactory = () => {
     updateMentorProfile: async (profileData) => {
       return requester.patch(`${apiUrl}/mentors/dashboard/my-profile`, profileData);
     },
+    // STUDENT DETAILS
+    getStudentDetails: async (studentId) => {
+      return requester.get(`${apiUrl}/mentors/students/${studentId}/details`);
+    },
+    getStudentNotes: async (studentId) => {
+      return requester.get(`${apiUrl}/mentors/students/${studentId}/notes`);
+    },
+
+    createStudentNote: async (studentId, noteData) => {
+      return requester.post(`${apiUrl}/mentors/students/${studentId}/notes`, noteData);
+    },
+
+    updateStudentNote: async (noteId, noteData) => {
+      return requester.patch(`${apiUrl}/mentors/notes/${noteId}`, noteData);
+    },
+
+    deleteStudentNote: async (noteId) => {
+      return requester.delete(`${apiUrl}/mentors/notes/${noteId}`);
+    },
   };
 };
 

@@ -1,13 +1,97 @@
 // client/src/components/DigiMentorPanel/DigiMentorStudentsList/DigiMentorStudentsList.jsx
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useAcademy } from '../../contexts/AcademyProvider';
 import './digiMentorStudentsList.css';
 
-export const DigiMentorStudentsList = ({ students = [] }) => {
+// ⚠️ TEMPORARY MOCK DATA
+const mockStudents = [
+  {
+    id: 'student_123',
+    name: 'Иван Петров',
+    email: 'ivan@example.com',
+    avatar: 'https://i.pravatar.cc/150?img=12',
+    status: 'active',
+    sessionsCount: 15,
+    totalHours: 12.5
+  },
+  {
+    id: 'student_456',
+    name: 'Мария Иванова',
+    email: 'maria@example.com',
+    avatar: 'https://i.pravatar.cc/150?img=45',
+    status: 'active',
+    sessionsCount: 8,
+    totalHours: 6.0
+  },
+  {
+    id: 'student_789',
+    name: 'Георги Димитров',
+    email: 'georgi@example.com',
+    avatar: null,
+    status: 'inactive',
+    sessionsCount: 3,
+    totalHours: 2.5
+  },
+  {
+    id: 'student_101',
+    name: 'Елена Стоянова',
+    email: 'elena@example.com',
+    avatar: 'https://i.pravatar.cc/150?img=32',
+    status: 'completed',
+    sessionsCount: 20,
+    totalHours: 18.0
+  }
+];
+
+export const DigiMentorStudentsList = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  
+  // ✅ ПОДГОТОВКА ЗА REAL FUNCTIONS
+  // const { getMentorStudents, isLoading } = useAcademy();
+  
+  const [students, setStudents] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    fetchStudents();
+  }, []);
+
+  const fetchStudents = async () => {
+    try {
+      setIsLoading(true);
+
+      // ✅ TODO: UNCOMMENT WHEN BACKEND IS READY
+      // const result = await getMentorStudents();
+      // if (result.success) {
+      //   setStudents(result.students);
+      // }
+
+      // ⚠️ TEMPORARY: Using mock data
+      setTimeout(() => {
+        setStudents(mockStudents);
+        setIsLoading(false);
+      }, 300);
+
+    } catch (error) {
+      console.error('Error fetching students:', error);
+      setIsLoading(false);
+    }
+  };
+
+  const handleViewStudent = (studentId) => {
+    navigate(`/mentor/students/${studentId}/details`);
+  };
+
+  const handleMessageStudent = (studentId) => {
+    // ✅ TODO: Navigate to chat or open chat modal
+    console.log('Message student:', studentId);
+  };
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -27,6 +111,19 @@ export const DigiMentorStudentsList = ({ students = [] }) => {
     const matchesFilter = filterStatus === 'all' || student.status === filterStatus;
     return matchesSearch && matchesFilter;
   });
+
+  if (isLoading) {
+    return (
+      <div className="digi-mentor-students-list">
+        <h2 className="digi-mentor-students-list-title">
+          {t('digiMentorStudentsList.title')}
+        </h2>
+        <div className="digi-mentor-students-list-loading">
+          <p>{t('digiMentorStudentsList.loading')}</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!students || students.length === 0) {
     return (
@@ -148,13 +245,19 @@ export const DigiMentorStudentsList = ({ students = [] }) => {
               </div>
 
               <div className="digi-mentor-students-list-card-footer">
-                <button className="digi-mentor-students-list-btn digi-mentor-students-list-btn-primary">
+                <button 
+                  className="digi-mentor-students-list-btn digi-mentor-students-list-btn-primary"
+                  onClick={() => handleMessageStudent(student.id)}
+                >
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M8 10H16M8 14H11M6 20L3 17V7C3 5.89543 3.89543 5 5 5H19C20.1046 5 21 5.89543 21 7V15C21 16.1046 20.1046 17 19 17H9L6 20Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                   {t('digiMentorStudentsList.message')}
                 </button>
-                <button className="digi-mentor-students-list-btn digi-mentor-students-list-btn-secondary">
+                <button 
+                  className="digi-mentor-students-list-btn digi-mentor-students-list-btn-secondary"
+                  onClick={() => handleViewStudent(student.id)}
+                >
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M15 12C15 13.6569 13.6569 15 12 15C10.3431 15 9 13.6569 9 12C9 10.3431 10.3431 9 12 9C13.6569 9 15 10.3431 15 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     <path d="M2.45801 12C3.73201 7.94288 7.52257 5 12 5C16.4774 5 20.268 7.94288 21.542 12C20.268 16.0571 16.4774 19 12 19C7.52257 19 3.73201 16.0571 2.45801 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>

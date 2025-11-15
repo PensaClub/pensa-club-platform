@@ -821,25 +821,84 @@ export const AcademyProvider = ({ children }) => {
   }, []);
 
   // MENTOR PROFILE EDIT
-const getMentorProfile = useCallback(async () => {
-  try {
-    const data = await academyService.getMentorProfile();
-    return data;
-  } catch (error) {
-    console.error('Error fetching mentor profile:', error);
-    return { success: false, message: error.message };
-  }
-}, []);
+  const getMentorProfile = useCallback(async () => {
+    try {
+      const data = await academyService.getMentorProfile();
+      return data;
+    } catch (error) {
+      console.error('Error fetching mentor profile:', error);
+      return { success: false, message: error.message };
+    }
+  }, []);
 
-const updateMentorProfile = useCallback(async (profileData) => {
-  try {
-    const data = await academyService.updateMentorProfile(profileData);
-    return data;
-  } catch (error) {
-    console.error('Error updating mentor profile:', error);
-    return { success: false, message: error.message };
-  }
-}, []);
+  const updateMentorProfile = useCallback(async (profileData) => {
+    try {
+      const data = await academyService.updateMentorProfile(profileData);
+      return data;
+    } catch (error) {
+      console.error('Error updating mentor profile:', error);
+      return { success: false, message: error.message };
+    }
+  }, []);
+  const getStudentDetails = useCallback(async (studentId) => {
+    try {
+      const data = await academyService.getStudentDetails(studentId);
+      return data;
+    } catch (error) {
+      console.error('Error fetching student details:', error);
+      return { success: false, message: error.message };
+    }
+  }, []);
+
+  // ============================================
+  // STUDENT NOTES FUNCTIONS
+  // ============================================
+
+  const getStudentNotes = useCallback(async (studentId) => {
+    try {
+      const data = await academyService.getStudentNotes(studentId);
+      return data;
+    } catch (error) {
+      console.error('Error fetching student notes:', error);
+      return { success: false, message: error.message, notes: [] };
+    }
+  }, []);
+
+  const createStudentNote = useCallback(async (studentId, noteData) => {
+    try {
+      const data = await academyService.createStudentNote(studentId, noteData);
+      toast.success('Бележката е създадена успешно');
+      return data;
+    } catch (error) {
+      console.error('Error creating note:', error);
+      toast.error('Грешка при създаване на бележка');
+      return { success: false, message: error.message };
+    }
+  }, []);
+
+  const updateStudentNote = useCallback(async (noteId, noteData) => {
+    try {
+      const data = await academyService.updateStudentNote(noteId, noteData);
+      toast.success('Бележката е обновена успешно');
+      return data;
+    } catch (error) {
+      console.error('Error updating note:', error);
+      toast.error('Грешка при обновяване на бележка');
+      return { success: false, message: error.message };
+    }
+  }, []);
+
+  const deleteStudentNote = useCallback(async (noteId) => {
+    try {
+      const data = await academyService.deleteStudentNote(noteId);
+      toast.success('Бележката е изтрита успешно');
+      return data;
+    } catch (error) {
+      console.error('Error deleting note:', error);
+      toast.error('Грешка при изтриване на бележка');
+      return { success: false, message: error.message };
+    }
+  }, []);
 
   // ===============================
   // CONTEXT VALUE
@@ -928,8 +987,14 @@ const updateMentorProfile = useCallback(async (profileData) => {
     completeMentorMeeting,
     cancelMentorMeeting,
     deleteMentorMeeting,
-      getMentorProfile,
-  updateMentorProfile,
+    getMentorProfile,
+    updateMentorProfile,
+    getStudentDetails,
+    // Student Notes
+    getStudentNotes,
+    createStudentNote,
+    updateStudentNote,
+    deleteStudentNote
   };
 
   return (

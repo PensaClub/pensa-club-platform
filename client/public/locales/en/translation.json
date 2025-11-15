@@ -12818,7 +12818,7 @@
     "myStudents": "My Students",
     "viewReviews": "View Reviews"
   },
-    "digiMentorStats": {
+  "digiMentorStats": {
     "totalStudents": "Total Students",
     "activeSessions": "Active Sessions",
     "completedSessions": "Completed Sessions",
@@ -12830,7 +12830,7 @@
     "minutes": "min",
     "completionRate": "Completion Rate"
   },
-   "digiMentorQuickActions": {
+  "digiMentorQuickActions": {
     "title": "Quick Actions",
     "startSession": "Start Session",
     "viewMessages": "View Messages",
@@ -12864,6 +12864,7 @@
     "cancelSession": "Cancel"
   },
   "digiMentorStudentsList": {
+    "loading": "Loading...",
     "title": "My Students",
     "studentsCount": "students",
     "noStudents": "You don't have any students yet",
@@ -13074,6 +13075,138 @@
     "errors": {
       "durationRequired": "Duration is required",
       "saveFailed": "Error completing meeting"
+    }
+  },
+  "studentDetails": {
+    "backToList": "Back to Students",
+    "notFound": "Student not found",
+    "errorLoading": "Error loading data",
+    "registeredSince": "Registered since",
+    "currentMentor": "Current Mentor",
+    "totalCredits": "Total Credits",
+    "activeCourses": "Active Courses",
+    "completedCourses": "Completed Courses",
+    "attendanceRate": "Attendance Rate",
+    "tabs": {
+      "overview": "Overview",
+      "courses": "Courses",
+      "activities": "Activities",
+      "attendance": "Attendance",
+      "schedule": "Schedule",
+      "notes": "Notes"
+    },
+    "overview": {
+      "title": "Overview",
+      "creditsBreakdown": "Credits Breakdown",
+      "fromCourses": "From Courses",
+      "fromLectures": "From Lectures",
+      "fromSeminars": "From Seminars",
+      "fromPresentations": "From Presentations",
+      "mentorInfo": "Mentor Information",
+      "assignedDate": "Assigned on",
+      "progress": "Progress",
+      "mentorHistory": "Mentor History",
+      "overallProgress": "Overall Progress",
+      "totalCourses": "Total Courses"
+    },
+    "courses": {
+      "title": "Courses",
+      "all": "All",
+      "inProgress": "In Progress",
+      "completed": "Completed",
+      "notStarted": "Not Started",
+      "noCourses": "No courses found",
+      "progress": "Progress",
+      "lessons": "lessons",
+      "credits": "credits",
+      "startDate": "Start",
+      "endDate": "End"
+    },
+    "activities": {
+      "title": "Activities",
+      "all": "All",
+      "lectures": "Lectures",
+      "seminars": "Seminars",
+      "presentations": "Presentations",
+      "attended": "Attended",
+      "missed": "Missed",
+      "scheduled": "Scheduled",
+      "minutes": "min",
+      "credits": "credits",
+      "totalCredits": "Total Credits",
+      "noActivities": "No activities found"
+    },
+    "attendance": {
+      "title": "Attendance & Help",
+      "overview": "Overview",
+      "totalSessions": "Total Sessions",
+      "attended": "Attended",
+      "missed": "Missed",
+      "rate": "Rate",
+      "mentorHelp": "Mentor Help",
+      "chatSessions": "Chat Sessions",
+      "chatHours": "Online Hours",
+      "lastChat": "Last Chat",
+      "scheduledMeetings": "Scheduled Meetings",
+      "completedMeetings": "Completed Meetings",
+      "breakdown": "Breakdown",
+      "meetingCompletion": "Meeting Completion"
+    },
+    "schedule": {
+      "title": "Schedule",
+      "all": "All",
+      "today": "Today",
+      "close": "Close",
+
+      "meetings": "Meetings",
+      "lessons": "Lessons",
+      "lectures": "Lectures",
+      "addMeeting": "Add Meeting",
+      "editMeeting": "Edit Meeting",
+      "loading": "Loading...",
+      "noEvents": "No upcoming events",
+      "minutes": "min",
+      "edit": "Edit",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "confirmDelete": "Are you sure you want to delete this meeting?",
+      "confirmCancel": "Are you sure you want to cancel this meeting?",
+      "course_lesson": "Course Lesson",
+      "mentor_meeting": "Mentor Meeting",
+      "lecture": "Lecture",
+      "seminar": "Seminar",
+      "presentation": "Presentation",
+      "status": {
+        "scheduled": "Scheduled",
+        "completed": "Completed",
+        "cancelled": "Cancelled"
+      },
+      "form": {
+        "title": "Title",
+        "titlePlaceholder": "Enter meeting title",
+        "date": "Date",
+        "time": "Time",
+        "duration": "Duration (min)",
+        "type": "Type",
+        "typeOnline": "Online",
+        "typePhone": "Phone",
+        "typeInPerson": "In Person",
+        "notes": "Notes",
+        "notesPlaceholder": "Add notes for the meeting...",
+        "cancel": "Cancel",
+        "save": "Save"
+      }
+    },
+    "notes": {
+      "title": "Private Notes",
+      "subtitle": "Only you can see these notes",
+      "addNote": "Add Note",
+      "placeholder": "Write a note about the student...",
+      "save": "Save",
+      "saving": "Saving...",
+      "noNotes": "No notes yet",
+      "successSave": "Note saved successfully",
+      "errorSave": "Error saving note"
     }
   }
 }

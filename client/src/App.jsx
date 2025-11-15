@@ -71,6 +71,7 @@ import { DigiBridgeChatWindow } from './components/DigiBridge/DigiBridgeChatWind
 import { MentorGuard } from './components/Guards/MentorGuard.jsx';
 import { DigiBridgeMentorDashboard } from './components/DigiBridge/DigiBridgeMentorDashboard/DigiBridgeMentorDashboard.jsx';
 import { UserChatsPage } from './components/DigiBridge/UserChatsPage/UserChatsPage.jsx';
+import { StudentDetails } from './components/DigiMentorPanel/StudentDetails/StudentDetails.jsx';
 
 // ✅ LAZY LOADING КОМПОНЕНТИ
 const ArticlesList = lazy(() => import('./components/Articles/ArticlesList/ArticlesList.jsx'));
