@@ -103,7 +103,7 @@ export const DigiMentorPanel = () => {
                 navigate('/profile/mentor-students');
                 break;
             case 'view-reviews':
-                navigate('/profile/mentor-reviews');
+                navigate('/mentor/reviews');
                 break;
             default:
                 break;

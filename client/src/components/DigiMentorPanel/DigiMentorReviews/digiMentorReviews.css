@@ -1,0 +1,186 @@
+/* client/src/components/DigiMentorPanel/DigiMentorReviews/digiMentorReviews.css */
+
+.digi-mentor-reviews {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+  min-height: 100vh;
+}
+
+/* ===============================
+   PAGE HEADER
+   =============================== */
+
+.digi-mentor-reviews-page-header {
+  margin-bottom: 2rem;
+}
+
+.digi-mentor-reviews-page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 70px 0 0.5rem 0;
+}
+
+.digi-mentor-reviews-page-subtitle {
+  font-size: 1rem;
+  color: #666;
+  margin: 0;
+}
+
+/* ===============================
+   REVIEWS LIST
+   =============================== */
+
+.digi-mentor-reviews-list {
+  margin-top: 2rem;
+}
+
+.digi-mentor-reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+/* ===============================
+   EMPTY STATE
+   =============================== */
+
+.digi-mentor-reviews-empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: #f8f9fa;
+  border-radius: 12px;
+  margin-top: 2rem;
+}
+
+.digi-mentor-reviews-empty-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.digi-mentor-reviews-empty-icon svg {
+  width: 40px;
+  height: 40px;
+  stroke: white;
+}
+
+.digi-mentor-reviews-empty-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 0.75rem 0;
+}
+
+.digi-mentor-reviews-empty-text {
+  font-size: 1rem;
+  color: #666;
+  margin: 0;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ===============================
+   LOAD MORE
+   =============================== */
+
+.digi-mentor-reviews-load-more {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.digi-mentor-reviews-load-more-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 0.875rem 2rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(102, 126, 234, 0.2);
+}
+
+.digi-mentor-reviews-load-more-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(102, 126, 234, 0.3);
+}
+
+.digi-mentor-reviews-load-more-btn:active {
+  transform: translateY(0);
+}
+
+.digi-mentor-reviews-load-more-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+.digi-mentor-reviews-load-more-info {
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  color: #666;
+}
+
+/* ===============================
+   RESPONSIVE
+   =============================== */
+
+@media (max-width: 768px) {
+  .digi-mentor-reviews {
+    padding: 1.5rem 1rem;
+  }
+
+  .digi-mentor-reviews-page-title {
+    font-size: 1.5rem;
+  }
+
+  .digi-mentor-reviews-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .digi-mentor-reviews-empty {
+    padding: 3rem 1.5rem;
+  }
+
+  .digi-mentor-reviews-empty-icon {
+    width: 60px;
+    height: 60px;
+  }
+
+  .digi-mentor-reviews-empty-icon svg {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .digi-mentor-reviews {
+    padding: 1rem 0.75rem;
+  }
+
+  .digi-mentor-reviews-page-title {
+    font-size: 1.25rem;
+  }
+
+  .digi-mentor-reviews-page-subtitle {
+    font-size: 0.875rem;
+  }
+
+  .digi-mentor-reviews-load-more-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

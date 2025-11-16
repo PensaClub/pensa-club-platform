@@ -13208,5 +13208,56 @@
       "successSave": "Note saved successfully",
       "errorSave": "Error saving note"
     }
+  },
+  "digiMentorReviews": {
+    "pageTitle": "My Reviews",
+    "pageSubtitle": "See what your students are saying about you",
+    "noReviewsTitle": "You don't have any reviews yet",
+    "noReviewsText": "When you receive your first review, it will appear here.",
+    "noResultsTitle": "No results found",
+    "noResultsText": "Try changing the filters or search query.",
+    "loadMore": "Load more reviews",
+    "showingCount": "Showing {{visible}} of {{total}} reviews"
+  },
+  "digiMentorReviewsHeader": {
+    "basedOn": "Based on {{count}} reviews",
+    "basedOn_one": "Based on {{count}} review",
+    "basedOn_other": "Based on {{count}} reviews",
+    "distributionTitle": "Rating Distribution"
+  },
+  "digiMentorReviewsFilters": {
+    "searchPlaceholder": "Search by name, text or role...",
+    "clearSearch": "Clear search",
+    "filterByRating": "Filter by rating",
+    "allRatings": "All",
+    "fiveStars": "5 stars",
+    "fourStars": "4 stars",
+    "threeStars": "3 stars",
+    "twoStars": "2 stars",
+    "oneStar": "1 star",
+    "sortBy": "Sort by",
+    "sortNewest": "Newest first",
+    "sortOldest": "Oldest first",
+    "sortHighest": "Highest rating",
+    "sortLowest": "Lowest rating",
+    "resultSingular": "result",
+    "resultPlural": "results"
+  },
+  "digiMentorReviewCard": {
+    "approved": "Approved",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "daysAgo": "{{count}} days ago",
+    "daysAgo_one": "{{count}} day ago",
+    "daysAgo_other": "{{count}} days ago",
+    "weeksAgo": "{{count}} weeks ago",
+    "weeksAgo_one": "{{count}} week ago",
+    "weeksAgo_other": "{{count}} weeks ago",
+    "monthsAgo": "{{count}} months ago",
+    "monthsAgo_one": "{{count}} month ago",
+    "monthsAgo_other": "{{count}} months ago",
+    "showMore": "Show more",
+    "showLess": "Show less",
+    "thankYou": "Thank you for your review!"
   }
 }

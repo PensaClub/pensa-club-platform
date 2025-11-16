@@ -13473,5 +13473,56 @@
         "save": "Запази"
       }
     }
+  },
+  "digiMentorReviews": {
+    "pageTitle": "Моите отзиви",
+    "pageSubtitle": "Вижте какво споделят вашите студенти за вас",
+    "noReviewsTitle": "Все още нямате отзиви",
+    "noReviewsText": "Когато получите първия си отзив, той ще се покаже тук.",
+    "noResultsTitle": "Няма намерени резултати",
+    "noResultsText": "Опитайте да промените филтрите или търсенето.",
+    "loadMore": "Зареди още отзиви",
+    "showingCount": "Показани {{visible}} от {{total}} отзива"
+  },
+  "digiMentorReviewsHeader": {
+    "basedOn": "Базирано на {{count}} отзива",
+    "basedOn_one": "Базирано на {{count}} отзив",
+    "basedOn_other": "Базирано на {{count}} отзива",
+    "distributionTitle": "Разпределение на оценките"
+  },
+  "digiMentorReviewsFilters": {
+    "searchPlaceholder": "Търсене по име, текст или роля...",
+    "clearSearch": "Изчисти търсенето",
+    "filterByRating": "Филтрирай по оценка",
+    "allRatings": "Всички",
+    "fiveStars": "5 звезди",
+    "fourStars": "4 звезди",
+    "threeStars": "3 звезди",
+    "twoStars": "2 звезди",
+    "oneStar": "1 звезда",
+    "sortBy": "Сортирай по",
+    "sortNewest": "Най-нови първи",
+    "sortOldest": "Най-стари първи",
+    "sortHighest": "Най-висок рейтинг",
+    "sortLowest": "Най-нисък рейтинг",
+    "resultSingular": "резултат",
+    "resultPlural": "резултата"
+  },
+  "digiMentorReviewCard": {
+    "approved": "Одобрено",
+    "today": "Днес",
+    "yesterday": "Вчера",
+    "daysAgo": "Преди {{count}} дни",
+    "daysAgo_one": "Преди {{count}} ден",
+    "daysAgo_other": "Преди {{count}} дни",
+    "weeksAgo": "Преди {{count}} седмици",
+    "weeksAgo_one": "Преди {{count}} седмица",
+    "weeksAgo_other": "Преди {{count}} седмици",
+    "monthsAgo": "Преди {{count}} месеца",
+    "monthsAgo_one": "Преди {{count}} месец",
+    "monthsAgo_other": "Преди {{count}} месеца",
+    "showMore": "Покажи повече",
+    "showLess": "Покажи по-малко",
+    "thankYou": "Благодарим за отзива!"
   }
 }

@@ -72,6 +72,7 @@ import { MentorGuard } from './components/Guards/MentorGuard.jsx';
 import { DigiBridgeMentorDashboard } from './components/DigiBridge/DigiBridgeMentorDashboard/DigiBridgeMentorDashboard.jsx';
 import { UserChatsPage } from './components/DigiBridge/UserChatsPage/UserChatsPage.jsx';
 import { StudentDetails } from './components/DigiMentorPanel/StudentDetails/StudentDetails.jsx';
+import { DigiMentorReviews } from './components/DigiMentorPanel/DigiMentorReviews/DigiMentorReviews.jsx';
 
 // ✅ LAZY LOADING КОМПОНЕНТИ
 const ArticlesList = lazy(() => import('./components/Articles/ArticlesList/ArticlesList.jsx'));
@@ -235,6 +236,7 @@ function App() {
                                         </Route>
                                         <Route path="/mentor" element={<MentorGuard />}>
                                           <Route path="students/:studentId/details" element={<StudentDetails />} />
+                                          <Route path="reviews" element={<DigiMentorReviews />} />
                                         </Route>
                                         <Route element={<PublicGuard />}>
                                           <Route path="/sign-up" element={<LoginRegister />} />

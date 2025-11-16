@@ -12503,6 +12503,57 @@
       "successSave": "Notiz erfolgreich gespeichert",
       "errorSave": "Fehler beim Speichern der Notiz"
     }
+  },
+  "digiMentorReviews": {
+    "pageTitle": "Meine Bewertungen",
+    "pageSubtitle": "Sehen Sie, was Ihre Studenten über Sie sagen",
+    "noReviewsTitle": "Sie haben noch keine Bewertungen",
+    "noReviewsText": "Wenn Sie Ihre erste Bewertung erhalten, wird sie hier angezeigt.",
+    "noResultsTitle": "Keine Ergebnisse gefunden",
+    "noResultsText": "Versuchen Sie, die Filter oder die Suche zu ändern.",
+    "loadMore": "Mehr Bewertungen laden",
+    "showingCount": "{{visible}} von {{total}} Bewertungen angezeigt"
+  },
+  "digiMentorReviewsHeader": {
+    "basedOn": "Basierend auf {{count}} Bewertungen",
+    "basedOn_one": "Basierend auf {{count}} Bewertung",
+    "basedOn_other": "Basierend auf {{count}} Bewertungen",
+    "distributionTitle": "Bewertungsverteilung"
+  },
+  "digiMentorReviewsFilters": {
+    "searchPlaceholder": "Suche nach Name, Text oder Rolle...",
+    "clearSearch": "Suche löschen",
+    "filterByRating": "Nach Bewertung filtern",
+    "allRatings": "Alle",
+    "fiveStars": "5 Sterne",
+    "fourStars": "4 Sterne",
+    "threeStars": "3 Sterne",
+    "twoStars": "2 Sterne",
+    "oneStar": "1 Stern",
+    "sortBy": "Sortieren nach",
+    "sortNewest": "Neueste zuerst",
+    "sortOldest": "Älteste zuerst",
+    "sortHighest": "Höchste Bewertung",
+    "sortLowest": "Niedrigste Bewertung",
+    "resultSingular": "Ergebnis",
+    "resultPlural": "Ergebnisse"
+  },
+  "digiMentorReviewCard": {
+    "approved": "Genehmigt",
+    "today": "Heute",
+    "yesterday": "Gestern",
+    "daysAgo": "Vor {{count}} Tagen",
+    "daysAgo_one": "Vor {{count}} Tag",
+    "daysAgo_other": "Vor {{count}} Tagen",
+    "weeksAgo": "Vor {{count}} Wochen",
+    "weeksAgo_one": "Vor {{count}} Woche",
+    "weeksAgo_other": "Vor {{count}} Wochen",
+    "monthsAgo": "Vor {{count}} Monaten",
+    "monthsAgo_one": "Vor {{count}} Monat",
+    "monthsAgo_other": "Vor {{count}} Monaten",
+    "showMore": "Mehr anzeigen",
+    "showLess": "Weniger anzeigen",
+    "thankYou": "Vielen Dank für die Bewertung!"
   }
   
 }
