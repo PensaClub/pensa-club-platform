@@ -74,7 +74,7 @@ userController.post('/details', isAuth, async (req, res, next) => {
 userController.get('/all-users', async (req, res, next) => {
     try {
         const accounts = await user_account.findAll({
-            attributes: ['id', 'email', ['finished', 'enabled'], 'createdAt', 'role', 'updatedAt', 'roleChangeComment'],
+            attributes: ['id', 'email', ['finished', 'enabled'], 'createdAt', 'role', 'updatedAt', 'roleChangeComment', 'isMentor'],
             include: [
                 {
                     model: user_details,
@@ -152,7 +152,16 @@ userController.get('/single-user', isAuth, rbac.checkPermission('userDetails', '
     try {
         const user = await user_account.findOne({
             where: { id: req.user.userId },
-            attributes: ['email', ['finished', 'enabled'], 'createdAt', 'role', 'updatedAt', 'roleChangeComment', 'password'],
+            attributes: [
+                'email', 
+                ['finished', 'enabled'], 
+                'createdAt', 
+                'role', 
+                'updatedAt', 
+                'roleChangeComment', 
+                'password',
+                'isMentor'  
+            ],
             include: [
                 {
                     model: user_details,
@@ -206,6 +215,7 @@ userController.get('/single-user', isAuth, rbac.checkPermission('userDetails', '
             user: {
                 ...restUser,
                 hasPassword: !!password,
+                isMentor: user.isMentor || false, 
                 details: {
                     ...details.dataValues,
                     age: ageCalculate(details?.birthDate),

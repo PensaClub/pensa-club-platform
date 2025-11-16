@@ -1,0 +1,411 @@
+/* client/src/components/DigiMentorPanel/MentorMeetings/addMeetingModal.css */
+
+.add-meeting-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 1rem;
+}
+
+.add-meeting-modal {
+  background: white;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.add-meeting-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 10;
+}
+
+.add-meeting-modal-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.add-meeting-modal-close {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: #6b7280;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.add-meeting-modal-close:hover {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.add-meeting-modal-close svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* ERROR MESSAGE */
+.add-meeting-modal-error {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.5rem;
+  padding: 1rem;
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  color: #dc2626;
+}
+
+.add-meeting-modal-error svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.add-meeting-modal-error p {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+/* FORM */
+.add-meeting-modal-form {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.add-meeting-modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.add-meeting-modal-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.add-meeting-modal-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.add-meeting-modal-required {
+  color: #dc2626;
+}
+
+.add-meeting-modal-input,
+.add-meeting-modal-select,
+.add-meeting-modal-textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  color: #111827;
+  transition: all 0.2s ease;
+}
+
+.add-meeting-modal-input:focus,
+.add-meeting-modal-select:focus,
+.add-meeting-modal-textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.add-meeting-modal-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.add-meeting-modal-select {
+  cursor: pointer;
+}
+
+.add-meeting-modal-loading {
+  padding: 0.75rem 1rem;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: #6b7280;
+  text-align: center;
+}
+
+/* FOOTER */
+.add-meeting-modal-footer {
+  display: flex;
+  gap: 0.75rem;
+  padding-top: 0.5rem;
+}
+
+.add-meeting-modal-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.add-meeting-modal-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.add-meeting-modal-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.add-meeting-modal-btn-cancel {
+  background: white;
+  color: #6b7280;
+  border: 1px solid #d1d5db;
+}
+
+.add-meeting-modal-btn-cancel:hover:not(:disabled) {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.add-meeting-modal-btn-submit {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.add-meeting-modal-btn-submit:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.add-meeting-modal-spinner {
+  animation: add-meeting-modal-spin 1s linear infinite;
+}
+
+@keyframes add-meeting-modal-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ============================================ */
+/* RESPONSIVE BREAKPOINTS */
+/* ============================================ */
+
+/* ТАБЛЕТИ (481px - 767px) */
+@media (min-width: 481px) and (max-width: 767px) {
+  .add-meeting-modal {
+    max-width: 95%;
+  }
+
+  .add-meeting-modal-header {
+    padding: 1.25rem;
+  }
+
+  .add-meeting-modal-title {
+    font-size: 1.125rem;
+  }
+
+  .add-meeting-modal-form {
+    padding: 1.25rem;
+    gap: 1rem;
+  }
+
+  .add-meeting-modal-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ГОЛЕМИ ТЕЛЕФОНИ (376px - 480px) */
+@media (min-width: 376px) and (max-width: 480px) {
+  .add-meeting-modal {
+    max-width: 100%;
+    border-radius: 0;
+    max-height: 100vh;
+  }
+
+  .add-meeting-modal-overlay {
+    padding: 0;
+  }
+
+  .add-meeting-modal-header {
+    padding: 1rem;
+  }
+
+  .add-meeting-modal-title {
+    font-size: 1rem;
+  }
+
+  .add-meeting-modal-close {
+    width: 28px;
+    height: 28px;
+  }
+
+  .add-meeting-modal-close svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .add-meeting-modal-error {
+    margin: 1rem;
+    padding: 0.875rem;
+  }
+
+  .add-meeting-modal-error svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .add-meeting-modal-error p {
+    font-size: 0.8125rem;
+  }
+
+  .add-meeting-modal-form {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .add-meeting-modal-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .add-meeting-modal-label {
+    font-size: 0.8125rem;
+  }
+
+  .add-meeting-modal-input,
+  .add-meeting-modal-select,
+  .add-meeting-modal-textarea {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.875rem;
+  }
+
+  .add-meeting-modal-footer {
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+
+  .add-meeting-modal-btn {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+  }
+
+  .add-meeting-modal-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+/* МАЛКИ ТЕЛЕФОНИ (320px - 375px) */
+@media (min-width: 320px) and (max-width: 375px) {
+  .add-meeting-modal-header {
+    padding: 0.875rem;
+  }
+
+  .add-meeting-modal-title {
+    font-size: 0.9375rem;
+  }
+
+  .add-meeting-modal-close {
+    width: 26px;
+    height: 26px;
+  }
+
+  .add-meeting-modal-close svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .add-meeting-modal-error {
+    margin: 0.875rem;
+    padding: 0.75rem;
+  }
+
+  .add-meeting-modal-form {
+    padding: 0.875rem;
+    gap: 0.875rem;
+  }
+
+  .add-meeting-modal-label {
+    font-size: 0.75rem;
+  }
+
+  .add-meeting-modal-input,
+  .add-meeting-modal-select,
+  .add-meeting-modal-textarea {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8125rem;
+  }
+
+  .add-meeting-modal-textarea {
+    min-height: 70px;
+  }
+
+  .add-meeting-modal-footer {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .add-meeting-modal-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.8125rem;
+  }
+
+  .add-meeting-modal-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+/* DISABLE HOVER ON TOUCH */
+@media (hover: none) and (pointer: coarse) {
+  .add-meeting-modal-btn-submit:hover:not(:disabled) {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .add-meeting-modal-btn-cancel:hover:not(:disabled) {
+    background: white;
+    border-color: #d1d5db;
+  }
+}

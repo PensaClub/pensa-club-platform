@@ -193,6 +193,12 @@ module.exports = (sequelize, DataTypes) => {
                 defaultValue: false,
                 field: 'is_google_user',
             },
+             isMentor: {
+                type: DataTypes.BOOLEAN,
+                allowNull: false,
+                defaultValue: false,
+                field: 'is_mentor',
+            },
         },
         {
             sequelize,
