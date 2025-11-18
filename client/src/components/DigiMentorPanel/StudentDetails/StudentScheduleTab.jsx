@@ -7,14 +7,13 @@ import './studentScheduleTab.css';
 
 export const StudentScheduleTab = ({ student }) => {
     const { t } = useTranslation();
-    // ✅ ПОДГОТОВКА ЗА REAL FUNCTIONS
-    // const { 
-    //   getMentorMeetings, 
-    //   createMentorMeeting, 
-    //   updateMentorMeeting, 
-    //   deleteMentorMeeting,
-    //   cancelMentorMeeting 
-    // } = useAcademy();
+    const { 
+      getMentorMeetings, 
+      createMentorMeeting, 
+      updateMentorMeeting, 
+      deleteMentorMeeting,
+      cancelMentorMeeting 
+    } = useAcademy();
     const [allEvents, setAllEvents] = useState([]);
     const [currentWeekStart, setCurrentWeekStart] = useState(getWeekStart(new Date()));
     const [currentMonthStart, setCurrentMonthStart] = useState(getMonthStart(new Date()));
@@ -100,72 +99,38 @@ export const StudentScheduleTab = ({ student }) => {
     }
 
     const loadSchedule = async () => {
-        setIsLoading(true);
+  setIsLoading(true);
 
-        try {
-            // ✅ TODO: UNCOMMENT WHEN BACKEND IS READY
-            // const result = await getMentorMeetings();
-            // if (result.success) {
-            //   const studentMeetings = result.meetings.filter(m => m.studentId === student.id);
-            //   combineAllEvents(studentMeetings);
-            // }
-            // ⚠️ TEMPORARY: Using mock data
-            setTimeout(() => {
-                combineAllEvents();
-                setIsLoading(false);
-            }, 300);
-        } catch (error) {
-            console.error('Error loading schedule:', error);
-            setIsLoading(false);
-        }
-    };
+  try {
+    const result = await getMentorMeetings();
+    
+    if (result.success) {
+      // Filter meetings for this student only
+      const studentMeetings = result.meetings.filter(m => m.studentId === student.id);
+      combineAllEvents(studentMeetings);
+    }
+    
+    setIsLoading(false);
+  } catch (error) {
+    console.error('Error loading schedule:', error);
+    setIsLoading(false);
+  }
+};
 
-    const combineAllEvents = (meetings = []) => {
-        const events = [];
-
-        if (student.courses) {
-            student.courses.forEach(course => {
-                if (course.status === 'in_progress') {
-                    events.push({
-                        id: `course-${course.courseId}`,
-                        type: 'course_lesson',
-                        title: course.courseName,
-                        date: new Date().toISOString().split('T')[0],
-                        time: '10:00',
-                        duration: 60,
-                        canEdit: false
-                    });
-                }
-            });
-        }
-
-        if (student.schedule && student.schedule.upcomingEvents) {
-            student.schedule.upcomingEvents.forEach(event => {
-                events.push({
-                    id: `event-${event.type}-${event.date}`,
-                    ...event,
-                    canEdit: event.type === 'mentor_meeting'
-                });
-            });
-        }
-
-        meetings.forEach(meeting => {
-            events.push({
-                id: `meeting-${meeting.id}`,
-                type: 'mentor_meeting',
-                title: meeting.title,
-                date: meeting.scheduledDate,
-                time: meeting.scheduledTime,
-                duration: meeting.plannedDuration,
-                notes: meeting.notes,
-                status: meeting.status,
-                canEdit: true,
-                meetingData: meeting
-            });
-        });
-
-        setAllEvents(events);
-    };
+    meetings.forEach(meeting => {
+  events.push({
+    id: `meeting-${meeting.id}`,
+    type: 'mentor_meeting',
+    title: meeting.title,
+    date: meeting.meetingDate,  
+    time: meeting.meetingTime,  
+    duration: meeting.duration, 
+    notes: meeting.notes,
+    status: meeting.status,
+    canEdit: true,
+    meetingData: meeting
+  });
+});
 
     const handlePreviousWeek = () => {
         const newStart = new Date(currentWeekStart);
@@ -261,48 +226,41 @@ export const StudentScheduleTab = ({ student }) => {
     };
 
     const handleSaveMeeting = async () => {
-        try {
-            const meetingData = {
-                studentId: student.id,
-                title: meetingForm.title,
-                scheduledDate: meetingForm.date,
-                scheduledTime: meetingForm.time,
-                plannedDuration: meetingForm.duration,
-                meetingType: meetingForm.type,
-                notes: meetingForm.notes
-            };
-
-            // ✅ TODO: UNCOMMENT WHEN BACKEND IS READY
-            // if (selectedMeeting) {
-            //   await updateMentorMeeting(selectedMeeting.meetingData.id, meetingData);
-            // } else {
-            //   await createMentorMeeting(meetingData);
-            // }
-            // await loadSchedule();
-
-            // ⚠️ TEMPORARY: Mock success
-            handleCloseMeetingModal();
-            setTimeout(() => loadSchedule(), 300);
-        } catch (error) {
-            console.error('Error saving meeting:', error);
-        }
+  try {
+    const meetingData = {
+      studentId: student.id,
+      title: meetingForm.title,
+      meetingDate: meetingForm.date,
+      meetingTime: meetingForm.time,
+      duration: meetingForm.duration,
+      meetingType: meetingForm.type,
+      notes: meetingForm.notes
     };
+
+    if (selectedMeeting) {
+      await updateMentorMeeting(selectedMeeting.meetingData.id, meetingData);
+    } else {
+      await createMentorMeeting(meetingData);
+    }
+    
+    await loadSchedule();
+    handleCloseMeetingModal();
+  } catch (error) {
+    console.error('Error saving meeting:', error);
+  }
+};
 
     const handleDeleteMeeting = async (meetingId) => {
-        if (!window.confirm(t('studentDetails.schedule.confirmDelete'))) return;
+  if (!window.confirm(t('studentDetails.schedule.confirmDelete'))) return;
 
-        try {
-            // ✅ TODO: UNCOMMENT WHEN BACKEND IS READY
-            // await deleteMentorMeeting(meetingId);
-            // await loadSchedule();
-
-            // ⚠️ TEMPORARY: Mock success
-            handleCloseMeetingModal();
-            setTimeout(() => loadSchedule(), 300);
-        } catch (error) {
-            console.error('Error deleting meeting:', error);
-        }
-    };
+  try {
+    await deleteMentorMeeting(meetingId);
+    await loadSchedule();
+    handleCloseMeetingModal();
+  } catch (error) {
+    console.error('Error deleting meeting:', error);
+  }
+};
 
     const getEventIcon = (type) => {
         const icons = {

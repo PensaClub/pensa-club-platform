@@ -900,6 +900,29 @@ export const AcademyProvider = ({ children }) => {
     }
   }, []);
 
+const acceptStudent = useCallback(async (studentId) => {
+    try {
+      const data = await academyService.acceptStudent(studentId);
+      toast.success('Студентът е приет успешно');
+      return data;
+    } catch (error) {
+      console.error('Error accepting student:', error);
+      toast.error('Грешка при приемане на студент');
+      return { success: false, message: error.message };
+    }
+  }, []);
+
+  const removeStudent = useCallback(async (studentId) => {
+    try {
+      const data = await academyService.removeStudent(studentId);
+      toast.success('Студентът е премахнат успешно');
+      return data;
+    } catch (error) {
+      console.error('Error removing student:', error);
+      toast.error('Грешка при премахване на студент');
+      return { success: false, message: error.message };
+    }
+  }, []);
   // ===============================
   // CONTEXT VALUE
   // ===============================
@@ -994,7 +1017,9 @@ export const AcademyProvider = ({ children }) => {
     getStudentNotes,
     createStudentNote,
     updateStudentNote,
-    deleteStudentNote
+    deleteStudentNote,
+    acceptStudent,
+    removeStudent,
   };
 
   return (

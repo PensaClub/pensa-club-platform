@@ -8,13 +8,12 @@ import './studentNotesTab.css';
 export const StudentNotesTab = ({ student }) => {
   const { t } = useTranslation();
   
-  // ✅ ПОДГОТОВКА ЗА REAL FUNCTIONS
-  // const { 
-  //   getStudentNotes,
-  //   createStudentNote, 
-  //   updateStudentNote, 
-  //   deleteStudentNote 
-  // } = useAcademy();
+  const { 
+    getStudentNotes,
+    createStudentNote, 
+    updateStudentNote, 
+    deleteStudentNote 
+  } = useAcademy();
 
   const [notes, setNotes] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -30,28 +29,24 @@ export const StudentNotesTab = ({ student }) => {
   }, []);
 
   const loadNotes = async () => {
-    setIsLoading(true);
-    try {
-      // ✅ TODO: UNCOMMENT WHEN BACKEND IS READY
-      // const result = await getStudentNotes(student.id);
-      // if (result.success) {
-      //   setNotes(result.notes);
-      // }
-
-      // ⚠️ TEMPORARY: Using mock data
-      setTimeout(() => {
-        // Sort by date (newest first)
-        const sortedNotes = [...(student.privateNotes || [])].sort(
-          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-        );
-        setNotes(sortedNotes);
-        setIsLoading(false);
-      }, 300);
-    } catch (error) {
-      console.error('Error loading notes:', error);
-      setIsLoading(false);
+  setIsLoading(true);
+  try {
+    const result = await getStudentNotes(student.id);
+    
+    if (result.success) {
+      // Sort by date (newest first)
+      const sortedNotes = [...result.notes].sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
+      setNotes(sortedNotes);
     }
-  };
+    
+    setIsLoading(false);
+  } catch (error) {
+    console.error('Error loading notes:', error);
+    setIsLoading(false);
+  }
+};
 
   const handleOpenNoteModal = (note = null) => {
     if (note) {
@@ -83,46 +78,36 @@ export const StudentNotesTab = ({ student }) => {
   };
 
   const handleSaveNote = async () => {
-    if (!noteForm.text.trim()) return;
+  if (!noteForm.text.trim()) return;
 
-    try {
-      const noteData = {
-        studentId: student.id,
-        text: noteForm.text.trim()
-      };
+  try {
+    const noteData = {
+      text: noteForm.text.trim()
+    };
 
-      // ✅ TODO: UNCOMMENT WHEN BACKEND IS READY
-      // if (selectedNote) {
-      //   await updateStudentNote(selectedNote.id, noteData);
-      // } else {
-      //   await createStudentNote(noteData);
-      // }
-      // await loadNotes();
-
-      // ⚠️ TEMPORARY: Mock success
-    //   console.log('Note saved:', noteData);
-      handleCloseNoteModal();
-      setTimeout(() => loadNotes(), 300);
-    } catch (error) {
-      console.error('Error saving note:', error);
+    if (selectedNote) {
+      await updateStudentNote(selectedNote.id, noteData);
+    } else {
+      await createStudentNote(student.id, noteData);
     }
-  };
+    
+    await loadNotes();
+    handleCloseNoteModal();
+  } catch (error) {
+    console.error('Error saving note:', error);
+  }
+};
 
   const handleDeleteNote = async (noteId) => {
-    if (!window.confirm(t('studentDetails.notes.confirmDelete'))) return;
+  if (!window.confirm(t('studentDetails.notes.confirmDelete'))) return;
 
-    try {
-      // ✅ TODO: UNCOMMENT WHEN BACKEND IS READY
-      // await deleteStudentNote(noteId);
-      // await loadNotes();
-
-      // ⚠️ TEMPORARY: Mock success
-    //   console.log('Note deleted:', noteId);
-      setTimeout(() => loadNotes(), 300);
-    } catch (error) {
-      console.error('Error deleting note:', error);
-    }
-  };
+  try {
+    await deleteStudentNote(noteId);
+    await loadNotes();
+  } catch (error) {
+    console.error('Error deleting note:', error);
+  }
+};
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);

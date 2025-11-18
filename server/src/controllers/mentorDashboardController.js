@@ -951,7 +951,7 @@ mentorDashboardController.delete(
 );
 // ===============================
 // GET /api/mentors/dashboard/my-profile
-// Вземи профила на ментора
+
 // ===============================
 mentorDashboardController.get(
   '/my-profile',
@@ -964,13 +964,24 @@ mentorDashboardController.get(
 
       const { user_account } = require('../sequelize/models/index');
 
-      // Вземи профила
       const mentorData = await mentor.findByPk(mentorId, {
+        attributes: { 
+          exclude: [
+            'accumulatedCompletedSessions',
+            'accumulatedMessagesCount',
+            'accumulatedOnlineMinutes',
+            'accumulatedResponseCount',
+            'accumulatedResponseTimeSum',
+            'adminNotes',
+            'lastSessionSyncedAt',
+            'lastActiveAt'
+          ]
+        },
         include: [
           {
             model: user_account,
             as: 'user',
-            attributes: ['id', 'email', 'role', 'isMentor']
+            attributes: ['id', 'email', 'role']
           }
         ]
       });
@@ -1004,7 +1015,7 @@ mentorDashboardController.get(
 
 // ===============================
 // PATCH /api/mentors/dashboard/my-profile
-// Редактирай собствения профил
+// Редактирай собствения профил (ОГРАНИЧЕНО)
 // ===============================
 mentorDashboardController.patch(
   '/my-profile',
@@ -1025,14 +1036,11 @@ mentorDashboardController.patch(
         });
       }
 
-      // ✅ Allowed fields (WITHOUT adminNotes and status)
+      // ✅ Allowed fields (БЕЗ photoUrl, name, age, adminNotes, status)
       const allowedFields = [
-        'name',
         'email',
         'phone',
-        'age',
         'country',
-        'photoUrl',
         'specialization',
         'education',
         'experience',
@@ -1068,14 +1076,488 @@ mentorDashboardController.patch(
       // Update mentor
       await mentorData.update(filteredUpdates);
 
+      // Върни ФИЛТРИРАН response
+      const updatedMentor = await mentor.findByPk(mentorId, {
+        attributes: { 
+          exclude: [
+            'accumulatedCompletedSessions',
+            'accumulatedMessagesCount',
+            'accumulatedOnlineMinutes',
+            'accumulatedResponseCount',
+            'accumulatedResponseTimeSum',
+            'adminNotes',
+            'lastSessionSyncedAt',
+            'lastActiveAt',
+            'userId'
+          ]
+        }
+      });
+
       res.status(200).json({
         success: true,
         message: 'Profile updated successfully',
-        mentor: mentorData
+        mentor: updatedMentor
       });
 
     } catch (err) {
       console.error('❌ [UPDATE MY PROFILE] Error:', err);
+
+      if (err.message === 'You are not registered as a mentor') {
+        return res.status(403).json({
+          success: false,
+          message: 'You are not registered as a mentor'
+        });
+      }
+
+      next(err);
+    }
+  }
+);
+// ===============================
+// STUDENT MANAGEMENT ENDPOINTS
+// ===============================
+
+// ===============================
+// GET /api/mentors/dashboard/students/:studentId/details
+// Вземи детайли за студент
+// ===============================
+mentorDashboardController.get(
+  '/students/:studentId/details',
+  isAuth,
+  rbac.checkPermission('statistics', 'readOwn'),
+  async (req, res, next) => {
+    try {
+      const userId = req.user.userId;
+      const studentId = parseInt(req.params.studentId);
+      const mentorId = await getMentorIdFromUser(userId);
+
+      const { student, user_account, user_details } = require('../sequelize/models/index');
+
+      const studentData = await student.findOne({
+        where: {
+          id: studentId,
+          currentMentorId: mentorId 
+        },
+        include: [
+          {
+            model: user_account,
+            as: 'user',
+            attributes: ['id', 'email'],
+            include: [
+              {
+                model: user_details,
+                as: 'details',
+                attributes: ['username', 'firstName', 'lastName']
+              }
+            ]
+          },
+          {
+            model: mentor,
+            as: 'currentMentor',
+            attributes: ['id', 'name', 'email', 'photoUrl']
+          }
+        ]
+      });
+
+      if (!studentData) {
+        return res.status(404).json({
+          success: false,
+          message: 'Student not found or not assigned to you'
+        });
+      }
+
+      res.status(200).json({
+        success: true,
+        student: studentData
+      });
+
+    } catch (err) {
+      console.error('❌ [GET STUDENT DETAILS] Error:', err);
+
+      if (err.message === 'You are not registered as a mentor') {
+        return res.status(403).json({
+          success: false,
+          message: 'You are not registered as a mentor'
+        });
+      }
+
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// POST /api/mentors/dashboard/students/:studentId/accept
+// Приеми студент (премахни от друг ментор ако е нужно)
+// ===============================
+mentorDashboardController.post(
+  '/students/:studentId/accept',
+  isAuth,
+  rbac.checkPermission('statistics', 'readOwn'),
+  async (req, res, next) => {
+    try {
+      const userId = req.user.userId;
+      const studentId = parseInt(req.params.studentId);
+      const mentorId = await getMentorIdFromUser(userId);
+
+      const { student } = require('../sequelize/models/index');
+
+      const studentData = await student.findByPk(studentId);
+
+      if (!studentData) {
+        return res.status(404).json({
+          success: false,
+          message: 'Student not found'
+        });
+      }
+
+      if (studentData.currentMentorId === mentorId) {
+        return res.status(400).json({
+          success: false,
+          message: 'Student is already assigned to you'
+        });
+      }
+
+      if (studentData.currentMentorId) {
+        const previousMentorId = studentData.currentMentorId;
+
+        const previousMentor = await mentor.findByPk(previousMentorId);
+        if (previousMentor) {
+          await previousMentor.update({
+            studentsCount: Math.max(0, previousMentor.studentsCount - 1)
+          });
+        }
+      }
+
+      await studentData.update({
+        currentMentorId: mentorId,
+        mentorAssignedDate: new Date()
+      });
+
+      const mentorData = await mentor.findByPk(mentorId);
+      await mentorData.update({
+        studentsCount: mentorData.studentsCount + 1
+      });
+
+      res.status(200).json({
+        success: true,
+        message: 'Student accepted successfully',
+        student: studentData
+      });
+
+    } catch (err) {
+      console.error('❌ [ACCEPT STUDENT] Error:', err);
+
+      if (err.message === 'You are not registered as a mentor') {
+        return res.status(403).json({
+          success: false,
+          message: 'You are not registered as a mentor'
+        });
+      }
+
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// POST /api/mentors/dashboard/students/:studentId/remove
+// Откажи се от студент
+// ===============================
+mentorDashboardController.post(
+  '/students/:studentId/remove',
+  isAuth,
+  rbac.checkPermission('statistics', 'readOwn'),
+  async (req, res, next) => {
+    try {
+      const userId = req.user.userId;
+      const studentId = parseInt(req.params.studentId);
+      const mentorId = await getMentorIdFromUser(userId);
+
+      const { student } = require('../sequelize/models/index');
+
+      // Вземи студента
+      const studentData = await student.findOne({
+        where: {
+          id: studentId,
+          currentMentorId: mentorId 
+        }
+      });
+
+      if (!studentData) {
+        return res.status(404).json({
+          success: false,
+          message: 'Student not found or not assigned to you'
+        });
+      }
+
+      // ✅ Премахни студента
+      await studentData.update({
+        currentMentorId: null
+        // mentorAssignedDate остава за история
+      });
+
+      const mentorData = await mentor.findByPk(mentorId);
+      await mentorData.update({
+        studentsCount: Math.max(0, mentorData.studentsCount - 1)
+      });
+
+      res.status(200).json({
+        success: true,
+        message: 'Student removed successfully'
+      });
+
+    } catch (err) {
+      console.error('❌ [REMOVE STUDENT] Error:', err);
+
+      if (err.message === 'You are not registered as a mentor') {
+        return res.status(403).json({
+          success: false,
+          message: 'You are not registered as a mentor'
+        });
+      }
+
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// NOTES ENDPOINTS
+// ===============================
+
+// ===============================
+// GET /api/mentors/dashboard/students/:studentId/notes
+// Вземи всички бележки за студент
+// ===============================
+mentorDashboardController.get(
+  '/students/:studentId/notes',
+  isAuth,
+  rbac.checkPermission('statistics', 'readOwn'),
+  async (req, res, next) => {
+    try {
+      const userId = req.user.userId;
+      const studentId = parseInt(req.params.studentId);
+      const mentorId = await getMentorIdFromUser(userId);
+
+      const { mentor_note, student } = require('../sequelize/models/index');
+
+      const studentData = await student.findOne({
+        where: {
+          id: studentId,
+          currentMentorId: mentorId
+        }
+      });
+
+      if (!studentData) {
+        return res.status(404).json({
+          success: false,
+          message: 'Student not found or not assigned to you'
+        });
+      }
+
+      const notes = await mentor_note.findAll({
+        where: {
+          studentId: studentId,
+          mentorId: mentorId
+        },
+        order: [['createdAt', 'DESC']]
+      });
+
+      res.status(200).json({
+        success: true,
+        notes: notes
+      });
+
+    } catch (err) {
+      console.error('❌ [GET STUDENT NOTES] Error:', err);
+
+      if (err.message === 'You are not registered as a mentor') {
+        return res.status(403).json({
+          success: false,
+          message: 'You are not registered as a mentor'
+        });
+      }
+
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// POST /api/mentors/dashboard/students/:studentId/notes
+// Създай бележка за студент
+// ===============================
+mentorDashboardController.post(
+  '/students/:studentId/notes',
+  isAuth,
+  rbac.checkPermission('statistics', 'readOwn'),
+  async (req, res, next) => {
+    try {
+      const userId = req.user.userId;
+      const studentId = parseInt(req.params.studentId);
+      const mentorId = await getMentorIdFromUser(userId);
+
+      const { createNoteSchema } = require('../schemas/mentorNotes.schema');
+      const { mentor_note, student } = require('../sequelize/models/index');
+
+      const validationResult = createNoteSchema.safeParse(req.body);
+
+      if (!validationResult.success) {
+        return res.status(400).json({
+          success: false,
+          message: 'Validation failed',
+          errors: validationResult.error.errors
+        });
+      }
+
+      const studentData = await student.findOne({
+        where: {
+          id: studentId,
+          currentMentorId: mentorId
+        }
+      });
+
+      if (!studentData) {
+        return res.status(404).json({
+          success: false,
+          message: 'Student not found or not assigned to you'
+        });
+      }
+
+      const newNote = await mentor_note.create({
+        mentorId: mentorId,
+        studentId: studentId,
+        text: validationResult.data.text
+      });
+
+      res.status(201).json({
+        success: true,
+        message: 'Note created successfully',
+        note: newNote
+      });
+
+    } catch (err) {
+      console.error('❌ [CREATE NOTE] Error:', err);
+
+      if (err.message === 'You are not registered as a mentor') {
+        return res.status(403).json({
+          success: false,
+          message: 'You are not registered as a mentor'
+        });
+      }
+
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// PATCH /api/mentors/dashboard/notes/:noteId
+// Редактирай бележка
+// ===============================
+mentorDashboardController.patch(
+  '/notes/:noteId',
+  isAuth,
+  rbac.checkPermission('statistics', 'readOwn'),
+  async (req, res, next) => {
+    try {
+      const userId = req.user.userId;
+      const noteId = parseInt(req.params.noteId);
+      const mentorId = await getMentorIdFromUser(userId);
+
+      const { updateNoteSchema } = require('../schemas/mentorNotes.schema');
+      const { mentor_note } = require('../sequelize/models/index');
+
+      // Валидация
+      const validationResult = updateNoteSchema.safeParse(req.body);
+
+      if (!validationResult.success) {
+        return res.status(400).json({
+          success: false,
+          message: 'Validation failed',
+          errors: validationResult.error.errors
+        });
+      }
+
+      const note = await mentor_note.findOne({
+        where: {
+          id: noteId,
+          mentorId: mentorId
+        }
+      });
+
+      if (!note) {
+        return res.status(404).json({
+          success: false,
+          message: 'Note not found or not yours'
+        });
+      }
+
+      await note.update({
+        text: validationResult.data.text
+      });
+
+      res.status(200).json({
+        success: true,
+        message: 'Note updated successfully',
+        note: note
+      });
+
+    } catch (err) {
+      console.error('❌ [UPDATE NOTE] Error:', err);
+
+      if (err.message === 'You are not registered as a mentor') {
+        return res.status(403).json({
+          success: false,
+          message: 'You are not registered as a mentor'
+        });
+      }
+
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// DELETE /api/mentors/dashboard/notes/:noteId
+// Изтрий бележка
+// ===============================
+mentorDashboardController.delete(
+  '/notes/:noteId',
+  isAuth,
+  rbac.checkPermission('statistics', 'readOwn'),
+  async (req, res, next) => {
+    try {
+      const userId = req.user.userId;
+      const noteId = parseInt(req.params.noteId);
+      const mentorId = await getMentorIdFromUser(userId);
+
+      const { mentor_note } = require('../sequelize/models/index');
+
+      const note = await mentor_note.findOne({
+        where: {
+          id: noteId,
+          mentorId: mentorId
+        }
+      });
+
+      if (!note) {
+        return res.status(404).json({
+          success: false,
+          message: 'Note not found or not yours'
+        });
+      }
+
+      await note.destroy();
+
+      res.status(200).json({
+        success: true,
+        message: 'Note deleted successfully'
+      });
+
+    } catch (err) {
+      console.error('❌ [DELETE NOTE] Error:', err);
 
       if (err.message === 'You are not registered as a mentor') {
         return res.status(403).json({

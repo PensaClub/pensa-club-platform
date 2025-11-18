@@ -6,52 +6,11 @@ import { useTranslation } from 'react-i18next';
 import { useAcademy } from '../../contexts/AcademyProvider';
 import './digiMentorStudentsList.css';
 
-// ⚠️ TEMPORARY MOCK DATA
-const mockStudents = [
-  {
-    id: 'student_123',
-    name: 'Иван Петров',
-    email: 'ivan@example.com',
-    avatar: 'https://i.pravatar.cc/150?img=12',
-    status: 'active',
-    sessionsCount: 15,
-    totalHours: 12.5
-  },
-  {
-    id: 'student_456',
-    name: 'Мария Иванова',
-    email: 'maria@example.com',
-    avatar: 'https://i.pravatar.cc/150?img=45',
-    status: 'active',
-    sessionsCount: 8,
-    totalHours: 6.0
-  },
-  {
-    id: 'student_789',
-    name: 'Георги Димитров',
-    email: 'georgi@example.com',
-    avatar: null,
-    status: 'inactive',
-    sessionsCount: 3,
-    totalHours: 2.5
-  },
-  {
-    id: 'student_101',
-    name: 'Елена Стоянова',
-    email: 'elena@example.com',
-    avatar: 'https://i.pravatar.cc/150?img=32',
-    status: 'completed',
-    sessionsCount: 20,
-    totalHours: 18.0
-  }
-];
-
 export const DigiMentorStudentsList = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   
-  // ✅ ПОДГОТОВКА ЗА REAL FUNCTIONS
-  // const { getMentorStudents, isLoading } = useAcademy();
+  const { getMentorStudents } = useAcademy();
   
   const [students, setStudents] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -66,18 +25,13 @@ export const DigiMentorStudentsList = () => {
     try {
       setIsLoading(true);
 
-      // ✅ TODO: UNCOMMENT WHEN BACKEND IS READY
-      // const result = await getMentorStudents();
-      // if (result.success) {
-      //   setStudents(result.students);
-      // }
+      const result = await getMentorStudents();
+      
+      if (result.success) {
+        setStudents(result.students);
+      }
 
-      // ⚠️ TEMPORARY: Using mock data
-      setTimeout(() => {
-        setStudents(mockStudents);
-        setIsLoading(false);
-      }, 300);
-
+      setIsLoading(false);
     } catch (error) {
       console.error('Error fetching students:', error);
       setIsLoading(false);
@@ -85,7 +39,7 @@ export const DigiMentorStudentsList = () => {
   };
 
   const handleViewStudent = (studentId) => {
-    navigate(`/mentor/students/${studentId}/details`);
+    navigate(`/profile/mentor-dashboard/students/${studentId}`);
   };
 
   const handleMessageStudent = (studentId) => {
@@ -98,6 +52,8 @@ export const DigiMentorStudentsList = () => {
       case 'active': return 'green';
       case 'inactive': return 'gray';
       case 'completed': return 'blue';
+      case 'graduated': return 'purple';
+      case 'suspended': return 'red';
       default: return 'gray';
     }
   };
@@ -187,10 +143,10 @@ export const DigiMentorStudentsList = () => {
             {t('digiMentorStudentsList.filters.inactive')}
           </button>
           <button
-            className={`digi-mentor-students-list-filter-btn ${filterStatus === 'completed' ? 'digi-mentor-students-list-filter-btn-active' : ''}`}
-            onClick={() => setFilterStatus('completed')}
+            className={`digi-mentor-students-list-filter-btn ${filterStatus === 'graduated' ? 'digi-mentor-students-list-filter-btn-active' : ''}`}
+            onClick={() => setFilterStatus('graduated')}
           >
-            {t('digiMentorStudentsList.filters.completed')}
+            {t('digiMentorStudentsList.filters.graduated')}
           </button>
         </div>
       </div>
@@ -232,15 +188,15 @@ export const DigiMentorStudentsList = () => {
               <div className="digi-mentor-students-list-card-stats">
                 <div className="digi-mentor-students-list-stat-item">
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 8V12L15 15M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
-                  <span>{student.sessionsCount || 0} {t('digiMentorStudentsList.sessions')}</span>
+                  <span>{student.attendance || 0} {t('digiMentorStudentsList.sessions')}</span>
                 </div>
                 <div className="digi-mentor-students-list-stat-item">
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 6V12L16 14M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M12 8V12L15 15M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
-                  <span>{student.totalHours || 0}h</span>
+                  <span>{student.totalCredits || 0} 💎</span>
                 </div>
               </div>
 
