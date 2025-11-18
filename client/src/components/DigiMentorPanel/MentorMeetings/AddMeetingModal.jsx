@@ -1,6 +1,6 @@
 // client/src/components/DigiMentorPanel/MentorMeetings/AddMeetingModal.jsx
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAcademy } from '../../contexts/AcademyProvider';
 import './addMeetingModal.css';
@@ -24,7 +24,7 @@ export const AddMeetingModal = ({ onClose, onSuccess }) => {
     notes: ''
   });
 
-  useState(() => {
+  useEffect(() => {
     fetchStudents();
   }, []);
 
@@ -70,7 +70,18 @@ export const AddMeetingModal = ({ onClose, onSuccess }) => {
     setErrorMessage('');
 
     try {
-      const result = await createMentorMeeting(formData);
+      // ✅ MAP FRONTEND FIELDS TO BACKEND FIELDS
+      const backendData = {
+        studentId: formData.studentId ? parseInt(formData.studentId) : undefined,
+        title: formData.title.trim(),
+        meetingDate: formData.scheduledDate,
+        meetingTime: formData.scheduledTime,
+        duration: formData.plannedDuration,
+        notes: formData.notes.trim() || undefined,
+        meetingType: formData.meetingType // ← Вече няма нужда от mapping, директно го изпращаме
+      };
+
+      const result = await createMentorMeeting(backendData);
       if (result.success) {
         onSuccess?.();
       } else {

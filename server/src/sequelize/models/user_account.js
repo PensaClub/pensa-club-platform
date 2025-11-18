@@ -122,6 +122,11 @@ module.exports = (sequelize, DataTypes) => {
                 sourceKey: 'id',
                 as: 'mentorProfile',
             });
+            user_account.hasOne(models.student, {
+                foreignKey: 'userId',
+                sourceKey: 'id',
+                as: 'studentProfile',
+            });
         }
     }
 
@@ -159,12 +164,12 @@ module.exports = (sequelize, DataTypes) => {
             token_expiration: DataTypes.DATE,
             role: {
                 type: DataTypes.STRING,
-                values: ['admin', 'moderator', 'user', 'guest', 'limited','mentor'],
+                values: ['admin', 'moderator', 'user', 'guest', 'limited', 'mentor'],
                 allowNull: false,
                 defaultValue: 'user',
                 validate: {
                     isIn: {
-                        args: [['admin', 'moderator', 'user', 'guest', 'limited','mentor']],
+                        args: [['admin', 'moderator', 'user', 'guest', 'limited', 'mentor']],
                         msg: 'Role must be one of the following: admin, moderator, user, limited or guest.',
                     },
                 },
@@ -193,7 +198,7 @@ module.exports = (sequelize, DataTypes) => {
                 defaultValue: false,
                 field: 'is_google_user',
             },
-             isMentor: {
+            isMentor: {
                 type: DataTypes.BOOLEAN,
                 allowNull: false,
                 defaultValue: false,

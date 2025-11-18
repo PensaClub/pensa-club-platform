@@ -49,40 +49,47 @@ export const EditMeetingModal = ({ meeting, onClose, onSuccess }) => {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    // Validation
-    if (!formData.title.trim()) {
-      setErrorMessage(t('editMeetingModal.errors.titleRequired'));
-      return;
-    }
-    if (!formData.scheduledDate) {
-      setErrorMessage(t('editMeetingModal.errors.dateRequired'));
-      return;
-    }
-    if (!formData.scheduledTime) {
-      setErrorMessage(t('editMeetingModal.errors.timeRequired'));
-      return;
-    }
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  
+  // Validation
+  if (!formData.title.trim()) {
+    setErrorMessage(t('editMeetingModal.errors.titleRequired'));
+    return;
+  }
+  if (!formData.scheduledDate) {
+    setErrorMessage(t('editMeetingModal.errors.dateRequired'));
+    return;
+  }
+  if (!formData.scheduledTime) {
+    setErrorMessage(t('editMeetingModal.errors.timeRequired'));
+    return;
+  }
 
-    setIsSaving(true);
-    setErrorMessage('');
+  setIsSaving(true);
+  setErrorMessage('');
 
-    try {
-      const result = await updateMentorMeeting(meeting.id, formData);
-      if (result.success) {
-        onSuccess?.();
-      } else {
-        setErrorMessage(result.message || t('editMeetingModal.errors.saveFailed'));
-      }
-    } catch (error) {
-      console.error('Error updating meeting:', error);
-      setErrorMessage(t('editMeetingModal.errors.saveFailed'));
-    } finally {
-      setIsSaving(false);
+  try {
+    // ✅ КОНВЕРТИРАЙ studentId на number (или undefined ако е празен)
+    const dataToSend = {
+      ...formData,
+      studentId: formData.studentId ? parseInt(formData.studentId, 10) : undefined,
+      plannedDuration: parseInt(formData.plannedDuration, 10)
+    };
+
+    const result = await updateMentorMeeting(meeting.id, dataToSend);
+    if (result.success) {
+      onSuccess?.();
+    } else {
+      setErrorMessage(result.message || t('editMeetingModal.errors.saveFailed'));
     }
-  };
+  } catch (error) {
+    console.error('Error updating meeting:', error);
+    setErrorMessage(t('editMeetingModal.errors.saveFailed'));
+  } finally {
+    setIsSaving(false);
+  }
+};
 
   return (
     <div className="edit-meeting-modal-overlay" onClick={onClose}>

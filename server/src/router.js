@@ -18,6 +18,7 @@ const clubController = require('./controllers/clubController');
 const academyController = require('./controllers/academyController');
 const reviewsController = require('./controllers/reviewsController');
 const userNotificationsController = require('./controllers/userNotificationsController'); 
+const mentorDashboardController = require('./controllers/mentorDashboardController');
 
 router.use('/auth', authController);
 router.use('/user', userController);
@@ -36,6 +37,7 @@ router.use('/clubs', clubController);
 router.use('/academy', academyController); 
 router.use('/reviews', reviewsController);
 router.use('/user-notifications', userNotificationsController); 
+router.use('/mentors/dashboard', mentorDashboardController);
 router.use((err, req, res, next) => {
     errorHandler(err, req, res, err.statusCode || 500);
 });
