@@ -12,7 +12,7 @@ import { DigiMentorRecentActivity } from './DigiMentorRecentActivity/DigiMentorR
 import { DigiMentorUpcomingSessions } from './DigiMentorUpcomingSessions/DigiMentorUpcomingSessions';
 import { DigiMentorStudentsList } from './DigiMentorStudentsList/DigiMentorStudentsList';
 import { DigiMentorPerformanceChart } from './DigiMentorPerformanceChart/DigiMentorPerformanceChart';
-import { MentorMeetings } from './MentorMeetings/MentorMeetings'; // ✅ ДОБАВИ
+import { MentorMeetings } from './MentorMeetings/MentorMeetings'; 
 import './digiMentorPanel.css';
 
 export const DigiMentorPanel = () => {
@@ -24,7 +24,7 @@ export const DigiMentorPanel = () => {
         getMentorUpcomingSessions,
         getMentorStudents,
         getMentorPerformanceData,
-        getMentorMeetings, // ✅ ДОБАВИ
+        getMentorMeetings, 
         isLoading 
     } = useAcademy();
     const { profileData } = useAuthContext();
@@ -82,7 +82,7 @@ export const DigiMentorPanel = () => {
                 setPerformanceData(performanceData.data);
             }
 
-            if (meetingsData && meetingsData.success) { // ✅ ДОБАВИ
+            if (meetingsData && meetingsData.success) {
                 setMeetings(meetingsData.meetings);
             }
         } catch (err) {

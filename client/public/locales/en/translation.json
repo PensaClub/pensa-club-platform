@@ -12879,7 +12879,8 @@
     "status": {
       "active": "Active",
       "inactive": "Inactive",
-      "completed": "Completed"
+      "completed": "Completed",
+      "scheduled": "Scheduled"
     },
     "sessions": "sessions",
     "message": "Message",

@@ -129,12 +129,21 @@ const permissions = {
     mentor: {
         create: ['admin',],
         read: ['admin', 'moderator', 'user', 'guest'],
+        readOwn: ['admin', 'mentor'],
         update: ['admin',],
+         updateOwn: ['admin', 'mentor'], 
         delete: ['admin'],
     },
     statistics: {
         read: ['admin'],
         readOwn: ['admin', 'mentor'],
+    },
+    meeting: {
+        create: ['admin', 'mentor'],
+        read: ['admin', 'mentor'],
+        readOwn: ['admin', 'mentor'],
+        update: ['admin', 'mentor'],
+        delete: ['admin', 'mentor'],
     },
     notification: {
         create: ['admin', 'moderator', 'user'],

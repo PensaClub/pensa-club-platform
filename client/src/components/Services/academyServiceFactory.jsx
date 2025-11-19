@@ -343,6 +343,13 @@ export const academyServiceFactory = () => {
     deleteStudentNote: async (noteId) => {
       return requester.delete(`${apiUrl}/mentors/notes/${noteId}`);
     },
+     acceptStudent: async (studentId) => {
+      return requester.post(`${apiUrl}/mentors/dashboard/students/${studentId}/accept`);
+    },
+
+    removeStudent: async (studentId) => {
+      return requester.post(`${apiUrl}/mentors/dashboard/students/${studentId}/remove`);
+    },
   };
 };
 

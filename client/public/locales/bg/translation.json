@@ -13113,7 +13113,9 @@
     "status": {
       "confirmed": "Потвърдена",
       "pending": "Изчакваща",
-      "cancelled": "Отказана"
+      "cancelled": "Отказана",
+      "scheduled": "Планиран"
+
     },
     "joinSession": "Присъедини се",
     "editSession": "Редактирай",
@@ -13135,7 +13137,8 @@
     "status": {
       "active": "Активен",
       "inactive": "Неактивен",
-      "completed": "Завършен"
+      "completed": "Завършен",
+      "scheduled": "Планиран"
     },
     "sessions": "сесии",
     "message": "Съобщение",

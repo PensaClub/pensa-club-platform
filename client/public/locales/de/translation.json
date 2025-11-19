@@ -12175,7 +12175,8 @@
     "status": {
       "active": "Aktiv",
       "inactive": "Inaktiv",
-      "completed": "Abgeschlossen"
+      "completed": "Abgeschlossen",
+      "scheduled": "Geplant"
     },
     "sessions": "Sitzungen",
     "message": "Nachricht",

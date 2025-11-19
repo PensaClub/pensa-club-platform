@@ -20,7 +20,7 @@ export const StudentDetails = () => {
   const { t } = useTranslation();
   
   // ✅ ПОДГОТОВКА ЗА REAL FUNCTIONS
-  // const { getStudentDetails, isLoading: academyLoading } = useAcademy();
+  const { getStudentDetails, isLoading: academyLoading } = useAcademy();
   
   const [student, setStudent] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -32,30 +32,25 @@ export const StudentDetails = () => {
   }, [studentId]);
 
   const fetchStudentDetails = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
+  try {
+    setIsLoading(true);
+    setError(null);
 
-      // ✅ TODO: UNCOMMENT WHEN BACKEND IS READY
-      // const result = await getStudentDetails(studentId);
-      // if (result.success) {
-      //   setStudent(result.student);
-      // } else {
-      //   setError(result.message || 'Failed to load student details');
-      // }
-
-      // ⚠️ TEMPORARY: Using mock data
-      setTimeout(() => {
-        setStudent(mockStudentData);
-        setIsLoading(false);
-      }, 500);
-
-    } catch (err) {
-      console.error('Error fetching student details:', err);
-      setError(t('studentDetails.errorLoading'));
-      setIsLoading(false);
+    const result = await getStudentDetails(studentId);
+    
+    if (result.success) {
+      setStudent(result.student);
+    } else {
+      setError(result.message || t('studentDetails.errorLoading'));
     }
-  };
+    
+    setIsLoading(false);
+  } catch (err) {
+    console.error('Error fetching student details:', err);
+    setError(t('studentDetails.errorLoading'));
+    setIsLoading(false);
+  }
+};
 
   if (isLoading) {
     return <Loader />;
