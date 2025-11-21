@@ -164,13 +164,13 @@ module.exports = (sequelize, DataTypes) => {
             token_expiration: DataTypes.DATE,
             role: {
                 type: DataTypes.STRING,
-                values: ['admin', 'moderator', 'user', 'guest', 'limited', 'mentor'],
+                values: ['admin', 'moderator', 'user', 'guest', 'limited', 'mentor', 'student'],
                 allowNull: false,
                 defaultValue: 'user',
                 validate: {
                     isIn: {
-                        args: [['admin', 'moderator', 'user', 'guest', 'limited', 'mentor']],
-                        msg: 'Role must be one of the following: admin, moderator, user, limited or guest.',
+                        args: [['admin', 'moderator', 'user', 'guest', 'limited', 'mentor', 'student']],
+                        msg: 'Role must be one of the following: admin, moderator, user, limited, guest, mentor or student.',
                     },
                 },
             },

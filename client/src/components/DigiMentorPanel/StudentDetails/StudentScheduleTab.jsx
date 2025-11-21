@@ -11,9 +11,9 @@ export const StudentScheduleTab = ({ student }) => {
       getMentorMeetings, 
       createMentorMeeting, 
       updateMentorMeeting, 
-      deleteMentorMeeting,
-      cancelMentorMeeting 
+      deleteMentorMeeting
     } = useAcademy();
+    
     const [allEvents, setAllEvents] = useState([]);
     const [currentWeekStart, setCurrentWeekStart] = useState(getWeekStart(new Date()));
     const [currentMonthStart, setCurrentMonthStart] = useState(getMonthStart(new Date()));
@@ -21,9 +21,7 @@ export const StudentScheduleTab = ({ student }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [showMeetingModal, setShowMeetingModal] = useState(false);
     const [showViewModal, setShowViewModal] = useState(false);
-    const [modalMode, setModalMode] = useState('view'); // 'view' or 'edit'
     const [selectedMeeting, setSelectedMeeting] = useState(null);
-    const [selectedDate, setSelectedDate] = useState(null);
     const [meetingForm, setMeetingForm] = useState({
         title: '',
         date: '',
@@ -67,19 +65,16 @@ export const StudentScheduleTab = ({ student }) => {
         const days = [];
         const startDay = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
 
-        // Previous month days
         for (let i = startDay - 1; i >= 0; i--) {
             const day = new Date(year, month, -i);
             days.push({ date: day, isCurrentMonth: false });
         }
 
-        // Current month days
         for (let i = 1; i <= lastDay.getDate(); i++) {
             const day = new Date(year, month, i);
             days.push({ date: day, isCurrentMonth: true });
         }
 
-        // Next month days
         const remainingDays = 42 - days.length;
         for (let i = 1; i <= remainingDays; i++) {
             const day = new Date(year, month + 1, i);
@@ -99,38 +94,37 @@ export const StudentScheduleTab = ({ student }) => {
     }
 
     const loadSchedule = async () => {
-  setIsLoading(true);
+      setIsLoading(true);
 
-  try {
-    const result = await getMentorMeetings();
-    
-    if (result.success) {
-      // Filter meetings for this student only
-      const studentMeetings = result.meetings.filter(m => m.studentId === student.id);
-      combineAllEvents(studentMeetings);
-    }
-    
-    setIsLoading(false);
-  } catch (error) {
-    console.error('Error loading schedule:', error);
-    setIsLoading(false);
-  }
-};
-
-    meetings.forEach(meeting => {
-  events.push({
-    id: `meeting-${meeting.id}`,
-    type: 'mentor_meeting',
-    title: meeting.title,
-    date: meeting.meetingDate,  
-    time: meeting.meetingTime,  
-    duration: meeting.duration, 
-    notes: meeting.notes,
-    status: meeting.status,
-    canEdit: true,
-    meetingData: meeting
-  });
-});
+      try {
+        const result = await getMentorMeetings();
+        
+        if (result.success) {
+          const studentMeetings = result.meetings.filter(m => m.studentId === student.id);
+          
+          // ✅ Transform meetings to events
+          const events = studentMeetings.map(meeting => ({
+            id: `meeting-${meeting.id}`,
+            type: 'mentor_meeting',
+            title: meeting.title,
+            date: meeting.meetingDate,  
+            time: meeting.meetingTime,  
+            duration: meeting.duration, 
+            notes: meeting.notes,
+            status: meeting.status,
+            canEdit: true,
+            meetingData: meeting
+          }));
+          
+          setAllEvents(events);
+        }
+        
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error loading schedule:', error);
+        setIsLoading(false);
+      }
+    };
 
     const handlePreviousWeek = () => {
         const newStart = new Date(currentWeekStart);
@@ -167,9 +161,6 @@ export const StudentScheduleTab = ({ student }) => {
     };
 
     const handleDayClick = (date) => {
-        setSelectedDate(date);
-        setSelectedMeeting(null);
-        setModalMode('edit');
         setMeetingForm({
             title: '',
             date: formatDate(date),
@@ -178,14 +169,12 @@ export const StudentScheduleTab = ({ student }) => {
             type: 'online',
             notes: ''
         });
+        setSelectedMeeting(null);
         setShowMeetingModal(true);
     };
 
     const handleEventClick = (event) => {
         setSelectedMeeting(event);
-        setSelectedDate(null);
-
-        setModalMode('view');
         setShowViewModal(true);
     };
 
@@ -199,7 +188,6 @@ export const StudentScheduleTab = ({ student }) => {
             notes: selectedMeeting.notes || ''
         });
         setShowViewModal(false);
-        setModalMode('edit');
         setShowMeetingModal(true);
     };
 
@@ -207,7 +195,6 @@ export const StudentScheduleTab = ({ student }) => {
         setShowMeetingModal(false);
         setShowViewModal(false);
         setSelectedMeeting(null);
-        setSelectedDate(null);
         setMeetingForm({
             title: '',
             date: '',
@@ -226,41 +213,41 @@ export const StudentScheduleTab = ({ student }) => {
     };
 
     const handleSaveMeeting = async () => {
-  try {
-    const meetingData = {
-      studentId: student.id,
-      title: meetingForm.title,
-      meetingDate: meetingForm.date,
-      meetingTime: meetingForm.time,
-      duration: meetingForm.duration,
-      meetingType: meetingForm.type,
-      notes: meetingForm.notes
+      try {
+        const meetingData = {
+          studentId: student.id,
+          title: meetingForm.title,
+          meetingDate: meetingForm.date,
+          meetingTime: meetingForm.time,
+          duration: meetingForm.duration,
+          meetingType: meetingForm.type,
+          notes: meetingForm.notes
+        };
+
+        if (selectedMeeting) {
+          await updateMentorMeeting(selectedMeeting.meetingData.id, meetingData);
+        } else {
+          await createMentorMeeting(meetingData);
+        }
+        
+        await loadSchedule();
+        handleCloseMeetingModal();
+      } catch (error) {
+        console.error('Error saving meeting:', error);
+      }
     };
 
-    if (selectedMeeting) {
-      await updateMentorMeeting(selectedMeeting.meetingData.id, meetingData);
-    } else {
-      await createMentorMeeting(meetingData);
-    }
-    
-    await loadSchedule();
-    handleCloseMeetingModal();
-  } catch (error) {
-    console.error('Error saving meeting:', error);
-  }
-};
-
     const handleDeleteMeeting = async (meetingId) => {
-  if (!window.confirm(t('studentDetails.schedule.confirmDelete'))) return;
+      if (!window.confirm(t('studentDetails.schedule.confirmDelete'))) return;
 
-  try {
-    await deleteMentorMeeting(meetingId);
-    await loadSchedule();
-    handleCloseMeetingModal();
-  } catch (error) {
-    console.error('Error deleting meeting:', error);
-  }
-};
+      try {
+        await deleteMentorMeeting(meetingId);
+        await loadSchedule();
+        handleCloseMeetingModal();
+      } catch (error) {
+        console.error('Error deleting meeting:', error);
+      }
+    };
 
     const getEventIcon = (type) => {
         const icons = {
@@ -385,39 +372,11 @@ export const StudentScheduleTab = ({ student }) => {
                             <span className="student-schedule-legend-label">{t('studentDetails.schedule.all')}</span>
                         </button>
                         <button
-                            className={`student-schedule-legend-item ${activeFilter === 'course_lesson' ? 'student-schedule-legend-item-active' : ''}`}
-                            onClick={() => setActiveFilter('course_lesson')}
-                        >
-                            <span className="student-schedule-legend-icon" style={{ background: '#dbeafe' }}>📚</span>
-                            <span className="student-schedule-legend-label">{t('studentDetails.schedule.course_lesson')}</span>
-                        </button>
-                        <button
                             className={`student-schedule-legend-item ${activeFilter === 'mentor_meeting' ? 'student-schedule-legend-item-active' : ''}`}
                             onClick={() => setActiveFilter('mentor_meeting')}
                         >
                             <span className="student-schedule-legend-icon" style={{ background: '#fce7f3' }}>📅</span>
                             <span className="student-schedule-legend-label">{t('studentDetails.schedule.mentor_meeting')}</span>
-                        </button>
-                        <button
-                            className={`student-schedule-legend-item ${activeFilter === 'lecture' ? 'student-schedule-legend-item-active' : ''}`}
-                            onClick={() => setActiveFilter('lecture')}
-                        >
-                            <span className="student-schedule-legend-icon" style={{ background: '#fef3c7' }}>🎓</span>
-                            <span className="student-schedule-legend-label">{t('studentDetails.schedule.lecture')}</span>
-                        </button>
-                        <button
-                            className={`student-schedule-legend-item ${activeFilter === 'seminar' ? 'student-schedule-legend-item-active' : ''}`}
-                            onClick={() => setActiveFilter('seminar')}
-                        >
-                            <span className="student-schedule-legend-icon" style={{ background: '#d1fae5' }}>🎯</span>
-                            <span className="student-schedule-legend-label">{t('studentDetails.schedule.seminar')}</span>
-                        </button>
-                        <button
-                            className={`student-schedule-legend-item ${activeFilter === 'presentation' ? 'student-schedule-legend-item-active' : ''}`}
-                            onClick={() => setActiveFilter('presentation')}
-                        >
-                            <span className="student-schedule-legend-icon" style={{ background: '#e0e7ff' }}>📊</span>
-                            <span className="student-schedule-legend-label">{t('studentDetails.schedule.presentation')}</span>
                         </button>
                     </div>
 
@@ -600,7 +559,7 @@ export const StudentScheduleTab = ({ student }) => {
                         </div>
 
                         <div className="student-schedule-modal-footer">
-                            {selectedMeeting.canEdit && (  // ✅ Показва се САМО ако canEdit === true
+                            {selectedMeeting.canEdit && (
                                 <button
                                     className="student-schedule-modal-btn student-schedule-modal-btn-delete"
                                     onClick={() => handleDeleteMeeting(selectedMeeting.meetingData?.id)}
@@ -615,7 +574,7 @@ export const StudentScheduleTab = ({ student }) => {
                                 >
                                     {t('studentDetails.schedule.close')}
                                 </button>
-                                {selectedMeeting.canEdit && (  // ✅ Показва се САМО ако canEdit === true
+                                {selectedMeeting.canEdit && (
                                     <button
                                         className="student-schedule-modal-btn student-schedule-modal-btn-save"
                                         onClick={handleEditFromView}

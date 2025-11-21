@@ -840,6 +840,7 @@ export const AcademyProvider = ({ children }) => {
       return { success: false, message: error.message };
     }
   }, []);
+
   const getStudentDetails = useCallback(async (studentId) => {
     try {
       const data = await academyService.getStudentDetails(studentId);
@@ -900,7 +901,7 @@ export const AcademyProvider = ({ children }) => {
     }
   }, []);
 
-const acceptStudent = useCallback(async (studentId) => {
+  const acceptStudent = useCallback(async (studentId) => {
     try {
       const data = await academyService.acceptStudent(studentId);
       toast.success('Студентът е приет успешно');
@@ -923,6 +924,123 @@ const acceptStudent = useCallback(async (studentId) => {
       return { success: false, message: error.message };
     }
   }, []);
+
+  // ============================================
+  // MENTOR OWN REVIEWS
+  // ============================================
+
+  const getMentorOwnReviews = useCallback(async (limit = 100) => {
+    try {
+      const data = await academyService.getMentorOwnReviews(limit);
+      return data;
+    } catch (error) {
+      console.error('Error fetching own reviews:', error);
+      return { success: false, reviews: [] };
+    }
+  }, []);
+
+  const getMentorOwnReviewStats = useCallback(async () => {
+    try {
+      const data = await academyService.getMentorOwnReviewStats();
+      return data;
+    } catch (error) {
+      console.error('Error fetching own review stats:', error);
+      return {
+        success: false,
+        stats: {
+          totalReviews: 0,
+          averageRating: 0,
+          ratingDistribution: { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 }
+        }
+      };
+    }
+  }, []);
+
+  // ===============================
+  // STUDENT APPLICATION TO MENTOR
+  // ===============================
+
+  const applyForMentor = useCallback(async (mentorId) => {
+    setIsLoading(true);
+    try {
+      const response = await academyService.applyForMentor(mentorId);
+
+      return {
+        success: true,
+        message: response.message || 'Заявката е изпратена успешно',
+        application: response.application || response,
+        id: response.application?.id || response.id
+      };
+    } catch (error) {
+      console.error('Error applying for mentor:', error);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  // ===============================
+  // MENTOR: MANAGE STUDENT APPLICATIONS (за следващ етап)
+  // ===============================
+
+  const getStudentApplications = useCallback(async () => {
+    try {
+      const data = await academyService.getStudentApplications();
+      return data;
+    } catch (error) {
+      console.error('Error fetching student applications:', error);
+      return { success: false, applications: [] };
+    }
+  }, []);
+
+  const approveStudentApplication = useCallback(async (applicationId) => {
+    try {
+      const response = await academyService.approveStudentApplication(applicationId);
+      toast.success('Заявката е одобрена успешно');
+      return response;
+    } catch (error) {
+      console.error('Error approving application:', error);
+      toast.error('Грешка при одобряване на заявка');
+      throw error;
+    }
+  }, []);
+
+  const rejectStudentApplication = useCallback(async (applicationId, reason) => {
+    try {
+      const response = await academyService.rejectStudentApplication(applicationId, reason);
+      toast.success('Заявката е отхвърлена');
+      return response;
+    } catch (error) {
+      console.error('Error rejecting application:', error);
+      toast.error('Грешка при отхвърляне на заявка');
+      throw error;
+    }
+  }, []);
+
+  const reapproveStudentApplication = useCallback(async (applicationId) => {
+  try {
+    const response = await academyService.reapproveStudentApplication(applicationId);
+    toast.success('Заявката е одобрена успешно');
+    return response;
+  } catch (error) {
+    console.error('Error re-approving application:', error);
+    toast.error('Грешка при одобряване на заявка');
+    throw error;
+  }
+}, []);
+
+  const deleteStudentApplication = useCallback(async (applicationId) => {
+    try {
+      const response = await academyService.deleteStudentApplication(applicationId);
+      toast.success('Заявката е изтрита');
+      return response;
+    } catch (error) {
+      console.error('Error deleting application:', error);
+      toast.error('Грешка при изтриване на заявка');
+      throw error;
+    }
+  }, []);
+
   // ===============================
   // CONTEXT VALUE
   // ===============================
@@ -1020,6 +1138,15 @@ const acceptStudent = useCallback(async (studentId) => {
     deleteStudentNote,
     acceptStudent,
     removeStudent,
+    getMentorOwnReviews,
+    getMentorOwnReviewStats,
+    // Student Applications
+    applyForMentor,
+    getStudentApplications,
+    approveStudentApplication,
+    rejectStudentApplication,
+    deleteStudentApplication,
+    reapproveStudentApplication 
   };
 
   return (

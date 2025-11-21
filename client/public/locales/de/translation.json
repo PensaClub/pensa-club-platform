@@ -371,6 +371,9 @@
     }
   },
   "profile": {
+    "mentorApplications": "Studentenbewerbungen",
+
+    "mentorProfile": "Profil",
     "clubMembership": "Clubmitgliedschaft",
     "clubs": {
       "title": "Meine Vereine",
@@ -590,9 +593,8 @@
       "applications": "Bewerbungen",
       "statistics": "Statistiken"
     },
-     "reviews": {
+    "reviews": {
       "management": "Bewertungen verwalten"
-
     },
     "pending_announcements": "Nicht genehmigte Anzeigen",
     "search": "Suchen",
@@ -11305,7 +11307,7 @@
       "loginRequiredMessage": "Bitte melden Sie sich an, um Ihre Erfahrung zu teilen und eine Bewertung zu hinterlassen.",
       "loginButton": "Anmelden",
       "errorMessage": "Fehler beim Senden. Bitte versuchen Sie es erneut.",
-       "checking": "Überprüfung läuft...",
+      "checking": "Überprüfung läuft...",
       "alreadyReviewed": "Vielen Dank für Ihre Bewertung!",
       "alreadyReviewedMessage": "Sie haben bereits eine Bewertung für die DigiBridge Academy abgegeben. Wir schätzen Ihr Feedback!"
     },
@@ -11335,11 +11337,13 @@
         "specializations": "Spezialisierungen"
       },
       "card": {
-        "available": "Verfügbar",
-        "busy": "Beschäftigt",
-        "years": "Jahre alt",
         "students": "Studenten",
-        "viewProfile": "Profil Ansehen"
+        "rating": "Bewertung",
+        "experience": "Erfahrung",
+        "years": "Jahre",
+        "available": "Online",
+        "busy": "Offline",
+        "viewProfile": "Profil ansehen"
       },
       "noResults": {
         "title": "Keine Mentoren Gefunden",
@@ -11951,14 +11955,13 @@
     "rating": "Bewertung",
     "minutes": "Min",
     "seconds": "sek",
-
     "min": "Min",
     "excellent": "Ausgezeichnet",
     "veryGood": "Sehr gut",
     "good": "Gut",
     "needsImprovement": "Verbesserungsbedürftig",
     "noData": "Keine Daten zum Anzeigen",
-     "totalMessages": "Gesamtanzahl der Nachrichten"
+    "totalMessages": "Gesamtanzahl der Nachrichten"
   },
   "MentorsBySpecialization": {
     "title": "Mentoren nach Fachgebiet",
@@ -11994,18 +11997,18 @@
     "error": "Fehler beim Generieren des PDF-Berichts"
   },
   "OverviewCardsSkeleton": {
-  "loading": "Lädt...",
-  "loadingStats": "Statistiken werden geladen..."
-},
-"ChartSkeleton": {
-  "loading": "Diagramm wird geladen...",
-  "loadingData": "Daten werden geladen..."
-},
-"TableSkeleton": {
-  "loading": "Tabelle wird geladen...",
-  "loadingData": "Mentor-Daten werden geladen..."
-},
-"reviewsManagement": {
+    "loading": "Lädt...",
+    "loadingStats": "Statistiken werden geladen..."
+  },
+  "ChartSkeleton": {
+    "loading": "Diagramm wird geladen...",
+    "loadingData": "Daten werden geladen..."
+  },
+  "TableSkeleton": {
+    "loading": "Tabelle wird geladen...",
+    "loadingData": "Mentor-Daten werden geladen..."
+  },
+  "reviewsManagement": {
     "title": "Plattform-Bewertungen",
     "subtitle": "Verwalten und moderieren Sie alle von Benutzern eingereichten Bewertungen auf der Plattform",
     "allReviews": "Alle Bewertungen",
@@ -12057,7 +12060,7 @@
     "courseReviews": "Kurse",
     "clearFilters": "Filter löschen"
   },
-    "listReviewsManagement": {
+  "listReviewsManagement": {
     "loading": "Bewertungen werden geladen...",
     "noReviews": "Keine Bewertungen gefunden",
     "noReviewsMessage": "Es gibt keine Bewertungen, die Ihren Filtern entsprechen. Versuchen Sie, Ihre Suchkriterien anzupassen.",
@@ -12078,23 +12081,23 @@
     "delete": "Löschen"
   },
   "mentorReviewModal": {
-  "title": "Wie war die Sitzung?",
-  "subtitle": "Teilen Sie Ihre Erfahrung mit diesem Mentor. Ihre Bewertung hilft anderen Nutzern.",
-  "ratingLabel": "Bewertung",
-  "ratingRequired": "Bitte wählen Sie eine Bewertung",
-  "rating1": "Sehr schlecht",
-  "rating2": "Schlecht",
-  "rating3": "Durchschnittlich",
-  "rating4": "Gut",
-  "rating5": "Ausgezeichnet!",
-  "textLabel": "Mehr teilen",
-  "optional": "optional",
-  "textPlaceholder": "Erzählen Sie, was Ihnen gefallen hat oder was verbessert werden kann...",
-  "skip": "Später",
-  "submit": "Bewertung senden",
-  "submitting": "Wird gesendet..."
-},
-"digiMentorPanel": {
+    "title": "Wie war die Sitzung?",
+    "subtitle": "Teilen Sie Ihre Erfahrung mit diesem Mentor. Ihre Bewertung hilft anderen Nutzern.",
+    "ratingLabel": "Bewertung",
+    "ratingRequired": "Bitte wählen Sie eine Bewertung",
+    "rating1": "Sehr schlecht",
+    "rating2": "Schlecht",
+    "rating3": "Durchschnittlich",
+    "rating4": "Gut",
+    "rating5": "Ausgezeichnet!",
+    "textLabel": "Mehr teilen",
+    "optional": "optional",
+    "textPlaceholder": "Erzählen Sie, was Ihnen gefallen hat oder was verbessert werden kann...",
+    "skip": "Später",
+    "submit": "Bewertung senden",
+    "submitting": "Wird gesendet..."
+  },
+  "digiMentorPanel": {
     "title": "Mentor-Dashboard",
     "welcome": "Willkommen",
     "errorLoading": "Fehler beim Laden der Daten",
@@ -12114,7 +12117,7 @@
     "myStudents": "Meine Studenten",
     "viewReviews": "Bewertungen ansehen"
   },
-   "digiMentorStats": {
+  "digiMentorStats": {
     "totalStudents": "Studenten insgesamt",
     "activeSessions": "Aktive Sitzungen",
     "completedSessions": "Abgeschlossene Sitzungen",
@@ -12126,7 +12129,7 @@
     "minutes": "Min",
     "completionRate": "Abschlussrate"
   },
-   "digiMentorQuickActions": {
+  "digiMentorQuickActions": {
     "title": "Schnellaktionen",
     "startSession": "Sitzung starten",
     "viewMessages": "Nachrichten ansehen",
@@ -12161,6 +12164,7 @@
   },
   "digiMentorStudentsList": {
     "title": "Meine Studenten",
+    "registeredOn": "Registriert am",
     "loading": "Studenten werden geladen...",
     "studentsCount": "Studenten",
     "noStudents": "Sie haben noch keine Studenten",
@@ -12202,7 +12206,7 @@
       "peak": "Spitze"
     }
   },
-   "mentorMeetings": {
+  "mentorMeetings": {
     "title": "Meine Treffen",
     "addMeeting": "Treffen hinzufügen",
     "noMeetings": "Sie haben noch keine Treffen",
@@ -12374,7 +12378,7 @@
       "saveFailed": "Fehler beim Abschließen des Treffens"
     }
   },
-   "studentDetails": {
+  "studentDetails": {
     "backToList": "Zurück zu Studenten",
     "notFound": "Student nicht gefunden",
     "errorLoading": "Fehler beim Laden der Daten",
@@ -12402,7 +12406,7 @@
       "mentorInfo": "Mentor Informationen",
       "assignedDate": "Zugewiesen am",
       "progress": "Fortschritt",
-        "mentorHistory": "Mentor Geschichte",
+      "mentorHistory": "Mentor Geschichte",
       "overallProgress": "Gesamtfortschritt",
       "totalCourses": "Gesamt Kurse"
     },
@@ -12420,7 +12424,7 @@
       "endDate": "Ende"
     },
     "activities": {
-     "title": "Aktivitäten",
+      "title": "Aktivitäten",
       "all": "Alle",
       "lectures": "Vorlesungen",
       "seminars": "Seminare",
@@ -12434,7 +12438,7 @@
       "noActivities": "Keine Aktivitäten gefunden"
     },
     "attendance": {
-        "title": "Anwesenheit & Hilfe",
+      "title": "Anwesenheit & Hilfe",
       "overview": "Übersicht",
       "totalSessions": "Gesamt Sitzungen",
       "attended": "Teilgenommen",
@@ -12555,6 +12559,143 @@
     "showMore": "Mehr anzeigen",
     "showLess": "Weniger anzeigen",
     "thankYou": "Vielen Dank für die Bewertung!"
+  },
+  "mentorProfile": {
+    "title": "Mentorenprofil",
+    "edit": "Profil bearbeiten",
+    "save": "Änderungen speichern",
+    "saving": "Speichern...",
+    "cancel": "Abbrechen",
+    "errorLoading": "Fehler beim Laden des Profils",
+    "name": "Name",
+    "email": "E-Mail",
+    "age": "Alter",
+    "phone": "Telefon",
+    "country": "Land",
+    "priorityContact": "Bevorzugter Kontakt",
+    "contactEmail": "E-Mail",
+    "contactPhone": "Telefon",
+    "contactViber": "Viber",
+    "contactFacebook": "Facebook",
+    "contactLinkedIn": "LinkedIn",
+    "contactInfo": "Kontaktinformationen",
+    "professionalInfo": "Berufliche Informationen",
+    "socialContacts": "Soziale Medien & Kontakte",
+    "specialization": "Spezialisierung",
+    "education": "Ausbildung",
+    "experience": "Erfahrung (Jahre)",
+    "experiencePlaceholder": "Anzahl der Jahre",
+    "availability": "Verfügbarkeit",
+    "languages": "Sprachen",
+    "motivation": "Motivation",
+    "motivationPlaceholder": "Warum möchten Sie Mentor werden?",
+    "viber": "Viber",
+    "facebook": "Facebook",
+    "linkedin": "LinkedIn",
+    "otherContact": "Andere Kontakte",
+    "students": "Studenten",
+    "rating": "Bewertung",
+    "reviews": "Bewertungen",
+    "sessions": "Sitzungen",
+    "status": {
+      "active": "Aktiver Mentor",
+      "inactive": "Inaktiv",
+      "pending": "Ausstehende Genehmigung"
+    },
+    "basicFieldsHelp": "Um grundlegende Informationen (Name, E-Mail, Alter und Foto) zu ändern, wenden Sie sich bitte an einen Administrator."
+  },
+  "mentorModal": {
+    "applying": "Wird gesendet...",
+  "about": "Über mich",
+  "experience": "Erfahrung & Ausbildung",
+  "education": "Ausbildung",
+  "yearsExperience": "Jahre Erfahrung",
+  "availability": "Verfügbarkeit",
+  "languages": "Sprachen",
+  "reviews": "Bewertungen",
+  "rating": "Bewertung",
+  "sessions": "Sitzungen",
+  "selectMentor": "Mentor wählen",
+  "close": "Schließen",
+  "noLanguages": "Keine Sprachen angegeben",
+  "alreadyApplied": "Bereits beworben",
+  "applicationSuccess": "Bewerbung erfolgreich gesendet!",
+  "applicationError": "Fehler beim Senden der Bewerbung",
+  "cannotApplyAsAdmin": "Administratoren können sich nicht bewerben",
+  "cannotApplyAsMentor": "Mentoren können sich nicht bewerben"
+},
+ "studentApplications": {
+    "title": "Studentenanträge",
+    "subtitle": "Verwalten Sie Bewerbungen von Studenten, die bei Ihnen lernen möchten",
+    "tabs": {
+      "pending": "Ausstehend",
+      "rejected": "Abgelehnt",
+      "approved": "Genehmigt"
+    },
+    "loading": "Wird geladen..."
+  },
+  "pendingApplications": {
+    "noApplications": "Keine ausstehenden Bewerbungen",
+    "noApplicationsDesc": "Wenn Studenten sich bei Ihnen bewerben, sehen Sie sie hier",
+    "appliedOn": "Beworben am",
+    "approve": "Genehmigen",
+    "reject": "Ablehnen",
+    "confirmApprove": "Genehmigung bestätigen",
+    "approveConfirmText": "Sind Sie sicher, dass Sie die Bewerbung von {{name}} genehmigen möchten? Dieser Benutzer wird Ihr Student.",
+    "confirmApproveBtn": "Genehmigen",
+    "confirmReject": "Ablehnung bestätigen",
+    "rejectConfirmText": "Sind Sie sicher, dass Sie die Bewerbung von {{name}} ablehnen möchten?",
+    "rejectionReason": "Ablehnungsgrund",
+    "rejectionReasonPlaceholder": "Bitte erklären Sie, warum Sie diese Bewerbung ablehnen (mindestens 10 Zeichen)...",
+    "rejectionReasonRequired": "Bitte geben Sie einen Ablehnungsgrund ein",
+    "rejectionReasonTooShort": "Der Grund muss mindestens 10 Zeichen lang sein",
+    "confirmRejectBtn": "Ablehnen",
+    "cancel": "Abbrechen",
+    "processing": "Wird verarbeitet..."
+  },
+  "rejectedApplications": {
+    "noApplications": "Keine abgelehnten Bewerbungen",
+    "noApplicationsDesc": "Abgelehnte Bewerbungen werden hier angezeigt",
+    "rejected": "Abgelehnt",
+    "appliedOn": "Beworben am",
+    "rejectedOn": "Abgelehnt am",
+    "reason": "Grund",
+    "details": "Details",
+    "reapprove": "Erneut genehmigen",
+    "delete": "Löschen",
+    "applicationDetails": "Bewerbungsdetails",
+    "studentName": "Studentenname",
+    "email": "E-Mail",
+    "phone": "Telefon",
+    "rejectionReason": "Ablehnungsgrund",
+    "close": "Schließen",
+    "confirmReapprove": "Erneute Genehmigung bestätigen",
+    "reapproveConfirmText": "Sind Sie sicher, dass Sie die Bewerbung von {{name}} erneut genehmigen möchten? Dieser Benutzer wird Ihr Student.",
+    "confirmReapproveBtn": "Erneut genehmigen",
+    "confirmDelete": "Löschung bestätigen",
+    "deleteConfirmText": "Sind Sie sicher, dass Sie die Bewerbung von {{name}} löschen möchten?",
+    "deleteWarning": "Diese Aktion ist irreversibel. Die Bewerbung wird dauerhaft gelöscht.",
+    "confirmDeleteBtn": "Löschen",
+    "cancel": "Abbrechen",
+    "processing": "Wird verarbeitet..."
+  },
+  "approvedApplications": {
+    "noApplications": "Keine genehmigten Studenten",
+    "noApplicationsDesc": "Genehmigte Studenten werden hier angezeigt",
+    "active": "Aktiv",
+    "approvedOn": "Genehmigt am",
+    "studentSince": "Student seit",
+    "days": "Tage",
+    "viewDetails": "Details anzeigen",
+    "totalStudents": "Studenten insgesamt",
+    "studentDetails": "Studentendetails",
+    "activeStudent": "Aktiver Student",
+    "studentName": "Studentenname",
+    "email": "E-Mail",
+    "phone": "Telefon",
+    "appliedOn": "Beworben am",
+    "studentFor": "Student seit",
+    "infoText": "Dieser Student ist aktiv und lernt bei Ihnen. Sie können den Fortschritt im Studentenbereich verfolgen.",
+    "close": "Schließen"
   }
-  
 }

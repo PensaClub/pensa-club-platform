@@ -17,6 +17,11 @@ export const StudentOverviewTab = ({ student }) => {
   const inProgressCourses = courses.filter(c => c.status === 'in_progress').length;
   const completedCourses = courses.filter(c => c.status === 'completed').length;
 
+  // ✅ Safe progress calculation
+  const creditsProgress = credits.totalPossible > 0 
+    ? (credits.totalEarned / credits.totalPossible) * 502.4 
+    : 0;
+
   return (
     <div className="student-overview-tab">
       {/* CREDITS SECTION */}
@@ -45,7 +50,7 @@ export const StudentOverviewTab = ({ student }) => {
                   fill="none"
                   stroke="url(#gradient)"
                   strokeWidth="20"
-                  strokeDasharray={`${(credits.totalEarned / credits.totalPossible) * 502.4} 502.4`}
+                  strokeDasharray={`${creditsProgress} 502.4`}
                   strokeLinecap="round"
                   transform="rotate(-90 100 100)"
                 />
@@ -125,13 +130,15 @@ export const StudentOverviewTab = ({ student }) => {
                 </svg>
               </div>
               <div className="student-overview-mentor-info">
-                <span className="student-overview-mentor-name">{currentMentor.name}</span>
-                <span className="student-overview-mentor-date">
-                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M8 7V3M16 7V3M7 11H17M5 21H19C20.1046 21 21 20.1046 21 19V7C21 5.89543 20.1046 5 19 5H5C3.89543 5 3 5.89543 3 7V19C3 20.1046 3.89543 21 5 21Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                  {t('studentDetails.overview.assignedDate')}: {new Date(currentMentor.assignedDate).toLocaleDateString('bg-BG')}
-                </span>
+                <span className="student-overview-mentor-name">{currentMentor?.name || 'N/A'}</span>
+                {currentMentor?.assignedDate && (
+                  <span className="student-overview-mentor-date">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M8 7V3M16 7V3M7 11H17M5 21H19C20.1046 21 21 20.1046 21 19V7C21 5.89543 20.1046 5 19 5H5C3.89543 5 3 5.89543 3 7V19C3 20.1046 3.89543 21 5 21Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    {t('studentDetails.overview.assignedDate')}: {new Date(currentMentor.assignedDate).toLocaleDateString('bg-BG')}
+                  </span>
+                )}
               </div>
               <span className="student-overview-mentor-badge">{t('studentDetails.currentMentor')}</span>
             </div>
@@ -142,8 +149,8 @@ export const StudentOverviewTab = ({ student }) => {
                 <h4 className="student-overview-mentor-history-title">
                   {t('studentDetails.overview.mentorHistory')}
                 </h4>
-                {mentorHistory.map((history, index) => (
-                  <div key={index} className="student-overview-mentor-history-item">
+                {mentorHistory.map((history) => (
+                  <div key={history.id} className="student-overview-mentor-history-item">
                     <div className="student-overview-mentor-history-icon">
                       <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12 8V12L15 15M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -152,7 +159,7 @@ export const StudentOverviewTab = ({ student }) => {
                     <div className="student-overview-mentor-history-content">
                       <span className="student-overview-mentor-history-name">{history.mentorName}</span>
                       <span className="student-overview-mentor-history-period">
-                        {new Date(history.periodStart).toLocaleDateString('bg-BG')} - {new Date(history.periodEnd).toLocaleDateString('bg-BG')}
+                        {new Date(history.periodStart).toLocaleDateString('bg-BG')} - {history.periodEnd ? new Date(history.periodEnd).toLocaleDateString('bg-BG') : 'Настояще'}
                       </span>
                       {history.reason && (
                         <span className="student-overview-mentor-history-reason">{history.reason}</span>

@@ -24,6 +24,40 @@ module.exports = (sequelize, DataTypes) => {
         sourceKey: 'id',
         as: 'meetings',
       });
+      // ✅ НОВО - Has many courses
+      student.hasMany(models.student_course, {
+        foreignKey: 'studentId',
+        sourceKey: 'id',
+        as: 'courses',
+      });
+
+      // ✅ НОВО - Has many lectures
+      student.hasMany(models.student_lecture, {
+        foreignKey: 'studentId',
+        sourceKey: 'id',
+        as: 'lectures',
+      });
+
+      // ✅ НОВО - Has many seminars
+      student.hasMany(models.student_seminar, {
+        foreignKey: 'studentId',
+        sourceKey: 'id',
+        as: 'seminars',
+      });
+
+      // ✅ НОВО - Has many presentations
+      student.hasMany(models.student_presentation, {
+        foreignKey: 'studentId',
+        sourceKey: 'id',
+        as: 'presentations',
+      });
+
+      // ✅ НОВО - Has many mentor history
+      student.hasMany(models.mentor_history, {
+        foreignKey: 'studentId',
+        sourceKey: 'id',
+        as: 'mentorHistory',
+      });
     }
   }
 
@@ -45,7 +79,7 @@ module.exports = (sequelize, DataTypes) => {
           key: 'id',
         },
       },
-      
+
       // ===============================
       // BASIC INFO
       // ===============================
@@ -97,7 +131,7 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: null,
         field: 'emergency_contact_phone',
       },
-      
+
       // ===============================
       // CREDITS SYSTEM
       // ===============================
@@ -137,7 +171,7 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: 0,
         field: 'credits_from_presentations',
       },
-      
+
       // ===============================
       // CURRENT MENTOR
       // ===============================
@@ -157,7 +191,7 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: null,
         field: 'mentor_assigned_date',
       },
-      
+
       // ===============================
       // ATTENDANCE TRACKING
       // ===============================
@@ -179,7 +213,7 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: 0,
         field: 'missed_sessions',
       },
-      
+
       // ===============================
       // MENTOR HELP STATS
       // ===============================
@@ -213,7 +247,7 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: 0,
         field: 'completed_meetings',
       },
-      
+
       // ===============================
       // PREFERENCES
       // ===============================
@@ -235,7 +269,7 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: null,
         field: 'availability_notes',
       },
-      
+
       // ===============================
       // ADMIN & SPECIAL NEEDS
       // ===============================
@@ -251,7 +285,7 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: null,
         field: 'special_needs',
       },
-      
+
       // ===============================
       // STATUS & DATES
       // ===============================
@@ -289,7 +323,7 @@ module.exports = (sequelize, DataTypes) => {
       sequelize,
       modelName: 'student',
       tableName: 'students',
-       underscored: true,
+      underscored: true,
     }
   );
 

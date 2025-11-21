@@ -82,6 +82,8 @@ import { UserNotificationBell } from "../UserNotifications/UserNotificationBell"
 import { Notifications } from "./Notifications/Notifications";
 import { AdminNotifications } from "./AdminNotifications/AdminNotifications";
 import { DigiMentorPanel } from "../DigiMentorPanel/DigiMentorPanel";
+import { DigiMentorProfile } from "../DigiMentorProfile/DigiMentorProfile";
+import { StudentApplicationsManagement } from "../DigiMentorApplications/StudentApplicationsManagement";
 
 // 🎨 НОВИ ИКОНКИ КОМПОНЕНТИ
 const HomeIcon = () => (
@@ -236,6 +238,7 @@ export const Profile = () => {
       "/profile/mentors-applications": t("admin.mentors.applications"),
       "/profile/mentors-statistics": t("admin.mentors.statistics"),
       "/profile/reviews-management": t("admin.reviews.management"),
+      "/profile/mentor-applications": t("profile.mentorApplications")
     };
 
     const matchedPath = Object.keys(pathTitleMap).find(key => path.includes(key));
@@ -744,6 +747,18 @@ export const Profile = () => {
                 <ul>
                   <li>
                     <NavLink
+                      to="mentor-profile"
+                      className={({ isActive }) => isActive ? 'active' : ''}
+                    >
+                      <span className="link-content">
+                        <UsersIcon className="icon" />
+                        {t("profile.mentorProfile")}
+                      </span>
+                      {/* <ArrowIcon className="icon-arrow" /> */}
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
                       to="mentor-dashboard"
                       className={({ isActive }) => isActive ? 'active' : ''}
                     >
@@ -751,7 +766,17 @@ export const Profile = () => {
                         <DashboardIcon className="icon" />
                         {t("profile.mentorOverview")}
                       </span>
-                      <ArrowIcon className="icon-arrow" />
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink
+                      to="mentor-applications"
+                      className={({ isActive }) => isActive ? 'active' : ''}
+                    >
+                      <span className="link-content">
+                        <UsersIcon className="icon" />
+                        {t("profile.mentorApplications")}
+                      </span>
                     </NavLink>
                   </li>
                 </ul>
@@ -1123,7 +1148,9 @@ export const Profile = () => {
             <Route path="clubs" element={<MyClubs />} />
             <Route path="club-create" element={<ClubCreateForm />} />
             <Route path="club-drafts" element={<DraftClubs />} />
+            <Route path="mentor-profile" element={<DigiMentorProfile />} />
             <Route path="mentor-dashboard" element={<DigiMentorPanel />} />
+            <Route path="mentor-applications" element={<StudentApplicationsManagement />} />
             <Route path="club-membership" element={<MembershipClubs isEditMode={true} />} />
             <Route path="admin-notifications" element={<ManagementGuard><AdminNotifications /></ManagementGuard>} />
             <Route path="ads-admin" element={<ManagementGuard><AllAnnouncements /></ManagementGuard>} />

@@ -1,0 +1,514 @@
+/* ===============================
+   STUDENT APPLICATIONS MANAGEMENT
+   =============================== */
+
+.student-applications-management {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+  animation: student-applications-management-fade-in 0.3s ease;
+}
+
+@keyframes student-applications-management-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===============================
+   HEADER
+   =============================== */
+
+.student-applications-management-header {
+  margin-bottom: 2rem;
+}
+
+.student-applications-management-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
+
+.student-applications-management-subtitle {
+  font-size: 1rem;
+  color: #666;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ===============================
+   TABS
+   =============================== */
+
+.student-applications-management-tabs {
+  display: flex;
+  gap: 0.5rem;
+  border-bottom: 2px solid #e5e7eb;
+  margin-bottom: 2rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 0;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.student-applications-management-tabs::-webkit-scrollbar {
+  height: 4px;
+}
+
+.student-applications-management-tabs::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.student-applications-management-tabs::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.student-applications-management-tabs::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.student-applications-management-tab-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: #6b7280;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.student-applications-management-tab-button:hover {
+  color: #1a1a1a;
+  background: #f9fafb;
+}
+
+.student-applications-management-tab-button-active {
+  color: #2563eb;
+  border-bottom-color: #2563eb;
+  background: transparent;
+}
+
+.student-applications-management-tab-text {
+  display: inline-block;
+}
+
+.student-applications-management-tab-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5rem;
+  height: 1.5rem;
+  padding: 0 0.5rem;
+  background: #2563eb;
+  color: white;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.student-applications-management-tab-badge-rejected {
+  background: #dc2626;
+}
+
+.student-applications-management-tab-badge-approved {
+  background: #16a34a;
+}
+
+/* ===============================
+   CONTENT
+   =============================== */
+
+.student-applications-management-content {
+  min-height: 400px;
+}
+
+/* ===============================
+   LOADING
+   =============================== */
+
+.student-applications-management-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.student-applications-management-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid #e5e7eb;
+  border-top-color: #2563eb;
+  border-radius: 50%;
+  animation: student-applications-management-spin 0.8s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes student-applications-management-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.student-applications-management-loading-text {
+  color: #6b7280;
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* ===============================
+   RESPONSIVE BREAKPOINTS
+   =============================== */
+
+/* Large Desktop (1920px+) */
+@media (min-width: 1920px) {
+  .student-applications-management {
+    max-width: 1600px;
+    padding: 2.5rem;
+  }
+
+  .student-applications-management-title {
+    font-size: 2.25rem;
+  }
+
+  .student-applications-management-subtitle {
+    font-size: 1.125rem;
+  }
+
+  .student-applications-management-tab-button {
+    padding: 1.125rem 1.75rem;
+    font-size: 1.0625rem;
+  }
+
+  .student-applications-management-tab-badge {
+    min-width: 1.625rem;
+    height: 1.625rem;
+    font-size: 0.8125rem;
+  }
+}
+
+/* Desktop (1440px - 1920px) */
+@media (min-width: 1440px) and (max-width: 1919px) {
+  .student-applications-management {
+    max-width: 1400px;
+    padding: 2rem;
+  }
+}
+
+/* Laptop (1024px - 1440px) */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .student-applications-management {
+    max-width: 1200px;
+    padding: 2rem 1.5rem;
+  }
+
+  .student-applications-management-title {
+    font-size: 1.875rem;
+  }
+
+  .student-applications-management-tab-button {
+    padding: 0.875rem 1.25rem;
+  }
+}
+
+/* Small Laptop / Large Tablet (768px - 1024px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .student-applications-management {
+    padding: 1.5rem;
+  }
+
+  .student-applications-management-header {
+    margin-bottom: 1.5rem;
+  }
+
+  .student-applications-management-title {
+    font-size: 1.75rem;
+  }
+
+  .student-applications-management-subtitle {
+    font-size: 0.9375rem;
+  }
+
+  .student-applications-management-tabs {
+    gap: 0.375rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .student-applications-management-tab-button {
+    padding: 0.875rem 1.125rem;
+    font-size: 0.9375rem;
+  }
+
+  .student-applications-management-tab-badge {
+    min-width: 1.375rem;
+    height: 1.375rem;
+    font-size: 0.6875rem;
+  }
+
+  .student-applications-management-content {
+    min-height: 350px;
+  }
+
+  .student-applications-management-loading {
+    padding: 3rem 1.5rem;
+  }
+
+  .student-applications-management-spinner {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* Tablet (600px - 768px) */
+@media (min-width: 600px) and (max-width: 767px) {
+  .student-applications-management {
+    padding: 1.25rem;
+  }
+
+  .student-applications-management-header {
+    margin-bottom: 1.25rem;
+  }
+
+  .student-applications-management-title {
+    font-size: 1.5rem;
+  }
+
+  .student-applications-management-subtitle {
+    font-size: 0.875rem;
+  }
+
+  .student-applications-management-tabs {
+    gap: 0.25rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .student-applications-management-tab-button {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .student-applications-management-tab-badge {
+    min-width: 1.25rem;
+    height: 1.25rem;
+    font-size: 0.625rem;
+  }
+
+  .student-applications-management-content {
+    min-height: 300px;
+  }
+
+  .student-applications-management-loading {
+    padding: 2.5rem 1.25rem;
+  }
+
+  .student-applications-management-spinner {
+    width: 36px;
+    height: 36px;
+    border-width: 3px;
+  }
+
+  .student-applications-management-loading-text {
+    font-size: 0.9375rem;
+  }
+}
+
+/* Large Phone (480px - 600px) */
+@media (min-width: 480px) and (max-width: 599px) {
+  .student-applications-management {
+    padding: 1rem;
+  }
+
+  .student-applications-management-header {
+    margin-bottom: 1rem;
+  }
+
+  .student-applications-management-title {
+    font-size: 1.375rem;
+  }
+
+  .student-applications-management-subtitle {
+    font-size: 0.8125rem;
+  }
+
+  .student-applications-management-tabs {
+    gap: 0.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .student-applications-management-tab-button {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.8125rem;
+    gap: 0.375rem;
+  }
+
+  .student-applications-management-tab-badge {
+    min-width: 1.125rem;
+    height: 1.125rem;
+    padding: 0 0.375rem;
+    font-size: 0.625rem;
+  }
+
+  .student-applications-management-content {
+    min-height: 280px;
+  }
+
+  .student-applications-management-loading {
+    padding: 2rem 1rem;
+  }
+
+  .student-applications-management-spinner {
+    width: 32px;
+    height: 32px;
+    border-width: 3px;
+  }
+
+  .student-applications-management-loading-text {
+    font-size: 0.875rem;
+  }
+}
+
+/* Small Phone (< 480px) */
+@media (max-width: 479px) {
+  .student-applications-management {
+    padding: 0.75rem;
+  }
+
+  .student-applications-management-header {
+    margin-bottom: 1rem;
+  }
+
+  .student-applications-management-title {
+    font-size: 1.25rem;
+  }
+
+  .student-applications-management-subtitle {
+    font-size: 0.75rem;
+    line-height: 1.4;
+  }
+
+  .student-applications-management-tabs {
+    gap: 0.125rem;
+    margin-bottom: 1rem;
+  }
+
+  .student-applications-management-tab-button {
+    padding: 0.5rem 0.625rem;
+    font-size: 0.75rem;
+    gap: 0.25rem;
+  }
+
+  .student-applications-management-tab-badge {
+    min-width: 1rem;
+    height: 1rem;
+    padding: 0 0.25rem;
+    font-size: 0.5625rem;
+  }
+
+  .student-applications-management-content {
+    min-height: 250px;
+  }
+
+  .student-applications-management-loading {
+    padding: 1.5rem 0.75rem;
+  }
+
+  .student-applications-management-spinner {
+    width: 28px;
+    height: 28px;
+    border-width: 2px;
+  }
+
+  .student-applications-management-loading-text {
+    font-size: 0.8125rem;
+  }
+}
+
+/* Extra Small Phone (< 360px) */
+@media (max-width: 359px) {
+  .student-applications-management {
+    padding: 0.5rem;
+  }
+
+  .student-applications-management-title {
+    font-size: 1.125rem;
+  }
+
+  .student-applications-management-subtitle {
+    font-size: 0.6875rem;
+  }
+
+  .student-applications-management-tab-button {
+    padding: 0.5rem;
+    font-size: 0.6875rem;
+  }
+
+  .student-applications-management-tab-text {
+    display: block;
+  }
+
+  .student-applications-management-tab-badge {
+    min-width: 0.875rem;
+    height: 0.875rem;
+    font-size: 0.5rem;
+  }
+}
+
+/* Landscape Mode */
+@media (max-height: 500px) and (orientation: landscape) {
+  .student-applications-management {
+    padding: 1rem;
+  }
+
+  .student-applications-management-header {
+    margin-bottom: 0.75rem;
+  }
+
+  .student-applications-management-title {
+    font-size: 1.25rem;
+  }
+
+  .student-applications-management-subtitle {
+    font-size: 0.8125rem;
+  }
+
+  .student-applications-management-tabs {
+    margin-bottom: 0.75rem;
+  }
+
+  .student-applications-management-tab-button {
+    padding: 0.5rem 0.875rem;
+  }
+
+  .student-applications-management-content {
+    min-height: 200px;
+  }
+
+  .student-applications-management-loading {
+    padding: 1.5rem 1rem;
+  }
+
+  .student-applications-management-spinner {
+    width: 32px;
+    height: 32px;
+  }
+}
