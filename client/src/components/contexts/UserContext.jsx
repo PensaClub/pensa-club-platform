@@ -18,14 +18,16 @@ export const UserProvider = ({ children }) => {
   const [addressId, setAddressId] = useLocalStorage('addressId', {});
   const [isAdmin, setIsAdmin] = useLocalStorage('isAdmin', false);
   const [isModerator, setIsModerator] = useLocalStorage('isModerator', false);
+  const [isMentor, setIsMentor] = useLocalStorage('isMentor', false);  // ✅ ДОБАВИ
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(getAuthStatus());
   const userService = userServiceFactory(isAuth.token);
   const [redirectPath, setRedirectPath] = useLocalStorage('redirectPath', null);
-
+  
   const navigate = useNavigate();
   const location = useLocation();
+  
   useEffect(() => {
     if (!isAuthenticated && location.pathname.startsWith('/profile')) {
       setIsAuth({});
@@ -47,8 +49,9 @@ export const UserProvider = ({ children }) => {
     if (profileData?.role) {
       setIsAdmin(profileData.role === 'admin');
       setIsModerator(profileData.role === 'moderator');
+      setIsMentor(profileData.isMentor === true);  // ✅ ДОБАВИ
     }
-  }, [profileData, setIsAdmin, setIsModerator]);
+  }, [profileData, setIsAdmin, setIsModerator, setIsMentor]);  // ✅ ДОБАВИ setIsMentor
 
   useEffect(() => {
     setAuthStatusUpdater(() => {
@@ -64,6 +67,7 @@ export const UserProvider = ({ children }) => {
       setIsLoading(false);
     }, 3000);
   };
+  
   const handleAuthChange = (newAuthData) => {
     if (newAuthData && newAuthData.token) {
       setIsAuth(newAuthData);
@@ -75,40 +79,41 @@ export const UserProvider = ({ children }) => {
       localStorage.removeItem('auth');
     }
   };
-const onRegisterSubmit = async (data) => {
-  setIsLoading(true);
-  try {
-    const response = await userService.register(data);
-    handleAuthChange({ token: response.token, email: response.user.email, enabled: response.user.enabled });
-    
-    // Добавяме default снимка след регистрацията
-    const defaultImage = "data:image/svg+xml;base64," + btoa(`
-      <svg width="150" height="150" xmlns="http://www.w3.org/2000/svg">
-        <rect width="150" height="150" fill="#cccccc"/>
-        <text x="75" y="80" font-family="Arial" font-size="40" fill="#666" text-anchor="middle">User</text>
-      </svg>
-    `);
-    
-    const userWithDefaults = {
-      ...response.user, 
-      details: {
-        ...(response.user.details || {}),
-        imageURL: response.user.details?.imageURL || defaultImage
-      }
 
-    };
-    
-    setProfileData(userWithDefaults);
-    setIsAdmin(response.user.role === 'admin');
-    navigate('/profile/data');
-    notify('success-register');
-  } catch (error) {
-    notify(error.message === 'User already exists with this email.' ? 'user-already-exists' : 'error');
-    showErrorAndSetTimeouts(error.message);
-  } finally {
-    setIsLoading(false);
-  }
-};
+  const onRegisterSubmit = async (data) => {
+    setIsLoading(true);
+    try {
+      const response = await userService.register(data);
+      handleAuthChange({ token: response.token, email: response.user.email, enabled: response.user.enabled });
+      
+      // Добавяме default снимка след регистрацията
+      const defaultImage = "data:image/svg+xml;base64," + btoa(`
+        <svg width="150" height="150" xmlns="http://www.w3.org/2000/svg">
+          <rect width="150" height="150" fill="#cccccc"/>
+          <text x="75" y="80" font-family="Arial" font-size="40" fill="#666" text-anchor="middle">User</text>
+        </svg>
+      `);
+      
+      const userWithDefaults = {
+        ...response.user, 
+        details: {
+          ...(response.user.details || {}),
+          imageURL: response.user.details?.imageURL || defaultImage
+        }
+      };
+      
+      setProfileData(userWithDefaults);
+      setIsAdmin(response.user.role === 'admin');
+      setIsMentor(response.user.isMentor === true);  // ✅ ДОБАВИ
+      navigate('/profile/data');
+      notify('success-register');
+    } catch (error) {
+      notify(error.message === 'User already exists with this email.' ? 'user-already-exists' : 'error');
+      showErrorAndSetTimeouts(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const onLoginSubmit = async (data) => {
     setIsLoading(true);
@@ -119,6 +124,7 @@ const onRegisterSubmit = async (data) => {
       setProfileData(response.user);
       setIsAdmin(userRole === 'admin');
       setIsModerator(userRole === 'moderator');
+      setIsMentor(response.user.isMentor === true);  // ✅ ДОБАВИ
       notify('success-login');
 
       if (response.user.enabled) {
@@ -148,12 +154,12 @@ const onRegisterSubmit = async (data) => {
       setIsLoading(false);
     }
   };
+  
   const setRedirectAfterLogin = (path) => {
     setRedirectPath(path);
   };
 
   const onLogout = async () => {
-
     setIsLoading(true);
     try {
       await userService.logout();
@@ -162,6 +168,7 @@ const onRegisterSubmit = async (data) => {
       setAddressId({});
       setIsAdmin(false);
       setIsModerator(false);
+      setIsMentor(false);  // ✅ ДОБАВИ
       setIsAuthenticated(false);
       localStorage.removeItem("contactRecaptchaToken");
       notify('success-logout');
@@ -187,11 +194,8 @@ const onRegisterSubmit = async (data) => {
       setAddressId({ ...data });
       setProfileData(response.user);
       setIsAuth({ ...isAuth, token: response.token, enabled: response.user.enabled });
-      // setIsAdmin(response.user.role === 'admin');
-      navigate('/profile');
       notify('success-data');
     } catch (error) {
-
       const isUsernameTaken =
         error?.message === "Unique constraint violation." && error?.details.some(error => error.field === 'username');
 
@@ -213,8 +217,6 @@ const onRegisterSubmit = async (data) => {
         const data = await loadAddressData(responseDetails.region, responseDetails.municipality, responseDetails.settlement);
         setAddressId({ ...data });
       }
-      // setIsAdmin(response.user.role === 'admin');
-
       notify('success-data');
     } catch (error) {
       notify('error', error);
@@ -230,7 +232,7 @@ const onRegisterSubmit = async (data) => {
       const response = await userService.getUserData();
       if (response) {
         setProfileData(response.user);
-        // setIsAdmin(response.user.role === 'admin');
+        setIsMentor(response.user.isMentor === true);  // ✅ ДОБАВИ
       }
       return response.user;
     } catch (error) {
@@ -250,7 +252,6 @@ const onRegisterSubmit = async (data) => {
       setIsLoading(true);
       const response = await userService.resetPassword({ ...data });
       setIsLoading(false);
-      // setIsAdmin(response.user.role === 'admin');
       notify('success-password-change');
       return response;
     } catch (error) {
@@ -265,6 +266,7 @@ const onRegisterSubmit = async (data) => {
       setIsLoading(false);
     }
   };
+  
   const onChangeAdminRole = async (mail, role, comment) => {
     setIsLoading(true);
     try {
@@ -276,6 +278,8 @@ const onRegisterSubmit = async (data) => {
         setProfileData(updatedProfileData);
         setIsAdmin(role === 'admin');
         setIsModerator(role === 'moderator');
+        // ✅ ДОБАВИ: Запазваме isMentor ако вече е ментор
+        // (role change не трябва автоматично да премахва isMentor статуса)
 
         localStorage.setItem('userDetails', JSON.stringify(updatedProfileData));
         localStorage.setItem('isAdmin', JSON.stringify(role === 'admin'));
@@ -300,7 +304,6 @@ const onRegisterSubmit = async (data) => {
       notify('email-send');
       return response;
     } catch (error) {
-
       if (error?.message === 'There is no user registered with that email address.') {
         notify('password-change-email-invalid');
         throw error;
@@ -315,7 +318,6 @@ const onRegisterSubmit = async (data) => {
   const onSuggestSubmit = async (data) => {
     setIsLoading(true);
     try {
-      // eslint-disable-next-line no-unused-vars
       const response = await userService.suggestUser(data);
       navigate('/');
       notify('success-register');
@@ -350,84 +352,83 @@ const onRegisterSubmit = async (data) => {
     }
   };
 
-const onProjectApplicationSubmit = async (applicationData) => {
-  setIsLoading(true);
-  try {
-    // Активираме реалния endpoint
-    const response = await userService.applyToProject(applicationData);
-    
-    // Записваме в localStorage за кеширане
-    const appliedProjects = JSON.parse(localStorage.getItem('appliedProjects') || '[]');
-    const newApplication = {
-      projectId: applicationData.projectId,
-      email: isAuth.email,
-      timestamp: Date.now(),
-      applicationId: response.id || response.application?.id
-    };
-    
-    appliedProjects.push(newApplication);
-    localStorage.setItem('appliedProjects', JSON.stringify(appliedProjects));
-    
-    notify('application-success');
-    return {
-      success: true,
-      message: response.message || 'Кандидатурата е изпратена успешно',
-      application: response.application || response
-    };
-  } catch (error) {
-    notify('error', error);
-    showErrorAndSetTimeouts(`Error submitting application: ${error.message}`);
-    throw error;
-  } finally {
-    setIsLoading(false);
-  }
-};
-// ===============================
-// USER NOTIFICATIONS
-// ===============================
-const getUserNotifications = async (params = {}) => {
-  try {
-    const data = await userService.getUserNotifications(params);
-    return data;
-  } catch (error) {
-    console.error('Error fetching user notifications:', error);
-    return { notifications: [], unreadCount: 0 };
-  }
-};
+  const onProjectApplicationSubmit = async (applicationData) => {
+    setIsLoading(true);
+    try {
+      const response = await userService.applyToProject(applicationData);
+      
+      const appliedProjects = JSON.parse(localStorage.getItem('appliedProjects') || '[]');
+      const newApplication = {
+        projectId: applicationData.projectId,
+        email: isAuth.email,
+        timestamp: Date.now(),
+        applicationId: response.id || response.application?.id
+      };
+      
+      appliedProjects.push(newApplication);
+      localStorage.setItem('appliedProjects', JSON.stringify(appliedProjects));
+      
+      notify('application-success');
+      return {
+        success: true,
+        message: response.message || 'Кандидатурата е изпратена успешно',
+        application: response.application || response
+      };
+    } catch (error) {
+      notify('error', error);
+      showErrorAndSetTimeouts(`Error submitting application: ${error.message}`);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-const markNotificationAsRead = async (notificationId) => {
-  try {
-    await userService.markNotificationAsRead(notificationId);
-    return true;
-  } catch (error) {
-    console.error('Error marking notification as read:', error);
-    return false;
-  }
-};
+  // ===============================
+  // USER NOTIFICATIONS
+  // ===============================
+  const getUserNotifications = async (params = {}) => {
+    try {
+      const data = await userService.getUserNotifications(params);
+      return data;
+    } catch (error) {
+      console.error('Error fetching user notifications:', error);
+      return { notifications: [], unreadCount: 0 };
+    }
+  };
 
-const markAllNotificationsAsRead = async () => {
-  try {
-    await userService.markAllNotificationsAsRead();
-    toast.success('Всички нотификации са маркирани като прочетени');
-    return true;
-  } catch (error) {
-    console.error('Error marking all notifications as read:', error);
-    toast.error('Грешка при маркиране на нотификации');
-    return false;
-  }
-};
+  const markNotificationAsRead = async (notificationId) => {
+    try {
+      await userService.markNotificationAsRead(notificationId);
+      return true;
+    } catch (error) {
+      console.error('Error marking notification as read:', error);
+      return false;
+    }
+  };
 
-const deleteNotification = async (notificationId) => {
-  try {
-    await userService.deleteNotification(notificationId);
-    toast.success('Нотификацията е изтрита');
-    return true;
-  } catch (error) {
-    console.error('Error deleting notification:', error);
-    toast.error('Грешка при изтриване на нотификация');
-    return false;
-  }
-};
+  const markAllNotificationsAsRead = async () => {
+    try {
+      await userService.markAllNotificationsAsRead();
+      toast.success('Всички нотификации са маркирани като прочетени');
+      return true;
+    } catch (error) {
+      console.error('Error marking all notifications as read:', error);
+      toast.error('Грешка при маркиране на нотификации');
+      return false;
+    }
+  };
+
+  const deleteNotification = async (notificationId) => {
+    try {
+      await userService.deleteNotification(notificationId);
+      toast.success('Нотификацията е изтрита');
+      return true;
+    } catch (error) {
+      console.error('Error deleting notification:', error);
+      toast.error('Грешка при изтриване на нотификация');
+      return false;
+    }
+  };
 
   const isUserAdmin = () => isAdmin;
 
@@ -451,14 +452,15 @@ const deleteNotification = async (notificationId) => {
     isUserAdmin,
     isAdmin,
     isModerator,
+    isMentor,  // ✅ ДОБАВИ
     onChangeAdminRole,
     sendContactForm,
     setProfileData,
-  // ✅ USER NOTIFICATIONS
-  getUserNotifications,
-  markNotificationAsRead,
-  markAllNotificationsAsRead,
-  deleteNotification,
+    // ✅ USER NOTIFICATIONS
+    getUserNotifications,
+    markNotificationAsRead,
+    markAllNotificationsAsRead,
+    deleteNotification,
     setRedirectAfterLogin,
     redirectPath,
     setUser: (user) => {
@@ -466,6 +468,9 @@ const deleteNotification = async (notificationId) => {
       if (user.role) {
         setIsAdmin(user.role === 'admin');
         setIsModerator(user.role === 'moderator');
+      }
+      if (user.isMentor !== undefined) {  // ✅ ДОБАВИ
+        setIsMentor(user.isMentor === true);
       }
     },
     setIsAuthenticated: (value) => {

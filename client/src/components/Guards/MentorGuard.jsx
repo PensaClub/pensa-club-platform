@@ -14,13 +14,7 @@ export const MentorGuard = () => {
   // Проверка дали е Admin или Mentor
   const isAdmin = profileData?.role === 'admin';
   
-  // ✅ TODO: Добави проверка за isMentor когато го добавиш в backend
-  // Когато backend-ът е готов, активирай този ред:
-  // const isMentor = profileData?.isMentor === true;
-  
-  // ⚠️ ВРЕМЕННО: Само админите имат достъп до Mentor Dashboard
-  // Когато добавиш isMentor в backend, промени тази логика
-  const isMentor = false; // Обнови на: profileData?.isMentor === true
+  const isMentor = profileData?.isMentor === true;
   
   // Блокирай достъпа ако не е нито Admin, нито Mentor
   if (!isAdmin && !isMentor) {

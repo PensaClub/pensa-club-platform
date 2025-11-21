@@ -81,6 +81,7 @@ import { ReviewsManagement } from "../ReviewsManagement/ReviewsManagement";
 import { UserNotificationBell } from "../UserNotifications/UserNotificationBell";
 import { Notifications } from "./Notifications/Notifications";
 import { AdminNotifications } from "./AdminNotifications/AdminNotifications";
+import { DigiMentorPanel } from "../DigiMentorPanel/DigiMentorPanel";
 
 // 🎨 НОВИ ИКОНКИ КОМПОНЕНТИ
 const HomeIcon = () => (
@@ -157,7 +158,7 @@ export const Profile = () => {
   const { t, i18n } = useTranslation();
   const currentLanguage = i18n.language;
   const [menuOpen, setMenuOpen] = useState(false);
-  const { isFinish, profileData, isAdmin, isModerator, addressId } = useContext(UserContext);
+  const { isFinish, profileData, isAdmin, isModerator, addressId, isMentor } = useContext(UserContext);
   const [adsCount, setAdsCount] = useState("");
   const [approvedCount, setApprovedCount] = useState("");
   const [rejectCount, setRejectCount] = useState("");
@@ -234,7 +235,7 @@ export const Profile = () => {
       "/profile/mentors-overview": t("admin.mentors.overview"),
       "/profile/mentors-applications": t("admin.mentors.applications"),
       "/profile/mentors-statistics": t("admin.mentors.statistics"),
-       "/profile/reviews-management": t("admin.reviews.management"),
+      "/profile/reviews-management": t("admin.reviews.management"),
     };
 
     const matchedPath = Object.keys(pathTitleMap).find(key => path.includes(key));
@@ -275,7 +276,7 @@ export const Profile = () => {
     "/profile/mentors-overview",
     "/profile/mentors-applications",
     "/profile/mentors-statistics",
-     "/profile/reviews-management"
+    "/profile/reviews-management"
   ];
 
   const isAdminPanel = adminPaths.some(path => location.pathname.startsWith(path));
@@ -737,7 +738,25 @@ export const Profile = () => {
                 </li>
               </ul>
             </div>
-
+            {isMentor && (
+              <div className="menu-section mentor">
+                <h3>{t("profile.mentorDashboard")}</h3>
+                <ul>
+                  <li>
+                    <NavLink
+                      to="mentor-dashboard"
+                      className={({ isActive }) => isActive ? 'active' : ''}
+                    >
+                      <span className="link-content">
+                        <DashboardIcon className="icon" />
+                        {t("profile.mentorOverview")}
+                      </span>
+                      <ArrowIcon className="icon-arrow" />
+                    </NavLink>
+                  </li>
+                </ul>
+              </div>
+            )}
             {(isAdmin || isModerator) && (
               <div className="menu-section admin">
                 <h3>{t("profile.admin_dashboard")}</h3>
@@ -760,7 +779,7 @@ export const Profile = () => {
                       className={({ isActive }) => isActive ? 'active' : ''}
                     >
                       <span className="link-content">
-                        <StoriesIcon /> 
+                        <StoriesIcon />
                         {t("admin.reviews.management")}
                       </span>
                       <ArrowIcon className="icon-arrow" />
@@ -1104,6 +1123,7 @@ export const Profile = () => {
             <Route path="clubs" element={<MyClubs />} />
             <Route path="club-create" element={<ClubCreateForm />} />
             <Route path="club-drafts" element={<DraftClubs />} />
+            <Route path="mentor-dashboard" element={<DigiMentorPanel />} />
             <Route path="club-membership" element={<MembershipClubs isEditMode={true} />} />
             <Route path="admin-notifications" element={<ManagementGuard><AdminNotifications /></ManagementGuard>} />
             <Route path="ads-admin" element={<ManagementGuard><AllAnnouncements /></ManagementGuard>} />

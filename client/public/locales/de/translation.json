@@ -12093,5 +12093,468 @@
   "skip": "Später",
   "submit": "Bewertung senden",
   "submitting": "Wird gesendet..."
-}
+},
+"digiMentorPanel": {
+    "title": "Mentor-Dashboard",
+    "welcome": "Willkommen",
+    "errorLoading": "Fehler beim Laden der Daten",
+    "totalStudents": "Studenten insgesamt",
+    "activeSessions": "Aktive Sitzungen",
+    "completedSessions": "Abgeschlossene Sitzungen",
+    "onlineHours": "Online-Stunden",
+    "averageRating": "Durchschnittsbewertung",
+    "reviews": "Bewertungen",
+    "totalMessages": "Nachrichten insgesamt",
+    "responseTime": "Durchschn. Antwort",
+    "minutes": "Min",
+    "completionRate": "Abschlussrate",
+    "quickActions": "Schnellaktionen",
+    "startSession": "Sitzung starten",
+    "viewMessages": "Nachrichten ansehen",
+    "myStudents": "Meine Studenten",
+    "viewReviews": "Bewertungen ansehen"
+  },
+   "digiMentorStats": {
+    "totalStudents": "Studenten insgesamt",
+    "activeSessions": "Aktive Sitzungen",
+    "completedSessions": "Abgeschlossene Sitzungen",
+    "onlineHours": "Online-Stunden",
+    "averageRating": "Durchschnittsbewertung",
+    "reviews": "Bewertungen",
+    "totalMessages": "Nachrichten insgesamt",
+    "responseTime": "Durchschn. Antwort",
+    "minutes": "Min",
+    "completionRate": "Abschlussrate"
+  },
+   "digiMentorQuickActions": {
+    "title": "Schnellaktionen",
+    "startSession": "Sitzung starten",
+    "viewMessages": "Nachrichten ansehen",
+    "myStudents": "Meine Studenten",
+    "viewReviews": "Bewertungen ansehen"
+  },
+  "digiMentorRecentActivity": {
+    "title": "Letzte Aktivität",
+    "noActivity": "Noch keine Aktivität",
+    "types": {
+      "session_started": "Sitzung mit {{student}} gestartet",
+      "session_completed": "Sitzung mit {{student}} abgeschlossen",
+      "message_received": "Neue Nachricht von {{student}}",
+      "new_student": "Neuer Student: {{student}}",
+      "review_received": "Neue Bewertung von {{student}} - {{rating}}⭐"
+    }
+  },
+  "digiMentorUpcomingSessions": {
+    "title": "Bevorstehende Sitzungen",
+    "sessionsCount": "Sitzungen",
+    "noSessions": "Keine bevorstehenden Sitzungen",
+    "noTopic": "Kein Thema",
+    "minutes": "Min",
+    "status": {
+      "confirmed": "Bestätigt",
+      "pending": "Ausstehend",
+      "cancelled": "Abgesagt"
+    },
+    "joinSession": "Beitreten",
+    "editSession": "Bearbeiten",
+    "cancelSession": "Absagen"
+  },
+  "digiMentorStudentsList": {
+    "title": "Meine Studenten",
+    "loading": "Studenten werden geladen...",
+    "studentsCount": "Studenten",
+    "noStudents": "Sie haben noch keine Studenten",
+    "noResults": "Keine Studenten gefunden",
+    "searchPlaceholder": "Nach Namen suchen...",
+    "filters": {
+      "all": "Alle",
+      "active": "Aktiv",
+      "inactive": "Inaktiv",
+      "completed": "Abgeschlossen"
+    },
+    "status": {
+      "active": "Aktiv",
+      "inactive": "Inaktiv",
+      "completed": "Abgeschlossen",
+      "scheduled": "Geplant"
+    },
+    "sessions": "Sitzungen",
+    "message": "Nachricht",
+    "viewProfile": "Profil"
+  },
+  "digiMentorPerformanceChart": {
+    "title": "Leistung & Statistik",
+    "noData": "Noch keine Daten verfügbar",
+    "comparisonTitle": "Periodenvergleich",
+    "periods": {
+      "week": "Woche",
+      "month": "Monat",
+      "year": "Jahr"
+    },
+    "chartTypes": {
+      "sessions": "Sitzungen",
+      "hours": "Stunden",
+      "students": "Studenten"
+    },
+    "summary": {
+      "total": "Gesamt",
+      "average": "Durchschnitt",
+      "peak": "Spitze"
+    }
+  },
+   "mentorMeetings": {
+    "title": "Meine Treffen",
+    "addMeeting": "Treffen hinzufügen",
+    "noMeetings": "Sie haben noch keine Treffen",
+    "confirmCancel": "Sind Sie sicher, dass Sie dieses Treffen absagen möchten?",
+    "errorCancel": "Fehler beim Absagen des Treffens",
+    "tabs": {
+      "scheduled": "Geplant",
+      "completed": "Abgeschlossen"
+    },
+    "noResults": {
+      "scheduled": "Keine geplanten Treffen",
+      "completed": "Keine abgeschlossenen Treffen"
+    },
+    "types": {
+      "viber": "Viber",
+      "google_meet": "Google Meet",
+      "phone": "Telefonanruf",
+      "in_person": "Persönlich",
+      "other": "Andere"
+    },
+    "minutes": "Min",
+    "actual": "tatsächlich",
+    "markComplete": "Als abgeschlossen markieren",
+    "edit": "Bearbeiten",
+    "cancel": "Absagen",
+    "completed": "Abgeschlossen",
+    "student": "Student",
+    "date": "Datum",
+    "time": "Zeit",
+    "duration": "Dauer",
+    "notes": "Notizen"
+  },
+  "mentorProfileEdit": {
+    "title": "Profil bearbeiten",
+    "subtitle": "Verwalten Sie Ihre Profilinformationen",
+    "errorFetch": "Fehler beim Laden des Profils",
+    "errorSave": "Fehler beim Speichern der Änderungen",
+    "successSave": "Änderungen erfolgreich gespeichert!",
+    "saving": "Wird gespeichert...",
+    "saveChanges": "Änderungen speichern",
+    "readonlySection": {
+      "title": "Schreibgeschützte Informationen",
+      "description": "Diese Felder können nur von Administratoren geändert werden"
+    },
+    "editableSection": {
+      "title": "Bearbeitbare Informationen",
+      "description": "Sie können die folgenden Informationen ändern"
+    },
+    "fields": {
+      "photo": "Foto",
+      "name": "Name",
+      "email": "E-Mail",
+      "phone": "Telefon",
+      "age": "Alter",
+      "specialization": "Spezialisierung",
+      "education": "Bildung",
+      "experience": "Erfahrung",
+      "motivation": "Motivation",
+      "availability": "Verfügbarkeit",
+      "languages": "Sprachen",
+      "viber": "Viber",
+      "facebook": "Facebook",
+      "linkedin": "LinkedIn",
+      "otherContact": "Anderer Kontakt",
+      "priorityContact": "Bevorzugter Kontakt"
+    },
+    "placeholders": {
+      "availability": "z.B. Montag-Freitag 18:00-21:00",
+      "languages": "z.B. Bulgarisch, Englisch, Deutsch"
+    },
+    "priorityOptions": {
+      "email": "E-Mail",
+      "viber": "Viber",
+      "phone": "Telefon"
+    }
+  },
+  "addMeetingModal": {
+    "title": "Treffen hinzufügen",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "saving": "Wird gespeichert...",
+    "loadingStudents": "Studenten werden geladen...",
+    "minutes": "Min",
+    "fields": {
+      "title": "Titel",
+      "meetingType": "Treffentyp",
+      "student": "Student",
+      "date": "Datum",
+      "time": "Zeit",
+      "duration": "Dauer",
+      "notes": "Notizen"
+    },
+    "placeholders": {
+      "title": "z.B. Computerkenntnisse Unterricht",
+      "student": "Student auswählen (optional)",
+      "notes": "Zusätzliche Informationen zum Treffen..."
+    },
+    "meetingTypes": {
+      "viber": "Viber",
+      "google_meet": "Google Meet",
+      "phone": "Telefonanruf",
+      "in_person": "Persönlich",
+      "other": "Andere"
+    },
+    "errors": {
+      "titleRequired": "Titel ist erforderlich",
+      "dateRequired": "Datum ist erforderlich",
+      "timeRequired": "Zeit ist erforderlich",
+      "saveFailed": "Fehler beim Speichern des Treffens"
+    }
+  },
+  "editMeetingModal": {
+    "title": "Treffen bearbeiten",
+    "cancel": "Abbrechen",
+    "save": "Änderungen speichern",
+    "saving": "Wird gespeichert...",
+    "loadingStudents": "Studenten werden geladen...",
+    "minutes": "Min",
+    "fields": {
+      "title": "Titel",
+      "meetingType": "Treffentyp",
+      "student": "Student",
+      "date": "Datum",
+      "time": "Zeit",
+      "duration": "Dauer",
+      "notes": "Notizen"
+    },
+    "placeholders": {
+      "title": "z.B. Computerkenntnisse Unterricht",
+      "student": "Student auswählen (optional)",
+      "notes": "Zusätzliche Informationen zum Treffen..."
+    },
+    "meetingTypes": {
+      "viber": "Viber",
+      "google_meet": "Google Meet",
+      "phone": "Telefonanruf",
+      "in_person": "Persönlich",
+      "other": "Andere"
+    },
+    "errors": {
+      "titleRequired": "Titel ist erforderlich",
+      "dateRequired": "Datum ist erforderlich",
+      "timeRequired": "Zeit ist erforderlich",
+      "saveFailed": "Fehler beim Speichern der Änderungen"
+    }
+  },
+  "completeMeetingModal": {
+    "title": "Treffen abschließen",
+    "cancel": "Abbrechen",
+    "complete": "Treffen abschließen",
+    "saving": "Wird gespeichert...",
+    "minutes": "Min",
+    "meetingTitle": "Treffen",
+    "student": "Student",
+    "plannedDuration": "Geplante Dauer",
+    "fields": {
+      "actualDuration": "Tatsächliche Dauer",
+      "completionNotes": "Notizen zum Treffen"
+    },
+    "placeholders": {
+      "completionNotes": "Beschreiben Sie, was besprochen wurde, behandelte Themen, Fortschritt des Studenten..."
+    },
+    "hints": {
+      "actualDuration": "Geben Sie die tatsächliche Dauer des Treffens in Minuten ein",
+      "completionNotes": "Diese Notizen werden für zukünftige Referenzen gespeichert und helfen beim Verfolgen des Fortschritts"
+    },
+    "errors": {
+      "durationRequired": "Dauer ist erforderlich",
+      "saveFailed": "Fehler beim Abschließen des Treffens"
+    }
+  },
+   "studentDetails": {
+    "backToList": "Zurück zu Studenten",
+    "notFound": "Student nicht gefunden",
+    "errorLoading": "Fehler beim Laden der Daten",
+    "registeredSince": "Registriert seit",
+    "currentMentor": "Aktueller Mentor",
+    "totalCredits": "Gesamt Credits",
+    "activeCourses": "Aktive Kurse",
+    "completedCourses": "Abgeschlossene Kurse",
+    "attendanceRate": "Anwesenheitsquote",
+    "tabs": {
+      "overview": "Übersicht",
+      "courses": "Kurse",
+      "activities": "Aktivitäten",
+      "attendance": "Anwesenheit",
+      "schedule": "Zeitplan",
+      "notes": "Notizen"
+    },
+    "overview": {
+      "title": "Übersicht",
+      "creditsBreakdown": "Credits Aufschlüsselung",
+      "fromCourses": "Von Kursen",
+      "fromLectures": "Von Vorlesungen",
+      "fromSeminars": "Von Seminaren",
+      "fromPresentations": "Von Präsentationen",
+      "mentorInfo": "Mentor Informationen",
+      "assignedDate": "Zugewiesen am",
+      "progress": "Fortschritt",
+        "mentorHistory": "Mentor Geschichte",
+      "overallProgress": "Gesamtfortschritt",
+      "totalCourses": "Gesamt Kurse"
+    },
+    "courses": {
+      "title": "Kurse",
+      "all": "Alle",
+      "inProgress": "In Bearbeitung",
+      "completed": "Abgeschlossen",
+      "notStarted": "Nicht begonnen",
+      "noCourses": "Keine Kurse gefunden",
+      "progress": "Fortschritt",
+      "lessons": "Lektionen",
+      "credits": "Credits",
+      "startDate": "Anfang",
+      "endDate": "Ende"
+    },
+    "activities": {
+     "title": "Aktivitäten",
+      "all": "Alle",
+      "lectures": "Vorlesungen",
+      "seminars": "Seminare",
+      "presentations": "Präsentationen",
+      "attended": "Teilgenommen",
+      "missed": "Verpasst",
+      "scheduled": "Geplant",
+      "minutes": "Min",
+      "credits": "Credits",
+      "totalCredits": "Gesamt Credits",
+      "noActivities": "Keine Aktivitäten gefunden"
+    },
+    "attendance": {
+        "title": "Anwesenheit & Hilfe",
+      "overview": "Übersicht",
+      "totalSessions": "Gesamt Sitzungen",
+      "attended": "Teilgenommen",
+      "missed": "Verpasst",
+      "rate": "Quote",
+      "mentorHelp": "Mentor Hilfe",
+      "chatSessions": "Chat Sitzungen",
+      "chatHours": "Online Stunden",
+      "lastChat": "Letzter Chat",
+      "scheduledMeetings": "Geplante Treffen",
+      "completedMeetings": "Abgeschlossene Treffen",
+      "breakdown": "Aufschlüsselung",
+      "meetingCompletion": "Treffen Abschluss"
+    },
+    "schedule": {
+      "title": "Zeitplan",
+      "all": "Alle",
+      "today": "Heute",
+      "meetings": "Treffen",
+      "lessons": "Unterricht",
+      "lectures": "Vorlesungen",
+      "addMeeting": "Treffen hinzufügen",
+      "editMeeting": "Treffen bearbeiten",
+      "loading": "Wird geladen...",
+      "noEvents": "Keine bevorstehenden Ereignisse",
+      "minutes": "Min",
+      "edit": "Bearbeiten",
+      "cancel": "Abbrechen",
+      "delete": "Löschen",
+      "confirmDelete": "Sind Sie sicher, dass Sie dieses Treffen löschen möchten?",
+      "confirmCancel": "Sind Sie sicher, dass Sie dieses Treffen abbrechen möchten?",
+      "course_lesson": "Kursunterricht",
+      "mentor_meeting": "Mentor Treffen",
+      "lecture": "Vorlesung",
+      "seminar": "Seminar",
+      "close": "Schließen",
+      "presentation": "Präsentation",
+      "status": {
+        "scheduled": "Geplant",
+        "completed": "Abgeschlossen",
+        "cancelled": "Abgesagt"
+      },
+      "form": {
+        "title": "Titel",
+        "titlePlaceholder": "Treffen Titel eingeben",
+        "date": "Datum",
+        "time": "Uhrzeit",
+        "duration": "Dauer (Min)",
+        "type": "Typ",
+        "typeOnline": "Online",
+        "typePhone": "Telefon",
+        "typeInPerson": "Persönlich",
+        "notes": "Notizen",
+        "notesPlaceholder": "Notizen für das Treffen hinzufügen...",
+        "cancel": "Abbrechen",
+        "save": "Speichern"
+      }
+    },
+    "notes": {
+      "title": "Private Notizen",
+      "subtitle": "Nur Sie können diese Notizen sehen",
+      "addNote": "Notiz hinzufügen",
+      "placeholder": "Schreiben Sie eine Notiz über den Studenten...",
+      "save": "Speichern",
+      "saving": "Wird gespeichert...",
+      "noNotes": "Noch keine Notizen",
+      "successSave": "Notiz erfolgreich gespeichert",
+      "errorSave": "Fehler beim Speichern der Notiz"
+    }
+  },
+  "digiMentorReviews": {
+    "pageTitle": "Meine Bewertungen",
+    "pageSubtitle": "Sehen Sie, was Ihre Studenten über Sie sagen",
+    "noReviewsTitle": "Sie haben noch keine Bewertungen",
+    "noReviewsText": "Wenn Sie Ihre erste Bewertung erhalten, wird sie hier angezeigt.",
+    "noResultsTitle": "Keine Ergebnisse gefunden",
+    "noResultsText": "Versuchen Sie, die Filter oder die Suche zu ändern.",
+    "loadMore": "Mehr Bewertungen laden",
+    "showingCount": "{{visible}} von {{total}} Bewertungen angezeigt"
+  },
+  "digiMentorReviewsHeader": {
+    "basedOn": "Basierend auf {{count}} Bewertungen",
+    "basedOn_one": "Basierend auf {{count}} Bewertung",
+    "basedOn_other": "Basierend auf {{count}} Bewertungen",
+    "distributionTitle": "Bewertungsverteilung"
+  },
+  "digiMentorReviewsFilters": {
+    "searchPlaceholder": "Suche nach Name, Text oder Rolle...",
+    "clearSearch": "Suche löschen",
+    "filterByRating": "Nach Bewertung filtern",
+    "allRatings": "Alle",
+    "fiveStars": "5 Sterne",
+    "fourStars": "4 Sterne",
+    "threeStars": "3 Sterne",
+    "twoStars": "2 Sterne",
+    "oneStar": "1 Stern",
+    "sortBy": "Sortieren nach",
+    "sortNewest": "Neueste zuerst",
+    "sortOldest": "Älteste zuerst",
+    "sortHighest": "Höchste Bewertung",
+    "sortLowest": "Niedrigste Bewertung",
+    "resultSingular": "Ergebnis",
+    "resultPlural": "Ergebnisse"
+  },
+  "digiMentorReviewCard": {
+    "approved": "Genehmigt",
+    "today": "Heute",
+    "yesterday": "Gestern",
+    "daysAgo": "Vor {{count}} Tagen",
+    "daysAgo_one": "Vor {{count}} Tag",
+    "daysAgo_other": "Vor {{count}} Tagen",
+    "weeksAgo": "Vor {{count}} Wochen",
+    "weeksAgo_one": "Vor {{count}} Woche",
+    "weeksAgo_other": "Vor {{count}} Wochen",
+    "monthsAgo": "Vor {{count}} Monaten",
+    "monthsAgo_one": "Vor {{count}} Monat",
+    "monthsAgo_other": "Vor {{count}} Monaten",
+    "showMore": "Mehr anzeigen",
+    "showLess": "Weniger anzeigen",
+    "thankYou": "Vielen Dank für die Bewertung!"
+  }
+  
 }

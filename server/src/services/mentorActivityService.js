@@ -70,10 +70,10 @@ const getMentorCombinedStats = async (mentorId) => {
     const user = mentorData.user;
     const userDetails = user.details || {};
 
-    const displayName = mentorData.name || 
-                       userDetails.username || 
-                       `${userDetails.firstName || ''} ${userDetails.lastName || ''}`.trim() ||
-                       user.email.split('@')[0];
+    const displayName = mentorData.name ||
+      userDetails.username ||
+      `${userDetails.firstName || ''} ${userDetails.lastName || ''}`.trim() ||
+      user.email.split('@')[0];
 
     const firebaseMentorId = user.email
       .replace(/\./g, '_dot_')
@@ -93,9 +93,11 @@ const getMentorCombinedStats = async (mentorId) => {
       studentsCount: mentorData.studentsCount || firebaseStats.totalSessions || 0,
       sessionsCount: totalSessions,
       rating: parseFloat(mentorData.rating) || 0,
+      reviewsCount: mentorData.reviewsCount || 0,        
+      reviewsAvgRating: parseFloat(mentorData.reviewsAvgRating) || 0,  
       isOnline: mentorData.isOnline || false,
       courses: mentorData.courses || [],
-      
+
       firebaseStats: {
         totalSessions: firebaseStats.totalSessions,
         activeSessions: firebaseStats.activeSessions,
@@ -153,10 +155,10 @@ const getAllMentorsCombinedStats = async () => {
         const user = mentorData.user;
         const userDetails = user.details || {};
 
-        const displayName = mentorData.name || 
-                           userDetails.username || 
-                           `${userDetails.firstName || ''} ${userDetails.lastName || ''}`.trim() ||
-                           user.email.split('@')[0];
+        const displayName = mentorData.name ||
+          userDetails.username ||
+          `${userDetails.firstName || ''} ${userDetails.lastName || ''}`.trim() ||
+          user.email.split('@')[0];
 
         const firebaseMentorId = user.email
           .replace(/\./g, '_dot_')
@@ -168,7 +170,7 @@ const getAllMentorsCombinedStats = async () => {
         const totalSessions = (firebaseStats.totalSessions || 0) + (mentorData.sessionsCount || 0);
         const totalStudentsCount = (mentorData.studentsCount || 0) + (firebaseStats.totalSessions || 0);
         const totalOnlineHours = Math.round((firebaseStats.totalOnlineMinutes || 0) / 60 * 100) / 100;
-        
+
         mentorsWithStats.push({
           id: mentorData.id,
           name: displayName,
@@ -181,7 +183,7 @@ const getAllMentorsCombinedStats = async () => {
           isOnline: mentorData.isOnline || false,
           courses: mentorData.courses || [],
           role: user.role,
-          
+
           firebaseStats: {
             totalSessions: firebaseStats.totalSessions,
             activeSessions: firebaseStats.activeSessions,

@@ -26,6 +26,19 @@ module.exports = (sequelize, DataTypes) => {
         sourceKey: 'id',
         as: 'courses',
       });
+      // ✅ Has many students
+      mentor.hasMany(models.student, {
+        foreignKey: 'currentMentorId',
+        sourceKey: 'id',
+        as: 'students',
+      });
+
+      // ✅ Has many meetings
+      mentor.hasMany(models.mentor_meeting, {
+        foreignKey: 'mentorId',
+        sourceKey: 'id',
+        as: 'meetings',
+      });
     }
   }
 
@@ -196,7 +209,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0,
-        field: 'reviews_count',  
+        field: 'reviews_count',
         validate: {
           min: {
             args: [0],
@@ -208,7 +221,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.DECIMAL(2, 1),
         allowNull: false,
         defaultValue: 0.0,
-        field: 'reviews_avg_rating',  
+        field: 'reviews_avg_rating',
         validate: {
           min: 0.0,
           max: 5.0,
@@ -327,6 +340,7 @@ module.exports = (sequelize, DataTypes) => {
       modelName: 'mentor',
       tableName: 'mentors',
     }
+
   );
 
   return mentor;

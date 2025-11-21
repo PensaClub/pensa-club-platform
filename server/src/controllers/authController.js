@@ -70,6 +70,7 @@ authController.post('/register', async (req, res, next) => {
             role: user.role,
             enabled: user.finished,
             isGoogleUser: user.isGoogleUser,
+            isMentor: user.isMentor || false,
             hasPassword: !!user.password,
         };
 
@@ -113,6 +114,7 @@ authController.post('/login', async (req, res, next) => {
             createdAt: user.createdAt,
             updatedAt: user.updatedAt,
             isGoogleUser: user.isGoogleUser,
+            isMentor: user.isMentor || false,
             ads: user.ads,
         };
 
@@ -286,6 +288,7 @@ authController.post('/google-register', async (req, res, next) => {
                 enabled: user.finished,
                 isGoogleUser: user.isGoogleUser,
                 hasPassword: !!user.password,
+                isMentor: user.isMentor || false,
                 details: {
                     imageURL: details.imageURL,
                 },
@@ -331,6 +334,7 @@ authController.post('/google-login', async (req, res, next) => {
             createdAt: user.createdAt,
             updatedAt: user.updatedAt,
             isGoogleUser: user.isGoogleUser,
+            isMentor: user.isMentor || false,
             ads: user.ads,
         };
 

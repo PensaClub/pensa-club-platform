@@ -8,6 +8,7 @@ function tokenGenerator(type, data) {
     email: data.email,
     role: data.role,
     enabled: data.finished,
+     isMentor: data.isMentor || false,
   };
 
   let refreshTokenId;

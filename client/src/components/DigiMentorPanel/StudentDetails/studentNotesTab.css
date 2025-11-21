@@ -1,0 +1,917 @@
+/* client/src/components/DigiMentorPanel/StudentDetails/studentNotesTab.css */
+
+.student-notes-tab {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* HEADER */
+.student-notes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.student-notes-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.student-notes-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.student-notes-count {
+  padding: 0.375rem 0.75rem;
+  background: #f3f4f6;
+  color: #6b7280;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  border-radius: 20px;
+}
+
+.student-notes-add-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border: none;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.student-notes-add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.student-notes-add-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* SEARCH */
+.student-notes-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.student-notes-search svg {
+  position: absolute;
+  left: 1.5rem;
+  width: 20px;
+  height: 20px;
+  color: #9ca3af;
+}
+
+.student-notes-search input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 3rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  color: #111827;
+  transition: all 0.2s ease;
+}
+
+.student-notes-search input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.student-notes-search input::placeholder {
+  color: #9ca3af;
+}
+
+/* LOADING */
+.student-notes-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.student-notes-loading p {
+  font-size: 1rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* EMPTY STATE */
+.student-notes-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 4rem 2rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.student-notes-empty svg {
+  width: 64px;
+  height: 64px;
+  color: #d1d5db;
+}
+
+.student-notes-empty p {
+  font-size: 1rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.student-notes-empty-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.student-notes-empty-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* NOTES LIST */
+.student-notes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* NOTE CARD */
+.student-notes-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.student-notes-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-color: #667eea;
+}
+
+.student-notes-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.student-notes-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.student-notes-card-meta svg {
+  width: 16px;
+  height: 16px;
+  color: #9ca3af;
+}
+
+.student-notes-card-author {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.student-notes-card-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.student-notes-card-action-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e5e7eb;
+  background: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.student-notes-card-action-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.student-notes-card-action-btn-edit {
+  color: #667eea;
+}
+
+.student-notes-card-action-btn-edit:hover {
+  background: #f0f9ff;
+  border-color: #667eea;
+}
+
+.student-notes-card-action-btn-delete {
+  color: #dc2626;
+}
+
+.student-notes-card-action-btn-delete:hover {
+  background: #fef2f2;
+  border-color: #dc2626;
+}
+
+.student-notes-card-body {
+  margin-bottom: 1rem;
+}
+
+.student-notes-card-text {
+  font-size: 0.9375rem;
+  color: #374151;
+  line-height: 1.7;
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.student-notes-card-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #f3f4f6;
+}
+
+.student-notes-card-footer svg {
+  width: 14px;
+  height: 14px;
+  color: #9ca3af;
+}
+
+.student-notes-card-date {
+  font-size: 0.8125rem;
+  color: #9ca3af;
+}
+
+/* MODAL */
+.student-notes-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.student-notes-modal {
+  width: 100%;
+  max-width: 700px;
+  background: white;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+  overflow: hidden;
+}
+
+.student-notes-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.student-notes-modal-header h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.student-notes-modal-header button {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: #6b7280;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.student-notes-modal-header button:hover {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.student-notes-modal-header button svg {
+  width: 20px;
+  height: 20px;
+}
+
+.student-notes-modal-body {
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.student-notes-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.student-notes-form-group label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.student-notes-form-group textarea {
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  color: #111827;
+  line-height: 1.7;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 200px;
+  transition: all 0.2s ease;
+}
+
+.student-notes-form-group textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.student-notes-form-group textarea::placeholder {
+  color: #9ca3af;
+}
+
+.student-notes-form-hint {
+  font-size: 0.8125rem;
+  color: #9ca3af;
+  font-style: italic;
+}
+
+.student-notes-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.student-notes-modal-btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.student-notes-modal-btn-cancel {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.student-notes-modal-btn-cancel:hover {
+  background: #e5e7eb;
+}
+
+.student-notes-modal-btn-save {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.student-notes-modal-btn-save:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.student-notes-modal-btn-save:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ============================================ */
+/* RESPONSIVE BREAKPOINTS */
+/* ============================================ */
+
+/* ГОЛЕМИ ЕКРАНИ (1920px+) */
+@media (min-width: 1920px) {
+  .student-notes-tab {
+    gap: 2rem;
+  }
+
+  .student-notes-title {
+    font-size: 1.25rem;
+  }
+
+  .student-notes-list {
+    gap: 1.25rem;
+  }
+
+  .student-notes-card {
+    padding: 2rem;
+  }
+
+  .student-notes-card-text {
+    font-size: 1rem;
+  }
+
+  .student-notes-modal {
+    max-width: 800px;
+  }
+
+  .student-notes-form-group textarea {
+    min-height: 250px;
+  }
+}
+
+/* МАЛКИ ЛАПТОПИ (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .student-notes-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .student-notes-header-left {
+    justify-content: space-between;
+  }
+
+  .student-notes-add-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .student-notes-card {
+    padding: 1.25rem;
+  }
+}
+
+/* ТАБЛЕТИ (481px - 767px) */
+@media (min-width: 481px) and (max-width: 767px) {
+  .student-notes-tab {
+    gap: 1.25rem;
+  }
+
+  .student-notes-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .student-notes-header-left {
+    justify-content: space-between;
+  }
+
+  .student-notes-title {
+    font-size: 1rem;
+  }
+
+  .student-notes-add-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 0.625rem 1rem;
+  }
+
+  .student-notes-search {
+    padding: 0.875rem;
+  }
+
+  .student-notes-search svg {
+    left: 1.25rem;
+  }
+
+  .student-notes-search input {
+    padding: 0.625rem 1rem 0.625rem 2.75rem;
+    font-size: 0.875rem;
+  }
+
+  .student-notes-list {
+    gap: 0.875rem;
+  }
+
+  .student-notes-card {
+    padding: 1.25rem;
+  }
+
+  .student-notes-card-text {
+    font-size: 0.875rem;
+  }
+
+  .student-notes-card-action-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .student-notes-card-action-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .student-notes-modal-body {
+    padding: 1.25rem;
+  }
+
+  .student-notes-form-group textarea {
+    min-height: 180px;
+  }
+
+  .student-notes-modal-footer {
+    padding: 1.25rem;
+  }
+}
+
+/* ГОЛЕМИ ТЕЛЕФОНИ (376px - 480px) */
+@media (min-width: 376px) and (max-width: 480px) {
+  .student-notes-tab {
+    gap: 1rem;
+  }
+
+  .student-notes-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .student-notes-header-left {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .student-notes-title {
+    font-size: 0.9375rem;
+  }
+
+  .student-notes-count {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.625rem;
+  }
+
+  .student-notes-add-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 0.625rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .student-notes-add-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .student-notes-search {
+    padding: 0.75rem;
+  }
+
+  .student-notes-search svg {
+    left: 1rem;
+    width: 18px;
+    height: 18px;
+  }
+
+  .student-notes-search input {
+    padding: 0.625rem 0.875rem 0.625rem 2.5rem;
+    font-size: 0.875rem;
+  }
+
+  .student-notes-empty {
+    padding: 3rem 1.5rem;
+    gap: 1.25rem;
+  }
+
+  .student-notes-empty svg {
+    width: 56px;
+    height: 56px;
+  }
+
+  .student-notes-empty p {
+    font-size: 0.9375rem;
+  }
+
+  .student-notes-list {
+    gap: 0.875rem;
+  }
+
+  .student-notes-card {
+    padding: 1rem;
+  }
+
+  .student-notes-card-header {
+    margin-bottom: 0.875rem;
+  }
+
+  .student-notes-card-action-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .student-notes-card-action-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .student-notes-card-body {
+    margin-bottom: 0.875rem;
+  }
+
+  .student-notes-card-text {
+    font-size: 0.875rem;
+  }
+
+  .student-notes-card-footer {
+    padding-top: 0.875rem;
+  }
+
+  .student-notes-card-date {
+    font-size: 0.75rem;
+  }
+
+  .student-notes-modal-header {
+    padding: 1.25rem;
+  }
+
+  .student-notes-modal-header h3 {
+    font-size: 1.125rem;
+  }
+
+  .student-notes-modal-body {
+    padding: 1.25rem;
+  }
+
+  .student-notes-form-group textarea {
+    min-height: 160px;
+    font-size: 0.875rem;
+  }
+
+  .student-notes-modal-footer {
+    padding: 1.25rem;
+    flex-direction: column;
+  }
+
+  .student-notes-modal-btn {
+    width: 100%;
+  }
+}
+
+/* МАЛКИ ТЕЛЕФОНИ (320px - 375px) */
+@media (min-width: 320px) and (max-width: 375px) {
+  .student-notes-tab {
+    gap: 0.875rem;
+  }
+
+  .student-notes-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.625rem;
+  }
+
+  .student-notes-header-left {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .student-notes-title {
+    font-size: 0.875rem;
+  }
+
+  .student-notes-count {
+    font-size: 0.6875rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .student-notes-add-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 0.5rem 0.875rem;
+    font-size: 0.8125rem;
+  }
+
+  .student-notes-add-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .student-notes-search {
+    padding: 0.625rem;
+  }
+
+  .student-notes-search svg {
+    left: 1rem;
+    width: 16px;
+    height: 16px;
+  }
+
+  .student-notes-search input {
+    padding: 0.5rem 0.75rem 0.5rem 2.25rem;
+    font-size: 0.8125rem;
+  }
+
+  .student-notes-empty {
+    padding: 2.5rem 1rem;
+    gap: 1rem;
+  }
+
+  .student-notes-empty svg {
+    width: 48px;
+    height: 48px;
+  }
+
+  .student-notes-empty p {
+    font-size: 0.875rem;
+  }
+
+  .student-notes-empty-btn {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+  }
+
+  .student-notes-list {
+    gap: 0.75rem;
+  }
+
+  .student-notes-card {
+    padding: 0.875rem;
+  }
+
+  .student-notes-card-header {
+    margin-bottom: 0.75rem;
+    gap: 0.5rem;
+  }
+
+  .student-notes-card-meta svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .student-notes-card-author {
+    font-size: 0.8125rem;
+  }
+
+  .student-notes-card-actions {
+    gap: 0.375rem;
+  }
+
+  .student-notes-card-action-btn {
+    width: 28px;
+    height: 28px;
+  }
+
+  .student-notes-card-action-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .student-notes-card-body {
+    margin-bottom: 0.75rem;
+  }
+
+  .student-notes-card-text {
+    font-size: 0.8125rem;
+  }
+
+  .student-notes-card-footer {
+    padding-top: 0.75rem;
+    gap: 0.375rem;
+  }
+
+  .student-notes-card-footer svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .student-notes-card-date {
+    font-size: 0.6875rem;
+  }
+
+  .student-notes-modal-header {
+    padding: 1rem;
+  }
+
+  .student-notes-modal-header h3 {
+    font-size: 1rem;
+  }
+
+  .student-notes-modal-header button {
+    width: 28px;
+    height: 28px;
+  }
+
+  .student-notes-modal-header button svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .student-notes-modal-body {
+    padding: 1rem;
+  }
+
+  .student-notes-form-group {
+    gap: 0.625rem;
+  }
+
+  .student-notes-form-group label {
+    font-size: 0.8125rem;
+  }
+
+  .student-notes-form-group textarea {
+    min-height: 140px;
+    font-size: 0.8125rem;
+    padding: 0.875rem;
+  }
+
+  .student-notes-form-hint {
+    font-size: 0.75rem;
+  }
+
+  .student-notes-modal-footer {
+    padding: 1rem;
+    gap: 0.5rem;
+  }
+
+  .student-notes-modal-btn {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* DISABLE HOVER ON TOUCH */
+@media (hover: none) and (pointer: coarse) {
+  .student-notes-add-btn:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .student-notes-empty-btn:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .student-notes-card:hover {
+    box-shadow: none;
+    border-color: #e5e7eb;
+  }
+
+  .student-notes-card-action-btn-edit:hover {
+    background: white;
+    border-color: #e5e7eb;
+  }
+
+  .student-notes-card-action-btn-delete:hover {
+    background: white;
+    border-color: #e5e7eb;
+  }
+
+  .student-notes-modal-btn-save:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}

@@ -1,0 +1,524 @@
+/* client/src/components/DigiMentorPanel/DigiMentorReviews/DigiMentorReviewsFilters/digiMentorReviewsFilters.css */
+
+.digi-mentor-reviews-filters {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 2rem;
+}
+
+.digi-mentor-reviews-filters-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.digi-mentor-reviews-filters-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 0.75rem;
+}
+
+/* ===============================
+   SEARCH BAR
+   =============================== */
+
+.digi-mentor-reviews-filters-search {
+  width: 100%;
+}
+
+.digi-mentor-reviews-filters-search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.digi-mentor-reviews-filters-search-icon {
+  position: absolute;
+  left: 1rem;
+  width: 20px;
+  height: 20px;
+  stroke: #999;
+  pointer-events: none;
+}
+
+.digi-mentor-reviews-filters-search-input {
+  width: 100%;
+  padding: 0.875rem 3rem 0.875rem 3rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  color: #1a1a1a;
+  transition: all 0.2s ease;
+  background: #f9fafb;
+}
+
+.digi-mentor-reviews-filters-search-input:focus {
+  outline: none;
+  border-color: #667eea;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.digi-mentor-reviews-filters-search-input::placeholder {
+  color: #9ca3af;
+}
+
+.digi-mentor-reviews-filters-search-clear {
+  position: absolute;
+  right: 0.75rem;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f3f4f6;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.digi-mentor-reviews-filters-search-clear:hover {
+  background: #e5e7eb;
+}
+
+.digi-mentor-reviews-filters-search-clear svg {
+  width: 16px;
+  height: 16px;
+  stroke: #6b7280;
+}
+
+/* ===============================
+   RATING FILTERS
+   =============================== */
+
+.digi-mentor-reviews-filters-rating {
+  width: 100%;
+}
+
+.digi-mentor-reviews-filters-rating-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.digi-mentor-reviews-filters-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  background: #f3f4f6;
+  border: 2px solid transparent;
+  border-radius: 50px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #4b5563;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.digi-mentor-reviews-filters-pill:hover {
+  background: #e5e7eb;
+  border-color: #d1d5db;
+}
+
+.digi-mentor-reviews-filters-pill-active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-color: transparent;
+}
+
+.digi-mentor-reviews-filters-pill-active:hover {
+  background: linear-gradient(135deg, #5568d3 0%, #6a3f8f 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+}
+
+.digi-mentor-reviews-filters-pill-icon {
+  font-size: 1.125rem;
+  line-height: 1;
+}
+
+.digi-mentor-reviews-filters-pill-stars {
+  display: flex;
+  gap: 2px;
+}
+
+.digi-mentor-reviews-filters-pill-stars svg {
+  width: 14px;
+  height: 14px;
+  color: #FFD700;
+}
+
+.digi-mentor-reviews-filters-pill-active .digi-mentor-reviews-filters-pill-stars svg {
+  color: #FFD700;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+}
+
+.digi-mentor-reviews-filters-pill-text {
+  display: inline-block;
+}
+
+/* ===============================
+   SORT & RESULTS
+   =============================== */
+
+.digi-mentor-reviews-filters-actions {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2rem;
+  align-items: flex-end;
+}
+
+.digi-mentor-reviews-filters-sort {
+  flex: 1;
+  min-width: 0;
+}
+
+.digi-mentor-reviews-filters-sort-wrapper {
+  position: relative;
+}
+
+.digi-mentor-reviews-filters-select {
+  width: 100%;
+  padding: 0.875rem 3rem 0.875rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #1a1a1a;
+  background: #f9fafb;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  appearance: none;
+}
+
+.digi-mentor-reviews-filters-select:hover {
+  border-color: #d1d5db;
+}
+
+.digi-mentor-reviews-filters-select:focus {
+  outline: none;
+  border-color: #667eea;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.digi-mentor-reviews-filters-select-icon {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  stroke: #6b7280;
+  pointer-events: none;
+}
+
+.digi-mentor-reviews-filters-results {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.875rem 1.25rem;
+  background: #f0f9ff;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+.digi-mentor-reviews-filters-results-count {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0369a1;
+}
+
+.digi-mentor-reviews-filters-results-text {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #0c4a6e;
+}
+
+/* ===============================
+   RESPONSIVE - ГОЛЕМИ МОНИТОРИ
+   =============================== */
+
+@media (min-width: 1920px) {
+  .digi-mentor-reviews-filters {
+    padding: 2rem;
+  }
+
+  .digi-mentor-reviews-filters-container {
+    gap: 2rem;
+  }
+
+  .digi-mentor-reviews-filters-search-input,
+  .digi-mentor-reviews-filters-select {
+    font-size: 1rem;
+    padding: 1rem 3.5rem 1rem 3.5rem;
+  }
+
+  .digi-mentor-reviews-filters-pill {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.9375rem;
+  }
+}
+
+/* ===============================
+   RESPONSIVE - СРЕДНИ МОНИТОРИ
+   =============================== */
+
+@media (max-width: 1440px) {
+  .digi-mentor-reviews-filters {
+    padding: 1.5rem;
+  }
+}
+
+/* ===============================
+   RESPONSIVE - МАЛКИ МОНИТОРИ / ГОЛЕМИ ЛАПТОПИ
+   =============================== */
+
+@media (max-width: 1280px) {
+  .digi-mentor-reviews-filters-actions {
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .digi-mentor-reviews-filters {
+    padding: 1.25rem;
+  }
+
+  .digi-mentor-reviews-filters-container {
+    gap: 1.25rem;
+  }
+
+  .digi-mentor-reviews-filters-rating-pills {
+    gap: 0.5rem;
+  }
+
+  .digi-mentor-reviews-filters-pill {
+    padding: 0.5rem 0.875rem;
+    font-size: 0.8125rem;
+  }
+
+  .digi-mentor-reviews-filters-pill-stars svg {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+/* ===============================
+   RESPONSIVE - МАЛКИ ЛАПТОПИ / ТАБЛЕТИ
+   =============================== */
+
+@media (max-width: 968px) {
+  .digi-mentor-reviews-filters-actions {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .digi-mentor-reviews-filters-results {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 834px) {
+  .digi-mentor-reviews-filters {
+    padding: 1rem;
+  }
+
+  .digi-mentor-reviews-filters-search-input,
+  .digi-mentor-reviews-filters-select {
+    padding: 0.75rem 2.75rem 0.75rem 2.75rem;
+    font-size: 0.875rem;
+  }
+
+  .digi-mentor-reviews-filters-search-icon,
+  .digi-mentor-reviews-filters-select-icon {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@media (max-width: 768px) {
+  .digi-mentor-reviews-filters-rating-pills {
+    justify-content: flex-start;
+  }
+
+  .digi-mentor-reviews-filters-pill-text {
+    display: none;
+  }
+
+  .digi-mentor-reviews-filters-pill {
+    padding: 0.625rem;
+    min-width: 44px;
+    justify-content: center;
+  }
+
+  .digi-mentor-reviews-filters-pill-icon {
+    font-size: 1.25rem;
+  }
+}
+
+/* ===============================
+   RESPONSIVE - ГОЛЕМИ ТЕЛЕФОНИ
+   =============================== */
+
+@media (max-width: 480px) {
+  .digi-mentor-reviews-filters {
+    padding: 1rem 0.75rem;
+    border-radius: 8px;
+  }
+
+  .digi-mentor-reviews-filters-container {
+    gap: 1rem;
+  }
+
+  .digi-mentor-reviews-filters-label {
+    font-size: 0.8125rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .digi-mentor-reviews-filters-search-input {
+    padding: 0.75rem 2.5rem 0.75rem 2.5rem;
+    font-size: 0.875rem;
+  }
+
+  .digi-mentor-reviews-filters-search-icon {
+    left: 0.75rem;
+    width: 16px;
+    height: 16px;
+  }
+
+  .digi-mentor-reviews-filters-search-clear {
+    right: 0.5rem;
+    width: 28px;
+    height: 28px;
+  }
+
+  .digi-mentor-reviews-filters-rating-pills {
+    gap: 0.5rem;
+  }
+
+  .digi-mentor-reviews-filters-pill {
+    padding: 0.5rem;
+    min-width: 40px;
+  }
+
+  .digi-mentor-reviews-filters-pill-stars svg {
+    width: 11px;
+    height: 11px;
+  }
+
+  .digi-mentor-reviews-filters-select {
+    padding: 0.75rem 2.5rem 0.75rem 0.875rem;
+    font-size: 0.875rem;
+  }
+
+  .digi-mentor-reviews-filters-select-icon {
+    right: 0.75rem;
+    width: 18px;
+    height: 18px;
+  }
+
+  .digi-mentor-reviews-filters-results {
+    padding: 0.75rem 1rem;
+  }
+
+  .digi-mentor-reviews-filters-results-count {
+    font-size: 1.25rem;
+  }
+
+  .digi-mentor-reviews-filters-results-text {
+    font-size: 0.8125rem;
+  }
+}
+
+/* ===============================
+   RESPONSIVE - МАЛКИ ТЕЛЕФОНИ
+   =============================== */
+
+@media (max-width: 375px) {
+  .digi-mentor-reviews-filters {
+    padding: 0.875rem 0.625rem;
+  }
+
+  .digi-mentor-reviews-filters-pill {
+    padding: 0.5rem;
+    min-width: 38px;
+  }
+
+  .digi-mentor-reviews-filters-pill-icon {
+    font-size: 1.125rem;
+  }
+
+  .digi-mentor-reviews-filters-results-count {
+    font-size: 1.125rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .digi-mentor-reviews-filters-search-input,
+  .digi-mentor-reviews-filters-select {
+    font-size: 0.8125rem;
+  }
+
+  .digi-mentor-reviews-filters-rating-pills {
+    gap: 0.375rem;
+  }
+
+  .digi-mentor-reviews-filters-pill {
+    min-width: 36px;
+    padding: 0.5rem;
+  }
+}
+
+@media (max-width: 320px) {
+  .digi-mentor-reviews-filters {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .digi-mentor-reviews-filters-container {
+    gap: 0.875rem;
+  }
+
+  .digi-mentor-reviews-filters-label {
+    font-size: 0.75rem;
+  }
+
+  .digi-mentor-reviews-filters-search-input,
+  .digi-mentor-reviews-filters-select {
+    padding: 0.625rem 2.25rem 0.625rem 2.25rem;
+    font-size: 0.75rem;
+  }
+
+  .digi-mentor-reviews-filters-pill {
+    min-width: 34px;
+    padding: 0.5rem;
+  }
+
+  .digi-mentor-reviews-filters-pill-icon {
+    font-size: 1rem;
+  }
+
+  .digi-mentor-reviews-filters-pill-stars svg {
+    width: 10px;
+    height: 10px;
+  }
+
+  .digi-mentor-reviews-filters-results {
+    padding: 0.625rem 0.875rem;
+  }
+
+  .digi-mentor-reviews-filters-results-count {
+    font-size: 1rem;
+  }
+
+  .digi-mentor-reviews-filters-results-text {
+    font-size: 0.75rem;
+  }
+}
