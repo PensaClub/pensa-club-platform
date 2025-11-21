@@ -1,0 +1,620 @@
+/* ===============================
+   REJECTED APPLICATIONS
+   =============================== */
+
+.rejected-applications {
+  width: 100%;
+}
+
+.rejected-applications-list {
+  display: grid;
+  gap: 1.5rem;
+}
+
+/* ===============================
+   CARD
+   =============================== */
+
+.rejected-applications-card {
+  background: white;
+  border: 1px solid #fee2e2;
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all 0.2s ease;
+}
+
+.rejected-applications-card:hover {
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.1);
+  border-color: #fecaca;
+}
+
+.rejected-applications-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.rejected-applications-card-avatar {
+  position: relative;
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #f3f4f6;
+}
+
+.rejected-applications-card-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.rejected-applications-card-badge {
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #dc2626;
+  color: white;
+  font-size: 0.625rem;
+  font-weight: 600;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.rejected-applications-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.rejected-applications-card-name {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 0.25rem 0;
+}
+
+.rejected-applications-card-email {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0 0 0.25rem 0;
+}
+
+.rejected-applications-card-phone {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.rejected-applications-card-dates {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.rejected-applications-card-date {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+
+.rejected-applications-card-date-label {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.rejected-applications-card-date-value {
+  font-size: 0.875rem;
+  color: #4b5563;
+  font-weight: 500;
+}
+
+.rejected-applications-card-reason {
+  background: #fef2f2;
+  border-left: 3px solid #dc2626;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border-radius: 6px;
+}
+
+.rejected-applications-card-reason-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #991b1b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.rejected-applications-card-reason-text {
+  font-size: 0.875rem;
+  color: #7f1d1d;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ===============================
+   ACTIONS
+   =============================== */
+
+.rejected-applications-card-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.rejected-applications-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.rejected-applications-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.rejected-applications-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.rejected-applications-btn-details {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.rejected-applications-btn-details:hover:not(:disabled) {
+  background: #e5e7eb;
+}
+
+.rejected-applications-btn-reapprove {
+  background: #16a34a;
+  color: white;
+}
+
+.rejected-applications-btn-reapprove:hover:not(:disabled) {
+  background: #15803d;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(22, 163, 74, 0.3);
+}
+
+.rejected-applications-btn-delete {
+  background: #dc2626;
+  color: white;
+}
+
+.rejected-applications-btn-delete:hover:not(:disabled) {
+  background: #b91c1c;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(220, 38, 38, 0.3);
+}
+
+/* ===============================
+   EMPTY STATE
+   =============================== */
+
+.rejected-applications-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.rejected-applications-empty-icon {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 1.5rem;
+  color: #9ca3af;
+}
+
+.rejected-applications-empty-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.rejected-applications-empty-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0 0 0.5rem 0;
+}
+
+.rejected-applications-empty-text {
+  font-size: 1rem;
+  color: #6b7280;
+  margin: 0;
+  max-width: 400px;
+}
+
+/* ===============================
+   MODAL
+   =============================== */
+
+.rejected-applications-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  animation: rejected-applications-fade-in 0.2s ease;
+}
+
+@keyframes rejected-applications-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.rejected-applications-modal {
+  background: white;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow: auto;
+  animation: rejected-applications-slide-up 0.3s ease;
+}
+
+@keyframes rejected-applications-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rejected-applications-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.rejected-applications-modal-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.rejected-applications-modal-close {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.rejected-applications-modal-close:hover:not(:disabled) {
+  background: #f3f4f6;
+  color: #1a1a1a;
+}
+
+.rejected-applications-modal-close svg {
+  width: 20px;
+  height: 20px;
+}
+
+.rejected-applications-modal-body {
+  padding: 1.5rem;
+}
+
+.rejected-applications-modal-text {
+  font-size: 1rem;
+  color: #4b5563;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.rejected-applications-modal-detail {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.rejected-applications-modal-detail:last-child {
+  border-bottom: none;
+}
+
+.rejected-applications-modal-detail-full {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.rejected-applications-modal-detail-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.rejected-applications-modal-detail-value {
+  font-size: 0.875rem;
+  color: #1a1a1a;
+  text-align: right;
+}
+
+.rejected-applications-modal-detail-reason {
+  font-size: 0.875rem;
+  color: #7f1d1d;
+  background: #fef2f2;
+  padding: 0.75rem;
+  border-radius: 6px;
+  border-left: 3px solid #dc2626;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.rejected-applications-modal-warning {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #fef2f2;
+  border: 1px solid #fee2e2;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1rem;
+  color: #991b1b;
+}
+
+.rejected-applications-modal-warning svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.rejected-applications-modal-warning span {
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.rejected-applications-modal-footer {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  padding: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.rejected-applications-modal-btn {
+  padding: 0.625rem 1.25rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.rejected-applications-modal-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.rejected-applications-modal-btn-cancel {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.rejected-applications-modal-btn-cancel:hover:not(:disabled) {
+  background: #e5e7eb;
+}
+
+.rejected-applications-modal-btn-secondary {
+  background: #2563eb;
+  color: white;
+}
+
+.rejected-applications-modal-btn-secondary:hover:not(:disabled) {
+  background: #1d4ed8;
+  box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
+}
+
+.rejected-applications-modal-btn-confirm {
+  background: #16a34a;
+  color: white;
+}
+
+.rejected-applications-modal-btn-confirm:hover:not(:disabled) {
+  background: #15803d;
+  box-shadow: 0 4px 8px rgba(22, 163, 74, 0.3);
+}
+
+.rejected-applications-modal-btn-danger {
+  background: #dc2626;
+  color: white;
+}
+
+.rejected-applications-modal-btn-danger:hover:not(:disabled) {
+  background: #b91c1c;
+  box-shadow: 0 4px 8px rgba(220, 38, 38, 0.3);
+}
+
+/* ===============================
+   RESPONSIVE
+   =============================== */
+
+/* Tablet (768px - 1024px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .rejected-applications-card {
+    padding: 1.25rem;
+  }
+
+  .rejected-applications-card-header {
+    gap: 0.875rem;
+  }
+
+  .rejected-applications-card-avatar {
+    width: 56px;
+    height: 56px;
+  }
+
+  .rejected-applications-card-name {
+    font-size: 1.0625rem;
+  }
+}
+
+/* Mobile (< 768px) */
+@media (max-width: 767px) {
+  .rejected-applications-list {
+    gap: 1rem;
+  }
+
+  .rejected-applications-card {
+    padding: 1rem;
+  }
+
+  .rejected-applications-card-header {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .rejected-applications-card-avatar {
+    width: 48px;
+    height: 48px;
+  }
+
+  .rejected-applications-card-badge {
+    font-size: 0.5625rem;
+    padding: 0.0625rem 0.375rem;
+  }
+
+  .rejected-applications-card-name {
+    font-size: 1rem;
+  }
+
+  .rejected-applications-card-email,
+  .rejected-applications-card-phone {
+    font-size: 0.8125rem;
+  }
+
+  .rejected-applications-card-dates {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .rejected-applications-card-reason {
+    padding: 0.625rem 0.875rem;
+  }
+
+  .rejected-applications-card-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .rejected-applications-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 0.75rem 1rem;
+  }
+
+  .rejected-applications-modal {
+    max-width: 100%;
+    margin: 0;
+    border-radius: 12px 12px 0 0;
+  }
+
+  .rejected-applications-modal-header,
+  .rejected-applications-modal-body,
+  .rejected-applications-modal-footer {
+    padding: 1.25rem;
+  }
+
+  .rejected-applications-modal-detail {
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .rejected-applications-modal-detail-value {
+    text-align: left;
+  }
+
+  .rejected-applications-modal-footer {
+    flex-direction: column-reverse;
+  }
+
+  .rejected-applications-modal-btn {
+    width: 100%;
+  }
+}
+
+/* Small Mobile (< 480px) */
+@media (max-width: 479px) {
+  .rejected-applications-card {
+    padding: 0.875rem;
+  }
+
+  .rejected-applications-card-name {
+    font-size: 0.9375rem;
+  }
+
+  .rejected-applications-btn {
+    font-size: 0.8125rem;
+    padding: 0.625rem 0.875rem;
+  }
+
+  .rejected-applications-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .rejected-applications-empty {
+    padding: 3rem 1rem;
+  }
+
+  .rejected-applications-empty-icon {
+    width: 64px;
+    height: 64px;
+  }
+
+  .rejected-applications-empty-title {
+    font-size: 1.125rem;
+  }
+
+  .rejected-applications-empty-text {
+    font-size: 0.9375rem;
+  }
+}

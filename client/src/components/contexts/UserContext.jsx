@@ -452,7 +452,7 @@ export const UserProvider = ({ children }) => {
     isUserAdmin,
     isAdmin,
     isModerator,
-    isMentor,  // ✅ ДОБАВИ
+    isMentor,  
     onChangeAdminRole,
     sendContactForm,
     setProfileData,

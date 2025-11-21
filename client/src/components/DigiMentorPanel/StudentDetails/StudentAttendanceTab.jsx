@@ -10,6 +10,19 @@ export const StudentAttendanceTab = ({ student }) => {
 
   const { attendance, mentorHelp } = student;
 
+  // ✅ Safe calculations
+  const attendancePercentage = attendance.totalScheduledSessions > 0
+    ? (attendance.attendedSessions / attendance.totalScheduledSessions) * 100
+    : 0;
+
+  const missedPercentage = attendance.totalScheduledSessions > 0
+    ? (attendance.missedSessions / attendance.totalScheduledSessions) * 100
+    : 0;
+
+  const meetingCompletionPercentage = mentorHelp.scheduledMeetings > 0
+    ? (mentorHelp.completedMeetings / mentorHelp.scheduledMeetings) * 100
+    : 0;
+
   return (
     <div className="student-attendance-tab">
       {/* ATTENDANCE OVERVIEW */}
@@ -136,7 +149,9 @@ export const StudentAttendanceTab = ({ student }) => {
             </div>
             <div className="student-attendance-help-content">
               <span className="student-attendance-help-value">
-                {new Date(mentorHelp.lastChatDate).toLocaleDateString('bg-BG')}
+                {mentorHelp.lastChatDate 
+                  ? new Date(mentorHelp.lastChatDate).toLocaleDateString('bg-BG')
+                  : t('studentDetails.attendance.noChats')}
               </span>
               <span className="student-attendance-help-label">{t('studentDetails.attendance.lastChat')}</span>
             </div>
@@ -164,7 +179,7 @@ export const StudentAttendanceTab = ({ student }) => {
               <div
                 className="student-attendance-breakdown-bar-fill"
                 style={{
-                  width: `${(attendance.attendedSessions / attendance.totalScheduledSessions) * 100}%`,
+                  width: `${attendancePercentage}%`,
                   background: '#059669'
                 }}
               />
@@ -184,7 +199,7 @@ export const StudentAttendanceTab = ({ student }) => {
               <div
                 className="student-attendance-breakdown-bar-fill"
                 style={{
-                  width: `${(attendance.missedSessions / attendance.totalScheduledSessions) * 100}%`,
+                  width: `${missedPercentage}%`,
                   background: '#dc2626'
                 }}
               />
@@ -204,7 +219,7 @@ export const StudentAttendanceTab = ({ student }) => {
               <div
                 className="student-attendance-breakdown-bar-fill"
                 style={{
-                  width: `${(mentorHelp.completedMeetings / mentorHelp.scheduledMeetings) * 100}%`,
+                  width: `${meetingCompletionPercentage}%`,
                   background: '#2563eb'
                 }}
               />

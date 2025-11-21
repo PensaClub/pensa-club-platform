@@ -17,7 +17,7 @@ import { DigiMentorReviewCard } from './DigiMentorReviewCard/DigiMentorReviewCar
 export const DigiMentorReviews = () => {
   const { t } = useTranslation();
   const { profileData } = useAuthContext();
-  const { getApprovedMentorReviews, getMentorReviewStats } = useAcademy();
+  const { getMentorOwnReviews, getMentorOwnReviewStats } = useAcademy();
 
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState(null);
@@ -47,28 +47,24 @@ export const DigiMentorReviews = () => {
   }, [filteredReviews, visibleCount]);
 
   const fetchReviewsData = async () => {
-    setIsLoading(true);
-    try {
-      // 🔥 TEMPORARY: Using mock data
-      // TODO: Replace with real API call when backend is ready
-      // const mentorId = profileData?.mentorId || profileData?.id;
-      // const [statsData, reviewsData] = await Promise.all([
-      //   getMentorReviewStats(mentorId),
-      //   getApprovedMentorReviews(mentorId, 100)
-      // ]);
+  setIsLoading(true);
+  try {
+    const [statsData, reviewsData] = await Promise.all([
+      getMentorOwnReviewStats(),
+      getMentorOwnReviews(100)
+    ]);
 
-      const statsData = mockMentorReviewsData.stats;
-      const reviewsData = mockMentorReviewsData.reviews;
-
-      setStats(statsData);
-      setAllReviews(reviewsData);
-      setFilteredReviews(reviewsData);
-    } catch (error) {
-      console.error('Error fetching reviews:', error);
-    } finally {
-      setIsLoading(false);
+    if (statsData.success && reviewsData.success) {
+      setStats(statsData.stats);
+      setAllReviews(reviewsData.reviews);
+      setFilteredReviews(reviewsData.reviews);
     }
-  };
+  } catch (error) {
+    console.error('Error fetching reviews:', error);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   const applyFiltersAndSort = () => {
     let filtered = [...allReviews];

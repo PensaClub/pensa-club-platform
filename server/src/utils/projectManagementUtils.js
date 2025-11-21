@@ -50,7 +50,6 @@ const manageInitiativeProjects = async (projectsData, initiativeId, userId, tran
 
             resolvedProjectIds.push(existingProject.id);
         } else {
-            console.log(`Creating new project: ${projectData.slug}`);
 
             const newProject = await project.create(
                 {

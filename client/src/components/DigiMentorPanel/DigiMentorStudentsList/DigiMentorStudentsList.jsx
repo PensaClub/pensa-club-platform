@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAcademy } from '../../contexts/AcademyProvider';
+import { Loader } from '../../Loader/Loader';
 import './digiMentorStudentsList.css';
 
 export const DigiMentorStudentsList = () => {
@@ -16,6 +17,7 @@ export const DigiMentorStudentsList = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchStudents();
@@ -24,22 +26,26 @@ export const DigiMentorStudentsList = () => {
   const fetchStudents = async () => {
     try {
       setIsLoading(true);
+      setError(null);
 
       const result = await getMentorStudents();
       
       if (result.success) {
-        setStudents(result.students);
+        setStudents(result.students || []);
+      } else {
+        setError(result.message || 'Failed to load students');
       }
 
       setIsLoading(false);
     } catch (error) {
       console.error('Error fetching students:', error);
+      setError('Failed to load students');
       setIsLoading(false);
     }
   };
 
   const handleViewStudent = (studentId) => {
-    navigate(`/profile/mentor-dashboard/students/${studentId}`);
+    navigate(`/mentor/students/${studentId}/details`);
   };
 
   const handleMessageStudent = (studentId) => {
@@ -62,6 +68,16 @@ export const DigiMentorStudentsList = () => {
     return t(`digiMentorStudentsList.status.${status}`);
   };
 
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('bg-BG', { 
+      day: '2-digit', 
+      month: '2-digit', 
+      year: 'numeric' 
+    });
+  };
+
   const filteredStudents = students.filter((student) => {
     const matchesSearch = student.name.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesFilter = filterStatus === 'all' || student.status === filterStatus;
@@ -74,8 +90,25 @@ export const DigiMentorStudentsList = () => {
         <h2 className="digi-mentor-students-list-title">
           {t('digiMentorStudentsList.title')}
         </h2>
-        <div className="digi-mentor-students-list-loading">
-          <p>{t('digiMentorStudentsList.loading')}</p>
+        <Loader />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="digi-mentor-students-list">
+        <h2 className="digi-mentor-students-list-title">
+          {t('digiMentorStudentsList.title')}
+        </h2>
+        <div className="digi-mentor-students-list-error">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 8V12M12 16H12.01M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          <p>{error}</p>
+          <button onClick={fetchStudents}>
+            {t('digiMentorStudentsList.retry')}
+          </button>
         </div>
       </div>
     );
@@ -180,8 +213,35 @@ export const DigiMentorStudentsList = () => {
 
               <div className="digi-mentor-students-list-card-body">
                 <h3 className="digi-mentor-students-list-student-name">{student.name}</h3>
+                
+                {/* EMAIL */}
                 {student.email && (
-                  <p className="digi-mentor-students-list-student-email">{student.email}</p>
+                  <p className="digi-mentor-students-list-student-contact">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M3 8L10.89 13.26C11.2187 13.4793 11.6049 13.5963 12 13.5963C12.3951 13.5963 12.7813 13.4793 13.11 13.26L21 8M5 19H19C19.5304 19 20.0391 18.7893 20.4142 18.4142C20.7893 18.0391 21 17.5304 21 17V7C21 6.46957 20.7893 5.96086 20.4142 5.58579C20.0391 5.21071 19.5304 5 19 5H5C4.46957 5 3.96086 5.21071 3.58579 5.58579C3.21071 5.96086 3 6.46957 3 7V17C3 17.5304 3.21071 18.0391 3.58579 18.4142C3.96086 18.7893 4.46957 19 5 19Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    {student.email}
+                  </p>
+                )}
+
+                {/* PHONE */}
+                {student.phone && (
+                  <p className="digi-mentor-students-list-student-contact">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M3 5C3 3.89543 3.89543 3 5 3H8.27924C8.70967 3 9.09181 3.27543 9.22792 3.68377L10.7257 8.17721C10.8831 8.64932 10.6694 9.16531 10.2243 9.38787L7.96701 10.5165C9.06925 12.9612 11.0388 14.9308 13.4835 16.033L14.6121 13.7757C14.8347 13.3306 15.3507 13.1169 15.8228 13.2743L20.3162 14.7721C20.7246 14.9082 21 15.2903 21 15.7208V19C21 20.1046 20.1046 21 19 21H18C9.71573 21 3 14.2843 3 6V5Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    {student.phone}
+                  </p>
+                )}
+
+                {/* REGISTRATION DATE */}
+                {student.registrationDate && (
+                  <p className="digi-mentor-students-list-student-contact">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M8 7V3M16 7V3M7 11H17M5 21H19C20.1046 21 21 20.1046 21 19V7C21 5.89543 20.1046 5 19 5H5C3.89543 5 3 5.89543 3 7V19C3 20.1046 3.89543 21 5 21Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    {t('digiMentorStudentsList.registeredOn')}: {formatDate(student.registrationDate)}
+                  </p>
                 )}
               </div>
 

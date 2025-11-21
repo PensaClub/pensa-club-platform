@@ -6,11 +6,23 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class mentor_course extends Model {
     static associate(models) {
-      // Belongs to mentor
+
       mentor_course.belongsTo(models.mentor, {
         foreignKey: 'mentorId',
         targetKey: 'id',
         as: 'mentor',
+      });
+      mentor_course.belongsTo(models.course, {
+        foreignKey: 'courseId',
+        targetKey: 'id',
+        as: 'course',
+      });
+
+
+      mentor_course.hasMany(models.student_course, {
+        foreignKey: 'mentorCourseId',
+        sourceKey: 'id',
+        as: 'enrollments',
       });
     }
   }
@@ -94,7 +106,7 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       status: {
-        type: DataTypes.ENUM('active', 'completed', 'paused'),
+        type: DataTypes.STRING, 
         allowNull: false,
         defaultValue: 'active',
         validate: {
@@ -115,6 +127,12 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         defaultValue: null,
         field: 'end_date',
+      },
+      courseId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        defaultValue: null,
+        field: 'course_id',
       },
     },
     {
