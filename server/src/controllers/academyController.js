@@ -1697,4 +1697,508 @@ academyController.get(
     }
   }
 );
+
+// ===============================
+// POST /api/academy/mentors/:mentorId/apply-student
+// Student applies to a mentor
+// ===============================
+academyController.post(
+  '/mentors/:mentorId/apply-student',
+  isAuth,
+  async (req, res, next) => {
+    try {
+      const mentorId = parseInt(req.params.mentorId);
+      const userId = req.user.userId;
+      const userRole = req.user.role;
+
+      const {
+        student_mentor_application,
+        mentor,
+        user_account,
+        student
+      } = require('../sequelize/models/index');
+
+      // ✅ 1. ПРОВЕРКА: Admin и Mentor НЕ могат да кандидатстват
+      if (userRole === 'admin' || userRole === 'mentor') {
+        return res.status(403).json({
+          success: false,
+          message: 'Administrators and mentors cannot apply for mentors'
+        });
+      }
+
+      // ✅ 2. ПРОВЕРКА: Менторът съществува и е активен
+      const mentorData = await mentor.findByPk(mentorId);
+
+      if (!mentorData) {
+        return res.status(404).json({
+          success: false,
+          message: 'Mentor not found'
+        });
+      }
+
+      if (mentorData.status !== 'active') {
+        return res.status(400).json({
+          success: false,
+          message: 'This mentor is not currently accepting students'
+        });
+      }
+
+      // ✅ 3. ПРОВЕРКА: Дали вече има pending заявка към ТОЗИ ментор
+      const existingApplication = await student_mentor_application.findOne({
+        where: {
+          userId: userId,
+          mentorId: mentorId,
+          status: 'pending'
+        }
+      });
+
+      if (existingApplication) {
+        return res.status(400).json({
+          success: false,
+          message: 'You already have a pending application to this mentor'
+        });
+      }
+      // ✅ 3.5. ПРОВЕРКА: Дали има APPROVED заявка към ТОЗИ ментор
+      const approvedApplication = await student_mentor_application.findOne({
+        where: {
+          userId: userId,
+          mentorId: mentorId,
+          status: 'approved'
+        }
+      });
+
+      if (approvedApplication) {
+        return res.status(400).json({
+          success: false,
+          message: 'You are already assigned to this mentor'
+        });
+      }
+
+      // ✅ 4. СЪЗДАЙ APPLICATION
+      const newApplication = await student_mentor_application.create({
+        userId: userId,
+        mentorId: mentorId,
+        status: 'pending'
+      });
+
+      // ✅ 5. СЪЗДАЙ ADMIN NOTIFICATION
+      await require('../sequelize/models/index').admin_notification.create({
+        type: 'student_application',
+        title: 'New Student Application',
+        message: `User applied to mentor ${mentorData.name}`,
+        data: {
+          applicationId: newApplication.id,
+          userId: userId,
+          mentorId: mentorId
+        },
+        isRead: false
+      });
+
+      res.status(201).json({
+        success: true,
+        message: 'Application sent successfully',
+        application: newApplication
+      });
+
+    } catch (err) {
+      console.error('❌ [APPLY FOR MENTOR] Error:', err);
+      next(err);
+    }
+  }
+);
+// ===============================
+// GET /api/academy/admin/student-applications
+// Admin: Вземи всички student applications (всички ментори)
+// ===============================
+academyController.get(
+  '/admin/student-applications',
+  isAuth,
+  rbac.checkPermission('studentApplication', 'readAll'),
+  async (req, res, next) => {
+    try {
+      const { status } = req.query; // optional filter: pending, approved, rejected
+
+      const {
+        student_mentor_application,
+        user_account,
+        user_details,
+        mentor
+      } = require('../sequelize/models/index');
+
+      // Build where clause
+      const where = {};
+      if (status && status !== 'all') {
+        where.status = status;
+      }
+
+      // Вземи всички заявки
+      const applications = await student_mentor_application.findAll({
+        where,
+        include: [
+          {
+            model: user_account,
+            as: 'user',
+            attributes: ['id', 'email', 'role'],
+            include: [
+              {
+                model: user_details,
+                as: 'details',
+                attributes: ['username', 'firstName', 'lastName', 'imageURL', 'phoneNumber']
+              }
+            ]
+          },
+          {
+            model: mentor,
+            as: 'mentor',
+            attributes: ['id', 'name', 'email', 'photoUrl', 'specialization', 'phone']
+          }
+        ],
+        order: [['createdAt', 'DESC']]
+      });
+
+      // Форматирай резултата
+      const formattedApplications = applications.map(app => {
+        const appData = app.get({ plain: true });
+        const userName = appData.user?.details?.username ||
+          `${appData.user?.details?.firstName || ''} ${appData.user?.details?.lastName || ''}`.trim() ||
+          appData.user?.email?.split('@')[0] ||
+          'Unknown';
+
+        return {
+          id: appData.id,
+          // User data
+          userId: appData.userId,
+          userName: userName,
+          userEmail: appData.user?.email,
+          userAvatar: appData.user?.details?.imageURL,
+          userPhone: appData.user?.details?.phoneNumber,
+          userRole: appData.user?.role,
+          // Mentor data
+          mentorId: appData.mentorId,
+          mentorName: appData.mentor?.name,
+          mentorEmail: appData.mentor?.email,
+          mentorPhoto: appData.mentor?.photoUrl,
+          mentorSpecialization: appData.mentor?.specialization,
+          mentorPhone: appData.mentor?.phone,
+          // Application status
+          status: appData.status,
+          rejectionReason: appData.rejectionReason,
+          approvedAt: appData.approvedAt,
+          rejectedAt: appData.rejectedAt,
+          createdAt: appData.createdAt,
+          updatedAt: appData.updatedAt
+        };
+      });
+
+      res.status(200).json({
+        success: true,
+        applications: formattedApplications,
+        total: formattedApplications.length,
+        statusCounts: {
+          pending: formattedApplications.filter(a => a.status === 'pending').length,
+          approved: formattedApplications.filter(a => a.status === 'approved').length,
+          rejected: formattedApplications.filter(a => a.status === 'rejected').length
+        }
+      });
+
+    } catch (err) {
+      console.error('❌ [GET ALL STUDENT APPLICATIONS] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// POST /api/academy/admin/student-applications/:id/approve
+// Admin: Одобри заявка (same logic as mentor)
+// ===============================
+academyController.post(
+  '/admin/student-applications/:id/approve',
+  isAuth,
+  rbac.checkPermission('studentApplication', 'update'),
+  async (req, res, next) => {
+    try {
+      const applicationId = parseInt(req.params.id);
+
+      const {
+        student_mentor_application,
+        student,
+        user_account,
+        mentor,
+        mentor_history
+      } = require('../sequelize/models/index');
+      const { tokenGenerator } = require('../utils/jwt');
+      const { refreshToken } = require('../sequelize/models/index');
+
+      // ✅ 1. ВЗЕМИ APPLICATION
+      const application = await student_mentor_application.findByPk(applicationId);
+
+      if (!application) {
+        return res.status(404).json({
+          success: false,
+          message: 'Application not found'
+        });
+      }
+
+      if (application.status !== 'pending') {
+        return res.status(400).json({
+          success: false,
+          message: 'Application is already processed'
+        });
+      }
+
+      // ✅ 2. ВЗЕМИ USER DATA
+      const user = await user_account.findByPk(application.userId);
+
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          message: 'User not found'
+        });
+      }
+
+      // ✅ 3. ПРОМЕНИ ROLE НА 'student' (ако не е вече)
+      if (user.role !== 'student') {
+        await user.update({ role: 'student' });
+
+        // ✅ ГЕНЕРИРАЙ НОВИ TOKENS с обновена роля
+        const { token } = tokenGenerator('access', user.dataValues);
+        const { token: refreshJwtToken, refreshTokenId, expiryDate } = tokenGenerator('refresh', user.dataValues);
+
+        await refreshToken.destroy({ where: { userId: user.id } });
+        await refreshToken.create({
+          userId: user.id,
+          token: refreshTokenId,
+          expiryDate
+        });
+      }
+
+      // ✅ 4. ПРОВЕРИ ДАЛИ СТУДЕНТЪТ ВЕЧЕ СЪЩЕСТВУВА
+      let studentData = await student.findOne({
+        where: { userId: application.userId }
+      });
+
+      const isNewStudent = !studentData;
+      const oldMentorId = studentData?.currentMentorId || null;
+
+      if (studentData) {
+        // ✅ СТУДЕНТЪТ СЪЩЕСТВУВА - ЗАМЕНИ МЕНТОРА
+
+        // Намали studentsCount на стария ментор
+        if (studentData.currentMentorId) {
+          const oldMentor = await mentor.findByPk(studentData.currentMentorId);
+          if (oldMentor) {
+            await oldMentor.update({
+              studentsCount: Math.max(0, oldMentor.studentsCount - 1)
+            });
+          }
+        }
+
+        // Обнови студента с новия ментор
+        await studentData.update({
+          currentMentorId: application.mentorId,
+          mentorAssignedDate: new Date(),
+          status: 'active'
+        });
+
+      } else {
+        // ✅ СТУДЕНТЪТ НЕ СЪЩЕСТВУВА - СЪЗДАЙ ГО
+        studentData = await student.create({
+          userId: application.userId,
+          currentMentorId: application.mentorId,
+          mentorAssignedDate: new Date(),
+          status: 'active',
+          country: 'BG'
+        });
+      }
+
+      // ✅ 5. УВЕЛИЧИ studentsCount НА НОВИЯ МЕНТОР
+      const mentorData = await mentor.findByPk(application.mentorId);
+      await mentorData.update({
+        studentsCount: mentorData.studentsCount + 1
+      });
+
+      // ✅ 5.5. СЪЗДАЙ MENTOR HISTORY ЗАПИС
+      
+      // Ако студентът вече съществуваше и сменихме ментора
+      if (!isNewStudent && oldMentorId && oldMentorId !== application.mentorId) {
+        // Завърши стария период
+        const oldHistory = await mentor_history.findOne({
+          where: {
+            studentId: studentData.id,
+            periodEnd: null
+          },
+          order: [['periodStart', 'DESC']]
+        });
+
+        if (oldHistory) {
+          await oldHistory.update({
+            periodEnd: new Date(),
+            reason: 'Reassigned to new mentor'
+          });
+        }
+      }
+
+      // Създай нов history запис за новия ментор
+      await mentor_history.create({
+        studentId: studentData.id,
+        mentorId: application.mentorId,
+        mentorName: mentorData.name,
+        periodStart: new Date(),
+        periodEnd: null,
+        reason: isNewStudent ? 'Initial assignment' : 'Reassigned from another mentor'
+      });
+
+      // ✅ 6. ОБНОВИ APPLICATION STATUS
+      await application.update({
+        status: 'approved',
+        approvedAt: new Date()
+      });
+
+      // ✅ 7. СЪЗДАЙ ADMIN NOTIFICATION
+      await require('../sequelize/models/index').admin_notification.create({
+        type: 'student_application_approved_by_admin',
+        title: 'Student Application Approved by Admin',
+        message: `Admin approved student application to mentor ${mentorData.name}`,
+        data: {
+          applicationId: application.id,
+          userId: application.userId,
+          mentorId: application.mentorId,
+          studentId: studentData.id,
+          approvedBy: 'admin'
+        },
+        isRead: false
+      });
+
+      res.status(200).json({
+        success: true,
+        message: 'Application approved successfully',
+        application: application,
+        student: studentData
+      });
+
+    } catch (err) {
+      console.error('❌ [ADMIN APPROVE APPLICATION] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// POST /api/academy/admin/student-applications/:id/reject
+// Admin: Отхвърли заявка
+// ===============================
+academyController.post(
+  '/admin/student-applications/:id/reject',
+  isAuth,
+  rbac.checkPermission('studentApplication', 'update'),
+  async (req, res, next) => {
+    try {
+      const applicationId = parseInt(req.params.id);
+
+      const { rejectApplicationSchema } = require('../schemas/studentMentorApplication.schema');
+      const { student_mentor_application, mentor } = require('../sequelize/models/index');
+
+      // Валидация
+      const validationResult = rejectApplicationSchema.safeParse(req.body);
+
+      if (!validationResult.success) {
+        return res.status(400).json({
+          success: false,
+          message: 'Validation failed',
+          errors: validationResult.error.errors
+        });
+      }
+
+      // Вземи application
+      const application = await student_mentor_application.findByPk(applicationId);
+
+      if (!application) {
+        return res.status(404).json({
+          success: false,
+          message: 'Application not found'
+        });
+      }
+
+      if (application.status !== 'pending') {
+        return res.status(400).json({
+          success: false,
+          message: 'Application is already processed'
+        });
+      }
+
+      // Обнови application
+      await application.update({
+        status: 'rejected',
+        rejectionReason: validationResult.data.rejectionReason,
+        rejectedAt: new Date()
+      });
+
+      // Създай admin notification
+      const mentorData = await mentor.findByPk(application.mentorId);
+      await require('../sequelize/models/index').admin_notification.create({
+        type: 'student_application_rejected_by_admin',
+        title: 'Student Application Rejected by Admin',
+        message: `Admin rejected student application to mentor ${mentorData.name}`,
+        data: {
+          applicationId: application.id,
+          userId: application.userId,
+          mentorId: application.mentorId,
+          rejectionReason: validationResult.data.rejectionReason,
+          rejectedBy: 'admin'
+        },
+        isRead: false
+      });
+
+      res.status(200).json({
+        success: true,
+        message: 'Application rejected successfully',
+        application: application
+      });
+
+    } catch (err) {
+      console.error('❌ [ADMIN REJECT APPLICATION] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// DELETE /api/academy/admin/student-applications/:id
+// Admin: Изтрий заявка
+// ===============================
+academyController.delete(
+  '/admin/student-applications/:id',
+  isAuth,
+  rbac.checkPermission('studentApplication', 'delete'),
+  async (req, res, next) => {
+    try {
+      const applicationId = parseInt(req.params.id);
+
+      const { student_mentor_application } = require('../sequelize/models/index');
+
+      // Намери application
+      const application = await student_mentor_application.findByPk(applicationId);
+
+      if (!application) {
+        return res.status(404).json({
+          success: false,
+          message: 'Application not found'
+        });
+      }
+
+      // Изтрий application
+      await application.destroy();
+
+      res.status(200).json({
+        success: true,
+        message: 'Application deleted successfully'
+      });
+
+    } catch (err) {
+      console.error('❌ [ADMIN DELETE APPLICATION] Error:', err);
+      next(err);
+    }
+  }
+);
 module.exports = academyController;

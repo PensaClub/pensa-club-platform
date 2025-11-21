@@ -85,7 +85,7 @@ export const StudentActivitiesTab = ({ student }) => {
               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 8V12L15 15M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-              <span>{activity.credits || activity.maxCredits || 0} {t('studentDetails.activities.credits')}</span>
+              <span>{activity.earnedCredits || activity.maxCredits || 0} {t('studentDetails.activities.credits')}</span>
             </div>
           </div>
         </div>
@@ -133,7 +133,7 @@ export const StudentActivitiesTab = ({ student }) => {
           </div>
           <div className="student-activities-stat-content">
             <span className="student-activities-stat-value">
-              {[...lectures, ...seminars, ...presentations].reduce((sum, activity) => sum + (activity.credits || 0), 0)}
+              {[...lectures, ...seminars, ...presentations].reduce((sum, activity) => sum + (activity.earnedCredits || 0), 0)}
             </span>
             <span className="student-activities-stat-label">{t('studentDetails.activities.totalCredits')}</span>
           </div>

@@ -188,6 +188,10 @@ eventEmitter.on('userCacheUpdate', async ({ type, data, adId, userId, action }) 
 
   if (type === 'users') {
     if (action === 'details') {
+      // ✅ ПРОВЕРИ ДАЛИ details СЪЩЕСТВУВА
+      if (!account.details) {
+        account.details = {}; // ✅ Инициализирай като празен обект
+      }
       Object.assign(account.details, data);
     }
     if (action === 'enabled') {

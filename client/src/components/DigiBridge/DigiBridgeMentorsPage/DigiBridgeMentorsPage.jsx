@@ -5,17 +5,46 @@ import { Helmet } from 'react-helmet-async';
 import { MentorCard } from './MentorCard';
 import './digiBridgeMentorsPage.css';
 import { DigiBridgeHeader } from '../../DigiBridgeAcademy/DigiBridgeHeader/DigiBridgeHeader';
+import { useAcademy } from '../../contexts/AcademyProvider';
+import { Loader } from '../../Loader/Loader';
+import { MentorDetailModal } from './MentorDetailModal';
 
 export const DigiBridgeMentorsPage = () => {
   const { t } = useTranslation();
+  const { getAllMentors } = useAcademy();
+  
+  const [mentors, setMentors] = useState([]);
+  const [filteredMentors, setFilteredMentors] = useState([]);
   const [selectedSpecialization, setSelectedSpecialization] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [scrollY, setScrollY] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedMentor, setSelectedMentor] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // Fetch mentors
   useEffect(() => {
+    fetchMentors();
     window.scrollTo(0, 0);
   }, []);
 
+  const fetchMentors = async () => {
+    setIsLoading(true);
+    try {
+      const response = await getAllMentors({ status: 'active' });
+      
+      if (response.success) {
+        setMentors(response.mentors || []);
+        setFilteredMentors(response.mentors || []);
+      }
+    } catch (error) {
+      console.error('Error fetching mentors:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Scroll effect
   useEffect(() => {
     const handleScroll = () => {
       setScrollY(window.scrollY);
@@ -24,81 +53,27 @@ export const DigiBridgeMentorsPage = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // MOCK DATA
-  const mentors = [
-    {
-      id: 1,
-      name: 'Мария Петрова',
-      age: 24,
-      avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
-      specialization: 'Digital Security',
-      bio: 'Студент по киберсигурност с опит в обучение на възрастни хора',
-      availability: 'available',
-      studentsCount: 8,
-      rating: 5.0,
-      experience: '2 години',
-    },
-    {
-      id: 2,
-      name: 'Иван Георгиев',
-      age: 28,
-      avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
-      specialization: 'Media Literacy',
-      bio: 'Журналист с над 5 години опит в медийна грамотност',
-      availability: 'busy',
-      studentsCount: 12,
-      rating: 4.8,
-      experience: '3 години',
-    },
-    {
-      id: 3,
-      name: 'Елена Димитрова',
-      age: 26,
-      avatar: 'https://randomuser.me/api/portraits/women/65.jpg',
-      specialization: 'Social Media',
-      bio: 'Специалист по социални мрежи и дигитален маркетинг',
-      availability: 'available',
-      studentsCount: 5,
-      rating: 5.0,
-      experience: '1.5 години',
-    },
-    {
-      id: 4,
-      name: 'Георги Стоянов',
-      age: 30,
-      avatar: 'https://randomuser.me/api/portraits/men/52.jpg',
-      specialization: 'Online Banking',
-      bio: 'Финансов експерт с фокус върху дигитални платежни решения',
-      availability: 'available',
-      studentsCount: 10,
-      rating: 4.9,
-      experience: '4 години',
-    },
-    {
-      id: 5,
-      name: 'София Иванова',
-      age: 23,
-      avatar: 'https://randomuser.me/api/portraits/women/28.jpg',
-      specialization: 'Basic Computer Skills',
-      bio: 'IT студент с търпение и разбиране към начинаещи',
-      availability: 'available',
-      studentsCount: 6,
-      rating: 5.0,
-      experience: '1 година',
-    },
-    {
-      id: 6,
-      name: 'Николай Петров',
-      age: 27,
-      avatar: 'https://randomuser.me/api/portraits/men/75.jpg',
-      specialization: 'Digital Security',
-      bio: 'Специалист по информационна сигурност и защита на лични данни',
-      availability: 'busy',
-      studentsCount: 15,
-      rating: 4.7,
-      experience: '3 години',
-    },
-  ];
+  // Filter mentors
+  useEffect(() => {
+    let result = mentors;
+
+    // Specialization filter
+    if (selectedSpecialization !== 'all') {
+      result = result.filter(m => m.specialization === selectedSpecialization);
+    }
+
+    // Search filter
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(m => 
+        m.name.toLowerCase().includes(query) ||
+        m.specialization?.toLowerCase().includes(query) ||
+        m.bio?.toLowerCase().includes(query)
+      );
+    }
+
+    setFilteredMentors(result);
+  }, [selectedSpecialization, searchQuery, mentors]);
 
   const specializations = [
     { value: 'all', label: t('digiBridge.mentorsPage.filters.all') },
@@ -109,13 +84,18 @@ export const DigiBridgeMentorsPage = () => {
     { value: 'Basic Computer Skills', label: t('digiBridge.mentorsPage.filters.basicSkills') },
   ];
 
-  // Филтриране
-  const filteredMentors = mentors.filter(mentor => {
-    const matchesSpecialization = selectedSpecialization === 'all' || mentor.specialization === selectedSpecialization;
-    const matchesSearch = mentor.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         mentor.bio.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesSpecialization && matchesSearch;
-  });
+  const handleOpenModal = (mentor) => {
+    setSelectedMentor(mentor);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedMentor(null);
+  };
+
+  const availableMentorsCount = mentors.filter(m => m.isOnline).length;
+  const uniqueSpecializations = [...new Set(mentors.map(m => m.specialization))].length;
 
   return (
     <>
@@ -163,11 +143,11 @@ export const DigiBridgeMentorsPage = () => {
               <span className="mentors-stat-label">{t('digiBridge.mentorsPage.stats.mentors')}</span>
             </div>
             <div className="mentors-stat-card">
-              <span className="mentors-stat-number">{mentors.filter(m => m.availability === 'available').length}</span>
+              <span className="mentors-stat-number">{availableMentorsCount}</span>
               <span className="mentors-stat-label">{t('digiBridge.mentorsPage.stats.available')}</span>
             </div>
             <div className="mentors-stat-card">
-              <span className="mentors-stat-number">6</span>
+              <span className="mentors-stat-number">{uniqueSpecializations}</span>
               <span className="mentors-stat-label">{t('digiBridge.mentorsPage.stats.specializations')}</span>
             </div>
           </div>
@@ -208,14 +188,21 @@ export const DigiBridgeMentorsPage = () => {
           </div>
         </section>
 
-        {/* MENTORS SECTIONS - FULL WIDTH ZIGZAG */}
+        {/* MENTORS LIST */}
         <section className="mentors-list-new">
           <div className="mentors-list-container">
             
-            {filteredMentors.length > 0 ? (
+            {isLoading ? (
+              <Loader />
+            ) : filteredMentors.length > 0 ? (
               <>
                 {filteredMentors.map((mentor, index) => (
-                  <MentorCard key={mentor.id} mentor={mentor} index={index} />
+                  <MentorCard 
+                    key={mentor.id} 
+                    mentor={mentor} 
+                    index={index}
+                    onViewProfile={() => handleOpenModal(mentor)}
+                  />
                 ))}
               </>
             ) : (
@@ -228,6 +215,14 @@ export const DigiBridgeMentorsPage = () => {
             
           </div>
         </section>
+
+        {/* MODAL */}
+        {isModalOpen && selectedMentor && (
+          <MentorDetailModal 
+            mentor={selectedMentor}
+            onClose={handleCloseModal}
+          />
+        )}
 
       </div>
     </>

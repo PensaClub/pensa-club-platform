@@ -21,6 +21,17 @@ export const StudentCoursesTab = ({ student }) => {
     return statusConfig[status] || statusConfig.not_started;
   };
 
+  const getCategoryColor = (category) => {
+    const colors = {
+      'Базови дигитални умения': '#3b82f6',
+      'Напреднали дигитални умения': '#8b5cf6',
+      'Специализирани умения': '#ec4899',
+      'Социални медии': '#06b6d4',
+      'Творчески умения': '#f59e0b'
+    };
+    return colors[category] || '#6b7280';
+  };
+
   const filteredCourses = filterStatus === 'all' 
     ? courses 
     : courses.filter(c => c.status === filterStatus);
@@ -73,9 +84,17 @@ export const StudentCoursesTab = ({ student }) => {
         <div className="student-courses-grid">
           {filteredCourses.map((course) => {
             const statusBadge = getStatusBadge(course.status);
+            const categoryColor = getCategoryColor(course.category);
             
             return (
               <div key={course.courseId} className="student-course-card">
+                {/* THUMBNAIL */}
+                {course.thumbnailUrl && (
+                  <div className="student-course-thumbnail">
+                    <img src={course.thumbnailUrl} alt={course.courseName} />
+                  </div>
+                )}
+
                 {/* CARD HEADER */}
                 <div className="student-course-card-header">
                   <div className="student-course-icon">
@@ -95,6 +114,22 @@ export const StudentCoursesTab = ({ student }) => {
                 <div className="student-course-card-body">
                   <h4 className="student-course-name">{course.courseName}</h4>
                   
+                  {/* CATEGORY */}
+                  {course.category && (
+                    <div className="student-course-category">
+                      <span 
+                        className="student-course-category-badge"
+                        style={{ 
+                          background: `${categoryColor}20`,
+                          color: categoryColor,
+                          borderColor: categoryColor
+                        }}
+                      >
+                        {course.category}
+                      </span>
+                    </div>
+                  )}
+
                   {/* PROGRESS BAR */}
                   <div className="student-course-progress">
                     <div className="student-course-progress-header">
@@ -124,7 +159,7 @@ export const StudentCoursesTab = ({ student }) => {
                       <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12 8V12L15 15M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
-                      <span>{course.earnedCredits} / {course.maxCredits} {t('studentDetails.courses.credits')}</span>
+                      <span>{course.earnedCredits} / {course.maxCredits} 💎</span>
                     </div>
                   </div>
 

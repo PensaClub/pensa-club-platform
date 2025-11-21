@@ -131,7 +131,7 @@ const permissions = {
         read: ['admin', 'moderator', 'user', 'guest'],
         readOwn: ['admin', 'mentor'],
         update: ['admin',],
-         updateOwn: ['admin', 'mentor'], 
+        updateOwn: ['admin', 'mentor'],
         delete: ['admin'],
     },
     statistics: {
@@ -156,6 +156,13 @@ const permissions = {
         approve: ['admin', 'moderator'],
         reject: ['admin', 'moderator'],
         delete: ['admin']
+    },
+    studentApplication: {
+        create: ['user', 'student'],
+        readOwn: ['mentor', 'admin'],
+        readAll: ['admin'],        
+        update: ['mentor', 'admin'],
+        delete: ['admin'],
     },
 };
 

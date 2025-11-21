@@ -328,7 +328,7 @@ mentorDashboardController.get(
 
       const { student, user_account, user_details } = require('../sequelize/models/index');
 
-      // Вземи студентите
+      // ✅ Вземи студентите С IMAGEURL
       const students = await student.findAll({
         where: {
           currentMentorId: mentorId,
@@ -343,7 +343,7 @@ mentorDashboardController.get(
               {
                 model: user_details,
                 as: 'details',
-                attributes: ['username', 'firstName', 'lastName']
+                attributes: ['username', 'firstName', 'lastName', 'phoneNumber', 'imageURL']  
               }
             ]
           }
@@ -351,7 +351,7 @@ mentorDashboardController.get(
         order: [['mentorAssignedDate', 'DESC']]
       });
 
-      // Форматирай резултата
+      // ✅ Форматирай резултата
       const formattedStudents = students.map(s => {
         const studentData = s.get({ plain: true });
         const name = studentData.user?.details?.username ||
@@ -363,7 +363,9 @@ mentorDashboardController.get(
           id: studentData.id,
           name: name,
           email: studentData.user?.email,
-          avatar: studentData.avatar,
+          avatar: studentData.avatar || studentData.user?.details?.imageURL || null,  // ✅ ФИКСИРАН AVATAR
+          phone: studentData.phone || studentData.user?.details?.phoneNumber || null,  // ✅ ДОБАВЕН ТЕЛЕФОН
+          registrationDate: studentData.registrationDate,  // ✅ ДОБАВЕНА ДАТА НА РЕГИСТРАЦИЯ
           totalCredits: studentData.totalCreditsEarned,
           attendance: studentData.attendedSessions,
           lastActive: studentData.lastActiveAt,
@@ -1117,10 +1119,6 @@ mentorDashboardController.patch(
 // STUDENT MANAGEMENT ENDPOINTS
 // ===============================
 
-// ===============================
-// GET /api/mentors/dashboard/students/:studentId/details
-// Вземи детайли за студент
-// ===============================
 mentorDashboardController.get(
   '/students/:studentId/details',
   isAuth,
@@ -1131,8 +1129,22 @@ mentorDashboardController.get(
       const studentId = parseInt(req.params.studentId);
       const mentorId = await getMentorIdFromUser(userId);
 
-      const { student, user_account, user_details } = require('../sequelize/models/index');
+      const { 
+        student, 
+        user_account, 
+        user_details,
+        student_course,
+        course,
+        student_lecture,
+        lecture,
+        student_seminar,
+        seminar,
+        student_presentation,
+        presentation,
+        mentor_history
+      } = require('../sequelize/models/index');
 
+      // ✅ ВЗЕМИ СТУДЕНТА С ПЪЛНИ ВКЛЮЧЕНИ ДАННИ
       const studentData = await student.findOne({
         where: {
           id: studentId,
@@ -1143,18 +1155,86 @@ mentorDashboardController.get(
             model: user_account,
             as: 'user',
             attributes: ['id', 'email'],
+            required: true,
             include: [
               {
                 model: user_details,
                 as: 'details',
-                attributes: ['username', 'firstName', 'lastName']
+                required: false,
+                attributes: ['username', 'firstName', 'lastName', 'phoneNumber', 'imageURL', 'birthDate', 'region']
               }
             ]
           },
           {
             model: mentor,
             as: 'currentMentor',
+            required: false,
             attributes: ['id', 'name', 'email', 'photoUrl']
+          },
+          {
+            model: student_course,
+            as: 'courses',
+            required: false,
+            include: [
+              {
+                model: course,
+                as: 'course',
+                required: false,
+                attributes: ['id', 'name', 'category', 'thumbnailUrl']
+              }
+            ]
+          },
+          {
+            model: student_lecture,
+            as: 'lectures',
+            required: false,
+            include: [
+              {
+                model: lecture,
+                as: 'lecture',
+                required: false,
+                attributes: ['id', 'title', 'scheduledDate', 'durationMinutes']
+              }
+            ]
+          },
+          {
+            model: student_seminar,
+            as: 'seminars',
+            required: false,
+            include: [
+              {
+                model: seminar,
+                as: 'seminar',
+                required: false,
+                attributes: ['id', 'title', 'scheduledDate', 'durationMinutes']
+              }
+            ]
+          },
+          {
+            model: student_presentation,
+            as: 'presentations',
+            required: false,
+            include: [
+              {
+                model: presentation,
+                as: 'presentation',
+                required: false,
+                attributes: ['id', 'title', 'dueDate', 'maxCredits']
+              }
+            ]
+          },
+          {
+            model: mentor_history,
+            as: 'mentorHistory',
+            required: false,
+            include: [
+              {
+                model: mentor,
+                as: 'mentor',
+                required: false,
+                attributes: ['id', 'name', 'photoUrl']
+              }
+            ]
           }
         ]
       });
@@ -1166,9 +1246,157 @@ mentorDashboardController.get(
         });
       }
 
+      // ✅ ПРЕОБРАЗУВАЙ В PLAIN OBJECT
+      const studentObj = studentData.get({ plain: true });
+
+      // ✅ ИЗЧИСЛИ ATTENDANCE RATE
+      const attendanceRate = studentObj.totalScheduledSessions > 0
+        ? Math.round((studentObj.attendedSessions / studentObj.totalScheduledSessions) * 100)
+        : 0;
+
+      // ✅ ИЗВЛЕЧИ ИМЕ ОТ USER DETAILS
+      const studentName = studentObj.user?.details?.username ||
+        `${studentObj.user?.details?.firstName || ''} ${studentObj.user?.details?.lastName || ''}`.trim() ||
+        studentObj.user?.email?.split('@')[0] ||
+        'Unknown';
+
+      // ✅ ФОРМАТИРАЙ COURSES
+      const formattedCourses = (studentObj.courses || []).map(sc => ({
+        id: sc.id,
+        courseId: sc.courseId,
+        courseName: sc.course?.name || 'Unknown Course',
+        category: sc.course?.category || null,
+        thumbnailUrl: sc.course?.thumbnailUrl || null,
+        status: sc.status,
+        progress: sc.progress,
+        completedLessons: sc.completedLessons,
+        totalLessons: sc.totalLessons,
+        earnedCredits: sc.earnedCredits,
+        maxCredits: sc.maxCredits,
+        startDate: sc.startDate,
+        endDate: sc.endDate
+      }));
+
+      // ✅ ФОРМАТИРАЙ LECTURES
+      const formattedLectures = (studentObj.lectures || []).map(sl => ({
+        id: sl.id,
+        lectureId: sl.lectureId,
+        title: sl.lecture?.title || 'Unknown Lecture',
+        date: sl.lecture?.scheduledDate || null,
+        duration: sl.lecture?.durationMinutes || 0,
+        attended: sl.attended,
+        attendedAt: sl.attendedAt,
+        earnedCredits: sl.earnedCredits
+      }));
+
+      // ✅ ФОРМАТИРАЙ SEMINARS
+      const formattedSeminars = (studentObj.seminars || []).map(ss => ({
+        id: ss.id,
+        seminarId: ss.seminarId,
+        title: ss.seminar?.title || 'Unknown Seminar',
+        date: ss.seminar?.scheduledDate || null,
+        duration: ss.seminar?.durationMinutes || 0,
+        attended: ss.attended,
+        attendedAt: ss.attendedAt,
+        earnedCredits: ss.earnedCredits
+      }));
+
+      // ✅ ФОРМАТИРАЙ PRESENTATIONS
+      const formattedPresentations = (studentObj.presentations || []).map(sp => ({
+        id: sp.id,
+        presentationId: sp.presentationId,
+        title: sp.presentation?.title || 'Unknown Presentation',
+        dueDate: sp.presentation?.dueDate || null,
+        status: sp.status,
+        submittedAt: sp.submittedAt,
+        gradedAt: sp.gradedAt,
+        earnedCredits: sp.earnedCredits,
+        maxCredits: sp.presentation?.maxCredits || 0
+      }));
+
+      // ✅ ФОРМАТИРАЙ MENTOR HISTORY
+      const formattedMentorHistory = (studentObj.mentorHistory || []).map(mh => ({
+        id: mh.id,
+        mentorId: mh.mentorId,
+        mentorName: mh.mentorName,
+        mentorPhoto: mh.mentor?.photoUrl || null,
+        periodStart: mh.periodStart,
+        periodEnd: mh.periodEnd,
+        reason: mh.reason
+      }));
+
+      // ✅ ФОРМАТИРАН RESPONSE
+      const formattedStudent = {
+        // Basic Info
+        id: studentObj.id,
+        name: studentName,
+        avatar: studentObj.avatar || studentObj.user?.details?.imageURL || null,
+        status: studentObj.status,
+        registrationDate: studentObj.registrationDate,
+        
+        // User Info
+        user: {
+          id: studentObj.user.id,
+          email: studentObj.user.email,
+          phone: studentObj.phone || studentObj.user?.details?.phoneNumber || null,
+          details: studentObj.user.details ? {
+            username: studentObj.user.details.username,
+            firstName: studentObj.user.details.firstName,
+            lastName: studentObj.user.details.lastName,
+            birthDate: studentObj.user.details.birthDate,
+            region: studentObj.user.details.region
+          } : null
+        },
+        
+        // Credits
+        credits: {
+          totalEarned: studentObj.totalCreditsEarned,
+          totalPossible: studentObj.totalCreditsPossible,
+          breakdown: {
+            fromCourses: studentObj.creditsFromCourses,
+            fromLectures: studentObj.creditsFromLectures,
+            fromSeminars: studentObj.creditsFromSeminars,
+            fromPresentations: studentObj.creditsFromPresentations
+          }
+        },
+        
+        // Current Mentor
+        currentMentor: studentObj.currentMentor ? {
+          id: studentObj.currentMentor.id,
+          name: studentObj.currentMentor.name,
+          email: studentObj.currentMentor.email,
+          photoUrl: studentObj.currentMentor.photoUrl,
+          assignedDate: studentObj.mentorAssignedDate
+        } : null,
+        
+        // Attendance
+        attendance: {
+          totalScheduledSessions: studentObj.totalScheduledSessions,
+          attendedSessions: studentObj.attendedSessions,
+          missedSessions: studentObj.missedSessions,
+          attendanceRate: attendanceRate
+        },
+        
+        // Mentor Help
+        mentorHelp: {
+          totalChatSessions: studentObj.totalChatSessions,
+          totalChatHours: parseFloat(studentObj.totalChatHours),
+          lastChatDate: studentObj.lastChatDate,
+          scheduledMeetings: studentObj.scheduledMeetings,
+          completedMeetings: studentObj.completedMeetings
+        },
+        
+        // ✅ РЕАЛНИ ДАННИ!
+        courses: formattedCourses,
+        lectures: formattedLectures,
+        seminars: formattedSeminars,
+        presentations: formattedPresentations,
+        mentorHistory: formattedMentorHistory
+      };
+
       res.status(200).json({
         success: true,
-        student: studentData
+        student: formattedStudent
       });
 
     } catch (err) {
@@ -1185,7 +1413,304 @@ mentorDashboardController.get(
     }
   }
 );
+// ===============================
+// GET /api/mentors/dashboard/students/:studentId/details
+// Вземи детайли за студент
+// ===============================
+mentorDashboardController.get(
+  '/students/:studentId/details',
+  isAuth,
+  rbac.checkPermission('statistics', 'readOwn'),
+  async (req, res, next) => {
+    try {
+      const userId = req.user.userId;
+      const studentId = parseInt(req.params.studentId);
+      const mentorId = await getMentorIdFromUser(userId);
 
+      const { 
+        student, 
+        user_account, 
+        user_details,
+        student_course,
+        course,
+        student_lecture,
+        lecture,
+        student_seminar,
+        seminar,
+        student_presentation,
+        presentation,
+        mentor_history
+      } = require('../sequelize/models/index');
+
+      // ✅ ВЗЕМИ СТУДЕНТА С ПЪЛНИ ВКЛЮЧЕНИ ДАННИ
+      const studentData = await student.findOne({
+        where: {
+          id: studentId,
+          currentMentorId: mentorId 
+        },
+        include: [
+          {
+            model: user_account,
+            as: 'user',
+            attributes: ['id', 'email'],
+            required: true,
+            include: [
+              {
+                model: user_details,
+                as: 'details',
+                required: false,
+                attributes: ['username', 'firstName', 'lastName', 'phoneNumber', 'imageURL', 'birthDate', 'region']
+              }
+            ]
+          },
+          {
+            model: mentor,
+            as: 'currentMentor',
+            required: false,
+            attributes: ['id', 'name', 'email', 'photoUrl']
+          },
+          {
+            model: student_course,
+            as: 'courses',
+            required: false,
+            include: [
+              {
+                model: course,
+                as: 'course',
+                required: false,
+                attributes: ['id', 'name', 'category', 'thumbnailUrl']
+              }
+            ]
+          },
+          {
+            model: student_lecture,
+            as: 'lectures',
+            required: false,
+            include: [
+              {
+                model: lecture,
+                as: 'lecture',
+                required: false,
+                attributes: ['id', 'title', 'scheduledDate', 'durationMinutes']
+              }
+            ]
+          },
+          {
+            model: student_seminar,
+            as: 'seminars',
+            required: false,
+            include: [
+              {
+                model: seminar,
+                as: 'seminar',
+                required: false,
+                attributes: ['id', 'title', 'scheduledDate', 'durationMinutes']
+              }
+            ]
+          },
+          {
+            model: student_presentation,
+            as: 'presentations',
+            required: false,
+            include: [
+              {
+                model: presentation,
+                as: 'presentation',
+                required: false,
+                attributes: ['id', 'title', 'dueDate', 'maxCredits']
+              }
+            ]
+          },
+          {
+            model: mentor_history,
+            as: 'mentorHistory',
+            required: false,
+            include: [
+              {
+                model: mentor,
+                as: 'mentor',
+                required: false,
+                attributes: ['id', 'name', 'photoUrl']
+              }
+            ]
+          }
+        ]
+      });
+
+      if (!studentData) {
+        return res.status(404).json({
+          success: false,
+          message: 'Student not found or not assigned to you'
+        });
+      }
+
+      // ✅ ПРЕОБРАЗУВАЙ В PLAIN OBJECT
+      const studentObj = studentData.get({ plain: true });
+
+      // ✅ ИЗЧИСЛИ ATTENDANCE RATE
+      const attendanceRate = studentObj.totalScheduledSessions > 0
+        ? Math.round((studentObj.attendedSessions / studentObj.totalScheduledSessions) * 100)
+        : 0;
+
+      // ✅ ИЗВЛЕЧИ ИМЕ ОТ USER DETAILS
+      const studentName = studentObj.user?.details?.username ||
+        `${studentObj.user?.details?.firstName || ''} ${studentObj.user?.details?.lastName || ''}`.trim() ||
+        studentObj.user?.email?.split('@')[0] ||
+        'Unknown';
+
+      // ✅ ФОРМАТИРАЙ COURSES
+      const formattedCourses = (studentObj.courses || []).map(sc => ({
+        id: sc.id,
+        courseId: sc.courseId,
+        courseName: sc.course?.name || 'Unknown Course',
+        category: sc.course?.category || null,
+        thumbnailUrl: sc.course?.thumbnailUrl || null,
+        status: sc.status,
+        progress: sc.progress,
+        completedLessons: sc.completedLessons,
+        totalLessons: sc.totalLessons,
+        earnedCredits: sc.earnedCredits,
+        maxCredits: sc.maxCredits,
+        startDate: sc.startDate,
+        endDate: sc.endDate
+      }));
+
+      // ✅ ФОРМАТИРАЙ LECTURES
+      const formattedLectures = (studentObj.lectures || []).map(sl => ({
+        id: sl.id,
+        lectureId: sl.lectureId,
+        title: sl.lecture?.title || 'Unknown Lecture',
+        date: sl.lecture?.scheduledDate || null,
+        duration: sl.lecture?.durationMinutes || 0,
+        attended: sl.attended,
+        attendedAt: sl.attendedAt,
+        earnedCredits: sl.earnedCredits
+      }));
+
+      // ✅ ФОРМАТИРАЙ SEMINARS
+      const formattedSeminars = (studentObj.seminars || []).map(ss => ({
+        id: ss.id,
+        seminarId: ss.seminarId,
+        title: ss.seminar?.title || 'Unknown Seminar',
+        date: ss.seminar?.scheduledDate || null,
+        duration: ss.seminar?.durationMinutes || 0,
+        attended: ss.attended,
+        attendedAt: ss.attendedAt,
+        earnedCredits: ss.earnedCredits
+      }));
+
+      // ✅ ФОРМАТИРАЙ PRESENTATIONS
+      const formattedPresentations = (studentObj.presentations || []).map(sp => ({
+        id: sp.id,
+        presentationId: sp.presentationId,
+        title: sp.presentation?.title || 'Unknown Presentation',
+        dueDate: sp.presentation?.dueDate || null,
+        status: sp.status,
+        submittedAt: sp.submittedAt,
+        gradedAt: sp.gradedAt,
+        earnedCredits: sp.earnedCredits,
+        maxCredits: sp.presentation?.maxCredits || 0
+      }));
+
+      // ✅ ФОРМАТИРАЙ MENTOR HISTORY
+      const formattedMentorHistory = (studentObj.mentorHistory || []).map(mh => ({
+        id: mh.id,
+        mentorId: mh.mentorId,
+        mentorName: mh.mentorName,
+        mentorPhoto: mh.mentor?.photoUrl || null,
+        periodStart: mh.periodStart,
+        periodEnd: mh.periodEnd,
+        reason: mh.reason
+      }));
+
+      // ✅ ФОРМАТИРАН RESPONSE
+      const formattedStudent = {
+        // Basic Info
+        id: studentObj.id,
+        name: studentName,
+        avatar: studentObj.avatar || studentObj.user?.details?.imageURL || null,
+        status: studentObj.status,
+        registrationDate: studentObj.registrationDate,
+        
+        // User Info
+        user: {
+          id: studentObj.user.id,
+          email: studentObj.user.email,
+          phone: studentObj.phone || studentObj.user?.details?.phoneNumber || null,
+          details: studentObj.user.details ? {
+            username: studentObj.user.details.username,
+            firstName: studentObj.user.details.firstName,
+            lastName: studentObj.user.details.lastName,
+            birthDate: studentObj.user.details.birthDate,
+            region: studentObj.user.details.region
+          } : null
+        },
+        
+        // Credits
+        credits: {
+          totalEarned: studentObj.totalCreditsEarned,
+          totalPossible: studentObj.totalCreditsPossible,
+          breakdown: {
+            fromCourses: studentObj.creditsFromCourses,
+            fromLectures: studentObj.creditsFromLectures,
+            fromSeminars: studentObj.creditsFromSeminars,
+            fromPresentations: studentObj.creditsFromPresentations
+          }
+        },
+        
+        // Current Mentor
+        currentMentor: studentObj.currentMentor ? {
+          id: studentObj.currentMentor.id,
+          name: studentObj.currentMentor.name,
+          email: studentObj.currentMentor.email,
+          photoUrl: studentObj.currentMentor.photoUrl,
+          assignedDate: studentObj.mentorAssignedDate
+        } : null,
+        
+        // Attendance
+        attendance: {
+          totalScheduledSessions: studentObj.totalScheduledSessions,
+          attendedSessions: studentObj.attendedSessions,
+          missedSessions: studentObj.missedSessions,
+          attendanceRate: attendanceRate
+        },
+        
+        // Mentor Help
+        mentorHelp: {
+          totalChatSessions: studentObj.totalChatSessions,
+          totalChatHours: parseFloat(studentObj.totalChatHours),
+          lastChatDate: studentObj.lastChatDate,
+          scheduledMeetings: studentObj.scheduledMeetings,
+          completedMeetings: studentObj.completedMeetings
+        },
+        
+        // ✅ РЕАЛНИ ДАННИ!
+        courses: formattedCourses,
+        lectures: formattedLectures,
+        seminars: formattedSeminars,
+        presentations: formattedPresentations,
+        mentorHistory: formattedMentorHistory
+      };
+
+      res.status(200).json({
+        success: true,
+        student: formattedStudent
+      });
+
+    } catch (err) {
+      console.error('❌ [GET STUDENT DETAILS] Error:', err);
+
+      if (err.message === 'You are not registered as a mentor') {
+        return res.status(403).json({
+          success: false,
+          message: 'You are not registered as a mentor'
+        });
+      }
+
+      next(err);
+    }
+  }
+);
 // ===============================
 // POST /api/mentors/dashboard/students/:studentId/accept
 // Приеми студент (премахни от друг ментор ако е нужно)
@@ -1558,6 +2083,686 @@ mentorDashboardController.delete(
 
     } catch (err) {
       console.error('❌ [DELETE NOTE] Error:', err);
+
+      if (err.message === 'You are not registered as a mentor') {
+        return res.status(403).json({
+          success: false,
+          message: 'You are not registered as a mentor'
+        });
+      }
+
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// GET /api/mentors/dashboard/my-reviews
+// Вземи reviews за текущия ментор
+// ===============================
+mentorDashboardController.get(
+  '/my-reviews',
+  isAuth,
+  rbac.checkPermission('statistics', 'readOwn'),
+  async (req, res, next) => {
+    try {
+      const userId = req.user.userId;
+      const { limit = 100 } = req.query;
+      const mentorId = await getMentorIdFromUser(userId);
+
+      const { review } = require('../sequelize/models/index');
+
+      // ✅ ИЗПОЛЗВАЙ camelCase БЕЗ attributes
+      const reviews = await review.findAll({
+        where: {
+          reviewType: 'mentor',
+          targetId: mentorId,
+          status: 'approved'
+        },
+        order: [['approvedAt', 'DESC']],
+        limit: parseInt(limit)
+        // ✅ БЕЗ attributes - Sequelize взима всички полета и прави автоматична конверсия
+      });
+
+      // ✅ Map to JSON (вече са camelCase)
+      const formattedReviews = reviews.map(r => {
+        const reviewData = r.toJSON();
+        return {
+          id: reviewData.id,
+          rating: reviewData.rating,
+          text: reviewData.text,
+          name: reviewData.name,
+          role: reviewData.role,
+          createdAt: reviewData.createdAt,
+          approvedAt: reviewData.approvedAt
+        };
+      });
+
+      res.status(200).json({
+        success: true,
+        reviews: formattedReviews
+      });
+
+    } catch (err) {
+      console.error('❌ [GET MY REVIEWS] Error:', err);
+
+      if (err.message === 'You are not registered as a mentor') {
+        return res.status(403).json({
+          success: false,
+          message: 'You are not registered as a mentor'
+        });
+      }
+
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// GET /api/mentors/dashboard/my-reviews/stats
+// Вземи review статистики за текущия ментор
+// ===============================
+mentorDashboardController.get(
+  '/my-reviews/stats',
+  isAuth,
+  rbac.checkPermission('statistics', 'readOwn'),
+  async (req, res, next) => {
+    try {
+      const userId = req.user.userId;
+      const mentorId = await getMentorIdFromUser(userId);
+
+      const { review } = require('../sequelize/models/index');
+
+      const reviews = await review.findAll({
+        where: {
+          review_type: 'mentor',
+          target_id: mentorId,
+          status: 'approved'
+        },
+        attributes: ['rating'],
+        raw: true
+      });
+
+      const totalReviews = reviews.length;
+      const sumRatings = reviews.reduce((sum, r) => sum + r.rating, 0);
+      const averageRating = totalReviews > 0 ? (sumRatings / totalReviews).toFixed(1) : 0;
+
+      // Rating distribution
+      const ratingDistribution = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+      reviews.forEach(r => {
+        ratingDistribution[r.rating]++;
+      });
+
+      res.status(200).json({
+        success: true,
+        stats: {
+          totalReviews: totalReviews,
+          averageRating: parseFloat(averageRating),
+          ratingDistribution: ratingDistribution
+        }
+      });
+
+    } catch (err) {
+      console.error('❌ [GET MY REVIEW STATS] Error:', err);
+
+      if (err.message === 'You are not registered as a mentor') {
+        return res.status(403).json({
+          success: false,
+          message: 'You are not registered as a mentor'
+        });
+      }
+
+      next(err);
+    }
+  }
+);
+// ===============================
+// GET /api/mentors/dashboard/student-applications
+// Вземи всички заявки за текущия ментор
+// ===============================
+mentorDashboardController.get(
+  '/student-applications',
+  isAuth,
+  rbac.checkPermission('statistics', 'readOwn'),
+  async (req, res, next) => {
+    try {
+      const userId = req.user.userId;
+      const mentorId = await getMentorIdFromUser(userId);
+
+      const { student_mentor_application, user_account, user_details } = require('../sequelize/models/index');
+
+      // Вземи всички заявки
+      const applications = await student_mentor_application.findAll({
+        where: {
+          mentorId: mentorId
+        },
+        include: [
+          {
+            model: user_account,
+            as: 'user',
+            attributes: ['id', 'email', 'role'],
+            include: [
+              {
+                model: user_details,
+                as: 'details',
+                attributes: ['username', 'firstName', 'lastName', 'imageURL', 'phoneNumber']
+              }
+            ]
+          }
+        ],
+        order: [['createdAt', 'DESC']]
+      });
+
+      // Форматирай резултата
+      const formattedApplications = applications.map(app => {
+        const appData = app.get({ plain: true });
+        const userName = appData.user?.details?.username ||
+          `${appData.user?.details?.firstName || ''} ${appData.user?.details?.lastName || ''}`.trim() ||
+          appData.user?.email?.split('@')[0] ||
+          'Unknown';
+
+        return {
+          id: appData.id,
+          userId: appData.userId,
+          userName: userName,
+          userEmail: appData.user?.email,
+          userAvatar: appData.user?.details?.imageURL,
+          userPhone: appData.user?.details?.phoneNumber,
+          status: appData.status,
+          rejectionReason: appData.rejectionReason,
+          approvedAt: appData.approvedAt,
+          rejectedAt: appData.rejectedAt,
+          createdAt: appData.createdAt,
+          updatedAt: appData.updatedAt
+        };
+      });
+
+      res.status(200).json({
+        success: true,
+        applications: formattedApplications,
+        total: formattedApplications.length
+      });
+
+    } catch (err) {
+      console.error('❌ [GET STUDENT APPLICATIONS] Error:', err);
+
+      if (err.message === 'You are not registered as a mentor') {
+        return res.status(403).json({
+          success: false,
+          message: 'You are not registered as a mentor'
+        });
+      }
+
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// POST /api/mentors/dashboard/student-applications/:id/approve
+// Одобри заявка
+// ===============================
+mentorDashboardController.post(
+  '/student-applications/:id/approve',
+  isAuth,
+  rbac.checkPermission('statistics', 'readOwn'),
+  async (req, res, next) => {
+    try {
+      const userId = req.user.userId;
+      const applicationId = parseInt(req.params.id);
+      const mentorId = await getMentorIdFromUser(userId);
+
+      const { 
+        student_mentor_application, 
+        student, 
+        user_account,
+        mentor,
+        mentor_history
+      } = require('../sequelize/models/index');
+      const { tokenGenerator } = require('../utils/jwt');
+      const { refreshToken } = require('../sequelize/models/index');
+
+      // ✅ 1. ВЗЕМИ APPLICATION
+      const application = await student_mentor_application.findOne({
+        where: {
+          id: applicationId,
+          mentorId: mentorId
+        }
+      });
+
+      if (!application) {
+        return res.status(404).json({
+          success: false,
+          message: 'Application not found or not yours'
+        });
+      }
+
+      if (application.status !== 'pending') {
+        return res.status(400).json({
+          success: false,
+          message: 'Application is already processed'
+        });
+      }
+
+      // ✅ 2. ВЗЕМИ USER DATA
+      const user = await user_account.findByPk(application.userId);
+
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          message: 'User not found'
+        });
+      }
+
+      // ✅ 3. ПРОМЕНИ ROLE НА 'student' (ако не е вече)
+      if (user.role !== 'student') {
+        await user.update({ role: 'student' });
+
+        // ✅ ГЕНЕРИРАЙ НОВИ TOKENS с обновена роля
+        const { token } = tokenGenerator('access', user.dataValues);
+        const { token: refreshJwtToken, refreshTokenId, expiryDate } = tokenGenerator('refresh', user.dataValues);
+
+        await refreshToken.destroy({ where: { userId: user.id } });
+        await refreshToken.create({ 
+          userId: user.id, 
+          token: refreshTokenId, 
+          expiryDate 
+        });
+      }
+
+      // ✅ 4. ПРОВЕРИ ДАЛИ СТУДЕНТЪТ ВЕЧЕ СЪЩЕСТВУВА
+      let studentData = await student.findOne({
+        where: { userId: application.userId }
+      });
+
+      const isNewStudent = !studentData;
+      const oldMentorId = studentData?.currentMentorId || null;
+
+      if (studentData) {
+        // ✅ СТУДЕНТЪТ СЪЩЕСТВУВА - ЗАМЕНИ МЕНТОРА
+
+        // Намали studentsCount на стария ментор
+        if (studentData.currentMentorId) {
+          const oldMentor = await mentor.findByPk(studentData.currentMentorId);
+          if (oldMentor) {
+            await oldMentor.update({
+              studentsCount: Math.max(0, oldMentor.studentsCount - 1)
+            });
+          }
+        }
+
+        // Обнови студента с новия ментор
+        await studentData.update({
+          currentMentorId: mentorId,
+          mentorAssignedDate: new Date(),
+          status: 'active'
+        });
+
+      } else {
+        // ✅ СТУДЕНТЪТ НЕ СЪЩЕСТВУВА - СЪЗДАЙ ГО
+        studentData = await student.create({
+          userId: application.userId,
+          currentMentorId: mentorId,
+          mentorAssignedDate: new Date(),
+          status: 'active',
+          country: 'BG'
+        });
+      }
+
+      // ✅ 5. УВЕЛИЧИ studentsCount НА НОВИЯ МЕНТОР
+      const mentorData = await mentor.findByPk(mentorId);
+      await mentorData.update({
+        studentsCount: mentorData.studentsCount + 1
+      });
+
+      // ✅ 5.5. СЪЗДАЙ MENTOR HISTORY ЗАПИС
+      
+      // Ако студентът вече съществуваше и сменихме ментора
+      if (!isNewStudent && oldMentorId && oldMentorId !== mentorId) {
+        // Завърши стария период
+        const oldHistory = await mentor_history.findOne({
+          where: {
+            studentId: studentData.id,
+            periodEnd: null
+          },
+          order: [['periodStart', 'DESC']]
+        });
+
+        if (oldHistory) {
+          await oldHistory.update({
+            periodEnd: new Date(),
+            reason: 'Reassigned to new mentor'
+          });
+        }
+      }
+
+      // Създай нов history запис за новия ментор
+      await mentor_history.create({
+        studentId: studentData.id,
+        mentorId: mentorId,
+        mentorName: mentorData.name,
+        periodStart: new Date(),
+        periodEnd: null,
+        reason: isNewStudent ? 'Initial assignment' : 'Reassigned from another mentor'
+      });
+
+      // ✅ 6. ОБНОВИ APPLICATION STATUS
+      await application.update({
+        status: 'approved',
+        approvedAt: new Date()
+      });
+
+      // ✅ 7. СЪЗДАЙ ADMIN NOTIFICATION
+      await require('../sequelize/models/index').admin_notification.create({
+        type: 'student_application_approved',
+        title: 'Student Application Approved',
+        message: `Student application approved by mentor ${mentorData.name}`,
+        data: {
+          applicationId: application.id,
+          userId: application.userId,
+          mentorId: mentorId,
+          studentId: studentData.id
+        },
+        isRead: false
+      });
+
+      res.status(200).json({
+        success: true,
+        message: 'Application approved successfully',
+        application: application,
+        student: studentData
+      });
+
+    } catch (err) {
+      console.error('❌ [APPROVE APPLICATION] Error:', err);
+
+      if (err.message === 'You are not registered as a mentor') {
+        return res.status(403).json({
+          success: false,
+          message: 'You are not registered as a mentor'
+        });
+      }
+
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// POST /api/mentors/dashboard/student-applications/:id/reject
+// Отхвърли заявка
+// ===============================
+mentorDashboardController.post(
+  '/student-applications/:id/reject',
+  isAuth,
+  rbac.checkPermission('statistics', 'readOwn'),
+  async (req, res, next) => {
+    try {
+      const userId = req.user.userId;
+      const applicationId = parseInt(req.params.id);
+      const mentorId = await getMentorIdFromUser(userId);
+
+      const { rejectApplicationSchema } = require('../schemas/studentMentorApplication.schema');
+      const { student_mentor_application, mentor } = require('../sequelize/models/index');
+
+      // Валидация
+      const validationResult = rejectApplicationSchema.safeParse(req.body);
+
+      if (!validationResult.success) {
+        return res.status(400).json({
+          success: false,
+          message: 'Validation failed',
+          errors: validationResult.error.errors
+        });
+      }
+
+      // Вземи application
+      const application = await student_mentor_application.findOne({
+        where: {
+          id: applicationId,
+          mentorId: mentorId
+        }
+      });
+
+      if (!application) {
+        return res.status(404).json({
+          success: false,
+          message: 'Application not found or not yours'
+        });
+      }
+
+      if (application.status !== 'pending') {
+        return res.status(400).json({
+          success: false,
+          message: 'Application is already processed'
+        });
+      }
+
+      // Обнови application
+      await application.update({
+        status: 'rejected',
+        rejectionReason: validationResult.data.rejectionReason,
+        rejectedAt: new Date()
+      });
+
+      // Създай admin notification
+      const mentorData = await mentor.findByPk(mentorId);
+      await require('../sequelize/models/index').admin_notification.create({
+        type: 'student_application_rejected',
+        title: 'Student Application Rejected',
+        message: `Student application rejected by mentor ${mentorData.name}`,
+        data: {
+          applicationId: application.id,
+          userId: application.userId,
+          mentorId: mentorId,
+          rejectionReason: validationResult.data.rejectionReason
+        },
+        isRead: false
+      });
+
+      res.status(200).json({
+        success: true,
+        message: 'Application rejected successfully',
+        application: application
+      });
+
+    } catch (err) {
+      console.error('❌ [REJECT APPLICATION] Error:', err);
+
+      if (err.message === 'You are not registered as a mentor') {
+        return res.status(403).json({
+          success: false,
+          message: 'You are not registered as a mentor'
+        });
+      }
+
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// DELETE /api/mentors/dashboard/student-applications/:id
+// Изтрий заявка (Admin only)
+// ===============================
+mentorDashboardController.delete(
+  '/student-applications/:id',
+  isAuth,
+  rbac.checkPermission('studentApplication', 'delete'),
+  async (req, res, next) => {
+    try {
+      const applicationId = parseInt(req.params.id);
+
+      const { student_mentor_application } = require('../sequelize/models/index');
+
+      // Намери application
+      const application = await student_mentor_application.findByPk(applicationId);
+
+      if (!application) {
+        return res.status(404).json({
+          success: false,
+          message: 'Application not found'
+        });
+      }
+
+      // Изтрий application
+      await application.destroy();
+
+      res.status(200).json({
+        success: true,
+        message: 'Application deleted successfully'
+      });
+
+    } catch (err) {
+      console.error('❌ [DELETE APPLICATION] Error:', err);
+      next(err);
+    }
+  }
+);
+// ===============================
+// POST /api/mentors/dashboard/student-applications/:id/reapprove
+// Одобри REJECTED заявка
+// ===============================
+mentorDashboardController.post(
+  '/student-applications/:id/reapprove',
+  isAuth,
+  rbac.checkPermission('statistics', 'readOwn'),
+  async (req, res, next) => {
+    try {
+      const userId = req.user.userId;
+      const applicationId = parseInt(req.params.id);
+      const mentorId = await getMentorIdFromUser(userId);
+
+      const { 
+        student_mentor_application, 
+        student, 
+        user_account,
+        mentor 
+      } = require('../sequelize/models/index');
+      const { tokenGenerator } = require('../utils/jwt');
+      const { refreshToken } = require('../sequelize/models/index');
+
+      // ✅ 1. ВЗЕМИ APPLICATION
+      const application = await student_mentor_application.findOne({
+        where: {
+          id: applicationId,
+          mentorId: mentorId
+        }
+      });
+
+      if (!application) {
+        return res.status(404).json({
+          success: false,
+          message: 'Application not found or not yours'
+        });
+      }
+
+      if (application.status !== 'rejected') {
+        return res.status(400).json({
+          success: false,
+          message: 'Only rejected applications can be re-approved'
+        });
+      }
+
+      // ✅ 2. ВЗЕМИ USER DATA
+      const user = await user_account.findByPk(application.userId);
+
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          message: 'User not found'
+        });
+      }
+
+      // ✅ 3. ПРОМЕНИ ROLE НА 'student' (ако не е вече)
+      if (user.role !== 'student') {
+        await user.update({ role: 'student' });
+
+        // ✅ ГЕНЕРИРАЙ НОВИ TOKENS с обновена роля
+        const { token } = tokenGenerator('access', user.dataValues);
+        const { token: refreshJwtToken, refreshTokenId, expiryDate } = tokenGenerator('refresh', user.dataValues);
+
+        await refreshToken.destroy({ where: { userId: user.id } });
+        await refreshToken.create({ 
+          userId: user.id, 
+          token: refreshTokenId, 
+          expiryDate 
+        });
+      }
+
+      // ✅ 4. ПРОВЕРИ ДАЛИ СТУДЕНТЪТ ВЕЧЕ СЪЩЕСТВУВА
+      let studentData = await student.findOne({
+        where: { userId: application.userId }
+      });
+
+      if (studentData) {
+        // ✅ СТУДЕНТЪТ СЪЩЕСТВУВА - ЗАМЕНИ МЕНТОРА
+
+        // Намали studentsCount на стария ментор
+        if (studentData.currentMentorId) {
+          const oldMentor = await mentor.findByPk(studentData.currentMentorId);
+          if (oldMentor) {
+            await oldMentor.update({
+              studentsCount: Math.max(0, oldMentor.studentsCount - 1)
+            });
+          }
+        }
+
+        // Обнови студента с новия ментор
+        await studentData.update({
+          currentMentorId: mentorId,
+          mentorAssignedDate: new Date(),
+          status: 'active'
+        });
+
+      } else {
+        // ✅ СТУДЕНТЪТ НЕ СЪЩЕСТВУВА - СЪЗДАЙ ГО
+        studentData = await student.create({
+          userId: application.userId,
+          currentMentorId: mentorId,
+          mentorAssignedDate: new Date(),
+          status: 'active',
+          country: 'BG'
+        });
+      }
+
+      // ✅ 5. УВЕЛИЧИ studentsCount НА НОВИЯ МЕНТОР
+      const mentorData = await mentor.findByPk(mentorId);
+      await mentorData.update({
+        studentsCount: mentorData.studentsCount + 1
+      });
+
+      // ✅ 6. ОБНОВИ APPLICATION STATUS
+      await application.update({
+        status: 'approved',
+        approvedAt: new Date(),
+        rejectionReason: null,  // ✅ Изчисти rejection reason
+        rejectedAt: null
+      });
+
+      // ✅ 7. СЪЗДАЙ ADMIN NOTIFICATION
+      await require('../sequelize/models/index').admin_notification.create({
+        type: 'student_application_reapproved',
+        title: 'Rejected Application Re-approved',
+        message: `Mentor ${mentorData.name} re-approved a rejected student application`,
+        data: {
+          applicationId: application.id,
+          userId: application.userId,
+          mentorId: mentorId,
+          studentId: studentData.id
+        },
+        isRead: false
+      });
+
+      res.status(200).json({
+        success: true,
+        message: 'Application re-approved successfully',
+        application: application,
+        student: studentData
+      });
+
+    } catch (err) {
+      console.error('❌ [REAPPROVE APPLICATION] Error:', err);
 
       if (err.message === 'You are not registered as a mentor') {
         return res.status(403).json({

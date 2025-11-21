@@ -45,7 +45,7 @@ export const DigiMentorPanel = () => {
     const [upcomingSessions, setUpcomingSessions] = useState([]);
     const [students, setStudents] = useState([]);
     const [performanceData, setPerformanceData] = useState({});
-    const [meetings, setMeetings] = useState([]); // ✅ ДОБАВИ
+    const [meetings, setMeetings] = useState([]); 
 
     useEffect(() => {
         fetchDashboardData();
@@ -59,7 +59,7 @@ export const DigiMentorPanel = () => {
                 getMentorUpcomingSessions(),
                 getMentorStudents(),
                 getMentorPerformanceData(),
-                getMentorMeetings() // ✅ ДОБАВИ
+                getMentorMeetings() 
             ]);
 
             if (statsData && statsData.success) {

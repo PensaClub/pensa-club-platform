@@ -314,7 +314,7 @@ export const academyServiceFactory = () => {
     },
 
     deleteMentorMeeting: async (meetingId) => {
-      return requester.delete(`${apiUrl}/mentors/dashboard/meetings/${meetingId}`);
+      return requester.del(`${apiUrl}/mentors/dashboard/meetings/${meetingId}`);
     },
     // MENTOR PROFILE EDIT
     getMentorProfile: async () => {
@@ -326,30 +326,62 @@ export const academyServiceFactory = () => {
     },
     // STUDENT DETAILS
     getStudentDetails: async (studentId) => {
-      return requester.get(`${apiUrl}/mentors/students/${studentId}/details`);
+      return requester.get(`${apiUrl}/mentors/dashboard/students/${studentId}/details`);
     },
     getStudentNotes: async (studentId) => {
-      return requester.get(`${apiUrl}/mentors/students/${studentId}/notes`);
+      return requester.get(`${apiUrl}/mentors/dashboard/students/${studentId}/notes`);
     },
-
+    applyForMentor: async (mentorId) => {
+      return requester.post(`${apiUrl}/academy/mentors/${mentorId}/apply-student`);
+    },
     createStudentNote: async (studentId, noteData) => {
-      return requester.post(`${apiUrl}/mentors/students/${studentId}/notes`, noteData);
+      return requester.post(`${apiUrl}/mentors/dashboard/students/${studentId}/notes`, noteData);
     },
 
     updateStudentNote: async (noteId, noteData) => {
-      return requester.patch(`${apiUrl}/mentors/notes/${noteId}`, noteData);
+      return requester.patch(`${apiUrl}/mentors/dashboard/notes/${noteId}`, noteData);
     },
 
     deleteStudentNote: async (noteId) => {
-      return requester.delete(`${apiUrl}/mentors/notes/${noteId}`);
+      return requester.del(`${apiUrl}/mentors/dashboard/notes/${noteId}`);
     },
-     acceptStudent: async (studentId) => {
+    acceptStudent: async (studentId) => {
       return requester.post(`${apiUrl}/mentors/dashboard/students/${studentId}/accept`);
     },
 
     removeStudent: async (studentId) => {
       return requester.post(`${apiUrl}/mentors/dashboard/students/${studentId}/remove`);
     },
+    getMentorOwnReviews: async (limit = 100) => {
+      return requester.get(`${apiUrl}/mentors/dashboard/my-reviews?limit=${limit}`);
+    },
+
+    getMentorOwnReviewStats: async () => {
+      return requester.get(`${apiUrl}/mentors/dashboard/my-reviews/stats`);
+    },
+    // ===============================
+    // MENTOR: MANAGE STUDENT APPLICATIONS (за следващ етап)
+    // ===============================
+
+    getStudentApplications: async () => {
+      return requester.get(`${apiUrl}/mentors/dashboard/student-applications`);
+    },
+
+    approveStudentApplication: async (applicationId) => {
+      return requester.post(`${apiUrl}/mentors/dashboard/student-applications/${applicationId}/approve`);
+    },
+
+    rejectStudentApplication: async (applicationId, reason) => {
+      return requester.post(`${apiUrl}/mentors/dashboard/student-applications/${applicationId}/reject`, { rejectionReason: reason });
+    },
+
+    deleteStudentApplication: async (applicationId) => {
+      return requester.del(`${apiUrl}/mentors/dashboard/student-applications/${applicationId}`);
+    },
+    reapproveStudentApplication: async (applicationId) => {
+      return requester.post(`${apiUrl}/mentors/dashboard/student-applications/${applicationId}/reapprove`);
+    },
+
   };
 };
 
