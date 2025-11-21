@@ -343,7 +343,7 @@ mentorDashboardController.get(
               {
                 model: user_details,
                 as: 'details',
-                attributes: ['username', 'firstName', 'lastName', 'phoneNumber', 'imageURL']  // ✅ ДОБАВЕНО imageURL
+                attributes: ['username', 'firstName', 'lastName', 'phoneNumber', 'imageURL']  
               }
             ]
           }

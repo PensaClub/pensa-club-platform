@@ -314,7 +314,7 @@ export const academyServiceFactory = () => {
     },
 
     deleteMentorMeeting: async (meetingId) => {
-      return requester.delete(`${apiUrl}/mentors/dashboard/meetings/${meetingId}`);
+      return requester.del(`${apiUrl}/mentors/dashboard/meetings/${meetingId}`);
     },
     // MENTOR PROFILE EDIT
     getMentorProfile: async () => {
@@ -343,7 +343,7 @@ export const academyServiceFactory = () => {
     },
 
     deleteStudentNote: async (noteId) => {
-      return requester.delete(`${apiUrl}/mentors/notes/${noteId}`);
+      return requester.del(`${apiUrl}/mentors/dashboard/notes/${noteId}`);
     },
     acceptStudent: async (studentId) => {
       return requester.post(`${apiUrl}/mentors/dashboard/students/${studentId}/accept`);
@@ -376,7 +376,7 @@ export const academyServiceFactory = () => {
     },
 
     deleteStudentApplication: async (applicationId) => {
-      return requester.delete(`${apiUrl}/mentors/dashboard/student-applications/${applicationId}`);
+      return requester.del(`${apiUrl}/mentors/dashboard/student-applications/${applicationId}`);
     },
     reapproveStudentApplication: async (applicationId) => {
       return requester.post(`${apiUrl}/mentors/dashboard/student-applications/${applicationId}/reapprove`);
