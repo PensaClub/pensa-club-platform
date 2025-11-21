@@ -11,7 +11,7 @@ const cookieParser = require('cookie-parser');
 const dataTrimmer = require('../middlewares/dataTrimmer');
 
 const corsOptions = {
-    origin: frontend_server,
+    origin: ['https://pensa.club', 'https://www.pensa.club', 'http://localhost:3000'],
     //   origin: function (origin, cb) {
     //     frontend_server === origin ? cb(null, true) : cb(new Error("Not allowed!"));
     //   },
