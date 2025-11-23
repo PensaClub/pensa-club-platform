@@ -593,6 +593,11 @@
       "applications": "Bewerbungen",
       "statistics": "Statistiken"
     },
+     "students": {
+      "title": "Studenten",
+      "overview": "Übersicht",
+      "applications": "Bewerbungen"
+    },
     "reviews": {
       "management": "Bewertungen verwalten"
     },
@@ -12697,5 +12702,89 @@
     "studentFor": "Student seit",
     "infoText": "Dieser Student ist aktiv und lernt bei Ihnen. Sie können den Fortschritt im Studentenbereich verfolgen.",
     "close": "Schließen"
+  },
+  "adminDigiBridgeStudents": {
+  "title": "Studentenverwaltung",
+  "subtitle": "Alle Studenten in der DigiBridge Academy ansehen und verwalten",
+  "stats": {
+      "totalStudents": "Gesamte Studenten",
+      "activeStudents": "Aktive Studenten",
+      "withMentor": "Mit Mentor",
+      "totalCredits": "Gesamte Credits",
+      "avgCredits": "Durchschnittliche Credits",
+      "attendanceRate": "Anwesenheitsrate",
+      "activeCourses": "Aktive Kurse",
+      "completedCourses": "Abgeschlossene Kurse"
+    },
+    "tabs": {
+      "overview": "Übersicht",
+      "byStatus": "Nach Status",
+      "byMentor": "Nach Mentor",
+      "credits": "Credits",
+      "attendance": "Anwesenheit",
+      "topPerformers": "Top-Performer",
+      "engagement": "Engagement"
+    },
+    "filters": {
+      "searchPlaceholder": "Nach Name, E-Mail suchen...",
+      "filters": "Filter",
+      "status": "Status",
+      "mentor": "Mentor",
+      "sortBy": "Sortieren",
+      "allStatuses": "Alle Status",
+      "active": "Aktiv",
+      "inactive": "Inaktiv",
+      "suspended": "Ausgesetzt",
+      "allMentors": "Alle Mentoren",
+      "withMentor": "Mit Mentor",
+      "withoutMentor": "Ohne Mentor",
+      "newest": "Neueste",
+      "oldest": "Älteste",
+      "nameAsc": "Name (A-Z)",
+      "nameDesc": "Name (Z-A)",
+      "creditsHigh": "Credits (hoch)",
+      "creditsLow": "Credits (niedrig)",
+      "clearAll": "Alle löschen",
+      "showing": "Zeige",
+      "students": "Studenten"
+    },
+    "table": {
+      "student": "Student",
+      "email": "E-Mail",
+      "mentor": "Mentor",
+      "credits": "Credits",
+      "attendance": "Anwesenheit",
+      "status": "Status",
+      "actions": "Aktionen",
+      "noMentor": "Kein Mentor",
+      "active": "Aktiv",
+      "inactive": "Inaktiv",
+      "suspended": "Ausgesetzt",
+      "view": "Ansehen",
+      "edit": "Bearbeiten",
+      "delete": "Löschen",
+      "noStudents": "Keine Studenten gefunden",
+      "noStudentsDesc": "Versuchen Sie, die Filter zu ändern oder neue Studenten hinzuzufügen"
+    }
+},
+"adminDgStudentDetailsModal": {
+    "title": "Studentendetails",
+    "totalCredits": "Gesamte Credits",
+    "attendanceRate": "Anwesenheitsrate",
+    "currentMentor": "Aktueller Mentor",
+    "mentor": "Mentor",
+    "noMentorAssigned": "Kein Mentor zugewiesen",
+    "additionalInfo": "Zusätzliche Informationen",
+    "registrationDate": "Registrierungsdatum",
+    "lastActive": "Zuletzt aktiv",
+      "close": "Schließen",
+    "notAvailable": "Keine Informationen verfügbar"
+  },
+  "adminDgDeleteStudentConfirm": {
+    "title": "Student löschen",
+    "message": "Sind Sie sicher, dass Sie den Studenten löschen möchten",
+    "warning": "Diese Aktion ist unwiderruflich und entfernt alle Studentendaten.",
+    "delete": "Student löschen",
+    "deleting": "Wird gelöscht..."
   }
 }

@@ -157,13 +157,29 @@ const permissions = {
         reject: ['admin', 'moderator'],
         delete: ['admin']
     },
-    studentApplication: {
-        create: ['user', 'student'],
-        readOwn: ['mentor', 'admin'],
-        readAll: ['admin'],        
-        update: ['mentor', 'admin'],
-        delete: ['admin'],
-    },
+ student: {
+    create: ['admin'],
+    read: ['admin'],                      // /admin/students (всички)
+    readOwn: ['admin', 'mentor'],         // /mentors/students (своите)
+    update: ['admin'],
+    updateOwn: ['admin', 'mentor'],       // Редактиране на своите
+    delete: ['admin'],
+    assignMentor: ['admin'],
+    sendEmail: ['admin'],
+},
+
+statistics: {
+    read: ['admin','mentor'],                      // Admin статистики
+    readOwn: ['admin', 'mentor'],         // Mentor статистики
+},
+
+studentApplication: {
+    create: ['user', 'student','admin'],
+    readOwn: ['mentor', 'admin'],         // Mentor: своите заявки
+    readAll: ['admin'],                   // Admin: всички заявки
+    update: ['mentor', 'admin'],
+    delete: ['admin'],
+},
 };
 
 module.exports = permissions;

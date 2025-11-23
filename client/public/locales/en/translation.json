@@ -668,6 +668,11 @@
       "applications": "Applications",
       "statistics": "Statistics"
     },
+    "students": {
+      "title": "Students",
+      "overview": "Overview",
+      "applications": "Applications"
+    },
     "reviews": {
       "management": "Manage Reviews"
     },
@@ -13402,5 +13407,89 @@
     "studentFor": "Student for",
     "infoText": "This student is active and learning with you. You can track their progress in the students section.",
     "close": "Close"
+  },
+  "adminDigiBridgeStudents": {
+  "title": "Students Management",
+  "subtitle": "View and manage all students in DigiBridge Academy",
+  "stats": {
+      "totalStudents": "Total Students",
+      "activeStudents": "Active Students",
+      "withMentor": "With Mentor",
+      "totalCredits": "Total Credits",
+      "avgCredits": "Average Credits",
+      "attendanceRate": "Attendance Rate",
+      "activeCourses": "Active Courses",
+      "completedCourses": "Completed Courses"
+    },
+     "tabs": {
+      "overview": "Overview",
+      "byStatus": "By Status",
+      "byMentor": "By Mentor",
+      "credits": "Credits",
+      "attendance": "Attendance",
+      "topPerformers": "Top Performers",
+      "engagement": "Engagement"
+    },
+    "filters": {
+      "searchPlaceholder": "Search by name, email...",
+      "filters": "Filters",
+      "status": "Status",
+      "mentor": "Mentor",
+      "sortBy": "Sort by",
+      "allStatuses": "All statuses",
+      "active": "Active",
+      "inactive": "Inactive",
+      "suspended": "Suspended",
+      "allMentors": "All mentors",
+      "withMentor": "With mentor",
+      "withoutMentor": "Without mentor",
+      "newest": "Newest",
+      "oldest": "Oldest",
+      "nameAsc": "Name (A-Z)",
+      "nameDesc": "Name (Z-A)",
+      "creditsHigh": "Credits (high)",
+      "creditsLow": "Credits (low)",
+      "clearAll": "Clear all",
+      "showing": "Showing",
+      "students": "students"
+    },
+    "table": {
+      "student": "Student",
+      "email": "Email",
+      "mentor": "Mentor",
+      "credits": "Credits",
+      "attendance": "Attendance",
+      "status": "Status",
+      "actions": "Actions",
+      "noMentor": "No mentor",
+      "active": "Active",
+      "inactive": "Inactive",
+      "suspended": "Suspended",
+      "view": "View",
+      "edit": "Edit",
+      "delete": "Delete",
+      "noStudents": "No students found",
+      "noStudentsDesc": "Try changing the filters or add new students"
+    }
+},
+"adminDgStudentDetailsModal": {
+    "title": "Student Details",
+    "totalCredits": "Total Credits",
+    "attendanceRate": "Attendance Rate",
+    "currentMentor": "Current Mentor",
+    "mentor": "Mentor",
+    "noMentorAssigned": "No mentor assigned",
+    "additionalInfo": "Additional Information",
+    "registrationDate": "Registration Date",
+    "lastActive": "Last Active",
+    "close": "Close",
+    "notAvailable": "No information available"
+  },
+  "adminDgDeleteStudentConfirm": {
+    "title": "Delete Student",
+    "message": "Are you sure you want to delete the student",
+    "warning": "This action is irreversible and will remove all student data.",
+    "delete": "Delete Student",
+    "deleting": "Deleting..."
   }
 }
