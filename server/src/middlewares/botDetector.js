@@ -1,8 +1,10 @@
-const { article, mainImage, project, initiative, club } = require('../sequelize/models');
+const { article, mainImage, project, initiative, Club, mentor } = require('../sequelize/models');
 const generateArticleMetaHTML = require('../utils/metaGenerator');
 const generateProjectMetaHTML = require('../utils/projectMetaGenerator');
 const generateInitiativeMetaHTML = require('../utils/initiativeMetaGenerator');
 const generateClubMetaHTML = require('../utils/clubMetaGenerator');
+const generateAcademyMetaHTML = require('../utils/academyMetaGenerator');
+const generateMentorMetaHTML = require('../utils/mentorMetaGenerator');
 
 /**
  * Проверява дали User-Agent е от социална мрежа bot
@@ -56,7 +58,7 @@ async function logBotRequest(botName, contentType, contentId, contentSlug, userA
         
         const logData = {
             bot: botName,
-            contentType: contentType, // 'article', 'project', 'initiative', 'club'
+            contentType: contentType, // 'article', 'project', 'initiative', 'club', 'page', 'mentor'
             userAgent: userAgent,
             ip: ip,
             timestamp: new Date()
@@ -75,10 +77,14 @@ async function logBotRequest(botName, contentType, contentId, contentSlug, userA
         } else if (contentType === 'club') {
             logData.clubId = contentId;
             logData.clubSlug = contentSlug;
+        } else if (contentType === 'page') {
+            logData.pageSlug = contentSlug;
+        } else if (contentType === 'mentor') {
+            logData.mentorId = contentId;
         }
 
         await bot_log.create(logData);
-        console.log(`✅ Bot log saved: ${botName} → ${contentType}/${contentSlug}`);
+        console.log(`✅ Bot log saved: ${botName} → ${contentType}/${contentSlug || contentId}`);
     } catch (error) {
         console.error('❌ Error saving bot log:', error);
     }
@@ -109,6 +115,8 @@ async function botDetector(req, res, next) {
     const projectMatch = req.path.match(/^\/projects\/([a-zA-Z0-9-]+)$/);
     const initiativeMatch = req.path.match(/^\/initiatives\/([a-zA-Z0-9-]+)$/);
     const clubMatch = req.path.match(/^\/clubs\/([a-zA-Z0-9-]+)$/);
+    const academyMatch = req.path.match(/^\/academy$/);
+    const mentorMatch = req.path.match(/^\/academy\/mentors\/(\d+)$/);
     
     try {
         // ==================== ARTICLE ====================
@@ -223,7 +231,7 @@ async function botDetector(req, res, next) {
         if (clubMatch) {
             const slug = clubMatch[1];
             
-            const foundClub = await club.findOne({
+            const foundClub = await Club.findOne({
                 where: { slug },
                 attributes: [
                     'id', 'name', 'slug', 'shortDescription', 'fullDescription',
@@ -249,7 +257,52 @@ async function botDetector(req, res, next) {
             return res.send(html);
         }
         
-        // Ако не е нито article, project, initiative, club
+        // ==================== ACADEMY (СТАТИЧНА СТРАНИЦА) ====================
+        if (academyMatch) {
+            await logBotRequest(
+                botName,
+                'page',
+                null,
+                'academy',
+                userAgent,
+                req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress
+            );
+            
+            const html = generateAcademyMetaHTML();
+            return res.send(html);
+        }
+        
+        // ==================== MENTOR ====================
+        if (mentorMatch) {
+            const mentorId = parseInt(mentorMatch[1], 10);
+            
+            const foundMentor = await mentor.findOne({
+                where: { id: mentorId, status: 'active' },
+                attributes: [
+                    'id', 'name', 'email', 'photoUrl', 'specialization',
+                    'experience', 'education', 'motivation', 'languages',
+                    'rating', 'reviewsCount', 'studentsCount', 'isOnline'
+                ]
+            });
+            
+            if (!foundMentor) {
+                return next();
+            }
+            
+            await logBotRequest(
+                botName,
+                'mentor',
+                foundMentor.id,
+                null,
+                userAgent,
+                req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress
+            );
+            
+            const html = generateMentorMetaHTML(foundMentor);
+            return res.send(html);
+        }
+        
+        // Ако не е нито един от горните типове
         return next();
         
     } catch (error) {

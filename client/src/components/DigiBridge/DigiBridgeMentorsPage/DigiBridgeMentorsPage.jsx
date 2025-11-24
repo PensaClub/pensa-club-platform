@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Helmet } from 'react-helmet-async';
 import { MentorCard } from './MentorCard';
 import './digiBridgeMentorsPage.css';
 import { DigiBridgeHeader } from '../../DigiBridgeAcademy/DigiBridgeHeader/DigiBridgeHeader';
 import { useAcademy } from '../../contexts/AcademyProvider';
 import { Loader } from '../../Loader/Loader';
 import { MentorDetailModal } from './MentorDetailModal';
+import SEOHead from '../../SEO/SEOHead';
 
 export const DigiBridgeMentorsPage = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { getAllMentors } = useAcademy();
   
   const [mentors, setMentors] = useState([]);
@@ -97,12 +97,148 @@ export const DigiBridgeMentorsPage = () => {
   const availableMentorsCount = mentors.filter(m => m.isOnline).length;
   const uniqueSpecializations = [...new Set(mentors.map(m => m.specialization))].length;
 
+  // ✅ META DATA
+  const metaData = useMemo(() => {
+    let title = t('digiBridge.mentorsPage.meta.title', {
+      defaultValue: 'Ментори на DigiBridge Academy | Pensa Club'
+    });
+
+    let description = t('digiBridge.mentorsPage.meta.description', {
+      defaultValue: `Срещнете нашите ${filteredMentors.length} активни ментори. Експерти в дигитална грамотност, готови да ви помогнат да се справите с дигиталния свят.`
+    });
+
+    const keywords = t('digiBridge.mentorsPage.meta.keywords', {
+      defaultValue: 'ментори, дигитална грамотност, обучение, DigiBridge, безплатни ментори, онлайн обучение, пенсионери, възрастни'
+    });
+
+    // Dynamic title based on filters
+    if (selectedSpecialization !== 'all') {
+      const specLabel = specializations.find(s => s.value === selectedSpecialization)?.label || selectedSpecialization;
+      title = `${specLabel} - Ментори | DigiBridge Academy`;
+      description = `Намерете ментор специализиран в ${specLabel}. ${filteredMentors.length} налични ментори.`;
+    }
+
+    if (searchQuery.trim()) {
+      title = `Търсене: "${searchQuery}" - Ментори | DigiBridge Academy`;
+      description = `${filteredMentors.length} ментори намерени за "${searchQuery}"`;
+    }
+
+    return {
+      title,
+      description,
+      keywords,
+      image: '/images/digibridge/mentors-hero.jpg'
+    };
+  }, [filteredMentors.length, selectedSpecialization, searchQuery, specializations, t]);
+
+  // ✅ STRUCTURED DATA - ITEMLIST + PERSON
+  const structuredData = useMemo(() => {
+    const mentorsToShow = filteredMentors.slice(0, 10);
+
+    return {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "ItemList",
+          "name": "Ментори на DigiBridge Academy",
+          "description": metaData.description,
+          "url": "https://pensa.club/academy/mentors",
+          "numberOfItems": filteredMentors.length,
+          "itemListElement": mentorsToShow.map((mentor, index) => ({
+            "@type": "ListItem",
+            "position": index + 1,
+            "item": {
+              "@type": "Person",
+              "name": mentor.name,
+              "description": mentor.bio || `Ментор по ${mentor.specialization}`,
+              "image": mentor.profileImage || "https://pensa.club/images/default-avatar.png",
+              "jobTitle": "Ментор по дигитална грамотност",
+              "worksFor": {
+                "@type": "EducationalOrganization",
+                "name": "DigiBridge Academy"
+              },
+              "knowsAbout": mentor.specialization,
+              ...(mentor.rating && {
+                "aggregateRating": {
+                  "@type": "AggregateRating",
+                  "ratingValue": mentor.rating,
+                  "ratingCount": mentor.reviewsCount || 1
+                }
+              })
+            }
+          }))
+        },
+        {
+          "@type": "WebPage",
+          "name": metaData.title,
+          "description": metaData.description,
+          "url": "https://pensa.club/academy/mentors",
+          "inLanguage": i18n.language,
+          "isPartOf": {
+            "@type": "WebSite",
+            "name": "Pensa Club",
+            "url": "https://pensa.club"
+          },
+          "breadcrumb": {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Начало",
+                "item": "https://pensa.club"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "DigiBridge Academy",
+                "item": "https://pensa.club/academy"
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "name": "Ментори",
+                "item": "https://pensa.club/academy/mentors"
+              }
+            ]
+          }
+        }
+      ]
+    };
+  }, [filteredMentors, metaData, i18n.language]);
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <>
+        <SEOHead
+          title="Зареждане на ментори... | DigiBridge Academy"
+          description="Моля, изчакайте. Зареждаме списъка с ментори."
+          keywords="ментори, DigiBridge, зареждане"
+          noindex={true}
+        />
+        <div className="mentors-page-new">
+          <DigiBridgeHeader />
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
+            <Loader />
+          </div>
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
-      <Helmet>
-        <title>{t('digiBridge.mentorsPage.meta.title')}</title>
-        <meta name="description" content={t('digiBridge.mentorsPage.meta.description')} />
-      </Helmet>
+      {/* ✅ SEO HEAD */}
+      <SEOHead
+        title={metaData.title}
+        description={metaData.description}
+        keywords={metaData.keywords}
+        image={metaData.image}
+        type="website"
+        structuredData={structuredData}
+        canonical="https://pensa.club/academy/mentors"
+      />
 
       <div className="mentors-page-new">
         <DigiBridgeHeader />
@@ -192,9 +328,7 @@ export const DigiBridgeMentorsPage = () => {
         <section className="mentors-list-new">
           <div className="mentors-list-container">
             
-            {isLoading ? (
-              <Loader />
-            ) : filteredMentors.length > 0 ? (
+            {filteredMentors.length > 0 ? (
               <>
                 {filteredMentors.map((mentor, index) => (
                   <MentorCard 
