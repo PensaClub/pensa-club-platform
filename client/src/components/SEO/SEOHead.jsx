@@ -1,0 +1,102 @@
+import { Helmet } from 'react-helmet-async';
+import { useTranslation } from 'react-i18next';
+
+const SEOHead = ({ 
+  title, 
+  description, 
+  keywords, 
+  image = '/images/iniciatives/iniciatives-2.jpg',
+  type = 'website',
+  noindex = false,
+  canonical = null,
+  structuredData = null
+}) => {
+  const { i18n } = useTranslation();
+  const currentLanguage = i18n.language || 'bg';
+  
+  // Базов URL на сайта
+  const baseUrl = 'https://pensa.club';
+  
+  // Текущия URL
+  const currentUrl = canonical || window.location.href;
+  
+  // Locale mapping
+  const localeMap = {
+    'bg': 'bg_BG',
+    'de': 'de_DE',
+    'en': 'en_US'
+  };
+  
+  const ogLocale = localeMap[currentLanguage] || 'bg_BG';
+  const alternateLocales = Object.keys(localeMap)
+    .filter(lang => lang !== currentLanguage)
+    .map(lang => localeMap[lang]);
+
+  // Full image URL
+  const fullImageUrl = image.startsWith('http') ? image : `${baseUrl}${image}`;
+
+  return (
+    <Helmet>
+      {/* Basic Meta Tags */}
+      <html lang={currentLanguage} />
+      <title>{title}</title>
+      <meta name="description" content={description} />
+      {keywords && <meta name="keywords" content={keywords} />}
+      <meta name="author" content="Pensa Foundation" />
+      <meta name="language" content={currentLanguage} />
+      <meta http-equiv="content-language" content={currentLanguage} />
+      
+      {/* Robots */}
+      {noindex ? (
+        <meta name="robots" content="noindex, nofollow" />
+      ) : (
+        <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+      )}
+      
+      {/* Canonical URL */}
+      <link rel="canonical" href={currentUrl} />
+      
+      {/* hreflang Tags за мултиезичност */}
+      {/* Понеже всички езици са на един URL, hreflang сочат към същия линк */}
+      <link rel="alternate" hreflang="bg" href={currentUrl} />
+      <link rel="alternate" hreflang="de" href={currentUrl} />
+      <link rel="alternate" hreflang="en" href={currentUrl} />
+      <link rel="alternate" hreflang="x-default" href={currentUrl} />
+      
+      {/* Open Graph */}
+      <meta property="og:type" content={type} />
+      <meta property="og:title" content={title} />
+      <meta property="og:description" content={description} />
+      <meta property="og:url" content={currentUrl} />
+      <meta property="og:image" content={fullImageUrl} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:image:alt" content={title} />
+      <meta property="og:site_name" content="Pensa Club" />
+      <meta property="og:locale" content={ogLocale} />
+      {alternateLocales.map(locale => (
+        <meta key={locale} property="og:locale:alternate" content={locale} />
+      ))}
+      
+      {/* Facebook */}
+      <meta property="fb:pages" content="61578204366479" />
+      <meta property="article:publisher" content="https://www.facebook.com/profile.php?id=61578204366479" />
+      
+      {/* Twitter Card */}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={title} />
+      <meta name="twitter:description" content={description} />
+      <meta name="twitter:image" content={fullImageUrl} />
+      <meta name="twitter:image:alt" content={title} />
+      
+      {/* Structured Data */}
+      {structuredData && (
+        <script type="application/ld+json">
+          {JSON.stringify(structuredData)}
+        </script>
+      )}
+    </Helmet>
+  );
+};
+
+export default SEOHead;
