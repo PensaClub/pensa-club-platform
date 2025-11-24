@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { Helmet } from 'react-helmet-async';
+// import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import { ClubsSearch } from './ClubsSearch/ClubsSearch';
 import { ClubsMap } from './ClubsMap/ClubsMap';
@@ -37,9 +37,9 @@ export const AllClubs = () => {
 
       // Обработваме response-а
       let clubsData = [];
-      if (response.clubs) {
+      if (response?.clubs) {
         // Ако response има clubs array (пагиниран отговор)
-        clubsData = response.clubs;
+        clubsData = response?.clubs;
       } else if (Array.isArray(response)) {
         // Ако response е директно array
         clubsData = response;
@@ -52,7 +52,7 @@ export const AllClubs = () => {
       setFilteredClubs(clubsData);
 
       // Показваме информация за fallback ако има
-      if (response.isFromFallback) {
+      if (response?.isFromFallback) {
         console.info('📋 Using fallback mock data due to API error');
       }
 
@@ -72,31 +72,31 @@ export const AllClubs = () => {
   const handleFilterChange = useCallback((filters) => {
     setSearchFilters(filters);
 
-    let filtered = [...clubs];
+let filtered = clubs.filter(club => club !== null && club !== undefined);
 
     // Търсене по име или описание
     if (filters.searchTerm) {
       const searchLower = filters.searchTerm.toLowerCase();
       filtered = filtered.filter(club =>
-        club.name?.toLowerCase().includes(searchLower) ||
-        club.shortDescription?.toLowerCase().includes(searchLower) ||
-        club.location?.city?.toLowerCase().includes(searchLower)
+        club?.name?.toLowerCase().includes(searchLower) ||
+        club?.shortDescription?.toLowerCase().includes(searchLower) ||
+        club?.location?.city?.toLowerCase().includes(searchLower)
       );
     }
 
     // Филтриране по град
-    if (filters.city && filters.city !== 'all') {
+    if (filters?.city && filters.city !== 'all') {
       filtered = filtered.filter(club => club.location?.city === filters.city);
     }
 
     // Филтриране по категория
-    if (filters.category && filters.category !== 'all') {
-      filtered = filtered.filter(club => club.category === filters.category);
+    if (filters?.category && filters.category !== 'all') {
+      filtered = filtered.filter(club => club?.category === filters?.category);
     }
 
     // Сортиране
     filtered.sort((a, b) => {
-      switch (filters.sortBy) {
+      switch (filters?.sortBy) {
         case 'name':
           return (a.name || '').localeCompare(b.name || '');
         case 'members':
@@ -140,77 +140,90 @@ export const AllClubs = () => {
       return newShowMap;
     });
   }, []);
+  
+ // Функция за получаване на переведено име на категория
+  const getCategoryLabel = useCallback((category) => {
+    return t(`clubs.AllClubs.categories.${category}`, {
+      defaultValue: category
+    });
+  }, [t]);
 
   // Мемоизирани градове и категории за филтрите
-  const availableCities = useMemo(() => {
-    return [...new Set(clubs.map(club => club.location?.city).filter(Boolean))].sort();
-  }, [clubs]);
+ const availableCities = useMemo(() => {
+  return [...new Set(clubs
+    .filter(club => club !== null && club !== undefined)
+    .map(club => club.location?.city)
+    .filter(Boolean))].sort();
+}, [clubs]);
 
-  const availableCategories = useMemo(() => {
-    return [...new Set(clubs.map(club => club.category).filter(Boolean))].sort();
-  }, [clubs]);
+const availableCategories = useMemo(() => {
+  return [...new Set(clubs
+    .filter(club => club !== null && club !== undefined)
+    .map(club => club.category)
+    .filter(Boolean))].sort();
+}, [clubs]);
 
-  // Изчисляване на статистики
-  const statistics = useMemo(() => {
-    const totalMembers = clubs.reduce((sum, club) => sum + (club.membership?.totalMembers || 0), 0);
-    const activeClubs = clubs.filter(club => club.status === 'active' || club.metadata?.isActive).length;
-    const cities = [...new Set(clubs.map(club => club.location?.city).filter(Boolean))].length;
+ // Изчисляване на статистики
+const statistics = useMemo(() => {
+  // Филтрираме null/undefined клубове
+  const validClubs = clubs.filter(club => club !== null && club !== undefined);
+  
+  const totalMembers = validClubs.reduce((sum, club) => sum + (club.membership?.totalMembers || 0), 0);
+  const activeClubs = validClubs.filter(club => club?.status === 'active' || club?.metadata?.isActive).length;
+  const cities = [...new Set(validClubs.map(club => club.location?.city).filter(Boolean))].length;
 
-    return {
-      totalClubs: clubs.length,
-      totalMembers,
-      activeClubs,
-      cities
-    };
-  }, [clubs]);
+  return {
+    totalClubs: validClubs.length,
+    totalMembers,
+    activeClubs,
+    cities
+  };
+}, [clubs]);
 
-  // ✅ META DATA - ДИНАМИЧНИ META TAGS
-  const metaData = useMemo(() => {
-    // Base keywords
-    const baseKeywords = [
-      'клубове за пенсионери',
-      'Pensa Club',
-      'дигитална грамотност',
-      'социални клубове',
-      'активни пенсионери',
-      'клубове България'
-    ];
+const metaData = useMemo(() => {
+  const baseKeywords = [
+    'клубове за пенсионери',
+    'Pensa Club',
+    'дигитална грамотност',
+    'социални клубове',
+    'активни пенсионери',
+    'клубове България'
+  ];
 
-    // Dynamic title based on filters
-    let title = 'Клубове за пенсионери | Pensa Club';
-    let description = `Открийте ${statistics.totalClubs} активни клуба за пенсионери в ${statistics.cities} града. Присъединете се към общността на Pensa Club и открийте нови приятели и възможности.`;
+  let title = 'Клубове за пенсионери | Pensa Club';
+  let description = `Открийте ${statistics.totalClubs} активни клуба за пенсионери в ${statistics.cities} града. Присъединете се към общността на Pensa Club и открийте нови приятели и възможности.`;
 
-    // If there are active filters
-    if (searchFilters.searchTerm || searchFilters.city !== 'all' || searchFilters.category !== 'all') {
-      const filterParts = [];
+  if (searchFilters.searchTerm || searchFilters.city || searchFilters.category) {
+    const filterParts = [];
 
-      if (searchFilters.city && searchFilters.city !== 'all') {
-        filterParts.push(searchFilters.city);
-        baseKeywords.push(searchFilters.city.toLowerCase());
-      }
-
-      if (searchFilters.category && searchFilters.category !== 'all') {
-        const categoryLabel = getCategoryLabel(searchFilters.category);
-        filterParts.push(categoryLabel);
-        baseKeywords.push(searchFilters.category.toLowerCase());
-      }
-
-      if (searchFilters.searchTerm) {
-        filterParts.push(`"${searchFilters.searchTerm}"`);
-        baseKeywords.push(searchFilters.searchTerm.toLowerCase());
-      }
-
-      title = `${filteredClubs.length} ${filteredClubs.length === 1 ? 'клуб' : 'клуба'} ${filterParts.join(' ')} | Pensa Club`;
-      description = `Намерени ${filteredClubs.length} клуба за пенсионери ${filterParts.join(' ')}. Преглед на клубове, информация за членство и дейности.`;
+    if (searchFilters.city && searchFilters.city !== 'all') {
+      filterParts.push(searchFilters.city);
+      baseKeywords.push(searchFilters.city.toLowerCase());
     }
 
-    return {
-      title,
-      description,
-      keywords: baseKeywords.join(', '),
-      image: '/images/iniciatives/iniciatives-2.jpg'
-    };
-  }, [statistics, filteredClubs.length, searchFilters, getCategoryLabel]);
+    if (searchFilters.category && searchFilters.category !== 'all') {
+      const categoryLabel = getCategoryLabel(searchFilters.category);
+      filterParts.push(categoryLabel);
+      baseKeywords.push(searchFilters.category.toLowerCase());
+    }
+
+    if (searchFilters.searchTerm) {
+      filterParts.push(`"${searchFilters.searchTerm}"`);
+      baseKeywords.push(searchFilters.searchTerm.toLowerCase());
+    }
+
+    const clubsCount = filteredClubs.length;
+    title = `${clubsCount} ${clubsCount === 1 ? 'клуб' : 'клуба'} ${filterParts.join(' ')} | Pensa Club`;
+    description = `Намерени ${clubsCount} клуба за пенсионери ${filterParts.join(' ')}. Преглед на клубове, информация за членство и дейности.`;
+  }
+
+  return {
+    title,
+    description,
+    keywords: baseKeywords.join(', '),
+    image: '/images/iniciatives/iniciatives-2.jpg'
+  };
+}, [statistics, filteredClubs, searchFilters, getCategoryLabel]); // ✅ ПРОМЕНЕНО от filteredClubs.length на filteredClubs
 
   // ✅ STRUCTURED DATA - ITEMLIST + COLLECTIONPAGE
   const structuredData = useMemo(() => {
@@ -300,14 +313,7 @@ export const AllClubs = () => {
     }, 150);
   }, []);
 
-  // Функция за получаване на переведено име на категория
-  const getCategoryLabel = useCallback((category) => {
-    return t(`clubs.AllClubs.categories.${category}`, {
-      defaultValue: category
-    });
-  }, [t]);
-
-  // Get current language for URLs and meta
+   // Get current language for URLs and meta
   const currentLang = i18n.language;
   const currentOrigin = typeof window !== 'undefined' ? window.location.origin : '';
   const currentUrl = `${currentOrigin}/${currentLang === 'bg' ? '' : currentLang + '/'}clubs`;

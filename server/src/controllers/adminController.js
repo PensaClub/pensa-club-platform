@@ -1,6 +1,8 @@
 const adminController = require('express').Router();
-const { user_account, user_ads } = require('../sequelize/models/index');
+const { user_account, user_ads,article, project, initiative, Club, bot_log } = require('../sequelize/models/index');
 
+const { Op } = require('sequelize');
+const sequelize = require('../sequelize/models').sequelize;
 const isAuth = require('../middlewares/isAuth');
 const rbac = require('../middlewares/rbac');
 const eventEmitter = require('../utils/eventEmitter');
@@ -276,26 +278,30 @@ adminController.delete('/bot-logs/cleanup', isAuth, rbac.checkPermission('admin'
  */
 adminController.get('/bot-summary', isAuth, rbac.checkPermission('admin', 'read'), async (req, res, next) => {
     try {
-        // Последните 24 часа
+        // ==================== TIME RANGES ====================
         const last24h = new Date();
         last24h.setHours(last24h.getHours() - 24);
 
-        const last24hCount = await bot_log.count({
-            where: { timestamp: { [Op.gte]: last24h } }
-        });
-
-        // Последните 7 дни
         const last7d = new Date();
         last7d.setDate(last7d.getDate() - 7);
 
-        const last7dCount = await bot_log.count({
-            where: { timestamp: { [Op.gte]: last7d } }
-        });
+        const last30d = new Date();
+        last30d.setDate(last30d.getDate() - 30);
 
-        // Всичко
-        const totalCount = await bot_log.count();
+        // ==================== BASIC COUNTS ====================
+        const [
+            last24hCount,
+            last7dCount,
+            last30dCount,
+            totalCount
+        ] = await Promise.all([
+            bot_log.count({ where: { timestamp: { [Op.gte]: last24h } } }),
+            bot_log.count({ where: { timestamp: { [Op.gte]: last7d } } }),
+            bot_log.count({ where: { timestamp: { [Op.gte]: last30d } } }),
+            bot_log.count()
+        ]);
 
-        // Най-популярен bot
+        // ==================== TOP BOT ====================
         const topBot = await bot_log.findAll({
             attributes: [
                 'bot',
@@ -303,38 +309,175 @@ adminController.get('/bot-summary', isAuth, rbac.checkPermission('admin', 'read'
             ],
             group: ['bot'],
             order: [[sequelize.fn('COUNT', sequelize.col('id')), 'DESC']],
-            limit: 1,
+            limit: 5,
             raw: true
         });
 
-        // Най-споделяна статия (последните 7 дни)
-        const topArticle = await bot_log.findAll({
+        // ==================== CONTENT TYPE DISTRIBUTION ====================
+        const contentTypeStats = await bot_log.findAll({
+            attributes: [
+                'contentType',
+                [sequelize.fn('COUNT', sequelize.col('id')), 'count']
+            ],
+            group: ['contentType'],
+            order: [[sequelize.fn('COUNT', sequelize.col('id')), 'DESC']],
+            raw: true
+        });
+
+        // ==================== TOP ARTICLES (Last 7 days) ====================
+        const topArticles = await bot_log.findAll({
             attributes: [
                 'articleSlug',
                 [sequelize.fn('COUNT', sequelize.col('bot_log.id')), 'shares']
             ],
             where: {
-                timestamp: { [Op.gte]: last7d }
+                timestamp: { [Op.gte]: last7d },
+                contentType: 'article',
+                articleSlug: { [Op.ne]: null }
             },
             include: [
                 {
                     model: article,
                     as: 'article',
-                    attributes: ['id', 'title', 'slug']
+                    attributes: ['id', 'title', 'slug'],
+                    required: false
                 }
             ],
             group: ['articleSlug', 'article.id', 'article.title', 'article.slug'],
             order: [[sequelize.fn('COUNT', sequelize.col('bot_log.id')), 'DESC']],
-            limit: 1
+            limit: 5
         });
 
+        // ==================== TOP PROJECTS (Last 7 days) ====================
+        const topProjects = await bot_log.findAll({
+            attributes: [
+                'projectSlug',
+                [sequelize.fn('COUNT', sequelize.col('bot_log.id')), 'shares']
+            ],
+            where: {
+                timestamp: { [Op.gte]: last7d },
+                contentType: 'project',
+                projectSlug: { [Op.ne]: null }
+            },
+            include: [
+                {
+                    model: project,
+                    as: 'project',
+                    attributes: ['id', 'title', 'slug'],
+                    required: false
+                }
+            ],
+            group: ['projectSlug', 'project.id', 'project.title', 'project.slug'],
+            order: [[sequelize.fn('COUNT', sequelize.col('bot_log.id')), 'DESC']],
+            limit: 5
+        });
+
+        // ==================== TOP INITIATIVES (Last 7 days) ====================
+        const topInitiatives = await bot_log.findAll({
+            attributes: [
+                'initiativeSlug',
+                [sequelize.fn('COUNT', sequelize.col('bot_log.id')), 'shares']
+            ],
+            where: {
+                timestamp: { [Op.gte]: last7d },
+                contentType: 'initiative',
+                initiativeSlug: { [Op.ne]: null }
+            },
+            include: [
+                {
+                    model: initiative,
+                    as: 'initiative',
+                    attributes: ['id', 'title', 'slug'],
+                    required: false
+                }
+            ],
+            group: ['initiativeSlug', 'initiative.id', 'initiative.title', 'initiative.slug'],
+            order: [[sequelize.fn('COUNT', sequelize.col('bot_log.id')), 'DESC']],
+            limit: 5
+        });
+
+        // ==================== TOP CLUBS (Last 7 days) ====================
+        const topClubs = await bot_log.findAll({
+            attributes: [
+                'clubSlug',
+                [sequelize.fn('COUNT', sequelize.col('bot_log.id')), 'shares']
+            ],
+            where: {
+                timestamp: { [Op.gte]: last7d },
+                contentType: 'club',
+                clubSlug: { [Op.ne]: null }
+            },
+            include: [
+                {
+                    model: Club,
+                    as: 'club',
+                    attributes: ['id', 'name', 'slug'],
+                    required: false
+                }
+            ],
+            group: ['clubSlug', 'club.id', 'club.name', 'club.slug'],
+            order: [[sequelize.fn('COUNT', sequelize.col('bot_log.id')), 'DESC']],
+            limit: 5
+        });
+
+        // ==================== DAILY ACTIVITY (Last 7 days) ====================
+        const dailyActivity = await bot_log.findAll({
+            attributes: [
+                [sequelize.fn('DATE', sequelize.col('timestamp')), 'date'],
+                [sequelize.fn('COUNT', sequelize.col('id')), 'count']
+            ],
+            where: {
+                timestamp: { [Op.gte]: last7d }
+            },
+            group: [sequelize.fn('DATE', sequelize.col('timestamp'))],
+            order: [[sequelize.fn('DATE', sequelize.col('timestamp')), 'ASC']],
+            raw: true
+        });
+
+        // ==================== RESPONSE ====================
         res.json({
             summary: {
                 last24Hours: last24hCount,
                 last7Days: last7dCount,
-                total: totalCount,
-                topBot: topBot[0] || null,
-                topArticle: topArticle[0] || null
+                last30Days: last30dCount,
+                total: totalCount
+            },
+            topBots: topBot,
+            contentTypeDistribution: contentTypeStats,
+            topContent: {
+                articles: topArticles.map(item => ({
+                    slug: item.articleSlug,
+                    title: item.article?.title || 'Unknown',
+                    shares: parseInt(item.dataValues.shares),
+                    type: 'article'
+                })),
+                projects: topProjects.map(item => ({
+                    slug: item.projectSlug,
+                    title: item.project?.title || 'Unknown',
+                    shares: parseInt(item.dataValues.shares),
+                    type: 'project'
+                })),
+                initiatives: topInitiatives.map(item => ({
+                    slug: item.initiativeSlug,
+                    title: item.initiative?.title || 'Unknown',
+                    shares: parseInt(item.dataValues.shares),
+                    type: 'initiative'
+                })),
+                clubs: topClubs.map(item => ({
+                    slug: item.clubSlug,
+                    name: item.club?.name || 'Unknown',
+                    shares: parseInt(item.dataValues.shares),
+                    type: 'club'
+                }))
+            },
+            dailyActivity: dailyActivity,
+            meta: {
+                generatedAt: new Date().toISOString(),
+                timeRanges: {
+                    last24h: last24h.toISOString(),
+                    last7d: last7d.toISOString(),
+                    last30d: last30d.toISOString()
+                }
             }
         });
     } catch (error) {
@@ -342,5 +485,4 @@ adminController.get('/bot-summary', isAuth, rbac.checkPermission('admin', 'read'
         next(error);
     }
 });
-
 module.exports = adminController;
