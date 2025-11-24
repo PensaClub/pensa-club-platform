@@ -120,12 +120,25 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
                 defaultValue: DataTypes.NOW,
             },
+            // ✅ ДОБАВЕНИ TIMESTAMPS ПОЛЕТА
+            createdAt: {
+                type: DataTypes.DATE,
+                allowNull: false,
+                defaultValue: DataTypes.NOW,
+                field: 'createdAt'
+            },
+            updatedAt: {
+                type: DataTypes.DATE,
+                allowNull: false,
+                defaultValue: DataTypes.NOW,
+                field: 'updatedAt'
+            }
         },
         {
             sequelize,
             modelName: 'bot_log',
             tableName: 'bot_logs',
-            timestamps: false,
+            timestamps: true,
             underscored: false,
         }
     );
