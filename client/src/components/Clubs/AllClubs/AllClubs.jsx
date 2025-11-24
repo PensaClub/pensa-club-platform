@@ -37,9 +37,9 @@ export const AllClubs = () => {
 
       // Обработваме response-а
       let clubsData = [];
-      if (response.clubs) {
+      if (response?.clubs) {
         // Ако response има clubs array (пагиниран отговор)
-        clubsData = response.clubs;
+        clubsData = response?.clubs;
       } else if (Array.isArray(response)) {
         // Ако response е директно array
         clubsData = response;
@@ -52,7 +52,7 @@ export const AllClubs = () => {
       setFilteredClubs(clubsData);
 
       // Показваме информация за fallback ако има
-      if (response.isFromFallback) {
+      if (response?.isFromFallback) {
         console.info('📋 Using fallback mock data due to API error');
       }
 
@@ -72,31 +72,31 @@ export const AllClubs = () => {
   const handleFilterChange = useCallback((filters) => {
     setSearchFilters(filters);
 
-    let filtered = [...clubs];
+let filtered = clubs.filter(club => club !== null && club !== undefined);
 
     // Търсене по име или описание
     if (filters.searchTerm) {
       const searchLower = filters.searchTerm.toLowerCase();
       filtered = filtered.filter(club =>
-        club.name?.toLowerCase().includes(searchLower) ||
-        club.shortDescription?.toLowerCase().includes(searchLower) ||
-        club.location?.city?.toLowerCase().includes(searchLower)
+        club?.name?.toLowerCase().includes(searchLower) ||
+        club?.shortDescription?.toLowerCase().includes(searchLower) ||
+        club?.location?.city?.toLowerCase().includes(searchLower)
       );
     }
 
     // Филтриране по град
-    if (filters.city && filters.city !== 'all') {
+    if (filters?.city && filters.city !== 'all') {
       filtered = filtered.filter(club => club.location?.city === filters.city);
     }
 
     // Филтриране по категория
-    if (filters.category && filters.category !== 'all') {
-      filtered = filtered.filter(club => club.category === filters.category);
+    if (filters?.category && filters.category !== 'all') {
+      filtered = filtered.filter(club => club?.category === filters?.category);
     }
 
     // Сортиране
     filtered.sort((a, b) => {
-      switch (filters.sortBy) {
+      switch (filters?.sortBy) {
         case 'name':
           return (a.name || '').localeCompare(b.name || '');
         case 'members':
@@ -140,29 +140,45 @@ export const AllClubs = () => {
       return newShowMap;
     });
   }, []);
+  
+ // Функция за получаване на переведено име на категория
+  const getCategoryLabel = useCallback((category) => {
+    return t(`clubs.AllClubs.categories.${category}`, {
+      defaultValue: category
+    });
+  }, [t]);
 
   // Мемоизирани градове и категории за филтрите
-  const availableCities = useMemo(() => {
-    return [...new Set(clubs.map(club => club.location?.city).filter(Boolean))].sort();
-  }, [clubs]);
+ const availableCities = useMemo(() => {
+  return [...new Set(clubs
+    .filter(club => club !== null && club !== undefined)
+    .map(club => club.location?.city)
+    .filter(Boolean))].sort();
+}, [clubs]);
 
-  const availableCategories = useMemo(() => {
-    return [...new Set(clubs.map(club => club.category).filter(Boolean))].sort();
-  }, [clubs]);
+const availableCategories = useMemo(() => {
+  return [...new Set(clubs
+    .filter(club => club !== null && club !== undefined)
+    .map(club => club.category)
+    .filter(Boolean))].sort();
+}, [clubs]);
 
-  // Изчисляване на статистики
-  const statistics = useMemo(() => {
-    const totalMembers = clubs.reduce((sum, club) => sum + (club.membership?.totalMembers || 0), 0);
-    const activeClubs = clubs.filter(club => club.status === 'active' || club.metadata?.isActive).length;
-    const cities = [...new Set(clubs.map(club => club.location?.city).filter(Boolean))].length;
+ // Изчисляване на статистики
+const statistics = useMemo(() => {
+  // Филтрираме null/undefined клубове
+  const validClubs = clubs.filter(club => club !== null && club !== undefined);
+  
+  const totalMembers = validClubs.reduce((sum, club) => sum + (club.membership?.totalMembers || 0), 0);
+  const activeClubs = validClubs.filter(club => club?.status === 'active' || club?.metadata?.isActive).length;
+  const cities = [...new Set(validClubs.map(club => club.location?.city).filter(Boolean))].length;
 
-    return {
-      totalClubs: clubs.length,
-      totalMembers,
-      activeClubs,
-      cities
-    };
-  }, [clubs]);
+  return {
+    totalClubs: validClubs.length,
+    totalMembers,
+    activeClubs,
+    cities
+  };
+}, [clubs]);
 
   // ✅ META DATA - ДИНАМИЧНИ META TAGS
   const metaData = useMemo(() => {
@@ -300,14 +316,7 @@ export const AllClubs = () => {
     }, 150);
   }, []);
 
-  // Функция за получаване на переведено име на категория
-  const getCategoryLabel = useCallback((category) => {
-    return t(`clubs.AllClubs.categories.${category}`, {
-      defaultValue: category
-    });
-  }, [t]);
-
-  // Get current language for URLs and meta
+   // Get current language for URLs and meta
   const currentLang = i18n.language;
   const currentOrigin = typeof window !== 'undefined' ? window.location.origin : '';
   const currentUrl = `${currentOrigin}/${currentLang === 'bg' ? '' : currentLang + '/'}clubs`;
