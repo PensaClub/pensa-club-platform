@@ -46,6 +46,14 @@ Object.keys(db).forEach((modelName) => {
     }
 });
 
+// ✅ ALIASES ЗА BACKCOMPAT - без да счупим съществуващи референции
+db.Club = db.club_Club; // ✅ Alias: Club → club_Club
+db.ClubDetails = db.club_ClubDetails;
+db.ClubLocation = db.club_ClubLocation;
+db.ClubMembership = db.club_ClubMembership;
+db.ClubMember = db.club_ClubMember;
+db.ClubActivity = db.club_ClubActivity;
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
