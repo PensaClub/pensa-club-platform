@@ -29,6 +29,12 @@ module.exports = (sequelize, DataTypes) => {
                     as: 'club',
                 });
             }
+
+            // ✅ Връзка с mentor
+            BotLog.belongsTo(models.mentor, {
+                foreignKey: 'mentorId',
+                as: 'mentor',
+            });
         }
     }
 
@@ -39,11 +45,11 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
             },
             contentType: {
-                type: DataTypes.ENUM('article', 'project', 'initiative', 'club'),
+                type: DataTypes.ENUM('article', 'project', 'initiative', 'club', 'page', 'mentor'),
                 allowNull: false,
                 defaultValue: 'article',
                 field: 'content_type',
-                comment: 'Тип на съдържанието: article, project, initiative, club'
+                comment: 'Тип на съдържанието: article, project, initiative, club, page, mentor'
             },
             // ========== ARTICLE FIELDS ==========
             articleId: {
@@ -86,6 +92,19 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
                 allowNull: true,
                 field: 'club_slug',
+            },
+            // ========== PAGE FIELDS (за статични страници като /academy) ==========
+            pageSlug: {
+                type: DataTypes.STRING,
+                allowNull: true,
+                field: 'page_slug',
+                comment: 'Slug на статична страница (напр. "academy", "about")'
+            },
+            // ========== MENTOR FIELDS ==========
+            mentorId: {
+                type: DataTypes.INTEGER,
+                allowNull: true,
+                field: 'mentor_id',
             },
             // ========== COMMON FIELDS ==========
             userAgent: {
