@@ -11,7 +11,7 @@ const generateMentorMetaHTML = require('../utils/mentorMetaGenerator');
  */
 function isBot(userAgent) {
     if (!userAgent) return false;
-    
+
     const botPatterns = [
         'facebookexternalhit',
         'Facebot',
@@ -25,8 +25,8 @@ function isBot(userAgent) {
         'yandex',
         'baiduspider'
     ];
-    
-    return botPatterns.some(pattern => 
+
+    return botPatterns.some(pattern =>
         userAgent.toLowerCase().includes(pattern.toLowerCase())
     );
 }
@@ -55,7 +55,7 @@ function getBotName(userAgent) {
 async function logBotRequest(botName, contentType, contentId, contentSlug, userAgent, ip) {
     try {
         const { bot_log } = require('../sequelize/models');
-        
+
         const logData = {
             bot: botName,
             contentType: contentType, // 'article', 'project', 'initiative', 'club', 'page', 'mentor'
@@ -95,7 +95,7 @@ async function logBotRequest(botName, contentType, contentId, contentSlug, userA
  */
 async function botDetector(req, res, next) {
     const userAgent = req.headers['user-agent'] || '';
-    
+
     // ✅ DEBUG: Показва всички requests
     console.log('🔍 botDetector called:', {
         path: req.path,
@@ -103,15 +103,15 @@ async function botDetector(req, res, next) {
         userAgent: userAgent.substring(0, 80) + '...',
         isBot: isBot(userAgent)
     });
-    
+
     // Проверка дали е bot
     if (!isBot(userAgent)) {
         console.log('❌ Not a bot, passing to next middleware');
         return next(); // Не е bot, продължи нормално
     }
-    
+
     const botName = getBotName(userAgent);
-    
+
     console.log('🤖 Bot detected:', {
         bot: botName,
         url: req.path,
@@ -126,7 +126,7 @@ async function botDetector(req, res, next) {
     const clubMatch = req.path.match(/^\/clubs\/([a-zA-Z0-9-]+)$/);
     const academyMatch = req.path.match(/^\/academy$/);
     const mentorMatch = req.path.match(/^\/academy\/mentors\/(\d+)$/);
-    
+
     console.log('🔎 Pattern matching results:', {
         articleMatch: !!articleMatch,
         projectMatch: !!projectMatch,
@@ -135,13 +135,13 @@ async function botDetector(req, res, next) {
         academyMatch: !!academyMatch,
         mentorMatch: !!mentorMatch
     });
-    
+
     try {
         // ==================== ARTICLE ====================
         if (articleMatch) {
             const slug = articleMatch[1];
             console.log('📄 Processing ARTICLE:', slug);
-            
+
             const foundArticle = await article.findOne({
                 where: { slug },
                 include: [
@@ -153,14 +153,14 @@ async function botDetector(req, res, next) {
                 ],
                 attributes: ['id', 'title', 'slug', 'summary', 'author', 'publishDate', 'updatedAt', 'tags']
             });
-            
+
             if (!foundArticle) {
                 console.log('❌ Article not found:', slug);
                 return next();
             }
-            
+
             console.log('✅ Article found:', foundArticle.title);
-            
+
             await logBotRequest(
                 botName,
                 'article',
@@ -169,17 +169,17 @@ async function botDetector(req, res, next) {
                 userAgent,
                 req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress
             );
-            
+
             const html = generateArticleMetaHTML(foundArticle);
             console.log('📤 Sending article HTML to bot');
             return res.send(html);
         }
-        
+
         // ==================== PROJECT ====================
         if (projectMatch) {
             const slug = projectMatch[1];
             console.log('📁 Processing PROJECT:', slug);
-            
+
             const foundProject = await project.findOne({
                 where: { slug },
                 include: [
@@ -195,14 +195,14 @@ async function botDetector(req, res, next) {
                     'contact', 'location', 'createdAt', 'updatedAt'
                 ]
             });
-            
+
             if (!foundProject) {
                 console.log('❌ Project not found:', slug);
                 return next();
             }
-            
+
             console.log('✅ Project found:', foundProject.title);
-            
+
             await logBotRequest(
                 botName,
                 'project',
@@ -211,17 +211,17 @@ async function botDetector(req, res, next) {
                 userAgent,
                 req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress
             );
-            
+
             const html = generateProjectMetaHTML(foundProject);
             console.log('📤 Sending project HTML to bot');
             return res.send(html);
         }
-        
+
         // ==================== INITIATIVE ====================
         if (initiativeMatch) {
             const slug = initiativeMatch[1];
             console.log('🎯 Processing INITIATIVE:', slug);
-            
+
             const foundInitiative = await initiative.findOne({
                 where: { slug },
                 include: [
@@ -238,14 +238,14 @@ async function botDetector(req, res, next) {
                     'responsible', 'createdAt', 'updatedAt'
                 ]
             });
-            
+
             if (!foundInitiative) {
                 console.log('❌ Initiative not found:', slug);
                 return next();
             }
-            
+
             console.log('✅ Initiative found:', foundInitiative.title);
-            
+
             await logBotRequest(
                 botName,
                 'initiative',
@@ -254,33 +254,33 @@ async function botDetector(req, res, next) {
                 userAgent,
                 req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress
             );
-            
+
             const html = generateInitiativeMetaHTML(foundInitiative);
             console.log('📤 Sending initiative HTML to bot');
             return res.send(html);
         }
-        
+
         // ==================== CLUB ====================
         if (clubMatch) {
             const slug = clubMatch[1];
             console.log('🏛️ Processing CLUB:', slug);
-            
+
             const foundClub = await Club.findOne({
                 where: { slug },
                 attributes: [
-                    'id', 'name', 'slug', 'shortDescription', 'fullDescription',
-                    'category', 'location', 'contacts', 'mainImage', 'logo',
-                    'foundedYear', 'metadata', 'createdAt', 'updatedAt'
+                    'id', 'name', 'slug', 'shortDescription',
+                    'category', 'logo', 'mainImage',
+                    'foundedYear', 'createdAt', 'updatedAt'
                 ]
             });
-            
+
             if (!foundClub) {
                 console.log('❌ Club not found:', slug);
                 return next();
             }
-            
+
             console.log('✅ Club found:', foundClub.name);
-            
+
             await logBotRequest(
                 botName,
                 'club',
@@ -289,16 +289,16 @@ async function botDetector(req, res, next) {
                 userAgent,
                 req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress
             );
-            
+
             const html = generateClubMetaHTML(foundClub);
             console.log('📤 Sending club HTML to bot');
             return res.send(html);
         }
-        
+
         // ==================== ACADEMY (СТАТИЧНА СТРАНИЦА) ====================
         if (academyMatch) {
             console.log('🎓 Processing ACADEMY page');
-            
+
             await logBotRequest(
                 botName,
                 'page',
@@ -307,17 +307,17 @@ async function botDetector(req, res, next) {
                 userAgent,
                 req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress
             );
-            
+
             const html = generateAcademyMetaHTML();
             console.log('📤 Sending academy HTML to bot');
             return res.send(html);
         }
-        
+
         // ==================== MENTOR ====================
         if (mentorMatch) {
             const mentorId = parseInt(mentorMatch[1], 10);
             console.log('👨‍🏫 Processing MENTOR:', mentorId);
-            
+
             const foundMentor = await mentor.findOne({
                 where: { id: mentorId, status: 'active' },
                 attributes: [
@@ -326,14 +326,14 @@ async function botDetector(req, res, next) {
                     'rating', 'reviewsCount', 'studentsCount', 'isOnline'
                 ]
             });
-            
+
             if (!foundMentor) {
                 console.log('❌ Mentor not found:', mentorId);
                 return next();
             }
-            
+
             console.log('✅ Mentor found:', foundMentor.name);
-            
+
             await logBotRequest(
                 botName,
                 'mentor',
@@ -342,19 +342,19 @@ async function botDetector(req, res, next) {
                 userAgent,
                 req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress
             );
-            
+
             const html = generateMentorMetaHTML(foundMentor);
             console.log('📤 Sending mentor HTML to bot');
             return res.send(html);
         }
-        
+
         // Ако не е нито един от горните типове
         console.log('⚠️ No pattern matched, passing to next middleware');
         return next();
-        
+
     } catch (error) {
         console.error('💥 Error in botDetector middleware:', error);
-        return next(); 
+        return next();
     }
 }
 
