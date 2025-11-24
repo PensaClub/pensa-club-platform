@@ -29,6 +29,9 @@ export const adminServiceFactory = (token) => {
         deleteMessage: (email,id) => {
             return requester.patch(`${apiUrl}/admin/delete-comment`,{email:email,adId:id});
         },
+         getBotSummary: async () => {
+            return requester.get(`${apiUrl}/admin/bot-summary`);
+        }
       
     }
 }
