@@ -73,5 +73,274 @@ adminController.patch('/delete-comment/', isAuth, rbac.checkPermission('comment'
         next(err);
     }
 });
+// ========================================
+// BOT LOGS - Статистика и управление
+// ========================================
+
+/**
+ * GET /admin/bot-stats
+ * Статистика за bot requests
+ * Query params: days (default: 7)
+ */
+adminController.get('/bot-stats', isAuth, rbac.checkPermission('admin', 'read'), async (req, res, next) => {
+    try {
+        const { days = 7 } = req.query;
+
+        const startDate = new Date();
+        startDate.setDate(startDate.getDate() - parseInt(days));
+
+        // Брой заявки по bot
+        const botCounts = await bot_log.findAll({
+            attributes: [
+                'bot',
+                [sequelize.fn('COUNT', sequelize.col('id')), 'count']
+            ],
+            where: {
+                timestamp: { [Op.gte]: startDate }
+            },
+            group: ['bot'],
+            order: [[sequelize.fn('COUNT', sequelize.col('id')), 'DESC']],
+            raw: true
+        });
+
+        // Топ споделяни статии
+        const topArticles = await bot_log.findAll({
+            attributes: [
+                'articleSlug',
+                [sequelize.fn('COUNT', sequelize.col('bot_log.id')), 'shares']
+            ],
+            where: {
+                timestamp: { [Op.gte]: startDate }
+            },
+            include: [
+                {
+                    model: article,
+                    as: 'article',
+                    attributes: ['id', 'title', 'slug']
+                }
+            ],
+            group: ['articleSlug', 'article.id', 'article.title', 'article.slug'],
+            order: [[sequelize.fn('COUNT', sequelize.col('bot_log.id')), 'DESC']],
+            limit: 10
+        });
+
+        // Обща статистика
+        const totalRequests = await bot_log.count({
+            where: {
+                timestamp: { [Op.gte]: startDate }
+            }
+        });
+
+        // Статистика по дни (за графика)
+        const dailyStats = await bot_log.findAll({
+            attributes: [
+                [sequelize.fn('DATE', sequelize.col('timestamp')), 'date'],
+                [sequelize.fn('COUNT', sequelize.col('id')), 'count']
+            ],
+            where: {
+                timestamp: { [Op.gte]: startDate }
+            },
+            group: [sequelize.fn('DATE', sequelize.col('timestamp'))],
+            order: [[sequelize.fn('DATE', sequelize.col('timestamp')), 'ASC']],
+            raw: true
+        });
+
+        res.json({
+            period: `${days} days`,
+            totalRequests,
+            botCounts,
+            topArticles,
+            dailyStats
+        });
+    } catch (error) {
+        console.error('Error fetching bot stats:', error);
+        next(error);
+    }
+});
+
+/**
+ * GET /admin/bot-logs
+ * Последни bot requests
+ * Query params: limit, offset, bot, articleSlug
+ */
+adminController.get('/bot-logs', isAuth, rbac.checkPermission('admin', 'read'), async (req, res, next) => {
+    try {
+        const { limit = 50, offset = 0, bot, articleSlug } = req.query;
+
+        const where = {};
+        if (bot) where.bot = bot;
+        if (articleSlug) where.articleSlug = articleSlug;
+
+        const logs = await bot_log.findAll({
+            where,
+            limit: parseInt(limit),
+            offset: parseInt(offset),
+            order: [['timestamp', 'DESC']],
+            include: [
+                {
+                    model: article,
+                    as: 'article',
+                    attributes: ['id', 'title', 'slug']
+                }
+            ]
+        });
+
+        const total = await bot_log.count({ where });
+
+        res.json({
+            logs,
+            pagination: {
+                total,
+                limit: parseInt(limit),
+                offset: parseInt(offset),
+                hasMore: (parseInt(offset) + parseInt(limit)) < total
+            }
+        });
+    } catch (error) {
+        console.error('Error fetching bot logs:', error);
+        next(error);
+    }
+});
+
+/**
+ * GET /admin/bot-logs/:articleSlug
+ * Bot logs за конкретна статия
+ */
+adminController.get('/bot-logs/:articleSlug', isAuth, rbac.checkPermission('admin', 'read'), async (req, res, next) => {
+    try {
+        const { articleSlug } = req.params;
+        const { limit = 50 } = req.query;
+
+        const logs = await bot_log.findAll({
+            where: { articleSlug },
+            limit: parseInt(limit),
+            order: [['timestamp', 'DESC']],
+            include: [
+                {
+                    model: article,
+                    as: 'article',
+                    attributes: ['id', 'title', 'slug']
+                }
+            ]
+        });
+
+        const stats = await bot_log.findAll({
+            attributes: [
+                'bot',
+                [sequelize.fn('COUNT', sequelize.col('id')), 'count']
+            ],
+            where: { articleSlug },
+            group: ['bot'],
+            order: [[sequelize.fn('COUNT', sequelize.col('id')), 'DESC']],
+            raw: true
+        });
+
+        res.json({
+            articleSlug,
+            totalShares: logs.length,
+            stats,
+            logs
+        });
+    } catch (error) {
+        console.error('Error fetching article bot logs:', error);
+        next(error);
+    }
+});
+
+/**
+ * DELETE /admin/bot-logs/cleanup
+ * Ръчно изчистване на стари логове
+ * Body: { days: 30 }
+ */
+adminController.delete('/bot-logs/cleanup', isAuth, rbac.checkPermission('admin', 'delete'), async (req, res, next) => {
+    try {
+        const { days = 30 } = req.body;
+
+        const { cleanupOldBotLogs } = require('../cron/botLogCleanup');
+        const deletedCount = await cleanupOldBotLogs(parseInt(days));
+
+        res.json({
+            message: `Deleted ${deletedCount} bot logs older than ${days} days`,
+            deletedCount,
+            days: parseInt(days)
+        });
+    } catch (error) {
+        console.error('Error cleaning up bot logs:', error);
+        next(error);
+    }
+});
+
+/**
+ * GET /admin/bot-summary
+ * Кратка обобщена статистика (за dashboard)
+ */
+adminController.get('/bot-summary', isAuth, rbac.checkPermission('admin', 'read'), async (req, res, next) => {
+    try {
+        // Последните 24 часа
+        const last24h = new Date();
+        last24h.setHours(last24h.getHours() - 24);
+
+        const last24hCount = await bot_log.count({
+            where: { timestamp: { [Op.gte]: last24h } }
+        });
+
+        // Последните 7 дни
+        const last7d = new Date();
+        last7d.setDate(last7d.getDate() - 7);
+
+        const last7dCount = await bot_log.count({
+            where: { timestamp: { [Op.gte]: last7d } }
+        });
+
+        // Всичко
+        const totalCount = await bot_log.count();
+
+        // Най-популярен bot
+        const topBot = await bot_log.findAll({
+            attributes: [
+                'bot',
+                [sequelize.fn('COUNT', sequelize.col('id')), 'count']
+            ],
+            group: ['bot'],
+            order: [[sequelize.fn('COUNT', sequelize.col('id')), 'DESC']],
+            limit: 1,
+            raw: true
+        });
+
+        // Най-споделяна статия (последните 7 дни)
+        const topArticle = await bot_log.findAll({
+            attributes: [
+                'articleSlug',
+                [sequelize.fn('COUNT', sequelize.col('bot_log.id')), 'shares']
+            ],
+            where: {
+                timestamp: { [Op.gte]: last7d }
+            },
+            include: [
+                {
+                    model: article,
+                    as: 'article',
+                    attributes: ['id', 'title', 'slug']
+                }
+            ],
+            group: ['articleSlug', 'article.id', 'article.title', 'article.slug'],
+            order: [[sequelize.fn('COUNT', sequelize.col('bot_log.id')), 'DESC']],
+            limit: 1
+        });
+
+        res.json({
+            summary: {
+                last24Hours: last24hCount,
+                last7Days: last7dCount,
+                total: totalCount,
+                topBot: topBot[0] || null,
+                topArticle: topArticle[0] || null
+            }
+        });
+    } catch (error) {
+        console.error('Error fetching bot summary:', error);
+        next(error);
+    }
+});
 
 module.exports = adminController;
