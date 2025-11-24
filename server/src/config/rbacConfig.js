@@ -160,8 +160,13 @@ const permissions = {
     studentApplication: {
         create: ['user', 'student'],
         readOwn: ['mentor', 'admin'],
-        readAll: ['admin'],        
+        readAll: ['admin'],
         update: ['mentor', 'admin'],
+        delete: ['admin'],
+    },
+    admin: {
+        read: ['admin', 'moderator'],
+        update: ['admin'],
         delete: ['admin'],
     },
 };

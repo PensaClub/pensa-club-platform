@@ -40,19 +40,26 @@ function loadModels(dir, namespace = '') {
 
 loadModels(__dirname);
 
-Object.keys(db).forEach((modelName) => {
-    if (db[modelName].associate) {
-        db[modelName].associate(db);
-    }
-});
-
-// ✅ ALIASES ЗА BACKCOMPAT - без да счупим съществуващи референции
-db.Club = db.club_Club; // ✅ Alias: Club → club_Club
+// ✅ ALIASES ПРЕДИ ASSOCIATE
+db.Club = db.club_Club;
 db.ClubDetails = db.club_ClubDetails;
 db.ClubLocation = db.club_ClubLocation;
 db.ClubMembership = db.club_ClubMembership;
 db.ClubMember = db.club_ClubMember;
 db.ClubActivity = db.club_ClubActivity;
+
+// ✅ СПИСЪК С ALIAS ИМЕНА - за да ги пропуснем
+const aliasNames = ['Club', 'ClubDetails', 'ClubLocation', 'ClubMembership', 'ClubMember', 'ClubActivity'];
+
+// ✅ ИЗВИКАЙ associate() САМО ЗА ОРИГИНАЛНИТЕ МОДЕЛИ (не за aliases)
+Object.keys(db).forEach((modelName) => {
+    // Пропусни aliases - те са същите обекти
+    if (aliasNames.includes(modelName)) return;
+    
+    if (db[modelName].associate) {
+        db[modelName].associate(db);
+    }
+});
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
