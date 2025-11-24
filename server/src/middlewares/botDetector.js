@@ -96,17 +96,8 @@ async function logBotRequest(botName, contentType, contentId, contentSlug, userA
 async function botDetector(req, res, next) {
     const userAgent = req.headers['user-agent'] || '';
 
-    // ✅ DEBUG: Показва всички requests
-    console.log('🔍 botDetector called:', {
-        path: req.path,
-        method: req.method,
-        userAgent: userAgent.substring(0, 80) + '...',
-        isBot: isBot(userAgent)
-    });
-
     // Проверка дали е bot
     if (!isBot(userAgent)) {
-        console.log('❌ Not a bot, passing to next middleware');
         return next(); // Не е bot, продължи нормално
     }
 
@@ -126,15 +117,6 @@ async function botDetector(req, res, next) {
     const clubMatch = req.path.match(/^\/clubs\/([a-zA-Z0-9-]+)$/);
     const academyMatch = req.path.match(/^\/academy$/);
     const mentorMatch = req.path.match(/^\/academy\/mentors\/(\d+)$/);
-
-    console.log('🔎 Pattern matching results:', {
-        articleMatch: !!articleMatch,
-        projectMatch: !!projectMatch,
-        initiativeMatch: !!initiativeMatch,
-        clubMatch: !!clubMatch,
-        academyMatch: !!academyMatch,
-        mentorMatch: !!mentorMatch
-    });
 
     try {
         // ==================== ARTICLE ====================
@@ -349,7 +331,7 @@ async function botDetector(req, res, next) {
         }
 
         // Ако не е нито един от горните типове
-        console.log('⚠️ No pattern matched, passing to next middleware');
+        console.log('⚠️ No pattern matched for bot request:', req.path);
         return next();
 
     } catch (error) {
