@@ -180,53 +180,50 @@ const statistics = useMemo(() => {
   };
 }, [clubs]);
 
-  // ✅ META DATA - ДИНАМИЧНИ META TAGS
-  const metaData = useMemo(() => {
-    // Base keywords
-    const baseKeywords = [
-      'клубове за пенсионери',
-      'Pensa Club',
-      'дигитална грамотност',
-      'социални клубове',
-      'активни пенсионери',
-      'клубове България'
-    ];
+const metaData = useMemo(() => {
+  const baseKeywords = [
+    'клубове за пенсионери',
+    'Pensa Club',
+    'дигитална грамотност',
+    'социални клубове',
+    'активни пенсионери',
+    'клубове България'
+  ];
 
-    // Dynamic title based on filters
-    let title = 'Клубове за пенсионери | Pensa Club';
-    let description = `Открийте ${statistics.totalClubs} активни клуба за пенсионери в ${statistics.cities} града. Присъединете се към общността на Pensa Club и открийте нови приятели и възможности.`;
+  let title = 'Клубове за пенсионери | Pensa Club';
+  let description = `Открийте ${statistics.totalClubs} активни клуба за пенсионери в ${statistics.cities} града. Присъединете се към общността на Pensa Club и открийте нови приятели и възможности.`;
 
-    // If there are active filters
-    if (searchFilters.searchTerm || searchFilters.city !== 'all' || searchFilters.category !== 'all') {
-      const filterParts = [];
+  if (searchFilters.searchTerm || searchFilters.city || searchFilters.category) {
+    const filterParts = [];
 
-      if (searchFilters.city && searchFilters.city !== 'all') {
-        filterParts.push(searchFilters.city);
-        baseKeywords.push(searchFilters.city.toLowerCase());
-      }
-
-      if (searchFilters.category && searchFilters.category !== 'all') {
-        const categoryLabel = getCategoryLabel(searchFilters.category);
-        filterParts.push(categoryLabel);
-        baseKeywords.push(searchFilters.category.toLowerCase());
-      }
-
-      if (searchFilters.searchTerm) {
-        filterParts.push(`"${searchFilters.searchTerm}"`);
-        baseKeywords.push(searchFilters.searchTerm.toLowerCase());
-      }
-
-      title = `${filteredClubs.length} ${filteredClubs.length === 1 ? 'клуб' : 'клуба'} ${filterParts.join(' ')} | Pensa Club`;
-      description = `Намерени ${filteredClubs.length} клуба за пенсионери ${filterParts.join(' ')}. Преглед на клубове, информация за членство и дейности.`;
+    if (searchFilters.city && searchFilters.city !== 'all') {
+      filterParts.push(searchFilters.city);
+      baseKeywords.push(searchFilters.city.toLowerCase());
     }
 
-    return {
-      title,
-      description,
-      keywords: baseKeywords.join(', '),
-      image: '/images/iniciatives/iniciatives-2.jpg'
-    };
-  }, [statistics, filteredClubs, searchFilters, getCategoryLabel]);
+    if (searchFilters.category && searchFilters.category !== 'all') {
+      const categoryLabel = getCategoryLabel(searchFilters.category);
+      filterParts.push(categoryLabel);
+      baseKeywords.push(searchFilters.category.toLowerCase());
+    }
+
+    if (searchFilters.searchTerm) {
+      filterParts.push(`"${searchFilters.searchTerm}"`);
+      baseKeywords.push(searchFilters.searchTerm.toLowerCase());
+    }
+
+    const clubsCount = filteredClubs.length;
+    title = `${clubsCount} ${clubsCount === 1 ? 'клуб' : 'клуба'} ${filterParts.join(' ')} | Pensa Club`;
+    description = `Намерени ${clubsCount} клуба за пенсионери ${filterParts.join(' ')}. Преглед на клубове, информация за членство и дейности.`;
+  }
+
+  return {
+    title,
+    description,
+    keywords: baseKeywords.join(', '),
+    image: '/images/iniciatives/iniciatives-2.jpg'
+  };
+}, [statistics, filteredClubs, searchFilters, getCategoryLabel]); // ✅ ПРОМЕНЕНО от filteredClubs.length на filteredClubs
 
   // ✅ STRUCTURED DATA - ITEMLIST + COLLECTIONPAGE
   const structuredData = useMemo(() => {
