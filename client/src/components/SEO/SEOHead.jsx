@@ -7,6 +7,8 @@ const SEOHead = ({
   keywords, 
   image = '/images/iniciatives/iniciatives-2.jpg',
   type = 'website',
+  publishedTime = null,
+  modifiedTime = null,
   noindex = false,
   canonical = null,
   structuredData = null
@@ -44,7 +46,7 @@ const SEOHead = ({
       {keywords && <meta name="keywords" content={keywords} />}
       <meta name="author" content="Pensa Foundation" />
       <meta name="language" content={currentLanguage} />
-      <meta http-equiv="content-language" content={currentLanguage} />
+      <meta httpEquiv="content-language" content={currentLanguage} />
       
       {/* Robots */}
       {noindex ? (
@@ -57,7 +59,6 @@ const SEOHead = ({
       <link rel="canonical" href={currentUrl} />
       
       {/* hreflang Tags за мултиезичност */}
-      {/* Понеже всички езици са на един URL, hreflang сочат към същия линк */}
       <link rel="alternate" hreflang="bg" href={currentUrl} />
       <link rel="alternate" hreflang="de" href={currentUrl} />
       <link rel="alternate" hreflang="en" href={currentUrl} />
@@ -77,6 +78,14 @@ const SEOHead = ({
       {alternateLocales.map(locale => (
         <meta key={locale} property="og:locale:alternate" content={locale} />
       ))}
+      
+      {/* Article Meta Tags (само за type="article") */}
+      {type === 'article' && publishedTime && (
+        <meta property="article:published_time" content={publishedTime} />
+      )}
+      {type === 'article' && modifiedTime && (
+        <meta property="article:modified_time" content={modifiedTime} />
+      )}
       
       {/* Facebook */}
       <meta property="fb:pages" content="61578204366479" />
