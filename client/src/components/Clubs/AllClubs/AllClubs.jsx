@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { Helmet } from 'react-helmet-async';
+// import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import { ClubsSearch } from './ClubsSearch/ClubsSearch';
 import { ClubsMap } from './ClubsMap/ClubsMap';
@@ -226,7 +226,7 @@ const statistics = useMemo(() => {
       keywords: baseKeywords.join(', '),
       image: '/images/iniciatives/iniciatives-2.jpg'
     };
-  }, [statistics, filteredClubs.length, searchFilters, getCategoryLabel]);
+  }, [statistics, filteredClubs, searchFilters, getCategoryLabel]);
 
   // ✅ STRUCTURED DATA - ITEMLIST + COLLECTIONPAGE
   const structuredData = useMemo(() => {
