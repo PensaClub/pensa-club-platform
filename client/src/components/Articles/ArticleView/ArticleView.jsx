@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useCallback, useEffect, useState, useMemo } from 'react'; 
+import { useCallback, useEffect, useState, useMemo } from 'react';
 import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -457,9 +457,11 @@ const ArticleView = () => {
         keywords={metaData.keywords}
         image={metaData.image}
         type="article"
+        publishedTime={metaData.publishedTime}
+        modifiedTime={metaData.modifiedTime}
         structuredData={structuredData}
       />
-      
+
       <TextZoom />
       <div className="article-main">
         <div className="articles-hero-view">
