@@ -2,7 +2,6 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Helmet } from 'react-helmet';
 import './projectView.css';
 import { useInitiativeContext } from '../../../contexts/InitiativeProvider';
 import { useAuthContext } from '../../../contexts/UserContext';
@@ -21,6 +20,7 @@ import { Milestones } from '../Milestones/Milestones';
 import ScrollToTop from '../../../ScrollToTop/ScrollToTop';
 import ProjectGallery from '../ProjectGallery/ProjectGallery';
 import { TextZoom } from '../../../TextZoom/TextZoom.jsx';
+import SEOHead from '../../../SEO/SEOHead.jsx';
 
 export const ProjectView = () => {
     const { slug } = useParams();
@@ -40,12 +40,12 @@ export const ProjectView = () => {
 
     const { isAuthentication, profileData } = useAuthContext();
     const { sendPersonalEmail } = useClubContext();
-    
+
     const [activeSection, setActiveSection] = useState('overview');
     const [commentsCount, setCommentsCount] = useState(0);
     const applicationsLoadedRef = useRef(false);
     const [locationText, setLocationText] = useState('');
-    
+
     // Email Modal States
     const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
     const [emailRecipient, setEmailRecipient] = useState({ name: '', email: '' });
@@ -357,75 +357,149 @@ export const ProjectView = () => {
         return <div className="project-view-loading">{t('projectView.loading')}</div>;
     }
 
-    const getProjectMetaImage = () => {
-        if (currentProject?.mainImage?.src) {
-            return currentProject.mainImage.src;
-        }
-        return 'https://www.pensa.club/default-project-image.jpg';
-    };
-
-    const getProjectDescription = () => {
-        let description = '';
-
-        if (currentProject?.fullDescription) {
-            if (typeof currentProject.fullDescription === 'string') {
-                description = currentProject.fullDescription.replace(/<[^>]*>/g, '');
-            }
-        } else if (currentProject?.shortDescription) {
-            if (typeof currentProject.shortDescription === 'string') {
-                description = currentProject.shortDescription.replace(/<[^>]*>/g, '');
-            }
-        }
-
-        return description.substring(0, 160) || 'Проект от Pensa Club за пенсионери в България';
-    };
-
-    const getProjectStructuredData = () => {
-        if (!currentProject) return null;
-
-        return {
-            "@context": "https://schema.org",
-            "@type": "Project",
-            "name": currentProject.title,
-            "description": getProjectDescription(),
-            "image": getProjectMetaImage(),
-            "url": `https://www.pensa.club/projects/${slug}`,
-            "funder": "Pensa Club"
-        };
-    };
-
     const canApply = currentProject?.applicationStatus === 'open' &&
         (currentProject.currentParticipants || 0) < (currentProject.maxParticipants || Infinity) &&
         !deadlinePassed;
 
+
+    // ✅ META DATA (ДИНАМИЧЕН SEO)
+    const metaData = useMemo(() => {
+        if (!currentProject) {
+            return {
+                title: 'Проект | Pensa Club',
+                description: 'Зареждане на проект...',
+                keywords: 'проект, Pensa Club',
+                image: '/images/iniciatives/iniciatives-2.jpg',
+                author: 'Pensa Foundation',
+                section: null,
+                tags: []
+            };
+        }
+
+        // Description - извличане от fullDescription или shortDescription
+        let description = '';
+        if (currentProject.fullDescription) {
+            if (typeof currentProject.fullDescription === 'string') {
+                description = currentProject.fullDescription.replace(/<[^>]*>/g, '');
+            }
+        } else if (currentProject.shortDescription) {
+            if (typeof currentProject.shortDescription === 'string') {
+                description = currentProject.shortDescription.replace(/<[^>]*>/g, '');
+            }
+        }
+        description = description.substring(0, 160) || 'Проект от Pensa Club за пенсионери в България';
+
+        // Keywords
+        const baseKeywords = [
+            'проект',
+            'Pensa Club',
+            'пенсионери',
+            'дигитална грамотност'
+        ];
+
+        if (currentProject.category) {
+            baseKeywords.push(currentProject.category.toLowerCase());
+        }
+
+        if (currentProject.tags && Array.isArray(currentProject.tags)) {
+            baseKeywords.push(...currentProject.tags.map(tag => tag.toLowerCase()));
+        }
+
+        // Image
+        const image = currentProject.mainImage?.src || '/images/iniciatives/iniciatives-2.jpg';
+
+        // Author - от contact или default
+        const author = currentProject.contact?.name || 'Pensa Foundation';
+
+        // Section - category
+        const section = currentProject.category || null;
+
+        // Tags
+        const tags = currentProject.tags || [];
+
+        return {
+            title: `${currentProject.title} | Pensa Club`,
+            description,
+            keywords: baseKeywords.join(', '),
+            image,
+            author,
+            section,
+            tags
+        };
+    }, [currentProject]);
+
+    // ✅ STRUCTURED DATA - PROJECT/CREATIVEWORK
+    const structuredData = useMemo(() => {
+        if (!currentProject) return null;
+
+        return {
+            "@context": "https://schema.org",
+            "@type": "CreativeWork",
+            "name": currentProject.title,
+            "description": metaData.description,
+            "image": metaData.image,
+            "url": `https://pensa.club/projects/${slug}`,
+            "author": {
+                "@type": currentProject.contact?.name ? "Person" : "Organization",
+                "name": currentProject.contact?.name || "Pensa Club"
+            },
+            "creator": {
+                "@type": "Organization",
+                "name": "Pensa Club",
+                "url": "https://pensa.club"
+            },
+            "publisher": {
+                "@type": "Organization",
+                "name": "Pensa Foundation",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://pensa.club/logo.png"
+                }
+            },
+            ...(currentProject.timeline?.startDate && {
+                "datePublished": currentProject.timeline.startDate
+            }),
+            ...(currentProject.timeline?.endDate && {
+                "dateModified": currentProject.timeline.endDate
+            }),
+            ...(currentProject.category && {
+                "genre": currentProject.category
+            }),
+            ...(currentProject.tags && {
+                "keywords": currentProject.tags.join(', ')
+            }),
+            ...(currentProject.budget?.total && {
+                "offers": {
+                    "@type": "Offer",
+                    "price": currentProject.budget.total,
+                    "priceCurrency": currentProject.budget.currency || "BGN"
+                }
+            }),
+            ...(locationText && {
+                "contentLocation": {
+                    "@type": "Place",
+                    "name": locationText
+                }
+            }),
+            "inLanguage": "bg"
+        };
+    }, [currentProject, metaData, slug, locationText]);
+
     return (
         <>
-            <Helmet>
-                <title>{currentProject?.title ? `${currentProject.title} | Pensa Club` : 'Проект | Pensa Club'}</title>
-                <meta name="description" content={getProjectDescription()} />
-
-                <meta property="og:title" content={currentProject?.title || 'Проект | Pensa Club'} />
-                <meta property="og:description" content={getProjectDescription()} />
-                <meta property="og:image" content={getProjectMetaImage()} />
-                <meta property="og:url" content={`https://www.pensa.club/projects/${slug}`} />
-                <meta property="og:type" content="article" />
-                <meta property="og:site_name" content="Pensa Club" />
-
-                {currentProject?.category && (
-                    <meta property="article:section" content={currentProject.category} />
-                )}
-
-                {currentProject?.timeline?.startDate && (
-                    <meta property="article:published_time" content={currentProject.timeline.startDate} />
-                )}
-                <script type="application/ld+json">
-                    {JSON.stringify(getProjectStructuredData())}
-                </script>
-                <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:title" content={currentProject?.title || 'Проект | Pensa Club'} />
-                <meta name="twitter:description" content={getProjectDescription()} />
-                <meta name="twitter:image" content={getProjectMetaImage()} />
-            </Helmet>
+            <SEOHead
+                title={metaData.title}
+                description={metaData.description}
+                keywords={metaData.keywords}
+                image={metaData.image}
+                type="article"
+                publishedTime={currentProject?.timeline?.startDate}
+                modifiedTime={currentProject?.timeline?.endDate || currentProject?.updatedAt}
+                author={metaData.author}
+                section={metaData.section}
+                tags={metaData.tags}
+                structuredData={structuredData}
+            />
             <div className="project-view-container">
                 {/* Hero Section */}
                 <section className="project-view-hero">
@@ -827,8 +901,8 @@ export const ProjectView = () => {
                                                         )}
                                                     </div>
 
-                                                    
-                                                    <a    href={material.downloadUrl}
+
+                                                    <a href={material.downloadUrl}
                                                         className="download-card-button"
                                                         download
                                                         target="_blank"
@@ -1016,8 +1090,8 @@ export const ProjectView = () => {
                         <div className="email-modal-container" onClick={(e) => e.stopPropagation()}>
                             <div className="email-modal-header">
                                 <h3>Изпрати имейл до {emailRecipient.name}</h3>
-                                <button 
-                                    className="email-modal-close" 
+                                <button
+                                    className="email-modal-close"
                                     onClick={closeEmailModal}
                                     aria-label="Затвори"
                                 >

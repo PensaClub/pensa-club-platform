@@ -1,5 +1,8 @@
-const { article, mainImage, bot_log } = require('../sequelize/models');
+const { article, mainImage, project, initiative, club } = require('../sequelize/models');
 const generateArticleMetaHTML = require('../utils/metaGenerator');
+const generateProjectMetaHTML = require('../utils/projectMetaGenerator');
+const generateInitiativeMetaHTML = require('../utils/initiativeMetaGenerator');
+const generateClubMetaHTML = require('../utils/clubMetaGenerator');
 
 /**
  * Проверява дали User-Agent е от социална мрежа bot
@@ -47,17 +50,35 @@ function getBotName(userAgent) {
 /**
  * Записва bot request в базата данни
  */
-async function logBotRequest(botName, articleId, articleSlug, userAgent, ip) {
+async function logBotRequest(botName, contentType, contentId, contentSlug, userAgent, ip) {
     try {
-        await bot_log.create({
+        const { bot_log } = require('../sequelize/models');
+        
+        const logData = {
             bot: botName,
-            articleId: articleId,
-            articleSlug: articleSlug,
+            contentType: contentType, // 'article', 'project', 'initiative', 'club'
             userAgent: userAgent,
             ip: ip,
             timestamp: new Date()
-        });
-        console.log(`✅ Bot log saved: ${botName} → ${articleSlug}`);
+        };
+
+        // Добавяме специфичните полета според типа
+        if (contentType === 'article') {
+            logData.articleId = contentId;
+            logData.articleSlug = contentSlug;
+        } else if (contentType === 'project') {
+            logData.projectId = contentId;
+            logData.projectSlug = contentSlug;
+        } else if (contentType === 'initiative') {
+            logData.initiativeId = contentId;
+            logData.initiativeSlug = contentSlug;
+        } else if (contentType === 'club') {
+            logData.clubId = contentId;
+            logData.clubSlug = contentSlug;
+        }
+
+        await bot_log.create(logData);
+        console.log(`✅ Bot log saved: ${botName} → ${contentType}/${contentSlug}`);
     } catch (error) {
         console.error('❌ Error saving bot log:', error);
     }
@@ -83,52 +104,157 @@ async function botDetector(req, res, next) {
         ip: req.ip
     });
 
-    // Проверка дали е article URL
-    const articleUrlPattern = /^\/articles\/([a-zA-Z0-9-]+)$/;
-    const match = req.path.match(articleUrlPattern);
-    
-    if (!match) {
-        return next(); // Не е article URL, продължи нормално
-    }
-    
-    const slug = match[1];
+    // URL Pattern Matching
+    const articleMatch = req.path.match(/^\/articles\/([a-zA-Z0-9-]+)$/);
+    const projectMatch = req.path.match(/^\/projects\/([a-zA-Z0-9-]+)$/);
+    const initiativeMatch = req.path.match(/^\/initiatives\/([a-zA-Z0-9-]+)$/);
+    const clubMatch = req.path.match(/^\/clubs\/([a-zA-Z0-9-]+)$/);
     
     try {
-        // Извличане на статията от DB
-        const foundArticle = await article.findOne({
-            where: { slug },
-            include: [
-                {
-                    model: mainImage,
-                    as: 'mainImage',
-                    attributes: ['id', 'type', 'sources', 'alt'],
-                }
-            ],
-            attributes: ['id', 'title', 'slug', 'summary', 'author', 'publishDate', 'tags']
-        });
-        
-        if (!foundArticle) {
-            return next(); // Статията не съществува, продължи нормално
+        // ==================== ARTICLE ====================
+        if (articleMatch) {
+            const slug = articleMatch[1];
+            
+            const foundArticle = await article.findOne({
+                where: { slug },
+                include: [
+                    {
+                        model: mainImage,
+                        as: 'mainImage',
+                        attributes: ['id', 'type', 'sources', 'alt'],
+                    }
+                ],
+                attributes: ['id', 'title', 'slug', 'summary', 'author', 'publishDate', 'updatedAt', 'tags']
+            });
+            
+            if (!foundArticle) {
+                return next();
+            }
+            
+            await logBotRequest(
+                botName,
+                'article',
+                foundArticle.id,
+                foundArticle.slug,
+                userAgent,
+                req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress
+            );
+            
+            const html = generateArticleMetaHTML(foundArticle);
+            return res.send(html);
         }
         
-        // ✅ ЗАПИСВА В БАЗАТА
-        await logBotRequest(
-            botName,
-            foundArticle.id,
-            foundArticle.slug,
-            userAgent,
-            req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress
-        );
+        // ==================== PROJECT ====================
+        if (projectMatch) {
+            const slug = projectMatch[1];
+            
+            const foundProject = await project.findOne({
+                where: { slug },
+                include: [
+                    {
+                        model: mainImage,
+                        as: 'mainImage',
+                        attributes: ['id', 'type', 'src', 'alt'],
+                    }
+                ],
+                attributes: [
+                    'id', 'title', 'slug', 'shortDescription', 'fullDescription',
+                    'category', 'tags', 'status', 'timeline', 'budget',
+                    'contact', 'location', 'createdAt', 'updatedAt'
+                ]
+            });
+            
+            if (!foundProject) {
+                return next();
+            }
+            
+            await logBotRequest(
+                botName,
+                'project',
+                foundProject.id,
+                foundProject.slug,
+                userAgent,
+                req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress
+            );
+            
+            const html = generateProjectMetaHTML(foundProject);
+            return res.send(html);
+        }
         
-        // Генериране на HTML с meta tags
-        const html = generateArticleMetaHTML(foundArticle);
+        // ==================== INITIATIVE ====================
+        if (initiativeMatch) {
+            const slug = initiativeMatch[1];
+            
+            const foundInitiative = await initiative.findOne({
+                where: { slug },
+                include: [
+                    {
+                        model: mainImage,
+                        as: 'mainImage',
+                        attributes: ['id', 'type', 'src', 'alt'],
+                    }
+                ],
+                attributes: [
+                    'id', 'title', 'slug', 'shortDescription', 'detailedDescription',
+                    'category', 'tags', 'status', 'startDate', 'endDate',
+                    'location', 'expectedBudget', 'currency', 'organization',
+                    'responsible', 'createdAt', 'updatedAt'
+                ]
+            });
+            
+            if (!foundInitiative) {
+                return next();
+            }
+            
+            await logBotRequest(
+                botName,
+                'initiative',
+                foundInitiative.id,
+                foundInitiative.slug,
+                userAgent,
+                req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress
+            );
+            
+            const html = generateInitiativeMetaHTML(foundInitiative);
+            return res.send(html);
+        }
         
-        // Изпрати HTML към bot-а
-        return res.send(html);
+        // ==================== CLUB ====================
+        if (clubMatch) {
+            const slug = clubMatch[1];
+            
+            const foundClub = await club.findOne({
+                where: { slug },
+                attributes: [
+                    'id', 'name', 'slug', 'shortDescription', 'fullDescription',
+                    'category', 'location', 'contacts', 'mainImage', 'logo',
+                    'foundedYear', 'metadata', 'createdAt', 'updatedAt'
+                ]
+            });
+            
+            if (!foundClub) {
+                return next();
+            }
+            
+            await logBotRequest(
+                botName,
+                'club',
+                foundClub.id,
+                foundClub.slug,
+                userAgent,
+                req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress
+            );
+            
+            const html = generateClubMetaHTML(foundClub);
+            return res.send(html);
+        }
+        
+        // Ако не е нито article, project, initiative, club
+        return next();
         
     } catch (error) {
         console.error('Error in botDetector middleware:', error);
-        return next(); // При грешка, продължи нормално
+        return next(); 
     }
 }
 
