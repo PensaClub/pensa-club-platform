@@ -10,13 +10,13 @@ import { TextZoom } from '../../TextZoom/TextZoom';
 import './allClubs.css';
 import { useClubContext } from '../../contexts/ClubContext';
 import ScrollToTop from '../../ScrollToTop/ScrollToTop';
+import SEOHead from '../../SEO/SEOHead';
 
 export const AllClubs = () => {
   const { t, i18n } = useTranslation();
-  
-  // ✅ Използваме ClubContext вместо mockClubsData
+
   const { getAllClubs, isLoading } = useClubContext();
-  
+
   const [clubs, setClubs] = useState([]);
   const [filteredClubs, setFilteredClubs] = useState([]);
   const [showMap, setShowMap] = useState(true);
@@ -28,13 +28,13 @@ export const AllClubs = () => {
     sortBy: 'name'
   });
   const mapRef = useRef(null);
-  
+
   // ✅ Заменяме fetchClubs да използва ClubContext
   const fetchClubs = useCallback(async () => {
     try {
-      console.log('🔄 Fetching clubs from API...');
+
       const response = await getAllClubs(false, 1, 500); // forceRefresh=false, page=1, limit=100
-      
+
       // Обработваме response-а
       let clubsData = [];
       if (response.clubs) {
@@ -50,12 +50,12 @@ export const AllClubs = () => {
 
       setClubs(clubsData);
       setFilteredClubs(clubsData);
-      
+
       // Показваме информация за fallback ако има
       if (response.isFromFallback) {
         console.info('📋 Using fallback mock data due to API error');
       }
-      
+
     } catch (error) {
       console.error('❌ Error fetching clubs:', error);
       // В случай на грешка, се ползва fallback-ът от контекста
@@ -71,7 +71,7 @@ export const AllClubs = () => {
   // Филтриране на клубове
   const handleFilterChange = useCallback((filters) => {
     setSearchFilters(filters);
-    
+
     let filtered = [...clubs];
 
     // Търсене по име или описание
@@ -120,14 +120,14 @@ export const AllClubs = () => {
   const toggleMapView = useCallback(() => {
     setShowMap(prev => {
       const newShowMap = !prev;
-      
+
       if (newShowMap) {
         requestAnimationFrame(() => {
           setTimeout(() => {
             if (mapRef.current) {
               const headerHeight = 90;
               const elementTop = mapRef.current.offsetTop - headerHeight;
-              
+
               window.scrollTo({
                 top: elementTop,
                 behavior: 'smooth'
@@ -136,7 +136,7 @@ export const AllClubs = () => {
           }, 150);
         });
       }
-      
+
       return newShowMap;
     });
   }, []);
@@ -155,7 +155,7 @@ export const AllClubs = () => {
     const totalMembers = clubs.reduce((sum, club) => sum + (club.membership?.totalMembers || 0), 0);
     const activeClubs = clubs.filter(club => club.status === 'active' || club.metadata?.isActive).length;
     const cities = [...new Set(clubs.map(club => club.location?.city).filter(Boolean))].length;
-    
+
     return {
       totalClubs: clubs.length,
       totalMembers,
@@ -164,15 +164,134 @@ export const AllClubs = () => {
     };
   }, [clubs]);
 
+  // ✅ META DATA - ДИНАМИЧНИ META TAGS
+  const metaData = useMemo(() => {
+    // Base keywords
+    const baseKeywords = [
+      'клубове за пенсионери',
+      'Pensa Club',
+      'дигитална грамотност',
+      'социални клубове',
+      'активни пенсионери',
+      'клубове България'
+    ];
+
+    // Dynamic title based on filters
+    let title = 'Клубове за пенсионери | Pensa Club';
+    let description = `Открийте ${statistics.totalClubs} активни клуба за пенсионери в ${statistics.cities} града. Присъединете се към общността на Pensa Club и открийте нови приятели и възможности.`;
+
+    // If there are active filters
+    if (searchFilters.searchTerm || searchFilters.city !== 'all' || searchFilters.category !== 'all') {
+      const filterParts = [];
+
+      if (searchFilters.city && searchFilters.city !== 'all') {
+        filterParts.push(searchFilters.city);
+        baseKeywords.push(searchFilters.city.toLowerCase());
+      }
+
+      if (searchFilters.category && searchFilters.category !== 'all') {
+        const categoryLabel = getCategoryLabel(searchFilters.category);
+        filterParts.push(categoryLabel);
+        baseKeywords.push(searchFilters.category.toLowerCase());
+      }
+
+      if (searchFilters.searchTerm) {
+        filterParts.push(`"${searchFilters.searchTerm}"`);
+        baseKeywords.push(searchFilters.searchTerm.toLowerCase());
+      }
+
+      title = `${filteredClubs.length} ${filteredClubs.length === 1 ? 'клуб' : 'клуба'} ${filterParts.join(' ')} | Pensa Club`;
+      description = `Намерени ${filteredClubs.length} клуба за пенсионери ${filterParts.join(' ')}. Преглед на клубове, информация за членство и дейности.`;
+    }
+
+    return {
+      title,
+      description,
+      keywords: baseKeywords.join(', '),
+      image: '/images/iniciatives/iniciatives-2.jpg'
+    };
+  }, [statistics, filteredClubs.length, searchFilters, getCategoryLabel]);
+
+  // ✅ STRUCTURED DATA - ITEMLIST + COLLECTIONPAGE
+  const structuredData = useMemo(() => {
+    const clubsToShow = filteredClubs.slice(0, 10);
+
+    return {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "CollectionPage",
+          "name": metaData.title,
+          "description": metaData.description,
+          "url": "https://pensa.club/clubs",
+          "inLanguage": i18n.language,
+          "breadcrumb": {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Начало",
+                "item": "https://pensa.club"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Клубове",
+                "item": "https://pensa.club/clubs"
+              }
+            ]
+          }
+        },
+        {
+          "@type": "ItemList",
+          "name": "Клубове за пенсионери - Pensa Club",
+          "description": metaData.description,
+          "url": "https://pensa.club/clubs",
+          "numberOfItems": filteredClubs.length,
+          "itemListElement": clubsToShow.map((club, index) => ({
+            "@type": "ListItem",
+            "position": index + 1,
+            "item": {
+              "@type": "Organization",
+              "name": club.name,
+              "description": club.shortDescription,
+              "url": `https://pensa.club/clubs/${club.slug}`,
+              ...(club.location && {
+                "address": {
+                  "@type": "PostalAddress",
+                  "streetAddress": club.location.address,
+                  "addressLocality": club.location.city,
+                  "postalCode": club.location.postalCode,
+                  "addressCountry": "BG"
+                }
+              }),
+              ...(club.foundedYear && {
+                "foundingDate": club.foundedYear.toString()
+              }),
+              ...(club.membership?.totalMembers && {
+                "numberOfEmployees": club.membership.totalMembers
+              }),
+              "memberOf": {
+                "@type": "Organization",
+                "name": "Pensa Club"
+              }
+            }
+          }))
+        }
+      ]
+    };
+  }, [filteredClubs, metaData, i18n.language]);
+
   const handleClubSelectOnMap = useCallback((club) => {
     setSelectedClub(club);
     setShowMap(true);
-    
+
     setTimeout(() => {
       if (mapRef.current) {
         const headerHeight = 90;
         const elementTop = mapRef.current.offsetTop - headerHeight;
-        
+
         window.scrollTo({
           top: elementTop,
           behavior: 'smooth'
@@ -183,57 +302,10 @@ export const AllClubs = () => {
 
   // Функция за получаване на переведено име на категория
   const getCategoryLabel = useCallback((category) => {
-    return t(`clubs.AllClubs.categories.${category}`, { 
-      defaultValue: category 
+    return t(`clubs.AllClubs.categories.${category}`, {
+      defaultValue: category
     });
   }, [t]);
-
-  // Генериране на динамични мета данни
-  const metaData = useMemo(() => {
-    const baseTitle = t('clubs.AllClubs.meta.baseTitle');
-    const baseDescription = t('clubs.AllClubs.meta.baseDescription');
-    
-    if (searchFilters.searchTerm || searchFilters.city || searchFilters.category) {
-      const filterParts = [];
-      if (searchFilters.city && searchFilters.city !== 'all') {
-        filterParts.push(t('clubs.AllClubs.meta.inCity', { city: searchFilters.city }));
-      }
-      if (searchFilters.category && searchFilters.category !== 'all') {
-        filterParts.push(getCategoryLabel(searchFilters.category));
-      }
-      if (searchFilters.searchTerm) {
-        filterParts.push(`"${searchFilters.searchTerm}"`);
-      }
-
-      const filteredTitle = t('clubs.AllClubs.meta.filteredTitle', {
-        filters: filterParts.join(' '),
-        count: filteredClubs.length
-      });
-      const filteredDescription = t('clubs.AllClubs.meta.filteredDescription', {
-        count: filteredClubs.length,
-        filters: filterParts.join(' ')
-      });
-      
-      return {
-        title: filteredTitle,
-        description: filteredDescription
-      };
-    }
-
-    return {
-      title: t('clubs.AllClubs.meta.fullTitle', {
-        baseTitle,
-        totalClubs: statistics.totalClubs,
-        totalMembers: statistics.totalMembers
-      }),
-      description: t('clubs.AllClubs.meta.fullDescription', {
-        baseDescription,
-        totalClubs: statistics.totalClubs,
-        cities: statistics.cities,
-        totalMembers: statistics.totalMembers
-      })
-    };
-  }, [searchFilters, filteredClubs.length, statistics, t, getCategoryLabel]);
 
   // Get current language for URLs and meta
   const currentLang = i18n.language;
@@ -243,11 +315,12 @@ export const AllClubs = () => {
   if (isLoading) {
     return (
       <>
-        <Helmet>
-          <title>{t('clubs.AllClubs.loading.title')}</title>
-          <meta name="description" content={t('clubs.AllClubs.loading.description')} />
-          <meta name="robots" content="noindex" />
-        </Helmet>
+        <SEOHead
+          title={t('clubs.AllClubs.loading.title', { defaultValue: 'Зареждане на клубове...' })}
+          description={t('clubs.AllClubs.loading.description', { defaultValue: 'Моля, изчакайте. Зареждаме списъка с клубове.' })}
+          keywords="клубове, пенсионери, Pensa Club"
+          noindex={true}
+        />
         <div className="all-clubs-loading-container">
           <LoadingSpinner />
           <p className="all-clubs-loading-text">{t('clubs.AllClubs.loading.text')}</p>
@@ -259,104 +332,35 @@ export const AllClubs = () => {
   return (
     <>
       {/* Helmet и останалата част от компонента остават същите */}
-      <Helmet>
-        <title>{metaData.title}</title>
-        <meta name="description" content={metaData.description} />
-        
-        {/* Keywords */}
-        <meta name="keywords" content={t('clubs.AllClubs.meta.keywords')} />
-        
-        {/* Open Graph / Facebook */}
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content={metaData.title} />
-        <meta property="og:description" content={metaData.description} />
-        <meta property="og:image" content="/images/og-clubs-list.jpg" />
-        <meta property="og:url" content={currentUrl} />
-        <meta property="og:site_name" content={t('clubs.AllClubs.meta.siteName')} />
-        
-        {/* Twitter */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={metaData.title} />
-        <meta name="twitter:description" content={metaData.description} />
-        <meta name="twitter:image" content="/images/twitter-clubs-list.jpg" />
-        
-        {/* Additional meta tags */}
-        <meta name="author" content={t('clubs.AllClubs.meta.siteName')} />
-        <meta name="robots" content="index, follow" />
-        <meta name="googlebot" content="index, follow" />
-        
-        {/* Canonical URL */}
-        <link rel="canonical" href={currentUrl} />
-        
-        {/* Structured data for better SEO */}
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "CollectionPage",
-            "name": metaData.title,
-            "description": metaData.description,
-            "url": currentUrl,
-            "inLanguage": currentLang,
-            "mainEntity": {
-              "@type": "ItemList",
-              "numberOfItems": statistics.totalClubs,
-              "itemListElement": filteredClubs.slice(0, 5).map((club, index) => ({
-                "@type": "Organization",
-                "position": index + 1,
-                "name": club.name,
-                "description": club.shortDescription,
-                "address": {
-                  "@type": "PostalAddress",
-                  "streetAddress": club.location?.address,
-                  "addressLocality": club.location?.city,
-                  "postalCode": club.location?.postalCode,
-                  "addressCountry": "BG"
-                },
-                "foundingDate": club.foundedYear?.toString(),
-                "memberOf": t('clubs.AllClubs.meta.memberOf')
-              }))
-            },
-            "breadcrumb": {
-              "@type": "BreadcrumbList",
-              "itemListElement": [
-                {
-                  "@type": "ListItem",
-                  "position": 1,
-                  "name": t('common.navigation.home'),
-                  "item": currentOrigin
-                },
-                {
-                  "@type": "ListItem", 
-                  "position": 2,
-                  "name": t('clubs.AllClubs.breadcrumb'),
-                  "item": currentUrl
-                }
-              ]
-            }
-          })}
-        </script>
-      </Helmet>
-      
+      <SEOHead
+        title={metaData.title}
+        description={metaData.description}
+        keywords={metaData.keywords}
+        image={metaData.image}
+        type="website"
+        structuredData={structuredData}
+      />
+
       <TextZoom />
       <div className="all-clubs-container">
         {/* Фонов слой със снимки */}
         <div className="all-clubs-bg-layer">
           <div className="all-clubs-bg-gradient"></div>
           <div className="all-clubs-bg-images">
-            <div 
-              className="bg-image bg-image-1" 
+            <div
+              className="bg-image bg-image-1"
               style={{ backgroundImage: `url('/images/homePage/about-img.webp')` }}
             ></div>
-            <div 
-              className="bg-image bg-image-2" 
+            <div
+              className="bg-image bg-image-2"
               style={{ backgroundImage: `url('/images/homePage/hero-img.jpg')` }}
             ></div>
-            <div 
-              className="bg-image bg-image-3" 
+            <div
+              className="bg-image bg-image-3"
               style={{ backgroundImage: `url('/images/homePage/old-people-sectinon-2.webp')` }}
             ></div>
-            <div 
-              className="bg-image bg-image-4" 
+            <div
+              className="bg-image bg-image-4"
               style={{ backgroundImage: `url('/images/homePage/test1.webp')` }}
             ></div>
           </div>
@@ -382,7 +386,7 @@ export const AllClubs = () => {
                   {t('clubs.AllClubs.header.subtitle')}
                 </p>
               </div>
-              
+
               {/* Статистики отдясно */}
               <div className="all-clubs-stats">
                 <div className="stat-card-clubs">
@@ -439,7 +443,7 @@ export const AllClubs = () => {
                   ) : (
                     <div className="all-clubs-grid">
                       {filteredClubs.map((club, index) => (
-                        <div 
+                        <div
                           key={club.id}
                           className="club-card-wrapper"
                         >

@@ -9,6 +9,9 @@ const SEOHead = ({
   type = 'website',
   publishedTime = null,
   modifiedTime = null,
+  author = null,
+  section = null,
+  tags = [],
   noindex = false,
   canonical = null,
   structuredData = null
@@ -16,13 +19,9 @@ const SEOHead = ({
   const { i18n } = useTranslation();
   const currentLanguage = i18n.language || 'bg';
   
-  // Базов URL на сайта
   const baseUrl = 'https://pensa.club';
-  
-  // Текущия URL
   const currentUrl = canonical || window.location.href;
   
-  // Locale mapping
   const localeMap = {
     'bg': 'bg_BG',
     'de': 'de_DE',
@@ -34,7 +33,6 @@ const SEOHead = ({
     .filter(lang => lang !== currentLanguage)
     .map(lang => localeMap[lang]);
 
-  // Full image URL
   const fullImageUrl = image.startsWith('http') ? image : `${baseUrl}${image}`;
 
   return (
@@ -44,7 +42,7 @@ const SEOHead = ({
       <title>{title}</title>
       <meta name="description" content={description} />
       {keywords && <meta name="keywords" content={keywords} />}
-      <meta name="author" content="Pensa Foundation" />
+      <meta name="author" content={author || "Pensa Foundation"} />
       <meta name="language" content={currentLanguage} />
       <meta httpEquiv="content-language" content={currentLanguage} />
       
@@ -58,7 +56,7 @@ const SEOHead = ({
       {/* Canonical URL */}
       <link rel="canonical" href={currentUrl} />
       
-      {/* hreflang Tags за мултиезичност */}
+      {/* hreflang Tags */}
       <link rel="alternate" hreflang="bg" href={currentUrl} />
       <link rel="alternate" hreflang="de" href={currentUrl} />
       <link rel="alternate" hreflang="en" href={currentUrl} />
@@ -79,13 +77,24 @@ const SEOHead = ({
         <meta key={locale} property="og:locale:alternate" content={locale} />
       ))}
       
-      {/* Article Meta Tags (само за type="article") */}
+      {/* Article Meta Tags (за type="article") */}
       {type === 'article' && publishedTime && (
         <meta property="article:published_time" content={publishedTime} />
       )}
       {type === 'article' && modifiedTime && (
         <meta property="article:modified_time" content={modifiedTime} />
       )}
+      {type === 'article' && author && (
+        <meta property="article:author" content={author} />
+      )}
+      {type === 'article' && section && (
+        <meta property="article:section" content={section} />
+      )}
+      {type === 'article' && tags.length > 0 && 
+        tags.map((tag, index) => (
+          <meta key={index} property="article:tag" content={tag} />
+        ))
+      }
       
       {/* Facebook */}
       <meta property="fb:pages" content="61578204366479" />
