@@ -55,10 +55,12 @@ function getBotName(userAgent) {
  */
 async function logBotRequest(botName, contentType, contentId, contentSlug, userAgent, ip) {
     try {
-        const { bot_log } = require('../sequelize/models');
-
-        // 🌍 Географско проследяване
+        // 🌍 GeoIP Lookup
         const geo = geoip.lookup(ip);
+        
+        // Debug log
+        console.log(`🔍 IP: ${ip}, Geo:`, geo ? `${geo.country} (${geo.city || 'N/A'})` : 'NULL');
+        
         const country = geo ? geo.country : null;
         const city = geo ? geo.city : null;
         const region = geo ? geo.region : null;
@@ -68,33 +70,34 @@ async function logBotRequest(botName, contentType, contentId, contentSlug, userA
             contentType: contentType,
             userAgent: userAgent,
             ip: ip,
-            country: country,
-            city: city,
-            region: region,
+            country: country,    // ✅ ISO код (BG, US, DE) или NULL
+            city: city,          // ✅ Град или NULL
+            region: region,      // ✅ Регион или NULL
             timestamp: new Date()
         };
 
-        // Добавяме специфичните полета според типа
-        if (contentType === 'article') {
-            logData.articleId = contentId;
-            logData.articleSlug = contentSlug;
-        } else if (contentType === 'project') {
-            logData.projectId = contentId;
-            logData.projectSlug = contentSlug;
-        } else if (contentType === 'initiative') {
-            logData.initiativeId = contentId;
-            logData.initiativeSlug = contentSlug;
-        } else if (contentType === 'club') {
-            logData.clubId = contentId;
-            logData.clubSlug = contentSlug;
-        } else if (contentType === 'page') {
-            logData.pageSlug = contentSlug;
-        } else if (contentType === 'mentor') {
-            logData.mentorId = contentId;
-        }
+        // Добави contentId полетата само ако не са null
+        if (contentType === 'article' && contentId) logData.articleId = contentId;
+        if (contentType === 'article' && contentSlug) logData.articleSlug = contentSlug;
+        
+        if (contentType === 'project' && contentId) logData.projectId = contentId;
+        if (contentType === 'project' && contentSlug) logData.projectSlug = contentSlug;
+        
+        if (contentType === 'initiative' && contentId) logData.initiativeId = contentId;
+        if (contentType === 'initiative' && contentSlug) logData.initiativeSlug = contentSlug;
+        
+        if (contentType === 'club' && contentId) logData.clubId = contentId;
+        if (contentType === 'club' && contentSlug) logData.clubSlug = contentSlug;
+        
+        if (contentType === 'mentor' && contentId) logData.mentorId = contentId;
+        if (contentType === 'mentor' && contentSlug) logData.mentorSlug = contentSlug;
+        
+        if (contentType === 'page' && contentSlug) logData.pageSlug = contentSlug;
 
         await bot_log.create(logData);
-        console.log(`✅ Bot log saved: ${botName} → ${contentType}/${contentSlug || contentId} (${country || 'Unknown'})`);
+        
+        const geoInfo = country ? `${country} (${city || 'Unknown'})` : 'Unknown Location';
+        console.log(`✅ Bot log saved: ${botName} → ${contentType}/${contentSlug || contentId} | ${geoInfo}`);
     } catch (error) {
         console.error('❌ Error saving bot log:', error);
     }
