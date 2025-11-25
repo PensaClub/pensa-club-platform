@@ -12786,5 +12786,25 @@
     "warning": "Diese Aktion ist unwiderruflich und entfernt alle Studentendaten.",
     "delete": "Student löschen",
     "deleting": "Wird gelöscht..."
+  },
+   "adminDgEditStudentModal": {
+    "title": "Student bearbeiten",
+    "currentAvatar": "Aktuelles Bild",
+    "avatarHint": "Bildänderung ist derzeit nicht verfügbar",
+    "name": "Name",
+    "namePlaceholder": "Name eingeben",
+    "email": "E-Mail",
+    "emailPlaceholder": "E-Mail eingeben",
+    "phone": "Telefon",
+    "phonePlaceholder": "Telefon eingeben (optional)",
+    "status": "Status",
+    "save": "Änderungen speichern",
+    "saving": "Wird gespeichert...",
+    "errors": {
+      "nameRequired": "Name ist erforderlich",
+      "emailRequired": "E-Mail ist erforderlich",
+      "emailInvalid": "Ungültiges E-Mail-Format",
+      "phoneInvalid": "Ungültige Telefonnummer"
+    }
   }
 }

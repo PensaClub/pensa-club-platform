@@ -2,7 +2,7 @@
 const academyController = require('express').Router();
 const { Op } = require('sequelize');
 
-const { mentor_application, mentor, mentor_course, user_account, admin_notification, sequelize, user_notification,student,user_details } = require('../sequelize/models/index');
+const { mentor_application, mentor, mentor_course, user_account, admin_notification, sequelize, user_notification, student, user_details } = require('../sequelize/models/index');
 const { getFirebaseDb } = require('../firebase/firebaseAdmin');
 const isAuth = require('../middlewares/isAuth.js');
 const rbac = require('../middlewares/rbac.js');
@@ -2628,6 +2628,7 @@ academyController.patch(
       const studentId = parseInt(req.params.id);
       const updates = req.body;
 
+
       const studentData = await student.findByPk(studentId);
 
       if (!studentData) {
@@ -2637,37 +2638,65 @@ academyController.patch(
         });
       }
 
-      const allowedFields = [
-        'phone',
-        'avatar',
-        'address',
-        'city',
-        'country',
-        'status',
-        'specialNeeds',
-        'adminNotes',
-        'emergencyContactName',
-        'emergencyContactPhone',
-        'preferredLanguage',
-        'preferredContactMethod',
-        'availabilityNotes'
+      const allowedStudentFields = [
+        'phone', 'avatar', 'address', 'city', 'country',
+        'status', 'specialNeeds', 'adminNotes',
+        'emergencyContactName', 'emergencyContactPhone',
+        'preferredLanguage', 'preferredContactMethod', 'availabilityNotes'
       ];
 
       const filteredUpdates = {};
-      allowedFields.forEach(field => {
+      allowedStudentFields.forEach(field => {
         if (updates[field] !== undefined) {
           filteredUpdates[field] = updates[field];
         }
       });
 
-      if (Object.keys(filteredUpdates).length === 0) {
+      if (updates.name !== undefined && updates.name.trim().length > 0) {
+
+        let userDetailsData = await user_details.findOne({
+          where: { userAccountsId: studentData.userId }
+        });
+
+
+        if (!userDetailsData) {
+          // ✅ СЪЗДАЙ user_details ако не съществува
+
+          userDetailsData = await user_details.create({
+            userAccountsId: studentData.userId,
+            username: updates.name.trim(),
+            workOptions: [],
+            skills: [],
+            interestOptions: []
+          });
+
+        } else {
+          // ✅ UPDATE съществуващ user_details
+          await userDetailsData.update({ username: updates.name.trim() });
+
+          // ✅ Reload to verify
+          await userDetailsData.reload();
+        }
+      }
+
+      // Check if any updates exist
+      if (Object.keys(filteredUpdates).length === 0 && updates.name === undefined) {
         return res.status(400).json({
           success: false,
           message: 'No valid fields to update'
         });
       }
 
-      await studentData.update(filteredUpdates);
+      // Update student fields
+      if (Object.keys(filteredUpdates).length > 0) {
+        await studentData.update(filteredUpdates);
+      }
+
+      // ✅ Create admin notification
+      const updatedFields = Object.keys(filteredUpdates);
+      if (updates.name !== undefined) {
+        updatedFields.push('name');
+      }
 
       await admin_notification.create({
         type: 'student_updated',
@@ -2675,7 +2704,7 @@ academyController.patch(
         message: `Student profile was updated by admin`,
         data: {
           studentId: studentData.id,
-          updatedFields: Object.keys(filteredUpdates)
+          updatedFields: updatedFields
         },
         read: false
       });

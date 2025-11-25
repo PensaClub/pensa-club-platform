@@ -2316,6 +2316,7 @@ mentorDashboardController.post(
         student_mentor_application, 
         student, 
         user_account,
+        user_details,
         mentor,
         mentor_history
       } = require('../sequelize/models/index');
@@ -2352,6 +2353,23 @@ mentorDashboardController.post(
           success: false,
           message: 'User not found'
         });
+      }
+
+      // ✅ 2.5. СЪЗДАЙ USER_DETAILS АКО НЕ СЪЩЕСТВУВА
+      let userDetailsData = await user_details.findOne({
+        where: { userAccountsId: application.userId }
+      });
+
+      if (!userDetailsData) {
+        
+        userDetailsData = await user_details.create({
+          userAccountsId: application.userId,
+          username: user.email.split('@')[0],
+          workOptions: [],
+          skills: [],
+          interestOptions: []
+        });
+        
       }
 
       // ✅ 3. ПРОМЕНИ ROLE НА 'student' (ако не е вече)
@@ -2487,7 +2505,6 @@ mentorDashboardController.post(
     }
   }
 );
-
 // ===============================
 // POST /api/mentors/dashboard/student-applications/:id/reject
 // Отхвърли заявка
@@ -2637,7 +2654,9 @@ mentorDashboardController.post(
         student_mentor_application, 
         student, 
         user_account,
-        mentor 
+        user_details,
+        mentor,
+        mentor_history
       } = require('../sequelize/models/index');
       const { tokenGenerator } = require('../utils/jwt');
       const { refreshToken } = require('../sequelize/models/index');
@@ -2674,6 +2693,23 @@ mentorDashboardController.post(
         });
       }
 
+      // ✅ 2.5. СЪЗДАЙ USER_DETAILS АКО НЕ СЪЩЕСТВУВА
+      let userDetailsData = await user_details.findOne({
+        where: { userAccountsId: application.userId }
+      });
+
+      if (!userDetailsData) {
+        
+        userDetailsData = await user_details.create({
+          userAccountsId: application.userId,
+          username: user.email.split('@')[0],
+          workOptions: [],
+          skills: [],
+          interestOptions: []
+        });
+        
+      }
+
       // ✅ 3. ПРОМЕНИ ROLE НА 'student' (ако не е вече)
       if (user.role !== 'student') {
         await user.update({ role: 'student' });
@@ -2694,6 +2730,9 @@ mentorDashboardController.post(
       let studentData = await student.findOne({
         where: { userId: application.userId }
       });
+
+      const isNewStudent = !studentData;
+      const oldMentorId = studentData?.currentMentorId || null;
 
       if (studentData) {
         // ✅ СТУДЕНТЪТ СЪЩЕСТВУВА - ЗАМЕНИ МЕНТОРА
@@ -2730,6 +2769,37 @@ mentorDashboardController.post(
       const mentorData = await mentor.findByPk(mentorId);
       await mentorData.update({
         studentsCount: mentorData.studentsCount + 1
+      });
+
+      // ✅ 5.5. СЪЗДАЙ MENTOR HISTORY ЗАПИС
+      
+      // Ако студентът вече съществуваше и сменихме ментора
+      if (!isNewStudent && oldMentorId && oldMentorId !== mentorId) {
+        // Завърши стария период
+        const oldHistory = await mentor_history.findOne({
+          where: {
+            studentId: studentData.id,
+            periodEnd: null
+          },
+          order: [['periodStart', 'DESC']]
+        });
+
+        if (oldHistory) {
+          await oldHistory.update({
+            periodEnd: new Date(),
+            reason: 'Reassigned to new mentor'
+          });
+        }
+      }
+
+      // Създай нов history запис за новия ментор
+      await mentor_history.create({
+        studentId: studentData.id,
+        mentorId: mentorId,
+        mentorName: mentorData.name,
+        periodStart: new Date(),
+        periodEnd: null,
+        reason: isNewStudent ? 'Initial assignment' : 'Reassigned from another mentor'
       });
 
       // ✅ 6. ОБНОВИ APPLICATION STATUS

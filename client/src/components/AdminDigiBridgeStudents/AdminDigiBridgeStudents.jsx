@@ -8,6 +8,7 @@ import { AdminDgStudentsFilters } from './StudentsFilters/AdminDgStudentsFilter'
 import { AdminDgStudentsTable } from './AdminDgStudentsTable/AdminDgStudentsTable';
 import { AdminDgStudentDetailsModal } from './AdminDgStudentDetailsModal/AdminDgStudentDetailsModal';
 import { AdminDgDeleteStudentConfirm } from './AdminDgDeleteStudentConfirm/AdminDgDeleteStudentConfirm';
+import { AdminDgEditStudentModal } from './AdminDgEditStudentModal/AdminDgEditStudentModal';
 
 export const AdminDigiBridgeStudents = () => {
   const { t } = useTranslation();
@@ -244,13 +245,13 @@ export const AdminDigiBridgeStudents = () => {
         />
       )}
 
-      {/* {showEditModal && (
-        <EditStudentModal
+      {showEditModal && (
+        <AdminDgEditStudentModal
           student={selectedStudent}
           onClose={() => setShowEditModal(false)}
           onSave={handleStudentUpdate}
         />
-      )} */}
+      )}
 
       {/* {showChangeMentorModal && (
         <ChangeMentorModal

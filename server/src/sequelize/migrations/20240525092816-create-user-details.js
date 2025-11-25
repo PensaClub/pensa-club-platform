@@ -1,3 +1,5 @@
+
+// 20240525092816-create-user-details.js
 "use strict";
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {

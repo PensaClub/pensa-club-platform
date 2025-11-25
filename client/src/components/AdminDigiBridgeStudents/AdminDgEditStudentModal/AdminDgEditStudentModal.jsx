@@ -11,10 +11,10 @@ export const AdminDgEditStudentModal = ({ student, onClose, onSave }) => {
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState({
-    name: student.name || '',
-    email: student.email || '',
-    phone: student.phone || '',
-    status: student.status || 'active'
+    name: student?.name || '',
+    email: student?.email || '',
+    phone: student?.phone || '',
+    status: student?.status || 'active'
   });
 
   const handleBackdropClick = useCallback((e) => {
@@ -26,17 +26,20 @@ export const AdminDgEditStudentModal = ({ student, onClose, onSave }) => {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData?.name.trim()) {
+    // ✅ Name - ЗАДЪЛЖИТЕЛНО
+    if (!formData.name.trim()) {
       newErrors.name = t('adminDgEditStudentModal.errors.nameRequired');
     }
 
-    if (!formData?.email.trim()) {
-      newErrors?.email = t('adminDgEditStudentModal.errors.emailRequired');
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData?.email)) {
+    // ✅ Email - ЗАДЪЛЖИТЕЛНО + ВАЛИДЕН ФОРМАТ
+    if (!formData.email.trim()) {
+      newErrors.email = t('adminDgEditStudentModal.errors.emailRequired');
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = t('adminDgEditStudentModal.errors.emailInvalid');
     }
 
-    if (formData?.phone && !/^\+?[\d\s\-()]+$/.test(formData?.phone)) {
+    // ✅ Phone - ОПЦИОНАЛНО, НО АКО ИМА - ВАЛИДЕН ФОРМАТ
+    if (formData.phone && formData.phone.trim() && !/^\+?[\d\s\-()]+$/.test(formData.phone)) {
       newErrors.phone = t('adminDgEditStudentModal.errors.phoneInvalid');
     }
 
@@ -111,7 +114,7 @@ export const AdminDgEditStudentModal = ({ student, onClose, onSave }) => {
             <div className="adminDgEditStudentModal-avatarSection">
               <div className="adminDgEditStudentModal-avatar">
                 {student?.avatar ? (
-                  <img src={student?.avatar} alt={student?.name} />
+                  <img src={student.avatar} alt={student?.name || 'Student'} />
                 ) : (
                   <div className="adminDgEditStudentModal-avatarPlaceholder">
                     {student?.name?.charAt(0)?.toUpperCase() || '?'}
@@ -131,14 +134,14 @@ export const AdminDgEditStudentModal = ({ student, onClose, onSave }) => {
               </label>
               <input
                 type="text"
-                className={`adminDgEditStudentModal-input ${errors?.name ? 'adminDgEditStudentModal-input--error' : ''}`}
-                value={formData?.name}
+                className={`adminDgEditStudentModal-input ${errors.name ? 'adminDgEditStudentModal-input--error' : ''}`}
+                value={formData.name}
                 onChange={(e) => handleChange('name', e.target.value)}
                 placeholder={t('adminDgEditStudentModal.namePlaceholder')}
                 disabled={saving}
               />
-              {errors?.name && (
-                <span className="adminDgEditStudentModal-error">{errors?.name}</span>
+              {errors.name && (
+                <span className="adminDgEditStudentModal-error">{errors.name}</span>
               )}
             </div>
 
@@ -155,8 +158,8 @@ export const AdminDgEditStudentModal = ({ student, onClose, onSave }) => {
                 placeholder={t('adminDgEditStudentModal.emailPlaceholder')}
                 disabled={saving}
               />
-              {errors?.email && (
-                <span className="adminDgEditStudentModal-error">{errors?.email}</span>
+              {errors.email && (
+                <span className="adminDgEditStudentModal-error">{errors.email}</span>
               )}
             </div>
 

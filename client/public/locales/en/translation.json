@@ -13491,5 +13491,25 @@
     "warning": "This action is irreversible and will remove all student data.",
     "delete": "Delete Student",
     "deleting": "Deleting..."
+  },
+   "adminDgEditStudentModal": {
+    "title": "Edit Student",
+    "currentAvatar": "Current Avatar",
+    "avatarHint": "Avatar change is not available at the moment",
+    "name": "Name",
+    "namePlaceholder": "Enter name",
+    "email": "Email",
+    "emailPlaceholder": "Enter email",
+    "phone": "Phone",
+    "phonePlaceholder": "Enter phone (optional)",
+    "status": "Status",
+    "save": "Save Changes",
+    "saving": "Saving...",
+    "errors": {
+      "nameRequired": "Name is required",
+      "emailRequired": "Email is required",
+      "emailInvalid": "Invalid email format",
+      "phoneInvalid": "Invalid phone number"
+    }
   }
 }
