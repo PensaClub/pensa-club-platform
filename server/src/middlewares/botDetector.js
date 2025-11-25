@@ -58,8 +58,7 @@ async function logBotRequest(botName, contentType, contentId, contentSlug, userA
         // 🌍 GeoIP Lookup
         const geo = geoip.lookup(ip);
         
-        // Debug log
-        console.log(`🔍 IP: ${ip}, Geo:`, geo ? `${geo.country} (${geo.city || 'N/A'})` : 'NULL');
+        console.log(`🔍 IP: ${ip}, Geo:`, geo); // ← DEBUG LOG
         
         const country = geo ? geo.country : null;
         const city = geo ? geo.city : null;
@@ -70,36 +69,16 @@ async function logBotRequest(botName, contentType, contentId, contentSlug, userA
             contentType: contentType,
             userAgent: userAgent,
             ip: ip,
-            country: country,    // ✅ ISO код (BG, US, DE) или NULL
-            city: city,          // ✅ Град или NULL
-            region: region,      // ✅ Регион или NULL
+            country: country,  // ← ТЕЗИ ТРЯБВА ДА СА ТУК!
+            city: city,
+            region: region,
             timestamp: new Date()
         };
 
-        // Добави contentId полетата само ако не са null
-        if (contentType === 'article' && contentId) logData.articleId = contentId;
-        if (contentType === 'article' && contentSlug) logData.articleSlug = contentSlug;
-        
-        if (contentType === 'project' && contentId) logData.projectId = contentId;
-        if (contentType === 'project' && contentSlug) logData.projectSlug = contentSlug;
-        
-        if (contentType === 'initiative' && contentId) logData.initiativeId = contentId;
-        if (contentType === 'initiative' && contentSlug) logData.initiativeSlug = contentSlug;
-        
-        if (contentType === 'club' && contentId) logData.clubId = contentId;
-        if (contentType === 'club' && contentSlug) logData.clubSlug = contentSlug;
-        
-        if (contentType === 'mentor' && contentId) logData.mentorId = contentId;
-        if (contentType === 'mentor' && contentSlug) logData.mentorSlug = contentSlug;
-        
-        if (contentType === 'page' && contentSlug) logData.pageSlug = contentSlug;
-
+        // ... останалия код
         await bot_log.create(logData);
-        
-        const geoInfo = country ? `${country} (${city || 'Unknown'})` : 'Unknown Location';
-        console.log(`✅ Bot log saved: ${botName} → ${contentType}/${contentSlug || contentId} | ${geoInfo}`);
     } catch (error) {
-        console.error('❌ Error saving bot log:', error);
+        console.error('❌ Error:', error);
     }
 }
 
