@@ -85,6 +85,7 @@ import { AdminNotifications } from "./AdminNotifications/AdminNotifications";
 import { DigiMentorPanel } from "../DigiMentorPanel/DigiMentorPanel";
 import { DigiMentorProfile } from "../DigiMentorProfile/DigiMentorProfile";
 import { StudentApplicationsManagement } from "../DigiMentorApplications/StudentApplicationsManagement";
+import { SEOStatisticAdmin } from "../SEOStatisticAdmin/SEOStatisticAdmin";
 
 // 🎨 НОВИ ИКОНКИ КОМПОНЕНТИ
 const HomeIcon = () => (
@@ -856,6 +857,18 @@ export const Profile = () => {
                     <>
                       <li>
                         <NavLink
+                          to="seo-statistics"
+                          className={({ isActive }) => isActive ? 'active' : ''}
+                        >
+                          <span className="link-content">
+                            <AnalyticsIcon className="icon" />
+                            SEO Логове
+                          </span>
+                          {/* <ArrowIcon className="icon-arrow" /> */}
+                        </NavLink>
+                      </li>
+                      <li>
+                        <NavLink
                           to="users-statistic"
                           onClick={() => toggleSubMenu('users')}
                           className={({ isActive }) => isActive ? 'active' : ''}
@@ -1221,8 +1234,12 @@ export const Profile = () => {
             <Route path="users-admin" element={<AdminGuard><AllUsers setAllUsers={setAllUsers} /></AdminGuard>} />
             <Route path="users-unfinished" element={<AdminGuard><UnfinishedProfiles setUnfinishedUsers={setUnfinishedUsers} /></AdminGuard>} />
 
+
             <Route path="students-overview" element={<AdminGuard><AdminDigiBridgeStudents /></AdminGuard>} />
             {/* <Route path="students-applications" element={<AdminGuard><AdminDigiBridgeStudentApplications /></AdminGuard>} /> */}
+
+            <Route path="seo-statistics" element={<AdminGuard><SEOStatisticAdmin /></AdminGuard>} />
+
           </Routes>
         </main>
       </div>

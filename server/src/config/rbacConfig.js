@@ -157,6 +157,7 @@ const permissions = {
         reject: ['admin', 'moderator'],
         delete: ['admin']
     },
+
  student: {
     create: ['admin'],
     read: ['admin'],                      // /admin/students (всички)
@@ -180,6 +181,20 @@ studentApplication: {
     update: ['mentor', 'admin'],
     delete: ['admin'],
 },
+
+    studentApplication: {
+        create: ['user', 'student'],
+        readOwn: ['mentor', 'admin'],
+        readAll: ['admin'],
+        update: ['mentor', 'admin'],
+        delete: ['admin'],
+    },
+    admin: {
+        read: ['admin', 'moderator'],
+        update: ['admin'],
+        delete: ['admin'],
+    },
+
 };
 
 module.exports = permissions;

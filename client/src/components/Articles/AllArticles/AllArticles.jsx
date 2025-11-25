@@ -10,7 +10,6 @@ export const AllArticles = () => {
   const { t } = useTranslation();
   const { articles, getAllArticles, isLoading } = useArticleContext();
   const { loadArticleViewCounts } = useAnalytics();
-console.log('AllArticles rendered',articles.length);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [articlesPerPage] = useState(8);

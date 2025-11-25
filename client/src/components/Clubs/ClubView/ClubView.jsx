@@ -56,18 +56,19 @@ import SocialTemplate from './templates/SocialTemplate';
 import SportsTemplate from './templates/SportsTemplate';
 import ShareModal from './components/ShareModal/ShareModal';
 import { useAuthContext } from '../../contexts/UserContext';
+import SEOHead from '../../SEO/SEOHead';
 
 export const ClubView = () => {
     const { slug } = useParams();
     const navigate = useNavigate();
     const { t } = useTranslation();
-    const { 
+    const {
         getClubBySlug,
-         currentClub,
-         isLoading, 
+        currentClub,
+        isLoading,
         toggleBookmarkClub,
         isBookmarkedClub } = useClubContext();
-const {isAuthentication } = useAuthContext();
+    const { isAuthentication } = useAuthContext();
     const [club, setClub] = useState(null);
     const [notFound, setNotFound] = useState(false);
     const [isFavorited, setIsFavorited] = useState(false);
@@ -129,76 +130,112 @@ const {isAuthentication } = useAuthContext();
         { id: 'sports-contacts', label: t('clubs.ClubView.navigation.contacts'), icon: faHeadset }
     ], [t]);
 
-    const generateSEOData = (club) => {
-        if (!club) return {};
+    // ✅ META DATA - ДИНАМИЧНИ META TAGS
+    const metaData = useMemo(() => {
+        if (!club) {
+            return {
+                title: 'Клуб | Pensa Club',
+                description: 'Зареждане на информация за клуба...',
+                keywords: 'клуб, пенсионери, Pensa Club',
+                image: '/images/iniciatives/iniciatives-2.jpg',
+                author: 'Pensa Foundation'
+            };
+        }
 
-        const title = t('clubs.ClubView.seo.clubTitle', { clubName: club.name, city: club.location.city });
-        const description = club.shortDescription || club.fullDescription?.substring(0, 160) ||
-            t('clubs.ClubView.seo.clubDescription', {
-                city: club.location.city,
-                activity: t(`clubs.ClubView.seo.activities.${club.category}`, { defaultValue: t('clubs.ClubView.seo.activities.general') })
-            });
+        // Title
+        const title = `${club.name} - ${club.location?.city || 'България'} | Pensa Club`;
 
-        const keywords = [
-            t('clubs.ClubView.seo.keywords.clubForPensioners'),
-            t('clubs.ClubView.seo.keywords.pensionersClub'),
-            club.location.city,
-            club.location.region,
+        // Description
+        const description = club.shortDescription
+            ? club.shortDescription.substring(0, 160)
+            : club.fullDescription?.substring(0, 160) || `Клуб за пенсионери ${club.name} в ${club.location?.city}. Присъединете се към нашата общност.`;
+
+        // Keywords
+        const baseKeywords = [
+            'клуб за пенсионери',
+            club.name,
+            club.location?.city,
+            club.location?.region,
             club.category,
-            ...(club.metadata?.tags || []),
-            t('clubs.ClubView.seo.keywords.activePensioners'),
-            t('clubs.ClubView.seo.keywords.socialActivities'),
-            t('clubs.ClubView.seo.keywords.thirdAge')
-        ].join(', ');
+            'Pensa Club',
+            'активни пенсионери',
+            'социални дейности',
+            'трета възраст'
+        ];
 
-        const canonicalUrl = `${window.location.origin}/clubs/${club.slug}`;
+        if (club.metadata?.tags && Array.isArray(club.metadata.tags)) {
+            baseKeywords.push(...club.metadata.tags);
+        }
+
+        const keywords = baseKeywords.filter(Boolean).join(', ');
+
+        // Image
+        const image = club.mainImage || club.logo || '/images/iniciatives/iniciatives-2.jpg';
+
+        // Author
+        const author = club.name;
 
         return {
             title,
             description,
             keywords,
-            canonicalUrl,
-            ogTitle: title,
-            ogDescription: description,
-            ogUrl: canonicalUrl,
-            ogImage: club.mainImage || club.logo || `${window.location.origin}/default-club-image.jpg`,
-            ogType: 'website',
-            twitterCard: 'summary_large_image',
-            schemaOrg: {
-                "@context": "https://schema.org",
-                "@type": "Organization",
-                "name": club.name,
-                "description": description,
-                "url": canonicalUrl,
-                "logo": club.logo,
-                "image": club.mainImage,
-                "address": {
-                    "@type": "PostalAddress",
-                    "streetAddress": club.location.address,
-                    "addressLocality": club.location.city,
-                    "addressRegion": club.location.region,
-                    "postalCode": club.location.postalCode,
-                    "addressCountry": "BG"
-                },
+            image,
+            author
+        };
+    }, [club]);
+
+    // ✅ STRUCTURED DATA - ORGANIZATION SCHEMA
+    const structuredData = useMemo(() => {
+        if (!club) return null;
+
+        return {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": club.name,
+            "description": metaData.description,
+            "url": `https://pensa.club/clubs/${club.slug}`,
+            "logo": club.logo,
+            "image": club.mainImage || club.logo,
+            "address": {
+                "@type": "PostalAddress",
+                "streetAddress": club.location?.address,
+                "addressLocality": club.location?.city,
+                "addressRegion": club.location?.region,
+                "postalCode": club.location?.postalCode,
+                "addressCountry": "BG"
+            },
+            ...(club.location?.coordinates && {
+                "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": club.location.coordinates.lat,
+                    "longitude": club.location.coordinates.lng
+                }
+            }),
+            ...(club.contacts?.phone && {
                 "contactPoint": {
                     "@type": "ContactPoint",
-                    "telephone": club.contacts?.phone,
+                    "telephone": club.contacts.phone,
                     "email": club.contacts?.email,
                     "contactType": "customer support"
-                },
-                "foundingDate": club.foundedYear ? `${club.foundedYear}-01-01` : undefined,
-                "memberOf": {
-                    "@type": "Organization",
-                    "name": t('clubs.ClubView.seo.organizationName')
-                },
-                "aggregateRating": club.metadata?.rating ? {
+                }
+            }),
+            ...(club.foundedYear && {
+                "foundingDate": `${club.foundedYear}-01-01`
+            }),
+            "memberOf": {
+                "@type": "Organization",
+                "name": "Pensa Club"
+            },
+            ...(club.metadata?.rating && {
+                "aggregateRating": {
                     "@type": "AggregateRating",
                     "ratingValue": club.metadata.rating,
                     "ratingCount": club.metadata.views || 1
-                } : undefined
-            }
+                }
+            }),
+            "inLanguage": "bg"
         };
-    };
+    }, [club, metaData]);
 
     const updateAvailableNavItems = () => {
         const existingSections = allNavItems.filter(item => {
@@ -348,31 +385,16 @@ const {isAuthentication } = useAuthContext();
         }
     };
 
-    // const handleFavorite = () => {
-    //     if (!club) return;
-
-    //     const favorites = JSON.parse(localStorage.getItem('favoriteClubs') || '[]');
-
-    //     if (isFavorited) {
-    //         const newFavorites = favorites.filter(id => id !== club.id);
-    //         localStorage.setItem('favoriteClubs', JSON.stringify(newFavorites));
-    //         setIsFavorited(false);
-    //     } else {
-    //         const newFavorites = [...favorites, club.id];
-    //         localStorage.setItem('favoriteClubs', JSON.stringify(newFavorites));
-    //         setIsFavorited(true);
-    //     }
-    // };
-
-    const seoData = club ? generateSEOData(club) : {};
 
     if (isLoading) {
         return (
             <>
-                <Helmet>
-                    <title>{t('clubs.ClubView.loading.title')}</title>
-                    <meta name="description" content={t('clubs.ClubView.loading.description')} />
-                </Helmet>
+                <SEOHead
+                    title={t('clubs.ClubView.loading.title', { defaultValue: 'Зареждане на клуб...' })}
+                    description={t('clubs.ClubView.loading.description', { defaultValue: 'Моля, изчакайте. Зареждаме информацията за клуба.' })}
+                    keywords="клуб, пенсионери, Pensa Club"
+                    noindex={true}
+                />
                 <div className="club-view-loading">
                     <div className="club-view-loading-content">
                         <div className="loading-spinner-large"></div>
@@ -386,11 +408,12 @@ const {isAuthentication } = useAuthContext();
     if (notFound || !club) {
         return (
             <>
-                <Helmet>
-                    <title>{t('clubs.ClubView.notFound.title')}</title>
-                    <meta name="description" content={t('clubs.ClubView.notFound.description')} />
-                    <meta name="robots" content="noindex, nofollow" />
-                </Helmet>
+                <SEOHead
+                    title={t('clubs.ClubView.notFound.title', { defaultValue: 'Клубът не е намерен' })}
+                    description={t('clubs.ClubView.notFound.description', { defaultValue: 'Търсеният клуб не е намерен в нашата система.' })}
+                    keywords="клуб, пенсионери, Pensa Club"
+                    noindex={true}
+                />
                 <div className="club-view-not-found">
                     <div className="not-found-content">
                         <FontAwesomeIcon icon={faExclamationTriangle} className="not-found-icon" />
@@ -408,50 +431,15 @@ const {isAuthentication } = useAuthContext();
 
     return (
         <div className="club-view-container">
-            <Helmet>
-                <title>{seoData.title}</title>
-                <meta name="description" content={seoData.description} />
-                <meta name="keywords" content={seoData.keywords} />
-                <link rel="canonical" href={seoData.canonicalUrl} />
-                <meta property="og:title" content={seoData.ogTitle} />
-                <meta property="og:description" content={seoData.ogDescription} />
-                <meta property="og:url" content={seoData.ogUrl} />
-                <meta property="og:type" content={seoData.ogType} />
-                <meta property="og:image" content={seoData.ogImage} />
-                <meta property="og:image:width" content="1200" />
-                <meta property="og:image:height" content="630" />
-                <meta property="og:locale" content="bg_BG" />
-                <meta property="og:site_name" content="Pensa Club" />
-                <meta name="twitter:card" content={seoData.twitterCard} />
-                <meta name="twitter:title" content={seoData.ogTitle} />
-                <meta name="twitter:description" content={seoData.ogDescription} />
-                <meta name="twitter:image" content={seoData.ogImage} />
-                <meta name="author" content={club.name} />
-                <meta name="publisher" content="Pensa Club" />
-                <meta name="robots" content="index, follow, max-image-preview:large" />
-                <meta name="googlebot" content="index, follow" />
-                <meta name="geo.region" content={`BG-${club.location.region}`} />
-                <meta name="geo.placename" content={club.location.city} />
-                {club.location.coordinates && (
-                    <>
-                        <meta name="geo.position" content={`${club.location.coordinates.lat};${club.location.coordinates.lng}`} />
-                        <meta name="ICBM" content={`${club.location.coordinates.lat}, ${club.location.coordinates.lng}`} />
-                    </>
-                )}
-                <script type="application/ld+json">
-                    {JSON.stringify(seoData.schemaOrg)}
-                </script>
-                <meta name="theme-color" content="#2563eb" />
-                <meta name="msapplication-TileColor" content="#2563eb" />
-                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-                <meta name="format-detection" content="telephone=yes" />
-                <meta name="format-detection" content="address=yes" />
-                {club.mainImage && (
-                    <link rel="preload" as="image" href={club.mainImage} />
-                )}
-                <link rel="alternate" hrefLang="bg" href={seoData.canonicalUrl} />
-                <link rel="alternate" hrefLang="x-default" href={seoData.canonicalUrl} />
-            </Helmet>
+            <SEOHead
+                title={metaData.title}
+                description={metaData.description}
+                keywords={metaData.keywords}
+                image={metaData.image}
+                type="website"
+                author={metaData.author}
+                structuredData={structuredData}
+            />
 
             <div className="club-view-header">
                 <div className="club-view-header-content">
@@ -469,14 +457,14 @@ const {isAuthentication } = useAuthContext();
                     </div>
 
                     <div className="club-header-actions">
-                        {isAuthentication  && (
-                        <button
-                            onClick={() => toggleBookmarkClub(club.id)}
-                            className={`club-action-btn ${isBookmarkedClub(club.id) ? 'favorited' : ''}`}
-                            title={isBookmarkedClub(club.id) ? t('clubs.ClubView.actions.removeFromFavorites') : t('clubs.ClubView.actions.addToFavorites')}
-                        >
-                            <FontAwesomeIcon icon={faHeart} />
-                        </button>
+                        {isAuthentication && (
+                            <button
+                                onClick={() => toggleBookmarkClub(club.id)}
+                                className={`club-action-btn ${isBookmarkedClub(club.id) ? 'favorited' : ''}`}
+                                title={isBookmarkedClub(club.id) ? t('clubs.ClubView.actions.removeFromFavorites') : t('clubs.ClubView.actions.addToFavorites')}
+                            >
+                                <FontAwesomeIcon icon={faHeart} />
+                            </button>
                         )}
                         <button
                             onClick={handleShare}

@@ -1,8 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
-import { Helmet } from 'react-helmet';
 import { useInitiativeContext } from '../../contexts/InitiativeProvider';
 import { useLoading } from '../../contexts/LoadingContext';
 import { getLocationFromCoordinates } from '../../../utils/getLocationFromCoordinates';
@@ -14,6 +13,7 @@ import ProjectsSlider from './ProjectsSlider/ProjectsSlider';
 import ScrollToTop from '../../ScrollToTop/ScrollToTop';
 
 import './projectsList.css';
+import SEOHead from '../../SEO/SEOHead';
 
 const ProjectsList = () => {
     const { t } = useTranslation();
@@ -301,8 +301,8 @@ const ProjectsList = () => {
 
     // Проверка дали да се показва секцията с участници
     const shouldShowParticipants = (project) => {
-        return (project.currentParticipants && project.currentParticipants > 0) || 
-               (project.maxParticipants && project.maxParticipants > 0);
+        return (project.currentParticipants && project.currentParticipants > 0) ||
+            (project.maxParticipants && project.maxParticipants > 0);
     };
 
     // Calculate stats
@@ -312,39 +312,28 @@ const ProjectsList = () => {
         completed: allProjects.filter(p => p.status === 'completed').length,
         canApply: allProjects.filter(p => p.applicationDeadline && new Date(p.applicationDeadline) > new Date()).length
     };
+    const metaData = useMemo(() => {
+        let title, description;
 
-    const getPageTitle = () => {
         if (searchTerm) {
-            return `${t('projects.meta.searchResults')} "${searchTerm}" | Pensa Club`;
+            title = `${t('projects.meta.searchResults')} "${searchTerm}" | Pensa Club`;
+            description = `${t('projects.meta.searchDescription')} "${searchTerm}". ${t('projects.meta.foundProjects')} ${filteredProjects.length} ${getStatLabel(filteredProjects.length, 'total')}.`;
+        } else if (activeFilters.category) {
+            title = `${t('projects.meta.categoryProjects')} ${activeFilters.category} | Pensa Club`;
+            description = `${t('projects.meta.categoryDescription')} ${activeFilters.category}. ${t('projects.meta.availableProjects')} ${filteredProjects.length} ${getStatLabel(filteredProjects.length, 'total')}.`;
+        } else {
+            title = `${t('projects.meta.title')} | Pensa Club`;
+            description = `${t('projects.meta.description')} ${stats.total} ${getStatLabel(stats.total, 'total')}, ${stats.active} ${getStatLabel(stats.active, 'active')}.`;
         }
 
-        if (activeFilters.category) {
-            return `${t('projects.meta.categoryProjects')} ${activeFilters.category} | Pensa Club`;
-        }
-
-        return `${t('projects.meta.title')} | Pensa Club`;
-    };
-
-    const getPageDescription = () => {
-        if (searchTerm) {
-            return `${t('projects.meta.searchDescription')} "${searchTerm}". ${t('projects.meta.foundProjects')} ${filteredProjects.length} ${getStatLabel(filteredProjects.length, 'total')}.`;
-        }
-
-        if (activeFilters.category) {
-            return `${t('projects.meta.categoryDescription')} ${activeFilters.category}. ${t('projects.meta.availableProjects')} ${filteredProjects.length} ${getStatLabel(filteredProjects.length, 'total')}.`;
-        }
-
-        return `${t('projects.meta.description')} ${stats.total} ${getStatLabel(stats.total, 'total')}, ${stats.active} ${getStatLabel(stats.active, 'active')}.`;
-    };
-
-    const getKeywords = () => {
         const baseKeywords = [
             'проекти за пенсионери',
             'инициативи България',
             'дигитална грамотност',
             'активни пенсионери',
             'обучение възрастни',
-            'Pensa Club'
+            'Pensa Club',
+            'EU проекти'
         ];
 
         if (activeFilters.category) {
@@ -355,65 +344,63 @@ const ProjectsList = () => {
             baseKeywords.push(searchTerm.toLowerCase());
         }
 
-        return baseKeywords.join(', ');
-    };
+        const keywords = baseKeywords.join(', ');
+        const image = featuredProject?.mainImage?.src || '/images/iniciatives/iniciatives-2.jpg';
 
-    const getStructuredData = () => {
+        return { title, description, keywords, image };
+    }, [searchTerm, activeFilters.category, filteredProjects.length, stats.total, stats.active, t, featuredProject]);
+
+    const structuredData = useMemo(() => {
         const projectsToShow = isSearchActive ? filteredProjects.slice(0, 10) : allProjects.slice(0, 10);
 
         return {
             "@context": "https://schema.org",
             "@type": "ItemList",
-            "name": "Проекти за пенсионери",
-            "description": getPageDescription(),
-            "url": "https://www.pensa.club/projects",
+            "name": "Проекти за пенсионери - Pensa Club",
+            "description": metaData.description,
+            "url": "https://pensa.club/projects",
             "numberOfItems": isSearchActive ? filteredProjects.length : stats.total,
             "itemListElement": projectsToShow.map((project, index) => ({
                 "@type": "ListItem",
                 "position": index + 1,
                 "item": {
-                    "@type": "Project",
+                    "@type": "CreativeWork",
                     "name": project.title,
                     "description": project.shortDescription,
-                    "url": `https://www.pensa.club/projects/${project.slug}`,
-                    "image": project.mainImage?.src,
-                    "category": project.category,
-                    "status": project.status
+                    "url": `https://pensa.club/projects/${project.slug}`,
+                    "image": project.mainImage?.src || "https://pensa.club/images/iniciatives/iniciatives-2.jpg",
+                    "genre": project.category,
+                    "keywords": project.tags?.join(', '),
+                    ...(project.budget?.total && {
+                        "offers": {
+                            "@type": "Offer",
+                            "price": project.budget.total,
+                            "priceCurrency": project.budget.currency || "BGN"
+                        }
+                    }),
+                    ...(project.timeline?.startDate && {
+                        "datePublished": project.timeline.startDate
+                    }),
+                    "creator": {
+                        "@type": "Organization",
+                        "name": "Pensa Club"
+                    },
+                    "inLanguage": "bg"
                 }
             }))
         };
-    };
+    }, [isSearchActive, filteredProjects, allProjects, stats.total, metaData.description]);
 
     return (
         <>
-            <Helmet>
-                <title>{getPageTitle()}</title>
-                <meta name="description" content={getPageDescription()} />
-                <meta name="keywords" content={getKeywords()} />
-
-                <meta property="og:title" content={getPageTitle()} />
-                <meta property="og:description" content={getPageDescription()} />
-                <meta property="og:image" content="https://www.pensa.club/images/projects-og-image.jpg" />
-                <meta property="og:url" content="https://www.pensa.club/projects" />
-                <meta property="og:type" content="website" />
-                <meta property="og:site_name" content="Pensa Club" />
-
-                <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:title" content={getPageTitle()} />
-                <meta name="twitter:description" content={getPageDescription()} />
-                <meta name="twitter:image" content="https://www.pensa.club/images/projects-twitter-image.jpg" />
-
-                <meta name="robots" content="index, follow" />
-                <meta name="author" content="Pensa Club" />
-                <link rel="canonical" href="https://www.pensa.club/projects" />
-
-                <script type="application/ld+json">
-                    {JSON.stringify(getStructuredData())}
-                </script>
-
-                <link rel="alternate" hreflang="bg" href="https://www.pensa.club/bg/projects" />
-                <link rel="alternate" hreflang="en" href="https://www.pensa.club/en/projects" />
-            </Helmet>
+            <SEOHead
+                title={metaData.title}
+                description={metaData.description}
+                keywords={metaData.keywords}
+                image={metaData.image}
+                type="website"
+                structuredData={structuredData}
+            />
             <div className="projects-list-container">
                 {/* Hero Section */}
                 <div className="starfield"></div>
