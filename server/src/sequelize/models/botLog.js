@@ -4,25 +4,21 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     class BotLog extends Model {
         static associate(models) {
-            // Връзка с articles
             BotLog.belongsTo(models.article, {
                 foreignKey: 'articleId',
                 as: 'article',
             });
 
-            // Връзка с projects
             BotLog.belongsTo(models.project, {
                 foreignKey: 'projectId',
                 as: 'project',
             });
 
-            // Връзка с initiatives
             BotLog.belongsTo(models.initiative, {
                 foreignKey: 'initiativeId',
                 as: 'initiative',
             });
 
-            // ✅ Връзка с Club (ГЛАВНА БУКВА!)
             if (models.Club) {
                 BotLog.belongsTo(models.Club, {
                     foreignKey: 'clubId',
@@ -30,7 +26,6 @@ module.exports = (sequelize, DataTypes) => {
                 });
             }
 
-            // ✅ Връзка с mentor
             BotLog.belongsTo(models.mentor, {
                 foreignKey: 'mentorId',
                 as: 'mentor',
@@ -49,9 +44,8 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
                 defaultValue: 'article',
                 field: 'content_type',
-                comment: 'Тип на съдържанието: article, project, initiative, club, page, mentor'
             },
-            // ========== ARTICLE FIELDS ==========
+            // ARTICLE
             articleId: {
                 type: DataTypes.INTEGER,
                 allowNull: true,
@@ -60,7 +54,7 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
                 allowNull: true,
             },
-            // ========== PROJECT FIELDS ==========
+            // PROJECT
             projectId: {
                 type: DataTypes.INTEGER,
                 allowNull: true,
@@ -71,7 +65,7 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: true,
                 field: 'project_slug',
             },
-            // ========== INITIATIVE FIELDS ==========
+            // INITIATIVE
             initiativeId: {
                 type: DataTypes.INTEGER,
                 allowNull: true,
@@ -82,7 +76,7 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: true,
                 field: 'initiative_slug',
             },
-            // ========== CLUB FIELDS ==========
+            // CLUB
             clubId: {
                 type: DataTypes.INTEGER,
                 allowNull: true,
@@ -93,20 +87,33 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: true,
                 field: 'club_slug',
             },
-            // ========== PAGE FIELDS (за статични страници като /academy) ==========
+            // PAGE
             pageSlug: {
                 type: DataTypes.STRING,
                 allowNull: true,
                 field: 'page_slug',
-                comment: 'Slug на статична страница (напр. "academy", "about")'
             },
-            // ========== MENTOR FIELDS ==========
+            // MENTOR
             mentorId: {
                 type: DataTypes.INTEGER,
                 allowNull: true,
                 field: 'mentor_id',
             },
-            // ========== COMMON FIELDS ==========
+            // GEOGRAPHY
+            country: {
+                type: DataTypes.STRING(2),
+                allowNull: true,
+                comment: 'ISO Country code'
+            },
+            city: {
+                type: DataTypes.STRING(100),
+                allowNull: true,
+            },
+            region: {
+                type: DataTypes.STRING(100),
+                allowNull: true,
+            },
+            // COMMON
             userAgent: {
                 type: DataTypes.TEXT,
                 allowNull: false,
@@ -120,7 +127,6 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
                 defaultValue: DataTypes.NOW,
             },
-            // ✅ ДОБАВЕНИ TIMESTAMPS ПОЛЕТА
             createdAt: {
                 type: DataTypes.DATE,
                 allowNull: false,

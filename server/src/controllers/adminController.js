@@ -276,6 +276,10 @@ adminController.delete('/bot-logs/cleanup', isAuth, rbac.checkPermission('admin'
  * GET /admin/bot-summary
  * Кратка обобщена статистика (за dashboard)
  */
+/**
+ * GET /admin/bot-summary
+ * Кратка обобщена статистика (за dashboard)
+ */
 adminController.get('/bot-summary', isAuth, rbac.checkPermission('admin', 'read'), async (req, res, next) => {
     try {
         // ==================== TIME RANGES ====================
@@ -420,6 +424,38 @@ adminController.get('/bot-summary', isAuth, rbac.checkPermission('admin', 'read'
             limit: 5
         });
 
+        // ==================== TOP PAGES (Last 7 days) ====================
+        const topPages = await bot_log.findAll({
+            attributes: [
+                'pageSlug',
+                [sequelize.fn('COUNT', sequelize.col('id')), 'shares']
+            ],
+            where: {
+                timestamp: { [Op.gte]: last7d },
+                contentType: 'page',
+                pageSlug: { [Op.ne]: null }
+            },
+            group: ['pageSlug'],
+            order: [[sequelize.fn('COUNT', sequelize.col('id')), 'DESC']],
+            limit: 10,
+            raw: true
+        });
+
+        // ==================== TOP COUNTRIES ====================
+        const topCountries = await bot_log.findAll({
+            attributes: [
+                'country',
+                [sequelize.fn('COUNT', sequelize.col('id')), 'count']
+            ],
+            where: {
+                country: { [Op.ne]: null }
+            },
+            group: ['country'],
+            order: [[sequelize.fn('COUNT', sequelize.col('id')), 'DESC']],
+            limit: 10,
+            raw: true
+        });
+
         // ==================== DAILY ACTIVITY (Last 7 days) ====================
         const dailyActivity = await bot_log.findAll({
             attributes: [
@@ -468,6 +504,17 @@ adminController.get('/bot-summary', isAuth, rbac.checkPermission('admin', 'read'
                     name: item.club?.name || 'Unknown',
                     shares: parseInt(item.dataValues.shares),
                     type: 'club'
+                })),
+                pages: topPages.map(item => ({
+                    slug: item.pageSlug,
+                    shares: parseInt(item.shares),
+                    type: 'page'
+                }))
+            },
+            geography: {
+                topCountries: topCountries.map(item => ({
+                    country: item.country,
+                    count: parseInt(item.count)
                 }))
             },
             dailyActivity: dailyActivity,

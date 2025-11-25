@@ -1,9 +1,121 @@
 import { useState, useEffect } from 'react';
-
 import { useTranslation } from 'react-i18next';
 import './SEOStatisticAdmin.css';
 import { useAuthContext } from '../contexts/UserContext';
 import { adminServiceFactory } from '../Services/adminService';
+import {
+    BarChart,
+    Bar,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    ResponsiveContainer,
+    PieChart,
+    Pie,
+    Cell,
+    Legend,
+    AreaChart,
+    Area
+} from 'recharts';
+
+// 🎨 ЦВЕТОВЕ ЗА ГРАФИКИТЕ
+const COLORS = ['#667eea', '#764ba2', '#f093fb', '#f5576c', '#4facfe', '#00f2fe', '#43e97b', '#38f9d7'];
+const BOT_COLORS = {
+    'Facebook': '#1877F2',
+    'Twitter': '#1DA1F2',
+    'LinkedIn': '#0A66C2',
+    'Google': '#4285F4',
+    'WhatsApp': '#25D366',
+    'Telegram': '#0088cc',
+    'Slack': '#4A154B',
+    'Bing': '#008373',
+    'Yandex': '#FF0000',
+    'Baidu': '#2319DC'
+};
+
+const CONTENT_COLORS = {
+    'article': '#667eea',
+    'project': '#f093fb',
+    'initiative': '#4facfe',
+    'club': '#43e97b',
+    'page': '#f5576c',
+    'mentor': '#764ba2'
+};
+
+const CONTENT_LABELS = {
+    'article': 'Статии',
+    'project': 'Проекти',
+    'initiative': 'Инициативи',
+    'club': 'Клубове',
+    'page': 'Страници',
+    'mentor': 'Ментори'
+};
+
+// 🌍 ФЛАГОВЕ ЗА ДЪРЖАВИ
+const COUNTRY_FLAGS = {
+    'BG': '🇧🇬',
+    'DE': '🇩🇪',
+    'US': '🇺🇸',
+    'GB': '🇬🇧',
+    'FR': '🇫🇷',
+    'IT': '🇮🇹',
+    'ES': '🇪🇸',
+    'RO': '🇷🇴',
+    'GR': '🇬🇷',
+    'TR': '🇹🇷',
+    'RU': '🇷🇺',
+    'UA': '🇺🇦',
+    'PL': '🇵🇱',
+    'NL': '🇳🇱',
+    'BE': '🇧🇪',
+    'AT': '🇦🇹',
+    'CH': '🇨🇭',
+    'SE': '🇸🇪',
+    'NO': '🇳🇴',
+    'DK': '🇩🇰',
+    'FI': '🇫🇮',
+    'CA': '🇨🇦',
+    'AU': '🇦🇺',
+    'JP': '🇯🇵',
+    'CN': '🇨🇳',
+    'IN': '🇮🇳',
+    'BR': '🇧🇷',
+    'MX': '🇲🇽',
+    'AR': '🇦🇷'
+};
+
+const COUNTRY_NAMES = {
+    'BG': 'България',
+    'DE': 'Германия',
+    'US': 'САЩ',
+    'GB': 'Великобритания',
+    'FR': 'Франция',
+    'IT': 'Италия',
+    'ES': 'Испания',
+    'RO': 'Румъния',
+    'GR': 'Гърция',
+    'TR': 'Турция',
+    'RU': 'Русия',
+    'UA': 'Украйна',
+    'PL': 'Полша',
+    'NL': 'Холандия',
+    'BE': 'Белгия',
+    'AT': 'Австрия',
+    'CH': 'Швейцария',
+    'SE': 'Швеция',
+    'NO': 'Норвегия',
+    'DK': 'Дания',
+    'FI': 'Финландия',
+    'CA': 'Канада',
+    'AU': 'Австралия',
+    'JP': 'Япония',
+    'CN': 'Китай',
+    'IN': 'Индия',
+    'BR': 'Бразилия',
+    'MX': 'Мексико',
+    'AR': 'Аржентина'
+};
 
 export const SEOStatisticAdmin = () => {
     const { t } = useTranslation();
@@ -42,6 +154,61 @@ export const SEOStatisticAdmin = () => {
         return date.toLocaleDateString('bg-BG', { day: '2-digit', month: '2-digit' });
     };
 
+    const formatDayName = (dateString) => {
+        const date = new Date(dateString);
+        const days = ['Нед', 'Пон', 'Вт', 'Ср', 'Чет', 'Пет', 'Съб'];
+        return days[date.getDay()];
+    };
+
+    const getCountryFlag = (countryCode) => {
+        return COUNTRY_FLAGS[countryCode] || '🌍';
+    };
+
+    const getCountryName = (countryCode) => {
+        return COUNTRY_NAMES[countryCode] || countryCode;
+    };
+
+    const getPageDisplayName = (slug) => {
+        const pageNames = {
+            'home': 'Начална страница',
+            'academy': 'DigiBridge Academy',
+            'about': 'За нас',
+            'contact': 'Контакти',
+            'mentors': 'Ментори'
+        };
+        return pageNames[slug] || slug;
+    };
+
+    // Custom Tooltip за графиките
+    const CustomTooltip = ({ active, payload, label }) => {
+        if (active && payload && payload.length) {
+            return (
+                <div className="SEOStatisticAdmin-custom-tooltip">
+                    <p className="SEOStatisticAdmin-tooltip-label">{label}</p>
+                    <p className="SEOStatisticAdmin-tooltip-value">
+                        {payload[0].value} посещения
+                    </p>
+                </div>
+            );
+        }
+        return null;
+    };
+
+    // Custom Tooltip за Pie Chart
+    const PieTooltip = ({ active, payload }) => {
+        if (active && payload && payload.length) {
+            return (
+                <div className="SEOStatisticAdmin-custom-tooltip">
+                    <p className="SEOStatisticAdmin-tooltip-label">{payload[0].name}</p>
+                    <p className="SEOStatisticAdmin-tooltip-value">
+                        {payload[0].value} ({((payload[0].value / data?.summary?.total) * 100).toFixed(1)}%)
+                    </p>
+                </div>
+            );
+        }
+        return null;
+    };
+
     if (loading) {
         return (
             <div className="SEOStatisticAdmin">
@@ -69,12 +236,35 @@ export const SEOStatisticAdmin = () => {
 
     if (!data) return null;
 
-    const { summary, topBots, contentTypeDistribution, topContent, dailyActivity } = data;
+    const { summary, topBots, contentTypeDistribution, topContent, dailyActivity, geography } = data;
+
+    // Подготви данни за графиките
+    const dailyChartData = dailyActivity?.map(day => ({
+        date: formatDate(day.date),
+        dayName: formatDayName(day.date),
+        count: parseInt(day.count),
+        fullDate: day.date
+    })) || [];
+
+    const botChartData = topBots?.map(bot => ({
+        name: bot.bot,
+        value: parseInt(bot.count),
+        fill: BOT_COLORS[bot.bot] || '#667eea'
+    })) || [];
+
+    const contentChartData = contentTypeDistribution?.map(item => ({
+        name: CONTENT_LABELS[item.contentType] || item.contentType,
+        value: parseInt(item.count),
+        fill: CONTENT_COLORS[item.contentType] || '#667eea'
+    })) || [];
 
     return (
         <div className="SEOStatisticAdmin">
             <div className="SEOStatisticAdmin-header">
-                <h1>📊 SEO & Bot Статистика</h1>
+                <div className="SEOStatisticAdmin-header-left">
+                    <h1>📊 SEO & Bot Статистика</h1>
+                    <p className="SEOStatisticAdmin-subtitle">Проследявайте как социалните мрежи индексират съдържанието ви</p>
+                </div>
                 <button onClick={fetchBotSummary} className="SEOStatisticAdmin-refresh-btn">
                     🔄 Обнови
                 </button>
@@ -112,59 +302,150 @@ export const SEOStatisticAdmin = () => {
                 </div>
             </div>
 
-            {/* TOP BOTS & CONTENT TYPE */}
+            {/* DAILY ACTIVITY CHART - AREA CHART */}
+            <div className="SEOStatisticAdmin-section SEOStatisticAdmin-full-width">
+                <h2>📈 Дневна Активност (Последната седмица)</h2>
+                <div className="SEOStatisticAdmin-chart-container">
+                    {dailyChartData.length > 0 ? (
+                        <ResponsiveContainer width="100%" height={300}>
+                            <AreaChart data={dailyChartData}>
+                                <defs>
+                                    <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="5%" stopColor="#667eea" stopOpacity={0.8}/>
+                                        <stop offset="95%" stopColor="#667eea" stopOpacity={0.1}/>
+                                    </linearGradient>
+                                </defs>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+                                <XAxis 
+                                    dataKey="date" 
+                                    tick={{ fill: '#7f8c8d', fontSize: 12 }}
+                                    tickLine={{ stroke: '#e0e0e0' }}
+                                />
+                                <YAxis 
+                                    tick={{ fill: '#7f8c8d', fontSize: 12 }}
+                                    tickLine={{ stroke: '#e0e0e0' }}
+                                    allowDecimals={false}
+                                />
+                                <Tooltip content={<CustomTooltip />} />
+                                <Area 
+                                    type="monotone" 
+                                    dataKey="count" 
+                                    stroke="#667eea" 
+                                    strokeWidth={3}
+                                    fillOpacity={1} 
+                                    fill="url(#colorCount)" 
+                                />
+                            </AreaChart>
+                        </ResponsiveContainer>
+                    ) : (
+                        <div className="SEOStatisticAdmin-no-data">
+                            <p>📭 Няма данни за последната седмица</p>
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            {/* TOP BOTS & CONTENT TYPE - CHARTS */}
             <div className="SEOStatisticAdmin-grid">
-                {/* TOP BOTS */}
+                {/* TOP BOTS - BAR CHART */}
                 <div className="SEOStatisticAdmin-section">
                     <h2>🤖 Топ Ботове</h2>
-                    <div className="SEOStatisticAdmin-bot-list">
-                        {topBots?.map((bot, index) => (
-                            <div key={index} className="SEOStatisticAdmin-bot-item">
-                                <div className="SEOStatisticAdmin-bot-info">
-                                    <span className="SEOStatisticAdmin-bot-rank">#{index + 1}</span>
-                                    <span className="SEOStatisticAdmin-bot-name">{bot.bot}</span>
-                                </div>
-                                <div className="SEOStatisticAdmin-bot-bar">
-                                    <div 
-                                        className="SEOStatisticAdmin-bot-bar-fill"
-                                        style={{ 
-                                            width: `${(bot.count / topBots[0].count) * 100}%`,
-                                            backgroundColor: index === 0 ? '#4CAF50' : '#2196F3'
+                    <div className="SEOStatisticAdmin-chart-container SEOStatisticAdmin-chart-small">
+                        {botChartData.length > 0 ? (
+                            <ResponsiveContainer width="100%" height={250}>
+                                <BarChart data={botChartData} layout="vertical">
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+                                    <XAxis type="number" tick={{ fill: '#7f8c8d', fontSize: 12 }} />
+                                    <YAxis 
+                                        dataKey="name" 
+                                        type="category" 
+                                        tick={{ fill: '#2c3e50', fontSize: 12 }}
+                                        width={80}
+                                    />
+                                    <Tooltip 
+                                        formatter={(value) => [`${value} посещения`, 'Брой']}
+                                        contentStyle={{ 
+                                            backgroundColor: '#fff',
+                                            border: '1px solid #e0e0e0',
+                                            borderRadius: '8px'
                                         }}
-                                    ></div>
-                                    <span className="SEOStatisticAdmin-bot-count">{formatNumber(bot.count)}</span>
+                                    />
+                                    <Bar dataKey="value" radius={[0, 8, 8, 0]}>
+                                        {botChartData.map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={entry.fill} />
+                                        ))}
+                                    </Bar>
+                                </BarChart>
+                            </ResponsiveContainer>
+                        ) : (
+                            <div className="SEOStatisticAdmin-no-data">
+                                <p>🤖 Няма данни за ботове</p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                {/* CONTENT TYPE DISTRIBUTION - PIE CHART */}
+                <div className="SEOStatisticAdmin-section">
+                    <h2>📁 Тип Съдържание</h2>
+                    <div className="SEOStatisticAdmin-chart-container SEOStatisticAdmin-chart-small">
+                        {contentChartData.length > 0 ? (
+                            <ResponsiveContainer width="100%" height={250}>
+                                <PieChart>
+                                    <Pie
+                                        data={contentChartData}
+                                        cx="50%"
+                                        cy="50%"
+                                        innerRadius={50}
+                                        outerRadius={80}
+                                        paddingAngle={5}
+                                        dataKey="value"
+                                    >
+                                        {contentChartData.map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={entry.fill} />
+                                        ))}
+                                    </Pie>
+                                    <Tooltip content={<PieTooltip />} />
+                                    <Legend 
+                                        layout="vertical" 
+                                        align="right" 
+                                        verticalAlign="middle"
+                                        formatter={(value) => <span style={{ color: '#2c3e50', fontSize: '12px' }}>{value}</span>}
+                                    />
+                                </PieChart>
+                            </ResponsiveContainer>
+                        ) : (
+                            <div className="SEOStatisticAdmin-no-data">
+                                <p>📁 Няма данни за типове съдържание</p>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+
+            {/* ГЕОГРАФИЯ - ТОП ДЪРЖАВИ */}
+            {geography?.topCountries && geography.topCountries.length > 0 && (
+                <div className="SEOStatisticAdmin-section SEOStatisticAdmin-full-width">
+                    <h2>🌍 Географско Разпределение</h2>
+                    <div className="SEOStatisticAdmin-country-grid">
+                        {geography.topCountries.map((item, index) => (
+                            <div key={index} className="SEOStatisticAdmin-country-card">
+                                <div className="SEOStatisticAdmin-country-rank">#{index + 1}</div>
+                                <div className="SEOStatisticAdmin-country-flag-large">
+                                    {getCountryFlag(item.country)}
+                                </div>
+                                <div className="SEOStatisticAdmin-country-info">
+                                    <h4>{getCountryName(item.country)}</h4>
+                                    <p className="SEOStatisticAdmin-country-code">{item.country}</p>
+                                </div>
+                                <div className="SEOStatisticAdmin-country-count-badge">
+                                    {formatNumber(item.count)}
                                 </div>
                             </div>
                         ))}
                     </div>
                 </div>
-
-                {/* CONTENT TYPE DISTRIBUTION */}
-                <div className="SEOStatisticAdmin-section">
-                    <h2>📁 Тип Съдържание</h2>
-                    <div className="SEOStatisticAdmin-content-list">
-                        {contentTypeDistribution?.map((item, index) => {
-                            const icons = {
-                                article: '📰',
-                                project: '📁',
-                                initiative: '🎯',
-                                club: '🏛️',
-                                page: '📄',
-                                mentor: '👨‍🏫'
-                            };
-                            return (
-                                <div key={index} className="SEOStatisticAdmin-content-item">
-                                    <div className="SEOStatisticAdmin-content-info">
-                                        <span className="SEOStatisticAdmin-content-icon">{icons[item.contentType] || '📄'}</span>
-                                        <span className="SEOStatisticAdmin-content-type">{item.contentType}</span>
-                                    </div>
-                                    <span className="SEOStatisticAdmin-content-count">{formatNumber(item.count)}</span>
-                                </div>
-                            );
-                        })}
-                    </div>
-                </div>
-            </div>
+            )}
 
             {/* TOP CONTENT TABS */}
             <div className="SEOStatisticAdmin-section SEOStatisticAdmin-full-width">
@@ -195,6 +476,12 @@ export const SEOStatisticAdmin = () => {
                     >
                         🏛️ Клубове ({topContent?.clubs?.length || 0})
                     </button>
+                    <button 
+                        className={`SEOStatisticAdmin-tab ${activeTab === 'pages' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('pages')}
+                    >
+                        📄 Страници ({topContent?.pages?.length || 0})
+                    </button>
                 </div>
 
                 <div className="SEOStatisticAdmin-tab-content">
@@ -203,7 +490,9 @@ export const SEOStatisticAdmin = () => {
                             {topContent?.articles?.length > 0 ? (
                                 topContent.articles.map((item, index) => (
                                     <div key={index} className="SEOStatisticAdmin-top-item">
-                                        <span className="SEOStatisticAdmin-top-rank">#{index + 1}</span>
+                                        <div className="SEOStatisticAdmin-top-rank-badge">
+                                            {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index + 1}`}
+                                        </div>
                                         <div className="SEOStatisticAdmin-top-info">
                                             <a 
                                                 href={`/articles/${item.slug}`} 
@@ -215,13 +504,17 @@ export const SEOStatisticAdmin = () => {
                                             </a>
                                             <span className="SEOStatisticAdmin-top-slug">{item.slug}</span>
                                         </div>
-                                        <span className="SEOStatisticAdmin-top-shares">
-                                            {formatNumber(item.shares)} споделяния
-                                        </span>
+                                        <div className="SEOStatisticAdmin-top-shares-badge">
+                                            <span className="SEOStatisticAdmin-shares-number">{formatNumber(item.shares)}</span>
+                                            <span className="SEOStatisticAdmin-shares-label">споделяния</span>
+                                        </div>
                                     </div>
                                 ))
                             ) : (
-                                <p className="SEOStatisticAdmin-empty">Няма данни за статии</p>
+                                <div className="SEOStatisticAdmin-empty-state">
+                                    <span className="SEOStatisticAdmin-empty-icon">📰</span>
+                                    <p>Няма споделени статии тази седмица</p>
+                                </div>
                             )}
                         </div>
                     )}
@@ -231,7 +524,9 @@ export const SEOStatisticAdmin = () => {
                             {topContent?.projects?.length > 0 ? (
                                 topContent.projects.map((item, index) => (
                                     <div key={index} className="SEOStatisticAdmin-top-item">
-                                        <span className="SEOStatisticAdmin-top-rank">#{index + 1}</span>
+                                        <div className="SEOStatisticAdmin-top-rank-badge">
+                                            {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index + 1}`}
+                                        </div>
                                         <div className="SEOStatisticAdmin-top-info">
                                             <a 
                                                 href={`/projects/${item.slug}`} 
@@ -243,13 +538,17 @@ export const SEOStatisticAdmin = () => {
                                             </a>
                                             <span className="SEOStatisticAdmin-top-slug">{item.slug}</span>
                                         </div>
-                                        <span className="SEOStatisticAdmin-top-shares">
-                                            {formatNumber(item.shares)} споделяния
-                                        </span>
+                                        <div className="SEOStatisticAdmin-top-shares-badge">
+                                            <span className="SEOStatisticAdmin-shares-number">{formatNumber(item.shares)}</span>
+                                            <span className="SEOStatisticAdmin-shares-label">споделяния</span>
+                                        </div>
                                     </div>
                                 ))
                             ) : (
-                                <p className="SEOStatisticAdmin-empty">Няма данни за проекти</p>
+                                <div className="SEOStatisticAdmin-empty-state">
+                                    <span className="SEOStatisticAdmin-empty-icon">📁</span>
+                                    <p>Няма споделени проекти тази седмица</p>
+                                </div>
                             )}
                         </div>
                     )}
@@ -259,7 +558,9 @@ export const SEOStatisticAdmin = () => {
                             {topContent?.initiatives?.length > 0 ? (
                                 topContent.initiatives.map((item, index) => (
                                     <div key={index} className="SEOStatisticAdmin-top-item">
-                                        <span className="SEOStatisticAdmin-top-rank">#{index + 1}</span>
+                                        <div className="SEOStatisticAdmin-top-rank-badge">
+                                            {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index + 1}`}
+                                        </div>
                                         <div className="SEOStatisticAdmin-top-info">
                                             <a 
                                                 href={`/initiatives/${item.slug}`} 
@@ -271,13 +572,17 @@ export const SEOStatisticAdmin = () => {
                                             </a>
                                             <span className="SEOStatisticAdmin-top-slug">{item.slug}</span>
                                         </div>
-                                        <span className="SEOStatisticAdmin-top-shares">
-                                            {formatNumber(item.shares)} споделяния
-                                        </span>
+                                        <div className="SEOStatisticAdmin-top-shares-badge">
+                                            <span className="SEOStatisticAdmin-shares-number">{formatNumber(item.shares)}</span>
+                                            <span className="SEOStatisticAdmin-shares-label">споделяния</span>
+                                        </div>
                                     </div>
                                 ))
                             ) : (
-                                <p className="SEOStatisticAdmin-empty">Няма данни за инициативи</p>
+                                <div className="SEOStatisticAdmin-empty-state">
+                                    <span className="SEOStatisticAdmin-empty-icon">🎯</span>
+                                    <p>Няма споделени инициативи тази седмица</p>
+                                </div>
                             )}
                         </div>
                     )}
@@ -287,7 +592,9 @@ export const SEOStatisticAdmin = () => {
                             {topContent?.clubs?.length > 0 ? (
                                 topContent.clubs.map((item, index) => (
                                     <div key={index} className="SEOStatisticAdmin-top-item">
-                                        <span className="SEOStatisticAdmin-top-rank">#{index + 1}</span>
+                                        <div className="SEOStatisticAdmin-top-rank-badge">
+                                            {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index + 1}`}
+                                        </div>
                                         <div className="SEOStatisticAdmin-top-info">
                                             <a 
                                                 href={`/clubs/${item.slug}`} 
@@ -299,39 +606,66 @@ export const SEOStatisticAdmin = () => {
                                             </a>
                                             <span className="SEOStatisticAdmin-top-slug">{item.slug}</span>
                                         </div>
-                                        <span className="SEOStatisticAdmin-top-shares">
-                                            {formatNumber(item.shares)} споделяния
-                                        </span>
+                                        <div className="SEOStatisticAdmin-top-shares-badge">
+                                            <span className="SEOStatisticAdmin-shares-number">{formatNumber(item.shares)}</span>
+                                            <span className="SEOStatisticAdmin-shares-label">споделяния</span>
+                                        </div>
                                     </div>
                                 ))
                             ) : (
-                                <p className="SEOStatisticAdmin-empty">Няма данни за клубове</p>
+                                <div className="SEOStatisticAdmin-empty-state">
+                                    <span className="SEOStatisticAdmin-empty-icon">🏛️</span>
+                                    <p>Няма споделени клубове тази седмица</p>
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {activeTab === 'pages' && (
+                        <div className="SEOStatisticAdmin-top-list">
+                            {topContent?.pages?.length > 0 ? (
+                                topContent.pages.map((item, index) => (
+                                    <div key={index} className="SEOStatisticAdmin-top-item">
+                                        <div className="SEOStatisticAdmin-top-rank-badge">
+                                            {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index + 1}`}
+                                        </div>
+                                        <div className="SEOStatisticAdmin-top-info">
+                                            <a 
+                                                href={`/${item.slug === 'home' ? '' : item.slug}`} 
+                                                target="_blank" 
+                                                rel="noopener noreferrer"
+                                                className="SEOStatisticAdmin-top-title"
+                                            >
+                                                {getPageDisplayName(item.slug)}
+                                            </a>
+                                            <span className="SEOStatisticAdmin-top-slug">/{item.slug}</span>
+                                        </div>
+                                        <div className="SEOStatisticAdmin-top-shares-badge">
+                                            <span className="SEOStatisticAdmin-shares-number">{formatNumber(item.shares)}</span>
+                                            <span className="SEOStatisticAdmin-shares-label">споделяния</span>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="SEOStatisticAdmin-empty-state">
+                                    <span className="SEOStatisticAdmin-empty-icon">📄</span>
+                                    <p>Няма споделени страници тази седмица</p>
+                                </div>
                             )}
                         </div>
                     )}
                 </div>
             </div>
 
-            {/* DAILY ACTIVITY */}
-            <div className="SEOStatisticAdmin-section SEOStatisticAdmin-full-width">
-                <h2>📈 Дневна Активност (Последната седмица)</h2>
-                <div className="SEOStatisticAdmin-chart">
-                    {dailyActivity?.map((day, index) => {
-                        const maxCount = Math.max(...dailyActivity.map(d => d.count));
-                        const height = (day.count / maxCount) * 100;
-                        return (
-                            <div key={index} className="SEOStatisticAdmin-chart-bar">
-                                <div 
-                                    className="SEOStatisticAdmin-chart-bar-fill"
-                                    style={{ height: `${height}%` }}
-                                >
-                                    <span className="SEOStatisticAdmin-chart-value">{day.count}</span>
-                                </div>
-                                <span className="SEOStatisticAdmin-chart-label">{formatDate(day.date)}</span>
-                            </div>
-                        );
-                    })}
-                </div>
+            {/* FOOTER INFO */}
+            <div className="SEOStatisticAdmin-footer">
+                <p>
+                    📌 Последно обновяване: {new Date(data?.meta?.generatedAt).toLocaleString('bg-BG')}
+                </p>
+                <p className="SEOStatisticAdmin-footer-hint">
+                    💡 Тази статистика показва колко пъти социални мрежи (Facebook, Twitter, LinkedIn и др.) 
+                    са поискали preview на вашето съдържание при споделяне.
+                </p>
             </div>
         </div>
     );
