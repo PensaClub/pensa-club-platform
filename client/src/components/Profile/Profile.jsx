@@ -31,7 +31,8 @@ import {
   MenuIcon,
   SearchIconProfile
 } from "../Articles/articleUtils/AdminIcons";
-
+import { AdminDigiBridgeStudents } from "../AdminDigiBridgeStudents/AdminDigiBridgeStudents";
+// import { AdminDigiBridgeStudentApplications } from "../AdminDigiBridgeStudents/AdminDigiBridgeStudentApplications/AdminDigiBridgeStudentApplications";
 import { ProfileSkills } from "./ProfileSkills";
 import { ProfileWorks } from "./ProfileWorks";
 import { ProfileInterests } from "./ProfileInterests";
@@ -185,7 +186,8 @@ export const Profile = () => {
     community: false,
     messages: false,
     applications: false,
-    clubs: false
+    clubs: false,
+    students: false,
   });
 
   const [applicationsStats, setApplicationsStats] = useState({
@@ -239,7 +241,11 @@ export const Profile = () => {
       "/profile/mentors-applications": t("admin.mentors.applications"),
       "/profile/mentors-statistics": t("admin.mentors.statistics"),
       "/profile/reviews-management": t("admin.reviews.management"),
-      "/profile/mentor-applications": t("profile.mentorApplications")
+      "/profile/mentor-applications": t("profile.mentorApplications"),
+      "/profile/students-overview": t("admin.students.overview"),
+      "/profile/student-applications": t("admin.students.applications"),
+      "/profile/mentor-profile": t("profile.mentorProfile")
+
     };
 
     const matchedPath = Object.keys(pathTitleMap).find(key => path.includes(key));
@@ -937,6 +943,37 @@ export const Profile = () => {
                           </li>
                         </ul>
                       </li>
+                      {/*Students*/}
+                      <li>
+                        <NavLink
+                          onClick={(e) => {
+                            toggleSubMenu('students');
+                          }}
+                          className="nav-link-button"
+                          >
+                          <span className="link-content">
+                            <UsersIcon className="icon" />
+                            {t("admin.students.title")}
+                          </span>
+                          <span className={`arrow-icon ${subMenuStates.students ? 'rotated' : ''}`}>
+                            {subMenuStates.students ? <DownArrowIcon /> : <ArrowIcon />}
+                          </span>
+                          </NavLink>
+                        <ul className={`sub-menu ${subMenuStates.students ? 'expanded' : ''}`}>
+                          <li>
+                            <NavLink to="students-overview" className={({ isActive }) => isActive ? 'active' : ''}>
+                              <CircleIcon className="icon" />
+                              {t("admin.students.overview")}
+                            </NavLink>
+                          </li>
+                          <li>
+                            <NavLink to="students-applications" className={({ isActive }) => isActive ? 'active' : ''}>
+                              <CircleIcon className="icon" />
+                              {t("admin.students.applications")}
+                            </NavLink>
+                          </li>
+                        </ul>
+                      </li>
                     </>
                   )}
 
@@ -1196,7 +1233,13 @@ export const Profile = () => {
             <Route path="mentors-statistics" element={<AdminGuard><AdminDigiBridgeMentorStatistics /></AdminGuard>} />
             <Route path="users-admin" element={<AdminGuard><AllUsers setAllUsers={setAllUsers} /></AdminGuard>} />
             <Route path="users-unfinished" element={<AdminGuard><UnfinishedProfiles setUnfinishedUsers={setUnfinishedUsers} /></AdminGuard>} />
+
+
+            <Route path="students-overview" element={<AdminGuard><AdminDigiBridgeStudents /></AdminGuard>} />
+            {/* <Route path="students-applications" element={<AdminGuard><AdminDigiBridgeStudentApplications /></AdminGuard>} /> */}
+
             <Route path="seo-statistics" element={<AdminGuard><SEOStatisticAdmin /></AdminGuard>} />
+
           </Routes>
         </main>
       </div>

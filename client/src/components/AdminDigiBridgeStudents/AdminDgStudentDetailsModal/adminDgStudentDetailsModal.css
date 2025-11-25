@@ -1,0 +1,438 @@
+/* src/components/AdminDigiBridgeStudents/AdminDgStudentDetailsModal/adminDgStudentDetailsModal.css */
+
+/* ===============================
+   OVERLAY
+   =============================== */
+.adminDgStudentDetailsModal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  animation: adminDgStudentDetailsModal-fadeIn 0.2s ease;
+}
+
+@keyframes adminDgStudentDetailsModal-fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ===============================
+   CONTAINER
+   =============================== */
+.adminDgStudentDetailsModal-container {
+  background: white;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: adminDgStudentDetailsModal-slideUp 0.3s ease;
+}
+
+@keyframes adminDgStudentDetailsModal-slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===============================
+   HEADER
+   =============================== */
+.adminDgStudentDetailsModal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.adminDgStudentDetailsModal-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
+}
+
+.adminDgStudentDetailsModal-closeBtn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.adminDgStudentDetailsModal-closeBtn:hover {
+  background: #f3f4f6;
+  color: #1f2937;
+}
+
+/* ===============================
+   CONTENT
+   =============================== */
+.adminDgStudentDetailsModal-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Profile Section */
+.adminDgStudentDetailsModal-profileSection {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #f9fafb 0%, #ffffff 100%);
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.adminDgStudentDetailsModal-avatarWrapper {
+  flex-shrink: 0;
+}
+
+.adminDgStudentDetailsModal-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.adminDgStudentDetailsModal-avatarPlaceholder {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-size: 2rem;
+  font-weight: 700;
+  border: 3px solid white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.adminDgStudentDetailsModal-profileInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.adminDgStudentDetailsModal-studentName {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 0.25rem 0;
+}
+
+.adminDgStudentDetailsModal-studentEmail {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0 0 0.5rem 0;
+  word-break: break-all;
+}
+
+.adminDgStudentDetailsModal-studentPhone {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #4b5563;
+  margin: 0;
+}
+
+.adminDgStudentDetailsModal-statusBadge {
+  flex-shrink: 0;
+}
+
+.adminDgStudentDetailsModal-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.375rem 0.75rem;
+  border-radius: 16px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.adminDgStudentDetailsModal-status--active {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.adminDgStudentDetailsModal-status--inactive {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.adminDgStudentDetailsModal-status--suspended {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+/* Stats Grid */
+.adminDgStudentDetailsModal-statsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.adminDgStudentDetailsModal-statCard {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 1.25rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.adminDgStudentDetailsModal-statCard:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+
+.adminDgStudentDetailsModal-statIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.adminDgStudentDetailsModal-statInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.adminDgStudentDetailsModal-statValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  line-height: 1.2;
+  margin-bottom: 0.25rem;
+}
+
+.adminDgStudentDetailsModal-statLabel {
+  font-size: 0.75rem;
+  color: #6b7280;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+/* Section */
+.adminDgStudentDetailsModal-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.adminDgStudentDetailsModal-sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: #1f2937;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+/* Mentor Card */
+.adminDgStudentDetailsModal-mentorCard {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+}
+
+.adminDgStudentDetailsModal-mentorAvatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.adminDgStudentDetailsModal-mentorAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.adminDgStudentDetailsModal-mentorAvatarPlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.adminDgStudentDetailsModal-mentorInfo {
+  flex: 1;
+}
+
+.adminDgStudentDetailsModal-mentorName {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 0.25rem;
+}
+
+.adminDgStudentDetailsModal-mentorRole {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.adminDgStudentDetailsModal-noMentor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  color: #9ca3af;
+}
+
+.adminDgStudentDetailsModal-noMentor svg {
+  margin-bottom: 0.5rem;
+}
+
+.adminDgStudentDetailsModal-noMentor p {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+/* Info Grid */
+.adminDgStudentDetailsModal-infoGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.adminDgStudentDetailsModal-infoRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: #f9fafb;
+  border-radius: 8px;
+  gap: 1rem;
+}
+
+.adminDgStudentDetailsModal-infoLabel {
+  font-size: 0.8rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.adminDgStudentDetailsModal-infoValue {
+  font-size: 0.875rem;
+  color: #1f2937;
+  font-weight: 600;
+  text-align: right;
+}
+
+/* ===============================
+   FOOTER
+   =============================== */
+.adminDgStudentDetailsModal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.adminDgStudentDetailsModal-btnSecondary {
+  padding: 0.625rem 1.5rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.adminDgStudentDetailsModal-btnSecondary:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+/* ===============================
+   RESPONSIVE
+   =============================== */
+
+/* Mobile Large (480px+) */
+@media (min-width: 480px) {
+  .adminDgStudentDetailsModal-statsGrid {
+    gap: 1.25rem;
+  }
+}
+
+/* Tablet (768px+) */
+@media (min-width: 768px) {
+  .adminDgStudentDetailsModal-container {
+    max-width: 700px;
+  }
+
+  .adminDgStudentDetailsModal-header {
+    padding: 1.5rem 2rem;
+  }
+
+  .adminDgStudentDetailsModal-title {
+    font-size: 1.5rem;
+  }
+
+  .adminDgStudentDetailsModal-content {
+    padding: 2rem;
+    gap: 2rem;
+  }
+
+  .adminDgStudentDetailsModal-footer {
+    padding: 1.5rem 2rem;
+  }
+}

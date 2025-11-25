@@ -382,6 +382,112 @@ export const academyServiceFactory = () => {
       return requester.post(`${apiUrl}/mentors/dashboard/student-applications/${applicationId}/reapprove`);
     },
 
+    // ===============================
+    // ADMIN STUDENTS MANAGEMENT 📚
+    // ===============================
+
+    getAllStudents: async (params = {}) => {
+      const queryString = new URLSearchParams(params).toString();
+      return requester.get(`${apiUrl}/academy/admin/students?${queryString}`);
+    },
+
+    getStudentById: async (studentId) => {
+      return requester.get(`${apiUrl}/academy/admin/students/${studentId}`);
+    },
+
+    updateStudent: async (studentId, data) => {
+      return requester.patch(`${apiUrl}/academy/admin/students/${studentId}`, data);
+    },
+
+    deleteStudent: async (studentId) => {
+      return requester.del(`${apiUrl}/academy/admin/students/${studentId}`);
+    },
+
+    updateStudentStatus: async (studentId, status) => {
+      return requester.patch(`${apiUrl}/academy/admin/students/${studentId}/status`, { status });
+    },
+
+    assignMentorToStudent: async (studentId, newMentorId) => {
+      return requester.post(`${apiUrl}/academy/admin/students/${studentId}/assign-mentor`, { newMentorId });
+    },
+
+    sendEmailToStudent: async (studentId, emailData) => {
+      return requester.post(`${apiUrl}/academy/admin/students/${studentId}/send-email`, emailData);
+    },
+
+    // ===============================
+    // ADMIN STUDENT NOTES 📝
+    // ===============================
+
+    getAdminStudentNotes: async (studentId) => {
+      return requester.get(`${apiUrl}/academy/admin/students/${studentId}/notes`);
+    },
+
+    createAdminStudentNote: async (studentId, noteData) => {
+      return requester.post(`${apiUrl}/academy/admin/students/${studentId}/notes`, noteData);
+    },
+
+    updateAdminStudentNote: async (studentId, noteId, noteData) => {
+      return requester.patch(`${apiUrl}/academy/admin/students/${studentId}/notes/${noteId}`, noteData);
+    },
+
+    deleteAdminStudentNote: async (studentId, noteId) => {
+      return requester.del(`${apiUrl}/academy/admin/students/${studentId}/notes/${noteId}`);
+    },
+
+    // ===============================
+    // STUDENT STATISTICS 📊
+    // ===============================
+
+    getStudentStatisticsOverview: async () => {
+      return requester.get(`${apiUrl}/academy/admin/students/statistics/overview`);
+    },
+
+    getStudentsByStatus: async () => {
+      return requester.get(`${apiUrl}/academy/admin/students/statistics/by-status`);
+    },
+
+    getStudentsByMentor: async () => {
+      return requester.get(`${apiUrl}/academy/admin/students/statistics/by-mentor`);
+    },
+
+    getStudentsCreditsDistribution: async () => {
+      return requester.get(`${apiUrl}/academy/admin/students/statistics/credits-distribution`);
+    },
+
+    getStudentsAttendanceTrends: async () => {
+      return requester.get(`${apiUrl}/academy/admin/students/statistics/attendance-trends`);
+    },
+
+    getTopPerformingStudents: async (limit = 10) => {
+      return requester.get(`${apiUrl}/academy/admin/students/statistics/top-performers?limit=${limit}`);
+    },
+
+    getStudentsEngagement: async () => {
+      return requester.get(`${apiUrl}/academy/admin/students/statistics/engagement`);
+    },
+    // ===============================
+// ADMIN: STUDENT APPLICATIONS (за /admin/student-applications)
+// ===============================
+
+getAllStudentApplications: async (params = {}) => {
+  const queryString = new URLSearchParams(params).toString();
+  return requester.get(`${apiUrl}/academy/admin/student-applications?${queryString}`);
+},
+
+approveStudentApplicationByAdmin: async (applicationId) => {
+  return requester.post(`${apiUrl}/academy/admin/student-applications/${applicationId}/approve`);
+},
+
+rejectStudentApplicationByAdmin: async (applicationId, rejectionReason) => {
+  return requester.post(`${apiUrl}/academy/admin/student-applications/${applicationId}/reject`, {
+    rejectionReason
+  });
+},
+
+deleteStudentApplicationByAdmin: async (applicationId) => {
+  return requester.del(`${apiUrl}/academy/admin/student-applications/${applicationId}`);
+},
   };
 };
 
