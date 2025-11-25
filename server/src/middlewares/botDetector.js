@@ -5,6 +5,7 @@ const generateInitiativeMetaHTML = require('../utils/initiativeMetaGenerator');
 const generateClubMetaHTML = require('../utils/clubMetaGenerator');
 const generateAcademyMetaHTML = require('../utils/academyMetaGenerator');
 const generateMentorMetaHTML = require('../utils/mentorMetaGenerator');
+const geoip = require('geoip-lite');
 
 /**
  * Проверява дали User-Agent е от социална мрежа bot
@@ -56,11 +57,20 @@ async function logBotRequest(botName, contentType, contentId, contentSlug, userA
     try {
         const { bot_log } = require('../sequelize/models');
 
+        // 🌍 Географско проследяване
+        const geo = geoip.lookup(ip);
+        const country = geo ? geo.country : null;
+        const city = geo ? geo.city : null;
+        const region = geo ? geo.region : null;
+
         const logData = {
             bot: botName,
-            contentType: contentType, // 'article', 'project', 'initiative', 'club', 'page', 'mentor'
+            contentType: contentType,
             userAgent: userAgent,
             ip: ip,
+            country: country,
+            city: city,
+            region: region,
             timestamp: new Date()
         };
 
@@ -84,7 +94,7 @@ async function logBotRequest(botName, contentType, contentId, contentSlug, userA
         }
 
         await bot_log.create(logData);
-        console.log(`✅ Bot log saved: ${botName} → ${contentType}/${contentSlug || contentId}`);
+        console.log(`✅ Bot log saved: ${botName} → ${contentType}/${contentSlug || contentId} (${country || 'Unknown'})`);
     } catch (error) {
         console.error('❌ Error saving bot log:', error);
     }
@@ -98,7 +108,7 @@ async function botDetector(req, res, next) {
 
     // Проверка дали е bot
     if (!isBot(userAgent)) {
-        return next(); // Не е bot, продължи нормално
+        return next();
     }
 
     const botName = getBotName(userAgent);
@@ -111,6 +121,7 @@ async function botDetector(req, res, next) {
     });
 
     // URL Pattern Matching
+    const homeMatch = req.path === '/';
     const articleMatch = req.path.match(/^\/articles\/([a-zA-Z0-9-]+)$/);
     const projectMatch = req.path.match(/^\/projects\/([a-zA-Z0-9-]+)$/);
     const initiativeMatch = req.path.match(/^\/initiatives\/([a-zA-Z0-9-]+)$/);
@@ -119,6 +130,62 @@ async function botDetector(req, res, next) {
     const mentorMatch = req.path.match(/^\/academy\/mentors\/(\d+)$/);
 
     try {
+        // ==================== HOME PAGE ====================
+        if (homeMatch) {
+            console.log('🏠 Processing HOME page');
+
+            await logBotRequest(
+                botName,
+                'page',
+                null,
+                'home',
+                userAgent,
+                req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress
+            );
+
+            const html = `<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pensa Club - Платформа за Активен Живот 60+</title>
+    <meta name="description" content="Pensa Club е платформа за активен живот, която свързва хора над 60 години с възможности за образование, социални контакти и активен живот." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://pensa.club/" />
+    <meta property="og:title" content="Pensa Club - Платформа за Активен Живот 60+" />
+    <meta property="og:description" content="Свържете се с общност от активни хора 60+. Открийте клубове, събития, обучения и още." />
+    <meta property="og:image" content="https://pensa.club/images/homePage/logo-2.png" />
+    <meta property="og:site_name" content="Pensa Club" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Pensa Club - Платформа за Активен Живот 60+" />
+    <meta name="twitter:description" content="Свържете се с общност от активни хора 60+. Открийте клубове, събития, обучения и още." />
+    <meta name="twitter:image" content="https://pensa.club/images/homePage/logo-2.png" />
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Pensa Club",
+        "url": "https://pensa.club",
+        "description": "Платформа за активен живот 60+",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://pensa.club/search?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+        }
+    }
+    </script>
+    <script>setTimeout(function(){window.location.href = "/";}, 100);</script>
+</head>
+<body>
+    <h1>Pensa Club - Платформа за Активен Живот 60+</h1>
+    <p>Зареждане...</p>
+</body>
+</html>`;
+            
+            console.log('📤 Sending home HTML to bot');
+            return res.send(html);
+        }
+
         // ==================== ARTICLE ====================
         if (articleMatch) {
             const slug = articleMatch[1];
