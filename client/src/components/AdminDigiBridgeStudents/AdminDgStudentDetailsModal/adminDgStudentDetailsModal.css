@@ -436,3 +436,83 @@
     padding: 1.5rem 2rem;
   }
 }
+/* ===============================
+   QUICK ACTIONS
+   =============================== */
+.adminDgStudentDetailsModal-quickActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.adminDgStudentDetailsModal-actionBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex: 1;
+  min-width: 140px;
+  justify-content: center;
+}
+
+.adminDgStudentDetailsModal-actionBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Edit Button */
+.adminDgStudentDetailsModal-actionBtn--edit {
+  color: #059669;
+  border-color: #a7f3d0;
+  background: #ecfdf5;
+}
+
+.adminDgStudentDetailsModal-actionBtn--edit:hover {
+  background: #d1fae5;
+  border-color: #6ee7b7;
+}
+
+/* Change Mentor Button */
+.adminDgStudentDetailsModal-actionBtn--mentor {
+  color: #7c3aed;
+  border-color: #ddd6fe;
+  background: #f5f3ff;
+}
+
+.adminDgStudentDetailsModal-actionBtn--mentor:hover {
+  background: #ede9fe;
+  border-color: #c4b5fd;
+}
+
+/* Send Email Button */
+.adminDgStudentDetailsModal-actionBtn--email {
+  color: #0284c7;
+  border-color: #bae6fd;
+  background: #f0f9ff;
+}
+
+.adminDgStudentDetailsModal-actionBtn--email:hover {
+  background: #e0f2fe;
+  border-color: #7dd3fc;
+}
+
+/* ===============================
+   RESPONSIVE - Quick Actions
+   =============================== */
+@media (max-width: 480px) {
+  .adminDgStudentDetailsModal-quickActions {
+    flex-direction: column;
+  }
+
+  .adminDgStudentDetailsModal-actionBtn {
+    width: 100%;
+    min-width: unset;
+  }
+}

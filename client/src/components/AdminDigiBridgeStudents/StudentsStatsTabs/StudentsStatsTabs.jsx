@@ -38,20 +38,20 @@ export const StudentsStatsTabs = ({ activeTab, setActiveTab }) => {
   };
 
   return (
-    <div className="students-stats-tabs">
+    <div className="studentsStatsTabs">
       {/* MOBILE/TABLET - Select Style */}
-      <div className="tabs-select-wrapper" ref={dropdownRef}>
+      <div className="studentsStatsTabs-selectWrapper" ref={dropdownRef}>
         <button 
-          className="tabs-select-trigger"
+          className="studentsStatsTabs-trigger"
           onClick={() => setIsOpen(!isOpen)}
           type="button"
         >
-          <span className="select-content">
-            <span className="select-icon">{activeTabData?.icon}</span>
-            <span className="select-label">{activeTabData?.label}</span>
+          <span className="studentsStatsTabs-triggerContent">
+            <span className="studentsStatsTabs-triggerIcon">{activeTabData?.icon}</span>
+            <span className="studentsStatsTabs-triggerLabel">{activeTabData?.label}</span>
           </span>
           <svg 
-            className={`select-arrow ${isOpen ? 'open' : ''}`}
+            className={`studentsStatsTabs-arrow ${isOpen ? 'studentsStatsTabs-arrow--open' : ''}`}
             width="12" 
             height="8" 
             viewBox="0 0 12 8"
@@ -61,18 +61,18 @@ export const StudentsStatsTabs = ({ activeTab, setActiveTab }) => {
         </button>
 
         {isOpen && (
-          <div className="tabs-select-dropdown">
+          <div className="studentsStatsTabs-dropdown">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
-                className={`select-option ${activeTab === tab.id ? 'active' : ''}`}
+                className={`studentsStatsTabs-option ${activeTab === tab.id ? 'studentsStatsTabs-option--active' : ''}`}
                 onClick={() => handleSelect(tab.id)}
                 type="button"
               >
-                <span className="option-icon">{tab.icon}</span>
-                <span className="option-label">{tab.label}</span>
+                <span className="studentsStatsTabs-optionIcon">{tab.icon}</span>
+                <span className="studentsStatsTabs-optionLabel">{tab.label}</span>
                 {activeTab === tab.id && (
-                  <svg className="check-icon" width="16" height="16" viewBox="0 0 16 16">
+                  <svg className="studentsStatsTabs-checkIcon" width="16" height="16" viewBox="0 0 16 16">
                     <path d="M13 4L6 11L3 8" stroke="currentColor" strokeWidth="2" fill="none"/>
                   </svg>
                 )}
@@ -83,16 +83,16 @@ export const StudentsStatsTabs = ({ activeTab, setActiveTab }) => {
       </div>
 
       {/* DESKTOP - Chips Style */}
-      <div className="tabs-chips">
+      <div className="studentsStatsTabs-chips">
         {tabs.map((tab) => (
           <button
             key={tab.id}
-            className={`tab-chip ${activeTab === tab.id ? 'active' : ''}`}
+            className={`studentsStatsTabs-chip ${activeTab === tab.id ? 'studentsStatsTabs-chip--active' : ''}`}
             onClick={() => setActiveTab(tab.id)}
             type="button"
           >
-            <span className="chip-icon">{tab.icon}</span>
-            <span className="chip-label">{tab.label}</span>
+            <span className="studentsStatsTabs-chipIcon">{tab.icon}</span>
+            <span className="studentsStatsTabs-chipLabel">{tab.label}</span>
           </button>
         ))}
       </div>

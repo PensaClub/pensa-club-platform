@@ -9690,7 +9690,8 @@
   "common": {
     "navigation": {
       "home": "Home"
-    }
+    },
+    "cancel": "Cancel"
   },
   "clubForm": {
     "title": "Club Registration",
@@ -13363,7 +13364,7 @@
     "cancel": "Cancel",
     "processing": "Processing..."
   },
-   "rejectedApplications": {
+  "rejectedApplications": {
     "noApplications": "No rejected applications",
     "noApplicationsDesc": "Rejected applications will appear here",
     "rejected": "Rejected",
@@ -13409,9 +13410,9 @@
     "close": "Close"
   },
   "adminDigiBridgeStudents": {
-  "title": "Students Management",
-  "subtitle": "View and manage all students in DigiBridge Academy",
-  "stats": {
+    "title": "Students Management",
+    "subtitle": "View and manage all students in DigiBridge Academy",
+    "stats": {
       "totalStudents": "Total Students",
       "activeStudents": "Active Students",
       "withMentor": "With Mentor",
@@ -13421,7 +13422,7 @@
       "activeCourses": "Active Courses",
       "completedCourses": "Completed Courses"
     },
-     "tabs": {
+    "tabs": {
       "overview": "Overview",
       "byStatus": "By Status",
       "byMentor": "By Mentor",
@@ -13471,8 +13472,8 @@
       "noStudents": "No students found",
       "noStudentsDesc": "Try changing the filters or add new students"
     }
-},
-"adminDgStudentDetailsModal": {
+  },
+  "adminDgStudentDetailsModal": {
     "title": "Student Details",
     "totalCredits": "Total Credits",
     "attendanceRate": "Attendance Rate",
@@ -13483,7 +13484,10 @@
     "registrationDate": "Registration Date",
     "lastActive": "Last Active",
     "close": "Close",
-    "notAvailable": "No information available"
+    "notAvailable": "Not available",
+    "editStudent": "Edit",
+    "changeMentor": "Change Mentor",
+    "sendEmail": "Send Email"
   },
   "adminDgDeleteStudentConfirm": {
     "title": "Delete Student",
@@ -13492,7 +13496,7 @@
     "delete": "Delete Student",
     "deleting": "Deleting..."
   },
-   "adminDgEditStudentModal": {
+  "adminDgEditStudentModal": {
     "title": "Edit Student",
     "currentAvatar": "Current Avatar",
     "avatarHint": "Avatar change is not available at the moment",
@@ -13510,6 +13514,77 @@
       "emailRequired": "Email is required",
       "emailInvalid": "Invalid email format",
       "phoneInvalid": "Invalid phone number"
+    }
+  },
+  "adminDgChangeMentorModal": {
+    "title": "Change Mentor",
+    "currentMentor": "Current mentor",
+    "searchPlaceholder": "Search mentor by name, email or specialization...",
+    "noMentorsFound": "No mentors found",
+    "current": "Current",
+    "students": "students",
+    "assign": "Assign Mentor",
+    "assigning": "Assigning..."
+  },
+   "adminDgSendEmailModal": {
+    "title": "Send Email",
+    "to": "To",
+    "subject": "Subject",
+    "subjectPlaceholder": "Enter email subject",
+    "message": "Message",
+    "messagePlaceholder": "Write your message here...",
+    "quickTemplates": "Quick templates",
+    "send": "Send Email",
+    "sending": "Sending...",
+    "note": "The email will be sent from the official DigiBridge Academy address.",
+    "templates": {
+      "welcome": "Welcome",
+      "reminder": "Reminder",
+      "inactive": "Inactive"
+    },
+    "templateContent": {
+      "welcome": {
+        "subject": "Welcome to DigiBridge Academy!",
+        "message": "Hello {{name}},\n\nWelcome to DigiBridge Academy! We are glad you are part of our community.\n\nHere you will find support and resources for your digital learning journey. Don't hesitate to contact your mentor if you have questions.\n\nBest regards,\nThe DigiBridge Academy Team"
+      },
+      "reminder": {
+        "subject": "Reminder for upcoming session",
+        "message": "Hello {{name}},\n\nThis is a reminder about your upcoming session with your mentor. Please make sure you are prepared and have a stable internet connection.\n\nIf you have any questions, don't hesitate to contact us.\n\nBest regards,\nThe DigiBridge Academy Team"
+      },
+      "inactive": {
+        "subject": "We miss you at DigiBridge Academy",
+        "message": "Hello {{name}},\n\nWe noticed you haven't been active lately. We hope everything is okay.\n\nIf you need help or want to schedule a new session with a mentor, please contact us.\n\nBest regards,\nThe DigiBridge Academy Team"
+      }
+    },
+    "errors": {
+      "subjectRequired": "Subject is required",
+      "subjectTooShort": "Subject must be at least 3 characters",
+      "messageRequired": "Message is required",
+      "messageTooShort": "Message must be at least 10 characters"
+    }
+  },
+  "adminDgStudentsFilters": {
+    "searchPlaceholder": "Search by name, email...",
+    "filters": "Filters",
+    "status": "Status",
+    "mentor": "Mentor",
+    "sortBy": "Sort by",
+    "allMentors": "All mentors",
+    "noMentor": "No mentor",
+    "clearAll": "Clear all",
+    "studentsFound": "students found",
+    "statusOptions": {
+      "all": "All statuses",
+      "active": "Active",
+      "inactive": "Inactive",
+      "suspended": "Suspended"
+    },
+    "sortOptions": {
+      "newest": "Newest",
+      "oldest": "Oldest",
+      "name": "By name",
+      "credits": "By credits",
+      "attendance": "By attendance"
     }
   }
 }

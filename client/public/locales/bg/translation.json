@@ -9719,7 +9719,9 @@
   "common": {
     "navigation": {
       "home": "Начало"
-    }
+    },
+      "cancel": "Отказ"
+
   },
   "clubForm": {
     "title": "Регистриране на клуб",
@@ -13740,18 +13742,22 @@
     }
   },
     "adminDgStudentDetailsModal": {
-    "title": "Детайли за студента",
-    "totalCredits": "Общо кредити",
-    "attendanceRate": "Процент посещаемост",
-    "currentMentor": "Текущ ментор",
-    "mentor": "Ментор",
-    "noMentorAssigned": "Няма назначен ментор",
-    "additionalInfo": "Допълнителна информация",
-    "registrationDate": "Дата на регистрация",
-    "lastActive": "Последна активност",
-    "close": "Затвори",
-    "notAvailable": "Няма налична информация"
-  },
+  "title": "Детайли за студента",
+  "totalCredits": "Общо кредити",
+  "attendanceRate": "Процент посещаемост",
+  "currentMentor": "Текущ ментор",
+  "mentor": "Ментор",
+  "noMentorAssigned": "Няма назначен ментор",
+  "additionalInfo": "Допълнителна информация",
+  "registrationDate": "Дата на регистрация",
+  "lastActive": "Последна активност",
+  "close": "Затвори",
+  "notAvailable": "Няма налична информация",
+  "editStudent": "Редактирай",
+  "changeMentor": "Смяна на ментор",
+  "sendEmail": "Изпрати имейл"
+},
+
    "adminDgDeleteStudentConfirm": {
     "title": "Изтриване на студент",
     "message": "Сигурни ли сте, че искате да изтриете студента",
@@ -13777,6 +13783,77 @@
       "emailRequired": "Имейлът е задължителен",
       "emailInvalid": "Невалиден имейл формат",
       "phoneInvalid": "Невалиден телефонен номер"
+    }
+  },
+  "adminDgChangeMentorModal": {
+  "title": "Промяна на ментор",
+  "currentMentor": "Текущ ментор",
+  "searchPlaceholder": "Търсене на ментор по име, имейл или специализация...",
+  "noMentorsFound": "Няма намерени ментори",
+  "current": "Текущ",
+  "students": "студенти",
+  "assign": "Назначи ментор",
+  "assigning": "Назначаване..."
+},
+"adminDgSendEmailModal": {
+    "title": "Изпращане на имейл",
+    "to": "До",
+    "subject": "Тема",
+    "subjectPlaceholder": "Въведете тема на имейла",
+    "message": "Съобщение",
+    "messagePlaceholder": "Напишете вашето съобщение тук...",
+    "quickTemplates": "Бързи шаблони",
+    "send": "Изпрати имейл",
+    "sending": "Изпращане...",
+    "note": "Имейлът ще бъде изпратен от официалния адрес на DigiBridge Academy.",
+    "templates": {
+      "welcome": "Добре дошли",
+      "reminder": "Напомняне",
+      "inactive": "Неактивност"
+    },
+    "templateContent": {
+      "welcome": {
+        "subject": "Добре дошли в DigiBridge Academy!",
+        "message": "Здравейте {{name}},\n\nДобре дошли в DigiBridge Academy! Радваме се, че сте част от нашата общност.\n\nТук ще намерите подкрепа и ресурси за вашето дигитално обучение. Не се колебайте да се свържете с вашия ментор при въпроси.\n\nПоздрави,\nЕкипът на DigiBridge Academy"
+      },
+      "reminder": {
+        "subject": "Напомняне за предстояща сесия",
+        "message": "Здравейте {{name}},\n\nНапомняме ви за предстоящата ви сесия с ментора. Моля, уверете се, че сте подготвени и имате стабилна интернет връзка.\n\nАко имате въпроси, не се колебайте да се свържете с нас.\n\nПоздрави,\nЕкипът на DigiBridge Academy"
+      },
+      "inactive": {
+        "subject": "Липсвате ни в DigiBridge Academy",
+        "message": "Здравейте {{name}},\n\nЗабелязахме, че не сте били активни напоследък. Надяваме се, че всичко е наред.\n\nАко имате нужда от помощ или искате да планирате нова сесия с ментор, моля свържете се с нас.\n\nПоздрави,\nЕкипът на DigiBridge Academy"
+      }
+    },
+    "errors": {
+      "subjectRequired": "Темата е задължителна",
+      "subjectTooShort": "Темата трябва да е поне 3 символа",
+      "messageRequired": "Съобщението е задължително",
+      "messageTooShort": "Съобщението трябва да е поне 10 символа"
+    }
+  },
+  "adminDgStudentsFilters": {
+    "searchPlaceholder": "Търсене по име, имейл...",
+    "filters": "Филтри",
+    "status": "Статус",
+    "mentor": "Ментор",
+    "sortBy": "Сортирай по",
+    "allMentors": "Всички ментори",
+    "noMentor": "Без ментор",
+    "clearAll": "Изчисти всички",
+    "studentsFound": "студенти намерени",
+    "statusOptions": {
+      "all": "Всички статуси",
+      "active": "Активни",
+      "inactive": "Неактивни",
+      "suspended": "Спрени"
+    },
+    "sortOptions": {
+      "newest": "Най-нови",
+      "oldest": "Най-стари",
+      "name": "По име",
+      "credits": "По кредити",
+      "attendance": "По посещаемост"
     }
   }
 }

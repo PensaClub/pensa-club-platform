@@ -1,13 +1,17 @@
 // src/components/AdminDigiBridgeStudents/AdminDgStudentDetailsModal/AdminDgStudentDetailsModal.jsx
 
-import {  useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import './adminDgStudentDetailsModal.css';
 
-export const AdminDgStudentDetailsModal = ({ student, onClose }) => {
+export const AdminDgStudentDetailsModal = ({ 
+  student, 
+  onClose, 
+  onChangeMentor, 
+  onSendEmail,
+  onEdit 
+}) => {
   const { t } = useTranslation();
-
-//   if (!student) return null;
 
   const formatDate = (dateString) => {
     if (!dateString) return t('notAvailable');
@@ -19,29 +23,30 @@ export const AdminDgStudentDetailsModal = ({ student, onClose }) => {
     });
   };
 
-   const handleBackdropClick = useCallback((e) => {
+  const handleBackdropClick = useCallback((e) => {
     if (e.target.classList.contains('adminDgStudentDetailsModal-overlay')) {
       onClose();
     }
   }, [onClose]);
 
-//    // ✅ ESC KEY + BODY SCROLL
-//   useEffect(() => {
-//     const handleEscKey = (e) => {
-//       if (e.key === 'Escape') {
-//         onClose();
-//       }
-//     };
+  // ESC KEY + BODY SCROLL
+  useEffect(() => {
+    const handleEscKey = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
 
-//     document.addEventListener('keydown', handleEscKey);
-//     document.body.style.overflow = 'hidden';
+    document.addEventListener('keydown', handleEscKey);
+    document.body.style.overflow = 'hidden';
 
-//     return () => {
-//       document.removeEventListener('keydown', handleEscKey);
-//       document.body.style.overflow = 'unset';
-//     };
-//     // eslint-disable-next-line react-hooks/exhaustive-deps
-//   }, []);
+    return () => {
+      document.removeEventListener('keydown', handleEscKey);
+      document.body.style.overflow = 'unset';
+    };
+  }, [onClose]);
+
+  if (!student) return null;
 
   return (
     <div className="adminDgStudentDetailsModal-overlay" onClick={handleBackdropClick}>
@@ -76,7 +81,7 @@ export const AdminDgStudentDetailsModal = ({ student, onClose }) => {
                 />
               ) : (
                 <div className="adminDgStudentDetailsModal-avatarPlaceholder">
-                  {student?.name.charAt(0)?.toUpperCase() || '?'}
+                  {student?.name?.charAt(0)?.toUpperCase() || '?'}
                 </div>
               )}
             </div>
@@ -97,6 +102,51 @@ export const AdminDgStudentDetailsModal = ({ student, onClose }) => {
                 {t(`adminDigiBridgeStudents.table.${student?.status}`)}
               </span>
             </div>
+          </div>
+
+          {/* Quick Actions */}
+          <div className="adminDgStudentDetailsModal-quickActions">
+            <button
+              className="adminDgStudentDetailsModal-actionBtn adminDgStudentDetailsModal-actionBtn--edit"
+              onClick={() => {
+                onClose();
+                onEdit(student);
+              }}
+              type="button"
+            >
+              <svg width="18" height="18" viewBox="0 0 18 18">
+                <path d="M16.854 2.146a.5.5 0 0 1 0 .708l-1 1L13.5 1.5l1-1a.5.5 0 0 1 .708 0l1.646 1.646zM12.5 2.5l2.354 2.354L5.5 14.208l-2.354-2.354L12.5 2.5zM2 15.5V13l.146-.146L4.5 15.208 2 15.5z" fill="currentColor"/>
+              </svg>
+              {t('adminDgStudentDetailsModal.editStudent')}
+            </button>
+
+            <button
+              className="adminDgStudentDetailsModal-actionBtn adminDgStudentDetailsModal-actionBtn--mentor"
+              onClick={() => {
+                onClose();
+                onChangeMentor(student);
+              }}
+              type="button"
+            >
+              <svg width="18" height="18" viewBox="0 0 18 18">
+                <path d="M9 9a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm0 1c-4 0-9 2-9 5v1.5C0 17.5.5 18 1 18h16c.5 0 1-.5 1-1.5V15c0-3-5-5-9-5z" fill="currentColor"/>
+              </svg>
+              {t('adminDgStudentDetailsModal.changeMentor')}
+            </button>
+
+            <button
+              className="adminDgStudentDetailsModal-actionBtn adminDgStudentDetailsModal-actionBtn--email"
+              onClick={() => {
+                onClose();
+                onSendEmail(student);
+              }}
+              type="button"
+            >
+              <svg width="18" height="18" viewBox="0 0 18 18">
+                <path d="M0 4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v.217l8 4.8 8-4.8V4a1 1 0 0 0-1-1H2zm15 2.383-5.758 3.455L17 12.114V5.383zm-.034 7.878L10.271 9.32 9 10.083l-1.271-.763-6.694 3.94A1 1 0 0 0 2 14h14a1 1 0 0 0 .966-.739zM1 12.114l5.758-3.476L1 5.383v6.73z" fill="currentColor"/>
+              </svg>
+              {t('adminDgStudentDetailsModal.sendEmail')}
+            </button>
           </div>
 
           {/* Stats Grid */}

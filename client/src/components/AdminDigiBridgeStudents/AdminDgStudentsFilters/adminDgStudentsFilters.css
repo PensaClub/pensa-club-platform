@@ -1,0 +1,321 @@
+/* src/components/AdminDigiBridgeStudents/AdminDgStudentsFilters/adminDgStudentsFilters.css */
+
+.adminDgStudentsFilters {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem;
+}
+
+/* Search Row */
+.adminDgStudentsFilters-searchRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.adminDgStudentsFilters-searchWrapper {
+  position: relative;
+  flex: 1;
+}
+
+.adminDgStudentsFilters-searchIcon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+.adminDgStudentsFilters-searchInput {
+  width: 100%;
+  padding: 0.75rem 2.5rem 0.75rem 2.75rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 0.9375rem;
+  color: #111827;
+  background: #f9fafb;
+  transition: all 0.2s ease;
+}
+
+.adminDgStudentsFilters-searchInput:focus {
+  outline: none;
+  border-color: #6366f1;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.adminDgStudentsFilters-searchInput::placeholder {
+  color: #9ca3af;
+}
+
+.adminDgStudentsFilters-clearSearch {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: #e5e7eb;
+  border-radius: 6px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.adminDgStudentsFilters-clearSearch:hover {
+  background: #d1d5db;
+  color: #374151;
+}
+
+/* Toggle Button (Mobile) */
+.adminDgStudentsFilters-toggleBtn {
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  border-radius: 10px;
+  color: #374151;
+  font-weight: 500;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.adminDgStudentsFilters-toggleBtn:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.adminDgStudentsFilters-toggleBtn--active {
+  background: #eef2ff;
+  border-color: #6366f1;
+  color: #6366f1;
+}
+
+.adminDgStudentsFilters-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  background: #6366f1;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 10px;
+}
+
+/* Filters Row */
+.adminDgStudentsFilters-filtersRow {
+  display: flex;
+  align-items: flex-end;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.adminDgStudentsFilters-filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  min-width: 160px;
+}
+
+.adminDgStudentsFilters-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.adminDgStudentsFilters-select {
+  padding: 0.625rem 2rem 0.625rem 0.875rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: #111827;
+  background: #ffffff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath fill='%236b7280' d='M4 6l4 4 4-4'/%3E%3C/svg%3E") no-repeat right 8px center;
+  background-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.adminDgStudentsFilters-select:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.adminDgStudentsFilters-select:disabled {
+  background-color: #f3f4f6;
+  cursor: not-allowed;
+}
+
+/* Clear Button */
+.adminDgStudentsFilters-clearBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.625rem 1rem;
+  border: 1px solid #fecaca;
+  background: #fef2f2;
+  color: #dc2626;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.adminDgStudentsFilters-clearBtn:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+}
+
+/* Results */
+.adminDgStudentsFilters-results {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #f3f4f6;
+}
+
+.adminDgStudentsFilters-resultsText {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.adminDgStudentsFilters-resultsText strong {
+  color: #111827;
+  font-weight: 600;
+}
+
+/* Active Filter Tags */
+.adminDgStudentsFilters-activeTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.adminDgStudentsFilters-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.5rem 0.25rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+}
+
+.adminDgStudentsFilters-tag--status {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.adminDgStudentsFilters-tag--mentor {
+  background: #f3e8ff;
+  color: #7c3aed;
+}
+
+.adminDgStudentsFilters-tag--sort {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.adminDgStudentsFilters-tag button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: none;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  color: inherit;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.adminDgStudentsFilters-tag button:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* ==================== RESPONSIVE ==================== */
+
+@media (max-width: 900px) {
+  .adminDgStudentsFilters-filterGroup {
+    min-width: 140px;
+    flex: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .adminDgStudentsFilters-toggleBtn {
+    display: flex;
+  }
+
+  .adminDgStudentsFilters-filtersRow {
+    display: none;
+    flex-direction: column;
+    padding: 1rem;
+    background: #f9fafb;
+    border-radius: 10px;
+    margin-top: 0.5rem;
+  }
+
+  .adminDgStudentsFilters-filtersRow--expanded {
+    display: flex;
+  }
+
+  .adminDgStudentsFilters-filterGroup {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .adminDgStudentsFilters-clearBtn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .adminDgStudentsFilters-results {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .adminDgStudentsFilters {
+    padding: 1rem;
+  }
+
+  .adminDgStudentsFilters-searchInput {
+    font-size: 1rem;
+  }
+
+  .adminDgStudentsFilters-activeTags {
+    width: 100%;
+  }
+
+  .adminDgStudentsFilters-tag {
+    font-size: 0.75rem;
+  }
+}

@@ -9224,7 +9224,9 @@
   "common": {
     "navigation": {
       "home": "Startseite"
-    }
+    },
+      "cancel": "Abbrechen"
+
   },
   "clubForm": {
     "title": "Vereinsregistrierung",
@@ -12768,18 +12770,21 @@
     }
 },
 "adminDgStudentDetailsModal": {
-    "title": "Studentendetails",
-    "totalCredits": "Gesamte Credits",
-    "attendanceRate": "Anwesenheitsrate",
-    "currentMentor": "Aktueller Mentor",
-    "mentor": "Mentor",
-    "noMentorAssigned": "Kein Mentor zugewiesen",
-    "additionalInfo": "Zusätzliche Informationen",
-    "registrationDate": "Registrierungsdatum",
-    "lastActive": "Zuletzt aktiv",
-      "close": "Schließen",
-    "notAvailable": "Keine Informationen verfügbar"
-  },
+  "title": "Studentendetails",
+  "totalCredits": "Gesamtpunkte",
+  "attendanceRate": "Anwesenheitsrate",
+  "currentMentor": "Aktueller Mentor",
+  "mentor": "Mentor",
+  "noMentorAssigned": "Kein Mentor zugewiesen",
+  "additionalInfo": "Zusätzliche Informationen",
+  "registrationDate": "Registrierungsdatum",
+  "lastActive": "Zuletzt aktiv",
+  "close": "Schließen",
+  "notAvailable": "Nicht verfügbar",
+  "editStudent": "Bearbeiten",
+  "changeMentor": "Mentor ändern",
+  "sendEmail": "E-Mail senden"
+},
   "adminDgDeleteStudentConfirm": {
     "title": "Student löschen",
     "message": "Sind Sie sicher, dass Sie den Studenten löschen möchten",
@@ -12805,6 +12810,77 @@
       "emailRequired": "E-Mail ist erforderlich",
       "emailInvalid": "Ungültiges E-Mail-Format",
       "phoneInvalid": "Ungültige Telefonnummer"
+    }
+  },
+  "adminDgChangeMentorModal": {
+  "title": "Mentor ändern",
+  "currentMentor": "Aktueller Mentor",
+  "searchPlaceholder": "Mentor nach Name, E-Mail oder Spezialisierung suchen...",
+  "noMentorsFound": "Keine Mentoren gefunden",
+  "current": "Aktuell",
+  "students": "Studenten",
+  "assign": "Mentor zuweisen",
+  "assigning": "Zuweisen..."
+},
+"adminDgSendEmailModal": {
+    "title": "E-Mail senden",
+    "to": "An",
+    "subject": "Betreff",
+    "subjectPlaceholder": "E-Mail-Betreff eingeben",
+    "message": "Nachricht",
+    "messagePlaceholder": "Schreiben Sie hier Ihre Nachricht...",
+    "quickTemplates": "Schnellvorlagen",
+    "send": "E-Mail senden",
+    "sending": "Wird gesendet...",
+    "note": "Die E-Mail wird von der offiziellen DigiBridge Academy Adresse gesendet.",
+    "templates": {
+      "welcome": "Willkommen",
+      "reminder": "Erinnerung",
+      "inactive": "Inaktiv"
+    },
+    "templateContent": {
+      "welcome": {
+        "subject": "Willkommen bei DigiBridge Academy!",
+        "message": "Hallo {{name}},\n\nWillkommen bei DigiBridge Academy! Wir freuen uns, dass Sie Teil unserer Gemeinschaft sind.\n\nHier finden Sie Unterstützung und Ressourcen für Ihre digitale Lernreise. Zögern Sie nicht, Ihren Mentor bei Fragen zu kontaktieren.\n\nMit freundlichen Grüßen,\nDas DigiBridge Academy Team"
+      },
+      "reminder": {
+        "subject": "Erinnerung an bevorstehende Sitzung",
+        "message": "Hallo {{name}},\n\nDies ist eine Erinnerung an Ihre bevorstehende Sitzung mit Ihrem Mentor. Bitte stellen Sie sicher, dass Sie vorbereitet sind und eine stabile Internetverbindung haben.\n\nBei Fragen kontaktieren Sie uns gerne.\n\nMit freundlichen Grüßen,\nDas DigiBridge Academy Team"
+      },
+      "inactive": {
+        "subject": "Wir vermissen Sie bei DigiBridge Academy",
+        "message": "Hallo {{name}},\n\nWir haben bemerkt, dass Sie in letzter Zeit nicht aktiv waren. Wir hoffen, dass alles in Ordnung ist.\n\nWenn Sie Hilfe benötigen oder eine neue Sitzung mit einem Mentor planen möchten, kontaktieren Sie uns bitte.\n\nMit freundlichen Grüßen,\nDas DigiBridge Academy Team"
+      }
+    },
+    "errors": {
+      "subjectRequired": "Betreff ist erforderlich",
+      "subjectTooShort": "Betreff muss mindestens 3 Zeichen lang sein",
+      "messageRequired": "Nachricht ist erforderlich",
+      "messageTooShort": "Nachricht muss mindestens 10 Zeichen lang sein"
+    }
+  },
+  "adminDgStudentsFilters": {
+    "searchPlaceholder": "Suche nach Name, E-Mail...",
+    "filters": "Filter",
+    "status": "Status",
+    "mentor": "Mentor",
+    "sortBy": "Sortieren nach",
+    "allMentors": "Alle Mentoren",
+    "noMentor": "Kein Mentor",
+    "clearAll": "Alle löschen",
+    "studentsFound": "Studenten gefunden",
+    "statusOptions": {
+      "all": "Alle Status",
+      "active": "Aktiv",
+      "inactive": "Inaktiv",
+      "suspended": "Gesperrt"
+    },
+    "sortOptions": {
+      "newest": "Neueste",
+      "oldest": "Älteste",
+      "name": "Nach Name",
+      "credits": "Nach Credits",
+      "attendance": "Nach Anwesenheit"
     }
   }
 }

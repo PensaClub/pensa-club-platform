@@ -4,11 +4,13 @@ import './adminDigiBridgeStudents.css';
 import { useAcademy } from '../contexts/AcademyProvider';
 import { StudentsOverviewStats } from './StudentsOverviewStats/StudentsOverviewStats';
 import { StudentsStatsTabs } from './StudentsStatsTabs/StudentsStatsTabs';
-import { AdminDgStudentsFilters } from './StudentsFilters/AdminDgStudentsFilter';
 import { AdminDgStudentsTable } from './AdminDgStudentsTable/AdminDgStudentsTable';
 import { AdminDgStudentDetailsModal } from './AdminDgStudentDetailsModal/AdminDgStudentDetailsModal';
 import { AdminDgDeleteStudentConfirm } from './AdminDgDeleteStudentConfirm/AdminDgDeleteStudentConfirm';
 import { AdminDgEditStudentModal } from './AdminDgEditStudentModal/AdminDgEditStudentModal';
+import { AdminDgChangeMentorModal } from './AdminDgChangeMentorModal/AdminDgChangeMentorModal';
+import { AdminDgSendEmailModal } from './AdminDgSendEmailModal/AdminDgSendEmailModal';
+import { AdminDgStudentsFilters } from './AdminDgStudentsFilters/AdminDgStudentsFilters';
 
 export const AdminDigiBridgeStudents = () => {
   const { t } = useTranslation();
@@ -192,14 +194,6 @@ export const AdminDigiBridgeStudents = () => {
     }
   };
 
-  const handleEmailSend = async (studentId, emailData) => {
-    try {
-      await sendEmailToStudent(studentId, emailData);
-      setShowEmailModal(false);
-    } catch (error) {
-      console.error('Error sending email:', error);
-    }
-  };
 
   return (
     <div className="admin-digibridge-students">
@@ -216,12 +210,11 @@ export const AdminDigiBridgeStudents = () => {
       {/* STATS TABS */}
       <StudentsStatsTabs activeTab={activeTab} setActiveTab={setActiveTab} />
 
-      {/* FILTERS */}
       <AdminDgStudentsFilters
-        filters={filters}
-        onFilterChange={handleFilterChange}
-        totalResults={pagination.total}
-      />
+  filters={filters}
+  onFilterChange={handleFilterChange}
+  totalResults={pagination?.total || students.length}
+/>
 
       {/* STUDENTS TABLE */}
       <AdminDgStudentsTable
@@ -242,6 +235,9 @@ export const AdminDigiBridgeStudents = () => {
         <AdminDgStudentDetailsModal
           student={selectedStudent}
           onClose={() => setShowDetailsModal(false)}
+          onEdit={handleEdit}
+          onChangeMentor={handleChangeMentor}
+          onSendEmail={handleSendEmail}
         />
       )}
 
@@ -253,29 +249,32 @@ export const AdminDigiBridgeStudents = () => {
         />
       )}
 
-      {/* {showChangeMentorModal && (
-        <ChangeMentorModal
+      {showChangeMentorModal && (
+        <AdminDgChangeMentorModal
           student={selectedStudent}
           onClose={() => setShowChangeMentorModal(false)}
           onAssign={handleMentorAssign}
         />
-      )} */}
+      )}
 
-      {/* {showEmailModal && (
-        <SendEmailModal
-          student={selectedStudent}
-          onClose={() => setShowEmailModal(false)}
-          onSend={handleEmailSend}
-        />
-      )} */}
-
-      {showDeleteConfirm && (
-  <AdminDgDeleteStudentConfirm
+      {showEmailModal && (
+  <AdminDgSendEmailModal
     student={selectedStudent}
-    onClose={() => setShowDeleteConfirm(false)}
-    onConfirm={handleConfirmDelete}
+    onClose={() => setShowEmailModal(false)}
+    onSuccess={() => {
+      // Опционално: refresh data или показване на допълнително съобщение
+      console.log('Email sent successfully!');
+    }}
   />
 )}
+
+      {showDeleteConfirm && (
+        <AdminDgDeleteStudentConfirm
+          student={selectedStudent}
+          onClose={() => setShowDeleteConfirm(false)}
+          onConfirm={handleConfirmDelete}
+        />
+      )}
     </div>
   );
 };

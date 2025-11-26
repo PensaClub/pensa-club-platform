@@ -195,3 +195,9 @@
     font-size: 0.8rem;
   }
 }
+/* ===============================
+   TAB CONTENT WRAPPER
+   =============================== */
+.admin-digibridge-students-content {
+  min-height: 400px;
+}
