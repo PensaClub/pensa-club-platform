@@ -1,16 +1,16 @@
 // src/components/AdminDigiBridgeStudents/StudentsStatsCharts/TopPerformersTable.jsx
 
 import { useTranslation } from 'react-i18next';
-import './studentsStatsCharts.css';
+import './topPerformersTable.css';
 
 export const TopPerformersTable = ({ students, loading, onViewDetails }) => {
   const { t } = useTranslation();
 
   if (loading) {
     return (
-      <div className="studentsStatsChart">
-        <div className="studentsStatsChart-loading">
-          <div className="studentsStatsChart-spinner"></div>
+      <div className="topPerformersTable">
+        <div className="topPerformersTable-loading">
+          <div className="topPerformersTable-spinner"></div>
           <span>{t('common.loading')}</span>
         </div>
       </div>
@@ -19,8 +19,8 @@ export const TopPerformersTable = ({ students, loading, onViewDetails }) => {
 
   if (!students || students.length === 0) {
     return (
-      <div className="studentsStatsChart">
-        <div className="studentsStatsChart-empty">
+      <div className="topPerformersTable">
+        <div className="topPerformersTable-empty">
           <svg width="64" height="64" viewBox="0 0 64 64">
             <path d="M32 8l8 16h16l-12 12 4 16-16-8-16 8 4-16L8 24h16z" fill="currentColor" opacity="0.3"/>
           </svg>
@@ -40,70 +40,81 @@ export const TopPerformersTable = ({ students, loading, onViewDetails }) => {
   };
 
   return (
-    <div className="studentsStatsChart">
-      <div className="studentsStatsChart-header">
-        <h3 className="studentsStatsChart-title">
-          <span className="studentsStatsChart-icon">🏆</span>
+    <div className="topPerformersTable">
+      <div className="topPerformersTable-header">
+        <h3 className="topPerformersTable-title">
+          <span className="topPerformersTable-icon">🏆</span>
           {t('adminDigiBridgeStudents.charts.topPerformers')}
         </h3>
+        <span className="topPerformersTable-count">
+          {students.length} {t('adminDigiBridgeStudents.charts.students')}
+        </span>
       </div>
 
-      <div className="studentsStatsChart-body">
-        <div className="topPerformers-table">
-          <div className="topPerformers-header">
-            <span className="topPerformers-col topPerformers-col--rank">#</span>
-            <span className="topPerformers-col topPerformers-col--student">
+      <div className="topPerformersTable-body">
+        <div className="topPerformersTable-grid">
+          {/* Table Header */}
+          <div className="topPerformersTable-gridHeader">
+            <span className="topPerformersTable-col topPerformersTable-col--rank">
+              {t('adminDigiBridgeStudents.charts.rank')}
+            </span>
+            <span className="topPerformersTable-col topPerformersTable-col--student">
               {t('adminDigiBridgeStudents.charts.student')}
             </span>
-            <span className="topPerformers-col topPerformers-col--credits">
+            <span className="topPerformersTable-col topPerformersTable-col--credits">
               {t('adminDigiBridgeStudents.charts.credits')}
             </span>
-            <span className="topPerformers-col topPerformers-col--attendance">
+            <span className="topPerformersTable-col topPerformersTable-col--attendance">
               {t('adminDigiBridgeStudents.charts.attendance')}
             </span>
-            <span className="topPerformers-col topPerformers-col--actions"></span>
+            <span className="topPerformersTable-col topPerformersTable-col--actions"></span>
           </div>
 
-          <div className="topPerformers-body">
+          {/* Table Rows */}
+          <div className="topPerformersTable-rows">
             {students.map((student, index) => (
               <div 
                 key={student.id} 
-                className={`topPerformers-row ${index < 3 ? 'topPerformers-row--top' : ''}`}
+                className={`topPerformersTable-row ${index < 3 ? 'topPerformersTable-row--top' : ''}`}
               >
-                <span className="topPerformers-col topPerformers-col--rank">
+                <span className="topPerformersTable-col topPerformersTable-col--rank">
                   {getMedalEmoji(index + 1) || index + 1}
                 </span>
-                <div className="topPerformers-col topPerformers-col--student">
-                  <div className="topPerformers-avatar">
+                <div className="topPerformersTable-col topPerformersTable-col--student">
+                  <div className="topPerformersTable-avatar">
                     {student.avatar || student.imageUrl ? (
                       <img src={student.avatar || student.imageUrl} alt={student.name} />
                     ) : (
                       <span>{student.name?.charAt(0)?.toUpperCase() || '?'}</span>
                     )}
                   </div>
-                  <div className="topPerformers-info">
-                    <span className="topPerformers-name">{student.name}</span>
-                    <span className="topPerformers-email">{student.email}</span>
+                  <div className="topPerformersTable-studentInfo">
+                    <span className="topPerformersTable-studentName">{student.name}</span>
+                    <span className="topPerformersTable-studentMentor">
+                      {student.mentorName || t('adminDigiBridgeStudents.noMentor')}
+                    </span>
                   </div>
                 </div>
-                <span className="topPerformers-col topPerformers-col--credits">
-                  <span className="topPerformers-credits">
-                    ⭐ {student.credits || student.totalCredits || 0}
+                <span className="topPerformersTable-col topPerformersTable-col--credits">
+                  <span className="topPerformersTable-creditsValue">
+                    ⭐ {student.totalCredits || student.credits || 0}
                   </span>
                 </span>
-                <span className="topPerformers-col topPerformers-col--attendance">
-                  <span className="topPerformers-attendance">
-                    {student.attendance || student.attendanceRate || 0}%
+                <span className="topPerformersTable-col topPerformersTable-col--attendance">
+                  <span className="topPerformersTable-attendanceValue">
+                    {student.attendanceRate || student.attendance || 0}%
                   </span>
                 </span>
-                <span className="topPerformers-col topPerformers-col--actions">
+                <span className="topPerformersTable-col topPerformersTable-col--actions">
                   <button
-                    className="topPerformers-viewBtn"
-                    onClick={() => onViewDetails(student)}
+                    className="topPerformersTable-viewBtn"
+                    onClick={() => onViewDetails && onViewDetails(student)}
                     type="button"
+                    title={t('adminDigiBridgeStudents.charts.viewDetails')}
                   >
-                    <svg width="18" height="18" viewBox="0 0 18 18">
-                      <path d="M9 3.5c-4 0-7.5 3.5-7.5 5.5s3.5 5.5 7.5 5.5 7.5-3.5 7.5-5.5-3.5-5.5-7.5-5.5zm0 9a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7zm0-5.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4z" fill="currentColor"/>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                      <circle cx="12" cy="12" r="3"/>
                     </svg>
                   </button>
                 </span>

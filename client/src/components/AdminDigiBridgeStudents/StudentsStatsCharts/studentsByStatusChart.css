@@ -1,0 +1,228 @@
+/* src/components/AdminDigiBridgeStudents/StudentsStatsCharts/studentsByStatusChart.css */
+
+.studentsByStatusChart {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+}
+
+/* ===============================
+   LOADING STATE
+   =============================== */
+.studentsByStatusChart-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  min-height: 350px;
+  color: #6b7280;
+}
+
+.studentsByStatusChart-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #10b981;
+  border-radius: 50%;
+  animation: studentsByStatusChart-spin 0.8s linear infinite;
+}
+
+@keyframes studentsByStatusChart-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===============================
+   EMPTY STATE
+   =============================== */
+.studentsByStatusChart-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  min-height: 350px;
+  color: #9ca3af;
+}
+
+.studentsByStatusChart-empty svg {
+  color: #d1d5db;
+}
+
+.studentsByStatusChart-empty span {
+  font-size: 0.95rem;
+}
+
+/* ===============================
+   HEADER
+   =============================== */
+.studentsByStatusChart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.studentsByStatusChart-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.studentsByStatusChart-icon {
+  font-size: 1.25rem;
+}
+
+.studentsByStatusChart-total {
+  font-size: 0.95rem;
+  color: #6b7280;
+  background: #f3f4f6;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+}
+
+.studentsByStatusChart-total strong {
+  color: #111827;
+  font-weight: 700;
+}
+
+/* ===============================
+   CHART BODY
+   =============================== */
+.studentsByStatusChart-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.studentsByStatusChart-pieWrapper {
+  width: 100%;
+}
+
+/* ===============================
+   TOOLTIP
+   =============================== */
+.studentsByStatusChart-tooltip {
+  background: #1f2937;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.studentsByStatusChart-tooltipLabel {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin: 0 0 0.25rem 0;
+}
+
+.studentsByStatusChart-tooltipValue {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+}
+
+/* ===============================
+   LEGEND
+   =============================== */
+.studentsByStatusChart-legend {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.studentsByStatusChart-legendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 0.875rem;
+  background: #f9fafb;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+}
+
+.studentsByStatusChart-legendItem:hover {
+  background: #f3f4f6;
+}
+
+.studentsByStatusChart-legendColor {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.studentsByStatusChart-legendLabel {
+  flex: 1;
+  font-size: 0.875rem;
+  color: #374151;
+  font-weight: 500;
+}
+
+.studentsByStatusChart-legendValue {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* ===============================
+   RESPONSIVE
+   =============================== */
+@media (max-width: 768px) {
+  .studentsByStatusChart {
+    padding: 1rem;
+  }
+
+  .studentsByStatusChart-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .studentsByStatusChart-title {
+    font-size: 1rem;
+  }
+
+  .studentsByStatusChart-total {
+    width: 100%;
+    text-align: center;
+  }
+
+  .studentsByStatusChart-legend {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .studentsByStatusChart {
+    padding: 0.875rem;
+    border-radius: 12px;
+  }
+
+  .studentsByStatusChart-legend {
+    grid-template-columns: 1fr;
+  }
+
+  .studentsByStatusChart-legendItem {
+    padding: 0.5rem 0.75rem;
+  }
+
+  .studentsByStatusChart-legendLabel {
+    font-size: 0.8rem;
+  }
+
+  .studentsByStatusChart-legendValue {
+    font-size: 0.85rem;
+  }
+}

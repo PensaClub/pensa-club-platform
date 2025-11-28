@@ -86,6 +86,7 @@ import { DigiMentorPanel } from "../DigiMentorPanel/DigiMentorPanel";
 import { DigiMentorProfile } from "../DigiMentorProfile/DigiMentorProfile";
 import { StudentApplicationsManagement } from "../DigiMentorApplications/StudentApplicationsManagement";
 import { SEOStatisticAdmin } from "../SEOStatisticAdmin/SEOStatisticAdmin";
+import { AdminDigiBridgeStudentApplications } from "../AdminDigiBridgeStudents/AdminDigiBridgeStudentApplications/AdminDigiBridgeStudentApplications";
 
 // 🎨 НОВИ ИКОНКИ КОМПОНЕНТИ
 const HomeIcon = () => (
@@ -1236,7 +1237,7 @@ export const Profile = () => {
 
 
             <Route path="students-overview" element={<AdminGuard><AdminDigiBridgeStudents /></AdminGuard>} />
-            {/* <Route path="students-applications" element={<AdminGuard><AdminDigiBridgeStudentApplications /></AdminGuard>} /> */}
+            <Route path="students-applications" element={<AdminGuard><AdminDigiBridgeStudentApplications /></AdminGuard>} />
 
             <Route path="seo-statistics" element={<AdminGuard><SEOStatisticAdmin /></AdminGuard>} />
 

@@ -1370,6 +1370,22 @@ const rejectStudentApplicationByAdmin = useCallback(async (applicationId, reason
   }
 }, [isAdmin]);
 
+const reapproveStudentApplicationByAdmin = useCallback(async (applicationId) => {
+  if (!isAdmin) {
+    toast.error('Нямате права за тази операция');
+    return { success: false };
+  }
+  try {
+    const response = await academyService.reapproveStudentApplicationByAdmin(applicationId);
+    toast.success('Кандидатурата е одобрена повторно');
+    return response;
+  } catch (error) {
+    console.error('Error reapproving application:', error);
+    toast.error('Грешка при повторно одобряване');
+    throw error;
+  }
+}, [isAdmin]);
+
 const deleteStudentApplicationByAdmin = useCallback(async (applicationId) => {
   if (!isAdmin) {
     toast.error('Нямате права за тази операция');
@@ -1521,6 +1537,7 @@ const deleteStudentApplicationByAdmin = useCallback(async (applicationId) => {
   approveStudentApplicationByAdmin,
   rejectStudentApplicationByAdmin,
   deleteStudentApplicationByAdmin,
+  reapproveStudentApplicationByAdmin,
   };
 
   return (

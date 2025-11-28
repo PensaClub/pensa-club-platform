@@ -2,16 +2,16 @@
 
 import { useTranslation } from 'react-i18next';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import './studentsStatsCharts.css';
+import './studentsCreditsChart.css';
 
 export const StudentsCreditsChart = ({ data, loading }) => {
   const { t } = useTranslation();
 
   if (loading) {
     return (
-      <div className="studentsStatsChart">
-        <div className="studentsStatsChart-loading">
-          <div className="studentsStatsChart-spinner"></div>
+      <div className="studentsCreditsChart">
+        <div className="studentsCreditsChart-loading">
+          <div className="studentsCreditsChart-spinner"></div>
           <span>{t('common.loading')}</span>
         </div>
       </div>
@@ -20,8 +20,8 @@ export const StudentsCreditsChart = ({ data, loading }) => {
 
   if (!data) {
     return (
-      <div className="studentsStatsChart">
-        <div className="studentsStatsChart-empty">
+      <div className="studentsCreditsChart">
+        <div className="studentsCreditsChart-empty">
           <svg width="64" height="64" viewBox="0 0 64 64">
             <path d="M32 8l6 12 14 2-10 10 2 14-12-6-12 6 2-14-10-10 14-2z" fill="currentColor" opacity="0.3"/>
           </svg>
@@ -36,11 +36,11 @@ export const StudentsCreditsChart = ({ data, loading }) => {
     range: range.label || range.range,
     count: range.count || 0
   })) : [
-    { range: '0-10', count: data['0-10'] || 0 },
-    { range: '11-25', count: data['11-25'] || 0 },
-    { range: '26-50', count: data['26-50'] || 0 },
+    { range: '0-50', count: data['0-50'] || 0 },
     { range: '51-100', count: data['51-100'] || 0 },
-    { range: '100+', count: data['100+'] || 0 }
+    { range: '101-200', count: data['101-200'] || 0 },
+    { range: '201-300', count: data['201-300'] || 0 },
+    { range: '300+', count: data['300+'] || 0 }
   ];
 
   const totalStudents = chartData.reduce((sum, item) => sum + item.count, 0);
@@ -49,11 +49,13 @@ export const StudentsCreditsChart = ({ data, loading }) => {
 
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
-      const percentage = ((payload[0].value / totalStudents) * 100).toFixed(1);
+      const percentage = totalStudents > 0 
+        ? ((payload[0].value / totalStudents) * 100).toFixed(1) 
+        : 0;
       return (
-        <div className="studentsStatsChart-tooltip">
-          <p className="studentsStatsChart-tooltipLabel">{label} {t('adminDigiBridgeStudents.charts.credits')}</p>
-          <p className="studentsStatsChart-tooltipValue">
+        <div className="studentsCreditsChart-tooltip">
+          <p className="studentsCreditsChart-tooltipLabel">{label} {t('adminDigiBridgeStudents.charts.credits')}</p>
+          <p className="studentsCreditsChart-tooltipValue">
             {payload[0].value} {t('adminDigiBridgeStudents.charts.students')} ({percentage}%)
           </p>
         </div>
@@ -63,37 +65,37 @@ export const StudentsCreditsChart = ({ data, loading }) => {
   };
 
   return (
-    <div className="studentsStatsChart">
-      <div className="studentsStatsChart-header">
-        <h3 className="studentsStatsChart-title">
-          <span className="studentsStatsChart-icon">⭐</span>
+    <div className="studentsCreditsChart">
+      <div className="studentsCreditsChart-header">
+        <h3 className="studentsCreditsChart-title">
+          <span className="studentsCreditsChart-icon">⭐</span>
           {t('adminDigiBridgeStudents.charts.creditsDistribution')}
         </h3>
       </div>
 
       {/* Stats Summary */}
-      <div className="studentsStatsChart-summary">
-        <div className="studentsStatsChart-summaryCard">
-          <span className="studentsStatsChart-summaryValue">{totalStudents}</span>
-          <span className="studentsStatsChart-summaryLabel">
+      <div className="studentsCreditsChart-summary">
+        <div className="studentsCreditsChart-summaryCard">
+          <span className="studentsCreditsChart-summaryValue">{totalStudents}</span>
+          <span className="studentsCreditsChart-summaryLabel">
             {t('adminDigiBridgeStudents.charts.totalStudents')}
           </span>
         </div>
-        <div className="studentsStatsChart-summaryCard">
-          <span className="studentsStatsChart-summaryValue">{avgCredits.toFixed(1)}</span>
-          <span className="studentsStatsChart-summaryLabel">
+        <div className="studentsCreditsChart-summaryCard">
+          <span className="studentsCreditsChart-summaryValue">{avgCredits.toFixed(1)}</span>
+          <span className="studentsCreditsChart-summaryLabel">
             {t('adminDigiBridgeStudents.charts.avgCredits')}
           </span>
         </div>
-        <div className="studentsStatsChart-summaryCard">
-          <span className="studentsStatsChart-summaryValue">{maxCredits}</span>
-          <span className="studentsStatsChart-summaryLabel">
+        <div className="studentsCreditsChart-summaryCard">
+          <span className="studentsCreditsChart-summaryValue">{maxCredits}</span>
+          <span className="studentsCreditsChart-summaryLabel">
             {t('adminDigiBridgeStudents.charts.maxCredits')}
           </span>
         </div>
       </div>
 
-      <div className="studentsStatsChart-body">
+      <div className="studentsCreditsChart-body">
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" vertical={false} />

@@ -1,17 +1,17 @@
 // src/components/AdminDigiBridgeStudents/StudentsStatsCharts/StudentsAttendanceChart.jsx
 
 import { useTranslation } from 'react-i18next';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts';
-import './studentsStatsCharts.css';
+import { XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, AreaChart } from 'recharts';
+import './studentsAttendanceChart.css';
 
 export const StudentsAttendanceChart = ({ data, loading }) => {
   const { t } = useTranslation();
 
   if (loading) {
     return (
-      <div className="studentsStatsChart">
-        <div className="studentsStatsChart-loading">
-          <div className="studentsStatsChart-spinner"></div>
+      <div className="studentsAttendanceChart">
+        <div className="studentsAttendanceChart-loading">
+          <div className="studentsAttendanceChart-spinner"></div>
           <span>{t('common.loading')}</span>
         </div>
       </div>
@@ -20,8 +20,8 @@ export const StudentsAttendanceChart = ({ data, loading }) => {
 
   if (!data) {
     return (
-      <div className="studentsStatsChart">
-        <div className="studentsStatsChart-empty">
+      <div className="studentsAttendanceChart">
+        <div className="studentsAttendanceChart-empty">
           <svg width="64" height="64" viewBox="0 0 64 64">
             <path d="M8 48L24 32L40 40L56 16" stroke="currentColor" strokeWidth="3" fill="none" opacity="0.3"/>
             <circle cx="24" cy="32" r="4" fill="currentColor" opacity="0.3"/>
@@ -41,9 +41,9 @@ export const StudentsAttendanceChart = ({ data, loading }) => {
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
-        <div className="studentsStatsChart-tooltip">
-          <p className="studentsStatsChart-tooltipLabel">{label}</p>
-          <p className="studentsStatsChart-tooltipValue">
+        <div className="studentsAttendanceChart-tooltip">
+          <p className="studentsAttendanceChart-tooltipLabel">{label}</p>
+          <p className="studentsAttendanceChart-tooltipValue">
             {payload[0].value}% {t('adminDigiBridgeStudents.charts.attendance')}
           </p>
         </div>
@@ -61,31 +61,30 @@ export const StudentsAttendanceChart = ({ data, loading }) => {
   };
 
   return (
-    <div className="studentsStatsChart">
-      <div className="studentsStatsChart-header">
-        <h3 className="studentsStatsChart-title">
-          <span className="studentsStatsChart-icon">📅</span>
+    <div className="studentsAttendanceChart">
+      <div className="studentsAttendanceChart-header">
+        <h3 className="studentsAttendanceChart-title">
+          <span className="studentsAttendanceChart-icon">📅</span>
           {t('adminDigiBridgeStudents.charts.attendanceTrends')}
         </h3>
-        <div className="studentsStatsChart-trend">
-          <span className="studentsStatsChart-trendIcon">{getTrendIcon()}</span>
-          <span className="studentsStatsChart-trendLabel">
+        <div className="studentsAttendanceChart-trend">
+          <span className="studentsAttendanceChart-trendIcon">{getTrendIcon()}</span>
+          <span className="studentsAttendanceChart-trendLabel">
             {t(`adminDigiBridgeStudents.charts.trend.${trend}`)}
           </span>
         </div>
       </div>
 
-      {/* Stats Summary */}
-      <div className="studentsStatsChart-summary">
-        <div className="studentsStatsChart-summaryCard studentsStatsChart-summaryCard--teal">
-          <span className="studentsStatsChart-summaryValue">{avgAttendance.toFixed(1)}%</span>
-          <span className="studentsStatsChart-summaryLabel">
+      <div className="studentsAttendanceChart-summary">
+        <div className="studentsAttendanceChart-summaryCard">
+          <span className="studentsAttendanceChart-summaryValue">{avgAttendance.toFixed(1)}%</span>
+          <span className="studentsAttendanceChart-summaryLabel">
             {t('adminDigiBridgeStudents.charts.avgAttendance')}
           </span>
         </div>
       </div>
 
-      <div className="studentsStatsChart-body">
+      <div className="studentsAttendanceChart-body">
         <ResponsiveContainer width="100%" height={300}>
           <AreaChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
             <defs>
@@ -100,7 +99,7 @@ export const StudentsAttendanceChart = ({ data, loading }) => {
             <Tooltip content={<CustomTooltip />} />
             <Area 
               type="monotone" 
-              dataKey="attendance" 
+              dataKey="attendanceRate" 
               stroke="#14b8a6" 
               strokeWidth={2}
               fill="url(#attendanceGradient)" 

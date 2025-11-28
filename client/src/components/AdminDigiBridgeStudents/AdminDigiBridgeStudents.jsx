@@ -1,3 +1,5 @@
+// src/components/AdminDigiBridgeStudents/adminDigiBridgeStudents.jsx
+
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import './adminDigiBridgeStudents.css';
@@ -12,16 +14,29 @@ import { AdminDgChangeMentorModal } from './AdminDgChangeMentorModal/AdminDgChan
 import { AdminDgSendEmailModal } from './AdminDgSendEmailModal/AdminDgSendEmailModal';
 import { AdminDgStudentsFilters } from './AdminDgStudentsFilters/AdminDgStudentsFilters';
 
+// Chart Components
+import { StudentsByStatusChart } from './StudentsStatsCharts/StudentsByStatusChart';
+import { StudentsByMentorChart } from './StudentsStatsCharts/StudentsByMentorChart';
+import { StudentsCreditsChart } from './StudentsStatsCharts/StudentsCreditsChart';
+import { StudentsAttendanceChart } from './StudentsStatsCharts/StudentsAttendanceChart';
+import { TopPerformersTable } from './StudentsStatsCharts/TopPerformersTable';
+import { StudentsEngagementChart } from './StudentsStatsCharts/StudentsEngagementChart';
+
 export const AdminDigiBridgeStudents = () => {
   const { t } = useTranslation();
   const {
     getAllStudents,
     getStudentStatisticsOverview,
+    getStudentsByStatus,
+    getStudentsByMentor,
+    getStudentsCreditsDistribution,
+    getStudentsAttendanceTrends,
+    getTopPerformingStudents,
+    getStudentsEngagement,
     deleteStudent,
     updateStudentStatus,
     assignMentorToStudent,
-    updateStudent,
-    sendEmailToStudent
+    updateStudent
   } = useAcademy();
 
   // States
@@ -35,11 +50,20 @@ export const AdminDigiBridgeStudents = () => {
     totalPages: 0
   });
 
+  // Stats States
+  const [statusStats, setStatusStats] = useState(null);
+  const [mentorStats, setMentorStats] = useState(null);
+  const [creditsStats, setCreditsStats] = useState(null);
+  const [attendanceStats, setAttendanceStats] = useState(null);
+  const [topPerformers, setTopPerformers] = useState([]);
+  const [engagementStats, setEngagementStats] = useState(null);
+  const [statsLoading, setStatsLoading] = useState(false);
+
   // Filters
   const [filters, setFilters] = useState({
     search: '',
     status: 'all',
-    mentorId: 'all',
+    mentorId: '',
     sortBy: 'newest'
   });
 
@@ -69,6 +93,77 @@ export const AdminDigiBridgeStudents = () => {
   };
 
   // ===============================
+  // FETCH TAB-SPECIFIC STATS
+  // ===============================
+  const fetchTabStats = async (tab) => {
+    setStatsLoading(true);
+    try {
+      switch (tab) {
+        case 'byStatus':
+          if (!statusStats) {
+            const statusData = await getStudentsByStatus();
+            if (statusData?.success) {
+              setStatusStats(statusData.statistics);
+            }
+          }
+          break;
+
+        case 'byMentor':
+          if (!mentorStats) {
+            const mentorData = await getStudentsByMentor();
+            if (mentorData?.success) {
+              setMentorStats(mentorData.statistics);
+            }
+          }
+          break;
+
+        case 'credits':
+          if (!creditsStats) {
+            const creditsData = await getStudentsCreditsDistribution();
+            if (creditsData?.success) {
+              setCreditsStats(creditsData.distribution);
+            }
+          }
+          break;
+
+        case 'attendance':
+          if (!attendanceStats) {
+            const attendanceData = await getStudentsAttendanceTrends();
+            if (attendanceData?.success) {
+              setAttendanceStats(attendanceData.trends);
+            }
+          }
+          break;
+
+        case 'topPerformers':
+          if (topPerformers.length === 0) {
+            const topData = await getTopPerformingStudents(10);
+            if (topData?.success) {
+              setTopPerformers(topData.topPerformers || topData.students || []);
+            }
+          }
+          break;
+
+        case 'engagement':
+          if (!engagementStats) {
+            const engagementData = await getStudentsEngagement();
+            if (engagementData?.success) {
+              setEngagementStats(engagementData.engagement);
+            }
+          }
+          break;
+
+        default:
+          break;
+      }
+    } catch (error) {
+      console.error(`Error fetching ${tab} stats:`, error);
+    } finally {
+      setStatsLoading(false);
+    }
+  };
+
+  // ===============================
   // FETCH STUDENTS
   // ===============================
   const fetchStudents = async (page = 1) => {
@@ -77,9 +172,9 @@ export const AdminDigiBridgeStudents = () => {
       const params = {
         page,
         limit: pagination.limit,
-        search: filters.search,
-        status: filters.status,
-        mentorId: filters.mentorId,
+        search: filters.search || undefined,
+        status: filters.status !== 'all' ? filters.status : undefined,
+        mentorId: filters.mentorId || undefined,
         sortBy: filters.sortBy
       };
 
@@ -108,7 +203,19 @@ export const AdminDigiBridgeStudents = () => {
   useEffect(() => {
     fetchOverviewStats();
     fetchStudents(1);
+  }, []);
+
+  // Fetch when filters change
+  useEffect(() => {
+    fetchStudents(1);
   }, [filters]);
+
+  // Fetch tab-specific stats when tab changes
+  useEffect(() => {
+    if (activeTab !== 'overview') {
+      fetchTabStats(activeTab);
+    }
+  }, [activeTab]);
 
   // ===============================
   // HANDLERS
@@ -130,16 +237,19 @@ export const AdminDigiBridgeStudents = () => {
 
   const handleEdit = (student) => {
     setSelectedStudent(student);
+    setShowDetailsModal(false);
     setShowEditModal(true);
   };
 
   const handleChangeMentor = (student) => {
     setSelectedStudent(student);
+    setShowDetailsModal(false);
     setShowChangeMentorModal(true);
   };
 
   const handleSendEmail = (student) => {
     setSelectedStudent(student);
+    setShowDetailsModal(false);
     setShowEmailModal(true);
   };
 
@@ -157,6 +267,8 @@ export const AdminDigiBridgeStudents = () => {
       setSelectedStudent(null);
       fetchStudents(pagination.page);
       fetchOverviewStats();
+      setStatusStats(null);
+      setMentorStats(null);
     } catch (error) {
       console.error('Error deleting student:', error);
     }
@@ -167,6 +279,7 @@ export const AdminDigiBridgeStudents = () => {
       await updateStudentStatus(studentId, newStatus);
       fetchStudents(pagination.page);
       fetchOverviewStats();
+      setStatusStats(null);
     } catch (error) {
       console.error('Error updating status:', error);
     }
@@ -176,8 +289,10 @@ export const AdminDigiBridgeStudents = () => {
     try {
       await assignMentorToStudent(studentId, mentorId);
       setShowChangeMentorModal(false);
+      setSelectedStudent(null);
       fetchStudents(pagination.page);
       fetchOverviewStats();
+      setMentorStats(null);
     } catch (error) {
       console.error('Error assigning mentor:', error);
     }
@@ -187,6 +302,7 @@ export const AdminDigiBridgeStudents = () => {
     try {
       await updateStudent(studentId, data);
       setShowEditModal(false);
+      setSelectedStudent(null);
       fetchStudents(pagination.page);
       fetchOverviewStats();
     } catch (error) {
@@ -194,6 +310,88 @@ export const AdminDigiBridgeStudents = () => {
     }
   };
 
+  // ===============================
+  // RENDER TAB CONTENT
+  // ===============================
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'overview':
+        return (
+          <>
+            <StudentsOverviewStats stats={overviewStats} loading={loading} />
+            
+            <AdminDgStudentsFilters
+              filters={filters}
+              onFilterChange={handleFilterChange}
+              totalResults={pagination?.total || students.length}
+            />
+
+            <AdminDgStudentsTable
+              students={students}
+              loading={loading}
+              pagination={pagination}
+              onPageChange={handlePageChange}
+              onViewDetails={handleViewDetails}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              onStatusChange={handleStatusChange}
+            />
+          </>
+        );
+
+      case 'byStatus':
+        return (
+          <StudentsByStatusChart 
+            data={statusStats} 
+            loading={statsLoading} 
+          />
+        );
+
+      case 'byMentor':
+        return (
+          <StudentsByMentorChart 
+            data={mentorStats} 
+            loading={statsLoading} 
+          />
+        );
+
+      case 'credits':
+        return (
+          <StudentsCreditsChart 
+            data={creditsStats} 
+            loading={statsLoading} 
+          />
+        );
+
+      case 'attendance':
+        return (
+          <StudentsAttendanceChart 
+            data={attendanceStats} 
+            loading={statsLoading} 
+          />
+        );
+
+      case 'topPerformers':
+        return (
+          <TopPerformersTable 
+            students={topPerformers} 
+            loading={statsLoading}
+            onViewDetails={handleViewDetails}
+          />
+        );
+
+      case 'engagement':
+        return (
+          <StudentsEngagementChart 
+            data={engagementStats} 
+            loading={statsLoading} 
+          />
+        );
+
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className="admin-digibridge-students">
@@ -204,37 +402,22 @@ export const AdminDigiBridgeStudents = () => {
         </p>
       </div>
 
-      {/* OVERVIEW STATS */}
-      <StudentsOverviewStats stats={overviewStats} loading={loading} />
-
       {/* STATS TABS */}
       <StudentsStatsTabs activeTab={activeTab} setActiveTab={setActiveTab} />
 
-      <AdminDgStudentsFilters
-  filters={filters}
-  onFilterChange={handleFilterChange}
-  totalResults={pagination?.total || students.length}
-/>
-
-      {/* STUDENTS TABLE */}
-      <AdminDgStudentsTable
-        students={students}
-        loading={loading}
-        pagination={pagination}
-        onPageChange={handlePageChange}
-        onViewDetails={handleViewDetails}
-        onEdit={handleEdit}
-        onChangeMentor={handleChangeMentor}
-        onSendEmail={handleSendEmail}
-        onDelete={handleDelete}
-        onStatusChange={handleStatusChange}
-      />
+      {/* TAB CONTENT */}
+      <div className="admin-digibridge-students-content">
+        {renderTabContent()}
+      </div>
 
       {/* MODALS */}
       {showDetailsModal && (
         <AdminDgStudentDetailsModal
           student={selectedStudent}
-          onClose={() => setShowDetailsModal(false)}
+          onClose={() => {
+            setShowDetailsModal(false);
+            setSelectedStudent(null);
+          }}
           onEdit={handleEdit}
           onChangeMentor={handleChangeMentor}
           onSendEmail={handleSendEmail}
@@ -244,7 +427,10 @@ export const AdminDigiBridgeStudents = () => {
       {showEditModal && (
         <AdminDgEditStudentModal
           student={selectedStudent}
-          onClose={() => setShowEditModal(false)}
+          onClose={() => {
+            setShowEditModal(false);
+            setSelectedStudent(null);
+          }}
           onSave={handleStudentUpdate}
         />
       )}
@@ -252,26 +438,34 @@ export const AdminDigiBridgeStudents = () => {
       {showChangeMentorModal && (
         <AdminDgChangeMentorModal
           student={selectedStudent}
-          onClose={() => setShowChangeMentorModal(false)}
+          onClose={() => {
+            setShowChangeMentorModal(false);
+            setSelectedStudent(null);
+          }}
           onAssign={handleMentorAssign}
         />
       )}
 
       {showEmailModal && (
-  <AdminDgSendEmailModal
-    student={selectedStudent}
-    onClose={() => setShowEmailModal(false)}
-    onSuccess={() => {
-      // Опционално: refresh data или показване на допълнително съобщение
-      console.log('Email sent successfully!');
-    }}
-  />
-)}
+        <AdminDgSendEmailModal
+          student={selectedStudent}
+          onClose={() => {
+            setShowEmailModal(false);
+            setSelectedStudent(null);
+          }}
+          onSuccess={() => {
+            console.log('Email sent successfully!');
+          }}
+        />
+      )}
 
       {showDeleteConfirm && (
         <AdminDgDeleteStudentConfirm
           student={selectedStudent}
-          onClose={() => setShowDeleteConfirm(false)}
+          onClose={() => {
+            setShowDeleteConfirm(false);
+            setSelectedStudent(null);
+          }}
           onConfirm={handleConfirmDelete}
         />
       )}

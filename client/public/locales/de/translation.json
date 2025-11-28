@@ -9225,7 +9225,12 @@
     "navigation": {
       "home": "Startseite"
     },
-      "cancel": "Abbrechen"
+      "cancel": "Abbrechen",
+         "loading": "Laden...",
+  "refresh": "Aktualisieren",
+  "refreshing": "Aktualisiere...",
+  "close": "Schließen"
+
 
   },
   "clubForm": {
@@ -12705,69 +12710,109 @@
     "infoText": "Dieser Student ist aktiv und lernt bei Ihnen. Sie können den Fortschritt im Studentenbereich verfolgen.",
     "close": "Schließen"
   },
-  "adminDigiBridgeStudents": {
+"adminDigiBridgeStudents": {
   "title": "Studentenverwaltung",
-  "subtitle": "Alle Studenten in der DigiBridge Academy ansehen und verwalten",
+  "subtitle": "Alle Studenten in DigiBridge Academy anzeigen und verwalten",
   "stats": {
-      "totalStudents": "Gesamte Studenten",
-      "activeStudents": "Aktive Studenten",
-      "withMentor": "Mit Mentor",
-      "totalCredits": "Gesamte Credits",
-      "avgCredits": "Durchschnittliche Credits",
-      "attendanceRate": "Anwesenheitsrate",
-      "activeCourses": "Aktive Kurse",
-      "completedCourses": "Abgeschlossene Kurse"
+    "totalStudents": "Gesamtzahl Studenten",
+    "activeStudents": "Aktive Studenten",
+    "withMentor": "Mit Mentor",
+    "totalCredits": "Gesamte Credits",
+    "avgCredits": "Durchschnittliche Credits",
+    "attendanceRate": "Anwesenheitsrate",
+    "activeCourses": "Aktive Kurse",
+    "completedCourses": "Abgeschlossene Kurse"
+  },
+  "tabs": {
+    "overview": "Übersicht",
+    "byStatus": "Nach Status",
+    "byMentor": "Nach Mentor",
+    "credits": "Credits",
+    "attendance": "Anwesenheit",
+    "topPerformers": "Top-Studenten",
+    "engagement": "Engagement"
+  },
+  "filters": {
+    "searchPlaceholder": "Nach Name, E-Mail suchen...",
+    "filters": "Filter",
+    "status": "Status",
+    "mentor": "Mentor",
+    "sortBy": "Sortieren nach",
+    "allStatuses": "Alle Status",
+    "active": "Aktiv",
+    "inactive": "Inaktiv",
+    "suspended": "Gesperrt",
+    "allMentors": "Alle Mentoren",
+    "withMentor": "Mit Mentor",
+    "withoutMentor": "Ohne Mentor",
+    "newest": "Neueste",
+    "oldest": "Älteste",
+    "nameAsc": "Name (A-Z)",
+    "nameDesc": "Name (Z-A)",
+    "creditsHigh": "Credits (hoch)",
+    "creditsLow": "Credits (niedrig)",
+    "clearAll": "Alle löschen",
+    "showing": "Zeigt",
+    "students": "Studenten"
+  },
+  "table": {
+    "student": "Student",
+    "email": "E-Mail",
+    "mentor": "Mentor",
+    "credits": "Credits",
+    "attendance": "Anwesenheit",
+    "status": "Status",
+    "actions": "Aktionen",
+    "noMentor": "Kein Mentor",
+    "active": "Aktiv",
+    "inactive": "Inaktiv",
+    "suspended": "Gesperrt",
+    "view": "Ansehen",
+    "edit": "Bearbeiten",
+    "delete": "Löschen",
+    "noStudents": "Keine Studenten gefunden",
+    "noStudentsDesc": "Versuchen Sie, die Filter zu ändern oder neue Studenten hinzuzufügen"
+  },
+  "status": {
+    "active": "Aktiv",
+    "inactive": "Inaktiv",
+    "suspended": "Gesperrt",
+    "pending": "Ausstehend"
+  },
+  "noMentor": "Kein Mentor",
+  "charts": {
+    "noData": "Keine Daten verfügbar",
+    "byStatus": "Studenten nach Status",
+    "byMentor": "Studenten nach Mentor",
+    "creditsDistribution": "Credits-Verteilung",
+    "attendanceTrends": "Anwesenheitstrends",
+    "topPerformers": "Top-Studenten",
+    "engagementOverview": "Engagement-Übersicht",
+    "total": "Gesamt",
+    "students": "Studenten",
+    "credits": "Credits",
+    "attendance": "Anwesenheit",
+    "student": "Student",
+    "rank": "Rang",
+    "totalStudents": "Gesamtzahl Studenten",
+    "avgCredits": "Durchschnittliche Credits",
+    "maxCredits": "Max. Credits",
+    "avgAttendance": "Durchschnittliche Anwesenheit",
+    "overallEngagement": "Gesamtes Engagement",
+    "viewDetails": "Ansehen",
+    "trend": {
+      "up": "Aufwärts",
+      "down": "Abwärts",
+      "stable": "Stabil"
     },
-    "tabs": {
-      "overview": "Übersicht",
-      "byStatus": "Nach Status",
-      "byMentor": "Nach Mentor",
-      "credits": "Credits",
-      "attendance": "Anwesenheit",
-      "topPerformers": "Top-Performer",
-      "engagement": "Engagement"
-    },
-    "filters": {
-      "searchPlaceholder": "Nach Name, E-Mail suchen...",
-      "filters": "Filter",
-      "status": "Status",
-      "mentor": "Mentor",
-      "sortBy": "Sortieren",
-      "allStatuses": "Alle Status",
-      "active": "Aktiv",
-      "inactive": "Inaktiv",
-      "suspended": "Ausgesetzt",
-      "allMentors": "Alle Mentoren",
-      "withMentor": "Mit Mentor",
-      "withoutMentor": "Ohne Mentor",
-      "newest": "Neueste",
-      "oldest": "Älteste",
-      "nameAsc": "Name (A-Z)",
-      "nameDesc": "Name (Z-A)",
-      "creditsHigh": "Credits (hoch)",
-      "creditsLow": "Credits (niedrig)",
-      "clearAll": "Alle löschen",
-      "showing": "Zeige",
-      "students": "Studenten"
-    },
-    "table": {
-      "student": "Student",
-      "email": "E-Mail",
-      "mentor": "Mentor",
-      "credits": "Credits",
-      "attendance": "Anwesenheit",
-      "status": "Status",
-      "actions": "Aktionen",
-      "noMentor": "Kein Mentor",
-      "active": "Aktiv",
-      "inactive": "Inaktiv",
-      "suspended": "Ausgesetzt",
-      "view": "Ansehen",
-      "edit": "Bearbeiten",
-      "delete": "Löschen",
-      "noStudents": "Keine Studenten gefunden",
-      "noStudentsDesc": "Versuchen Sie, die Filter zu ändern oder neue Studenten hinzuzufügen"
+    "engagement": {
+      "sessions": "Sitzungen",
+      "courses": "Kurse",
+      "mentoring": "Mentoring",
+      "activities": "Aktivitäten",
+      "feedback": "Feedback"
     }
+  }
 },
 "adminDgStudentDetailsModal": {
   "title": "Studentendetails",
@@ -12882,5 +12927,102 @@
       "credits": "Nach Credits",
       "attendance": "Nach Anwesenheit"
     }
+  },
+  "adminStudentApplications": {
+  "title": "Studentenbewerbungen",
+  "subtitle": "Verwaltung von Mentoring-Schulungsanfragen",
+  "stats": {
+    "total": "Gesamt",
+    "pending": "Ausstehend",
+    "approved": "Genehmigt",
+    "rejected": "Abgelehnt"
+  },
+  "tabs": {
+    "overview": "Übersicht",
+    "pending": "Ausstehend",
+    "approved": "Genehmigt",
+    "rejected": "Abgelehnt"
+  },
+  "filters": {
+    "searchPlaceholder": "Nach Name oder E-Mail suchen...",
+    "allStatuses": "Alle Status",
+    "allMentors": "Alle Mentoren",
+    "newest": "Neueste",
+    "oldest": "Älteste",
+    "studentName": "Studentenname",
+    "mentorName": "Mentorenname",
+    "clearAll": "Löschen",
+    "showing": "Zeige {{count}} von {{total}} Ergebnissen"
+  },
+  "table": {
+    "student": "Student",
+    "mentor": "Mentor",
+    "status": "Status",
+    "appliedAt": "Beworben am",
+    "actions": "Aktionen",
+    "noApplications": "Keine Bewerbungen gefunden"
+  },
+  "status": {
+    "pending": "Ausstehend",
+    "approved": "Genehmigt",
+    "rejected": "Abgelehnt"
+  },
+  "actions": {
+    "view": "Ansehen",
+    "approve": "Genehmigen",
+    "reject": "Ablehnen",
+    "reapprove": "Erneut genehmigen",
+    "delete": "Löschen"
+  },
+  "charts": {
+    "byStatus": "Bewerbungen nach Status",
+    "byMentor": "Bewerbungen nach Mentor",
+    "overTime": "Bewerbungen im Zeitverlauf"
+  },
+  "modals": {
+    "viewTitle": "Bewerbungsdetails",
+    "approveTitle": "Bewerbung genehmigen",
+    "reapproveTitle": "Bewerbung erneut genehmigen",
+    "rejectTitle": "Bewerbung ablehnen",
+    "deleteTitle": "Bewerbung löschen",
+    "studentInfo": "Studenteninformationen",
+    "mentorInfo": "Mentoreninformationen",
+    "applicationInfo": "Bewerbungsinformationen",
+    "name": "Name",
+    "email": "E-Mail",
+    "phone": "Telefon",
+    "specialization": "Spezialisierung",
+    "status": "Status",
+    "appliedAt": "Beworben am",
+    "approvedAt": "Genehmigt am",
+    "rejectedAt": "Abgelehnt am",
+    "rejectionReason": "Ablehnungsgrund",
+    "approveConfirm": "Sind Sie sicher, dass Sie die Bewerbung von {{student}} bei Mentor {{mentor}} genehmigen möchten?",
+    "reapproveConfirm": "Sind Sie sicher, dass Sie die Bewerbung von {{student}} bei Mentor {{mentor}} erneut genehmigen möchten?",
+    "deleteConfirm": "Sind Sie sicher, dass Sie die Bewerbung von {{student}} löschen möchten?",
+    "deleteWarning": "Diese Aktion kann nicht rückgängig gemacht werden!",
+    "rejectInfo": "Sie werden die Bewerbung von {{student}} bei Mentor {{mentor}} ablehnen.",
+    "rejectionReasonLabel": "Ablehnungsgrund",
+    "rejectionReasonPlaceholder": "Beschreiben Sie, warum Sie diese Bewerbung ablehnen...",
+    "reasonRequired": "Grund ist erforderlich",
+    "reasonTooShort": "Grund muss mindestens 10 Zeichen lang sein"
   }
+},
+"charts": {
+  "byStatus": "Bewerbungen nach Status",
+  "byMentor": "Bewerbungen nach Mentor",
+  "overTime": "Bewerbungen im Zeitverlauf",
+  "noData": "Keine Daten vorhanden"
+},
+"applicationsByStatusChart": {
+  "noData": "Keine Daten vorhanden"
+},
+"applicationsByMentorChart": {
+  "noData": "Keine Daten vorhanden",
+  "unknownMentor": "Unbekannter Mentor",
+  "applications": "Bewerbungen",
+  "applicationsShort": "Bew.",
+  "topMentors": "Top {{count}} Mentoren",
+  "totalApplications": "Gesamtbewerbungen"
+}
 }

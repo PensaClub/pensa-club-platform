@@ -2164,6 +2164,205 @@ academyController.post(
 );
 
 // ===============================
+// POST /api/academy/admin/student-applications/:id/reapprove
+// Admin: Повторно одобри отхвърлена заявка
+// ===============================
+academyController.post(
+  '/admin/student-applications/:id/reapprove',
+  isAuth,
+  rbac.checkPermission('studentApplication', 'update'),
+  async (req, res, next) => {
+    try {
+      const applicationId = parseInt(req.params.id);
+
+      const {
+        student_mentor_application,
+        student,
+        user_account,
+        mentor,
+        mentor_history,
+        user_notification,
+        admin_notification
+      } = require('../sequelize/models/index');
+      const { tokenGenerator, refreshToken } = require('../utils/jwt');
+
+      // ✅ 1. ВЗЕМИ APPLICATION
+      const application = await student_mentor_application.findByPk(applicationId);
+
+      if (!application) {
+        return res.status(404).json({
+          success: false,
+          message: 'Application not found'
+        });
+      }
+
+      // ✅ 2. ПРОВЕРИ ДАЛИ Е REJECTED
+      if (application.status !== 'rejected') {
+        return res.status(400).json({
+          success: false,
+          message: `Can only reapprove rejected applications. Current status: ${application.status}`
+        });
+      }
+
+      // ✅ 3. ВЗЕМИ USER DATA
+      const user = await user_account.findByPk(application.userId);
+
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          message: 'User not found'
+        });
+      }
+
+      // ✅ 4. ПРОВЕРИ ДАЛИ МЕНТОРЪТ Е АКТИВЕН
+      const mentorData = await mentor.findByPk(application.mentorId);
+
+      if (!mentorData) {
+        return res.status(404).json({
+          success: false,
+          message: 'Mentor not found'
+        });
+      }
+
+      if (mentorData.status !== 'active') {
+        return res.status(400).json({
+          success: false,
+          message: 'Cannot assign student to inactive mentor'
+        });
+      }
+
+      // ✅ 5. ПРОМЕНИ ROLE НА 'student' (ако не е вече)
+      if (user.role !== 'student' && user.role !== 'admin' && user.role !== 'mentor') {
+        await user.update({ role: 'student' });
+      }
+
+      // ✅ 6. ПРОВЕРИ ДАЛИ СТУДЕНТЪТ ВЕЧЕ СЪЩЕСТВУВА
+      let studentData = await student.findOne({
+        where: { userId: application.userId }
+      });
+
+      const isNewStudent = !studentData;
+      const oldMentorId = studentData?.currentMentorId || null;
+
+      if (studentData) {
+        // ✅ СТУДЕНТЪТ СЪЩЕСТВУВА - ЗАМЕНИ МЕНТОРА
+
+        // Намали studentsCount на стария ментор
+        if (studentData.currentMentorId && studentData.currentMentorId !== application.mentorId) {
+          const oldMentor = await mentor.findByPk(studentData.currentMentorId);
+          if (oldMentor) {
+            await oldMentor.update({
+              studentsCount: Math.max(0, oldMentor.studentsCount - 1)
+            });
+          }
+        }
+
+        // Обнови студента с новия ментор
+        await studentData.update({
+          currentMentorId: application.mentorId,
+          mentorAssignedDate: new Date(),
+          status: 'active'
+        });
+
+      } else {
+        // ✅ СТУДЕНТЪТ НЕ СЪЩЕСТВУВА - СЪЗДАЙ ГО
+        studentData = await student.create({
+          userId: application.userId,
+          currentMentorId: application.mentorId,
+          mentorAssignedDate: new Date(),
+          status: 'active',
+          country: 'BG'
+        });
+      }
+
+      // ✅ 7. УВЕЛИЧИ studentsCount НА НОВИЯ МЕНТОР (само ако е различен)
+      if (oldMentorId !== application.mentorId) {
+        await mentorData.update({
+          studentsCount: mentorData.studentsCount + 1
+        });
+      }
+
+      // ✅ 8. СЪЗДАЙ MENTOR HISTORY ЗАПИС
+      if (!isNewStudent && oldMentorId && oldMentorId !== application.mentorId) {
+        // Завърши стария период
+        const oldHistory = await mentor_history.findOne({
+          where: {
+            studentId: studentData.id,
+            periodEnd: null
+          },
+          order: [['periodStart', 'DESC']]
+        });
+
+        if (oldHistory) {
+          await oldHistory.update({
+            periodEnd: new Date(),
+            reason: 'Reassigned via reapproval'
+          });
+        }
+      }
+
+      // Създай нов history запис
+      await mentor_history.create({
+        studentId: studentData.id,
+        mentorId: application.mentorId,
+        mentorName: mentorData.name,
+        periodStart: new Date(),
+        periodEnd: null,
+        reason: isNewStudent ? 'Initial assignment (reapproved)' : 'Reapproved by admin'
+      });
+
+      // ✅ 9. ОБНОВИ APPLICATION STATUS
+      await application.update({
+        status: 'approved',
+        approvedAt: new Date(),
+        rejectionReason: null,
+        rejectedAt: null
+      });
+
+      // ✅ 10. СЪЗДАЙ NOTIFICATIONS
+      await admin_notification.create({
+        type: 'student_application_reapproved',
+        title: 'Student Application Reapproved',
+        message: `Previously rejected application was reapproved for mentor ${mentorData.name}`,
+        data: {
+          applicationId: application.id,
+          userId: application.userId,
+          mentorId: application.mentorId,
+          studentId: studentData.id,
+          reapprovedBy: 'admin'
+        },
+        read: false
+      });
+
+      await user_notification.create({
+        userId: application.userId,
+        type: 'application_reapproved',
+        title: 'Вашата кандидатура е одобрена! 🎉',
+        message: `Радваме се да ви съобщим, че вашата кандидатура към ментор ${mentorData.name} беше одобрена!`,
+        data: {
+          mentorId: application.mentorId,
+          mentorName: mentorData.name,
+          mentorEmail: mentorData.email,
+          mentorPhoto: mentorData.photoUrl
+        },
+        read: false
+      });
+
+      res.status(200).json({
+        success: true,
+        message: 'Application reapproved successfully',
+        application: application,
+        student: studentData
+      });
+
+    } catch (err) {
+      console.error('❌ [ADMIN REAPPROVE APPLICATION] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
 // DELETE /api/academy/admin/student-applications/:id
 // Admin: Изтрий заявка
 // ===============================
@@ -2231,22 +2430,22 @@ academyController.get(
       // Build WHERE clause
       const where = {};
 
-      // Filter by status
-      if (status && status !== 'all') {
+      // Filter by status - ✅ ДОБАВЕНА ПРОВЕРКА
+      if (status && status !== 'all' && status !== 'undefined') {
         where.status = status;
       }
 
-      // Filter by mentor
-      if (mentorId && mentorId !== 'all') {
+      // Filter by mentor - ✅ ДОБАВЕНА ПРОВЕРКА
+      if (mentorId && mentorId !== 'all' && mentorId !== 'undefined' && mentorId !== 'null') {
         where.currentMentorId = parseInt(mentorId);
       }
 
-      // Search by name or email
-      if (search) {
+      // Search by name or email - ✅ ПОПРАВЕНО: snake_case колони
+      if (search && search !== 'undefined' && search.trim() !== '') {
         where[Op.or] = [
           { '$user.details.username$': { [Op.iLike]: `%${search}%` } },
-          { '$user.details.firstName$': { [Op.iLike]: `%${search}%` } },
-          { '$user.details.lastName$': { [Op.iLike]: `%${search}%` } },
+          { '$user.details.first_name$': { [Op.iLike]: `%${search}%` } },
+          { '$user.details.last_name$': { [Op.iLike]: `%${search}%` } },
           { '$user.email$': { [Op.iLike]: `%${search}%` } },
         ];
       }
