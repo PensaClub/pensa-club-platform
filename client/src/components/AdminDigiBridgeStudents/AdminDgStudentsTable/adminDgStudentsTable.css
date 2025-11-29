@@ -461,3 +461,92 @@
     height: 36px;
   }
 }
+/* ===============================
+   NOTES BUTTON - DESKTOP
+   =============================== */
+.adminDgStudentsTable-notesBtn {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #9ca3af;
+}
+
+.adminDgStudentsTable-notesBtn:hover {
+  border-color: #6366f1;
+  color: #6366f1;
+  background: #eef2ff;
+}
+
+.adminDgStudentsTable-notesBtn--hasNotes {
+  color: #6366f1;
+  border-color: #c7d2fe;
+  background: #eef2ff;
+}
+
+.adminDgStudentsTable-notesBadge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  border-radius: 9px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: white;
+  border: 2px solid white;
+}
+
+/* ===============================
+   NOTES BUTTON - MOBILE
+   =============================== */
+.adminDgStudentsTable-cardActionBtn--notes {
+  position: relative;
+  color: #6b7280;
+}
+
+.adminDgStudentsTable-cardActionBtn--notes:hover {
+  border-color: #6366f1;
+  color: #6366f1;
+  background: #eef2ff;
+}
+
+.adminDgStudentsTable-cardActionBtn--hasNotes {
+  color: #6366f1;
+  border-color: #c7d2fe;
+  background: #eef2ff;
+}
+
+.adminDgStudentsTable-cardNotesBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  border-radius: 10px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: white;
+  margin-left: 0.25rem;
+}
+
+@media (min-width: 1024px) {
+  .adminDgStudentsTable-notesBtn {
+    width: 36px;
+    height: 36px;
+  }
+}

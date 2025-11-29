@@ -1910,7 +1910,6 @@ academyController.get(
 
 // ===============================
 // POST /api/academy/admin/student-applications/:id/approve
-// Admin: Одобри заявка (same logic as mentor)
 // ===============================
 academyController.post(
   '/admin/student-applications/:id/approve',
@@ -1924,13 +1923,15 @@ academyController.post(
         student_mentor_application,
         student,
         user_account,
+        user_details,
         mentor,
-        mentor_history
+        mentor_history,
+        admin_notification,
+        user_notification
       } = require('../sequelize/models/index');
       const { tokenGenerator } = require('../utils/jwt');
       const { refreshToken } = require('../sequelize/models/index');
 
-      // ✅ 1. ВЗЕМИ APPLICATION
       const application = await student_mentor_application.findByPk(applicationId);
 
       if (!application) {
@@ -1947,7 +1948,6 @@ academyController.post(
         });
       }
 
-      // ✅ 2. ВЗЕМИ USER DATA
       const user = await user_account.findByPk(application.userId);
 
       if (!user) {
@@ -1957,11 +1957,23 @@ academyController.post(
         });
       }
 
-      // ✅ 3. ПРОМЕНИ ROLE НА 'student' (ако не е вече)
+      let userDetailsData = await user_details.findOne({
+        where: { userAccountsId: application.userId }
+      });
+
+      if (!userDetailsData) {
+        userDetailsData = await user_details.create({
+          userAccountsId: application.userId,
+          username: user.email.split('@')[0],
+          workOptions: [],
+          skills: [],
+          interestOptions: []
+        });
+      }
+
       if (user.role !== 'student') {
         await user.update({ role: 'student' });
 
-        // ✅ ГЕНЕРИРАЙ НОВИ TOKENS с обновена роля
         const { token } = tokenGenerator('access', user.dataValues);
         const { token: refreshJwtToken, refreshTokenId, expiryDate } = tokenGenerator('refresh', user.dataValues);
 
@@ -1973,7 +1985,6 @@ academyController.post(
         });
       }
 
-      // ✅ 4. ПРОВЕРИ ДАЛИ СТУДЕНТЪТ ВЕЧЕ СЪЩЕСТВУВА
       let studentData = await student.findOne({
         where: { userId: application.userId }
       });
@@ -1982,9 +1993,6 @@ academyController.post(
       const oldMentorId = studentData?.currentMentorId || null;
 
       if (studentData) {
-        // ✅ СТУДЕНТЪТ СЪЩЕСТВУВА - ЗАМЕНИ МЕНТОРА
-
-        // Намали studentsCount на стария ментор
         if (studentData.currentMentorId) {
           const oldMentor = await mentor.findByPk(studentData.currentMentorId);
           if (oldMentor) {
@@ -1994,7 +2002,6 @@ academyController.post(
           }
         }
 
-        // Обнови студента с новия ментор
         await studentData.update({
           currentMentorId: application.mentorId,
           mentorAssignedDate: new Date(),
@@ -2002,7 +2009,6 @@ academyController.post(
         });
 
       } else {
-        // ✅ СТУДЕНТЪТ НЕ СЪЩЕСТВУВА - СЪЗДАЙ ГО
         studentData = await student.create({
           userId: application.userId,
           currentMentorId: application.mentorId,
@@ -2012,17 +2018,12 @@ academyController.post(
         });
       }
 
-      // ✅ 5. УВЕЛИЧИ studentsCount НА НОВИЯ МЕНТОР
       const mentorData = await mentor.findByPk(application.mentorId);
       await mentorData.update({
         studentsCount: mentorData.studentsCount + 1
       });
 
-      // ✅ 5.5. СЪЗДАЙ MENTOR HISTORY ЗАПИС
-
-      // Ако студентът вече съществуваше и сменихме ментора
       if (!isNewStudent && oldMentorId && oldMentorId !== application.mentorId) {
-        // Завърши стария период
         const oldHistory = await mentor_history.findOne({
           where: {
             studentId: studentData.id,
@@ -2039,7 +2040,6 @@ academyController.post(
         }
       }
 
-      // Създай нов history запис за новия ментор
       await mentor_history.create({
         studentId: studentData.id,
         mentorId: application.mentorId,
@@ -2049,17 +2049,15 @@ academyController.post(
         reason: isNewStudent ? 'Initial assignment' : 'Reassigned from another mentor'
       });
 
-      // ✅ 6. ОБНОВИ APPLICATION STATUS
       await application.update({
         status: 'approved',
         approvedAt: new Date()
       });
 
-      // ✅ 7. СЪЗДАЙ ADMIN NOTIFICATION
-      await require('../sequelize/models/index').admin_notification.create({
+      await admin_notification.create({
         type: 'student_application_approved_by_admin',
-        title: 'Student Application Approved by Admin',
-        message: `Admin approved student application to mentor ${mentorData.name}`,
+        title: 'Заявка за студент одобрена от админ',
+        message: `Администраторът одобри заявка за студент към ментор ${mentorData.name}`,
         data: {
           applicationId: application.id,
           userId: application.userId,
@@ -2068,6 +2066,24 @@ academyController.post(
           approvedBy: 'admin'
         },
         isRead: false
+      });
+
+      // ✅ USER NOTIFICATION
+      await user_notification.create({
+        userId: application.userId,
+        type: 'student_application_approved',
+        title: 'Вашата заявка е одобрена! 🎉',
+        message: `Администраторът одобри вашата заявка към ментор ${mentorData.name}. Вече можете да започнете обучението си!`,
+        data: {
+          applicationId: application.id,
+          mentorId: application.mentorId,
+          mentorName: mentorData.name,
+          mentorEmail: mentorData.email,
+          mentorPhoto: mentorData.photoUrl,
+          studentId: studentData.id,
+          approvedBy: 'admin'
+        },
+        read: false
       });
 
       res.status(200).json({
@@ -2086,7 +2102,6 @@ academyController.post(
 
 // ===============================
 // POST /api/academy/admin/student-applications/:id/reject
-// Admin: Отхвърли заявка
 // ===============================
 academyController.post(
   '/admin/student-applications/:id/reject',
@@ -2097,9 +2112,8 @@ academyController.post(
       const applicationId = parseInt(req.params.id);
 
       const { rejectApplicationSchema } = require('../schemas/studentMentorApplication.schema');
-      const { student_mentor_application, mentor } = require('../sequelize/models/index');
+      const { student_mentor_application, mentor, admin_notification, user_notification } = require('../sequelize/models/index');
 
-      // Валидация
       const validationResult = rejectApplicationSchema.safeParse(req.body);
 
       if (!validationResult.success) {
@@ -2110,7 +2124,6 @@ academyController.post(
         });
       }
 
-      // Вземи application
       const application = await student_mentor_application.findByPk(applicationId);
 
       if (!application) {
@@ -2127,19 +2140,18 @@ academyController.post(
         });
       }
 
-      // Обнови application
       await application.update({
         status: 'rejected',
         rejectionReason: validationResult.data.rejectionReason,
         rejectedAt: new Date()
       });
 
-      // Създай admin notification
       const mentorData = await mentor.findByPk(application.mentorId);
-      await require('../sequelize/models/index').admin_notification.create({
+
+      await admin_notification.create({
         type: 'student_application_rejected_by_admin',
-        title: 'Student Application Rejected by Admin',
-        message: `Admin rejected student application to mentor ${mentorData.name}`,
+        title: 'Заявка за студент отхвърлена от админ',
+        message: `Администраторът отхвърли заявка за студент към ментор ${mentorData.name}`,
         data: {
           applicationId: application.id,
           userId: application.userId,
@@ -2148,6 +2160,23 @@ academyController.post(
           rejectedBy: 'admin'
         },
         isRead: false
+      });
+
+      // ✅ USER NOTIFICATION
+      await user_notification.create({
+        userId: application.userId,
+        type: 'student_application_rejected',
+        title: 'Вашата заявка не беше одобрена',
+        message: `За съжаление, вашата заявка към ментор ${mentorData.name} не беше одобрена.`,
+        data: {
+          applicationId: application.id,
+          mentorId: application.mentorId,
+          mentorName: mentorData.name,
+          mentorPhoto: mentorData.photoUrl,
+          rejectionReason: validationResult.data.rejectionReason,
+          rejectedBy: 'admin'
+        },
+        read: false
       });
 
       res.status(200).json({
@@ -2319,11 +2348,10 @@ academyController.post(
         rejectedAt: null
       });
 
-      // ✅ 10. СЪЗДАЙ NOTIFICATIONS
       await admin_notification.create({
         type: 'student_application_reapproved',
-        title: 'Student Application Reapproved',
-        message: `Previously rejected application was reapproved for mentor ${mentorData.name}`,
+        title: 'Заявка за студент одобрена отново',
+        message: `Предишно отхвърлена заявка беше одобрена за ментор ${mentorData.name}`,
         data: {
           applicationId: application.id,
           userId: application.userId,
@@ -3530,12 +3558,12 @@ academyController.post(
   async (req, res, next) => {
     try {
       const studentId = parseInt(req.params.id);
-      const { text } = req.body;
+      const { text, category } = req.body;  // ← ДОБАВЕНО category
 
       const { createAdminNoteSchema } = require('../schemas/adminStudentNotes.schema');
       const { admin_student_note } = require('../sequelize/models/index');
 
-      const validationResult = createAdminNoteSchema.safeParse({ text });
+      const validationResult = createAdminNoteSchema.safeParse({ text, category });
 
       if (!validationResult.success) {
         return res.status(400).json({
@@ -3556,7 +3584,8 @@ academyController.post(
 
       const newNote = await admin_student_note.create({
         studentId: studentId,
-        text: validationResult.data.text
+        text: validationResult.data.text,
+        category: validationResult.data.category  // ← ДОБАВЕНО
       });
 
       await admin_notification.create({
@@ -3565,7 +3594,8 @@ academyController.post(
         message: `Admin note added for student`,
         data: {
           studentId: studentId,
-          noteId: newNote.id
+          noteId: newNote.id,
+          category: newNote.category
         },
         read: false
       });
@@ -3583,6 +3613,7 @@ academyController.post(
   }
 );
 
+
 // ===============================
 // PATCH /api/academy/admin/students/:id/notes/:noteId
 // Редактирай админ бележка
@@ -3595,12 +3626,12 @@ academyController.patch(
     try {
       const studentId = parseInt(req.params.id);
       const noteId = parseInt(req.params.noteId);
-      const { text } = req.body;
+      const { text, category } = req.body;  // ← ДОБАВЕНО category
 
       const { updateAdminNoteSchema } = require('../schemas/adminStudentNotes.schema');
       const { admin_student_note } = require('../sequelize/models/index');
 
-      const validationResult = updateAdminNoteSchema.safeParse({ text });
+      const validationResult = updateAdminNoteSchema.safeParse({ text, category });
 
       if (!validationResult.success) {
         return res.status(400).json({
@@ -3624,9 +3655,12 @@ academyController.patch(
         });
       }
 
-      await note.update({
-        text: validationResult.data.text
-      });
+      // Build update object
+      const updateData = {};
+      if (validationResult.data.text) updateData.text = validationResult.data.text;
+      if (validationResult.data.category) updateData.category = validationResult.data.category;
+
+      await note.update(updateData);
 
       res.status(200).json({
         success: true,

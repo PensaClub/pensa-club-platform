@@ -9692,11 +9692,16 @@
       "home": "Home"
     },
     "cancel": "Cancel",
-       "loading": "Loading...",
-  "refresh": "Refresh",
-  "refreshing": "Refreshing...",
-  "close": "Close"
-
+    "loading": "Loading...",
+    "refresh": "Refresh",
+    "refreshing": "Refreshing...",
+    "close": "Close",
+      "save": "Save",
+  "saving": "Saving...",
+  "delete": "Delete",
+  "deleting": "Deleting...",
+  "edit": "Edit",
+  "retry": "Retry"
   },
   "clubForm": {
     "title": "Club Registration",
@@ -13415,111 +13420,115 @@
     "close": "Close"
   },
   "adminDigiBridgeStudents": {
-  "title": "Student Management",
-  "subtitle": "View and manage all students in DigiBridge Academy",
-  "stats": {
-    "totalStudents": "Total Students",
-    "activeStudents": "Active Students",
-    "withMentor": "With Mentor",
-    "totalCredits": "Total Credits",
-    "avgCredits": "Average Credits",
-    "attendanceRate": "Attendance Rate",
-    "activeCourses": "Active Courses",
-    "completedCourses": "Completed Courses"
-  },
-  "tabs": {
-    "overview": "Overview",
-    "byStatus": "By Status",
-    "byMentor": "By Mentor",
-    "credits": "Credits",
-    "attendance": "Attendance",
-    "topPerformers": "Top Performers",
-    "engagement": "Engagement"
-  },
-  "filters": {
-    "searchPlaceholder": "Search by name, email...",
-    "filters": "Filters",
-    "status": "Status",
-    "mentor": "Mentor",
-    "sortBy": "Sort by",
-    "allStatuses": "All statuses",
-    "active": "Active",
-    "inactive": "Inactive",
-    "suspended": "Suspended",
-    "allMentors": "All mentors",
-    "withMentor": "With mentor",
-    "withoutMentor": "Without mentor",
-    "newest": "Newest",
-    "oldest": "Oldest",
-    "nameAsc": "Name (A-Z)",
-    "nameDesc": "Name (Z-A)",
-    "creditsHigh": "Credits (high)",
-    "creditsLow": "Credits (low)",
-    "clearAll": "Clear all",
-    "showing": "Showing",
-    "students": "students"
-  },
-  "table": {
-    "student": "Student",
-    "email": "Email",
-    "mentor": "Mentor",
-    "credits": "Credits",
-    "attendance": "Attendance",
-    "status": "Status",
-    "actions": "Actions",
-    "noMentor": "No mentor",
-    "active": "Active",
-    "inactive": "Inactive",
-    "suspended": "Suspended",
-    "view": "View",
-    "edit": "Edit",
-    "delete": "Delete",
-    "noStudents": "No students found",
-    "noStudentsDesc": "Try changing the filters or add new students"
-  },
-  "status": {
-    "active": "Active",
-    "inactive": "Inactive",
-    "suspended": "Suspended",
-    "pending": "Pending"
-  },
-  "noMentor": "No mentor",
-  "charts": {
-    "noData": "No data available",
-    "byStatus": "Students by Status",
-    "byMentor": "Students by Mentor",
-    "creditsDistribution": "Credits Distribution",
-    "attendanceTrends": "Attendance Trends",
-    "topPerformers": "Top Performers",
-    "engagementOverview": "Engagement Overview",
-    "total": "Total",
-    "students": "students",
-    "credits": "credits",
-    "attendance": "attendance",
-    "student": "Student",
-    "rank": "Rank",
-    "totalStudents": "Total Students",
-    "avgCredits": "Average Credits",
-    "maxCredits": "Max Credits",
-    "avgAttendance": "Average Attendance",
-    "overallEngagement": "Overall Engagement",
-    "viewDetails": "View",
-    "trend": {
-      "up": "Up",
-      "down": "Down",
-      "stable": "Stable"
+    "title": "Student Management",
+    "subtitle": "View and manage all students in DigiBridge Academy",
+    "stats": {
+      "totalStudents": "Total Students",
+      "activeStudents": "Active Students",
+      "withMentor": "With Mentor",
+      "totalCredits": "Total Credits",
+      "avgCredits": "Average Credits",
+      "attendanceRate": "Attendance Rate",
+      "activeCourses": "Active Courses",
+      "completedCourses": "Completed Courses"
     },
-    "engagement": {
-      "sessions": "Sessions",
-      "courses": "Courses",
-      "mentoring": "Mentoring",
-      "activities": "Activities",
-      "feedback": "Feedback"
+    "tabs": {
+      "overview": "Overview",
+      "byStatus": "By Status",
+      "byMentor": "By Mentor",
+      "credits": "Credits",
+      "attendance": "Attendance",
+      "topPerformers": "Top Performers",
+      "engagement": "Engagement"
+    },
+    "filters": {
+      "searchPlaceholder": "Search by name, email...",
+      "filters": "Filters",
+      "status": "Status",
+      "mentor": "Mentor",
+      "sortBy": "Sort by",
+      "allStatuses": "All statuses",
+      "active": "Active",
+      "inactive": "Inactive",
+      "suspended": "Suspended",
+      "allMentors": "All mentors",
+      "withMentor": "With mentor",
+      "withoutMentor": "Without mentor",
+      "newest": "Newest",
+      "oldest": "Oldest",
+      "nameAsc": "Name (A-Z)",
+      "nameDesc": "Name (Z-A)",
+      "creditsHigh": "Credits (high)",
+      "creditsLow": "Credits (low)",
+      "clearAll": "Clear all",
+      "showing": "Showing",
+      "students": "students"
+    },
+    "table": {
+      "student": "Student",
+      "email": "Email",
+      "mentor": "Mentor",
+      "credits": "Credits",
+      "attendance": "Attendance",
+      "status": "Status",
+      "actions": "Actions",
+      "noMentor": "No mentor",
+      "active": "Active",
+      "inactive": "Inactive",
+      "suspended": "Suspended",
+      "view": "View",
+      "edit": "Edit",
+      "delete": "Delete",
+      "noStudents": "No students found",
+      "noStudentsDesc": "Try changing the filters or add new students",
+       "notes": "Notes",
+    "notesCount": "{{count}} notes",
+    "noNotes": "No notes"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "suspended": "Suspended",
+      "pending": "Pending"
+    },
+    "noMentor": "No mentor",
+    "charts": {
+      "noData": "No data available",
+      "byStatus": "Students by Status",
+      "byMentor": "Students by Mentor",
+      "creditsDistribution": "Credits Distribution",
+      "attendanceTrends": "Attendance Trends",
+      "topPerformers": "Top Performers",
+      "engagementOverview": "Engagement Overview",
+      "total": "Total",
+      "students": "students",
+      "credits": "credits",
+      "attendance": "attendance",
+      "student": "Student",
+      "rank": "Rank",
+      "totalStudents": "Total Students",
+      "avgCredits": "Average Credits",
+      "maxCredits": "Max Credits",
+      "avgAttendance": "Average Attendance",
+      "overallEngagement": "Overall Engagement",
+      "viewDetails": "View",
+      "trend": {
+        "up": "Up",
+        "down": "Down",
+        "stable": "Stable"
+      },
+      "engagement": {
+        "sessions": "Sessions",
+        "courses": "Courses",
+        "mentoring": "Mentoring",
+        "activities": "Activities",
+        "feedback": "Feedback"
+      }
     }
-  }
-},
+  },
   "adminDgStudentDetailsModal": {
     "title": "Student Details",
+    "notes": "Notes",
     "totalCredits": "Total Credits",
     "attendanceRate": "Attendance Rate",
     "currentMentor": "Current Mentor",
@@ -13571,7 +13580,7 @@
     "assign": "Assign Mentor",
     "assigning": "Assigning..."
   },
-   "adminDgSendEmailModal": {
+  "adminDgSendEmailModal": {
     "title": "Send Email",
     "to": "To",
     "subject": "Subject",
@@ -13633,100 +13642,130 @@
     }
   },
   "adminStudentApplications": {
-  "title": "Student Applications",
-  "subtitle": "Manage mentorship training requests",
-  "stats": {
-    "total": "Total",
-    "pending": "Pending",
-    "approved": "Approved",
-    "rejected": "Rejected"
-  },
-  "tabs": {
-    "overview": "Overview",
-    "pending": "Pending",
-    "approved": "Approved",
-    "rejected": "Rejected"
-  },
-  "filters": {
-    "searchPlaceholder": "Search by name or email...",
-    "allStatuses": "All statuses",
-    "allMentors": "All mentors",
-    "newest": "Newest",
-    "oldest": "Oldest",
-    "studentName": "Student name",
-    "mentorName": "Mentor name",
-    "clearAll": "Clear",
-    "showing": "Showing {{count}} of {{total}} results"
-  },
-  "table": {
-    "student": "Student",
-    "mentor": "Mentor",
-    "status": "Status",
-    "appliedAt": "Applied",
-    "actions": "Actions",
-    "noApplications": "No applications found"
-  },
-  "status": {
-    "pending": "Pending",
-    "approved": "Approved",
-    "rejected": "Rejected"
-  },
-  "actions": {
-    "view": "View",
-    "approve": "Approve",
-    "reject": "Reject",
-    "reapprove": "Reapprove",
-    "delete": "Delete"
+    "title": "Student Applications",
+    "subtitle": "Manage mentorship training requests",
+    "stats": {
+      "total": "Total",
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
+    "tabs": {
+      "overview": "Overview",
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
+    "filters": {
+      "searchPlaceholder": "Search by name or email...",
+      "allStatuses": "All statuses",
+      "allMentors": "All mentors",
+      "newest": "Newest",
+      "oldest": "Oldest",
+      "studentName": "Student name",
+      "mentorName": "Mentor name",
+      "clearAll": "Clear",
+      "showing": "Showing {{count}} of {{total}} results"
+    },
+    "table": {
+      "student": "Student",
+      "mentor": "Mentor",
+      "status": "Status",
+      "appliedAt": "Applied",
+      "actions": "Actions",
+      "noApplications": "No applications found"
+    },
+    "status": {
+      "pending": "Pending",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
+    "actions": {
+      "view": "View",
+      "approve": "Approve",
+      "reject": "Reject",
+      "reapprove": "Reapprove",
+      "delete": "Delete"
+    },
+    "charts": {
+      "byStatus": "Applications by Status",
+      "byMentor": "Applications by Mentor",
+      "overTime": "Applications Over Time"
+    },
+    "modals": {
+      "viewTitle": "Application Details",
+      "approveTitle": "Approve Application",
+      "reapproveTitle": "Reapprove Application",
+      "rejectTitle": "Reject Application",
+      "deleteTitle": "Delete Application",
+      "studentInfo": "Student Information",
+      "mentorInfo": "Mentor Information",
+      "applicationInfo": "Application Information",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "specialization": "Specialization",
+      "status": "Status",
+      "appliedAt": "Applied at",
+      "approvedAt": "Approved at",
+      "rejectedAt": "Rejected at",
+      "rejectionReason": "Rejection reason",
+      "approveConfirm": "Are you sure you want to approve {{student}}'s application to mentor {{mentor}}?",
+      "reapproveConfirm": "Are you sure you want to reapprove {{student}}'s application to mentor {{mentor}}?",
+      "deleteConfirm": "Are you sure you want to delete {{student}}'s application?",
+      "deleteWarning": "This action cannot be undone!",
+      "rejectInfo": "You are about to reject {{student}}'s application to mentor {{mentor}}.",
+      "rejectionReasonLabel": "Rejection reason",
+      "rejectionReasonPlaceholder": "Describe why you are rejecting this application...",
+      "reasonRequired": "Reason is required",
+      "reasonTooShort": "Reason must be at least 10 characters"
+    }
   },
   "charts": {
     "byStatus": "Applications by Status",
     "byMentor": "Applications by Mentor",
-    "overTime": "Applications Over Time"
+    "overTime": "Applications Over Time",
+    "noData": "No data to display"
   },
-  "modals": {
-    "viewTitle": "Application Details",
-    "approveTitle": "Approve Application",
-    "reapproveTitle": "Reapprove Application",
-    "rejectTitle": "Reject Application",
-    "deleteTitle": "Delete Application",
-    "studentInfo": "Student Information",
-    "mentorInfo": "Mentor Information",
-    "applicationInfo": "Application Information",
-    "name": "Name",
-    "email": "Email",
-    "phone": "Phone",
-    "specialization": "Specialization",
-    "status": "Status",
-    "appliedAt": "Applied at",
-    "approvedAt": "Approved at",
-    "rejectedAt": "Rejected at",
-    "rejectionReason": "Rejection reason",
-    "approveConfirm": "Are you sure you want to approve {{student}}'s application to mentor {{mentor}}?",
-    "reapproveConfirm": "Are you sure you want to reapprove {{student}}'s application to mentor {{mentor}}?",
-    "deleteConfirm": "Are you sure you want to delete {{student}}'s application?",
-    "deleteWarning": "This action cannot be undone!",
-    "rejectInfo": "You are about to reject {{student}}'s application to mentor {{mentor}}.",
-    "rejectionReasonLabel": "Rejection reason",
-    "rejectionReasonPlaceholder": "Describe why you are rejecting this application...",
-    "reasonRequired": "Reason is required",
-    "reasonTooShort": "Reason must be at least 10 characters"
+  "applicationsByStatusChart": {
+    "noData": "No data to display"
+  },
+  "applicationsByMentorChart": {
+    "noData": "No data to display",
+    "unknownMentor": "Unknown mentor",
+    "applications": "applications",
+    "applicationsShort": "apps",
+    "topMentors": "Top {{count}} mentors",
+    "totalApplications": "Total applications"
+  },
+  "adminDgStudentNotes": {
+    "title": "Student Notes",
+    "notesCount": "notes",
+    "addNote": "Add Note",
+    "newNote": "New Note",
+    "editNote": "Edit Note",
+    "placeholder": "Write your note here...",
+    "deleteConfirm": "Are you sure you want to delete this note?",
+    "edited": "edited",
+    "categories": {
+      "general": "General",
+      "important": "Important",
+      "followup": "Follow-up",
+      "positive": "Positive",
+      "contact": "Contact"
+    },
+    "time": {
+      "justNow": "Just now",
+      "minutesAgo": "{{count}} min ago",
+      "hoursAgo": "{{count}} h ago",
+      "daysAgo": "{{count}} days ago"
+    },
+    "empty": {
+      "title": "No Notes",
+      "description": "No notes have been added for this student yet"
+    },
+    "errors": {
+      "fetchFailed": "Failed to load notes"
+    }
   }
-},
-"charts": {
-  "byStatus": "Applications by Status",
-  "byMentor": "Applications by Mentor",
-  "overTime": "Applications Over Time",
-  "noData": "No data to display"
-},
-"applicationsByStatusChart": {
-  "noData": "No data to display"
-},
-"applicationsByMentorChart": {
-  "noData": "No data to display",
-  "unknownMentor": "Unknown mentor",
-  "applications": "applications",
-  "applicationsShort": "apps",
-  "topMentors": "Top {{count}} mentors",
-  "totalApplications": "Total applications"
-}
 }

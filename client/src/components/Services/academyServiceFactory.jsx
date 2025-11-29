@@ -493,8 +493,27 @@ export const academyServiceFactory = () => {
       return requester.del(`${apiUrl}/academy/admin/student-applications/${applicationId}`);
     },
     reapproveStudentApplicationByAdmin: async (applicationId) => {
-  return requester.post(`${apiUrl}/academy/admin/student-applications/${applicationId}/reapprove`);
-},
+      return requester.post(`${apiUrl}/academy/admin/student-applications/${applicationId}/reapprove`);
+    },
+    // ===============================
+    // ADMIN STUDENT NOTES 📝 
+    // ===============================
+
+    getAdminStudentNotes: async (studentId) => {
+      return requester.get(`${apiUrl}/academy/admin/students/${studentId}/notes`);
+    },
+
+    createAdminStudentNote: async (studentId, noteData) => {
+      return requester.post(`${apiUrl}/academy/admin/students/${studentId}/notes`, noteData);
+    },
+
+    updateAdminStudentNote: async (studentId, noteId, noteData) => {
+      return requester.patch(`${apiUrl}/academy/admin/students/${studentId}/notes/${noteId}`, noteData);
+    },
+
+    deleteAdminStudentNote: async (studentId, noteId) => {
+      return requester.del(`${apiUrl}/academy/admin/students/${studentId}/notes/${noteId}`);
+    },
   };
 };
 

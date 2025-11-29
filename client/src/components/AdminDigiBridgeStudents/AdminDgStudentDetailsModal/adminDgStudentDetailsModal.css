@@ -516,3 +516,30 @@
     min-width: unset;
   }
 }
+/* Notes Button */
+.adminDgStudentDetailsModal-actionBtn--notes {
+  position: relative;
+  color: #6366f1;
+  border-color: #c7d2fe;
+  background: #eef2ff;
+}
+
+.adminDgStudentDetailsModal-actionBtn--notes:hover {
+  background: #e0e7ff;
+  border-color: #a5b4fc;
+}
+
+.adminDgStudentDetailsModal-notesBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  border-radius: 10px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: white;
+  margin-left: 0.375rem;
+}

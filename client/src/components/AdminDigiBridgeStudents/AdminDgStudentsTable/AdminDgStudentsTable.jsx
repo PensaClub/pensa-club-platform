@@ -13,7 +13,8 @@ export const AdminDgStudentsTable = ({
   onChangeMentor,
   onSendEmail,
   onDelete,
-  onStatusChange
+  onStatusChange,
+  onOpenNotes  
 }) => {
   const { t } = useTranslation();
 
@@ -194,6 +195,24 @@ export const AdminDgStudentsTable = ({
                 </td>
                 <td className="adminDgStudentsTable-td adminDgStudentsTable-td--actions">
                   <div className="adminDgStudentsTable-actions">
+                    {/* NOTES BUTTON */}
+                    <button
+                      className={`adminDgStudentsTable-notesBtn ${
+                        (student.notesCount || 0) > 0 ? 'adminDgStudentsTable-notesBtn--hasNotes' : ''
+                      }`}
+                      onClick={() => onOpenNotes(student)}
+                      title={t('adminDigiBridgeStudents.table.notes')}
+                      type="button"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24">
+                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z" fill="currentColor"/>
+                        <path d="M7 7h10v2H7zm0 4h10v2H7zm0 4h7v2H7z" fill="currentColor"/>
+                      </svg>
+                      {(student.notesCount || 0) > 0 && (
+                        <span className="adminDgStudentsTable-notesBadge">{student.notesCount}</span>
+                      )}
+                    </button>
+
                     <button
                       className="adminDgStudentsTable-actionBtn adminDgStudentsTable-actionBtn--view"
                       onClick={() => onViewDetails(student)}
@@ -284,6 +303,24 @@ export const AdminDgStudentsTable = ({
             </div>
 
             <div className="adminDgStudentsTable-cardActions">
+              {/* NOTES BUTTON - MOBILE */}
+              <button
+                className={`adminDgStudentsTable-cardActionBtn adminDgStudentsTable-cardActionBtn--notes ${
+                  (student.notesCount || 0) > 0 ? 'adminDgStudentsTable-cardActionBtn--hasNotes' : ''
+                }`}
+                onClick={() => onOpenNotes(student)}
+                type="button"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24">
+                  <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z" fill="currentColor"/>
+                  <path d="M7 7h10v2H7zm0 4h10v2H7zm0 4h7v2H7z" fill="currentColor"/>
+                </svg>
+                {t('adminDigiBridgeStudents.table.notes')}
+                {(student.notesCount || 0) > 0 && (
+                  <span className="adminDgStudentsTable-cardNotesBadge">{student.notesCount}</span>
+                )}
+              </button>
+
               <button
                 className="adminDgStudentsTable-cardActionBtn adminDgStudentsTable-cardActionBtn--view"
                 onClick={() => onViewDetails(student)}

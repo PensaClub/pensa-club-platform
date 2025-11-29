@@ -13,6 +13,7 @@ import { AdminDgEditStudentModal } from './AdminDgEditStudentModal/AdminDgEditSt
 import { AdminDgChangeMentorModal } from './AdminDgChangeMentorModal/AdminDgChangeMentorModal';
 import { AdminDgSendEmailModal } from './AdminDgSendEmailModal/AdminDgSendEmailModal';
 import { AdminDgStudentsFilters } from './AdminDgStudentsFilters/AdminDgStudentsFilters';
+import { AdminDgStudentNotesModal } from './AdminDgStudentNotesModal/AdminDgStudentNotesModal';
 
 // Chart Components
 import { StudentsByStatusChart } from './StudentsStatsCharts/StudentsByStatusChart';
@@ -77,6 +78,7 @@ export const AdminDigiBridgeStudents = () => {
   const [showChangeMentorModal, setShowChangeMentorModal] = useState(false);
   const [showEmailModal, setShowEmailModal] = useState(false);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showNotesModal, setShowNotesModal] = useState(false); // ← NEW
 
   // ===============================
   // FETCH OVERVIEW STATS
@@ -258,6 +260,14 @@ export const AdminDigiBridgeStudents = () => {
     setShowDeleteConfirm(true);
   };
 
+  // ===============================
+  // NEW: NOTES HANDLER
+  // ===============================
+  const handleOpenNotes = (student) => {
+    setSelectedStudent(student);
+    setShowNotesModal(true);
+  };
+
   const handleConfirmDelete = async () => {
     if (!selectedStudent) return;
 
@@ -319,7 +329,7 @@ export const AdminDigiBridgeStudents = () => {
         return (
           <>
             <StudentsOverviewStats stats={overviewStats} loading={loading} />
-            
+
             <AdminDgStudentsFilters
               filters={filters}
               onFilterChange={handleFilterChange}
@@ -335,46 +345,47 @@ export const AdminDigiBridgeStudents = () => {
               onEdit={handleEdit}
               onDelete={handleDelete}
               onStatusChange={handleStatusChange}
+              onOpenNotes={handleOpenNotes}  // ← NEW PROP
             />
           </>
         );
 
       case 'byStatus':
         return (
-          <StudentsByStatusChart 
-            data={statusStats} 
-            loading={statsLoading} 
+          <StudentsByStatusChart
+            data={statusStats}
+            loading={statsLoading}
           />
         );
 
       case 'byMentor':
         return (
-          <StudentsByMentorChart 
-            data={mentorStats} 
-            loading={statsLoading} 
+          <StudentsByMentorChart
+            data={mentorStats}
+            loading={statsLoading}
           />
         );
 
       case 'credits':
         return (
-          <StudentsCreditsChart 
-            data={creditsStats} 
-            loading={statsLoading} 
+          <StudentsCreditsChart
+            data={creditsStats}
+            loading={statsLoading}
           />
         );
 
       case 'attendance':
         return (
-          <StudentsAttendanceChart 
-            data={attendanceStats} 
-            loading={statsLoading} 
+          <StudentsAttendanceChart
+            data={attendanceStats}
+            loading={statsLoading}
           />
         );
 
       case 'topPerformers':
         return (
-          <TopPerformersTable 
-            students={topPerformers} 
+          <TopPerformersTable
+            students={topPerformers}
             loading={statsLoading}
             onViewDetails={handleViewDetails}
           />
@@ -382,9 +393,9 @@ export const AdminDigiBridgeStudents = () => {
 
       case 'engagement':
         return (
-          <StudentsEngagementChart 
-            data={engagementStats} 
-            loading={statsLoading} 
+          <StudentsEngagementChart
+            data={engagementStats}
+            loading={statsLoading}
           />
         );
 
@@ -421,6 +432,10 @@ export const AdminDigiBridgeStudents = () => {
           onEdit={handleEdit}
           onChangeMentor={handleChangeMentor}
           onSendEmail={handleSendEmail}
+          onOpenNotes={() => {
+            setShowDetailsModal(false);
+            setShowNotesModal(true);
+          }}
         />
       )}
 
@@ -467,6 +482,17 @@ export const AdminDigiBridgeStudents = () => {
             setSelectedStudent(null);
           }}
           onConfirm={handleConfirmDelete}
+        />
+      )}
+
+      {/* NEW: NOTES MODAL */}
+      {showNotesModal && (
+        <AdminDgStudentNotesModal
+          student={selectedStudent}
+          onClose={() => {
+            setShowNotesModal(false);
+            setSelectedStudent(null);
+          }}
         />
       )}
     </div>
