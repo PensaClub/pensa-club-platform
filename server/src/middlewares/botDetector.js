@@ -1,4 +1,4 @@
-const { article, mainImage, project, initiative, Club, mentor } = require('../sequelize/models');
+const { article, mainImage, project, initiative, Club, mentor, image } = require('../sequelize/models');
 const generateArticleMetaHTML = require('../utils/metaGenerator');
 const generateProjectMetaHTML = require('../utils/projectMetaGenerator');
 const generateInitiativeMetaHTML = require('../utils/initiativeMetaGenerator');
@@ -166,7 +166,7 @@ async function botDetector(req, res, next) {
                 where: { slug },
                 include: [
                     {
-                        model: mainImage,
+                        model: image,  // ← ПРОМЕНЕНО от mainImage на image
                         as: 'mainImage',
                         attributes: ['id', 'type', 'src', 'alt'],
                     }
@@ -174,7 +174,7 @@ async function botDetector(req, res, next) {
                 attributes: [
                     'id', 'title', 'slug', 'shortDescription', 'fullDescription',
                     'category', 'tags', 'status', 'timeline', 'budget',
-                    'contact', 'location', 'createdAt', 'updatedAt'
+                    'location', 'createdAt', 'updatedAt'
                 ]
             });
 
