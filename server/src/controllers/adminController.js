@@ -1,5 +1,5 @@
 const adminController = require('express').Router();
-const { user_account, user_ads,article, project, initiative, Club, bot_log } = require('../sequelize/models/index');
+const { user_account, user_ads, article, project, initiative, Club, bot_log } = require('../sequelize/models/index');
 
 const { Op } = require('sequelize');
 const sequelize = require('../sequelize/models').sequelize;
@@ -469,7 +469,22 @@ adminController.get('/bot-summary', isAuth, rbac.checkPermission('admin', 'read'
             order: [[sequelize.fn('DATE', sequelize.col('timestamp')), 'ASC']],
             raw: true
         });
-
+        // ==================== TOP GAMES (Last 7 days) ====================
+        const topGames = await bot_log.findAll({
+            attributes: [
+                'gameSlug',
+                [sequelize.fn('COUNT', sequelize.col('id')), 'shares']
+            ],
+            where: {
+                timestamp: { [Op.gte]: last7d },
+                contentType: 'game',
+                gameSlug: { [Op.ne]: null }
+            },
+            group: ['gameSlug'],
+            order: [[sequelize.fn('COUNT', sequelize.col('id')), 'DESC']],
+            limit: 10,
+            raw: true
+        });
         // ==================== RESPONSE ====================
         res.json({
             summary: {
@@ -509,6 +524,11 @@ adminController.get('/bot-summary', isAuth, rbac.checkPermission('admin', 'read'
                     slug: item.pageSlug,
                     shares: parseInt(item.shares),
                     type: 'page'
+                })),
+                games: topGames.map(item => ({
+                    slug: item.gameSlug,
+                    shares: parseInt(item.shares),
+                    type: 'game'
                 }))
             },
             geography: {

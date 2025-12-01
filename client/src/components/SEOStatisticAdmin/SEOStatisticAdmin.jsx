@@ -40,7 +40,8 @@ const CONTENT_COLORS = {
     'initiative': '#4facfe',
     'club': '#43e97b',
     'page': '#f5576c',
-    'mentor': '#764ba2'
+    'mentor': '#764ba2',
+    'game': '#FFD93D'
 };
 
 const CONTENT_LABELS = {
@@ -49,7 +50,8 @@ const CONTENT_LABELS = {
     'initiative': 'Инициативи',
     'club': 'Клубове',
     'page': 'Страници',
-    'mentor': 'Ментори'
+    'mentor': 'Ментори',
+    'game': 'Игри'
 };
 
 // 🌍 ФЛАГОВЕ ЗА ДЪРЖАВИ
@@ -174,9 +176,24 @@ export const SEOStatisticAdmin = () => {
             'academy': 'DigiBridge Academy',
             'about': 'За нас',
             'contact': 'Контакти',
-            'mentors': 'Ментори'
+            'mentors': 'Ментори',
+            'games': 'Игри'
         };
         return pageNames[slug] || slug;
+    };
+
+    const getGameDisplayName = (slug) => {
+        const gameNames = {
+            'chess': 'Шах',
+            'sudoku': 'Судоку',
+            'solitaire': 'Пасианс',
+            'backgammon': 'Табла',
+            'tetris': 'Тетрис',
+            '2048': '2048',
+            'checkers': 'Шашки',
+            'mahjong': 'Маджонг'
+        };
+        return gameNames[slug] || slug;
     };
 
     // Custom Tooltip за графиките
@@ -482,6 +499,12 @@ export const SEOStatisticAdmin = () => {
                     >
                         📄 Страници ({topContent?.pages?.length || 0})
                     </button>
+                    <button 
+                        className={`SEOStatisticAdmin-tab ${activeTab === 'games' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('games')}
+                    >
+                        🎮 Игри ({topContent?.games?.length || 0})
+                    </button>
                 </div>
 
                 <div className="SEOStatisticAdmin-tab-content">
@@ -650,6 +673,40 @@ export const SEOStatisticAdmin = () => {
                                 <div className="SEOStatisticAdmin-empty-state">
                                     <span className="SEOStatisticAdmin-empty-icon">📄</span>
                                     <p>Няма споделени страници тази седмица</p>
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {activeTab === 'games' && (
+                        <div className="SEOStatisticAdmin-top-list">
+                            {topContent?.games?.length > 0 ? (
+                                topContent.games.map((item, index) => (
+                                    <div key={index} className="SEOStatisticAdmin-top-item">
+                                        <div className="SEOStatisticAdmin-top-rank-badge">
+                                            {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index + 1}`}
+                                        </div>
+                                        <div className="SEOStatisticAdmin-top-info">
+                                            <a 
+                                                href={`/games/${item.slug}`} 
+                                                target="_blank" 
+                                                rel="noopener noreferrer"
+                                                className="SEOStatisticAdmin-top-title"
+                                            >
+                                                {getGameDisplayName(item.slug)}
+                                            </a>
+                                            <span className="SEOStatisticAdmin-top-slug">/games/{item.slug}</span>
+                                        </div>
+                                        <div className="SEOStatisticAdmin-top-shares-badge">
+                                            <span className="SEOStatisticAdmin-shares-number">{formatNumber(item.shares)}</span>
+                                            <span className="SEOStatisticAdmin-shares-label">споделяния</span>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="SEOStatisticAdmin-empty-state">
+                                    <span className="SEOStatisticAdmin-empty-icon">🎮</span>
+                                    <p>Няма споделени игри тази седмица</p>
                                 </div>
                             )}
                         </div>
