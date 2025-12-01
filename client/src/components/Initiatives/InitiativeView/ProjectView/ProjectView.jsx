@@ -352,16 +352,6 @@ export const ProjectView = () => {
 
         return <p>{String(content)}</p>;
     };
-
-    if (isLoading || !currentProject) {
-        return <div className="project-view-loading">{t('projectView.loading')}</div>;
-    }
-
-    const canApply = currentProject?.applicationStatus === 'open' &&
-        (currentProject.currentParticipants || 0) < (currentProject.maxParticipants || Infinity) &&
-        !deadlinePassed;
-
-
     // ✅ META DATA (ДИНАМИЧЕН SEO)
     const metaData = useMemo(() => {
         if (!currentProject) {
@@ -484,6 +474,13 @@ export const ProjectView = () => {
             "inLanguage": "bg"
         };
     }, [currentProject, metaData, slug, locationText]);
+    if (isLoading || !currentProject) {
+        return <div className="project-view-loading">{t('projectView.loading')}</div>;
+    }
+
+    const canApply = currentProject?.applicationStatus === 'open' &&
+        (currentProject.currentParticipants || 0) < (currentProject.maxParticipants || Infinity) &&
+        !deadlinePassed;
 
     return (
         <>
