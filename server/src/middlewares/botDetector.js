@@ -5,6 +5,7 @@ const generateInitiativeMetaHTML = require('../utils/initiativeMetaGenerator');
 const generateClubMetaHTML = require('../utils/clubMetaGenerator');
 const generateAcademyMetaHTML = require('../utils/academyMetaGenerator');
 const generateMentorMetaHTML = require('../utils/mentorMetaGenerator');
+const generateGamesMetaHTML = require('../utils/gamesMetaGenerator'); // ✅ ДОБАВЕНО
 
 /**
  * Проверява дали User-Agent е от социална мрежа bot
@@ -58,13 +59,12 @@ async function logBotRequest(botName, contentType, contentId, contentSlug, userA
 
         const logData = {
             bot: botName,
-            contentType: contentType, // 'article', 'project', 'initiative', 'club', 'page', 'mentor'
+            contentType: contentType,
             userAgent: userAgent,
             ip: ip,
             timestamp: new Date()
         };
 
-        // Добавяме специфичните полета според типа
         if (contentType === 'article') {
             logData.articleId = contentId;
             logData.articleSlug = contentSlug;
@@ -96,9 +96,8 @@ async function logBotRequest(botName, contentType, contentId, contentSlug, userA
 async function botDetector(req, res, next) {
     const userAgent = req.headers['user-agent'] || '';
 
-    // Проверка дали е bot
     if (!isBot(userAgent)) {
-        return next(); // Не е bot, продължи нормално
+        return next();
     }
 
     const botName = getBotName(userAgent);
@@ -117,6 +116,7 @@ async function botDetector(req, res, next) {
     const clubMatch = req.path.match(/^\/clubs\/([a-zA-Z0-9-]+)$/);
     const academyMatch = req.path.match(/^\/academy$/);
     const mentorMatch = req.path.match(/^\/academy\/mentors\/(\d+)$/);
+    const gamesMatch = req.path.match(/^\/games$/); // ✅ ДОБАВЕНО
 
     try {
         // ==================== ARTICLE ====================
@@ -166,7 +166,7 @@ async function botDetector(req, res, next) {
                 where: { slug },
                 include: [
                     {
-                        model: image,  // ← ПРОМЕНЕНО от mainImage на image
+                        model: image,
                         as: 'mainImage',
                         attributes: ['id', 'type', 'src', 'alt'],
                     }
@@ -292,6 +292,24 @@ async function botDetector(req, res, next) {
 
             const html = generateAcademyMetaHTML();
             console.log('📤 Sending academy HTML to bot');
+            return res.send(html);
+        }
+
+        // ==================== GAMES (СТАТИЧНА СТРАНИЦА) ==================== ✅ ДОБАВЕНО
+        if (gamesMatch) {
+            console.log('🎮 Processing GAMES page');
+
+            await logBotRequest(
+                botName,
+                'page',
+                null,
+                'games',
+                userAgent,
+                req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress
+            );
+
+            const html = generateGamesMetaHTML();
+            console.log('📤 Sending games HTML to bot');
             return res.send(html);
         }
 

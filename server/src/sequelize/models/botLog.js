@@ -1,3 +1,4 @@
+// server/src/sequelize/models/botLog.js
 'use strict';
 const { Model } = require('sequelize');
 
