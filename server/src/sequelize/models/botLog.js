@@ -41,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
             },
             contentType: {
-                type: DataTypes.ENUM('article', 'project', 'initiative', 'club', 'page', 'mentor'),
+                type: DataTypes.ENUM('article', 'project', 'initiative', 'club', 'page', 'mentor', 'game'),
                 allowNull: false,
                 defaultValue: 'article',
                 field: 'content_type',
@@ -139,7 +139,12 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
                 defaultValue: DataTypes.NOW,
                 field: 'updatedAt'
-            }
+            },
+            gameSlug: {
+                type: DataTypes.STRING,
+                allowNull: true,
+                field: 'game_slug',
+            },
         },
         {
             sequelize,
