@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import GameCard from './GameCard';
 import { gamesData, gameCategories } from './gameData';
 import './gamesPage.css';
+import SEOHead from '../SEO/SEOHead'; // ✅ Добави импорта
 
 const GamesPage = () => {
     const { t } = useTranslation();
@@ -21,6 +22,84 @@ const GamesPage = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [isFiltersStickyActive, setIsFiltersStickyActive] = useState(false);
     const [isMobileDropdownOpen, setIsMobileDropdownOpen] = useState(false);
+
+    // ✅ META DATA (СТАТИЧЕН SEO)
+    const metaData = useMemo(() => {
+        // Извличаме имената на игрите за keywords
+        const gameNames = gamesData.map(game => t(game.name)).join(', ');
+        
+        return {
+            title: `${t('games.title')} | Pensa Club`,
+            description: t('games.subtitle') || 'Безплатни онлайн игри за пенсионери - шах, судоку, пасианс, табла, тетрис и други. Тренирайте ума си докато се забавлявате!',
+            keywords: `онлайн игри, игри за пенсионери, безплатни игри, ${gameNames}, шах, судоку, пасианс, табла, тетрис, маджонг, Pensa Club`,
+            image: '/images/games/gaming-room.jpg',
+            author: 'Pensa Foundation'
+        };
+    }, [t]);
+
+    // ✅ STRUCTURED DATA - ITEMLIST (КОЛЕКЦИЯ ОТ ИГРИ)
+    const structuredData = useMemo(() => {
+        return {
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            "name": t('games.title'),
+            "description": metaData.description,
+            "url": "https://pensa.club/games",
+            "image": "https://pensa.club/images/games/gaming-room.jpg",
+            "publisher": {
+                "@type": "Organization",
+                "name": "Pensa Club",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": "https://pensa.club/logo.png"
+                }
+            },
+            "mainEntity": {
+                "@type": "ItemList",
+                "name": t('games.title'),
+                "description": metaData.description,
+                "numberOfItems": gamesData.length,
+                "itemListElement": gamesData.map((game, index) => ({
+                    "@type": "ListItem",
+                    "position": index + 1,
+                    "item": {
+                        "@type": "VideoGame",
+                        "name": t(game.name),
+                        "description": t(game.description),
+                        "image": `https://pensa.club${game.image}`,
+                        "url": game.url,
+                        "genre": t(`games.categories.${game.category}`),
+                        "gamePlatform": "Web Browser",
+                        "applicationCategory": "Game",
+                        "offers": {
+                            "@type": "Offer",
+                            "price": "0",
+                            "priceCurrency": "BGN",
+                            "availability": "https://schema.org/InStock"
+                        }
+                    }
+                }))
+            },
+            "breadcrumb": {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": 1,
+                        "name": "Начало",
+                        "item": "https://pensa.club"
+                    },
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": t('games.title'),
+                        "item": "https://pensa.club/games"
+                    }
+                ]
+            },
+            "inLanguage": "bg"
+        };
+    }, [t, metaData.description]);
 
     // 🆕 Sticky ефект за филтрите
     useEffect(() => {
@@ -76,7 +155,7 @@ const GamesPage = () => {
 
     const handleCategoryChange = (category) => {
         setSelectedCategory(category);
-        setIsMobileDropdownOpen(false); // Затвори dropdown след избор
+        setIsMobileDropdownOpen(false);
     };
 
     const toggleMobileDropdown = () => {
@@ -84,93 +163,74 @@ const GamesPage = () => {
     };
 
     return (
-        <div className="games-page">
-            {/* Hero Section */}
-            <div className="games-hero">
-                <div className="games-hero-content">
-                    <div className="games-hero-text">
-                        <h1 className="games-title">
-                            <FontAwesomeIcon icon={faGamepad} className="games-title-icon" />
-                            {t('games.title')}
-                        </h1>
-                        <p className="games-subtitle">
-                            {t('games.subtitle')}
-                        </p>
-                        <div className="games-stats">
-                            <div className="games-stat">
-                                <FontAwesomeIcon icon={faTrophy} />
-                                <span>{t('games.stats.totalGames', { count: gamesData.length })}</span>
-                            </div>
-                            <div className="games-stat">
-                                <FontAwesomeIcon icon={faUsers} />
-                                <span>{t('games.stats.allAges')}</span>
-                            </div>
-                            <div className="games-stat">
-                                <FontAwesomeIcon icon={faClock} />
-                                <span>{t('games.stats.available24_7')}</span>
+        <>
+            {/* ✅ SEO HEAD */}
+            <SEOHead
+                title={metaData.title}
+                description={metaData.description}
+                keywords={metaData.keywords}
+                image={metaData.image}
+                type="website"
+                author={metaData.author}
+                structuredData={structuredData}
+            />
+
+            <div className="games-page">
+                {/* Hero Section */}
+                <div className="games-hero">
+                    <div className="games-hero-content">
+                        <div className="games-hero-text">
+                            <h1 className="games-title">
+                                <FontAwesomeIcon icon={faGamepad} className="games-title-icon" />
+                                {t('games.title')}
+                            </h1>
+                            <p className="games-subtitle">
+                                {t('games.subtitle')}
+                            </p>
+                            <div className="games-stats">
+                                <div className="games-stat">
+                                    <FontAwesomeIcon icon={faTrophy} />
+                                    <span>{t('games.stats.totalGames', { count: gamesData.length })}</span>
+                                </div>
+                                <div className="games-stat">
+                                    <FontAwesomeIcon icon={faUsers} />
+                                    <span>{t('games.stats.allAges')}</span>
+                                </div>
+                                <div className="games-stat">
+                                    <FontAwesomeIcon icon={faClock} />
+                                    <span>{t('games.stats.available24_7')}</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div className="games-hero-image">
-                        <img
-                            src="/images/games/gaming-room.jpg"
-                            alt={t('games.heroImageAlt')}
-                        />
+                        <div className="games-hero-image">
+                            <img
+                                src="/images/games/gaming-room.jpg"
+                                alt={t('games.heroImageAlt')}
+                            />
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            {/* Filters and Search */}
-            <div className="games-filters-section">
-                <div className="games-container">
-                    <div className="games-filters">
-                        <div className="games-search">
-                            <div className="search-input-container">
-                                <FontAwesomeIcon icon={faSearch} className="search-icon" />
-                                <input
-                                    type="text"
-                                    placeholder={t('games.searchPlaceholder')}
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="search-input-games"
-                                />
-                            </div>
-                        </div>
-
-                        <div className="games-categories">
-                            {/* 🖥️ Desktop версия */}
-                            <div className="categories-header desktop-only">
-                                <svg
-                                    className="categories-header-icon"
-                                    viewBox="0 0 24 24"
-                                    fill="none"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                >
-                                    <path
-                                        d="M22 3H2L10 12.46V19L14 21V12.46L22 3Z"
-                                        fill="currentColor"
+                {/* Filters and Search */}
+                <div className="games-filters-section">
+                    <div className="games-container">
+                        <div className="games-filters">
+                            <div className="games-search">
+                                <div className="search-input-container">
+                                    <FontAwesomeIcon icon={faSearch} className="search-icon" />
+                                    <input
+                                        type="text"
+                                        placeholder={t('games.searchPlaceholder')}
+                                        value={searchTerm}
+                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                        className="search-input-games"
                                     />
-                                </svg>
-                                <span>{t('games.categories.title')}:</span>
-                            </div>
-                            <div className="categories-list desktop-only">
-                                {gameCategories.map(category => (
-                                    <button
-                                        key={category}
-                                        className={`category-btn ${selectedCategory === category ? 'active' : ''}`}
-                                        onClick={() => handleCategoryChange(category)}
-                                    >
-                                        {t(`games.categories.${category}`)}
-                                    </button>
-                                ))}
+                                </div>
                             </div>
 
-                            {/* 📱 Mobile падащо меню */}
-                            <div className="mobile-category-dropdown mobile-only">
-                                <button 
-                                    className="mobile-dropdown-trigger"
-                                    onClick={toggleMobileDropdown}
-                                >
+                            <div className="games-categories">
+                                {/* 🖥️ Desktop версия */}
+                                <div className="categories-header desktop-only">
                                     <svg
                                         className="categories-header-icon"
                                         viewBox="0 0 24 24"
@@ -182,79 +242,111 @@ const GamesPage = () => {
                                             fill="currentColor"
                                         />
                                     </svg>
-                                    <span>{t(`games.categories.${selectedCategory}`)}</span>
-                                    <FontAwesomeIcon 
-                                        icon={isMobileDropdownOpen ? faChevronUp : faChevronDown} 
-                                        className="dropdown-arrow"
-                                    />
-                                </button>
-                                
-                                {isMobileDropdownOpen && (
-                                    <div className="mobile-dropdown-menu">
-                                        {gameCategories.map(category => (
-                                            <button
-                                                key={category}
-                                                className={`mobile-category-option ${selectedCategory === category ? 'active' : ''}`}
-                                                onClick={() => handleCategoryChange(category)}
-                                            >
-                                                {t(`games.categories.${category}`)}
-                                            </button>
-                                        ))}
-                                    </div>
-                                )}
+                                    <span>{t('games.categories.title')}:</span>
+                                </div>
+                                <div className="categories-list desktop-only">
+                                    {gameCategories.map(category => (
+                                        <button
+                                            key={category}
+                                            className={`category-btn ${selectedCategory === category ? 'active' : ''}`}
+                                            onClick={() => handleCategoryChange(category)}
+                                        >
+                                            {t(`games.categories.${category}`)}
+                                        </button>
+                                    ))}
+                                </div>
+
+                                {/* 📱 Mobile падащо меню */}
+                                <div className="mobile-category-dropdown mobile-only">
+                                    <button
+                                        className="mobile-dropdown-trigger"
+                                        onClick={toggleMobileDropdown}
+                                    >
+                                        <svg
+                                            className="categories-header-icon"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                            <path
+                                                d="M22 3H2L10 12.46V19L14 21V12.46L22 3Z"
+                                                fill="currentColor"
+                                            />
+                                        </svg>
+                                        <span>{t(`games.categories.${selectedCategory}`)}</span>
+                                        <FontAwesomeIcon
+                                            icon={isMobileDropdownOpen ? faChevronUp : faChevronDown}
+                                            className="dropdown-arrow"
+                                        />
+                                    </button>
+
+                                    {isMobileDropdownOpen && (
+                                        <div className="mobile-dropdown-menu">
+                                            {gameCategories.map(category => (
+                                                <button
+                                                    key={category}
+                                                    className={`mobile-category-option ${selectedCategory === category ? 'active' : ''}`}
+                                                    onClick={() => handleCategoryChange(category)}
+                                                >
+                                                    {t(`games.categories.${category}`)}
+                                                </button>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            {/* Games Grid */}
-            <div className="games-content">
-                <div className="games-container">
-                    {filteredGames.length > 0 ? (
-                        <>
-                            <div className="games-results-header">
-                                <h2>
-                                    {selectedCategory === 'all'
-                                        ? t('games.results.allGames', { count: filteredGames.length })
-                                        : t('games.results.categoryGames', {
-                                            category: t(`games.categories.${selectedCategory}`),
-                                            count: filteredGames.length
-                                        })
-                                    }
-                                </h2>
-                                {searchTerm && (
-                                    <p className="search-results-text">
-                                        {t('games.results.searchFor')}: <span className="search-term">{searchTerm}</span>
-                                    </p>
-                                )}
-                            </div>
+                {/* Games Grid */}
+                <div className="games-content">
+                    <div className="games-container">
+                        {filteredGames.length > 0 ? (
+                            <>
+                                <div className="games-results-header">
+                                    <h2>
+                                        {selectedCategory === 'all'
+                                            ? t('games.results.allGames', { count: filteredGames.length })
+                                            : t('games.results.categoryGames', {
+                                                category: t(`games.categories.${selectedCategory}`),
+                                                count: filteredGames.length
+                                            })
+                                        }
+                                    </h2>
+                                    {searchTerm && (
+                                        <p className="search-results-text">
+                                            {t('games.results.searchFor')}: <span className="search-term">{searchTerm}</span>
+                                        </p>
+                                    )}
+                                </div>
 
-                            <div className="games-grid">
-                                {filteredGames.map(game => (
-                                    <GameCard key={game.id} {...game} />
-                                ))}
+                                <div className="games-grid">
+                                    {filteredGames.map(game => (
+                                        <GameCard key={game.id} {...game} />
+                                    ))}
+                                </div>
+                            </>
+                        ) : (
+                            <div className="no-games-found">
+                                <FontAwesomeIcon icon={faGamepad} className="no-games-icon" />
+                                <h3>{t('games.noGamesFound.title')}</h3>
+                                <p>{t('games.noGamesFound.description')}</p>
+                                <button
+                                    className="reset-filters-btn"
+                                    onClick={() => {
+                                        setSearchTerm('');
+                                        setSelectedCategory('all');
+                                    }}
+                                >
+                                    {t('games.noGamesFound.resetButton')}
+                                </button>
                             </div>
-                        </>
-                    ) : (
-                        <div className="no-games-found">
-                            <FontAwesomeIcon icon={faGamepad} className="no-games-icon" />
-                            <h3>{t('games.noGamesFound.title')}</h3>
-                            <p>{t('games.noGamesFound.description')}</p>
-                            <button
-                                className="reset-filters-btn"
-                                onClick={() => {
-                                    setSearchTerm('');
-                                    setSelectedCategory('all');
-                                }}
-                            >
-                                {t('games.noGamesFound.resetButton')}
-                            </button>
-                        </div>
-                    )}
+                        )}
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 

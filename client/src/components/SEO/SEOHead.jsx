@@ -1,3 +1,4 @@
+// src/components/SEO/SEOHead.jsx
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 
