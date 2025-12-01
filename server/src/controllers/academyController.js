@@ -2090,7 +2090,8 @@ academyController.post(
         success: true,
         message: 'Application approved successfully',
         application: application,
-        student: studentData
+        student: studentData,
+        userEmail: user.email
       });
 
     } catch (err) {
@@ -2182,7 +2183,8 @@ academyController.post(
       res.status(200).json({
         success: true,
         message: 'Application rejected successfully',
-        application: application
+        application: application,
+        userEmail: user.email
       });
 
     } catch (err) {
@@ -2380,7 +2382,8 @@ academyController.post(
         success: true,
         message: 'Application reapproved successfully',
         application: application,
-        student: studentData
+        student: studentData,
+        userEmail: user.email
       });
 
     } catch (err) {
@@ -2419,7 +2422,8 @@ academyController.delete(
 
       res.status(200).json({
         success: true,
-        message: 'Application deleted successfully'
+        message: 'Application deleted successfully',
+        userEmail: user?.email || null
       });
 
     } catch (err) {

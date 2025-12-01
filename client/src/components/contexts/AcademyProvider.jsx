@@ -8,7 +8,7 @@ import { notify } from '../../utils/notify';
 export const AcademyContext = createContext();
 
 export const AcademyProvider = ({ children }) => {
-  const { token,isAdmin } = useAuthContext();
+  const { token, isAdmin, userEmail } = useAuthContext();
   const academyService = academyServiceFactory(token);
   const clubService = clubServiceFactory(token);
 
@@ -996,6 +996,25 @@ export const AcademyProvider = ({ children }) => {
   const approveStudentApplication = useCallback(async (applicationId) => {
     try {
       const response = await academyService.approveStudentApplication(applicationId);
+      if (response.userEmail) {
+        const mentorName = response.student?.currentMentor?.name || 'вашият ментор';
+
+        await sendPersonalEmail({
+          from: 'info@pensa.club',
+          to: response.userEmail,
+          subject: '🎉 Вашата заявка за обучение е одобрена!',
+          message: `Здравейте,
+
+Радваме се да ви съобщим, че вашата заявка за обучение към ментор ${mentorName} беше одобрена!
+
+Вече можете да започнете обучението си в DigiBridge Academy.
+
+Влезте в профила си, за да видите повече информация и да се свържете с вашия ментор.
+
+С уважение,
+Екипът на DigiBridge Academy`
+        });
+      }
       toast.success('Заявката е одобрена успешно');
       return response;
     } catch (error) {
@@ -1003,11 +1022,28 @@ export const AcademyProvider = ({ children }) => {
       toast.error('Грешка при одобряване на заявка');
       throw error;
     }
-  }, []);
+  }, [sendPersonalEmail]);
 
   const rejectStudentApplication = useCallback(async (applicationId, reason) => {
     try {
       const response = await academyService.rejectStudentApplication(applicationId, reason);
+      if (response.userEmail) {
+      await sendPersonalEmail({
+        from: 'info@pensa.club',
+        to: response.userEmail,
+        subject: 'Информация относно вашата заявка за обучение',
+        message: `Здравейте,
+
+За съжаление, вашата заявка за обучение не беше одобрена.
+
+${reason ? `Причина: ${reason}` : ''}
+
+Можете да кандидатствате отново или да изберете друг ментор от нашата платформа.
+
+С уважение,
+Екипът на DigiBridge Academy`
+      });
+    }
       toast.success('Заявката е отхвърлена');
       return response;
     } catch (error) {
@@ -1015,11 +1051,30 @@ export const AcademyProvider = ({ children }) => {
       toast.error('Грешка при отхвърляне на заявка');
       throw error;
     }
-  }, []);
+  }, [sendPersonalEmail]);
 
   const reapproveStudentApplication = useCallback(async (applicationId) => {
     try {
       const response = await academyService.reapproveStudentApplication(applicationId);
+      if (response.userEmail) {
+      const mentorName = response.student?.currentMentor?.name || 'вашият ментор';
+      
+      await sendPersonalEmail({
+        from: 'info@pensa.club',
+        to: response.userEmail,
+        subject: '🎉 Вашата заявка за обучение е одобрена!',
+        message: `Здравейте,
+
+Радваме се да ви съобщим, че вашата заявка за обучение беше преразгледана и одобрена!
+
+Вече можете да започнете обучението си в DigiBridge Academy с ментор ${mentorName}.
+
+Влезте в профила си, за да видите повече информация и да се свържете с вашия ментор.
+
+С уважение,
+Екипът на DigiBridge Academy`
+      });
+    }
       toast.success('Заявката е одобрена успешно');
       return response;
     } catch (error) {
@@ -1027,7 +1082,7 @@ export const AcademyProvider = ({ children }) => {
       toast.error('Грешка при одобряване на заявка');
       throw error;
     }
-  }, []);
+  }, [sendPersonalEmail]);
 
   const deleteStudentApplication = useCallback(async (applicationId) => {
     try {
@@ -1040,367 +1095,422 @@ export const AcademyProvider = ({ children }) => {
       throw error;
     }
   }, []);
-// ===============================
-// ADMIN STUDENTS MANAGEMENT 📚 (С isAdmin ПРОВЕРКА)
-// ===============================
+  // ===============================
+  // ADMIN STUDENTS MANAGEMENT 📚 (С isAdmin ПРОВЕРКА)
+  // ===============================
 
-const getAllStudents = useCallback(async (params = {}) => {
-  if (!isAdmin) {
-    toast.error('Нямате права за тази операция');
-    return { success: false, students: [], pagination: {} };
-  }
-  try {
-    const data = await academyService.getAllStudents(params);
-    return data;
-  } catch (error) {
-    console.error('Error fetching students:', error);
-    toast.error('Грешка при зареждане на студенти');
-    throw error;
-  }
-}, [isAdmin]);
+  const getAllStudents = useCallback(async (params = {}) => {
+    if (!isAdmin) {
+      toast.error('Нямате права за тази операция');
+      return { success: false, students: [], pagination: {} };
+    }
+    try {
+      const data = await academyService.getAllStudents(params);
+      return data;
+    } catch (error) {
+      console.error('Error fetching students:', error);
+      toast.error('Грешка при зареждане на студенти');
+      throw error;
+    }
+  }, [isAdmin]);
 
-const getStudentById = useCallback(async (studentId) => {
-  if (!isAdmin) {
-    toast.error('Нямате права за тази операция');
-    return { success: false, student: null };
-  }
-  try {
-    const data = await academyService.getStudentById(studentId);
-    return data;
-  } catch (error) {
-    console.error('Error fetching student details:', error);
-    toast.error('Грешка при зареждане на детайли');
-    throw error;
-  }
-}, [isAdmin]);
+  const getStudentById = useCallback(async (studentId) => {
+    if (!isAdmin) {
+      toast.error('Нямате права за тази операция');
+      return { success: false, student: null };
+    }
+    try {
+      const data = await academyService.getStudentById(studentId);
+      return data;
+    } catch (error) {
+      console.error('Error fetching student details:', error);
+      toast.error('Грешка при зареждане на детайли');
+      throw error;
+    }
+  }, [isAdmin]);
 
-const updateStudent = useCallback(async (studentId, data) => {
-  if (!isAdmin) {
-    toast.error('Нямате права за тази операция');
-    return { success: false };
-  }
-  try {
-    const response = await academyService.updateStudent(studentId, data);
-    toast.success('Студентът е обновен успешно');
-    return response;
-  } catch (error) {
-    console.error('Error updating student:', error);
-    toast.error('Грешка при обновяване на студент');
-    throw error;
-  }
-}, [isAdmin]);
+  const updateStudent = useCallback(async (studentId, data) => {
+    if (!isAdmin) {
+      toast.error('Нямате права за тази операция');
+      return { success: false };
+    }
+    try {
+      const response = await academyService.updateStudent(studentId, data);
+      toast.success('Студентът е обновен успешно');
+      return response;
+    } catch (error) {
+      console.error('Error updating student:', error);
+      toast.error('Грешка при обновяване на студент');
+      throw error;
+    }
+  }, [isAdmin]);
 
-const deleteStudent = useCallback(async (studentId) => {
-  if (!isAdmin) {
-    toast.error('Нямате права за тази операция');
-    return { success: false };
-  }
-  try {
-    const response = await academyService.deleteStudent(studentId);
-    toast.success('Студентът е изтрит успешно');
-    return response;
-  } catch (error) {
-    console.error('Error deleting student:', error);
-    toast.error('Грешка при изтриване на студент');
-    throw error;
-  }
-}, [isAdmin]);
+  const deleteStudent = useCallback(async (studentId) => {
+    if (!isAdmin) {
+      toast.error('Нямате права за тази операция');
+      return { success: false };
+    }
+    try {
+      const response = await academyService.deleteStudent(studentId);
+      toast.success('Студентът е изтрит успешно');
+      return response;
+    } catch (error) {
+      console.error('Error deleting student:', error);
+      toast.error('Грешка при изтриване на студент');
+      throw error;
+    }
+  }, [isAdmin]);
 
-const updateStudentStatus = useCallback(async (studentId, status) => {
-  if (!isAdmin) {
-    toast.error('Нямате права за тази операция');
-    return { success: false };
-  }
-  try {
-    const response = await academyService.updateStudentStatus(studentId, status);
-    toast.success('Статусът е променен успешно');
-    return response;
-  } catch (error) {
-    console.error('Error updating student status:', error);
-    toast.error('Грешка при промяна на статус');
-    throw error;
-  }
-}, [isAdmin]);
+  const updateStudentStatus = useCallback(async (studentId, status) => {
+    if (!isAdmin) {
+      toast.error('Нямате права за тази операция');
+      return { success: false };
+    }
+    try {
+      const response = await academyService.updateStudentStatus(studentId, status);
+      toast.success('Статусът е променен успешно');
+      return response;
+    } catch (error) {
+      console.error('Error updating student status:', error);
+      toast.error('Грешка при промяна на статус');
+      throw error;
+    }
+  }, [isAdmin]);
 
-const assignMentorToStudent = useCallback(async (studentId, newMentorId) => {
-  if (!isAdmin) {
-    toast.error('Нямате права за тази операция');
-    return { success: false };
-  }
-  try {
-    const response = await academyService.assignMentorToStudent(studentId, newMentorId);
-    toast.success('Менторът е присвоен успешно');
-    return response;
-  } catch (error) {
-    console.error('Error assigning mentor to student:', error);
-    toast.error('Грешка при присвояване на ментор');
-    throw error;
-  }
-}, [isAdmin]);
+  const assignMentorToStudent = useCallback(async (studentId, newMentorId) => {
+    if (!isAdmin) {
+      toast.error('Нямате права за тази операция');
+      return { success: false };
+    }
+    try {
+      const response = await academyService.assignMentorToStudent(studentId, newMentorId);
+      toast.success('Менторът е присвоен успешно');
+      return response;
+    } catch (error) {
+      console.error('Error assigning mentor to student:', error);
+      toast.error('Грешка при присвояване на ментор');
+      throw error;
+    }
+  }, [isAdmin]);
 
-const sendEmailToStudent = useCallback(async (studentId, emailData) => {
-  if (!isAdmin) {
-    toast.error('Нямате права за тази операция');
-    return { success: false };
-  }
-  setIsLoading(true);
-  try {
-    const response = await academyService.sendEmailToStudent(studentId, emailData);
-    toast.success('Имейлът е изпратен успешно');
-    return response;
-  } catch (error) {
-    console.error('Error sending email to student:', error);
-    toast.error('Грешка при изпращане на имейл');
-    throw error;
-  } finally {
-    setIsLoading(false);
-  }
-}, [isAdmin]);
+  const sendEmailToStudent = useCallback(async (studentId, emailData) => {
+    if (!isAdmin) {
+      toast.error('Нямате права за тази операция');
+      return { success: false };
+    }
+    setIsLoading(true);
+    try {
+      const response = await academyService.sendEmailToStudent(studentId, emailData);
+      toast.success('Имейлът е изпратен успешно');
+      return response;
+    } catch (error) {
+      console.error('Error sending email to student:', error);
+      toast.error('Грешка при изпращане на имейл');
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, [isAdmin]);
 
-// ===============================
-// ADMIN STUDENT NOTES 📝 (С isAdmin ПРОВЕРКА)
-// ===============================
+  // ===============================
+  // ADMIN STUDENT NOTES 📝 (С isAdmin ПРОВЕРКА)
+  // ===============================
 
-const getAdminStudentNotes = useCallback(async (studentId) => {
-  if (!isAdmin) {
-    toast.error('Нямате права за тази операция');
-    return { success: false, notes: [] };
-  }
-  try {
-    const data = await academyService.getAdminStudentNotes(studentId);
-    return data;
-  } catch (error) {
-    console.error('Error fetching admin student notes:', error);
-    return { success: false, notes: [] };
-  }
-}, [isAdmin]);
+  const getAdminStudentNotes = useCallback(async (studentId) => {
+    if (!isAdmin) {
+      toast.error('Нямате права за тази операция');
+      return { success: false, notes: [] };
+    }
+    try {
+      const data = await academyService.getAdminStudentNotes(studentId);
+      return data;
+    } catch (error) {
+      console.error('Error fetching admin student notes:', error);
+      return { success: false, notes: [] };
+    }
+  }, [isAdmin]);
 
-const createAdminStudentNote = useCallback(async (studentId, noteData) => {
-  if (!isAdmin) {
-    toast.error('Нямате права за тази операция');
-    return { success: false };
-  }
-  try {
-    const response = await academyService.createAdminStudentNote(studentId, noteData);
-    toast.success('Бележката е създадена успешно');
-    return response;
-  } catch (error) {
-    console.error('Error creating admin note:', error);
-    toast.error('Грешка при създаване на бележка');
-    throw error;
-  }
-}, [isAdmin]);
+  const createAdminStudentNote = useCallback(async (studentId, noteData) => {
+    if (!isAdmin) {
+      toast.error('Нямате права за тази операция');
+      return { success: false };
+    }
+    try {
+      const response = await academyService.createAdminStudentNote(studentId, noteData);
+      toast.success('Бележката е създадена успешно');
+      return response;
+    } catch (error) {
+      console.error('Error creating admin note:', error);
+      toast.error('Грешка при създаване на бележка');
+      throw error;
+    }
+  }, [isAdmin]);
 
-const updateAdminStudentNote = useCallback(async (studentId, noteId, noteData) => {
-  if (!isAdmin) {
-    toast.error('Нямате права за тази операция');
-    return { success: false };
-  }
-  try {
-    const response = await academyService.updateAdminStudentNote(studentId, noteId, noteData);
-    toast.success('Бележката е обновена успешно');
-    return response;
-  } catch (error) {
-    console.error('Error updating admin note:', error);
-    toast.error('Грешка при обновяване на бележка');
-    throw error;
-  }
-}, [isAdmin]);
+  const updateAdminStudentNote = useCallback(async (studentId, noteId, noteData) => {
+    if (!isAdmin) {
+      toast.error('Нямате права за тази операция');
+      return { success: false };
+    }
+    try {
+      const response = await academyService.updateAdminStudentNote(studentId, noteId, noteData);
+      toast.success('Бележката е обновена успешно');
+      return response;
+    } catch (error) {
+      console.error('Error updating admin note:', error);
+      toast.error('Грешка при обновяване на бележка');
+      throw error;
+    }
+  }, [isAdmin]);
 
-const deleteAdminStudentNote = useCallback(async (studentId, noteId) => {
-  if (!isAdmin) {
-    toast.error('Нямате права за тази операция');
-    return { success: false };
-  }
-  try {
-    const response = await academyService.deleteAdminStudentNote(studentId, noteId);
-    toast.success('Бележката е изтрита успешно');
-    return response;
-  } catch (error) {
-    console.error('Error deleting admin note:', error);
-    toast.error('Грешка при изтриване на бележка');
-    throw error;
-  }
-}, [isAdmin]);
+  const deleteAdminStudentNote = useCallback(async (studentId, noteId) => {
+    if (!isAdmin) {
+      toast.error('Нямате права за тази операция');
+      return { success: false };
+    }
+    try {
+      const response = await academyService.deleteAdminStudentNote(studentId, noteId);
+      toast.success('Бележката е изтрита успешно');
+      return response;
+    } catch (error) {
+      console.error('Error deleting admin note:', error);
+      toast.error('Грешка при изтриване на бележка');
+      throw error;
+    }
+  }, [isAdmin]);
 
-// ===============================
-// STUDENT STATISTICS 📊 (С isAdmin ПРОВЕРКА)
-// ===============================
+  // ===============================
+  // STUDENT STATISTICS 📊 (С isAdmin ПРОВЕРКА)
+  // ===============================
 
-const getStudentStatisticsOverview = useCallback(async () => {
-  if (!isAdmin) {
-    toast.error('Нямате права за тази операция');
-    return { success: false, stats: {} };
-  }
-  try {
-    const data = await academyService.getStudentStatisticsOverview();
-    return data;
-  } catch (error) {
-    console.error('Error fetching student statistics overview:', error);
-    return { success: false, stats: {} };
-  }
-}, [isAdmin]);
+  const getStudentStatisticsOverview = useCallback(async () => {
+    if (!isAdmin) {
+      toast.error('Нямате права за тази операция');
+      return { success: false, stats: {} };
+    }
+    try {
+      const data = await academyService.getStudentStatisticsOverview();
+      return data;
+    } catch (error) {
+      console.error('Error fetching student statistics overview:', error);
+      return { success: false, stats: {} };
+    }
+  }, [isAdmin]);
 
-const getStudentsByStatus = useCallback(async () => {
-  if (!isAdmin) {
-    return { success: false, statistics: [] };
-  }
-  try {
-    const data = await academyService.getStudentsByStatus();
-    return data;
-  } catch (error) {
-    console.error('Error fetching students by status:', error);
-    return { success: false, statistics: [] };
-  }
-}, [isAdmin]);
+  const getStudentsByStatus = useCallback(async () => {
+    if (!isAdmin) {
+      return { success: false, statistics: [] };
+    }
+    try {
+      const data = await academyService.getStudentsByStatus();
+      return data;
+    } catch (error) {
+      console.error('Error fetching students by status:', error);
+      return { success: false, statistics: [] };
+    }
+  }, [isAdmin]);
 
-const getStudentsByMentor = useCallback(async () => {
-  if (!isAdmin) {
-    return { success: false, statistics: [] };
-  }
-  try {
-    const data = await academyService.getStudentsByMentor();
-    return data;
-  } catch (error) {
-    console.error('Error fetching students by mentor:', error);
-    return { success: false, statistics: [] };
-  }
-}, [isAdmin]);
+  const getStudentsByMentor = useCallback(async () => {
+    if (!isAdmin) {
+      return { success: false, statistics: [] };
+    }
+    try {
+      const data = await academyService.getStudentsByMentor();
+      return data;
+    } catch (error) {
+      console.error('Error fetching students by mentor:', error);
+      return { success: false, statistics: [] };
+    }
+  }, [isAdmin]);
 
-const getStudentsCreditsDistribution = useCallback(async () => {
-  if (!isAdmin) {
-    return { success: false, distribution: {} };
-  }
-  try {
-    const data = await academyService.getStudentsCreditsDistribution();
-    return data;
-  } catch (error) {
-    console.error('Error fetching credits distribution:', error);
-    return { success: false, distribution: {} };
-  }
-}, [isAdmin]);
+  const getStudentsCreditsDistribution = useCallback(async () => {
+    if (!isAdmin) {
+      return { success: false, distribution: {} };
+    }
+    try {
+      const data = await academyService.getStudentsCreditsDistribution();
+      return data;
+    } catch (error) {
+      console.error('Error fetching credits distribution:', error);
+      return { success: false, distribution: {} };
+    }
+  }, [isAdmin]);
 
-const getStudentsAttendanceTrends = useCallback(async () => {
-  if (!isAdmin) {
-    return { success: false, trends: {} };
-  }
-  try {
-    const data = await academyService.getStudentsAttendanceTrends();
-    return data;
-  } catch (error) {
-    console.error('Error fetching attendance trends:', error);
-    return { success: false, trends: {} };
-  }
-}, [isAdmin]);
+  const getStudentsAttendanceTrends = useCallback(async () => {
+    if (!isAdmin) {
+      return { success: false, trends: {} };
+    }
+    try {
+      const data = await academyService.getStudentsAttendanceTrends();
+      return data;
+    } catch (error) {
+      console.error('Error fetching attendance trends:', error);
+      return { success: false, trends: {} };
+    }
+  }, [isAdmin]);
 
-const getTopPerformingStudents = useCallback(async (limit = 10) => {
-  if (!isAdmin) {
-    return { success: false, topPerformers: [] };
-  }
-  try {
-    const data = await academyService.getTopPerformingStudents(limit);
-    return data;
-  } catch (error) {
-    console.error('Error fetching top performing students:', error);
-    return { success: false, topPerformers: [] };
-  }
-}, [isAdmin]);
+  const getTopPerformingStudents = useCallback(async (limit = 10) => {
+    if (!isAdmin) {
+      return { success: false, topPerformers: [] };
+    }
+    try {
+      const data = await academyService.getTopPerformingStudents(limit);
+      return data;
+    } catch (error) {
+      console.error('Error fetching top performing students:', error);
+      return { success: false, topPerformers: [] };
+    }
+  }, [isAdmin]);
 
-const getStudentsEngagement = useCallback(async () => {
-  if (!isAdmin) {
-    return { success: false, engagement: {} };
-  }
-  try {
-    const data = await academyService.getStudentsEngagement();
-    return data;
-  } catch (error) {
-    console.error('Error fetching students engagement:', error);
-    return { success: false, engagement: {} };
-  }
-}, [isAdmin]);
+  const getStudentsEngagement = useCallback(async () => {
+    if (!isAdmin) {
+      return { success: false, engagement: {} };
+    }
+    try {
+      const data = await academyService.getStudentsEngagement();
+      return data;
+    } catch (error) {
+      console.error('Error fetching students engagement:', error);
+      return { success: false, engagement: {} };
+    }
+  }, [isAdmin]);
 
-// ===============================
-// ADMIN: STUDENT APPLICATIONS MANAGEMENT 📋
-// ===============================
+  // ===============================
+  // ADMIN: STUDENT APPLICATIONS MANAGEMENT 📋
+  // ===============================
 
-const getAllStudentApplications = useCallback(async (params = {}) => {
-  if (!isAdmin) {
-    toast.error('Нямате права за тази операция');
-    return { success: false, applications: [] };
-  }
-  try {
-    const data = await academyService.getAllStudentApplications(params);
-    return data;
-  } catch (error) {
-    console.error('Error fetching student applications:', error);
-    toast.error('Грешка при зареждане на кандидатури');
-    throw error;
-  }
-}, [isAdmin]);
+  const getAllStudentApplications = useCallback(async (params = {}) => {
+    if (!isAdmin) {
+      toast.error('Нямате права за тази операция');
+      return { success: false, applications: [] };
+    }
+    try {
+      const data = await academyService.getAllStudentApplications(params);
+      return data;
+    } catch (error) {
+      console.error('Error fetching student applications:', error);
+      toast.error('Грешка при зареждане на кандидатури');
+      throw error;
+    }
+  }, [isAdmin]);
 
-const approveStudentApplicationByAdmin = useCallback(async (applicationId) => {
-  if (!isAdmin) {
-    toast.error('Нямате права за тази операция');
-    return { success: false };
-  }
-  try {
-    const response = await academyService.approveStudentApplicationByAdmin(applicationId);
-    toast.success('Кандидатурата е одобрена успешно');
-    return response;
-  } catch (error) {
-    console.error('Error approving application:', error);
-    toast.error('Грешка при одобряване на кандидатура');
-    throw error;
-  }
-}, [isAdmin]);
+  const approveStudentApplicationByAdmin = useCallback(async (applicationId) => {
+    if (!isAdmin) {
+      toast.error('Нямате права за тази операция');
+      return { success: false };
+    }
+    try {
+      const response = await academyService.approveStudentApplicationByAdmin(applicationId);
+       if (response.userEmail) {
+      const mentorName = response.student?.currentMentor?.name || 'вашият ментор';
+      
+      await sendPersonalEmail({
+        from: 'info@pensa.club',
+        to: response.userEmail,
+        subject: '🎉 Вашата заявка за обучение е одобрена!',
+        message: `Здравейте,
 
-const rejectStudentApplicationByAdmin = useCallback(async (applicationId, reason) => {
-  if (!isAdmin) {
-    toast.error('Нямате права за тази операция');
-    return { success: false };
-  }
-  try {
-    const response = await academyService.rejectStudentApplicationByAdmin(applicationId, reason);
-    toast.success('Кандидатурата е отхвърлена');
-    return response;
-  } catch (error) {
-    console.error('Error rejecting application:', error);
-    toast.error('Грешка при отхвърляне на кандидатура');
-    throw error;
-  }
-}, [isAdmin]);
+Радваме се да ви съобщим, че вашата заявка за обучение към ментор ${mentorName} беше одобрена от администратор!
 
-const reapproveStudentApplicationByAdmin = useCallback(async (applicationId) => {
-  if (!isAdmin) {
-    toast.error('Нямате права за тази операция');
-    return { success: false };
-  }
-  try {
-    const response = await academyService.reapproveStudentApplicationByAdmin(applicationId);
-    toast.success('Кандидатурата е одобрена повторно');
-    return response;
-  } catch (error) {
-    console.error('Error reapproving application:', error);
-    toast.error('Грешка при повторно одобряване');
-    throw error;
-  }
-}, [isAdmin]);
+Вече можете да започнете обучението си в DigiBridge Academy.
 
-const deleteStudentApplicationByAdmin = useCallback(async (applicationId) => {
-  if (!isAdmin) {
-    toast.error('Нямате права за тази операция');
-    return { success: false };
-  }
-  try {
-    const response = await academyService.deleteStudentApplicationByAdmin(applicationId);
-    toast.success('Кандидатурата е изтрита');
-    return response;
-  } catch (error) {
-    console.error('Error deleting application:', error);
-    toast.error('Грешка при изтриване на кандидатура');
-    throw error;
-  }
-}, [isAdmin]);
+Влезте в профила си, за да видите повече информация и да се свържете с вашия ментор.
+
+С уважение,
+Екипът на DigiBridge Academy`
+      });
+    }
+      toast.success('Кандидатурата е одобрена успешно');
+      return response;
+    } catch (error) {
+      console.error('Error approving application:', error);
+      toast.error('Грешка при одобряване на кандидатура');
+      throw error;
+    }
+  }, [isAdmin,sendPersonalEmail]);
+
+  const rejectStudentApplicationByAdmin = useCallback(async (applicationId, reason) => {
+    if (!isAdmin) {
+      toast.error('Нямате права за тази операция');
+      return { success: false };
+    }
+    try {
+      const response = await academyService.rejectStudentApplicationByAdmin(applicationId, reason);
+       if (response.userEmail) {
+      await sendPersonalEmail({
+        from: 'info@pensa.club',
+        to: response.userEmail,
+        subject: 'Информация относно вашата заявка за обучение',
+        message: `Здравейте,
+
+За съжаление, вашата заявка за обучение не беше одобрена от администратор.
+
+${reason ? `Причина: ${reason}` : ''}
+
+Можете да кандидатствате отново или да изберете друг ментор от нашата платформа.
+
+С уважение,
+Екипът на DigiBridge Academy`
+      });
+    }
+      toast.success('Кандидатурата е отхвърлена');
+      return response;
+    } catch (error) {
+      console.error('Error rejecting application:', error);
+      toast.error('Грешка при отхвърляне на кандидатура');
+      throw error;
+    }
+  }, [isAdmin, sendPersonalEmail]);
+
+  const reapproveStudentApplicationByAdmin = useCallback(async (applicationId) => {
+    if (!isAdmin) {
+      toast.error('Нямате права за тази операция');
+      return { success: false };
+    }
+    try {
+      const response = await academyService.reapproveStudentApplicationByAdmin(applicationId);
+      if (response.userEmail) {
+      const mentorName = response.student?.currentMentor?.name || 'вашият ментор';
+      
+      await sendPersonalEmail({
+        from: 'info@pensa.club',
+        to: response.userEmail,
+        subject: '🎉 Вашата заявка за обучение е одобрена!',
+        message: `Здравейте,
+
+Радваме се да ви съобщим, че вашата заявка за обучение беше преразгледана и одобрена от администратор!
+
+Вече можете да започнете обучението си в DigiBridge Academy с ментор ${mentorName}.
+
+Влезте в профила си, за да видите повече информация и да се свържете с вашия ментор.
+
+С уважение,
+Екипът на DigiBridge Academy`
+      });
+    }
+      toast.success('Кандидатурата е одобрена повторно');
+      return response;
+    } catch (error) {
+      console.error('Error reapproving application:', error);
+      toast.error('Грешка при повторно одобряване');
+      throw error;
+    }
+  }, [isAdmin, sendPersonalEmail]);
+
+  const deleteStudentApplicationByAdmin = useCallback(async (applicationId) => {
+    if (!isAdmin) {
+      toast.error('Нямате права за тази операция');
+      return { success: false };
+    }
+    try {
+      const response = await academyService.deleteStudentApplicationByAdmin(applicationId);
+      toast.success('Кандидатурата е изтрита');
+      return response;
+    } catch (error) {
+      console.error('Error deleting application:', error);
+      toast.error('Грешка при изтриване на кандидатура');
+      throw error;
+    }
+  }, [isAdmin]);
   // ===============================
   // CONTEXT VALUE
   // ===============================
@@ -1429,7 +1539,7 @@ const deleteStudentApplicationByAdmin = useCallback(async (applicationId) => {
     // Admin Notifications
     getAdminNotifications,
     markNotificationAsRead,
-    markAllNotificationsAsRead,     
+    markAllNotificationsAsRead,
     deleteNotification,
 
     // Admin Mentor Management
@@ -1508,36 +1618,36 @@ const deleteStudentApplicationByAdmin = useCallback(async (applicationId) => {
     deleteStudentApplication,
     reapproveStudentApplication,
 
-      // Admin Students Management 📚
-  getAllStudents,
-  getStudentById,
-  updateStudent,
-  deleteStudent,
-  updateStudentStatus,
-  assignMentorToStudent,
-  sendEmailToStudent,
+    // Admin Students Management 📚
+    getAllStudents,
+    getStudentById,
+    updateStudent,
+    deleteStudent,
+    updateStudentStatus,
+    assignMentorToStudent,
+    sendEmailToStudent,
 
-  // Admin Student Notes 📝
-  getAdminStudentNotes,
-  createAdminStudentNote,
-  updateAdminStudentNote,
-  deleteAdminStudentNote,
+    // Admin Student Notes 📝
+    getAdminStudentNotes,
+    createAdminStudentNote,
+    updateAdminStudentNote,
+    deleteAdminStudentNote,
 
-  // Student Statistics 📊
-  getStudentStatisticsOverview,
-  getStudentsByStatus,
-  getStudentsByMentor,
-  getStudentsCreditsDistribution,
-  getStudentsAttendanceTrends,
-  getTopPerformingStudents,
-  getStudentsEngagement,
+    // Student Statistics 📊
+    getStudentStatisticsOverview,
+    getStudentsByStatus,
+    getStudentsByMentor,
+    getStudentsCreditsDistribution,
+    getStudentsAttendanceTrends,
+    getTopPerformingStudents,
+    getStudentsEngagement,
 
-  // Admin Student Applications 📋
-  getAllStudentApplications,
-  approveStudentApplicationByAdmin,
-  rejectStudentApplicationByAdmin,
-  deleteStudentApplicationByAdmin,
-  reapproveStudentApplicationByAdmin,
+    // Admin Student Applications 📋
+    getAllStudentApplications,
+    approveStudentApplicationByAdmin,
+    rejectStudentApplicationByAdmin,
+    deleteStudentApplicationByAdmin,
+    reapproveStudentApplicationByAdmin,
   };
 
   return (

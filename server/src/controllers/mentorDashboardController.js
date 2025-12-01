@@ -2488,7 +2488,8 @@ mentorDashboardController.post(
         success: true,
         message: 'Application approved successfully',
         application: application,
-        student: studentData
+        student: studentData,
+        userEmail: user.email
       });
 
     } catch (err) {
@@ -2593,7 +2594,8 @@ mentorDashboardController.post(
       res.status(200).json({
         success: true,
         message: 'Application rejected successfully',
-        application: application
+        application: application,
+        userEmail: user?.email || null
       });
 
     } catch (err) {
@@ -2639,7 +2641,8 @@ mentorDashboardController.delete(
 
       res.status(200).json({
         success: true,
-        message: 'Application deleted successfully'
+        message: 'Application deleted successfully',
+        userEmail: user.email
       });
 
     } catch (err) {
@@ -2837,7 +2840,8 @@ mentorDashboardController.post(
         success: true,
         message: 'Application re-approved successfully',
         application: application,
-        student: studentData
+        student: studentData,
+        userEmail: user.email
       });
 
     } catch (err) {
