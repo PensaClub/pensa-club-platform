@@ -3,6 +3,7 @@
  * @param {Object} project - Project обект от базата данни
  * @returns {String} - HTML string с meta tags
  */
+// server/src/utils/projectMetaGenerator.js
 function generateProjectMetaHTML(project) {
     // Извличане на description
     let description = '';
