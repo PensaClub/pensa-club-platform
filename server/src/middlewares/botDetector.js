@@ -5,7 +5,7 @@ const generateInitiativeMetaHTML = require('../utils/initiativeMetaGenerator');
 const generateClubMetaHTML = require('../utils/clubMetaGenerator');
 const generateAcademyMetaHTML = require('../utils/academyMetaGenerator');
 const generateMentorMetaHTML = require('../utils/mentorMetaGenerator');
-const generateGamesMetaHTML = require('../utils/gamesMetaGenerator'); // ✅ ДОБАВЕНО
+const generateGamesMetaHTML = require('../utils/gamesMetaGenerator');
 
 /**
  * Проверява дали User-Agent е от социална мрежа bot
@@ -96,6 +96,21 @@ async function logBotRequest(botName, contentType, contentId, contentSlug, userA
 async function botDetector(req, res, next) {
     const userAgent = req.headers['user-agent'] || '';
 
+    // ✅ Пропускай static files (снимки, CSS, JS, fonts и т.н.)
+    const staticExtensions = [
+        '.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg', '.ico', '.bmp',
+        '.css', '.js', '.map',
+        '.woff', '.woff2', '.ttf', '.eot', '.otf',
+        '.pdf', '.doc', '.docx', '.xls', '.xlsx',
+        '.mp4', '.webm', '.mp3', '.wav',
+        '.json', '.xml', '.txt'
+    ];
+    const isStaticFile = staticExtensions.some(ext => req.path.toLowerCase().endsWith(ext));
+    
+    if (isStaticFile) {
+        return next();
+    }
+
     if (!isBot(userAgent)) {
         return next();
     }
@@ -116,7 +131,7 @@ async function botDetector(req, res, next) {
     const clubMatch = req.path.match(/^\/clubs\/([a-zA-Z0-9-]+)$/);
     const academyMatch = req.path.match(/^\/academy$/);
     const mentorMatch = req.path.match(/^\/academy\/mentors\/(\d+)$/);
-    const gamesMatch = req.path.match(/^\/games$/); // ✅ ДОБАВЕНО
+    const gamesMatch = req.path.match(/^\/games$/);
 
     try {
         // ==================== ARTICLE ====================
@@ -295,7 +310,7 @@ async function botDetector(req, res, next) {
             return res.send(html);
         }
 
-        // ==================== GAMES (СТАТИЧНА СТРАНИЦА) ==================== ✅ ДОБАВЕНО
+        // ==================== GAMES (СТАТИЧНА СТРАНИЦА) ====================
         if (gamesMatch) {
             console.log('🎮 Processing GAMES page');
 
