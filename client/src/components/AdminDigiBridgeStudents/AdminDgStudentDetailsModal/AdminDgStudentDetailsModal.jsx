@@ -9,7 +9,8 @@ export const AdminDgStudentDetailsModal = ({
   onClose, 
   onChangeMentor, 
   onSendEmail,
-  onEdit 
+  onEdit,
+  onOpenNotes  // ← NEW PROP
 }) => {
   const { t } = useTranslation();
 
@@ -29,7 +30,6 @@ export const AdminDgStudentDetailsModal = ({
     }
   }, [onClose]);
 
-  // ESC KEY + BODY SCROLL
   useEffect(() => {
     const handleEscKey = (e) => {
       if (e.key === 'Escape') {
@@ -146,6 +146,26 @@ export const AdminDgStudentDetailsModal = ({
                 <path d="M0 4a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2-1a1 1 0 0 0-1 1v.217l8 4.8 8-4.8V4a1 1 0 0 0-1-1H2zm15 2.383-5.758 3.455L17 12.114V5.383zm-.034 7.878L10.271 9.32 9 10.083l-1.271-.763-6.694 3.94A1 1 0 0 0 2 14h14a1 1 0 0 0 .966-.739zM1 12.114l5.758-3.476L1 5.383v6.73z" fill="currentColor"/>
               </svg>
               {t('adminDgStudentDetailsModal.sendEmail')}
+            </button>
+
+            {/* NEW: NOTES BUTTON */}
+            <button
+              className="adminDgStudentDetailsModal-actionBtn adminDgStudentDetailsModal-actionBtn--notes"
+              onClick={() => {
+                if (onOpenNotes) onOpenNotes();
+              }}
+              type="button"
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24">
+                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14z" fill="currentColor"/>
+                <path d="M7 7h10v2H7zm0 4h10v2H7zm0 4h7v2H7z" fill="currentColor"/>
+              </svg>
+              {t('adminDgStudentDetailsModal.notes')}
+              {(student?.notesCount || 0) > 0 && (
+                <span className="adminDgStudentDetailsModal-notesBadge">
+                  {student.notesCount}
+                </span>
+              )}
             </button>
           </div>
 

@@ -5,7 +5,6 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class admin_student_note extends Model {
     static associate(models) {
-      // Belongs to student
       admin_student_note.belongsTo(models.student, {
         foreignKey: 'studentId',
         targetKey: 'id',
@@ -34,6 +33,14 @@ module.exports = (sequelize, DataTypes) => {
       text: {
         type: DataTypes.TEXT,
         allowNull: false
+      },
+      category: {
+        type: DataTypes.STRING(20),
+        allowNull: false,
+        defaultValue: 'general',
+        validate: {
+          isIn: [['general', 'important', 'followup', 'positive', 'contact']]
+        }
       }
     },
     {

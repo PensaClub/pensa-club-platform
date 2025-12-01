@@ -1,17 +1,16 @@
+// server/sequelize/models/mentor_note.js
 'use strict';
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class mentor_note extends Model {
     static associate(models) {
-      // Belongs to mentor
       mentor_note.belongsTo(models.mentor, {
         foreignKey: 'mentorId',
         targetKey: 'id',
         as: 'mentor'
       });
 
-      // Belongs to student
       mentor_note.belongsTo(models.student, {
         foreignKey: 'studentId',
         targetKey: 'id',
@@ -49,6 +48,14 @@ module.exports = (sequelize, DataTypes) => {
       text: {
         type: DataTypes.TEXT,
         allowNull: false
+      },
+      category: {
+        type: DataTypes.STRING(20),
+        allowNull: false,
+        defaultValue: 'general',
+        validate: {
+          isIn: [['general', 'important', 'followup', 'positive', 'contact']]
+        }
       }
     },
     {

@@ -1,0 +1,599 @@
+/* src/components/AdminDigiBridgeStudents/AdminDgStudentNotesModal/adminDgStudentNotesModal.css */
+
+/* ===============================
+   OVERLAY
+   =============================== */
+.adminDgStudentNotesModal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+  padding: 1rem;
+  animation: adminDgStudentNotesModal-fadeIn 0.2s ease;
+}
+
+@keyframes adminDgStudentNotesModal-fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ===============================
+   CONTAINER
+   =============================== */
+.adminDgStudentNotesModal-container {
+  background: white;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 560px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: adminDgStudentNotesModal-slideUp 0.3s ease;
+}
+
+@keyframes adminDgStudentNotesModal-slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ===============================
+   HEADER
+   =============================== */
+.adminDgStudentNotesModal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+  border-radius: 16px 16px 0 0;
+}
+
+.adminDgStudentNotesModal-headerInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.adminDgStudentNotesModal-title {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 0.25rem 0;
+}
+
+.adminDgStudentNotesModal-title svg {
+  color: #6366f1;
+  flex-shrink: 0;
+}
+
+.adminDgStudentNotesModal-subtitle {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+.adminDgStudentNotesModal-closeBtn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  margin-left: 0.75rem;
+}
+
+.adminDgStudentNotesModal-closeBtn:hover {
+  background: #f3f4f6;
+  color: #1f2937;
+}
+
+/* ===============================
+   CONTENT
+   =============================== */
+.adminDgStudentNotesModal-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ===============================
+   ADD NOTE BUTTON
+   =============================== */
+.adminDgStudentNotesModal-addBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.875rem;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  border: none;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.adminDgStudentNotesModal-addBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+}
+
+/* ===============================
+   FORM
+   =============================== */
+.adminDgStudentNotesModal-form {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.adminDgStudentNotesModal-formHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.adminDgStudentNotesModal-formTitle {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.adminDgStudentNotesModal-formCancel {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: #9ca3af;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.adminDgStudentNotesModal-formCancel:hover {
+  background: #e5e7eb;
+  color: #6b7280;
+}
+
+/* Categories */
+.adminDgStudentNotesModal-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.adminDgStudentNotesModal-categoryBtn {
+  padding: 0.375rem 0.75rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.adminDgStudentNotesModal-categoryBtn:hover {
+  border-color: var(--cat-color);
+  color: var(--cat-color);
+  background: var(--cat-bg);
+}
+
+.adminDgStudentNotesModal-categoryBtn--active {
+  border-color: var(--cat-color);
+  color: var(--cat-color);
+  background: var(--cat-bg);
+  font-weight: 600;
+}
+
+/* Textarea */
+.adminDgStudentNotesModal-textarea {
+  width: 100%;
+  padding: 0.875rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  color: #1f2937;
+  resize: vertical;
+  min-height: 100px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.adminDgStudentNotesModal-textarea:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.adminDgStudentNotesModal-textarea::placeholder {
+  color: #9ca3af;
+}
+
+/* Form Actions */
+.adminDgStudentNotesModal-formActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.625rem;
+}
+
+.adminDgStudentNotesModal-btnSecondary,
+.adminDgStudentNotesModal-btnPrimary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.adminDgStudentNotesModal-btnSecondary {
+  background: white;
+  border: 1px solid #e5e7eb;
+  color: #374151;
+}
+
+.adminDgStudentNotesModal-btnSecondary:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.adminDgStudentNotesModal-btnPrimary {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  border: none;
+  color: white;
+}
+
+.adminDgStudentNotesModal-btnPrimary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.adminDgStudentNotesModal-btnPrimary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.adminDgStudentNotesModal-btnSpinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: adminDgStudentNotesModal-spin 0.6s linear infinite;
+}
+
+@keyframes adminDgStudentNotesModal-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===============================
+   NOTES LIST
+   =============================== */
+.adminDgStudentNotesModal-notesList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Loading */
+.adminDgStudentNotesModal-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+  gap: 1rem;
+}
+
+.adminDgStudentNotesModal-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #6366f1;
+  border-radius: 50%;
+  animation: adminDgStudentNotesModal-spin 0.8s linear infinite;
+}
+
+.adminDgStudentNotesModal-loading p {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Error */
+.adminDgStudentNotesModal-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  gap: 0.75rem;
+  color: #ef4444;
+}
+
+.adminDgStudentNotesModal-error p {
+  font-size: 0.875rem;
+  margin: 0;
+  text-align: center;
+}
+
+.adminDgStudentNotesModal-error button {
+  padding: 0.5rem 1rem;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #dc2626;
+  cursor: pointer;
+}
+
+/* Empty State */
+.adminDgStudentNotesModal-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+  text-align: center;
+  color: #9ca3af;
+}
+
+.adminDgStudentNotesModal-empty h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #6b7280;
+  margin: 0 0 0.375rem 0;
+}
+
+.adminDgStudentNotesModal-empty p {
+  font-size: 0.875rem;
+  color: #9ca3af;
+  margin: 0;
+}
+
+/* ===============================
+   SINGLE NOTE
+   =============================== */
+.adminDgStudentNotesModal-note {
+  position: relative;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1rem;
+  transition: all 0.2s ease;
+}
+
+.adminDgStudentNotesModal-note:hover {
+  border-color: #d1d5db;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.adminDgStudentNotesModal-note--editing {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Note Header */
+.adminDgStudentNotesModal-noteHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.625rem;
+}
+
+.adminDgStudentNotesModal-noteCategory {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.625rem;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.adminDgStudentNotesModal-noteActions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.adminDgStudentNotesModal-note:hover .adminDgStudentNotesModal-noteActions {
+  opacity: 1;
+}
+
+.adminDgStudentNotesModal-noteActionBtn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  color: #9ca3af;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.adminDgStudentNotesModal-noteActionBtn:hover {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.adminDgStudentNotesModal-noteActionBtn--delete:hover {
+  background: #fef2f2;
+  color: #ef4444;
+}
+
+/* Note Content */
+.adminDgStudentNotesModal-noteContent {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #374151;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Note Footer */
+.adminDgStudentNotesModal-noteFooter {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  padding-top: 0.625rem;
+  border-top: 1px solid #f3f4f6;
+}
+
+.adminDgStudentNotesModal-noteDate {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.adminDgStudentNotesModal-noteEdited {
+  font-size: 0.7rem;
+  color: #d1d5db;
+  font-style: italic;
+}
+
+/* Delete Overlay */
+.adminDgStudentNotesModal-noteDeleteOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(2px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  border-radius: 12px;
+  z-index: 10;
+}
+
+.adminDgStudentNotesModal-noteDeleteOverlay p {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin: 0;
+}
+
+.adminDgStudentNotesModal-noteDeleteActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.adminDgStudentNotesModal-noteDeleteCancel,
+.adminDgStudentNotesModal-noteDeleteConfirm {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.adminDgStudentNotesModal-noteDeleteCancel {
+  background: white;
+  border: 1px solid #e5e7eb;
+  color: #6b7280;
+}
+
+.adminDgStudentNotesModal-noteDeleteConfirm {
+  background: #ef4444;
+  border: none;
+  color: white;
+}
+
+/* ===============================
+   FOOTER
+   =============================== */
+.adminDgStudentNotesModal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #e5e7eb;
+  background: #f9fafb;
+  border-radius: 0 0 16px 16px;
+}
+
+/* ===============================
+   RESPONSIVE
+   =============================== */
+@media (max-width: 400px) {
+  .adminDgStudentNotesModal-overlay {
+    padding: 0.5rem;
+  }
+
+  .adminDgStudentNotesModal-container {
+    max-height: 95vh;
+    border-radius: 12px;
+  }
+
+  .adminDgStudentNotesModal-header {
+    padding: 1rem;
+  }
+
+  .adminDgStudentNotesModal-content {
+    padding: 1rem;
+  }
+}
+
+@media (min-width: 640px) {
+  .adminDgStudentNotesModal-noteActions {
+    opacity: 1;
+  }
+}

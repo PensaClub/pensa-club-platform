@@ -1,0 +1,205 @@
+/* src/components/AdminDigiBridgeStudents/StudentsStatsCharts/studentsCreditsChart.css */
+
+.studentsCreditsChart {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+}
+
+/* ===============================
+   LOADING STATE
+   =============================== */
+.studentsCreditsChart-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  min-height: 350px;
+  color: #6b7280;
+}
+
+.studentsCreditsChart-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #f59e0b;
+  border-radius: 50%;
+  animation: studentsCreditsChart-spin 0.8s linear infinite;
+}
+
+@keyframes studentsCreditsChart-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===============================
+   EMPTY STATE
+   =============================== */
+.studentsCreditsChart-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  min-height: 350px;
+  color: #9ca3af;
+}
+
+.studentsCreditsChart-empty svg {
+  color: #fbbf24;
+}
+
+.studentsCreditsChart-empty span {
+  font-size: 0.95rem;
+}
+
+/* ===============================
+   HEADER
+   =============================== */
+.studentsCreditsChart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.studentsCreditsChart-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.studentsCreditsChart-icon {
+  font-size: 1.25rem;
+}
+
+/* ===============================
+   SUMMARY CARDS
+   =============================== */
+.studentsCreditsChart-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.studentsCreditsChart-summaryCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  border-radius: 12px;
+  color: #ffffff;
+  text-align: center;
+}
+
+.studentsCreditsChart-summaryCard:nth-child(2) {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+}
+
+.studentsCreditsChart-summaryCard:nth-child(3) {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+.studentsCreditsChart-summaryValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.studentsCreditsChart-summaryLabel {
+  font-size: 0.75rem;
+  opacity: 0.9;
+  font-weight: 500;
+}
+
+/* ===============================
+   CHART BODY
+   =============================== */
+.studentsCreditsChart-body {
+  width: 100%;
+}
+
+/* ===============================
+   TOOLTIP
+   =============================== */
+.studentsCreditsChart-tooltip {
+  background: #1f2937;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.studentsCreditsChart-tooltipLabel {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin: 0 0 0.25rem 0;
+}
+
+.studentsCreditsChart-tooltipValue {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+}
+
+/* ===============================
+   RESPONSIVE
+   =============================== */
+@media (max-width: 768px) {
+  .studentsCreditsChart {
+    padding: 1rem;
+  }
+
+  .studentsCreditsChart-title {
+    font-size: 1rem;
+  }
+
+  .studentsCreditsChart-summary {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .studentsCreditsChart-summaryCard {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.875rem 1rem;
+  }
+
+  .studentsCreditsChart-summaryValue {
+    font-size: 1.25rem;
+  }
+
+  .studentsCreditsChart-summaryLabel {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .studentsCreditsChart {
+    padding: 0.875rem;
+    border-radius: 12px;
+  }
+
+  .studentsCreditsChart-summaryCard {
+    padding: 0.75rem;
+  }
+
+  .studentsCreditsChart-summaryValue {
+    font-size: 1.125rem;
+  }
+
+  .studentsCreditsChart-summaryLabel {
+    font-size: 0.7rem;
+  }
+}

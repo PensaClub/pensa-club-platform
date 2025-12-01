@@ -2,7 +2,7 @@
 
 import { useTranslation } from 'react-i18next';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
-import './studentsStatsCharts.css';
+import './studentsByStatusChart.css';
 
 const COLORS = {
   active: '#10b981',
@@ -16,9 +16,9 @@ export const StudentsByStatusChart = ({ data, loading }) => {
 
   if (loading) {
     return (
-      <div className="studentsStatsChart">
-        <div className="studentsStatsChart-loading">
-          <div className="studentsStatsChart-spinner"></div>
+      <div className="studentsByStatusChart">
+        <div className="studentsByStatusChart-loading">
+          <div className="studentsByStatusChart-spinner"></div>
           <span>{t('common.loading')}</span>
         </div>
       </div>
@@ -27,8 +27,8 @@ export const StudentsByStatusChart = ({ data, loading }) => {
 
   if (!data || data.length === 0) {
     return (
-      <div className="studentsStatsChart">
-        <div className="studentsStatsChart-empty">
+      <div className="studentsByStatusChart">
+        <div className="studentsByStatusChart-empty">
           <svg width="64" height="64" viewBox="0 0 64 64">
             <circle cx="32" cy="32" r="28" fill="none" stroke="currentColor" strokeWidth="2" opacity="0.3"/>
             <path d="M32 18v14M32 38v4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
@@ -56,9 +56,9 @@ export const StudentsByStatusChart = ({ data, loading }) => {
       const data = payload[0].payload;
       const percentage = ((data.value / total) * 100).toFixed(1);
       return (
-        <div className="studentsStatsChart-tooltip">
-          <p className="studentsStatsChart-tooltipLabel">{data.name}</p>
-          <p className="studentsStatsChart-tooltipValue">
+        <div className="studentsByStatusChart-tooltip">
+          <p className="studentsByStatusChart-tooltipLabel">{data.name}</p>
+          <p className="studentsByStatusChart-tooltipValue">
             {data.value} ({percentage}%)
           </p>
         </div>
@@ -68,19 +68,19 @@ export const StudentsByStatusChart = ({ data, loading }) => {
   };
 
   return (
-    <div className="studentsStatsChart">
-      <div className="studentsStatsChart-header">
-        <h3 className="studentsStatsChart-title">
-          <span className="studentsStatsChart-icon">✅</span>
+    <div className="studentsByStatusChart">
+      <div className="studentsByStatusChart-header">
+        <h3 className="studentsByStatusChart-title">
+          <span className="studentsByStatusChart-icon">✅</span>
           {t('adminDigiBridgeStudents.charts.byStatus')}
         </h3>
-        <span className="studentsStatsChart-total">
+        <span className="studentsByStatusChart-total">
           {t('adminDigiBridgeStudents.charts.total')}: <strong>{total}</strong>
         </span>
       </div>
 
-      <div className="studentsStatsChart-body">
-        <div className="studentsStatsChart-pieWrapper">
+      <div className="studentsByStatusChart-body">
+        <div className="studentsByStatusChart-pieWrapper">
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
               <Pie
@@ -103,7 +103,7 @@ export const StudentsByStatusChart = ({ data, loading }) => {
               <Legend 
                 verticalAlign="bottom" 
                 height={36}
-                formatter={(value, entry) => (
+                formatter={(value) => (
                   <span style={{ color: '#374151' }}>{value}</span>
                 )}
               />
@@ -111,15 +111,15 @@ export const StudentsByStatusChart = ({ data, loading }) => {
           </ResponsiveContainer>
         </div>
 
-        <div className="studentsStatsChart-legend">
+        <div className="studentsByStatusChart-legend">
           {chartData.map((item, index) => (
-            <div key={index} className="studentsStatsChart-legendItem">
+            <div key={index} className="studentsByStatusChart-legendItem">
               <span 
-                className="studentsStatsChart-legendColor"
+                className="studentsByStatusChart-legendColor"
                 style={{ backgroundColor: COLORS[item.status] || '#8884d8' }}
               ></span>
-              <span className="studentsStatsChart-legendLabel">{item.name}</span>
-              <span className="studentsStatsChart-legendValue">{item.value}</span>
+              <span className="studentsByStatusChart-legendLabel">{item.name}</span>
+              <span className="studentsByStatusChart-legendValue">{item.value}</span>
             </div>
           ))}
         </div>

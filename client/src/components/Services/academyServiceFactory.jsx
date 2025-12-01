@@ -387,7 +387,11 @@ export const academyServiceFactory = () => {
     // ===============================
 
     getAllStudents: async (params = {}) => {
-      const queryString = new URLSearchParams(params).toString();
+      // Филтрирай undefined/null/'' преди URLSearchParams
+      const cleanParams = Object.fromEntries(
+        Object.entries(params).filter(([_, v]) => v !== undefined && v !== null && v !== '')
+      );
+      const queryString = new URLSearchParams(cleanParams).toString();
       return requester.get(`${apiUrl}/academy/admin/students?${queryString}`);
     },
 
@@ -467,27 +471,49 @@ export const academyServiceFactory = () => {
       return requester.get(`${apiUrl}/academy/admin/students/statistics/engagement`);
     },
     // ===============================
-// ADMIN: STUDENT APPLICATIONS (за /admin/student-applications)
-// ===============================
+    // ADMIN: STUDENT APPLICATIONS (за /admin/student-applications)
+    // ===============================
 
-getAllStudentApplications: async (params = {}) => {
-  const queryString = new URLSearchParams(params).toString();
-  return requester.get(`${apiUrl}/academy/admin/student-applications?${queryString}`);
-},
+    getAllStudentApplications: async (params = {}) => {
+      const queryString = new URLSearchParams(params).toString();
+      return requester.get(`${apiUrl}/academy/admin/student-applications?${queryString}`);
+    },
 
-approveStudentApplicationByAdmin: async (applicationId) => {
-  return requester.post(`${apiUrl}/academy/admin/student-applications/${applicationId}/approve`);
-},
+    approveStudentApplicationByAdmin: async (applicationId) => {
+      return requester.post(`${apiUrl}/academy/admin/student-applications/${applicationId}/approve`);
+    },
 
-rejectStudentApplicationByAdmin: async (applicationId, rejectionReason) => {
-  return requester.post(`${apiUrl}/academy/admin/student-applications/${applicationId}/reject`, {
-    rejectionReason
-  });
-},
+    rejectStudentApplicationByAdmin: async (applicationId, rejectionReason) => {
+      return requester.post(`${apiUrl}/academy/admin/student-applications/${applicationId}/reject`, {
+        rejectionReason
+      });
+    },
 
-deleteStudentApplicationByAdmin: async (applicationId) => {
-  return requester.del(`${apiUrl}/academy/admin/student-applications/${applicationId}`);
-},
+    deleteStudentApplicationByAdmin: async (applicationId) => {
+      return requester.del(`${apiUrl}/academy/admin/student-applications/${applicationId}`);
+    },
+    reapproveStudentApplicationByAdmin: async (applicationId) => {
+      return requester.post(`${apiUrl}/academy/admin/student-applications/${applicationId}/reapprove`);
+    },
+    // ===============================
+    // ADMIN STUDENT NOTES 📝 
+    // ===============================
+
+    getAdminStudentNotes: async (studentId) => {
+      return requester.get(`${apiUrl}/academy/admin/students/${studentId}/notes`);
+    },
+
+    createAdminStudentNote: async (studentId, noteData) => {
+      return requester.post(`${apiUrl}/academy/admin/students/${studentId}/notes`, noteData);
+    },
+
+    updateAdminStudentNote: async (studentId, noteId, noteData) => {
+      return requester.patch(`${apiUrl}/academy/admin/students/${studentId}/notes/${noteId}`, noteData);
+    },
+
+    deleteAdminStudentNote: async (studentId, noteId) => {
+      return requester.del(`${apiUrl}/academy/admin/students/${studentId}/notes/${noteId}`);
+    },
   };
 };
 

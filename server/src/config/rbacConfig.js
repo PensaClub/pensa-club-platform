@@ -170,20 +170,20 @@ const permissions = {
     },
 
     statistics: {
-        read: ['admin', 'mentor'],                     
-        readOwn: ['admin', 'mentor'],        
+        read: ['admin', 'mentor'],
+        readOwn: ['admin', 'mentor'],
     },
 
     studentApplication: {
         create: ['user', 'student', 'admin'],
-        readOwn: ['mentor', 'admin'],         
-        readAll: ['admin'],                   
+        readOwn: ['mentor', 'admin'],
+        readAll: ['admin'],
         update: ['mentor', 'admin'],
         delete: ['admin'],
     },
 
     studentApplication: {
-        create: ['user', 'student'],
+        create: ['user', 'student', 'admin'],
         readOwn: ['mentor', 'admin'],
         readAll: ['admin'],
         update: ['mentor', 'admin'],
