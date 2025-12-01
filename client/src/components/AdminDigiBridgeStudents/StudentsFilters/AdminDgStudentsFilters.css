@@ -1,0 +1,323 @@
+/* src/components/AdminDigiBridgeStudents/AdminDgStudentsFilters/adminDgStudentsFilters.css */
+
+.adminDgStudentsFilters-container {
+  margin-bottom: 1.25rem;
+}
+
+/* ===============================
+   FILTERS TOP BAR
+   =============================== */
+.adminDgStudentsFilters-top {
+  display: flex;
+  gap: 0.625rem;
+  margin-bottom: 0.625rem;
+}
+
+/* Search Wrapper */
+.adminDgStudentsFilters-searchWrapper {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.adminDgStudentsFilters-searchIcon {
+  position: absolute;
+  left: 0.875rem;
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+.adminDgStudentsFilters-searchInput {
+  width: 100%;
+  padding: 0.75rem 2.75rem 0.75rem 2.5rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  color: #1f2937;
+  transition: all 0.2s ease;
+}
+
+.adminDgStudentsFilters-searchInput::placeholder {
+  color: #9ca3af;
+}
+
+.adminDgStudentsFilters-searchInput:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.adminDgStudentsFilters-clearSearch {
+  position: absolute;
+  right: 0.75rem;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  color: #9ca3af;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.adminDgStudentsFilters-clearSearch:hover {
+  background: #f3f4f6;
+  color: #1f2937;
+}
+
+/* Filters Toggle Button */
+.adminDgStudentsFilters-toggleBtn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1f2937;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.adminDgStudentsFilters-toggleBtn:hover {
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
+.adminDgStudentsFilters-toggleBtn--active {
+  background: #eff6ff;
+  border-color: #2563eb;
+  color: #2563eb;
+}
+
+.adminDgStudentsFilters-toggleText {
+  display: none;
+}
+
+.adminDgStudentsFilters-filterBadge {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 8px;
+  height: 8px;
+  background: #ef4444;
+  border: 2px solid white;
+  border-radius: 50%;
+}
+
+/* ===============================
+   FILTERS PANEL
+   =============================== */
+.adminDgStudentsFilters-panel {
+  display: none;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 0.625rem;
+  animation: adminDgStudentsFilters-slideDown 0.2s ease;
+}
+
+.adminDgStudentsFilters-panel--open {
+  display: block;
+}
+
+@keyframes adminDgStudentsFilters-slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.adminDgStudentsFilters-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.875rem;
+}
+
+/* Filter Group */
+.adminDgStudentsFilters-filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.adminDgStudentsFilters-filterLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.adminDgStudentsFilters-filterSelect {
+  padding: 0.625rem 0.875rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  color: #1f2937;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.adminDgStudentsFilters-filterSelect:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* Clear Filters Button */
+.adminDgStudentsFilters-filterActions {
+  margin-top: 0.25rem;
+}
+
+.adminDgStudentsFilters-clearFiltersBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  background: transparent;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #ef4444;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  justify-content: center;
+}
+
+.adminDgStudentsFilters-clearFiltersBtn:hover {
+  background: #fef2f2;
+  border-color: #ef4444;
+}
+
+/* ===============================
+   RESULTS COUNT
+   =============================== */
+.adminDgStudentsFilters-results {
+  padding: 0.625rem 0;
+}
+
+.adminDgStudentsFilters-resultsCount {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.adminDgStudentsFilters-resultsCount strong {
+  color: #1f2937;
+  font-weight: 700;
+}
+
+/* ===============================
+   RESPONSIVE
+   =============================== */
+
+/* Mobile Large (480px+) */
+@media (min-width: 480px) {
+  .adminDgStudentsFilters-toggleText {
+    display: inline;
+  }
+
+  .adminDgStudentsFilters-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .adminDgStudentsFilters-filterActions {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Tablet Small (600px+) */
+@media (min-width: 600px) {
+  .adminDgStudentsFilters-panel {
+    padding: 1.25rem;
+  }
+
+  .adminDgStudentsFilters-grid {
+    gap: 1rem;
+  }
+
+  .adminDgStudentsFilters-filterSelect {
+    padding: 0.75rem 1rem;
+  }
+
+  .adminDgStudentsFilters-clearFiltersBtn {
+    width: auto;
+    padding: 0.75rem 1.25rem;
+  }
+}
+
+/* Tablet Large (768px+) */
+@media (min-width: 768px) {
+  .adminDgStudentsFilters-panel {
+    display: block;
+    padding: 1.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .adminDgStudentsFilters-toggleBtn {
+    display: none;
+  }
+
+  .adminDgStudentsFilters-grid {
+    grid-template-columns: repeat(3, 1fr) auto;
+    align-items: end;
+  }
+
+  .adminDgStudentsFilters-filterActions {
+    grid-column: auto;
+    margin-top: 0;
+  }
+
+  .adminDgStudentsFilters-filterLabel {
+    font-size: 0.8rem;
+  }
+
+  .adminDgStudentsFilters-resultsCount {
+    font-size: 0.875rem;
+  }
+}
+
+/* Laptop (1024px+) */
+@media (min-width: 1024px) {
+  .adminDgStudentsFilters-container {
+    margin-bottom: 1.5rem;
+  }
+
+  .adminDgStudentsFilters-top {
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .adminDgStudentsFilters-searchInput {
+    padding: 0.875rem 3rem 0.875rem 2.75rem;
+    font-size: 0.9rem;
+  }
+
+  .adminDgStudentsFilters-panel {
+    margin-bottom: 1rem;
+  }
+}
+
+/* Desktop (1440px+) */
+@media (min-width: 1440px) {
+  .adminDgStudentsFilters-grid {
+    grid-template-columns: 2fr 1.5fr 1.5fr 1.5fr auto;
+  }
+}

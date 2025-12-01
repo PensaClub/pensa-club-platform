@@ -1,0 +1,234 @@
+/* src/components/AdminDigiBridgeStudents/StudentsStatsCharts/studentsByMentorChart.css */
+
+.studentsByMentorChart {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+}
+
+/* ===============================
+   LOADING STATE
+   =============================== */
+.studentsByMentorChart-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  min-height: 400px;
+  color: #6b7280;
+}
+
+.studentsByMentorChart-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #6366f1;
+  border-radius: 50%;
+  animation: studentsByMentorChart-spin 0.8s linear infinite;
+}
+
+@keyframes studentsByMentorChart-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===============================
+   EMPTY STATE
+   =============================== */
+.studentsByMentorChart-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  min-height: 400px;
+  color: #9ca3af;
+}
+
+.studentsByMentorChart-empty svg {
+  color: #d1d5db;
+}
+
+.studentsByMentorChart-empty span {
+  font-size: 0.95rem;
+}
+
+/* ===============================
+   HEADER
+   =============================== */
+.studentsByMentorChart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.studentsByMentorChart-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.studentsByMentorChart-icon {
+  font-size: 1.25rem;
+}
+
+/* ===============================
+   CHART BODY
+   =============================== */
+.studentsByMentorChart-body {
+  width: 100%;
+}
+
+/* ===============================
+   TOOLTIP
+   =============================== */
+.studentsByMentorChart-tooltip {
+  background: #1f2937;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.studentsByMentorChart-tooltipLabel {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin: 0 0 0.25rem 0;
+}
+
+.studentsByMentorChart-tooltipValue {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0;
+}
+
+/* ===============================
+   MENTOR CARDS
+   =============================== */
+.studentsByMentorChart-mentorCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.studentsByMentorChart-mentorCard {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  background: #f9fafb;
+  border-radius: 10px;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.studentsByMentorChart-mentorCard:hover {
+  background: #f3f4f6;
+  transform: translateY(-2px);
+}
+
+.studentsByMentorChart-mentorAvatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.studentsByMentorChart-mentorAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.studentsByMentorChart-mentorAvatar span {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.studentsByMentorChart-mentorInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 0;
+}
+
+.studentsByMentorChart-mentorName {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.studentsByMentorChart-mentorCount {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+/* ===============================
+   RESPONSIVE
+   =============================== */
+@media (max-width: 768px) {
+  .studentsByMentorChart {
+    padding: 1rem;
+  }
+
+  .studentsByMentorChart-title {
+    font-size: 1rem;
+  }
+
+  .studentsByMentorChart-mentorCards {
+    grid-template-columns: 1fr;
+  }
+
+  .studentsByMentorChart-mentorCard {
+    padding: 0.625rem;
+  }
+
+  .studentsByMentorChart-mentorAvatar {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 480px) {
+  .studentsByMentorChart {
+    padding: 0.875rem;
+    border-radius: 12px;
+  }
+
+  .studentsByMentorChart-mentorCards {
+    margin-top: 1rem;
+    padding-top: 1rem;
+  }
+
+  .studentsByMentorChart-mentorAvatar {
+    width: 36px;
+    height: 36px;
+  }
+
+  .studentsByMentorChart-mentorAvatar span {
+    font-size: 1rem;
+  }
+
+  .studentsByMentorChart-mentorName {
+    font-size: 0.85rem;
+  }
+}

@@ -372,7 +372,6 @@
   },
   "profile": {
     "mentorApplications": "Studentenbewerbungen",
-
     "mentorProfile": "Profil",
     "clubMembership": "Clubmitgliedschaft",
     "clubs": {
@@ -592,6 +591,11 @@
       "overview": "Mentoren-Übersicht",
       "applications": "Bewerbungen",
       "statistics": "Statistiken"
+    },
+    "students": {
+      "title": "Studenten",
+      "overview": "Übersicht",
+      "applications": "Bewerbungen"
     },
     "reviews": {
       "management": "Bewertungen verwalten"
@@ -9219,7 +9223,18 @@
   "common": {
     "navigation": {
       "home": "Startseite"
-    }
+    },
+    "loading": "Laden...",
+    "refresh": "Aktualisieren",
+    "refreshing": "Aktualisiere...",
+    "close": "Schließen",
+      "save": "Speichern",
+  "saving": "Speichern...",
+  "delete": "Löschen",
+  "deleting": "Löschen...",
+  "edit": "Bearbeiten",
+  "retry": "Erneut versuchen"
+    
   },
   "clubForm": {
     "title": "Vereinsregistrierung",
@@ -12606,25 +12621,25 @@
   },
   "mentorModal": {
     "applying": "Wird gesendet...",
-  "about": "Über mich",
-  "experience": "Erfahrung & Ausbildung",
-  "education": "Ausbildung",
-  "yearsExperience": "Jahre Erfahrung",
-  "availability": "Verfügbarkeit",
-  "languages": "Sprachen",
-  "reviews": "Bewertungen",
-  "rating": "Bewertung",
-  "sessions": "Sitzungen",
-  "selectMentor": "Mentor wählen",
-  "close": "Schließen",
-  "noLanguages": "Keine Sprachen angegeben",
-  "alreadyApplied": "Bereits beworben",
-  "applicationSuccess": "Bewerbung erfolgreich gesendet!",
-  "applicationError": "Fehler beim Senden der Bewerbung",
-  "cannotApplyAsAdmin": "Administratoren können sich nicht bewerben",
-  "cannotApplyAsMentor": "Mentoren können sich nicht bewerben"
-},
- "studentApplications": {
+    "about": "Über mich",
+    "experience": "Erfahrung & Ausbildung",
+    "education": "Ausbildung",
+    "yearsExperience": "Jahre Erfahrung",
+    "availability": "Verfügbarkeit",
+    "languages": "Sprachen",
+    "reviews": "Bewertungen",
+    "rating": "Bewertung",
+    "sessions": "Sitzungen",
+    "selectMentor": "Mentor wählen",
+    "close": "Schließen",
+    "noLanguages": "Keine Sprachen angegeben",
+    "alreadyApplied": "Bereits beworben",
+    "applicationSuccess": "Bewerbung erfolgreich gesendet!",
+    "applicationError": "Fehler beim Senden der Bewerbung",
+    "cannotApplyAsAdmin": "Administratoren können sich nicht bewerben",
+    "cannotApplyAsMentor": "Mentoren können sich nicht bewerben"
+  },
+  "studentApplications": {
     "title": "Studentenanträge",
     "subtitle": "Verwalten Sie Bewerbungen von Studenten, die bei Ihnen lernen möchten",
     "tabs": {
@@ -12697,5 +12712,354 @@
     "studentFor": "Student seit",
     "infoText": "Dieser Student ist aktiv und lernt bei Ihnen. Sie können den Fortschritt im Studentenbereich verfolgen.",
     "close": "Schließen"
+  },
+  "adminDigiBridgeStudents": {
+    "title": "Studentenverwaltung",
+    "subtitle": "Alle Studenten in DigiBridge Academy anzeigen und verwalten",
+    "stats": {
+      "totalStudents": "Gesamtzahl Studenten",
+      "activeStudents": "Aktive Studenten",
+      "withMentor": "Mit Mentor",
+      "totalCredits": "Gesamte Credits",
+      "avgCredits": "Durchschnittliche Credits",
+      "attendanceRate": "Anwesenheitsrate",
+      "activeCourses": "Aktive Kurse",
+      "completedCourses": "Abgeschlossene Kurse"
+    },
+    "tabs": {
+      "overview": "Übersicht",
+      "byStatus": "Nach Status",
+      "byMentor": "Nach Mentor",
+      "credits": "Credits",
+      "attendance": "Anwesenheit",
+      "topPerformers": "Top-Studenten",
+      "engagement": "Engagement"
+    },
+    "filters": {
+      "searchPlaceholder": "Nach Name, E-Mail suchen...",
+      "filters": "Filter",
+      "status": "Status",
+      "mentor": "Mentor",
+      "sortBy": "Sortieren nach",
+      "allStatuses": "Alle Status",
+      "active": "Aktiv",
+      "inactive": "Inaktiv",
+      "suspended": "Gesperrt",
+      "allMentors": "Alle Mentoren",
+      "withMentor": "Mit Mentor",
+      "withoutMentor": "Ohne Mentor",
+      "newest": "Neueste",
+      "oldest": "Älteste",
+      "nameAsc": "Name (A-Z)",
+      "nameDesc": "Name (Z-A)",
+      "creditsHigh": "Credits (hoch)",
+      "creditsLow": "Credits (niedrig)",
+      "clearAll": "Alle löschen",
+      "showing": "Zeigt",
+      "students": "Studenten"
+    },
+    "table": {
+      "student": "Student",
+      "email": "E-Mail",
+      "mentor": "Mentor",
+      "credits": "Credits",
+      "attendance": "Anwesenheit",
+      "status": "Status",
+      "actions": "Aktionen",
+      "noMentor": "Kein Mentor",
+      "active": "Aktiv",
+      "inactive": "Inaktiv",
+      "suspended": "Gesperrt",
+      "view": "Ansehen",
+      "edit": "Bearbeiten",
+      "delete": "Löschen",
+      "noStudents": "Keine Studenten gefunden",
+      "noStudentsDesc": "Versuchen Sie, die Filter zu ändern oder neue Studenten hinzuzufügen",
+          "notes": "Notizen",
+    "notesCount": "{{count}} Notizen",
+    "noNotes": "Keine Notizen"
+    },
+    "status": {
+      "active": "Aktiv",
+      "inactive": "Inaktiv",
+      "suspended": "Gesperrt",
+      "pending": "Ausstehend"
+    },
+    "noMentor": "Kein Mentor",
+    "charts": {
+      "noData": "Keine Daten verfügbar",
+      "byStatus": "Studenten nach Status",
+      "byMentor": "Studenten nach Mentor",
+      "creditsDistribution": "Credits-Verteilung",
+      "attendanceTrends": "Anwesenheitstrends",
+      "topPerformers": "Top-Studenten",
+      "engagementOverview": "Engagement-Übersicht",
+      "total": "Gesamt",
+      "students": "Studenten",
+      "credits": "Credits",
+      "attendance": "Anwesenheit",
+      "student": "Student",
+      "rank": "Rang",
+      "totalStudents": "Gesamtzahl Studenten",
+      "avgCredits": "Durchschnittliche Credits",
+      "maxCredits": "Max. Credits",
+      "avgAttendance": "Durchschnittliche Anwesenheit",
+      "overallEngagement": "Gesamtes Engagement",
+      "viewDetails": "Ansehen",
+      "trend": {
+        "up": "Aufwärts",
+        "down": "Abwärts",
+        "stable": "Stabil"
+      },
+      "engagement": {
+        "sessions": "Sitzungen",
+        "courses": "Kurse",
+        "mentoring": "Mentoring",
+        "activities": "Aktivitäten",
+        "feedback": "Feedback"
+      }
+    }
+  },
+  "adminDgStudentDetailsModal": {
+    "title": "Studentendetails",
+    "notes": "Notizen",
+    "totalCredits": "Gesamtpunkte",
+    "attendanceRate": "Anwesenheitsrate",
+    "currentMentor": "Aktueller Mentor",
+    "mentor": "Mentor",
+    "noMentorAssigned": "Kein Mentor zugewiesen",
+    "additionalInfo": "Zusätzliche Informationen",
+    "registrationDate": "Registrierungsdatum",
+    "lastActive": "Zuletzt aktiv",
+    "close": "Schließen",
+    "notAvailable": "Nicht verfügbar",
+    "editStudent": "Bearbeiten",
+    "changeMentor": "Mentor ändern",
+    "sendEmail": "E-Mail senden"
+  },
+  "adminDgDeleteStudentConfirm": {
+    "title": "Student löschen",
+    "message": "Sind Sie sicher, dass Sie den Studenten löschen möchten",
+    "warning": "Diese Aktion ist unwiderruflich und entfernt alle Studentendaten.",
+    "delete": "Student löschen",
+    "deleting": "Wird gelöscht..."
+  },
+  "adminDgEditStudentModal": {
+    "title": "Student bearbeiten",
+    "currentAvatar": "Aktuelles Bild",
+    "avatarHint": "Bildänderung ist derzeit nicht verfügbar",
+    "name": "Name",
+    "namePlaceholder": "Name eingeben",
+    "email": "E-Mail",
+    "emailPlaceholder": "E-Mail eingeben",
+    "phone": "Telefon",
+    "phonePlaceholder": "Telefon eingeben (optional)",
+    "status": "Status",
+    "save": "Änderungen speichern",
+    "saving": "Wird gespeichert...",
+    "errors": {
+      "nameRequired": "Name ist erforderlich",
+      "emailRequired": "E-Mail ist erforderlich",
+      "emailInvalid": "Ungültiges E-Mail-Format",
+      "phoneInvalid": "Ungültige Telefonnummer"
+    }
+  },
+  "adminDgChangeMentorModal": {
+    "title": "Mentor ändern",
+    "currentMentor": "Aktueller Mentor",
+    "searchPlaceholder": "Mentor nach Name, E-Mail oder Spezialisierung suchen...",
+    "noMentorsFound": "Keine Mentoren gefunden",
+    "current": "Aktuell",
+    "students": "Studenten",
+    "assign": "Mentor zuweisen",
+    "assigning": "Zuweisen..."
+  },
+  "adminDgSendEmailModal": {
+    "title": "E-Mail senden",
+    "to": "An",
+    "subject": "Betreff",
+    "subjectPlaceholder": "E-Mail-Betreff eingeben",
+    "message": "Nachricht",
+    "messagePlaceholder": "Schreiben Sie hier Ihre Nachricht...",
+    "quickTemplates": "Schnellvorlagen",
+    "send": "E-Mail senden",
+    "sending": "Wird gesendet...",
+    "note": "Die E-Mail wird von der offiziellen DigiBridge Academy Adresse gesendet.",
+    "templates": {
+      "welcome": "Willkommen",
+      "reminder": "Erinnerung",
+      "inactive": "Inaktiv"
+    },
+    "templateContent": {
+      "welcome": {
+        "subject": "Willkommen bei DigiBridge Academy!",
+        "message": "Hallo {{name}},\n\nWillkommen bei DigiBridge Academy! Wir freuen uns, dass Sie Teil unserer Gemeinschaft sind.\n\nHier finden Sie Unterstützung und Ressourcen für Ihre digitale Lernreise. Zögern Sie nicht, Ihren Mentor bei Fragen zu kontaktieren.\n\nMit freundlichen Grüßen,\nDas DigiBridge Academy Team"
+      },
+      "reminder": {
+        "subject": "Erinnerung an bevorstehende Sitzung",
+        "message": "Hallo {{name}},\n\nDies ist eine Erinnerung an Ihre bevorstehende Sitzung mit Ihrem Mentor. Bitte stellen Sie sicher, dass Sie vorbereitet sind und eine stabile Internetverbindung haben.\n\nBei Fragen kontaktieren Sie uns gerne.\n\nMit freundlichen Grüßen,\nDas DigiBridge Academy Team"
+      },
+      "inactive": {
+        "subject": "Wir vermissen Sie bei DigiBridge Academy",
+        "message": "Hallo {{name}},\n\nWir haben bemerkt, dass Sie in letzter Zeit nicht aktiv waren. Wir hoffen, dass alles in Ordnung ist.\n\nWenn Sie Hilfe benötigen oder eine neue Sitzung mit einem Mentor planen möchten, kontaktieren Sie uns bitte.\n\nMit freundlichen Grüßen,\nDas DigiBridge Academy Team"
+      }
+    },
+    "errors": {
+      "subjectRequired": "Betreff ist erforderlich",
+      "subjectTooShort": "Betreff muss mindestens 3 Zeichen lang sein",
+      "messageRequired": "Nachricht ist erforderlich",
+      "messageTooShort": "Nachricht muss mindestens 10 Zeichen lang sein"
+    }
+  },
+  "adminDgStudentsFilters": {
+    "searchPlaceholder": "Suche nach Name, E-Mail...",
+    "filters": "Filter",
+    "status": "Status",
+    "mentor": "Mentor",
+    "sortBy": "Sortieren nach",
+    "allMentors": "Alle Mentoren",
+    "noMentor": "Kein Mentor",
+    "clearAll": "Alle löschen",
+    "studentsFound": "Studenten gefunden",
+    "statusOptions": {
+      "all": "Alle Status",
+      "active": "Aktiv",
+      "inactive": "Inaktiv",
+      "suspended": "Gesperrt"
+    },
+    "sortOptions": {
+      "newest": "Neueste",
+      "oldest": "Älteste",
+      "name": "Nach Name",
+      "credits": "Nach Credits",
+      "attendance": "Nach Anwesenheit"
+    }
+  },
+  "adminStudentApplications": {
+    "title": "Studentenbewerbungen",
+    "subtitle": "Verwaltung von Mentoring-Schulungsanfragen",
+    "stats": {
+      "total": "Gesamt",
+      "pending": "Ausstehend",
+      "approved": "Genehmigt",
+      "rejected": "Abgelehnt"
+    },
+    "tabs": {
+      "overview": "Übersicht",
+      "pending": "Ausstehend",
+      "approved": "Genehmigt",
+      "rejected": "Abgelehnt"
+    },
+    "filters": {
+      "searchPlaceholder": "Nach Name oder E-Mail suchen...",
+      "allStatuses": "Alle Status",
+      "allMentors": "Alle Mentoren",
+      "newest": "Neueste",
+      "oldest": "Älteste",
+      "studentName": "Studentenname",
+      "mentorName": "Mentorenname",
+      "clearAll": "Löschen",
+      "showing": "Zeige {{count}} von {{total}} Ergebnissen"
+    },
+    "table": {
+      "student": "Student",
+      "mentor": "Mentor",
+      "status": "Status",
+      "appliedAt": "Beworben am",
+      "actions": "Aktionen",
+      "noApplications": "Keine Bewerbungen gefunden"
+    },
+    "status": {
+      "pending": "Ausstehend",
+      "approved": "Genehmigt",
+      "rejected": "Abgelehnt"
+    },
+    "actions": {
+      "view": "Ansehen",
+      "approve": "Genehmigen",
+      "reject": "Ablehnen",
+      "reapprove": "Erneut genehmigen",
+      "delete": "Löschen"
+    },
+    "charts": {
+      "byStatus": "Bewerbungen nach Status",
+      "byMentor": "Bewerbungen nach Mentor",
+      "overTime": "Bewerbungen im Zeitverlauf"
+    },
+    "modals": {
+      "viewTitle": "Bewerbungsdetails",
+      "approveTitle": "Bewerbung genehmigen",
+      "reapproveTitle": "Bewerbung erneut genehmigen",
+      "rejectTitle": "Bewerbung ablehnen",
+      "deleteTitle": "Bewerbung löschen",
+      "studentInfo": "Studenteninformationen",
+      "mentorInfo": "Mentoreninformationen",
+      "applicationInfo": "Bewerbungsinformationen",
+      "name": "Name",
+      "email": "E-Mail",
+      "phone": "Telefon",
+      "specialization": "Spezialisierung",
+      "status": "Status",
+      "appliedAt": "Beworben am",
+      "approvedAt": "Genehmigt am",
+      "rejectedAt": "Abgelehnt am",
+      "rejectionReason": "Ablehnungsgrund",
+      "approveConfirm": "Sind Sie sicher, dass Sie die Bewerbung von {{student}} bei Mentor {{mentor}} genehmigen möchten?",
+      "reapproveConfirm": "Sind Sie sicher, dass Sie die Bewerbung von {{student}} bei Mentor {{mentor}} erneut genehmigen möchten?",
+      "deleteConfirm": "Sind Sie sicher, dass Sie die Bewerbung von {{student}} löschen möchten?",
+      "deleteWarning": "Diese Aktion kann nicht rückgängig gemacht werden!",
+      "rejectInfo": "Sie werden die Bewerbung von {{student}} bei Mentor {{mentor}} ablehnen.",
+      "rejectionReasonLabel": "Ablehnungsgrund",
+      "rejectionReasonPlaceholder": "Beschreiben Sie, warum Sie diese Bewerbung ablehnen...",
+      "reasonRequired": "Grund ist erforderlich",
+      "reasonTooShort": "Grund muss mindestens 10 Zeichen lang sein"
+    }
+  },
+  "charts": {
+    "byStatus": "Bewerbungen nach Status",
+    "byMentor": "Bewerbungen nach Mentor",
+    "overTime": "Bewerbungen im Zeitverlauf",
+    "noData": "Keine Daten vorhanden"
+  },
+  "applicationsByStatusChart": {
+    "noData": "Keine Daten vorhanden"
+  },
+  "applicationsByMentorChart": {
+    "noData": "Keine Daten vorhanden",
+    "unknownMentor": "Unbekannter Mentor",
+    "applications": "Bewerbungen",
+    "applicationsShort": "Bew.",
+    "topMentors": "Top {{count}} Mentoren",
+    "totalApplications": "Gesamtbewerbungen"
+  },
+  "adminDgStudentNotes": {
+    "title": "Studentennotizen",
+    "notesCount": "Notizen",
+    "addNote": "Notiz hinzufügen",
+    "newNote": "Neue Notiz",
+    "editNote": "Notiz bearbeiten",
+    "placeholder": "Schreiben Sie Ihre Notiz hier...",
+    "deleteConfirm": "Sind Sie sicher, dass Sie diese Notiz löschen möchten?",
+    "edited": "bearbeitet",
+    "categories": {
+      "general": "Allgemein",
+      "important": "Wichtig",
+      "followup": "Nachverfolgen",
+      "positive": "Positiv",
+      "contact": "Kontakt"
+    },
+    "time": {
+      "justNow": "Gerade eben",
+      "minutesAgo": "vor {{count}} Min",
+      "hoursAgo": "vor {{count}} Std",
+      "daysAgo": "vor {{count}} Tagen"
+    },
+    "empty": {
+      "title": "Keine Notizen",
+      "description": "Für diesen Studenten wurden noch keine Notizen hinzugefügt"
+    },
+    "errors": {
+      "fetchFailed": "Fehler beim Laden der Notizen"
+    }
   }
 }

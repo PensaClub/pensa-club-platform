@@ -1,0 +1,2577 @@
+/* src/components/AdminDigiBridgeStudentApplications/adminDigiBridgeStudentApplications.css */
+
+/* ===============================
+   BASE STYLES - DESKTOP
+   =============================== */
+.adminStudentApplications {
+  padding: 2rem;
+  max-width: 1600px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+/* ===============================
+   LOADING STATE
+   =============================== */
+.adminStudentApplications-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  min-height: 500px;
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+.adminStudentApplications-spinner {
+  width: 56px;
+  height: 56px;
+  border: 4px solid #e5e7eb;
+  border-top-color: #6366f1;
+  border-radius: 50%;
+  animation: adminStudentApplications-spin 0.8s linear infinite;
+}
+
+@keyframes adminStudentApplications-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===============================
+   HEADER - DESKTOP
+   =============================== */
+.adminStudentApplications-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.adminStudentApplications-headerLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.adminStudentApplications-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.adminStudentApplications-titleIcon {
+  font-size: 1.5rem;
+}
+
+.adminStudentApplications-subtitle {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.adminStudentApplications-headerRight {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.adminStudentApplications-refreshBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  color: #374151;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.adminStudentApplications-refreshBtn:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.adminStudentApplications-refreshBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.adminStudentApplications-refreshBtn--loading svg {
+  animation: adminStudentApplications-spin 1s linear infinite;
+}
+
+.adminStudentApplications-refreshBtn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ===============================
+   STATS - DESKTOP (4 КОЛОНИ)
+   =============================== */
+.adminStudentApplications-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.adminStudentApplications-statCard {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 1rem;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.adminStudentApplications-statCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  border-radius: 12px 0 0 12px;
+}
+
+.adminStudentApplications-statCard--total::before {
+  background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%);
+}
+
+.adminStudentApplications-statCard--pending::before {
+  background: linear-gradient(180deg, #f59e0b 0%, #d97706 100%);
+}
+
+.adminStudentApplications-statCard--approved::before {
+  background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+}
+
+.adminStudentApplications-statCard--rejected::before {
+  background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%);
+}
+
+.adminStudentApplications-statCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px -4px rgba(0, 0, 0, 0.1);
+}
+
+.adminStudentApplications-statIcon {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  font-size: 1.375rem;
+  flex-shrink: 0;
+}
+
+.adminStudentApplications-statCard--total .adminStudentApplications-statIcon {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+}
+
+.adminStudentApplications-statCard--pending .adminStudentApplications-statIcon {
+  background: linear-gradient(135deg, #fefce8 0%, #fef08a 100%);
+}
+
+.adminStudentApplications-statCard--approved .adminStudentApplications-statIcon {
+  background: linear-gradient(135deg, #ecfdf5 0%, #a7f3d0 100%);
+}
+
+.adminStudentApplications-statCard--rejected .adminStudentApplications-statIcon {
+  background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+}
+
+.adminStudentApplications-statInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 0;
+}
+
+.adminStudentApplications-statValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.2;
+}
+
+.adminStudentApplications-statLabel {
+  font-size: 0.7rem;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ===============================
+   TABS - DESKTOP (HORIZONTAL)
+   =============================== */
+.adminStudentApplications-tabs {
+  display: flex;
+  flex-direction: row;
+  gap: 0.375rem;
+  margin-bottom: 1.5rem;
+  background: #ffffff;
+  padding: 0.375rem;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e7eb;
+}
+
+.adminStudentApplications-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: #6b7280;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.adminStudentApplications-tab:hover {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.adminStudentApplications-tab--active {
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+}
+
+.adminStudentApplications-tab--active:hover {
+  background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+  color: #ffffff;
+}
+
+.adminStudentApplications-tabIcon {
+  font-size: 1rem;
+  display: inline;
+}
+
+.adminStudentApplications-tabBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  color: #78350f;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: 10px;
+}
+
+.adminStudentApplications-tab--active .adminStudentApplications-tabBadge {
+  background: #ffffff;
+  color: #6366f1;
+}
+
+/* ===============================
+   CONTENT WRAPPER
+   =============================== */
+.adminStudentApplications-content {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+}
+
+/* ===============================
+   CHARTS - DESKTOP (2 КОЛОНИ)
+   =============================== */
+.adminStudentApplications-charts {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  padding: 1.25rem;
+  border-bottom: 1px solid #e5e7eb;
+  background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+}
+
+.adminStudentApplications-chartCard {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  min-width: 0;
+}
+
+.adminStudentApplications-chartCard:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.adminStudentApplications-chartTitle {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 1rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* ===============================
+   FILTERS - DESKTOP
+   =============================== */
+.adminStudentApplications-filtersWrapper {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #e5e7eb;
+  background: #fafafa;
+}
+
+.adminStudentApplications-filters {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.adminStudentApplications-filterGroup {
+  display: flex;
+  align-items: center;
+}
+
+.adminStudentApplications-searchInput {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 0.875rem;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  min-width: 240px;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.adminStudentApplications-searchInput:focus-within {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.adminStudentApplications-searchInput svg {
+  color: #9ca3af;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+}
+
+.adminStudentApplications-searchInput input {
+  flex: 1;
+  padding: 0.625rem 0;
+  border: none;
+  background: transparent;
+  font-size: 0.875rem;
+  color: #111827;
+  outline: none;
+}
+
+.adminStudentApplications-searchInput input::placeholder {
+  color: #9ca3af;
+}
+
+.adminStudentApplications-select {
+  padding: 0.625rem 2rem 0.625rem 0.875rem;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  color: #374151;
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.625rem center;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  min-width: 140px;
+}
+
+.adminStudentApplications-select:hover {
+  border-color: #d1d5db;
+}
+
+.adminStudentApplications-select:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.adminStudentApplications-clearFiltersBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.625rem 0.875rem;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 10px;
+  color: #dc2626;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.adminStudentApplications-clearFiltersBtn:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+}
+
+.adminStudentApplications-clearFiltersBtn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.adminStudentApplications-resultsCount {
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* ===============================
+   TABLE WRAPPER
+   =============================== */
+.adminStudentApplications-tableWrapper {
+  overflow-x: auto;
+}
+
+/* ===============================
+   DESKTOP TABLE - VISIBLE BY DEFAULT
+   =============================== */
+.adminStudentApplications-desktopView {
+  display: block;
+}
+
+.adminStudentApplications-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.adminStudentApplications-table th {
+  padding: 0.875rem 1rem;
+  text-align: left;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: #f9fafb;
+  border-bottom: 2px solid #e5e7eb;
+  white-space: nowrap;
+}
+
+.adminStudentApplications-table td {
+  padding: 0.875rem 1rem;
+  border-bottom: 1px solid #f3f4f6;
+  vertical-align: middle;
+}
+
+.adminStudentApplications-table tbody tr {
+  transition: all 0.2s ease;
+}
+
+.adminStudentApplications-table tbody tr:hover {
+  background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+}
+
+.adminStudentApplications-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ===============================
+   MOBILE CARDS - HIDDEN BY DEFAULT
+   =============================== */
+.adminStudentApplications-mobileView {
+  display: none;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 0.75rem;
+}
+
+.adminStudentApplications-appCard {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.adminStudentApplications-appCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.adminStudentApplications-appCardStudent {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.adminStudentApplications-appCardInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.adminStudentApplications-appCardName {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1f2937;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.adminStudentApplications-appCardEmail {
+  font-size: 0.75rem;
+  color: #6b7280;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.adminStudentApplications-appCardBody {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem 1rem;
+  padding: 0.75rem 0;
+  border-top: 1px solid #f3f4f6;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.adminStudentApplications-appCardRow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.adminStudentApplications-appCardLabel {
+  font-size: 0.65rem;
+  color: #9ca3af;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.adminStudentApplications-appCardValue {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.adminStudentApplications-appCardMentor {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.adminStudentApplications-appCardMentorAvatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.adminStudentApplications-appCardMentorAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.adminStudentApplications-appCardMentorAvatar span {
+  font-size: 0.6rem;
+  font-weight: 600;
+  color: white;
+}
+
+.adminStudentApplications-appCardMentorName {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #1f2937;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ===============================
+   CARD ACTIONS
+   =============================== */
+.adminStudentApplications-appCardActions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.adminStudentApplications-appCardBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  flex: 1;
+  padding: 0.625rem 0.5rem;
+  background: transparent;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+.adminStudentApplications-appCardBtn svg {
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+}
+
+.adminStudentApplications-appCardBtn--view:hover {
+  border-color: #6b7280;
+  color: #374151;
+  background: #f9fafb;
+}
+
+.adminStudentApplications-appCardBtn--approve {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  border-color: #a7f3d0;
+  color: #059669;
+}
+
+.adminStudentApplications-appCardBtn--approve:hover {
+  background: linear-gradient(135deg, #a7f3d0 0%, #6ee7b7 100%);
+}
+
+.adminStudentApplications-appCardBtn--reject {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  border-color: #fecaca;
+  color: #dc2626;
+}
+
+.adminStudentApplications-appCardBtn--reject:hover {
+  background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%);
+}
+
+.adminStudentApplications-appCardBtn--reapprove {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  border-color: #bfdbfe;
+  color: #2563eb;
+}
+
+.adminStudentApplications-appCardBtn--reapprove:hover {
+  background: linear-gradient(135deg, #bfdbfe 0%, #93c5fd 100%);
+}
+
+.adminStudentApplications-appCardBtn--delete {
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  border-color: #fee2e2;
+  color: #ef4444;
+}
+
+.adminStudentApplications-appCardBtn--delete:hover {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+}
+
+/* ===============================
+   USER CELL
+   =============================== */
+.adminStudentApplications-userCell {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.adminStudentApplications-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(99, 102, 241, 0.25);
+}
+
+.adminStudentApplications-avatar--mentor {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.25);
+}
+
+.adminStudentApplications-avatar--large {
+  width: 64px;
+  height: 64px;
+}
+
+.adminStudentApplications-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.adminStudentApplications-avatar span {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.adminStudentApplications-avatar--large span {
+  font-size: 1.5rem;
+}
+
+.adminStudentApplications-userInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 0;
+}
+
+.adminStudentApplications-userName {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.adminStudentApplications-userEmail {
+  font-size: 0.75rem;
+  color: #6b7280;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ===============================
+   STATUS BADGE
+   =============================== */
+.adminStudentApplications-statusBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.375rem 0.75rem;
+  border-radius: 16px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  white-space: nowrap;
+}
+
+.adminStudentApplications-statusBadge--pending {
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  color: #92400e;
+}
+
+.adminStudentApplications-statusBadge--approved {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  color: #065f46;
+}
+
+.adminStudentApplications-statusBadge--rejected {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  color: #991b1b;
+}
+
+.adminStudentApplications-statusBadge--small {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.6rem;
+  border-radius: 10px;
+}
+
+/* ===============================
+   DATE
+   =============================== */
+.adminStudentApplications-date {
+  font-size: 0.8rem;
+  color: #6b7280;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* ===============================
+   ACTIONS
+   =============================== */
+.adminStudentApplications-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.adminStudentApplications-actionBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.adminStudentApplications-actionBtn:active {
+  transform: scale(0.95);
+}
+
+.adminStudentApplications-actionBtn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.adminStudentApplications-actionBtn--view {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.adminStudentApplications-actionBtn--view:hover {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.adminStudentApplications-actionBtn--approve {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  color: #059669;
+}
+
+.adminStudentApplications-actionBtn--approve:hover {
+  background: linear-gradient(135deg, #a7f3d0 0%, #6ee7b7 100%);
+}
+
+.adminStudentApplications-actionBtn--reject {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  color: #dc2626;
+}
+
+.adminStudentApplications-actionBtn--reject:hover {
+  background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%);
+}
+
+.adminStudentApplications-actionBtn--reapprove {
+  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+  color: #2563eb;
+}
+
+.adminStudentApplications-actionBtn--reapprove:hover {
+  background: linear-gradient(135deg, #bfdbfe 0%, #93c5fd 100%);
+}
+
+.adminStudentApplications-actionBtn--delete {
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  color: #ef4444;
+}
+
+.adminStudentApplications-actionBtn--delete:hover {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+}
+
+/* ===============================
+   EMPTY STATE
+   =============================== */
+.adminStudentApplications-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 4rem 2rem;
+  color: #9ca3af;
+}
+
+.adminStudentApplications-empty svg {
+  width: 56px;
+  height: 56px;
+  color: #d1d5db;
+  opacity: 0.8;
+}
+
+.adminStudentApplications-empty span {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* ===============================
+   MODAL
+   =============================== */
+.adminStudentApplications-modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  backdrop-filter: blur(4px);
+  animation: adminStudentApplications-fadeIn 0.2s ease;
+}
+
+@keyframes adminStudentApplications-fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.adminStudentApplications-modal {
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: adminStudentApplications-slideUp 0.3s ease;
+}
+
+@keyframes adminStudentApplications-slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.adminStudentApplications-modal--view {
+  max-width: 580px;
+}
+
+.adminStudentApplications-modalHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+}
+
+.adminStudentApplications-modalHeader h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.adminStudentApplications-modalClose {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.adminStudentApplications-modalClose:hover {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.adminStudentApplications-modalClose svg {
+  width: 18px;
+  height: 18px;
+}
+
+.adminStudentApplications-modalBody {
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.adminStudentApplications-modalFooter {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid #e5e7eb;
+  background: #f9fafb;
+}
+
+/* ===============================
+   VIEW MODAL
+   =============================== */
+.adminStudentApplications-viewSection {
+  margin-bottom: 1.5rem;
+}
+
+.adminStudentApplications-viewSection:last-child {
+  margin-bottom: 0;
+}
+
+.adminStudentApplications-viewSection h3 {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.075em;
+  margin: 0 0 0.875rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.adminStudentApplications-viewRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.adminStudentApplications-viewDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.adminStudentApplications-viewDetails p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #374151;
+  line-height: 1.5;
+}
+
+.adminStudentApplications-viewDetails strong {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.adminStudentApplications-viewGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.adminStudentApplications-viewGrid p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.adminStudentApplications-viewGrid strong {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.adminStudentApplications-rejectionReason {
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 0.25rem !important;
+  padding: 0.875rem;
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+  border-radius: 10px;
+  margin-top: 0.625rem;
+  border: 1px solid #fecaca;
+}
+
+.adminStudentApplications-rejectionReason span {
+  color: #991b1b;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+/* ===============================
+   CONFIRM MODAL
+   =============================== */
+.adminStudentApplications-confirmIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin: 0 auto 1.5rem;
+}
+
+.adminStudentApplications-confirmIcon--approve {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  color: #059669;
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.25);
+}
+
+.adminStudentApplications-confirmIcon--delete {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  color: #dc2626;
+  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.25);
+}
+
+.adminStudentApplications-confirmIcon svg {
+  width: 40px;
+  height: 40px;
+}
+
+.adminStudentApplications-confirmText {
+  text-align: center;
+  font-size: 1rem;
+  color: #374151;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.6;
+}
+
+.adminStudentApplications-warningText {
+  text-align: center;
+  font-size: 0.85rem;
+  color: #dc2626;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* ===============================
+   REJECT MODAL FORM
+   =============================== */
+.adminStudentApplications-rejectInfo {
+  font-size: 0.95rem;
+  color: #374151;
+  margin: 0 0 1.25rem 0;
+  line-height: 1.6;
+}
+
+.adminStudentApplications-formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.adminStudentApplications-formGroup label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.adminStudentApplications-formGroup textarea {
+  padding: 0.875rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  color: #111827;
+  resize: vertical;
+  min-height: 100px;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  line-height: 1.5;
+}
+
+.adminStudentApplications-formGroup textarea:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.adminStudentApplications-formGroup textarea::placeholder {
+  color: #9ca3af;
+}
+
+.adminStudentApplications-textarea--error {
+  border-color: #ef4444 !important;
+}
+
+.adminStudentApplications-textarea--error:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15) !important;
+}
+
+.adminStudentApplications-error {
+  font-size: 0.8rem;
+  color: #ef4444;
+  font-weight: 500;
+}
+
+/* ===============================
+   BUTTONS
+   =============================== */
+.adminStudentApplications-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.adminStudentApplications-btn:active {
+  transform: scale(0.98);
+}
+
+.adminStudentApplications-btn--secondary {
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+}
+
+.adminStudentApplications-btn--secondary:hover {
+  background: #e5e7eb;
+}
+
+.adminStudentApplications-btn--success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.adminStudentApplications-btn--success:hover {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+}
+
+.adminStudentApplications-btn--danger {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.adminStudentApplications-btn--danger:hover {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+}
+
+/* ===============================
+   RESPONSIVE - max-width: 1200px
+   Charts 1 колона, Stats по-компактни
+   =============================== */
+@media (max-width: 1200px) {
+  .adminStudentApplications {
+    padding: 1.5rem;
+  }
+  
+  .adminStudentApplications-header {
+    margin-bottom: 1.5rem;
+  }
+  
+  .adminStudentApplications-title {
+    font-size: 1.5rem;
+    gap: 0.625rem;
+  }
+  
+  .adminStudentApplications-titleIcon {
+    font-size: 1.375rem;
+  }
+  
+  .adminStudentApplications-stats {
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .adminStudentApplications-statCard {
+    padding: 0.875rem;
+    gap: 0.75rem;
+  }
+  
+  .adminStudentApplications-statIcon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.25rem;
+    border-radius: 8px;
+  }
+  
+  .adminStudentApplications-statValue {
+    font-size: 1.375rem;
+  }
+  
+  .adminStudentApplications-statLabel {
+    font-size: 0.65rem;
+  }
+  
+  /* Charts: 1 колона */
+  .adminStudentApplications-charts {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+    gap: 0.875rem;
+  }
+  
+  .adminStudentApplications-tabs {
+    gap: 0.25rem;
+    padding: 0.25rem;
+    margin-bottom: 1.25rem;
+  }
+  
+  .adminStudentApplications-tab {
+    padding: 0.5rem 0.875rem;
+    font-size: 0.8rem;
+    gap: 0.375rem;
+  }
+  
+  .adminStudentApplications-tabIcon {
+    font-size: 0.9rem;
+  }
+  
+  .adminStudentApplications-filtersWrapper {
+    padding: 0.875rem 1rem;
+  }
+  
+  .adminStudentApplications-searchInput {
+    min-width: 200px;
+  }
+  
+  .adminStudentApplications-select {
+    min-width: 120px;
+  }
+}
+
+/* ===============================
+   RESPONSIVE - max-width: 1024px
+   Stats 2x2, показваме cards
+   =============================== */
+@media (max-width: 1024px) {
+  .adminStudentApplications {
+    padding: 1.25rem;
+  }
+  
+  .adminStudentApplications-header {
+    margin-bottom: 1.25rem;
+  }
+  
+  .adminStudentApplications-title {
+    font-size: 1.375rem;
+  }
+  
+  .adminStudentApplications-subtitle {
+    font-size: 0.8rem;
+  }
+  
+  /* Stats: 2 колони */
+  .adminStudentApplications-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.625rem;
+    margin-bottom: 1.25rem;
+  }
+  
+  .adminStudentApplications-statCard {
+    padding: 0.75rem;
+    gap: 0.625rem;
+    border-radius: 10px;
+  }
+  
+  .adminStudentApplications-statIcon {
+    width: 36px;
+    height: 36px;
+    font-size: 1.125rem;
+  }
+  
+  .adminStudentApplications-statValue {
+    font-size: 1.25rem;
+  }
+  
+  .adminStudentApplications-tabs {
+    margin-bottom: 1rem;
+  }
+  
+  .adminStudentApplications-tab {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+  }
+  
+  .adminStudentApplications-content {
+    border-radius: 12px;
+  }
+  
+  .adminStudentApplications-charts {
+    padding: 0.875rem;
+    gap: 0.75rem;
+  }
+  
+  .adminStudentApplications-chartCard {
+    padding: 0.875rem;
+    border-radius: 10px;
+  }
+  
+  .adminStudentApplications-chartTitle {
+    font-size: 0.875rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  /* Desktop table hidden, Mobile cards visible */
+  .adminStudentApplications-desktopView {
+    display: none;
+  }
+  
+  .adminStudentApplications-mobileView {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.625rem;
+    padding: 0.875rem;
+  }
+  
+  .adminStudentApplications-appCard {
+    padding: 0.875rem;
+    border-radius: 10px;
+    gap: 0.625rem;
+  }
+  
+  .adminStudentApplications-appCardBody {
+    grid-template-columns: 1fr;
+  }
+  
+  .adminStudentApplications-filtersWrapper {
+    padding: 0.75rem;
+  }
+  
+  .adminStudentApplications-filters {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .adminStudentApplications-filterGroup {
+    flex: 1;
+    min-width: calc(50% - 0.25rem);
+  }
+  
+  .adminStudentApplications-searchInput {
+    min-width: 100%;
+    order: -1;
+    flex: auto;
+  }
+  
+  .adminStudentApplications-select {
+    width: 100%;
+    min-width: unset;
+  }
+  
+  .adminStudentApplications-clearFiltersBtn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ===============================
+   RESPONSIVE - max-width: 768px
+   =============================== */
+@media (max-width: 768px) {
+  .adminStudentApplications {
+    padding: 1rem;
+  }
+  
+  .adminStudentApplications-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  
+  .adminStudentApplications-headerRight {
+    justify-content: flex-start;
+  }
+  
+  .adminStudentApplications-title {
+    font-size: 1.25rem;
+    gap: 0.5rem;
+  }
+  
+  .adminStudentApplications-titleIcon {
+    font-size: 1.25rem;
+  }
+  
+  .adminStudentApplications-subtitle {
+    font-size: 0.75rem;
+  }
+  
+  .adminStudentApplications-refreshBtn {
+    padding: 0.5rem 0.875rem;
+    font-size: 0.8rem;
+    border-radius: 8px;
+  }
+  
+  .adminStudentApplications-refreshBtn svg {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .adminStudentApplications-stats {
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .adminStudentApplications-statCard {
+    padding: 0.625rem;
+    gap: 0.5rem;
+    border-radius: 8px;
+  }
+  
+  .adminStudentApplications-statCard::before {
+    width: 3px;
+  }
+  
+  .adminStudentApplications-statIcon {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+    border-radius: 6px;
+  }
+  
+  .adminStudentApplications-statValue {
+    font-size: 1.125rem;
+  }
+  
+  .adminStudentApplications-statLabel {
+    font-size: 0.6rem;
+  }
+  
+  .adminStudentApplications-tabs {
+    padding: 0.25rem;
+    gap: 0.1875rem;
+    border-radius: 8px;
+    margin-bottom: 0.875rem;
+  }
+  
+  .adminStudentApplications-tab {
+    padding: 0.4375rem 0.625rem;
+    font-size: 0.7rem;
+    border-radius: 6px;
+  }
+  
+  .adminStudentApplications-tabIcon {
+    font-size: 0.8rem;
+  }
+  
+  .adminStudentApplications-tabBadge {
+    min-width: 16px;
+    height: 16px;
+    font-size: 0.6rem;
+    padding: 0 4px;
+  }
+  
+  .adminStudentApplications-content {
+    border-radius: 10px;
+  }
+  
+  .adminStudentApplications-charts {
+    padding: 0.75rem;
+    gap: 0.625rem;
+  }
+  
+  .adminStudentApplications-chartCard {
+    padding: 0.75rem;
+    border-radius: 8px;
+  }
+  
+  .adminStudentApplications-chartTitle {
+    font-size: 0.8rem;
+    margin-bottom: 0.625rem;
+  }
+  
+  .adminStudentApplications-filtersWrapper {
+    padding: 0.625rem;
+  }
+  
+  .adminStudentApplications-filters {
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+  
+  .adminStudentApplications-filterGroup {
+    width: 100%;
+    min-width: unset;
+  }
+  
+  .adminStudentApplications-searchInput {
+    border-radius: 6px;
+    padding: 0 0.5rem;
+  }
+  
+  .adminStudentApplications-searchInput svg {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .adminStudentApplications-searchInput input {
+    padding: 0.4375rem 0;
+    font-size: 0.8rem;
+  }
+  
+  .adminStudentApplications-select {
+    padding: 0.4375rem 1.75rem 0.4375rem 0.625rem;
+    font-size: 0.8rem;
+    border-radius: 6px;
+  }
+  
+  .adminStudentApplications-clearFiltersBtn {
+    padding: 0.4375rem 0.625rem;
+    font-size: 0.75rem;
+    border-radius: 6px;
+  }
+  
+  .adminStudentApplications-resultsCount {
+    font-size: 0.75rem;
+    margin-top: 0.375rem;
+  }
+  
+  /* Cards: 1 колона */
+  .adminStudentApplications-mobileView {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    padding: 0.625rem;
+  }
+  
+  .adminStudentApplications-appCard {
+    padding: 0.75rem;
+    gap: 0.5rem;
+  }
+  
+  .adminStudentApplications-appCardHeader {
+    gap: 0.5rem;
+  }
+  
+  .adminStudentApplications-appCardStudent {
+    gap: 0.5rem;
+  }
+  
+  .adminStudentApplications-avatar {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .adminStudentApplications-avatar span {
+    font-size: 0.8rem;
+  }
+  
+  .adminStudentApplications-appCardName {
+    font-size: 0.8rem;
+  }
+  
+  .adminStudentApplications-appCardEmail {
+    font-size: 0.65rem;
+  }
+  
+  .adminStudentApplications-appCardBody {
+    grid-template-columns: 1fr 1fr;
+    padding: 0.5rem 0;
+    gap: 0.375rem 0.625rem;
+  }
+  
+  .adminStudentApplications-appCardRow {
+    flex-direction: column;
+  }
+  
+  .adminStudentApplications-appCardLabel {
+    font-size: 0.55rem;
+  }
+  
+  .adminStudentApplications-appCardValue {
+    font-size: 0.7rem;
+  }
+  
+  .adminStudentApplications-appCardMentorAvatar {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .adminStudentApplications-appCardMentorAvatar span {
+    font-size: 0.45rem;
+  }
+  
+  .adminStudentApplications-appCardMentorName {
+    font-size: 0.7rem;
+  }
+  
+  .adminStudentApplications-appCardActions {
+    gap: 0.375rem;
+  }
+  
+  .adminStudentApplications-appCardBtn {
+    padding: 0.4375rem 0.375rem;
+    font-size: 0.6rem;
+    gap: 0.25rem;
+    border-radius: 6px;
+  }
+  
+  .adminStudentApplications-appCardBtn svg {
+    width: 12px;
+    height: 12px;
+  }
+  
+  .adminStudentApplications-statusBadge--small {
+    padding: 0.1875rem 0.375rem;
+    font-size: 0.55rem;
+  }
+  
+  .adminStudentApplications-modalOverlay {
+    padding: 0.5rem;
+  }
+  
+  .adminStudentApplications-modal {
+    border-radius: 12px;
+    max-height: 95vh;
+  }
+  
+  .adminStudentApplications-modalHeader {
+    padding: 1rem;
+  }
+  
+  .adminStudentApplications-modalHeader h2 {
+    font-size: 1.125rem;
+  }
+  
+  .adminStudentApplications-modalClose {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .adminStudentApplications-modalClose svg {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .adminStudentApplications-modalBody {
+    padding: 1rem;
+  }
+  
+  .adminStudentApplications-modalFooter {
+    padding: 1rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .adminStudentApplications-btn {
+    width: 100%;
+  }
+  
+  .adminStudentApplications-viewSection {
+    margin-bottom: 1rem;
+  }
+  
+  .adminStudentApplications-viewSection h3 {
+    font-size: 0.7rem;
+    margin-bottom: 0.625rem;
+  }
+  
+  .adminStudentApplications-viewDetails p {
+    font-size: 0.8rem;
+  }
+  
+  .adminStudentApplications-avatar--large {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .adminStudentApplications-avatar--large span {
+    font-size: 1.25rem;
+  }
+  
+  .adminStudentApplications-confirmIcon {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 1rem;
+  }
+  
+  .adminStudentApplications-confirmIcon svg {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .adminStudentApplications-confirmText {
+    font-size: 0.9rem;
+  }
+  
+  .adminStudentApplications-warningText {
+    font-size: 0.8rem;
+  }
+  
+  .adminStudentApplications-rejectInfo {
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+  }
+  
+  .adminStudentApplications-formGroup label {
+    font-size: 0.8rem;
+  }
+  
+  .adminStudentApplications-formGroup textarea {
+    padding: 0.625rem;
+    font-size: 0.85rem;
+    min-height: 90px;
+    border-radius: 8px;
+  }
+  
+  .adminStudentApplications-error {
+    font-size: 0.75rem;
+  }
+  
+  .adminStudentApplications-btn {
+    padding: 0.625rem 1rem;
+    font-size: 0.8rem;
+    border-radius: 8px;
+  }
+  
+  .adminStudentApplications-empty {
+    padding: 2.5rem 1rem;
+    gap: 0.75rem;
+  }
+  
+  .adminStudentApplications-empty svg {
+    width: 44px;
+    height: 44px;
+  }
+  
+  .adminStudentApplications-empty span {
+    font-size: 0.8rem;
+  }
+}
+
+/* ===============================
+   RESPONSIVE - max-width: 480px
+   TABS VERTICAL
+   =============================== */
+@media (max-width: 480px) {
+  .adminStudentApplications {
+    padding: 0.75rem;
+  }
+  
+  .adminStudentApplications-header {
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .adminStudentApplications-title {
+    font-size: 1.125rem;
+    gap: 0.375rem;
+  }
+  
+  .adminStudentApplications-titleIcon {
+    font-size: 1rem;
+  }
+  
+  .adminStudentApplications-subtitle {
+    font-size: 0.7rem;
+  }
+  
+  .adminStudentApplications-refreshBtn {
+    padding: 0.375rem 0.625rem;
+    font-size: 0.75rem;
+  }
+  
+  .adminStudentApplications-refreshBtn svg {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .adminStudentApplications-stats {
+    gap: 0.375rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .adminStudentApplications-statCard {
+    padding: 0.5rem;
+    gap: 0.375rem;
+    border-radius: 6px;
+  }
+  
+  .adminStudentApplications-statIcon {
+    width: 28px;
+    height: 28px;
+    font-size: 0.875rem;
+  }
+  
+  .adminStudentApplications-statValue {
+    font-size: 1rem;
+  }
+  
+  .adminStudentApplications-statLabel {
+    font-size: 0.55rem;
+  }
+  
+  /* TABS VERTICAL */
+  .adminStudentApplications-tabs {
+    flex-direction: column;
+    padding: 0.1875rem;
+    gap: 0.125rem;
+    border-radius: 6px;
+    margin-bottom: 0.75rem;
+  }
+  
+  .adminStudentApplications-tab {
+    padding: 0.375rem 0.5rem;
+    font-size: 0.65rem;
+    border-radius: 4px;
+    justify-content: flex-start;
+  }
+  
+  .adminStudentApplications-tabIcon {
+    font-size: 0.75rem;
+  }
+  
+  .adminStudentApplications-tabBadge {
+    min-width: 14px;
+    height: 14px;
+    font-size: 0.55rem;
+    padding: 0 3px;
+    margin-left: auto;
+  }
+  
+  .adminStudentApplications-content {
+    border-radius: 8px;
+  }
+  
+  .adminStudentApplications-charts {
+    padding: 0.5rem;
+    gap: 0.5rem;
+  }
+  
+  .adminStudentApplications-chartCard {
+    padding: 0.5rem;
+    border-radius: 6px;
+  }
+  
+  .adminStudentApplications-chartTitle {
+    font-size: 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .adminStudentApplications-filtersWrapper {
+    padding: 0.5rem;
+  }
+  
+  .adminStudentApplications-filters {
+    gap: 0.25rem;
+  }
+  
+  .adminStudentApplications-searchInput {
+    border-radius: 4px;
+    padding: 0 0.375rem;
+  }
+  
+  .adminStudentApplications-searchInput svg {
+    width: 12px;
+    height: 12px;
+  }
+  
+  .adminStudentApplications-searchInput input {
+    padding: 0.375rem 0;
+    font-size: 0.75rem;
+  }
+  
+  .adminStudentApplications-select {
+    padding: 0.375rem 1.5rem 0.375rem 0.5rem;
+    font-size: 0.75rem;
+    border-radius: 4px;
+  }
+  
+  .adminStudentApplications-clearFiltersBtn {
+    padding: 0.375rem 0.5rem;
+    font-size: 0.7rem;
+    border-radius: 4px;
+  }
+  
+  .adminStudentApplications-resultsCount {
+    font-size: 0.7rem;
+  }
+  
+  .adminStudentApplications-mobileView {
+    gap: 0.375rem;
+    padding: 0.5rem;
+  }
+  
+  .adminStudentApplications-appCard {
+    padding: 0.5rem;
+    gap: 0.375rem;
+    border-radius: 6px;
+  }
+  
+  .adminStudentApplications-appCardHeader {
+    gap: 0.375rem;
+  }
+  
+  .adminStudentApplications-appCardStudent {
+    gap: 0.375rem;
+  }
+  
+  .adminStudentApplications-avatar {
+    width: 26px;
+    height: 26px;
+  }
+  
+  .adminStudentApplications-avatar span {
+    font-size: 0.7rem;
+  }
+  
+  .adminStudentApplications-appCardName {
+    font-size: 0.75rem;
+  }
+  
+  .adminStudentApplications-appCardEmail {
+    font-size: 0.6rem;
+  }
+  
+  .adminStudentApplications-appCardBody {
+    grid-template-columns: 1fr;
+    padding: 0.375rem 0;
+    gap: 0.25rem;
+  }
+  
+  .adminStudentApplications-appCardRow {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .adminStudentApplications-appCardLabel {
+    font-size: 0.5rem;
+  }
+  
+  .adminStudentApplications-appCardValue {
+    font-size: 0.65rem;
+  }
+  
+  .adminStudentApplications-appCardMentorAvatar {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .adminStudentApplications-appCardMentorName {
+    font-size: 0.65rem;
+  }
+  
+  .adminStudentApplications-appCardActions {
+    gap: 0.25rem;
+  }
+  
+  /* Buttons: ICON ONLY */
+  .adminStudentApplications-appCardBtn {
+    padding: 0.375rem;
+    font-size: 0;
+    border-radius: 4px;
+    min-width: 28px;
+  }
+  
+  .adminStudentApplications-appCardBtn svg {
+    width: 12px;
+    height: 12px;
+  }
+  
+  .adminStudentApplications-statusBadge--small {
+    padding: 0.125rem 0.25rem;
+    font-size: 0.5rem;
+  }
+  
+  .adminStudentApplications-modalOverlay {
+    padding: 0.375rem;
+  }
+  
+  .adminStudentApplications-modal {
+    border-radius: 10px;
+  }
+  
+  .adminStudentApplications-modalHeader {
+    padding: 0.75rem;
+  }
+  
+  .adminStudentApplications-modalHeader h2 {
+    font-size: 1rem;
+  }
+  
+  .adminStudentApplications-modalClose {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+  }
+  
+  .adminStudentApplications-modalClose svg {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .adminStudentApplications-modalBody {
+    padding: 0.75rem;
+  }
+  
+  .adminStudentApplications-modalFooter {
+    padding: 0.75rem;
+    gap: 0.375rem;
+  }
+  
+  .adminStudentApplications-viewSection {
+    margin-bottom: 0.75rem;
+  }
+  
+  .adminStudentApplications-viewSection h3 {
+    font-size: 0.65rem;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.25rem;
+  }
+  
+  .adminStudentApplications-viewRow {
+    gap: 0.5rem;
+  }
+  
+  .adminStudentApplications-viewDetails p {
+    font-size: 0.75rem;
+  }
+  
+  .adminStudentApplications-avatar--large {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .adminStudentApplications-avatar--large span {
+    font-size: 1rem;
+  }
+  
+  .adminStudentApplications-rejectionReason {
+    padding: 0.5rem;
+    border-radius: 6px;
+  }
+  
+  .adminStudentApplications-confirmIcon {
+    width: 56px;
+    height: 56px;
+    margin-bottom: 0.75rem;
+  }
+  
+  .adminStudentApplications-confirmIcon svg {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .adminStudentApplications-confirmText {
+    font-size: 0.85rem;
+  }
+  
+  .adminStudentApplications-warningText {
+    font-size: 0.75rem;
+  }
+  
+  .adminStudentApplications-rejectInfo {
+    font-size: 0.8rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .adminStudentApplications-formGroup label {
+    font-size: 0.75rem;
+  }
+  
+  .adminStudentApplications-formGroup textarea {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+    min-height: 80px;
+    border-radius: 6px;
+  }
+  
+  .adminStudentApplications-error {
+    font-size: 0.7rem;
+  }
+  
+  .adminStudentApplications-btn {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+    border-radius: 6px;
+  }
+  
+  .adminStudentApplications-empty {
+    padding: 2rem 0.5rem;
+    gap: 0.5rem;
+  }
+  
+  .adminStudentApplications-empty svg {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .adminStudentApplications-empty span {
+    font-size: 0.75rem;
+  }
+}
+
+/* ===============================
+   RESPONSIVE - max-width: 374px
+   Stats 1 колона
+   =============================== */
+@media (max-width: 374px) {
+  .adminStudentApplications {
+    padding: 0.5rem;
+  }
+  
+  .adminStudentApplications-header {
+    gap: 0.375rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .adminStudentApplications-title {
+    font-size: 1rem;
+    gap: 0.25rem;
+  }
+  
+  .adminStudentApplications-titleIcon {
+    font-size: 0.9rem;
+  }
+  
+  .adminStudentApplications-subtitle {
+    font-size: 0.65rem;
+  }
+  
+  .adminStudentApplications-refreshBtn {
+    padding: 0.3125rem 0.5rem;
+    font-size: 0.7rem;
+  }
+  
+  .adminStudentApplications-refreshBtn svg {
+    width: 12px;
+    height: 12px;
+  }
+  
+  /* Stats: 1 колона */
+  .adminStudentApplications-stats {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .adminStudentApplications-statCard {
+    padding: 0.4375rem 0.5rem;
+    gap: 0.375rem;
+  }
+  
+  .adminStudentApplications-statIcon {
+    width: 24px;
+    height: 24px;
+    font-size: 0.75rem;
+  }
+  
+  .adminStudentApplications-statValue {
+    font-size: 0.875rem;
+  }
+  
+  .adminStudentApplications-statLabel {
+    font-size: 0.5rem;
+  }
+  
+  .adminStudentApplications-tabs {
+    padding: 0.125rem;
+    gap: 0.0625rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .adminStudentApplications-tab {
+    padding: 0.3125rem 0.375rem;
+    font-size: 0.6rem;
+  }
+  
+  .adminStudentApplications-tabIcon {
+    font-size: 0.7rem;
+  }
+  
+  .adminStudentApplications-tabBadge {
+    min-width: 12px;
+    height: 12px;
+    font-size: 0.5rem;
+    padding: 0 2px;
+  }
+  
+  .adminStudentApplications-content {
+    border-radius: 6px;
+  }
+  
+  .adminStudentApplications-charts {
+    padding: 0.375rem;
+    gap: 0.375rem;
+  }
+  
+  .adminStudentApplications-chartCard {
+    padding: 0.375rem;
+    border-radius: 4px;
+  }
+  
+  .adminStudentApplications-chartTitle {
+    font-size: 0.7rem;
+    margin-bottom: 0.375rem;
+  }
+  
+  .adminStudentApplications-filtersWrapper {
+    padding: 0.375rem;
+  }
+  
+  .adminStudentApplications-filters {
+    gap: 0.1875rem;
+  }
+  
+  .adminStudentApplications-searchInput input {
+    padding: 0.3125rem 0;
+    font-size: 0.7rem;
+  }
+  
+  .adminStudentApplications-select {
+    padding: 0.3125rem 1.25rem 0.3125rem 0.375rem;
+    font-size: 0.7rem;
+  }
+  
+  .adminStudentApplications-clearFiltersBtn {
+    padding: 0.3125rem 0.375rem;
+    font-size: 0.65rem;
+  }
+  
+  .adminStudentApplications-resultsCount {
+    font-size: 0.65rem;
+  }
+  
+  .adminStudentApplications-mobileView {
+    gap: 0.25rem;
+    padding: 0.375rem;
+  }
+  
+  .adminStudentApplications-appCard {
+    padding: 0.375rem;
+    gap: 0.25rem;
+    border-radius: 4px;
+  }
+  
+  .adminStudentApplications-avatar {
+    width: 22px;
+    height: 22px;
+  }
+  
+  .adminStudentApplications-avatar span {
+    font-size: 0.6rem;
+  }
+  
+  .adminStudentApplications-appCardName {
+    font-size: 0.7rem;
+  }
+  
+  .adminStudentApplications-appCardEmail {
+    font-size: 0.55rem;
+  }
+  
+  .adminStudentApplications-appCardBody {
+    padding: 0.25rem 0;
+    gap: 0.1875rem;
+  }
+  
+  .adminStudentApplications-appCardLabel {
+    font-size: 0.45rem;
+  }
+  
+  .adminStudentApplications-appCardValue {
+    font-size: 0.6rem;
+  }
+  
+  .adminStudentApplications-appCardMentorAvatar {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .adminStudentApplications-appCardMentorName {
+    font-size: 0.6rem;
+  }
+  
+  .adminStudentApplications-appCardActions {
+    gap: 0.1875rem;
+  }
+  
+  .adminStudentApplications-appCardBtn {
+    padding: 0.3125rem;
+    min-width: 24px;
+  }
+  
+  .adminStudentApplications-appCardBtn svg {
+    width: 10px;
+    height: 10px;
+  }
+  
+  .adminStudentApplications-statusBadge--small {
+    padding: 0.0625rem 0.1875rem;
+    font-size: 0.45rem;
+    border-radius: 4px;
+  }
+  
+  .adminStudentApplications-modalOverlay {
+    padding: 0.25rem;
+  }
+  
+  .adminStudentApplications-modal {
+    border-radius: 8px;
+  }
+  
+  .adminStudentApplications-modalHeader {
+    padding: 0.625rem;
+  }
+  
+  .adminStudentApplications-modalHeader h2 {
+    font-size: 0.9rem;
+  }
+  
+  .adminStudentApplications-modalClose {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .adminStudentApplications-modalClose svg {
+    width: 12px;
+    height: 12px;
+  }
+  
+  .adminStudentApplications-modalBody {
+    padding: 0.625rem;
+  }
+  
+  .adminStudentApplications-modalFooter {
+    padding: 0.625rem;
+    gap: 0.25rem;
+  }
+  
+  .adminStudentApplications-viewRow {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.375rem;
+  }
+  
+  .adminStudentApplications-viewDetails {
+    align-items: center;
+  }
+  
+  .adminStudentApplications-viewDetails p {
+    font-size: 0.7rem;
+  }
+  
+  .adminStudentApplications-viewGrid p {
+    font-size: 0.7rem;
+    justify-content: center;
+  }
+  
+  .adminStudentApplications-avatar--large {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .adminStudentApplications-avatar--large span {
+    font-size: 0.9rem;
+  }
+  
+  .adminStudentApplications-confirmIcon {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 0.625rem;
+  }
+  
+  .adminStudentApplications-confirmIcon svg {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .adminStudentApplications-confirmText {
+    font-size: 0.8rem;
+  }
+  
+  .adminStudentApplications-warningText {
+    font-size: 0.7rem;
+  }
+  
+  .adminStudentApplications-formGroup textarea {
+    padding: 0.375rem;
+    font-size: 0.75rem;
+    min-height: 70px;
+  }
+  
+  .adminStudentApplications-btn {
+    padding: 0.4375rem 0.625rem;
+    font-size: 0.7rem;
+  }
+  
+  .adminStudentApplications-empty {
+    padding: 1.5rem 0.375rem;
+  }
+  
+  .adminStudentApplications-empty svg {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .adminStudentApplications-empty span {
+    font-size: 0.7rem;
+  }
+}
+
+/* ===============================
+   PRINT STYLES
+   =============================== */
+@media print {
+  .adminStudentApplications {
+    padding: 0;
+    background: #ffffff;
+  }
+
+  .adminStudentApplications-refreshBtn,
+  .adminStudentApplications-tabs,
+  .adminStudentApplications-filters,
+  .adminStudentApplications-charts,
+  .adminStudentApplications-actions,
+  .adminStudentApplications-mobileView {
+    display: none !important;
+  }
+
+  .adminStudentApplications-desktopView {
+    display: block !important;
+  }
+
+  .adminStudentApplications-statCard {
+    box-shadow: none;
+    border: 1px solid #e5e7eb;
+  }
+
+  .adminStudentApplications-stats {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .adminStudentApplications-table {
+    font-size: 9pt;
+  }
+
+  .adminStudentApplications-table th,
+  .adminStudentApplications-table td {
+    padding: 6px 8px;
+  }
+}

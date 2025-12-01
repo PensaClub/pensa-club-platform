@@ -1,0 +1,562 @@
+/* src/components/AdminDigiBridgeStudents/AdminDgChangeMentorModal/adminDgChangeMentorModal.css */
+
+.adminDgChangeMentorModal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.adminDgChangeMentorModal-container {
+  background: #ffffff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 520px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  animation: adminDgChangeMentorModal-slideIn 0.3s ease-out;
+}
+
+@keyframes adminDgChangeMentorModal-slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Header */
+.adminDgChangeMentorModal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.adminDgChangeMentorModal-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0;
+}
+
+.adminDgChangeMentorModal-closeBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: #f3f4f6;
+  border-radius: 8px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.adminDgChangeMentorModal-closeBtn:hover:not(:disabled) {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.adminDgChangeMentorModal-closeBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Content */
+.adminDgChangeMentorModal-content {
+  padding: 1.5rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* Student Info */
+.adminDgChangeMentorModal-studentInfo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, #eff6ff 0%, #f5f3ff 100%);
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+
+.adminDgChangeMentorModal-studentAvatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.adminDgChangeMentorModal-studentAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.adminDgChangeMentorModal-avatarPlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: white;
+  font-weight: 600;
+  font-size: 1.125rem;
+}
+
+.adminDgChangeMentorModal-studentDetails {
+  flex: 1;
+  min-width: 0;
+}
+
+.adminDgChangeMentorModal-studentName {
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 0.25rem;
+}
+
+.adminDgChangeMentorModal-studentEmail {
+  font-size: 0.875rem;
+  color: #6b7280;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Current Mentor */
+.adminDgChangeMentorModal-currentMentor {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: #fef3c7;
+  border-radius: 8px;
+  border: 1px solid #fcd34d;
+}
+
+.adminDgChangeMentorModal-currentLabel {
+  font-size: 0.875rem;
+  color: #92400e;
+  font-weight: 500;
+}
+
+.adminDgChangeMentorModal-currentMentorCard {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.adminDgChangeMentorModal-currentMentorName {
+  font-weight: 600;
+  color: #92400e;
+}
+
+/* Search */
+.adminDgChangeMentorModal-search {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.adminDgChangeMentorModal-searchIcon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+.adminDgChangeMentorModal-searchInput {
+  width: 100%;
+  padding: 0.75rem 2.5rem 0.75rem 2.75rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 0.9375rem;
+  color: #111827;
+  background: #f9fafb;
+  transition: all 0.2s ease;
+}
+
+.adminDgChangeMentorModal-searchInput:focus {
+  outline: none;
+  border-color: #6366f1;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.adminDgChangeMentorModal-searchInput::placeholder {
+  color: #9ca3af;
+}
+
+.adminDgChangeMentorModal-clearSearch {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: #e5e7eb;
+  border-radius: 6px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.adminDgChangeMentorModal-clearSearch:hover {
+  background: #d1d5db;
+  color: #374151;
+}
+
+/* Mentors List */
+.adminDgChangeMentorModal-mentorsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 280px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.adminDgChangeMentorModal-mentorsList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.adminDgChangeMentorModal-mentorsList::-webkit-scrollbar-track {
+  background: #f3f4f6;
+  border-radius: 3px;
+}
+
+.adminDgChangeMentorModal-mentorsList::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+.adminDgChangeMentorModal-mentorsList::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Loading */
+.adminDgChangeMentorModal-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  gap: 1rem;
+  color: #6b7280;
+}
+
+.adminDgChangeMentorModal-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #6366f1;
+  border-radius: 50%;
+  animation: adminDgChangeMentorModal-spin 0.8s linear infinite;
+}
+
+@keyframes adminDgChangeMentorModal-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Empty */
+.adminDgChangeMentorModal-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  gap: 0.75rem;
+  color: #9ca3af;
+  text-align: center;
+}
+
+/* Mentor Card */
+.adminDgChangeMentorModal-mentorCard {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 0.875rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: #ffffff;
+}
+
+.adminDgChangeMentorModal-mentorCard:hover:not(.adminDgChangeMentorModal-mentorCard--current) {
+  border-color: #c7d2fe;
+  background: #f5f3ff;
+}
+
+.adminDgChangeMentorModal-mentorCard--selected {
+  border-color: #6366f1;
+  background: #eef2ff;
+}
+
+.adminDgChangeMentorModal-mentorCard--current {
+  border-color: #fcd34d;
+  background: #fffbeb;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.adminDgChangeMentorModal-mentorAvatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.adminDgChangeMentorModal-mentorAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.adminDgChangeMentorModal-mentorAvatarPlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.adminDgChangeMentorModal-mentorInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.adminDgChangeMentorModal-mentorName {
+  font-weight: 600;
+  color: #111827;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.adminDgChangeMentorModal-currentBadge {
+  display: inline-flex;
+  padding: 0.125rem 0.5rem;
+  background: #fcd34d;
+  color: #92400e;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+.adminDgChangeMentorModal-mentorMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.8125rem;
+  color: #6b7280;
+}
+
+.adminDgChangeMentorModal-specialization {
+  color: #8b5cf6;
+  font-weight: 500;
+}
+
+.adminDgChangeMentorModal-students {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.adminDgChangeMentorModal-checkmark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: #6366f1;
+  color: white;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Footer */
+.adminDgChangeMentorModal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid #e5e7eb;
+  background: #f9fafb;
+  border-radius: 0 0 16px 16px;
+}
+
+.adminDgChangeMentorModal-btnCancel {
+  padding: 0.625rem 1.25rem;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  color: #374151;
+  font-weight: 500;
+  font-size: 0.9375rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.adminDgChangeMentorModal-btnCancel:hover:not(:disabled) {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+}
+
+.adminDgChangeMentorModal-btnCancel:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.adminDgChangeMentorModal-btnAssign {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.5rem;
+  border: none;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: white;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.adminDgChangeMentorModal-btnAssign:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+}
+
+.adminDgChangeMentorModal-btnAssign:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.adminDgChangeMentorModal-btnSpinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: adminDgChangeMentorModal-spin 0.8s linear infinite;
+}
+
+/* ==================== RESPONSIVE ==================== */
+
+@media (max-width: 640px) {
+  .adminDgChangeMentorModal-overlay {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .adminDgChangeMentorModal-container {
+    max-width: 100%;
+    max-height: 90vh;
+    border-radius: 24px 24px 0 0;
+    animation: adminDgChangeMentorModal-slideUp 0.3s ease-out;
+  }
+
+  @keyframes adminDgChangeMentorModal-slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(100%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .adminDgChangeMentorModal-header {
+    padding: 1rem 1.25rem;
+  }
+
+  .adminDgChangeMentorModal-title {
+    font-size: 1.125rem;
+  }
+
+  .adminDgChangeMentorModal-content {
+    padding: 1.25rem;
+  }
+
+  .adminDgChangeMentorModal-studentInfo {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.25rem;
+  }
+
+  .adminDgChangeMentorModal-currentMentor {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.5rem;
+  }
+
+  .adminDgChangeMentorModal-mentorsList {
+    max-height: 220px;
+  }
+
+  .adminDgChangeMentorModal-footer {
+    padding: 1rem 1.25rem;
+    flex-direction: column;
+  }
+
+  .adminDgChangeMentorModal-btnCancel,
+  .adminDgChangeMentorModal-btnAssign {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .adminDgChangeMentorModal-mentorCard {
+    padding: 0.75rem;
+  }
+
+  .adminDgChangeMentorModal-mentorAvatar {
+    width: 40px;
+    height: 40px;
+  }
+
+  .adminDgChangeMentorModal-mentorMeta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+}

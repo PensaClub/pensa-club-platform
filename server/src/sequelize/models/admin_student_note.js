@@ -1,17 +1,11 @@
-// server/sequelize/models/mentor_note.js
+// server/sequelize/models/admin_student_note.js
 'use strict';
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class mentor_note extends Model {
+  class admin_student_note extends Model {
     static associate(models) {
-      mentor_note.belongsTo(models.mentor, {
-        foreignKey: 'mentorId',
-        targetKey: 'id',
-        as: 'mentor'
-      });
-
-      mentor_note.belongsTo(models.student, {
+      admin_student_note.belongsTo(models.student, {
         foreignKey: 'studentId',
         targetKey: 'id',
         as: 'student'
@@ -19,22 +13,13 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
 
-  mentor_note.init(
+  admin_student_note.init(
     {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
         allowNull: false
-      },
-      mentorId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        field: 'mentor_id',
-        references: {
-          model: 'mentors',
-          key: 'id'
-        }
       },
       studentId: {
         type: DataTypes.INTEGER,
@@ -60,11 +45,11 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'mentor_note',
-      tableName: 'mentor_notes',
+      modelName: 'admin_student_note',
+      tableName: 'admin_student_notes',
       underscored: true
     }
   );
 
-  return mentor_note;
+  return admin_student_note;
 };

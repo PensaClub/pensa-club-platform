@@ -1953,7 +1953,8 @@ mentorDashboardController.post(
       const newNote = await mentor_note.create({
         mentorId: mentorId,
         studentId: studentId,
-        text: validationResult.data.text
+        text: validationResult.data.text,
+        category: validationResult.data.category  // ← ДОБАВЕНО
       });
 
       res.status(201).json({
@@ -1994,7 +1995,6 @@ mentorDashboardController.patch(
       const { updateNoteSchema } = require('../schemas/mentorNotes.schema');
       const { mentor_note } = require('../sequelize/models/index');
 
-      // Валидация
       const validationResult = updateNoteSchema.safeParse(req.body);
 
       if (!validationResult.success) {
@@ -2019,9 +2019,12 @@ mentorDashboardController.patch(
         });
       }
 
-      await note.update({
-        text: validationResult.data.text
-      });
+      // Build update object
+      const updateData = {};
+      if (validationResult.data.text) updateData.text = validationResult.data.text;
+      if (validationResult.data.category) updateData.category = validationResult.data.category;
+
+      await note.update(updateData);
 
       res.status(200).json({
         success: true,
@@ -2300,7 +2303,6 @@ mentorDashboardController.get(
 
 // ===============================
 // POST /api/mentors/dashboard/student-applications/:id/approve
-// Одобри заявка
 // ===============================
 mentorDashboardController.post(
   '/student-applications/:id/approve',
@@ -2316,13 +2318,15 @@ mentorDashboardController.post(
         student_mentor_application, 
         student, 
         user_account,
+        user_details,
         mentor,
-        mentor_history
+        mentor_history,
+        admin_notification,
+        user_notification
       } = require('../sequelize/models/index');
       const { tokenGenerator } = require('../utils/jwt');
       const { refreshToken } = require('../sequelize/models/index');
 
-      // ✅ 1. ВЗЕМИ APPLICATION
       const application = await student_mentor_application.findOne({
         where: {
           id: applicationId,
@@ -2344,7 +2348,6 @@ mentorDashboardController.post(
         });
       }
 
-      // ✅ 2. ВЗЕМИ USER DATA
       const user = await user_account.findByPk(application.userId);
 
       if (!user) {
@@ -2354,11 +2357,23 @@ mentorDashboardController.post(
         });
       }
 
-      // ✅ 3. ПРОМЕНИ ROLE НА 'student' (ако не е вече)
+      let userDetailsData = await user_details.findOne({
+        where: { userAccountsId: application.userId }
+      });
+
+      if (!userDetailsData) {
+        userDetailsData = await user_details.create({
+          userAccountsId: application.userId,
+          username: user.email.split('@')[0],
+          workOptions: [],
+          skills: [],
+          interestOptions: []
+        });
+      }
+
       if (user.role !== 'student') {
         await user.update({ role: 'student' });
 
-        // ✅ ГЕНЕРИРАЙ НОВИ TOKENS с обновена роля
         const { token } = tokenGenerator('access', user.dataValues);
         const { token: refreshJwtToken, refreshTokenId, expiryDate } = tokenGenerator('refresh', user.dataValues);
 
@@ -2370,7 +2385,6 @@ mentorDashboardController.post(
         });
       }
 
-      // ✅ 4. ПРОВЕРИ ДАЛИ СТУДЕНТЪТ ВЕЧЕ СЪЩЕСТВУВА
       let studentData = await student.findOne({
         where: { userId: application.userId }
       });
@@ -2379,9 +2393,6 @@ mentorDashboardController.post(
       const oldMentorId = studentData?.currentMentorId || null;
 
       if (studentData) {
-        // ✅ СТУДЕНТЪТ СЪЩЕСТВУВА - ЗАМЕНИ МЕНТОРА
-
-        // Намали studentsCount на стария ментор
         if (studentData.currentMentorId) {
           const oldMentor = await mentor.findByPk(studentData.currentMentorId);
           if (oldMentor) {
@@ -2391,7 +2402,6 @@ mentorDashboardController.post(
           }
         }
 
-        // Обнови студента с новия ментор
         await studentData.update({
           currentMentorId: mentorId,
           mentorAssignedDate: new Date(),
@@ -2399,7 +2409,6 @@ mentorDashboardController.post(
         });
 
       } else {
-        // ✅ СТУДЕНТЪТ НЕ СЪЩЕСТВУВА - СЪЗДАЙ ГО
         studentData = await student.create({
           userId: application.userId,
           currentMentorId: mentorId,
@@ -2409,17 +2418,12 @@ mentorDashboardController.post(
         });
       }
 
-      // ✅ 5. УВЕЛИЧИ studentsCount НА НОВИЯ МЕНТОР
       const mentorData = await mentor.findByPk(mentorId);
       await mentorData.update({
         studentsCount: mentorData.studentsCount + 1
       });
 
-      // ✅ 5.5. СЪЗДАЙ MENTOR HISTORY ЗАПИС
-      
-      // Ако студентът вече съществуваше и сменихме ментора
       if (!isNewStudent && oldMentorId && oldMentorId !== mentorId) {
-        // Завърши стария период
         const oldHistory = await mentor_history.findOne({
           where: {
             studentId: studentData.id,
@@ -2436,7 +2440,6 @@ mentorDashboardController.post(
         }
       }
 
-      // Създай нов history запис за новия ментор
       await mentor_history.create({
         studentId: studentData.id,
         mentorId: mentorId,
@@ -2446,17 +2449,15 @@ mentorDashboardController.post(
         reason: isNewStudent ? 'Initial assignment' : 'Reassigned from another mentor'
       });
 
-      // ✅ 6. ОБНОВИ APPLICATION STATUS
       await application.update({
         status: 'approved',
         approvedAt: new Date()
       });
 
-      // ✅ 7. СЪЗДАЙ ADMIN NOTIFICATION
-      await require('../sequelize/models/index').admin_notification.create({
+      await admin_notification.create({
         type: 'student_application_approved',
-        title: 'Student Application Approved',
-        message: `Student application approved by mentor ${mentorData.name}`,
+        title: 'Заявка за студент одобрена',
+        message: `Заявката за студент е одобрена от ментор ${mentorData.name}`,
         data: {
           applicationId: application.id,
           userId: application.userId,
@@ -2466,11 +2467,29 @@ mentorDashboardController.post(
         isRead: false
       });
 
+      // ✅ USER NOTIFICATION
+      await user_notification.create({
+        userId: application.userId,
+        type: 'student_application_approved',
+        title: 'Вашата заявка е одобрена! 🎉',
+        message: `Менторът ${mentorData.name} одобри вашата заявка. Вече можете да започнете обучението си!`,
+        data: {
+          applicationId: application.id,
+          mentorId: mentorId,
+          mentorName: mentorData.name,
+          mentorEmail: mentorData.email,
+          mentorPhoto: mentorData.photoUrl,
+          studentId: studentData.id
+        },
+        read: false
+      });
+
       res.status(200).json({
         success: true,
         message: 'Application approved successfully',
         application: application,
-        student: studentData
+        student: studentData,
+        userEmail: user.email
       });
 
     } catch (err) {
@@ -2486,11 +2505,10 @@ mentorDashboardController.post(
       next(err);
     }
   }
-);
+);;
 
 // ===============================
 // POST /api/mentors/dashboard/student-applications/:id/reject
-// Отхвърли заявка
 // ===============================
 mentorDashboardController.post(
   '/student-applications/:id/reject',
@@ -2503,9 +2521,8 @@ mentorDashboardController.post(
       const mentorId = await getMentorIdFromUser(userId);
 
       const { rejectApplicationSchema } = require('../schemas/studentMentorApplication.schema');
-      const { student_mentor_application, mentor } = require('../sequelize/models/index');
+      const { student_mentor_application, mentor, admin_notification, user_notification } = require('../sequelize/models/index');
 
-      // Валидация
       const validationResult = rejectApplicationSchema.safeParse(req.body);
 
       if (!validationResult.success) {
@@ -2516,7 +2533,6 @@ mentorDashboardController.post(
         });
       }
 
-      // Вземи application
       const application = await student_mentor_application.findOne({
         where: {
           id: applicationId,
@@ -2538,19 +2554,18 @@ mentorDashboardController.post(
         });
       }
 
-      // Обнови application
       await application.update({
         status: 'rejected',
         rejectionReason: validationResult.data.rejectionReason,
         rejectedAt: new Date()
       });
 
-      // Създай admin notification
       const mentorData = await mentor.findByPk(mentorId);
-      await require('../sequelize/models/index').admin_notification.create({
+
+      await admin_notification.create({
         type: 'student_application_rejected',
-        title: 'Student Application Rejected',
-        message: `Student application rejected by mentor ${mentorData.name}`,
+        title: 'Заявка за студент отхвърлена',
+        message: `Заявката за студент е отхвърлена от ментор ${mentorData.name}`,
         data: {
           applicationId: application.id,
           userId: application.userId,
@@ -2560,10 +2575,27 @@ mentorDashboardController.post(
         isRead: false
       });
 
+      // ✅ USER NOTIFICATION
+      await user_notification.create({
+        userId: application.userId,
+        type: 'student_application_rejected',
+        title: 'Вашата заявка не беше одобрена',
+        message: `За съжаление, менторът ${mentorData.name} не одобри вашата заявка.`,
+        data: {
+          applicationId: application.id,
+          mentorId: mentorId,
+          mentorName: mentorData.name,
+          mentorPhoto: mentorData.photoUrl,
+          rejectionReason: validationResult.data.rejectionReason
+        },
+        read: false
+      });
+
       res.status(200).json({
         success: true,
         message: 'Application rejected successfully',
-        application: application
+        application: application,
+        userEmail: user?.email || null
       });
 
     } catch (err) {
@@ -2580,7 +2612,6 @@ mentorDashboardController.post(
     }
   }
 );
-
 // ===============================
 // DELETE /api/mentors/dashboard/student-applications/:id
 // Изтрий заявка (Admin only)
@@ -2610,7 +2641,8 @@ mentorDashboardController.delete(
 
       res.status(200).json({
         success: true,
-        message: 'Application deleted successfully'
+        message: 'Application deleted successfully',
+        userEmail: user.email
       });
 
     } catch (err) {
@@ -2621,7 +2653,6 @@ mentorDashboardController.delete(
 );
 // ===============================
 // POST /api/mentors/dashboard/student-applications/:id/reapprove
-// Одобри REJECTED заявка
 // ===============================
 mentorDashboardController.post(
   '/student-applications/:id/reapprove',
@@ -2637,12 +2668,15 @@ mentorDashboardController.post(
         student_mentor_application, 
         student, 
         user_account,
-        mentor 
+        user_details,
+        mentor,
+        mentor_history,
+        admin_notification,
+        user_notification
       } = require('../sequelize/models/index');
       const { tokenGenerator } = require('../utils/jwt');
       const { refreshToken } = require('../sequelize/models/index');
 
-      // ✅ 1. ВЗЕМИ APPLICATION
       const application = await student_mentor_application.findOne({
         where: {
           id: applicationId,
@@ -2664,7 +2698,6 @@ mentorDashboardController.post(
         });
       }
 
-      // ✅ 2. ВЗЕМИ USER DATA
       const user = await user_account.findByPk(application.userId);
 
       if (!user) {
@@ -2674,11 +2707,23 @@ mentorDashboardController.post(
         });
       }
 
-      // ✅ 3. ПРОМЕНИ ROLE НА 'student' (ако не е вече)
+      let userDetailsData = await user_details.findOne({
+        where: { userAccountsId: application.userId }
+      });
+
+      if (!userDetailsData) {
+        userDetailsData = await user_details.create({
+          userAccountsId: application.userId,
+          username: user.email.split('@')[0],
+          workOptions: [],
+          skills: [],
+          interestOptions: []
+        });
+      }
+
       if (user.role !== 'student') {
         await user.update({ role: 'student' });
 
-        // ✅ ГЕНЕРИРАЙ НОВИ TOKENS с обновена роля
         const { token } = tokenGenerator('access', user.dataValues);
         const { token: refreshJwtToken, refreshTokenId, expiryDate } = tokenGenerator('refresh', user.dataValues);
 
@@ -2690,15 +2735,14 @@ mentorDashboardController.post(
         });
       }
 
-      // ✅ 4. ПРОВЕРИ ДАЛИ СТУДЕНТЪТ ВЕЧЕ СЪЩЕСТВУВА
       let studentData = await student.findOne({
         where: { userId: application.userId }
       });
 
-      if (studentData) {
-        // ✅ СТУДЕНТЪТ СЪЩЕСТВУВА - ЗАМЕНИ МЕНТОРА
+      const isNewStudent = !studentData;
+      const oldMentorId = studentData?.currentMentorId || null;
 
-        // Намали studentsCount на стария ментор
+      if (studentData) {
         if (studentData.currentMentorId) {
           const oldMentor = await mentor.findByPk(studentData.currentMentorId);
           if (oldMentor) {
@@ -2708,7 +2752,6 @@ mentorDashboardController.post(
           }
         }
 
-        // Обнови студента с новия ментор
         await studentData.update({
           currentMentorId: mentorId,
           mentorAssignedDate: new Date(),
@@ -2716,7 +2759,6 @@ mentorDashboardController.post(
         });
 
       } else {
-        // ✅ СТУДЕНТЪТ НЕ СЪЩЕСТВУВА - СЪЗДАЙ ГО
         studentData = await student.create({
           userId: application.userId,
           currentMentorId: mentorId,
@@ -2726,25 +2768,48 @@ mentorDashboardController.post(
         });
       }
 
-      // ✅ 5. УВЕЛИЧИ studentsCount НА НОВИЯ МЕНТОР
       const mentorData = await mentor.findByPk(mentorId);
       await mentorData.update({
         studentsCount: mentorData.studentsCount + 1
       });
 
-      // ✅ 6. ОБНОВИ APPLICATION STATUS
+      if (!isNewStudent && oldMentorId && oldMentorId !== mentorId) {
+        const oldHistory = await mentor_history.findOne({
+          where: {
+            studentId: studentData.id,
+            periodEnd: null
+          },
+          order: [['periodStart', 'DESC']]
+        });
+
+        if (oldHistory) {
+          await oldHistory.update({
+            periodEnd: new Date(),
+            reason: 'Reassigned to new mentor'
+          });
+        }
+      }
+
+      await mentor_history.create({
+        studentId: studentData.id,
+        mentorId: mentorId,
+        mentorName: mentorData.name,
+        periodStart: new Date(),
+        periodEnd: null,
+        reason: isNewStudent ? 'Initial assignment' : 'Reassigned from another mentor'
+      });
+
       await application.update({
         status: 'approved',
         approvedAt: new Date(),
-        rejectionReason: null,  // ✅ Изчисти rejection reason
+        rejectionReason: null,
         rejectedAt: null
       });
 
-      // ✅ 7. СЪЗДАЙ ADMIN NOTIFICATION
-      await require('../sequelize/models/index').admin_notification.create({
+      await admin_notification.create({
         type: 'student_application_reapproved',
-        title: 'Rejected Application Re-approved',
-        message: `Mentor ${mentorData.name} re-approved a rejected student application`,
+        title: 'Отхвърлена заявка е одобрена отново',
+        message: `Менторът ${mentorData.name} преразгледа и одобри отхвърлена заявка за студент`,
         data: {
           applicationId: application.id,
           userId: application.userId,
@@ -2754,11 +2819,29 @@ mentorDashboardController.post(
         isRead: false
       });
 
+      // ✅ USER NOTIFICATION
+      await user_notification.create({
+        userId: application.userId,
+        type: 'student_application_reapproved',
+        title: 'Вашата заявка е одобрена! 🎉',
+        message: `Менторът ${mentorData.name} преразгледа и одобри вашата заявка. Вече можете да започнете обучението си!`,
+        data: {
+          applicationId: application.id,
+          mentorId: mentorId,
+          mentorName: mentorData.name,
+          mentorEmail: mentorData.email,
+          mentorPhoto: mentorData.photoUrl,
+          studentId: studentData.id
+        },
+        read: false
+      });
+
       res.status(200).json({
         success: true,
         message: 'Application re-approved successfully',
         application: application,
-        student: studentData
+        student: studentData,
+        userEmail: user.email
       });
 
     } catch (err) {

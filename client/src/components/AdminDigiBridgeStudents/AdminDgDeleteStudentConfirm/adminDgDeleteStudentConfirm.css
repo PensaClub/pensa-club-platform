@@ -1,0 +1,264 @@
+/* src/components/AdminDigiBridgeStudents/AdminDgDeleteStudentConfirm/adminDgDeleteStudentConfirm.css */
+
+/* ===============================
+   OVERLAY
+   =============================== */
+.adminDgDeleteStudentConfirm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+  animation: adminDgDeleteStudentConfirm-fadeIn 0.2s ease;
+}
+
+@keyframes adminDgDeleteStudentConfirm-fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ===============================
+   CONTAINER
+   =============================== */
+.adminDgDeleteStudentConfirm-container {
+  background: white;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 480px;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: adminDgDeleteStudentConfirm-slideUp 0.3s ease;
+}
+
+@keyframes adminDgDeleteStudentConfirm-slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===============================
+   ICON
+   =============================== */
+.adminDgDeleteStudentConfirm-iconWrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.adminDgDeleteStudentConfirm-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #fef2f2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ef4444;
+}
+
+/* ===============================
+   CONTENT
+   =============================== */
+.adminDgDeleteStudentConfirm-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  text-align: center;
+}
+
+.adminDgDeleteStudentConfirm-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
+}
+
+.adminDgDeleteStudentConfirm-message {
+  font-size: 1rem;
+  color: #4b5563;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.adminDgDeleteStudentConfirm-message strong {
+  color: #1f2937;
+  font-weight: 600;
+}
+
+.adminDgDeleteStudentConfirm-warning {
+  font-size: 0.875rem;
+  color: #ef4444;
+  background: #fef2f2;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Student Card */
+.adminDgDeleteStudentConfirm-studentCard {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  text-align: left;
+}
+
+.adminDgDeleteStudentConfirm-studentAvatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.adminDgDeleteStudentConfirm-studentAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.adminDgDeleteStudentConfirm-avatarPlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.adminDgDeleteStudentConfirm-studentInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.adminDgDeleteStudentConfirm-studentName {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 0.25rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.adminDgDeleteStudentConfirm-studentEmail {
+  font-size: 0.8rem;
+  color: #6b7280;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ===============================
+   ACTIONS
+   =============================== */
+.adminDgDeleteStudentConfirm-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.adminDgDeleteStudentConfirm-btnCancel,
+.adminDgDeleteStudentConfirm-btnDelete {
+  flex: 1;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: none;
+}
+
+.adminDgDeleteStudentConfirm-btnCancel {
+  background: white;
+  border: 1px solid #e5e7eb;
+  color: #374151;
+}
+
+.adminDgDeleteStudentConfirm-btnCancel:hover:not(:disabled) {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.adminDgDeleteStudentConfirm-btnDelete {
+  background: #ef4444;
+  color: white;
+}
+
+.adminDgDeleteStudentConfirm-btnDelete:hover:not(:disabled) {
+  background: #dc2626;
+}
+
+.adminDgDeleteStudentConfirm-btnCancel:disabled,
+.adminDgDeleteStudentConfirm-btnDelete:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Spinner */
+.adminDgDeleteStudentConfirm-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: adminDgDeleteStudentConfirm-spin 0.8s linear infinite;
+}
+
+@keyframes adminDgDeleteStudentConfirm-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===============================
+   RESPONSIVE
+   =============================== */
+
+/* Tablet (768px+) */
+@media (min-width: 768px) {
+  .adminDgDeleteStudentConfirm-container {
+    padding: 2.5rem 2rem;
+  }
+
+  .adminDgDeleteStudentConfirm-title {
+    font-size: 1.75rem;
+  }
+
+  .adminDgDeleteStudentConfirm-actions {
+    gap: 1rem;
+  }
+
+  .adminDgDeleteStudentConfirm-btnCancel,
+  .adminDgDeleteStudentConfirm-btnDelete {
+    padding: 0.875rem 1.75rem;
+    font-size: 0.9rem;
+  }
+}

@@ -606,6 +606,11 @@
     "upload_image_btn": "Качи снимка"
   },
   "admin": {
+    "students": {
+      "title": "Студенти",
+      "overview": "Преглед на студенти",
+      "applications": "Кандидатури"
+    },
     "mentors": {
       "title": "Ментори",
       "overview": "Преглед на ментори",
@@ -9714,7 +9719,17 @@
   "common": {
     "navigation": {
       "home": "Начало"
-    }
+    },
+    "cancel": "Отказ",
+    "loading": "Зареждане...",
+    "refresh": "Обнови",
+    "refreshing": "Обновяване...",
+    "close": "Затвори",
+    "save": "Запази",
+    "saving": "Запазване...",
+    "retry": "Опитай отново",
+    "delete": "Изтрий",
+    "deleting": "Изтриване..."
   },
   "clubForm": {
     "title": "Регистриране на клуб",
@@ -13578,25 +13593,25 @@
   },
   "mentorModal": {
     "applying": "Изпраща се...",
-  "about": "За мен",
-  "experience": "Опит и образование",
-  "education": "Образование",
-  "yearsExperience": "Години опит",
-  "availability": "Наличност",
-  "languages": "Езици",
-  "reviews": "Отзиви",
-  "rating": "Рейтинг",
-  "sessions": "Сесии",
-  "selectMentor": "Избери ментор",
-  "close": "Затвори",
-  "noLanguages": "Не са посочени езици",
-  "alreadyApplied": "Вече сте кандидатствали",
-  "applicationSuccess": "Заявката е изпратена успешно!",
-  "applicationError": "Грешка при изпращане на заявка",
-  "cannotApplyAsAdmin": "Администраторите не могат да кандидатстват",
-  "cannotApplyAsMentor": "Менторите не могат да кандидатстват"
-},
- "studentApplications": {
+    "about": "За мен",
+    "experience": "Опит и образование",
+    "education": "Образование",
+    "yearsExperience": "Години опит",
+    "availability": "Наличност",
+    "languages": "Езици",
+    "reviews": "Отзиви",
+    "rating": "Рейтинг",
+    "sessions": "Сесии",
+    "selectMentor": "Избери ментор",
+    "close": "Затвори",
+    "noLanguages": "Не са посочени езици",
+    "alreadyApplied": "Вече сте кандидатствали",
+    "applicationSuccess": "Заявката е изпратена успешно!",
+    "applicationError": "Грешка при изпращане на заявка",
+    "cannotApplyAsAdmin": "Администраторите не могат да кандидатстват",
+    "cannotApplyAsMentor": "Менторите не могат да кандидатстват"
+  },
+  "studentApplications": {
     "title": "Заявки от студенти",
     "subtitle": "Управлявайте заявките на студенти, които искат да учат с вас",
     "tabs": {
@@ -13669,5 +13684,354 @@
     "studentFor": "Студент вече",
     "infoText": "Този студент е активен и учи с вас. Можете да виждате напредъка му в секцията за студенти.",
     "close": "Затвори"
+  },
+  "adminDigiBridgeStudents": {
+    "title": "Управление на студенти",
+    "subtitle": "Преглед и управление на всички студенти в DigiBridge Academy",
+    "stats": {
+      "totalStudents": "Общо студенти",
+      "activeStudents": "Активни студенти",
+      "withMentor": "С ментор",
+      "totalCredits": "Общо кредити",
+      "avgCredits": "Средни кредити",
+      "attendanceRate": "Процент посещаемост",
+      "activeCourses": "Активни курсове",
+      "completedCourses": "Завършени курсове"
+    },
+    "tabs": {
+      "overview": "Общ преглед",
+      "byStatus": "По статус",
+      "byMentor": "По ментор",
+      "credits": "Кредити",
+      "attendance": "Посещаемост",
+      "topPerformers": "Топ студенти",
+      "engagement": "Ангажираност"
+    },
+    "filters": {
+      "searchPlaceholder": "Търси по име, имейл...",
+      "filters": "Филтри",
+      "status": "Статус",
+      "mentor": "Ментор",
+      "sortBy": "Сортирай",
+      "allStatuses": "Всички статуси",
+      "active": "Активен",
+      "inactive": "Неактивен",
+      "suspended": "Спрян",
+      "allMentors": "Всички ментори",
+      "withMentor": "С ментор",
+      "withoutMentor": "Без ментор",
+      "newest": "Най-нови",
+      "oldest": "Най-стари",
+      "nameAsc": "Име (А-Я)",
+      "nameDesc": "Име (Я-А)",
+      "creditsHigh": "Кредити (висока)",
+      "creditsLow": "Кредити (ниска)",
+      "clearAll": "Изчисти всички",
+      "showing": "Показва",
+      "students": "студента"
+    },
+    "table": {
+      "student": "Студент",
+      "email": "Имейл",
+      "mentor": "Ментор",
+      "credits": "Кредити",
+      "attendance": "Посещаемост",
+      "status": "Статус",
+      "actions": "Действия",
+      "noMentor": "Без ментор",
+      "active": "Активен",
+      "inactive": "Неактивен",
+      "suspended": "Спрян",
+      "view": "Преглед",
+      "edit": "Редактирай",
+      "delete": "Изтрий",
+      "noStudents": "Няма намерени студенти",
+      "noStudentsDesc": "Опитайте да промените филтрите или добавете нови студенти",
+       "notes": "Бележки",
+    "notesCount": "{{count}} бележки",
+    "noNotes": "Няма бележки"
+    },
+    "status": {
+      "active": "Активни",
+      "inactive": "Неактивни",
+      "suspended": "Спрени",
+      "pending": "Изчакващи"
+    },
+    "noMentor": "Без ментор",
+    "charts": {
+      "noData": "Няма налични данни",
+      "byStatus": "Студенти по статус",
+      "byMentor": "Студенти по ментор",
+      "creditsDistribution": "Разпределение на кредити",
+      "attendanceTrends": "Тенденции в посещаемостта",
+      "topPerformers": "Топ студенти",
+      "engagementOverview": "Преглед на ангажираността",
+      "total": "Общо",
+      "students": "студенти",
+      "credits": "кредити",
+      "attendance": "посещаемост",
+      "student": "Студент",
+      "rank": "Ранг",
+      "totalStudents": "Общо студенти",
+      "avgCredits": "Средни кредити",
+      "maxCredits": "Макс. кредити",
+      "avgAttendance": "Средна посещаемост",
+      "overallEngagement": "Обща ангажираност",
+      "viewDetails": "Преглед",
+      "trend": {
+        "up": "Нагоре",
+        "down": "Надолу",
+        "stable": "Стабилно"
+      },
+      "engagement": {
+        "sessions": "Сесии",
+        "courses": "Курсове",
+        "mentoring": "Менторство",
+        "activities": "Дейности",
+        "feedback": "Обратна връзка"
+      }
+    }
+  },
+  "adminDgStudentDetailsModal": {
+    "title": "Детайли за студента",
+    "notes": "Бележки",
+    "totalCredits": "Общо кредити",
+    "attendanceRate": "Процент посещаемост",
+    "currentMentor": "Текущ ментор",
+    "mentor": "Ментор",
+    "noMentorAssigned": "Няма назначен ментор",
+    "additionalInfo": "Допълнителна информация",
+    "registrationDate": "Дата на регистрация",
+    "lastActive": "Последна активност",
+    "close": "Затвори",
+    "notAvailable": "Няма налична информация",
+    "editStudent": "Редактирай",
+    "changeMentor": "Смяна на ментор",
+    "sendEmail": "Изпрати имейл"
+  },
+  "adminDgDeleteStudentConfirm": {
+    "title": "Изтриване на студент",
+    "message": "Сигурни ли сте, че искате да изтриете студента",
+    "warning": "Това действие е необратимо и ще премахне всички данни за студента.",
+    "delete": "Изтрий студента",
+    "deleting": "Изтриване..."
+  },
+  "adminDgEditStudentModal": {
+    "title": "Редактиране на студент",
+    "currentAvatar": "Текуща снимка",
+    "avatarHint": "Промяната на снимката не е налична в момента",
+    "name": "Име",
+    "namePlaceholder": "Въведете име",
+    "email": "Имейл",
+    "emailPlaceholder": "Въведете имейл",
+    "phone": "Телефон",
+    "phonePlaceholder": "Въведете телефон (опционално)",
+    "status": "Статус",
+    "save": "Запази промените",
+    "saving": "Записване...",
+    "errors": {
+      "nameRequired": "Името е задължително",
+      "emailRequired": "Имейлът е задължителен",
+      "emailInvalid": "Невалиден имейл формат",
+      "phoneInvalid": "Невалиден телефонен номер"
+    }
+  },
+  "adminDgChangeMentorModal": {
+    "title": "Промяна на ментор",
+    "currentMentor": "Текущ ментор",
+    "searchPlaceholder": "Търсене на ментор по име, имейл или специализация...",
+    "noMentorsFound": "Няма намерени ментори",
+    "current": "Текущ",
+    "students": "студенти",
+    "assign": "Назначи ментор",
+    "assigning": "Назначаване..."
+  },
+  "adminDgSendEmailModal": {
+    "title": "Изпращане на имейл",
+    "to": "До",
+    "subject": "Тема",
+    "subjectPlaceholder": "Въведете тема на имейла",
+    "message": "Съобщение",
+    "messagePlaceholder": "Напишете вашето съобщение тук...",
+    "quickTemplates": "Бързи шаблони",
+    "send": "Изпрати имейл",
+    "sending": "Изпращане...",
+    "note": "Имейлът ще бъде изпратен от официалния адрес на DigiBridge Academy.",
+    "templates": {
+      "welcome": "Добре дошли",
+      "reminder": "Напомняне",
+      "inactive": "Неактивност"
+    },
+    "templateContent": {
+      "welcome": {
+        "subject": "Добре дошли в DigiBridge Academy!",
+        "message": "Здравейте {{name}},\n\nДобре дошли в DigiBridge Academy! Радваме се, че сте част от нашата общност.\n\nТук ще намерите подкрепа и ресурси за вашето дигитално обучение. Не се колебайте да се свържете с вашия ментор при въпроси.\n\nПоздрави,\nЕкипът на DigiBridge Academy"
+      },
+      "reminder": {
+        "subject": "Напомняне за предстояща сесия",
+        "message": "Здравейте {{name}},\n\nНапомняме ви за предстоящата ви сесия с ментора. Моля, уверете се, че сте подготвени и имате стабилна интернет връзка.\n\nАко имате въпроси, не се колебайте да се свържете с нас.\n\nПоздрави,\nЕкипът на DigiBridge Academy"
+      },
+      "inactive": {
+        "subject": "Липсвате ни в DigiBridge Academy",
+        "message": "Здравейте {{name}},\n\nЗабелязахме, че не сте били активни напоследък. Надяваме се, че всичко е наред.\n\nАко имате нужда от помощ или искате да планирате нова сесия с ментор, моля свържете се с нас.\n\nПоздрави,\nЕкипът на DigiBridge Academy"
+      }
+    },
+    "errors": {
+      "subjectRequired": "Темата е задължителна",
+      "subjectTooShort": "Темата трябва да е поне 3 символа",
+      "messageRequired": "Съобщението е задължително",
+      "messageTooShort": "Съобщението трябва да е поне 10 символа"
+    }
+  },
+  "adminDgStudentsFilters": {
+    "searchPlaceholder": "Търсене по име, имейл...",
+    "filters": "Филтри",
+    "status": "Статус",
+    "mentor": "Ментор",
+    "sortBy": "Сортирай по",
+    "allMentors": "Всички ментори",
+    "noMentor": "Без ментор",
+    "clearAll": "Изчисти всички",
+    "studentsFound": "студенти намерени",
+    "statusOptions": {
+      "all": "Всички статуси",
+      "active": "Активни",
+      "inactive": "Неактивни",
+      "suspended": "Спрени"
+    },
+    "sortOptions": {
+      "newest": "Най-нови",
+      "oldest": "Най-стари",
+      "name": "По име",
+      "credits": "По кредити",
+      "attendance": "По посещаемост"
+    }
+  },
+  "adminStudentApplications": {
+    "title": "Кандидатури на студенти",
+    "subtitle": "Управление на заявките за обучение с ментори",
+    "stats": {
+      "total": "Общо",
+      "pending": "Чакащи",
+      "approved": "Одобрени",
+      "rejected": "Отхвърлени"
+    },
+    "tabs": {
+      "overview": "Преглед",
+      "pending": "Чакащи",
+      "approved": "Одобрени",
+      "rejected": "Отхвърлени"
+    },
+    "filters": {
+      "searchPlaceholder": "Търси по име или имейл...",
+      "allStatuses": "Всички статуси",
+      "allMentors": "Всички ментори",
+      "newest": "Най-нови",
+      "oldest": "Най-стари",
+      "studentName": "Име на студент",
+      "mentorName": "Име на ментор",
+      "clearAll": "Изчисти",
+      "showing": "Показване на {{count}} от {{total}} резултата"
+    },
+    "table": {
+      "student": "Студент",
+      "mentor": "Ментор",
+      "status": "Статус",
+      "appliedAt": "Дата на кандидатстване",
+      "actions": "Действия",
+      "noApplications": "Няма намерени кандидатури"
+    },
+    "status": {
+      "pending": "Чакаща",
+      "approved": "Одобрена",
+      "rejected": "Отхвърлена"
+    },
+    "actions": {
+      "view": "Преглед",
+      "approve": "Одобри",
+      "reject": "Отхвърли",
+      "reapprove": "Одобри повторно",
+      "delete": "Изтрий"
+    },
+    "charts": {
+      "byStatus": "Кандидатури по статус",
+      "byMentor": "Кандидатури по ментор",
+      "overTime": "Кандидатури във времето"
+    },
+    "modals": {
+      "viewTitle": "Детайли на кандидатурата",
+      "approveTitle": "Одобряване на кандидатура",
+      "reapproveTitle": "Повторно одобряване на кандидатура",
+      "rejectTitle": "Отхвърляне на кандидатура",
+      "deleteTitle": "Изтриване на кандидатура",
+      "studentInfo": "Информация за студента",
+      "mentorInfo": "Информация за ментора",
+      "applicationInfo": "Информация за кандидатурата",
+      "name": "Име",
+      "email": "Имейл",
+      "phone": "Телефон",
+      "specialization": "Специализация",
+      "status": "Статус",
+      "appliedAt": "Кандидатствал на",
+      "approvedAt": "Одобрена на",
+      "rejectedAt": "Отхвърлена на",
+      "rejectionReason": "Причина за отхвърляне",
+      "approveConfirm": "Сигурни ли сте, че искате да одобрите кандидатурата на {{student}} към ментор {{mentor}}?",
+      "reapproveConfirm": "Сигурни ли сте, че искате повторно да одобрите кандидатурата на {{student}} към ментор {{mentor}}?",
+      "deleteConfirm": "Сигурни ли сте, че искате да изтриете кандидатурата на {{student}}?",
+      "deleteWarning": "Това действие е необратимо!",
+      "rejectInfo": "Ще отхвърлите кандидатурата на {{student}} към ментор {{mentor}}.",
+      "rejectionReasonLabel": "Причина за отхвърляне",
+      "rejectionReasonPlaceholder": "Опишете защо отхвърляте тази кандидатура...",
+      "reasonRequired": "Причината е задължителна",
+      "reasonTooShort": "Причината трябва да е поне 10 символа"
+    }
+  },
+  "charts": {
+    "byStatus": "Кандидатури по статус",
+    "byMentor": "Кандидатури по ментор",
+    "overTime": "Кандидатури във времето",
+    "noData": "Няма данни за показване"
+  },
+  "applicationsByStatusChart": {
+    "noData": "Няма данни за показване"
+  },
+  "applicationsByMentorChart": {
+    "noData": "Няма данни за показване",
+    "unknownMentor": "Неизвестен ментор",
+    "applications": "кандидатури",
+    "applicationsShort": "канд.",
+    "topMentors": "Топ {{count}} ментори",
+    "totalApplications": "Общо кандидатури"
+  },
+  "adminDgStudentNotes": {
+    "title": "Бележки за студент",
+    "notesCount": "бележки",
+    "addNote": "Добави бележка",
+    "newNote": "Нова бележка",
+    "editNote": "Редактиране на бележка",
+    "placeholder": "Напишете вашата бележка тук...",
+    "deleteConfirm": "Сигурни ли сте, че искате да изтриете тази бележка?",
+    "edited": "редактирано",
+    "categories": {
+      "general": "Обща",
+      "important": "Важно",
+      "followup": "За проследяване",
+      "positive": "Положително",
+      "contact": "Контакт"
+    },
+    "time": {
+      "justNow": "Току-що",
+      "minutesAgo": "преди {{count}} мин",
+      "hoursAgo": "преди {{count}} ч",
+      "daysAgo": "преди {{count}} дни"
+    },
+    "empty": {
+      "title": "Няма бележки",
+      "description": "Все още няма добавени бележки за този студент"
+    },
+    "errors": {
+      "fetchFailed": "Грешка при зареждане на бележките"
+    }
   }
 }

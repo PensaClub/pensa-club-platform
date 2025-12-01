@@ -1,9 +1,9 @@
-// server/schemas/mentorNotes.schema.js
+// server/schemas/adminStudentNotes.schema.js
 const { z } = require('zod');
 
 const categoryEnum = z.enum(['general', 'important', 'followup', 'positive', 'contact']);
 
-const createNoteSchema = z.object({
+const createAdminNoteSchema = z.object({
   text: z
     .string({ required_error: 'Note text is required' })
     .min(1, 'Note text cannot be empty')
@@ -11,7 +11,7 @@ const createNoteSchema = z.object({
   category: categoryEnum.default('general')
 });
 
-const updateNoteSchema = z.object({
+const updateAdminNoteSchema = z.object({
   text: z
     .string()
     .min(1, 'Note text cannot be empty')
@@ -21,6 +21,6 @@ const updateNoteSchema = z.object({
 });
 
 module.exports = {
-  createNoteSchema,
-  updateNoteSchema
+  createAdminNoteSchema,
+  updateAdminNoteSchema
 };
