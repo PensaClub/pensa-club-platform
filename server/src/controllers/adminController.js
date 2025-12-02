@@ -1,5 +1,5 @@
 const adminController = require('express').Router();
-const { user_account, user_ads, article, project, initiative, Club, bot_log } = require('../sequelize/models/index');
+const { user_account, user_ads, article, project, initiative, Club, bot_log, publication,story } = require('../sequelize/models/index');
 
 const { Op } = require('sequelize');
 const sequelize = require('../sequelize/models').sequelize;
