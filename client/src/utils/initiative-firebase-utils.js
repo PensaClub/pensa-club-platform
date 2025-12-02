@@ -45,8 +45,6 @@ export const uploadInitiativeImages = async (files, folderPath = 'initiatives/im
         }
       );
 
-      console.log(`✅ File ${index + 1} uploaded:`, url);
-
       return {
         src: url,
         alt: '',
@@ -55,7 +53,6 @@ export const uploadInitiativeImages = async (files, folderPath = 'initiatives/im
     });
 
     const uploadedImages = await Promise.all(uploadPromises);
-    console.log(`✅ All ${uploadedImages.length} images uploaded successfully:`, uploadedImages);
     return uploadedImages;
 
   } catch (error) {
@@ -90,7 +87,6 @@ export const deleteInitiativeImages = async (imageUrls) => {
       .map(url => deleteFileFromStorage(url));
 
     await Promise.all(deletePromises);
-    console.log(`✅ Изтрити ${deletePromises.length} снимки от Firebase`);
   } catch (error) {
     console.error('Грешка при изтриване на снимки:', error);
     throw error;

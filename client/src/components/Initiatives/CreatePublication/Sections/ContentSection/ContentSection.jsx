@@ -1,10 +1,15 @@
 // components/Initiatives/CreatePublication/Sections/ContentSection/ContentSection.jsx
 import React, { useMemo, useRef, useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faTrash, faEdit, faChevronUp, faChevronDown, faImage, faUpload, faTimes, faLink } from '@fortawesome/free-solid-svg-icons';
+import { 
+    faPlus, faTrash, faEdit, faChevronUp, faChevronDown, 
+    faImage, faUpload, faTimes, faLink, faVideo, faPlay, 
+    faSpinner, faCheck 
+} from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import { Slate, Editable } from 'slate-react';
 import { createSlateEditor, createSlateEditorState } from '../../../../Initiatives/CreateIniciative/Utils/initiativeEditorUtils';
+import { formatVideoDuration } from '../../../../../utils/video-utils';
 import './contentSection.css';
 
 const ContentSection = ({
@@ -23,35 +28,41 @@ const ContentSection = ({
     updateSectionImageAlt,
     updateSectionImageCaption,
     clearSectionImages,
+    // ✅ НОВИ PROPS ЗА ВИДЕО
+    handleSectionVideoUpload,
+    removeSectionVideo,
+    videoUploadState,
 }) => {
     const { t } = useTranslation();
     const sectionEditorsRef = useRef({});
     const sectionRefs = useRef({});
+    const videoRefs = useRef({});
     const [lastSectionCount, setLastSectionCount] = useState(values.sections?.length || 0);
     const [lastRemovedIndex, setLastRemovedIndex] = useState(null);
 
     // State за URL inputs
     const [showUrlInputs, setShowUrlInputs] = useState({});
     const [imageUrls, setImageUrls] = useState({});
+    
+    // ✅ State за video playing
+    const [playingVideos, setPlayingVideos] = useState({});
 
     // Track section changes for scroll behavior
     useEffect(() => {
         const currentSectionCount = values.sections?.length || 0;
 
         if (currentSectionCount > lastSectionCount) {
-            // Section was added - scroll to the new section
             setTimeout(() => {
                 const newSectionIndex = currentSectionCount - 1;
-                scrollToSection(newSectionIndex, true); // true = focus on title input
+                scrollToSection(newSectionIndex, true);
             }, 100);
         } else if (currentSectionCount < lastSectionCount && lastRemovedIndex !== null) {
-            // Section was removed - scroll to the section above (or stay at same position)
             setTimeout(() => {
                 const targetIndex = Math.max(0, Math.min(lastRemovedIndex - 1, currentSectionCount - 1));
                 if (targetIndex >= 0 && currentSectionCount > 0) {
-                    scrollToSection(targetIndex, false); // false = don't focus
+                    scrollToSection(targetIndex, false);
                 }
-                setLastRemovedIndex(null); // Reset
+                setLastRemovedIndex(null);
             }, 100);
         }
 
@@ -68,7 +79,6 @@ const ContentSection = ({
                 inline: 'nearest'
             });
 
-            // Optional: Focus on the title input of the section
             if (shouldFocus) {
                 setTimeout(() => {
                     const titleInput = sectionElement.querySelector('input[type="text"]');
@@ -104,6 +114,39 @@ const ContentSection = ({
         }
     };
 
+    // ✅ Toggle video play/pause
+    const toggleVideoPlay = (sectionIndex) => {
+        const video = videoRefs.current[sectionIndex];
+        if (video) {
+            if (playingVideos[sectionIndex]) {
+                video.pause();
+            } else {
+                video.play();
+            }
+            setPlayingVideos(prev => ({
+                ...prev,
+                [sectionIndex]: !prev[sectionIndex]
+            }));
+        }
+    };
+
+    // ✅ Get video upload progress text
+    const getVideoProgressText = (sectionIndex) => {
+        const state = videoUploadState?.[sectionIndex];
+        if (!state?.stage) return '';
+        
+        switch (state.stage) {
+            case 'thumbnail':
+                return t('publications.video.generatingThumbnail');
+            case 'thumbnailUpload':
+                return t('publications.video.uploadingThumbnail');
+            case 'video':
+                return `${t('publications.video.uploadingVideo')} ${Math.round(state.progress || 0)}%`;
+            default:
+                return '';
+        }
+    };
+
     // Create editor for each section
     const getSectionEditor = (index) => {
         if (!sectionEditorsRef.current[index]) {
@@ -123,7 +166,6 @@ const ContentSection = ({
             setValues(prev => ({ ...prev, sections: updatedSections }));
         } catch (error) {
             console.error('Error updating section content:', error);
-            // Fallback: set empty content
             const updatedSections = [...(values.sections || [])];
             updatedSections[sectionIndex] = {
                 ...updatedSections[sectionIndex],
@@ -142,7 +184,6 @@ const ContentSection = ({
             [newSections[index], newSections[targetIndex]] = [newSections[targetIndex], newSections[index]];
             setValues(prev => ({ ...prev, sections: newSections }));
 
-            // Swap editors too
             const tempEditor = sectionEditorsRef.current[index];
             sectionEditorsRef.current[index] = sectionEditorsRef.current[targetIndex];
             sectionEditorsRef.current[targetIndex] = tempEditor;
@@ -215,9 +256,7 @@ const ContentSection = ({
         }
     };
 
-    // Add this function after the existing functions (around line 140, before toggleMark)
     const handleKeyDown = (event, editor) => {
-        // Handle keyboard shortcuts
         if (event.ctrlKey || event.metaKey) {
             switch (event.key) {
                 case 'b':
@@ -380,7 +419,6 @@ const ContentSection = ({
     useEffect(() => {
         const currentCount = values.sections?.length || 0;
         if (currentCount > lastSectionCount) {
-            // New section added, scroll to it
             setTimeout(() => {
                 const lastSectionIndex = currentCount - 1;
                 const lastSection = sectionRefs.current[lastSectionIndex];
@@ -390,7 +428,6 @@ const ContentSection = ({
                         block: 'center'
                     });
 
-                    // Focus the title input
                     const titleInput = lastSection.querySelector('input[type="text"]');
                     if (titleInput) {
                         setTimeout(() => titleInput.focus(), 300);
@@ -464,7 +501,6 @@ const ContentSection = ({
                                     </div>
 
                                     <div className="publication-sections-item-actions">
-                                        {/* Move buttons */}
                                         <button
                                             type="button"
                                             className="publication-sections-move-btn"
@@ -484,7 +520,6 @@ const ContentSection = ({
                                             <FontAwesomeIcon icon={faChevronDown} />
                                         </button>
 
-                                        {/* Remove button */}
                                         <button
                                             type="button"
                                             className="publication-sections-remove-btn"
@@ -557,7 +592,6 @@ const ContentSection = ({
                                                     onKeyDown={(event) => handleKeyDown(event, getSectionEditor(index))}
                                                     onError={(error) => {
                                                         console.error('Slate editor error:', error);
-                                                        // Reset editor state on error
                                                         const editor = getSectionEditor(index);
                                                         editor.children = createSlateEditorState();
                                                     }}
@@ -569,7 +603,7 @@ const ContentSection = ({
                                         )}
                                     </div>
 
-                                    {/* Section Image (Single Image) */}
+                                    {/* Section Image */}
                                     <div className="publication-sections-form-group">
                                         <label>
                                             <FontAwesomeIcon icon={faImage} />
@@ -580,7 +614,6 @@ const ContentSection = ({
                                         </div>
 
                                         <div className="publication-sections-image-upload">
-                                            {/* Upload methods */}
                                             <div className="publication-sections-upload-methods">
                                                 <div className="publication-sections-upload-method">
                                                     <label className="publication-sections-upload-btn">
@@ -623,7 +656,6 @@ const ContentSection = ({
                                                 )}
                                             </div>
 
-                                            {/* URL input section */}
                                             {showUrlInputs[index] && (
                                                 <div className="publication-sections-url-input-section">
                                                     <input
@@ -646,7 +678,7 @@ const ContentSection = ({
                                             )}
                                         </div>
 
-                                        {/* Single Image Preview with controls on the right */}
+                                        {/* Image Preview */}
                                         {section.image && (
                                             <div className="publication-sections-image-preview">
                                                 <div className="publication-sections-image-container">
@@ -671,7 +703,6 @@ const ContentSection = ({
                                                         </div>
                                                     </div>
 
-                                                    {/* Controls on the right side */}
                                                     <div className="publication-sections-image-controls">
                                                         <div className="publication-sections-image-input-group">
                                                             <label>{t('publications.media.altText')}:</label>
@@ -704,6 +735,105 @@ const ContentSection = ({
                                                         </div>
                                                     </div>
                                                 </div>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* ✅ SECTION VIDEO - НОВО */}
+                                    <div className="publication-sections-form-group">
+                                        <label>
+                                            <FontAwesomeIcon icon={faVideo} />
+                                            <span style={{ marginLeft: '0.5rem' }}>{t('publications.video.title')}</span>
+                                        </label>
+                                        <div className="publication-sections-field-help">
+                                            {t('publications.video.helpText')}
+                                        </div>
+
+                                        {/* Video Upload Area */}
+                                        {!section.videoUrl && !videoUploadState?.[index]?.isUploading && (
+                                            <div className="publication-sections-video-upload">
+                                                <label className="publication-sections-video-upload-btn">
+                                                    <FontAwesomeIcon icon={faVideo} />
+                                                    {t('publications.video.selectVideo')}
+                                                    <input
+                                                        type="file"
+                                                        accept="video/mp4,video/webm,video/ogg,video/quicktime"
+                                                        onChange={(e) => handleSectionVideoUpload(e, index)}
+                                                        style={{ display: 'none' }}
+                                                    />
+                                                </label>
+                                                <span className="publication-sections-video-formats">
+                                                    MP4, WebM, OGG • Max 100MB
+                                                </span>
+                                            </div>
+                                        )}
+
+                                        {/* Video Upload Progress */}
+                                        {videoUploadState?.[index]?.isUploading && (
+                                            <div className="publication-sections-video-uploading">
+                                                <FontAwesomeIcon icon={faSpinner} spin className="publication-sections-video-spinner" />
+                                                <p>{getVideoProgressText(index)}</p>
+                                                <div className="publication-sections-video-progress-bar">
+                                                    <div 
+                                                        className="publication-sections-video-progress-fill"
+                                                        style={{ 
+                                                            width: videoUploadState[index]?.stage === 'video' 
+                                                                ? `${videoUploadState[index]?.progress || 0}%` 
+                                                                : '100%' 
+                                                        }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* Video Preview */}
+                                        {section.videoUrl && !videoUploadState?.[index]?.isUploading && (
+                                            <div className="publication-sections-video-preview">
+                                                <div className="publication-sections-video-container">
+                                                    <div className="publication-sections-video-player-wrapper">
+                                                        <video
+                                                            ref={el => videoRefs.current[index] = el}
+                                                            src={section.videoUrl}
+                                                            poster={section.thumbnailUrl}
+                                                            className="publication-sections-video-player"
+                                                            onEnded={() => setPlayingVideos(prev => ({ ...prev, [index]: false }))}
+                                                        />
+                                                        
+                                                        {!playingVideos[index] && (
+                                                            <div 
+                                                                className="publication-sections-video-overlay"
+                                                                onClick={() => toggleVideoPlay(index)}
+                                                            >
+                                                                <div className="publication-sections-video-play-btn">
+                                                                    <FontAwesomeIcon icon={faPlay} />
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                    </div>
+
+                                                    <div className="publication-sections-video-info">
+                                                        <div className="publication-sections-video-info-item">
+                                                            <FontAwesomeIcon icon={faCheck} className="publication-sections-video-success-icon" />
+                                                            <span>{t('publications.video.uploaded')}</span>
+                                                        </div>
+                                                        
+                                                        {section.thumbnailUrl && (
+                                                            <div className="publication-sections-video-thumbnail-preview">
+                                                                <span>{t('publications.video.thumbnail')}:</span>
+                                                                <img src={section.thumbnailUrl} alt="Video thumbnail" />
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+
+                                                <button
+                                                    type="button"
+                                                    className="publication-sections-video-remove-btn"
+                                                    onClick={() => removeSectionVideo(index)}
+                                                >
+                                                    <FontAwesomeIcon icon={faTrash} />
+                                                    {t('publications.video.remove')}
+                                                </button>
                                             </div>
                                         )}
                                     </div>

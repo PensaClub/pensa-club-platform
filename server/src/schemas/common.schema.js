@@ -47,6 +47,9 @@ const SectionSchema = z.object({
     order: z.number().nullable().optional(),
     image: ImageSchema.nullable().optional(),
     images: z.array(ImageSchema).nullable().optional(),
+    // Video fields
+    videoUrl: z.string().nullable().optional(),
+    thumbnailUrl: z.string().nullable().optional(),
 });
 
 const SponsorSchema = z.object({
