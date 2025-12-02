@@ -1,3 +1,4 @@
+//src/utils/publicationUtils.js
 const { initiative, project, section, image, comment, publication, user_account } = require('../sequelize/models');
 
 const publicationConfig = [

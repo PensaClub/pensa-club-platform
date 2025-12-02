@@ -96,24 +96,28 @@ const PublicationForm = ({
         };
     }, [showPreview]);
 
-    const {
-        values, setValues, errors, onChangeHandler, onBlurHandler, onSubmit,
-        generateSlug,
-        addSection,
-        removeSection,
-        updateSection,
-        handleSectionImageUpload,
-        addSectionImageFromUrl,
-        removeSectionImage,
-        updateSectionImageAlt,
-        updateSectionImageCaption,
-        clearSectionImages,
-        handleMainImageUpload,
-        addMainImageFromUrl,
-        removeMainImage,
-        updateMainImageAlt,
-        updateMainImageCaption
-    } = useCreatePublication(initialValues, onSubmitHandler);
+   const {
+    values, setValues, errors, onChangeHandler, onBlurHandler, onSubmit,
+    generateSlug,
+    addSection,
+    removeSection,
+    updateSection,
+    handleSectionImageUpload,
+    addSectionImageFromUrl,
+    removeSectionImage,
+    updateSectionImageAlt,
+    updateSectionImageCaption,
+    clearSectionImages,
+    handleMainImageUpload,
+    addMainImageFromUrl,
+    removeMainImage,
+    updateMainImageAlt,
+    updateMainImageCaption,
+    // ✅ НОВИ ЗА ВИДЕО
+    handleSectionVideoUpload,
+    removeSectionVideo,
+    videoUploadState
+} = useCreatePublication(initialValues, onSubmitHandler);
 
     // Transform server data to form format for inline editing
     useEffect(() => {
@@ -336,24 +340,28 @@ const PublicationForm = ({
                         )}
 
                         {activeSection === 'content' && (
-                            <ContentSection
-                                values={values}
-                                errors={errors}
-                                setValues={setValues}
-                                addSection={addSection}
-                                removeSection={removeSection}
-                                updateSection={updateSection}
-                                Transforms={Transforms}
-                                Editor={Editor}
-                                SlateElement={SlateElement}
-                                handleSectionImageUpload={handleSectionImageUpload}
-                                addSectionImageFromUrl={addSectionImageFromUrl}
-                                removeSectionImage={removeSectionImage}
-                                updateSectionImageAlt={updateSectionImageAlt}
-                                updateSectionImageCaption={updateSectionImageCaption}
-                                clearSectionImages={clearSectionImages}
-                            />
-                        )}
+    <ContentSection
+        values={values}
+        errors={errors}
+        setValues={setValues}
+        addSection={addSection}
+        removeSection={removeSection}
+        updateSection={updateSection}
+        Transforms={Transforms}
+        Editor={Editor}
+        SlateElement={SlateElement}
+        handleSectionImageUpload={handleSectionImageUpload}
+        addSectionImageFromUrl={addSectionImageFromUrl}
+        removeSectionImage={removeSectionImage}
+        updateSectionImageAlt={updateSectionImageAlt}
+        updateSectionImageCaption={updateSectionImageCaption}
+        clearSectionImages={clearSectionImages}
+
+        handleSectionVideoUpload={handleSectionVideoUpload}
+        removeSectionVideo={removeSectionVideo}
+        videoUploadState={videoUploadState}
+    />
+)}
 
                         {activeSection === 'file-options' && (
                             <FileSection

@@ -9,6 +9,10 @@ import {
     compressImage,
 } from '../Articles/articleUtils/file-utils';
 import { deleteSingleImage } from '../../utils/initiative-firebase-utils';
+import { 
+    uploadVideoWithThumbnail, 
+    validateVideo 
+} from '../../utils/video-utils';
 
 const useCreatePublication = (initialValues, onSubmitHandler) => {
     const { t } = useTranslation();
@@ -42,7 +46,9 @@ const useCreatePublication = (initialValues, onSubmitHandler) => {
             title: 'Въведение',
             content: createSlateEditorState(),
             order: 1,
-            image: null
+            image: null,
+            videoUrl: null,      // ✅ ДОБАВЕНО
+            thumbnailUrl: null   // ✅ ДОБАВЕНО
         }],
 
         relatedPublications: [],
@@ -55,6 +61,9 @@ const useCreatePublication = (initialValues, onSubmitHandler) => {
     }), [userEmail]);
 
     const [values, setValues] = useState(initialValues || defaultValues);
+    
+    // ✅ ДОБАВЕНО: State за video upload progress по секции
+    const [videoUploadState, setVideoUploadState] = useState({});
 
     // Generate slug from title
     const generateSlug = useCallback((title) => {
@@ -126,7 +135,9 @@ const useCreatePublication = (initialValues, onSubmitHandler) => {
             titleSlug: `section-${Date.now()}`,
             title: '',
             content: createSlateEditorState(),
-            image: null
+            image: null,
+            videoUrl: null,      // ✅ ДОБАВЕНО
+            thumbnailUrl: null   // ✅ ДОБАВЕНО
         };
 
         setValues(prev => ({
@@ -334,6 +345,103 @@ const useCreatePublication = (initialValues, onSubmitHandler) => {
         });
     }, []);
 
+    // ========== ✅ SECTION VIDEO MANAGEMENT (ДОБАВЕНО) ==========
+
+    // Handle section video upload
+    const handleSectionVideoUpload = useCallback(async (e, sectionIndex) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        const validation = validateVideo(file);
+        if (!validation.valid) {
+            notify('error', validation.error);
+            return;
+        }
+
+        // Reset input
+        if (e.target) e.target.value = '';
+
+        // Set uploading state
+        setVideoUploadState(prev => ({
+            ...prev,
+            [sectionIndex]: { isUploading: true, progress: 0, stage: 'thumbnail' }
+        }));
+
+        try {
+            const result = await uploadVideoWithThumbnail(
+                file,
+                `publications/section-videos`,
+                ({ stage, progress }) => {
+                    setVideoUploadState(prev => ({
+                        ...prev,
+                        [sectionIndex]: { isUploading: true, progress, stage }
+                    }));
+                }
+            );
+
+            // Update section with video data
+            setValues(prev => {
+                const updatedSections = [...(prev.sections || [])];
+                updatedSections[sectionIndex] = {
+                    ...updatedSections[sectionIndex],
+                    videoUrl: result.videoUrl,
+                    thumbnailUrl: result.thumbnailUrl
+                };
+                return { ...prev, sections: updatedSections };
+            });
+
+            // Clear uploading state
+            setVideoUploadState(prev => ({
+                ...prev,
+                [sectionIndex]: { isUploading: false, progress: 100, stage: null }
+            }));
+
+            notify('success', 'Видеото е качено успешно!');
+
+        } catch (error) {
+            console.error('Video upload error:', error);
+            setVideoUploadState(prev => ({
+                ...prev,
+                [sectionIndex]: { isUploading: false, progress: 0, stage: null }
+            }));
+            notify('error', 'Грешка при качване на видео');
+        }
+    }, [setValues]);
+
+    // Remove section video
+    const removeSectionVideo = useCallback(async (sectionIndex) => {
+        setValues(prev => {
+            const updatedSections = [...(prev.sections || [])];
+            const section = updatedSections[sectionIndex];
+
+            // Delete video from Firebase if needed
+            if (section?.videoUrl && section.videoUrl.includes('firebasestorage.googleapis.com')) {
+                deleteSingleImage(section.videoUrl).catch(() => {
+                    console.log('Could not delete video from Firebase');
+                });
+            }
+            
+            // Delete thumbnail from Firebase if needed
+            if (section?.thumbnailUrl && section.thumbnailUrl.includes('firebasestorage.googleapis.com')) {
+                deleteSingleImage(section.thumbnailUrl).catch(() => {
+                    console.log('Could not delete thumbnail from Firebase');
+                });
+            }
+
+            updatedSections[sectionIndex] = {
+                ...updatedSections[sectionIndex],
+                videoUrl: null,
+                thumbnailUrl: null
+            };
+
+            return { ...prev, sections: updatedSections };
+        });
+        
+        notify('success', 'Видеото е премахнато');
+    }, [setValues]);
+
+    // ========== END SECTION VIDEO MANAGEMENT ==========
+
     // Main image management
     const handleMainImageUpload = useCallback(async (e) => {
         const files = e.target.files;
@@ -480,11 +588,11 @@ const useCreatePublication = (initialValues, onSubmitHandler) => {
         // State
         values,
         setValues,
-        errors: {}, // Add this if validation is needed
+        errors: {},
 
         // Form handlers
         onChangeHandler,
-        onBlurHandler: () => {}, // Add this if needed
+        onBlurHandler: () => {},
         onSubmit,
         generateSlug,
 
@@ -500,6 +608,11 @@ const useCreatePublication = (initialValues, onSubmitHandler) => {
         updateSectionImageAlt,
         updateSectionImageCaption,
         clearSectionImages,
+
+        // ✅ Section video management (ДОБАВЕНО)
+        handleSectionVideoUpload,
+        removeSectionVideo,
+        videoUploadState,
 
         // Main image management
         handleMainImageUpload,

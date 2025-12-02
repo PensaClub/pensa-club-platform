@@ -1,4 +1,6 @@
-const { article, mainImage, project, initiative, Club, mentor, image } = require('../sequelize/models');
+// server/src/middleware/botDetector.js
+
+const { article, mainImage, project, initiative, Club, mentor, image, publication, story } = require('../sequelize/models');
 const generateArticleMetaHTML = require('../utils/metaGenerator');
 const generateProjectMetaHTML = require('../utils/projectMetaGenerator');
 const generateInitiativeMetaHTML = require('../utils/initiativeMetaGenerator');
@@ -6,7 +8,9 @@ const generateClubMetaHTML = require('../utils/clubMetaGenerator');
 const generateAcademyMetaHTML = require('../utils/academyMetaGenerator');
 const generateMentorMetaHTML = require('../utils/mentorMetaGenerator');
 const generateGamesMetaHTML = require('../utils/gamesMetaGenerator');
-const geoip = require('geoip-lite'); // ✅ ДОБАВЕНО
+const generatePublicationMetaHTML = require('../utils/publicationMetaGenerator');
+const generateStoryMetaHTML = require('../utils/storyMetaGenerator');
+const geoip = require('geoip-lite');
 
 /**
  * Проверява дали User-Agent е от социална мрежа bot
@@ -55,14 +59,11 @@ function getBotName(userAgent) {
  * Извлича IP адреса от request
  */
 function getClientIP(req) {
-    // Nginx Proxy Manager / reverse proxy
     const forwarded = req.headers['x-forwarded-for'];
     if (forwarded) {
-        // Взимаме първото IP (оригиналният клиент)
         return forwarded.split(',')[0].trim();
     }
     
-    // Други варианти
     return req.headers['x-real-ip'] || 
            req.ip || 
            req.connection?.remoteAddress || 
@@ -77,18 +78,16 @@ async function logBotRequest(botName, contentType, contentId, contentSlug, userA
     try {
         const { bot_log } = require('../sequelize/models');
 
-        // ✅ GeoIP Lookup
         let country = null;
         let city = null;
         let region = null;
 
         if (ip) {
-            // Премахни IPv6 prefix ако има (::ffff:)
             const cleanIP = ip.replace(/^::ffff:/, '');
             const geo = geoip.lookup(cleanIP);
             
             if (geo) {
-                country = geo.country || null;  // 'BG', 'DE', 'US'
+                country = geo.country || null;
                 city = geo.city || null;
                 region = geo.region || null;
                 console.log(`🌍 GeoIP: ${cleanIP} → ${country}, ${city}, ${region}`);
@@ -124,6 +123,12 @@ async function logBotRequest(botName, contentType, contentId, contentSlug, userA
             logData.pageSlug = contentSlug;
         } else if (contentType === 'mentor') {
             logData.mentorId = contentId;
+        } else if (contentType === 'publication') {
+            logData.publicationId = contentId;
+            logData.publicationSlug = contentSlug;
+        } else if (contentType === 'story') {
+            logData.storyId = contentId;
+            logData.storySlug = contentSlug;
         }
 
         await bot_log.create(logData);
@@ -161,6 +166,8 @@ async function botDetector(req, res, next) {
     const academyMatch = req.path.match(/^\/academy$/);
     const mentorMatch = req.path.match(/^\/academy\/mentors\/(\d+)$/);
     const gamesMatch = req.path.match(/^\/games$/);
+    const publicationMatch = req.path.match(/^\/publications\/([a-zA-Z0-9-]+)$/);
+    const storyMatch = req.path.match(/^\/stories\/([a-zA-Z0-9-]+)$/);
 
     try {
         // ==================== ARTICLE ====================
@@ -290,6 +297,62 @@ async function botDetector(req, res, next) {
 
             const html = generateClubMetaHTML(foundClub);
             console.log('📤 Sending club HTML to bot');
+            return res.send(html);
+        }
+
+        // ==================== PUBLICATION ====================
+        if (publicationMatch) {
+            const slug = publicationMatch[1];
+            console.log('📚 Processing PUBLICATION:', slug);
+
+            const foundPublication = await publication.findOne({
+                where: { slug, isDraft: false },
+                attributes: [
+                    'id', 'title', 'slug', 'shortDescription',
+                    'category', 'tags', 'author', 'image',
+                    'publishedAt', 'createdAt', 'updatedAt'
+                ]
+            });
+
+            if (!foundPublication) {
+                console.log('❌ Publication not found:', slug);
+                return next();
+            }
+
+            console.log('✅ Publication found:', foundPublication.title);
+
+            await logBotRequest(botName, 'publication', foundPublication.id, foundPublication.slug, userAgent, clientIP);
+
+            const html = generatePublicationMetaHTML(foundPublication);
+            console.log('📤 Sending publication HTML to bot');
+            return res.send(html);
+        }
+
+        // ==================== STORY ====================
+        if (storyMatch) {
+            const slug = storyMatch[1];
+            console.log('📖 Processing STORY:', slug);
+
+            const foundStory = await story.findOne({
+                where: { slug, isDraft: false },
+                attributes: [
+                    'id', 'title', 'slug', 'shortDescription',
+                    'category', 'tags', 'author', 'image',
+                    'publishedAt', 'createdAt', 'updatedAt'
+                ]
+            });
+
+            if (!foundStory) {
+                console.log('❌ Story not found:', slug);
+                return next();
+            }
+
+            console.log('✅ Story found:', foundStory.title);
+
+            await logBotRequest(botName, 'story', foundStory.id, foundStory.slug, userAgent, clientIP);
+
+            const html = generateStoryMetaHTML(foundStory);
+            console.log('📤 Sending story HTML to bot');
             return res.send(html);
         }
 

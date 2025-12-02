@@ -75,6 +75,16 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
                 allowNull: true,
             },
+            videoUrl: {
+                type: DataTypes.TEXT,
+                allowNull: true,
+                field: 'video_url',
+            },
+            thumbnailUrl: {
+                type: DataTypes.TEXT,
+                allowNull: true,
+                field: 'thumbnail_url',
+            },
         },
         {
             sequelize,
