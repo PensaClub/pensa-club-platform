@@ -301,60 +301,74 @@ async function botDetector(req, res, next) {
         }
 
         // ==================== PUBLICATION ====================
-        if (publicationMatch) {
-            const slug = publicationMatch[1];
-            console.log('📚 Processing PUBLICATION:', slug);
+if (publicationMatch) {
+    const slug = publicationMatch[1];
+    console.log('📚 Processing PUBLICATION:', slug);
 
-            const foundPublication = await publication.findOne({
-                where: { slug, isDraft: false },
-                attributes: [
-                    'id', 'title', 'slug', 'shortDescription',
-                    'category', 'tags', 'author', 'image',
-                    'publishedAt', 'createdAt', 'updatedAt'
-                ]
-            });
-
-            if (!foundPublication) {
-                console.log('❌ Publication not found:', slug);
-                return next();
+    const foundPublication = await publication.findOne({
+        where: { slug, isDraft: false },
+        attributes: [
+            'id', 'title', 'slug', 'shortDescription',
+            'category', 'tags', 'author',
+            'publishedAt', 'createdAt', 'updatedAt'
+        ],
+        include: [
+            {
+                model: image,
+                as: 'image',
+                attributes: ['id', 'src', 'alt'],
             }
+        ]
+    });
 
-            console.log('✅ Publication found:', foundPublication.title);
+    if (!foundPublication) {
+        console.log('❌ Publication not found:', slug);
+        return next();
+    }
 
-            await logBotRequest(botName, 'publication', foundPublication.id, foundPublication.slug, userAgent, clientIP);
+    console.log('✅ Publication found:', foundPublication.title);
 
-            const html = generatePublicationMetaHTML(foundPublication);
-            console.log('📤 Sending publication HTML to bot');
-            return res.send(html);
-        }
+    await logBotRequest(botName, 'publication', foundPublication.id, foundPublication.slug, userAgent, clientIP);
+
+    const html = generatePublicationMetaHTML(foundPublication);
+    console.log('📤 Sending publication HTML to bot');
+    return res.send(html);
+}
 
         // ==================== STORY ====================
-        if (storyMatch) {
-            const slug = storyMatch[1];
-            console.log('📖 Processing STORY:', slug);
+if (storyMatch) {
+    const slug = storyMatch[1];
+    console.log('📖 Processing STORY:', slug);
 
-            const foundStory = await story.findOne({
-                where: { slug, isDraft: false },
-                attributes: [
-                    'id', 'title', 'slug', 'shortDescription',
-                    'category', 'tags', 'author', 'image',
-                    'publishedAt', 'createdAt', 'updatedAt'
-                ]
-            });
-
-            if (!foundStory) {
-                console.log('❌ Story not found:', slug);
-                return next();
+    const foundStory = await story.findOne({
+        where: { slug, isDraft: false },
+        attributes: [
+            'id', 'title', 'slug', 'shortDescription',
+            'category', 'tags', 'author',
+            'publishedAt', 'createdAt', 'updatedAt'
+        ],
+        include: [
+            {
+                model: image,
+                as: 'image',
+                attributes: ['id', 'src', 'alt'],
             }
+        ]
+    });
 
-            console.log('✅ Story found:', foundStory.title);
+    if (!foundStory) {
+        console.log('❌ Story not found:', slug);
+        return next();
+    }
 
-            await logBotRequest(botName, 'story', foundStory.id, foundStory.slug, userAgent, clientIP);
+    console.log('✅ Story found:', foundStory.title);
 
-            const html = generateStoryMetaHTML(foundStory);
-            console.log('📤 Sending story HTML to bot');
-            return res.send(html);
-        }
+    await logBotRequest(botName, 'story', foundStory.id, foundStory.slug, userAgent, clientIP);
+
+    const html = generateStoryMetaHTML(foundStory);
+    console.log('📤 Sending story HTML to bot');
+    return res.send(html);
+}
 
         // ==================== ACADEMY (СТАТИЧНА СТРАНИЦА) ====================
         if (academyMatch) {
