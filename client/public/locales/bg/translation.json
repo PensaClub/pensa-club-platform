@@ -3546,6 +3546,24 @@
     }
   },
   "publications": {
+    "video": {
+    "title": "Видео към секцията",
+    "helpText": "Качете видео към тази секция (MP4, WebM, OGG до 100MB)",
+    "selectVideo": "Изберете видео",
+    "generatingThumbnail": "Генериране на миниатюра...",
+    "uploadingThumbnail": "Качване на миниатюра...",
+    "uploadingVideo": "Качване на видео...",
+    "uploaded": "Видеото е качено успешно",
+    "thumbnail": "Миниатюра",
+    "remove": "Премахни видео",
+    "invalidType": "Невалиден тип файл. Разрешени: MP4, WebM, OGG",
+    "fileTooLarge": "Видеото е твърде голямо. Максимум 100MB",
+    "uploadSuccess": "Видеото е качено успешно!",
+    "uploadError": "Грешка при качване на видеото",
+    "removeSuccess": "Видеото е премахнато",
+    "notSupported": "Вашият браузър не поддържа видео."
+
+},
     "common": {
       "title": "Публикации",
       "next": "Напред",

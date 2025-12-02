@@ -31,6 +31,22 @@ module.exports = (sequelize, DataTypes) => {
                 foreignKey: 'mentorId',
                 as: 'mentor',
             });
+
+            // ✅ ДОБАВЕНО: Publication
+            if (models.publication) {
+                BotLog.belongsTo(models.publication, {
+                    foreignKey: 'publicationId',
+                    as: 'publication',
+                });
+            }
+
+            // ✅ ДОБАВЕНО: Story
+            if (models.story) {
+                BotLog.belongsTo(models.story, {
+                    foreignKey: 'storyId',
+                    as: 'story',
+                });
+            }
         }
     }
 
@@ -41,7 +57,7 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
             },
             contentType: {
-                type: DataTypes.ENUM('article', 'project', 'initiative', 'club', 'page', 'mentor', 'game'),
+                type: DataTypes.ENUM('article', 'project', 'initiative', 'club', 'page', 'mentor', 'game', 'publication', 'story'),
                 allowNull: false,
                 defaultValue: 'article',
                 field: 'content_type',
@@ -99,6 +115,28 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.INTEGER,
                 allowNull: true,
                 field: 'mentor_id',
+            },
+            // ✅ PUBLICATION
+            publicationId: {
+                type: DataTypes.INTEGER,
+                allowNull: true,
+                field: 'publication_id',
+            },
+            publicationSlug: {
+                type: DataTypes.STRING,
+                allowNull: true,
+                field: 'publication_slug',
+            },
+            // ✅ STORY
+            storyId: {
+                type: DataTypes.INTEGER,
+                allowNull: true,
+                field: 'story_id',
+            },
+            storySlug: {
+                type: DataTypes.STRING,
+                allowNull: true,
+                field: 'story_slug',
             },
             // GEOGRAPHY
             country: {

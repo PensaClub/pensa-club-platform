@@ -163,7 +163,9 @@ const transformToForm = (data, contentType) => {
             titleSlug: section.titleSlug || section.slug || '',
             content: convertStringToSlateContent(section.content),
             order: section.order || index + 1,
-            image: normalizeImageData(section.image)
+            image: normalizeImageData(section.image),
+            videoUrl: section.videoUrl || null,
+            thumbnailUrl: section.thumbnailUrl || null,
         })) || [],
 
         relatedPublications: extractIds(data.relatedPublications),
@@ -210,7 +212,9 @@ const transformToServer = (data, contentType, { isDraft = true } = {}) => {
                     src: section.image.src,
                     alt: nullIfEmpty(section.image.alt),
                     caption: nullIfEmpty(section.image.caption)
-                } : null
+                } : null,
+                videoUrl: nullIfEmpty(section.videoUrl),
+                thumbnailUrl: nullIfEmpty(section.thumbnailUrl),
             };
         }) || [],
 
@@ -254,7 +258,9 @@ const transformToDisplay = (data, contentType, { userEmail, username, t, publica
                             alt: section.image.alt || `Image for ${section.title}`,
                             caption: section.image.caption || ''
                         } : null,
-                        images: section.image ? [section.image] : []
+                        images: section.image ? [section.image] : [],
+                        videoUrl: section.videoUrl || null,
+                        thumbnailUrl: section.thumbnailUrl || null,
                     };
                 });
         }
