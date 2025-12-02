@@ -5,7 +5,8 @@ const generateInitiativeMetaHTML = require('../utils/initiativeMetaGenerator');
 const generateClubMetaHTML = require('../utils/clubMetaGenerator');
 const generateAcademyMetaHTML = require('../utils/academyMetaGenerator');
 const generateMentorMetaHTML = require('../utils/mentorMetaGenerator');
-const generateGamesMetaHTML = require('../utils/gamesMetaGenerator'); // ✅ ДОБАВЕНО
+const generateGamesMetaHTML = require('../utils/gamesMetaGenerator');
+const geoip = require('geoip-lite'); // ✅ ДОБАВЕНО
 
 /**
  * Проверява дали User-Agent е от социална мрежа bot
@@ -51,17 +52,59 @@ function getBotName(userAgent) {
 }
 
 /**
+ * Извлича IP адреса от request
+ */
+function getClientIP(req) {
+    // Nginx Proxy Manager / reverse proxy
+    const forwarded = req.headers['x-forwarded-for'];
+    if (forwarded) {
+        // Взимаме първото IP (оригиналният клиент)
+        return forwarded.split(',')[0].trim();
+    }
+    
+    // Други варианти
+    return req.headers['x-real-ip'] || 
+           req.ip || 
+           req.connection?.remoteAddress || 
+           req.socket?.remoteAddress ||
+           null;
+}
+
+/**
  * Записва bot request в базата данни
  */
 async function logBotRequest(botName, contentType, contentId, contentSlug, userAgent, ip) {
     try {
         const { bot_log } = require('../sequelize/models');
 
+        // ✅ GeoIP Lookup
+        let country = null;
+        let city = null;
+        let region = null;
+
+        if (ip) {
+            // Премахни IPv6 prefix ако има (::ffff:)
+            const cleanIP = ip.replace(/^::ffff:/, '');
+            const geo = geoip.lookup(cleanIP);
+            
+            if (geo) {
+                country = geo.country || null;  // 'BG', 'DE', 'US'
+                city = geo.city || null;
+                region = geo.region || null;
+                console.log(`🌍 GeoIP: ${cleanIP} → ${country}, ${city}, ${region}`);
+            } else {
+                console.log(`🌍 GeoIP: No data for ${cleanIP}`);
+            }
+        }
+
         const logData = {
             bot: botName,
             contentType: contentType,
             userAgent: userAgent,
             ip: ip,
+            country: country,   
+            city: city,         
+            region: region,     
             timestamp: new Date()
         };
 
@@ -84,7 +127,7 @@ async function logBotRequest(botName, contentType, contentId, contentSlug, userA
         }
 
         await bot_log.create(logData);
-        console.log(`✅ Bot log saved: ${botName} → ${contentType}/${contentSlug || contentId}`);
+        console.log(`✅ Bot log saved: ${botName} → ${contentType}/${contentSlug || contentId} [${country || 'Unknown'}]`);
     } catch (error) {
         console.error('❌ Error saving bot log:', error);
     }
@@ -101,12 +144,13 @@ async function botDetector(req, res, next) {
     }
 
     const botName = getBotName(userAgent);
+    const clientIP = getClientIP(req); 
 
     console.log('🤖 Bot detected:', {
         bot: botName,
         url: req.path,
         timestamp: new Date().toISOString(),
-        ip: req.ip
+        ip: clientIP
     });
 
     // URL Pattern Matching
@@ -116,7 +160,7 @@ async function botDetector(req, res, next) {
     const clubMatch = req.path.match(/^\/clubs\/([a-zA-Z0-9-]+)$/);
     const academyMatch = req.path.match(/^\/academy$/);
     const mentorMatch = req.path.match(/^\/academy\/mentors\/(\d+)$/);
-    const gamesMatch = req.path.match(/^\/games$/); // ✅ ДОБАВЕНО
+    const gamesMatch = req.path.match(/^\/games$/);
 
     try {
         // ==================== ARTICLE ====================
@@ -143,14 +187,7 @@ async function botDetector(req, res, next) {
 
             console.log('✅ Article found:', foundArticle.title);
 
-            await logBotRequest(
-                botName,
-                'article',
-                foundArticle.id,
-                foundArticle.slug,
-                userAgent,
-                req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress
-            );
+            await logBotRequest(botName, 'article', foundArticle.id, foundArticle.slug, userAgent, clientIP);
 
             const html = generateArticleMetaHTML(foundArticle);
             console.log('📤 Sending article HTML to bot');
@@ -185,14 +222,7 @@ async function botDetector(req, res, next) {
 
             console.log('✅ Project found:', foundProject.title);
 
-            await logBotRequest(
-                botName,
-                'project',
-                foundProject.id,
-                foundProject.slug,
-                userAgent,
-                req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress
-            );
+            await logBotRequest(botName, 'project', foundProject.id, foundProject.slug, userAgent, clientIP);
 
             const html = generateProjectMetaHTML(foundProject);
             console.log('📤 Sending project HTML to bot');
@@ -228,14 +258,7 @@ async function botDetector(req, res, next) {
 
             console.log('✅ Initiative found:', foundInitiative.title);
 
-            await logBotRequest(
-                botName,
-                'initiative',
-                foundInitiative.id,
-                foundInitiative.slug,
-                userAgent,
-                req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress
-            );
+            await logBotRequest(botName, 'initiative', foundInitiative.id, foundInitiative.slug, userAgent, clientIP);
 
             const html = generateInitiativeMetaHTML(foundInitiative);
             console.log('📤 Sending initiative HTML to bot');
@@ -263,14 +286,7 @@ async function botDetector(req, res, next) {
 
             console.log('✅ Club found:', foundClub.name);
 
-            await logBotRequest(
-                botName,
-                'club',
-                foundClub.id,
-                foundClub.slug,
-                userAgent,
-                req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress
-            );
+            await logBotRequest(botName, 'club', foundClub.id, foundClub.slug, userAgent, clientIP);
 
             const html = generateClubMetaHTML(foundClub);
             console.log('📤 Sending club HTML to bot');
@@ -281,32 +297,18 @@ async function botDetector(req, res, next) {
         if (academyMatch) {
             console.log('🎓 Processing ACADEMY page');
 
-            await logBotRequest(
-                botName,
-                'page',
-                null,
-                'academy',
-                userAgent,
-                req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress
-            );
+            await logBotRequest(botName, 'page', null, 'academy', userAgent, clientIP);
 
             const html = generateAcademyMetaHTML();
             console.log('📤 Sending academy HTML to bot');
             return res.send(html);
         }
 
-        // ==================== GAMES (СТАТИЧНА СТРАНИЦА) ==================== ✅ ДОБАВЕНО
+        // ==================== GAMES (СТАТИЧНА СТРАНИЦА) ====================
         if (gamesMatch) {
             console.log('🎮 Processing GAMES page');
 
-            await logBotRequest(
-                botName,
-                'page',
-                null,
-                'games',
-                userAgent,
-                req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress
-            );
+            await logBotRequest(botName, 'page', null, 'games', userAgent, clientIP);
 
             const html = generateGamesMetaHTML();
             console.log('📤 Sending games HTML to bot');
@@ -334,14 +336,7 @@ async function botDetector(req, res, next) {
 
             console.log('✅ Mentor found:', foundMentor.name);
 
-            await logBotRequest(
-                botName,
-                'mentor',
-                foundMentor.id,
-                null,
-                userAgent,
-                req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress
-            );
+            await logBotRequest(botName, 'mentor', foundMentor.id, null, userAgent, clientIP);
 
             const html = generateMentorMetaHTML(foundMentor);
             console.log('📤 Sending mentor HTML to bot');
