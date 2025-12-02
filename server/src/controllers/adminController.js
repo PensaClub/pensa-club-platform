@@ -485,6 +485,53 @@ adminController.get('/bot-summary', isAuth, rbac.checkPermission('admin', 'read'
             limit: 10,
             raw: true
         });
+        // ==================== TOP PUBLICATIONS (Last 7 days) ====================
+        const topPublications = await bot_log.findAll({
+            attributes: [
+                'publicationSlug',
+                [sequelize.fn('COUNT', sequelize.col('bot_log.id')), 'shares']
+            ],
+            where: {
+                timestamp: { [Op.gte]: last7d },
+                contentType: 'publication',
+                publicationSlug: { [Op.ne]: null }
+            },
+            include: [
+                {
+                    model: publication,
+                    as: 'publication',
+                    attributes: ['id', 'title', 'slug'],
+                    required: false
+                }
+            ],
+            group: ['publicationSlug', 'publication.id', 'publication.title', 'publication.slug'],
+            order: [[sequelize.fn('COUNT', sequelize.col('bot_log.id')), 'DESC']],
+            limit: 5
+        });
+
+        // ==================== TOP STORIES (Last 7 days) ====================
+        const topStories = await bot_log.findAll({
+            attributes: [
+                'storySlug',
+                [sequelize.fn('COUNT', sequelize.col('bot_log.id')), 'shares']
+            ],
+            where: {
+                timestamp: { [Op.gte]: last7d },
+                contentType: 'story',
+                storySlug: { [Op.ne]: null }
+            },
+            include: [
+                {
+                    model: story,
+                    as: 'story',
+                    attributes: ['id', 'title', 'slug'],
+                    required: false
+                }
+            ],
+            group: ['storySlug', 'story.id', 'story.title', 'story.slug'],
+            order: [[sequelize.fn('COUNT', sequelize.col('bot_log.id')), 'DESC']],
+            limit: 5
+        });
         // ==================== RESPONSE ====================
         res.json({
             summary: {
@@ -501,6 +548,23 @@ adminController.get('/bot-summary', isAuth, rbac.checkPermission('admin', 'read'
                     title: item.article?.title || 'Unknown',
                     shares: parseInt(item.dataValues.shares),
                     type: 'article'
+                })),
+                games: topGames.map(item => ({
+                    slug: item.gameSlug,
+                    shares: parseInt(item.shares),
+                    type: 'game'
+                })),
+                publications: topPublications.map(item => ({
+                    slug: item.publicationSlug,
+                    title: item.publication?.title || 'Unknown',
+                    shares: parseInt(item.dataValues.shares),
+                    type: 'publication'
+                })),
+                stories: topStories.map(item => ({
+                    slug: item.storySlug,
+                    title: item.story?.title || 'Unknown',
+                    shares: parseInt(item.dataValues.shares),
+                    type: 'story'
                 })),
                 projects: topProjects.map(item => ({
                     slug: item.projectSlug,
@@ -525,11 +589,7 @@ adminController.get('/bot-summary', isAuth, rbac.checkPermission('admin', 'read'
                     shares: parseInt(item.shares),
                     type: 'page'
                 })),
-                games: topGames.map(item => ({
-                    slug: item.gameSlug,
-                    shares: parseInt(item.shares),
-                    type: 'game'
-                }))
+
             },
             geography: {
                 topCountries: topCountries.map(item => ({
@@ -537,6 +597,7 @@ adminController.get('/bot-summary', isAuth, rbac.checkPermission('admin', 'read'
                     count: parseInt(item.count)
                 }))
             },
+
             dailyActivity: dailyActivity,
             meta: {
                 generatedAt: new Date().toISOString(),
@@ -545,7 +606,8 @@ adminController.get('/bot-summary', isAuth, rbac.checkPermission('admin', 'read'
                     last7d: last7d.toISOString(),
                     last30d: last30d.toISOString()
                 }
-            }
+            },
+
         });
     } catch (error) {
         console.error('Error fetching bot summary:', error);
