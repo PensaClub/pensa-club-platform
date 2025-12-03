@@ -8,7 +8,9 @@ import {
   faMap,
   faTimes,
   faSort,
-  faLayerGroup
+  faLayerGroup,
+  faRoad,
+  faMailBulk
 } from '@fortawesome/free-solid-svg-icons';
 import './clubsSearch.css';
 
@@ -22,6 +24,8 @@ export const ClubsSearch = ({
 }) => {
   const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState('');
+  const [addressSearch, setAddressSearch] = useState(''); // НОВО: търсене по адрес
+  const [postalCodeSearch, setPostalCodeSearch] = useState(''); // НОВО: търсене по пощенски код
   const [selectedCity, setSelectedCity] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState('name');
@@ -30,11 +34,13 @@ export const ClubsSearch = ({
   const handleFilterUpdate = useCallback(() => {
     onFilterChange({
       searchTerm,
+      addressSearch,      // НОВО
+      postalCodeSearch,   // НОВО
       city: selectedCity,
       category: selectedCategory,
       sortBy
     });
-  }, [searchTerm, selectedCity, selectedCategory, sortBy, onFilterChange]);
+  }, [searchTerm, addressSearch, postalCodeSearch, selectedCity, selectedCategory, sortBy, onFilterChange]);
 
   useEffect(() => {
     const debounceTimer = setTimeout(handleFilterUpdate, 300);
@@ -43,12 +49,14 @@ export const ClubsSearch = ({
 
   const clearAllFilters = () => {
     setSearchTerm('');
+    setAddressSearch('');
+    setPostalCodeSearch('');
     setSelectedCity('all');
     setSelectedCategory('all');
     setSortBy('name');
   };
 
-  const hasActiveFilters = searchTerm || selectedCity !== 'all' || selectedCategory !== 'all';
+  const hasActiveFilters = searchTerm || addressSearch || postalCodeSearch || selectedCity !== 'all' || selectedCategory !== 'all';
 
   const getCategoryLabel = (category) => {
     return t(`clubs.ClubsSearch.categories.${category}`, { 
@@ -70,7 +78,7 @@ export const ClubsSearch = ({
         <span className="clubs-search-results">{getResultsText(resultsCount)}</span>
       </div>
 
-      {/* Търсачка */}
+      {/* Търсачка по име */}
       <div className="clubs-search-section">
         <div className="clubs-search-input-wrapper">
           <FontAwesomeIcon icon={faSearch} className="clubs-search-icon" />
@@ -114,6 +122,56 @@ export const ClubsSearch = ({
                 <option key={city} value={city}>{city}</option>
               ))}
             </select>
+          </div>
+        </div>
+
+        {/* НОВО: Търсене по адрес/квартал/район */}
+        <div className="clubs-filter-group">
+          <label>{t('clubs.ClubsSearch.filters.address.label', { defaultValue: 'Квартал / Улица / Район' })}</label>
+          <div className="clubs-search-input-wrapper clubs-address-search">
+            <FontAwesomeIcon icon={faRoad} className="clubs-search-icon" />
+            <input
+              type="text"
+              placeholder={t('clubs.ClubsSearch.filters.address.placeholder', { defaultValue: 'Напр: Надежда, Младост, ул. Витоша...' })}
+              value={addressSearch}
+              onChange={(e) => setAddressSearch(e.target.value)}
+              className="clubs-search-input"
+            />
+            {addressSearch && (
+              <button
+                onClick={() => setAddressSearch('')}
+                className="clubs-search-clear"
+              >
+                <FontAwesomeIcon icon={faTimes} />
+              </button>
+            )}
+          </div>
+          <span className="clubs-filter-hint">
+            {t('clubs.ClubsSearch.filters.address.hint', { defaultValue: 'Търси в: квартал, улица, район, област' })}
+          </span>
+        </div>
+
+        {/* НОВО: Търсене по пощенски код */}
+        <div className="clubs-filter-group">
+          <label>{t('clubs.ClubsSearch.filters.postalCode.label', { defaultValue: 'Пощенски код' })}</label>
+          <div className="clubs-search-input-wrapper clubs-postal-search">
+            <FontAwesomeIcon icon={faMailBulk} className="clubs-search-icon" />
+            <input
+              type="text"
+              placeholder={t('clubs.ClubsSearch.filters.postalCode.placeholder', { defaultValue: 'Напр: 1000, 1233...' })}
+              value={postalCodeSearch}
+              onChange={(e) => setPostalCodeSearch(e.target.value)}
+              className="clubs-search-input"
+              maxLength={4}
+            />
+            {postalCodeSearch && (
+              <button
+                onClick={() => setPostalCodeSearch('')}
+                className="clubs-search-clear"
+              >
+                <FontAwesomeIcon icon={faTimes} />
+              </button>
+            )}
           </div>
         </div>
 
