@@ -9,9 +9,9 @@ import {
     compressImage,
 } from '../Articles/articleUtils/file-utils';
 import { deleteSingleImage } from '../../utils/initiative-firebase-utils';
-import { 
-    uploadVideoWithThumbnail, 
-    validateVideo 
+import {
+    uploadVideoWithThumbnail,
+    validateVideo
 } from '../../utils/video-utils';
 
 const useCreatePublication = (initialValues, onSubmitHandler) => {
@@ -61,7 +61,7 @@ const useCreatePublication = (initialValues, onSubmitHandler) => {
     }), [userEmail]);
 
     const [values, setValues] = useState(initialValues || defaultValues);
-    
+
     // ✅ ДОБАВЕНО: State за video upload progress по секции
     const [videoUploadState, setVideoUploadState] = useState({});
 
@@ -131,26 +131,43 @@ const useCreatePublication = (initialValues, onSubmitHandler) => {
 
     // Section management
     const addSection = useCallback(() => {
-        const newSection = {
-            titleSlug: `section-${Date.now()}`,
-            title: '',
-            content: createSlateEditorState(),
-            image: null,
-            videoUrl: null,      // ✅ ДОБАВЕНО
-            thumbnailUrl: null   // ✅ ДОБАВЕНО
-        };
+        setValues(prev => {
+            const currentSections = prev.sections || [];
+            const newOrder = currentSections.length + 1;
 
-        setValues(prev => ({
-            ...prev,
-            sections: [...(prev.sections || []), newSection]
-        }));
+            const newSection = {
+                id: `section-${Date.now()}`,
+                titleSlug: `section-${Date.now()}`,
+                title: '',
+                content: createSlateEditorState(),
+                order: newOrder,  // ✅ Правилен order
+                image: null,
+                videoUrl: null,
+                thumbnailUrl: null
+            };
+
+            return {
+                ...prev,
+                sections: [...currentSections, newSection]
+            };
+        });
     }, []);
 
     const removeSection = useCallback((index) => {
-        setValues(prev => ({
-            ...prev,
-            sections: (prev.sections || []).filter((_, i) => i !== index)
-        }));
+        setValues(prev => {
+            const filteredSections = (prev.sections || []).filter((_, i) => i !== index);
+
+            // ✅ Обновяване на order на всички секции след премахване
+            const updatedSections = filteredSections.map((section, idx) => ({
+                ...section,
+                order: idx + 1
+            }));
+
+            return {
+                ...prev,
+                sections: updatedSections
+            };
+        });
     }, []);
 
     const updateSection = useCallback((index, field, value) => {
@@ -201,7 +218,7 @@ const useCreatePublication = (initialValues, onSubmitHandler) => {
             const url = await uploadFileWithProgress(
                 compressedFile,
                 'publications/section-images',
-                () => {}
+                () => { }
             );
 
             // Replace blob URL with Firebase URL
@@ -420,7 +437,7 @@ const useCreatePublication = (initialValues, onSubmitHandler) => {
                     console.log('Could not delete video from Firebase');
                 });
             }
-            
+
             // Delete thumbnail from Firebase if needed
             if (section?.thumbnailUrl && section.thumbnailUrl.includes('firebasestorage.googleapis.com')) {
                 deleteSingleImage(section.thumbnailUrl).catch(() => {
@@ -436,7 +453,7 @@ const useCreatePublication = (initialValues, onSubmitHandler) => {
 
             return { ...prev, sections: updatedSections };
         });
-        
+
         notify('success', 'Видеото е премахнато');
     }, [setValues]);
 
@@ -476,7 +493,7 @@ const useCreatePublication = (initialValues, onSubmitHandler) => {
             const url = await uploadFileWithProgress(
                 compressedFile,
                 'publications/main-images',
-                () => {} // Progress callback
+                () => { } // Progress callback
             );
 
             // Replace blob URL with Firebase URL
@@ -592,7 +609,7 @@ const useCreatePublication = (initialValues, onSubmitHandler) => {
 
         // Form handlers
         onChangeHandler,
-        onBlurHandler: () => {},
+        onBlurHandler: () => { },
         onSubmit,
         generateSlug,
 
