@@ -227,7 +227,7 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
 
     const getSortedSections = () => {
         if (!content?.sections || content.sections.length === 0) return [];
-        return [...content.sections].sort((a, b) => (a.id || a.order || 0) - (b.id || b.order || 0));
+        return [...content.sections].sort((a, b) => (a.order || 0) - (b.order || 0));
     };
 
     const renderSectionContent = (content) => {

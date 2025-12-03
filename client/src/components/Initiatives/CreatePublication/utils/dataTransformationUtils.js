@@ -49,11 +49,11 @@ const convertStringToSlateContent = (content) => {
 
     // ✅ Ако content е HTML string, конвертирай го към Slate format
     if (typeof content === 'string') {
-        if (content.includes('<p>') || content.includes('<h1>') || content.includes('<h2>') || 
+        if (content.includes('<p>') || content.includes('<h1>') || content.includes('<h2>') ||
             content.includes('<ul>') || content.includes('<ol>') || content.includes('<blockquote>')) {
             return convertHtmlToSlate(content);
         }
-        
+
         // Plain text - раздели по нови редове
         const lines = content.split('\n').filter(line => line.trim());
         if (lines.length > 0) {
@@ -79,7 +79,7 @@ const convertHtmlToSlate = (html) => {
     }
 
     const nodes = [];
-    
+
     if (typeof DOMParser !== 'undefined') {
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
@@ -87,7 +87,7 @@ const convertHtmlToSlate = (html) => {
 
         const processNode = (element) => {
             const tagName = element.tagName?.toLowerCase();
-            
+
             switch (tagName) {
                 case 'p':
                     return {
@@ -143,7 +143,7 @@ const convertHtmlToSlate = (html) => {
 
         const processChildren = (element) => {
             const children = [];
-            
+
             element.childNodes.forEach(child => {
                 if (child.nodeType === Node.TEXT_NODE) {
                     const text = child.textContent;
@@ -153,7 +153,7 @@ const convertHtmlToSlate = (html) => {
                 } else if (child.nodeType === Node.ELEMENT_NODE) {
                     const tagName = child.tagName.toLowerCase();
                     const textContent = child.textContent || '';
-                    
+
                     switch (tagName) {
                         case 'strong':
                         case 'b':
@@ -191,23 +191,23 @@ const convertHtmlToSlate = (html) => {
         const paragraphRegex = /<p>(.*?)<\/p>/gs;
         const h1Regex = /<h1>(.*?)<\/h1>/gs;
         const h2Regex = /<h2>(.*?)<\/h2>/gs;
-        
+
         let match;
-        
+
         while ((match = paragraphRegex.exec(html)) !== null) {
             nodes.push({
                 type: 'paragraph',
                 children: [{ text: match[1].replace(/<[^>]*>/g, '') }]
             });
         }
-        
+
         while ((match = h1Regex.exec(html)) !== null) {
             nodes.push({
                 type: 'heading-one',
                 children: [{ text: match[1].replace(/<[^>]*>/g, '') }]
             });
         }
-        
+
         while ((match = h2Regex.exec(html)) !== null) {
             nodes.push({
                 type: 'heading-two',
@@ -309,11 +309,11 @@ const transformToForm = (data, contentType) => {
         sections: (data.sections || [])
             .sort((a, b) => (a.order || 0) - (b.order || 0))
             .map((section, index) => ({
-                id: section.id || `section-${index + 1}`,
+                id: section.id || `section-${Date.now()}-${index}`,
                 title: section.title || '',
                 titleSlug: section.titleSlug || section.slug || '',
                 content: convertStringToSlateContent(section.content),
-                order: section.order || index + 1,
+                order: index + 1,  // ✅ НОВО order базирано на позиция след сортиране
                 image: normalizeImageData(section.image),
                 videoUrl: section.videoUrl || null,
                 thumbnailUrl: section.thumbnailUrl || null,
@@ -346,33 +346,30 @@ const transformToServer = (data, contentType, { isDraft = true } = {}) => {
             alt: nullIfEmpty(data.mainImage.alt),
             caption: nullIfEmpty(data.mainImage.caption)
         } : null,
-        
-        sections: (data.sections || [])
-            .sort((a, b) => (a.order || 0) - (b.order || 0))
-            .map((section, index) => {
-                let content = '';
-                
-                if (section.content && !isSlateEmpty(section.content)) {
-                    // ✅ КЛЮЧОВА ПРОМЯНА: slateToHtml вместо convertSlateToText
-                    content = slateToHtml(section.content);
-                }
 
-                const sectionTitleSlug = generateSectionTitleSlug(section.title, index);
+        sections: (data.sections || []).map((section, index) => {
+            let content = '';
 
-                return {
-                    title: nullIfEmpty(section.title),
-                    titleSlug: sectionTitleSlug,
-                    content: nullIfEmpty(content),
-                    order: section.order || index + 1,
-                    image: section.image?.src ? {
-                        src: section.image.src,
-                        alt: nullIfEmpty(section.image.alt),
-                        caption: nullIfEmpty(section.image.caption)
-                    } : null,
-                    videoUrl: nullIfEmpty(section.videoUrl),
-                    thumbnailUrl: nullIfEmpty(section.thumbnailUrl),
-                };
-            }),
+            if (section.content && !isSlateEmpty(section.content)) {
+                content = slateToHtml(section.content);
+            }
+
+            const sectionTitleSlug = generateSectionTitleSlug(section.title, index);
+
+            return {
+                title: nullIfEmpty(section.title),
+                titleSlug: sectionTitleSlug,
+                content: nullIfEmpty(content),
+                order: index + 1,  // ✅ ПОЗИЦИЯ в масива, НЕ section.order
+                image: section.image?.src ? {
+                    src: section.image.src,
+                    alt: nullIfEmpty(section.image.alt),
+                    caption: nullIfEmpty(section.image.caption)
+                } : null,
+                videoUrl: nullIfEmpty(section.videoUrl),
+                thumbnailUrl: nullIfEmpty(section.thumbnailUrl),
+            };
+        }),
 
         relatedPublications: data.relatedPublications || [],
         connectedInitiativeIds: data.connectedInitiativeIds || [],
@@ -389,7 +386,7 @@ const transformToDisplay = (data, contentType, { userEmail, username, t, publica
                 .map((section, index) => {
                     const sectionTitleSlug = generateSectionTitleSlug(section.title, index);
                     let content = '';
-                    
+
                     if (section.content) {
                         if (Array.isArray(section.content)) {
                             content = slateToHtml(section.content);

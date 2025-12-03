@@ -176,20 +176,28 @@ const ContentSection = ({
     };
 
     // Move section up/down
-    const handleMoveSection = (index, direction) => {
-        const newSections = [...(values.sections || [])];
-        const targetIndex = direction === 'up' ? index - 1 : index + 1;
+const handleMoveSection = (index, direction) => {
+    const newSections = [...(values.sections || [])];
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
 
-        if (targetIndex >= 0 && targetIndex < newSections.length) {
-            [newSections[index], newSections[targetIndex]] = [newSections[targetIndex], newSections[index]];
-            setValues(prev => ({ ...prev, sections: newSections }));
+    if (targetIndex >= 0 && targetIndex < newSections.length) {
+        // Swap секциите
+        [newSections[index], newSections[targetIndex]] = [newSections[targetIndex], newSections[index]];
+        
+        // ✅ НОВО: Update order на ВСИЧКИ секции базирано на новата позиция
+        const updatedSections = newSections.map((section, idx) => ({
+            ...section,
+            order: idx + 1
+        }));
+        
+        setValues(prev => ({ ...prev, sections: updatedSections }));
 
-            const tempEditor = sectionEditorsRef.current[index];
-            sectionEditorsRef.current[index] = sectionEditorsRef.current[targetIndex];
-            sectionEditorsRef.current[targetIndex] = tempEditor;
-        }
-    };
-
+        // Swap editors
+        const tempEditor = sectionEditorsRef.current[index];
+        sectionEditorsRef.current[index] = sectionEditorsRef.current[targetIndex];
+        sectionEditorsRef.current[targetIndex] = tempEditor;
+    }
+};
     // Slate.js toolbar functions
     const toggleMark = (editor, format) => {
         try {
