@@ -11,6 +11,7 @@ import './allClubs.css';
 import { useClubContext } from '../../contexts/ClubContext';
 import ScrollToTop from '../../ScrollToTop/ScrollToTop';
 import SEOHead from '../../SEO/SEOHead';
+import { matchesAddressSearch, matchesPostalCode } from '../../../utils/addressSearch';
 
 export const AllClubs = () => {
   const { t, i18n } = useTranslation();
@@ -69,19 +70,28 @@ export const AllClubs = () => {
   }, []);
 
   // Филтриране на клубове
-  const handleFilterChange = useCallback((filters) => {
+ const handleFilterChange = useCallback((filters) => {
     setSearchFilters(filters);
 
-let filtered = clubs.filter(club => club !== null && club !== undefined);
+    let filtered = clubs.filter(club => club !== null && club !== undefined);
 
     // Търсене по име или описание
     if (filters.searchTerm) {
       const searchLower = filters.searchTerm.toLowerCase();
       filtered = filtered.filter(club =>
         club?.name?.toLowerCase().includes(searchLower) ||
-        club?.shortDescription?.toLowerCase().includes(searchLower) ||
-        club?.location?.city?.toLowerCase().includes(searchLower)
+        club?.shortDescription?.toLowerCase().includes(searchLower)
       );
+    }
+
+    // НОВО: Търсене по адрес/квартал/район/улица
+    if (filters.addressSearch) {
+      filtered = filtered.filter(club => matchesAddressSearch(club, filters.addressSearch));
+    }
+
+    // НОВО: Търсене по пощенски код
+    if (filters.postalCodeSearch) {
+      filtered = filtered.filter(club => matchesPostalCode(club, filters.postalCodeSearch));
     }
 
     // Филтриране по град
