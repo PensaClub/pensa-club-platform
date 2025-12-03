@@ -1,3 +1,5 @@
+// dataTransformationUtils.js
+
 import { isSlateEmpty, slateToHtml } from '../../../../utils/slateToHtml';
 
 // Transformation types
@@ -45,6 +47,23 @@ const convertStringToSlateContent = (content) => {
         }
     }
 
+    // ✅ Ако content е HTML string, конвертирай го към Slate format
+    if (typeof content === 'string') {
+        if (content.includes('<p>') || content.includes('<h1>') || content.includes('<h2>') || 
+            content.includes('<ul>') || content.includes('<ol>') || content.includes('<blockquote>')) {
+            return convertHtmlToSlate(content);
+        }
+        
+        // Plain text - раздели по нови редове
+        const lines = content.split('\n').filter(line => line.trim());
+        if (lines.length > 0) {
+            return lines.map(line => ({
+                type: 'paragraph',
+                children: [{ text: line }]
+            }));
+        }
+    }
+
     return [
         {
             type: 'paragraph',
@@ -53,21 +72,151 @@ const convertStringToSlateContent = (content) => {
     ];
 };
 
-// Convert Slate content to plain text
-const convertSlateToText = (slateContent) => {
-    if (!slateContent || !Array.isArray(slateContent)) {
-        return '';
+// ✅ НОВО: Конвертиране на HTML обратно към Slate format
+const convertHtmlToSlate = (html) => {
+    if (!html || typeof html !== 'string') {
+        return [{ type: 'paragraph', children: [{ text: '' }] }];
     }
 
-    return slateContent
-        .map(node => {
-            if (node.type === 'paragraph') {
-                return node.children?.map(child => child.text || '').join('') || '';
+    const nodes = [];
+    
+    if (typeof DOMParser !== 'undefined') {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const body = doc.body;
+
+        const processNode = (element) => {
+            const tagName = element.tagName?.toLowerCase();
+            
+            switch (tagName) {
+                case 'p':
+                    return {
+                        type: 'paragraph',
+                        children: processChildren(element)
+                    };
+                case 'h1':
+                    return {
+                        type: 'heading-one',
+                        children: processChildren(element)
+                    };
+                case 'h2':
+                    return {
+                        type: 'heading-two',
+                        children: processChildren(element)
+                    };
+                case 'h3':
+                    return {
+                        type: 'heading-three',
+                        children: processChildren(element)
+                    };
+                case 'ul':
+                    return {
+                        type: 'bulleted-list',
+                        children: Array.from(element.children).map(li => ({
+                            type: 'list-item',
+                            children: processChildren(li)
+                        }))
+                    };
+                case 'ol':
+                    return {
+                        type: 'numbered-list',
+                        children: Array.from(element.children).map(li => ({
+                            type: 'list-item',
+                            children: processChildren(li)
+                        }))
+                    };
+                case 'blockquote':
+                    return {
+                        type: 'block-quote',
+                        children: processChildren(element)
+                    };
+                default:
+                    if (element.textContent?.trim()) {
+                        return {
+                            type: 'paragraph',
+                            children: [{ text: element.textContent }]
+                        };
+                    }
+                    return null;
             }
-            return '';
-        })
-        .filter(text => text.trim() !== '')
-        .join('\n');
+        };
+
+        const processChildren = (element) => {
+            const children = [];
+            
+            element.childNodes.forEach(child => {
+                if (child.nodeType === Node.TEXT_NODE) {
+                    const text = child.textContent;
+                    if (text) {
+                        children.push({ text });
+                    }
+                } else if (child.nodeType === Node.ELEMENT_NODE) {
+                    const tagName = child.tagName.toLowerCase();
+                    const textContent = child.textContent || '';
+                    
+                    switch (tagName) {
+                        case 'strong':
+                        case 'b':
+                            children.push({ text: textContent, bold: true });
+                            break;
+                        case 'em':
+                        case 'i':
+                            children.push({ text: textContent, italic: true });
+                            break;
+                        case 'u':
+                            children.push({ text: textContent, underline: true });
+                            break;
+                        case 'br':
+                            children.push({ text: '\n' });
+                            break;
+                        default:
+                            if (textContent) {
+                                children.push({ text: textContent });
+                            }
+                    }
+                }
+            });
+
+            return children.length > 0 ? children : [{ text: '' }];
+        };
+
+        Array.from(body.children).forEach(child => {
+            const node = processNode(child);
+            if (node) {
+                nodes.push(node);
+            }
+        });
+    } else {
+        // Fallback за server-side
+        const paragraphRegex = /<p>(.*?)<\/p>/gs;
+        const h1Regex = /<h1>(.*?)<\/h1>/gs;
+        const h2Regex = /<h2>(.*?)<\/h2>/gs;
+        
+        let match;
+        
+        while ((match = paragraphRegex.exec(html)) !== null) {
+            nodes.push({
+                type: 'paragraph',
+                children: [{ text: match[1].replace(/<[^>]*>/g, '') }]
+            });
+        }
+        
+        while ((match = h1Regex.exec(html)) !== null) {
+            nodes.push({
+                type: 'heading-one',
+                children: [{ text: match[1].replace(/<[^>]*>/g, '') }]
+            });
+        }
+        
+        while ((match = h2Regex.exec(html)) !== null) {
+            nodes.push({
+                type: 'heading-two',
+                children: [{ text: match[1].replace(/<[^>]*>/g, '') }]
+            });
+        }
+    }
+
+    return nodes.length > 0 ? nodes : [{ type: 'paragraph', children: [{ text: '' }] }];
 };
 
 // Normalize image data structure
@@ -100,7 +249,6 @@ const getFileNameFromUrl = (url) => {
         const filename = pathname.split('/').pop();
         return filename || null;
     } catch {
-        // Fallback for relative URLs
         const urlParts = url.split('/');
         return urlParts[urlParts.length - 1] || null;
     }
@@ -157,16 +305,19 @@ const transformToForm = (data, contentType) => {
         fileSize: data.fileSize || '',
         downloadUrl: data.downloadUrl || '',
 
-        sections: data.sections?.map((section, index) => ({
-            id: section.id || `section-${index + 1}`,
-            title: section.title || '',
-            titleSlug: section.titleSlug || section.slug || '',
-            content: convertStringToSlateContent(section.content),
-            order: section.order || index + 1,
-            image: normalizeImageData(section.image),
-            videoUrl: section.videoUrl || null,
-            thumbnailUrl: section.thumbnailUrl || null,
-        })) || [],
+        // ✅ ПОПРАВКА: Сортиране на секциите по order при зареждане
+        sections: (data.sections || [])
+            .sort((a, b) => (a.order || 0) - (b.order || 0))
+            .map((section, index) => ({
+                id: section.id || `section-${index + 1}`,
+                title: section.title || '',
+                titleSlug: section.titleSlug || section.slug || '',
+                content: convertStringToSlateContent(section.content),
+                order: section.order || index + 1,
+                image: normalizeImageData(section.image),
+                videoUrl: section.videoUrl || null,
+                thumbnailUrl: section.thumbnailUrl || null,
+            })),
 
         relatedPublications: extractIds(data.relatedPublications),
         connectedInitiativeIds: extractIds(data.initiatives),
@@ -174,7 +325,7 @@ const transformToForm = (data, contentType) => {
     };
 };
 
-// Transform form data to server format (for create/update)
+// ✅ ПОПРАВКА: Transform form data to server format - използва slateToHtml
 const transformToServer = (data, contentType, { isDraft = true } = {}) => {
     return {
         title: data.title,
@@ -195,28 +346,33 @@ const transformToServer = (data, contentType, { isDraft = true } = {}) => {
             alt: nullIfEmpty(data.mainImage.alt),
             caption: nullIfEmpty(data.mainImage.caption)
         } : null,
-        sections: data.sections?.map((section, index) => {
-            let content = '';
-            if (section.content && !isSlateEmpty(section.content)) {
-                content = convertSlateToText(section.content);
-            }
+        
+        sections: (data.sections || [])
+            .sort((a, b) => (a.order || 0) - (b.order || 0))
+            .map((section, index) => {
+                let content = '';
+                
+                if (section.content && !isSlateEmpty(section.content)) {
+                    // ✅ КЛЮЧОВА ПРОМЯНА: slateToHtml вместо convertSlateToText
+                    content = slateToHtml(section.content);
+                }
 
-            const sectionTitleSlug = generateSectionTitleSlug(section.title, index);
+                const sectionTitleSlug = generateSectionTitleSlug(section.title, index);
 
-            return {
-                title: nullIfEmpty(section.title),
-                titleSlug: sectionTitleSlug,
-                content: nullIfEmpty(content),
-                order: section.order || index + 1,
-                image: section.image?.src ? {
-                    src: section.image.src,
-                    alt: nullIfEmpty(section.image.alt),
-                    caption: nullIfEmpty(section.image.caption)
-                } : null,
-                videoUrl: nullIfEmpty(section.videoUrl),
-                thumbnailUrl: nullIfEmpty(section.thumbnailUrl),
-            };
-        }) || [],
+                return {
+                    title: nullIfEmpty(section.title),
+                    titleSlug: sectionTitleSlug,
+                    content: nullIfEmpty(content),
+                    order: section.order || index + 1,
+                    image: section.image?.src ? {
+                        src: section.image.src,
+                        alt: nullIfEmpty(section.image.alt),
+                        caption: nullIfEmpty(section.image.caption)
+                    } : null,
+                    videoUrl: nullIfEmpty(section.videoUrl),
+                    thumbnailUrl: nullIfEmpty(section.thumbnailUrl),
+                };
+            }),
 
         relatedPublications: data.relatedPublications || [],
         connectedInitiativeIds: data.connectedInitiativeIds || [],
@@ -233,15 +389,12 @@ const transformToDisplay = (data, contentType, { userEmail, username, t, publica
                 .map((section, index) => {
                     const sectionTitleSlug = generateSectionTitleSlug(section.title, index);
                     let content = '';
+                    
                     if (section.content) {
-                        if (isEditMode) {
-                            content = section.content;
+                        if (Array.isArray(section.content)) {
+                            content = slateToHtml(section.content);
                         } else {
-                            if (Array.isArray(section.content)) {
-                                content = convertSlateToText(section.content);
-                            } else {
-                                content = section.content;
-                            }
+                            content = section.content;
                         }
                     } else {
                         content = t?.('publications.preview.noContent') || 'No content';
@@ -302,9 +455,9 @@ const transformToDisplay = (data, contentType, { userEmail, username, t, publica
         likes: data.likes || null,
         isLiked: data.isLiked || false,
 
-        initiatives: isEditMode ? (data.initiatives || []) : (data.initiatives || []),
-        projects: isEditMode ? (data.projects || []) : (data.projects || []),
-        relatedPublications: isEditMode ? (data.relatedPublications || []) : (data.relatedPublications || []),
+        initiatives: data.initiatives || [],
+        projects: data.projects || [],
+        relatedPublications: data.relatedPublications || [],
     };
 };
 
@@ -317,4 +470,3 @@ export const transformPublicationForServer = (data, isDraft = true) =>
 
 export const transformPublicationForDisplay = (data, options = {}) =>
     transformData(data, TRANSFORMATION_TYPES.DISPLAY, CONTENT_TYPES.PUBLICATION, options);
-
