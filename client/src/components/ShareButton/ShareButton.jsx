@@ -36,22 +36,18 @@ export const ShareButton = ({
         return `${contentTitle} - ${t('share.readMore', 'Прочетете повече в Pensa Club')}`;
     };
 
-    // Generate share URLs using utility
     const shareUrls = generateShareUrls(
         getCurrentUrl(), 
         contentTitle, 
         getShareText()
     );
 
-    // Detect user preferences
     const preferences = detectBulgarianPreferences();
 
-    // Detect if device supports native sharing
     const hasNativeShare = () => {
         return navigator.share && /Mobile|Android|iPhone|iPad/.test(navigator.userAgent);
     };
 
-    // Close dropdown when clicking outside
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (dropdownRef.current && !dropdownRef.current.contains(event.target) &&
@@ -64,7 +60,6 @@ export const ShareButton = ({
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    // Native share
     const handleNativeShare = async () => {
         try {
             await navigator.share({
@@ -83,7 +78,6 @@ export const ShareButton = ({
         }
     };
 
-    // Show toast with specific type
     const showToastMessage = (type = 'default') => {
         setToastType(type);
         setShowToast(true);
@@ -98,7 +92,6 @@ export const ShareButton = ({
         }, duration);
     };
 
-    // Copy to clipboard
     const copyToClipboard = async () => {
         try {
             const url = getCurrentUrl();
@@ -130,7 +123,6 @@ export const ShareButton = ({
         }
     };
 
-    // Viber share - using utility with smart device detection
     const shareToViber = () => {
         const isMobile = /Mobile|Android|iPhone|iPad/.test(navigator.userAgent);
         const viberUrl = isMobile ? shareUrls.viber.mobile : shareUrls.viber.desktop;
@@ -144,7 +136,6 @@ export const ShareButton = ({
         setShowDropdown(false);
     };
 
-    // Telegram share - using utility
     const shareToTelegram = () => {
         window.open(shareUrls.telegram, '_blank', 'noopener,noreferrer');
 
@@ -155,7 +146,6 @@ export const ShareButton = ({
         setShowDropdown(false);
     };
 
-    // Instagram share (copy link with instructions)
     const shareToInstagram = async () => {
         try {
             const url = getCurrentUrl();
@@ -187,7 +177,6 @@ export const ShareButton = ({
         }
     };
 
-    // Email share - using utility
     const shareToEmail = () => {
         window.location.href = shareUrls.email;
 
@@ -198,7 +187,6 @@ export const ShareButton = ({
         setShowDropdown(false);
     };
 
-    // Dynamic platform ordering based on user preferences
     const getPlatformOrder = () => {
         const allPlatforms = [
             { 
@@ -233,19 +221,16 @@ export const ShareButton = ({
             }
         ];
 
-        // За български потребители: Copy, Viber, Telegram, Instagram, Email
         if (preferences.isBulgarian) {
             return allPlatforms;
         } else {
-            // За международни потребители: Copy, Telegram, Viber, Instagram, Email
             const reordered = [...allPlatforms];
-            const viber = reordered.splice(1, 1)[0]; // Премахваме Viber от позиция 1
-            reordered.splice(2, 0, viber); // Слагаме го на позиция 2 (след Telegram)
+            const viber = reordered.splice(1, 1)[0];
+            reordered.splice(2, 0, viber);
             return reordered;
         }
     };
 
-    // Main button click handler
     const handleMainButtonClick = () => {
         if (hasNativeShare()) {
             handleNativeShare();
@@ -256,14 +241,14 @@ export const ShareButton = ({
 
     return (
         <>
-            <div className="share-button-container">
+            <div className="pensa-share-container">
                 <button
                     ref={buttonRef}
-                    className={`share-btn ${className} ${copied ? 'copied' : ''}`}
+                    className={`pensa-share-btn ${className} ${copied ? 'pensa-share-btn-copied' : ''}`}
                     onClick={handleMainButtonClick}
                     title={t('share.tooltip', 'Споделяне')}
                 >
-                    <span className="share-icon">
+                    <span className="pensa-share-icon">
                         {copied ? (
                             <CheckIcon size={18} />
                         ) : (
@@ -271,7 +256,7 @@ export const ShareButton = ({
                         )}
                     </span>
                     {showText && (
-                        <span className="share-text">
+                        <span className="pensa-share-text">
                             {copied
                                 ? t('share.copied', 'Копирано!')
                                 : t('share.button', 'Споделяне')
@@ -279,27 +264,26 @@ export const ShareButton = ({
                         </span>
                     )}
                     {!hasNativeShare() && (
-                        <span className={`share-dropdown-arrow ${showDropdown ? 'open' : ''}`}>
+                        <span className={`pensa-share-arrow ${showDropdown ? 'pensa-share-arrow-open' : ''}`}>
                             ▼
                         </span>
                     )}
                 </button>
 
-                {/* Dropdown Menu with Dynamic Ordering */}
                 {showDropdown && !hasNativeShare() && (
-                    <div ref={dropdownRef} className="share-dropdown">
-                        <div className="share-dropdown-content">
+                    <div ref={dropdownRef} className="pensa-share-dropdown">
+                        <div className="pensa-share-dropdown-content">
                             {getPlatformOrder().map(platform => (
                                 <button 
                                     key={platform.key}
-                                    className="share-option" 
+                                    className="pensa-share-option" 
                                     onClick={platform.action}
                                     data-platform={platform.key}
                                 >
-                                    <span className="share-option-icon">
+                                    <span className="pensa-share-option-icon">
                                         <platform.component size={18} />
                                     </span>
-                                    <span className="share-option-text">
+                                    <span className="pensa-share-option-text">
                                         {platform.text}
                                     </span>
                                 </button>
@@ -309,14 +293,13 @@ export const ShareButton = ({
                 )}
             </div>
 
-            {/* Toast Notification */}
             {showToast && (
-                <div className={`share-toast ${toastType === 'instagram' ? 'instagram' : ''}`}>
-                    <div className="share-toast-content">
-                        <span className="share-toast-icon">
+                <div className={`pensa-share-toast ${toastType === 'instagram' ? 'pensa-share-toast-instagram' : ''}`}>
+                    <div className="pensa-share-toast-content">
+                        <span className="pensa-share-toast-icon">
                             <CheckIcon size={20} />
                         </span>
-                        <span className="share-toast-text">
+                        <span className="pensa-share-toast-text">
                             {toastType === 'instagram' 
                                 ? t('share.instagramToast', 'Линкът е копиран! Отворете Instagram и го поставете в Story или съобщение.')
                                 : t('share.toastMessage', 'Линкът е копиран в clipboard!')

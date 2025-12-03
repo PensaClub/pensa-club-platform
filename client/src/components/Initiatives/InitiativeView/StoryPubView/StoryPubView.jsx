@@ -3,7 +3,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import './storyPubView.css';
-
+import { renderSlateContent } from '../../../../utils/slateRenderer.jsx';
 import { useInitiativeContext } from '../../../contexts/InitiativeProvider';
 import { Comments } from '../Comments/Comments';
 import { Loader } from '../../../Loader/Loader';
@@ -166,12 +166,12 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
 
         if (type === 'publication') {
             return (content.initiatives && content.initiatives.length > 0) ||
-                   (content.projects && content.projects.length > 0) ||
-                   (content.relatedPublications && content.relatedPublications.length > 0);
+                (content.projects && content.projects.length > 0) ||
+                (content.relatedPublications && content.relatedPublications.length > 0);
         } else if (type === 'story') {
             return (content.initiatives && content.initiatives.length > 0) ||
-                   (content.projects && content.projects.length > 0) ||
-                   (content.relatedStories && content.relatedStories.length > 0);
+                (content.projects && content.projects.length > 0) ||
+                (content.relatedStories && content.relatedStories.length > 0);
         }
 
         return false;
@@ -230,11 +230,38 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
         return [...content.sections].sort((a, b) => (a.id || a.order || 0) - (b.id || b.order || 0));
     };
 
+    const renderSectionContent = (content) => {
+        if (!content) {
+            return <p>{t('publications.preview.noContent', 'Няма съдържание')}</p>;
+        }
+
+        // Ако е HTML string - рендирай с dangerouslySetInnerHTML
+        if (typeof content === 'string') {
+            // Проверка дали съдържа HTML тагове
+            if (content.includes('<') && content.includes('>')) {
+                return (
+                    <div
+                        className="story-pub-view-html-content"
+                        dangerouslySetInnerHTML={{ __html: content }}
+                    />
+                );
+            }
+            // Plain text
+            return <p>{content}</p>;
+        }
+
+        if (Array.isArray(content)) {
+            return renderSlateContent(content);
+        }
+
+        // Fallback
+        return <p>{String(content)}</p>;
+    };
     // ✅ SEO META DATA
     const metaData = useMemo(() => {
         if (!content) {
             return {
-                title: type === 'story' 
+                title: type === 'story'
                     ? 'Зареждане на история... | Pensa Club'
                     : 'Зареждане на публикация... | Pensa Club',
                 description: 'Зареждане на съдържание от Pensa Club',
@@ -251,10 +278,10 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
         const description = cleanDescription.substring(0, 160) + (cleanDescription.length > 160 ? '...' : '');
 
         // Keywords от tags
-        const baseKeywords = type === 'story' 
+        const baseKeywords = type === 'story'
             ? 'истории, Pensa Club, пенсионери, дигитална грамотност'
             : 'публикации, Pensa Club, пенсионери, дигитална грамотност';
-        
+
         const keywords = content.tags && content.tags.length > 0
             ? `${content.tags.join(', ')}, ${baseKeywords}`
             : baseKeywords;
@@ -284,7 +311,7 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
         if (!content) return null;
 
         const cleanDescription = content.shortDescription?.replace(/<[^>]*>/g, '').trim() || '';
-        
+
         let imageUrl = 'https://pensa.club/images/iniciatives/iniciatives-2.jpg';
         if (content.image?.src) {
             imageUrl = content.image.src.startsWith('http')
@@ -354,13 +381,13 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
     const sortedSections = getSortedSections();
 
     const shouldShowTOC = sortedSections.length > 0 &&
-                         sortedSections.some(section => section.title && section.title.trim());
+        sortedSections.some(section => section.title && section.title.trim());
 
     const shouldShowConnections = hasConnections();
 
     const shouldShowSidebar = shouldShowTOC || shouldShowConnections ||
-                             (type === 'publication' && content.downloadUrl) ||
-                             shouldShowRelated;
+        (type === 'publication' && content.downloadUrl) ||
+        shouldShowRelated;
 
     return (
         <article className="story-pub-view">
@@ -508,7 +535,7 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                                                 )}
 
                                                 <div className="story-pub-view-section-content">
-                                                    <p>{section.content}</p>
+                                                    {renderSectionContent(section.content)}
                                                 </div>
                                             </section>
                                         );
@@ -731,8 +758,8 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
                                                         const sectionSlug = section.titleSlug || generateSectionSlug(section.title, index);
                                                         return (
                                                             <li key={section.id || index} className="story-pub-view-toc-item">
-                                                                
-                                                                <a    href={`#${sectionSlug}`}
+
+                                                                <a href={`#${sectionSlug}`}
                                                                     className="story-pub-view-toc-link"
                                                                     onClick={(e) => handleTOCClick(e, sectionSlug)}
                                                                 >
