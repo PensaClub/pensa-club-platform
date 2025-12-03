@@ -74,7 +74,7 @@ export const ShareButton = ({
 
             setShowDropdown(false);
         } catch (err) {
-            console.log('Native share cancelled or failed:', err);
+            // console.log('Native share cancelled or failed:', err);
         }
     };
 

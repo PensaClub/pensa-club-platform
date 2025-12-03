@@ -1,9 +1,18 @@
 /* ======================= */
-/* SECTIONS SECTION */
+/* PENSA PUBLICATION SECTIONS */
 /* ======================= */
 
+/* Card Container */
+.pensa-pub-sec-card {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
 /* Sections Help */
-.publication-sections-help {
+.pensa-pub-sec-help {
     background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
     padding: 0.2rem;
     border-radius: 12px;
@@ -11,7 +20,7 @@
     margin-bottom: 3rem;
 }
 
-.publication-sections-help p {
+.pensa-pub-sec-help p {
     margin: 0;
     color: #0369a1;
     font-size: 1rem;
@@ -19,18 +28,8 @@
     line-height: 1.6;
 }
 
-/* Empty State */
-.publication-sections-empty-state {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 400px;
-    background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
-    border-radius: 20px;
-    border: 3px dashed #d1d5db;
-    margin: 2rem 0;
-}
-.publication-sections-section-header {
+/* Header */
+.pensa-pub-sec-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -40,7 +39,7 @@
     border-radius: 16px 16px 0 0;
 }
 
-.publication-sections-section-title {
+.pensa-pub-sec-title {
     font-size: 1.75rem;
     font-weight: 700;
     color: #92400e;
@@ -49,26 +48,44 @@
     align-items: center;
     gap: 0.75rem;
 }
-.publication-sections-empty-content {
+
+/* Content Area */
+.pensa-pub-sec-content {
+    padding: 2rem;
+}
+
+/* Empty State */
+.pensa-pub-sec-empty-state {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+    background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
+    border-radius: 20px;
+    border: 3px dashed #d1d5db;
+    margin: 2rem 0;
+}
+
+.pensa-pub-sec-empty-content {
     text-align: center;
     max-width: 500px;
     padding: 2rem;
 }
 
-.publication-sections-empty-icon {
+.pensa-pub-sec-empty-icon {
     font-size: 4rem;
     color: #d1d5db;
     margin-bottom: 1.5rem;
 }
 
-.publication-sections-empty-content h3 {
+.pensa-pub-sec-empty-content h3 {
     font-size: 1.8rem;
     font-weight: 700;
     color: #374151;
     margin: 0 0 1rem 0;
 }
 
-.publication-sections-empty-content p {
+.pensa-pub-sec-empty-content p {
     font-size: 1.1rem;
     color: #6b7280;
     margin: 0 0 2rem 0;
@@ -76,14 +93,14 @@
 }
 
 /* Sections List */
-.publication-sections-list {
+.pensa-pub-sec-list {
     display: flex;
     flex-direction: column;
     gap: 2rem;
 }
 
 /* Section Item */
-.publication-sections-item {
+.pensa-pub-sec-item {
     background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
     border: 2px solid #e2e8f0;
     border-radius: 20px;
@@ -92,7 +109,7 @@
     position: relative;
 }
 
-.publication-sections-item::before {
+.pensa-pub-sec-item::before {
     content: '';
     position: absolute;
     top: 0;
@@ -102,14 +119,14 @@
     background: linear-gradient(90deg, #8b5cf6 0%, #7c3aed 50%, #6d28d9 100%);
 }
 
-.publication-sections-item:hover {
+.pensa-pub-sec-item:hover {
     transform: translateY(-3px);
     border-color: #8b5cf6;
     box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15);
 }
 
 /* Section Item Header */
-.publication-sections-item-header {
+.pensa-pub-sec-item-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -118,7 +135,7 @@
     border-bottom: 2px solid #e9d5ff;
 }
 
-.publication-sections-item-title h4 {
+.pensa-pub-sec-item-title h4 {
     font-size: 1.4rem;
     font-weight: 700;
     color: #581c87;
@@ -128,32 +145,32 @@
     gap: 0.75rem;
 }
 
-.publication-sections-item-status {
+.pensa-pub-sec-item-status {
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
-.publication-sections-status-complete {
+.pensa-pub-sec-status-complete {
     color: #059669;
     font-weight: 600;
     font-size: 0.95rem;
 }
 
-.publication-sections-status-incomplete {
+.pensa-pub-sec-status-incomplete {
     color: #9ca3af;
     font-weight: 500;
     font-size: 0.95rem;
 }
 
 /* Section Actions */
-.publication-sections-item-actions {
+.pensa-pub-sec-item-actions {
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
-.publication-sections-move-btn {
+.pensa-pub-sec-move-btn {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -168,19 +185,19 @@
     font-size: 0.9rem;
 }
 
-.publication-sections-move-btn:hover:not(:disabled) {
+.pensa-pub-sec-move-btn:hover:not(:disabled) {
     background: linear-gradient(135deg, #bae6fd 0%, #7dd3fc 100%);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(3, 105, 161, 0.2);
 }
 
-.publication-sections-move-btn:disabled {
+.pensa-pub-sec-move-btn:disabled {
     opacity: 0.4;
     cursor: not-allowed;
     transform: none;
 }
 
-.publication-sections-remove-btn {
+.pensa-pub-sec-remove-btn {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -195,22 +212,22 @@
     transition: all 0.3s ease;
 }
 
-.publication-sections-remove-btn:hover {
+.pensa-pub-sec-remove-btn:hover {
     background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
 }
 
 /* Section Content */
-.publication-sections-item-content {
+.pensa-pub-sec-item-content {
     padding: 2rem;
 }
 
-.publication-sections-form-group {
+.pensa-pub-sec-form-group {
     margin-bottom: 2rem;
 }
 
-.publication-sections-form-group label {
+.pensa-pub-sec-form-group label {
     display: flex;
     font-weight: 700;
     color: #374151;
@@ -220,7 +237,12 @@
     gap: 0.5rem;
 }
 
-.publication-sections-title-input {
+.pensa-pub-sec-required {
+    color: #ef4444;
+    margin-left: 0.25rem;
+}
+
+.pensa-pub-sec-title-input {
     width: 100%;
     padding: 1rem 1.25rem;
     border: 2px solid #e5e7eb;
@@ -232,22 +254,22 @@
     transition: all 0.3s ease;
 }
 
-.publication-sections-title-input:focus {
+.pensa-pub-sec-title-input:focus {
     outline: none;
     border-color: #8b5cf6;
     box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
 }
 
-.publication-sections-title-input.error {
+.pensa-pub-sec-title-input.error {
     border-color: #ef4444;
 }
 
-.publication-sections-title-input.error:focus {
+.pensa-pub-sec-title-input.error:focus {
     box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
 }
 
 /* Character Count */
-.publication-sections-character-count {
+.pensa-pub-sec-char-count {
     font-size: 0.8rem;
     color: #9ca3af;
     margin-top: 0.5rem;
@@ -255,7 +277,7 @@
 }
 
 /* Field Help */
-.publication-sections-field-help {
+.pensa-pub-sec-field-help {
     font-size: 0.875rem;
     color: #6b7280;
     margin-bottom: 0.75rem;
@@ -263,7 +285,7 @@
 }
 
 /* Slate Editor Container */
-.publication-sections-slate-editor-container {
+.pensa-pub-sec-slate-container {
     border: 2px solid #e5e7eb;
     border-radius: 16px;
     overflow: hidden;
@@ -272,21 +294,21 @@
     margin-bottom: 2rem;
 }
 
-.publication-sections-slate-editor-container:focus-within {
+.pensa-pub-sec-slate-container:focus-within {
     border-color: #8b5cf6;
     box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
 }
 
-.publication-sections-slate-editor-container.error {
+.pensa-pub-sec-slate-container.error {
     border-color: #ef4444;
 }
 
-.publication-sections-slate-editor-container.error:focus-within {
+.pensa-pub-sec-slate-container.error:focus-within {
     box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
 }
 
 /* Slate Toolbar */
-.publication-sections-slate-toolbar {
+.pensa-pub-sec-slate-toolbar {
     background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
     border-bottom: 2px solid #e2e8f0;
     padding: 1rem;
@@ -296,7 +318,7 @@
     align-items: center;
 }
 
-.publication-sections-slate-btn {
+.pensa-pub-sec-slate-btn {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -313,21 +335,21 @@
     color: #64748b;
 }
 
-.publication-sections-slate-btn:hover {
+.pensa-pub-sec-slate-btn:hover {
     background: #f8fafc;
     color: #8b5cf6;
     border-color: #8b5cf6;
     transform: translateY(-1px);
 }
 
-.publication-sections-slate-btn.active {
+.pensa-pub-sec-slate-btn.active {
     background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
     color: white;
     border-color: #8b5cf6;
     box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
 }
 
-.publication-sections-toolbar-divider {
+.pensa-pub-sec-toolbar-divider {
     width: 2px;
     height: 30px;
     background: #e2e8f0;
@@ -335,7 +357,7 @@
 }
 
 /* Slate Editable */
-.publication-sections-slate-editable {
+.pensa-pub-sec-slate-editable {
     padding: 2rem;
     min-height: 200px;
     font-size: 1rem;
@@ -346,21 +368,21 @@
     transition: min-height 0.3s ease;
 }
 
-.publication-sections-slate-editable h1 {
+.pensa-pub-sec-slate-editable h1 {
     font-size: 2rem;
     font-weight: 700;
     color: #1e293b;
     margin: 1.5rem 0 1rem 0;
 }
 
-.publication-sections-slate-editable h2 {
+.pensa-pub-sec-slate-editable h2 {
     font-size: 1.5rem;
     font-weight: 600;
     color: #1e293b;
     margin: 1.25rem 0 0.75rem 0;
 }
 
-.publication-sections-slate-editable blockquote {
+.pensa-pub-sec-slate-editable blockquote {
     border-left: 4px solid #8b5cf6;
     padding-left: 1.5rem;
     margin: 1.5rem 0;
@@ -371,18 +393,18 @@
     border-radius: 0 8px 8px 0;
 }
 
-.publication-sections-slate-editable ul,
-.publication-sections-slate-editable ol {
+.pensa-pub-sec-slate-editable ul,
+.pensa-pub-sec-slate-editable ol {
     padding-left: 2rem;
     margin: 1rem 0;
 }
 
-.publication-sections-slate-editable li {
+.pensa-pub-sec-slate-editable li {
     margin: 0.5rem 0;
 }
 
 /* Error Messages */
-.publication-sections-error-message {
+.pensa-pub-sec-error-msg {
     font-size: 0.875rem;
     color: #ef4444;
     margin-top: 0.5rem;
@@ -391,14 +413,14 @@
     gap: 0.25rem;
 }
 
-.publication-sections-error-indicator {
+.pensa-pub-sec-error-indicator {
     color: #ef4444;
     font-size: 1.2rem;
     margin-left: 0.5rem;
 }
 
 /* Form Buttons */
-.publication-sections-form-btn {
+.pensa-pub-sec-btn {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
@@ -415,32 +437,32 @@
     user-select: none;
 }
 
-.publication-sections-form-btn.primary {
+.pensa-pub-sec-btn.primary {
     background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
     color: #ffffff;
     box-shadow: 0 4px 14px rgba(139, 92, 246, 0.25);
 }
 
-.publication-sections-form-btn.primary:hover:not(:disabled) {
+.pensa-pub-sec-btn.primary:hover:not(:disabled) {
     background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(139, 92, 246, 0.35);
 }
 
-.publication-sections-form-btn.accent {
+.pensa-pub-sec-btn.accent {
     background: linear-gradient(135deg, #10b981 0%, #059669 100%);
     color: #ffffff;
     box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25);
 }
 
-.publication-sections-form-btn.accent:hover:not(:disabled) {
+.pensa-pub-sec-btn.accent:hover:not(:disabled) {
     background: linear-gradient(135deg, #059669 0%, #047857 100%);
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
 }
 
 /* Sections Summary */
-.publication-sections-summary {
+.pensa-pub-sec-summary {
     background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
     padding: 2rem;
     border-radius: 16px;
@@ -448,7 +470,7 @@
     margin-top: 3rem;
 }
 
-.publication-sections-summary h4 {
+.pensa-pub-sec-summary h4 {
     margin: 0 0 1.5rem 0;
     color: #15803d;
     font-size: 1.4rem;
@@ -456,13 +478,13 @@
     text-align: center;
 }
 
-.publication-sections-summary-stats {
+.pensa-pub-sec-summary-stats {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: 1.5rem;
 }
 
-.publication-sections-stat {
+.pensa-pub-sec-stat {
     background: rgba(255, 255, 255, 0.8);
     padding: 1.5rem;
     border-radius: 12px;
@@ -471,7 +493,7 @@
     border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
-.publication-sections-stat-label {
+.pensa-pub-sec-stat-label {
     display: block;
     font-size: 0.9rem;
     color: #374151;
@@ -479,18 +501,19 @@
     margin-bottom: 0.5rem;
 }
 
-.publication-sections-stat-value {
+.pensa-pub-sec-stat-value {
     display: block;
     font-size: 2rem;
     font-weight: 800;
     color: #15803d;
 }
+
 /* ======================= */
 /* SECTION IMAGES UPLOAD */
 /* ======================= */
 
 /* Images Upload Container */
-.publication-sections-images-upload {
+.pensa-pub-sec-img-upload {
     background: linear-gradient(135deg, #fafafa 0%, #f5f5f5 100%);
     border: 2px dashed #d1d5db;
     border-radius: 16px;
@@ -499,26 +522,26 @@
     transition: all 0.3s ease;
 }
 
-.publication-sections-images-upload:hover {
+.pensa-pub-sec-img-upload:hover {
     border-color: #8b5cf6;
     background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
 }
 
 /* Upload Methods */
-.publication-sections-upload-methods {
+.pensa-pub-sec-upload-methods {
     display: flex;
     gap: 1rem;
     margin-bottom: 1rem;
     flex-wrap: wrap;
 }
 
-.publication-sections-upload-method {
+.pensa-pub-sec-upload-method {
     flex: 1;
     min-width: 200px;
 }
 
 /* Upload Button - Label Style */
-.publication-sections-upload-btn {
+.pensa-pub-sec-upload-btn {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -541,19 +564,19 @@
     white-space: nowrap !important;
 }
 
-.publication-sections-upload-btn:hover {
+.pensa-pub-sec-upload-btn:hover {
     background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%) !important;
     transform: translateY(-2px) !important;
     box-shadow: 0 6px 20px rgba(139, 92, 246, 0.35) !important;
 }
 
-.publication-sections-upload-btn:active {
+.pensa-pub-sec-upload-btn:active {
     transform: translateY(0) !important;
     box-shadow: 0 4px 14px rgba(139, 92, 246, 0.25) !important;
 }
 
 /* Button for URL and Clear */
-button.publication-sections-upload-btn {
+button.pensa-pub-sec-upload-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -576,19 +599,19 @@ button.publication-sections-upload-btn {
     white-space: nowrap;
 }
 
-button.publication-sections-upload-btn:hover {
+button.pensa-pub-sec-upload-btn:hover {
     background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(139, 92, 246, 0.35);
 }
 
-button.publication-sections-upload-btn:active {
+button.pensa-pub-sec-upload-btn:active {
     transform: translateY(0);
     box-shadow: 0 4px 14px rgba(139, 92, 246, 0.25);
 }
 
 /* Clear Button */
-.publication-sections-clear-btn {
+.pensa-pub-sec-clear-btn {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -609,19 +632,19 @@ button.publication-sections-upload-btn:active {
     white-space: nowrap !important;
 }
 
-.publication-sections-clear-btn:hover {
+.pensa-pub-sec-clear-btn:hover {
     background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%) !important;
     transform: translateY(-2px) !important;
     box-shadow: 0 6px 20px rgba(220, 38, 38, 0.25) !important;
 }
 
-.publication-sections-clear-btn:active {
+.pensa-pub-sec-clear-btn:active {
     transform: translateY(0) !important;
     box-shadow: 0 4px 14px rgba(220, 38, 38, 0.15) !important;
 }
 
 /* URL Input Section */
-.publication-sections-url-input-section {
+.pensa-pub-sec-url-section {
     display: flex;
     gap: 0.75rem;
     margin-top: 1rem;
@@ -632,7 +655,7 @@ button.publication-sections-upload-btn:active {
     border-radius: 12px;
 }
 
-.publication-sections-url-input {
+.pensa-pub-sec-url-input {
     flex: 1;
     padding: 0.75rem 1rem;
     border: 2px solid #e5e7eb;
@@ -642,13 +665,13 @@ button.publication-sections-upload-btn:active {
     transition: all 0.3s ease;
 }
 
-.publication-sections-url-input:focus {
+.pensa-pub-sec-url-input:focus {
     outline: none;
     border-color: #8b5cf6;
     box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
 }
 
-.publication-sections-url-add-btn {
+.pensa-pub-sec-url-add-btn {
     padding: 0.75rem 1.5rem;
     background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
     color: white;
@@ -660,14 +683,14 @@ button.publication-sections-upload-btn:active {
     white-space: nowrap;
 }
 
-.publication-sections-url-add-btn:hover {
+.pensa-pub-sec-url-add-btn:hover {
     background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
 }
 
 /* Images Preview */
-.publication-sections-images-preview {
+.pensa-pub-sec-img-preview {
     margin-top: 2rem;
     padding: 1.5rem;
     background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
@@ -677,7 +700,7 @@ button.publication-sections-upload-btn:active {
     z-index: 1;
 }
 
-.publication-sections-images-preview h5 {
+.pensa-pub-sec-img-preview h5 {
     margin: 0 0 1.5rem 0;
     color: #ea580c;
     font-size: 1.2rem;
@@ -685,14 +708,14 @@ button.publication-sections-upload-btn:active {
     text-align: center;
 }
 
-.publication-sections-images-grid {
+.pensa-pub-sec-img-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1.5rem;
 }
 
 /* Image Item */
-.publication-sections-image-item {
+.pensa-pub-sec-img-item {
     background: white;
     border-radius: 16px;
     overflow: hidden;
@@ -702,32 +725,32 @@ button.publication-sections-upload-btn:active {
     position: relative;
 }
 
-.publication-sections-image-item:hover {
+.pensa-pub-sec-img-item:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
     border-color: #8b5cf6;
 }
 
-/* Image Preview */
-.publication-sections-image-preview {
+/* Image Preview Inner */
+.pensa-pub-sec-img-preview-inner {
     position: relative;
     width: 100%;
     height: 200px;
     overflow: hidden;
 }
 
-.publication-sections-image-preview img {
+.pensa-pub-sec-img-preview-inner img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform 0.3s ease;
 }
 
-.publication-sections-image-item:hover .publication-sections-image-preview img {
+.pensa-pub-sec-img-item:hover .pensa-pub-sec-img-preview-inner img {
     transform: scale(1.05);
 }
 
-.publication-sections-image-overlay {
+.pensa-pub-sec-img-overlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -741,11 +764,11 @@ button.publication-sections-upload-btn:active {
     transition: all 0.3s ease;
 }
 
-.publication-sections-image-item:hover .publication-sections-image-overlay {
+.pensa-pub-sec-img-item:hover .pensa-pub-sec-img-overlay {
     opacity: 1;
 }
 
-.publication-sections-image-remove-btn {
+.pensa-pub-sec-img-remove-btn {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -761,14 +784,14 @@ button.publication-sections-upload-btn:active {
     box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
 }
 
-.publication-sections-image-remove-btn:hover {
+.pensa-pub-sec-img-remove-btn:hover {
     background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
     transform: scale(1.1);
     box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
 }
 
 /* Uploading State */
-.publication-sections-image-uploading {
+.pensa-pub-sec-img-uploading {
     position: absolute;
     top: 0;
     left: 0;
@@ -781,36 +804,40 @@ button.publication-sections-upload-btn:active {
     backdrop-filter: blur(4px);
 }
 
-.publication-sections-uploading-spinner {
+.pensa-pub-sec-spinner {
     width: 40px;
     height: 40px;
     border: 4px solid #e5e7eb;
     border-top: 4px solid #8b5cf6;
     border-radius: 50%;
-    animation: publication-sections-spin 1s linear infinite;
+    animation: pensaPubSecSpin 1s linear infinite;
 }
 
-@keyframes publication-sections-spin {
+@keyframes pensaPubSecSpin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
 
 /* Image Controls */
-.publication-sections-image-controls {
+.pensa-pub-sec-img-controls {
     padding: 1.5rem;
     background: #fafafa;
     position: relative;
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
 }
 
-.publication-sections-image-input-group {
+.pensa-pub-sec-img-input-group {
     margin-bottom: 0.5rem;
 }
 
-.publication-sections-image-input-group:last-child {
+.pensa-pub-sec-img-input-group:last-child {
     margin-bottom: 0;
 }
 
-.publication-sections-image-input-group label {
+.pensa-pub-sec-img-input-group label {
     display: block;
     font-weight: 600;
     color: #374151;
@@ -818,7 +845,7 @@ button.publication-sections-upload-btn:active {
     font-size: 0.9rem;
 }
 
-.publication-sections-image-input {
+.pensa-pub-sec-img-input {
     width: 100%;
     padding: 0.75rem 1rem;
     border: 2px solid #e5e7eb;
@@ -828,71 +855,86 @@ button.publication-sections-upload-btn:active {
     transition: all 0.3s ease;
 }
 
-.publication-sections-image-input:focus {
+.pensa-pub-sec-img-input:focus {
     outline: none;
     border-color: #8b5cf6;
     box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
 }
 
-.publication-sections-char-count {
+.pensa-pub-sec-img-char-count {
     font-size: 0.8rem;
     color: #9ca3af;
     margin-top: 0.25rem;
     text-align: right;
 }
 
-.publication-sections-char-count.warning {
+.pensa-pub-sec-img-char-count.warning {
     color: #f59e0b;
 }
 
-.publication-sections-char-count.error {
+.pensa-pub-sec-img-char-count.error {
     color: #ef4444;
 }
 
+/* Image Container Layout */
+.pensa-pub-sec-img-container {
+    display: flex;
+    gap: 1rem;
+    align-items: stretch;
+    position: relative;
+    z-index: 2;
+}
+
+.pensa-pub-sec-img-container .pensa-pub-sec-img-item {
+    flex: 0 0 auto;
+    max-width: 350px;
+    position: relative;
+}
+
 /* ============================= */
-/* 🎯 SLATE EDITOR CONTENT STYLES FOR SECTIONS */
+/* SLATE EDITOR CONTENT STYLES */
 /* ============================= */
 
-/* Bold/Strong elements in sections */
-.publication-sections-slate-editable strong,
-.publication-sections-slate-editable b {
+/* Bold/Strong elements */
+.pensa-pub-sec-slate-editable strong,
+.pensa-pub-sec-slate-editable b {
     font-weight: 700 !important;
     color: #1a202c !important;
 }
 
-/* Italic/Em elements in sections */
-.publication-sections-slate-editable em,
-.publication-sections-slate-editable i {
+/* Italic/Em elements */
+.pensa-pub-sec-slate-editable em,
+.pensa-pub-sec-slate-editable i {
     font-style: italic !important;
     color: #4a5568 !important;
 }
 
-/* Underline elements in sections */
-.publication-sections-slate-editable u {
+/* Underline elements */
+.pensa-pub-sec-slate-editable u {
     text-decoration: underline !important;
     text-decoration-color: #3b82f6 !important;
     text-decoration-thickness: 2px !important;
     text-underline-offset: 2px !important;
 }
 
-/* Bulleted Lists in sections */
-.publication-sections-slate-editable ul {
+/* Bulleted Lists */
+.pensa-pub-sec-slate-editable ul {
     display: block !important;
     margin: 1rem 0 !important;
     padding-left: 2rem !important;
     list-style-type: disc !important;
 }
 
-/* Numbered Lists in sections */
-.publication-sections-slate-editable ol {
+/* Numbered Lists */
+.pensa-pub-sec-slate-editable ol {
     display: block !important;
     margin: 1rem 0 !important;
     padding-left: 2rem !important;
     list-style-type: decimal !important;
 }
 
-/* List Items in sections */
-.publication-sections-slate-editable li {
+/* List Items */
+.pensa-pub-sec-slate-editable li {
     display: list-item !important;
     margin: 0.5rem 0 !important;
     line-height: 1.6 !important;
@@ -900,8 +942,8 @@ button.publication-sections-upload-btn:active {
     list-style: inherit !important;
 }
 
-/* Blockquote in sections */
-.publication-sections-slate-editable blockquote {
+/* Blockquote */
+.pensa-pub-sec-slate-editable blockquote {
     display: block !important;
     border-left: 4px solid #8b5cf6 !important;
     margin: 1.5rem 0 !important;
@@ -915,7 +957,7 @@ button.publication-sections-upload-btn:active {
     position: relative !important;
 }
 
-.publication-sections-slate-editable blockquote::before {
+.pensa-pub-sec-slate-editable blockquote::before {
     content: '"' !important;
     font-size: 3rem !important;
     color: #8b5cf6 !important;
@@ -926,8 +968,8 @@ button.publication-sections-upload-btn:active {
     opacity: 0.3 !important;
 }
 
-/* H1 Headings in sections */
-.publication-sections-slate-editable h1 {
+/* H1 Headings */
+.pensa-pub-sec-slate-editable h1 {
     font-size: 2rem !important;
     font-weight: 700 !important;
     line-height: 1.3 !important;
@@ -946,8 +988,8 @@ button.publication-sections-upload-btn:active {
     min-height: auto !important;
 }
 
-/* H2 Headings in sections */
-.publication-sections-slate-editable h2 {
+/* H2 Headings */
+.pensa-pub-sec-slate-editable h2 {
     font-size: 1.5rem !important;
     font-weight: 600 !important;
     line-height: 1.4 !important;
@@ -966,8 +1008,8 @@ button.publication-sections-upload-btn:active {
     min-height: auto !important;
 }
 
-/* H3 Headings in sections */
-.publication-sections-slate-editable h3 {
+/* H3 Headings */
+.pensa-pub-sec-slate-editable h3 {
     font-size: 1.25rem !important;
     font-weight: 600 !important;
     line-height: 1.4 !important;
@@ -978,8 +1020,8 @@ button.publication-sections-upload-btn:active {
     padding: 0 !important;
 }
 
-/* Paragraphs in sections */
-.publication-sections-slate-editable p {
+/* Paragraphs */
+.pensa-pub-sec-slate-editable p {
     font-size: 1rem !important;
     font-weight: 400 !important;
     line-height: 1.6 !important;
@@ -990,81 +1032,81 @@ button.publication-sections-upload-btn:active {
     padding: 0 !important;
 }
 
-/* Nested Lists styles in sections */
-.publication-sections-slate-editable ul ul {
+/* Nested Lists styles */
+.pensa-pub-sec-slate-editable ul ul {
     list-style-type: circle !important;
     margin: 0.5rem 0 !important;
 }
 
-.publication-sections-slate-editable ul ul ul {
+.pensa-pub-sec-slate-editable ul ul ul {
     list-style-type: square !important;
 }
 
-.publication-sections-slate-editable ol ol {
+.pensa-pub-sec-slate-editable ol ol {
     list-style-type: lower-alpha !important;
     margin: 0.5rem 0 !important;
 }
 
-.publication-sections-slate-editable ol ol ol {
+.pensa-pub-sec-slate-editable ol ol ol {
     list-style-type: lower-roman !important;
 }
 
-/* Combined styles in sections */
-.publication-sections-slate-editable strong em,
-.publication-sections-slate-editable em strong {
+/* Combined styles */
+.pensa-pub-sec-slate-editable strong em,
+.pensa-pub-sec-slate-editable em strong {
     font-weight: 700 !important;
     font-style: italic !important;
     color: #1a202c !important;
 }
 
-.publication-sections-slate-editable strong u,
-.publication-sections-slate-editable u strong {
+.pensa-pub-sec-slate-editable strong u,
+.pensa-pub-sec-slate-editable u strong {
     font-weight: 700 !important;
     text-decoration: underline !important;
     text-decoration-color: #3b82f6 !important;
 }
 
-.publication-sections-slate-editable em u,
-.publication-sections-slate-editable u em {
+.pensa-pub-sec-slate-editable em u,
+.pensa-pub-sec-slate-editable u em {
     font-style: italic !important;
     text-decoration: underline !important;
     text-decoration-color: #3b82f6 !important;
 }
 
-/* Styles for elements in lists in sections */
-.publication-sections-slate-editable li strong {
+/* Styles for elements in lists */
+.pensa-pub-sec-slate-editable li strong {
     font-weight: 700 !important;
     color: #1a202c !important;
 }
 
-.publication-sections-slate-editable li em {
+.pensa-pub-sec-slate-editable li em {
     font-style: italic !important;
     color: #4a5568 !important;
 }
 
-.publication-sections-slate-editable li u {
+.pensa-pub-sec-slate-editable li u {
     text-decoration: underline !important;
     text-decoration-color: #3b82f6 !important;
 }
 
-/* Styles for elements in blockquote in sections */
-.publication-sections-slate-editable blockquote strong {
+/* Styles for elements in blockquote */
+.pensa-pub-sec-slate-editable blockquote strong {
     font-weight: 700 !important;
     color: #1a202c !important;
 }
 
-.publication-sections-slate-editable blockquote em {
+.pensa-pub-sec-slate-editable blockquote em {
     font-style: italic !important;
     color: #4a5568 !important;
 }
 
-.publication-sections-slate-editable blockquote u {
+.pensa-pub-sec-slate-editable blockquote u {
     text-decoration: underline !important;
     text-decoration-color: #3b82f6 !important;
 }
 
-/* Fix for span elements in sections Slate */
-.publication-sections-slate-editable span[data-slate-string] {
+/* Fix for span elements in Slate */
+.pensa-pub-sec-slate-editable span[data-slate-string] {
     font-family: inherit !important;
     font-size: inherit !important;
     line-height: inherit !important;
@@ -1074,315 +1116,34 @@ button.publication-sections-upload-btn:active {
     text-decoration: inherit !important;
 }
 
-/* Reset any unwanted styles in sections */
-.publication-sections-slate-editable * {
+/* Reset any unwanted styles */
+.pensa-pub-sec-slate-editable * {
     all: unset;
     display: revert !important;
     box-sizing: border-box !important;
 }
 
-/* Specific overrides for main content elements in sections */
-.publication-sections-slate-editable h1,
-.publication-sections-slate-editable h2,
-.publication-sections-slate-editable h3 {
+/* Specific overrides for main content elements */
+.pensa-pub-sec-slate-editable h1,
+.pensa-pub-sec-slate-editable h2,
+.pensa-pub-sec-slate-editable h3 {
     display: block !important;
     font-family: inherit !important;
     cursor: text !important;
 }
 
-.publication-sections-slate-editable p {
+.pensa-pub-sec-slate-editable p {
     display: block !important;
     font-family: inherit !important;
     cursor: text !important;
 }
 
-/* ============================= */
-/* 🎯 RESPONSIVE STYLES FOR SECTIONS */
-/* ============================= */
-
-@media (max-width: 768px) {
-    .publication-sections-slate-editable blockquote {
-        font-size: 1rem !important;
-        padding: 0.75rem 1rem !important;
-    }
-
-    .publication-sections-slate-editable blockquote::before {
-        font-size: 2rem !important;
-        top: 0.25rem !important;
-        left: 0.5rem !important;
-    }
-
-    .publication-sections-slate-editable ul,
-    .publication-sections-slate-editable ol {
-        padding-left: 1.5rem !important;
-    }
-
-    .publication-sections-slate-editable h1 {
-        font-size: 1.75rem !important;
-    }
-
-    .publication-sections-slate-editable h2 {
-        font-size: 1.35rem !important;
-    }
-}
-
-@media (max-width: 480px) {
-    .publication-sections-slate-editable h1 {
-        font-size: 1.5rem !important;
-    }
-
-    .publication-sections-slate-editable h2 {
-        font-size: 1.25rem !important;
-    }
-
-    .publication-sections-slate-editable h3 {
-        font-size: 1.1rem !important;
-    }
-
-    .publication-sections-slate-editable blockquote {
-        font-size: 0.95rem !important;
-        padding: 0.5rem 0.75rem !important;
-        margin: 1rem 0 !important;
-    }
-
-    .publication-sections-slate-editable blockquote::before {
-        font-size: 1.5rem !important;
-        top: 0.15rem !important;
-        left: 0.375rem !important;
-    }
-
-    .publication-sections-slate-editable ul,
-    .publication-sections-slate-editable ol {
-        padding-left: 1.25rem !important;
-    }
-}
-/* Responsive */
-@media (max-width: 768px) {
-    .publication-sections-item-header {
-        flex-direction: column;
-        gap: 1rem;
-        align-items: stretch;
-    }
-     .publication-sections-upload-methods {
-        flex-direction: column;
-        gap: 0.75rem;
-    }
-
-    .publication-sections-upload-method {
-        min-width: auto;
-    }
-
-    .publication-sections-images-grid {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-    }
-
-    .publication-sections-url-input-section {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-
-    .publication-sections-image-preview {
-        height: 160px;
-    }
-
-    .publication-sections-image-controls {
-        padding: 1rem;
-    }
-    .publication-sections-item-actions {
-        justify-content: center;
-    }
-
-    .publication-sections-slate-toolbar {
-        gap: 0.25rem;
-        padding: 0.75rem;
-    }
-
-    .publication-sections-slate-btn {
-        min-width: 35px;
-        height: 35px;
-        font-size: 0.8rem;
-    }
-
-    .publication-sections-slate-editable {
-        padding: 1.5rem;
-        min-height: 150px;
-    }
-
-    .publication-sections-summary-stats {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .publication-sections-item-content {
-        padding: 1.5rem;
-    }
-       .publication-sections-images-upload {
-        padding: 1rem;
-    }
-    .publication-sections-section-header{
-        flex-direction: column;
-        gap: 1rem;
-    }
-    .publication-sections-images-preview {
-        padding: 1rem;
-        margin-top: 1rem;
-    }
-
-    .publication-sections-upload-btn,
-    .publication-sections-clear-btn {
-        padding: 0.6rem 1.25rem !important;
-        font-size: 0.9rem !important;
-    }
-
-    .publication-sections-image-preview {
-        height: 140px;
-    }
-
-    .publication-sections-image-remove-btn {
-        width: 45px;
-        height: 45px;
-        font-size: 1rem;
-    }
-    .publication-sections-slate-toolbar {
-        flex-wrap: wrap;
-        padding: 0.5rem;
-    }
-
-    .publication-sections-toolbar-divider {
-        display: none;
-    }
-    .publication-sections-section-header {
-        padding: 1rem;
-        font-size: 1.25rem;
-        margin-bottom: 1rem;
-    }
-    .publication-sections-form-btn{
-        padding: 0.575rem 1rem;
-        font-size: 0.9rem;
-    }
-    .publication-sections-help p {
-        font-size: 0.8rem;
-        line-height: 1.5;
-    }
-    .publication-sections-status-complete{
-        font-size: 0.9rem;
-    }
-    .publication-sections-move-btn{
-        width: 25px;
-        height: 25px;
-        font-size: 0.8rem;
-    }
-    .publication-sections-remove-btn {
-        /* width: 25px;
-        height: 25px; */
-        padding: 0.5rem;
-        font-size: 0.8rem;
-    }
-    .publication-sections-item-actions{
-        justify-content: space-between;
-    }
-    .publication-sections-item-content {
-        padding: 1rem;
-    }
-    .publication-sections-slate-editable {
-        padding: 0 0.5rem;
-        min-height: 120px;
-    }
-    .publication-sections-form-group label{
-
-        font-size: 1rem;
-        margin-bottom: 0.25rem;
-    }
-    .publication-sections-images-upload,.publication-sections-images-preview {
-        padding: 0.5rem;
-    }
-    .publication-sections-form-group label {
-        font-size: 0.9rem;
-        padding: 0.5rem ;
-    }
-    .publication-sections-summary h4, .publication-sections-item-title h4{
-        font-size: 1.2rem;
-        margin-bottom: 1.2rem;
-    }
-    .publication-sections-images-preview h5 {
-        font-size: 1rem;
-        margin-bottom: 1rem;
-        text-align: left;
-    }
-    .publication-sections-item-header{
-        padding: 1rem;
-    }
-    .publication-sections-stat-value {
-        font-size: 1.5rem;
-        font-weight: 700;
-    }
-    .publication-sections-stat{
-        padding: 1rem;
-    }
-}
-
-/* Image Container Layout */
-.publication-sections-image-container {
-    display: flex;
-    gap: 1rem;
-    align-items: stretch;
-    position: relative;
-    z-index: 2;
-}
-
-.publication-sections-image-item {
-    flex: 0 0 auto;
-    max-width: 350px;
-    position: relative;
-}
-
-.publication-sections-image-controls {
-    flex: 1;
-    min-width: 0;
-    padding: 0;
-    background: transparent;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-}
-
-.publication-sections-image-input-group {
-    margin-bottom: 0.25rem;
-}
-
-.publication-sections-image-input-group:last-child {
-    margin-bottom: 0;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .publication-sections-image-container {
-        flex-direction: column;
-        gap: 0.5rem;
-        align-items: flex-start;
-    }
-
-    .publication-sections-image-item {
-        max-width: 100%;
-    }
-
-    .publication-sections-image-controls {
-        justify-content: flex-start;
-    }
-
-    .publication-sections-image-input-group {
-        margin-bottom: 0.5rem;
-    }
-}
 /* ======================= */
 /* SECTION VIDEO UPLOAD    */
 /* ======================= */
 
 /* Video Upload Area */
-.publication-sections-video-upload {
+.pensa-pub-sec-video-upload {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1394,13 +1155,13 @@ button.publication-sections-upload-btn:active {
     transition: all 0.3s ease;
 }
 
-.publication-sections-video-upload:hover {
+.pensa-pub-sec-video-upload:hover {
     border-color: #8b5cf6;
     background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
 }
 
 /* Video Upload Button */
-.publication-sections-video-upload-btn {
+.pensa-pub-sec-video-upload-btn {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -1417,20 +1178,20 @@ button.publication-sections-upload-btn:active {
     box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3) !important;
 }
 
-.publication-sections-video-upload-btn:hover {
+.pensa-pub-sec-video-upload-btn:hover {
     background: linear-gradient(135deg, #6d28d9 0%, #5b21b6 100%) !important;
     transform: translateY(-2px) !important;
     box-shadow: 0 6px 20px rgba(124, 58, 237, 0.4) !important;
 }
 
-.publication-sections-video-formats {
+.pensa-pub-sec-video-formats {
     font-size: 0.85rem;
     color: #6b7280;
     font-weight: 500;
 }
 
 /* Video Uploading State */
-.publication-sections-video-uploading {
+.pensa-pub-sec-video-uploading {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1441,12 +1202,12 @@ button.publication-sections-upload-btn:active {
     border-radius: 16px;
 }
 
-.publication-sections-video-spinner {
+.pensa-pub-sec-video-spinner {
     font-size: 2rem;
     color: #3b82f6;
 }
 
-.publication-sections-video-uploading p {
+.pensa-pub-sec-video-uploading p {
     margin: 0;
     font-size: 1rem;
     font-weight: 600;
@@ -1454,7 +1215,7 @@ button.publication-sections-upload-btn:active {
 }
 
 /* Video Progress Bar */
-.publication-sections-video-progress-bar {
+.pensa-pub-sec-video-progress-bar {
     width: 100%;
     max-width: 300px;
     height: 8px;
@@ -1463,7 +1224,7 @@ button.publication-sections-upload-btn:active {
     overflow: hidden;
 }
 
-.publication-sections-video-progress-fill {
+.pensa-pub-sec-video-progress-fill {
     height: 100%;
     background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
     border-radius: 4px;
@@ -1471,7 +1232,7 @@ button.publication-sections-upload-btn:active {
 }
 
 /* Video Preview Container */
-.publication-sections-video-preview {
+.pensa-pub-sec-video-preview {
     background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
     border: 2px solid #86efac;
     border-radius: 16px;
@@ -1479,14 +1240,14 @@ button.publication-sections-upload-btn:active {
     margin-top: 1rem;
 }
 
-.publication-sections-video-container {
+.pensa-pub-sec-video-container {
     display: flex;
     gap: 1.5rem;
     align-items: flex-start;
 }
 
 /* Video Player Wrapper */
-.publication-sections-video-player-wrapper {
+.pensa-pub-sec-video-wrapper {
     position: relative;
     flex: 0 0 auto;
     max-width: 400px;
@@ -1495,7 +1256,7 @@ button.publication-sections-upload-btn:active {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
-.publication-sections-video-player {
+.pensa-pub-sec-video-player {
     display: block;
     width: 100%;
     max-height: 250px;
@@ -1504,7 +1265,7 @@ button.publication-sections-upload-btn:active {
 }
 
 /* Video Play Overlay */
-.publication-sections-video-overlay {
+.pensa-pub-sec-video-overlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -1518,11 +1279,11 @@ button.publication-sections-upload-btn:active {
     transition: all 0.3s ease;
 }
 
-.publication-sections-video-overlay:hover {
+.pensa-pub-sec-video-overlay:hover {
     background: rgba(0, 0, 0, 0.5);
 }
 
-.publication-sections-video-play-btn {
+.pensa-pub-sec-video-play-btn {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1536,20 +1297,20 @@ button.publication-sections-upload-btn:active {
     transition: all 0.3s ease;
 }
 
-.publication-sections-video-overlay:hover .publication-sections-video-play-btn {
+.pensa-pub-sec-video-overlay:hover .pensa-pub-sec-video-play-btn {
     transform: scale(1.1);
     box-shadow: 0 6px 25px rgba(139, 92, 246, 0.5);
 }
 
 /* Video Info Section */
-.publication-sections-video-info {
+.pensa-pub-sec-video-info {
     flex: 1;
     display: flex;
     flex-direction: column;
     gap: 1rem;
 }
 
-.publication-sections-video-info-item {
+.pensa-pub-sec-video-info-item {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -1558,25 +1319,25 @@ button.publication-sections-upload-btn:active {
     color: #15803d;
 }
 
-.publication-sections-video-success-icon {
+.pensa-pub-sec-video-success-icon {
     color: #22c55e;
     font-size: 1.1rem;
 }
 
 /* Video Thumbnail Preview */
-.publication-sections-video-thumbnail-preview {
+.pensa-pub-sec-video-thumb {
     display: flex;
     align-items: center;
     gap: 0.75rem;
 }
 
-.publication-sections-video-thumbnail-preview span {
+.pensa-pub-sec-video-thumb span {
     font-size: 0.9rem;
     font-weight: 600;
     color: #374151;
 }
 
-.publication-sections-video-thumbnail-preview img {
+.pensa-pub-sec-video-thumb img {
     width: 80px;
     height: 50px;
     object-fit: cover;
@@ -1586,7 +1347,7 @@ button.publication-sections-upload-btn:active {
 }
 
 /* Video Remove Button */
-.publication-sections-video-remove-btn {
+.pensa-pub-sec-video-remove-btn {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
@@ -1602,76 +1363,1549 @@ button.publication-sections-upload-btn:active {
     transition: all 0.3s ease;
 }
 
-.publication-sections-video-remove-btn:hover {
+.pensa-pub-sec-video-remove-btn:hover {
     background: linear-gradient(135deg, #fecaca 0%, #fca5a5 100%);
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
 }
 
-/* ======================= */
-/* VIDEO RESPONSIVE STYLES */
-/* ======================= */
+/* ============================= */
+/* RESPONSIVE STYLES             */
+/* ============================= */
 
-@media (max-width: 768px) {
-    .publication-sections-video-container {
-        flex-direction: column;
+/* ============================= */
+/* EXTRA LARGE SCREENS (1920px+) */
+/* 4K Monitors, Large Displays   */
+/* ============================= */
+@media (min-width: 1920px) {
+    .pensa-pub-sec-card {
+        max-width: 1600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .pensa-pub-sec-header {
+        padding: 2.5rem 3rem;
+    }
+
+    .pensa-pub-sec-title {
+        font-size: 2rem;
+    }
+
+    .pensa-pub-sec-content {
+        padding: 2.5rem;
+    }
+
+    .pensa-pub-sec-item-content {
+        padding: 2.5rem;
+    }
+
+    .pensa-pub-sec-slate-editable {
+        padding: 2.5rem;
+        min-height: 300px;
+        font-size: 1.1rem;
+    }
+
+    .pensa-pub-sec-slate-editable h1 {
+        font-size: 2.5rem !important;
+    }
+
+    .pensa-pub-sec-slate-editable h2 {
+        font-size: 1.875rem !important;
+    }
+
+    .pensa-pub-sec-img-grid {
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 2rem;
+    }
+
+    .pensa-pub-sec-summary-stats {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 2rem;
+    }
+
+    .pensa-pub-sec-stat-value {
+        font-size: 2.5rem;
+    }
+
+    .pensa-pub-sec-video-wrapper {
+        max-width: 500px;
+    }
+
+    .pensa-pub-sec-video-player {
+        max-height: 300px;
+    }
+}
+
+/* ============================= */
+/* LARGE SCREENS (1400px - 1919px) */
+/* Desktop Monitors              */
+/* ============================= */
+@media (min-width: 1400px) and (max-width: 1919px) {
+    .pensa-pub-sec-card {
+        max-width: 1400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .pensa-pub-sec-img-grid {
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    }
+
+    .pensa-pub-sec-summary-stats {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* ============================= */
+/* MEDIUM-LARGE (1200px - 1399px) */
+/* Standard Laptops              */
+/* ============================= */
+@media (min-width: 1200px) and (max-width: 1399px) {
+    .pensa-pub-sec-card {
+        max-width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .pensa-pub-sec-summary-stats {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* ============================= */
+/* MEDIUM SCREENS (1024px - 1199px) */
+/* Small Laptops                 */
+/* ============================= */
+@media (min-width: 1024px) and (max-width: 1199px) {
+    .pensa-pub-sec-header {
+        padding: 1.75rem 2rem;
+    }
+
+    .pensa-pub-sec-title {
+        font-size: 1.5rem;
+    }
+
+    .pensa-pub-sec-content {
+        padding: 1.75rem;
+    }
+
+    .pensa-pub-sec-item-content {
+        padding: 1.75rem;
+    }
+
+    .pensa-pub-sec-slate-editable {
+        padding: 1.75rem;
+    }
+
+    .pensa-pub-sec-img-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+
+    .pensa-pub-sec-summary-stats {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* ============================= */
+/* TABLETS LANDSCAPE (992px - 1023px) */
+/* ============================= */
+@media (min-width: 992px) and (max-width: 1023px) {
+    .pensa-pub-sec-header {
+        padding: 1.5rem 1.75rem;
+    }
+
+    .pensa-pub-sec-title {
+        font-size: 1.4rem;
+    }
+
+    .pensa-pub-sec-content {
+        padding: 1.5rem;
+    }
+
+    .pensa-pub-sec-item-content {
+        padding: 1.5rem;
+    }
+
+    .pensa-pub-sec-slate-editable {
+        padding: 1.5rem;
+        min-height: 180px;
+    }
+
+    .pensa-pub-sec-img-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .pensa-pub-sec-summary-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .pensa-pub-sec-video-container {
         gap: 1rem;
     }
 
-    .publication-sections-video-player-wrapper {
+    .pensa-pub-sec-video-wrapper {
+        max-width: 350px;
+    }
+}
+
+/* ============================= */
+/* TABLETS PORTRAIT (768px - 991px) */
+/* ============================= */
+@media (min-width: 768px) and (max-width: 991px) {
+    .pensa-pub-sec-header {
+        padding: 1.5rem;
+        flex-direction: row;
+        gap: 1rem;
+    }
+
+    .pensa-pub-sec-title {
+        font-size: 1.35rem;
+    }
+
+    .pensa-pub-sec-content {
+        padding: 1.5rem;
+    }
+
+    .pensa-pub-sec-item-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+        padding: 1.5rem;
+    }
+
+    .pensa-pub-sec-item-actions {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .pensa-pub-sec-item-content {
+        padding: 1.5rem;
+    }
+
+    .pensa-pub-sec-slate-toolbar {
+        padding: 0.75rem;
+        gap: 0.35rem;
+    }
+
+    .pensa-pub-sec-slate-btn {
+        min-width: 38px;
+        height: 38px;
+        font-size: 0.8rem;
+    }
+
+    .pensa-pub-sec-slate-editable {
+        padding: 1.5rem;
+        min-height: 180px;
+        font-size: 0.95rem;
+    }
+
+    .pensa-pub-sec-slate-editable h1 {
+        font-size: 1.75rem !important;
+    }
+
+    .pensa-pub-sec-slate-editable h2 {
+        font-size: 1.35rem !important;
+    }
+
+    .pensa-pub-sec-slate-editable blockquote {
+        font-size: 1rem !important;
+        padding: 0.75rem 1rem !important;
+    }
+
+    .pensa-pub-sec-slate-editable blockquote::before {
+        font-size: 2rem !important;
+        top: 0.25rem !important;
+        left: 0.5rem !important;
+    }
+
+    .pensa-pub-sec-slate-editable ul,
+    .pensa-pub-sec-slate-editable ol {
+        padding-left: 1.5rem !important;
+    }
+
+    .pensa-pub-sec-upload-methods {
+        flex-direction: row;
+        gap: 0.75rem;
+    }
+
+    .pensa-pub-sec-upload-method {
+        min-width: 180px;
+    }
+
+    .pensa-pub-sec-img-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .pensa-pub-sec-img-preview-inner {
+        height: 180px;
+    }
+
+    .pensa-pub-sec-url-section {
+        flex-direction: row;
+        gap: 0.75rem;
+    }
+
+    .pensa-pub-sec-summary-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .pensa-pub-sec-video-container {
+        flex-direction: column;
+        gap: 1.25rem;
+    }
+
+    .pensa-pub-sec-video-wrapper {
         max-width: 100%;
     }
 
-    .publication-sections-video-player {
-        max-height: 200px;
+    .pensa-pub-sec-video-player {
+        max-height: 220px;
     }
 
-    .publication-sections-video-play-btn {
+    .pensa-pub-sec-video-play-btn {
         width: 60px;
         height: 60px;
         font-size: 1.25rem;
     }
 
-    .publication-sections-video-upload {
-        padding: 1.5rem;
+    .pensa-pub-sec-img-container {
+        flex-direction: row;
+        flex-wrap: wrap;
     }
 
-    .publication-sections-video-upload-btn {
-        padding: 1rem 1.5rem !important;
-        font-size: 0.9rem !important;
+    .pensa-pub-sec-img-container .pensa-pub-sec-img-item {
+        max-width: calc(50% - 0.5rem);
+        flex: 1 1 calc(50% - 0.5rem);
     }
 }
 
-@media (max-width: 480px) {
-    .publication-sections-video-upload {
-        padding: 1rem;
+/* ============================= */
+/* LARGE PHONES (576px - 767px)  */
+/* Phablets, Large Smartphones   */
+/* ============================= */
+@media (min-width: 576px) and (max-width: 767px) {
+    .pensa-pub-sec-card {
+        border-radius: 12px;
+        margin-bottom: 1.5rem;
     }
 
-    .publication-sections-video-uploading {
-        padding: 1.5rem;
+    .pensa-pub-sec-header {
+        padding: 1.25rem;
+        flex-direction: column;
+        gap: 0.75rem;
+        border-radius: 12px 12px 0 0;
     }
 
-    .publication-sections-video-preview {
-        padding: 1rem;
+    .pensa-pub-sec-title {
+        font-size: 1.25rem;
+        text-align: center;
     }
 
-    .publication-sections-video-player {
-        max-height: 180px;
+    .pensa-pub-sec-content {
+        padding: 1.25rem;
     }
 
-    .publication-sections-video-play-btn {
-        width: 50px;
-        height: 50px;
+    .pensa-pub-sec-empty-state {
+        min-height: 300px;
+        border-radius: 16px;
+    }
+
+    .pensa-pub-sec-empty-icon {
+        font-size: 3rem;
+    }
+
+    .pensa-pub-sec-empty-content h3 {
+        font-size: 1.5rem;
+    }
+
+    .pensa-pub-sec-empty-content p {
         font-size: 1rem;
     }
 
-    .publication-sections-video-thumbnail-preview img {
-        width: 60px;
+    .pensa-pub-sec-list {
+        gap: 1.5rem;
+    }
+
+    .pensa-pub-sec-item {
+        border-radius: 16px;
+    }
+
+    .pensa-pub-sec-item-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+        padding: 1.25rem;
+    }
+
+    .pensa-pub-sec-item-title h4 {
+        font-size: 1.2rem;
+    }
+
+    .pensa-pub-sec-item-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .pensa-pub-sec-move-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 0.85rem;
+    }
+
+    .pensa-pub-sec-remove-btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.85rem;
+    }
+
+    .pensa-pub-sec-item-content {
+        padding: 1.25rem;
+    }
+
+    .pensa-pub-sec-form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .pensa-pub-sec-form-group label {
+        font-size: 0.95rem;
+    }
+
+    .pensa-pub-sec-title-input {
+        padding: 0.875rem 1rem;
+        font-size: 1rem;
+    }
+
+    .pensa-pub-sec-slate-container {
+        border-radius: 12px;
+    }
+
+    .pensa-pub-sec-slate-toolbar {
+        padding: 0.75rem;
+        gap: 0.3rem;
+    }
+
+    .pensa-pub-sec-slate-btn {
+        min-width: 36px;
+        height: 36px;
+        font-size: 0.8rem;
+        padding: 0.4rem 0.6rem;
+    }
+
+    .pensa-pub-sec-toolbar-divider {
+        height: 24px;
+        margin: 0 0.3rem;
+    }
+
+    .pensa-pub-sec-slate-editable {
+        padding: 1.25rem;
+        min-height: 160px;
+        font-size: 0.95rem;
+    }
+
+    .pensa-pub-sec-slate-editable h1 {
+        font-size: 1.5rem !important;
+    }
+
+    .pensa-pub-sec-slate-editable h2 {
+        font-size: 1.25rem !important;
+    }
+
+    .pensa-pub-sec-slate-editable h3 {
+        font-size: 1.1rem !important;
+    }
+
+    .pensa-pub-sec-slate-editable blockquote {
+        font-size: 0.95rem !important;
+        padding: 0.75rem 1rem !important;
+        margin: 1rem 0 !important;
+    }
+
+    .pensa-pub-sec-slate-editable blockquote::before {
+        font-size: 1.75rem !important;
+    }
+
+    .pensa-pub-sec-slate-editable ul,
+    .pensa-pub-sec-slate-editable ol {
+        padding-left: 1.25rem !important;
+    }
+
+    .pensa-pub-sec-btn {
+        padding: 0.875rem 1.25rem;
+        font-size: 0.95rem;
+    }
+
+    .pensa-pub-sec-upload-methods {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .pensa-pub-sec-upload-method {
+        min-width: auto;
+    }
+
+    .pensa-pub-sec-upload-btn,
+    .pensa-pub-sec-clear-btn {
+        padding: 0.875rem 1.25rem !important;
+        font-size: 0.9rem !important;
+    }
+
+    .pensa-pub-sec-img-upload {
+        padding: 1.25rem;
+        border-radius: 12px;
+    }
+
+    .pensa-pub-sec-url-section {
+        flex-direction: column;
+        gap: 0.75rem;
+        padding: 0.875rem;
+    }
+
+    .pensa-pub-sec-img-preview {
+        padding: 1.25rem;
+        margin-top: 1.5rem;
+    }
+
+    .pensa-pub-sec-img-preview h5 {
+        font-size: 1.1rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .pensa-pub-sec-img-grid {
+        grid-template-columns: 1fr;
+        gap: 1.25rem;
+    }
+
+    .pensa-pub-sec-img-preview-inner {
+        height: 180px;
+    }
+
+    .pensa-pub-sec-img-controls {
+        padding: 1.25rem;
+    }
+
+    .pensa-pub-sec-img-remove-btn {
+        width: 46px;
+        height: 46px;
+        font-size: 1rem;
+    }
+
+    .pensa-pub-sec-summary {
+        padding: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .pensa-pub-sec-summary h4 {
+        font-size: 1.25rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .pensa-pub-sec-summary-stats {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .pensa-pub-sec-stat {
+        padding: 1.25rem;
+    }
+
+    .pensa-pub-sec-stat-value {
+        font-size: 1.75rem;
+    }
+
+    .pensa-pub-sec-video-upload {
+        padding: 1.5rem;
+    }
+
+    .pensa-pub-sec-video-upload-btn {
+        padding: 1rem 1.5rem !important;
+        font-size: 0.95rem !important;
+    }
+
+    .pensa-pub-sec-video-container {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .pensa-pub-sec-video-wrapper {
+        max-width: 100%;
+    }
+
+    .pensa-pub-sec-video-player {
+        max-height: 200px;
+    }
+
+    .pensa-pub-sec-video-play-btn {
+        width: 56px;
+        height: 56px;
+        font-size: 1.2rem;
+    }
+
+    .pensa-pub-sec-video-preview {
+        padding: 1.25rem;
+    }
+
+    .pensa-pub-sec-video-thumb img {
+        width: 70px;
+        height: 44px;
+    }
+
+    .pensa-pub-sec-video-remove-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .pensa-pub-sec-img-container {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .pensa-pub-sec-img-container .pensa-pub-sec-img-item {
+        max-width: 100%;
+    }
+
+    .pensa-pub-sec-help {
+        margin-bottom: 2rem;
+    }
+
+    .pensa-pub-sec-help p {
+        font-size: 0.9rem;
+    }
+}
+
+/* ============================= */
+/* MEDIUM PHONES (480px - 575px) */
+/* Standard Smartphones          */
+/* ============================= */
+@media (min-width: 480px) and (max-width: 575px) {
+    .pensa-pub-sec-card {
+        border-radius: 10px;
+        margin-bottom: 1.25rem;
+    }
+
+    .pensa-pub-sec-header {
+        padding: 1rem;
+        flex-direction: column;
+        gap: 0.75rem;
+        border-radius: 10px 10px 0 0;
+    }
+
+    .pensa-pub-sec-title {
+        font-size: 1.15rem;
+        text-align: center;
+    }
+
+    .pensa-pub-sec-content {
+        padding: 1rem;
+    }
+
+    .pensa-pub-sec-empty-state {
+        min-height: 280px;
+        border-radius: 14px;
+        border-width: 2px;
+    }
+
+    .pensa-pub-sec-empty-icon {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .pensa-pub-sec-empty-content {
+        padding: 1.5rem;
+    }
+
+    .pensa-pub-sec-empty-content h3 {
+        font-size: 1.35rem;
+    }
+
+    .pensa-pub-sec-empty-content p {
+        font-size: 0.95rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .pensa-pub-sec-list {
+        gap: 1.25rem;
+    }
+
+    .pensa-pub-sec-item {
+        border-radius: 14px;
+    }
+
+    .pensa-pub-sec-item::before {
+        height: 4px;
+    }
+
+    .pensa-pub-sec-item-header {
+        flex-direction: column;
+        gap: 0.875rem;
+        align-items: stretch;
+        padding: 1rem;
+    }
+
+    .pensa-pub-sec-item-title h4 {
+        font-size: 1.1rem;
+    }
+
+    .pensa-pub-sec-status-complete,
+    .pensa-pub-sec-status-incomplete {
+        font-size: 0.85rem;
+    }
+
+    .pensa-pub-sec-item-actions {
+        justify-content: space-between;
+    }
+
+    .pensa-pub-sec-move-btn {
+        width: 34px;
+        height: 34px;
+        font-size: 0.8rem;
+        border-radius: 8px;
+    }
+
+    .pensa-pub-sec-remove-btn {
+        padding: 0.55rem 0.9rem;
+        font-size: 0.8rem;
+        border-radius: 10px;
+    }
+
+    .pensa-pub-sec-item-content {
+        padding: 1rem;
+    }
+
+    .pensa-pub-sec-form-group {
+        margin-bottom: 1.25rem;
+    }
+
+    .pensa-pub-sec-form-group label {
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .pensa-pub-sec-title-input {
+        padding: 0.75rem 0.875rem;
+        font-size: 0.95rem;
+        border-radius: 10px;
+    }
+
+    .pensa-pub-sec-slate-container {
+        border-radius: 10px;
+        margin-bottom: 1.5rem;
+    }
+
+    .pensa-pub-sec-slate-toolbar {
+        padding: 0.6rem;
+        gap: 0.25rem;
+    }
+
+    .pensa-pub-sec-slate-btn {
+        min-width: 32px;
+        height: 32px;
+        font-size: 0.75rem;
+        padding: 0.35rem 0.5rem;
+        border-radius: 8px;
+    }
+
+    .pensa-pub-sec-toolbar-divider {
+        display: none;
+    }
+
+    .pensa-pub-sec-slate-editable {
+        padding: 1rem;
+        min-height: 140px;
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+
+    .pensa-pub-sec-slate-editable h1 {
+        font-size: 1.4rem !important;
+    }
+
+    .pensa-pub-sec-slate-editable h2 {
+        font-size: 1.15rem !important;
+    }
+
+    .pensa-pub-sec-slate-editable h3 {
+        font-size: 1.05rem !important;
+    }
+
+    .pensa-pub-sec-slate-editable blockquote {
+        font-size: 0.9rem !important;
+        padding: 0.6rem 0.875rem !important;
+        margin: 0.875rem 0 !important;
+    }
+
+    .pensa-pub-sec-slate-editable blockquote::before {
+        font-size: 1.5rem !important;
+        top: 0.2rem !important;
+        left: 0.4rem !important;
+    }
+
+    .pensa-pub-sec-slate-editable ul,
+    .pensa-pub-sec-slate-editable ol {
+        padding-left: 1.2rem !important;
+    }
+
+    .pensa-pub-sec-btn {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+        border-radius: 10px;
+    }
+
+    .pensa-pub-sec-upload-methods {
+        flex-direction: column;
+        gap: 0.6rem;
+    }
+
+    .pensa-pub-sec-upload-btn,
+    .pensa-pub-sec-clear-btn {
+        padding: 0.75rem 1rem !important;
+        font-size: 0.85rem !important;
+        border-radius: 10px !important;
+    }
+
+    .pensa-pub-sec-img-upload {
+        padding: 1rem;
+        border-radius: 10px;
+    }
+
+    .pensa-pub-sec-url-section {
+        flex-direction: column;
+        gap: 0.6rem;
+        padding: 0.75rem;
+        border-radius: 10px;
+    }
+
+    .pensa-pub-sec-url-input {
+        padding: 0.65rem 0.875rem;
+        font-size: 0.9rem;
+    }
+
+    .pensa-pub-sec-url-add-btn {
+        padding: 0.65rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .pensa-pub-sec-img-preview {
+        padding: 1rem;
+        margin-top: 1.25rem;
+        border-radius: 12px;
+    }
+
+    .pensa-pub-sec-img-preview h5 {
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .pensa-pub-sec-img-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .pensa-pub-sec-img-item {
+        border-radius: 12px;
+    }
+
+    .pensa-pub-sec-img-preview-inner {
+        height: 160px;
+    }
+
+    .pensa-pub-sec-img-controls {
+        padding: 1rem;
+    }
+
+    .pensa-pub-sec-img-input-group label {
+        font-size: 0.85rem;
+    }
+
+    .pensa-pub-sec-img-input {
+        padding: 0.6rem 0.875rem;
+        font-size: 0.85rem;
+    }
+
+    .pensa-pub-sec-img-remove-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 0.95rem;
+    }
+
+    .pensa-pub-sec-summary {
+        padding: 1.25rem;
+        margin-top: 1.75rem;
+        border-radius: 12px;
+    }
+
+    .pensa-pub-sec-summary h4 {
+        font-size: 1.15rem;
+        margin-bottom: 1rem;
+    }
+
+    .pensa-pub-sec-summary-stats {
+        grid-template-columns: 1fr;
+        gap: 0.875rem;
+    }
+
+    .pensa-pub-sec-stat {
+        padding: 1rem;
+        border-radius: 10px;
+    }
+
+    .pensa-pub-sec-stat-label {
+        font-size: 0.85rem;
+    }
+
+    .pensa-pub-sec-stat-value {
+        font-size: 1.6rem;
+    }
+
+    .pensa-pub-sec-video-upload {
+        padding: 1.25rem;
+        border-radius: 12px;
+    }
+
+    .pensa-pub-sec-video-upload-btn {
+        padding: 0.875rem 1.25rem !important;
+        font-size: 0.9rem !important;
+    }
+
+    .pensa-pub-sec-video-formats {
+        font-size: 0.8rem;
+    }
+
+    .pensa-pub-sec-video-uploading {
+        padding: 1.5rem;
+        border-radius: 12px;
+    }
+
+    .pensa-pub-sec-video-container {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .pensa-pub-sec-video-wrapper {
+        max-width: 100%;
+        border-radius: 10px;
+    }
+
+    .pensa-pub-sec-video-player {
+        max-height: 180px;
+    }
+
+    .pensa-pub-sec-video-play-btn {
+        width: 52px;
+        height: 52px;
+        font-size: 1.1rem;
+    }
+
+    .pensa-pub-sec-video-preview {
+        padding: 1rem;
+        border-radius: 12px;
+    }
+
+    .pensa-pub-sec-video-info-item {
+        font-size: 0.9rem;
+    }
+
+    .pensa-pub-sec-video-thumb span {
+        font-size: 0.85rem;
+    }
+
+    .pensa-pub-sec-video-thumb img {
+        width: 65px;
         height: 40px;
     }
 
-    .publication-sections-video-remove-btn {
+    .pensa-pub-sec-video-remove-btn {
         width: 100%;
         justify-content: center;
+        padding: 0.65rem 1rem;
+        font-size: 0.85rem;
+    }
+
+    .pensa-pub-sec-img-container {
+        flex-direction: column;
+        gap: 0.875rem;
+    }
+
+    .pensa-pub-sec-img-container .pensa-pub-sec-img-item {
+        max-width: 100%;
+    }
+
+    .pensa-pub-sec-help {
+        margin-bottom: 1.75rem;
+        padding: 0.75rem;
+    }
+
+    .pensa-pub-sec-help p {
+        font-size: 0.85rem;
+        line-height: 1.5;
+    }
+}
+
+/* ============================= */
+/* SMALL PHONES (360px - 479px)  */
+/* Compact Smartphones           */
+/* ============================= */
+@media (min-width: 360px) and (max-width: 479px) {
+    .pensa-pub-sec-card {
+        border-radius: 8px;
+        margin-bottom: 1rem;
+    }
+
+    .pensa-pub-sec-header {
+        padding: 0.875rem;
+        flex-direction: column;
+        gap: 0.6rem;
+        border-radius: 8px 8px 0 0;
+    }
+
+    .pensa-pub-sec-title {
+        font-size: 1.1rem;
+        text-align: center;
+    }
+
+    .pensa-pub-sec-content {
+        padding: 0.875rem;
+    }
+
+    .pensa-pub-sec-empty-state {
+        min-height: 250px;
+        border-radius: 12px;
+    }
+
+    .pensa-pub-sec-empty-icon {
+        font-size: 2.25rem;
+    }
+
+    .pensa-pub-sec-empty-content h3 {
+        font-size: 1.25rem;
+    }
+
+    .pensa-pub-sec-empty-content p {
+        font-size: 0.9rem;
+    }
+
+    .pensa-pub-sec-list {
+        gap: 1rem;
+    }
+
+    .pensa-pub-sec-item {
+        border-radius: 12px;
+    }
+
+    .pensa-pub-sec-item::before {
+        height: 3px;
+    }
+
+    .pensa-pub-sec-item-header {
+        flex-direction: column;
+        gap: 0.75rem;
+        padding: 0.875rem;
+    }
+
+    .pensa-pub-sec-item-title h4 {
+        font-size: 1.05rem;
+    }
+
+    .pensa-pub-sec-status-complete,
+    .pensa-pub-sec-status-incomplete {
+        font-size: 0.8rem;
+    }
+
+    .pensa-pub-sec-move-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 0.75rem;
+    }
+
+    .pensa-pub-sec-remove-btn {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.75rem;
+    }
+
+    .pensa-pub-sec-item-content {
+        padding: 0.875rem;
+    }
+
+    .pensa-pub-sec-form-group {
+        margin-bottom: 1rem;
+    }
+
+    .pensa-pub-sec-form-group label {
+        font-size: 0.875rem;
+    }
+
+    .pensa-pub-sec-title-input {
+        padding: 0.65rem 0.75rem;
+        font-size: 0.9rem;
+    }
+
+    .pensa-pub-sec-slate-container {
+        border-radius: 8px;
+    }
+
+    .pensa-pub-sec-slate-toolbar {
+        padding: 0.5rem;
+        gap: 0.2rem;
+    }
+
+    .pensa-pub-sec-slate-btn {
+        min-width: 28px;
+        height: 28px;
+        font-size: 0.7rem;
+    }
+
+    .pensa-pub-sec-toolbar-divider {
+        display: none;
+    }
+
+    .pensa-pub-sec-slate-editable {
+        padding: 0.75rem;
+        min-height: 120px;
+        font-size: 0.875rem;
+    }
+
+    .pensa-pub-sec-slate-editable h1 {
+        font-size: 1.3rem !important;
+    }
+
+    .pensa-pub-sec-slate-editable h2 {
+        font-size: 1.1rem !important;
+    }
+
+    .pensa-pub-sec-slate-editable h3 {
+        font-size: 1rem !important;
+    }
+
+    .pensa-pub-sec-slate-editable blockquote {
+        font-size: 0.85rem !important;
+        padding: 0.5rem 0.75rem !important;
+    }
+
+    .pensa-pub-sec-slate-editable blockquote::before {
+        font-size: 1.25rem !important;
+    }
+
+    .pensa-pub-sec-slate-editable ul,
+    .pensa-pub-sec-slate-editable ol {
+        padding-left: 1rem !important;
+    }
+
+    .pensa-pub-sec-btn {
+        padding: 0.65rem 0.875rem;
+        font-size: 0.85rem;
+    }
+
+    .pensa-pub-sec-upload-btn,
+    .pensa-pub-sec-clear-btn {
+        padding: 0.65rem 0.875rem !important;
+        font-size: 0.8rem !important;
+    }
+
+    .pensa-pub-sec-img-upload {
+        padding: 0.875rem;
+    }
+
+    .pensa-pub-sec-url-section {
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 0.65rem;
+    }
+
+    .pensa-pub-sec-img-preview {
+        padding: 0.875rem;
+    }
+
+    .pensa-pub-sec-img-preview h5 {
+        font-size: 0.95rem;
+    }
+
+    .pensa-pub-sec-img-grid {
+        grid-template-columns: 1fr;
+        gap: 0.875rem;
+    }
+
+    .pensa-pub-sec-img-preview-inner {
+        height: 150px;
+    }
+
+    .pensa-pub-sec-img-controls {
+        padding: 0.875rem;
+    }
+
+    .pensa-pub-sec-img-remove-btn {
+        width: 42px;
+        height: 42px;
+    }
+
+    .pensa-pub-sec-summary {
+        padding: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .pensa-pub-sec-summary h4 {
+        font-size: 1.1rem;
+    }
+
+    .pensa-pub-sec-summary-stats {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+
+    .pensa-pub-sec-stat {
+        padding: 0.875rem;
+    }
+
+    .pensa-pub-sec-stat-value {
+        font-size: 1.5rem;
+    }
+
+    .pensa-pub-sec-video-upload {
+        padding: 1rem;
+    }
+
+    .pensa-pub-sec-video-upload-btn {
+        padding: 0.75rem 1rem !important;
+        font-size: 0.85rem !important;
+    }
+
+    .pensa-pub-sec-video-player {
+        max-height: 160px;
+    }
+
+    .pensa-pub-sec-video-play-btn {
+        width: 48px;
+        height: 48px;
+        font-size: 1rem;
+    }
+
+    .pensa-pub-sec-video-preview {
+        padding: 0.875rem;
+    }
+
+    .pensa-pub-sec-video-thumb img {
+        width: 60px;
+        height: 38px;
+    }
+
+    .pensa-pub-sec-video-remove-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .pensa-pub-sec-img-container {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .pensa-pub-sec-help {
+        margin-bottom: 1.5rem;
+        padding: 0.6rem;
+    }
+
+    .pensa-pub-sec-help p {
+        font-size: 0.8rem;
+    }
+}
+
+/* ============================= */
+/* EXTRA SMALL PHONES (<360px)   */
+/* Very Small Devices            */
+/* ============================= */
+@media (max-width: 359px) {
+    .pensa-pub-sec-card {
+        border-radius: 6px;
+        margin-bottom: 0.875rem;
+    }
+
+    .pensa-pub-sec-header {
+        padding: 0.75rem;
+        flex-direction: column;
+        gap: 0.5rem;
+        border-radius: 6px 6px 0 0;
+    }
+
+    .pensa-pub-sec-title {
+        font-size: 1rem;
+        text-align: center;
+    }
+
+    .pensa-pub-sec-content {
+        padding: 0.75rem;
+    }
+
+    .pensa-pub-sec-empty-state {
+        min-height: 220px;
+        border-radius: 10px;
+    }
+
+    .pensa-pub-sec-empty-icon {
+        font-size: 2rem;
+    }
+
+    .pensa-pub-sec-empty-content h3 {
+        font-size: 1.1rem;
+    }
+
+    .pensa-pub-sec-empty-content p {
+        font-size: 0.85rem;
+    }
+
+    .pensa-pub-sec-list {
+        gap: 0.875rem;
+    }
+
+    .pensa-pub-sec-item {
+        border-radius: 10px;
+    }
+
+    .pensa-pub-sec-item::before {
+        height: 3px;
+    }
+
+    .pensa-pub-sec-item-header {
+        padding: 0.75rem;
+        gap: 0.6rem;
+    }
+
+    .pensa-pub-sec-item-title h4 {
+        font-size: 0.95rem;
+    }
+
+    .pensa-pub-sec-status-complete,
+    .pensa-pub-sec-status-incomplete {
+        font-size: 0.75rem;
+    }
+
+    .pensa-pub-sec-move-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 0.7rem;
+    }
+
+    .pensa-pub-sec-remove-btn {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.7rem;
+    }
+
+    .pensa-pub-sec-item-content {
+        padding: 0.75rem;
+    }
+
+    .pensa-pub-sec-form-group {
+        margin-bottom: 0.875rem;
+    }
+
+    .pensa-pub-sec-form-group label {
+        font-size: 0.8rem;
+    }
+
+    .pensa-pub-sec-title-input {
+        padding: 0.55rem 0.65rem;
+        font-size: 0.85rem;
+    }
+
+    .pensa-pub-sec-slate-container {
+        border-radius: 6px;
+    }
+
+    .pensa-pub-sec-slate-toolbar {
+        padding: 0.4rem;
+        gap: 0.15rem;
+    }
+
+    .pensa-pub-sec-slate-btn {
+        min-width: 26px;
+        height: 26px;
+        font-size: 0.65rem;
+    }
+
+    .pensa-pub-sec-slate-editable {
+        padding: 0.6rem;
+        min-height: 100px;
+        font-size: 0.825rem;
+    }
+
+    .pensa-pub-sec-slate-editable h1 {
+        font-size: 1.2rem !important;
+    }
+
+    .pensa-pub-sec-slate-editable h2 {
+        font-size: 1rem !important;
+    }
+
+    .pensa-pub-sec-slate-editable h3 {
+        font-size: 0.95rem !important;
+    }
+
+    .pensa-pub-sec-slate-editable blockquote {
+        font-size: 0.8rem !important;
+        padding: 0.4rem 0.6rem !important;
+    }
+
+    .pensa-pub-sec-slate-editable blockquote::before {
+        font-size: 1rem !important;
+    }
+
+    .pensa-pub-sec-slate-editable ul,
+    .pensa-pub-sec-slate-editable ol {
+        padding-left: 0.875rem !important;
+    }
+
+    .pensa-pub-sec-btn {
+        padding: 0.55rem 0.75rem;
+        font-size: 0.8rem;
+    }
+
+    .pensa-pub-sec-upload-btn,
+    .pensa-pub-sec-clear-btn {
+        padding: 0.55rem 0.75rem !important;
+        font-size: 0.75rem !important;
+    }
+
+    .pensa-pub-sec-img-upload {
+        padding: 0.75rem;
+    }
+
+    .pensa-pub-sec-url-section {
+        padding: 0.55rem;
+        gap: 0.4rem;
+    }
+
+    .pensa-pub-sec-url-input {
+        padding: 0.5rem 0.65rem;
+        font-size: 0.8rem;
+    }
+
+    .pensa-pub-sec-url-add-btn {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8rem;
+    }
+
+    .pensa-pub-sec-img-preview {
+        padding: 0.75rem;
+    }
+
+    .pensa-pub-sec-img-preview h5 {
+        font-size: 0.9rem;
+    }
+
+    .pensa-pub-sec-img-grid {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+
+    .pensa-pub-sec-img-preview-inner {
+        height: 130px;
+    }
+
+    .pensa-pub-sec-img-controls {
+        padding: 0.75rem;
+    }
+
+    .pensa-pub-sec-img-input-group label {
+        font-size: 0.75rem;
+    }
+
+    .pensa-pub-sec-img-input {
+        padding: 0.5rem 0.65rem;
+        font-size: 0.8rem;
+    }
+
+    .pensa-pub-sec-img-remove-btn {
+        width: 38px;
+        height: 38px;
+        font-size: 0.85rem;
+    }
+
+    .pensa-pub-sec-summary {
+        padding: 0.875rem;
+        margin-top: 1.25rem;
+    }
+
+    .pensa-pub-sec-summary h4 {
+        font-size: 1rem;
+    }
+
+    .pensa-pub-sec-summary-stats {
+        grid-template-columns: 1fr;
+        gap: 0.6rem;
+    }
+
+    .pensa-pub-sec-stat {
+        padding: 0.75rem;
+    }
+
+    .pensa-pub-sec-stat-label {
+        font-size: 0.75rem;
+    }
+
+    .pensa-pub-sec-stat-value {
+        font-size: 1.35rem;
+    }
+
+    .pensa-pub-sec-video-upload {
+        padding: 0.875rem;
+    }
+
+    .pensa-pub-sec-video-upload-btn {
+        padding: 0.65rem 0.875rem !important;
+        font-size: 0.8rem !important;
+    }
+
+    .pensa-pub-sec-video-formats {
+        font-size: 0.75rem;
+    }
+
+    .pensa-pub-sec-video-uploading {
+        padding: 1.25rem;
+    }
+
+    .pensa-pub-sec-video-player {
+        max-height: 140px;
+    }
+
+    .pensa-pub-sec-video-play-btn {
+        width: 44px;
+        height: 44px;
+        font-size: 0.9rem;
+    }
+
+    .pensa-pub-sec-video-preview {
+        padding: 0.75rem;
+    }
+
+    .pensa-pub-sec-video-info-item {
+        font-size: 0.8rem;
+    }
+
+    .pensa-pub-sec-video-thumb span {
+        font-size: 0.75rem;
+    }
+
+    .pensa-pub-sec-video-thumb img {
+        width: 55px;
+        height: 35px;
+    }
+
+    .pensa-pub-sec-video-remove-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 0.55rem 0.875rem;
+        font-size: 0.8rem;
+    }
+
+    .pensa-pub-sec-img-container {
+        flex-direction: column;
+        gap: 0.6rem;
+    }
+
+    .pensa-pub-sec-help {
+        margin-bottom: 1.25rem;
+        padding: 0.5rem;
+    }
+
+    .pensa-pub-sec-help p {
+        font-size: 0.75rem;
     }
 }

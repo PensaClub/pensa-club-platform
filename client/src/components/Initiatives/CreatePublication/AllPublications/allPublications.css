@@ -1,6 +1,6 @@
 /* Allpublications.css - Уникални класове */
 .all-publications-admin-container {
-  padding: 2rem;
+  padding:0 2rem 0 0;
   background-color: #f8fafc;
   min-height: 100vh;
   overflow-x: hidden;
@@ -497,7 +497,7 @@
 
 @media (max-width: 576px) {
   .all-publications-admin-container {
-    padding: 0.75rem;
+    padding: 0;
   }
 
   .all-publications-grid-admin {

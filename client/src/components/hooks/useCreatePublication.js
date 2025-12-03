@@ -434,14 +434,12 @@ const useCreatePublication = (initialValues, onSubmitHandler) => {
             // Delete video from Firebase if needed
             if (section?.videoUrl && section.videoUrl.includes('firebasestorage.googleapis.com')) {
                 deleteSingleImage(section.videoUrl).catch(() => {
-                    console.log('Could not delete video from Firebase');
                 });
             }
 
             // Delete thumbnail from Firebase if needed
             if (section?.thumbnailUrl && section.thumbnailUrl.includes('firebasestorage.googleapis.com')) {
                 deleteSingleImage(section.thumbnailUrl).catch(() => {
-                    console.log('Could not delete thumbnail from Firebase');
                 });
             }
 

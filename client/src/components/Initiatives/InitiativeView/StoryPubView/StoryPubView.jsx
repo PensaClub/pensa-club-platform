@@ -13,6 +13,7 @@ import { useAnalytics } from '../../../contexts/AnalyticsContext';
 import { getDownloadsCountText, getLikesCountText, getViewCountText } from '../../../../utils/textUtils';
 import { ShareButton } from '../../../ShareButton/ShareButton';
 import SEOHead from '../../../SEO/SEOHead';
+import { TextZoom } from '../../../TextZoom/TextZoom.jsx';
 
 export const StoryPubView = ({ type, previewMode = false, previewData = null }) => {
     const { slug } = useParams();
@@ -390,6 +391,7 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
         shouldShowRelated;
 
     return (
+        <>
         <article className="story-pub-view">
             {/* ✅ SEO HEAD */}
             {!previewMode && content && (
@@ -820,5 +822,7 @@ export const StoryPubView = ({ type, previewMode = false, previewData = null }) 
             </main>
             <ScrollToTop />
         </article>
+        <TextZoom />
+        </>
     );
 };

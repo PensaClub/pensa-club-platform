@@ -1,7 +1,8 @@
 /* ======================= */
-/* FLOATING ACTIONS */
+/* PENSA FLOATING ACTIONS  */
 /* ======================= */
-.publication-floating-actions {
+
+.pensa-float-actions {
     position: fixed;
     bottom: 6rem;
     right: 2rem;
@@ -11,7 +12,7 @@
     z-index: 1111;
 }
 
-.publication-floating-btn {
+.pensa-float-btn {
     width: 56px;
     height: 56px;
     border-radius: 50%;
@@ -30,126 +31,330 @@
     flex-shrink: 0;
 }
 
-.publication-floating-btn:hover {
+.pensa-float-btn:hover:not(:disabled) {
     transform: scale(1.1);
 }
 
-.publication-floating-btn.draft {
+.pensa-float-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.pensa-float-btn-draft {
     background: linear-gradient(135deg, #64748b 0%, #475569 100%);
     color: white;
 }
 
-.publication-floating-btn.preview {
+.pensa-float-btn-draft:hover:not(:disabled) {
+    background: linear-gradient(135deg, #475569 0%, #334155 100%);
+    box-shadow: 0 6px 20px rgba(71, 85, 105, 0.35);
+}
+
+.pensa-float-btn-preview {
     background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     color: white;
 }
 
-.publication-floating-btn.publish {
+.pensa-float-btn-preview:hover:not(:disabled) {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.35);
+}
+
+.pensa-float-btn-publish {
     background: linear-gradient(135deg, #10b981 0%, #059669 100%);
     color: white;
 }
 
-.publication-floating-btn.create {
+.pensa-float-btn-publish:hover:not(:disabled) {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
+}
+
+.pensa-float-btn-create {
     background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
     color: white;
 }
 
-.publication-floating-btn.new-publication {
+.pensa-float-btn-create:hover:not(:disabled) {
+    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.35);
+}
+
+.pensa-float-btn-new-publication {
     background: linear-gradient(135deg, #38a169 0%, #48bb78 100%);
     color: white;
 }
 
-.publication-floating-btn.new-publication:hover {
+.pensa-float-btn-new-publication:hover:not(:disabled) {
     background: linear-gradient(135deg, #2f855a 0%, #38a169 100%);
-    transform: scale(1.1);
-    box-shadow: 0 4px 20px rgba(56, 161, 105, 0.3);
+    box-shadow: 0 6px 20px rgba(56, 161, 105, 0.35);
 }
 
-.publication-floating-btn.update {
+.pensa-float-btn-update {
     background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
     color: white;
 }
 
-.publication-floating-btn.update:hover {
+.pensa-float-btn-update:hover:not(:disabled) {
     background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
-    transform: scale(1.1);
-    box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.35);
 }
 
-/* ======================= */
-/* RESPONSIVE DESIGN */
-/* ======================= */
-@media (max-width: 968px) {
-    .publication-floating-actions {
-        bottom: 1.5rem; /* Increased from 1rem */
-        right: 1.5rem;  /* Increased from 1rem */
-        gap: 0.75rem;   /* Increased from 0.5rem */
+/* ============================= */
+/* RESPONSIVE STYLES             */
+/* ============================= */
+
+/* Large Screens (1920px+) */
+@media (min-width: 1920px) {
+    .pensa-float-actions {
+        bottom: 7rem;
+        right: 3rem;
+        gap: 1.25rem;
     }
 
-    .publication-floating-btn {
-        width: 56px;     /* Increased from 48px */
-        height: 56px;    /* Increased from 48px */
-        min-width: 56px;
-        min-height: 56px;
-        max-width: 56px;
-        max-height: 56px;
-        font-size: 1.1rem; /* Slightly increased */
+    .pensa-float-btn {
+        width: 64px;
+        height: 64px;
+        min-width: 64px;
+        min-height: 64px;
+        max-width: 64px;
+        max-height: 64px;
+        font-size: 1.4rem;
     }
 }
 
-@media (max-width: 768px) {
-    .publication-floating-actions {
-        bottom: 2rem;    /* Increased margin bottom */
-        right: 1.75rem;  /* Increased margin right */
+/* Desktop (1400px - 1919px) */
+@media (min-width: 1400px) and (max-width: 1919px) {
+    .pensa-float-actions {
+        bottom: 6.6rem;
+        right: 2.5rem;
     }
 
-    .publication-floating-btn {
-        width: 52px;     /* Increased from 44px */
-        height: 52px;    /* Increased from 44px */
+    .pensa-float-btn {
+        width: 60px;
+        height: 60px;
+        min-width: 60px;
+        min-height: 60px;
+        max-width: 60px;
+        max-height: 60px;
+        font-size: 1.3rem;
+    }
+}
+
+/* Standard Laptops (1200px - 1399px) */
+@media (min-width: 1200px) and (max-width: 1399px) {
+    .pensa-float-actions {
+        bottom: 6.5rem;
+        right: 2rem;
+    }
+}
+
+/* Small Laptops (1024px - 1199px) */
+@media (min-width: 1024px) and (max-width: 1199px) {
+    .pensa-float-actions {
+        bottom: 6rem;
+        right: 1.75rem;
+        gap: 0.875rem;
+    }
+
+    .pensa-float-btn {
+        width: 54px;
+        height: 54px;
+        min-width: 54px;
+        min-height: 54px;
+        max-width: 54px;
+        max-height: 54px;
+        font-size: 1.2rem;
+    }
+}
+
+/* Tablets Landscape (992px - 1023px) */
+@media (min-width: 992px) and (max-width: 1023px) {
+    .pensa-float-actions {
+        bottom: 6.5rem;
+        right: 1.5rem;
+        gap: 0.875rem;
+    }
+
+    .pensa-float-btn {
+        width: 52px;
+        height: 52px;
         min-width: 52px;
         min-height: 52px;
         max-width: 52px;
         max-height: 52px;
-        font-size: 1rem; /* Increased from 0.9rem */
+        font-size: 1.15rem;
     }
 }
 
-@media (max-width: 480px) {
-    .publication-floating-actions {
-        bottom: 2.25rem;  /* Increased from 0.75rem */
-        right: 1.5rem;    /* Increased from 0.75rem */
+/* Tablets Portrait (768px - 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+    .pensa-float-actions {
+        bottom: 6rem;
+        right: 1.5rem;
+        gap: 0.75rem;
     }
 
-    .publication-floating-btn {
-        width: 48px;      /* Increased from 40px */
-        height: 48px;     /* Increased from 40px */
+    .pensa-float-btn {
+        width: 52px;
+        height: 52px;
+        min-width: 52px;
+        min-height: 52px;
+        max-width: 52px;
+        max-height: 52px;
+        font-size: 1.1rem;
+    }
+}
+
+/* Large Phones (576px - 767px) */
+@media (min-width: 576px) and (max-width: 767px) {
+    .pensa-float-actions {
+        bottom: 5.5rem;
+        right: 1.25rem;
+        gap: 0.75rem;
+    }
+
+    .pensa-float-btn {
+        width: 50px;
+        height: 50px;
+        min-width: 50px;
+        min-height: 50px;
+        max-width: 50px;
+        max-height: 50px;
+        font-size: 1.05rem;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+    }
+}
+
+/* Medium Phones (480px - 575px) */
+@media (min-width: 480px) and (max-width: 575px) {
+    .pensa-float-actions {
+        bottom: 5rem;
+        right: 1rem;
+        gap: 0.625rem;
+    }
+
+    .pensa-float-btn {
+        width: 48px;
+        height: 48px;
         min-width: 48px;
         min-height: 48px;
         max-width: 48px;
         max-height: 48px;
-        font-size: 0.95rem; /* Increased from 0.85rem */
+        font-size: 1rem;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+    }
+}
+
+/* Small Phones (360px - 479px) */
+@media (min-width: 360px) and (max-width: 479px) {
+    .pensa-float-actions {
+        bottom: 5.5rem;
+        right: 0.875rem;
+        gap: 0.5rem;
+    }
+
+    .pensa-float-btn {
+        width: 46px;
+        height: 46px;
+        min-width: 46px;
+        min-height: 46px;
+        max-width: 46px;
+        max-height: 46px;
+        font-size: 0.95rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+}
+
+/* Extra Small Phones (<360px) */
+@media (max-width: 359px) {
+    .pensa-float-actions {
+        bottom: 5rem;
+        right: 0.75rem;
+        gap: 0.4rem;
+    }
+
+    .pensa-float-btn {
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
+        min-height: 42px;
+        max-width: 42px;
+        max-height: 42px;
+        font-size: 0.875rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
     }
 }
 
 /* ======================= */
-/* ACCESSIBILITY */
+/* ACCESSIBILITY           */
 /* ======================= */
+
 @media (prefers-reduced-motion: reduce) {
-    .publication-floating-btn {
+    .pensa-float-btn {
         transition: none;
     }
+
+    .pensa-float-btn:hover:not(:disabled) {
+        transform: none;
+    }
 }
 
-.publication-floating-btn:focus {
+.pensa-float-btn:focus {
+    outline: 2px solid #0ea5e9;
+    outline-offset: 2px;
+}
+
+.pensa-float-btn:focus:not(:focus-visible) {
+    outline: none;
+}
+
+.pensa-float-btn:focus-visible {
     outline: 2px solid #0ea5e9;
     outline-offset: 2px;
 }
 
 /* ======================= */
-/* HIGH CONTRAST MODE */
+/* HIGH CONTRAST MODE      */
 /* ======================= */
+
 @media (prefers-contrast: high) {
-    .publication-floating-btn {
+    .pensa-float-btn {
         border: 2px solid #374151;
+    }
+
+    .pensa-float-btn-draft {
+        background: #475569;
+    }
+
+    .pensa-float-btn-preview {
+        background: #2563eb;
+    }
+
+    .pensa-float-btn-publish {
+        background: #059669;
+    }
+
+    .pensa-float-btn-create {
+        background: #1d4ed8;
+    }
+
+    .pensa-float-btn-update {
+        background: #7c3aed;
+    }
+}
+
+/* ======================= */
+/* DARK MODE SUPPORT       */
+/* ======================= */
+
+@media (prefers-color-scheme: dark) {
+    .pensa-float-btn {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .pensa-float-btn:hover:not(:disabled) {
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
     }
 }
