@@ -4366,6 +4366,15 @@
           "newest": "Neueste"
         }
       },
+      "address": {
+        "label": "Viertel / Straße / Bezirk",
+        "placeholder": "Z.B.: Nadeschda, Mladost, Vitosha Str...",
+        "hint": "Sucht in: Viertel, Straße, Bezirk, Region"
+      },
+      "postalCode": {
+        "label": "Postleitzahl",
+        "placeholder": "Z.B.: 1000, 1233..."
+      },
       "categories": {
         "cultural": "Kulturell",
         "general": "Allgemein",
@@ -9228,13 +9237,12 @@
     "refresh": "Aktualisieren",
     "refreshing": "Aktualisiere...",
     "close": "Schließen",
-      "save": "Speichern",
-  "saving": "Speichern...",
-  "delete": "Löschen",
-  "deleting": "Löschen...",
-  "edit": "Bearbeiten",
-  "retry": "Erneut versuchen"
-    
+    "save": "Speichern",
+    "saving": "Speichern...",
+    "delete": "Löschen",
+    "deleting": "Löschen...",
+    "edit": "Bearbeiten",
+    "retry": "Erneut versuchen"
   },
   "clubForm": {
     "title": "Vereinsregistrierung",
@@ -12775,9 +12783,9 @@
       "delete": "Löschen",
       "noStudents": "Keine Studenten gefunden",
       "noStudentsDesc": "Versuchen Sie, die Filter zu ändern oder neue Studenten hinzuzufügen",
-          "notes": "Notizen",
-    "notesCount": "{{count}} Notizen",
-    "noNotes": "Keine Notizen"
+      "notes": "Notizen",
+      "notesCount": "{{count}} Notizen",
+      "noNotes": "Keine Notizen"
     },
     "status": {
       "active": "Aktiv",
