@@ -28,7 +28,6 @@ const ContentSection = ({
     updateSectionImageAlt,
     updateSectionImageCaption,
     clearSectionImages,
-    // ✅ НОВИ PROPS ЗА ВИДЕО
     handleSectionVideoUpload,
     removeSectionVideo,
     videoUploadState,
@@ -40,14 +39,10 @@ const ContentSection = ({
     const [lastSectionCount, setLastSectionCount] = useState(values.sections?.length || 0);
     const [lastRemovedIndex, setLastRemovedIndex] = useState(null);
 
-    // State за URL inputs
     const [showUrlInputs, setShowUrlInputs] = useState({});
     const [imageUrls, setImageUrls] = useState({});
-    
-    // ✅ State за video playing
     const [playingVideos, setPlayingVideos] = useState({});
 
-    // Track section changes for scroll behavior
     useEffect(() => {
         const currentSectionCount = values.sections?.length || 0;
 
@@ -69,7 +64,6 @@ const ContentSection = ({
         setLastSectionCount(currentSectionCount);
     }, [values.sections?.length, lastSectionCount, lastRemovedIndex]);
 
-    // Scroll to specific section
     const scrollToSection = (sectionIndex, shouldFocus = false) => {
         const sectionElement = sectionRefs.current[sectionIndex];
         if (sectionElement) {
@@ -90,13 +84,11 @@ const ContentSection = ({
         }
     };
 
-    // Enhanced remove section handler with scroll tracking
     const handleRemoveSection = (index) => {
         setLastRemovedIndex(index);
         removeSection(index);
     };
 
-    // Handle URL input
     const handleImageUrlChange = (sectionIndex, value) => {
         setImageUrls(prev => ({
             ...prev,
@@ -104,7 +96,6 @@ const ContentSection = ({
         }));
     }
 
-    // Add image from URL
     const handleAddImageFromUrl = (sectionIndex) => {
         const url = imageUrls[sectionIndex];
         if (url && url.trim()) {
@@ -114,7 +105,6 @@ const ContentSection = ({
         }
     };
 
-    // ✅ Toggle video play/pause
     const toggleVideoPlay = (sectionIndex) => {
         const video = videoRefs.current[sectionIndex];
         if (video) {
@@ -130,7 +120,6 @@ const ContentSection = ({
         }
     };
 
-    // ✅ Get video upload progress text
     const getVideoProgressText = (sectionIndex) => {
         const state = videoUploadState?.[sectionIndex];
         if (!state?.stage) return '';
@@ -147,7 +136,6 @@ const ContentSection = ({
         }
     };
 
-    // Create editor for each section
     const getSectionEditor = (index) => {
         if (!sectionEditorsRef.current[index]) {
             sectionEditorsRef.current[index] = createSlateEditor();
@@ -155,7 +143,6 @@ const ContentSection = ({
         return sectionEditorsRef.current[index];
     };
 
-    // Handle section content changes with error handling
     const handleSectionContentChange = (sectionIndex) => (value) => {
         try {
             const updatedSections = [...(values.sections || [])];
@@ -175,30 +162,26 @@ const ContentSection = ({
         }
     };
 
-    // Move section up/down
-const handleMoveSection = (index, direction) => {
-    const newSections = [...(values.sections || [])];
-    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    const handleMoveSection = (index, direction) => {
+        const newSections = [...(values.sections || [])];
+        const targetIndex = direction === 'up' ? index - 1 : index + 1;
 
-    if (targetIndex >= 0 && targetIndex < newSections.length) {
-        // Swap секциите
-        [newSections[index], newSections[targetIndex]] = [newSections[targetIndex], newSections[index]];
-        
-        // ✅ НОВО: Update order на ВСИЧКИ секции базирано на новата позиция
-        const updatedSections = newSections.map((section, idx) => ({
-            ...section,
-            order: idx + 1
-        }));
-        
-        setValues(prev => ({ ...prev, sections: updatedSections }));
+        if (targetIndex >= 0 && targetIndex < newSections.length) {
+            [newSections[index], newSections[targetIndex]] = [newSections[targetIndex], newSections[index]];
+            
+            const updatedSections = newSections.map((section, idx) => ({
+                ...section,
+                order: idx + 1
+            }));
+            
+            setValues(prev => ({ ...prev, sections: updatedSections }));
 
-        // Swap editors
-        const tempEditor = sectionEditorsRef.current[index];
-        sectionEditorsRef.current[index] = sectionEditorsRef.current[targetIndex];
-        sectionEditorsRef.current[targetIndex] = tempEditor;
-    }
-};
-    // Slate.js toolbar functions
+            const tempEditor = sectionEditorsRef.current[index];
+            sectionEditorsRef.current[index] = sectionEditorsRef.current[targetIndex];
+            sectionEditorsRef.current[targetIndex] = tempEditor;
+        }
+    };
+
     const toggleMark = (editor, format) => {
         try {
             const isActive = isMarkActive(editor, format);
@@ -297,16 +280,15 @@ const handleMoveSection = (index, direction) => {
         }
     };
 
-    // Render Slate toolbar
     const renderSlateToolbar = (editor) => (
-        <div className="publication-sections-slate-toolbar">
+        <div className="pensa-pub-sec-slate-toolbar">
             <button
                 type="button"
                 onMouseDown={(e) => {
                     e.preventDefault();
                     toggleMark(editor, 'bold');
                 }}
-                className={`publication-sections-slate-btn ${isMarkActive(editor, 'bold') ? 'active' : ''}`}
+                className={`pensa-pub-sec-slate-btn ${isMarkActive(editor, 'bold') ? 'active' : ''}`}
             >
                 <strong>B</strong>
             </button>
@@ -316,7 +298,7 @@ const handleMoveSection = (index, direction) => {
                     e.preventDefault();
                     toggleMark(editor, 'italic');
                 }}
-                className={`publication-sections-slate-btn ${isMarkActive(editor, 'italic') ? 'active' : ''}`}
+                className={`pensa-pub-sec-slate-btn ${isMarkActive(editor, 'italic') ? 'active' : ''}`}
             >
                 <em>I</em>
             </button>
@@ -326,18 +308,18 @@ const handleMoveSection = (index, direction) => {
                     e.preventDefault();
                     toggleMark(editor, 'underline');
                 }}
-                className={`publication-sections-slate-btn ${isMarkActive(editor, 'underline') ? 'active' : ''}`}
+                className={`pensa-pub-sec-slate-btn ${isMarkActive(editor, 'underline') ? 'active' : ''}`}
             >
                 <u>U</u>
             </button>
-            <div className="publication-sections-toolbar-divider"></div>
+            <div className="pensa-pub-sec-toolbar-divider"></div>
             <button
                 type="button"
                 onMouseDown={(e) => {
                     e.preventDefault();
                     toggleBlock(editor, 'heading-one');
                 }}
-                className={`publication-sections-slate-btn ${isBlockActive(editor, 'heading-one') ? 'active' : ''}`}
+                className={`pensa-pub-sec-slate-btn ${isBlockActive(editor, 'heading-one') ? 'active' : ''}`}
             >
                 H1
             </button>
@@ -347,7 +329,7 @@ const handleMoveSection = (index, direction) => {
                     e.preventDefault();
                     toggleBlock(editor, 'heading-two');
                 }}
-                className={`publication-sections-slate-btn ${isBlockActive(editor, 'heading-two') ? 'active' : ''}`}
+                className={`pensa-pub-sec-slate-btn ${isBlockActive(editor, 'heading-two') ? 'active' : ''}`}
             >
                 H2
             </button>
@@ -357,7 +339,7 @@ const handleMoveSection = (index, direction) => {
                     e.preventDefault();
                     toggleBlock(editor, 'bulleted-list');
                 }}
-                className={`publication-sections-slate-btn ${isBlockActive(editor, 'bulleted-list') ? 'active' : ''}`}
+                className={`pensa-pub-sec-slate-btn ${isBlockActive(editor, 'bulleted-list') ? 'active' : ''}`}
             >
                 • List
             </button>
@@ -367,7 +349,7 @@ const handleMoveSection = (index, direction) => {
                     e.preventDefault();
                     toggleBlock(editor, 'numbered-list');
                 }}
-                className={`publication-sections-slate-btn ${isBlockActive(editor, 'numbered-list') ? 'active' : ''}`}
+                className={`pensa-pub-sec-slate-btn ${isBlockActive(editor, 'numbered-list') ? 'active' : ''}`}
             >
                 1. List
             </button>
@@ -377,14 +359,13 @@ const handleMoveSection = (index, direction) => {
                     e.preventDefault();
                     toggleBlock(editor, 'block-quote');
                 }}
-                className={`publication-sections-slate-btn ${isBlockActive(editor, 'block-quote') ? 'active' : ''}`}
+                className={`pensa-pub-sec-slate-btn ${isBlockActive(editor, 'block-quote') ? 'active' : ''}`}
             >
                 " Quote
             </button>
         </div>
     );
 
-    // Render Slate element
     const renderElement = (props) => {
         switch (props.element.type) {
             case 'block-quote':
@@ -404,7 +385,6 @@ const handleMoveSection = (index, direction) => {
         }
     };
 
-    // Render Slate leaf
     const renderLeaf = (props) => {
         let { children } = props;
 
@@ -423,7 +403,6 @@ const handleMoveSection = (index, direction) => {
         return <span {...props.attributes}>{children}</span>;
     };
 
-    // Track when new section is added and scroll to it
     useEffect(() => {
         const currentCount = values.sections?.length || 0;
         if (currentCount > lastSectionCount) {
@@ -447,35 +426,35 @@ const handleMoveSection = (index, direction) => {
     }, [values.sections?.length, lastSectionCount]);
 
     return (
-        <div className="publication-form-section-card">
-            <div className="publication-sections-section-header">
-                <h2 className="publication-sections-section-title">
+        <div className="pensa-pub-sec-card">
+            <div className="pensa-pub-sec-header">
+                <h2 className="pensa-pub-sec-title">
                     📝 {t('publications.content.sections')}
                 </h2>
                 <button
                     type="button"
-                    className="publication-sections-form-btn accent"
+                    className="pensa-pub-sec-btn accent"
                     onClick={addSection}
                 >
                     <FontAwesomeIcon icon={faPlus} />
                     {t('publications.content.addSection')}
                 </button>
             </div>
-            <div className="publication-form-section-content">
+            <div className="pensa-pub-sec-content">
 
-                <div className="publication-sections-help">
+                <div className="pensa-pub-sec-help">
                     <p>{t('publications.helpTexts.sectionsHelp')}</p>
                 </div>
 
                 {(values.sections || []).length === 0 ? (
-                    <div className="publication-sections-empty-state">
-                        <div className="publication-sections-empty-content">
-                            <FontAwesomeIcon icon={faEdit} className="publication-sections-empty-icon" />
+                    <div className="pensa-pub-sec-empty-state">
+                        <div className="pensa-pub-sec-empty-content">
+                            <FontAwesomeIcon icon={faEdit} className="pensa-pub-sec-empty-icon" />
                             <h3>{t('publications.content.noSections')}</h3>
                             <p>{t('publications.content.sectionsDescription')}</p>
                             <button
                                 type="button"
-                                className="publication-sections-form-btn primary"
+                                className="pensa-pub-sec-btn primary"
                                 onClick={addSection}
                             >
                                 <FontAwesomeIcon icon={faPlus} />
@@ -484,34 +463,34 @@ const handleMoveSection = (index, direction) => {
                         </div>
                     </div>
                 ) : (
-                    <div className="publication-sections-list">
+                    <div className="pensa-pub-sec-list">
                         {(values.sections || []).map((section, index) => (
                             <div
                                 key={index}
-                                className="publication-sections-section-item"
+                                className="pensa-pub-sec-item"
                                 ref={el => sectionRefs.current[index] = el}
                             >
-                                <div className="publication-sections-item-header">
-                                    <div className="publication-sections-item-title">
+                                <div className="pensa-pub-sec-item-header">
+                                    <div className="pensa-pub-sec-item-title">
                                         <h4>
                                             {t('publications.content.sectionNumber', { number: index + 1 })}
                                             {(errors[`sections[${index}].title`] || errors[`sections[${index}].content`]) && (
-                                                <span className="publication-sections-error-indicator">⚠️</span>
+                                                <span className="pensa-pub-sec-error-indicator">⚠️</span>
                                             )}
                                         </h4>
-                                        <div className="publication-sections-item-status">
+                                        <div className="pensa-pub-sec-item-status">
                                             {section.title ? (
-                                                <span className="publication-sections-status-complete">✅ {section.title}</span>
+                                                <span className="pensa-pub-sec-status-complete">✅ {section.title}</span>
                                             ) : (
-                                                <span className="publication-sections-status-incomplete">⚪ {t('publications.content.untitled')}</span>
+                                                <span className="pensa-pub-sec-status-incomplete">⚪ {t('publications.content.untitled')}</span>
                                             )}
                                         </div>
                                     </div>
 
-                                    <div className="publication-sections-item-actions">
+                                    <div className="pensa-pub-sec-item-actions">
                                         <button
                                             type="button"
-                                            className="publication-sections-move-btn"
+                                            className="pensa-pub-sec-move-btn"
                                             onClick={() => handleMoveSection(index, 'up')}
                                             disabled={index === 0}
                                             title={t('publications.content.moveUp')}
@@ -520,7 +499,7 @@ const handleMoveSection = (index, direction) => {
                                         </button>
                                         <button
                                             type="button"
-                                            className="publication-sections-move-btn"
+                                            className="pensa-pub-sec-move-btn"
                                             onClick={() => handleMoveSection(index, 'down')}
                                             disabled={index === (values.sections || []).length - 1}
                                             title={t('publications.content.moveDown')}
@@ -530,7 +509,7 @@ const handleMoveSection = (index, direction) => {
 
                                         <button
                                             type="button"
-                                            className="publication-sections-remove-btn"
+                                            className="pensa-pub-sec-remove-btn"
                                             onClick={() => handleRemoveSection(index)}
                                             title={t('publications.content.removeSection')}
                                         >
@@ -540,12 +519,12 @@ const handleMoveSection = (index, direction) => {
                                     </div>
                                 </div>
 
-                                <div className="publication-sections-item-content">
+                                <div className="pensa-pub-sec-item-content">
                                     {/* Section Title */}
-                                    <div className="publication-sections-form-group">
+                                    <div className="pensa-pub-sec-form-group">
                                         <label htmlFor={`section-title-${index}`}>
                                             {t('publications.content.sectionTitle')}
-                                            <span className="publication-required-indicator">*</span>
+                                            <span className="pensa-pub-sec-required">*</span>
                                         </label>
                                         <input
                                             type="text"
@@ -564,27 +543,27 @@ const handleMoveSection = (index, direction) => {
                                                 setValues(prev => ({ ...prev, sections: updatedSections }));
                                             }}
                                             placeholder={t('publications.content.sectionTitlePlaceholder')}
-                                            className={`publication-sections-title-input ${errors[`sections[${index}].title`] ? 'error' : ''}`}
+                                            className={`pensa-pub-sec-title-input ${errors[`sections[${index}].title`] ? 'error' : ''}`}
                                             maxLength={200}
                                         />
-                                        <div className="publication-sections-character-count">
+                                        <div className="pensa-pub-sec-char-count">
                                             {section.title?.length || 0}/200
                                         </div>
                                         {errors[`sections[${index}].title`] && (
-                                            <div className="publication-sections-error-message">{errors[`sections[${index}].title`]}</div>
+                                            <div className="pensa-pub-sec-error-msg">{errors[`sections[${index}].title`]}</div>
                                         )}
                                     </div>
 
                                     {/* Section Content - Slate.js */}
-                                    <div className="publication-sections-form-group">
+                                    <div className="pensa-pub-sec-form-group">
                                         <label htmlFor={`section-content-${index}`}>
                                             {t('publications.content.sectionContent')}
-                                            <span className="publication-required-indicator">*</span>
+                                            <span className="pensa-pub-sec-required">*</span>
                                         </label>
-                                        <div className="publication-sections-field-help">
+                                        <div className="pensa-pub-sec-field-help">
                                             {t('publications.helpTexts.sectionContentHelp')}
                                         </div>
-                                        <div className={`publication-sections-slate-editor-container ${errors[`sections[${index}].content`] ? 'error' : ''}`}>
+                                        <div className={`pensa-pub-sec-slate-container ${errors[`sections[${index}].content`] ? 'error' : ''}`}>
                                             <Slate
                                                 key={`section-${index}`}
                                                 editor={getSectionEditor(index)}
@@ -593,7 +572,7 @@ const handleMoveSection = (index, direction) => {
                                             >
                                                 {renderSlateToolbar(getSectionEditor(index))}
                                                 <Editable
-                                                    className="publication-sections-slate-editable"
+                                                    className="pensa-pub-sec-slate-editable"
                                                     placeholder={t('publications.content.sectionContentPlaceholder')}
                                                     renderElement={renderElement}
                                                     renderLeaf={renderLeaf}
@@ -607,24 +586,24 @@ const handleMoveSection = (index, direction) => {
                                             </Slate>
                                         </div>
                                         {errors[`sections[${index}].content`] && (
-                                            <div className="publication-sections-error-message">{errors[`sections[${index}].content`]}</div>
+                                            <div className="pensa-pub-sec-error-msg">{errors[`sections[${index}].content`]}</div>
                                         )}
                                     </div>
 
                                     {/* Section Image */}
-                                    <div className="publication-sections-form-group">
+                                    <div className="pensa-pub-sec-form-group">
                                         <label>
                                             <FontAwesomeIcon icon={faImage} />
                                             {t('publications.media.sectionImage')}
                                         </label>
-                                        <div className="publication-sections-field-help">
+                                        <div className="pensa-pub-sec-field-help">
                                             {t('publications.helpTexts.sectionImageHelp')}
                                         </div>
 
-                                        <div className="publication-sections-image-upload">
-                                            <div className="publication-sections-upload-methods">
-                                                <div className="publication-sections-upload-method">
-                                                    <label className="publication-sections-upload-btn">
+                                        <div className="pensa-pub-sec-img-upload">
+                                            <div className="pensa-pub-sec-upload-methods">
+                                                <div className="pensa-pub-sec-upload-method">
+                                                    <label className="pensa-pub-sec-upload-btn">
                                                         <FontAwesomeIcon icon={faUpload} />
                                                         {section.image ? t('publications.media.changeImage') : t('publications.media.uploadImage')}
                                                         <input
@@ -636,10 +615,10 @@ const handleMoveSection = (index, direction) => {
                                                     </label>
                                                 </div>
 
-                                                <div className="publication-sections-upload-method">
+                                                <div className="pensa-pub-sec-upload-method">
                                                     <button
                                                         type="button"
-                                                        className="publication-sections-upload-btn"
+                                                        className="pensa-pub-sec-upload-btn"
                                                         onClick={() => setShowUrlInputs(prev => ({
                                                             ...prev,
                                                             [index]: !prev[index]
@@ -651,10 +630,10 @@ const handleMoveSection = (index, direction) => {
                                                 </div>
 
                                                 {section.image && (
-                                                    <div className="publication-sections-upload-method">
+                                                    <div className="pensa-pub-sec-upload-method">
                                                         <button
                                                             type="button"
-                                                            className="publication-sections-clear-btn"
+                                                            className="pensa-pub-sec-clear-btn"
                                                             onClick={() => clearSectionImages(index)}
                                                         >
                                                             <FontAwesomeIcon icon={faTrash} />
@@ -665,17 +644,17 @@ const handleMoveSection = (index, direction) => {
                                             </div>
 
                                             {showUrlInputs[index] && (
-                                                <div className="publication-sections-url-input-section">
+                                                <div className="pensa-pub-sec-url-section">
                                                     <input
                                                         type="url"
                                                         placeholder={t('publications.media.imageUrl')}
                                                         value={imageUrls[index] || ''}
                                                         onChange={(e) => handleImageUrlChange(index, e.target.value)}
-                                                        className="publication-sections-url-input"
+                                                        className="pensa-pub-sec-url-input"
                                                     />
                                                     <button
                                                         type="button"
-                                                        className="publication-sections-url-add-btn"
+                                                        className="pensa-pub-sec-url-add-btn"
                                                         onClick={() => handleAddImageFromUrl(index)}
                                                         disabled={!imageUrls[index]?.trim()}
                                                     >
@@ -688,15 +667,15 @@ const handleMoveSection = (index, direction) => {
 
                                         {/* Image Preview */}
                                         {section.image && (
-                                            <div className="publication-sections-image-preview">
-                                                <div className="publication-sections-image-container">
-                                                    <div className="publication-sections-image-item">
-                                                        <div className="publication-sections-image-preview">
+                                            <div className="pensa-pub-sec-img-preview">
+                                                <div className="pensa-pub-sec-img-container">
+                                                    <div className="pensa-pub-sec-img-item">
+                                                        <div className="pensa-pub-sec-img-preview-inner">
                                                             <img src={section.image.src} alt={section.image.alt || 'Section image'} />
-                                                            <div className="publication-sections-image-overlay">
+                                                            <div className="pensa-pub-sec-img-overlay">
                                                                 <button
                                                                     type="button"
-                                                                    className="publication-sections-image-remove-btn"
+                                                                    className="pensa-pub-sec-img-remove-btn"
                                                                     onClick={() => clearSectionImages(index)}
                                                                     title={t('publications.media.removeImage')}
                                                                 >
@@ -704,40 +683,40 @@ const handleMoveSection = (index, direction) => {
                                                                 </button>
                                                             </div>
                                                             {section.image.isUploading && (
-                                                                <div className="publication-sections-image-uploading">
-                                                                    <div className="publication-sections-uploading-spinner"></div>
+                                                                <div className="pensa-pub-sec-img-uploading">
+                                                                    <div className="pensa-pub-sec-spinner"></div>
                                                                 </div>
                                                             )}
                                                         </div>
                                                     </div>
 
-                                                    <div className="publication-sections-image-controls">
-                                                        <div className="publication-sections-image-input-group">
+                                                    <div className="pensa-pub-sec-img-controls">
+                                                        <div className="pensa-pub-sec-img-input-group">
                                                             <label>{t('publications.media.altText')}:</label>
                                                             <input
                                                                 type="text"
                                                                 placeholder={t('publications.media.imageDescription')}
                                                                 value={section.image.alt || ''}
                                                                 onChange={(e) => updateSectionImageAlt(index, e.target.value)}
-                                                                className="publication-sections-image-input"
+                                                                className="pensa-pub-sec-img-input"
                                                                 maxLength={100}
                                                             />
-                                                            <div className="publication-sections-char-count">
+                                                            <div className="pensa-pub-sec-img-char-count">
                                                                 {section.image.alt?.length || 0}/100
                                                             </div>
                                                         </div>
 
-                                                        <div className="publication-sections-image-input-group">
+                                                        <div className="pensa-pub-sec-img-input-group">
                                                             <label>{t('publications.media.caption')}:</label>
                                                             <input
                                                                 type="text"
                                                                 placeholder={t('publications.media.imageCaption')}
                                                                 value={section.image.caption || ''}
                                                                 onChange={(e) => updateSectionImageCaption(index, e.target.value)}
-                                                                className="publication-sections-image-input"
+                                                                className="pensa-pub-sec-img-input"
                                                                 maxLength={150}
                                                             />
-                                                            <div className="publication-sections-char-count">
+                                                            <div className="pensa-pub-sec-img-char-count">
                                                                 {section.image.caption?.length || 0}/150
                                                             </div>
                                                         </div>
@@ -747,20 +726,20 @@ const handleMoveSection = (index, direction) => {
                                         )}
                                     </div>
 
-                                    {/* ✅ SECTION VIDEO - НОВО */}
-                                    <div className="publication-sections-form-group">
+                                    {/* Section Video */}
+                                    <div className="pensa-pub-sec-form-group">
                                         <label>
                                             <FontAwesomeIcon icon={faVideo} />
                                             <span style={{ marginLeft: '0.5rem' }}>{t('publications.video.title')}</span>
                                         </label>
-                                        <div className="publication-sections-field-help">
+                                        <div className="pensa-pub-sec-field-help">
                                             {t('publications.video.helpText')}
                                         </div>
 
                                         {/* Video Upload Area */}
                                         {!section.videoUrl && !videoUploadState?.[index]?.isUploading && (
-                                            <div className="publication-sections-video-upload">
-                                                <label className="publication-sections-video-upload-btn">
+                                            <div className="pensa-pub-sec-video-upload">
+                                                <label className="pensa-pub-sec-video-upload-btn">
                                                     <FontAwesomeIcon icon={faVideo} />
                                                     {t('publications.video.selectVideo')}
                                                     <input
@@ -770,7 +749,7 @@ const handleMoveSection = (index, direction) => {
                                                         style={{ display: 'none' }}
                                                     />
                                                 </label>
-                                                <span className="publication-sections-video-formats">
+                                                <span className="pensa-pub-sec-video-formats">
                                                     MP4, WebM, OGG • Max 100MB
                                                 </span>
                                             </div>
@@ -778,12 +757,12 @@ const handleMoveSection = (index, direction) => {
 
                                         {/* Video Upload Progress */}
                                         {videoUploadState?.[index]?.isUploading && (
-                                            <div className="publication-sections-video-uploading">
-                                                <FontAwesomeIcon icon={faSpinner} spin className="publication-sections-video-spinner" />
+                                            <div className="pensa-pub-sec-video-uploading">
+                                                <FontAwesomeIcon icon={faSpinner} spin className="pensa-pub-sec-video-spinner" />
                                                 <p>{getVideoProgressText(index)}</p>
-                                                <div className="publication-sections-video-progress-bar">
+                                                <div className="pensa-pub-sec-video-progress-bar">
                                                     <div 
-                                                        className="publication-sections-video-progress-fill"
+                                                        className="pensa-pub-sec-video-progress-fill"
                                                         style={{ 
                                                             width: videoUploadState[index]?.stage === 'video' 
                                                                 ? `${videoUploadState[index]?.progress || 0}%` 
@@ -796,37 +775,37 @@ const handleMoveSection = (index, direction) => {
 
                                         {/* Video Preview */}
                                         {section.videoUrl && !videoUploadState?.[index]?.isUploading && (
-                                            <div className="publication-sections-video-preview">
-                                                <div className="publication-sections-video-container">
-                                                    <div className="publication-sections-video-player-wrapper">
+                                            <div className="pensa-pub-sec-video-preview">
+                                                <div className="pensa-pub-sec-video-container">
+                                                    <div className="pensa-pub-sec-video-wrapper">
                                                         <video
                                                             ref={el => videoRefs.current[index] = el}
                                                             src={section.videoUrl}
                                                             poster={section.thumbnailUrl}
-                                                            className="publication-sections-video-player"
+                                                            className="pensa-pub-sec-video-player"
                                                             onEnded={() => setPlayingVideos(prev => ({ ...prev, [index]: false }))}
                                                         />
                                                         
                                                         {!playingVideos[index] && (
                                                             <div 
-                                                                className="publication-sections-video-overlay"
+                                                                className="pensa-pub-sec-video-overlay"
                                                                 onClick={() => toggleVideoPlay(index)}
                                                             >
-                                                                <div className="publication-sections-video-play-btn">
+                                                                <div className="pensa-pub-sec-video-play-btn">
                                                                     <FontAwesomeIcon icon={faPlay} />
                                                                 </div>
                                                             </div>
                                                         )}
                                                     </div>
 
-                                                    <div className="publication-sections-video-info">
-                                                        <div className="publication-sections-video-info-item">
-                                                            <FontAwesomeIcon icon={faCheck} className="publication-sections-video-success-icon" />
+                                                    <div className="pensa-pub-sec-video-info">
+                                                        <div className="pensa-pub-sec-video-info-item">
+                                                            <FontAwesomeIcon icon={faCheck} className="pensa-pub-sec-video-success-icon" />
                                                             <span>{t('publications.video.uploaded')}</span>
                                                         </div>
                                                         
                                                         {section.thumbnailUrl && (
-                                                            <div className="publication-sections-video-thumbnail-preview">
+                                                            <div className="pensa-pub-sec-video-thumb">
                                                                 <span>{t('publications.video.thumbnail')}:</span>
                                                                 <img src={section.thumbnailUrl} alt="Video thumbnail" />
                                                             </div>
@@ -836,7 +815,7 @@ const handleMoveSection = (index, direction) => {
 
                                                 <button
                                                     type="button"
-                                                    className="publication-sections-video-remove-btn"
+                                                    className="pensa-pub-sec-video-remove-btn"
                                                     onClick={() => removeSectionVideo(index)}
                                                 >
                                                     <FontAwesomeIcon icon={faTrash} />
@@ -853,22 +832,22 @@ const handleMoveSection = (index, direction) => {
 
                 {/* Sections Summary */}
                 {(values.sections || []).length > 0 && (
-                    <div className="publication-sections-summary">
+                    <div className="pensa-pub-sec-summary">
                         <h4>📊 {t('publications.content.sectionsSummary')}</h4>
-                        <div className="publication-sections-summary-stats">
-                            <div className="publication-sections-stat">
-                                <span className="publication-sections-stat-label">{t('publications.content.totalSections')}:</span>
-                                <span className="publication-sections-stat-value">{(values.sections || []).length}</span>
+                        <div className="pensa-pub-sec-summary-stats">
+                            <div className="pensa-pub-sec-stat">
+                                <span className="pensa-pub-sec-stat-label">{t('publications.content.totalSections')}:</span>
+                                <span className="pensa-pub-sec-stat-value">{(values.sections || []).length}</span>
                             </div>
-                            <div className="publication-sections-stat">
-                                <span className="publication-sections-stat-label">{t('publications.content.completeSections')}:</span>
-                                <span className="publication-sections-stat-value">
+                            <div className="pensa-pub-sec-stat">
+                                <span className="pensa-pub-sec-stat-label">{t('publications.content.completeSections')}:</span>
+                                <span className="pensa-pub-sec-stat-value">
                                     {(values.sections || []).filter(s => s.title && s.content).length}
                                 </span>
                             </div>
-                            <div className="publication-sections-stat">
-                                <span className="publication-sections-stat-label">{t('publications.content.completionRate')}:</span>
-                                <span className="publication-sections-stat-value">
+                            <div className="pensa-pub-sec-stat">
+                                <span className="pensa-pub-sec-stat-label">{t('publications.content.completionRate')}:</span>
+                                <span className="pensa-pub-sec-stat-value">
                                     {(values.sections || []).length > 0 ? Math.round(((values.sections || []).filter(s => s.title && s.content).length / (values.sections || []).length) * 100) : 0}%
                                 </span>
                             </div>

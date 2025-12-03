@@ -95,10 +95,10 @@ const FileSection = ({
     }, [setValues]);
 
     return (
-        <div className="publication-form-section">
-            <div className="publication-form-group">
-                <label className="publication-form-label">
-                    <FontAwesomeIcon icon={faFileAlt} className="publication-form-icon" />
+        <div className="pensa-file-section">
+            <div className="pensa-file-group">
+                <label className="pensa-file-label">
+                    <FontAwesomeIcon icon={faFileAlt} className="pensa-file-label-icon" />
                     {t('publications.fileUpload.uploadFile')}
                 </label>
 
@@ -113,7 +113,7 @@ const FileSection = ({
 
                 {!values.downloadUrl ? (
                     <div
-                        className={`publication-file-upload-area ${values.isUploading ? 'uploading' : ''}`}
+                        className={`pensa-file-upload-area ${values.isUploading ? 'pensa-file-uploading' : ''}`}
                         onClick={() => {
                             if (!values.isUploading) {
                                 fileInputRef.current?.click();
@@ -122,7 +122,7 @@ const FileSection = ({
                     >
                         {values.isUploading ? (
                             <>
-                                <p>{t('publications.fileUpload.uploadingDescription')}<FontAwesomeIcon icon={faSpinner} className="publication-upload-spinner" spin /></p>
+                                <p>{t('publications.fileUpload.uploadingDescription')}<FontAwesomeIcon icon={faSpinner} className="pensa-file-spinner" spin /></p>
                                 <small>{t('publications.fileUpload.uploadingHint')}</small>
                             </>
                         ) : (
@@ -134,21 +134,21 @@ const FileSection = ({
                         )}
                     </div>
                 ) : (
-                    <div className="publication-file-preview">
-                        <div className="publication-file-info">
-                            <FontAwesomeIcon icon={faFileAlt} />
-                            <div className="publication-file-details">
-                                <div className="publication-file-name">
+                    <div className="pensa-file-preview">
+                        <div className="pensa-file-info">
+                            <FontAwesomeIcon icon={faFileAlt} className="pensa-file-info-icon" />
+                            <div className="pensa-file-details">
+                                <div className="pensa-file-name">
                                     {values.originalFileName || t('publications.unnamedFile')}
                                 </div>
-                                <div className="publication-file-meta">
+                                <div className="pensa-file-meta">
                                     {values.fileType?.toUpperCase()} • {values.fileSize}
                                 </div>
                             </div>
                         </div>
                         <button
                             type="button"
-                            className="publication-file-remove"
+                            className="pensa-file-remove-btn"
                             onClick={removeFile}
                             disabled={values.isUploading}
                         >
@@ -163,27 +163,27 @@ const FileSection = ({
             </div>
 
             {values.downloadUrl && (
-                <div className="publication-form-group">
-                    <label className="publication-form-label">
-                        <FontAwesomeIcon icon={faFileAlt} className="publication-form-icon" />
+                <div className="pensa-file-group">
+                    <label className="pensa-file-label">
+                        <FontAwesomeIcon icon={faFileAlt} className="pensa-file-label-icon" />
                         {t('publications.fileUpload.fileInfo')}
                     </label>
-                    <div className="publication-file-info-display">
-                        <div className="publication-info-row">
-                            <span className="publication-info-label">{t('publications.fileUpload.fileType')}:</span>
-                            <span className="publication-info-value">{values.fileType?.toUpperCase()}</span>
+                    <div className="pensa-file-info-display">
+                        <div className="pensa-file-info-row">
+                            <span className="pensa-file-info-label">{t('publications.fileUpload.fileType')}:</span>
+                            <span className="pensa-file-info-value">{values.fileType?.toUpperCase()}</span>
                         </div>
-                        <div className="publication-info-row">
-                            <span className="publication-info-label">{t('publications.fileUpload.fileSize')}:</span>
-                            <span className="publication-info-value">{values.fileSize}</span>
+                        <div className="pensa-file-info-row">
+                            <span className="pensa-file-info-label">{t('publications.fileUpload.fileSize')}:</span>
+                            <span className="pensa-file-info-value">{values.fileSize}</span>
                         </div>
-                        <div className="publication-info-row">
-                            <span className="publication-info-label">{t('publications.fileUpload.downloadUrl')}:</span>
-                            <span className="publication-info-value">
-                                <a
-                                    href={values.downloadUrl}
+                        <div className="pensa-file-info-row">
+                            <span className="pensa-file-info-label">{t('publications.fileUpload.downloadUrl')}:</span>
+                            <span className="pensa-file-info-value">
+                                
+                                <a    href={values.downloadUrl}
                                     download={values.originalFileName || 'document'}
-                                    className="publication-file-link publication-file-download"
+                                    className="pensa-file-link pensa-file-download"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
@@ -193,12 +193,12 @@ const FileSection = ({
                         </div>
 
                         {values.fileType?.toLowerCase() === 'pdf' && (
-                            <div className="publication-info-row">
-                                <span className="publication-info-label">{t('publications.fileUpload.viewUrl')}:</span>
-                                <span className="publication-info-value">
-                                    <a
-                                        href={values.downloadUrl}
-                                        className="publication-file-link publication-file-view"
+                            <div className="pensa-file-info-row">
+                                <span className="pensa-file-info-label">{t('publications.fileUpload.viewUrl')}:</span>
+                                <span className="pensa-file-info-value">
+                                    
+                                      <a  href={values.downloadUrl}
+                                        className="pensa-file-link pensa-file-view"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                     >

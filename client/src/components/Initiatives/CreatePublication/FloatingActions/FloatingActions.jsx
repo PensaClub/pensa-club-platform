@@ -24,10 +24,10 @@ const FloatingActions = ({
     // CREATE MODE
     if (!isEditMode) {
         return (
-            <div className="publication-floating-actions">
+            <div className="pensa-float-actions">
                 <button
                     type="button"
-                    className="publication-floating-btn preview"
+                    className="pensa-float-btn pensa-float-btn-preview"
                     onClick={onPreview}
                     disabled={isSaving}
                     title={t('publications.common.preview')}
@@ -37,7 +37,7 @@ const FloatingActions = ({
 
                 <button
                     type="button"
-                    className="publication-floating-btn draft"
+                    className="pensa-float-btn pensa-float-btn-draft"
                     onClick={onSaveDraft}
                     disabled={isSaving}
                     title={t('publications.create.saveDraft')}
@@ -47,7 +47,7 @@ const FloatingActions = ({
 
                 <button
                     type="button"
-                    className="publication-floating-btn publish"
+                    className="pensa-float-btn pensa-float-btn-publish"
                     onClick={onCreate}
                     disabled={isSaving}
                     title={t('publications.create.publishPublication')}
@@ -60,10 +60,10 @@ const FloatingActions = ({
 
     // EDIT MODE
     return (
-        <div className="publication-floating-actions">
+        <div className="pensa-float-actions">
             <button
                 type="button"
-                className="publication-floating-btn preview"
+                className="pensa-float-btn pensa-float-btn-preview"
                 onClick={onPreview}
                 disabled={isSaving}
                 title={t('publications.common.preview')}
@@ -76,7 +76,7 @@ const FloatingActions = ({
                 <>
                     <button
                         type="button"
-                        className="publication-floating-btn draft"
+                        className="pensa-float-btn pensa-float-btn-draft"
                         onClick={onSaveDraft}
                         disabled={isSaving}
                         title={t('publications.edit.updateDraft')}
@@ -86,7 +86,7 @@ const FloatingActions = ({
 
                     <button
                         type="button"
-                        className="publication-floating-btn publish"
+                        className="pensa-float-btn pensa-float-btn-publish"
                         onClick={onCreate}
                         disabled={isSaving}
                         title={t('publications.edit.publishDraft')}
@@ -99,7 +99,7 @@ const FloatingActions = ({
                 <>
                     <button
                         type="button"
-                        className="publication-floating-btn draft"
+                        className="pensa-float-btn pensa-float-btn-draft"
                         onClick={onToggleDraft}
                         disabled={isSaving}
                         title={t('publications.edit.convertToDraft')}
@@ -109,7 +109,7 @@ const FloatingActions = ({
 
                     <button
                         type="button"
-                        className="publication-floating-btn publish"
+                        className="pensa-float-btn pensa-float-btn-publish"
                         onClick={onCreate}
                         disabled={isSaving}
                         title={t('publications.edit.updatePublished')}
