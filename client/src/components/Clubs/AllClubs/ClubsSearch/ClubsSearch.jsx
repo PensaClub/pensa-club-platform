@@ -127,12 +127,12 @@ export const ClubsSearch = ({
 
         {/* НОВО: Търсене по адрес/квартал/район */}
         <div className="clubs-filter-group">
-          <label>{t('clubs.ClubsSearch.filters.address.label', { defaultValue: 'Квартал / Улица / Район' })}</label>
+         <label>{t('clubs.ClubsSearch.address.label')}</label>
           <div className="clubs-search-input-wrapper clubs-address-search">
             <FontAwesomeIcon icon={faRoad} className="clubs-search-icon" />
             <input
               type="text"
-              placeholder={t('clubs.ClubsSearch.filters.address.placeholder', { defaultValue: 'Напр: Надежда, Младост, ул. Витоша...' })}
+              placeholder={t('clubs.ClubsSearch.address.placeholder')}
               value={addressSearch}
               onChange={(e) => setAddressSearch(e.target.value)}
               className="clubs-search-input"
@@ -147,18 +147,18 @@ export const ClubsSearch = ({
             )}
           </div>
           <span className="clubs-filter-hint">
-            {t('clubs.ClubsSearch.filters.address.hint', { defaultValue: 'Търси в: квартал, улица, район, област' })}
+            {t('clubs.ClubsSearch.address.hint')}
           </span>
         </div>
 
         {/* НОВО: Търсене по пощенски код */}
         <div className="clubs-filter-group">
-          <label>{t('clubs.ClubsSearch.filters.postalCode.label', { defaultValue: 'Пощенски код' })}</label>
+          <label>{t('clubs.ClubsSearch.postalCode.label')}</label>
           <div className="clubs-search-input-wrapper clubs-postal-search">
             <FontAwesomeIcon icon={faMailBulk} className="clubs-search-icon" />
             <input
               type="text"
-              placeholder={t('clubs.ClubsSearch.filters.postalCode.placeholder', { defaultValue: 'Напр: 1000, 1233...' })}
+              placeholder={t('clubs.ClubsSearch.postalCode.placeholder')}
               value={postalCodeSearch}
               onChange={(e) => setPostalCodeSearch(e.target.value)}
               className="clubs-search-input"

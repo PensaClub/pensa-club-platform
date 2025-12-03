@@ -4953,6 +4953,15 @@
           "newest": "Newest"
         }
       },
+      "address": {
+        "label": "Neighborhood / Street / District",
+        "placeholder": "E.g.: Nadezhda, Mladost, Vitosha St...",
+        "hint": "Searches in: neighborhood, street, district, region"
+      },
+      "postalCode": {
+        "label": "Postal Code",
+        "placeholder": "E.g.: 1000, 1233..."
+      },
       "categories": {
         "cultural": "Cultural",
         "general": "General",
@@ -9696,12 +9705,12 @@
     "refresh": "Refresh",
     "refreshing": "Refreshing...",
     "close": "Close",
-      "save": "Save",
-  "saving": "Saving...",
-  "delete": "Delete",
-  "deleting": "Deleting...",
-  "edit": "Edit",
-  "retry": "Retry"
+    "save": "Save",
+    "saving": "Saving...",
+    "delete": "Delete",
+    "deleting": "Deleting...",
+    "edit": "Edit",
+    "retry": "Retry"
   },
   "clubForm": {
     "title": "Club Registration",
@@ -13481,9 +13490,9 @@
       "delete": "Delete",
       "noStudents": "No students found",
       "noStudentsDesc": "Try changing the filters or add new students",
-       "notes": "Notes",
-    "notesCount": "{{count}} notes",
-    "noNotes": "No notes"
+      "notes": "Notes",
+      "notesCount": "{{count}} notes",
+      "noNotes": "No notes"
     },
     "status": {
       "active": "Active",
