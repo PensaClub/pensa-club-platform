@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faSearch, 
@@ -10,9 +11,11 @@ import {
   faSort,
   faLayerGroup,
   faRoad,
-  faMailBulk
+  faMailBulk,
+  faSpinner
 } from '@fortawesome/free-solid-svg-icons';
 import './clubsSearch.css';
+import { useInitiativeContext } from '../../../contexts/InitiativeProvider';
 
 export const ClubsSearch = ({ 
   onFilterChange, 
@@ -23,19 +26,51 @@ export const ClubsSearch = ({
   onToggleMap 
 }) => {
   const { t } = useTranslation();
+  const { getAllPublications } = useInitiativeContext();
+  
   const [searchTerm, setSearchTerm] = useState('');
-  const [addressSearch, setAddressSearch] = useState(''); // НОВО: търсене по адрес
-  const [postalCodeSearch, setPostalCodeSearch] = useState(''); // НОВО: търсене по пощенски код
+  const [addressSearch, setAddressSearch] = useState('');
+  const [postalCodeSearch, setPostalCodeSearch] = useState('');
   const [selectedCity, setSelectedCity] = useState('all');
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState('name');
+  
+  // State за последни публикации
+  const [recentPublications, setRecentPublications] = useState([]);
+  const [publicationsLoading, setPublicationsLoading] = useState(true);
+
+  // Зареждане на последните публикации
+  useEffect(() => {
+    const fetchRecentPublications = async () => {
+      try {
+        setPublicationsLoading(true);
+        const response = await getAllPublications(1, true, false); // page=1, forceRefresh=true, isDraft=false
+        
+        const publications = response?.data || [];
+        // Взимаме само публикуваните (не drafts) и сортираме по дата
+        const publishedPubs = publications
+          .filter(pub => !pub.isDraft )
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+          .slice(0, 4); 
+        
+        setRecentPublications(publishedPubs);
+      } catch (error) {
+        console.error('Error fetching recent publications:', error);
+        setRecentPublications([]);
+      } finally {
+        setPublicationsLoading(false);
+      }
+    };
+
+    fetchRecentPublications();
+  }, [getAllPublications]);
 
   // Обработка на промени във филтрите
   const handleFilterUpdate = useCallback(() => {
     onFilterChange({
       searchTerm,
-      addressSearch,      // НОВО
-      postalCodeSearch,   // НОВО
+      addressSearch,
+      postalCodeSearch,
       city: selectedCity,
       category: selectedCategory,
       sortBy
@@ -69,6 +104,23 @@ export const ClubsSearch = ({
       count, 
       defaultValue_other: `${count} резултата` 
     });
+  };
+
+  // Функция за съкращаване на заглавие
+  const truncateTitle = (title, maxLength = 50) => {
+    if (!title) return '';
+    return title.length > maxLength ? `${title.substring(0, maxLength)}...` : title;
+  };
+
+  // Функция за форматиране на категория
+  const formatCategory = (publication) => {
+    // Взимаме категорията от различни възможни места
+    const category = publication.category || 
+                     publication.sections?.[0]?.category || 
+                     publication.type ||
+                     'general';
+    
+    return t(`publications.categories.${category}`, { defaultValue: category });
   };
 
   return (
@@ -125,9 +177,9 @@ export const ClubsSearch = ({
           </div>
         </div>
 
-        {/* НОВО: Търсене по адрес/квартал/район */}
+        {/* Търсене по адрес/квартал/район */}
         <div className="clubs-filter-group">
-         <label>{t('clubs.ClubsSearch.address.label')}</label>
+          <label>{t('clubs.ClubsSearch.address.label')}</label>
           <div className="clubs-search-input-wrapper clubs-address-search">
             <FontAwesomeIcon icon={faRoad} className="clubs-search-icon" />
             <input
@@ -151,7 +203,7 @@ export const ClubsSearch = ({
           </span>
         </div>
 
-        {/* НОВО: Търсене по пощенски код */}
+        {/* Търсене по пощенски код */}
         <div className="clubs-filter-group">
           <label>{t('clubs.ClubsSearch.postalCode.label')}</label>
           <div className="clubs-search-input-wrapper clubs-postal-search">
@@ -235,22 +287,36 @@ export const ClubsSearch = ({
         )}
       </div>
 
-      {/* Последни публикации секция */}
+      {/* Последни публикации секция - РЕАЛНИ ДАННИ */}
       <div className="clubs-recent-section">
         <h4 className="clubs-recent-title">{t('clubs.ClubsSearch.recent.title')}</h4>
+        
         <div className="clubs-recent-items">
-          <div className="clubs-recent-item">
-            <span className="clubs-recent-category">{t('clubs.ClubsSearch.recent.digitalLiteracy')}</span>
-            <p className="clubs-recent-name">{t('clubs.ClubsSearch.recent.example1')}</p>
-          </div>
-          <div className="clubs-recent-item">
-            <span className="clubs-recent-category">{t('clubs.ClubsSearch.recent.digitalLiteracy')}</span>
-            <p className="clubs-recent-name">{t('clubs.ClubsSearch.recent.example2')}</p>
-          </div>
-          <div className="clubs-recent-item">
-            <span className="clubs-recent-category">{t('clubs.ClubsSearch.recent.digitalLiteracy')}</span>
-            <p className="clubs-recent-name">{t('clubs.ClubsSearch.recent.example3')}</p>
-          </div>
+          {publicationsLoading ? (
+            <div className="clubs-recent-loading">
+              <FontAwesomeIcon icon={faSpinner} spin />
+              <span>{t('common.loading', { defaultValue: 'Зареждане...' })}</span>
+            </div>
+          ) : recentPublications.length > 0 ? (
+            recentPublications.map((publication) => (
+              <Link 
+                to={`/publications/${publication.slug || publication.id}`} 
+                key={publication.id}
+                className="clubs-recent-item"
+              >
+                <span className="clubs-recent-category">
+                  {formatCategory(publication)}
+                </span>
+                <p className="clubs-recent-name">
+                  {truncateTitle(publication.title)}
+                </p>
+              </Link>
+            ))
+          ) : (
+            <p className="clubs-recent-empty">
+              {t('clubs.ClubsSearch.recent.noPublications', { defaultValue: 'Няма публикации' })}
+            </p>
+          )}
         </div>
       </div>
     </div>
