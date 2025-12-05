@@ -1,3 +1,4 @@
+// server/src/middlewares/isAuth.js
 const jwt = require('../utils/jwt');
 const { user_account } = require('../sequelize/models/index');
 

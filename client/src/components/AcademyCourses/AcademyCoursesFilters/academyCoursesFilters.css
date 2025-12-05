@@ -1,0 +1,546 @@
+/* src/components/AcademyCourses/AcademyCoursesFilters/academyCoursesFilters.css */
+
+.academyCoursesFilters {
+  position: relative;
+  margin-top: -60px;
+  z-index: 10;
+}
+
+/* Glass Card Effect */
+.academyCoursesFilters-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 28px;
+  padding: 36px 40px;
+  box-shadow: 
+    0 20px 60px rgba(255, 99, 71, 0.15),
+    0 8px 25px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animated gradient border */
+.academyCoursesFilters-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(
+    90deg, 
+    #ff6347, #ff7f50, #ffa500, #10b981, #3b82f6, #8b5cf6, #ff6347
+  );
+  background-size: 200% 100%;
+  animation: academyCoursesFilters-gradient 4s linear infinite;
+}
+
+@keyframes academyCoursesFilters-gradient {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+/* Decorative circles */
+.academyCoursesFilters-card::after {
+  content: '';
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, rgba(255, 99, 71, 0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.academyCoursesFilters-container {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ===================================
+   SEARCH SECTION
+   =================================== */
+
+.academyCoursesFilters-search {
+  position: relative;
+}
+
+.academyCoursesFilters-search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.academyCoursesFilters-search-icon {
+  position: absolute;
+  left: 6px;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #ff6347 0%, #ff8c69 100%);
+  border-radius: 16px;
+  color: #ffffff;
+  pointer-events: none;
+  box-shadow: 
+    0 8px 20px rgba(255, 99, 71, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.academyCoursesFilters-search-wrapper:focus-within .academyCoursesFilters-search-icon {
+  transform: scale(1.05);
+  box-shadow: 
+    0 10px 25px rgba(255, 99, 71, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.academyCoursesFilters-search-input {
+  width: 100%;
+  padding: 20px 54px 20px 72px;
+  font-size: 16px;
+  font-weight: 500;
+  color: #2c3e50;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border: 2px solid transparent;
+  border-radius: 20px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.academyCoursesFilters-search-input::placeholder {
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+.academyCoursesFilters-search-input:hover {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.academyCoursesFilters-search-input:focus {
+  background: #ffffff;
+  border-color: #ff6347;
+  box-shadow: 
+    0 0 0 4px rgba(255, 99, 71, 0.12),
+    0 8px 24px rgba(255, 99, 71, 0.15);
+}
+
+.academyCoursesFilters-search-clear {
+  position: absolute;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+  border: none;
+  border-radius: 12px;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.academyCoursesFilters-search-clear:hover {
+  background: linear-gradient(135deg, #ff6347 0%, #ff8c69 100%);
+  color: #ffffff;
+  transform: rotate(90deg);
+  box-shadow: 0 4px 12px rgba(255, 99, 71, 0.4);
+}
+
+/* ===================================
+   FILTERS ROW
+   =================================== */
+
+.academyCoursesFilters-row {
+  display: flex;
+  gap: 20px;
+  align-items: stretch;
+}
+
+/* ===================================
+   FILTER ITEM (each select)
+   =================================== */
+
+.academyCoursesFilters-item {
+  flex: 1;
+  min-width: 220px;
+  position: relative;
+}
+
+/* Filter card style */
+.academyCoursesFilters-item-inner {
+  position: relative;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 18px;
+  padding: 4px;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.academyCoursesFilters-item-inner:hover {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Focus state with color based on type */
+.academyCoursesFilters-item[data-type="category"] .academyCoursesFilters-item-inner:focus-within {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+}
+
+.academyCoursesFilters-item[data-type="level"] .academyCoursesFilters-item-inner:focus-within {
+  border-color: #10b981;
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
+}
+
+.academyCoursesFilters-item[data-type="sort"] .academyCoursesFilters-item-inner:focus-within {
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.15);
+}
+
+.academyCoursesFilters-item-content {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 14px;
+}
+
+/* Icon boxes with different colors */
+.academyCoursesFilters-item-icon {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  font-size: 20px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+.academyCoursesFilters-item[data-type="category"] .academyCoursesFilters-item-icon {
+  background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+}
+
+.academyCoursesFilters-item[data-type="level"] .academyCoursesFilters-item-icon {
+  background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+}
+
+.academyCoursesFilters-item[data-type="sort"] .academyCoursesFilters-item-icon {
+  background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+  box-shadow: 0 6px 16px rgba(139, 92, 246, 0.4);
+}
+
+.academyCoursesFilters-item-inner:hover .academyCoursesFilters-item-icon {
+  transform: scale(1.08);
+}
+
+/* Select wrapper */
+.academyCoursesFilters-select-box {
+  flex: 1;
+  position: relative;
+  min-width: 0;
+}
+
+.academyCoursesFilters-select-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.academyCoursesFilters-item[data-type="category"] .academyCoursesFilters-select-label {
+  color: #3b82f6;
+}
+
+.academyCoursesFilters-item[data-type="level"] .academyCoursesFilters-select-label {
+  color: #10b981;
+}
+
+.academyCoursesFilters-item[data-type="sort"] .academyCoursesFilters-select-label {
+  color: #8b5cf6;
+}
+
+.academyCoursesFilters-select {
+  width: 100%;
+  padding: 6px 32px 6px 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #2c3e50;
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+}
+
+/* FIX: Option text color */
+.academyCoursesFilters-select option {
+  color: #2c3e50;
+  background: #ffffff;
+  padding: 12px;
+  font-weight: 500;
+}
+
+.academyCoursesFilters-select-arrow {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  pointer-events: none;
+  transition: transform 0.3s ease;
+}
+
+.academyCoursesFilters-select:focus ~ .academyCoursesFilters-select-arrow {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.academyCoursesFilters-item[data-type="category"] .academyCoursesFilters-select:focus ~ .academyCoursesFilters-select-arrow {
+  color: #3b82f6;
+}
+
+.academyCoursesFilters-item[data-type="level"] .academyCoursesFilters-select:focus ~ .academyCoursesFilters-select-arrow {
+  color: #10b981;
+}
+
+.academyCoursesFilters-item[data-type="sort"] .academyCoursesFilters-select:focus ~ .academyCoursesFilters-select-arrow {
+  color: #8b5cf6;
+}
+
+/* ===================================
+   CLEAR BUTTON
+   =================================== */
+
+.academyCoursesFilters-clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 18px 28px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+  background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+  border: none;
+  border-radius: 18px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  box-shadow: 
+    0 8px 20px rgba(239, 68, 68, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.academyCoursesFilters-clear::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.academyCoursesFilters-clear:hover::before {
+  left: 100%;
+}
+
+.academyCoursesFilters-clear:hover {
+  transform: translateY(-4px);
+  box-shadow: 
+    0 12px 28px rgba(239, 68, 68, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.academyCoursesFilters-clear:active {
+  transform: translateY(-2px);
+}
+
+.academyCoursesFilters-clear svg {
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.academyCoursesFilters-clear:hover svg {
+  transform: rotate(90deg);
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+@media (max-width: 1200px) {
+  .academyCoursesFilters-item {
+    min-width: 200px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .academyCoursesFilters {
+    margin-top: -50px;
+  }
+
+  .academyCoursesFilters-card {
+    padding: 28px 28px;
+    border-radius: 24px;
+  }
+
+  .academyCoursesFilters-row {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .academyCoursesFilters-item {
+    min-width: calc(50% - 8px);
+    flex: 1 1 calc(50% - 8px);
+  }
+
+  .academyCoursesFilters-clear {
+    flex: 1 1 100%;
+    margin-top: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .academyCoursesFilters {
+    margin-top: -40px;
+  }
+
+  .academyCoursesFilters-card {
+    padding: 24px 20px;
+    border-radius: 20px;
+  }
+
+  .academyCoursesFilters-container {
+    gap: 20px;
+  }
+
+  .academyCoursesFilters-search-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+  }
+
+  .academyCoursesFilters-search-input {
+    padding: 18px 50px 18px 66px;
+    font-size: 15px;
+    border-radius: 18px;
+  }
+
+  .academyCoursesFilters-row {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .academyCoursesFilters-item {
+    width: 100%;
+    min-width: unset;
+    flex: 1 1 100%;
+  }
+
+  .academyCoursesFilters-item-inner {
+    border-radius: 16px;
+  }
+
+  .academyCoursesFilters-item-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    font-size: 18px;
+  }
+
+  .academyCoursesFilters-clear {
+    width: 100%;
+    padding: 16px 24px;
+    border-radius: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .academyCoursesFilters {
+    margin-top: -32px;
+  }
+
+  .academyCoursesFilters-card {
+    padding: 20px 16px;
+    border-radius: 18px;
+  }
+
+  .academyCoursesFilters-card::before {
+    height: 4px;
+  }
+
+  .academyCoursesFilters-container {
+    gap: 16px;
+  }
+
+  .academyCoursesFilters-search-icon {
+    width: 42px;
+    height: 42px;
+    left: 5px;
+    border-radius: 12px;
+  }
+
+  .academyCoursesFilters-search-icon svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .academyCoursesFilters-search-input {
+    padding: 16px 44px 16px 58px;
+    font-size: 14px;
+    border-radius: 16px;
+  }
+
+  .academyCoursesFilters-search-clear {
+    width: 32px;
+    height: 32px;
+    right: 12px;
+    border-radius: 10px;
+  }
+
+  .academyCoursesFilters-item-content {
+    padding: 8px 12px;
+    gap: 12px;
+  }
+
+  .academyCoursesFilters-item-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    font-size: 16px;
+  }
+
+  .academyCoursesFilters-select-label {
+    font-size: 10px;
+  }
+
+  .academyCoursesFilters-select {
+    font-size: 14px;
+    padding: 4px 28px 4px 0;
+  }
+
+  .academyCoursesFilters-clear {
+    padding: 14px 20px;
+    font-size: 13px;
+    border-radius: 14px;
+  }
+}

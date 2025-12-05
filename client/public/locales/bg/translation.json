@@ -14059,5 +14059,146 @@
     "errors": {
       "fetchFailed": "Грешка при зареждане на бележките"
     }
+  },
+    "academyCourses": {
+    "loading": "Зареждане на курсове...",
+    "noCourses": "Все още няма курсове",
+    "checkBackLater": "Скоро ще добавим нови учебни програми. Очаквайте!",
+    "programsTitle": "Учебни програми",
+    "programsSubtitle": "Изберете програма според вашите интереси и ниво на опит",
+    "popularCourses": "Популярни курсове",
+    "popularCoursesSubtitle": "Най-търсените курсове от нашите курсисти"
+  },
+    "academyCoursesHero": {
+    "titleLine1": "Открий своя път в ",
+    "titleLine2": "дигиталния свят",
+    "subtitle": "Безплатни практически курсове за всички възрасти. Научи се да използваш технологиите уверено с подкрепата на нашите ментори.",
+    "scroll": "Превърти надолу",
+    "stats": {
+      "programs": "Програми",
+      "courses": "Курса",
+      "enrolled": "Записани",
+      "free": "Безплатно"
+    }
+  },
+  "academyCoursesFilters": {
+    "searchPlaceholder": "Търсете курсове...",
+    "clearSearch": "Изчисти търсенето",
+    "categoryLabel": "Категория",
+    "levelLabel": "Ниво",
+    "sortLabel": "Сортиране",
+    "allCategories": "Всички категории",
+    "allLevels": "Всички нива",
+    "clearAll": "Изчисти",
+    "levels": {
+      "beginner": "Начинаещи",
+      "intermediate": "Напреднали",
+      "advanced": "Експерти"
+    },
+    "sort": {
+      "popular": "Най-популярни",
+      "newest": "Най-нови",
+      "alphabetical": "По азбучен ред"
+    }
+  },
+  "academyCoursesCategorySection": {
+    "uncategorized": "Други курсове",
+    "course": "курс",
+    "courses": "курса",
+    "allLevels": "Всички нива",
+    "showAll": "Виж всички ({{count}})",
+    "showLess": "Покажи по-малко",
+    "loadMore": "Зареди още {{remaining}} курса"
+  },
+  "academyProgramTracks": {
+    "course": "курс",
+    "courses": "курса"
+  },
+  "academyCoursesList": {
+    "course": "курс",
+    "courses": "курса",
+    "close": "Затвори",
+    "searchPlaceholder": "Търси в курсовете...",
+    "noResults": "Няма намерени курсове с този филтър",
+    "resetFilter": "Покажи всички",
+    "viewAllCourses": "Виж всички курсове",
+    "filters": {
+      "all": "Всички",
+      "beginner": "Начинаещи",
+      "intermediate": "Напреднали",
+      "advanced": "Експерти"
+    }
+  },
+    "academyCourseCard": {
+    "free": "Безплатно",
+    "startLearning": "Започни",
+    "lessons": "урока",
+    "credits": "кредита",
+    "watchTrailer": "Гледай трейлър",
+    "levels": {
+      "beginner": "Начинаещи",
+      "intermediate": "Напреднали",
+      "advanced": "Експерти"
+    }
+  },
+  "academyTrailerModal": {
+    "preview": "Преглед",
+    "close": "Затвори",
+    "noVideo": "Няма налично видео за този курс",
+    "hint": "Натисни ESC или кликни извън прозореца за затваряне",
+    "viewCourse": "Виж курса"
+  },
+   "academyCourseDetail": {
+    "loading": "Зареждане на курса...",
+    "notFound": "Курсът не е намерен",
+    "notFoundText": "Курсът, който търсите, не съществува или е бил премахнат.",
+    "backToCourses": "Обратно към курсовете",
+    "breadcrumb": {
+      "academy": "Академия",
+      "courses": "Курсове"
+    },
+    "levels": {
+      "beginner": "Начинаещи",
+      "intermediate": "Напреднали",
+      "advanced": "Експерти"
+    },
+    "ratings": "оценки",
+    "enrolled": "записани",
+    "duration": "продължителност",
+    "watchPreview": "Гледай представяне",
+    "free": "Безплатно",
+    "credits": "кредита",
+    "enrollNow": "Запиши се сега",
+    "lessons": "урока",
+    "hours": "часа",
+    "weeks": "седмици",
+    "certificate": "Сертификат при завършване",
+    "creditsOnComplete": "кредита при завършване",
+    "tabs": {
+      "overview": "Преглед",
+      "content": "Съдържание",
+      "reviews": "Отзиви"
+    },
+    "aboutCourse": "За курса",
+    "targetAudience": "За кого е подходящ",
+    "whatYouLearn": "Какво ще научиш",
+    "learnItems": {
+      "item1": "Основни умения за работа с темата",
+      "item2": "Практически опит чрез упражнения",
+      "item3": "Разбиране на ключови концепции",
+      "item4": "Увереност в прилагането на наученото"
+    },
+    "totalEnrolled": "Общо записани",
+    "completed": "Завършили",
+    "rating": "Рейтинг",
+    "maxCredits": "Максимум кредити",
+    "courseContent": "Съдържание на курса",
+    "lessonsTotal": "урока общо",
+    "hoursTotal": "часа общо",
+    "lessonPlaceholder": "Урок {{number}}",
+    "minutes": "мин",
+    "studentReviews": "Отзиви от курсисти",
+    "reviews": "отзива",
+    "noReviewsYet": "Все още няма отзиви за този курс."
   }
 }

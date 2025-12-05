@@ -1,0 +1,402 @@
+/* src/components/AcademyCourses/AcademyCourseCard/academyCourseCard.css */
+
+.academyCourseCard {
+  --accent-color: #ff6347;
+  
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  overflow: hidden;
+  text-decoration: none;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: academyCourseCard-fadeIn 0.6s ease backwards;
+  animation-delay: var(--animation-delay, 0s);
+}
+
+@keyframes academyCourseCard-fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.academyCourseCard:hover {
+  transform: translateY(-8px);
+  border-color: var(--accent-color);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.4),
+    0 0 60px color-mix(in srgb, var(--accent-color) 15%, transparent);
+}
+
+/* Glow Effect */
+.academyCourseCard-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 50% 0%,
+    color-mix(in srgb, var(--accent-color) 20%, transparent) 0%,
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.academyCourseCard:hover .academyCourseCard-glow {
+  opacity: 1;
+}
+
+/* ===================================
+   IMAGE
+   =================================== */
+
+.academyCourseCard-image {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+}
+
+.academyCourseCard-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.academyCourseCard:hover .academyCourseCard-image img {
+  transform: scale(1.1);
+}
+
+.academyCourseCard-image-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(15, 23, 42, 0.4) 60%,
+    rgba(15, 23, 42, 0.8) 100%
+  );
+  transition: opacity 0.4s ease;
+}
+
+.academyCourseCard:hover .academyCourseCard-image-overlay {
+  opacity: 0.6;
+}
+
+/* Level Badge */
+.academyCourseCard-level {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 6px 12px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+  background: var(--level-color);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+}
+
+/* Duration */
+.academyCourseCard-duration {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+  z-index: 2;
+}
+
+/* Play Button */
+.academyCourseCard-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--accent-color);
+  border: none;
+  border-radius: 50%;
+  color: #ffffff;
+  opacity: 0;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 3;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.academyCourseCard-play svg {
+  margin-left: 4px;
+  pointer-events: none;
+}
+
+.academyCourseCard:hover .academyCourseCard-play {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.academyCourseCard:hover .academyCourseCard-play:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+  box-shadow: 0 12px 40px color-mix(in srgb, var(--accent-color) 50%, transparent);
+}
+.academyCourseCard-play:hover {
+  transform: translate(-50%, -50%) scale(1.15) !important;
+  box-shadow: 0 12px 40px color-mix(in srgb, var(--accent-color) 60%, transparent);
+}
+/* ===================================
+   CONTENT
+   =================================== */
+
+.academyCourseCard-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  flex: 1;
+}
+
+/* Category */
+.academyCourseCard-category {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent-color);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Title */
+.academyCourseCard-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: color 0.3s ease;
+}
+
+.academyCourseCard:hover .academyCourseCard-title {
+  color: var(--accent-color);
+}
+
+/* Description */
+.academyCourseCard-description {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  margin: 0;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Stats */
+.academyCourseCard-stats {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+.academyCourseCard-stat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.academyCourseCard-stat svg {
+  flex-shrink: 0;
+}
+
+.academyCourseCard-stat--rating {
+  color: #fbbf24;
+  font-weight: 600;
+}
+
+.academyCourseCard-stat--rating svg {
+  color: #fbbf24;
+}
+
+/* Footer */
+.academyCourseCard-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 16px;
+  margin-top: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.academyCourseCard-price-free {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #10b981;
+  text-transform: uppercase;
+}
+
+.academyCourseCard-cta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent-color);
+  transition: all 0.3s ease;
+}
+
+.academyCourseCard:hover .academyCourseCard-cta {
+  gap: 10px;
+}
+
+.academyCourseCard-cta svg {
+  transition: transform 0.3s ease;
+}
+
+.academyCourseCard:hover .academyCourseCard-cta svg {
+  transform: translateX(4px);
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+@media (max-width: 768px) {
+  .academyCourseCard {
+    border-radius: 16px;
+  }
+
+  .academyCourseCard-content {
+    padding: 16px;
+    gap: 10px;
+  }
+
+  .academyCourseCard-title {
+    font-size: 1rem;
+  }
+
+  .academyCourseCard-play {
+    width: 50px;
+    height: 50px;
+  }
+
+  .academyCourseCard-play svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .academyCourseCard-stats {
+    gap: 12px;
+  }
+
+  .academyCourseCard-stat {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .academyCourseCard-image {
+    aspect-ratio: 16 / 9;
+  }
+
+  .academyCourseCard-content {
+    padding: 14px;
+  }
+
+  .academyCourseCard-level {
+    padding: 5px 10px;
+    font-size: 0.65rem;
+  }
+
+  .academyCourseCard-duration {
+    padding: 5px 10px;
+    font-size: 0.7rem;
+  }
+
+  .academyCourseCard-title {
+    font-size: 0.95rem;
+  }
+
+  .academyCourseCard-description {
+    font-size: 0.8rem;
+  }
+
+  .academyCourseCard-footer {
+    padding-top: 12px;
+  }
+
+  .academyCourseCard-price-free {
+    font-size: 0.9rem;
+  }
+
+  .academyCourseCard-cta {
+    font-size: 0.8rem;
+  }
+}
+/* Credits Badge */
+.academyCourseCard-credits {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fbbf24;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  border-radius: 8px;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  z-index: 2;
+}
+
+.academyCourseCard-credits svg {
+  color: #fbbf24;
+}
+
+/* Credits in footer */
+.academyCourseCard-price {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.academyCourseCard-price-credits {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #fbbf24;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}

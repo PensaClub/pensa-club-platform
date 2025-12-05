@@ -13069,5 +13069,146 @@
     "errors": {
       "fetchFailed": "Fehler beim Laden der Notizen"
     }
+  },
+  "academyCourses": {
+    "loading": "Kurse werden geladen...",
+    "noCourses": "Noch keine Kurse",
+    "checkBackLater": "Wir werden bald neue Lernprogramme hinzufügen. Bleib dran!",
+    "programsTitle": "Lernprogramme",
+    "programsSubtitle": "Wähle ein Programm basierend auf deinen Interessen und Erfahrungen",
+    "popularCourses": "Beliebte Kurse",
+    "popularCoursesSubtitle": "Die meistgesuchten Kurse unserer Teilnehmer"
+  },
+  "academyCoursesHero": {
+    "titleLine1": "Entdecke deinen Weg in die ",
+    "titleLine2": "digitale Welt",
+    "subtitle": "Kostenlose praktische Kurse für alle Altersgruppen. Lerne, Technologie sicher zu nutzen – mit der Unterstützung unserer Mentoren.",
+    "scroll": "Nach unten scrollen",
+    "stats": {
+      "programs": "Programme",
+      "courses": "Kurse",
+      "enrolled": "Eingeschrieben",
+      "free": "Kostenlos"
+    }
+  },
+ "academyCoursesFilters": {
+    "searchPlaceholder": "Kurse suchen...",
+    "clearSearch": "Suche löschen",
+    "categoryLabel": "Kategorie",
+    "levelLabel": "Stufe",
+    "sortLabel": "Sortieren",
+    "allCategories": "Alle Kategorien",
+    "allLevels": "Alle Stufen",
+    "clearAll": "Löschen",
+    "levels": {
+      "beginner": "Anfänger",
+      "intermediate": "Fortgeschritten",
+      "advanced": "Experte"
+    },
+    "sort": {
+      "popular": "Beliebteste",
+      "newest": "Neueste",
+      "alphabetical": "Alphabetisch"
+    }
+  },
+   "academyCoursesCategorySection": {
+    "uncategorized": "Andere Kurse",
+    "course": "Kurs",
+    "courses": "Kurse",
+    "allLevels": "Alle Stufen",
+    "showAll": "Alle anzeigen ({{count}})",
+    "showLess": "Weniger anzeigen",
+    "loadMore": "{{remaining}} weitere laden"
+  },
+  "academyProgramTracks": {
+    "course": "Kurs",
+    "courses": "Kurse"
+  },
+  "academyCoursesList": {
+    "course": "Kurs",
+    "courses": "Kurse",
+    "close": "Schließen",
+    "searchPlaceholder": "Kurse suchen...",
+    "noResults": "Keine Kurse mit diesem Filter gefunden",
+    "resetFilter": "Alle anzeigen",
+    "viewAllCourses": "Alle Kurse anzeigen",
+    "filters": {
+      "all": "Alle",
+      "beginner": "Anfänger",
+      "intermediate": "Fortgeschritten",
+      "advanced": "Experte"
+    }
+  },
+  "academyCourseCard": {
+    "free": "Kostenlos",
+    "startLearning": "Starten",
+    "lessons": "Lektionen",
+    "credits": "Punkte",
+    "watchTrailer": "Trailer ansehen",
+    "levels": {
+      "beginner": "Anfänger",
+      "intermediate": "Fortgeschritten",
+      "advanced": "Experte"
+    }
+  },
+  "academyTrailerModal": {
+    "preview": "Vorschau",
+    "close": "Schließen",
+    "noVideo": "Kein Video für diesen Kurs verfügbar",
+    "hint": "ESC drücken oder außerhalb klicken zum Schließen",
+    "viewCourse": "Kurs ansehen"
+  },
+  "academyCourseDetail": {
+    "loading": "Kurs wird geladen...",
+    "notFound": "Kurs nicht gefunden",
+    "notFoundText": "Der gesuchte Kurs existiert nicht oder wurde entfernt.",
+    "backToCourses": "Zurück zu den Kursen",
+    "breadcrumb": {
+      "academy": "Akademie",
+      "courses": "Kurse"
+    },
+    "levels": {
+      "beginner": "Anfänger",
+      "intermediate": "Fortgeschritten",
+      "advanced": "Experte"
+    },
+    "ratings": "Bewertungen",
+    "enrolled": "eingeschrieben",
+    "duration": "Dauer",
+    "watchPreview": "Vorschau ansehen",
+    "free": "Kostenlos",
+    "credits": "Punkte",
+    "enrollNow": "Jetzt einschreiben",
+    "lessons": "Lektionen",
+    "hours": "Stunden",
+    "weeks": "Wochen",
+    "certificate": "Zertifikat bei Abschluss",
+    "creditsOnComplete": "Punkte bei Abschluss",
+    "tabs": {
+      "overview": "Übersicht",
+      "content": "Inhalt",
+      "reviews": "Bewertungen"
+    },
+    "aboutCourse": "Über diesen Kurs",
+    "targetAudience": "Für wen ist das geeignet",
+    "whatYouLearn": "Was du lernen wirst",
+    "learnItems": {
+      "item1": "Grundlegende Fähigkeiten zum Thema",
+      "item2": "Praktische Erfahrung durch Übungen",
+      "item3": "Verständnis der Schlüsselkonzepte",
+      "item4": "Selbstvertrauen bei der Anwendung des Gelernten"
+    },
+    "totalEnrolled": "Gesamt eingeschrieben",
+    "completed": "Abgeschlossen",
+    "rating": "Bewertung",
+    "maxCredits": "Max. Punkte",
+    "courseContent": "Kursinhalt",
+    "lessonsTotal": "Lektionen gesamt",
+    "hoursTotal": "Stunden gesamt",
+    "lessonPlaceholder": "Lektion {{number}}",
+    "minutes": "Min",
+    "studentReviews": "Bewertungen von Teilnehmern",
+    "reviews": "Bewertungen",
+    "noReviewsYet": "Noch keine Bewertungen für diesen Kurs."
   }
 }

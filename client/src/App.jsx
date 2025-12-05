@@ -73,6 +73,9 @@ import { DigiBridgeMentorDashboard } from './components/DigiBridge/DigiBridgeMen
 import { UserChatsPage } from './components/DigiBridge/UserChatsPage/UserChatsPage.jsx';
 import { StudentDetails } from './components/DigiMentorPanel/StudentDetails/StudentDetails.jsx';
 import { DigiMentorReviews } from './components/DigiMentorPanel/DigiMentorReviews/DigiMentorReviews.jsx';
+import { AcademyCoursesProvider } from './components/contexts/AcademyCoursesProvider.jsx';
+import { AcademyCourses } from './components/AcademyCourses/AcademyCourses.jsx';
+import { AcademyCourseDetail } from './components/AcademyCourses/AcademyCourseDetail/AcademyCourseDetail.jsx';
 
 // ✅ LAZY LOADING КОМПОНЕНТИ
 const ArticlesList = lazy(() => import('./components/Articles/ArticlesList/ArticlesList.jsx'));
@@ -134,6 +137,7 @@ function App() {
                     <SuggestUserProvider>
                       <AdminProvider>
                         <AcademyProvider>
+                          <AcademyCoursesProvider>
                           <ArticleProvider>
                             <InitiativeProvider>
                               <AnalyticsProvider>
@@ -159,6 +163,8 @@ function App() {
                                       <Routes>
                                         <Route path="/" element={<Home />} />
                                         <Route path="/academy" element={<DigiBridgeAcademy />} />
+                                        <Route path="/academy/courses" element={<AcademyCourses />} />
+                                        <Route path="/academy/courses/:slug" element={<AcademyCourseDetail />} />
                                         <Route path="/academy/mentors" element={<DigiBridgeMentorsPage />} />
                                         <Route path="/contact" element={<ContactForm />} />
                                         <Route path="/about" element={<AboutPage />} />
@@ -269,6 +275,7 @@ function App() {
                               </AnalyticsProvider>
                             </InitiativeProvider>
                           </ArticleProvider>
+                          </AcademyCoursesProvider>
                         </AcademyProvider>
                       </AdminProvider>
                     </SuggestUserProvider>

@@ -13776,5 +13776,146 @@
     "errors": {
       "fetchFailed": "Failed to load notes"
     }
+  },
+   "academyCourses": {
+    "loading": "Loading courses...",
+    "noCourses": "No courses yet",
+    "checkBackLater": "We'll add new learning programs soon. Stay tuned!",
+    "programsTitle": "Learning Programs",
+    "programsSubtitle": "Choose a program based on your interests and experience level",
+    "popularCourses": "Popular Courses",
+    "popularCoursesSubtitle": "Most sought-after courses by our students"
+  },
+   "academyCoursesHero": {
+    "titleLine1": "Discover your path in the ",
+    "titleLine2": "digital world",
+    "subtitle": "Free practical courses for all ages. Learn to use technology confidently with the support of our mentors.",
+    "scroll": "Scroll down",
+    "stats": {
+      "programs": "Programs",
+      "courses": "Courses",
+      "enrolled": "Enrolled",
+      "free": "Free"
+    }
+  },
+   "academyCoursesFilters": {
+    "searchPlaceholder": "Search courses...",
+    "clearSearch": "Clear search",
+    "categoryLabel": "Category",
+    "levelLabel": "Level",
+    "sortLabel": "Sort by",
+    "allCategories": "All categories",
+    "allLevels": "All levels",
+    "clearAll": "Clear",
+    "levels": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    },
+    "sort": {
+      "popular": "Most popular",
+      "newest": "Newest",
+      "alphabetical": "Alphabetical"
+    }
+  },
+   "academyCoursesCategorySection": {
+    "uncategorized": "Other courses",
+    "course": "course",
+    "courses": "courses",
+    "allLevels": "All levels",
+    "showAll": "View all ({{count}})",
+    "showLess": "Show less",
+    "loadMore": "Load {{remaining}} more"
+  },
+  "academyProgramTracks": {
+    "course": "course",
+    "courses": "courses"
+  },
+  "academyCoursesList": {
+    "course": "course",
+    "courses": "courses",
+    "close": "Close",
+    "searchPlaceholder": "Search courses...",
+    "noResults": "No courses found with this filter",
+    "resetFilter": "Show all",
+    "viewAllCourses": "View all courses",
+    "filters": {
+      "all": "All",
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    }
+  },
+ "academyCourseCard": {
+    "free": "Free",
+    "startLearning": "Start",
+    "lessons": "lessons",
+    "credits": "credits",
+    "watchTrailer": "Watch trailer",
+    "levels": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    }
+  },
+  "academyTrailerModal": {
+    "preview": "Preview",
+    "close": "Close",
+    "noVideo": "No video available for this course",
+    "hint": "Press ESC or click outside to close",
+    "viewCourse": "View Course"
+  },
+  "academyCourseDetail": {
+    "loading": "Loading course...",
+    "notFound": "Course not found",
+    "notFoundText": "The course you're looking for doesn't exist or has been removed.",
+    "backToCourses": "Back to courses",
+    "breadcrumb": {
+      "academy": "Academy",
+      "courses": "Courses"
+    },
+    "levels": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    },
+    "ratings": "ratings",
+    "enrolled": "enrolled",
+    "duration": "duration",
+    "watchPreview": "Watch preview",
+    "free": "Free",
+    "credits": "credits",
+    "enrollNow": "Enroll Now",
+    "lessons": "lessons",
+    "hours": "hours",
+    "weeks": "weeks",
+    "certificate": "Certificate on completion",
+    "creditsOnComplete": "credits on completion",
+    "tabs": {
+      "overview": "Overview",
+      "content": "Content",
+      "reviews": "Reviews"
+    },
+    "aboutCourse": "About this course",
+    "targetAudience": "Who is this for",
+    "whatYouLearn": "What you'll learn",
+    "learnItems": {
+      "item1": "Core skills for working with the topic",
+      "item2": "Practical experience through exercises",
+      "item3": "Understanding of key concepts",
+      "item4": "Confidence in applying what you've learned"
+    },
+    "totalEnrolled": "Total enrolled",
+    "completed": "Completed",
+    "rating": "Rating",
+    "maxCredits": "Max credits",
+    "courseContent": "Course content",
+    "lessonsTotal": "lessons total",
+    "hoursTotal": "hours total",
+    "lessonPlaceholder": "Lesson {{number}}",
+    "minutes": "min",
+    "studentReviews": "Student reviews",
+    "reviews": "reviews",
+    "noReviewsYet": "No reviews yet for this course."
   }
 }
