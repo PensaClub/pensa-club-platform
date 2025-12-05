@@ -230,9 +230,9 @@ seminar: {
 },
 
 enrollment: {
-    create: ['admin', 'mentor', 'student'],
+    create: ['admin', 'mentor', 'student','user','guest'],
     read: ['admin', 'mentor'],
-    readOwn: ['admin', 'mentor', 'student'],
+    readOwn: ['admin', 'mentor', 'student','user','guest'],
     update: ['admin', 'mentor'],
     delete: ['admin'],
 },

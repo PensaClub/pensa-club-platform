@@ -47,9 +47,9 @@ db.ClubLocation = db.club_ClubLocation;
 db.ClubMembership = db.club_ClubMembership;
 db.ClubMember = db.club_ClubMember;
 db.ClubActivity = db.club_ClubActivity;
-
+db.course_enrollment = db.student_course;
 // ✅ СПИСЪК С ALIAS ИМЕНА - за да ги пропуснем
-const aliasNames = ['Club', 'ClubDetails', 'ClubLocation', 'ClubMembership', 'ClubMember', 'ClubActivity'];
+const aliasNames = ['Club', 'ClubDetails', 'ClubLocation', 'ClubMembership', 'ClubMember', 'ClubActivity', 'course_enrollment'];
 
 // ✅ ИЗВИКАЙ associate() САМО ЗА ОРИГИНАЛНИТЕ МОДЕЛИ (не за aliases)
 Object.keys(db).forEach((modelName) => {

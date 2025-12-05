@@ -12,7 +12,7 @@ const {
   lesson,
   lecture,
   seminar,
-  module: courseModule,
+  course_module,
   student,
   mentor,
   user_account,
@@ -240,7 +240,7 @@ academyEnrollmentController.get(
             as: 'course',
             include: [
               {
-                model: courseModule,
+                model: course_module,
                 as: 'modules',
                 include: [
                   {
@@ -327,6 +327,19 @@ academyEnrollmentController.post(
         });
       }
 
+      // Get user account first to check role
+      const userAccount = await user_account.findByPk(userId);
+      if (!userAccount) {
+        return res.status(404).json({
+          success: false,
+          message: 'User account not found',
+        });
+      }
+
+      // Privileged roles that should NOT be downgraded to student
+      const privilegedRoles = ['admin', 'moderator', 'mentor'];
+      const isPrivileged = privilegedRoles.includes(userAccount.role);
+
       let studentData = await getStudentByUserId(userId);
 
       if (!studentData) {
@@ -334,6 +347,11 @@ academyEnrollmentController.post(
           userId,
           status: 'active',
         });
+      }
+
+      // Only upgrade role if user is 'user' or 'guest' (NOT privileged)
+      if (!isPrivileged && ['user', 'guest'].includes(userAccount.role)) {
+        await userAccount.update({ role: 'student' });
       }
 
       const existingEnrollment = await course_enrollment.findOne({
@@ -367,7 +385,8 @@ academyEnrollmentController.post(
         }
       }
 
-      const initialStatus = courseData.requiresApproval ? 'pending' : 'active';
+      // Privileged users get auto-approved, regular users follow course settings
+      const initialStatus = isPrivileged ? 'active' : (courseData.requiresApproval ? 'pending' : 'active');
 
       const enrollment = await course_enrollment.create({
         studentId: studentData.id,
@@ -966,6 +985,19 @@ academyEnrollmentController.post(
         });
       }
 
+      // Get user account first to check role
+      const userAccount = await user_account.findByPk(userId);
+      if (!userAccount) {
+        return res.status(404).json({
+          success: false,
+          message: 'User account not found',
+        });
+      }
+
+      // Privileged roles that should NOT be downgraded to student
+      const privilegedRoles = ['admin', 'moderator', 'mentor'];
+      const isPrivileged = privilegedRoles.includes(userAccount.role);
+
       let studentData = await getStudentByUserId(userId);
 
       if (!studentData) {
@@ -973,6 +1005,11 @@ academyEnrollmentController.post(
           userId,
           status: 'active',
         });
+      }
+
+      // Only upgrade role if user is 'user' or 'guest' (NOT privileged)
+      if (!isPrivileged && ['user', 'guest'].includes(userAccount.role)) {
+        await userAccount.update({ role: 'student' });
       }
 
       const existingRegistration = await student_lecture.findOne({
@@ -1023,7 +1060,6 @@ academyEnrollmentController.post(
     }
   }
 );
-
 // ===============================
 // POST /api/academy/enrollment/lectures/:lectureId/unregister
 // Отписване от лекция
@@ -1243,6 +1279,19 @@ academyEnrollmentController.post(
         });
       }
 
+      // Get user account first to check role
+      const userAccount = await user_account.findByPk(userId);
+      if (!userAccount) {
+        return res.status(404).json({
+          success: false,
+          message: 'User account not found',
+        });
+      }
+
+      // Privileged roles that should NOT be downgraded to student
+      const privilegedRoles = ['admin', 'moderator', 'mentor'];
+      const isPrivileged = privilegedRoles.includes(userAccount.role);
+
       let studentData = await getStudentByUserId(userId);
 
       if (!studentData) {
@@ -1250,6 +1299,11 @@ academyEnrollmentController.post(
           userId,
           status: 'active',
         });
+      }
+
+      // Only upgrade role if user is 'user' or 'guest' (NOT privileged)
+      if (!isPrivileged && ['user', 'guest'].includes(userAccount.role)) {
+        await userAccount.update({ role: 'student' });
       }
 
       const existingRegistration = await student_seminar.findOne({
@@ -1283,7 +1337,8 @@ academyEnrollmentController.post(
         }
       }
 
-      const initialStatus = seminarData.requiresApproval ? 'pending' : 'approved';
+      // Privileged users get auto-approved, regular users follow seminar settings
+      const initialStatus = isPrivileged ? 'approved' : (seminarData.requiresApproval ? 'pending' : 'approved');
 
       const registration = await student_seminar.create({
         studentId: studentData.id,
@@ -1456,8 +1511,8 @@ academyEnrollmentController.get(
                 attributes: ['email'],
                 where: search
                   ? {
-                      email: { [Op.iLike]: `%${search}%` },
-                    }
+                    email: { [Op.iLike]: `%${search}%` },
+                  }
                   : undefined,
                 required: !!search,
                 include: [

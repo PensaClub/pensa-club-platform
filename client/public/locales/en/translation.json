@@ -13870,52 +13870,104 @@
     "notFound": "Course not found",
     "notFoundText": "The course you're looking for doesn't exist or has been removed.",
     "backToCourses": "Back to courses",
+    
     "breadcrumb": {
       "academy": "Academy",
       "courses": "Courses"
     },
+    
     "levels": {
       "beginner": "Beginner",
       "intermediate": "Intermediate",
       "advanced": "Advanced"
     },
-    "ratings": "ratings",
-    "enrolled": "enrolled",
-    "duration": "duration",
-    "watchPreview": "Watch preview",
-    "free": "Free",
-    "credits": "credits",
-    "enrollNow": "Enroll Now",
-    "lessons": "lessons",
-    "hours": "hours",
-    "weeks": "weeks",
-    "certificate": "Certificate on completion",
-    "creditsOnComplete": "credits on completion",
+    
     "tabs": {
       "overview": "Overview",
       "content": "Content",
+      "instructor": "Instructor",
       "reviews": "Reviews"
     },
-    "aboutCourse": "About this course",
-    "targetAudience": "Who is this for",
-    "whatYouLearn": "What you'll learn",
-    "learnItems": {
-      "item1": "Core skills for working with the topic",
-      "item2": "Practical experience through exercises",
-      "item3": "Understanding of key concepts",
-      "item4": "Confidence in applying what you've learned"
+    
+    "hero": {
+      "certificateBadge": "Certificate",
+      "ratings": "ratings",
+      "enrolled": "enrolled",
+      "duration": "hours",
+      "lessonsLabel": "lessons",
+      "createdBy": "Created by",
+      "youAreEnrolled": "You are enrolled",
+      "adminAccess": "Admin access",
+      "mentorAccess": "Mentor access",
+      "moderatorAccess": "Moderator access"
     },
-    "totalEnrolled": "Total enrolled",
-    "completed": "Completed",
-    "rating": "Rating",
-    "maxCredits": "Max credits",
-    "courseContent": "Course content",
-    "lessonsTotal": "lessons total",
-    "hoursTotal": "hours total",
-    "lessonPlaceholder": "Lesson {{number}}",
-    "minutes": "min",
-    "studentReviews": "Student reviews",
-    "reviews": "reviews",
-    "noReviewsYet": "No reviews yet for this course."
+    
+    "card": {
+      "watchPreview": "Watch preview",
+      "watchTrailer": "Watch trailer",
+      "free": "Free",
+      "credits": "credits",
+      "enrollNow": "Enroll Now",
+      "lessons": "lessons",
+      "hours": "hours",
+      "weeks": "weeks",
+      "certificate": "Certificate on completion",
+      "creditsOnComplete": "credits on completion",
+      "guarantee": "Free access forever",
+      "startLearning": "Start Learning",
+      "checking": "Checking..."
+    },
+    
+    "overview": {
+      "aboutCourse": "About this course",
+      "targetAudience": "Who is this for",
+      "whatYouLearn": "What you'll learn",
+      "learnItems": {
+        "item1": "Core skills for working with the topic",
+        "item2": "Practical experience through exercises",
+        "item3": "Understanding of key concepts",
+        "item4": "Confidence in applying what you've learned"
+      },
+      "stats": {
+        "totalEnrolled": "Total enrolled",
+        "completed": "Completed",
+        "rating": "Rating",
+        "maxCredits": "Max credits"
+      }
+    },
+    
+    "content": {
+      "courseContent": "Course content",
+      "modules": "modules",
+      "lessonsTotal": "lessons",
+      "lessonsShort": "lessons",
+      "hoursTotal": "hours",
+      "minutes": "min",
+      "freeLesson": "Free",
+      "hasTest": "Has test",
+      "noContent": "Course content will be added soon."
+    },
+    
+    "instructor": {
+      "roles": {
+        "lecturer": "Lecturer",
+        "assistant": "Assistant",
+        "mentor": "Mentor"
+      },
+      "leadInstructor": "Lead",
+      "students": "Students",
+      "completedStudents": "Completed",
+      "instructorRating": "Rating",
+      "assistants": "Assistants",
+      "noInstructor": "Instructor information will be added soon."
+    },
+    
+    "reviews": {
+      "studentReviews": "Student reviews",
+      "basedOn": "Based on",
+      "reviews": "reviews",
+      "noReviewsYet": "No reviews yet for this course.",
+      "beFirstReview": "Be the first to share your opinion!"
+    }
   }
 }

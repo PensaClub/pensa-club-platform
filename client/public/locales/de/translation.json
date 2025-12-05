@@ -13158,57 +13158,109 @@
     "hint": "ESC drücken oder außerhalb klicken zum Schließen",
     "viewCourse": "Kurs ansehen"
   },
-  "academyCourseDetail": {
+   "academyCourseDetail": {
     "loading": "Kurs wird geladen...",
     "notFound": "Kurs nicht gefunden",
     "notFoundText": "Der gesuchte Kurs existiert nicht oder wurde entfernt.",
     "backToCourses": "Zurück zu den Kursen",
+    
     "breadcrumb": {
       "academy": "Akademie",
       "courses": "Kurse"
     },
+    
     "levels": {
       "beginner": "Anfänger",
       "intermediate": "Fortgeschritten",
       "advanced": "Experte"
     },
-    "ratings": "Bewertungen",
-    "enrolled": "eingeschrieben",
-    "duration": "Dauer",
-    "watchPreview": "Vorschau ansehen",
-    "free": "Kostenlos",
-    "credits": "Punkte",
-    "enrollNow": "Jetzt einschreiben",
-    "lessons": "Lektionen",
-    "hours": "Stunden",
-    "weeks": "Wochen",
-    "certificate": "Zertifikat bei Abschluss",
-    "creditsOnComplete": "Punkte bei Abschluss",
+    
     "tabs": {
       "overview": "Übersicht",
       "content": "Inhalt",
+      "instructor": "Dozent",
       "reviews": "Bewertungen"
     },
-    "aboutCourse": "Über diesen Kurs",
-    "targetAudience": "Für wen ist das geeignet",
-    "whatYouLearn": "Was du lernen wirst",
-    "learnItems": {
-      "item1": "Grundlegende Fähigkeiten zum Thema",
-      "item2": "Praktische Erfahrung durch Übungen",
-      "item3": "Verständnis der Schlüsselkonzepte",
-      "item4": "Selbstvertrauen bei der Anwendung des Gelernten"
+    
+    "hero": {
+      "certificateBadge": "Zertifikat",
+      "ratings": "Bewertungen",
+      "enrolled": "eingeschrieben",
+      "duration": "Stunden",
+      "lessonsLabel": "Lektionen",
+      "createdBy": "Erstellt von",
+          "youAreEnrolled": "Sie sind eingeschrieben",
+      "adminAccess": "Admin-Zugang",
+      "mentorAccess": "Mentor-Zugang",
+      "moderatorAccess": "Moderator-Zugang"
     },
-    "totalEnrolled": "Gesamt eingeschrieben",
-    "completed": "Abgeschlossen",
-    "rating": "Bewertung",
-    "maxCredits": "Max. Punkte",
-    "courseContent": "Kursinhalt",
-    "lessonsTotal": "Lektionen gesamt",
-    "hoursTotal": "Stunden gesamt",
-    "lessonPlaceholder": "Lektion {{number}}",
-    "minutes": "Min",
-    "studentReviews": "Bewertungen von Teilnehmern",
-    "reviews": "Bewertungen",
-    "noReviewsYet": "Noch keine Bewertungen für diesen Kurs."
+    
+    "card": {
+      "watchPreview": "Vorschau ansehen",
+      "watchTrailer": "Trailer ansehen",
+      "free": "Kostenlos",
+      "credits": "Punkte",
+      "enrollNow": "Jetzt einschreiben",
+      "lessons": "Lektionen",
+      "hours": "Stunden",
+      "weeks": "Wochen",
+      "certificate": "Zertifikat bei Abschluss",
+      "creditsOnComplete": "Punkte bei Abschluss",
+      "guarantee": "Kostenloser Zugang für immer",
+        "startLearning": "Lernen starten",
+      "checking": "Prüfen..."
+    },
+    
+    "overview": {
+      "aboutCourse": "Über diesen Kurs",
+      "targetAudience": "Für wen ist das geeignet",
+      "whatYouLearn": "Was du lernen wirst",
+      "learnItems": {
+        "item1": "Grundlegende Fähigkeiten zum Thema",
+        "item2": "Praktische Erfahrung durch Übungen",
+        "item3": "Verständnis der Schlüsselkonzepte",
+        "item4": "Selbstvertrauen bei der Anwendung des Gelernten"
+      },
+      "stats": {
+        "totalEnrolled": "Gesamt eingeschrieben",
+        "completed": "Abgeschlossen",
+        "rating": "Bewertung",
+        "maxCredits": "Max. Punkte"
+      }
+    },
+    
+    "content": {
+      "courseContent": "Kursinhalt",
+      "modules": "Module",
+      "lessonsTotal": "Lektionen",
+      "lessonsShort": "Lektionen",
+      "hoursTotal": "Stunden",
+      "minutes": "Min",
+      "freeLesson": "Kostenlos",
+      "hasTest": "Mit Test",
+      "noContent": "Kursinhalt wird bald hinzugefügt."
+    },
+    
+    "instructor": {
+      "roles": {
+        "lecturer": "Dozent",
+        "assistant": "Assistent",
+        "mentor": "Mentor"
+      },
+      "leadInstructor": "Hauptdozent",
+      "students": "Teilnehmer",
+      "completedStudents": "Abgeschlossen",
+      "instructorRating": "Bewertung",
+      "assistants": "Assistenten",
+      "noInstructor": "Dozent-Informationen werden bald hinzugefügt."
+    },
+    
+    "reviews": {
+      "studentReviews": "Bewertungen von Teilnehmern",
+      "basedOn": "Basierend auf",
+      "reviews": "Bewertungen",
+      "noReviewsYet": "Noch keine Bewertungen für diesen Kurs.",
+      "beFirstReview": "Sei der Erste, der seine Meinung teilt!"
+    }
   }
 }

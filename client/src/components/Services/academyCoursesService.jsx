@@ -98,36 +98,36 @@ export const academyCoursesServiceFactory = () => {
     //                    LESSONS
     // =========================================================
 
-    getCourseLessons: async (courseId) => {
-      return requester.get(`${apiUrl}/academy/courses/${courseId}/lessons`);
+    getCourseLessons: async (courseSlug) => {
+      return requester.get(`${apiUrl}/academy/courses/${courseSlug}/lessons`);
     },
 
-    createLesson: async (courseId, lessonData) => {
-      return requester.post(`${apiUrl}/academy/courses/${courseId}/lessons`, lessonData);
+    createLesson: async (courseSlug, lessonData) => {
+      return requester.post(`${apiUrl}/academy/courses/${courseSlug}/lessons`, lessonData);
     },
 
-    getLessonById: async (courseId, lessonId) => {
-      return requester.get(`${apiUrl}/academy/courses/${courseId}/lessons/${lessonId}`);
+    getLessonBySlug: async (courseSlug, lessonSlug) => {
+      return requester.get(`${apiUrl}/academy/courses/${courseSlug}/lessons/${lessonSlug}`);
     },
 
-    updateLesson: async (courseId, lessonId, lessonData) => {
-      return requester.put(`${apiUrl}/academy/courses/${courseId}/lessons/${lessonId}`, lessonData);
+    updateLesson: async (courseSlug, lessonSlug, lessonData) => {
+      return requester.put(`${apiUrl}/academy/courses/${courseSlug}/lessons/${lessonSlug}`, lessonData);
+    },
+    
+    deleteLesson: async (courseSlug, lessonSlug) => {
+      return requester.del(`${apiUrl}/academy/courses/${courseSlug}/lessons/${lessonSlug}`);
     },
 
-    deleteLesson: async (courseId, lessonId) => {
-      return requester.del(`${apiUrl}/academy/courses/${courseId}/lessons/${lessonId}`);
+    reorderLessons: async (courseSlug, lessonIds, moduleId = null) => {
+      return requester.put(`${apiUrl}/academy/courses/${courseSlug}/lessons/reorder`, { lessonIds, moduleId });
     },
 
-    reorderLessons: async (courseId, lessonIds, moduleId = null) => {
-      return requester.put(`${apiUrl}/academy/courses/${courseId}/lessons/reorder`, { lessonIds, moduleId });
+    publishLesson: async (courseSlug, lessonSlug) => {
+      return requester.post(`${apiUrl}/academy/courses/${courseSlug}/lessons/${lessonSlug}/publish`);
     },
 
-    publishLesson: async (courseId, lessonId) => {
-      return requester.post(`${apiUrl}/academy/courses/${courseId}/lessons/${lessonId}/publish`);
-    },
-
-    unpublishLesson: async (courseId, lessonId) => {
-      return requester.post(`${apiUrl}/academy/courses/${courseId}/lessons/${lessonId}/unpublish`);
+    unpublishLesson: async (courseSlug, lessonSlug) => {
+      return requester.post(`${apiUrl}/academy/courses/${courseSlug}/lessons/${lessonSlug}/unpublish`);
     },
 
     // =========================================================
@@ -343,9 +343,9 @@ export const academyCoursesServiceFactory = () => {
       return requester.post(`${apiUrl}/academy/enrollment/courses/${courseId}/drop`);
     },
 
-    getEnrollmentStatus: async (courseId) => {
-      return requester.get(`${apiUrl}/academy/enrollment/courses/${courseId}/status`);
-    },
+   checkEnrollment: async (courseId) => {
+  return requester.get(`${apiUrl}/academy/enrollment/courses/${courseId}/check`);
+},
 
     updateLessonProgress: async (lessonId, progressData) => {
       return requester.post(`${apiUrl}/academy/enrollment/lessons/${lessonId}/progress`, progressData);
@@ -506,40 +506,40 @@ export const academyCoursesServiceFactory = () => {
     //                    MATERIALS
     // =========================================================
 
-    // Course materials
-    getCourseMaterials: async (courseId) => {
-      return requester.get(`${apiUrl}/academy/materials/courses/${courseId}`);
+    // Course materialss
+    getCourseMaterials: async (courseSlug) => {
+      return requester.get(`${apiUrl}/academy/materials/courses/${courseSlug}`);
     },
 
-    addCourseMaterial: async (courseId, materialData) => {
-      return requester.post(`${apiUrl}/academy/materials/courses/${courseId}`, materialData);
+    addCourseMaterial: async (courseSlug, materialData) => {
+      return requester.post(`${apiUrl}/academy/materials/courses/${courseSlug}`, materialData);
     },
 
     // Lesson materials
-    getLessonMaterials: async (lessonId) => {
-      return requester.get(`${apiUrl}/academy/materials/lessons/${lessonId}`);
+    getLessonMaterials: async (lessonSlug) => {
+      return requester.get(`${apiUrl}/academy/materials/lessons/${lessonSlug}`);
     },
 
-    addLessonMaterial: async (lessonId, materialData) => {
-      return requester.post(`${apiUrl}/academy/materials/lessons/${lessonId}`, materialData);
+    addLessonMaterial: async (lessonSlug, materialData) => {
+      return requester.post(`${apiUrl}/academy/materials/lessons/${lessonSlug}`, materialData);
     },
 
     // Lecture materials
-    getLectureMaterials: async (lectureId) => {
-      return requester.get(`${apiUrl}/academy/materials/lectures/${lectureId}`);
+    getLectureMaterials: async (lectureSlug) => {
+      return requester.get(`${apiUrl}/academy/materials/lectures/${lectureSlug}`);
     },
 
-    addLectureMaterial: async (lectureId, materialData) => {
-      return requester.post(`${apiUrl}/academy/materials/lectures/${lectureId}`, materialData);
+    addLectureMaterial: async (lectureSlug, materialData) => {
+      return requester.post(`${apiUrl}/academy/materials/lectures/${lectureSlug}`, materialData);
     },
 
     // Seminar materials
-    getSeminarMaterials: async (seminarId) => {
-      return requester.get(`${apiUrl}/academy/materials/seminars/${seminarId}`);
+    getSeminarMaterials: async (seminarSlug) => {
+      return requester.get(`${apiUrl}/academy/materials/seminars/${seminarSlug}`);
     },
 
-    addSeminarMaterial: async (seminarId, materialData) => {
-      return requester.post(`${apiUrl}/academy/materials/seminars/${seminarId}`, materialData);
+    addSeminarMaterial: async (seminarSlug, materialData) => {
+      return requester.post(`${apiUrl}/academy/materials/seminars/${seminarSlug}`, materialData);
     },
 
     // Generic material operations

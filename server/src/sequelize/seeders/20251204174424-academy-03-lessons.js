@@ -2,17 +2,78 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
+    // ===============================
+    // CHECK IF DATA EXISTS (Idempotency)
+    // ===============================
+    const existing = await queryInterface.sequelize.query(
+      `SELECT COUNT(*) as count FROM lessons;`,
+      { type: Sequelize.QueryTypes.SELECT }
+    );
+
+    if (parseInt(existing[0].count) > 0) {
+      console.log('✅ Lessons already seeded, skipping...');
+      return;
+    }
+
+    // ===============================
+    // GET ADMIN USER
+    // ===============================
     const [users] = await queryInterface.sequelize.query(
       `SELECT id FROM user_accounts WHERE role = 'admin' LIMIT 1`
     );
     const createdBy = users[0]?.id || 1;
 
+    // ===============================
+    // GET MENTOR IDs
+    // ===============================
+    const [mentors] = await queryInterface.sequelize.query(
+      `SELECT m.id, u.email FROM mentors m 
+       JOIN user_accounts u ON m.user_id = u.id 
+       WHERE u.email IN ('mentor1@example.com', 'mentor2@example.com', 'mentor3@example.com')
+       ORDER BY u.email;`
+    );
+
+    const mentor1Id = mentors[0]?.id || null; // Интернет сигурност
+    const mentor2Id = mentors[1]?.id || null; // Мобилни (Viber, Смартфон)
+    const mentor3Id = mentors[2]?.id || null; // Основи, Електронна поща
+
+    // Mapping: Course -> Lead Mentor
+    // Курс 1 (Основи на компютъра) -> mentor3
+    // Курс 2 (Електронна поща) -> mentor3
+    // Курс 3 (Интернет сигурност) -> mentor1
+    // Курс 4 (Viber и WhatsApp) -> mentor2
+    // Курс 5 (Смартфон за начинаещи) -> mentor2
+
+    // ===============================
+    // DRIP CONTENT DATES
+    // ===============================
+    // Базова дата: днес
+    const today = new Date();
+    
+    // Helper: добавя дни към дата (09:00 сутринта)
+    const addDays = (days) => {
+      const date = new Date(today);
+      date.setDate(date.getDate() + days);
+      date.setHours(9, 0, 0, 0);
+      return date;
+    };
+
+    // Drip schedule:
+    // Модул 1 от курс: достъпен веднага (null)
+    // Модул 2: +7 дни (или +5 за кратки курсове)
+    // Модул 3: +10-14 дни
+    // Модул 4: +15-21 дни
+
     await queryInterface.bulkInsert('lessons', [
-      // Модул 1: Въведение в компютрите (Курс 1)
+      // ==========================================
+      // КУРС 1: Основи на компютъра (mentor3)
+      // ==========================================
+      // Модул 1: Въведение в компютрите (ВЕДНАГА)
       {
         id: 1,
         course_id: 1,
         module_id: 1,
+        mentor_id: mentor3Id,
         created_by: createdBy,
         slug: 'kakvo-e-kompyutar',
         title: 'Какво е компютър?',
@@ -23,6 +84,7 @@ module.exports = {
         video_url: 'https://www.youtube.com/watch?v=lesson1',
         thumbnail_url: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400',
         duration_minutes: 15,
+        scheduled_date: null, // Достъпен веднага
         max_credits: 3,
         credits_for_completion: 2,
         credits_for_test: 1,
@@ -41,6 +103,7 @@ module.exports = {
         id: 2,
         course_id: 1,
         module_id: 1,
+        mentor_id: mentor3Id,
         created_by: createdBy,
         slug: 'chasti-na-kompyutra',
         title: 'Части на компютъра',
@@ -51,6 +114,7 @@ module.exports = {
         video_url: 'https://www.youtube.com/watch?v=lesson2',
         thumbnail_url: 'https://images.unsplash.com/photo-1587831990711-23ca6441447b?w=400',
         duration_minutes: 20,
+        scheduled_date: null, // Достъпен веднага
         max_credits: 3,
         credits_for_completion: 2,
         credits_for_test: 1,
@@ -70,6 +134,7 @@ module.exports = {
         id: 3,
         course_id: 1,
         module_id: 1,
+        mentor_id: mentor3Id,
         created_by: createdBy,
         slug: 'vklyuchvane-izklyuchvane',
         title: 'Включване и изключване',
@@ -80,6 +145,7 @@ module.exports = {
         video_url: 'https://www.youtube.com/watch?v=lesson3',
         thumbnail_url: 'https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=400',
         duration_minutes: 10,
+        scheduled_date: null, // Достъпен веднага
         max_credits: 3,
         credits_for_completion: 2,
         credits_for_test: 1,
@@ -96,12 +162,12 @@ module.exports = {
         created_at: new Date(),
         updated_at: new Date(),
       },
-
-      // Модул 2: Мишка и клавиатура (Курс 1)
+      // Модул 2: Мишка и клавиатура (+7 дни DRIP)
       {
         id: 4,
         course_id: 1,
         module_id: 2,
+        mentor_id: mentor3Id,
         created_by: createdBy,
         slug: 'mishkata-vashiyat-pomoshtnik',
         title: 'Мишката - вашият помощник',
@@ -112,6 +178,7 @@ module.exports = {
         video_url: 'https://www.youtube.com/watch?v=lesson4',
         thumbnail_url: 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=400',
         duration_minutes: 15,
+        scheduled_date: addDays(7), // +7 дни
         max_credits: 3,
         credits_for_completion: 2,
         credits_for_test: 1,
@@ -130,6 +197,7 @@ module.exports = {
         id: 5,
         course_id: 1,
         module_id: 2,
+        mentor_id: mentor3Id,
         created_by: createdBy,
         slug: 'klaviaturata-osnovni-klavishi',
         title: 'Клавиатурата - основни клавиши',
@@ -140,6 +208,7 @@ module.exports = {
         video_url: 'https://www.youtube.com/watch?v=lesson5',
         thumbnail_url: 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400',
         duration_minutes: 20,
+        scheduled_date: addDays(7), // +7 дни
         max_credits: 3,
         credits_for_completion: 2,
         credits_for_test: 1,
@@ -156,11 +225,15 @@ module.exports = {
         updated_at: new Date(),
       },
 
-      // Курс 2: Електронна поща - Модул 4
+      // ==========================================
+      // КУРС 2: Електронна поща (mentor3)
+      // ==========================================
+      // Модул 4: Започване с Gmail (ВЕДНАГА)
       {
         id: 6,
         course_id: 2,
         module_id: 4,
+        mentor_id: mentor3Id,
         created_by: createdBy,
         slug: 'sazdavane-na-gmail-akaunt',
         title: 'Създаване на Gmail акаунт',
@@ -171,6 +244,7 @@ module.exports = {
         video_url: 'https://www.youtube.com/watch?v=lesson6',
         thumbnail_url: 'https://images.unsplash.com/photo-1596526131083-e8c633c948d2?w=400',
         duration_minutes: 15,
+        scheduled_date: null, // Достъпен веднага
         max_credits: 4,
         credits_for_completion: 3,
         credits_for_test: 1,
@@ -189,6 +263,7 @@ module.exports = {
         id: 7,
         course_id: 2,
         module_id: 4,
+        mentor_id: mentor3Id,
         created_by: createdBy,
         slug: 'izprashchane-na-parvi-imeil',
         title: 'Изпращане на първи имейл',
@@ -199,6 +274,7 @@ module.exports = {
         video_url: 'https://www.youtube.com/watch?v=lesson7',
         thumbnail_url: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=400',
         duration_minutes: 12,
+        scheduled_date: null, // Достъпен веднага
         max_credits: 4,
         credits_for_completion: 3,
         credits_for_test: 1,
@@ -215,12 +291,79 @@ module.exports = {
         created_at: new Date(),
         updated_at: new Date(),
       },
-
-      // Курс 3: Интернет сигурност - Модул 6
+      // Модул 5: Работа с имейли (+7 дни DRIP)
       {
         id: 8,
+        course_id: 2,
+        module_id: 5,
+        mentor_id: mentor3Id,
+        created_by: createdBy,
+        slug: 'prikachvane-na-failove',
+        title: 'Прикачване на файлове',
+        description: 'Как да изпращате документи и снимки по имейл',
+        sort_order: 1,
+        lesson_type: 'video',
+        video_provider: 'youtube',
+        video_url: 'https://www.youtube.com/watch?v=lesson8',
+        thumbnail_url: 'https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=400',
+        duration_minutes: 15,
+        scheduled_date: addDays(7), // +7 дни
+        max_credits: 4,
+        credits_for_completion: 3,
+        credits_for_test: 1,
+        has_test: false,
+        requires_completion: false,
+        status: 'published',
+        is_published: true,
+        published_at: new Date(),
+        is_free: false,
+        views_count: 189,
+        completed_count: 156,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        id: 9,
+        course_id: 2,
+        module_id: 5,
+        mentor_id: mentor3Id,
+        created_by: createdBy,
+        slug: 'organizirane-na-poshtata',
+        title: 'Организиране на пощата',
+        description: 'Етикети, папки и търсене в Gmail',
+        sort_order: 2,
+        lesson_type: 'video',
+        video_provider: 'youtube',
+        video_url: 'https://www.youtube.com/watch?v=lesson9',
+        thumbnail_url: 'https://images.unsplash.com/photo-1557200134-90327ee9fafa?w=400',
+        duration_minutes: 15,
+        scheduled_date: addDays(7), // +7 дни
+        max_credits: 4,
+        credits_for_completion: 3,
+        credits_for_test: 1,
+        has_test: true,
+        test_passing_score: 70,
+        requires_completion: true,
+        prerequisite_lesson_id: 8,
+        status: 'published',
+        is_published: true,
+        published_at: new Date(),
+        is_free: false,
+        views_count: 167,
+        completed_count: 134,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+
+      // ==========================================
+      // КУРС 3: Интернет сигурност (mentor1)
+      // ==========================================
+      // Модул 6: Основи на сигурността (ВЕДНАГА)
+      {
+        id: 10,
         course_id: 3,
         module_id: 6,
+        mentor_id: mentor1Id,
         created_by: createdBy,
         slug: 'zashto-sigurnostta-e-vazhna',
         title: 'Защо сигурността е важна',
@@ -228,9 +371,10 @@ module.exports = {
         sort_order: 1,
         lesson_type: 'video',
         video_provider: 'youtube',
-        video_url: 'https://www.youtube.com/watch?v=lesson8',
+        video_url: 'https://www.youtube.com/watch?v=lesson10',
         thumbnail_url: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=400',
         duration_minutes: 12,
+        scheduled_date: null, // Достъпен веднага
         max_credits: 3,
         credits_for_completion: 2,
         credits_for_test: 1,
@@ -246,26 +390,28 @@ module.exports = {
         updated_at: new Date(),
       },
       {
-        id: 9,
+        id: 11,
         course_id: 3,
-        module_id: 7,
+        module_id: 6,
+        mentor_id: mentor1Id,
         created_by: createdBy,
-        slug: 'silni-paroli',
-        title: 'Създаване на силни пароли',
-        description: 'Как да създадете и запомните сигурни пароли',
-        sort_order: 1,
+        slug: 'vidove-online-zaplahi',
+        title: 'Видове онлайн заплахи',
+        description: 'Вируси, фишинг, измами - как да ги разпознаем',
+        sort_order: 2,
         lesson_type: 'video',
         video_provider: 'youtube',
-        video_url: 'https://www.youtube.com/watch?v=lesson9',
-        thumbnail_url: 'https://images.unsplash.com/photo-1614064641938-3bbee52942c7?w=400',
+        video_url: 'https://www.youtube.com/watch?v=lesson11',
+        thumbnail_url: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400',
         duration_minutes: 15,
-        max_credits: 4,
-        credits_for_completion: 3,
+        scheduled_date: null, // Достъпен веднага
+        max_credits: 3,
+        credits_for_completion: 2,
         credits_for_test: 1,
         has_test: true,
-        test_passing_score: 80,
+        test_passing_score: 70,
         requires_completion: true,
-        prerequisite_lesson_id: 8,
+        prerequisite_lesson_id: 10,
         status: 'published',
         is_published: true,
         published_at: new Date(),
@@ -275,7 +421,519 @@ module.exports = {
         created_at: new Date(),
         updated_at: new Date(),
       },
+      // Модул 7: Практическа защита (+7 дни DRIP)
+      {
+        id: 12,
+        course_id: 3,
+        module_id: 7,
+        mentor_id: mentor1Id,
+        created_by: createdBy,
+        slug: 'silni-paroli',
+        title: 'Създаване на силни пароли',
+        description: 'Как да създадете и запомните сигурни пароли',
+        sort_order: 1,
+        lesson_type: 'video',
+        video_provider: 'youtube',
+        video_url: 'https://www.youtube.com/watch?v=lesson12',
+        thumbnail_url: 'https://images.unsplash.com/photo-1614064641938-3bbee52942c7?w=400',
+        duration_minutes: 15,
+        scheduled_date: addDays(7), // +7 дни
+        max_credits: 4,
+        credits_for_completion: 3,
+        credits_for_test: 1,
+        has_test: true,
+        test_passing_score: 80,
+        requires_completion: false,
+        status: 'published',
+        is_published: true,
+        published_at: new Date(),
+        is_free: false,
+        views_count: 167,
+        completed_count: 134,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        id: 13,
+        course_id: 3,
+        module_id: 7,
+        mentor_id: mentor1Id,
+        created_by: createdBy,
+        slug: 'dvufaktorna-autentikaciya',
+        title: 'Двуфакторна автентикация',
+        description: 'Допълнителна защита за вашите акаунти',
+        sort_order: 2,
+        lesson_type: 'video',
+        video_provider: 'youtube',
+        video_url: 'https://www.youtube.com/watch?v=lesson13',
+        thumbnail_url: 'https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=400',
+        duration_minutes: 15,
+        scheduled_date: addDays(7), // +7 дни
+        max_credits: 4,
+        credits_for_completion: 3,
+        credits_for_test: 1,
+        has_test: false,
+        requires_completion: true,
+        prerequisite_lesson_id: 12,
+        status: 'published',
+        is_published: true,
+        published_at: new Date(),
+        is_free: false,
+        views_count: 145,
+        completed_count: 112,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+
+      // ==========================================
+      // КУРС 4: Viber и WhatsApp (mentor2)
+      // ==========================================
+      // Модул 8: Инсталиране и настройка (ВЕДНАГА)
+      {
+        id: 14,
+        course_id: 4,
+        module_id: 8,
+        mentor_id: mentor2Id,
+        created_by: createdBy,
+        slug: 'instalirane-na-viber',
+        title: 'Инсталиране на Viber',
+        description: 'Как да инсталирате и настроите Viber',
+        sort_order: 1,
+        lesson_type: 'video',
+        video_provider: 'youtube',
+        video_url: 'https://www.youtube.com/watch?v=lesson14',
+        thumbnail_url: 'https://images.unsplash.com/photo-1611746872915-64382b5c76da?w=400',
+        duration_minutes: 12,
+        scheduled_date: null, // Достъпен веднага
+        max_credits: 3,
+        credits_for_completion: 2,
+        credits_for_test: 1,
+        has_test: false,
+        requires_completion: false,
+        status: 'published',
+        is_published: true,
+        published_at: new Date(),
+        is_free: true,
+        views_count: 289,
+        completed_count: 245,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        id: 15,
+        course_id: 4,
+        module_id: 8,
+        mentor_id: mentor2Id,
+        created_by: createdBy,
+        slug: 'instalirane-na-whatsapp',
+        title: 'Инсталиране на WhatsApp',
+        description: 'Как да инсталирате и настроите WhatsApp',
+        sort_order: 2,
+        lesson_type: 'video',
+        video_provider: 'youtube',
+        video_url: 'https://www.youtube.com/watch?v=lesson15',
+        thumbnail_url: 'https://images.unsplash.com/photo-1614680376408-81e91ffe3db7?w=400',
+        duration_minutes: 13,
+        scheduled_date: null, // Достъпен веднага
+        max_credits: 3,
+        credits_for_completion: 2,
+        credits_for_test: 1,
+        has_test: false,
+        requires_completion: true,
+        prerequisite_lesson_id: 14,
+        status: 'published',
+        is_published: true,
+        published_at: new Date(),
+        is_free: false,
+        views_count: 267,
+        completed_count: 223,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      // Модул 9: Съобщения и разговори (+5 дни DRIP)
+      {
+        id: 16,
+        course_id: 4,
+        module_id: 9,
+        mentor_id: mentor2Id,
+        created_by: createdBy,
+        slug: 'izprashtane-na-saobshteniya',
+        title: 'Изпращане на съобщения',
+        description: 'Текст, емотикони, снимки и видео',
+        sort_order: 1,
+        lesson_type: 'video',
+        video_provider: 'youtube',
+        video_url: 'https://www.youtube.com/watch?v=lesson16',
+        thumbnail_url: 'https://images.unsplash.com/photo-1577563908411-5077b6dc7624?w=400',
+        duration_minutes: 15,
+        scheduled_date: addDays(5), // +5 дни
+        max_credits: 4,
+        credits_for_completion: 3,
+        credits_for_test: 1,
+        has_test: false,
+        requires_completion: false,
+        status: 'published',
+        is_published: true,
+        published_at: new Date(),
+        is_free: false,
+        views_count: 234,
+        completed_count: 198,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        id: 17,
+        course_id: 4,
+        module_id: 9,
+        mentor_id: mentor2Id,
+        created_by: createdBy,
+        slug: 'glasovi-i-video-razgovori',
+        title: 'Гласови и видео разговори',
+        description: 'Безплатни обаждания през интернет',
+        sort_order: 2,
+        lesson_type: 'video',
+        video_provider: 'youtube',
+        video_url: 'https://www.youtube.com/watch?v=lesson17',
+        thumbnail_url: 'https://images.unsplash.com/photo-1587614382346-4ec70e388b28?w=400',
+        duration_minutes: 15,
+        scheduled_date: addDays(5), // +5 дни
+        max_credits: 4,
+        credits_for_completion: 3,
+        credits_for_test: 1,
+        has_test: true,
+        test_passing_score: 70,
+        requires_completion: true,
+        prerequisite_lesson_id: 16,
+        status: 'published',
+        is_published: true,
+        published_at: new Date(),
+        is_free: false,
+        views_count: 212,
+        completed_count: 178,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      // Модул 10: Групи и настройки (+10 дни DRIP)
+      {
+        id: 18,
+        course_id: 4,
+        module_id: 10,
+        mentor_id: mentor2Id,
+        created_by: createdBy,
+        slug: 'sazdavane-na-grupi',
+        title: 'Създаване на групи',
+        description: 'Групови чатове за семейството и приятели',
+        sort_order: 1,
+        lesson_type: 'video',
+        video_provider: 'youtube',
+        video_url: 'https://www.youtube.com/watch?v=lesson18',
+        thumbnail_url: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400',
+        duration_minutes: 12,
+        scheduled_date: addDays(10), // +10 дни
+        max_credits: 3,
+        credits_for_completion: 2,
+        credits_for_test: 1,
+        has_test: false,
+        requires_completion: false,
+        status: 'published',
+        is_published: true,
+        published_at: new Date(),
+        is_free: false,
+        views_count: 189,
+        completed_count: 156,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        id: 19,
+        course_id: 4,
+        module_id: 10,
+        mentor_id: mentor2Id,
+        created_by: createdBy,
+        slug: 'nastroiki-za-poveritelnost',
+        title: 'Настройки за поверителност',
+        description: 'Защитете личната си информация',
+        sort_order: 2,
+        lesson_type: 'video',
+        video_provider: 'youtube',
+        video_url: 'https://www.youtube.com/watch?v=lesson19',
+        thumbnail_url: 'https://images.unsplash.com/photo-1563986768494-4dee2763ff3f?w=400',
+        duration_minutes: 13,
+        scheduled_date: addDays(10), // +10 дни
+        max_credits: 4,
+        credits_for_completion: 3,
+        credits_for_test: 1,
+        has_test: true,
+        test_passing_score: 70,
+        requires_completion: true,
+        prerequisite_lesson_id: 18,
+        status: 'published',
+        is_published: true,
+        published_at: new Date(),
+        is_free: false,
+        views_count: 167,
+        completed_count: 134,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+
+      // ==========================================
+      // КУРС 5: Смартфон за начинаещи (mentor2)
+      // ==========================================
+      // Модул 11: Първи стъпки със смартфона (ВЕДНАГА)
+      {
+        id: 20,
+        course_id: 5,
+        module_id: 11,
+        mentor_id: mentor2Id,
+        created_by: createdBy,
+        slug: 'osnovni-zhestove',
+        title: 'Основни жестове',
+        description: 'Tap, swipe, pinch - научете основните жестове',
+        sort_order: 1,
+        lesson_type: 'video',
+        video_provider: 'youtube',
+        video_url: 'https://www.youtube.com/watch?v=lesson20',
+        thumbnail_url: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=400',
+        duration_minutes: 15,
+        scheduled_date: null, // Достъпен веднага
+        max_credits: 3,
+        credits_for_completion: 2,
+        credits_for_test: 1,
+        has_test: false,
+        requires_completion: false,
+        status: 'published',
+        is_published: true,
+        published_at: new Date(),
+        is_free: true,
+        views_count: 345,
+        completed_count: 289,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        id: 21,
+        course_id: 5,
+        module_id: 11,
+        mentor_id: mentor2Id,
+        created_by: createdBy,
+        slug: 'navigaciya-v-android',
+        title: 'Навигация в Android',
+        description: 'Начален екран, приложения и известия',
+        sort_order: 2,
+        lesson_type: 'video',
+        video_provider: 'youtube',
+        video_url: 'https://www.youtube.com/watch?v=lesson21',
+        thumbnail_url: 'https://images.unsplash.com/photo-1607252650355-f7fd0460ccdb?w=400',
+        duration_minutes: 15,
+        scheduled_date: null, // Достъпен веднага
+        max_credits: 3,
+        credits_for_completion: 2,
+        credits_for_test: 1,
+        has_test: true,
+        test_passing_score: 70,
+        requires_completion: true,
+        prerequisite_lesson_id: 20,
+        status: 'published',
+        is_published: true,
+        published_at: new Date(),
+        is_free: false,
+        views_count: 312,
+        completed_count: 256,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      // Модул 12: Приложения и Google Play (+5 дни DRIP)
+      {
+        id: 22,
+        course_id: 5,
+        module_id: 12,
+        mentor_id: mentor2Id,
+        created_by: createdBy,
+        slug: 'google-play-store',
+        title: 'Google Play Store',
+        description: 'Как да намирате и инсталирате приложения',
+        sort_order: 1,
+        lesson_type: 'video',
+        video_provider: 'youtube',
+        video_url: 'https://www.youtube.com/watch?v=lesson22',
+        thumbnail_url: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=400',
+        duration_minutes: 14,
+        scheduled_date: addDays(5), // +5 дни
+        max_credits: 3,
+        credits_for_completion: 2,
+        credits_for_test: 1,
+        has_test: false,
+        requires_completion: false,
+        status: 'published',
+        is_published: true,
+        published_at: new Date(),
+        is_free: false,
+        views_count: 289,
+        completed_count: 234,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        id: 23,
+        course_id: 5,
+        module_id: 12,
+        mentor_id: mentor2Id,
+        created_by: createdBy,
+        slug: 'polezni-prilozheniya',
+        title: 'Полезни приложения',
+        description: 'Препоръчани приложения за ежедневието',
+        sort_order: 2,
+        lesson_type: 'video',
+        video_provider: 'youtube',
+        video_url: 'https://www.youtube.com/watch?v=lesson23',
+        thumbnail_url: 'https://images.unsplash.com/photo-1551650975-87deedd944c3?w=400',
+        duration_minutes: 14,
+        scheduled_date: addDays(5), // +5 дни
+        max_credits: 3,
+        credits_for_completion: 2,
+        credits_for_test: 1,
+        has_test: true,
+        test_passing_score: 70,
+        requires_completion: true,
+        prerequisite_lesson_id: 22,
+        status: 'published',
+        is_published: true,
+        published_at: new Date(),
+        is_free: false,
+        views_count: 256,
+        completed_count: 198,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      // Модул 13: Камера и снимки (+10 дни DRIP)
+      {
+        id: 24,
+        course_id: 5,
+        module_id: 13,
+        mentor_id: mentor2Id,
+        created_by: createdBy,
+        slug: 'pravene-na-snimki',
+        title: 'Правене на снимки',
+        description: 'Използване на камерата на телефона',
+        sort_order: 1,
+        lesson_type: 'video',
+        video_provider: 'youtube',
+        video_url: 'https://www.youtube.com/watch?v=lesson24',
+        thumbnail_url: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400',
+        duration_minutes: 12,
+        scheduled_date: addDays(10), // +10 дни
+        max_credits: 3,
+        credits_for_completion: 2,
+        credits_for_test: 1,
+        has_test: false,
+        requires_completion: false,
+        status: 'published',
+        is_published: true,
+        published_at: new Date(),
+        is_free: false,
+        views_count: 234,
+        completed_count: 189,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        id: 25,
+        course_id: 5,
+        module_id: 13,
+        mentor_id: mentor2Id,
+        created_by: createdBy,
+        slug: 'galeriya-i-spodeliane',
+        title: 'Галерия и споделяне',
+        description: 'Преглед на снимки и изпращане на близки',
+        sort_order: 2,
+        lesson_type: 'video',
+        video_provider: 'youtube',
+        video_url: 'https://www.youtube.com/watch?v=lesson25',
+        thumbnail_url: 'https://images.unsplash.com/photo-1551650975-87deedd944c3?w=400',
+        duration_minutes: 13,
+        scheduled_date: addDays(10), // +10 дни
+        max_credits: 3,
+        credits_for_completion: 2,
+        credits_for_test: 1,
+        has_test: false,
+        requires_completion: true,
+        prerequisite_lesson_id: 24,
+        status: 'published',
+        is_published: true,
+        published_at: new Date(),
+        is_free: false,
+        views_count: 212,
+        completed_count: 167,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      // Модул 14: Интернет и Wi-Fi (+15 дни DRIP)
+      {
+        id: 26,
+        course_id: 5,
+        module_id: 14,
+        mentor_id: mentor2Id,
+        created_by: createdBy,
+        slug: 'svurzvane-s-wifi',
+        title: 'Свързване с Wi-Fi',
+        description: 'Как да се свържете с безжична мрежа',
+        sort_order: 1,
+        lesson_type: 'video',
+        video_provider: 'youtube',
+        video_url: 'https://www.youtube.com/watch?v=lesson26',
+        thumbnail_url: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=400',
+        duration_minutes: 12,
+        scheduled_date: addDays(15), // +15 дни
+        max_credits: 3,
+        credits_for_completion: 2,
+        credits_for_test: 1,
+        has_test: false,
+        requires_completion: false,
+        status: 'published',
+        is_published: true,
+        published_at: new Date(),
+        is_free: false,
+        views_count: 278,
+        completed_count: 223,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        id: 27,
+        course_id: 5,
+        module_id: 14,
+        mentor_id: mentor2Id,
+        created_by: createdBy,
+        slug: 'brauzar-i-tarsene',
+        title: 'Браузър и търсене',
+        description: 'Chrome и Google търсене на телефона',
+        sort_order: 2,
+        lesson_type: 'video',
+        video_provider: 'youtube',
+        video_url: 'https://www.youtube.com/watch?v=lesson27',
+        thumbnail_url: 'https://images.unsplash.com/photo-1555421689-491a97ff2040?w=400',
+        duration_minutes: 13,
+        scheduled_date: addDays(15), // +15 дни
+        max_credits: 4,
+        credits_for_completion: 3,
+        credits_for_test: 1,
+        has_test: true,
+        test_passing_score: 70,
+        requires_completion: true,
+        prerequisite_lesson_id: 26,
+        status: 'published',
+        is_published: true,
+        published_at: new Date(),
+        is_free: false,
+        views_count: 245,
+        completed_count: 189,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
     ]);
+
+    console.log('✅ Lessons seeded with drip content schedule!');
   },
 
   async down(queryInterface, Sequelize) {

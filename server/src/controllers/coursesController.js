@@ -12,7 +12,8 @@ const {
   student_course,
   user_account,
   mentor,
-  sequelize
+  lecture,
+  sequelize,
 } = require('../sequelize/models/index');
 
 const { validateBody, validateQuery } = require('../middlewares/validateRequest');
@@ -286,6 +287,10 @@ coursesController.get('/meta/categories', async (req, res, next) => {
 // GET /api/academy/courses/:slug
 // Детайли за курс (по slug)
 // ===============================
+// ===============================
+// GET /api/academy/courses/:slug
+// Детайли за курс (по slug)
+// ===============================
 coursesController.get('/:slug', async (req, res, next) => {
   try {
     const { slug } = req.params;
@@ -307,6 +312,13 @@ coursesController.get('/:slug', async (req, res, next) => {
               as: 'lessons',
               where: { isPublished: true },
               required: false,
+              include: [
+                {
+                  model: mentor,
+                  as: 'mentor',
+                  attributes: ['id', 'name', 'photoUrl', 'specialization'],
+                },
+              ],
             },
           ],
         },
@@ -336,6 +348,28 @@ coursesController.get('/:slug', async (req, res, next) => {
             },
           ],
         },
+        // ========== ДОБАВИ LECTURES ==========
+        {
+          model: lecture,
+          as: 'lectures',
+          where: { isPublished: true },
+          required: false,
+          attributes: [
+            'id', 'slug', 'title', 'shortDescription', 'category',
+            'lectureType', 'isOnline', 'thumbnailUrl', 'scheduledDate',
+            'scheduledEndDate', 'durationMinutes', 'status',
+            'maxCredits', 'creditsForAttendance', 'registeredCount',
+            'attendedCount', 'rating'
+          ],
+          include: [
+            {
+              model: mentor,
+              as: 'lecturer',
+              attributes: ['id', 'name', 'photoUrl', 'specialization'],
+            },
+          ],
+        },
+        // =====================================
       ],
     });
 
@@ -394,6 +428,18 @@ coursesController.get(
           {
             model: course_material,
             as: 'materials',
+          },
+          {
+            model: lecture,
+            as: 'lectures',
+            required: false,
+            include: [
+              {
+                model: mentor,
+                as: 'lecturer',
+                attributes: ['id', 'name', 'photoUrl'],
+              },
+            ],
           },
           {
             model: mentor_course,
@@ -946,15 +992,32 @@ coursesController.get('/:courseId/lessons', async (req, res, next) => {
 });
 
 // ===============================
-// GET /api/academy/courses/:courseId/lessons/:lessonId
+// GET /api/academy/courses/:courseId/lessons/:lessonSlug
+// Поддържа и slug, и id за backwards compatibility
 // ===============================
-coursesController.get('/:courseId/lessons/:lessonId', async (req, res, next) => {
+coursesController.get('/:courseId/lessons/:lessonSlug', async (req, res, next) => {
   try {
-    const courseId = parseInt(req.params.courseId);
-    const lessonId = parseInt(req.params.lessonId);
+    const { courseId, lessonSlug } = req.params;
+
+    // Determine if courseId is slug or id
+    const courseWhere = isNaN(courseId) 
+      ? { slug: courseId } 
+      : { id: parseInt(courseId) };
+
+    // Find course first
+    const courseData = await course.findOne({ where: courseWhere });
+    
+    if (!courseData) {
+      return res.status(404).json({ success: false, message: 'Course not found' });
+    }
+
+    // Determine if lessonSlug is slug or id
+    const lessonWhere = isNaN(lessonSlug)
+      ? { slug: lessonSlug, courseId: courseData.id }
+      : { id: parseInt(lessonSlug), courseId: courseData.id };
 
     const lessonData = await lesson.findOne({
-      where: { id: lessonId, courseId },
+      where: lessonWhere,
       include: [
         { model: course_module, as: 'module', attributes: ['id', 'title'] },
         { model: mentor, as: 'mentor', attributes: ['id', 'name', 'photoUrl', 'specialization'] },
@@ -965,6 +1028,9 @@ coursesController.get('/:courseId/lessons/:lessonId', async (req, res, next) => 
     if (!lessonData) {
       return res.status(404).json({ success: false, message: 'Lesson not found' });
     }
+
+    // Increment view count
+    await lessonData.increment('viewsCount');
 
     res.status(200).json({ success: true, lesson: lessonData });
   } catch (err) {

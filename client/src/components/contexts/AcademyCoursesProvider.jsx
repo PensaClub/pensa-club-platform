@@ -842,7 +842,7 @@ export const AcademyCoursesProvider = ({ children }) => {
 
   const getEnrollmentStatus = useCallback(async (courseId) => {
     try {
-      const data = await coursesService.getEnrollmentStatus(courseId);
+      const data = await coursesService.checkEnrollment(courseId);
       return data;
     } catch (error) {
       console.error('Error fetching enrollment status:', error);

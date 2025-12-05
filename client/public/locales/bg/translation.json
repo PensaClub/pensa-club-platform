@@ -14153,52 +14153,116 @@
     "notFound": "Курсът не е намерен",
     "notFoundText": "Курсът, който търсите, не съществува или е бил премахнат.",
     "backToCourses": "Обратно към курсовете",
+    
     "breadcrumb": {
       "academy": "Академия",
       "courses": "Курсове"
     },
+    
     "levels": {
       "beginner": "Начинаещи",
       "intermediate": "Напреднали",
       "advanced": "Експерти"
     },
-    "ratings": "оценки",
-    "enrolled": "записани",
-    "duration": "продължителност",
-    "watchPreview": "Гледай представяне",
-    "free": "Безплатно",
-    "credits": "кредита",
-    "enrollNow": "Запиши се сега",
-    "lessons": "урока",
-    "hours": "часа",
-    "weeks": "седмици",
-    "certificate": "Сертификат при завършване",
-    "creditsOnComplete": "кредита при завършване",
+    
     "tabs": {
       "overview": "Преглед",
       "content": "Съдържание",
+      "instructor": "Инструктор",
       "reviews": "Отзиви"
     },
-    "aboutCourse": "За курса",
-    "targetAudience": "За кого е подходящ",
-    "whatYouLearn": "Какво ще научиш",
-    "learnItems": {
-      "item1": "Основни умения за работа с темата",
-      "item2": "Практически опит чрез упражнения",
-      "item3": "Разбиране на ключови концепции",
-      "item4": "Увереност в прилагането на наученото"
+    
+    "hero": {
+      "certificateBadge": "Сертификат",
+      "ratings": "оценки",
+      "enrolled": "записани",
+      "duration": "часа",
+      "lessonsLabel": "урока",
+      "createdBy": "Създаден от",
+        "enrolledStudents": "записани",
+        "youAreEnrolled": "Записан сте",
+      "adminAccess": "Администраторски достъп",
+      "mentorAccess": "Менторски достъп",
+      "moderatorAccess": "Модераторски достъп"
+
     },
-    "totalEnrolled": "Общо записани",
-    "completed": "Завършили",
-    "rating": "Рейтинг",
-    "maxCredits": "Максимум кредити",
-    "courseContent": "Съдържание на курса",
-    "lessonsTotal": "урока общо",
-    "hoursTotal": "часа общо",
-    "lessonPlaceholder": "Урок {{number}}",
-    "minutes": "мин",
-    "studentReviews": "Отзиви от курсисти",
-    "reviews": "отзива",
-    "noReviewsYet": "Все още няма отзиви за този курс."
+    
+    "card": {
+      "watchPreview": "Гледай представяне",
+      "watchTrailer": "Гледай трейлър",
+      "free": "Безплатно",
+      "credits": "кредита",
+      "enrollNow": "Запиши се сега",
+      "lessons": "урока",
+      "hours": "часа",
+      "weeks": "седмици",
+      "certificate": "Сертификат при завършване",
+      "creditsOnComplete": "кредита при завършване",
+      "guarantee": "Безплатен достъп завинаги",
+       "continueLearning": "Продължи обучението",
+      "loginToEnroll": "Влез, за да се запишеш",
+      "enrolling": "Записване...",
+      "loginHint": "Трябва да влезете в акаунта си, за да се запишете",
+      "youAreEnrolled": "Записан",
+        "startLearning": "Започни обучението",
+      "checking": "Проверка..."
+    },
+    
+    "overview": {
+      "aboutCourse": "За курса",
+      "targetAudience": "За кого е подходящ",
+      "whatYouLearn": "Какво ще научиш",
+      "learnItems": {
+        "item1": "Основни умения за работа с темата",
+        "item2": "Практически опит чрез упражнения",
+        "item3": "Разбиране на ключови концепции",
+        "item4": "Увереност в прилагането на наученото"
+      },
+      "stats": {
+        "totalEnrolled": "Общо записани",
+        "completed": "Завършили",
+        "rating": "Рейтинг",
+        "maxCredits": "Макс. кредити"
+      }
+    },
+    
+    "content": {
+      "courseContent": "Съдържание на курса",
+      "modules": "модула",
+      "lessonsTotal": "урока",
+      "lessonsShort": "урока",
+      "hoursTotal": "часа",
+      "minutes": "мин",
+      "freeLesson": "Безплатен",
+      "hasTest": "С тест",
+      "noContent": "Съдържанието на курса ще бъде добавено скоро.",
+       "availableOn": "Достъпен на",
+      "enrollToAccess": "Запишете се, за да получите достъп",
+      "enrollToAccessDesc": "Курсът е безплатен. Запишете се, за да отключите всички уроци.",
+      "loginToAccess": "Влезте, за да получите достъп",
+      "loginToAccessDesc": "Влезте в акаунта си или се регистрирайте, за да се запишете за курса."
+    },
+    
+    "instructor": {
+      "roles": {
+        "lecturer": "Лектор",
+        "assistant": "Асистент",
+        "mentor": "Ментор"
+      },
+      "leadInstructor": "Водещ",
+      "students": "Курсисти",
+      "completedStudents": "Завършили",
+      "instructorRating": "Рейтинг",
+      "assistants": "Асистенти",
+      "noInstructor": "Информацията за инструктора ще бъде добавена скоро."
+    },
+    
+    "reviews": {
+      "studentReviews": "Отзиви от курсисти",
+      "basedOn": "Базирано на",
+      "reviews": "отзива",
+      "noReviewsYet": "Все още няма отзиви за този курс.",
+      "beFirstReview": "Бъди първият, който ще сподели мнение!"
+    }
   }
 }
