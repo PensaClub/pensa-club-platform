@@ -14264,5 +14264,50 @@
       "noReviewsYet": "Все още няма отзиви за този курс.",
       "beFirstReview": "Бъди първият, който ще сподели мнение!"
     }
+  },
+    "academyLessonPlayer": {
+    "loading": "Зареждане...",
+    "error": "Грешка",
+    "backToCourse": "Към курса",
+    "loginRequired": "Влезте в профила си",
+    "loginRequiredDesc": "Трябва да влезете, за да гледате този урок.",
+    "login": "Вход",
+    "enrollRequired": "Запишете се",
+    "enrollRequiredDesc": "Трябва да сте записани в този курс.",
+    "goToCourse": "Към курса",
+    "notFound": "Урокът не е намерен",
+    "unpublished": "Не е публикуван",
+    "unpublishedDesc": "Този урок все още не е наличен.",
+    
+    "courseContent": "Съдържание",
+    "fullscreen": "Цял екран",
+    "exitFullscreen": "Изход",
+    
+    "typeVideo": "Видео",
+    "typeLive": "На живо",
+    "typeText": "Текст",
+    "typeQuiz": "Тест",
+    
+    "complete": "Завърши урока",
+    "startTest": "Започни теста",
+    "testAvailable": "Тест към урока",
+    "passingScore": "Минимален резултат",
+    "earnCredits": "Печели",
+    "materials": "Материали",
+    
+    "live": "НА ЖИВО",
+    "upcoming": "Предстоящо",
+    "liveScheduled": "Урок на живо",
+    "startsIn": "Започва след",
+    "recordingProcessing": "Записът се обработва",
+    "recordingProcessingDesc": "Ще бъде наличен скоро.",
+    "textLesson": "Текстов урок",
+    "readBelowDesc": "Прочетете съдържанието по-долу",
+    "noVideo": "Няма видео",
+    
+    "days": "дни",
+    "hours": "часа",
+    "minutes": "мин",
+    "seconds": "сек"
   }
 }

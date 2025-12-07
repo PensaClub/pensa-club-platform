@@ -693,7 +693,7 @@ module.exports = {
         sort_order: 1,
         lesson_type: 'video',
         video_provider: 'youtube',
-        video_url: 'https://www.youtube.com/watch?v=lesson20',
+        video_url: 'https://www.youtube.com/watch?v=xJHk_fGfY7w',
         thumbnail_url: 'https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=400',
         duration_minutes: 15,
         scheduled_date: null, // Достъпен веднага
@@ -723,7 +723,7 @@ module.exports = {
         sort_order: 2,
         lesson_type: 'video',
         video_provider: 'youtube',
-        video_url: 'https://www.youtube.com/watch?v=lesson21',
+        video_url: 'https://www.youtube.com/watch?v=xJHk_fGfY7w',
         thumbnail_url: 'https://images.unsplash.com/photo-1607252650355-f7fd0460ccdb?w=400',
         duration_minutes: 15,
         scheduled_date: null, // Достъпен веднага
@@ -756,7 +756,7 @@ module.exports = {
         sort_order: 1,
         lesson_type: 'video',
         video_provider: 'youtube',
-        video_url: 'https://www.youtube.com/watch?v=lesson22',
+        video_url: 'https://www.youtube.com/watch?v=xJHk_fGfY7w',
         thumbnail_url: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=400',
         duration_minutes: 14,
         scheduled_date: addDays(5), // +5 дни
@@ -786,7 +786,7 @@ module.exports = {
         sort_order: 2,
         lesson_type: 'video',
         video_provider: 'youtube',
-        video_url: 'https://www.youtube.com/watch?v=lesson23',
+        video_url: 'https://www.youtube.com/watch?v=xJHk_fGfY7w',
         thumbnail_url: 'https://images.unsplash.com/photo-1551650975-87deedd944c3?w=400',
         duration_minutes: 14,
         scheduled_date: addDays(5), // +5 дни
@@ -819,7 +819,7 @@ module.exports = {
         sort_order: 1,
         lesson_type: 'video',
         video_provider: 'youtube',
-        video_url: 'https://www.youtube.com/watch?v=lesson24',
+        video_url: 'https://www.youtube.com/watch?v=xJHk_fGfY7w',
         thumbnail_url: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?w=400',
         duration_minutes: 12,
         scheduled_date: addDays(10), // +10 дни
@@ -849,7 +849,7 @@ module.exports = {
         sort_order: 2,
         lesson_type: 'video',
         video_provider: 'youtube',
-        video_url: 'https://www.youtube.com/watch?v=lesson25',
+        video_url: 'https://www.youtube.com/watch?v=xJHk_fGfY7w',
         thumbnail_url: 'https://images.unsplash.com/photo-1551650975-87deedd944c3?w=400',
         duration_minutes: 13,
         scheduled_date: addDays(10), // +10 дни
@@ -881,7 +881,7 @@ module.exports = {
         sort_order: 1,
         lesson_type: 'video',
         video_provider: 'youtube',
-        video_url: 'https://www.youtube.com/watch?v=lesson26',
+        video_url: 'https://www.youtube.com/watch?v=xJHk_fGfY7w',
         thumbnail_url: 'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=400',
         duration_minutes: 12,
         scheduled_date: addDays(15), // +15 дни
@@ -911,7 +911,7 @@ module.exports = {
         sort_order: 2,
         lesson_type: 'video',
         video_provider: 'youtube',
-        video_url: 'https://www.youtube.com/watch?v=lesson27',
+        video_url: 'https://www.youtube.com/watch?v=xJHk_fGfY7w',
         thumbnail_url: 'https://images.unsplash.com/photo-1555421689-491a97ff2040?w=400',
         duration_minutes: 13,
         scheduled_date: addDays(15), // +15 дни

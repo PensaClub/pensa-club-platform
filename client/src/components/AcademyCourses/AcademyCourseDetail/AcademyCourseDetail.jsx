@@ -37,15 +37,13 @@ const ROLE_LABELS = {
 // HELPER FUNCTIONS
 // ============================================
 
-// Check if lesson is accessible based on scheduledDate
 const isLessonScheduledAccessible = (scheduledDate) => {
-  if (!scheduledDate) return true; // NULL = достъпен веднага
+  if (!scheduledDate) return true;
   const scheduled = new Date(scheduledDate);
   const now = new Date();
-  return scheduled <= now; // Достъпен ако датата е в миналото или сега
+  return scheduled <= now;
 };
 
-// Format scheduled date for display
 const formatScheduledDate = (scheduledDate) => {
   if (!scheduledDate) return null;
   const date = new Date(scheduledDate);
@@ -58,11 +56,32 @@ const formatScheduledDate = (scheduledDate) => {
   });
 };
 
+const getMaterialIcon = (material) => {
+  const type = material.type?.toLowerCase() || material.fileType?.toLowerCase() || '';
+  const name = material.name?.toLowerCase() || material.title?.toLowerCase() || '';
+  
+  if (type.includes('pdf') || name.endsWith('.pdf')) return '📄';
+  if (type.includes('doc') || name.endsWith('.doc') || name.endsWith('.docx')) return '📝';
+  if (type.includes('video') || name.endsWith('.mp4') || name.endsWith('.avi')) return '🎬';
+  if (type.includes('image') || name.endsWith('.jpg') || name.endsWith('.png') || name.endsWith('.gif')) return '🖼️';
+  if (type.includes('zip') || type.includes('rar') || name.endsWith('.zip')) return '📦';
+  if (type.includes('excel') || name.endsWith('.xlsx') || name.endsWith('.xls')) return '📊';
+  if (type.includes('presentation') || name.endsWith('.pptx') || name.endsWith('.ppt')) return '📽️';
+  if (type.includes('audio') || name.endsWith('.mp3') || name.endsWith('.wav')) return '🎵';
+  return '🔗';
+};
+
+const formatFileSize = (bytes) => {
+  if (!bytes) return '';
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+};
+
 // ============================================
 // SUB-COMPONENTS
 // ============================================
 
-// Lesson Type Icon Component
 const LessonTypeIcon = ({ type }) => {
   switch (type) {
     case 'video':
@@ -105,25 +124,22 @@ const LessonTypeIcon = ({ type }) => {
   }
 };
 
-// Lesson Item Component
 const LessonItem = ({ 
   lesson, 
   index, 
   t, 
   showNumber = true,
   isAuthenticated,
-  hasAccess, // true if enrolled OR is admin/moderator/mentor
+  hasAccess,
   onLessonClick
 }) => {
-  // Determine lesson accessibility
   const isScheduleAccessible = isLessonScheduledAccessible(lesson.scheduledDate);
   const isAccessible = isAuthenticated && hasAccess && isScheduleAccessible;
   
-  // Determine lock reason
   const getLockReason = () => {
-    if (!isAuthenticated) return 'login'; // Трябва да влезе
-    if (!hasAccess) return 'enroll'; // Трябва да се запише (не важи за admin/mentor/mod)
-    if (!isScheduleAccessible) return 'scheduled'; // Ще бъде достъпен на дата
+    if (!isAuthenticated) return 'login';
+    if (!hasAccess) return 'enroll';
+    if (!isScheduleAccessible) return 'scheduled';
     return null;
   };
   
@@ -190,19 +206,16 @@ const LessonItem = ({
       
       <div className="academyCourseDetail-lesson-action">
         {isAccessible ? (
-          // Play icon - достъпен
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <circle cx="12" cy="12" r="10" />
             <polygon points="10,8 16,12 10,16" fill="currentColor" stroke="none" />
           </svg>
         ) : lockReason === 'scheduled' ? (
-          // Clock icon - ще бъде достъпен
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <circle cx="12" cy="12" r="10" />
             <polyline points="12,6 12,12 16,14" />
           </svg>
         ) : (
-          // Lock icon - заключен
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
             <path d="M7 11V7a5 5 0 0110 0v4" />
@@ -213,7 +226,6 @@ const LessonItem = ({
   );
 };
 
-// Module Accordion Component
 const ModuleAccordion = ({ 
   module, 
   index, 
@@ -228,7 +240,6 @@ const ModuleAccordion = ({
   const totalDuration = module.totalDurationMinutes || 
     module.lessons?.reduce((acc, l) => acc + (l.durationMinutes || 0), 0) || 0;
   
-  // Count accessible lessons
   const accessibleLessonsCount = module.lessons?.filter(lesson => 
     isAuthenticated && hasAccess && isLessonScheduledAccessible(lesson.scheduledDate)
   ).length || 0;
@@ -295,6 +306,53 @@ const ModuleAccordion = ({
   );
 };
 
+// Course Material Item Component
+const CourseMaterialItem = ({ material, index, t }) => {
+  return (
+    <a 
+      href={material.url || material.fileUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="academyCourseDetail-material"
+      style={{ '--delay': `${index * 0.05}s` }}
+      download={material.downloadable !== false}
+    >
+      <div className="academyCourseDetail-material-icon">
+        {getMaterialIcon(material)}
+      </div>
+      <div className="academyCourseDetail-material-info">
+        <h4 className="academyCourseDetail-material-name">
+          {material.name || material.title || t('academyCourseDetail.content.material', 'Материал')}
+        </h4>
+        <div className="academyCourseDetail-material-meta">
+          {material.fileType && (
+            <span className="academyCourseDetail-material-type">
+              {material.fileType.toUpperCase()}
+            </span>
+          )}
+          {material.fileSize && (
+            <span className="academyCourseDetail-material-size">
+              {formatFileSize(material.fileSize)}
+            </span>
+          )}
+          {material.description && (
+            <span className="academyCourseDetail-material-desc">
+              {material.description}
+            </span>
+          )}
+        </div>
+      </div>
+      <div className="academyCourseDetail-material-download">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+          <polyline points="7 10 12 15 17 10" />
+          <line x1="12" y1="15" x2="12" y2="3" />
+        </svg>
+      </div>
+    </a>
+  );
+};
+
 // ============================================
 // MAIN COMPONENT
 // ============================================
@@ -304,8 +362,14 @@ export const AcademyCourseDetail = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
   
-  // Contexts
-  const { getCourseBySlug, currentCourse, isLoading, enrollInCourse, getEnrollmentStatus } = useAcademyCourses();
+  const { 
+    getCourseBySlug, 
+    currentCourse, 
+    isLoading, 
+    enrollInCourse, 
+    getEnrollmentStatus,
+    getCourseMaterials 
+  } = useAcademyCourses();
   const { isAuthentication, setRedirectAfterLogin, isAdmin, isModerator, isMentor } = useAuthContext();
 
   // State
@@ -316,14 +380,14 @@ export const AcademyCourseDetail = () => {
   const [isEnrolling, setIsEnrolling] = useState(false);
   const [enrollmentData, setEnrollmentData] = useState(null);
   const [isCheckingEnrollment, setIsCheckingEnrollment] = useState(false);
+  const [courseMaterials, setCourseMaterials] = useState([]);
+  const [isLoadingMaterials, setIsLoadingMaterials] = useState(false);
   
   const fetchedSlugRef = useRef(null);
   const enrollmentCheckedRef = useRef(null);
+  const materialsLoadedRef = useRef(null);
 
-  // Check if user has privileged access (admin, moderator, mentor)
   const hasPrivilegedAccess = isAdmin || isModerator || isMentor;
-  
-  // User has access to lessons if enrolled OR has privileged access
   const hasLessonAccess = isEnrolled || hasPrivilegedAccess;
 
   // Load course
@@ -343,17 +407,15 @@ export const AcademyCourseDetail = () => {
     loadCourse();
   }, [slug, getCourseBySlug]);
 
-  // Check enrollment status when course loads and user is authenticated
+  // Check enrollment
   useEffect(() => {
     const verifyEnrollment = async () => {
-      // Skip if not authenticated, no course, or already checking
       if (!currentCourse?.id || !isAuthentication) {
         setIsEnrolled(false);
         setEnrollmentData(null);
         return;
       }
 
-      // Skip if we already checked this course
       if (enrollmentCheckedRef.current === currentCourse.id) {
         return;
       }
@@ -363,7 +425,6 @@ export const AcademyCourseDetail = () => {
 
       try {
         const status = await getEnrollmentStatus(currentCourse.id);
-        console.log('Enrollment status response:', status);
         setIsEnrolled(status?.enrolled || false);
         setEnrollmentData(status?.enrollment || null);
       } catch (err) {
@@ -378,20 +439,42 @@ export const AcademyCourseDetail = () => {
     verifyEnrollment();
   }, [currentCourse?.id, isAuthentication, getEnrollmentStatus]);
 
+  // Load course materials when content tab is active
+  useEffect(() => {
+    const loadMaterials = async () => {
+      if (activeTab !== 'content' || !slug || materialsLoadedRef.current === slug) {
+        return;
+      }
+
+      setIsLoadingMaterials(true);
+      materialsLoadedRef.current = slug;
+
+      try {
+        console.log('Fetching course materials for:', slug);
+        const materials = await getCourseMaterials(slug);
+        console.log('Course materials response:', materials);
+        setCourseMaterials(materials || []);
+      } catch (err) {
+        console.error('Error loading course materials:', err);
+        setCourseMaterials([]);
+      } finally {
+        setIsLoadingMaterials(false);
+      }
+    };
+
+    loadMaterials();
+  }, [activeTab, slug, getCourseMaterials]);
+
   const course = currentCourse;
 
-  // Handle enroll button click
   const handleEnroll = async () => {
-    // If not authenticated, redirect to login
     if (!isAuthentication) {
       setRedirectAfterLogin(`/academy/courses/${slug}`);
       navigate('/sign-up');
       return;
     }
 
-    // Privileged users don't need to enroll
     if (hasPrivilegedAccess) {
-      // Just navigate to first lesson
       const firstAccessibleLesson = modules.flatMap(m => m.lessons || [])
         .find(l => isLessonScheduledAccessible(l.scheduledDate));
       if (firstAccessibleLesson) {
@@ -400,15 +483,12 @@ export const AcademyCourseDetail = () => {
       return;
     }
 
-    // Enroll in course
     setIsEnrolling(true);
     try {
       const result = await enrollInCourse(course.id);
-      console.log('Enroll result:', result);
       if (result?.success) {
         setIsEnrolled(true);
         setEnrollmentData(result?.enrollment || null);
-        // Reset the check ref so it can recheck if needed
         enrollmentCheckedRef.current = null;
       }
     } catch (err) {
@@ -418,7 +498,6 @@ export const AcademyCourseDetail = () => {
     }
   };
 
-  // Handle lesson click - navigate to lesson page
   const handleLessonClick = (lesson) => {
     navigate(`/academy/courses/${slug}/lessons/${lesson.slug}`);
   };
@@ -476,16 +555,13 @@ export const AcademyCourseDetail = () => {
   const tags = course.tags || [];
   const targetAudience = course.targetAudience || [];
   
-  // Modules and Lessons
   const modules = course.modules || [];
   const lessons = course.lessons || [];
   
-  // Instructors from instances
   const instructors = course.instances || [];
   const leadInstructor = instructors.find(i => i.isLead) || instructors[0];
   const assistants = instructors.filter(i => !i.isLead);
 
-  // Tabs
   const tabs = [
     { id: 'overview', label: t('academyCourseDetail.tabs.overview'), icon: '📋' },
     { id: 'content', label: t('academyCourseDetail.tabs.content'), icon: '📚' },
@@ -493,9 +569,7 @@ export const AcademyCourseDetail = () => {
     { id: 'reviews', label: t('academyCourseDetail.tabs.reviews'), icon: '⭐' }
   ];
 
-  // CTA Button text and action
   const getCtaConfig = () => {
-    // If enrolled, show continue
     if (isEnrolled) {
       return {
         text: t('academyCourseDetail.card.continueLearning'),
@@ -511,7 +585,6 @@ export const AcademyCourseDetail = () => {
       };
     }
 
-    // If privileged user (admin/mod/mentor), show start learning directly
     if (hasPrivilegedAccess) {
       return {
         text: t('academyCourseDetail.card.startLearning'),
@@ -527,7 +600,6 @@ export const AcademyCourseDetail = () => {
       };
     }
     
-    // If not authenticated, show login
     if (!isAuthentication) {
       return {
         text: t('academyCourseDetail.card.loginToEnroll'),
@@ -537,7 +609,6 @@ export const AcademyCourseDetail = () => {
       };
     }
     
-    // Default: show enroll
     return {
       text: t('academyCourseDetail.card.enrollNow'),
       icon: '→',
@@ -547,8 +618,6 @@ export const AcademyCourseDetail = () => {
   };
 
   const ctaConfig = getCtaConfig();
-
-  // Should show enroll notice in content tab?
   const showEnrollNotice = !hasLessonAccess && !isCheckingEnrollment;
 
   return (
@@ -628,10 +697,7 @@ export const AcademyCourseDetail = () => {
                 )}
               </div>
 
-              {/* Title */}
               <h1 className="academyCourseDetail-hero-title">{title}</h1>
-
-              {/* Description */}
               <p className="academyCourseDetail-hero-description">{shortDescription}</p>
 
               {/* Meta Stats */}
@@ -719,7 +785,6 @@ export const AcademyCourseDetail = () => {
 
             {/* Right - Preview Card */}
             <div className="academyCourseDetail-hero-card">
-              {/* Preview Image/Video */}
               <div className="academyCourseDetail-card-preview">
                 <img src={imageUrl} alt={title} />
                 <div className="academyCourseDetail-card-preview-overlay"></div>
@@ -738,7 +803,6 @@ export const AcademyCourseDetail = () => {
                   </button>
                 )}
 
-                {/* Credits Badge on Image */}
                 {maxCredits > 0 && (
                   <div className="academyCourseDetail-card-credits">
                     <span>+{maxCredits}</span>
@@ -746,7 +810,6 @@ export const AcademyCourseDetail = () => {
                   </div>
                 )}
 
-                {/* Enrolled indicator on card */}
                 {isEnrolled && (
                   <div className="academyCourseDetail-card-enrolled">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
@@ -757,16 +820,13 @@ export const AcademyCourseDetail = () => {
                 )}
               </div>
 
-              {/* Card Content */}
               <div className="academyCourseDetail-card-content">
-                {/* Price */}
                 <div className="academyCourseDetail-card-price">
                   <span className="academyCourseDetail-card-price-free">
                     {t('academyCourseDetail.card.free')}
                   </span>
                 </div>
 
-                {/* CTA Button */}
                 <button 
                   className={`academyCourseDetail-card-cta academyCourseDetail-card-cta--${ctaConfig.variant}`}
                   onClick={ctaConfig.action}
@@ -787,14 +847,12 @@ export const AcademyCourseDetail = () => {
                   )}
                 </button>
 
-                {/* Secondary Action - show login hint if not authenticated */}
                 {!isAuthentication && (
                   <p className="academyCourseDetail-card-hint">
                     {t('academyCourseDetail.card.loginHint')}
                   </p>
                 )}
 
-                {/* Trailer Button */}
                 {trailerUrl && (
                   <button 
                     className="academyCourseDetail-card-secondary"
@@ -807,7 +865,6 @@ export const AcademyCourseDetail = () => {
                   </button>
                 )}
 
-                {/* Features */}
                 <ul className="academyCourseDetail-card-features">
                   <li>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -851,7 +908,6 @@ export const AcademyCourseDetail = () => {
                   )}
                 </ul>
 
-                {/* Guarantee */}
                 <div className="academyCourseDetail-card-guarantee">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
@@ -885,10 +941,9 @@ export const AcademyCourseDetail = () => {
           {/* Tab Content */}
           <div className="academyCourseDetail-tabContent" key={activeTab}>
             
-            {/* ==================== OVERVIEW TAB ==================== */}
+            {/* OVERVIEW TAB */}
             {activeTab === 'overview' && (
               <div className="academyCourseDetail-overview">
-                {/* About */}
                 <div className="academyCourseDetail-section academyCourseDetail-section--about">
                   <div className="academyCourseDetail-section-header">
                     <div className="academyCourseDetail-section-icon">📖</div>
@@ -901,7 +956,6 @@ export const AcademyCourseDetail = () => {
                   </div>
                 </div>
 
-                {/* Target Audience */}
                 {targetAudience.length > 0 && (
                   <div className="academyCourseDetail-section">
                     <div className="academyCourseDetail-section-header">
@@ -925,7 +979,6 @@ export const AcademyCourseDetail = () => {
                   </div>
                 )}
 
-                {/* What You'll Learn */}
                 <div className="academyCourseDetail-section">
                   <div className="academyCourseDetail-section-header">
                     <div className="academyCourseDetail-section-icon">🎓</div>
@@ -947,7 +1000,6 @@ export const AcademyCourseDetail = () => {
                   </div>
                 </div>
 
-                {/* Stats */}
                 <div className="academyCourseDetail-stats-grid">
                   <div className="academyCourseDetail-stat-card">
                     <div className="academyCourseDetail-stat-glow"></div>
@@ -977,10 +1029,9 @@ export const AcademyCourseDetail = () => {
               </div>
             )}
 
-            {/* ==================== CONTENT TAB ==================== */}
+            {/* CONTENT TAB */}
             {activeTab === 'content' && (
               <div className="academyCourseDetail-contentTab">
-                {/* Access Notice for non-enrolled users (not shown to privileged users) */}
                 {showEnrollNotice && (
                   <div className="academyCourseDetail-access-notice">
                     <div className="academyCourseDetail-access-notice-icon">
@@ -1012,6 +1063,7 @@ export const AcademyCourseDetail = () => {
                   </div>
                 )}
 
+                {/* Course Content Section */}
                 <div className="academyCourseDetail-section">
                   <div className="academyCourseDetail-section-header">
                     <div className="academyCourseDetail-section-icon">📚</div>
@@ -1020,7 +1072,6 @@ export const AcademyCourseDetail = () => {
                     </h2>
                   </div>
                   
-                  {/* Summary */}
                   <div className="academyCourseDetail-content-summary">
                     {modules.length > 0 && (
                       <>
@@ -1050,7 +1101,6 @@ export const AcademyCourseDetail = () => {
                     </span>
                   </div>
 
-                  {/* Modules with Lessons */}
                   {modules.length > 0 ? (
                     <div className="academyCourseDetail-modules">
                       {modules.map((module, moduleIndex) => (
@@ -1067,7 +1117,6 @@ export const AcademyCourseDetail = () => {
                       ))}
                     </div>
                   ) : lessons.length > 0 ? (
-                    /* Direct Lessons (no modules) */
                     <div className="academyCourseDetail-lessons">
                       {lessons.map((lesson, index) => (
                         <LessonItem 
@@ -1082,20 +1131,51 @@ export const AcademyCourseDetail = () => {
                       ))}
                     </div>
                   ) : (
-                    /* No content */
                     <div className="academyCourseDetail-content-empty">
                       <div className="academyCourseDetail-content-empty-icon">📭</div>
                       <p>{t('academyCourseDetail.content.noContent')}</p>
                     </div>
                   )}
                 </div>
+
+                {/* ========== COURSE MATERIALS SECTION ========== */}
+                <div className="academyCourseDetail-section academyCourseDetail-materials-section">
+                  <div className="academyCourseDetail-section-header">
+                    <div className="academyCourseDetail-section-icon">📎</div>
+                    <h2 className="academyCourseDetail-section-title">
+                      {t('academyCourseDetail.content.courseMaterials', 'Материали към курса')}
+                    </h2>
+                  </div>
+
+                  {isLoadingMaterials ? (
+                    <div className="academyCourseDetail-materials-loading">
+                      <div className="academyCourseDetail-materials-spinner"></div>
+                      <p>{t('academyCourseDetail.content.loadingMaterials', 'Зареждане на материали...')}</p>
+                    </div>
+                  ) : courseMaterials.length > 0 ? (
+                    <div className="academyCourseDetail-materials-list">
+                      {courseMaterials.map((material, index) => (
+                        <CourseMaterialItem 
+                          key={material.id || index}
+                          material={material}
+                          index={index}
+                          t={t}
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="academyCourseDetail-materials-empty">
+                      <div className="academyCourseDetail-materials-empty-icon">📂</div>
+                      <p>{t('academyCourseDetail.content.noMaterials', 'Няма допълнителни материали към този курс')}</p>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
 
-            {/* ==================== INSTRUCTOR TAB ==================== */}
+            {/* INSTRUCTOR TAB */}
             {activeTab === 'instructor' && (
               <div className="academyCourseDetail-instructorTab">
-                {/* Lead Instructor */}
                 {leadInstructor && (
                   <div className="academyCourseDetail-instructor academyCourseDetail-instructor--lead">
                     <div className="academyCourseDetail-instructor-glow"></div>
@@ -1158,7 +1238,6 @@ export const AcademyCourseDetail = () => {
                   </div>
                 )}
 
-                {/* Assistants */}
                 {assistants.length > 0 && (
                   <div className="academyCourseDetail-assistants">
                     <h3 className="academyCourseDetail-assistants-title">
@@ -1185,7 +1264,6 @@ export const AcademyCourseDetail = () => {
                   </div>
                 )}
 
-                {/* No instructor fallback */}
                 {!leadInstructor && assistants.length === 0 && (
                   <div className="academyCourseDetail-instructor-empty">
                     <div className="academyCourseDetail-instructor-empty-icon">👨‍🏫</div>
@@ -1195,7 +1273,7 @@ export const AcademyCourseDetail = () => {
               </div>
             )}
 
-            {/* ==================== REVIEWS TAB ==================== */}
+            {/* REVIEWS TAB */}
             {activeTab === 'reviews' && (
               <div className="academyCourseDetail-reviewsTab">
                 <div className="academyCourseDetail-section">
@@ -1206,7 +1284,6 @@ export const AcademyCourseDetail = () => {
                     </h2>
                   </div>
 
-                  {/* Rating Overview */}
                   <div className="academyCourseDetail-reviews-overview">
                     <div className="academyCourseDetail-reviews-score">
                       <div className="academyCourseDetail-reviews-score-glow"></div>
@@ -1231,7 +1308,6 @@ export const AcademyCourseDetail = () => {
                       </span>
                     </div>
 
-                    {/* Rating Bars */}
                     <div className="academyCourseDetail-reviews-bars">
                       {[5, 4, 3, 2, 1].map(stars => {
                         const percentage = stars === 5 ? 75 : stars === 4 ? 18 : stars === 3 ? 5 : stars === 2 ? 1 : 1;
@@ -1251,7 +1327,6 @@ export const AcademyCourseDetail = () => {
                     </div>
                   </div>
 
-                  {/* Placeholder reviews */}
                   <div className="academyCourseDetail-reviews-list">
                     <div className="academyCourseDetail-review-placeholder">
                       <div className="academyCourseDetail-review-placeholder-icon">💬</div>

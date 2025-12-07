@@ -18,6 +18,7 @@ export const AcademyCoursesProvider = ({ children }) => {
   const [lectures, setLectures] = useState([]);
   const [seminars, setSeminars] = useState([]);
   const [myDashboard, setMyDashboard] = useState(null);
+const [currentLesson, setCurrentLesson] = useState(null);
 
   // =========================================================
   //                    COURSES - PUBLIC
@@ -277,9 +278,9 @@ export const AcademyCoursesProvider = ({ children }) => {
   //                    LESSONS
   // =========================================================
 
-  const getCourseLessons = useCallback(async (courseId) => {
+  const getCourseLessons = useCallback(async (courseSlug) => {
     try {
-      const data = await coursesService.getCourseLessons(courseId);
+      const data = await coursesService.getCourseLessons(courseSlug);
       return data.lessons || [];
     } catch (error) {
       console.error('Error fetching lessons:', error);
@@ -287,13 +288,13 @@ export const AcademyCoursesProvider = ({ children }) => {
     }
   }, []);
 
-  const createLesson = useCallback(async (courseId, lessonData) => {
+  const createLesson = useCallback(async (courseSlug, lessonData) => {
     if (!isAdmin) {
       toast.error('Нямате права за тази операция');
       return { success: false };
     }
     try {
-      const response = await coursesService.createLesson(courseId, lessonData);
+      const response = await coursesService.createLesson(courseSlug, lessonData);
       toast.success('Урокът е създаден успешно');
       return response;
     } catch (error) {
@@ -303,23 +304,27 @@ export const AcademyCoursesProvider = ({ children }) => {
     }
   }, [isAdmin]);
 
-  const getLessonById = useCallback(async (courseId, lessonId) => {
+  const getLessonBySlug = useCallback(async (courseSlug, lessonSlug) => {
     try {
-      const data = await coursesService.getLessonById(courseId, lessonId);
-      return data.lesson || data;
+      setIsLoading(true);
+      const data = await coursesService.getLessonBySlug(courseSlug, lessonSlug);
+      setCurrentLesson(data.lesson || data);
+      return data;
     } catch (error) {
       console.error('Error fetching lesson:', error);
       throw error;
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
-  const updateLesson = useCallback(async (courseId, lessonId, lessonData) => {
+  const updateLesson = useCallback(async (courseSlug, lessonSlug, lessonData) => {
     if (!isAdmin) {
       toast.error('Нямате права за тази операция');
       return { success: false };
     }
     try {
-      const response = await coursesService.updateLesson(courseId, lessonId, lessonData);
+      const response = await coursesService.updateLesson(courseSlug, lessonSlug, lessonData);
       toast.success('Урокът е обновен успешно');
       return response;
     } catch (error) {
@@ -329,13 +334,13 @@ export const AcademyCoursesProvider = ({ children }) => {
     }
   }, [isAdmin]);
 
-  const deleteLesson = useCallback(async (courseId, lessonId) => {
+  const deleteLesson = useCallback(async (courseSlug, lessonSlug) => {
     if (!isAdmin) {
       toast.error('Нямате права за тази операция');
       return { success: false };
     }
     try {
-      const response = await coursesService.deleteLesson(courseId, lessonId);
+      const response = await coursesService.deleteLesson(courseSlug, lessonSlug);
       toast.success('Урокът е изтрит успешно');
       return response;
     } catch (error) {
@@ -345,13 +350,13 @@ export const AcademyCoursesProvider = ({ children }) => {
     }
   }, [isAdmin]);
 
-  const reorderLessons = useCallback(async (courseId, lessonIds, moduleId = null) => {
+  const reorderLessons = useCallback(async (courseSlug, lessonIds, moduleId = null) => {
     if (!isAdmin) {
       toast.error('Нямате права за тази операция');
       return { success: false };
     }
     try {
-      const response = await coursesService.reorderLessons(courseId, lessonIds, moduleId);
+      const response = await coursesService.reorderLessons(courseSlug, lessonIds, moduleId);
       return response;
     } catch (error) {
       console.error('Error reordering lessons:', error);
@@ -359,13 +364,13 @@ export const AcademyCoursesProvider = ({ children }) => {
     }
   }, [isAdmin]);
 
-  const publishLesson = useCallback(async (courseId, lessonId) => {
+  const publishLesson = useCallback(async (courseSlug, lessonSlug) => {
     if (!isAdmin) {
       toast.error('Нямате права за тази операция');
       return { success: false };
     }
     try {
-      const response = await coursesService.publishLesson(courseId, lessonId);
+      const response = await coursesService.publishLesson(courseSlug, lessonSlug);
       toast.success('Урокът е публикуван');
       return response;
     } catch (error) {
@@ -375,13 +380,13 @@ export const AcademyCoursesProvider = ({ children }) => {
     }
   }, [isAdmin]);
 
-  const unpublishLesson = useCallback(async (courseId, lessonId) => {
+  const unpublishLesson = useCallback(async (courseSlug, lessonSlug) => {
     if (!isAdmin) {
       toast.error('Нямате права за тази операция');
       return { success: false };
     }
     try {
-      const response = await coursesService.unpublishLesson(courseId, lessonId);
+      const response = await coursesService.unpublishLesson(courseSlug, lessonSlug);
       toast.success('Урокът е скрит');
       return response;
     } catch (error) {
@@ -998,31 +1003,32 @@ export const AcademyCoursesProvider = ({ children }) => {
   //                    MATERIALS
   // =========================================================
 
-  const getCourseMaterials = useCallback(async (courseId) => {
-    try {
-      const data = await coursesService.getCourseMaterials(courseId);
-      return data.materials || [];
-    } catch (error) {
-      console.error('Error fetching materials:', error);
-      return [];
-    }
-  }, []);
+  // Course materials
+const getCourseMaterials = useCallback(async (courseSlug) => {
+  try {
+    const data = await coursesService.getCourseMaterials(courseSlug);
+    return data.materials || [];
+  } catch (error) {
+    console.error('Error fetching course materials:', error);
+    return [];
+  }
+}, []);
 
-  const addCourseMaterial = useCallback(async (courseId, materialData) => {
-    if (!isAdmin) {
-      toast.error('Нямате права за тази операция');
-      return { success: false };
-    }
-    try {
-      const response = await coursesService.addCourseMaterial(courseId, materialData);
-      toast.success('Материалът е добавен успешно');
-      return response;
-    } catch (error) {
-      console.error('Error adding material:', error);
-      toast.error('Грешка при добавяне на материал');
-      throw error;
-    }
-  }, [isAdmin]);
+  const addCourseMaterial = useCallback(async (courseSlug, materialData) => {
+  if (!isAdmin) {
+    toast.error('Нямате права за тази операция');
+    return { success: false };
+  }
+  try {
+    const response = await coursesService.addCourseMaterial(courseSlug, materialData);
+    toast.success('Материалът е добавен успешно');
+    return response;
+  } catch (error) {
+    console.error('Error adding course material:', error);
+    toast.error('Грешка при добавяне на материал');
+    throw error;
+  }
+}, [isAdmin]);
 
   const getMaterialTypes = useCallback(async () => {
     try {
@@ -1034,6 +1040,84 @@ export const AcademyCoursesProvider = ({ children }) => {
     }
   }, []);
 
+
+const addLessonMaterial = useCallback(async (lessonSlug, materialData) => {
+  if (!isAdmin) {
+    toast.error('Нямате права за тази операция');
+    return { success: false };
+  }
+  try {
+    const response = await coursesService.addLessonMaterial(lessonSlug, materialData);
+    toast.success('Материалът е добавен успешно');
+    return response;
+  } catch (error) {
+    console.error('Error adding lesson material:', error);
+    toast.error('Грешка при добавяне на материал');
+    throw error;
+  }
+}, [isAdmin]);
+
+// Lecture materials
+const getLectureMaterials = useCallback(async (lectureSlug) => {
+  try {
+    const data = await coursesService.getLectureMaterials(lectureSlug);
+    return data.materials || [];
+  } catch (error) {
+    console.error('Error fetching lecture materials:', error);
+    return [];
+  }
+}, []);
+
+const addLectureMaterial = useCallback(async (lectureSlug, materialData) => {
+  if (!isAdmin) {
+    toast.error('Нямате права за тази операция');
+    return { success: false };
+  }
+  try {
+    const response = await coursesService.addLectureMaterial(lectureSlug, materialData);
+    toast.success('Материалът е добавен успешно');
+    return response;
+  } catch (error) {
+    console.error('Error adding lecture material:', error);
+    toast.error('Грешка при добавяне на материал');
+    throw error;
+  }
+}, [isAdmin]);
+
+// Seminar materials
+const getSeminarMaterials = useCallback(async (seminarSlug) => {
+  try {
+    const data = await coursesService.getSeminarMaterials(seminarSlug);
+    return data.materials || [];
+  } catch (error) {
+    console.error('Error fetching seminar materials:', error);
+    return [];
+  }
+}, []);
+const getLessonMaterials = useCallback(async (lessonSlug) => {
+  try {
+    const data = await coursesService.getLessonMaterials(lessonSlug);
+    return data.materials || [];
+  } catch (error) {
+    console.error('Error fetching lesson materials:', error);
+    return [];
+  }
+}, []);
+const addSeminarMaterial = useCallback(async (seminarSlug, materialData) => {
+  if (!isAdmin) {
+    toast.error('Нямате права за тази операция');
+    return { success: false };
+  }
+  try {
+    const response = await coursesService.addSeminarMaterial(seminarSlug, materialData);
+    toast.success('Материалът е добавен успешно');
+    return response;
+  } catch (error) {
+    console.error('Error adding seminar material:', error);
+    toast.error('Грешка при добавяне на материал');
+    throw error;
+  }
+}, [isAdmin]);
   // =========================================================
   //                    MY ACADEMY (Student Dashboard)
   // =========================================================
@@ -1154,6 +1238,7 @@ export const AcademyCoursesProvider = ({ children }) => {
     lectures,
     seminars,
     myDashboard,
+    currentLesson,
 
     // Courses - Public
     getCourses,
@@ -1180,7 +1265,7 @@ export const AcademyCoursesProvider = ({ children }) => {
     // Lessons
     getCourseLessons,
     createLesson,
-    getLessonById,
+    getLessonBySlug,
     updateLesson,
     deleteLesson,
     reorderLessons,
@@ -1246,10 +1331,15 @@ export const AcademyCoursesProvider = ({ children }) => {
     verifyCertificate,
     generateCertificate,
 
-    // Materials
-    getCourseMaterials,
-    addCourseMaterial,
-    getMaterialTypes,
+    // Materials (slug-based)
+getCourseMaterials,
+addCourseMaterial,
+getLessonMaterials,
+addLessonMaterial,
+getLectureMaterials,
+addLectureMaterial,
+getSeminarMaterials,
+addSeminarMaterial,
 
     // My Academy
     getMyDashboard,

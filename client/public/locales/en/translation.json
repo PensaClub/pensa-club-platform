@@ -13969,5 +13969,50 @@
       "noReviewsYet": "No reviews yet for this course.",
       "beFirstReview": "Be the first to share your opinion!"
     }
+  },
+   "academyLessonPlayer": {
+    "loading": "Loading...",
+    "error": "Error",
+    "backToCourse": "Back to course",
+    "loginRequired": "Sign in required",
+    "loginRequiredDesc": "You need to sign in to watch this lesson.",
+    "login": "Sign in",
+    "enrollRequired": "Enroll first",
+    "enrollRequiredDesc": "You need to be enrolled in this course.",
+    "goToCourse": "Go to course",
+    "notFound": "Lesson not found",
+    "unpublished": "Not published",
+    "unpublishedDesc": "This lesson is not available yet.",
+    
+    "courseContent": "Content",
+    "fullscreen": "Fullscreen",
+    "exitFullscreen": "Exit",
+    
+    "typeVideo": "Video",
+    "typeLive": "Live",
+    "typeText": "Text",
+    "typeQuiz": "Quiz",
+    
+    "complete": "Complete lesson",
+    "startTest": "Start test",
+    "testAvailable": "Lesson test",
+    "passingScore": "Passing score",
+    "earnCredits": "Earn",
+    "materials": "Materials",
+    
+    "live": "LIVE",
+    "upcoming": "Upcoming",
+    "liveScheduled": "Live lesson",
+    "startsIn": "Starts in",
+    "recordingProcessing": "Recording processing",
+    "recordingProcessingDesc": "Will be available soon.",
+    "textLesson": "Text lesson",
+    "readBelowDesc": "Read the content below",
+    "noVideo": "No video",
+    
+    "days": "days",
+    "hours": "hours",
+    "minutes": "min",
+    "seconds": "sec"
   }
 }

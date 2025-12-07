@@ -56,6 +56,16 @@ const getStudentByUserId = async (userId) => {
 };
 
 // ===============================
+// HELPER: Find entity by slug or id
+// ===============================
+const findBySlugOrId = async (model, slugOrId) => {
+  const where = isNaN(slugOrId) 
+    ? { slug: slugOrId } 
+    : { id: parseInt(slugOrId) };
+  return await model.findOne({ where });
+};
+
+// ===============================
 // HELPER: Check access to course materials
 // ===============================
 const checkCourseAccess = async (studentId, courseId) => {
@@ -279,20 +289,26 @@ academyMaterialsController.get('/types', async (req, res, next) => {
 // =========================================================
 
 // ===============================
-// GET /api/academy/materials/courses/:courseId
-// Материали за курс
+// GET /api/academy/materials/courses/:courseSlug
+// Материали за курс (поддържа slug и id)
 // ===============================
 academyMaterialsController.get(
-  '/courses/:courseId',
+  '/courses/:courseSlug',
   isAuth,
   async (req, res, next) => {
     try {
       const userId = req.user.userId;
-      const courseId = parseInt(req.params.courseId);
+      const { courseSlug } = req.params;
+
+      const courseData = await findBySlugOrId(course, courseSlug);
+      
+      if (!courseData) {
+        return res.status(404).json({ success: false, message: 'Course not found' });
+      }
 
       const studentData = await getStudentByUserId(userId);
 
-      const hasAccess = await checkCourseAccess(studentData?.id, courseId);
+      const hasAccess = await checkCourseAccess(studentData?.id, courseData.id);
       const isAdmin = req.user.role === 'admin' || req.user.role === 'mentor';
 
       if (!hasAccess && !isAdmin) {
@@ -302,7 +318,7 @@ academyMaterialsController.get(
         });
       }
 
-      const where = { courseId };
+      const where = { courseId: courseData.id };
 
       if (!isAdmin) {
         where.status = 'active';
@@ -328,18 +344,24 @@ academyMaterialsController.get(
 );
 
 // ===============================
-// POST /api/academy/materials/courses/:courseId
-// Добавяне на материал към курс
+// POST /api/academy/materials/courses/:courseSlug
+// Добавяне на материал към курс (поддържа slug и id)
 // ===============================
 academyMaterialsController.post(
-  '/courses/:courseId',
+  '/courses/:courseSlug',
   isAuth,
   rbac.checkPermission('material', 'create'),
   validateBody(materialCreateSchema),
   async (req, res, next) => {
     try {
       const userId = req.user.userId;
-      const courseId = parseInt(req.params.courseId);
+      const { courseSlug } = req.params;
+
+      const courseData = await findBySlugOrId(course, courseSlug);
+      
+      if (!courseData) {
+        return res.status(404).json({ success: false, message: 'Course not found' });
+      }
 
       const {
         title,
@@ -356,20 +378,12 @@ academyMaterialsController.post(
         accessLevel,
       } = req.body;
 
-      const courseData = await course.findByPk(courseId);
-      if (!courseData) {
-        return res.status(404).json({
-          success: false,
-          message: 'Course not found',
-        });
-      }
-
       const maxSortOrder = await course_material.max('sortOrder', {
-        where: { courseId },
+        where: { courseId: courseData.id },
       });
 
       const material = await course_material.create({
-        courseId,
+        courseId: courseData.id,
         uploadedBy: userId,
         title,
         description,
@@ -404,20 +418,29 @@ academyMaterialsController.post(
 // =========================================================
 
 // ===============================
-// GET /api/academy/materials/lessons/:lessonId
-// Материали за урок
+// GET /api/academy/materials/lessons/:lessonSlug
+// Материали за урок (поддържа slug и id)
 // ===============================
 academyMaterialsController.get(
-  '/lessons/:lessonId',
+  '/lessons/:lessonSlug',
   isAuth,
   async (req, res, next) => {
     try {
       const userId = req.user.userId;
-      const lessonId = parseInt(req.params.lessonId);
+      const { lessonSlug } = req.params;
+
+      const lessonData = await findBySlugOrId(lesson, lessonSlug);
+
+      if (!lessonData) {
+        return res.status(404).json({
+          success: false,
+          message: 'Lesson not found',
+        });
+      }
 
       const studentData = await getStudentByUserId(userId);
 
-      const hasAccess = await checkLessonAccess(studentData?.id, lessonId);
+      const hasAccess = await checkLessonAccess(studentData?.id, lessonData.id);
       const isAdmin = req.user.role === 'admin' || req.user.role === 'mentor';
 
       if (!hasAccess && !isAdmin) {
@@ -427,7 +450,7 @@ academyMaterialsController.get(
         });
       }
 
-      const where = { lessonId };
+      const where = { lessonId: lessonData.id };
 
       if (!isAdmin) {
         where.status = 'active';
@@ -453,18 +476,27 @@ academyMaterialsController.get(
 );
 
 // ===============================
-// POST /api/academy/materials/lessons/:lessonId
-// Добавяне на материал към урок
+// POST /api/academy/materials/lessons/:lessonSlug
+// Добавяне на материал към урок (поддържа slug и id)
 // ===============================
 academyMaterialsController.post(
-  '/lessons/:lessonId',
+  '/lessons/:lessonSlug',
   isAuth,
   rbac.checkPermission('material', 'create'),
   validateBody(materialCreateSchema),
   async (req, res, next) => {
     try {
       const userId = req.user.userId;
-      const lessonId = parseInt(req.params.lessonId);
+      const { lessonSlug } = req.params;
+
+      const lessonData = await findBySlugOrId(lesson, lessonSlug);
+
+      if (!lessonData) {
+        return res.status(404).json({
+          success: false,
+          message: 'Lesson not found',
+        });
+      }
 
       const {
         title,
@@ -480,20 +512,12 @@ academyMaterialsController.post(
         isPreviewable,
       } = req.body;
 
-      const lessonData = await lesson.findByPk(lessonId);
-      if (!lessonData) {
-        return res.status(404).json({
-          success: false,
-          message: 'Lesson not found',
-        });
-      }
-
       const maxSortOrder = await lesson_material.max('sortOrder', {
-        where: { lessonId },
+        where: { lessonId: lessonData.id },
       });
 
       const material = await lesson_material.create({
-        lessonId,
+        lessonId: lessonData.id,
         uploadedBy: userId,
         title,
         description,
@@ -527,20 +551,29 @@ academyMaterialsController.post(
 // =========================================================
 
 // ===============================
-// GET /api/academy/materials/lectures/:lectureId
-// Материали за лекция
+// GET /api/academy/materials/lectures/:lectureSlug
+// Материали за лекция (поддържа slug и id)
 // ===============================
 academyMaterialsController.get(
-  '/lectures/:lectureId',
+  '/lectures/:lectureSlug',
   isAuth,
   async (req, res, next) => {
     try {
       const userId = req.user.userId;
-      const lectureId = parseInt(req.params.lectureId);
+      const { lectureSlug } = req.params;
+
+      const lectureData = await findBySlugOrId(lecture, lectureSlug);
+
+      if (!lectureData) {
+        return res.status(404).json({
+          success: false,
+          message: 'Lecture not found',
+        });
+      }
 
       const studentData = await getStudentByUserId(userId);
 
-      const hasAccess = await checkLectureAccess(studentData?.id, lectureId);
+      const hasAccess = await checkLectureAccess(studentData?.id, lectureData.id);
       const isAdmin = req.user.role === 'admin' || req.user.role === 'mentor';
 
       if (!hasAccess && !isAdmin) {
@@ -550,7 +583,7 @@ academyMaterialsController.get(
         });
       }
 
-      const where = { lectureId };
+      const where = { lectureId: lectureData.id };
 
       if (!isAdmin) {
         where.status = 'active';
@@ -576,18 +609,27 @@ academyMaterialsController.get(
 );
 
 // ===============================
-// POST /api/academy/materials/lectures/:lectureId
-// Добавяне на материал към лекция
+// POST /api/academy/materials/lectures/:lectureSlug
+// Добавяне на материал към лекция (поддържа slug и id)
 // ===============================
 academyMaterialsController.post(
-  '/lectures/:lectureId',
+  '/lectures/:lectureSlug',
   isAuth,
   rbac.checkPermission('material', 'create'),
   validateBody(materialCreateSchema),
   async (req, res, next) => {
     try {
       const userId = req.user.userId;
-      const lectureId = parseInt(req.params.lectureId);
+      const { lectureSlug } = req.params;
+
+      const lectureData = await findBySlugOrId(lecture, lectureSlug);
+
+      if (!lectureData) {
+        return res.status(404).json({
+          success: false,
+          message: 'Lecture not found',
+        });
+      }
 
       const {
         title,
@@ -604,20 +646,12 @@ academyMaterialsController.post(
         availableAfterLecture,
       } = req.body;
 
-      const lectureData = await lecture.findByPk(lectureId);
-      if (!lectureData) {
-        return res.status(404).json({
-          success: false,
-          message: 'Lecture not found',
-        });
-      }
-
       const maxSortOrder = await lecture_material.max('sortOrder', {
-        where: { lectureId },
+        where: { lectureId: lectureData.id },
       });
 
       const material = await lecture_material.create({
-        lectureId,
+        lectureId: lectureData.id,
         uploadedBy: userId,
         title,
         description,
@@ -652,20 +686,29 @@ academyMaterialsController.post(
 // =========================================================
 
 // ===============================
-// GET /api/academy/materials/seminars/:seminarId
-// Материали за семинар
+// GET /api/academy/materials/seminars/:seminarSlug
+// Материали за семинар (поддържа slug и id)
 // ===============================
 academyMaterialsController.get(
-  '/seminars/:seminarId',
+  '/seminars/:seminarSlug',
   isAuth,
   async (req, res, next) => {
     try {
       const userId = req.user.userId;
-      const seminarId = parseInt(req.params.seminarId);
+      const { seminarSlug } = req.params;
+
+      const seminarData = await findBySlugOrId(seminar, seminarSlug);
+
+      if (!seminarData) {
+        return res.status(404).json({
+          success: false,
+          message: 'Seminar not found',
+        });
+      }
 
       const studentData = await getStudentByUserId(userId);
 
-      const hasAccess = await checkSeminarAccess(studentData?.id, seminarId);
+      const hasAccess = await checkSeminarAccess(studentData?.id, seminarData.id);
       const isAdmin = req.user.role === 'admin' || req.user.role === 'mentor';
 
       if (!hasAccess && !isAdmin) {
@@ -675,7 +718,7 @@ academyMaterialsController.get(
         });
       }
 
-      const where = { seminarId };
+      const where = { seminarId: seminarData.id };
 
       if (!isAdmin) {
         where.status = 'active';
@@ -701,18 +744,27 @@ academyMaterialsController.get(
 );
 
 // ===============================
-// POST /api/academy/materials/seminars/:seminarId
-// Добавяне на материал към семинар
+// POST /api/academy/materials/seminars/:seminarSlug
+// Добавяне на материал към семинар (поддържа slug и id)
 // ===============================
 academyMaterialsController.post(
-  '/seminars/:seminarId',
+  '/seminars/:seminarSlug',
   isAuth,
   rbac.checkPermission('material', 'create'),
   validateBody(materialCreateSchema),
   async (req, res, next) => {
     try {
       const userId = req.user.userId;
-      const seminarId = parseInt(req.params.seminarId);
+      const { seminarSlug } = req.params;
+
+      const seminarData = await findBySlugOrId(seminar, seminarSlug);
+
+      if (!seminarData) {
+        return res.status(404).json({
+          success: false,
+          message: 'Seminar not found',
+        });
+      }
 
       const {
         title,
@@ -730,20 +782,12 @@ academyMaterialsController.post(
         isHomework,
       } = req.body;
 
-      const seminarData = await seminar.findByPk(seminarId);
-      if (!seminarData) {
-        return res.status(404).json({
-          success: false,
-          message: 'Seminar not found',
-        });
-      }
-
       const maxSortOrder = await seminar_material.max('sortOrder', {
-        where: { seminarId },
+        where: { seminarId: seminarData.id },
       });
 
       const material = await seminar_material.create({
-        seminarId,
+        seminarId: seminarData.id,
         uploadedBy: userId,
         title,
         description,

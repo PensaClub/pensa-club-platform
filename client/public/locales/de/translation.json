@@ -13262,5 +13262,50 @@
       "noReviewsYet": "Noch keine Bewertungen für diesen Kurs.",
       "beFirstReview": "Sei der Erste, der seine Meinung teilt!"
     }
+  },
+  "academyLessonPlayer": {
+    "loading": "Laden...",
+    "error": "Fehler",
+    "backToCourse": "Zum Kurs",
+    "loginRequired": "Anmeldung erforderlich",
+    "loginRequiredDesc": "Sie müssen sich anmelden, um diese Lektion zu sehen.",
+    "login": "Anmelden",
+    "enrollRequired": "Zuerst einschreiben",
+    "enrollRequiredDesc": "Sie müssen in diesem Kurs eingeschrieben sein.",
+    "goToCourse": "Zum Kurs",
+    "notFound": "Lektion nicht gefunden",
+    "unpublished": "Nicht veröffentlicht",
+    "unpublishedDesc": "Diese Lektion ist noch nicht verfügbar.",
+    
+    "courseContent": "Inhalt",
+    "fullscreen": "Vollbild",
+    "exitFullscreen": "Beenden",
+    
+    "typeVideo": "Video",
+    "typeLive": "Live",
+    "typeText": "Text",
+    "typeQuiz": "Quiz",
+    
+    "complete": "Lektion abschließen",
+    "startTest": "Test starten",
+    "testAvailable": "Lektionstest",
+    "passingScore": "Mindestpunktzahl",
+    "earnCredits": "Verdienen",
+    "materials": "Materialien",
+    
+    "live": "LIVE",
+    "upcoming": "Bevorstehend",
+    "liveScheduled": "Live-Lektion",
+    "startsIn": "Beginnt in",
+    "recordingProcessing": "Aufnahme wird verarbeitet",
+    "recordingProcessingDesc": "Wird bald verfügbar sein.",
+    "textLesson": "Textlektion",
+    "readBelowDesc": "Lesen Sie den Inhalt unten",
+    "noVideo": "Kein Video",
+    
+    "days": "Tage",
+    "hours": "Stunden",
+    "minutes": "Min",
+    "seconds": "Sek"
   }
 }

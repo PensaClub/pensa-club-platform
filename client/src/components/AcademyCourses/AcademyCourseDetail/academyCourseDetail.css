@@ -2112,3 +2112,190 @@
   font-size: 0.875rem;
   font-weight: 600;
 }
+/* ============================================
+   COURSE MATERIALS SECTION
+   ============================================ */
+
+.academyCourseDetail-materials-section {
+  margin-top: 40px;
+  padding-top: 40px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.academyCourseDetail-materials-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  gap: 16px;
+}
+
+.academyCourseDetail-materials-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: var(--accent-color);
+  border-radius: 50%;
+  animation: academyCourseDetail-spin 0.8s linear infinite;
+}
+
+.academyCourseDetail-materials-loading p {
+  font-size: 0.9375rem;
+  color: #94a3b8;
+}
+
+.academyCourseDetail-materials-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.academyCourseDetail-material {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  text-decoration: none;
+  color: #e2e8f0;
+  transition: all 0.3s ease;
+  animation: academyCourseDetail-lessonFadeIn 0.4s ease forwards;
+  animation-delay: var(--delay, 0s);
+  opacity: 0;
+}
+
+.academyCourseDetail-material:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: color-mix(in srgb, var(--accent-color) 30%, transparent);
+  transform: translateX(8px);
+}
+
+.academyCourseDetail-material-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--accent-color) 12%, transparent);
+  border-radius: 12px;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.academyCourseDetail-material-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.academyCourseDetail-material-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin: 0 0 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.academyCourseDetail-material-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.8125rem;
+  color: #64748b;
+  flex-wrap: wrap;
+}
+
+.academyCourseDetail-material-type {
+  padding: 3px 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.6875rem;
+  letter-spacing: 0.5px;
+}
+
+.academyCourseDetail-material-size {
+  color: #94a3b8;
+}
+
+.academyCourseDetail-material-desc {
+  color: #94a3b8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.academyCourseDetail-material-download {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  color: #64748b;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.academyCourseDetail-material:hover .academyCourseDetail-material-download {
+  background: var(--accent-color);
+  color: white;
+}
+
+.academyCourseDetail-materials-empty {
+  text-align: center;
+  padding: 50px 40px;
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 16px;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.academyCourseDetail-materials-empty-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+  opacity: 0.6;
+}
+
+.academyCourseDetail-materials-empty p {
+  font-size: 1rem;
+  color: #64748b;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .academyCourseDetail-material {
+    padding: 14px 16px;
+    gap: 12px;
+  }
+  
+  .academyCourseDetail-material-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 1.25rem;
+  }
+  
+  .academyCourseDetail-material-name {
+    font-size: 0.9375rem;
+  }
+  
+  .academyCourseDetail-material-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  
+  .academyCourseDetail-material-desc {
+    max-width: 100%;
+  }
+  
+  .academyCourseDetail-material-download {
+    width: 36px;
+    height: 36px;
+  }
+}
