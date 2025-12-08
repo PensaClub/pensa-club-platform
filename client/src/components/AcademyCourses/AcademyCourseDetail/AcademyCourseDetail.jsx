@@ -450,9 +450,7 @@ export const AcademyCourseDetail = () => {
       materialsLoadedRef.current = slug;
 
       try {
-        console.log('Fetching course materials for:', slug);
         const materials = await getCourseMaterials(slug);
-        console.log('Course materials response:', materials);
         setCourseMaterials(materials || []);
       } catch (err) {
         console.error('Error loading course materials:', err);
