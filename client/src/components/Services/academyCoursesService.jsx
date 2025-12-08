@@ -431,9 +431,10 @@ export const academyCoursesServiceFactory = () => {
     //                    TEST TAKING (Student)
     // =========================================================
 
-    startTest: async (testId) => {
-      return requester.post(`${apiUrl}/academy/tests/${testId}/start`);
-    },
+    // academyCoursesService.js
+startTest: async (lessonId) => {
+  return requester.post(`${apiUrl}/academy/tests/lesson/${lessonId}/start`);
+},
 
     getCurrentAttempt: async (testId) => {
       return requester.get(`${apiUrl}/academy/tests/${testId}/attempt`);

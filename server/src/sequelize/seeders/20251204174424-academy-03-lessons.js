@@ -1,3 +1,4 @@
+//server/src/sequelize/seeders/20251204174424-academy-03-lessons.js
 'use strict';
 
 module.exports = {

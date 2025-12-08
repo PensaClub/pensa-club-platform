@@ -12,6 +12,20 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: 'id',
         as: 'test',
       });
+      
+      // Has many answers (от test_answers таблицата)
+      test_question.hasMany(models.test_answer, {
+        foreignKey: 'questionId',
+        sourceKey: 'id',
+        as: 'answerOptions',  // <-- ПРЕИМЕНУВАНО от 'answers'
+      });
+
+      // Has many attempt answers
+      test_question.hasMany(models.test_attempt_answer, {
+        foreignKey: 'questionId',
+        sourceKey: 'id',
+        as: 'attemptAnswers',
+      });
     }
   }
 
@@ -41,11 +55,6 @@ module.exports = (sequelize, DataTypes) => {
         field: 'question_text',
       },
 
-      // questionType: Тип на въпроса
-      // - 'single': Един верен отговор (radio buttons)
-      // - 'multiple': Няколко верни отговора (checkboxes)
-      // - 'true_false': Вярно/Невярно
-      // - 'text': Свободен текст (ръчна проверка)
       questionType: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -53,45 +62,37 @@ module.exports = (sequelize, DataTypes) => {
         field: 'question_type',
       },
 
-      // === ОТГОВОРИ ===
-      // JSON масив с отговори
-      // Формат: [{ id: 1, text: "Отговор 1", isCorrect: true }, ...]
+      // === DEPRECATED - ще се използва test_answers таблицата ===
+      // Оставяме го за backwards compatibility
       answers: {
         type: DataTypes.JSONB,
-        allowNull: false,
+        allowNull: true,  // <-- Сменено на true
         defaultValue: [],
       },
 
-      // correctAnswer: За text въпроси - очакван отговор
       correctAnswer: {
         type: DataTypes.TEXT,
         allowNull: true,
         field: 'correct_answer',
       },
 
-      // === ДОПЪЛНИТЕЛНИ НАСТРОЙКИ ===
-      
-      // explanation: Обяснение след отговор
       explanation: {
         type: DataTypes.TEXT,
         allowNull: true,
       },
 
-      // imageUrl: Снимка към въпроса
       imageUrl: {
         type: DataTypes.STRING(2048),
         allowNull: true,
         field: 'image_url',
       },
 
-      // points: Точки за този въпрос
       points: {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 1,
       },
 
-      // sortOrder: Подредба
       sortOrder: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -99,7 +100,6 @@ module.exports = (sequelize, DataTypes) => {
         field: 'sort_order',
       },
 
-      // === СТАТУС ===
       isActive: {
         type: DataTypes.BOOLEAN,
         allowNull: false,

@@ -4,10 +4,10 @@ const academyTestsController = require('express').Router();
 const { Op } = require('sequelize');
 
 const {
-  test,
+  lesson_test,
   test_question,
   test_answer,
-  test_attempt,
+  student_test_attempt,
   test_attempt_answer,
   lesson,
   lecture,
@@ -20,7 +20,8 @@ const {
   user_details,
   sequelize,
 } = require('../sequelize/models/index');
-
+const test = lesson_test;
+const test_attempt = student_test_attempt;
 const { validateBody, validateQuery } = require('../middlewares/validateRequest');
 const {
   paginationSchema,
@@ -69,7 +70,7 @@ const calculateTestScore = async (attemptId) => {
     include: [
       {
         model: test_attempt_answer,
-        as: 'answers',
+        as: 'attemptAnswers',
         include: [
           {
             model: test_question,
@@ -95,12 +96,12 @@ const calculateTestScore = async (attemptId) => {
   let correctAnswers = 0;
   let wrongAnswers = 0;
 
-  for (const answer of attempt.answers) {
+  for (const answer of attempt.attemptAnswers) {
     const question = answer.question;
     const points = question.points || 1;
     totalPoints += points;
 
-    if (question.questionType === 'multiple_choice' || question.questionType === 'single_choice') {
+    if (question.questionType === 'multiple_choice' || question.questionType === 'single_choice' || question.questionType === 'single') {
       if (answer.selectedAnswer && answer.selectedAnswer.isCorrect) {
         earnedPoints += points;
         correctAnswers++;
@@ -121,6 +122,14 @@ const calculateTestScore = async (attemptId) => {
       } else if (answer.isCorrect === false) {
         wrongAnswers++;
       }
+    } else if (question.questionType === 'multiple') {
+      // За multiple choice - проверяваме дали е верен
+      if (answer.selectedAnswer && answer.selectedAnswer.isCorrect) {
+        earnedPoints += points;
+        correctAnswers++;
+      } else {
+        wrongAnswers++;
+      }
     }
   }
 
@@ -133,7 +142,7 @@ const calculateTestScore = async (attemptId) => {
     scorePercentage,
     correctAnswers,
     wrongAnswers,
-    totalQuestions: attempt.answers.length,
+    totalQuestions: attempt.attemptAnswers.length,
     passed,
   };
 };
@@ -227,14 +236,14 @@ academyTestsController.get(
             [
               sequelize.literal(`(
                 SELECT COUNT(*) FROM test_questions 
-                WHERE test_questions.test_id = test.id
+                WHERE test_questions.test_id = "lesson_test".id
               )`),
               'questionsCount',
             ],
             [
               sequelize.literal(`(
-                SELECT COUNT(*) FROM test_attempts 
-                WHERE test_attempts.test_id = test.id
+                SELECT COUNT(*) FROM student_test_attempts 
+                WHERE student_test_attempts.test_id = "lesson_test".id
               )`),
               'attemptsCount',
             ],
@@ -285,9 +294,10 @@ academyTestsController.get(
             include: [
               {
                 model: test_answer,
-                as: 'answers',
+                as: 'answerOptions',
               },
             ],
+            order: [['sortOrder', 'ASC']],
           },
           {
             model: lesson,
@@ -609,7 +619,7 @@ academyTestsController.get(
         include: [
           {
             model: test_answer,
-            as: 'answers',
+            as: 'answerOptions',
           },
         ],
         order: [['sortOrder', 'ASC']],
@@ -694,7 +704,7 @@ academyTestsController.post(
       });
 
       const questionWithAnswers = await test_question.findByPk(question.id, {
-        include: [{ model: test_answer, as: 'answers' }],
+        include: [{ model: test_answer, as: 'answerOptions' }],
       });
 
       res.status(201).json({
@@ -767,7 +777,7 @@ academyTestsController.put(
       await testData.update({ totalPoints: totalPoints || 0 });
 
       const questionWithAnswers = await test_question.findByPk(questionId, {
-        include: [{ model: test_answer, as: 'answers' }],
+        include: [{ model: test_answer, as: 'answerOptions' }],
       });
 
       res.status(200).json({
@@ -1029,7 +1039,7 @@ const getQuestionsForAttempt = async (testData, attemptId) => {
     include: [
       {
         model: test_answer,
-        as: 'answers',
+        as: 'answerOptions',
         attributes: ['id', 'answerText', 'sortOrder'],
       },
     ],
@@ -1045,7 +1055,7 @@ const getQuestionsForAttempt = async (testData, attemptId) => {
   if (testData.shuffleAnswers) {
     questions = questions.map((q) => ({
       ...q,
-      answers: shuffleArray(q.answers),
+      answerOptions: shuffleArray(q.answerOptions),
     }));
   }
 
@@ -1144,6 +1154,7 @@ academyTestsController.post(
         await existingAnswer.update({
           answerId: answerId || null,
           textAnswer: textAnswer || null,
+          answeredAt: new Date(),
         });
       } else {
         await test_attempt_answer.create({
@@ -1151,6 +1162,7 @@ academyTestsController.post(
           questionId,
           answerId: answerId || null,
           textAnswer: textAnswer || null,
+          answeredAt: new Date(),
         });
       }
 
@@ -1235,6 +1247,7 @@ const submitAttempt = async (attemptId) => {
       if (selectedAnswer) {
         await answer.update({
           isCorrect: selectedAnswer.isCorrect,
+          pointsEarned: selectedAnswer.isCorrect ? (answer.question?.points || 1) : 0,
         });
       }
     }
@@ -1251,7 +1264,7 @@ const submitAttempt = async (attemptId) => {
     correctAnswers: score.correctAnswers,
     wrongAnswers: score.wrongAnswers,
     passed: score.passed,
-    earnedCredits: score.passed ? attempt.test.creditsForPassing : 0,
+    earnedCredits: score.passed ? (attempt.test.creditsForPassing || attempt.test.maxCredits || 0) : 0,
   });
 
   if (attempt.test.lessonId) {
@@ -1274,7 +1287,7 @@ const submitAttempt = async (attemptId) => {
   return {
     attemptId,
     ...score,
-    earnedCredits: score.passed ? attempt.test.creditsForPassing : 0,
+    earnedCredits: score.passed ? (attempt.test.creditsForPassing || attempt.test.maxCredits || 0) : 0,
   };
 };
 
@@ -1359,7 +1372,7 @@ academyTestsController.get('/:id/result/:attemptId', isAuth, async (req, res, ne
             include: [
               {
                 model: test_answer,
-                as: 'answers',
+                as: 'answerOptions',
                 attributes: attempt.test.showCorrectAnswers || isAdmin
                   ? ['id', 'answerText', 'isCorrect', 'explanation']
                   : ['id', 'answerText'],
@@ -1384,7 +1397,7 @@ academyTestsController.get('/:id/result/:attemptId', isAuth, async (req, res, ne
         isCorrect: attempt.test.showCorrectAnswers || isAdmin ? a.isCorrect : undefined,
         explanation:
           attempt.test.showCorrectAnswers || isAdmin ? a.question.explanation : undefined,
-        answers: a.question.answers,
+        answerOptions: a.question.answerOptions,
       }));
     }
 
@@ -1453,8 +1466,8 @@ academyTestsController.get(
 
       const formattedAttempts = attempts.map((a) => {
         const data = a.get({ plain: true });
-        const studentData = data.student;
-        const userDetails = studentData?.user?.details || {};
+        const studentInfo = data.student;
+        const userDetails = studentInfo?.user?.details || {};
 
         return {
           id: data.id,
@@ -1462,9 +1475,9 @@ academyTestsController.get(
           studentName:
             userDetails.username ||
             `${userDetails.firstName || ''} ${userDetails.lastName || ''}`.trim() ||
-            studentData?.user?.email?.split('@')[0] ||
+            studentInfo?.user?.email?.split('@')[0] ||
             'Unknown',
-          studentEmail: studentData?.user?.email,
+          studentEmail: studentInfo?.user?.email,
           status: data.status,
           attemptNumber: data.attemptNumber,
           scorePercentage: data.scorePercentage,
@@ -1585,9 +1598,9 @@ academyTestsController.get(
             passRate: completedAttempts > 0 ? Math.round((passedAttempts / completedAttempts) * 100) : 0,
           },
           scores: {
-            average: Math.round(parseFloat(scoreData[0].avgScore) || 0),
-            min: parseInt(scoreData[0].minScore) || 0,
-            max: parseInt(scoreData[0].maxScore) || 0,
+            average: Math.round(parseFloat(scoreData[0]?.avgScore) || 0),
+            min: parseInt(scoreData[0]?.minScore) || 0,
+            max: parseInt(scoreData[0]?.maxScore) || 0,
           },
           questions: formattedQuestionStats,
         },
@@ -1636,5 +1649,148 @@ academyTestsController.post(
     }
   }
 );
+// ===============================
+// POST /api/academy/tests/lesson/:lessonId/start
+// Започване на тест по lessonId
+// ===============================
+academyTestsController.post('/lesson/:lessonId/start', isAuth, async (req, res, next) => {
+  try {
+    const lessonId = parseInt(req.params.lessonId);
+    const userId = req.user.userId;
+
+    // Намери теста за този урок
+    const testData = await test.findOne({
+      where: { lessonId, isPublished: true }
+    });
+
+    if (!testData) {
+      return res.status(404).json({
+        success: false,
+        message: 'Test not found for this lesson',
+      });
+    }
+
+    let studentData = await getStudentByUserId(userId);
+
+    if (!studentData) {
+      studentData = await student.create({
+        userId,
+        status: 'active',
+      });
+    }
+
+    const existingAttempts = await test_attempt.count({
+      where: {
+        testId: testData.id,
+        studentId: studentData.id,
+      },
+    });
+
+    if (existingAttempts >= testData.maxAttempts) {
+      return res.status(400).json({
+        success: false,
+        message: 'Maximum attempts reached',
+      });
+    }
+
+    const inProgressAttempt = await test_attempt.findOne({
+      where: {
+        testId: testData.id,
+        studentId: studentData.id,
+        status: 'in_progress',
+      },
+    });
+
+    if (inProgressAttempt) {
+      const questions = await getQuestionsForAttempt(testData, inProgressAttempt.id);
+
+      return res.status(200).json({
+        success: true,
+        message: 'Continuing existing attempt',
+        attempt: inProgressAttempt,
+        test: testData,
+        questions,
+        timeRemaining: calculateTimeRemaining(inProgressAttempt, testData),
+      });
+    }
+
+    const attempt = await test_attempt.create({
+      testId: testData.id,
+      studentId: studentData.id,
+      status: 'in_progress',
+      startedAt: new Date(),
+      attemptNumber: existingAttempts + 1,
+    });
+
+    const questions = await getQuestionsForAttempt(testData, attempt.id);
+
+    res.status(201).json({
+      success: true,
+      message: 'Test started',
+      attempt,
+      test: testData,
+      questions,
+      timeLimit: testData.timeLimitMinutes,
+    });
+  } catch (err) {
+    console.error('❌ [START TEST BY LESSON] Error:', err);
+    next(err);
+  }
+});
+// Backend - добави преди другите GET endpoints
+academyTestsController.get('/lesson/:lessonId/attempt', isAuth, async (req, res, next) => {
+  try {
+    const lessonId = parseInt(req.params.lessonId);
+    const userId = req.user.userId;
+
+    const testData = await test.findOne({
+      where: { lessonId, isPublished: true }
+    });
+
+    if (!testData) {
+      return res.status(404).json({
+        success: false,
+        message: 'Test not found for this lesson',
+      });
+    }
+
+    const studentData = await getStudentByUserId(userId);
+
+    if (!studentData) {
+      return res.status(404).json({
+        success: false,
+        message: 'Student profile not found',
+      });
+    }
+
+    const attempt = await test_attempt.findOne({
+      where: {
+        testId: testData.id,
+        studentId: studentData.id,
+        status: 'in_progress',
+      },
+    });
+
+    if (!attempt) {
+      return res.status(404).json({
+        success: false,
+        message: 'No active attempt found',
+      });
+    }
+
+    const questions = await getQuestionsForAttempt(testData, attempt.id);
+
+    res.status(200).json({
+      success: true,
+      test: testData,
+      attempt,
+      questions,
+      timeRemaining: calculateTimeRemaining(attempt, testData),
+    });
+  } catch (err) {
+    console.error('❌ [GET ATTEMPT BY LESSON] Error:', err);
+    next(err);
+  }
+});
 
 module.exports = academyTestsController;

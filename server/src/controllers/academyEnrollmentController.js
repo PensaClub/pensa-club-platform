@@ -65,7 +65,25 @@ const calculateCourseProgress = async (enrollmentId, courseId) => {
 
   return Math.round((completedLessons / totalLessons) * 100);
 };
-
+// ===============================
+// HELPER: Find lesson by slug or id
+// ===============================
+const findLessonBySlugOrId = async (slugOrId) => {
+  const where = isNaN(slugOrId)
+    ? { slug: slugOrId }
+    : { id: parseInt(slugOrId) };
+  return await lesson.findOne({
+    where,
+    include: [{ model: course, as: 'course' }],
+  });
+};
+// ===============================
+// HELPER: Check if user has privileged access
+// ===============================
+const isPrivilegedUser = (userRole) => {
+  const privilegedRoles = ['admin', 'moderator', 'mentor'];
+  return privilegedRoles.includes(userRole);
+};
 // ===============================
 // HELPER: Check course completion
 // ===============================
@@ -524,34 +542,49 @@ academyEnrollmentController.get(
 // =========================================================
 
 // ===============================
-// POST /api/academy/enrollment/lessons/:lessonId/start
-// Започване на урок
+// POST /api/academy/enrollment/lessons/:lessonSlug/start
+// Започване на урок (поддържа slug и id)
 // ===============================
 academyEnrollmentController.post(
-  '/lessons/:lessonId/start',
+  '/lessons/:lessonSlug/start',
   isAuth,
   async (req, res, next) => {
     try {
       const userId = req.user.userId;
-      const lessonId = parseInt(req.params.lessonId);
+      const userRole = req.user.role;
+      const { lessonSlug } = req.params;
 
+      // Find lesson by slug or id
+      const lessonData = await findLessonBySlugOrId(lessonSlug);
+
+      if (!lessonData) {
+        return res.status(404).json({
+          success: false,
+          message: 'Lesson not found',
+        });
+      }
+
+      // Privileged users can access without student profile
+      if (isPrivilegedUser(userRole)) {
+        return res.status(200).json({
+          success: true,
+          message: 'Lesson started (privileged access)',
+          progress: {
+            lessonId: lessonData.id,
+            status: 'in_progress',
+            progressPercentage: 0,
+            privilegedAccess: true,
+          },
+        });
+      }
+
+      // Regular flow for students
       const studentData = await getStudentByUserId(userId);
 
       if (!studentData) {
         return res.status(404).json({
           success: false,
           message: 'Student profile not found',
-        });
-      }
-
-      const lessonData = await lesson.findByPk(lessonId, {
-        include: [{ model: course, as: 'course' }],
-      });
-
-      if (!lessonData) {
-        return res.status(404).json({
-          success: false,
-          message: 'Lesson not found',
         });
       }
 
@@ -592,7 +625,7 @@ academyEnrollmentController.post(
       let progress = await student_lesson.findOne({
         where: {
           studentId: studentData.id,
-          lessonId,
+          lessonId: lessonData.id,
           enrollmentId: enrollment?.id || null,
         },
       });
@@ -600,7 +633,7 @@ academyEnrollmentController.post(
       if (!progress) {
         progress = await student_lesson.create({
           studentId: studentData.id,
-          lessonId,
+          lessonId: lessonData.id,
           enrollmentId: enrollment?.id || null,
           status: 'in_progress',
           startedAt: new Date(),
@@ -617,7 +650,7 @@ academyEnrollmentController.post(
       if (enrollment) {
         await enrollment.update({
           lastAccessedAt: new Date(),
-          currentLessonId: lessonId,
+          currentLessonId: lessonData.id,
         });
       }
 
@@ -634,19 +667,44 @@ academyEnrollmentController.post(
 );
 
 // ===============================
-// POST /api/academy/enrollment/lessons/:lessonId/progress
-// Обновяване на прогрес
+// POST /api/academy/enrollment/lessons/:lessonSlug/progress
+// Обновяване на прогрес (поддържа slug и id)
 // ===============================
 academyEnrollmentController.post(
-  '/lessons/:lessonId/progress',
+  '/lessons/:lessonSlug/progress',
   isAuth,
   validateBody(lessonProgressUpdateSchema),
   async (req, res, next) => {
     try {
       const userId = req.user.userId;
-      const lessonId = parseInt(req.params.lessonId);
+      const userRole = req.user.role;
+      const { lessonSlug } = req.params;
       const { progressPercentage, watchedSeconds, videoPosition } = req.body;
 
+      // Find lesson by slug or id
+      const lessonData = await findLessonBySlugOrId(lessonSlug);
+
+      if (!lessonData) {
+        return res.status(404).json({
+          success: false,
+          message: 'Lesson not found',
+        });
+      }
+
+      // Privileged users - just return success without tracking
+      if (isPrivilegedUser(userRole)) {
+        return res.status(200).json({
+          success: true,
+          message: 'Progress updated (privileged access)',
+          progress: {
+            lessonId: lessonData.id,
+            progressPercentage: progressPercentage || 0,
+            privilegedAccess: true,
+          },
+        });
+      }
+
+      // Regular flow for students
       const studentData = await getStudentByUserId(userId);
 
       if (!studentData) {
@@ -656,17 +714,31 @@ academyEnrollmentController.post(
         });
       }
 
-      const progress = await student_lesson.findOne({
+      let progress = await student_lesson.findOne({
         where: {
           studentId: studentData.id,
-          lessonId,
+          lessonId: lessonData.id,
         },
       });
 
+      // Auto-create progress if not exists (auto-start)
       if (!progress) {
-        return res.status(404).json({
-          success: false,
-          message: 'Lesson progress not found. Start the lesson first.',
+        const enrollment = await course_enrollment.findOne({
+          where: {
+            studentId: studentData.id,
+            courseId: lessonData.courseId,
+            status: 'active',
+          },
+        });
+
+        progress = await student_lesson.create({
+          studentId: studentData.id,
+          lessonId: lessonData.id,
+          enrollmentId: enrollment?.id || null,
+          status: 'in_progress',
+          startedAt: new Date(),
+          progressPercentage: 0,
+          timeSpentMinutes: 0,
         });
       }
 
@@ -677,7 +749,6 @@ academyEnrollmentController.post(
       }
 
       if (watchedSeconds !== undefined) {
-        // Convert seconds to minutes and add to existing time
         const additionalMinutes = Math.floor(watchedSeconds / 60);
         updates.timeSpentMinutes = (progress.timeSpentMinutes || 0) + additionalMinutes;
       }
@@ -703,17 +774,44 @@ academyEnrollmentController.post(
 );
 
 // ===============================
-// POST /api/academy/enrollment/lessons/:lessonId/complete
-// Завършване на урок
+// POST /api/academy/enrollment/lessons/:lessonSlug/complete
+// Завършване на урок (поддържа slug и id)
 // ===============================
 academyEnrollmentController.post(
-  '/lessons/:lessonId/complete',
+  '/lessons/:lessonSlug/complete',
   isAuth,
   async (req, res, next) => {
     try {
       const userId = req.user.userId;
-      const lessonId = parseInt(req.params.lessonId);
+      const userRole = req.user.role;
+      const { lessonSlug } = req.params;
 
+      // Find lesson by slug or id
+      const lessonData = await findLessonBySlugOrId(lessonSlug);
+
+      if (!lessonData) {
+        return res.status(404).json({
+          success: false,
+          message: 'Lesson not found',
+        });
+      }
+
+      // Privileged users - just return success without tracking
+      if (isPrivilegedUser(userRole)) {
+        return res.status(200).json({
+          success: true,
+          message: 'Lesson completed (privileged access)',
+          progress: {
+            lessonId: lessonData.id,
+            status: 'completed',
+            progressPercentage: 100,
+            privilegedAccess: true,
+          },
+          earnedCredits: 0,
+        });
+      }
+
+      // Regular flow for students
       const studentData = await getStudentByUserId(userId);
 
       if (!studentData) {
@@ -723,26 +821,31 @@ academyEnrollmentController.post(
         });
       }
 
-      const lessonData = await lesson.findByPk(lessonId);
-
-      if (!lessonData) {
-        return res.status(404).json({
-          success: false,
-          message: 'Lesson not found',
-        });
-      }
-
-      const progress = await student_lesson.findOne({
+      let progress = await student_lesson.findOne({
         where: {
           studentId: studentData.id,
-          lessonId,
+          lessonId: lessonData.id,
         },
       });
 
+      // Auto-create progress if not exists (auto-start + complete)
       if (!progress) {
-        return res.status(404).json({
-          success: false,
-          message: 'Lesson progress not found. Start the lesson first.',
+        const enrollment = await course_enrollment.findOne({
+          where: {
+            studentId: studentData.id,
+            courseId: lessonData.courseId,
+            status: 'active',
+          },
+        });
+
+        progress = await student_lesson.create({
+          studentId: studentData.id,
+          lessonId: lessonData.id,
+          enrollmentId: enrollment?.id || null,
+          status: 'in_progress',
+          startedAt: new Date(),
+          progressPercentage: 0,
+          timeSpentMinutes: 0,
         });
       }
 
@@ -828,17 +931,49 @@ academyEnrollmentController.post(
 );
 
 // ===============================
-// GET /api/academy/enrollment/lessons/:lessonId/progress
-// Статус на урок
+// GET /api/academy/enrollment/lessons/:lessonSlug/progress
+// Статус на урок (поддържа slug и id)
 // ===============================
 academyEnrollmentController.get(
-  '/lessons/:lessonId/progress',
+  '/lessons/:lessonSlug/progress',
   isAuth,
   async (req, res, next) => {
     try {
       const userId = req.user.userId;
-      const lessonId = parseInt(req.params.lessonId);
+      const userRole = req.user.role;
+      const { lessonSlug } = req.params;
 
+      // Find lesson by slug or id
+      const lessonData = await findLessonBySlugOrId(lessonSlug);
+
+      if (!lessonData) {
+        return res.status(404).json({
+          success: false,
+          message: 'Lesson not found',
+        });
+      }
+
+      // Privileged users - return mock progress
+      if (isPrivilegedUser(userRole)) {
+        return res.status(200).json({
+          success: true,
+          progress: {
+            lessonId: lessonData.id,
+            status: 'not_started',
+            progressPercentage: 0,
+            privilegedAccess: true,
+            lesson: {
+              id: lessonData.id,
+              title: lessonData.title,
+              slug: lessonData.slug,
+              hasTest: lessonData.hasTest,
+              creditsForCompletion: lessonData.creditsForCompletion,
+            },
+          },
+        });
+      }
+
+      // Regular flow for students
       const studentData = await getStudentByUserId(userId);
 
       if (!studentData) {
@@ -851,7 +986,7 @@ academyEnrollmentController.get(
       const progress = await student_lesson.findOne({
         where: {
           studentId: studentData.id,
-          lessonId,
+          lessonId: lessonData.id,
         },
         include: [
           {

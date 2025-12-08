@@ -12,7 +12,12 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: 'id',
         as: 'student',
       });
-
+      // Has many attempt answers
+      student_test_attempt.hasMany(models.test_attempt_answer, {
+        foreignKey: 'attemptId',
+        sourceKey: 'id',
+        as: 'attemptAnswers',
+      })
       // Belongs to test
       student_test_attempt.belongsTo(models.lesson_test, {
         foreignKey: 'testId',
@@ -78,7 +83,7 @@ module.exports = (sequelize, DataTypes) => {
       },
 
       // === РЕЗУЛТАТИ ===
-      
+
       // answers: JSON с отговорите на студента
       // Формат: { questionId: selectedAnswerId или [selectedAnswerIds] или "text" }
       answers: {
@@ -122,7 +127,7 @@ module.exports = (sequelize, DataTypes) => {
       },
 
       // === СТАТУС ===
-      
+
       // status: Статус на опита
       // - 'in_progress': Студентът решава теста
       // - 'completed': Завършен

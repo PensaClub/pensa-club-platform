@@ -421,17 +421,27 @@ const AcademyLessonPlayer = () => {
     });
   };
 
-  const getMaterialIcon = (material) => {
-    const type = material.type?.toLowerCase() || material.fileType?.toLowerCase() || '';
-    const name = material.name?.toLowerCase() || material.title?.toLowerCase() || '';
-    
-    if (type.includes('pdf') || name.endsWith('.pdf')) return '📄';
-    if (type.includes('doc') || name.endsWith('.doc') || name.endsWith('.docx')) return '📝';
-    if (type.includes('video') || name.endsWith('.mp4')) return '🎬';
-    if (type.includes('image') || name.endsWith('.jpg') || name.endsWith('.png')) return '🖼️';
-    if (type.includes('zip') || type.includes('rar')) return '📦';
-    return '🔗';
-  };
+  
+const getMaterialIcon = (material) => {
+  const type = material.materialType?.toLowerCase() || material.mimeType?.toLowerCase() || '';
+  const name = material.originalFileName?.toLowerCase() || material.title?.toLowerCase() || '';
+  
+  if (type.includes('pdf') || name.endsWith('.pdf')) return '📄';
+  if (type.includes('doc') || name.endsWith('.doc') || name.endsWith('.docx')) return '📝';
+  if (type.includes('video') || type.includes('mp4') || name.endsWith('.mp4')) return '🎬';
+  if (type.includes('image') || type.includes('png') || type.includes('jpg')) return '🖼️';
+  if (type.includes('zip') || type.includes('rar')) return '📦';
+  if (type.includes('excel') || type.includes('spreadsheet') || name.endsWith('.xlsx')) return '📊';
+  if (type.includes('presentation') || name.endsWith('.pptx')) return '📽️';
+  if (type.includes('audio') || name.endsWith('.mp3')) return '🎵';
+  return '🔗';
+};
+const formatFileSize = (bytes) => {
+  if (!bytes) return '';
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+};
 
   // =========================================================
   //                    RENDER STATES
@@ -872,34 +882,89 @@ const AcademyLessonPlayer = () => {
 
               {/* Materials */}
               {materials.length > 0 && (
-                <div className="lp-info__materials">
-                  <h3>📎 {t('academyLessonPlayer.materials', 'Материали')} ({materials.length})</h3>
-                  <div className="lp-info__materials-list">
-                    {materials.map((material, idx) => (
-                      <a 
-                        key={material.id || idx}
-                        href={material.url || material.fileUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="lp-info__material"
-                        download={material.downloadable !== false}
-                      >
-                        <span className="lp-info__material-icon">
-                          {getMaterialIcon(material)}
-                        </span>
-                        <span className="lp-info__material-name">
-                          {material.name || material.title || 'Материал'}
-                        </span>
-                        <svg className="lp-info__material-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                          <polyline points="7 10 12 15 17 10" />
-                          <line x1="12" y1="15" x2="12" y2="3" />
-                        </svg>
-                      </a>
-                    ))}
-                  </div>
-                </div>
+  <div className="lp-materials">
+    <div className="lp-materials__header">
+      <h3>
+        <span className="lp-materials__icon">📎</span>
+        {t('academyLessonPlayer.materials', 'Материали')}
+        <span className="lp-materials__count">{materials.length}</span>
+      </h3>
+    </div>
+    
+    <div className="lp-materials__list">
+      {materials.map((material, idx) => (
+        <a 
+          key={material.id || idx}
+          href={material.fileUrl || material.externalUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`lp-materials__item ${material.isRequired ? 'lp-materials__item--required' : ''}`}
+          download={material.isDownloadable !== false}
+          style={{ '--delay': `${idx * 0.05}s` }}
+        >
+          {/* Icon */}
+          <div className="lp-materials__item-icon">
+            {getMaterialIcon(material)}
+          </div>
+          
+          {/* Info */}
+          <div className="lp-materials__item-info">
+            <div className="lp-materials__item-header">
+              <h4 className="lp-materials__item-title">
+                {material.title || material.originalFileName || 'Материал'}
+              </h4>
+              {material.isRequired && (
+                <span className="lp-materials__item-required-badge">
+                  {t('academyLessonPlayer.required', 'Задължителен')}
+                </span>
               )}
+            </div>
+            
+            {material.description && (
+              <p className="lp-materials__item-description">
+                {material.description}
+              </p>
+            )}
+            
+            <div className="lp-materials__item-meta">
+              {material.materialType && (
+                <span className="lp-materials__item-type">
+                  {material.materialType.toUpperCase()}
+                </span>
+              )}
+              {material.fileSize && (
+                <span className="lp-materials__item-size">
+                  {formatFileSize(material.fileSize)}
+                </span>
+              )}
+              {material.viewsCount > 0 && (
+                <span className="lp-materials__item-views">
+                  👁️ {material.viewsCount.toLocaleString()}
+                </span>
+              )}
+              {material.downloadsCount > 0 && (
+                <span className="lp-materials__item-downloads">
+                  ⬇️ {material.downloadsCount.toLocaleString()}
+                </span>
+              )}
+            </div>
+          </div>
+          
+          {/* Download Button */}
+          <div className="lp-materials__item-action">
+            <div className="lp-materials__item-download">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+)}
             </div>
           </div>
         </div>

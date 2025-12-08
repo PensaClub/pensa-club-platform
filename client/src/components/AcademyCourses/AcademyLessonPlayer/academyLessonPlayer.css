@@ -1195,3 +1195,316 @@
     font-size: 1.5rem;
   }
 }
+/* =========================================================
+   MATERIALS - ENHANCED DESIGN
+   ========================================================= */
+
+.lp-materials {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.lp-materials__header {
+  margin-bottom: 16px;
+}
+
+.lp-materials__header h3 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  margin: 0;
+  color: #f1f5f9;
+}
+
+.lp-materials__icon {
+  font-size: 1.25rem;
+}
+
+.lp-materials__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 8px;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(139, 92, 246, 0.1));
+  color: #a78bfa;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.lp-materials__list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Material Item */
+.lp-materials__item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 18px 20px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 16px;
+  color: #e2e8f0;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  animation: lp-materialFadeIn 0.4s ease forwards;
+  animation-delay: var(--delay, 0s);
+  opacity: 0;
+}
+
+@keyframes lp-materialFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.lp-materials__item:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(139, 92, 246, 0.3);
+  transform: translateX(6px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+
+.lp-materials__item--required {
+  border-color: rgba(251, 191, 36, 0.2);
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.05), transparent);
+}
+
+.lp-materials__item--required:hover {
+  border-color: rgba(251, 191, 36, 0.4);
+}
+
+/* Icon */
+.lp-materials__item-icon {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(139, 92, 246, 0.05));
+  border: 1px solid rgba(139, 92, 246, 0.1);
+  border-radius: 14px;
+  font-size: 1.75rem;
+  flex-shrink: 0;
+  transition: all 0.3s;
+}
+
+.lp-materials__item:hover .lp-materials__item-icon {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.25), rgba(139, 92, 246, 0.1));
+  border-color: rgba(139, 92, 246, 0.3);
+  transform: scale(1.05);
+}
+
+/* Info */
+.lp-materials__item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.lp-materials__item-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+
+.lp-materials__item-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #f8fafc;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.lp-materials__item-required-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(251, 191, 36, 0.1));
+  color: #fbbf24;
+  border-radius: 20px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.lp-materials__item-description {
+  font-size: 0.875rem;
+  color: #94a3b8;
+  margin: 0 0 10px;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Meta */
+.lp-materials__item-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.lp-materials__item-type {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 6px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: #cbd5e1;
+  letter-spacing: 0.5px;
+}
+
+.lp-materials__item-size,
+.lp-materials__item-views,
+.lp-materials__item-downloads {
+  font-size: 0.8125rem;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.lp-materials__item-size::before {
+  content: '•';
+  margin-right: 4px;
+  color: #475569;
+}
+
+/* Download Action */
+.lp-materials__item-action {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.lp-materials__item-download {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.05);
+  border-radius: 12px;
+  color: #64748b;
+  transition: all 0.3s;
+}
+
+.lp-materials__item-download svg {
+  width: 20px;
+  height: 20px;
+}
+
+.lp-materials__item:hover .lp-materials__item-download {
+  background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+  color: white;
+  transform: scale(1.1);
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.4);
+}
+
+/* Empty State */
+.lp-materials--empty {
+  text-align: center;
+  padding: 40px;
+  background: rgba(255,255,255,0.02);
+  border-radius: 16px;
+  border: 1px dashed rgba(255,255,255,0.1);
+}
+
+.lp-materials--empty-icon {
+  font-size: 3rem;
+  margin-bottom: 12px;
+  opacity: 0.5;
+}
+
+.lp-materials--empty p {
+  font-size: 0.9375rem;
+  color: #64748b;
+  margin: 0;
+}
+
+/* =========================================================
+   RESPONSIVE - Materials
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .lp-materials__item {
+    padding: 14px 16px;
+    gap: 12px;
+  }
+  
+  .lp-materials__item-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 1.5rem;
+    border-radius: 12px;
+  }
+  
+  .lp-materials__item-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  
+  .lp-materials__item-title {
+    font-size: 0.9375rem;
+  }
+  
+  .lp-materials__item-description {
+    font-size: 0.8125rem;
+    -webkit-line-clamp: 1;
+  }
+  
+  .lp-materials__item-meta {
+    gap: 8px;
+  }
+  
+  .lp-materials__item-views,
+  .lp-materials__item-downloads {
+    display: none;
+  }
+  
+  .lp-materials__item-download {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .lp-materials__item-download svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .lp-materials__item {
+    flex-wrap: wrap;
+  }
+  
+  .lp-materials__item-info {
+    flex: 1 1 calc(100% - 60px);
+  }
+  
+  .lp-materials__item-action {
+    margin-left: auto;
+  }
+}
