@@ -13307,5 +13307,52 @@
     "hours": "Stunden",
     "minutes": "Min",
     "seconds": "Sek"
-  }
+  },
+  "academyTestPlayer": {
+    "loading": "Test wird geladen...",
+    "error": "Fehler",
+    "backToLesson": "Zurück zur Lektion",
+    "loginRequired": "Anmeldung erforderlich",
+    "loginRequiredDesc": "Sie müssen sich anmelden, um diesen Test zu machen.",
+    "login": "Anmelden",
+    "notFound": "Test nicht gefunden",
+    "questionOf": "Frage {{current}} von {{total}}",
+    "questions": "Fragen",
+    "answered": "Beantwortet",
+    "unanswered": "Unbeantwortet",
+    "current": "Aktuell",
+    "question": "Frage",
+    "point": "Punkt",
+    "points": "Punkte",
+    "typeSingle": "Einzelauswahl",
+    "typeMultiple": "Mehrfachauswahl",
+    "typeTrueFalse": "Richtig/Falsch",
+    "prev": "Vorherige",
+    "next": "Nächste",
+    "submit": "Test abgeben",
+    "submitting": "Wird abgegeben...",
+    "confirmSubmitUnanswered": "Sie haben {{count}} unbeantwortete Fragen. Möchten Sie den Test wirklich abgeben?",
+    "passingScore": "Bestehen",
+    "maxCredits": "Max. Credits",
+    "attempt": "Versuch",
+    "results": {
+      "passed": "Herzlichen Glückwunsch!",
+      "failed": "Versuchen Sie es erneut",
+      "passedDesc": "Sie haben den Test erfolgreich bestanden!",
+      "failedDesc": "Leider haben Sie die Mindestpunktzahl nicht erreicht.",
+      "yourScore": "Ihr Ergebnis",
+      "correct": "Richtig",
+      "total": "Gesamt",
+      "passing": "Bestehen",
+      "creditsEarned": "Credits",
+      "backToLesson": "Zurück zur Lektion",
+      "tryAgain": "Erneut versuchen",
+      "attemptInfo": "Versuch {{current}} von {{max}}"
+    }
+  },
+  "results": {
+  "wrong": "Falsch",
+  "continueCourse": "Mit dem Kurs fortfahren",
+  "noMoreAttempts": "Keine weiteren Versuche"
+}
 }

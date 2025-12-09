@@ -14309,5 +14309,52 @@
     "hours": "часа",
     "minutes": "мин",
     "seconds": "сек"
-  }
+  },
+  "academyTestPlayer": {
+    "loading": "Зареждане на теста...",
+    "error": "Грешка",
+    "backToLesson": "Към урока",
+    "loginRequired": "Влезте в профила си",
+    "loginRequiredDesc": "Трябва да влезете, за да решите теста.",
+    "login": "Вход",
+    "notFound": "Тестът не е намерен",
+    "questionOf": "Въпрос {{current}} от {{total}}",
+    "questions": "Въпроси",
+    "answered": "Отговорен",
+    "unanswered": "Неотговорен",
+    "current": "Текущ",
+    "question": "Въпрос",
+    "point": "точка",
+    "points": "точки",
+    "typeSingle": "Един верен",
+    "typeMultiple": "Няколко верни",
+    "typeTrueFalse": "Вярно/Невярно",
+    "prev": "Предишен",
+    "next": "Следващ",
+    "submit": "Предай теста",
+    "submitting": "Предаване...",
+    "confirmSubmitUnanswered": "Имате {{count}} неотговорени въпроса. Сигурни ли сте, че искате да предадете теста?",
+    "passingScore": "Минимум",
+    "maxCredits": "Макс. кредити",
+    "attempt": "Опит",
+    "results": {
+      "passed": "Поздравления!",
+      "failed": "Опитайте отново",
+      "passedDesc": "Успешно преминахте теста!",
+      "failedDesc": "За съжаление не достигнахте минималния резултат.",
+      "yourScore": "Вашият резултат",
+      "correct": "Верни",
+      "total": "Общо",
+      "passing": "Минимум",
+      "creditsEarned": "кредита",
+      "backToLesson": "Към урока",
+      "tryAgain": "Опитай отново",
+      "attemptInfo": "Опит {{current}} от {{max}}"
+    }
+  },
+   "results": {
+      "wrong": "Грешни",
+      "continueCourse": "Продължи с курса",
+      "noMoreAttempts": "Няма повече опити"
+    }
 }

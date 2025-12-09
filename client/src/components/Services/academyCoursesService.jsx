@@ -368,7 +368,9 @@ export const academyCoursesServiceFactory = () => {
     rejectEnrollment: async (courseId, studentId, reason = null) => {
       return requester.post(`${apiUrl}/academy/enrollment/admin/courses/${courseId}/students/${studentId}/reject`, { reason });
     },
-
+startLessonBySlug: async (lessonSlug) => {
+  return requester.post(`${apiUrl}/academy/enrollment/lessons/${lessonSlug}/start`);
+},
     // =========================================================
     //                    TESTS - ADMIN
     // =========================================================
@@ -437,9 +439,8 @@ startTest: async (lessonId) => {
 },
 
     getCurrentAttempt: async (testId) => {
-      return requester.get(`${apiUrl}/academy/tests/${testId}/attempt`);
-    },
-
+  return requester.get(`${apiUrl}/academy/tests/${testId}/attempt`);
+},
     submitAnswer: async (testId, answerData) => {
       return requester.post(`${apiUrl}/academy/tests/${testId}/answer`, answerData);
     },
@@ -451,7 +452,14 @@ startTest: async (lessonId) => {
     getTestResults: async (testId) => {
       return requester.get(`${apiUrl}/academy/tests/${testId}/results`);
     },
+getTestStatus: async (lessonId) => {
+  return requester.get(`${apiUrl}/academy/tests/lesson/${lessonId}/status`);
+},
 
+// Резултат от конкретен опит
+getTestResultByAttempt: async (testId, attemptId) => {
+  return requester.get(`${apiUrl}/academy/tests/${testId}/result/${attemptId}`);
+},
     // =========================================================
     //                    CERTIFICATES
     // =========================================================

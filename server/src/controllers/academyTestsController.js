@@ -942,6 +942,120 @@ academyTestsController.get('/:id/preview', isAuth, async (req, res, next) => {
 });
 
 // ===============================
+// GET /api/academy/tests/lesson/:lessonId/status
+// Статус на теста за урок + история на опити
+// ===============================
+academyTestsController.get('/lesson/:lessonId/status', isAuth, async (req, res, next) => {
+  try {
+    const lessonId = parseInt(req.params.lessonId);
+    const userId = req.user.userId;
+    const userRole = req.user.role;
+
+    // Намери теста за този урок
+    const testData = await test.findOne({
+      where: { lessonId, isPublished: true },
+      attributes: [
+        'id', 'title', 'description', 'totalQuestions', 'totalPoints',
+        'passingScore', 'maxAttempts', 'timeLimitMinutes', 
+        'maxCredits', 'creditsForPassing', 'shuffleQuestions', 'shuffleAnswers',
+        'showCorrectAnswers', 'showScore', 'allowReview'
+      ]
+    });
+
+    if (!testData) {
+      return res.status(404).json({
+        success: false,
+        message: 'Test not found for this lesson',
+      });
+    }
+
+    // Privileged users - винаги могат
+    const privilegedRoles = ['admin', 'moderator', 'mentor'];
+    const isPrivileged = privilegedRoles.includes(userRole);
+
+    const studentData = await getStudentByUserId(userId);
+
+    // Ако няма студентски профил - няма опити
+    if (!studentData) {
+      return res.status(200).json({
+        success: true,
+        test: testData,
+        attempts: [],
+        bestAttempt: null,
+        lastAttempt: null,
+        hasPassedTest: false,
+        activeAttempt: null,
+        canStartNew: true,
+        totalAttempts: 0,
+        remainingAttempts: testData.maxAttempts || null,
+        isPrivileged,
+      });
+    }
+
+    // Вземи всички опити на този студент
+    const attempts = await test_attempt.findAll({
+      where: {
+        testId: testData.id,
+        studentId: studentData.id,
+      },
+      attributes: [
+        'id', 'attemptNumber', 'status', 'scorePercentage', 'passed',
+        'earnedPoints', 'totalPoints', 'correctAnswers', 'wrongAnswers',
+        'startedAt', 'completedAt', 'earnedCredits'
+      ],
+      order: [['attemptNumber', 'DESC']],
+    });
+
+    // Намери активен (in_progress) опит
+    const activeAttempt = attempts.find(a => a.status === 'in_progress') || null;
+
+    // Филтрирай завършените опити
+    const completedAttempts = attempts.filter(a => a.status === 'completed');
+
+    // Намери най-добър резултат
+    let bestAttempt = null;
+    if (completedAttempts.length > 0) {
+      bestAttempt = completedAttempts.reduce((best, current) => 
+        (current.scorePercentage > best.scorePercentage) ? current : best
+      );
+    }
+
+    // Последен опит
+    const lastAttempt = completedAttempts.length > 0 ? completedAttempts[0] : null;
+
+    // Дали е преминал някога
+    const hasPassedTest = completedAttempts.some(a => a.passed);
+
+    // Може ли да започне нов опит
+    // null или 0 maxAttempts = безкрайни опити
+    const hasUnlimitedAttempts = !testData.maxAttempts || testData.maxAttempts === 0;
+    const canStartNew = !activeAttempt && (hasUnlimitedAttempts || attempts.length < testData.maxAttempts);
+
+    // Оставащи опити
+    const remainingAttempts = hasUnlimitedAttempts 
+      ? null  // null означава безкрайни
+      : Math.max(0, testData.maxAttempts - attempts.length);
+
+    res.status(200).json({
+      success: true,
+      test: testData,
+      attempts: attempts.map(a => a.get({ plain: true })),
+      bestAttempt: bestAttempt ? bestAttempt.get({ plain: true }) : null,
+      lastAttempt: lastAttempt ? lastAttempt.get({ plain: true }) : null,
+      hasPassedTest,
+      activeAttempt: activeAttempt ? activeAttempt.get({ plain: true }) : null,
+      canStartNew,
+      totalAttempts: attempts.length,
+      remainingAttempts,
+      isPrivileged,
+    });
+  } catch (err) {
+    console.error('❌ [GET TEST STATUS] Error:', err);
+    next(err);
+  }
+});
+
+// ===============================
 // POST /api/academy/tests/:id/start
 // Започване на тест
 // ===============================
@@ -982,7 +1096,7 @@ academyTestsController.post('/:id/start', isAuth, async (req, res, next) => {
       },
     });
 
-    if (existingAttempts >= testData.maxAttempts) {
+    if (testData.maxAttempts && existingAttempts >= testData.maxAttempts) {
       return res.status(400).json({
         success: false,
         message: 'Maximum attempts reached',
@@ -1657,10 +1771,16 @@ academyTestsController.post('/lesson/:lessonId/start', isAuth, async (req, res, 
   try {
     const lessonId = parseInt(req.params.lessonId);
     const userId = req.user.userId;
+    const userRole = req.user.role;
 
-    // Намери теста за този урок
+    // Намери теста за този урок с информация за урока
     const testData = await test.findOne({
-      where: { lessonId, isPublished: true }
+      where: { lessonId, isPublished: true },
+      include: [{
+        model: lesson,
+        as: 'lesson',
+        attributes: ['id', 'courseId', 'isFree']
+      }]
     });
 
     if (!testData) {
@@ -1670,14 +1790,46 @@ academyTestsController.post('/lesson/:lessonId/start', isAuth, async (req, res, 
       });
     }
 
+    // Privileged users (admin/mentor/moderator) - skip enrollment check
+    const privilegedRoles = ['admin', 'moderator', 'mentor'];
+    const isPrivileged = privilegedRoles.includes(userRole);
+
     let studentData = await getStudentByUserId(userId);
 
-    if (!studentData) {
+    // За privileged users - създай student profile ако няма
+    if (isPrivileged && !studentData) {
       studentData = await student.create({
         userId,
         status: 'active',
       });
     }
+
+    // ========== ENROLLMENT CHECK ==========
+    if (!isPrivileged) {
+      if (!studentData) {
+        return res.status(403).json({
+          success: false,
+          message: 'Трябва да сте записани в курса, за да решите теста',
+        });
+      }
+
+      const enrollment = await course_enrollment.findOne({
+        where: {
+          studentId: studentData.id,
+          courseId: testData.lesson.courseId,
+          status: 'active'
+        }
+      });
+
+      // Ако урокът НЕ е безплатен и няма enrollment - забрани
+      if (!testData.lesson.isFree && !enrollment) {
+        return res.status(403).json({
+          success: false,
+          message: 'Трябва да сте записани в курса, за да решите теста',
+        });
+      }
+    }
+    // ======================================
 
     const existingAttempts = await test_attempt.count({
       where: {
@@ -1737,6 +1889,7 @@ academyTestsController.post('/lesson/:lessonId/start', isAuth, async (req, res, 
     next(err);
   }
 });
+
 // Backend - добави преди другите GET endpoints
 academyTestsController.get('/lesson/:lessonId/attempt', isAuth, async (req, res, next) => {
   try {

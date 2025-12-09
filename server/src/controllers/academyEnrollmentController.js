@@ -498,7 +498,7 @@ academyEnrollmentController.post(
 
 // ===============================
 // GET /api/academy/enrollment/courses/:courseId/check
-// Проверка дали е записан
+// Проверка дали е записан + реален прогрес
 // ===============================
 academyEnrollmentController.get(
   '/courses/:courseId/check',
@@ -506,7 +506,12 @@ academyEnrollmentController.get(
   async (req, res, next) => {
     try {
       const userId = req.user.userId;
+      const userRole = req.user.role;
       const courseId = parseInt(req.params.courseId);
+
+      // Privileged users - винаги имат достъп
+      const privilegedRoles = ['admin', 'moderator', 'mentor'];
+      const isPrivileged = privilegedRoles.includes(userRole);
 
       const studentData = await getStudentByUserId(userId);
 
@@ -515,9 +520,13 @@ academyEnrollmentController.get(
           success: true,
           enrolled: false,
           enrollment: null,
+          lessonsProgress: [],
+          stats: null,
+          isPrivileged,
         });
       }
 
+      // Вземи enrollment
       const enrollment = await course_enrollment.findOne({
         where: {
           studentId: studentData.id,
@@ -525,10 +534,126 @@ academyEnrollmentController.get(
         },
       });
 
+      // Вземи реалния прогрес по уроците (без explicit attributes - взема всички)
+      const lessonsProgress = await student_lesson.findAll({
+        where: {
+          studentId: studentData.id,
+        },
+        include: [
+          {
+            model: lesson,
+            as: 'lesson',
+            where: { courseId },
+            attributes: ['id', 'title', 'slug', 'sortOrder', 'hasTest', 'moduleId'],
+          },
+        ],
+      });
+
+      // Вземи общия брой публикувани уроци в курса
+      const totalLessonsInCourse = await lesson.count({
+        where: {
+          courseId,
+          isPublished: true,
+        },
+      });
+
+      // Изчисли статистики
+      const completedLessons = lessonsProgress.filter(lp => lp.status === 'completed').length;
+      const inProgressLessons = lessonsProgress.filter(lp => lp.status === 'in_progress').length;
+      const totalEarnedCredits = lessonsProgress.reduce((sum, lp) => sum + (lp.earnedCredits || 0), 0);
+      const totalTimeSpent = lessonsProgress.reduce((sum, lp) => sum + (lp.timeSpentMinutes || 0), 0);
+      const passedTests = lessonsProgress.filter(lp => lp.testPassed).length;
+
+      // Изчисли реален процент прогрес
+      const realProgressPercentage = totalLessonsInCourse > 0 
+        ? Math.round((completedLessons / totalLessonsInCourse) * 100) 
+        : 0;
+
+      // Ако има enrollment и данните са разминати - синхронизирай ги
+      if (enrollment) {
+        const needsUpdate = 
+          enrollment.completedLessons !== completedLessons ||
+          enrollment.progressPercentage !== realProgressPercentage ||
+          enrollment.totalCreditsEarned !== totalEarnedCredits;
+
+        if (needsUpdate) {
+          await enrollment.update({
+            completedLessons,
+            progressPercentage: realProgressPercentage,
+            totalCreditsEarned: totalEarnedCredits,
+            totalLessons: totalLessonsInCourse,
+          });
+          await enrollment.reload();
+        }
+      }
+
+      // Намери текущия/последния урок
+      const sortedProgress = [...lessonsProgress]
+        .filter(lp => lp.status === 'in_progress' || lp.status === 'completed')
+        .sort((a, b) => {
+          const dateA = a.completedAt || a.startedAt || new Date(0);
+          const dateB = b.completedAt || b.startedAt || new Date(0);
+          return new Date(dateB) - new Date(dateA);
+        });
+      
+      const lastAccessedLesson = sortedProgress[0] || null;
+
+      // Намери следващия урок за продължаване
+      const completedLessonIds = lessonsProgress
+        .filter(lp => lp.status === 'completed')
+        .map(lp => lp.lessonId);
+
+      const nextLesson = await lesson.findOne({
+        where: {
+          courseId,
+          isPublished: true,
+          ...(completedLessonIds.length > 0 && { id: { [Op.notIn]: completedLessonIds } }),
+        },
+        order: [['sortOrder', 'ASC']],
+        attributes: ['id', 'title', 'slug', 'sortOrder', 'moduleId'],
+      });
+
       res.status(200).json({
         success: true,
         enrolled: !!enrollment && enrollment.status === 'active',
         enrollment,
+        isPrivileged,
+        lessonsProgress: lessonsProgress.map(lp => {
+          const plain = lp.get({ plain: true });
+          return {
+            lessonId: plain.lessonId,
+            lessonSlug: plain.lesson?.slug,
+            lessonTitle: plain.lesson?.title,
+            status: plain.status,
+            progress: plain.progress || plain.progressPercentage || 0,
+            startedAt: plain.startedAt,
+            completedAt: plain.completedAt,
+            testPassed: plain.testPassed,
+            testScore: plain.testScore,
+            earnedCredits: plain.earnedCredits || 0,
+            timeSpentMinutes: plain.timeSpentMinutes || 0,
+          };
+        }),
+        stats: {
+          totalLessons: totalLessonsInCourse,
+          completedLessons,
+          inProgressLessons,
+          progressPercentage: realProgressPercentage,
+          totalEarnedCredits,
+          totalTimeSpentMinutes: totalTimeSpent,
+          passedTests,
+        },
+        currentLesson: lastAccessedLesson ? {
+          id: lastAccessedLesson.lessonId,
+          slug: lastAccessedLesson.lesson?.slug,
+          title: lastAccessedLesson.lesson?.title,
+          status: lastAccessedLesson.status,
+        } : null,
+        nextLesson: nextLesson ? {
+          id: nextLesson.id,
+          slug: nextLesson.slug,
+          title: nextLesson.title,
+        } : null,
       });
     } catch (err) {
       console.error('❌ [CHECK ENROLLMENT] Error:', err);
@@ -588,6 +713,7 @@ academyEnrollmentController.post(
         });
       }
 
+      // Намери enrollment (ако има)
       const enrollment = await course_enrollment.findOne({
         where: {
           studentId: studentData.id,
@@ -596,19 +722,19 @@ academyEnrollmentController.post(
         },
       });
 
-      if (!enrollment) {
-        if (!lessonData.isFree) {
-          return res.status(403).json({
-            success: false,
-            message: 'Must be enrolled in course to access this lesson',
-          });
-        }
+      // Проверка за достъп
+      if (!enrollment && !lessonData.isFree) {
+        return res.status(403).json({
+          success: false,
+          message: 'Must be enrolled in course to access this lesson',
+        });
       }
 
-      if (lessonData.prerequisiteLessonId && enrollment) {
+      // Проверка за prerequisite
+      if (lessonData.prerequisiteLessonId) {
         const prerequisiteCompleted = await student_lesson.findOne({
           where: {
-            enrollmentId: enrollment.id,
+            studentId: studentData.id,
             lessonId: lessonData.prerequisiteLessonId,
             status: 'completed',
           },
@@ -622,15 +748,16 @@ academyEnrollmentController.post(
         }
       }
 
+      // ПОПРАВКА: Търси progress САМО по student + lesson (без enrollmentId в where)
       let progress = await student_lesson.findOne({
         where: {
           studentId: studentData.id,
           lessonId: lessonData.id,
-          enrollmentId: enrollment?.id || null,
         },
       });
 
       if (!progress) {
+        // Създай нов progress
         progress = await student_lesson.create({
           studentId: studentData.id,
           lessonId: lessonData.id,
@@ -640,13 +767,26 @@ academyEnrollmentController.post(
           progressPercentage: 0,
           timeSpentMinutes: 0,
         });
-      } else if (progress.status === 'not_started') {
-        await progress.update({
-          status: 'in_progress',
-          startedAt: new Date(),
-        });
+      } else {
+        // ПОПРАВКА: Ако има enrollment, но progress.enrollmentId е null - свържи ги!
+        const updates = {};
+        
+        if (enrollment && !progress.enrollmentId) {
+          updates.enrollmentId = enrollment.id;
+        }
+        
+        if (progress.status === 'not_started') {
+          updates.status = 'in_progress';
+          updates.startedAt = new Date();
+        }
+        
+        if (Object.keys(updates).length > 0) {
+          await progress.update(updates);
+          await progress.reload();
+        }
       }
 
+      // Обнови enrollment lastAccessedAt
       if (enrollment) {
         await enrollment.update({
           lastAccessedAt: new Date(),
@@ -821,6 +961,16 @@ academyEnrollmentController.post(
         });
       }
 
+      // Намери enrollment
+      const enrollment = await course_enrollment.findOne({
+        where: {
+          studentId: studentData.id,
+          courseId: lessonData.courseId,
+          status: 'active',
+        },
+      });
+
+      // Търси progress САМО по student + lesson
       let progress = await student_lesson.findOne({
         where: {
           studentId: studentData.id,
@@ -830,14 +980,6 @@ academyEnrollmentController.post(
 
       // Auto-create progress if not exists (auto-start + complete)
       if (!progress) {
-        const enrollment = await course_enrollment.findOne({
-          where: {
-            studentId: studentData.id,
-            courseId: lessonData.courseId,
-            status: 'active',
-          },
-        });
-
         progress = await student_lesson.create({
           studentId: studentData.id,
           lessonId: lessonData.id,
@@ -847,15 +989,24 @@ academyEnrollmentController.post(
           progressPercentage: 0,
           timeSpentMinutes: 0,
         });
+      } else if (enrollment && !progress.enrollmentId) {
+        // ПОПРАВКА: Свържи с enrollment ако не е свързан
+        await progress.update({ enrollmentId: enrollment.id });
+        await progress.reload();
       }
 
+      // ПОПРАВКА: Ако вече е завършен - върни успех, не грешка
       if (progress.status === 'completed') {
-        return res.status(400).json({
-          success: false,
+        return res.status(200).json({
+          success: true,
           message: 'Lesson already completed',
+          alreadyCompleted: true,
+          progress,
+          earnedCredits: progress.earnedCredits || 0,
         });
       }
 
+      // Проверка за тест
       if (lessonData.hasTest && !progress.testPassed) {
         return res.status(400).json({
           success: false,
@@ -863,11 +1014,13 @@ academyEnrollmentController.post(
         });
       }
 
+      // Изчисли кредити
       let earnedCredits = lessonData.creditsForCompletion || 0;
       if (progress.testPassed && lessonData.creditsForTest) {
         earnedCredits += lessonData.creditsForTest;
       }
 
+      // Обнови progress
       await progress.update({
         status: 'completed',
         completedAt: new Date(),
@@ -875,35 +1028,37 @@ academyEnrollmentController.post(
         earnedCredits,
       });
 
+      // Обнови enrollment прогреса
       if (progress.enrollmentId) {
-        const enrollment = await course_enrollment.findByPk(progress.enrollmentId);
+        const enrollmentToUpdate = await course_enrollment.findByPk(progress.enrollmentId);
 
-        if (enrollment) {
+        if (enrollmentToUpdate) {
           const newProgress = await calculateCourseProgress(
-            enrollment.id,
+            enrollmentToUpdate.id,
             lessonData.courseId
           );
 
           const completedCount = await student_lesson.count({
             where: {
-              enrollmentId: enrollment.id,
+              enrollmentId: enrollmentToUpdate.id,
               status: 'completed',
             },
           });
 
-          await enrollment.update({
+          await enrollmentToUpdate.update({
             progressPercentage: newProgress,
             completedLessons: completedCount,
-            totalCreditsEarned: (enrollment.totalCreditsEarned || 0) + earnedCredits,
+            totalCreditsEarned: (enrollmentToUpdate.totalCreditsEarned || 0) + earnedCredits,
           });
 
+          // Провери за завършване на курса
           const isCompleted = await checkCourseCompletion(
-            enrollment.id,
+            enrollmentToUpdate.id,
             lessonData.courseId
           );
 
-          if (isCompleted && enrollment.status !== 'completed') {
-            await enrollment.update({
+          if (isCompleted && enrollmentToUpdate.status !== 'completed') {
+            await enrollmentToUpdate.update({
               status: 'completed',
               completedAt: new Date(),
               progressPercentage: 100,

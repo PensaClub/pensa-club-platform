@@ -77,6 +77,7 @@ import { AcademyCoursesProvider } from './components/contexts/AcademyCoursesProv
 import { AcademyCourses } from './components/AcademyCourses/AcademyCourses.jsx';
 import { AcademyCourseDetail } from './components/AcademyCourses/AcademyCourseDetail/AcademyCourseDetail.jsx';
 import AcademyLessonPlayer from './components/AcademyCourses/AcademyLessonPlayer/AcademyLessonPlayer.jsx';
+import AcademyTestPlayer from './components/AcademyCourses/AcademyTestPlayer/AcademyTestPlayer.jsx';
 
 // ✅ LAZY LOADING КОМПОНЕНТИ
 const ArticlesList = lazy(() => import('./components/Articles/ArticlesList/ArticlesList.jsx'));
@@ -231,6 +232,10 @@ function App() {
                                             <Route
                                               path="/academy/courses/:courseSlug/lessons/:lessonSlug"
                                               element={<AcademyLessonPlayer />}
+                                            />
+                                            <Route
+                                              path="/academy/courses/:courseSlug/lessons/:lessonSlug/test"
+                                              element={<AcademyTestPlayer />}
                                             />
                                             <Route path="/ad/details/:adId" element={<AdDetails />} />
                                             <Route path="/ad/edit/:adId" element={<EditAd />} />
