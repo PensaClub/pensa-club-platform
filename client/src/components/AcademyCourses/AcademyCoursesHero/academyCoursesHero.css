@@ -1,0 +1,379 @@
+/* src/components/AcademyCourses/AcademyCoursesHero/academyCoursesHero.css */
+
+.academyCoursesHero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #0f172a;
+}
+
+/* Background */
+.academyCoursesHero-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.academyCoursesHero-bg-gradient {
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(255, 99, 71, 0.15) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 40% at 80% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 40% at 20% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
+}
+
+.academyCoursesHero-bg-grid {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse at center, black 20%, transparent 70%);
+}
+
+.academyCoursesHero-bg-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.6;
+  animation: academyCoursesHero-float 8s ease-in-out infinite;
+}
+
+.academyCoursesHero-bg-glow--1 {
+  width: 400px;
+  height: 400px;
+  background: #ff6347;
+  top: -100px;
+  left: 10%;
+  animation-delay: 0s;
+}
+
+.academyCoursesHero-bg-glow--2 {
+  width: 300px;
+  height: 300px;
+  background: #3b82f6;
+  top: 50%;
+  right: 5%;
+  animation-delay: -3s;
+}
+
+.academyCoursesHero-bg-glow--3 {
+  width: 350px;
+  height: 350px;
+  background: #10b981;
+  bottom: -50px;
+  left: 30%;
+  animation-delay: -5s;
+}
+
+@keyframes academyCoursesHero-float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -30px) scale(1.05); }
+  66% { transform: translate(-20px, 20px) scale(0.95); }
+}
+
+/* Container */
+.academyCoursesHero-container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 120px 40px 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* Content */
+.academyCoursesHero-content {
+  text-align: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Badge */
+.academyCoursesHero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  background: rgba(255, 99, 71, 0.1);
+  border: 1px solid rgba(255, 99, 71, 0.3);
+  border-radius: 100px;
+  margin-bottom: 32px;
+  animation: academyCoursesHero-fadeIn 0.8s ease;
+}
+
+.academyCoursesHero-badge-dot {
+  width: 8px;
+  height: 8px;
+  background: #ff6347;
+  border-radius: 50%;
+  animation: academyCoursesHero-pulse 2s ease-in-out infinite;
+}
+
+@keyframes academyCoursesHero-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.2); }
+}
+
+.academyCoursesHero-badge-text {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #ff6347;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* Title */
+.academyCoursesHero-title {
+  font-size: 4rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.1;
+  margin: 0 0 24px;
+  letter-spacing: -0.03em;
+  animation: academyCoursesHero-fadeIn 0.8s ease 0.1s backwards;
+}
+
+.academyCoursesHero-title-gradient {
+  display: block;
+  background: linear-gradient(135deg, #ff6347 0%, #ff7f50 25%, #3b82f6 50%, #10b981 75%, #ff6347 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: academyCoursesHero-gradient 4s linear infinite;
+}
+
+@keyframes academyCoursesHero-gradient {
+  0% { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes academyCoursesHero-fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Subtitle */
+.academyCoursesHero-subtitle {
+  font-size: 1.25rem;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin: 0 0 48px;
+  max-width: 600px;
+  animation: academyCoursesHero-fadeIn 0.8s ease 0.2s backwards;
+}
+
+/* Stats */
+.academyCoursesHero-stats {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  padding: 24px 40px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  backdrop-filter: blur(20px);
+  animation: academyCoursesHero-fadeIn 0.8s ease 0.3s backwards;
+}
+
+.academyCoursesHero-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.academyCoursesHero-stat-value {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.academyCoursesHero-stat--highlight .academyCoursesHero-stat-value {
+  background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.academyCoursesHero-stat-label {
+  font-size: 0.875rem;
+  color: #64748b;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.academyCoursesHero-stat-divider {
+  width: 1px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Scroll Indicator */
+.academyCoursesHero-scroll {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  animation: academyCoursesHero-fadeIn 0.8s ease 0.5s backwards;
+}
+
+.academyCoursesHero-scroll-mouse {
+  width: 26px;
+  height: 40px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 13px;
+  display: flex;
+  justify-content: center;
+  padding-top: 8px;
+}
+
+.academyCoursesHero-scroll-wheel {
+  width: 4px;
+  height: 8px;
+  background: #ff6347;
+  border-radius: 2px;
+  animation: academyCoursesHero-scrollWheel 2s ease-in-out infinite;
+}
+
+@keyframes academyCoursesHero-scrollWheel {
+  0%, 100% { transform: translateY(0); opacity: 1; }
+  50% { transform: translateY(8px); opacity: 0.3; }
+}
+
+.academyCoursesHero-scroll-text {
+  font-size: 0.75rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+@media (max-width: 1024px) {
+  .academyCoursesHero-title {
+    font-size: 3rem;
+  }
+
+  .academyCoursesHero-stats {
+    gap: 24px;
+    padding: 20px 32px;
+  }
+
+  .academyCoursesHero-stat-value {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .academyCoursesHero-container {
+    padding: 100px 24px 60px;
+  }
+
+  .academyCoursesHero-title {
+    font-size: 2.5rem;
+  }
+
+  .academyCoursesHero-subtitle {
+    font-size: 1.125rem;
+    margin-bottom: 40px;
+  }
+
+  .academyCoursesHero-stats {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px 24px;
+  }
+
+  .academyCoursesHero-stat-divider {
+    display: none;
+  }
+
+  .academyCoursesHero-stat {
+    min-width: 80px;
+  }
+
+  .academyCoursesHero-stat-value {
+    font-size: 1.5rem;
+  }
+
+  .academyCoursesHero-stat-label {
+    font-size: 0.75rem;
+  }
+
+  .academyCoursesHero-bg-glow--1 {
+    width: 250px;
+    height: 250px;
+  }
+
+  .academyCoursesHero-bg-glow--2 {
+    width: 200px;
+    height: 200px;
+  }
+
+  .academyCoursesHero-bg-glow--3 {
+    width: 220px;
+    height: 220px;
+  }
+}
+
+@media (max-width: 480px) {
+  .academyCoursesHero-container {
+    padding: 90px 16px 50px;
+  }
+
+  .academyCoursesHero-badge {
+    padding: 8px 16px;
+    margin-bottom: 24px;
+  }
+
+  .academyCoursesHero-badge-text {
+    font-size: 0.75rem;
+  }
+
+  .academyCoursesHero-title {
+    font-size: 2rem;
+  }
+
+  .academyCoursesHero-subtitle {
+    font-size: 1rem;
+    margin-bottom: 32px;
+  }
+
+  .academyCoursesHero-stats {
+    width: 100%;
+    padding: 16px 20px;
+    gap: 16px;
+    border-radius: 16px;
+  }
+
+  .academyCoursesHero-stat {
+    min-width: 70px;
+  }
+
+  .academyCoursesHero-stat-value {
+    font-size: 1.25rem;
+  }
+
+  .academyCoursesHero-scroll {
+    display: none;
+  }
+}

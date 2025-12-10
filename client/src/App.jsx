@@ -73,6 +73,11 @@ import { DigiBridgeMentorDashboard } from './components/DigiBridge/DigiBridgeMen
 import { UserChatsPage } from './components/DigiBridge/UserChatsPage/UserChatsPage.jsx';
 import { StudentDetails } from './components/DigiMentorPanel/StudentDetails/StudentDetails.jsx';
 import { DigiMentorReviews } from './components/DigiMentorPanel/DigiMentorReviews/DigiMentorReviews.jsx';
+import { AcademyCoursesProvider } from './components/contexts/AcademyCoursesProvider.jsx';
+import { AcademyCourses } from './components/AcademyCourses/AcademyCourses.jsx';
+import { AcademyCourseDetail } from './components/AcademyCourses/AcademyCourseDetail/AcademyCourseDetail.jsx';
+import AcademyLessonPlayer from './components/AcademyCourses/AcademyLessonPlayer/AcademyLessonPlayer.jsx';
+import AcademyTestPlayer from './components/AcademyCourses/AcademyTestPlayer/AcademyTestPlayer.jsx';
 
 // ✅ LAZY LOADING КОМПОНЕНТИ
 const ArticlesList = lazy(() => import('./components/Articles/ArticlesList/ArticlesList.jsx'));
@@ -134,141 +139,153 @@ function App() {
                     <SuggestUserProvider>
                       <AdminProvider>
                         <AcademyProvider>
-                          <ArticleProvider>
-                            <InitiativeProvider>
-                              <AnalyticsProvider>
-                                <LoadingProvider>
-                                  <ArticleLimitProvider>
-                                    <ClubProvider>
-                                      {!isProfilePage && !isAcademyPage && <Header
-                                        additionalClasses={isProfilePage ? 'hide-header' : ''}
-                                      />}
+                          <AcademyCoursesProvider>
+                            <ArticleProvider>
+                              <InitiativeProvider>
+                                <AnalyticsProvider>
+                                  <LoadingProvider>
+                                    <ArticleLimitProvider>
+                                      <ClubProvider>
+                                        {!isProfilePage && !isAcademyPage && <Header
+                                          additionalClasses={isProfilePage ? 'hide-header' : ''}
+                                        />}
 
-                                      {!cookies.cookieConsent && <CookieConsent />}
-                                      <HeaderCommunity />
-                                      <ToastContainer
-                                        role="alert"
-                                        className={'notification'}
-                                        limit={3}
-                                        position="bottom-right"
-                                      />
-                                      <DigiBridgeChatButton onClick={() => setIsChatOpen(true)} />
-                                      {/* ✅ Chat Window */}
-                                      {isChatOpen && <DigiBridgeChatWindow onClose={() => setIsChatOpen(false)} />}
-                                      {/* {isChatOpen && <DigiBridgeChatWindow onClose={() => setIsChatOpen(false)} />} */}
-                                      <Routes>
-                                        <Route path="/" element={<Home />} />
-                                        <Route path="/academy" element={<DigiBridgeAcademy />} />
-                                        <Route path="/academy/mentors" element={<DigiBridgeMentorsPage />} />
-                                        <Route path="/contact" element={<ContactForm />} />
-                                        <Route path="/about" element={<AboutPage />} />
-                                        <Route path="/server-error" element={<ServerError />} />
-                                        <Route path="/forget-password" element={<ForgetPassword />} />
-                                        <Route path="/resend-email" element={<ReSendEmail />} />
-                                        <Route path="/reset-password" element={<ResetPasswordPage />} />
+                                        {!cookies.cookieConsent && <CookieConsent />}
+                                        <HeaderCommunity />
+                                        <ToastContainer
+                                          role="alert"
+                                          className={'notification'}
+                                          limit={3}
+                                          position="bottom-right"
+                                        />
+                                        <DigiBridgeChatButton onClick={() => setIsChatOpen(true)} />
+                                        {/* ✅ Chat Window */}
+                                        {isChatOpen && <DigiBridgeChatWindow onClose={() => setIsChatOpen(false)} />}
+                                        {/* {isChatOpen && <DigiBridgeChatWindow onClose={() => setIsChatOpen(false)} />} */}
+                                        <Routes>
+                                          <Route path="/" element={<Home />} />
+                                          <Route path="/academy" element={<DigiBridgeAcademy />} />
+                                          <Route path="/academy/courses" element={<AcademyCourses />} />
+                                          <Route path="/academy/courses/:slug" element={<AcademyCourseDetail />} />
+                                          <Route path="/academy/mentors" element={<DigiBridgeMentorsPage />} />
+                                          <Route path="/contact" element={<ContactForm />} />
+                                          <Route path="/about" element={<AboutPage />} />
+                                          <Route path="/server-error" element={<ServerError />} />
+                                          <Route path="/forget-password" element={<ForgetPassword />} />
+                                          <Route path="/resend-email" element={<ReSendEmail />} />
+                                          <Route path="/reset-password" element={<ResetPasswordPage />} />
 
-                                        {/* ✅ LAZY LOADED ROUTES */}
-                                        <Route
-                                          path="/articles"
-                                          element={
-                                            <Suspense fallback={<LazyLoadingFallback type="articles" />}>
-                                              <ArticlesList />
-                                            </Suspense>
-                                          }
-                                        />
-                                        <Route
-                                          path="/initiatives"
-                                          element={
-                                            <Suspense fallback={<LazyLoadingFallback type="initiatives" />}>
-                                              <InitiativesList />
-                                            </Suspense>
-                                          }
-                                        />
-                                        <Route
-                                          path="/projects"
-                                          element={
-                                            <Suspense fallback={<LazyLoadingFallback type="projects" />}>
-                                              <ProjectsList />
-                                            </Suspense>
-                                          }
-                                        />
-                                        <Route
-                                          path="/publications"
-                                          element={
-                                            <Suspense fallback={<LazyLoadingFallback type="publications" />}>
-                                              <PublicationsList />
-                                            </Suspense>
-                                          }
-                                        />
-                                        <Route path="/publications/:slug" element={<PublicationView />} />
-                                        <Route path="/publications/edit/:slug" element={<PublicationForm isEditMode={true} />} />
-                                        <Route path="/initiatives/:slug" element={<InitiativeView />} />
-                                        <Route path="/stories/:slug" element={<StoryView />} />
-                                        <Route path="/projects/:slug" element={<ProjectView />} />
-                                        <Route path="/articles/:slug" element={<ArticleView />} />
-                                        <Route path="/elite-membership" element={<EliteMembershipPage />} />
-                                        <Route
-                                          path="/stories"
-                                          element={
-                                            <Suspense fallback={<LazyLoadingFallback type="stories" />}>
-                                              <StoriesList />
-                                            </Suspense>
-                                          }
-                                        />
-                                        <Route path="/stories/:slug" element={<StoryView />} />
-                                        <Route path="/stories/edit/:slug" element={<StoryForm isEditMode={true} />} />
+                                          {/* ✅ LAZY LOADED ROUTES */}
+                                          <Route
+                                            path="/articles"
+                                            element={
+                                              <Suspense fallback={<LazyLoadingFallback type="articles" />}>
+                                                <ArticlesList />
+                                              </Suspense>
+                                            }
+                                          />
+                                          <Route
+                                            path="/initiatives"
+                                            element={
+                                              <Suspense fallback={<LazyLoadingFallback type="initiatives" />}>
+                                                <InitiativesList />
+                                              </Suspense>
+                                            }
+                                          />
+                                          <Route
+                                            path="/projects"
+                                            element={
+                                              <Suspense fallback={<LazyLoadingFallback type="projects" />}>
+                                                <ProjectsList />
+                                              </Suspense>
+                                            }
+                                          />
+                                          <Route
+                                            path="/publications"
+                                            element={
+                                              <Suspense fallback={<LazyLoadingFallback type="publications" />}>
+                                                <PublicationsList />
+                                              </Suspense>
+                                            }
+                                          />
+                                          <Route path="/publications/:slug" element={<PublicationView />} />
+                                          <Route path="/publications/edit/:slug" element={<PublicationForm isEditMode={true} />} />
+                                          <Route path="/initiatives/:slug" element={<InitiativeView />} />
+                                          <Route path="/stories/:slug" element={<StoryView />} />
+                                          <Route path="/projects/:slug" element={<ProjectView />} />
+                                          <Route path="/articles/:slug" element={<ArticleView />} />
+                                          <Route path="/elite-membership" element={<EliteMembershipPage />} />
+                                          <Route
+                                            path="/stories"
+                                            element={
+                                              <Suspense fallback={<LazyLoadingFallback type="stories" />}>
+                                                <StoriesList />
+                                              </Suspense>
+                                            }
+                                          />
+                                          <Route path="/stories/:slug" element={<StoryView />} />
+                                          <Route path="/stories/edit/:slug" element={<StoryForm isEditMode={true} />} />
 
-                                        <Route element={<AuthGuard />}>
-                                          <Route path="/academy/become-mentor" element={<DigiBridgeBecomeMentor />} />
-                                          <Route path="/initiative-preview" element={<InitiativePreviewPage />} />
-                                          <Route path="/ad/details/:adId" element={<AdDetails />} />
-                                          <Route path="/ad/edit/:adId" element={<EditAd />} />
-                                          <Route path="/ad" element={<AdPage />} />
-                                          <Route path="/games" element={<GamesPage />} />
-                                          <Route path="/ad/create" element={<CreateAd />} />
-                                          <Route path="/logout" element={<Logout />} />
-                                          <Route path="/profile/*" element={<Profile />} />
-                                          <Route path="/my-chats" element={<UserChatsPage />} />
-                                        </Route>
-                                        <Route element={<MentorGuard />}>
-                                          <Route path="/academy/mentor-dashboard" element={<DigiBridgeMentorDashboard />} />
+                                          <Route element={<AuthGuard />}>
+                                            <Route path="/academy/become-mentor" element={<DigiBridgeBecomeMentor />} />
+                                            <Route path="/initiative-preview" element={<InitiativePreviewPage />} />
+                                            <Route
+                                              path="/academy/courses/:courseSlug/lessons/:lessonSlug"
+                                              element={<AcademyLessonPlayer />}
+                                            />
+                                            <Route
+                                              path="/academy/courses/:courseSlug/lessons/:lessonSlug/test"
+                                              element={<AcademyTestPlayer />}
+                                            />
+                                            <Route path="/ad/details/:adId" element={<AdDetails />} />
+                                            <Route path="/ad/edit/:adId" element={<EditAd />} />
+                                            <Route path="/ad" element={<AdPage />} />
+                                            <Route path="/games" element={<GamesPage />} />
+                                            <Route path="/ad/create" element={<CreateAd />} />
+                                            <Route path="/logout" element={<Logout />} />
+                                            <Route path="/profile/*" element={<Profile />} />
+                                            <Route path="/my-chats" element={<UserChatsPage />} />
+                                          </Route>
+                                          <Route element={<MentorGuard />}>
+                                            <Route path="/academy/mentor-dashboard" element={<DigiBridgeMentorDashboard />} />
 
-                                        </Route>
-                                        <Route path="/mentor" element={<MentorGuard />}>
-                                          <Route path="students/:studentId/details" element={<StudentDetails />} />
-                                          <Route path="reviews" element={<DigiMentorReviews />} />
-                                        </Route>
-                                        <Route element={<PublicGuard />}>
-                                          <Route path="/sign-up" element={<LoginRegister />} />
-                                        </Route>
+                                          </Route>
+                                          <Route path="/mentor" element={<MentorGuard />}>
+                                            <Route path="students/:studentId/details" element={<StudentDetails />} />
+                                            <Route path="reviews" element={<DigiMentorReviews />} />
+                                          </Route>
+                                          <Route element={<PublicGuard />}>
+                                            <Route path="/sign-up" element={<LoginRegister />} />
+                                          </Route>
 
-                                        <Route path="/craigslist" element={<CommunityPage />} />
-                                        <Route path="/clubs" element={<AllClubs />} />
-                                        <Route path="/clubs/:slug" element={<ClubView />} />
-                                        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                                        <Route path="/ads" element={<AdsCard />} />
-                                        <Route path="/filter" element={<FiltersMap />} />
-                                        <Route path="/map" element={<MapPage />} />
-                                        <Route path="/suggest-user" element={<UserSuggestion />} />
-                                        <Route path="/errors/*" element={<ErrorPageBoundary />} />
-                                        <Route path="404/*" element={<NotFound />} />
-                                        <Route path="*" element={<NotFound />} />
-                                      </Routes>
+                                          <Route path="/craigslist" element={<CommunityPage />} />
+                                          <Route path="/clubs" element={<AllClubs />} />
+                                          <Route path="/clubs/:slug" element={<ClubView />} />
+                                          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                                          <Route path="/ads" element={<AdsCard />} />
+                                          <Route path="/filter" element={<FiltersMap />} />
+                                          <Route path="/map" element={<MapPage />} />
+                                          <Route path="/suggest-user" element={<UserSuggestion />} />
+                                          <Route path="/errors/*" element={<ErrorPageBoundary />} />
+                                          <Route path="404/*" element={<NotFound />} />
+                                          <Route path="*" element={<NotFound />} />
+                                        </Routes>
 
-                                      {!isProfilePage && !isAcademyPage && (
-                                        <FooterWithLoading
-                                          additionalClasses={
-                                            isCommunityPage ? 'hide-on-mobile position-fix' : ''
-                                          }
-                                        />
-                                      )}
-                                      {!isProfilePage && <MenuCommunity />}
-                                    </ClubProvider>
-                                  </ArticleLimitProvider>
-                                </LoadingProvider>
-                              </AnalyticsProvider>
-                            </InitiativeProvider>
-                          </ArticleProvider>
+                                        {!isProfilePage && !isAcademyPage && (
+                                          <FooterWithLoading
+                                            additionalClasses={
+                                              isCommunityPage ? 'hide-on-mobile position-fix' : ''
+                                            }
+                                          />
+                                        )}
+                                        {!isProfilePage && <MenuCommunity />}
+                                      </ClubProvider>
+                                    </ArticleLimitProvider>
+                                  </LoadingProvider>
+                                </AnalyticsProvider>
+                              </InitiativeProvider>
+                            </ArticleProvider>
+                          </AcademyCoursesProvider>
                         </AcademyProvider>
                       </AdminProvider>
                     </SuggestUserProvider>

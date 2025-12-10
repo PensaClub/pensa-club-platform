@@ -13776,5 +13776,290 @@
     "errors": {
       "fetchFailed": "Failed to load notes"
     }
-  }
+  },
+   "academyCourses": {
+    "loading": "Loading courses...",
+    "noCourses": "No courses yet",
+    "checkBackLater": "We'll add new learning programs soon. Stay tuned!",
+    "programsTitle": "Learning Programs",
+    "programsSubtitle": "Choose a program based on your interests and experience level",
+    "popularCourses": "Popular Courses",
+    "popularCoursesSubtitle": "Most sought-after courses by our students"
+  },
+   "academyCoursesHero": {
+    "titleLine1": "Discover your path in the ",
+    "titleLine2": "digital world",
+    "subtitle": "Free practical courses for all ages. Learn to use technology confidently with the support of our mentors.",
+    "scroll": "Scroll down",
+    "stats": {
+      "programs": "Programs",
+      "courses": "Courses",
+      "enrolled": "Enrolled",
+      "free": "Free"
+    }
+  },
+   "academyCoursesFilters": {
+    "searchPlaceholder": "Search courses...",
+    "clearSearch": "Clear search",
+    "categoryLabel": "Category",
+    "levelLabel": "Level",
+    "sortLabel": "Sort by",
+    "allCategories": "All categories",
+    "allLevels": "All levels",
+    "clearAll": "Clear",
+    "levels": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    },
+    "sort": {
+      "popular": "Most popular",
+      "newest": "Newest",
+      "alphabetical": "Alphabetical"
+    }
+  },
+   "academyCoursesCategorySection": {
+    "uncategorized": "Other courses",
+    "course": "course",
+    "courses": "courses",
+    "allLevels": "All levels",
+    "showAll": "View all ({{count}})",
+    "showLess": "Show less",
+    "loadMore": "Load {{remaining}} more"
+  },
+  "academyProgramTracks": {
+    "course": "course",
+    "courses": "courses"
+  },
+  "academyCoursesList": {
+    "course": "course",
+    "courses": "courses",
+    "close": "Close",
+    "searchPlaceholder": "Search courses...",
+    "noResults": "No courses found with this filter",
+    "resetFilter": "Show all",
+    "viewAllCourses": "View all courses",
+    "filters": {
+      "all": "All",
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    }
+  },
+ "academyCourseCard": {
+    "free": "Free",
+    "startLearning": "Start",
+    "lessons": "lessons",
+    "credits": "credits",
+    "watchTrailer": "Watch trailer",
+    "levels": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    }
+  },
+  "academyTrailerModal": {
+    "preview": "Preview",
+    "close": "Close",
+    "noVideo": "No video available for this course",
+    "hint": "Press ESC or click outside to close",
+    "viewCourse": "View Course"
+  },
+  "academyCourseDetail": {
+    "loading": "Loading course...",
+    "notFound": "Course not found",
+    "notFoundText": "The course you're looking for doesn't exist or has been removed.",
+    "backToCourses": "Back to courses",
+    
+    "breadcrumb": {
+      "academy": "Academy",
+      "courses": "Courses"
+    },
+    
+    "levels": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    },
+    
+    "tabs": {
+      "overview": "Overview",
+      "content": "Content",
+      "instructor": "Instructor",
+      "reviews": "Reviews"
+    },
+    
+    "hero": {
+      "certificateBadge": "Certificate",
+      "ratings": "ratings",
+      "enrolled": "enrolled",
+      "duration": "hours",
+      "lessonsLabel": "lessons",
+      "createdBy": "Created by",
+      "youAreEnrolled": "You are enrolled",
+      "adminAccess": "Admin access",
+      "mentorAccess": "Mentor access",
+      "moderatorAccess": "Moderator access"
+    },
+    
+    "card": {
+      "watchPreview": "Watch preview",
+      "watchTrailer": "Watch trailer",
+      "free": "Free",
+      "credits": "credits",
+      "enrollNow": "Enroll Now",
+      "lessons": "lessons",
+      "hours": "hours",
+      "weeks": "weeks",
+      "certificate": "Certificate on completion",
+      "creditsOnComplete": "credits on completion",
+      "guarantee": "Free access forever",
+      "startLearning": "Start Learning",
+      "checking": "Checking..."
+    },
+    
+    "overview": {
+      "aboutCourse": "About this course",
+      "targetAudience": "Who is this for",
+      "whatYouLearn": "What you'll learn",
+      "learnItems": {
+        "item1": "Core skills for working with the topic",
+        "item2": "Practical experience through exercises",
+        "item3": "Understanding of key concepts",
+        "item4": "Confidence in applying what you've learned"
+      },
+      "stats": {
+        "totalEnrolled": "Total enrolled",
+        "completed": "Completed",
+        "rating": "Rating",
+        "maxCredits": "Max credits"
+      }
+    },
+    
+    "content": {
+      "courseContent": "Course content",
+      "modules": "modules",
+      "lessonsTotal": "lessons",
+      "lessonsShort": "lessons",
+      "hoursTotal": "hours",
+      "minutes": "min",
+      "freeLesson": "Free",
+      "hasTest": "Has test",
+      "noContent": "Course content will be added soon."
+    },
+    
+    "instructor": {
+      "roles": {
+        "lecturer": "Lecturer",
+        "assistant": "Assistant",
+        "mentor": "Mentor"
+      },
+      "leadInstructor": "Lead",
+      "students": "Students",
+      "completedStudents": "Completed",
+      "instructorRating": "Rating",
+      "assistants": "Assistants",
+      "noInstructor": "Instructor information will be added soon."
+    },
+    
+    "reviews": {
+      "studentReviews": "Student reviews",
+      "basedOn": "Based on",
+      "reviews": "reviews",
+      "noReviewsYet": "No reviews yet for this course.",
+      "beFirstReview": "Be the first to share your opinion!"
+    }
+  },
+   "academyLessonPlayer": {
+    "loading": "Loading...",
+    "error": "Error",
+    "backToCourse": "Back to course",
+    "loginRequired": "Sign in required",
+    "loginRequiredDesc": "You need to sign in to watch this lesson.",
+    "login": "Sign in",
+    "enrollRequired": "Enroll first",
+    "enrollRequiredDesc": "You need to be enrolled in this course.",
+    "goToCourse": "Go to course",
+    "notFound": "Lesson not found",
+    "unpublished": "Not published",
+    "unpublishedDesc": "This lesson is not available yet.",
+    
+    "courseContent": "Content",
+    "fullscreen": "Fullscreen",
+    "exitFullscreen": "Exit",
+    
+    "typeVideo": "Video",
+    "typeLive": "Live",
+    "typeText": "Text",
+    "typeQuiz": "Quiz",
+    
+    "complete": "Complete lesson",
+    "startTest": "Start test",
+    "testAvailable": "Lesson test",
+    "passingScore": "Passing score",
+    "earnCredits": "Earn",
+    "materials": "Materials",
+    
+    "live": "LIVE",
+    "upcoming": "Upcoming",
+    "liveScheduled": "Live lesson",
+    "startsIn": "Starts in",
+    "recordingProcessing": "Recording processing",
+    "recordingProcessingDesc": "Will be available soon.",
+    "textLesson": "Text lesson",
+    "readBelowDesc": "Read the content below",
+    "noVideo": "No video",
+    
+    "days": "days",
+    "hours": "hours",
+    "minutes": "min",
+    "seconds": "sec"
+  },
+  "academyTestPlayer": {
+    "loading": "Loading test...",
+    "error": "Error",
+    "backToLesson": "Back to lesson",
+    "loginRequired": "Login required",
+    "loginRequiredDesc": "You need to log in to take this test.",
+    "login": "Login",
+    "notFound": "Test not found",
+    "questionOf": "Question {{current}} of {{total}}",
+    "questions": "Questions",
+    "answered": "Answered",
+    "unanswered": "Unanswered",
+    "current": "Current",
+    "question": "Question",
+    "point": "point",
+    "points": "points",
+    "typeSingle": "Single choice",
+    "typeMultiple": "Multiple choice",
+    "typeTrueFalse": "True/False",
+    "prev": "Previous",
+    "next": "Next",
+    "submit": "Submit test",
+    "submitting": "Submitting...",
+    "confirmSubmitUnanswered": "You have {{count}} unanswered questions. Are you sure you want to submit?",
+    "passingScore": "Passing",
+    "maxCredits": "Max credits",
+    "attempt": "Attempt",
+    "results": {
+      "passed": "Congratulations!",
+      "failed": "Try again",
+      "passedDesc": "You passed the test successfully!",
+      "failedDesc": "Unfortunately, you didn't reach the minimum score.",
+      "yourScore": "Your score",
+      "correct": "Correct",
+      "total": "Total",
+      "passing": "Passing",
+      "creditsEarned": "credits",
+      "backToLesson": "Back to lesson",
+      "tryAgain": "Try again",
+      "attemptInfo": "Attempt {{current}} of {{max}}"
+    }
+  },
+  "results": {
+  "wrong": "Wrong",
+  "continueCourse": "Continue with course",
+  "noMoreAttempts": "No more attempts"
+}
 }

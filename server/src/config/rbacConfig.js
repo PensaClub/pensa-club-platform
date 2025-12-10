@@ -194,6 +194,73 @@ const permissions = {
         update: ['admin'],
         delete: ['admin'],
     },
+    // Добави в permissions обекта:
+
+course: {
+    create: ['admin', 'mentor'],
+    read: ['admin', 'mentor', 'student', 'user', 'guest'],
+    update: ['admin', 'mentor'],
+    delete: ['admin'],
+    publish: ['admin', 'mentor'],
+},
+
+lesson: {
+    create: ['admin', 'mentor'],
+    read: ['admin', 'mentor', 'student'],
+    update: ['admin', 'mentor'],
+    delete: ['admin', 'mentor'],
+},
+
+lecture: {
+    create: ['admin', 'mentor'],
+    read: ['admin', 'mentor', 'student', 'user', 'guest'],
+    update: ['admin', 'mentor'],
+    delete: ['admin'],
+    publish: ['admin', 'mentor'],
+    cancel: ['admin', 'mentor'],
+},
+
+seminar: {
+    create: ['admin', 'mentor'],
+    read: ['admin', 'mentor', 'student', 'user', 'guest'],
+    update: ['admin', 'mentor'],
+    delete: ['admin'],
+    publish: ['admin', 'mentor'],
+    cancel: ['admin', 'mentor'],
+},
+
+enrollment: {
+    create: ['admin', 'mentor', 'student','user','guest'],
+    read: ['admin', 'mentor'],
+    readOwn: ['admin', 'mentor', 'student','user','guest'],
+    update: ['admin', 'mentor'],
+    delete: ['admin'],
+},
+
+test: {
+    create: ['admin', 'mentor'],
+    read: ['admin', 'mentor'],
+    readOwn: ['admin', 'mentor', 'student'],
+    update: ['admin', 'mentor'],
+    delete: ['admin', 'mentor'],
+    attempt: ['student'],
+},
+
+certificate: {
+    create: ['admin'],
+    read: ['admin', 'mentor'],
+    readOwn: ['admin', 'mentor', 'student'],
+    verify: ['admin', 'mentor', 'student', 'user', 'guest'],
+    revoke: ['admin'],
+},
+
+material: {
+    create: ['admin', 'mentor'],
+    read: ['admin', 'mentor', 'student'],
+    update: ['admin', 'mentor'],
+    delete: ['admin', 'mentor'],
+    download: ['admin', 'mentor', 'student'],
+},
 
 };
 
