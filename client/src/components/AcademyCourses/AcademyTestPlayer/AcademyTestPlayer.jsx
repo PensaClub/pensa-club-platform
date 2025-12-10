@@ -5,7 +5,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuthContext } from '../../contexts/UserContext';
 import { useAcademyCourses } from '../../contexts/AcademyCoursesProvider';
-import './academytestplayer.css';
+import './academyTestPlayer.css';
 
 const AcademyTestPlayer = () => {
   const { t } = useTranslation();
