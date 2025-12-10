@@ -13,7 +13,8 @@ ARG VITE_FIREBASE_messagingSenderId
 ARG VITE_FIREBASE_appId
 ARG VITE_FIREBASE_measurementId
 ARG VITE_RECAPTCHA_SITE_KEY
-
+ARG VITE_GA_TRACKING_ID
+ARG VITE_GOOGLE_CLIENT_ID
 # Set corresponding environment variables
 ENV VITE_API_URL=$VITE_API_URL
 ENV VITE_FIREBASE_apiKey=$VITE_FIREBASE_apiKey
@@ -24,7 +25,8 @@ ENV VITE_FIREBASE_messagingSenderId=$VITE_FIREBASE_messagingSenderId
 ENV VITE_FIREBASE_appId=$VITE_FIREBASE_appId
 ENV VITE_FIREBASE_measurementId=$VITE_FIREBASE_measurementId
 ENV VITE_RECAPTCHA_SITE_KEY=$VITE_RECAPTCHA_SITE_KEY
-
+ENV VITE_GA_TRACKING_ID=$VITE_GA_TRACKING_ID
+ENV VITE_GOOGLE_CLIENT_ID=$VITE_GOOGLE_CLIENT_ID
 COPY package*.json ./
 
 # Use npm ci for faster, more reliable builds
@@ -33,7 +35,7 @@ RUN npm ci
 COPY . .
 
 # Vite is more memory-efficient, adjust memory limit
-ENV NODE_OPTIONS=--max-old-space-size=1024
+ENV NODE_OPTIONS=--max-old-space-size=3072
 
 # Build the application with Vite
 RUN npm run build
