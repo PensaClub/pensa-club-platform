@@ -20,6 +20,8 @@ export const AcademyCoursesProvider = ({ children }) => {
   const [myDashboard, setMyDashboard] = useState(null);
   const [currentLesson, setCurrentLesson] = useState(null);
   const [currentTestData, setCurrentTestData] = useState(null);
+  const [lessonsProgress, setLessonsProgress] = useState([]);
+  const [enrollmentStats, setEnrollmentStats] = useState(null);
   const testLoadedRef = useRef(null);
   // =========================================================
   //                    COURSES - PUBLIC
@@ -846,15 +848,15 @@ export const AcademyCoursesProvider = ({ children }) => {
     }
   }, []);
 
-  const getEnrollmentStatus = useCallback(async (courseId) => {
-    try {
-      const data = await coursesService.checkEnrollment(courseId);
-      return data;
-    } catch (error) {
-      console.error('Error fetching enrollment status:', error);
-      return { enrolled: false };
-    }
-  }, []);
+  // const getEnrollmentStatus = useCallback(async (courseId) => {
+  //   try {
+  //     const data = await coursesService.checkEnrollment(courseId);
+  //     return data;
+  //   } catch (error) {
+  //     console.error('Error fetching enrollment status:', error);
+  //     return { enrolled: false };
+  //   }
+  // }, []);
 
   const updateLessonProgress = useCallback(async (lessonId, progressData) => {
     try {
@@ -877,6 +879,61 @@ export const AcademyCoursesProvider = ({ children }) => {
       throw error;
     }
   }, []);
+
+
+  // =========================================================
+//                    ENROLLMENT - SLUG BASED (НОВИ)
+// =========================================================
+
+const startLessonBySlug = useCallback(async (lessonSlug) => {
+  try {
+    const response = await coursesService.startLessonBySlug(lessonSlug);
+    return response;
+  } catch (error) {
+    console.error('Error starting lesson:', error);
+    return { success: false };
+  }
+}, []);
+
+const updateLessonProgressBySlug = useCallback(async (lessonSlug, progressData) => {
+  try {
+    const response = await coursesService.updateLessonProgressBySlug(lessonSlug, progressData);
+    return response;
+  } catch (error) {
+    console.error('Error updating progress:', error);
+    return { success: false };
+  }
+}, []);
+
+const completeLessonBySlug = useCallback(async (lessonSlug) => {
+  try {
+    const response = await coursesService.completeLessonBySlug(lessonSlug);
+    toast.success('Урокът е завършен успешно!');
+    return response;
+  } catch (error) {
+    console.error('Error completing lesson:', error);
+    toast.error('Грешка при завършване на урок');
+    throw error;
+  }
+}, []);
+
+// Обновен getEnrollmentStatus - запазва lessonsProgress
+const getEnrollmentStatus = useCallback(async (courseId) => {
+  try {
+    const data = await coursesService.checkEnrollment(courseId);
+    // Запазваме прогреса по уроците в state
+    if (data.lessonsProgress) {
+      setLessonsProgress(data.lessonsProgress);
+    }
+    if (data.stats) {
+      setEnrollmentStats(data.stats);
+    }
+    return data;
+  } catch (error) {
+    console.error('Error fetching enrollment status:', error);
+    return { enrolled: false };
+  }
+}, []);
 
   // =========================================================
   //                    TESTS
@@ -977,6 +1034,29 @@ export const AcademyCoursesProvider = ({ children }) => {
     }
   }, []);
 
+// =========================================================
+//                    TESTS - НОВИ ФУНКЦИИ
+// =========================================================
+
+const getTestStatus = useCallback(async (lessonId) => {
+  try {
+    const data = await coursesService.getTestStatus(lessonId);
+    return data;
+  } catch (error) {
+    console.error('Error fetching test status:', error);
+    throw error;
+  }
+}, []);
+
+const getTestResultByAttempt = useCallback(async (testId, attemptId) => {
+  try {
+    const data = await coursesService.getTestResultByAttempt(testId, attemptId);
+    return data;
+  } catch (error) {
+    console.error('Error fetching test result:', error);
+    throw error;
+  }
+}, []);
   const getTestResults = useCallback(async (testId) => {
     try {
       const data = await coursesService.getTestResults(testId);
@@ -1267,7 +1347,8 @@ export const AcademyCoursesProvider = ({ children }) => {
     seminars,
     myDashboard,
     currentLesson,
-
+lessonsProgress,
+enrollmentStats,
     // Courses - Public
     getCourses,
     getCourseBySlug,
@@ -1345,7 +1426,10 @@ export const AcademyCoursesProvider = ({ children }) => {
     getEnrollmentStatus,
     updateLessonProgress,
     completeLesson,
-
+// Enrollment - slug based
+startLessonBySlug,
+updateLessonProgressBySlug,
+completeLessonBySlug,
     // Tests
     getTests,
     createTest,
@@ -1360,6 +1444,8 @@ export const AcademyCoursesProvider = ({ children }) => {
     getMyCertificates,
     verifyCertificate,
     generateCertificate,
+    getTestStatus,
+getTestResultByAttempt,
 
     // Materials (slug-based)
     getCourseMaterials,

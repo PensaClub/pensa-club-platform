@@ -18,9 +18,9 @@ const AcademyLessonPlayer = () => {
     getCourseBySlug,
     getLessonMaterials,
     getEnrollmentStatus,
-    updateLessonProgress,
-    completeLesson,
-    startTest,
+    startLessonBySlug,
+    updateLessonProgressBySlug,
+    completeLessonBySlug,
     isLoading 
   } = useAcademyCourses();
 
@@ -30,6 +30,13 @@ const AcademyLessonPlayer = () => {
   const [materials, setMaterials] = useState([]);
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [error, setError] = useState(null);
+  
+  // Enrollment & Progress State
+  const [lessonsProgress, setLessonsProgress] = useState([]);
+  const [enrollmentStats, setEnrollmentStats] = useState(null);
+  const [currentLessonStatus, setCurrentLessonStatus] = useState('not_started');
+  const [currentLessonProgress, setCurrentLessonProgress] = useState(0);
+  const [nextLessonData, setNextLessonData] = useState(null);
   
   // UI State
   const [showPlayer, setShowPlayer] = useState(false);
@@ -41,8 +48,8 @@ const AcademyLessonPlayer = () => {
   const [countdown, setCountdown] = useState(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [controlsVisible, setControlsVisible] = useState(true);
-  const [lessonProgress, setLessonProgress] = useState(0);
   const [lessonStarted, setLessonStarted] = useState(false);
+  const [watchedSeconds, setWatchedSeconds] = useState(0);
 
   const fetchedRef = useRef(null);
   const countdownIntervalRef = useRef(null);
@@ -67,26 +74,54 @@ const AcademyLessonPlayer = () => {
         fetchedRef.current = `${courseSlug}-${lessonSlug}`;
         setError(null);
         setLessonStarted(false);
-        setLessonProgress(0);
+        setCurrentLessonProgress(0);
+        setCurrentLessonStatus('not_started');
         setShowPlayer(false);
+        setWatchedSeconds(0);
         
-        // Fetch course first
+        // 1. Fetch course
         const courseData = await getCourseBySlug(courseSlug);
         const courseInfo = courseData?.course || courseData;
         setCourse(courseInfo);
 
-        // Check enrollment
-        if (isAuthentication && courseInfo?.id) {
-          const enrollmentStatus = await getEnrollmentStatus(courseInfo.id);
-          setIsEnrolled(enrollmentStatus?.enrolled || false);
-        }
-
-        // Fetch lesson
+        // 2. Fetch lesson
         const lessonData = await getLessonBySlug(courseSlug, lessonSlug);
         const lessonInfo = lessonData?.lesson || lessonData;
         setLesson(lessonInfo);
 
-        // Fetch lesson materials
+        // 3. Check enrollment + get ALL lessons progress
+        if (isAuthentication && courseInfo?.id) {
+          const enrollmentData = await getEnrollmentStatus(courseInfo.id);
+          setIsEnrolled(enrollmentData?.enrolled || false);
+          
+          // Store lessons progress
+          if (enrollmentData?.lessonsProgress) {
+            setLessonsProgress(enrollmentData.lessonsProgress);
+            
+            // Find current lesson status
+            const currentProgress = enrollmentData.lessonsProgress.find(
+              lp => lp.lessonSlug === lessonSlug || lp.lessonId === lessonInfo?.id
+            );
+            
+            if (currentProgress) {
+              setCurrentLessonStatus(currentProgress.status || 'not_started');
+              setCurrentLessonProgress(currentProgress.progress || 0);
+              setWatchedSeconds((currentProgress.timeSpentMinutes || 0) * 60);
+            }
+          }
+          
+          // Store stats
+          if (enrollmentData?.stats) {
+            setEnrollmentStats(enrollmentData.stats);
+          }
+          
+          // Store next lesson from API
+          if (enrollmentData?.nextLesson) {
+            setNextLessonData(enrollmentData.nextLesson);
+          }
+        }
+
+        // 4. Fetch lesson materials
         try {
           const materialsData = await getLessonMaterials(lessonSlug);
           setMaterials(materialsData || []);
@@ -109,34 +144,45 @@ const AcademyLessonPlayer = () => {
   // =========================================================
 
   useEffect(() => {
-    const startLessonProgress = async () => {
-      if (!lesson?.id || !hasAccess || lessonStarted) return;
+    const markLessonStarted = async () => {
+      if (!lessonSlug || !hasAccess || lessonStarted) return;
+      if (currentLessonStatus === 'completed') return;
 
       try {
-        await updateLessonProgress(lesson.id, { progress: 0 });
+        await startLessonBySlug(lessonSlug);
         setLessonStarted(true);
+        if (currentLessonStatus === 'not_started') {
+          setCurrentLessonStatus('in_progress');
+        }
       } catch (err) {
         console.error('Error starting lesson:', err);
         setLessonStarted(true);
       }
     };
 
-    startLessonProgress();
-  }, [lesson?.id, hasAccess, lessonStarted, updateLessonProgress]);
+    markLessonStarted();
+  }, [lessonSlug, hasAccess, lessonStarted, currentLessonStatus, startLessonBySlug]);
 
   // =========================================================
   //                    VIDEO PROGRESS TRACKING
   // =========================================================
 
   useEffect(() => {
-    if (!showPlayer || !lesson?.id || !hasAccess) return;
+    if (!showPlayer || !lessonSlug || !hasAccess) return;
+    if (currentLessonStatus === 'completed') return;
 
     progressIntervalRef.current = setInterval(async () => {
-      setLessonProgress(prev => {
-        const newProgress = Math.min(prev + 10, 90);
-        updateLessonProgress(lesson.id, { progress: newProgress }).catch(err => {
+      setWatchedSeconds(prev => prev + 30);
+      setCurrentLessonProgress(prev => {
+        const newProgress = Math.min(prev + 5, 95);
+        
+        updateLessonProgressBySlug(lessonSlug, { 
+          progress: newProgress,
+          watchedSeconds: watchedSeconds + 30
+        }).catch(err => {
           console.error('Error updating progress:', err);
         });
+        
         return newProgress;
       });
     }, 30000);
@@ -146,7 +192,7 @@ const AcademyLessonPlayer = () => {
         clearInterval(progressIntervalRef.current);
       }
     };
-  }, [showPlayer, lesson?.id, hasAccess, updateLessonProgress]);
+  }, [showPlayer, lessonSlug, hasAccess, currentLessonStatus, watchedSeconds, updateLessonProgressBySlug]);
 
   // =========================================================
   //                    LIVE STATUS
@@ -308,7 +354,7 @@ const AcademyLessonPlayer = () => {
   }, []);
 
   // =========================================================
-  //                    LESSON ACCESS
+  //                    LESSON ACCESS & STATUS HELPERS
   // =========================================================
 
   const isLessonAccessible = useCallback((lessonData) => {
@@ -331,6 +377,42 @@ const AcademyLessonPlayer = () => {
     const scheduled = new Date(lessonData.scheduledDate);
     return now >= scheduled;
   }, [hasPrivilegedAccess]);
+
+  // Get lesson progress data from progress array
+  const getLessonProgressData = useCallback((lessonId, lessonSlugParam) => {
+    return lessonsProgress.find(
+      lp => lp.lessonId === lessonId || lp.lessonSlug === lessonSlugParam
+    );
+  }, [lessonsProgress]);
+
+  // Get lesson status from progress array
+  const getLessonStatus = useCallback((lessonId, lessonSlugParam) => {
+    const progress = getLessonProgressData(lessonId, lessonSlugParam);
+    return progress?.status || 'not_started';
+  }, [getLessonProgressData]);
+
+  // Check if lesson is completed
+  const isLessonCompleted = useCallback((lessonId, lessonSlugParam) => {
+    return getLessonStatus(lessonId, lessonSlugParam) === 'completed';
+  }, [getLessonStatus]);
+
+  // Check if test is passed
+  const isTestPassed = useCallback((lessonId, lessonSlugParam) => {
+    const progress = getLessonProgressData(lessonId, lessonSlugParam);
+    return progress?.testPassed || false;
+  }, [getLessonProgressData]);
+
+  // Get test score
+  const getTestScore = useCallback((lessonId, lessonSlugParam) => {
+    const progress = getLessonProgressData(lessonId, lessonSlugParam);
+    return progress?.testScore || null;
+  }, [getLessonProgressData]);
+
+  // Get earned credits for lesson
+  const getLessonEarnedCredits = useCallback((lessonId, lessonSlugParam) => {
+    const progress = getLessonProgressData(lessonId, lessonSlugParam);
+    return progress?.earnedCredits || 0;
+  }, [getLessonProgressData]);
 
   // =========================================================
   //                    NAVIGATION
@@ -361,15 +443,51 @@ const AcademyLessonPlayer = () => {
   // =========================================================
 
   const handleCompleteLesson = async () => {
-    if (!lesson?.id || isCompleting) return;
+    if (!lessonSlug || isCompleting) return;
+    
+    // Already completed - navigate to next
+    if (currentLessonStatus === 'completed') {
+      if (nextLesson && isLessonAccessible(nextLesson)) {
+        navigate(`/academy/courses/${courseSlug}/lessons/${nextLesson.slug}`);
+      }
+      return;
+    }
     
     try {
       setIsCompleting(true);
-      await completeLesson(lesson.id);
-      setLessonProgress(100);
+      await completeLessonBySlug(lessonSlug);
       
+      setCurrentLessonStatus('completed');
+      setCurrentLessonProgress(100);
+      
+      // Update local lessonsProgress
+      setLessonsProgress(prev => {
+        const existing = prev.find(lp => lp.lessonSlug === lessonSlug);
+        if (existing) {
+          return prev.map(lp => 
+            lp.lessonSlug === lessonSlug 
+              ? { ...lp, status: 'completed', progress: 100 }
+              : lp
+          );
+        }
+        return [...prev, { lessonSlug, status: 'completed', progress: 100 }];
+      });
+      
+      // Update stats
+      if (enrollmentStats) {
+        setEnrollmentStats(prev => ({
+          ...prev,
+          completedLessons: (prev?.completedLessons || 0) + 1,
+          inProgressLessons: Math.max(0, (prev?.inProgressLessons || 0) - 1),
+          progressPercentage: Math.round(((prev?.completedLessons || 0) + 1) / (prev?.totalLessons || 1) * 100)
+        }));
+      }
+      
+      // Navigate to next lesson
       if (nextLesson && isLessonAccessible(nextLesson)) {
-        navigate(`/academy/courses/${courseSlug}/lessons/${nextLesson.slug}`);
+        setTimeout(() => {
+          navigate(`/academy/courses/${courseSlug}/lessons/${nextLesson.slug}`);
+        }, 500);
       }
     } catch (error) {
       console.error('Error completing lesson:', error);
@@ -380,16 +498,7 @@ const AcademyLessonPlayer = () => {
 
   const handleStartTest = async () => {
     if (!lesson?.id || isStartingTest || !lesson?.hasTest) return;
-    
-    try {
-      setIsStartingTest(true);
-      await startTest(lesson.id);
-      navigate(`/academy/courses/${courseSlug}/lessons/${lessonSlug}/test`);
-    } catch (error) {
-      console.error('Error starting test:', error);
-    } finally {
-      setIsStartingTest(false);
-    }
+    navigate(`/academy/courses/${courseSlug}/lessons/${lessonSlug}/test`);
   };
 
   const handleNavigateToLesson = (targetLesson) => {
@@ -421,27 +530,35 @@ const AcademyLessonPlayer = () => {
     });
   };
 
-  
-const getMaterialIcon = (material) => {
-  const type = material.materialType?.toLowerCase() || material.mimeType?.toLowerCase() || '';
-  const name = material.originalFileName?.toLowerCase() || material.title?.toLowerCase() || '';
-  
-  if (type.includes('pdf') || name.endsWith('.pdf')) return '📄';
-  if (type.includes('doc') || name.endsWith('.doc') || name.endsWith('.docx')) return '📝';
-  if (type.includes('video') || type.includes('mp4') || name.endsWith('.mp4')) return '🎬';
-  if (type.includes('image') || type.includes('png') || type.includes('jpg')) return '🖼️';
-  if (type.includes('zip') || type.includes('rar')) return '📦';
-  if (type.includes('excel') || type.includes('spreadsheet') || name.endsWith('.xlsx')) return '📊';
-  if (type.includes('presentation') || name.endsWith('.pptx')) return '📽️';
-  if (type.includes('audio') || name.endsWith('.mp3')) return '🎵';
-  return '🔗';
-};
-const formatFileSize = (bytes) => {
-  if (!bytes) return '';
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-};
+  const getMaterialIcon = (material) => {
+    const type = material.materialType?.toLowerCase() || material.mimeType?.toLowerCase() || '';
+    const name = material.originalFileName?.toLowerCase() || material.title?.toLowerCase() || '';
+    
+    if (type.includes('pdf') || name.endsWith('.pdf')) return '📄';
+    if (type.includes('doc') || name.endsWith('.doc') || name.endsWith('.docx')) return '📝';
+    if (type.includes('video') || type.includes('mp4') || name.endsWith('.mp4')) return '🎬';
+    if (type.includes('image') || type.includes('png') || type.includes('jpg')) return '🖼️';
+    if (type.includes('zip') || type.includes('rar')) return '📦';
+    if (type.includes('excel') || type.includes('spreadsheet') || name.endsWith('.xlsx')) return '📊';
+    if (type.includes('presentation') || name.endsWith('.pptx')) return '📽️';
+    if (type.includes('audio') || name.endsWith('.mp3')) return '🎵';
+    return '🔗';
+  };
+
+  const formatFileSize = (bytes) => {
+    if (!bytes) return '';
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  };
+
+  const formatTimeSpent = (minutes) => {
+    if (!minutes) return '0 мин';
+    if (minutes < 60) return `${minutes} мин`;
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return mins > 0 ? `${hours}ч ${mins}м` : `${hours}ч`;
+  };
 
   // =========================================================
   //                    RENDER STATES
@@ -537,6 +654,11 @@ const formatFileSize = (bytes) => {
   const canShowVideo = lesson?.lessonType === 'video' || 
     (lesson?.lessonType === 'live' && (liveStatus === 'live' || liveStatus === 'starting' || (liveStatus === 'ended' && lesson?.videoUrl)));
 
+  // Current lesson progress data
+  const currentLessonProgressData = getLessonProgressData(lesson?.id, lessonSlug);
+  const currentTestScore = currentLessonProgressData?.testScore;
+  const currentEarnedCredits = currentLessonProgressData?.earnedCredits || 0;
+
   // =========================================================
   //                    MAIN RENDER
   // =========================================================
@@ -558,6 +680,16 @@ const formatFileSize = (bytes) => {
           onMouseMove={showControls}
           onMouseLeave={() => showPlayer && setControlsVisible(false)}
         >
+          {/* Completed Badge */}
+          {currentLessonStatus === 'completed' && (
+            <div className="lp-player__completed-badge">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+              {t('academyLessonPlayer.completed', 'Завършен')}
+            </div>
+          )}
+
           {/* Video Content */}
           <div className="lp-player__video">
             {canShowVideo && embedUrl ? (
@@ -782,22 +914,61 @@ const formatFileSize = (bytes) => {
                 {lesson?.maxCredits > 0 && (
                   <span className="lp-info__credits">🪙 +{lesson.maxCredits}</span>
                 )}
-                {lesson?.viewsCount > 0 && (
-                  <span className="lp-info__views">👁️ {lesson.viewsCount.toLocaleString()}</span>
+                {currentLessonStatus === 'completed' && (
+                  <span className="lp-info__status lp-info__status--completed">
+                    ✅ {t('academyLessonPlayer.completedStatus', 'Завършен')}
+                  </span>
+                )}
+                {currentLessonStatus === 'in_progress' && (
+                  <span className="lp-info__status lp-info__status--in-progress">
+                    ▶️ {t('academyLessonPlayer.inProgress', 'В процес')}
+                  </span>
                 )}
               </div>
               <h1 className="lp-info__title">{lesson?.title}</h1>
               
+              {/* Course Progress Stats */}
+              {enrollmentStats && (
+                <div className="lp-info__course-stats">
+                  <span className="lp-info__course-stat">
+                    📚 {enrollmentStats.completedLessons}/{enrollmentStats.totalLessons} урока
+                  </span>
+                  <span className="lp-info__course-stat">
+                    📈 {enrollmentStats.progressPercentage}% завършени
+                  </span>
+                  {enrollmentStats.inProgressLessons > 0 && (
+                    <span className="lp-info__course-stat">
+                      ▶️ {enrollmentStats.inProgressLessons} в процес
+                    </span>
+                  )}
+                  {enrollmentStats.passedTests > 0 && (
+                    <span className="lp-info__course-stat">
+                      ✅ {enrollmentStats.passedTests} теста
+                    </span>
+                  )}
+                  {enrollmentStats.totalEarnedCredits > 0 && (
+                    <span className="lp-info__course-stat">
+                      🪙 {enrollmentStats.totalEarnedCredits} кредита
+                    </span>
+                  )}
+                  {enrollmentStats.totalTimeSpentMinutes > 0 && (
+                    <span className="lp-info__course-stat">
+                      ⏱️ {formatTimeSpent(enrollmentStats.totalTimeSpentMinutes)}
+                    </span>
+                  )}
+                </div>
+              )}
+              
               {/* Progress indicator */}
-              {lessonProgress > 0 && (
+              {currentLessonProgress > 0 && currentLessonStatus !== 'completed' && (
                 <div className="lp-info__progress-bar">
                   <div className="lp-info__progress-track">
                     <div 
                       className="lp-info__progress-fill" 
-                      style={{ width: `${lessonProgress}%` }}
+                      style={{ width: `${currentLessonProgress}%` }}
                     ></div>
                   </div>
-                  <span className="lp-info__progress-text">{lessonProgress}%</span>
+                  <span className="lp-info__progress-text">{currentLessonProgress}%</span>
                 </div>
               )}
             </div>
@@ -828,12 +999,19 @@ const formatFileSize = (bytes) => {
               {/* Actions */}
               <div className="lp-info__actions">
                 <button 
-                  className="lp-info__complete-btn"
+                  className={`lp-info__complete-btn ${currentLessonStatus === 'completed' ? 'lp-info__complete-btn--completed' : ''}`}
                   onClick={handleCompleteLesson}
                   disabled={isCompleting}
                 >
                   {isCompleting ? (
                     <span className="lp-info__spinner"></span>
+                  ) : currentLessonStatus === 'completed' ? (
+                    <>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M5 12h14M12 5l7 7-7 7" />
+                      </svg>
+                      {nextLesson ? t('academyLessonPlayer.nextLesson', 'Следващ урок') : t('academyLessonPlayer.completed', 'Завършен')}
+                    </>
                   ) : (
                     <>
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -846,12 +1024,17 @@ const formatFileSize = (bytes) => {
 
                 {lesson?.hasTest && (
                   <button 
-                    className="lp-info__test-btn"
+                    className={`lp-info__test-btn ${isTestPassed(lesson.id, lessonSlug) ? 'lp-info__test-btn--passed' : ''}`}
                     onClick={handleStartTest}
                     disabled={isStartingTest}
                   >
                     {isStartingTest ? (
                       <span className="lp-info__spinner lp-info__spinner--purple"></span>
+                    ) : isTestPassed(lesson.id, lessonSlug) ? (
+                      <>
+                        ✅ {t('academyLessonPlayer.testPassed', 'Тестът е преминат')}
+                        {currentTestScore && <span className="lp-info__test-score">({currentTestScore}%)</span>}
+                      </>
                     ) : (
                       <>
                         📝 {t('academyLessonPlayer.startTest', 'Започни теста')}
@@ -864,8 +1047,16 @@ const formatFileSize = (bytes) => {
                 )}
               </div>
 
+              {/* Current lesson earned credits */}
+              {currentEarnedCredits > 0 && (
+                <div className="lp-info__earned-credits">
+                  <span className="lp-info__earned-credits-icon">🏆</span>
+                  <span>Спечелени от този урок: <strong>{currentEarnedCredits} кредита</strong></span>
+                </div>
+              )}
+
               {/* Test info */}
-              {lesson?.hasTest && (
+              {lesson?.hasTest && !isTestPassed(lesson.id, lessonSlug) && (
                 <div className="lp-info__test-info">
                   <div className="lp-info__test-info-icon">📋</div>
                   <div className="lp-info__test-info-content">
@@ -882,89 +1073,76 @@ const formatFileSize = (bytes) => {
 
               {/* Materials */}
               {materials.length > 0 && (
-  <div className="lp-materials">
-    <div className="lp-materials__header">
-      <h3>
-        <span className="lp-materials__icon">📎</span>
-        {t('academyLessonPlayer.materials', 'Материали')}
-        <span className="lp-materials__count">{materials.length}</span>
-      </h3>
-    </div>
-    
-    <div className="lp-materials__list">
-      {materials.map((material, idx) => (
-        <a 
-          key={material.id || idx}
-          href={material.fileUrl || material.externalUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={`lp-materials__item ${material.isRequired ? 'lp-materials__item--required' : ''}`}
-          download={material.isDownloadable !== false}
-          style={{ '--delay': `${idx * 0.05}s` }}
-        >
-          {/* Icon */}
-          <div className="lp-materials__item-icon">
-            {getMaterialIcon(material)}
-          </div>
-          
-          {/* Info */}
-          <div className="lp-materials__item-info">
-            <div className="lp-materials__item-header">
-              <h4 className="lp-materials__item-title">
-                {material.title || material.originalFileName || 'Материал'}
-              </h4>
-              {material.isRequired && (
-                <span className="lp-materials__item-required-badge">
-                  {t('academyLessonPlayer.required', 'Задължителен')}
-                </span>
+                <div className="lp-materials">
+                  <div className="lp-materials__header">
+                    <h3>
+                      <span className="lp-materials__icon">📎</span>
+                      {t('academyLessonPlayer.materials', 'Материали')}
+                      <span className="lp-materials__count">{materials.length}</span>
+                    </h3>
+                  </div>
+                  
+                  <div className="lp-materials__list">
+                    {materials.map((material, idx) => (
+                      <a 
+                        key={material.id || idx}
+                        href={material.fileUrl || material.externalUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`lp-materials__item ${material.isRequired ? 'lp-materials__item--required' : ''}`}
+                        download={material.isDownloadable !== false}
+                        style={{ '--delay': `${idx * 0.05}s` }}
+                      >
+                        <div className="lp-materials__item-icon">
+                          {getMaterialIcon(material)}
+                        </div>
+                        
+                        <div className="lp-materials__item-info">
+                          <div className="lp-materials__item-header">
+                            <h4 className="lp-materials__item-title">
+                              {material.title || material.originalFileName || 'Материал'}
+                            </h4>
+                            {material.isRequired && (
+                              <span className="lp-materials__item-required-badge">
+                                {t('academyLessonPlayer.required', 'Задължителен')}
+                              </span>
+                            )}
+                          </div>
+                          
+                          {material.description && (
+                            <p className="lp-materials__item-description">
+                              {material.description}
+                            </p>
+                          )}
+                          
+                          <div className="lp-materials__item-meta">
+                            {material.materialType && (
+                              <span className="lp-materials__item-type">
+                                {material.materialType.toUpperCase()}
+                              </span>
+                            )}
+                            {material.fileSize && (
+                              <span className="lp-materials__item-size">
+                                {formatFileSize(material.fileSize)}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                        
+                        <div className="lp-materials__item-action">
+                          <div className="lp-materials__item-download">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                              <polyline points="7 10 12 15 17 10" />
+                              <line x1="12" y1="15" x2="12" y2="3" />
+                            </svg>
+                          </div>
+                        </div>
+                      </a>
+                    ))}
+                  </div>
+                </div>
               )}
-            </div>
-            
-            {material.description && (
-              <p className="lp-materials__item-description">
-                {material.description}
-              </p>
-            )}
-            
-            <div className="lp-materials__item-meta">
-              {material.materialType && (
-                <span className="lp-materials__item-type">
-                  {material.materialType.toUpperCase()}
-                </span>
-              )}
-              {material.fileSize && (
-                <span className="lp-materials__item-size">
-                  {formatFileSize(material.fileSize)}
-                </span>
-              )}
-              {material.viewsCount > 0 && (
-                <span className="lp-materials__item-views">
-                  👁️ {material.viewsCount.toLocaleString()}
-                </span>
-              )}
-              {material.downloadsCount > 0 && (
-                <span className="lp-materials__item-downloads">
-                  ⬇️ {material.downloadsCount.toLocaleString()}
-                </span>
-              )}
-            </div>
-          </div>
-          
-          {/* Download Button */}
-          <div className="lp-materials__item-action">
-            <div className="lp-materials__item-download">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                <polyline points="7 10 12 15 17 10" />
-                <line x1="12" y1="15" x2="12" y2="3" />
-              </svg>
-            </div>
-          </div>
-        </a>
-      ))}
-    </div>
-  </div>
-)}
             </div>
           </div>
         </div>
@@ -983,6 +1161,21 @@ const formatFileSize = (bytes) => {
               </svg>
             </button>
           </div>
+
+          {/* Course Progress in Sidebar */}
+          {enrollmentStats && (
+            <div className="lp-sidebar__stats">
+              <div className="lp-sidebar__stats-bar">
+                <div 
+                  className="lp-sidebar__stats-fill"
+                  style={{ width: `${enrollmentStats.progressPercentage}%` }}
+                ></div>
+              </div>
+              <span className="lp-sidebar__stats-text">
+                {enrollmentStats.completedLessons}/{enrollmentStats.totalLessons} завършени ({enrollmentStats.progressPercentage}%)
+              </span>
+            </div>
+          )}
 
           <div className="lp-sidebar__content">
             {course?.modules?.map((module, moduleIdx) => {
@@ -1005,6 +1198,10 @@ const formatFileSize = (bytes) => {
                     {moduleLessons.map((l) => {
                       const isActive = l.slug === lessonSlug;
                       const isAccessible = isLessonAccessible(l);
+                      const lessonStatus = getLessonStatus(l.id, l.slug);
+                      const testPassedForLesson = isTestPassed(l.id, l.slug);
+                      const testScore = getTestScore(l.id, l.slug);
+                      const earnedCredits = getLessonEarnedCredits(l.id, l.slug);
 
                       return (
                         <button
@@ -1012,19 +1209,41 @@ const formatFileSize = (bytes) => {
                           onClick={() => isAccessible && handleNavigateToLesson(l)}
                           className={`lp-sidebar__lesson 
                             ${isActive ? 'lp-sidebar__lesson--active' : ''} 
-                            ${!isAccessible ? 'lp-sidebar__lesson--locked' : ''}`}
+                            ${!isAccessible ? 'lp-sidebar__lesson--locked' : ''}
+                            ${lessonStatus === 'completed' ? 'lp-sidebar__lesson--completed' : ''}
+                            ${lessonStatus === 'in_progress' ? 'lp-sidebar__lesson--in-progress' : ''}`}
                           disabled={!isAccessible}
                         >
                           <span className="lp-sidebar__lesson-icon">
                             {!isAccessible ? '🔒' : 
-                              l.lessonType === 'video' ? '▶️' :
+                              lessonStatus === 'completed' ? '✅' :
+                              lessonStatus === 'in_progress' ? '▶️' :
+                              l.lessonType === 'video' ? '🎬' :
                               l.lessonType === 'live' ? '🔴' :
                               l.lessonType === 'text' ? '📖' : '❓'}
                           </span>
                           <span className="lp-sidebar__lesson-title">{l.title}</span>
-                          {l.durationMinutes > 0 && (
-                            <span className="lp-sidebar__lesson-duration">{l.durationMinutes}м</span>
-                          )}
+                          <div className="lp-sidebar__lesson-badges">
+                            {l.durationMinutes > 0 && (
+                              <span className="lp-sidebar__lesson-duration">{l.durationMinutes}м</span>
+                            )}
+                            {/* Show test score if passed */}
+                            {testPassedForLesson && testScore && (
+                              <span className="lp-sidebar__lesson-test-score" title={`Резултат: ${testScore}%`}>
+                                {testScore}%
+                              </span>
+                            )}
+                            {/* Show test passed badge if no score */}
+                            {testPassedForLesson && !testScore && (
+                              <span className="lp-sidebar__lesson-test-passed" title="Тестът е преминат">✓</span>
+                            )}
+                            {/* Show earned credits */}
+                            {earnedCredits > 0 && (
+                              <span className="lp-sidebar__lesson-credits" title={`${earnedCredits} кредита`}>
+                                🪙{earnedCredits}
+                              </span>
+                            )}
+                          </div>
                           {isActive && <span className="lp-sidebar__lesson-playing">▶</span>}
                         </button>
                       );

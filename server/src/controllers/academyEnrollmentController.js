@@ -19,6 +19,8 @@ const {
   user_details,
   certificate,
   sequelize,
+  student_test_attempt,
+  lesson_test
 } = require('../sequelize/models/index');
 
 const { validateBody, validateQuery } = require('../middlewares/validateRequest');
@@ -498,7 +500,7 @@ academyEnrollmentController.post(
 
 // ===============================
 // GET /api/academy/enrollment/courses/:courseId/check
-// Проверка дали е записан + реален прогрес
+// Проверка дали е записан + реален прогрес + ТЕСТ РЕЗУЛТАТИ
 // ===============================
 academyEnrollmentController.get(
   '/courses/:courseId/check',
@@ -509,7 +511,6 @@ academyEnrollmentController.get(
       const userRole = req.user.role;
       const courseId = parseInt(req.params.courseId);
 
-      // Privileged users - винаги имат достъп
       const privilegedRoles = ['admin', 'moderator', 'mentor'];
       const isPrivileged = privilegedRoles.includes(userRole);
 
@@ -534,7 +535,7 @@ academyEnrollmentController.get(
         },
       });
 
-      // Вземи реалния прогрес по уроците (без explicit attributes - взема всички)
+      // Вземи реалния прогрес по уроците
       const lessonsProgress = await student_lesson.findAll({
         where: {
           studentId: studentData.id,
@@ -549,27 +550,63 @@ academyEnrollmentController.get(
         ],
       });
 
-      // Вземи общия брой публикувани уроци в курса
-      const totalLessonsInCourse = await lesson.count({
-        where: {
-          courseId,
-          isPublished: true,
-        },
+      // ========================================
+      // НОВО: Вземи най-добрия тест резултат за всеки урок
+      // ========================================
+      const courseTests = await lesson_test.findAll({
+        include: [{
+          model: lesson,
+          as: 'lesson',
+          where: { courseId },
+          attributes: ['id'],
+        }],
+        attributes: ['id', 'lessonId', 'passingScore'],
       });
 
-      // Изчисли статистики
+      // Вземи най-добрите опити за всеки тест
+      const testResultsMap = {};
+      
+      for (const testItem of courseTests) {
+        const bestAttempt = await student_test_attempt.findOne({
+          where: {
+            studentId: studentData.id,
+            testId: testItem.id,
+            status: 'completed',
+          },
+          order: [['score', 'DESC']],
+        });
+
+        if (bestAttempt) {
+          const score = bestAttempt.score ? Number(bestAttempt.score) : 0;
+          const passed = bestAttempt.isPassed ?? (score >= (testItem.passingScore || 60));
+          
+          testResultsMap[testItem.lessonId] = {
+            testPassed: passed,
+            testScore: score,
+            bestAttemptId: bestAttempt.id,
+          };
+        }
+      }
+
+      // Вземи общия брой публикувани уроци
+      const totalLessonsInCourse = await lesson.count({
+        where: { courseId, isPublished: true },
+      });
+
+      // Изчисли статистики С тест резултатите
       const completedLessons = lessonsProgress.filter(lp => lp.status === 'completed').length;
       const inProgressLessons = lessonsProgress.filter(lp => lp.status === 'in_progress').length;
       const totalEarnedCredits = lessonsProgress.reduce((sum, lp) => sum + (lp.earnedCredits || 0), 0);
       const totalTimeSpent = lessonsProgress.reduce((sum, lp) => sum + (lp.timeSpentMinutes || 0), 0);
-      const passedTests = lessonsProgress.filter(lp => lp.testPassed).length;
+      
+      // Брой минати тестове - от testResultsMap!
+      const passedTests = Object.values(testResultsMap).filter(t => t.testPassed).length;
 
-      // Изчисли реален процент прогрес
       const realProgressPercentage = totalLessonsInCourse > 0 
         ? Math.round((completedLessons / totalLessonsInCourse) * 100) 
         : 0;
 
-      // Ако има enrollment и данните са разминати - синхронизирай ги
+      // Синхронизирай enrollment ако е нужно
       if (enrollment) {
         const needsUpdate = 
           enrollment.completedLessons !== completedLessons ||
@@ -587,7 +624,35 @@ academyEnrollmentController.get(
         }
       }
 
-      // Намери текущия/последния урок
+      // Форматирай lessonsProgress С тест резултатите от testResultsMap
+      const formattedLessonsProgress = lessonsProgress.map(lp => {
+        const plain = lp.get({ plain: true });
+        const lessonId = plain.lessonId;
+        
+        // Вземи тест резултата от map-а (по-надежден от student_lesson)
+        const testResult = testResultsMap[lessonId] || {};
+        
+        // Използвай testResultsMap ако има данни, иначе fallback към student_lesson
+        const testPassed = testResult.testPassed ?? plain.testPassed ?? false;
+        const testScore = testResult.testScore ?? plain.testScore ?? null;
+
+        return {
+          lessonId: lessonId,
+          lessonSlug: plain.lesson?.slug,
+          lessonTitle: plain.lesson?.title,
+          status: plain.status,
+          progress: plain.progress || plain.progressPercentage || 0,
+          startedAt: plain.startedAt,
+          completedAt: plain.completedAt,
+          testPassed: testPassed,
+          testScore: testScore,
+          bestAttemptId: testResult.bestAttemptId || null,
+          earnedCredits: plain.earnedCredits || 0,
+          timeSpentMinutes: plain.timeSpentMinutes || 0,
+        };
+      });
+
+      // currentLesson и nextLesson логика
       const sortedProgress = [...lessonsProgress]
         .filter(lp => lp.status === 'in_progress' || lp.status === 'completed')
         .sort((a, b) => {
@@ -598,7 +663,6 @@ academyEnrollmentController.get(
       
       const lastAccessedLesson = sortedProgress[0] || null;
 
-      // Намери следващия урок за продължаване
       const completedLessonIds = lessonsProgress
         .filter(lp => lp.status === 'completed')
         .map(lp => lp.lessonId);
@@ -618,22 +682,7 @@ academyEnrollmentController.get(
         enrolled: !!enrollment && enrollment.status === 'active',
         enrollment,
         isPrivileged,
-        lessonsProgress: lessonsProgress.map(lp => {
-          const plain = lp.get({ plain: true });
-          return {
-            lessonId: plain.lessonId,
-            lessonSlug: plain.lesson?.slug,
-            lessonTitle: plain.lesson?.title,
-            status: plain.status,
-            progress: plain.progress || plain.progressPercentage || 0,
-            startedAt: plain.startedAt,
-            completedAt: plain.completedAt,
-            testPassed: plain.testPassed,
-            testScore: plain.testScore,
-            earnedCredits: plain.earnedCredits || 0,
-            timeSpentMinutes: plain.timeSpentMinutes || 0,
-          };
-        }),
+        lessonsProgress: formattedLessonsProgress,
         stats: {
           totalLessons: totalLessonsInCourse,
           completedLessons,
@@ -641,7 +690,7 @@ academyEnrollmentController.get(
           progressPercentage: realProgressPercentage,
           totalEarnedCredits,
           totalTimeSpentMinutes: totalTimeSpent,
-          passedTests,
+          passedTests, // Сега е правилно от testResultsMap!
         },
         currentLesson: lastAccessedLesson ? {
           id: lastAccessedLesson.lessonId,

@@ -3,6 +3,7 @@
 const LessonNavigation = ({ 
   previousLesson, 
   nextLesson, 
+  currentLessonStatus,
   isCompleting, 
   courseSlug, 
   onComplete, 
@@ -12,6 +13,7 @@ const LessonNavigation = ({
 }) => {
   const canGoToPrevious = previousLesson && isLessonAccessible(previousLesson);
   const canGoToNext = nextLesson && isLessonAccessible(nextLesson);
+  const isCompleted = currentLessonStatus === 'completed';
 
   return (
     <div className="alp-nav">
@@ -28,12 +30,19 @@ const LessonNavigation = ({
       </button>
 
       <button 
-        className="alp-nav__btn alp-nav__btn--complete"
+        className={`alp-nav__btn alp-nav__btn--complete ${isCompleted ? 'alp-nav__btn--completed' : ''}`}
         onClick={onComplete}
         disabled={isCompleting}
       >
         {isCompleting ? (
           <div className="alp-nav__spinner"></div>
+        ) : isCompleted ? (
+          <>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+            <span>{nextLesson ? t('academyLessonPlayer.nextLesson', 'Следващ урок') : t('academyLessonPlayer.completed', 'Завършен')}</span>
+          </>
         ) : (
           <>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

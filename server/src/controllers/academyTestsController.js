@@ -954,12 +954,6 @@ academyTestsController.get('/lesson/:lessonId/status', isAuth, async (req, res, 
     // Намери теста за този урок
     const testData = await test.findOne({
       where: { lessonId, isPublished: true },
-      attributes: [
-        'id', 'title', 'description', 'totalQuestions', 'totalPoints',
-        'passingScore', 'maxAttempts', 'timeLimitMinutes', 
-        'maxCredits', 'creditsForPassing', 'shuffleQuestions', 'shuffleAnswers',
-        'showCorrectAnswers', 'showScore', 'allowReview'
-      ]
     });
 
     if (!testData) {
@@ -969,7 +963,7 @@ academyTestsController.get('/lesson/:lessonId/status', isAuth, async (req, res, 
       });
     }
 
-    // Privileged users - винаги могат
+    // Privileged users
     const privilegedRoles = ['admin', 'moderator', 'mentor'];
     const isPrivileged = privilegedRoles.includes(userRole);
 
@@ -992,60 +986,117 @@ academyTestsController.get('/lesson/:lessonId/status', isAuth, async (req, res, 
       });
     }
 
-    // Вземи всички опити на този студент
+    // Вземи всички опити С отговорите
     const attempts = await test_attempt.findAll({
       where: {
         testId: testData.id,
         studentId: studentData.id,
       },
-      attributes: [
-        'id', 'attemptNumber', 'status', 'scorePercentage', 'passed',
-        'earnedPoints', 'totalPoints', 'correctAnswers', 'wrongAnswers',
-        'startedAt', 'completedAt', 'earnedCredits'
+      include: [
+        {
+          model: test_attempt_answer,
+          as: 'attemptAnswers',
+          include: [
+            {
+              model: test_question,
+              as: 'question',
+              attributes: ['id', 'questionText', 'questionType', 'points', 'sortOrder'],
+            },
+            {
+              model: test_answer,
+              as: 'selectedAnswer',
+              attributes: ['id', 'answerText', 'isCorrect'],
+            },
+          ],
+        },
       ],
       order: [['attemptNumber', 'DESC']],
     });
 
+    // Форматирай опитите с отговорите
+    const formattedAttempts = attempts.map(attempt => {
+      const plain = attempt.get({ plain: true });
+      
+      // Форматирай отговорите и сортирай по sortOrder на въпроса
+      const answersDetails = (plain.attemptAnswers || [])
+        .sort((a, b) => (a.question?.sortOrder || 0) - (b.question?.sortOrder || 0))
+        .map((aa, index) => ({
+          questionNumber: index + 1,
+          questionId: aa.questionId,
+          questionText: aa.question?.questionText,
+          isCorrect: aa.isCorrect ?? aa.selectedAnswer?.isCorrect ?? false,
+          yourAnswer: aa.selectedAnswer?.answerText || aa.textAnswer || 'Без отговор',
+        }));
+
+      // Изчисли статистика от отговорите
+      const correctCount = answersDetails.filter(a => a.isCorrect === true).length;
+      const wrongCount = answersDetails.filter(a => a.isCorrect === false).length;
+      const totalCount = answersDetails.length;
+      
+      // Изчисли score ако е null в базата
+      const calculatedScore = totalCount > 0 
+        ? Math.round((correctCount / totalCount) * 100) 
+        : 0;
+      
+      // Използвай стойността от базата или изчислената
+      const score = plain.score !== null ? Number(plain.score) : calculatedScore;
+      const passed = plain.isPassed !== null ? plain.isPassed : (score >= testData.passingScore);
+
+      return {
+        id: plain.id,
+        attemptNumber: plain.attemptNumber,
+        status: plain.status,
+        startedAt: plain.startedAt,
+        completedAt: plain.completedAt,
+        score: score,
+        correctAnswers: plain.correctAnswers ?? correctCount,
+        wrongAnswers: wrongCount,
+        totalQuestions: plain.totalQuestions ?? totalCount,
+        passed: passed,
+        earnedCredits: plain.earnedCredits || 0,
+        questionsResult: plain.status === 'completed' ? answersDetails : null,
+      };
+    });
+
     // Намери активен (in_progress) опит
-    const activeAttempt = attempts.find(a => a.status === 'in_progress') || null;
+    const activeAttempt = formattedAttempts.find(a => a.status === 'in_progress') || null;
 
     // Филтрирай завършените опити
-    const completedAttempts = attempts.filter(a => a.status === 'completed');
+    const completedAttempts = formattedAttempts.filter(a => a.status === 'completed');
 
-    // Намери най-добър резултат
+    // Намери най-добър резултат (по score)
     let bestAttempt = null;
     if (completedAttempts.length > 0) {
       bestAttempt = completedAttempts.reduce((best, current) => 
-        (current.scorePercentage > best.scorePercentage) ? current : best
+        (current.score > best.score) ? current : best
       );
     }
 
-    // Последен опит
+    // Последен завършен опит
     const lastAttempt = completedAttempts.length > 0 ? completedAttempts[0] : null;
 
     // Дали е преминал някога
-    const hasPassedTest = completedAttempts.some(a => a.passed);
+    const hasPassedTest = completedAttempts.some(a => a.passed === true);
 
     // Може ли да започне нов опит
-    // null или 0 maxAttempts = безкрайни опити
     const hasUnlimitedAttempts = !testData.maxAttempts || testData.maxAttempts === 0;
-    const canStartNew = !activeAttempt && (hasUnlimitedAttempts || attempts.length < testData.maxAttempts);
+    const canStartNew = !activeAttempt && (hasUnlimitedAttempts || formattedAttempts.length < testData.maxAttempts);
 
     // Оставащи опити
     const remainingAttempts = hasUnlimitedAttempts 
-      ? null  // null означава безкрайни
-      : Math.max(0, testData.maxAttempts - attempts.length);
+      ? null
+      : Math.max(0, testData.maxAttempts - formattedAttempts.length);
 
     res.status(200).json({
       success: true,
       test: testData,
-      attempts: attempts.map(a => a.get({ plain: true })),
-      bestAttempt: bestAttempt ? bestAttempt.get({ plain: true }) : null,
-      lastAttempt: lastAttempt ? lastAttempt.get({ plain: true }) : null,
+      attempts: formattedAttempts,
+      bestAttempt,
+      lastAttempt,
       hasPassedTest,
-      activeAttempt: activeAttempt ? activeAttempt.get({ plain: true }) : null,
+      activeAttempt,
       canStartNew,
-      totalAttempts: attempts.length,
+      totalAttempts: formattedAttempts.length,
       remainingAttempts,
       isPrivileged,
     });
@@ -1054,7 +1105,6 @@ academyTestsController.get('/lesson/:lessonId/status', isAuth, async (req, res, 
     next(err);
   }
 });
-
 // ===============================
 // POST /api/academy/tests/:id/start
 // Започване на тест
@@ -1355,53 +1405,86 @@ const submitAttempt = async (attemptId) => {
     ],
   });
 
+  // Изчисли резултатите
+  let correctAnswers = 0;
+  let pointsEarned = 0;
+  let maxPoints = 0;
+
   for (const answer of answers) {
+    const questionPoints = answer.question?.points || 1;
+    maxPoints += questionPoints;
+
     if (answer.answerId) {
       const selectedAnswer = await test_answer.findByPk(answer.answerId);
-      if (selectedAnswer) {
-        await answer.update({
-          isCorrect: selectedAnswer.isCorrect,
-          pointsEarned: selectedAnswer.isCorrect ? (answer.question?.points || 1) : 0,
-        });
+      const isCorrect = selectedAnswer?.isCorrect || false;
+
+      await answer.update({
+        isCorrect: isCorrect,
+        pointsEarned: isCorrect ? questionPoints : 0,
+      });
+
+      if (isCorrect) {
+        correctAnswers++;
+        pointsEarned += questionPoints;
       }
-    }
-  }
-
-  const score = await calculateTestScore(attemptId);
-
-  await attempt.update({
-    status: 'completed',
-    completedAt: new Date(),
-    scorePercentage: score.scorePercentage,
-    earnedPoints: score.earnedPoints,
-    totalPoints: score.totalPoints,
-    correctAnswers: score.correctAnswers,
-    wrongAnswers: score.wrongAnswers,
-    passed: score.passed,
-    earnedCredits: score.passed ? (attempt.test.creditsForPassing || attempt.test.maxCredits || 0) : 0,
-  });
-
-  if (attempt.test.lessonId) {
-    const lessonProgress = await student_lesson.findOne({
-      where: {
-        studentId: attempt.studentId,
-        lessonId: attempt.test.lessonId,
-      },
-    });
-
-    if (lessonProgress) {
-      await lessonProgress.update({
-        testPassed: score.passed,
-        testScore: score.scorePercentage,
-        testCompletedAt: new Date(),
+    } else {
+      // Без отговор = грешен
+      await answer.update({
+        isCorrect: false,
+        pointsEarned: 0,
       });
     }
   }
 
+  // Изчисли процент
+  const totalQuestions = answers.length;
+  const score = totalQuestions > 0 
+    ? Math.round((correctAnswers / totalQuestions) * 100) 
+    : 0;
+  
+  const isPassed = score >= (attempt.test.passingScore || 60);
+  const earnedCredits = isPassed ? (attempt.test.creditsForPassing || attempt.test.maxCredits || 0) : 0;
+
+  // Запиши с ПРАВИЛНИТЕ имена от модела
+  await attempt.update({
+    status: 'completed',
+    completedAt: new Date(),
+    score: score,
+    correctAnswers: correctAnswers,
+    totalQuestions: totalQuestions,
+    pointsEarned: pointsEarned,
+    maxPoints: maxPoints,
+    isPassed: isPassed,
+    earnedCredits: earnedCredits,
+  });
+
+  // Обнови student_lesson ако има lessonId
+  if (attempt.test.lessonId) {
+    await student_lesson.update(
+      {
+        testPassed: isPassed,
+        testScore: score,
+        testCompletedAt: new Date(),
+      },
+      {
+        where: {
+          studentId: attempt.studentId,
+          lessonId: attempt.test.lessonId,
+        },
+      }
+    );
+  }
+
   return {
     attemptId,
-    ...score,
-    earnedCredits: score.passed ? (attempt.test.creditsForPassing || attempt.test.maxCredits || 0) : 0,
+    score,
+    correctAnswers,
+    wrongAnswers: totalQuestions - correctAnswers,
+    totalQuestions,
+    pointsEarned,
+    maxPoints,
+    passed: isPassed,
+    earnedCredits,
   };
 };
 

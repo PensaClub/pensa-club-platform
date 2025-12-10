@@ -113,7 +113,7 @@ export const academyCoursesServiceFactory = () => {
     updateLesson: async (courseSlug, lessonSlug, lessonData) => {
       return requester.put(`${apiUrl}/academy/courses/${courseSlug}/lessons/${lessonSlug}`, lessonData);
     },
-    
+
     deleteLesson: async (courseSlug, lessonSlug) => {
       return requester.del(`${apiUrl}/academy/courses/${courseSlug}/lessons/${lessonSlug}`);
     },
@@ -343,9 +343,9 @@ export const academyCoursesServiceFactory = () => {
       return requester.post(`${apiUrl}/academy/enrollment/courses/${courseId}/drop`);
     },
 
-   checkEnrollment: async (courseId) => {
-  return requester.get(`${apiUrl}/academy/enrollment/courses/${courseId}/check`);
-},
+    checkEnrollment: async (courseId) => {
+      return requester.get(`${apiUrl}/academy/enrollment/courses/${courseId}/check`);
+    },
 
     updateLessonProgress: async (lessonId, progressData) => {
       return requester.post(`${apiUrl}/academy/enrollment/lessons/${lessonId}/progress`, progressData);
@@ -354,7 +354,24 @@ export const academyCoursesServiceFactory = () => {
     completeLesson: async (lessonId) => {
       return requester.post(`${apiUrl}/academy/enrollment/lessons/${lessonId}/complete`);
     },
+    // =========================================================
+    //                    ENROLLMENT - SLUG BASED (НОВИ)
+    // =========================================================
 
+    // Маркира урок като започнат (по slug)
+    startLessonBySlug: async (lessonSlug) => {
+      return requester.post(`${apiUrl}/academy/enrollment/lessons/${lessonSlug}/start`);
+    },
+
+    // Обновява прогрес по урок (по slug)
+    updateLessonProgressBySlug: async (lessonSlug, progressData) => {
+      return requester.post(`${apiUrl}/academy/enrollment/lessons/${lessonSlug}/progress`, progressData);
+    },
+
+    // Завършва урок (по slug)
+    completeLessonBySlug: async (lessonSlug) => {
+      return requester.post(`${apiUrl}/academy/enrollment/lessons/${lessonSlug}/complete`);
+    },
     // Admin enrollment management
     getCourseStudents: async (courseId, params = {}) => {
       const queryString = toQueryString(params);
@@ -368,9 +385,9 @@ export const academyCoursesServiceFactory = () => {
     rejectEnrollment: async (courseId, studentId, reason = null) => {
       return requester.post(`${apiUrl}/academy/enrollment/admin/courses/${courseId}/students/${studentId}/reject`, { reason });
     },
-startLessonBySlug: async (lessonSlug) => {
-  return requester.post(`${apiUrl}/academy/enrollment/lessons/${lessonSlug}/start`);
-},
+    startLessonBySlug: async (lessonSlug) => {
+      return requester.post(`${apiUrl}/academy/enrollment/lessons/${lessonSlug}/start`);
+    },
     // =========================================================
     //                    TESTS - ADMIN
     // =========================================================
@@ -434,13 +451,13 @@ startLessonBySlug: async (lessonSlug) => {
     // =========================================================
 
     // academyCoursesService.js
-startTest: async (lessonId) => {
-  return requester.post(`${apiUrl}/academy/tests/lesson/${lessonId}/start`);
-},
+    startTest: async (lessonId) => {
+      return requester.post(`${apiUrl}/academy/tests/lesson/${lessonId}/start`);
+    },
 
     getCurrentAttempt: async (testId) => {
-  return requester.get(`${apiUrl}/academy/tests/${testId}/attempt`);
-},
+      return requester.get(`${apiUrl}/academy/tests/${testId}/attempt`);
+    },
     submitAnswer: async (testId, answerData) => {
       return requester.post(`${apiUrl}/academy/tests/${testId}/answer`, answerData);
     },
@@ -452,14 +469,14 @@ startTest: async (lessonId) => {
     getTestResults: async (testId) => {
       return requester.get(`${apiUrl}/academy/tests/${testId}/results`);
     },
-getTestStatus: async (lessonId) => {
-  return requester.get(`${apiUrl}/academy/tests/lesson/${lessonId}/status`);
-},
+    getTestStatus: async (lessonId) => {
+      return requester.get(`${apiUrl}/academy/tests/lesson/${lessonId}/status`);
+    },
 
-// Резултат от конкретен опит
-getTestResultByAttempt: async (testId, attemptId) => {
-  return requester.get(`${apiUrl}/academy/tests/${testId}/result/${attemptId}`);
-},
+    // Резултат от конкретен опит
+    getTestResultByAttempt: async (testId, attemptId) => {
+      return requester.get(`${apiUrl}/academy/tests/${testId}/result/${attemptId}`);
+    },
     // =========================================================
     //                    CERTIFICATES
     // =========================================================
