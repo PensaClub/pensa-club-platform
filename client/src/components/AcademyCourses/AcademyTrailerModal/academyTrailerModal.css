@@ -1,0 +1,293 @@
+/* src/components/AcademyCourses/AcademyTrailerModal/academyTrailerModal.css */
+
+/* Backdrop */
+.academyTrailerModal-backdrop {
+  --accent-color: #ff6347;
+  
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(8px);
+  animation: academyTrailerModal-fadeIn 0.3s ease;
+}
+
+@keyframes academyTrailerModal-fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Modal */
+.academyTrailerModal {
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 
+    0 40px 80px rgba(0, 0, 0, 0.5),
+    0 0 100px color-mix(in srgb, var(--accent-color) 20%, transparent);
+  animation: academyTrailerModal-slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes academyTrailerModal-slideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Header */
+.academyTrailerModal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px 24px;
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.academyTrailerModal-header-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+}
+
+.academyTrailerModal-header-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+  background: var(--accent-color);
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.academyTrailerModal-header-badge svg {
+  width: 12px;
+  height: 12px;
+}
+
+.academyTrailerModal-header-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.academyTrailerModal-close {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: #94a3b8;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.academyTrailerModal-close:hover {
+  background: #ef4444;
+  border-color: #ef4444;
+  color: #ffffff;
+  transform: rotate(90deg);
+}
+
+/* Video Container */
+.academyTrailerModal-video {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000000;
+}
+
+.academyTrailerModal-video iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Video Error State */
+.academyTrailerModal-video-error {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+}
+
+.academyTrailerModal-video-error-icon {
+  font-size: 64px;
+  opacity: 0.5;
+}
+
+.academyTrailerModal-video-error-text {
+  font-size: 1.125rem;
+  color: #94a3b8;
+  margin: 0;
+  text-align: center;
+}
+
+/* Footer */
+.academyTrailerModal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px 24px;
+  background: rgba(0, 0, 0, 0.3);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.academyTrailerModal-footer-hint {
+  font-size: 0.9rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.academyTrailerModal-footer-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 28px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffffff;
+  background: var(--accent-color);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--accent-color) 40%, transparent);
+}
+
+.academyTrailerModal-footer-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px color-mix(in srgb, var(--accent-color) 50%, transparent);
+}
+
+.academyTrailerModal-footer-btn svg {
+  transition: transform 0.3s ease;
+}
+
+.academyTrailerModal-footer-btn:hover svg {
+  transform: translateX(4px);
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+@media (max-width: 768px) {
+  .academyTrailerModal-backdrop {
+    padding: 16px;
+    align-items: flex-end;
+  }
+
+  .academyTrailerModal {
+    border-radius: 20px 20px 0 0;
+    max-height: 90vh;
+    animation-name: academyTrailerModal-slideUp;
+  }
+
+  @keyframes academyTrailerModal-slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(100%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .academyTrailerModal-header {
+    padding: 16px 20px;
+  }
+
+  .academyTrailerModal-header-badge {
+    padding: 6px 10px;
+    font-size: 0.7rem;
+  }
+
+  .academyTrailerModal-header-title {
+    font-size: 1rem;
+  }
+
+  .academyTrailerModal-close {
+    width: 38px;
+    height: 38px;
+  }
+
+  .academyTrailerModal-footer {
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px 20px;
+  }
+
+  .academyTrailerModal-footer-hint {
+    text-align: center;
+    font-size: 0.85rem;
+  }
+
+  .academyTrailerModal-footer-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 16px 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .academyTrailerModal-backdrop {
+    padding: 0;
+  }
+
+  .academyTrailerModal {
+    border-radius: 20px 20px 0 0;
+    max-height: 95vh;
+  }
+
+  .academyTrailerModal-header-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .academyTrailerModal-video-error-icon {
+    font-size: 48px;
+  }
+
+  .academyTrailerModal-video-error-text {
+    font-size: 1rem;
+    padding: 0 20px;
+  }
+}

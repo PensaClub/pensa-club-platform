@@ -3,7 +3,21 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
     async up(queryInterface, Sequelize) {
+        // ===============================
+        // ПРОВЕРКА - АКО ИМА MENTORS, СПРИ
+        // ===============================
+        const existingMentors = await queryInterface.sequelize.query(
+            `SELECT COUNT(*) as count FROM mentors;`
+        );
+        
+        if (parseInt(existingMentors[0][0].count) > 0) {
+            console.log('✅ Mentors already exist, skipping...');
+            return;
+        }
 
+        // ===============================
+        // ПРОВЕРКА ЗА USER ACCOUNTS
+        // ===============================
         const existingUsers = await queryInterface.sequelize.query(
             `SELECT id, email FROM user_accounts 
              WHERE email IN ('mentor1@example.com', 'mentor2@example.com', 'mentor3@example.com', 'rejected1@example.com');`
@@ -12,7 +26,6 @@ module.exports = {
         let user1Id, user2Id, user3Id, user4Id;
 
         if (existingUsers[0].length === 0) {
-     
             const bcrypt = require('bcrypt');
             const hashedPassword = await bcrypt.hash('Mentor123!', 10);
 
@@ -46,24 +59,19 @@ module.exports = {
                     updatedAt: new Date(),
                 },
             ]);
-
-            const newUsers = await queryInterface.sequelize.query(
-                `SELECT id, email FROM user_accounts 
-                 WHERE email IN ('mentor1@example.com', 'mentor2@example.com', 'mentor3@example.com', 'rejected1@example.com')
-                 ORDER BY email;`
-            );
-
-            user1Id = newUsers[0][0].id; 
-            user2Id = newUsers[0][1].id; 
-            user3Id = newUsers[0][2].id;  
-            user4Id = newUsers[0][3].id;  
-        } else {
-  
-            user1Id = existingUsers[0].find(u => u.email === 'mentor1@example.com')?.id;
-            user2Id = existingUsers[0].find(u => u.email === 'mentor2@example.com')?.id;
-            user3Id = existingUsers[0].find(u => u.email === 'mentor3@example.com')?.id;
-            user4Id = existingUsers[0].find(u => u.email === 'rejected1@example.com')?.id;
         }
+
+        // Вземи user IDs
+        const users = await queryInterface.sequelize.query(
+            `SELECT id, email FROM user_accounts 
+             WHERE email IN ('mentor1@example.com', 'mentor2@example.com', 'mentor3@example.com', 'rejected1@example.com')
+             ORDER BY email;`
+        );
+
+        user1Id = users[0].find(u => u.email === 'mentor1@example.com')?.id;
+        user2Id = users[0].find(u => u.email === 'mentor2@example.com')?.id;
+        user3Id = users[0].find(u => u.email === 'mentor3@example.com')?.id;
+        user4Id = users[0].find(u => u.email === 'rejected1@example.com')?.id;
         
         await queryInterface.bulkInsert('mentors', [
             {
@@ -73,7 +81,7 @@ module.exports = {
                 email: 'maria.petrova@example.com',
                 phone: '+359888123456',
                 age: 24,
-                 country: 'BG',
+                country: 'BG',
                 photo_url: 'https://randomuser.me/api/portraits/women/44.jpg',
                 specialization: 'Digital Security',
                 education: 'СУ - Киберсигурност, Бакалавър 2023',
@@ -167,37 +175,45 @@ module.exports = {
             },
         ]);
 
-        await queryInterface.bulkInsert('mentor_applications', [
-            {
-                user_id: user4Id,  
-                name: 'Петър Иванов',
-                email: 'peter.ivanov@example.com',
-                phone: '+359888777666',
-                age: 22,
-                country: 'BG',
-                photo_url: 'https://randomuser.me/api/portraits/men/75.jpg',
-                specialization: 'Media Literacy',
-                education: 'Студент в СУ - Журналистика',
-                experience: '6 месеца стаж в местна медия',
-                motivation: 'Искам да помагам на хората да разпознават фалшиви новини',
-                availability: 'Уикенди',
-                languages: ['bg'],
-                viber: '+359888777666',
-                facebook: 'facebook.com/peter.ivanov',
-                linkedin: '',
-                other_contact: '',
-                priority_contact: 'viber',
-                cv_url: 'https://example.com/cv_peter.pdf',
-                cv_original_name: 'Peter_Ivanov_CV.pdf',
-                status: 'rejected',
-                rejection_reason: 'Недостатъчен опит в областта',
-                approved_at: null,
-                rejected_at: new Date('2025-01-21T09:00:00Z'),
-                createdAt: new Date('2025-01-20T11:00:00Z'),
-                updatedAt: new Date('2025-01-21T09:00:00Z'),
-            },
-        ]);
+        // Провери дали има rejected application
+        const existingApps = await queryInterface.sequelize.query(
+            `SELECT COUNT(*) as count FROM mentor_applications WHERE status = 'rejected';`
+        );
 
+        if (parseInt(existingApps[0][0].count) === 0) {
+            await queryInterface.bulkInsert('mentor_applications', [
+                {
+                    user_id: user4Id,  
+                    name: 'Петър Иванов',
+                    email: 'peter.ivanov@example.com',
+                    phone: '+359888777666',
+                    age: 22,
+                    country: 'BG',
+                    photo_url: 'https://randomuser.me/api/portraits/men/75.jpg',
+                    specialization: 'Media Literacy',
+                    education: 'Студент в СУ - Журналистика',
+                    experience: '6 месеца стаж в местна медия',
+                    motivation: 'Искам да помагам на хората да разпознават фалшиви новини',
+                    availability: 'Уикенди',
+                    languages: ['bg'],
+                    viber: '+359888777666',
+                    facebook: 'facebook.com/peter.ivanov',
+                    linkedin: '',
+                    other_contact: '',
+                    priority_contact: 'viber',
+                    cv_url: 'https://example.com/cv_peter.pdf',
+                    cv_original_name: 'Peter_Ivanov_CV.pdf',
+                    status: 'rejected',
+                    rejection_reason: 'Недостатъчен опит в областта',
+                    approved_at: null,
+                    rejected_at: new Date('2025-01-21T09:00:00Z'),
+                    createdAt: new Date('2025-01-20T11:00:00Z'),
+                    updatedAt: new Date('2025-01-21T09:00:00Z'),
+                },
+            ]);
+        }
+
+        console.log('✅ Mentors seeded: 3 mentors + 1 rejected application');
     },
 
     async down(queryInterface, Sequelize) {

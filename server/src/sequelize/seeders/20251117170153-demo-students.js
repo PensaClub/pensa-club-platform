@@ -4,6 +4,21 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     // ===============================
+    // ПРОВЕРИ ДАЛИ STUDENTS ВЕЧЕ СЪЩЕСТВУВАТ
+    // ===============================
+    const existingStudents = await queryInterface.sequelize.query(
+      `SELECT s.id, u.email FROM students s
+       JOIN user_accounts u ON s.user_id = u.id
+       WHERE u.email IN ('student1@example.com', 'student2@example.com', 'student3@example.com', 
+                         'student4@example.com', 'student5@example.com', 'student6@example.com');`
+    );
+
+    if (existingStudents[0].length > 0) {
+      console.log('✅ Students already exist, skipping...');
+      return;
+    }
+
+    // ===============================
     // СЪЗДАЙ STUDENT USER ACCOUNTS
     // ===============================
     const existingUsers = await queryInterface.sequelize.query(
@@ -68,28 +83,22 @@ module.exports = {
           updatedAt: new Date('2025-01-15'),
         },
       ]);
-
-      const newUsers = await queryInterface.sequelize.query(
-        `SELECT id, email FROM user_accounts 
-         WHERE email IN ('student1@example.com', 'student2@example.com', 'student3@example.com',
-                         'student4@example.com', 'student5@example.com', 'student6@example.com')
-         ORDER BY email;`
-      );
-
-      student1UserId = newUsers[0][0].id;
-      student2UserId = newUsers[0][1].id;
-      student3UserId = newUsers[0][2].id;
-      student4UserId = newUsers[0][3].id;
-      student5UserId = newUsers[0][4].id;
-      student6UserId = newUsers[0][5].id;
-    } else {
-      student1UserId = existingUsers[0].find(u => u.email === 'student1@example.com')?.id;
-      student2UserId = existingUsers[0].find(u => u.email === 'student2@example.com')?.id;
-      student3UserId = existingUsers[0].find(u => u.email === 'student3@example.com')?.id;
-      student4UserId = existingUsers[0].find(u => u.email === 'student4@example.com')?.id;
-      student5UserId = existingUsers[0].find(u => u.email === 'student5@example.com')?.id;
-      student6UserId = existingUsers[0].find(u => u.email === 'student6@example.com')?.id;
     }
+
+    // Вземи user IDs (независимо дали са нови или съществуващи)
+    const users = await queryInterface.sequelize.query(
+      `SELECT id, email FROM user_accounts 
+       WHERE email IN ('student1@example.com', 'student2@example.com', 'student3@example.com',
+                       'student4@example.com', 'student5@example.com', 'student6@example.com')
+       ORDER BY email;`
+    );
+
+    student1UserId = users[0].find(u => u.email === 'student1@example.com')?.id;
+    student2UserId = users[0].find(u => u.email === 'student2@example.com')?.id;
+    student3UserId = users[0].find(u => u.email === 'student3@example.com')?.id;
+    student4UserId = users[0].find(u => u.email === 'student4@example.com')?.id;
+    student5UserId = users[0].find(u => u.email === 'student5@example.com')?.id;
+    student6UserId = users[0].find(u => u.email === 'student6@example.com')?.id;
 
     // ===============================
     // ВЗЕМИ MENTOR IDs
@@ -101,9 +110,9 @@ module.exports = {
        ORDER BY u.email;`
     );
 
-    const mentor1Id = mentors[0][0]?.id;
-    const mentor2Id = mentors[0][1]?.id;
-    const mentor3Id = mentors[0][2]?.id;
+    const mentor1Id = mentors[0][0]?.id || null;
+    const mentor2Id = mentors[0][1]?.id || null;
+    const mentor3Id = mentors[0][2]?.id || null;
 
     // ===============================
     // СЪЗДАЙ STUDENTS
@@ -344,6 +353,8 @@ module.exports = {
         updated_at: new Date('2025-01-15'),
       },
     ]);
+
+    console.log('✅ Students seeded: 6 students created');
   },
 
   async down(queryInterface, Sequelize) {

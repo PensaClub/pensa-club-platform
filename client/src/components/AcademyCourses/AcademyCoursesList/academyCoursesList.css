@@ -1,0 +1,385 @@
+/* src/components/AcademyCourses/AcademyCoursesList/academyCoursesList.css */
+
+.academyCoursesList {
+  --accent-color: #ff6347;
+}
+
+/* ===================================
+   HEADER
+   =================================== */
+
+.academyCoursesList-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 24px 28px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.03) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  margin-bottom: 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.academyCoursesList-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--accent-color);
+}
+
+.academyCoursesList-header-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.academyCoursesList-header-icon {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  font-size: 28px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.academyCoursesList-header-text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.academyCoursesList-header-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.academyCoursesList-header-count {
+  font-size: 0.9rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.academyCoursesList-header-close {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.academyCoursesList-header-close:hover {
+  background: #ef4444;
+  border-color: #ef4444;
+  color: #ffffff;
+  transform: rotate(90deg);
+}
+
+/* ===================================
+   FILTERS
+   =================================== */
+
+.academyCoursesList-filters {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+.academyCoursesList-filters-pills {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.academyCoursesList-filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #94a3b8;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.academyCoursesList-filter:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.academyCoursesList-filter.is-active {
+  background: var(--accent-color, #ff6347);
+  border-color: var(--accent-color, #ff6347);
+  color: #ffffff;
+  box-shadow: 0 4px 16px color-mix(in srgb, var(--accent-color, #ff6347) 40%, transparent);
+}
+
+.academyCoursesList-filter-count {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+}
+
+.academyCoursesList-filter.is-active .academyCoursesList-filter-count {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Search */
+.academyCoursesList-search {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  min-width: 280px;
+  transition: all 0.3s ease;
+}
+
+.academyCoursesList-search:focus-within {
+  border-color: var(--accent-color, #ff6347);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-color, #ff6347) 15%, transparent);
+}
+
+.academyCoursesList-search svg {
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.academyCoursesList-search-input {
+  flex: 1;
+  background: none;
+  border: none;
+  outline: none;
+  font-size: 0.9rem;
+  color: #ffffff;
+}
+
+.academyCoursesList-search-input::placeholder {
+  color: #64748b;
+}
+
+/* ===================================
+   GRID
+   =================================== */
+
+.academyCoursesList-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+/* ===================================
+   EMPTY STATE
+   =================================== */
+
+.academyCoursesList-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 40px;
+  text-align: center;
+}
+
+.academyCoursesList-empty-icon {
+  font-size: 56px;
+  margin-bottom: 20px;
+  opacity: 0.6;
+}
+
+.academyCoursesList-empty-text {
+  font-size: 1.125rem;
+  color: #94a3b8;
+  margin: 0 0 24px;
+}
+
+.academyCoursesList-empty-reset {
+  padding: 12px 24px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #ffffff;
+  background: var(--accent-color, #ff6347);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.academyCoursesList-empty-reset:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--accent-color, #ff6347) 40%, transparent);
+}
+
+/* ===================================
+   VIEW ALL
+   =================================== */
+
+.academyCoursesList-viewAll {
+  display: flex;
+  justify-content: center;
+  margin-top: 48px;
+}
+
+.academyCoursesList-viewAll-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 32px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+  background: linear-gradient(135deg, #ff6347 0%, #ff7f50 100%);
+  border: none;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 24px rgba(255, 99, 71, 0.3);
+}
+
+.academyCoursesList-viewAll-btn:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(255, 99, 71, 0.4);
+}
+
+.academyCoursesList-viewAll-btn svg {
+  transition: transform 0.3s ease;
+}
+
+.academyCoursesList-viewAll-btn:hover svg {
+  transform: translateX(4px);
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+@media (max-width: 1400px) {
+  .academyCoursesList-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  .academyCoursesList-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .academyCoursesList-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .academyCoursesList-search {
+    min-width: unset;
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .academyCoursesList-header {
+    padding: 20px;
+    border-radius: 16px;
+    margin-bottom: 24px;
+  }
+
+  .academyCoursesList-header-icon {
+    width: 48px;
+    height: 48px;
+    font-size: 24px;
+    border-radius: 14px;
+  }
+
+  .academyCoursesList-header-title {
+    font-size: 1.25rem;
+  }
+
+  .academyCoursesList-filters {
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .academyCoursesList-filters-pills {
+    gap: 8px;
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    flex-wrap: nowrap;
+  }
+
+  .academyCoursesList-filter {
+    padding: 10px 16px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .academyCoursesList-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .academyCoursesList-header {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .academyCoursesList-header-icon {
+    width: 44px;
+    height: 44px;
+    font-size: 22px;
+    border-radius: 12px;
+  }
+
+  .academyCoursesList-header-title {
+    font-size: 1.125rem;
+  }
+
+  .academyCoursesList-header-close {
+    width: 38px;
+    height: 38px;
+  }
+
+  .academyCoursesList-filter {
+    padding: 8px 14px;
+    font-size: 0.8rem;
+    border-radius: 10px;
+  }
+
+  .academyCoursesList-search {
+    padding: 10px 14px;
+  }
+
+  .academyCoursesList-viewAll-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 14px 24px;
+  }
+}

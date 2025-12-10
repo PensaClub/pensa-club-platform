@@ -19,6 +19,14 @@ const academyController = require('./controllers/academyController');
 const reviewsController = require('./controllers/reviewsController');
 const userNotificationsController = require('./controllers/userNotificationsController'); 
 const mentorDashboardController = require('./controllers/mentorDashboardController');
+const coursesController = require('./controllers/coursesController');
+const lecturesController = require('./controllers/lecturesController');
+const seminarsController = require('./controllers/seminarsController');
+const academyEnrollmentController = require('./controllers/academyEnrollmentController');
+const academyTestsController = require('./controllers/academyTestsController');
+const certificatesController = require('./controllers/certificatesController');
+const academyMaterialsController = require('./controllers/academyMaterialsController');
+const academyMyController = require('./controllers/academyMyController');
 
 router.use('/auth', authController);
 router.use('/user', userController);
@@ -38,6 +46,17 @@ router.use('/academy', academyController);
 router.use('/reviews', reviewsController);
 router.use('/user-notifications', userNotificationsController); 
 router.use('/mentors/dashboard', mentorDashboardController);
+
+// Academy routes
+router.use('/academy/courses', coursesController);
+router.use('/academy/lectures', lecturesController);
+router.use('/academy/seminars', seminarsController);
+router.use('/academy/enrollment', academyEnrollmentController);
+router.use('/academy/tests', academyTestsController);
+router.use('/academy/certificates', certificatesController);
+router.use('/academy/materials', academyMaterialsController);
+router.use('/academy/my', academyMyController);
+
 router.use((err, req, res, next) => {
     errorHandler(err, req, res, err.statusCode || 500);
 });

@@ -10,7 +10,28 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: 'id',
         as: 'user',
       });
+      // В student.js - добави в associate():
 
+      // Has many lesson progress
+      student.hasMany(models.student_lesson, {
+        foreignKey: 'studentId',
+        sourceKey: 'id',
+        as: 'lessonProgress',
+      });
+
+      // Has many test attempts
+      student.hasMany(models.student_test_attempt, {
+        foreignKey: 'studentId',
+        sourceKey: 'id',
+        as: 'testAttempts',
+      });
+
+      // Has many certificates
+      student.hasMany(models.certificate, {
+        foreignKey: 'studentId',
+        sourceKey: 'id',
+        as: 'certificates',
+      });
       // Belongs to current mentor
       student.belongsTo(models.mentor, {
         foreignKey: 'currentMentorId',

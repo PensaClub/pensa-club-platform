@@ -1,14 +1,23 @@
+// server/src/sequelize/models/seminar.js
+
 'use strict';
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class seminar extends Model {
     static associate(models) {
-      // Belongs to course
+      // Belongs to course (optional)
       seminar.belongsTo(models.course, {
         foreignKey: 'courseId',
         targetKey: 'id',
         as: 'course',
+      });
+
+      // Belongs to mentor/facilitator
+      seminar.belongsTo(models.mentor, {
+        foreignKey: 'mentorId',
+        targetKey: 'id',
+        as: 'facilitator',
       });
 
       // Has many student_seminars
@@ -16,6 +25,13 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'seminarId',
         sourceKey: 'id',
         as: 'attendances',
+      });
+
+      // Has many materials
+      seminar.hasMany(models.seminar_material, {
+        foreignKey: 'seminarId',
+        sourceKey: 'id',
+        as: 'materials',
       });
 
       // Belongs to creator
@@ -35,25 +51,118 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         allowNull: false,
       },
+      courseId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        field: 'course_id',
+        references: {
+          model: 'courses',
+          key: 'id',
+        },
+        onDelete: 'SET NULL',
+      },
+      mentorId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        field: 'mentor_id',
+        references: {
+          model: 'mentors',
+          key: 'id',
+        },
+        onDelete: 'SET NULL',
+      },
+      createdBy: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        field: 'created_by',
+      },
+
+      // === ОСНОВНА ИНФОРМАЦИЯ ===
+      slug: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+      },
       title: {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      shortDescription: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+        field: 'short_description',
+      },
       description: {
         type: DataTypes.TEXT,
         allowNull: true,
-        defaultValue: null,
       },
-      courseId: {
-        type: DataTypes.INTEGER,
+      category: {
+        type: DataTypes.STRING,
         allowNull: true,
-        defaultValue: null,
-        field: 'course_id',
       },
+
+      // === ТИП И ФОРМАТ ===
+      seminarType: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: 'workshop',
+        field: 'seminar_type',
+        // workshop, discussion, hands_on, q_and_a
+      },
+      isOnline: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+        field: 'is_online',
+      },
+
+      // === ЛОКАЦИЯ ===
+      location: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      address: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
+      meetingLink: {
+        type: DataTypes.STRING(2048),
+        allowNull: true,
+        field: 'meeting_link',
+      },
+      meetingPassword: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        field: 'meeting_password',
+      },
+
+      // === ВИДЕО (за записани семинари) ===
+      videoProvider: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        field: 'video_provider',
+      },
+      videoUrl: {
+        type: DataTypes.STRING(2048),
+        allowNull: true,
+        field: 'video_url',
+      },
+      thumbnailUrl: {
+        type: DataTypes.STRING(2048),
+        allowNull: true,
+        field: 'thumbnail_url',
+      },
+
+      // === ВРЕМЕВИ НАСТРОЙКИ ===
       scheduledDate: {
         type: DataTypes.DATE,
         allowNull: false,
         field: 'scheduled_date',
+      },
+      scheduledEndDate: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        field: 'scheduled_end_date',
       },
       durationMinutes: {
         type: DataTypes.INTEGER,
@@ -61,44 +170,168 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: 90,
         field: 'duration_minutes',
       },
+      timezone: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: 'Europe/Sofia',
+      },
+
+      // === ЗАПИСВАНЕ ===
+      maxParticipants: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        field: 'max_participants',
+      },
+      minParticipants: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        field: 'min_participants',
+      },
+      requiresRegistration: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+        field: 'requires_registration',
+      },
+      requiresApproval: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+        field: 'requires_approval',
+      },
+      isPublic: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+        field: 'is_public',
+      },
+
+      // === КРЕДИТИ ===
       maxCredits: {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0,
         field: 'max_credits',
       },
-      location: {
-        type: DataTypes.STRING,
-        allowNull: true,
-        defaultValue: null,
+      creditsForAttendance: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+        field: 'credits_for_attendance',
       },
-      meetingLink: {
-        type: DataTypes.STRING(2048),
-        allowNull: true,
-        defaultValue: null,
-        field: 'meeting_link',
+      creditsForParticipation: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+        field: 'credits_for_participation',
       },
-      maxParticipants: {
+      creditsForTest: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+        field: 'credits_for_test',
+      },
+
+      // === ТЕСТ ===
+      hasTest: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+        field: 'has_test',
+      },
+      testPassingScore: {
         type: DataTypes.INTEGER,
         allowNull: true,
-        defaultValue: null,
-        field: 'max_participants',
+        field: 'test_passing_score',
       },
+
+      // === ЗАДАЧА ===
+      hasAssignment: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+        field: 'has_assignment',
+      },
+      assignmentDescription: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+        field: 'assignment_description',
+      },
+
+      // === СТАТУС ===
       status: {
         type: DataTypes.STRING,
         allowNull: false,
         defaultValue: 'scheduled',
+        // scheduled, live, completed, cancelled
       },
-      createdBy: {
+      isPublished: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+        field: 'is_published',
+      },
+      publishedAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        field: 'published_at',
+      },
+      cancelledAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        field: 'cancelled_at',
+      },
+      cancelReason: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+        field: 'cancel_reason',
+      },
+
+      // === СТАТИСТИКИ ===
+      registeredCount: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        field: 'created_by',
+        defaultValue: 0,
+        field: 'registered_count',
+      },
+      attendedCount: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+        field: 'attended_count',
+      },
+      viewsCount: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+        field: 'views_count',
+      },
+      rating: {
+        type: DataTypes.DECIMAL(2, 1),
+        allowNull: true,
+      },
+
+      // === МЕТА ===
+      tags: {
+        type: DataTypes.ARRAY(DataTypes.STRING),
+        allowNull: true,
+        defaultValue: [],
+      },
+      prerequisites: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
+      whatToBring: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+        field: 'what_to_bring',
       },
     },
     {
       sequelize,
       modelName: 'seminar',
       tableName: 'seminars',
+      timestamps: true,
       underscored: true,
     }
   );

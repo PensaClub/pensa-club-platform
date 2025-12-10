@@ -1,4 +1,4 @@
-// server/sequelize/models/mentor_course.js
+// server/src/sequelize/models/mentor_course.js
 
 'use strict';
 const { Model } = require('sequelize');
@@ -6,18 +6,17 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class mentor_course extends Model {
     static associate(models) {
-
       mentor_course.belongsTo(models.mentor, {
         foreignKey: 'mentorId',
         targetKey: 'id',
         as: 'mentor',
       });
+
       mentor_course.belongsTo(models.course, {
         foreignKey: 'courseId',
         targetKey: 'id',
         as: 'course',
       });
-
 
       mentor_course.hasMany(models.student_course, {
         foreignKey: 'mentorCourseId',
@@ -44,6 +43,37 @@ module.exports = (sequelize, DataTypes) => {
           key: 'id',
         },
       },
+      courseId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        defaultValue: null,
+        field: 'course_id',
+      },
+
+      // === РОЛЯ НА МЕНТОРА В КУРСА ===
+      
+      // role: Определя типа на ментора в курса
+      // - 'mentor' (default): Стандартен ментор, помага на студенти
+      // - 'lecturer': Лектор, води уроците
+      // - 'assistant': Асистент, помага на главния ментор
+      // - 'guest': Гост-лектор за отделни уроци
+      role: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: 'mentor',
+      },
+
+      // isLead: Дали е водещ/главен ментор на курса
+      // - true: Главен ментор, отговаря за курса, може да управлява другите ментори
+      // - false: Обикновен ментор/асистент
+      isLead: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+        field: 'is_lead',
+      },
+
+      // === ИНФОРМАЦИЯ ЗА КУРСА ===
       courseName: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -69,6 +99,8 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         defaultValue: null,
       },
+
+      // === ВРЕМЕВИ НАСТРОЙКИ ===
       durationWeeks: {
         type: DataTypes.INTEGER,
         allowNull: true,
@@ -81,6 +113,20 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
+      startDate: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        defaultValue: null,
+        field: 'start_date',
+      },
+      endDate: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        defaultValue: null,
+        field: 'end_date',
+      },
+
+      // === СТАТИСТИКИ ===
       enrolledStudents: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -105,8 +151,10 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
+
+      // === СТАТУС ===
       status: {
-        type: DataTypes.STRING, 
+        type: DataTypes.STRING,
         allowNull: false,
         defaultValue: 'active',
         validate: {
@@ -116,29 +164,13 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
-      startDate: {
-        type: DataTypes.DATE,
-        allowNull: true,
-        defaultValue: null,
-        field: 'start_date',
-      },
-      endDate: {
-        type: DataTypes.DATE,
-        allowNull: true,
-        defaultValue: null,
-        field: 'end_date',
-      },
-      courseId: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        defaultValue: null,
-        field: 'course_id',
-      },
     },
     {
       sequelize,
       modelName: 'mentor_course',
       tableName: 'mentor_courses',
+      timestamps: true,
+      underscored: true,
     }
   );
 
