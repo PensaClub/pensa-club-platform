@@ -12045,7 +12045,8 @@
         "events": "Събития",
         "library": "Библиотека",
         "community": "Общност",
-        "about": "За проекта"
+        "about": "За проекта",
+        "lectures": "Лекции"
       },
       "dropdown": {
         "dashboard": "Моят прогрес",
@@ -14060,16 +14061,20 @@
       "fetchFailed": "Грешка при зареждане на бележките"
     }
   },
-    "academyCourses": {
+  "academyCourses": {
     "loading": "Зареждане на курсове...",
     "noCourses": "Все още няма курсове",
     "checkBackLater": "Скоро ще добавим нови учебни програми. Очаквайте!",
     "programsTitle": "Учебни програми",
     "programsSubtitle": "Изберете програма според вашите интереси и ниво на опит",
     "popularCourses": "Популярни курсове",
-    "popularCoursesSubtitle": "Най-търсените курсове от нашите курсисти"
+    "popularCoursesSubtitle": "Най-търсените курсове от нашите курсисти",
+    "noResults": "Няма намерени курсове",
+    "tryDifferentFilters": "Опитайте с различни филтри или търсене",
+    "searchResults": "Резултати от търсенето",
+    "foundCourses": "Намерени {{count}} курса"
   },
-    "academyCoursesHero": {
+  "academyCoursesHero": {
     "titleLine1": "Открий своя път в ",
     "titleLine2": "дигиталния свят",
     "subtitle": "Безплатни практически курсове за всички възрасти. Научи се да използваш технологиите уверено с подкрепата на нашите ментори.",
@@ -14122,14 +14127,26 @@
     "noResults": "Няма намерени курсове с този филтър",
     "resetFilter": "Покажи всички",
     "viewAllCourses": "Виж всички курсове",
+    "resultSingle": "резултат",
+    "resultPlural": "резултата",
+    "clearAll": "Изчисти всички",
+    "noResultsTitle": "Няма намерени курсове",
+    "noResultsText": "Опитайте с различни филтри или търсене",
     "filters": {
       "all": "Всички",
       "beginner": "Начинаещи",
       "intermediate": "Напреднали",
       "advanced": "Експерти"
+    },
+    "sort": {
+      "popular": "Популярни",
+      "newest": "Най-нови",
+      "alphabetical": "По азбучен ред",
+      "rating": "По рейтинг",
+      "duration": "По продължителност"
     }
   },
-    "academyCourseCard": {
+  "academyCourseCard": {
     "free": "Безплатно",
     "startLearning": "Започни",
     "lessons": "урока",
@@ -14148,30 +14165,26 @@
     "hint": "Натисни ESC или кликни извън прозореца за затваряне",
     "viewCourse": "Виж курса"
   },
-   "academyCourseDetail": {
+  "academyCourseDetail": {
     "loading": "Зареждане на курса...",
     "notFound": "Курсът не е намерен",
     "notFoundText": "Курсът, който търсите, не съществува или е бил премахнат.",
     "backToCourses": "Обратно към курсовете",
-    
     "breadcrumb": {
       "academy": "Академия",
       "courses": "Курсове"
     },
-    
     "levels": {
       "beginner": "Начинаещи",
       "intermediate": "Напреднали",
       "advanced": "Експерти"
     },
-    
     "tabs": {
       "overview": "Преглед",
       "content": "Съдържание",
       "instructor": "Инструктор",
       "reviews": "Отзиви"
     },
-    
     "hero": {
       "certificateBadge": "Сертификат",
       "ratings": "оценки",
@@ -14179,14 +14192,12 @@
       "duration": "часа",
       "lessonsLabel": "урока",
       "createdBy": "Създаден от",
-        "enrolledStudents": "записани",
-        "youAreEnrolled": "Записан сте",
+      "enrolledStudents": "записани",
+      "youAreEnrolled": "Записан сте",
       "adminAccess": "Администраторски достъп",
       "mentorAccess": "Менторски достъп",
       "moderatorAccess": "Модераторски достъп"
-
     },
-    
     "card": {
       "watchPreview": "Гледай представяне",
       "watchTrailer": "Гледай трейлър",
@@ -14199,15 +14210,14 @@
       "certificate": "Сертификат при завършване",
       "creditsOnComplete": "кредита при завършване",
       "guarantee": "Безплатен достъп завинаги",
-       "continueLearning": "Продължи обучението",
+      "continueLearning": "Продължи обучението",
       "loginToEnroll": "Влез, за да се запишеш",
       "enrolling": "Записване...",
       "loginHint": "Трябва да влезете в акаунта си, за да се запишете",
       "youAreEnrolled": "Записан",
-        "startLearning": "Започни обучението",
+      "startLearning": "Започни обучението",
       "checking": "Проверка..."
     },
-    
     "overview": {
       "aboutCourse": "За курса",
       "targetAudience": "За кого е подходящ",
@@ -14225,7 +14235,6 @@
         "maxCredits": "Макс. кредити"
       }
     },
-    
     "content": {
       "courseContent": "Съдържание на курса",
       "modules": "модула",
@@ -14236,13 +14245,12 @@
       "freeLesson": "Безплатен",
       "hasTest": "С тест",
       "noContent": "Съдържанието на курса ще бъде добавено скоро.",
-       "availableOn": "Достъпен на",
+      "availableOn": "Достъпен на",
       "enrollToAccess": "Запишете се, за да получите достъп",
       "enrollToAccessDesc": "Курсът е безплатен. Запишете се, за да отключите всички уроци.",
       "loginToAccess": "Влезте, за да получите достъп",
       "loginToAccessDesc": "Влезте в акаунта си или се регистрирайте, за да се запишете за курса."
     },
-    
     "instructor": {
       "roles": {
         "lecturer": "Лектор",
@@ -14256,7 +14264,6 @@
       "assistants": "Асистенти",
       "noInstructor": "Информацията за инструктора ще бъде добавена скоро."
     },
-    
     "reviews": {
       "studentReviews": "Отзиви от курсисти",
       "basedOn": "Базирано на",
@@ -14265,7 +14272,7 @@
       "beFirstReview": "Бъди първият, който ще сподели мнение!"
     }
   },
-    "academyLessonPlayer": {
+  "academyLessonPlayer": {
     "loading": "Зареждане...",
     "error": "Грешка",
     "backToCourse": "Към курса",
@@ -14278,23 +14285,19 @@
     "notFound": "Урокът не е намерен",
     "unpublished": "Не е публикуван",
     "unpublishedDesc": "Този урок все още не е наличен.",
-    
     "courseContent": "Съдържание",
     "fullscreen": "Цял екран",
     "exitFullscreen": "Изход",
-    
     "typeVideo": "Видео",
     "typeLive": "На живо",
     "typeText": "Текст",
     "typeQuiz": "Тест",
-    
     "complete": "Завърши урока",
     "startTest": "Започни теста",
     "testAvailable": "Тест към урока",
     "passingScore": "Минимален резултат",
     "earnCredits": "Печели",
     "materials": "Материали",
-    
     "live": "НА ЖИВО",
     "upcoming": "Предстоящо",
     "liveScheduled": "Урок на живо",
@@ -14304,7 +14307,6 @@
     "textLesson": "Текстов урок",
     "readBelowDesc": "Прочетете съдържанието по-долу",
     "noVideo": "Няма видео",
-    
     "days": "дни",
     "hours": "часа",
     "minutes": "мин",
@@ -14352,9 +14354,61 @@
       "attemptInfo": "Опит {{current}} от {{max}}"
     }
   },
-   "results": {
-      "wrong": "Грешни",
-      "continueCourse": "Продължи с курса",
-      "noMoreAttempts": "Няма повече опити"
+  "results": {
+    "wrong": "Грешни",
+    "continueCourse": "Продължи с курса",
+    "noMoreAttempts": "Няма повече опити"
+  },
+ "academyLectures": {
+  "hero": {
+    "badge": "Видео лекции",
+    "title": "Лекции",
+    "titleAccent": "на живо и записи",
+    "subtitle": "Учете от експерти в реално време или гледайте записи когато ви е удобно. Напълно безплатно.",
+    "stats": {
+      "total": "Лекции",
+      "upcoming": "Предстоящи",
+      "recordings": "Записи",
+      "credits": "Кредита"
     }
+  },
+  "schedule": {
+    "title": "Предстоящи на живо",
+    "upcoming": "лекции",
+    "today": "Днес",
+    "tomorrow": "Утре"
+  },
+  "filters": {
+    "all": "Всички",
+    "live": "На живо",
+    "upcoming": "Предстоящи",
+    "recordings": "Записи",
+    "searchPlaceholder": "Търси лекция...",
+    "clearAll": "Изчисти"
+  },
+  "sort": {
+    "date": "По дата",
+    "popular": "Популярни",
+    "alphabetical": "А-Я"
+  },
+  "results": {
+    "found": "намерени"
+  },
+  "card": {
+    "upcoming": "Предстояща",
+    "recording": "Запис",
+    "speaker": "Лектор",
+    "hasTest": "С тест",
+    "watchLive": "Гледай на живо",
+    "signUp": "Запиши се",
+    "watch": "Гледай"
+  },
+  "loading": "Зареждане...",
+  "empty": {
+    "noLectures": "Няма налични лекции",
+    "noResults": "Няма намерени лекции",
+    "checkBack": "Проверете по-късно за нови лекции.",
+    "tryDifferent": "Опитайте с други филтри."
+  }
+}
 }

@@ -40,6 +40,11 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: 'id',
         as: 'creator',
       });
+      lecture.hasOne(models.lecture_test, {
+        foreignKey: 'lectureId',
+        sourceKey: 'id',
+        as: 'test',
+      });
     }
   }
 

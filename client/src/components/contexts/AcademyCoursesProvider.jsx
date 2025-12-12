@@ -1068,6 +1068,47 @@ const getTestResultByAttempt = useCallback(async (testId, attemptId) => {
   }, []);
 
   // =========================================================
+//                    LECTURE TESTS
+// =========================================================
+
+const startLectureTest = useCallback(async (lectureId) => {
+  try {
+    setIsLoading(true);
+    const response = await coursesService.startLectureTest(lectureId);
+    return response;
+  } catch (error) {
+    console.error('Error starting lecture test:', error);
+    toast.error('Грешка при стартиране на тест');
+    throw error;
+  } finally {
+    setIsLoading(false);
+  }
+}, []);
+
+const getLectureTestStatus = useCallback(async (lectureId) => {
+  try {
+    const data = await coursesService.getLectureTestStatus(lectureId);
+    return data;
+  } catch (error) {
+    console.error('Error fetching lecture test status:', error);
+    throw error;
+  }
+}, []);
+
+const getLectureAttempt = useCallback(async (lectureId) => {
+  try {
+    setIsLoading(true);
+    const data = await coursesService.getLectureAttempt(lectureId);
+    return data;
+  } catch (error) {
+    console.error('Error fetching lecture attempt:', error);
+    throw error;
+  } finally {
+    setIsLoading(false);
+  }
+}, []);
+
+  // =========================================================
   //                    CERTIFICATES
   // =========================================================
 
@@ -1468,6 +1509,10 @@ getTestResultByAttempt,
     getMyProgress,
     getMyCourseProgress,
     getMySchedule,
+    // Lecture Tests
+startLectureTest,
+getLectureTestStatus,
+getLectureAttempt,
   };
 
   return (

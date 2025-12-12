@@ -11815,7 +11815,9 @@
         "events": "Events",
         "library": "Library",
         "community": "Community",
-        "about": "About"
+        "about": "About",
+        "lectures": "Лекции"
+
       },
       "dropdown": {
         "dashboard": "My Progress",
@@ -13784,7 +13786,11 @@
     "programsTitle": "Learning Programs",
     "programsSubtitle": "Choose a program based on your interests and experience level",
     "popularCourses": "Popular Courses",
-    "popularCoursesSubtitle": "Most sought-after courses by our students"
+    "popularCoursesSubtitle": "Most sought-after courses by our students",
+      "noResults": "No courses found",
+    "tryDifferentFilters": "Try different filters or search terms",
+    "searchResults": "Search Results",
+    "foundCourses": "Found {{count}} courses"
   },
    "academyCoursesHero": {
     "titleLine1": "Discover your path in the ",
@@ -13844,7 +13850,19 @@
       "beginner": "Beginner",
       "intermediate": "Intermediate",
       "advanced": "Advanced"
-    }
+    },
+     "sort": {
+    "popular": "Popular",
+    "newest": "Newest",
+    "alphabetical": "Alphabetical",
+    "rating": "By rating",
+    "duration": "By duration"
+  },
+  "resultSingle": "result",
+  "resultPlural": "results",
+  "clearAll": "Clear all",
+  "noResultsTitle": "No courses found",
+  "noResultsText": "Try different filters or search terms"
   },
  "academyCourseCard": {
     "free": "Free",
@@ -14061,5 +14079,57 @@
   "wrong": "Wrong",
   "continueCourse": "Continue with course",
   "noMoreAttempts": "No more attempts"
+},
+ "academyLectures": {
+  "hero": {
+    "badge": "Video Lectures",
+    "title": "Lectures",
+    "titleAccent": "Live & Recordings",
+    "subtitle": "Learn from experts in real-time or watch recordings whenever convenient. Completely free.",
+    "stats": {
+      "total": "Lectures",
+      "upcoming": "Upcoming",
+      "recordings": "Recordings",
+      "credits": "Credits"
+    }
+  },
+  "schedule": {
+    "title": "Upcoming Live",
+    "upcoming": "lectures",
+    "today": "Today",
+    "tomorrow": "Tomorrow"
+  },
+  "filters": {
+    "all": "All",
+    "live": "Live",
+    "upcoming": "Upcoming",
+    "recordings": "Recordings",
+    "searchPlaceholder": "Search lecture...",
+    "clearAll": "Clear"
+  },
+  "sort": {
+    "date": "By date",
+    "popular": "Popular",
+    "alphabetical": "A-Z"
+  },
+  "results": {
+    "found": "found"
+  },
+  "card": {
+    "upcoming": "Upcoming",
+    "recording": "Recording",
+    "speaker": "Speaker",
+    "hasTest": "With test",
+    "watchLive": "Watch Live",
+    "signUp": "Sign Up",
+    "watch": "Watch"
+  },
+  "loading": "Loading...",
+  "empty": {
+    "noLectures": "No lectures available",
+    "noResults": "No lectures found",
+    "checkBack": "Check back later for new lectures.",
+    "tryDifferent": "Try different filters."
+  }
 }
 }

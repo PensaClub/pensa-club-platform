@@ -24,6 +24,7 @@ export const DigiBridgeHeader = () => {
   const baseNavigationItems = [
     { key: 'home', label: t('digiBridge.header.nav.home'), path: '/academy' },
     { key: 'courses', label: t('digiBridge.header.nav.courses'), path: '/academy/courses' },
+    { key: 'lectures', label: t('digiBridge.header.nav.lectures'), path: '/academy/lectures' },
     { key: 'mentors', label: t('digiBridge.header.nav.mentors'), path: '/academy/mentors' },
     { key: 'events', label: t('digiBridge.header.nav.events'), path: '/academy/events' },
     { key: 'library', label: t('digiBridge.header.nav.library'), path: '/academy/library' },

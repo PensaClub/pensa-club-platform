@@ -24,6 +24,11 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: 'id',
         as: 'test',
       });
+      student_test_attempt.belongsTo(models.lecture_test, {
+        foreignKey: 'lectureTestId',
+        targetKey: 'id',
+        as: 'lectureTest',
+      });
     }
   }
 
@@ -145,7 +150,16 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         field: 'is_passed',
       },
-
+      lectureTestId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        field: 'lecture_test_id',
+        references: {
+          model: 'lecture_tests',
+          key: 'id',
+        },
+        onDelete: 'CASCADE',
+      },
       // === КРЕДИТИ ===
       earnedCredits: {
         type: DataTypes.INTEGER,
