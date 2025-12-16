@@ -6,18 +6,25 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class test_question extends Model {
     static associate(models) {
-      // Belongs to test
+      // Belongs to lesson test
       test_question.belongsTo(models.lesson_test, {
         foreignKey: 'testId',
         targetKey: 'id',
         as: 'test',
       });
+
+      // Belongs to lecture test (НОВО)
+      test_question.belongsTo(models.lecture_test, {
+        foreignKey: 'lectureTestId',
+        targetKey: 'id',
+        as: 'lectureTest',
+      });
       
-      // Has many answers (от test_answers таблицата)
+      // Has many answers
       test_question.hasMany(models.test_answer, {
         foreignKey: 'questionId',
         sourceKey: 'id',
-        as: 'answerOptions',  // <-- ПРЕИМЕНУВАНО от 'answers'
+        as: 'answerOptions',
       });
 
       // Has many attempt answers
@@ -39,10 +46,20 @@ module.exports = (sequelize, DataTypes) => {
       },
       testId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true, // ✅ Сега е nullable
         field: 'test_id',
         references: {
           model: 'lesson_tests',
+          key: 'id',
+        },
+        onDelete: 'CASCADE',
+      },
+      lectureTestId: {
+        type: DataTypes.INTEGER,
+        allowNull: true, // ✅ НОВО поле
+        field: 'lecture_test_id',
+        references: {
+          model: 'lecture_tests',
           key: 'id',
         },
         onDelete: 'CASCADE',
@@ -62,11 +79,10 @@ module.exports = (sequelize, DataTypes) => {
         field: 'question_type',
       },
 
-      // === DEPRECATED - ще се използва test_answers таблицата ===
-      // Оставяме го за backwards compatibility
+      // === DEPRECATED - използва се test_answers таблицата ===
       answers: {
         type: DataTypes.JSONB,
-        allowNull: true,  // <-- Сменено на true
+        allowNull: true,
         defaultValue: [],
       },
 

@@ -579,47 +579,65 @@ export const AcademyCoursesProvider = ({ children }) => {
     }
   }, [isAdmin]);
 
-  // =========================================================
-  //                    LECTURE REGISTRATION
-  // =========================================================
+
+  // ═══════════════════════════════════════════════════════════════════════════
 
   const registerForLecture = useCallback(async (lectureId) => {
-    try {
-      setIsLoading(true);
-      const response = await coursesService.registerForLecture(lectureId);
-      toast.success('Регистрацията е успешна');
-      return response;
-    } catch (error) {
-      console.error('Error registering for lecture:', error);
-      toast.error('Грешка при регистрация');
-      throw error;
-    } finally {
-      setIsLoading(false);
+  setIsLoading(true);
+  try {
+    const result = await coursesService.registerForLecture(lectureId);
+    if (result.success) {
+      toast.success(result.message || 'Успешно се записахте за лекцията');
     }
-  }, []);
+    return result;
+  } catch (error) {
+    toast.error(error.message || 'Грешка при записване за лекцията');
+    throw error;
+  } finally {
+    setIsLoading(false);
+  }
+}, []);
 
-  const unregisterFromLecture = useCallback(async (lectureId) => {
-    try {
-      const response = await coursesService.unregisterFromLecture(lectureId);
-      toast.success('Регистрацията е отменена');
-      return response;
-    } catch (error) {
-      console.error('Error unregistering from lecture:', error);
-      toast.error('Грешка при отмяна на регистрация');
-      throw error;
+const unregisterFromLecture = useCallback(async (lectureId) => {
+  setIsLoading(true);
+  try {
+    const result = await coursesService.unregisterFromLecture(lectureId);
+    if (result.success) {
+      toast.success(result.message || 'Успешно се отписахте от лекцията');
     }
-  }, []);
+    return result;
+  } catch (error) {
+    toast.error(error.message || 'Грешка при отписване от лекцията');
+    throw error;
+  } finally {
+    setIsLoading(false);
+  }
+}, []);
 
-  const getLectureAttendees = useCallback(async (lectureId) => {
-    try {
-      const data = await coursesService.getLectureAttendees(lectureId);
-      return data.attendees || [];
-    } catch (error) {
-      console.error('Error fetching attendees:', error);
-      return [];
-    }
-  }, []);
+const checkLectureRegistration = useCallback(async (lectureId) => {
+  try {
+    const result = await coursesService.checkLectureRegistration(lectureId);
+    return result;
+  } catch (error) {
+    console.error('Check registration error:', error);
+    return { success: false, registered: false, registration: null };
+  }
+}, []);
 
+// 2. ДОБАВИ тази липсваща функция (или махни от return ако не ти трябва):
+
+const getLectureAttendees = useCallback(async (lectureId) => {
+  if (!isAdmin) {
+    return { attendees: [] };
+  }
+  try {
+    const data = await coursesService.getLectureAttendees(lectureId);
+    return data.attendees || [];
+  } catch (error) {
+    console.error('Error fetching lecture attendees:', error);
+    return [];
+  }
+}, [isAdmin]);
   const markLectureAttended = useCallback(async (lectureId, studentId) => {
     if (!isAdmin) {
       toast.error('Нямате права за тази операция');
@@ -882,58 +900,58 @@ export const AcademyCoursesProvider = ({ children }) => {
 
 
   // =========================================================
-//                    ENROLLMENT - SLUG BASED (НОВИ)
-// =========================================================
+  //                    ENROLLMENT - SLUG BASED (НОВИ)
+  // =========================================================
 
-const startLessonBySlug = useCallback(async (lessonSlug) => {
-  try {
-    const response = await coursesService.startLessonBySlug(lessonSlug);
-    return response;
-  } catch (error) {
-    console.error('Error starting lesson:', error);
-    return { success: false };
-  }
-}, []);
-
-const updateLessonProgressBySlug = useCallback(async (lessonSlug, progressData) => {
-  try {
-    const response = await coursesService.updateLessonProgressBySlug(lessonSlug, progressData);
-    return response;
-  } catch (error) {
-    console.error('Error updating progress:', error);
-    return { success: false };
-  }
-}, []);
-
-const completeLessonBySlug = useCallback(async (lessonSlug) => {
-  try {
-    const response = await coursesService.completeLessonBySlug(lessonSlug);
-    toast.success('Урокът е завършен успешно!');
-    return response;
-  } catch (error) {
-    console.error('Error completing lesson:', error);
-    toast.error('Грешка при завършване на урок');
-    throw error;
-  }
-}, []);
-
-// Обновен getEnrollmentStatus - запазва lessonsProgress
-const getEnrollmentStatus = useCallback(async (courseId) => {
-  try {
-    const data = await coursesService.checkEnrollment(courseId);
-    // Запазваме прогреса по уроците в state
-    if (data.lessonsProgress) {
-      setLessonsProgress(data.lessonsProgress);
+  const startLessonBySlug = useCallback(async (lessonSlug) => {
+    try {
+      const response = await coursesService.startLessonBySlug(lessonSlug);
+      return response;
+    } catch (error) {
+      console.error('Error starting lesson:', error);
+      return { success: false };
     }
-    if (data.stats) {
-      setEnrollmentStats(data.stats);
+  }, []);
+
+  const updateLessonProgressBySlug = useCallback(async (lessonSlug, progressData) => {
+    try {
+      const response = await coursesService.updateLessonProgressBySlug(lessonSlug, progressData);
+      return response;
+    } catch (error) {
+      console.error('Error updating progress:', error);
+      return { success: false };
     }
-    return data;
-  } catch (error) {
-    console.error('Error fetching enrollment status:', error);
-    return { enrolled: false };
-  }
-}, []);
+  }, []);
+
+  const completeLessonBySlug = useCallback(async (lessonSlug) => {
+    try {
+      const response = await coursesService.completeLessonBySlug(lessonSlug);
+      toast.success('Урокът е завършен успешно!');
+      return response;
+    } catch (error) {
+      console.error('Error completing lesson:', error);
+      toast.error('Грешка при завършване на урок');
+      throw error;
+    }
+  }, []);
+
+  // Обновен getEnrollmentStatus - запазва lessonsProgress
+  const getEnrollmentStatus = useCallback(async (courseId) => {
+    try {
+      const data = await coursesService.checkEnrollment(courseId);
+      // Запазваме прогреса по уроците в state
+      if (data.lessonsProgress) {
+        setLessonsProgress(data.lessonsProgress);
+      }
+      if (data.stats) {
+        setEnrollmentStats(data.stats);
+      }
+      return data;
+    } catch (error) {
+      console.error('Error fetching enrollment status:', error);
+      return { enrolled: false };
+    }
+  }, []);
 
   // =========================================================
   //                    TESTS
@@ -1034,29 +1052,29 @@ const getEnrollmentStatus = useCallback(async (courseId) => {
     }
   }, []);
 
-// =========================================================
-//                    TESTS - НОВИ ФУНКЦИИ
-// =========================================================
+  // =========================================================
+  //                    TESTS - НОВИ ФУНКЦИИ
+  // =========================================================
 
-const getTestStatus = useCallback(async (lessonId) => {
-  try {
-    const data = await coursesService.getTestStatus(lessonId);
-    return data;
-  } catch (error) {
-    console.error('Error fetching test status:', error);
-    throw error;
-  }
-}, []);
+  const getTestStatus = useCallback(async (lessonId) => {
+    try {
+      const data = await coursesService.getTestStatus(lessonId);
+      return data;
+    } catch (error) {
+      console.error('Error fetching test status:', error);
+      throw error;
+    }
+  }, []);
 
-const getTestResultByAttempt = useCallback(async (testId, attemptId) => {
-  try {
-    const data = await coursesService.getTestResultByAttempt(testId, attemptId);
-    return data;
-  } catch (error) {
-    console.error('Error fetching test result:', error);
-    throw error;
-  }
-}, []);
+  const getTestResultByAttempt = useCallback(async (testId, attemptId) => {
+    try {
+      const data = await coursesService.getTestResultByAttempt(testId, attemptId);
+      return data;
+    } catch (error) {
+      console.error('Error fetching test result:', error);
+      throw error;
+    }
+  }, []);
   const getTestResults = useCallback(async (testId) => {
     try {
       const data = await coursesService.getTestResults(testId);
@@ -1068,45 +1086,45 @@ const getTestResultByAttempt = useCallback(async (testId, attemptId) => {
   }, []);
 
   // =========================================================
-//                    LECTURE TESTS
-// =========================================================
+  //                    LECTURE TESTS
+  // =========================================================
 
-const startLectureTest = useCallback(async (lectureId) => {
-  try {
-    setIsLoading(true);
-    const response = await coursesService.startLectureTest(lectureId);
-    return response;
-  } catch (error) {
-    console.error('Error starting lecture test:', error);
-    toast.error('Грешка при стартиране на тест');
-    throw error;
-  } finally {
-    setIsLoading(false);
-  }
-}, []);
+  const startLectureTest = useCallback(async (lectureId) => {
+    try {
+      setIsLoading(true);
+      const response = await coursesService.startLectureTest(lectureId);
+      return response;
+    } catch (error) {
+      console.error('Error starting lecture test:', error);
+      toast.error('Грешка при стартиране на тест');
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
-const getLectureTestStatus = useCallback(async (lectureId) => {
-  try {
-    const data = await coursesService.getLectureTestStatus(lectureId);
-    return data;
-  } catch (error) {
-    console.error('Error fetching lecture test status:', error);
-    throw error;
-  }
-}, []);
+  const getLectureTestStatus = useCallback(async (lectureId) => {
+    try {
+      const data = await coursesService.getLectureTestStatus(lectureId);
+      return data;
+    } catch (error) {
+      console.error('Error fetching lecture test status:', error);
+      throw error;
+    }
+  }, []);
 
-const getLectureAttempt = useCallback(async (lectureId) => {
-  try {
-    setIsLoading(true);
-    const data = await coursesService.getLectureAttempt(lectureId);
-    return data;
-  } catch (error) {
-    console.error('Error fetching lecture attempt:', error);
-    throw error;
-  } finally {
-    setIsLoading(false);
-  }
-}, []);
+  const getLectureAttempt = useCallback(async (lectureId) => {
+    try {
+      setIsLoading(true);
+      const data = await coursesService.getLectureAttempt(lectureId);
+      return data;
+    } catch (error) {
+      console.error('Error fetching lecture attempt:', error);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
   // =========================================================
   //                    CERTIFICATES
@@ -1388,8 +1406,8 @@ const getLectureAttempt = useCallback(async (lectureId) => {
     seminars,
     myDashboard,
     currentLesson,
-lessonsProgress,
-enrollmentStats,
+    lessonsProgress,
+    enrollmentStats,
     // Courses - Public
     getCourses,
     getCourseBySlug,
@@ -1440,6 +1458,7 @@ enrollmentStats,
     // Lecture Registration
     registerForLecture,
     unregisterFromLecture,
+    checkLectureRegistration,
     getLectureAttendees,
     markLectureAttended,
 
@@ -1467,10 +1486,10 @@ enrollmentStats,
     getEnrollmentStatus,
     updateLessonProgress,
     completeLesson,
-// Enrollment - slug based
-startLessonBySlug,
-updateLessonProgressBySlug,
-completeLessonBySlug,
+    // Enrollment - slug based
+    startLessonBySlug,
+    updateLessonProgressBySlug,
+    completeLessonBySlug,
     // Tests
     getTests,
     createTest,
@@ -1486,7 +1505,7 @@ completeLessonBySlug,
     verifyCertificate,
     generateCertificate,
     getTestStatus,
-getTestResultByAttempt,
+    getTestResultByAttempt,
 
     // Materials (slug-based)
     getCourseMaterials,
@@ -1510,9 +1529,9 @@ getTestResultByAttempt,
     getMyCourseProgress,
     getMySchedule,
     // Lecture Tests
-startLectureTest,
-getLectureTestStatus,
-getLectureAttempt,
+    startLectureTest,
+    getLectureTestStatus,
+    getLectureAttempt,
   };
 
   return (

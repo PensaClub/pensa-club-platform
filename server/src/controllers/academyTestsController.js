@@ -5,6 +5,7 @@ const { Op } = require('sequelize');
 
 const {
   lesson_test,
+   lecture_test,
   test_question,
   test_answer,
   student_test_attempt,
@@ -155,7 +156,85 @@ const getStudentByUserId = async (userId) => {
     where: { userId },
   });
 };
+// ===============================
+// Helper: Submit lecture attempt (НОВ)
+// ===============================
+const submitLectureAttempt = async (attemptId, testData) => {
+  const attempt = await test_attempt.findByPk(attemptId);
 
+  if (!attempt || attempt.status === 'completed') return null;
+
+  const answers = await test_attempt_answer.findAll({
+    where: { attemptId },
+    include: [
+      {
+        model: test_question,
+        as: 'question',
+      },
+    ],
+  });
+
+  let correctAnswers = 0;
+  let pointsEarned = 0;
+  let maxPoints = 0;
+
+  for (const answer of answers) {
+    const questionPoints = answer.question?.points || 1;
+    maxPoints += questionPoints;
+
+    if (answer.answerId) {
+      const selectedAnswer = await test_answer.findByPk(answer.answerId);
+      const isCorrect = selectedAnswer?.isCorrect || false;
+
+      await answer.update({
+        isCorrect: isCorrect,
+        pointsEarned: isCorrect ? questionPoints : 0,
+      });
+
+      if (isCorrect) {
+        correctAnswers++;
+        pointsEarned += questionPoints;
+      }
+    } else {
+      await answer.update({
+        isCorrect: false,
+        pointsEarned: 0,
+      });
+    }
+  }
+
+  const totalQuestions = answers.length;
+  const score = totalQuestions > 0 
+    ? Math.round((correctAnswers / totalQuestions) * 100) 
+    : 0;
+  
+  const isPassed = score >= (testData.passingScore || 70);
+  const earnedCredits = isPassed ? (testData.creditsForPassing || testData.maxCredits || 0) : 0;
+
+  await attempt.update({
+    status: 'completed',
+    completedAt: new Date(),
+    score: score,
+    correctAnswers: correctAnswers,
+    totalQuestions: totalQuestions,
+    pointsEarned: pointsEarned,
+    maxPoints: maxPoints,
+    isPassed: isPassed,
+    earnedCredits: earnedCredits,
+  });
+
+  return {
+    attemptId,
+    score,
+    correctAnswers,
+    wrongAnswers: totalQuestions - correctAnswers,
+    totalQuestions,
+    pointsEarned,
+    maxPoints,
+    passed: isPassed,
+    earnedCredits,
+  };
+};
 // =========================================================
 //                    TEST CRUD (Admin/Mentor)
 // =========================================================
@@ -1197,9 +1276,14 @@ academyTestsController.post('/:id/start', isAuth, async (req, res, next) => {
 });
 
 // Helper: Get questions for attempt
-const getQuestionsForAttempt = async (testData, attemptId) => {
+const getQuestionsForAttempt = async (testData, attemptId, isLectureTest = false) => {
+
+  const whereClause = isLectureTest 
+    ? { lectureTestId: testData.id }
+    : { testId: testData.id };
+
   let questions = await test_question.findAll({
-    where: { testId: testData.id },
+    where: whereClause,
     include: [
       {
         model: test_answer,
@@ -2039,7 +2123,7 @@ academyTestsController.get('/lecture/:lectureId/status', isAuth, async (req, res
     const userRole = req.user.role;
 
     // Намери теста за тази лекция
-    const testData = await test.findOne({
+    const testData = await lecture_test.findOne({
       where: { lectureId, isPublished: true },
     });
 
@@ -2189,7 +2273,7 @@ academyTestsController.post('/lecture/:lectureId/start', isAuth, async (req, res
     const userRole = req.user.role;
 
     // Намери теста за тази лекция
-    const testData = await test.findOne({
+    const testData = await lecture_test.findOne({
       where: { lectureId, isPublished: true },
       include: [{
         model: lecture,
@@ -2242,14 +2326,15 @@ academyTestsController.post('/lecture/:lectureId/start', isAuth, async (req, res
       }
     }
 
-    // Ако няма студентски профил за непривилегирован потребител
-    if (!isPrivileged && !studentData) {
+    // Ако няма студентски профил
+    if (!studentData) {
       studentData = await student.create({
         userId,
         status: 'active',
       });
     }
 
+    // ✅ Търси attempts по testId = lecture_test.id
     const existingAttempts = await test_attempt.count({
       where: {
         testId: testData.id,
@@ -2264,6 +2349,7 @@ academyTestsController.post('/lecture/:lectureId/start', isAuth, async (req, res
       });
     }
 
+    // ✅ Търси in_progress attempt
     const inProgressAttempt = await test_attempt.findOne({
       where: {
         testId: testData.id,
@@ -2273,7 +2359,43 @@ academyTestsController.post('/lecture/:lectureId/start', isAuth, async (req, res
     });
 
     if (inProgressAttempt) {
-      const questions = await getQuestionsForAttempt(testData, inProgressAttempt.id);
+      // ✅ Провери дали времето е изтекло
+      const timeRemaining = calculateTimeRemaining(inProgressAttempt, testData);
+      
+      if (timeRemaining !== null && timeRemaining <= 0) {
+        // Времето е изтекло - submit автоматично
+        await submitLectureAttempt(inProgressAttempt.id, testData);
+        
+        // Създай нов attempt ако има още опити
+        if (!testData.maxAttempts || existingAttempts + 1 < testData.maxAttempts) {
+          const newAttempt = await test_attempt.create({
+            testId: testData.id,
+            studentId: studentData.id,
+            status: 'in_progress',
+            startedAt: new Date(),
+            attemptNumber: existingAttempts + 2, // +2 защото вече сме submit-нали един
+          });
+
+          const questions = await getQuestionsForAttempt(testData, newAttempt.id, true);
+
+          return res.status(201).json({
+            success: true,
+            message: 'Previous attempt timed out. New test started.',
+            attempt: newAttempt,
+            test: testData,
+            questions,
+            timeLimit: testData.timeLimitMinutes,
+          });
+        } else {
+          return res.status(400).json({
+            success: false,
+            message: 'Previous attempt timed out. Maximum attempts reached.',
+          });
+        }
+      }
+
+      // ✅ Продължи съществуващия attempt
+      const questions = await getQuestionsForAttempt(testData, inProgressAttempt.id, true);
 
       return res.status(200).json({
         success: true,
@@ -2281,10 +2403,11 @@ academyTestsController.post('/lecture/:lectureId/start', isAuth, async (req, res
         attempt: inProgressAttempt,
         test: testData,
         questions,
-        timeRemaining: calculateTimeRemaining(inProgressAttempt, testData),
+        timeRemaining: timeRemaining,
       });
     }
 
+    // ✅ Създай нов attempt
     const attempt = await test_attempt.create({
       testId: testData.id,
       studentId: studentData.id,
@@ -2293,7 +2416,7 @@ academyTestsController.post('/lecture/:lectureId/start', isAuth, async (req, res
       attemptNumber: existingAttempts + 1,
     });
 
-    const questions = await getQuestionsForAttempt(testData, attempt.id);
+    const questions = await getQuestionsForAttempt(testData, attempt.id, true);
 
     res.status(201).json({
       success: true,
@@ -2308,7 +2431,6 @@ academyTestsController.post('/lecture/:lectureId/start', isAuth, async (req, res
     next(err);
   }
 });
-
 // ===============================
 // GET /api/academy/tests/lecture/:lectureId/attempt
 // Вземане на активен опит за лекция
@@ -2318,7 +2440,7 @@ academyTestsController.get('/lecture/:lectureId/attempt', isAuth, async (req, re
     const lectureId = parseInt(req.params.lectureId);
     const userId = req.user.userId;
 
-    const testData = await test.findOne({
+    const testData = await lecture_test.findOne({
       where: { lectureId, isPublished: true }
     });
 

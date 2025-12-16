@@ -1137,5 +1137,180 @@ lecturesController.post(
     }
   }
 );
+// ===============================
+// POST /api/academy/lectures/:id/register
+// Регистрация за лекция
+// ===============================
+lecturesController.post(
+  '/:id/register',
+  isAuth,
+  async (req, res, next) => {
+    try {
+      const lectureId = parseInt(req.params.id);
+      const userId = req.user.userId;
 
+      // Намери лекцията
+      const lectureData = await lecture.findByPk(lectureId);
+      if (!lectureData) {
+        return res.status(404).json({
+          success: false,
+          message: 'Lecture not found',
+        });
+      }
+
+      // Провери статуса
+      if (lectureData.status === 'cancelled') {
+        return res.status(400).json({
+          success: false,
+          message: 'Cannot register for a cancelled lecture',
+        });
+      }
+
+      if (lectureData.status === 'completed') {
+        return res.status(400).json({
+          success: false,
+          message: 'Cannot register for a completed lecture',
+        });
+      }
+
+      // Намери студента
+      const studentData = await student.findOne({ where: { userId } });
+      if (!studentData) {
+        return res.status(400).json({
+          success: false,
+          message: 'Student profile not found',
+        });
+      }
+
+      // Провери дали вече е регистриран
+      const existingRegistration = await student_lecture.findOne({
+        where: { lectureId, studentId: studentData.id },
+      });
+
+      if (existingRegistration) {
+        return res.status(400).json({
+          success: false,
+          message: 'Already registered for this lecture',
+        });
+      }
+
+      // Провери лимита за участници
+      if (lectureData.maxParticipants) {
+        const currentCount = await student_lecture.count({ where: { lectureId } });
+        if (currentCount >= lectureData.maxParticipants) {
+          return res.status(400).json({
+            success: false,
+            message: 'Lecture is full',
+          });
+        }
+      }
+
+      // Създай регистрация
+      const registration = await student_lecture.create({
+        lectureId,
+        studentId: studentData.id,
+        attended: false,
+        earnedCredits: 0,
+      });
+
+      // Обнови броя регистрации
+      const registeredCount = await student_lecture.count({ where: { lectureId } });
+      await lectureData.update({ registeredCount });
+
+      res.status(201).json({
+        success: true,
+        message: 'Successfully registered for lecture',
+        registration,
+      });
+    } catch (err) {
+      console.error('❌ [REGISTER LECTURE] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// DELETE /api/academy/lectures/:id/register
+// Отписване от лекция
+// ===============================
+lecturesController.delete(
+  '/:id/register',
+  isAuth,
+  async (req, res, next) => {
+    try {
+      const lectureId = parseInt(req.params.id);
+      const userId = req.user.userId;
+
+      const studentData = await student.findOne({ where: { userId } });
+      if (!studentData) {
+        return res.status(400).json({
+          success: false,
+          message: 'Student profile not found',
+        });
+      }
+
+      const registration = await student_lecture.findOne({
+        where: { lectureId, studentId: studentData.id },
+      });
+
+      if (!registration) {
+        return res.status(404).json({
+          success: false,
+          message: 'Registration not found',
+        });
+      }
+
+      await registration.destroy();
+
+      // Обнови броя регистрации
+      const registeredCount = await student_lecture.count({ where: { lectureId } });
+      await lecture.update({ registeredCount }, { where: { id: lectureId } });
+
+      res.status(200).json({
+        success: true,
+        message: 'Successfully unregistered from lecture',
+      });
+    } catch (err) {
+      console.error('❌ [UNREGISTER LECTURE] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// GET /api/academy/lectures/:id/registration-status
+// Статус на регистрация
+// ===============================
+lecturesController.get(
+  '/:id/registration-status',
+  isAuth,
+  async (req, res, next) => {
+    try {
+      const lectureId = parseInt(req.params.id);
+      const userId = req.user.userId;
+
+      const studentData = await student.findOne({ where: { userId } });
+      if (!studentData) {
+        return res.status(200).json({
+          success: true,
+          isRegistered: false,
+          registration: null,
+        });
+      }
+
+      const registration = await student_lecture.findOne({
+        where: { lectureId, studentId: studentData.id },
+      });
+
+      res.status(200).json({
+        success: true,
+        isRegistered: !!registration,
+        registration,
+      });
+    } catch (err) {
+      console.error('❌ [REGISTRATION STATUS] Error:', err);
+      next(err);
+    }
+  }
+);
 module.exports = lecturesController;

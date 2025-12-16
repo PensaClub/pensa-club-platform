@@ -14410,5 +14410,120 @@
     "checkBack": "Проверете по-късно за нови лекции.",
     "tryDifferent": "Опитайте с други филтри."
   }
-}
+},
+ "academyLectureWatch": {
+    "loading": "Зареждане на лекцията...",
+    "error": {
+      "title": "Грешка",
+      "backToList": "← Към лекциите"
+    },
+    "noVideo": {
+      "title": "Видеото не е налично",
+      "description": "Записът все още не е публикуван.",
+      "back": "← Назад към лекцията"
+    },
+    "header": {
+      "back": "Назад",
+      "live": "НА ЖИВО",
+      "theaterMode": "Театрален режим",
+      "exitTheater": "Изход от театрален режим",
+      "openYoutube": "Отвори в YouTube"
+    },
+    "video": {
+      "unsupportedProvider": "Видео провайдерът не се поддържа",
+      "openExternal": "Отвори външно"
+    },
+    "meta": {
+      "views": "гледания",
+      "hours": "ч",
+      "mins": "м",
+      "minutes": "мин"
+    },
+    "actions": {
+      "takeTest": "Реши теста"
+    },
+    "chat": {
+      "title": "Чат на живо",
+      "watching": "гледат",
+      "empty": "Бъдете първият, който ще напише!",
+      "comingSoon": "Firebase интеграция скоро",
+      "placeholder": "Напишете съобщение...",
+      "loginRequired": "Влезте за да пишете",
+      "anonymousUser": "Потребител"
+    },
+    "description": {
+      "about": "За лекцията"
+    },
+    "course": {
+      "partOf": "Част от курс",
+      "viewCourse": "Виж курса"
+    }
+  },
+  "academyLectureTest": {
+    "loading": "Зареждане на теста...",
+    "auth": {
+      "title": "Влезте в профила си",
+      "description": "Трябва да сте влезли, за да решите теста",
+      "login": "Вход / Регистрация"
+    },
+    "error": {
+      "title": "Грешка",
+      "back": "← Назад към лекцията",
+      "noTest": "Тази лекция няма тест"
+    },
+    "intro": {
+      "title": "Тест към лекцията",
+      "minutes": "минути",
+      "credits": "кредита",
+      "toPass": "за успех",
+      "rulesTitle": "Правила",
+      "rule1": "Можете да се върнете към предишни въпроси",
+      "rule2": "Отговорите се запазват автоматично",
+      "rule3": "Можете да опитате отново след приключване",
+      "start": "Започни теста",
+      "back": "← Назад"
+    },
+    "results": {
+      "passedTitle": "Поздравления!",
+      "failedTitle": "Опитайте отново",
+      "passedDesc": "Успешно преминахте теста!",
+      "failedDesc": "За съжаление не достигнахте минималния резултат.",
+      "yourScore": "Вашият резултат",
+      "correct": "Верни",
+      "wrong": "Грешни",
+      "total": "Общо",
+      "creditsEarned": "кредита спечелени!",
+      "retry": "Опитай отново",
+      "backToLecture": "Към лекцията"
+    },
+    "header": {
+      "test": "Тест",
+      "exit": "Изход"
+    },
+    "question": {
+      "label": "Въпрос",
+      "point": "точка",
+      "points": "точки"
+    },
+    "navigator": {
+      "title": "Въпроси"
+    },
+    "legend": {
+      "answered": "Отговорен",
+      "unanswered": "Неотговорен",
+      "current": "Текущ"
+    },
+    "navigation": {
+      "prev": "Предишен",
+      "next": "Следващ"
+    },
+    "submit": {
+      "button": "Предай теста",
+      "submitting": "Предаване..."
+    },
+    "footer": {
+      "passing": "Минимум",
+      "credits": "Кредити"
+    }
+  }
 }

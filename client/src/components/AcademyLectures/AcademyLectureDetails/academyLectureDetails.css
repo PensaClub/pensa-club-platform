@@ -1886,3 +1886,296 @@
     animation: none;
   }
 }
+/* ═══════════════════════════════════════════════════════════════════════════
+   ДОПЪЛНИТЕЛЕН CSS - добави към academyLectureDetails.css
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* YouTube button secondary style */
+.ald-action-btn-youtube {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: var(--ald-live);
+  border-color: var(--ald-live);
+  text-decoration: none;
+}
+
+.ald-action-btn-youtube:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--ald-live);
+  border-color: var(--ald-live);
+}
+
+/* Video external link */
+.ald-video-external {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  background: var(--ald-bg-glass);
+  border-top: 1px solid var(--ald-border);
+}
+
+.ald-video-external-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  background: transparent;
+  color: var(--ald-text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  border: 1px solid var(--ald-border);
+  border-radius: 8px;
+  transition: var(--ald-transition-fast);
+}
+
+.ald-video-external-link:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--ald-live);
+  border-color: var(--ald-live);
+}
+
+/* Material meta row */
+.ald-material-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.ald-material-size {
+  font-size: 0.75rem;
+  color: var(--ald-text-muted);
+}
+
+/* Material download as button */
+.ald-material-download {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  background: var(--ald-bg-tertiary);
+  color: var(--ald-text-secondary);
+  font-size: 1.25rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: var(--ald-transition-fast);
+  flex-shrink: 0;
+}
+
+.ald-material-download:hover {
+  background: var(--ald-accent);
+  color: white;
+  transform: scale(1.05);
+}
+
+/* Test result */
+.ald-test-result {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  background: var(--ald-bg-glass);
+  border: 1px solid var(--ald-border);
+  border-radius: 12px;
+}
+
+.ald-test-result.passed {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: var(--ald-recording);
+}
+
+.ald-test-result.failed {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: var(--ald-live);
+}
+
+.ald-test-result-icon {
+  font-size: 2rem;
+}
+
+.ald-test-result-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.ald-test-result-label {
+  font-size: 0.75rem;
+  color: var(--ald-text-muted);
+}
+
+.ald-test-result-value {
+  font-family: var(--ald-font-display);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.ald-test-result.passed .ald-test-result-value {
+  color: var(--ald-recording);
+}
+
+.ald-test-result.failed .ald-test-result-value {
+  color: var(--ald-live);
+}
+
+/* Video section improvements */
+.ald-video-section .ald-video-player {
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--ald-bg-tertiary);
+  border: 1px solid var(--ald-border);
+}
+
+.ald-video-section .ald-video-embed {
+  position: relative;
+  padding-bottom: 56.25%; /* 16:9 */
+  height: 0;
+}
+
+.ald-video-section .ald-video-embed iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* Live section video container with external link */
+.ald-live-section .ald-video-container {
+  display: flex;
+  flex-direction: column;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--ald-bg-tertiary);
+  border: 1px solid var(--ald-border);
+}
+
+.ald-live-section .ald-video-embed {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+}
+
+.ald-live-section .ald-video-embed iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+/* ═══════════════════════════════════════════════════════════════════════════
+   QUICK ACTIONS (за Overview tab)
+   ═══════════════════════════════════════════════════════════════════════════ */
+.ald-quick-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.ald-quick-action {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: var(--ald-bg-glass);
+  border: 1px solid var(--ald-border);
+  border-radius: 12px;
+  color: var(--ald-text-primary);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--ald-transition);
+  flex: 1;
+  min-width: 200px;
+}
+
+.ald-quick-action:hover {
+  border-color: var(--ald-accent);
+  background: var(--ald-bg-glass-hover);
+  transform: translateY(-2px);
+}
+
+.ald-quick-action-icon {
+  font-size: 1.5rem;
+}
+
+.ald-quick-action-text {
+  text-align: left;
+}
+
+/* Test Button в Action Card */
+.ald-action-btn-test {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  color: var(--ald-accent);
+  border-color: var(--ald-accent);
+}
+
+.ald-action-btn-test:hover:not(:disabled) {
+  background: rgba(255, 99, 71, 0.1);
+  color: var(--ald-accent);
+}
+
+.ald-action-btn-test:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Test Tab Badge Colors */
+.ald-tab-badge--passed {
+  background: var(--ald-recording) !important;
+}
+
+.ald-tab-badge--failed {
+  background: var(--ald-live) !important;
+}
+
+/* Test Result Credits */
+.ald-test-result-credits {
+  margin-left: auto;
+  font-family: var(--ald-font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--ald-recording);
+}
+
+/* Test Hint */
+.ald-test-hint {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: var(--ald-bg-glass);
+  border-radius: 8px;
+  font-size: 0.8rem;
+  color: var(--ald-text-muted);
+  text-align: center;
+}
+
+/* Responsive Quick Actions */
+@media (max-width: 768px) {
+  .ald-quick-actions {
+    flex-direction: column;
+  }
+  
+  .ald-quick-action {
+    min-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .ald-quick-action {
+    padding: 0.875rem 1rem;
+  }
+  
+  .ald-quick-action-icon {
+    font-size: 1.25rem;
+  }
+}

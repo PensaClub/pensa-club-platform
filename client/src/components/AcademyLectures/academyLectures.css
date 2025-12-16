@@ -932,7 +932,44 @@
   transition: all 0.35s ease;
   z-index: 3;
 }
+/* Status Icons (визуални, non-clickable) */
+.al-card-status-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  font-size: 1.375rem;
+  opacity: 0;
+  transition: all 0.35s ease;
+  z-index: 3;
+  pointer-events: none;
+}
 
+.al-card:hover .al-card-status-icon {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.al-card-status-icon--live {
+  background: var(--al-live);
+  border-color: var(--al-live);
+  box-shadow: 0 0 20px var(--al-live-glow);
+}
+
+.al-card-status-icon--upcoming {
+  background: var(--al-upcoming);
+  border-color: var(--al-upcoming);
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+}
 .al-card:hover .al-card-play {
   opacity: 1;
   transform: translate(-50%, -50%) scale(1);
@@ -1627,5 +1664,284 @@
   .al-card-btn {
     padding: 10px 14px;
     font-size: 0.75rem;
+  }
+}
+/* =========================================================
+   CARD - NEW ELEMENTS (Views, Lecturer Photo, Course, Tags)
+   ========================================================= */
+
+/* Views Count */
+.al-card-views {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 6px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--al-text);
+  z-index: 3;
+}
+
+.al-card-views-icon {
+  font-size: 0.75rem;
+}
+
+/* Play Button Trailer Variant */
+.al-card-play--trailer {
+  cursor: pointer;
+}
+
+.al-card-play--trailer:hover {
+  background: var(--al-accent) !important;
+  border-color: var(--al-accent) !important;
+  transform: translate(-50%, -50%) scale(1.1) !important;
+}
+
+/* Tags */
+.al-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.al-card-tag {
+  padding: 3px 8px;
+  background: var(--al-glass);
+  border: 1px solid var(--al-border);
+  border-radius: 4px;
+  font-size: 0.65rem;
+  color: var(--al-text-dim);
+  transition: all 0.2s ease;
+}
+
+.al-card:hover .al-card-tag {
+  border-color: var(--card-color);
+  color: var(--card-color);
+}
+
+/* Lecturer with Avatar */
+.al-card-lecturer {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.al-card-lecturer-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 2px solid var(--al-border);
+  background: var(--al-bg-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.875rem;
+}
+
+.al-card-lecturer-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.al-card:hover .al-card-lecturer-avatar {
+  border-color: var(--card-color);
+}
+
+.al-card-lecturer-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.al-card-lecturer-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--al-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.al-card-lecturer-rating {
+  font-size: 0.7rem;
+  color: var(--al-orange);
+  font-weight: 600;
+}
+
+/* Course Badge */
+.al-card-course {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 6px;
+  margin-bottom: 12px;
+  font-size: 0.7rem;
+}
+
+.al-card-course-icon {
+  flex-shrink: 0;
+}
+
+.al-card-course-name {
+  color: #3b82f6;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* =========================================================
+   LOAD MORE SECTION
+   ========================================================= */
+
+.al-loadMore {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: 48px;
+  padding: 32px;
+  background: var(--al-bg-medium);
+  border: 1px solid var(--al-border);
+  border-radius: var(--al-radius);
+}
+
+.al-loadMore-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 36px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+  background: linear-gradient(135deg, var(--al-accent) 0%, var(--al-orange) 100%);
+  border: none;
+  border-radius: var(--al-radius-sm);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 6px 24px var(--al-accent-glow);
+}
+
+.al-loadMore-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 36px var(--al-accent-glow);
+}
+
+.al-loadMore-btn-icon {
+  font-size: 1.25rem;
+}
+
+.al-loadMore-btn-text {
+  font-weight: 700;
+}
+
+.al-loadMore-btn-count {
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+.al-loadMore-progress {
+  width: 100%;
+  max-width: 300px;
+  height: 6px;
+  background: var(--al-bg-dark);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.al-loadMore-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--al-accent) 0%, var(--al-orange) 100%);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.al-loadMore-info {
+  font-size: 0.8125rem;
+  color: var(--al-text-muted);
+}
+
+/* =========================================================
+   RESPONSIVE UPDATES FOR NEW ELEMENTS
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .al-card-lecturer-avatar {
+    width: 28px;
+    height: 28px;
+  }
+
+  .al-card-lecturer-name {
+    font-size: 0.75rem;
+  }
+
+  .al-card-tags {
+    display: none;
+  }
+
+  .al-card-course {
+    font-size: 0.65rem;
+    padding: 5px 8px;
+  }
+
+  .al-loadMore {
+    padding: 24px 16px;
+    margin-top: 32px;
+  }
+
+  .al-loadMore-btn {
+    width: 100%;
+    justify-content: center;
+    padding: 14px 24px;
+    font-size: 0.9375rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .al-card-views {
+    display: none;
+  }
+
+  .al-card-lecturer {
+    margin-bottom: 10px;
+  }
+
+  .al-card-course {
+    margin-bottom: 10px;
+  }
+
+  .al-loadMore-btn {
+    flex-direction: column;
+    gap: 6px;
+    padding: 16px 20px;
+  }
+
+  .al-loadMore-btn-count {
+    font-size: 0.8125rem;
+  }
+}
+
+@media (max-width: 375px) {
+  .al-card-lecturer-avatar {
+    width: 24px;
+    height: 24px;
+  }
+
+  .al-card-course {
+    display: none;
   }
 }

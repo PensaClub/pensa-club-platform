@@ -14131,5 +14131,121 @@
     "checkBack": "Check back later for new lectures.",
     "tryDifferent": "Try different filters."
   }
-}
+},
+
+  "academyLectureWatch": {
+    "loading": "Loading lecture...",
+    "error": {
+      "title": "Error",
+      "backToList": "← Back to lectures"
+    },
+    "noVideo": {
+      "title": "Video not available",
+      "description": "The recording has not been published yet.",
+      "back": "← Back to lecture"
+    },
+    "header": {
+      "back": "Back",
+      "live": "LIVE",
+      "theaterMode": "Theater mode",
+      "exitTheater": "Exit theater mode",
+      "openYoutube": "Open in YouTube"
+    },
+    "video": {
+      "unsupportedProvider": "Video provider not supported",
+      "openExternal": "Open externally"
+    },
+    "meta": {
+      "views": "views",
+      "hours": "h",
+      "mins": "m",
+      "minutes": "min"
+    },
+    "actions": {
+      "takeTest": "Take the test"
+    },
+    "chat": {
+      "title": "Live chat",
+      "watching": "watching",
+      "empty": "Be the first to write!",
+      "comingSoon": "Firebase integration coming soon",
+      "placeholder": "Write a message...",
+      "loginRequired": "Log in to write",
+      "anonymousUser": "User"
+    },
+    "description": {
+      "about": "About the lecture"
+    },
+    "course": {
+      "partOf": "Part of course",
+      "viewCourse": "View course"
+    }
+  },
+  "academyLectureTest": {
+    "loading": "Loading test...",
+    "auth": {
+      "title": "Sign in to your account",
+      "description": "You must be logged in to take the test",
+      "login": "Login / Register"
+    },
+    "error": {
+      "title": "Error",
+      "back": "← Back to lecture",
+      "noTest": "This lecture has no test"
+    },
+    "intro": {
+      "title": "Lecture Test",
+      "minutes": "minutes",
+      "credits": "credits",
+      "toPass": "to pass",
+      "rulesTitle": "Rules",
+      "rule1": "You can go back to previous questions",
+      "rule2": "Answers are saved automatically",
+      "rule3": "You can try again after finishing",
+      "start": "Start the test",
+      "back": "← Back"
+    },
+    "results": {
+      "passedTitle": "Congratulations!",
+      "failedTitle": "Try again",
+      "passedDesc": "You passed the test successfully!",
+      "failedDesc": "Unfortunately, you didn't reach the minimum score.",
+      "yourScore": "Your score",
+      "correct": "Correct",
+      "wrong": "Wrong",
+      "total": "Total",
+      "creditsEarned": "credits earned!",
+      "retry": "Try again",
+      "backToLecture": "To the lecture"
+    },
+    "header": {
+      "test": "Test",
+      "exit": "Exit"
+    },
+    "question": {
+      "label": "Question",
+      "point": "point",
+      "points": "points"
+    },
+    "navigator": {
+      "title": "Questions"
+    },
+    "legend": {
+      "answered": "Answered",
+      "unanswered": "Unanswered",
+      "current": "Current"
+    },
+    "navigation": {
+      "prev": "Previous",
+      "next": "Next"
+    },
+    "submit": {
+      "button": "Submit test",
+      "submitting": "Submitting..."
+    },
+    "footer": {
+      "passing": "Minimum",
+      "credits": "Credits"
+    }
+  }
 }

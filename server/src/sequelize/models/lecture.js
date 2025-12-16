@@ -199,7 +199,12 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: true,
         field: 'is_public',
       },
-
+isFree: {
+  type: DataTypes.BOOLEAN,
+  allowNull: false,
+  defaultValue: false,
+  field: 'is_free',
+},
       // === КРЕДИТИ ===
       maxCredits: {
         type: DataTypes.INTEGER,
