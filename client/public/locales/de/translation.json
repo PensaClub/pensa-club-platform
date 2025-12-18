@@ -13475,69 +13475,83 @@
   },
 "academyLectureTest": {
     "loading": "Test wird geladen...",
-    "auth": {
-      "title": "Melden Sie sich an",
-      "description": "Sie müssen angemeldet sein, um den Test zu machen",
-      "login": "Anmelden / Registrieren"
+    "error": "Fehler",
+    "notFound": "Test nicht gefunden",
+    "backToLecture": "Zurück zur Vorlesung",
+    "loginRequired": "Anmeldung erforderlich",
+    "loginRequiredDesc": "Bitte melden Sie sich an, um den Test zu machen.",
+    "login": "Anmelden",
+    
+    "question": "Frage",
+    "questionOf": "Frage {{current}} von {{total}}",
+    "questions": "Fragen",
+    "point": "Punkt",
+    "points": "Punkte",
+    
+    "typeSingle": "Einzelauswahl",
+    "typeMultiple": "Mehrfachauswahl",
+    "typeTrueFalse": "Wahr/Falsch",
+    
+    "answered": "Beantwortet",
+    "unanswered": "Unbeantwortet",
+    "current": "Aktuell",
+    
+    "prev": "Zurück",
+    "next": "Weiter",
+    "submit": "Test abgeben",
+    "submitting": "Wird abgegeben...",
+    
+    "passingScore": "Mindestpunktzahl",
+    "maxCredits": "Max. Credits",
+    "attempt": "Versuch",
+    
+    "confirmSubmitUnanswered": "Sie haben {{count}} unbeantwortete Fragen. Möchten Sie wirklich abgeben?",
+    
+    "errors": {
+      "lectureNotFound": "Vorlesung nicht gefunden",
+      "noTest": "Diese Vorlesung hat keinen Test",
+      "loadFailed": "Fehler beim Laden des Tests",
+      "submitFailed": "Fehler beim Abgeben des Tests",
+      "retryFailed": "Fehler beim Starten eines neuen Versuchs"
     },
-    "error": {
-      "title": "Fehler",
-      "back": "← Zurück zur Vorlesung",
-      "noTest": "Diese Vorlesung hat keinen Test"
-    },
-    "intro": {
-      "title": "Vorlesungstest",
-      "minutes": "Minuten",
-      "credits": "Credits",
-      "toPass": "zum Bestehen",
-      "rulesTitle": "Regeln",
-      "rule1": "Sie können zu vorherigen Fragen zurückkehren",
-      "rule2": "Antworten werden automatisch gespeichert",
-      "rule3": "Sie können es nach Abschluss erneut versuchen",
-      "start": "Test starten",
-      "back": "← Zurück"
-    },
+    
     "results": {
-      "passedTitle": "Herzlichen Glückwunsch!",
-      "failedTitle": "Versuchen Sie es erneut",
-      "passedDesc": "Sie haben den Test bestanden!",
-      "failedDesc": "Leider haben Sie die Mindestpunktzahl nicht erreicht.",
+      "passed": "Herzlichen Glückwunsch! 🎉",
+      "failed": "Nicht bestanden",
+      "passedDesc": "Sie haben den Test erfolgreich abgeschlossen!",
+      "failedDesc": "Sie haben die Mindestpunktzahl nicht erreicht. Versuchen Sie es erneut!",
       "yourScore": "Ihr Ergebnis",
       "correct": "Richtig",
       "wrong": "Falsch",
       "total": "Gesamt",
-      "creditsEarned": "Credits verdient!",
-      "retry": "Erneut versuchen",
-      "backToLecture": "Zur Vorlesung"
+      "passing": "Mindest.",
+      "creditsEarned": "Credits verdient",
+      "backToLecture": "Zurück zur Vorlesung",
+      "tryAgain": "Erneut versuchen",
+      
+      "reviewAnswers": "Antworten überprüfen",
+      "correctLabel": "Richtig",
+      "wrongLabel": "Falsch",
+      "yourAnswer": "Ihre Antwort",
+      "noAnswer": "Keine Antwort",
+      
+      "attemptInfo": "Versuch {{current}} von {{max}}",
+      "remainingAttempts": "Verbleibende Versuche: {{count}}",
+      "noMoreAttempts": "Keine weiteren Versuche",
+      
+      "attemptHistory": "Versuchshistorie",
+      "viewAnswers": "Antworten anzeigen",
+      
+      "bestAttempt": "Bestes Ergebnis",
+      "attempt": "Versuch"
     },
-    "header": {
-      "test": "Test",
-      "exit": "Beenden"
+    
+    "intro": {
+      "attemptsLeft": "Verbleibende Versuche: {{count}}"
     },
-    "question": {
-      "label": "Frage",
-      "point": "Punkt",
-      "points": "Punkte"
-    },
-    "navigator": {
-      "title": "Fragen"
-    },
-    "legend": {
-      "answered": "Beantwortet",
-      "unanswered": "Unbeantwortet",
-      "current": "Aktuell"
-    },
-    "navigation": {
-      "prev": "Zurück",
-      "next": "Weiter"
-    },
-    "submit": {
-      "button": "Test abgeben",
-      "submitting": "Wird gesendet..."
-    },
+    
     "footer": {
-      "passing": "Minimum",
-      "credits": "Credits"
+      "attempt": "Versuch"
     }
   }
 }

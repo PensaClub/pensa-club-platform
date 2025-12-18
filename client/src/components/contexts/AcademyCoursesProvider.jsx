@@ -583,61 +583,61 @@ export const AcademyCoursesProvider = ({ children }) => {
   // ═══════════════════════════════════════════════════════════════════════════
 
   const registerForLecture = useCallback(async (lectureId) => {
-  setIsLoading(true);
-  try {
-    const result = await coursesService.registerForLecture(lectureId);
-    if (result.success) {
-      toast.success(result.message || 'Успешно се записахте за лекцията');
+    setIsLoading(true);
+    try {
+      const result = await coursesService.registerForLecture(lectureId);
+      if (result.success) {
+        toast.success(result.message || 'Успешно се записахте за лекцията');
+      }
+      return result;
+    } catch (error) {
+      toast.error(error.message || 'Грешка при записване за лекцията');
+      throw error;
+    } finally {
+      setIsLoading(false);
     }
-    return result;
-  } catch (error) {
-    toast.error(error.message || 'Грешка при записване за лекцията');
-    throw error;
-  } finally {
-    setIsLoading(false);
-  }
-}, []);
+  }, []);
 
-const unregisterFromLecture = useCallback(async (lectureId) => {
-  setIsLoading(true);
-  try {
-    const result = await coursesService.unregisterFromLecture(lectureId);
-    if (result.success) {
-      toast.success(result.message || 'Успешно се отписахте от лекцията');
+  const unregisterFromLecture = useCallback(async (lectureId) => {
+    setIsLoading(true);
+    try {
+      const result = await coursesService.unregisterFromLecture(lectureId);
+      if (result.success) {
+        toast.success(result.message || 'Успешно се отписахте от лекцията');
+      }
+      return result;
+    } catch (error) {
+      toast.error(error.message || 'Грешка при отписване от лекцията');
+      throw error;
+    } finally {
+      setIsLoading(false);
     }
-    return result;
-  } catch (error) {
-    toast.error(error.message || 'Грешка при отписване от лекцията');
-    throw error;
-  } finally {
-    setIsLoading(false);
-  }
-}, []);
+  }, []);
 
-const checkLectureRegistration = useCallback(async (lectureId) => {
-  try {
-    const result = await coursesService.checkLectureRegistration(lectureId);
-    return result;
-  } catch (error) {
-    console.error('Check registration error:', error);
-    return { success: false, registered: false, registration: null };
-  }
-}, []);
+  const checkLectureRegistration = useCallback(async (lectureId) => {
+    try {
+      const result = await coursesService.checkLectureRegistration(lectureId);
+      return result;
+    } catch (error) {
+      console.error('Check registration error:', error);
+      return { success: false, registered: false, registration: null };
+    }
+  }, []);
 
-// 2. ДОБАВИ тази липсваща функция (или махни от return ако не ти трябва):
+  // 2. ДОБАВИ тази липсваща функция (или махни от return ако не ти трябва):
 
-const getLectureAttendees = useCallback(async (lectureId) => {
-  if (!isAdmin) {
-    return { attendees: [] };
-  }
-  try {
-    const data = await coursesService.getLectureAttendees(lectureId);
-    return data.attendees || [];
-  } catch (error) {
-    console.error('Error fetching lecture attendees:', error);
-    return [];
-  }
-}, [isAdmin]);
+  const getLectureAttendees = useCallback(async (lectureId) => {
+    if (!isAdmin) {
+      return { attendees: [] };
+    }
+    try {
+      const data = await coursesService.getLectureAttendees(lectureId);
+      return data.attendees || [];
+    } catch (error) {
+      console.error('Error fetching lecture attendees:', error);
+      return [];
+    }
+  }, [isAdmin]);
   const markLectureAttended = useCallback(async (lectureId, studentId) => {
     if (!isAdmin) {
       toast.error('Нямате права за тази операция');
@@ -1125,6 +1125,29 @@ const getLectureAttendees = useCallback(async (lectureId) => {
       setIsLoading(false);
     }
   }, []);
+  // В началото, добави функциите:
+  const submitLectureAnswer = useCallback(async (lectureTestId, answerData) => {
+    try {
+      const response = await coursesService.submitLectureAnswer(lectureTestId, answerData);
+      return response;
+    } catch (error) {
+      console.error('Error submitting lecture answer:', error);
+      throw error;
+    }
+  }, []);
+
+  const submitLectureTest = useCallback(async (lectureTestId) => {
+    try {
+      setIsLoading(true);
+      const response = await coursesService.submitLectureTest(lectureTestId);
+      return response;
+    } catch (error) {
+      console.error('Error submitting lecture test:', error);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
   // =========================================================
   //                    CERTIFICATES
@@ -1532,6 +1555,8 @@ const getLectureAttendees = useCallback(async (lectureId) => {
     startLectureTest,
     getLectureTestStatus,
     getLectureAttempt,
+    submitLectureAnswer,
+    submitLectureTest,
   };
 
   return (

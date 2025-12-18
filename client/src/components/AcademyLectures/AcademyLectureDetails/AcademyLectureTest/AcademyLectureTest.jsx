@@ -1,11 +1,38 @@
 // src/components/AcademyLectures/AcademyLectureTest/AcademyLectureTest.jsx
 
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuthContext } from '../../../contexts/UserContext';
 import { useAcademyCourses } from '../../../contexts/AcademyCoursesProvider';
 import './academyLectureTest.css';
+
+// ═══════════════════════════════════════════════════════════════════════════
+// HELPER FUNCTIONS
+// ═══════════════════════════════════════════════════════════════════════════
+
+const calculateScorePercentage = (correctAnswers, totalQuestions) => {
+  if (!totalQuestions || totalQuestions === 0) return 0;
+  return Math.round((correctAnswers / totalQuestions) * 100);
+};
+
+const formatDate = (dateStr) => {
+  if (!dateStr) return '';
+  return new Date(dateStr).toLocaleDateString('bg-BG', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+};
+
+const formatTime = (seconds) => {
+  if (seconds === null || seconds === undefined) return '--:--';
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+};
 
 // ═══════════════════════════════════════════════════════════════════════════
 // COMPONENT
@@ -16,169 +43,295 @@ export const AcademyLectureTest = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { isAuthentication } = useAuthContext();
-  const { 
+  const {
     getLectureBySlug,
     startLectureTest,
-    submitAnswer,
-    submitTest,
-    isLoading 
+    getLectureTestStatus,
+    submitLectureAnswer,
+    submitLectureTest,
+    isLoading
   } = useAcademyCourses();
 
-  // State
+  // ═══════════════════════════════════════════════════════════════════════════
+  // STATE
+  // ═══════════════════════════════════════════════════════════════════════════
+  
   const [lecture, setLecture] = useState(null);
-  const [testData, setTestData] = useState(null); // { attempt, test, questions, timeRemaining }
+  const [testData, setTestData] = useState(null);
+  const [testStatus, setTestStatus] = useState(null);
+  const [questions, setQuestions] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [testResult, setTestResult] = useState(null);
+  const [timeRemaining, setTimeRemaining] = useState(null);
   const [error, setError] = useState(null);
-  const [timeLeft, setTimeLeft] = useState(null);
-  const [testState, setTestState] = useState('loading');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showResults, setShowResults] = useState(false);
+  const [results, setResults] = useState(null);
   const [isSavingAnswer, setIsSavingAnswer] = useState(false);
+  const [isLoadingTest, setIsLoadingTest] = useState(true);
+
+  // History & Results state
+  const [previousAttempts, setPreviousAttempts] = useState([]);
+  const [showHistory, setShowHistory] = useState(false);
+  const [showQuestionsReview, setShowQuestionsReview] = useState(false);
+  const [questionsResult, setQuestionsResult] = useState([]);
+  const [canStartNewAttempt, setCanStartNewAttempt] = useState(true);
+  const [remainingAttempts, setRemainingAttempts] = useState(0);
+  const [hasPassedTest, setHasPassedTest] = useState(false);
+  const [bestAttempt, setBestAttempt] = useState(null);
 
   // Refs
-  const loadingRef = useRef(false);
   const timerRef = useRef(null);
+  const fetchedRef = useRef(null);
 
-  // Load lecture and test data
+  // ═══════════════════════════════════════════════════════════════════════════
+  // DATA FETCHING
+  // ═══════════════════════════════════════════════════════════════════════════
+
   useEffect(() => {
-    if (!slug || loadingRef.current || !isAuthentication) return;
+    const fetchTestData = async () => {
+      if (!slug) return;
+      
+      const cacheKey = slug;
+      if (fetchedRef.current === cacheKey && testData) return;
 
-    const loadData = async () => {
-      loadingRef.current = true;
       try {
-        // 1. Зареди лекцията
-        const lectureRes = await getLectureBySlug(slug);
-        const lectureData = lectureRes.lecture || lectureRes;
-        setLecture(lectureData);
-
-        if (!lectureData.hasTest) {
-          setError(t('academyLectureTest.error.noTest'));
-          setTestState('error');
-          return;
+        fetchedRef.current = cacheKey;
+        setError(null);
+        setIsLoadingTest(true);
+        
+        // 1. Get lecture info
+        const lectureResponse = await getLectureBySlug(slug);
+        const lectureInfo = lectureResponse?.lecture || lectureResponse;
+        setLecture(lectureInfo);
+        
+        if (!lectureInfo || !lectureInfo.id) {
+          throw new Error(t('academyLectureTest.errors.lectureNotFound'));
         }
 
-        // 2. Стартирай/продължи теста
+        if (!lectureInfo.hasTest) {
+          throw new Error(t('academyLectureTest.errors.noTest'));
+        }
+
+        // 2. Get test status + previous attempts
+        let statusData = null;
         try {
-          const response = await startLectureTest(lectureData.id);
+          statusData = await getLectureTestStatus(lectureInfo.id);
+          setTestStatus(statusData);
           
-          if (response?.attempt) {
-            // Запази целия response
-            setTestData(response);
-            
-            // Зареди предишни отговори ако има
-            if (response.attempt.answers && typeof response.attempt.answers === 'object') {
-              setAnswers(response.attempt.answers);
-            }
-            
-            // Настрой таймера
-            if (response.timeRemaining !== undefined && response.timeRemaining > 0) {
-              setTimeLeft(response.timeRemaining);
-            } else if (response.test?.timeLimitMinutes) {
-              // Ако няма timeRemaining, изчисли от началото
-              const elapsed = (Date.now() - new Date(response.attempt.startedAt).getTime()) / 1000;
-              const remaining = Math.max(0, response.test.timeLimitMinutes * 60 - elapsed);
-              setTimeLeft(Math.floor(remaining));
-            }
-            
-            // Провери статуса
-            if (response.attempt.status === 'completed') {
-              setTestResult({
-                score: response.attempt.score,
-                correctCount: response.attempt.correctAnswers,
-                totalCount: response.attempt.totalQuestions || response.questions?.length || 0,
-                passed: response.attempt.isPassed
-              });
-              setTestState('results');
-            } else {
-              setTestState('active');
-            }
-          } else {
-            setTestState('intro');
+          // Store all the rich data from status
+          if (statusData?.attempts) {
+            setPreviousAttempts(statusData.attempts);
           }
+          
+          if (statusData?.bestAttempt) {
+            setBestAttempt(statusData.bestAttempt);
+          }
+          
+          // Use the correct field names from API
+          setCanStartNewAttempt(statusData?.canStartNew ?? true);
+          setRemainingAttempts(statusData?.remainingAttempts ?? 0);
+          setHasPassedTest(statusData?.hasPassedTest ?? false);
+          
+          // If test is already passed - show best attempt results
+          if (statusData?.hasPassedTest && statusData?.bestAttempt) {
+            const best = statusData.bestAttempt;
+            const scorePercent = best.score ?? calculateScorePercentage(best.correctAnswers, best.totalQuestions);
+            
+            setShowResults(true);
+            setResults({
+              scorePercentage: scorePercent,
+              correctAnswers: best.correctAnswers || 0,
+              wrongAnswers: best.wrongAnswers || ((best.totalQuestions || 0) - (best.correctAnswers || 0)),
+              totalQuestions: best.totalQuestions || 0,
+              passed: true,
+              earnedCredits: best.earnedCredits || 0,
+              attemptId: best.id,
+              attemptNumber: best.attemptNumber || 1
+            });
+            
+            if (best.questionsResult) {
+              setQuestionsResult(best.questionsResult);
+            }
+            
+            setTestData({ test: statusData.test, attempt: best });
+            return;
+          }
+          
+          // If there's a completed last attempt (not passed), show its results
+          const lastAttempt = statusData?.lastAttempt;
+          if (lastAttempt?.status === 'completed' && !statusData?.activeAttempt) {
+            const scorePercent = lastAttempt.score ?? calculateScorePercentage(lastAttempt.correctAnswers, lastAttempt.totalQuestions);
+            const isPassed = scorePercent >= (statusData?.test?.passingScore || 70);
+            
+            setShowResults(true);
+            setResults({
+              scorePercentage: scorePercent,
+              correctAnswers: lastAttempt.correctAnswers || 0,
+              wrongAnswers: lastAttempt.wrongAnswers || ((lastAttempt.totalQuestions || 0) - (lastAttempt.correctAnswers || 0)),
+              totalQuestions: lastAttempt.totalQuestions || 0,
+              passed: isPassed,
+              earnedCredits: lastAttempt.earnedCredits || 0,
+              attemptId: lastAttempt.id,
+              attemptNumber: lastAttempt.attemptNumber || 1
+            });
+            
+            if (lastAttempt.questionsResult) {
+              setQuestionsResult(lastAttempt.questionsResult);
+            }
+            
+            setTestData({ test: statusData.test, attempt: lastAttempt });
+            return;
+          }
+          
+          // If there's an active attempt, continue it
+          if (statusData?.activeAttempt) {
+            const data = await startLectureTest(lectureInfo.id);
+            if (data) {
+              setTestData(data);
+              setQuestions(data.questions || []);
+              
+              if (data.attempt?.answers && typeof data.attempt.answers === 'object') {
+                setAnswers(data.attempt.answers);
+              }
+              
+              if (data.timeRemaining !== undefined && data.timeRemaining > 0) {
+                setTimeRemaining(data.timeRemaining);
+              } else if (data.test?.timeLimitMinutes) {
+                setTimeRemaining(data.test.timeLimitMinutes * 60);
+              }
+            }
+            return;
+          }
+          
         } catch (err) {
-          console.error('Start test error:', err);
-          setTestState('intro');
+          console.warn('Could not get test status, will try to start:', err);
+        }
+
+        // 3. No active attempt and can start new - start test
+        if (canStartNewAttempt || !statusData) {
+          const data = await startLectureTest(lectureInfo.id);
+          
+          if (data) {
+            setTestData(data);
+            setQuestions(data.questions || []);
+            
+            if (data.attempt?.answers && typeof data.attempt.answers === 'object') {
+              setAnswers(data.attempt.answers);
+            }
+            
+            if (data.timeRemaining !== undefined && data.timeRemaining > 0) {
+              setTimeRemaining(data.timeRemaining);
+            } else if (data.test?.timeLimitMinutes) {
+              setTimeRemaining(data.test.timeLimitMinutes * 60);
+            }
+            
+            if (data.attempt?.status === 'completed') {
+              const scorePercent = data.attempt.score ?? calculateScorePercentage(data.attempt.correctAnswers, data.attempt.totalQuestions);
+              const isPassed = scorePercent >= (data.test?.passingScore || 70);
+              
+              setShowResults(true);
+              setResults({
+                scorePercentage: scorePercent,
+                correctAnswers: data.attempt.correctAnswers || 0,
+                wrongAnswers: data.attempt.wrongAnswers || ((data.attempt.totalQuestions || data.questions?.length || 0) - (data.attempt.correctAnswers || 0)),
+                totalQuestions: data.attempt.totalQuestions || data.questions?.length || 0,
+                passed: isPassed,
+                earnedCredits: data.attempt.earnedCredits || 0,
+                attemptId: data.attempt.id,
+                attemptNumber: data.attempt.attemptNumber || 1
+              });
+              
+              if (data.attempt.questionsResult) {
+                setQuestionsResult(data.attempt.questionsResult);
+              }
+            }
+          }
         }
       } catch (err) {
-        console.error('Error loading test:', err);
-        setError(err.message);
-        setTestState('error');
+        console.error('Error fetching test:', err);
+        setError(err.message || t('academyLectureTest.errors.loadFailed'));
       } finally {
-        loadingRef.current = false;
+        setIsLoadingTest(false);
       }
     };
 
-    loadData();
-  }, [slug, isAuthentication, t, getLectureBySlug, startLectureTest]);
+    if (isAuthentication) {
+      fetchTestData();
+    }
+  }, [slug, isAuthentication, getLectureBySlug, getLectureTestStatus, startLectureTest, t]);
 
-  // Timer
+  // ═══════════════════════════════════════════════════════════════════════════
+  // TIMER
+  // ═══════════════════════════════════════════════════════════════════════════
+
   useEffect(() => {
-    if (testState !== 'active' || timeLeft === null || timeLeft <= 0) return;
+    if (timeRemaining === null || timeRemaining <= 0 || showResults) return;
 
     timerRef.current = setInterval(() => {
-      setTimeLeft(prev => {
+      setTimeRemaining(prev => {
         if (prev <= 1) {
           clearInterval(timerRef.current);
-          handleSubmitTest();
+          handleSubmitTest(true);
           return 0;
         }
         return prev - 1;
       });
     }, 1000);
 
-    return () => clearInterval(timerRef.current);
-  }, [testState, timeLeft]);
-
-  // Current question - взимаме от testData.questions
-  const currentQuestion = useMemo(() => {
-    if (!testData?.questions?.length) return null;
-    return testData.questions[currentQuestionIndex];
-  }, [testData, currentQuestionIndex]);
-
-  const totalQuestions = testData?.questions?.length || 0;
-  const answeredCount = Object.keys(answers).length;
-  const progress = totalQuestions > 0 ? (answeredCount / totalQuestions) * 100 : 0;
-
-  // Format time
-  const formatTime = (seconds) => {
-    if (seconds === null) return '--:--';
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-  };
-
-  const isTimeWarning = timeLeft !== null && timeLeft <= 60;
-  const isTimeCritical = timeLeft !== null && timeLeft <= 30;
-
-  // Handlers
-  const handleStartTest = async () => {
-    setTestState('loading');
-    try {
-      const response = await startLectureTest(lecture.id);
-      
-      if (response?.attempt) {
-        setTestData(response);
-        setAnswers(response.attempt.answers || {});
-        setCurrentQuestionIndex(0);
-        
-        if (response.timeRemaining !== undefined && response.timeRemaining > 0) {
-          setTimeLeft(response.timeRemaining);
-        } else if (response.test?.timeLimitMinutes) {
-          setTimeLeft(response.test.timeLimitMinutes * 60);
-        }
-        
-        setTestState('active');
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
       }
-    } catch (err) {
-      console.error('Start test error:', err);
-      setError(err.message);
-      setTestState('error');
-    }
-  };
+    };
+  }, [timeRemaining, showResults]);
 
- const handleSelectAnswer = async (questionId, answerId, isMultiple = false) => {
-  // Изчисли новата стойност ПРЕДИ setAnswers
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, []);
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // COMPUTED VALUES
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  const currentQuestion = useMemo(() => {
+    if (!questions?.length) return null;
+    return questions[currentQuestionIndex];
+  }, [questions, currentQuestionIndex]);
+
+  const test = testData?.test;
+  const attemptNumber = results?.attemptNumber || testData?.attempt?.attemptNumber || 1;
+  const maxAttempts = test?.maxAttempts || 3;
+  const canRetry = !results?.passed && remainingAttempts > 0 && canStartNewAttempt;
+
+  const isTimeWarning = timeRemaining !== null && timeRemaining <= 60;
+  const isTimeCritical = timeRemaining !== null && timeRemaining <= 30;
+
+  const getQuestionStatus = useCallback((questionId) => {
+    const answer = answers[questionId];
+    if (answer !== undefined && answer !== null) {
+      if (Array.isArray(answer)) {
+        return answer.length > 0 ? 'answered' : 'unanswered';
+      }
+      return 'answered';
+    }
+    return 'unanswered';
+  }, [answers]);
+
+  const getAnsweredCount = useCallback(() => {
+    return questions.filter(q => getQuestionStatus(q.id) === 'answered').length;
+  }, [questions, getQuestionStatus]);
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // HANDLERS
+  // ═══════════════════════════════════════════════════════════════════════════
+
+ const handleAnswerSelect = useCallback(async (questionId, answerId, isMultiple = false) => {
+  // ✅ Изчисли новата стойност ПРЕДИ setAnswers
   let newAnswerValue;
   
   if (isMultiple) {
@@ -190,27 +343,27 @@ export const AcademyLectureTest = () => {
     newAnswerValue = answerId;
   }
   
-  // Сетни state-а
+  // Обнови state-а
   setAnswers(prev => ({ ...prev, [questionId]: newAnswerValue }));
 
-  // Използвай submitAnswer с правилния формат
+  // Изпрати към backend-а
   if (testData?.test?.id) {
     setIsSavingAnswer(true);
     try {
-      await submitAnswer(testData.test.id, {
-        questionId: questionId,
-        answer: newAnswerValue
+      await submitLectureAnswer(testData.test.id, {
+        questionId,
+        answerId: newAnswerValue  // ✅ Сега има стойност!
       });
     } catch (err) {
-      console.error('Save answer error:', err);
+      console.error('Error saving answer:', err);
     } finally {
       setIsSavingAnswer(false);
     }
   }
-};
+}, [testData, submitLectureAnswer, answers]);  // ✅ Добави answers в dependencies
 
   const handleNextQuestion = () => {
-    if (currentQuestionIndex < totalQuestions - 1) {
+    if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
     }
   };
@@ -225,115 +378,141 @@ export const AcademyLectureTest = () => {
     setCurrentQuestionIndex(index);
   };
 
-  const handleSubmitTest = async () => {
-    if (isSubmitting) return;
+  const handleSubmitTest = async (isAutoSubmit = false) => {
+    if (isSubmitting || !testData?.test?.id) return;
     
+    if (!isAutoSubmit) {
+      const unanswered = questions.filter(q => !answers[q.id] || 
+        (Array.isArray(answers[q.id]) && answers[q.id].length === 0));
+      if (unanswered.length > 0) {
+        const confirm = window.confirm(
+          t('academyLectureTest.confirmSubmitUnanswered', {
+            count: unanswered.length
+          })
+        );
+        if (!confirm) return;
+      }
+    }
+
     setIsSubmitting(true);
-    clearInterval(timerRef.current);
-    
     try {
-      // Използваме testData.attempt.id
-      const result = await submitTest(testData.test.id);
+      const response = await submitLectureTest(testData.test.id);
       
-      // Парсваме резултата
-      const resultData = result?.result || result?.attempt || result;
+      const resultData = response.result || response;
       
-      setTestResult({
-        score: resultData.score ?? resultData.scorePercentage ?? 0,
-        correctCount: resultData.correctAnswers ?? resultData.correctCount ?? 0,
-        totalCount: resultData.totalQuestions ?? resultData.totalCount ?? totalQuestions,
-        passed: resultData.isPassed ?? resultData.passed ?? false
+      // Calculate score if not provided
+      const scorePercent = resultData.scorePercentage ?? resultData.score ?? 
+        calculateScorePercentage(resultData.correctAnswers, resultData.totalQuestions || questions.length);
+      
+      const isPassed = resultData.passed ?? resultData.isPassed ?? 
+        (scorePercent >= (testData.test?.passingScore || 70));
+      
+      setResults({
+        scorePercentage: scorePercent,
+        correctAnswers: resultData.correctAnswers ?? 0,
+        wrongAnswers: resultData.wrongAnswers ?? ((resultData.totalQuestions ?? questions.length) - (resultData.correctAnswers ?? 0)),
+        totalQuestions: resultData.totalQuestions ?? questions.length,
+        passed: isPassed,
+        earnedCredits: resultData.earnedCredits ?? 0,
+        earnedPoints: resultData.earnedPoints ?? 0,
+        totalPoints: resultData.totalPoints ?? 0,
+        attemptId: resultData.attemptId,
+        attemptNumber: testData.attempt?.attemptNumber || 1
       });
-      setTestState('results');
+      
+      // Store questions result if available
+      if (resultData.questionsResult) {
+        setQuestionsResult(resultData.questionsResult);
+      }
+      
+      // Update remaining attempts
+      if (remainingAttempts > 0) {
+        setRemainingAttempts(prev => prev - 1);
+      }
+      
+      if (isPassed) {
+        setHasPassedTest(true);
+      }
+      
+      setShowResults(true);
+      
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
     } catch (err) {
-      console.error('Submit test error:', err);
-      setError(err.message);
+      console.error('Error submitting test:', err);
+      setError(err.message || t('academyLectureTest.errors.submitFailed'));
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleRetry = async () => {
-  setTestResult(null);
-  setAnswers({});
-  setCurrentQuestionIndex(0);
-  setTestData(null);
-  setTimeLeft(null);
-  loadingRef.current = false;
-  setTestState('loading');
-  
-  try {
-    const response = await startLectureTest(lecture.id);
-    
-    // 🔍 Debug - виж какво връща сървърът
-    console.log('🔄 Retry response:', {
-      attemptId: response?.attempt?.id,
-      attemptStatus: response?.attempt?.status,
-      startedAt: response?.attempt?.startedAt,
-      timeRemaining: response?.timeRemaining,
-      attemptNumber: response?.attempt?.attemptNumber
-    });
-    
-    if (response?.attempt) {
-      // Провери дали attempt-ът е нов или е стар submitted
-      if (response.attempt.status === 'completed' || response.attempt.status === 'submitted') {
-        console.warn('⚠️ Server returned old completed attempt!');
-        // Може би трябва друг endpoint за нов опит?
-        setTestState('intro');
-        return;
-      }
-      
-      setTestData(response);
-      
-      // Използвай timeRemaining от сървъра ако има
-      if (response.timeRemaining !== undefined && response.timeRemaining > 0) {
-        setTimeLeft(response.timeRemaining);
-      } else if (response.test?.timeLimitMinutes) {
-        setTimeLeft(response.test.timeLimitMinutes * 60);
-      }
-      
-      setTestState('active');
-    } else {
-      setTestState('intro');
-    }
-  } catch (err) {
-    console.error('Retry error:', err);
-    setTestState('intro');
-  }
-};
-  const handleGoBack = () => {
+  const handleBackToLecture = () => {
     navigate(`/academy/lectures/${slug}`);
   };
 
-  const getQuestionStatus = (questionId) => {
-    const answer = answers[questionId];
-    if (answer !== undefined && answer !== null) {
-      if (Array.isArray(answer)) {
-        return answer.length > 0 ? 'answered' : 'unanswered';
+  const handleRetryTest = async () => {
+    if (!canStartNewAttempt || remainingAttempts <= 0) return;
+    
+    // Reset state
+    setTestData(null);
+    setQuestions([]);
+    setAnswers({});
+    setCurrentQuestionIndex(0);
+    setShowResults(false);
+    setResults(null);
+    setTimeRemaining(null);
+    setQuestionsResult([]);
+    setShowQuestionsReview(false);
+    fetchedRef.current = null;
+    setIsLoadingTest(true);
+    
+    try {
+      const data = await startLectureTest(lecture.id);
+      
+      if (data) {
+        setTestData(data);
+        setQuestions(data.questions || []);
+        
+        if (data.test?.timeLimitMinutes) {
+          setTimeRemaining(data.test.timeLimitMinutes * 60);
+        }
       }
-      return 'answered';
+    } catch (err) {
+      console.error('Error starting new attempt:', err);
+      setError(err.message || t('academyLectureTest.errors.retryFailed'));
+    } finally {
+      setIsLoadingTest(false);
     }
-    return 'unanswered';
   };
 
-  // Auth required
+  const handleViewAttemptQuestions = (attempt) => {
+    if (attempt.questionsResult) {
+      setQuestionsResult(attempt.questionsResult);
+      setShowQuestionsReview(true);
+    }
+  };
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // RENDER STATES
+  // ═══════════════════════════════════════════════════════════════════════════
+
   if (!isAuthentication) {
     return (
       <div className="alt">
         <div className="alt-error">
           <div className="alt-error__icon">🔐</div>
-          <h2>{t('academyLectureTest.auth.title')}</h2>
-          <p>{t('academyLectureTest.auth.description')}</p>
-          <Link to="/sign-up" className="alt-error__btn">
-            {t('academyLectureTest.auth.login')}
+          <h2>{t('academyLectureTest.loginRequired')}</h2>
+          <p>{t('academyLectureTest.loginRequiredDesc')}</p>
+          <Link to="/sign-in" className="alt-error__btn">
+            {t('academyLectureTest.login')}
           </Link>
         </div>
       </div>
     );
   }
 
-  // Loading
-  if (testState === 'loading' || isLoading) {
+  if (isLoadingTest || isLoading) {
     return (
       <div className="alt">
         <div className="alt-loading">
@@ -344,112 +523,86 @@ export const AcademyLectureTest = () => {
     );
   }
 
-  // Error
-  if (testState === 'error' || error) {
+  if (error) {
     return (
       <div className="alt">
         <div className="alt-error">
           <div className="alt-error__icon">⚠️</div>
-          <h2>{t('academyLectureTest.error.title')}</h2>
+          <h2>{t('academyLectureTest.error')}</h2>
           <p>{error}</p>
-          <button onClick={handleGoBack} className="alt-error__btn">
-            {t('academyLectureTest.error.back')}
+          <button onClick={handleBackToLecture} className="alt-error__btn">
+            {t('academyLectureTest.backToLecture')}
           </button>
         </div>
       </div>
     );
   }
 
-  // Intro screen
-  if (testState === 'intro') {
+  if (!testData || !testData.test) {
     return (
       <div className="alt">
-        <div className="alt-intro">
-          <div className="alt-intro__card">
-            <div className="alt-intro__icon">📝</div>
-            <h1 className="alt-intro__title">{t('academyLectureTest.intro.title')}</h1>
-            <p className="alt-intro__lecture">{lecture?.title}</p>
-            
-            <div className="alt-intro__info">
-              {(testData?.test?.timeLimitMinutes || lecture?.testTimeLimit) && (
-                <div className="alt-intro__info-item">
-                  <span className="alt-intro__info-icon">⏱️</span>
-                  <span>{testData?.test?.timeLimitMinutes || lecture?.testTimeLimit} {t('academyLectureTest.intro.minutes')}</span>
-                </div>
-              )}
-              <div className="alt-intro__info-item">
-                <span className="alt-intro__info-icon">🪙</span>
-                <span>+{testData?.test?.creditsForPassing || lecture?.creditsForTest || 0} {t('academyLectureTest.intro.credits')}</span>
-              </div>
-              <div className="alt-intro__info-item">
-                <span className="alt-intro__info-icon">✓</span>
-                <span>{testData?.test?.passingScore || lecture?.testPassingScore || 70}% {t('academyLectureTest.intro.toPass')}</span>
-              </div>
-            </div>
-
-            <div className="alt-intro__rules">
-              <h3>{t('academyLectureTest.intro.rulesTitle')}</h3>
-              <ul>
-                <li>{t('academyLectureTest.intro.rule1')}</li>
-                <li>{t('academyLectureTest.intro.rule2')}</li>
-                <li>{t('academyLectureTest.intro.rule3')}</li>
-              </ul>
-            </div>
-
-            <div className="alt-intro__actions">
-              <button className="alt-intro__start" onClick={handleStartTest}>
-                🚀 {t('academyLectureTest.intro.start')}
-              </button>
-              <button className="alt-intro__back" onClick={handleGoBack}>
-                {t('academyLectureTest.intro.back')}
-              </button>
-            </div>
-          </div>
+        <div className="alt-error">
+          <div className="alt-error__icon">📝</div>
+          <h2>{t('academyLectureTest.notFound')}</h2>
+          <button onClick={handleBackToLecture} className="alt-error__btn">
+            {t('academyLectureTest.backToLecture')}
+          </button>
         </div>
       </div>
     );
   }
 
-  // Results screen
-  if (testState === 'results' && testResult) {
-    const passingScore = testData?.test?.passingScore || lecture?.testPassingScore || 70;
-    const passed = testResult.score >= passingScore;
-    const scorePercentage = testResult.score || 0;
-    const correctAnswers = testResult.correctCount || 0;
-    const wrongAnswers = (testResult.totalCount || 0) - correctAnswers;
-    const creditsEarned = testData?.test?.creditsForPassing || lecture?.creditsForTest || 0;
+  // ═══════════════════════════════════════════════════════════════════════════
+  // RESULTS SCREEN
+  // ═══════════════════════════════════════════════════════════════════════════
+
+  if (showResults && results) {
+    const scorePercentage = results.scorePercentage ?? 0;
+    const isPassed = results.passed ?? false;
+    const correctAnswers = results.correctAnswers ?? 0;
+    const wrongAnswers = results.wrongAnswers ?? 0;
+    const totalQuestionsCount = results.totalQuestions ?? questions.length;
+    const earnedCredits = results.earnedCredits ?? 0;
     
     return (
       <div className="alt alt--results">
         <div className="alt-results">
-          <div className={`alt-results__card ${passed ? 'alt-results__card--passed' : 'alt-results__card--failed'}`}>
+          <div className={`alt-results__card ${isPassed ? 'alt-results__card--passed' : 'alt-results__card--failed'}`}>
+            {/* Icon */}
             <div className="alt-results__icon">
-              {passed ? '🎉' : '😔'}
+              {isPassed ? '🎉' : '😔'}
             </div>
             
+            {/* Title */}
             <h1 className="alt-results__title">
-              {passed 
-                ? t('academyLectureTest.results.passedTitle')
-                : t('academyLectureTest.results.failedTitle')}
+              {isPassed 
+                ? t('academyLectureTest.results.passed')
+                : t('academyLectureTest.results.failed')
+              }
             </h1>
             
+            {/* Subtitle */}
             <p className="alt-results__subtitle">
-              {passed 
+              {isPassed 
                 ? t('academyLectureTest.results.passedDesc')
-                : t('academyLectureTest.results.failedDesc')}
+                : t('academyLectureTest.results.failedDesc')
+              }
             </p>
 
             {/* Score Circle */}
             <div className="alt-results__score">
               <div className="alt-results__score-circle">
                 <svg viewBox="0 0 100 100">
-                  <circle className="alt-results__score-bg" cx="50" cy="50" r="45" />
+                  <circle 
+                    className="alt-results__score-bg" 
+                    cx="50" cy="50" r="45"
+                  />
                   <circle 
                     className="alt-results__score-fill" 
                     cx="50" cy="50" r="45"
                     style={{ 
                       strokeDasharray: `${(scorePercentage / 100) * 283} 283`,
-                      stroke: passed ? '#10b981' : '#ef4444'
+                      stroke: isPassed ? '#10b981' : '#ef4444'
                     }}
                   />
                 </svg>
@@ -466,49 +619,211 @@ export const AcademyLectureTest = () => {
                 <span className="alt-results__stat-value alt-results__stat-value--correct">
                   {correctAnswers}
                 </span>
-                <span className="alt-results__stat-label">{t('academyLectureTest.results.correct')}</span>
+                <span className="alt-results__stat-label">
+                  {t('academyLectureTest.results.correct')}
+                </span>
               </div>
               <div className="alt-results__stat-divider"></div>
               <div className="alt-results__stat">
                 <span className="alt-results__stat-value alt-results__stat-value--wrong">
                   {wrongAnswers}
                 </span>
-                <span className="alt-results__stat-label">{t('academyLectureTest.results.wrong')}</span>
+                <span className="alt-results__stat-label">
+                  {t('academyLectureTest.results.wrong')}
+                </span>
               </div>
               <div className="alt-results__stat-divider"></div>
               <div className="alt-results__stat">
-                <span className="alt-results__stat-value">{testResult.totalCount || 0}</span>
-                <span className="alt-results__stat-label">{t('academyLectureTest.results.total')}</span>
+                <span className="alt-results__stat-value">{totalQuestionsCount}</span>
+                <span className="alt-results__stat-label">
+                  {t('academyLectureTest.results.total')}
+                </span>
+              </div>
+              <div className="alt-results__stat-divider"></div>
+              <div className="alt-results__stat">
+                <span className="alt-results__stat-value">{test.passingScore}%</span>
+                <span className="alt-results__stat-label">
+                  {t('academyLectureTest.results.passing')}
+                </span>
               </div>
             </div>
 
             {/* Earned Credits */}
-            {passed && creditsEarned > 0 && (
+            {isPassed && earnedCredits > 0 && (
               <div className="alt-results__credits">
                 <span className="alt-results__credits-icon">🪙</span>
-                <span>+{creditsEarned} {t('academyLectureTest.results.creditsEarned')}</span>
+                <span>+{earnedCredits} {t('academyLectureTest.results.creditsEarned')}</span>
+              </div>
+            )}
+
+            {/* Questions Review Toggle */}
+            {questionsResult.length > 0 && test.showCorrectAnswers && (
+              <div className="alt-results__review">
+                <button 
+                  className="alt-results__review-toggle"
+                  onClick={() => setShowQuestionsReview(!showQuestionsReview)}
+                >
+                  <span>📋 {t('academyLectureTest.results.reviewAnswers')}</span>
+                  <svg 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    strokeWidth="2"
+                    style={{ transform: showQuestionsReview ? 'rotate(180deg)' : 'rotate(0deg)' }}
+                  >
+                    <path d="M6 9l6 6 6-6" />
+                  </svg>
+                </button>
+                
+                {showQuestionsReview && (
+                  <div className="alt-results__review-list">
+                    {questionsResult.map((q, idx) => (
+                      <div 
+                        key={q.questionId || idx} 
+                        className={`alt-results__review-item ${q.isCorrect ? 'alt-results__review-item--correct' : 'alt-results__review-item--wrong'}`}
+                      >
+                        <div className="alt-results__review-header">
+                          <span className="alt-results__review-num">
+                            {q.questionNumber || idx + 1}.
+                          </span>
+                          <span className={`alt-results__review-badge ${q.isCorrect ? 'alt-results__review-badge--correct' : 'alt-results__review-badge--wrong'}`}>
+                            {q.isCorrect 
+                              ? `✓ ${t('academyLectureTest.results.correctLabel')}`
+                              : `✗ ${t('academyLectureTest.results.wrongLabel')}`
+                            }
+                          </span>
+                        </div>
+                        <p className="alt-results__review-question">
+                          {q.questionText}
+                        </p>
+                        <div className="alt-results__review-answer">
+                          <span className="alt-results__review-label">{t('academyLectureTest.results.yourAnswer')}:</span>
+                          <span className={`alt-results__review-value ${q.isCorrect ? '' : 'alt-results__review-value--wrong'}`}>
+                            {q.yourAnswer || t('academyLectureTest.results.noAnswer')}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Attempt Info */}
+            <div className="alt-results__attempts">
+              <span className="alt-results__attempts-icon">📊</span>
+              {t('academyLectureTest.results.attemptInfo', {
+                current: attemptNumber,
+                max: maxAttempts
+              })}
+              {remainingAttempts > 0 && !isPassed && (
+                <span className="alt-results__attempts-remaining">
+                  {' '}• {t('academyLectureTest.results.remainingAttempts', {
+                    count: remainingAttempts
+                  })}
+                </span>
+              )}
+              {remainingAttempts === 0 && !isPassed && (
+                <span className="alt-results__attempts-exhausted">
+                  {' '}• {t('academyLectureTest.results.noMoreAttempts')}
+                </span>
+              )}
+            </div>
+
+            {/* Previous Attempts History */}
+            {previousAttempts.length > 0 && (
+              <div className="alt-results__history">
+                <button 
+                  className="alt-results__history-toggle"
+                  onClick={() => setShowHistory(!showHistory)}
+                >
+                  <span>📜 {t('academyLectureTest.results.attemptHistory')} ({previousAttempts.length})</span>
+                  <svg 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    strokeWidth="2"
+                    style={{ transform: showHistory ? 'rotate(180deg)' : 'rotate(0deg)' }}
+                  >
+                    <path d="M6 9l6 6 6-6" />
+                  </svg>
+                </button>
+                
+                {showHistory && (
+                  <div className="alt-results__history-list">
+                    {previousAttempts.map((attempt, idx) => {
+                      const attemptScore = attempt.score ?? calculateScorePercentage(attempt.correctAnswers, attempt.totalQuestions);
+                      const attemptPassed = attemptScore >= (test.passingScore || 70);
+                      
+                      return (
+                        <div 
+                          key={attempt.id} 
+                          className={`alt-results__history-item ${attemptPassed ? 'alt-results__history-item--passed' : ''}`}
+                        >
+                          <span className="alt-results__history-num">#{attempt.attemptNumber || idx + 1}</span>
+                          <span className="alt-results__history-date">{formatDate(attempt.completedAt || attempt.startedAt)}</span>
+                          <span className="alt-results__history-details">
+                            {attempt.correctAnswers}/{attempt.totalQuestions}
+                          </span>
+                          <span className={`alt-results__history-score ${attemptPassed ? 'alt-results__history-score--passed' : ''}`}>
+                            {Math.round(attemptScore)}%
+                          </span>
+                          {attemptPassed && <span className="alt-results__history-badge">✅</span>}
+                          {attempt.questionsResult && test.showCorrectAnswers && (
+                            <button 
+                              className="alt-results__history-view"
+                              onClick={() => handleViewAttemptQuestions(attempt)}
+                              title={t('academyLectureTest.results.viewAnswers')}
+                            >
+                              👁️
+                            </button>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Best Attempt Info */}
+            {bestAttempt && previousAttempts.length > 1 && (
+              <div className="alt-results__best">
+                <span className="alt-results__best-icon">🏆</span>
+                <span className="alt-results__best-text">
+                  {t('academyLectureTest.results.bestAttempt')}: {' '}
+                  <strong>{Math.round(bestAttempt.score ?? calculateScorePercentage(bestAttempt.correctAnswers, bestAttempt.totalQuestions))}%</strong>
+                  {' '}({t('academyLectureTest.results.attempt')} #{bestAttempt.attemptNumber})
+                </span>
               </div>
             )}
 
             {/* Actions */}
             <div className="alt-results__actions">
-              {passed ? (
-                <button onClick={handleGoBack} className="alt-results__btn alt-results__btn--primary">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M5 12h14M12 5l7 7-7 7" />
-                  </svg>
-                  {t('academyLectureTest.results.backToLecture')}
-                </button>
+              {isPassed ? (
+                <>
+                  <button onClick={handleBackToLecture} className="alt-results__btn alt-results__btn--primary">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                    {t('academyLectureTest.results.backToLecture')}
+                  </button>
+                </>
               ) : (
                 <>
-                  <button onClick={handleRetry} className="alt-results__btn alt-results__btn--retry">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M1 4v6h6M23 20v-6h-6" />
-                      <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15" />
-                    </svg>
-                    {t('academyLectureTest.results.retry')}
-                  </button>
-                  <button onClick={handleGoBack} className="alt-results__btn alt-results__btn--secondary">
+                  {canRetry && (
+                    <button 
+                      onClick={handleRetryTest} 
+                      className="alt-results__btn alt-results__btn--retry"
+                    >
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M1 4v6h6M23 20v-6h-6" />
+                        <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15" />
+                      </svg>
+                      {t('academyLectureTest.results.tryAgain')}
+                    </button>
+                  )}
+                  <button onClick={handleBackToLecture} className="alt-results__btn alt-results__btn--secondary">
                     {t('academyLectureTest.results.backToLecture')}
                   </button>
                 </>
@@ -520,40 +835,49 @@ export const AcademyLectureTest = () => {
     );
   }
 
-  // Active test
+  // ═══════════════════════════════════════════════════════════════════════════
+  // MAIN TEST UI
+  // ═══════════════════════════════════════════════════════════════════════════
+
   return (
     <div className="alt">
       {/* Header */}
       <header className="alt-header">
         <div className="alt-header__left">
-          <button onClick={handleGoBack} className="alt-header__back" title={t('academyLectureTest.header.exit')}>
+          <button onClick={handleBackToLecture} className="alt-header__back">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M19 12H5M12 19l-7-7 7-7" />
             </svg>
           </button>
           <div className="alt-header__info">
-            <h1 className="alt-header__title">{testData?.test?.title || lecture?.title}</h1>
+            <h1 className="alt-header__title">{test.title}</h1>
             <span className="alt-header__meta">
-              {t('academyLectureTest.question.label')} {currentQuestionIndex + 1} / {totalQuestions}
+              {t('academyLectureTest.questionOf', {
+                current: currentQuestionIndex + 1,
+                total: questions.length
+              })}
             </span>
           </div>
         </div>
 
         <div className="alt-header__right">
-          {timeLeft !== null && (
+          {timeRemaining !== null && (
             <div className={`alt-header__timer ${isTimeWarning ? 'alt-header__timer--warning' : ''} ${isTimeCritical ? 'alt-header__timer--critical' : ''}`}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="12" cy="12" r="10" />
                 <polyline points="12,6 12,12 16,14" />
               </svg>
-              <span>{formatTime(timeLeft)}</span>
+              <span>{formatTime(timeRemaining)}</span>
             </div>
           )}
 
           <div className="alt-header__progress">
-            <span>{answeredCount}/{totalQuestions}</span>
+            <span>{getAnsweredCount()}/{questions.length}</span>
             <div className="alt-header__progress-bar">
-              <div className="alt-header__progress-fill" style={{ width: `${progress}%` }}></div>
+              <div 
+                className="alt-header__progress-fill"
+                style={{ width: `${(getAnsweredCount() / questions.length) * 100}%` }}
+              ></div>
             </div>
           </div>
 
@@ -570,9 +894,11 @@ export const AcademyLectureTest = () => {
         <div className="alt-container">
           {/* Sidebar */}
           <aside className="alt-sidebar">
-            <h3 className="alt-sidebar__title">{t('academyLectureTest.navigator.title')}</h3>
+            <h3 className="alt-sidebar__title">
+              {t('academyLectureTest.questions')}
+            </h3>
             <div className="alt-sidebar__grid">
-              {testData?.questions?.map((q, index) => (
+              {questions.map((q, index) => (
                 <button
                   key={q.id}
                   onClick={() => handleGoToQuestion(index)}
@@ -589,15 +915,15 @@ export const AcademyLectureTest = () => {
             <div className="alt-sidebar__legend">
               <div className="alt-sidebar__legend-item">
                 <span className="alt-sidebar__legend-dot alt-sidebar__legend-dot--answered"></span>
-                <span>{t('academyLectureTest.legend.answered')}</span>
+                <span>{t('academyLectureTest.answered')}</span>
               </div>
               <div className="alt-sidebar__legend-item">
                 <span className="alt-sidebar__legend-dot alt-sidebar__legend-dot--unanswered"></span>
-                <span>{t('academyLectureTest.legend.unanswered')}</span>
+                <span>{t('academyLectureTest.unanswered')}</span>
               </div>
               <div className="alt-sidebar__legend-item">
                 <span className="alt-sidebar__legend-dot alt-sidebar__legend-dot--current"></span>
-                <span>{t('academyLectureTest.legend.current')}</span>
+                <span>{t('academyLectureTest.current')}</span>
               </div>
             </div>
           </aside>
@@ -608,16 +934,24 @@ export const AcademyLectureTest = () => {
               <>
                 <div className="alt-question__header">
                   <span className="alt-question__number">
-                    {t('academyLectureTest.question.label')} {currentQuestionIndex + 1}
+                    {t('academyLectureTest.question')} {currentQuestionIndex + 1}
                   </span>
-                  {currentQuestion.points && (
-                    <span className="alt-question__points">
-                      {currentQuestion.points} {currentQuestion.points === 1 ? t('academyLectureTest.question.point') : t('academyLectureTest.question.points')}
-                    </span>
-                  )}
+                  <span className="alt-question__points">
+                    {currentQuestion.points} {currentQuestion.points === 1 
+                      ? t('academyLectureTest.point')
+                      : t('academyLectureTest.points')
+                    }
+                  </span>
+                  <span className={`alt-question__type alt-question__type--${currentQuestion.questionType}`}>
+                    {currentQuestion.questionType === 'single' && t('academyLectureTest.typeSingle')}
+                    {currentQuestion.questionType === 'multiple' && t('academyLectureTest.typeMultiple')}
+                    {currentQuestion.questionType === 'true_false' && t('academyLectureTest.typeTrueFalse')}
+                  </span>
                 </div>
 
-                <h2 className="alt-question__text">{currentQuestion.questionText}</h2>
+                <h2 className="alt-question__text">
+                  {currentQuestion.questionText}
+                </h2>
 
                 {currentQuestion.imageUrl && (
                   <div className="alt-question__image">
@@ -636,7 +970,7 @@ export const AcademyLectureTest = () => {
                     return (
                       <button
                         key={option.id}
-                        onClick={() => handleSelectAnswer(currentQuestion.id, option.id, isMultiple)}
+                        onClick={() => handleAnswerSelect(currentQuestion.id, option.id, isMultiple)}
                         className={`alt-question__answer ${isSelected ? 'alt-question__answer--selected' : ''}`}
                       >
                         <span className="alt-question__answer-indicator">
@@ -674,23 +1008,23 @@ export const AcademyLectureTest = () => {
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M19 12H5M12 19l-7-7 7-7" />
                     </svg>
-                    {t('academyLectureTest.navigation.prev')}
+                    {t('academyLectureTest.prev')}
                   </button>
 
-                  {currentQuestionIndex === totalQuestions - 1 ? (
+                  {currentQuestionIndex === questions.length - 1 ? (
                     <button
-                      onClick={() => handleSubmitTest()}
+                      onClick={() => handleSubmitTest(false)}
                       disabled={isSubmitting}
                       className="alt-question__nav-btn alt-question__nav-btn--submit"
                     >
                       {isSubmitting ? (
                         <>
                           <span className="alt-question__nav-spinner"></span>
-                          {t('academyLectureTest.submit.submitting')}
+                          {t('academyLectureTest.submitting')}
                         </>
                       ) : (
                         <>
-                          {t('academyLectureTest.submit.button')}
+                          {t('academyLectureTest.submit')}
                           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                             <polyline points="20 6 9 17 4 12" />
                           </svg>
@@ -702,7 +1036,7 @@ export const AcademyLectureTest = () => {
                       onClick={handleNextQuestion}
                       className="alt-question__nav-btn alt-question__nav-btn--next"
                     >
-                      {t('academyLectureTest.navigation.next')}
+                      {t('academyLectureTest.next')}
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <path d="M5 12h14M12 5l7 7-7 7" />
                       </svg>
@@ -718,11 +1052,17 @@ export const AcademyLectureTest = () => {
       {/* Footer */}
       <footer className="alt-footer">
         <div className="alt-footer__info">
-          <span>📋 {testData?.test?.title || t('academyLectureTest.header.test')}</span>
+          <span>📋 {test.title}</span>
           <span>•</span>
-          <span>🎯 {t('academyLectureTest.footer.passing')}: {testData?.test?.passingScore || lecture?.testPassingScore || 70}%</span>
+          <span>🎯 {t('academyLectureTest.passingScore')}: {test.passingScore}%</span>
           <span>•</span>
-          <span>🪙 {t('academyLectureTest.footer.credits')}: {testData?.test?.creditsForPassing || lecture?.creditsForTest || 0}</span>
+          <span>🪙 {t('academyLectureTest.maxCredits')}: {test.maxCredits || test.creditsForPassing || 0}</span>
+          {maxAttempts && (
+            <>
+              <span>•</span>
+              <span>🔄 {t('academyLectureTest.attempt')}: {attemptNumber}/{maxAttempts}</span>
+            </>
+          )}
         </div>
       </footer>
     </div>

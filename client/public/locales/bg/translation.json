@@ -14461,69 +14461,83 @@
   },
   "academyLectureTest": {
     "loading": "Зареждане на теста...",
-    "auth": {
-      "title": "Влезте в профила си",
-      "description": "Трябва да сте влезли, за да решите теста",
-      "login": "Вход / Регистрация"
+    "error": "Грешка",
+    "notFound": "Тестът не е намерен",
+    "backToLecture": "Обратно към лекцията",
+    "loginRequired": "Изисква се вход",
+    "loginRequiredDesc": "Моля, влезте в акаунта си, за да решите теста.",
+    "login": "Вход",
+    
+    "question": "Въпрос",
+    "questionOf": "Въпрос {{current}} от {{total}}",
+    "questions": "Въпроси",
+    "point": "точка",
+    "points": "точки",
+    
+    "typeSingle": "Един отговор",
+    "typeMultiple": "Няколко отговора",
+    "typeTrueFalse": "Вярно/Грешно",
+    
+    "answered": "Отговорен",
+    "unanswered": "Без отговор",
+    "current": "Текущ",
+    
+    "prev": "Назад",
+    "next": "Напред",
+    "submit": "Предай теста",
+    "submitting": "Предаване...",
+    
+    "passingScore": "Минимум за преминаване",
+    "maxCredits": "Максимум кредити",
+    "attempt": "Опит",
+    
+    "confirmSubmitUnanswered": "Имате {{count}} въпроса без отговор. Сигурни ли сте, че искате да предадете теста?",
+    
+    "errors": {
+      "lectureNotFound": "Лекцията не е намерена",
+      "noTest": "Тази лекция няма тест",
+      "loadFailed": "Грешка при зареждане на теста",
+      "submitFailed": "Грешка при предаване на теста",
+      "retryFailed": "Грешка при стартиране на нов опит"
     },
-    "error": {
-      "title": "Грешка",
-      "back": "← Назад към лекцията",
-      "noTest": "Тази лекция няма тест"
-    },
-    "intro": {
-      "title": "Тест към лекцията",
-      "minutes": "минути",
-      "credits": "кредита",
-      "toPass": "за успех",
-      "rulesTitle": "Правила",
-      "rule1": "Можете да се върнете към предишни въпроси",
-      "rule2": "Отговорите се запазват автоматично",
-      "rule3": "Можете да опитате отново след приключване",
-      "start": "Започни теста",
-      "back": "← Назад"
-    },
+    
     "results": {
-      "passedTitle": "Поздравления!",
-      "failedTitle": "Опитайте отново",
-      "passedDesc": "Успешно преминахте теста!",
-      "failedDesc": "За съжаление не достигнахте минималния резултат.",
+      "passed": "Поздравления! 🎉",
+      "failed": "Не успяхте",
+      "passedDesc": "Успешно завършихте теста!",
+      "failedDesc": "Не достигнахте минималния резултат. Опитайте отново!",
       "yourScore": "Вашият резултат",
       "correct": "Верни",
       "wrong": "Грешни",
       "total": "Общо",
-      "creditsEarned": "кредита спечелени!",
-      "retry": "Опитай отново",
-      "backToLecture": "Към лекцията"
-    },
-    "header": {
-      "test": "Тест",
-      "exit": "Изход"
-    },
-    "question": {
-      "label": "Въпрос",
-      "point": "точка",
-      "points": "точки"
-    },
-    "navigator": {
-      "title": "Въпроси"
-    },
-    "legend": {
-      "answered": "Отговорен",
-      "unanswered": "Неотговорен",
-      "current": "Текущ"
-    },
-    "navigation": {
-      "prev": "Предишен",
-      "next": "Следващ"
-    },
-    "submit": {
-      "button": "Предай теста",
-      "submitting": "Предаване..."
-    },
-    "footer": {
       "passing": "Минимум",
-      "credits": "Кредити"
+      "creditsEarned": "кредита спечелени",
+      "backToLecture": "Обратно към лекцията",
+      "tryAgain": "Опитай отново",
+      
+      "reviewAnswers": "Преглед на отговорите",
+      "correctLabel": "Вярно",
+      "wrongLabel": "Грешно",
+      "yourAnswer": "Твоят отговор",
+      "noAnswer": "Без отговор",
+      
+      "attemptInfo": "Опит {{current}} от {{max}}",
+      "remainingAttempts": "Оставащи опити: {{count}}",
+      "noMoreAttempts": "Няма повече опити",
+      
+      "attemptHistory": "История на опитите",
+      "viewAnswers": "Виж отговорите",
+      
+      "bestAttempt": "Най-добър резултат",
+      "attempt": "Опит"
+    },
+    
+    "intro": {
+      "attemptsLeft": "Оставащи опити: {{count}}"
+    },
+    
+    "footer": {
+      "attempt": "Опит"
     }
   }
 }

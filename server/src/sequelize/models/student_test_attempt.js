@@ -52,7 +52,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       testId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         field: 'test_id',
         references: {
           model: 'lesson_tests',

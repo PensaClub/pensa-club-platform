@@ -490,7 +490,14 @@ export const academyCoursesServiceFactory = () => {
     getLectureAttempt: async (lectureId) => {
       return requester.get(`${apiUrl}/academy/tests/lecture/${lectureId}/attempt`);
     },
+    // ============ LECTURE TESTS - НОВИ ============
+    submitLectureAnswer: async (lectureTestId, answerData) => {
+      return requester.post(`${apiUrl}/academy/tests/lecture/${lectureTestId}/answer`, answerData);
+    },
 
+    submitLectureTest: async (lectureTestId) => {
+      return requester.post(`${apiUrl}/academy/tests/lecture/${lectureTestId}/submit`);
+    },
     // =========================================================
     //                    CERTIFICATES
     // =========================================================
