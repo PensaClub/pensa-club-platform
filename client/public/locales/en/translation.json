@@ -11815,7 +11815,9 @@
         "events": "Events",
         "library": "Library",
         "community": "Community",
-        "about": "About"
+        "about": "About",
+        "lectures": "Лекции"
+
       },
       "dropdown": {
         "dashboard": "My Progress",
@@ -13784,7 +13786,11 @@
     "programsTitle": "Learning Programs",
     "programsSubtitle": "Choose a program based on your interests and experience level",
     "popularCourses": "Popular Courses",
-    "popularCoursesSubtitle": "Most sought-after courses by our students"
+    "popularCoursesSubtitle": "Most sought-after courses by our students",
+      "noResults": "No courses found",
+    "tryDifferentFilters": "Try different filters or search terms",
+    "searchResults": "Search Results",
+    "foundCourses": "Found {{count}} courses"
   },
    "academyCoursesHero": {
     "titleLine1": "Discover your path in the ",
@@ -13844,7 +13850,19 @@
       "beginner": "Beginner",
       "intermediate": "Intermediate",
       "advanced": "Advanced"
-    }
+    },
+     "sort": {
+    "popular": "Popular",
+    "newest": "Newest",
+    "alphabetical": "Alphabetical",
+    "rating": "By rating",
+    "duration": "By duration"
+  },
+  "resultSingle": "result",
+  "resultPlural": "results",
+  "clearAll": "Clear all",
+  "noResultsTitle": "No courses found",
+  "noResultsText": "Try different filters or search terms"
   },
  "academyCourseCard": {
     "free": "Free",
@@ -14061,5 +14079,187 @@
   "wrong": "Wrong",
   "continueCourse": "Continue with course",
   "noMoreAttempts": "No more attempts"
-}
+},
+ "academyLectures": {
+  "hero": {
+    "badge": "Video Lectures",
+    "title": "Lectures",
+    "titleAccent": "Live & Recordings",
+    "subtitle": "Learn from experts in real-time or watch recordings whenever convenient. Completely free.",
+    "stats": {
+      "total": "Lectures",
+      "upcoming": "Upcoming",
+      "recordings": "Recordings",
+      "credits": "Credits"
+    }
+  },
+  "schedule": {
+    "title": "Upcoming Live",
+    "upcoming": "lectures",
+    "today": "Today",
+    "tomorrow": "Tomorrow"
+  },
+  "filters": {
+    "all": "All",
+    "live": "Live",
+    "upcoming": "Upcoming",
+    "recordings": "Recordings",
+    "searchPlaceholder": "Search lecture...",
+    "clearAll": "Clear"
+  },
+  "sort": {
+    "date": "By date",
+    "popular": "Popular",
+    "alphabetical": "A-Z"
+  },
+  "results": {
+    "found": "found"
+  },
+  "card": {
+    "upcoming": "Upcoming",
+    "recording": "Recording",
+    "speaker": "Speaker",
+    "hasTest": "With test",
+    "watchLive": "Watch Live",
+    "signUp": "Sign Up",
+    "watch": "Watch"
+  },
+  "loading": "Loading...",
+  "empty": {
+    "noLectures": "No lectures available",
+    "noResults": "No lectures found",
+    "checkBack": "Check back later for new lectures.",
+    "tryDifferent": "Try different filters."
+  }
+},
+
+  "academyLectureWatch": {
+    "loading": "Loading lecture...",
+    "error": {
+      "title": "Error",
+      "backToList": "← Back to lectures"
+    },
+    "noVideo": {
+      "title": "Video not available",
+      "description": "The recording has not been published yet.",
+      "back": "← Back to lecture"
+    },
+    "header": {
+      "back": "Back",
+      "live": "LIVE",
+      "theaterMode": "Theater mode",
+      "exitTheater": "Exit theater mode",
+      "openYoutube": "Open in YouTube"
+    },
+    "video": {
+      "unsupportedProvider": "Video provider not supported",
+      "openExternal": "Open externally"
+    },
+    "meta": {
+      "views": "views",
+      "hours": "h",
+      "mins": "m",
+      "minutes": "min"
+    },
+    "actions": {
+      "takeTest": "Take the test"
+    },
+    "chat": {
+      "title": "Live chat",
+      "watching": "watching",
+      "empty": "Be the first to write!",
+      "comingSoon": "Firebase integration coming soon",
+      "placeholder": "Write a message...",
+      "loginRequired": "Log in to write",
+      "anonymousUser": "User"
+    },
+    "description": {
+      "about": "About the lecture"
+    },
+    "course": {
+      "partOf": "Part of course",
+      "viewCourse": "View course"
+    }
+  },
+ "academyLectureTest": {
+    "loading": "Loading test...",
+    "error": "Error",
+    "notFound": "Test not found",
+    "backToLecture": "Back to lecture",
+    "loginRequired": "Login required",
+    "loginRequiredDesc": "Please sign in to take this test.",
+    "login": "Sign In",
+    
+    "question": "Question",
+    "questionOf": "Question {{current}} of {{total}}",
+    "questions": "Questions",
+    "point": "point",
+    "points": "points",
+    
+    "typeSingle": "Single choice",
+    "typeMultiple": "Multiple choice",
+    "typeTrueFalse": "True/False",
+    
+    "answered": "Answered",
+    "unanswered": "Unanswered",
+    "current": "Current",
+    
+    "prev": "Previous",
+    "next": "Next",
+    "submit": "Submit Test",
+    "submitting": "Submitting...",
+    
+    "passingScore": "Passing score",
+    "maxCredits": "Max credits",
+    "attempt": "Attempt",
+    
+    "confirmSubmitUnanswered": "You have {{count}} unanswered questions. Are you sure you want to submit?",
+    
+    "errors": {
+      "lectureNotFound": "Lecture not found",
+      "noTest": "This lecture has no test",
+      "loadFailed": "Failed to load test",
+      "submitFailed": "Failed to submit test",
+      "retryFailed": "Failed to start new attempt"
+    },
+    
+    "results": {
+      "passed": "Congratulations! 🎉",
+      "failed": "Not Passed",
+      "passedDesc": "You successfully completed the test!",
+      "failedDesc": "You didn't reach the minimum score. Try again!",
+      "yourScore": "Your Score",
+      "correct": "Correct",
+      "wrong": "Wrong",
+      "total": "Total",
+      "passing": "Passing",
+      "creditsEarned": "credits earned",
+      "backToLecture": "Back to Lecture",
+      "tryAgain": "Try Again",
+      
+      "reviewAnswers": "Review Answers",
+      "correctLabel": "Correct",
+      "wrongLabel": "Wrong",
+      "yourAnswer": "Your answer",
+      "noAnswer": "No answer",
+      
+      "attemptInfo": "Attempt {{current}} of {{max}}",
+      "remainingAttempts": "Remaining attempts: {{count}}",
+      "noMoreAttempts": "No more attempts",
+      
+      "attemptHistory": "Attempt History",
+      "viewAnswers": "View answers",
+      
+      "bestAttempt": "Best result",
+      "attempt": "Attempt"
+    },
+    
+    "intro": {
+      "attemptsLeft": "Attempts left: {{count}}"
+    },
+    
+    "footer": {
+      "attempt": "Attempt"
+    }
+  }
 }

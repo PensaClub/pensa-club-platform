@@ -11108,7 +11108,9 @@
         "events": "Veranstaltungen",
         "library": "Bibliothek",
         "community": "Community",
-        "about": "Über das Projekt"
+        "about": "Über das Projekt",
+        "lectures": "Vorlesungen"
+
       },
       "dropdown": {
         "dashboard": "Mein Fortschritt",
@@ -13077,7 +13079,11 @@
     "programsTitle": "Lernprogramme",
     "programsSubtitle": "Wähle ein Programm basierend auf deinen Interessen und Erfahrungen",
     "popularCourses": "Beliebte Kurse",
-    "popularCoursesSubtitle": "Die meistgesuchten Kurse unserer Teilnehmer"
+    "popularCoursesSubtitle": "Die meistgesuchten Kurse unserer Teilnehmer",
+     "noResults": "Keine Kurse gefunden",
+    "tryDifferentFilters": "Versuchen Sie es mit anderen Filtern oder einer anderen Suche",
+    "searchResults": "Suchergebnisse",
+    "foundCourses": "{{count}} Kurse gefunden"
   },
   "academyCoursesHero": {
     "titleLine1": "Entdecke deinen Weg in die ",
@@ -13137,7 +13143,19 @@
       "beginner": "Anfänger",
       "intermediate": "Fortgeschritten",
       "advanced": "Experte"
-    }
+    },
+    "sort": {
+    "popular": "Beliebt",
+    "newest": "Neueste",
+    "alphabetical": "Alphabetisch",
+    "rating": "Nach Bewertung",
+    "duration": "Nach Dauer"
+  },
+  "resultSingle": "Ergebnis",
+  "resultPlural": "Ergebnisse",
+  "clearAll": "Alle löschen",
+  "noResultsTitle": "Keine Kurse gefunden",
+  "noResultsText": "Versuchen Sie andere Filter oder Suchbegriffe"
   },
   "academyCourseCard": {
     "free": "Kostenlos",
@@ -13354,5 +13372,186 @@
   "wrong": "Falsch",
   "continueCourse": "Mit dem Kurs fortfahren",
   "noMoreAttempts": "Keine weiteren Versuche"
-}
+},
+"academyLectures": {
+  "hero": {
+    "badge": "Videovorlesungen",
+    "title": "Vorlesungen",
+    "titleAccent": "Live & Aufzeichnungen",
+    "subtitle": "Lernen Sie von Experten in Echtzeit oder schauen Sie Aufzeichnungen wann immer es passt. Völlig kostenlos.",
+    "stats": {
+      "total": "Vorlesungen",
+      "upcoming": "Bevorstehend",
+      "recordings": "Aufzeichnungen",
+      "credits": "Credits"
+    }
+  },
+  "schedule": {
+    "title": "Kommende Live",
+    "upcoming": "Vorlesungen",
+    "today": "Heute",
+    "tomorrow": "Morgen"
+  },
+  "filters": {
+    "all": "Alle",
+    "live": "Live",
+    "upcoming": "Bevorstehend",
+    "recordings": "Aufzeichnungen",
+    "searchPlaceholder": "Vorlesung suchen...",
+    "clearAll": "Löschen"
+  },
+  "sort": {
+    "date": "Nach Datum",
+    "popular": "Beliebt",
+    "alphabetical": "A-Z"
+  },
+  "results": {
+    "found": "gefunden"
+  },
+  "card": {
+    "upcoming": "Bevorstehend",
+    "recording": "Aufzeichnung",
+    "speaker": "Referent",
+    "hasTest": "Mit Test",
+    "watchLive": "Live ansehen",
+    "signUp": "Anmelden",
+    "watch": "Ansehen"
+  },
+  "loading": "Laden...",
+  "empty": {
+    "noLectures": "Keine Vorlesungen verfügbar",
+    "noResults": "Keine Vorlesungen gefunden",
+    "checkBack": "Schauen Sie später nach neuen Vorlesungen.",
+    "tryDifferent": "Versuchen Sie andere Filter."
+  }
+},
+ "academyLectureWatch": {
+    "loading": "Vorlesung wird geladen...",
+    "error": {
+      "title": "Fehler",
+      "backToList": "← Zu den Vorlesungen"
+    },
+    "noVideo": {
+      "title": "Video nicht verfügbar",
+      "description": "Die Aufzeichnung wurde noch nicht veröffentlicht.",
+      "back": "← Zurück zur Vorlesung"
+    },
+    "header": {
+      "back": "Zurück",
+      "live": "LIVE",
+      "theaterMode": "Theatermodus",
+      "exitTheater": "Theatermodus verlassen",
+      "openYoutube": "In YouTube öffnen"
+    },
+    "video": {
+      "unsupportedProvider": "Video-Anbieter nicht unterstützt",
+      "openExternal": "Extern öffnen"
+    },
+    "meta": {
+      "views": "Aufrufe",
+      "hours": "Std",
+      "mins": "Min",
+      "minutes": "Min"
+    },
+    "actions": {
+      "takeTest": "Test machen"
+    },
+    "chat": {
+      "title": "Live-Chat",
+      "watching": "schauen zu",
+      "empty": "Seien Sie der Erste, der schreibt!",
+      "comingSoon": "Firebase-Integration kommt bald",
+      "placeholder": "Nachricht schreiben...",
+      "loginRequired": "Anmelden zum Schreiben",
+      "anonymousUser": "Benutzer"
+    },
+    "description": {
+      "about": "Über die Vorlesung"
+    },
+    "course": {
+      "partOf": "Teil des Kurses",
+      "viewCourse": "Kurs ansehen"
+    }
+  },
+"academyLectureTest": {
+    "loading": "Test wird geladen...",
+    "error": "Fehler",
+    "notFound": "Test nicht gefunden",
+    "backToLecture": "Zurück zur Vorlesung",
+    "loginRequired": "Anmeldung erforderlich",
+    "loginRequiredDesc": "Bitte melden Sie sich an, um den Test zu machen.",
+    "login": "Anmelden",
+    
+    "question": "Frage",
+    "questionOf": "Frage {{current}} von {{total}}",
+    "questions": "Fragen",
+    "point": "Punkt",
+    "points": "Punkte",
+    
+    "typeSingle": "Einzelauswahl",
+    "typeMultiple": "Mehrfachauswahl",
+    "typeTrueFalse": "Wahr/Falsch",
+    
+    "answered": "Beantwortet",
+    "unanswered": "Unbeantwortet",
+    "current": "Aktuell",
+    
+    "prev": "Zurück",
+    "next": "Weiter",
+    "submit": "Test abgeben",
+    "submitting": "Wird abgegeben...",
+    
+    "passingScore": "Mindestpunktzahl",
+    "maxCredits": "Max. Credits",
+    "attempt": "Versuch",
+    
+    "confirmSubmitUnanswered": "Sie haben {{count}} unbeantwortete Fragen. Möchten Sie wirklich abgeben?",
+    
+    "errors": {
+      "lectureNotFound": "Vorlesung nicht gefunden",
+      "noTest": "Diese Vorlesung hat keinen Test",
+      "loadFailed": "Fehler beim Laden des Tests",
+      "submitFailed": "Fehler beim Abgeben des Tests",
+      "retryFailed": "Fehler beim Starten eines neuen Versuchs"
+    },
+    
+    "results": {
+      "passed": "Herzlichen Glückwunsch! 🎉",
+      "failed": "Nicht bestanden",
+      "passedDesc": "Sie haben den Test erfolgreich abgeschlossen!",
+      "failedDesc": "Sie haben die Mindestpunktzahl nicht erreicht. Versuchen Sie es erneut!",
+      "yourScore": "Ihr Ergebnis",
+      "correct": "Richtig",
+      "wrong": "Falsch",
+      "total": "Gesamt",
+      "passing": "Mindest.",
+      "creditsEarned": "Credits verdient",
+      "backToLecture": "Zurück zur Vorlesung",
+      "tryAgain": "Erneut versuchen",
+      
+      "reviewAnswers": "Antworten überprüfen",
+      "correctLabel": "Richtig",
+      "wrongLabel": "Falsch",
+      "yourAnswer": "Ihre Antwort",
+      "noAnswer": "Keine Antwort",
+      
+      "attemptInfo": "Versuch {{current}} von {{max}}",
+      "remainingAttempts": "Verbleibende Versuche: {{count}}",
+      "noMoreAttempts": "Keine weiteren Versuche",
+      
+      "attemptHistory": "Versuchshistorie",
+      "viewAnswers": "Antworten anzeigen",
+      
+      "bestAttempt": "Bestes Ergebnis",
+      "attempt": "Versuch"
+    },
+    
+    "intro": {
+      "attemptsLeft": "Verbleibende Versuche: {{count}}"
+    },
+    
+    "footer": {
+      "attempt": "Versuch"
+    }
+  }
 }

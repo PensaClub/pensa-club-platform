@@ -40,6 +40,11 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: 'id',
         as: 'creator',
       });
+      lecture.hasOne(models.lecture_test, {
+        foreignKey: 'lectureId',
+        sourceKey: 'id',
+        as: 'test',
+      });
     }
   }
 
@@ -194,7 +199,12 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: true,
         field: 'is_public',
       },
-
+isFree: {
+  type: DataTypes.BOOLEAN,
+  allowNull: false,
+  defaultValue: false,
+  field: 'is_free',
+},
       // === КРЕДИТИ ===
       maxCredits: {
         type: DataTypes.INTEGER,

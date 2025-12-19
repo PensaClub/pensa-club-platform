@@ -78,6 +78,10 @@ import { AcademyCourses } from './components/AcademyCourses/AcademyCourses.jsx';
 import { AcademyCourseDetail } from './components/AcademyCourses/AcademyCourseDetail/AcademyCourseDetail.jsx';
 import AcademyLessonPlayer from './components/AcademyCourses/AcademyLessonPlayer/AcademyLessonPlayer.jsx';
 import AcademyTestPlayer from './components/AcademyCourses/AcademyTestPlayer/AcademyTestPlayer.jsx';
+import AcademyLectures from './components/AcademyLectures/AcademyLectures.jsx';
+import AcademyLectureDetails from './components/AcademyLectures/AcademyLectureDetails/AcademyLectureDetails.jsx';
+import AcademyLectureTest from './components/AcademyLectures/AcademyLectureDetails/AcademyLectureTest/AcademyLectureTest.jsx';
+import AcademyLectureWatch from './components/AcademyLectures/AcademyLectureWatch/AcademyLectureWatch.jsx';
 
 // ✅ LAZY LOADING КОМПОНЕНТИ
 const ArticlesList = lazy(() => import('./components/Articles/ArticlesList/ArticlesList.jsx'));
@@ -237,6 +241,11 @@ function App() {
                                               path="/academy/courses/:courseSlug/lessons/:lessonSlug/test"
                                               element={<AcademyTestPlayer />}
                                             />
+
+                                            <Route path="/academy/lectures" element={<AcademyLectures />} />
+                                            <Route path="/academy/lectures/:slug" element={<AcademyLectureDetails />} />
+                                            <Route path="/academy/lectures/:slug/watch" element={<AcademyLectureWatch />} />
+                                            <Route path="/academy/lectures/:slug/test" element={<AcademyLectureTest />} />
                                             <Route path="/ad/details/:adId" element={<AdDetails />} />
                                             <Route path="/ad/edit/:adId" element={<EditAd />} />
                                             <Route path="/ad" element={<AdPage />} />
