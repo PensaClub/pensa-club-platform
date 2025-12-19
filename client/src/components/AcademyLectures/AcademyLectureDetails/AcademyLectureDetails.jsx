@@ -283,7 +283,7 @@ export const AcademyLectureDetails = () => {
     };
 
     updateAuthData();
-  }, [isAuthentication, lecture?.id, dataLoaded]); // Зависи от auth и lecture.id
+  }, [isAuthentication, lecture?.id]); // Зависи от auth и lecture.id
 
   // Status и category
   const status = useMemo(() => getLectureStatus(lecture), [lecture]);

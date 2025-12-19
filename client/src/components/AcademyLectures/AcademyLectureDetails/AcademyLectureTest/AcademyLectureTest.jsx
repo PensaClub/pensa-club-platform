@@ -55,7 +55,7 @@ export const AcademyLectureTest = () => {
   // ═══════════════════════════════════════════════════════════════════════════
   // STATE
   // ═══════════════════════════════════════════════════════════════════════════
-  
+
   const [lecture, setLecture] = useState(null);
   const [testData, setTestData] = useState(null);
   const [testStatus, setTestStatus] = useState(null);
@@ -91,7 +91,7 @@ export const AcademyLectureTest = () => {
   useEffect(() => {
     const fetchTestData = async () => {
       if (!slug) return;
-      
+
       const cacheKey = slug;
       if (fetchedRef.current === cacheKey && testData) return;
 
@@ -99,12 +99,12 @@ export const AcademyLectureTest = () => {
         fetchedRef.current = cacheKey;
         setError(null);
         setIsLoadingTest(true);
-        
+
         // 1. Get lecture info
         const lectureResponse = await getLectureBySlug(slug);
         const lectureInfo = lectureResponse?.lecture || lectureResponse;
         setLecture(lectureInfo);
-        
+
         if (!lectureInfo || !lectureInfo.id) {
           throw new Error(t('academyLectureTest.errors.lectureNotFound'));
         }
@@ -118,52 +118,77 @@ export const AcademyLectureTest = () => {
         try {
           statusData = await getLectureTestStatus(lectureInfo.id);
           setTestStatus(statusData);
-          
+
           // Store all the rich data from status
           if (statusData?.attempts) {
             setPreviousAttempts(statusData.attempts);
           }
-          
+
           if (statusData?.bestAttempt) {
             setBestAttempt(statusData.bestAttempt);
           }
-          
+
           // Use the correct field names from API
           setCanStartNewAttempt(statusData?.canStartNew ?? true);
           setRemainingAttempts(statusData?.remainingAttempts ?? 0);
           setHasPassedTest(statusData?.hasPassedTest ?? false);
-          
-          // If test is already passed - show best attempt results
-          if (statusData?.hasPassedTest && statusData?.bestAttempt) {
-            const best = statusData.bestAttempt;
-            const scorePercent = best.score ?? calculateScorePercentage(best.correctAnswers, best.totalQuestions);
-            
-            setShowResults(true);
-            setResults({
-              scorePercentage: scorePercent,
-              correctAnswers: best.correctAnswers || 0,
-              wrongAnswers: best.wrongAnswers || ((best.totalQuestions || 0) - (best.correctAnswers || 0)),
-              totalQuestions: best.totalQuestions || 0,
-              passed: true,
-              earnedCredits: best.earnedCredits || 0,
-              attemptId: best.id,
-              attemptNumber: best.attemptNumber || 1
-            });
-            
-            if (best.questionsResult) {
-              setQuestionsResult(best.questionsResult);
+
+          // ✅ ПРОВЕРКА: Ако няма повече опити - покажи съобщение
+          if (statusData?.remainingAttempts === 0 && !statusData?.activeAttempt) {
+            // Покажи последния/най-добрия резултат
+            const displayAttempt = statusData.bestAttempt || statusData.lastAttempt;
+            if (displayAttempt) {
+              const scorePercent = displayAttempt.score ?? calculateScorePercentage(displayAttempt.correctAnswers, displayAttempt.totalQuestions);
+              const isPassed = scorePercent >= (statusData?.test?.passingScore || 70);
+
+              setShowResults(true);
+              setResults({
+                scorePercentage: scorePercent,
+                correctAnswers: displayAttempt.correctAnswers || 0,
+                wrongAnswers: displayAttempt.wrongAnswers || ((displayAttempt.totalQuestions || 0) - (displayAttempt.correctAnswers || 0)),
+                totalQuestions: displayAttempt.totalQuestions || 0,
+                passed: isPassed,
+                earnedCredits: displayAttempt.earnedCredits || 0,
+                attemptId: displayAttempt.id,
+                attemptNumber: displayAttempt.attemptNumber || 1
+              });
+
+              if (displayAttempt.questionsResult) {
+                setQuestionsResult(displayAttempt.questionsResult);
+              }
+
+              setTestData({ test: statusData.test, attempt: displayAttempt });
             }
-            
-            setTestData({ test: statusData.test, attempt: best });
+            return; // ✅ САМО тук return - когато НЯМА повече опити
+          }
+
+          // ✅ Ако има активен опит - продължи го
+          if (statusData?.activeAttempt) {
+            const data = await startLectureTest(lectureInfo.id);
+            if (data) {
+              setTestData(data);
+              setQuestions(data.questions || []);
+
+              if (data.attempt?.answers && typeof data.attempt.answers === 'object') {
+                setAnswers(data.attempt.answers);
+              }
+
+              if (data.timeRemaining !== undefined && data.timeRemaining > 0) {
+                setTimeRemaining(data.timeRemaining);
+              } else if (data.test?.timeLimitMinutes) {
+                setTimeRemaining(data.test.timeLimitMinutes * 60);
+              }
+            }
             return;
           }
-          
-          // If there's a completed last attempt (not passed), show its results
+
+          // ✅ Ако има завършен опит (минал или не) - покажи резултатите
+          // но НЕ return-вай - позволи retry ако има опити
           const lastAttempt = statusData?.lastAttempt;
-          if (lastAttempt?.status === 'completed' && !statusData?.activeAttempt) {
+          if (lastAttempt?.status === 'completed') {
             const scorePercent = lastAttempt.score ?? calculateScorePercentage(lastAttempt.correctAnswers, lastAttempt.totalQuestions);
             const isPassed = scorePercent >= (statusData?.test?.passingScore || 70);
-            
+
             setShowResults(true);
             setResults({
               scorePercentage: scorePercent,
@@ -175,61 +200,42 @@ export const AcademyLectureTest = () => {
               attemptId: lastAttempt.id,
               attemptNumber: lastAttempt.attemptNumber || 1
             });
-            
+
             if (lastAttempt.questionsResult) {
               setQuestionsResult(lastAttempt.questionsResult);
             }
-            
+
             setTestData({ test: statusData.test, attempt: lastAttempt });
+            // ❌ НЕ return-вай тук - позволи retry бутона да работи
             return;
           }
-          
-          // If there's an active attempt, continue it
-          if (statusData?.activeAttempt) {
-            const data = await startLectureTest(lectureInfo.id);
-            if (data) {
-              setTestData(data);
-              setQuestions(data.questions || []);
-              
-              if (data.attempt?.answers && typeof data.attempt.answers === 'object') {
-                setAnswers(data.attempt.answers);
-              }
-              
-              if (data.timeRemaining !== undefined && data.timeRemaining > 0) {
-                setTimeRemaining(data.timeRemaining);
-              } else if (data.test?.timeLimitMinutes) {
-                setTimeRemaining(data.test.timeLimitMinutes * 60);
-              }
-            }
-            return;
-          }
-          
+
         } catch (err) {
           console.warn('Could not get test status, will try to start:', err);
         }
 
-        // 3. No active attempt and can start new - start test
-        if (canStartNewAttempt || !statusData) {
+        // 3. Започни нов тест ако може
+        if (!statusData || statusData?.canStartNew) {
           const data = await startLectureTest(lectureInfo.id);
-          
+
           if (data) {
             setTestData(data);
             setQuestions(data.questions || []);
-            
+
             if (data.attempt?.answers && typeof data.attempt.answers === 'object') {
               setAnswers(data.attempt.answers);
             }
-            
+
             if (data.timeRemaining !== undefined && data.timeRemaining > 0) {
               setTimeRemaining(data.timeRemaining);
             } else if (data.test?.timeLimitMinutes) {
               setTimeRemaining(data.test.timeLimitMinutes * 60);
             }
-            
+
             if (data.attempt?.status === 'completed') {
               const scorePercent = data.attempt.score ?? calculateScorePercentage(data.attempt.correctAnswers, data.attempt.totalQuestions);
               const isPassed = scorePercent >= (data.test?.passingScore || 70);
-              
+
               setShowResults(true);
               setResults({
                 scorePercentage: scorePercent,
@@ -241,7 +247,7 @@ export const AcademyLectureTest = () => {
                 attemptId: data.attempt.id,
                 attemptNumber: data.attempt.attemptNumber || 1
               });
-              
+
               if (data.attempt.questionsResult) {
                 setQuestionsResult(data.attempt.questionsResult);
               }
@@ -259,7 +265,7 @@ export const AcademyLectureTest = () => {
     if (isAuthentication) {
       fetchTestData();
     }
-  }, [slug, isAuthentication, getLectureBySlug, getLectureTestStatus, startLectureTest, t]);
+  }, [slug, isAuthentication]);
 
   // ═══════════════════════════════════════════════════════════════════════════
   // TIMER
@@ -306,7 +312,7 @@ export const AcademyLectureTest = () => {
   const test = testData?.test;
   const attemptNumber = results?.attemptNumber || testData?.attempt?.attemptNumber || 1;
   const maxAttempts = test?.maxAttempts || 3;
-  const canRetry = !results?.passed && remainingAttempts > 0 && canStartNewAttempt;
+  const canRetry = remainingAttempts > 0 && canStartNewAttempt;
 
   const isTimeWarning = timeRemaining !== null && timeRemaining <= 60;
   const isTimeCritical = timeRemaining !== null && timeRemaining <= 30;
@@ -330,37 +336,37 @@ export const AcademyLectureTest = () => {
   // HANDLERS
   // ═══════════════════════════════════════════════════════════════════════════
 
- const handleAnswerSelect = useCallback(async (questionId, answerId, isMultiple = false) => {
-  // ✅ Изчисли новата стойност ПРЕДИ setAnswers
-  let newAnswerValue;
-  
-  if (isMultiple) {
-    const currentAnswers = answers[questionId] || [];
-    newAnswerValue = currentAnswers.includes(answerId)
-      ? currentAnswers.filter(id => id !== answerId)
-      : [...currentAnswers, answerId];
-  } else {
-    newAnswerValue = answerId;
-  }
-  
-  // Обнови state-а
-  setAnswers(prev => ({ ...prev, [questionId]: newAnswerValue }));
+  const handleAnswerSelect = useCallback(async (questionId, answerId, isMultiple = false) => {
+    // ✅ Изчисли новата стойност ПРЕДИ setAnswers
+    let newAnswerValue;
 
-  // Изпрати към backend-а
-  if (testData?.test?.id) {
-    setIsSavingAnswer(true);
-    try {
-      await submitLectureAnswer(testData.test.id, {
-        questionId,
-        answerId: newAnswerValue  // ✅ Сега има стойност!
-      });
-    } catch (err) {
-      console.error('Error saving answer:', err);
-    } finally {
-      setIsSavingAnswer(false);
+    if (isMultiple) {
+      const currentAnswers = answers[questionId] || [];
+      newAnswerValue = currentAnswers.includes(answerId)
+        ? currentAnswers.filter(id => id !== answerId)
+        : [...currentAnswers, answerId];
+    } else {
+      newAnswerValue = answerId;
     }
-  }
-}, [testData, submitLectureAnswer, answers]);  // ✅ Добави answers в dependencies
+
+    // Обнови state-а
+    setAnswers(prev => ({ ...prev, [questionId]: newAnswerValue }));
+
+    // Изпрати към backend-а
+    if (testData?.test?.id) {
+      setIsSavingAnswer(true);
+      try {
+        await submitLectureAnswer(testData.test.id, {
+          questionId,
+          answerId: newAnswerValue  // ✅ Сега има стойност!
+        });
+      } catch (err) {
+        console.error('Error saving answer:', err);
+      } finally {
+        setIsSavingAnswer(false);
+      }
+    }
+  }, [testData, submitLectureAnswer, answers]);  // ✅ Добави answers в dependencies
 
   const handleNextQuestion = () => {
     if (currentQuestionIndex < questions.length - 1) {
@@ -380,9 +386,9 @@ export const AcademyLectureTest = () => {
 
   const handleSubmitTest = async (isAutoSubmit = false) => {
     if (isSubmitting || !testData?.test?.id) return;
-    
+
     if (!isAutoSubmit) {
-      const unanswered = questions.filter(q => !answers[q.id] || 
+      const unanswered = questions.filter(q => !answers[q.id] ||
         (Array.isArray(answers[q.id]) && answers[q.id].length === 0));
       if (unanswered.length > 0) {
         const confirm = window.confirm(
@@ -397,16 +403,16 @@ export const AcademyLectureTest = () => {
     setIsSubmitting(true);
     try {
       const response = await submitLectureTest(testData.test.id);
-      
+
       const resultData = response.result || response;
-      
+
       // Calculate score if not provided
-      const scorePercent = resultData.scorePercentage ?? resultData.score ?? 
+      const scorePercent = resultData.scorePercentage ?? resultData.score ??
         calculateScorePercentage(resultData.correctAnswers, resultData.totalQuestions || questions.length);
-      
-      const isPassed = resultData.passed ?? resultData.isPassed ?? 
+
+      const isPassed = resultData.passed ?? resultData.isPassed ??
         (scorePercent >= (testData.test?.passingScore || 70));
-      
+
       setResults({
         scorePercentage: scorePercent,
         correctAnswers: resultData.correctAnswers ?? 0,
@@ -419,23 +425,23 @@ export const AcademyLectureTest = () => {
         attemptId: resultData.attemptId,
         attemptNumber: testData.attempt?.attemptNumber || 1
       });
-      
+
       // Store questions result if available
       if (resultData.questionsResult) {
         setQuestionsResult(resultData.questionsResult);
       }
-      
+
       // Update remaining attempts
       if (remainingAttempts > 0) {
         setRemainingAttempts(prev => prev - 1);
       }
-      
+
       if (isPassed) {
         setHasPassedTest(true);
       }
-      
+
       setShowResults(true);
-      
+
       if (timerRef.current) {
         clearInterval(timerRef.current);
       }
@@ -453,7 +459,7 @@ export const AcademyLectureTest = () => {
 
   const handleRetryTest = async () => {
     if (!canStartNewAttempt || remainingAttempts <= 0) return;
-    
+
     // Reset state
     setTestData(null);
     setQuestions([]);
@@ -466,14 +472,14 @@ export const AcademyLectureTest = () => {
     setShowQuestionsReview(false);
     fetchedRef.current = null;
     setIsLoadingTest(true);
-    
+
     try {
       const data = await startLectureTest(lecture.id);
-      
+
       if (data) {
         setTestData(data);
         setQuestions(data.questions || []);
-        
+
         if (data.test?.timeLimitMinutes) {
           setTimeRemaining(data.test.timeLimitMinutes * 60);
         }
@@ -563,7 +569,7 @@ export const AcademyLectureTest = () => {
     const wrongAnswers = results.wrongAnswers ?? 0;
     const totalQuestionsCount = results.totalQuestions ?? questions.length;
     const earnedCredits = results.earnedCredits ?? 0;
-    
+
     return (
       <div className="alt alt--results">
         <div className="alt-results">
@@ -572,18 +578,18 @@ export const AcademyLectureTest = () => {
             <div className="alt-results__icon">
               {isPassed ? '🎉' : '😔'}
             </div>
-            
+
             {/* Title */}
             <h1 className="alt-results__title">
-              {isPassed 
+              {isPassed
                 ? t('academyLectureTest.results.passed')
                 : t('academyLectureTest.results.failed')
               }
             </h1>
-            
+
             {/* Subtitle */}
             <p className="alt-results__subtitle">
-              {isPassed 
+              {isPassed
                 ? t('academyLectureTest.results.passedDesc')
                 : t('academyLectureTest.results.failedDesc')
               }
@@ -593,14 +599,14 @@ export const AcademyLectureTest = () => {
             <div className="alt-results__score">
               <div className="alt-results__score-circle">
                 <svg viewBox="0 0 100 100">
-                  <circle 
-                    className="alt-results__score-bg" 
+                  <circle
+                    className="alt-results__score-bg"
                     cx="50" cy="50" r="45"
                   />
-                  <circle 
-                    className="alt-results__score-fill" 
+                  <circle
+                    className="alt-results__score-fill"
                     cx="50" cy="50" r="45"
-                    style={{ 
+                    style={{
                       strokeDasharray: `${(scorePercentage / 100) * 283} 283`,
                       stroke: isPassed ? '#10b981' : '#ef4444'
                     }}
@@ -659,27 +665,27 @@ export const AcademyLectureTest = () => {
             {/* Questions Review Toggle */}
             {questionsResult.length > 0 && test.showCorrectAnswers && (
               <div className="alt-results__review">
-                <button 
+                <button
                   className="alt-results__review-toggle"
                   onClick={() => setShowQuestionsReview(!showQuestionsReview)}
                 >
                   <span>📋 {t('academyLectureTest.results.reviewAnswers')}</span>
-                  <svg 
-                    viewBox="0 0 24 24" 
-                    fill="none" 
-                    stroke="currentColor" 
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
                     strokeWidth="2"
                     style={{ transform: showQuestionsReview ? 'rotate(180deg)' : 'rotate(0deg)' }}
                   >
                     <path d="M6 9l6 6 6-6" />
                   </svg>
                 </button>
-                
+
                 {showQuestionsReview && (
                   <div className="alt-results__review-list">
                     {questionsResult.map((q, idx) => (
-                      <div 
-                        key={q.questionId || idx} 
+                      <div
+                        key={q.questionId || idx}
                         className={`alt-results__review-item ${q.isCorrect ? 'alt-results__review-item--correct' : 'alt-results__review-item--wrong'}`}
                       >
                         <div className="alt-results__review-header">
@@ -687,7 +693,7 @@ export const AcademyLectureTest = () => {
                             {q.questionNumber || idx + 1}.
                           </span>
                           <span className={`alt-results__review-badge ${q.isCorrect ? 'alt-results__review-badge--correct' : 'alt-results__review-badge--wrong'}`}>
-                            {q.isCorrect 
+                            {q.isCorrect
                               ? `✓ ${t('academyLectureTest.results.correctLabel')}`
                               : `✗ ${t('academyLectureTest.results.wrongLabel')}`
                             }
@@ -711,53 +717,54 @@ export const AcademyLectureTest = () => {
 
             {/* Attempt Info */}
             <div className="alt-results__attempts">
-              <span className="alt-results__attempts-icon">📊</span>
-              {t('academyLectureTest.results.attemptInfo', {
-                current: attemptNumber,
-                max: maxAttempts
-              })}
-              {remainingAttempts > 0 && !isPassed && (
-                <span className="alt-results__attempts-remaining">
-                  {' '}• {t('academyLectureTest.results.remainingAttempts', {
-                    count: remainingAttempts
-                  })}
-                </span>
-              )}
-              {remainingAttempts === 0 && !isPassed && (
-                <span className="alt-results__attempts-exhausted">
-                  {' '}• {t('academyLectureTest.results.noMoreAttempts')}
-                </span>
-              )}
-            </div>
+  <span className="alt-results__attempts-icon">📊</span>
+  {t('academyLectureTest.results.attemptInfo', {
+    current: attemptNumber,
+    max: maxAttempts
+  })}
+  {/* ✅ Показвай remaining attempts винаги, не само при !isPassed */}
+  {remainingAttempts > 0 && (
+    <span className="alt-results__attempts-remaining">
+      {' '}• {t('academyLectureTest.results.remainingAttempts', {
+        count: remainingAttempts
+      })}
+    </span>
+  )}
+  {remainingAttempts === 0 && (
+    <span className="alt-results__attempts-exhausted">
+      {' '}• {t('academyLectureTest.results.noMoreAttempts')}
+    </span>
+  )}
+</div>
 
             {/* Previous Attempts History */}
             {previousAttempts.length > 0 && (
               <div className="alt-results__history">
-                <button 
+                <button
                   className="alt-results__history-toggle"
                   onClick={() => setShowHistory(!showHistory)}
                 >
                   <span>📜 {t('academyLectureTest.results.attemptHistory')} ({previousAttempts.length})</span>
-                  <svg 
-                    viewBox="0 0 24 24" 
-                    fill="none" 
-                    stroke="currentColor" 
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
                     strokeWidth="2"
                     style={{ transform: showHistory ? 'rotate(180deg)' : 'rotate(0deg)' }}
                   >
                     <path d="M6 9l6 6 6-6" />
                   </svg>
                 </button>
-                
+
                 {showHistory && (
                   <div className="alt-results__history-list">
                     {previousAttempts.map((attempt, idx) => {
                       const attemptScore = attempt.score ?? calculateScorePercentage(attempt.correctAnswers, attempt.totalQuestions);
                       const attemptPassed = attemptScore >= (test.passingScore || 70);
-                      
+
                       return (
-                        <div 
-                          key={attempt.id} 
+                        <div
+                          key={attempt.id}
                           className={`alt-results__history-item ${attemptPassed ? 'alt-results__history-item--passed' : ''}`}
                         >
                           <span className="alt-results__history-num">#{attempt.attemptNumber || idx + 1}</span>
@@ -770,7 +777,7 @@ export const AcademyLectureTest = () => {
                           </span>
                           {attemptPassed && <span className="alt-results__history-badge">✅</span>}
                           {attempt.questionsResult && test.showCorrectAnswers && (
-                            <button 
+                            <button
                               className="alt-results__history-view"
                               onClick={() => handleViewAttemptQuestions(attempt)}
                               title={t('academyLectureTest.results.viewAnswers')}
@@ -797,37 +804,33 @@ export const AcademyLectureTest = () => {
                 </span>
               </div>
             )}
-
             {/* Actions */}
             <div className="alt-results__actions">
-              {isPassed ? (
-                <>
-                  <button onClick={handleBackToLecture} className="alt-results__btn alt-results__btn--primary">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M5 12h14M12 5l7 7-7 7" />
-                    </svg>
-                    {t('academyLectureTest.results.backToLecture')}
-                  </button>
-                </>
-              ) : (
-                <>
-                  {canRetry && (
-                    <button 
-                      onClick={handleRetryTest} 
-                      className="alt-results__btn alt-results__btn--retry"
-                    >
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M1 4v6h6M23 20v-6h-6" />
-                        <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15" />
-                      </svg>
-                      {t('academyLectureTest.results.tryAgain')}
-                    </button>
-                  )}
-                  <button onClick={handleBackToLecture} className="alt-results__btn alt-results__btn--secondary">
-                    {t('academyLectureTest.results.backToLecture')}
-                  </button>
-                </>
+        
+              {canRetry && (
+                <button
+                  onClick={handleRetryTest}
+                  className={`alt-results__btn ${isPassed ? 'alt-results__btn--secondary' : 'alt-results__btn--retry'}`}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M1 4v6h6M23 20v-6h-6" />
+                    <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15" />
+                  </svg>
+                  {t('academyLectureTest.results.tryAgain')}
+                </button>
               )}
+
+              <button
+                onClick={handleBackToLecture}
+                className={`alt-results__btn ${isPassed && !canRetry ? 'alt-results__btn--primary' : 'alt-results__btn--secondary'}`}
+              >
+                {isPassed && (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                )}
+                {t('academyLectureTest.results.backToLecture')}
+              </button>
             </div>
           </div>
         </div>
@@ -874,7 +877,7 @@ export const AcademyLectureTest = () => {
           <div className="alt-header__progress">
             <span>{getAnsweredCount()}/{questions.length}</span>
             <div className="alt-header__progress-bar">
-              <div 
+              <div
                 className="alt-header__progress-fill"
                 style={{ width: `${(getAnsweredCount() / questions.length) * 100}%` }}
               ></div>
@@ -937,7 +940,7 @@ export const AcademyLectureTest = () => {
                     {t('academyLectureTest.question')} {currentQuestionIndex + 1}
                   </span>
                   <span className="alt-question__points">
-                    {currentQuestion.points} {currentQuestion.points === 1 
+                    {currentQuestion.points} {currentQuestion.points === 1
                       ? t('academyLectureTest.point')
                       : t('academyLectureTest.points')
                     }
