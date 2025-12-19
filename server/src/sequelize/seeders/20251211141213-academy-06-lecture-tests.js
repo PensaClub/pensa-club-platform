@@ -1,4 +1,3 @@
-// server/src/sequelize/seeders/20251211141213-academy-06-lecture-tests.js
 'use strict';
 
 module.exports = {
@@ -60,6 +59,14 @@ module.exports = {
     // Вземи новосъздадените тестове
     const [newTests] = await queryInterface.sequelize.query(
       `SELECT id, lecture_id FROM lecture_tests ORDER BY id`
+    );
+
+    // ✅ RESET SEQUENCES - за да не конфликтират с hardcoded ID-та от academy-04-tests
+    await queryInterface.sequelize.query(
+      `SELECT setval('test_questions_id_seq', (SELECT COALESCE(MAX(id), 0) FROM test_questions));`
+    );
+    await queryInterface.sequelize.query(
+      `SELECT setval('test_answers_id_seq', (SELECT COALESCE(MAX(id), 0) FROM test_answers));`
     );
 
     // Въпроси за всеки тест
@@ -128,8 +135,8 @@ module.exports = {
     for (const test of newTests) {
       questionsData.forEach((q, index) => {
         questions.push({
-          test_id: null,                    // ✅ NULL за lesson tests
-          lecture_test_id: test.id,         // ✅ ID на lecture test
+          test_id: null,
+          lecture_test_id: test.id,
           question_text: q.question_text,
           question_type: q.question_type,
           points: q.points,
@@ -174,15 +181,12 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    // Изтрий отговорите за въпроси от lecture tests
     await queryInterface.sequelize.query(
       `DELETE FROM test_answers WHERE question_id IN (SELECT id FROM test_questions WHERE lecture_test_id IS NOT NULL)`
     );
-    // Изтрий въпросите
     await queryInterface.sequelize.query(
       `DELETE FROM test_questions WHERE lecture_test_id IS NOT NULL`
     );
-    // Изтрий тестовете
     await queryInterface.bulkDelete('lecture_tests', null, {});
   },
 };

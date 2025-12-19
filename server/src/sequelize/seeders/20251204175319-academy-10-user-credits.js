@@ -2,6 +2,16 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
+    // ✅ ПРОВЕРКА: Ако вече има user_credits - skip
+    const [existing] = await queryInterface.sequelize.query(
+      `SELECT COUNT(*) as count FROM user_credits;`
+    );
+    
+    if (parseInt(existing[0].count) > 0) {
+      console.log('✅ User credits already exist, skipping...');
+      return;
+    }
+
     // Вземаме студенти с техните user_id
     const [students] = await queryInterface.sequelize.query(
       `SELECT s.id as student_id, s.user_id 
@@ -229,6 +239,8 @@ module.exports = {
         updated_at: today,
       },
     ]);
+
+    console.log('✅ User credits seeded: 3 users with credit history');
   },
 
   async down(queryInterface, Sequelize) {
