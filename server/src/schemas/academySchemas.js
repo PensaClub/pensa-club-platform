@@ -278,7 +278,18 @@ const questionReorderSchema = z.object({
 
 const testAnswerSchema = z.object({
   questionId: z.coerce.number().int().positive(),
-  answerId: z.coerce.number().int().positive().optional(),
+  // Позволи число, масив от числа, или null
+  answerId: z.union([
+    z.coerce.number().int().positive(),
+    z.array(z.coerce.number().int().positive()),
+    z.null()
+  ]).optional(),
+  // Също за 'answer' полето (frontend го изпраща като answer понякога)
+  answer: z.union([
+    z.coerce.number().int().positive(),
+    z.array(z.coerce.number().int().positive()),
+    z.null()
+  ]).optional(),
   textAnswer: z.string().optional(),
 });
 

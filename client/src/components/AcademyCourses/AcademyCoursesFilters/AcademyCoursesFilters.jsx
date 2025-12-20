@@ -1,6 +1,6 @@
 // src/components/AcademyCourses/AcademyCoursesFilters/AcademyCoursesFilters.jsx
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import './academyCoursesFilters.css';
 
@@ -12,6 +12,11 @@ export const AcademyCoursesFilters = ({
 }) => {
   const { t } = useTranslation();
   const [searchValue, setSearchValue] = useState(filters.search || '');
+
+  // Синхронизирай searchValue когато filters.search се промени отвън (напр. при clear)
+  useEffect(() => {
+    setSearchValue(filters.search || '');
+  }, [filters.search]);
 
   const levels = [
     { value: 'beginner', label: t('academyCoursesFilters.levels.beginner') },
@@ -25,9 +30,12 @@ export const AcademyCoursesFilters = ({
     { value: 'alphabetical', label: t('academyCoursesFilters.sort.alphabetical') }
   ];
 
+  // Real-time търсене при писане
   const handleSearchChange = useCallback((e) => {
-    setSearchValue(e.target.value);
-  }, []);
+    const value = e.target.value;
+    setSearchValue(value);
+    onSearch(value);
+  }, [onSearch]);
 
   const handleSearchKeyDown = useCallback((e) => {
     if (e.key === 'Enter') {
@@ -50,7 +58,7 @@ export const AcademyCoursesFilters = ({
     onSearch('');
   }, [onFilterChange, onSearch]);
 
-  // Helper function to normalize category data
+  // Normalize category data
   const normalizeCategory = (cat, index) => {
     if (typeof cat === 'string') {
       return { slug: cat, name: cat, id: index };
@@ -62,7 +70,6 @@ export const AcademyCoursesFilters = ({
     };
   };
 
-  // Normalize categories array
   const normalizedCategories = categories.map(normalizeCategory);
 
   return (
@@ -102,7 +109,7 @@ export const AcademyCoursesFilters = ({
 
           {/* Filters Row */}
           <div className="academyCoursesFilters-row">
-            {/* Category Filter - показва се САМО ако има категории */}
+            {/* Category Filter */}
             {normalizedCategories.length > 0 && (
               <div className="academyCoursesFilters-item" data-type="category">
                 <div className="academyCoursesFilters-item-inner">
@@ -114,7 +121,7 @@ export const AcademyCoursesFilters = ({
                       </span>
                       <select
                         className="academyCoursesFilters-select"
-                        value={filters.category}
+                        value={filters.category || ''}
                         onChange={(e) => onFilterChange('category', e.target.value)}
                       >
                         <option value="">{t('academyCoursesFilters.allCategories')}</option>
@@ -146,7 +153,7 @@ export const AcademyCoursesFilters = ({
                     </span>
                     <select
                       className="academyCoursesFilters-select"
-                      value={filters.level}
+                      value={filters.level || ''}
                       onChange={(e) => onFilterChange('level', e.target.value)}
                     >
                       <option value="">{t('academyCoursesFilters.allLevels')}</option>
@@ -177,7 +184,7 @@ export const AcademyCoursesFilters = ({
                     </span>
                     <select
                       className="academyCoursesFilters-select"
-                      value={filters.sort}
+                      value={filters.sort || 'popular'}
                       onChange={(e) => onFilterChange('sort', e.target.value)}
                     >
                       {sortOptions.map(option => (

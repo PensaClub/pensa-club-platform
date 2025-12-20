@@ -216,16 +216,17 @@ export const academyCoursesServiceFactory = () => {
       return requester.post(`${apiUrl}/academy/lectures/${lectureId}/attendees/${attendeeId}/approve`);
     },
 
-    rejectLectureAttendee: async (lectureId, attendeeId, reason = null) => {
-      return requester.post(`${apiUrl}/academy/lectures/${lectureId}/attendees/${attendeeId}/reject`, { reason });
+    // LECTURES - ENROLLMENT (поправени URLs)
+    registerForLecture: async (lectureId) => {
+      return requester.post(`${apiUrl}/academy/enrollment/lectures/${lectureId}/register`);
     },
 
-    markLectureAttended: async (lectureId, studentId) => {
-      return requester.post(`${apiUrl}/academy/lectures/${lectureId}/attendees/${studentId}/mark-attended`);
+    unregisterFromLecture: async (lectureId) => {
+      return requester.post(`${apiUrl}/academy/enrollment/lectures/${lectureId}/unregister`);
     },
 
-    markAllLectureAttended: async (lectureId, studentIds) => {
-      return requester.post(`${apiUrl}/academy/lectures/${lectureId}/attendees/mark-all`, { studentIds });
+    checkLectureRegistration: async (lectureId) => {
+      return requester.get(`${apiUrl}/academy/enrollment/lectures/${lectureId}/check`);
     },
 
     // =========================================================
@@ -476,6 +477,26 @@ export const academyCoursesServiceFactory = () => {
     // Резултат от конкретен опит
     getTestResultByAttempt: async (testId, attemptId) => {
       return requester.get(`${apiUrl}/academy/tests/${testId}/result/${attemptId}`);
+    },
+    // ============ LECTURE TESTS ============
+    startLectureTest: async (lectureId) => {
+      return requester.post(`${apiUrl}/academy/tests/lecture/${lectureId}/start`);
+    },
+
+    getLectureTestStatus: async (lectureId) => {
+      return requester.get(`${apiUrl}/academy/tests/lecture/${lectureId}/status`);
+    },
+
+    getLectureAttempt: async (lectureId) => {
+      return requester.get(`${apiUrl}/academy/tests/lecture/${lectureId}/attempt`);
+    },
+    // ============ LECTURE TESTS - НОВИ ============
+    submitLectureAnswer: async (lectureTestId, answerData) => {
+      return requester.post(`${apiUrl}/academy/tests/lecture/${lectureTestId}/answer`, answerData);
+    },
+
+    submitLectureTest: async (lectureTestId) => {
+      return requester.post(`${apiUrl}/academy/tests/lecture/${lectureTestId}/submit`);
     },
     // =========================================================
     //                    CERTIFICATES
