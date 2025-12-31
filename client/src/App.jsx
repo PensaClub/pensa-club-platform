@@ -82,6 +82,7 @@ import AcademyLectures from './components/AcademyLectures/AcademyLectures.jsx';
 import AcademyLectureDetails from './components/AcademyLectures/AcademyLectureDetails/AcademyLectureDetails.jsx';
 import AcademyLectureTest from './components/AcademyLectures/AcademyLectureDetails/AcademyLectureTest/AcademyLectureTest.jsx';
 import AcademyLectureWatch from './components/AcademyLectures/AcademyLectureWatch/AcademyLectureWatch.jsx';
+import ChristmasGreetingModal from './components/ChristmasGreetingModal/ChristmasGreetingModal.jsx';
 
 // ✅ LAZY LOADING КОМПОНЕНТИ
 const ArticlesList = lazy(() => import('./components/Articles/ArticlesList/ArticlesList.jsx'));
@@ -135,6 +136,7 @@ function App() {
     <>
       <HelmetProvider>
         <ErrorBoundary>
+           <ChristmasGreetingModal />
           <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
             <UserProvider>
               <GoogleAuthProvider>

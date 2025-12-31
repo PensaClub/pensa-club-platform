@@ -1,0 +1,395 @@
+/* ========================================
+   ChristmasGreetingModal - Коледен поздрав
+   Unique prefix: xmas-greeting-
+   ======================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@400;700&family=Nunito:wght@400;600;700&display=swap');
+
+/* CSS Variables */
+:root {
+    --xmas-red-deep: #8B0000;
+    --xmas-red-bright: #C41E3A;
+    --xmas-gold: #FFD700;
+    --xmas-gold-light: #FFEC8B;
+    --xmas-green-deep: #0B3D0B;
+    --xmas-green-bright: #228B22;
+    --xmas-white: #FFFAFA;
+    --xmas-cream: #FFF8DC;
+    --xmas-shadow: rgba(0, 0, 0, 0.5);
+    --xmas-glow: rgba(255, 215, 0, 0.3);
+}
+
+/* Overlay */
+.xmas-greeting-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(11, 61, 11, 0.95) 0%, rgba(139, 0, 0, 0.95) 50%, rgba(11, 61, 11, 0.95) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999999;
+    padding: 20px;
+    box-sizing: border-box;
+    animation: xmas-greeting-fadeIn 0.6s ease-out;
+    overflow-y: auto;
+}
+
+.xmas-greeting-overlay--closing {
+    animation: xmas-greeting-fadeOut 0.5s ease-in forwards;
+}
+
+/* Снежинки */
+.xmas-greeting-snowflakes {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.xmas-greeting-snowflake {
+    position: absolute;
+    top: -50px;
+    color: var(--xmas-white);
+    font-size: 20px;
+    opacity: 0.8;
+    animation: xmas-greeting-snowfall linear infinite;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+/* Modal */
+.xmas-greeting-modal {
+    position: relative;
+    background: linear-gradient(180deg, var(--xmas-green-deep) 0%, #1a1a2e 50%, var(--xmas-red-deep) 100%);
+    border-radius: 24px;
+    box-shadow: 0 0 60px var(--xmas-glow), 0 20px 60px var(--xmas-shadow), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    max-width: 700px;
+    width: 100%;
+    overflow: hidden;
+    animation: xmas-greeting-scaleIn 0.6s ease-out;
+    border: 3px solid var(--xmas-gold);
+}
+
+.xmas-greeting-modal--closing {
+    animation: xmas-greeting-scaleOut 0.5s ease-in forwards;
+}
+
+/* Close Button */
+.xmas-greeting-close-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid var(--xmas-gold);
+    color: var(--xmas-white);
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 10;
+    backdrop-filter: blur(4px);
+}
+
+.xmas-greeting-close-btn:hover {
+    background: var(--xmas-red-bright);
+    transform: scale(1.1);
+    box-shadow: 0 0 15px var(--xmas-glow);
+}
+
+/* Decoration Top */
+.xmas-greeting-decoration-top {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 15px 20px 10px;
+    background: linear-gradient(180deg, rgba(255, 215, 0, 0.2) 0%, transparent 100%);
+}
+
+.xmas-greeting-holly {
+    font-size: 28px;
+    animation: xmas-greeting-sway 3s ease-in-out infinite;
+}
+
+.xmas-greeting-star {
+    font-size: 36px;
+    animation: xmas-greeting-twinkle 1.5s ease-in-out infinite;
+    filter: drop-shadow(0 0 10px var(--xmas-gold));
+}
+
+/* Video */
+.xmas-greeting-video-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    overflow: hidden;
+}
+
+.xmas-greeting-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Mute Button */
+.xmas-greeting-mute-btn {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.6);
+    border: 2px solid var(--xmas-gold);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
+}
+
+.xmas-greeting-mute-btn:hover {
+    background: rgba(0, 0, 0, 0.8);
+    transform: scale(1.1);
+    box-shadow: 0 0 20px var(--xmas-glow);
+}
+
+.xmas-greeting-sound-icon {
+    font-size: 24px;
+}
+
+/* Text Container */
+.xmas-greeting-text-container {
+    padding: 25px 30px 20px;
+    text-align: center;
+    background: linear-gradient(180deg, transparent 0%, rgba(139, 0, 0, 0.3) 100%);
+}
+
+.xmas-greeting-text-container--ended {
+    animation: xmas-greeting-pulse 1s ease-in-out infinite;
+}
+
+/* Title */
+.xmas-greeting-title {
+    font-family: 'Mountains of Christmas', cursive, serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--xmas-gold);
+    margin: 0 0 10px 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 0 0 30px var(--xmas-glow), 0 0 60px rgba(255, 215, 0, 0.3);
+    animation: xmas-greeting-shimmer 3s ease-in-out infinite;
+    line-height: 1.3;
+    letter-spacing: 1px;
+}
+
+/* Subtitle */
+.xmas-greeting-subtitle {
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--xmas-cream);
+    margin: 0;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    animation: xmas-greeting-slideUp 0.8s ease-out 0.3s forwards;
+}
+
+/* Ornaments */
+.xmas-greeting-ornaments {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 15px;
+}
+
+.xmas-greeting-ornament {
+    font-size: 28px;
+    animation: xmas-greeting-bounce 2s ease-in-out infinite;
+}
+
+.xmas-greeting-ornament--1 { animation-delay: 0s; }
+.xmas-greeting-ornament--2 { animation-delay: 0.3s; }
+.xmas-greeting-ornament--3 { animation-delay: 0.6s; }
+
+/* Continue Button */
+.xmas-greeting-continue-btn {
+    display: block;
+    width: calc(100% - 60px);
+    margin: 0 30px 25px;
+    padding: 16px 30px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--xmas-green-deep);
+    background: linear-gradient(135deg, var(--xmas-gold) 0%, var(--xmas-gold-light) 50%, var(--xmas-gold) 100%);
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.xmas-greeting-continue-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(255, 215, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* Garland */
+.xmas-greeting-decoration-bottom {
+    padding: 0 20px 15px;
+}
+
+.xmas-greeting-garland {
+    height: 8px;
+    background: repeating-linear-gradient(90deg, var(--xmas-red-bright) 0px, var(--xmas-red-bright) 15px, var(--xmas-green-bright) 15px, var(--xmas-green-bright) 30px, var(--xmas-gold) 30px, var(--xmas-gold) 45px);
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* ANIMATIONS */
+@keyframes xmas-greeting-fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes xmas-greeting-fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@keyframes xmas-greeting-scaleIn {
+    from { opacity: 0; transform: scale(0.8) translateY(30px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes xmas-greeting-scaleOut {
+    from { opacity: 1; transform: scale(1); }
+    to { opacity: 0; transform: scale(0.8); }
+}
+
+@keyframes xmas-greeting-snowfall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+    100% { transform: translateY(100vh) rotate(360deg); opacity: 0.2; }
+}
+
+@keyframes xmas-greeting-shimmer {
+    0%, 100% { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 0 0 30px var(--xmas-glow), 0 0 60px rgba(255, 215, 0, 0.3); }
+    50% { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 0 0 40px var(--xmas-gold), 0 0 80px rgba(255, 215, 0, 0.5); }
+}
+
+@keyframes xmas-greeting-slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes xmas-greeting-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+@keyframes xmas-greeting-sway {
+    0%, 100% { transform: rotate(-5deg); }
+    50% { transform: rotate(5deg); }
+}
+
+@keyframes xmas-greeting-twinkle {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.2); }
+}
+
+@keyframes xmas-greeting-pulse {
+    0%, 100% { background: linear-gradient(180deg, transparent 0%, rgba(139, 0, 0, 0.3) 100%); }
+    50% { background: linear-gradient(180deg, transparent 0%, rgba(255, 215, 0, 0.2) 100%); }
+}
+
+/* RESPONSIVE - Големи монитори */
+@media (min-width: 1920px) {
+    .xmas-greeting-modal { max-width: 800px; }
+    .xmas-greeting-title { font-size: 2.6rem; }
+    .xmas-greeting-subtitle { font-size: 1.3rem; }
+    .xmas-greeting-continue-btn { font-size: 1.2rem; padding: 18px 35px; }
+}
+
+/* RESPONSIVE - Таблети */
+@media (min-width: 768px) and (max-width: 899px) {
+    .xmas-greeting-modal { max-width: 520px; border-radius: 20px; }
+    .xmas-greeting-title { font-size: 1.8rem; }
+    .xmas-greeting-subtitle { font-size: 1rem; }
+    .xmas-greeting-text-container { padding: 18px 20px 15px; }
+    .xmas-greeting-continue-btn { width: calc(100% - 40px); margin: 0 20px 20px; padding: 14px 25px; font-size: 1rem; }
+}
+
+/* RESPONSIVE - Големи телефони */
+@media (min-width: 576px) and (max-width: 767px) {
+    .xmas-greeting-overlay { padding: 12px; align-items: flex-start; padding-top: 40px; }
+    .xmas-greeting-modal { max-width: 100%; border-radius: 18px; border-width: 2px; }
+    .xmas-greeting-title { font-size: 1.6rem; }
+    .xmas-greeting-subtitle { font-size: 0.95rem; }
+    .xmas-greeting-text-container { padding: 15px 18px 12px; }
+    .xmas-greeting-continue-btn { width: calc(100% - 36px); margin: 0 18px 18px; padding: 14px 20px; font-size: 0.95rem; }
+    .xmas-greeting-holly { font-size: 22px; }
+    .xmas-greeting-star { font-size: 26px; }
+    .xmas-greeting-ornament { font-size: 22px; }
+    .xmas-greeting-snowflake { font-size: 16px; }
+}
+
+/* RESPONSIVE - Малки телефони */
+@media (max-width: 575px) {
+    .xmas-greeting-overlay { padding: 8px; align-items: flex-start; padding-top: 25px; }
+    .xmas-greeting-modal { max-width: 100%; border-radius: 16px; border-width: 2px; }
+    .xmas-greeting-title { font-size: 1.4rem; line-height: 1.35; }
+    .xmas-greeting-subtitle { font-size: 0.9rem; line-height: 1.4; }
+    .xmas-greeting-text-container { padding: 12px 15px 10px; }
+    .xmas-greeting-continue-btn { width: calc(100% - 30px); margin: 0 15px 15px; padding: 13px 18px; font-size: 0.9rem; }
+    .xmas-greeting-decoration-top { padding: 8px 10px 5px; gap: 10px; }
+    .xmas-greeting-holly { font-size: 20px; }
+    .xmas-greeting-star { font-size: 24px; }
+    .xmas-greeting-ornament { font-size: 20px; }
+    .xmas-greeting-snowflake { font-size: 14px; }
+    .xmas-greeting-close-btn { width: 34px; height: 34px; font-size: 14px; top: 8px; right: 8px; }
+    .xmas-greeting-mute-btn { width: 40px; height: 40px; bottom: 10px; right: 10px; }
+    .xmas-greeting-sound-icon { font-size: 18px; }
+}
+
+/* RESPONSIVE - Много малки телефони */
+@media (max-width: 375px) {
+    .xmas-greeting-title { font-size: 1.25rem; }
+    .xmas-greeting-subtitle { font-size: 0.85rem; }
+    .xmas-greeting-continue-btn { padding: 12px 15px; font-size: 0.85rem; }
+}
+
+/* Landscape */
+@media (max-height: 500px) and (orientation: landscape) {
+    .xmas-greeting-overlay { padding: 10px; align-items: flex-start; }
+    .xmas-greeting-modal { max-width: 90%; }
+    .xmas-greeting-video-container { aspect-ratio: 16 / 7; }
+    .xmas-greeting-title { font-size: 1.3rem; margin-bottom: 5px; }
+    .xmas-greeting-subtitle { font-size: 0.85rem; }
+    .xmas-greeting-text-container { padding: 10px 15px 8px; }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    .xmas-greeting-overlay, .xmas-greeting-modal, .xmas-greeting-snowflake,
+    .xmas-greeting-title, .xmas-greeting-subtitle, .xmas-greeting-ornament,
+    .xmas-greeting-holly, .xmas-greeting-star { animation: none !important; }
+    .xmas-greeting-subtitle { opacity: 1; transform: none; }
+    .xmas-greeting-snowflakes { display: none; }
+}
