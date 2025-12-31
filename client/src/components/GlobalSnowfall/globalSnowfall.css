@@ -1,0 +1,66 @@
+/* ========================================
+   GlobalSnowfall - Глобални снежинки
+   Unique prefix: global-snow-
+   ======================================== */
+
+.global-snow-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 99999;
+    overflow: hidden;
+}
+
+.global-snow-flake {
+    position: absolute;
+    top: -50px;
+    color: #fff;
+    text-shadow: 
+        0 0 5px rgba(255, 255, 255, 0.8),
+        0 0 10px rgba(255, 255, 255, 0.5);
+    animation: global-snow-fall linear infinite;
+    user-select: none;
+}
+
+@keyframes global-snow-fall {
+    0% {
+        transform: translateY(0) rotate(0deg) translateX(0);
+        opacity: 1;
+    }
+    25% {
+        transform: translateY(25vh) rotate(90deg) translateX(10px);
+    }
+    50% {
+        transform: translateY(50vh) rotate(180deg) translateX(-10px);
+    }
+    75% {
+        transform: translateY(75vh) rotate(270deg) translateX(10px);
+    }
+    100% {
+        transform: translateY(100vh) rotate(360deg) translateX(0);
+        opacity: 0.3;
+    }
+}
+
+/* По-малко снежинки на мобилни за performance */
+@media (max-width: 768px) {
+    .global-snow-flake:nth-child(n+30) {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .global-snow-flake:nth-child(n+20) {
+        display: none;
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .global-snow-container {
+        display: none;
+    }
+}   

@@ -14261,5 +14261,13 @@
     "footer": {
       "attempt": "Attempt"
     }
-  }
+  },
+  "christmasGreeting": {
+    "title": "Merry Christmas and Happy New Year!",
+    "subtitle": "The Pensa Club team wishes you health, happiness and many smiles in the new year!",
+    "continue": "Continue to site",
+    "close": "Close",
+    "mute": "Mute sound",
+    "unmute": "Unmute sound"
+}
 }
