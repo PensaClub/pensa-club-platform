@@ -507,9 +507,9 @@ export const academyServiceFactory = () => {
       return requester.post(`${apiUrl}/academy/admin/students/${studentId}/notes`, noteData);
     },
 
-    updateAdminStudentNote: async (studentId, noteId, noteData) => {
-      return requester.patch(`${apiUrl}/academy/admin/students/${studentId}/notes/${noteId}`, noteData);
-    },
+    // updateAdminStudentNote: async (studentId, noteId, noteData) => {
+    //   return requester.patch(`${apiUrl}/academy/admin/students/${studentId}/notes/${noteId}`, noteData);
+    // },
 
     deleteAdminStudentNote: async (studentId, noteId) => {
       return requester.del(`${apiUrl}/academy/admin/students/${studentId}/notes/${noteId}`);
