@@ -83,6 +83,7 @@ import AcademyLectureDetails from './components/AcademyLectures/AcademyLectureDe
 import AcademyLectureTest from './components/AcademyLectures/AcademyLectureDetails/AcademyLectureTest/AcademyLectureTest.jsx';
 import AcademyLectureWatch from './components/AcademyLectures/AcademyLectureWatch/AcademyLectureWatch.jsx';
 import ChristmasGreetingModal from './components/ChristmasGreetingModal/ChristmasGreetingModal.jsx';
+import GlobalSnowfall from './components/GlobalSnowfall/GlobalSnowfall.jsx';
 
 // ✅ LAZY LOADING КОМПОНЕНТИ
 const ArticlesList = lazy(() => import('./components/Articles/ArticlesList/ArticlesList.jsx'));
@@ -136,6 +137,7 @@ function App() {
     <>
       <HelmetProvider>
         <ErrorBoundary>
+          <GlobalSnowfall count={50} />
            <ChristmasGreetingModal />
           <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
             <UserProvider>
