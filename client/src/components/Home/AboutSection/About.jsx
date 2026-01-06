@@ -59,6 +59,7 @@ export const AboutSection = () => {
           <div className="pens-about-text-content">
             <div className="pens-about-content-accent-line"></div>
             <h2 className="pens-about-section-title">{t("about.title")}</h2>
+            <span className="pens-about-nonprofit-badge">{t("about.nonprofit-badge")}</span>
             <p className="pens-about-section-description">{t("about.desc")}</p>
 
             <div className="pens-about-action-buttons">
