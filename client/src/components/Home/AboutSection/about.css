@@ -324,3 +324,21 @@
     font-size: 60px;
   }
 }
+.pens-about-nonprofit-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--orange), var(--green));
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+}
+
+@media (max-width: 992px) {
+  .pens-about-nonprofit-badge {
+    margin: 0 auto 20px auto;
+  }
+}
