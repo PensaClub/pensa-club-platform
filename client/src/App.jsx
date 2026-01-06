@@ -84,6 +84,7 @@ import AcademyLectureTest from './components/AcademyLectures/AcademyLectureDetai
 import AcademyLectureWatch from './components/AcademyLectures/AcademyLectureWatch/AcademyLectureWatch.jsx';
 import ChristmasGreetingModal from './components/ChristmasGreetingModal/ChristmasGreetingModal.jsx';
 import GlobalSnowfall from './components/GlobalSnowfall/GlobalSnowfall.jsx';
+import DigiBridgeHeader from './components/DigiBridgeAcademy/DigiBridgeHeader/DigiBridgeHeader.jsx';
 
 // ✅ LAZY LOADING КОМПОНЕНТИ
 const ArticlesList = lazy(() => import('./components/Articles/ArticlesList/ArticlesList.jsx'));
@@ -160,6 +161,7 @@ function App() {
 
                                         {!cookies.cookieConsent && <CookieConsent />}
                                         <HeaderCommunity />
+                                        {isAcademyPage && <DigiBridgeHeader />}
                                         <ToastContainer
                                           role="alert"
                                           className={'notification'}

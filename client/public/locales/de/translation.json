@@ -35,7 +35,11 @@
     "copyright": "2024 Pensa club. Alle Rechte vorbehalten",
     "add-ad": "Anzeige hinzufügen",
     "softuni": "Software University",
-    "financial": "Mit finanzieller Unterstützung von"
+    "financial": "Mit finanzieller Unterstützung von",
+    "foundation-name": "Stiftung PENSA",
+    "nonprofit-status": "Gemeinnützige Organisation, eingetragen zum öffentlichen Nutzen",
+    "eik": "UIC",
+    "mission-short": "Wir helfen Senioren in Bulgarien, selbstbewusst in die digitale Welt einzutreten"
   },
   "hero": {
     "title-part1": "WÜRDIGES LEBEN",
@@ -74,6 +78,7 @@
     "main-title": "Was wir Ihnen anbieten"
   },
   "about": {
+    "nonprofit-badge": "Gemeinnützige Stiftung",
     "title": "Unsere Mission",
     "desc": "Eine innovative Plattform zu schaffen, ein Werkzeug zum Aufbau einer Gemeinschaft. Wir vereinen Menschen gleichen Alters mit gemeinsamen Interessen, neuen Ideen und Wissen. Wir streben danach, eine Gemeinschaft aufzubauen, die auf Interaktion und gegenseitiger Hilfe basiert. Das erwartete Ergebnis ist die Verbesserung der Lebensqualität durch aktive Teilnahme an der Gegenwart, Unterstützung beim Erwerb neuer Fähigkeiten und Interessen sowie die Förderung eines gesunden, erfüllten und würdigen Lebens.",
     "ourVision": "Unsere Vision",
@@ -144,6 +149,8 @@
       "label": "Die Stiftung",
       "title": "Pensa Stiftung",
       "description": "Gegründet mit der Mission, die Lebensqualität älterer Menschen durch digitale Inklusion und aktive Gemeinschaft zu verbessern",
+      "legalStatus": "Gemeinnützige Organisation im öffentlichen Interesse",
+      "eik": "UIC",
       "missionTitle": "Unsere Mission",
       "missionText": "Eine Gemeinschaft aufzubauen, die auf Interaktion und gegenseitiger Hilfe basiert. Wir streben danach, Menschen gleichen Alters mit gemeinsamen Interessen, neuen Ideen und Wissen zu vereinen und die aktive Teilnahme an der modernen Gesellschaft zu fördern.",
       "valuesTitle": "Unsere Werte",
@@ -11109,8 +11116,8 @@
         "library": "Bibliothek",
         "community": "Community",
         "about": "Über das Projekt",
-        "lectures": "Vorlesungen"
-
+        "lectures": "Vorlesungen",
+        "more": "Mehr"
       },
       "dropdown": {
         "dashboard": "Mein Fortschritt",
@@ -13080,7 +13087,7 @@
     "programsSubtitle": "Wähle ein Programm basierend auf deinen Interessen und Erfahrungen",
     "popularCourses": "Beliebte Kurse",
     "popularCoursesSubtitle": "Die meistgesuchten Kurse unserer Teilnehmer",
-     "noResults": "Keine Kurse gefunden",
+    "noResults": "Keine Kurse gefunden",
     "tryDifferentFilters": "Versuchen Sie es mit anderen Filtern oder einer anderen Suche",
     "searchResults": "Suchergebnisse",
     "foundCourses": "{{count}} Kurse gefunden"
@@ -13097,7 +13104,7 @@
       "free": "Kostenlos"
     }
   },
- "academyCoursesFilters": {
+  "academyCoursesFilters": {
     "searchPlaceholder": "Kurse suchen...",
     "clearSearch": "Suche löschen",
     "categoryLabel": "Kategorie",
@@ -13117,7 +13124,7 @@
       "alphabetical": "Alphabetisch"
     }
   },
-   "academyCoursesCategorySection": {
+  "academyCoursesCategorySection": {
     "uncategorized": "Andere Kurse",
     "course": "Kurs",
     "courses": "Kurse",
@@ -13145,17 +13152,17 @@
       "advanced": "Experte"
     },
     "sort": {
-    "popular": "Beliebt",
-    "newest": "Neueste",
-    "alphabetical": "Alphabetisch",
-    "rating": "Nach Bewertung",
-    "duration": "Nach Dauer"
-  },
-  "resultSingle": "Ergebnis",
-  "resultPlural": "Ergebnisse",
-  "clearAll": "Alle löschen",
-  "noResultsTitle": "Keine Kurse gefunden",
-  "noResultsText": "Versuchen Sie andere Filter oder Suchbegriffe"
+      "popular": "Beliebt",
+      "newest": "Neueste",
+      "alphabetical": "Alphabetisch",
+      "rating": "Nach Bewertung",
+      "duration": "Nach Dauer"
+    },
+    "resultSingle": "Ergebnis",
+    "resultPlural": "Ergebnisse",
+    "clearAll": "Alle löschen",
+    "noResultsTitle": "Keine Kurse gefunden",
+    "noResultsText": "Versuchen Sie andere Filter oder Suchbegriffe"
   },
   "academyCourseCard": {
     "free": "Kostenlos",
@@ -13176,30 +13183,26 @@
     "hint": "ESC drücken oder außerhalb klicken zum Schließen",
     "viewCourse": "Kurs ansehen"
   },
-   "academyCourseDetail": {
+  "academyCourseDetail": {
     "loading": "Kurs wird geladen...",
     "notFound": "Kurs nicht gefunden",
     "notFoundText": "Der gesuchte Kurs existiert nicht oder wurde entfernt.",
     "backToCourses": "Zurück zu den Kursen",
-    
     "breadcrumb": {
       "academy": "Akademie",
       "courses": "Kurse"
     },
-    
     "levels": {
       "beginner": "Anfänger",
       "intermediate": "Fortgeschritten",
       "advanced": "Experte"
     },
-    
     "tabs": {
       "overview": "Übersicht",
       "content": "Inhalt",
       "instructor": "Dozent",
       "reviews": "Bewertungen"
     },
-    
     "hero": {
       "certificateBadge": "Zertifikat",
       "ratings": "Bewertungen",
@@ -13207,12 +13210,11 @@
       "duration": "Stunden",
       "lessonsLabel": "Lektionen",
       "createdBy": "Erstellt von",
-          "youAreEnrolled": "Sie sind eingeschrieben",
+      "youAreEnrolled": "Sie sind eingeschrieben",
       "adminAccess": "Admin-Zugang",
       "mentorAccess": "Mentor-Zugang",
       "moderatorAccess": "Moderator-Zugang"
     },
-    
     "card": {
       "watchPreview": "Vorschau ansehen",
       "watchTrailer": "Trailer ansehen",
@@ -13225,10 +13227,9 @@
       "certificate": "Zertifikat bei Abschluss",
       "creditsOnComplete": "Punkte bei Abschluss",
       "guarantee": "Kostenloser Zugang für immer",
-        "startLearning": "Lernen starten",
+      "startLearning": "Lernen starten",
       "checking": "Prüfen..."
     },
-    
     "overview": {
       "aboutCourse": "Über diesen Kurs",
       "targetAudience": "Für wen ist das geeignet",
@@ -13246,7 +13247,6 @@
         "maxCredits": "Max. Punkte"
       }
     },
-    
     "content": {
       "courseContent": "Kursinhalt",
       "modules": "Module",
@@ -13258,7 +13258,6 @@
       "hasTest": "Mit Test",
       "noContent": "Kursinhalt wird bald hinzugefügt."
     },
-    
     "instructor": {
       "roles": {
         "lecturer": "Dozent",
@@ -13272,7 +13271,6 @@
       "assistants": "Assistenten",
       "noInstructor": "Dozent-Informationen werden bald hinzugefügt."
     },
-    
     "reviews": {
       "studentReviews": "Bewertungen von Teilnehmern",
       "basedOn": "Basierend auf",
@@ -13294,23 +13292,19 @@
     "notFound": "Lektion nicht gefunden",
     "unpublished": "Nicht veröffentlicht",
     "unpublishedDesc": "Diese Lektion ist noch nicht verfügbar.",
-    
     "courseContent": "Inhalt",
     "fullscreen": "Vollbild",
     "exitFullscreen": "Beenden",
-    
     "typeVideo": "Video",
     "typeLive": "Live",
     "typeText": "Text",
     "typeQuiz": "Quiz",
-    
     "complete": "Lektion abschließen",
     "startTest": "Test starten",
     "testAvailable": "Lektionstest",
     "passingScore": "Mindestpunktzahl",
     "earnCredits": "Verdienen",
     "materials": "Materialien",
-    
     "live": "LIVE",
     "upcoming": "Bevorstehend",
     "liveScheduled": "Live-Lektion",
@@ -13320,7 +13314,6 @@
     "textLesson": "Textlektion",
     "readBelowDesc": "Lesen Sie den Inhalt unten",
     "noVideo": "Kein Video",
-    
     "days": "Tage",
     "hours": "Stunden",
     "minutes": "Min",
@@ -13369,63 +13362,63 @@
     }
   },
   "results": {
-  "wrong": "Falsch",
-  "continueCourse": "Mit dem Kurs fortfahren",
-  "noMoreAttempts": "Keine weiteren Versuche"
-},
-"academyLectures": {
-  "hero": {
-    "badge": "Videovorlesungen",
-    "title": "Vorlesungen",
-    "titleAccent": "Live & Aufzeichnungen",
-    "subtitle": "Lernen Sie von Experten in Echtzeit oder schauen Sie Aufzeichnungen wann immer es passt. Völlig kostenlos.",
-    "stats": {
-      "total": "Vorlesungen",
+    "wrong": "Falsch",
+    "continueCourse": "Mit dem Kurs fortfahren",
+    "noMoreAttempts": "Keine weiteren Versuche"
+  },
+  "academyLectures": {
+    "hero": {
+      "badge": "Videovorlesungen",
+      "title": "Vorlesungen",
+      "titleAccent": "Live & Aufzeichnungen",
+      "subtitle": "Lernen Sie von Experten in Echtzeit oder schauen Sie Aufzeichnungen wann immer es passt. Völlig kostenlos.",
+      "stats": {
+        "total": "Vorlesungen",
+        "upcoming": "Bevorstehend",
+        "recordings": "Aufzeichnungen",
+        "credits": "Credits"
+      }
+    },
+    "schedule": {
+      "title": "Kommende Live",
+      "upcoming": "Vorlesungen",
+      "today": "Heute",
+      "tomorrow": "Morgen"
+    },
+    "filters": {
+      "all": "Alle",
+      "live": "Live",
       "upcoming": "Bevorstehend",
       "recordings": "Aufzeichnungen",
-      "credits": "Credits"
+      "searchPlaceholder": "Vorlesung suchen...",
+      "clearAll": "Löschen"
+    },
+    "sort": {
+      "date": "Nach Datum",
+      "popular": "Beliebt",
+      "alphabetical": "A-Z"
+    },
+    "results": {
+      "found": "gefunden"
+    },
+    "card": {
+      "upcoming": "Bevorstehend",
+      "recording": "Aufzeichnung",
+      "speaker": "Referent",
+      "hasTest": "Mit Test",
+      "watchLive": "Live ansehen",
+      "signUp": "Anmelden",
+      "watch": "Ansehen"
+    },
+    "loading": "Laden...",
+    "empty": {
+      "noLectures": "Keine Vorlesungen verfügbar",
+      "noResults": "Keine Vorlesungen gefunden",
+      "checkBack": "Schauen Sie später nach neuen Vorlesungen.",
+      "tryDifferent": "Versuchen Sie andere Filter."
     }
   },
-  "schedule": {
-    "title": "Kommende Live",
-    "upcoming": "Vorlesungen",
-    "today": "Heute",
-    "tomorrow": "Morgen"
-  },
-  "filters": {
-    "all": "Alle",
-    "live": "Live",
-    "upcoming": "Bevorstehend",
-    "recordings": "Aufzeichnungen",
-    "searchPlaceholder": "Vorlesung suchen...",
-    "clearAll": "Löschen"
-  },
-  "sort": {
-    "date": "Nach Datum",
-    "popular": "Beliebt",
-    "alphabetical": "A-Z"
-  },
-  "results": {
-    "found": "gefunden"
-  },
-  "card": {
-    "upcoming": "Bevorstehend",
-    "recording": "Aufzeichnung",
-    "speaker": "Referent",
-    "hasTest": "Mit Test",
-    "watchLive": "Live ansehen",
-    "signUp": "Anmelden",
-    "watch": "Ansehen"
-  },
-  "loading": "Laden...",
-  "empty": {
-    "noLectures": "Keine Vorlesungen verfügbar",
-    "noResults": "Keine Vorlesungen gefunden",
-    "checkBack": "Schauen Sie später nach neuen Vorlesungen.",
-    "tryDifferent": "Versuchen Sie andere Filter."
-  }
-},
- "academyLectureWatch": {
+  "academyLectureWatch": {
     "loading": "Vorlesung wird geladen...",
     "error": {
       "title": "Fehler",
@@ -13473,7 +13466,7 @@
       "viewCourse": "Kurs ansehen"
     }
   },
-"academyLectureTest": {
+  "academyLectureTest": {
     "loading": "Test wird geladen...",
     "error": "Fehler",
     "notFound": "Test nicht gefunden",
@@ -13481,32 +13474,25 @@
     "loginRequired": "Anmeldung erforderlich",
     "loginRequiredDesc": "Bitte melden Sie sich an, um den Test zu machen.",
     "login": "Anmelden",
-    
     "question": "Frage",
     "questionOf": "Frage {{current}} von {{total}}",
     "questions": "Fragen",
     "point": "Punkt",
     "points": "Punkte",
-    
     "typeSingle": "Einzelauswahl",
     "typeMultiple": "Mehrfachauswahl",
     "typeTrueFalse": "Wahr/Falsch",
-    
     "answered": "Beantwortet",
     "unanswered": "Unbeantwortet",
     "current": "Aktuell",
-    
     "prev": "Zurück",
     "next": "Weiter",
     "submit": "Test abgeben",
     "submitting": "Wird abgegeben...",
-    
     "passingScore": "Mindestpunktzahl",
     "maxCredits": "Max. Credits",
     "attempt": "Versuch",
-    
     "confirmSubmitUnanswered": "Sie haben {{count}} unbeantwortete Fragen. Möchten Sie wirklich abgeben?",
-    
     "errors": {
       "lectureNotFound": "Vorlesung nicht gefunden",
       "noTest": "Diese Vorlesung hat keinen Test",
@@ -13514,7 +13500,6 @@
       "submitFailed": "Fehler beim Abgeben des Tests",
       "retryFailed": "Fehler beim Starten eines neuen Versuchs"
     },
-    
     "results": {
       "passed": "Herzlichen Glückwunsch! 🎉",
       "failed": "Nicht bestanden",
@@ -13528,28 +13513,22 @@
       "creditsEarned": "Credits verdient",
       "backToLecture": "Zurück zur Vorlesung",
       "tryAgain": "Erneut versuchen",
-      
       "reviewAnswers": "Antworten überprüfen",
       "correctLabel": "Richtig",
       "wrongLabel": "Falsch",
       "yourAnswer": "Ihre Antwort",
       "noAnswer": "Keine Antwort",
-      
       "attemptInfo": "Versuch {{current}} von {{max}}",
       "remainingAttempts": "Verbleibende Versuche: {{count}}",
       "noMoreAttempts": "Keine weiteren Versuche",
-      
       "attemptHistory": "Versuchshistorie",
       "viewAnswers": "Antworten anzeigen",
-      
       "bestAttempt": "Bestes Ergebnis",
       "attempt": "Versuch"
     },
-    
     "intro": {
       "attemptsLeft": "Verbleibende Versuche: {{count}}"
     },
-    
     "footer": {
       "attempt": "Versuch"
     }
@@ -13561,5 +13540,5 @@
     "close": "Schließen",
     "mute": "Ton ausschalten",
     "unmute": "Ton einschalten"
-}
+  }
 }

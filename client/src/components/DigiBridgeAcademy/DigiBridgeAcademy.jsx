@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { DigiBridgeHeader } from './DigiBridgeHeader/DigiBridgeHeader';
+// import { DigiBridgeHeader } from './DigiBridgeHeader/DigiBridgeHeader';
 import { DigiBridgeHero } from './DigiBridgeHero/DigiBridgeHero';
 import './digiBridgeAcademy.css';
 import { DigiBridgeAbout } from './DigiBridgeAbout/DigiBridgeAbout';
@@ -176,7 +176,7 @@ export const DigiBridgeAcademy = () => {
         canonical="https://pensa.club/academy"
       />
 
-      <DigiBridgeHeader />
+      {/* <DigiBridgeHeader /> */}
       <DigiBridgeHero />
 
       <DigiBridgeAbout stats={stats} loading={loading} />

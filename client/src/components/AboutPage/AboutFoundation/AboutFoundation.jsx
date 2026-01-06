@@ -4,7 +4,8 @@ import {
   faHandshake,
   faAward,
   faShieldAlt,
-  faHeart
+  faHeart,
+  faBalanceScale
 } from '@fortawesome/free-solid-svg-icons';
 import './aboutFoundation.css';
 
@@ -27,6 +28,15 @@ export const AboutFoundation = () => {
           <p className="aboutfoundation-description">
             {t('about.foundation.description')}
           </p>
+          
+          {/* Nonprofit Info Box */}
+          <div className="aboutfoundation-legal-info">
+            <FontAwesomeIcon icon={faBalanceScale} className="aboutfoundation-legal-icon" />
+            <div className="aboutfoundation-legal-text">
+              <span className="aboutfoundation-legal-status">{t('about.foundation.legalStatus')}</span>
+              <span className="aboutfoundation-legal-eik">{t('about.foundation.eik')}: 208034387</span>
+            </div>
+          </div>
         </div>
 
         <div className="aboutfoundation-content">

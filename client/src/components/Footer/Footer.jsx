@@ -33,12 +33,14 @@ export const Footer = ({ additionalClasses }) => {
                     <div className="info-desc">
                         <p>{t('footer.financial')}: <Link to={"https://bg.usembassy.gov/education-culture/grant-opportunities/"}target="_blank">Small Grants US Embassy</Link></p>
                         <p>{t('footer.country-city')}</p>
-
                         <p>{t('footer.email')}</p>
                     </div>
                 </div>
             </section>
             <section className='footer-privacy'>
+                <p className="footer-nonprofit-line">
+                    {t('footer.foundation-name')} | {t('footer.nonprofit-status')} | {t('footer.eik')}: 208034387
+                </p>
                 <p><Link to="/privacy-policy">{t('footer.privacy')}</Link></p>
                 <p>&copy; {t('footer.copyright')}</p>
             </section>

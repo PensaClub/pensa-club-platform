@@ -36,7 +36,11 @@
     "copyright": "2024 Pensa club. All rights reserved",
     "add-ad": "Create ad",
     "softuni": "Software University",
-    "financial": "Financial support by"
+    "financial": "Financial support by",
+    "foundation-name": "PENSA Foundation",
+"nonprofit-status": "Non-profit organization registered for public benefit",
+"eik": "UIC",
+"mission-short": "Helping seniors in Bulgaria confidently enter the digital world"
   },
   "home": {
     "town": "Twn",
@@ -132,6 +136,7 @@
     "main-title": "What we offer you"
   },
   "about": {
+    "nonprofit-badge": "Non-profit foundation for public benefit",
     "title": "Our mission",
     "desc": "To create an innovative platform, a tool for building community. We unite people of similar age with common interests, new ideas, and knowledge. We strive to build a community based on interaction and mutual support. The expected outcome is to improve quality of life through active engagement in modernity, support for acquiring new skills and interests, and encouraging a healthy, fulfilling, and dignified life.",
     "ourVision": "Our vision",
@@ -202,6 +207,8 @@
       "label": "The Foundation",
       "title": "Pensa Foundation",
       "description": "Created with the mission to improve the quality of life of older adults through digital inclusion and active community",
+      "legalStatus": "Non-profit organization registered for public benefit",
+"eik": "UIC",
       "missionTitle": "Our Mission",
       "missionText": "To build a community based on interaction and mutual assistance. We strive to unite people of the same age with common interests, new ideas and knowledge, encouraging active participation in modern society.",
       "valuesTitle": "Our Values",
@@ -11816,8 +11823,8 @@
         "library": "Library",
         "community": "Community",
         "about": "About",
-        "lectures": "Лекции"
-
+        "lectures": "Live Events",
+        "more": "More"
       },
       "dropdown": {
         "dashboard": "My Progress",
