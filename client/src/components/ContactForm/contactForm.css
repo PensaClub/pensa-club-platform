@@ -1,43 +1,36 @@
-:root {
-    --primary: #6C63FF;
-    --secondary: #4AB1D8;
-    --accent: #B76CFD;
-    --orange: #FF7A3D;
-    --green: #1B6D4D;
-    --dark: #2A2A4A;
-    --light: #EBEEFE;
-    --error: #e53e3e;
-    --success: #38a169;
-    --transition: all 0.3s ease;
-    --shadow-sm: 0 4px 6px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 10px 15px rgba(0, 0, 0, 0.1);
-    --radius: 16px;
-  }
-  
-  .contact-section {
+/* ============================================
+   CONTACT FORM SECTION
+   Unique Prefix: pcf7x-
+   ============================================ */
+
+.pcf7x-section {
     position: relative;
     padding: 100px 0;
     overflow: hidden;
     opacity: 0;
     transform: translateY(30px);
     transition: all 0.8s ease;
-  }
-  
-  .contact-section.visible {
+}
+
+.pcf7x-section.pcf7x-visible {
     opacity: 1;
     transform: translateY(0);
-  }
+}
 
-  .contact-background {
+/* ============================================
+   BACKGROUND ELEMENTS
+   ============================================ */
+
+.pcf7x-background {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     z-index: -1;
-  }
-  
-  .bg-wave {
+}
+
+.pcf7x-bg-wave {
     position: absolute;
     top: 0;
     left: 0;
@@ -47,71 +40,79 @@
     background: linear-gradient(135deg, #F4F6FF, #FFFFFF);
     border-radius: 0 0 50% 50%/0 0 100% 100%;
     filter: blur(8px);
-  }
-  
-  .bg-shape {
+}
+
+.pcf7x-bg-shape {
     position: absolute;
     border-radius: 50%;
     opacity: 0.08;
-  }
-  
-  .shape1 {
+}
+
+.pcf7x-shape-primary {
     top: -10%;
     right: -5%;
     width: 500px;
     height: 500px;
-    background: linear-gradient(135deg, var(--primary), var(--accent));
-    animation: float 15s ease-in-out infinite alternate;
-  }
-  
-  .shape2 {
+    background: linear-gradient(135deg, #6C63FF, #B76CFD);
+    animation: pcf7x-float 15s ease-in-out infinite alternate;
+}
+
+.pcf7x-shape-secondary {
     bottom: -15%;
     left: -10%;
     width: 600px;
     height: 600px;
-    background: linear-gradient(135deg, var(--secondary), var(--primary));
-    animation: float 20s ease-in-out infinite alternate-reverse;
-  }
-  
-  @keyframes float {
+    background: linear-gradient(135deg, #4AB1D8, #6C63FF);
+    animation: pcf7x-float 20s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes pcf7x-float {
     0% { transform: translate(0, 0) rotate(0deg); }
     100% { transform: translate(30px, 30px) rotate(5deg); }
-  }
-  
-  .contact-pattern {
+}
+
+.pcf7x-pattern {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background-image: 
-      radial-gradient(rgba(108, 99, 255, 0.04) 2px, transparent 2px),
-      radial-gradient(rgba(183, 108, 253, 0.04) 2px, transparent 2px);
+        radial-gradient(rgba(108, 99, 255, 0.04) 2px, transparent 2px),
+        radial-gradient(rgba(183, 108, 253, 0.04) 2px, transparent 2px);
     background-size: 40px 40px;
     background-position: 0 0, 20px 20px;
-  }
+}
 
-  .contact-container {
+/* ============================================
+   CONTAINER
+   ============================================ */
+
+.pcf7x-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
-  }
+}
 
-  .contact-header {
+/* ============================================
+   HEADER
+   ============================================ */
+
+.pcf7x-header {
     text-align: center;
     margin-bottom: 60px;
-  }
-  
-  .contact-title {
+}
+
+.pcf7x-title {
     font-size: 2.8rem;
     font-weight: 700;
-    color: var(--dark);
+    color: #2A2A4A;
     margin-bottom: 20px;
     position: relative;
     display: inline-block;
-  }
-  
-  .contact-title::after {
+}
+
+.pcf7x-title::after {
     content: '';
     position: absolute;
     bottom: -15px;
@@ -119,138 +120,165 @@
     transform: translateX(-50%);
     width: 80px;
     height: 4px;
-    background: linear-gradient(90deg, var(--primary), var(--accent));
+    background: linear-gradient(90deg, #6C63FF, #B76CFD);
     border-radius: 10px;
-  }
-  
-  .contact-title .highlight {
+}
+
+.pcf7x-title-highlight {
     background: linear-gradient(135deg, #1B6D4D, #0A3D28);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-left: 10px;
-  }
-.highlight{
     font-size: 2.6rem;
     font-weight: 700;
-  }
-  .contact-description {
+}
+
+.pcf7x-description {
     font-size: 1.1rem;
     color: #585880;
     max-width: 700px;
     margin: 0 auto;
     line-height: 1.6;
-  }
+}
 
-  .contact-content {
+/* ============================================
+   CONTENT GRID
+   ============================================ */
+
+.pcf7x-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 40px;
-  }
+}
 
-  .contact-info {
+/* ============================================
+   INFO SECTION
+   ============================================ */
+
+.pcf7x-info {
     display: flex;
     flex-direction: column;
     gap: 20px;
-  }
-  
-  .contact-card {
+}
+
+.pcf7x-card {
     background: white;
-    border-radius: var(--radius);
+    border-radius: 16px;
     padding: 20px;
     display: flex;
     align-items: center;
-    box-shadow: var(--shadow-sm);
-    transition: var(--transition);
-  }
-  
-  .contact-card:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.pcf7x-card:hover {
     transform: translateY(-5px);
-    box-shadow: var(--shadow-md);
-  }
-  
-  .card-icon {
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.pcf7x-card-icon {
     width: 50px;
     height: 50px;
     min-width: 50px;
     border-radius: 15px;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    background: linear-gradient(135deg, #6C63FF, #4AB1D8);
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-right: 20px;
-  }
-  
-  .card-icon svg {
+}
+
+.pcf7x-card-icon svg {
     width: 24px;
     height: 24px;
-  }
-  
-  .card-content {
+}
+
+.pcf7x-card-content {
     flex: 1;
-  }
-  
-  .card-content h3 {
+}
+
+.pcf7x-card-content h3 {
     font-size: 1.2rem;
     font-weight: 600;
-    color: var(--dark);
+    color: #2A2A4A;
     margin-bottom: 8px;
-  }
-  
-  .card-content p {
+}
+
+.pcf7x-card-content p {
     color: #585880;
     font-size: 1rem;
     line-height: 1.5;
-  }
-  
-  .social-links {
+}
+
+/* ============================================
+   SOCIAL LINKS
+   ============================================ */
+
+.pcf7x-social-links {
     display: flex;
     gap: 15px;
     margin-top: 5px;
-  }
-  
-  .social-links a {
+}
+
+.pcf7x-social-links a {
     width: 35px;
     height: 35px;
     border-radius: 50%;
-    background: var(--light);
-    color: var(--primary);
+    background: #EBEEFE;
+    color: #6C63FF;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: var(--transition);
-  }
-  
-  .social-links a:hover {
-    background: var(--primary);
+    transition: all 0.3s ease;
+}
+
+.pcf7x-social-links a:hover {
+    background: #6C63FF;
     color: white;
     transform: translateY(-3px);
-  }
+}
 
-  .map-container {
-    border-radius: var(--radius);
+/* ============================================
+   MAP
+   ============================================ */
+
+.pcf7x-map-container {
+    border-radius: 16px;
     overflow: hidden;
-    box-shadow: var(--shadow-sm);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     margin-top: 10px;
     height: 250px;
-  }
+}
 
-  .contact-form-container {
+/* ============================================
+   FORM WRAPPER
+   ============================================ */
+
+.pcf7x-form-wrapper {
     background: white;
-    border-radius: var(--radius);
+    border-radius: 16px;
     padding: 30px;
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
     position: relative;
-  }
+}
 
-  .recaptcha-wrapper {
+/* ============================================
+   RECAPTCHA
+   ============================================ */
+
+.pcf7x-recaptcha-wrapper {
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
     margin-top: 1em;
-  }
+}
 
-  .success-message {
+/* ============================================
+   SUCCESS MESSAGE
+   ============================================ */
+
+.pcf7x-success-message {
     position: absolute;
     top: 0;
     left: 0;
@@ -261,121 +289,137 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    border-radius: var(--radius);
+    border-radius: 16px;
     z-index: 10;
-    animation: fadeIn 0.3s ease;
+    animation: pcf7x-fadeIn 0.3s ease;
     padding: 20px;
-  }
-  
-  @keyframes fadeIn {
+}
+
+@keyframes pcf7x-fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
-  }
-  
-  .success-message svg {
+}
+
+.pcf7x-success-message svg {
     width: 60px;
     height: 60px;
-    color: var(--success);
+    color: #38a169;
     margin-bottom: 20px;
-  }
-  
-  .success-message p {
+}
+
+.pcf7x-success-message p {
     font-size: 1.2rem;
     font-weight: 600;
-    color: var(--dark);
+    color: #2A2A4A;
     text-align: center;
-  }
-  
-  .success-message .success-details {
+}
+
+.pcf7x-success-details {
     font-size: 1rem;
     font-weight: normal;
     color: #585880;
     margin-top: 10px;
-  }
+}
 
-  .contact-form {
+/* ============================================
+   FORM
+   ============================================ */
+
+.pcf7x-form {
     display: flex;
     flex-direction: column;
     gap: 20px;
-  }
-  
-  .form-group {
+}
+
+.pcf7x-form-group {
     margin-bottom: 5px;
-  }
-  
-  .input-wrapper {
+}
+
+/* ============================================
+   INPUT WRAPPER
+   ============================================ */
+
+.pcf7x-input-wrapper {
     position: relative;
     display: flex;
     align-items: center;
-    background-color: var(--light);
-    border-radius: var(--radius);
-    transition: var(--transition);
+    background-color: #EBEEFE;
+    border-radius: 16px;
+    transition: all 0.3s ease;
     border: 2px solid transparent;
-  }
-  
-  .input-wrapper.focused {
-    border-color: var(--primary);
+}
+
+.pcf7x-input-wrapper.pcf7x-input-focused {
+    border-color: #6C63FF;
     background-color: white;
     box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
-  }
-  
-  .input-wrapper.error {
-    border-color: var(--error);
-  }
-  
-  .input-icon {
+}
+
+.pcf7x-input-wrapper.pcf7x-input-error {
+    border-color: #e53e3e;
+}
+
+.pcf7x-input-icon {
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 0 15px;
     color: #a0aec0;
-  }
-  
-  .input-wrapper.focused .input-icon {
-    color: var(--primary);
-  }
-  
-  .input-wrapper input, 
-  .input-wrapper textarea {
+}
+
+.pcf7x-input-wrapper.pcf7x-input-focused .pcf7x-input-icon {
+    color: #6C63FF;
+}
+
+.pcf7x-input-wrapper input, 
+.pcf7x-input-wrapper textarea {
     flex: 1;
     border: none;
     background: transparent;
     padding: 15px 15px 15px 0;
     font-size: 1rem;
-    color: var(--dark);
+    color: #2A2A4A;
     width: 100%;
-  }
-  
-  .input-wrapper input:focus, 
-  .input-wrapper textarea:focus {
+}
+
+.pcf7x-input-wrapper input:focus, 
+.pcf7x-input-wrapper textarea:focus {
     outline: none;
-  }
-  
-  .input-wrapper.textarea {
+}
+
+.pcf7x-input-wrapper.pcf7x-input-textarea {
     align-items: flex-start;
-  }
-  
-  .input-wrapper.textarea .input-icon {
+}
+
+.pcf7x-input-wrapper.pcf7x-input-textarea .pcf7x-input-icon {
     padding-top: 15px;
-  }
-  
-  .error-message-contact  {
-    color: var(--error);
+}
+
+/* ============================================
+   ERROR MESSAGES
+   ============================================ */
+
+.pcf7x-error-message {
+    color: #e53e3e;
     font-size: 0.875rem;
     margin-top: 5px;
     margin-left: 15px;
-  }
-  
-  .submit-error {
+}
+
+.pcf7x-submit-error {
     text-align: center;
     margin-bottom: 10px;
-  }
+}
 
-  .contact-button {
+/* ============================================
+   SUBMIT BUTTON
+   ============================================ */
+
+.pcf7x-submit-btn {
     background: linear-gradient(135deg, #E26020, #FF9D5C);
     color: white;
     border: none;
-    border-radius: var(--radius);
+    border-radius: 16px;
     padding: 15px 20px;
     font-size: 1.1rem;
     font-weight: 600;
@@ -384,151 +428,175 @@
     align-items: center;
     justify-content: center;
     gap: 10px;
-    transition: var(--transition);
+    transition: all 0.3s ease;
     box-shadow: 0 5px 15px rgba(108, 99, 255, 0.3);
     position: relative;
     overflow: hidden;
-  }
-  
-  .contact-button:hover:not(:disabled) {
+}
+
+.pcf7x-submit-btn:hover:not(:disabled) {
     transform: translateY(-5px);
     box-shadow: 0 8px 25px rgba(108, 99, 255, 0.4);
-  }
-  
-  .contact-button:disabled {
+}
+
+.pcf7x-submit-btn:disabled {
     opacity: 0.7;
     cursor: not-allowed;
-  }
-  
-  .contact-button svg {
+}
+
+.pcf7x-submit-btn svg {
     width: 20px;
     height: 20px;
     transition: transform 0.3s ease;
     rotate: 180deg;
-  }
-  
-  .contact-button:hover svg {
-    transform: translateX(5px);
-  }
+}
 
-  .loading-spinner {
-    animation: spin 1.5s linear infinite;
+.pcf7x-submit-btn:hover svg {
+    transform: translateX(5px);
+}
+
+/* ============================================
+   LOADING SPINNER
+   ============================================ */
+
+.pcf7x-loading-spinner {
+    animation: pcf7x-spin 1.5s linear infinite;
     width: 24px;
     height: 24px;
-  }
-  
-  .spinner-path {
+}
+
+.pcf7x-spinner-path {
     stroke: white;
     stroke-linecap: round;
-    animation: dash 1.5s ease-in-out infinite;
-  }
-  
-  @keyframes spin {
+    animation: pcf7x-dash 1.5s ease-in-out infinite;
+}
+
+@keyframes pcf7x-spin {
     100% {
-      transform: rotate(360deg);
+        transform: rotate(360deg);
     }
-  }
-  
-  @keyframes dash {
+}
+
+@keyframes pcf7x-dash {
     0% {
-      stroke-dasharray: 1, 150;
-      stroke-dashoffset: 0;
+        stroke-dasharray: 1, 150;
+        stroke-dashoffset: 0;
     }
     50% {
-      stroke-dasharray: 90, 150;
-      stroke-dashoffset: -35;
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -35;
     }
     100% {
-      stroke-dasharray: 90, 150;
-      stroke-dashoffset: -124;
+        stroke-dasharray: 90, 150;
+        stroke-dashoffset: -124;
     }
-  }
+}
 
-  @media (max-width: 992px) {
-    .contact-title {
-      font-size: 2.4rem;
+/* ============================================
+   RESPONSIVE - TABLETS (max-width: 992px)
+   ============================================ */
+
+@media (max-width: 992px) {
+    .pcf7x-title {
+        font-size: 2.4rem;
     }
     
-    .contact-content {
-      grid-template-columns: 1fr;
+    .pcf7x-content {
+        grid-template-columns: 1fr;
     }
     
-    .contact-info {
-      order: 2;
+    .pcf7x-info {
+        order: 2;
     }
     
-    .contact-form-container {
-      order: 1;
+    .pcf7x-form-wrapper {
+        order: 1;
     }
-  }
-  
-  @media (max-width: 768px) {
-    .contact-section {
-      padding: 70px 0;
+}
+
+/* ============================================
+   RESPONSIVE - MOBILE (max-width: 768px)
+   ============================================ */
+
+@media (max-width: 768px) {
+    .pcf7x-section {
+        padding: 70px 0;
     }
-    .contact-container {
+
+    .pcf7x-container {
         padding: 4em 10px;
-      }
-    .contact-title {
-      font-size: 2rem;
+    }
+
+    .pcf7x-title {
+        font-size: 2rem;
     }
     
-    .contact-description {
-      font-size: 1rem;
+    .pcf7x-description {
+        font-size: 1rem;
     }
     
-    .contact-card {
-      padding: 15px;
+    .pcf7x-card {
+        padding: 15px;
     }
     
-    .card-icon {
-      width: 45px;
-      height: 45px;
-      min-width: 45px;
+    .pcf7x-card-icon {
+        width: 45px;
+        height: 45px;
+        min-width: 45px;
     }
     
-    .card-content h3 {
-      font-size: 1.1rem;
+    .pcf7x-card-content h3 {
+        font-size: 1.1rem;
     }
-  }
-  
-  @media (max-width: 576px) {
-    .contact-section {
-      padding: 50px 0;
+}
+
+/* ============================================
+   RESPONSIVE - SMALL MOBILE (max-width: 576px)
+   ============================================ */
+
+@media (max-width: 576px) {
+    .pcf7x-section {
+        padding: 50px 0;
     }
-    .contact-container {
-      padding: 4em 10px;
+
+    .pcf7x-container {
+        padding: 4em 10px;
     }
-    .contact-title {
-      font-size: 1.8rem;
+
+    .pcf7x-title {
+        font-size: 1.8rem;
     }
-    
-    .contact-form-container {
-      padding: 20px;
-    }
-    
-    .contact-button {
-      padding: 12px 16px;
-      font-size: 1rem;
-    }
-    
-    .card-icon {
-      width: 40px;
-      height: 40px;
-      min-width: 40px;
-      border-radius: 12px;
+
+    .pcf7x-title-highlight {
+        font-size: 1.6rem;
     }
     
-    .card-icon svg {
-      width: 20px;
-      height: 20px;
+    .pcf7x-form-wrapper {
+        padding: 20px;
     }
     
-    .card-content h3 {
-      font-size: 1rem;
+    .pcf7x-submit-btn {
+        padding: 12px 16px;
+        font-size: 1rem;
     }
     
-    .card-content p {
-      font-size: 0.9rem;
+    .pcf7x-card-icon {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        border-radius: 12px;
     }
-  }
+    
+    .pcf7x-card-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .pcf7x-card-content h3 {
+        font-size: 1rem;
+    }
+    
+    .pcf7x-card-content p {
+        font-size: 0.9rem;
+    }
+}
