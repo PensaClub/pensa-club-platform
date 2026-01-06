@@ -1,6 +1,6 @@
 /* eslint-disable no-useless-escape */
 /* eslint-disable react-hooks/exhaustive-deps */
-import  { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useTranslation } from "react-i18next";
 import "./contactForm.css";
@@ -32,7 +32,6 @@ export const ContactForm = () => {
     const sectionRef = useRef(null);
     
     useEffect(() => {
-
         const clearRecaptchaToken = () => {
           localStorage.removeItem("contactRecaptchaToken");
           setRecaptchaToken(null);
@@ -43,7 +42,7 @@ export const ContactForm = () => {
         return () => {
           clearInterval(tokenCleanupInterval);
         };
-      }, []);
+    }, []);
 
     useEffect(() => {
         window.scrollTo({ top: 0 });
@@ -70,7 +69,7 @@ export const ContactForm = () => {
         const observer = new IntersectionObserver(
             (entries) => {
                 if (entries[0].isIntersecting) {
-                    sectionRef.current.classList.add("visible");
+                    sectionRef.current.classList.add("pcf7x-visible");
                 }
             },
             { threshold: 0.2 }
@@ -142,16 +141,16 @@ export const ContactForm = () => {
         return Object.keys(newErrors).length === 0;
     };
 
-    //тъпият брояч за recaptcha който забравих
     const incrementSubmissionCount = () => {
         const count = parseInt(localStorage.getItem("contactSubmissionCount") || "0");
-        if (count >= 3) { // След 3 изпращания
+        if (count >= 3) {
           localStorage.removeItem("contactRecaptchaToken"); 
           localStorage.setItem("contactSubmissionCount", "0"); 
         } else {
           localStorage.setItem("contactSubmissionCount", String(count + 1));
         }
-      };
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -199,61 +198,61 @@ export const ContactForm = () => {
     };
 
     return (
-        <section className="contact-section" ref={sectionRef}>
-            <div className="contact-background">
-                <div className="bg-wave"></div>
-                <div className="bg-shape shape1"></div>
-                <div className="bg-shape shape2"></div>
-                <div className="contact-pattern"></div>
+        <section className="pcf7x-section" ref={sectionRef}>
+            <div className="pcf7x-background">
+                <div className="pcf7x-bg-wave"></div>
+                <div className="pcf7x-bg-shape pcf7x-shape-primary"></div>
+                <div className="pcf7x-bg-shape pcf7x-shape-secondary"></div>
+                <div className="pcf7x-pattern"></div>
             </div>
 
-            <div className="contact-container">
-                <div className="contact-header">
-                    <h2 className="contact-title">
+            <div className="pcf7x-container">
+                <div className="pcf7x-header">
+                    <h2 className="pcf7x-title">
                         {t("contact.title")}
-                        <span className="highlight">Pensa club</span>
+                        <span className="pcf7x-title-highlight">Pensa club</span>
                     </h2>
-                    <p className="contact-description">{t("contact.description")}</p>
+                    <p className="pcf7x-description">{t("contact.description")}</p>
                 </div>
 
-                <div className="contact-content">
-                    <div className="contact-info">
-                        <div className="contact-card">
-                            <div className="card-icon">
+                <div className="pcf7x-content">
+                    <div className="pcf7x-info">
+                        <div className="pcf7x-card">
+                            <div className="pcf7x-card-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
                                     <path fill="none" stroke="currentColor" strokeWidth="2"
                                         d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
                                 </svg>
                             </div>
-                            <div className="card-content">
+                            <div className="pcf7x-card-content">
                                 <h3>{t("contact.location.title")}</h3>
                                 <p>{t("contact.location.address")}</p>
                             </div>
                         </div>
 
-                        <div className="contact-card">
-                            <div className="card-icon">
+                        <div className="pcf7x-card">
+                            <div className="pcf7x-card-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
                                     <path fill="none" stroke="currentColor" strokeWidth="2"
                                         d="M22 6C22 4.9 21.1 4 20 4H4C2.9 4 2 4.9 2 6M22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6M22 6L12 13L2 6" />
                                 </svg>
                             </div>
-                            <div className="card-content">
+                            <div className="pcf7x-card-content">
                                 <h3>{t("contact.email.title")}</h3>
                                 <p>help@pensa.club</p>
                             </div>
                         </div>
 
-                        <div className="contact-card">
-                            <div className="card-icon">
+                        <div className="pcf7x-card">
+                            <div className="pcf7x-card-icon">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
                                     <path fill="none" stroke="currentColor" strokeWidth="2"
                                         d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 16H4c-.55 0-1-.45-1-1V6c0-.55.45-1 1-1h16c.55 0 1 .45 1 1v12c0 .55-.45 1-1 1z" />
                                 </svg>
                             </div>
-                            <div className="card-content">
+                            <div className="pcf7x-card-content">
                                 <h3>{t("contact.social.title")}</h3>
-                                <div className="social-links">
+                                <div className="pcf7x-social-links">
                                     <a href="https://www.facebook.com/profile.php?id=61578204366479" target="_blank" rel="noopener noreferrer">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
                                             <path fill="currentColor" d="M12 2.04C6.5 2.04 2 6.53 2 12.06C2 17.06 5.66 21.21 10.44 21.96V14.96H7.9V12.06H10.44V9.85C10.44 7.34 11.93 5.96 14.22 5.96C15.31 5.96 16.45 6.15 16.45 6.15V8.62H15.19C13.95 8.62 13.56 9.39 13.56 10.18V12.06H16.34L15.89 14.96H13.56V21.96C15.9 21.59 18.03 20.37 19.58 18.54C21.13 16.7 21.98 14.35 22 11.91C22 6.48 17.5 2.04 12 2.04Z" />
@@ -273,7 +272,7 @@ export const ContactForm = () => {
                             </div>
                         </div>
 
-                        <div className="map-container">
+                        <div className="pcf7x-map-container">
                             <iframe
                                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d93836.9586578648!2d23.26855800441234!3d42.69814863188764!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x40aa8682cb317bf5%3A0x400a01269bf5e60!2z0KHQvtGE0LjRjywg0JHRitC70LPQsNGA0LjRjw!5e0!3m2!1sbg!2sbg!4v1714664918592!5m2!1sbg!2sbg"
                                 width="100%"
@@ -287,22 +286,22 @@ export const ContactForm = () => {
                         </div>
                     </div>
 
-                    <div className="contact-form-container">
+                    <div className="pcf7x-form-wrapper">
                      
                         {submitSuccess && (
-                            <div className="success-message">
+                            <div className="pcf7x-success-message">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
                                     <path fill="currentColor" d="M12 22a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-2.3-8.7l1.3 1.29 3.3-3.3a1 1 0 0 1 1.4 1.42l-4 4a1 1 0 0 1-1.4 0l-2-2a1 1 0 0 1 1.4-1.42z" />
                                 </svg>
                                 <p>{t("contact.success")}</p>
-                                <p className="success-details">{t("contact.confirmation_email")}</p>
+                                <p className="pcf7x-success-details">{t("contact.confirmation_email")}</p>
                             </div>
                         )}
 
-                        <form onSubmit={handleSubmit} className="contact-form">
-                            <div className="form-group">
-                                <div className={`input-wrapper ${formFocus.name ? 'focused' : ''} ${errors.name ? 'error' : ''}`}>
-                                    <div className="input-icon">
+                        <form onSubmit={handleSubmit} className="pcf7x-form">
+                            <div className="pcf7x-form-group">
+                                <div className={`pcf7x-input-wrapper ${formFocus.name ? 'pcf7x-input-focused' : ''} ${errors.name ? 'pcf7x-input-error' : ''}`}>
+                                    <div className="pcf7x-input-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
                                             <path fill="none" stroke="currentColor" strokeWidth="2"
                                                 d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11ZM16 15H8C5.79086 15 4 16.7909 4 19V21H20V19C20 16.7909 18.2091 15 16 15Z" />
@@ -311,7 +310,7 @@ export const ContactForm = () => {
                                     <input
                                         type="text"
                                         name="name"
-                                        id="name"
+                                        id="pcf7x-name"
                                         placeholder={t("contact.form.name")}
                                         value={formData.name}
                                         onChange={handleChange}
@@ -319,12 +318,12 @@ export const ContactForm = () => {
                                         onBlur={() => handleBlur('name')}
                                     />
                                 </div>
-                                {errors.name && <div className="error-message-contact">{errors.name}</div>}
+                                {errors.name && <div className="pcf7x-error-message">{errors.name}</div>}
                             </div>
 
-                            <div className="form-group">
-                                <div className={`input-wrapper ${formFocus.email ? 'focused' : ''} ${errors.email ? 'error' : ''}`}>
-                                    <div className="input-icon">
+                            <div className="pcf7x-form-group">
+                                <div className={`pcf7x-input-wrapper ${formFocus.email ? 'pcf7x-input-focused' : ''} ${errors.email ? 'pcf7x-input-error' : ''}`}>
+                                    <div className="pcf7x-input-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
                                             <path fill="none" stroke="currentColor" strokeWidth="2" d="M22 6C22 4.9 21.1 4 20 4H4C2.9 4 2 4.9 2 6M22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6M22 6L12 13L2 6" />
                                         </svg>
@@ -332,7 +331,7 @@ export const ContactForm = () => {
                                     <input
                                         type="email"
                                         name="email"
-                                        id="email"
+                                        id="pcf7x-email"
                                         placeholder={t("contact.form.email")}
                                         value={formData.email}
                                         onChange={handleChange}
@@ -340,12 +339,12 @@ export const ContactForm = () => {
                                         onBlur={() => handleBlur('email')}
                                     />
                                 </div>
-                                {errors.email && <div className="error-message-contact">{errors.email}</div>}
+                                {errors.email && <div className="pcf7x-error-message">{errors.email}</div>}
                             </div>
 
-                            <div className="form-group">
-                                <div className={`input-wrapper ${formFocus.subject ? 'focused' : ''} ${errors.subject ? 'error' : ''}`}>
-                                    <div className="input-icon">
+                            <div className="pcf7x-form-group">
+                                <div className={`pcf7x-input-wrapper ${formFocus.subject ? 'pcf7x-input-focused' : ''} ${errors.subject ? 'pcf7x-input-error' : ''}`}>
+                                    <div className="pcf7x-input-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
                                             <path fill="none" stroke="currentColor" strokeWidth="2"
                                                 d="M3.5 3.5h17v17h-17z M7 9h10 M7 13h10 M7 17h5" />
@@ -354,7 +353,7 @@ export const ContactForm = () => {
                                     <input
                                         type="text"
                                         name="subject"
-                                        id="subject"
+                                        id="pcf7x-subject"
                                         placeholder={t("contact.form.subject")}
                                         value={formData.subject}
                                         onChange={handleChange}
@@ -362,12 +361,12 @@ export const ContactForm = () => {
                                         onBlur={() => handleBlur('subject')}
                                     />
                                 </div>
-                                {errors.subject && <div className="error-message-contact">{errors.subject}</div>}
+                                {errors.subject && <div className="pcf7x-error-message">{errors.subject}</div>}
                             </div>
 
-                            <div className="form-group">
-                                <div className={`input-wrapper textarea ${formFocus.message ? 'focused' : ''} ${errors.message ? 'error' : ''}`}>
-                                    <div className="input-icon">
+                            <div className="pcf7x-form-group">
+                                <div className={`pcf7x-input-wrapper pcf7x-input-textarea ${formFocus.message ? 'pcf7x-input-focused' : ''} ${errors.message ? 'pcf7x-input-error' : ''}`}>
+                                    <div className="pcf7x-input-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
                                             <path fill="none" stroke="currentColor" strokeWidth="2"
                                                 d="M3 20.4V3.6a.6.6 0 01.6-.6h16.8a.6.6 0 01.6.6v16.8a.6.6 0 01-.6.6H3.6a.6.6 0 01-.6-.6z M16 8H8 M16 12H8 M16 16H8" />
@@ -375,7 +374,7 @@ export const ContactForm = () => {
                                     </div>
                                     <textarea
                                         name="message"
-                                        id="message"
+                                        id="pcf7x-message"
                                         placeholder={t("contact.form.message")}
                                         value={formData.message}
                                         onChange={handleChange}
@@ -384,12 +383,12 @@ export const ContactForm = () => {
                                         rows="5"
                                     ></textarea>
                                 </div>
-                                {errors.message && <div className="error-message-contact">{errors.message}</div>}
+                                {errors.message && <div className="pcf7x-error-message">{errors.message}</div>}
                             </div>
 
-                            {errors.submit && <div className="error-message-contact submit-error">{errors.submit}</div>}
+                            {errors.submit && <div className="pcf7x-error-message pcf7x-submit-error">{errors.submit}</div>}
 
-                            <button type="submit" className="contact-button" disabled={isSubmitting}>
+                            <button type="submit" className="pcf7x-submit-btn" disabled={isSubmitting}>
                                 <span>{isSubmitting ? t("contact.form.sending") : t("contact.form.send")}</span>
                                 {!isSubmitting && (
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
@@ -398,14 +397,14 @@ export const ContactForm = () => {
                                     </svg>
                                 )}
                                 {isSubmitting && (
-                                    <svg className="loading-spinner" viewBox="0 0 50 50">
-                                        <circle className="spinner-path" cx="25" cy="25" r="20" fill="none" strokeWidth="5"></circle>
+                                    <svg className="pcf7x-loading-spinner" viewBox="0 0 50 50">
+                                        <circle className="pcf7x-spinner-path" cx="25" cy="25" r="20" fill="none" strokeWidth="5"></circle>
                                     </svg>
                                 )}
                             </button>
                         </form>
                         {showRecaptcha && (
-                            <div className="recaptcha-wrapper">
+                            <div className="pcf7x-recaptcha-wrapper">
                                 <ReCAPTCHA
                                     sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
                                     onChange={onRecaptchaChange}
