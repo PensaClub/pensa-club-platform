@@ -68,6 +68,14 @@ export const AllClubs = () => {
   useEffect(() => {
     fetchClubs();
   }, []);
+  // Google Ads Conversion Tracking
+useEffect(() => {
+  if (typeof window !== 'undefined' && window.gtag) {
+    window.gtag('event', 'conversion', {
+      'send_to': 'AW-17855872413/u3NZCJy2kN4bEJ37q8JC'
+    });
+  }
+}, []);
 
   // Филтриране на клубове
  const handleFilterChange = useCallback((filters) => {
