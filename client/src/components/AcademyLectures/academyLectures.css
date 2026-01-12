@@ -1424,6 +1424,7 @@
   .al-filters-tabs {
     overflow-x: auto;
     flex-wrap: nowrap;
+    justify-content: center;
     padding-bottom: 8px;
     gap: 6px;
   }
@@ -1516,6 +1517,9 @@
 
   .al-empty h3 {
     font-size: 1.125rem;
+  }
+  .al-filters{
+    flex-direction: column;
   }
 }
 
