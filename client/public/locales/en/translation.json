@@ -12159,44 +12159,56 @@
       "loginButton": "Log In"
     },
     "mentorsPage": {
-      "meta": {
-        "title": "Our Mentors | DigiBridge Academy",
-        "description": "Meet our young mentors who help seniors master digital technologies"
-      },
-      "hero": {
-        "title": "Meet Our Mentors",
-        "subtitle": "Young people specially trained to help with patience, understanding and without prejudice",
-        "findMentor": "Find a Mentor",
-        "becomeButton": "Become a Mentor"
-      },
-      "searchPlaceholder": "Search by name or specialization...",
-      "filters": {
-        "all": "All",
-        "digitalSecurity": "Digital Security",
-        "mediaLiteracy": "Media Literacy",
-        "socialMedia": "Social Media",
-        "onlineBanking": "Online Banking",
-        "basicSkills": "Basic Skills"
-      },
-      "stats": {
-        "mentors": "Mentors",
-        "available": "Available",
-        "specializations": "Specializations"
-      },
-      "card": {
-        "students": "Students",
-        "rating": "Rating",
-        "experience": "Experience",
-        "years": "years",
-        "available": "Online",
-        "busy": "Offline",
-        "viewProfile": "View Profile"
-      },
-      "noResults": {
-        "title": "No Mentors Found",
-        "description": "Try changing the filters or search query"
-      }
-    },
+  "meta": {
+    "title": "Our Mentors | DigiBridge Academy",
+    "description": "Meet our young mentors who help seniors master digital technologies",
+    "keywords": "mentors, digital literacy, training, DigiBridge, free mentors"
+  },
+  "hero": {
+    "title": "Our Mentors",
+    "subtitle": "Young professionals ready to share knowledge and experience with patience and understanding",
+    "online": "online now",
+    "findMentor": "Find a mentor",
+    "become": "Become a mentor"
+  },
+  "search": "Search by name or specialization...",
+  "filters": {
+    "all": "All",
+    "digitalSecurity": "Digital Security",
+    "mediaLiteracy": "Media Literacy",
+    "socialMedia": "Social Media",
+    "onlineBanking": "Online Banking",
+    "basicSkills": "Basic Skills"
+  },
+  "filtersDrawer": {
+    "title": "Filters & Search"
+  },
+  "stats": {
+    "mentors": "Mentors",
+    "available": "Available",
+    "specializations": "Areas",
+    "sessions": "Sessions"
+  },
+  "list": {
+    "all": "All mentors",
+    "found": "found"
+  },
+  "card": {
+    "years": "y.o.",
+    "available": "Online",
+    "busy": "Offline",
+    "sessions": "sessions",
+    "speaks": "Speaks:",
+    "students": "students",
+    "rating": "rating",
+    "reviews": "reviews",
+    "viewProfile": "View profile"
+  },
+  "noResults": {
+    "title": "No mentors found",
+    "desc": "Try different filters"
+  }
+},
     "chatButton": {
       "help": "Help",
       "ariaLabel": "Open help chat"
