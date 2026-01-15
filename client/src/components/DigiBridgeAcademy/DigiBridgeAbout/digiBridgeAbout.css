@@ -1,199 +1,445 @@
 /* ===================================
-   ABOUT SECTION
+   DIGIBRIDGE ABOUT - TECH THEME
+   Prefix: dba-
    =================================== */
 
-.digibridge-about {
-  padding: 100px 20px;
-  background: #ffffff;
-  position: relative;
-  overflow: hidden;
+.dba-about {
+    position: relative;
+    padding: 120px 20px;
+    background: #1e293b;
+    overflow: hidden;
 }
 
-.digibridge-about-container {
-  max-width: 1200px;
-  margin: 0 auto;
+/* Background Glows */
+.dba-about-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    pointer-events: none;
 }
 
-.digibridge-about-content {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 80px;
-  align-items: center;
+.dba-about-glow--1 {
+    width: 400px;
+    height: 400px;
+    background: rgba(99, 102, 241, 0.15);
+    top: -100px;
+    left: -100px;
 }
 
-/* Text Content */
-.digibridge-about-text {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+.dba-about-glow--2 {
+    width: 350px;
+    height: 350px;
+    background: rgba(14, 165, 233, 0.12);
+    bottom: -100px;
+    right: -50px;
 }
 
-.digibridge-about-label {
-  display: inline-block;
-  padding: 8px 20px;
-  background: linear-gradient(135deg, rgba(255, 99, 71, 0.1) 0%, rgba(255, 127, 80, 0.1) 100%);
-  color: #ff6347;
-  font-size: 0.85rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  border-radius: 50px;
-  align-self: flex-start;
+/* Container */
+.dba-about-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
 }
 
-.digibridge-about-title {
-  font-size: 2.75rem;
-  font-weight: 800;
-  color: #2c3e50;
-  line-height: 1.2;
-  margin: 0;
+.dba-about-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
 }
 
-.digibridge-about-description {
-  font-size: 1.1rem;
-  color: #6c757d;
-  line-height: 1.8;
-  margin: 0;
+/* ===================================
+   TEXT SIDE
+   =================================== */
+
+.dba-about-text {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
 }
 
-/* Stats */
-.digibridge-about-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  margin-top: 20px;
+/* Label */
+.dba-about-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: rgba(99, 102, 241, 0.15);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 50px;
+    color: #a5b4fc;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    width: fit-content;
 }
 
-.digibridge-about-stat {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 20px;
-  background: linear-gradient(135deg, #fff5f0 0%, #ffe8df 100%);
-  border-radius: 16px;
-  transition: all 0.3s ease;
+.dba-about-label svg {
+    width: 16px;
+    height: 16px;
 }
 
-.digibridge-about-stat:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 24px rgba(255, 99, 71, 0.15);
+/* Title */
+.dba-about-title {
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.2;
+    margin: 0;
 }
 
-.digibridge-about-stat-icon {
-  font-size: 2rem;
-  line-height: 1;
+.dba-about-title-highlight {
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #0ea5e9 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.dba-about-title span {
+ font-size: 2.8rem;
+}
+/* Description */
+.dba-about-description {
+    font-size: 1.1rem;
+    color: #94a3b8;
+    line-height: 1.8;
+    margin: 0;
 }
 
-.digibridge-about-stat-content {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+/* ===================================
+   STATS
+   =================================== */
+
+.dba-about-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 16px;
 }
 
-.digibridge-about-stat-number {
-  font-size: 1.75rem;
-  font-weight: 800;
-  color: #ff6347;
-  margin: 0;
-  line-height: 1;
+.dba-about-stat {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 20px;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid #334155;
+    border-radius: 16px;
+    transition: all 0.3s ease;
 }
 
-.digibridge-about-stat-text {
-  font-size: 0.85rem;
-  color: #6c757d;
-  margin: 0;
-  line-height: 1.4;
+.dba-about-stat:hover {
+    border-color: rgba(99, 102, 241, 0.5);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
 }
 
-/* Image */
-.digibridge-about-image {
-  position: relative;
+.dba-about-stat-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    border-radius: 12px;
+    flex-shrink: 0;
 }
 
-.digibridge-about-image-wrapper {
-  position: relative;
-  border-radius: 24px;
-  overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+.dba-about-stat-icon svg {
+    width: 24px;
+    height: 24px;
+    color: #fff;
 }
 
-.digibridge-about-img {
-  width: 100%;
-  height: auto;
-  display: block;
-  border-radius: 24px;
+.dba-about-stat-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
-.digibridge-about-image-decoration {
-  position: absolute;
-  top: -30px;
-  right: -30px;
-  width: 200px;
-  height: 200px;
-  background: linear-gradient(135deg, rgba(255, 99, 71, 0.2) 0%, rgba(255, 127, 80, 0.2) 100%);
-  border-radius: 50%;
-  z-index: -1;
+.dba-about-stat-number {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1;
+}
+
+.dba-about-stat-label {
+    font-size: 0.8rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+/* ===================================
+   FEATURES
+   =================================== */
+
+.dba-about-features {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 12px;
+}
+
+.dba-about-feature {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1rem;
+    color: #94a3b8;
+}
+
+.dba-about-feature-check {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: rgba(34, 197, 94, 0.2);
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.dba-about-feature-check svg {
+    width: 14px;
+    height: 14px;
+    color: #22c55e;
+}
+
+/* ===================================
+   VISUAL SIDE
+   =================================== */
+
+.dba-about-visual {
+    position: relative;
+}
+
+.dba-about-img-wrapper {
+    position: relative;
+}
+
+.dba-about-img-frame {
+    position: relative;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 
+        0 30px 60px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(99, 102, 241, 0.2);
+}
+
+.dba-about-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+}
+
+.dba-about-img-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, transparent 50%, rgba(14, 165, 233, 0.1) 100%);
+    pointer-events: none;
+}
+
+/* Floating Badge */
+.dba-about-float-badge {
+    position: absolute;
+    bottom: -20px;
+    left: -20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: rgba(30, 41, 59, 0.95);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 16px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    animation: dba-float 5s ease-in-out infinite;
+}
+
+@keyframes dba-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+.dba-about-float-badge-icon {
+    font-size: 2rem;
+}
+
+.dba-about-float-badge-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.dba-about-float-badge-title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.dba-about-float-badge-sub {
+    font-size: 0.75rem;
+    color: #64748b;
+}
+
+/* Decorative Ring */
+.dba-about-ring {
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 200px;
+    height: 200px;
+    border: 2px solid rgba(99, 102, 241, 0.2);
+    border-radius: 50%;
+    z-index: -1;
+    animation: dba-ring-pulse 4s ease-in-out infinite;
+}
+
+@keyframes dba-ring-pulse {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.1); opacity: 0.8; }
 }
 
 /* ===================================
    RESPONSIVE
    =================================== */
 
+@media (max-width: 1200px) {
+    .dba-about-content {
+        gap: 60px;
+    }
+    
+    .dba-about-title {
+        font-size: 2.4rem;
+    }
+    .dba-about-title span {
+     font-size: 2.4rem;
+    }
+}
+
 @media (max-width: 1024px) {
-  .digibridge-about {
-    padding: 80px 20px;
-  }
+    .dba-about {
+        padding: 100px 20px;
+    }
+    
+    .dba-about-content {
+        gap: 50px;
+    }
+    
+    .dba-about-stats {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
 
-  .digibridge-about-content {
-    gap: 60px;
-  }
-
-  .digibridge-about-title {
-    font-size: 2.25rem;
-  }
-
-  .digibridge-about-stats {
-    grid-template-columns: repeat(3, 1fr);
-  }
+@media (max-width: 900px) {
+    .dba-about-content {
+        grid-template-columns: 1fr;
+        gap: 60px;
+    }
+    
+    .dba-about-visual {
+        order: -1;
+        max-width: 550px;
+        margin: 0 auto;
+    }
+    
+    .dba-about-text {
+        text-align: center;
+        align-items: center;
+    }
 }
 
 @media (max-width: 768px) {
-  .digibridge-about {
-    padding: 60px 20px;
-  }
-
-  .digibridge-about-content {
-    grid-template-columns: 1fr;
-    gap: 50px;
-  }
-
-  .digibridge-about-title {
-    font-size: 2rem;
-  }
-
-  .digibridge-about-description {
-    font-size: 1rem;
-  }
-
-  .digibridge-about-stats {
-    grid-template-columns: 1fr;
-  }
-
-  .digibridge-about-image {
-    order: -1;
-  }
+    .dba-about {
+        padding: 80px 20px;
+    }
+    
+    .dba-about-title {
+        font-size: 2rem;
+    }
+    .dba-about-title span {
+     font-size: 2rem;
+    }
+    .dba-about-description {
+        font-size: 1rem;
+    }
+    
+    .dba-about-stats {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .dba-about-stat {
+        justify-content: flex-start;
+    }
+    
+    .dba-about-float-badge {
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: -30px;
+    }
+    
+    @keyframes dba-float {
+        0%, 100% { transform: translateX(-50%) translateY(0); }
+        50% { transform: translateX(-50%) translateY(-8px); }
+    }
+    
+    .dba-about-ring {
+        display: none;
+    }
 }
 
 @media (max-width: 480px) {
-  .digibridge-about {
-    padding: 50px 15px;
-  }
+    .dba-about {
+        padding: 60px 16px;
+    }
+    
+    .dba-about-title {
+        font-size: 1.75rem;
+    }
+    .dba-about-title span {
+     font-size: 1.75rem;
+    }
+    .dba-about-stat {
+        padding: 16px;
+    }
+    
+    .dba-about-stat-icon {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .dba-about-stat-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .dba-about-stat-number {
+        font-size: 1.3rem;
+    }
+    
+    .dba-about-float-badge {
+        padding: 12px 16px;
+    }
+    
+    .dba-about-float-badge-icon {
+        font-size: 1.5rem;
+    }
+}
 
-  .digibridge-about-title {
-    font-size: 1.75rem;
-  }
+/* ===================================
+   ACCESSIBILITY
+   =================================== */
 
-  .digibridge-about-stat {
-    padding: 16px;
-  }
+@media (prefers-reduced-motion: reduce) {
+    .dba-about-float-badge,
+    .dba-about-ring,
+    .dba-about-stat {
+        animation: none;
+        transition: none;
+    }
 }

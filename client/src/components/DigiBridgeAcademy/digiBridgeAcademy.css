@@ -1,161 +1,268 @@
 /* ===================================
    DIGIBRIDGE ACADEMY - MAIN WRAPPER
+   Tech/Dark Theme
    =================================== */
 
 .digibridge-academy-wrapper {
-  width: 100%;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #fff 0%, #fff5f0 100%);
-  overflow-x: hidden;
-  position: relative;
+    width: 100%;
+    min-height: 100vh;
+    background: #0f172a;
+    overflow-x: hidden;
+    position: relative;
 }
 
 /* Общи стилове за всички секции */
 .digibridge-section {
-  width: 100%;
-  padding: 80px 20px;
-  position: relative;
+    width: 100%;
+    padding: 100px 20px;
+    position: relative;
+}
+
+/* Alternating section backgrounds */
+.digibridge-section--dark {
+    background: #0f172a;
+}
+
+.digibridge-section--darker {
+    background: #1e293b;
 }
 
 .digibridge-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
 }
 
 /* Общ стил за заглавия */
 .digibridge-section-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #2c3e50;
-  text-align: center;
-  margin-bottom: 20px;
-  line-height: 1.2;
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 20px;
+    line-height: 1.2;
 }
 
 .digibridge-section-subtitle {
-  font-size: 1.2rem;
-  color: #6c757d;
-  text-align: center;
-  margin-bottom: 50px;
-  max-width: 700px;
-  margin-left: auto;
-  margin-right: auto;
-  line-height: 1.6;
+    font-size: 1.15rem;
+    color: #94a3b8;
+    text-align: center;
+    margin-bottom: 60px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.7;
 }
 
-/* Gradient Text Effect */
+/* Gradient Text Effect - Tech Theme */
 .digibridge-gradient-text {
-  background: linear-gradient(135deg, #ff6b35 0%, #f7931e 50%, #4caf50 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #0ea5e9 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 /* Плавни преходи */
 .digibridge-smooth-transition {
-  transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
 }
 
 /* Accessibility - Focus States */
 .digibridge-academy-wrapper *:focus-visible {
-  outline: 3px solid #ff6b35;
-  outline-offset: 3px;
-  border-radius: 4px;
+    outline: 3px solid #6366f1;
+    outline-offset: 3px;
+    border-radius: 4px;
 }
 
-/* Parallax Background Декорации */
+/* Tech Background Decorations */
 .digibridge-bg-decoration {
-  position: absolute;
-  z-index: 0;
-  pointer-events: none;
+    position: absolute;
+    z-index: 0;
+    pointer-events: none;
 }
 
-.digibridge-bg-circle-1 {
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, rgba(255, 107, 53, 0.1) 0%, transparent 70%);
-  border-radius: 50%;
-  top: -100px;
-  right: -100px;
+.digibridge-bg-glow-1 {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+    top: -150px;
+    right: -150px;
+    filter: blur(60px);
 }
 
-.digibridge-bg-circle-2 {
-  width: 300px;
-  height: 300px;
-  background: radial-gradient(circle, rgba(76, 175, 80, 0.1) 0%, transparent 70%);
-  border-radius: 50%;
-  bottom: 100px;
-  left: -50px;
+.digibridge-bg-glow-2 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(14, 165, 233, 0.12) 0%, transparent 70%);
+    border-radius: 50%;
+    bottom: 100px;
+    left: -100px;
+    filter: blur(60px);
+}
+
+/* Grid Pattern for sections */
+.digibridge-grid-pattern {
+    position: absolute;
+    inset: 0;
+    background-image: 
+        linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+/* Common Card Style */
+.digibridge-card {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 20px;
+    padding: 32px;
+    transition: all 0.3s ease;
+}
+
+.digibridge-card:hover {
+    border-color: rgba(99, 102, 241, 0.5);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    transform: translateY(-4px);
+}
+
+/* Common Button Styles */
+.digibridge-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 28px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+}
+
+.digibridge-btn--primary {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+}
+
+.digibridge-btn--primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.5);
+}
+
+.digibridge-btn--outline {
+    background: transparent;
+    color: #a5b4fc;
+    border: 2px solid rgba(99, 102, 241, 0.4);
+}
+
+.digibridge-btn--outline:hover {
+    background: rgba(99, 102, 241, 0.1);
+    border-color: #6366f1;
 }
 
 /* Responsive Typography */
+@media (max-width: 1024px) {
+    .digibridge-section {
+        padding: 80px 20px;
+    }
+
+    .digibridge-section-title {
+        font-size: 2.4rem;
+    }
+}
+
 @media (max-width: 768px) {
-  .digibridge-section {
-    padding: 60px 15px;
-  }
+    .digibridge-section {
+        padding: 60px 15px;
+    }
 
-  .digibridge-section-title {
-    font-size: 2rem;
-  }
+    .digibridge-section-title {
+        font-size: 2rem;
+    }
 
-  .digibridge-section-subtitle {
-    font-size: 1rem;
-  }
+    .digibridge-section-subtitle {
+        font-size: 1rem;
+        margin-bottom: 40px;
+    }
 
-  .digibridge-container {
-    padding: 0 15px;
-  }
+    .digibridge-container {
+        padding: 0 15px;
+    }
 }
 
 @media (max-width: 480px) {
-  .digibridge-section {
-    padding: 40px 10px;
-  }
+    .digibridge-section {
+        padding: 50px 12px;
+    }
 
-  .digibridge-section-title {
-    font-size: 1.75rem;
-  }
+    .digibridge-section-title {
+        font-size: 1.75rem;
+    }
 
-  .digibridge-section-subtitle {
-    font-size: 0.95rem;
-  }
+    .digibridge-section-subtitle {
+        font-size: 0.95rem;
+    }
 }
 
-/* Loading Animation (за бъдещи lazy loaded секции) */
+/* Loading Animation */
 .digibridge-loading {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
 }
 
 .digibridge-spinner {
-  width: 50px;
-  height: 50px;
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #ff6b35;
-  border-radius: 50%;
-  animation: digibridge-spin 1s linear infinite;
+    width: 50px;
+    height: 50px;
+    border: 4px solid #334155;
+    border-top: 4px solid #6366f1;
+    border-radius: 50%;
+    animation: digibridge-spin 1s linear infinite;
 }
 
 @keyframes digibridge-spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 /* Smooth Scroll */
 html {
-  scroll-behavior: smooth;
+    scroll-behavior: smooth;
 }
 
 /* Print Styles */
 @media print {
-  .digibridge-academy-wrapper {
-    background: white;
-  }
-  
-  .digibridge-bg-decoration {
-    display: none;
-  }
+    .digibridge-academy-wrapper {
+        background: white;
+    }
+    
+    .digibridge-bg-decoration,
+    .digibridge-grid-pattern {
+        display: none;
+    }
+    
+    .digibridge-section-title,
+    .digibridge-section-subtitle {
+        color: #000;
+    }
+}
+
+/* Accessibility - Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    .digibridge-smooth-transition,
+    .digibridge-card,
+    .digibridge-btn {
+        transition: none;
+    }
+    
+    .digibridge-spinner {
+        animation: none;
+    }
 }

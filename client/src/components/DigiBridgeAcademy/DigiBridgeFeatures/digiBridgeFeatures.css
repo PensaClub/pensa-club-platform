@@ -1,150 +1,292 @@
 /* ===================================
-   FEATURES SECTION
+   DIGIBRIDGE FEATURES - TECH THEME
+   Prefix: dbf-
    =================================== */
 
-.digibridge-features {
-  padding: 100px 20px;
-  background: #ffffff;
-  position: relative;
+.dbf-section {
+    position: relative;
+    padding: 120px 20px;
+    background: #1e293b;
+    overflow: hidden;
 }
 
-.digibridge-features-container {
-  max-width: 1200px;
-  margin: 0 auto;
+/* Background Glows */
+.dbf-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    pointer-events: none;
 }
 
-/* Header */
-.digibridge-features-header {
-  text-align: center;
-  margin-bottom: 70px;
+.dbf-glow--1 {
+    width: 500px;
+    height: 500px;
+    background: rgba(99, 102, 241, 0.12);
+    top: -150px;
+    right: -100px;
 }
 
-.digibridge-features-label {
-  display: inline-block;
-  padding: 8px 20px;
-  background: linear-gradient(135deg, rgba(255, 99, 71, 0.1) 0%, rgba(255, 127, 80, 0.1) 100%);
-  color: #ff6347;
-  font-size: 0.85rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  border-radius: 50px;
-  margin-bottom: 20px;
+.dbf-glow--2 {
+    width: 400px;
+    height: 400px;
+    background: rgba(16, 185, 129, 0.1);
+    bottom: -100px;
+    left: -100px;
 }
 
-.digibridge-features-title {
-  font-size: 2.75rem;
-  font-weight: 800;
-  color: #2c3e50;
-  margin: 0 0 16px 0;
-  line-height: 1.2;
+/* Container */
+.dbf-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
 }
 
-.digibridge-features-subtitle {
-  font-size: 1.1rem;
-  color: #6c757d;
-  max-width: 700px;
-  margin: 0 auto;
-  line-height: 1.7;
+/* ===================================
+   HEADER
+   =================================== */
+
+.dbf-header {
+    text-align: center;
+    margin-bottom: 70px;
 }
 
-/* Grid */
-.digibridge-features-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 30px;
+.dbf-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: rgba(99, 102, 241, 0.15);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 50px;
+    color: #a5b4fc;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 24px;
 }
 
-.digibridge-features-card {
-  position: relative;
-  background: linear-gradient(135deg, #fff 0%, #fff5f0 100%);
-  padding: 45px 35px;
-  border-radius: 24px;
-  text-decoration: none;
-  transition: all 0.4s ease;
-  overflow: hidden;
-  border: 2px solid transparent;
+.dbf-label svg {
+    width: 16px;
+    height: 16px;
 }
 
-.digibridge-features-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, var(--feature-color, #ff6347) 0%, transparent 100%);
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  z-index: 0;
+.dbf-title {
+    font-size: 3rem;
+    font-weight: 800;
+    color: #fff;
+    margin: 0 0 20px;
+    line-height: 1.2;
 }
 
-.digibridge-features-card:hover::before {
-  opacity: 0.08;
+.dbf-title-highlight {
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #0ea5e9 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.dbf-title span {
+  font-size: 3rem;
+}
+.dbf-subtitle {
+    font-size: 1.15rem;
+    color: #94a3b8;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.7;
 }
 
-.digibridge-features-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 16px 40px rgba(255, 99, 71, 0.15);
-  border-color: var(--feature-color, #ff6347);
+/* ===================================
+   FEATURES GRID
+   =================================== */
+
+.dbf-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    margin-bottom: 60px;
 }
 
-.digibridge-features-card > * {
-  position: relative;
-  z-index: 1;
+/* Feature Card */
+.dbf-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 40px 32px;
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 24px;
+    text-decoration: none;
+    transition: all 0.4s ease;
+    overflow: hidden;
 }
 
-.digibridge-features-card-icon {
-  font-size: 3.5rem;
-  margin-bottom: 20px;
-  line-height: 1;
-  display: inline-block;
-  transition: transform 0.4s ease;
+.dbf-card:hover {
+    border-color: var(--card-color);
+    transform: translateY(-6px);
+    box-shadow: 
+        0 20px 50px rgba(0, 0, 0, 0.3),
+        0 0 40px rgba(99, 102, 241, 0.1);
 }
 
-.digibridge-features-card:hover .digibridge-features-card-icon {
-  transform: scale(1.1);
+/* Card Glow Effect */
+.dbf-card-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 150px;
+    background: linear-gradient(180deg, var(--card-color) 0%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
 }
 
-.digibridge-features-card-title {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #2c3e50;
-  margin: 0 0 12px 0;
-  line-height: 1.3;
+.dbf-card:hover .dbf-card-glow {
+    opacity: 0.08;
 }
 
-.digibridge-features-card-description {
-  font-size: 1rem;
-  color: #6c757d;
-  margin: 0 0 20px 0;
-  line-height: 1.7;
+/* Icon */
+.dbf-card-icon {
+    position: relative;
+    width: 70px;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(99, 102, 241, 0.1);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: 18px;
+    transition: all 0.4s ease;
 }
 
-.digibridge-features-card-arrow {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  background: var(--feature-color, #ff6347);
-  color: #ffffff;
-  border-radius: 50%;
-  transition: all 0.3s ease;
+.dbf-card:hover .dbf-card-icon {
+    background: rgba(99, 102, 241, 0.15);
+    border-color: var(--card-color);
+    transform: scale(1.08);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
 
-.digibridge-features-card-arrow svg {
-  width: 20px;
-  height: 20px;
-  transition: transform 0.3s ease;
+.dbf-card-icon svg {
+    width: 32px;
+    height: 32px;
+    color: var(--card-color);
+    transition: all 0.3s ease;
 }
 
-.digibridge-features-card:hover .digibridge-features-card-arrow {
-  transform: scale(1.15);
+/* Content */
+.dbf-card-content {
+    position: relative;
+    flex: 1;
 }
 
-.digibridge-features-card:hover .digibridge-features-card-arrow svg {
-  transform: translateX(3px);
+.dbf-card-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 12px;
+    line-height: 1.3;
+    transition: color 0.3s ease;
+}
+
+.dbf-card:hover .dbf-card-title {
+    color: var(--card-color);
+}
+
+.dbf-card-desc {
+    font-size: 0.95rem;
+    color: #64748b;
+    margin: 0;
+    line-height: 1.7;
+}
+
+/* Arrow */
+.dbf-card-arrow {
+    position: relative;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--card-color);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    align-self: flex-start;
+}
+
+.dbf-card-arrow svg {
+    width: 20px;
+    height: 20px;
+    color: #fff;
+    transition: transform 0.3s ease;
+}
+
+.dbf-card:hover .dbf-card-arrow {
+    transform: scale(1.1);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.dbf-card:hover .dbf-card-arrow svg {
+    transform: translateX(3px);
+}
+
+/* Corner Decoration */
+.dbf-card-corner {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, transparent 50%, var(--card-color) 50%);
+    opacity: 0.05;
+    transition: opacity 0.3s ease;
+}
+
+.dbf-card:hover .dbf-card-corner {
+    opacity: 0.1;
+}
+
+/* ===================================
+   BOTTOM STATS
+   =================================== */
+
+.dbf-stats {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    padding: 40px;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid #334155;
+    border-radius: 20px;
+}
+
+.dbf-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.dbf-stat-number {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1;
+}
+
+.dbf-stat-label {
+    font-size: 0.85rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.dbf-stat-divider {
+    width: 1px;
+    height: 50px;
+    background: #334155;
 }
 
 /* ===================================
@@ -152,60 +294,130 @@
    =================================== */
 
 @media (max-width: 1024px) {
-  .digibridge-features {
-    padding: 80px 20px;
-  }
-
-  .digibridge-features-title {
-    font-size: 2.25rem;
-  }
+    .dbf-section {
+        padding: 100px 20px;
+    }
+    
+    .dbf-title {
+        font-size: 2.5rem;
+    }
+    .dbf-title span {
+     font-size: 2.5rem;
+    }
+    .dbf-card {
+        padding: 36px 28px;
+    }
 }
 
 @media (max-width: 768px) {
-  .digibridge-features {
-    padding: 60px 20px;
-  }
-
-  .digibridge-features-header {
-    margin-bottom: 50px;
-  }
-
-  .digibridge-features-title {
-    font-size: 2rem;
-  }
-
-  .digibridge-features-subtitle {
-    font-size: 1rem;
-  }
-
-  .digibridge-features-grid {
-    grid-template-columns: 1fr;
-    gap: 25px;
-  }
-
-  .digibridge-features-card {
-    padding: 35px 30px;
-  }
+    .dbf-section {
+        padding: 80px 20px;
+    }
+    
+    .dbf-header {
+        margin-bottom: 50px;
+    }
+    
+    .dbf-title {
+        font-size: 2rem;
+    }
+    .dbf-title span {
+     font-size: 2rem;
+    }
+    .dbf-subtitle {
+        font-size: 1rem;
+    }
+    
+    .dbf-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .dbf-card {
+        padding: 32px 24px;
+    }
+    
+    .dbf-card-icon {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .dbf-card-icon svg {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .dbf-stats {
+        gap: 24px;
+        padding: 30px 20px;
+    }
+    
+    .dbf-stat-number {
+        font-size: 1.6rem;
+    }
+    
+    .dbf-stat-divider {
+        height: 40px;
+    }
 }
 
 @media (max-width: 480px) {
-  .digibridge-features {
-    padding: 50px 15px;
-  }
+    .dbf-section {
+        padding: 60px 16px;
+    }
+    
+    .dbf-title {
+        font-size: 1.75rem;
+    }
+    .dbf-title span {
+     font-size: 1.75rem;
+    }
+    .dbf-card {
+        padding: 28px 20px;
+    }
+    
+    .dbf-card-title {
+        font-size: 1.2rem;
+    }
+    
+    .dbf-card-desc {
+        font-size: 0.9rem;
+    }
+    
+    .dbf-card-arrow {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .dbf-card-arrow svg {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .dbf-stats {
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+    
+    .dbf-stat-divider {
+        display: none;
+    }
+    
+    .dbf-stat {
+        flex: 1;
+        min-width: 80px;
+    }
+}
 
-  .digibridge-features-title {
-    font-size: 1.75rem;
-  }
+/* ===================================
+   ACCESSIBILITY
+   =================================== */
 
-  .digibridge-features-card {
-    padding: 30px 25px;
-  }
-
-  .digibridge-features-card-icon {
-    font-size: 3rem;
-  }
-
-  .digibridge-features-card-title {
-    font-size: 1.3rem;
-  }
+@media (prefers-reduced-motion: reduce) {
+    .dbf-card,
+    .dbf-card-icon,
+    .dbf-card-arrow,
+    .dbf-card-glow {
+        transition: none;
+    }
 }
