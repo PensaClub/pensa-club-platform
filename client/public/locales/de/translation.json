@@ -11344,44 +11344,56 @@
       "alreadyReviewedMessage": "Sie haben bereits eine Bewertung für die DigiBridge Academy abgegeben. Wir schätzen Ihr Feedback!"
     },
     "mentorsPage": {
-      "meta": {
-        "title": "Unsere Mentoren | DigiBridge Akademie",
-        "description": "Lernen Sie unsere jungen Mentoren kennen, die Senioren beim Erlernen digitaler Technologien helfen"
-      },
-      "hero": {
-        "title": "Treffen Sie Unsere Mentoren",
-        "subtitle": "Junge Menschen, speziell geschult, um mit Geduld, Verständnis und ohne Vorurteile zu helfen",
-        "findMentor": "Finde einen Mentor",
-        "becomeButton": "Mentor Werden"
-      },
-      "searchPlaceholder": "Nach Name oder Spezialisierung suchen...",
-      "filters": {
-        "all": "Alle",
-        "digitalSecurity": "Digitale Sicherheit",
-        "mediaLiteracy": "Medienkompetenz",
-        "socialMedia": "Soziale Medien",
-        "onlineBanking": "Online-Banking",
-        "basicSkills": "Grundkenntnisse"
-      },
-      "stats": {
-        "mentors": "Mentoren",
-        "available": "Verfügbar",
-        "specializations": "Spezialisierungen"
-      },
-      "card": {
-        "students": "Studenten",
-        "rating": "Bewertung",
-        "experience": "Erfahrung",
-        "years": "Jahre",
-        "available": "Online",
-        "busy": "Offline",
-        "viewProfile": "Profil ansehen"
-      },
-      "noResults": {
-        "title": "Keine Mentoren Gefunden",
-        "description": "Versuchen Sie, die Filter oder die Suche zu ändern"
-      }
-    },
+  "meta": {
+    "title": "Unsere Mentoren | DigiBridge Akademie",
+    "description": "Lernen Sie unsere jungen Mentoren kennen, die Senioren helfen, digitale Technologien zu meistern",
+    "keywords": "Mentoren, digitale Kompetenz, Schulung, DigiBridge, kostenlose Mentoren"
+  },
+  "hero": {
+    "title": "Unsere Mentoren",
+    "subtitle": "Junge Fachleute, bereit Wissen und Erfahrung mit Geduld und Verständnis zu teilen",
+    "online": "jetzt online",
+    "findMentor": "Mentor finden",
+    "become": "Mentor werden"
+  },
+  "search": "Nach Name oder Spezialisierung suchen...",
+  "filters": {
+    "all": "Alle",
+    "digitalSecurity": "Digitale Sicherheit",
+    "mediaLiteracy": "Medienkompetenz",
+    "socialMedia": "Soziale Medien",
+    "onlineBanking": "Online-Banking",
+    "basicSkills": "Grundkenntnisse"
+  },
+  "filtersDrawer": {
+    "title": "Filter & Suche"
+  },
+  "stats": {
+    "mentors": "Mentoren",
+    "available": "Verfügbar",
+    "specializations": "Bereiche",
+    "sessions": "Sitzungen"
+  },
+  "list": {
+    "all": "Alle Mentoren",
+    "found": "gefunden"
+  },
+  "card": {
+    "years": "J.",
+    "available": "Online",
+    "busy": "Offline",
+    "sessions": "Sitzungen",
+    "speaks": "Spricht:",
+    "students": "Schüler",
+    "rating": "Bewertung",
+    "reviews": "Rezensionen",
+    "viewProfile": "Profil ansehen"
+  },
+  "noResults": {
+    "title": "Keine Mentoren gefunden",
+    "desc": "Versuchen Sie andere Filter"
+  }
+},
     "becomeMentor": {
       "authRequired": {
         "title": "Melden Sie sich an",

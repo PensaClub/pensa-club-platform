@@ -1,285 +1,358 @@
 /* ===================================
-   CTA SECTION
+   DIGIBRIDGE CTA - TECH THEME
+   Prefix: dbc-
    =================================== */
 
-.digibridge-cta {
-  position: relative;
-  padding: 120px 20px;
-  background: linear-gradient(135deg, #ff6347 0%, #ff7f50 50%, #ffa07a 100%);
-  overflow: hidden;
+.dbc-section {
+    position: relative;
+    padding: 140px 20px;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+    overflow: hidden;
 }
 
-.digibridge-cta-background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-image: url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=1200&q=80');
-  background-size: cover;
-  background-position: center;
-  opacity: 0.15;
-  mix-blend-mode: overlay;
+/* Background Grid */
+.dbc-grid {
+    position: absolute;
+    inset: 0;
+    background-image: 
+        linear-gradient(rgba(99, 102, 241, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99, 102, 241, 0.05) 1px, transparent 1px);
+    background-size: 50px 50px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 100%);
 }
 
-.digibridge-cta-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 99, 71, 0.95) 0%,
-    rgba(255, 127, 80, 0.9) 50%,
-    rgba(255, 160, 122, 0.85) 100%
-  );
-  pointer-events: none;
+/* Glowing Orbs */
+.dbc-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    pointer-events: none;
+    animation: dbc-glow-pulse 8s ease-in-out infinite;
 }
 
-.digibridge-cta-container {
-  position: relative;
-  z-index: 1;
-  max-width: 900px;
-  margin: 0 auto;
+.dbc-glow--1 {
+    width: 600px;
+    height: 600px;
+    background: rgba(99, 102, 241, 0.25);
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
-.digibridge-cta-content {
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 32px;
+.dbc-glow--2 {
+    width: 400px;
+    height: 400px;
+    background: rgba(139, 92, 246, 0.2);
+    bottom: -100px;
+    left: 10%;
+    animation-delay: 2s;
+}
+
+.dbc-glow--3 {
+    width: 350px;
+    height: 350px;
+    background: rgba(14, 165, 233, 0.15);
+    bottom: -50px;
+    right: 10%;
+    animation-delay: 4s;
+}
+
+@keyframes dbc-glow-pulse {
+    0%, 100% { opacity: 0.6; transform: translateX(-50%) scale(1); }
+    50% { opacity: 1; transform: translateX(-50%) scale(1.1); }
+}
+
+.dbc-glow--2, .dbc-glow--3 {
+    animation-name: dbc-glow-pulse-2;
+}
+
+@keyframes dbc-glow-pulse-2 {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.1); }
+}
+
+/* Floating Particles */
+.dbc-particles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.dbc-particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: rgba(99, 102, 241, 0.6);
+    border-radius: 50%;
+    animation: dbc-particle-float linear infinite;
+}
+
+@keyframes dbc-particle-float {
+    0% { transform: translateY(100%) rotate(0deg); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 1; }
+    100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+}
+
+/* Container */
+.dbc-container {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.dbc-content {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
 }
 
 /* ===================================
    BADGE
    =================================== */
 
-.digibridge-cta-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px 24px;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50px;
-  animation: digibridge-cta-pulse 2s ease-in-out infinite;
+.dbc-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    background: rgba(99, 102, 241, 0.15);
+    border: 1px solid rgba(99, 102, 241, 0.4);
+    border-radius: 50px;
+    animation: dbc-badge-pulse 3s ease-in-out infinite;
 }
 
-.digibridge-cta-badge-icon {
-  font-size: 1.5rem;
-  line-height: 1;
-  animation: digibridge-cta-rotate 3s linear infinite;
+@keyframes dbc-badge-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.4); }
+    50% { box-shadow: 0 0 0 12px rgba(99, 102, 241, 0); }
 }
 
-.digibridge-cta-badge-text {
-  color: #ffffff;
-  font-size: 0.9rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+.dbc-badge-dot {
+    width: 10px;
+    height: 10px;
+    background: #22c55e;
+    border-radius: 50%;
+    animation: dbc-dot-pulse 2s ease-in-out infinite;
+}
+
+@keyframes dbc-dot-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+.dbc-badge-text {
+    color: #a5b4fc;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
 }
 
 /* ===================================
-   TEXT CONTENT
+   TITLE
    =================================== */
 
-.digibridge-cta-title {
-  font-size: 3.5rem;
-  font-weight: 800;
-  color: #ffffff;
-  line-height: 1.2;
-  margin: 0;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  animation: digibridge-cta-fade-in 0.8s ease;
+.dbc-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.2;
+    margin: 0;
+    max-width: 800px;
 }
 
-.digibridge-cta-description {
-  font-size: 1.3rem;
-  color: rgba(255, 255, 255, 0.95);
-  line-height: 1.7;
-  margin: 0;
-  max-width: 700px;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
-  animation: digibridge-cta-fade-in 0.8s ease 0.2s backwards;
+.dbc-title-highlight {
+    display: inline;
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #0ea5e9 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.dbc-title span {
+  font-size: 3.5rem;
+}
+/* ===================================
+   DESCRIPTION
+   =================================== */
+
+.dbc-description {
+    font-size: 1.2rem;
+    color: #94a3b8;
+    line-height: 1.8;
+    margin: 0;
+    max-width: 650px;
 }
 
 /* ===================================
    BUTTONS
    =================================== */
 
-.digibridge-cta-actions {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-  justify-content: center;
-  animation: digibridge-cta-fade-in 0.8s ease 0.4s backwards;
+.dbc-actions {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 12px;
 }
 
-.digibridge-cta-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  padding: 18px 40px;
-  font-size: 1.1rem;
-  font-weight: 700;
-  border-radius: 50px;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
-  white-space: nowrap;
+.dbc-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 36px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    border-radius: 14px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
 }
 
-.digibridge-cta-button-icon {
-  width: 24px;
-  height: 24px;
-  transition: transform 0.3s ease;
+.dbc-btn svg {
+    width: 22px;
+    height: 22px;
+    transition: transform 0.3s ease;
 }
 
-.digibridge-cta-button-primary {
-  background: #ffffff;
-  color: #ff6347;
+.dbc-btn--primary {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: #fff;
+    box-shadow: 0 8px 32px rgba(99, 102, 241, 0.4);
 }
 
-.digibridge-cta-button-primary:hover {
-  background: #fff;
-  transform: translateY(-4px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+.dbc-btn--primary:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(99, 102, 241, 0.5);
 }
 
-.digibridge-cta-button-primary:hover .digibridge-cta-button-icon {
-  transform: scale(1.2);
+.dbc-btn--primary:hover svg {
+    transform: scale(1.15);
 }
 
-.digibridge-cta-button-secondary {
-  background: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-  border: 3px solid rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(10px);
+.dbc-btn--outline {
+    background: rgba(99, 102, 241, 0.1);
+    color: #a5b4fc;
+    border: 2px solid rgba(99, 102, 241, 0.4);
 }
 
-.digibridge-cta-button-secondary:hover {
-  background: rgba(255, 255, 255, 0.3);
-  border-color: rgba(255, 255, 255, 0.8);
-  transform: translateY(-4px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+.dbc-btn--outline:hover {
+    background: rgba(99, 102, 241, 0.2);
+    border-color: #6366f1;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.3);
 }
 
-.digibridge-cta-button-secondary:hover .digibridge-cta-button-icon {
-  transform: scale(1.2);
-}
-
-/* ===================================
-   FEATURES LIST
-   =================================== */
-
-.digibridge-cta-features {
-  display: flex;
-  gap: 30px;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 20px;
-  animation: digibridge-cta-fade-in 0.8s ease 0.6s backwards;
-}
-
-.digibridge-cta-feature {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: #ffffff;
-  font-size: 1rem;
-  font-weight: 500;
-}
-
-.digibridge-cta-feature-icon {
-  width: 20px;
-  height: 20px;
-  stroke-width: 3px;
-  flex-shrink: 0;
+.dbc-btn--outline:hover svg {
+    transform: scale(1.15);
 }
 
 /* ===================================
-   DECORATIVE ELEMENTS
+   FEATURES
    =================================== */
 
-.digibridge-cta-decoration {
-  position: absolute;
-  border-radius: 50%;
-  opacity: 0.1;
-  pointer-events: none;
+.dbc-features {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
 }
 
-.digibridge-cta-decoration-1 {
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 0%, transparent 70%);
-  top: -100px;
-  right: -100px;
-  animation: digibridge-cta-float 10s ease-in-out infinite;
+.dbc-feature {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #94a3b8;
+    font-size: 1rem;
+    font-weight: 500;
 }
 
-.digibridge-cta-decoration-2 {
-  width: 300px;
-  height: 300px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
-  bottom: -80px;
-  left: -80px;
-  animation: digibridge-cta-float 12s ease-in-out infinite reverse;
+.dbc-feature-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    background: rgba(34, 197, 94, 0.2);
+    border-radius: 50%;
 }
 
-.digibridge-cta-decoration-3 {
-  width: 200px;
-  height: 200px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
-  top: 50%;
-  left: 10%;
-  animation: digibridge-cta-float 8s ease-in-out infinite;
+.dbc-feature-icon svg {
+    width: 14px;
+    height: 14px;
+    color: #22c55e;
 }
 
 /* ===================================
-   ANIMATIONS
+   STATS
    =================================== */
 
-@keyframes digibridge-cta-fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.dbc-stats {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    padding: 32px 48px;
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid #334155;
+    border-radius: 20px;
+    margin-top: 20px;
 }
 
-@keyframes digibridge-cta-pulse {
-  0%, 100% {
-    transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
-  }
-  50% {
-    transform: scale(1.05);
-    box-shadow: 0 0 0 10px rgba(255, 255, 255, 0);
-  }
+.dbc-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
 }
 
-@keyframes digibridge-cta-rotate {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.dbc-stat-number {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1;
+    background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
-@keyframes digibridge-cta-float {
-  0%, 100% {
-    transform: translate(0, 0) scale(1);
-  }
-  50% {
-    transform: translate(30px, -30px) scale(1.1);
-  }
+.dbc-stat-label {
+    font-size: 0.85rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.dbc-stat-divider {
+    width: 1px;
+    height: 50px;
+    background: linear-gradient(180deg, transparent 0%, #334155 50%, transparent 100%);
+}
+
+/* ===================================
+   DECORATIVE BORDERS
+   =================================== */
+
+.dbc-border-top,
+.dbc-border-bottom {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(99, 102, 241, 0.3) 50%, transparent 100%);
+}
+
+.dbc-border-top {
+    top: 0;
+}
+
+.dbc-border-bottom {
+    bottom: 0;
 }
 
 /* ===================================
@@ -287,96 +360,120 @@
    =================================== */
 
 @media (max-width: 1024px) {
-  .digibridge-cta {
-    padding: 100px 20px;
-  }
-
-  .digibridge-cta-title {
-    font-size: 3rem;
-  }
-
-  .digibridge-cta-description {
-    font-size: 1.2rem;
-  }
+    .dbc-section {
+        padding: 120px 20px;
+    }
+    
+    .dbc-title {
+        font-size: 3rem;
+    }
+    .dbc-title span {
+     font-size: 3rem;
+    }
+    .dbc-description {
+        font-size: 1.1rem;
+    }
 }
 
 @media (max-width: 768px) {
-  .digibridge-cta {
-    padding: 80px 20px;
-  }
-
-  .digibridge-cta-title {
-    font-size: 2.5rem;
-  }
-
-  .digibridge-cta-description {
-    font-size: 1.1rem;
-  }
-
-  .digibridge-cta-actions {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .digibridge-cta-button {
-    width: 100%;
-    justify-content: center;
-    padding: 16px 32px;
-  }
-
-  .digibridge-cta-features {
-    flex-direction: column;
-    gap: 16px;
-  }
+    .dbc-section {
+        padding: 100px 20px;
+    }
+    
+    .dbc-title {
+        font-size: 2.3rem;
+    }
+    .dbc-title span {
+     font-size: 2.3rem;
+    }
+    .dbc-description {
+        font-size: 1rem;
+    }
+    
+    .dbc-actions {
+        flex-direction: column;
+        width: 100%;
+        max-width: 320px;
+    }
+    
+    .dbc-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 16px 28px;
+    }
+    
+    .dbc-features {
+        flex-direction: column;
+        gap: 16px;
+    }
+    
+    .dbc-stats {
+        gap: 24px;
+        padding: 24px 32px;
+    }
+    
+    .dbc-stat-number {
+        font-size: 1.8rem;
+    }
 }
 
 @media (max-width: 600px) {
-  .digibridge-cta {
-    padding: 70px 20px;
-  }
-
-  .digibridge-cta-title {
-    font-size: 2rem;
-  }
-
-  .digibridge-cta-description {
-    font-size: 1rem;
-  }
-
-  .digibridge-cta-badge {
-    padding: 10px 20px;
-  }
-
-  .digibridge-cta-badge-icon {
-    font-size: 1.3rem;
-  }
-
-  .digibridge-cta-badge-text {
-    font-size: 0.8rem;
-  }
-
-  .digibridge-cta-button {
-    font-size: 1rem;
-    padding: 14px 28px;
-  }
+    .dbc-section {
+        padding: 80px 16px;
+    }
+    
+    .dbc-title {
+        font-size: 2rem;
+    }
+    .dbc-title span {
+     font-size: 2rem;
+    }
+    .dbc-badge {
+        padding: 10px 20px;
+    }
+    
+    .dbc-badge-text {
+        font-size: 0.8rem;
+    }
+    
+    .dbc-stats {
+        flex-direction: column;
+        gap: 20px;
+        padding: 24px 20px;
+    }
+    
+    .dbc-stat-divider {
+        width: 80%;
+        height: 1px;
+    }
 }
 
 @media (max-width: 480px) {
-  .digibridge-cta {
-    padding: 60px 15px;
-  }
-
-  .digibridge-cta-title {
-    font-size: 1.75rem;
-  }
-
-  .digibridge-cta-description {
-    font-size: 0.95rem;
-  }
-
-  .digibridge-cta-content {
-    gap: 24px;
-  }
+    .dbc-section {
+        padding: 70px 16px;
+    }
+    
+    .dbc-title {
+        font-size: 1.75rem;
+    }
+    .dbc-title
+    .dbc-description {
+        font-size: 0.95rem;
+    }
+    
+    .dbc-content {
+        gap: 24px;
+    }
+    
+    .dbc-btn {
+        font-size: 0.95rem;
+        padding: 14px 24px;
+    }
+    
+    .dbc-btn svg {
+        width: 20px;
+        height: 20px;
+    }
 }
 
 /* ===================================
@@ -384,16 +481,14 @@
    =================================== */
 
 @media (prefers-reduced-motion: reduce) {
-  .digibridge-cta-badge,
-  .digibridge-cta-badge-icon,
-  .digibridge-cta-decoration {
-    animation: none;
-  }
-
-  .digibridge-cta-title,
-  .digibridge-cta-description,
-  .digibridge-cta-actions,
-  .digibridge-cta-features {
-    animation: none;
-  }
+    .dbc-glow,
+    .dbc-particle,
+    .dbc-badge,
+    .dbc-badge-dot {
+        animation: none;
+    }
+    
+    .dbc-btn {
+        transition: none;
+    }
 }

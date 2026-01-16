@@ -9,38 +9,38 @@ export const DigiBridgePartners = () => {
         {
             id: 1,
             name: 'Civic Innovation Fund',
-            description: t('digiBridge.partners.cif.description'),
+            description: t('digiBridge.partners.cif.description', 'Фонд за граждански иновации - подкрепя проекти за демократично участие'),
             logo: '/images/partners/CIF_logo_white_rgb.png',
             url: 'https://thecivics.eu/',
             type: 'main',
-            bgColor: '#1a1a2e', // Тъмен фон за белото CIF лого
+            logoBg: 'dark',
         },
         {
             id: 2,
-            name: t('digiBridge.partners.coalition.name'),
-            description: t('digiBridge.partners.coalition.description'),
+            name: t('digiBridge.partners.coalition.name', 'Национална коалиция за дигитални умения'),
+            description: t('digiBridge.partners.coalition.description', 'Обединява усилията за повишаване на дигиталната грамотност'),
             logo: '/images/partners/logo-coalition-fina.png',
             url: 'https://www.gramoten.li/',
             type: 'main',
-            bgColor: '#ffffff', // Бял фон за цветното лого
+            logoBg: 'light',
         },
         {
             id: 3,
             name: 'Austausch',
-            description: t('digiBridge.partners.austausch.description'),
+            description: t('digiBridge.partners.austausch.description', 'Немска организация за международен обмен и сътрудничество'),
             logo: '/images/partners/Logo-austausch.svg',
             url: 'https://austausch.org/',
             type: 'partner',
-            bgColor: '#ffffff',
+            logoBg: 'light',
         },
         {
             id: 4,
             name: 'Pensa Foundation',
-            description: t('digiBridge.partners.pensa.description'),
+            description: t('digiBridge.partners.pensa.description', 'Българска фондация за подкрепа на възрастни хора'),
             logo: '/images/homePage/logo-2.png',
             url: 'https://pensa.club/',
             type: 'partner',
-            bgColor: '#ffffff',
+            logoBg: 'light',
         },
     ];
 
@@ -48,57 +48,64 @@ export const DigiBridgePartners = () => {
     const otherPartners = partners.filter(p => p.type === 'partner');
 
     return (
-        <section className="digibridge-partners">
-            <div className="digibridge-partners-container">
+        <section className="dbp-section">
+            {/* Background */}
+            <div className="dbp-glow dbp-glow--1"></div>
+            <div className="dbp-glow dbp-glow--2"></div>
 
+            <div className="dbp-container">
                 {/* Header */}
-                <div className="digibridge-partners-header">
-                    <span className="digibridge-partners-label">
-                        {t('digiBridge.partners.label')}
+                <div className="dbp-header">
+                    <span className="dbp-label">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                        {t('digiBridge.partners.label', 'Партньори')}
                     </span>
-                    <h2 className="digibridge-partners-title">
-                        {t('digiBridge.partners.title')}
+                    <h2 className="dbp-title">
+                        {t('digiBridge.partners.titlePart1', 'Нашите ')}
+                        <span className="dbp-title-highlight">
+                            {t('digiBridge.partners.titlePart2', 'партньори')}
+                        </span>
                     </h2>
-                    <p className="digibridge-partners-subtitle">
-                        {t('digiBridge.partners.subtitle')}
+                    <p className="dbp-subtitle">
+                        {t('digiBridge.partners.subtitle', 'Работим заедно с водещи организации за развитие на дигиталната грамотност')}
                     </p>
                 </div>
 
                 {/* Main Partners */}
-                <div className="digibridge-partners-main">
+                <div className="dbp-main">
                     {mainPartners.map((partner) => (
-
-                        <a key={partner.id}
+                        <a 
+                            key={partner.id}
                             href={partner.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="digibridge-partners-card digibridge-partners-card-main"
+                            className="dbp-card dbp-card--main"
                         >
-                            <div
-                                className="digibridge-partners-logo-wrapper"
-                                style={{ backgroundColor: partner.bgColor }}
-                            >
+                            <div className="dbp-card-glow"></div>
+                            
+                            <div className={`dbp-card-logo ${partner.logoBg === 'dark' ? 'dbp-card-logo--dark' : 'dbp-card-logo--light'}`}>
                                 {partner.logo ? (
-                                    <img
-                                        src={partner.logo}
-                                        alt={partner.name}
-                                        className="digibridge-partners-logo"
-                                    />
+                                    <img src={partner.logo} alt={partner.name} />
                                 ) : (
-                                    <div className="digibridge-partners-logo-placeholder">
-                                        {partner.name}
-                                    </div>
+                                    <span className="dbp-card-logo-text">{partner.name}</span>
                                 )}
                             </div>
-                            <div className="digibridge-partners-info">
-                                <h3 className="digibridge-partners-name">{partner.name}</h3>
-                                <p className="digibridge-partners-description">{partner.description}</p>
+                            
+                            <div className="dbp-card-info">
+                                <h3 className="dbp-card-name">{partner.name}</h3>
+                                <p className="dbp-card-desc">{partner.description}</p>
                             </div>
-                            <div className="digibridge-partners-link-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                                    <polyline points="15 3 21 3 21 9" />
-                                    <line x1="10" y1="14" x2="21" y2="3" />
+                            
+                            <div className="dbp-card-arrow">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                                    <polyline points="15 3 21 3 21 9"/>
+                                    <line x1="10" y1="14" x2="21" y2="3"/>
                                 </svg>
                             </div>
                         </a>
@@ -106,38 +113,39 @@ export const DigiBridgePartners = () => {
                 </div>
 
                 {/* Other Partners */}
-                <div className="digibridge-partners-other">
-                    <h3 className="digibridge-partners-section-title">
-                        {t('digiBridge.partners.projectPartners')}
+                <div className="dbp-other">
+                    <h3 className="dbp-other-title">
+                        <span className="dbp-other-title-line"></span>
+                        {t('digiBridge.partners.projectPartners', 'Проектни партньори')}
+                        <span className="dbp-other-title-line"></span>
                     </h3>
-                    <div className="digibridge-partners-grid">
+                    
+                    <div className="dbp-grid">
                         {otherPartners.map((partner) => (
-
-                            <a key={partner.id}
+                            <a 
+                                key={partner.id}
                                 href={partner.url}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="digibridge-partners-card digibridge-partners-card-small"
+                                className="dbp-card dbp-card--small"
                             >
-                                <div
-                                    className="digibridge-partners-logo-wrapper-small"
-                                    style={{ backgroundColor: partner.bgColor }}
-                                >
+                                <div className={`dbp-card-logo-small ${partner.logoBg === 'dark' ? 'dbp-card-logo--dark' : 'dbp-card-logo--light'}`}>
                                     {partner.logo ? (
-                                        <img
-                                            src={partner.logo}
-                                            alt={partner.name}
-                                            className="digibridge-partners-logo-small"
-                                        />
+                                        <img src={partner.logo} alt={partner.name} />
                                     ) : (
-                                        <div className="digibridge-partners-logo-placeholder-small">
-                                            {partner.name.charAt(0)}
-                                        </div>
+                                        <span>{partner.name.charAt(0)}</span>
                                     )}
                                 </div>
-                                <div className="digibridge-partners-info-small">
-                                    <h4 className="digibridge-partners-name-small">{partner.name}</h4>
-                                    <p className="digibridge-partners-description-small">{partner.description}</p>
+                                
+                                <div className="dbp-card-info-small">
+                                    <h4 className="dbp-card-name-small">{partner.name}</h4>
+                                    <p className="dbp-card-desc-small">{partner.description}</p>
+                                </div>
+                                
+                                <div className="dbp-card-arrow-small">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                                    </svg>
                                 </div>
                             </a>
                         ))}
@@ -145,18 +153,27 @@ export const DigiBridgePartners = () => {
                 </div>
 
                 {/* EU Support Badge */}
-                <div className="digibridge-partners-eu-badge">
-                    <img
-                        src="/images/partners/logo-eu--en.svg"
-                        alt="European Union Logo"
-                        className="digibridge-partners-eu-logo"
-                    />
-                    <div className="digibridge-partners-eu-text">
-                        <p className="digibridge-partners-eu-title">{t('digiBridge.partners.euSupport.title')}</p>
-                        <p className="digibridge-partners-eu-description">{t('digiBridge.partners.euSupport.description')}</p>
+                <div className="dbp-eu">
+                    <div className="dbp-eu-icon">
+                        <img
+                            src="/images/partners/logo-eu--en.svg"
+                            alt="European Union Logo"
+                            className="dbp-eu-logo"
+                        />
+                    </div>
+                    <div className="dbp-eu-content">
+                        <h4 className="dbp-eu-title">
+                            {t('digiBridge.partners.euSupport.title', 'Финансирано от Европейския съюз')}
+                        </h4>
+                        <p className="dbp-eu-desc">
+                            {t('digiBridge.partners.euSupport.description', 'Този проект е финансиран с подкрепата на Европейската комисия чрез програма CERV.')}
+                        </p>
+                    </div>
+                    <div className="dbp-eu-badge">
+                        <span className="dbp-eu-badge-text">CERV</span>
+                        <span className="dbp-eu-badge-year">2024-2026</span>
                     </div>
                 </div>
-
             </div>
         </section>
     );
