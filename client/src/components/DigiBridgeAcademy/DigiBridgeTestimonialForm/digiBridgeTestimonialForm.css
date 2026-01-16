@@ -1,221 +1,509 @@
 /* ===================================
-   TESTIMONIAL FORM
+   DIGIBRIDGE TESTIMONIAL FORM - TECH THEME
+   Prefix: dbtf-
    =================================== */
 
-.digibridge-testimonial-form {
-  padding: 100px 20px;
-  background: linear-gradient(180deg, #ffffff 0%, #fff5f0 100%);
-  position: relative;
+.dbtf-section {
+    position: relative;
+    padding: 120px 20px;
+    background: #0f172a;
+    overflow: hidden;
 }
 
-.digibridge-testimonial-form-container {
-  max-width: 700px;
-  margin: 0 auto;
+/* Background */
+.dbtf-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    pointer-events: none;
+}
+
+.dbtf-glow--1 {
+    width: 500px;
+    height: 500px;
+    background: rgba(99, 102, 241, 0.15);
+    top: -150px;
+    right: -100px;
+}
+
+.dbtf-glow--2 {
+    width: 400px;
+    height: 400px;
+    background: rgba(139, 92, 246, 0.12);
+    bottom: -100px;
+    left: -100px;
+}
+
+.dbtf-grid {
+    position: absolute;
+    inset: 0;
+    background-image: 
+        linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    mask-image: radial-gradient(ellipse 60% 60% at 50% 50%, black 20%, transparent 100%);
+}
+
+/* Container */
+.dbtf-container {
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+/* ===================================
+   STATE CARDS (Login, Loading, Success)
+   =================================== */
+
+.dbtf-state-card {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 24px;
+    padding: 60px 40px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.dbtf-state-icon {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    margin-bottom: 8px;
+}
+
+.dbtf-state-icon svg {
+    width: 40px;
+    height: 40px;
+}
+
+.dbtf-state-icon--lock {
+    background: rgba(99, 102, 241, 0.15);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    color: #6366f1;
+}
+
+.dbtf-state-icon--success {
+    background: rgba(34, 197, 94, 0.15);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    color: #22c55e;
+}
+
+.dbtf-state-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+}
+
+.dbtf-state-desc {
+    font-size: 1rem;
+    color: #94a3b8;
+    margin: 0;
+    max-width: 400px;
+    line-height: 1.7;
+}
+
+.dbtf-state-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 28px;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+    margin-top: 8px;
+}
+
+.dbtf-state-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.5);
+}
+
+.dbtf-state-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* ===================================
+   MAIN CARD
+   =================================== */
+
+.dbtf-card {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 24px;
+    overflow: hidden;
 }
 
 /* Header */
-.digibridge-testimonial-form-header {
-  text-align: center;
-  margin-bottom: 50px;
+.dbtf-header {
+    text-align: center;
+    padding: 40px 40px 32px;
+    border-bottom: 1px solid #334155;
+    background: linear-gradient(180deg, rgba(99, 102, 241, 0.05) 0%, transparent 100%);
 }
 
-.digibridge-testimonial-form-icon {
-  font-size: 3.5rem;
-  margin-bottom: 20px;
-  line-height: 1;
+.dbtf-header-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(99, 102, 241, 0.15);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 18px;
+    color: #6366f1;
 }
 
-.digibridge-testimonial-form-title {
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: #2c3e50;
-  margin: 0 0 16px 0;
-  line-height: 1.2;
+.dbtf-header-icon svg {
+    width: 32px;
+    height: 32px;
 }
 
-.digibridge-testimonial-form-subtitle {
-  font-size: 1.1rem;
-  color: #6c757d;
-  margin: 0;
-  line-height: 1.7;
+.dbtf-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #fff;
+    margin: 0 0 12px;
+    line-height: 1.3;
 }
 
-/* Form */
-.digibridge-testimonial-form-form {
-  background: #ffffff;
-  padding: 45px;
-  border-radius: 24px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+.dbtf-title-highlight {
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #0ea5e9 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.dbtf-title span {
+  font-size: 1.8rem;
+}
+.dbtf-subtitle {
+    font-size: 1rem;
+    color: #94a3b8;
+    margin: 0;
+    line-height: 1.7;
 }
 
-.digibridge-testimonial-form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
+/* ===================================
+   FORM
+   =================================== */
+
+.dbtf-form {
+    padding: 32px 40px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
 }
 
-.digibridge-testimonial-form-field {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+.dbtf-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
 }
 
-.digibridge-testimonial-form-label {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #2c3e50;
+/* Field */
+.dbtf-field {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-.digibridge-testimonial-form-label .required {
-  color: #ff6347;
+.dbtf-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #e2e8f0;
 }
 
-.digibridge-testimonial-form-input,
-.digibridge-testimonial-form-textarea {
-  width: 100%;
-  padding: 14px 18px;
-  font-size: 1rem;
-  font-family: inherit;
-  color: #2c3e50;
-  background: #f8f9fa;
-  border: 2px solid #e9ecef;
-  border-radius: 12px;
-  transition: all 0.3s ease;
+.dbtf-label svg {
+    width: 16px;
+    height: 16px;
+    color: #6366f1;
 }
 
-.digibridge-testimonial-form-input:focus,
-.digibridge-testimonial-form-textarea:focus {
-  outline: none;
-  background: #ffffff;
-  border-color: #ff6347;
-  box-shadow: 0 0 0 4px rgba(255, 99, 71, 0.1);
+.dbtf-required {
+    color: #f87171;
+    margin-left: 2px;
 }
 
-.digibridge-testimonial-form-input:disabled,
-.digibridge-testimonial-form-textarea:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+/* Input */
+.dbtf-input,
+.dbtf-select,
+.dbtf-textarea {
+    width: 100%;
+    padding: 14px 18px;
+    font-size: 1rem;
+    font-family: inherit;
+    color: #fff;
+    background: #0f172a;
+    border: 2px solid #334155;
+    border-radius: 12px;
+    transition: all 0.3s ease;
 }
 
-.digibridge-testimonial-form-textarea {
-  resize: vertical;
-  min-height: 120px;
+.dbtf-input::placeholder,
+.dbtf-textarea::placeholder {
+    color: #64748b;
 }
 
-.digibridge-testimonial-form-hint {
-  font-size: 0.85rem;
-  color: #6c757d;
-  font-style: italic;
+.dbtf-input:focus,
+.dbtf-select:focus,
+.dbtf-textarea:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
 }
 
-.digibridge-testimonial-form-char-count {
-  font-size: 0.85rem;
-  color: #6c757d;
-  text-align: right;
+.dbtf-input:disabled,
+.dbtf-select:disabled,
+.dbtf-textarea:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
-/* Rating */
-.digibridge-testimonial-form-rating {
-  display: flex;
-  gap: 8px;
+.dbtf-input--readonly {
+    background: #1e293b;
+    cursor: default;
 }
 
-.digibridge-testimonial-form-star {
-  background: none;
-  border: none;
-  font-size: 2.5rem;
-  color: #e0e0e0;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  padding: 0;
-  line-height: 1;
+.dbtf-textarea {
+    resize: vertical;
+    min-height: 120px;
 }
 
-.digibridge-testimonial-form-star:hover,
-.digibridge-testimonial-form-star.active {
-  color: #ffa500;
-  transform: scale(1.1);
+/* Select */
+.dbtf-select-wrapper {
+    position: relative;
 }
 
-.digibridge-testimonial-form-star:disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
+.dbtf-select {
+    appearance: none;
+    padding-right: 48px;
+    cursor: pointer;
 }
 
-/* Consent */
-.digibridge-testimonial-form-consent {
-  padding: 20px;
-  background: rgba(255, 99, 71, 0.05);
-  border-radius: 12px;
-  border: 2px solid rgba(255, 99, 71, 0.1);
+.dbtf-select-arrow {
+    position: absolute;
+    top: 50%;
+    right: 16px;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    color: #64748b;
+    pointer-events: none;
 }
 
-.digibridge-testimonial-form-checkbox {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  cursor: pointer;
-  font-size: 0.95rem;
-  color: #2c3e50;
-  line-height: 1.6;
+/* Hint */
+.dbtf-hint {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    color: #64748b;
 }
 
-.digibridge-testimonial-form-checkbox input[type="checkbox"] {
-  width: 20px;
-  height: 20px;
-  flex-shrink: 0;
-  cursor: pointer;
-  margin-top: 2px;
+.dbtf-hint svg {
+    width: 14px;
+    height: 14px;
 }
 
-/* Button */
-.digibridge-testimonial-form-button {
-  width: 100%;
-  padding: 16px 32px;
-  background: linear-gradient(135deg, #ff6347 0%, #ff7f50 100%);
-  color: #ffffff;
-  font-size: 1.1rem;
-  font-weight: 600;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  box-shadow: 0 4px 16px rgba(255, 99, 71, 0.3);
-  margin-top: 10px;
+/* ===================================
+   RATING
+   =================================== */
+
+.dbtf-rating {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.digibridge-testimonial-form-button:hover:not(:disabled) {
-  background: linear-gradient(135deg, #ff7f50 0%, #ff6347 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 99, 71, 0.4);
+.dbtf-star {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0f172a;
+    border: 2px solid #334155;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #334155;
 }
 
-.digibridge-testimonial-form-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+.dbtf-star:hover {
+    border-color: rgba(251, 191, 36, 0.5);
+    transform: scale(1.05);
 }
 
-/* Spinner */
-.digibridge-testimonial-form-spinner {
-  width: 20px;
-  height: 20px;
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  border-top-color: #ffffff;
-  border-radius: 50%;
-  animation: digibridge-testimonial-spin 0.8s linear infinite;
+.dbtf-star--active {
+    background: rgba(251, 191, 36, 0.15);
+    border-color: rgba(251, 191, 36, 0.5);
+    color: #fbbf24;
 }
 
-@keyframes digibridge-testimonial-spin {
-  to {
-    transform: rotate(360deg);
-  }
+.dbtf-star:disabled {
+    cursor: not-allowed;
+}
+
+.dbtf-star svg {
+    width: 24px;
+    height: 24px;
+}
+
+.dbtf-rating-text {
+    margin-left: 12px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fbbf24;
+}
+
+/* ===================================
+   CHAR COUNT
+   =================================== */
+
+.dbtf-char-count {
+    font-size: 0.8rem;
+    color: #64748b;
+    text-align: right;
+    margin-top: -4px;
+}
+
+.dbtf-char-count--warning {
+    color: #f87171;
+}
+
+/* ===================================
+   CONSENT
+   =================================== */
+
+.dbtf-consent {
+    padding-top: 8px;
+}
+
+.dbtf-checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    cursor: pointer;
+}
+
+.dbtf-checkbox input {
+    display: none;
+}
+
+.dbtf-checkbox-box {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0f172a;
+    border: 2px solid #334155;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.dbtf-checkbox-box svg {
+    width: 14px;
+    height: 14px;
+    color: transparent;
+    transition: all 0.3s ease;
+}
+
+.dbtf-checkbox input:checked + .dbtf-checkbox-box {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    border-color: transparent;
+}
+
+.dbtf-checkbox input:checked + .dbtf-checkbox-box svg {
+    color: #fff;
+}
+
+.dbtf-checkbox-text {
+    font-size: 0.95rem;
+    color: #94a3b8;
+    line-height: 1.5;
+}
+
+/* ===================================
+   SUBMIT BUTTON
+   =================================== */
+
+.dbtf-submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    padding: 16px 28px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 24px rgba(99, 102, 241, 0.4);
+    margin-top: 8px;
+}
+
+.dbtf-submit:hover:not(:disabled) {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 32px rgba(99, 102, 241, 0.5);
+}
+
+.dbtf-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.dbtf-submit svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* ===================================
+   SPINNER
+   =================================== */
+
+.dbtf-spinner {
+    width: 48px;
+    height: 48px;
+    border: 4px solid #334155;
+    border-top-color: #6366f1;
+    border-radius: 50%;
+    animation: dbtf-spin 0.8s linear infinite;
+}
+
+.dbtf-spinner--small {
+    width: 20px;
+    height: 20px;
+    border-width: 3px;
+    border-color: rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+}
+
+@keyframes dbtf-spin {
+    to { transform: rotate(360deg); }
 }
 
 /* ===================================
@@ -223,201 +511,137 @@
    =================================== */
 
 @media (max-width: 768px) {
-  .digibridge-testimonial-form {
-    padding: 80px 20px;
-  }
+    .dbtf-section {
+        padding: 80px 20px;
+    }
+    
+    .dbtf-state-card {
+        padding: 48px 28px;
+    }
+    
+    .dbtf-header {
+        padding: 32px 24px 28px;
+    }
+    
+    .dbtf-title {
+        font-size: 1.5rem;
+    }
+.dbtf-title span {
+  font-size: 1.5rem;
+}
 
-  .digibridge-testimonial-form-header {
-    margin-bottom: 40px;
-  }
-
-  .digibridge-testimonial-form-title {
-    font-size: 2rem;
-  }
-
-  .digibridge-testimonial-form-subtitle {
-    font-size: 1rem;
-  }
-
-  .digibridge-testimonial-form-form {
-    padding: 35px 30px;
-  }
-
-  .digibridge-testimonial-form-row {
-    grid-template-columns: 1fr;
-  }
-
-  .digibridge-testimonial-form-star {
-    font-size: 2rem;
-  }
+    .dbtf-subtitle {
+        font-size: 0.95rem;
+    }
+    .dbtf-form {
+        padding: 28px 24px 32px;
+        gap: 20px;
+    }
+    
+    .dbtf-row {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .dbtf-star {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .dbtf-star svg {
+        width: 22px;
+        height: 22px;
+    }
 }
 
 @media (max-width: 480px) {
-  .digibridge-testimonial-form {
-    padding: 60px 15px;
-  }
-
-  .digibridge-testimonial-form-title {
-    font-size: 1.75rem;
-  }
-
-  .digibridge-testimonial-form-form {
-    padding: 30px 20px;
-    gap: 20px;
-  }
-
-  .digibridge-testimonial-form-icon {
-    font-size: 3rem;
-  }
-}
-/* ===================================
-   AUTH REQUIRED & STATUS STATES
-   =================================== */
-
-.digibridge-testimonial-form-auth-required,
-.digibridge-testimonial-form-already-reviewed,
-.digibridge-testimonial-form-loading {
-  text-align: center;
-  padding: 80px 40px;
-  background: #ffffff;
-  border-radius: 24px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-}
-
-.digibridge-testimonial-form-auth-required .digibridge-testimonial-form-icon,
-.digibridge-testimonial-form-already-reviewed .digibridge-testimonial-form-icon {
-  font-size: 4rem;
-  margin-bottom: 24px;
-  line-height: 1;
-}
-
-.digibridge-testimonial-form-auth-required h3,
-.digibridge-testimonial-form-already-reviewed h3 {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: #2c3e50;
-  margin: 0 0 16px 0;
-  line-height: 1.3;
-}
-
-.digibridge-testimonial-form-auth-required p,
-.digibridge-testimonial-form-already-reviewed p {
-  font-size: 1.1rem;
-  color: #6c757d;
-  margin: 0 0 32px 0;
-  line-height: 1.7;
-  max-width: 500px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* Login Button */
-.digibridge-testimonial-form-login-button {
-  padding: 14px 36px;
-  background: linear-gradient(135deg, #ff6347 0%, #ff7f50 100%);
-  color: #ffffff;
-  font-size: 1.05rem;
-  font-weight: 600;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 16px rgba(255, 99, 71, 0.3);
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.digibridge-testimonial-form-login-button:hover {
-  background: linear-gradient(135deg, #ff7f50 0%, #ff6347 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 99, 71, 0.4);
-}
-
-/* Loading State */
-.digibridge-testimonial-form-loading {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-}
-
-.digibridge-testimonial-form-loading .digibridge-testimonial-form-spinner {
-  width: 50px;
-  height: 50px;
-  border: 4px solid rgba(255, 99, 71, 0.2);
-  border-top-color: #ff6347;
-  border-radius: 50%;
-  animation: digibridge-testimonial-spin 0.8s linear infinite;
-}
-
-.digibridge-testimonial-form-loading p {
-  font-size: 1rem;
-  color: #6c757d;
-  margin: 0;
-}
-
-/* Already Reviewed - Success State */
-.digibridge-testimonial-form-already-reviewed {
-  background: linear-gradient(135deg, #f0fff4 0%, #e6ffed 100%);
-  border: 2px solid rgba(72, 187, 120, 0.3);
-}
-
-.digibridge-testimonial-form-already-reviewed .digibridge-testimonial-form-icon {
-  color: #48bb78;
-}
-
-.digibridge-testimonial-form-already-reviewed h3 {
-  color: #2f855a;
+    .dbtf-section {
+        padding: 60px 16px;
+    }
+    
+    .dbtf-state-card {
+        padding: 40px 20px;
+    }
+    
+    .dbtf-state-icon {
+        width: 64px;
+        height: 64px;
+    }
+    
+    .dbtf-state-icon svg {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .dbtf-state-title {
+        font-size: 1.3rem;
+    }
+    
+    .dbtf-header {
+        padding: 28px 20px 24px;
+    }
+    
+    .dbtf-header-icon {
+        width: 56px;
+        height: 56px;
+    }
+    
+    .dbtf-header-icon svg {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .dbtf-title {
+        font-size: 1.3rem;
+    }
+    .dbtf-title span {
+      font-size: 1.3rem;
+    }
+    .dbtf-subtitle {
+        font-size: 0.9rem;
+    }
+    
+    .dbtf-form {
+        padding: 24px 20px 28px;
+    }
+    
+    .dbtf-input,
+    .dbtf-select,
+    .dbtf-textarea {
+        padding: 12px 16px;
+    }
+    
+    .dbtf-rating {
+        flex-wrap: wrap;
+    }
+    
+    .dbtf-star {
+        width: 44px;
+        height: 44px;
+    }
+    
+    .dbtf-submit {
+        padding: 14px 24px;
+        font-size: 1rem;
+    }
 }
 
 /* ===================================
-   RESPONSIVE - AUTH STATES
+   ACCESSIBILITY
    =================================== */
 
-@media (max-width: 768px) {
-  .digibridge-testimonial-form-auth-required,
-  .digibridge-testimonial-form-already-reviewed,
-  .digibridge-testimonial-form-loading {
-    padding: 60px 30px;
-  }
-
-  .digibridge-testimonial-form-auth-required .digibridge-testimonial-form-icon,
-  .digibridge-testimonial-form-already-reviewed .digibridge-testimonial-form-icon {
-    font-size: 3.5rem;
-  }
-
-  .digibridge-testimonial-form-auth-required h3,
-  .digibridge-testimonial-form-already-reviewed h3 {
-    font-size: 1.5rem;
-  }
-
-  .digibridge-testimonial-form-auth-required p,
-  .digibridge-testimonial-form-already-reviewed p {
-    font-size: 1rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .digibridge-testimonial-form-auth-required,
-  .digibridge-testimonial-form-already-reviewed,
-  .digibridge-testimonial-form-loading {
-    padding: 50px 25px;
-  }
-
-  .digibridge-testimonial-form-auth-required .digibridge-testimonial-form-icon,
-  .digibridge-testimonial-form-already-reviewed .digibridge-testimonial-form-icon {
-    font-size: 3rem;
-  }
-
-  .digibridge-testimonial-form-auth-required h3,
-  .digibridge-testimonial-form-already-reviewed h3 {
-    font-size: 1.35rem;
-  }
-
-  .digibridge-testimonial-form-login-button {
-    padding: 12px 28px;
-    font-size: 1rem;
-  }
+@media (prefers-reduced-motion: reduce) {
+    .dbtf-spinner {
+        animation: none;
+    }
+    
+    .dbtf-input,
+    .dbtf-select,
+    .dbtf-textarea,
+    .dbtf-star,
+    .dbtf-checkbox-box,
+    .dbtf-submit,
+    .dbtf-state-btn {
+        transition: none;
+    }
 }

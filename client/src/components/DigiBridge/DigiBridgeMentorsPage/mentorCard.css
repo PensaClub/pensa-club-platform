@@ -1,399 +1,795 @@
 /* ===================================
-   FULL WIDTH ZIGZAG SECTION
+   MENTOR ZIGZAG CARD - PREMIUM
+   Prefix: mzz-
    =================================== */
 
-.mentor-full-section {
-  display: flex;
-  align-items: center;
-  gap: 60px;
-  padding: 0;
-  margin-bottom: 70px;
-  min-height: 550px;
+/* CSS Variables - ще бъдат override-нати per card */
+.mzz-section {
+    --mzz-primary: #ff6b6b;
+    --mzz-secondary: #ffa8a8;
+    --mzz-accent: #ff4757;
+    --mzz-light: #fff5f5;
 }
 
-/* Когато снимката е дясно - обръщаме */
-.mentor-full-section.image-right {
-  flex-direction: row-reverse;
+/* ===== Main Section ===== */
+.mzz-section {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin-bottom: 100px;
+    min-height: 580px;
+    background: #ffffff;
+    border-radius: 32px;
+    overflow: hidden;
+    box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.08),
+        0 8px 24px rgba(0, 0, 0, 0.04);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 
-/* ===================================
-   IMAGE SIDE (50% width)
-   =================================== */
-
-.mentor-section-image {
-  flex: 0 0 45%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.mzz-section:hover {
+    transform: translateY(-8px);
+    box-shadow: 
+        0 32px 80px rgba(0, 0, 0, 0.12),
+        0 12px 32px rgba(0, 0, 0, 0.06);
 }
 
-.mentor-image-background {
-  position: relative;
-  width: 100%;
-  max-width: 480px;
-  padding: 40px;
-  background: linear-gradient(135deg, #ffd4d4 0%, #ffc2b8 100%);
-  border-radius: 35px;
+/* Zigzag directions */
+.mzz-section--right {
+    flex-direction: row-reverse;
 }
 
-.mentor-image-frame {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  border-radius: 28px;
-  overflow: hidden;
-  background: #ffffff;
-  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.14);
+.mzz-section--left {
+    flex-direction: row;
 }
 
-.mentor-image-frame img {
-  width: 100%;
-  height: 100%;
-  min-height: 420px;
-  object-fit: cover;
-  display: block;
+/* ===== Background Decorations ===== */
+.mzz-bg-pattern {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle at 20% 50%, var(--mzz-light) 2px, transparent 2px),
+        radial-gradient(circle at 80% 20%, var(--mzz-light) 1px, transparent 1px);
+    background-size: 40px 40px, 60px 60px;
+    opacity: 0.5;
+    pointer-events: none;
 }
 
-/* Badge */
-.mentor-section-badge {
-  position: absolute;
-  top: 30px;
-  right: 30px;
-  padding: 10px 22px;
-  border-radius: 50px;
-  font-size: 0.72rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 1.3px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
-  z-index: 10;
+.mzz-section--right .mzz-bg-pattern {
+    right: auto;
+    left: 0;
 }
 
-.mentor-section-badge.available {
-  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-  color: #ffffff;
+.mzz-bg-blob {
+    position: absolute;
+    bottom: -100px;
+    right: -100px;
+    width: 300px;
+    height: 300px;
+    background: var(--mzz-light);
+    border-radius: 50%;
+    opacity: 0.4;
+    filter: blur(60px);
+    pointer-events: none;
 }
 
-.mentor-section-badge.busy {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-  color: #ffffff;
+.mzz-section--right .mzz-bg-blob {
+    right: auto;
+    left: -100px;
 }
 
-.mentor-section-badge-dot {
-  width: 9px;
-  height: 9px;
-  background: #ffffff;
-  border-radius: 50%;
-  animation: mentor-badge-pulse 2s ease-in-out infinite;
+/* ===== IMAGE SIDE ===== */
+.mzz-image-side {
+    flex: 0 0 45%;
+    display: flex;
+    flex-direction: column;
+    padding: 40px;
+    position: relative;
 }
 
-@keyframes mentor-badge-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.85); }
+.mzz-image-wrapper {
+    position: relative;
+    padding: 30px;
+    border-radius: 28px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 380px;
 }
 
-/* ===================================
-   CONTENT SIDE (50% width)
-   =================================== */
-
-.mentor-section-content {
-  flex: 0 0 55%;
-  display: flex;
-  flex-direction: column;
-  gap: 22px;
-  padding-right: 35px;
+/* Floating elements */
+.mzz-float {
+    position: absolute;
+    font-size: 1.8rem;
+    animation: mzz-float 4s ease-in-out infinite;
+    z-index: 5;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15));
 }
 
-.mentor-full-section.image-right .mentor-section-content {
-  padding-right: 0;
-  padding-left: 35px;
+.mzz-float--1 {
+    top: 20px;
+    left: 20px;
+    animation-delay: 0s;
 }
 
-.mentor-section-name {
-  font-size: 2.75rem;
-  font-weight: 900;
-  color: #ff6347;
-  margin: 0;
-  line-height: 1.1;
-  letter-spacing: -0.8px;
+.mzz-float--2 {
+    top: 50%;
+    right: 15px;
+    animation-delay: 1s;
 }
 
-.mentor-section-age {
-  font-size: 1.1rem;
-  color: #6b7280;
-  margin: -12px 0 0 0;
-  font-weight: 600;
+.mzz-float--3 {
+    bottom: 20px;
+    left: 40%;
+    animation-delay: 2s;
 }
 
-.mentor-section-specialization {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px 26px;
-  background: linear-gradient(135deg, rgba(255, 99, 71, 0.12), rgba(255, 127, 80, 0.12));
-  border-radius: 16px;
-  color: #ff6347;
-  font-size: 1rem;
-  font-weight: 800;
-  width: fit-content;
-  border: 2.5px solid rgba(255, 99, 71, 0.2);
+@keyframes mzz-float {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-15px) rotate(10deg); }
 }
 
-.mentor-section-specialization svg {
-  width: 20px;
-  height: 20px;
+/* Blob image mask */
+.mzz-image-blob {
+    position: relative;
+    width: 280px;
+    height: 320px;
+    border-radius: 60% 40% 50% 50% / 50% 50% 40% 60%;
+    overflow: hidden;
+    box-shadow: 
+        0 20px 50px rgba(0, 0, 0, 0.2),
+        inset 0 -5px 20px rgba(255, 255, 255, 0.3);
+    animation: mzz-morph 8s ease-in-out infinite;
+    border: 5px solid rgba(255, 255, 255, 0.8);
 }
 
-.mentor-section-bio {
-  font-size: 1.1rem;
-  color: #4b5563;
-  line-height: 1.7;
-  margin: 0;
-  font-weight: 500;
+@keyframes mzz-morph {
+    0%, 100% { border-radius: 60% 40% 50% 50% / 50% 50% 40% 60%; }
+    25% { border-radius: 50% 60% 40% 50% / 40% 60% 50% 50%; }
+    50% { border-radius: 40% 50% 60% 40% / 50% 40% 60% 50%; }
+    75% { border-radius: 50% 40% 50% 60% / 60% 50% 40% 50%; }
 }
 
-/* Stats Row */
-.mentor-section-stats {
-  display: flex;
-  gap: 32px;
-  padding: 26px 0;
-  border-top: 2.5px solid rgba(255, 99, 71, 0.15);
-  border-bottom: 2.5px solid rgba(255, 99, 71, 0.15);
+.mzz-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
-.mentor-section-stat {
-  display: flex;
-  align-items: center;
-  gap: 14px;
+/* Status badge */
+.mzz-status {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    z-index: 10;
 }
 
-.mentor-stat-icon {
-  width: 52px;
-  height: 52px;
-  background: linear-gradient(135deg, #ff6347, #ff7f50);
-  border-radius: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  box-shadow: 0 6px 18px rgba(255, 99, 71, 0.28);
+.mzz-status--online {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    color: #ffffff;
 }
 
-.mentor-stat-icon svg {
-  width: 26px;
-  height: 26px;
-  color: #ffffff;
+.mzz-status--offline {
+    background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%);
+    color: #ffffff;
 }
 
-.mentor-stat-info {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
+.mzz-status-dot {
+    width: 8px;
+    height: 8px;
+    background: #ffffff;
+    border-radius: 50%;
+    animation: mzz-pulse 2s ease-in-out infinite;
 }
 
-.mentor-stat-number {
-  font-size: 1.65rem;
-  font-weight: 900;
-  color: #1f2937;
-  line-height: 1;
+@keyframes mzz-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
 }
 
-.mentor-stat-label {
-  font-size: 0.82rem;
-  color: #6b7280;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
+/* Experience badge */
+.mzz-exp-badge {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 14px 20px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    z-index: 10;
 }
 
-/* Button */
-.mentor-section-button {
-  width: fit-content;
-  padding: 17px 40px;
-  background: linear-gradient(135deg, #ff6347 0%, #ff7f50 100%);
-  color: #ffffff;
-  font-size: 1.1rem;
-  font-weight: 800;
-  border: none;
-  border-radius: 16px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  transition: all 0.3s ease;
-  box-shadow: 0 8px 26px rgba(255, 99, 71, 0.38);
-  margin-top: 10px;
+.mzz-exp-number {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--mzz-primary);
+    line-height: 1;
 }
 
-.mentor-section-button:hover {
-  gap: 18px;
-  transform: translateY(-3px);
-  box-shadow: 0 12px 36px rgba(255, 99, 71, 0.48);
+.mzz-exp-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-.mentor-section-button svg {
-  width: 21px;
-  height: 21px;
-  transition: transform 0.3s ease;
+/* ===== Courses Sidebar ===== */
+.mzz-courses-sidebar {
+    margin-top: 20px;
+    padding: 20px;
+    background: var(--mzz-light);
+    border-radius: 20px;
+    border: 2px solid rgba(0, 0, 0, 0.04);
 }
 
-.mentor-section-button:hover svg {
-  transform: translateX(5px);
+.mzz-courses-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--mzz-primary);
+    margin-bottom: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-/* ===================================
-   RESPONSIVE
-   =================================== */
+.mzz-courses-title svg {
+    width: 18px;
+    height: 18px;
+}
+
+.mzz-courses-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.mzz-course-chip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: #ffffff;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #374151;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    animation: mzz-slideIn 0.4s ease backwards;
+}
+
+@keyframes mzz-slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.mzz-course-chip:hover {
+    background: var(--mzz-primary);
+    color: #ffffff;
+    transform: translateX(8px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.mzz-course-icon {
+    font-size: 1.1rem;
+}
+
+.mzz-course-name {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mzz-course-students {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    transition: color 0.3s ease;
+}
+
+.mzz-course-chip:hover .mzz-course-students {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* ===== CONTENT SIDE ===== */
+.mzz-content-side {
+    flex: 0 0 55%;
+    padding: 50px 50px 50px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 24px;
+    position: relative;
+    z-index: 2;
+}
+
+.mzz-section--right .mzz-content-side {
+    padding: 50px 30px 50px 50px;
+}
+
+/* Header */
+.mzz-header {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.mzz-name-row {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.mzz-name {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--mzz-primary);
+    margin: 0;
+    line-height: 1.1;
+    letter-spacing: -1px;
+}
+
+.mzz-age {
+    font-size: 1rem;
+    color: #9ca3af;
+    font-weight: 600;
+}
+
+.mzz-spec-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    border-radius: 14px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--mzz-primary);
+    width: fit-content;
+    border: 2px solid;
+}
+
+.mzz-spec-tag svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Bio */
+.mzz-bio {
+    font-size: 1.05rem;
+    color: #4b5563;
+    line-height: 1.75;
+    margin: 0;
+}
+
+/* Languages */
+.mzz-languages {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.mzz-languages-label {
+    font-size: 0.9rem;
+    color: #6b7280;
+    font-weight: 600;
+}
+
+.mzz-languages-flags {
+    display: flex;
+    gap: 8px;
+}
+
+.mzz-flag {
+    font-size: 1.5rem;
+    transition: transform 0.2s ease;
+    cursor: default;
+}
+
+.mzz-flag:hover {
+    transform: scale(1.2);
+}
+
+/* Stats Grid */
+.mzz-stats {
+    display: flex;
+    gap: 24px;
+    padding: 24px 0;
+    border-top: 2px solid #f3f4f6;
+    border-bottom: 2px solid #f3f4f6;
+}
+
+.mzz-stat {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.mzz-stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.mzz-stat-icon svg {
+    width: 24px;
+    height: 24px;
+    color: #ffffff;
+}
+
+.mzz-stat-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.mzz-stat-value {
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: #1f2937;
+    line-height: 1;
+}
+
+.mzz-stat-label {
+    font-size: 0.75rem;
+    color: #6b7280;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+/* Availability */
+.mzz-availability {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 20px;
+    background: #f9fafb;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    color: #4b5563;
+    font-weight: 500;
+    width: fit-content;
+}
+
+.mzz-availability svg {
+    width: 18px;
+    height: 18px;
+    color: var(--mzz-primary);
+}
+
+/* Actions */
+.mzz-actions {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.mzz-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 36px;
+    border: none;
+    border-radius: 14px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.mzz-btn--primary {
+    color: #ffffff;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.2);
+}
+
+.mzz-btn--primary:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.25);
+    gap: 16px;
+}
+
+.mzz-btn--primary svg {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.3s ease;
+}
+
+.mzz-btn--primary:hover svg {
+    transform: translateX(5px);
+}
+
+/* Quick Contact */
+.mzz-quick-contact {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.mzz-quick-label {
+    font-size: 0.8rem;
+    color: #9ca3af;
+    font-weight: 600;
+}
+
+.mzz-contact-icons {
+    display: flex;
+    gap: 8px;
+}
+
+.mzz-contact-icon {
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    background: #f3f4f6;
+}
+
+.mzz-contact-icon:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.mzz-contact-icon--viber:hover {
+    background: #665CAC;
+}
+
+.mzz-contact-icon--fb:hover {
+    background: #1877F2;
+}
+
+.mzz-contact-icon--li:hover {
+    background: #0A66C2;
+}
+
+/* ===== RESPONSIVE ===== */
 
 @media (max-width: 1400px) {
-  .mentor-full-section {
-    gap: 55px;
-    margin-bottom: 60px;
-  }
-
-  .mentor-section-name {
-    font-size: 2.5rem;
-  }
-
-  .mentor-image-background {
-    max-width: 450px;
-    padding: 38px;
-  }
+    .mzz-section {
+        margin-bottom: 80px;
+    }
+    
+    .mzz-name {
+        font-size: 2.2rem;
+    }
+    
+    .mzz-image-blob {
+        width: 250px;
+        height: 290px;
+    }
 }
 
 @media (max-width: 1200px) {
-  .mentor-full-section {
-    gap: 45px;
-  }
-
-  .mentor-section-name {
-    font-size: 2.2rem;
-  }
-
-  .mentor-section-bio {
-    font-size: 1.05rem;
-  }
-
-  .mentor-image-background {
-    max-width: 420px;
-    padding: 35px;
-  }
-
-  .mentor-image-frame img {
-    min-height: 380px;
-  }
+    .mzz-image-side {
+        flex: 0 0 42%;
+        padding: 30px;
+    }
+    
+    .mzz-content-side {
+        flex: 0 0 58%;
+        padding: 40px 40px 40px 20px;
+    }
+    
+    .mzz-section--right .mzz-content-side {
+        padding: 40px 20px 40px 40px;
+    }
+    
+    .mzz-name {
+        font-size: 2rem;
+    }
+    
+    .mzz-stats {
+        gap: 20px;
+    }
 }
 
 @media (max-width: 1024px) {
-  .mentor-full-section,
-  .mentor-full-section.image-right {
-    flex-direction: column;
-    gap: 40px;
-    margin-bottom: 50px;
-    min-height: auto;
-  }
-
-  .mentor-section-image {
-    flex: none;
-    width: 100%;
-  }
-
-  .mentor-section-content,
-  .mentor-full-section.image-right .mentor-section-content {
-    flex: none;
-    width: 100%;
-    padding: 0 20px;
-  }
-
-  .mentor-image-background {
-    max-width: 100%;
-    padding: 35px;
-  }
-
-  .mentor-section-stats {
-    flex-wrap: wrap;
-    gap: 28px;
-  }
+    .mzz-section,
+    .mzz-section--right,
+    .mzz-section--left {
+        flex-direction: column;
+        min-height: auto;
+    }
+    
+    .mzz-image-side {
+        flex: none;
+        width: 100%;
+        padding: 30px;
+    }
+    
+    .mzz-content-side,
+    .mzz-section--right .mzz-content-side {
+        flex: none;
+        width: 100%;
+        padding: 30px;
+    }
+    
+    .mzz-image-wrapper {
+        min-height: 320px;
+    }
+    
+    .mzz-courses-sidebar {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .mzz-courses-list {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    .mzz-course-chip {
+        flex: 1;
+        min-width: 200px;
+    }
 }
 
 @media (max-width: 768px) {
-  .mentor-full-section {
-    margin-bottom: 40px;
-  }
-
-  .mentor-section-name {
-    font-size: 1.9rem;
-  }
-
-  .mentor-section-age {
-    font-size: 1rem;
-  }
-
-  .mentor-section-bio {
-    font-size: 1rem;
-  }
-
-  .mentor-image-background {
-    padding: 30px;
-  }
-
-  .mentor-image-frame img {
-    min-height: 370px;
-  }
-
-  .mentor-section-badge {
-    top: 25px;
-    right: 25px;
-    padding: 9px 18px;
-    font-size: 0.68rem;
-  }
-
-  .mentor-section-button {
-    width: 100%;
-    justify-content: center;
-  }
+    .mzz-section {
+        margin-bottom: 50px;
+        border-radius: 24px;
+    }
+    
+    .mzz-image-side {
+        padding: 24px;
+    }
+    
+    .mzz-content-side {
+        padding: 24px;
+        gap: 20px;
+    }
+    
+    .mzz-image-wrapper {
+        padding: 24px;
+        min-height: 280px;
+    }
+    
+    .mzz-image-blob {
+        width: 200px;
+        height: 230px;
+    }
+    
+    .mzz-name {
+        font-size: 1.75rem;
+    }
+    
+    .mzz-bio {
+        font-size: 0.95rem;
+    }
+    
+    .mzz-stats {
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+    
+    .mzz-stat {
+        flex: 1;
+        min-width: 120px;
+    }
+    
+    .mzz-float {
+        display: none;
+    }
+    
+    .mzz-actions {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+    }
+    
+    .mzz-btn--primary {
+        justify-content: center;
+    }
+    
+    .mzz-quick-contact {
+        justify-content: center;
+    }
 }
 
 @media (max-width: 480px) {
-  .mentor-full-section {
-    gap: 30px;
-    margin-bottom: 30px;
-  }
+    .mzz-section {
+        margin-bottom: 40px;
+        border-radius: 20px;
+    }
+    
+    .mzz-image-side,
+    .mzz-content-side {
+        padding: 20px;
+    }
+    
+    .mzz-image-wrapper {
+        padding: 20px;
+        min-height: 260px;
+    }
+    
+    .mzz-image-blob {
+        width: 180px;
+        height: 200px;
+    }
+    
+    .mzz-name {
+        font-size: 1.5rem;
+    }
+    
+    .mzz-spec-tag {
+        padding: 10px 18px;
+        font-size: 0.85rem;
+    }
+    
+    .mzz-stats {
+        flex-direction: column;
+    }
+    
+    .mzz-stat {
+        width: 100%;
+    }
+    
+    .mzz-courses-list {
+        flex-direction: column;
+    }
+    
+    .mzz-course-chip {
+        min-width: auto;
+    }
+    
+    .mzz-btn--primary {
+        padding: 14px 28px;
+        font-size: 0.95rem;
+    }
+}
 
-  .mentor-section-name {
-    font-size: 1.65rem;
-  }
-
-  .mentor-section-age {
-    font-size: 0.95rem;
-  }
-
-  .mentor-section-bio {
-    font-size: 0.95rem;
-  }
-
-  .mentor-image-background {
-    padding: 25px;
-  }
-
-  .mentor-image-frame img {
-    min-height: 330px;
-  }
-
-  .mentor-section-stats {
-    flex-direction: column;
-    gap: 22px;
-  }
-
-  .mentor-section-stat {
-    width: 100%;
-  }
-
-  .mentor-section-button {
-    padding: 16px 34px;
-    font-size: 1.05rem;
-  }
+/* ===== Accessibility ===== */
+@media (prefers-reduced-motion: reduce) {
+    .mzz-float,
+    .mzz-image-blob,
+    .mzz-status-dot {
+        animation: none;
+    }
+    
+    .mzz-section,
+    .mzz-btn,
+    .mzz-course-chip,
+    .mzz-contact-icon {
+        transition: none;
+    }
 }

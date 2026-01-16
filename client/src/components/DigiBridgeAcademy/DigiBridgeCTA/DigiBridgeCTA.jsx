@@ -1,80 +1,128 @@
-
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import './digiBridgeCTA.css';
 
 export const DigiBridgeCTA = () => {
-  const { t } = useTranslation();
+    const { t } = useTranslation();
 
-  return (
-    <section className="digibridge-cta">
-      <div className="digibridge-cta-background"></div>
-      <div className="digibridge-cta-overlay"></div>
-      
-      <div className="digibridge-cta-container">
-        <div className="digibridge-cta-content">
-          
-          <div className="digibridge-cta-badge">
-            <span className="digibridge-cta-badge-icon">✨</span>
-            <span className="digibridge-cta-badge-text">{t('digiBridge.cta.badge')}</span>
-          </div>
+    return (
+        <section className="dbc-section">
+            {/* Background Elements */}
+            <div className="dbc-grid"></div>
+            <div className="dbc-glow dbc-glow--1"></div>
+            <div className="dbc-glow dbc-glow--2"></div>
+            <div className="dbc-glow dbc-glow--3"></div>
 
-          <h2 className="digibridge-cta-title">
-            {t('digiBridge.cta.title')}
-          </h2>
-
-          <p className="digibridge-cta-description">
-            {t('digiBridge.cta.description')}
-          </p>
-
-          <div className="digibridge-cta-actions">
-            <Link to="/academy/courses" className="digibridge-cta-button digibridge-cta-button-primary">
-              <svg className="digibridge-cta-button-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                <polyline points="22 4 12 14.01 9 11.01"/>
-              </svg>
-              <span>{t('digiBridge.cta.startLearning')}</span>
-            </Link>
-
-            <Link to="/academy/become-mentor" className="digibridge-cta-button digibridge-cta-button-secondary">
-              <svg className="digibridge-cta-button-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                <circle cx="9" cy="7" r="4"/>
-                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-              </svg>
-              <span>{t('digiBridge.cta.becomeMentor')}</span>
-            </Link>
-          </div>
-
-          <div className="digibridge-cta-features">
-            <div className="digibridge-cta-feature">
-              <svg className="digibridge-cta-feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-              <span>{t('digiBridge.cta.feature1')}</span>
+            {/* Floating Particles */}
+            <div className="dbc-particles">
+                {[...Array(15)].map((_, i) => (
+                    <div 
+                        key={i} 
+                        className="dbc-particle"
+                        style={{
+                            left: `${Math.random() * 100}%`,
+                            top: `${Math.random() * 100}%`,
+                            animationDelay: `${Math.random() * 5}s`,
+                            animationDuration: `${10 + Math.random() * 10}s`
+                        }}
+                    ></div>
+                ))}
             </div>
-            <div className="digibridge-cta-feature">
-              <svg className="digibridge-cta-feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-              <span>{t('digiBridge.cta.feature2')}</span>
-            </div>
-            <div className="digibridge-cta-feature">
-              <svg className="digibridge-cta-feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-              <span>{t('digiBridge.cta.feature3')}</span>
-            </div>
-          </div>
 
-        </div>
-      </div>
+            <div className="dbc-container">
+                <div className="dbc-content">
+                    {/* Badge */}
+                    <div className="dbc-badge">
+                        <span className="dbc-badge-dot"></span>
+                        <span className="dbc-badge-text">{t('digiBridge.cta.badge', 'Започнете днес')}</span>
+                    </div>
 
-      {/* Decorative Elements */}
-      <div className="digibridge-cta-decoration digibridge-cta-decoration-1"></div>
-      <div className="digibridge-cta-decoration digibridge-cta-decoration-2"></div>
-      <div className="digibridge-cta-decoration digibridge-cta-decoration-3"></div>
-    </section>
-  );
+                    {/* Title */}
+                    <h2 className="dbc-title">
+                        {t('digiBridge.cta.titlePart1', 'Готови ли сте за ')}
+                        <span className="dbc-title-highlight">
+                            {t('digiBridge.cta.titlePart2', 'дигиталното бъдеще')}
+                        </span>
+                        {t('digiBridge.cta.titlePart3', '?')}
+                    </h2>
+
+                    {/* Description */}
+                    <p className="dbc-description">
+                        {t('digiBridge.cta.description', 'Присъединете се към хилядите участници, които вече подобряват дигиталните си умения с помощта на нашите ментори.')}
+                    </p>
+
+                    {/* Actions */}
+                    <div className="dbc-actions">
+                        <Link to="/academy/courses" className="dbc-btn dbc-btn--primary">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                                <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                            </svg>
+                            <span>{t('digiBridge.cta.startLearning', 'Започни обучение')}</span>
+                        </Link>
+
+                        <Link to="/academy/become-mentor" className="dbc-btn dbc-btn--outline">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                            <span>{t('digiBridge.cta.becomeMentor', 'Стани ментор')}</span>
+                        </Link>
+                    </div>
+
+                    {/* Features */}
+                    <div className="dbc-features">
+                        <div className="dbc-feature">
+                            <div className="dbc-feature-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                            </div>
+                            <span>{t('digiBridge.cta.feature1', '100% безплатно')}</span>
+                        </div>
+                        <div className="dbc-feature">
+                            <div className="dbc-feature-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                            </div>
+                            <span>{t('digiBridge.cta.feature2', 'Обучени ментори')}</span>
+                        </div>
+                        <div className="dbc-feature">
+                            <div className="dbc-feature-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                            </div>
+                            <span>{t('digiBridge.cta.feature3', 'Гъвкав график')}</span>
+                        </div>
+                    </div>
+
+                    {/* Stats Row */}
+                    <div className="dbc-stats">
+                        <div className="dbc-stat">
+                            <span className="dbc-stat-number">500+</span>
+                            <span className="dbc-stat-label">{t('digiBridge.cta.stat1', 'Участници')}</span>
+                        </div>
+                        <div className="dbc-stat-divider"></div>
+                        <div className="dbc-stat">
+                            <span className="dbc-stat-number">50+</span>
+                            <span className="dbc-stat-label">{t('digiBridge.cta.stat2', 'Ментори')}</span>
+                        </div>
+                        <div className="dbc-stat-divider"></div>
+                        <div className="dbc-stat">
+                            <span className="dbc-stat-number">3</span>
+                            <span className="dbc-stat-label">{t('digiBridge.cta.stat3', 'Държави')}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Decorative Border Lines */}
+            <div className="dbc-border-top"></div>
+            <div className="dbc-border-bottom"></div>
+        </section>
+    );
 };

@@ -1,239 +1,272 @@
 /* ===================================
-   CONTACT MODAL
+   DIGIBRIDGE CONTACT MODAL - TECH THEME
+   Prefix: dbcm-
    =================================== */
 
-.digibridge-contact-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10000;
-  padding: 20px;
-  animation: digibridge-contact-fade-in 0.3s ease;
+.dbcm-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.8);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    padding: 20px;
+    animation: dbcm-fade-in 0.3s ease;
 }
 
-.digibridge-contact-modal {
-  background: #ffffff;
-  border-radius: 24px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-  max-width: 600px;
-  width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
-  position: relative;
-  animation: digibridge-contact-slide-up 0.3s ease;
+.dbcm-modal {
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 24px;
+    box-shadow: 
+        0 25px 80px rgba(0, 0, 0, 0.5),
+        0 0 60px rgba(99, 102, 241, 0.1);
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    animation: dbcm-slide-up 0.3s ease;
 }
 
-/* Header */
-.digibridge-contact-modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 30px 30px 20px 30px;
-  border-bottom: 2px solid #f0f0f0;
+/* ===================================
+   HEADER
+   =================================== */
+
+.dbcm-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 28px 20px;
+    border-bottom: 1px solid #334155;
 }
 
-.digibridge-contact-modal-title {
-  font-size: 1.75rem;
-  font-weight: 800;
-  color: #2c3e50;
-  margin: 0;
-  line-height: 1.2;
+.dbcm-header-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
 }
 
-.digibridge-contact-modal-close {
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 99, 71, 0.1);
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  color: #ff6347;
-  transition: all 0.3s ease;
-  flex-shrink: 0;
+.dbcm-header-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(99, 102, 241, 0.15);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 14px;
+    color: #6366f1;
 }
 
-.digibridge-contact-modal-close:hover {
-  background: #ff6347;
-  color: #ffffff;
-  transform: rotate(90deg);
+.dbcm-header-icon svg {
+    width: 24px;
+    height: 24px;
 }
 
-.digibridge-contact-modal-close svg {
-  width: 20px;
-  height: 20px;
+.dbcm-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #fff;
+    margin: 0;
+    line-height: 1.2;
 }
 
-.digibridge-contact-modal-description {
-  padding: 20px 30px 0 30px;
-  font-size: 1rem;
-  color: #6c757d;
-  line-height: 1.6;
-  margin: 0;
+.dbcm-close {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 12px;
+    cursor: pointer;
+    color: #f87171;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
 }
 
-/* Form */
-.digibridge-contact-modal-form {
-  padding: 30px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+.dbcm-close:hover {
+    background: #ef4444;
+    border-color: transparent;
+    color: #fff;
+    transform: rotate(90deg);
 }
 
-.digibridge-contact-modal-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
+.dbcm-close svg {
+    width: 20px;
+    height: 20px;
 }
 
-.digibridge-contact-modal-field {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+.dbcm-description {
+    padding: 20px 28px 0;
+    font-size: 1rem;
+    color: #94a3b8;
+    line-height: 1.6;
+    margin: 0;
 }
 
-.digibridge-contact-modal-label {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #2c3e50;
+/* ===================================
+   FORM
+   =================================== */
+
+.dbcm-form {
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
-.digibridge-contact-modal-label .required {
-  color: #ff6347;
+.dbcm-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
 }
 
-.digibridge-contact-modal-input,
-.digibridge-contact-modal-textarea {
-  width: 100%;
-  padding: 12px 16px;
-  font-size: 1rem;
-  font-family: inherit;
-  color: #2c3e50;
-  background: #f8f9fa;
-  border: 2px solid #e9ecef;
-  border-radius: 12px;
-  transition: all 0.3s ease;
+.dbcm-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
-.digibridge-contact-modal-input:focus,
-.digibridge-contact-modal-textarea:focus {
-  outline: none;
-  background: #ffffff;
-  border-color: #ff6347;
-  box-shadow: 0 0 0 4px rgba(255, 99, 71, 0.1);
+.dbcm-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #e2e8f0;
 }
 
-.digibridge-contact-modal-input:disabled,
-.digibridge-contact-modal-textarea:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+.dbcm-required {
+    color: #f87171;
+    margin-left: 4px;
 }
 
-.digibridge-contact-modal-textarea {
-  resize: vertical;
-  min-height: 120px;
+.dbcm-input,
+.dbcm-textarea {
+    width: 100%;
+    padding: 14px 18px;
+    font-size: 1rem;
+    font-family: inherit;
+    color: #fff;
+    background: #0f172a;
+    border: 2px solid #334155;
+    border-radius: 12px;
+    transition: all 0.3s ease;
 }
 
-/* Actions */
-.digibridge-contact-modal-actions {
-  display: flex;
-  gap: 12px;
-  margin-top: 10px;
+.dbcm-input::placeholder,
+.dbcm-textarea::placeholder {
+    color: #64748b;
 }
 
-.digibridge-contact-modal-button {
-  flex: 1;
-  padding: 14px 24px;
-  font-size: 1rem;
-  font-weight: 600;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
+.dbcm-input:focus,
+.dbcm-textarea:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
 }
 
-.digibridge-contact-modal-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+.dbcm-input:disabled,
+.dbcm-textarea:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
-.digibridge-contact-modal-button-cancel {
-  background: #f0f0f0;
-  color: #6c757d;
+.dbcm-textarea {
+    resize: vertical;
+    min-height: 120px;
 }
 
-.digibridge-contact-modal-button-cancel:hover:not(:disabled) {
-  background: #e0e0e0;
+/* ===================================
+   ACTIONS
+   =================================== */
+
+.dbcm-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
 }
 
-.digibridge-contact-modal-button-submit {
-  background: linear-gradient(135deg, #ff6347 0%, #ff7f50 100%);
-  color: #ffffff;
-  box-shadow: 0 4px 16px rgba(255, 99, 71, 0.3);
+.dbcm-btn {
+    flex: 1;
+    padding: 14px 24px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
 }
 
-.digibridge-contact-modal-button-submit:hover:not(:disabled) {
-  background: linear-gradient(135deg, #ff7f50 0%, #ff6347 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 99, 71, 0.4);
+.dbcm-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
-.digibridge-contact-modal-button svg {
-  width: 18px;
-  height: 18px;
+.dbcm-btn--cancel {
+    background: #334155;
+    color: #94a3b8;
+}
+
+.dbcm-btn--cancel:hover:not(:disabled) {
+    background: #475569;
+    color: #fff;
+}
+
+.dbcm-btn--submit {
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+}
+
+.dbcm-btn--submit:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.5);
+}
+
+.dbcm-btn svg {
+    width: 18px;
+    height: 18px;
 }
 
 /* Spinner */
-.digibridge-contact-modal-spinner {
-  width: 18px;
-  height: 18px;
-  border: 3px solid rgba(255, 255, 255, 0.3);
-  border-top-color: #ffffff;
-  border-radius: 50%;
-  animation: digibridge-contact-spin 0.8s linear infinite;
+.dbcm-spinner {
+    width: 18px;
+    height: 18px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: dbcm-spin 0.8s linear infinite;
 }
 
 /* ===================================
    ANIMATIONS
    =================================== */
 
-@keyframes digibridge-contact-fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+@keyframes dbcm-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
-@keyframes digibridge-contact-slide-up {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+@keyframes dbcm-slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
-@keyframes digibridge-contact-spin {
-  to {
-    transform: rotate(360deg);
-  }
+@keyframes dbcm-spin {
+    to { transform: rotate(360deg); }
 }
 
 /* ===================================
@@ -241,79 +274,117 @@
    =================================== */
 
 @media (max-width: 768px) {
-  .digibridge-contact-modal {
-    max-height: 95vh;
-  }
-
-  .digibridge-contact-modal-header {
-    padding: 25px 25px 18px 25px;
-  }
-
-  .digibridge-contact-modal-title {
-    font-size: 1.5rem;
-  }
-
-  .digibridge-contact-modal-description {
-    padding: 18px 25px 0 25px;
-  }
-
-  .digibridge-contact-modal-form {
-    padding: 25px;
-  }
-
-  .digibridge-contact-modal-row {
-    grid-template-columns: 1fr;
-    gap: 18px;
-  }
+    .dbcm-modal {
+        max-height: 95vh;
+    }
+    
+    .dbcm-header {
+        padding: 24px 24px 18px;
+    }
+    
+    .dbcm-title {
+        font-size: 1.3rem;
+    }
+    
+    .dbcm-description {
+        padding: 18px 24px 0;
+    }
+    
+    .dbcm-form {
+        padding: 24px;
+    }
+    
+    .dbcm-row {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
 }
 
 @media (max-width: 480px) {
-  .digibridge-contact-modal-overlay {
-    padding: 10px;
-  }
-
-  .digibridge-contact-modal-header {
-    padding: 20px 20px 16px 20px;
-  }
-
-  .digibridge-contact-modal-title {
-    font-size: 1.3rem;
-  }
-
-  .digibridge-contact-modal-description {
-    padding: 16px 20px 0 20px;
-    font-size: 0.95rem;
-  }
-
-  .digibridge-contact-modal-form {
-    padding: 20px;
-    gap: 16px;
-  }
-
-  .digibridge-contact-modal-actions {
-    flex-direction: column;
-  }
-
-  .digibridge-contact-modal-button {
-    width: 100%;
-  }
+    .dbcm-overlay {
+        padding: 10px;
+    }
+    
+    .dbcm-header {
+        padding: 20px 20px 16px;
+    }
+    
+    .dbcm-header-icon {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .dbcm-header-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .dbcm-title {
+        font-size: 1.15rem;
+    }
+    
+    .dbcm-description {
+        padding: 16px 20px 0;
+        font-size: 0.95rem;
+    }
+    
+    .dbcm-form {
+        padding: 20px;
+        gap: 16px;
+    }
+    
+    .dbcm-input,
+    .dbcm-textarea {
+        padding: 12px 16px;
+    }
+    
+    .dbcm-actions {
+        flex-direction: column;
+    }
+    
+    .dbcm-btn {
+        width: 100%;
+    }
 }
 
-/* Scrollbar Styling */
-.digibridge-contact-modal::-webkit-scrollbar {
-  width: 8px;
+/* ===================================
+   SCROLLBAR
+   =================================== */
+
+.dbcm-modal::-webkit-scrollbar {
+    width: 8px;
 }
 
-.digibridge-contact-modal::-webkit-scrollbar-track {
-  background: #f0f0f0;
-  border-radius: 0 24px 24px 0;
+.dbcm-modal::-webkit-scrollbar-track {
+    background: #1e293b;
+    border-radius: 0 24px 24px 0;
 }
 
-.digibridge-contact-modal::-webkit-scrollbar-thumb {
-  background: #ff6347;
-  border-radius: 4px;
+.dbcm-modal::-webkit-scrollbar-thumb {
+    background: #6366f1;
+    border-radius: 4px;
 }
 
-.digibridge-contact-modal::-webkit-scrollbar-thumb:hover {
-  background: #ff7f50;
+.dbcm-modal::-webkit-scrollbar-thumb:hover {
+    background: #8b5cf6;
+}
+
+/* ===================================
+   ACCESSIBILITY
+   =================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    .dbcm-overlay,
+    .dbcm-modal,
+    .dbcm-close,
+    .dbcm-btn,
+    .dbcm-input,
+    .dbcm-textarea {
+        animation: none;
+        transition: none;
+    }
+    
+    .dbcm-spinner {
+        animation: none;
+    }
 }
