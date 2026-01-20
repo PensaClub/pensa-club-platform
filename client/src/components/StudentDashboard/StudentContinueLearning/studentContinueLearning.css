@@ -1,0 +1,340 @@
+/* studentContinueLearning.css */
+/* Prefix: sdcl- */
+
+.sdcl-container {
+  width: 100%;
+}
+
+/* ========================================
+   Header
+   ======================================== */
+.sdcl-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.sdcl-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+.sdcl-view-all {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+  background: none;
+  border: none;
+  color: #3b82f6;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sdcl-view-all svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s ease;
+}
+
+.sdcl-view-all:hover {
+  color: #60a5fa;
+}
+
+.sdcl-view-all:hover svg {
+  transform: translateX(3px);
+}
+
+/* ========================================
+   List
+   ======================================== */
+.sdcl-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ========================================
+   Card
+   ======================================== */
+.sdcl-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.sdcl-card:hover {
+  background: rgba(30, 41, 59, 0.95);
+  border-color: rgba(148, 163, 184, 0.2);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Thumbnail */
+.sdcl-card-thumbnail {
+  position: relative;
+  flex-shrink: 0;
+  width: 80px;
+  height: 60px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(15, 23, 42, 0.8);
+}
+
+.sdcl-card-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sdcl-card-thumbnail-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #475569;
+}
+
+.sdcl-card-thumbnail-placeholder svg {
+  width: 28px;
+  height: 28px;
+}
+
+.sdcl-card-progress-badge {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  padding: 2px 6px;
+  background: rgba(0, 0, 0, 0.75);
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #10b981;
+}
+
+/* Content */
+.sdcl-card-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.sdcl-card-title {
+  margin: 0 0 6px 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #f1f5f9;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sdcl-card-meta {
+  margin-bottom: 8px;
+}
+
+.sdcl-card-lessons {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+/* Progress bar */
+.sdcl-card-progress-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(100, 116, 139, 0.3);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.sdcl-card-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #10b981);
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+/* Button */
+.sdcl-card-button {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sdcl-card-button svg {
+  width: 14px;
+  height: 14px;
+}
+
+.sdcl-card-button:hover {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  transform: translateX(2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+/* ========================================
+   Empty State
+   ======================================== */
+.sdcl-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px dashed rgba(148, 163, 184, 0.2);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.sdcl-empty-icon {
+  width: 56px;
+  height: 56px;
+  color: #475569;
+  margin-bottom: 16px;
+}
+
+.sdcl-empty-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.sdcl-empty-text {
+  margin: 0 0 20px 0;
+  font-size: 15px;
+  color: #94a3b8;
+}
+
+.sdcl-browse-button {
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sdcl-browse-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+}
+
+/* ========================================
+   Responsive: Laptop
+   ======================================== */
+@media (max-width: 1279px) {
+  .sdcl-card {
+    padding: 14px;
+    gap: 14px;
+  }
+
+  .sdcl-card-thumbnail {
+    width: 70px;
+    height: 52px;
+  }
+
+  .sdcl-card-button {
+    padding: 8px 14px;
+  }
+}
+
+/* ========================================
+   Responsive: Tablet
+   ======================================== */
+@media (max-width: 1023px) {
+  .sdcl-card {
+    flex-wrap: wrap;
+  }
+
+  .sdcl-card-content {
+    flex: 1;
+    min-width: calc(100% - 96px);
+  }
+
+  .sdcl-card-button {
+    width: 100%;
+    justify-content: center;
+    margin-top: 8px;
+  }
+}
+
+/* ========================================
+   Responsive: Mobile Large
+   ======================================== */
+@media (max-width: 767px) {
+  .sdcl-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .sdcl-card {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 16px;
+  }
+
+  .sdcl-card-thumbnail {
+    width: 100%;
+    height: 120px;
+  }
+
+  .sdcl-card-content {
+    min-width: 100%;
+  }
+
+  .sdcl-card-title {
+    white-space: normal;
+  }
+
+  .sdcl-empty {
+    padding: 32px 16px;
+  }
+}
+
+/* ========================================
+   Responsive: Mobile Small
+   ======================================== */
+@media (max-width: 424px) {
+  .sdcl-title {
+    font-size: 16px;
+  }
+
+  .sdcl-card {
+    padding: 12px;
+  }
+
+  .sdcl-card-thumbnail {
+    height: 100px;
+  }
+
+  .sdcl-card-title {
+    font-size: 14px;
+  }
+
+  .sdcl-card-button {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+}

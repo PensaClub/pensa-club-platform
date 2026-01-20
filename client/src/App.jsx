@@ -85,6 +85,7 @@ import AcademyLectureWatch from './components/AcademyLectures/AcademyLectureWatc
 // import ChristmasGreetingModal from './components/ChristmasGreetingModal/ChristmasGreetingModal.jsx';
 import GlobalSnowfall from './components/GlobalSnowfall/GlobalSnowfall.jsx';
 import DigiBridgeHeader from './components/DigiBridgeAcademy/DigiBridgeHeader/DigiBridgeHeader.jsx';
+import StudentDashboard from './components/StudentDashboard/StudentDashboard.jsx';
 
 // ✅ LAZY LOADING КОМПОНЕНТИ
 const ArticlesList = lazy(() => import('./components/Articles/ArticlesList/ArticlesList.jsx'));
@@ -238,6 +239,7 @@ function App() {
 
                                           <Route element={<AuthGuard />}>
                                             <Route path="/academy/become-mentor" element={<DigiBridgeBecomeMentor />} />
+                                            <Route path="/academy/my" element={<StudentDashboard />} />
                                             <Route path="/initiative-preview" element={<InitiativePreviewPage />} />
                                             <Route
                                               path="/academy/courses/:courseSlug/lessons/:lessonSlug"
