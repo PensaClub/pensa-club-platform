@@ -1,0 +1,379 @@
+/* ========================================
+   StudentCertificates Component
+   Prefix: scr-
+   ======================================== */
+
+.scr-container {
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(99, 102, 241, 0.15);
+    border-radius: 16px;
+    padding: 24px;
+}
+
+.scr-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.scr-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin: 0;
+}
+
+.scr-title-icon {
+    width: 20px;
+    height: 20px;
+    color: #f59e0b;
+}
+
+.scr-view-all {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: #6366f1;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.scr-view-all:hover {
+    color: #818cf8;
+    gap: 8px;
+}
+
+.scr-view-all-icon {
+    width: 16px;
+    height: 16px;
+}
+
+/* ========================================
+   Certificates Grid
+   ======================================== */
+
+.scr-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.scr-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgba(99, 102, 241, 0.1);
+    border-radius: 12px;
+    padding: 24px 16px;
+    transition: all 0.2s ease;
+}
+
+.scr-card:hover {
+    background: rgba(30, 41, 59, 0.8);
+    border-color: rgba(99, 102, 241, 0.3);
+    transform: translateY(-2px);
+}
+
+.scr-card-earned {
+    border-color: rgba(245, 158, 11, 0.2);
+}
+
+.scr-card-earned:hover {
+    border-color: rgba(245, 158, 11, 0.4);
+}
+
+.scr-card-locked {
+    opacity: 0.7;
+}
+
+.scr-card-locked:hover {
+    opacity: 0.85;
+}
+
+/* ========================================
+   Card Badge
+   ======================================== */
+
+.scr-card-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #10b981, #059669);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+}
+
+.scr-badge-locked {
+    background: linear-gradient(135deg, #64748b, #475569);
+    box-shadow: 0 2px 8px rgba(100, 116, 139, 0.3);
+}
+
+.scr-badge-icon {
+    width: 14px;
+    height: 14px;
+    color: white;
+}
+
+/* ========================================
+   Card Icon
+   ======================================== */
+
+.scr-card-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
+}
+
+.scr-icon-locked {
+    background: linear-gradient(135deg, #64748b, #475569);
+    box-shadow: 0 4px 16px rgba(100, 116, 139, 0.2);
+}
+
+.scr-icon {
+    width: 32px;
+    height: 32px;
+    color: white;
+}
+
+/* ========================================
+   Card Content
+   ======================================== */
+
+.scr-card-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin: 0 0 8px 0;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.scr-card-date {
+    font-size: 12px;
+    color: #10b981;
+    margin: 0 0 12px 0;
+}
+
+.scr-card-progress {
+    font-size: 12px;
+    color: #94a3b8;
+    margin: 0 0 8px 0;
+}
+
+/* ========================================
+   Progress Bar
+   ======================================== */
+
+.scr-progress-bar {
+    width: 100%;
+    height: 6px;
+    background: rgba(100, 116, 139, 0.3);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.scr-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #6366f1, #8b5cf6);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+/* ========================================
+   Download Button
+   ======================================== */
+
+.scr-card-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.scr-btn-download {
+    background: rgba(245, 158, 11, 0.15);
+    color: #f59e0b;
+}
+
+.scr-btn-download:hover {
+    background: rgba(245, 158, 11, 0.25);
+}
+
+.scr-btn-icon {
+    width: 14px;
+    height: 14px;
+}
+
+/* ========================================
+   Empty State
+   ======================================== */
+
+.scr-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.scr-empty-icon {
+    width: 48px;
+    height: 48px;
+    color: #475569;
+    margin-bottom: 16px;
+}
+
+.scr-empty-text {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0 0 16px 0;
+}
+
+.scr-empty-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #6366f1;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.scr-empty-link:hover {
+    color: #818cf8;
+}
+
+/* ========================================
+   Responsive: Tablet
+   ======================================== */
+@media (max-width: 768px) {
+    .scr-container {
+        padding: 20px;
+    }
+
+    .scr-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .scr-card {
+        padding: 20px 14px;
+    }
+
+    .scr-card-icon {
+        width: 56px;
+        height: 56px;
+    }
+
+    .scr-icon {
+        width: 28px;
+        height: 28px;
+    }
+}
+
+/* ========================================
+   Responsive: Mobile Large
+   ======================================== */
+@media (max-width: 576px) {
+    .scr-container {
+        padding: 16px;
+        border-radius: 12px;
+    }
+
+    .scr-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .scr-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .scr-card {
+        flex-direction: row;
+        text-align: left;
+        padding: 16px;
+        gap: 16px;
+    }
+
+    .scr-card-badge {
+        top: 50%;
+        right: 12px;
+        transform: translateY(-50%);
+    }
+
+    .scr-card-icon {
+        flex-shrink: 0;
+        width: 48px;
+        height: 48px;
+        margin-bottom: 0;
+    }
+
+    .scr-icon {
+        width: 24px;
+        height: 24px;
+    }
+
+    .scr-card-title {
+        font-size: 13px;
+    }
+}
+
+/* ========================================
+   Responsive: Mobile Small
+   ======================================== */
+@media (max-width: 424px) {
+    .scr-container {
+        padding: 12px;
+    }
+
+    .scr-title {
+        font-size: 16px;
+    }
+
+    .scr-card {
+        padding: 12px;
+        gap: 12px;
+    }
+
+    .scr-card-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .scr-icon {
+        width: 20px;
+        height: 20px;
+    }
+}

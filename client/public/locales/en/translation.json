@@ -14396,5 +14396,55 @@
   "sendMessage": "Send message",
   "active": "Active",
   "defaultSpecialization": "Digital literacy"
+},
+"studentCertificates": {
+    "title": "Certificates",
+    "viewAll": "View all",
+    "earned": "Earned:",
+    "download": "Download",
+    "credits": "credits",
+    "noCertificates": "No certificates yet",
+    "browseCourses": "Browse courses"
+},
+"studentCreditsOverview": {
+    "totalCredits": "Total Credits",
+    "toNextLevel": "{{credits}} to next level",
+    "levels": {
+        "beginner": "Beginner",
+        "intermediate": "Intermediate",
+        "expert": "Expert",
+        "master": "Master"
+    },
+    "categories": {
+        "courses": "Courses",
+        "lectures": "Lectures",
+        "seminars": "Seminars",
+        "presentations": "Presentations"
+    }
+},
+"studentRecentActivity": {
+    "title": "Recent Activity",
+    "viewAll": "View all",
+    "credits": "credits",
+    "noActivity": "No recent activity",
+    "startLearning": "Start learning",
+    "types": {
+        "lesson_completed": "Completed lesson:",
+        "lesson_started": "Started lesson:",
+        "course_enrolled": "Enrolled in:",
+        "course_completed": "Completed course:",
+        "lecture_attended": "Attended lecture:",
+        "seminar_attended": "Attended seminar:",
+        "test_passed": "Passed test:",
+        "test_failed": "Failed test:",
+        "certificate_earned": "Earned certificate:"
+    },
+    "time": {
+        "justNow": "Just now",
+        "minutesAgo": "{{minutes}}m ago",
+        "hoursAgo": "{{hours}}h ago",
+        "yesterday": "Yesterday",
+        "daysAgo": "{{days}}d ago"
+    }
 }
 }

@@ -13660,5 +13660,55 @@
   "sendMessage": "Nachricht senden",
   "active": "Aktiv",
   "defaultSpecialization": "Digitale Kompetenz"
+},
+"studentCertificates": {
+    "title": "Zertifikate",
+    "viewAll": "Alle anzeigen",
+    "earned": "Erhalten:",
+    "download": "Herunterladen",
+    "credits": "Credits",
+    "noCertificates": "Noch keine Zertifikate",
+    "browseCourses": "Kurse durchsuchen"
+},
+"studentCreditsOverview": {
+    "totalCredits": "Gesamtpunkte",
+    "toNextLevel": "{{credits}} bis zum nächsten Level",
+    "levels": {
+        "beginner": "Anfänger",
+        "intermediate": "Fortgeschritten",
+        "expert": "Experte",
+        "master": "Meister"
+    },
+    "categories": {
+        "courses": "Kurse",
+        "lectures": "Vorlesungen",
+        "seminars": "Seminare",
+        "presentations": "Präsentationen"
+    }
+},
+"studentRecentActivity": {
+    "title": "Letzte Aktivität",
+    "viewAll": "Alle anzeigen",
+    "credits": "Credits",
+    "noActivity": "Keine aktuelle Aktivität",
+    "startLearning": "Lernen beginnen",
+    "types": {
+        "lesson_completed": "Lektion abgeschlossen:",
+        "lesson_started": "Lektion gestartet:",
+        "course_enrolled": "Eingeschrieben in:",
+        "course_completed": "Kurs abgeschlossen:",
+        "lecture_attended": "Vorlesung besucht:",
+        "seminar_attended": "Seminar besucht:",
+        "test_passed": "Test bestanden:",
+        "test_failed": "Test nicht bestanden:",
+        "certificate_earned": "Zertifikat erhalten:"
+    },
+    "time": {
+        "justNow": "Gerade eben",
+        "minutesAgo": "vor {{minutes}} Min",
+        "hoursAgo": "vor {{hours}} Std",
+        "yesterday": "Gestern",
+        "daysAgo": "vor {{days}} Tagen"
+    }
 }
 }

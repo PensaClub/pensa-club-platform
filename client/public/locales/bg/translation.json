@@ -14661,5 +14661,55 @@
   "sendMessage": "Изпрати съобщение",
   "active": "Активен",
   "defaultSpecialization": "Дигитална грамотност"
+},
+"studentCertificates": {
+    "title": "Сертификати",
+    "viewAll": "Виж всички",
+    "earned": "Получен:",
+    "download": "Свали",
+    "credits": "кредита",
+    "noCertificates": "Все още нямаш сертификати",
+    "browseCourses": "Разгледай курсове"
+},
+"studentCreditsOverview": {
+    "totalCredits": "Общо кредити",
+    "toNextLevel": "{{credits}} до следващо ниво",
+    "levels": {
+        "beginner": "Начинаещ",
+        "intermediate": "Напреднал",
+        "expert": "Експерт",
+        "master": "Майстор"
+    },
+    "categories": {
+        "courses": "Курсове",
+        "lectures": "Лекции",
+        "seminars": "Семинари",
+        "presentations": "Презентации"
+    }
+},
+"studentRecentActivity": {
+    "title": "Скорошна активност",
+    "viewAll": "Виж всички",
+    "credits": "кредита",
+    "noActivity": "Няма скорошна активност",
+    "startLearning": "Започни обучение",
+    "types": {
+        "lesson_completed": "Завърши урок:",
+        "lesson_started": "Започна урок:",
+        "course_enrolled": "Записа се за:",
+        "course_completed": "Завърши курс:",
+        "lecture_attended": "Присъства на лекция:",
+        "seminar_attended": "Присъства на семинар:",
+        "test_passed": "Издържа тест:",
+        "test_failed": "Неуспешен тест:",
+        "certificate_earned": "Получи сертификат:"
+    },
+    "time": {
+        "justNow": "Сега",
+        "minutesAgo": "преди {{minutes}} мин",
+        "hoursAgo": "преди {{hours}}ч",
+        "yesterday": "Вчера",
+        "daysAgo": "преди {{days}} дни"
+    }
 }
 }

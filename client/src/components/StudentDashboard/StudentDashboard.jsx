@@ -10,6 +10,9 @@ import StudentQuickStats from './StudentDashboardHeader/StudentQuickStats/Studen
 import StudentContinueLearning from './StudentContinueLearning/StudentContinueLearning';
 import StudentUpcomingEvents from './StudentUpcomingEvents/StudentUpcomingEvents';
 import StudentMentorCard from './StudentMentorCard/StudentMentorCard';
+import StudentCertificates from './StudentCertificates/StudentCertificates';
+import StudentCreditsOverview from './StudentCreditsOverview/StudentCreditsOverview';
+import StudentRecentActivity from './StudentRecentActivity/StudentRecentActivity';
 
 const StudentDashboard = () => {
     const { t } = useTranslation();
@@ -175,9 +178,7 @@ const StudentDashboard = () => {
 
                 {/* Credits Overview */}
                 <section className="sdb-section sdb-credits-section">
-                    <div className="sdb-placeholder">
-                        <p>StudentCreditsOverview - TODO</p>
-                    </div>
+                    <StudentCreditsOverview dashboardData={dashboardData} />
                 </section>
 
                 {/* Main Grid */}
@@ -212,17 +213,12 @@ const StudentDashboard = () => {
 
                 {/* Certificates */}
                 <section className="sdb-section sdb-certificates-section">
-                    <div className="sdb-placeholder">
-                        <p>StudentCertificates - TODO</p>
-                        <small>Certificates: {certificates.length}</small>
-                    </div>
+                    <StudentCertificates certificates={certificates} />
                 </section>
 
                 {/* Recent Activity */}
                 <section className="sdb-section sdb-activity-section">
-                    <div className="sdb-placeholder">
-                        <p>StudentRecentActivity - TODO</p>
-                    </div>
+                    <StudentRecentActivity activities={progressData?.recentActivity || []} />
                 </section>
             </div>
         </div>
