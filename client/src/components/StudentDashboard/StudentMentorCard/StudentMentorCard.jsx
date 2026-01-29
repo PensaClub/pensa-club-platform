@@ -1,25 +1,17 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { User, Mail, MessageCircle, Calendar, ArrowRight } from 'lucide-react';
+import { User, Mail, MessageCircle, ArrowRight, Star } from 'lucide-react';
 import './studentMentorCard.css';
 
-const StudentMentorCard = ({ mentor = null, assignedDate = null }) => {
+const StudentMentorCard = ({ mentor = null }) => {
   const { t } = useTranslation();
 
-  const formatDate = (dateString) => {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    return date.toLocaleDateString('bg-BG', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric'
-    });
-  };
-
-  const getInitials = (firstName, lastName) => {
-    const first = firstName?.charAt(0) || '';
-    const last = lastName?.charAt(0) || '';
+  const getInitials = (name) => {
+    if (!name) return '?';
+    const parts = name.split(' ');
+    const first = parts[0]?.charAt(0) || '';
+    const last = parts[1]?.charAt(0) || '';
     return (first + last).toUpperCase() || '?';
   };
 
@@ -47,12 +39,7 @@ const StudentMentorCard = ({ mentor = null, assignedDate = null }) => {
     );
   }
 
-  const firstName = mentor.user?.details?.firstName || '';
-  const lastName = mentor.user?.details?.lastName || '';
-  const fullName = `${firstName} ${lastName}`.trim() || mentor.user?.email || 'Ментор';
-  const imageURL = mentor.user?.details?.imageURL;
-  const specialization = mentor.specialization || t('studentMentorCard.defaultSpecialization');
-  const email = mentor.user?.email;
+  const rating = parseFloat(mentor.rating) || 0;
 
   return (
     <div className="smc-container">
@@ -62,42 +49,53 @@ const StudentMentorCard = ({ mentor = null, assignedDate = null }) => {
           {t('studentMentorCard.title')}
         </h3>
         <Link to="/academy/mentors" className="smc-view-all">
-          {t('studentMentorCard.allMentors')}
+          {t('studentMentorCard.changeMentor')}
           <ArrowRight className="smc-view-all-icon" />
         </Link>
       </div>
 
       <div className="smc-card">
         <div className="smc-avatar-wrapper">
-          {imageURL ? (
-            <img src={imageURL} alt={fullName} className="smc-avatar" />
+          {mentor.photoUrl ? (
+            <img src={mentor.photoUrl} alt={mentor.name} className="smc-avatar" />
           ) : (
             <div className="smc-avatar-placeholder">
-              {getInitials(firstName, lastName)}
+              {getInitials(mentor.name)}
             </div>
           )}
-          <span className="smc-status-dot" title={t('studentMentorCard.active')}></span>
+          <span 
+            className={`smc-status-dot ${mentor.isOnline ? 'smc-status-online' : 'smc-status-offline'}`} 
+            title={mentor.isOnline ? t('studentMentorCard.online') : t('studentMentorCard.offline')}
+          />
         </div>
 
         <div className="smc-info">
-          <h4 className="smc-name">{fullName}</h4>
-          <p className="smc-specialization">{specialization}</p>
+          <h4 className="smc-name">{mentor.name}</h4>
+          <p className="smc-specialization">{mentor.specialization || t('studentMentorCard.defaultSpecialization')}</p>
           
-          {assignedDate && (
-            <p className="smc-assigned">
-              <Calendar className="smc-assigned-icon" />
-              {t('studentMentorCard.mentorSince')} {formatDate(assignedDate)}
+          {rating > 0 && (
+            <p className="smc-rating">
+              <Star className="smc-rating-icon" />
+              {rating.toFixed(1)}
             </p>
           )}
         </div>
 
         <div className="smc-actions">
-          {email && (
-            <a href={`mailto:${email}`} className="smc-action-btn smc-action-email" title={t('studentMentorCard.sendEmail')}>
+          {mentor.email && (
+            <a 
+              href={`mailto:${mentor.email}`} 
+              className="smc-action-btn smc-action-email" 
+              title={t('studentMentorCard.sendEmail')}
+            >
               <Mail className="smc-action-icon" />
             </a>
           )}
-          <Link to={`/messages?to=${mentor.userId || mentor.id}`} className="smc-action-btn smc-action-message" title={t('studentMentorCard.sendMessage')}>
+          <Link 
+            to={`/messages?to=${mentor.id}`} 
+            className="smc-action-btn smc-action-message" 
+            title={t('studentMentorCard.sendMessage')}
+          >
             <MessageCircle className="smc-action-icon" />
           </Link>
         </div>

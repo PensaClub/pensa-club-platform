@@ -7,11 +7,14 @@ const StudentQuickStats = ({ data }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
+  // data е целият response, достъпваме през dashboard
+  const dashboard = data?.dashboard;
+
   const stats = [
     {
       id: 'enrolled',
       label: t('studentQuickStats.enrolledCourses'),
-      value: data?.coursesEnrolled || 0,
+      value: dashboard?.courses?.enrolled || 0,
       icon: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
@@ -25,7 +28,7 @@ const StudentQuickStats = ({ data }) => {
     {
       id: 'completed',
       label: t('studentQuickStats.completedCourses'),
-      value: data?.coursesCompleted || 0,
+      value: dashboard?.courses?.completed || 0,
       icon: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
@@ -39,7 +42,7 @@ const StudentQuickStats = ({ data }) => {
     {
       id: 'lectures',
       label: t('studentQuickStats.upcomingLectures'),
-      value: data?.lecturesRegistered || data?.upcomingLectures || 0,
+      value: dashboard?.lectures?.upcoming || 0,
       icon: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
@@ -55,7 +58,7 @@ const StudentQuickStats = ({ data }) => {
     {
       id: 'certificates',
       label: t('studentQuickStats.certificates'),
-      value: data?.certificatesEarned || data?.certificates || 0,
+      value: dashboard?.certificates || 0,
       icon: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <circle cx="12" cy="8" r="6" />

@@ -5,9 +5,7 @@
   width: 100%;
 }
 
-/* ========================================
-   Header
-   ======================================== */
+/* Header */
 .sdcl-header {
   display: flex;
   align-items: center;
@@ -49,292 +47,217 @@
   transform: translateX(3px);
 }
 
-/* ========================================
-   List
-   ======================================== */
-.sdcl-list {
-  display: flex;
-  flex-direction: column;
+/* Grid */
+.sdcl-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 16px;
+  margin-bottom: 20px;
 }
 
-/* ========================================
-   Card
-   ======================================== */
+/* Card */
 .sdcl-card {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 16px;
+  position: relative;
   background: rgba(30, 41, 59, 0.8);
   border: 1px solid rgba(148, 163, 184, 0.1);
   border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .sdcl-card:hover {
   background: rgba(30, 41, 59, 0.95);
-  border-color: rgba(148, 163, 184, 0.2);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  border-color: rgba(59, 130, 246, 0.3);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
-/* Thumbnail */
-.sdcl-card-thumbnail {
+/* Card Image */
+.sdcl-card-image {
   position: relative;
-  flex-shrink: 0;
-  width: 80px;
-  height: 60px;
-  border-radius: 8px;
+  width: 100%;
+  height: 140px;
   overflow: hidden;
-  background: rgba(15, 23, 42, 0.8);
 }
 
-.sdcl-card-thumbnail img {
+.sdcl-card-image img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.3s ease;
 }
 
-.sdcl-card-thumbnail-placeholder {
+.sdcl-card:hover .sdcl-card-image img {
+  transform: scale(1.05);
+}
+
+.sdcl-card-placeholder {
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: rgba(15, 23, 42, 0.8);
   color: #475569;
 }
 
-.sdcl-card-thumbnail-placeholder svg {
-  width: 28px;
-  height: 28px;
+.sdcl-card-placeholder svg {
+  width: 48px;
+  height: 48px;
 }
 
-.sdcl-card-progress-badge {
+/* Progress Badge */
+.sdcl-card-badge {
   position: absolute;
-  bottom: 4px;
-  right: 4px;
-  padding: 2px 6px;
+  top: 10px;
+  right: 10px;
+  padding: 4px 10px;
   background: rgba(0, 0, 0, 0.75);
-  border-radius: 4px;
-  font-size: 11px;
+  backdrop-filter: blur(4px);
+  border-radius: 20px;
+  font-size: 12px;
   font-weight: 600;
   color: #10b981;
 }
 
-/* Content */
-.sdcl-card-content {
-  flex: 1;
-  min-width: 0;
-}
-
-.sdcl-card-title {
-  margin: 0 0 6px 0;
-  font-size: 15px;
-  font-weight: 600;
-  color: #f1f5f9;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.sdcl-card-meta {
-  margin-bottom: 8px;
-}
-
-.sdcl-card-lessons {
-  font-size: 12px;
-  color: #94a3b8;
-}
-
-/* Progress bar */
-.sdcl-card-progress-bar {
-  width: 100%;
-  height: 6px;
-  background: rgba(100, 116, 139, 0.3);
-  border-radius: 3px;
-  overflow: hidden;
-}
-
-.sdcl-card-progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #3b82f6, #10b981);
-  border-radius: 3px;
-  transition: width 0.5s ease;
-}
-
-/* Button */
-.sdcl-card-button {
-  flex-shrink: 0;
+/* Play Icon */
+.sdcl-card-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  width: 48px;
+  height: 48px;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 10px 16px;
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
-  border: none;
-  border-radius: 8px;
+  justify-content: center;
+  background: rgba(59, 130, 246, 0.9);
+  border-radius: 50%;
   color: white;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
+  opacity: 0;
   transition: all 0.3s ease;
 }
 
-.sdcl-card-button svg {
-  width: 14px;
-  height: 14px;
+.sdcl-card-play svg {
+  width: 20px;
+  height: 20px;
+  margin-left: 3px;
 }
 
-.sdcl-card-button:hover {
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
-  transform: translateX(2px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+.sdcl-card:hover .sdcl-card-play {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
 }
 
-/* ========================================
-   Empty State
-   ======================================== */
-.sdcl-empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 48px 24px;
-  background: rgba(30, 41, 59, 0.5);
-  border: 1px dashed rgba(148, 163, 184, 0.2);
-  border-radius: 12px;
-  text-align: center;
+/* Card Info */
+.sdcl-card-info {
+  padding: 16px;
 }
 
-.sdcl-empty-icon {
-  width: 56px;
-  height: 56px;
-  color: #475569;
-  margin-bottom: 16px;
-}
-
-.sdcl-empty-icon svg {
-  width: 100%;
-  height: 100%;
-}
-
-.sdcl-empty-text {
-  margin: 0 0 20px 0;
+.sdcl-card-title {
+  margin: 0 0 8px 0;
   font-size: 15px;
+  font-weight: 600;
+  color: #f1f5f9;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.sdcl-card-lessons {
+  margin: 0 0 12px 0;
+  font-size: 13px;
   color: #94a3b8;
 }
 
-.sdcl-browse-button {
-  padding: 12px 24px;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-  border: none;
+/* Progress Bar */
+.sdcl-progress {
+  width: 100%;
+  height: 4px;
+  background: rgba(100, 116, 139, 0.3);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.sdcl-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #10b981);
+  border-radius: 2px;
+  transition: width 0.5s ease;
+}
+
+/* Empty State - Inline */
+.sdcl-empty-inline {
+  padding: 32px 20px;
+  background: rgba(30, 41, 59, 0.4);
+  border: 1px dashed rgba(148, 163, 184, 0.2);
+  border-radius: 12px;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.sdcl-empty-inline p {
+  margin: 0;
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+/* Footer */
+.sdcl-footer {
+  display: flex;
+  justify-content: center;
+}
+
+.sdcl-browse-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: transparent;
+  border: 1px solid rgba(59, 130, 246, 0.3);
   border-radius: 8px;
-  color: white;
+  color: #3b82f6;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
-.sdcl-browse-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+.sdcl-browse-link svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s ease;
 }
 
-/* ========================================
-   Responsive: Laptop
-   ======================================== */
-@media (max-width: 1279px) {
-  .sdcl-card {
-    padding: 14px;
-    gap: 14px;
-  }
-
-  .sdcl-card-thumbnail {
-    width: 70px;
-    height: 52px;
-  }
-
-  .sdcl-card-button {
-    padding: 8px 14px;
-  }
+.sdcl-browse-link:hover {
+  background: rgba(59, 130, 246, 0.1);
+  border-color: rgba(59, 130, 246, 0.5);
 }
 
-/* ========================================
-   Responsive: Tablet
-   ======================================== */
-@media (max-width: 1023px) {
-  .sdcl-card {
-    flex-wrap: wrap;
-  }
-
-  .sdcl-card-content {
-    flex: 1;
-    min-width: calc(100% - 96px);
-  }
-
-  .sdcl-card-button {
-    width: 100%;
-    justify-content: center;
-    margin-top: 8px;
-  }
+.sdcl-browse-link:hover svg {
+  transform: translateX(4px);
 }
 
-/* ========================================
-   Responsive: Mobile Large
-   ======================================== */
+/* Responsive */
 @media (max-width: 767px) {
-  .sdcl-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
+  .sdcl-grid {
+    grid-template-columns: 1fr;
   }
-
-  .sdcl-card {
-    flex-direction: column;
-    align-items: stretch;
-    padding: 16px;
-  }
-
-  .sdcl-card-thumbnail {
-    width: 100%;
-    height: 120px;
-  }
-
-  .sdcl-card-content {
-    min-width: 100%;
-  }
-
-  .sdcl-card-title {
-    white-space: normal;
-  }
-
-  .sdcl-empty {
-    padding: 32px 16px;
+  
+  .sdcl-card-image {
+    height: 160px;
   }
 }
 
-/* ========================================
-   Responsive: Mobile Small
-   ======================================== */
 @media (max-width: 424px) {
   .sdcl-title {
     font-size: 16px;
   }
-
-  .sdcl-card {
-    padding: 12px;
-  }
-
-  .sdcl-card-thumbnail {
-    height: 100px;
-  }
-
-  .sdcl-card-title {
-    font-size: 14px;
-  }
-
-  .sdcl-card-button {
-    padding: 10px 16px;
-    font-size: 13px;
+  
+  .sdcl-card-image {
+    height: 140px;
   }
 }

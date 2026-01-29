@@ -14,7 +14,7 @@ const {
   seminar,
   module: courseModule,
   certificate,
-  test_attempt,
+  student_test_attempt,
   student,
   mentor,
   user_account,
@@ -194,33 +194,85 @@ academyMyController.get('/dashboard', isAuth, async (req, res, next) => {
       (courseCredits || 0) + (lectureCredits || 0) + (seminarCredits || 0);
 
     res.status(200).json({
-      success: true,
-      dashboard: {
-        courses: {
-          enrolled: enrolledCourses,
-          inProgress: inProgressCourses,
-          completed: completedCourses,
-        },
-        lectures: {
-          registered: registeredLectures,
-          attended: attendedLectures,
-          upcoming: upcomingLectures,
-        },
-        seminars: {
-          registered: registeredSeminars,
-          attended: attendedSeminars,
-          upcoming: upcomingSeminars,
-        },
-        certificates: certificatesCount,
-        totalCredits,
-      },
-    });
+  success: true,
+  dashboard: {
+    courses: {
+      enrolled: enrolledCourses,
+      inProgress: inProgressCourses,
+      completed: completedCourses,
+    },
+    lectures: {
+      registered: registeredLectures,
+      attended: attendedLectures,
+      upcoming: upcomingLectures,
+    },
+    seminars: {
+      registered: registeredSeminars,
+      attended: attendedSeminars,
+      upcoming: upcomingSeminars,
+    },
+    certificates: certificatesCount,
+    // Credits breakdown
+    totalCredits,
+    totalCreditsEarned: totalCredits,
+    creditsFromCourses: courseCredits || 0,
+    creditsFromLectures: lectureCredits || 0,
+    creditsFromSeminars: seminarCredits || 0,
+    creditsFromPresentations: 0, // TODO: добави когато имаш student_presentation credits
+  },
+});
   } catch (err) {
     console.error('❌ [GET MY DASHBOARD] Error:', err);
     next(err);
   }
 });
+// ===============================
+// ===============================
+// GET /api/academy/my/mentor
+// Моят текущ ментор
+// ===============================
+academyMyController.get('/mentor', isAuth, async (req, res, next) => {
+  try {
+    const userId = req.user.userId;
+    const studentData = await student.findOne({
+      where: { userId },
+      attributes: ['currentMentorId'],
+      include: [
+        {
+          model: mentor,
+          as: 'currentMentor',
+          attributes: [
+            'id',
+            'name',
+            'email',
+            'photoUrl',
+            'specialization',
+            'isOnline',
+            'priorityContact',
+            'rating',
+            'otherContact',
+            'status',
+          ],
+        },
+      ],
+    });
 
+    if (!studentData || !studentData.currentMentor) {
+      return res.status(200).json({
+        success: true,
+        mentor: null,
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      mentor: studentData.currentMentor,
+    });
+  } catch (err) {
+    console.error('❌ [GET MY MENTOR] Error:', err);
+    next(err);
+  }
+});
 // =========================================================
 //                    MY COURSES
 // =========================================================
@@ -365,7 +417,8 @@ academyMyController.get(
         where: {
           studentId: studentData.id,
           status: 'active',
-          progressPercentage: { [Op.gt]: 0, [Op.lt]: 100 },
+          // Премахнато: progressPercentage: { [Op.gt]: 0, [Op.lt]: 100 },
+          progressPercentage: { [Op.lt]: 100 },  // Всички незавършени
         },
         include: [
           {
@@ -393,7 +446,6 @@ academyMyController.get(
     }
   }
 );
-
 // =========================================================
 //                    MY LECTURES
 // =========================================================
@@ -925,9 +977,9 @@ academyMyController.get('/progress', isAuth, async (req, res, next) => {
     });
     const totalCredits = (courseCredits || 0) + (lectureCredits || 0) + (seminarCredits || 0);
 
-    const testAttempts = await test_attempt.findAll({
+    const testAttempts = await student_test_attempt.findAll({
       where: { studentId, status: 'completed' },
-      attributes: [[sequelize.fn('AVG', sequelize.col('score_percentage')), 'avgScore']],
+      attributes: [[sequelize.fn('AVG', sequelize.col('score')), 'avgScore']],
       raw: true,
     });
     const averageScore = Math.round(parseFloat(testAttempts[0]?.avgScore) || 0);

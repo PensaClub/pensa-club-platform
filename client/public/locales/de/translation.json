@@ -13628,12 +13628,11 @@
   "certificates": "Zertifikate"
 },
 "studentContinueLearning": {
-  "title": "Lernen fortsetzen",
-  "viewAll": "Alle anzeigen",
-  "lessons": "Lektionen",
-  "continue": "Fortsetzen",
-  "noCourses": "Keine laufenden Kurse",
-  "browseCourses": "Kurse durchsuchen"
+    "title": "Lernen fortsetzen",
+    "viewAll": "Alle anzeigen",
+    "lessons": "Lektionen",
+    "noCourses": "Keine laufenden Kurse",
+    "browseMore": "Weitere Kurse durchsuchen"
 },
 "studentUpcomingEvents": {
   "title": "Kommende Veranstaltungen",
@@ -13651,15 +13650,16 @@
   "browseLectures": "Vorlesungen durchsuchen"
 },
 "studentMentorCard": {
-  "title": "Mein Mentor",
-  "allMentors": "Alle Mentoren",
-  "noMentor": "Du hast noch keinen Mentor",
-  "findMentor": "Mentor finden",
-  "mentorSince": "Mentor seit:",
-  "sendEmail": "E-Mail senden",
-  "sendMessage": "Nachricht senden",
-  "active": "Aktiv",
-  "defaultSpecialization": "Digitale Kompetenz"
+    "title": "Mein Mentor",
+    "noMentor": "Du hast noch keinen Mentor",
+    "findMentor": "Mentor finden",
+    "changeMentor": "Mentor wechseln",
+    "allMentors": "Alle Mentoren",
+    "defaultSpecialization": "Mentor",
+    "sendEmail": "E-Mail senden",
+    "sendMessage": "Nachricht senden",
+    "online": "Online",
+    "offline": "Offline"
 },
 "studentCertificates": {
     "title": "Zertifikate",

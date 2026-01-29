@@ -5,14 +5,14 @@ import './studentCreditsOverview.css';
 
 const StudentCreditsOverview = ({ dashboardData = {} }) => {
     const { t } = useTranslation();
-
+ const dashboard = dashboardData?.dashboard || {};
     const {
         totalCreditsEarned = 0,
         creditsFromCourses = 0,
         creditsFromLectures = 0,
         creditsFromSeminars = 0,
         creditsFromPresentations = 0
-    } = dashboardData;
+    } = dashboard;
 
     const getLevelInfo = (credits) => {
         if (credits >= 301) {

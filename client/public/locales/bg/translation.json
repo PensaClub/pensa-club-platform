@@ -14629,12 +14629,12 @@
   "certificates": "Сертификати"
 },
 "studentContinueLearning": {
-  "title": "Продължи обучението",
-  "viewAll": "Виж всички",
-  "lessons": "урока",
-  "continue": "Продължи",
-  "noCourses": "Нямаш започнати курсове",
-  "browseCourses": "Разгледай курсове"
+      "title": "Продължи обучението",
+    "viewAll": "Виж всички",
+    "lessons": "урока",
+    "noCourses": "Нямаш започнати курсове",
+    "browseMore": "Разгледай други курсове"
+
 },
 "studentUpcomingEvents": {
   "title": "Предстоящи събития",
@@ -14652,15 +14652,16 @@
   "browseLectures": "Разгледай лекции"
 },
 "studentMentorCard": {
-  "title": "Моят ментор",
-  "allMentors": "Всички ментори",
-  "noMentor": "Все още нямаш ментор",
-  "findMentor": "Намери ментор",
-  "mentorSince": "Ментор от:",
-  "sendEmail": "Изпрати имейл",
-  "sendMessage": "Изпрати съобщение",
-  "active": "Активен",
-  "defaultSpecialization": "Дигитална грамотност"
+ "title": "Моят ментор",
+    "noMentor": "Все още нямаш ментор",
+    "findMentor": "Намери ментор",
+    "changeMentor": "Смени ментор",
+    "allMentors": "Всички ментори",
+    "defaultSpecialization": "Ментор",
+    "sendEmail": "Изпрати имейл",
+    "sendMessage": "Изпрати съобщение",
+    "online": "Онлайн",
+    "offline": "Офлайн"
 },
 "studentCertificates": {
     "title": "Сертификати",

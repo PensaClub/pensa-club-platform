@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../contexts/UserContext';
 import { useAcademyCourses } from '../contexts/AcademyCoursesProvider';
-import { useAcademy } from '../contexts/AcademyProvider';
 import './studentDashboard.css';
 import StudentDashboardHeader from './StudentDashboardHeader/StudentDashboardHeader';
 import StudentQuickStats from './StudentDashboardHeader/StudentQuickStats/StudentQuickStats';
@@ -18,14 +17,14 @@ const StudentDashboard = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { isAuthentication, profileData } = useAuthContext();
-    const { getMentorById } = useAcademy();
     const {
         getMyDashboard,
         getContinueCourses,
         getUpcomingLectures,
         getUpcomingSeminars,
         getMyCertificates,
-        getMyProgress
+        getMyProgress,
+        getMyMentor
     } = useAcademyCourses();
 
     const [isLoading, setIsLoading] = useState(true);
@@ -55,27 +54,29 @@ const StudentDashboard = () => {
                     lecturesRes,
                     seminarsRes,
                     certificatesRes,
-                    progressRes
+                    progressRes,
+                    mentorRes  
                 ] = await Promise.all([
                     getMyDashboard(),
                     getContinueCourses(3),
                     getUpcomingLectures(3),
                     getUpcomingSeminars(3),
                     getMyCertificates(),
-                    getMyProgress()
+                    getMyProgress(),
+                    getMyMentor() 
                 ]);
 
                 setDashboardData(dashboardRes);
-                setContinueCourses(continueRes?.courses || []);
-
-                const allEvents = [
-                    ...(lecturesRes?.lectures || []).map(l => ({ ...l, type: 'lecture' })),
-                    ...(seminarsRes?.seminars || []).map(s => ({ ...s, type: 'seminar' }))
-                ].sort((a, b) => new Date(a.scheduledDate || a.date) - new Date(b.scheduledDate || b.date));
-                setUpcomingEvents(allEvents.slice(0, 5));
-
+                setContinueCourses(continueRes || []);
                 setCertificates(certificatesRes?.certificates || []);
                 setProgressData(progressRes);
+                setCurrentMentor(mentorRes?.mentor || null);
+
+                const allEvents = [
+                    ...(lecturesRes || []).map(l => ({ ...l, type: 'lecture' })),
+                    ...(seminarsRes || []).map(s => ({ ...s, type: 'seminar' }))
+                ].sort((a, b) => new Date(a.lecture?.scheduledDate || a.seminar?.scheduledDate) - new Date(b.lecture?.scheduledDate || b.seminar?.scheduledDate));
+                setUpcomingEvents(allEvents.slice(0, 5));
 
             } catch (err) {
                 console.error('Error fetching dashboard data:', err);
@@ -87,22 +88,6 @@ const StudentDashboard = () => {
 
         fetchDashboardData();
     }, [isAuthentication]);
-
-    // Fetch mentor data when dashboardData is loaded
-    useEffect(() => {
-        const fetchMentor = async () => {
-            if (dashboardData?.currentMentorId) {
-                try {
-                    const mentorData = await getMentorById(dashboardData.currentMentorId);
-                    setCurrentMentor(mentorData);
-                } catch (err) {
-                    console.error('Error fetching mentor:', err);
-                }
-            }
-        };
-
-        fetchMentor();
-    }, [dashboardData?.currentMentorId, getMentorById]);
 
     if (!isAuthentication) {
         return (
@@ -191,10 +176,7 @@ const StudentDashboard = () => {
 
                         {/* Mentor Card */}
                         <section className="sdb-section sdb-mentor-section">
-                            <StudentMentorCard
-                                mentor={currentMentor}
-                                assignedDate={dashboardData?.mentorAssignedDate}
-                            />
+                            <StudentMentorCard mentor={currentMentor} />
                         </section>
                     </div>
 
@@ -218,7 +200,7 @@ const StudentDashboard = () => {
 
                 {/* Recent Activity */}
                 <section className="sdb-section sdb-activity-section">
-                    <StudentRecentActivity activities={progressData?.recentActivity || []} />
+                    <StudentRecentActivity activities={progressData?.progress?.recentActivity || []} />
                 </section>
             </div>
         </div>

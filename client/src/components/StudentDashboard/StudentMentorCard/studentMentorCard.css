@@ -333,3 +333,38 @@
     height: 40px;
   }
 }
+/* В studentMentorCard.css - замени .smc-status-dot */
+
+.smc-status-dot {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  width: 14px;
+  height: 14px;
+  border: 3px solid #1e293b;
+  border-radius: 50%;
+}
+
+.smc-status-online {
+  background: #10b981;
+}
+
+.smc-status-offline {
+  background: #64748b;
+}
+
+/* Rating */
+.smc-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: #fbbf24;
+  margin: 0;
+}
+
+.smc-rating-icon {
+  width: 14px;
+  height: 14px;
+  fill: #fbbf24;
+}

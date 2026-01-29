@@ -14364,12 +14364,11 @@
   "certificates": "Certificates"
 },
 "studentContinueLearning": {
-  "title": "Continue Learning",
-  "viewAll": "View all",
-  "lessons": "lessons",
-  "continue": "Continue",
-  "noCourses": "No courses in progress",
-  "browseCourses": "Browse courses"
+    "title": "Continue Learning",
+    "viewAll": "View all",
+    "lessons": "lessons",
+    "noCourses": "No courses in progress",
+    "browseMore": "Browse more courses"
 },
 "studentUpcomingEvents": {
   "title": "Upcoming Events",
@@ -14387,15 +14386,16 @@
   "browseLectures": "Browse lectures"
 },
 "studentMentorCard": {
-  "title": "My Mentor",
-  "allMentors": "All mentors",
-  "noMentor": "You don't have a mentor yet",
-  "findMentor": "Find a mentor",
-  "mentorSince": "Mentor since:",
-  "sendEmail": "Send email",
-  "sendMessage": "Send message",
-  "active": "Active",
-  "defaultSpecialization": "Digital literacy"
+   "title": "My Mentor",
+    "noMentor": "You don't have a mentor yet",
+    "findMentor": "Find a mentor",
+    "changeMentor": "Change mentor",
+    "allMentors": "All mentors",
+    "defaultSpecialization": "Mentor",
+    "sendEmail": "Send email",
+    "sendMessage": "Send message",
+    "online": "Online",
+    "offline": "Offline"
 },
 "studentCertificates": {
     "title": "Certificates",
