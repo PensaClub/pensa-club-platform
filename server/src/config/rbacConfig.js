@@ -10,7 +10,7 @@ const permissions = {
     },
     article: {
         create: ['admin', 'moderator'],
-        read: ['admin', 'moderator', 'user', 'guest', 'limited'],
+        read: ['admin', 'moderator', 'user', 'guest', 'limited', 'student', 'mentor'],
         update: ['admin', 'moderator'],
         delete: ['admin', 'moderator'],
     },
