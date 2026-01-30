@@ -1,71 +1,86 @@
 // src/config/rbacConfig.js
 
+// Групи роли за лесна поддръжка
+const ROLES = {
+    // Публичен достъп с limited (Pensa Club ресурси)
+    PUBLIC_WITH_LIMITED: ['admin', 'moderator', 'user', 'guest', 'limited', 'student', 'mentor'],
+    // Публичен достъп без limited (Academy ресурси)
+    PUBLIC: ['admin', 'moderator', 'user', 'guest', 'student', 'mentor'],
+    // Автентикирани потребители
+    AUTHENTICATED: ['admin', 'moderator', 'user', 'student', 'mentor'],
+    // Само staff
+    STAFF: ['admin', 'moderator'],
+    // Academy роли
+    ACADEMY: ['admin', 'mentor', 'student'],
+    // Academy creators
+    ACADEMY_CREATORS: ['admin', 'mentor'],
+};
+
 const permissions = {
     ad: {
         create: ['admin', 'moderator', 'user'],
-        read: ['admin', 'moderator', 'user', 'guest', 'limited'],
+        read: ROLES.PUBLIC_WITH_LIMITED,
         update: ['admin', 'moderator', 'user'],
         delete: ['admin', 'moderator', 'user'],
-        approve: ['admin', 'moderator'],
+        approve: ROLES.STAFF,
     },
     article: {
-        create: ['admin', 'moderator'],
-        read: ['admin', 'moderator', 'user', 'guest', 'limited', 'student', 'mentor'],
-        update: ['admin', 'moderator'],
-        delete: ['admin', 'moderator'],
+        create: ROLES.STAFF,
+        read: ROLES.PUBLIC_WITH_LIMITED,
+        update: ROLES.STAFF,
+        delete: ROLES.STAFF,
     },
     initiative: {
-        create: ['admin', 'moderator'],
-        read: ['admin', 'moderator', 'user', 'guest', 'limited'],
-        update: ['admin', 'moderator'],
-        delete: ['admin', 'moderator'],
+        create: ROLES.STAFF,
+        read: ROLES.PUBLIC_WITH_LIMITED,
+        update: ROLES.STAFF,
+        delete: ROLES.STAFF,
         draft: {
-            read: ['admin', 'moderator'],
-            create: ['admin', 'moderator'],
-            update: ['admin', 'moderator'],
-            delete: ['admin', 'moderator'],
+            read: ROLES.STAFF,
+            create: ROLES.STAFF,
+            update: ROLES.STAFF,
+            delete: ROLES.STAFF,
         },
     },
     projects: {
-        create: ['admin', 'moderator'],
-        read: ['admin', 'moderator', 'user', 'guest', 'limited'],
-        update: ['admin', 'moderator'],
-        delete: ['admin', 'moderator'],
+        create: ROLES.STAFF,
+        read: ROLES.PUBLIC_WITH_LIMITED,
+        update: ROLES.STAFF,
+        delete: ROLES.STAFF,
         draft: {
-            read: ['admin', 'moderator'],
-            create: ['admin', 'moderator'],
-            update: ['admin', 'moderator'],
-            delete: ['admin', 'moderator'],
+            read: ROLES.STAFF,
+            create: ROLES.STAFF,
+            update: ROLES.STAFF,
+            delete: ROLES.STAFF,
         },
     },
     publications: {
-        create: ['admin', 'moderator'],
-        read: ['admin', 'moderator', 'user', 'guest', 'limited'],
-        update: ['admin', 'moderator'],
-        delete: ['admin', 'moderator'],
+        create: ROLES.STAFF,
+        read: ROLES.PUBLIC_WITH_LIMITED,
+        update: ROLES.STAFF,
+        delete: ROLES.STAFF,
         draft: {
-            read: ['admin', 'moderator'],
-            create: ['admin', 'moderator'],
-            update: ['admin', 'moderator'],
-            delete: ['admin', 'moderator'],
+            read: ROLES.STAFF,
+            create: ROLES.STAFF,
+            update: ROLES.STAFF,
+            delete: ROLES.STAFF,
         },
     },
     stories: {
-        create: ['admin', 'moderator'],
-        read: ['admin', 'moderator', 'user', 'guest', 'limited'],
-        update: ['admin', 'moderator'],
-        delete: ['admin', 'moderator'],
+        create: ROLES.STAFF,
+        read: ROLES.PUBLIC_WITH_LIMITED,
+        update: ROLES.STAFF,
+        delete: ROLES.STAFF,
         draft: {
-            read: ['admin', 'moderator'],
-            create: ['admin', 'moderator'],
-            update: ['admin', 'moderator'],
-            delete: ['admin', 'moderator'],
+            read: ROLES.STAFF,
+            create: ROLES.STAFF,
+            update: ROLES.STAFF,
+            delete: ROLES.STAFF,
         },
     },
-    // For initiatives, projects, etc
     comments: {
         create: ['admin', 'moderator', 'user'],
-        read: ['admin', 'moderator', 'user', 'guest', 'limited'],
+        read: ROLES.PUBLIC_WITH_LIMITED,
         update: ['admin', 'moderator', 'user'],
         delete: ['admin', 'moderator', 'user'],
         like: ['admin', 'moderator', 'user'],
@@ -78,35 +93,35 @@ const permissions = {
         delete: ['admin'],
     },
     subscription: {
-        read: ['admin', 'moderator'],
+        read: ROLES.STAFF,
     },
     suggestion: {
-        read: ['admin', 'moderator'],
-        delete: ['admin', 'moderator'],
-        approve: ['admin', 'moderator'],
-        comment: ['admin', 'moderator'],
+        read: ROLES.STAFF,
+        delete: ROLES.STAFF,
+        approve: ROLES.STAFF,
+        comment: ROLES.STAFF,
     },
     userDetails: {
         read: ['admin', 'moderator', 'user', 'limited'],
     },
     application: {
         create: ['admin', 'moderator', 'user'],
-        read: ['admin', 'moderator', 'user', 'guest', 'limited'],
+        read: ROLES.PUBLIC_WITH_LIMITED,
         update: ['admin', 'moderator', 'user'],
         delete: ['admin', 'moderator', 'user'],
-        sendEmails: ['admin', 'moderator'],
+        sendEmails: ROLES.STAFF,
     },
     club: {
         create: ['admin', 'moderator', 'user'],
-        read: ['admin', 'moderator', 'user', 'guest', 'limited'],
+        read: ROLES.PUBLIC_WITH_LIMITED,
         update: ['admin', 'moderator', 'user'],
         delete: ['admin', 'moderator', 'user'],
-        approve: ['admin', 'moderator'],
-        verify: ['admin', 'moderator'],
-        transferOwnership: ['admin', 'moderator'],
-        bulkUpdate: ['admin', 'moderator'],
-        bulkDelete: ['admin', 'moderator'],
-        bulkApprove: ['admin', 'moderator'],
+        approve: ROLES.STAFF,
+        verify: ROLES.STAFF,
+        transferOwnership: ROLES.STAFF,
+        bulkUpdate: ROLES.STAFF,
+        bulkDelete: ROLES.STAFF,
+        bulkApprove: ROLES.STAFF,
         draft: {
             read: ['admin', 'moderator', 'user'],
             create: ['admin', 'moderator', 'user'],
@@ -123,19 +138,18 @@ const permissions = {
         update: ['admin'],
         delete: ['admin'],
         approve: ['admin'],
-        reject: ['admin',],
+        reject: ['admin'],
     },
-
     mentor: {
-        create: ['admin',],
-        read: ['admin', 'moderator', 'user', 'guest'],
+        create: ['admin'],
+        read: ROLES.PUBLIC,
         readOwn: ['admin', 'mentor'],
-        update: ['admin',],
+        update: ['admin'],
         updateOwn: ['admin', 'mentor'],
         delete: ['admin'],
     },
     statistics: {
-        read: ['admin'],
+        read: ['admin', 'mentor'],
         readOwn: ['admin', 'mentor'],
     },
     meeting: {
@@ -147,41 +161,26 @@ const permissions = {
     },
     notification: {
         create: ['admin', 'moderator', 'user'],
-        read: ['admin', 'moderator'],
-        update: ['admin', 'moderator'],
-        delete: ['admin', 'moderator'],
+        read: ROLES.STAFF,
+        update: ROLES.STAFF,
+        delete: ROLES.STAFF,
     },
     review: {
-        read: ['admin', 'moderator'],
-        approve: ['admin', 'moderator'],
-        reject: ['admin', 'moderator'],
-        delete: ['admin']
+        read: ROLES.STAFF,
+        approve: ROLES.STAFF,
+        reject: ROLES.STAFF,
+        delete: ['admin'],
     },
-
     student: {
         create: ['admin'],
-        read: ['admin'],                      // /admin/students (всички)
-        readOwn: ['admin', 'mentor'],         // /mentors/students (своите)
+        read: ['admin'],
+        readOwn: ['admin', 'mentor'],
         update: ['admin'],
-        updateOwn: ['admin', 'mentor'],       // Редактиране на своите
+        updateOwn: ['admin', 'mentor'],
         delete: ['admin'],
         assignMentor: ['admin'],
         sendEmail: ['admin'],
     },
-
-    statistics: {
-        read: ['admin', 'mentor'],
-        readOwn: ['admin', 'mentor'],
-    },
-
-    studentApplication: {
-        create: ['user', 'student', 'admin'],
-        readOwn: ['mentor', 'admin'],
-        readAll: ['admin'],
-        update: ['mentor', 'admin'],
-        delete: ['admin'],
-    },
-
     studentApplication: {
         create: ['user', 'student', 'admin'],
         readOwn: ['mentor', 'admin'],
@@ -190,78 +189,70 @@ const permissions = {
         delete: ['admin'],
     },
     admin: {
-        read: ['admin', 'moderator'],
+        read: ROLES.STAFF,
         update: ['admin'],
         delete: ['admin'],
     },
-    // Добави в permissions обекта:
 
-course: {
-    create: ['admin', 'mentor'],
-    read: ['admin', 'mentor', 'student', 'user', 'guest'],
-    update: ['admin', 'mentor'],
-    delete: ['admin'],
-    publish: ['admin', 'mentor'],
-},
-
-lesson: {
-    create: ['admin', 'mentor'],
-    read: ['admin', 'mentor', 'student'],
-    update: ['admin', 'mentor'],
-    delete: ['admin', 'mentor'],
-},
-
-lecture: {
-    create: ['admin', 'mentor'],
-    read: ['admin', 'mentor', 'student', 'user', 'guest'],
-    update: ['admin', 'mentor'],
-    delete: ['admin'],
-    publish: ['admin', 'mentor'],
-    cancel: ['admin', 'mentor'],
-},
-
-seminar: {
-    create: ['admin', 'mentor'],
-    read: ['admin', 'mentor', 'student', 'user', 'guest'],
-    update: ['admin', 'mentor'],
-    delete: ['admin'],
-    publish: ['admin', 'mentor'],
-    cancel: ['admin', 'mentor'],
-},
-
-enrollment: {
-    create: ['admin', 'mentor', 'student','user','guest'],
-    read: ['admin', 'mentor'],
-    readOwn: ['admin', 'mentor', 'student','user','guest'],
-    update: ['admin', 'mentor'],
-    delete: ['admin'],
-},
-
-test: {
-    create: ['admin', 'mentor'],
-    read: ['admin', 'mentor'],
-    readOwn: ['admin', 'mentor', 'student'],
-    update: ['admin', 'mentor'],
-    delete: ['admin', 'mentor'],
-    attempt: ['student'],
-},
-
-certificate: {
-    create: ['admin'],
-    read: ['admin', 'mentor'],
-    readOwn: ['admin', 'mentor', 'student'],
-    verify: ['admin', 'mentor', 'student', 'user', 'guest'],
-    revoke: ['admin'],
-},
-
-material: {
-    create: ['admin', 'mentor'],
-    read: ['admin', 'mentor', 'student'],
-    update: ['admin', 'mentor'],
-    delete: ['admin', 'mentor'],
-    download: ['admin', 'mentor', 'student'],
-},
-
+    // Academy permissions
+    course: {
+        create: ROLES.ACADEMY_CREATORS,
+        read: ROLES.PUBLIC,
+        update: ROLES.ACADEMY_CREATORS,
+        delete: ['admin'],
+        publish: ROLES.ACADEMY_CREATORS,
+    },
+    lesson: {
+        create: ROLES.ACADEMY_CREATORS,
+        read: ROLES.ACADEMY,
+        update: ROLES.ACADEMY_CREATORS,
+        delete: ROLES.ACADEMY_CREATORS,
+    },
+    lecture: {
+        create: ROLES.ACADEMY_CREATORS,
+        read: ROLES.PUBLIC,
+        update: ROLES.ACADEMY_CREATORS,
+        delete: ['admin'],
+        publish: ROLES.ACADEMY_CREATORS,
+        cancel: ROLES.ACADEMY_CREATORS,
+    },
+    seminar: {
+        create: ROLES.ACADEMY_CREATORS,
+        read: ROLES.PUBLIC,
+        update: ROLES.ACADEMY_CREATORS,
+        delete: ['admin'],
+        publish: ROLES.ACADEMY_CREATORS,
+        cancel: ROLES.ACADEMY_CREATORS,
+    },
+    enrollment: {
+        create: ROLES.PUBLIC,
+        read: ROLES.ACADEMY_CREATORS,
+        readOwn: ROLES.PUBLIC,
+        update: ROLES.ACADEMY_CREATORS,
+        delete: ['admin'],
+    },
+    test: {
+        create: ROLES.ACADEMY_CREATORS,
+        read: ROLES.ACADEMY_CREATORS,
+        readOwn: ROLES.ACADEMY,
+        update: ROLES.ACADEMY_CREATORS,
+        delete: ROLES.ACADEMY_CREATORS,
+        attempt: ['student'],
+    },
+    certificate: {
+        create: ['admin'],
+        read: ROLES.ACADEMY_CREATORS,
+        readOwn: ROLES.ACADEMY,
+        verify: ROLES.PUBLIC,
+        revoke: ['admin'],
+    },
+    material: {
+        create: ROLES.ACADEMY_CREATORS,
+        read: ROLES.ACADEMY,
+        update: ROLES.ACADEMY_CREATORS,
+        delete: ROLES.ACADEMY_CREATORS,
+        download: ROLES.ACADEMY,
+    },
 };
 
 module.exports = permissions;
