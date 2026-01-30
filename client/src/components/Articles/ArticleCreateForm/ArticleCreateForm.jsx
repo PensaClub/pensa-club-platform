@@ -1,4 +1,4 @@
-import{ useState, useRef, useMemo, useCallback, forwardRef, useImperativeHandle } from "react";
+import { useState, useRef, useMemo, useCallback, forwardRef, useImperativeHandle } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     faPlus, faMinus, faImage, faVideo, faSliders,
@@ -212,7 +212,7 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
     const summaryEditor = useMemo(() => createSlateEditor(), []);
     const mainImageAltEditor = useMemo(() => createSlateEditor(), []);
     const sectionEditorsRef = useRef({});
-const navigate = useNavigate();
+    const navigate = useNavigate();
     const getSectionEditor = useCallback((index, field) => {
         const key = `${index}-${field}`;
         if (!sectionEditorsRef.current[key]) {
@@ -382,7 +382,24 @@ const navigate = useNavigate();
         });
         return !!link;
     }, []);
+    const normalizeUrl = useCallback((url) => {
+        if (!url) return url;
 
+        const trimmedUrl = url.trim();
+
+        // Ако вече има http:// или https://, върни както е
+        if (trimmedUrl.match(/^https?:\/\//i)) {
+            return trimmedUrl;
+        }
+
+        // Ако е mailto: или tel: линк, върни както е
+        if (trimmedUrl.match(/^(mailto:|tel:)/i)) {
+            return trimmedUrl;
+        }
+
+        // Добави https:// по подразбиране
+        return `https://${trimmedUrl}`;
+    }, []);
     const insertLink = useCallback((editor, url, text) => {
         if (isLinkActive(editor)) {
             unwrapLink(editor);
@@ -430,17 +447,20 @@ const navigate = useNavigate();
             const url = window.prompt('Enter the URL:');
             if (!url) return;
 
+            // Нормализирай URL-то
+            const normalizedUrl = normalizeUrl(url.trim());
+
             const { selection } = editor;
             const isCollapsed = selection && Range.isCollapsed(selection);
 
             if (isCollapsed) {
                 const text = window.prompt('Enter link text:') || url;
-                insertLink(editor, url, text);
+                insertLink(editor, normalizedUrl, text);
             } else {
-                insertLink(editor, url, '');
+                insertLink(editor, normalizedUrl, '');
             }
         }
-    }, [isLinkActive, insertLink, unwrapLink]);
+    }, [isLinkActive, insertLink, unwrapLink, normalizeUrl]);
 
     // Render functions
     const renderElement = useCallback((props) => {
@@ -637,19 +657,19 @@ const navigate = useNavigate();
         }
     }, [newTag, addTag]);
 
-   const handlePreview = useCallback(() => {
-    if (!values.title?.trim()) {
-        notify('warning', t('articles.createForm.enterTitleForPreview'));
-        return;
-    }
-
-    navigate('/profile/article-preview', {
-        state: { 
-            previewData: values,
-            mediaFiles: mediaFiles 
+    const handlePreview = useCallback(() => {
+        if (!values.title?.trim()) {
+            notify('warning', t('articles.createForm.enterTitleForPreview'));
+            return;
         }
-    });
-}, [values, mediaFiles, navigate, t]);
+
+        navigate('/profile/article-preview', {
+            state: {
+                previewData: values,
+                mediaFiles: mediaFiles
+            }
+        });
+    }, [values, mediaFiles, navigate, t]);
 
     const handleAddImageUrl = useCallback(() => {
         if (handleMainImageUrl(imageUrl)) {
