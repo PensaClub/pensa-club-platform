@@ -446,7 +446,9 @@ export const academyServiceFactory = () => {
     getStudentStatisticsOverview: async () => {
       return requester.get(`${apiUrl}/academy/admin/students/statistics/overview`);
     },
-
+    getMyMentor: async () => {
+      return requester.get(`${apiUrl}/academy/my/mentor`);
+    },
     getStudentsByStatus: async () => {
       return requester.get(`${apiUrl}/academy/admin/students/statistics/by-status`);
     },

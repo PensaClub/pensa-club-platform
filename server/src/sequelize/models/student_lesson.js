@@ -58,6 +58,12 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: 'not_started',
         // not_started, in_progress, completed
       },
+      lastAccessedAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        defaultValue: null,
+        field: 'last_accessed_at',
+      },
       progress: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -126,6 +132,12 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.TEXT,
         allowNull: true,
       },
+      timeSpentMinutes: {
+  type: DataTypes.INTEGER,
+  allowNull: false,
+  defaultValue: 0,
+  field: 'time_spent_minutes',
+},
     },
     {
       sequelize,

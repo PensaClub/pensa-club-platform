@@ -1,0 +1,330 @@
+/* studentDashboardHeader.css */
+/* Prefix: sdbh- */
+
+.sdbh-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 70px;
+  gap: 32px;
+  padding: 32px;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+}
+
+/* ========================================
+   Left Section - Avatar & Info
+   ======================================== */
+.sdbh-left {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex: 1;
+}
+
+/* Avatar */
+.sdbh-avatar-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.sdbh-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 3px solid #64748b;
+  overflow: hidden;
+  background: rgba(30, 41, 59, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sdbh-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sdbh-avatar-placeholder {
+  width: 50px;
+  height: 50px;
+  color: #64748b;
+}
+
+.sdbh-avatar-placeholder svg {
+  width: 100%;
+  height: 100%;
+}
+
+.sdbh-level-badge {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  border: 2px solid #0f172a;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* User Info */
+.sdbh-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.sdbh-name {
+  margin: 0 0 4px 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: #f1f5f9;
+  line-height: 1.2;
+}
+
+.sdbh-email {
+  margin: 0 0 16px 0;
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+/* Level */
+.sdbh-level-container {
+  max-width: 300px;
+}
+
+.sdbh-level-text {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.sdbh-level-label {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.sdbh-level-progress-text {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.sdbh-progress-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(100, 116, 139, 0.3);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.sdbh-progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.sdbh-next-level {
+  margin: 8px 0 0 0;
+  font-size: 12px;
+  color: #64748b;
+}
+
+/* ========================================
+   Right Section - Credits & Button
+   ======================================== */
+.sdbh-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Credits Card */
+.sdbh-credits-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 32px;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  border-radius: 16px;
+  min-width: 140px;
+  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+}
+
+.sdbh-credits-icon {
+  width: 28px;
+  height: 28px;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 4px;
+}
+
+.sdbh-credits-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.sdbh-credits-value {
+  font-size: 36px;
+  font-weight: 700;
+  color: white;
+  line-height: 1;
+}
+
+.sdbh-credits-label {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Edit Button */
+.sdbh-edit-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: transparent;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 8px;
+  color: #94a3b8;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.sdbh-edit-button svg {
+  width: 16px;
+  height: 16px;
+}
+
+.sdbh-edit-button:hover {
+  background: rgba(148, 163, 184, 0.1);
+  border-color: rgba(148, 163, 184, 0.3);
+  color: #f1f5f9;
+}
+
+/* ========================================
+   Responsive: Laptop
+   ======================================== */
+@media (max-width: 1279px) {
+  .sdbh-container {
+    padding: 24px;
+    gap: 24px;
+  }
+
+  .sdbh-avatar {
+    width: 80px;
+    height: 80px;
+  }
+
+  .sdbh-name {
+    font-size: 24px;
+  }
+
+  .sdbh-credits-value {
+    font-size: 32px;
+  }
+}
+
+/* ========================================
+   Responsive: Tablet
+   ======================================== */
+@media (max-width: 1023px) {
+  .sdbh-container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .sdbh-left {
+    flex-direction: column;
+  }
+
+  .sdbh-level-container {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .sdbh-level-text {
+    justify-content: center;
+    gap: 16px;
+  }
+
+  .sdbh-right {
+    width: 100%;
+    flex-direction: row;
+    justify-content: center;
+  }
+}
+
+/* ========================================
+   Responsive: Mobile Large
+   ======================================== */
+@media (max-width: 767px) {
+  .sdbh-container {
+    padding: 20px;
+  }
+
+  .sdbh-avatar {
+    width: 70px;
+    height: 70px;
+  }
+
+  .sdbh-level-badge {
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+  }
+
+  .sdbh-name {
+    font-size: 20px;
+  }
+
+  .sdbh-email {
+    font-size: 13px;
+    margin-bottom: 12px;
+  }
+
+  .sdbh-right {
+    flex-direction: column;
+  }
+
+  .sdbh-credits-card {
+    width: 100%;
+    padding: 16px;
+  }
+
+  .sdbh-edit-button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ========================================
+   Responsive: Mobile Small
+   ======================================== */
+@media (max-width: 424px) {
+  .sdbh-container {
+    padding: 16px;
+  }
+
+  .sdbh-avatar {
+    width: 60px;
+    height: 60px;
+  }
+
+  .sdbh-name {
+    font-size: 18px;
+  }
+
+  .sdbh-credits-value {
+    font-size: 28px;
+  }
+}

@@ -1,3 +1,4 @@
+// server/src/sequelize/models/index.js
 'use strict';
 
 const fs = require('fs');

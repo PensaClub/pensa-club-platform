@@ -1,0 +1,306 @@
+/* ========================================
+   StudentUpcomingEvents Component
+   Prefix: sue-
+   ======================================== */
+
+.sue-container {
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(99, 102, 241, 0.15);
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.sue-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.sue-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin: 0;
+}
+
+.sue-title-icon {
+  width: 20px;
+  height: 20px;
+  color: #6366f1;
+}
+
+.sue-view-all {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #6366f1;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.sue-view-all:hover {
+  color: #818cf8;
+  gap: 8px;
+}
+
+.sue-view-all-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* ========================================
+   Event List
+   ======================================== */
+
+.sue-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sue-event {
+  position: relative;
+  display: block;
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(99, 102, 241, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.sue-event:hover {
+  background: rgba(30, 41, 59, 0.8);
+  border-color: rgba(99, 102, 241, 0.3);
+  transform: translateX(4px);
+}
+
+.sue-event-live {
+  border-color: rgba(239, 68, 68, 0.4);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.sue-event-live:hover {
+  border-color: rgba(239, 68, 68, 0.6);
+}
+
+/* ========================================
+   Live Badge
+   ======================================== */
+
+.sue-live-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.sue-live-dot {
+  width: 6px;
+  height: 6px;
+  background: white;
+  border-radius: 50%;
+  animation: sue-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes sue-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+/* ========================================
+   Event Content
+   ======================================== */
+
+.sue-event-type {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.sue-event-type-icon {
+  width: 14px;
+  height: 14px;
+  color: #6366f1;
+}
+
+.sue-event-type-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6366f1;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.sue-event-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin: 0 0 12px 0;
+  line-height: 1.4;
+}
+
+.sue-event-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 8px;
+}
+
+.sue-event-date,
+.sue-event-time,
+.sue-event-location {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 13px;
+  color: #94a3b8;
+}
+
+.sue-meta-icon {
+  width: 14px;
+  height: 14px;
+  color: #64748b;
+}
+
+.sue-event-countdown {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 500;
+  color: #0ea5e9;
+  background: rgba(14, 165, 233, 0.1);
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.sue-event-live .sue-event-countdown {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.15);
+}
+
+/* ========================================
+   Empty State
+   ======================================== */
+
+.sue-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.sue-empty-icon {
+  width: 48px;
+  height: 48px;
+  color: #475569;
+  margin-bottom: 16px;
+}
+
+.sue-empty-text {
+  font-size: 14px;
+  color: #64748b;
+  margin: 0 0 16px 0;
+}
+
+.sue-empty-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #6366f1;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.sue-empty-link:hover {
+  color: #818cf8;
+}
+
+/* ========================================
+   Responsive: Tablet
+   ======================================== */
+@media (max-width: 768px) {
+  .sue-container {
+    padding: 20px;
+  }
+
+  .sue-title {
+    font-size: 16px;
+  }
+
+  .sue-event {
+    padding: 14px;
+  }
+
+  .sue-event-meta {
+    gap: 12px;
+  }
+}
+
+/* ========================================
+   Responsive: Mobile Large
+   ======================================== */
+@media (max-width: 576px) {
+  .sue-container {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .sue-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .sue-event-title {
+    font-size: 14px;
+    padding-right: 60px;
+  }
+
+  .sue-event-meta {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+/* ========================================
+   Responsive: Mobile Small
+   ======================================== */
+@media (max-width: 424px) {
+  .sue-container {
+    padding: 12px;
+  }
+
+  .sue-event {
+    padding: 12px;
+  }
+
+  .sue-live-badge {
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+
+  .sue-empty {
+    padding: 32px 16px;
+  }
+}

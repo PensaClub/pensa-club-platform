@@ -1,0 +1,271 @@
+/* ========================================
+   SendEmailModal Component
+   Prefix: sem-
+   ======================================== */
+
+.sem-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.sem-modal {
+  width: 100%;
+  max-width: 500px;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.98), rgba(15, 23, 42, 0.98));
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  animation: sem-slideIn 0.2s ease-out;
+}
+
+@keyframes sem-slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Header */
+.sem-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.sem-header-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sem-header-icon {
+  width: 24px;
+  height: 24px;
+  color: #6366f1;
+}
+
+.sem-header-title h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #f1f5f9;
+}
+
+.sem-close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: rgba(100, 116, 139, 0.1);
+  border: none;
+  border-radius: 8px;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sem-close-btn:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.sem-close-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sem-close-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Form */
+.sem-form {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Recipient */
+.sem-recipient {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: rgba(99, 102, 241, 0.1);
+  border-radius: 8px;
+}
+
+.sem-recipient-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #94a3b8;
+}
+
+.sem-recipient-value {
+  font-size: 14px;
+  color: #f1f5f9;
+}
+
+/* Field */
+.sem-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sem-field label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #cbd5e1;
+}
+
+.sem-field input,
+.sem-field textarea {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 8px;
+  color: #f1f5f9;
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.sem-field input:focus,
+.sem-field textarea:focus {
+  outline: none;
+  border-color: rgba(99, 102, 241, 0.5);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.sem-field input::placeholder,
+.sem-field textarea::placeholder {
+  color: #64748b;
+}
+
+.sem-field input:disabled,
+.sem-field textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.sem-field textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* Actions */
+.sem-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding-top: 8px;
+}
+
+.sem-cancel-btn,
+.sem-submit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sem-cancel-btn {
+  background: transparent;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  color: #94a3b8;
+}
+
+.sem-cancel-btn:hover:not(:disabled) {
+  background: rgba(100, 116, 139, 0.1);
+  border-color: rgba(148, 163, 184, 0.5);
+}
+
+.sem-submit-btn {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border: none;
+  color: white;
+}
+
+.sem-submit-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.3);
+}
+
+.sem-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.sem-submit-btn svg,
+.sem-cancel-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.sem-spinner {
+  animation: sem-spin 1s linear infinite;
+}
+
+@keyframes sem-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ========================================
+   Responsive
+   ======================================== */
+
+@media (max-width: 576px) {
+  .sem-overlay {
+    padding: 16px;
+  }
+
+  .sem-modal {
+    border-radius: 12px;
+  }
+
+  .sem-header {
+    padding: 16px 20px;
+  }
+
+  .sem-form {
+    padding: 20px;
+  }
+
+  .sem-actions {
+    flex-direction: column;
+  }
+
+  .sem-cancel-btn,
+  .sem-submit-btn {
+    width: 100%;
+  }
+}
