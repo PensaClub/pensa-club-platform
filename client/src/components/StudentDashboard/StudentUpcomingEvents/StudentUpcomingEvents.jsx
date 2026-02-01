@@ -23,7 +23,9 @@ const StudentUpcomingEvents = ({ events = [] }) => {
   };
 
   const formatDate = (dateString) => {
+    if (!dateString) return '-';
     const date = new Date(dateString);
+    if (isNaN(date.getTime())) return '-';
     return date.toLocaleDateString('bg-BG', {
       day: '2-digit',
       month: '2-digit'
@@ -31,7 +33,9 @@ const StudentUpcomingEvents = ({ events = [] }) => {
   };
 
   const formatTime = (dateString) => {
+    if (!dateString) return '-';
     const date = new Date(dateString);
+    if (isNaN(date.getTime())) return '-';
     return date.toLocaleTimeString('bg-BG', {
       hour: '2-digit',
       minute: '2-digit'
@@ -39,8 +43,11 @@ const StudentUpcomingEvents = ({ events = [] }) => {
   };
 
   const getTimeUntil = (dateString) => {
+    if (!dateString) return '';
     const now = new Date();
     const eventDate = new Date(dateString);
+    if (isNaN(eventDate.getTime())) return '';
+    
     const diffMs = eventDate - now;
     const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
     const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
@@ -55,10 +62,12 @@ const StudentUpcomingEvents = ({ events = [] }) => {
   };
 
   const isLive = (dateString) => {
+    if (!dateString) return false;
     const now = new Date();
     const eventDate = new Date(dateString);
+    if (isNaN(eventDate.getTime())) return false;
     const diffMs = now - eventDate;
-    return diffMs >= 0 && diffMs < 2 * 60 * 60 * 1000; // в рамките на 2 часа
+    return diffMs >= 0 && diffMs < 2 * 60 * 60 * 1000;
   };
 
   if (!events || events.length === 0) {
@@ -97,11 +106,11 @@ const StudentUpcomingEvents = ({ events = [] }) => {
       <div className="sue-list">
         {events.slice(0, 4).map((event) => (
           <Link
-            key={event.id}
+            key={`${event.type}-${event.id}`}
             to={`/academy/${event.type === 'lecture' ? 'lectures' : 'seminars'}/${event.slug}`}
-            className={`sue-event ${isLive(event.scheduled_at) ? 'sue-event-live' : ''}`}
+            className={`sue-event ${isLive(event.scheduledDate) ? 'sue-event-live' : ''}`}
           >
-            {isLive(event.scheduled_at) && (
+            {isLive(event.scheduledDate) && (
               <span className="sue-live-badge">
                 <span className="sue-live-dot"></span>
                 LIVE
@@ -118,11 +127,11 @@ const StudentUpcomingEvents = ({ events = [] }) => {
             <div className="sue-event-meta">
               <span className="sue-event-date">
                 <Calendar className="sue-meta-icon" />
-                {formatDate(event.scheduled_at)}
+                {formatDate(event.scheduledDate)}
               </span>
               <span className="sue-event-time">
                 <Clock className="sue-meta-icon" />
-                {formatTime(event.scheduled_at)}
+                {formatTime(event.scheduledDate)}
               </span>
               {event.location && (
                 <span className="sue-event-location">
@@ -132,7 +141,7 @@ const StudentUpcomingEvents = ({ events = [] }) => {
               )}
             </div>
 
-            <span className="sue-event-countdown">{getTimeUntil(event.scheduled_at)}</span>
+            <span className="sue-event-countdown">{getTimeUntil(event.scheduledDate)}</span>
           </Link>
         ))}
       </div>

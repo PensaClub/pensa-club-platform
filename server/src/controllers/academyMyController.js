@@ -15,6 +15,7 @@ const {
   module: courseModule,
   certificate,
   student_test_attempt,
+  lesson_test,
   student,
   mentor,
   user_account,
@@ -829,8 +830,8 @@ academyMyController.get(
 // =========================================================
 
 // ===============================
-// GET /api/academy/my/certificates
-// Моите сертификати
+//  
+// Моите сертификати + възможни за печелене
 // ===============================
 academyMyController.get(
   '/certificates',
@@ -849,13 +850,17 @@ academyMyController.get(
         return res.status(200).json({
           success: true,
           certificates: [],
+          availableCertificates: [],
           pagination: { page, limit, total: 0, totalPages: 0 },
         });
       }
 
-      const { count, rows: certificates } = await certificate.findAndCountAll({
+      const studentId = studentData.id;
+
+      // 1. Спечелени сертификати
+      const { count, rows: earnedCertificates } = await certificate.findAndCountAll({
         where: {
-          studentId: studentData.id,
+          studentId,
           status: 'active',
         },
         include: [
@@ -871,11 +876,59 @@ academyMyController.get(
         distinct: true,
       });
 
+      // 2. Взимаме courseIds на вече спечелени сертификати
+      const earnedCourseIds = earnedCertificates.map(c => c.courseId);
+
+      // 3. Намираме курсове с възможен сертификат, в които студентът е записан, но няма сертификат
+      const availableEnrollments = await course_enrollment.findAll({
+        where: {
+          studentId,
+          status: { [Op.in]: ['active', 'completed'] },
+          courseId: { [Op.notIn]: earnedCourseIds.length > 0 ? earnedCourseIds : [0] },
+        },
+        include: [
+          {
+            model: course,
+            as: 'course',
+            where: {
+              hasCertificate: true,
+            },
+            attributes: [
+              'id',
+              'name',
+              'slug',
+              'thumbnailUrl',
+              'category',
+              'maxCredits',
+              'creditsForCompletion',
+            ],
+          },
+        ],
+        order: [['progressPercentage', 'DESC']],
+      });
+
+      // 4. Форматираме available certificates
+      const availableCertificates = availableEnrollments.map(enrollment => ({
+        id: `available-${enrollment.courseId}`,
+        courseId: enrollment.courseId,
+        courseName: enrollment.course?.name,
+        courseSlug: enrollment.course?.slug,
+        thumbnailUrl: enrollment.course?.thumbnailUrl,
+        category: enrollment.course?.category,
+        progressPercentage: enrollment.progressPercentage || 0,
+        completedLessons: enrollment.completedLessons || 0,
+        currentCredits: enrollment.totalCreditsEarned || 0,
+        requiredCredits: enrollment.course?.creditsForCompletion || enrollment.course?.maxCredits || 100,
+        isCompleted: enrollment.status === 'completed',
+        enrolledAt: enrollment.enrolledAt,
+      }));
+
       const totalPages = Math.ceil(count / limit);
 
       res.status(200).json({
         success: true,
-        certificates,
+        certificates: earnedCertificates,
+        availableCertificates,
         pagination: {
           page,
           limit,
@@ -923,6 +976,7 @@ academyMyController.get('/progress', isAuth, async (req, res, next) => {
 
     const studentId = studentData.id;
 
+    // === COURSES ===
     const enrollments = await course_enrollment.findAll({
       where: { studentId },
       include: [
@@ -935,6 +989,48 @@ academyMyController.get('/progress', isAuth, async (req, res, next) => {
       order: [['lastAccessedAt', 'DESC NULLS LAST']],
     });
 
+    // === RECENT ACTIVITY - събираме от всички таблици ===
+    const activities = [];
+
+    // 1. Course enrollments (course_enrolled, course_completed)
+    const recentEnrollments = await course_enrollment.findAll({
+      where: { studentId },
+      include: [
+        {
+          model: course,
+          as: 'course',
+          attributes: ['id', 'name', 'slug'],
+        },
+      ],
+      order: [['createdAt', 'DESC']],
+      limit: 10,
+    });
+
+    recentEnrollments.forEach(e => {
+      // Enrolled event
+      activities.push({
+        id: `course-enrolled-${e.id}`,
+        type: 'course_enrolled',
+        title: e.course?.name,
+        courseSlug: e.course?.slug,
+        credits: 0,
+        createdAt: e.enrolledAt || e.createdAt,
+      });
+
+      // Completed event (if completed)
+      if (e.status === 'completed' && e.completedAt) {
+        activities.push({
+          id: `course-completed-${e.id}`,
+          type: 'course_completed',
+          title: e.course?.name,
+          courseSlug: e.course?.slug,
+          credits: e.totalCreditsEarned || 0,
+          createdAt: e.completedAt,
+        });
+      }
+    });
+
+    // 2. Lessons (lesson_started, lesson_completed)
     const recentLessons = await student_lesson.findAll({
       where: { studentId },
       include: [
@@ -951,10 +1047,156 @@ academyMyController.get('/progress', isAuth, async (req, res, next) => {
           ],
         },
       ],
-      order: [['lastAccessedAt', 'DESC']],
+      order: [['updatedAt', 'DESC']],
+      limit: 15,
+    });
+
+    recentLessons.forEach(l => {
+      if (l.status === 'completed' && l.completedAt) {
+        activities.push({
+          id: `lesson-completed-${l.id}`,
+          type: 'lesson_completed',
+          title: l.lesson?.title,
+          courseSlug: l.lesson?.course?.slug,
+          lessonSlug: l.lesson?.slug,
+          credits: l.earnedCredits || 0,
+          createdAt: l.completedAt,
+        });
+      } else if (l.status === 'in_progress') {
+        activities.push({
+          id: `lesson-started-${l.id}`,
+          type: 'lesson_started',
+          title: l.lesson?.title,
+          courseSlug: l.lesson?.course?.slug,
+          lessonSlug: l.lesson?.slug,
+          credits: 0,
+          createdAt: l.createdAt,
+        });
+      }
+    });
+
+    // 3. Lectures attended
+    const recentLectures = await student_lecture.findAll({
+      where: { studentId, attended: true },
+      include: [
+        {
+          model: lecture,
+          as: 'lecture',
+          attributes: ['id', 'title', 'slug'],
+        },
+      ],
+      order: [['attendedAt', 'DESC']],
       limit: 10,
     });
 
+    recentLectures.forEach(l => {
+      activities.push({
+        id: `lecture-attended-${l.id}`,
+        type: 'lecture_attended',
+        title: l.lecture?.title,
+        lectureSlug: l.lecture?.slug,
+        credits: l.earnedCredits || 0,
+        createdAt: l.attendedAt || l.createdAt,
+      });
+    });
+
+    // 4. Seminars attended
+    const recentSeminars = await student_seminar.findAll({
+      where: { studentId, attended: true },
+      include: [
+        {
+          model: seminar,
+          as: 'seminar',
+          attributes: ['id', 'title', 'slug'],
+        },
+      ],
+      order: [['attendedAt', 'DESC']],
+      limit: 10,
+    });
+
+    recentSeminars.forEach(s => {
+      activities.push({
+        id: `seminar-attended-${s.id}`,
+        type: 'seminar_attended',
+        title: s.seminar?.title,
+        seminarSlug: s.seminar?.slug,
+        credits: s.earnedCredits || 0,
+        createdAt: s.attendedAt || s.createdAt,
+      });
+    });
+
+    // 5. Test attempts (passed/failed)
+    const recentTests = await student_test_attempt.findAll({
+      where: { studentId, status: 'completed' },
+      include: [
+        {
+          model: lesson_test,
+          as: 'test',
+          attributes: ['id', 'title', 'lessonId'],
+          include: [
+            {
+              model: lesson,
+              as: 'lesson',
+              attributes: ['id', 'title', 'slug', 'courseId'],
+              include: [
+                {
+                  model: course,
+                  as: 'course',
+                  attributes: ['slug'],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+      order: [['completedAt', 'DESC']],
+      limit: 10,
+    });
+
+    recentTests.forEach(t => {
+      activities.push({
+        id: `test-${t.isPassed ? 'passed' : 'failed'}-${t.id}`,
+        type: t.isPassed ? 'test_passed' : 'test_failed',
+        title: t.test?.title || t.test?.lesson?.title,
+        courseSlug: t.test?.lesson?.course?.slug,
+        lessonSlug: t.test?.lesson?.slug,
+        credits: t.earnedCredits || 0,
+        createdAt: t.completedAt,
+      });
+    });
+
+    // 6. Certificates earned
+    const recentCertificates = await certificate.findAll({
+      where: { studentId, status: 'active' },
+      include: [
+        {
+          model: course,
+          as: 'course',
+          attributes: ['id', 'name', 'slug'],
+        },
+      ],
+      order: [['issuedAt', 'DESC']],
+      limit: 5,
+    });
+
+    recentCertificates.forEach(c => {
+      activities.push({
+        id: `certificate-earned-${c.id}`,
+        type: 'certificate_earned',
+        title: c.courseTitle || c.course?.name,
+        courseSlug: c.course?.slug,
+        credits: c.totalCreditsEarned || 0,
+        createdAt: c.issuedAt,
+      });
+    });
+
+    // Sort all activities by date (newest first) and take top 10
+    const sortedActivities = activities
+      .filter(a => a.createdAt) // филтрираме null dates
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      .slice(0, 10);
+
+    // === STATS ===
     const totalCoursesStarted = enrollments.length;
     const totalCoursesCompleted = enrollments.filter((e) => e.status === 'completed').length;
 
@@ -998,13 +1240,7 @@ academyMyController.get('/progress', isAuth, async (req, res, next) => {
           completedAt: e.completedAt,
           lastAccessedAt: e.lastAccessedAt,
         })),
-        recentActivity: recentLessons.map((l) => ({
-          lessonId: l.lessonId,
-          lesson: l.lesson,
-          status: l.status,
-          progressPercentage: l.progressPercentage,
-          lastAccessedAt: l.lastAccessedAt,
-        })),
+        recentActivity: sortedActivities,
         stats: {
           totalCoursesStarted,
           totalCoursesCompleted,

@@ -12,6 +12,7 @@ import StudentMentorCard from './StudentMentorCard/StudentMentorCard';
 import StudentCertificates from './StudentCertificates/StudentCertificates';
 import StudentCreditsOverview from './StudentCreditsOverview/StudentCreditsOverview';
 import StudentRecentActivity from './StudentRecentActivity/StudentRecentActivity';
+import SendEmailModal from './SendEmailModal/SendEmailModal';
 
 const StudentDashboard = () => {
     const { t } = useTranslation();
@@ -36,6 +37,9 @@ const StudentDashboard = () => {
     const [certificates, setCertificates] = useState([]);
     const [progressData, setProgressData] = useState(null);
     const [currentMentor, setCurrentMentor] = useState(null);
+    const [availableCertificates, setAvailableCertificates] = useState([]);
+    // Email modal state
+    const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
 
     useEffect(() => {
         const fetchDashboardData = async () => {
@@ -55,7 +59,7 @@ const StudentDashboard = () => {
                     seminarsRes,
                     certificatesRes,
                     progressRes,
-                    mentorRes  
+                    mentorRes
                 ] = await Promise.all([
                     getMyDashboard(),
                     getContinueCourses(3),
@@ -63,19 +67,42 @@ const StudentDashboard = () => {
                     getUpcomingSeminars(3),
                     getMyCertificates(),
                     getMyProgress(),
-                    getMyMentor() 
+                    getMyMentor()
                 ]);
 
                 setDashboardData(dashboardRes);
                 setContinueCourses(continueRes || []);
                 setCertificates(certificatesRes?.certificates || []);
+                setAvailableCertificates(certificatesRes?.availableCertificates || []);
                 setProgressData(progressRes);
                 setCurrentMentor(mentorRes?.mentor || null);
 
                 const allEvents = [
-                    ...(lecturesRes || []).map(l => ({ ...l, type: 'lecture' })),
-                    ...(seminarsRes || []).map(s => ({ ...s, type: 'seminar' }))
-                ].sort((a, b) => new Date(a.lecture?.scheduledDate || a.seminar?.scheduledDate) - new Date(b.lecture?.scheduledDate || b.seminar?.scheduledDate));
+                    ...(lecturesRes || []).map(l => ({
+                        id: l.id,
+                        type: 'lecture',
+                        title: l.lecture?.title,
+                        slug: l.lecture?.slug,
+                        scheduledDate: l.lecture?.scheduledDate,
+                        durationMinutes: l.lecture?.durationMinutes,
+                        isOnline: l.lecture?.isOnline,
+                        meetingLink: l.lecture?.meetingLink,
+                        location: l.lecture?.isOnline ? 'Online' : l.lecture?.location,
+                        thumbnailUrl: l.lecture?.thumbnailUrl,
+                        lecturer: l.lecture?.lecturer
+                    })),
+                    ...(seminarsRes || []).map(s => ({
+                        id: s.id,
+                        type: 'seminar',
+                        title: s.seminar?.title,
+                        slug: s.seminar?.slug,
+                        scheduledDate: s.seminar?.scheduledDate,
+                        durationMinutes: s.seminar?.durationMinutes,
+                        isOnline: s.seminar?.isOnline,
+                        location: s.seminar?.isOnline ? 'Online' : s.seminar?.location,
+                        thumbnailUrl: s.seminar?.thumbnailUrl
+                    }))
+                ].sort((a, b) => new Date(a.scheduledDate) - new Date(b.scheduledDate));
                 setUpcomingEvents(allEvents.slice(0, 5));
 
             } catch (err) {
@@ -176,7 +203,10 @@ const StudentDashboard = () => {
 
                         {/* Mentor Card */}
                         <section className="sdb-section sdb-mentor-section">
-                            <StudentMentorCard mentor={currentMentor} />
+                            <StudentMentorCard
+                                mentor={currentMentor}
+                                onSendEmail={() => setIsEmailModalOpen(true)}
+                            />
                         </section>
                     </div>
 
@@ -195,7 +225,10 @@ const StudentDashboard = () => {
 
                 {/* Certificates */}
                 <section className="sdb-section sdb-certificates-section">
-                    <StudentCertificates certificates={certificates} />
+                    <StudentCertificates
+                        certificates={certificates}
+                        availableCertificates={availableCertificates}
+                    />
                 </section>
 
                 {/* Recent Activity */}
@@ -203,6 +236,16 @@ const StudentDashboard = () => {
                     <StudentRecentActivity activities={progressData?.progress?.recentActivity || []} />
                 </section>
             </div>
+
+            {/* Email Modal - на най-високо ниво */}
+            {currentMentor && (
+                <SendEmailModal
+                    isOpen={isEmailModalOpen}
+                    onClose={() => setIsEmailModalOpen(false)}
+                    recipientEmail={currentMentor.email}
+                    recipientName={currentMentor.name}
+                />
+            )}
         </div>
     );
 };

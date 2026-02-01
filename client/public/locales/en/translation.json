@@ -14400,11 +14400,12 @@
 "studentCertificates": {
     "title": "Certificates",
     "viewAll": "View all",
+    "noCertificates": "You don't have any certificates yet",
+    "browseCourses": "Browse courses",
     "earned": "Earned:",
     "download": "Download",
     "credits": "credits",
-    "noCertificates": "No certificates yet",
-    "browseCourses": "Browse courses"
+    "certificate": "Certificate"
 },
 "studentCreditsOverview": {
     "totalCredits": "Total Credits",
@@ -14446,5 +14447,16 @@
         "yesterday": "Yesterday",
         "daysAgo": "{{days}}d ago"
     }
-}
+},
+  "sendEmailModal": {
+    "title": "Send Email",
+    "to": "To",
+    "subject": "Subject",
+    "subjectPlaceholder": "Enter message subject",
+    "message": "Message",
+    "messagePlaceholder": "Write your message here...",
+    "cancel": "Cancel",
+    "send": "Send",
+    "sending": "Sending..."
+  }
 }

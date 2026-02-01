@@ -503,9 +503,9 @@ export const academyCoursesServiceFactory = () => {
     // =========================================================
 
     getMyCertificates: async (params = {}) => {
-      const queryString = toQueryString(params);
-      return requester.get(`${apiUrl}/academy/certificates/my?${queryString}`);
-    },
+  const queryString = toQueryString(params);
+  return requester.get(`${apiUrl}/academy/my/certificates?${queryString}`);
+},
 
     verifyCertificate: async (code) => {
       return requester.get(`${apiUrl}/academy/certificates/verify/${code}`);

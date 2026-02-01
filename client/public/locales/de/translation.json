@@ -13662,13 +13662,14 @@
     "offline": "Offline"
 },
 "studentCertificates": {
-    "title": "Zertifikate",
+     "title": "Zertifikate",
     "viewAll": "Alle anzeigen",
+    "noCertificates": "Du hast noch keine Zertifikate",
+    "browseCourses": "Kurse durchsuchen",
     "earned": "Erhalten:",
     "download": "Herunterladen",
     "credits": "Credits",
-    "noCertificates": "Noch keine Zertifikate",
-    "browseCourses": "Kurse durchsuchen"
+    "certificate": "Zertifikat"
 },
 "studentCreditsOverview": {
     "totalCredits": "Gesamtpunkte",
@@ -13710,5 +13711,16 @@
         "yesterday": "Gestern",
         "daysAgo": "vor {{days}} Tagen"
     }
-}
+},
+"sendEmailModal": {
+    "title": "E-Mail senden",
+    "to": "An",
+    "subject": "Betreff",
+    "subjectPlaceholder": "Betreff eingeben",
+    "message": "Nachricht",
+    "messagePlaceholder": "Schreibe deine Nachricht hier...",
+    "cancel": "Abbrechen",
+    "send": "Senden",
+    "sending": "Wird gesendet..."
+  }
 }

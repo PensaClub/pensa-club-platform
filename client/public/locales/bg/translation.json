@@ -14664,13 +14664,14 @@
     "offline": "Офлайн"
 },
 "studentCertificates": {
-    "title": "Сертификати",
+       "title": "Сертификати",
     "viewAll": "Виж всички",
-    "earned": "Получен:",
-    "download": "Свали",
-    "credits": "кредита",
     "noCertificates": "Все още нямаш сертификати",
-    "browseCourses": "Разгледай курсове"
+    "browseCourses": "Разгледай курсове",
+    "earned": "Получен:",
+    "download": "Изтегли",
+    "credits": "кредита",
+    "certificate": "Сертификат"
 },
 "studentCreditsOverview": {
     "totalCredits": "Общо кредити",
@@ -14712,5 +14713,16 @@
         "yesterday": "Вчера",
         "daysAgo": "преди {{days}} дни"
     }
-}
+},
+"sendEmailModal": {
+    "title": "Изпрати имейл",
+    "to": "До",
+    "subject": "Тема",
+    "subjectPlaceholder": "Въведи тема на съобщението",
+    "message": "Съобщение",
+    "messagePlaceholder": "Напиши съобщението си тук...",
+    "cancel": "Отказ",
+    "send": "Изпрати",
+    "sending": "Изпращане..."
+  }
 }

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { User, Mail, MessageCircle, ArrowRight, Star } from 'lucide-react';
 import './studentMentorCard.css';
 
-const StudentMentorCard = ({ mentor = null }) => {
+const StudentMentorCard = ({ mentor = null, onSendEmail }) => {
   const { t } = useTranslation();
 
   const getInitials = (name) => {
@@ -83,13 +83,13 @@ const StudentMentorCard = ({ mentor = null }) => {
 
         <div className="smc-actions">
           {mentor.email && (
-            <a 
-              href={`mailto:${mentor.email}`} 
+            <button 
+              onClick={onSendEmail}
               className="smc-action-btn smc-action-email" 
               title={t('studentMentorCard.sendEmail')}
             >
               <Mail className="smc-action-icon" />
-            </a>
+            </button>
           )}
           <Link 
             to={`/messages?to=${mentor.id}`} 
