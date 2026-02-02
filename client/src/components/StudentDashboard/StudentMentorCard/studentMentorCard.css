@@ -1,0 +1,370 @@
+/* ========================================
+   StudentMentorCard Component
+   Prefix: smc-
+   ======================================== */
+
+.smc-container {
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(99, 102, 241, 0.15);
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.smc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.smc-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin: 0;
+}
+
+.smc-title-icon {
+  width: 20px;
+  height: 20px;
+  color: #6366f1;
+}
+
+.smc-view-all {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #6366f1;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.smc-view-all:hover {
+  color: #818cf8;
+  gap: 8px;
+}
+
+.smc-view-all-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* ========================================
+   Mentor Card
+   ======================================== */
+
+.smc-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(99, 102, 241, 0.1);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.smc-avatar-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.smc-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid rgba(99, 102, 241, 0.3);
+}
+
+.smc-avatar-placeholder {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 700;
+  color: white;
+  border: 3px solid rgba(99, 102, 241, 0.3);
+}
+
+.smc-status-dot {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  width: 14px;
+  height: 14px;
+  background: #10b981;
+  border: 3px solid #1e293b;
+  border-radius: 50%;
+}
+
+/* ========================================
+   Mentor Info
+   ======================================== */
+
+.smc-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.smc-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin: 0 0 4px 0;
+}
+
+.smc-specialization {
+  font-size: 14px;
+  color: #6366f1;
+  margin: 0 0 8px 0;
+}
+
+.smc-assigned {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #64748b;
+  margin: 0;
+}
+
+.smc-assigned-icon {
+  width: 14px;
+  height: 14px;
+}
+
+/* ========================================
+   Actions
+   ======================================== */
+
+.smc-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.smc-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.smc-action-email {
+  background: rgba(14, 165, 233, 0.15);
+  color: #0ea5e9;
+}
+
+.smc-action-email:hover {
+  background: rgba(14, 165, 233, 0.25);
+  transform: translateY(-2px);
+}
+
+.smc-action-message {
+  background: rgba(99, 102, 241, 0.15);
+  color: #6366f1;
+}
+
+.smc-action-message:hover {
+  background: rgba(99, 102, 241, 0.25);
+  transform: translateY(-2px);
+}
+
+.smc-action-icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* ========================================
+   Empty State
+   ======================================== */
+
+.smc-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 20px;
+  text-align: center;
+}
+
+.smc-empty-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(30, 41, 59, 0.8);
+  border: 2px dashed rgba(100, 116, 139, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.smc-empty-avatar-icon {
+  width: 36px;
+  height: 36px;
+  color: #475569;
+}
+
+.smc-empty-text {
+  font-size: 14px;
+  color: #64748b;
+  margin: 0 0 16px 0;
+}
+
+.smc-find-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: white;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 24px;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.smc-find-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+}
+
+.smc-find-btn-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* ========================================
+   Responsive: Tablet
+   ======================================== */
+@media (max-width: 768px) {
+  .smc-container {
+    padding: 20px;
+  }
+
+  .smc-card {
+    padding: 16px;
+  }
+
+  .smc-avatar,
+  .smc-avatar-placeholder {
+    width: 64px;
+    height: 64px;
+    font-size: 20px;
+  }
+
+  .smc-name {
+    font-size: 16px;
+  }
+}
+
+/* ========================================
+   Responsive: Mobile Large
+   ======================================== */
+@media (max-width: 576px) {
+  .smc-container {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .smc-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .smc-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+
+  .smc-info {
+    width: 100%;
+  }
+
+  .smc-assigned {
+    justify-content: center;
+  }
+
+  .smc-actions {
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ========================================
+   Responsive: Mobile Small
+   ======================================== */
+@media (max-width: 424px) {
+  .smc-container {
+    padding: 12px;
+  }
+
+  .smc-card {
+    padding: 14px;
+  }
+
+  .smc-avatar,
+  .smc-avatar-placeholder {
+    width: 56px;
+    height: 56px;
+    font-size: 18px;
+  }
+
+  .smc-action-btn {
+    width: 40px;
+    height: 40px;
+  }
+}
+/* В studentMentorCard.css - замени .smc-status-dot */
+
+.smc-status-dot {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  width: 14px;
+  height: 14px;
+  border: 3px solid #1e293b;
+  border-radius: 50%;
+}
+
+.smc-status-online {
+  background: #10b981;
+}
+
+.smc-status-offline {
+  background: #64748b;
+}
+
+/* Rating */
+.smc-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: #fbbf24;
+  margin: 0;
+}
+
+.smc-rating-icon {
+  width: 14px;
+  height: 14px;
+  fill: #fbbf24;
+}

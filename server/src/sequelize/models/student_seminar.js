@@ -1,3 +1,5 @@
+
+// server/src/sequelize/models/student_seminar.js
 'use strict';
 const { Model } = require('sequelize');
 
@@ -60,6 +62,12 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         defaultValue: null,
       },
+      status: {
+  type: DataTypes.STRING,
+  allowNull: false,
+  defaultValue: 'registered',
+  // registered, approved, pending, rejected, cancelled
+},
     },
     {
       sequelize,

@@ -1,3 +1,4 @@
+// server/src/sequelize/models/student_course.js
 'use strict';
 const { Model } = require('sequelize');
 
@@ -23,6 +24,13 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'mentorCourseId',
         targetKey: 'id',
         as: 'mentorCourse',
+      });
+
+      // Current lesson being studied
+      student_course.belongsTo(models.lesson, {
+        foreignKey: 'currentLessonId',
+        targetKey: 'id',
+        as: 'currentLesson',
       });
     }
   }
@@ -51,15 +59,28 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: null,
         field: 'mentor_course_id',
       },
+      currentLessonId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        defaultValue: null,
+        field: 'current_lesson_id',
+      },
       status: {
         type: DataTypes.STRING,
         allowNull: false,
-        defaultValue: 'not_started',
+        defaultValue: 'active',
+        // active, completed, dropped, paused
       },
       progress: {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0,
+      },
+      progressPercentage: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+        field: 'progress_percentage',
       },
       completedLessons: {
         type: DataTypes.INTEGER,
@@ -79,11 +100,23 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: 0,
         field: 'earned_credits',
       },
+      totalCreditsEarned: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 0,
+        field: 'total_credits_earned',
+      },
       maxCredits: {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0,
         field: 'max_credits',
+      },
+      enrolledAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        defaultValue: DataTypes.NOW,
+        field: 'enrolled_at',
       },
       startDate: {
         type: DataTypes.DATE,
@@ -96,6 +129,18 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         defaultValue: null,
         field: 'end_date',
+      },
+      completedAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        defaultValue: null,
+        field: 'completed_at',
+      },
+      lastAccessedAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        defaultValue: null,
+        field: 'last_accessed_at',
       },
     },
     {

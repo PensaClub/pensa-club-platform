@@ -4,13 +4,14 @@ import { createContext, useContext, useState, useCallback, useRef } from 'react'
 import { useAuthContext } from './UserContext';
 import { academyCoursesServiceFactory } from '../Services/academyCoursesService';
 import { toast } from 'react-toastify';
+import academyServiceFactory from '../Services/academyServiceFactory';
 
 export const AcademyCoursesContext = createContext();
 
 export const AcademyCoursesProvider = ({ children }) => {
-  const { isAdmin } = useAuthContext();
+  const { isAdmin, token } = useAuthContext();
   const coursesService = academyCoursesServiceFactory();
-
+  const academyService = academyServiceFactory(token);
   // State
   const [isLoading, setIsLoading] = useState(false);
   const [courses, setCourses] = useState([]);
@@ -1415,7 +1416,15 @@ export const AcademyCoursesProvider = ({ children }) => {
       return [];
     }
   }, []);
-
+const getMyMentor = useCallback(async () => {
+  try {
+    const data = await academyService.getMyMentor();
+    return data;
+  } catch (error) {
+    console.error('Error fetching my mentor:', error);
+    return { mentor: null, assignedDate: null };
+  }
+}, []);
   // =========================================================
   //                    CONTEXT VALUE
   // =========================================================
@@ -1551,6 +1560,7 @@ export const AcademyCoursesProvider = ({ children }) => {
     getMyProgress,
     getMyCourseProgress,
     getMySchedule,
+    getMyMentor,
     // Lecture Tests
     startLectureTest,
     getLectureTestStatus,
