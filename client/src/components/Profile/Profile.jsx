@@ -189,6 +189,7 @@ export const Profile = () => {
     applications: false,
     clubs: false,
     students: false,
+    academy: false
   });
 
   const [applicationsStats, setApplicationsStats] = useState({
@@ -943,6 +944,43 @@ export const Profile = () => {
                             </NavLink>
                           </li>
                         </ul>
+                        {/* Academy */}
+                        <li>
+                          <NavLink
+                            onClick={(e) => {
+                              toggleSubMenu('academy');
+                            }}
+                            className="nav-link-button"
+                          >
+                            <span className="link-content">
+                              <EducationIcon className="icon" />
+                              {t("admin.academy.title")}
+                            </span>
+                            <span className={`arrow-icon ${subMenuStates.academy ? 'rotated' : ''}`}>
+                              {subMenuStates.academy ? <DownArrowIcon /> : <ArrowIcon />}
+                            </span>
+                          </NavLink>
+                          <ul className={`sub-menu ${subMenuStates.academy ? 'expanded' : ''}`}>
+                            <li>
+                              <NavLink to="/academy/admin/create-course" className={({ isActive }) => isActive ? 'active' : ''}>
+                                <CircleIcon className="icon" />
+                                {t("admin.academy.createCourse")}
+                              </NavLink>
+                            </li>
+                            <li>
+                              <NavLink to="/academy/admin/create-lecture" className={({ isActive }) => isActive ? 'active' : ''}>
+                                <CircleIcon className="icon" />
+                                {t("admin.academy.createLecture")}
+                              </NavLink>
+                            </li>
+                            <li>
+                              <NavLink to="/academy/admin/create-seminar" className={({ isActive }) => isActive ? 'active' : ''}>
+                                <CircleIcon className="icon" />
+                                {t("admin.academy.createSeminar")}
+                              </NavLink>
+                            </li>
+                          </ul>
+                        </li>
                       </li>
                       {/*Students*/}
                       <li>
@@ -951,7 +989,7 @@ export const Profile = () => {
                             toggleSubMenu('students');
                           }}
                           className="nav-link-button"
-                          >
+                        >
                           <span className="link-content">
                             <UsersIcon className="icon" />
                             {t("admin.students.title")}
@@ -959,7 +997,7 @@ export const Profile = () => {
                           <span className={`arrow-icon ${subMenuStates.students ? 'rotated' : ''}`}>
                             {subMenuStates.students ? <DownArrowIcon /> : <ArrowIcon />}
                           </span>
-                          </NavLink>
+                        </NavLink>
                         <ul className={`sub-menu ${subMenuStates.students ? 'expanded' : ''}`}>
                           <li>
                             <NavLink to="students-overview" className={({ isActive }) => isActive ? 'active' : ''}>

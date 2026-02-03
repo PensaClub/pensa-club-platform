@@ -38,9 +38,9 @@
     "softuni": "Software University",
     "financial": "Financial support by",
     "foundation-name": "PENSA Foundation",
-"nonprofit-status": "Non-profit organization registered for public benefit",
-"eik": "UIC",
-"mission-short": "Helping seniors in Bulgaria confidently enter the digital world"
+    "nonprofit-status": "Non-profit organization registered for public benefit",
+    "eik": "UIC",
+    "mission-short": "Helping seniors in Bulgaria confidently enter the digital world"
   },
   "home": {
     "town": "Twn",
@@ -208,7 +208,7 @@
       "title": "Pensa Foundation",
       "description": "Created with the mission to improve the quality of life of older adults through digital inclusion and active community",
       "legalStatus": "Non-profit organization registered for public benefit",
-"eik": "UIC",
+      "eik": "UIC",
       "missionTitle": "Our Mission",
       "missionText": "To build a community based on interaction and mutual assistance. We strive to unite people of the same age with common interests, new ideas and knowledge, encouraging active participation in modern society.",
       "valuesTitle": "Our Values",
@@ -674,6 +674,12 @@
       "overview": "Mentors Overview",
       "applications": "Applications",
       "statistics": "Statistics"
+    },
+    "academy": {
+      "title": "Academy",
+      "createCourse": "Create Course",
+      "createLecture": "Create Lecture",
+      "createSeminar": "Create Seminar"
     },
     "students": {
       "title": "Students",
@@ -12159,56 +12165,56 @@
       "loginButton": "Log In"
     },
     "mentorsPage": {
-  "meta": {
-    "title": "Our Mentors | DigiBridge Academy",
-    "description": "Meet our young mentors who help seniors master digital technologies",
-    "keywords": "mentors, digital literacy, training, DigiBridge, free mentors"
-  },
-  "hero": {
-    "title": "Our Mentors",
-    "subtitle": "Young professionals ready to share knowledge and experience with patience and understanding",
-    "online": "online now",
-    "findMentor": "Find a mentor",
-    "become": "Become a mentor"
-  },
-  "search": "Search by name or specialization...",
-  "filters": {
-    "all": "All",
-    "digitalSecurity": "Digital Security",
-    "mediaLiteracy": "Media Literacy",
-    "socialMedia": "Social Media",
-    "onlineBanking": "Online Banking",
-    "basicSkills": "Basic Skills"
-  },
-  "filtersDrawer": {
-    "title": "Filters & Search"
-  },
-  "stats": {
-    "mentors": "Mentors",
-    "available": "Available",
-    "specializations": "Areas",
-    "sessions": "Sessions"
-  },
-  "list": {
-    "all": "All mentors",
-    "found": "found"
-  },
-  "card": {
-    "years": "y.o.",
-    "available": "Online",
-    "busy": "Offline",
-    "sessions": "sessions",
-    "speaks": "Speaks:",
-    "students": "students",
-    "rating": "rating",
-    "reviews": "reviews",
-    "viewProfile": "View profile"
-  },
-  "noResults": {
-    "title": "No mentors found",
-    "desc": "Try different filters"
-  }
-},
+      "meta": {
+        "title": "Our Mentors | DigiBridge Academy",
+        "description": "Meet our young mentors who help seniors master digital technologies",
+        "keywords": "mentors, digital literacy, training, DigiBridge, free mentors"
+      },
+      "hero": {
+        "title": "Our Mentors",
+        "subtitle": "Young professionals ready to share knowledge and experience with patience and understanding",
+        "online": "online now",
+        "findMentor": "Find a mentor",
+        "become": "Become a mentor"
+      },
+      "search": "Search by name or specialization...",
+      "filters": {
+        "all": "All",
+        "digitalSecurity": "Digital Security",
+        "mediaLiteracy": "Media Literacy",
+        "socialMedia": "Social Media",
+        "onlineBanking": "Online Banking",
+        "basicSkills": "Basic Skills"
+      },
+      "filtersDrawer": {
+        "title": "Filters & Search"
+      },
+      "stats": {
+        "mentors": "Mentors",
+        "available": "Available",
+        "specializations": "Areas",
+        "sessions": "Sessions"
+      },
+      "list": {
+        "all": "All mentors",
+        "found": "found"
+      },
+      "card": {
+        "years": "y.o.",
+        "available": "Online",
+        "busy": "Offline",
+        "sessions": "sessions",
+        "speaks": "Speaks:",
+        "students": "students",
+        "rating": "rating",
+        "reviews": "reviews",
+        "viewProfile": "View profile"
+      },
+      "noResults": {
+        "title": "No mentors found",
+        "desc": "Try different filters"
+      }
+    },
     "chatButton": {
       "help": "Help",
       "ariaLabel": "Open help chat"
@@ -13798,7 +13804,7 @@
       "fetchFailed": "Failed to load notes"
     }
   },
-   "academyCourses": {
+  "academyCourses": {
     "loading": "Loading courses...",
     "noCourses": "No courses yet",
     "checkBackLater": "We'll add new learning programs soon. Stay tuned!",
@@ -13806,12 +13812,12 @@
     "programsSubtitle": "Choose a program based on your interests and experience level",
     "popularCourses": "Popular Courses",
     "popularCoursesSubtitle": "Most sought-after courses by our students",
-      "noResults": "No courses found",
+    "noResults": "No courses found",
     "tryDifferentFilters": "Try different filters or search terms",
     "searchResults": "Search Results",
     "foundCourses": "Found {{count}} courses"
   },
-   "academyCoursesHero": {
+  "academyCoursesHero": {
     "titleLine1": "Discover your path in the ",
     "titleLine2": "digital world",
     "subtitle": "Free practical courses for all ages. Learn to use technology confidently with the support of our mentors.",
@@ -13823,7 +13829,7 @@
       "free": "Free"
     }
   },
-   "academyCoursesFilters": {
+  "academyCoursesFilters": {
     "searchPlaceholder": "Search courses...",
     "clearSearch": "Clear search",
     "categoryLabel": "Category",
@@ -13843,7 +13849,7 @@
       "alphabetical": "Alphabetical"
     }
   },
-   "academyCoursesCategorySection": {
+  "academyCoursesCategorySection": {
     "uncategorized": "Other courses",
     "course": "course",
     "courses": "courses",
@@ -13870,20 +13876,20 @@
       "intermediate": "Intermediate",
       "advanced": "Advanced"
     },
-     "sort": {
-    "popular": "Popular",
-    "newest": "Newest",
-    "alphabetical": "Alphabetical",
-    "rating": "By rating",
-    "duration": "By duration"
+    "sort": {
+      "popular": "Popular",
+      "newest": "Newest",
+      "alphabetical": "Alphabetical",
+      "rating": "By rating",
+      "duration": "By duration"
+    },
+    "resultSingle": "result",
+    "resultPlural": "results",
+    "clearAll": "Clear all",
+    "noResultsTitle": "No courses found",
+    "noResultsText": "Try different filters or search terms"
   },
-  "resultSingle": "result",
-  "resultPlural": "results",
-  "clearAll": "Clear all",
-  "noResultsTitle": "No courses found",
-  "noResultsText": "Try different filters or search terms"
-  },
- "academyCourseCard": {
+  "academyCourseCard": {
     "free": "Free",
     "startLearning": "Start",
     "lessons": "lessons",
@@ -13907,25 +13913,21 @@
     "notFound": "Course not found",
     "notFoundText": "The course you're looking for doesn't exist or has been removed.",
     "backToCourses": "Back to courses",
-    
     "breadcrumb": {
       "academy": "Academy",
       "courses": "Courses"
     },
-    
     "levels": {
       "beginner": "Beginner",
       "intermediate": "Intermediate",
       "advanced": "Advanced"
     },
-    
     "tabs": {
       "overview": "Overview",
       "content": "Content",
       "instructor": "Instructor",
       "reviews": "Reviews"
     },
-    
     "hero": {
       "certificateBadge": "Certificate",
       "ratings": "ratings",
@@ -13938,7 +13940,6 @@
       "mentorAccess": "Mentor access",
       "moderatorAccess": "Moderator access"
     },
-    
     "card": {
       "watchPreview": "Watch preview",
       "watchTrailer": "Watch trailer",
@@ -13954,7 +13955,6 @@
       "startLearning": "Start Learning",
       "checking": "Checking..."
     },
-    
     "overview": {
       "aboutCourse": "About this course",
       "targetAudience": "Who is this for",
@@ -13972,7 +13972,6 @@
         "maxCredits": "Max credits"
       }
     },
-    
     "content": {
       "courseContent": "Course content",
       "modules": "modules",
@@ -13984,7 +13983,6 @@
       "hasTest": "Has test",
       "noContent": "Course content will be added soon."
     },
-    
     "instructor": {
       "roles": {
         "lecturer": "Lecturer",
@@ -13998,7 +13996,6 @@
       "assistants": "Assistants",
       "noInstructor": "Instructor information will be added soon."
     },
-    
     "reviews": {
       "studentReviews": "Student reviews",
       "basedOn": "Based on",
@@ -14007,7 +14004,7 @@
       "beFirstReview": "Be the first to share your opinion!"
     }
   },
-   "academyLessonPlayer": {
+  "academyLessonPlayer": {
     "loading": "Loading...",
     "error": "Error",
     "backToCourse": "Back to course",
@@ -14020,23 +14017,19 @@
     "notFound": "Lesson not found",
     "unpublished": "Not published",
     "unpublishedDesc": "This lesson is not available yet.",
-    
     "courseContent": "Content",
     "fullscreen": "Fullscreen",
     "exitFullscreen": "Exit",
-    
     "typeVideo": "Video",
     "typeLive": "Live",
     "typeText": "Text",
     "typeQuiz": "Quiz",
-    
     "complete": "Complete lesson",
     "startTest": "Start test",
     "testAvailable": "Lesson test",
     "passingScore": "Passing score",
     "earnCredits": "Earn",
     "materials": "Materials",
-    
     "live": "LIVE",
     "upcoming": "Upcoming",
     "liveScheduled": "Live lesson",
@@ -14046,7 +14039,6 @@
     "textLesson": "Text lesson",
     "readBelowDesc": "Read the content below",
     "noVideo": "No video",
-    
     "days": "days",
     "hours": "hours",
     "minutes": "min",
@@ -14095,63 +14087,62 @@
     }
   },
   "results": {
-  "wrong": "Wrong",
-  "continueCourse": "Continue with course",
-  "noMoreAttempts": "No more attempts"
-},
- "academyLectures": {
-  "hero": {
-    "badge": "Video Lectures",
-    "title": "Lectures",
-    "titleAccent": "Live & Recordings",
-    "subtitle": "Learn from experts in real-time or watch recordings whenever convenient. Completely free.",
-    "stats": {
-      "total": "Lectures",
+    "wrong": "Wrong",
+    "continueCourse": "Continue with course",
+    "noMoreAttempts": "No more attempts"
+  },
+  "academyLectures": {
+    "hero": {
+      "badge": "Video Lectures",
+      "title": "Lectures",
+      "titleAccent": "Live & Recordings",
+      "subtitle": "Learn from experts in real-time or watch recordings whenever convenient. Completely free.",
+      "stats": {
+        "total": "Lectures",
+        "upcoming": "Upcoming",
+        "recordings": "Recordings",
+        "credits": "Credits"
+      }
+    },
+    "schedule": {
+      "title": "Upcoming Live",
+      "upcoming": "lectures",
+      "today": "Today",
+      "tomorrow": "Tomorrow"
+    },
+    "filters": {
+      "all": "All",
+      "live": "Live",
       "upcoming": "Upcoming",
       "recordings": "Recordings",
-      "credits": "Credits"
+      "searchPlaceholder": "Search lecture...",
+      "clearAll": "Clear"
+    },
+    "sort": {
+      "date": "By date",
+      "popular": "Popular",
+      "alphabetical": "A-Z"
+    },
+    "results": {
+      "found": "found"
+    },
+    "card": {
+      "upcoming": "Upcoming",
+      "recording": "Recording",
+      "speaker": "Speaker",
+      "hasTest": "With test",
+      "watchLive": "Watch Live",
+      "signUp": "Sign Up",
+      "watch": "Watch"
+    },
+    "loading": "Loading...",
+    "empty": {
+      "noLectures": "No lectures available",
+      "noResults": "No lectures found",
+      "checkBack": "Check back later for new lectures.",
+      "tryDifferent": "Try different filters."
     }
   },
-  "schedule": {
-    "title": "Upcoming Live",
-    "upcoming": "lectures",
-    "today": "Today",
-    "tomorrow": "Tomorrow"
-  },
-  "filters": {
-    "all": "All",
-    "live": "Live",
-    "upcoming": "Upcoming",
-    "recordings": "Recordings",
-    "searchPlaceholder": "Search lecture...",
-    "clearAll": "Clear"
-  },
-  "sort": {
-    "date": "By date",
-    "popular": "Popular",
-    "alphabetical": "A-Z"
-  },
-  "results": {
-    "found": "found"
-  },
-  "card": {
-    "upcoming": "Upcoming",
-    "recording": "Recording",
-    "speaker": "Speaker",
-    "hasTest": "With test",
-    "watchLive": "Watch Live",
-    "signUp": "Sign Up",
-    "watch": "Watch"
-  },
-  "loading": "Loading...",
-  "empty": {
-    "noLectures": "No lectures available",
-    "noResults": "No lectures found",
-    "checkBack": "Check back later for new lectures.",
-    "tryDifferent": "Try different filters."
-  }
-},
-
   "academyLectureWatch": {
     "loading": "Loading lecture...",
     "error": {
@@ -14200,7 +14191,7 @@
       "viewCourse": "View course"
     }
   },
- "academyLectureTest": {
+  "academyLectureTest": {
     "loading": "Loading test...",
     "error": "Error",
     "notFound": "Test not found",
@@ -14208,32 +14199,25 @@
     "loginRequired": "Login required",
     "loginRequiredDesc": "Please sign in to take this test.",
     "login": "Sign In",
-    
     "question": "Question",
     "questionOf": "Question {{current}} of {{total}}",
     "questions": "Questions",
     "point": "point",
     "points": "points",
-    
     "typeSingle": "Single choice",
     "typeMultiple": "Multiple choice",
     "typeTrueFalse": "True/False",
-    
     "answered": "Answered",
     "unanswered": "Unanswered",
     "current": "Current",
-    
     "prev": "Previous",
     "next": "Next",
     "submit": "Submit Test",
     "submitting": "Submitting...",
-    
     "passingScore": "Passing score",
     "maxCredits": "Max credits",
     "attempt": "Attempt",
-    
     "confirmSubmitUnanswered": "You have {{count}} unanswered questions. Are you sure you want to submit?",
-    
     "errors": {
       "lectureNotFound": "Lecture not found",
       "noTest": "This lecture has no test",
@@ -14241,7 +14225,6 @@
       "submitFailed": "Failed to submit test",
       "retryFailed": "Failed to start new attempt"
     },
-    
     "results": {
       "passed": "Congratulations! 🎉",
       "failed": "Not Passed",
@@ -14255,28 +14238,22 @@
       "creditsEarned": "credits earned",
       "backToLecture": "Back to Lecture",
       "tryAgain": "Try Again",
-      
       "reviewAnswers": "Review Answers",
       "correctLabel": "Correct",
       "wrongLabel": "Wrong",
       "yourAnswer": "Your answer",
       "noAnswer": "No answer",
-      
       "attemptInfo": "Attempt {{current}} of {{max}}",
       "remainingAttempts": "Remaining attempts: {{count}}",
       "noMoreAttempts": "No more attempts",
-      
       "attemptHistory": "Attempt History",
       "viewAnswers": "View answers",
-      
       "bestAttempt": "Best result",
       "attempt": "Attempt"
     },
-    
     "intro": {
       "attemptsLeft": "Attempts left: {{count}}"
     },
-    
     "footer": {
       "attempt": "Attempt"
     }
@@ -14288,105 +14265,105 @@
     "close": "Close",
     "mute": "Mute sound",
     "unmute": "Unmute sound"
-},
-"studentDashboard": {
-  "title": "My Academy",
-  "welcomeBack": "Welcome back",
-  "editProfile": "Edit profile",
-  "levelBeginner": "Beginner",
-  "levelIntermediate": "Intermediate",
-  "levelExpert": "Expert",
-  "levelMaster": "Master",
-  "enrolledCourses": "Enrolled courses",
-  "completedCourses": "Completed courses",
-  "upcomingLectures": "Upcoming lectures",
-  "certificates": "Certificates",
-  "totalCredits": "Total credits",
-  "creditsFromCourses": "From courses",
-  "creditsFromLectures": "From lectures",
-  "creditsFromSeminars": "From seminars",
-  "creditsFromPresentations": "From presentations",
-  "progressToNextLevel": "To next level",
-  "continueLearning": "Continue learning",
-  "continueButton": "Continue",
-  "noCoursesInProgress": "No courses in progress",
-  "browseCoursesButton": "Browse courses",
-  "completedLessons": "lessons completed",
-  "upcomingEvents": "Upcoming events",
-  "noUpcomingEvents": "No upcoming events",
-  "liveBadge": "LIVE",
-  "lectureBadge": "Lecture",
-  "seminarBadge": "Seminar",
-  "inDays": "in {{days}} days",
-  "today": "today",
-  "tomorrow": "tomorrow",
-  "viewAll": "View all",
-  "myMentor": "My mentor",
-  "noMentor": "No mentor assigned yet",
-  "findMentor": "Find a mentor",
-  "mentorSince": "Mentor since",
-  "contactMentor": "Contact",
-  "sendMessage": "Send message",
-  "myCertificates": "My certificates",
-  "availableCertificates": "Available certificates",
-  "noCertificates": "No certificates yet",
-  "earnedBadge": "Earned",
-  "download": "Download",
-  "creditsNeeded": "Credits needed",
-  "recentActivity": "Recent activity",
-  "noRecentActivity": "No recent activity",
-  "completedLesson": "Completed lesson",
-  "passedTest": "Passed test",
-  "earnedCredits": "Earned {{credits}} credits",
-  "loading": "Loading...",
-  "error": "Error loading data",
-  "retry": "Try again",
-  "loginRequired": "Login required",
-  "loginRequiredText": "Please log in to view your academy dashboard.",
-  "loginButton": "Log in"
-},
-"studentDashboardHeader": {
-  "student": "Student",
-  "levelBeginner": "Beginner",
-  "levelIntermediate": "Intermediate",
-  "levelExpert": "Expert",
-  "levelMaster": "Master",
-  "credits": "credits",
-  "totalCredits": "Total credits",
-  "progressToNextLevel": "To next level",
-  "editProfile": "Edit profile"
-},
-"studentQuickStats": {
-  "title": "Statistics",
-  "enrolledCourses": "Enrolled courses",
-  "completedCourses": "Completed courses",
-  "upcomingLectures": "Upcoming lectures",
-  "certificates": "Certificates"
-},
-"studentContinueLearning": {
+  },
+  "studentDashboard": {
+    "title": "My Academy",
+    "welcomeBack": "Welcome back",
+    "editProfile": "Edit profile",
+    "levelBeginner": "Beginner",
+    "levelIntermediate": "Intermediate",
+    "levelExpert": "Expert",
+    "levelMaster": "Master",
+    "enrolledCourses": "Enrolled courses",
+    "completedCourses": "Completed courses",
+    "upcomingLectures": "Upcoming lectures",
+    "certificates": "Certificates",
+    "totalCredits": "Total credits",
+    "creditsFromCourses": "From courses",
+    "creditsFromLectures": "From lectures",
+    "creditsFromSeminars": "From seminars",
+    "creditsFromPresentations": "From presentations",
+    "progressToNextLevel": "To next level",
+    "continueLearning": "Continue learning",
+    "continueButton": "Continue",
+    "noCoursesInProgress": "No courses in progress",
+    "browseCoursesButton": "Browse courses",
+    "completedLessons": "lessons completed",
+    "upcomingEvents": "Upcoming events",
+    "noUpcomingEvents": "No upcoming events",
+    "liveBadge": "LIVE",
+    "lectureBadge": "Lecture",
+    "seminarBadge": "Seminar",
+    "inDays": "in {{days}} days",
+    "today": "today",
+    "tomorrow": "tomorrow",
+    "viewAll": "View all",
+    "myMentor": "My mentor",
+    "noMentor": "No mentor assigned yet",
+    "findMentor": "Find a mentor",
+    "mentorSince": "Mentor since",
+    "contactMentor": "Contact",
+    "sendMessage": "Send message",
+    "myCertificates": "My certificates",
+    "availableCertificates": "Available certificates",
+    "noCertificates": "No certificates yet",
+    "earnedBadge": "Earned",
+    "download": "Download",
+    "creditsNeeded": "Credits needed",
+    "recentActivity": "Recent activity",
+    "noRecentActivity": "No recent activity",
+    "completedLesson": "Completed lesson",
+    "passedTest": "Passed test",
+    "earnedCredits": "Earned {{credits}} credits",
+    "loading": "Loading...",
+    "error": "Error loading data",
+    "retry": "Try again",
+    "loginRequired": "Login required",
+    "loginRequiredText": "Please log in to view your academy dashboard.",
+    "loginButton": "Log in"
+  },
+  "studentDashboardHeader": {
+    "student": "Student",
+    "levelBeginner": "Beginner",
+    "levelIntermediate": "Intermediate",
+    "levelExpert": "Expert",
+    "levelMaster": "Master",
+    "credits": "credits",
+    "totalCredits": "Total credits",
+    "progressToNextLevel": "To next level",
+    "editProfile": "Edit profile"
+  },
+  "studentQuickStats": {
+    "title": "Statistics",
+    "enrolledCourses": "Enrolled courses",
+    "completedCourses": "Completed courses",
+    "upcomingLectures": "Upcoming lectures",
+    "certificates": "Certificates"
+  },
+  "studentContinueLearning": {
     "title": "Continue Learning",
     "viewAll": "View all",
     "lessons": "lessons",
     "noCourses": "No courses in progress",
     "browseMore": "Browse more courses"
-},
-"studentUpcomingEvents": {
-  "title": "Upcoming Events",
-  "viewAll": "View all",
-  "types": {
-    "lecture": "Lecture",
-    "seminar": "Seminar"
   },
-  "started": "Started",
-  "soon": "Soon",
-  "hoursLeft": "in {{hours}}h",
-  "tomorrow": "Tomorrow",
-  "daysLeft": "in {{days}} days",
-  "noEvents": "No upcoming events",
-  "browseLectures": "Browse lectures"
-},
-"studentMentorCard": {
-   "title": "My Mentor",
+  "studentUpcomingEvents": {
+    "title": "Upcoming Events",
+    "viewAll": "View all",
+    "types": {
+      "lecture": "Lecture",
+      "seminar": "Seminar"
+    },
+    "started": "Started",
+    "soon": "Soon",
+    "hoursLeft": "in {{hours}}h",
+    "tomorrow": "Tomorrow",
+    "daysLeft": "in {{days}} days",
+    "noEvents": "No upcoming events",
+    "browseLectures": "Browse lectures"
+  },
+  "studentMentorCard": {
+    "title": "My Mentor",
     "noMentor": "You don't have a mentor yet",
     "findMentor": "Find a mentor",
     "changeMentor": "Change mentor",
@@ -14396,8 +14373,8 @@
     "sendMessage": "Send message",
     "online": "Online",
     "offline": "Offline"
-},
-"studentCertificates": {
+  },
+  "studentCertificates": {
     "title": "Certificates",
     "viewAll": "View all",
     "noCertificates": "You don't have any certificates yet",
@@ -14406,48 +14383,49 @@
     "download": "Download",
     "credits": "credits",
     "certificate": "Certificate"
-},
-"studentCreditsOverview": {
+  },
+  "studentCreditsOverview": {
     "totalCredits": "Total Credits",
     "toNextLevel": "{{credits}} to next level",
     "levels": {
-        "beginner": "Beginner",
-        "intermediate": "Intermediate",
-        "expert": "Expert",
-        "master": "Master"
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "expert": "Expert",
+      "master": "Master"
     },
     "categories": {
-        "courses": "Courses",
-        "lectures": "Lectures",
-        "seminars": "Seminars",
-        "presentations": "Presentations"
+      "courses": "Courses",
+      "lectures": "Lectures",
+      "seminars": "Seminars",
+      "presentations": "Presentations"
     }
-},
-"studentRecentActivity": {
+  },
+  "studentRecentActivity": {
     "title": "Recent Activity",
     "viewAll": "View all",
     "credits": "credits",
     "noActivity": "No recent activity",
     "startLearning": "Start learning",
     "types": {
-        "lesson_completed": "Completed lesson:",
-        "lesson_started": "Started lesson:",
-        "course_enrolled": "Enrolled in:",
-        "course_completed": "Completed course:",
-        "lecture_attended": "Attended lecture:",
-        "seminar_attended": "Attended seminar:",
-        "test_passed": "Passed test:",
-        "test_failed": "Failed test:",
-        "certificate_earned": "Earned certificate:"
+      "undefined": "Activity:",
+      "lesson_completed": "Completed lesson:",
+      "lesson_started": "Started lesson:",
+      "course_enrolled": "Enrolled in:",
+      "course_completed": "Completed course:",
+      "lecture_attended": "Attended lecture:",
+      "seminar_attended": "Attended seminar:",
+      "test_passed": "Passed test:",
+      "test_failed": "Failed test:",
+      "certificate_earned": "Earned certificate:"
     },
     "time": {
-        "justNow": "Just now",
-        "minutesAgo": "{{minutes}}m ago",
-        "hoursAgo": "{{hours}}h ago",
-        "yesterday": "Yesterday",
-        "daysAgo": "{{days}}d ago"
+      "justNow": "Just now",
+      "minutesAgo": "{{minutes}}m ago",
+      "hoursAgo": "{{hours}}h ago",
+      "yesterday": "Yesterday",
+      "daysAgo": "{{days}}d ago"
     }
-},
+  },
   "sendEmailModal": {
     "title": "Send Email",
     "to": "To",
@@ -14458,5 +14436,33 @@
     "cancel": "Cancel",
     "send": "Send",
     "sending": "Sending..."
-  }
+  },
+  "courseFormHook": {
+  "draftSaved": "Draft saved successfully",
+  "draftCreated": "Course created as draft",
+  "published": "Course published successfully",
+  "loadFailed": "Failed to load course",
+  "saveFailed": "Failed to save",
+  "publishFailed": "Failed to publish",
+  "validationFailed": "Please fill in the required fields",
+  "nameRequired": "Course name is required",
+  "categoryRequired": "Category is required"
+},
+"courseCreateForm": {
+  "titleCreate": "Create Course",
+  "titleEdit": "Edit Course",
+  "loading": "Loading...",
+  "saving": "Saving...",
+  "stepOf": "Step {{current}} of {{total}}",
+  "steps": {
+    "basicInfo": "Basic Information",
+    "settings": "Settings",
+    "modules": "Modules & Lessons",
+    "preview": "Preview"
+  },
+  "back": "Back",
+  "next": "Next",
+  "saveDraft": "Save Draft",
+  "publish": "Publish"
+}
 }
