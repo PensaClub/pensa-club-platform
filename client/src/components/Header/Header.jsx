@@ -192,12 +192,12 @@ export const Header = ({ additionalClasses }) => {
               </div>
             </div>
 
-            <NavLink
+            {/* <NavLink
               to="/ad/create"
               className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
             >
               {t("header.ad-create")}
-            </NavLink>
+            </NavLink> */}
 
             {/* НОВА ИКОНКА - Clubs (група хора) */}
             <NavLink
@@ -516,7 +516,7 @@ export const Header = ({ additionalClasses }) => {
               </div>
             </div>
 
-            <NavLink
+            {/* <NavLink
               to="/ad/create"
               className={({ isActive }) => `mobile-nav-item ${isActive ? "active" : ""}`}
               onClick={toggleMobileMenu}
@@ -525,7 +525,7 @@ export const Header = ({ additionalClasses }) => {
                 <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" fill="currentColor" />
               </svg>
               {t("header.ad-create")}
-            </NavLink>
+            </NavLink> */}
 
             {/* MOBILE - НОВА ИКОНКА - Clubs */}
             <NavLink
