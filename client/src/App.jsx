@@ -88,6 +88,7 @@ import DigiBridgeHeader from './components/DigiBridgeAcademy/DigiBridgeHeader/Di
 import StudentDashboard from './components/StudentDashboard/StudentDashboard.jsx';
 import { AdminGuard } from './components/Guards/AdminGuard.jsx';
 import CourseAcademyCreateForm from './components/CourseAcademyCreateForm/CourseAcademyCreateForm.jsx';
+import AdminAcademyCoursesList from './components/AdminAcademyCoursesList/AdminAcademyCoursesList.jsx';
 
 // ✅ LAZY LOADING КОМПОНЕНТИ
 const ArticlesList = lazy(() => import('./components/Articles/ArticlesList/ArticlesList.jsx'));
@@ -259,6 +260,7 @@ function App() {
                                             <Route path="/academy/lectures/:slug/watch" element={<AcademyLectureWatch />} />
                                             <Route path="/academy/lectures/:slug/test" element={<AcademyLectureTest />} />
                                             
+                                            <Route path="/academy/admin/courses" element={<AdminGuard><AdminAcademyCoursesList /></AdminGuard>} />
                                              <Route path="/academy/admin/create-course" element={<AdminGuard><CourseAcademyCreateForm /></AdminGuard>} />
                                           <Route path="/academy/admin/edit-course/:courseSlug" element={<AdminGuard><CourseAcademyCreateForm /></AdminGuard>} />
                                             <Route path="/ad/details/:adId" element={<AdDetails />} />

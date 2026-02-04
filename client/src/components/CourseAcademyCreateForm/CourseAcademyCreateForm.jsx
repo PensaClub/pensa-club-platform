@@ -3,7 +3,11 @@
 import { useTranslation } from 'react-i18next';
 import { BookOpen, Settings, Layers, Eye, ChevronLeft, ChevronRight, Save, Send } from 'lucide-react';
 import useCourseAcademyCreateForm from '../hooks/useCourseAcademyCreateForm';
+import CourseStepBasicInfo from './CourseStepBasicInfo/CourseStepBasicInfo';
+import CourseStepSettings from './CourseStepSettings/CourseStepSettings';
+import CourseStepModules from './CourseStepModules/CourseStepModules';
 import './courseAcademyCreateForm.css';
+import CourseStepPreview from './CourseStepPreview/CourseStepPreview';
 
 const STEPS = [
   { id: 1, key: 'basicInfo', icon: BookOpen },
@@ -19,6 +23,7 @@ const CourseAcademyCreateForm = () => {
     isEditMode,
     currentStep,
     courseData,
+    modules,
     isLoading,
     isSaving,
     errors,
@@ -29,16 +34,61 @@ const CourseAcademyCreateForm = () => {
     prevStep,
     handleSaveDraft,
     handlePublish,
+    addModule,
+    updateModule,
+    removeModule,
+    moveModule,
+    toggleModule,
+    addLesson,
+    updateLesson,
+    removeLesson,
+    moveLesson,
   } = useCourseAcademyCreateForm();
 
   const renderStepContent = () => {
-    const StepIcon = STEPS[currentStep - 1].icon;
-    return (
-      <div className="cacf-step-placeholder">
-        <StepIcon size={48} />
-        <p>{t(`courseCreateForm.steps.${STEPS[currentStep - 1].key}`)} - TODO</p>
-      </div>
-    );
+    switch (currentStep) {
+      case 1:
+        return (
+          <CourseStepBasicInfo
+            courseData={courseData}
+            updateField={updateField}
+            errors={errors}
+          />
+        );
+      case 2:
+        return (
+          <CourseStepSettings
+            courseData={courseData}
+            updateField={updateField}
+            errors={errors}
+          />
+        );
+      case 3:
+        return (
+          <CourseStepModules
+            modules={modules}
+            addModule={addModule}
+            updateModule={updateModule}
+            removeModule={removeModule}
+            moveModule={moveModule}
+            toggleModule={toggleModule}
+            addLesson={addLesson}
+            updateLesson={updateLesson}
+            removeLesson={removeLesson}
+            moveLesson={moveLesson}
+          />
+        );
+     case 4:
+  return (
+    <CourseStepPreview
+      courseData={courseData}
+      modules={modules}
+      goToStep={goToStep}
+    />
+  );
+      default:
+        return null;
+    }
   };
 
   if (isLoading) {

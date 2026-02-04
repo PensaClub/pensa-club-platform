@@ -677,6 +677,7 @@
     },
     "academy": {
       "title": "Academy",
+      "courses": "Courses",
       "createCourse": "Create Course",
       "createLecture": "Create Lecture",
       "createSeminar": "Create Seminar"
@@ -14464,5 +14465,199 @@
   "next": "Next",
   "saveDraft": "Save Draft",
   "publish": "Publish"
+},
+"courseStepBasicInfo": {
+  "name": "Course Name",
+  "namePlaceholder": "Enter course name",
+  "shortDescription": "Short Description",
+  "shortDescriptionPlaceholder": "Brief description for the course list",
+  "description": "Full Description",
+  "descriptionPlaceholder": "Detailed course description",
+  "category": "Category",
+  "categoryPlaceholder": "e.g. Digital Literacy",
+  "difficulty": "Level",
+  "difficultyLevels": {
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced"
+  },
+  "thumbnailUrl": "Thumbnail URL",
+  "trailerUrl": "Trailer URL",
+  "thumbnailPreview": "Thumbnail preview"
+},
+"courseStepSettings": {
+  "sections": {
+    "typeFormat": "Type & Format",
+    "durationDates": "Duration & Dates",
+    "enrollment": "Enrollment",
+    "credits": "Credits & Certificate",
+    "tags": "Tags"
+  },
+  "courseType": "Course Type",
+  "courseTypes": {
+    "online": "Online",
+    "offline": "In-person",
+    "hybrid": "Hybrid"
+  },
+  "videoProvider": "Video Platform",
+  "videoProviders": {
+    "youtube": "YouTube",
+    "vimeo": "Vimeo",
+    "custom": "Custom",
+    "none": "No video"
+  },
+  "durationWeeks": "Weeks",
+  "estimatedHours": "Estimated Hours",
+  "startDate": "Start Date",
+  "endDate": "End Date",
+  "maxParticipants": "Max Participants",
+  "unlimited": "Unlimited",
+  "targetAudience": "Target Audience",
+  "targetAudiencePlaceholder": "e.g. Seniors, beginners",
+  "isPublic": "Public Course",
+  "requiresApproval": "Requires Approval",
+  "maxCredits": "Max Credits",
+  "creditsForCompletion": "Credits for Completion",
+  "hasCertificate": "Issue Certificate",
+  "tags": "Tags",
+  "tagsPlaceholder": "computer, internet, email",
+  "tagsHint": "Separate with commas"
+},
+"courseStepModules": {
+  "description": "Organize course content into modules and lessons",
+  "stats": "{{modules}} modules • {{lessons}} lessons",
+  "addModule": "Add Module",
+  "empty": "No modules yet. Add your first module.",
+  "moduleTitlePlaceholder": "Module title",
+  "moduleDescPlaceholder": "Module description (optional)",
+  "lessonsCount": "lessons",
+  "moveUp": "Move up",
+  "moveDown": "Move down",
+  "removeModule": "Remove module",
+  "addLesson": "Add Lesson",
+  "lessonTitlePlaceholder": "Lesson title",
+  "durationPlaceholder": "min.",
+  "lessonTypes": {
+    "video": "Video",
+    "text": "Text",
+    "live": "Live",
+    "quiz": "Quiz",
+    "assignment": "Assignment"
+  }
+},
+"courseStepPreview": {
+  "warningsTitle": "{{count}} warnings",
+  "warnings": {
+    "noName": "Course name is missing",
+    "noCategory": "Category is missing",
+    "noModules": "No modules added",
+    "moduleNoTitle": "Module {{index}} has no title",
+    "moduleNoLessons": "Module {{index}} has no lessons",
+    "lessonNoTitle": "Module {{module}}, Lesson {{lesson}} has no title"
+  },
+  "sections": {
+    "basicInfo": "Basic Information",
+    "settings": "Settings",
+    "modules": "Modules & Lessons"
+  },
+  "edit": "Edit",
+  "fields": {
+    "name": "Name",
+    "category": "Category",
+    "difficulty": "Level",
+    "shortDescription": "Short Description",
+    "description": "Description",
+    "thumbnail": "Thumbnail",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "duration": "Duration",
+    "hours": "Hours",
+    "maxParticipants": "Max Participants",
+    "credits": "Credits (max / completion)"
+  },
+  "badges": {
+    "public": "Public",
+    "private": "Private",
+    "certificate": "Certificate",
+    "approval": "Approval required"
+  },
+  "weeks": "weeks",
+  "hours": "hours",
+  "minutes": "min.",
+  "min": "min.",
+  "modulesCount": "{{count}} modules",
+  "lessonsCount": "{{count}} lessons",
+  "noModules": "No modules added",
+  "untitledModule": "Untitled module",
+  "untitledLesson": "Untitled lesson"
+},
+"adminCourses": {
+  "title": "Manage",
+  "titleAccent": "Courses",
+  "subtitle": "Create, edit and manage academy courses",
+  "createCourse": "Create Course",
+  "refresh": "Refresh",
+  "searchPlaceholder": "Search by course name...",
+  "filters": "Filters",
+  "status": "Status",
+  "sortBy": "Sort by",
+  "loading": "Loading courses...",
+  "published": "Published",
+  "draft": "Draft",
+  "stats": {
+    "total": "total",
+    "published": "published",
+    "drafts": "drafts"
+  },
+  "statusOptions": {
+    "all": "All",
+    "published": "Published",
+    "draft": "Drafts"
+  },
+  "sortOptions": {
+    "newest": "Newest",
+    "oldest": "Oldest",
+    "name": "By name",
+    "popular": "Popular"
+  },
+  "categories": {
+    "digital_literacy": "Digital Literacy",
+    "internet_safety": "Internet Safety",
+    "social_media": "Social Media",
+    "office_tools": "Office Tools",
+    "communication": "Communication",
+    "e_services": "E-Services",
+    "other": "Other"
+  },
+  "difficulty": {
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced"
+  },
+  "cardStats": {
+    "lessons": "Lessons",
+    "enrolled": "Enrolled",
+    "hours": "Hours",
+    "created": "Created"
+  },
+  "actions": {
+    "edit": "Edit",
+    "content": "Content",
+    "stats": "Statistics",
+    "publish": "Publish",
+    "unpublish": "Unpublish",
+    "delete": "Delete"
+  },
+  "empty": {
+    "title": "No courses found",
+    "description": "Create your first course or change the filters"
+  },
+  "deleteModal": {
+    "title": "Delete Course",
+    "text": "Are you sure you want to delete",
+    "warning": "This action cannot be undone.",
+    "cancel": "Cancel",
+    "confirm": "Delete"
+  }
 }
 }

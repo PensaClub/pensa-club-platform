@@ -258,7 +258,30 @@ module.exports = {
     ]);
 
     console.log('✅ Certificates seeded:');
+// ===============================
+    // RESET ALL SEQUENCES
+    // ===============================
+    const tables = [
+      'courses', 'course_modules', 'lessons', 'lesson_tests',
+      'lesson_materials', 'course_materials', 'test_questions',
+      'test_answers', 'student_test_attempts', 'certificates',
+      'lectures', 'seminars', 'lecture_tests', 'lecture_materials',
+      'seminar_materials', 'presentations', 'student_courses',
+      'student_lessons', 'student_lectures', 'student_seminars',
+      'student_presentations', 'mentor_courses', 'user_credits',
+      'user_credits_history',
+    ];
 
+    for (const table of tables) {
+      try {
+        await queryInterface.sequelize.query(
+          `SELECT setval('${table}_id_seq', COALESCE((SELECT MAX(id) FROM "${table}"), 0) + 1, false);`
+        );
+      } catch (e) {
+        // Table may not exist yet - skip silently
+      }
+    }
+      console.log('✅ All sequences reset successfully.');
   },
 
   async down(queryInterface, Sequelize) {

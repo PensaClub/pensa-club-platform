@@ -962,11 +962,18 @@ export const Profile = () => {
                           </NavLink>
                           <ul className={`sub-menu ${subMenuStates.academy ? 'expanded' : ''}`}>
                             <li>
+                              <NavLink to="/academy/admin/courses" className={({ isActive }) => isActive ? 'active' : ''}>
+                                <CircleIcon className="icon" />
+                                {t("admin.academy.courses")}
+                              </NavLink>
+                            </li>
+                            <li>
                               <NavLink to="/academy/admin/create-course" className={({ isActive }) => isActive ? 'active' : ''}>
                                 <CircleIcon className="icon" />
                                 {t("admin.academy.createCourse")}
                               </NavLink>
                             </li>
+
                             <li>
                               <NavLink to="/academy/admin/create-lecture" className={({ isActive }) => isActive ? 'active' : ''}>
                                 <CircleIcon className="icon" />

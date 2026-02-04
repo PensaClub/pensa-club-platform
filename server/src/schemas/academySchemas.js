@@ -44,7 +44,7 @@ const courseCreateSchema = z.object({
   creditsForCompletion: z.coerce.number().int().min(0).default(0),
   hasCertificate: z.boolean().default(false),
   tags: z.array(z.string()).default([]),
-  targetAudience: z.string().optional(),
+  targetAudience: z.array(z.string()).default([]),
 });
 
 const courseUpdateSchema = courseCreateSchema.partial();
