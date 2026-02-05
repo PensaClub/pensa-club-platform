@@ -89,6 +89,8 @@ import StudentDashboard from './components/StudentDashboard/StudentDashboard.jsx
 import { AdminGuard } from './components/Guards/AdminGuard.jsx';
 import CourseAcademyCreateForm from './components/CourseAcademyCreateForm/CourseAcademyCreateForm.jsx';
 import AdminAcademyCoursesList from './components/AdminAcademyCoursesList/AdminAcademyCoursesList.jsx';
+import EditCourseBasicInfo from './components/AdminAcademyCoursesList/EditCourseBasicInfo/EditCourseBasicInfo.jsx';
+import CourseContentManager from './components/AdminAcademyCoursesList/CourseContentManager/CourseContentManager.jsx';
 
 // ✅ LAZY LOADING КОМПОНЕНТИ
 const ArticlesList = lazy(() => import('./components/Articles/ArticlesList/ArticlesList.jsx'));
@@ -262,7 +264,8 @@ function App() {
                                             
                                             <Route path="/academy/admin/courses" element={<AdminGuard><AdminAcademyCoursesList /></AdminGuard>} />
                                              <Route path="/academy/admin/create-course" element={<AdminGuard><CourseAcademyCreateForm /></AdminGuard>} />
-                                          <Route path="/academy/admin/edit-course/:courseSlug" element={<AdminGuard><CourseAcademyCreateForm /></AdminGuard>} />
+                                          <Route path="/academy/admin/edit-course/:slug" element={<AdminGuard><EditCourseBasicInfo /></AdminGuard>} />
+                                          <Route path="/academy/admin/course/:slug/content" element={<AdminGuard><CourseContentManager /></AdminGuard>} />
                                             <Route path="/ad/details/:adId" element={<AdDetails />} />
                                             <Route path="/ad/edit/:adId" element={<EditAd />} />
                                             <Route path="/ad" element={<AdPage />} />

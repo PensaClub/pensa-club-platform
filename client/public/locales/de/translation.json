@@ -13732,224 +13732,280 @@
     "sending": "Wird gesendet..."
   },
   "courseFormHook": {
-  "draftSaved": "Entwurf erfolgreich gespeichert",
-  "draftCreated": "Kurs als Entwurf erstellt",
-  "published": "Kurs erfolgreich veröffentlicht",
-  "loadFailed": "Fehler beim Laden des Kurses",
-  "saveFailed": "Fehler beim Speichern",
-  "publishFailed": "Fehler beim Veröffentlichen",
-  "validationFailed": "Bitte füllen Sie die Pflichtfelder aus",
-  "nameRequired": "Kursname ist erforderlich",
-  "categoryRequired": "Kategorie ist erforderlich"
-},
-"courseCreateForm": {
-  "titleCreate": "Kurs erstellen",
-  "titleEdit": "Kurs bearbeiten",
-  "loading": "Laden...",
-  "saving": "Speichern...",
-  "stepOf": "Schritt {{current}} von {{total}}",
-  "steps": {
-    "basicInfo": "Grundinformationen",
-    "settings": "Einstellungen",
-    "modules": "Module & Lektionen",
-    "preview": "Vorschau"
+    "draftSaved": "Entwurf erfolgreich gespeichert",
+    "draftCreated": "Kurs als Entwurf erstellt",
+    "published": "Kurs erfolgreich veröffentlicht",
+    "loadFailed": "Fehler beim Laden des Kurses",
+    "saveFailed": "Fehler beim Speichern",
+    "publishFailed": "Fehler beim Veröffentlichen",
+    "validationFailed": "Bitte füllen Sie die Pflichtfelder aus",
+    "nameRequired": "Kursname ist erforderlich",
+    "categoryRequired": "Kategorie ist erforderlich"
   },
-  "back": "Zurück",
-  "next": "Weiter",
-  "saveDraft": "Entwurf speichern",
-  "publish": "Veröffentlichen"
-},
-"courseStepBasicInfo": {
-  "name": "Kursname",
-  "namePlaceholder": "Kursname eingeben",
-  "shortDescription": "Kurzbeschreibung",
-  "shortDescriptionPlaceholder": "Kurzbeschreibung für die Kursliste",
-  "description": "Vollständige Beschreibung",
-  "descriptionPlaceholder": "Detaillierte Kursbeschreibung",
-  "category": "Kategorie",
-  "categoryPlaceholder": "z.B. Digitale Kompetenz",
-  "difficulty": "Stufe",
-  "difficultyLevels": {
-    "beginner": "Anfänger",
-    "intermediate": "Mittelstufe",
-    "advanced": "Fortgeschritten"
+  "courseCreateForm": {
+    "titleCreate": "Kurs erstellen",
+    "titleEdit": "Kurs bearbeiten",
+    "loading": "Laden...",
+    "saving": "Speichern...",
+    "stepOf": "Schritt {{current}} von {{total}}",
+    "steps": {
+      "basicInfo": "Grundinformationen",
+      "settings": "Einstellungen",
+      "modules": "Module & Lektionen",
+      "preview": "Vorschau"
+    },
+    "back": "Zurück",
+    "next": "Weiter",
+    "saveDraft": "Entwurf speichern",
+    "publish": "Veröffentlichen"
   },
-  "thumbnailUrl": "Thumbnail URL",
-  "trailerUrl": "Trailer URL",
-  "thumbnailPreview": "Thumbnail-Vorschau"
-},
-"courseStepSettings": {
-  "sections": {
-    "typeFormat": "Typ & Format",
-    "durationDates": "Dauer & Termine",
-    "enrollment": "Einschreibung",
-    "credits": "Credits & Zertifikat",
-    "tags": "Tags"
-  },
-  "courseType": "Kurstyp",
-  "courseTypes": {
-    "online": "Online",
-    "offline": "Präsenz",
-    "hybrid": "Hybrid"
-  },
-  "videoProvider": "Video-Plattform",
-  "videoProviders": {
-    "youtube": "YouTube",
-    "vimeo": "Vimeo",
-    "custom": "Andere",
-    "none": "Kein Video"
-  },
-  "durationWeeks": "Wochen",
-  "estimatedHours": "Geschätzte Stunden",
-  "startDate": "Startdatum",
-  "endDate": "Enddatum",
-  "maxParticipants": "Max. Teilnehmer",
-  "unlimited": "Unbegrenzt",
-  "targetAudience": "Zielgruppe",
-  "targetAudiencePlaceholder": "z.B. Senioren, Anfänger",
-  "isPublic": "Öffentlicher Kurs",
-  "requiresApproval": "Genehmigung erforderlich",
-  "maxCredits": "Max. Credits",
-  "creditsForCompletion": "Credits für Abschluss",
-  "hasCertificate": "Zertifikat ausstellen",
-  "tags": "Tags",
-  "tagsPlaceholder": "Computer, Internet, E-Mail",
-  "tagsHint": "Mit Komma trennen"
-},
-"courseStepModules": {
-  "description": "Kursinhalt in Module und Lektionen organisieren",
-  "stats": "{{modules}} Module • {{lessons}} Lektionen",
-  "addModule": "Modul hinzufügen",
-  "empty": "Noch keine Module. Fügen Sie das erste Modul hinzu.",
-  "moduleTitlePlaceholder": "Modultitel",
-  "moduleDescPlaceholder": "Modulbeschreibung (optional)",
-  "lessonsCount": "Lektionen",
-  "moveUp": "Nach oben",
-  "moveDown": "Nach unten",
-  "removeModule": "Modul entfernen",
-  "addLesson": "Lektion hinzufügen",
-  "lessonTitlePlaceholder": "Lektionstitel",
-  "durationPlaceholder": "Min.",
-  "lessonTypes": {
-    "video": "Video",
-    "text": "Text",
-    "live": "Live",
-    "quiz": "Quiz",
-    "assignment": "Aufgabe"
-  }
-},"courseStepPreview": {
-  "warningsTitle": "{{count}} Warnungen",
-  "warnings": {
-    "noName": "Kursname fehlt",
-    "noCategory": "Kategorie fehlt",
-    "noModules": "Keine Module hinzugefügt",
-    "moduleNoTitle": "Modul {{index}} hat keinen Titel",
-    "moduleNoLessons": "Modul {{index}} hat keine Lektionen",
-    "lessonNoTitle": "Modul {{module}}, Lektion {{lesson}} hat keinen Titel"
-  },
-  "sections": {
-    "basicInfo": "Grundinformationen",
-    "settings": "Einstellungen",
-    "modules": "Module & Lektionen"
-  },
-  "edit": "Bearbeiten",
-  "fields": {
-    "name": "Name",
-    "category": "Kategorie",
-    "difficulty": "Stufe",
+  "courseStepBasicInfo": {
+    "name": "Kursname",
+    "namePlaceholder": "Kursname eingeben",
     "shortDescription": "Kurzbeschreibung",
-    "description": "Beschreibung",
-    "thumbnail": "Thumbnail",
+    "shortDescriptionPlaceholder": "Kurzbeschreibung für die Kursliste",
+    "description": "Vollständige Beschreibung",
+    "descriptionPlaceholder": "Detaillierte Kursbeschreibung",
+    "category": "Kategorie",
+    "categoryPlaceholder": "z.B. Digitale Kompetenz",
+    "difficulty": "Stufe",
+    "difficultyLevels": {
+      "beginner": "Anfänger",
+      "intermediate": "Mittelstufe",
+      "advanced": "Fortgeschritten"
+    },
+    "thumbnailUrl": "Thumbnail URL",
+    "trailerUrl": "Trailer URL",
+    "thumbnailPreview": "Thumbnail-Vorschau"
+  },
+  "courseStepSettings": {
+    "sections": {
+      "typeFormat": "Typ & Format",
+      "durationDates": "Dauer & Termine",
+      "enrollment": "Einschreibung",
+      "credits": "Credits & Zertifikat",
+      "tags": "Tags"
+    },
+    "courseType": "Kurstyp",
+    "courseTypes": {
+      "online": "Online",
+      "offline": "Präsenz",
+      "hybrid": "Hybrid"
+    },
+    "videoProvider": "Video-Plattform",
+    "videoProviders": {
+      "youtube": "YouTube",
+      "vimeo": "Vimeo",
+      "custom": "Andere",
+      "none": "Kein Video"
+    },
+    "durationWeeks": "Wochen",
+    "estimatedHours": "Geschätzte Stunden",
     "startDate": "Startdatum",
     "endDate": "Enddatum",
-    "duration": "Dauer",
-    "hours": "Stunden",
     "maxParticipants": "Max. Teilnehmer",
-    "credits": "Credits (max / Abschluss)"
+    "unlimited": "Unbegrenzt",
+    "targetAudience": "Zielgruppe",
+    "targetAudiencePlaceholder": "z.B. Senioren, Anfänger",
+    "isPublic": "Öffentlicher Kurs",
+    "requiresApproval": "Genehmigung erforderlich",
+    "maxCredits": "Max. Credits",
+    "creditsForCompletion": "Credits für Abschluss",
+    "hasCertificate": "Zertifikat ausstellen",
+    "tags": "Tags",
+    "tagsPlaceholder": "Computer, Internet, E-Mail",
+    "tagsHint": "Mit Komma trennen"
   },
-  "badges": {
-    "public": "Öffentlich",
-    "private": "Privat",
-    "certificate": "Zertifikat",
-    "approval": "Genehmigung"
+  "courseStepModules": {
+    "description": "Kursinhalt in Module und Lektionen organisieren",
+    "stats": "{{modules}} Module • {{lessons}} Lektionen",
+    "addModule": "Modul hinzufügen",
+    "empty": "Noch keine Module. Fügen Sie das erste Modul hinzu.",
+    "moduleTitlePlaceholder": "Modultitel",
+    "moduleDescPlaceholder": "Modulbeschreibung (optional)",
+    "lessonsCount": "Lektionen",
+    "moveUp": "Nach oben",
+    "moveDown": "Nach unten",
+    "removeModule": "Modul entfernen",
+    "addLesson": "Lektion hinzufügen",
+    "lessonTitlePlaceholder": "Lektionstitel",
+    "durationPlaceholder": "Min.",
+    "lessonTypes": {
+      "video": "Video",
+      "text": "Text",
+      "live": "Live",
+      "quiz": "Quiz",
+      "assignment": "Aufgabe"
+    }
   },
-  "weeks": "Wochen",
-  "hours": "Stunden",
-  "minutes": "Min.",
-  "min": "Min.",
-  "modulesCount": "{{count}} Module",
-  "lessonsCount": "{{count}} Lektionen",
-  "noModules": "Keine Module hinzugefügt",
-  "untitledModule": "Modul ohne Titel",
-  "untitledLesson": "Lektion ohne Titel"
-},
-"adminCourses": {
-  "title": "Verwaltung von",
-  "titleAccent": "Kursen",
-  "subtitle": "Kurse in der Akademie erstellen, bearbeiten und verwalten",
-  "createCourse": "Kurs erstellen",
-  "refresh": "Aktualisieren",
-  "searchPlaceholder": "Nach Kursname suchen...",
-  "filters": "Filter",
-  "status": "Status",
-  "sortBy": "Sortieren nach",
-  "loading": "Kurse werden geladen...",
-  "published": "Veröffentlicht",
-  "draft": "Entwurf",
-  "stats": {
-    "total": "gesamt",
-    "published": "veröffentlicht",
-    "drafts": "Entwürfe"
-  },
-  "statusOptions": {
-    "all": "Alle",
-    "published": "Veröffentlicht",
-    "draft": "Entwürfe"
-  },
-  "sortOptions": {
-    "newest": "Neueste",
-    "oldest": "Älteste",
-    "name": "Nach Name",
-    "popular": "Beliebt"
-  },
-  "categories": {
-    "digital_literacy": "Digitale Kompetenz",
-    "internet_safety": "Internetsicherheit",
-    "social_media": "Soziale Medien",
-    "office_tools": "Bürowerkzeuge",
-    "communication": "Kommunikation",
-    "e_services": "E-Dienste",
-    "other": "Sonstiges"
-  },
-  "difficulty": {
-    "beginner": "Anfänger",
-    "intermediate": "Mittelstufe",
-    "advanced": "Fortgeschritten"
-  },
-  "cardStats": {
-    "lessons": "Lektionen",
-    "enrolled": "Eingeschrieben",
-    "hours": "Stunden",
-    "created": "Erstellt"
-  },
-  "actions": {
+  "courseStepPreview": {
+    "warningsTitle": "{{count}} Warnungen",
+    "warnings": {
+      "noName": "Kursname fehlt",
+      "noCategory": "Kategorie fehlt",
+      "noModules": "Keine Module hinzugefügt",
+      "moduleNoTitle": "Modul {{index}} hat keinen Titel",
+      "moduleNoLessons": "Modul {{index}} hat keine Lektionen",
+      "lessonNoTitle": "Modul {{module}}, Lektion {{lesson}} hat keinen Titel"
+    },
+    "sections": {
+      "basicInfo": "Grundinformationen",
+      "settings": "Einstellungen",
+      "modules": "Module & Lektionen"
+    },
     "edit": "Bearbeiten",
-    "content": "Inhalt",
-    "stats": "Statistiken",
-    "publish": "Veröffentlichen",
-    "unpublish": "Ausblenden",
-    "delete": "Löschen"
+    "fields": {
+      "name": "Name",
+      "category": "Kategorie",
+      "difficulty": "Stufe",
+      "shortDescription": "Kurzbeschreibung",
+      "description": "Beschreibung",
+      "thumbnail": "Thumbnail",
+      "startDate": "Startdatum",
+      "endDate": "Enddatum",
+      "duration": "Dauer",
+      "hours": "Stunden",
+      "maxParticipants": "Max. Teilnehmer",
+      "credits": "Credits (max / Abschluss)"
+    },
+    "badges": {
+      "public": "Öffentlich",
+      "private": "Privat",
+      "certificate": "Zertifikat",
+      "approval": "Genehmigung"
+    },
+    "weeks": "Wochen",
+    "hours": "Stunden",
+    "minutes": "Min.",
+    "min": "Min.",
+    "modulesCount": "{{count}} Module",
+    "lessonsCount": "{{count}} Lektionen",
+    "noModules": "Keine Module hinzugefügt",
+    "untitledModule": "Modul ohne Titel",
+    "untitledLesson": "Lektion ohne Titel"
   },
-  "empty": {
-    "title": "Keine Kurse gefunden",
-    "description": "Erstellen Sie Ihren ersten Kurs oder ändern Sie die Filter"
+  "adminCourses": {
+    "title": "Verwaltung von",
+    "titleAccent": "Kursen",
+    "subtitle": "Kurse in der Akademie erstellen, bearbeiten und verwalten",
+    "createCourse": "Kurs erstellen",
+    "refresh": "Aktualisieren",
+    "searchPlaceholder": "Nach Kursname suchen...",
+    "filters": "Filter",
+    "status": "Status",
+    "sortBy": "Sortieren nach",
+    "loading": "Kurse werden geladen...",
+    "published": "Veröffentlicht",
+    "draft": "Entwurf",
+    "stats": {
+      "total": "gesamt",
+      "published": "veröffentlicht",
+      "drafts": "Entwürfe"
+    },
+    "statusOptions": {
+      "all": "Alle",
+      "published": "Veröffentlicht",
+      "draft": "Entwürfe"
+    },
+    "sortOptions": {
+      "newest": "Neueste",
+      "oldest": "Älteste",
+      "name": "Nach Name",
+      "popular": "Beliebt"
+    },
+    "categories": {
+      "digital_literacy": "Digitale Kompetenz",
+      "internet_safety": "Internetsicherheit",
+      "social_media": "Soziale Medien",
+      "office_tools": "Bürowerkzeuge",
+      "communication": "Kommunikation",
+      "e_services": "E-Dienste",
+      "other": "Sonstiges"
+    },
+    "difficulty": {
+      "beginner": "Anfänger",
+      "intermediate": "Mittelstufe",
+      "advanced": "Fortgeschritten"
+    },
+    "cardStats": {
+      "lessons": "Lektionen",
+      "enrolled": "Eingeschrieben",
+      "hours": "Stunden",
+      "created": "Erstellt"
+    },
+    "actions": {
+      "edit": "Bearbeiten",
+      "content": "Inhalt",
+      "stats": "Statistiken",
+      "publish": "Veröffentlichen",
+      "unpublish": "Ausblenden",
+      "delete": "Löschen"
+    },
+    "empty": {
+      "title": "Keine Kurse gefunden",
+      "description": "Erstellen Sie Ihren ersten Kurs oder ändern Sie die Filter"
+    },
+    "deleteModal": {
+      "title": "Kurs löschen",
+      "text": "Sind Sie sicher, dass Sie löschen möchten",
+      "warning": "Diese Aktion kann nicht rückgängig gemacht werden.",
+      "cancel": "Abbrechen",
+      "confirm": "Löschen"
+    }
   },
-  "deleteModal": {
-    "title": "Kurs löschen",
-    "text": "Sind Sie sicher, dass Sie löschen möchten",
-    "warning": "Diese Aktion kann nicht rückgängig gemacht werden.",
+  "editCourse": {
+    "loading": "Kurs wird geladen...",
+    "back": "Zurück",
+    "title": "Bearbeitung von",
+    "subtitle": "Grundinformationen und Einstellungen ändern",
+    "basicInfoTitle": "Grundinformationen",
+    "settingsTitle": "Einstellungen",
+    "unsavedChanges": "● Ungespeicherte Änderungen",
     "cancel": "Abbrechen",
-    "confirm": "Löschen"
+    "save": "Änderungen speichern",
+    "errors": {
+      "loadFailed": "Fehler beim Laden des Kurses",
+      "nameRequired": "Name ist erforderlich",
+      "saveFailed": "Fehler beim Speichern"
+    }
+  },
+  "contentManager": {
+    "loading": "Loading content...",
+    "back": "Back",
+    "title": "Content of",
+    "subtitle": "Manage modules and lessons",
+    "modules": "modules",
+    "lessons": "lessons",
+    "lessonsShort": "les.",
+    "addModule": "Add module",
+    "moduleNamePlaceholder": "Module name...",
+    "noModules": "No modules yet. Add the first module.",
+    "noLessons": "No lessons in this module",
+    "addLesson": "Add lesson",
+    "lessonTitlePlaceholder": "Lesson title...",
+    "free": "Free",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "editModule": "Rename",
+    "deleteModule": "Delete module",
+    "editLesson": "Edit",
+    "deleteLesson": "Delete",
+    "publish": "Publish",
+    "unpublish": "Unpublish",
+    "deleteModuleTitle": "Delete Module",
+    "deleteLessonTitle": "Delete Lesson",
+    "deleteConfirm": "Are you sure you want to delete",
+    "deleteModuleWarning": "Lessons will be moved outside the module.",
+    "cancel": "Cancel",
+    "confirmDelete": "Delete",
+    "lessonTypes": {
+      "video": "Video",
+      "text": "Text",
+      "live": "Live",
+      "quiz": "Quiz"
+    },
+    "errors": {
+      "loadFailed": "Error loading content"
+    }
   }
-}
 }

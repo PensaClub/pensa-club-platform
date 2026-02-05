@@ -1,0 +1,742 @@
+/* src/components/AdminAcademyCoursesList/CourseContentManager/courseContentManager.css */
+/* Prefix: ccm- */
+
+/* =========================================================
+                    PAGE BACKGROUND
+   ========================================================= */
+
+.ccm-wrapper {
+  position: relative;
+  min-height: 100vh;
+}
+
+.ccm-page-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: #0c0e14;
+}
+
+.ccm-page-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(56, 189, 248, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(56, 189, 248, 0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.ccm-page-bg::after {
+  content: '';
+  position: absolute;
+  top: -30%;
+  right: -15%;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.07) 0%, transparent 65%);
+  border-radius: 50%;
+}
+
+.ccm-glow-orb {
+  position: absolute;
+  bottom: -25%;
+  left: -10%;
+  width: 550px;
+  height: 550px;
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.05) 0%, transparent 65%);
+  border-radius: 50%;
+}
+
+/* =========================================================
+                    LOADING
+   ========================================================= */
+
+.ccm-loading {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 16px;
+  color: #5a6478;
+}
+
+.ccm-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(56, 189, 248, 0.15);
+  border-top-color: #0ea5e9;
+  border-radius: 50%;
+  animation: ccm-spin 0.8s linear infinite;
+}
+
+@keyframes ccm-spin {
+  to { transform: rotate(360deg); }
+}
+
+.ccm-spin {
+  animation: ccm-spin 1s linear infinite;
+}
+
+.ccm-loading p {
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+/* =========================================================
+                    CONTAINER
+   ========================================================= */
+
+.ccm-container {
+  position: relative;
+  z-index: 1;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 96px 32px 80px;
+}
+
+/* =========================================================
+                    HEADER
+   ========================================================= */
+
+.ccm-header {
+  margin-bottom: 28px;
+}
+
+.ccm-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  margin-bottom: 16px;
+  background: rgba(30, 35, 50, 0.5);
+  border: 1px solid rgba(56, 189, 248, 0.08);
+  border-radius: 8px;
+  color: #64748b;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ccm-back-btn:hover {
+  background: rgba(30, 35, 50, 0.8);
+  border-color: rgba(56, 189, 248, 0.15);
+  color: #94a3b8;
+}
+
+.ccm-header-info {
+  margin-bottom: 16px;
+}
+
+.ccm-title {
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: #f0f4f8;
+  margin: 0 0 8px;
+  letter-spacing: -0.02em;
+}
+
+.ccm-title-accent {
+  background: linear-gradient(135deg, #38bdf8, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.ccm-subtitle {
+  font-size: 0.9rem;
+  color: #5a6478;
+  margin: 0;
+}
+
+.ccm-header-stats {
+  display: flex;
+  gap: 16px;
+}
+
+.ccm-mini-stat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: #4a5568;
+}
+
+.ccm-mini-stat svg {
+  color: #38bdf8;
+}
+
+/* =========================================================
+                    ADD MODULE
+   ========================================================= */
+
+.ccm-add-module-area {
+  margin-bottom: 20px;
+}
+
+.ccm-add-module-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px dashed rgba(56, 189, 248, 0.2);
+  border-radius: 10px;
+  color: #38bdf8;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ccm-add-module-btn:hover {
+  background: rgba(56, 189, 248, 0.12);
+  border-color: rgba(56, 189, 248, 0.35);
+}
+
+/* =========================================================
+                    INLINE FORMS
+   ========================================================= */
+
+.ccm-inline-form {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.ccm-inline-form-lesson {
+  margin-top: 8px;
+  padding: 0 12px;
+}
+
+.ccm-inline-input {
+  flex: 1;
+  padding: 9px 14px;
+  background: rgba(15, 18, 28, 0.8);
+  border: 1px solid rgba(56, 189, 248, 0.15);
+  border-radius: 8px;
+  color: #e2e8f0;
+  font-size: 0.82rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.ccm-inline-input:focus {
+  border-color: rgba(56, 189, 248, 0.35);
+}
+
+.ccm-inline-select {
+  padding: 9px 12px;
+  background: rgba(15, 18, 28, 0.8);
+  border: 1px solid rgba(56, 189, 248, 0.15);
+  border-radius: 8px;
+  color: #e2e8f0;
+  font-size: 0.82rem;
+  outline: none;
+  cursor: pointer;
+}
+
+.ccm-inline-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.ccm-inline-confirm {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+}
+
+.ccm-inline-confirm:hover:not(:disabled) {
+  background: rgba(16, 185, 129, 0.25);
+}
+
+.ccm-inline-confirm:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ccm-inline-cancel {
+  background: rgba(239, 68, 68, 0.1);
+  color: #f87171;
+}
+
+.ccm-inline-cancel:hover {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+.ccm-edit-inline {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex: 1;
+}
+
+/* =========================================================
+                    EMPTY
+   ========================================================= */
+
+.ccm-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 240px;
+  gap: 12px;
+  color: #3d4555;
+  text-align: center;
+}
+
+.ccm-empty p {
+  font-size: 0.88rem;
+  color: #4a5568;
+  margin: 0;
+}
+
+/* =========================================================
+                    MODULES LIST
+   ========================================================= */
+
+.ccm-modules-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* =========================================================
+                    MODULE
+   ========================================================= */
+
+.ccm-module {
+  background: rgba(15, 18, 28, 0.6);
+  border: 1px solid rgba(56, 189, 248, 0.08);
+  border-radius: 14px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.ccm-module-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  gap: 10px;
+}
+
+.ccm-module-header:hover {
+  background: rgba(56, 189, 248, 0.03);
+}
+
+.ccm-module-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+  color: #94a3b8;
+}
+
+.ccm-module-left svg:first-child {
+  color: #4a5568;
+  flex-shrink: 0;
+}
+
+.ccm-module-order {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: rgba(56, 189, 248, 0.08);
+  color: #38bdf8;
+  font-size: 0.75rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.ccm-module-title {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ccm-module-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.ccm-module-count {
+  font-size: 0.72rem;
+  color: #4a5568;
+  margin-right: 6px;
+  white-space: nowrap;
+}
+
+/* =========================================================
+                    ICON BUTTONS
+   ========================================================= */
+
+.ccm-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 7px;
+  background: transparent;
+  color: #4a5568;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ccm-icon-btn:hover:not(:disabled) {
+  background: rgba(56, 189, 248, 0.08);
+  color: #94a3b8;
+}
+
+.ccm-icon-btn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+.ccm-icon-btn-danger:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.1);
+  color: #f87171;
+}
+
+.ccm-icon-btn-active {
+  color: #34d399;
+}
+
+.ccm-icon-btn-active:hover:not(:disabled) {
+  background: rgba(245, 158, 11, 0.1);
+  color: #fbbf24;
+}
+
+/* =========================================================
+                    MODULE BODY
+   ========================================================= */
+
+.ccm-module-body {
+  padding: 4px 18px 14px;
+  border-top: 1px solid rgba(56, 189, 248, 0.05);
+}
+
+.ccm-no-lessons {
+  font-size: 0.8rem;
+  color: #3d4555;
+  padding: 10px 12px;
+  margin: 0;
+}
+
+/* =========================================================
+                    LESSONS LIST
+   ========================================================= */
+
+.ccm-lessons-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ccm-lesson {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 12px;
+  border-radius: 8px;
+  transition: background 0.15s ease;
+  gap: 8px;
+}
+
+.ccm-lesson:hover {
+  background: rgba(56, 189, 248, 0.04);
+}
+
+.ccm-lesson-draft {
+  opacity: 0.55;
+}
+
+.ccm-lesson-draft:hover {
+  opacity: 0.85;
+}
+
+.ccm-lesson-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.ccm-grip {
+  color: #2d3548;
+  flex-shrink: 0;
+  cursor: grab;
+}
+
+.ccm-lesson-type-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: rgba(56, 189, 248, 0.08);
+  color: #38bdf8;
+  flex-shrink: 0;
+}
+
+.ccm-lesson-title {
+  font-size: 0.84rem;
+  color: #cbd5e1;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.2s ease;
+}
+
+.ccm-lesson-title:hover {
+  color: #38bdf8;
+}
+
+.ccm-free-badge {
+  padding: 2px 7px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.12);
+  border-radius: 4px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.ccm-lesson-right {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.ccm-lesson-duration {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  color: #4a5568;
+  margin-right: 6px;
+  white-space: nowrap;
+}
+
+/* =========================================================
+                    ADD LESSON BUTTON
+   ========================================================= */
+
+.ccm-add-lesson-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  margin-top: 8px;
+  background: transparent;
+  border: 1px dashed rgba(56, 189, 248, 0.12);
+  border-radius: 8px;
+  color: #4a5568;
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ccm-add-lesson-btn:hover {
+  border-color: rgba(56, 189, 248, 0.25);
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.04);
+}
+
+/* =========================================================
+                    DELETE MODAL
+   ========================================================= */
+
+.ccm-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: ccm-fadeIn 0.15s ease;
+}
+
+@keyframes ccm-fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.ccm-modal {
+  background: rgba(18, 22, 34, 0.98);
+  border: 1px solid rgba(239, 68, 68, 0.15);
+  border-radius: 20px;
+  padding: 36px;
+  max-width: 420px;
+  width: 90%;
+  text-align: center;
+  animation: ccm-scaleIn 0.2s ease;
+}
+
+@keyframes ccm-scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.ccm-modal-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: rgba(239, 68, 68, 0.1);
+  color: #f87171;
+  margin-bottom: 16px;
+}
+
+.ccm-modal-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #f0f4f8;
+  margin: 0 0 10px;
+}
+
+.ccm-modal-text {
+  font-size: 0.85rem;
+  color: #64748b;
+  line-height: 1.55;
+  margin: 0 0 24px;
+}
+
+.ccm-modal-text strong {
+  color: #e2e8f0;
+}
+
+.ccm-modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.ccm-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 22px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+
+.ccm-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.ccm-btn-cancel {
+  background: rgba(30, 35, 50, 0.6);
+  border-color: rgba(56, 189, 248, 0.1);
+  color: #94a3b8;
+}
+
+.ccm-btn-cancel:hover {
+  background: rgba(30, 35, 50, 0.9);
+  color: #e2e8f0;
+}
+
+.ccm-btn-delete {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #f87171;
+}
+
+.ccm-btn-delete:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.25);
+  border-color: rgba(239, 68, 68, 0.5);
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.15);
+}
+
+/* =========================================================
+                    RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .ccm-container {
+    padding: 80px 16px 60px;
+  }
+
+  .ccm-title {
+    font-size: 1.4rem;
+  }
+
+  .ccm-module-header {
+    padding: 12px 14px;
+  }
+
+  .ccm-module-right {
+    gap: 2px;
+  }
+
+  .ccm-lesson {
+    flex-wrap: wrap;
+  }
+
+  .ccm-lesson-right {
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 4px;
+  }
+
+  .ccm-inline-form-lesson {
+    flex-wrap: wrap;
+  }
+
+  .ccm-modal {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ccm-module-count {
+    display: none;
+  }
+
+  .ccm-lesson-duration {
+    display: none;
+  }
+}

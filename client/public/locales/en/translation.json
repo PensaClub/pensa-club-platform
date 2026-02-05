@@ -14659,5 +14659,60 @@
     "cancel": "Cancel",
     "confirm": "Delete"
   }
+},
+"editCourse": {
+  "loading": "Loading course...",
+  "back": "Back",
+  "title": "Edit",
+  "subtitle": "Change basic information and settings",
+  "basicInfoTitle": "Basic Information",
+  "settingsTitle": "Settings",
+  "unsavedChanges": "● Unsaved changes",
+  "cancel": "Cancel",
+  "save": "Save changes",
+  "errors": {
+    "loadFailed": "Error loading course",
+    "nameRequired": "Name is required",
+    "saveFailed": "Error saving changes"
+  }
+},
+"contentManager": {
+  "loading": "Loading content...",
+  "back": "Back",
+  "title": "Content of",
+  "subtitle": "Manage modules and lessons",
+  "modules": "modules",
+  "lessons": "lessons",
+  "lessonsShort": "les.",
+  "addModule": "Add module",
+  "moduleNamePlaceholder": "Module name...",
+  "noModules": "No modules yet. Add the first module.",
+  "noLessons": "No lessons in this module",
+  "addLesson": "Add lesson",
+  "lessonTitlePlaceholder": "Lesson title...",
+  "free": "Free",
+  "moveUp": "Move up",
+  "moveDown": "Move down",
+  "editModule": "Rename",
+  "deleteModule": "Delete module",
+  "editLesson": "Edit",
+  "deleteLesson": "Delete",
+  "publish": "Publish",
+  "unpublish": "Unpublish",
+  "deleteModuleTitle": "Delete Module",
+  "deleteLessonTitle": "Delete Lesson",
+  "deleteConfirm": "Are you sure you want to delete",
+  "deleteModuleWarning": "Lessons will be moved outside the module.",
+  "cancel": "Cancel",
+  "confirmDelete": "Delete",
+  "lessonTypes": {
+    "video": "Video",
+    "text": "Text",
+    "live": "Live",
+    "quiz": "Quiz"
+  },
+  "errors": {
+    "loadFailed": "Error loading content"
+  }
 }
 }
