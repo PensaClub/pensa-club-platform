@@ -71,7 +71,22 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: false,
         field: 'is_published',
       },
-
+// === ВРЕМЕВИ НАСТРОЙКИ ===
+      startDate: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        field: 'start_date',
+      },
+      endDate: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        field: 'end_date',
+      },
+      estimatedHours: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        field: 'estimated_hours',
+      },
       // === СТАТИСТИКИ ===
       lessonsCount: {
         type: DataTypes.INTEGER,
@@ -92,7 +107,8 @@ module.exports = (sequelize, DataTypes) => {
       tableName: 'course_modules',
       timestamps: true,
       underscored: true,
-    }
+    },
+
   );
 
   return course_module;

@@ -14685,6 +14685,9 @@
   "lessons": "lessons",
   "lessonsShort": "les.",
   "addModule": "Add module",
+  "startDate": "Start",
+"endDate": "End",
+"estimatedHours": "Hours",
   "moduleNamePlaceholder": "Module name...",
   "noModules": "No modules yet. Add the first module.",
   "noLessons": "No lessons in this module",
@@ -14713,6 +14716,59 @@
   },
   "errors": {
     "loadFailed": "Error loading content"
+  }
+},
+"editLesson": {
+  "title": "Edit Lesson",
+  "loading": "Loading...",
+  "unsavedChanges": "● Unsaved changes",
+  "cancel": "Cancel",
+  "save": "Save",
+  "sections": {
+    "basicInfo": "Basic Information",
+    "video": "Video Settings",
+    "schedule": "Schedule & Duration",
+    "credits": "Credits",
+    "test": "Test Settings",
+    "settings": "Settings"
+  },
+  "fields": {
+    "title": "Title",
+    "description": "Description",
+    "lessonType": "Lesson Type",
+    "videoProvider": "Provider",
+    "videoUrl": "Video URL",
+    "liveStreamUrl": "Live Stream URL",
+    "thumbnailUrl": "Thumbnail URL",
+    "durationMinutes": "Duration (min)",
+    "scheduledDate": "Start Date",
+    "endDate": "End Date",
+    "maxCredits": "Max Credits",
+    "creditsForCompletion": "For Completion",
+    "creditsForTest": "For Test",
+    "hasTest": "Has Test",
+    "testPassingScore": "Passing Score (%)",
+    "isFree": "Free Lesson",
+    "requiresCompletion": "Requires Completion",
+    "published": "Published",
+    "draft": "Draft"
+  },
+  "lessonTypes": {
+    "video": "Video",
+    "text": "Text",
+    "live": "Live",
+    "quiz": "Quiz"
+  },
+  "videoProviders": {
+    "youtube": "YouTube",
+    "vimeo": "Vimeo",
+    "custom": "Custom",
+    "none": "None"
+  },
+  "errors": {
+    "loadFailed": "Error loading lesson",
+    "titleRequired": "Title is required",
+    "saveFailed": "Error saving lesson"
   }
 }
 }

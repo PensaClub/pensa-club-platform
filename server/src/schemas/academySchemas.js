@@ -65,6 +65,9 @@ const moduleCreateSchema = z.object({
   title: z.string().min(2, 'Title must be at least 2 characters').max(200),
   description: z.string().optional(),
   isPublished: z.boolean().default(false),
+  startDate: z.coerce.date().optional().nullable(),
+  endDate: z.coerce.date().optional().nullable(),
+  estimatedHours: z.coerce.number().int().min(0).optional().nullable(),
 });
 
 const moduleUpdateSchema = moduleCreateSchema.partial();
@@ -88,6 +91,7 @@ const lessonCreateSchema = z.object({
   thumbnailUrl: z.string().url().optional().or(z.literal('')),
   durationMinutes: z.coerce.number().int().positive().optional(),
   scheduledDate: z.coerce.date().optional(),
+  endDate: z.coerce.date().optional().nullable(),
   maxCredits: z.coerce.number().int().min(0).default(0),
   creditsForCompletion: z.coerce.number().int().min(0).default(0),
   creditsForTest: z.coerce.number().int().min(0).default(0),
@@ -220,7 +224,6 @@ const bulkAttendanceSchema = z.object({
 //                    TEST SCHEMAS
 // =========================================================
 
-// Base schema без refine (за да работи .partial())
 const testBaseSchema = z.object({
   title: z.string().min(3, 'Title must be at least 3 characters').max(200),
   description: z.string().optional(),
@@ -242,13 +245,11 @@ const testBaseSchema = z.object({
   creditsForPassing: z.coerce.number().int().min(0).default(0),
 });
 
-// Create schema с refine валидация
 const testCreateSchema = testBaseSchema.refine(
   (data) => data.courseId || data.lessonId || data.lectureId || data.seminarId,
   { message: 'Test must be associated with a course, lesson, lecture, or seminar' }
 );
 
-// Update schema от base (без entity IDs)
 const testUpdateSchema = testBaseSchema.omit({
   courseId: true,
   lessonId: true,
@@ -278,13 +279,11 @@ const questionReorderSchema = z.object({
 
 const testAnswerSchema = z.object({
   questionId: z.coerce.number().int().positive(),
-  // Позволи число, масив от числа, или null
   answerId: z.union([
     z.coerce.number().int().positive(),
     z.array(z.coerce.number().int().positive()),
     z.null()
   ]).optional(),
-  // Също за 'answer' полето (frontend го изпраща като answer понякога)
   answer: z.union([
     z.coerce.number().int().positive(),
     z.array(z.coerce.number().int().positive()),

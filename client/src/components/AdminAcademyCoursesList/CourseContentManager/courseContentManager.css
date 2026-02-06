@@ -740,3 +740,94 @@
     display: none;
   }
 }
+/* =========================================================
+   MODULE EDIT EXPANDED
+   ========================================================= */
+
+.ccm-edit-inline-expanded {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.ccm-edit-row-main {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ccm-edit-row-details {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  padding: 8px 0 4px;
+}
+
+.ccm-edit-mini-field {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.ccm-edit-mini-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.ccm-inline-input-sm {
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  max-width: 140px;
+}
+
+/* =========================================================
+   MODULE META BADGES
+   ========================================================= */
+
+.ccm-module-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 8px;
+}
+
+.ccm-module-meta-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.7rem;
+  color: #64748b;
+  background: rgba(56, 189, 248, 0.06);
+  padding: 2px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   RESPONSIVE - MODULE EDIT
+   ========================================================= */
+
+@media (max-width: 640px) {
+  .ccm-edit-row-details {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .ccm-inline-input-sm {
+    max-width: 100%;
+  }
+
+  .ccm-module-meta {
+    margin-left: 0;
+    margin-top: 4px;
+    flex-wrap: wrap;
+  }
+}

@@ -14999,6 +14999,9 @@
     "deleteModuleWarning": "Уроците ще бъдат преместени извън модула.",
     "cancel": "Отказ",
     "confirmDelete": "Изтрий",
+    "startDate": "Начало",
+"endDate": "Край",
+"estimatedHours": "Часове",
     "lessonTypes": {
       "video": "Видео",
       "text": "Текст",
@@ -15008,5 +15011,58 @@
     "errors": {
       "loadFailed": "Грешка при зареждане"
     }
+  },
+  "editLesson": {
+  "title": "Редактиране на урок",
+  "loading": "Зареждане...",
+  "unsavedChanges": "● Незапазени промени",
+  "cancel": "Отказ",
+  "save": "Запази",
+  "sections": {
+    "basicInfo": "Основна информация",
+    "video": "Видео настройки",
+    "schedule": "График и времетраене",
+    "credits": "Кредити",
+    "test": "Тест настройки",
+    "settings": "Настройки"
+  },
+  "fields": {
+    "title": "Заглавие",
+    "description": "Описание",
+    "lessonType": "Тип урок",
+    "videoProvider": "Доставчик",
+    "videoUrl": "Видео URL",
+    "liveStreamUrl": "Live Stream URL",
+    "thumbnailUrl": "Thumbnail URL",
+    "durationMinutes": "Продължителност (мин)",
+    "scheduledDate": "Начална дата",
+    "endDate": "Крайна дата",
+    "maxCredits": "Макс. кредити",
+    "creditsForCompletion": "За завършване",
+    "creditsForTest": "За тест",
+    "hasTest": "Има тест",
+    "testPassingScore": "Минимален резултат (%)",
+    "isFree": "Безплатен урок",
+    "requiresCompletion": "Изисква завършване",
+    "published": "Публикуван",
+    "draft": "Чернова"
+  },
+  "lessonTypes": {
+    "video": "Видео",
+    "text": "Текст",
+    "live": "На живо",
+    "quiz": "Тест"
+  },
+  "videoProviders": {
+    "youtube": "YouTube",
+    "vimeo": "Vimeo",
+    "custom": "Друг",
+    "none": "Няма"
+  },
+  "errors": {
+    "loadFailed": "Грешка при зареждане на урока",
+    "titleRequired": "Заглавието е задължително",
+    "saveFailed": "Грешка при запазване"
   }
+}
 }

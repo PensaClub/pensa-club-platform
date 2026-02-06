@@ -164,7 +164,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         field: 'scheduled_date',
       },
-
+      endDate: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        field: 'end_date',
+      },
       // === КРЕДИТИ ===
       maxCredits: {
         type: DataTypes.INTEGER,

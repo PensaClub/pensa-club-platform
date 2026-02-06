@@ -13973,6 +13973,9 @@
     "loading": "Loading content...",
     "back": "Back",
     "title": "Content of",
+    "startDate": "Beginn",
+"endDate": "Ende",
+"estimatedHours": "Stunden",
     "subtitle": "Manage modules and lessons",
     "modules": "modules",
     "lessons": "lessons",
@@ -14007,5 +14010,58 @@
     "errors": {
       "loadFailed": "Error loading content"
     }
+  },
+  "editLesson": {
+  "title": "Lektion bearbeiten",
+  "loading": "Wird geladen...",
+  "unsavedChanges": "● Ungespeicherte Änderungen",
+  "cancel": "Abbrechen",
+  "save": "Speichern",
+  "sections": {
+    "basicInfo": "Grundinformationen",
+    "video": "Video-Einstellungen",
+    "schedule": "Zeitplan & Dauer",
+    "credits": "Credits",
+    "test": "Test-Einstellungen",
+    "settings": "Einstellungen"
+  },
+  "fields": {
+    "title": "Titel",
+    "description": "Beschreibung",
+    "lessonType": "Lektionstyp",
+    "videoProvider": "Anbieter",
+    "videoUrl": "Video-URL",
+    "liveStreamUrl": "Live-Stream-URL",
+    "thumbnailUrl": "Thumbnail-URL",
+    "durationMinutes": "Dauer (Min.)",
+    "scheduledDate": "Startdatum",
+    "endDate": "Enddatum",
+    "maxCredits": "Max. Credits",
+    "creditsForCompletion": "Für Abschluss",
+    "creditsForTest": "Für Test",
+    "hasTest": "Hat Test",
+    "testPassingScore": "Mindestpunktzahl (%)",
+    "isFree": "Kostenlose Lektion",
+    "requiresCompletion": "Abschluss erforderlich",
+    "published": "Veröffentlicht",
+    "draft": "Entwurf"
+  },
+  "lessonTypes": {
+    "video": "Video",
+    "text": "Text",
+    "live": "Live",
+    "quiz": "Quiz"
+  },
+  "videoProviders": {
+    "youtube": "YouTube",
+    "vimeo": "Vimeo",
+    "custom": "Benutzerdefiniert",
+    "none": "Keine"
+  },
+  "errors": {
+    "loadFailed": "Fehler beim Laden der Lektion",
+    "titleRequired": "Titel ist erforderlich",
+    "saveFailed": "Fehler beim Speichern"
   }
+}
 }

@@ -3,8 +3,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useAcademyCourses } from '../../contexts/AcademyCoursesProvider';
 import { toast } from 'react-toastify';
+import { useAcademyCourses } from '../../contexts/AcademyCoursesProvider';
 
 const useCourseContentManager = () => {
   const { t } = useTranslation();

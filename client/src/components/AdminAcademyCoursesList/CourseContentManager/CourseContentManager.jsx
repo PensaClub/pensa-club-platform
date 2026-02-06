@@ -24,10 +24,12 @@ import {
   GripVertical,
   AlertTriangle,
   Loader2,
+  Calendar,
 } from 'lucide-react';
 import useCourseContentManager from './useCourseContentManager';
 import './courseContentManager.css';
 import { useState } from 'react';
+import EditLessonModal from './EditLessonModal/EditLessonModal';
 
 const LESSON_TYPE_ICONS = {
   video: Video,
@@ -38,12 +40,18 @@ const LESSON_TYPE_ICONS = {
 
 const LESSON_TYPE_OPTIONS = ['video', 'text', 'live', 'quiz'];
 
+const formatDateForInput = (dateStr) => {
+  if (!dateStr) return '';
+  return new Date(dateStr).toISOString().split('T')[0];
+};
+
 const CourseContentManager = () => {
   const { t } = useTranslation();
   const {
     course,
     modules,
     isLoading,
+    slug,
     actionLoading,
     expandedModules,
     editingModule,
@@ -53,6 +61,7 @@ const CourseContentManager = () => {
     newLessonTitle,
     newLessonType,
     deleteTarget,
+    editingLesson,
     toggleModule,
     setAddingModule,
     setNewModuleTitle,
@@ -69,6 +78,7 @@ const CourseContentManager = () => {
     setDeleteTarget,
     handleDeleteModule,
     handleDeleteLesson,
+    closeEditLesson,
     openEditLesson,
     handleBack,
   } = useCourseContentManager();
@@ -176,12 +186,33 @@ const CourseContentManager = () => {
                     {editingModule === mod.id ? (
                       <ModuleEditInline
                         module={mod}
-                        onSave={(title) => handleUpdateModule(mod.id, { title })}
+                        onSave={(updates) => handleUpdateModule(mod.id, updates)}
                         onCancel={() => setEditingModule(null)}
                         actionLoading={actionLoading === `module-${mod.id}`}
                       />
                     ) : (
-                      <span className="ccm-module-title">{mod.title}</span>
+                      <>
+                        <span className="ccm-module-title">{mod.title}</span>
+                        {(mod.startDate || mod.endDate || mod.estimatedHours) && (
+                          <div className="ccm-module-meta">
+                            {mod.startDate && (
+                              <span className="ccm-module-meta-tag">
+                                <Calendar size={10} /> {new Date(mod.startDate).toLocaleDateString('bg-BG')}
+                              </span>
+                            )}
+                            {mod.endDate && (
+                              <span className="ccm-module-meta-tag">
+                                → {new Date(mod.endDate).toLocaleDateString('bg-BG')}
+                              </span>
+                            )}
+                            {mod.estimatedHours && (
+                              <span className="ccm-module-meta-tag">
+                                <Clock size={10} /> {mod.estimatedHours}ч
+                              </span>
+                            )}
+                          </div>
+                        )}
+                      </>
                     )}
                   </div>
 
@@ -389,6 +420,15 @@ const CourseContentManager = () => {
           </div>
         </div>
       )}
+
+      {/* Edit Lesson Modal */}
+      {editingLesson && (
+        <EditLessonModal
+          lesson={editingLesson}
+          courseSlug={slug}
+          onClose={closeEditLesson}
+        />
+      )}
     </div>
   );
 };
@@ -398,27 +438,85 @@ const CourseContentManager = () => {
 // =========================================================
 
 const ModuleEditInline = ({ module, onSave, onCancel, actionLoading }) => {
-  const [title, setTitle] = useState(module.title);
+  const { t } = useTranslation();
+  const [form, setForm] = useState({
+    title: module.title || '',
+    startDate: formatDateForInput(module.startDate),
+    endDate: formatDateForInput(module.endDate),
+    estimatedHours: module.estimatedHours || '',
+  });
+
+  const handleSave = () => {
+    onSave({
+      title: form.title,
+      startDate: form.startDate || null,
+      endDate: form.endDate || null,
+      estimatedHours: form.estimatedHours ? Number(form.estimatedHours) : null,
+    });
+  };
 
   return (
-    <div className="ccm-edit-inline" onClick={(e) => e.stopPropagation()}>
-      <input
-        type="text"
-        className="ccm-inline-input"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') onSave(title);
-          if (e.key === 'Escape') onCancel();
-        }}
-        autoFocus
-      />
-      <button className="ccm-inline-btn ccm-inline-confirm" onClick={() => onSave(title)} disabled={actionLoading}>
-        {actionLoading ? <Loader2 size={14} className="ccm-spin" /> : <Check size={14} />}
-      </button>
-      <button className="ccm-inline-btn ccm-inline-cancel" onClick={onCancel}>
-        <X size={14} />
-      </button>
+    <div className="ccm-edit-inline-expanded" onClick={(e) => e.stopPropagation()}>
+      <div className="ccm-edit-row-main">
+        <input
+          type="text"
+          className="ccm-inline-input"
+          value={form.title}
+          onChange={(e) => setForm((p) => ({ ...p, title: e.target.value }))}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') handleSave();
+            if (e.key === 'Escape') onCancel();
+          }}
+          placeholder={t('contentManager.moduleNamePlaceholder', 'Име на модула...')}
+          autoFocus
+        />
+        <button className="ccm-inline-btn ccm-inline-confirm" onClick={handleSave} disabled={actionLoading}>
+          {actionLoading ? <Loader2 size={14} className="ccm-spin" /> : <Check size={14} />}
+        </button>
+        <button className="ccm-inline-btn ccm-inline-cancel" onClick={onCancel}>
+          <X size={14} />
+        </button>
+      </div>
+      <div className="ccm-edit-row-details">
+        <div className="ccm-edit-mini-field">
+          <label className="ccm-edit-mini-label">
+            <Calendar size={11} />
+            {t('contentManager.startDate', 'Начало')}
+          </label>
+          <input
+            type="date"
+            className="ccm-inline-input ccm-inline-input-sm"
+            value={form.startDate}
+            onChange={(e) => setForm((p) => ({ ...p, startDate: e.target.value }))}
+          />
+        </div>
+        <div className="ccm-edit-mini-field">
+          <label className="ccm-edit-mini-label">
+            <Calendar size={11} />
+            {t('contentManager.endDate', 'Край')}
+          </label>
+          <input
+            type="date"
+            className="ccm-inline-input ccm-inline-input-sm"
+            value={form.endDate}
+            onChange={(e) => setForm((p) => ({ ...p, endDate: e.target.value }))}
+          />
+        </div>
+        <div className="ccm-edit-mini-field">
+          <label className="ccm-edit-mini-label">
+            <Clock size={11} />
+            {t('contentManager.estimatedHours', 'Часове')}
+          </label>
+          <input
+            type="number"
+            className="ccm-inline-input ccm-inline-input-sm"
+            value={form.estimatedHours}
+            onChange={(e) => setForm((p) => ({ ...p, estimatedHours: e.target.value }))}
+            min={0}
+            placeholder="0"
+          />
+        </div>
+      </div>
     </div>
   );
 };

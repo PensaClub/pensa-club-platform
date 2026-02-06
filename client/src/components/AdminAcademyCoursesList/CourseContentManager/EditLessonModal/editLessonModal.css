@@ -1,0 +1,470 @@
+/* src/components/AdminAcademyCoursesList/CourseContentManager/EditLessonModal/editLessonModal.css */
+/* Prefix: elm- */
+
+/* =========================================================
+                    OVERLAY
+   ========================================================= */
+
+.elm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+  animation: elm-fadeIn 0.15s ease;
+}
+
+@keyframes elm-fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* =========================================================
+                    MODAL
+   ========================================================= */
+
+.elm-modal {
+  background: rgba(15, 18, 28, 0.98);
+  border: 1px solid rgba(56, 189, 248, 0.1);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 720px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  animation: elm-scaleIn 0.2s ease;
+  overflow: hidden;
+}
+
+@keyframes elm-scaleIn {
+  from { opacity: 0; transform: scale(0.96) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* =========================================================
+                    HEADER
+   ========================================================= */
+
+.elm-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.08);
+  flex-shrink: 0;
+}
+
+.elm-header-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #f0f4f8;
+  margin: 0;
+  background: linear-gradient(135deg, #38bdf8, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.elm-close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 10px;
+  background: rgba(239, 68, 68, 0.08);
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.elm-close-btn:hover {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+}
+
+/* =========================================================
+                    LOADING
+   ========================================================= */
+
+.elm-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  gap: 12px;
+  color: #5a6478;
+}
+
+.elm-loading p {
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.elm-spin {
+  animation: elm-spinAnim 1s linear infinite;
+}
+
+@keyframes elm-spinAnim {
+  to { transform: rotate(360deg); }
+}
+
+/* =========================================================
+                    BODY
+   ========================================================= */
+
+.elm-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+}
+
+.elm-body::-webkit-scrollbar {
+  width: 5px;
+}
+
+.elm-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.elm-body::-webkit-scrollbar-thumb {
+  background: rgba(56, 189, 248, 0.15);
+  border-radius: 10px;
+}
+
+/* =========================================================
+                    SECTIONS
+   ========================================================= */
+
+.elm-section {
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.05);
+}
+
+.elm-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.elm-section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #94a3b8;
+  margin: 0 0 16px;
+}
+
+.elm-section-title svg {
+  color: #38bdf8;
+}
+
+/* =========================================================
+                    FIELDS
+   ========================================================= */
+
+.elm-field {
+  margin-bottom: 14px;
+}
+
+.elm-field:last-child {
+  margin-bottom: 0;
+}
+
+.elm-label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #64748b;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.elm-input,
+.elm-textarea,
+.elm-select {
+  width: 100%;
+  padding: 10px 14px;
+  background: rgba(15, 18, 28, 0.6);
+  border: 1px solid rgba(56, 189, 248, 0.1);
+  border-radius: 10px;
+  color: #e2e8f0;
+  font-size: 0.85rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s ease;
+  box-sizing: border-box;
+}
+
+.elm-input:focus,
+.elm-textarea:focus,
+.elm-select:focus {
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+.elm-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.elm-select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%2364748b' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+}
+
+.elm-select option {
+  background: #1a1e2e;
+  color: #e2e8f0;
+}
+
+.elm-field-error .elm-input {
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.elm-error-msg {
+  display: block;
+  font-size: 0.75rem;
+  color: #f87171;
+  margin-top: 4px;
+}
+
+/* =========================================================
+                    ROWS
+   ========================================================= */
+
+.elm-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.elm-row-3 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+/* =========================================================
+                    TYPE SELECTOR
+   ========================================================= */
+
+.elm-type-selector {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.elm-type-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 16px;
+  background: rgba(30, 35, 50, 0.5);
+  border: 1px solid rgba(56, 189, 248, 0.08);
+  border-radius: 10px;
+  color: #64748b;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.elm-type-btn:hover {
+  border-color: rgba(56, 189, 248, 0.2);
+  color: #94a3b8;
+}
+
+.elm-type-btn-active {
+  background: rgba(56, 189, 248, 0.1);
+  border-color: rgba(56, 189, 248, 0.35);
+  color: #38bdf8;
+}
+
+/* =========================================================
+                    TOGGLES
+   ========================================================= */
+
+.elm-toggles {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.elm-toggle {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.elm-toggle input {
+  display: none;
+}
+
+.elm-toggle-slider {
+  position: relative;
+  width: 40px;
+  height: 22px;
+  background: rgba(30, 35, 50, 0.8);
+  border: 1px solid rgba(56, 189, 248, 0.1);
+  border-radius: 12px;
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+}
+
+.elm-toggle-slider::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background: #4a5568;
+  border-radius: 50%;
+  transition: all 0.25s ease;
+}
+
+.elm-toggle input:checked + .elm-toggle-slider {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: rgba(56, 189, 248, 0.35);
+}
+
+.elm-toggle input:checked + .elm-toggle-slider::after {
+  left: 20px;
+  background: #38bdf8;
+}
+
+.elm-toggle-text {
+  font-size: 0.82rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+/* =========================================================
+                    FOOTER
+   ========================================================= */
+
+.elm-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-top: 1px solid rgba(56, 189, 248, 0.08);
+  flex-shrink: 0;
+}
+
+.elm-footer-left,
+.elm-footer-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.elm-unsaved {
+  font-size: 0.78rem;
+  color: #fbbf24;
+  font-weight: 500;
+  animation: elm-pulse 2s ease-in-out infinite;
+}
+
+@keyframes elm-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* =========================================================
+                    BUTTONS
+   ========================================================= */
+
+.elm-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.elm-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.elm-btn-cancel {
+  background: rgba(30, 35, 50, 0.6);
+  border-color: rgba(56, 189, 248, 0.1);
+  color: #94a3b8;
+}
+
+.elm-btn-cancel:hover {
+  background: rgba(30, 35, 50, 0.9);
+  color: #e2e8f0;
+}
+
+.elm-btn-save {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff;
+  border: none;
+}
+
+.elm-btn-save:hover:not(:disabled) {
+  box-shadow: 0 0 24px rgba(16, 185, 129, 0.35);
+  transform: translateY(-1px);
+}
+
+/* =========================================================
+                    RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 640px) {
+  .elm-modal {
+    max-height: 95vh;
+    border-radius: 16px;
+  }
+
+  .elm-body {
+    padding: 18px;
+  }
+
+  .elm-row {
+    grid-template-columns: 1fr;
+  }
+
+  .elm-row-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .elm-type-selector {
+    flex-direction: column;
+  }
+
+  .elm-footer {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .elm-footer-right {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
