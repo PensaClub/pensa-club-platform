@@ -1309,6 +1309,23 @@ export const AcademyCoursesProvider = ({ children }) => {
       throw error;
     }
   }, [isAdmin]);
+
+
+const deleteLessonMaterial = useCallback(async (lessonId, materialId) => {
+  if (!isAdmin) {
+    toast.error('Нямате права за тази операция');
+    return { success: false };
+  }
+  try {
+    const response = await coursesService.deleteLessonMaterial(lessonId, materialId);
+    toast.success('Материалът е изтрит успешно');
+    return response;
+  } catch (error) {
+    console.error('Error deleting lesson material:', error);
+    toast.error('Грешка при изтриване на материал');
+    throw error;
+  }
+}, [isAdmin]);
   // =========================================================
   //                    MY ACADEMY (Student Dashboard)
   // =========================================================
@@ -1548,7 +1565,7 @@ const getMyMentor = useCallback(async () => {
     addLectureMaterial,
     getSeminarMaterials,
     addSeminarMaterial,
-
+deleteLessonMaterial,
     // My Academy
     getMyDashboard,
     getMyCourses,

@@ -503,9 +503,9 @@ export const academyCoursesServiceFactory = () => {
     // =========================================================
 
     getMyCertificates: async (params = {}) => {
-  const queryString = toQueryString(params);
-  return requester.get(`${apiUrl}/academy/my/certificates?${queryString}`);
-},
+      const queryString = toQueryString(params);
+      return requester.get(`${apiUrl}/academy/my/certificates?${queryString}`);
+    },
 
     verifyCertificate: async (code) => {
       return requester.get(`${apiUrl}/academy/certificates/verify/${code}`);
@@ -625,7 +625,9 @@ export const academyCoursesServiceFactory = () => {
     getMaterialStats: async () => {
       return requester.get(`${apiUrl}/academy/materials/stats/overview`);
     },
-
+    deleteLessonMaterial: async (lessonId, materialId) => {
+      return requester.del(`${apiUrl}/academy/materials/lesson/${lessonId}/${materialId}`);
+    },
     // =========================================================
     //                    MY ACADEMY (Student Dashboard)
     // =========================================================

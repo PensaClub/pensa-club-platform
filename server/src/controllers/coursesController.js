@@ -14,6 +14,8 @@ const {
   mentor,
   lecture,
   sequelize,
+  lesson_material,
+  lesson_test,
 } = require('../sequelize/models/index');
 
 const { validateBody, validateQuery } = require('../middlewares/validateRequest');
@@ -334,6 +336,19 @@ coursesController.get('/:slug', async (req, res, next) => {
                   as: 'mentor',
                   attributes: ['id', 'name', 'photoUrl', 'specialization'],
                 },
+                {
+                  model: lesson_material,
+                  as: 'materials',
+                  where: { status: 'active' },
+                  required: false,
+                  attributes: ['id', 'title', 'description', 'materialType', 'fileUrl', 'originalFileName', 'fileSize', 'mimeType', 'externalUrl', 'isDownloadable', 'sortOrder'],
+                },
+                {
+                  model: lesson_test,
+                  as: 'tests',
+                  required: false,
+                  attributes: ['id', 'title', 'description', 'passingScore', 'maxAttempts', 'timeLimitMinutes', 'isPublished'],
+                },
               ],
             },
           ],
@@ -346,6 +361,26 @@ coursesController.get('/:slug', async (req, res, next) => {
             moduleId: null,
           },
           required: false,
+          include: [
+            {
+              model: mentor,
+              as: 'mentor',
+              attributes: ['id', 'name', 'photoUrl', 'specialization'],
+            },
+            {
+              model: lesson_material,
+              as: 'materials',
+              where: { status: 'active' },
+              required: false,
+              attributes: ['id', 'title', 'description', 'materialType', 'fileUrl', 'originalFileName', 'fileSize', 'mimeType', 'externalUrl', 'isDownloadable', 'sortOrder'],
+            },
+            {
+              model: lesson_test,
+              as: 'tests',
+              required: false,
+              attributes: ['id', 'title', 'description', 'passingScore', 'maxAttempts', 'timeLimitMinutes', 'isPublished'],
+            },
+          ],
         },
         {
           model: course_material,
@@ -855,7 +890,7 @@ coursesController.post(
       const { title, description, startDate, endDate, estimatedHours } = req.body;
 
       const courseData = await findCourseBySlugOrId(courseSlug);
-      
+
       if (!courseData) {
         return res.status(404).json({ success: false, message: 'Course not found' });
       }
@@ -900,7 +935,7 @@ coursesController.put(
       const { title, description, isPublished, startDate, endDate, estimatedHours } = req.body;
 
       const courseData = await findCourseBySlugOrId(courseSlug);
-      
+
       if (!courseData) {
         return res.status(404).json({ success: false, message: 'Course not found' });
       }

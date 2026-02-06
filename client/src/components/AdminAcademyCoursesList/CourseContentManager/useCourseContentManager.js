@@ -39,33 +39,36 @@ const useCourseContentManager = () => {
   const [newLessonType, setNewLessonType] = useState('video');
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [editingLesson, setEditingLesson] = useState(null);
-
+const [standaloneLessons, setStandaloneLessons] = useState([]);
   // =========================================================
   //                    LOAD DATA
   // =========================================================
 
-  const loadData = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      const courseData = await getCourseBySlug(slug);
-      const c = courseData.course || courseData;
-      setCourse(c);
+ const loadData = useCallback(async () => {
+  try {
+    setIsLoading(true);
+    const courseData = await getCourseBySlug(slug);
+    const c = courseData.course || courseData;
+    setCourse(c);
 
-      const mods = await getCourseModules(c.id);
-      setModules(mods);
+    const mods = await getCourseModules(c.id);
+    setModules(mods);
 
-      // Expand all by default
-      const expanded = {};
-      mods.forEach((m) => { expanded[m.id] = true; });
-      setExpandedModules(expanded);
-    } catch (err) {
-      console.error('Error loading course content:', err);
-      toast.error(t('contentManager.errors.loadFailed', 'Грешка при зареждане'));
-      navigate('/academy/admin/courses');
-    } finally {
-      setIsLoading(false);
-    }
-  }, [slug]);
+    // Standalone lessons (без модул)
+    setStandaloneLessons(c.lessons || []);
+
+    const expanded = {};
+    mods.forEach((m) => { expanded[m.id] = true; });
+    expanded['standalone'] = true; // разгъни и standalone секцията
+    setExpandedModules(expanded);
+  } catch (err) {
+    console.error('Error loading course content:', err);
+    toast.error(t('contentManager.errors.loadFailed', 'Грешка при зареждане'));
+    navigate('/academy/admin/courses');
+  } finally {
+    setIsLoading(false);
+  }
+}, [slug]);
 
   useEffect(() => {
     if (slug) loadData();
@@ -194,29 +197,48 @@ const useCourseContentManager = () => {
   };
 
   const handleMoveLessonInModule = async (moduleId, lessonId, direction) => {
-    const mod = modules.find((m) => m.id === moduleId);
-    if (!mod) return;
-
-    const lessons = [...(mod.lessons || [])];
+  // За standalone уроци
+  if (moduleId === 'standalone') {
+    const lessons = [...standaloneLessons];
     const idx = lessons.findIndex((l) => l.id === lessonId);
     if (idx < 0) return;
     const newIdx = direction === 'up' ? idx - 1 : idx + 1;
     if (newIdx < 0 || newIdx >= lessons.length) return;
 
     [lessons[idx], lessons[newIdx]] = [lessons[newIdx], lessons[idx]];
-
-    // Optimistic update
-    setModules((prev) =>
-      prev.map((m) => (m.id === moduleId ? { ...m, lessons } : m))
-    );
+    setStandaloneLessons(lessons);
 
     try {
-      await reorderLessons(slug, lessons.map((l) => l.id), moduleId);
+      await reorderLessons(slug, lessons.map((l) => l.id), null);
     } catch (err) {
-      console.error('Error reordering lessons:', err);
+      console.error('Error reordering standalone lessons:', err);
       await loadData();
     }
-  };
+    return;
+  }
+
+  // Оригиналния код за модулни уроци
+  const mod = modules.find((m) => m.id === moduleId);
+  if (!mod) return;
+
+  const lessons = [...(mod.lessons || [])];
+  const idx = lessons.findIndex((l) => l.id === lessonId);
+  if (idx < 0) return;
+  const newIdx = direction === 'up' ? idx - 1 : idx + 1;
+  if (newIdx < 0 || newIdx >= lessons.length) return;
+
+  [lessons[idx], lessons[newIdx]] = [lessons[newIdx], lessons[idx]];
+  setModules((prev) =>
+    prev.map((m) => (m.id === moduleId ? { ...m, lessons } : m))
+  );
+
+  try {
+    await reorderLessons(slug, lessons.map((l) => l.id), moduleId);
+  } catch (err) {
+    console.error('Error reordering lessons:', err);
+    await loadData();
+  }
+};
 
   const openEditLesson = (lesson) => {
     setEditingLesson(lesson);
@@ -267,6 +289,7 @@ const useCourseContentManager = () => {
     closeEditLesson,
     handleBack,
     loadData,
+    standaloneLessons
   };
 };
 

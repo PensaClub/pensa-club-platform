@@ -135,7 +135,8 @@ const LessonItem = ({
 }) => {
   const isScheduleAccessible = isLessonScheduledAccessible(lesson.scheduledDate);
   const isAccessible = isAuthenticated && hasAccess && isScheduleAccessible;
-  
+  const [showMaterials, setShowMaterials] = useState(false);
+
   const getLockReason = () => {
     if (!isAuthenticated) return 'login';
     if (!hasAccess) return 'enroll';
@@ -145,6 +146,9 @@ const LessonItem = ({
   
   const lockReason = getLockReason();
   const scheduledDateFormatted = formatScheduledDate(lesson.scheduledDate);
+  const materials = lesson.materials || [];
+  const tests = lesson.tests || [];
+  const hasMaterials = materials.length > 0;
 
   const handleClick = () => {
     if (isAccessible && onLessonClick) {
@@ -152,76 +156,124 @@ const LessonItem = ({
     }
   };
 
+  const handleMaterialsToggle = (e) => {
+    e.stopPropagation();
+    setShowMaterials(!showMaterials);
+  };
+
   return (
-    <div 
-      className={`academyCourseDetail-lesson ${isAccessible ? 'is-accessible' : 'is-locked'} ${lockReason === 'scheduled' ? 'is-scheduled' : ''}`}
-      style={{ '--delay': `${index * 0.05}s` }}
-      onClick={handleClick}
-      role={isAccessible ? 'button' : undefined}
-      tabIndex={isAccessible ? 0 : undefined}
-    >
-      {showNumber && (
-        <div className="academyCourseDetail-lesson-number">{index + 1}</div>
-      )}
-      
-      <div className="academyCourseDetail-lesson-icon">
-        <LessonTypeIcon type={lesson.lessonType} />
-      </div>
-      
-      <div className="academyCourseDetail-lesson-info">
-        <h4 className="academyCourseDetail-lesson-title">
-          {lesson.title}
-          {lockReason === 'scheduled' && scheduledDateFormatted && (
-            <span className="academyCourseDetail-lesson-scheduled">
-              📅 {t('academyCourseDetail.content.availableOn')} {scheduledDateFormatted}
-            </span>
-          )}
-        </h4>
-        <div className="academyCourseDetail-lesson-meta">
-          {lesson.durationMinutes > 0 && (
-            <span className="academyCourseDetail-lesson-duration">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="12" cy="12" r="10" />
-                <polyline points="12,6 12,12 16,14" />
-              </svg>
-              {lesson.durationMinutes} {t('academyCourseDetail.content.minutes')}
-            </span>
-          )}
-          {lesson.hasTest && (
-            <span className="academyCourseDetail-lesson-test">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M9 11l3 3L22 4" />
-                <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
-              </svg>
-              {t('academyCourseDetail.content.hasTest')}
-            </span>
-          )}
-          {lesson.maxCredits > 0 && (
-            <span className="academyCourseDetail-lesson-credits">
-              🪙 +{lesson.maxCredits}
-            </span>
+    <div className="academyCourseDetail-lesson-wrapper">
+      <div 
+        className={`academyCourseDetail-lesson ${isAccessible ? 'is-accessible' : 'is-locked'} ${lockReason === 'scheduled' ? 'is-scheduled' : ''}`}
+        style={{ '--delay': `${index * 0.05}s` }}
+        onClick={handleClick}
+        role={isAccessible ? 'button' : undefined}
+        tabIndex={isAccessible ? 0 : undefined}
+      >
+        {showNumber && (
+          <div className="academyCourseDetail-lesson-number">{index + 1}</div>
+        )}
+        
+        <div className="academyCourseDetail-lesson-icon">
+          <LessonTypeIcon type={lesson.lessonType} />
+        </div>
+        
+        <div className="academyCourseDetail-lesson-info">
+          <h4 className="academyCourseDetail-lesson-title">
+            {lesson.title}
+            {lockReason === 'scheduled' && scheduledDateFormatted && (
+              <span className="academyCourseDetail-lesson-scheduled">
+                📅 {t('academyCourseDetail.content.availableOn')} {scheduledDateFormatted}
+              </span>
+            )}
+          </h4>
+          <div className="academyCourseDetail-lesson-meta">
+            {lesson.durationMinutes > 0 && (
+              <span className="academyCourseDetail-lesson-duration">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12,6 12,12 16,14" />
+                </svg>
+                {lesson.durationMinutes} {t('academyCourseDetail.content.minutes')}
+              </span>
+            )}
+            {lesson.hasTest && (
+              <span className="academyCourseDetail-lesson-test">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M9 11l3 3L22 4" />
+                  <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
+                </svg>
+                {t('academyCourseDetail.content.hasTest')}
+              </span>
+            )}
+            {lesson.maxCredits > 0 && (
+              <span className="academyCourseDetail-lesson-credits">
+                🪙 +{lesson.maxCredits}
+              </span>
+            )}
+            {hasMaterials && (
+              <span 
+                className="academyCourseDetail-lesson-materials-badge"
+                onClick={handleMaterialsToggle}
+              >
+                📎 {materials.length} {t('academyCourseDetail.content.materialsCount', 'материал(а)')}
+              </span>
+            )}
+          </div>
+        </div>
+        
+        <div className="academyCourseDetail-lesson-action">
+          {isAccessible ? (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="10" />
+              <polygon points="10,8 16,12 10,16" fill="currentColor" stroke="none" />
+            </svg>
+          ) : lockReason === 'scheduled' ? (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12,6 12,12 16,14" />
+            </svg>
+          ) : (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0110 0v4" />
+            </svg>
           )}
         </div>
       </div>
-      
-      <div className="academyCourseDetail-lesson-action">
-        {isAccessible ? (
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="12" cy="12" r="10" />
-            <polygon points="10,8 16,12 10,16" fill="currentColor" stroke="none" />
-          </svg>
-        ) : lockReason === 'scheduled' ? (
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="12" cy="12" r="10" />
-            <polyline points="12,6 12,12 16,14" />
-          </svg>
-        ) : (
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-            <path d="M7 11V7a5 5 0 0110 0v4" />
-          </svg>
-        )}
-      </div>
+
+      {/* Lesson Materials (expandable) */}
+      {showMaterials && hasMaterials && isAccessible && (
+        <div className="academyCourseDetail-lesson-materials">
+          {materials.map((mat, matIdx) => (
+            <a  
+              key={mat.id}
+              href={mat.fileUrl || mat.externalUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="academyCourseDetail-lesson-material-item"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <span className="academyCourseDetail-lesson-material-icon">
+                {getMaterialIcon(mat)}
+              </span>
+              <span className="academyCourseDetail-lesson-material-name">
+                {mat.title}
+              </span>
+              {mat.fileSize > 0 && (
+                <span className="academyCourseDetail-lesson-material-size">
+                  {formatFileSize(mat.fileSize)}
+                </span>
+              )}
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+            </a>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
@@ -245,6 +297,9 @@ const ModuleAccordion = ({
   ).length || 0;
   
   const totalLessonsCount = module.lessons?.length || module.lessonsCount || 0;
+
+  const totalMaterials = module.lessons?.reduce((acc, l) => acc + (l.materials?.length || 0), 0) || 0;
+  const totalTests = module.lessons?.filter(l => l.hasTest || l.tests?.length > 0).length || 0;
   
   return (
     <div 
@@ -273,6 +328,23 @@ const ModuleAccordion = ({
               </svg>
               {totalDuration} {t('academyCourseDetail.content.minutes')}
             </span>
+            {totalMaterials > 0 && (
+              <span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" />
+                </svg>
+                {totalMaterials} {t('academyCourseDetail.content.materialsShort', 'материал(а)')}
+              </span>
+            )}
+            {totalTests > 0 && (
+              <span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M9 11l3 3L22 4" />
+                  <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
+                </svg>
+                {totalTests} {t('academyCourseDetail.content.testsShort', 'тест(а)')}
+              </span>
+            )}
           </div>
         </div>
         <div className="academyCourseDetail-module-toggle">

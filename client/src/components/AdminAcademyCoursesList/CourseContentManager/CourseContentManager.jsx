@@ -50,6 +50,7 @@ const CourseContentManager = () => {
   const {
     course,
     modules,
+    standaloneLessons,
     isLoading,
     slug,
     actionLoading,
@@ -125,7 +126,7 @@ const CourseContentManager = () => {
             <div className="ccm-mini-stat">
               <Video size={14} />
               <span>
-                {modules.reduce((sum, m) => sum + (m.lessons?.length || 0), 0)}{' '}
+                {modules.reduce((sum, m) => sum + (m.lessons?.length || 0), 0) + standaloneLessons.length}{' '}
                 {t('contentManager.lessons', 'урока')}
               </span>
             </div>
@@ -168,7 +169,7 @@ const CourseContentManager = () => {
         </div>
 
         {/* Modules List */}
-        {modules.length === 0 ? (
+        {modules.length === 0 && standaloneLessons.length === 0 ? (
           <div className="ccm-empty">
             <Layers size={40} strokeWidth={1} />
             <p>{t('contentManager.noModules', 'Все още няма модули. Добавете първия модул.')}</p>
@@ -383,6 +384,156 @@ const CourseContentManager = () => {
             ))}
           </div>
         )}
+
+        {/* =========================================================
+                    STANDALONE LESSONS (без модул)
+            ========================================================= */}
+        <div className="ccm-standalone-section">
+          <div
+            className="ccm-standalone-header"
+            onClick={() => toggleModule('standalone')}
+          >
+            <div className="ccm-module-left">
+              {expandedModules['standalone'] ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
+              <FileText size={16} className="ccm-standalone-icon" />
+              <span className="ccm-module-title">
+                {t('contentManager.standaloneLessons', 'Самостоятелни уроци')}
+              </span>
+              <span className="ccm-lesson-count-badge">
+                {standaloneLessons.length}
+              </span>
+            </div>
+          </div>
+
+          {expandedModules['standalone'] && (
+            <div className="ccm-module-body">
+              {standaloneLessons.length === 0 && addingLessonTo !== 'standalone' && (
+                <p className="ccm-standalone-empty">
+                  {t('contentManager.noStandaloneLessons', 'Няма самостоятелни уроци. Тези уроци не принадлежат към модул.')}
+                </p>
+              )}
+
+              {standaloneLessons.length > 0 && (
+                <div className="ccm-lessons-list">
+                  {standaloneLessons.map((les, lesIdx) => {
+                    const TypeIcon = LESSON_TYPE_ICONS[les.lessonType] || Video;
+                    return (
+                      <div key={les.id} className={`ccm-lesson ${les.isPublished ? '' : 'ccm-lesson-draft'}`}>
+                        <div className="ccm-lesson-left">
+                          <GripVertical size={14} className="ccm-grip" />
+                          <div className="ccm-lesson-type-icon">
+                            <TypeIcon size={14} />
+                          </div>
+                          <span className="ccm-lesson-title" onClick={() => openEditLesson(les)}>
+                            {les.title}
+                          </span>
+                          {les.isFree && <span className="ccm-free-badge">{t('contentManager.free', 'Безплатен')}</span>}
+                        </div>
+
+                        <div className="ccm-lesson-right">
+                          {les.durationMinutes > 0 && (
+                            <span className="ccm-lesson-duration">
+                              <Clock size={12} /> {les.durationMinutes} мин
+                            </span>
+                          )}
+                          <button
+                            className="ccm-icon-btn"
+                            onClick={() => handleMoveLessonInModule('standalone', les.id, 'up')}
+                            disabled={lesIdx === 0}
+                            title={t('contentManager.moveUp', 'Нагоре')}
+                          >
+                            <ArrowUp size={13} />
+                          </button>
+                          <button
+                            className="ccm-icon-btn"
+                            onClick={() => handleMoveLessonInModule('standalone', les.id, 'down')}
+                            disabled={lesIdx === standaloneLessons.length - 1}
+                            title={t('contentManager.moveDown', 'Надолу')}
+                          >
+                            <ArrowDown size={13} />
+                          </button>
+                          <button
+                            className={`ccm-icon-btn ${les.isPublished ? 'ccm-icon-btn-active' : ''}`}
+                            onClick={() => handleToggleLessonPublish(les.slug, les.isPublished)}
+                            disabled={actionLoading === `publish-${les.slug}`}
+                            title={les.isPublished
+                              ? t('contentManager.unpublish', 'Скрий')
+                              : t('contentManager.publish', 'Публикувай')}
+                          >
+                            {les.isPublished ? <Eye size={13} /> : <EyeOff size={13} />}
+                          </button>
+                          <button
+                            className="ccm-icon-btn"
+                            onClick={() => openEditLesson(les)}
+                            title={t('contentManager.editLesson', 'Редактирай')}
+                          >
+                            <Pencil size={13} />
+                          </button>
+                          <button
+                            className="ccm-icon-btn ccm-icon-btn-danger"
+                            onClick={() => setDeleteTarget({ type: 'lesson', slug: les.slug, name: les.title })}
+                            title={t('contentManager.deleteLesson', 'Изтрий')}
+                          >
+                            <Trash2 size={13} />
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* Add Standalone Lesson */}
+              {addingLessonTo === 'standalone' ? (
+                <div className="ccm-inline-form ccm-inline-form-lesson">
+                  <input
+                    type="text"
+                    className="ccm-inline-input"
+                    placeholder={t('contentManager.lessonTitlePlaceholder', 'Заглавие на урока...')}
+                    value={newLessonTitle}
+                    onChange={(e) => setNewLessonTitle(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleAddLesson(null)}
+                    autoFocus
+                  />
+                  <select
+                    className="ccm-inline-select"
+                    value={newLessonType}
+                    onChange={(e) => setNewLessonType(e.target.value)}
+                  >
+                    {LESSON_TYPE_OPTIONS.map((lt) => (
+                      <option key={lt} value={lt}>
+                        {t(`contentManager.lessonTypes.${lt}`, lt)}
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    className="ccm-inline-btn ccm-inline-confirm"
+                    onClick={() => handleAddLesson(null)}
+                    disabled={actionLoading === `add-lesson-null` || !newLessonTitle.trim()}
+                  >
+                    {actionLoading === `add-lesson-null`
+                      ? <Loader2 size={14} className="ccm-spin" />
+                      : <Check size={14} />}
+                  </button>
+                  <button
+                    className="ccm-inline-btn ccm-inline-cancel"
+                    onClick={() => { setAddingLessonTo(null); setNewLessonTitle(''); }}
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
+              ) : (
+                <button
+                  className="ccm-add-lesson-btn"
+                  onClick={() => setAddingLessonTo('standalone')}
+                >
+                  <Plus size={14} />
+                  {t('contentManager.addLesson', 'Добави урок')}
+                </button>
+              )}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Delete Confirmation Modal */}

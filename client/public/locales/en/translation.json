@@ -14721,15 +14721,17 @@
 "editLesson": {
   "title": "Edit Lesson",
   "loading": "Loading...",
-  "unsavedChanges": "● Unsaved changes",
-  "cancel": "Cancel",
   "save": "Save",
+  "cancel": "Cancel",
+  "autosave": "Materials save automatically",
+  "unsavedChanges": "● Unsaved changes",
   "sections": {
     "basicInfo": "Basic Information",
     "video": "Video Settings",
     "schedule": "Schedule & Duration",
     "credits": "Credits",
     "test": "Test Settings",
+    "materials": "Materials",
     "settings": "Settings"
   },
   "fields": {
@@ -14753,6 +14755,10 @@
     "published": "Published",
     "draft": "Draft"
   },
+  "placeholders": {
+    "title": "Enter title...",
+    "description": "Brief description..."
+  },
   "lessonTypes": {
     "video": "Video",
     "text": "Text",
@@ -14766,9 +14772,54 @@
     "none": "None"
   },
   "errors": {
-    "loadFailed": "Error loading lesson",
-    "titleRequired": "Title is required",
-    "saveFailed": "Error saving lesson"
+    "loadFailed": "Failed to load lesson",
+    "saveFailed": "Failed to save",
+    "titleRequired": "Title is required"
+  },
+  "materials": {
+    "loading": "Loading materials...",
+    "autosave": "Materials save automatically",
+    "empty": "No materials added",
+    "open": "Open",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "add": "Add",
+    "uploadFile": "Upload File",
+    "addExternalLink": "Add Link",
+    "addLink": "New External Link",
+    "dropzoneTitle": "Drag files here or click to browse",
+    "dropzoneSubtitle": "PDF, documents, images, video, audio",
+    "maxFileSize": "Maximum size: 50MB",
+    "uploadSuccess": "{{name}} uploaded successfully",
+    "fields": {
+      "title": "Title",
+      "url": "URL",
+      "type": "Material Type",
+      "description": "Description"
+    },
+    "placeholders": {
+      "linkTitle": "Link name...",
+      "description": "Brief description of the material..."
+    },
+    "errors": {
+      "titleRequired": "Title is required",
+      "urlRequired": "URL is required",
+      "fileTooLarge": "{{name}} exceeds the 50MB size limit",
+      "uploadFailed": "Failed to upload {{name}}"
+    },
+    "types": {
+      "pdf": "PDF",
+      "document": "Document",
+      "video": "Video",
+      "presentation": "Presentation",
+      "image": "Image",
+      "audio": "Audio",
+      "spreadsheet": "Spreadsheet",
+      "code": "Code",
+      "archive": "Archive",
+      "link": "Link",
+      "other": "Other"
+    }
   }
 }
 }

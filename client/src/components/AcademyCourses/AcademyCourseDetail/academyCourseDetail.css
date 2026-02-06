@@ -2299,3 +2299,112 @@
     height: 36px;
   }
 }
+/* =========================================================
+          LESSON MATERIALS (inside lessons)
+   ========================================================= */
+
+.academyCourseDetail-lesson-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.academyCourseDetail-lesson-materials-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 8px;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.15);
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #38bdf8;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.academyCourseDetail-lesson-materials-badge:hover {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: rgba(56, 189, 248, 0.3);
+}
+
+.academyCourseDetail-lesson-materials {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 12px 8px 56px;
+  margin-top: -2px;
+  background: rgba(15, 18, 28, 0.3);
+  border-left: 2px solid rgba(56, 189, 248, 0.1);
+  border-radius: 0 0 10px 10px;
+  animation: acd-materialsSlide 0.2s ease;
+}
+
+@keyframes acd-materialsSlide {
+  from { opacity: 0; max-height: 0; }
+  to { opacity: 1; max-height: 500px; }
+}
+
+.academyCourseDetail-lesson-material-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #94a3b8;
+  font-size: 0.78rem;
+  transition: all 0.2s ease;
+}
+
+.academyCourseDetail-lesson-material-item:hover {
+  background: rgba(56, 189, 248, 0.06);
+  color: #e2e8f0;
+}
+
+.academyCourseDetail-lesson-material-icon {
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.academyCourseDetail-lesson-material-name {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+}
+
+.academyCourseDetail-lesson-material-size {
+  font-size: 0.68rem;
+  color: #4a5568;
+  flex-shrink: 0;
+}
+
+.academyCourseDetail-lesson-material-item svg {
+  flex-shrink: 0;
+  color: #38bdf8;
+  opacity: 0.5;
+}
+
+.academyCourseDetail-lesson-material-item:hover svg {
+  opacity: 1;
+}
+
+/* Responsive */
+@media (max-width: 639px) {
+  .academyCourseDetail-lesson-materials {
+    padding-left: 20px;
+  }
+}
+
+@media (max-width: 379px) {
+  .academyCourseDetail-lesson-materials {
+    padding-left: 12px;
+  }
+
+  .academyCourseDetail-lesson-material-item {
+    font-size: 0.72rem;
+    padding: 5px 8px;
+  }
+}

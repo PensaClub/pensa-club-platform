@@ -15012,18 +15012,20 @@
       "loadFailed": "Грешка при зареждане"
     }
   },
-  "editLesson": {
+ "editLesson": {
   "title": "Редактиране на урок",
   "loading": "Зареждане...",
-  "unsavedChanges": "● Незапазени промени",
-  "cancel": "Отказ",
   "save": "Запази",
+  "cancel": "Отказ",
+  
+  "unsavedChanges": "● Незапазени промени",
   "sections": {
     "basicInfo": "Основна информация",
     "video": "Видео настройки",
     "schedule": "График и времетраене",
     "credits": "Кредити",
     "test": "Тест настройки",
+    "materials": "Материали",
     "settings": "Настройки"
   },
   "fields": {
@@ -15047,6 +15049,10 @@
     "published": "Публикуван",
     "draft": "Чернова"
   },
+  "placeholders": {
+    "title": "Въведете заглавие...",
+    "description": "Кратко описание..."
+  },
   "lessonTypes": {
     "video": "Видео",
     "text": "Текст",
@@ -15061,8 +15067,53 @@
   },
   "errors": {
     "loadFailed": "Грешка при зареждане на урока",
-    "titleRequired": "Заглавието е задължително",
-    "saveFailed": "Грешка при запазване"
+    "saveFailed": "Грешка при запазване",
+    "titleRequired": "Заглавието е задължително"
+  },
+  "materials": {
+    "loading": "Зареждане на материали...",
+    "autosave": "Материалите се записват автоматично", 
+    "empty": "Няма добавени материали",
+    "open": "Отвори",
+    "delete": "Изтрий",
+    "cancel": "Откажи",
+    "add": "Добави",
+    "uploadFile": "Качи файл",
+    "addExternalLink": "Добави връзка",
+    "addLink": "Нова външна връзка",
+    "dropzoneTitle": "Плъзнете файлове тук или кликнете",
+    "dropzoneSubtitle": "PDF, документи, изображения, видео, аудио",
+    "maxFileSize": "Максимален размер: 50MB",
+    "uploadSuccess": "{{name}} е качен успешно",
+    "fields": {
+      "title": "Заглавие",
+      "url": "URL адрес",
+      "type": "Тип на материала",
+      "description": "Описание"
+    },
+    "placeholders": {
+      "linkTitle": "Име на връзката...",
+      "description": "Кратко описание на материала..."
+    },
+    "errors": {
+      "titleRequired": "Заглавието е задължително",
+      "urlRequired": "URL адресът е задължителен",
+      "fileTooLarge": "{{name}} надвишава максималния размер от 50MB",
+      "uploadFailed": "Грешка при качване на {{name}}"
+    },
+    "types": {
+      "pdf": "PDF",
+      "document": "Документ",
+      "video": "Видео",
+      "presentation": "Презентация",
+      "image": "Изображение",
+      "audio": "Аудио",
+      "spreadsheet": "Таблица",
+      "code": "Код",
+      "archive": "Архив",
+      "link": "Връзка",
+      "other": "Друго"
+    }
   }
 }
 }

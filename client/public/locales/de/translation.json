@@ -14011,18 +14011,19 @@
       "loadFailed": "Error loading content"
     }
   },
-  "editLesson": {
+"editLesson": {
   "title": "Lektion bearbeiten",
   "loading": "Wird geladen...",
-  "unsavedChanges": "● Ungespeicherte Änderungen",
-  "cancel": "Abbrechen",
   "save": "Speichern",
+  "cancel": "Abbrechen",
+  "unsavedChanges": "● Nicht gespeicherte Änderungen",
   "sections": {
     "basicInfo": "Grundinformationen",
     "video": "Video-Einstellungen",
     "schedule": "Zeitplan & Dauer",
     "credits": "Credits",
     "test": "Test-Einstellungen",
+    "materials": "Materialien",
     "settings": "Einstellungen"
   },
   "fields": {
@@ -14033,7 +14034,7 @@
     "videoUrl": "Video-URL",
     "liveStreamUrl": "Live-Stream-URL",
     "thumbnailUrl": "Thumbnail-URL",
-    "durationMinutes": "Dauer (Min.)",
+    "durationMinutes": "Dauer (Min)",
     "scheduledDate": "Startdatum",
     "endDate": "Enddatum",
     "maxCredits": "Max. Credits",
@@ -14046,6 +14047,10 @@
     "published": "Veröffentlicht",
     "draft": "Entwurf"
   },
+  "placeholders": {
+    "title": "Titel eingeben...",
+    "description": "Kurze Beschreibung..."
+  },
   "lessonTypes": {
     "video": "Video",
     "text": "Text",
@@ -14055,13 +14060,58 @@
   "videoProviders": {
     "youtube": "YouTube",
     "vimeo": "Vimeo",
-    "custom": "Benutzerdefiniert",
+    "custom": "Andere",
     "none": "Keine"
   },
   "errors": {
     "loadFailed": "Fehler beim Laden der Lektion",
-    "titleRequired": "Titel ist erforderlich",
-    "saveFailed": "Fehler beim Speichern"
+    "saveFailed": "Fehler beim Speichern",
+    "titleRequired": "Titel ist erforderlich"
+  },
+  "materials": {
+    "loading": "Materialien werden geladen...",
+    "empty": "Keine Materialien hinzugefügt",
+    "autosave": "Materialien werden automatisch gespeichert",
+    "open": "Öffnen",
+    "delete": "Löschen",
+    "cancel": "Abbrechen",
+    "add": "Hinzufügen",
+    "uploadFile": "Datei hochladen",
+    "addExternalLink": "Link hinzufügen",
+    "addLink": "Neuer externer Link",
+    "dropzoneTitle": "Dateien hierher ziehen oder klicken",
+    "dropzoneSubtitle": "PDF, Dokumente, Bilder, Video, Audio",
+    "maxFileSize": "Maximale Größe: 50MB",
+    "uploadSuccess": "{{name}} erfolgreich hochgeladen",
+    "fields": {
+      "title": "Titel",
+      "url": "URL-Adresse",
+      "type": "Materialtyp",
+      "description": "Beschreibung"
+    },
+    "placeholders": {
+      "linkTitle": "Linkname...",
+      "description": "Kurze Beschreibung des Materials..."
+    },
+    "errors": {
+      "titleRequired": "Titel ist erforderlich",
+      "urlRequired": "URL ist erforderlich",
+      "fileTooLarge": "{{name}} überschreitet die maximale Größe von 50MB",
+      "uploadFailed": "Fehler beim Hochladen von {{name}}"
+    },
+    "types": {
+      "pdf": "PDF",
+      "document": "Dokument",
+      "video": "Video",
+      "presentation": "Präsentation",
+      "image": "Bild",
+      "audio": "Audio",
+      "spreadsheet": "Tabelle",
+      "code": "Code",
+      "archive": "Archiv",
+      "link": "Link",
+      "other": "Sonstiges"
+    }
   }
 }
 }
