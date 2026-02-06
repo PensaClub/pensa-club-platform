@@ -328,7 +328,6 @@ coursesController.get('/:slug', async (req, res, next) => {
             {
               model: lesson,
               as: 'lessons',
-              where: { isPublished: true },
               required: false,
               include: [
                 {
@@ -354,12 +353,12 @@ coursesController.get('/:slug', async (req, res, next) => {
           ],
         },
         {
-          model: lesson,
-          as: 'lessons',
-          where: {
-            isPublished: true,
-            moduleId: null,
-          },
+         model: lesson,
+  as: 'lessons',
+  where: {
+    moduleId: null,
+  },
+  required: false,  
           required: false,
           include: [
             {
@@ -1034,6 +1033,41 @@ coursesController.put(
     }
   }
 );
+// ===============================
+// PUT /api/academy/courses/:courseSlug/lessons/reorder
+// ===============================
+coursesController.put(
+  '/:courseSlug/lessons/reorder',
+  isAuth,
+  rbac.checkPermission('lesson', 'update'),
+  validateBody(lessonReorderSchema),
+  async (req, res, next) => {
+    try {
+      const { courseSlug } = req.params;
+      const { lessonIds, moduleId } = req.body;
+
+      const courseData = await findCourseBySlugOrId(courseSlug);
+
+      if (!courseData) {
+        return res.status(404).json({ success: false, message: 'Course not found' });
+      }
+
+      const updates = lessonIds.map((id, index) =>
+        lesson.update(
+          { sortOrder: index, moduleId: moduleId || null },
+          { where: { id, courseId: courseData.id } }
+        )
+      );
+
+      await Promise.all(updates);
+
+      res.status(200).json({ success: true, message: 'Lessons reordered successfully' });
+    } catch (err) {
+      console.error('❌ [REORDER LESSONS] Error:', err);
+      next(err);
+    }
+  }
+);
 
 // ===============================
 // ============ LESSONS ============
@@ -1076,6 +1110,7 @@ coursesController.get('/:courseSlug/lessons', async (req, res, next) => {
     next(err);
   }
 });
+
 
 // ===============================
 // GET /api/academy/courses/:courseSlug/lessons/:lessonSlug
@@ -1362,40 +1397,5 @@ coursesController.post(
   }
 );
 
-// ===============================
-// PUT /api/academy/courses/:courseSlug/lessons/reorder
-// ===============================
-coursesController.put(
-  '/:courseSlug/lessons/reorder',
-  isAuth,
-  rbac.checkPermission('lesson', 'update'),
-  validateBody(lessonReorderSchema),
-  async (req, res, next) => {
-    try {
-      const { courseSlug } = req.params;
-      const { lessonIds, moduleId } = req.body;
-
-      const courseData = await findCourseBySlugOrId(courseSlug);
-
-      if (!courseData) {
-        return res.status(404).json({ success: false, message: 'Course not found' });
-      }
-
-      const updates = lessonIds.map((id, index) =>
-        lesson.update(
-          { sortOrder: index, moduleId: moduleId || null },
-          { where: { id, courseId: courseData.id } }
-        )
-      );
-
-      await Promise.all(updates);
-
-      res.status(200).json({ success: true, message: 'Lessons reordered successfully' });
-    } catch (err) {
-      console.error('❌ [REORDER LESSONS] Error:', err);
-      next(err);
-    }
-  }
-);
 
 module.exports = coursesController;

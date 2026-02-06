@@ -57,7 +57,7 @@ const formatScheduledDate = (scheduledDate) => {
 };
 
 const getMaterialIcon = (material) => {
-  const type = material.type?.toLowerCase() || material.fileType?.toLowerCase() || '';
+  const type = material.materialType?.toLowerCase() || material.type?.toLowerCase() || material.fileType?.toLowerCase() || '';
   const name = material.name?.toLowerCase() || material.title?.toLowerCase() || '';
   
   if (type.includes('pdf') || name.endsWith('.pdf')) return '📄';
@@ -1171,7 +1171,7 @@ export const AcademyCourseDetail = () => {
                     </span>
                   </div>
 
-                  {modules.length > 0 ? (
+                  {modules.length > 0 && (
                     <div className="academyCourseDetail-modules">
                       {modules.map((module, moduleIndex) => (
                         <ModuleAccordion 
@@ -1186,21 +1186,30 @@ export const AcademyCourseDetail = () => {
                         />
                       ))}
                     </div>
-                  ) : lessons.length > 0 ? (
-                    <div className="academyCourseDetail-lessons">
-                      {lessons.map((lesson, index) => (
-                        <LessonItem 
-                          key={lesson.id} 
-                          lesson={lesson} 
-                          index={index}
-                          t={t}
-                          isAuthenticated={isAuthentication}
-                          hasAccess={hasLessonAccess}
-                          onLessonClick={handleLessonClick}
-                        />
-                      ))}
+                  )}
+
+                  {lessons.length > 0 && (
+                    <div className="academyCourseDetail-standalone-lessons">
+                      <h3 className="academyCourseDetail-standalone-title">
+                        {t('academyCourseDetail.content.standaloneLessons', 'Самостоятелни уроци')}
+                      </h3>
+                      <div className="academyCourseDetail-lessons">
+                        {lessons.map((lesson, index) => (
+                          <LessonItem 
+                            key={lesson.id} 
+                            lesson={lesson} 
+                            index={index}
+                            t={t}
+                            isAuthenticated={isAuthentication}
+                            hasAccess={hasLessonAccess}
+                            onLessonClick={handleLessonClick}
+                          />
+                        ))}
+                      </div>
                     </div>
-                  ) : (
+                  )}
+
+                  {modules.length === 0 && lessons.length === 0 && (
                     <div className="academyCourseDetail-content-empty">
                       <div className="academyCourseDetail-content-empty-icon">📭</div>
                       <p>{t('academyCourseDetail.content.noContent')}</p>

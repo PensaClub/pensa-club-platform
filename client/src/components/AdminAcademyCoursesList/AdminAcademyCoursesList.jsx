@@ -81,7 +81,7 @@ useEffect(() => {
   const handlePublishToggle = async (course) => {
     setActionLoading(course.id);
     try {
-      if (course.isPublished) {
+      if (!course.isDraft) {
         await unpublishCourse(course.id);
       } else {
         await publishCourse(course.id);
@@ -195,12 +195,12 @@ useEffect(() => {
             </div>
             <div className="aacl-stat">
               <Eye size={16} />
-              <span className="aacl-stat-value">{courses.filter(c => c.isPublished).length}</span>
+              <span className="aacl-stat-value">{courses.filter(c => !c.isDraft).length}</span>
               <span className="aacl-stat-label">{t('adminCourses.stats.published', 'публикувани')}</span>
             </div>
             <div className="aacl-stat">
               <EyeOff size={16} />
-              <span className="aacl-stat-value">{courses.filter(c => !c.isPublished).length}</span>
+              <span className="aacl-stat-value">{courses.filter(c => c.isDraft).length}</span>
               <span className="aacl-stat-label">{t('adminCourses.stats.drafts', 'чернови')}</span>
             </div>
           </div>
@@ -282,7 +282,7 @@ useEffect(() => {
           <>
             <div className="aacl-grid">
               {courses.map((course) => (
-                <div key={course.id} className={`aacl-card ${course.isPublished ? '' : 'aacl-card-draft'}`}>
+                <div key={course.id} className={`aacl-card ${!course.isDraft ? '' : 'aacl-card-draft'}`}>
                   {/* Thumbnail */}
                   <div className="aacl-card-thumb">
                     {course.thumbnailUrl ? (
@@ -293,12 +293,11 @@ useEffect(() => {
                       </div>
                     )}
 
-                    {/* Status badge */}
-                    <span className={`aacl-badge ${course.isPublished ? 'aacl-badge-published' : 'aacl-badge-draft'}`}>
-                      {course.isPublished
-                        ? t('adminCourses.published', 'Публикуван')
-                        : t('adminCourses.draft', 'Чернова')}
-                    </span>
+                  <span className={`aacl-badge ${!course.isDraft ? 'aacl-badge-published' : 'aacl-badge-draft'}`}>
+  {!course.isDraft
+    ? t('adminCourses.published', 'Публикуван')
+    : t('adminCourses.draft', 'Чернова')}
+</span>
 
                     {/* Difficulty badge */}
                     {course.difficultyLevel && (
@@ -363,14 +362,14 @@ useEffect(() => {
                       <BarChart3 size={15} />
                     </button>
                     <button
-                      className={`aacl-action-btn ${course.isPublished ? 'aacl-action-unpublish' : 'aacl-action-publish'}`}
+                      className={`aacl-action-btn ${!course.isDraft ? 'aacl-action-unpublish' : 'aacl-action-publish'}`}
                       onClick={() => handlePublishToggle(course)}
                       disabled={actionLoading === course.id}
-                      title={course.isPublished
+                      title={!course.isDraft
                         ? t('adminCourses.actions.unpublish', 'Скрий')
                         : t('adminCourses.actions.publish', 'Публикувай')}
                     >
-                      {course.isPublished ? <EyeOff size={15} /> : <Eye size={15} />}
+                      {!course.isDraft ? <EyeOff size={15} /> : <Eye size={15} />}
                     </button>
                     <button
                       className="aacl-action-btn aacl-action-delete"
