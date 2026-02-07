@@ -25,12 +25,13 @@ import {
   AlertTriangle,
   Loader2,
   Calendar,
+  Upload, Paperclip
 } from 'lucide-react';
 import useCourseContentManager from './useCourseContentManager';
 import './courseContentManager.css';
 import { useState } from 'react';
 import EditLessonModal from './EditLessonModal/EditLessonModal';
-
+import { useFirebaseUpload } from '../../hooks/useFirebaseUpload';
 const LESSON_TYPE_ICONS = {
   video: Video,
   text: FileText,
@@ -82,7 +83,14 @@ const CourseContentManager = () => {
     closeEditLesson,
     openEditLesson,
     handleBack,
+    courseMaterials,
+    materialsLoading,
+    handleAddCourseMaterial,
+    handleDeleteCourseMaterial,
   } = useCourseContentManager();
+
+ const { uploadFile, uploading, uploadProgress } = useFirebaseUpload();
+  const [materialsExpanded, setMaterialsExpanded] = useState(true);
 
   if (isLoading) {
     return (
@@ -96,7 +104,59 @@ const CourseContentManager = () => {
     );
   }
 
-  return (
+  const detectMaterialType = (file) => {
+    const ext = file.name.split('.').pop().toLowerCase();
+    const mime = file.type || '';
+    if (ext === 'pdf' || mime.includes('pdf')) return 'pdf';
+    if (['doc', 'docx'].includes(ext) || mime.includes('word')) return 'document';
+    if (['xls', 'xlsx'].includes(ext) || mime.includes('spreadsheet') || mime.includes('excel')) return 'spreadsheet';
+    if (['ppt', 'pptx'].includes(ext) || mime.includes('presentation')) return 'presentation';
+    if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'].includes(ext) || mime.startsWith('image/')) return 'image';
+    if (['mp4', 'avi', 'mov', 'webm'].includes(ext) || mime.startsWith('video/')) return 'video';
+    if (['mp3', 'wav', 'ogg'].includes(ext) || mime.startsWith('audio/')) return 'audio';
+    if (['zip', 'rar', '7z', 'tar'].includes(ext)) return 'archive';
+    return 'other';
+  };
+
+  const formatFileSize = (bytes) => {
+    if (!bytes) return '';
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  };
+
+  const handleCourseMaterialUpload = async (e) => {
+    const files = Array.from(e.target.files);
+    if (!files.length) return;
+
+    for (const file of files) {
+      if (file.size > 50 * 1024 * 1024) {
+        toast.error(`${file.name} е твърде голям (макс. 50MB)`);
+        continue;
+      }
+      try {
+        const materialType = detectMaterialType(file);
+        const storagePath = `academy/materials/courses/${slug}`;
+        const result = await uploadFile(file, storagePath);
+        
+        await handleAddCourseMaterial({
+          title: file.name.replace(/\.[^/.]+$/, ''),
+          materialType,
+          fileUrl: result.url,
+          fileName: file.name,
+          fileSize: file.size,
+          mimeType: file.type,
+          isDownloadable: true,
+        });
+      } catch (err) {
+        console.error('Upload error:', err);
+        toast.error(`Грешка при качване на ${file.name}`);
+      }
+    }
+    e.target.value = '';
+  };
+
+ return (
     <div className="ccm-wrapper">
       <div className="ccm-page-bg"><div className="ccm-glow-orb" /></div>
 
@@ -530,6 +590,95 @@ const CourseContentManager = () => {
                   <Plus size={14} />
                   {t('contentManager.addLesson', 'Добави урок')}
                 </button>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* =========================================================
+                    COURSE MATERIALS (материали към курса)
+            ========================================================= */}
+        <div className="ccm-materials-section">
+          <div
+            className="ccm-materials-header"
+            onClick={() => setMaterialsExpanded(!materialsExpanded)}
+          >
+            <div className="ccm-materials-header-left">
+              {materialsExpanded ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
+              <Paperclip size={18} className="ccm-materials-icon" />
+              <h3 className="ccm-materials-title">
+                 {t('contentManager.materials.title', 'Материали към курса')}
+              </h3>
+              <span className="ccm-lesson-count-badge">{courseMaterials.length}</span>
+            </div>
+           <label
+              className="ccm-btn ccm-btn-sm ccm-btn-secondary"
+              onClick={(e) => e.stopPropagation()}
+              title={t('contentManager.materials.uploadTooltip', 'Качете файлове към курса')}
+            >
+              <Upload size={14} />
+              {t('contentManager.materials.upload', 'Качи файл')}
+              <input
+                type="file"
+                multiple
+                hidden
+                onChange={handleCourseMaterialUpload}
+                disabled={uploading}
+              />
+            </label>
+          </div>
+
+          {materialsExpanded && (
+            <div className="ccm-materials-body">
+              {uploading && (
+                <div className="ccm-materials-uploading">
+                  <Loader2 size={16} className="ccm-spin" />
+                  {t('contentManager.materials.uploading', 'Качване...')} {Math.round(uploadProgress)}%
+                </div>
+              )}
+
+              {materialsLoading ? (
+                <div className="ccm-materials-loading">
+                  <Loader2 size={20} className="ccm-spin" />
+                </div>
+              ) : courseMaterials.length === 0 ? (
+               <div className="ccm-standalone-empty">
+                {t('contentManager.materials.empty', 'Няма качени материали към курса. Качете файлове с бутона "Качи файл".')}
+              </div>
+              ) : (
+                <div className="ccm-materials-list">
+                  {courseMaterials.map((mat) => (
+                    <div key={mat.id} className="ccm-material-item">
+                      <span className="ccm-material-type">{mat.materialType?.toUpperCase()}</span>
+                      <span className="ccm-material-name">{mat.title}</span>
+                      {mat.fileSize > 0 && (
+                        <span className="ccm-material-size">{formatFileSize(mat.fileSize)}</span>
+                      )}
+                      
+                       <button
+                        className="ccm-material-link"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          window.open(mat.fileUrl || mat.externalUrl, '_blank');
+                        }}
+                        title={t('contentManager.materials.openFile', 'Отвори файла')}
+                      >
+                        <Eye size={14} />
+                      </button>
+                      <button
+                        className="ccm-material-delete"
+                        onClick={() => handleDeleteCourseMaterial(mat.id)}
+                        disabled={actionLoading === `deleteMaterial-${mat.id}`}
+                        title={t('contentManager.materials.delete', 'Изтрий материал')}
+                      >
+                        {actionLoading === `deleteMaterial-${mat.id}`
+                          ? <Loader2 size={14} className="ccm-spin" />
+                          : <Trash2 size={14} />
+                        }
+                      </button>
+                    </div>
+                  ))}
+                </div>
               )}
             </div>
           )}

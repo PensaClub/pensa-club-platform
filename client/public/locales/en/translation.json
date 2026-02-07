@@ -14791,6 +14791,10 @@
     "dropzoneSubtitle": "PDF, documents, images, video, audio",
     "maxFileSize": "Maximum size: 50MB",
     "uploadSuccess": "{{name}} uploaded successfully",
+    "title": "Course Materials",
+    "upload": "Upload File",
+    "uploadTooltip": "Upload files to the course",
+    "uploading": "Uploading...",
     "fields": {
       "title": "Title",
       "url": "URL",

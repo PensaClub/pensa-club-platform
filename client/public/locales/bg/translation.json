@@ -15085,6 +15085,11 @@
     "dropzoneSubtitle": "PDF, документи, изображения, видео, аудио",
     "maxFileSize": "Максимален размер: 50MB",
     "uploadSuccess": "{{name}} е качен успешно",
+    "title": "Материали към курса",
+    "upload": "Качи файл",
+    "uploadTooltip": "Качете файлове към курса",
+    "uploading": "Качване...",
+    "openFile": "Отвори файла",
     "fields": {
       "title": "Заглавие",
       "url": "URL адрес",

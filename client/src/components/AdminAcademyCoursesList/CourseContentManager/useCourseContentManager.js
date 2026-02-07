@@ -24,6 +24,9 @@ const useCourseContentManager = () => {
     reorderLessons,
     publishLesson,
     unpublishLesson,
+    deleteCourseMaterial,
+    getCourseMaterials,
+    addCourseMaterial
   } = useAcademyCourses();
 
   const [course, setCourse] = useState(null);
@@ -40,6 +43,8 @@ const useCourseContentManager = () => {
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [editingLesson, setEditingLesson] = useState(null);
 const [standaloneLessons, setStandaloneLessons] = useState([]);
+const [courseMaterials, setCourseMaterials] = useState([]);
+  const [materialsLoading, setMaterialsLoading] = useState(false);
   // =========================================================
   //                    LOAD DATA
   // =========================================================
@@ -69,10 +74,23 @@ const [standaloneLessons, setStandaloneLessons] = useState([]);
     setIsLoading(false);
   }
 }, [slug]);
+const loadCourseMaterials = useCallback(async () => {
+    if (!slug) return;
+    try {
+      setMaterialsLoading(true);
+      const materials = await getCourseMaterials(slug);
+      setCourseMaterials(materials || []);
+    } catch (err) {
+      console.error('Error loading course materials:', err);
+    } finally {
+      setMaterialsLoading(false);
+    }
+  }, [slug, getCourseMaterials]);
 
   useEffect(() => {
     if (slug) loadData();
-  }, [slug]);
+     loadCourseMaterials();
+  }, [slug,loadCourseMaterials]);
 
   // =========================================================
   //                    MODULES
@@ -239,6 +257,30 @@ const [standaloneLessons, setStandaloneLessons] = useState([]);
     await loadData();
   }
 };
+const handleAddCourseMaterial = useCallback(async (materialData) => {
+    try {
+      setActionLoading('addCourseMaterial');
+      await addCourseMaterial(slug, materialData);
+      await loadCourseMaterials();
+    } catch (err) {
+      console.error('Error adding course material:', err);
+    } finally {
+      setActionLoading(null);
+    }
+  }, [slug, addCourseMaterial, loadCourseMaterials]);
+
+  const handleDeleteCourseMaterial = useCallback(async (materialId) => {
+    if (!course) return;
+    try {
+      setActionLoading(`deleteMaterial-${materialId}`);
+      await deleteCourseMaterial(course.id, materialId);
+      await loadCourseMaterials();
+    } catch (err) {
+      console.error('Error deleting course material:', err);
+    } finally {
+      setActionLoading(null);
+    }
+  }, [course, deleteCourseMaterial, loadCourseMaterials]);
 
   const openEditLesson = (lesson) => {
     setEditingLesson(lesson);
@@ -289,7 +331,11 @@ const [standaloneLessons, setStandaloneLessons] = useState([]);
     closeEditLesson,
     handleBack,
     loadData,
-    standaloneLessons
+    standaloneLessons,
+    courseMaterials,
+    materialsLoading,
+    handleAddCourseMaterial,
+    handleDeleteCourseMaterial,
   };
 };
 

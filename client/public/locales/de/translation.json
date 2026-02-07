@@ -14083,6 +14083,11 @@
     "dropzoneSubtitle": "PDF, Dokumente, Bilder, Video, Audio",
     "maxFileSize": "Maximale Größe: 50MB",
     "uploadSuccess": "{{name}} erfolgreich hochgeladen",
+     "title": "Kursmaterialien",
+    "upload": "Datei hochladen",
+    "uploadTooltip": "Dateien zum Kurs hochladen",
+    "uploading": "Hochladen...",
+    "openFile": "Datei öffnen",
     "fields": {
       "title": "Titel",
       "url": "URL-Adresse",

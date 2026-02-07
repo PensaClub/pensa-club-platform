@@ -882,3 +882,153 @@
   color: #4a5568;
   font-style: italic;
 }
+/* Course Materials Section */
+.ccm-materials-section {
+  border: 1px dashed rgba(0, 230, 230, 0.25);
+  border-radius: 12px;
+  background: rgba(0, 30, 40, 0.35);
+  padding: 0;
+  margin-top: 20px;
+}
+
+.ccm-materials-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+  border-radius: 12px;
+}
+
+.ccm-materials-header:hover {
+  background: rgba(0, 230, 230, 0.04);
+}
+
+.ccm-materials-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ccm-materials-icon {
+  color: #00e6e6;
+}
+
+.ccm-materials-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  margin: 0;
+}
+
+.ccm-materials-body {
+  padding: 0 16px 16px;
+}
+
+.ccm-materials-uploading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #00e6e6;
+  font-size: 0.85rem;
+  padding: 8px 0;
+}
+
+.ccm-materials-loading {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.ccm-materials-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ccm-material-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.ccm-material-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.ccm-material-type {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  color: #00e6e6;
+  background: rgba(0, 230, 230, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+  min-width: 45px;
+  text-align: center;
+}
+
+.ccm-material-name {
+  flex: 1;
+  font-size: 0.85rem;
+  color: #e2e8f0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ccm-material-size {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.ccm-material-link,
+.ccm-material-delete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.ccm-material-link {
+  color: #00e6e6;
+  background: rgba(0, 230, 230, 0.1);
+  text-decoration: none;
+}
+
+.ccm-material-link:hover {
+  background: rgba(0, 230, 230, 0.2);
+}
+
+.ccm-material-delete {
+  color: #f87171;
+  background: rgba(248, 113, 113, 0.1);
+}
+
+.ccm-material-delete:hover {
+  background: rgba(248, 113, 113, 0.2);
+}
+
+.ccm-material-delete:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ccm-spin {
+  animation: ccm-spin 1s linear infinite;
+}
+
+@keyframes ccm-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
