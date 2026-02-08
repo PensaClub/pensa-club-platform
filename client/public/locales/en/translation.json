@@ -14716,13 +14716,19 @@
   },
   "errors": {
     "loadFailed": "Error loading content"
-  }
+  },
+  "finalTest": {
+  "title": "Course final test",
+  "manage": "Manage test",
+  "description": "The final test is taken by students after completing all modules and lessons in the course."
+}
 },
 "editLesson": {
   "title": "Edit Lesson",
   "loading": "Loading...",
   "save": "Save",
   "cancel": "Cancel",
+  "manageTest": "Manage test",
   "autosave": "Materials save automatically",
   "unsavedChanges": "● Unsaved changes",
   "sections": {
@@ -14825,5 +14831,94 @@
       "other": "Other"
     }
   }
+},
+"testEditor": {
+  "title": "Test Editor",
+  "defaultTitle": "Test",
+  "lesson": "Lesson",
+  "published": "Published",
+  "draft": "Draft",
+  "publish": "Publish",
+  "unpublish": "Unpublish",
+  "needQuestions": "Add questions first",
+  "loading": "Loading...",
+  "noQuestions": "No questions added yet",
+  "addFirstQuestion": "Add first question",
+  "addQuestion": "Add question",
+  "newQuestion": "New question",
+  "cancel": "Cancel",
+  "saveQuestion": "Save question",
+  "updateQuestion": "Update question",
+  "questionAdded": "Question added",
+  "questionUpdated": "Question updated",
+  "questionDeleted": "Question deleted",
+  "confirmDeleteQuestion": "Are you sure you want to delete this question?",
+  "confirmDelete": "Delete",
+  "settingsSaved": "Settings saved",
+  "saveSettings": "Save settings",
+  "moveUp": "Move up",
+  "moveDown": "Move down",
+  "editQuestion": "Edit",
+  "deleteQuestion": "Delete",
+  "markCorrect": "Mark as correct",
+  "markIncorrect": "Mark as incorrect",
+  "addAnswer": "Add answer",
+  "answerPlaceholder": "Answer",
+  "trueOption": "True",
+  "falseOption": "False",
+  "untitled": "Untitled",
+  "minutes": "min",
+  "questionsCount": "questions",
+  "passingAt": "Minimum",
+  "pts": "pts",
+  "answers": "ans.",
+  "noQuestionsPreview": "Add questions to see a preview",
+  "tabs": {
+    "settings": "Settings",
+    "questions": "Questions",
+    "preview": "Preview"
+  },
+  "fields": {
+    "title": "Test title",
+    "description": "Description",
+    "passingScore": "Passing score (%)",
+    "timeLimit": "Time limit (min)",
+    "maxAttempts": "Max attempts",
+    "maxCredits": "Credits",
+    "shuffleQuestions": "Shuffle questions",
+    "shuffleAnswers": "Shuffle answers",
+    "showCorrectAnswers": "Show correct answers",
+    "questionText": "Question text",
+    "points": "Points",
+    "explanation": "Explanation (optional)",
+    "answers": "Answers"
+  },
+  "placeholders": {
+    "title": "E.g. Module 1 Quiz",
+    "description": "Brief description of the test...",
+    "noLimit": "No limit",
+    "unlimited": "Unlimited",
+    "questionText": "Enter your question here...",
+    "explanation": "Why this answer is correct..."
+  },
+  "sections": {
+    "options": "Options"
+  },
+  "questionTypes": {
+    "single_choice": "Single choice",
+    "multiple_choice": "Multiple choice",
+    "true_false": "True / False"
+  },
+  "errors": {
+    "loadFailed": "Failed to load test",
+    "questionRequired": "Enter question text",
+    "answersRequired": "All answers must have text",
+    "correctRequired": "Mark at least one correct answer"
+  },
+  "questionTypeHints": {
+  "single_choice": "Question with multiple answers, only one is correct",
+  "multiple_choice": "Question with multiple answers, more than one can be correct",
+  "true_false": "Question with two answers (True/False), you choose which is correct"
+}
 }
 }

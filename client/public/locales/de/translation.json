@@ -14009,12 +14009,18 @@
     },
     "errors": {
       "loadFailed": "Error loading content"
-    }
+    },
+    "finalTest": {
+  "title": "Abschlusstest des Kurses",
+  "manage": "Test verwalten",
+  "description": "Der Abschlusstest wird von den Studenten nach Abschluss aller Module und Lektionen im Kurs absolviert."
+}
   },
 "editLesson": {
   "title": "Lektion bearbeiten",
   "loading": "Wird geladen...",
   "save": "Speichern",
+  "manageTest": "Test verwalten",
   "cancel": "Abbrechen",
   "unsavedChanges": "● Nicht gespeicherte Änderungen",
   "sections": {
@@ -14118,5 +14124,94 @@
       "other": "Sonstiges"
     }
   }
+},
+"testEditor": {
+  "title": "Test-Editor",
+  "defaultTitle": "Test",
+  "lesson": "Lektion",
+  "published": "Veröffentlicht",
+  "draft": "Entwurf",
+  "publish": "Veröffentlichen",
+  "unpublish": "Verbergen",
+  "needQuestions": "Fügen Sie zuerst Fragen hinzu",
+  "loading": "Wird geladen...",
+  "noQuestions": "Noch keine Fragen hinzugefügt",
+  "addFirstQuestion": "Erste Frage hinzufügen",
+  "addQuestion": "Frage hinzufügen",
+  "newQuestion": "Neue Frage",
+  "cancel": "Abbrechen",
+  "saveQuestion": "Frage speichern",
+  "updateQuestion": "Frage aktualisieren",
+  "questionAdded": "Frage hinzugefügt",
+  "questionUpdated": "Frage aktualisiert",
+  "questionDeleted": "Frage gelöscht",
+  "confirmDeleteQuestion": "Sind Sie sicher, dass Sie diese Frage löschen möchten?",
+  "confirmDelete": "Löschen",
+  "settingsSaved": "Einstellungen gespeichert",
+  "saveSettings": "Einstellungen speichern",
+  "moveUp": "Nach oben",
+  "moveDown": "Nach unten",
+  "editQuestion": "Bearbeiten",
+  "deleteQuestion": "Löschen",
+  "markCorrect": "Als richtig markieren",
+  "markIncorrect": "Als falsch markieren",
+  "addAnswer": "Antwort hinzufügen",
+  "answerPlaceholder": "Antwort",
+  "trueOption": "Richtig",
+  "falseOption": "Falsch",
+  "untitled": "Ohne Titel",
+  "minutes": "Min",
+  "questionsCount": "Fragen",
+  "passingAt": "Minimum",
+  "pts": "Pkt.",
+  "answers": "Antw.",
+  "noQuestionsPreview": "Fügen Sie Fragen hinzu, um eine Vorschau zu sehen",
+  "tabs": {
+    "settings": "Einstellungen",
+    "questions": "Fragen",
+    "preview": "Vorschau"
+  },
+  "fields": {
+    "title": "Testtitel",
+    "description": "Beschreibung",
+    "passingScore": "Mindestpunktzahl (%)",
+    "timeLimit": "Zeitlimit (Min)",
+    "maxAttempts": "Max. Versuche",
+    "maxCredits": "Credits",
+    "shuffleQuestions": "Fragen mischen",
+    "shuffleAnswers": "Antworten mischen",
+    "showCorrectAnswers": "Richtige Antworten anzeigen",
+    "questionText": "Fragetext",
+    "points": "Punkte",
+    "explanation": "Erklärung (optional)",
+    "answers": "Antworten"
+  },
+  "placeholders": {
+    "title": "Z.B. Modul 1 Quiz",
+    "description": "Kurze Beschreibung des Tests...",
+    "noLimit": "Kein Limit",
+    "unlimited": "Unbegrenzt",
+    "questionText": "Geben Sie hier Ihre Frage ein...",
+    "explanation": "Warum diese Antwort richtig ist..."
+  },
+  "sections": {
+    "options": "Optionen"
+  },
+  "questionTypes": {
+    "single_choice": "Einzelauswahl",
+    "multiple_choice": "Mehrfachauswahl",
+    "true_false": "Richtig / Falsch"
+  },
+  "errors": {
+    "loadFailed": "Fehler beim Laden des Tests",
+    "questionRequired": "Geben Sie den Fragetext ein",
+    "answersRequired": "Alle Antworten müssen Text enthalten",
+    "correctRequired": "Markieren Sie mindestens eine richtige Antwort"
+  },
+  "questionTypeHints": {
+  "single_choice": "Frage mit mehreren Antworten, nur eine ist richtig",
+  "multiple_choice": "Frage mit mehreren Antworten, mehr als eine kann richtig sein",
+  "true_false": "Frage mit zwei Antworten (Richtig/Falsch), Sie wählen die richtige"
+}
 }
 }

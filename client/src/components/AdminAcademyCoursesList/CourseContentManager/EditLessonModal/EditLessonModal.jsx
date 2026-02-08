@@ -33,6 +33,7 @@ import { useAcademyCourses } from '../../../contexts/AcademyCoursesProvider';
 import { useFirebaseUpload } from '../../../hooks/useFirebaseUpload';
 import { toast } from 'react-toastify';
 import './editLessonModal.css';
+import TestEditorModal from '../TestEditorModal/TestEditorModal';
 
 const LESSON_TYPE_OPTIONS = [
   { value: 'video', icon: Video },
@@ -135,6 +136,7 @@ const EditLessonModal = ({ lesson: basicLesson, courseSlug, onClose }) => {
     isFree: false,
     isPublished: false,
   });
+const [showTestEditor, setShowTestEditor] = useState(false);
 
   // === MATERIALS STATE ===
   const [materials, setMaterials] = useState([]);
@@ -432,6 +434,7 @@ const EditLessonModal = ({ lesson: basicLesson, courseSlug, onClose }) => {
   // =========================================================
 
   return (
+    <>
     <div className="elm-overlay" onClick={onClose}>
       <div className="elm-modal" onClick={(e) => e.stopPropagation()}>
         {/* Header */}
@@ -569,7 +572,7 @@ const EditLessonModal = ({ lesson: basicLesson, courseSlug, onClose }) => {
               </div>
             </div>
 
-            {/* === Section: Test === */}
+           {/* === Section: Test === */}
             <div className="elm-section">
               <h3 className="elm-section-title">
                 <HelpCircle size={16} />
@@ -585,16 +588,26 @@ const EditLessonModal = ({ lesson: basicLesson, courseSlug, onClose }) => {
               </div>
 
               {form.hasTest && (
-                <div className="elm-row" style={{ marginTop: 14 }}>
-                  <div className="elm-field">
-                    <label className="elm-label">{t('editLesson.fields.testPassingScore')}</label>
-                    <input type="number" name="testPassingScore" className="elm-input" value={form.testPassingScore} onChange={handleChange} min={0} max={100} />
+                <>
+                  <div className="elm-row" style={{ marginTop: 14 }}>
+                    <div className="elm-field">
+                      <label className="elm-label">{t('editLesson.fields.testPassingScore')}</label>
+                      <input type="number" name="testPassingScore" className="elm-input" value={form.testPassingScore} onChange={handleChange} min={0} max={100} />
+                    </div>
+                    <div className="elm-field" />
                   </div>
-                  <div className="elm-field" />
-                </div>
+                  <button
+                    type="button"
+                    className="elm-btn elm-btn-test-editor"
+                    onClick={() => setShowTestEditor(true)}
+                    style={{ marginTop: 12 }}
+                  >
+                    <FileText size={16} />
+                    {t('editLesson.manageTest', 'Управлявай тест')}
+                  </button>
+                </>
               )}
             </div>
-
             {/* ============================================= */}
             {/* === Section: MATERIALS === */}
             {/* ============================================= */}
@@ -824,6 +837,13 @@ const EditLessonModal = ({ lesson: basicLesson, courseSlug, onClose }) => {
         )}
       </div>
     </div>
+    <TestEditorModal
+       isOpen={showTestEditor}
+  onClose={() => setShowTestEditor(false)}
+  lessonId={lessonId}
+  entityTitle={form.title}
+    />
+    </>
   );
 };
 

@@ -1032,3 +1032,58 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+/* =========================================================
+   FINAL TEST SECTION
+   ========================================================= */
+
+.ccm-final-test-section {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(0, 212, 255, 0.12);
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-top: 16px;
+}
+
+.ccm-final-test-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.ccm-final-test-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ccm-final-test-icon {
+  color: #00d4ff;
+  flex-shrink: 0;
+}
+
+.ccm-final-test-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  margin: 0;
+}
+
+.ccm-final-test-desc {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin: 10px 0 0 0;
+  line-height: 1.4;
+}
+
+@media (max-width: 480px) {
+  .ccm-final-test-section {
+    padding: 14px;
+  }
+
+  .ccm-final-test-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}

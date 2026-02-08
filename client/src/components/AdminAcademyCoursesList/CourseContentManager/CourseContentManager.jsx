@@ -32,6 +32,7 @@ import './courseContentManager.css';
 import { useState } from 'react';
 import EditLessonModal from './EditLessonModal/EditLessonModal';
 import { useFirebaseUpload } from '../../hooks/useFirebaseUpload';
+import TestEditorModal from './TestEditorModal/TestEditorModal';
 const LESSON_TYPE_ICONS = {
   video: Video,
   text: FileText,
@@ -89,8 +90,9 @@ const CourseContentManager = () => {
     handleDeleteCourseMaterial,
   } = useCourseContentManager();
 
- const { uploadFile, uploading, uploadProgress } = useFirebaseUpload();
+  const { uploadFile, uploading, uploadProgress } = useFirebaseUpload();
   const [materialsExpanded, setMaterialsExpanded] = useState(true);
+  const [showCourseTest, setShowCourseTest] = useState(false);
 
   if (isLoading) {
     return (
@@ -138,7 +140,7 @@ const CourseContentManager = () => {
         const materialType = detectMaterialType(file);
         const storagePath = `academy/materials/courses/${slug}`;
         const result = await uploadFile(file, storagePath);
-        
+
         await handleAddCourseMaterial({
           title: file.name.replace(/\.[^/.]+$/, ''),
           materialType,
@@ -156,7 +158,7 @@ const CourseContentManager = () => {
     e.target.value = '';
   };
 
- return (
+  return (
     <div className="ccm-wrapper">
       <div className="ccm-page-bg"><div className="ccm-glow-orb" /></div>
 
@@ -607,11 +609,11 @@ const CourseContentManager = () => {
               {materialsExpanded ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
               <Paperclip size={18} className="ccm-materials-icon" />
               <h3 className="ccm-materials-title">
-                 {t('contentManager.materials.title', 'Материали към курса')}
+                {t('contentManager.materials.title', 'Материали към курса')}
               </h3>
               <span className="ccm-lesson-count-badge">{courseMaterials.length}</span>
             </div>
-           <label
+            <label
               className="ccm-btn ccm-btn-sm ccm-btn-secondary"
               onClick={(e) => e.stopPropagation()}
               title={t('contentManager.materials.uploadTooltip', 'Качете файлове към курса')}
@@ -642,9 +644,9 @@ const CourseContentManager = () => {
                   <Loader2 size={20} className="ccm-spin" />
                 </div>
               ) : courseMaterials.length === 0 ? (
-               <div className="ccm-standalone-empty">
-                {t('contentManager.materials.empty', 'Няма качени материали към курса. Качете файлове с бутона "Качи файл".')}
-              </div>
+                <div className="ccm-standalone-empty">
+                  {t('contentManager.materials.empty', 'Няма качени материали към курса. Качете файлове с бутона "Качи файл".')}
+                </div>
               ) : (
                 <div className="ccm-materials-list">
                   {courseMaterials.map((mat) => (
@@ -654,8 +656,8 @@ const CourseContentManager = () => {
                       {mat.fileSize > 0 && (
                         <span className="ccm-material-size">{formatFileSize(mat.fileSize)}</span>
                       )}
-                      
-                       <button
+
+                      <button
                         className="ccm-material-link"
                         onClick={(e) => {
                           e.stopPropagation();
@@ -682,6 +684,29 @@ const CourseContentManager = () => {
               )}
             </div>
           )}
+        </div>
+        {/* =========================================================
+                    COURSE FINAL TEST
+            ========================================================= */}
+        <div className="ccm-final-test-section">
+          <div className="ccm-final-test-header">
+            <div className="ccm-final-test-left">
+              <HelpCircle size={18} className="ccm-final-test-icon" />
+              <h3 className="ccm-final-test-title">
+                {t('contentManager.finalTest.title', 'Финален тест на курса')}
+              </h3>
+            </div>
+            <button
+              className="ccm-btn ccm-btn-sm ccm-btn-primary"
+              onClick={() => setShowCourseTest(true)}
+            >
+              <FileText size={14} />
+              {t('contentManager.finalTest.manage', 'Управлявай тест')}
+            </button>
+          </div>
+          <p className="ccm-final-test-desc">
+            {t('contentManager.finalTest.description', 'Финалният тест се решава от учениците след завършване на всички модули и уроци в курса.')}
+          </p>
         </div>
       </div>
 
@@ -729,6 +754,12 @@ const CourseContentManager = () => {
           onClose={closeEditLesson}
         />
       )}
+       <TestEditorModal
+        isOpen={showCourseTest}
+        onClose={() => setShowCourseTest(false)}
+        courseId={course?.id}
+        entityTitle={course?.name}
+      />
     </div>
   );
 };
@@ -817,6 +848,7 @@ const ModuleEditInline = ({ module, onSave, onCancel, actionLoading }) => {
           />
         </div>
       </div>
+     
     </div>
   );
 };
