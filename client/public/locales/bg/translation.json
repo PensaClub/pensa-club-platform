@@ -618,6 +618,13 @@
       "overview": "Преглед на студенти",
       "applications": "Кандидатури"
     },
+    "academy": {
+      "title": "Академия",
+      "courses": "Курсове",
+      "createCourse": "Създай курс",
+      "createLecture": "Създай лекция",
+      "createSeminar": "Създай семинар"
+    },
     "mentors": {
       "title": "Ментори",
       "overview": "Преглед на ментори",
@@ -12281,56 +12288,56 @@
       "alreadyReviewedMessage": "Вие вече сте изпратили отзив за DigiBridge Academy. Благодарим Ви за обратната връзка!"
     },
     "mentorsPage": {
-  "meta": {
-    "title": "Нашите Ментори | DigiBridge Академия",
-    "description": "Запознайте се с нашите млади ментори, които помагат на възрастни хора да овладеят дигиталните технологии",
-    "keywords": "ментори, дигитална грамотност, обучение, DigiBridge, безплатни ментори"
-  },
-  "hero": {
-    "title": "Нашите ментори",
-    "subtitle": "Млади професионалисти, готови да споделят знания и опит с търпение и разбиране",
-    "online": "онлайн сега",
-    "findMentor": "Намери ментор",
-    "become": "Стани ментор"
-  },
-  "search": "Търси по име или специализация...",
-  "filters": {
-    "all": "Всички",
-    "digitalSecurity": "Дигитална сигурност",
-    "mediaLiteracy": "Медийна грамотност",
-    "socialMedia": "Социални мрежи",
-    "onlineBanking": "Онлайн банкиране",
-    "basicSkills": "Основни умения"
-  },
-  "filtersDrawer": {
-    "title": "Филтри и търсене"
-  },
-  "stats": {
-    "mentors": "Ментори",
-    "available": "Налични",
-    "specializations": "Области",
-    "sessions": "Сесии"
-  },
-  "list": {
-    "all": "Всички ментори",
-    "found": "намерени"
-  },
-  "card": {
-    "years": "г.",
-    "available": "Онлайн",
-    "busy": "Офлайн",
-    "sessions": "сесии",
-    "speaks": "Говори:",
-    "students": "ученици",
-    "rating": "рейтинг",
-    "reviews": "отзиви",
-    "viewProfile": "Виж профил"
-  },
-  "noResults": {
-    "title": "Няма намерени ментори",
-    "desc": "Опитайте с различни филтри"
-  }
-},
+      "meta": {
+        "title": "Нашите Ментори | DigiBridge Академия",
+        "description": "Запознайте се с нашите млади ментори, които помагат на възрастни хора да овладеят дигиталните технологии",
+        "keywords": "ментори, дигитална грамотност, обучение, DigiBridge, безплатни ментори"
+      },
+      "hero": {
+        "title": "Нашите ментори",
+        "subtitle": "Млади професионалисти, готови да споделят знания и опит с търпение и разбиране",
+        "online": "онлайн сега",
+        "findMentor": "Намери ментор",
+        "become": "Стани ментор"
+      },
+      "search": "Търси по име или специализация...",
+      "filters": {
+        "all": "Всички",
+        "digitalSecurity": "Дигитална сигурност",
+        "mediaLiteracy": "Медийна грамотност",
+        "socialMedia": "Социални мрежи",
+        "onlineBanking": "Онлайн банкиране",
+        "basicSkills": "Основни умения"
+      },
+      "filtersDrawer": {
+        "title": "Филтри и търсене"
+      },
+      "stats": {
+        "mentors": "Ментори",
+        "available": "Налични",
+        "specializations": "Области",
+        "sessions": "Сесии"
+      },
+      "list": {
+        "all": "Всички ментори",
+        "found": "намерени"
+      },
+      "card": {
+        "years": "г.",
+        "available": "Онлайн",
+        "busy": "Офлайн",
+        "sessions": "сесии",
+        "speaks": "Говори:",
+        "students": "ученици",
+        "rating": "рейтинг",
+        "reviews": "отзиви",
+        "viewProfile": "Виж профил"
+      },
+      "noResults": {
+        "title": "Няма намерени ментори",
+        "desc": "Опитайте с различни филтри"
+      }
+    },
     "becomeMentor": {
       "authRequired": {
         "title": "Влезте в профила си",
@@ -14205,6 +14212,20 @@
       "instructor": "Инструктор",
       "reviews": "Отзиви"
     },
+    "finalTest": {
+  "title": "Финален тест",
+  "questions": "въпроса",
+  "minutes": "мин",
+  "passingScore": "Мин. резултат",
+  "maxAttempts": "Макс. опити",
+  "passed": "Тестът е преминат успешно!",
+  "bestScore": "Най-добър резултат",
+  "locked": "Завършете всички уроци в курса, за да отключите теста.",
+  "startTest": "Започни тест",
+  "continueAttempt": "Продължи опита",
+  "noMoreAttempts": "Изчерпахте всички опити.",
+  "remaining": "Оставащи опити"
+},
     "hero": {
       "certificateBadge": "Сертификат",
       "ratings": "оценки",
@@ -14555,104 +14576,103 @@
     "unmute": "Включи звука"
   },
   "studentDashboard": {
-  "title": "Моята академия",
-  "welcomeBack": "Добре дошъл отново",
-  "editProfile": "Редактирай профил",
-  "levelBeginner": "Начинаещ",
-  "levelIntermediate": "Напреднал",
-  "levelExpert": "Експерт",
-  "levelMaster": "Майстор",
-  "enrolledCourses": "Записани курсове",
-  "completedCourses": "Завършени курсове",
-  "upcomingLectures": "Предстоящи лекции",
-  "certificates": "Сертификати",
-  "totalCredits": "Общо кредити",
-  "creditsFromCourses": "От курсове",
-  "creditsFromLectures": "От лекции",
-  "creditsFromSeminars": "От семинари",
-  "creditsFromPresentations": "От презентации",
-  "progressToNextLevel": "До следващо ниво",
-  "continueLearning": "Продължи обучението",
-  "continueButton": "Продължи",
-  "noCoursesInProgress": "Нямаш започнати курсове",
-  "browseCoursesButton": "Разгледай курсове",
-  "completedLessons": "завършени урока",
-  "upcomingEvents": "Предстоящи събития",
-  "noUpcomingEvents": "Няма предстоящи събития",
-  "liveBadge": "НА ЖИВО",
-  "lectureBadge": "Лекция",
-  "seminarBadge": "Семинар",
-  "inDays": "след {{days}} дни",
-  "today": "днес",
-  "tomorrow": "утре",
-  "viewAll": "Виж всички",
-  "myMentor": "Моят ментор",
-  "noMentor": "Все още нямаш ментор",
-  "findMentor": "Намери ментор",
-  "mentorSince": "Ментор от",
-  "contactMentor": "Свържи се",
-  "sendMessage": "Изпрати съобщение",
-  "myCertificates": "Моите сертификати",
-  "availableCertificates": "Налични сертификати",
-  "noCertificates": "Все още нямаш сертификати",
-  "earnedBadge": "Получен",
-  "download": "Свали",
-  "creditsNeeded": "Нужни кредити",
-  "recentActivity": "Скорошна активност",
-  "noRecentActivity": "Няма скорошна активност",
-  "completedLesson": "Завърши урок",
-  "passedTest": "Издържа тест",
-  "earnedCredits": "Спечели {{credits}} кредита",
-  "loading": "Зареждане...",
-  "error": "Грешка при зареждане",
-  "retry": "Опитай отново",
-  "loginRequired": "Влез в профила си",
-  "loginRequiredText": "Трябва да влезеш в профила си, за да видиш своята академия.",
-  "loginButton": "Вход"
-},
-"studentDashboardHeader": {
-  "student": "Студент",
-  "levelBeginner": "Начинаещ",
-  "levelIntermediate": "Напреднал",
-  "levelExpert": "Експерт",
-  "levelMaster": "Майстор",
-  "credits": "кредити",
-  "totalCredits": "Общо кредити",
-  "progressToNextLevel": "До следващо ниво",
-  "editProfile": "Редактирай профил"
-},
-"studentQuickStats": {
-  "title": "Статистики",
-  "enrolledCourses": "Записани курсове",
-  "completedCourses": "Завършени курсове",
-  "upcomingLectures": "Предстоящи лекции",
-  "certificates": "Сертификати"
-},
-"studentContinueLearning": {
-      "title": "Продължи обучението",
+    "title": "Моята академия",
+    "welcomeBack": "Добре дошъл отново",
+    "editProfile": "Редактирай профил",
+    "levelBeginner": "Начинаещ",
+    "levelIntermediate": "Напреднал",
+    "levelExpert": "Експерт",
+    "levelMaster": "Майстор",
+    "enrolledCourses": "Записани курсове",
+    "completedCourses": "Завършени курсове",
+    "upcomingLectures": "Предстоящи лекции",
+    "certificates": "Сертификати",
+    "totalCredits": "Общо кредити",
+    "creditsFromCourses": "От курсове",
+    "creditsFromLectures": "От лекции",
+    "creditsFromSeminars": "От семинари",
+    "creditsFromPresentations": "От презентации",
+    "progressToNextLevel": "До следващо ниво",
+    "continueLearning": "Продължи обучението",
+    "continueButton": "Продължи",
+    "noCoursesInProgress": "Нямаш започнати курсове",
+    "browseCoursesButton": "Разгледай курсове",
+    "completedLessons": "завършени урока",
+    "upcomingEvents": "Предстоящи събития",
+    "noUpcomingEvents": "Няма предстоящи събития",
+    "liveBadge": "НА ЖИВО",
+    "lectureBadge": "Лекция",
+    "seminarBadge": "Семинар",
+    "inDays": "след {{days}} дни",
+    "today": "днес",
+    "tomorrow": "утре",
+    "viewAll": "Виж всички",
+    "myMentor": "Моят ментор",
+    "noMentor": "Все още нямаш ментор",
+    "findMentor": "Намери ментор",
+    "mentorSince": "Ментор от",
+    "contactMentor": "Свържи се",
+    "sendMessage": "Изпрати съобщение",
+    "myCertificates": "Моите сертификати",
+    "availableCertificates": "Налични сертификати",
+    "noCertificates": "Все още нямаш сертификати",
+    "earnedBadge": "Получен",
+    "download": "Свали",
+    "creditsNeeded": "Нужни кредити",
+    "recentActivity": "Скорошна активност",
+    "noRecentActivity": "Няма скорошна активност",
+    "completedLesson": "Завърши урок",
+    "passedTest": "Издържа тест",
+    "earnedCredits": "Спечели {{credits}} кредита",
+    "loading": "Зареждане...",
+    "error": "Грешка при зареждане",
+    "retry": "Опитай отново",
+    "loginRequired": "Влез в профила си",
+    "loginRequiredText": "Трябва да влезеш в профила си, за да видиш своята академия.",
+    "loginButton": "Вход"
+  },
+  "studentDashboardHeader": {
+    "student": "Студент",
+    "levelBeginner": "Начинаещ",
+    "levelIntermediate": "Напреднал",
+    "levelExpert": "Експерт",
+    "levelMaster": "Майстор",
+    "credits": "кредити",
+    "totalCredits": "Общо кредити",
+    "progressToNextLevel": "До следващо ниво",
+    "editProfile": "Редактирай профил"
+  },
+  "studentQuickStats": {
+    "title": "Статистики",
+    "enrolledCourses": "Записани курсове",
+    "completedCourses": "Завършени курсове",
+    "upcomingLectures": "Предстоящи лекции",
+    "certificates": "Сертификати"
+  },
+  "studentContinueLearning": {
+    "title": "Продължи обучението",
     "viewAll": "Виж всички",
     "lessons": "урока",
     "noCourses": "Нямаш започнати курсове",
     "browseMore": "Разгледай други курсове"
-
-},
-"studentUpcomingEvents": {
-  "title": "Предстоящи събития",
-  "viewAll": "Виж всички",
-  "types": {
-    "lecture": "Лекция",
-    "seminar": "Семинар"
   },
-  "started": "Започна",
-  "soon": "Скоро",
-  "hoursLeft": "след {{hours}}ч",
-  "tomorrow": "Утре",
-  "daysLeft": "след {{days}} дни",
-  "noEvents": "Нямаш предстоящи събития",
-  "browseLectures": "Разгледай лекции"
-},
-"studentMentorCard": {
- "title": "Моят ментор",
+  "studentUpcomingEvents": {
+    "title": "Предстоящи събития",
+    "viewAll": "Виж всички",
+    "types": {
+      "lecture": "Лекция",
+      "seminar": "Семинар"
+    },
+    "started": "Започна",
+    "soon": "Скоро",
+    "hoursLeft": "след {{hours}}ч",
+    "tomorrow": "Утре",
+    "daysLeft": "след {{days}} дни",
+    "noEvents": "Нямаш предстоящи събития",
+    "browseLectures": "Разгледай лекции"
+  },
+  "studentMentorCard": {
+    "title": "Моят ментор",
     "noMentor": "Все още нямаш ментор",
     "findMentor": "Намери ментор",
     "changeMentor": "Смени ментор",
@@ -14662,9 +14682,9 @@
     "sendMessage": "Изпрати съобщение",
     "online": "Онлайн",
     "offline": "Офлайн"
-},
-"studentCertificates": {
-       "title": "Сертификати",
+  },
+  "studentCertificates": {
+    "title": "Сертификати",
     "viewAll": "Виж всички",
     "noCertificates": "Все още нямаш сертификати",
     "browseCourses": "Разгледай курсове",
@@ -14672,49 +14692,50 @@
     "download": "Изтегли",
     "credits": "кредита",
     "certificate": "Сертификат"
-},
-"studentCreditsOverview": {
+  },
+  "studentCreditsOverview": {
     "totalCredits": "Общо кредити",
     "toNextLevel": "{{credits}} до следващо ниво",
     "levels": {
-        "beginner": "Начинаещ",
-        "intermediate": "Напреднал",
-        "expert": "Експерт",
-        "master": "Майстор"
+      "beginner": "Начинаещ",
+      "intermediate": "Напреднал",
+      "expert": "Експерт",
+      "master": "Майстор"
     },
     "categories": {
-        "courses": "Курсове",
-        "lectures": "Лекции",
-        "seminars": "Семинари",
-        "presentations": "Презентации"
+      "courses": "Курсове",
+      "lectures": "Лекции",
+      "seminars": "Семинари",
+      "presentations": "Презентации"
     }
-},
-"studentRecentActivity": {
+  },
+  "studentRecentActivity": {
     "title": "Скорошна активност",
     "viewAll": "Виж всички",
     "credits": "кредита",
     "noActivity": "Няма скорошна активност",
     "startLearning": "Започни обучение",
     "types": {
-        "lesson_completed": "Завърши урок:",
-        "lesson_started": "Започна урок:",
-        "course_enrolled": "Записа се за:",
-        "course_completed": "Завърши курс:",
-        "lecture_attended": "Присъства на лекция:",
-        "seminar_attended": "Присъства на семинар:",
-        "test_passed": "Издържа тест:",
-        "test_failed": "Неуспешен тест:",
-        "certificate_earned": "Получи сертификат:"
+      "undefined": "Активност:",
+      "lesson_completed": "Завърши урок:",
+      "lesson_started": "Започна урок:",
+      "course_enrolled": "Записа се за:",
+      "course_completed": "Завърши курс:",
+      "lecture_attended": "Присъства на лекция:",
+      "seminar_attended": "Присъства на семинар:",
+      "test_passed": "Издържа тест:",
+      "test_failed": "Неуспешен тест:",
+      "certificate_earned": "Получи сертификат:"
     },
     "time": {
-        "justNow": "Сега",
-        "minutesAgo": "преди {{minutes}} мин",
-        "hoursAgo": "преди {{hours}}ч",
-        "yesterday": "Вчера",
-        "daysAgo": "преди {{days}} дни"
+      "justNow": "Сега",
+      "minutesAgo": "преди {{minutes}} мин",
+      "hoursAgo": "преди {{hours}}ч",
+      "yesterday": "Вчера",
+      "daysAgo": "преди {{days}} дни"
     }
-},
-"sendEmailModal": {
+  },
+  "sendEmailModal": {
     "title": "Изпрати имейл",
     "to": "До",
     "subject": "Тема",
@@ -14724,5 +14745,489 @@
     "cancel": "Отказ",
     "send": "Изпрати",
     "sending": "Изпращане..."
+  },
+  "courseFormHook": {
+    "draftSaved": "Черновата е запазена",
+    "draftCreated": "Курсът е създаден като чернова",
+    "published": "Курсът е публикуван успешно",
+    "loadFailed": "Грешка при зареждане на курса",
+    "saveFailed": "Грешка при запазване",
+    "publishFailed": "Грешка при публикуване",
+    "validationFailed": "Моля попълнете задължителните полета",
+    "nameRequired": "Името на курса е задължително",
+    "categoryRequired": "Категорията е задължителна"
+  },
+  "courseCreateForm": {
+    "titleCreate": "Създаване на курс",
+    "titleEdit": "Редактиране на курс",
+    "loading": "Зареждане...",
+    "saving": "Запазване...",
+    "stepOf": "Стъпка {{current}} от {{total}}",
+    "steps": {
+      "basicInfo": "Основна информация",
+      "settings": "Настройки",
+      "modules": "Модули и уроци",
+      "preview": "Преглед"
+    },
+    "back": "Назад",
+    "next": "Напред",
+    "saveDraft": "Запази чернова",
+    "publish": "Публикувай"
+  },
+  "courseStepBasicInfo": {
+    "name": "Име на курса",
+    "namePlaceholder": "Въведете име на курса",
+    "shortDescription": "Кратко описание",
+    "shortDescriptionPlaceholder": "Кратко описание за списъка с курсове",
+    "description": "Пълно описание",
+    "descriptionPlaceholder": "Подробно описание на курса",
+    "category": "Категория",
+    "categoryPlaceholder": "напр. Дигитална грамотност",
+    "difficulty": "Ниво",
+    "difficultyLevels": {
+      "beginner": "Начинаещ",
+      "intermediate": "Средно напреднал",
+      "advanced": "Напреднал"
+    },
+    "thumbnailUrl": "Thumbnail URL",
+    "trailerUrl": "Trailer URL",
+    "thumbnailPreview": "Преглед на thumbnail"
+  },
+  "courseStepSettings": {
+    "sections": {
+      "typeFormat": "Тип и формат",
+      "durationDates": "Продължителност и дати",
+      "enrollment": "Записване",
+      "credits": "Кредити и сертификат",
+      "tags": "Тагове"
+    },
+    "courseType": "Тип курс",
+    "courseTypes": {
+      "online": "Онлайн",
+      "offline": "Присъствен",
+      "hybrid": "Хибриден"
+    },
+    "videoProvider": "Видео платформа",
+    "videoProviders": {
+      "youtube": "YouTube",
+      "vimeo": "Vimeo",
+      "custom": "Друга",
+      "none": "Без видео"
+    },
+    "durationWeeks": "Седмици",
+    "estimatedHours": "Очаквани часове",
+    "startDate": "Начална дата",
+    "endDate": "Крайна дата",
+    "maxParticipants": "Макс. участници",
+    "unlimited": "Без ограничение",
+    "targetAudience": "Целева аудитория",
+    "targetAudiencePlaceholder": "напр. Пенсионери, начинаещи",
+    "isPublic": "Публичен курс",
+    "requiresApproval": "Изисква одобрение",
+    "maxCredits": "Макс. кредити",
+    "creditsForCompletion": "Кредити за завършване",
+    "hasCertificate": "Издава сертификат",
+    "tags": "Тагове",
+    "tagsPlaceholder": "компютър, интернет, email",
+    "tagsHint": "Разделете с запетая"
+  },
+  "courseStepModules": {
+    "description": "Организирайте съдържанието на курса в модули и уроци",
+    "stats": "{{modules}} модула • {{lessons}} урока",
+    "addModule": "Добави модул",
+    "empty": "Все още няма модули. Добавете първия модул.",
+    "moduleTitlePlaceholder": "Заглавие на модула",
+    "moduleDescPlaceholder": "Описание на модула (по избор)",
+    "lessonsCount": "урока",
+    "moveUp": "Нагоре",
+    "moveDown": "Надолу",
+    "removeModule": "Премахни модул",
+    "addLesson": "Добави урок",
+    "lessonTitlePlaceholder": "Заглавие на урока",
+    "durationPlaceholder": "мин.",
+    "lessonTypes": {
+      "video": "Видео",
+      "text": "Текст",
+      "live": "На живо",
+      "quiz": "Тест",
+      "assignment": "Задача"
+    }
+  },
+  "courseStepPreview": {
+    "warningsTitle": "{{count}} предупреждения",
+    "warnings": {
+      "noName": "Липсва име на курса",
+      "noCategory": "Липсва категория",
+      "noModules": "Няма добавени модули",
+      "moduleNoTitle": "Модул {{index}} няма заглавие",
+      "moduleNoLessons": "Модул {{index}} няма уроци",
+      "lessonNoTitle": "Модул {{module}}, Урок {{lesson}} няма заглавие"
+    },
+    "sections": {
+      "basicInfo": "Основна информация",
+      "settings": "Настройки",
+      "modules": "Модули и уроци"
+    },
+    "edit": "Редактирай",
+    "fields": {
+      "name": "Име",
+      "category": "Категория",
+      "difficulty": "Ниво",
+      "shortDescription": "Кратко описание",
+      "description": "Описание",
+      "thumbnail": "Thumbnail",
+      "startDate": "Начална дата",
+      "endDate": "Крайна дата",
+      "duration": "Продължителност",
+      "hours": "Часове",
+      "maxParticipants": "Макс. участници",
+      "credits": "Кредити (макс / завършване)"
+    },
+    "badges": {
+      "public": "Публичен",
+      "private": "Частен",
+      "certificate": "Сертификат",
+      "approval": "Одобрение"
+    },
+    "weeks": "седмици",
+    "hours": "часа",
+    "minutes": "мин.",
+    "min": "мин.",
+    "modulesCount": "{{count}} модула",
+    "lessonsCount": "{{count}} урока",
+    "noModules": "Няма добавени модули",
+    "untitledModule": "Модул без заглавие",
+    "untitledLesson": "Урок без заглавие"
+  },
+  "adminCourses": {
+    "title": "Управление на",
+    "titleAccent": "курсове",
+    "subtitle": "Създавайте, редактирайте и управлявайте курсовете в академията",
+    "createCourse": "Създай курс",
+    "refresh": "Обнови",
+    "searchPlaceholder": "Търси по име на курс...",
+    "filters": "Филтри",
+    "status": "Статус",
+    "sortBy": "Подреди по",
+    "loading": "Зареждане на курсове...",
+    "published": "Публикуван",
+    "draft": "Чернова",
+    "stats": {
+      "total": "общо",
+      "published": "публикувани",
+      "drafts": "чернови"
+    },
+    "statusOptions": {
+      "all": "Всички",
+      "published": "Публикувани",
+      "draft": "Чернови"
+    },
+    "sortOptions": {
+      "newest": "Най-нови",
+      "oldest": "Най-стари",
+      "name": "По име",
+      "popular": "Популярни"
+    },
+    "categories": {
+      "digital_literacy": "Дигитална грамотност",
+      "internet_safety": "Интернет безопасност",
+      "social_media": "Социални мрежи",
+      "office_tools": "Офис инструменти",
+      "communication": "Комуникация",
+      "e_services": "Е-услуги",
+      "other": "Друго"
+    },
+    "difficulty": {
+      "beginner": "Начинаещи",
+      "intermediate": "Средно",
+      "advanced": "Напреднали"
+    },
+    "cardStats": {
+      "lessons": "Уроци",
+      "enrolled": "Записани",
+      "hours": "Часове",
+      "created": "Създаден"
+    },
+    "actions": {
+      "edit": "Редактирай",
+      "content": "Съдържание",
+      "stats": "Статистики",
+      "publish": "Публикувай",
+      "unpublish": "Скрий",
+      "delete": "Изтрий"
+    },
+    "empty": {
+      "title": "Няма намерени курсове",
+      "description": "Създайте първия си курс или променете филтрите"
+    },
+    "deleteModal": {
+      "title": "Изтриване на курс",
+      "text": "Сигурни ли сте, че искате да изтриете",
+      "warning": "Това действие е необратимо.",
+      "cancel": "Отказ",
+      "confirm": "Изтрий"
+    }
+  },
+  "editCourse": {
+    "loading": "Зареждане на курса...",
+    "back": "Назад",
+    "title": "Редактиране на",
+    "subtitle": "Промяна на основна информация и настройки",
+    "basicInfoTitle": "Основна информация",
+    "settingsTitle": "Настройки",
+    "unsavedChanges": "● Незапазени промени",
+    "cancel": "Отказ",
+    "save": "Запази промените",
+    "errors": {
+      "loadFailed": "Грешка при зареждане на курса",
+      "nameRequired": "Името е задължително",
+      "saveFailed": "Грешка при запазване"
+    }
+  },
+  "contentManager": {
+    "loading": "Зареждане на съдържание...",
+    "back": "Назад",
+    "title": "Съдържание на",
+    "subtitle": "Управлявайте модули и уроци",
+    "modules": "модула",
+    "lessons": "урока",
+    "lessonsShort": "ур.",
+    "addModule": "Добави модул",
+    "moduleNamePlaceholder": "Име на модула...",
+    "noModules": "Все още няма модули. Добавете първия модул.",
+    "noLessons": "Няма уроци в този модул",
+    "addLesson": "Добави урок",
+    "lessonTitlePlaceholder": "Заглавие на урока...",
+    "free": "Безплатен",
+    "moveUp": "Нагоре",
+    "moveDown": "Надолу",
+    "editModule": "Преименувай",
+    "deleteModule": "Изтрий модул",
+    "editLesson": "Редактирай",
+    "deleteLesson": "Изтрий",
+    "publish": "Публикувай",
+    "unpublish": "Скрий",
+    "deleteModuleTitle": "Изтриване на модул",
+    "deleteLessonTitle": "Изтриване на урок",
+    "deleteConfirm": "Сигурни ли сте, че искате да изтриете",
+    "deleteModuleWarning": "Уроците ще бъдат преместени извън модула.",
+    "cancel": "Отказ",
+    "confirmDelete": "Изтрий",
+    "startDate": "Начало",
+"endDate": "Край",
+"estimatedHours": "Часове",
+    "lessonTypes": {
+      "video": "Видео",
+      "text": "Текст",
+      "live": "На живо",
+      "quiz": "Тест"
+    },
+    "errors": {
+      "loadFailed": "Грешка при зареждане"
+    },
+    "finalTest": {
+  "title": "Финален тест на курса",
+  "manage": "Управлявай тест",
+  "description": "Финалният тест се решава от учениците след завършване на всички модули и уроци в курса."
+}
+  },
+ "editLesson": {
+  "title": "Редактиране на урок",
+  "loading": "Зареждане...",
+  "save": "Запази",
+  "cancel": "Отказ",
+  "manageTest": "Управлявай тест",
+  "unsavedChanges": "● Незапазени промени",
+  "sections": {
+    "basicInfo": "Основна информация",
+    "video": "Видео настройки",
+    "schedule": "График и времетраене",
+    "credits": "Кредити",
+    "test": "Тест настройки",
+    "materials": "Материали",
+    "settings": "Настройки"
+  },
+  "fields": {
+    "title": "Заглавие",
+    "description": "Описание",
+    "lessonType": "Тип урок",
+    "videoProvider": "Доставчик",
+    "videoUrl": "Видео URL",
+    "liveStreamUrl": "Live Stream URL",
+    "thumbnailUrl": "Thumbnail URL",
+    "durationMinutes": "Продължителност (мин)",
+    "scheduledDate": "Начална дата",
+    "endDate": "Крайна дата",
+    "maxCredits": "Макс. кредити",
+    "creditsForCompletion": "За завършване",
+    "creditsForTest": "За тест",
+    "hasTest": "Има тест",
+    "testPassingScore": "Минимален резултат (%)",
+    "isFree": "Безплатен урок",
+    "requiresCompletion": "Изисква завършване",
+    "published": "Публикуван",
+    "draft": "Чернова"
+  },
+  "placeholders": {
+    "title": "Въведете заглавие...",
+    "description": "Кратко описание..."
+  },
+  "lessonTypes": {
+    "video": "Видео",
+    "text": "Текст",
+    "live": "На живо",
+    "quiz": "Тест"
+  },
+  "videoProviders": {
+    "youtube": "YouTube",
+    "vimeo": "Vimeo",
+    "custom": "Друг",
+    "none": "Няма"
+  },
+  "errors": {
+    "loadFailed": "Грешка при зареждане на урока",
+    "saveFailed": "Грешка при запазване",
+    "titleRequired": "Заглавието е задължително"
+  },
+  "materials": {
+    "loading": "Зареждане на материали...",
+    "autosave": "Материалите се записват автоматично", 
+    "empty": "Няма добавени материали",
+    "open": "Отвори",
+    "delete": "Изтрий",
+    "cancel": "Откажи",
+    "add": "Добави",
+    "uploadFile": "Качи файл",
+    "addExternalLink": "Добави връзка",
+    "addLink": "Нова външна връзка",
+    "dropzoneTitle": "Плъзнете файлове тук или кликнете",
+    "dropzoneSubtitle": "PDF, документи, изображения, видео, аудио",
+    "maxFileSize": "Максимален размер: 50MB",
+    "uploadSuccess": "{{name}} е качен успешно",
+    "title": "Материали към курса",
+    "upload": "Качи файл",
+    "uploadTooltip": "Качете файлове към курса",
+    "uploading": "Качване...",
+    "openFile": "Отвори файла",
+    "fields": {
+      "title": "Заглавие",
+      "url": "URL адрес",
+      "type": "Тип на материала",
+      "description": "Описание"
+    },
+    "placeholders": {
+      "linkTitle": "Име на връзката...",
+      "description": "Кратко описание на материала..."
+    },
+    "errors": {
+      "titleRequired": "Заглавието е задължително",
+      "urlRequired": "URL адресът е задължителен",
+      "fileTooLarge": "{{name}} надвишава максималния размер от 50MB",
+      "uploadFailed": "Грешка при качване на {{name}}"
+    },
+    "types": {
+      "pdf": "PDF",
+      "document": "Документ",
+      "video": "Видео",
+      "presentation": "Презентация",
+      "image": "Изображение",
+      "audio": "Аудио",
+      "spreadsheet": "Таблица",
+      "code": "Код",
+      "archive": "Архив",
+      "link": "Връзка",
+      "other": "Друго"
+    }
   }
+},
+"testEditor": {
+  "title": "Редактор на тест",
+  "defaultTitle": "Тест",
+  "lesson": "Урок",
+  "published": "Публикуван",
+  "draft": "Чернова",
+  "publish": "Публикувай",
+  "unpublish": "Скрий",
+  "needQuestions": "Добавете въпроси първо",
+  "loading": "Зареждане...",
+  "noQuestions": "Няма добавени въпроси",
+  "addFirstQuestion": "Добави първи въпрос",
+  "addQuestion": "Добави въпрос",
+  "newQuestion": "Нов въпрос",
+  "cancel": "Отказ",
+  "saveQuestion": "Запази въпрос",
+  "updateQuestion": "Обнови въпрос",
+  "questionAdded": "Въпросът е добавен",
+  "questionUpdated": "Въпросът е обновен",
+  "questionDeleted": "Въпросът е изтрит",
+  "confirmDeleteQuestion": "Сигурни ли сте, че искате да изтриете този въпрос?",
+  "confirmDelete": "Изтрий",
+  "settingsSaved": "Настройките са запазени",
+  "saveSettings": "Запази настройки",
+  "moveUp": "Премести нагоре",
+  "moveDown": "Премести надолу",
+  "editQuestion": "Редактирай",
+  "deleteQuestion": "Изтрий",
+  "markCorrect": "Маркирай като верен",
+  "markIncorrect": "Маркирай като грешен",
+  "addAnswer": "Добави отговор",
+  "answerPlaceholder": "Отговор",
+  "trueOption": "Вярно",
+  "falseOption": "Грешно",
+  "untitled": "Без заглавие",
+  "minutes": "мин",
+  "questionsCount": "въпроса",
+  "passingAt": "Минимум",
+  "pts": "т.",
+  "answers": "отг.",
+  "noQuestionsPreview": "Добавете въпроси, за да видите преглед",
+  "tabs": {
+    "settings": "Настройки",
+    "questions": "Въпроси",
+    "preview": "Преглед"
+  },
+  "fields": {
+    "title": "Заглавие на теста",
+    "description": "Описание",
+    "passingScore": "Минимален резултат (%)",
+    "timeLimit": "Времево ограничение (мин)",
+    "maxAttempts": "Макс. опити",
+    "maxCredits": "Кредити",
+    "shuffleQuestions": "Разбъркай въпросите",
+    "shuffleAnswers": "Разбъркай отговорите",
+    "showCorrectAnswers": "Покажи верните отговори",
+    "questionText": "Текст на въпроса",
+    "points": "Точки",
+    "explanation": "Обяснение (опционално)",
+    "answers": "Отговори",
+    "requireCourseCompletion": "Изисквай завършване на курса"
+  },
+  "placeholders": {
+    "title": "Напр. Тест по Модул 1",
+    "description": "Кратко описание на теста...",
+    "noLimit": "Без ограничение",
+    "unlimited": "Неограничено",
+    "questionText": "Въведете въпроса тук...",
+    "explanation": "Защо този отговор е верен..."
+  },
+  "sections": {
+    "options": "Опции"
+  },
+  "questionTypes": {
+    "single_choice": "Един верен",
+    "multiple_choice": "Няколко верни",
+    "true_false": "Вярно / Грешно"
+  },
+  "errors": {
+    "loadFailed": "Грешка при зареждане на тест",
+    "questionRequired": "Въведете текст на въпроса",
+    "answersRequired": "Всички отговори трябва да имат текст",
+    "correctRequired": "Маркирайте поне един верен отговор"
+  },
+  "questionTypeHints": {
+  "single_choice": "Въпрос с няколко отговора, само един е правилен",
+  "multiple_choice": "Въпрос с няколко отговора, повече от един могат да са правилни",
+  "true_false": "Въпрос с два отговора (Вярно/Грешно), избирате кой е верният"
+}
+}
 }

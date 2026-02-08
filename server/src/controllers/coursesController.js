@@ -14,6 +14,8 @@ const {
   mentor,
   lecture,
   sequelize,
+  lesson_material,
+  lesson_test,
 } = require('../sequelize/models/index');
 
 const { validateBody, validateQuery } = require('../middlewares/validateRequest');
@@ -72,8 +74,8 @@ const generateUniqueSlug = async (title, existingId = null) => {
 // HELPER: Find course by slug or id
 // ===============================
 const findCourseBySlugOrId = async (slugOrId) => {
-  const where = isNaN(slugOrId) 
-    ? { slug: slugOrId } 
+  const where = isNaN(slugOrId)
+    ? { slug: slugOrId }
     : { id: parseInt(slugOrId) };
   return await course.findOne({ where });
 };
@@ -326,7 +328,6 @@ coursesController.get('/:slug', async (req, res, next) => {
             {
               model: lesson,
               as: 'lessons',
-              where: { isPublished: true },
               required: false,
               include: [
                 {
@@ -334,18 +335,51 @@ coursesController.get('/:slug', async (req, res, next) => {
                   as: 'mentor',
                   attributes: ['id', 'name', 'photoUrl', 'specialization'],
                 },
+                {
+                  model: lesson_material,
+                  as: 'materials',
+                  where: { status: 'active' },
+                  required: false,
+                  attributes: ['id', 'title', 'description', 'materialType', 'fileUrl', 'originalFileName', 'fileSize', 'mimeType', 'externalUrl', 'isDownloadable', 'sortOrder'],
+                },
+                {
+                  model: lesson_test,
+                  as: 'tests',
+                  required: false,
+                  attributes: ['id', 'title', 'description', 'passingScore', 'maxAttempts', 'timeLimitMinutes', 'isPublished'],
+                },
               ],
             },
           ],
         },
         {
-          model: lesson,
-          as: 'lessons',
-          where: {
-            isPublished: true,
-            moduleId: null,
-          },
+         model: lesson,
+  as: 'lessons',
+  where: {
+    moduleId: null,
+  },
+  required: false,  
           required: false,
+          include: [
+            {
+              model: mentor,
+              as: 'mentor',
+              attributes: ['id', 'name', 'photoUrl', 'specialization'],
+            },
+            {
+              model: lesson_material,
+              as: 'materials',
+              where: { status: 'active' },
+              required: false,
+              attributes: ['id', 'title', 'description', 'materialType', 'fileUrl', 'originalFileName', 'fileSize', 'mimeType', 'externalUrl', 'isDownloadable', 'sortOrder'],
+            },
+            {
+              model: lesson_test,
+              as: 'tests',
+              required: false,
+              attributes: ['id', 'title', 'description', 'passingScore', 'maxAttempts', 'timeLimitMinutes', 'isPublished'],
+            },
+          ],
         },
         {
           model: course_material,
@@ -817,7 +851,7 @@ coursesController.get('/:courseSlug/modules', async (req, res, next) => {
     const { courseSlug } = req.params;
 
     const courseData = await findCourseBySlugOrId(courseSlug);
-    
+
     if (!courseData) {
       return res.status(404).json({ success: false, message: 'Course not found' });
     }
@@ -852,10 +886,10 @@ coursesController.post(
   async (req, res, next) => {
     try {
       const { courseSlug } = req.params;
-      const { title, description } = req.body;
+      const { title, description, startDate, endDate, estimatedHours } = req.body;
 
       const courseData = await findCourseBySlugOrId(courseSlug);
-      
+
       if (!courseData) {
         return res.status(404).json({ success: false, message: 'Course not found' });
       }
@@ -869,6 +903,9 @@ coursesController.post(
         courseId: courseData.id,
         title,
         description,
+        startDate: startDate || null,
+        endDate: endDate || null,
+        estimatedHours: estimatedHours || null,
         sortOrder: lastModule ? lastModule.sortOrder + 1 : 0,
         status: 'draft',
         isPublished: false,
@@ -894,10 +931,10 @@ coursesController.put(
     try {
       const { courseSlug } = req.params;
       const moduleId = parseInt(req.params.moduleId);
-      const { title, description, isPublished } = req.body;
+      const { title, description, isPublished, startDate, endDate, estimatedHours } = req.body;
 
       const courseData = await findCourseBySlugOrId(courseSlug);
-      
+
       if (!courseData) {
         return res.status(404).json({ success: false, message: 'Course not found' });
       }
@@ -915,6 +952,9 @@ coursesController.put(
         updates.isPublished = isPublished;
         updates.status = isPublished ? 'active' : 'draft';
       }
+      if (startDate !== undefined) updates.startDate = startDate;
+      if (endDate !== undefined) updates.endDate = endDate;
+      if (estimatedHours !== undefined) updates.estimatedHours = estimatedHours;
 
       await moduleData.update(updates);
 
@@ -939,7 +979,7 @@ coursesController.delete(
       const moduleId = parseInt(req.params.moduleId);
 
       const courseData = await findCourseBySlugOrId(courseSlug);
-      
+
       if (!courseData) {
         return res.status(404).json({ success: false, message: 'Course not found' });
       }
@@ -975,7 +1015,7 @@ coursesController.put(
       const { moduleIds } = req.body;
 
       const courseData = await findCourseBySlugOrId(courseSlug);
-      
+
       if (!courseData) {
         return res.status(404).json({ success: false, message: 'Course not found' });
       }
@@ -989,6 +1029,41 @@ coursesController.put(
       res.status(200).json({ success: true, message: 'Modules reordered successfully' });
     } catch (err) {
       console.error('❌ [REORDER MODULES] Error:', err);
+      next(err);
+    }
+  }
+);
+// ===============================
+// PUT /api/academy/courses/:courseSlug/lessons/reorder
+// ===============================
+coursesController.put(
+  '/:courseSlug/lessons/reorder',
+  isAuth,
+  rbac.checkPermission('lesson', 'update'),
+  validateBody(lessonReorderSchema),
+  async (req, res, next) => {
+    try {
+      const { courseSlug } = req.params;
+      const { lessonIds, moduleId } = req.body;
+
+      const courseData = await findCourseBySlugOrId(courseSlug);
+
+      if (!courseData) {
+        return res.status(404).json({ success: false, message: 'Course not found' });
+      }
+
+      const updates = lessonIds.map((id, index) =>
+        lesson.update(
+          { sortOrder: index, moduleId: moduleId || null },
+          { where: { id, courseId: courseData.id } }
+        )
+      );
+
+      await Promise.all(updates);
+
+      res.status(200).json({ success: true, message: 'Lessons reordered successfully' });
+    } catch (err) {
+      console.error('❌ [REORDER LESSONS] Error:', err);
       next(err);
     }
   }
@@ -1007,7 +1082,7 @@ coursesController.get('/:courseSlug/lessons', async (req, res, next) => {
     const { moduleId } = req.query;
 
     const courseData = await findCourseBySlugOrId(courseSlug);
-    
+
     if (!courseData) {
       return res.status(404).json({ success: false, message: 'Course not found' });
     }
@@ -1036,6 +1111,7 @@ coursesController.get('/:courseSlug/lessons', async (req, res, next) => {
   }
 });
 
+
 // ===============================
 // GET /api/academy/courses/:courseSlug/lessons/:lessonSlug
 // Поддържа и slug, и id за backwards compatibility
@@ -1045,7 +1121,7 @@ coursesController.get('/:courseSlug/lessons/:lessonSlug', async (req, res, next)
     const { courseSlug, lessonSlug } = req.params;
 
     const courseData = await findCourseBySlugOrId(courseSlug);
-    
+
     if (!courseData) {
       return res.status(404).json({ success: false, message: 'Course not found' });
     }
@@ -1089,7 +1165,7 @@ coursesController.post(
       const userId = req.user.userId;
 
       const courseData = await findCourseBySlugOrId(courseSlug);
-      
+
       if (!courseData) {
         return res.status(404).json({ success: false, message: 'Course not found' });
       }
@@ -1174,7 +1250,7 @@ coursesController.put(
       const updates = req.body;
 
       const courseData = await findCourseBySlugOrId(courseSlug);
-      
+
       if (!courseData) {
         return res.status(404).json({ success: false, message: 'Course not found' });
       }
@@ -1197,7 +1273,6 @@ coursesController.put(
           await course_module.increment('lessonsCount', { where: { id: newModuleId } });
         }
       }
-
       await lessonData.update(updates);
 
       res.status(200).json({ success: true, message: 'Lesson updated successfully', lesson: lessonData });
@@ -1220,7 +1295,7 @@ coursesController.delete(
       const { courseSlug, lessonSlug } = req.params;
 
       const courseData = await findCourseBySlugOrId(courseSlug);
-      
+
       if (!courseData) {
         return res.status(404).json({ success: false, message: 'Course not found' });
       }
@@ -1261,7 +1336,7 @@ coursesController.post(
       const { courseSlug, lessonSlug } = req.params;
 
       const courseData = await findCourseBySlugOrId(courseSlug);
-      
+
       if (!courseData) {
         return res.status(404).json({ success: false, message: 'Course not found' });
       }
@@ -1298,7 +1373,7 @@ coursesController.post(
       const { courseSlug, lessonSlug } = req.params;
 
       const courseData = await findCourseBySlugOrId(courseSlug);
-      
+
       if (!courseData) {
         return res.status(404).json({ success: false, message: 'Course not found' });
       }
@@ -1322,40 +1397,5 @@ coursesController.post(
   }
 );
 
-// ===============================
-// PUT /api/academy/courses/:courseSlug/lessons/reorder
-// ===============================
-coursesController.put(
-  '/:courseSlug/lessons/reorder',
-  isAuth,
-  rbac.checkPermission('lesson', 'update'),
-  validateBody(lessonReorderSchema),
-  async (req, res, next) => {
-    try {
-      const { courseSlug } = req.params;
-      const { lessonIds, moduleId } = req.body;
-
-      const courseData = await findCourseBySlugOrId(courseSlug);
-      
-      if (!courseData) {
-        return res.status(404).json({ success: false, message: 'Course not found' });
-      }
-
-      const updates = lessonIds.map((id, index) =>
-        lesson.update(
-          { sortOrder: index, moduleId: moduleId || null }, 
-          { where: { id, courseId: courseData.id } }
-        )
-      );
-
-      await Promise.all(updates);
-
-      res.status(200).json({ success: true, message: 'Lessons reordered successfully' });
-    } catch (err) {
-      console.error('❌ [REORDER LESSONS] Error:', err);
-      next(err);
-    }
-  }
-);
 
 module.exports = coursesController;

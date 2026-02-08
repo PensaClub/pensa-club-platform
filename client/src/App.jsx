@@ -86,6 +86,11 @@ import AcademyLectureWatch from './components/AcademyLectures/AcademyLectureWatc
 import GlobalSnowfall from './components/GlobalSnowfall/GlobalSnowfall.jsx';
 import DigiBridgeHeader from './components/DigiBridgeAcademy/DigiBridgeHeader/DigiBridgeHeader.jsx';
 import StudentDashboard from './components/StudentDashboard/StudentDashboard.jsx';
+import { AdminGuard } from './components/Guards/AdminGuard.jsx';
+import CourseAcademyCreateForm from './components/CourseAcademyCreateForm/CourseAcademyCreateForm.jsx';
+import AdminAcademyCoursesList from './components/AdminAcademyCoursesList/AdminAcademyCoursesList.jsx';
+import EditCourseBasicInfo from './components/AdminAcademyCoursesList/EditCourseBasicInfo/EditCourseBasicInfo.jsx';
+import CourseContentManager from './components/AdminAcademyCoursesList/CourseContentManager/CourseContentManager.jsx';
 
 // ✅ LAZY LOADING КОМПОНЕНТИ
 const ArticlesList = lazy(() => import('./components/Articles/ArticlesList/ArticlesList.jsx'));
@@ -140,7 +145,7 @@ function App() {
       <HelmetProvider>
         <ErrorBoundary>
           <GlobalSnowfall count={50} />
-           {/* <ChristmasGreetingModal /> */}
+          {/* <ChristmasGreetingModal /> */}
           <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
             <UserProvider>
               <GoogleAuthProvider>
@@ -226,6 +231,7 @@ function App() {
                                           <Route path="/projects/:slug" element={<ProjectView />} />
                                           <Route path="/articles/:slug" element={<ArticleView />} />
                                           <Route path="/elite-membership" element={<EliteMembershipPage />} />
+
                                           <Route
                                             path="/stories"
                                             element={
@@ -234,6 +240,7 @@ function App() {
                                               </Suspense>
                                             }
                                           />
+
                                           <Route path="/stories/:slug" element={<StoryView />} />
                                           <Route path="/stories/edit/:slug" element={<StoryForm isEditMode={true} />} />
 
@@ -254,6 +261,14 @@ function App() {
                                             <Route path="/academy/lectures/:slug" element={<AcademyLectureDetails />} />
                                             <Route path="/academy/lectures/:slug/watch" element={<AcademyLectureWatch />} />
                                             <Route path="/academy/lectures/:slug/test" element={<AcademyLectureTest />} />
+                                            <Route
+                                              path="/academy/courses/:courseSlug/test"
+                                              element={<AcademyTestPlayer />}
+                                            />
+                                            <Route path="/academy/admin/courses" element={<AdminGuard><AdminAcademyCoursesList /></AdminGuard>} />
+                                            <Route path="/academy/admin/create-course" element={<AdminGuard><CourseAcademyCreateForm /></AdminGuard>} />
+                                            <Route path="/academy/admin/edit-course/:slug" element={<AdminGuard><EditCourseBasicInfo /></AdminGuard>} />
+                                            <Route path="/academy/admin/course/:slug/content" element={<AdminGuard><CourseContentManager /></AdminGuard>} />
                                             <Route path="/ad/details/:adId" element={<AdDetails />} />
                                             <Route path="/ad/edit/:adId" element={<EditAd />} />
                                             <Route path="/ad" element={<AdPage />} />
@@ -263,14 +278,19 @@ function App() {
                                             <Route path="/profile/*" element={<Profile />} />
                                             <Route path="/my-chats" element={<UserChatsPage />} />
                                           </Route>
+                                          {/* <Route path="/academy/admin/create-course" element={<AdminGuard><CourseAcademyCreateForm /></AdminGuard>} />
+                                          <Route path="/academy/admin/edit-course/:courseSlug" element={<AdminGuard><CourseAcademyCreateForm /></AdminGuard>} /> */}
+
                                           <Route element={<MentorGuard />}>
                                             <Route path="/academy/mentor-dashboard" element={<DigiBridgeMentorDashboard />} />
 
                                           </Route>
+
                                           <Route path="/mentor" element={<MentorGuard />}>
                                             <Route path="students/:studentId/details" element={<StudentDetails />} />
                                             <Route path="reviews" element={<DigiMentorReviews />} />
                                           </Route>
+
                                           <Route element={<PublicGuard />}>
                                             <Route path="/sign-up" element={<LoginRegister />} />
                                           </Route>

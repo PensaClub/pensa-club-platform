@@ -1289,6 +1289,7 @@ academyTestsController.post('/:id/start', isAuth, async (req, res, next) => {
         success: true,
         message: 'Continuing existing attempt',
         attempt: inProgressAttempt,
+        test: testData,
         questions,
         timeRemaining: calculateTimeRemaining(inProgressAttempt, testData),
       });
@@ -1308,6 +1309,7 @@ academyTestsController.post('/:id/start', isAuth, async (req, res, next) => {
       success: true,
       message: 'Test started',
       attempt,
+      test: testData,
       questions,
       timeLimit: testData.timeLimitMinutes,
     });
@@ -2700,5 +2702,152 @@ academyTestsController.post('/lecture/:lectureTestId/submit', isAuth, async (req
   }
 });
 
+// ===============================
+// GET /api/academy/tests/course/:courseId/status
+// Статус на финалния тест за курс + проверка за завършване
+// ===============================
+academyTestsController.get('/course/:courseId/status', isAuth, async (req, res, next) => {
+  try {
+    const courseId = parseInt(req.params.courseId);
+    const userId = req.user.userId;
+    const userRole = req.user.role;
+
+    // Намери публикуван тест за този курс
+    const testData = await test.findOne({
+      where: { courseId, isPublished: true },
+    });
+
+    if (!testData) {
+      return res.status(200).json({
+        success: true,
+        hasTest: false,
+        test: null,
+      });
+    }
+
+    const privilegedRoles = ['admin', 'moderator', 'mentor'];
+    const isPrivileged = privilegedRoles.includes(userRole);
+
+    const studentData = await getStudentByUserId(userId);
+
+    // Провери завършване на курса чрез enrollment данни
+    let courseCompleted = false;
+    if (studentData) {
+      const enrollment = await course_enrollment.findOne({
+        where: {
+          studentId: studentData.id,
+          courseId,
+          status: 'active',
+        },
+      });
+
+      if (enrollment) {
+        courseCompleted = enrollment.completedLessons > 0
+          && enrollment.completedLessons >= enrollment.totalLessons;
+      }
+    }
+
+    // Определи дали тестът е достъпен
+    const testAccessible = !testData.requireCourseCompletion || courseCompleted || isPrivileged;
+
+    // Ако няма студент — няма опити
+    if (!studentData) {
+      return res.status(200).json({
+        success: true,
+        hasTest: true,
+        test: {
+          id: testData.id,
+          title: testData.title,
+          description: testData.description,
+          passingScore: testData.passingScore,
+          timeLimitMinutes: testData.timeLimitMinutes,
+          maxAttempts: testData.maxAttempts,
+          questionsCount: testData.questionsCount,
+          maxCredits: testData.maxCredits,
+          requireCourseCompletion: testData.requireCourseCompletion,
+        },
+        courseCompleted,
+        testAccessible,
+        attempts: [],
+        bestAttempt: null,
+        lastAttempt: null,
+        hasPassedTest: false,
+        canStartNew: testAccessible,
+        totalAttempts: 0,
+        remainingAttempts: testData.maxAttempts || null,
+        isPrivileged,
+      });
+    }
+
+    // Вземи всички опити
+    const attempts = await test_attempt.findAll({
+      where: {
+        testId: testData.id,
+        studentId: studentData.id,
+      },
+      order: [['created_at', 'DESC']],
+    });
+
+    const completedAttempts = attempts.filter(a => a.status === 'completed');
+    const bestAttempt = completedAttempts.length > 0
+      ? completedAttempts.reduce((best, a) => (a.score > best.score ? a : best))
+      : null;
+    const lastAttempt = attempts[0] || null;
+    const activeAttempt = attempts.find(a => a.status === 'in_progress') || null;
+    const hasPassedTest = completedAttempts.some(a => a.score >= testData.passingScore);
+
+    const totalAttempts = attempts.length;
+    const canStartNew = testAccessible
+      && !activeAttempt
+      && (!testData.maxAttempts || totalAttempts < testData.maxAttempts)
+      && !hasPassedTest;
+
+    const remainingAttempts = testData.maxAttempts
+      ? Math.max(0, testData.maxAttempts - totalAttempts)
+      : null;
+
+    res.status(200).json({
+      success: true,
+      hasTest: true,
+      test: {
+        id: testData.id,
+        title: testData.title,
+        description: testData.description,
+        passingScore: testData.passingScore,
+        timeLimitMinutes: testData.timeLimitMinutes,
+        maxAttempts: testData.maxAttempts,
+        questionsCount: testData.questionsCount,
+        maxCredits: testData.maxCredits,
+        requireCourseCompletion: testData.requireCourseCompletion,
+      },
+      courseCompleted,
+      testAccessible,
+      attempts: completedAttempts.map(a => ({
+        id: a.id,
+        score: a.score,
+        passed: a.score >= testData.passingScore,
+        completedAt: a.completedAt || a.createdAt,
+      })),
+      bestAttempt: bestAttempt ? {
+        id: bestAttempt.id,
+        score: bestAttempt.score,
+        passed: bestAttempt.score >= testData.passingScore,
+      } : null,
+      lastAttempt: lastAttempt ? {
+        id: lastAttempt.id,
+        score: lastAttempt.score,
+        status: lastAttempt.status,
+      } : null,
+      activeAttempt: activeAttempt ? { id: activeAttempt.id } : null,
+      hasPassedTest,
+      canStartNew,
+      totalAttempts,
+      remainingAttempts,
+      isPrivileged,
+    });
+  } catch (err) {
+    next(err);
+  }
+});
 
 module.exports = academyTestsController;

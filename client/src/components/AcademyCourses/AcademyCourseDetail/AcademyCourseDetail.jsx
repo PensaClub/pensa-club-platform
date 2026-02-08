@@ -57,9 +57,9 @@ const formatScheduledDate = (scheduledDate) => {
 };
 
 const getMaterialIcon = (material) => {
-  const type = material.type?.toLowerCase() || material.fileType?.toLowerCase() || '';
+  const type = material.materialType?.toLowerCase() || material.type?.toLowerCase() || material.fileType?.toLowerCase() || '';
   const name = material.name?.toLowerCase() || material.title?.toLowerCase() || '';
-  
+
   if (type.includes('pdf') || name.endsWith('.pdf')) return '📄';
   if (type.includes('doc') || name.endsWith('.doc') || name.endsWith('.docx')) return '📝';
   if (type.includes('video') || name.endsWith('.mp4') || name.endsWith('.avi')) return '🎬';
@@ -124,10 +124,10 @@ const LessonTypeIcon = ({ type }) => {
   }
 };
 
-const LessonItem = ({ 
-  lesson, 
-  index, 
-  t, 
+const LessonItem = ({
+  lesson,
+  index,
+  t,
   showNumber = true,
   isAuthenticated,
   hasAccess,
@@ -135,16 +135,20 @@ const LessonItem = ({
 }) => {
   const isScheduleAccessible = isLessonScheduledAccessible(lesson.scheduledDate);
   const isAccessible = isAuthenticated && hasAccess && isScheduleAccessible;
-  
+  const [showMaterials, setShowMaterials] = useState(false);
+
   const getLockReason = () => {
     if (!isAuthenticated) return 'login';
     if (!hasAccess) return 'enroll';
     if (!isScheduleAccessible) return 'scheduled';
     return null;
   };
-  
+
   const lockReason = getLockReason();
   const scheduledDateFormatted = formatScheduledDate(lesson.scheduledDate);
+  const materials = lesson.materials || [];
+  const tests = lesson.tests || [];
+  const hasMaterials = materials.length > 0;
 
   const handleClick = () => {
     if (isAccessible && onLessonClick) {
@@ -152,106 +156,157 @@ const LessonItem = ({
     }
   };
 
+  const handleMaterialsToggle = (e) => {
+    e.stopPropagation();
+    setShowMaterials(!showMaterials);
+  };
+
   return (
-    <div 
-      className={`academyCourseDetail-lesson ${isAccessible ? 'is-accessible' : 'is-locked'} ${lockReason === 'scheduled' ? 'is-scheduled' : ''}`}
-      style={{ '--delay': `${index * 0.05}s` }}
-      onClick={handleClick}
-      role={isAccessible ? 'button' : undefined}
-      tabIndex={isAccessible ? 0 : undefined}
-    >
-      {showNumber && (
-        <div className="academyCourseDetail-lesson-number">{index + 1}</div>
-      )}
-      
-      <div className="academyCourseDetail-lesson-icon">
-        <LessonTypeIcon type={lesson.lessonType} />
-      </div>
-      
-      <div className="academyCourseDetail-lesson-info">
-        <h4 className="academyCourseDetail-lesson-title">
-          {lesson.title}
-          {lockReason === 'scheduled' && scheduledDateFormatted && (
-            <span className="academyCourseDetail-lesson-scheduled">
-              📅 {t('academyCourseDetail.content.availableOn')} {scheduledDateFormatted}
-            </span>
-          )}
-        </h4>
-        <div className="academyCourseDetail-lesson-meta">
-          {lesson.durationMinutes > 0 && (
-            <span className="academyCourseDetail-lesson-duration">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="12" cy="12" r="10" />
-                <polyline points="12,6 12,12 16,14" />
-              </svg>
-              {lesson.durationMinutes} {t('academyCourseDetail.content.minutes')}
-            </span>
-          )}
-          {lesson.hasTest && (
-            <span className="academyCourseDetail-lesson-test">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M9 11l3 3L22 4" />
-                <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
-              </svg>
-              {t('academyCourseDetail.content.hasTest')}
-            </span>
-          )}
-          {lesson.maxCredits > 0 && (
-            <span className="academyCourseDetail-lesson-credits">
-              🪙 +{lesson.maxCredits}
-            </span>
+    <div className="academyCourseDetail-lesson-wrapper">
+      <div
+        className={`academyCourseDetail-lesson ${isAccessible ? 'is-accessible' : 'is-locked'} ${lockReason === 'scheduled' ? 'is-scheduled' : ''}`}
+        style={{ '--delay': `${index * 0.05}s` }}
+        onClick={handleClick}
+        role={isAccessible ? 'button' : undefined}
+        tabIndex={isAccessible ? 0 : undefined}
+      >
+        {showNumber && (
+          <div className="academyCourseDetail-lesson-number">{index + 1}</div>
+        )}
+
+        <div className="academyCourseDetail-lesson-icon">
+          <LessonTypeIcon type={lesson.lessonType} />
+        </div>
+
+        <div className="academyCourseDetail-lesson-info">
+          <h4 className="academyCourseDetail-lesson-title">
+            {lesson.title}
+            {lockReason === 'scheduled' && scheduledDateFormatted && (
+              <span className="academyCourseDetail-lesson-scheduled">
+                📅 {t('academyCourseDetail.content.availableOn')} {scheduledDateFormatted}
+              </span>
+            )}
+          </h4>
+          <div className="academyCourseDetail-lesson-meta">
+            {lesson.durationMinutes > 0 && (
+              <span className="academyCourseDetail-lesson-duration">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12,6 12,12 16,14" />
+                </svg>
+                {lesson.durationMinutes} {t('academyCourseDetail.content.minutes')}
+              </span>
+            )}
+            {lesson.hasTest && (
+              <span className="academyCourseDetail-lesson-test">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M9 11l3 3L22 4" />
+                  <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
+                </svg>
+                {t('academyCourseDetail.content.hasTest')}
+              </span>
+            )}
+            {lesson.maxCredits > 0 && (
+              <span className="academyCourseDetail-lesson-credits">
+                🪙 +{lesson.maxCredits}
+              </span>
+            )}
+            {hasMaterials && (
+              <span
+                className="academyCourseDetail-lesson-materials-badge"
+                onClick={handleMaterialsToggle}
+              >
+                📎 {materials.length} {t('academyCourseDetail.content.materialsCount', 'материал(а)')}
+              </span>
+            )}
+          </div>
+        </div>
+
+        <div className="academyCourseDetail-lesson-action">
+          {isAccessible ? (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="10" />
+              <polygon points="10,8 16,12 10,16" fill="currentColor" stroke="none" />
+            </svg>
+          ) : lockReason === 'scheduled' ? (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12,6 12,12 16,14" />
+            </svg>
+          ) : (
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0110 0v4" />
+            </svg>
           )}
         </div>
       </div>
-      
-      <div className="academyCourseDetail-lesson-action">
-        {isAccessible ? (
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="12" cy="12" r="10" />
-            <polygon points="10,8 16,12 10,16" fill="currentColor" stroke="none" />
-          </svg>
-        ) : lockReason === 'scheduled' ? (
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <circle cx="12" cy="12" r="10" />
-            <polyline points="12,6 12,12 16,14" />
-          </svg>
-        ) : (
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-            <path d="M7 11V7a5 5 0 0110 0v4" />
-          </svg>
-        )}
-      </div>
+
+      {/* Lesson Materials (expandable) */}
+      {showMaterials && hasMaterials && isAccessible && (
+        <div className="academyCourseDetail-lesson-materials">
+          {materials.map((mat, matIdx) => (
+            <a
+              key={mat.id}
+              href={mat.fileUrl || mat.externalUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="academyCourseDetail-lesson-material-item"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <span className="academyCourseDetail-lesson-material-icon">
+                {getMaterialIcon(mat)}
+              </span>
+              <span className="academyCourseDetail-lesson-material-name">
+                {mat.title}
+              </span>
+              {mat.fileSize > 0 && (
+                <span className="academyCourseDetail-lesson-material-size">
+                  {formatFileSize(mat.fileSize)}
+                </span>
+              )}
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+            </a>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
 
-const ModuleAccordion = ({ 
-  module, 
-  index, 
-  t, 
+const ModuleAccordion = ({
+  module,
+  index,
+  t,
   accentColor,
   isAuthenticated,
   hasAccess,
   onLessonClick
 }) => {
   const [isOpen, setIsOpen] = useState(index === 0);
-  
-  const totalDuration = module.totalDurationMinutes || 
+
+  const totalDuration = module.totalDurationMinutes ||
     module.lessons?.reduce((acc, l) => acc + (l.durationMinutes || 0), 0) || 0;
-  
-  const accessibleLessonsCount = module.lessons?.filter(lesson => 
+
+  const accessibleLessonsCount = module.lessons?.filter(lesson =>
     isAuthenticated && hasAccess && isLessonScheduledAccessible(lesson.scheduledDate)
   ).length || 0;
-  
+
   const totalLessonsCount = module.lessons?.length || module.lessonsCount || 0;
-  
+
+  const totalMaterials = module.lessons?.reduce((acc, l) => acc + (l.materials?.length || 0), 0) || 0;
+  const totalTests = module.lessons?.filter(l => l.hasTest || l.tests?.length > 0).length || 0;
+
   return (
-    <div 
+    <div
       className={`academyCourseDetail-module ${isOpen ? 'is-open' : ''}`}
       style={{ '--delay': `${index * 0.1}s`, '--accent': accentColor }}
     >
-      <button 
+      <button
         className="academyCourseDetail-module-header"
         onClick={() => setIsOpen(!isOpen)}
       >
@@ -273,6 +328,23 @@ const ModuleAccordion = ({
               </svg>
               {totalDuration} {t('academyCourseDetail.content.minutes')}
             </span>
+            {totalMaterials > 0 && (
+              <span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" />
+                </svg>
+                {totalMaterials} {t('academyCourseDetail.content.materialsShort', 'материал(а)')}
+              </span>
+            )}
+            {totalTests > 0 && (
+              <span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M9 11l3 3L22 4" />
+                  <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
+                </svg>
+                {totalTests} {t('academyCourseDetail.content.testsShort', 'тест(а)')}
+              </span>
+            )}
           </div>
         </div>
         <div className="academyCourseDetail-module-toggle">
@@ -281,17 +353,17 @@ const ModuleAccordion = ({
           </svg>
         </div>
       </button>
-      
+
       {module.description && (
         <p className="academyCourseDetail-module-description">{module.description}</p>
       )}
-      
+
       <div className="academyCourseDetail-module-content">
         <div className="academyCourseDetail-module-lessons">
           {module.lessons?.map((lesson, lessonIndex) => (
-            <LessonItem 
-              key={lesson.id} 
-              lesson={lesson} 
+            <LessonItem
+              key={lesson.id}
+              lesson={lesson}
               index={lessonIndex}
               t={t}
               showNumber={false}
@@ -309,7 +381,7 @@ const ModuleAccordion = ({
 // Course Material Item Component
 const CourseMaterialItem = ({ material, index, t }) => {
   return (
-    <a 
+    <a
       href={material.url || material.fileUrl}
       target="_blank"
       rel="noopener noreferrer"
@@ -361,14 +433,15 @@ export const AcademyCourseDetail = () => {
   const { t } = useTranslation();
   const { slug } = useParams();
   const navigate = useNavigate();
-  
-  const { 
-    getCourseBySlug, 
-    currentCourse, 
-    isLoading, 
-    enrollInCourse, 
+
+  const {
+    getCourseBySlug,
+    currentCourse,
+    isLoading,
+    enrollInCourse,
     getEnrollmentStatus,
-    getCourseMaterials 
+    getCourseMaterials,
+    getCourseTestStatus
   } = useAcademyCourses();
   const { isAuthentication, setRedirectAfterLogin, isAdmin, isModerator, isMentor } = useAuthContext();
 
@@ -382,10 +455,14 @@ export const AcademyCourseDetail = () => {
   const [isCheckingEnrollment, setIsCheckingEnrollment] = useState(false);
   const [courseMaterials, setCourseMaterials] = useState([]);
   const [isLoadingMaterials, setIsLoadingMaterials] = useState(false);
-  
+
+  const [courseTestData, setCourseTestData] = useState(null);
+  const [isLoadingCourseTest, setIsLoadingCourseTest] = useState(false);
+
   const fetchedSlugRef = useRef(null);
   const enrollmentCheckedRef = useRef(null);
   const materialsLoadedRef = useRef(null);
+  const courseTestLoadedRef = useRef(null);
 
   const hasPrivilegedAccess = isAdmin || isModerator || isMentor;
   const hasLessonAccess = isEnrolled || hasPrivilegedAccess;
@@ -419,7 +496,7 @@ export const AcademyCourseDetail = () => {
       if (enrollmentCheckedRef.current === currentCourse.id) {
         return;
       }
-      
+
       setIsCheckingEnrollment(true);
       enrollmentCheckedRef.current = currentCourse.id;
 
@@ -462,6 +539,31 @@ export const AcademyCourseDetail = () => {
 
     loadMaterials();
   }, [activeTab, slug, getCourseMaterials]);
+
+  // Load course test status when content tab is active
+useEffect(() => {
+  const loadCourseTest = async () => {
+    if (activeTab !== 'content' || !currentCourse?.id || !isAuthentication) {
+      return;
+    }
+    if (courseTestLoadedRef.current === currentCourse.id) return;
+
+    setIsLoadingCourseTest(true);
+    courseTestLoadedRef.current = currentCourse.id;
+
+    try {
+      const data = await getCourseTestStatus(currentCourse.id);
+      setCourseTestData(data);
+    } catch (err) {
+      console.error('Error loading course test:', err);
+      setCourseTestData(null);
+    } finally {
+      setIsLoadingCourseTest(false);
+    }
+  };
+
+  loadCourseTest();
+}, [activeTab, currentCourse?.id, isAuthentication, getCourseTestStatus]);
 
   const course = currentCourse;
 
@@ -552,10 +654,10 @@ export const AcademyCourseDetail = () => {
   const hasCertificate = course.hasCertificate || false;
   const tags = course.tags || [];
   const targetAudience = course.targetAudience || [];
-  
+
   const modules = course.modules || [];
   const lessons = course.lessons || [];
-  
+
   const instructors = course.instances || [];
   const leadInstructor = instructors.find(i => i.isLead) || instructors[0];
   const assistants = instructors.filter(i => !i.isLead);
@@ -597,7 +699,7 @@ export const AcademyCourseDetail = () => {
         variant: 'continue'
       };
     }
-    
+
     if (!isAuthentication) {
       return {
         text: t('academyCourseDetail.card.loginToEnroll'),
@@ -606,7 +708,7 @@ export const AcademyCourseDetail = () => {
         variant: 'login'
       };
     }
-    
+
     return {
       text: t('academyCourseDetail.card.enrollNow'),
       icon: '→',
@@ -668,9 +770,9 @@ export const AcademyCourseDetail = () => {
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                     </svg>
-                    {isAdmin ? t('academyCourseDetail.hero.adminAccess') : 
-                     isMentor ? t('academyCourseDetail.hero.mentorAccess') : 
-                     t('academyCourseDetail.hero.moderatorAccess')}
+                    {isAdmin ? t('academyCourseDetail.hero.adminAccess') :
+                      isMentor ? t('academyCourseDetail.hero.mentorAccess') :
+                        t('academyCourseDetail.hero.moderatorAccess')}
                   </div>
                 )}
               </div>
@@ -682,7 +784,7 @@ export const AcademyCourseDetail = () => {
                     {category}
                   </span>
                 )}
-                <span 
+                <span
                   className="academyCourseDetail-badge academyCourseDetail-badge--level"
                   style={{ '--level-color': level.color }}
                 >
@@ -754,8 +856,8 @@ export const AcademyCourseDetail = () => {
               {/* Instructor Preview */}
               {leadInstructor && (
                 <div className="academyCourseDetail-hero-instructor">
-                  <img 
-                    src={leadInstructor.mentor?.photoUrl || 'https://via.placeholder.com/48'} 
+                  <img
+                    src={leadInstructor.mentor?.photoUrl || 'https://via.placeholder.com/48'}
                     alt={leadInstructor.mentor?.name}
                   />
                   <div className="academyCourseDetail-hero-instructor-info">
@@ -786,9 +888,9 @@ export const AcademyCourseDetail = () => {
               <div className="academyCourseDetail-card-preview">
                 <img src={imageUrl} alt={title} />
                 <div className="academyCourseDetail-card-preview-overlay"></div>
-                
+
                 {trailerUrl && (
-                  <button 
+                  <button
                     className="academyCourseDetail-card-play"
                     onClick={() => setIsTrailerOpen(true)}
                   >
@@ -825,7 +927,7 @@ export const AcademyCourseDetail = () => {
                   </span>
                 </div>
 
-                <button 
+                <button
                   className={`academyCourseDetail-card-cta academyCourseDetail-card-cta--${ctaConfig.variant}`}
                   onClick={ctaConfig.action}
                   disabled={isEnrolling || isCheckingEnrollment}
@@ -852,7 +954,7 @@ export const AcademyCourseDetail = () => {
                 )}
 
                 {trailerUrl && (
-                  <button 
+                  <button
                     className="academyCourseDetail-card-secondary"
                     onClick={() => setIsTrailerOpen(true)}
                   >
@@ -938,7 +1040,7 @@ export const AcademyCourseDetail = () => {
 
           {/* Tab Content */}
           <div className="academyCourseDetail-tabContent" key={activeTab}>
-            
+
             {/* OVERVIEW TAB */}
             {activeTab === 'overview' && (
               <div className="academyCourseDetail-overview">
@@ -1037,23 +1139,23 @@ export const AcademyCourseDetail = () => {
                     </div>
                     <div className="academyCourseDetail-access-notice-content">
                       <h4>
-                        {isAuthentication 
+                        {isAuthentication
                           ? t('academyCourseDetail.content.enrollToAccess')
                           : t('academyCourseDetail.content.loginToAccess')
                         }
                       </h4>
                       <p>
-                        {isAuthentication 
+                        {isAuthentication
                           ? t('academyCourseDetail.content.enrollToAccessDesc')
                           : t('academyCourseDetail.content.loginToAccessDesc')
                         }
                       </p>
                     </div>
-                    <button 
+                    <button
                       className="academyCourseDetail-access-notice-btn"
                       onClick={handleEnroll}
                     >
-                      {isAuthentication 
+                      {isAuthentication
                         ? t('academyCourseDetail.card.enrollNow')
                         : t('academyCourseDetail.card.loginToEnroll')
                       }
@@ -1069,7 +1171,7 @@ export const AcademyCourseDetail = () => {
                       {t('academyCourseDetail.content.courseContent')}
                     </h2>
                   </div>
-                  
+
                   <div className="academyCourseDetail-content-summary">
                     {modules.length > 0 && (
                       <>
@@ -1099,12 +1201,12 @@ export const AcademyCourseDetail = () => {
                     </span>
                   </div>
 
-                  {modules.length > 0 ? (
+                  {modules.length > 0 && (
                     <div className="academyCourseDetail-modules">
                       {modules.map((module, moduleIndex) => (
-                        <ModuleAccordion 
-                          key={module.id} 
-                          module={module} 
+                        <ModuleAccordion
+                          key={module.id}
+                          module={module}
                           index={moduleIndex}
                           t={t}
                           accentColor={categoryColor}
@@ -1114,21 +1216,30 @@ export const AcademyCourseDetail = () => {
                         />
                       ))}
                     </div>
-                  ) : lessons.length > 0 ? (
-                    <div className="academyCourseDetail-lessons">
-                      {lessons.map((lesson, index) => (
-                        <LessonItem 
-                          key={lesson.id} 
-                          lesson={lesson} 
-                          index={index}
-                          t={t}
-                          isAuthenticated={isAuthentication}
-                          hasAccess={hasLessonAccess}
-                          onLessonClick={handleLessonClick}
-                        />
-                      ))}
+                  )}
+
+                  {lessons.length > 0 && (
+                    <div className="academyCourseDetail-standalone-lessons">
+                      <h3 className="academyCourseDetail-standalone-title">
+                        {t('academyCourseDetail.content.standaloneLessons', 'Самостоятелни уроци')}
+                      </h3>
+                      <div className="academyCourseDetail-lessons">
+                        {lessons.map((lesson, index) => (
+                          <LessonItem
+                            key={lesson.id}
+                            lesson={lesson}
+                            index={index}
+                            t={t}
+                            isAuthenticated={isAuthentication}
+                            hasAccess={hasLessonAccess}
+                            onLessonClick={handleLessonClick}
+                          />
+                        ))}
+                      </div>
                     </div>
-                  ) : (
+                  )}
+
+                  {modules.length === 0 && lessons.length === 0 && (
                     <div className="academyCourseDetail-content-empty">
                       <div className="academyCourseDetail-content-empty-icon">📭</div>
                       <p>{t('academyCourseDetail.content.noContent')}</p>
@@ -1153,7 +1264,7 @@ export const AcademyCourseDetail = () => {
                   ) : courseMaterials.length > 0 ? (
                     <div className="academyCourseDetail-materials-list">
                       {courseMaterials.map((material, index) => (
-                        <CourseMaterialItem 
+                        <CourseMaterialItem
                           key={material.id || index}
                           material={material}
                           index={index}
@@ -1168,6 +1279,102 @@ export const AcademyCourseDetail = () => {
                     </div>
                   )}
                 </div>
+                {/* ========== COURSE FINAL TEST SECTION ========== */}
+                {isAuthentication && courseTestData?.hasTest && (
+                  <div className="academyCourseDetail-section academyCourseDetail-final-test-section">
+                    <div className="academyCourseDetail-section-header">
+                      <div className="academyCourseDetail-section-icon">📝</div>
+                      <h2 className="academyCourseDetail-section-title">
+                        {t('academyCourseDetail.finalTest.title', 'Финален тест')}
+                      </h2>
+                    </div>
+
+                    <div className="academyCourseDetail-final-test-card">
+                      <div className="academyCourseDetail-final-test-info">
+                        <h3 className="academyCourseDetail-final-test-name">
+                          {courseTestData.test.title}
+                        </h3>
+                        {courseTestData.test.description && (
+                          <p className="academyCourseDetail-final-test-desc">
+                            {courseTestData.test.description}
+                          </p>
+                        )}
+                        <div className="academyCourseDetail-final-test-meta">
+                          {courseTestData.test.questionsCount > 0 && (
+                            <span className="academyCourseDetail-final-test-meta-item">
+                              ❓ {courseTestData.test.questionsCount} {t('academyCourseDetail.finalTest.questions', 'въпроса')}
+                            </span>
+                          )}
+                          {courseTestData.test.timeLimitMinutes && (
+                            <span className="academyCourseDetail-final-test-meta-item">
+                              ⏱️ {courseTestData.test.timeLimitMinutes} {t('academyCourseDetail.finalTest.minutes', 'мин')}
+                            </span>
+                          )}
+                          <span className="academyCourseDetail-final-test-meta-item">
+                            🎯 {t('academyCourseDetail.finalTest.passingScore', 'Мин. резултат')}: {courseTestData.test.passingScore}%
+                          </span>
+                          {courseTestData.test.maxAttempts && (
+                            <span className="academyCourseDetail-final-test-meta-item">
+                              🔄 {t('academyCourseDetail.finalTest.maxAttempts', 'Макс. опити')}: {courseTestData.test.maxAttempts}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Passed badge */}
+                      {courseTestData.hasPassedTest && (
+                        <div className="academyCourseDetail-final-test-passed">
+                          <span className="academyCourseDetail-final-test-passed-icon">✅</span>
+                          <span>{t('academyCourseDetail.finalTest.passed', 'Тестът е преминат успешно!')}</span>
+                          {courseTestData.bestAttempt && (
+                            <span className="academyCourseDetail-final-test-passed-score">
+                              {t('academyCourseDetail.finalTest.bestScore', 'Най-добър резултат')}: {courseTestData.bestAttempt.score}%
+                            </span>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Locked state */}
+                      {!courseTestData.testAccessible && !courseTestData.hasPassedTest && (
+                        <div className="academyCourseDetail-final-test-locked">
+                          <span className="academyCourseDetail-final-test-locked-icon">🔒</span>
+                          <span>{t('academyCourseDetail.finalTest.locked', 'Завършете всички уроци в курса, за да отключите теста.')}</span>
+                        </div>
+                      )}
+
+                      {/* Action buttons */}
+                      {courseTestData.testAccessible && !courseTestData.hasPassedTest && (
+                        <div className="academyCourseDetail-final-test-actions">
+                          {courseTestData.activeAttempt ? (
+                            <button
+                              className="academyCourseDetail-final-test-btn academyCourseDetail-final-test-btn--continue"
+                              onClick={() => navigate(`/academy/courses/${slug}/test`)}
+                            >
+                              ▶ {t('academyCourseDetail.finalTest.continueAttempt', 'Продължи опита')}
+                            </button>
+                          ) : courseTestData.canStartNew ? (
+                            <button
+                              className="academyCourseDetail-final-test-btn academyCourseDetail-final-test-btn--start"
+                              onClick={() => navigate(`/academy/courses/${slug}/test`)}
+                            >
+                              📝 {t('academyCourseDetail.finalTest.startTest', 'Започни тест')}
+                            </button>
+                          ) : (
+                            <div className="academyCourseDetail-final-test-exhausted">
+                              {t('academyCourseDetail.finalTest.noMoreAttempts', 'Изчерпахте всички опити.')}
+                            </div>
+                          )}
+
+                          {courseTestData.remainingAttempts !== null && courseTestData.canStartNew && (
+                            <span className="academyCourseDetail-final-test-remaining">
+                              {t('academyCourseDetail.finalTest.remaining', 'Оставащи опити')}: {courseTestData.remainingAttempts}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
@@ -1179,8 +1386,8 @@ export const AcademyCourseDetail = () => {
                     <div className="academyCourseDetail-instructor-glow"></div>
                     <div className="academyCourseDetail-instructor-header">
                       <div className="academyCourseDetail-instructor-avatar">
-                        <img 
-                          src={leadInstructor.mentor?.photoUrl || 'https://via.placeholder.com/120'} 
+                        <img
+                          src={leadInstructor.mentor?.photoUrl || 'https://via.placeholder.com/120'}
                           alt={leadInstructor.mentor?.name}
                         />
                         <div className="academyCourseDetail-instructor-badge">
@@ -1200,7 +1407,7 @@ export const AcademyCourseDetail = () => {
                         </p>
                       </div>
                     </div>
-                    
+
                     {leadInstructor.description && (
                       <p className="academyCourseDetail-instructor-description">
                         {leadInstructor.description}
@@ -1244,8 +1451,8 @@ export const AcademyCourseDetail = () => {
                     <div className="academyCourseDetail-assistants-grid">
                       {assistants.map((assistant, index) => (
                         <div key={index} className="academyCourseDetail-assistant">
-                          <img 
-                            src={assistant.mentor?.photoUrl || 'https://via.placeholder.com/60'} 
+                          <img
+                            src={assistant.mentor?.photoUrl || 'https://via.placeholder.com/60'}
                             alt={assistant.mentor?.name}
                           />
                           <div className="academyCourseDetail-assistant-info">
@@ -1288,13 +1495,13 @@ export const AcademyCourseDetail = () => {
                       <span className="academyCourseDetail-reviews-score-value">{rating.toFixed(1)}</span>
                       <div className="academyCourseDetail-reviews-stars">
                         {[1, 2, 3, 4, 5].map(star => (
-                          <svg 
-                            key={star} 
-                            width="24" 
-                            height="24" 
-                            viewBox="0 0 24 24" 
+                          <svg
+                            key={star}
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
                             fill={star <= Math.round(rating) ? 'currentColor' : 'none'}
-                            stroke="currentColor" 
+                            stroke="currentColor"
                             strokeWidth="2"
                           >
                             <polygon points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9" />
@@ -1313,7 +1520,7 @@ export const AcademyCourseDetail = () => {
                           <div key={stars} className="academyCourseDetail-reviews-bar">
                             <span className="academyCourseDetail-reviews-bar-label">{stars} ⭐</span>
                             <div className="academyCourseDetail-reviews-bar-track">
-                              <div 
+                              <div
                                 className="academyCourseDetail-reviews-bar-fill"
                                 style={{ width: `${percentage}%` }}
                               ></div>

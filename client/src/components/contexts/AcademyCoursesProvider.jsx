@@ -987,6 +987,145 @@ export const AcademyCoursesProvider = ({ children }) => {
     }
   }, [isAdmin]);
 
+  const getTestById = useCallback(async (testId) => {
+    try {
+      const data = await coursesService.getTestById(testId);
+      return data;
+    } catch (error) {
+      console.error('Error fetching test:', error);
+      throw error;
+    }
+  }, []);
+
+  const updateTest = useCallback(async (testId, testData) => {
+    if (!isAdmin) {
+      toast.error('Нямате права за тази операция');
+      return { success: false };
+    }
+    try {
+      const response = await coursesService.updateTest(testId, testData);
+      return response;
+    } catch (error) {
+      console.error('Error updating test:', error);
+      toast.error('Грешка при обновяване на тест');
+      throw error;
+    }
+  }, [isAdmin]);
+
+  const deleteTest = useCallback(async (testId) => {
+    if (!isAdmin) {
+      toast.error('Нямате права за тази операция');
+      return { success: false };
+    }
+    try {
+      const response = await coursesService.deleteTest(testId);
+      toast.success('Тестът е изтрит успешно');
+      return response;
+    } catch (error) {
+      console.error('Error deleting test:', error);
+      toast.error('Грешка при изтриване на тест');
+      throw error;
+    }
+  }, [isAdmin]);
+
+  const publishTest = useCallback(async (testId) => {
+    if (!isAdmin) return { success: false };
+    try {
+      const response = await coursesService.publishTest(testId);
+      toast.success('Тестът е публикуван');
+      return response;
+    } catch (error) {
+      console.error('Error publishing test:', error);
+      toast.error(error?.response?.data?.message || 'Грешка при публикуване на тест');
+      throw error;
+    }
+  }, [isAdmin]);
+
+  const unpublishTest = useCallback(async (testId) => {
+    if (!isAdmin) return { success: false };
+    try {
+      const response = await coursesService.unpublishTest(testId);
+      toast.success('Тестът е скрит');
+      return response;
+    } catch (error) {
+      console.error('Error unpublishing test:', error);
+      toast.error('Грешка при скриване на тест');
+      throw error;
+    }
+  }, [isAdmin]);
+
+  const getTestAttempts = useCallback(async (testId, params = {}) => {
+    try {
+      const data = await coursesService.getTestAttempts(testId, params);
+      return data;
+    } catch (error) {
+      console.error('Error fetching test attempts:', error);
+      return { attempts: [], pagination: {} };
+    }
+  }, []);
+
+  const getCourseTestStatus = useCallback(async (courseId) => {
+  try {
+    const data = await coursesService.getCourseTestStatus(courseId);
+    return data;
+  } catch (error) {
+    console.error('Error fetching course test status:', error);
+    return { hasTest: false };
+  }
+}, []);
+
+  // =========================================================
+  //                    TEST QUESTIONS - ADMIN
+  // =========================================================
+
+  const addQuestion = useCallback(async (testId, questionData) => {
+    if (!isAdmin) return { success: false };
+    try {
+      const response = await coursesService.addQuestion(testId, questionData);
+      return response;
+    } catch (error) {
+      console.error('Error adding question:', error);
+      toast.error('Грешка при добавяне на въпрос');
+      throw error;
+    }
+  }, [isAdmin]);
+
+  const updateQuestion = useCallback(async (testId, questionId, questionData) => {
+    if (!isAdmin) return { success: false };
+    try {
+      const response = await coursesService.updateQuestion(testId, questionId, questionData);
+      return response;
+    } catch (error) {
+      console.error('Error updating question:', error);
+      toast.error('Грешка при обновяване на въпрос');
+      throw error;
+    }
+  }, [isAdmin]);
+
+  const deleteQuestion = useCallback(async (testId, questionId) => {
+    if (!isAdmin) return { success: false };
+    try {
+      const response = await coursesService.deleteQuestion(testId, questionId);
+      return response;
+    } catch (error) {
+      console.error('Error deleting question:', error);
+      toast.error('Грешка при изтриване на въпрос');
+      throw error;
+    }
+  }, [isAdmin]);
+
+  const reorderQuestions = useCallback(async (testId, questionIds) => {
+    if (!isAdmin) return { success: false };
+    try {
+      const response = await coursesService.reorderQuestions(testId, questionIds);
+      return response;
+    } catch (error) {
+      console.error('Error reordering questions:', error);
+      toast.error('Грешка при пренареждане на въпроси');
+      throw error;
+    }
+  }, [isAdmin]);
+
   const startTest = useCallback(async (testId) => {
     try {
       setIsLoading(true);
@@ -1000,6 +1139,17 @@ export const AcademyCoursesProvider = ({ children }) => {
       setIsLoading(false);
     }
   }, []);
+
+  const startTestById = useCallback(async (testId) => {
+  try {
+    const response = await coursesService.startTestById(testId);
+    return response;
+  } catch (error) {
+    console.error('Error starting test:', error);
+    toast.error('Грешка при стартиране на тест');
+    throw error;
+  }
+}, []);
 
   const submitAnswer = useCallback(async (testId, answerData) => {
     try {
@@ -1221,6 +1371,22 @@ export const AcademyCoursesProvider = ({ children }) => {
     }
   }, [isAdmin]);
 
+  const deleteCourseMaterial = useCallback(async (courseId, materialId) => {
+    if (!isAdmin) {
+      toast.error('Нямате права за тази операция');
+      return { success: false };
+    }
+    try {
+      const response = await coursesService.deleteMaterial('course', courseId, materialId);
+      toast.success('Материалът е изтрит успешно');
+      return response;
+    } catch (error) {
+      console.error('Error deleting course material:', error);
+      toast.error('Грешка при изтриване на материал');
+      throw error;
+    }
+  }, [isAdmin]);
+
   const getMaterialTypes = useCallback(async () => {
     try {
       const data = await coursesService.getMaterialTypes();
@@ -1309,6 +1475,23 @@ export const AcademyCoursesProvider = ({ children }) => {
       throw error;
     }
   }, [isAdmin]);
+
+
+const deleteLessonMaterial = useCallback(async (lessonId, materialId) => {
+  if (!isAdmin) {
+    toast.error('Нямате права за тази операция');
+    return { success: false };
+  }
+  try {
+    const response = await coursesService.deleteLessonMaterial(lessonId, materialId);
+    toast.success('Материалът е изтрит успешно');
+    return response;
+  } catch (error) {
+    console.error('Error deleting lesson material:', error);
+    toast.error('Грешка при изтриване на материал');
+    throw error;
+  }
+}, [isAdmin]);
   // =========================================================
   //                    MY ACADEMY (Student Dashboard)
   // =========================================================
@@ -1526,6 +1709,7 @@ const getMyMentor = useCallback(async () => {
     getTests,
     createTest,
     startTest,
+    startTestById,
     submitAnswer,
     submitTest,
     getTestResults,
@@ -1548,7 +1732,8 @@ const getMyMentor = useCallback(async () => {
     addLectureMaterial,
     getSeminarMaterials,
     addSeminarMaterial,
-
+deleteLessonMaterial,
+deleteCourseMaterial,
     // My Academy
     getMyDashboard,
     getMyCourses,
@@ -1567,6 +1752,20 @@ const getMyMentor = useCallback(async () => {
     getLectureAttempt,
     submitLectureAnswer,
     submitLectureTest,
+    clearTestCache,
+    // Tests - Admin CRUD
+    getTestById,
+    updateTest,
+    deleteTest,
+    publishTest,
+    unpublishTest,
+    getTestAttempts,
+    getCourseTestStatus,
+    // Questions - Admin CRUD
+    addQuestion,
+    updateQuestion,
+    deleteQuestion,
+    reorderQuestions,
   };
 
   return (

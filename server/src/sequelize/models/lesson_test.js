@@ -33,10 +33,26 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: 'id',
         as: 'creator',
       });
+
+      // Belongs to lecture
       lesson_test.belongsTo(models.lecture, {
         foreignKey: 'lectureId',
         targetKey: 'id',
         as: 'lecture',
+      });
+
+      // Belongs to course
+      lesson_test.belongsTo(models.course, {
+        foreignKey: 'courseId',
+        targetKey: 'id',
+        as: 'course',
+      });
+
+      // Belongs to seminar
+      lesson_test.belongsTo(models.seminar, {
+        foreignKey: 'seminarId',
+        targetKey: 'id',
+        as: 'seminar',
       });
     }
   }
@@ -58,6 +74,36 @@ module.exports = (sequelize, DataTypes) => {
           key: 'id',
         },
         onDelete: 'CASCADE',
+      },
+      lectureId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        field: 'lecture_id',
+        references: {
+          model: 'lectures',
+          key: 'id',
+        },
+        onDelete: 'CASCADE',
+      },
+      courseId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        field: 'course_id',
+        references: {
+          model: 'courses',
+          key: 'id',
+        },
+        onDelete: 'SET NULL',
+      },
+      seminarId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        field: 'seminar_id',
+        references: {
+          model: 'seminars',
+          key: 'id',
+        },
+        onDelete: 'SET NULL',
       },
       createdBy: {
         type: DataTypes.INTEGER,
@@ -150,7 +196,12 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: false,
         field: 'is_published',
       },
-
+      requireCourseCompletion: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+        field: 'require_course_completion',
+      },
       // === СТАТИСТИКИ ===
       questionsCount: {
         type: DataTypes.INTEGER,
