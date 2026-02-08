@@ -389,6 +389,9 @@ export const academyCoursesServiceFactory = () => {
     startLessonBySlug: async (lessonSlug) => {
       return requester.post(`${apiUrl}/academy/enrollment/lessons/${lessonSlug}/start`);
     },
+    startTestById: async (testId) => {
+      return requester.post(`${apiUrl}/academy/tests/${testId}/start`);
+    },
     // =========================================================
     //                    TESTS - ADMIN
     // =========================================================
@@ -397,7 +400,9 @@ export const academyCoursesServiceFactory = () => {
       const queryString = toQueryString(params);
       return requester.get(`${apiUrl}/academy/tests?${queryString}`);
     },
-
+    getCourseTestStatus: async (courseId) => {
+      return requester.get(`${apiUrl}/academy/tests/course/${courseId}/status`);
+    },
     getTestById: async (testId) => {
       return requester.get(`${apiUrl}/academy/tests/${testId}`);
     },
@@ -503,9 +508,9 @@ export const academyCoursesServiceFactory = () => {
     // =========================================================
 
     getMyCertificates: async (params = {}) => {
-  const queryString = toQueryString(params);
-  return requester.get(`${apiUrl}/academy/my/certificates?${queryString}`);
-},
+      const queryString = toQueryString(params);
+      return requester.get(`${apiUrl}/academy/my/certificates?${queryString}`);
+    },
 
     verifyCertificate: async (code) => {
       return requester.get(`${apiUrl}/academy/certificates/verify/${code}`);
@@ -625,7 +630,9 @@ export const academyCoursesServiceFactory = () => {
     getMaterialStats: async () => {
       return requester.get(`${apiUrl}/academy/materials/stats/overview`);
     },
-
+    deleteLessonMaterial: async (lessonId, materialId) => {
+      return requester.del(`${apiUrl}/academy/materials/lesson/${lessonId}/${materialId}`);
+    },
     // =========================================================
     //                    MY ACADEMY (Student Dashboard)
     // =========================================================

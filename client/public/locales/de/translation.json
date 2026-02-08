@@ -599,6 +599,13 @@
       "applications": "Bewerbungen",
       "statistics": "Statistiken"
     },
+    "academy": {
+      "title": "Akademie",
+      "createCourse": "Kurs erstellen",
+      "courses": "Kurse",
+      "createLecture": "Vorlesung erstellen",
+      "createSeminar": "Seminar erstellen"
+    },
     "students": {
       "title": "Studenten",
       "overview": "Übersicht",
@@ -11344,56 +11351,56 @@
       "alreadyReviewedMessage": "Sie haben bereits eine Bewertung für die DigiBridge Academy abgegeben. Wir schätzen Ihr Feedback!"
     },
     "mentorsPage": {
-  "meta": {
-    "title": "Unsere Mentoren | DigiBridge Akademie",
-    "description": "Lernen Sie unsere jungen Mentoren kennen, die Senioren helfen, digitale Technologien zu meistern",
-    "keywords": "Mentoren, digitale Kompetenz, Schulung, DigiBridge, kostenlose Mentoren"
-  },
-  "hero": {
-    "title": "Unsere Mentoren",
-    "subtitle": "Junge Fachleute, bereit Wissen und Erfahrung mit Geduld und Verständnis zu teilen",
-    "online": "jetzt online",
-    "findMentor": "Mentor finden",
-    "become": "Mentor werden"
-  },
-  "search": "Nach Name oder Spezialisierung suchen...",
-  "filters": {
-    "all": "Alle",
-    "digitalSecurity": "Digitale Sicherheit",
-    "mediaLiteracy": "Medienkompetenz",
-    "socialMedia": "Soziale Medien",
-    "onlineBanking": "Online-Banking",
-    "basicSkills": "Grundkenntnisse"
-  },
-  "filtersDrawer": {
-    "title": "Filter & Suche"
-  },
-  "stats": {
-    "mentors": "Mentoren",
-    "available": "Verfügbar",
-    "specializations": "Bereiche",
-    "sessions": "Sitzungen"
-  },
-  "list": {
-    "all": "Alle Mentoren",
-    "found": "gefunden"
-  },
-  "card": {
-    "years": "J.",
-    "available": "Online",
-    "busy": "Offline",
-    "sessions": "Sitzungen",
-    "speaks": "Spricht:",
-    "students": "Schüler",
-    "rating": "Bewertung",
-    "reviews": "Rezensionen",
-    "viewProfile": "Profil ansehen"
-  },
-  "noResults": {
-    "title": "Keine Mentoren gefunden",
-    "desc": "Versuchen Sie andere Filter"
-  }
-},
+      "meta": {
+        "title": "Unsere Mentoren | DigiBridge Akademie",
+        "description": "Lernen Sie unsere jungen Mentoren kennen, die Senioren helfen, digitale Technologien zu meistern",
+        "keywords": "Mentoren, digitale Kompetenz, Schulung, DigiBridge, kostenlose Mentoren"
+      },
+      "hero": {
+        "title": "Unsere Mentoren",
+        "subtitle": "Junge Fachleute, bereit Wissen und Erfahrung mit Geduld und Verständnis zu teilen",
+        "online": "jetzt online",
+        "findMentor": "Mentor finden",
+        "become": "Mentor werden"
+      },
+      "search": "Nach Name oder Spezialisierung suchen...",
+      "filters": {
+        "all": "Alle",
+        "digitalSecurity": "Digitale Sicherheit",
+        "mediaLiteracy": "Medienkompetenz",
+        "socialMedia": "Soziale Medien",
+        "onlineBanking": "Online-Banking",
+        "basicSkills": "Grundkenntnisse"
+      },
+      "filtersDrawer": {
+        "title": "Filter & Suche"
+      },
+      "stats": {
+        "mentors": "Mentoren",
+        "available": "Verfügbar",
+        "specializations": "Bereiche",
+        "sessions": "Sitzungen"
+      },
+      "list": {
+        "all": "Alle Mentoren",
+        "found": "gefunden"
+      },
+      "card": {
+        "years": "J.",
+        "available": "Online",
+        "busy": "Offline",
+        "sessions": "Sitzungen",
+        "speaks": "Spricht:",
+        "students": "Schüler",
+        "rating": "Bewertung",
+        "reviews": "Rezensionen",
+        "viewProfile": "Profil ansehen"
+      },
+      "noResults": {
+        "title": "Keine Mentoren gefunden",
+        "desc": "Versuchen Sie andere Filter"
+      }
+    },
     "becomeMentor": {
       "authRequired": {
         "title": "Melden Sie sich an",
@@ -13215,6 +13222,20 @@
       "instructor": "Dozent",
       "reviews": "Bewertungen"
     },
+    "finalTest": {
+  "title": "Abschlusstest",
+  "questions": "Fragen",
+  "minutes": "Min",
+  "passingScore": "Min. Ergebnis",
+  "maxAttempts": "Max. Versuche",
+  "passed": "Test erfolgreich bestanden!",
+  "bestScore": "Bestes Ergebnis",
+  "locked": "Schließen Sie alle Lektionen im Kurs ab, um den Test freizuschalten.",
+  "startTest": "Test starten",
+  "continueAttempt": "Versuch fortsetzen",
+  "noMoreAttempts": "Alle Versuche aufgebraucht.",
+  "remaining": "Verbleibende Versuche"
+},
     "hero": {
       "certificateBadge": "Zertifikat",
       "ratings": "Bewertungen",
@@ -13554,102 +13575,102 @@
     "unmute": "Ton einschalten"
   },
   "studentDashboard": {
-  "title": "Meine Akademie",
-  "welcomeBack": "Willkommen zurück",
-  "editProfile": "Profil bearbeiten",
-  "levelBeginner": "Anfänger",
-  "levelIntermediate": "Fortgeschritten",
-  "levelExpert": "Experte",
-  "levelMaster": "Meister",
-  "enrolledCourses": "Eingeschriebene Kurse",
-  "completedCourses": "Abgeschlossene Kurse",
-  "upcomingLectures": "Kommende Vorlesungen",
-  "certificates": "Zertifikate",
-  "totalCredits": "Gesamtpunkte",
-  "creditsFromCourses": "Von Kursen",
-  "creditsFromLectures": "Von Vorlesungen",
-  "creditsFromSeminars": "Von Seminaren",
-  "creditsFromPresentations": "Von Präsentationen",
-  "progressToNextLevel": "Bis zum nächsten Level",
-  "continueLearning": "Lernen fortsetzen",
-  "continueButton": "Fortsetzen",
-  "noCoursesInProgress": "Keine laufenden Kurse",
-  "browseCoursesButton": "Kurse durchsuchen",
-  "completedLessons": "Lektionen abgeschlossen",
-  "upcomingEvents": "Kommende Veranstaltungen",
-  "noUpcomingEvents": "Keine kommenden Veranstaltungen",
-  "liveBadge": "LIVE",
-  "lectureBadge": "Vorlesung",
-  "seminarBadge": "Seminar",
-  "inDays": "in {{days}} Tagen",
-  "today": "heute",
-  "tomorrow": "morgen",
-  "viewAll": "Alle anzeigen",
-  "myMentor": "Mein Mentor",
-  "noMentor": "Noch kein Mentor zugewiesen",
-  "findMentor": "Mentor finden",
-  "mentorSince": "Mentor seit",
-  "contactMentor": "Kontakt",
-  "sendMessage": "Nachricht senden",
-  "myCertificates": "Meine Zertifikate",
-  "availableCertificates": "Verfügbare Zertifikate",
-  "noCertificates": "Noch keine Zertifikate",
-  "earnedBadge": "Erhalten",
-  "download": "Herunterladen",
-  "creditsNeeded": "Benötigte Punkte",
-  "recentActivity": "Letzte Aktivitäten",
-  "noRecentActivity": "Keine aktuellen Aktivitäten",
-  "completedLesson": "Lektion abgeschlossen",
-  "passedTest": "Test bestanden",
-  "earnedCredits": "{{credits}} Punkte verdient",
-  "loading": "Wird geladen...",
-  "error": "Fehler beim Laden",
-  "retry": "Erneut versuchen",
-  "loginRequired": "Anmeldung erforderlich",
-  "loginRequiredText": "Bitte melden Sie sich an, um Ihre Akademie zu sehen.",
-  "loginButton": "Anmelden"
-},
-"studentDashboardHeader": {
-  "student": "Student",
-  "levelBeginner": "Anfänger",
-  "levelIntermediate": "Fortgeschritten",
-  "levelExpert": "Experte",
-  "levelMaster": "Meister",
-  "credits": "Punkte",
-  "totalCredits": "Gesamtpunkte",
-  "progressToNextLevel": "Bis zum nächsten Level",
-  "editProfile": "Profil bearbeiten"
-},
-"studentQuickStats": {
-  "title": "Statistiken",
-  "enrolledCourses": "Eingeschriebene Kurse",
-  "completedCourses": "Abgeschlossene Kurse",
-  "upcomingLectures": "Kommende Vorlesungen",
-  "certificates": "Zertifikate"
-},
-"studentContinueLearning": {
+    "title": "Meine Akademie",
+    "welcomeBack": "Willkommen zurück",
+    "editProfile": "Profil bearbeiten",
+    "levelBeginner": "Anfänger",
+    "levelIntermediate": "Fortgeschritten",
+    "levelExpert": "Experte",
+    "levelMaster": "Meister",
+    "enrolledCourses": "Eingeschriebene Kurse",
+    "completedCourses": "Abgeschlossene Kurse",
+    "upcomingLectures": "Kommende Vorlesungen",
+    "certificates": "Zertifikate",
+    "totalCredits": "Gesamtpunkte",
+    "creditsFromCourses": "Von Kursen",
+    "creditsFromLectures": "Von Vorlesungen",
+    "creditsFromSeminars": "Von Seminaren",
+    "creditsFromPresentations": "Von Präsentationen",
+    "progressToNextLevel": "Bis zum nächsten Level",
+    "continueLearning": "Lernen fortsetzen",
+    "continueButton": "Fortsetzen",
+    "noCoursesInProgress": "Keine laufenden Kurse",
+    "browseCoursesButton": "Kurse durchsuchen",
+    "completedLessons": "Lektionen abgeschlossen",
+    "upcomingEvents": "Kommende Veranstaltungen",
+    "noUpcomingEvents": "Keine kommenden Veranstaltungen",
+    "liveBadge": "LIVE",
+    "lectureBadge": "Vorlesung",
+    "seminarBadge": "Seminar",
+    "inDays": "in {{days}} Tagen",
+    "today": "heute",
+    "tomorrow": "morgen",
+    "viewAll": "Alle anzeigen",
+    "myMentor": "Mein Mentor",
+    "noMentor": "Noch kein Mentor zugewiesen",
+    "findMentor": "Mentor finden",
+    "mentorSince": "Mentor seit",
+    "contactMentor": "Kontakt",
+    "sendMessage": "Nachricht senden",
+    "myCertificates": "Meine Zertifikate",
+    "availableCertificates": "Verfügbare Zertifikate",
+    "noCertificates": "Noch keine Zertifikate",
+    "earnedBadge": "Erhalten",
+    "download": "Herunterladen",
+    "creditsNeeded": "Benötigte Punkte",
+    "recentActivity": "Letzte Aktivitäten",
+    "noRecentActivity": "Keine aktuellen Aktivitäten",
+    "completedLesson": "Lektion abgeschlossen",
+    "passedTest": "Test bestanden",
+    "earnedCredits": "{{credits}} Punkte verdient",
+    "loading": "Wird geladen...",
+    "error": "Fehler beim Laden",
+    "retry": "Erneut versuchen",
+    "loginRequired": "Anmeldung erforderlich",
+    "loginRequiredText": "Bitte melden Sie sich an, um Ihre Akademie zu sehen.",
+    "loginButton": "Anmelden"
+  },
+  "studentDashboardHeader": {
+    "student": "Student",
+    "levelBeginner": "Anfänger",
+    "levelIntermediate": "Fortgeschritten",
+    "levelExpert": "Experte",
+    "levelMaster": "Meister",
+    "credits": "Punkte",
+    "totalCredits": "Gesamtpunkte",
+    "progressToNextLevel": "Bis zum nächsten Level",
+    "editProfile": "Profil bearbeiten"
+  },
+  "studentQuickStats": {
+    "title": "Statistiken",
+    "enrolledCourses": "Eingeschriebene Kurse",
+    "completedCourses": "Abgeschlossene Kurse",
+    "upcomingLectures": "Kommende Vorlesungen",
+    "certificates": "Zertifikate"
+  },
+  "studentContinueLearning": {
     "title": "Lernen fortsetzen",
     "viewAll": "Alle anzeigen",
     "lessons": "Lektionen",
     "noCourses": "Keine laufenden Kurse",
     "browseMore": "Weitere Kurse durchsuchen"
-},
-"studentUpcomingEvents": {
-  "title": "Kommende Veranstaltungen",
-  "viewAll": "Alle anzeigen",
-  "types": {
-    "lecture": "Vorlesung",
-    "seminar": "Seminar"
   },
-  "started": "Gestartet",
-  "soon": "Bald",
-  "hoursLeft": "in {{hours}} Std",
-  "tomorrow": "Morgen",
-  "daysLeft": "in {{days}} Tagen",
-  "noEvents": "Keine kommenden Veranstaltungen",
-  "browseLectures": "Vorlesungen durchsuchen"
-},
-"studentMentorCard": {
+  "studentUpcomingEvents": {
+    "title": "Kommende Veranstaltungen",
+    "viewAll": "Alle anzeigen",
+    "types": {
+      "lecture": "Vorlesung",
+      "seminar": "Seminar"
+    },
+    "started": "Gestartet",
+    "soon": "Bald",
+    "hoursLeft": "in {{hours}} Std",
+    "tomorrow": "Morgen",
+    "daysLeft": "in {{days}} Tagen",
+    "noEvents": "Keine kommenden Veranstaltungen",
+    "browseLectures": "Vorlesungen durchsuchen"
+  },
+  "studentMentorCard": {
     "title": "Mein Mentor",
     "noMentor": "Du hast noch keinen Mentor",
     "findMentor": "Mentor finden",
@@ -13660,9 +13681,9 @@
     "sendMessage": "Nachricht senden",
     "online": "Online",
     "offline": "Offline"
-},
-"studentCertificates": {
-     "title": "Zertifikate",
+  },
+  "studentCertificates": {
+    "title": "Zertifikate",
     "viewAll": "Alle anzeigen",
     "noCertificates": "Du hast noch keine Zertifikate",
     "browseCourses": "Kurse durchsuchen",
@@ -13670,49 +13691,50 @@
     "download": "Herunterladen",
     "credits": "Credits",
     "certificate": "Zertifikat"
-},
-"studentCreditsOverview": {
+  },
+  "studentCreditsOverview": {
     "totalCredits": "Gesamtpunkte",
     "toNextLevel": "{{credits}} bis zum nächsten Level",
     "levels": {
-        "beginner": "Anfänger",
-        "intermediate": "Fortgeschritten",
-        "expert": "Experte",
-        "master": "Meister"
+      "beginner": "Anfänger",
+      "intermediate": "Fortgeschritten",
+      "expert": "Experte",
+      "master": "Meister"
     },
     "categories": {
-        "courses": "Kurse",
-        "lectures": "Vorlesungen",
-        "seminars": "Seminare",
-        "presentations": "Präsentationen"
+      "courses": "Kurse",
+      "lectures": "Vorlesungen",
+      "seminars": "Seminare",
+      "presentations": "Präsentationen"
     }
-},
-"studentRecentActivity": {
+  },
+  "studentRecentActivity": {
     "title": "Letzte Aktivität",
     "viewAll": "Alle anzeigen",
     "credits": "Credits",
     "noActivity": "Keine aktuelle Aktivität",
     "startLearning": "Lernen beginnen",
     "types": {
-        "lesson_completed": "Lektion abgeschlossen:",
-        "lesson_started": "Lektion gestartet:",
-        "course_enrolled": "Eingeschrieben in:",
-        "course_completed": "Kurs abgeschlossen:",
-        "lecture_attended": "Vorlesung besucht:",
-        "seminar_attended": "Seminar besucht:",
-        "test_passed": "Test bestanden:",
-        "test_failed": "Test nicht bestanden:",
-        "certificate_earned": "Zertifikat erhalten:"
+      "undefined": "Aktivität:",
+      "lesson_completed": "Lektion abgeschlossen:",
+      "lesson_started": "Lektion begonnen:",
+      "course_enrolled": "Eingeschrieben in:",
+      "course_completed": "Kurs abgeschlossen:",
+      "lecture_attended": "Vorlesung besucht:",
+      "seminar_attended": "Seminar besucht:",
+      "test_passed": "Test bestanden:",
+      "test_failed": "Test nicht bestanden:",
+      "certificate_earned": "Zertifikat erhalten:"
     },
     "time": {
-        "justNow": "Gerade eben",
-        "minutesAgo": "vor {{minutes}} Min",
-        "hoursAgo": "vor {{hours}} Std",
-        "yesterday": "Gestern",
-        "daysAgo": "vor {{days}} Tagen"
+      "justNow": "Gerade eben",
+      "minutesAgo": "vor {{minutes}} Min",
+      "hoursAgo": "vor {{hours}} Std",
+      "yesterday": "Gestern",
+      "daysAgo": "vor {{days}} Tagen"
     }
-},
-"sendEmailModal": {
+  },
+  "sendEmailModal": {
     "title": "E-Mail senden",
     "to": "An",
     "subject": "Betreff",
@@ -13722,5 +13744,489 @@
     "cancel": "Abbrechen",
     "send": "Senden",
     "sending": "Wird gesendet..."
+  },
+  "courseFormHook": {
+    "draftSaved": "Entwurf erfolgreich gespeichert",
+    "draftCreated": "Kurs als Entwurf erstellt",
+    "published": "Kurs erfolgreich veröffentlicht",
+    "loadFailed": "Fehler beim Laden des Kurses",
+    "saveFailed": "Fehler beim Speichern",
+    "publishFailed": "Fehler beim Veröffentlichen",
+    "validationFailed": "Bitte füllen Sie die Pflichtfelder aus",
+    "nameRequired": "Kursname ist erforderlich",
+    "categoryRequired": "Kategorie ist erforderlich"
+  },
+  "courseCreateForm": {
+    "titleCreate": "Kurs erstellen",
+    "titleEdit": "Kurs bearbeiten",
+    "loading": "Laden...",
+    "saving": "Speichern...",
+    "stepOf": "Schritt {{current}} von {{total}}",
+    "steps": {
+      "basicInfo": "Grundinformationen",
+      "settings": "Einstellungen",
+      "modules": "Module & Lektionen",
+      "preview": "Vorschau"
+    },
+    "back": "Zurück",
+    "next": "Weiter",
+    "saveDraft": "Entwurf speichern",
+    "publish": "Veröffentlichen"
+  },
+  "courseStepBasicInfo": {
+    "name": "Kursname",
+    "namePlaceholder": "Kursname eingeben",
+    "shortDescription": "Kurzbeschreibung",
+    "shortDescriptionPlaceholder": "Kurzbeschreibung für die Kursliste",
+    "description": "Vollständige Beschreibung",
+    "descriptionPlaceholder": "Detaillierte Kursbeschreibung",
+    "category": "Kategorie",
+    "categoryPlaceholder": "z.B. Digitale Kompetenz",
+    "difficulty": "Stufe",
+    "difficultyLevels": {
+      "beginner": "Anfänger",
+      "intermediate": "Mittelstufe",
+      "advanced": "Fortgeschritten"
+    },
+    "thumbnailUrl": "Thumbnail URL",
+    "trailerUrl": "Trailer URL",
+    "thumbnailPreview": "Thumbnail-Vorschau"
+  },
+  "courseStepSettings": {
+    "sections": {
+      "typeFormat": "Typ & Format",
+      "durationDates": "Dauer & Termine",
+      "enrollment": "Einschreibung",
+      "credits": "Credits & Zertifikat",
+      "tags": "Tags"
+    },
+    "courseType": "Kurstyp",
+    "courseTypes": {
+      "online": "Online",
+      "offline": "Präsenz",
+      "hybrid": "Hybrid"
+    },
+    "videoProvider": "Video-Plattform",
+    "videoProviders": {
+      "youtube": "YouTube",
+      "vimeo": "Vimeo",
+      "custom": "Andere",
+      "none": "Kein Video"
+    },
+    "durationWeeks": "Wochen",
+    "estimatedHours": "Geschätzte Stunden",
+    "startDate": "Startdatum",
+    "endDate": "Enddatum",
+    "maxParticipants": "Max. Teilnehmer",
+    "unlimited": "Unbegrenzt",
+    "targetAudience": "Zielgruppe",
+    "targetAudiencePlaceholder": "z.B. Senioren, Anfänger",
+    "isPublic": "Öffentlicher Kurs",
+    "requiresApproval": "Genehmigung erforderlich",
+    "maxCredits": "Max. Credits",
+    "creditsForCompletion": "Credits für Abschluss",
+    "hasCertificate": "Zertifikat ausstellen",
+    "tags": "Tags",
+    "tagsPlaceholder": "Computer, Internet, E-Mail",
+    "tagsHint": "Mit Komma trennen"
+  },
+  "courseStepModules": {
+    "description": "Kursinhalt in Module und Lektionen organisieren",
+    "stats": "{{modules}} Module • {{lessons}} Lektionen",
+    "addModule": "Modul hinzufügen",
+    "empty": "Noch keine Module. Fügen Sie das erste Modul hinzu.",
+    "moduleTitlePlaceholder": "Modultitel",
+    "moduleDescPlaceholder": "Modulbeschreibung (optional)",
+    "lessonsCount": "Lektionen",
+    "moveUp": "Nach oben",
+    "moveDown": "Nach unten",
+    "removeModule": "Modul entfernen",
+    "addLesson": "Lektion hinzufügen",
+    "lessonTitlePlaceholder": "Lektionstitel",
+    "durationPlaceholder": "Min.",
+    "lessonTypes": {
+      "video": "Video",
+      "text": "Text",
+      "live": "Live",
+      "quiz": "Quiz",
+      "assignment": "Aufgabe"
+    }
+  },
+  "courseStepPreview": {
+    "warningsTitle": "{{count}} Warnungen",
+    "warnings": {
+      "noName": "Kursname fehlt",
+      "noCategory": "Kategorie fehlt",
+      "noModules": "Keine Module hinzugefügt",
+      "moduleNoTitle": "Modul {{index}} hat keinen Titel",
+      "moduleNoLessons": "Modul {{index}} hat keine Lektionen",
+      "lessonNoTitle": "Modul {{module}}, Lektion {{lesson}} hat keinen Titel"
+    },
+    "sections": {
+      "basicInfo": "Grundinformationen",
+      "settings": "Einstellungen",
+      "modules": "Module & Lektionen"
+    },
+    "edit": "Bearbeiten",
+    "fields": {
+      "name": "Name",
+      "category": "Kategorie",
+      "difficulty": "Stufe",
+      "shortDescription": "Kurzbeschreibung",
+      "description": "Beschreibung",
+      "thumbnail": "Thumbnail",
+      "startDate": "Startdatum",
+      "endDate": "Enddatum",
+      "duration": "Dauer",
+      "hours": "Stunden",
+      "maxParticipants": "Max. Teilnehmer",
+      "credits": "Credits (max / Abschluss)"
+    },
+    "badges": {
+      "public": "Öffentlich",
+      "private": "Privat",
+      "certificate": "Zertifikat",
+      "approval": "Genehmigung"
+    },
+    "weeks": "Wochen",
+    "hours": "Stunden",
+    "minutes": "Min.",
+    "min": "Min.",
+    "modulesCount": "{{count}} Module",
+    "lessonsCount": "{{count}} Lektionen",
+    "noModules": "Keine Module hinzugefügt",
+    "untitledModule": "Modul ohne Titel",
+    "untitledLesson": "Lektion ohne Titel"
+  },
+  "adminCourses": {
+    "title": "Verwaltung von",
+    "titleAccent": "Kursen",
+    "subtitle": "Kurse in der Akademie erstellen, bearbeiten und verwalten",
+    "createCourse": "Kurs erstellen",
+    "refresh": "Aktualisieren",
+    "searchPlaceholder": "Nach Kursname suchen...",
+    "filters": "Filter",
+    "status": "Status",
+    "sortBy": "Sortieren nach",
+    "loading": "Kurse werden geladen...",
+    "published": "Veröffentlicht",
+    "draft": "Entwurf",
+    "stats": {
+      "total": "gesamt",
+      "published": "veröffentlicht",
+      "drafts": "Entwürfe"
+    },
+    "statusOptions": {
+      "all": "Alle",
+      "published": "Veröffentlicht",
+      "draft": "Entwürfe"
+    },
+    "sortOptions": {
+      "newest": "Neueste",
+      "oldest": "Älteste",
+      "name": "Nach Name",
+      "popular": "Beliebt"
+    },
+    "categories": {
+      "digital_literacy": "Digitale Kompetenz",
+      "internet_safety": "Internetsicherheit",
+      "social_media": "Soziale Medien",
+      "office_tools": "Bürowerkzeuge",
+      "communication": "Kommunikation",
+      "e_services": "E-Dienste",
+      "other": "Sonstiges"
+    },
+    "difficulty": {
+      "beginner": "Anfänger",
+      "intermediate": "Mittelstufe",
+      "advanced": "Fortgeschritten"
+    },
+    "cardStats": {
+      "lessons": "Lektionen",
+      "enrolled": "Eingeschrieben",
+      "hours": "Stunden",
+      "created": "Erstellt"
+    },
+    "actions": {
+      "edit": "Bearbeiten",
+      "content": "Inhalt",
+      "stats": "Statistiken",
+      "publish": "Veröffentlichen",
+      "unpublish": "Ausblenden",
+      "delete": "Löschen"
+    },
+    "empty": {
+      "title": "Keine Kurse gefunden",
+      "description": "Erstellen Sie Ihren ersten Kurs oder ändern Sie die Filter"
+    },
+    "deleteModal": {
+      "title": "Kurs löschen",
+      "text": "Sind Sie sicher, dass Sie löschen möchten",
+      "warning": "Diese Aktion kann nicht rückgängig gemacht werden.",
+      "cancel": "Abbrechen",
+      "confirm": "Löschen"
+    }
+  },
+  "editCourse": {
+    "loading": "Kurs wird geladen...",
+    "back": "Zurück",
+    "title": "Bearbeitung von",
+    "subtitle": "Grundinformationen und Einstellungen ändern",
+    "basicInfoTitle": "Grundinformationen",
+    "settingsTitle": "Einstellungen",
+    "unsavedChanges": "● Ungespeicherte Änderungen",
+    "cancel": "Abbrechen",
+    "save": "Änderungen speichern",
+    "errors": {
+      "loadFailed": "Fehler beim Laden des Kurses",
+      "nameRequired": "Name ist erforderlich",
+      "saveFailed": "Fehler beim Speichern"
+    }
+  },
+  "contentManager": {
+    "loading": "Loading content...",
+    "back": "Back",
+    "title": "Content of",
+    "startDate": "Beginn",
+"endDate": "Ende",
+"estimatedHours": "Stunden",
+    "subtitle": "Manage modules and lessons",
+    "modules": "modules",
+    "lessons": "lessons",
+    "lessonsShort": "les.",
+    "addModule": "Add module",
+    "moduleNamePlaceholder": "Module name...",
+    "noModules": "No modules yet. Add the first module.",
+    "noLessons": "No lessons in this module",
+    "addLesson": "Add lesson",
+    "lessonTitlePlaceholder": "Lesson title...",
+    "free": "Free",
+    "moveUp": "Move up",
+    "moveDown": "Move down",
+    "editModule": "Rename",
+    "deleteModule": "Delete module",
+    "editLesson": "Edit",
+    "deleteLesson": "Delete",
+    "publish": "Publish",
+    "unpublish": "Unpublish",
+    "deleteModuleTitle": "Delete Module",
+    "deleteLessonTitle": "Delete Lesson",
+    "deleteConfirm": "Are you sure you want to delete",
+    "deleteModuleWarning": "Lessons will be moved outside the module.",
+    "cancel": "Cancel",
+    "confirmDelete": "Delete",
+    "lessonTypes": {
+      "video": "Video",
+      "text": "Text",
+      "live": "Live",
+      "quiz": "Quiz"
+    },
+    "errors": {
+      "loadFailed": "Error loading content"
+    },
+    "finalTest": {
+  "title": "Abschlusstest des Kurses",
+  "manage": "Test verwalten",
+  "description": "Der Abschlusstest wird von den Studenten nach Abschluss aller Module und Lektionen im Kurs absolviert."
+}
+  },
+"editLesson": {
+  "title": "Lektion bearbeiten",
+  "loading": "Wird geladen...",
+  "save": "Speichern",
+  "manageTest": "Test verwalten",
+  "cancel": "Abbrechen",
+  "unsavedChanges": "● Nicht gespeicherte Änderungen",
+  "sections": {
+    "basicInfo": "Grundinformationen",
+    "video": "Video-Einstellungen",
+    "schedule": "Zeitplan & Dauer",
+    "credits": "Credits",
+    "test": "Test-Einstellungen",
+    "materials": "Materialien",
+    "settings": "Einstellungen"
+  },
+  "fields": {
+    "title": "Titel",
+    "description": "Beschreibung",
+    "lessonType": "Lektionstyp",
+    "videoProvider": "Anbieter",
+    "videoUrl": "Video-URL",
+    "liveStreamUrl": "Live-Stream-URL",
+    "thumbnailUrl": "Thumbnail-URL",
+    "durationMinutes": "Dauer (Min)",
+    "scheduledDate": "Startdatum",
+    "endDate": "Enddatum",
+    "maxCredits": "Max. Credits",
+    "creditsForCompletion": "Für Abschluss",
+    "creditsForTest": "Für Test",
+    "hasTest": "Hat Test",
+    "testPassingScore": "Mindestpunktzahl (%)",
+    "isFree": "Kostenlose Lektion",
+    "requiresCompletion": "Abschluss erforderlich",
+    "published": "Veröffentlicht",
+    "draft": "Entwurf"
+  },
+  "placeholders": {
+    "title": "Titel eingeben...",
+    "description": "Kurze Beschreibung..."
+  },
+  "lessonTypes": {
+    "video": "Video",
+    "text": "Text",
+    "live": "Live",
+    "quiz": "Quiz"
+  },
+  "videoProviders": {
+    "youtube": "YouTube",
+    "vimeo": "Vimeo",
+    "custom": "Andere",
+    "none": "Keine"
+  },
+  "errors": {
+    "loadFailed": "Fehler beim Laden der Lektion",
+    "saveFailed": "Fehler beim Speichern",
+    "titleRequired": "Titel ist erforderlich"
+  },
+  "materials": {
+    "loading": "Materialien werden geladen...",
+    "empty": "Keine Materialien hinzugefügt",
+    "autosave": "Materialien werden automatisch gespeichert",
+    "open": "Öffnen",
+    "delete": "Löschen",
+    "cancel": "Abbrechen",
+    "add": "Hinzufügen",
+    "uploadFile": "Datei hochladen",
+    "addExternalLink": "Link hinzufügen",
+    "addLink": "Neuer externer Link",
+    "dropzoneTitle": "Dateien hierher ziehen oder klicken",
+    "dropzoneSubtitle": "PDF, Dokumente, Bilder, Video, Audio",
+    "maxFileSize": "Maximale Größe: 50MB",
+    "uploadSuccess": "{{name}} erfolgreich hochgeladen",
+     "title": "Kursmaterialien",
+    "upload": "Datei hochladen",
+    "uploadTooltip": "Dateien zum Kurs hochladen",
+    "uploading": "Hochladen...",
+    "openFile": "Datei öffnen",
+    "fields": {
+      "title": "Titel",
+      "url": "URL-Adresse",
+      "type": "Materialtyp",
+      "description": "Beschreibung"
+    },
+    "placeholders": {
+      "linkTitle": "Linkname...",
+      "description": "Kurze Beschreibung des Materials..."
+    },
+    "errors": {
+      "titleRequired": "Titel ist erforderlich",
+      "urlRequired": "URL ist erforderlich",
+      "fileTooLarge": "{{name}} überschreitet die maximale Größe von 50MB",
+      "uploadFailed": "Fehler beim Hochladen von {{name}}"
+    },
+    "types": {
+      "pdf": "PDF",
+      "document": "Dokument",
+      "video": "Video",
+      "presentation": "Präsentation",
+      "image": "Bild",
+      "audio": "Audio",
+      "spreadsheet": "Tabelle",
+      "code": "Code",
+      "archive": "Archiv",
+      "link": "Link",
+      "other": "Sonstiges"
+    }
   }
+},
+"testEditor": {
+  "title": "Test-Editor",
+  "defaultTitle": "Test",
+  "lesson": "Lektion",
+  "published": "Veröffentlicht",
+  "draft": "Entwurf",
+  "publish": "Veröffentlichen",
+  "unpublish": "Verbergen",
+  "needQuestions": "Fügen Sie zuerst Fragen hinzu",
+  "loading": "Wird geladen...",
+  "noQuestions": "Noch keine Fragen hinzugefügt",
+  "addFirstQuestion": "Erste Frage hinzufügen",
+  "addQuestion": "Frage hinzufügen",
+  "newQuestion": "Neue Frage",
+  "cancel": "Abbrechen",
+  "saveQuestion": "Frage speichern",
+  "updateQuestion": "Frage aktualisieren",
+  "questionAdded": "Frage hinzugefügt",
+  "questionUpdated": "Frage aktualisiert",
+  "questionDeleted": "Frage gelöscht",
+  "confirmDeleteQuestion": "Sind Sie sicher, dass Sie diese Frage löschen möchten?",
+  "confirmDelete": "Löschen",
+  "settingsSaved": "Einstellungen gespeichert",
+  "saveSettings": "Einstellungen speichern",
+  "moveUp": "Nach oben",
+  "moveDown": "Nach unten",
+  "editQuestion": "Bearbeiten",
+  "deleteQuestion": "Löschen",
+  "markCorrect": "Als richtig markieren",
+  "markIncorrect": "Als falsch markieren",
+  "addAnswer": "Antwort hinzufügen",
+  "answerPlaceholder": "Antwort",
+  "trueOption": "Richtig",
+  "falseOption": "Falsch",
+  "untitled": "Ohne Titel",
+  "minutes": "Min",
+  "questionsCount": "Fragen",
+  "passingAt": "Minimum",
+  "pts": "Pkt.",
+  "answers": "Antw.",
+  "noQuestionsPreview": "Fügen Sie Fragen hinzu, um eine Vorschau zu sehen",
+  "tabs": {
+    "settings": "Einstellungen",
+    "questions": "Fragen",
+    "preview": "Vorschau"
+  },
+  "fields": {
+    "title": "Testtitel",
+    "description": "Beschreibung",
+    "passingScore": "Mindestpunktzahl (%)",
+    "timeLimit": "Zeitlimit (Min)",
+    "maxAttempts": "Max. Versuche",
+    "maxCredits": "Credits",
+    "shuffleQuestions": "Fragen mischen",
+    "shuffleAnswers": "Antworten mischen",
+    "showCorrectAnswers": "Richtige Antworten anzeigen",
+    "questionText": "Fragetext",
+    "points": "Punkte",
+    "explanation": "Erklärung (optional)",
+    "answers": "Antworten",
+    "requireCourseCompletion": "Kursabschluss erforderlich"
+  },
+  "placeholders": {
+    "title": "Z.B. Modul 1 Quiz",
+    "description": "Kurze Beschreibung des Tests...",
+    "noLimit": "Kein Limit",
+    "unlimited": "Unbegrenzt",
+    "questionText": "Geben Sie hier Ihre Frage ein...",
+    "explanation": "Warum diese Antwort richtig ist..."
+  },
+  "sections": {
+    "options": "Optionen"
+  },
+  "questionTypes": {
+    "single_choice": "Einzelauswahl",
+    "multiple_choice": "Mehrfachauswahl",
+    "true_false": "Richtig / Falsch"
+  },
+  "errors": {
+    "loadFailed": "Fehler beim Laden des Tests",
+    "questionRequired": "Geben Sie den Fragetext ein",
+    "answersRequired": "Alle Antworten müssen Text enthalten",
+    "correctRequired": "Markieren Sie mindestens eine richtige Antwort"
+  },
+  "questionTypeHints": {
+  "single_choice": "Frage mit mehreren Antworten, nur eine ist richtig",
+  "multiple_choice": "Frage mit mehreren Antworten, mehr als eine kann richtig sein",
+  "true_false": "Frage mit zwei Antworten (Richtig/Falsch), Sie wählen die richtige"
+}
+}
 }

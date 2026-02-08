@@ -1,0 +1,201 @@
+/* src/components/CourseAcademyCreateForm/courseStepBasicInfo.css */
+/* Prefix: csbi- */
+
+.csbi-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* =========================================================
+                    FIELD
+   ========================================================= */
+
+.csbi-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  position: relative;
+}
+
+.csbi-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #94a3b8;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.csbi-required {
+  color: #f43f5e;
+  margin-left: 2px;
+}
+
+/* =========================================================
+                    INPUT / TEXTAREA / SELECT
+   ========================================================= */
+
+.csbi-input,
+.csbi-textarea,
+.csbi-select {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 0.92rem;
+  font-weight: 400;
+  color: #e2e8f0;
+  background: rgba(15, 18, 28, 0.5);
+  border: 1px solid rgba(56, 189, 248, 0.1);
+  border-radius: 10px;
+  outline: none;
+  transition: all 0.25s ease;
+  font-family: inherit;
+}
+
+.csbi-input::placeholder,
+.csbi-textarea::placeholder {
+  color: #3d4558;
+}
+
+.csbi-input:focus,
+.csbi-textarea:focus,
+.csbi-select:focus {
+  border-color: rgba(56, 189, 248, 0.35);
+  background: rgba(15, 18, 28, 0.7);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.08);
+}
+
+.csbi-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.csbi-textarea-sm {
+  min-height: 70px;
+}
+
+.csbi-select {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M4.5 6l3.5 4 3.5-4z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 40px;
+}
+
+.csbi-select option {
+  background: #0f121c;
+  color: #e2e8f0;
+}
+
+/* =========================================================
+                    CHAR COUNT
+   ========================================================= */
+
+.csbi-char-count {
+  font-size: 0.72rem;
+  color: #3d4558;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* =========================================================
+                    ERROR
+   ========================================================= */
+
+.csbi-field-error .csbi-input,
+.csbi-field-error .csbi-textarea,
+.csbi-field-error .csbi-select {
+  border-color: rgba(244, 63, 94, 0.5);
+}
+
+.csbi-field-error .csbi-input:focus,
+.csbi-field-error .csbi-textarea:focus {
+  box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.1);
+}
+
+.csbi-error-msg {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: #f43f5e;
+}
+
+/* =========================================================
+                    ROW (2 columns)
+   ========================================================= */
+
+.csbi-row {
+  display: flex;
+  gap: 20px;
+}
+
+/* =========================================================
+                    THUMBNAIL PREVIEW
+   ========================================================= */
+
+.csbi-preview {
+  margin-top: 4px;
+}
+
+.csbi-preview-img {
+  max-width: 260px;
+  max-height: 160px;
+  border-radius: 10px;
+  border: 1px solid rgba(56, 189, 248, 0.1);
+  object-fit: cover;
+}
+
+/* =========================================================
+                    RESPONSIVE - Tablet (≤1023px)
+   ========================================================= */
+
+@media (max-width: 1023px) {
+  .csbi-row {
+    gap: 16px;
+  }
+
+  .csbi-input,
+  .csbi-textarea,
+  .csbi-select {
+    padding: 11px 14px;
+    font-size: 0.88rem;
+  }
+}
+
+/* =========================================================
+                    RESPONSIVE - Mobile (≤767px)
+   ========================================================= */
+
+@media (max-width: 767px) {
+  .csbi-row {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .csbi-wrapper {
+    gap: 20px;
+  }
+
+  .csbi-preview-img {
+    max-width: 100%;
+  }
+}
+
+/* =========================================================
+                    RESPONSIVE - Mobile Small (≤424px)
+   ========================================================= */
+
+@media (max-width: 424px) {
+  .csbi-input,
+  .csbi-textarea,
+  .csbi-select {
+    padding: 10px 12px;
+    font-size: 0.85rem;
+  }
+
+  .csbi-label {
+    font-size: 0.78rem;
+  }
+}

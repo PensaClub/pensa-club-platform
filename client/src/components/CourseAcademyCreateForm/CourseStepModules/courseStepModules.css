@@ -1,0 +1,576 @@
+/* src/components/CourseAcademyCreateForm/CourseStepModules/courseStepModules.css */
+/* Prefix: csmo- */
+
+.csmo-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* =========================================================
+                    HEADER
+   ========================================================= */
+
+.csmo-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.csmo-header-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.csmo-header-desc {
+  font-size: 0.88rem;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.csmo-stats {
+  font-size: 0.78rem;
+  color: #4a5568;
+}
+
+.csmo-add-module-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.csmo-add-module-btn:hover {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: rgba(56, 189, 248, 0.35);
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.15);
+}
+
+/* =========================================================
+                    EMPTY STATE
+   ========================================================= */
+
+.csmo-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 180px;
+  border: 1px dashed rgba(56, 189, 248, 0.15);
+  border-radius: 14px;
+  background: rgba(15, 18, 28, 0.3);
+}
+
+.csmo-empty p {
+  font-size: 0.9rem;
+  color: #4a5568;
+  margin: 0;
+}
+
+/* =========================================================
+                    MODULES LIST
+   ========================================================= */
+
+.csmo-modules-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* =========================================================
+                    MODULE CARD
+   ========================================================= */
+
+.csmo-module {
+  background: rgba(15, 18, 28, 0.4);
+  border: 1px solid rgba(56, 189, 248, 0.08);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: border-color 0.25s ease;
+}
+
+.csmo-module:hover {
+  border-color: rgba(56, 189, 248, 0.15);
+}
+
+/* Module Header */
+.csmo-module-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  gap: 12px;
+  background: rgba(30, 35, 50, 0.3);
+}
+
+.csmo-module-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 0;
+}
+
+.csmo-drag-icon {
+  color: #3d4558;
+  cursor: grab;
+  flex-shrink: 0;
+}
+
+.csmo-module-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.csmo-module-toggle:hover {
+  color: #94a3b8;
+  background: rgba(56, 189, 248, 0.06);
+}
+
+.csmo-module-toggle svg {
+  transition: transform 0.25s ease;
+}
+
+.csmo-toggle-open svg {
+  transform: rotate(90deg);
+}
+
+.csmo-module-index {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  background: rgba(56, 189, 248, 0.1);
+  color: #38bdf8;
+  font-size: 0.78rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.csmo-module-title-input {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 10px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  outline: none;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.csmo-module-title-input::placeholder {
+  color: #3d4558;
+  font-weight: 400;
+}
+
+.csmo-module-title-input:focus {
+  border-color: rgba(56, 189, 248, 0.2);
+  background: rgba(15, 18, 28, 0.4);
+}
+
+.csmo-module-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.csmo-lesson-count {
+  font-size: 0.75rem;
+  color: #4a5568;
+  margin-right: 6px;
+  white-space: nowrap;
+}
+
+/* =========================================================
+                    ICON BUTTONS
+   ========================================================= */
+
+.csmo-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  border: 1px solid rgba(100, 116, 139, 0.15);
+  border-radius: 8px;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.csmo-icon-btn:hover:not(:disabled) {
+  color: #94a3b8;
+  background: rgba(56, 189, 248, 0.06);
+  border-color: rgba(56, 189, 248, 0.2);
+}
+
+.csmo-icon-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.csmo-icon-btn-danger:hover:not(:disabled) {
+  color: #f43f5e;
+  background: rgba(244, 63, 94, 0.08);
+  border-color: rgba(244, 63, 94, 0.2);
+}
+
+.csmo-icon-btn-sm {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background: transparent;
+  border: 1px solid rgba(100, 116, 139, 0.1);
+  border-radius: 6px;
+  color: #4a5568;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.csmo-icon-btn-sm:hover:not(:disabled) {
+  color: #94a3b8;
+  background: rgba(56, 189, 248, 0.06);
+}
+
+.csmo-icon-btn-sm:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+.csmo-icon-btn-sm.csmo-icon-btn-danger:hover:not(:disabled) {
+  color: #f43f5e;
+  background: rgba(244, 63, 94, 0.06);
+}
+
+/* =========================================================
+                    MODULE BODY
+   ========================================================= */
+
+.csmo-module-body {
+  padding: 12px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-top: 1px solid rgba(56, 189, 248, 0.05);
+}
+
+.csmo-module-desc-input {
+  width: 100%;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  color: #94a3b8;
+  background: rgba(15, 18, 28, 0.3);
+  border: 1px solid rgba(56, 189, 248, 0.06);
+  border-radius: 8px;
+  outline: none;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.csmo-module-desc-input::placeholder {
+  color: #2d3548;
+}
+
+.csmo-module-desc-input:focus {
+  border-color: rgba(56, 189, 248, 0.2);
+  background: rgba(15, 18, 28, 0.5);
+}
+
+/* =========================================================
+                    LESSONS LIST
+   ========================================================= */
+
+.csmo-lessons-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* =========================================================
+                    LESSON ROW
+   ========================================================= */
+
+.csmo-lesson {
+  background: rgba(15, 18, 28, 0.3);
+  border: 1px solid rgba(56, 189, 248, 0.05);
+  border-radius: 10px;
+  transition: border-color 0.2s ease;
+}
+
+.csmo-lesson:hover {
+  border-color: rgba(56, 189, 248, 0.12);
+}
+
+.csmo-lesson-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+}
+
+.csmo-lesson-type-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: rgba(99, 102, 241, 0.1);
+  color: #818cf8;
+  flex-shrink: 0;
+}
+
+.csmo-lesson-title-input {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 10px;
+  font-size: 0.85rem;
+  color: #e2e8f0;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  outline: none;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.csmo-lesson-title-input::placeholder {
+  color: #2d3548;
+}
+
+.csmo-lesson-title-input:focus {
+  border-color: rgba(99, 102, 241, 0.2);
+  background: rgba(15, 18, 28, 0.4);
+}
+
+.csmo-lesson-type-select {
+  width: 120px;
+  padding: 6px 10px;
+  font-size: 0.78rem;
+  color: #94a3b8;
+  background: rgba(15, 18, 28, 0.4);
+  border: 1px solid rgba(56, 189, 248, 0.08);
+  border-radius: 6px;
+  outline: none;
+  cursor: pointer;
+  font-family: inherit;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M4.5 6l3.5 4 3.5-4z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  padding-right: 24px;
+  flex-shrink: 0;
+}
+
+.csmo-lesson-type-select option {
+  background: #0f121c;
+  color: #e2e8f0;
+}
+
+.csmo-lesson-type-select:focus {
+  border-color: rgba(56, 189, 248, 0.25);
+}
+
+.csmo-lesson-duration {
+  width: 80px;
+  padding: 6px 10px;
+  font-size: 0.82rem;
+  color: #94a3b8;
+  background: rgba(15, 18, 28, 0.4);
+  border: 1px solid rgba(56, 189, 248, 0.08);
+  border-radius: 6px;
+  outline: none;
+  font-family: inherit;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.csmo-lesson-duration::placeholder {
+  color: #2d3548;
+  font-size: 0.75rem;
+}
+
+.csmo-lesson-duration:focus {
+  border-color: rgba(56, 189, 248, 0.25);
+}
+
+/* Remove number spinners */
+.csmo-lesson-duration::-webkit-inner-spin-button,
+.csmo-lesson-duration::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.csmo-lesson-duration {
+  -moz-appearance: textfield;
+}
+
+.csmo-lesson-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+/* =========================================================
+                    ADD LESSON BUTTON
+   ========================================================= */
+
+.csmo-add-lesson-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #64748b;
+  background: transparent;
+  border: 1px dashed rgba(100, 116, 139, 0.2);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-family: inherit;
+  align-self: flex-start;
+}
+
+.csmo-add-lesson-btn:hover {
+  color: #818cf8;
+  border-color: rgba(99, 102, 241, 0.3);
+  background: rgba(99, 102, 241, 0.04);
+}
+
+/* =========================================================
+                    RESPONSIVE - Tablet (≤1023px)
+   ========================================================= */
+
+@media (max-width: 1023px) {
+  .csmo-lesson-row {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .csmo-lesson-title-input {
+    flex: 1 1 100%;
+    order: 1;
+  }
+
+  .csmo-lesson-row > .csmo-drag-icon {
+    order: 0;
+  }
+
+  .csmo-lesson-type-badge {
+    order: 0;
+  }
+
+  .csmo-lesson-type-select {
+    order: 2;
+    flex: 1;
+  }
+
+  .csmo-lesson-duration {
+    order: 3;
+  }
+
+  .csmo-lesson-actions {
+    order: 4;
+  }
+}
+
+/* =========================================================
+                    RESPONSIVE - Mobile (≤767px)
+   ========================================================= */
+
+@media (max-width: 767px) {
+  .csmo-header {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .csmo-add-module-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .csmo-module-header {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 12px;
+  }
+
+  .csmo-module-left {
+    flex: 1 1 100%;
+  }
+
+  .csmo-module-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .csmo-lesson-row {
+    padding: 8px 10px;
+  }
+
+  .csmo-lesson-type-select {
+    width: 100px;
+  }
+
+  .csmo-lesson-duration {
+    width: 65px;
+  }
+}
+
+/* =========================================================
+                    RESPONSIVE - Mobile Small (≤424px)
+   ========================================================= */
+
+@media (max-width: 424px) {
+  .csmo-module-body {
+    padding: 8px 10px 12px;
+  }
+
+  .csmo-lesson-type-select {
+    width: 90px;
+    font-size: 0.72rem;
+  }
+
+  .csmo-lesson-duration {
+    width: 55px;
+    font-size: 0.75rem;
+  }
+
+  .csmo-icon-btn-sm {
+    width: 24px;
+    height: 24px;
+  }
+}
