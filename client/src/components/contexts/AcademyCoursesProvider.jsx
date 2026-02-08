@@ -1064,6 +1064,16 @@ export const AcademyCoursesProvider = ({ children }) => {
     }
   }, []);
 
+  const getCourseTestStatus = useCallback(async (courseId) => {
+  try {
+    const data = await coursesService.getCourseTestStatus(courseId);
+    return data;
+  } catch (error) {
+    console.error('Error fetching course test status:', error);
+    return { hasTest: false };
+  }
+}, []);
+
   // =========================================================
   //                    TEST QUESTIONS - ADMIN
   // =========================================================
@@ -1129,6 +1139,17 @@ export const AcademyCoursesProvider = ({ children }) => {
       setIsLoading(false);
     }
   }, []);
+
+  const startTestById = useCallback(async (testId) => {
+  try {
+    const response = await coursesService.startTestById(testId);
+    return response;
+  } catch (error) {
+    console.error('Error starting test:', error);
+    toast.error('Грешка при стартиране на тест');
+    throw error;
+  }
+}, []);
 
   const submitAnswer = useCallback(async (testId, answerData) => {
     try {
@@ -1688,6 +1709,7 @@ const getMyMentor = useCallback(async () => {
     getTests,
     createTest,
     startTest,
+    startTestById,
     submitAnswer,
     submitTest,
     getTestResults,
@@ -1738,6 +1760,7 @@ deleteCourseMaterial,
     publishTest,
     unpublishTest,
     getTestAttempts,
+    getCourseTestStatus,
     // Questions - Admin CRUD
     addQuestion,
     updateQuestion,

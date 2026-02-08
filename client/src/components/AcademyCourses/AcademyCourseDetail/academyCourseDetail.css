@@ -2415,3 +2415,170 @@
   margin: 24px 0 12px 0;
   padding-left: 4px;
 }
+/* =========================================================
+   FINAL TEST SECTION
+   ========================================================= */
+
+.academyCourseDetail-final-test-section {
+  margin-top: 24px;
+}
+
+.academyCourseDetail-final-test-card {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.7), rgba(30, 41, 59, 0.6));
+  border: 1px solid rgba(0, 212, 255, 0.12);
+  border-radius: 12px;
+  padding: 20px 24px;
+}
+
+.academyCourseDetail-final-test-name {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  margin: 0 0 6px 0;
+}
+
+.academyCourseDetail-final-test-desc {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  margin: 0 0 12px 0;
+  line-height: 1.5;
+}
+
+.academyCourseDetail-final-test-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.academyCourseDetail-final-test-meta-item {
+  font-size: 0.8rem;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Passed */
+.academyCourseDetail-final-test-passed {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 8px;
+  color: #10b981;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.academyCourseDetail-final-test-passed-icon {
+  font-size: 1.2rem;
+}
+
+.academyCourseDetail-final-test-passed-score {
+  margin-left: auto;
+  color: #34d399;
+  font-weight: 600;
+}
+
+/* Locked */
+.academyCourseDetail-final-test-locked {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.15);
+  border-radius: 8px;
+  color: #f59e0b;
+  font-size: 0.85rem;
+}
+
+.academyCourseDetail-final-test-locked-icon {
+  font-size: 1.2rem;
+}
+
+/* Actions */
+.academyCourseDetail-final-test-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.academyCourseDetail-final-test-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.academyCourseDetail-final-test-btn--start {
+  background: linear-gradient(135deg, #00d4ff, #00b4d8);
+  color: #0f172a;
+}
+
+.academyCourseDetail-final-test-btn--start:hover {
+  box-shadow: 0 0 16px rgba(0, 212, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.academyCourseDetail-final-test-btn--continue {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #0f172a;
+}
+
+.academyCourseDetail-final-test-btn--continue:hover {
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.3);
+  transform: translateY(-1px);
+}
+
+.academyCourseDetail-final-test-remaining {
+  font-size: 0.8rem;
+  color: #64748b;
+}
+
+.academyCourseDetail-final-test-exhausted {
+  font-size: 0.85rem;
+  color: #ef4444;
+  padding: 10px 16px;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.15);
+  border-radius: 8px;
+}
+
+@media (max-width: 480px) {
+  .academyCourseDetail-final-test-card {
+    padding: 14px 16px;
+  }
+
+  .academyCourseDetail-final-test-meta {
+    gap: 8px;
+  }
+
+  .academyCourseDetail-final-test-passed {
+    flex-wrap: wrap;
+  }
+
+  .academyCourseDetail-final-test-passed-score {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .academyCourseDetail-final-test-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .academyCourseDetail-final-test-btn {
+    justify-content: center;
+  }
+}

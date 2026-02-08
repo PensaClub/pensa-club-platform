@@ -13222,6 +13222,20 @@
       "instructor": "Dozent",
       "reviews": "Bewertungen"
     },
+    "finalTest": {
+  "title": "Abschlusstest",
+  "questions": "Fragen",
+  "minutes": "Min",
+  "passingScore": "Min. Ergebnis",
+  "maxAttempts": "Max. Versuche",
+  "passed": "Test erfolgreich bestanden!",
+  "bestScore": "Bestes Ergebnis",
+  "locked": "Schließen Sie alle Lektionen im Kurs ab, um den Test freizuschalten.",
+  "startTest": "Test starten",
+  "continueAttempt": "Versuch fortsetzen",
+  "noMoreAttempts": "Alle Versuche aufgebraucht.",
+  "remaining": "Verbleibende Versuche"
+},
     "hero": {
       "certificateBadge": "Zertifikat",
       "ratings": "Bewertungen",
@@ -14184,7 +14198,8 @@
     "questionText": "Fragetext",
     "points": "Punkte",
     "explanation": "Erklärung (optional)",
-    "answers": "Antworten"
+    "answers": "Antworten",
+    "requireCourseCompletion": "Kursabschluss erforderlich"
   },
   "placeholders": {
     "title": "Z.B. Modul 1 Quiz",

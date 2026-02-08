@@ -239,6 +239,7 @@ const testBaseSchema = z.object({
   shuffleQuestions: z.boolean().default(false),
   shuffleAnswers: z.boolean().default(false),
   showCorrectAnswers: z.boolean().default(true),
+  requireCourseCompletion: z.boolean().optional(),
   showScore: z.boolean().default(true),
   allowReview: z.boolean().default(true),
   maxCredits: z.coerce.number().int().min(0).default(0),

@@ -13929,6 +13929,20 @@
       "instructor": "Instructor",
       "reviews": "Reviews"
     },
+    "finalTest": {
+  "title": "Final test",
+  "questions": "questions",
+  "minutes": "min",
+  "passingScore": "Min. score",
+  "maxAttempts": "Max. attempts",
+  "passed": "Test passed successfully!",
+  "bestScore": "Best score",
+  "locked": "Complete all lessons in the course to unlock the test.",
+  "startTest": "Start test",
+  "continueAttempt": "Continue attempt",
+  "noMoreAttempts": "All attempts exhausted.",
+  "remaining": "Remaining attempts"
+},
     "hero": {
       "certificateBadge": "Certificate",
       "ratings": "ratings",
@@ -14891,7 +14905,8 @@
     "questionText": "Question text",
     "points": "Points",
     "explanation": "Explanation (optional)",
-    "answers": "Answers"
+    "answers": "Answers",
+    "requireCourseCompletion": "Require course completion"
   },
   "placeholders": {
     "title": "E.g. Module 1 Quiz",

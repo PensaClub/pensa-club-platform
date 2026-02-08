@@ -30,6 +30,7 @@ const DEFAULT_SETTINGS = {
     shuffleAnswers: false,
     showCorrectAnswers: true,
     maxCredits: 0,
+    requireCourseCompletion: true,
 };
 
 const EMPTY_QUESTION = {
@@ -58,6 +59,7 @@ const TestEditorModal = ({ isOpen, onClose, lessonId, courseId, entityTitle }) =
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [actionLoading, setActionLoading] = useState(null);
+    const [fieldErrors, setFieldErrors] = useState({});
 
     // Settings form
     const [settings, setSettings] = useState({ ...DEFAULT_SETTINGS });
@@ -90,63 +92,65 @@ const TestEditorModal = ({ isOpen, onClose, lessonId, courseId, entityTitle }) =
             setEditingQuestionId(null);
             setDeleteTarget(null);
             setSettingsDirty(false);
+            setFieldErrors({});
         }
     }, [isOpen, lessonId, courseId]);
 
     const loadTest = async () => {
-    setLoading(true);
-    try {
-      const entityType = courseId ? 'course' : 'lesson';
-      const entityId = courseId || lessonId;
-      const entityField = courseId ? 'courseId' : 'lessonId';
+        setLoading(true);
+        try {
+            const entityType = courseId ? 'course' : 'lesson';
+            const entityId = courseId || lessonId;
+            const entityField = courseId ? 'courseId' : 'lessonId';
 
-      const data = await getTests({ entityType, limit: 100 });
-      const existing = data.tests?.find(t => t[entityField] === entityId);
+            const data = await getTests({ entityType, limit: 100 });
+            const existing = data.tests?.find(t => t[entityField] === entityId);
 
-      if (existing) {
-        const full = await getTestById(existing.id);
-        const td = full.test;
-        setTest(td);
-        setQuestions(
-          (td.questions || [])
-            .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0))
-        );
-        setSettings({
-          title: td.title || '',
-          description: td.description || '',
-          passingScore: td.passingScore ?? 70,
-          maxAttempts: td.maxAttempts || null,
-          timeLimitMinutes: td.timeLimitMinutes || null,
-          shuffleQuestions: td.shuffleQuestions || false,
-          shuffleAnswers: td.shuffleAnswers || false,
-          showCorrectAnswers: td.showCorrectAnswers !== false,
-          maxCredits: td.maxCredits || 0,
-        });
-      } else {
-        const createPayload = {
-          title: `${t('testEditor.defaultTitle', 'Тест')}: ${entityTitle || t('testEditor.lesson', 'Урок')}`,
-          passingScore: 70,
-        };
-        if (courseId) createPayload.courseId = courseId;
-        else createPayload.lessonId = lessonId;
+            if (existing) {
+                const full = await getTestById(existing.id);
+                const td = full.test;
+                setTest(td);
+                setQuestions(
+                    (td.questions || [])
+                        .sort((a, b) => (a.sortOrder || 0) - (b.sortOrder || 0))
+                );
+                setSettings({
+                    title: td.title || '',
+                    description: td.description || '',
+                    passingScore: td.passingScore ?? 70,
+                    maxAttempts: td.maxAttempts || null,
+                    timeLimitMinutes: td.timeLimitMinutes || null,
+                    shuffleQuestions: td.shuffleQuestions || false,
+                    shuffleAnswers: td.shuffleAnswers || false,
+                    showCorrectAnswers: td.showCorrectAnswers !== false,
+                    maxCredits: td.maxCredits || 0,
+                    requireCourseCompletion: td.requireCourseCompletion !== false,
+                });
+            } else {
+                const createPayload = {
+                    title: `${t('testEditor.defaultTitle', 'Тест')}: ${entityTitle || t('testEditor.lesson', 'Урок')}`,
+                    passingScore: 70,
+                };
+                if (courseId) createPayload.courseId = courseId;
+                else createPayload.lessonId = lessonId;
 
-        const resp = await createTest(createPayload);
-        if (resp.test) {
-          setTest(resp.test);
-          setQuestions([]);
-          setSettings({
-            ...DEFAULT_SETTINGS,
-            title: resp.test.title || '',
-          });
+                const resp = await createTest(createPayload);
+                if (resp.test) {
+                    setTest(resp.test);
+                    setQuestions([]);
+                    setSettings({
+                        ...DEFAULT_SETTINGS,
+                        title: resp.test.title || '',
+                    });
+                }
+            }
+        } catch (err) {
+            console.error('Error loading test:', err);
+            toast.error(t('testEditor.errors.loadFailed', 'Грешка при зареждане на тест'));
+        } finally {
+            setLoading(false);
         }
-      }
-    } catch (err) {
-      console.error('Error loading test:', err);
-      toast.error(t('testEditor.errors.loadFailed', 'Грешка при зареждане на тест'));
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
     if (!isOpen) return null;
     // =========================================================
@@ -156,6 +160,9 @@ const TestEditorModal = ({ isOpen, onClose, lessonId, courseId, entityTitle }) =
     const handleSettingChange = (field, value) => {
         setSettings(prev => ({ ...prev, [field]: value }));
         setSettingsDirty(true);
+        if (fieldErrors[field]) {
+            setFieldErrors(prev => { const next = { ...prev }; delete next[field]; return next; });
+        }
     };
 
     const handleSaveSettings = async () => {
@@ -172,13 +179,20 @@ const TestEditorModal = ({ isOpen, onClose, lessonId, courseId, entityTitle }) =
                 shuffleAnswers: settings.shuffleAnswers,
                 showCorrectAnswers: settings.showCorrectAnswers,
                 maxCredits: parseInt(settings.maxCredits) || 0,
+                requireCourseCompletion: settings.requireCourseCompletion,
             };
             const resp = await updateTest(test.id, payload);
             if (resp.test) setTest(resp.test);
             setSettingsDirty(false);
             toast.success(t('testEditor.settingsSaved', 'Настройките са запазени'));
-        } catch (err) {
+       } catch (err) {
             console.error('Error saving settings:', err);
+            const validationErrors = err?.response?.data?.errors || err?.errors;
+            if (validationErrors && Array.isArray(validationErrors)) {
+                const errMap = {};
+                validationErrors.forEach(e => { errMap[e.field] = e.message; });
+                setFieldErrors(errMap);
+            }
         } finally {
             setSaving(false);
         }
@@ -415,11 +429,12 @@ const TestEditorModal = ({ isOpen, onClose, lessonId, courseId, entityTitle }) =
                     <label className="tem-label">{t('testEditor.fields.title', 'Заглавие на теста')}</label>
                     <input
                         type="text"
-                        className="tem-input"
+                        className={`tem-input ${fieldErrors.title ? 'tem-input-error' : ''}`}
                         value={settings.title}
                         onChange={(e) => handleSettingChange('title', e.target.value)}
                         placeholder={t('testEditor.placeholders.title', 'Напр. Тест по Модул 1')}
                     />
+                    {fieldErrors.title && <span className="tem-field-error">{fieldErrors.title}</span>}
                 </div>
 
                 {/* Description */}
@@ -442,12 +457,13 @@ const TestEditorModal = ({ isOpen, onClose, lessonId, courseId, entityTitle }) =
                     </label>
                     <input
                         type="number"
-                        className="tem-input"
+                        className={`tem-input ${fieldErrors.passingScore ? 'tem-input-error' : ''}`}
                         value={settings.passingScore}
                         onChange={(e) => handleSettingChange('passingScore', e.target.value)}
                         min={0}
                         max={100}
                     />
+                    {fieldErrors.passingScore && <span className="tem-field-error">{fieldErrors.passingScore}</span>}
                 </div>
 
                 {/* Time Limit */}
@@ -458,12 +474,13 @@ const TestEditorModal = ({ isOpen, onClose, lessonId, courseId, entityTitle }) =
                     </label>
                     <input
                         type="number"
-                        className="tem-input"
+                        className={`tem-input ${fieldErrors.timeLimitMinutes ? 'tem-input-error' : ''}`}
                         value={settings.timeLimitMinutes || ''}
                         onChange={(e) => handleSettingChange('timeLimitMinutes', e.target.value || null)}
                         min={1}
                         placeholder={t('testEditor.placeholders.noLimit', 'Без ограничение')}
                     />
+                    {fieldErrors.timeLimitMinutes && <span className="tem-field-error">{fieldErrors.timeLimitMinutes}</span>}
                 </div>
 
                 {/* Max Attempts */}
@@ -474,12 +491,13 @@ const TestEditorModal = ({ isOpen, onClose, lessonId, courseId, entityTitle }) =
                     </label>
                     <input
                         type="number"
-                        className="tem-input"
+                        className={`tem-input ${fieldErrors.maxAttempts ? 'tem-input-error' : ''}`}
                         value={settings.maxAttempts || ''}
                         onChange={(e) => handleSettingChange('maxAttempts', e.target.value || null)}
                         min={1}
                         placeholder={t('testEditor.placeholders.unlimited', 'Неограничено')}
                     />
+                    {fieldErrors.maxAttempts && <span className="tem-field-error">{fieldErrors.maxAttempts}</span>}
                 </div>
 
                 {/* Max Credits */}
@@ -490,11 +508,12 @@ const TestEditorModal = ({ isOpen, onClose, lessonId, courseId, entityTitle }) =
                     </label>
                     <input
                         type="number"
-                        className="tem-input"
+                        className={`tem-input ${fieldErrors.maxCredits ? 'tem-input-error' : ''}`}
                         value={settings.maxCredits}
                         onChange={(e) => handleSettingChange('maxCredits', e.target.value)}
                         min={0}
                     />
+                    {fieldErrors.maxCredits && <span className="tem-field-error">{fieldErrors.maxCredits}</span>}
                 </div>
             </div>
 
@@ -506,6 +525,7 @@ const TestEditorModal = ({ isOpen, onClose, lessonId, courseId, entityTitle }) =
                         { key: 'shuffleQuestions', icon: Shuffle, label: t('testEditor.fields.shuffleQuestions', 'Разбъркай въпросите') },
                         { key: 'shuffleAnswers', icon: Shuffle, label: t('testEditor.fields.shuffleAnswers', 'Разбъркай отговорите') },
                         { key: 'showCorrectAnswers', icon: CheckCircle2, label: t('testEditor.fields.showCorrectAnswers', 'Покажи верните отговори') },
+                        { key: 'requireCourseCompletion', icon: Award, label: t('testEditor.fields.requireCourseCompletion', 'Изисквай завършване на курса') },
                     ].map(({ key, icon: Icon, label }) => (
                         <label key={key} className="tem-toggle-row">
                             <div className="tem-toggle-info">

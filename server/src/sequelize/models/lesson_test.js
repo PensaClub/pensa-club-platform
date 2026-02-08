@@ -196,7 +196,12 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: false,
         field: 'is_published',
       },
-
+      requireCourseCompletion: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true,
+        field: 'require_course_completion',
+      },
       // === СТАТИСТИКИ ===
       questionsCount: {
         type: DataTypes.INTEGER,

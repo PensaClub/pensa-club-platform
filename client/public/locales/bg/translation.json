@@ -14212,6 +14212,20 @@
       "instructor": "Инструктор",
       "reviews": "Отзиви"
     },
+    "finalTest": {
+  "title": "Финален тест",
+  "questions": "въпроса",
+  "minutes": "мин",
+  "passingScore": "Мин. резултат",
+  "maxAttempts": "Макс. опити",
+  "passed": "Тестът е преминат успешно!",
+  "bestScore": "Най-добър резултат",
+  "locked": "Завършете всички уроци в курса, за да отключите теста.",
+  "startTest": "Започни тест",
+  "continueAttempt": "Продължи опита",
+  "noMoreAttempts": "Изчерпахте всички опити.",
+  "remaining": "Оставащи опити"
+},
     "hero": {
       "certificateBadge": "Сертификат",
       "ratings": "оценки",
@@ -15185,7 +15199,8 @@
     "questionText": "Текст на въпроса",
     "points": "Точки",
     "explanation": "Обяснение (опционално)",
-    "answers": "Отговори"
+    "answers": "Отговори",
+    "requireCourseCompletion": "Изисквай завършване на курса"
   },
   "placeholders": {
     "title": "Напр. Тест по Модул 1",

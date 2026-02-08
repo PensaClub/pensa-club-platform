@@ -389,6 +389,9 @@ export const academyCoursesServiceFactory = () => {
     startLessonBySlug: async (lessonSlug) => {
       return requester.post(`${apiUrl}/academy/enrollment/lessons/${lessonSlug}/start`);
     },
+    startTestById: async (testId) => {
+      return requester.post(`${apiUrl}/academy/tests/${testId}/start`);
+    },
     // =========================================================
     //                    TESTS - ADMIN
     // =========================================================
@@ -397,7 +400,9 @@ export const academyCoursesServiceFactory = () => {
       const queryString = toQueryString(params);
       return requester.get(`${apiUrl}/academy/tests?${queryString}`);
     },
-
+    getCourseTestStatus: async (courseId) => {
+      return requester.get(`${apiUrl}/academy/tests/course/${courseId}/status`);
+    },
     getTestById: async (testId) => {
       return requester.get(`${apiUrl}/academy/tests/${testId}`);
     },

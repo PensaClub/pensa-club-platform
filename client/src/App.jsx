@@ -261,11 +261,14 @@ function App() {
                                             <Route path="/academy/lectures/:slug" element={<AcademyLectureDetails />} />
                                             <Route path="/academy/lectures/:slug/watch" element={<AcademyLectureWatch />} />
                                             <Route path="/academy/lectures/:slug/test" element={<AcademyLectureTest />} />
-                                            
+                                            <Route
+                                              path="/academy/courses/:courseSlug/test"
+                                              element={<AcademyTestPlayer />}
+                                            />
                                             <Route path="/academy/admin/courses" element={<AdminGuard><AdminAcademyCoursesList /></AdminGuard>} />
-                                             <Route path="/academy/admin/create-course" element={<AdminGuard><CourseAcademyCreateForm /></AdminGuard>} />
-                                          <Route path="/academy/admin/edit-course/:slug" element={<AdminGuard><EditCourseBasicInfo /></AdminGuard>} />
-                                          <Route path="/academy/admin/course/:slug/content" element={<AdminGuard><CourseContentManager /></AdminGuard>} />
+                                            <Route path="/academy/admin/create-course" element={<AdminGuard><CourseAcademyCreateForm /></AdminGuard>} />
+                                            <Route path="/academy/admin/edit-course/:slug" element={<AdminGuard><EditCourseBasicInfo /></AdminGuard>} />
+                                            <Route path="/academy/admin/course/:slug/content" element={<AdminGuard><CourseContentManager /></AdminGuard>} />
                                             <Route path="/ad/details/:adId" element={<AdDetails />} />
                                             <Route path="/ad/edit/:adId" element={<EditAd />} />
                                             <Route path="/ad" element={<AdPage />} />
@@ -277,7 +280,7 @@ function App() {
                                           </Route>
                                           {/* <Route path="/academy/admin/create-course" element={<AdminGuard><CourseAcademyCreateForm /></AdminGuard>} />
                                           <Route path="/academy/admin/edit-course/:courseSlug" element={<AdminGuard><CourseAcademyCreateForm /></AdminGuard>} /> */}
-                                        
+
                                           <Route element={<MentorGuard />}>
                                             <Route path="/academy/mentor-dashboard" element={<DigiBridgeMentorDashboard />} />
 
