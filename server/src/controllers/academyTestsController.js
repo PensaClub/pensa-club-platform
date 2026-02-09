@@ -164,27 +164,29 @@ const submitLectureAttempt = async (attemptId, testData) => {
 
   if (!attempt || attempt.status === 'completed') return null;
 
-  const answers = await test_attempt_answer.findAll({
-    where: { attemptId },
+  // 1. Get all questions for the test (source of truth for count + scoring)
+  const questions = await test_question.findAll({
+    where: { testId: attempt.testId },
     include: [
       {
-        model: test_question,
-        as: 'question',
-        include: [
-          {
-            model: test_answer,
-            as: 'answerOptions',
-            attributes: ['id', 'answerText', 'isCorrect'],
-          },
-        ],
+        model: test_answer,
+        as: 'answerOptions',
+        attributes: ['id', 'answerText', 'isCorrect'],
       },
+    ],
+    order: [['sortOrder', 'ASC']],
+  });
+
+  // 2. Get ALL attempt answer rows (multiple rows per question for multiple_choice)
+  const allAttemptAnswers = await test_attempt_answer.findAll({
+    where: { attemptId },
+    include: [
       {
         model: test_answer,
         as: 'selectedAnswer',
         attributes: ['id', 'answerText', 'isCorrect'],
       },
     ],
-    order: [[{ model: test_question, as: 'question' }, 'sortOrder', 'ASC']],
   });
 
   let correctAnswers = 0;
@@ -192,61 +194,102 @@ const submitLectureAttempt = async (attemptId, testData) => {
   let maxPoints = 0;
   const questionsResult = [];
 
-  for (let i = 0; i < answers.length; i++) {
-    const answer = answers[i];
-    const questionPoints = answer.question?.points || 1;
+  for (let i = 0; i < questions.length; i++) {
+    const question = questions[i];
+    const questionPoints = question.points || 1;
     maxPoints += questionPoints;
+
+    // All answer rows the student submitted for THIS question
+    const questionAnswers = allAttemptAnswers.filter(a => a.questionId === question.id);
 
     let isCorrect = false;
     let yourAnswerText = 'Без отговор';
 
-    if (answer.answerId) {
-      const selectedAnswer = await test_answer.findByPk(answer.answerId);
-      isCorrect = selectedAnswer?.isCorrect || false;
-      yourAnswerText = selectedAnswer?.answerText || 'Без отговор';
+    if (question.questionType === 'multiple_choice') {
+      // --- MULTIPLE CHOICE ---
+      // Correct = ALL correct options selected AND NO wrong options selected
+      const correctOptionIds = question.answerOptions
+        .filter(a => a.isCorrect)
+        .map(a => a.id);
 
-      await answer.update({
-        isCorrect: isCorrect,
-        pointsEarned: isCorrect ? questionPoints : 0,
-      });
+      const selectedIds = questionAnswers
+        .filter(a => a.answerId)
+        .map(a => a.answerId);
 
-      if (isCorrect) {
-        correctAnswers++;
-        pointsEarned += questionPoints;
+      if (selectedIds.length > 0) {
+        const allCorrectSelected = correctOptionIds.every(id => selectedIds.includes(id));
+        const noWrongSelected = selectedIds.every(id => correctOptionIds.includes(id));
+        isCorrect = allCorrectSelected && noWrongSelected;
+
+        yourAnswerText = questionAnswers
+          .map(a => a.selectedAnswer?.answerText || '')
+          .filter(Boolean)
+          .join(', ');
       }
-    } else if (answer.textAnswer) {
-      yourAnswerText = answer.textAnswer;
-      await answer.update({
-        isCorrect: false,
-        pointsEarned: 0,
-      });
+
+      // Update all rows for this question
+      for (const qa of questionAnswers) {
+        await qa.update({
+          isCorrect,
+          pointsEarned: isCorrect ? Math.round(questionPoints / questionAnswers.length) : 0,
+        });
+      }
+
     } else {
-      await answer.update({
-        isCorrect: false,
-        pointsEarned: 0,
-      });
+      // --- SINGLE CHOICE / TRUE_FALSE / TEXT ---
+      const singleAnswer = questionAnswers[0];
+
+      if (singleAnswer?.answerId) {
+        const selectedAnswer = singleAnswer.selectedAnswer || await test_answer.findByPk(singleAnswer.answerId);
+        isCorrect = selectedAnswer?.isCorrect || false;
+        yourAnswerText = selectedAnswer?.answerText || 'Без отговор';
+
+        await singleAnswer.update({
+          isCorrect,
+          pointsEarned: isCorrect ? questionPoints : 0,
+        });
+      } else if (singleAnswer?.textAnswer) {
+        yourAnswerText = singleAnswer.textAnswer;
+        await singleAnswer.update({
+          isCorrect: false,
+          pointsEarned: 0,
+        });
+      } else if (singleAnswer) {
+        await singleAnswer.update({
+          isCorrect: false,
+          pointsEarned: 0,
+        });
+      }
+    }
+
+    if (isCorrect) {
+      correctAnswers++;
+      pointsEarned += questionPoints;
     }
 
     // Добави към questionsResult
     questionsResult.push({
-      questionId: answer.questionId,
+      questionId: question.id,
       questionNumber: i + 1,
-      questionText: answer.question?.questionText || '',
-      questionType: answer.question?.questionType || 'single',
-      isCorrect: isCorrect,
+      questionText: question.questionText || '',
+      questionType: question.questionType || 'single_choice',
+      isCorrect,
       yourAnswer: yourAnswerText,
       // Ако showCorrectAnswers е включено, добави верния отговор
       ...(testData?.showCorrectAnswers && {
-        correctAnswer: answer.question?.answerOptions?.find(a => a.isCorrect)?.answerText || null,
+        correctAnswer: question.answerOptions
+          ?.filter(a => a.isCorrect)
+          .map(a => a.answerText)
+          .join(', ') || null,
       }),
     });
   }
 
-  const totalQuestions = answers.length;
-  const score = totalQuestions > 0 
-    ? Math.round((correctAnswers / totalQuestions) * 100) 
+  const totalQuestions = questions.length;
+  const score = totalQuestions > 0
+    ? Math.round((correctAnswers / totalQuestions) * 100)
     : 0;
-  
+
   const isPassed = score >= (testData?.passingScore || 70);
   const earnedCredits = isPassed ? (testData?.creditsForPassing || testData?.maxCredits || 0) : 0;
 
@@ -273,7 +316,7 @@ const submitLectureAttempt = async (attemptId, testData) => {
     maxPoints,
     passed: isPassed,
     earnedCredits,
-    questionsResult, 
+    questionsResult,
   };
 };
 
@@ -1388,6 +1431,7 @@ const calculateTimeRemaining = (attempt, testData) => {
 // POST /api/academy/tests/:id/answer
 // Отговор на въпрос
 // ===============================
+
 academyTestsController.post(
   '/:id/answer',
   isAuth,
@@ -1435,20 +1479,31 @@ academyTestsController.post(
         }
       }
 
-      const existingAnswer = await test_attempt_answer.findOne({
+      // Handle multiple answers (array) for multiple_choice questions
+      const isMultiple = Array.isArray(answerId);
+
+      // Delete all existing answers for this question first
+      await test_attempt_answer.destroy({
         where: {
           attemptId: attempt.id,
           questionId,
         },
       });
 
-      if (existingAnswer) {
-        await existingAnswer.update({
-          answerId: answerId || null,
-          textAnswer: textAnswer || null,
-          answeredAt: new Date(),
-        });
+      if (isMultiple) {
+        // Multiple choice — create one row per selected answer
+        if (answerId.length > 0) {
+          const rows = answerId.map(aid => ({
+            attemptId: attempt.id,
+            questionId,
+            answerId: aid,
+            textAnswer: null,
+            answeredAt: new Date(),
+          }));
+          await test_attempt_answer.bulkCreate(rows);
+        }
       } else {
+        // Single choice / true_false / text — one row
         await test_attempt_answer.create({
           attemptId: attempt.id,
           questionId,
@@ -1516,6 +1571,8 @@ academyTestsController.post('/:id/submit', isAuth, async (req, res, next) => {
 });
 
 // Helper: Submit attempt and calculate score
+// Helper: Submit attempt and calculate score
+// Helper: Submit attempt and calculate score
 const submitAttempt = async (attemptId) => {
   const attempt = await test_attempt.findByPk(attemptId, {
     include: [{ model: test, as: 'test' }],
@@ -1523,67 +1580,133 @@ const submitAttempt = async (attemptId) => {
 
   if (!attempt) return null;
 
-  const answers = await test_attempt_answer.findAll({
+  // 1. Вземи ВСИЧКИ въпроси от теста
+  const questions = await test_question.findAll({
+    where: { testId: attempt.testId },
+    include: [
+      {
+        model: test_answer,
+        as: 'answerOptions',
+        attributes: ['id', 'answerText', 'isCorrect'],
+      },
+    ],
+    order: [['sortOrder', 'ASC']],
+  });
+
+  // 2. Вземи ВСИЧКИ answer редове
+  const allAttemptAnswers = await test_attempt_answer.findAll({
     where: { attemptId },
     include: [
       {
-        model: test_question,
-        as: 'question',
+        model: test_answer,
+        as: 'selectedAnswer',
+        attributes: ['id', 'answerText', 'isCorrect'],
       },
     ],
   });
 
-  // Изчисли резултатите
   let correctAnswers = 0;
   let pointsEarned = 0;
   let maxPoints = 0;
+  const questionsResult = [];
 
-  for (const answer of answers) {
-    const questionPoints = answer.question?.points || 1;
+  for (let i = 0; i < questions.length; i++) {
+    const question = questions[i];
+    const questionPoints = question.points || 1;
     maxPoints += questionPoints;
 
-    if (answer.answerId) {
-      const selectedAnswer = await test_answer.findByPk(answer.answerId);
-      const isCorrect = selectedAnswer?.isCorrect || false;
+    const questionAnswers = allAttemptAnswers.filter(a => a.questionId === question.id);
 
-      await answer.update({
-        isCorrect: isCorrect,
-        pointsEarned: isCorrect ? questionPoints : 0,
-      });
+    let isCorrect = false;
+    let yourAnswerText = 'Без отговор';
 
-      if (isCorrect) {
-        correctAnswers++;
-        pointsEarned += questionPoints;
+    if (question.questionType === 'multiple_choice') {
+      const correctOptionIds = question.answerOptions
+        .filter(a => a.isCorrect)
+        .map(a => a.id);
+
+      const selectedIds = questionAnswers
+        .filter(a => a.answerId)
+        .map(a => a.answerId);
+
+      if (selectedIds.length > 0) {
+        const allCorrectSelected = correctOptionIds.every(id => selectedIds.includes(id));
+        const noWrongSelected = selectedIds.every(id => correctOptionIds.includes(id));
+        isCorrect = allCorrectSelected && noWrongSelected;
+
+        yourAnswerText = questionAnswers
+          .map(a => a.selectedAnswer?.answerText || '')
+          .filter(Boolean)
+          .join(', ');
       }
+
+      for (const qa of questionAnswers) {
+        await qa.update({
+          isCorrect,
+          pointsEarned: isCorrect ? Math.round(questionPoints / questionAnswers.length) : 0,
+        });
+      }
+
     } else {
-      // Без отговор = грешен
-      await answer.update({
-        isCorrect: false,
-        pointsEarned: 0,
-      });
+      const singleAnswer = questionAnswers[0];
+
+      if (singleAnswer?.answerId) {
+        const selectedAnswer = singleAnswer.selectedAnswer || await test_answer.findByPk(singleAnswer.answerId);
+        isCorrect = selectedAnswer?.isCorrect || false;
+        yourAnswerText = selectedAnswer?.answerText || 'Без отговор';
+
+        await singleAnswer.update({
+          isCorrect,
+          pointsEarned: isCorrect ? questionPoints : 0,
+        });
+      } else if (singleAnswer?.textAnswer) {
+        yourAnswerText = singleAnswer.textAnswer;
+        await singleAnswer.update({ isCorrect: false, pointsEarned: 0 });
+      } else if (singleAnswer) {
+        await singleAnswer.update({ isCorrect: false, pointsEarned: 0 });
+      }
     }
+
+    if (isCorrect) {
+      correctAnswers++;
+      pointsEarned += questionPoints;
+    }
+
+    questionsResult.push({
+      questionId: question.id,
+      questionNumber: i + 1,
+      questionText: question.questionText || '',
+      questionType: question.questionType || 'single_choice',
+      isCorrect,
+      yourAnswer: yourAnswerText,
+      ...(attempt.test?.showCorrectAnswers && {
+        correctAnswer: question.answerOptions
+          ?.filter(a => a.isCorrect)
+          .map(a => a.answerText)
+          .join(', ') || null,
+      }),
+    });
   }
 
-  // Изчисли процент
-  const totalQuestions = answers.length;
-  const score = totalQuestions > 0 
-    ? Math.round((correctAnswers / totalQuestions) * 100) 
+  const totalQuestions = questions.length;
+  const score = totalQuestions > 0
+    ? Math.round((correctAnswers / totalQuestions) * 100)
     : 0;
-  
+
   const isPassed = score >= (attempt.test.passingScore || 60);
   const earnedCredits = isPassed ? (attempt.test.creditsForPassing || attempt.test.maxCredits || 0) : 0;
 
-  // Запиши с ПРАВИЛНИТЕ имена от модела
+  // Запиши резултатите
   await attempt.update({
     status: 'completed',
     completedAt: new Date(),
-    score: score,
-    correctAnswers: correctAnswers,
-    totalQuestions: totalQuestions,
-    pointsEarned: pointsEarned,
-    maxPoints: maxPoints,
-    isPassed: isPassed,
-    earnedCredits: earnedCredits,
+    score,
+    correctAnswers,
+    totalQuestions,
+    pointsEarned,
+    maxPoints,
+    isPassed,
+    earnedCredits,
   });
 
   // Обнови student_lesson ако има lessonId
@@ -1613,6 +1736,7 @@ const submitAttempt = async (attemptId) => {
     maxPoints,
     passed: isPassed,
     earnedCredits,
+    questionsResult,
   };
 };
 

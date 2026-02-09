@@ -14,18 +14,18 @@ const AcademyTestPlayer = () => {
   const navigate = useNavigate();
 
   const { isAuthentication } = useAuthContext();
- const { 
-  getLessonBySlug,
-  getTestStatus,
-  startTest,
-  startTestById,
-  getCourseTestStatus,
-  getCourseBySlug,
-  currentCourse,
-  submitAnswer,
-  submitTest,
-  isLoading 
-} = useAcademyCourses();
+  const {
+    getLessonBySlug,
+    getTestStatus,
+    startTest,
+    startTestById,
+    getCourseTestStatus,
+    getCourseBySlug,
+    currentCourse,
+    submitAnswer,
+    submitTest,
+    isLoading
+  } = useAcademyCourses();
 
   // State
   const [lesson, setLesson] = useState(null);
@@ -69,61 +69,193 @@ const AcademyTestPlayer = () => {
   // =========================================================
 
   useEffect(() => {
-  const fetchTestData = async () => {
-    // ========== COURSE TEST MODE ==========
-    if (isCourseTest) {
-      if (!courseSlug) return;
-      
-      const cacheKey = `course-${courseSlug}`;
+    const fetchTestData = async () => {
+      // ========== COURSE TEST MODE ==========
+      if (isCourseTest) {
+        if (!courseSlug) return;
+
+        const cacheKey = `course-${courseSlug}`;
+        if (fetchedRef.current === cacheKey && testData) return;
+
+        try {
+          fetchedRef.current = cacheKey;
+          setError(null);
+          setIsLoadingTest(true);
+
+          // 1. Get course info
+          const courseResponse = await getCourseBySlug(courseSlug);
+          const courseInfo = courseResponse?.course || courseResponse || currentCourse;
+
+          if (!courseInfo || !courseInfo.id) {
+            throw new Error('Курсът не е намерен');
+          }
+
+          // Set a pseudo-lesson object for display purposes
+          setLesson({
+            id: null,
+            title: courseInfo.name || courseInfo.title,
+            courseId: courseInfo.id,
+            slug: courseSlug
+          });
+
+          // 2. Get course test status
+          let statusData = null;
+          try {
+            statusData = await getCourseTestStatus(courseInfo.id);
+
+            if (!statusData?.hasTest) {
+              throw new Error('Този курс няма финален тест');
+            }
+
+            setTestStatus(statusData);
+
+            if (statusData?.attempts) setPreviousAttempts(statusData.attempts);
+            if (statusData?.bestAttempt) setBestAttempt(statusData.bestAttempt);
+            setCanStartNewAttempt(statusData?.canStartNew ?? true);
+            setRemainingAttempts(statusData?.remainingAttempts ?? 0);
+            setHasPassedTest(statusData?.hasPassedTest ?? false);
+
+            if (!statusData?.testAccessible) {
+              throw new Error('Завършете всички уроци в курса, за да отключите теста.');
+            }
+
+            // If passed - show best attempt
+            if (statusData?.hasPassedTest && statusData?.bestAttempt) {
+              const best = statusData.bestAttempt;
+              const scorePercent = best.score ?? calculateScorePercentage(best.correctAnswers, best.totalQuestions);
+
+              setShowResults(true);
+              setResults({
+                scorePercentage: scorePercent,
+                correctAnswers: best.correctAnswers || 0,
+                wrongAnswers: best.wrongAnswers || 0,
+                totalQuestions: best.totalQuestions || 0,
+                passed: true,
+                earnedCredits: best.earnedCredits || 0,
+                attemptId: best.id,
+                attemptNumber: best.attemptNumber || 1
+              });
+
+              if (best.questionsResult) setQuestionsResult(best.questionsResult);
+              setTestData({ test: statusData.test, attempt: best });
+              return;
+            }
+
+            // If completed last attempt (not passed)
+            const lastAttempt = statusData?.lastAttempt;
+            if (lastAttempt?.status === 'completed' && !statusData?.activeAttempt) {
+              const scorePercent = lastAttempt.score ?? calculateScorePercentage(lastAttempt.correctAnswers, lastAttempt.totalQuestions);
+              const isPassed = scorePercent >= (statusData?.test?.passingScore || 70);
+
+              setShowResults(true);
+              setResults({
+                scorePercentage: scorePercent,
+                correctAnswers: lastAttempt.correctAnswers || 0,
+                wrongAnswers: lastAttempt.wrongAnswers || 0,
+                totalQuestions: lastAttempt.totalQuestions || 0,
+                passed: isPassed,
+                earnedCredits: lastAttempt.earnedCredits || 0,
+                attemptId: lastAttempt.id,
+                attemptNumber: lastAttempt.attemptNumber || 1
+              });
+
+              if (lastAttempt.questionsResult) setQuestionsResult(lastAttempt.questionsResult);
+              setTestData({ test: statusData.test, attempt: lastAttempt });
+              return;
+            }
+
+            // Active attempt or start new — use generic startTestById
+            if (statusData?.activeAttempt || statusData?.canStartNew) {
+              const data = await startTestById(statusData.test.id);
+              if (data) {
+                setTestData(data);
+                setQuestions(data.questions || []);
+
+                if (data.attempt?.answers && typeof data.attempt.answers === 'object') {
+                  setAnswers(data.attempt.answers);
+                }
+
+                if (data.timeRemaining !== undefined && data.timeRemaining > 0) {
+                  setTimeRemaining(data.timeRemaining);
+                } else if (data.test?.timeLimitMinutes) {
+                  setTimeRemaining(data.test.timeLimitMinutes * 60);
+                }
+
+                if (data.attempt?.status === 'completed') {
+                  const scorePercent = data.attempt.score ?? calculateScorePercentage(data.attempt.correctAnswers, data.attempt.totalQuestions);
+                  const isPassed = scorePercent >= (data.test?.passingScore || 70);
+
+                  setShowResults(true);
+                  setResults({
+                    scorePercentage: scorePercent,
+                    correctAnswers: data.attempt.correctAnswers || 0,
+                    wrongAnswers: data.attempt.wrongAnswers || 0,
+                    totalQuestions: data.attempt.totalQuestions || data.questions?.length || 0,
+                    passed: isPassed,
+                    earnedCredits: data.attempt.earnedCredits || 0,
+                    attemptId: data.attempt.id,
+                    attemptNumber: data.attempt.attemptNumber || 1
+                  });
+
+                  if (data.attempt.questionsResult) setQuestionsResult(data.attempt.questionsResult);
+                }
+              }
+            }
+
+          } catch (err) {
+            console.error('Error with course test status:', err);
+            setError(err.message || 'Грешка при зареждане на теста');
+          }
+        } catch (err) {
+          console.error('Error fetching course test:', err);
+          setError(err.message || 'Грешка при зареждане на теста');
+        } finally {
+          setIsLoadingTest(false);
+        }
+        return;
+      }
+
+      // ========== LESSON TEST MODE (existing logic) ==========
+      if (!courseSlug || !lessonSlug) return;
+
+      const cacheKey = `${courseSlug}-${lessonSlug}`;
       if (fetchedRef.current === cacheKey && testData) return;
-      
+
       try {
         fetchedRef.current = cacheKey;
         setError(null);
         setIsLoadingTest(true);
-        
-        // 1. Get course info
-        const courseResponse = await getCourseBySlug(courseSlug);
-        const courseInfo = courseResponse?.course || courseResponse || currentCourse;
-        
-        if (!courseInfo || !courseInfo.id) {
-          throw new Error('Курсът не е намерен');
+
+        // 1. Get lesson info
+        const lessonResponse = await getLessonBySlug(courseSlug, lessonSlug);
+        const lessonInfo = lessonResponse?.lesson || lessonResponse;
+        setLesson(lessonInfo);
+
+        if (!lessonInfo || !lessonInfo.id) {
+          throw new Error('Урокът не е намерен');
         }
-        
-        // Set a pseudo-lesson object for display purposes
-        setLesson({ 
-          id: null, 
-          title: courseInfo.name || courseInfo.title, 
-          courseId: courseInfo.id,
-          slug: courseSlug 
-        });
-        
-        // 2. Get course test status
+
+        if (!lessonInfo.hasTest) {
+          throw new Error('Този урок няма тест');
+        }
+
+        // 2. Get test status + previous attempts
         let statusData = null;
         try {
-          statusData = await getCourseTestStatus(courseInfo.id);
-          
-          if (!statusData?.hasTest) {
-            throw new Error('Този курс няма финален тест');
-          }
-          
+          statusData = await getTestStatus(lessonInfo.id);
           setTestStatus(statusData);
-          
+
           if (statusData?.attempts) setPreviousAttempts(statusData.attempts);
           if (statusData?.bestAttempt) setBestAttempt(statusData.bestAttempt);
           setCanStartNewAttempt(statusData?.canStartNew ?? true);
           setRemainingAttempts(statusData?.remainingAttempts ?? 0);
           setHasPassedTest(statusData?.hasPassedTest ?? false);
-          
-          if (!statusData?.testAccessible) {
-            throw new Error('Завършете всички уроци в курса, за да отключите теста.');
-          }
-          
-          // If passed - show best attempt
+
+          // If test is already passed
           if (statusData?.hasPassedTest && statusData?.bestAttempt) {
             const best = statusData.bestAttempt;
             const scorePercent = best.score ?? calculateScorePercentage(best.correctAnswers, best.totalQuestions);
-            
+
             setShowResults(true);
             setResults({
               scorePercentage: scorePercent,
@@ -135,18 +267,18 @@ const AcademyTestPlayer = () => {
               attemptId: best.id,
               attemptNumber: best.attemptNumber || 1
             });
-            
+
             if (best.questionsResult) setQuestionsResult(best.questionsResult);
             setTestData({ test: statusData.test, attempt: best });
             return;
           }
-          
-          // If completed last attempt (not passed)
+
+          // If there's a completed last attempt (not passed)
           const lastAttempt = statusData?.lastAttempt;
           if (lastAttempt?.status === 'completed' && !statusData?.activeAttempt) {
             const scorePercent = lastAttempt.score ?? calculateScorePercentage(lastAttempt.correctAnswers, lastAttempt.totalQuestions);
             const isPassed = scorePercent >= (statusData?.test?.passingScore || 70);
-            
+
             setShowResults(true);
             setResults({
               scorePercentage: scorePercent,
@@ -158,218 +290,86 @@ const AcademyTestPlayer = () => {
               attemptId: lastAttempt.id,
               attemptNumber: lastAttempt.attemptNumber || 1
             });
-            
+
             if (lastAttempt.questionsResult) setQuestionsResult(lastAttempt.questionsResult);
             setTestData({ test: statusData.test, attempt: lastAttempt });
             return;
           }
-          
-          // Active attempt or start new — use generic startTestById
-          if (statusData?.activeAttempt || statusData?.canStartNew) {
-            const data = await startTestById(statusData.test.id);
+
+          // If there's an active attempt
+          if (statusData?.activeAttempt) {
+            const data = await startTest(lessonInfo.id);
             if (data) {
               setTestData(data);
               setQuestions(data.questions || []);
-              
+
               if (data.attempt?.answers && typeof data.attempt.answers === 'object') {
                 setAnswers(data.attempt.answers);
               }
-              
+
               if (data.timeRemaining !== undefined && data.timeRemaining > 0) {
                 setTimeRemaining(data.timeRemaining);
               } else if (data.test?.timeLimitMinutes) {
                 setTimeRemaining(data.test.timeLimitMinutes * 60);
               }
-              
-              if (data.attempt?.status === 'completed') {
-                const scorePercent = data.attempt.score ?? calculateScorePercentage(data.attempt.correctAnswers, data.attempt.totalQuestions);
-                const isPassed = scorePercent >= (data.test?.passingScore || 70);
-                
-                setShowResults(true);
-                setResults({
-                  scorePercentage: scorePercent,
-                  correctAnswers: data.attempt.correctAnswers || 0,
-                  wrongAnswers: data.attempt.wrongAnswers || 0,
-                  totalQuestions: data.attempt.totalQuestions || data.questions?.length || 0,
-                  passed: isPassed,
-                  earnedCredits: data.attempt.earnedCredits || 0,
-                  attemptId: data.attempt.id,
-                  attemptNumber: data.attempt.attemptNumber || 1
-                });
-                
-                if (data.attempt.questionsResult) setQuestionsResult(data.attempt.questionsResult);
-              }
             }
+            return;
           }
-          
+
         } catch (err) {
-          console.error('Error with course test status:', err);
-          setError(err.message || 'Грешка при зареждане на теста');
+          console.warn('Could not get test status, will try to start:', err);
         }
-      } catch (err) {
-        console.error('Error fetching course test:', err);
-        setError(err.message || 'Грешка при зареждане на теста');
-      } finally {
-        setIsLoadingTest(false);
-      }
-      return;
-    }
-    
-    // ========== LESSON TEST MODE (existing logic) ==========
-    if (!courseSlug || !lessonSlug) return;
-    
-    const cacheKey = `${courseSlug}-${lessonSlug}`;
-    if (fetchedRef.current === cacheKey && testData) return;
 
-    try {
-      fetchedRef.current = cacheKey;
-      setError(null);
-      setIsLoadingTest(true);
-      
-      // 1. Get lesson info
-      const lessonResponse = await getLessonBySlug(courseSlug, lessonSlug);
-      const lessonInfo = lessonResponse?.lesson || lessonResponse;
-      setLesson(lessonInfo);
-      
-      if (!lessonInfo || !lessonInfo.id) {
-        throw new Error('Урокът не е намерен');
-      }
-
-      if (!lessonInfo.hasTest) {
-        throw new Error('Този урок няма тест');
-      }
-
-      // 2. Get test status + previous attempts
-      let statusData = null;
-      try {
-        statusData = await getTestStatus(lessonInfo.id);
-        setTestStatus(statusData);
-        
-        if (statusData?.attempts) setPreviousAttempts(statusData.attempts);
-        if (statusData?.bestAttempt) setBestAttempt(statusData.bestAttempt);
-        setCanStartNewAttempt(statusData?.canStartNew ?? true);
-        setRemainingAttempts(statusData?.remainingAttempts ?? 0);
-        setHasPassedTest(statusData?.hasPassedTest ?? false);
-        
-        // If test is already passed
-        if (statusData?.hasPassedTest && statusData?.bestAttempt) {
-          const best = statusData.bestAttempt;
-          const scorePercent = best.score ?? calculateScorePercentage(best.correctAnswers, best.totalQuestions);
-          
-          setShowResults(true);
-          setResults({
-            scorePercentage: scorePercent,
-            correctAnswers: best.correctAnswers || 0,
-            wrongAnswers: best.wrongAnswers || 0,
-            totalQuestions: best.totalQuestions || 0,
-            passed: true,
-            earnedCredits: best.earnedCredits || 0,
-            attemptId: best.id,
-            attemptNumber: best.attemptNumber || 1
-          });
-          
-          if (best.questionsResult) setQuestionsResult(best.questionsResult);
-          setTestData({ test: statusData.test, attempt: best });
-          return;
-        }
-        
-        // If there's a completed last attempt (not passed)
-        const lastAttempt = statusData?.lastAttempt;
-        if (lastAttempt?.status === 'completed' && !statusData?.activeAttempt) {
-          const scorePercent = lastAttempt.score ?? calculateScorePercentage(lastAttempt.correctAnswers, lastAttempt.totalQuestions);
-          const isPassed = scorePercent >= (statusData?.test?.passingScore || 70);
-          
-          setShowResults(true);
-          setResults({
-            scorePercentage: scorePercent,
-            correctAnswers: lastAttempt.correctAnswers || 0,
-            wrongAnswers: lastAttempt.wrongAnswers || 0,
-            totalQuestions: lastAttempt.totalQuestions || 0,
-            passed: isPassed,
-            earnedCredits: lastAttempt.earnedCredits || 0,
-            attemptId: lastAttempt.id,
-            attemptNumber: lastAttempt.attemptNumber || 1
-          });
-          
-          if (lastAttempt.questionsResult) setQuestionsResult(lastAttempt.questionsResult);
-          setTestData({ test: statusData.test, attempt: lastAttempt });
-          return;
-        }
-        
-        // If there's an active attempt
-        if (statusData?.activeAttempt) {
+        // 3. No active attempt and can start new
+        if (canStartNewAttempt || !statusData) {
           const data = await startTest(lessonInfo.id);
+
           if (data) {
             setTestData(data);
             setQuestions(data.questions || []);
-            
+
             if (data.attempt?.answers && typeof data.attempt.answers === 'object') {
               setAnswers(data.attempt.answers);
             }
-            
+
             if (data.timeRemaining !== undefined && data.timeRemaining > 0) {
               setTimeRemaining(data.timeRemaining);
             } else if (data.test?.timeLimitMinutes) {
               setTimeRemaining(data.test.timeLimitMinutes * 60);
             }
+
+            if (data.attempt?.status === 'completed') {
+              const scorePercent = data.attempt.score ?? calculateScorePercentage(data.attempt.correctAnswers, data.attempt.totalQuestions);
+              const isPassed = scorePercent >= (data.test?.passingScore || 70);
+
+              setShowResults(true);
+              setResults({
+                scorePercentage: scorePercent,
+                correctAnswers: data.attempt.correctAnswers || 0,
+                wrongAnswers: data.attempt.wrongAnswers || 0,
+                totalQuestions: data.attempt.totalQuestions || data.questions?.length || 0,
+                passed: isPassed,
+                earnedCredits: data.attempt.earnedCredits || 0,
+                attemptId: data.attempt.id,
+                attemptNumber: data.attempt.attemptNumber || 1
+              });
+
+              if (data.attempt.questionsResult) setQuestionsResult(data.attempt.questionsResult);
+            }
           }
-          return;
         }
-        
       } catch (err) {
-        console.warn('Could not get test status, will try to start:', err);
+        console.error('Error fetching test:', err);
+        setError(err.message || 'Грешка при зареждане на теста');
+      } finally {
+        setIsLoadingTest(false);
       }
+    };
 
-      // 3. No active attempt and can start new
-      if (canStartNewAttempt || !statusData) {
-        const data = await startTest(lessonInfo.id);
-        
-        if (data) {
-          setTestData(data);
-          setQuestions(data.questions || []);
-          
-          if (data.attempt?.answers && typeof data.attempt.answers === 'object') {
-            setAnswers(data.attempt.answers);
-          }
-          
-          if (data.timeRemaining !== undefined && data.timeRemaining > 0) {
-            setTimeRemaining(data.timeRemaining);
-          } else if (data.test?.timeLimitMinutes) {
-            setTimeRemaining(data.test.timeLimitMinutes * 60);
-          }
-          
-          if (data.attempt?.status === 'completed') {
-            const scorePercent = data.attempt.score ?? calculateScorePercentage(data.attempt.correctAnswers, data.attempt.totalQuestions);
-            const isPassed = scorePercent >= (data.test?.passingScore || 70);
-            
-            setShowResults(true);
-            setResults({
-              scorePercentage: scorePercent,
-              correctAnswers: data.attempt.correctAnswers || 0,
-              wrongAnswers: data.attempt.wrongAnswers || 0,
-              totalQuestions: data.attempt.totalQuestions || data.questions?.length || 0,
-              passed: isPassed,
-              earnedCredits: data.attempt.earnedCredits || 0,
-              attemptId: data.attempt.id,
-              attemptNumber: data.attempt.attemptNumber || 1
-            });
-            
-            if (data.attempt.questionsResult) setQuestionsResult(data.attempt.questionsResult);
-          }
-        }
-      }
-    } catch (err) {
-      console.error('Error fetching test:', err);
-      setError(err.message || 'Грешка при зареждане на теста');
-    } finally {
-      setIsLoadingTest(false);
+    if (isAuthentication) {
+      fetchTestData();
     }
-  };
-
-  if (isAuthentication) {
-    fetchTestData();
-  }
-}, [courseSlug, lessonSlug, isCourseTest, isAuthentication, getLessonBySlug, getTestStatus, startTest, startTestById, getCourseTestStatus, getCourseBySlug]);
+  }, [courseSlug, lessonSlug, isCourseTest, isAuthentication, getLessonBySlug, getTestStatus, startTest, startTestById, getCourseTestStatus, getCourseBySlug]);
 
   // =========================================================
   //                    TIMER
@@ -408,7 +408,9 @@ const AcademyTestPlayer = () => {
   //                    HANDLERS
   // =========================================================
 
-  const handleAnswerSelect = useCallback(async (questionId, answerId, isMultiple = false) => {
+  const answerDebounceRef = useRef(null);
+
+const handleAnswerSelect = useCallback(async (questionId, answerId, isMultiple = false) => {
     let newAnswerValue;
 
     setAnswers(prev => {
@@ -424,17 +426,37 @@ const AcademyTestPlayer = () => {
     });
 
     if (testData?.test?.id) {
-      setIsSavingAnswer(true);
-      try {
-        await submitAnswer(testData.test.id, {
-          questionId,
-          answerId: isMultiple ? undefined : answerId,
-          answerIds: isMultiple ? newAnswerValue : undefined
-        });
-      } catch (err) {
-        console.error('Error saving answer:', err);
-      } finally {
-        setIsSavingAnswer(false);
+      if (isMultiple) {
+        // Debounce за multiple_choice — изчаква 600ms след последния клик
+        if (answerDebounceRef.current) {
+          clearTimeout(answerDebounceRef.current);
+        }
+        answerDebounceRef.current = setTimeout(async () => {
+          setIsSavingAnswer(true);
+          try {
+            await submitAnswer(testData.test.id, {
+              questionId,
+              answerId: newAnswerValue,
+            });
+          } catch (err) {
+            console.error('Error saving answer:', err);
+          } finally {
+            setIsSavingAnswer(false);
+          }
+        }, 600);
+      } else {
+        // Single choice / true_false — веднага
+        setIsSavingAnswer(true);
+        try {
+          await submitAnswer(testData.test.id, {
+            questionId,
+            answerId: answerId,
+          });
+        } catch (err) {
+          console.error('Error saving answer:', err);
+        } finally {
+          setIsSavingAnswer(false);
+        }
       }
     }
   }, [testData, submitAnswer]);
@@ -526,37 +548,37 @@ const AcademyTestPlayer = () => {
   };
 
   const handleBackToLesson = () => {
-  if (isCourseTest) {
-    navigate(`/academy/courses/${courseSlug}`);
-  } else {
-    navigate(`/academy/courses/${courseSlug}/lessons/${lessonSlug}`);
-  }
-};
+    if (isCourseTest) {
+      navigate(`/academy/courses/${courseSlug}`);
+    } else {
+      navigate(`/academy/courses/${courseSlug}/lessons/${lessonSlug}`);
+    }
+  };
 
   const handleContinueCourse = () => {
-  navigate(`/academy/courses/${courseSlug}`);
-};
+    navigate(`/academy/courses/${courseSlug}`);
+  };
 
   const handleRetryTest = async () => {
-     if (!canStartNewAttempt || remainingAttempts <= 0) return;
-  
-  // Reset state
-  setTestData(null);
-  setQuestions([]);
-  setAnswers({});
-  setCurrentQuestionIndex(0);
-  setShowResults(false);
-  setResults(null);
-  setTimeRemaining(null);
-  setQuestionsResult([]);
-  setShowQuestionsReview(false);
-  fetchedRef.current = null;
-  setIsLoadingTest(true);
+    if (!canStartNewAttempt || remainingAttempts <= 0) return;
+
+    // Reset state
+    setTestData(null);
+    setQuestions([]);
+    setAnswers({});
+    setCurrentQuestionIndex(0);
+    setShowResults(false);
+    setResults(null);
+    setTimeRemaining(null);
+    setQuestionsResult([]);
+    setShowQuestionsReview(false);
+    fetchedRef.current = null;
+    setIsLoadingTest(true);
 
     try {
-     const data = isCourseTest 
-      ? await startTestById(testStatus?.test?.id || testData?.test?.id)
-      : await startTest(lesson.id);
+      const data = isCourseTest
+        ? await startTestById(testStatus?.test?.id || testData?.test?.id)
+        : await startTest(lesson.id);
 
       if (data) {
         setTestData(data);
@@ -1079,8 +1101,8 @@ const AcademyTestPlayer = () => {
                     }
                   </span>
                   <span className={`atp-question__type atp-question__type--${currentQuestion.questionType}`}>
-                    {currentQuestion.questionType === 'single' && t('academyTestPlayer.typeSingle', 'Един верен')}
-                    {currentQuestion.questionType === 'multiple' && t('academyTestPlayer.typeMultiple', 'Няколко верни')}
+                    {currentQuestion.questionType === 'single_choice' && t('academyTestPlayer.typeSingle', 'Един верен')}
+                    {currentQuestion.questionType === 'multiple_choice' && t('academyTestPlayer.typeMultiple', 'Няколко верни')}
                     {currentQuestion.questionType === 'true_false' && t('academyTestPlayer.typeTrueFalse', 'Вярно/Невярно')}
                   </span>
                 </div>
@@ -1097,7 +1119,7 @@ const AcademyTestPlayer = () => {
 
                 <div className="atp-question__answers">
                   {currentQuestion.answerOptions?.map((option) => {
-                    const isMultiple = currentQuestion.questionType === 'multiple';
+                    const isMultiple = currentQuestion.questionType === 'multiple_choice';
                     const currentAnswer = answers[currentQuestion.id];
                     const isSelected = isMultiple
                       ? (currentAnswer || []).includes(option.id)

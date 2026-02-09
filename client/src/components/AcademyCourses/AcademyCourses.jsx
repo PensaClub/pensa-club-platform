@@ -1,16 +1,14 @@
 // src/components/AcademyCourses/AcademyCourses.jsx
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 import { useAcademyCourses } from '../contexts/AcademyCoursesProvider';
 import { AcademyCoursesHero } from './AcademyCoursesHero/AcademyCoursesHero';
-// import { AcademyProgramTracks } from './AcademyProgramTracks/AcademyProgramTracks';
-// import { AcademyCoursesList } from './AcademyCoursesList/AcademyCoursesList';
-import './academyCourses.css';
 import { AcademyProgramTracks } from './AcademyProgramTracks/AcademyProgramTracks';
 import { AcademyCoursesList } from './AcademyCoursesList/AcademyCoursesList';
+import './academyCourses.css';
 
-// Цветова схема за програмите
 const PROGRAM_COLORS = {
   'Мобилни устройства': { primary: '#3b82f6', gradient: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)', icon: '📱' },
   'Интернет сигурност': { primary: '#ef4444', gradient: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)', icon: '🔒' },
@@ -23,16 +21,47 @@ const PROGRAM_COLORS = {
 
 export const AcademyCourses = () => {
   const { t } = useTranslation();
-  const { 
-    courses,
-    isLoading,
-    getCourses, 
-    getCourseCategories 
-  } = useAcademyCourses();
+  const { getCourses, getCourseCategories } = useAcademyCourses();
+  const [searchParams, setSearchParams] = useSearchParams();
 
+  // Local state
+  const [localCourses, setLocalCourses] = useState([]);
+  const [pagination, setPagination] = useState({});
   const [categories, setCategories] = useState([]);
-  const [selectedProgram, setSelectedProgram] = useState(null);
   const [categoriesLoaded, setCategoriesLoaded] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const cacheRef = useRef({});
+
+  // Read filters from URL
+  const currentPage = parseInt(searchParams.get('page')) || 1;
+  const currentCategory = searchParams.get('category') || '';
+  const currentDifficulty = searchParams.get('difficulty') || '';
+  const currentSearch = searchParams.get('search') || '';
+  const currentSort = searchParams.get('sortBy') || '';
+
+  // Update URL params
+  const updateParams = useCallback((updates) => {
+    setSearchParams(prev => {
+      const newParams = new URLSearchParams(prev);
+
+      Object.entries(updates).forEach(([key, value]) => {
+        if (value && value !== '' && value !== 'all') {
+          newParams.set(key, String(value));
+        } else {
+          newParams.delete(key);
+        }
+      });
+
+      // Reset page to 1 when non-page filters change
+      if (!('page' in updates)) {
+        newParams.delete('page');
+      } else if (updates.page === 1) {
+        newParams.delete('page');
+      }
+
+      return newParams;
+    }, { replace: true });
+  }, [setSearchParams]);
 
   // Fetch categories
   useEffect(() => {
@@ -42,12 +71,7 @@ export const AcademyCourses = () => {
         const normalized = (data || []).map((cat, index) => {
           const name = typeof cat === 'string' ? cat : cat.name;
           const colors = PROGRAM_COLORS[name] || PROGRAM_COLORS.default;
-          return {
-            id: index,
-            slug: name,
-            name: name,
-            ...colors
-          };
+          return { id: index, slug: name, name, ...colors };
         });
         setCategories(normalized);
         setCategoriesLoaded(true);
@@ -56,122 +80,113 @@ export const AcademyCourses = () => {
     }
   }, [getCourseCategories, categoriesLoaded]);
 
-  // Fetch courses
+  // Fetch courses based on URL params
   useEffect(() => {
-    if (courses.length === 0) {
-      getCourses({});
+    const cacheKey = JSON.stringify({
+      p: currentPage,
+      c: currentCategory,
+      d: currentDifficulty,
+      s: currentSearch,
+      sb: currentSort
+    });
+
+    if (cacheRef.current[cacheKey]) {
+      setLocalCourses(cacheRef.current[cacheKey].courses);
+      setPagination(cacheRef.current[cacheKey].pagination);
+      setLoading(false);
+      return;
     }
-  }, []);
 
-  // Group courses by category
-  const programsWithCourses = useMemo(() => {
-    return categories.map(category => {
-      const categoryCourses = courses.filter(course => {
-        const courseCat = course.category?.name || course.categoryName || course.category;
-        return courseCat === category.name;
-      });
-      return {
-        ...category,
-        courses: categoryCourses,
-        courseCount: categoryCourses.length
-      };
-    }).filter(p => p.courseCount > 0);
-  }, [categories, courses]);
+    const fetchCourses = async () => {
+      setLoading(true);
+      try {
+        const params = { page: currentPage, limit: 12 };
+        if (currentCategory) params.category = currentCategory;
+        if (currentDifficulty && currentDifficulty !== 'all') params.difficulty = currentDifficulty;
+        if (currentSearch) params.search = currentSearch;
+        if (currentSort) params.sortBy = currentSort;
 
-  // Stats
+        const data = await getCourses(params);
+        const result = {
+          courses: data.courses || [],
+          pagination: data.pagination || {}
+        };
+
+        cacheRef.current[cacheKey] = result;
+        setLocalCourses(result.courses);
+        setPagination(result.pagination);
+      } catch (err) {
+        console.error('Error fetching courses:', err);
+        setLocalCourses([]);
+        setPagination({});
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourses();
+  }, [currentPage, currentCategory, currentDifficulty, currentSearch, currentSort, getCourses]);
+
+  // Stats for hero
   const stats = useMemo(() => ({
-    totalCourses: courses.length,
-    totalPrograms: programsWithCourses.length,
-    totalEnrolled: courses.reduce((sum, c) => sum + (c.enrolledCount || 0), 0)
-  }), [courses, programsWithCourses]);
+    totalCourses: pagination.total || localCourses.length,
+    totalPrograms: categories.length,
+    totalEnrolled: localCourses.reduce((sum, c) => sum + (c.enrolledCount || 0), 0)
+  }), [localCourses, categories, pagination]);
 
-  // Selected program courses
-  const selectedProgramData = useMemo(() => {
-    if (!selectedProgram) return null;
-    return programsWithCourses.find(p => p.slug === selectedProgram);
-  }, [selectedProgram, programsWithCourses]);
-
+  // Handle program select (toggle category)
   const handleProgramSelect = useCallback((programSlug) => {
-    setSelectedProgram(prev => prev === programSlug ? null : programSlug);
-  }, []);
+    const newCategory = currentCategory === programSlug ? '' : programSlug;
+    updateParams({ category: newCategory });
+  }, [currentCategory, updateParams]);
+
+  // Selected category data for visual styling
+  const selectedCategoryData = useMemo(() => {
+    if (!currentCategory) return null;
+    return categories.find(c => c.name === currentCategory) || null;
+  }, [currentCategory, categories]);
 
   return (
     <div className="academyCourses">
-      {/* Hero */}
-      <AcademyCoursesHero 
+      <AcademyCoursesHero
         totalCourses={stats.totalCourses}
         totalPrograms={stats.totalPrograms}
         totalEnrolled={stats.totalEnrolled}
       />
 
-      {/* Main Content */}
       <div className="academyCourses-main">
-        {isLoading ? (
-          <div className="academyCourses-loading">
-            <div className="academyCourses-loading-spinner">
-              <div className="academyCourses-loading-ring"></div>
-              <div className="academyCourses-loading-ring"></div>
-              <div className="academyCourses-loading-ring"></div>
-            </div>
-            <p className="academyCourses-loading-text">{t('academyCourses.loading')}</p>
+        {/* Program Tracks */}
+        <section className="academyCourses-section">
+          <div className="academyCourses-section-header">
+            <h2 className="academyCourses-section-title">
+              {t('academyCourses.programsTitle')}
+            </h2>
+            <p className="academyCourses-section-subtitle">
+              {t('academyCourses.programsSubtitle')}
+            </p>
           </div>
-        ) : programsWithCourses.length === 0 ? (
-          <div className="academyCourses-empty">
-            <div className="academyCourses-empty-icon">📚</div>
-            <h3 className="academyCourses-empty-title">{t('academyCourses.noCourses')}</h3>
-            <p className="academyCourses-empty-text">{t('academyCourses.checkBackLater')}</p>
-          </div>
-        ) : (
-          <>
-            {/* Program Tracks */}
-            <section className="academyCourses-section">
-              <div className="academyCourses-section-header">
-                <h2 className="academyCourses-section-title">
-                  {t('academyCourses.programsTitle')}
-                </h2>
-                <p className="academyCourses-section-subtitle">
-                  {t('academyCourses.programsSubtitle')}
-                </p>
-              </div>
-              
-              <AcademyProgramTracks 
-                programs={programsWithCourses}
-                selectedProgram={selectedProgram}
-                onProgramSelect={handleProgramSelect}
-              />
-            </section>
 
-            {/* Courses List */}
-            {selectedProgramData && (
-              <section className="academyCourses-section academyCourses-section--courses">
-                <AcademyCoursesList 
-                  program={selectedProgramData}
-                  courses={selectedProgramData.courses}
-                  onClose={() => setSelectedProgram(null)}
-                />
-              </section>
-            )}
+          <AcademyProgramTracks
+            programs={categories}
+            selectedProgram={currentCategory}
+            onProgramSelect={handleProgramSelect}
+          />
+        </section>
 
-            {/* All Courses Preview (when no program selected) */}
-            {!selectedProgram && (
-              <section className="academyCourses-section">
-                <div className="academyCourses-section-header">
-                  <h2 className="academyCourses-section-title">
-                    {t('academyCourses.popularCourses')}
-                  </h2>
-                  <p className="academyCourses-section-subtitle">
-                    {t('academyCourses.popularCoursesSubtitle')}
-                  </p>
-                </div>
-                
-                <AcademyCoursesList 
-                  courses={courses.slice(0, 8)}
-                  showViewAll={courses.length > 8}
-                />
-              </section>
-            )}
-          </>
-        )}
+        {/* Courses List */}
+        <section className="academyCourses-section academyCourses-section--courses">
+          <AcademyCoursesList
+            courses={localCourses}
+            pagination={pagination}
+            isLoading={loading}
+            program={selectedCategoryData}
+            onClose={() => updateParams({ category: '' })}
+            difficulty={currentDifficulty}
+            search={currentSearch}
+            sortBy={currentSort}
+            onFilterChange={updateParams}
+          />
+        </section>
       </div>
     </div>
   );
