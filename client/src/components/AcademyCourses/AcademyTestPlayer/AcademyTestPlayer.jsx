@@ -410,7 +410,7 @@ const AcademyTestPlayer = () => {
 
   const answerDebounceRef = useRef(null);
 
-const handleAnswerSelect = useCallback(async (questionId, answerId, isMultiple = false) => {
+  const handleAnswerSelect = useCallback(async (questionId, answerId, isMultiple = false) => {
     let newAnswerValue;
 
     setAnswers(prev => {
@@ -706,7 +706,7 @@ const handleAnswerSelect = useCallback(async (questionId, answerId, isMultiple =
   const currentQuestion = questions[currentQuestionIndex];
   const attemptNumber = results?.attemptNumber || testData.attempt?.attemptNumber || 1;
   const maxAttempts = test.maxAttempts || 3;
-  const canRetry = !results?.passed && remainingAttempts > 0 && canStartNewAttempt;
+  const canRetry = remainingAttempts > 0 && canStartNewAttempt;
 
   // =========================================================
   //                    RESULTS SCREEN
@@ -870,7 +870,7 @@ const handleAnswerSelect = useCallback(async (questionId, answerId, isMultiple =
                 max: maxAttempts,
                 defaultValue: `Опит ${attemptNumber} от ${maxAttempts}`
               })}
-              {remainingAttempts > 0 && !isPassed && (
+              {remainingAttempts > 0 && (
                 <span className="atp-results__attempts-remaining">
                   {' '}• {t('academyTestPlayer.results.remainingAttempts', {
                     count: remainingAttempts,
@@ -878,7 +878,7 @@ const handleAnswerSelect = useCallback(async (questionId, answerId, isMultiple =
                   })}
                 </span>
               )}
-              {remainingAttempts === 0 && !isPassed && (
+              {remainingAttempts === 0 && (
                 <span className="atp-results__attempts-exhausted">
                   {' '}• {t('academyTestPlayer.results.noMoreAttempts', 'Няма повече опити')}
                 </span>
@@ -955,36 +955,28 @@ const handleAnswerSelect = useCallback(async (questionId, answerId, isMultiple =
 
             {/* Actions - НАЙ-ОТДОЛУ */}
             <div className="atp-results__actions">
-              {isPassed ? (
-                <>
-                  <button onClick={handleBackToLesson} className="atp-results__btn atp-results__btn--secondary">
-                    {t('academyTestPlayer.results.backToLesson', 'Към урока')}
-                  </button>
-                  <button onClick={handleContinueCourse} className="atp-results__btn atp-results__btn--primary">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M5 12h14M12 5l7 7-7 7" />
-                    </svg>
-                    {t('academyTestPlayer.results.continueCourse', 'Продължи с курса')}
-                  </button>
-                </>
-              ) : (
-                <>
-                  {canRetry && (
-                    <button
-                      onClick={handleRetryTest}
-                      className="atp-results__btn atp-results__btn--retry"
-                    >
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M1 4v6h6M23 20v-6h-6" />
-                        <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15" />
-                      </svg>
-                      {t('academyTestPlayer.results.tryAgain', 'Опитай отново')}
-                    </button>
-                  )}
-                  <button onClick={handleBackToLesson} className="atp-results__btn atp-results__btn--primary">
-                    {t('academyTestPlayer.results.backToLesson', 'Към урока')}
-                  </button>
-                </>
+              {canRetry && (
+                <button
+                  onClick={handleRetryTest}
+                  className="atp-results__btn atp-results__btn--retry"
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M1 4v6h6M23 20v-6h-6" />
+                    <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15" />
+                  </svg>
+                  {t('academyTestPlayer.results.tryAgain', 'Опитай отново')}
+                </button>
+              )}
+              <button onClick={handleBackToLesson} className="atp-results__btn atp-results__btn--secondary">
+                {t('academyTestPlayer.results.backToLesson', 'Към урока')}
+              </button>
+              {isPassed && (
+                <button onClick={handleContinueCourse} className="atp-results__btn atp-results__btn--primary">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                  {t('academyTestPlayer.results.continueCourse', 'Продължи с курса')}
+                </button>
               )}
             </div>
           </div>

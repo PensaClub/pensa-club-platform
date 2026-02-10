@@ -2921,10 +2921,9 @@ academyTestsController.get('/course/:courseId/status', isAuth, async (req, res, 
     const hasPassedTest = completedAttempts.some(a => a.score >= testData.passingScore);
 
     const totalAttempts = attempts.length;
-    const canStartNew = testAccessible
-      && !activeAttempt
-      && (!testData.maxAttempts || totalAttempts < testData.maxAttempts)
-      && !hasPassedTest;
+  const canStartNew = testAccessible
+  && !activeAttempt
+  && (!testData.maxAttempts || totalAttempts < testData.maxAttempts);
 
     const remainingAttempts = testData.maxAttempts
       ? Math.max(0, testData.maxAttempts - totalAttempts)

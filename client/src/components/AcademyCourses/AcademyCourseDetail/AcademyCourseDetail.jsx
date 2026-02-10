@@ -1343,7 +1343,7 @@ useEffect(() => {
                       )}
 
                       {/* Action buttons */}
-                      {courseTestData.testAccessible && !courseTestData.hasPassedTest && (
+                      {courseTestData.testAccessible && (
                         <div className="academyCourseDetail-final-test-actions">
                           {courseTestData.activeAttempt ? (
                             <button
