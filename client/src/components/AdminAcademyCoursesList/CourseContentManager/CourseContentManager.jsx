@@ -25,7 +25,8 @@ import {
   AlertTriangle,
   Loader2,
   Calendar,
-  Upload, Paperclip
+  Upload, Paperclip,
+  ClipboardCheck,
 } from 'lucide-react';
 import useCourseContentManager from './useCourseContentManager';
 import './courseContentManager.css';
@@ -337,6 +338,11 @@ const CourseContentManager = () => {
                                   {les.title}
                                 </span>
                                 {les.isFree && <span className="ccm-free-badge">{t('contentManager.free', 'Безплатен')}</span>}
+                                {les.hasTest && (
+                                  <span className="ccm-test-badge" title={t('contentManager.hasTest', 'Урокът има тест')}>
+                                    <ClipboardCheck size={14} />
+                                  </span>
+                                )}
                               </div>
 
                               <div className="ccm-lesson-right">
@@ -490,6 +496,11 @@ const CourseContentManager = () => {
                             {les.title}
                           </span>
                           {les.isFree && <span className="ccm-free-badge">{t('contentManager.free', 'Безплатен')}</span>}
+                          {les.hasTest && (
+  <span className="ccm-test-badge" title={t('contentManager.hasTest', 'Урокът има тест')}>
+    <ClipboardCheck size={14} />
+  </span>
+)}
                         </div>
 
                         <div className="ccm-lesson-right">
@@ -754,7 +765,7 @@ const CourseContentManager = () => {
           onClose={closeEditLesson}
         />
       )}
-       <TestEditorModal
+      <TestEditorModal
         isOpen={showCourseTest}
         onClose={() => setShowCourseTest(false)}
         courseId={course?.id}
@@ -848,7 +859,7 @@ const ModuleEditInline = ({ module, onSave, onCancel, actionLoading }) => {
           />
         </div>
       </div>
-     
+
     </div>
   );
 };

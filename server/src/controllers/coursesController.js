@@ -419,6 +419,11 @@ coursesController.get('/:slug', async (req, res, next) => {
           ],
         },
       ],
+      order: [
+    [{ model: course_module, as: 'modules' }, 'sortOrder', 'ASC'],
+    [{ model: course_module, as: 'modules' }, { model: lesson, as: 'lessons' }, 'sortOrder', 'ASC'],
+    [{ model: lesson, as: 'lessons' }, 'sortOrder', 'ASC'],
+  ],
     });
 
     if (!courseData) {
@@ -501,6 +506,11 @@ coursesController.get(
             ],
           },
         ],
+         order: [
+    [{ model: course_module, as: 'modules' }, 'sortOrder', 'ASC'],
+    [{ model: course_module, as: 'modules' }, { model: lesson, as: 'lessons' }, 'sortOrder', 'ASC'],
+    [{ model: lesson, as: 'lessons' }, 'sortOrder', 'ASC'],
+  ],
       });
 
       if (!courseData) {
@@ -857,16 +867,19 @@ coursesController.get('/:courseSlug/modules', async (req, res, next) => {
     }
 
     const modules = await course_module.findAll({
-      where: { courseId: courseData.id },
-      include: [
-        {
-          model: lesson,
-          as: 'lessons',
-          attributes: ['id', 'title', 'slug', 'lessonType', 'durationMinutes', 'sortOrder', 'isPublished', 'isFree'],
-        },
-      ],
-      order: [['sortOrder', 'ASC']],
-    });
+  where: { courseId: courseData.id },
+  include: [
+    {
+      model: lesson,
+      as: 'lessons',
+      attributes: ['id', 'title', 'slug', 'lessonType', 'durationMinutes', 'sortOrder', 'isPublished', 'isFree', 'hasTest'],
+    },
+  ],
+  order: [
+    ['sortOrder', 'ASC'],
+    [{ model: lesson, as: 'lessons' }, 'sortOrder', 'ASC'],
+  ],
+});
 
     res.status(200).json({ success: true, modules });
   } catch (err) {

@@ -532,7 +532,21 @@
   text-transform: uppercase;
   flex-shrink: 0;
 }
+/* Test badge indicator */
+.ccm-test-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #f59e0b;
+  margin-left: 6px;
+  cursor: help;
+  opacity: 0.85;
+  transition: opacity 0.2s;
+}
 
+.ccm-test-badge:hover {
+  opacity: 1;
+}
 .ccm-lesson-right {
   display: flex;
   align-items: center;
