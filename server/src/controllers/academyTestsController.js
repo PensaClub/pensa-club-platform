@@ -5,7 +5,7 @@ const { Op } = require('sequelize');
 
 const {
   lesson_test,
-   lecture_test,
+  lecture_test,
   test_question,
   test_answer,
   student_test_attempt,
@@ -1180,7 +1180,7 @@ academyTestsController.get('/lesson/:lessonId/status', isAuth, async (req, res, 
     // Форматирай опитите с отговорите
     const formattedAttempts = attempts.map(attempt => {
       const plain = attempt.get({ plain: true });
-      
+
       // Форматирай отговорите и сортирай по sortOrder на въпроса
       const answersDetails = (plain.attemptAnswers || [])
         .sort((a, b) => (a.question?.sortOrder || 0) - (b.question?.sortOrder || 0))
@@ -1196,12 +1196,12 @@ academyTestsController.get('/lesson/:lessonId/status', isAuth, async (req, res, 
       const correctCount = answersDetails.filter(a => a.isCorrect === true).length;
       const wrongCount = answersDetails.filter(a => a.isCorrect === false).length;
       const totalCount = answersDetails.length;
-      
+
       // Изчисли score ако е null в базата
-      const calculatedScore = totalCount > 0 
-        ? Math.round((correctCount / totalCount) * 100) 
+      const calculatedScore = totalCount > 0
+        ? Math.round((correctCount / totalCount) * 100)
         : 0;
-      
+
       // Използвай стойността от базата или изчислената
       const score = plain.score !== null ? Number(plain.score) : calculatedScore;
       const passed = plain.isPassed !== null ? plain.isPassed : (score >= testData.passingScore);
@@ -1231,7 +1231,7 @@ academyTestsController.get('/lesson/:lessonId/status', isAuth, async (req, res, 
     // Намери най-добър резултат (по score)
     let bestAttempt = null;
     if (completedAttempts.length > 0) {
-      bestAttempt = completedAttempts.reduce((best, current) => 
+      bestAttempt = completedAttempts.reduce((best, current) =>
         (current.score > best.score) ? current : best
       );
     }
@@ -1247,7 +1247,7 @@ academyTestsController.get('/lesson/:lessonId/status', isAuth, async (req, res, 
     const canStartNew = !activeAttempt && (hasUnlimitedAttempts || formattedAttempts.length < testData.maxAttempts);
 
     // Оставащи опити
-    const remainingAttempts = hasUnlimitedAttempts 
+    const remainingAttempts = hasUnlimitedAttempts
       ? null
       : Math.max(0, testData.maxAttempts - formattedAttempts.length);
 
@@ -1365,7 +1365,7 @@ academyTestsController.post('/:id/start', isAuth, async (req, res, next) => {
 // Helper: Get questions for attempt
 const getQuestionsForAttempt = async (testData, attemptId, isLectureTest = false) => {
 
-  const whereClause = isLectureTest 
+  const whereClause = isLectureTest
     ? { lectureTestId: testData.id }
     : { testId: testData.id };
 
@@ -2360,7 +2360,7 @@ academyTestsController.get('/lecture/:lectureId/status', isAuth, async (req, res
     // Форматирай опитите
     const formattedAttempts = attempts.map(attempt => {
       const plain = attempt.get({ plain: true });
-      
+
       // Сортирай отговорите по sortOrder на въпроса
       const sortedAnswers = (plain.attemptAnswers || [])
         .sort((a, b) => (a.question?.sortOrder || 0) - (b.question?.sortOrder || 0));
@@ -2369,7 +2369,7 @@ academyTestsController.get('/lecture/:lectureId/status', isAuth, async (req, res
       const answersDetails = sortedAnswers.map((aa, index) => {
         // Намери верния отговор за въпроса
         const correctAnswer = aa.question?.answerOptions?.find(opt => opt.isCorrect);
-        
+
         return {
           questionNumber: index + 1,
           questionId: aa.questionId,
@@ -2388,12 +2388,12 @@ academyTestsController.get('/lecture/:lectureId/status', isAuth, async (req, res
       const correctCount = answersDetails.filter(a => a.isCorrect === true).length;
       const wrongCount = answersDetails.filter(a => a.isCorrect === false).length;
       const totalCount = answersDetails.length;
-      
+
       // Изчисли score ако е null в базата
-      const calculatedScore = totalCount > 0 
-        ? Math.round((correctCount / totalCount) * 100) 
+      const calculatedScore = totalCount > 0
+        ? Math.round((correctCount / totalCount) * 100)
         : 0;
-      
+
       // Използвай стойността от базата или изчислената
       const score = plain.score !== null ? Number(plain.score) : calculatedScore;
       const passed = plain.isPassed !== null ? plain.isPassed : (score >= testData.passingScore);
@@ -2424,7 +2424,7 @@ academyTestsController.get('/lecture/:lectureId/status', isAuth, async (req, res
     // Намери най-добър резултат (по score)
     let bestAttempt = null;
     if (completedAttempts.length > 0) {
-      bestAttempt = completedAttempts.reduce((best, current) => 
+      bestAttempt = completedAttempts.reduce((best, current) =>
         (current.score > best.score) ? current : best
       );
     }
@@ -2440,7 +2440,7 @@ academyTestsController.get('/lecture/:lectureId/status', isAuth, async (req, res
     const canStartNew = !activeAttempt && (hasUnlimitedAttempts || formattedAttempts.length < testData.maxAttempts);
 
     // Оставащи опити
-    const remainingAttempts = hasUnlimitedAttempts 
+    const remainingAttempts = hasUnlimitedAttempts
       ? null
       : Math.max(0, testData.maxAttempts - formattedAttempts.length);
 
@@ -2562,11 +2562,11 @@ academyTestsController.post('/lecture/:lectureId/start', isAuth, async (req, res
     if (inProgressAttempt) {
       // Провери дали времето е изтекло
       const timeRemaining = calculateTimeRemaining(inProgressAttempt, testData);
-      
+
       if (timeRemaining !== null && timeRemaining <= 0) {
         // Времето е изтекло - submit автоматично
         await submitLectureAttempt(inProgressAttempt.id, testData);
-        
+
         // Създай нов attempt ако има още опити
         if (!testData.maxAttempts || existingAttempts + 1 < testData.maxAttempts) {
           const newAttempt = await test_attempt.create({
@@ -2892,8 +2892,17 @@ academyTestsController.get('/course/:courseId/status', isAuth, async (req, res, 
         },
         courseCompleted,
         testAccessible,
-        attempts: [],
-        bestAttempt: null,
+        attempts: completedAttempts.map(a => ({
+          id: a.id,
+          score: Number(a.score),
+          passed: Number(a.score) >= testData.passingScore,
+          completedAt: a.completedAt || a.createdAt,
+        })),
+        bestAttempt: bestAttempt ? {
+          id: bestAttempt.id,
+          score: Number(bestAttempt.score),
+          passed: Number(bestAttempt.score) >= testData.passingScore,
+        } : null,
         lastAttempt: null,
         hasPassedTest: false,
         canStartNew: testAccessible,
@@ -2914,16 +2923,16 @@ academyTestsController.get('/course/:courseId/status', isAuth, async (req, res, 
 
     const completedAttempts = attempts.filter(a => a.status === 'completed');
     const bestAttempt = completedAttempts.length > 0
-      ? completedAttempts.reduce((best, a) => (a.score > best.score ? a : best))
+      ? completedAttempts.reduce((best, a) => (Number(a.score) > Number(best.score) ? a : best))
       : null;
     const lastAttempt = attempts[0] || null;
     const activeAttempt = attempts.find(a => a.status === 'in_progress') || null;
     const hasPassedTest = completedAttempts.some(a => a.score >= testData.passingScore);
 
     const totalAttempts = attempts.length;
-  const canStartNew = testAccessible
-  && !activeAttempt
-  && (!testData.maxAttempts || totalAttempts < testData.maxAttempts);
+    const canStartNew = testAccessible
+      && !activeAttempt
+      && (!testData.maxAttempts || totalAttempts < testData.maxAttempts);
 
     const remainingAttempts = testData.maxAttempts
       ? Math.max(0, testData.maxAttempts - totalAttempts)
