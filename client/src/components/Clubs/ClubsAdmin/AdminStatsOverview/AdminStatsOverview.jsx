@@ -23,7 +23,8 @@ const AdminStatsOverview = ({ stats }) => {
                 verifiedPercentage: 0,
                 pendingPercentage: 0,
                 averageMembers: 0,
-                healthScore: 0
+                healthScore: 0,
+                pendingCount: 0
             };
         }
 
@@ -137,7 +138,7 @@ const AdminStatsOverview = ({ stats }) => {
                             </div>
                             <div className="adminstatsoverview-stat-content">
                                 <div className="adminstatsoverview-stat-value">
-                                    {stat.value.toLocaleString()}
+                                    {(stat.value ?? 0).toLocaleString()}
                                     {stat.percentage !== undefined && (
                                         <span className="adminstatsoverview-stat-percentage">
                                             ({stat.percentage}%)
