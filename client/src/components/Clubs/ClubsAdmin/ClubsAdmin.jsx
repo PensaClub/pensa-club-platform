@@ -26,7 +26,7 @@ import AdminSearchBar from './AdminSearchBar/AdminSearchBar';
 const ClubsAdmin = () => {
     const { t } = useTranslation();
     const { isAdmin, isAuthentication, isModerator } = useAuthContext();
-    
+
     const {
         getAllClubs,
         toggleClubStatus,
@@ -51,12 +51,12 @@ const ClubsAdmin = () => {
     const [initialLoading, setInitialLoading] = useState(true);
     const [error, setError] = useState(null);
     const [showBulkActions, setShowBulkActions] = useState(false);
-    
+
     // Pagination info from server
     const [totalItems, setTotalItems] = useState(0);
     const [totalPages, setTotalPages] = useState(1);
     const [isServerSidePagination, setIsServerSidePagination] = useState(true);
-    
+
     // Modal states
     const [modalState, setModalState] = useState({
         isOpen: false,
@@ -99,7 +99,7 @@ const ClubsAdmin = () => {
                     setIsServerSidePagination(true);
                     const response = await getAllClubs(true, currentPage, itemsPerPage);
                     const fetchedClubs = response?.clubs || response || [];
-                    
+
                     setClubs(Array.isArray(fetchedClubs) ? fetchedClubs : []);
                     setTotalItems(response?.total || response?.pagination?.totalItems || fetchedClubs.length);
                     setTotalPages(response?.pagination?.totalPages || Math.ceil((response?.total || fetchedClubs.length) / itemsPerPage));
@@ -219,7 +219,17 @@ const ClubsAdmin = () => {
     // Calculate statistics
     const stats = useMemo(() => {
         const dataToAnalyze = needsClientSideFiltering ? allClubs : clubs;
-        if (!Array.isArray(dataToAnalyze)) return {};
+        if (!Array.isArray(dataToAnalyze) || dataToAnalyze.length === 0) return {
+            total: 0,
+            active: 0,
+            inactive: 0,
+            draft: 0,
+            suspended: 0,
+            rejected: 0,
+            verified: 0,
+            unverified: 0,
+            totalMembers: 0
+        };
 
         return {
             total: dataToAnalyze.length,
@@ -245,8 +255,8 @@ const ClubsAdmin = () => {
 
     // Handle club selection
     const handleClubSelect = (clubId, isSelected) => {
-        setSelectedClubs(prev => 
-            isSelected 
+        setSelectedClubs(prev =>
+            isSelected
                 ? [...prev, clubId]
                 : prev.filter(id => id !== clubId)
         );
@@ -271,10 +281,10 @@ const ClubsAdmin = () => {
             const updatedClub = await toggleClubStatus(club.id || club.slug, newStatus);
             if (updatedClub) {
                 // Update both clubs arrays
-                setClubs(prev => prev.map(c => 
+                setClubs(prev => prev.map(c =>
                     c.id === club.id ? updatedClub : c
                 ));
-                setAllClubs(prev => prev.map(c => 
+                setAllClubs(prev => prev.map(c =>
                     c.id === club.id ? updatedClub : c
                 ));
             }
@@ -287,10 +297,10 @@ const ClubsAdmin = () => {
         try {
             const verifiedClub = await verifyClub(club.id || club.slug);
             if (verifiedClub) {
-                setClubs(prev => prev.map(c => 
+                setClubs(prev => prev.map(c =>
                     c.id === club.id ? verifiedClub : c
                 ));
-                setAllClubs(prev => prev.map(c => 
+                setAllClubs(prev => prev.map(c =>
                     c.id === club.id ? verifiedClub : c
                 ));
             }
@@ -303,10 +313,10 @@ const ClubsAdmin = () => {
         try {
             const approvedClub = await approveClub(club.id || club.slug);
             if (approvedClub) {
-                setClubs(prev => prev.map(c => 
+                setClubs(prev => prev.map(c =>
                     c.id === club.id ? approvedClub : c
                 ));
-                setAllClubs(prev => prev.map(c => 
+                setAllClubs(prev => prev.map(c =>
                     c.id === club.id ? approvedClub : c
                 ));
             }
@@ -320,10 +330,10 @@ const ClubsAdmin = () => {
             const result = await rejectClub(club.id || club.slug, reason);
             if (result) {
                 const updatedClub = { ...club, status: 'rejected' };
-                setClubs(prev => prev.map(c => 
+                setClubs(prev => prev.map(c =>
                     c.id === club.id ? updatedClub : c
                 ));
-                setAllClubs(prev => prev.map(c => 
+                setAllClubs(prev => prev.map(c =>
                     c.id === club.id ? updatedClub : c
                 ));
             }
@@ -358,12 +368,12 @@ const ClubsAdmin = () => {
                     setAllClubs(prev => prev.filter(club => !selectedClubs.includes(club.id)));
                 } else {
                     // Refresh current page data
-                    const response = await getAllClubs(true, 
-                        needsClientSideFiltering ? 1 : currentPage, 
+                    const response = await getAllClubs(true,
+                        needsClientSideFiltering ? 1 : currentPage,
                         needsClientSideFiltering ? 1000 : itemsPerPage
                     );
                     const updatedClubs = response?.clubs || response || [];
-                    
+
                     if (needsClientSideFiltering) {
                         setAllClubs(Array.isArray(updatedClubs) ? updatedClubs : []);
                     } else {
@@ -434,11 +444,11 @@ const ClubsAdmin = () => {
                         onChange={setFilterBy}
                         stats={stats}
                     />
-                    
+
                     <div className="clubsadmin-sort-dropdown">
                         <FontAwesomeIcon icon={faSort} />
-                        <select 
-                            value={sortBy} 
+                        <select
+                            value={sortBy}
                             onChange={(e) => setSortBy(e.target.value)}
                             className="clubsadmin-sort-select"
                         >
@@ -505,7 +515,7 @@ const ClubsAdmin = () => {
                                 >
                                     ⟪
                                 </button>
-                                
+
                                 <button
                                     className="clubsadmin-pagination-btn"
                                     onClick={() => handlePageChange(currentPage - 1)}
@@ -513,12 +523,12 @@ const ClubsAdmin = () => {
                                 >
                                     {t('clubsAdmin.pagination.previous')}
                                 </button>
-                                
+
                                 <div className="clubsadmin-pagination-info">
                                     <span>
-                                        {t('clubsAdmin.pagination.info', { 
-                                            current: currentPage, 
-                                            total: calculatedTotalPages 
+                                        {t('clubsAdmin.pagination.info', {
+                                            current: currentPage,
+                                            total: calculatedTotalPages
                                         })}
                                     </span>
                                     <div className="clubsadmin-pagination-details">
@@ -529,7 +539,7 @@ const ClubsAdmin = () => {
                                         })}
                                     </div>
                                 </div>
-                                
+
                                 <button
                                     className="clubsadmin-pagination-btn"
                                     onClick={() => handlePageChange(currentPage + 1)}
@@ -537,7 +547,7 @@ const ClubsAdmin = () => {
                                 >
                                     {t('clubsAdmin.pagination.next')}
                                 </button>
-                                
+
                                 <button
                                     className="clubsadmin-pagination-btn"
                                     onClick={() => handlePageChange(calculatedTotalPages)}

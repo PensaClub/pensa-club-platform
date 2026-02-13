@@ -866,7 +866,6 @@ export const Profile = () => {
                             <AnalyticsIcon className="icon" />
                             SEO Логове
                           </span>
-                          {/* <ArrowIcon className="icon-arrow" /> */}
                         </NavLink>
                       </li>
                       <li>
@@ -944,50 +943,49 @@ export const Profile = () => {
                             </NavLink>
                           </li>
                         </ul>
-                        {/* Academy */}
-                        <li>
-                          <NavLink
-                            onClick={(e) => {
-                              toggleSubMenu('academy');
-                            }}
-                            className="nav-link-button"
-                          >
-                            <span className="link-content">
-                              <EducationIcon className="icon" />
-                              {t("admin.academy.title")}
-                            </span>
-                            <span className={`arrow-icon ${subMenuStates.academy ? 'rotated' : ''}`}>
-                              {subMenuStates.academy ? <DownArrowIcon /> : <ArrowIcon />}
-                            </span>
-                          </NavLink>
-                          <ul className={`sub-menu ${subMenuStates.academy ? 'expanded' : ''}`}>
-                            <li>
-                              <NavLink to="/academy/admin/courses" className={({ isActive }) => isActive ? 'active' : ''}>
-                                <CircleIcon className="icon" />
-                                {t("admin.academy.courses")}
-                              </NavLink>
-                            </li>
-                            <li>
-                              <NavLink to="/academy/admin/create-course" className={({ isActive }) => isActive ? 'active' : ''}>
-                                <CircleIcon className="icon" />
-                                {t("admin.academy.createCourse")}
-                              </NavLink>
-                            </li>
-
-                            <li>
-                              <NavLink to="/academy/admin/create-lecture" className={({ isActive }) => isActive ? 'active' : ''}>
-                                <CircleIcon className="icon" />
-                                {t("admin.academy.createLecture")}
-                              </NavLink>
-                            </li>
-                            <li>
-                              <NavLink to="/academy/admin/create-seminar" className={({ isActive }) => isActive ? 'active' : ''}>
-                                <CircleIcon className="icon" />
-                                {t("admin.academy.createSeminar")}
-                              </NavLink>
-                            </li>
-                          </ul>
-                        </li>
+                      </li>
+                      {/* Academy */}
+                      <li>
+                        <NavLink
+                          onClick={(e) => {
+                            toggleSubMenu('academy');
+                          }}
+                          className="nav-link-button"
+                        >
+                          <span className="link-content">
+                            <EducationIcon className="icon" />
+                            {t("admin.academy.title")}
+                          </span>
+                          <span className={`arrow-icon ${subMenuStates.academy ? 'rotated' : ''}`}>
+                            {subMenuStates.academy ? <DownArrowIcon /> : <ArrowIcon />}
+                          </span>
+                        </NavLink>
+                        <ul className={`sub-menu ${subMenuStates.academy ? 'expanded' : ''}`}>
+                          <li>
+                            <NavLink to="/academy/admin/courses" className={({ isActive }) => isActive ? 'active' : ''}>
+                              <CircleIcon className="icon" />
+                              {t("admin.academy.courses")}
+                            </NavLink>
+                          </li>
+                          <li>
+                            <NavLink to="/academy/admin/create-course" className={({ isActive }) => isActive ? 'active' : ''}>
+                              <CircleIcon className="icon" />
+                              {t("admin.academy.createCourse")}
+                            </NavLink>
+                          </li>
+                          <li>
+                            <NavLink to="/academy/admin/create-lecture" className={({ isActive }) => isActive ? 'active' : ''}>
+                              <CircleIcon className="icon" />
+                              {t("admin.academy.createLecture")}
+                            </NavLink>
+                          </li>
+                          <li>
+                            <NavLink to="/academy/admin/create-seminar" className={({ isActive }) => isActive ? 'active' : ''}>
+                              <CircleIcon className="icon" />
+                              {t("admin.academy.createSeminar")}
+                            </NavLink>
+                          </li>
+                        </ul>
                       </li>
                       {/*Students*/}
                       <li>
