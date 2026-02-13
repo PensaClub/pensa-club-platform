@@ -1174,3 +1174,11 @@
   border-color: rgba(0, 212, 255, 0.4);
   box-shadow: 0 0 15px rgba(0, 212, 255, 0.15);
 }
+.elm-field-error .elm-textarea,
+.elm-field-error .elm-select {
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.elm-field-error .elm-label {
+  color: #f87171;
+}

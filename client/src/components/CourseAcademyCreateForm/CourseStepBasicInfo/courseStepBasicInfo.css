@@ -199,3 +199,21 @@
     font-size: 0.78rem;
   }
 }
+.csbi-field-error .csbi-input,
+.csbi-field-error .csbi-textarea,
+.csbi-field-error .csbi-select {
+  border-color: rgba(244, 63, 94, 0.5);
+}
+
+.csbi-field-error .csbi-input:focus,
+.csbi-field-error .csbi-textarea:focus {
+  box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.1);
+}
+
+.csbi-error-msg {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: #f43f5e;
+}

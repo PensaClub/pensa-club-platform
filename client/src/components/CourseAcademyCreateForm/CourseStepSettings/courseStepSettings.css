@@ -252,3 +252,24 @@
     font-size: 0.88rem;
   }
 }
+/* =========================================================
+                    ERROR STATES
+   ========================================================= */
+
+.csst-field-error .csst-input,
+.csst-field-error .csst-select {
+  border-color: rgba(244, 63, 94, 0.5);
+}
+
+.csst-field-error .csst-input:focus {
+  box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.1);
+}
+
+.csst-error-msg {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: #f43f5e;
+  margin-top: 4px;
+}

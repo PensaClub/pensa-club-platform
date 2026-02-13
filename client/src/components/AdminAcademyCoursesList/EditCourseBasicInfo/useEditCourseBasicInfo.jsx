@@ -111,8 +111,18 @@ const useEditCourseBasicInfo = () => {
 
     const validate = () => {
         const newErrors = {};
-       
-if (!courseData.name.trim()) newErrors.name = t('editCourse.errors.nameRequired', 'Името е задължително');
+        if (!courseData.name.trim()) {
+            newErrors.name = t('editCourse.errors.nameRequired', 'Името е задължително');
+        }
+        if (courseData.thumbnailUrl && courseData.thumbnailUrl.trim() && !/^https?:\/\/.+/.test(courseData.thumbnailUrl.trim())) {
+            newErrors.thumbnailUrl = t('editCourse.errors.invalidUrl', 'Невалиден URL адрес');
+        }
+        if (courseData.trailerUrl && courseData.trailerUrl.trim() && !/^https?:\/\/.+/.test(courseData.trailerUrl.trim())) {
+            newErrors.trailerUrl = t('editCourse.errors.invalidUrl', 'Невалиден URL адрес');
+        }
+        if (courseData.startDate && courseData.endDate && new Date(courseData.endDate) < new Date(courseData.startDate)) {
+            newErrors.endDate = t('editCourse.errors.endBeforeStart', 'Крайната дата не може да е преди началната');
+        }
         return newErrors;
     };
 
@@ -128,6 +138,12 @@ if (!courseData.name.trim()) newErrors.name = t('editCourse.errors.nameRequired'
 
             const payload = {
                 ...courseData,
+                name: courseData.name.trim(),
+                shortDescription: (courseData.shortDescription || '').trim(),
+                description: (courseData.description || '').trim(),
+                category: (courseData.category || '').trim(),
+                thumbnailUrl: (courseData.thumbnailUrl || '').trim(),
+                trailerUrl: (courseData.trailerUrl || '').trim(),
                 durationWeeks: courseData.durationWeeks ? Number(courseData.durationWeeks) : null,
                 estimatedHours: courseData.estimatedHours ? Number(courseData.estimatedHours) : null,
                 maxParticipants: courseData.maxParticipants ? Number(courseData.maxParticipants) : null,
@@ -149,7 +165,17 @@ if (!courseData.name.trim()) newErrors.name = t('editCourse.errors.nameRequired'
             navigate('/academy/admin/courses');
         } catch (err) {
             console.error('Error saving course:', err);
-            toast.error(t('editCourse.errors.saveFailed', 'Грешка при запазване'));
+            const serverErrors = err?.errors;
+            if (Array.isArray(serverErrors) && serverErrors.length > 0) {
+                const errMap = {};
+                serverErrors.forEach(e => {
+                    if (e.field) errMap[e.field] = e.message;
+                });
+                setErrors(errMap);
+                toast.error(serverErrors[0].message || t('editCourse.errors.saveFailed', 'Грешка при запазване'));
+            } else {
+                toast.error(t('editCourse.errors.saveFailed', 'Грешка при запазване'));
+            }
         } finally {
             setIsSaving(false);
         }

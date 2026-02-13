@@ -209,11 +209,7 @@ const CourseContentManager = () => {
                 onKeyDown={(e) => e.key === 'Enter' && handleAddModule()}
                 autoFocus
               />
-              <button
-                className="ccm-inline-btn ccm-inline-confirm"
-                onClick={handleAddModule}
-                disabled={actionLoading === 'add-module' || !newModuleTitle.trim()}
-              >
+             <button className="ccm-inline-btn ccm-inline-confirm" onClick={handleSave} disabled={actionLoading || !form.title.trim()}>
                 {actionLoading === 'add-module' ? <Loader2 size={14} className="ccm-spin" /> : <Check size={14} />}
               </button>
               <button
@@ -497,10 +493,10 @@ const CourseContentManager = () => {
                           </span>
                           {les.isFree && <span className="ccm-free-badge">{t('contentManager.free', 'Безплатен')}</span>}
                           {les.hasTest && (
-  <span className="ccm-test-badge" title={t('contentManager.hasTest', 'Урокът има тест')}>
-    <ClipboardCheck size={14} />
-  </span>
-)}
+                            <span className="ccm-test-badge" title={t('contentManager.hasTest', 'Урокът има тест')}>
+                              <ClipboardCheck size={14} />
+                            </span>
+                          )}
                         </div>
 
                         <div className="ccm-lesson-right">

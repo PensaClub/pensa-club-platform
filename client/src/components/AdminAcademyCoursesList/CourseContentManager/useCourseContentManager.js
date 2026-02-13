@@ -110,6 +110,8 @@ const loadCourseMaterials = useCallback(async () => {
       await loadData();
     } catch (err) {
       console.error('Error adding module:', err);
+      const msg = err?.errors?.[0]?.message;
+      toast.error(msg || t('contentManager.errors.addModuleFailed', 'Грешка при добавяне на модул'));
     } finally {
       setActionLoading(null);
     }
@@ -118,11 +120,16 @@ const loadCourseMaterials = useCallback(async () => {
   const handleUpdateModule = async (moduleId, updates) => {
     setActionLoading(`module-${moduleId}`);
     try {
-      await updateModule(course.id, moduleId, updates);
+      await updateModule(course.id, moduleId, {
+        ...updates,
+        title: updates.title?.trim(),
+      });
       setEditingModule(null);
       await loadData();
     } catch (err) {
       console.error('Error updating module:', err);
+      const msg = err?.errors?.[0]?.message;
+      toast.error(msg || t('contentManager.errors.updateModuleFailed', 'Грешка при обновяване на модул'));
     } finally {
       setActionLoading(null);
     }
@@ -177,8 +184,10 @@ const loadCourseMaterials = useCallback(async () => {
       setNewLessonType('video');
       setAddingLessonTo(null);
       await loadData();
-    } catch (err) {
+     } catch (err) {
       console.error('Error adding lesson:', err);
+      const msg = err?.errors?.[0]?.message;
+      toast.error(msg || t('contentManager.errors.addLessonFailed', 'Грешка при добавяне на урок'));
     } finally {
       setActionLoading(null);
     }

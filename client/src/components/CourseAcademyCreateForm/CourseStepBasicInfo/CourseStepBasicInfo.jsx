@@ -121,7 +121,7 @@ const CourseStepBasicInfo = ({ courseData, updateField, errors }) => {
 
       {/* Thumbnail + Trailer row */}
       <div className="csbi-row">
-        <div className="csbi-field">
+        <div className={`csbi-field ${errors.thumbnailUrl ? 'csbi-field-error' : ''}`}>
           <label className="csbi-label" htmlFor="csbi-thumbnail">
             {t('courseStepBasicInfo.thumbnailUrl')}
           </label>
@@ -134,22 +134,34 @@ const CourseStepBasicInfo = ({ courseData, updateField, errors }) => {
             value={courseData.thumbnailUrl}
             onChange={handleChange}
           />
+          {errors.thumbnailUrl && (
+            <span className="csbi-error-msg">
+              <AlertCircle size={14} />
+              {errors.thumbnailUrl}
+            </span>
+          )}
         </div>
 
-        <div className="csbi-field">
-          <label className="csbi-label" htmlFor="csbi-trailer">
-            {t('courseStepBasicInfo.trailerUrl')}
-          </label>
-          <input
-            id="csbi-trailer"
-            type="url"
-            name="trailerUrl"
-            className="csbi-input"
-            placeholder="https://youtube.com/..."
-            value={courseData.trailerUrl}
-            onChange={handleChange}
-          />
-        </div>
+        <div className={`csbi-field ${errors.trailerUrl ? 'csbi-field-error' : ''}`}>
+  <label className="csbi-label" htmlFor="csbi-trailer">
+    {t('courseStepBasicInfo.trailerUrl')}
+  </label>
+  <input
+    id="csbi-trailer"
+    type="url"
+    name="trailerUrl"
+    className="csbi-input"
+    placeholder="https://youtube.com/..."
+    value={courseData.trailerUrl}
+    onChange={handleChange}
+  />
+  {errors.trailerUrl && (
+    <span className="csbi-error-msg">
+      <AlertCircle size={14} />
+      {errors.trailerUrl}
+    </span>
+  )}
+</div>
       </div>
 
       {/* Thumbnail Preview */}

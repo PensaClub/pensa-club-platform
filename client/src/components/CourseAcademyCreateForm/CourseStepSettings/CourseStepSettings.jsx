@@ -1,6 +1,7 @@
 // src/components/CourseAcademyCreateForm/CourseStepSettings/CourseStepSettings.jsx
 
 import { useTranslation } from 'react-i18next';
+import { AlertCircle } from 'lucide-react';
 import './courseStepSettings.css';
 
 const COURSE_TYPE_OPTIONS = ['online', 'offline', 'hybrid'];
@@ -121,19 +122,25 @@ const CourseStepSettings = ({ courseData, updateField, errors }) => {
             />
           </div>
 
-          <div className="csst-field">
-            <label className="csst-label" htmlFor="csst-end-date">
-              {t('courseStepSettings.endDate')}
-            </label>
-            <input
-              id="csst-end-date"
-              type="date"
-              name="endDate"
-              className="csst-input"
-              value={courseData.endDate}
-              onChange={handleChange}
-            />
-          </div>
+        <div className={`csst-field ${errors.endDate ? 'csst-field-error' : ''}`}>
+  <label className="csst-label" htmlFor="csst-end-date">
+    {t('courseStepSettings.endDate')}
+  </label>
+  <input
+    id="csst-end-date"
+    type="date"
+    name="endDate"
+    className="csst-input"
+    value={courseData.endDate}
+    onChange={handleChange}
+  />
+  {errors.endDate && (
+    <span className="csst-error-msg">
+      <AlertCircle size={14} />
+      {errors.endDate}
+    </span>
+  )}
+</div>
         </div>
       </div>
 

@@ -167,11 +167,30 @@ const TestEditorModal = ({ isOpen, onClose, lessonId, courseId, entityTitle }) =
 
     const handleSaveSettings = async () => {
         if (!test) return;
+
+        const errs = {};
+        if (!settings.title.trim()) {
+            errs.title = t('testEditor.errors.titleRequired', 'Заглавието е задължително');
+        }
+        if (settings.passingScore < 0 || settings.passingScore > 100) {
+            errs.passingScore = t('testEditor.errors.passingScoreRange', 'Стойността трябва да е между 0 и 100');
+        }
+        if (settings.maxAttempts && parseInt(settings.maxAttempts) < 1) {
+            errs.maxAttempts = t('testEditor.errors.maxAttemptsMin', 'Минимум 1 опит');
+        }
+        if (settings.timeLimitMinutes && parseInt(settings.timeLimitMinutes) < 1) {
+            errs.timeLimitMinutes = t('testEditor.errors.timeLimitMin', 'Минимум 1 минута');
+        }
+        if (Object.keys(errs).length > 0) {
+            setFieldErrors(errs);
+            return;
+        }
+
         setSaving(true);
         try {
             const payload = {
-                title: settings.title,
-                description: settings.description,
+                title: settings.title.trim(),
+                description: settings.description.trim(),
                 passingScore: parseInt(settings.passingScore) || 70,
                 maxAttempts: settings.maxAttempts ? parseInt(settings.maxAttempts) : null,
                 timeLimitMinutes: settings.timeLimitMinutes ? parseInt(settings.timeLimitMinutes) : null,
@@ -185,9 +204,9 @@ const TestEditorModal = ({ isOpen, onClose, lessonId, courseId, entityTitle }) =
             if (resp.test) setTest(resp.test);
             setSettingsDirty(false);
             toast.success(t('testEditor.settingsSaved', 'Настройките са запазени'));
-       } catch (err) {
+        } catch (err) {
             console.error('Error saving settings:', err);
-            const validationErrors = err?.response?.data?.errors || err?.errors;
+            const validationErrors = err?.errors;
             if (validationErrors && Array.isArray(validationErrors)) {
                 const errMap = {};
                 validationErrors.forEach(e => { errMap[e.field] = e.message; });
