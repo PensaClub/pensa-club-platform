@@ -108,7 +108,7 @@ const loadCourseMaterials = useCallback(async () => {
       setNewModuleTitle('');
       setAddingModule(false);
       await loadData();
-    } catch (err) {
+   } catch (err) {
       console.error('Error adding module:', err);
       const msg = err?.errors?.[0]?.message;
       toast.error(msg || t('contentManager.errors.addModuleFailed', 'Грешка при добавяне на модул'));

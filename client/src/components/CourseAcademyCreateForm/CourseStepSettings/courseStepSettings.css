@@ -261,8 +261,13 @@
   border-color: rgba(244, 63, 94, 0.5);
 }
 
-.csst-field-error .csst-input:focus {
+.csst-field-error .csst-input:focus,
+.csst-field-error .csst-select:focus {
   box-shadow: 0 0 0 3px rgba(244, 63, 94, 0.1);
+}
+
+.csst-field-error .csst-label {
+  color: #f43f5e;
 }
 
 .csst-error-msg {

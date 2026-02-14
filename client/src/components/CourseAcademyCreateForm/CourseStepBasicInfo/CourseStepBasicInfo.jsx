@@ -6,7 +6,7 @@ import './courseStepBasicInfo.css';
 
 const DIFFICULTY_OPTIONS = ['beginner', 'intermediate', 'advanced'];
 
-const CourseStepBasicInfo = ({ courseData, updateField, errors }) => {
+const CourseStepBasicInfo = ({ courseData, updateField, errors = {} }) => {
   const { t } = useTranslation();
 
   const handleChange = (e) => {
@@ -33,16 +33,13 @@ const CourseStepBasicInfo = ({ courseData, updateField, errors }) => {
           maxLength={200}
         />
         {errors.name && (
-          <span className="csbi-error-msg">
-            <AlertCircle size={14} />
-            {errors.name}
-          </span>
+          <span className="csbi-error-msg"><AlertCircle size={14} />{errors.name}</span>
         )}
         <span className="csbi-char-count">{courseData.name.length}/200</span>
       </div>
 
       {/* Short Description */}
-      <div className="csbi-field">
+      <div className={`csbi-field ${errors.shortDescription ? 'csbi-field-error' : ''}`}>
         <label className="csbi-label" htmlFor="csbi-short-desc">
           {t('courseStepBasicInfo.shortDescription')}
         </label>
@@ -56,11 +53,14 @@ const CourseStepBasicInfo = ({ courseData, updateField, errors }) => {
           maxLength={500}
           rows={3}
         />
+        {errors.shortDescription && (
+          <span className="csbi-error-msg"><AlertCircle size={14} />{errors.shortDescription}</span>
+        )}
         <span className="csbi-char-count">{courseData.shortDescription.length}/500</span>
       </div>
 
       {/* Description */}
-      <div className="csbi-field">
+      <div className={`csbi-field ${errors.description ? 'csbi-field-error' : ''}`}>
         <label className="csbi-label" htmlFor="csbi-desc">
           {t('courseStepBasicInfo.description')}
         </label>
@@ -73,6 +73,9 @@ const CourseStepBasicInfo = ({ courseData, updateField, errors }) => {
           onChange={handleChange}
           rows={6}
         />
+        {errors.description && (
+          <span className="csbi-error-msg"><AlertCircle size={14} />{errors.description}</span>
+        )}
       </div>
 
       {/* Category + Difficulty row */}
@@ -92,14 +95,11 @@ const CourseStepBasicInfo = ({ courseData, updateField, errors }) => {
             maxLength={100}
           />
           {errors.category && (
-            <span className="csbi-error-msg">
-              <AlertCircle size={14} />
-              {errors.category}
-            </span>
+            <span className="csbi-error-msg"><AlertCircle size={14} />{errors.category}</span>
           )}
         </div>
 
-        <div className="csbi-field">
+        <div className={`csbi-field ${errors.difficultyLevel ? 'csbi-field-error' : ''}`}>
           <label className="csbi-label" htmlFor="csbi-difficulty">
             {t('courseStepBasicInfo.difficulty')}
           </label>
@@ -116,6 +116,9 @@ const CourseStepBasicInfo = ({ courseData, updateField, errors }) => {
               </option>
             ))}
           </select>
+          {errors.difficultyLevel && (
+            <span className="csbi-error-msg"><AlertCircle size={14} />{errors.difficultyLevel}</span>
+          )}
         </div>
       </div>
 
@@ -135,33 +138,27 @@ const CourseStepBasicInfo = ({ courseData, updateField, errors }) => {
             onChange={handleChange}
           />
           {errors.thumbnailUrl && (
-            <span className="csbi-error-msg">
-              <AlertCircle size={14} />
-              {errors.thumbnailUrl}
-            </span>
+            <span className="csbi-error-msg"><AlertCircle size={14} />{errors.thumbnailUrl}</span>
           )}
         </div>
 
         <div className={`csbi-field ${errors.trailerUrl ? 'csbi-field-error' : ''}`}>
-  <label className="csbi-label" htmlFor="csbi-trailer">
-    {t('courseStepBasicInfo.trailerUrl')}
-  </label>
-  <input
-    id="csbi-trailer"
-    type="url"
-    name="trailerUrl"
-    className="csbi-input"
-    placeholder="https://youtube.com/..."
-    value={courseData.trailerUrl}
-    onChange={handleChange}
-  />
-  {errors.trailerUrl && (
-    <span className="csbi-error-msg">
-      <AlertCircle size={14} />
-      {errors.trailerUrl}
-    </span>
-  )}
-</div>
+          <label className="csbi-label" htmlFor="csbi-trailer">
+            {t('courseStepBasicInfo.trailerUrl')}
+          </label>
+          <input
+            id="csbi-trailer"
+            type="url"
+            name="trailerUrl"
+            className="csbi-input"
+            placeholder="https://youtube.com/..."
+            value={courseData.trailerUrl}
+            onChange={handleChange}
+          />
+          {errors.trailerUrl && (
+            <span className="csbi-error-msg"><AlertCircle size={14} />{errors.trailerUrl}</span>
+          )}
+        </div>
       </div>
 
       {/* Thumbnail Preview */}

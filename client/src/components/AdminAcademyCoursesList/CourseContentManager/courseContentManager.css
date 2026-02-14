@@ -1101,3 +1101,14 @@
     gap: 10px;
   }
 }
+/* Error states */
+.ccm-inline-input-error {
+  border-color: rgba(244, 63, 94, 0.5) !important;
+}
+
+.ccm-inline-error {
+  display: block;
+  font-size: 0.75rem;
+  color: #f43f5e;
+  margin: 4px 0 0 4px;
+}
