@@ -70,7 +70,7 @@ export const PartnersShowcase = () => {
               style={{ '--pshw-delay': `${index * 0.2}s` }}
             >
               <div className="pshw-spotlight-shimmer"></div>
-              <div className="pshw-spotlight-border"></div>
+              {/* <div className="pshw-spotlight-border"></div> */}
 
               <div className="pshw-spotlight-inner">
                 <div className="pshw-spotlight-badge">

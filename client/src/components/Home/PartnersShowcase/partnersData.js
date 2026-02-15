@@ -70,7 +70,7 @@ export const partnersData = [
     id: 8,
     slug: "austausch",
     name: "Austausch",
-    logo: "/images/partners/austausch-logo.png",
+    logo: "/images/partners/austausch-logo.svg",
     alt: "Austausch Logo",
     url: "https://austausch.org/",
     tier: "standard"
