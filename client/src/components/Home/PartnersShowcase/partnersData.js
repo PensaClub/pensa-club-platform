@@ -5,7 +5,7 @@ export const partnersData = [
     id: 1,
     slug: "civic-innovation-fund",
     name: "Civic Innovation Fund (CIF)",
-    logo: "/images/partners/cif-logo.png",
+    logo: "/images/partners/cif-logo.jpg",
     alt: "Civic Innovation Fund Logo",
     url: "https://thecivics.eu/",
     tier: "main",
@@ -25,7 +25,7 @@ export const partnersData = [
     id: 3,
     slug: "softuni-buditel",
     name: "СофтУни Будител",
-    logo: "/images/partners/softuni-buditel-logo.png",
+    logo: "/images/partners/softuni-buditel-logo.svg",
     alt: "SoftUni Buditel Logo",
     url: "https://buditel.softuni.bg/",
     tier: "standard"
@@ -70,7 +70,7 @@ export const partnersData = [
     id: 8,
     slug: "austausch",
     name: "Austausch",
-    logo: "/images/partners/austausch-logo.png",
+    logo: "/images/partners/austausch-logo.svg",
     alt: "Austausch Logo",
     url: "https://austausch.org/",
     tier: "standard"

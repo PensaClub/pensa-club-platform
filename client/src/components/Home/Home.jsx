@@ -15,6 +15,7 @@ import ScrollToTop from "../ScrollToTop/ScrollToTop";
 import { TextZoom } from "../TextZoom/TextZoom";
 import { useTranslation } from 'react-i18next';
 import SEOHead from "../SEO/SEOHead";
+import { PartnersShowcase } from "./PartnersShowcase/PartnersShowcase";
 
 export const Home = () => {
 
@@ -187,6 +188,7 @@ export const Home = () => {
       <div className="home-container">
         <Hero />
         <PlatformStats />
+        <PartnersShowcase />
         <MottoSection />
         <AboutSection />
         <ConstellationShowcase />
