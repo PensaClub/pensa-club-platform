@@ -25,7 +25,8 @@ import {
   AlertTriangle,
   Loader2,
   Calendar,
-  Upload, Paperclip
+  Upload, Paperclip,
+  ClipboardCheck,
 } from 'lucide-react';
 import useCourseContentManager from './useCourseContentManager';
 import './courseContentManager.css';
@@ -208,11 +209,7 @@ const CourseContentManager = () => {
                 onKeyDown={(e) => e.key === 'Enter' && handleAddModule()}
                 autoFocus
               />
-              <button
-                className="ccm-inline-btn ccm-inline-confirm"
-                onClick={handleAddModule}
-                disabled={actionLoading === 'add-module' || !newModuleTitle.trim()}
-              >
+             <button className="ccm-inline-btn ccm-inline-confirm" onClick={handleSave} disabled={actionLoading || !form.title.trim()}>
                 {actionLoading === 'add-module' ? <Loader2 size={14} className="ccm-spin" /> : <Check size={14} />}
               </button>
               <button
@@ -337,6 +334,11 @@ const CourseContentManager = () => {
                                   {les.title}
                                 </span>
                                 {les.isFree && <span className="ccm-free-badge">{t('contentManager.free', 'Безплатен')}</span>}
+                                {les.hasTest && (
+                                  <span className="ccm-test-badge" title={t('contentManager.hasTest', 'Урокът има тест')}>
+                                    <ClipboardCheck size={14} />
+                                  </span>
+                                )}
                               </div>
 
                               <div className="ccm-lesson-right">
@@ -490,6 +492,11 @@ const CourseContentManager = () => {
                             {les.title}
                           </span>
                           {les.isFree && <span className="ccm-free-badge">{t('contentManager.free', 'Безплатен')}</span>}
+                          {les.hasTest && (
+                            <span className="ccm-test-badge" title={t('contentManager.hasTest', 'Урокът има тест')}>
+                              <ClipboardCheck size={14} />
+                            </span>
+                          )}
                         </div>
 
                         <div className="ccm-lesson-right">
@@ -754,7 +761,7 @@ const CourseContentManager = () => {
           onClose={closeEditLesson}
         />
       )}
-       <TestEditorModal
+      <TestEditorModal
         isOpen={showCourseTest}
         onClose={() => setShowCourseTest(false)}
         courseId={course?.id}
@@ -776,10 +783,20 @@ const ModuleEditInline = ({ module, onSave, onCancel, actionLoading }) => {
     endDate: formatDateForInput(module.endDate),
     estimatedHours: module.estimatedHours || '',
   });
+  const [error, setError] = useState('');
 
   const handleSave = () => {
+    if (!form.title.trim()) {
+      setError(t('contentManager.errors.titleRequired', 'Заглавието е задължително'));
+      return;
+    }
+    if (form.startDate && form.endDate && new Date(form.endDate) < new Date(form.startDate)) {
+      setError(t('contentManager.errors.endBeforeStart', 'Крайната дата не може да е преди началната'));
+      return;
+    }
+    setError('');
     onSave({
-      title: form.title,
+      title: form.title.trim(),
       startDate: form.startDate || null,
       endDate: form.endDate || null,
       estimatedHours: form.estimatedHours ? Number(form.estimatedHours) : null,
@@ -791,9 +808,9 @@ const ModuleEditInline = ({ module, onSave, onCancel, actionLoading }) => {
       <div className="ccm-edit-row-main">
         <input
           type="text"
-          className="ccm-inline-input"
+          className={`ccm-inline-input ${error && !form.title.trim() ? 'ccm-inline-input-error' : ''}`}
           value={form.title}
-          onChange={(e) => setForm((p) => ({ ...p, title: e.target.value }))}
+          onChange={(e) => { setForm((p) => ({ ...p, title: e.target.value })); if (error) setError(''); }}
           onKeyDown={(e) => {
             if (e.key === 'Enter') handleSave();
             if (e.key === 'Escape') onCancel();
@@ -801,13 +818,14 @@ const ModuleEditInline = ({ module, onSave, onCancel, actionLoading }) => {
           placeholder={t('contentManager.moduleNamePlaceholder', 'Име на модула...')}
           autoFocus
         />
-        <button className="ccm-inline-btn ccm-inline-confirm" onClick={handleSave} disabled={actionLoading}>
+        <button className="ccm-inline-btn ccm-inline-confirm" onClick={handleSave} disabled={actionLoading || !form.title.trim()}>
           {actionLoading ? <Loader2 size={14} className="ccm-spin" /> : <Check size={14} />}
         </button>
         <button className="ccm-inline-btn ccm-inline-cancel" onClick={onCancel}>
           <X size={14} />
         </button>
       </div>
+      {error && <span className="ccm-inline-error">{error}</span>}
       <div className="ccm-edit-row-details">
         <div className="ccm-edit-mini-field">
           <label className="ccm-edit-mini-label">
@@ -848,7 +866,6 @@ const ModuleEditInline = ({ module, onSave, onCancel, actionLoading }) => {
           />
         </div>
       </div>
-     
     </div>
   );
 };

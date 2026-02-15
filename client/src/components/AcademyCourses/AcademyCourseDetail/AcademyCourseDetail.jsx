@@ -1328,7 +1328,7 @@ useEffect(() => {
                           <span>{t('academyCourseDetail.finalTest.passed', 'Тестът е преминат успешно!')}</span>
                           {courseTestData.bestAttempt && (
                             <span className="academyCourseDetail-final-test-passed-score">
-                              {t('academyCourseDetail.finalTest.bestScore', 'Най-добър резултат')}: {courseTestData.bestAttempt.score}%
+                              {t('academyCourseDetail.finalTest.bestScore', 'Най-добър резултат')}: {Math.round(courseTestData.bestAttempt.score)}%
                             </span>
                           )}
                         </div>
@@ -1343,7 +1343,7 @@ useEffect(() => {
                       )}
 
                       {/* Action buttons */}
-                      {courseTestData.testAccessible && !courseTestData.hasPassedTest && (
+                      {courseTestData.testAccessible && (
                         <div className="academyCourseDetail-final-test-actions">
                           {courseTestData.activeAttempt ? (
                             <button

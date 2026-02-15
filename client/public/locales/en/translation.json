@@ -14935,5 +14935,18 @@
   "multiple_choice": "Question with multiple answers, more than one can be correct",
   "true_false": "Question with two answers (True/False), you choose which is correct"
 }
+},
+"partners": {
+  "label": "Partners",
+  "title": "Our Partners",
+  "subtitle": "Together we build a bridge between generations in the digital world",
+  "mainPartner": "Main Partner",
+  "visitSite": "Visit website",
+  "cif": {
+    "description": "A civic innovation programme supporting initiatives for democratic participation and digital inclusion across Europe"
+  },
+  "bosch": {
+    "description": "An international foundation dedicated to healthcare, education, and civil society worldwide"
+  }
 }
 }
