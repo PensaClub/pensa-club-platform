@@ -18,7 +18,7 @@ export const partnersData = [
     logo: "/images/partners/robert-bosch-stiftung-logo.png",
     alt: "Robert Bosch Stiftung Logo",
     url: "https://www.bosch-stiftung.de/en",
-    tier: "main",
+    tier: "standard",
     descriptionKey: "partners.bosch.description"
   },
   {
@@ -84,13 +84,13 @@ export const partnersData = [
     url: "https://www.costeffective.software/",
     tier: "standard"
   },
-  {
-    id: 10,
-    slug: "coalition-media-literacy",
-    name: "Коалиция за медийна грамотност",
-    logo: "/images/partners/coalition-media-literacy-logo.png",
-    alt: "Coalition for Media Literacy Logo",
-    url: "https://gramoten.li/",
-    tier: "standard"
-  }
+//   {
+//     id: 10,
+//     slug: "coalition-media-literacy",
+//     name: "Коалиция за медийна грамотност",
+//     logo: "/images/partners/coalition-media-literacy-logo.png",
+//     alt: "Coalition for Media Literacy Logo",
+//     url: "https://gramoten.li/",
+//     tier: "standard"
+//   }
 ];
