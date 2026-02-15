@@ -168,7 +168,25 @@ const useCourseAcademyCreateForm = () => {
     // =========================================================
 
     const prepareCoursePayload = () => ({
-        ...courseData,
+        name: courseData.name.trim(),
+        shortDescription: (courseData.shortDescription || '').trim(),
+        description: (courseData.description || '').trim(),
+        category: (courseData.category || '').trim(),
+        difficultyLevel: courseData.difficultyLevel,
+        thumbnailUrl: (courseData.thumbnailUrl || '').trim(),
+        trailerUrl: (courseData.trailerUrl || '').trim(),
+        courseType: courseData.courseType,
+        videoProvider: courseData.videoProvider,
+        durationWeeks: courseData.durationWeeks ? Number(courseData.durationWeeks) : null,
+        estimatedHours: courseData.estimatedHours ? Number(courseData.estimatedHours) : null,
+        startDate: courseData.startDate || null,
+        endDate: courseData.endDate || null,
+        maxParticipants: courseData.maxParticipants ? Number(courseData.maxParticipants) : null,
+        requiresApproval: courseData.requiresApproval,
+        isPublic: courseData.isPublic,
+        maxCredits: Number(courseData.maxCredits) || 0,
+        creditsForCompletion: Number(courseData.creditsForCompletion) || 0,
+        hasCertificate: courseData.hasCertificate,
         tags: courseData.tags
             ? String(courseData.tags).split(',').map((tag) => tag.trim()).filter(Boolean)
             : [],
@@ -176,85 +194,82 @@ const useCourseAcademyCreateForm = () => {
             ? String(courseData.targetAudience).split(',').map((t) => t.trim()).filter(Boolean)
             : [],
     });
+
     const saveModulesAndLessons = async (slug) => {
-  for (let i = 0; i < modules.length; i++) {
-    const mod = modules[i];
-    let moduleId = mod.id;
+        for (let i = 0; i < modules.length; i++) {
+            const mod = modules[i];
+            let moduleId = mod.id;
 
-    // Създай или обнови модул
-    if (!moduleId) {
-      const modResult = await apiCreateModule(slug, {
-        title: mod.title || `Module ${i + 1}`,
-        description: mod.description || '',
-        isPublished: false,
-      });
-      moduleId = modResult?.module?.id;
+            if (!moduleId) {
+                const modResult = await apiCreateModule(slug, {
+                    title: (mod.title || `Module ${i + 1}`).trim(),
+                    description: (mod.description || '').trim(),
+                    isPublished: false,
+                });
+                moduleId = modResult?.module?.id;
 
-      // Запази id в state
-      setModules((prev) =>
-        prev.map((m, idx) => (idx === i ? { ...m, id: moduleId } : m))
-      );
-    } else {
-      await apiUpdateModule(slug, moduleId, {
-        title: mod.title,
-        description: mod.description,
-      });
-    }
+                setModules((prev) =>
+                    prev.map((m, idx) => (idx === i ? { ...m, id: moduleId } : m))
+                );
+            } else {
+                await apiUpdateModule(slug, moduleId, {
+                    title: (mod.title || '').trim(),
+                    description: (mod.description || '').trim(),
+                });
+            }
 
-    // Запиши уроците за този модул
-    if (moduleId) {
-      for (let j = 0; j < mod.lessons.length; j++) {
-        const les = mod.lessons[j];
+            if (moduleId) {
+                for (let j = 0; j < mod.lessons.length; j++) {
+                    const les = mod.lessons[j];
 
-        if (!les.id) {
-          const lessonPayload = {
-            title: les.title || `Lesson ${j + 1}`,
-            description: les.description || '',
-            lessonType: les.lessonType || 'video',
-            isFree: les.isFree || false,
-            moduleId: moduleId,
-          };
+                    if (!les.id) {
+                        const lessonPayload = {
+                            title: (les.title || `Lesson ${j + 1}`).trim(),
+                            description: (les.description || '').trim(),
+                            lessonType: les.lessonType || 'video',
+                            isFree: les.isFree || false,
+                            moduleId: moduleId,
+                        };
 
-          if (les.durationMinutes && Number(les.durationMinutes) > 0) {
-            lessonPayload.durationMinutes = Number(les.durationMinutes);
-          }
-          if (les.videoUrl) {
-            lessonPayload.videoUrl = les.videoUrl;
-          }
+                        if (les.durationMinutes && Number(les.durationMinutes) > 0) {
+                            lessonPayload.durationMinutes = Number(les.durationMinutes);
+                        }
+                        if (les.videoUrl) {
+                            lessonPayload.videoUrl = les.videoUrl.trim();
+                        }
 
-          const lesResult = await apiCreateLesson(slug, lessonPayload);
-          const newLessonId = lesResult?.lesson?.id;
+                        const lesResult = await apiCreateLesson(slug, lessonPayload);
+                        const newLessonId = lesResult?.lesson?.id;
 
-          // Запази id в state
-          setModules((prev) =>
-            prev.map((m, mIdx) => {
-              if (mIdx !== i) return m;
-              return {
-                ...m,
-                lessons: m.lessons.map((l, lIdx) =>
-                  lIdx === j ? { ...l, id: newLessonId } : l
-                ),
-              };
-            })
-          );
-        } else {
-          const updatePayload = {
-            title: les.title,
-            description: les.description,
-            lessonType: les.lessonType,
-            isFree: les.isFree,
-          };
+                        setModules((prev) =>
+                            prev.map((m, mIdx) => {
+                                if (mIdx !== i) return m;
+                                return {
+                                    ...m,
+                                    lessons: m.lessons.map((l, lIdx) =>
+                                        lIdx === j ? { ...l, id: newLessonId } : l
+                                    ),
+                                };
+                            })
+                        );
+                    } else {
+                        const updatePayload = {
+                            title: (les.title || '').trim(),
+                            description: (les.description || '').trim(),
+                            lessonType: les.lessonType,
+                            isFree: les.isFree,
+                        };
 
-          if (les.durationMinutes && Number(les.durationMinutes) > 0) {
-            updatePayload.durationMinutes = Number(les.durationMinutes);
-          }
+                        if (les.durationMinutes && Number(les.durationMinutes) > 0) {
+                            updatePayload.durationMinutes = Number(les.durationMinutes);
+                        }
 
-          await apiUpdateLesson(slug, les.id, updatePayload);
+                        await apiUpdateLesson(slug, les.id, updatePayload);
+                    }
+                }
+            }
         }
-      }
-    }
-  }
-};
+    };
 
     // =========================================================
     //                    FIELD UPDATES
@@ -286,7 +301,7 @@ const useCourseAcademyCreateForm = () => {
         }
     }, []);
 
-    const nextStep = useCallback(() => {
+     const nextStep = useCallback(() => {
         goToStep(currentStep + 1);
     }, [currentStep, goToStep]);
 
@@ -298,133 +313,214 @@ const useCourseAcademyCreateForm = () => {
     //                    VALIDATION
     // =========================================================
 
+    // =========================================================
+    //                    VALIDATION
+    // =========================================================
+
     const validateStep = useCallback((step) => {
         const newErrors = {};
 
         if (step === 1) {
             if (!courseData.name.trim()) {
-                newErrors.name = t('courseFormHook.nameRequired');
+                newErrors.name = t('courseFormHook.nameRequired', 'Името е задължително');
+            } else if (courseData.name.trim().length < 3) {
+                newErrors.name = t('courseFormHook.nameMinLength', 'Името трябва да е поне 3 символа');
             }
-            if (!courseData.category) {
-                newErrors.category = t('courseFormHook.categoryRequired');
+            if (courseData.thumbnailUrl && courseData.thumbnailUrl.trim() && !/^https?:\/\/.+/.test(courseData.thumbnailUrl.trim())) {
+                newErrors.thumbnailUrl = t('courseFormHook.invalidUrl', 'Невалиден URL адрес');
             }
+            if (courseData.trailerUrl && courseData.trailerUrl.trim() && !/^https?:\/\/.+/.test(courseData.trailerUrl.trim())) {
+                newErrors.trailerUrl = t('courseFormHook.invalidUrl', 'Невалиден URL адрес');
+            }
+        }
+
+        if (step === 2) {
+            if (courseData.startDate && courseData.endDate && new Date(courseData.endDate) < new Date(courseData.startDate)) {
+                newErrors.endDate = t('courseFormHook.endBeforeStart', 'Крайната дата не може да е преди началната');
+            }
+        }
+
+        if (step === 3) {
+            modules.forEach((mod, i) => {
+                if (!mod.title.trim()) {
+                    newErrors[`module_${i}_title`] = t('courseFormHook.moduleTitleRequired', 'Заглавието на модула е задължително');
+                }
+                mod.lessons.forEach((les, j) => {
+                    if (!les.title.trim()) {
+                        newErrors[`module_${i}_lesson_${j}_title`] = t('courseFormHook.lessonTitleRequired', 'Заглавието на урока е задължително');
+                    }
+                });
+            });
         }
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
-    }, [courseData, t]);
+    }, [courseData, modules, t]);
 
     const validateAll = useCallback(() => {
-        const newErrors = {};
+        const allErrors = {};
 
+        // Step 1
         if (!courseData.name.trim()) {
-            newErrors.name = t('courseFormHook.nameRequired');
+            allErrors.name = t('courseFormHook.nameRequired', 'Името е задължително');
+        } else if (courseData.name.trim().length < 3) {
+            allErrors.name = t('courseFormHook.nameMinLength', 'Името трябва да е поне 3 символа');
         }
-        if (!courseData.category) {
-            newErrors.category = t('courseFormHook.categoryRequired');
+        if (courseData.thumbnailUrl && courseData.thumbnailUrl.trim() && !/^https?:\/\/.+/.test(courseData.thumbnailUrl.trim())) {
+            allErrors.thumbnailUrl = t('courseFormHook.invalidUrl', 'Невалиден URL адрес');
+        }
+        if (courseData.trailerUrl && courseData.trailerUrl.trim() && !/^https?:\/\/.+/.test(courseData.trailerUrl.trim())) {
+            allErrors.trailerUrl = t('courseFormHook.invalidUrl', 'Невалиден URL адрес');
         }
 
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    }, [courseData, t]);
+        // Step 2
+        if (courseData.startDate && courseData.endDate && new Date(courseData.endDate) < new Date(courseData.startDate)) {
+            allErrors.endDate = t('courseFormHook.endBeforeStart', 'Крайната дата не може да е преди началната');
+        }
+
+        // Step 3
+        modules.forEach((mod, i) => {
+            if (!mod.title.trim()) {
+                allErrors[`module_${i}_title`] = t('courseFormHook.moduleTitleRequired', 'Заглавието на модула е задължително');
+            }
+            mod.lessons.forEach((les, j) => {
+                if (!les.title.trim()) {
+                    allErrors[`module_${i}_lesson_${j}_title`] = t('courseFormHook.lessonTitleRequired', 'Заглавието на урока е задължително');
+                }
+            });
+        });
+
+        setErrors(allErrors);
+
+        // Навигирай към първия step с грешка
+        if (Object.keys(allErrors).length > 0) {
+            if (allErrors.name || allErrors.thumbnailUrl || allErrors.trailerUrl) {
+                setCurrentStep(1);
+            } else if (allErrors.endDate) {
+                setCurrentStep(2);
+            } else {
+                setCurrentStep(3);
+            }
+        }
+
+        return Object.keys(allErrors).length === 0;
+    }, [courseData, modules, t]);
 
     // =========================================================
     //                    SAVE DRAFT
     // =========================================================
 
     const handleSaveDraft = useCallback(async () => {
-  try {
-    setIsSaving(true);
+        // Минимална валидация — поне име
+        if (!courseData.name.trim()) {
+            setErrors({ name: t('courseFormHook.nameRequired', 'Името е задължително') });
+            setCurrentStep(1);
+            return;
+        }
 
-    const coursePayload = prepareCoursePayload();
-    let slug = courseSlug;
-    let id = courseId;
+        try {
+            setIsSaving(true);
 
-    // 1. Създай или обнови курса
-    if (id) {
-      await updateCourse(id, coursePayload);
-    } else {
-      const result = await createCourse(coursePayload);
-      const newCourse = result?.course;
-      if (!newCourse?.id) throw new Error('Failed to create course');
+            const coursePayload = prepareCoursePayload();
+            let slug = courseSlug;
+            let id = courseId;
 
-      // Веднага запази в state - дори модулите да гръмнат после
-      id = newCourse.id;
-      slug = newCourse.slug;
-      setCourseId(id);
+            if (id) {
+                await updateCourse(id, coursePayload);
+            } else {
+                const result = await createCourse(coursePayload);
+                const newCourse = result?.course;
+                if (!newCourse?.id) throw new Error('Failed to create course');
 
-      // Веднага навигирай за да имаме slug в URL
-      navigate(`/academy/admin/edit-course/${slug}`, { replace: true });
-    }
+                id = newCourse.id;
+                slug = newCourse.slug;
+                setCourseId(id);
+                navigate(`/academy/admin/edit-course/${slug}`, { replace: true });
+            }
 
-    // 2. Запиши модулите и уроците
-    const courseIdentifier = slug || id;
-    if (courseIdentifier && modules.length > 0) {
-      try {
-        await saveModulesAndLessons(courseIdentifier);
-      } catch (modError) {
-        console.error('Error saving modules:', modError);
-        toast.warning(t('courseFormHook.courseCreatedModulesFailed'));
-        return; // Курсът е създаден, само модулите са гръмнали
-      }
-    }
+            const courseIdentifier = slug || id;
+            if (courseIdentifier && modules.length > 0) {
+                try {
+                    await saveModulesAndLessons(courseIdentifier);
+                } catch (modError) {
+                    console.error('Error saving modules:', modError);
+                    const msg = modError?.errors?.[0]?.message;
+                    toast.warning(msg || t('courseFormHook.courseCreatedModulesFailed', 'Курсът е запазен, но модулите имат грешка'));
+                    return;
+                }
+            }
 
-    toast.success(id === courseId ? t('courseFormHook.draftSaved') : t('courseFormHook.draftCreated'));
-  } catch (error) {
-    console.error('Error saving draft:', error);
-    toast.error(t('courseFormHook.saveFailed'));
-  } finally {
-    setIsSaving(false);
-  }
-}, [courseId, courseSlug, courseData, modules, createCourse, updateCourse, navigate, t]);
-
-    // =========================================================
-    //                    PUBLISH
-    // =========================================================
+            toast.success(id === courseId
+                ? t('courseFormHook.draftSaved', 'Черновата е запазена')
+                : t('courseFormHook.draftCreated', 'Курсът е създаден')
+            );
+        } catch (err) {
+            console.error('Error saving draft:', err);
+            const serverErrors = err?.errors;
+            if (Array.isArray(serverErrors) && serverErrors.length > 0) {
+                const errMap = {};
+                serverErrors.forEach(e => {
+                    if (e.field) errMap[e.field] = e.message;
+                });
+                setErrors(errMap);
+                setCurrentStep(1);
+                toast.error(serverErrors[0].message || t('courseFormHook.saveFailed', 'Грешка при запазване'));
+            } else {
+                toast.error(t('courseFormHook.saveFailed', 'Грешка при запазване'));
+            }
+        } finally {
+            setIsSaving(false);
+        }
+    }, [courseId, courseSlug, courseData, modules, createCourse, updateCourse, navigate, t]);
 
     const handlePublish = useCallback(async () => {
-  if (!validateAll()) {
-    toast.error(t('courseFormHook.validationFailed'));
-    return;
-  }
+        if (!validateAll()) {
+            toast.error(t('courseFormHook.validationFailed', 'Моля попълнете всички задължителни полета'));
+            return;
+        }
 
-  try {
-    setIsSaving(true);
+        try {
+            setIsSaving(true);
 
-    const coursePayload = prepareCoursePayload();
-    let slug = courseSlug;
-    let id = courseId;
+            const coursePayload = prepareCoursePayload();
+            let slug = courseSlug;
+            let id = courseId;
 
-    // 1. Създай или обнови курса
-    if (!id) {
-      const result = await createCourse(coursePayload);
-      id = result?.course?.id;
-      slug = result?.course?.slug;
-      if (!id) throw new Error('Failed to create course');
+            if (!id) {
+                const result = await createCourse(coursePayload);
+                id = result?.course?.id;
+                slug = result?.course?.slug;
+                if (!id) throw new Error('Failed to create course');
+                setCourseId(id);
+            } else {
+                await updateCourse(id, coursePayload);
+            }
 
-      // Веднага запази
-      setCourseId(id);
-    } else {
-      await updateCourse(id, coursePayload);
-    }
+            const courseIdentifier = slug || id;
+            if (courseIdentifier && modules.length > 0) {
+                await saveModulesAndLessons(courseIdentifier);
+            }
 
-    // 2. Запиши модулите и уроците
-    const courseIdentifier = slug || id;
-    if (courseIdentifier && modules.length > 0) {
-      await saveModulesAndLessons(courseIdentifier);
-    }
-
-    // 3. Публикувай
-    await publishCourse(id);
-    toast.success(t('courseFormHook.published'));
-    navigate('/academy/courses');
-  } catch (error) {
-    console.error('Error publishing:', error);
-    toast.error(t('courseFormHook.publishFailed'));
-  } finally {
-    setIsSaving(false);
-  }
-}, [courseId, courseSlug, courseData, modules, validateAll, createCourse, updateCourse, publishCourse, navigate, t]);
+            await publishCourse(id);
+            toast.success(t('courseFormHook.published', 'Курсът е публикуван'));
+            navigate('/academy/admin/courses');
+        } catch (err) {
+            console.error('Error publishing:', err);
+            const serverErrors = err?.errors;
+            if (Array.isArray(serverErrors) && serverErrors.length > 0) {
+                const errMap = {};
+                serverErrors.forEach(e => {
+                    if (e.field) errMap[e.field] = e.message;
+                });
+                setErrors(errMap);
+                toast.error(serverErrors[0].message || t('courseFormHook.publishFailed', 'Грешка при публикуване'));
+            } else {
+                toast.error(t('courseFormHook.publishFailed', 'Грешка при публикуване'));
+            }
+        } finally {
+            setIsSaving(false);
+        }
+    }, [courseId, courseSlug, courseData, modules, validateAll, createCourse, updateCourse, publishCourse, navigate, t]);
 
     // =========================================================
     //                    MODULE MANAGEMENT (Local State)
