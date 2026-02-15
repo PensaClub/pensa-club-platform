@@ -32,6 +32,7 @@ const CourseAcademyCreateForm = () => {
     goToStep,
     nextStep,
     prevStep,
+    validateStep,
     handleSaveDraft,
     handlePublish,
     addModule,
@@ -78,14 +79,14 @@ const CourseAcademyCreateForm = () => {
             moveLesson={moveLesson}
           />
         );
-     case 4:
-  return (
-    <CourseStepPreview
-      courseData={courseData}
-      modules={modules}
-      goToStep={goToStep}
-    />
-  );
+      case 4:
+        return (
+          <CourseStepPreview
+            courseData={courseData}
+            modules={modules}
+            goToStep={goToStep}
+          />
+        );
       default:
         return null;
     }
@@ -162,7 +163,9 @@ const CourseAcademyCreateForm = () => {
             {isSaving ? t('courseCreateForm.saving') : t('courseCreateForm.saveDraft')}
           </button>
           {currentStep < totalSteps ? (
-            <button className="cacf-btn cacf-btn-primary" onClick={nextStep}>
+            <button className="cacf-btn cacf-btn-primary" onClick={() => {
+              if (validateStep(currentStep)) nextStep();
+            }}>
               {t('courseCreateForm.next')}
               <ChevronRight size={18} />
             </button>

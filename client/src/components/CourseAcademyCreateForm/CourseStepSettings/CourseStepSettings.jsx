@@ -1,12 +1,13 @@
 // src/components/CourseAcademyCreateForm/CourseStepSettings/CourseStepSettings.jsx
 
 import { useTranslation } from 'react-i18next';
+import { AlertCircle } from 'lucide-react';
 import './courseStepSettings.css';
 
 const COURSE_TYPE_OPTIONS = ['online', 'offline', 'hybrid'];
 const VIDEO_PROVIDER_OPTIONS = ['youtube', 'vimeo', 'custom', 'none'];
 
-const CourseStepSettings = ({ courseData, updateField, errors }) => {
+const CourseStepSettings = ({ courseData, updateField, errors = {} }) => {
   const { t } = useTranslation();
 
   const handleChange = (e) => {
@@ -28,7 +29,7 @@ const CourseStepSettings = ({ courseData, updateField, errors }) => {
         <h3 className="csst-section-title">{t('courseStepSettings.sections.typeFormat')}</h3>
 
         <div className="csst-row">
-          <div className="csst-field">
+          <div className={`csst-field ${errors.courseType ? 'csst-field-error' : ''}`}>
             <label className="csst-label" htmlFor="csst-course-type">
               {t('courseStepSettings.courseType')}
             </label>
@@ -45,9 +46,12 @@ const CourseStepSettings = ({ courseData, updateField, errors }) => {
                 </option>
               ))}
             </select>
+            {errors.courseType && (
+              <span className="csst-error-msg"><AlertCircle size={14} />{errors.courseType}</span>
+            )}
           </div>
 
-          <div className="csst-field">
+          <div className={`csst-field ${errors.videoProvider ? 'csst-field-error' : ''}`}>
             <label className="csst-label" htmlFor="csst-video-provider">
               {t('courseStepSettings.videoProvider')}
             </label>
@@ -64,6 +68,9 @@ const CourseStepSettings = ({ courseData, updateField, errors }) => {
                 </option>
               ))}
             </select>
+            {errors.videoProvider && (
+              <span className="csst-error-msg"><AlertCircle size={14} />{errors.videoProvider}</span>
+            )}
           </div>
         </div>
       </div>
@@ -73,7 +80,7 @@ const CourseStepSettings = ({ courseData, updateField, errors }) => {
         <h3 className="csst-section-title">{t('courseStepSettings.sections.durationDates')}</h3>
 
         <div className="csst-row">
-          <div className="csst-field">
+          <div className={`csst-field ${errors.durationWeeks ? 'csst-field-error' : ''}`}>
             <label className="csst-label" htmlFor="csst-duration">
               {t('courseStepSettings.durationWeeks')}
             </label>
@@ -87,9 +94,12 @@ const CourseStepSettings = ({ courseData, updateField, errors }) => {
               onChange={handleChange}
               min={1}
             />
+            {errors.durationWeeks && (
+              <span className="csst-error-msg"><AlertCircle size={14} />{errors.durationWeeks}</span>
+            )}
           </div>
 
-          <div className="csst-field">
+          <div className={`csst-field ${errors.estimatedHours ? 'csst-field-error' : ''}`}>
             <label className="csst-label" htmlFor="csst-hours">
               {t('courseStepSettings.estimatedHours')}
             </label>
@@ -103,11 +113,14 @@ const CourseStepSettings = ({ courseData, updateField, errors }) => {
               onChange={handleChange}
               min={1}
             />
+            {errors.estimatedHours && (
+              <span className="csst-error-msg"><AlertCircle size={14} />{errors.estimatedHours}</span>
+            )}
           </div>
         </div>
 
         <div className="csst-row">
-          <div className="csst-field">
+          <div className={`csst-field ${errors.startDate ? 'csst-field-error' : ''}`}>
             <label className="csst-label" htmlFor="csst-start-date">
               {t('courseStepSettings.startDate')}
             </label>
@@ -119,9 +132,12 @@ const CourseStepSettings = ({ courseData, updateField, errors }) => {
               value={courseData.startDate}
               onChange={handleChange}
             />
+            {errors.startDate && (
+              <span className="csst-error-msg"><AlertCircle size={14} />{errors.startDate}</span>
+            )}
           </div>
 
-          <div className="csst-field">
+          <div className={`csst-field ${errors.endDate ? 'csst-field-error' : ''}`}>
             <label className="csst-label" htmlFor="csst-end-date">
               {t('courseStepSettings.endDate')}
             </label>
@@ -133,6 +149,9 @@ const CourseStepSettings = ({ courseData, updateField, errors }) => {
               value={courseData.endDate}
               onChange={handleChange}
             />
+            {errors.endDate && (
+              <span className="csst-error-msg"><AlertCircle size={14} />{errors.endDate}</span>
+            )}
           </div>
         </div>
       </div>
@@ -142,7 +161,7 @@ const CourseStepSettings = ({ courseData, updateField, errors }) => {
         <h3 className="csst-section-title">{t('courseStepSettings.sections.enrollment')}</h3>
 
         <div className="csst-row">
-          <div className="csst-field">
+          <div className={`csst-field ${errors.maxParticipants ? 'csst-field-error' : ''}`}>
             <label className="csst-label" htmlFor="csst-max-participants">
               {t('courseStepSettings.maxParticipants')}
             </label>
@@ -156,9 +175,12 @@ const CourseStepSettings = ({ courseData, updateField, errors }) => {
               onChange={handleChange}
               min={1}
             />
+            {errors.maxParticipants && (
+              <span className="csst-error-msg"><AlertCircle size={14} />{errors.maxParticipants}</span>
+            )}
           </div>
 
-          <div className="csst-field">
+          <div className={`csst-field ${errors.targetAudience ? 'csst-field-error' : ''}`}>
             <label className="csst-label" htmlFor="csst-target-audience">
               {t('courseStepSettings.targetAudience')}
             </label>
@@ -171,29 +193,22 @@ const CourseStepSettings = ({ courseData, updateField, errors }) => {
               value={courseData.targetAudience}
               onChange={handleChange}
             />
+            {errors.targetAudience && (
+              <span className="csst-error-msg"><AlertCircle size={14} />{errors.targetAudience}</span>
+            )}
           </div>
         </div>
 
         {/* Toggles */}
         <div className="csst-toggles">
           <label className="csst-toggle">
-            <input
-              type="checkbox"
-              name="isPublic"
-              checked={courseData.isPublic}
-              onChange={handleChange}
-            />
+            <input type="checkbox" name="isPublic" checked={courseData.isPublic} onChange={handleChange} />
             <span className="csst-toggle-slider" />
             <span className="csst-toggle-text">{t('courseStepSettings.isPublic')}</span>
           </label>
 
           <label className="csst-toggle">
-            <input
-              type="checkbox"
-              name="requiresApproval"
-              checked={courseData.requiresApproval}
-              onChange={handleChange}
-            />
+            <input type="checkbox" name="requiresApproval" checked={courseData.requiresApproval} onChange={handleChange} />
             <span className="csst-toggle-slider" />
             <span className="csst-toggle-text">{t('courseStepSettings.requiresApproval')}</span>
           </label>
@@ -205,7 +220,7 @@ const CourseStepSettings = ({ courseData, updateField, errors }) => {
         <h3 className="csst-section-title">{t('courseStepSettings.sections.credits')}</h3>
 
         <div className="csst-row">
-          <div className="csst-field">
+          <div className={`csst-field ${errors.maxCredits ? 'csst-field-error' : ''}`}>
             <label className="csst-label" htmlFor="csst-max-credits">
               {t('courseStepSettings.maxCredits')}
             </label>
@@ -218,9 +233,12 @@ const CourseStepSettings = ({ courseData, updateField, errors }) => {
               onChange={handleChange}
               min={0}
             />
+            {errors.maxCredits && (
+              <span className="csst-error-msg"><AlertCircle size={14} />{errors.maxCredits}</span>
+            )}
           </div>
 
-          <div className="csst-field">
+          <div className={`csst-field ${errors.creditsForCompletion ? 'csst-field-error' : ''}`}>
             <label className="csst-label" htmlFor="csst-credits-completion">
               {t('courseStepSettings.creditsForCompletion')}
             </label>
@@ -233,17 +251,15 @@ const CourseStepSettings = ({ courseData, updateField, errors }) => {
               onChange={handleChange}
               min={0}
             />
+            {errors.creditsForCompletion && (
+              <span className="csst-error-msg"><AlertCircle size={14} />{errors.creditsForCompletion}</span>
+            )}
           </div>
         </div>
 
         <div className="csst-toggles">
           <label className="csst-toggle">
-            <input
-              type="checkbox"
-              name="hasCertificate"
-              checked={courseData.hasCertificate}
-              onChange={handleChange}
-            />
+            <input type="checkbox" name="hasCertificate" checked={courseData.hasCertificate} onChange={handleChange} />
             <span className="csst-toggle-slider" />
             <span className="csst-toggle-text">{t('courseStepSettings.hasCertificate')}</span>
           </label>
@@ -253,7 +269,7 @@ const CourseStepSettings = ({ courseData, updateField, errors }) => {
       {/* === Section: Tags === */}
       <div className="csst-section">
         <h3 className="csst-section-title">{t('courseStepSettings.sections.tags')}</h3>
-        <div className="csst-field">
+        <div className={`csst-field ${errors.tags ? 'csst-field-error' : ''}`}>
           <label className="csst-label" htmlFor="csst-tags">
             {t('courseStepSettings.tags')}
           </label>
@@ -266,6 +282,9 @@ const CourseStepSettings = ({ courseData, updateField, errors }) => {
             value={courseData.tags}
             onChange={handleChange}
           />
+          {errors.tags && (
+            <span className="csst-error-msg"><AlertCircle size={14} />{errors.tags}</span>
+          )}
           <span className="csst-hint">{t('courseStepSettings.tagsHint')}</span>
         </div>
       </div>
