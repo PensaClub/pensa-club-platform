@@ -14228,5 +14228,18 @@
   "multiple_choice": "Frage mit mehreren Antworten, mehr als eine kann richtig sein",
   "true_false": "Frage mit zwei Antworten (Richtig/Falsch), Sie wählen die richtige"
 }
+},
+"partners": {
+  "label": "Partner",
+  "title": "Unsere Partner",
+  "subtitle": "Gemeinsam bauen wir eine Brücke zwischen den Generationen in der digitalen Welt",
+  "mainPartner": "Hauptpartner",
+  "visitSite": "Webseite besuchen",
+  "cif": {
+    "description": "Ein Programm für bürgerschaftliche Innovation, das Initiativen für demokratische Teilhabe und digitale Inklusion in Europa unterstützt"
+  },
+  "bosch": {
+    "description": "Eine internationale Stiftung, die sich weltweit für Gesundheit, Bildung und Zivilgesellschaft einsetzt"
+  }
 }
 }
