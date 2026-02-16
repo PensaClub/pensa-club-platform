@@ -7,6 +7,9 @@ import AboutTeam from './AboutTeam/AboutTeam';
 import AboutContact from './AboutContact/AboutContact';
 import { TextZoom } from '../TextZoom/TextZoom';
 import ScrollToTop from '../ScrollToTop/ScrollToTop';
+import AboutPartners from './AboutPartners/AboutPartners';
+import AboutPartnersTimeline from './AboutPartnersTimeline/AboutPartnersTimeline';
+import AboutPartnersCards from './AboutPartnersCards/AboutPartnersCards';
 // import { AboutPlatform } from './components/AboutPlatform';
 // import { AboutFoundation } from './components/AboutFoundation';
 // import { AboutTeam } from './components/AboutTeam';
@@ -20,7 +23,9 @@ export const AboutPage = () => {
       <AboutHero />
       <AboutPlatform />
       <AboutFoundation />
-      <AboutTeam />
+      <AboutPartners /> {/* Вариант 1 */}
+      {/* <AboutPartnersTimeline /> {/* Вариант 2*/}
+      {/* <AboutPartnersCards />   {/* Вариант 3*/}
       <AboutContact />
       <TextZoom />
       <ScrollToTop />

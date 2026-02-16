@@ -1,0 +1,497 @@
+/* ============================================
+   ABOUT PARTNERS TIMELINE — abtl- prefix
+   ============================================ */
+
+.abtl-section {
+  width: 100%;
+  padding: 90px 40px;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+.abtl-container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.abtl-header {
+  text-align: center;
+  margin-bottom: 70px;
+  opacity: 0;
+  transform: translateY(25px);
+  transition: all 0.7s ease;
+}
+
+.abtl-header.abtl-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.abtl-label {
+  display: inline-block;
+  padding: 5px 14px;
+  background: #fef3c7;
+  color: #92400e;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+}
+
+.abtl-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+.abtl-description {
+  font-size: 16px;
+  color: #6b7280;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* ============================================
+   TIMELINE
+   ============================================ */
+
+.abtl-timeline {
+  position: relative;
+  padding: 40px 0 20px;
+}
+
+/* Central vertical line */
+.abtl-line {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #d4af37 5%,
+    #e5e7eb 15%,
+    #e5e7eb 85%,
+    #d4af37 95%,
+    transparent 100%
+  );
+  transform: translateX(-50%);
+}
+
+/* End dot */
+.abtl-end-dot {
+  width: 12px;
+  height: 12px;
+  background: #d4af37;
+  border-radius: 50%;
+  margin: 30px auto 0;
+  position: relative;
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 0.5s ease 1.5s;
+}
+
+.abtl-end-dot.abtl-visible {
+  opacity: 1;
+}
+
+/* ============================================
+   NODE — each partner row
+   ============================================ */
+
+.abtl-node {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 50px;
+  opacity: 0;
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.abtl-node.abtl-node-visible {
+  opacity: 1;
+}
+
+.abtl-node-main {
+  margin-bottom: 60px;
+}
+
+/* Left side: card left, marker center, empty right */
+.abtl-node-left {
+  flex-direction: row-reverse;
+  transform: translateX(-40px);
+}
+
+.abtl-node-left.abtl-node-visible {
+  transform: translateX(0);
+}
+
+/* Right side: empty left, marker center, card right */
+.abtl-node-right {
+  transform: translateX(40px);
+}
+
+.abtl-node-right.abtl-node-visible {
+  transform: translateX(0);
+}
+
+/* ============================================
+   MARKER — dot on the line
+   ============================================ */
+
+.abtl-marker {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.abtl-marker-dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid #d1d5db;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  transition: all 0.4s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.abtl-node-visible .abtl-marker-dot {
+  border-color: #d4af37;
+  color: #d4af37;
+}
+
+.abtl-marker-main .abtl-marker-dot {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #fef9c3, #fde68a);
+  border: 2px solid #d4af37;
+  color: #92400e;
+}
+
+.abtl-marker-ring {
+  position: absolute;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  animation: abtl-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes abtl-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.2); opacity: 0; }
+}
+
+/* ============================================
+   CONNECTOR — line from marker to card
+   ============================================ */
+
+.abtl-connector {
+  position: absolute;
+  top: 50%;
+  height: 2px;
+  background: #e5e7eb;
+  width: 40px;
+  transition: background 0.4s ease;
+}
+
+.abtl-node-visible .abtl-connector {
+  background: #d1d5db;
+}
+
+.abtl-node-left .abtl-connector {
+  right: calc(50% + 16px);
+}
+
+.abtl-node-right .abtl-connector {
+  left: calc(50% + 16px);
+}
+
+.abtl-node-main .abtl-connector {
+  background: rgba(212, 175, 55, 0.4);
+}
+
+.abtl-node-main.abtl-node-visible .abtl-connector {
+  background: rgba(212, 175, 55, 0.6);
+}
+
+/* ============================================
+   CARD
+   ============================================ */
+
+.abtl-card {
+  display: block;
+  width: calc(50% - 60px);
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.4s ease;
+  overflow: hidden;
+  position: relative;
+}
+
+.abtl-card:hover {
+  border-color: #d1d5db;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+  transform: translateY(-3px);
+}
+
+/* Main card accent */
+.abtl-card-main {
+  border-color: rgba(212, 175, 55, 0.25);
+}
+
+.abtl-card-main:hover {
+  border-color: rgba(212, 175, 55, 0.5);
+  box-shadow: 0 12px 35px rgba(212, 175, 55, 0.1);
+}
+
+.abtl-card-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, #c0c0c0, #d4af37, #f5e6a3, #d4af37, #c0c0c0);
+  opacity: 0.7;
+}
+
+.abtl-card-main:hover .abtl-card-accent {
+  opacity: 1;
+}
+
+.abtl-card-inner {
+  padding: 28px 24px;
+}
+
+/* Badge */
+.abtl-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  background: #fefce8;
+  border: 1px solid #fde68a;
+  color: #92400e;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+}
+
+.abtl-badge svg {
+  color: #d4af37;
+}
+
+/* Logo */
+.abtl-card-logo {
+  width: 100px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.abtl-card-main .abtl-card-logo {
+  width: 120px;
+  height: 60px;
+}
+
+.abtl-card-logo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transition: transform 0.4s ease;
+}
+
+.abtl-card:hover .abtl-card-logo img {
+  transform: scale(1.04);
+}
+
+/* Text */
+.abtl-card-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 6px;
+}
+
+.abtl-card-main .abtl-card-name {
+  font-size: 17px;
+}
+
+.abtl-card-desc {
+  font-size: 13px;
+  line-height: 1.6;
+  color: #6b7280;
+  margin-bottom: 14px;
+}
+
+/* Link */
+.abtl-card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #9ca3af;
+  transition: color 0.3s ease;
+}
+
+.abtl-card:hover .abtl-card-link {
+  color: #d4af37;
+}
+
+.abtl-card-link svg {
+  transition: transform 0.3s ease;
+}
+
+.abtl-card:hover .abtl-card-link svg {
+  transform: translateX(3px);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 992px) {
+  .abtl-section {
+    padding: 70px 24px;
+  }
+
+  .abtl-node {
+    margin-bottom: 40px;
+  }
+
+  .abtl-card-inner {
+    padding: 22px 20px;
+  }
+}
+
+/* Mobile: single column, line on left */
+@media (max-width: 768px) {
+  .abtl-section {
+    padding: 60px 20px;
+  }
+
+  .abtl-title {
+    font-size: 28px;
+  }
+
+  .abtl-line {
+    left: 20px;
+  }
+
+  .abtl-node,
+  .abtl-node-left,
+  .abtl-node-right {
+    flex-direction: row;
+    padding-left: 55px;
+  }
+
+  .abtl-node-left {
+    transform: translateY(20px);
+  }
+
+  .abtl-node-right {
+    transform: translateY(20px);
+  }
+
+  .abtl-node-left.abtl-node-visible,
+  .abtl-node-right.abtl-node-visible {
+    transform: translateY(0) translateX(0);
+  }
+
+  .abtl-marker {
+    left: 20px;
+  }
+
+  .abtl-connector {
+    display: none;
+  }
+
+  .abtl-card {
+    width: 100%;
+  }
+
+  .abtl-end-dot {
+    margin-left: 14px;
+    margin-right: auto;
+  }
+}
+
+@media (max-width: 576px) {
+  .abtl-section {
+    padding: 50px 16px;
+  }
+
+  .abtl-title {
+    font-size: 24px;
+  }
+
+  .abtl-description {
+    font-size: 14px;
+  }
+
+  .abtl-node,
+  .abtl-node-left,
+  .abtl-node-right {
+    padding-left: 48px;
+  }
+
+  .abtl-marker-dot {
+    width: 28px;
+    height: 28px;
+  }
+
+  .abtl-marker-main .abtl-marker-dot {
+    width: 34px;
+    height: 34px;
+  }
+
+  .abtl-marker-ring {
+    width: 46px;
+    height: 46px;
+  }
+
+  .abtl-card-inner {
+    padding: 20px 16px;
+  }
+
+  .abtl-card-logo {
+    width: 90px;
+    height: 45px;
+  }
+
+  .abtl-card-main .abtl-card-logo {
+    width: 100px;
+    height: 50px;
+  }
+
+  .abtl-node {
+    margin-bottom: 30px;
+  }
+}
