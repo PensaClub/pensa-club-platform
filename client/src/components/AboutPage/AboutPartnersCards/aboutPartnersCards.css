@@ -1,0 +1,502 @@
+/* ============================================
+   ABOUT PARTNERS CARDS (BENTO) — abpc- prefix
+   ============================================ */
+
+.abpc-section {
+  width: 100%;
+  padding: 90px 40px;
+  background: linear-gradient(180deg, #f9fafb 0%, #ffffff 100%);
+  overflow: hidden;
+}
+
+.abpc-container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.abpc-header {
+  text-align: center;
+  margin-bottom: 60px;
+  opacity: 0;
+  transform: translateY(25px);
+  transition: all 0.7s ease;
+}
+
+.abpc-header.abpc-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.abpc-label {
+  display: inline-block;
+  padding: 5px 14px;
+  background: #f3f4f6;
+  color: #4b5563;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 16px;
+}
+
+.abpc-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+.abpc-description {
+  font-size: 16px;
+  color: #6b7280;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* ============================================
+   BENTO GRID
+   ============================================ */
+
+.abpc-bento {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  opacity: 0;
+  transform: translateY(25px);
+  transition: all 0.7s ease 0.15s;
+}
+
+.abpc-bento.abpc-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================
+   CELL — shared base
+   ============================================ */
+
+.abpc-cell {
+  position: relative;
+  border-radius: 18px;
+  text-decoration: none;
+  color: inherit;
+  overflow: hidden;
+  animation: abpc-pop 0.5s ease forwards;
+  animation-delay: var(--abpc-delay);
+  opacity: 0;
+  transform: scale(0.95) translateY(10px);
+}
+
+@keyframes abpc-pop {
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ============================================
+   MAIN CELLS — 2 columns wide
+   ============================================ */
+
+.abpc-cell-main {
+  grid-column: span 2;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  transition: all 0.45s ease;
+  min-height: 260px;
+}
+
+.abpc-cell-main:hover {
+  border-color: rgba(212, 175, 55, 0.4);
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.08);
+  transform: translateY(-5px);
+}
+
+/* Subtle gradient bg on hover */
+.abpc-cell-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(254, 249, 195, 0) 0%,
+    rgba(253, 230, 138, 0.06) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.abpc-cell-main:hover .abpc-cell-bg {
+  opacity: 1;
+}
+
+/* Shine sweep */
+.abpc-cell-shine {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.abpc-cell-shine::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(212, 175, 55, 0.04),
+    transparent
+  );
+  transition: none;
+  animation: abpc-shine 5s ease-in-out infinite;
+  animation-delay: var(--abpc-delay);
+}
+
+@keyframes abpc-shine {
+  0%, 100% { left: -100%; }
+  50% { left: 120%; }
+}
+
+/* Corner decorations */
+.abpc-cell-corner {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.abpc-cell-main:hover .abpc-cell-corner {
+  opacity: 0.3;
+}
+
+.abpc-cell-corner-tl {
+  top: 12px;
+  left: 12px;
+  border-top: 2px solid #d4af37;
+  border-left: 2px solid #d4af37;
+  border-radius: 4px 0 0 0;
+}
+
+.abpc-cell-corner-br {
+  bottom: 12px;
+  right: 12px;
+  border-bottom: 2px solid #d4af37;
+  border-right: 2px solid #d4af37;
+  border-radius: 0 0 4px 0;
+}
+
+/* Main cell content */
+.abpc-cell-main .abpc-cell-content {
+  position: relative;
+  z-index: 1;
+  padding: 35px 32px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.abpc-main-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  background: linear-gradient(135deg, #fefce8, #fef9c3);
+  border: 1px solid #fde68a;
+  color: #92400e;
+  border-radius: 10px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 20px;
+  width: fit-content;
+}
+
+.abpc-main-badge svg {
+  color: #d4af37;
+}
+
+.abpc-cell-logo-main {
+  width: 130px;
+  height: 60px;
+}
+
+.abpc-cell-name-main {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.abpc-cell-main .abpc-cell-desc {
+  font-size: 14px;
+  line-height: 1.65;
+  color: #6b7280;
+  margin-bottom: 18px;
+  flex: 1;
+}
+
+.abpc-cell-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #9ca3af;
+  transition: color 0.3s ease;
+}
+
+.abpc-cell-main:hover .abpc-cell-link {
+  color: #d4af37;
+}
+
+.abpc-cell-link svg {
+  transition: transform 0.3s ease;
+}
+
+.abpc-cell-main:hover .abpc-cell-link svg {
+  transform: translateX(3px);
+}
+
+/* ============================================
+   STANDARD CELLS — 1 column, hover reveal
+   ============================================ */
+
+.abpc-cell-standard {
+  background: #ffffff;
+  border: 1px solid #f3f4f6;
+  aspect-ratio: 1;
+  transition: all 0.4s ease;
+}
+
+.abpc-cell-standard:hover {
+  border-color: #e5e7eb;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+  transform: translateY(-4px);
+}
+
+.abpc-cell-standard .abpc-cell-content {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 18px;
+  text-align: center;
+  z-index: 1;
+}
+
+/* Logo */
+.abpc-cell-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  width: 80px;
+  height: 45px;
+}
+
+.abpc-cell-logo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transition: all 0.4s ease;
+}
+
+.abpc-cell-standard:hover .abpc-cell-logo img {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+/* Name */
+.abpc-cell-name {
+  font-size: 13px;
+  font-weight: 650;
+  color: #374151;
+  line-height: 1.3;
+  transition: opacity 0.3s ease;
+}
+
+.abpc-cell-standard:hover .abpc-cell-name {
+  opacity: 0;
+}
+
+/* ============================================
+   HOVER OVERLAY — standard cells
+   ============================================ */
+
+.abpc-cell-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 22px 18px;
+  text-align: center;
+  opacity: 0;
+  transform: scale(0.95);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 17px;
+  z-index: 2;
+}
+
+.abpc-cell-standard:hover .abpc-cell-overlay {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.abpc-overlay-icon {
+  color: #d4af37;
+  margin-bottom: 10px;
+  opacity: 0.8;
+}
+
+.abpc-overlay-desc {
+  font-size: 12px;
+  line-height: 1.55;
+  color: #d1d5db;
+  margin-bottom: 14px;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.abpc-overlay-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #d4af37;
+  letter-spacing: 0.3px;
+  transition: gap 0.3s ease;
+}
+
+.abpc-cell-standard:hover .abpc-overlay-link {
+  gap: 8px;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 1024px) {
+  .abpc-bento {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+
+  .abpc-cell-main {
+    grid-column: span 3;
+    min-height: 220px;
+  }
+
+  .abpc-cell-standard {
+    aspect-ratio: auto;
+    min-height: 180px;
+  }
+}
+
+@media (max-width: 768px) {
+  .abpc-section {
+    padding: 60px 20px;
+  }
+
+  .abpc-title {
+    font-size: 28px;
+  }
+
+  .abpc-bento {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .abpc-cell-main {
+    grid-column: span 2;
+    min-height: 200px;
+  }
+
+  .abpc-cell-main .abpc-cell-content {
+    padding: 28px 24px;
+  }
+
+  .abpc-cell-standard {
+    min-height: 160px;
+  }
+
+  .abpc-cell-standard .abpc-cell-content {
+    padding: 20px 14px;
+  }
+}
+
+@media (max-width: 576px) {
+  .abpc-section {
+    padding: 50px 16px;
+  }
+
+  .abpc-title {
+    font-size: 24px;
+  }
+
+  .abpc-description {
+    font-size: 14px;
+  }
+
+  .abpc-bento {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .abpc-cell-main {
+    grid-column: span 2;
+    min-height: auto;
+  }
+
+  .abpc-cell-main .abpc-cell-content {
+    padding: 24px 18px;
+  }
+
+  .abpc-cell-logo-main {
+    width: 100px;
+    height: 50px;
+  }
+
+  .abpc-cell-name-main {
+    font-size: 16px;
+  }
+
+  .abpc-cell-standard {
+    min-height: 140px;
+  }
+
+  .abpc-cell-logo {
+    width: 65px;
+    height: 38px;
+  }
+
+  .abpc-cell-name {
+    font-size: 11px;
+  }
+
+  .abpc-cell-overlay {
+    padding: 16px 12px;
+  }
+
+  .abpc-overlay-desc {
+    font-size: 11px;
+    -webkit-line-clamp: 3;
+  }
+}
