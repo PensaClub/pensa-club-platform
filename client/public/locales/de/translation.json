@@ -14233,6 +14233,8 @@
   "label": "Partner",
   "title": "Unsere Partner",
   "subtitle": "Gemeinsam bauen wir eine Brücke zwischen den Generationen in der digitalen Welt",
+  "aboutTitle": "Partner & Unterstützung",
+  "aboutSubtitle": "Die Organisationen, die an unsere Mission glauben und uns beim Aufbau einer digitalen Brücke zwischen den Generationen unterstützen",
   "mainPartner": "Hauptpartner",
   "visitSite": "Webseite besuchen",
   "cif": {
@@ -14240,6 +14242,33 @@
   },
   "bosch": {
     "description": "Eine internationale Stiftung, die sich weltweit für Gesundheit, Bildung und Zivilgesellschaft einsetzt"
+  },
+  "bosch": {
+    "description": "Eine internationale Stiftung, die sich weltweit für Gesundheit, Bildung und Zivilgesellschaft einsetzt"
+  },
+  "softuniBuditel": {
+    "description": "Ein Bildungsprogramm für digitale Kompetenz in kleinen Gemeinden in ganz Bulgarien"
+  },
+  "softuni": {
+    "description": "Führende Software-Universität in Bulgarien mit der Mission für qualitativ hochwertige IT-Ausbildung"
+  },
+  "sofiaMunicipality": {
+    "description": "Gemeinde Sofia — ein strategischer Partner für städtische Initiativen und Sozialprojekte"
+  },
+  "bgFundWomen": {
+    "description": "Eine Stiftung zur Unterstützung der Rechte und Stärkung von Frauen in Bulgarien"
+  },
+  "kingBaudouin": {
+    "description": "Eine belgische Stiftung, die CIF und Bürgerbeteiligungsinitiativen in Europa unterstützt"
+  },
+  "austausch": {
+    "description": "Eine deutsche Organisation für internationalen Austausch und Bildungskooperation"
+  },
+  "costEffective": {
+    "description": "Ein Softwareunternehmen, das technologische Unterstützung für die Plattform bereitstellt"
+  },
+  "coalitionMediaLiteracy": {
+    "description": "Eine Koalition zur Förderung von Medienkompetenz und kritischem Denken in der Gesellschaft"
   }
 }
 }
