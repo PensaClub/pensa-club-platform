@@ -12,7 +12,7 @@
   background: #0f172a;
   color: #e2e8f0;
   position: relative;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 /* ============================================
@@ -2580,5 +2580,67 @@
 
   .academyCourseDetail-final-test-btn {
     justify-content: center;
+  }
+}
+/* ============================================
+   STICKY TOP BAR
+   ============================================ */
+
+.academyCourseDetail-topBar {
+  position: sticky;
+  top: 70px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 24px;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.academyCourseDetail-topBar-back {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.academyCourseDetail-topBar-back:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #00d4ff;
+}
+
+.academyCourseDetail-topBar-back svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.academyCourseDetail-topBar-title {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .academyCourseDetail-topBar {
+    padding: 10px 16px;
+  }
+
+  .academyCourseDetail-topBar-title {
+    display: none;
   }
 }

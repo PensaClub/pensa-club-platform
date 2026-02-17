@@ -541,29 +541,29 @@ export const AcademyCourseDetail = () => {
   }, [activeTab, slug, getCourseMaterials]);
 
   // Load course test status when content tab is active
-useEffect(() => {
-  const loadCourseTest = async () => {
-    if (activeTab !== 'content' || !currentCourse?.id || !isAuthentication) {
-      return;
-    }
-    if (courseTestLoadedRef.current === currentCourse.id) return;
+  useEffect(() => {
+    const loadCourseTest = async () => {
+      if (activeTab !== 'content' || !currentCourse?.id || !isAuthentication) {
+        return;
+      }
+      if (courseTestLoadedRef.current === currentCourse.id) return;
 
-    setIsLoadingCourseTest(true);
-    courseTestLoadedRef.current = currentCourse.id;
+      setIsLoadingCourseTest(true);
+      courseTestLoadedRef.current = currentCourse.id;
 
-    try {
-      const data = await getCourseTestStatus(currentCourse.id);
-      setCourseTestData(data);
-    } catch (err) {
-      console.error('Error loading course test:', err);
-      setCourseTestData(null);
-    } finally {
-      setIsLoadingCourseTest(false);
-    }
-  };
+      try {
+        const data = await getCourseTestStatus(currentCourse.id);
+        setCourseTestData(data);
+      } catch (err) {
+        console.error('Error loading course test:', err);
+        setCourseTestData(null);
+      } finally {
+        setIsLoadingCourseTest(false);
+      }
+    };
 
-  loadCourseTest();
-}, [activeTab, currentCourse?.id, isAuthentication, getCourseTestStatus]);
+    loadCourseTest();
+  }, [activeTab, currentCourse?.id, isAuthentication, getCourseTestStatus]);
 
   const course = currentCourse;
 
@@ -729,7 +729,16 @@ useEffect(() => {
         <div className="academyCourseDetail-bgGlow academyCourseDetail-bgGlow--3"></div>
         <div className="academyCourseDetail-bgGrid"></div>
       </div>
-
+      {/* Sticky Navigation Bar */}
+      <div className="academyCourseDetail-topBar">
+        <Link to="/academy/courses" className="academyCourseDetail-topBar-back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+          {t('academyCourseDetail.backToCourses', '← Към курсовете')}
+        </Link>
+        {/* <span className="academyCourseDetail-topBar-title">{title}</span> */}
+      </div>
       {/* Hero Section */}
       <section className="academyCourseDetail-hero">
         <div className="academyCourseDetail-hero-bg">

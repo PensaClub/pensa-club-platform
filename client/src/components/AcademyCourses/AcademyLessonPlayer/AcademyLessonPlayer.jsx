@@ -11,17 +11,17 @@ const AcademyLessonPlayer = () => {
   const { t } = useTranslation();
   const { courseSlug, lessonSlug } = useParams();
   const navigate = useNavigate();
-  
+
   const { isAuthentication, isAdmin, isModerator, isMentor } = useAuthContext();
-  const { 
-    getLessonBySlug, 
+  const {
+    getLessonBySlug,
     getCourseBySlug,
     getLessonMaterials,
     getEnrollmentStatus,
     startLessonBySlug,
     updateLessonProgressBySlug,
     completeLessonBySlug,
-    isLoading 
+    isLoading
   } = useAcademyCourses();
 
   // State
@@ -30,14 +30,14 @@ const AcademyLessonPlayer = () => {
   const [materials, setMaterials] = useState([]);
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [error, setError] = useState(null);
-  
+
   // Enrollment & Progress State
   const [lessonsProgress, setLessonsProgress] = useState([]);
   const [enrollmentStats, setEnrollmentStats] = useState(null);
   const [currentLessonStatus, setCurrentLessonStatus] = useState('not_started');
   const [currentLessonProgress, setCurrentLessonProgress] = useState(0);
   const [nextLessonData, setNextLessonData] = useState(null);
-  
+
   // UI State
   const [showPlayer, setShowPlayer] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -54,6 +54,8 @@ const AcademyLessonPlayer = () => {
   const fetchedRef = useRef(null);
   const countdownIntervalRef = useRef(null);
   const videoContainerRef = useRef(null);
+  const breadcrumbBarRef = useRef(null);
+  const [isBreadcrumbSticky, setIsBreadcrumbSticky] = useState(false);
   const controlsTimeoutRef = useRef(null);
   const progressIntervalRef = useRef(null);
   const privilegedProgressRef = useRef({});
@@ -61,11 +63,21 @@ const AcademyLessonPlayer = () => {
   const hasPrivilegedAccess = isAdmin || isModerator || isMentor;
   const hasAccess = isAuthentication && (isEnrolled || hasPrivilegedAccess);
 
-//SCROLL TOP
+  //SCROLL TOP
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [lessonSlug]);
 
+  useEffect(() => {
+    const el = breadcrumbBarRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setIsBreadcrumbSticky(!entry.isIntersecting),
+      { rootMargin: '-141px 0px 0px 0px' }
+    );
+    observer.observe(el.previousElementSibling); // наблюдава video player div-а
+    return () => observer.disconnect();
+  }, [lesson]);
   // =========================================================
   //                    DATA FETCHING
   // =========================================================
@@ -80,7 +92,7 @@ const AcademyLessonPlayer = () => {
         setError(null);
         setLessonStarted(false);
         setCurrentLessonProgress(0);
-        setCurrentLessonStatus('loading');  
+        setCurrentLessonStatus('loading');
         setShowPlayer(false);
         setWatchedSeconds(0);
 
@@ -101,16 +113,16 @@ const AcademyLessonPlayer = () => {
         if (isAuthentication && courseInfo?.id) {
           const enrollmentData = await getEnrollmentStatus(courseInfo.id);
           setIsEnrolled(enrollmentData?.enrolled || false);
-          
+
           // Store lessons progress
           if (enrollmentData?.lessonsProgress) {
             setLessonsProgress(enrollmentData.lessonsProgress);
-            
+
             // Find current lesson status
             const currentProgress = enrollmentData.lessonsProgress.find(
               lp => lp.lessonSlug === lessonSlug || lp.lessonId === lessonInfo?.id
             );
-            
+
             if (currentProgress) {
               setCurrentLessonStatus(currentProgress.status || 'not_started');
               setCurrentLessonProgress(currentProgress.progress || 0);
@@ -123,12 +135,12 @@ const AcademyLessonPlayer = () => {
               setCurrentLessonProgress(0);
             }
           }
-          
+
           // Store stats
           if (enrollmentData?.stats) {
             setEnrollmentStats(enrollmentData.stats);
           }
-          
+
           // Store next lesson from API
           if (enrollmentData?.nextLesson) {
             setNextLessonData(enrollmentData.nextLesson);
@@ -189,14 +201,14 @@ const AcademyLessonPlayer = () => {
       setWatchedSeconds(prev => prev + 30);
       setCurrentLessonProgress(prev => {
         const newProgress = Math.min(prev + 5, 95);
-        
-        updateLessonProgressBySlug(lessonSlug, { 
+
+        updateLessonProgressBySlug(lessonSlug, {
           progress: newProgress,
           watchedSeconds: watchedSeconds + 30
         }).catch(err => {
           console.error('Error updating progress:', err);
         });
-        
+
         return newProgress;
       });
     }, 30000);
@@ -316,7 +328,7 @@ const AcademyLessonPlayer = () => {
     if (!videoId) return null;
 
     const isLive = lesson?.lessonType === 'live' && liveStatus === 'live';
-    
+
     const params = new URLSearchParams({
       rel: '0',
       modestbranding: '1',
@@ -331,7 +343,7 @@ const AcademyLessonPlayer = () => {
     if (lesson?.thumbnailUrl) {
       return lesson.thumbnailUrl;
     }
-    
+
     const videoUrl = lesson?.videoUrl;
     if (videoUrl) {
       const videoId = extractYouTubeId(videoUrl);
@@ -339,7 +351,7 @@ const AcademyLessonPlayer = () => {
         return `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
       }
     }
-    
+
     return '/images/default-lesson-thumbnail.jpg';
   }, [lesson?.thumbnailUrl, lesson?.videoUrl, extractYouTubeId]);
 
@@ -373,7 +385,7 @@ const AcademyLessonPlayer = () => {
 
   const isLessonAccessible = useCallback((lessonData) => {
     if (!lessonData) return false;
-    
+
     if (!lessonData.isPublished && lessonData.status !== 'published') {
       return hasPrivilegedAccess;
     }
@@ -434,7 +446,7 @@ const AcademyLessonPlayer = () => {
 
   const allLessons = useMemo(() => {
     if (!course?.modules) return [];
-    return course.modules.flatMap(module => 
+    return course.modules.flatMap(module =>
       (module.lessons || [])
         .filter(l => l.isPublished || l.status === 'published')
         .map(l => ({
@@ -458,7 +470,7 @@ const AcademyLessonPlayer = () => {
 
   const handleCompleteLesson = async () => {
     if (!lessonSlug || isCompleting) return;
-    
+
     // Already completed - navigate to next
     if (currentLessonStatus === 'completed') {
       if (nextLesson && isLessonAccessible(nextLesson)) {
@@ -467,29 +479,29 @@ const AcademyLessonPlayer = () => {
       }
       return;
     }
-    
+
     try {
       setIsCompleting(true);
       await completeLessonBySlug(lessonSlug);
-      
+
       setCurrentLessonStatus('completed');
       setCurrentLessonProgress(100);
-       if (hasPrivilegedAccess && !isEnrolled) {
+      if (hasPrivilegedAccess && !isEnrolled) {
         privilegedProgressRef.current[lessonSlug] = true;
       }
       // Update local lessonsProgress
       setLessonsProgress(prev => {
         const existing = prev.find(lp => lp.lessonSlug === lessonSlug);
         if (existing) {
-          return prev.map(lp => 
-            lp.lessonSlug === lessonSlug 
+          return prev.map(lp =>
+            lp.lessonSlug === lessonSlug
               ? { ...lp, status: 'completed', progress: 100 }
               : lp
           );
         }
         return [...prev, { lessonSlug, status: 'completed', progress: 100 }];
       });
-      
+
       // Update stats
       if (enrollmentStats) {
         setEnrollmentStats(prev => ({
@@ -499,7 +511,7 @@ const AcademyLessonPlayer = () => {
           progressPercentage: Math.round(((prev?.completedLessons || 0) + 1) / (prev?.totalLessons || 1) * 100)
         }));
       }
-      
+
       // НЕ навигирай автоматично — потребителят решава
     } catch (error) {
       console.error('Error completing lesson:', error);
@@ -546,7 +558,7 @@ const AcademyLessonPlayer = () => {
   const getMaterialIcon = (material) => {
     const type = material.materialType?.toLowerCase() || material.mimeType?.toLowerCase() || '';
     const name = material.originalFileName?.toLowerCase() || material.title?.toLowerCase() || '';
-    
+
     if (type.includes('pdf') || name.endsWith('.pdf')) return '📄';
     if (type.includes('doc') || name.endsWith('.doc') || name.endsWith('.docx')) return '📝';
     if (type.includes('video') || type.includes('mp4') || name.endsWith('.mp4')) return '🎬';
@@ -664,7 +676,7 @@ const AcademyLessonPlayer = () => {
 
   const courseName = lesson?.course?.name || course?.name || '';
   const moduleTitle = lesson?.module?.title || '';
-  const canShowVideo = lesson?.lessonType === 'video' || 
+  const canShowVideo = lesson?.lessonType === 'video' ||
     (lesson?.lessonType === 'live' && (liveStatus === 'live' || liveStatus === 'starting' || (liveStatus === 'ended' && lesson?.videoUrl)));
 
   // Current lesson progress data
@@ -687,7 +699,7 @@ const AcademyLessonPlayer = () => {
       {/* Main Container */}
       <div className="lp-container">
         {/* Video Section */}
-        <div 
+        <div
           ref={videoContainerRef}
           className={`lp-player ${isFullscreen ? 'lp-player--fullscreen' : ''}`}
           onMouseMove={showControls}
@@ -708,8 +720,8 @@ const AcademyLessonPlayer = () => {
             {canShowVideo && embedUrl ? (
               !showPlayer ? (
                 <div className="lp-player__thumbnail" onClick={() => setShowPlayer(true)}>
-                  <img 
-                    src={thumbnailUrl} 
+                  <img
+                    src={thumbnailUrl}
                     alt={lesson?.title}
                     onError={(e) => {
                       e.target.src = '/images/default-lesson-thumbnail.jpg';
@@ -739,9 +751,9 @@ const AcademyLessonPlayer = () => {
               )
             ) : lesson?.lessonType === 'live' && liveStatus === 'upcoming' ? (
               <div className="lp-player__countdown">
-                <img 
-                  src={thumbnailUrl} 
-                  alt="" 
+                <img
+                  src={thumbnailUrl}
+                  alt=""
                   className="lp-player__countdown-bg"
                   onError={(e) => {
                     e.target.src = '/images/default-lesson-thumbnail.jpg';
@@ -786,9 +798,9 @@ const AcademyLessonPlayer = () => {
               </div>
             ) : lesson?.lessonType === 'text' ? (
               <div className="lp-player__message">
-                <img 
-                  src={thumbnailUrl} 
-                  alt="" 
+                <img
+                  src={thumbnailUrl}
+                  alt=""
                   className="lp-player__message-bg"
                   onError={(e) => { e.target.style.display = 'none'; }}
                 />
@@ -798,9 +810,9 @@ const AcademyLessonPlayer = () => {
               </div>
             ) : (
               <div className="lp-player__message">
-                <img 
-                  src={thumbnailUrl} 
-                  alt="" 
+                <img
+                  src={thumbnailUrl}
+                  alt=""
                   className="lp-player__message-bg"
                   onError={(e) => { e.target.style.display = 'none'; }}
                 />
@@ -826,7 +838,7 @@ const AcademyLessonPlayer = () => {
               </div>
 
               <div className="lp-controls__actions">
-                <button 
+                {/* <button 
                   className="lp-controls__btn"
                   onClick={() => setIsSidebarOpen(true)}
                   title={t('academyLessonPlayer.courseContent', 'Съдържание')}
@@ -834,9 +846,9 @@ const AcademyLessonPlayer = () => {
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M4 6h16M4 12h16M4 18h16" />
                   </svg>
-                </button>
+                </button> */}
                 {canShowVideo && (
-                  <button 
+                  <button
                     className="lp-controls__btn"
                     onClick={toggleFullscreen}
                     title={isFullscreen ? t('academyLessonPlayer.exitFullscreen', 'Изход') : t('academyLessonPlayer.fullscreen', 'Цял екран')}
@@ -866,7 +878,7 @@ const AcademyLessonPlayer = () => {
             {/* Bottom Bar */}
             <div className="lp-controls__bottom">
               <div className="lp-controls__nav">
-                <button 
+                <button
                   className="lp-controls__nav-btn"
                   onClick={() => previousLesson && handleNavigateToLesson(previousLesson)}
                   disabled={!previousLesson || !isLessonAccessible(previousLesson)}
@@ -876,12 +888,12 @@ const AcademyLessonPlayer = () => {
                     <path d="M19 12H5M12 19l-7-7 7-7" />
                   </svg>
                 </button>
-                
+
                 <span className="lp-controls__progress">
                   {currentLessonIndex + 1} / {allLessons.length}
                 </span>
 
-                <button 
+                <button
                   className="lp-controls__nav-btn"
                   onClick={() => nextLesson && handleNavigateToLesson(nextLesson)}
                   disabled={!nextLesson || !isLessonAccessible(nextLesson)}
@@ -895,17 +907,35 @@ const AcademyLessonPlayer = () => {
             </div>
           </div>
         </div>
-
+        {/* Sticky Navigation Bar */}
+        <div ref={breadcrumbBarRef} className="lp-nav-bar">
+          <Link to={`/academy/courses/${courseSlug}`} className="lp-nav-bar__back">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+            {t('academyLessonPlayer.backToCourse', '← Към курса')}
+          </Link>
+          <span className="lp-nav-bar__title">{lesson?.title}</span>
+          <button
+            className="lp-nav-bar__sidebar-btn"
+            onClick={() => setIsSidebarOpen(true)}
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+            {t('academyLessonPlayer.courseContent', 'Съдържание')}
+          </button>
+        </div>
         {/* Info Section */}
-        <div className={`lp-info ${isInfoExpanded ? 'lp-info--expanded' : ''}`}>
-          <button 
+        <div className="lp-info">
+          {/* <button 
             className="lp-info__toggle"
             onClick={() => setIsInfoExpanded(!isInfoExpanded)}
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d={isInfoExpanded ? "M18 15l-6-6-6 6" : "M6 9l6 6 6-6"} />
             </svg>
-          </button>
+          </button> */}
 
           <div className="lp-info__content">
             {/* Header */}
@@ -939,7 +969,7 @@ const AcademyLessonPlayer = () => {
                 )}
               </div>
               <h1 className="lp-info__title">{lesson?.title}</h1>
-              
+
               {/* Course Progress Stats */}
               {enrollmentStats && (
                 <div className="lp-info__course-stats">
@@ -971,13 +1001,13 @@ const AcademyLessonPlayer = () => {
                   )}
                 </div>
               )}
-              
+
               {/* Progress indicator */}
               {currentLessonProgress > 0 && currentLessonStatus !== 'completed' && (
                 <div className="lp-info__progress-bar">
                   <div className="lp-info__progress-track">
-                    <div 
-                      className="lp-info__progress-fill" 
+                    <div
+                      className="lp-info__progress-fill"
                       style={{ width: `${currentLessonProgress}%` }}
                     ></div>
                   </div>
@@ -995,8 +1025,8 @@ const AcademyLessonPlayer = () => {
               {/* Mentor */}
               {lesson?.mentor && (
                 <div className="lp-info__mentor">
-                  <img 
-                    src={lesson.mentor.photoUrl || '/images/default-avatar.png'} 
+                  <img
+                    src={lesson.mentor.photoUrl || '/images/default-avatar.png'}
                     alt={lesson.mentor.name}
                     onError={(e) => { e.target.src = '/images/default-avatar.png'; }}
                   />
@@ -1011,7 +1041,7 @@ const AcademyLessonPlayer = () => {
 
               {/* Actions */}
               <div className="lp-info__actions">
-                <button 
+                <button
                   className={`lp-info__complete-btn ${currentLessonStatus === 'completed' ? 'lp-info__complete-btn--completed' : ''}`}
                   onClick={handleCompleteLesson}
                   disabled={isCompleting || currentLessonStatus === 'loading'}
@@ -1036,7 +1066,7 @@ const AcademyLessonPlayer = () => {
                 </button>
 
                 {lesson?.hasTest && (
-                  <button 
+                  <button
                     className={`lp-info__test-btn ${isTestPassed(lesson.id, lessonSlug) ? 'lp-info__test-btn--passed' : ''}`}
                     onClick={handleStartTest}
                     disabled={isStartingTest}
@@ -1094,10 +1124,10 @@ const AcademyLessonPlayer = () => {
                       <span className="lp-materials__count">{materials.length}</span>
                     </h3>
                   </div>
-                  
+
                   <div className="lp-materials__list">
                     {materials.map((material, idx) => (
-                      <a 
+                      <a
                         key={material.id || idx}
                         href={material.fileUrl || material.externalUrl}
                         target="_blank"
@@ -1109,7 +1139,7 @@ const AcademyLessonPlayer = () => {
                         <div className="lp-materials__item-icon">
                           {getMaterialIcon(material)}
                         </div>
-                        
+
                         <div className="lp-materials__item-info">
                           <div className="lp-materials__item-header">
                             <h4 className="lp-materials__item-title">
@@ -1121,13 +1151,13 @@ const AcademyLessonPlayer = () => {
                               </span>
                             )}
                           </div>
-                          
+
                           {material.description && (
                             <p className="lp-materials__item-description">
                               {material.description}
                             </p>
                           )}
-                          
+
                           <div className="lp-materials__item-meta">
                             {material.materialType && (
                               <span className="lp-materials__item-type">
@@ -1141,7 +1171,7 @@ const AcademyLessonPlayer = () => {
                             )}
                           </div>
                         </div>
-                        
+
                         <div className="lp-materials__item-action">
                           <div className="lp-materials__item-download">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -1179,7 +1209,7 @@ const AcademyLessonPlayer = () => {
           {enrollmentStats && (
             <div className="lp-sidebar__stats">
               <div className="lp-sidebar__stats-bar">
-                <div 
+                <div
                   className="lp-sidebar__stats-fill"
                   style={{ width: `${enrollmentStats.progressPercentage}%` }}
                 ></div>
@@ -1198,8 +1228,8 @@ const AcademyLessonPlayer = () => {
               const isCurrentModule = module.id === lesson?.moduleId;
 
               return (
-                <div 
-                  key={module.id} 
+                <div
+                  key={module.id}
                   className={`lp-sidebar__module ${isCurrentModule ? 'lp-sidebar__module--current' : ''}`}
                 >
                   <div className="lp-sidebar__module-header">
@@ -1228,12 +1258,12 @@ const AcademyLessonPlayer = () => {
                           disabled={!isAccessible}
                         >
                           <span className="lp-sidebar__lesson-icon">
-                            {!isAccessible ? '🔒' : 
+                            {!isAccessible ? '🔒' :
                               lessonStatus === 'completed' ? '✅' :
-                              lessonStatus === 'in_progress' ? '▶️' :
-                              l.lessonType === 'video' ? '🎬' :
-                              l.lessonType === 'live' ? '🔴' :
-                              l.lessonType === 'text' ? '📖' : '❓'}
+                                lessonStatus === 'in_progress' ? '▶️' :
+                                  l.lessonType === 'video' ? '🎬' :
+                                    l.lessonType === 'live' ? '🔴' :
+                                      l.lessonType === 'text' ? '📖' : '❓'}
                           </span>
                           <span className="lp-sidebar__lesson-title">{l.title}</span>
                           <div className="lp-sidebar__lesson-badges">
