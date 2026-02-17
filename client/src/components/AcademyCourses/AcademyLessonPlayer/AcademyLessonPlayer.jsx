@@ -56,10 +56,15 @@ const AcademyLessonPlayer = () => {
   const videoContainerRef = useRef(null);
   const controlsTimeoutRef = useRef(null);
   const progressIntervalRef = useRef(null);
-
+  const privilegedProgressRef = useRef({});
   // Privileged access
   const hasPrivilegedAccess = isAdmin || isModerator || isMentor;
   const hasAccess = isAuthentication && (isEnrolled || hasPrivilegedAccess);
+
+//SCROLL TOP
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [lessonSlug]);
 
   // =========================================================
   //                    DATA FETCHING
@@ -75,14 +80,17 @@ const AcademyLessonPlayer = () => {
         setError(null);
         setLessonStarted(false);
         setCurrentLessonProgress(0);
-        setCurrentLessonStatus('not_started');
+        setCurrentLessonStatus('loading');  
         setShowPlayer(false);
         setWatchedSeconds(0);
-        
+
         // 1. Fetch course
-        const courseData = await getCourseBySlug(courseSlug);
-        const courseInfo = courseData?.course || courseData;
-        setCourse(courseInfo);
+        let courseInfo = course;
+        if (!courseInfo || courseInfo.slug !== courseSlug) {
+          const courseData = await getCourseBySlug(courseSlug);
+          courseInfo = courseData?.course || courseData;
+          setCourse(courseInfo);
+        }
 
         // 2. Fetch lesson
         const lessonData = await getLessonBySlug(courseSlug, lessonSlug);
@@ -107,6 +115,12 @@ const AcademyLessonPlayer = () => {
               setCurrentLessonStatus(currentProgress.status || 'not_started');
               setCurrentLessonProgress(currentProgress.progress || 0);
               setWatchedSeconds((currentProgress.timeSpentMinutes || 0) * 60);
+            } else if (hasPrivilegedAccess && privilegedProgressRef.current[lessonSlug]) {
+              setCurrentLessonStatus('completed');
+              setCurrentLessonProgress(100);
+            } else {
+              setCurrentLessonStatus('not_started');
+              setCurrentLessonProgress(0);
             }
           }
           
@@ -448,6 +462,7 @@ const AcademyLessonPlayer = () => {
     // Already completed - navigate to next
     if (currentLessonStatus === 'completed') {
       if (nextLesson && isLessonAccessible(nextLesson)) {
+        fetchedRef.current = null;
         navigate(`/academy/courses/${courseSlug}/lessons/${nextLesson.slug}`);
       }
       return;
@@ -459,7 +474,9 @@ const AcademyLessonPlayer = () => {
       
       setCurrentLessonStatus('completed');
       setCurrentLessonProgress(100);
-      
+       if (hasPrivilegedAccess && !isEnrolled) {
+        privilegedProgressRef.current[lessonSlug] = true;
+      }
       // Update local lessonsProgress
       setLessonsProgress(prev => {
         const existing = prev.find(lp => lp.lessonSlug === lessonSlug);
@@ -483,12 +500,7 @@ const AcademyLessonPlayer = () => {
         }));
       }
       
-      // Navigate to next lesson
-      if (nextLesson && isLessonAccessible(nextLesson)) {
-        setTimeout(() => {
-          navigate(`/academy/courses/${courseSlug}/lessons/${nextLesson.slug}`);
-        }, 500);
-      }
+      // НЕ навигирай автоматично — потребителят решава
     } catch (error) {
       console.error('Error completing lesson:', error);
     } finally {
@@ -503,6 +515,7 @@ const AcademyLessonPlayer = () => {
 
   const handleNavigateToLesson = (targetLesson) => {
     if (!targetLesson || !isLessonAccessible(targetLesson)) return;
+    fetchedRef.current = null;  // <-- форсирай re-fetch
     navigate(`/academy/courses/${courseSlug}/lessons/${targetLesson.slug}`);
     setIsSidebarOpen(false);
     setShowPlayer(false);
@@ -1001,9 +1014,9 @@ const AcademyLessonPlayer = () => {
                 <button 
                   className={`lp-info__complete-btn ${currentLessonStatus === 'completed' ? 'lp-info__complete-btn--completed' : ''}`}
                   onClick={handleCompleteLesson}
-                  disabled={isCompleting}
+                  disabled={isCompleting || currentLessonStatus === 'loading'}
                 >
-                  {isCompleting ? (
+                  {isCompleting || currentLessonStatus === 'loading' ? (
                     <span className="lp-info__spinner"></span>
                   ) : currentLessonStatus === 'completed' ? (
                     <>
