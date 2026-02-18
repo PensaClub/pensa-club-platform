@@ -1041,30 +1041,47 @@ const AcademyLessonPlayer = () => {
 
               {/* Actions */}
               <div className="lp-info__actions">
-                <button
-                  className={`lp-info__complete-btn ${currentLessonStatus === 'completed' ? 'lp-info__complete-btn--completed' : ''}`}
-                  onClick={handleCompleteLesson}
-                  disabled={isCompleting || currentLessonStatus === 'loading'}
-                >
-                  {isCompleting || currentLessonStatus === 'loading' ? (
-                    <span className="lp-info__spinner"></span>
-                  ) : currentLessonStatus === 'completed' ? (
-                    <>
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M5 12h14M12 5l7 7-7 7" />
-                      </svg>
-                      {nextLesson ? t('academyLessonPlayer.nextLesson', 'Следващ урок') : t('academyLessonPlayer.completed', 'Завършен')}
-                    </>
-                  ) : (
-                    <>
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <polyline points="20 6 9 17 4 12" />
-                      </svg>
-                      {t('academyLessonPlayer.complete', 'Завърши урока')}
-                    </>
-                  )}
-                </button>
+                {/* Complete Button */}
+                {currentLessonStatus === 'completed' ? (
+                  <div className="lp-info__completed-badge">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                    {t('academyLessonPlayer.completedStatus', 'Завършен')}
+                  </div>
+                ) : (
+                  <button
+                    className="lp-info__complete-btn"
+                    onClick={handleCompleteLesson}
+                    disabled={isCompleting || currentLessonStatus === 'loading'}
+                  >
+                    {isCompleting || currentLessonStatus === 'loading' ? (
+                      <span className="lp-info__spinner"></span>
+                    ) : (
+                      <>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        {t('academyLessonPlayer.complete', 'Завърши урока')}
+                      </>
+                    )}
+                  </button>
+                )}
 
+                {/* Next Lesson Button - separate, always visible when there's a next */}
+                {/* {currentLessonStatus === 'completed' && nextLesson && (
+                  <button
+                    className="lp-info__next-btn"
+                    onClick={() => handleNavigateToLesson(nextLesson)}
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                    {t('academyLessonPlayer.nextLesson', 'Следващ урок')}
+                  </button>
+                )} */}
+
+                {/* Test Button */}
                 {lesson?.hasTest && (
                   <button
                     className={`lp-info__test-btn ${isTestPassed(lesson.id, lessonSlug) ? 'lp-info__test-btn--passed' : ''}`}
@@ -1186,6 +1203,39 @@ const AcademyLessonPlayer = () => {
                   </div>
                 </div>
               )}
+              {/* Prev/Next Navigation */}
+              <div className="lp-info__nav">
+                {previousLesson ? (
+                  <button
+                    className="lp-info__nav-btn lp-info__nav-btn--prev"
+                    onClick={() => handleNavigateToLesson(previousLesson)}
+                    disabled={!isLessonAccessible(previousLesson)}
+                  >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M19 12H5M12 19l-7-7 7-7" />
+                    </svg>
+                    <div className="lp-info__nav-text">
+                      <span className="lp-info__nav-label">{t('academyLessonPlayer.prevLesson', 'Предишен урок')}</span>
+                      <span className="lp-info__nav-title">{previousLesson.title}</span>
+                    </div>
+                  </button>
+                ) : <div />}
+                {nextLesson ? (
+                  <button
+                    className="lp-info__nav-btn lp-info__nav-btn--next"
+                    onClick={() => handleNavigateToLesson(nextLesson)}
+                    disabled={!isLessonAccessible(nextLesson)}
+                  >
+                    <div className="lp-info__nav-text">
+                      <span className="lp-info__nav-label">{t('academyLessonPlayer.nextLessonLabel', 'Следващ урок')}</span>
+                      <span className="lp-info__nav-title">{nextLesson.title}</span>
+                    </div>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                ) : <div />}
+              </div>
             </div>
           </div>
         </div>

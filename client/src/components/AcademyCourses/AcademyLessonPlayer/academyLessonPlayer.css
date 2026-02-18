@@ -1922,3 +1922,129 @@
     font-size: 0.85rem;
   }
 }
+/* =========================================================
+   PREV/NEXT NAVIGATION
+   ========================================================= */
+
+.lp-info__nav {
+  display: flex;
+  gap: 12px;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.lp-info__nav-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: #fff;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.lp-info__nav-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.lp-info__nav-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.lp-info__nav-btn--next {
+  text-align: right;
+  justify-content: flex-end;
+}
+
+.lp-info__nav-btn svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+.lp-info__nav-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.lp-info__nav-label {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.lp-info__nav-title {
+  font-size: 0.9rem;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .lp-info__nav {
+    flex-direction: column;
+  }
+
+  .lp-info__nav-btn--next {
+    text-align: left;
+    justify-content: flex-start;
+    flex-direction: row-reverse;
+  }
+}
+/* Completed Badge */
+.lp-info__completed-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 10px;
+  color: #10b981;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.lp-info__completed-badge svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Next Lesson Button */
+.lp-info__next-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.lp-info__next-btn:hover {
+  opacity: 0.9;
+  transform: translateX(2px);
+}
+
+.lp-info__next-btn svg {
+  width: 20px;
+  height: 20px;
+}
