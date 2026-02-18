@@ -101,7 +101,7 @@ export const DigiBridgeHeader = () => {
         <>
             <header
                 ref={headerRef}
-                 className={`dbh-header ${isScrolled ? 'dbh-header--scrolled' : ''} ${isTestPage ? 'dbh-header--dark' : ''}`}
+                 className={`dbh-header ${isScrolled ? 'dbh-header--scrolled' : ''} ${isTestPage ? 'dbh-header--dark' : ''} ${isMobileMenuOpen ? 'dbh-header--dark' : ''}`}
             >
                 <div className="dbh-container">
                     {/* ===== ЛЯВА ЧАСТ: Logo + Navigation ===== */}
