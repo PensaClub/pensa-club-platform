@@ -968,6 +968,11 @@ const AcademyLessonPlayer = () => {
                   </span>
                 )}
               </div>
+              {moduleTitle && (
+                <span className="lp-info__module-badge">
+                  📁 {t('academyLessonPlayer.partOfModule', 'Част от модул')}: {moduleTitle}
+                </span>
+              )}
               <h1 className="lp-info__title">{lesson?.title}</h1>
 
               {/* Course Progress Stats */}

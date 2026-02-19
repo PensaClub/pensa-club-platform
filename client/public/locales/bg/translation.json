@@ -14213,19 +14213,19 @@
       "reviews": "Отзиви"
     },
     "finalTest": {
-  "title": "Финален тест",
-  "questions": "въпроса",
-  "minutes": "мин",
-  "passingScore": "Мин. резултат",
-  "maxAttempts": "Макс. опити",
-  "passed": "Тестът е преминат успешно!",
-  "bestScore": "Най-добър резултат",
-  "locked": "Завършете всички уроци в курса, за да отключите теста.",
-  "startTest": "Започни тест",
-  "continueAttempt": "Продължи опита",
-  "noMoreAttempts": "Изчерпахте всички опити.",
-  "remaining": "Оставащи опити"
-},
+      "title": "Финален тест",
+      "questions": "въпроса",
+      "minutes": "мин",
+      "passingScore": "Мин. резултат",
+      "maxAttempts": "Макс. опити",
+      "passed": "Тестът е преминат успешно!",
+      "bestScore": "Най-добър резултат",
+      "locked": "Завършете всички уроци в курса, за да отключите теста.",
+      "startTest": "Започни тест",
+      "continueAttempt": "Продължи опита",
+      "noMoreAttempts": "Изчерпахте всички опити.",
+      "remaining": "Оставащи опити"
+    },
     "hero": {
       "certificateBadge": "Сертификат",
       "ratings": "оценки",
@@ -14282,6 +14282,7 @@
       "lessonsTotal": "урока",
       "lessonsShort": "урока",
       "hoursTotal": "часа",
+      "moduleLabel": "Модул",
       "minutes": "мин",
       "freeLesson": "Безплатен",
       "hasTest": "С тест",
@@ -14318,6 +14319,7 @@
     "error": "Грешка",
     "backToCourse": "Към курса",
     "loginRequired": "Влезте в профила си",
+    "partOfModule": "Част от модул",
     "loginRequiredDesc": "Трябва да влезете, за да гледате този урок.",
     "login": "Вход",
     "enrollRequired": "Запишете се",
@@ -15014,8 +15016,8 @@
     "cancel": "Отказ",
     "confirmDelete": "Изтрий",
     "startDate": "Начало",
-"endDate": "Край",
-"estimatedHours": "Часове",
+    "endDate": "Край",
+    "estimatedHours": "Часове",
     "lessonTypes": {
       "video": "Видео",
       "text": "Текст",
@@ -15026,247 +15028,247 @@
       "loadFailed": "Грешка при зареждане"
     },
     "finalTest": {
-  "title": "Финален тест на курса",
-  "manage": "Управлявай тест",
-  "description": "Финалният тест се решава от учениците след завършване на всички модули и уроци в курса."
-}
+      "title": "Финален тест на курса",
+      "manage": "Управлявай тест",
+      "description": "Финалният тест се решава от учениците след завършване на всички модули и уроци в курса."
+    }
   },
- "editLesson": {
-  "title": "Редактиране на урок",
-  "loading": "Зареждане...",
-  "save": "Запази",
-  "cancel": "Отказ",
-  "manageTest": "Управлявай тест",
-  "unsavedChanges": "● Незапазени промени",
-  "sections": {
-    "basicInfo": "Основна информация",
-    "video": "Видео настройки",
-    "schedule": "График и времетраене",
-    "credits": "Кредити",
-    "test": "Тест настройки",
-    "materials": "Материали",
-    "settings": "Настройки"
-  },
-  "fields": {
-    "title": "Заглавие",
-    "description": "Описание",
-    "lessonType": "Тип урок",
-    "videoProvider": "Доставчик",
-    "videoUrl": "Видео URL",
-    "liveStreamUrl": "Live Stream URL",
-    "thumbnailUrl": "Thumbnail URL",
-    "durationMinutes": "Продължителност (мин)",
-    "scheduledDate": "Начална дата",
-    "endDate": "Крайна дата",
-    "maxCredits": "Макс. кредити",
-    "creditsForCompletion": "За завършване",
-    "creditsForTest": "За тест",
-    "hasTest": "Има тест",
-    "testPassingScore": "Минимален резултат (%)",
-    "isFree": "Безплатен урок",
-    "requiresCompletion": "Изисква завършване",
-    "published": "Публикуван",
-    "draft": "Чернова"
-  },
-  "placeholders": {
-    "title": "Въведете заглавие...",
-    "description": "Кратко описание..."
-  },
-  "lessonTypes": {
-    "video": "Видео",
-    "text": "Текст",
-    "live": "На живо",
-    "quiz": "Тест"
-  },
-  "videoProviders": {
-    "youtube": "YouTube",
-    "vimeo": "Vimeo",
-    "custom": "Друг",
-    "none": "Няма"
-  },
-  "errors": {
-    "loadFailed": "Грешка при зареждане на урока",
-    "saveFailed": "Грешка при запазване",
-    "titleRequired": "Заглавието е задължително"
-  },
-  "materials": {
-    "loading": "Зареждане на материали...",
-    "autosave": "Материалите се записват автоматично", 
-    "empty": "Няма добавени материали",
-    "open": "Отвори",
-    "delete": "Изтрий",
-    "cancel": "Откажи",
-    "add": "Добави",
-    "uploadFile": "Качи файл",
-    "addExternalLink": "Добави връзка",
-    "addLink": "Нова външна връзка",
-    "dropzoneTitle": "Плъзнете файлове тук или кликнете",
-    "dropzoneSubtitle": "PDF, документи, изображения, видео, аудио",
-    "maxFileSize": "Максимален размер: 50MB",
-    "uploadSuccess": "{{name}} е качен успешно",
-    "title": "Материали към курса",
-    "upload": "Качи файл",
-    "uploadTooltip": "Качете файлове към курса",
-    "uploading": "Качване...",
-    "openFile": "Отвори файла",
+  "editLesson": {
+    "title": "Редактиране на урок",
+    "loading": "Зареждане...",
+    "save": "Запази",
+    "cancel": "Отказ",
+    "manageTest": "Управлявай тест",
+    "unsavedChanges": "● Незапазени промени",
+    "sections": {
+      "basicInfo": "Основна информация",
+      "video": "Видео настройки",
+      "schedule": "График и времетраене",
+      "credits": "Кредити",
+      "test": "Тест настройки",
+      "materials": "Материали",
+      "settings": "Настройки"
+    },
     "fields": {
       "title": "Заглавие",
-      "url": "URL адрес",
-      "type": "Тип на материала",
-      "description": "Описание"
+      "description": "Описание",
+      "lessonType": "Тип урок",
+      "videoProvider": "Доставчик",
+      "videoUrl": "Видео URL",
+      "liveStreamUrl": "Live Stream URL",
+      "thumbnailUrl": "Thumbnail URL",
+      "durationMinutes": "Продължителност (мин)",
+      "scheduledDate": "Начална дата",
+      "endDate": "Крайна дата",
+      "maxCredits": "Макс. кредити",
+      "creditsForCompletion": "За завършване",
+      "creditsForTest": "За тест",
+      "hasTest": "Има тест",
+      "testPassingScore": "Минимален резултат (%)",
+      "isFree": "Безплатен урок",
+      "requiresCompletion": "Изисква завършване",
+      "published": "Публикуван",
+      "draft": "Чернова"
     },
     "placeholders": {
-      "linkTitle": "Име на връзката...",
-      "description": "Кратко описание на материала..."
+      "title": "Въведете заглавие...",
+      "description": "Кратко описание..."
+    },
+    "lessonTypes": {
+      "video": "Видео",
+      "text": "Текст",
+      "live": "На живо",
+      "quiz": "Тест"
+    },
+    "videoProviders": {
+      "youtube": "YouTube",
+      "vimeo": "Vimeo",
+      "custom": "Друг",
+      "none": "Няма"
     },
     "errors": {
-      "titleRequired": "Заглавието е задължително",
-      "urlRequired": "URL адресът е задължителен",
-      "fileTooLarge": "{{name}} надвишава максималния размер от 50MB",
-      "uploadFailed": "Грешка при качване на {{name}}"
+      "loadFailed": "Грешка при зареждане на урока",
+      "saveFailed": "Грешка при запазване",
+      "titleRequired": "Заглавието е задължително"
     },
-    "types": {
-      "pdf": "PDF",
-      "document": "Документ",
-      "video": "Видео",
-      "presentation": "Презентация",
-      "image": "Изображение",
-      "audio": "Аудио",
-      "spreadsheet": "Таблица",
-      "code": "Код",
-      "archive": "Архив",
-      "link": "Връзка",
-      "other": "Друго"
+    "materials": {
+      "loading": "Зареждане на материали...",
+      "autosave": "Материалите се записват автоматично",
+      "empty": "Няма добавени материали",
+      "open": "Отвори",
+      "delete": "Изтрий",
+      "cancel": "Откажи",
+      "add": "Добави",
+      "uploadFile": "Качи файл",
+      "addExternalLink": "Добави връзка",
+      "addLink": "Нова външна връзка",
+      "dropzoneTitle": "Плъзнете файлове тук или кликнете",
+      "dropzoneSubtitle": "PDF, документи, изображения, видео, аудио",
+      "maxFileSize": "Максимален размер: 50MB",
+      "uploadSuccess": "{{name}} е качен успешно",
+      "title": "Материали към курса",
+      "upload": "Качи файл",
+      "uploadTooltip": "Качете файлове към курса",
+      "uploading": "Качване...",
+      "openFile": "Отвори файла",
+      "fields": {
+        "title": "Заглавие",
+        "url": "URL адрес",
+        "type": "Тип на материала",
+        "description": "Описание"
+      },
+      "placeholders": {
+        "linkTitle": "Име на връзката...",
+        "description": "Кратко описание на материала..."
+      },
+      "errors": {
+        "titleRequired": "Заглавието е задължително",
+        "urlRequired": "URL адресът е задължителен",
+        "fileTooLarge": "{{name}} надвишава максималния размер от 50MB",
+        "uploadFailed": "Грешка при качване на {{name}}"
+      },
+      "types": {
+        "pdf": "PDF",
+        "document": "Документ",
+        "video": "Видео",
+        "presentation": "Презентация",
+        "image": "Изображение",
+        "audio": "Аудио",
+        "spreadsheet": "Таблица",
+        "code": "Код",
+        "archive": "Архив",
+        "link": "Връзка",
+        "other": "Друго"
+      }
+    }
+  },
+  "testEditor": {
+    "title": "Редактор на тест",
+    "defaultTitle": "Тест",
+    "lesson": "Урок",
+    "published": "Публикуван",
+    "draft": "Чернова",
+    "publish": "Публикувай",
+    "unpublish": "Скрий",
+    "needQuestions": "Добавете въпроси първо",
+    "loading": "Зареждане...",
+    "noQuestions": "Няма добавени въпроси",
+    "addFirstQuestion": "Добави първи въпрос",
+    "addQuestion": "Добави въпрос",
+    "newQuestion": "Нов въпрос",
+    "cancel": "Отказ",
+    "saveQuestion": "Запази въпрос",
+    "updateQuestion": "Обнови въпрос",
+    "questionAdded": "Въпросът е добавен",
+    "questionUpdated": "Въпросът е обновен",
+    "questionDeleted": "Въпросът е изтрит",
+    "confirmDeleteQuestion": "Сигурни ли сте, че искате да изтриете този въпрос?",
+    "confirmDelete": "Изтрий",
+    "settingsSaved": "Настройките са запазени",
+    "saveSettings": "Запази настройки",
+    "moveUp": "Премести нагоре",
+    "moveDown": "Премести надолу",
+    "editQuestion": "Редактирай",
+    "deleteQuestion": "Изтрий",
+    "markCorrect": "Маркирай като верен",
+    "markIncorrect": "Маркирай като грешен",
+    "addAnswer": "Добави отговор",
+    "answerPlaceholder": "Отговор",
+    "trueOption": "Вярно",
+    "falseOption": "Грешно",
+    "untitled": "Без заглавие",
+    "minutes": "мин",
+    "questionsCount": "въпроса",
+    "passingAt": "Минимум",
+    "pts": "т.",
+    "answers": "отг.",
+    "noQuestionsPreview": "Добавете въпроси, за да видите преглед",
+    "tabs": {
+      "settings": "Настройки",
+      "questions": "Въпроси",
+      "preview": "Преглед"
+    },
+    "fields": {
+      "title": "Заглавие на теста",
+      "description": "Описание",
+      "passingScore": "Минимален резултат (%)",
+      "timeLimit": "Времево ограничение (мин)",
+      "maxAttempts": "Макс. опити",
+      "maxCredits": "Кредити",
+      "shuffleQuestions": "Разбъркай въпросите",
+      "shuffleAnswers": "Разбъркай отговорите",
+      "showCorrectAnswers": "Покажи верните отговори",
+      "questionText": "Текст на въпроса",
+      "points": "Точки",
+      "explanation": "Обяснение (опционално)",
+      "answers": "Отговори",
+      "requireCourseCompletion": "Изисквай завършване на курса"
+    },
+    "placeholders": {
+      "title": "Напр. Тест по Модул 1",
+      "description": "Кратко описание на теста...",
+      "noLimit": "Без ограничение",
+      "unlimited": "Неограничено",
+      "questionText": "Въведете въпроса тук...",
+      "explanation": "Защо този отговор е верен..."
+    },
+    "sections": {
+      "options": "Опции"
+    },
+    "questionTypes": {
+      "single_choice": "Един верен",
+      "multiple_choice": "Няколко верни",
+      "true_false": "Вярно / Грешно"
+    },
+    "errors": {
+      "loadFailed": "Грешка при зареждане на тест",
+      "questionRequired": "Въведете текст на въпроса",
+      "answersRequired": "Всички отговори трябва да имат текст",
+      "correctRequired": "Маркирайте поне един верен отговор"
+    },
+    "questionTypeHints": {
+      "single_choice": "Въпрос с няколко отговора, само един е правилен",
+      "multiple_choice": "Въпрос с няколко отговора, повече от един могат да са правилни",
+      "true_false": "Въпрос с два отговора (Вярно/Грешно), избирате кой е верният"
+    }
+  },
+  "partners": {
+    "label": "Партньори",
+    "title": "Нашите партньори",
+    "subtitle": "Заедно изграждаме мост между поколенията в дигиталния свят",
+    "aboutTitle": "Партньори и подкрепа",
+    "aboutSubtitle": "Организациите, които вярват в нашата мисия и ни подкрепят в изграждането на дигитален мост между поколенията",
+    "mainPartner": "Главен партньор",
+    "visitSite": "Посетете сайта",
+    "cif": {
+      "description": "The implementation of the project 'Bridging Digital Transformation and Civic Participation (BRIDGE)"
+    },
+    "bosch": {
+      "description": "Международна фондация, посветена на здравеопазването, образованието и гражданското общество по целия свят"
+    },
+    "softuniBuditel": {
+      "description": "Образователна програма за дигитално ограмотяване в малки общности из цяла България"
+    },
+    "softuni": {
+      "description": "Водещ софтуерен университет в България с мисия за качествено IT образование"
+    },
+    "sofiaMunicipality": {
+      "description": "Столична община — стратегически партньор за градски инициативи и социални проекти"
+    },
+    "bgFundWomen": {
+      "description": "Фондация, подкрепяща правата и овластяването на жените в България"
+    },
+    "kingBaudouin": {
+      "description": "Белгийска фондация, подкрепяща CIF и инициативи за гражданско участие в Европа"
+    },
+    "austausch": {
+      "description": "Германска организация за международен обмен и образователно сътрудничество"
+    },
+    "costEffective": {
+      "description": "Софтуерна компания, осигуряваща технологична подкрепа за платформата"
+    },
+    "coalitionMediaLiteracy": {
+      "description": "Коалиция за повишаване на медийната грамотност и критичното мислене в обществото"
     }
   }
-},
-"testEditor": {
-  "title": "Редактор на тест",
-  "defaultTitle": "Тест",
-  "lesson": "Урок",
-  "published": "Публикуван",
-  "draft": "Чернова",
-  "publish": "Публикувай",
-  "unpublish": "Скрий",
-  "needQuestions": "Добавете въпроси първо",
-  "loading": "Зареждане...",
-  "noQuestions": "Няма добавени въпроси",
-  "addFirstQuestion": "Добави първи въпрос",
-  "addQuestion": "Добави въпрос",
-  "newQuestion": "Нов въпрос",
-  "cancel": "Отказ",
-  "saveQuestion": "Запази въпрос",
-  "updateQuestion": "Обнови въпрос",
-  "questionAdded": "Въпросът е добавен",
-  "questionUpdated": "Въпросът е обновен",
-  "questionDeleted": "Въпросът е изтрит",
-  "confirmDeleteQuestion": "Сигурни ли сте, че искате да изтриете този въпрос?",
-  "confirmDelete": "Изтрий",
-  "settingsSaved": "Настройките са запазени",
-  "saveSettings": "Запази настройки",
-  "moveUp": "Премести нагоре",
-  "moveDown": "Премести надолу",
-  "editQuestion": "Редактирай",
-  "deleteQuestion": "Изтрий",
-  "markCorrect": "Маркирай като верен",
-  "markIncorrect": "Маркирай като грешен",
-  "addAnswer": "Добави отговор",
-  "answerPlaceholder": "Отговор",
-  "trueOption": "Вярно",
-  "falseOption": "Грешно",
-  "untitled": "Без заглавие",
-  "minutes": "мин",
-  "questionsCount": "въпроса",
-  "passingAt": "Минимум",
-  "pts": "т.",
-  "answers": "отг.",
-  "noQuestionsPreview": "Добавете въпроси, за да видите преглед",
-  "tabs": {
-    "settings": "Настройки",
-    "questions": "Въпроси",
-    "preview": "Преглед"
-  },
-  "fields": {
-    "title": "Заглавие на теста",
-    "description": "Описание",
-    "passingScore": "Минимален резултат (%)",
-    "timeLimit": "Времево ограничение (мин)",
-    "maxAttempts": "Макс. опити",
-    "maxCredits": "Кредити",
-    "shuffleQuestions": "Разбъркай въпросите",
-    "shuffleAnswers": "Разбъркай отговорите",
-    "showCorrectAnswers": "Покажи верните отговори",
-    "questionText": "Текст на въпроса",
-    "points": "Точки",
-    "explanation": "Обяснение (опционално)",
-    "answers": "Отговори",
-    "requireCourseCompletion": "Изисквай завършване на курса"
-  },
-  "placeholders": {
-    "title": "Напр. Тест по Модул 1",
-    "description": "Кратко описание на теста...",
-    "noLimit": "Без ограничение",
-    "unlimited": "Неограничено",
-    "questionText": "Въведете въпроса тук...",
-    "explanation": "Защо този отговор е верен..."
-  },
-  "sections": {
-    "options": "Опции"
-  },
-  "questionTypes": {
-    "single_choice": "Един верен",
-    "multiple_choice": "Няколко верни",
-    "true_false": "Вярно / Грешно"
-  },
-  "errors": {
-    "loadFailed": "Грешка при зареждане на тест",
-    "questionRequired": "Въведете текст на въпроса",
-    "answersRequired": "Всички отговори трябва да имат текст",
-    "correctRequired": "Маркирайте поне един верен отговор"
-  },
-  "questionTypeHints": {
-  "single_choice": "Въпрос с няколко отговора, само един е правилен",
-  "multiple_choice": "Въпрос с няколко отговора, повече от един могат да са правилни",
-  "true_false": "Въпрос с два отговора (Вярно/Грешно), избирате кой е верният"
-}
-},
-"partners": {
-   "label": "Партньори",
-  "title": "Нашите партньори",
-  "subtitle": "Заедно изграждаме мост между поколенията в дигиталния свят",
-  "aboutTitle": "Партньори и подкрепа",
-  "aboutSubtitle": "Организациите, които вярват в нашата мисия и ни подкрепят в изграждането на дигитален мост между поколенията",
-  "mainPartner": "Главен партньор",
-  "visitSite": "Посетете сайта",
-  "cif": {
-    "description": "The implementation of the project 'Bridging Digital Transformation and Civic Participation (BRIDGE)"
-  },
- "bosch": {
-    "description": "Международна фондация, посветена на здравеопазването, образованието и гражданското общество по целия свят"
-  },
-  "softuniBuditel": {
-    "description": "Образователна програма за дигитално ограмотяване в малки общности из цяла България"
-  },
-  "softuni": {
-    "description": "Водещ софтуерен университет в България с мисия за качествено IT образование"
-  },
-  "sofiaMunicipality": {
-    "description": "Столична община — стратегически партньор за градски инициативи и социални проекти"
-  },
-  "bgFundWomen": {
-    "description": "Фондация, подкрепяща правата и овластяването на жените в България"
-  },
-  "kingBaudouin": {
-    "description": "Белгийска фондация, подкрепяща CIF и инициативи за гражданско участие в Европа"
-  },
-  "austausch": {
-    "description": "Германска организация за международен обмен и образователно сътрудничество"
-  },
-  "costEffective": {
-    "description": "Софтуерна компания, осигуряваща технологична подкрепа за платформата"
-  },
-  "coalitionMediaLiteracy": {
-    "description": "Коалиция за повишаване на медийната грамотност и критичното мислене в обществото"
-  }
-}
 }

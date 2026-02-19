@@ -1045,7 +1045,10 @@
   color: #f1f5f9;
   margin-bottom: 4px;
 }
-
+.academyCourseDetail-module-label {
+  color: var(--accent, var(--accent-color));
+  font-weight: 700;
+}
 .academyCourseDetail-module-meta {
   display: flex;
   align-items: center;

@@ -312,7 +312,12 @@ const ModuleAccordion = ({
       >
         <div className="academyCourseDetail-module-number">{index + 1}</div>
         <div className="academyCourseDetail-module-info">
-          <h3 className="academyCourseDetail-module-title">{module.title}</h3>
+          <h3 className="academyCourseDetail-module-title">
+            <span className="academyCourseDetail-module-label">
+              {t('academyCourseDetail.content.moduleLabel', 'Модул')} {index + 1}:
+            </span>
+            {' '}{module.title}
+          </h3>
           <div className="academyCourseDetail-module-meta">
             <span>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

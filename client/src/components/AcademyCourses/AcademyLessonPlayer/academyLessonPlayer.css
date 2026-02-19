@@ -1663,7 +1663,7 @@
   margin-top: 12px;
 }
 
-.lp-info__earned-credits-icon {
+.lp-info__earned-credits span {
   font-size: 1.25rem;
 }
 
@@ -2047,4 +2047,14 @@
 .lp-info__next-btn svg {
   width: 20px;
   height: 20px;
+}
+.lp-info__header span {
+  display: inline-block;
+  padding: 5px 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 8px;
 }
