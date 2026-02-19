@@ -28,6 +28,7 @@ const INITIAL_STATE = {
     creditsForCompletion: 0,
     hasCertificate: false,
     tags: '',
+    mentors: [],
 };
 
 const formatDateForInput = (dateStr) => {
@@ -81,9 +82,15 @@ const useEditCourseBasicInfo = () => {
                     creditsForCompletion: course.creditsForCompletion || 0,
                     hasCertificate: course.hasCertificate ?? false,
                     tags: Array.isArray(course.tags)
-                        ? course.tags.join(', ')
-                        : course.tags || '',
-                });
+                            ? course.tags.join(', ')
+                            : course.tags || '',
+                        mentors: (course.instances || []).map(inst => ({
+                            mentorId: inst.mentorId || inst.mentor?.id,
+                            role: inst.role || 'mentor',
+                            isLead: inst.isLead || false,
+                            mentor: inst.mentor || null,
+                        })),
+                    });
             } catch (err) {
                 console.error('Error loading course:', err);
                 // ред ~88
@@ -159,6 +166,7 @@ const useEditCourseBasicInfo = () => {
                     : [],
             };
 
+            delete payload.mentors;
             await updateCourse(courseId, payload);
             setHasChanges(false);
             toast.success('Курсът е обновен успешно');

@@ -34,6 +34,7 @@ import { useState } from 'react';
 import EditLessonModal from './EditLessonModal/EditLessonModal';
 import { useFirebaseUpload } from '../../hooks/useFirebaseUpload';
 import TestEditorModal from './TestEditorModal/TestEditorModal';
+import { AcademyMentorPicker } from '../../AcademyCourses/AcademyMentorPicker/AcademyMentorPicker';
 const LESSON_TYPE_ICONS = {
   video: Video,
   text: FileText,
@@ -249,6 +250,7 @@ const CourseContentManager = () => {
                         onSave={(updates) => handleUpdateModule(mod.id, updates)}
                         onCancel={() => setEditingModule(null)}
                         actionLoading={actionLoading === `module-${mod.id}`}
+                        courseMentors={course?.instances || []}
                       />
                     ) : (
                       <>
@@ -758,6 +760,7 @@ const CourseContentManager = () => {
         <EditLessonModal
           lesson={editingLesson}
           courseSlug={slug}
+          courseMentors={course?.instances || []}
           onClose={closeEditLesson}
         />
       )}
@@ -775,13 +778,14 @@ const CourseContentManager = () => {
 //                    INLINE MODULE EDIT
 // =========================================================
 
-const ModuleEditInline = ({ module, onSave, onCancel, actionLoading }) => {
+const ModuleEditInline = ({ module, onSave, onCancel, actionLoading, courseMentors = [] }) => {
   const { t } = useTranslation();
   const [form, setForm] = useState({
     title: module.title || '',
     startDate: formatDateForInput(module.startDate),
     endDate: formatDateForInput(module.endDate),
     estimatedHours: module.estimatedHours || '',
+    mentorId: module.mentorId || module.mentor?.id || null,
   });
   const [error, setError] = useState('');
 
@@ -797,9 +801,11 @@ const ModuleEditInline = ({ module, onSave, onCancel, actionLoading }) => {
     setError('');
     onSave({
       title: form.title.trim(),
+      description: form.description.trim(), 
       startDate: form.startDate || null,
       endDate: form.endDate || null,
       estimatedHours: form.estimatedHours ? Number(form.estimatedHours) : null,
+      mentorId: form.mentorId || null,
     });
   };
 
@@ -863,6 +869,18 @@ const ModuleEditInline = ({ module, onSave, onCancel, actionLoading }) => {
             onChange={(e) => setForm((p) => ({ ...p, estimatedHours: e.target.value }))}
             min={0}
             placeholder="0"
+          />
+        </div>
+        <div className="ccm-edit-mini-field ccm-edit-mini-field--wide">
+          <label className="ccm-edit-mini-label">
+            👨‍🏫 {t('contentManager.moduleMentor', 'Ментор')}
+          </label>
+          <AcademyMentorPicker
+            mode="single"
+            selectedMentorId={form.mentorId}
+            courseMentors={courseMentors}
+            onChange={(id) => setForm((p) => ({ ...p, mentorId: id }))}
+            placeholder={t('contentManager.moduleMentorPlaceholder', 'Избери...')}
           />
         </div>
       </div>

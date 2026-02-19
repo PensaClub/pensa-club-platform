@@ -34,6 +34,7 @@ import { useFirebaseUpload } from '../../../hooks/useFirebaseUpload';
 import { toast } from 'react-toastify';
 import './editLessonModal.css';
 import TestEditorModal from '../TestEditorModal/TestEditorModal';
+import { AcademyMentorPicker } from '../../../AcademyCourses/AcademyMentorPicker/AcademyMentorPicker';
 
 const LESSON_TYPE_OPTIONS = [
   { value: 'video', icon: Video },
@@ -99,7 +100,7 @@ const detectMaterialType = (file) => {
   return 'other';
 };
 
-const EditLessonModal = ({ lesson: basicLesson, courseSlug, onClose }) => {
+const EditLessonModal = ({ lesson: basicLesson, courseSlug, courseMentors = [], onClose }) => {
   const { t } = useTranslation();
   const {
     getLessonBySlug,
@@ -135,6 +136,7 @@ const EditLessonModal = ({ lesson: basicLesson, courseSlug, onClose }) => {
     requiresCompletion: true,
     isFree: false,
     isPublished: false,
+    mentorId: null,
   });
   const [showTestEditor, setShowTestEditor] = useState(false);
 
@@ -192,6 +194,7 @@ const EditLessonModal = ({ lesson: basicLesson, courseSlug, onClose }) => {
           requiresCompletion: les.requiresCompletion ?? true,
           isFree: les.isFree || false,
           isPublished: les.isPublished || false,
+          mentorId: les.mentorId || les.mentor?.id || null,
         });
 
         await loadMaterials();
@@ -569,6 +572,20 @@ const EditLessonModal = ({ lesson: basicLesson, courseSlug, onClose }) => {
                 </div>
               </div>
 
+              {/* === Section: Mentor === */}
+              <div className="elm-section">
+                <h3 className="elm-section-title">
+                  👨‍🏫 {t('editLesson.sections.mentor', 'Ментор на урока')}
+                </h3>
+                <AcademyMentorPicker
+                  mode="single"
+                  selectedMentorId={form.mentorId}
+                  courseMentors={courseMentors}
+                  onChange={(id) => updateField('mentorId', id)}
+                  placeholder={t('editLesson.mentorPlaceholder', 'Избери ментор...')}
+                />
+              </div>
+
               {/* === Section: Credits === */}
               <div className="elm-section">
                 <h3 className="elm-section-title">
@@ -614,10 +631,10 @@ const EditLessonModal = ({ lesson: basicLesson, courseSlug, onClose }) => {
                   <>
                     <div className="elm-row" style={{ marginTop: 14 }}>
                       <div className={`elm-field ${errors.testPassingScore ? 'elm-field-error' : ''}`}>
-  <label className="elm-label">{t('editLesson.fields.testPassingScore')}</label>
-  <input type="number" name="testPassingScore" className="elm-input" value={form.testPassingScore} onChange={handleChange} min={0} max={100} />
-  {errors.testPassingScore && <span className="elm-error-msg">{errors.testPassingScore}</span>}
-</div>
+                        <label className="elm-label">{t('editLesson.fields.testPassingScore')}</label>
+                        <input type="number" name="testPassingScore" className="elm-input" value={form.testPassingScore} onChange={handleChange} min={0} max={100} />
+                        {errors.testPassingScore && <span className="elm-error-msg">{errors.testPassingScore}</span>}
+                      </div>
                       <div className="elm-field" />
                     </div>
                     <button

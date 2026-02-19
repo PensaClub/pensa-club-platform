@@ -14990,6 +14990,8 @@
     }
   },
   "contentManager": {
+     "moduleMentor": "Ментор",
+  "moduleMentorPlaceholder": "Избери...",
     "loading": "Зареждане на съдържание...",
     "back": "Назад",
     "title": "Съдържание на",
@@ -15037,6 +15039,7 @@
     }
   },
   "editLesson": {
+    "mentorPlaceholder": "Избери ментор...",
     "title": "Редактиране на урок",
     "loading": "Зареждане...",
     "save": "Запази",
@@ -15045,6 +15048,7 @@
     "unsavedChanges": "● Незапазени промени",
     "sections": {
       "basicInfo": "Основна информация",
+      "mentor": "Ментор на урока",
       "video": "Видео настройки",
       "schedule": "График и времетраене",
       "credits": "Кредити",

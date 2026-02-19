@@ -3133,3 +3133,43 @@
     font-size: 0.95rem;
   }
 }
+/* Module mentor tag */
+.academyCourseDetail-module-mentor-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.academyCourseDetail-module-mentor-avatar {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Lesson mentor tag */
+.academyCourseDetail-lesson-mentor-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.academyCourseDetail-lesson-mentor-avatar {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+@media (max-width: 480px) {
+  .academyCourseDetail-module-mentor-avatar {
+    width: 15px;
+    height: 15px;
+  }
+  .academyCourseDetail-lesson-mentor-avatar {
+    width: 13px;
+    height: 13px;
+  }
+}

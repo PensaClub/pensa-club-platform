@@ -219,6 +219,16 @@ const LessonItem = ({
                 📎 {materials.length} {t('academyCourseDetail.content.materialsCount', 'материал(а)')}
               </span>
             )}
+            {lesson.mentor && (
+              <span className="academyCourseDetail-lesson-mentor-tag">
+                <img
+                  src={lesson.mentor.photoUrl || 'https://via.placeholder.com/14'}
+                  alt={lesson.mentor.name}
+                  className="academyCourseDetail-lesson-mentor-avatar"
+                />
+                {lesson.mentor.name}
+              </span>
+            )}
           </div>
         </div>
 
@@ -348,6 +358,16 @@ const ModuleAccordion = ({
                   <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
                 </svg>
                 {totalTests} {t('academyCourseDetail.content.testsShort', 'тест(а)')}
+              </span>
+            )}
+            {module.mentor && (
+              <span className="academyCourseDetail-module-mentor-tag">
+                <img
+                  src={module.mentor.photoUrl || 'https://via.placeholder.com/16'}
+                  alt={module.mentor.name}
+                  className="academyCourseDetail-module-mentor-avatar"
+                />
+                {module.mentor.name}
               </span>
             )}
           </div>

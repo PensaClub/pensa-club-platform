@@ -14697,6 +14697,8 @@
 },
 "contentManager": {
   "loading": "Loading content...",
+  "moduleMentor": "Mentor",
+  "moduleMentorPlaceholder": "Select...",
   "back": "Back",
   "title": "Content of",
   "subtitle": "Manage modules and lessons",
@@ -14747,6 +14749,7 @@
   "loading": "Loading...",
   "save": "Save",
   "cancel": "Cancel",
+  "mentorPlaceholder": "Select mentor...",
   "manageTest": "Manage test",
   "autosave": "Materials save automatically",
   "unsavedChanges": "● Unsaved changes",
@@ -14757,7 +14760,8 @@
     "credits": "Credits",
     "test": "Test Settings",
     "materials": "Materials",
-    "settings": "Settings"
+    "settings": "Settings",
+    "mentor": "Lesson Mentor"
   },
   "fields": {
     "title": "Title",

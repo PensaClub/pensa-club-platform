@@ -773,10 +773,9 @@
 }
 
 .ccm-edit-row-details {
-  display: flex;
-  align-items: flex-end;
-  gap: 12px;
-  padding: 8px 0 4px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 12px;
 }
 
 .ccm-edit-mini-field {
@@ -1100,6 +1099,9 @@
     align-items: flex-start;
     gap: 10px;
   }
+  .ccm-edit-row-details {
+    grid-template-columns: 1fr;
+  }
 }
 /* Error states */
 .ccm-inline-input-error {
@@ -1111,4 +1113,7 @@
   font-size: 0.75rem;
   color: #f43f5e;
   margin: 4px 0 0 4px;
+}
+.ccm-edit-mini-field--wide {
+  flex-basis: 100%;
 }
