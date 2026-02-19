@@ -448,7 +448,7 @@ export const AcademyCourseDetail = () => {
   // State
   const [error, setError] = useState(null);
   const [isTrailerOpen, setIsTrailerOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState('overview');
+  // const [activeTab, setActiveTab] = useState('overview');
   const [isEnrolled, setIsEnrolled] = useState(false);
   const [isEnrolling, setIsEnrolling] = useState(false);
   const [enrollmentData, setEnrollmentData] = useState(null);
@@ -516,12 +516,10 @@ export const AcademyCourseDetail = () => {
     verifyEnrollment();
   }, [currentCourse?.id, isAuthentication, getEnrollmentStatus]);
 
-  // Load course materials when content tab is active
+  // Load course materials always
   useEffect(() => {
     const loadMaterials = async () => {
-      if (activeTab !== 'content' || !slug || materialsLoadedRef.current === slug) {
-        return;
-      }
+      if (!slug || materialsLoadedRef.current === slug) return;
 
       setIsLoadingMaterials(true);
       materialsLoadedRef.current = slug;
@@ -538,14 +536,12 @@ export const AcademyCourseDetail = () => {
     };
 
     loadMaterials();
-  }, [activeTab, slug, getCourseMaterials]);
+  }, [slug, getCourseMaterials]);
 
-  // Load course test status when content tab is active
+  // Load course test status
   useEffect(() => {
     const loadCourseTest = async () => {
-      if (activeTab !== 'content' || !currentCourse?.id || !isAuthentication) {
-        return;
-      }
+      if (!currentCourse?.id || !isAuthentication) return;
       if (courseTestLoadedRef.current === currentCourse.id) return;
 
       setIsLoadingCourseTest(true);
@@ -563,7 +559,7 @@ export const AcademyCourseDetail = () => {
     };
 
     loadCourseTest();
-  }, [activeTab, currentCourse?.id, isAuthentication, getCourseTestStatus]);
+  }, [currentCourse?.id, isAuthentication, getCourseTestStatus]);
 
   const course = currentCourse;
 
@@ -662,12 +658,12 @@ export const AcademyCourseDetail = () => {
   const leadInstructor = instructors.find(i => i.isLead) || instructors[0];
   const assistants = instructors.filter(i => !i.isLead);
 
-  const tabs = [
-    { id: 'overview', label: t('academyCourseDetail.tabs.overview'), icon: '📋' },
-    { id: 'content', label: t('academyCourseDetail.tabs.content'), icon: '📚' },
-    { id: 'instructor', label: t('academyCourseDetail.tabs.instructor'), icon: '👨‍🏫' },
-    { id: 'reviews', label: t('academyCourseDetail.tabs.reviews'), icon: '⭐' }
-  ];
+  // const tabs = [
+  //   { id: 'overview', label: t('academyCourseDetail.tabs.overview'), icon: '📋' },
+  //   { id: 'content', label: t('academyCourseDetail.tabs.content'), icon: '📚' },
+  //   { id: 'instructor', label: t('academyCourseDetail.tabs.instructor'), icon: '👨‍🏫' },
+  //   { id: 'reviews', label: t('academyCourseDetail.tabs.reviews'), icon: '⭐' }
+  // ];
 
   const getCtaConfig = () => {
     if (isEnrolled) {
@@ -1030,529 +1026,315 @@ export const AcademyCourseDetail = () => {
         </div>
       </section>
 
-      {/* Content Section */}
-      <section className="academyCourseDetail-main">
-        <div className="academyCourseDetail-main-container">
-          {/* Tabs */}
-          <div className="academyCourseDetail-tabs">
-            {tabs.map(tab => (
-              <button
-                key={tab.id}
-                className={`academyCourseDetail-tab ${activeTab === tab.id ? 'is-active' : ''}`}
-                onClick={() => setActiveTab(tab.id)}
-              >
-                <span className="academyCourseDetail-tab-icon">{tab.icon}</span>
-                <span>{tab.label}</span>
-              </button>
-            ))}
+     {/* ========== FULL WIDTH CONTENT ========== */}
+      <section className="acd-content">
+
+        {/* ===== УЧЕБНА ПРОГРАМА (full width) ===== */}
+        <div className="acd-curriculum">
+          <div className="acd-section-header">
+            <span className="acd-section-icon">📚</span>
+            <h2 className="acd-section-title">
+              {t('academyCourseDetail.curriculum.title', 'Учебна програма')}
+            </h2>
           </div>
 
-          {/* Tab Content */}
-          <div className="academyCourseDetail-tabContent" key={activeTab}>
-
-            {/* OVERVIEW TAB */}
-            {activeTab === 'overview' && (
-              <div className="academyCourseDetail-overview">
-                <div className="academyCourseDetail-section academyCourseDetail-section--about">
-                  <div className="academyCourseDetail-section-header">
-                    <div className="academyCourseDetail-section-icon">📖</div>
-                    <h2 className="academyCourseDetail-section-title">
-                      {t('academyCourseDetail.overview.aboutCourse')}
-                    </h2>
-                  </div>
-                  <div className="academyCourseDetail-section-content">
-                    <p style={{ whiteSpace: 'pre-line' }}>{fullDescription}</p>
-                  </div>
-                </div>
-
-                {targetAudience.length > 0 && (
-                  <div className="academyCourseDetail-section">
-                    <div className="academyCourseDetail-section-header">
-                      <div className="academyCourseDetail-section-icon">🎯</div>
-                      <h2 className="academyCourseDetail-section-title">
-                        {t('academyCourseDetail.overview.targetAudience')}
-                      </h2>
-                    </div>
-                    <div className="academyCourseDetail-audience">
-                      {targetAudience.map((audience, index) => (
-                        <div key={index} className="academyCourseDetail-audience-item">
-                          <div className="academyCourseDetail-audience-check">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                              <polyline points="20,6 9,17 4,12" />
-                            </svg>
-                          </div>
-                          <span>{audience}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                <div className="academyCourseDetail-section">
-                  <div className="academyCourseDetail-section-header">
-                    <div className="academyCourseDetail-section-icon">🎓</div>
-                    <h2 className="academyCourseDetail-section-title">
-                      {t('academyCourseDetail.overview.whatYouLearn')}
-                    </h2>
-                  </div>
-                  <div className="academyCourseDetail-learn-grid">
-                    {[1, 2, 3, 4].map(i => (
-                      <div key={i} className="academyCourseDetail-learn-item">
-                        <div className="academyCourseDetail-learn-check">
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
-                            <polyline points="20,6 9,17 4,12" />
-                          </svg>
-                        </div>
-                        <span>{t(`academyCourseDetail.overview.learnItems.item${i}`)}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="academyCourseDetail-stats-grid">
-                  <div className="academyCourseDetail-stat-card">
-                    <div className="academyCourseDetail-stat-glow"></div>
-                    <div className="academyCourseDetail-stat-icon">👥</div>
-                    <div className="academyCourseDetail-stat-value">{enrolledCount.toLocaleString()}</div>
-                    <div className="academyCourseDetail-stat-label">{t('academyCourseDetail.overview.stats.totalEnrolled')}</div>
-                  </div>
-                  <div className="academyCourseDetail-stat-card">
-                    <div className="academyCourseDetail-stat-glow"></div>
-                    <div className="academyCourseDetail-stat-icon">✅</div>
-                    <div className="academyCourseDetail-stat-value">{completedCount.toLocaleString()}</div>
-                    <div className="academyCourseDetail-stat-label">{t('academyCourseDetail.overview.stats.completed')}</div>
-                  </div>
-                  <div className="academyCourseDetail-stat-card">
-                    <div className="academyCourseDetail-stat-glow"></div>
-                    <div className="academyCourseDetail-stat-icon">⭐</div>
-                    <div className="academyCourseDetail-stat-value">{rating.toFixed(1)}</div>
-                    <div className="academyCourseDetail-stat-label">{t('academyCourseDetail.overview.stats.rating')}</div>
-                  </div>
-                  <div className="academyCourseDetail-stat-card">
-                    <div className="academyCourseDetail-stat-glow"></div>
-                    <div className="academyCourseDetail-stat-icon">🪙</div>
-                    <div className="academyCourseDetail-stat-value">{maxCredits}</div>
-                    <div className="academyCourseDetail-stat-label">{t('academyCourseDetail.overview.stats.maxCredits')}</div>
-                  </div>
-                </div>
-              </div>
+          <div className="acd-curriculum-summary">
+            {modules.length > 0 && (
+              <>
+                <span className="acd-curriculum-tag">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+                  </svg>
+                  {modules.length} {t('academyCourseDetail.content.modules', 'модула')}
+                </span>
+              </>
             )}
+            <span className="acd-curriculum-tag">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+              </svg>
+              {lessonsCount} {t('academyCourseDetail.content.lessonsTotal', 'урока')}
+            </span>
+            <span className="acd-curriculum-tag">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12,6 12,12 16,14" />
+              </svg>
+              {duration} {t('academyCourseDetail.content.hoursTotal', 'часа')}
+            </span>
+          </div>
 
-            {/* CONTENT TAB */}
-            {activeTab === 'content' && (
-              <div className="academyCourseDetail-contentTab">
-                {showEnrollNotice && (
-                  <div className="academyCourseDetail-access-notice">
-                    <div className="academyCourseDetail-access-notice-icon">
-                      {isAuthentication ? '📝' : '🔐'}
-                    </div>
-                    <div className="academyCourseDetail-access-notice-content">
-                      <h4>
-                        {isAuthentication
-                          ? t('academyCourseDetail.content.enrollToAccess')
-                          : t('academyCourseDetail.content.loginToAccess')
-                        }
-                      </h4>
-                      <p>
-                        {isAuthentication
-                          ? t('academyCourseDetail.content.enrollToAccessDesc')
-                          : t('academyCourseDetail.content.loginToAccessDesc')
-                        }
-                      </p>
-                    </div>
-                    <button
-                      className="academyCourseDetail-access-notice-btn"
-                      onClick={handleEnroll}
-                    >
-                      {isAuthentication
-                        ? t('academyCourseDetail.card.enrollNow')
-                        : t('academyCourseDetail.card.loginToEnroll')
-                      }
-                    </button>
-                  </div>
-                )}
+          {showEnrollNotice && (
+            <div className="acd-access-notice">
+              <span className="acd-access-notice-icon">{isAuthentication ? '📋' : '🔑'}</span>
+              <div className="acd-access-notice-body">
+                <strong>{isAuthentication ? t('academyCourseDetail.content.enrollToAccess') : t('academyCourseDetail.content.loginToAccess')}</strong>
+                <p>{isAuthentication ? t('academyCourseDetail.content.enrollToAccessDesc') : t('academyCourseDetail.content.loginToAccessDesc')}</p>
+              </div>
+              <button className="acd-access-notice-btn" onClick={handleEnroll}>
+                {isAuthentication ? t('academyCourseDetail.card.enrollNow') : t('academyCourseDetail.card.loginToEnroll')}
+              </button>
+            </div>
+          )}
 
-                {/* Course Content Section */}
-                <div className="academyCourseDetail-section">
-                  <div className="academyCourseDetail-section-header">
-                    <div className="academyCourseDetail-section-icon">📚</div>
-                    <h2 className="academyCourseDetail-section-title">
-                      {t('academyCourseDetail.content.courseContent')}
-                    </h2>
-                  </div>
+          {modules.length > 0 && (
+            <div className="academyCourseDetail-modules">
+              {modules.map((module, moduleIndex) => (
+                <ModuleAccordion
+                  key={module.id}
+                  module={module}
+                  index={moduleIndex}
+                  t={t}
+                  accentColor={categoryColor}
+                  isAuthenticated={isAuthentication}
+                  hasAccess={hasLessonAccess}
+                  onLessonClick={handleLessonClick}
+                />
+              ))}
+            </div>
+          )}
 
-                  <div className="academyCourseDetail-content-summary">
-                    {modules.length > 0 && (
-                      <>
-                        <span className="academyCourseDetail-content-summary-item">
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
-                          </svg>
-                          {modules.length} {t('academyCourseDetail.content.modules')}
-                        </span>
-                        <span className="academyCourseDetail-content-dot">•</span>
-                      </>
+          {lessons.length > 0 && (
+            <div className="academyCourseDetail-standalone-lessons">
+              <h3 className="academyCourseDetail-standalone-title">
+                {t('academyCourseDetail.content.standaloneLessons', 'Самостоятелни уроци')}
+              </h3>
+              <div className="academyCourseDetail-lessons">
+                {lessons.map((lesson, index) => (
+                  <LessonItem
+                    key={lesson.id}
+                    lesson={lesson}
+                    index={index}
+                    t={t}
+                    isAuthenticated={isAuthentication}
+                    hasAccess={hasLessonAccess}
+                    onLessonClick={handleLessonClick}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {modules.length === 0 && lessons.length === 0 && (
+            <div className="academyCourseDetail-content-empty">
+              <div className="academyCourseDetail-content-empty-icon">🔭</div>
+              <p>{t('academyCourseDetail.content.noContent')}</p>
+            </div>
+          )}
+
+          {/* Materials */}
+          {(courseMaterials.length > 0 || isLoadingMaterials) && (
+            <div className="acd-sub-section">
+              <h3 className="acd-sub-title">📎 {t('academyCourseDetail.content.courseMaterials', 'Материали към курса')}</h3>
+              {isLoadingMaterials ? (
+                <div className="academyCourseDetail-materials-loading">
+                  <div className="academyCourseDetail-materials-spinner"></div>
+                </div>
+              ) : (
+                <div className="academyCourseDetail-materials-list">
+                  {courseMaterials.map((material, index) => (
+                    <CourseMaterialItem key={material.id || index} material={material} index={index} t={t} />
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Final Test */}
+          {isAuthentication && courseTestData?.hasTest && (
+            <div className="acd-sub-section">
+              <h3 className="acd-sub-title">📝 {t('academyCourseDetail.finalTest.title', 'Финален тест')}</h3>
+              <div className="academyCourseDetail-final-test-card">
+                <div className="academyCourseDetail-final-test-info">
+                  <div className="academyCourseDetail-final-test-meta">
+                    {courseTestData.test?.totalQuestions && (
+                      <span>📋 {courseTestData.test.totalQuestions} {t('academyCourseDetail.finalTest.questions', 'въпроса')}</span>
                     )}
-                    <span className="academyCourseDetail-content-summary-item">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
-                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
-                      </svg>
-                      {lessonsCount} {t('academyCourseDetail.content.lessonsTotal')}
-                    </span>
-                    <span className="academyCourseDetail-content-dot">•</span>
-                    <span className="academyCourseDetail-content-summary-item">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                        <circle cx="12" cy="12" r="10" />
-                        <polyline points="12,6 12,12 16,14" />
-                      </svg>
-                      {duration} {t('academyCourseDetail.content.hoursTotal')}
-                    </span>
-                  </div>
-
-                  {modules.length > 0 && (
-                    <div className="academyCourseDetail-modules">
-                      {modules.map((module, moduleIndex) => (
-                        <ModuleAccordion
-                          key={module.id}
-                          module={module}
-                          index={moduleIndex}
-                          t={t}
-                          accentColor={categoryColor}
-                          isAuthenticated={isAuthentication}
-                          hasAccess={hasLessonAccess}
-                          onLessonClick={handleLessonClick}
-                        />
-                      ))}
-                    </div>
-                  )}
-
-                  {lessons.length > 0 && (
-                    <div className="academyCourseDetail-standalone-lessons">
-                      <h3 className="academyCourseDetail-standalone-title">
-                        {t('academyCourseDetail.content.standaloneLessons', 'Самостоятелни уроци')}
-                      </h3>
-                      <div className="academyCourseDetail-lessons">
-                        {lessons.map((lesson, index) => (
-                          <LessonItem
-                            key={lesson.id}
-                            lesson={lesson}
-                            index={index}
-                            t={t}
-                            isAuthenticated={isAuthentication}
-                            hasAccess={hasLessonAccess}
-                            onLessonClick={handleLessonClick}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {modules.length === 0 && lessons.length === 0 && (
-                    <div className="academyCourseDetail-content-empty">
-                      <div className="academyCourseDetail-content-empty-icon">📭</div>
-                      <p>{t('academyCourseDetail.content.noContent')}</p>
-                    </div>
-                  )}
-                </div>
-
-                {/* ========== COURSE MATERIALS SECTION ========== */}
-                <div className="academyCourseDetail-section academyCourseDetail-materials-section">
-                  <div className="academyCourseDetail-section-header">
-                    <div className="academyCourseDetail-section-icon">📎</div>
-                    <h2 className="academyCourseDetail-section-title">
-                      {t('academyCourseDetail.content.courseMaterials', 'Материали към курса')}
-                    </h2>
-                  </div>
-
-                  {isLoadingMaterials ? (
-                    <div className="academyCourseDetail-materials-loading">
-                      <div className="academyCourseDetail-materials-spinner"></div>
-                      <p>{t('academyCourseDetail.content.loadingMaterials', 'Зареждане на материали...')}</p>
-                    </div>
-                  ) : courseMaterials.length > 0 ? (
-                    <div className="academyCourseDetail-materials-list">
-                      {courseMaterials.map((material, index) => (
-                        <CourseMaterialItem
-                          key={material.id || index}
-                          material={material}
-                          index={index}
-                          t={t}
-                        />
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="academyCourseDetail-materials-empty">
-                      <div className="academyCourseDetail-materials-empty-icon">📂</div>
-                      <p>{t('academyCourseDetail.content.noMaterials', 'Няма допълнителни материали към този курс')}</p>
-                    </div>
-                  )}
-                </div>
-                {/* ========== COURSE FINAL TEST SECTION ========== */}
-                {isAuthentication && courseTestData?.hasTest && (
-                  <div className="academyCourseDetail-section academyCourseDetail-final-test-section">
-                    <div className="academyCourseDetail-section-header">
-                      <div className="academyCourseDetail-section-icon">📝</div>
-                      <h2 className="academyCourseDetail-section-title">
-                        {t('academyCourseDetail.finalTest.title', 'Финален тест')}
-                      </h2>
-                    </div>
-
-                    <div className="academyCourseDetail-final-test-card">
-                      <div className="academyCourseDetail-final-test-info">
-                        <h3 className="academyCourseDetail-final-test-name">
-                          {courseTestData.test.title}
-                        </h3>
-                        {courseTestData.test.description && (
-                          <p className="academyCourseDetail-final-test-desc">
-                            {courseTestData.test.description}
-                          </p>
-                        )}
-                        <div className="academyCourseDetail-final-test-meta">
-                          {courseTestData.test.questionsCount > 0 && (
-                            <span className="academyCourseDetail-final-test-meta-item">
-                              ❓ {courseTestData.test.questionsCount} {t('academyCourseDetail.finalTest.questions', 'въпроса')}
-                            </span>
-                          )}
-                          {courseTestData.test.timeLimitMinutes && (
-                            <span className="academyCourseDetail-final-test-meta-item">
-                              ⏱️ {courseTestData.test.timeLimitMinutes} {t('academyCourseDetail.finalTest.minutes', 'мин')}
-                            </span>
-                          )}
-                          <span className="academyCourseDetail-final-test-meta-item">
-                            🎯 {t('academyCourseDetail.finalTest.passingScore', 'Мин. резултат')}: {courseTestData.test.passingScore}%
-                          </span>
-                          {courseTestData.test.maxAttempts && (
-                            <span className="academyCourseDetail-final-test-meta-item">
-                              🔄 {t('academyCourseDetail.finalTest.maxAttempts', 'Макс. опити')}: {courseTestData.test.maxAttempts}
-                            </span>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Passed badge */}
-                      {courseTestData.hasPassedTest && (
-                        <div className="academyCourseDetail-final-test-passed">
-                          <span className="academyCourseDetail-final-test-passed-icon">✅</span>
-                          <span>{t('academyCourseDetail.finalTest.passed', 'Тестът е преминат успешно!')}</span>
-                          {courseTestData.bestAttempt && (
-                            <span className="academyCourseDetail-final-test-passed-score">
-                              {t('academyCourseDetail.finalTest.bestScore', 'Най-добър резултат')}: {Math.round(courseTestData.bestAttempt.score)}%
-                            </span>
-                          )}
-                        </div>
-                      )}
-
-                      {/* Locked state */}
-                      {!courseTestData.testAccessible && !courseTestData.hasPassedTest && (
-                        <div className="academyCourseDetail-final-test-locked">
-                          <span className="academyCourseDetail-final-test-locked-icon">🔒</span>
-                          <span>{t('academyCourseDetail.finalTest.locked', 'Завършете всички уроци в курса, за да отключите теста.')}</span>
-                        </div>
-                      )}
-
-                      {/* Action buttons */}
-                      {courseTestData.testAccessible && (
-                        <div className="academyCourseDetail-final-test-actions">
-                          {courseTestData.activeAttempt ? (
-                            <button
-                              className="academyCourseDetail-final-test-btn academyCourseDetail-final-test-btn--continue"
-                              onClick={() => navigate(`/academy/courses/${slug}/test`)}
-                            >
-                              ▶ {t('academyCourseDetail.finalTest.continueAttempt', 'Продължи опита')}
-                            </button>
-                          ) : courseTestData.canStartNew ? (
-                            <button
-                              className="academyCourseDetail-final-test-btn academyCourseDetail-final-test-btn--start"
-                              onClick={() => navigate(`/academy/courses/${slug}/test`)}
-                            >
-                              📝 {t('academyCourseDetail.finalTest.startTest', 'Започни тест')}
-                            </button>
-                          ) : (
-                            <div className="academyCourseDetail-final-test-exhausted">
-                              {t('academyCourseDetail.finalTest.noMoreAttempts', 'Изчерпахте всички опити.')}
-                            </div>
-                          )}
-
-                          {courseTestData.remainingAttempts !== null && courseTestData.canStartNew && (
-                            <span className="academyCourseDetail-final-test-remaining">
-                              {t('academyCourseDetail.finalTest.remaining', 'Оставащи опити')}: {courseTestData.remainingAttempts}
-                            </span>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* INSTRUCTOR TAB */}
-            {activeTab === 'instructor' && (
-              <div className="academyCourseDetail-instructorTab">
-                {leadInstructor && (
-                  <div className="academyCourseDetail-instructor academyCourseDetail-instructor--lead">
-                    <div className="academyCourseDetail-instructor-glow"></div>
-                    <div className="academyCourseDetail-instructor-header">
-                      <div className="academyCourseDetail-instructor-avatar">
-                        <img
-                          src={leadInstructor.mentor?.photoUrl || 'https://via.placeholder.com/120'}
-                          alt={leadInstructor.mentor?.name}
-                        />
-                        <div className="academyCourseDetail-instructor-badge">
-                          {leadInstructor.isLead ? '⭐' : '👨‍🏫'}
-                        </div>
-                      </div>
-                      <div className="academyCourseDetail-instructor-info">
-                        <span className="academyCourseDetail-instructor-role">
-                          {t(`academyCourseDetail.instructor.${ROLE_LABELS[leadInstructor.role] || 'roles.lecturer'}`)}
-                          {leadInstructor.isLead && ` • ${t('academyCourseDetail.instructor.leadInstructor')}`}
-                        </span>
-                        <h3 className="academyCourseDetail-instructor-name">
-                          {leadInstructor.mentor?.name}
-                        </h3>
-                        <p className="academyCourseDetail-instructor-specialization">
-                          {leadInstructor.mentor?.specialization}
-                        </p>
-                      </div>
-                    </div>
-
-                    {leadInstructor.description && (
-                      <p className="academyCourseDetail-instructor-description">
-                        {leadInstructor.description}
-                      </p>
+                    {courseTestData.test?.passingScore && (
+                      <span>🎯 {t('academyCourseDetail.finalTest.passingScore', 'Мин. резултат')}: {courseTestData.test.passingScore}%</span>
                     )}
-
-                    <div className="academyCourseDetail-instructor-stats">
-                      <div className="academyCourseDetail-instructor-stat">
-                        <span className="academyCourseDetail-instructor-stat-value">
-                          {leadInstructor.enrolledStudents?.toLocaleString() || enrolledCount.toLocaleString()}
-                        </span>
-                        <span className="academyCourseDetail-instructor-stat-label">
-                          {t('academyCourseDetail.instructor.students')}
-                        </span>
-                      </div>
-                      <div className="academyCourseDetail-instructor-stat">
-                        <span className="academyCourseDetail-instructor-stat-value">
-                          {leadInstructor.completedCount?.toLocaleString() || completedCount.toLocaleString()}
-                        </span>
-                        <span className="academyCourseDetail-instructor-stat-label">
-                          {t('academyCourseDetail.instructor.completedStudents')}
-                        </span>
-                      </div>
-                      <div className="academyCourseDetail-instructor-stat">
-                        <span className="academyCourseDetail-instructor-stat-value">
-                          ⭐ {rating.toFixed(1)}
-                        </span>
-                        <span className="academyCourseDetail-instructor-stat-label">
-                          {t('academyCourseDetail.instructor.instructorRating')}
-                        </span>
-                      </div>
+                    {courseTestData.test?.timeLimitMinutes && (
+                      <span>⏱️ {courseTestData.test.timeLimitMinutes} {t('academyCourseDetail.finalTest.minutes', 'мин')}</span>
+                    )}
+                    {courseTestData.test?.maxAttempts && (
+                      <span>🔄 {t('academyCourseDetail.finalTest.maxAttempts', 'Макс. опити')}: {courseTestData.test.maxAttempts}</span>
+                    )}
+                  </div>
+                  {courseTestData.bestAttempt && (
+                    <div className="academyCourseDetail-final-test-best">
+                      ✅ {t('academyCourseDetail.finalTest.bestScore', 'Най-добър резултат')}: {courseTestData.bestAttempt.score}%
                     </div>
+                  )}
+                </div>
+                {!courseTestData.testAccessible && (
+                  <div className="academyCourseDetail-final-test-locked">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                    </svg>
+                    <span>{t('academyCourseDetail.finalTest.locked', 'Завършете всички уроци за да отключите теста.')}</span>
                   </div>
                 )}
-
-                {assistants.length > 0 && (
-                  <div className="academyCourseDetail-assistants">
-                    <h3 className="academyCourseDetail-assistants-title">
-                      {t('academyCourseDetail.instructor.assistants')}
-                    </h3>
-                    <div className="academyCourseDetail-assistants-grid">
-                      {assistants.map((assistant, index) => (
-                        <div key={index} className="academyCourseDetail-assistant">
-                          <img
-                            src={assistant.mentor?.photoUrl || 'https://via.placeholder.com/60'}
-                            alt={assistant.mentor?.name}
-                          />
-                          <div className="academyCourseDetail-assistant-info">
-                            <span className="academyCourseDetail-assistant-name">
-                              {assistant.mentor?.name}
-                            </span>
-                            <span className="academyCourseDetail-assistant-role">
-                              {t(`academyCourseDetail.instructor.${ROLE_LABELS[assistant.role] || 'roles.assistant'}`)}
-                            </span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {!leadInstructor && assistants.length === 0 && (
-                  <div className="academyCourseDetail-instructor-empty">
-                    <div className="academyCourseDetail-instructor-empty-icon">👨‍🏫</div>
-                    <p>{t('academyCourseDetail.instructor.noInstructor')}</p>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* REVIEWS TAB */}
-            {activeTab === 'reviews' && (
-              <div className="academyCourseDetail-reviewsTab">
-                <div className="academyCourseDetail-section">
-                  <div className="academyCourseDetail-section-header">
-                    <div className="academyCourseDetail-section-icon">⭐</div>
-                    <h2 className="academyCourseDetail-section-title">
-                      {t('academyCourseDetail.reviews.studentReviews')}
-                    </h2>
-                  </div>
-
-                  <div className="academyCourseDetail-reviews-overview">
-                    <div className="academyCourseDetail-reviews-score">
-                      <div className="academyCourseDetail-reviews-score-glow"></div>
-                      <span className="academyCourseDetail-reviews-score-value">{rating.toFixed(1)}</span>
-                      <div className="academyCourseDetail-reviews-stars">
-                        {[1, 2, 3, 4, 5].map(star => (
-                          <svg
-                            key={star}
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill={star <= Math.round(rating) ? 'currentColor' : 'none'}
-                            stroke="currentColor"
-                            strokeWidth="2"
-                          >
-                            <polygon points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9" />
-                          </svg>
-                        ))}
+                {courseTestData.testAccessible && (
+                  <div className="academyCourseDetail-final-test-actions">
+                    {courseTestData.activeAttempt ? (
+                      <button className="academyCourseDetail-final-test-btn academyCourseDetail-final-test-btn--continue" onClick={() => navigate(`/academy/courses/${slug}/test`)}>
+                        ▶ {t('academyCourseDetail.finalTest.continueAttempt', 'Продължи опита')}
+                      </button>
+                    ) : courseTestData.canStartNew ? (
+                      <button className="academyCourseDetail-final-test-btn academyCourseDetail-final-test-btn--start" onClick={() => navigate(`/academy/courses/${slug}/test`)}>
+                        📝 {t('academyCourseDetail.finalTest.startTest', 'Започни тест')}
+                      </button>
+                    ) : (
+                      <div className="academyCourseDetail-final-test-exhausted">
+                        {t('academyCourseDetail.finalTest.noMoreAttempts', 'Изчерпахте всички опити.')}
                       </div>
-                      <span className="academyCourseDetail-reviews-count">
-                        {t('academyCourseDetail.reviews.basedOn')} {enrolledCount} {t('academyCourseDetail.reviews.reviews')}
+                    )}
+                    {courseTestData.remainingAttempts !== null && courseTestData.canStartNew && (
+                      <span className="academyCourseDetail-final-test-remaining">
+                        {t('academyCourseDetail.finalTest.remaining', 'Оставащи опити')}: {courseTestData.remainingAttempts}
                       </span>
-                    </div>
-
-                    <div className="academyCourseDetail-reviews-bars">
-                      {[5, 4, 3, 2, 1].map(stars => {
-                        const percentage = stars === 5 ? 75 : stars === 4 ? 18 : stars === 3 ? 5 : stars === 2 ? 1 : 1;
-                        return (
-                          <div key={stars} className="academyCourseDetail-reviews-bar">
-                            <span className="academyCourseDetail-reviews-bar-label">{stars} ⭐</span>
-                            <div className="academyCourseDetail-reviews-bar-track">
-                              <div
-                                className="academyCourseDetail-reviews-bar-fill"
-                                style={{ width: `${percentage}%` }}
-                              ></div>
-                            </div>
-                            <span className="academyCourseDetail-reviews-bar-percent">{percentage}%</span>
-                          </div>
-                        );
-                      })}
-                    </div>
+                    )}
                   </div>
-
-                  <div className="academyCourseDetail-reviews-list">
-                    <div className="academyCourseDetail-review-placeholder">
-                      <div className="academyCourseDetail-review-placeholder-icon">💬</div>
-                      <p>{t('academyCourseDetail.reviews.noReviewsYet')}</p>
-                      <span>{t('academyCourseDetail.reviews.beFirstReview')}</span>
-                    </div>
-                  </div>
-                </div>
+                )}
               </div>
-            )}
+            </div>
+          )}
+        </div>
+
+        {/* ===== ЗА КУРСА (2x2 grid) ===== */}
+        <div className="acd-about-grid">
+          <div className="acd-about-card">
+            <h3 className="acd-about-card-title">📖 {t('academyCourseDetail.overview.aboutCourse', 'Описание')}</h3>
+            <p className="acd-about-card-text">{fullDescription}</p>
+          </div>
+
+          <div className="acd-about-card">
+            <h3 className="acd-about-card-title">🎓 {t('academyCourseDetail.overview.whatYouLearn', 'Какво ще научиш')}</h3>
+            <div className="acd-about-card-list">
+              {[1, 2, 3, 4].map(i => (
+                <div key={i} className="acd-about-card-list-item">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                    <polyline points="20,6 9,17 4,12" />
+                  </svg>
+                  <span>{t(`academyCourseDetail.overview.learnItems.item${i}`)}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {targetAudience.length > 0 && (
+            <div className="acd-about-card">
+              <h3 className="acd-about-card-title">🎯 {t('academyCourseDetail.overview.targetAudience', 'За кого е курсът')}</h3>
+              <div className="acd-about-card-list">
+                {targetAudience.map((aud, idx) => (
+                  <div key={idx} className="acd-about-card-list-item">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                      <polyline points="20,6 9,17 4,12" />
+                    </svg>
+                    <span>{aud}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          <div className="acd-about-card">
+            <h3 className="acd-about-card-title">📊 {t('academyCourseDetail.overview.stats.title', 'Статистики')}</h3>
+            <div className="acd-stats-mini">
+              <div className="acd-stat-mini">
+                <span className="acd-stat-mini-val">{enrolledCount.toLocaleString()}</span>
+                <span className="acd-stat-mini-lbl">{t('academyCourseDetail.overview.stats.totalEnrolled', 'записани')}</span>
+              </div>
+              <div className="acd-stat-mini">
+                <span className="acd-stat-mini-val">{completedCount.toLocaleString()}</span>
+                <span className="acd-stat-mini-lbl">{t('academyCourseDetail.overview.stats.completed', 'завършили')}</span>
+              </div>
+              <div className="acd-stat-mini">
+                <span className="acd-stat-mini-val">⭐ {rating.toFixed(1)}</span>
+                <span className="acd-stat-mini-lbl">{t('academyCourseDetail.overview.stats.rating', 'рейтинг')}</span>
+              </div>
+              <div className="acd-stat-mini">
+                <span className="acd-stat-mini-val">{maxCredits} 🪙</span>
+                <span className="acd-stat-mini-lbl">{t('academyCourseDetail.overview.stats.maxCredits', 'кредити')}</span>
+              </div>
+            </div>
           </div>
         </div>
+
+        {/* ===== МЕНТОРИ + ОТЗИВИ (side by side) ===== */}
+        <div className="acd-bottom-grid">
+          {/* Ментори */}
+          <div className="acd-bottom-card">
+            <h3 className="acd-bottom-card-title">👨‍🏫 {t('academyCourseDetail.mentors.title', 'Ментори')}</h3>
+            {leadInstructor ? (
+              <div className="acd-mentor-row">
+                <img
+                  src={leadInstructor.mentor?.photoUrl || 'https://via.placeholder.com/48'}
+                  alt={leadInstructor.mentor?.name}
+                  className="acd-mentor-img"
+                />
+                <div className="acd-mentor-info">
+                  <span className="acd-mentor-name">{leadInstructor.mentor?.name}</span>
+                  <span className="acd-mentor-role">
+                    {t(`academyCourseDetail.instructor.${ROLE_LABELS[leadInstructor.role] || 'roles.lecturer'}`)}
+                    {leadInstructor.isLead && ` • ${t('academyCourseDetail.instructor.leadInstructor')}`}
+                  </span>
+                  {leadInstructor.mentor?.specialization && (
+                    <span className="acd-mentor-spec">{leadInstructor.mentor.specialization}</span>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <p className="acd-empty-text">{t('academyCourseDetail.instructor.noInstructor')}</p>
+            )}
+            {assistants.length > 0 && (
+              <div className="acd-assistants-list">
+                {assistants.map((a, i) => (
+                  <div key={i} className="acd-assistant-row">
+                    <img src={a.mentor?.photoUrl || 'https://via.placeholder.com/32'} alt={a.mentor?.name} />
+                    <span>{a.mentor?.name}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Отзиви */}
+          <div className="acd-bottom-card">
+            <h3 className="acd-bottom-card-title">⭐ {t('academyCourseDetail.reviews.studentReviews', 'Отзиви')}</h3>
+            <div className="acd-review-header">
+              <span className="acd-review-big">{rating.toFixed(1)}</span>
+              <div className="acd-review-stars">
+                {[1, 2, 3, 4, 5].map(s => (
+                  <svg key={s} width="18" height="18" viewBox="0 0 24 24"
+                    fill={s <= Math.round(rating) ? 'currentColor' : 'none'}
+                    stroke="currentColor" strokeWidth="2"
+                  >
+                    <polygon points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9" />
+                  </svg>
+                ))}
+              </div>
+              <span className="acd-review-count">{enrolledCount} {t('academyCourseDetail.reviews.reviews', 'отзива')}</span>
+            </div>
+            <div className="acd-review-bars">
+              {[5, 4, 3, 2, 1].map(stars => {
+                const pct = stars === 5 ? 75 : stars === 4 ? 18 : stars === 3 ? 5 : stars === 2 ? 1 : 1;
+                return (
+                  <div key={stars} className="acd-review-bar">
+                    <span className="acd-review-bar-label">{stars}★</span>
+                    <div className="acd-review-bar-track">
+                      <div className="acd-review-bar-fill" style={{ width: `${pct}%` }}></div>
+                    </div>
+                    <span className="acd-review-bar-pct">{pct}%</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
       </section>
 
       {/* Trailer Modal */}
