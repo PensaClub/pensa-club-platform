@@ -36,6 +36,7 @@ const INITIAL_COURSE_DATA = {
     hasCertificate: false,
     tags: '',
     targetAudience: '',
+    mentors: [],
 };
 
 const createNewModule = () => ({

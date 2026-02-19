@@ -13795,7 +13795,10 @@
     "thumbnailPreview": "Thumbnail-Vorschau"
   },
   "courseStepSettings": {
+     "mentorsDesc": "Mentoren, Dozenten und Assistenten hinzufügen. Der erste wird automatisch Leiter (⭐).",
+  "mentorsPlaceholder": "Nach Name suchen...",
     "sections": {
+       "mentors": "Kursmentoren",
       "typeFormat": "Typ & Format",
       "durationDates": "Dauer & Termine",
       "enrollment": "Einschreibung",
@@ -14245,9 +14248,7 @@
   "bosch": {
     "description": "Eine internationale Stiftung, die sich weltweit für Gesundheit, Bildung und Zivilgesellschaft einsetzt"
   },
-  "bosch": {
-    "description": "Eine internationale Stiftung, die sich weltweit für Gesundheit, Bildung und Zivilgesellschaft einsetzt"
-  },
+
   "softuniBuditel": {
     "description": "Ein Bildungsprogramm für digitale Kompetenz in kleinen Gemeinden in ganz Bulgarien"
   },
@@ -14271,6 +14272,18 @@
   },
   "coalitionMediaLiteracy": {
     "description": "Eine Koalition zur Förderung von Medienkompetenz und kritischem Denken in der Gesellschaft"
+  }
+},
+"academyMentorPicker": {
+  "searchPlaceholder": "Mentor suchen...",
+  "typeToSearch": "Mindestens 1 Zeichen eingeben...",
+  "noResults": "Keine Ergebnisse",
+  "setAsLead": "Als Leiter festlegen",
+  "roles": {
+    "lecturer": "Dozent",
+    "mentor": "Mentor",
+    "assistant": "Assistent",
+    "guest": "Gastdozent"
   }
 }
 }

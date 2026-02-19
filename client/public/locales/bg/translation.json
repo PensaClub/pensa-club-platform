@@ -14796,12 +14796,15 @@
     "thumbnailPreview": "Преглед на thumbnail"
   },
   "courseStepSettings": {
+     "mentorsDesc": "Добавете ментори, лектори и асистенти. Първият добавен автоматично става водещ (⭐).",
+  "mentorsPlaceholder": "Търси по име...",
     "sections": {
       "typeFormat": "Тип и формат",
       "durationDates": "Продължителност и дати",
       "enrollment": "Записване",
       "credits": "Кредити и сертификат",
-      "tags": "Тагове"
+      "tags": "Тагове",
+      "mentors": "Ментори на курса"
     },
     "courseType": "Тип курс",
     "courseTypes": {
@@ -15270,5 +15273,17 @@
     "coalitionMediaLiteracy": {
       "description": "Коалиция за повишаване на медийната грамотност и критичното мислене в обществото"
     }
+  },
+  "academyMentorPicker": {
+  "searchPlaceholder": "Търси ментор...",
+  "typeToSearch": "Въведи поне 1 символ...",
+  "noResults": "Няма резултати",
+  "setAsLead": "Задай като водещ",
+  "roles": {
+    "lecturer": "Лектор",
+    "mentor": "Ментор",
+    "assistant": "Асистент",
+    "guest": "Гост-лектор"
   }
+}
 }

@@ -14502,9 +14502,12 @@
   "thumbnailPreview": "Thumbnail preview"
 },
 "courseStepSettings": {
+  "mentorsDesc": "Add mentors, lecturers and assistants. The first one added automatically becomes the lead (⭐).",
+  "mentorsPlaceholder": "Search by name...",
   "sections": {
     "typeFormat": "Type & Format",
     "durationDates": "Duration & Dates",
+    "mentors": "Course Mentors",
     "enrollment": "Enrollment",
     "credits": "Credits & Certificate",
     "tags": "Tags"
@@ -14978,6 +14981,18 @@
   },
   "coalitionMediaLiteracy": {
     "description": "A coalition for raising media literacy and critical thinking in society"
+  }
+},
+"academyMentorPicker": {
+  "searchPlaceholder": "Search mentor...",
+  "typeToSearch": "Type at least 1 character...",
+  "noResults": "No results",
+  "setAsLead": "Set as lead",
+  "roles": {
+    "lecturer": "Lecturer",
+    "mentor": "Mentor",
+    "assistant": "Assistant",
+    "guest": "Guest lecturer"
   }
 }
 }
