@@ -3,6 +3,7 @@
 import { useTranslation } from 'react-i18next';
 import { AlertCircle } from 'lucide-react';
 import './courseStepSettings.css';
+import { AcademyMentorPicker } from '../../AcademyCourses/AcademyMentorPicker/AcademyMentorPicker';
 
 const COURSE_TYPE_OPTIONS = ['online', 'offline', 'hybrid'];
 const VIDEO_PROVIDER_OPTIONS = ['youtube', 'vimeo', 'custom', 'none'];
@@ -287,6 +288,21 @@ const CourseStepSettings = ({ courseData, updateField, errors = {} }) => {
           )}
           <span className="csst-hint">{t('courseStepSettings.tagsHint')}</span>
         </div>
+      </div>
+      {/* === Section: Mentors === */}
+      <div className="csst-section">
+        <h3 className="csst-section-title">
+          👨‍🏫 {t('courseStepSettings.sections.mentors', 'Ментори на курса')}
+        </h3>
+        <p className="csst-section-desc">
+          {t('courseStepSettings.mentorsDesc', 'Добавете ментори, лектори и асистенти. Първият добавен автоматично става водещ (⭐).')}
+        </p>
+        <AcademyMentorPicker
+          mode="multi"
+          selected={courseData.mentors || []}
+          onChange={(mentors) => updateField('mentors', mentors)}
+          placeholder={t('courseStepSettings.mentorsPlaceholder', 'Търси по име...')}
+        />
       </div>
     </div>
   );

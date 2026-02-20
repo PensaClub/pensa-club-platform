@@ -278,3 +278,9 @@
   color: #f43f5e;
   margin-top: 4px;
 }
+.csst-section-desc {
+  font-size: 0.83rem;
+  color: rgba(255, 255, 255, 0.45);
+  margin: -8px 0 12px;
+  line-height: 1.5;
+}

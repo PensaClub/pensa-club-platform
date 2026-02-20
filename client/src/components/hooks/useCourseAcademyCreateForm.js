@@ -36,6 +36,7 @@ const INITIAL_COURSE_DATA = {
     hasCertificate: false,
     tags: '',
     targetAudience: '',
+    mentors: [],
 };
 
 const createNewModule = () => ({
@@ -71,6 +72,7 @@ const useCourseAcademyCreateForm = () => {
         createCourse,
         updateCourse,
         publishCourse,
+        addCourseMentor,
         createModule: apiCreateModule,
         updateModule: apiUpdateModule,
         createLesson: apiCreateLesson,
@@ -301,7 +303,7 @@ const useCourseAcademyCreateForm = () => {
         }
     }, []);
 
-     const nextStep = useCallback(() => {
+    const nextStep = useCallback(() => {
         goToStep(currentStep + 1);
     }, [currentStep, goToStep]);
 
@@ -449,7 +451,16 @@ const useCourseAcademyCreateForm = () => {
                     return;
                 }
             }
-
+            // Sync mentors
+            if (courseData.mentors?.length > 0) {
+                for (const m of courseData.mentors) {
+                    try {
+                        await addCourseMentor(id, { mentorId: m.mentorId, role: m.role, isLead: m.isLead });
+                    } catch (e) {
+                        console.warn('Mentor add failed:', e);
+                    }
+                }
+            }
             toast.success(id === courseId
                 ? t('courseFormHook.draftSaved', 'Черновата е запазена')
                 : t('courseFormHook.draftCreated', 'Курсът е създаден')
@@ -500,7 +511,16 @@ const useCourseAcademyCreateForm = () => {
             if (courseIdentifier && modules.length > 0) {
                 await saveModulesAndLessons(courseIdentifier);
             }
-
+            // Sync mentors
+            if (courseData.mentors?.length > 0) {
+                for (const m of courseData.mentors) {
+                    try {
+                        await addCourseMentor(id, { mentorId: m.mentorId, role: m.role, isLead: m.isLead });
+                    } catch (e) {
+                        console.warn('Mentor add failed:', e);
+                    }
+                }
+            }
             await publishCourse(id);
             toast.success(t('courseFormHook.published', 'Курсът е публикуван'));
             navigate('/academy/admin/courses');

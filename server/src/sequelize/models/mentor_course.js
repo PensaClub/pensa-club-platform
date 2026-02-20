@@ -170,7 +170,6 @@ module.exports = (sequelize, DataTypes) => {
       modelName: 'mentor_course',
       tableName: 'mentor_courses',
       timestamps: true,
-      underscored: true,
     }
   );
 

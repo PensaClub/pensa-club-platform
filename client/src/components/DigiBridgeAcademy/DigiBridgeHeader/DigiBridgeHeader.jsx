@@ -7,6 +7,7 @@ import './digiBridgeHeader.css';
 export const DigiBridgeHeader = () => {
     const { t, i18n } = useTranslation();
     const location = useLocation();
+     const isTestPage = location.pathname.includes('/test');
     const { isAuthentication, isFinish, profileData, isAdmin, isModerator } = useContext(UserContext);
 
     const [isScrolled, setIsScrolled] = useState(false);
@@ -100,7 +101,7 @@ export const DigiBridgeHeader = () => {
         <>
             <header
                 ref={headerRef}
-                className={`dbh-header ${isScrolled ? 'dbh-header--scrolled' : ''}`}
+                 className={`dbh-header ${isScrolled ? 'dbh-header--scrolled' : ''} ${isTestPage ? 'dbh-header--dark' : ''} ${isMobileMenuOpen ? 'dbh-header--dark' : ''}`}
             >
                 <div className="dbh-container">
                     {/* ===== ЛЯВА ЧАСТ: Logo + Navigation ===== */}

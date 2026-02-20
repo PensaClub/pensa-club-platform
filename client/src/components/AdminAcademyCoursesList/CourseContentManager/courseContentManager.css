@@ -400,8 +400,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
+  width: 42px;
+  height: 42px;
   border: none;
   border-radius: 7px;
   background: transparent;
@@ -705,146 +705,7 @@
   box-shadow: 0 0 20px rgba(239, 68, 68, 0.15);
 }
 
-/* =========================================================
-                    RESPONSIVE
-   ========================================================= */
 
-@media (max-width: 768px) {
-  .ccm-container {
-    padding: 80px 16px 60px;
-  }
-
-  .ccm-title {
-    font-size: 1.4rem;
-  }
-
-  .ccm-module-header {
-    padding: 12px 14px;
-  }
-
-  .ccm-module-right {
-    gap: 2px;
-  }
-
-  .ccm-lesson {
-    flex-wrap: wrap;
-  }
-
-  .ccm-lesson-right {
-    width: 100%;
-    justify-content: flex-end;
-    margin-top: 4px;
-  }
-
-  .ccm-inline-form-lesson {
-    flex-wrap: wrap;
-  }
-
-  .ccm-modal {
-    padding: 24px;
-  }
-}
-
-@media (max-width: 480px) {
-  .ccm-module-count {
-    display: none;
-  }
-
-  .ccm-lesson-duration {
-    display: none;
-  }
-}
-/* =========================================================
-   MODULE EDIT EXPANDED
-   ========================================================= */
-
-.ccm-edit-inline-expanded {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  flex: 1;
-  min-width: 0;
-}
-
-.ccm-edit-row-main {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.ccm-edit-row-details {
-  display: flex;
-  align-items: flex-end;
-  gap: 12px;
-  padding: 8px 0 4px;
-}
-
-.ccm-edit-mini-field {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.ccm-edit-mini-label {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 0.68rem;
-  font-weight: 600;
-  color: #64748b;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.ccm-inline-input-sm {
-  padding: 6px 10px;
-  font-size: 0.8rem;
-  max-width: 140px;
-}
-
-/* =========================================================
-   MODULE META BADGES
-   ========================================================= */
-
-.ccm-module-meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-left: 8px;
-}
-
-.ccm-module-meta-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  font-size: 0.7rem;
-  color: #64748b;
-  background: rgba(56, 189, 248, 0.06);
-  padding: 2px 8px;
-  border-radius: 6px;
-  white-space: nowrap;
-}
-
-/* =========================================================
-   RESPONSIVE - MODULE EDIT
-   ========================================================= */
-
-@media (max-width: 640px) {
-  .ccm-edit-row-details {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .ccm-inline-input-sm {
-    max-width: 100%;
-  }
-
-  .ccm-module-meta {
-    margin-left: 0;
-    margin-top: 4px;
-    flex-wrap: wrap;
-  }
-}
 /* =========================================================
           STANDALONE LESSONS SECTION
    ========================================================= */
@@ -923,8 +784,17 @@
   display: flex;
   align-items: center;
   gap: 8px;
-}
 
+}
+.ccm-materials-header-left>svg {
+  color: #94a3b8;
+  flex-shrink: 0;
+}
+.ccm-btn.ccm-btn-sm.ccm-btn-secondary {
+  background: rgba(15, 23, 42, 0.6);
+  border-color: rgba(56, 189, 248, 0.15);
+  color: #94a3b8;
+}
 .ccm-materials-icon {
   color: #00e6e6;
 }
@@ -1100,6 +970,9 @@
     align-items: flex-start;
     gap: 10px;
   }
+  .ccm-edit-row-details {
+    grid-template-columns: 1fr;
+  }
 }
 /* Error states */
 .ccm-inline-input-error {
@@ -1111,4 +984,199 @@
   font-size: 0.75rem;
   color: #f43f5e;
   margin: 4px 0 0 4px;
+}
+.ccm-edit-mini-field--wide {
+  flex-basis: 100%;
+}
+/* =========================================================
+                    RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .ccm-container {
+    padding: 80px 16px 60px;
+  }
+
+  .ccm-title {
+    font-size: 1.4rem;
+  }
+
+  .ccm-module-header {
+    padding: 12px 14px;
+    flex-direction: column;
+  }
+
+  .ccm-module-right {
+    gap: initial;
+  }
+.ccm-module-left {
+    gap: 6px;
+    flex-direction: column;
+  }
+  .ccm-material-link, .ccm-material-delete {
+    padding: 6px 10px;
+    font-size: 0.78rem;
+      width: 40px;
+  height: 40px;
+  }
+  .ccm-lesson {
+    flex-wrap: wrap;
+  }
+
+  .ccm-lesson-right {
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 4px;
+  }
+
+  .ccm-inline-form-lesson {
+    flex-wrap: wrap;
+  }
+
+  .ccm-modal {
+    padding: 24px;
+  }
+  .ccm-materials-header {
+    flex-direction: column;
+    /* align-items: flex-start; */
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .ccm-module-count {
+    display: none;
+  }
+
+  .ccm-lesson-duration {
+    display: none;
+  }
+}
+/* =========================================================
+   MODULE EDIT EXPANDED
+   ========================================================= */
+
+.ccm-edit-inline-expanded {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.ccm-edit-row-main {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ccm-edit-row-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 12px;
+}
+
+.ccm-edit-mini-field {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.ccm-edit-mini-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.ccm-inline-input-sm {
+  padding: 6px 10px;
+  font-size: 0.8rem;
+  max-width: 140px;
+}
+
+/* =========================================================
+   MODULE META BADGES
+   ========================================================= */
+
+.ccm-module-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 8px;
+}
+
+.ccm-module-meta-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.7rem;
+  color: #64748b;
+  background: rgba(56, 189, 248, 0.06);
+  padding: 2px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   RESPONSIVE - MODULE EDIT
+   ========================================================= */
+
+@media (max-width: 640px) {
+  .ccm-edit-row-details {
+    flex-direction: column;
+    gap: 8px;
+  }
+ .ccm-material-item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 6px 8px;
+    padding: 10px 12px;
+  }
+
+  /* Ред 1: Тип (DOCUMENT) - цял ред */
+  .ccm-material-item .ccm-material-type {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+
+  /* Ред 2: Име + размер на един ред */
+  .ccm-material-item .ccm-material-name {
+    grid-column: 1;
+    min-width: 0;
+  }
+
+  .ccm-material-item .ccm-material-size {
+    grid-column: 2;
+    justify-self: end;
+  }
+
+  /* Ред 3: Иконки на един ред */
+  .ccm-material-item .ccm-material-link,
+  .ccm-material-item .ccm-material-delete {
+    grid-row: 3;
+  }
+
+  .ccm-material-item .ccm-material-link {
+    grid-column: 1;
+    justify-self: start;
+  }
+
+  .ccm-material-item .ccm-material-delete {
+    grid-column: 2;
+    justify-self: end;
+  }
+  .ccm-inline-input-sm {
+    max-width: 100%;
+  }
+
+  .ccm-module-meta {
+    margin-left: 0;
+    margin-top: 4px;
+    flex-wrap: wrap;
+  }
 }
