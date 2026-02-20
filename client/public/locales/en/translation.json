@@ -13918,6 +13918,9 @@
       "academy": "Academy",
       "courses": "Courses"
     },
+    "mentors": {
+    "students": "students"
+  },
     "levels": {
       "beginner": "Beginner",
       "intermediate": "Intermediate",

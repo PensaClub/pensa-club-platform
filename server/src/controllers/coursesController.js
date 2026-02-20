@@ -344,7 +344,8 @@ coursesController.get('/:slug', async (req, res, next) => {
             {
               model: mentor,
               as: 'mentor',
-              attributes: ['id', 'name', 'photoUrl', 'specialization'],
+               attributes: ['id', 'name', 'photoUrl', 'specialization', 'education', 'experience', 'languages', 'rating', 'reviewsCount', 'studentsCount', 'availability'],
+        
             },
             {
               model: lesson,
@@ -415,7 +416,7 @@ coursesController.get('/:slug', async (req, res, next) => {
             {
               model: mentor,
               as: 'mentor',
-              attributes: ['id', 'name', 'photoUrl', 'specialization'],
+              attributes: ['id', 'name', 'photoUrl', 'specialization', 'education', 'experience', 'languages', 'rating', 'reviewsCount', 'studentsCount', 'availability'],
             },
           ],
         },
@@ -1490,6 +1491,7 @@ coursesController.post(
         await mentor_course.update({ isLead: false }, { where: { courseId } });
       }
 
+    // const now = new Date();
       const newMentorCourse = await mentor_course.create({
         courseId,
         mentorId,
@@ -1497,6 +1499,7 @@ coursesController.post(
         isLead,
         courseName: courseData.name,
         courseCategory: courseData.category || '',
+       
       });
 
       // Върни с mentor данни

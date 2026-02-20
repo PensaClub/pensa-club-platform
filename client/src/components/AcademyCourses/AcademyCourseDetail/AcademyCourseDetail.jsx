@@ -883,24 +883,30 @@ export const AcademyCourseDetail = () => {
                 </div>
               </div>
 
-              {/* Instructor Preview */}
-              {leadInstructor && (
-                <div className="academyCourseDetail-hero-instructor">
-                  <img
-                    src={leadInstructor.mentor?.photoUrl || 'https://via.placeholder.com/48'}
-                    alt={leadInstructor.mentor?.name}
-                  />
-                  <div className="academyCourseDetail-hero-instructor-info">
-                    <span className="academyCourseDetail-hero-instructor-label">
-                      {t('academyCourseDetail.hero.createdBy')}
-                    </span>
-                    <span className="academyCourseDetail-hero-instructor-name">
-                      {leadInstructor.mentor?.name}
-                    </span>
-                  </div>
+              {/* Instructors Preview */}
+              {instructors.length > 0 && (
+                <div className="academyCourseDetail-hero-instructors">
+                  {instructors.map((inst, i) => (
+                    <div key={i} className="academyCourseDetail-hero-instructor">
+                      <img
+                        src={inst.mentor?.photoUrl || 'https://via.placeholder.com/48'}
+                        alt={inst.mentor?.name}
+                      />
+                      <div className="academyCourseDetail-hero-instructor-info">
+                        <span className="academyCourseDetail-hero-instructor-label">
+                          {inst.isLead
+                            ? t('academyCourseDetail.hero.createdBy')
+                            : t(`academyCourseDetail.instructor.${ROLE_LABELS[inst.role] || 'roles.mentor'}`)
+                          }
+                        </span>
+                        <span className="academyCourseDetail-hero-instructor-name">
+                          {inst.mentor?.name}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               )}
-
               {/* Tags */}
               {tags.length > 0 && (
                 <div className="academyCourseDetail-hero-tags">
@@ -1290,39 +1296,71 @@ export const AcademyCourseDetail = () => {
 
         {/* ===== МЕНТОРИ + ОТЗИВИ (side by side) ===== */}
         <div className="acd-bottom-grid">
-          {/* Ментори */}
+        {/* Ментори */}
           <div className="acd-bottom-card">
             <h3 className="acd-bottom-card-title">👨‍🏫 {t('academyCourseDetail.mentors.title', 'Ментори')}</h3>
-            {leadInstructor ? (
-              <div className="acd-mentor-row">
-                <img
-                  src={leadInstructor.mentor?.photoUrl || 'https://via.placeholder.com/48'}
-                  alt={leadInstructor.mentor?.name}
-                  className="acd-mentor-img"
-                />
-                <div className="acd-mentor-info">
-                  <span className="acd-mentor-name">{leadInstructor.mentor?.name}</span>
-                  <span className="acd-mentor-role">
-                    {t(`academyCourseDetail.instructor.${ROLE_LABELS[leadInstructor.role] || 'roles.lecturer'}`)}
-                    {leadInstructor.isLead && ` • ${t('academyCourseDetail.instructor.leadInstructor')}`}
-                  </span>
-                  {leadInstructor.mentor?.specialization && (
-                    <span className="acd-mentor-spec">{leadInstructor.mentor.specialization}</span>
-                  )}
-                </div>
-              </div>
-            ) : (
-              <p className="acd-empty-text">{t('academyCourseDetail.instructor.noInstructor')}</p>
-            )}
-            {assistants.length > 0 && (
-              <div className="acd-assistants-list">
-                {assistants.map((a, i) => (
-                  <div key={i} className="acd-assistant-row">
-                    <img src={a.mentor?.photoUrl || 'https://via.placeholder.com/32'} alt={a.mentor?.name} />
-                    <span>{a.mentor?.name}</span>
+            {instructors.length > 0 ? (
+              <div className="acd-mentors-list">
+                {instructors.map((inst, i) => (
+                  <div key={i} className={`acd-mentor-card ${inst.isLead ? 'acd-mentor-card--lead' : ''}`}>
+                    <div className="acd-mentor-card-header">
+                      <img
+                        src={inst.mentor?.photoUrl || 'https://via.placeholder.com/56'}
+                        alt={inst.mentor?.name}
+                        className="acd-mentor-card-img"
+                      />
+                      <div className="acd-mentor-card-main">
+                        <span className="acd-mentor-card-name">
+                          {inst.mentor?.name}
+                          {inst.isLead && <span className="acd-mentor-lead-badge">⭐</span>}
+                        </span>
+                        <span className="acd-mentor-card-role">
+                          {t(`academyCourseDetail.instructor.${ROLE_LABELS[inst.role] || 'roles.mentor'}`)}
+                        </span>
+                        {inst.mentor?.specialization && (
+                          <span className="acd-mentor-card-spec">{inst.mentor.specialization}</span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Статистики */}
+                    <div className="acd-mentor-card-stats">
+                      {inst.mentor?.rating > 0 && (
+                        <span className="acd-mentor-stat">
+                          ⭐ {parseFloat(inst.mentor.rating).toFixed(1)}
+                          {inst.mentor.reviewsCount > 0 && <small> ({inst.mentor.reviewsCount})</small>}
+                        </span>
+                      )}
+                      {inst.mentor?.studentsCount > 0 && (
+                        <span className="acd-mentor-stat">
+                          🎓 {inst.mentor.studentsCount} {t('academyCourseDetail.mentors.students', 'студенти')}
+                        </span>
+                      )}
+                      {inst.mentor?.languages?.length > 0 && (
+                        <span className="acd-mentor-stat">
+                          🌐 {inst.mentor.languages.join(', ')}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Опит / Образование */}
+                    {(inst.mentor?.experience || inst.mentor?.education) && (
+                      <div className="acd-mentor-card-bio">
+                        {inst.mentor.experience && (
+                          <p className="acd-mentor-card-bio-text">{inst.mentor.experience}</p>
+                        )}
+                        {inst.mentor.education && (
+                          <p className="acd-mentor-card-bio-text acd-mentor-card-bio-edu">
+                            🎓 {inst.mentor.education}
+                          </p>
+                        )}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
+            ) : (
+              <p className="acd-empty-text">{t('academyCourseDetail.instructor.noInstructor')}</p>
             )}
           </div>
 

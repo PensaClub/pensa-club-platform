@@ -3000,7 +3000,37 @@
   color: rgba(255, 255, 255, 0.4);
   flex-shrink: 0;
 }
+/* Hero multiple instructors */
+.academyCourseDetail-hero-instructors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
+}
 
+/* Mentors list in bottom card */
+.acd-mentors-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.acd-mentor-row--lead {
+  padding: 10px;
+  border-radius: 10px;
+  background: rgba(0, 255, 255, 0.04);
+  border: 1px solid rgba(0, 255, 255, 0.12);
+}
+
+.acd-mentor-lead-badge {
+  margin-left: 8px;
+  font-size: 0.75rem;
+  color: rgba(0, 255, 255, 0.8);
+}
+
+@media (max-width: 480px) {
+
+}
 /* ===== RESPONSIVE ===== */
 @media (max-width: 860px) {
   .acd-content {
@@ -3171,5 +3201,118 @@
   .academyCourseDetail-lesson-mentor-avatar {
     width: 13px;
     height: 13px;
+  }
+    .academyCourseDetail-hero-instructors {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+/* Mentor cards */
+.acd-mentors-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.acd-mentor-card {
+  padding: 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.acd-mentor-card--lead {
+  background: rgba(0, 255, 255, 0.04);
+  border-color: rgba(0, 255, 255, 0.12);
+}
+
+.acd-mentor-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.acd-mentor-card-img {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.acd-mentor-card-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.acd-mentor-card-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.acd-mentor-lead-badge {
+  margin-left: 6px;
+  font-size: 0.8rem;
+}
+
+.acd-mentor-card-role {
+  font-size: 0.8rem;
+  color: rgba(0, 255, 255, 0.7);
+}
+
+.acd-mentor-card-spec {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.acd-mentor-card-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.acd-mentor-stat {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.acd-mentor-stat small {
+  opacity: 0.7;
+}
+
+.acd-mentor-card-bio {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.acd-mentor-card-bio-text {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.5;
+  margin: 0 0 6px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.acd-mentor-card-bio-edu {
+  color: rgba(255, 255, 255, 0.45);
+  font-style: italic;
+}
+
+@media (max-width: 480px) {
+  .acd-mentor-card-img {
+    width: 44px;
+    height: 44px;
+  }
+  .acd-mentor-card-stats {
+    gap: 8px;
   }
 }

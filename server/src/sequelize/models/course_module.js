@@ -124,6 +124,7 @@ module.exports = (sequelize, DataTypes) => {
       tableName: 'course_modules',
       timestamps: true,
       underscored: true,
+      
     },
 
   );

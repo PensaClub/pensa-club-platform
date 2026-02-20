@@ -13211,6 +13211,9 @@
       "academy": "Akademie",
       "courses": "Kurse"
     },
+     "mentors": {
+    "students": "Studenten"
+  },
     "levels": {
       "beginner": "Anfänger",
       "intermediate": "Fortgeschritten",

@@ -92,9 +92,9 @@ const useEditCourseBasicInfo = () => {
                         })),
                     });
                   
-                    const mentors = (course.instances || []).map(inst => ({
-                        mentorCourseId: inst.id,
-                        mentorId: inst.mentorId || inst.mentor?.id,
+                     const mentors = (course.instances || []).map(inst => ({
+                        mentorCourseId: inst.id, 
+                        mentorId: inst.mentor?.id || inst.mentorId,
                         role: inst.role || 'mentor',
                         isLead: inst.isLead || false,
                         mentor: inst.mentor || null,
