@@ -801,7 +801,7 @@ const ModuleEditInline = ({ module, onSave, onCancel, actionLoading, courseMento
     setError('');
     onSave({
       title: form.title.trim(),
-      description: form.description.trim(), 
+      description: (form.description || '').trim(),
       startDate: form.startDate || null,
       endDate: form.endDate || null,
       estimatedHours: form.estimatedHours ? Number(form.estimatedHours) : null,
@@ -878,8 +878,9 @@ const ModuleEditInline = ({ module, onSave, onCancel, actionLoading, courseMento
           <AcademyMentorPicker
             mode="single"
             selectedMentorId={form.mentorId}
+            selectedMentorObj={module.mentor || null}
             courseMentors={courseMentors}
-            onChange={(id) => setForm((p) => ({ ...p, mentorId: id }))}
+            onChange={(id, mentor) => setForm((p) => ({ ...p, mentorId: id }))}
             placeholder={t('contentManager.moduleMentorPlaceholder', 'Избери...')}
           />
         </div>

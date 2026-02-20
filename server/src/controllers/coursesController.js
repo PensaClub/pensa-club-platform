@@ -176,7 +176,7 @@ coursesController.get('/', validateQuery(courseQuerySchema), async (req, res, ne
         {
           model: mentor_course,
           as: 'instances',
-          attributes: ['id', 'mentorId'],
+          attributes: ['id', 'mentorId', 'role', 'isLead'],
           include: [
             {
               model: mentor,
@@ -342,6 +342,11 @@ coursesController.get('/:slug', async (req, res, next) => {
           as: 'modules',
           include: [
             {
+              model: mentor,
+              as: 'mentor',
+              attributes: ['id', 'name', 'photoUrl', 'specialization'],
+            },
+            {
               model: lesson,
               as: 'lessons',
               required: false,
@@ -369,12 +374,12 @@ coursesController.get('/:slug', async (req, res, next) => {
           ],
         },
         {
-         model: lesson,
-  as: 'lessons',
-  where: {
-    moduleId: null,
-  },
-  required: false,  
+          model: lesson,
+          as: 'lessons',
+          where: {
+            moduleId: null,
+          },
+          required: false,
           required: false,
           include: [
             {
@@ -436,10 +441,10 @@ coursesController.get('/:slug', async (req, res, next) => {
         },
       ],
       order: [
-    [{ model: course_module, as: 'modules' }, 'sortOrder', 'ASC'],
-    [{ model: course_module, as: 'modules' }, { model: lesson, as: 'lessons' }, 'sortOrder', 'ASC'],
-    [{ model: lesson, as: 'lessons' }, 'sortOrder', 'ASC'],
-  ],
+        [{ model: course_module, as: 'modules' }, 'sortOrder', 'ASC'],
+        [{ model: course_module, as: 'modules' }, { model: lesson, as: 'lessons' }, 'sortOrder', 'ASC'],
+        [{ model: lesson, as: 'lessons' }, 'sortOrder', 'ASC'],
+      ],
     });
 
     if (!courseData) {
@@ -482,6 +487,11 @@ coursesController.get(
             model: course_module,
             as: 'modules',
             include: [
+               {
+                model: mentor,
+                as: 'mentor',
+                attributes: ['id', 'name', 'photoUrl', 'specialization'],
+              },
               {
                 model: lesson,
                 as: 'lessons',
@@ -522,11 +532,11 @@ coursesController.get(
             ],
           },
         ],
-         order: [
-    [{ model: course_module, as: 'modules' }, 'sortOrder', 'ASC'],
-    [{ model: course_module, as: 'modules' }, { model: lesson, as: 'lessons' }, 'sortOrder', 'ASC'],
-    [{ model: lesson, as: 'lessons' }, 'sortOrder', 'ASC'],
-  ],
+        order: [
+          [{ model: course_module, as: 'modules' }, 'sortOrder', 'ASC'],
+          [{ model: course_module, as: 'modules' }, { model: lesson, as: 'lessons' }, 'sortOrder', 'ASC'],
+          [{ model: lesson, as: 'lessons' }, 'sortOrder', 'ASC'],
+        ],
       });
 
       if (!courseData) {
@@ -882,20 +892,32 @@ coursesController.get('/:courseSlug/modules', async (req, res, next) => {
       return res.status(404).json({ success: false, message: 'Course not found' });
     }
 
-    const modules = await course_module.findAll({
-  where: { courseId: courseData.id },
-  include: [
-    {
-      model: lesson,
-      as: 'lessons',
-      attributes: ['id', 'title', 'slug', 'lessonType', 'durationMinutes', 'sortOrder', 'isPublished', 'isFree', 'hasTest'],
-    },
-  ],
-  order: [
-    ['sortOrder', 'ASC'],
-    [{ model: lesson, as: 'lessons' }, 'sortOrder', 'ASC'],
-  ],
-});
+     const modules = await course_module.findAll({
+      where: { courseId: courseData.id },
+      include: [
+        {
+          model: lesson,
+          as: 'lessons',
+          attributes: ['id', 'title', 'slug', 'lessonType', 'durationMinutes', 'sortOrder', 'isPublished', 'isFree', 'hasTest', 'mentorId'],
+          include: [
+            {
+              model: mentor,
+              as: 'mentor',
+              attributes: ['id', 'name', 'photoUrl', 'specialization'],
+            },
+          ],
+        },
+        {
+          model: mentor,
+          as: 'mentor',
+          attributes: ['id', 'name', 'photoUrl', 'specialization'],
+        },
+      ],
+      order: [
+        ['sortOrder', 'ASC'],
+        [{ model: lesson, as: 'lessons' }, 'sortOrder', 'ASC'],
+      ],
+    });
 
     res.status(200).json({ success: true, modules });
   } catch (err) {
@@ -960,7 +982,7 @@ coursesController.put(
     try {
       const { courseSlug } = req.params;
       const moduleId = parseInt(req.params.moduleId);
-      const { title, description, isPublished, startDate, endDate, estimatedHours } = req.body;
+      const { title, description, isPublished, startDate, endDate, estimatedHours, mentorId } = req.body;
 
       const courseData = await findCourseBySlugOrId(courseSlug);
 
@@ -984,7 +1006,7 @@ coursesController.put(
       if (startDate !== undefined) updates.startDate = startDate;
       if (endDate !== undefined) updates.endDate = endDate;
       if (estimatedHours !== undefined) updates.estimatedHours = estimatedHours;
-
+      if (mentorId !== undefined) updates.mentorId = mentorId;
       await moduleData.update(updates);
 
       res.status(200).json({ success: true, message: 'Module updated successfully', module: moduleData });
@@ -1424,7 +1446,149 @@ coursesController.post(
       next(err);
     }
   }
+  
 );
 
+// ===============================
+// ============ COURSE MENTORS ============
+// ===============================
 
+// POST /api/academy/courses/:id/mentors
+// Добавяне на ментор към курс
+// ===============================
+coursesController.post(
+  '/:id/mentors',
+  isAuth,
+  rbac.checkPermission('course', 'update'),
+  async (req, res, next) => {
+    try {
+      const courseId = parseInt(req.params.id);
+      const { mentorId, role = 'mentor', isLead = false } = req.body;
+
+      if (!mentorId) {
+        return res.status(400).json({ success: false, message: 'mentorId is required' });
+      }
+
+      const courseData = await course.findByPk(courseId);
+      if (!courseData) {
+        return res.status(404).json({ success: false, message: 'Course not found' });
+      }
+
+      const mentorData = await mentor.findByPk(mentorId);
+      if (!mentorData) {
+        return res.status(404).json({ success: false, message: 'Mentor not found' });
+      }
+
+      // Проверка дали вече е добавен
+      const existing = await mentor_course.findOne({ where: { courseId, mentorId } });
+      if (existing) {
+        return res.status(400).json({ success: false, message: 'Mentor already assigned to this course' });
+      }
+
+      // Ако isLead, махни lead от другите
+      if (isLead) {
+        await mentor_course.update({ isLead: false }, { where: { courseId } });
+      }
+
+      const newMentorCourse = await mentor_course.create({
+        courseId,
+        mentorId,
+        role,
+        isLead,
+        courseName: courseData.name,
+        courseCategory: courseData.category || '',
+      });
+
+      // Върни с mentor данни
+      const result = await mentor_course.findByPk(newMentorCourse.id, {
+        include: [{ model: mentor, as: 'mentor', attributes: ['id', 'name', 'photoUrl', 'specialization'] }],
+      });
+
+      res.status(201).json({ success: true, message: 'Mentor added to course', mentorCourse: result });
+    } catch (err) {
+      console.error('❌ [ADD COURSE MENTOR] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// PUT /api/academy/courses/:id/mentors/:mentorCourseId
+// Обновяване на роля/lead
+// ===============================
+coursesController.put(
+  '/:id/mentors/:mentorCourseId',
+  isAuth,
+  rbac.checkPermission('course', 'update'),
+  async (req, res, next) => {
+    try {
+      const courseId = parseInt(req.params.id);
+      const mentorCourseId = parseInt(req.params.mentorCourseId);
+      const { role, isLead } = req.body;
+
+      const record = await mentor_course.findOne({ where: { id: mentorCourseId, courseId } });
+      if (!record) {
+        return res.status(404).json({ success: false, message: 'Mentor assignment not found' });
+      }
+
+      const updates = {};
+      if (role !== undefined) updates.role = role;
+      if (isLead !== undefined) {
+        updates.isLead = isLead;
+        // Ако става lead, махни от другите
+        if (isLead) {
+          await mentor_course.update({ isLead: false }, { where: { courseId, id: { [Op.ne]: mentorCourseId } } });
+        }
+      }
+
+      await record.update(updates);
+
+      const result = await mentor_course.findByPk(mentorCourseId, {
+        include: [{ model: mentor, as: 'mentor', attributes: ['id', 'name', 'photoUrl', 'specialization'] }],
+      });
+
+      res.status(200).json({ success: true, message: 'Mentor updated', mentorCourse: result });
+    } catch (err) {
+      console.error('❌ [UPDATE COURSE MENTOR] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// DELETE /api/academy/courses/:id/mentors/:mentorCourseId
+// Премахване на ментор от курс
+// ===============================
+coursesController.delete(
+  '/:id/mentors/:mentorCourseId',
+  isAuth,
+  rbac.checkPermission('course', 'update'),
+  async (req, res, next) => {
+    try {
+      const courseId = parseInt(req.params.id);
+      const mentorCourseId = parseInt(req.params.mentorCourseId);
+
+      const record = await mentor_course.findOne({ where: { id: mentorCourseId, courseId } });
+      if (!record) {
+        return res.status(404).json({ success: false, message: 'Mentor assignment not found' });
+      }
+
+      const wasLead = record.isLead;
+      await record.destroy();
+
+      // Ако изтрият lead-а, направи следващия lead
+      if (wasLead) {
+        const nextMentor = await mentor_course.findOne({ where: { courseId }, order: [['createdAt', 'ASC']] });
+        if (nextMentor) {
+          await nextMentor.update({ isLead: true });
+        }
+      }
+
+      res.status(200).json({ success: true, message: 'Mentor removed from course' });
+    } catch (err) {
+      console.error('❌ [DELETE COURSE MENTOR] Error:', err);
+      next(err);
+    }
+  }
+);
 module.exports = coursesController;

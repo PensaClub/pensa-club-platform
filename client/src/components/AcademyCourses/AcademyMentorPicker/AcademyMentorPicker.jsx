@@ -15,14 +15,15 @@ const MENTOR_ROLES = [
 export const AcademyMentorPicker = ({
   mode = 'multi',           // 'multi' | 'single'
   selected = [],            // multi: [{mentorId, role, isLead, mentor: {id, name, photoUrl, specialization}}]
-  selectedMentorId = null,  // single: number | null
+  selectedMentorId = null,
+  selectedMentorObj = null, 
   onChange,                  // multi: (mentors) => void | single: (mentorId, mentor) => void
   courseMentors = [],       // single mode: limit dropdown to course mentors
   label,
   placeholder,
 }) => {
   const { t } = useTranslation();
-  const { requester } = useAcademyCourses();
+    const { searchMentors: searchMentorsApi } = useAcademyCourses();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -44,7 +45,6 @@ export const AcademyMentorPicker = ({
   // Search mentors
   const searchMentors = useCallback(async (query) => {
     if (mode === 'single' && courseMentors.length > 0) {
-      // Filter from course mentors locally
       const filtered = courseMentors.filter(m => {
         const name = m.mentor?.name || m.name || '';
         return name.toLowerCase().includes(query.toLowerCase());
@@ -60,8 +60,7 @@ export const AcademyMentorPicker = ({
 
     setIsSearching(true);
     try {
-      const res = await requester.get(`/api/academy/mentors?search=${encodeURIComponent(query)}&limit=8&status=active`);
-      const mentors = res?.mentors || res?.data?.mentors || [];
+      const mentors = await searchMentorsApi(query, 8);
       setSearchResults(mentors);
     } catch (err) {
       console.error('Error searching mentors:', err);
@@ -69,7 +68,7 @@ export const AcademyMentorPicker = ({
     } finally {
       setIsSearching(false);
     }
-  }, [mode, courseMentors, requester]);
+  }, [mode, courseMentors, searchMentorsApi]);
 
   // Load initial list for single mode with courseMentors
   useEffect(() => {
@@ -165,7 +164,8 @@ export const AcademyMentorPicker = ({
 
   // Get selected mentor for single mode
   const selectedMentor = mode === 'single' && selectedMentorId
-    ? (courseMentors.find(m => (m.mentor?.id || m.id) === selectedMentorId)?.mentor ||
+    ? (selectedMentorObj ||
+       courseMentors.find(m => (m.mentor?.id || m.id) === selectedMentorId)?.mentor ||
        courseMentors.find(m => (m.mentor?.id || m.id) === selectedMentorId) ||
        searchResults.find(m => m.id === selectedMentorId))
     : null;

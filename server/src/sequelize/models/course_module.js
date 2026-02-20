@@ -19,6 +19,12 @@ module.exports = (sequelize, DataTypes) => {
         sourceKey: 'id',
         as: 'lessons',
       });
+       // Belongs to mentor (optional)
+      course_module.belongsTo(models.mentor, {
+        foreignKey: 'mentorId',
+        targetKey: 'id',
+        as: 'mentor',
+      });
     }
   }
 
@@ -99,6 +105,17 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         defaultValue: 0,
         field: 'total_duration_minutes',
+      },
+      mentorId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        defaultValue: null,
+        field: 'mentor_id',
+        references: {
+          model: 'mentors',
+          key: 'id',
+        },
+        onDelete: 'SET NULL',
       },
     },
     {

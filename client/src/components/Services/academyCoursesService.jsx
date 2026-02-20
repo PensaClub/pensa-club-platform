@@ -68,6 +68,26 @@ export const academyCoursesServiceFactory = () => {
 
     getCourseStatistics: async (courseId) => {
       return requester.get(`${apiUrl}/academy/courses/${courseId}/statistics`);
+
+    },
+    // =========================================================
+    //                    COURSE MENTORS
+    // =========================================================
+
+    searchMentors: async (query = '', limit = 8) => {
+      return requester.get(`${apiUrl}/academy/mentors?search=${encodeURIComponent(query)}&limit=${limit}&status=active`);
+    },
+
+    addCourseMentor: async (courseId, data) => {
+      return requester.post(`${apiUrl}/academy/courses/${courseId}/mentors`, data);
+    },
+
+    updateCourseMentor: async (courseId, mentorCourseId, data) => {
+      return requester.put(`${apiUrl}/academy/courses/${courseId}/mentors/${mentorCourseId}`, data);
+    },
+
+    removeCourseMentor: async (courseId, mentorCourseId) => {
+      return requester.del(`${apiUrl}/academy/courses/${courseId}/mentors/${mentorCourseId}`);
     },
 
     // =========================================================

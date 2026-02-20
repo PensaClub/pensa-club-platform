@@ -40,7 +40,7 @@ const useEditCourseBasicInfo = () => {
     const { t } = useTranslation();
     const { slug } = useParams();
     const navigate = useNavigate();
-    const { getCourseBySlug, updateCourse } = useAcademyCourses();
+    const {  getCourseBySlug, updateCourse, addCourseMentor, updateCourseMentor, removeCourseMentor } = useAcademyCourses();
 
     const [courseData, setCourseData] = useState(INITIAL_STATE);
     const [courseId, setCourseId] = useState(null);
@@ -48,7 +48,7 @@ const useEditCourseBasicInfo = () => {
     const [isSaving, setIsSaving] = useState(false);
     const [errors, setErrors] = useState({});
     const [hasChanges, setHasChanges] = useState(false);
-
+ const [originalMentors, setOriginalMentors] = useState([]);
     // Load course data
     useEffect(() => {
         const loadCourse = async () => {
@@ -91,6 +91,16 @@ const useEditCourseBasicInfo = () => {
                             mentor: inst.mentor || null,
                         })),
                     });
+                  
+                    const mentors = (course.instances || []).map(inst => ({
+                        mentorCourseId: inst.id,
+                        mentorId: inst.mentorId || inst.mentor?.id,
+                        role: inst.role || 'mentor',
+                        isLead: inst.isLead || false,
+                        mentor: inst.mentor || null,
+                    }));
+                    setCourseData(prev => ({ ...prev, mentors }));
+                    setOriginalMentors(mentors);
             } catch (err) {
                 console.error('Error loading course:', err);
                 // ред ~88
@@ -133,7 +143,7 @@ const useEditCourseBasicInfo = () => {
         return newErrors;
     };
 
-    const handleSave = async () => {
+   const handleSave = async () => {
         const validationErrors = validate();
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
@@ -166,10 +176,40 @@ const useEditCourseBasicInfo = () => {
                     : [],
             };
 
+            // Махни mentors от payload (управляват се отделно)
             delete payload.mentors;
             await updateCourse(courseId, payload);
+
+            // Sync mentors
+            const currentMentors = courseData.mentors || [];
+            const originalIds = originalMentors.map(m => m.mentorId);
+            const currentIds = currentMentors.map(m => m.mentorId);
+
+            // Добави нови
+            const toAdd = currentMentors.filter(m => !originalIds.includes(m.mentorId));
+            for (const m of toAdd) {
+                await addCourseMentor(courseId, { mentorId: m.mentorId, role: m.role, isLead: m.isLead });
+            }
+
+            // Премахни изтрити
+            const toRemove = originalMentors.filter(m => !currentIds.includes(m.mentorId));
+            for (const m of toRemove) {
+                await removeCourseMentor(courseId, m.mentorCourseId);
+            }
+
+            // Обнови променени (role/isLead)
+            const toUpdate = currentMentors.filter(m => {
+                const orig = originalMentors.find(o => o.mentorId === m.mentorId);
+                return orig && (orig.role !== m.role || orig.isLead !== m.isLead);
+            });
+            for (const m of toUpdate) {
+                const orig = originalMentors.find(o => o.mentorId === m.mentorId);
+                await updateCourseMentor(courseId, orig.mentorCourseId, { role: m.role, isLead: m.isLead });
+            }
+
             setHasChanges(false);
-            toast.success('Курсът е обновен успешно');
+            sessionStorage.removeItem(storageKey);
+            toast.success(t('editCourse.saveSuccess', 'Курсът е обновен успешно'));
             navigate('/academy/admin/courses');
         } catch (err) {
             console.error('Error saving course:', err);

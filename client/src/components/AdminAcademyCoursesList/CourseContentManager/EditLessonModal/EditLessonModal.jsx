@@ -138,6 +138,9 @@ const EditLessonModal = ({ lesson: basicLesson, courseSlug, courseMentors = [], 
     isPublished: false,
     mentorId: null,
   });
+  const [lessonMentor, setLessonMentor] = useState(null);
+const [initialMentor, setInitialMentor] = useState(null);
+  
   const [showTestEditor, setShowTestEditor] = useState(false);
 
   // === MATERIALS STATE ===
@@ -150,7 +153,6 @@ const EditLessonModal = ({ lesson: basicLesson, courseSlug, courseMentors = [], 
   const [addMode, setAddMode] = useState('none');
   const [fileUploadProgress, setFileUploadProgress] = useState(null);
   const [isDragOver, setIsDragOver] = useState(false);
-
   // Link form state
   const [linkForm, setLinkForm] = useState({
     title: '',
@@ -195,8 +197,11 @@ const EditLessonModal = ({ lesson: basicLesson, courseSlug, courseMentors = [], 
           isFree: les.isFree || false,
           isPublished: les.isPublished || false,
           mentorId: les.mentorId || les.mentor?.id || null,
+          
         });
-
+if (les.mentor) {
+          setLessonMentor(les.mentor);
+        }
         await loadMaterials();
       } catch (err) {
         console.error('Error loading lesson:', err);
@@ -580,8 +585,12 @@ const EditLessonModal = ({ lesson: basicLesson, courseSlug, courseMentors = [], 
                 <AcademyMentorPicker
                   mode="single"
                   selectedMentorId={form.mentorId}
+                  selectedMentorObj={lessonMentor}
                   courseMentors={courseMentors}
-                  onChange={(id) => updateField('mentorId', id)}
+                  onChange={(id, mentor) => {
+                    updateField('mentorId', id);
+                    setLessonMentor(mentor);
+                  }}
                   placeholder={t('editLesson.mentorPlaceholder', 'Избери ментор...')}
                 />
               </div>
