@@ -203,6 +203,35 @@ export const AcademyCoursesProvider = ({ children }) => {
   }, []);
 
   // =========================================================
+  //                    COURSE MENTORS
+  // =========================================================
+
+  const searchMentors = useCallback(async (query = '', limit = 8) => {
+    try {
+      const data = await coursesService.searchMentors(query, limit);
+      return data?.mentors || [];
+    } catch (err) {
+      console.error('Error searching mentors:', err);
+      return [];
+    }
+  }, [coursesService]);
+
+  const addCourseMentor = useCallback(async (courseId, mentorData) => {
+    const data = await coursesService.addCourseMentor(courseId, mentorData);
+    return data;
+  }, [coursesService]);
+
+  const updateCourseMentor = useCallback(async (courseId, mentorCourseId, updates) => {
+    const data = await coursesService.updateCourseMentor(courseId, mentorCourseId, updates);
+    return data;
+  }, [coursesService]);
+
+  const removeCourseMentor = useCallback(async (courseId, mentorCourseId) => {
+    const data = await coursesService.removeCourseMentor(courseId, mentorCourseId);
+    return data;
+  }, [coursesService]);
+
+  // =========================================================
   //                    MODULES
   // =========================================================
 
@@ -1637,7 +1666,11 @@ const getMyMentor = useCallback(async () => {
     unpublishCourse,
     duplicateCourse,
     getCourseStatistics,
-
+  // Course Mentors
+    searchMentors,
+    addCourseMentor,
+    updateCourseMentor,
+    removeCourseMentor,
     // Modules
     getCourseModules,
     createModule,

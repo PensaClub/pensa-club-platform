@@ -41,7 +41,7 @@ const AcademyTestPlayer = () => {
   const [results, setResults] = useState(null);
   const [isSavingAnswer, setIsSavingAnswer] = useState(false);
   const [isLoadingTest, setIsLoadingTest] = useState(true);
-
+  const [nextLesson, setNextLesson] = useState(null);
   // History & Results state
   const [previousAttempts, setPreviousAttempts] = useState([]);
   const [showHistory, setShowHistory] = useState(false);
@@ -63,6 +63,11 @@ const AcademyTestPlayer = () => {
     if (!totalQuestions || totalQuestions === 0) return 0;
     return Math.round((correctAnswers / totalQuestions) * 100);
   };
+
+  //SCROLLING TO TOP
+   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   // =========================================================
   //                    DATA FETCHING
@@ -230,7 +235,20 @@ const AcademyTestPlayer = () => {
         const lessonResponse = await getLessonBySlug(courseSlug, lessonSlug);
         const lessonInfo = lessonResponse?.lesson || lessonResponse;
         setLesson(lessonInfo);
-
+try {
+          const courseData = await getCourseBySlug(courseSlug);
+          const courseInfo = courseData?.course || courseData;
+          if (courseInfo?.modules) {
+            const allLessons = courseInfo.modules.flatMap(m =>
+              (m.lessons || []).filter(l => l.isPublished || l.status === 'published')
+            );
+            const currentIdx = allLessons.findIndex(l => l.slug === lessonSlug);
+            if (currentIdx >= 0 && currentIdx < allLessons.length - 1) {
+              setNextLesson(allLessons[currentIdx + 1]);
+            }
+          }
+        } catch (e) {}
+        
         if (!lessonInfo || !lessonInfo.id) {
           throw new Error('Урокът не е намерен');
         }
@@ -558,7 +576,11 @@ const AcademyTestPlayer = () => {
   const handleContinueCourse = () => {
     navigate(`/academy/courses/${courseSlug}`);
   };
-
+const handleNextLesson = () => {
+    if (nextLesson?.slug) {
+      navigate(`/academy/courses/${courseSlug}/lessons/${nextLesson.slug}`);
+    }
+  };
   const handleRetryTest = async () => {
     if (!canStartNewAttempt || remainingAttempts <= 0) return;
 
@@ -968,9 +990,19 @@ const AcademyTestPlayer = () => {
                 </button>
               )}
               <button onClick={handleBackToLesson} className="atp-results__btn atp-results__btn--secondary">
-                {t('academyTestPlayer.results.backToLesson', 'Към урока')}
+                {isCourseTest
+                  ? t('academyTestPlayer.results.backToCourse', 'Към курса')
+                  : t('academyTestPlayer.results.backToLesson', 'Към урока')}
               </button>
-              {isPassed && (
+              {isPassed && nextLesson && !isCourseTest && (
+                <button onClick={handleNextLesson} className="atp-results__btn atp-results__btn--primary">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                  {t('academyTestPlayer.results.nextLesson', 'Следващ урок')}
+                </button>
+              )}
+              {isPassed && !nextLesson && (
                 <button onClick={handleContinueCourse} className="atp-results__btn atp-results__btn--primary">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M5 12h14M12 5l7 7-7 7" />

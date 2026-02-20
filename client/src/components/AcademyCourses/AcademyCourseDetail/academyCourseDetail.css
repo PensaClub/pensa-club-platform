@@ -9,10 +9,11 @@
   --level-color: #10b981;
   
   min-height: 100vh;
+  padding-top: 70px;
   background: #0f172a;
   color: #e2e8f0;
   position: relative;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 /* ============================================
@@ -1044,7 +1045,10 @@
   color: #f1f5f9;
   margin-bottom: 4px;
 }
-
+.academyCourseDetail-module-label {
+  color: var(--accent, var(--accent-color));
+  font-weight: 700;
+}
 .academyCourseDetail-module-meta {
   display: flex;
   align-items: center;
@@ -2505,6 +2509,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  padding-top: 1rem;
   flex-wrap: wrap;
 }
 
@@ -2580,5 +2585,734 @@
 
   .academyCourseDetail-final-test-btn {
     justify-content: center;
+  }
+}
+/* ============================================
+   STICKY TOP BAR
+   ============================================ */
+
+.academyCourseDetail-topBar {
+  position: sticky;
+  top: 70px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 24px;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.academyCourseDetail-topBar-back {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.academyCourseDetail-topBar-back:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #00d4ff;
+}
+
+.academyCourseDetail-topBar-back svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.academyCourseDetail-topBar-title {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .academyCourseDetail-topBar {
+    padding: 10px 16px;
+  }
+
+  .academyCourseDetail-topBar-title {
+    display: none;
+  }
+}
+/* ============================================
+   NEW LAYOUT (prefix: acd-)
+   ============================================ */
+
+.acd-content {
+  position: relative;
+  z-index: 1;
+  padding: 32px 32px 60px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* --- Учебна програма --- */
+.acd-curriculum {
+  margin-bottom: 40px;
+}
+
+.acd-section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.acd-section-icon {
+  font-size: 1.3rem;
+}
+
+.acd-section-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.acd-curriculum-summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.acd-curriculum-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.acd-curriculum-tag svg {
+  opacity: 0.5;
+}
+
+.acd-sub-section {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.acd-sub-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 0 14px;
+}
+
+/* --- Access Notice --- */
+.acd-access-notice {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: rgba(255, 107, 74, 0.1);
+  border: 1px solid rgba(255, 107, 74, 0.2);
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.acd-access-notice-icon {
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+.acd-access-notice-body {
+  flex: 1;
+}
+
+.acd-access-notice-body strong {
+  display: block;
+  font-size: 0.95rem;
+  color: #fff;
+  margin-bottom: 2px;
+}
+
+.acd-access-notice-body p {
+  margin: 0;
+  font-size: 0.83rem;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.acd-access-notice-btn {
+  padding: 8px 18px;
+  background: var(--accent-color, #ff6b4a);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.acd-empty-text {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.88rem;
+  margin: 0;
+}
+
+/* --- За курса (2x2 grid) --- */
+.acd-about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.acd-about-card {
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+}
+
+.acd-about-card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 0 12px;
+}
+
+.acd-about-card-text {
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  white-space: pre-line;
+}
+
+.acd-about-card-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.acd-about-card-list-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.acd-about-card-list-item svg {
+  color: #10b981;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+/* Stats mini */
+.acd-stats-mini {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.acd-stat-mini {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 10px;
+  text-align: center;
+}
+
+.acd-stat-mini-val {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.acd-stat-mini-lbl {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-top: 2px;
+}
+
+/* --- Ментори + Отзиви (side by side) --- */
+.acd-bottom-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.acd-bottom-card {
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+}
+
+.acd-bottom-card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 0 14px;
+}
+
+/* Mentor */
+.acd-mentor-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.acd-mentor-img {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.acd-mentor-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.acd-mentor-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.acd-mentor-role {
+  font-size: 0.8rem;
+  color: var(--accent-color, #ff6b4a);
+}
+
+.acd-mentor-spec {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.acd-assistants-list {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.acd-assistant-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.acd-assistant-row img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Reviews */
+.acd-review-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.acd-review-big {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #fbbf24;
+}
+
+.acd-review-stars {
+  display: flex;
+  gap: 2px;
+  color: #fbbf24;
+}
+
+.acd-review-count {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.acd-review-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.acd-review-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.acd-review-bar-label {
+  width: 28px;
+  text-align: right;
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.5);
+  flex-shrink: 0;
+}
+
+.acd-review-bar-track {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.acd-review-bar-fill {
+  height: 100%;
+  background: #fbbf24;
+  border-radius: 3px;
+}
+
+.acd-review-bar-pct {
+  width: 30px;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.4);
+  flex-shrink: 0;
+}
+/* Hero multiple instructors */
+.academyCourseDetail-hero-instructors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+/* Mentors list in bottom card */
+.acd-mentors-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.acd-mentor-row--lead {
+  padding: 10px;
+  border-radius: 10px;
+  background: rgba(0, 255, 255, 0.04);
+  border: 1px solid rgba(0, 255, 255, 0.12);
+}
+
+.acd-mentor-lead-badge {
+  margin-left: 8px;
+  font-size: 0.75rem;
+  color: rgba(0, 255, 255, 0.8);
+}
+
+@media (max-width: 480px) {
+
+}
+/* ===== RESPONSIVE ===== */
+@media (max-width: 860px) {
+  .acd-content {
+    padding: 24px 16px 40px;
+  }
+
+  .acd-about-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .acd-bottom-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .acd-content {
+    padding: 16px 12px 32px;
+  }
+
+  .acd-section-title {
+    font-size: 1.15rem;
+  }
+
+  .acd-access-notice {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .acd-stats-mini {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+/* ============================================
+   RESPONSIVE FIX: Modules & Lessons (350-480px)
+   ============================================ */
+
+@media (max-width: 480px) {
+  /* Module header */
+  .academyCourseDetail-module-header {
+    gap: 10px;
+    padding: 14px 12px;
+  }
+
+  .academyCourseDetail-module-number {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+    border-radius: 8px;
+  }
+
+  .academyCourseDetail-module-title {
+    font-size: 0.95rem;
+  }
+
+  .academyCourseDetail-module-meta {
+    flex-wrap: wrap;
+    gap: 6px 12px;
+    font-size: 0.75rem;
+  }
+
+  .academyCourseDetail-module-toggle {
+    width: 30px;
+    height: 30px;
+  }
+
+  /* Module description & content */
+  .academyCourseDetail-module-description {
+    padding: 0 12px 12px;
+    font-size: 0.82rem;
+  }
+
+  .academyCourseDetail-module-content {
+    padding: 0 8px 8px;
+  }
+
+  /* Lessons */
+  .academyCourseDetail-lesson {
+    gap: 8px;
+    padding: 12px 10px;
+  }
+
+  .academyCourseDetail-lesson-number {
+    width: 26px;
+    height: 26px;
+    font-size: 0.7rem;
+    border-radius: 6px;
+  }
+
+  .academyCourseDetail-lesson-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 7px;
+  }
+
+  .academyCourseDetail-lesson-icon svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .academyCourseDetail-lesson-title {
+    font-size: 0.82rem;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .academyCourseDetail-lesson-meta {
+    flex-wrap: wrap;
+    gap: 4px 8px;
+    font-size: 0.68rem;
+  }
+
+  .academyCourseDetail-lesson-action {
+    width: 28px;
+    height: 28px;
+    border-radius: 7px;
+  }
+
+  .academyCourseDetail-lesson-action svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .academyCourseDetail-lesson:hover {
+    transform: none;
+  }
+
+  /* Standalone lessons title */
+  .academyCourseDetail-standalone-title {
+    font-size: 0.95rem;
+  }
+}
+/* Module mentor tag */
+.academyCourseDetail-module-mentor-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.academyCourseDetail-module-mentor-avatar {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Lesson mentor tag */
+.academyCourseDetail-lesson-mentor-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.academyCourseDetail-lesson-mentor-avatar {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+@media (max-width: 480px) {
+  .academyCourseDetail-module-mentor-avatar {
+    width: 15px;
+    height: 15px;
+  }
+  .academyCourseDetail-lesson-mentor-avatar {
+    width: 13px;
+    height: 13px;
+  }
+    .academyCourseDetail-hero-instructors {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+/* Mentor cards */
+.acd-mentors-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.acd-mentor-card {
+  padding: 14px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.acd-mentor-card--lead {
+  background: rgba(0, 255, 255, 0.04);
+  border-color: rgba(0, 255, 255, 0.12);
+}
+
+.acd-mentor-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.acd-mentor-card-img {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.acd-mentor-card-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.acd-mentor-card-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.acd-mentor-lead-badge {
+  margin-left: 6px;
+  font-size: 0.8rem;
+}
+
+.acd-mentor-card-role {
+  font-size: 0.8rem;
+  color: rgba(0, 255, 255, 0.7);
+}
+
+.acd-mentor-card-spec {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.acd-mentor-card-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.acd-mentor-stat {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.acd-mentor-stat small {
+  opacity: 0.7;
+}
+
+.acd-mentor-card-bio {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.acd-mentor-card-bio-text {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.5;
+  margin: 0 0 6px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.acd-mentor-card-bio-edu {
+  color: rgba(255, 255, 255, 0.45);
+  font-style: italic;
+}
+
+@media (max-width: 480px) {
+  .acd-mentor-card-img {
+    width: 44px;
+    height: 44px;
+  }
+  .acd-mentor-card-stats {
+    gap: 8px;
   }
 }

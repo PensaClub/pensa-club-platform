@@ -35,6 +35,7 @@ const courseCreateSchema = z.object({
   thumbnailUrl: z.string().url().optional().or(z.literal('')),
   durationWeeks: z.coerce.number().int().positive().optional(),
   estimatedHours: z.coerce.number().positive().optional(),
+  mentorId: z.coerce.number().int().positive().optional().nullable(),
   startDate: z.coerce.date().optional(),
   endDate: z.coerce.date().optional(),
   maxParticipants: z.coerce.number().int().positive().nullable().optional(),
@@ -68,6 +69,7 @@ const moduleCreateSchema = z.object({
   startDate: z.coerce.date().optional().nullable(),
   endDate: z.coerce.date().optional().nullable(),
   estimatedHours: z.coerce.number().int().min(0).optional().nullable(),
+  mentorId: z.coerce.number().int().positive().optional().nullable(),
 });
 
 const moduleUpdateSchema = moduleCreateSchema.partial();

@@ -13918,6 +13918,9 @@
       "academy": "Academy",
       "courses": "Courses"
     },
+    "mentors": {
+    "students": "students"
+  },
     "levels": {
       "beginner": "Beginner",
       "intermediate": "Intermediate",
@@ -13992,6 +13995,7 @@
       "modules": "modules",
       "lessonsTotal": "lessons",
       "lessonsShort": "lessons",
+      "moduleLabel": "Module",
       "hoursTotal": "hours",
       "minutes": "min",
       "freeLesson": "Free",
@@ -14035,6 +14039,7 @@
     "courseContent": "Content",
     "fullscreen": "Fullscreen",
     "exitFullscreen": "Exit",
+    "partOfModule": "Part of module",
     "typeVideo": "Video",
     "typeLive": "Live",
     "typeText": "Text",
@@ -14500,9 +14505,12 @@
   "thumbnailPreview": "Thumbnail preview"
 },
 "courseStepSettings": {
+  "mentorsDesc": "Add mentors, lecturers and assistants. The first one added automatically becomes the lead (⭐).",
+  "mentorsPlaceholder": "Search by name...",
   "sections": {
     "typeFormat": "Type & Format",
     "durationDates": "Duration & Dates",
+    "mentors": "Course Mentors",
     "enrollment": "Enrollment",
     "credits": "Credits & Certificate",
     "tags": "Tags"
@@ -14692,6 +14700,8 @@
 },
 "contentManager": {
   "loading": "Loading content...",
+  "moduleMentor": "Mentor",
+  "moduleMentorPlaceholder": "Select...",
   "back": "Back",
   "title": "Content of",
   "subtitle": "Manage modules and lessons",
@@ -14742,6 +14752,7 @@
   "loading": "Loading...",
   "save": "Save",
   "cancel": "Cancel",
+  "mentorPlaceholder": "Select mentor...",
   "manageTest": "Manage test",
   "autosave": "Materials save automatically",
   "unsavedChanges": "● Unsaved changes",
@@ -14752,7 +14763,8 @@
     "credits": "Credits",
     "test": "Test Settings",
     "materials": "Materials",
-    "settings": "Settings"
+    "settings": "Settings",
+    "mentor": "Lesson Mentor"
   },
   "fields": {
     "title": "Title",
@@ -14976,6 +14988,18 @@
   },
   "coalitionMediaLiteracy": {
     "description": "A coalition for raising media literacy and critical thinking in society"
+  }
+},
+"academyMentorPicker": {
+  "searchPlaceholder": "Search mentor...",
+  "typeToSearch": "Type at least 1 character...",
+  "noResults": "No results",
+  "setAsLead": "Set as lead",
+  "roles": {
+    "lecturer": "Lecturer",
+    "mentor": "Mentor",
+    "assistant": "Assistant",
+    "guest": "Guest lecturer"
   }
 }
 }
