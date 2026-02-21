@@ -497,7 +497,7 @@ const ArticleView = () => {
                   return (
                     <section key={actualIndex} className="article-section">
                       <h2 className="section-title">{section.title}</h2>
-                      <div className="section-content">
+                      <div className="section-content-artview">
                         <div dangerouslySetInnerHTML={{ __html: section.content }} />
                         {renderSectionImages(section, actualIndex)}
                       </div>
