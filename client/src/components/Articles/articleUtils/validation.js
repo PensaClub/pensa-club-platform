@@ -7,7 +7,7 @@ export const validateArticleField = (name, value, t) => {
         case "title":
             error = !value.trim() ? t("articles.validation.title_required") :
                     value.length < 4 ? t("articles.validation.title_too_short") :
-                    value.length > 100 ? t("articles.validation.title_too_long") : "";
+                    value.length > 150 ? t("articles.validation.title_too_long") : "";
             break;
         case "slug":
             error = !value.trim() ? t("articles.validation.slug_required") :
