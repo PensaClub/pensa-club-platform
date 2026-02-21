@@ -220,7 +220,7 @@
   font-weight: 700;
   line-height: 1.3;
   margin: 1.5rem 2rem 1rem;
-  color: #333;
+  color: #1e293b;
 }
 
 .article-title-view.view {
@@ -277,13 +277,13 @@
   border-bottom: 2px solid #f0f0f0;
 }
 
-.section-content {
+.section-content-artview {
   font-size: 1.05rem;
   line-height: 1.8;
   color: #444;
 }
 
-.section-content p {
+.section-content-artview p {
   margin: 0.4rem;
   font-size: var(--xxs-font-size);
 }
@@ -607,9 +607,9 @@
 }
 /* === SLATE EDITOR CONTENT СТИЛОВЕ === */
 .article-summary-view[data-editor="slate"],
-.section-content[data-editor="slate"],
+.section-content-artview[data-editor="slate"],
 .article-summary-view,
-.section-content {
+.section-content-artview {
   
   /* === BLOCKQUOTE СТИЛИЗАЦИЯ === */
   blockquote, 
@@ -697,7 +697,7 @@
 
 /* === СПЕЦИФИЧНИ BLOCKQUOTE СТИЛОВЕ ЗА ВСИЧКИ МЕСТА В СТАТИЯТА === */
 .article-summary-view blockquote,
-.section-content blockquote,
+.section-content-artview blockquote,
 .article-body-view blockquote {
   display: block !important;
   border-left: 4px solid #1B8B8A !important;
@@ -713,7 +713,7 @@
 }
 
 .article-summary-view blockquote::before,
-.section-content blockquote::before,
+.section-content-artview blockquote::before,
 .article-body-view blockquote::before {
   content: '"' !important;
   font-size: 3rem !important;
@@ -727,7 +727,7 @@
 
 /* === ARTICLE CONTENT LINK STYLES === */
 .article-summary-view a,
-.section-content a,
+.section-content-artview a,
 .article-body-view a {
   color: #1B8B8A !important;
   text-decoration: underline !important;
@@ -739,7 +739,7 @@
 }
 
 .article-summary-view a:hover,
-.section-content a:hover,
+.section-content-artview a:hover,
 .article-body-view a:hover {
   color: #E26020 !important;
   text-decoration-color: #E26020 !important;
@@ -748,7 +748,7 @@
 }
 
 .article-summary-view a:focus,
-.section-content a:focus,
+.section-content-artview a:focus,
 .article-body-view a:focus {
   outline: 2px solid #1B8B8A !important;
   outline-offset: 2px !important;
@@ -757,7 +757,7 @@
 
 /* Links in blockquotes */
 .article-summary-view blockquote a,
-.section-content blockquote a,
+.section-content-artview blockquote a,
 .article-body-view blockquote a {
   color: #1B8B8A !important;
   font-style: normal !important;
@@ -765,14 +765,14 @@
 
 /* Links in lists */
 .article-summary-view li a,
-.section-content li a,
+.section-content-artview li a,
 .article-body-view li a {
   font-weight: 600 !important;
 }
 
 /* External link indicator */
 .article-summary-view a[target="_blank"]::after,
-.section-content a[target="_blank"]::after,
+.section-content-artview a[target="_blank"]::after,
 .article-body-view a[target="_blank"]::after {
   content: " ↗";
   font-size: 1em;
@@ -805,7 +805,7 @@
     margin-right: 1.5rem; */
   }
     .article-summary-view a,
-  .section-content a,
+  .section-content-artview a,
   .article-body-view a {
     word-break: break-word;
   }
@@ -813,20 +813,20 @@
     margin: 2rem 1.5rem 2rem;
   }
   .article-body-view {
-    padding: 0 1rem;
+    padding: 0 0.1rem;
   }
   .article-navigation {
     grid-template-columns: 1fr;
     gap: 1rem;
   }
   .article-content{
-    padding: 0 0.5rem;
+    padding: 0 1.6rem;
   }
   .nav-title {
     font-size: 0.9rem;
   }
    .article-summary-view blockquote,
-  .section-content blockquote,
+  .section-content-artview blockquote,
   .article-body-view blockquote {
     margin: 1rem 0 !important;
     padding: 0.8rem 1.2rem !important;
@@ -834,7 +834,7 @@
   }
 
   .article-summary-view blockquote::before,
-  .section-content blockquote::before,
+  .section-content-artview blockquote::before,
   .article-body-view blockquote::before {
     font-size: 2.5rem !important;
     top: 0.3rem !important;
@@ -851,7 +851,7 @@
   font-size: var(--xxs-font-size);
   }
   .article-content{
-    padding: 0 0.2rem;
+    padding: 0 0.9rem;
   }
   .social-text {
     display: none;
@@ -865,8 +865,8 @@
   align-items: flex-start;
   } */
   .article-title-view.view {
-    font-size: 1.8rem;
-    margin: 1.2rem 1rem 0.8rem;
+    font-size: 1.8rem!important;
+    margin: 1.2rem 0.6rem 0.8rem;
   }
 
 }
