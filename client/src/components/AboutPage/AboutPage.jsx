@@ -23,6 +23,7 @@ export const AboutPage = () => {
       <AboutHero />
       <AboutPlatform />
       <AboutFoundation />
+      <AboutTeam />
       <AboutPartners /> {/* Вариант 1 */}
       {/* <AboutPartnersTimeline /> {/* Вариант 2*/}
       {/* <AboutPartnersCards />   {/* Вариант 3*/}
