@@ -234,14 +234,14 @@ clip-path: path('M25 2 A14 14 0 0 1 39 14 C39 24 38 29 35 32 C33 34 33 38 33 42 
 /* === RESPONSIVE === */
 @media (max-width: 480px) {
     .tt-wrapper {
-        transform: scale(0.82);
+        transform: scale(0.91);
         transform-origin: bottom left;
-        bottom: 2px;
-        left: 2px;
+        bottom: 1px;
+        left: 1px;
     }
 
     .tt-wrapper:hover {
-        transform: scale(0.88);
+        transform: scale(0.91);
     }
 }
 
