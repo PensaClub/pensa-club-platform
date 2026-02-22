@@ -1,0 +1,126 @@
+/* src/components/SiteSettingsAdmin/SettingsAdminTextInput/settingsAdminTextInput.css */
+/* Prefix: sati- */
+
+.sati-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 0;
+}
+
+.sati-label-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    min-width: 160px;
+}
+
+.sati-flag {
+    font-size: 1.2rem;
+    line-height: 1;
+}
+
+.sati-label {
+    font-size: 0.88rem;
+    color: #94a3b8;
+    font-weight: 500;
+}
+
+/* =========================================================
+                    INPUT
+   ========================================================= */
+
+.sati-input {
+    flex: 1;
+    padding: 10px 14px;
+    font-size: 0.88rem;
+    color: #f1f5f9;
+    background: rgba(15, 23, 42, 0.5);
+    border: 1px solid rgba(100, 116, 139, 0.2);
+    border-radius: 10px;
+    outline: none;
+    transition: all 0.25s ease;
+    font-family: inherit;
+}
+
+.sati-input::placeholder {
+    color: rgba(100, 116, 139, 0.5);
+    font-style: italic;
+}
+
+.sati-input:focus {
+    border-color: rgba(245, 158, 11, 0.5);
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+    background: rgba(15, 23, 42, 0.7);
+}
+
+/* =========================================================
+                    RESPONSIVE - Tablet (<=1023px)
+   ========================================================= */
+
+@media (max-width: 1023px) {
+    .sati-label-wrap {
+        min-width: 150px;
+    }
+}
+
+/* =========================================================
+                    RESPONSIVE - Mobile (<=767px)
+   ========================================================= */
+
+@media (max-width: 767px) {
+    .sati-label-wrap {
+        min-width: 130px;
+    }
+
+    .sati-label {
+        font-size: 0.84rem;
+    }
+
+    .sati-input {
+        font-size: 0.84rem;
+        padding: 9px 12px;
+    }
+}
+
+/* =========================================================
+                    RESPONSIVE - Small Mobile (<=480px)
+   ========================================================= */
+
+@media (max-width: 480px) {
+    .sati-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    .sati-label-wrap {
+        min-width: auto;
+    }
+}
+
+/* =========================================================
+                    LIGHT THEME
+   ========================================================= */
+
+[data-theme="light"] .sati-label {
+    color: #334155;
+}
+
+[data-theme="light"] .sati-input {
+    background: #ffffff;
+    color: #0f172a;
+    border: 2px solid #d1d5db;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(99, 102, 241, 0.04);
+}
+
+[data-theme="light"] .sati-input::placeholder {
+    color: rgba(100, 116, 139, 0.6);
+}
+
+[data-theme="light"] .sati-input:focus {
+    border-color: #0ea5e9;
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2), 0 2px 8px rgba(99, 102, 241, 0.08);
+    background: #ffffff;
+}

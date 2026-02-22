@@ -14312,6 +14312,42 @@
     "saveError": "Fehler beim Speichern der Einstellung",
     "loadError": "Fehler beim Laden der Einstellungen",
     "loading": "Einstellungen werden geladen...",
-    "backToProfile": "Zurück zum Profil"
+    "backToProfile": "Zurück zum Profil",
+    "snowfallConfig": {
+      "title": "Schneefall-Einstellungen",
+      "count": "Anzahl der Schneeflocken",
+      "minSize": "Min. Größe",
+      "maxSize": "Max. Größe",
+      "minDuration": "Min. Dauer",
+      "maxDuration": "Max. Dauer",
+      "opacity": "Deckkraft",
+      "color": "Schneeflockenfarbe",
+      "save": "Änderungen speichern",
+      "reset": "Auf Standard zurücksetzen",
+      "saved": "Schneefall-Einstellungen gespeichert!",
+      "error": "Fehler beim Speichern"
+    },
+    "greetingConfig": {
+      "title": "Grußmodal-Einstellungen",
+      "texts": "Texte",
+      "colors": "Farben",
+      "preview": "Vorschau",
+      "titleLabel": "Titel",
+      "subtitleLabel": "Untertitel",
+      "primaryColor": "Primärfarbe (Gold)",
+      "bgColor": "Hintergrundfarbe",
+      "textColor": "Textfarbe",
+      "accentColor": "Akzentfarbe",
+      "titlePlaceholder": "Standardübersetzung wird verwendet",
+      "subtitlePlaceholder": "Standardübersetzung wird verwendet",
+      "save": "Änderungen speichern",
+      "reset": "Auf Standard zurücksetzen",
+      "saved": "Grußeinstellungen gespeichert!",
+      "error": "Fehler beim Speichern",
+      "videoPlaceholder": "Video",
+      "videoLabel": "Video",
+      "videoUrlPlaceholder": "/videos/christmas.mp4",
+      "continueButton": "Weiter zur Website"
+    }
   }
 }

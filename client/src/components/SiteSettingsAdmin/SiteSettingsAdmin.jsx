@@ -5,6 +5,8 @@ import { toast } from 'react-toastify';
 import { useSiteSettingsAdminContext } from '../contexts/SiteSettingsAdminContext';
 import SettingsAdminSection from './SettingsAdminSection/SettingsAdminSection';
 import SettingsAdminToggle from './SettingsAdminToggle/SettingsAdminToggle';
+import SnowfallConfig from './SnowfallConfig/SnowfallConfig';
+import GreetingConfig from './GreetingConfig/GreetingConfig';
 import ScrollToTop from '../ScrollToTop/ScrollToTop';
 import './siteSettingsAdmin.css';
 
@@ -61,10 +63,11 @@ const SiteSettingsAdmin = () => {
 
                 {/* Settings sections */}
                 <div className="ssa-sections">
+                    {/* Snowfall Section */}
                     <SettingsAdminSection
-                        title={t('siteSettingsAdmin.seasonal')}
-                        icon="🎄"
-                        description={t('siteSettingsAdmin.seasonalDesc')}
+                        title={t('siteSettingsAdmin.snowfall')}
+                        icon="❄️"
+                        description={t('siteSettingsAdmin.snowfallDesc')}
                     >
                         <SettingsAdminToggle
                             settingKey="snowfall_enabled"
@@ -75,6 +78,15 @@ const SiteSettingsAdmin = () => {
                             onChange={handleToggle}
                             isLoading={loadingKeys.snowfall_enabled || false}
                         />
+                        {settings.snowfall_enabled && <SnowfallConfig />}
+                    </SettingsAdminSection>
+
+                    {/* Christmas Greeting Section */}
+                    <SettingsAdminSection
+                        title={t('siteSettingsAdmin.christmasGreeting')}
+                        icon="🎅"
+                        description={t('siteSettingsAdmin.christmasGreetingDesc')}
+                    >
                         <SettingsAdminToggle
                             settingKey="christmas_greeting_enabled"
                             title={t('siteSettingsAdmin.christmasGreeting')}
@@ -84,6 +96,7 @@ const SiteSettingsAdmin = () => {
                             onChange={handleToggle}
                             isLoading={loadingKeys.christmas_greeting_enabled || false}
                         />
+                        {settings.christmas_greeting_enabled && <GreetingConfig />}
                     </SettingsAdminSection>
                 </div>
             </div>

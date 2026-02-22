@@ -15022,6 +15022,42 @@
   "saveError": "Error saving setting",
   "loadError": "Error loading settings",
   "loading": "Loading settings...",
-  "backToProfile": "Back to profile"
+  "backToProfile": "Back to profile",
+  "snowfallConfig": {
+    "title": "Snowfall Settings",
+    "count": "Snowflake Count",
+    "minSize": "Min Size",
+    "maxSize": "Max Size",
+    "minDuration": "Min Duration",
+    "maxDuration": "Max Duration",
+    "opacity": "Opacity",
+    "color": "Snowflake Color",
+    "save": "Save Changes",
+    "reset": "Reset to Defaults",
+    "saved": "Snowfall settings saved!",
+    "error": "Error saving settings"
+  },
+  "greetingConfig": {
+    "title": "Greeting Modal Settings",
+    "texts": "Texts",
+    "colors": "Colors",
+    "preview": "Preview",
+    "titleLabel": "Title",
+    "subtitleLabel": "Subtitle",
+    "primaryColor": "Primary Color (Gold)",
+    "bgColor": "Background Color",
+    "textColor": "Text Color",
+    "accentColor": "Accent Color",
+    "titlePlaceholder": "Default translation will be used",
+    "subtitlePlaceholder": "Default translation will be used",
+    "save": "Save Changes",
+    "reset": "Reset to Defaults",
+    "saved": "Greeting settings saved!",
+    "error": "Error saving settings",
+    "videoPlaceholder": "Video",
+      "videoLabel": "Video",
+      "videoUrlPlaceholder": "/videos/christmas.mp4",
+    "continueButton": "Continue to site"
+  }
 }
 }

@@ -1,0 +1,153 @@
+/* src/components/SiteSettingsAdmin/SettingsAdminColorPicker/settingsAdminColorPicker.css */
+/* Prefix: sacp- */
+
+.sacp-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 10px 0;
+}
+
+.sacp-label {
+    font-size: 0.88rem;
+    color: #94a3b8;
+    font-weight: 500;
+    flex-shrink: 0;
+    min-width: 160px;
+}
+
+.sacp-control {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    padding: 6px 14px;
+    border-radius: 12px;
+    background: rgba(100, 116, 139, 0.08);
+    border: 1px solid rgba(100, 116, 139, 0.15);
+    transition: all 0.25s ease;
+}
+
+.sacp-control:hover {
+    border-color: rgba(245, 158, 11, 0.3);
+    background: rgba(100, 116, 139, 0.12);
+}
+
+/* =========================================================
+                    SWATCH
+   ========================================================= */
+
+.sacp-swatch {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+
+.sacp-control:hover .sacp-swatch {
+    transform: scale(1.08);
+}
+
+/* =========================================================
+                    HEX VALUE
+   ========================================================= */
+
+.sacp-hex {
+    font-size: 0.84rem;
+    color: #e2e8f0;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+/* =========================================================
+                    HIDDEN INPUT
+   ========================================================= */
+
+.sacp-input {
+    position: absolute;
+    width: 0;
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* =========================================================
+                    RESPONSIVE - Tablet (<=1023px)
+   ========================================================= */
+
+@media (max-width: 1023px) {
+    .sacp-label {
+        min-width: 150px;
+    }
+}
+
+/* =========================================================
+                    RESPONSIVE - Mobile (<=767px)
+   ========================================================= */
+
+@media (max-width: 767px) {
+    .sacp-label {
+        min-width: 130px;
+        font-size: 0.84rem;
+    }
+
+    .sacp-swatch {
+        width: 24px;
+        height: 24px;
+    }
+
+    .sacp-hex {
+        font-size: 0.8rem;
+    }
+}
+
+/* =========================================================
+                    RESPONSIVE - Small Mobile (<=480px)
+   ========================================================= */
+
+@media (max-width: 480px) {
+    .sacp-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    .sacp-label {
+        min-width: auto;
+    }
+}
+
+/* =========================================================
+                    LIGHT THEME
+   ========================================================= */
+
+[data-theme="light"] .sacp-label {
+    color: #334155;
+}
+
+[data-theme="light"] .sacp-control {
+    background: #f8fafc;
+    border: 2px solid #d1d5db;
+    box-shadow: 0 1px 4px rgba(99, 102, 241, 0.06), 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .sacp-control:hover {
+    border-color: #ea580c;
+    background: #fff7ed;
+    box-shadow: 0 3px 10px rgba(234, 88, 12, 0.12), 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .sacp-swatch {
+    border: 2px solid rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18), 0 0 0 2px rgba(99, 102, 241, 0.06);
+}
+
+[data-theme="light"] .sacp-hex {
+    color: #1e293b;
+}

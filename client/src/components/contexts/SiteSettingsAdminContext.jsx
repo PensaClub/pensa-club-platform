@@ -36,6 +36,29 @@ export const SiteSettingsAdminProvider = ({ children }) => {
         }
     }, []);
 
+    const updateSettings = useCallback(async (settingsObj) => {
+        const keys = Object.keys(settingsObj);
+        setLoadingKeys((prev) => {
+            const next = { ...prev };
+            keys.forEach((k) => (next[k] = true));
+            return next;
+        });
+        try {
+            const result = await siteSettingsService.update(settingsObj);
+            setSettings(result.settings || {});
+            return { success: true };
+        } catch (err) {
+            console.error('Failed to update settings:', err);
+            return { success: false, error: err.message };
+        } finally {
+            setLoadingKeys((prev) => {
+                const next = { ...prev };
+                keys.forEach((k) => (next[k] = false));
+                return next;
+            });
+        }
+    }, []);
+
     useEffect(() => {
         fetchSettings();
     }, [fetchSettings]);
@@ -45,6 +68,7 @@ export const SiteSettingsAdminProvider = ({ children }) => {
         isLoading,
         loadingKeys,
         updateSetting,
+        updateSettings,
         fetchSettings,
     };
 
