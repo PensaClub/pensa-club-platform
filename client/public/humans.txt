@@ -7,7 +7,7 @@ Organization: Pensa Foundation Bulgaria
 Description: Full-stack developer and team lead at Pensa Foundation Bulgaria. Creator of pensa.club — a digital literacy platform serving 150+ retirement clubs across the country. Lead developer of DigiBridge Academy under the European BRIDGE project for digital transformation and civic participation.Site: https://pensa.club/
 GitHub: https://github.com/bebo13133
 LinkedIn: https://www.linkedin.com/in/borislav-iliev-744779194/
-Contact: borrislaviliev47@gmail.com
+Contact: borislaviliev47@gmail.com
 Location: Sofia, Bulgaria
 
 /* TECHNOLOGY */
