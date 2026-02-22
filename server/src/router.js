@@ -27,6 +27,7 @@ const academyTestsController = require('./controllers/academyTestsController');
 const certificatesController = require('./controllers/certificatesController');
 const academyMaterialsController = require('./controllers/academyMaterialsController');
 const academyMyController = require('./controllers/academyMyController');
+const siteSettingsController = require('./controllers/siteSettingsController');
 
 router.use('/auth', authController);
 router.use('/user', userController);
@@ -56,6 +57,7 @@ router.use('/academy/tests', academyTestsController);
 router.use('/academy/certificates', certificatesController);
 router.use('/academy/materials', academyMaterialsController);
 router.use('/academy/my', academyMyController);
+router.use('/admin/site-settings', siteSettingsController);
 
 router.use((err, req, res, next) => {
     errorHandler(err, req, res, err.statusCode || 500);

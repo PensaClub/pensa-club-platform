@@ -1,0 +1,341 @@
+/* src/components/SiteSettingsAdmin/siteSettingsAdmin.css */
+/* Prefix: ssa- */
+
+.ssa-page {
+    position: relative;
+    min-height: 100vh;
+    background: #0c1222;
+    padding: 110px 40px 100px;
+    overflow: hidden;
+    transition: background-color 0.3s ease, color 0.2s ease;
+}
+
+/* =========================================================
+                    BACKGROUND — subtle dot grid
+   ========================================================= */
+
+.ssa-bg-pattern {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.35;
+    background-image:
+        radial-gradient(circle, rgba(139, 92, 246, 0.15) 1px, transparent 1px);
+    background-size: 28px 28px;
+}
+
+/* Diagonal gradient corners — warm purple-to-amber */
+.ssa-bg-corner {
+    position: absolute;
+    width: 420px;
+    height: 420px;
+    border-radius: 50%;
+    filter: blur(100px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.ssa-bg-corner--tl {
+    top: -120px;
+    left: -80px;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.14) 0%, transparent 70%);
+}
+
+.ssa-bg-corner--br {
+    bottom: -120px;
+    right: -80px;
+    background: radial-gradient(circle, rgba(245, 158, 11, 0.08) 0%, transparent 70%);
+}
+
+/* =========================================================
+                    CONTAINER
+   ========================================================= */
+
+.ssa-container {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+/* =========================================================
+                    BACK LINK
+   ========================================================= */
+
+.ssa-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: #64748b;
+    text-decoration: none;
+    transition: color 0.2s ease, transform 0.2s ease;
+    width: fit-content;
+}
+
+.ssa-back-link:hover {
+    color: #a78bfa;
+    transform: translateX(-3px);
+}
+
+/* =========================================================
+                    HEADER
+   ========================================================= */
+
+.ssa-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid rgba(139, 92, 246, 0.1);
+}
+
+.ssa-header-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 18px;
+    background: linear-gradient(145deg, rgba(245, 158, 11, 0.12), rgba(139, 92, 246, 0.12));
+    color: #f59e0b;
+    flex-shrink: 0;
+    border: 1px solid rgba(245, 158, 11, 0.15);
+    box-shadow: 0 4px 20px rgba(245, 158, 11, 0.12), 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.ssa-header-text {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.ssa-title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #f1f5f9;
+    margin: 0;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+}
+
+.ssa-subtitle {
+    font-size: 0.92rem;
+    color: #64748b;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* =========================================================
+                    SECTIONS
+   ========================================================= */
+
+.ssa-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+/* =========================================================
+                    LOADING
+   ========================================================= */
+
+.ssa-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    min-height: 400px;
+}
+
+.ssa-loading-spinner {
+    width: 44px;
+    height: 44px;
+    border: 3px solid rgba(245, 158, 11, 0.12);
+    border-top-color: #f59e0b;
+    border-radius: 50%;
+    animation: ssa-spin 0.8s linear infinite;
+}
+
+@keyframes ssa-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.ssa-loading-text {
+    font-size: 0.92rem;
+    color: #64748b;
+    margin: 0;
+}
+
+/* =========================================================
+                    RESPONSIVE - Tablet (<=1023px)
+   ========================================================= */
+
+@media (max-width: 1023px) {
+    .ssa-page {
+        padding: 100px 24px 80px;
+    }
+
+    .ssa-container {
+        gap: 28px;
+    }
+
+    .ssa-bg-corner {
+        width: 300px;
+        height: 300px;
+    }
+}
+
+/* =========================================================
+                    RESPONSIVE - Mobile (<=767px)
+   ========================================================= */
+
+@media (max-width: 767px) {
+    .ssa-page {
+        padding: 90px 16px 60px;
+    }
+
+    .ssa-container {
+        gap: 22px;
+    }
+
+    .ssa-header {
+        gap: 14px;
+        padding-bottom: 22px;
+    }
+
+    .ssa-header-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 14px;
+    }
+
+    .ssa-header-icon svg {
+        width: 22px;
+        height: 22px;
+    }
+
+    .ssa-title {
+        font-size: 1.35rem;
+    }
+
+    .ssa-subtitle {
+        font-size: 0.84rem;
+    }
+
+    .ssa-bg-corner {
+        width: 220px;
+        height: 220px;
+    }
+
+    .ssa-bg-pattern {
+        background-size: 22px 22px;
+    }
+}
+
+/* =========================================================
+                    RESPONSIVE - Small Mobile (<=480px)
+   ========================================================= */
+
+@media (max-width: 480px) {
+    .ssa-page {
+        padding: 85px 12px 50px;
+    }
+
+    .ssa-header {
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .ssa-header-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+    }
+
+    .ssa-title {
+        font-size: 1.15rem;
+        word-break: break-word;
+    }
+
+    .ssa-subtitle {
+        font-size: 0.8rem;
+    }
+
+    .ssa-back-link {
+        font-size: 0.8rem;
+    }
+
+    .ssa-bg-corner {
+        width: 160px;
+        height: 160px;
+    }
+}
+
+/* =========================================================
+                    LIGHT THEME
+   ========================================================= */
+
+[data-theme="light"] .ssa-page {
+    background: #f8fafc;
+}
+
+[data-theme="light"] .ssa-bg-pattern {
+    opacity: 0.6;
+    background-image:
+        radial-gradient(circle, rgba(30, 41, 59, 0.18) 1px, transparent 1px);
+}
+
+[data-theme="light"] .ssa-bg-corner--tl {
+    background: radial-gradient(circle, rgba(14, 165, 233, 0.08) 0%, transparent 70%);
+}
+
+[data-theme="light"] .ssa-bg-corner--br {
+    background: radial-gradient(circle, rgba(234, 88, 12, 0.06) 0%, transparent 70%);
+}
+
+[data-theme="light"] .ssa-back-link {
+    color: #475569;
+}
+
+[data-theme="light"] .ssa-back-link:hover {
+    color: #0ea5e9;
+}
+
+[data-theme="light"] .ssa-header {
+    border-bottom: 2px solid #cbd5e1;
+    box-shadow: 0 2px 8px rgba(100, 116, 139, 0.08);
+}
+
+[data-theme="light"] .ssa-header-icon {
+    background: linear-gradient(145deg, rgba(14, 165, 233, 0.12), rgba(59, 130, 246, 0.15));
+    color: #0284c7;
+    border: 2px solid rgba(14, 165, 233, 0.25);
+    box-shadow: 0 4px 16px rgba(99, 102, 241, 0.1), 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .ssa-title {
+    color: #0f172a;
+}
+
+[data-theme="light"] .ssa-subtitle {
+    color: #475569;
+}
+
+[data-theme="light"] .ssa-loading-spinner {
+    border-color: rgba(14, 165, 233, 0.15);
+    border-top-color: #0ea5e9;
+}
+
+[data-theme="light"] .ssa-loading-text {
+    color: #475569;
+}

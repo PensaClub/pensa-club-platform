@@ -1,0 +1,196 @@
+/* src/components/SiteSettingsAdmin/SettingsAdminSlider/settingsAdminSlider.css */
+/* Prefix: sasl- */
+
+.sasl-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 10px 0;
+}
+
+.sasl-label {
+    font-size: 0.88rem;
+    color: #94a3b8;
+    font-weight: 500;
+    flex-shrink: 0;
+    min-width: 160px;
+}
+
+.sasl-control {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex: 1;
+}
+
+/* =========================================================
+                    RANGE INPUT
+   ========================================================= */
+
+.sasl-range {
+    flex: 1;
+    height: 6px;
+    -webkit-appearance: none;
+    appearance: none;
+    border-radius: 3px;
+    background: rgba(100, 116, 139, 0.25);
+    outline: none;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.sasl-range:hover {
+    background: rgba(100, 116, 139, 0.35);
+}
+
+.sasl-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    margin-top: -7px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.35), 0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sasl-range::-webkit-slider-thumb:hover {
+    transform: scale(1.15);
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.5), 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.sasl-range::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.35), 0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.sasl-range::-moz-range-thumb:hover {
+    transform: scale(1.15);
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.5), 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.sasl-range::-webkit-slider-runnable-track {
+    height: 6px;
+    border-radius: 3px;
+}
+
+.sasl-range::-moz-range-track {
+    height: 6px;
+    border-radius: 3px;
+    background: rgba(100, 116, 139, 0.25);
+}
+
+/* =========================================================
+                    VALUE DISPLAY
+   ========================================================= */
+
+.sasl-value {
+    font-size: 0.85rem;
+    color: #f59e0b;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    min-width: 55px;
+    text-align: right;
+    white-space: nowrap;
+}
+
+/* =========================================================
+                    RESPONSIVE - Tablet (<=1023px)
+   ========================================================= */
+
+@media (max-width: 1023px) {
+    .sasl-label {
+        min-width: 150px;
+    }
+}
+
+/* =========================================================
+                    RESPONSIVE - Mobile (<=767px)
+   ========================================================= */
+
+@media (max-width: 767px) {
+    .sasl-label {
+        min-width: 130px;
+        font-size: 0.84rem;
+    }
+
+    .sasl-range::-webkit-slider-thumb {
+        width: 18px;
+        height: 18px;
+        margin-top: -6px;
+    }
+
+    .sasl-range::-moz-range-thumb {
+        width: 18px;
+        height: 18px;
+    }
+}
+
+/* =========================================================
+                    RESPONSIVE - Small Mobile (<=480px)
+   ========================================================= */
+
+@media (max-width: 480px) {
+    .sasl-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+
+    .sasl-label {
+        min-width: auto;
+    }
+
+    .sasl-value {
+        min-width: 45px;
+        font-size: 0.82rem;
+    }
+}
+
+/* =========================================================
+                    LIGHT THEME
+   ========================================================= */
+
+[data-theme="light"] .sasl-label {
+    color: #334155;
+}
+
+[data-theme="light"] .sasl-range {
+    background: #cbd5e1;
+}
+
+[data-theme="light"] .sasl-range:hover {
+    background: #94a3b8;
+}
+
+[data-theme="light"] .sasl-range::-webkit-slider-thumb {
+    background: linear-gradient(135deg, #0ea5e9, #2563eb);
+    box-shadow: 0 2px 8px rgba(14, 165, 233, 0.35), 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .sasl-range::-webkit-slider-thumb:hover {
+    box-shadow: 0 4px 14px rgba(14, 165, 233, 0.45), 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+[data-theme="light"] .sasl-range::-moz-range-thumb {
+    background: linear-gradient(135deg, #0ea5e9, #2563eb);
+    box-shadow: 0 2px 8px rgba(14, 165, 233, 0.35), 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .sasl-range::-moz-range-thumb:hover {
+    box-shadow: 0 4px 14px rgba(14, 165, 233, 0.45), 0 2px 6px rgba(0, 0, 0, 0.12);
+}
+
+[data-theme="light"] .sasl-value {
+    color: #0284c7;
+}
