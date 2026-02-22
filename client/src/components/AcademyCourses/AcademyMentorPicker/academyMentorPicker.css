@@ -284,3 +284,82 @@
     flex-grow: 1;
   }
 }
+
+/* ========================================
+   LIGHT THEME OVERRIDES — Academy Mentor Picker
+   ======================================== */
+[data-theme="light"] .amp-label {
+    color: #475569;
+}
+[data-theme="light"] .amp-search {
+    background: #f1f5f9;
+    border: 1px solid #d1d5db;
+    color: #1e293b;
+}
+[data-theme="light"] .amp-search:focus {
+    border-color: #E26020;
+    box-shadow: 0 0 0 3px rgba(226, 96, 32, 0.12);
+}
+[data-theme="light"] .amp-search::placeholder {
+    color: #94a3b8;
+}
+[data-theme="light"] .amp-spinner {
+    border-color: rgba(0, 0, 0, 0.1);
+    border-top-color: #E26020;
+}
+[data-theme="light"] .amp-dropdown {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+[data-theme="light"] .amp-dropdown::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.15);
+}
+[data-theme="light"] .amp-dropdown-item:hover {
+    background: rgba(226, 96, 32, 0.06);
+}
+[data-theme="light"] .amp-dropdown-name {
+    color: #1e293b;
+}
+[data-theme="light"] .amp-dropdown-spec {
+    color: #64748b;
+}
+[data-theme="light"] .amp-dropdown-empty {
+    color: #94a3b8;
+}
+[data-theme="light"] .amp-selected-single {
+    background: #f1f5f9;
+    border: 1px solid #d1d5db;
+}
+[data-theme="light"] .amp-selected-single .amp-selected-name {
+    color: #1e293b;
+}
+[data-theme="light"] .amp-clear-btn {
+    color: #94a3b8;
+}
+[data-theme="light"] .amp-selected-item {
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+}
+[data-theme="light"] .amp-selected-item--lead {
+    border-color: rgba(251, 191, 36, 0.4);
+    background: rgba(251, 191, 36, 0.08);
+}
+[data-theme="light"] .amp-selected-name {
+    color: #1e293b;
+}
+[data-theme="light"] .amp-selected-spec {
+    color: #64748b;
+}
+[data-theme="light"] .amp-role-select {
+    background: #f1f5f9;
+    border: 1px solid #d1d5db;
+    color: #1e293b;
+}
+[data-theme="light"] .amp-role-select option {
+    background: #ffffff;
+    color: #1e293b;
+}
+[data-theme="light"] .amp-remove-btn {
+    color: #94a3b8;
+}

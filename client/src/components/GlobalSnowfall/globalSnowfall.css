@@ -28,7 +28,7 @@
 @keyframes global-snow-fall {
     0% {
         transform: translateY(0) rotate(0deg) translateX(0);
-        opacity: 1;
+        opacity: var(--flake-opacity, 0.8);
     }
     25% {
         transform: translateY(25vh) rotate(90deg) translateX(10px);
@@ -41,7 +41,7 @@
     }
     100% {
         transform: translateY(100vh) rotate(360deg) translateX(0);
-        opacity: 0.3;
+        opacity: calc(var(--flake-opacity, 0.8) * 0.375);
     }
 }
 

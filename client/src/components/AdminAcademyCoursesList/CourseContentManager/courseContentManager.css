@@ -8,6 +8,7 @@
 .ccm-wrapper {
   position: relative;
   min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.2s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .ccm-page-bg {
@@ -1179,4 +1180,419 @@
     margin-top: 4px;
     flex-wrap: wrap;
   }
+}
+
+/* ===== LIGHT THEME ===== */
+
+/* --- Page Background --- */
+[data-theme="light"] .ccm-page-bg {
+  background: #f1f5f9;
+}
+
+[data-theme="light"] .ccm-page-bg::before {
+  background-image:
+    linear-gradient(rgba(226, 96, 32, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(226, 96, 32, 0.07) 1px, transparent 1px);
+}
+
+[data-theme="light"] .ccm-page-bg::after {
+  background: radial-gradient(circle, rgba(226, 96, 32, 0.08) 0%, transparent 65%);
+}
+
+[data-theme="light"] .ccm-glow-orb {
+  background: radial-gradient(circle, rgba(251, 146, 60, 0.07) 0%, transparent 65%);
+}
+
+/* --- Loading --- */
+[data-theme="light"] .ccm-loading {
+  color: #64748b;
+}
+
+[data-theme="light"] .ccm-spinner {
+  border: 3px solid rgba(226, 96, 32, 0.15);
+  border-top-color: #E26020;
+}
+
+/* --- Header --- */
+[data-theme="light"] .ccm-back-btn {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+}
+
+[data-theme="light"] .ccm-back-btn:hover {
+  background: rgba(226, 96, 32, 0.06);
+  border-color: rgba(226, 96, 32, 0.15);
+  color: #E26020;
+}
+
+[data-theme="light"] .ccm-title {
+  color: #1e293b;
+}
+
+[data-theme="light"] .ccm-title-accent {
+  background: linear-gradient(135deg, #E26020, #d97706);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+[data-theme="light"] .ccm-subtitle {
+  color: #64748b;
+}
+
+[data-theme="light"] .ccm-mini-stat {
+  color: #64748b;
+}
+
+[data-theme="light"] .ccm-mini-stat svg {
+  color: #E26020;
+}
+
+/* --- Add Module --- */
+[data-theme="light"] .ccm-add-module-btn {
+  background: rgba(226, 96, 32, 0.08);
+  border: 1px dashed rgba(226, 96, 32, 0.2);
+  color: #E26020;
+}
+
+[data-theme="light"] .ccm-add-module-btn:hover {
+  background: rgba(226, 96, 32, 0.12);
+  border-color: rgba(226, 96, 32, 0.35);
+}
+
+/* --- Inline Forms --- */
+[data-theme="light"] .ccm-inline-input {
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  color: #1e293b;
+}
+
+[data-theme="light"] .ccm-inline-input:focus {
+  border-color: #E26020;
+  box-shadow: 0 0 0 3px rgba(226,96,32,0.12);
+}
+
+[data-theme="light"] .ccm-inline-select {
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  color: #1e293b;
+}
+
+[data-theme="light"] .ccm-inline-confirm {
+  background: rgba(5, 150, 105, 0.12);
+  color: #059669;
+}
+
+[data-theme="light"] .ccm-inline-confirm:hover:not(:disabled) {
+  background: rgba(5, 150, 105, 0.2);
+}
+
+[data-theme="light"] .ccm-inline-cancel {
+  background: rgba(220, 38, 38, 0.08);
+  color: #dc2626;
+}
+
+[data-theme="light"] .ccm-inline-cancel:hover {
+  background: rgba(220, 38, 38, 0.15);
+}
+
+/* --- Empty --- */
+[data-theme="light"] .ccm-empty {
+  color: #94a3b8;
+}
+
+[data-theme="light"] .ccm-empty p {
+  color: #64748b;
+}
+
+/* --- Module --- */
+[data-theme="light"] .ccm-module {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+[data-theme="light"] .ccm-module-header:hover {
+  background: rgba(226, 96, 32, 0.03);
+}
+
+[data-theme="light"] .ccm-module-left {
+  color: #475569;
+}
+
+[data-theme="light"] .ccm-module-left svg:first-child {
+  color: #64748b;
+}
+
+[data-theme="light"] .ccm-module-order {
+  background: rgba(226, 96, 32, 0.08);
+  color: #E26020;
+}
+
+[data-theme="light"] .ccm-module-title {
+  color: #1e293b;
+}
+
+[data-theme="light"] .ccm-module-count {
+  color: #64748b;
+}
+
+/* --- Icon Buttons --- */
+[data-theme="light"] .ccm-icon-btn {
+  color: #64748b;
+}
+
+[data-theme="light"] .ccm-icon-btn:hover:not(:disabled) {
+  background: rgba(226, 96, 32, 0.08);
+  color: #E26020;
+}
+
+[data-theme="light"] .ccm-icon-btn-danger:hover:not(:disabled) {
+  background: rgba(220, 38, 38, 0.08);
+  color: #dc2626;
+}
+
+[data-theme="light"] .ccm-icon-btn-active {
+  color: #059669;
+}
+
+[data-theme="light"] .ccm-icon-btn-active:hover:not(:disabled) {
+  background: rgba(217, 119, 6, 0.08);
+  color: #d97706;
+}
+
+/* --- Module Body --- */
+[data-theme="light"] .ccm-module-body {
+  border-top: 1px solid #e2e8f0;
+}
+
+[data-theme="light"] .ccm-no-lessons {
+  color: #94a3b8;
+}
+
+/* --- Lessons --- */
+[data-theme="light"] .ccm-lesson:hover {
+  background: rgba(226, 96, 32, 0.04);
+}
+
+[data-theme="light"] .ccm-grip {
+  color: #94a3b8;
+}
+
+[data-theme="light"] .ccm-lesson-type-icon {
+  background: rgba(226, 96, 32, 0.08);
+  color: #E26020;
+}
+
+[data-theme="light"] .ccm-lesson-title {
+  color: #1e293b;
+}
+
+[data-theme="light"] .ccm-lesson-title:hover {
+  color: #E26020;
+}
+
+[data-theme="light"] .ccm-free-badge {
+  color: #059669;
+  background: rgba(5, 150, 105, 0.1);
+}
+
+[data-theme="light"] .ccm-test-badge {
+  color: #d97706;
+}
+
+[data-theme="light"] .ccm-lesson-duration {
+  color: #64748b;
+}
+
+/* --- Add Lesson --- */
+[data-theme="light"] .ccm-add-lesson-btn {
+  border: 1px dashed rgba(226, 96, 32, 0.15);
+  color: #64748b;
+}
+
+[data-theme="light"] .ccm-add-lesson-btn:hover {
+  border-color: rgba(226, 96, 32, 0.25);
+  color: #E26020;
+  background: rgba(226, 96, 32, 0.04);
+}
+
+/* --- Delete Modal --- */
+[data-theme="light"] .ccm-modal-overlay {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="light"] .ccm-modal {
+  background: #ffffff;
+  border: 1px solid rgba(220, 38, 38, 0.15);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .ccm-modal-icon {
+  background: rgba(220, 38, 38, 0.1);
+  color: #dc2626;
+}
+
+[data-theme="light"] .ccm-modal-title {
+  color: #1e293b;
+}
+
+[data-theme="light"] .ccm-modal-text {
+  color: #64748b;
+}
+
+[data-theme="light"] .ccm-modal-text strong {
+  color: #1e293b;
+}
+
+[data-theme="light"] .ccm-btn-cancel {
+  background: #f1f5f9;
+  border-color: rgba(0, 0, 0, 0.08);
+  color: #475569;
+}
+
+[data-theme="light"] .ccm-btn-cancel:hover {
+  background: #e2e8f0;
+  color: #1e293b;
+}
+
+[data-theme="light"] .ccm-btn-delete {
+  background: rgba(220, 38, 38, 0.1);
+  border-color: rgba(220, 38, 38, 0.3);
+  color: #dc2626;
+}
+
+[data-theme="light"] .ccm-btn-delete:hover:not(:disabled) {
+  background: rgba(220, 38, 38, 0.18);
+  border-color: rgba(220, 38, 38, 0.5);
+  box-shadow: 0 0 20px rgba(220, 38, 38, 0.12);
+}
+
+/* --- Standalone Lessons Section --- */
+[data-theme="light"] .ccm-standalone-section {
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px dashed rgba(226, 96, 32, 0.15);
+}
+
+[data-theme="light"] .ccm-standalone-header:hover {
+  background: rgba(226, 96, 32, 0.04);
+}
+
+[data-theme="light"] .ccm-standalone-icon {
+  color: #E26020;
+}
+
+[data-theme="light"] .ccm-lesson-count-badge {
+  background: rgba(226, 96, 32, 0.1);
+  color: #E26020;
+}
+
+[data-theme="light"] .ccm-standalone-empty {
+  color: #64748b;
+}
+
+/* --- Course Materials Section --- */
+[data-theme="light"] .ccm-materials-section {
+  border: 1px dashed rgba(226, 96, 32, 0.2);
+  background: rgba(226, 96, 32, 0.03);
+}
+
+[data-theme="light"] .ccm-materials-header:hover {
+  background: rgba(226, 96, 32, 0.04);
+}
+
+[data-theme="light"] .ccm-materials-header-left > svg {
+  color: #475569;
+}
+
+[data-theme="light"] .ccm-btn.ccm-btn-sm.ccm-btn-secondary {
+  background: #f1f5f9;
+  border-color: rgba(0, 0, 0, 0.08);
+  color: #475569;
+}
+
+[data-theme="light"] .ccm-materials-icon {
+  color: #E26020;
+}
+
+[data-theme="light"] .ccm-materials-title {
+  color: #1e293b;
+}
+
+[data-theme="light"] .ccm-materials-uploading {
+  color: #E26020;
+}
+
+[data-theme="light"] .ccm-material-item {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+[data-theme="light"] .ccm-material-item:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .ccm-material-type {
+  color: #E26020;
+  background: rgba(226, 96, 32, 0.08);
+}
+
+[data-theme="light"] .ccm-material-name {
+  color: #1e293b;
+}
+
+[data-theme="light"] .ccm-material-size {
+  color: #64748b;
+}
+
+[data-theme="light"] .ccm-material-link {
+  color: #E26020;
+  background: rgba(226, 96, 32, 0.08);
+}
+
+[data-theme="light"] .ccm-material-link:hover {
+  background: rgba(226, 96, 32, 0.15);
+}
+
+[data-theme="light"] .ccm-material-delete {
+  color: #dc2626;
+  background: rgba(220, 38, 38, 0.08);
+}
+
+[data-theme="light"] .ccm-material-delete:hover {
+  background: rgba(220, 38, 38, 0.15);
+}
+
+/* --- Final Test Section --- */
+[data-theme="light"] .ccm-final-test-section {
+  background: rgba(226, 96, 32, 0.04);
+  border: 1px solid rgba(226, 96, 32, 0.12);
+}
+
+[data-theme="light"] .ccm-final-test-icon {
+  color: #E26020;
+}
+
+[data-theme="light"] .ccm-final-test-title {
+  color: #1e293b;
+}
+
+[data-theme="light"] .ccm-final-test-desc {
+  color: #64748b;
+}
+
+/* --- Error States --- */
+[data-theme="light"] .ccm-inline-error {
+  color: #dc2626;
+}
+
+/* --- Edit Labels --- */
+[data-theme="light"] .ccm-edit-mini-label {
+  color: #64748b;
+}
+
+/* --- Module Meta Tags --- */
+[data-theme="light"] .ccm-module-meta-tag {
+  color: #64748b;
+  background: rgba(226, 96, 32, 0.06);
 }

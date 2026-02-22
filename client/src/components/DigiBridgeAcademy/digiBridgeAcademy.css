@@ -9,6 +9,7 @@
     background: #0f172a;
     overflow-x: hidden;
     position: relative;
+    transition: background-color 0.3s ease, color 0.2s ease;
 }
 
 /* Общи стилове за всички секции */
@@ -21,10 +22,12 @@
 /* Alternating section backgrounds */
 .digibridge-section--dark {
     background: #0f172a;
+    transition: background-color 0.3s ease;
 }
 
 .digibridge-section--darker {
     background: #1e293b;
+    transition: background-color 0.3s ease;
 }
 
 .digibridge-container {
@@ -261,8 +264,76 @@ html {
     .digibridge-btn {
         transition: none;
     }
-    
+
     .digibridge-spinner {
         animation: none;
     }
+}
+
+/* ========================================
+   LIGHT THEME OVERRIDES — DigiBridge Academy Wrapper
+   ======================================== */
+[data-theme="light"] .digibridge-academy-wrapper {
+    background: #ffffff;
+}
+[data-theme="light"] .digibridge-section--dark {
+    background: #ffffff;
+}
+[data-theme="light"] .digibridge-section--darker {
+    background: #f1f5f9;
+}
+[data-theme="light"] .digibridge-section-title {
+    color: #1e293b;
+}
+[data-theme="light"] .digibridge-section-subtitle {
+    color: #475569;
+}
+[data-theme="light"] .digibridge-gradient-text {
+    background: linear-gradient(135deg, #E26020 0%, #d97706 50%, #E26020 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+[data-theme="light"] .digibridge-academy-wrapper *:focus-visible {
+    outline: 3px solid #E26020;
+}
+[data-theme="light"] .digibridge-bg-glow-1 {
+    background: radial-gradient(circle, rgba(226, 96, 32, 0.10) 0%, transparent 70%);
+}
+[data-theme="light"] .digibridge-bg-glow-2 {
+    background: radial-gradient(circle, rgba(251, 146, 60, 0.08) 0%, transparent 70%);
+}
+[data-theme="light"] .digibridge-grid-pattern {
+    background-image:
+        linear-gradient(rgba(226, 96, 32, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(226, 96, 32, 0.08) 1px, transparent 1px);
+}
+[data-theme="light"] .digibridge-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+[data-theme="light"] .digibridge-card:hover {
+    border-color: #E26020;
+    box-shadow: 0 8px 25px rgba(226,96,32,0.12), 0 4px 10px rgba(0,0,0,0.06);
+}
+[data-theme="light"] .digibridge-btn--primary {
+    background: linear-gradient(135deg, #E26020, #f97316);
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(226, 96, 32, 0.3);
+}
+[data-theme="light"] .digibridge-btn--primary:hover {
+    box-shadow: 0 8px 30px rgba(226, 96, 32, 0.4);
+}
+[data-theme="light"] .digibridge-btn--outline {
+    color: #E26020;
+    border: 2px solid rgba(226, 96, 32, 0.3);
+}
+[data-theme="light"] .digibridge-btn--outline:hover {
+    background: rgba(226, 96, 32, 0.08);
+    border-color: #E26020;
+}
+[data-theme="light"] .digibridge-spinner {
+    border: 4px solid #e2e8f0;
+    border-top: 4px solid #E26020;
 }

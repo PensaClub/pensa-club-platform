@@ -847,3 +847,86 @@
     font-size: 0.8rem;
   }
 }
+
+/* ========================================
+   LIGHT THEME OVERRIDES — Academy Courses List
+   ======================================== */
+/* Filters */
+[data-theme="light"] .academyCoursesList-filter {
+    background: #f1f5f9;
+    border: 1px solid #d1d5db;
+    color: #475569;
+}
+[data-theme="light"] .academyCoursesList-filter:hover {
+    background: #e2e8f0;
+    color: #1e293b;
+    border-color: #94a3b8;
+}
+[data-theme="light"] .academyCoursesList-filter.is-active {
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    border-color: transparent;
+    color: #ffffff;
+    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.3);
+}
+[data-theme="light"] .academyCoursesList-filter-count {
+    background: rgba(0, 0, 0, 0.08);
+}
+[data-theme="light"] .academyCoursesList-filter.is-active .academyCoursesList-filter-count {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+[data-theme="light"] .academyCoursesList-header {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+[data-theme="light"] .academyCoursesList-header-title {
+    color: #1e293b;
+}
+[data-theme="light"] .academyCoursesList-header-count {
+    color: #475569;
+}
+[data-theme="light"] .academyCoursesList-header-count span {
+    color: #1e293b;
+}
+[data-theme="light"] .academyCoursesList-view-btn {
+    background: rgba(0, 0, 0, 0.05);
+    color: #475569;
+}
+[data-theme="light"] .academyCoursesList-view-btn.is-active {
+    background: linear-gradient(135deg, #E26020, #f97316);
+    color: #ffffff;
+}
+[data-theme="light"] .academyCoursesList-empty {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+}
+[data-theme="light"] .academyCoursesList-empty-title {
+    color: #1e293b;
+}
+[data-theme="light"] .academyCoursesList-empty-text {
+    color: #475569;
+}
+[data-theme="light"] .academyCoursesList-empty-btn {
+    background: linear-gradient(135deg, #E26020, #f97316);
+    color: #ffffff;
+    box-shadow: 0 4px 20px rgba(226, 96, 32, 0.3);
+}
+[data-theme="light"] .academyCoursesList-page-btn {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    color: #475569;
+}
+[data-theme="light"] .academyCoursesList-page-btn:hover:not(:disabled) {
+    background: rgba(226, 96, 32, 0.08);
+    border-color: rgba(226, 96, 32, 0.3);
+    color: #E26020;
+}
+[data-theme="light"] .academyCoursesList-page-btn.is-active {
+    background: linear-gradient(135deg, #E26020, #f97316);
+    border-color: transparent;
+    color: #ffffff;
+}
+[data-theme="light"] .academyCoursesList-page-dots {
+    color: #94a3b8;
+}

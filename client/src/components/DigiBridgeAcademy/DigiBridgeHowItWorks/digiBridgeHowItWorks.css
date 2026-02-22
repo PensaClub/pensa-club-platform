@@ -8,6 +8,7 @@
     padding: 120px 20px;
     background: #0f172a;
     overflow: hidden;
+    transition: background-color 0.3s ease, color 0.2s ease;
 }
 
 /* Background Grid */
@@ -436,11 +437,89 @@
         animation: none;
         width: 100%;
     }
-    
+
     .dbhiw-step,
     .dbhiw-step-icon,
     .dbhiw-step-dot,
     .dbhiw-cta-btn {
         transition: none;
     }
+}
+
+/* ========================================
+   LIGHT THEME OVERRIDES — DigiBridge How It Works
+   ======================================== */
+[data-theme="light"] .dbhiw-section {
+    background: #ffffff;
+}
+[data-theme="light"] .dbhiw-grid {
+    background-image:
+        linear-gradient(rgba(226, 96, 32, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(226, 96, 32, 0.08) 1px, transparent 1px);
+}
+[data-theme="light"] .dbhiw-glow--1 {
+    background: rgba(226, 96, 32, 0.10);
+}
+[data-theme="light"] .dbhiw-glow--2 {
+    background: rgba(251, 146, 60, 0.08);
+}
+[data-theme="light"] .dbhiw-label {
+    background: rgba(226, 96, 32, 0.08);
+    border: 1px solid rgba(226, 96, 32, 0.2);
+    color: #E26020;
+}
+[data-theme="light"] .dbhiw-title {
+    color: #1e293b;
+}
+[data-theme="light"] .dbhiw-title-highlight {
+    background: linear-gradient(135deg, #E26020 0%, #d97706 50%, #E26020 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+[data-theme="light"] .dbhiw-subtitle {
+    color: #475569;
+}
+[data-theme="light"] .dbhiw-line {
+    background: #e5e2de;
+}
+[data-theme="light"] .dbhiw-step {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+[data-theme="light"] .dbhiw-step:hover {
+    border-color: #E26020;
+    box-shadow: 0 8px 25px rgba(226,96,32,0.12), 0 4px 10px rgba(0,0,0,0.06);
+}
+[data-theme="light"] .dbhiw-step-icon {
+    background: rgba(226, 96, 32, 0.08);
+    border: 1px solid rgba(226, 96, 32, 0.15);
+}
+[data-theme="light"] .dbhiw-step:hover .dbhiw-step-icon {
+    background: rgba(226, 96, 32, 0.12);
+}
+[data-theme="light"] .dbhiw-step-title {
+    color: #1e293b;
+}
+[data-theme="light"] .dbhiw-step-desc {
+    color: #64748b;
+}
+[data-theme="light"] .dbhiw-step-dot {
+    border: 3px solid #ffffff;
+}
+[data-theme="light"] .dbhiw-cta {
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+}
+[data-theme="light"] .dbhiw-cta-text {
+    color: #475569;
+}
+[data-theme="light"] .dbhiw-cta-btn {
+    background: linear-gradient(135deg, #E26020, #f97316);
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(226, 96, 32, 0.3);
+}
+[data-theme="light"] .dbhiw-cta-btn:hover {
+    box-shadow: 0 8px 30px rgba(226, 96, 32, 0.4);
 }

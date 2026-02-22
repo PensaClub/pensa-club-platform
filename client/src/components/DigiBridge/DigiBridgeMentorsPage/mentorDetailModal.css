@@ -1,5 +1,5 @@
 /* ===================================
-   MENTOR DETAIL MODAL
+   MENTOR DETAIL MODAL — DARK THEME (DEFAULT)
    =================================== */
 
 .mentor-modal-overlay {
@@ -8,7 +8,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.75);
+  background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(8px);
   z-index: 10000;
   display: flex;
@@ -29,13 +29,15 @@
 
 .mentor-modal-container {
   position: relative;
-  background: #ffffff;
+  background: rgba(15, 23, 42, 0.97);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 24px;
   max-width: 900px;
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
   animation: modalSlideUp 0.3s ease-out;
 }
 
@@ -57,8 +59,8 @@
   right: 20px;
   width: 40px;
   height: 40px;
-  background: rgba(255, 255, 255, 0.9);
-  border: none;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -69,15 +71,15 @@
 }
 
 .mentor-modal-close:hover {
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
   transform: rotate(90deg);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .mentor-modal-close svg {
   width: 20px;
   height: 20px;
-  color: #ff6347;
+  color: #f87171;
 }
 
 /* HEADER */
@@ -86,7 +88,8 @@
   align-items: center;
   gap: 30px;
   padding: 40px 40px 30px 40px;
-  background: linear-gradient(135deg, #ffd4d4 0%, #ffc2b8 100%);
+  background: linear-gradient(135deg, rgba(226, 96, 32, 0.12) 0%, rgba(251, 146, 60, 0.08) 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 24px 24px 0 0;
 }
 
@@ -100,8 +103,8 @@
   height: 140px;
   border-radius: 50%;
   object-fit: cover;
-  border: 5px solid #ffffff;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  border: 5px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
 .mentor-modal-badge {
@@ -117,7 +120,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 .mentor-modal-badge.available {
@@ -150,14 +153,14 @@
 .mentor-modal-name {
   font-size: 2.25rem;
   font-weight: 900;
-  color: #ff6347;
+  color: #fb923c;
   margin: 0 0 8px 0;
   line-height: 1.1;
 }
 
 .mentor-modal-age {
   font-size: 1rem;
-  color: #6b7280;
+  color: #94a3b8;
   margin: 0 0 16px 0;
   font-weight: 600;
 }
@@ -167,12 +170,12 @@
   align-items: center;
   gap: 10px;
   padding: 12px 20px;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.06);
   border-radius: 12px;
-  color: #ff6347;
+  color: #fb923c;
   font-size: 0.95rem;
   font-weight: 800;
-  border: 2px solid rgba(255, 99, 71, 0.3);
+  border: 2px solid rgba(251, 146, 60, 0.25);
 }
 
 .mentor-modal-specialization svg {
@@ -186,7 +189,7 @@
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   padding: 30px 40px;
-  border-bottom: 2px solid #f3f4f6;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.06);
 }
 
 .mentor-modal-stat {
@@ -200,7 +203,7 @@
 .mentor-modal-stat svg {
   width: 36px;
   height: 36px;
-  color: #ff6347;
+  color: #fb923c;
 }
 
 .mentor-modal-stat > div {
@@ -212,13 +215,13 @@
 .mentor-modal-stat-value {
   font-size: 1.75rem;
   font-weight: 900;
-  color: #1f2937;
+  color: #f1f5f9;
   line-height: 1;
 }
 
 .mentor-modal-stat-label {
   font-size: 0.8rem;
-  color: #6b7280;
+  color: #94a3b8;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -241,15 +244,15 @@
 .mentor-modal-section-title {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #1f2937;
+  color: #f1f5f9;
   margin: 0;
   padding-bottom: 10px;
-  border-bottom: 2px solid rgba(255, 99, 71, 0.2);
+  border-bottom: 2px solid rgba(251, 146, 60, 0.25);
 }
 
 .mentor-modal-bio {
   font-size: 1rem;
-  color: #4b5563;
+  color: #cbd5e1;
   line-height: 1.7;
   margin: 0;
 }
@@ -264,25 +267,26 @@
   display: flex;
   justify-content: space-between;
   padding: 12px 16px;
-  background: #f9fafb;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 10px;
 }
 
 .mentor-modal-info-label {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #6b7280;
+  color: #94a3b8;
 }
 
 .mentor-modal-info-value {
   font-size: 0.9rem;
   font-weight: 700;
-  color: #1f2937;
+  color: #f1f5f9;
 }
 
 .mentor-modal-languages {
   font-size: 1rem;
-  color: #4b5563;
+  color: #cbd5e1;
   line-height: 1.6;
   margin: 0;
   font-weight: 500;
@@ -297,16 +301,17 @@
 
 .mentor-modal-review {
   padding: 20px;
-  background: #f9fafb;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   border-radius: 12px;
   border: 2px solid transparent;
   transition: all 0.3s ease;
 }
 
 .mentor-modal-review:hover {
-  border-color: rgba(255, 99, 71, 0.2);
-  background: #ffffff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-color: rgba(251, 146, 60, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .mentor-modal-review-header {
@@ -319,7 +324,7 @@
 .mentor-modal-review-name {
   font-size: 0.95rem;
   font-weight: 700;
-  color: #1f2937;
+  color: #f1f5f9;
 }
 
 .mentor-modal-review-rating {
@@ -328,7 +333,7 @@
 
 .mentor-modal-review-text {
   font-size: 0.95rem;
-  color: #4b5563;
+  color: #cbd5e1;
   line-height: 1.6;
   margin: 0;
 }
@@ -338,8 +343,8 @@
   display: flex;
   gap: 16px;
   padding: 30px 40px;
-  border-top: 2px solid #f3f4f6;
-  background: #f9fafb;
+  border-top: 2px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.02);
   border-radius: 0 0 24px 24px;
 }
 
@@ -358,25 +363,26 @@
 }
 
 .mentor-modal-btn-primary {
-  background: linear-gradient(135deg, #ff6347 0%, #ff7f50 100%);
+  background: linear-gradient(135deg, #E26020 0%, #f97316 100%);
   color: #ffffff;
-  box-shadow: 0 6px 20px rgba(255, 99, 71, 0.3);
+  box-shadow: 0 6px 20px rgba(226, 96, 32, 0.35);
 }
 
 .mentor-modal-btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 26px rgba(255, 99, 71, 0.4);
+  box-shadow: 0 8px 26px rgba(226, 96, 32, 0.45);
 }
 
 .mentor-modal-btn-secondary {
-  background: #ffffff;
-  color: #6b7280;
-  border: 2px solid #e5e7eb;
+  background: rgba(255, 255, 255, 0.06);
+  color: #94a3b8;
+  border: 2px solid rgba(255, 255, 255, 0.1);
 }
 
 .mentor-modal-btn-secondary:hover {
-  background: #f9fafb;
-  border-color: #d1d5db;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: #f1f5f9;
 }
 
 /* ===================================
@@ -511,15 +517,143 @@
     font-size: 0.95rem;
   }
 }
+
 /* DISABLED BUTTON STATE */
 .mentor-modal-btn-primary:disabled {
   opacity: 0.5;
   cursor: not-allowed;
   transform: none !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
 }
 
 .mentor-modal-btn-primary:disabled:hover {
   transform: none !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+
+/* ========================================
+   LIGHT THEME OVERRIDES — Mentor Detail Modal
+   ======================================== */
+
+[data-theme="light"] .mentor-modal-overlay {
+    background: rgba(0, 0, 0, 0.5);
+}
+[data-theme="light"] .mentor-modal-container {
+    background: #ffffff;
+    border: none;
+    backdrop-filter: none;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+/* --- Close --- */
+[data-theme="light"] .mentor-modal-close {
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+}
+[data-theme="light"] .mentor-modal-close:hover {
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+[data-theme="light"] .mentor-modal-close svg {
+    color: #E26020;
+}
+
+/* --- Header --- */
+[data-theme="light"] .mentor-modal-header {
+    background: linear-gradient(135deg, #fde8d8 0%, #fcd5c0 100%);
+    border-bottom: none;
+}
+[data-theme="light"] .mentor-modal-avatar img {
+    border-color: #ffffff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+[data-theme="light"] .mentor-modal-name {
+    color: #E26020;
+}
+[data-theme="light"] .mentor-modal-age {
+    color: #6b7280;
+}
+[data-theme="light"] .mentor-modal-specialization {
+    background: rgba(255, 255, 255, 0.9);
+    color: #E26020;
+    border: 2px solid rgba(226, 96, 32, 0.3);
+}
+
+/* --- Stats --- */
+[data-theme="light"] .mentor-modal-stats {
+    border-bottom-color: #f3f4f6;
+}
+[data-theme="light"] .mentor-modal-stat svg {
+    color: #E26020;
+}
+[data-theme="light"] .mentor-modal-stat-value {
+    color: #1f2937;
+}
+[data-theme="light"] .mentor-modal-stat-label {
+    color: #6b7280;
+}
+
+/* --- Content --- */
+[data-theme="light"] .mentor-modal-section-title {
+    color: #1f2937;
+    border-bottom-color: rgba(226, 96, 32, 0.2);
+}
+[data-theme="light"] .mentor-modal-bio {
+    color: #4b5563;
+}
+[data-theme="light"] .mentor-modal-info-item {
+    background: #f9fafb;
+    border: none;
+}
+[data-theme="light"] .mentor-modal-info-label {
+    color: #6b7280;
+}
+[data-theme="light"] .mentor-modal-info-value {
+    color: #1f2937;
+}
+[data-theme="light"] .mentor-modal-languages {
+    color: #4b5563;
+}
+
+/* --- Reviews --- */
+[data-theme="light"] .mentor-modal-review {
+    background: #f9fafb;
+}
+[data-theme="light"] .mentor-modal-review:hover {
+    border-color: rgba(226, 96, 32, 0.2);
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+[data-theme="light"] .mentor-modal-review-name {
+    color: #1f2937;
+}
+[data-theme="light"] .mentor-modal-review-text {
+    color: #4b5563;
+}
+
+/* --- Footer --- */
+[data-theme="light"] .mentor-modal-footer {
+    border-top-color: #f3f4f6;
+    background: #f9fafb;
+}
+[data-theme="light"] .mentor-modal-btn-primary {
+    background: linear-gradient(135deg, #E26020, #f97316);
+    box-shadow: 0 6px 20px rgba(226, 96, 32, 0.3);
+}
+[data-theme="light"] .mentor-modal-btn-primary:hover {
+    box-shadow: 0 8px 26px rgba(226, 96, 32, 0.4);
+}
+[data-theme="light"] .mentor-modal-btn-secondary {
+    background: #ffffff;
+    color: #6b7280;
+    border: 2px solid #e5e7eb;
+}
+[data-theme="light"] .mentor-modal-btn-secondary:hover {
+    background: #f9fafb;
+    border-color: #d1d5db;
+    color: #1f2937;
+}
+[data-theme="light"] .mentor-modal-btn-primary:disabled {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
 }

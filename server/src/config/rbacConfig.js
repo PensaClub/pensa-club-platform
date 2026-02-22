@@ -253,6 +253,10 @@ const permissions = {
         delete: ROLES.ACADEMY_CREATORS,
         download: ROLES.ACADEMY,
     },
+    siteSettings: {
+        read: ROLES.PUBLIC_WITH_LIMITED,
+        update: ['admin'],
+    },
 };
 
 module.exports = permissions;

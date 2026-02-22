@@ -48,6 +48,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { GoogleAuthProvider } from './components/contexts/GoogleAuthContext.jsx';
 import ContactForm from './components/ContactForm/ContactForm.jsx';
 import { InitiativeProvider } from './components/contexts/InitiativeProvider.jsx';
+import { ThemeProvider } from './components/contexts/ThemeContext.jsx';
 import { InitiativeView } from './components/Initiatives/InitiativeView/InitiativeView.jsx';
 import { ProjectView } from './components/Initiatives/InitiativeView/ProjectView/ProjectView.jsx';
 import { StoryView } from './components/Initiatives/InitiativeView/StoryPubView/StoryView.jsx';
@@ -82,7 +83,6 @@ import AcademyLectures from './components/AcademyLectures/AcademyLectures.jsx';
 import AcademyLectureDetails from './components/AcademyLectures/AcademyLectureDetails/AcademyLectureDetails.jsx';
 import AcademyLectureTest from './components/AcademyLectures/AcademyLectureDetails/AcademyLectureTest/AcademyLectureTest.jsx';
 import AcademyLectureWatch from './components/AcademyLectures/AcademyLectureWatch/AcademyLectureWatch.jsx';
-// import ChristmasGreetingModal from './components/ChristmasGreetingModal/ChristmasGreetingModal.jsx';
 import GlobalSnowfall from './components/GlobalSnowfall/GlobalSnowfall.jsx';
 import DigiBridgeHeader from './components/DigiBridgeAcademy/DigiBridgeHeader/DigiBridgeHeader.jsx';
 import StudentDashboard from './components/StudentDashboard/StudentDashboard.jsx';
@@ -91,6 +91,10 @@ import CourseAcademyCreateForm from './components/CourseAcademyCreateForm/Course
 import AdminAcademyCoursesList from './components/AdminAcademyCoursesList/AdminAcademyCoursesList.jsx';
 import EditCourseBasicInfo from './components/AdminAcademyCoursesList/EditCourseBasicInfo/EditCourseBasicInfo.jsx';
 import CourseContentManager from './components/AdminAcademyCoursesList/CourseContentManager/CourseContentManager.jsx';
+import ThemeToggle from './components/ThemeToggle/ThemeToggle';
+import { SiteSettingsAdminProvider } from './components/contexts/SiteSettingsAdminContext';
+import SiteSettingsAdmin from './components/SiteSettingsAdmin/SiteSettingsAdmin';
+import ChristmasGreetingModal from './components/ChristmasGreetingModal/ChristmasGreetingModal';
 
 // ✅ LAZY LOADING КОМПОНЕНТИ
 const ArticlesList = lazy(() => import('./components/Articles/ArticlesList/ArticlesList.jsx'));
@@ -143,9 +147,12 @@ function App() {
   return (
     <>
       <HelmetProvider>
+        <ThemeProvider>
+        <SiteSettingsAdminProvider>
+        <ThemeToggle />
         <ErrorBoundary>
           <GlobalSnowfall count={50} />
-          {/* <ChristmasGreetingModal /> */}
+          <ChristmasGreetingModal />
           <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
             <UserProvider>
               <GoogleAuthProvider>
@@ -265,6 +272,7 @@ function App() {
                                               path="/academy/courses/:courseSlug/test"
                                               element={<AcademyTestPlayer />}
                                             />
+                                            <Route path="/admin/site-settings" element={<AdminGuard><SiteSettingsAdmin /></AdminGuard>} />
                                             <Route path="/academy/admin/courses" element={<AdminGuard><AdminAcademyCoursesList /></AdminGuard>} />
                                             <Route path="/academy/admin/create-course" element={<AdminGuard><CourseAcademyCreateForm /></AdminGuard>} />
                                             <Route path="/academy/admin/edit-course/:slug" element={<AdminGuard><EditCourseBasicInfo /></AdminGuard>} />
@@ -332,6 +340,8 @@ function App() {
             </UserProvider>
           </GoogleOAuthProvider>
         </ErrorBoundary>
+        </SiteSettingsAdminProvider>
+        </ThemeProvider>
       </HelmetProvider>
     </>
   );

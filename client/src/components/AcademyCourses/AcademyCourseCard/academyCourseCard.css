@@ -400,3 +400,51 @@
   align-items: center;
   gap: 4px;
 }
+
+/* ========================================
+   LIGHT THEME OVERRIDES — Academy Course Card
+   ======================================== */
+[data-theme="light"] .academyCourseCard {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+[data-theme="light"] .academyCourseCard:hover {
+    border-color: #E26020;
+    box-shadow: 0 8px 25px rgba(226,96,32,0.12), 0 4px 10px rgba(0,0,0,0.06);
+}
+[data-theme="light"] .academyCourseCard-image-overlay {
+    background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.15) 60%, rgba(0, 0, 0, 0.4) 100%);
+}
+[data-theme="light"] .academyCourseCard-title {
+    color: #1e293b;
+}
+[data-theme="light"] .academyCourseCard-description {
+    color: #475569;
+}
+[data-theme="light"] .academyCourseCard-stat {
+    color: #64748b;
+}
+[data-theme="light"] .academyCourseCard-stat--rating {
+    color: #d97706;
+}
+[data-theme="light"] .academyCourseCard-stat--rating svg {
+    color: #d97706;
+}
+[data-theme="light"] .academyCourseCard-footer {
+    border-top: 1px solid #e2e8f0;
+}
+[data-theme="light"] .academyCourseCard-price-free {
+    color: #059669;
+}
+[data-theme="light"] .academyCourseCard-credits {
+    background: rgba(217, 119, 6, 0.08);
+    border: 1px solid rgba(217, 119, 6, 0.2);
+    color: #d97706;
+}
+[data-theme="light"] .academyCourseCard-credits svg {
+    color: #d97706;
+}
+[data-theme="light"] .academyCourseCard-price-credits {
+    color: #d97706;
+}

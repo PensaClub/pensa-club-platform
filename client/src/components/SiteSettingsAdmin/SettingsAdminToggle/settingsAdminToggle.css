@@ -1,0 +1,464 @@
+/* src/components/SiteSettingsAdmin/SettingsAdminToggle/settingsAdminToggle.css */
+/* Prefix: sat- */
+
+/* =========================================================
+                    CARD
+   ========================================================= */
+
+.sat-card {
+    position: relative;
+    display: flex;
+    border-radius: 16px;
+    background: rgba(15, 23, 42, 0.55);
+    border: 1px solid rgba(100, 116, 139, 0.12);
+    overflow: hidden;
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sat-card:hover {
+    background: rgba(15, 23, 42, 0.7);
+    border-color: rgba(139, 92, 246, 0.18);
+    box-shadow: 0 6px 28px rgba(0, 0, 0, 0.2), 0 2px 8px rgba(139, 92, 246, 0.08);
+    transform: translateY(-1px);
+}
+
+.sat-card--on {
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+.sat-card--on:hover {
+    border-color: rgba(16, 185, 129, 0.3);
+    box-shadow: 0 6px 28px rgba(16, 185, 129, 0.12), 0 2px 8px rgba(0, 0, 0, 0.12);
+}
+
+/* =========================================================
+                    ACCENT BAR
+   ========================================================= */
+
+.sat-accent {
+    width: 4px;
+    flex-shrink: 0;
+    background: linear-gradient(180deg, #475569 0%, #334155 100%);
+    transition: background 0.4s ease;
+}
+
+.sat-accent--on {
+    background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
+}
+
+/* =========================================================
+                    BODY
+   ========================================================= */
+
+.sat-body {
+    flex: 1;
+    padding: 22px 28px;
+    min-width: 0;
+}
+
+.sat-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+/* =========================================================
+                    INFO
+   ========================================================= */
+
+.sat-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    flex: 1;
+    min-width: 0;
+}
+
+.sat-icon {
+    font-size: 1.6rem;
+    flex-shrink: 0;
+    line-height: 1;
+    margin-top: 2px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.sat-text {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.sat-title-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.sat-title {
+    font-size: 1rem;
+    font-weight: 650;
+    color: #f1f5f9;
+    margin: 0;
+    letter-spacing: 0.01em;
+}
+
+.sat-desc {
+    font-size: 0.84rem;
+    color: #94a3b8;
+    margin: 0;
+    line-height: 1.55;
+}
+
+/* =========================================================
+                    BADGE
+   ========================================================= */
+
+.sat-badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 3px 10px;
+    border-radius: 20px;
+    transition: all 0.35s ease;
+    white-space: nowrap;
+}
+
+.sat-badge--on {
+    color: #34d399;
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.08);
+}
+
+.sat-badge--off {
+    color: #64748b;
+    background: rgba(100, 116, 139, 0.08);
+    border: 1px solid rgba(100, 116, 139, 0.15);
+}
+
+/* =========================================================
+                    SWITCH (TOGGLE)
+   ========================================================= */
+
+.sat-switch {
+    flex-shrink: 0;
+    background: none;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    outline: none;
+    border-radius: 26px;
+    transition: box-shadow 0.2s ease;
+}
+
+.sat-switch:focus-visible {
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.35);
+}
+
+.sat-switch--loading {
+    cursor: wait;
+    opacity: 0.65;
+}
+
+.sat-switch-track {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 58px;
+    height: 30px;
+    background: linear-gradient(135deg, #1e293b, #334155);
+    border: 1.5px solid rgba(100, 116, 139, 0.3);
+    border-radius: 15px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+
+.sat-switch--on .sat-switch-track {
+    background: linear-gradient(135deg, #059669, #10b981);
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow:
+        0 0 16px rgba(16, 185, 129, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Track labels (check / x inside the track) */
+.sat-switch-label {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s ease;
+}
+
+.sat-switch-label--on {
+    left: 8px;
+    color: rgba(255, 255, 255, 0.8);
+    opacity: 0;
+}
+
+.sat-switch--on .sat-switch-label--on {
+    opacity: 1;
+}
+
+.sat-switch-label--off {
+    right: 8px;
+    color: rgba(100, 116, 139, 0.6);
+    opacity: 1;
+}
+
+.sat-switch--on .sat-switch-label--off {
+    opacity: 0;
+}
+
+/* Thumb */
+.sat-switch-thumb {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #64748b, #94a3b8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #1e293b;
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.sat-switch--on .sat-switch-thumb {
+    left: 30px;
+    background: linear-gradient(135deg, #ffffff, #e2e8f0);
+    color: #059669;
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, 0.2),
+        0 0 12px rgba(16, 185, 129, 0.2);
+}
+
+/* =========================================================
+                    LOADING SPINNER
+   ========================================================= */
+
+.sat-switch-spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid transparent;
+    border-top-color: currentColor;
+    border-right-color: currentColor;
+    border-radius: 50%;
+    animation: sat-spin 0.6s linear infinite;
+}
+
+@keyframes sat-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* =========================================================
+                    RESPONSIVE - Tablet (<=1023px)
+   ========================================================= */
+
+@media (max-width: 1023px) {
+    .sat-body {
+        padding: 20px 22px;
+    }
+}
+
+/* =========================================================
+                    RESPONSIVE - Mobile (<=767px)
+   ========================================================= */
+
+@media (max-width: 767px) {
+    .sat-body {
+        padding: 18px 18px;
+    }
+
+    .sat-row {
+        gap: 16px;
+    }
+
+    .sat-info {
+        gap: 12px;
+    }
+
+    .sat-icon {
+        font-size: 1.4rem;
+    }
+
+    .sat-title {
+        font-size: 0.92rem;
+    }
+
+    .sat-desc {
+        font-size: 0.8rem;
+    }
+
+    .sat-switch-track {
+        width: 52px;
+        height: 28px;
+    }
+
+    .sat-switch-thumb {
+        width: 22px;
+        height: 22px;
+    }
+
+    .sat-switch--on .sat-switch-thumb {
+        left: 26px;
+    }
+}
+
+/* =========================================================
+                    RESPONSIVE - Small Mobile (<=480px)
+   ========================================================= */
+
+@media (max-width: 480px) {
+    .sat-body {
+        padding: 14px 14px;
+    }
+
+    .sat-row {
+        gap: 12px;
+    }
+
+    .sat-icon {
+        font-size: 1.2rem;
+    }
+
+    .sat-title {
+        font-size: 0.88rem;
+    }
+
+    .sat-desc {
+        font-size: 0.76rem;
+    }
+
+    .sat-badge {
+        font-size: 0.62rem;
+        padding: 2px 7px;
+    }
+
+    .sat-switch-track {
+        width: 48px;
+        height: 26px;
+    }
+
+    .sat-switch-thumb {
+        width: 20px;
+        height: 20px;
+    }
+
+    .sat-switch--on .sat-switch-thumb {
+        left: 24px;
+    }
+
+    .sat-switch-label--on {
+        left: 6px;
+    }
+
+    .sat-switch-label--off {
+        right: 6px;
+    }
+}
+
+/* =========================================================
+                    LIGHT THEME
+   ========================================================= */
+
+[data-theme="light"] .sat-card {
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    box-shadow: 0 2px 6px rgba(99, 102, 241, 0.06), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .sat-card:hover {
+    background: #ffffff;
+    border-color: #9ca3af;
+    box-shadow: 0 6px 24px rgba(99, 102, 241, 0.1), 0 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .sat-card--on {
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .sat-card--on:hover {
+    border-color: rgba(16, 185, 129, 0.6);
+    box-shadow: 0 6px 24px rgba(16, 185, 129, 0.14), 0 3px 8px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .sat-accent {
+    background: linear-gradient(180deg, #94a3b8 0%, #64748b 100%);
+}
+
+[data-theme="light"] .sat-accent--on {
+    background: linear-gradient(180deg, #10b981 0%, #059669 100%);
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.25);
+}
+
+[data-theme="light"] .sat-title {
+    color: #0f172a;
+}
+
+[data-theme="light"] .sat-desc {
+    color: #475569;
+}
+
+[data-theme="light"] .sat-icon {
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.12));
+}
+
+[data-theme="light"] .sat-badge--on {
+    color: #059669;
+    background: rgba(5, 150, 105, 0.1);
+    border: 1px solid rgba(5, 150, 105, 0.3);
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.12);
+}
+
+[data-theme="light"] .sat-badge--off {
+    color: #dc2626;
+    background: rgba(220, 38, 38, 0.06);
+    border: 1px solid rgba(220, 38, 38, 0.15);
+}
+
+[data-theme="light"] .sat-switch-track {
+    background: linear-gradient(135deg, #e2e8f0, #cbd5e1);
+    border: 2px solid #9ca3af;
+}
+
+[data-theme="light"] .sat-switch--on .sat-switch-track {
+    background: linear-gradient(135deg, #059669, #10b981);
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 0 14px rgba(16, 185, 129, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="light"] .sat-switch-thumb {
+    background: linear-gradient(135deg, #ffffff, #f1f5f9);
+    color: #64748b;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .sat-switch--on .sat-switch-thumb {
+    background: linear-gradient(135deg, #ffffff, #f1f5f9);
+    color: #059669;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18), 0 0 12px rgba(16, 185, 129, 0.2);
+}
+
+[data-theme="light"] .sat-switch-label--off {
+    color: rgba(100, 116, 139, 0.5);
+}
+
+[data-theme="light"] .sat-switch-label--on {
+    color: rgba(255, 255, 255, 0.9);
+}

@@ -38,6 +38,7 @@
   flex-direction: column;
   animation: elm-scaleIn 0.2s ease;
   overflow: hidden;
+  transition: background-color 0.3s ease, color 0.2s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 @keyframes elm-scaleIn {
@@ -1181,4 +1182,370 @@
 
 .elm-field-error .elm-label {
   color: #f87171;
+}
+
+/* ===== LIGHT THEME ===== */
+
+/* --- Overlay --- */
+[data-theme="light"] .elm-overlay {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* --- Modal --- */
+[data-theme="light"] .elm-modal {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+/* --- Header --- */
+[data-theme="light"] .elm-header {
+  border-bottom: 1px solid #e2e8f0;
+}
+
+[data-theme="light"] .elm-header-title {
+  color: #1e293b;
+  background: linear-gradient(135deg, #E26020, #d97706);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+[data-theme="light"] .elm-close-btn {
+  background: rgba(220, 38, 38, 0.06);
+  color: #64748b;
+}
+
+[data-theme="light"] .elm-close-btn:hover {
+  background: rgba(220, 38, 38, 0.12);
+  color: #dc2626;
+}
+
+/* --- Loading --- */
+[data-theme="light"] .elm-loading {
+  color: #64748b;
+}
+
+/* --- Scrollbar --- */
+[data-theme="light"] .elm-body::-webkit-scrollbar-thumb {
+  background: rgba(226, 96, 32, 0.15);
+}
+
+/* --- Sections --- */
+[data-theme="light"] .elm-section {
+  border-bottom: 1px solid #e2e8f0;
+}
+
+[data-theme="light"] .elm-section-title {
+  color: #475569;
+}
+
+[data-theme="light"] .elm-section-title svg {
+  color: #E26020;
+}
+
+/* --- Fields --- */
+[data-theme="light"] .elm-label {
+  color: #64748b;
+}
+
+[data-theme="light"] .elm-input,
+[data-theme="light"] .elm-textarea,
+[data-theme="light"] .elm-select {
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  color: #1e293b;
+}
+
+[data-theme="light"] .elm-input:focus,
+[data-theme="light"] .elm-textarea:focus,
+[data-theme="light"] .elm-select:focus {
+  border-color: #E26020;
+  box-shadow: 0 0 0 3px rgba(226,96,32,0.12);
+}
+
+[data-theme="light"] .elm-select option {
+  background: #ffffff;
+  color: #1e293b;
+}
+
+[data-theme="light"] .elm-field-error .elm-input,
+[data-theme="light"] .elm-field-error .elm-textarea,
+[data-theme="light"] .elm-field-error .elm-select {
+  border-color: rgba(220, 38, 38, 0.4);
+}
+
+[data-theme="light"] .elm-field-error .elm-label {
+  color: #dc2626;
+}
+
+[data-theme="light"] .elm-error-msg {
+  color: #dc2626;
+}
+
+/* --- Type Selector --- */
+[data-theme="light"] .elm-type-btn {
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+}
+
+[data-theme="light"] .elm-type-btn:hover {
+  border-color: rgba(226, 96, 32, 0.2);
+  color: #475569;
+}
+
+[data-theme="light"] .elm-type-btn-active {
+  background: rgba(226, 96, 32, 0.08);
+  border-color: rgba(226, 96, 32, 0.3);
+  color: #E26020;
+}
+
+/* --- Toggles --- */
+[data-theme="light"] .elm-toggle-slider {
+  background: rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .elm-toggle-slider::after {
+  background: #94a3b8;
+}
+
+[data-theme="light"] .elm-toggle input:checked + .elm-toggle-slider {
+  background: rgba(226, 96, 32, 0.15);
+  border-color: rgba(226, 96, 32, 0.3);
+}
+
+[data-theme="light"] .elm-toggle input:checked + .elm-toggle-slider::after {
+  background: #E26020;
+}
+
+[data-theme="light"] .elm-toggle-text {
+  color: #475569;
+}
+
+/* --- Footer --- */
+[data-theme="light"] .elm-footer {
+  border-top: 1px solid #e2e8f0;
+}
+
+[data-theme="light"] .elm-unsaved {
+  color: #d97706;
+}
+
+/* --- Buttons --- */
+[data-theme="light"] .elm-btn-cancel {
+  background: #f1f5f9;
+  border-color: rgba(0, 0, 0, 0.08);
+  color: #475569;
+}
+
+[data-theme="light"] .elm-btn-cancel:hover {
+  background: #e2e8f0;
+  color: #1e293b;
+}
+
+/* --- Materials Section --- */
+[data-theme="light"] .elm-section-title-clickable:hover {
+  color: #1e293b;
+}
+
+[data-theme="light"] .elm-materials-count {
+  background: rgba(226, 96, 32, 0.1);
+  border: 1px solid rgba(226, 96, 32, 0.2);
+  color: #E26020;
+}
+
+[data-theme="light"] .elm-expand-icon {
+  color: #64748b;
+}
+
+[data-theme="light"] .elm-section-title-clickable:hover .elm-expand-icon {
+  color: #475569;
+}
+
+[data-theme="light"] .elm-materials-loading {
+  color: #64748b;
+}
+
+[data-theme="light"] .elm-materials-empty {
+  color: #94a3b8;
+}
+
+[data-theme="light"] .elm-materials-empty p {
+  color: #64748b;
+}
+
+/* --- Material Items --- */
+[data-theme="light"] .elm-material-item {
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid #e2e8f0;
+}
+
+[data-theme="light"] .elm-material-item:hover {
+  border-color: rgba(226, 96, 32, 0.12);
+  background: rgba(0, 0, 0, 0.03);
+}
+
+[data-theme="light"] .elm-material-icon {
+  background: rgba(226, 96, 32, 0.08);
+  color: #E26020;
+}
+
+[data-theme="light"] .elm-material-title {
+  color: #1e293b;
+}
+
+[data-theme="light"] .elm-material-type-badge {
+  color: #64748b;
+  background: rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .elm-material-size {
+  color: #64748b;
+}
+
+[data-theme="light"] .elm-material-link {
+  color: #E26020;
+}
+
+[data-theme="light"] .elm-material-delete {
+  color: #64748b;
+}
+
+[data-theme="light"] .elm-material-delete:hover:not(:disabled) {
+  background: rgba(220, 38, 38, 0.08);
+  color: #dc2626;
+}
+
+/* --- Dropzone --- */
+[data-theme="light"] .elm-dropzone {
+  background: rgba(226, 96, 32, 0.02);
+  border: 2px dashed rgba(226, 96, 32, 0.15);
+  color: #64748b;
+}
+
+[data-theme="light"] .elm-dropzone:hover {
+  background: rgba(226, 96, 32, 0.05);
+  border-color: rgba(226, 96, 32, 0.3);
+  color: #E26020;
+}
+
+[data-theme="light"] .elm-dropzone-active {
+  background: rgba(226, 96, 32, 0.08);
+  border-color: rgba(226, 96, 32, 0.5);
+  color: #E26020;
+}
+
+[data-theme="light"] .elm-dropzone-subtitle {
+  color: #64748b;
+}
+
+[data-theme="light"] .elm-dropzone-limit {
+  color: #94a3b8;
+}
+
+/* --- Upload Progress --- */
+[data-theme="light"] .elm-upload-progress {
+  background: rgba(226, 96, 32, 0.04);
+  border: 1px solid rgba(226, 96, 32, 0.12);
+}
+
+[data-theme="light"] .elm-upload-progress-info {
+  color: #E26020;
+}
+
+[data-theme="light"] .elm-upload-progress-name {
+  color: #475569;
+}
+
+[data-theme="light"] .elm-upload-progress-pct {
+  color: #E26020;
+}
+
+[data-theme="light"] .elm-upload-progress-bar {
+  background: #f1f5f9;
+}
+
+[data-theme="light"] .elm-upload-progress-fill {
+  background: linear-gradient(90deg, #E26020, #d97706);
+}
+
+/* --- Add Material Buttons --- */
+[data-theme="light"] .elm-add-material-btn {
+  background: rgba(226, 96, 32, 0.04);
+  border: 1px dashed rgba(226, 96, 32, 0.15);
+  color: #64748b;
+}
+
+[data-theme="light"] .elm-add-material-btn:hover {
+  background: rgba(226, 96, 32, 0.08);
+  border-color: rgba(226, 96, 32, 0.3);
+  color: #E26020;
+}
+
+[data-theme="light"] .elm-cancel-add-btn {
+  color: #64748b;
+}
+
+[data-theme="light"] .elm-cancel-add-btn:hover {
+  color: #475569;
+}
+
+/* --- Link Form --- */
+[data-theme="light"] .elm-link-form {
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid #e2e8f0;
+}
+
+[data-theme="light"] .elm-link-form-title {
+  color: #E26020;
+}
+
+[data-theme="light"] .elm-mat-type-btn {
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+}
+
+[data-theme="light"] .elm-mat-type-btn:hover {
+  border-color: rgba(226, 96, 32, 0.15);
+  color: #475569;
+}
+
+[data-theme="light"] .elm-mat-type-btn-active {
+  background: rgba(226, 96, 32, 0.08);
+  border-color: rgba(226, 96, 32, 0.3);
+  color: #E26020;
+}
+
+[data-theme="light"] .elm-btn-add {
+  background: rgba(226, 96, 32, 0.1);
+  border-color: rgba(226, 96, 32, 0.3);
+  color: #E26020;
+}
+
+[data-theme="light"] .elm-btn-add:hover:not(:disabled) {
+  background: rgba(226, 96, 32, 0.18);
+  box-shadow: 0 0 16px rgba(226, 96, 32, 0.12);
+}
+
+/* --- Autosave --- */
+[data-theme="light"] .elm-materials-autosave {
+  background: rgba(5, 150, 105, 0.06);
+  border: 1px solid rgba(5, 150, 105, 0.15);
+  color: #059669;
+}
+
+/* --- Test Editor Button --- */
+[data-theme="light"] .elm-btn-test-editor {
+  background: rgba(226, 96, 32, 0.08);
+  border: 1px solid rgba(226, 96, 32, 0.2);
+  color: #E26020;
+}
+
+[data-theme="light"] .elm-btn-test-editor:hover {
+  background: rgba(226, 96, 32, 0.15);
+  border-color: rgba(226, 96, 32, 0.35);
+  box-shadow: 0 0 15px rgba(226, 96, 32, 0.12);
 }

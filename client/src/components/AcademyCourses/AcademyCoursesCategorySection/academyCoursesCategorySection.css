@@ -437,3 +437,14 @@
     border-radius: 12px;
   }
 }
+
+/* ========================================
+   LIGHT THEME OVERRIDES — Academy Category Section
+   ======================================== */
+[data-theme="light"] .academyCoursesCategorySection {
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+[data-theme="light"] .academyCoursesCategorySection:hover {
+    box-shadow: 0 10px 25px rgba(226, 96, 32, 0.1), 0 4px 10px rgba(0, 0, 0, 0.05);
+}

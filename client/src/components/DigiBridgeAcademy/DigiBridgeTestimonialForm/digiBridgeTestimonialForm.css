@@ -8,6 +8,7 @@
     padding: 120px 20px;
     background: #0f172a;
     overflow: hidden;
+    transition: background-color 0.3s ease, color 0.2s ease;
 }
 
 /* Background */
@@ -634,7 +635,7 @@
     .dbtf-spinner {
         animation: none;
     }
-    
+
     .dbtf-input,
     .dbtf-select,
     .dbtf-textarea,
@@ -644,4 +645,143 @@
     .dbtf-state-btn {
         transition: none;
     }
+}
+
+/* ========================================
+   LIGHT THEME OVERRIDES — DigiBridge Testimonial Form
+   ======================================== */
+[data-theme="light"] .dbtf-section {
+    background: #ffffff;
+}
+[data-theme="light"] .dbtf-glow--1 {
+    background: rgba(226, 96, 32, 0.10);
+}
+[data-theme="light"] .dbtf-glow--2 {
+    background: rgba(251, 146, 60, 0.08);
+}
+[data-theme="light"] .dbtf-grid {
+    background-image:
+        linear-gradient(rgba(226, 96, 32, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(226, 96, 32, 0.08) 1px, transparent 1px);
+}
+[data-theme="light"] .dbtf-state-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+[data-theme="light"] .dbtf-state-icon--lock {
+    background: rgba(226, 96, 32, 0.08);
+    border: 1px solid rgba(226, 96, 32, 0.2);
+    color: #E26020;
+}
+[data-theme="light"] .dbtf-state-title {
+    color: #1e293b;
+}
+[data-theme="light"] .dbtf-state-desc {
+    color: #475569;
+}
+[data-theme="light"] .dbtf-state-btn {
+    background: linear-gradient(135deg, #E26020, #f97316);
+    box-shadow: 0 4px 20px rgba(226, 96, 32, 0.3);
+}
+[data-theme="light"] .dbtf-state-btn:hover {
+    box-shadow: 0 8px 30px rgba(226, 96, 32, 0.4);
+}
+[data-theme="light"] .dbtf-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+[data-theme="light"] .dbtf-header {
+    border-bottom: 1px solid #e5e2de;
+    background: linear-gradient(180deg, rgba(226, 96, 32, 0.03) 0%, transparent 100%);
+}
+[data-theme="light"] .dbtf-header-icon {
+    background: rgba(226, 96, 32, 0.08);
+    border: 1px solid rgba(226, 96, 32, 0.2);
+    color: #E26020;
+}
+[data-theme="light"] .dbtf-title {
+    color: #1e293b;
+}
+[data-theme="light"] .dbtf-title-highlight {
+    background: linear-gradient(135deg, #E26020 0%, #d97706 50%, #E26020 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+[data-theme="light"] .dbtf-subtitle {
+    color: #475569;
+}
+[data-theme="light"] .dbtf-label {
+    color: #1e293b;
+}
+[data-theme="light"] .dbtf-label svg {
+    color: #E26020;
+}
+[data-theme="light"] .dbtf-input,
+[data-theme="light"] .dbtf-select,
+[data-theme="light"] .dbtf-textarea {
+    color: #1e293b;
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+}
+[data-theme="light"] .dbtf-input::placeholder,
+[data-theme="light"] .dbtf-textarea::placeholder {
+    color: #94a3b8;
+}
+[data-theme="light"] .dbtf-input:focus,
+[data-theme="light"] .dbtf-select:focus,
+[data-theme="light"] .dbtf-textarea:focus {
+    border-color: #E26020;
+    box-shadow: 0 0 0 3px rgba(226,96,32,0.12);
+}
+[data-theme="light"] .dbtf-input--readonly {
+    background: #f1f5f9;
+}
+[data-theme="light"] .dbtf-select-arrow {
+    color: #64748b;
+}
+[data-theme="light"] .dbtf-hint {
+    color: #64748b;
+}
+[data-theme="light"] .dbtf-star {
+    background: #ffffff;
+    border: 2px solid #e2e8f0;
+    color: #e2e8f0;
+}
+[data-theme="light"] .dbtf-star:hover {
+    border-color: rgba(217, 119, 6, 0.4);
+}
+[data-theme="light"] .dbtf-star--active {
+    background: rgba(217, 119, 6, 0.08);
+    border-color: rgba(217, 119, 6, 0.4);
+    color: #d97706;
+}
+[data-theme="light"] .dbtf-rating-text {
+    color: #d97706;
+}
+[data-theme="light"] .dbtf-char-count {
+    color: #64748b;
+}
+[data-theme="light"] .dbtf-checkbox-box {
+    background: #ffffff;
+    border: 2px solid #e2e8f0;
+}
+[data-theme="light"] .dbtf-checkbox input:checked + .dbtf-checkbox-box {
+    background: linear-gradient(135deg, #E26020, #f97316);
+}
+[data-theme="light"] .dbtf-checkbox-text {
+    color: #475569;
+}
+[data-theme="light"] .dbtf-submit {
+    background: linear-gradient(135deg, #E26020, #f97316);
+    box-shadow: 0 4px 24px rgba(226, 96, 32, 0.3);
+}
+[data-theme="light"] .dbtf-submit:hover:not(:disabled) {
+    box-shadow: 0 8px 32px rgba(226, 96, 32, 0.4);
+}
+[data-theme="light"] .dbtf-spinner {
+    border: 4px solid #e2e8f0;
+    border-top-color: #E26020;
 }

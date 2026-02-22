@@ -177,7 +177,7 @@
 .xmas-greeting-text-container {
     padding: 25px 30px 20px;
     text-align: center;
-    background: linear-gradient(180deg, transparent 0%, rgba(139, 0, 0, 0.3) 100%);
+    background: linear-gradient(180deg, transparent 0%, color-mix(in srgb, var(--xmas-red-deep) 30%, transparent) 100%);
 }
 
 .xmas-greeting-text-container--ended {
