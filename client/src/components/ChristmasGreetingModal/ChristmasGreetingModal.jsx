@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSiteSettingsAdminContext } from '../contexts/SiteSettingsAdminContext';
 import './christmasGreetingModal.css';
 
 export const ChristmasGreetingModal = () => {
     const { t } = useTranslation();
+    const { settings } = useSiteSettingsAdminContext();
     const [isVisible, setIsVisible] = useState(false);
     const [isMuted, setIsMuted] = useState(false);
     const [isVideoEnded, setIsVideoEnded] = useState(false);
@@ -70,6 +72,7 @@ export const ChristmasGreetingModal = () => {
         }, 3000);
     }, [handleClose]);
 
+    if (!settings.christmas_greeting_enabled) return null;
     if (!isVisible) return null;
 
     return (

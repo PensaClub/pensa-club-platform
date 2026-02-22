@@ -858,6 +858,15 @@ export const Profile = () => {
                   {isAdmin && (
                     <>
                       <li>
+                        <Link to="/admin/site-settings">
+                          <span className="link-content">
+                            <DashboardIcon className="icon" />
+                            {t("profile.siteSettingsAdmin")}
+                          </span>
+                          <ArrowIcon className="icon-arrow" />
+                        </Link>
+                      </li>
+                      <li>
                         <NavLink
                           to="seo-statistics"
                           className={({ isActive }) => isActive ? 'active' : ''}

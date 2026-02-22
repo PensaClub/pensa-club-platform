@@ -1,0 +1,224 @@
+/* src/components/SiteSettingsAdmin/SettingsAdminSection/settingsAdminSection.css */
+/* Prefix: sas- */
+
+.sas-card {
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    background: rgba(12, 18, 34, 0.65);
+    border: 1px solid rgba(245, 158, 11, 0.06);
+    backdrop-filter: blur(12px);
+    overflow: hidden;
+    transition: all 0.35s ease;
+}
+
+.sas-card:hover {
+    border-color: rgba(245, 158, 11, 0.12);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* =========================================================
+                    HEADER
+   ========================================================= */
+
+.sas-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 32px 20px;
+}
+
+.sas-header-left {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.sas-icon {
+    font-size: 1.6rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+    line-height: 1;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.sas-icon svg {
+    color: #f59e0b;
+}
+
+.sas-header-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.sas-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin: 0;
+    letter-spacing: 0.01em;
+}
+
+.sas-desc {
+    font-size: 0.84rem;
+    color: #64748b;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* =========================================================
+                    DIVIDER
+   ========================================================= */
+
+.sas-divider {
+    height: 1px;
+    margin: 0 32px;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(245, 158, 11, 0.1) 30%,
+        rgba(245, 158, 11, 0.1) 70%,
+        transparent 100%
+    );
+}
+
+/* =========================================================
+                    CONTENT
+   ========================================================= */
+
+.sas-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px 12px 12px;
+}
+
+/* =========================================================
+                    RESPONSIVE - Tablet (<=1023px)
+   ========================================================= */
+
+@media (max-width: 1023px) {
+    .sas-header {
+        padding: 24px 26px 18px;
+    }
+
+    .sas-divider {
+        margin: 0 26px;
+    }
+
+    .sas-content {
+        padding: 6px 10px 10px;
+    }
+}
+
+/* =========================================================
+                    RESPONSIVE - Mobile (<=767px)
+   ========================================================= */
+
+@media (max-width: 767px) {
+    .sas-card {
+        border-radius: 16px;
+    }
+
+    .sas-header {
+        padding: 20px 20px 16px;
+    }
+
+    .sas-header-left {
+        gap: 12px;
+    }
+
+    .sas-divider {
+        margin: 0 20px;
+    }
+
+    .sas-content {
+        padding: 4px 6px 6px;
+    }
+
+    .sas-title {
+        font-size: 1.05rem;
+    }
+
+    .sas-desc {
+        font-size: 0.8rem;
+    }
+
+    .sas-icon {
+        font-size: 1.4rem;
+    }
+}
+
+/* =========================================================
+                    RESPONSIVE - Small Mobile (<=480px)
+   ========================================================= */
+
+@media (max-width: 480px) {
+    .sas-card {
+        border-radius: 14px;
+    }
+
+    .sas-header {
+        padding: 16px 16px 14px;
+    }
+
+    .sas-divider {
+        margin: 0 16px;
+    }
+
+    .sas-content {
+        padding: 4px 4px 4px;
+    }
+
+    .sas-title {
+        font-size: 0.95rem;
+    }
+
+    .sas-icon {
+        font-size: 1.2rem;
+    }
+}
+
+/* =========================================================
+                    LIGHT THEME
+   ========================================================= */
+
+[data-theme="light"] .sas-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+    backdrop-filter: none;
+}
+
+[data-theme="light"] .sas-card:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .sas-title {
+    color: #1e293b;
+}
+
+[data-theme="light"] .sas-desc {
+    color: #475569;
+}
+
+[data-theme="light"] .sas-icon {
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.08));
+}
+
+[data-theme="light"] .sas-icon svg {
+    color: #d97706;
+}
+
+[data-theme="light"] .sas-divider {
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(0, 0, 0, 0.06) 30%,
+        rgba(0, 0, 0, 0.06) 70%,
+        transparent 100%
+    );
+}

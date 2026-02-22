@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useSiteSettingsAdminContext } from '../contexts/SiteSettingsAdminContext';
 import './globalSnowfall.css';
 
 /**
@@ -6,6 +7,8 @@ import './globalSnowfall.css';
  * Уникален CSS prefix: global-snow-
  */
 export const GlobalSnowfall = ({ count = 50 }) => {
+    const { settings } = useSiteSettingsAdminContext();
+
     // Генерираме снежинките веднъж с useMemo
     const snowflakes = useMemo(() => {
         return [...Array(count)].map((_, i) => ({
@@ -17,6 +20,8 @@ export const GlobalSnowfall = ({ count = 50 }) => {
             opacity: 0.4 + Math.random() * 0.6
         }));
     }, [count]);
+
+    if (!settings.snowfall_enabled) return null;
 
     return (
         <div className="global-snow-container" aria-hidden="true">

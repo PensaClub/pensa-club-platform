@@ -484,6 +484,7 @@
     "newClub": "Neuer Verein",
     "clubDrafts": "Vereinsentwürfe",
     "clubsAdmin": "Vereinsverwaltung",
+    "siteSettingsAdmin": "Website-Einstellungen",
     "skills": "Fähigkeiten",
     "workOptions": "Berufsmöglichkeiten",
     "interestOptions": "Interessen",
@@ -14294,5 +14295,23 @@
       "assistant": "Assistent",
       "guest": "Gastdozent"
     }
+  },
+  "siteSettingsAdmin": {
+    "title": "Website-Einstellungen",
+    "subtitle": "Globale Website-Funktionen verwalten",
+    "seasonal": "Saisonale Funktionen",
+    "seasonalDesc": "Saisonale Dekorationen und Grüße ein- und ausschalten",
+    "snowfall": "Schneefall",
+    "snowfallDesc": "Zeigt animierte Schneeflocken auf der gesamten Website",
+    "christmasGreeting": "Weihnachtsgruß",
+    "christmasGreetingDesc": "Zeigt beim ersten Besuch ein Weihnachtsvideo-Modal",
+    "enabled": "Aktiviert",
+    "disabled": "Deaktiviert",
+    "saving": "Speichern...",
+    "saveSuccess": "Einstellung erfolgreich gespeichert",
+    "saveError": "Fehler beim Speichern der Einstellung",
+    "loadError": "Fehler beim Laden der Einstellungen",
+    "loading": "Einstellungen werden geladen...",
+    "backToProfile": "Zurück zum Profil"
   }
 }

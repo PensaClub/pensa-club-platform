@@ -555,6 +555,7 @@
     "newClub": "New Club",
     "clubDrafts": "Club Drafts",
     "clubsAdmin": "Clubs Management",
+    "siteSettingsAdmin": "Site Settings",
     "skills": "Skills",
     "workOptions": "Work Options",
     "interestOptions": "Interests",
@@ -15004,5 +15005,23 @@
     "assistant": "Assistant",
     "guest": "Guest lecturer"
   }
+},
+"siteSettingsAdmin": {
+  "title": "Site Settings",
+  "subtitle": "Manage global site features",
+  "seasonal": "Seasonal Features",
+  "seasonalDesc": "Enable and disable seasonal decorations and greetings",
+  "snowfall": "Snowfall",
+  "snowfallDesc": "Shows animated snowflakes across the entire site",
+  "christmasGreeting": "Christmas Greeting",
+  "christmasGreetingDesc": "Shows a Christmas video modal on first visit",
+  "enabled": "Enabled",
+  "disabled": "Disabled",
+  "saving": "Saving...",
+  "saveSuccess": "Setting saved successfully",
+  "saveError": "Error saving setting",
+  "loadError": "Error loading settings",
+  "loading": "Loading settings...",
+  "backToProfile": "Back to profile"
 }
 }
