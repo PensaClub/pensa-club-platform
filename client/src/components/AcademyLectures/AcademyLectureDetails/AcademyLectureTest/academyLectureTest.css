@@ -1238,3 +1238,60 @@
     padding: 0.875rem 1.5rem;
   }
 }
+
+/* ========================================
+   LIGHT THEME OVERRIDES — Academy Lecture Test
+   ======================================== */
+[data-theme="light"] .alt-header__progress-fill {
+    background: linear-gradient(90deg, #E26020, #f97316);
+}
+[data-theme="light"] .alt-header__saving-spinner {
+    border-top-color: #E26020;
+}
+[data-theme="light"] .alt-loading__spinner {
+    border-top-color: #E26020;
+}
+[data-theme="light"] .alt-error__btn {
+    background: #E26020;
+}
+[data-theme="light"] .alt-error__btn:hover {
+    background: #c8531a;
+}
+[data-theme="light"] .alt-question__number {
+    color: #E26020;
+    background: rgba(226, 96, 32, 0.08);
+}
+[data-theme="light"] .alt-sidebar__item--active {
+    background: #E26020;
+    border-color: #E26020;
+}
+[data-theme="light"] .alt-sidebar__item--answered.alt-sidebar__item--active {
+    background: #E26020;
+    border-color: #E26020;
+}
+[data-theme="light"] .alt-sidebar__legend-dot--current {
+    background: #E26020;
+}
+[data-theme="light"] .alt-question__answer--selected {
+    background: rgba(226, 96, 32, 0.06);
+    border-color: #E26020;
+}
+[data-theme="light"] .alt-question__answer--selected .alt-question__answer-indicator svg {
+    color: #E26020;
+}
+[data-theme="light"] .alt-question__nav-btn--next {
+    background: #E26020;
+}
+[data-theme="light"] .alt-question__nav-btn--next:hover {
+    background: #c8531a;
+}
+[data-theme="light"] .alt-results__btn--primary {
+    background: linear-gradient(135deg, #E26020, #f97316);
+}
+[data-theme="light"] .alt-results__btn--primary:hover {
+    background: linear-gradient(135deg, #c8531a, #e5680e);
+    box-shadow: 0 10px 20px -10px rgba(226, 96, 32, 0.5);
+}
+[data-theme="light"] .alt-results__attempts-remaining {
+    color: #E26020;
+}

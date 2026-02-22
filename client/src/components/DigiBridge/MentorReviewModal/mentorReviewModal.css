@@ -714,3 +714,26 @@
     font-size: 1.5rem;
   }
 }
+
+/* ========================================
+   LIGHT THEME OVERRIDES — Mentor Review Modal
+   ======================================== */
+[data-theme="light"] .mentor-review-modal-overlay {
+    background: rgba(0, 0, 0, 0.5);
+}
+[data-theme="light"] .mentor-review-modal-content {
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+[data-theme="light"] .mentor-review-modal-mentor-avatar-placeholder {
+    background: linear-gradient(135deg, #E26020 0%, #f97316 100%);
+}
+[data-theme="light"] .mentor-review-modal-textarea:focus {
+    border-color: #E26020;
+    box-shadow: 0 0 0 3px rgba(226, 96, 32, 0.12);
+}
+[data-theme="light"] .mentor-review-modal-btn-submit {
+    background: linear-gradient(135deg, #E26020 0%, #f97316 100%);
+}
+[data-theme="light"] .mentor-review-modal-btn-submit:hover:not(:disabled) {
+    box-shadow: 0 8px 20px rgba(226, 96, 32, 0.3);
+}

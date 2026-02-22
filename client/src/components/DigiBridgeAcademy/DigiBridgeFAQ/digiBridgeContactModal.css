@@ -20,7 +20,7 @@
     background: #1e293b;
     border: 1px solid #334155;
     border-radius: 24px;
-    box-shadow: 
+    box-shadow:
         0 25px 80px rgba(0, 0, 0, 0.5),
         0 0 60px rgba(99, 102, 241, 0.1);
     max-width: 600px;
@@ -29,6 +29,7 @@
     overflow-y: auto;
     position: relative;
     animation: dbcm-slide-up 0.3s ease;
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* ===================================
@@ -383,8 +384,77 @@
         animation: none;
         transition: none;
     }
-    
+
     .dbcm-spinner {
         animation: none;
     }
+}
+
+/* ========================================
+   LIGHT THEME OVERRIDES — DigiBridge Contact Modal
+   ======================================== */
+[data-theme="light"] .dbcm-overlay {
+    background: rgba(0, 0, 0, 0.5);
+}
+[data-theme="light"] .dbcm-modal {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.15), 0 0 60px rgba(226, 96, 32, 0.05);
+}
+[data-theme="light"] .dbcm-header {
+    border-bottom: 1px solid #e5e2de;
+}
+[data-theme="light"] .dbcm-header-icon {
+    background: rgba(226, 96, 32, 0.08);
+    border: 1px solid rgba(226, 96, 32, 0.2);
+    color: #E26020;
+}
+[data-theme="light"] .dbcm-title {
+    color: #1e293b;
+}
+[data-theme="light"] .dbcm-description {
+    color: #475569;
+}
+[data-theme="light"] .dbcm-label {
+    color: #1e293b;
+}
+[data-theme="light"] .dbcm-input,
+[data-theme="light"] .dbcm-textarea {
+    color: #1e293b;
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+}
+[data-theme="light"] .dbcm-input::placeholder,
+[data-theme="light"] .dbcm-textarea::placeholder {
+    color: #94a3b8;
+}
+[data-theme="light"] .dbcm-input:focus,
+[data-theme="light"] .dbcm-textarea:focus {
+    border-color: #E26020;
+    box-shadow: 0 0 0 3px rgba(226,96,32,0.12);
+}
+[data-theme="light"] .dbcm-btn--cancel {
+    background: #f1f5f9;
+    color: #475569;
+}
+[data-theme="light"] .dbcm-btn--cancel:hover:not(:disabled) {
+    background: #e2e8f0;
+    color: #1e293b;
+}
+[data-theme="light"] .dbcm-btn--submit {
+    background: linear-gradient(135deg, #E26020, #f97316);
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(226, 96, 32, 0.3);
+}
+[data-theme="light"] .dbcm-btn--submit:hover:not(:disabled) {
+    box-shadow: 0 8px 30px rgba(226, 96, 32, 0.4);
+}
+[data-theme="light"] .dbcm-modal::-webkit-scrollbar-track {
+    background: #ffffff;
+}
+[data-theme="light"] .dbcm-modal::-webkit-scrollbar-thumb {
+    background: #E26020;
+}
+[data-theme="light"] .dbcm-modal::-webkit-scrollbar-thumb:hover {
+    background: #c2510c;
 }

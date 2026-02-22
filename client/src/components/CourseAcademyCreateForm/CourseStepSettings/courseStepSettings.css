@@ -5,6 +5,7 @@
   display: flex;
   flex-direction: column;
   gap: 32px;
+  transition: background-color 0.3s ease, color 0.2s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* =========================================================
@@ -283,4 +284,105 @@
   color: rgba(255, 255, 255, 0.45);
   margin: -8px 0 12px;
   line-height: 1.5;
+}
+
+/* ===== LIGHT THEME ===== */
+
+/* --- Section --- */
+[data-theme="light"] .csst-section {
+  border-bottom: 1px solid #e2e8f0;
+}
+
+[data-theme="light"] .csst-section-title {
+  color: #E26020;
+}
+
+[data-theme="light"] .csst-section-desc {
+  color: #475569;
+}
+
+/* --- Labels --- */
+[data-theme="light"] .csst-label {
+  color: #334155;
+}
+
+/* --- Input / Select --- */
+[data-theme="light"] .csst-input,
+[data-theme="light"] .csst-select {
+  color: #1e293b;
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+}
+
+[data-theme="light"] .csst-input::placeholder {
+  color: #94a3b8;
+}
+
+[data-theme="light"] .csst-input:focus,
+[data-theme="light"] .csst-select:focus {
+  border-color: #E26020;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(226,96,32,0.12);
+}
+
+[data-theme="light"] .csst-select option {
+  background: #ffffff;
+  color: #1e293b;
+}
+
+/* --- Date Input --- */
+[data-theme="light"] .csst-input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0);
+}
+
+/* --- Toggles --- */
+[data-theme="light"] .csst-toggle-slider {
+  background: rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .csst-toggle-slider::after {
+  background: #94a3b8;
+}
+
+[data-theme="light"] .csst-toggle input:checked + .csst-toggle-slider {
+  background: rgba(226, 96, 32, 0.15);
+  border-color: rgba(226, 96, 32, 0.3);
+}
+
+[data-theme="light"] .csst-toggle input:checked + .csst-toggle-slider::after {
+  background: #E26020;
+  box-shadow: 0 0 8px rgba(226, 96, 32, 0.3);
+}
+
+[data-theme="light"] .csst-toggle-text {
+  color: #334155;
+}
+
+[data-theme="light"] .csst-toggle input:checked ~ .csst-toggle-text {
+  color: #1e293b;
+}
+
+/* --- Hint --- */
+[data-theme="light"] .csst-hint {
+  color: #64748b;
+}
+
+/* --- Error States --- */
+[data-theme="light"] .csst-field-error .csst-input,
+[data-theme="light"] .csst-field-error .csst-select {
+  border-color: rgba(220, 38, 38, 0.4);
+}
+
+[data-theme="light"] .csst-field-error .csst-input:focus,
+[data-theme="light"] .csst-field-error .csst-select:focus {
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+[data-theme="light"] .csst-field-error .csst-label {
+  color: #dc2626;
+}
+
+[data-theme="light"] .csst-error-msg {
+  color: #dc2626;
 }

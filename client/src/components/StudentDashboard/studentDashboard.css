@@ -327,3 +327,38 @@
     padding: 24px 16px;
   }
 }
+
+/* ========================================
+   LIGHT THEME OVERRIDES — Student Dashboard
+   ======================================== */
+[data-theme="light"] .sdb-container {
+    --sdb-bg-primary: #f1f5f9;
+    --sdb-bg-secondary: #ffffff;
+    --sdb-bg-card: rgba(255, 255, 255, 0.9);
+    --sdb-bg-card-hover: rgba(255, 255, 255, 0.95);
+    --sdb-border: #e2e8f0;
+    --sdb-border-hover: rgba(0, 0, 0, 0.15);
+    --sdb-gradient-primary: linear-gradient(135deg, #E26020, #f97316);
+    --sdb-text-primary: #1e293b;
+    --sdb-text-secondary: #475569;
+    --sdb-text-muted: #64748b;
+    --sdb-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+    --sdb-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+    --sdb-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.1);
+    --sdb-shadow-glow: 0 0 20px rgba(226, 96, 32, 0.2);
+}
+[data-theme="light"] .sdb-bg-grid {
+    background-image:
+        linear-gradient(rgba(226, 96, 32, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(226, 96, 32, 0.08) 1px, transparent 1px);
+}
+[data-theme="light"] .sdb-bg-orb-1 {
+    background: rgba(226, 96, 32, 0.10);
+}
+[data-theme="light"] .sdb-bg-orb-2 {
+    background: rgba(249, 115, 22, 0.08);
+}
+[data-theme="light"] .sdb-placeholder {
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px dashed #e2e8f0;
+}

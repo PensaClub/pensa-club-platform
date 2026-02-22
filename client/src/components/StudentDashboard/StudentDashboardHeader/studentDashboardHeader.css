@@ -328,3 +328,51 @@
     font-size: 28px;
   }
 }
+
+/* ========================================
+   LIGHT THEME OVERRIDES — Student Dashboard Header
+   ======================================== */
+[data-theme="light"] .sdbh-container {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(241, 245, 249, 0.95));
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+}
+[data-theme="light"] .sdbh-avatar {
+    border: 3px solid rgba(0, 0, 0, 0.12);
+    background: rgba(241, 245, 249, 0.8);
+}
+[data-theme="light"] .sdbh-avatar-placeholder {
+    color: #94a3b8;
+}
+[data-theme="light"] .sdbh-level-badge {
+    border: 2px solid #f1f5f9;
+}
+[data-theme="light"] .sdbh-name {
+    color: #1e293b;
+}
+[data-theme="light"] .sdbh-email {
+    color: #64748b;
+}
+[data-theme="light"] .sdbh-level-progress-text {
+    color: #64748b;
+}
+[data-theme="light"] .sdbh-progress-bar {
+    background: #e2e8f0;
+}
+[data-theme="light"] .sdbh-next-level {
+    color: #64748b;
+}
+[data-theme="light"] .sdbh-credits-card {
+    background: linear-gradient(135deg, #E26020, #f97316);
+    box-shadow: 0 4px 20px rgba(226, 96, 32, 0.25);
+}
+[data-theme="light"] .sdbh-edit-button {
+    background: transparent;
+    border: 1px solid #e2e8f0;
+    color: #475569;
+}
+[data-theme="light"] .sdbh-edit-button:hover {
+    background: rgba(0, 0, 0, 0.04);
+    border-color: #d1d5db;
+    color: #1e293b;
+}

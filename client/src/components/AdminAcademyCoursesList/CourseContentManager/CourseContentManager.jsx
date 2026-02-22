@@ -210,7 +210,7 @@ const CourseContentManager = () => {
                 onKeyDown={(e) => e.key === 'Enter' && handleAddModule()}
                 autoFocus
               />
-             <button className="ccm-inline-btn ccm-inline-confirm" onClick={handleSave} disabled={actionLoading || !form.title.trim()}>
+             <button className="ccm-inline-btn ccm-inline-confirm" onClick={handleAddModule} disabled={actionLoading || !newModuleTitle.trim()}>
                 {actionLoading === 'add-module' ? <Loader2 size={14} className="ccm-spin" /> : <Check size={14} />}
               </button>
               <button

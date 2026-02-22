@@ -12050,6 +12050,9 @@
       "userMenu": "Потребителско меню",
       "mobileMenu": "Меню",
       "login": "Вход",
+      "themeLight": "Светла тема",
+      "themeDark": "Тъмна тема",
+      "settings": "Настройки",
       "nav": {
         "myChats": "Чат",
         "mentorDashboard": "Чат",

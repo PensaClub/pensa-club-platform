@@ -326,3 +326,60 @@
     height: 18px;
   }
 }
+
+/* ========================================
+   LIGHT THEME OVERRIDES — Academy Program Tracks
+   ======================================== */
+[data-theme="light"] .academyProgramTracks-card {
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.92) 0%,
+        color-mix(in srgb, var(--program-color) 6%, #ffffff) 100%);
+    border: 1px solid color-mix(in srgb, var(--program-color) 18%, #e2e8f0);
+    box-shadow:
+        0 2px 8px color-mix(in srgb, var(--program-color) 8%, transparent),
+        0 1px 3px rgba(0, 0, 0, 0.04);
+}
+[data-theme="light"] .academyProgramTracks-card:hover {
+    border-color: var(--program-color);
+    box-shadow:
+        0 12px 32px color-mix(in srgb, var(--program-color) 18%, transparent),
+        0 4px 12px rgba(0, 0, 0, 0.06);
+}
+[data-theme="light"] .academyProgramTracks-card.is-active {
+    background: linear-gradient(135deg,
+        color-mix(in srgb, var(--program-color) 8%, #ffffff) 0%,
+        color-mix(in srgb, var(--program-color) 14%, #ffffff) 100%);
+    border-color: var(--program-color);
+    box-shadow:
+        0 12px 32px color-mix(in srgb, var(--program-color) 18%, transparent),
+        0 4px 12px rgba(0, 0, 0, 0.06);
+}
+[data-theme="light"] .academyProgramTracks-card-glow {
+    background: radial-gradient(
+        circle at center,
+        color-mix(in srgb, var(--program-color) 8%, transparent) 0%,
+        transparent 50%
+    );
+}
+[data-theme="light"] .academyProgramTracks-card-pattern {
+    background:
+      radial-gradient(circle at 30% 30%, #2563eb 1.2px, transparent 1.2px),
+      radial-gradient(circle at 70% 70%, #2563eb 1.2px, transparent 1.2px);
+    background-size: 20px 20px;
+    opacity: 0.3;
+}
+[data-theme="light"] .academyProgramTracks-card-title {
+    color: #1e293b;
+}
+[data-theme="light"] .academyProgramTracks-card-count {
+    color: #4a5568;
+}
+[data-theme="light"] .academyProgramTracks-card-arrow {
+    background: color-mix(in srgb, var(--program-color) 8%, #f1f5f9);
+    border: 1px solid color-mix(in srgb, var(--program-color) 15%, #e2e8f0);
+    color: color-mix(in srgb, var(--program-color) 60%, #475569);
+}
+[data-theme="light"] .academyProgramTracks-card:hover .academyProgramTracks-card-arrow,
+[data-theme="light"] .academyProgramTracks-card.is-active .academyProgramTracks-card-arrow {
+    color: #ffffff;
+}

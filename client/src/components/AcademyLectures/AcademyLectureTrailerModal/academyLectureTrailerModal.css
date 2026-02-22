@@ -480,3 +480,71 @@
     padding: 3px 8px;
   }
 }
+
+/* ========================================
+   LIGHT THEME OVERRIDES — Academy Lecture Trailer Modal
+   ======================================== */
+[data-theme="light"] .altm-backdrop {
+    --altm-bg-primary: #f1f5f9;
+    --altm-bg-secondary: #ffffff;
+    --altm-text-primary: #1e293b;
+    --altm-text-secondary: #475569;
+    --altm-text-muted: #64748b;
+    --altm-border: #e2e8f0;
+    --altm-glass: rgba(0, 0, 0, 0.03);
+    background: rgba(0, 0, 0, 0.5);
+}
+[data-theme="light"] .altm-modal {
+    background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.15);
+}
+[data-theme="light"] .altm-header {
+    background: #f1f5f9;
+    border-bottom: 1px solid #e5e2de;
+}
+[data-theme="light"] .altm-close {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: #e2e8f0;
+    color: #475569;
+}
+[data-theme="light"] .altm-close:hover {
+    background: rgba(220, 38, 38, 0.1);
+    color: #dc2626;
+    border-color: rgba(220, 38, 38, 0.2);
+}
+[data-theme="light"] .altm-video-error {
+    background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+}
+[data-theme="light"] .altm-lecturer {
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+}
+[data-theme="light"] .altm-lecturer-avatar-placeholder {
+    background: #f1ede8;
+}
+[data-theme="light"] .altm-course {
+    background: rgba(226, 96, 32, 0.06);
+    border: 1px solid rgba(226, 96, 32, 0.15);
+}
+[data-theme="light"] .altm-course-name {
+    color: #E26020;
+}
+[data-theme="light"] .altm-tag {
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    color: #64748b;
+}
+[data-theme="light"] .altm-tag:hover {
+    border-color: #E26020;
+    color: #E26020;
+}
+[data-theme="light"] .altm-footer {
+    background: #f1f5f9;
+    border-top: 1px solid #e5e2de;
+}
+[data-theme="light"] .altm-footer-btn {
+    background: linear-gradient(135deg, #E26020, #f97316);
+    color: #ffffff;
+    box-shadow: 0 4px 20px rgba(226, 96, 32, 0.3);
+}

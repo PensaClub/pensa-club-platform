@@ -8,6 +8,7 @@
 .ecbi-wrapper {
   position: relative;
   min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.2s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .ecbi-page-bg {
@@ -303,4 +304,106 @@
   .ecbi-footer {
     padding: 12px 16px;
   }
+}
+
+/* ===== LIGHT THEME ===== */
+
+/* --- Page Background --- */
+[data-theme="light"] .ecbi-page-bg {
+  background: #f1f5f9;
+}
+
+[data-theme="light"] .ecbi-page-bg::before {
+  background-image:
+    linear-gradient(rgba(226, 96, 32, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(226, 96, 32, 0.07) 1px, transparent 1px);
+}
+
+[data-theme="light"] .ecbi-page-bg::after {
+  background: radial-gradient(circle, rgba(226, 96, 32, 0.08) 0%, transparent 65%);
+}
+
+[data-theme="light"] .ecbi-glow-orb {
+  background: radial-gradient(circle, rgba(251, 146, 60, 0.07) 0%, transparent 65%);
+}
+
+/* --- Loading --- */
+[data-theme="light"] .ecbi-loading {
+  color: #64748b;
+}
+
+[data-theme="light"] .ecbi-spinner {
+  border: 3px solid rgba(226, 96, 32, 0.15);
+  border-top-color: #E26020;
+}
+
+/* --- Header --- */
+[data-theme="light"] .ecbi-back-btn {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  color: #64748b;
+}
+
+[data-theme="light"] .ecbi-back-btn:hover {
+  background: rgba(226, 96, 32, 0.06);
+  border-color: rgba(226, 96, 32, 0.15);
+  color: #E26020;
+}
+
+[data-theme="light"] .ecbi-title {
+  color: #1e293b;
+}
+
+[data-theme="light"] .ecbi-title-accent {
+  background: linear-gradient(135deg, #E26020, #d97706);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+[data-theme="light"] .ecbi-subtitle {
+  color: #64748b;
+}
+
+/* --- Sections --- */
+[data-theme="light"] .ecbi-section-title {
+  color: #475569;
+}
+
+[data-theme="light"] .ecbi-section-content {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+[data-theme="light"] .ecbi-section-content::before {
+  background: linear-gradient(90deg, transparent, rgba(226, 96, 32, 0.1), rgba(226, 96, 32, 0.06), transparent);
+}
+
+/* --- Footer --- */
+[data-theme="light"] .ecbi-footer {
+  background: rgba(255, 255, 255, 0.95);
+  border-top: 1px solid #e2e8f0;
+  box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .ecbi-footer::before {
+  background: linear-gradient(90deg, transparent, rgba(226, 96, 32, 0.1), rgba(226, 96, 32, 0.06), transparent);
+}
+
+[data-theme="light"] .ecbi-unsaved {
+  color: #d97706;
+}
+
+/* --- Buttons --- */
+[data-theme="light"] .ecbi-btn-cancel {
+  background: #f1f5f9;
+  border-color: rgba(0, 0, 0, 0.08);
+  color: #475569;
+}
+
+[data-theme="light"] .ecbi-btn-cancel:hover:not(:disabled) {
+  background: #e2e8f0;
+  border-color: rgba(226, 96, 32, 0.2);
+  color: #1e293b;
 }

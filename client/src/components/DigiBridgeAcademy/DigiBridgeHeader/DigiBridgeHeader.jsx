@@ -9,7 +9,6 @@ export const DigiBridgeHeader = () => {
     const location = useLocation();
      const isTestPage = location.pathname.includes('/test');
     const { isAuthentication, isFinish, profileData, isAdmin, isModerator } = useContext(UserContext);
-
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
@@ -332,6 +331,7 @@ export const DigiBridgeHeader = () => {
                             </Link>
                         </div>
                     )}
+
                 </nav>
             </div>
         </>
