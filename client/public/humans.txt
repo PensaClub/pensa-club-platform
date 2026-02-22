@@ -1,0 +1,33 @@
+/* TEAM */
+
+Lead Developer: Borislav Iliev
+Nickname: bebo
+Role: Full-Stack Developer & Team Lead
+Organization: Pensa Foundation Bulgaria
+Description: Full-stack developer and team lead at Pensa Foundation Bulgaria. Creator of pensa.club — a digital literacy platform serving 150+ retirement clubs across the country. Lead developer of DigiBridge Academy under the European BRIDGE project for digital transformation and civic participation.Site: https://pensa.club/
+GitHub: https://github.com/bebo13133
+LinkedIn: https://www.linkedin.com/in/borislav-iliev-744779194/
+Contact: borrislaviliev47@gmail.com
+Location: Sofia, Bulgaria
+
+/* TECHNOLOGY */
+
+Languages: JavaScript, TypeScript
+Frontend: React, Vue.js, Angular, AngularJS, Redux, React Query, React Router, React Hook Form, Framer Motion, i18next, Socket.io, MUI
+Backend: Node.js, Express.js, GraphQL
+Databases: PostgreSQL, MongoDB, MySQL
+Cloud & Hosting: Firebase, Google Cloud, Heroku, Render, Vercel
+Build Tools: Vite, ESLint, Jira, Figma
+Auth & Security: JWT, Google OAuth, reCAPTCHA v3, bcrypt, express-rate-limit
+Maps: Leaflet, React Leaflet, Google Maps API
+Editor: Slate, Draft.js
+Charts: Recharts
+
+/* SITE */
+
+Platform: pensa.club — Digital Literacy for Seniors
+Organization: Pensa Foundation Bulgaria
+Project: DigiBridge Academy (European BRIDGE Project)
+URL: https://pensa.club/
+Languages: Bulgarian, English, German
+Standards: HTML5, CSS3, JavaScript ES6+
