@@ -423,7 +423,7 @@
 }
 
 [data-theme="light"] .cspv-edit-link {
-  color: #64748b;
+  color: #475569;
 }
 
 [data-theme="light"] .cspv-section-header:hover .cspv-edit-link {
@@ -432,7 +432,7 @@
 
 /* --- Grid Items --- */
 [data-theme="light"] .cspv-item-label {
-  color: #64748b;
+  color: #475569;
 }
 
 [data-theme="light"] .cspv-item-value {
@@ -440,7 +440,7 @@
 }
 
 [data-theme="light"] .cspv-item-description {
-  color: #475569;
+  color: #334155;
 }
 
 /* --- Thumbnail --- */
@@ -450,9 +450,9 @@
 
 /* --- Badges --- */
 [data-theme="light"] .cspv-badge {
-  color: #475569;
+  color: #334155;
   background: rgba(0, 0, 0, 0.03);
-  border: 1px solid #e2e8f0;
+  border: 1px solid #d1d5db;
 }
 
 [data-theme="light"] .cspv-badge-accent {
@@ -463,22 +463,22 @@
 
 /* --- Tags --- */
 [data-theme="light"] .cspv-tags {
-  color: #64748b;
+  color: #475569;
 }
 
 [data-theme="light"] .cspv-tag {
-  color: #d97706;
-  background: rgba(226, 96, 32, 0.06);
-  border: 1px solid rgba(226, 96, 32, 0.12);
+  color: #2563eb;
+  background: rgba(37, 99, 235, 0.07);
+  border: 1px solid rgba(37, 99, 235, 0.15);
 }
 
 /* --- Modules Stats --- */
 [data-theme="light"] .cspv-modules-stats {
-  color: #64748b;
+  color: #475569;
 }
 
 [data-theme="light"] .cspv-empty {
-  color: #94a3b8;
+  color: #64748b;
 }
 
 /* --- Module --- */
@@ -502,7 +502,7 @@
 }
 
 [data-theme="light"] .cspv-module-count {
-  color: #64748b;
+  color: #475569;
 }
 
 /* --- Lessons --- */
@@ -511,17 +511,17 @@
 }
 
 [data-theme="light"] .cspv-lesson-index {
-  color: #94a3b8;
+  color: #64748b;
 }
 
 [data-theme="light"] .cspv-lesson-type-icon {
-  color: #d97706;
+  color: #2563eb;
 }
 
 [data-theme="light"] .cspv-lesson-title {
-  color: #475569;
+  color: #334155;
 }
 
 [data-theme="light"] .cspv-lesson-meta {
-  color: #64748b;
+  color: #475569;
 }

@@ -223,7 +223,7 @@
 
 /* --- Labels --- */
 [data-theme="light"] .csbi-label {
-  color: #475569;
+  color: #334155;
 }
 
 [data-theme="light"] .csbi-required {
@@ -259,7 +259,7 @@
 
 /* --- Char Count --- */
 [data-theme="light"] .csbi-char-count {
-  color: #94a3b8;
+  color: #64748b;
 }
 
 /* --- Error States --- */

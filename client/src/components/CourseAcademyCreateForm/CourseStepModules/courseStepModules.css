@@ -580,11 +580,11 @@
 
 /* --- Header --- */
 [data-theme="light"] .csmo-header-desc {
-  color: #475569;
+  color: #334155;
 }
 
 [data-theme="light"] .csmo-stats {
-  color: #64748b;
+  color: #475569;
 }
 
 [data-theme="light"] .csmo-add-module-btn {
@@ -625,21 +625,21 @@
 }
 
 [data-theme="light"] .csmo-drag-icon {
-  color: #94a3b8;
+  color: #475569;
 }
 
 [data-theme="light"] .csmo-module-toggle {
-  color: #64748b;
+  color: #334155;
 }
 
 [data-theme="light"] .csmo-module-toggle:hover {
-  color: #475569;
+  color: #1e293b;
   background: rgba(226, 96, 32, 0.06);
 }
 
 [data-theme="light"] .csmo-module-index {
-  background: rgba(226, 96, 32, 0.1);
-  color: #E26020;
+  background: rgba(226, 96, 32, 0.14);
+  color: #c2571c;
 }
 
 [data-theme="light"] .csmo-module-title-input {
@@ -656,40 +656,72 @@
 }
 
 [data-theme="light"] .csmo-lesson-count {
-  color: #64748b;
+  color: #334155;
 }
 
 /* --- Icon Buttons --- */
 [data-theme="light"] .csmo-icon-btn {
-  color: #64748b;
-  border: 1px solid #e2e8f0;
+  color: #1e293b;
+  border: 1px solid #94a3b8;
+  background: rgba(0, 0, 0, 0.13);
+}
+
+[data-theme="light"] .csmo-icon-btn svg {
+  color: #1e293b;
+  stroke: #1e293b;
 }
 
 [data-theme="light"] .csmo-icon-btn:hover:not(:disabled) {
-  color: #475569;
-  background: rgba(226, 96, 32, 0.06);
-  border-color: rgba(226, 96, 32, 0.2);
+  color: #0f172a;
+  background: rgba(226, 96, 32, 0.18);
+  border-color: rgba(226, 96, 32, 0.3);
+}
+
+[data-theme="light"] .csmo-icon-btn:hover:not(:disabled) svg {
+  color: #0f172a;
+  stroke: #0f172a;
 }
 
 [data-theme="light"] .csmo-icon-btn-danger:hover:not(:disabled) {
   color: #dc2626;
-  background: rgba(220, 38, 38, 0.08);
-  border-color: rgba(220, 38, 38, 0.2);
+  background: rgba(220, 38, 38, 0.16);
+  border-color: rgba(220, 38, 38, 0.3);
+}
+
+[data-theme="light"] .csmo-icon-btn-danger:hover:not(:disabled) svg {
+  color: #dc2626;
+  stroke: #dc2626;
 }
 
 [data-theme="light"] .csmo-icon-btn-sm {
-  color: #64748b;
-  border: 1px solid #e2e8f0;
+  color: #1e293b;
+  border: 1px solid #94a3b8;
+  background: rgba(0, 0, 0, 0.13);
+}
+
+[data-theme="light"] .csmo-icon-btn-sm svg {
+  color: #1e293b;
+  stroke: #1e293b;
 }
 
 [data-theme="light"] .csmo-icon-btn-sm:hover:not(:disabled) {
-  color: #475569;
-  background: rgba(226, 96, 32, 0.06);
+  color: #0f172a;
+  background: rgba(226, 96, 32, 0.18);
+}
+
+[data-theme="light"] .csmo-icon-btn-sm:hover:not(:disabled) svg {
+  color: #0f172a;
+  stroke: #0f172a;
 }
 
 [data-theme="light"] .csmo-icon-btn-sm.csmo-icon-btn-danger:hover:not(:disabled) {
   color: #dc2626;
-  background: rgba(220, 38, 38, 0.06);
+  background: rgba(220, 38, 38, 0.16);
+}
+
+[data-theme="light"] .csmo-icon-btn-sm.csmo-icon-btn-danger:hover:not(:disabled) svg {
+  color: #dc2626;
+  stroke: #dc2626;
 }
 
 /* --- Module Body --- */
@@ -698,7 +730,7 @@
 }
 
 [data-theme="light"] .csmo-module-desc-input {
-  color: #475569;
+  color: #334155;
   background: #ffffff;
   border: 1px solid #d1d5db;
 }
@@ -723,8 +755,8 @@
 }
 
 [data-theme="light"] .csmo-lesson-type-badge {
-  background: rgba(226, 96, 32, 0.08);
-  color: #d97706;
+  background: rgba(37, 99, 235, 0.12);
+  color: #1d4ed8;
 }
 
 [data-theme="light"] .csmo-lesson-title-input {
@@ -771,12 +803,12 @@
 
 /* --- Add Lesson Button --- */
 [data-theme="light"] .csmo-add-lesson-btn {
-  color: #64748b;
-  border: 1px dashed rgba(0, 0, 0, 0.12);
+  color: #334155;
+  border: 1px dashed rgba(0, 0, 0, 0.2);
 }
 
 [data-theme="light"] .csmo-add-lesson-btn:hover {
-  color: #d97706;
-  border-color: rgba(226, 96, 32, 0.3);
-  background: rgba(226, 96, 32, 0.04);
+  color: #2563eb;
+  border-color: rgba(37, 99, 235, 0.3);
+  background: rgba(37, 99, 235, 0.04);
 }

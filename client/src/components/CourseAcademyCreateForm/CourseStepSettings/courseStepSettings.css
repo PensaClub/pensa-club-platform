@@ -298,12 +298,12 @@
 }
 
 [data-theme="light"] .csst-section-desc {
-  color: #64748b;
+  color: #475569;
 }
 
 /* --- Labels --- */
 [data-theme="light"] .csst-label {
-  color: #475569;
+  color: #334155;
 }
 
 /* --- Input / Select --- */
@@ -356,7 +356,7 @@
 }
 
 [data-theme="light"] .csst-toggle-text {
-  color: #475569;
+  color: #334155;
 }
 
 [data-theme="light"] .csst-toggle input:checked ~ .csst-toggle-text {
@@ -365,7 +365,7 @@
 
 /* --- Hint --- */
 [data-theme="light"] .csst-hint {
-  color: #94a3b8;
+  color: #64748b;
 }
 
 /* --- Error States --- */
