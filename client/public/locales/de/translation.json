@@ -11113,6 +11113,9 @@
       "userMenu": "Benutzermenü",
       "mobileMenu": "Menü",
       "login": "Anmelden",
+      "themeLight": "Helles Design",
+      "themeDark": "Dunkles Design",
+      "settings": "Einstellungen",
       "nav": {
         "myChats": "Chats",
         "mentorDashboard": "Chats",

@@ -3316,3 +3316,883 @@
     gap: 8px;
   }
 }
+
+/* ========================================
+   LIGHT THEME OVERRIDES — Academy Course Detail
+   Rich layered design with colored glows
+   ======================================== */
+
+/* --- Base: warm layered background --- */
+[data-theme="light"] .academyCourseDetail {
+    background: linear-gradient(180deg, #fef7ee 0%, #faf5f0 30%, #f0f4f8 60%, #f5f0fa 100%);
+    color: #1e293b;
+}
+
+/* --- Background Effects: vibrant colored glows --- */
+[data-theme="light"] .academyCourseDetail-bgGlow {
+    opacity: 0.35;
+}
+[data-theme="light"] .academyCourseDetail-bgGlow--1 {
+    background: #f9a875;
+}
+[data-theme="light"] .academyCourseDetail-bgGlow--2 {
+    background: #93b5f7;
+}
+[data-theme="light"] .academyCourseDetail-bgGlow--3 {
+    background: #6dd4b8;
+}
+[data-theme="light"] .academyCourseDetail-bgGrid {
+    background-image:
+        linear-gradient(rgba(160, 120, 80, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(160, 120, 80, 0.1) 1px, transparent 1px);
+}
+
+/* --- Loading & Error --- */
+[data-theme="light"] .academyCourseDetail-loader p {
+    color: #4a5568;
+}
+[data-theme="light"] .academyCourseDetail-loader-ring div:nth-child(1) {
+    border-top-color: #E26020;
+}
+[data-theme="light"] .academyCourseDetail-loader-ring div:nth-child(2) {
+    border-top-color: #5b8ade;
+}
+[data-theme="light"] .academyCourseDetail-loader-ring div:nth-child(3) {
+    border-top-color: #10b981;
+}
+[data-theme="light"] .academyCourseDetail-error h2 {
+    color: #1e293b;
+}
+[data-theme="light"] .academyCourseDetail-error p {
+    color: #374151;
+}
+[data-theme="light"] .academyCourseDetail-error button {
+    background: linear-gradient(135deg, #E26020, #f97316);
+}
+
+/* --- Hero Section: warm gradient with depth --- */
+[data-theme="light"] .academyCourseDetail-hero {
+    background: linear-gradient(160deg, #fef3e2 0%, #fde8d0 25%, #f0e6f6 60%, #e8f0fe 100%);
+}
+[data-theme="light"] .academyCourseDetail-hero-overlay {
+    background: linear-gradient(
+        to bottom,
+        rgba(254, 243, 226, 0.3) 0%,
+        rgba(254, 243, 226, 0.6) 40%,
+        rgba(250, 245, 240, 0.95) 100%
+    );
+}
+
+/* Breadcrumb */
+[data-theme="light"] .academyCourseDetail-breadcrumb a {
+    color: #4a5568;
+}
+[data-theme="light"] .academyCourseDetail-breadcrumb a:hover {
+    color: #E26020;
+}
+[data-theme="light"] .academyCourseDetail-breadcrumb svg {
+    color: #6b7c93;
+}
+[data-theme="light"] .academyCourseDetail-breadcrumb-current {
+    color: #1e293b;
+}
+
+/* Badges */
+[data-theme="light"] .academyCourseDetail-badge {
+    background: rgba(226, 96, 32, 0.08);
+    border-color: rgba(226, 96, 32, 0.2);
+    color: #E26020;
+}
+[data-theme="light"] .academyCourseDetail-badge--category {
+    background: rgba(226, 96, 32, 0.08);
+    color: #c9541a;
+    border-color: rgba(226, 96, 32, 0.25);
+}
+[data-theme="light"] .academyCourseDetail-badge--level {
+    background: rgba(16, 185, 129, 0.1);
+    color: #059669;
+    border-color: rgba(16, 185, 129, 0.3);
+}
+[data-theme="light"] .academyCourseDetail-badge--certificate {
+    background: rgba(245, 158, 11, 0.1);
+    color: #d97706;
+    border-color: rgba(245, 158, 11, 0.3);
+}
+
+/* Hero Title & Description */
+[data-theme="light"] .academyCourseDetail-hero-title {
+    background: linear-gradient(135deg, #2d1810 0%, #4a2c1a 50%, #1e293b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+[data-theme="light"] .academyCourseDetail-hero-description {
+    color: #374151;
+}
+
+/* Hero Meta Stats */
+[data-theme="light"] .academyCourseDetail-hero-stat {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(226, 96, 32, 0.1);
+    box-shadow: 0 2px 8px rgba(180, 120, 60, 0.06);
+}
+[data-theme="light"] .academyCourseDetail-hero-stat:hover {
+    background: rgba(255, 255, 255, 0.85);
+    border-color: rgba(226, 96, 32, 0.25);
+    box-shadow: 0 4px 16px rgba(226, 96, 32, 0.1);
+}
+[data-theme="light"] .academyCourseDetail-hero-stat-icon {
+    background: rgba(226, 96, 32, 0.1);
+    color: #E26020;
+}
+[data-theme="light"] .academyCourseDetail-hero-stat-value {
+    color: #1e293b;
+}
+[data-theme="light"] .academyCourseDetail-hero-stat-label {
+    color: #4a5568;
+}
+
+/* Hero Instructor */
+[data-theme="light"] .academyCourseDetail-hero-instructor-label {
+    color: #4a5568;
+}
+[data-theme="light"] .academyCourseDetail-hero-instructor-name {
+    color: #1e293b;
+}
+[data-theme="light"] .academyCourseDetail-hero-instructor img {
+    border-color: #E26020;
+}
+
+/* Hero Tags */
+[data-theme="light"] .academyCourseDetail-tag {
+    background: rgba(255, 255, 255, 0.88);
+    border-color: rgba(160, 120, 80, 0.25);
+    color: #374151;
+}
+[data-theme="light"] .academyCourseDetail-tag:hover {
+    color: #E26020;
+    border-color: rgba(226, 96, 32, 0.3);
+    background: rgba(226, 96, 32, 0.06);
+}
+
+/* --- Hero Card (Right Sticky): frosted glass --- */
+[data-theme="light"] .academyCourseDetail-hero-card {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(226, 96, 32, 0.12);
+    box-shadow:
+        0 8px 32px rgba(180, 120, 60, 0.1),
+        0 2px 8px rgba(0, 0, 0, 0.04),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+[data-theme="light"] .academyCourseDetail-card-preview-overlay {
+    background: linear-gradient(to top, rgba(255, 255, 255, 0.9) 0%, transparent 60%);
+}
+[data-theme="light"] .academyCourseDetail-card-play-icon {
+    background: rgba(226, 96, 32, 0.9);
+    color: #fff;
+    box-shadow: 0 8px 24px rgba(226, 96, 32, 0.3);
+}
+[data-theme="light"] .academyCourseDetail-card-play:hover .academyCourseDetail-card-play-icon {
+    background: #E26020;
+    box-shadow: 0 12px 32px rgba(226, 96, 32, 0.4);
+}
+[data-theme="light"] .academyCourseDetail-card-play span {
+    color: #1e293b;
+    text-shadow: none;
+}
+[data-theme="light"] .academyCourseDetail-card-credits {
+    background: rgba(255, 255, 255, 0.9);
+    color: #d97706;
+    border: 1px solid rgba(245, 158, 11, 0.2);
+}
+[data-theme="light"] .academyCourseDetail-card-price-free {
+    color: #059669;
+    text-shadow: none;
+}
+[data-theme="light"] .academyCourseDetail-card-cta {
+    background: linear-gradient(135deg, #E26020, #f97316);
+    box-shadow: 0 4px 16px rgba(226, 96, 32, 0.3);
+}
+[data-theme="light"] .academyCourseDetail-card-cta:hover {
+    box-shadow: 0 10px 32px rgba(226, 96, 32, 0.4);
+}
+[data-theme="light"] .academyCourseDetail-card-cta--continue {
+    background: linear-gradient(135deg, #10b981, #059669);
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+}
+[data-theme="light"] .academyCourseDetail-card-cta--login {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+}
+[data-theme="light"] .academyCourseDetail-card-secondary {
+    color: #374151;
+    border-color: rgba(160, 120, 80, 0.3);
+    background: rgba(255, 255, 255, 0.85);
+}
+[data-theme="light"] .academyCourseDetail-card-secondary:hover {
+    background: rgba(226, 96, 32, 0.06);
+    border-color: #E26020;
+    color: #E26020;
+}
+[data-theme="light"] .academyCourseDetail-card-features li {
+    color: #374151;
+}
+[data-theme="light"] .academyCourseDetail-card-features li svg {
+    color: #6b7c93;
+}
+[data-theme="light"] .academyCourseDetail-card-guarantee {
+    background: rgba(16, 185, 129, 0.06);
+    border-color: rgba(16, 185, 129, 0.2);
+}
+[data-theme="light"] .academyCourseDetail-card-hint {
+    color: #6b7c93;
+}
+[data-theme="light"] .academyCourseDetail-card-enrolled {
+    background: rgba(16, 185, 129, 0.95);
+}
+
+/* --- Main Content: distinct background --- */
+[data-theme="light"] .academyCourseDetail-main {
+    background: linear-gradient(180deg, rgba(250, 245, 240, 0) 0%, rgba(240, 244, 248, 0.5) 100%);
+}
+
+/* --- Tabs --- */
+[data-theme="light"] .academyCourseDetail-tabs {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(160, 120, 80, 0.22);
+    box-shadow: 0 2px 8px rgba(180, 120, 60, 0.05);
+}
+[data-theme="light"] .academyCourseDetail-tab {
+    color: #4a5568;
+}
+[data-theme="light"] .academyCourseDetail-tab:hover {
+    color: #1e293b;
+    background: rgba(226, 96, 32, 0.04);
+}
+[data-theme="light"] .academyCourseDetail-tab.is-active {
+    background: linear-gradient(135deg, #E26020, #f97316);
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(226, 96, 32, 0.3);
+}
+
+/* --- Section --- */
+[data-theme="light"] .academyCourseDetail-section-title {
+    color: #1e293b;
+}
+[data-theme="light"] .academyCourseDetail-section-content {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(160, 120, 80, 0.2);
+    backdrop-filter: blur(4px);
+}
+[data-theme="light"] .academyCourseDetail-section-content p {
+    color: #374151;
+}
+[data-theme="light"] .academyCourseDetail-section-icon {
+    background: rgba(226, 96, 32, 0.1);
+}
+
+/* --- Overview: Audience --- */
+[data-theme="light"] .academyCourseDetail-audience-item {
+    background: rgba(255, 255, 255, 0.92);
+    border-color: rgba(160, 120, 80, 0.22);
+    color: #334155;
+}
+[data-theme="light"] .academyCourseDetail-audience-check {
+    background: rgba(16, 185, 129, 0.12);
+}
+
+/* --- Overview: Learn Grid --- */
+[data-theme="light"] .academyCourseDetail-learn-item {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(160, 120, 80, 0.2);
+    box-shadow: 0 1px 4px rgba(180, 120, 60, 0.04);
+}
+[data-theme="light"] .academyCourseDetail-learn-item:hover {
+    background: rgba(255, 255, 255, 0.85);
+    border-color: rgba(226, 96, 32, 0.2);
+    box-shadow: 0 4px 12px rgba(226, 96, 32, 0.08);
+}
+[data-theme="light"] .academyCourseDetail-learn-item span {
+    color: #334155;
+}
+[data-theme="light"] .academyCourseDetail-learn-check {
+    background: linear-gradient(135deg, #E26020, #f97316);
+}
+
+/* --- Overview: Stats Grid --- */
+[data-theme="light"] .academyCourseDetail-stat-card {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(160, 120, 80, 0.2);
+    box-shadow: 0 1px 4px rgba(180, 120, 60, 0.04);
+}
+[data-theme="light"] .academyCourseDetail-stat-card:hover {
+    border-color: rgba(226, 96, 32, 0.2);
+    box-shadow: 0 4px 12px rgba(226, 96, 32, 0.08);
+}
+[data-theme="light"] .academyCourseDetail-stat-value {
+    color: #1e293b;
+}
+[data-theme="light"] .academyCourseDetail-stat-label {
+    color: #4a5568;
+}
+[data-theme="light"] .academyCourseDetail-stat-glow {
+    background: #E26020;
+}
+
+/* --- Content: Summary --- */
+[data-theme="light"] .academyCourseDetail-content-summary {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(160, 120, 80, 0.2);
+}
+[data-theme="light"] .academyCourseDetail-content-summary-item {
+    color: #334155;
+}
+[data-theme="light"] .academyCourseDetail-content-dot {
+    color: #6b7c93;
+}
+
+/* --- Content: Modules --- */
+[data-theme="light"] .academyCourseDetail-module {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(160, 120, 80, 0.2);
+    box-shadow: 0 1px 4px rgba(180, 120, 60, 0.04);
+    backdrop-filter: blur(4px);
+}
+[data-theme="light"] .academyCourseDetail-module-header:hover {
+    background: rgba(226, 96, 32, 0.03);
+}
+[data-theme="light"] .academyCourseDetail-module-title {
+    color: #1e293b;
+}
+[data-theme="light"] .academyCourseDetail-module-label {
+    color: #E26020;
+}
+[data-theme="light"] .academyCourseDetail-module-meta {
+    color: #4a5568;
+}
+[data-theme="light"] .academyCourseDetail-module-toggle {
+    background: rgba(226, 96, 32, 0.06);
+    color: #6b7c93;
+}
+[data-theme="light"] .academyCourseDetail-module.is-open .academyCourseDetail-module-toggle {
+    color: #E26020;
+    background: rgba(226, 96, 32, 0.1);
+}
+[data-theme="light"] .academyCourseDetail-module-description {
+    color: #4a5568;
+}
+
+/* --- Content: Lessons --- */
+[data-theme="light"] .academyCourseDetail-lesson {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(160, 120, 80, 0.18);
+}
+[data-theme="light"] .academyCourseDetail-lesson:hover {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: rgba(226, 96, 32, 0.2);
+}
+[data-theme="light"] .academyCourseDetail-lesson.is-accessible:hover {
+    background: rgba(16, 185, 129, 0.05);
+    border-color: rgba(16, 185, 129, 0.2);
+}
+[data-theme="light"] .academyCourseDetail-lesson.is-free {
+    background: rgba(16, 185, 129, 0.05);
+    border-color: rgba(16, 185, 129, 0.15);
+}
+[data-theme="light"] .academyCourseDetail-lesson.is-scheduled {
+    background: rgba(245, 158, 11, 0.05);
+    border-color: rgba(245, 158, 11, 0.15);
+}
+[data-theme="light"] .academyCourseDetail-lesson-number {
+    background: rgba(226, 96, 32, 0.06);
+    color: #9a6040;
+}
+[data-theme="light"] .academyCourseDetail-lesson-icon {
+    background: rgba(226, 96, 32, 0.1);
+}
+[data-theme="light"] .academyCourseDetail-lesson-title {
+    color: #1e293b;
+}
+[data-theme="light"] .academyCourseDetail-lesson-meta {
+    color: #4a5568;
+}
+[data-theme="light"] .academyCourseDetail-lesson-duration svg {
+    color: #6b7c93;
+}
+[data-theme="light"] .academyCourseDetail-lesson-action {
+    background: rgba(226, 96, 32, 0.06);
+    color: #c9541a;
+}
+[data-theme="light"] .academyCourseDetail-lesson:hover .academyCourseDetail-lesson-action {
+    background: #E26020;
+    color: #fff;
+}
+[data-theme="light"] .academyCourseDetail-lesson.is-accessible .academyCourseDetail-lesson-action {
+    background: rgba(16, 185, 129, 0.1);
+    color: #059669;
+}
+[data-theme="light"] .academyCourseDetail-lesson.is-accessible:hover .academyCourseDetail-lesson-action {
+    background: #10b981;
+    color: #fff;
+}
+
+/* --- Content: Empty --- */
+[data-theme="light"] .academyCourseDetail-content-empty {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px dashed rgba(160, 120, 80, 0.3);
+}
+[data-theme="light"] .academyCourseDetail-content-empty p {
+    color: #4a5568;
+}
+
+/* --- Instructor Tab --- */
+[data-theme="light"] .academyCourseDetail-instructor--lead {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(160, 120, 80, 0.2);
+    backdrop-filter: blur(4px);
+}
+[data-theme="light"] .academyCourseDetail-instructor-glow {
+    background: rgba(226, 96, 32, 0.12);
+}
+[data-theme="light"] .academyCourseDetail-instructor-badge {
+    background: #fff;
+    border-color: #E26020;
+}
+[data-theme="light"] .academyCourseDetail-instructor-role {
+    background: rgba(226, 96, 32, 0.1);
+    color: #E26020;
+}
+[data-theme="light"] .academyCourseDetail-instructor-name {
+    color: #1e293b;
+}
+[data-theme="light"] .academyCourseDetail-instructor-specialization {
+    color: #4a5568;
+}
+[data-theme="light"] .academyCourseDetail-instructor-description {
+    background: rgba(255, 255, 255, 0.88);
+    color: #374151;
+    border: 1px solid rgba(160, 120, 80, 0.2);
+}
+[data-theme="light"] .academyCourseDetail-instructor-stat {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(160, 120, 80, 0.2);
+}
+[data-theme="light"] .academyCourseDetail-instructor-stat:hover {
+    background: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 12px rgba(180, 120, 60, 0.08);
+}
+[data-theme="light"] .academyCourseDetail-instructor-stat-value {
+    color: #1e293b;
+}
+[data-theme="light"] .academyCourseDetail-instructor-stat-label {
+    color: #4a5568;
+}
+[data-theme="light"] .academyCourseDetail-assistants {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(160, 120, 80, 0.2);
+}
+[data-theme="light"] .academyCourseDetail-assistants-title {
+    color: #1e293b;
+}
+[data-theme="light"] .academyCourseDetail-assistant {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(160, 120, 80, 0.18);
+}
+[data-theme="light"] .academyCourseDetail-assistant:hover {
+    background: rgba(255, 255, 255, 0.85);
+    border-color: rgba(226, 96, 32, 0.2);
+}
+[data-theme="light"] .academyCourseDetail-assistant img {
+    border-color: rgba(160, 120, 80, 0.25);
+}
+[data-theme="light"] .academyCourseDetail-assistant-name {
+    color: #1e293b;
+}
+[data-theme="light"] .academyCourseDetail-assistant-role {
+    color: #4a5568;
+}
+[data-theme="light"] .academyCourseDetail-instructor-empty {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px dashed rgba(160, 120, 80, 0.3);
+}
+[data-theme="light"] .academyCourseDetail-instructor-empty p {
+    color: #4a5568;
+}
+
+/* --- Reviews Tab --- */
+[data-theme="light"] .academyCourseDetail-reviews-overview {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(160, 120, 80, 0.2);
+}
+[data-theme="light"] .academyCourseDetail-reviews-score {
+    border-right: 1px solid rgba(160, 120, 80, 0.22);
+}
+[data-theme="light"] .academyCourseDetail-reviews-score-value {
+    text-shadow: none;
+}
+[data-theme="light"] .academyCourseDetail-reviews-score-glow {
+    opacity: 0.12;
+}
+[data-theme="light"] .academyCourseDetail-reviews-count {
+    color: #4a5568;
+}
+[data-theme="light"] .academyCourseDetail-reviews-bar-label {
+    color: #4a5568;
+}
+[data-theme="light"] .academyCourseDetail-reviews-bar-track {
+    background: rgba(160, 120, 80, 0.2);
+}
+[data-theme="light"] .academyCourseDetail-reviews-bar-percent {
+    color: #4a5568;
+}
+[data-theme="light"] .academyCourseDetail-review-placeholder {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px dashed rgba(160, 120, 80, 0.3);
+}
+[data-theme="light"] .academyCourseDetail-review-placeholder p {
+    color: #4a5568;
+}
+[data-theme="light"] .academyCourseDetail-review-placeholder span {
+    color: #6b7c93;
+}
+
+/* --- Enrolled & Privileged Badges --- */
+[data-theme="light"] .academyCourseDetail-enrolled-badge {
+    background: rgba(16, 185, 129, 0.08);
+    border-color: rgba(16, 185, 129, 0.25);
+}
+[data-theme="light"] .academyCourseDetail-privileged-badge {
+    background: rgba(139, 92, 246, 0.08);
+    border-color: rgba(139, 92, 246, 0.25);
+}
+
+/* --- Access Notice --- */
+[data-theme="light"] .academyCourseDetail-access-notice {
+    background: rgba(226, 96, 32, 0.05);
+    border: 1px solid rgba(226, 96, 32, 0.15);
+}
+[data-theme="light"] .academyCourseDetail-access-notice-content h4 {
+    color: #1e293b;
+}
+[data-theme="light"] .academyCourseDetail-access-notice-content p {
+    color: #4a5568;
+}
+[data-theme="light"] .academyCourseDetail-access-notice-btn {
+    background: linear-gradient(135deg, #E26020, #f97316);
+}
+
+/* --- Materials Section --- */
+[data-theme="light"] .academyCourseDetail-materials-section {
+    border-top-color: rgba(160, 120, 80, 0.22);
+}
+[data-theme="light"] .academyCourseDetail-materials-spinner {
+    border-color: rgba(160, 120, 80, 0.25);
+    border-top-color: #E26020;
+}
+[data-theme="light"] .academyCourseDetail-materials-loading p {
+    color: #4a5568;
+}
+[data-theme="light"] .academyCourseDetail-material {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(160, 120, 80, 0.2);
+    color: #334155;
+}
+[data-theme="light"] .academyCourseDetail-material:hover {
+    background: rgba(255, 255, 255, 0.85);
+    border-color: rgba(226, 96, 32, 0.25);
+    box-shadow: 0 4px 12px rgba(226, 96, 32, 0.08);
+}
+[data-theme="light"] .academyCourseDetail-material-icon {
+    background: rgba(226, 96, 32, 0.1);
+}
+[data-theme="light"] .academyCourseDetail-material-name {
+    color: #1e293b;
+}
+[data-theme="light"] .academyCourseDetail-material-meta {
+    color: #4a5568;
+}
+[data-theme="light"] .academyCourseDetail-material-type {
+    background: rgba(160, 120, 80, 0.2);
+    color: #6b5c4d;
+}
+[data-theme="light"] .academyCourseDetail-material-size {
+    color: #6b7c93;
+}
+[data-theme="light"] .academyCourseDetail-material-desc {
+    color: #4a5568;
+}
+[data-theme="light"] .academyCourseDetail-material-download {
+    background: rgba(226, 96, 32, 0.06);
+    color: #c9541a;
+}
+[data-theme="light"] .academyCourseDetail-material:hover .academyCourseDetail-material-download {
+    background: #E26020;
+    color: #fff;
+}
+[data-theme="light"] .academyCourseDetail-materials-empty {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px dashed rgba(160, 120, 80, 0.3);
+}
+[data-theme="light"] .academyCourseDetail-materials-empty p {
+    color: #4a5568;
+}
+
+/* --- Lesson Materials (expandable) --- */
+[data-theme="light"] .academyCourseDetail-lesson-materials {
+    background: rgba(255, 255, 255, 0.3);
+    border-left-color: rgba(226, 96, 32, 0.15);
+}
+[data-theme="light"] .academyCourseDetail-lesson-material-item {
+    color: #374151;
+}
+[data-theme="light"] .academyCourseDetail-lesson-material-item:hover {
+    background: rgba(226, 96, 32, 0.05);
+    color: #1e293b;
+}
+[data-theme="light"] .academyCourseDetail-lesson-material-size {
+    color: #6b7c93;
+}
+[data-theme="light"] .academyCourseDetail-lesson-material-item svg {
+    color: #E26020;
+}
+[data-theme="light"] .academyCourseDetail-lesson-materials-badge {
+    background: rgba(226, 96, 32, 0.07);
+    border-color: rgba(226, 96, 32, 0.15);
+    color: #E26020;
+}
+[data-theme="light"] .academyCourseDetail-lesson-materials-badge:hover {
+    background: rgba(226, 96, 32, 0.14);
+    border-color: rgba(226, 96, 32, 0.3);
+}
+
+/* --- Final Test Section --- */
+[data-theme="light"] .academyCourseDetail-final-test-card {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(160, 120, 80, 0.2);
+}
+[data-theme="light"] .academyCourseDetail-final-test-name {
+    color: #1e293b;
+}
+[data-theme="light"] .academyCourseDetail-final-test-desc {
+    color: #374151;
+}
+[data-theme="light"] .academyCourseDetail-final-test-meta-item {
+    color: #4a5568;
+}
+[data-theme="light"] .academyCourseDetail-final-test-passed {
+    background: rgba(16, 185, 129, 0.06);
+    border-color: rgba(16, 185, 129, 0.2);
+}
+[data-theme="light"] .academyCourseDetail-final-test-locked {
+    background: rgba(245, 158, 11, 0.06);
+    border-color: rgba(245, 158, 11, 0.15);
+}
+[data-theme="light"] .academyCourseDetail-final-test-btn--start {
+    background: linear-gradient(135deg, #E26020, #f97316);
+    color: #fff;
+}
+[data-theme="light"] .academyCourseDetail-final-test-btn--continue {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: #fff;
+}
+[data-theme="light"] .academyCourseDetail-final-test-remaining {
+    color: #4a5568;
+}
+[data-theme="light"] .academyCourseDetail-final-test-exhausted {
+    background: rgba(239, 68, 68, 0.06);
+    border-color: rgba(239, 68, 68, 0.15);
+}
+
+/* --- Standalone Lessons Title --- */
+[data-theme="light"] .academyCourseDetail-standalone-title {
+    color: #1e293b;
+}
+
+/* --- Top Bar (sticky): frosted glass --- */
+[data-theme="light"] .academyCourseDetail-topBar {
+    background: rgba(254, 247, 238, 0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(160, 120, 80, 0.2);
+}
+[data-theme="light"] .academyCourseDetail-topBar-back {
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(160, 120, 80, 0.22);
+    color: #334155;
+}
+[data-theme="light"] .academyCourseDetail-topBar-back:hover {
+    background: rgba(226, 96, 32, 0.06);
+    border-color: rgba(226, 96, 32, 0.2);
+    color: #E26020;
+}
+[data-theme="light"] .academyCourseDetail-topBar-title {
+    color: #4a5568;
+}
+
+/* --- Lesson Mentor Tags --- */
+[data-theme="light"] .academyCourseDetail-module-mentor-tag {
+    color: #374151;
+}
+[data-theme="light"] .academyCourseDetail-lesson-mentor-tag {
+    color: #4a5568;
+}
+
+/* --- acd- prefix layout elements --- */
+[data-theme="light"] .acd-content {
+    background: linear-gradient(180deg, transparent 0%, rgba(240, 244, 248, 0.3) 50%, rgba(245, 240, 250, 0.2) 100%);
+}
+[data-theme="light"] .acd-section-title {
+    color: #1e293b;
+}
+[data-theme="light"] .acd-sub-title {
+    color: #1e293b;
+}
+[data-theme="light"] .acd-curriculum-tag {
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(160, 120, 80, 0.22);
+    color: #374151;
+}
+[data-theme="light"] .acd-curriculum-tag svg {
+    opacity: 0.6;
+}
+[data-theme="light"] .acd-sub-section {
+    border-top-color: rgba(160, 120, 80, 0.2);
+}
+[data-theme="light"] .acd-empty-text {
+    color: #6b7c93;
+}
+
+/* Access Notice (acd-) */
+[data-theme="light"] .acd-access-notice {
+    background: rgba(226, 96, 32, 0.05);
+    border: 1px solid rgba(226, 96, 32, 0.15);
+}
+[data-theme="light"] .acd-access-notice-body strong {
+    color: #1e293b;
+}
+[data-theme="light"] .acd-access-notice-body p {
+    color: #4a5568;
+}
+[data-theme="light"] .acd-access-notice-btn {
+    background: #E26020;
+}
+
+/* About Grid */
+[data-theme="light"] .acd-about-card {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(160, 120, 80, 0.2);
+    backdrop-filter: blur(4px);
+    box-shadow: 0 1px 4px rgba(180, 120, 60, 0.04);
+}
+[data-theme="light"] .acd-about-card-title {
+    color: #1e293b;
+}
+[data-theme="light"] .acd-about-card-text {
+    color: #374151;
+}
+[data-theme="light"] .acd-about-card-list-item {
+    color: #374151;
+}
+
+/* Stats Mini */
+[data-theme="light"] .acd-stat-mini {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(160, 120, 80, 0.18);
+}
+[data-theme="light"] .acd-stat-mini-val {
+    color: #1e293b;
+}
+[data-theme="light"] .acd-stat-mini-lbl {
+    color: #4a5568;
+}
+
+/* Bottom Grid */
+[data-theme="light"] .acd-bottom-card {
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(160, 120, 80, 0.2);
+    backdrop-filter: blur(4px);
+    box-shadow: 0 1px 4px rgba(180, 120, 60, 0.04);
+}
+[data-theme="light"] .acd-bottom-card-title {
+    color: #1e293b;
+}
+
+/* Mentors (acd-) */
+[data-theme="light"] .acd-mentor-card {
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(160, 120, 80, 0.2);
+}
+[data-theme="light"] .acd-mentor-card--lead {
+    background: linear-gradient(135deg, rgba(226, 96, 32, 0.04), rgba(249, 115, 22, 0.02));
+    border-color: rgba(226, 96, 32, 0.15);
+}
+[data-theme="light"] .acd-mentor-card-name {
+    color: #1e293b;
+}
+[data-theme="light"] .acd-mentor-lead-badge {
+    color: #E26020;
+}
+[data-theme="light"] .acd-mentor-card-role {
+    color: #E26020;
+}
+[data-theme="light"] .acd-mentor-card-spec {
+    color: #4a5568;
+}
+[data-theme="light"] .acd-mentor-card-stats {
+    border-top-color: rgba(160, 120, 80, 0.2);
+}
+[data-theme="light"] .acd-mentor-stat {
+    color: #374151;
+}
+[data-theme="light"] .acd-mentor-card-bio {
+    border-top-color: rgba(160, 120, 80, 0.2);
+}
+[data-theme="light"] .acd-mentor-card-bio-text {
+    color: #4a5568;
+}
+[data-theme="light"] .acd-mentor-card-bio-edu {
+    color: #6b7c93;
+}
+[data-theme="light"] .acd-mentor-card-img {
+    border: 2px solid rgba(160, 120, 80, 0.25);
+}
+[data-theme="light"] .acd-mentor-name {
+    color: #1e293b;
+}
+[data-theme="light"] .acd-mentor-role {
+    color: #E26020;
+}
+[data-theme="light"] .acd-mentor-spec {
+    color: #4a5568;
+}
+[data-theme="light"] .acd-mentor-img {
+    border-color: rgba(160, 120, 80, 0.25);
+}
+[data-theme="light"] .acd-assistant-row {
+    color: #374151;
+}
+
+/* Reviews (acd-) */
+[data-theme="light"] .acd-review-count {
+    color: #4a5568;
+}
+[data-theme="light"] .acd-review-bar-label {
+    color: #4a5568;
+}
+[data-theme="light"] .acd-review-bar-track {
+    background: rgba(160, 120, 80, 0.2);
+}
+[data-theme="light"] .acd-review-bar-pct {
+    color: #4a5568;
+}
+
+/* --- Responsive fixes for light theme --- */
+@media (max-width: 768px) {
+    [data-theme="light"] .academyCourseDetail-reviews-score {
+        border-right: none;
+        border-bottom: 1px solid rgba(160, 120, 80, 0.22);
+    }
+}

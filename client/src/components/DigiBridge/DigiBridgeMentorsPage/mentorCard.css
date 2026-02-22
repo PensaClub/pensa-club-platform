@@ -785,11 +785,33 @@
     .mzz-status-dot {
         animation: none;
     }
-    
+
     .mzz-section,
     .mzz-btn,
     .mzz-course-chip,
     .mzz-contact-icon {
         transition: none;
     }
+}
+
+/* ========================================
+   LIGHT THEME OVERRIDES — Mentor Zigzag Card
+   ======================================== */
+[data-theme="light"] .mzz-section {
+    border: 1px solid rgba(0, 0, 0, 0.06);
+}
+[data-theme="light"] .mzz-section:hover {
+    box-shadow:
+        0 32px 80px rgba(0, 0, 0, 0.08),
+        0 12px 32px rgba(0, 0, 0, 0.04);
+}
+[data-theme="light"] .mzz-stats {
+    border-top: 2px solid rgba(0, 0, 0, 0.06);
+    border-bottom: 2px solid rgba(0, 0, 0, 0.06);
+}
+[data-theme="light"] .mzz-availability {
+    background: #f1f5f9;
+}
+[data-theme="light"] .mzz-contact-icon {
+    background: #f1f5f9;
 }

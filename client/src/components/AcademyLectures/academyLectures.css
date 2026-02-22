@@ -204,7 +204,8 @@
   animation: al-fadeInUp 0.8s ease-out 0.2s backwards;
 }
 
-.al-hero-title-glow {
+.al-hero-title span {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
   display: block;
   background: linear-gradient(135deg, var(--al-accent) 0%, var(--al-orange) 50%, var(--al-accent) 100%);
   background-size: 200% auto;
@@ -1533,9 +1534,15 @@
   }
 
   .al-hero-title {
-    font-size: 1.5rem;
-  }
+       font-size: 2.2rem;
 
+  }
+.al-hero-title span {
+    display: block;
+    font-size: 2.2rem;
+    margin-top: 4px;
+    /* color: var(--al-text-muted); */
+  }
   .al-hero-subtitle {
     font-size: 0.875rem;
     margin-bottom: 28px;
@@ -1607,9 +1614,14 @@
   }
 
   .al-hero-title {
-    font-size: 1.375rem;
+    font-size: 2rem;
   }
-
+.al-hero-title span {
+    display: block;
+    font-size: 2rem;
+    margin-top: 4px;
+    /* color: var(--al-text-muted); */
+  }
   .al-hero-subtitle {
     font-size: 0.8125rem;
   }
@@ -1948,4 +1960,256 @@
   .al-card-course {
     display: none;
   }
+}
+
+/* ========================================
+   LIGHT THEME OVERRIDES — Academy Lectures
+   ======================================== */
+[data-theme="light"] .al {
+    --al-bg-dark: #f1f5f9;
+    --al-bg-medium: #ffffff;
+    --al-bg-light: #f1ede8;
+    --al-bg-card: rgba(255, 255, 255, 0.9);
+    --al-text: #1e293b;
+    --al-text-muted: #475569;
+    --al-text-dim: #64748b;
+    --al-border: #e2e8f0;
+    --al-glass: rgba(255, 255, 255, 0.7);
+    --al-glass-border: #e2e8f0;
+    --al-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+[data-theme="light"] .al-hero-bg-img {
+    opacity: 0.55;
+    filter: none;
+}
+[data-theme="light"] .al-card-recording {
+    font-size: 0.8125rem;
+    padding: 7px 14px;
+}
+[data-theme="light"] .al-hero-overlay {
+    background:
+        linear-gradient(180deg,
+            rgba(254, 247, 238, 0.15) 0%,
+            rgba(253, 232, 208, 0.3) 25%,
+            rgba(240, 230, 246, 0.5) 55%,
+            rgba(232, 240, 254, 0.75) 80%,
+            var(--al-bg-dark) 100%
+        ),
+        linear-gradient(135deg,
+            rgba(234, 120, 50, 0.14) 0%,
+            rgba(249, 168, 117, 0.08) 30%,
+            transparent 55%
+        ),
+        linear-gradient(225deg,
+            rgba(100, 140, 230, 0.10) 0%,
+            rgba(94, 200, 168, 0.06) 30%,
+            transparent 55%
+        );
+}
+[data-theme="light"] .al-hero-grid {
+    background-image:
+        linear-gradient(rgba(160, 120, 80, 0.14) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(160, 120, 80, 0.14) 1px, transparent 1px);
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 30%, transparent 75%);
+}
+[data-theme="light"] .al-hero-stat:hover {
+    border-color: #E26020;
+    box-shadow: 0 8px 32px rgba(226, 96, 32, 0.1);
+}
+[data-theme="light"] .al-schedule-container {
+    background: linear-gradient(135deg,
+        rgba(226, 96, 32, 0.05) 0%,
+        rgba(255, 255, 255, 0.95) 50%,
+        rgba(251, 146, 60, 0.03) 100%
+    );
+    border: 1px solid #e2e8f0;
+}
+[data-theme="light"] .al-schedule-item {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+}
+[data-theme="light"] .al-schedule-item:hover {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), 0 0 20px color-mix(in srgb, var(--item-color) 10%, transparent);
+}
+[data-theme="light"] .al-schedule-item-time {
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+}
+[data-theme="light"] .al-filters {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+}
+[data-theme="light"] .al-filters-tab {
+    background: #f1f5f9;
+    color: #475569;
+}
+[data-theme="light"] .al-filters-tab:hover {
+    color: #1e293b;
+    background: #f1ede8;
+}
+[data-theme="light"] .al-filters-tab.is-active {
+    color: #E26020;
+    background: rgba(226, 96, 32, 0.08);
+    border-color: #E26020;
+}
+[data-theme="light"] .al-filters-tab-badge {
+    background: #f1ede8;
+    color: #475569;
+}
+[data-theme="light"] .al-filters-tab.is-active .al-filters-tab-badge {
+    background: #E26020;
+    color: #ffffff;
+}
+[data-theme="light"] .al-filters-search {
+    background: #f1f5f9;
+    border: 2px solid #e2e8f0;
+}
+[data-theme="light"] .al-filters-search:focus-within {
+    border-color: #E26020;
+    box-shadow: 0 0 0 3px rgba(226, 96, 32, 0.12);
+}
+[data-theme="light"] .al-filters-search-input {
+    color: #1e293b;
+}
+[data-theme="light"] .al-filters-search-input::placeholder {
+    color: #94a3b8;
+}
+[data-theme="light"] .al-filters-search-clear {
+    background: #e2e0dc;
+    color: #64748b;
+}
+[data-theme="light"] .al-filters-sort {
+    color: #475569;
+    background: #f1f5f9;
+    border: 2px solid #e2e8f0;
+}
+[data-theme="light"] .al-filters-sort option {
+    background: #ffffff;
+    color: #1e293b;
+}
+[data-theme="light"] .al-category {
+    color: #475569;
+    background: #ffffff;
+    border: 2px solid #e2e8f0;
+}
+[data-theme="light"] .al-category:hover {
+    background: color-mix(in srgb, var(--cat-color) 8%, #ffffff);
+}
+[data-theme="light"] .al-activeFilters {
+    background: rgba(226, 96, 32, 0.06);
+    border: 1px solid rgba(226, 96, 32, 0.2);
+}
+[data-theme="light"] .al-activeFilters button {
+    color: #1e293b;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+}
+[data-theme="light"] .al-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+[data-theme="light"] .al-card:hover {
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.1),
+        0 0 30px color-mix(in srgb, var(--card-color) 10%, transparent);
+}
+[data-theme="light"] .al-card-thumb-overlay {
+    background: linear-gradient(180deg, transparent 30%, rgba(255, 255, 255, 0.9) 100%);
+}
+[data-theme="light"] .al-card-content {
+    background: #ffffff;
+}
+[data-theme="light"] .al-card-title {
+    color: #1e293b;
+}
+[data-theme="light"] .al-card-desc {
+    color: #475569;
+}
+[data-theme="light"] .al-card-meta-item {
+    color: #64748b;
+}
+[data-theme="light"] .al-card-footer {
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+[data-theme="light"] .al-card-spots {
+    color: #64748b;
+}
+[data-theme="light"] .al-card-spots-bar {
+    background: #e2e0dc;
+}
+[data-theme="light"] .al-card-tag {
+    background: rgba(226, 96, 32, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    color: #64748b;
+}
+[data-theme="light"] .al-card-lecturer-avatar {
+    border: 2px solid #e2e8f0;
+    background: #f1f5f9;
+}
+[data-theme="light"] .al-card-lecturer-name {
+    color: #1e293b;
+}
+[data-theme="light"] .al-card-course {
+    background: rgba(226, 96, 32, 0.06);
+    border: 1px solid rgba(226, 96, 32, 0.15);
+}
+[data-theme="light"] .al-card-course-name {
+    color: #E26020;
+}
+[data-theme="light"] .al-empty {
+    background: #ffffff;
+    border: 2px dashed #e2e8f0;
+}
+[data-theme="light"] .al-empty h3 {
+    color: #1e293b;
+}
+[data-theme="light"] .al-empty p {
+    color: #475569;
+}
+[data-theme="light"] .al-loadMore {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+}
+[data-theme="light"] .al-loadMore-progress {
+    background: #e2e0dc;
+}
+[data-theme="light"] .al-loadMore-info {
+    color: #475569;
+}
+/* Card overlays — light backgrounds instead of dark */
+[data-theme="light"] .al-card-duration {
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(8px);
+    color: #1e293b;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+[data-theme="light"] .al-card-credits {
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(8px);
+    color: #b45309;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+[data-theme="light"] .al-card-views {
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(8px);
+    color: #475569;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+[data-theme="light"] .al-card-play {
+    background: rgba(255, 255, 255, 0.5);
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    color: #1e293b;
+}
+@media (max-width: 768px) {
+    [data-theme="light"] .al-card-recording {
+        font-size: 0.75rem;
+        padding: 6px 12px;
+    }
+}
+@media (max-width: 480px) {
+    [data-theme="light"] .al-card-recording {
+        font-size: 0.6875rem;
+        padding: 5px 10px;
+    }
 }

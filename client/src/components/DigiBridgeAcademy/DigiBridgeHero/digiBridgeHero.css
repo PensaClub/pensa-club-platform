@@ -11,6 +11,7 @@
     background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
     overflow: hidden;
     padding: 120px 0 80px;
+    transition: background-color 0.3s ease, color 0.2s ease;
 }
 
 /* Tech Grid Pattern */
@@ -543,11 +544,93 @@
     .dbh-hero-float-card {
         animation: none;
     }
-    
+
     .dbh-hero-content,
     .dbh-hero-visual {
         transition: none;
         opacity: 1;
         transform: none;
     }
+}
+
+/* ========================================
+   LIGHT THEME OVERRIDES — DigiBridge Hero
+   ======================================== */
+[data-theme="light"] .dbh-hero {
+    background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 50%, #ffffff 100%);
+}
+[data-theme="light"] .dbh-hero-grid {
+    background-image:
+        linear-gradient(rgba(226, 96, 32, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(226, 96, 32, 0.08) 1px, transparent 1px);
+}
+[data-theme="light"] .dbh-hero-glow--1 {
+    background: rgba(226, 96, 32, 0.10);
+}
+[data-theme="light"] .dbh-hero-glow--2 {
+    background: rgba(251, 146, 60, 0.08);
+}
+[data-theme="light"] .dbh-hero-glow--3 {
+    background: rgba(226, 96, 32, 0.03);
+}
+[data-theme="light"] .dbh-hero-particle {
+    background: rgba(226, 96, 32, 0.15);
+}
+[data-theme="light"] .dbh-hero-badge {
+    background: rgba(226, 96, 32, 0.08);
+    border: 1px solid rgba(226, 96, 32, 0.2);
+    color: #E26020;
+}
+[data-theme="light"] .dbh-hero-title {
+    color: #1e293b;
+}
+[data-theme="light"] .dbh-hero-title-highlight {
+    background: linear-gradient(135deg, #E26020 0%, #d97706 50%, #E26020 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+[data-theme="light"] .dbh-hero-subtitle {
+    color: #475569;
+}
+[data-theme="light"] .dbh-hero-btn--primary {
+    background: linear-gradient(135deg, #E26020, #f97316);
+    color: #fff;
+    box-shadow: 0 8px 32px rgba(226, 96, 32, 0.3);
+}
+[data-theme="light"] .dbh-hero-btn--primary:hover {
+    box-shadow: 0 12px 40px rgba(226, 96, 32, 0.4);
+}
+[data-theme="light"] .dbh-hero-btn--outline {
+    background: rgba(226, 96, 32, 0.08);
+    color: #E26020;
+    border: 2px solid rgba(226, 96, 32, 0.3);
+}
+[data-theme="light"] .dbh-hero-btn--outline:hover {
+    background: rgba(226, 96, 32, 0.15);
+    border-color: #E26020;
+}
+[data-theme="light"] .dbh-hero-trust-item {
+    color: #64748b;
+}
+[data-theme="light"] .dbh-hero-img-frame {
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(226, 96, 32, 0.1);
+}
+[data-theme="light"] .dbh-hero-img-overlay {
+    background: linear-gradient(135deg, rgba(226, 96, 32, 0.08) 0%, transparent 50%, rgba(251, 146, 60, 0.05) 100%);
+}
+[data-theme="light"] .dbh-hero-float-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+[data-theme="light"] .dbh-hero-float-title {
+    color: #1e293b;
+}
+[data-theme="light"] .dbh-hero-float-sub {
+    color: #64748b;
+}
+[data-theme="light"] .dbh-hero-wave svg path {
+    fill: #f1f5f9;
 }

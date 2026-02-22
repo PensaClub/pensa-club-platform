@@ -5,6 +5,7 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+  transition: background-color 0.3s ease, color 0.2s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* =========================================================
@@ -573,4 +574,209 @@
     width: 24px;
     height: 24px;
   }
+}
+
+/* ===== LIGHT THEME ===== */
+
+/* --- Header --- */
+[data-theme="light"] .csmo-header-desc {
+  color: #475569;
+}
+
+[data-theme="light"] .csmo-stats {
+  color: #64748b;
+}
+
+[data-theme="light"] .csmo-add-module-btn {
+  color: #E26020;
+  background: rgba(226, 96, 32, 0.08);
+  border: 1px solid rgba(226, 96, 32, 0.2);
+}
+
+[data-theme="light"] .csmo-add-module-btn:hover {
+  background: rgba(226, 96, 32, 0.15);
+  border-color: rgba(226, 96, 32, 0.35);
+  box-shadow: 0 0 16px rgba(226, 96, 32, 0.12);
+}
+
+/* --- Empty State --- */
+[data-theme="light"] .csmo-empty {
+  border: 1px dashed rgba(226, 96, 32, 0.15);
+  background: rgba(0, 0, 0, 0.02);
+}
+
+[data-theme="light"] .csmo-empty p {
+  color: #64748b;
+}
+
+/* --- Module Card --- */
+[data-theme="light"] .csmo-module {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+[data-theme="light"] .csmo-module:hover {
+  border-color: rgba(226, 96, 32, 0.2);
+}
+
+[data-theme="light"] .csmo-module-header {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+[data-theme="light"] .csmo-drag-icon {
+  color: #94a3b8;
+}
+
+[data-theme="light"] .csmo-module-toggle {
+  color: #64748b;
+}
+
+[data-theme="light"] .csmo-module-toggle:hover {
+  color: #475569;
+  background: rgba(226, 96, 32, 0.06);
+}
+
+[data-theme="light"] .csmo-module-index {
+  background: rgba(226, 96, 32, 0.1);
+  color: #E26020;
+}
+
+[data-theme="light"] .csmo-module-title-input {
+  color: #1e293b;
+}
+
+[data-theme="light"] .csmo-module-title-input::placeholder {
+  color: #94a3b8;
+}
+
+[data-theme="light"] .csmo-module-title-input:focus {
+  border-color: rgba(226, 96, 32, 0.2);
+  background: rgba(0, 0, 0, 0.02);
+}
+
+[data-theme="light"] .csmo-lesson-count {
+  color: #64748b;
+}
+
+/* --- Icon Buttons --- */
+[data-theme="light"] .csmo-icon-btn {
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+}
+
+[data-theme="light"] .csmo-icon-btn:hover:not(:disabled) {
+  color: #475569;
+  background: rgba(226, 96, 32, 0.06);
+  border-color: rgba(226, 96, 32, 0.2);
+}
+
+[data-theme="light"] .csmo-icon-btn-danger:hover:not(:disabled) {
+  color: #dc2626;
+  background: rgba(220, 38, 38, 0.08);
+  border-color: rgba(220, 38, 38, 0.2);
+}
+
+[data-theme="light"] .csmo-icon-btn-sm {
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+}
+
+[data-theme="light"] .csmo-icon-btn-sm:hover:not(:disabled) {
+  color: #475569;
+  background: rgba(226, 96, 32, 0.06);
+}
+
+[data-theme="light"] .csmo-icon-btn-sm.csmo-icon-btn-danger:hover:not(:disabled) {
+  color: #dc2626;
+  background: rgba(220, 38, 38, 0.06);
+}
+
+/* --- Module Body --- */
+[data-theme="light"] .csmo-module-body {
+  border-top: 1px solid #e2e8f0;
+}
+
+[data-theme="light"] .csmo-module-desc-input {
+  color: #475569;
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+}
+
+[data-theme="light"] .csmo-module-desc-input::placeholder {
+  color: #94a3b8;
+}
+
+[data-theme="light"] .csmo-module-desc-input:focus {
+  border-color: rgba(226, 96, 32, 0.2);
+  background: #ffffff;
+}
+
+/* --- Lesson Row --- */
+[data-theme="light"] .csmo-lesson {
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .csmo-lesson:hover {
+  border-color: rgba(226, 96, 32, 0.12);
+}
+
+[data-theme="light"] .csmo-lesson-type-badge {
+  background: rgba(226, 96, 32, 0.08);
+  color: #d97706;
+}
+
+[data-theme="light"] .csmo-lesson-title-input {
+  color: #1e293b;
+}
+
+[data-theme="light"] .csmo-lesson-title-input::placeholder {
+  color: #94a3b8;
+}
+
+[data-theme="light"] .csmo-lesson-title-input:focus {
+  border-color: rgba(226, 96, 32, 0.2);
+  background: rgba(0, 0, 0, 0.02);
+}
+
+[data-theme="light"] .csmo-lesson-type-select {
+  color: #475569;
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+}
+
+[data-theme="light"] .csmo-lesson-type-select option {
+  background: #ffffff;
+  color: #1e293b;
+}
+
+[data-theme="light"] .csmo-lesson-type-select:focus {
+  border-color: rgba(226, 96, 32, 0.25);
+}
+
+[data-theme="light"] .csmo-lesson-duration {
+  color: #475569;
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+}
+
+[data-theme="light"] .csmo-lesson-duration::placeholder {
+  color: #94a3b8;
+}
+
+[data-theme="light"] .csmo-lesson-duration:focus {
+  border-color: rgba(226, 96, 32, 0.25);
+}
+
+/* --- Add Lesson Button --- */
+[data-theme="light"] .csmo-add-lesson-btn {
+  color: #64748b;
+  border: 1px dashed rgba(0, 0, 0, 0.12);
+}
+
+[data-theme="light"] .csmo-add-lesson-btn:hover {
+  color: #d97706;
+  border-color: rgba(226, 96, 32, 0.3);
+  background: rgba(226, 96, 32, 0.04);
 }

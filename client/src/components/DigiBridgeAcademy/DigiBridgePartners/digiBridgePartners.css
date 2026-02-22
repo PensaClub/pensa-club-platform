@@ -8,6 +8,7 @@
     padding: 120px 20px;
     background: #0f172a;
     overflow: hidden;
+    transition: background-color 0.3s ease, color 0.2s ease;
 }
 
 /* Background Glows */
@@ -610,4 +611,119 @@
     .dbp-card-arrow-small {
         transition: none;
     }
+}
+
+/* ========================================
+   LIGHT THEME OVERRIDES — DigiBridge Partners
+   ======================================== */
+[data-theme="light"] .dbp-section {
+    background: #ffffff;
+}
+[data-theme="light"] .dbp-glow--1 {
+    background: rgba(226, 96, 32, 0.10);
+}
+[data-theme="light"] .dbp-glow--2 {
+    background: rgba(251, 146, 60, 0.08);
+}
+[data-theme="light"] .dbp-label {
+    background: rgba(226, 96, 32, 0.08);
+    border: 1px solid rgba(226, 96, 32, 0.2);
+    color: #E26020;
+}
+[data-theme="light"] .dbp-title {
+    color: #1e293b;
+}
+[data-theme="light"] .dbp-title-highlight {
+    background: linear-gradient(135deg, #E26020 0%, #d97706 50%, #E26020 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+[data-theme="light"] .dbp-subtitle {
+    color: #475569;
+}
+[data-theme="light"] .dbp-card--main {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+[data-theme="light"] .dbp-card--main:hover {
+    border-color: rgba(226, 96, 32, 0.3);
+    box-shadow: 0 10px 25px rgba(226, 96, 32, 0.1), 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+[data-theme="light"] .dbp-card-logo--dark {
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+}
+[data-theme="light"] .dbp-card-logo-text {
+    color: #475569;
+}
+[data-theme="light"] .dbp-card-name {
+    color: #1e293b;
+}
+[data-theme="light"] .dbp-card--main:hover .dbp-card-name {
+    color: #E26020;
+}
+[data-theme="light"] .dbp-card-desc {
+    color: #64748b;
+}
+[data-theme="light"] .dbp-card-arrow {
+    background: rgba(226, 96, 32, 0.08);
+    border: 1px solid rgba(226, 96, 32, 0.15);
+    color: #E26020;
+}
+[data-theme="light"] .dbp-card--main:hover .dbp-card-arrow {
+    background: linear-gradient(135deg, #E26020, #f97316);
+    box-shadow: 0 8px 24px rgba(226, 96, 32, 0.3);
+}
+[data-theme="light"] .dbp-other-title {
+    color: #475569;
+}
+[data-theme="light"] .dbp-other-title-line {
+    background: linear-gradient(90deg, transparent 0%, #e5e2de 100%);
+}
+[data-theme="light"] .dbp-other-title-line:last-child {
+    background: linear-gradient(90deg, #e5e2de 0%, transparent 100%);
+}
+[data-theme="light"] .dbp-card--small {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+[data-theme="light"] .dbp-card--small:hover {
+    border-color: rgba(226, 96, 32, 0.3);
+    box-shadow: 0 10px 25px rgba(226, 96, 32, 0.1), 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+[data-theme="light"] .dbp-card-name-small {
+    color: #1e293b;
+}
+[data-theme="light"] .dbp-card--small:hover .dbp-card-name-small {
+    color: #E26020;
+}
+[data-theme="light"] .dbp-card-desc-small {
+    color: #64748b;
+}
+[data-theme="light"] .dbp-card-arrow-small {
+    background: rgba(226, 96, 32, 0.08);
+    color: #E26020;
+}
+[data-theme="light"] .dbp-eu {
+    background: linear-gradient(135deg, rgba(0, 51, 153, 0.05) 0%, rgba(255, 204, 0, 0.03) 100%);
+    border: 1px solid rgba(0, 51, 153, 0.12);
+}
+[data-theme="light"] .dbp-eu-title {
+    color: #1e293b;
+}
+[data-theme="light"] .dbp-eu-desc {
+    color: #475569;
+}
+[data-theme="light"] .dbp-eu-badge {
+    background: rgba(0, 51, 153, 0.08);
+    border: 1px solid rgba(0, 51, 153, 0.15);
+}
+[data-theme="light"] .dbp-eu-badge-text {
+    color: #2563eb;
+}
+[data-theme="light"] .dbp-eu-badge-year {
+    color: #64748b;
 }

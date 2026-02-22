@@ -55,6 +55,7 @@
   margin: 0 auto;
   padding: 96px 32px 140px;
   min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.2s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* =========================================================
@@ -499,4 +500,159 @@
     font-size: 0.75rem;
     gap: 6px;
   }
+}
+
+/* ===== LIGHT THEME ===== */
+
+/* --- Page Background --- */
+[data-theme="light"] .cacf-page-bg {
+  background: #f1f5f9;
+}
+
+[data-theme="light"] .cacf-page-bg::before {
+  background-image:
+    linear-gradient(rgba(226, 96, 32, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(226, 96, 32, 0.07) 1px, transparent 1px);
+}
+
+[data-theme="light"] .cacf-page-bg::after {
+  background: radial-gradient(circle, rgba(226, 96, 32, 0.08) 0%, transparent 65%);
+}
+
+[data-theme="light"] .cacf-glow-orb {
+  background: radial-gradient(circle, rgba(251, 146, 60, 0.07) 0%, transparent 65%);
+}
+
+/* --- Loading --- */
+[data-theme="light"] .cacf-loading {
+  color: #64748b;
+}
+
+[data-theme="light"] .cacf-spinner {
+  border: 3px solid rgba(226, 96, 32, 0.15);
+  border-top-color: #E26020;
+}
+
+/* --- Header --- */
+[data-theme="light"] .cacf-title {
+  color: #1e293b;
+}
+
+[data-theme="light"] .cacf-title-accent {
+  background: linear-gradient(135deg, #E26020, #d97706);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+[data-theme="light"] .cacf-subtitle {
+  color: #64748b;
+}
+
+/* --- Steps Navigation --- */
+[data-theme="light"] .cacf-steps-nav {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+[data-theme="light"] .cacf-step-btn {
+  color: #64748b;
+}
+
+[data-theme="light"] .cacf-step-btn:hover {
+  color: #475569;
+  background: rgba(226, 96, 32, 0.04);
+}
+
+[data-theme="light"] .cacf-step-number {
+  background: rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  color: #64748b;
+}
+
+[data-theme="light"] .cacf-step-btn.cacf-step-active {
+  background: rgba(226, 96, 32, 0.08);
+  border-color: rgba(226, 96, 32, 0.2);
+  color: #1e293b;
+}
+
+[data-theme="light"] .cacf-step-btn.cacf-step-active .cacf-step-number {
+  background: linear-gradient(135deg, #E26020, #f59e0b);
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 0 20px rgba(226, 96, 32, 0.3);
+}
+
+[data-theme="light"] .cacf-step-btn.cacf-step-completed {
+  color: #E26020;
+}
+
+[data-theme="light"] .cacf-step-btn.cacf-step-completed .cacf-step-number {
+  background: rgba(226, 96, 32, 0.1);
+  border-color: rgba(226, 96, 32, 0.2);
+  color: #E26020;
+}
+
+/* --- Content Area --- */
+[data-theme="light"] .cacf-content {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+[data-theme="light"] .cacf-content::before {
+  background: linear-gradient(90deg, transparent, rgba(226, 96, 32, 0.1), rgba(226, 96, 32, 0.06), transparent);
+}
+
+[data-theme="light"] .cacf-step-placeholder {
+  color: #94a3b8;
+}
+
+[data-theme="light"] .cacf-step-placeholder p {
+  color: #64748b;
+}
+
+/* --- Footer --- */
+[data-theme="light"] .cacf-footer {
+  background: rgba(255, 255, 255, 0.95);
+  border-top: 1px solid #e2e8f0;
+  box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .cacf-footer::before {
+  background: linear-gradient(90deg, transparent, rgba(226, 96, 32, 0.1), rgba(226, 96, 32, 0.06), transparent);
+}
+
+/* --- Buttons --- */
+[data-theme="light"] .cacf-btn-secondary {
+  background: #f1f5f9;
+  border-color: rgba(0, 0, 0, 0.08);
+  color: #475569;
+}
+
+[data-theme="light"] .cacf-btn-secondary:hover:not(:disabled) {
+  background: #e2e8f0;
+  border-color: rgba(226, 96, 32, 0.2);
+  color: #1e293b;
+}
+
+[data-theme="light"] .cacf-btn-primary {
+  background: linear-gradient(135deg, #E26020, #f59e0b);
+}
+
+[data-theme="light"] .cacf-btn-primary:hover:not(:disabled) {
+  box-shadow: 0 0 24px rgba(226, 96, 32, 0.35), 0 0 48px rgba(226, 96, 32, 0.15);
+}
+
+[data-theme="light"] .cacf-btn-draft {
+  background: #f1f5f9;
+  border-color: rgba(0, 0, 0, 0.1);
+  color: #64748b;
+}
+
+[data-theme="light"] .cacf-btn-draft:hover:not(:disabled) {
+  background: #e2e8f0;
+  border-color: rgba(0, 0, 0, 0.15);
+  color: #475569;
 }

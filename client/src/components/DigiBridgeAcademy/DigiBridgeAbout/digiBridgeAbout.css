@@ -8,6 +8,7 @@
     padding: 120px 20px;
     background: #1e293b;
     overflow: hidden;
+    transition: background-color 0.3s ease, color 0.2s ease;
 }
 
 /* Background Glows */
@@ -442,4 +443,76 @@
         animation: none;
         transition: none;
     }
+}
+
+/* ========================================
+   LIGHT THEME OVERRIDES — DigiBridge About
+   ======================================== */
+[data-theme="light"] .dba-about {
+    background: #f1f5f9;
+}
+[data-theme="light"] .dba-about-glow--1 {
+    background: rgba(226, 96, 32, 0.10);
+}
+[data-theme="light"] .dba-about-glow--2 {
+    background: rgba(251, 146, 60, 0.08);
+}
+[data-theme="light"] .dba-about-label {
+    background: rgba(226, 96, 32, 0.08);
+    border: 1px solid rgba(226, 96, 32, 0.2);
+    color: #E26020;
+}
+[data-theme="light"] .dba-about-title {
+    color: #1e293b;
+}
+[data-theme="light"] .dba-about-title-highlight {
+    background: linear-gradient(135deg, #E26020 0%, #d97706 50%, #E26020 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+[data-theme="light"] .dba-about-description {
+    color: #475569;
+}
+[data-theme="light"] .dba-about-stat {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+[data-theme="light"] .dba-about-stat:hover {
+    border-color: #E26020;
+    box-shadow: 0 8px 25px rgba(226,96,32,0.12), 0 4px 10px rgba(0,0,0,0.06);
+}
+[data-theme="light"] .dba-about-stat-icon {
+    background: linear-gradient(135deg, #E26020, #f97316);
+}
+[data-theme="light"] .dba-about-stat-number {
+    color: #1e293b;
+}
+[data-theme="light"] .dba-about-stat-label {
+    color: #64748b;
+}
+[data-theme="light"] .dba-about-feature {
+    color: #475569;
+}
+[data-theme="light"] .dba-about-img-frame {
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(226, 96, 32, 0.1);
+}
+[data-theme="light"] .dba-about-img-overlay {
+    background: linear-gradient(135deg, rgba(226, 96, 32, 0.08) 0%, transparent 50%, rgba(251, 146, 60, 0.05) 100%);
+}
+[data-theme="light"] .dba-about-float-badge {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+[data-theme="light"] .dba-about-float-badge-title {
+    color: #1e293b;
+}
+[data-theme="light"] .dba-about-float-badge-sub {
+    color: #64748b;
+}
+[data-theme="light"] .dba-about-ring {
+    border: 2px solid rgba(226, 96, 32, 0.1);
 }

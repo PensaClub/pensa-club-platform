@@ -719,3 +719,116 @@
     font-size: 0.8rem;
   }
 }
+
+/* ========================================
+   LIGHT THEME OVERRIDES — Academy Lecture Watch
+   ======================================== */
+[data-theme="light"] .alw {
+    --alw-bg: #f1f5f9;
+    --alw-bg-secondary: #ffffff;
+    --alw-bg-tertiary: #f1ede8;
+    --alw-text: #1e293b;
+    --alw-text-muted: #475569;
+    --alw-border: #e2e8f0;
+}
+[data-theme="light"] .alw-header {
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+}
+[data-theme="light"] .alw-back-btn {
+    background: #f1ede8;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+}
+[data-theme="light"] .alw-back-btn:hover {
+    background: rgba(0, 0, 0, 0.06);
+    color: #1e293b;
+}
+[data-theme="light"] .alw-title {
+    color: #1e293b;
+}
+[data-theme="light"] .alw-theater-btn {
+    background: #f1ede8;
+    color: #475569;
+    border: 1px solid #e2e8f0;
+}
+[data-theme="light"] .alw-youtube-btn {
+    color: #475569;
+    border: 1px solid #e2e8f0;
+}
+[data-theme="light"] .alw-video-info {
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+}
+[data-theme="light"] .alw-meta-item {
+    color: #64748b;
+}
+[data-theme="light"] .alw-meta-category {
+    background: #f1ede8;
+}
+[data-theme="light"] .alw-test-btn {
+    background: linear-gradient(135deg, #E26020, #f97316);
+    box-shadow: 0 4px 15px rgba(226, 96, 32, 0.25);
+}
+[data-theme="light"] .alw-test-btn:hover {
+    box-shadow: 0 8px 20px rgba(226, 96, 32, 0.35);
+}
+[data-theme="light"] .alw-chat {
+    background: #ffffff;
+    border-left: 1px solid #e2e8f0;
+}
+[data-theme="light"] .alw-chat-header {
+    background: #f1f5f9;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+[data-theme="light"] .alw-chat-title {
+    color: #1e293b;
+}
+[data-theme="light"] .alw-chat-viewers {
+    color: #64748b;
+}
+[data-theme="light"] .alw-chat-message-avatar {
+    background: #f1ede8;
+}
+[data-theme="light"] .alw-chat-message-text {
+    color: #1e293b;
+}
+[data-theme="light"] .alw-chat-form {
+    background: #f1f5f9;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+}
+[data-theme="light"] .alw-chat-input {
+    background: #ffffff;
+    color: #1e293b;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+[data-theme="light"] .alw-description {
+    background: #ffffff;
+    border-top: 1px solid #e2e8f0;
+}
+[data-theme="light"] .alw-description h2 {
+    color: #1e293b;
+}
+[data-theme="light"] .alw-description p {
+    color: #475569;
+}
+[data-theme="light"] .alw-tag {
+    background: #f1ede8;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    color: #64748b;
+}
+[data-theme="light"] .alw-course-card {
+    background: #f1ede8;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+}
+[data-theme="light"] .alw-course-title {
+    color: #1e293b;
+}
+[data-theme="light"] .alw-loading,
+[data-theme="light"] .alw-error {
+    background: #f1f5f9;
+    color: #1e293b;
+}
+[data-theme="light"] .alw-error p {
+    color: #475569;
+}

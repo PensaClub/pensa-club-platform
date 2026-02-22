@@ -8,6 +8,7 @@
     padding: 120px 20px;
     background: #0f172a;
     overflow: hidden;
+    transition: background-color 0.3s ease, color 0.2s ease;
 }
 
 /* Background Grid */
@@ -571,4 +572,111 @@
         animation: none;
         transition: none;
     }
+}
+
+/* ========================================
+   LIGHT THEME OVERRIDES — DigiBridge Mentors Section
+   ======================================== */
+[data-theme="light"] .dbm-section {
+    background: #ffffff;
+}
+[data-theme="light"] .dbm-grid {
+    background-image:
+        linear-gradient(rgba(226, 96, 32, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(226, 96, 32, 0.08) 1px, transparent 1px);
+}
+[data-theme="light"] .dbm-glow--1 {
+    background: rgba(226, 96, 32, 0.10);
+}
+[data-theme="light"] .dbm-glow--2 {
+    background: rgba(251, 146, 60, 0.08);
+}
+[data-theme="light"] .dbm-label {
+    background: rgba(226, 96, 32, 0.08);
+    border: 1px solid rgba(226, 96, 32, 0.2);
+    color: #E26020;
+}
+[data-theme="light"] .dbm-title {
+    color: #1e293b;
+}
+[data-theme="light"] .dbm-title-highlight {
+    background: linear-gradient(135deg, #E26020 0%, #d97706 50%, #E26020 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+[data-theme="light"] .dbm-description {
+    color: #475569;
+}
+[data-theme="light"] .dbm-quality {
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+}
+[data-theme="light"] .dbm-quality:hover {
+    background: #ffffff;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+[data-theme="light"] .dbm-quality-icon {
+    background: rgba(226, 96, 32, 0.08);
+}
+[data-theme="light"] .dbm-quality-title {
+    color: #1e293b;
+}
+[data-theme="light"] .dbm-quality-desc {
+    color: #64748b;
+}
+[data-theme="light"] .dbm-btn--primary {
+    background: linear-gradient(135deg, #E26020, #f97316);
+    color: #fff;
+    box-shadow: 0 4px 20px rgba(226, 96, 32, 0.3);
+}
+[data-theme="light"] .dbm-btn--primary:hover {
+    box-shadow: 0 8px 30px rgba(226, 96, 32, 0.4);
+}
+[data-theme="light"] .dbm-btn--outline {
+    color: #E26020;
+    border: 2px solid rgba(226, 96, 32, 0.3);
+}
+[data-theme="light"] .dbm-btn--outline:hover {
+    background: rgba(226, 96, 32, 0.08);
+    border-color: #E26020;
+}
+[data-theme="light"] .dbm-img-frame {
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(226, 96, 32, 0.1);
+}
+[data-theme="light"] .dbm-img-overlay {
+    background: linear-gradient(135deg, rgba(226, 96, 32, 0.08) 0%, transparent 50%, rgba(251, 146, 60, 0.05) 100%);
+}
+[data-theme="light"] .dbm-stats-card {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+[data-theme="light"] .dbm-stat-icon {
+    background: rgba(226, 96, 32, 0.1);
+}
+[data-theme="light"] .dbm-stat-icon svg {
+    color: #E26020;
+}
+[data-theme="light"] .dbm-stat-number {
+    color: #1e293b;
+}
+[data-theme="light"] .dbm-stat-label {
+    color: #64748b;
+}
+[data-theme="light"] .dbm-stat-divider {
+    background: linear-gradient(180deg, transparent 0%, #e5e2de 50%, transparent 100%);
+}
+[data-theme="light"] .dbm-float-badge {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+[data-theme="light"] .dbm-float-badge-text {
+    color: #E26020;
+}
+[data-theme="light"] .dbm-ring {
+    border: 2px solid rgba(226, 96, 32, 0.1);
 }

@@ -291,3 +291,44 @@
     padding: 0 20px;
   }
 }
+
+/* ========================================
+   LIGHT THEME OVERRIDES — Academy Trailer Modal
+   ======================================== */
+[data-theme="light"] .academyTrailerModal-backdrop {
+    background: rgba(0, 0, 0, 0.5);
+}
+[data-theme="light"] .academyTrailerModal {
+    background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.15);
+}
+[data-theme="light"] .academyTrailerModal-header {
+    border-bottom-color: #e5e2de;
+}
+[data-theme="light"] .academyTrailerModal-header-title {
+    color: #1e293b;
+}
+[data-theme="light"] .academyTrailerModal-header-badge {
+    color: #475569;
+}
+[data-theme="light"] .academyTrailerModal-close {
+    color: #475569;
+    background: rgba(0, 0, 0, 0.05);
+}
+[data-theme="light"] .academyTrailerModal-close:hover {
+    background: rgba(220, 38, 38, 0.1);
+    color: #dc2626;
+}
+[data-theme="light"] .academyTrailerModal-footer {
+    background: #f1f5f9;
+    border-top-color: #e5e2de;
+}
+[data-theme="light"] .academyTrailerModal-footer-hint {
+    color: #475569;
+}
+[data-theme="light"] .academyTrailerModal-footer-btn {
+    background: linear-gradient(135deg, #E26020, #f97316);
+    color: #ffffff;
+    box-shadow: 0 4px 20px rgba(226, 96, 32, 0.3);
+}

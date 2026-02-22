@@ -5,6 +5,7 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
+  transition: background-color 0.3s ease, color 0.2s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* =========================================================
@@ -216,4 +217,68 @@
   gap: 6px;
   font-size: 0.78rem;
   color: #f43f5e;
+}
+
+/* ===== LIGHT THEME ===== */
+
+/* --- Labels --- */
+[data-theme="light"] .csbi-label {
+  color: #475569;
+}
+
+[data-theme="light"] .csbi-required {
+  color: #dc2626;
+}
+
+/* --- Input / Textarea / Select --- */
+[data-theme="light"] .csbi-input,
+[data-theme="light"] .csbi-textarea,
+[data-theme="light"] .csbi-select {
+  color: #1e293b;
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+}
+
+[data-theme="light"] .csbi-input::placeholder,
+[data-theme="light"] .csbi-textarea::placeholder {
+  color: #94a3b8;
+}
+
+[data-theme="light"] .csbi-input:focus,
+[data-theme="light"] .csbi-textarea:focus,
+[data-theme="light"] .csbi-select:focus {
+  border-color: #E26020;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(226,96,32,0.12);
+}
+
+[data-theme="light"] .csbi-select option {
+  background: #ffffff;
+  color: #1e293b;
+}
+
+/* --- Char Count --- */
+[data-theme="light"] .csbi-char-count {
+  color: #94a3b8;
+}
+
+/* --- Error States --- */
+[data-theme="light"] .csbi-field-error .csbi-input,
+[data-theme="light"] .csbi-field-error .csbi-textarea,
+[data-theme="light"] .csbi-field-error .csbi-select {
+  border-color: rgba(220, 38, 38, 0.4);
+}
+
+[data-theme="light"] .csbi-field-error .csbi-input:focus,
+[data-theme="light"] .csbi-field-error .csbi-textarea:focus {
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+[data-theme="light"] .csbi-error-msg {
+  color: #dc2626;
+}
+
+/* --- Thumbnail Preview --- */
+[data-theme="light"] .csbi-preview-img {
+  border: 1px solid #e2e8f0;
 }

@@ -48,6 +48,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { GoogleAuthProvider } from './components/contexts/GoogleAuthContext.jsx';
 import ContactForm from './components/ContactForm/ContactForm.jsx';
 import { InitiativeProvider } from './components/contexts/InitiativeProvider.jsx';
+import { ThemeProvider } from './components/contexts/ThemeContext.jsx';
 import { InitiativeView } from './components/Initiatives/InitiativeView/InitiativeView.jsx';
 import { ProjectView } from './components/Initiatives/InitiativeView/ProjectView/ProjectView.jsx';
 import { StoryView } from './components/Initiatives/InitiativeView/StoryPubView/StoryView.jsx';
@@ -91,6 +92,7 @@ import CourseAcademyCreateForm from './components/CourseAcademyCreateForm/Course
 import AdminAcademyCoursesList from './components/AdminAcademyCoursesList/AdminAcademyCoursesList.jsx';
 import EditCourseBasicInfo from './components/AdminAcademyCoursesList/EditCourseBasicInfo/EditCourseBasicInfo.jsx';
 import CourseContentManager from './components/AdminAcademyCoursesList/CourseContentManager/CourseContentManager.jsx';
+import ThemeToggle from './components/ThemeToggle/ThemeToggle';
 
 // ✅ LAZY LOADING КОМПОНЕНТИ
 const ArticlesList = lazy(() => import('./components/Articles/ArticlesList/ArticlesList.jsx'));
@@ -143,6 +145,8 @@ function App() {
   return (
     <>
       <HelmetProvider>
+        <ThemeProvider>
+        <ThemeToggle />
         <ErrorBoundary>
           <GlobalSnowfall count={50} />
           {/* <ChristmasGreetingModal /> */}
@@ -332,6 +336,7 @@ function App() {
             </UserProvider>
           </GoogleOAuthProvider>
         </ErrorBoundary>
+        </ThemeProvider>
       </HelmetProvider>
     </>
   );

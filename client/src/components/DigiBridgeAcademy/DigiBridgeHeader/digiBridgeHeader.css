@@ -85,6 +85,7 @@
     font-weight: 700;
     color: var(--dbh-text);
     letter-spacing: -0.5px;
+    transition: color var(--dbh-transition);
 }
 
 .dbh-logo__subtitle {
@@ -93,6 +94,7 @@
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 2px;
+    transition: color var(--dbh-transition);
 }
 
 /* ===== Navigation ===== */
@@ -283,9 +285,10 @@
     text-decoration: none;
     font-size: 0.85rem;
     font-weight: 500;
-    transition: 
+    transition:
         background var(--dbh-transition),
         border-color var(--dbh-transition),
+        color var(--dbh-transition),
         transform var(--dbh-transition);
 }
 
@@ -319,8 +322,9 @@
     border: none;
     border-radius: 50%;
     cursor: pointer;
-    transition: 
+    transition:
         background var(--dbh-transition),
+        color var(--dbh-transition),
         transform var(--dbh-transition);
 }
 
@@ -399,7 +403,8 @@
     border-radius: 50%;
     cursor: pointer;
     overflow: hidden;
-    transition: 
+    transition:
+        background var(--dbh-transition),
         border-color var(--dbh-transition),
         transform var(--dbh-transition),
         box-shadow var(--dbh-transition);
@@ -538,7 +543,9 @@
     border-radius: 8px;
     cursor: pointer;
     padding: 10px;
-    transition: background var(--dbh-transition);
+    transition:
+        background var(--dbh-transition),
+        color var(--dbh-transition);
 }
 
 .dbh-mobile-toggle:hover {
@@ -551,7 +558,8 @@
     height: 2px;
     background: var(--dbh-text);
     border-radius: 2px;
-    transition: 
+    transition:
+        background var(--dbh-transition),
         transform var(--dbh-transition),
         opacity var(--dbh-transition);
 }
@@ -770,8 +778,8 @@
     .dbh-lang__trigger,
     .dbh-user__trigger,
     .dbh-mobile-toggle {
-        width: 36px;
-        height: 36px;
+        width: 34px;
+        height: 34px;
     }
     
     .dbh-back {
@@ -880,8 +888,87 @@
     .dbh-container {
         padding: 0 15px;
     }
-    
+
     .dbh-back {
         display: none;
     }
+}
+
+/* ========================================
+   LIGHT THEME OVERRIDES — DigiBridge Header
+   ======================================== */
+[data-theme="light"] .dbh-header--scrolled,
+[data-theme="light"] .dbh-header--dark {
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+[data-theme="light"] .dbh-logo__title {
+    color: #1e293b;
+}
+[data-theme="light"] .dbh-logo__subtitle {
+    color: #64748b;
+}
+[data-theme="light"] .dbh-nav__link {
+    color: #1e293b;
+}
+[data-theme="light"] .dbh-nav__link:hover {
+    background: rgba(226, 96, 32, 0.08);
+}
+[data-theme="light"] .dbh-nav__link--active {
+    background: rgba(226, 96, 32, 0.1);
+}
+[data-theme="light"] .dbh-nav__link--active::after {
+    background: #E26020;
+}
+[data-theme="light"] .dbh-nav__link--chat {
+    background: rgba(226, 96, 32, 0.1);
+    border-color: rgba(226, 96, 32, 0.2);
+    color: #E26020;
+}
+[data-theme="light"] .dbh-nav__link--chat:hover {
+    background: rgba(226, 96, 32, 0.15);
+}
+[data-theme="light"] .dbh-more__trigger {
+    color: #1e293b;
+}
+[data-theme="light"] .dbh-more__trigger:hover {
+    background: rgba(226, 96, 32, 0.08);
+}
+[data-theme="light"] .dbh-more__trigger--open {
+    background: rgba(226, 96, 32, 0.1);
+}
+[data-theme="light"] .dbh-back {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.1);
+    color: #1e293b;
+}
+[data-theme="light"] .dbh-back:hover {
+    background: rgba(0, 0, 0, 0.08);
+    border-color: rgba(0, 0, 0, 0.15);
+}
+[data-theme="light"] .dbh-lang__trigger {
+    background: rgba(0, 0, 0, 0.05);
+}
+[data-theme="light"] .dbh-lang__trigger:hover {
+    background: rgba(0, 0, 0, 0.08);
+}
+[data-theme="light"] .dbh-user__trigger {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.1);
+}
+[data-theme="light"] .dbh-user__trigger:hover {
+    border-color: rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.08);
+}
+[data-theme="light"] .dbh-mobile-toggle {
+    background: rgba(0, 0, 0, 0.05);
+}
+[data-theme="light"] .dbh-mobile-toggle:hover {
+    background: rgba(0, 0, 0, 0.08);
+}
+[data-theme="light"] .dbh-mobile-toggle__line {
+    background: #1e293b;
+}
+[data-theme="light"] .dbh-header *:focus-visible {
+    outline-color: #E26020;
 }

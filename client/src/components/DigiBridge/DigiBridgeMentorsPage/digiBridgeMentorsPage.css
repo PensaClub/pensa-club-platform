@@ -1064,7 +1064,7 @@
     .dmp-card-blob {
         animation: none;
     }
-    
+
     .dmp-card,
     .dmp-btn,
     .dmp-card-btn,
@@ -1072,4 +1072,183 @@
     .dmp-filters-toggle {
         transition: none;
     }
+}
+
+/* ========================================
+   LIGHT THEME OVERRIDES — DigiBridge Mentors Page
+   ======================================== */
+[data-theme="light"] .dmp-page {
+    background: #f1f5f9;
+}
+[data-theme="light"] .dmp-hero {
+    background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+}
+[data-theme="light"] .dmp-hero-grid {
+    background-image:
+        linear-gradient(rgba(226, 96, 32, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(226, 96, 32, 0.08) 1px, transparent 1px);
+}
+[data-theme="light"] .dmp-hero-glow--1 {
+    background: rgba(226, 96, 32, 0.08);
+}
+[data-theme="light"] .dmp-hero-glow--2 {
+    background: rgba(249, 115, 22, 0.06);
+}
+[data-theme="light"] .dmp-hero-content {
+    color: #1e293b;
+}
+[data-theme="light"] .dmp-hero-badge {
+    background: rgba(226, 96, 32, 0.08);
+    border: 1px solid rgba(226, 96, 32, 0.2);
+    color: #E26020;
+}
+[data-theme="light"] .dmp-hero-title {
+    background: linear-gradient(135deg, #1e293b 0%, #E26020 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+[data-theme="light"] .dmp-hero-desc {
+    color: #475569;
+}
+[data-theme="light"] .dmp-btn--primary {
+    background: linear-gradient(135deg, #E26020, #f97316);
+    box-shadow: 0 4px 20px rgba(226, 96, 32, 0.3);
+}
+[data-theme="light"] .dmp-btn--primary:hover {
+    box-shadow: 0 8px 30px rgba(226, 96, 32, 0.4);
+}
+[data-theme="light"] .dmp-btn--outline {
+    color: #E26020;
+    border: 2px solid rgba(226, 96, 32, 0.3);
+}
+[data-theme="light"] .dmp-btn--outline:hover {
+    background: rgba(226, 96, 32, 0.06);
+    border-color: #E26020;
+}
+[data-theme="light"] .dmp-hero-img-frame {
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.12);
+}
+[data-theme="light"] .dmp-hero-img-overlay {
+    background: linear-gradient(135deg, rgba(226, 96, 32, 0.1) 0%, transparent 50%);
+}
+[data-theme="light"] .dmp-hero-stat-card {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+[data-theme="light"] .dmp-hero-stat-num {
+    color: #1e293b;
+}
+[data-theme="light"] .dmp-hero-stat-label {
+    color: #64748b;
+}
+[data-theme="light"] .dmp-filters {
+    background: #ffffff;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+[data-theme="light"] .dmp-filters-toggle {
+    background: rgba(255, 255, 255, 0.95);
+    color: #E26020;
+    border: 1px solid rgba(226, 96, 32, 0.2);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+[data-theme="light"] .dmp-filters-toggle:hover {
+    background: rgba(226, 96, 32, 0.06);
+    border-color: #E26020;
+}
+[data-theme="light"] .dmp-filters-toggle--active {
+    background: linear-gradient(135deg, #E26020, #f97316);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 4px 24px rgba(226, 96, 32, 0.4);
+}
+[data-theme="light"] .dmp-filters-title {
+    color: #1e293b;
+}
+[data-theme="light"] .dmp-filters-close {
+    background: rgba(0, 0, 0, 0.05);
+    color: #64748b;
+}
+[data-theme="light"] .dmp-search input {
+    background: #ffffff;
+    border: 2px solid #d1d5db;
+    color: #1e293b;
+}
+[data-theme="light"] .dmp-search input::placeholder {
+    color: #94a3b8;
+}
+[data-theme="light"] .dmp-search input:focus {
+    border-color: #E26020;
+    box-shadow: 0 0 0 3px rgba(226, 96, 32, 0.12);
+}
+[data-theme="light"] .dmp-search-clear {
+    background: rgba(0, 0, 0, 0.08);
+    color: #64748b;
+}
+[data-theme="light"] .dmp-tag {
+    background: #f1f5f9;
+    color: #475569;
+}
+[data-theme="light"] .dmp-tag:hover {
+    color: #1e293b;
+    border-color: rgba(0, 0, 0, 0.12);
+}
+[data-theme="light"] .dmp-tag--active {
+    background: linear-gradient(135deg, #E26020, #f97316);
+    color: #fff;
+    border-color: transparent;
+}
+[data-theme="light"] .dmp-mentors-header h2 {
+    color: #1e293b;
+}
+[data-theme="light"] .dmp-mentors-count {
+    color: #64748b;
+}
+[data-theme="light"] .dmp-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+[data-theme="light"] .dmp-card:hover {
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08), 0 0 40px rgba(226, 96, 32, 0.05);
+}
+[data-theme="light"] .dmp-card-name {
+    color: #1e293b;
+}
+[data-theme="light"] .dmp-card-bio {
+    color: #475569;
+}
+[data-theme="light"] .dmp-card-lang {
+    background: #f1ede8;
+    color: #1e293b;
+}
+[data-theme="light"] .dmp-card-stats {
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+[data-theme="light"] .dmp-card-stat span {
+    color: #1e293b;
+}
+[data-theme="light"] .dmp-card-stat small {
+    color: #64748b;
+}
+[data-theme="light"] .dmp-card-btn:hover {
+    box-shadow: 0 10px 30px rgba(226, 96, 32, 0.2);
+}
+[data-theme="light"] .dmp-empty {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+}
+[data-theme="light"] .dmp-empty svg {
+    color: rgba(0, 0, 0, 0.15);
+}
+[data-theme="light"] .dmp-empty h3 {
+    color: #1e293b;
+}
+[data-theme="light"] .dmp-empty p {
+    color: #64748b;
+}
+[data-theme="light"] .dmp-filters-header {
+    border-bottom: 1px solid #e2e8f0;
 }

@@ -11820,6 +11820,9 @@
       "userMenu": "User menu",
       "mobileMenu": "Menu",
       "login": "Sign In",
+      "themeLight": "Light theme",
+      "themeDark": "Dark theme",
+      "settings": "Settings",
       "nav": {
         "home": "Home",
         "myChats": "My Chats",

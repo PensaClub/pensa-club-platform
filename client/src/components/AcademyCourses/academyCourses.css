@@ -2,9 +2,13 @@
 
 .academyCourses {
   min-height: 100vh;
-  background: #0f172a;
+  background:
+    radial-gradient(circle, rgba(56, 189, 248, 0.09) 1px, transparent 1px),
+    #0f172a;
+  background-size: 30px 30px, auto;
   color: #ffffff;
   overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.2s ease;
 }
 
 /* Main Content */
@@ -208,4 +212,37 @@
     padding: 60px 20px;
     border-radius: 20px;
   }
+}
+
+/* ========================================
+   LIGHT THEME OVERRIDES — Academy Courses
+   ======================================== */
+[data-theme="light"] .academyCourses {
+    background:
+      radial-gradient(circle, rgba(30, 41, 59, 0.18) 1.5px, transparent 1.5px),
+      #ffffff;
+    background-size: 30px 30px, auto;
+    color: #1e293b;
+}
+[data-theme="light"] .academyCourses-section-title {
+    color: #1e293b;
+}
+[data-theme="light"] .academyCourses-section-subtitle {
+    color: #475569;
+}
+[data-theme="light"] .academyCourses-loading-text {
+    color: #475569;
+}
+[data-theme="light"] .academyCourses-loading-ring:nth-child(1) {
+    border-top-color: #E26020;
+}
+[data-theme="light"] .academyCourses-empty {
+    background: linear-gradient(135deg, rgba(226, 96, 32, 0.04) 0%, rgba(226, 96, 32, 0.01) 100%);
+    border: 1px solid #e2e8f0;
+}
+[data-theme="light"] .academyCourses-empty-title {
+    color: #1e293b;
+}
+[data-theme="light"] .academyCourses-empty-text {
+    color: #475569;
 }
