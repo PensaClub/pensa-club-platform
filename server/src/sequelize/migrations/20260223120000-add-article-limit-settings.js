@@ -1,6 +1,8 @@
 'use strict';
 
-/** @type {import('sequelize-cli').Migration} */
+/** @type {import('sequelize-cli').Migration}
+ *  Adds article limit settings: enabled toggle, max reads, window hours
+ */
 module.exports = {
     async up(queryInterface, Sequelize) {
         await queryInterface.bulkInsert('site_settings', [
