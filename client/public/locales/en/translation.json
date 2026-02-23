@@ -15058,6 +15058,17 @@
       "videoLabel": "Video",
       "videoUrlPlaceholder": "/videos/christmas.mp4",
     "continueButton": "Continue to site"
+  },
+  "articleLimit": "Article Limit",
+  "articleLimitDesc": "Limits the number of articles unregistered users can read",
+  "articleLimitConfig": {
+    "title": "Limit Settings",
+    "maxReads": "Maximum articles",
+    "windowHours": "Time window",
+    "save": "Save Changes",
+    "reset": "Reset to Defaults",
+    "saved": "Article limit settings saved!",
+    "error": "Error saving settings"
   }
 }
 }

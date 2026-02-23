@@ -7,6 +7,7 @@ import SettingsAdminSection from './SettingsAdminSection/SettingsAdminSection';
 import SettingsAdminToggle from './SettingsAdminToggle/SettingsAdminToggle';
 import SnowfallConfig from './SnowfallConfig/SnowfallConfig';
 import GreetingConfig from './GreetingConfig/GreetingConfig';
+import ArticleLimitConfig from './ArticleLimitConfig/ArticleLimitConfig';
 import ScrollToTop from '../ScrollToTop/ScrollToTop';
 import './siteSettingsAdmin.css';
 
@@ -79,6 +80,24 @@ const SiteSettingsAdmin = () => {
                             isLoading={loadingKeys.snowfall_enabled || false}
                         />
                         {settings.snowfall_enabled && <SnowfallConfig />}
+                    </SettingsAdminSection>
+
+                    {/* Article Limit Section */}
+                    <SettingsAdminSection
+                        title={t('siteSettingsAdmin.articleLimit')}
+                        icon="📖"
+                        description={t('siteSettingsAdmin.articleLimitDesc')}
+                    >
+                        <SettingsAdminToggle
+                            settingKey="article_limit_enabled"
+                            title={t('siteSettingsAdmin.articleLimit')}
+                            description={t('siteSettingsAdmin.articleLimitDesc')}
+                            icon="📖"
+                            value={settings.article_limit_enabled ?? true}
+                            onChange={handleToggle}
+                            isLoading={loadingKeys.article_limit_enabled || false}
+                        />
+                        {settings.article_limit_enabled && <ArticleLimitConfig />}
                     </SettingsAdminSection>
 
                     {/* Christmas Greeting Section */}

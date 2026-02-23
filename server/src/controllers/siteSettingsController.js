@@ -3,6 +3,7 @@ const { site_setting } = require('../sequelize/models/index');
 const isAuth = require('../middlewares/isAuth');
 const rbac = require('../middlewares/rbac');
 const { updateSettingsSchema } = require('../schemas/siteSettings.schema');
+const { invalidateCache: invalidateRateLimiterCache } = require('../middlewares/rateLimiter');
 
 /**
  * GET /admin/site-settings
@@ -75,6 +76,9 @@ siteSettingsController.put('/', isAuth, rbac.checkPermission('siteSettings', 'up
             }
             result[setting.key] = parsedValue;
         });
+
+        // Invalidate rate limiter cache so changes take effect immediately
+        invalidateRateLimiterCache();
 
         res.status(200).json({
             message: 'Settings updated successfully.',
