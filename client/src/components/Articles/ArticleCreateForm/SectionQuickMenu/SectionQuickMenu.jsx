@@ -14,11 +14,14 @@ export const SectionQuickMenu = ({
   const { t } = useTranslation();
 
   return (
-    <div className="left-quick-menu">
+    <div className="sqm-bar">
+      <span className="sqm-badge">{sectionIndex + 1}</span>
+
+      <div className="sqm-divider" />
 
       <button
         type="button"
-        className="quick-btn add-btn"
+        className="sqm-btn sqm-btn--add"
         onClick={onAddSection}
         title={t('articles.sectionMenu.addSection')}
       >
@@ -27,7 +30,7 @@ export const SectionQuickMenu = ({
 
       <button
         type="button"
-        className="quick-btn arrow-up-btn"
+        className="sqm-btn sqm-btn--up"
         onClick={() => onMoveUp(sectionIndex)}
         disabled={sectionIndex === 0}
         title={t('articles.sectionMenu.moveUp')}
@@ -37,7 +40,7 @@ export const SectionQuickMenu = ({
 
       <button
         type="button"
-        className="quick-btn arrow-down-btn"
+        className="sqm-btn sqm-btn--down"
         onClick={() => onMoveDown(sectionIndex)}
         disabled={sectionIndex === totalSections - 1}
         title={t('articles.sectionMenu.moveDown')}
@@ -46,14 +49,17 @@ export const SectionQuickMenu = ({
       </button>
 
       {totalSections > 1 && (
-        <button
-          type="button"
-          className="quick-btn delete-btn"
-          onClick={() => onRemove(sectionIndex)}
-          title={t('articles.sectionMenu.removeSection')}
-        >
-          <FontAwesomeIcon icon={faTrash} />
-        </button>
+        <>
+          <div className="sqm-divider" />
+          <button
+            type="button"
+            className="sqm-btn sqm-btn--delete"
+            onClick={() => onRemove(sectionIndex)}
+            title={t('articles.sectionMenu.removeSection')}
+          >
+            <FontAwesomeIcon icon={faTrash} />
+          </button>
+        </>
       )}
     </div>
   );
