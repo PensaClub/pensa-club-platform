@@ -15349,6 +15349,17 @@
       "videoLabel": "Видео",
       "videoUrlPlaceholder": "/videos/christmas.mp4",
     "continueButton": "Продължи към сайта"
+  },
+  "articleLimit": "Лимит за статии",
+  "articleLimitDesc": "Ограничава броя статии, които нерегистрирани потребители могат да четат",
+  "articleLimitConfig": {
+    "title": "Настройки на лимита",
+    "maxReads": "Максимален брой статии",
+    "windowHours": "Времеви прозорец",
+    "save": "Запази промените",
+    "reset": "Върни по подразбиране",
+    "saved": "Настройките на лимита са запазени!",
+    "error": "Грешка при запазване"
   }
 }
 }

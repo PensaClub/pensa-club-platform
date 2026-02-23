@@ -3,6 +3,14 @@ import { siteSettingsServiceFactory } from '../Services/siteSettingsService';
 
 const SiteSettingsAdminContext = createContext({});
 
+const checkIsAdmin = () => {
+    try {
+        return JSON.parse(localStorage.getItem('isAdmin')) === true;
+    } catch {
+        return false;
+    }
+};
+
 export const SiteSettingsAdminProvider = ({ children }) => {
     const [settings, setSettings] = useState({});
     const [isLoading, setIsLoading] = useState(true);
@@ -23,6 +31,10 @@ export const SiteSettingsAdminProvider = ({ children }) => {
     }, []);
 
     const updateSetting = useCallback(async (key, value) => {
+        if (!checkIsAdmin()) {
+            console.error('Unauthorized: only admins can update settings');
+            return { success: false, error: 'Unauthorized' };
+        }
         setLoadingKeys((prev) => ({ ...prev, [key]: true }));
         try {
             const result = await siteSettingsService.update({ [key]: value });
@@ -37,6 +49,10 @@ export const SiteSettingsAdminProvider = ({ children }) => {
     }, []);
 
     const updateSettings = useCallback(async (settingsObj) => {
+        if (!checkIsAdmin()) {
+            console.error('Unauthorized: only admins can update settings');
+            return { success: false, error: 'Unauthorized' };
+        }
         const keys = Object.keys(settingsObj);
         setLoadingKeys((prev) => {
             const next = { ...prev };
