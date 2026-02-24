@@ -4,6 +4,7 @@ import { faPlus, faMinus, faUndo, faCog, faHome } from '@fortawesome/free-solid-
 import './TextZoom.css';
 
 export const TextZoom = () => {
+  const [isVisible, setIsVisible] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [fontSize, setFontSize] = useState(100);
   const [position, setPosition] = useState('center-left');
@@ -86,13 +87,14 @@ const resetTextSize = () => {
   };
 
   const getPositionStyle = () => {
+    const slideTransform = isVisible ? 'translateX(0)' : 'translateX(-100%)';
     switch (position) {
       case 'top-left':
-        return { top: '20px', left: '0' };
+        return { top: '20px', left: '0', transform: slideTransform };
       case 'bottom-left':
-        return { bottom: '20px', left: '0' };
+        return { bottom: '20px', left: '0', transform: slideTransform };
       default: // center-left
-        return { top: '50%', left: '0', transform: 'translateY(-50%)' };
+        return { top: '50%', left: '0', transform: `${slideTransform} translateY(-50%)` };
     }
   };
 
@@ -105,10 +107,19 @@ const resetTextSize = () => {
   };
 
   return (
-    <div 
-      className={`text-zoom-widget ${isExpanded ? 'expanded' : 'collapsed'}`}
+    <div
+      className={`text-zoom-widget ${isExpanded ? 'expanded' : 'collapsed'} ${isVisible ? 'text-zoom-visible' : 'text-zoom-hidden'}`}
       style={widgetStyle}
     >
+      {/* Езиче/Tab за издърпване */}
+      <div
+        className="text-zoom-tab"
+        onClick={(e) => { e.stopPropagation(); setIsVisible(!isVisible); }}
+        style={{ background: accentColor }}
+      >
+        <span>Text Zoom</span>
+      </div>
+
       {/* Затворено състояние */}
       {!isExpanded && (
         <div className="text-zoom-collapsed" onClick={() => setIsExpanded(true)}>
