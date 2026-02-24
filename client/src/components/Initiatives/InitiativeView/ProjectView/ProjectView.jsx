@@ -200,7 +200,7 @@ export const ProjectView = () => {
     }, [currentProject?.id]);
 
     useEffect(() => {
-        const navLinks = document.querySelector('.project-view-nav-links');
+        const navLinks = document.querySelector('.pvw-nav-links');
         if (!navLinks) return;
 
         let isDown = false;
@@ -499,87 +499,87 @@ export const ProjectView = () => {
             />
             <div className="project-view-container">
                 {/* Hero Section */}
-                <section className="project-view-hero">
-                    <div className="project-view-hero-background">
+                <section className="pvw-hero">
+                    <div className="pvw-hero-background">
                         {currentProject.mainImage?.src ? (
                             <img
                                 src={currentProject.mainImage.src}
                                 alt={currentProject.mainImage.alt || currentProject.title}
-                                className="project-view-hero-image"
+                                className="pvw-hero-image"
                             />
                         ) : (
-                            <div className="project-view-hero-placeholder">
+                            <div className="pvw-hero-placeholder">
                                 <FontAwesomeIcon icon={faImage} size="4x" />
                                 <p>Няма главно изображение</p>
                             </div>
                         )}
-                        <div className="project-view-hero-overlay"></div>
+                        <div className="pvw-hero-overlay"></div>
                     </div>
 
-                    <div className="project-view-hero-content">
-                        <div className="container">
-                            <div className="project-view-breadcrumb">
-                                <Link to="/initiatives" className="project-view-breadcrumb-link">
+                    <div className="pvw-hero-content">
+                        <div className="pvw-container">
+                            <div className="pvw-breadcrumb">
+                                <Link to="/initiatives" className="pvw-breadcrumb-link">
                                     {t('projectView.breadcrumb.initiatives')}
                                 </Link>
-                                <span className="project-view-breadcrumb-separator">›</span>
+                                <span className="pvw-breadcrumb-separator">›</span>
                                 {currentProject.initiativeSlug && (
                                     <>
                                         <Link
                                             to={`/initiatives/${currentProject.initiativeSlug}`}
-                                            className="project-view-breadcrumb-link"
+                                            className="pvw-breadcrumb-link"
                                         >
                                             {t('projectView.breadcrumb.backToInitiative')}
                                         </Link>
-                                        <span className="project-view-breadcrumb-separator">›</span>
+                                        <span className="pvw-breadcrumb-separator">›</span>
                                     </>
                                 )}
-                                <span className="project-view-breadcrumb-current">{currentProject.title}</span>
+                                <span className="pvw-breadcrumb-current">{currentProject.title}</span>
                             </div>
 
-                            <div className="project-view-hero-main">
-                                <div className="project-view-hero-text">
-                                    <div className="project-view-badges">
+                            <div className="pvw-hero-main">
+                                <div className="pvw-hero-text">
+                                    <div className="pvw-badges">
                                         {currentProject.logo && (
-                                            <div className="project-view-logo">
+                                            <div className="pvw-logo">
                                                 <img src={currentProject.logo} alt={`${currentProject.title} logo`} />
                                             </div>
                                         )}
                                         {currentProject.status && (
-                                            <span className={`project-view-status ${currentProject.status}`}>
+                                            <span className={`pvw-status ${currentProject.status}`}>
                                                 {t(`projectView.status.${currentProject.status}`)}
                                             </span>
                                         )}
                                         {currentProject.priority && (
-                                            <span className={`project-view-priority ${currentProject.priority}`}>
+                                            <span className={`pvw-priority ${currentProject.priority}`}>
                                                 {t(`projectView.priority.${currentProject.priority}`)} {t('projectView.priorityLabel')}
                                             </span>
                                         )}
                                     </div>
 
-                                    <h1 className="project-view-title">{currentProject.title}</h1>
+                                    <h1 className="pvw-title">{currentProject.title}</h1>
 
                                     {(currentProject.fullDescription || currentProject.shortDescription) && (
-                                        <div className="project-view-description">
+                                        <div className="pvw-description">
                                             {renderContent(currentProject.fullDescription || currentProject.shortDescription)}
                                         </div>
                                     )}
 
-                                    <div className="project-view-meta">
+                                    <div className="pvw-meta">
                                         {(currentProject.timeline?.startDate || currentProject.timeline?.endDate) && (
-                                            <div className="project-view-meta-item project-view-meta-timeline">
-                                                <span className="project-view-meta-label">{t('projectView.meta.timeline')}:</span>
-                                                <div className="project-view-meta-timeline-dates">
+                                            <div className="pvw-meta-item pvw-meta-timeline">
+                                                <span className="pvw-meta-label">{t('projectView.meta.timeline')}:</span>
+                                                <div className="pvw-meta-timeline-dates">
                                                     {currentProject.timeline?.startDate && (
-                                                        <span className="project-view-timeline-start">
+                                                        <span className="pvw-timeline-start">
                                                             {new Date(currentProject.timeline.startDate).toLocaleDateString('bg-BG')}
                                                         </span>
                                                     )}
                                                     {currentProject.timeline?.startDate && currentProject.timeline?.endDate && (
-                                                        <span className="project-view-timeline-separator">-</span>
+                                                        <span className="pvw-timeline-separator">-</span>
                                                     )}
                                                     {currentProject.timeline?.endDate && (
-                                                        <span className="project-view-timeline-end">
+                                                        <span className="pvw-timeline-end">
                                                             {new Date(currentProject.timeline.endDate).toLocaleDateString('bg-BG')}
                                                         </span>
                                                     )}
@@ -587,44 +587,44 @@ export const ProjectView = () => {
                                             </div>
                                         )}
                                         {currentProject.category && (
-                                            <div className="project-view-meta-item">
-                                                <span className="project-view-meta-label">{t('projectView.meta.category')}:</span>
-                                                <span className="project-view-meta-value">{currentProject.category}</span>
+                                            <div className="pvw-meta-item">
+                                                <span className="pvw-meta-label">{t('projectView.meta.category')}:</span>
+                                                <span className="pvw-meta-value">{currentProject.category}</span>
                                             </div>
                                         )}
 
                                         {currentProject.location && (
-                                            <div className="project-view-meta-item">
-                                                <span className="project-view-meta-label">{t('projectView.meta.location')}:</span>
-                                                <span className="project-view-meta-value">
+                                            <div className="pvw-meta-item">
+                                                <span className="pvw-meta-label">{t('projectView.meta.location')}:</span>
+                                                <span className="pvw-meta-value">
                                                     {locationText || t('location.loading')}
                                                 </span>
                                             </div>
                                         )}
 
                                         {(currentProject.currentParticipants !== undefined || currentProject.maxParticipants !== undefined) && (
-                                            <div className="project-view-meta-item">
-                                                {currentProject.currentParticipants && <span className="project-view-meta-label">{t('projectView.meta.participants')}:</span>}
-                                                {currentProject.currentParticipants && <span className="project-view-meta-value">
+                                            <div className="pvw-meta-item">
+                                                {currentProject.currentParticipants && <span className="pvw-meta-label">{t('projectView.meta.participants')}:</span>}
+                                                {currentProject.currentParticipants && <span className="pvw-meta-value">
                                                     {currentProject.currentParticipants || 0} / {currentProject.maxParticipants || '∞'}
                                                 </span>}
                                             </div>
                                         )}
 
                                         {currentProject.beneficiaries?.totalCount && currentProject.beneficiaries.totalCount > 0 && (
-                                            <div className="project-view-meta-item">
-                                                <span className="project-view-meta-label">{t('projectView.meta.beneficiaries')}:</span>
-                                                <span className="project-view-meta-value">
+                                            <div className="pvw-meta-item">
+                                                <span className="pvw-meta-label">{t('projectView.meta.beneficiaries')}:</span>
+                                                <span className="pvw-meta-value">
                                                     {currentProject.beneficiaries.totalCount}
                                                 </span>
                                             </div>
                                         )}
                                     </div>
 
-                                    <div className="project-view-actions">
+                                    <div className="pvw-actions">
                                         {isAuthentication && (
                                             <button
-                                                className={`project-view-btn-apply ${hasUserApplied ? 'applied' : ''} ${deadlinePassed ? 'deadline-passed' : ''}`}
+                                                className={`pvw-btn-apply ${hasUserApplied ? 'applied' : ''} ${deadlinePassed ? 'deadline-passed' : ''}`}
                                                 onClick={scrollToApplicationForm}
                                                 disabled={hasUserApplied || deadlinePassed || !canApply}
                                             >
@@ -639,7 +639,7 @@ export const ProjectView = () => {
 
                                         {isBookmarkedProject && (
                                             <button
-                                                className={`project-view-btn-bookmark ${isBookmarkedProject(currentProject.id) ? 'bookmarked' : ''}`}
+                                                className={`pvw-btn-bookmark ${isBookmarkedProject(currentProject.id) ? 'bookmarked' : ''}`}
                                                 onClick={() => toggleBookmarkProjects(currentProject.id)}
                                             >
                                                 <BookmarkIcon />
@@ -664,27 +664,27 @@ export const ProjectView = () => {
                                         currentProject.team.length > 0;
 
                                     return (hasBudget || hasDuration || hasTeam) ? (
-                                        <div className="project-view-stats-card">
+                                        <div className="pvw-stats-card">
                                             {hasBudget && (
-                                                <div className="project-view-stats-item">
-                                                    <div className="project-view-stats-number">
+                                                <div className="pvw-stats-item">
+                                                    <div className="pvw-stats-number">
                                                         {Math.round((Number(currentProject.budget.funded) / Number(currentProject.budget.total)) * 100)}%
                                                     </div>
-                                                    <div className="project-view-stats-label">{t('projectView.stats.funded')}</div>
+                                                    <div className="pvw-stats-label">{t('projectView.stats.funded')}</div>
                                                 </div>
                                             )}
 
                                             {hasDuration && (
-                                                <div className="project-view-stats-item">
-                                                    <div className="project-view-stats-number">{currentProject.timeline.estimatedDuration}</div>
-                                                    <div className="project-view-stats-label">{t('projectView.stats.duration')}</div>
+                                                <div className="pvw-stats-item">
+                                                    <div className="pvw-stats-number">{currentProject.timeline.estimatedDuration}</div>
+                                                    <div className="pvw-stats-label">{t('projectView.stats.duration')}</div>
                                                 </div>
                                             )}
 
                                             {hasTeam && (
-                                                <div className="project-view-stats-item">
-                                                    <div className="project-view-stats-number">{currentProject.team.length}</div>
-                                                    <div className="project-view-stats-label">{t('projectView.stats.team')}</div>
+                                                <div className="pvw-stats-item">
+                                                    <div className="pvw-stats-number">{currentProject.team.length}</div>
+                                                    <div className="pvw-stats-label">{t('projectView.stats.team')}</div>
                                                 </div>
                                             )}
                                         </div>
@@ -694,8 +694,8 @@ export const ProjectView = () => {
 
                         </div>
                         {currentProject?.applicationDeadline && !hasUserApplied && (
-                            <div className="project-view-deadline-info">
-                                <span className={`deadline-status ${deadlinePassed ? 'passed' : 'active'}`}>
+                            <div className="pvw-deadline-info">
+                                <span className={`pvw-deadline ${deadlinePassed ? 'passed' : 'active'}`}>
                                     {deadlinePassed
                                         ? `Крайният срок изтече: ${new Date(currentProject.applicationDeadline).toLocaleDateString('bg-BG')}`
                                         : `Краен срок: ${new Date(currentProject.applicationDeadline).toLocaleDateString('bg-BG')}`
@@ -707,13 +707,13 @@ export const ProjectView = () => {
                 </section>
 
                 {/* Navigation */}
-                <nav className="project-view-nav">
-                    <div className="container">
-                        <div className="project-view-nav-links">
+                <nav className="pvw-nav">
+                    <div className="pvw-container">
+                        <div className="pvw-nav-links">
                             {sortedSections?.map((section) => (
                                 <button
                                     key={section.titleSlug}
-                                    className={`project-view-nav-link ${activeSection === section.titleSlug ? 'active' : ''}`}
+                                    className={`pvw-nav-link ${activeSection === section.titleSlug ? 'active' : ''}`}
                                     onClick={() => scrollToSection(section.titleSlug)}
                                 >
                                     {section.title}
@@ -722,7 +722,7 @@ export const ProjectView = () => {
 
                             {currentProject.publications?.length > 0 && (
                                 <button
-                                    className={`project-view-nav-link ${activeSection === 'publications' ? 'active' : ''}`}
+                                    className={`pvw-nav-link ${activeSection === 'publications' ? 'active' : ''}`}
                                     onClick={() => scrollToSection('publications')}
                                 >
                                     {t('projectView.navigation.publications')}
@@ -731,7 +731,7 @@ export const ProjectView = () => {
 
                             {currentProject.downloadMaterials?.length > 0 && (
                                 <button
-                                    className={`project-view-nav-link ${activeSection === 'download-materials' ? 'active' : ''}`}
+                                    className={`pvw-nav-link ${activeSection === 'download-materials' ? 'active' : ''}`}
                                     onClick={() => scrollToSection('download-materials')}
                                 >
                                     {t('projectView.navigation.downloadMaterials')}
@@ -739,7 +739,7 @@ export const ProjectView = () => {
                             )}
                             {(currentProject.budget?.goal || currentProject.budget?.total || currentProject.budget?.funded) && (
                                 <button
-                                    className={`project-view-nav-link ${activeSection === 'budget' ? 'active' : ''}`}
+                                    className={`pvw-nav-link ${activeSection === 'budget' ? 'active' : ''}`}
                                     onClick={() => scrollToSection('budget')}
                                 >
                                     {t('projectView.navigation.budget')}
@@ -748,7 +748,7 @@ export const ProjectView = () => {
                             {((currentProject.sponsors && currentProject.sponsors.length > 0) ||
                                 (currentProject.partners && currentProject.partners.length > 0)) && (
                                     <button
-                                        className={`project-view-nav-link ${activeSection === 'sponsors-partners' ? 'active' : ''}`}
+                                        className={`pvw-nav-link ${activeSection === 'sponsors-partners' ? 'active' : ''}`}
                                         onClick={() => scrollToSection('sponsors-partners')}
                                     >
                                         {t('projectView.navigation.sponsorsPartners')}
@@ -756,7 +756,7 @@ export const ProjectView = () => {
                                 )}
                             {currentProject.team?.length > 0 && (
                                 <button
-                                    className={`project-view-nav-link ${activeSection === 'team' ? 'active' : ''}`}
+                                    className={`pvw-nav-link ${activeSection === 'team' ? 'active' : ''}`}
                                     onClick={() => scrollToSection('team')}
                                 >
                                     {t('projectView.navigation.team')}
@@ -764,7 +764,7 @@ export const ProjectView = () => {
                             )}
                             {currentProject.contact?.name && (
                                 <button
-                                    className={`project-view-nav-link ${activeSection === 'contact' ? 'active' : ''}`}
+                                    className={`pvw-nav-link ${activeSection === 'contact' ? 'active' : ''}`}
                                     onClick={() => scrollToSection('contact')}
                                 >
                                     {t('projectView.navigation.contact')}
@@ -772,7 +772,7 @@ export const ProjectView = () => {
                             )}
                             {isAuthentication && (
                                 <button
-                                    className={`project-view-nav-link ${activeSection === 'application-form' ? 'active' : ''}`}
+                                    className={`pvw-nav-link ${activeSection === 'application-form' ? 'active' : ''}`}
                                     onClick={() => scrollToSection('application-form')}
                                 >
                                     {t('projectView.navigation.applications')}
@@ -780,7 +780,7 @@ export const ProjectView = () => {
                             )}
 
                             <button
-                                className={`project-view-nav-link ${activeSection === 'comments' ? 'active' : ''}`}
+                                className={`pvw-nav-link ${activeSection === 'comments' ? 'active' : ''}`}
                                 onClick={() => scrollToSection('comments')}
                             >
                                 {t('projectView.navigation.comments')} ({commentsCount})
@@ -790,25 +790,25 @@ export const ProjectView = () => {
                 </nav>
 
                 {/* Content Sections */}
-                <div className="project-view-content">
-                    <div className="container">
+                <div className="pvw-content">
+                    <div className="pvw-container">
                         {/* Project Sections */}
                         {sortedSections?.map((section, index) => (
                             <section
                                 key={section.titleSlug}
                                 id={section.titleSlug}
-                                className={`project-view-section ${index % 2 === 0 ? 'project-view-section-left' : 'project-view-section-right'}`}
+                                className={`pvw-section ${index % 2 === 0 ? 'pvw-section-left' : 'pvw-section-right'}`}
                             >
-                                <div className="project-view-section-content">
-                                    <div className="project-view-section-text">
-                                        <h2 className="project-view-section-title">{section.title}</h2>
-                                        <div className="project-view-section-description slate-content" data-editor="slate">
+                                <div className="pvw-section-content">
+                                    <div className="pvw-section-text">
+                                        <h2 className="pvw-section-title">{section.title}</h2>
+                                        <div className="pvw-section-description slate-content" data-editor="slate">
                                             {renderContent(section.content)}
                                         </div>
                                     </div>
 
                                     {(section.image?.src || (section.images && section.images.length > 0)) && (
-                                        <div className="project-view-section-image">
+                                        <div className="pvw-section-image">
                                             <img
                                                 src={section.image?.src || section.images[0]?.src}
                                                 alt={section.image?.alt || section.images[0]?.alt || section.title}
@@ -825,8 +825,8 @@ export const ProjectView = () => {
                         ))}
                         {/* Gallery Section */}
                         {currentProject.gallery?.length > 0 && (
-                            <section id="gallery" className="project-view-section project-view-gallery-section">
-                                <h2 className="project-view-section-title">{t('projectView.sections.gallery')}</h2>
+                            <section id="gallery" className="pvw-section project-view-gallery-section">
+                                <h2 className="pvw-section-title">{t('projectView.sections.gallery')}</h2>
                                 <ProjectGallery
                                     gallery={currentProject.gallery}
                                     title={t('projectView.gallery.title')}
@@ -835,8 +835,8 @@ export const ProjectView = () => {
                         )}
                         {/* Publications */}
                         {currentProject.publications?.length > 0 && (
-                            <section id="publications" className="project-view-section project-view-publications-section">
-                                <h2 className="project-view-section-title">{t('projectView.sections.publications')}</h2>
+                            <section id="publications" className="pvw-section project-view-publications-section">
+                                <h2 className="pvw-section-title">{t('projectView.sections.publications')}</h2>
                                 <StoriesPublications
                                     stories={[]}
                                     publications={currentProject.publications}
@@ -847,65 +847,65 @@ export const ProjectView = () => {
                         )}
                         {/* Download Materials Section */}
                         {currentProject.downloadMaterials?.length > 0 && (
-                            <section id="download-materials" className="project-view-section project-view-download-section">
-                                <h2 className="project-view-section-title">{t('projectView.sections.downloadMaterials')}</h2>
+                            <section id="download-materials" className="pvw-section project-view-download-section">
+                                <h2 className="pvw-section-title">{t('projectView.sections.downloadMaterials')}</h2>
 
-                                <div className="project-view-download-grid">
+                                <div className="pvw-download-grid">
                                     {currentProject.downloadMaterials.map((material) => (
-                                        <div key={material.id} className="project-view-download-card">
-                                            <div className="download-card-preview">
+                                        <div key={material.id} className="pvw-download-card">
+                                            <div className="pvw-dl-preview">
                                                 {material.image ? (
                                                     <img
                                                         src={material.image.src}
                                                         alt={material.image.alt || material.title}
-                                                        className="download-preview-image"
+                                                        className="pvw-dl-preview-img"
                                                     />
                                                 ) : (
-                                                    <div className="download-preview-placeholder">
-                                                        <span className="file-type-icon">
+                                                    <div className="pvw-dl-preview-ph">
+                                                        <span className="pvw-file-icon">
                                                             {getFileTypeIcon(material.fileType)}
                                                         </span>
-                                                        <span className="file-extension">{material.fileType?.toUpperCase()}</span>
+                                                        <span className="pvw-file-ext">{material.fileType?.toUpperCase()}</span>
                                                     </div>
                                                 )}
 
-                                                <div className="download-card-overlay">
-                                                    <span className="download-overlay-icon">⬇</span>
+                                                <div className="pvw-dl-overlay">
+                                                    <span className="pvw-dl-overlay-icon">⬇</span>
                                                 </div>
                                             </div>
 
-                                            <div className="download-card-content">
-                                                <h3 className="download-card-title">{material.title}</h3>
+                                            <div className="pvw-dl-content">
+                                                <h3 className="pvw-dl-title">{material.title}</h3>
 
                                                 {material.description && (
-                                                    <p className="download-card-description">
+                                                    <p className="pvw-dl-desc">
                                                         {material.description}
                                                     </p>
                                                 )}
 
-                                                <div className="download-card-meta">
-                                                    <div className="download-meta-items">
-                                                        <span className="download-meta-item">
-                                                            <span className="meta-icon">📄</span>
-                                                            <span className="meta-value">{material.fileType?.toUpperCase()}</span>
+                                                <div className="pvw-dl-meta">
+                                                    <div className="pvw-dl-meta-items">
+                                                        <span className="pvw-dl-meta-item">
+                                                            <span className="pvw-meta-icon">📄</span>
+                                                            <span className="pvw-meta-val">{material.fileType?.toUpperCase()}</span>
                                                         </span>
 
                                                         {material.fileSize && (
-                                                            <span className="download-meta-item">
-                                                                <span className="meta-icon">💾</span>
-                                                                <span className="meta-value">{material.fileSize} MB</span>
+                                                            <span className="pvw-dl-meta-item">
+                                                                <span className="pvw-meta-icon">💾</span>
+                                                                <span className="pvw-meta-val">{material.fileSize} MB</span>
                                                             </span>
                                                         )}
                                                     </div>
 
 
                                                     <a href={material.downloadUrl}
-                                                        className="download-card-button"
+                                                        className="pvw-dl-btn"
                                                         download
                                                         target="_blank"
                                                         rel="noopener noreferrer"
                                                     >
-                                                        <span className="download-button-icon">⬇</span>
+                                                        <span className="pvw-dl-btn-icon">⬇</span>
                                                         {t('projectView.downloadMaterials.download')}
                                                     </a>
                                                 </div>
@@ -917,8 +917,8 @@ export const ProjectView = () => {
                         )}
                         {/* Budget Section */}
                         {(currentProject.budget?.goal || currentProject.budget?.total || currentProject.budget?.funded) && (
-                            <section id="budget" className="project-view-section project-view-budget-section">
-                                <h2 className="project-view-section-title">{t('projectView.sections.budget')}</h2>
+                            <section id="budget" className="pvw-section project-view-budget-section">
+                                <h2 className="pvw-section-title">{t('projectView.sections.budget')}</h2>
                                 <ProjectBudget
                                     budget={currentProject.budget}
                                     currency={currentProject.budget?.currency || 'BGN'}
@@ -928,8 +928,8 @@ export const ProjectView = () => {
                         {/* Sponsors and Partners Section */}
                         {((currentProject.sponsors && currentProject.sponsors.length > 0) ||
                             (currentProject.partners && currentProject.partners.length > 0)) && (
-                                <section id="sponsors-partners" className="project-view-section project-view-sponsors-partners-section">
-                                    <h2 className="project-view-section-title">{t('projectView.sections.sponsorsPartners')}</h2>
+                                <section id="sponsors-partners" className="pvw-section project-view-sponsors-partners-section">
+                                    <h2 className="pvw-section-title">{t('projectView.sections.sponsorsPartners')}</h2>
                                     <SponsorsPartners
                                         sponsors={currentProject.sponsors}
                                         partners={currentProject.partners}
@@ -938,39 +938,39 @@ export const ProjectView = () => {
                             )}
                         {/* Milestones Section */}
                         {currentProject.milestones?.length > 0 && (
-                            <section id="milestones" className="project-view-section project-view-milestones-section">
-                                <h2 className="project-view-section-title">{t('projectView.sections.milestones')}</h2>
+                            <section id="milestones" className="pvw-section project-view-milestones-section">
+                                <h2 className="pvw-section-title">{t('projectView.sections.milestones')}</h2>
                                 <Milestones milestones={currentProject.milestones} />
                             </section>
                         )}
                         {/* Team Section */}
                         {currentProject.team?.length > 0 && (
-                            <section id="team" className="project-view-section project-view-team-section">
-                                <h2 className="project-view-section-title">{t('projectView.sections.team')}</h2>
-                                <div className="project-view-team-grid">
+                            <section id="team" className="pvw-section project-view-team-section">
+                                <h2 className="pvw-section-title">{t('projectView.sections.team')}</h2>
+                                <div className="pvw-team-grid">
                                     {currentProject.team.map((member, index) => (
-                                        <div key={index} className="project-view-team-member">
+                                        <div key={index} className="pvw-team-member">
                                             {member.image && (
-                                                <div className="project-view-member-image">
+                                                <div className="pvw-member-image">
                                                     <img src={member.image} alt={member.name} />
                                                 </div>
                                             )}
-                                            <div className="project-view-member-info">
-                                                <h3 className="project-view-member-name">{member.name}</h3>
+                                            <div className="pvw-member-info">
+                                                <h3 className="pvw-member-name">{member.name}</h3>
                                                 {member.role && (
-                                                    <p className="project-view-member-position">{member.role}</p>
+                                                    <p className="pvw-member-position">{member.role}</p>
                                                 )}
-                                                <div className="project-view-member-contact">
+                                                <div className="pvw-member-contact">
                                                     {member.email && (
                                                         <button
                                                             onClick={() => openEmailModal(member.name, member.email)}
-                                                            className="project-view-contact-button"
+                                                            className="pvw-contact-button"
                                                         >
                                                             {member.email}
                                                         </button>
                                                     )}
                                                     {member.phone && (
-                                                        <a href={`tel:${member.phone}`} className="project-view-contact-link">
+                                                        <a href={`tel:${member.phone}`} className="pvw-contact-link">
                                                             {member.phone}
                                                         </a>
                                                     )}
@@ -983,14 +983,14 @@ export const ProjectView = () => {
                         )}
                         {/* Contact Section */}
                         {currentProject.contact?.name && (
-                            <section id="contact" className="project-view-section project-view-contact-section">
-                                <h2 className="project-view-section-title">{t('projectView.sections.contact')}</h2>
+                            <section id="contact" className="pvw-section pvw-contact-section">
+                                <h2 className="pvw-section-title">{t('projectView.sections.contact')}</h2>
 
-                                <div className="project-view-contact-content">
-                                    <div className="project-view-contact-card">
-                                        <div className="project-view-contact-person">
+                                <div className="pvw-contact-content">
+                                    <div className="pvw-contact-card">
+                                        <div className="pvw-contact-person">
                                             {currentProject.contact.image && (
-                                                <div className="project-view-contact-photo">
+                                                <div className="pvw-contact-photo">
                                                     <img
                                                         src={currentProject.contact.image}
                                                         alt={currentProject.contact.name}
@@ -999,34 +999,34 @@ export const ProjectView = () => {
                                                             e.target.nextSibling.style.display = 'flex';
                                                         }}
                                                     />
-                                                    <div className="project-view-contact-initials" style={{ display: 'none' }}>
+                                                    <div className="pvw-contact-initials" style={{ display: 'none' }}>
                                                         {currentProject.contact.name.split(' ').map(n => n[0]).join('')}
                                                     </div>
                                                 </div>
                                             )}
 
-                                            <div className="project-view-contact-details">
-                                                <h3 className="project-view-contact-name">{currentProject.contact.name}</h3>
+                                            <div className="pvw-contact-details">
+                                                <h3 className="pvw-contact-name">{currentProject.contact.name}</h3>
                                                 {currentProject.contact.role && (
-                                                    <p className="project-view-contact-role">{currentProject.contact.role}</p>
+                                                    <p className="pvw-contact-role">{currentProject.contact.role}</p>
                                                 )}
-                                                <span className="project-view-contact-label">{t('projectView.contact.projectContact')}</span>
+                                                <span className="pvw-contact-label">{t('projectView.contact.projectContact')}</span>
                                             </div>
                                         </div>
 
-                                        <div className="project-view-contact-info">
+                                        <div className="pvw-contact-info">
                                             {currentProject.contact.email && (
-                                                <div className="project-view-contact-item">
-                                                    <div className="contact-item-header">
-                                                        <span className="contact-item-icon">✉</span>
-                                                        <span className="contact-item-label">{t('projectView.contact.email')}</span>
+                                                <div className="pvw-contact-item">
+                                                    <div className="pvw-ci-header">
+                                                        <span className="pvw-ci-icon">✉</span>
+                                                        <span className="pvw-ci-label">{t('projectView.contact.email')}</span>
                                                     </div>
                                                     <button
                                                         onClick={() => openEmailModal(
                                                             currentProject.contact.name,
                                                             currentProject.contact.email
                                                         )}
-                                                        className="contact-item-button-project"
+                                                        className="pvw-ci-btn"
                                                     >
                                                         {currentProject.contact.email}
                                                     </button>
@@ -1034,14 +1034,14 @@ export const ProjectView = () => {
                                             )}
 
                                             {currentProject.contact.phone && (
-                                                <div className="project-view-contact-item">
-                                                    <div className="contact-item-header">
-                                                        <span className="contact-item-icon">📞</span>
-                                                        <span className="contact-item-label">{t('projectView.contact.phone')}</span>
+                                                <div className="pvw-contact-item">
+                                                    <div className="pvw-ci-header">
+                                                        <span className="pvw-ci-icon">📞</span>
+                                                        <span className="pvw-ci-label">{t('projectView.contact.phone')}</span>
                                                     </div>
 
                                                     <a href={`tel:${currentProject.contact.phone}`}
-                                                        className="contact-item-value"
+                                                        className="pvw-ci-value"
                                                     >
                                                         {currentProject.contact.phone}
                                                     </a>
@@ -1054,7 +1054,7 @@ export const ProjectView = () => {
                         )}
                         {/* Application Form Section */}
                         {isAuthentication && !deadlinePassed && currentProject?.applicationStatus === 'open' && (
-                            <section id="application-form" className="project-view-section">
+                            <section id="application-form" className="pvw-section">
                                 <ApplicationForm
                                     project={currentProject}
                                     onSubmit={handleApplicationSubmit}
@@ -1062,15 +1062,15 @@ export const ProjectView = () => {
                             </section>
                         )}
                         {isAuthentication && deadlinePassed && (
-                            <section id="application-form" className="project-view-section">
-                                <div className="application-deadline-message">
+                            <section id="application-form" className="pvw-section">
+                                <div className="pvw-deadline-message">
                                     <h3>Кандидатстването е затворено</h3>
                                     <p>Крайният срок за кандидатстване за този проект е изминал на {new Date(currentProject.applicationDeadline).toLocaleDateString('bg-BG')}.</p>
                                 </div>
                             </section>
                         )}
                         {/* Comments Section */}
-                        <section id="comments" className="project-view-section project-view-comments-section">
+                        <section id="comments" className="pvw-section pvw-comments-section">
                             <Comments
                                 entityId={currentProject.id || currentProject.slug}
                                 entityType="project"
@@ -1083,12 +1083,12 @@ export const ProjectView = () => {
 
                 {/* Email Modal */}
                 {isEmailModalOpen && (
-                    <div className="email-modal-overlay" onClick={closeEmailModal}>
-                        <div className="email-modal-container" onClick={(e) => e.stopPropagation()}>
-                            <div className="email-modal-header">
+                    <div className="pvw-email-overlay" onClick={closeEmailModal}>
+                        <div className="pvw-email-container" onClick={(e) => e.stopPropagation()}>
+                            <div className="pvw-email-header">
                                 <h3>Изпрати имейл до {emailRecipient.name}</h3>
                                 <button
-                                    className="email-modal-close"
+                                    className="pvw-email-close"
                                     onClick={closeEmailModal}
                                     aria-label="Затвори"
                                 >
@@ -1096,8 +1096,8 @@ export const ProjectView = () => {
                                 </button>
                             </div>
 
-                            <form onSubmit={handleEmailSubmit} className="email-modal-form">
-                                <div className="email-form-group">
+                            <form onSubmit={handleEmailSubmit} className="pvw-email-form">
+                                <div className="pvw-email-group">
                                     <label htmlFor="emailFrom">
                                         От (Вашият имейл)
                                         <span className="required">*</span>
@@ -1113,13 +1113,13 @@ export const ProjectView = () => {
                                         disabled={!isAuthentication}
                                     />
                                     {!isAuthentication && (
-                                        <small className="email-form-hint">
+                                        <small className="pvw-email-hint">
                                             Влезте в профила си, за да изпратите имейл
                                         </small>
                                     )}
                                 </div>
 
-                                <div className="email-form-group">
+                                <div className="pvw-email-group">
                                     <label htmlFor="emailTo">
                                         До
                                         <span className="required">*</span>
@@ -1130,11 +1130,11 @@ export const ProjectView = () => {
                                         name="to"
                                         value={emailForm.to}
                                         readOnly
-                                        className="email-readonly"
+                                        className="pvw-email-readonly"
                                     />
                                 </div>
 
-                                <div className="email-form-group">
+                                <div className="pvw-email-group">
                                     <label htmlFor="emailSubject">
                                         Относно
                                         <span className="required">*</span>
@@ -1151,7 +1151,7 @@ export const ProjectView = () => {
                                     />
                                 </div>
 
-                                <div className="email-form-group">
+                                <div className="pvw-email-group">
                                     <label htmlFor="emailMessage">
                                         Съобщение
                                         <span className="required">*</span>
@@ -1166,29 +1166,29 @@ export const ProjectView = () => {
                                         rows={8}
                                         maxLength={2000}
                                     />
-                                    <small className="email-char-count">
+                                    <small className="pvw-email-char-count">
                                         {emailForm.message.length}/2000 символа
                                     </small>
                                 </div>
 
                                 {emailStatus.message && (
-                                    <div className={`email-status-message ${emailStatus.type}`}>
+                                    <div className={`pvw-email-status ${emailStatus.type}`}>
                                         {emailStatus.message}
                                     </div>
                                 )}
 
-                                <div className="email-modal-actions">
+                                <div className="pvw-email-actions">
                                     <button
                                         type="button"
                                         onClick={closeEmailModal}
-                                        className="email-btn-cancel"
+                                        className="pvw-email-btn-cancel"
                                         disabled={isSubmittingEmail}
                                     >
                                         Отказ
                                     </button>
                                     <button
                                         type="submit"
-                                        className="email-btn-submit"
+                                        className="pvw-email-btn-submit"
                                         disabled={isSubmittingEmail || !isAuthentication}
                                     >
                                         {isSubmittingEmail ? 'Изпращане...' : 'Изпрати'}

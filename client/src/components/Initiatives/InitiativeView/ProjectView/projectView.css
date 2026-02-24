@@ -4,7 +4,7 @@
 }
 
 /* Hero Section - Modern Split Design */
-.project-view-hero {
+.pvw-hero {
     position: relative;
     max-height: 85vh;
     min-height: 700px;
@@ -14,13 +14,13 @@
     flex-direction: column;
 }
 
-.project-view-nav .container {
+.pvw-nav .pvw-container {
     width: 100%;
     max-width: 1700px;
 
 }
 
-.project-view-hero-background {
+.pvw-hero-background {
     position: absolute;
     top: 0;
     left: 0;
@@ -29,14 +29,14 @@
     z-index: 1;
 }
 
-.project-view-hero-image {
+.pvw-hero-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
     filter: brightness(0.7) saturate(1.1);
 }
 
-.project-view-hero-overlay {
+.pvw-hero-overlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -49,7 +49,7 @@
     z-index: 2;
 }
 
-.project-view-hero-main {
+.pvw-hero-main {
     max-width: 1800px;
     width: 100%;
     display: grid;
@@ -61,7 +61,7 @@
     justify-content: center;
 }
 
-.project-view-breadcrumb {
+.pvw-breadcrumb {
     position: relative;
     z-index: 3;
     display: flex;
@@ -77,32 +77,32 @@
 
 }
 
-.project-view-breadcrumb-link {
+.pvw-breadcrumb-link {
     color: rgba(255, 255, 255, 0.9);
     text-decoration: none;
     transition: color 0.3s ease;
     font-weight: 600;
 }
 
-.project-view-breadcrumb-link:hover {
+.pvw-breadcrumb-link:hover {
     color: white;
     text-decoration: underline;
 }
 
-.project-view-breadcrumb-separator {
+.pvw-breadcrumb-separator {
     color: rgba(255, 255, 255, 0.7);
     font-weight: 600;
     font-size: 1.1rem;
 }
 
-.project-view-breadcrumb-current {
+.pvw-breadcrumb-current {
     color: rgba(255, 255, 255, 0.9);
     font-weight: 600;
     font-size: 1em;
 
 }
 
-.project-view-hero-content {
+.pvw-hero-content {
     position: relative;
     z-index: 3;
     width: 100%;
@@ -116,18 +116,18 @@
     flex: 1;
 }
 
-.project-view-hero-text {
+.pvw-hero-text {
     color: white;
 }
 
-.project-view-badges {
+.pvw-badges {
     display: flex;
     gap: 1rem;
     margin-bottom: 1.5rem;
     flex-wrap: wrap;
 }
 
-.project-view-status {
+.pvw-status {
     padding: 0.4rem 1rem;
     border-radius: 20px;
     font-size: 0.8rem;
@@ -136,27 +136,27 @@
     letter-spacing: 0.5px;
 }
 
-.project-view-status.active {
+.pvw-status.active {
     background: rgba(34, 197, 94, 0.9);
     color: white;
 }
 
-.project-view-status.planned {
+.pvw-status.planned {
     background: rgba(251, 191, 36, 0.9);
     color: #1f2937;
 }
 
-.project-view-status.in-progress {
+.pvw-status.in-progress {
     background: rgba(0, 123, 255, 0.9);
     color: white;
 }
 
-.project-view-status.completed {
+.pvw-status.completed {
     background: rgba(107, 114, 128, 0.9);
     color: white;
 }
 
-.project-view-priority {
+.pvw-priority {
     padding: 0.4rem 1rem;
     border-radius: 20px;
     font-size: 0.8rem;
@@ -167,7 +167,7 @@
     color: white;
 }
 
-.project-view-title {
+.pvw-title {
     font-size: 3rem;
     font-weight: 800;
     line-height: 1.1;
@@ -176,7 +176,7 @@
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
 }
 
-.project-view-description {
+.pvw-description {
     font-size: 1.2rem;
     line-height: 1.6;
     margin: 0 0 2rem 0;
@@ -184,38 +184,38 @@
     text-shadow: 0 1px 10px rgba(0, 0, 0, 0.3);
 }
 
-.project-view-meta {
+.pvw-meta {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 1rem;
     margin-bottom: 1rem;
 }
 
-.project-view-meta-item {
+.pvw-meta-item {
     display: flex;
     flex-direction: column;
     gap: 0.3rem;
 }
 
-.project-view-meta-label {
+.pvw-meta-label {
     font-size: 0.9rem;
     opacity: 0.8;
     font-weight: 500;
 }
 
-.project-view-meta-value {
+.pvw-meta-value {
     font-size: 1rem;
     font-weight: 600;
 }
 
-.project-view-actions {
+.pvw-actions {
     display: flex;
     gap: 1rem;
     align-items: center;
     flex-wrap: wrap;
 }
 
-.project-view-btn-apply {
+.pvw-btn-apply {
     background: linear-gradient(to right, var(--orange-primary), var(--orange-light));
     color: white;
     border: none;
@@ -228,12 +228,12 @@
     box-shadow: 0 8px 25px rgba(27, 139, 138, 0.3);
 }
 
-.project-view-btn-apply:hover {
+.pvw-btn-apply:hover {
     transform: translateY(-2px);
     box-shadow: 0 12px 35px rgba(27, 139, 138, 0.6);
 }
 
-.project-view-btn-bookmark {
+.pvw-btn-bookmark {
     background: rgba(255, 255, 255, 0.1);
     color: white;
     border: 2px solid rgba(255, 255, 255, 0.3);
@@ -248,19 +248,19 @@
     backdrop-filter: blur(15px);
 }
 
-.project-view-btn-bookmark:hover {
+.pvw-btn-bookmark:hover {
     background: rgba(255, 255, 255, 0.2);
     border-color: rgba(255, 255, 255, 0.5);
     transform: translateY(-1px);
 }
 
-.project-view-btn-bookmark.bookmarked {
+.pvw-btn-bookmark.bookmarked {
     background: rgba(239, 68, 68, 0.9);
     border-color: rgba(239, 68, 68, 0.9);
 }
 
 /* Modern Stats Card - Repositioned */
-.project-view-stats-card {
+.pvw-stats-card {
     background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
     backdrop-filter: blur(20px);
     border-radius: 20px;
@@ -272,17 +272,17 @@
     align-self: start;
 }
 
-.project-view-stats-item {
+.pvw-stats-item {
     text-align: center;
     padding: 1rem 0;
     position: relative;
 }
 
-.project-view-stats-item:not(:last-child) {
+.pvw-stats-item:not(:last-child) {
     border-bottom: 1px solid rgba(148, 163, 184, 0.2);
 }
 
-.project-view-stats-item:not(:last-child)::after {
+.pvw-stats-item:not(:last-child)::after {
     content: '';
     position: absolute;
     bottom: 0;
@@ -294,7 +294,7 @@
     border-radius: 1px;
 }
 
-.project-view-stats-number {
+.pvw-stats-number {
     font-size: 2.8rem;
     font-weight: 800;
     background: linear-gradient(135deg, #3b82f6, #1d4ed8, #1e40af);
@@ -303,7 +303,7 @@
     margin-bottom: 0.5rem;
 }
 
-.project-view-stats-label {
+.pvw-stats-label {
     font-size: 0.9rem;
     color: #64748b;
     font-weight: 600;
@@ -312,7 +312,7 @@
 }
 
 /* Navigation */
-.project-view-nav {
+.pvw-nav {
     background: white;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
     position: sticky;
@@ -321,7 +321,7 @@
     border-bottom: 3px solid #1B8B8A;
 }
 
-.project-view-nav-links {
+.pvw-nav-links {
     max-width: 1800px;
     margin: 0 auto;
     display: flex;
@@ -332,11 +332,11 @@
     padding: 0 2rem;
 }
 
-.project-view-nav-links::-webkit-scrollbar {
+.pvw-nav-links::-webkit-scrollbar {
     display: none;
 }
 
-.project-view-nav-link {
+.pvw-nav-link {
     background: none;
     border: none;
     padding: 1.2rem 1.5rem;
@@ -349,44 +349,44 @@
     border-bottom: 3px solid transparent;
 }
 
-.project-view-nav-link:hover {
+.pvw-nav-link:hover {
     color: #1B8B8A;
     background: rgba(27, 139, 138, 0.05);
 }
 
-.project-view-nav-link.active {
+.pvw-nav-link.active {
     color: #1B8B8A;
     border-bottom-color: #1B8B8A;
     background: rgba(27, 139, 138, 0.1);
 }
 
-.project-view-nav-links:active {
+.pvw-nav-links:active {
     cursor: grabbing;
     /* При дърпане */
 }
 
 /* Content Sections */
-.project-view-content {
+.pvw-content {
     max-width: 1400px;
     margin: 0 auto;
     padding: 4rem 2rem;
 }
 
-.project-view-section {
+.pvw-section {
     margin-bottom: 6rem;
     opacity: 0;
     animation: projectViewFadeInUp 0.8s ease forwards;
 }
 
-.project-view-section:nth-child(2) {
+.pvw-section:nth-child(2) {
     animation-delay: 0.1s;
 }
 
-.project-view-section:nth-child(3) {
+.pvw-section:nth-child(3) {
     animation-delay: 0.2s;
 }
 
-.project-view-section:nth-child(4) {
+.pvw-section:nth-child(4) {
     animation-delay: 0.3s;
 }
 
@@ -402,7 +402,7 @@
     }
 }
 
-.project-view-section-content {
+.pvw-section-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 4rem;
@@ -411,23 +411,23 @@
     border-bottom: 1px solid #e2e8f0;
 }
 
-.project-view-section-content:last-child {
+.pvw-section-content:last-child {
     border-bottom: none;
 }
 
-.project-view-section:nth-child(even) .project-view-section-content {
+.pvw-section:nth-child(even) .pvw-section-content {
     grid-template-columns: 1fr 1fr;
 }
 
-.project-view-section:nth-child(even) .project-view-section-text {
+.pvw-section:nth-child(even) .pvw-section-text {
     order: 2;
 }
 
-.project-view-section:nth-child(even) .project-view-section-image {
+.pvw-section:nth-child(even) .pvw-section-image {
     order: 1;
 }
 
-.project-view-section-title {
+.pvw-section-title {
     font-size: 2rem;
     font-weight: 700;
     color: #1e293b;
@@ -437,7 +437,7 @@
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
 }
 
-.project-view-section-title::after {
+.pvw-section-title::after {
     content: '';
     position: absolute;
     bottom: -15px;
@@ -449,7 +449,7 @@
     border-radius: 2px;
 }
 
-.project-view-section-heading {
+.pvw-section-heading {
     font-size: 1.6rem;
     font-weight: 600;
     color: #1B8B8A;
@@ -457,14 +457,14 @@
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
 }
 
-.project-view-section-description {
+.pvw-section-description {
     font-size: 1.1rem;
     line-height: 1.7;
     color: #475569;
     margin: 0;
 }
 
-.project-view-section-image {
+.pvw-section-image {
     border-radius: 16px;
     overflow: hidden;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
@@ -472,7 +472,7 @@
     position: relative;
 }
 
-.project-view-section-image::before {
+.pvw-section-image::before {
     content: '';
     position: absolute;
     top: 0;
@@ -485,15 +485,15 @@
     transition: opacity 0.3s ease;
 }
 
-.project-view-section-image:hover::before {
+.pvw-section-image:hover::before {
     opacity: 1;
 }
 
-.project-view-section-image:hover {
+.pvw-section-image:hover {
     transform: translateY(-8px);
 }
 
-.project-view-section-image img {
+.pvw-section-image img {
     width: 100%;
     height: 320px;
     object-fit: cover;
@@ -509,14 +509,14 @@
     margin: 4rem 0;
 }
 
-.project-view-team-grid {
+.pvw-team-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2.5rem;
     margin-top: 3rem;
 }
 
-.project-view-team-member {
+.pvw-team-member {
     background: white;
     border-radius: 16px;
     padding: 2.5rem;
@@ -528,7 +528,7 @@
     overflow: hidden;
 }
 
-.project-view-team-member::before {
+.pvw-team-member::before {
     content: '';
     position: absolute;
     top: 0;
@@ -538,12 +538,12 @@
     background: linear-gradient(135deg, #1B8B8A, #E26020);
 }
 
-.project-view-team-member:hover {
+.pvw-team-member:hover {
     transform: translateY(-8px);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
 }
 
-.project-view-member-image {
+.pvw-member-image {
     width: 100px;
     height: 100px;
     border-radius: 50%;
@@ -553,44 +553,44 @@
     box-shadow: 0 8px 20px rgba(27, 139, 138, 0.3);
 }
 
-.project-view-member-image img {
+.pvw-member-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.project-view-member-name {
+.pvw-member-name {
     font-size: 1.3rem;
     font-weight: 700;
     color: #1e293b;
     margin-bottom: 0.5rem;
 }
 
-.project-view-member-position {
+.pvw-member-position {
     color: var(--green);
     font-weight: 600;
     margin-bottom: 1rem;
 }
 
-.project-view-member-contact {
+.pvw-member-contact {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
 }
 
-.project-view-contact-link {
+.pvw-contact-link {
     color: #64748b;
     text-decoration: none;
     font-size: 0.9rem;
     transition: color 0.3s ease;
 }
 
-.project-view-contact-link:hover {
+.pvw-contact-link:hover {
     color: #1B8B8A;
 }
 
 /* Comments Section */
-.project-view-comments-section {
+.pvw-comments-section {
     margin: 4rem 0;
 }
 
@@ -605,14 +605,14 @@
 }
 
 /* В projectView.css */
-.project-view-btn-apply.deadline-passed {
+.pvw-btn-apply.deadline-passed {
     background-color: #6c757d;
     border-color: #6c757d;
     cursor: not-allowed;
     opacity: 0.6;
 }
 
-.project-view-deadline-info {
+.pvw-deadline-info {
     background: transparent;
     /* border-bottom: 1px solid #e2e8f0; */
     padding: 1.5rem 0;
@@ -626,7 +626,7 @@
     z-index: 10;
 }
 
-.deadline-status::before {
+.pvw-deadline::before {
     content: '';
     position: absolute;
     top: 0;
@@ -637,11 +637,11 @@
     transition: left 0.6s ease;
 }
 
-.deadline-status:hover::before {
+.pvw-deadline:hover::before {
     left: 100%;
 }
 
-.deadline-status {
+.pvw-deadline {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
@@ -655,38 +655,38 @@
     overflow: hidden;
 }
 
-.deadline-status.active {
+.pvw-deadline.active {
     background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
     color: white;
     border: 2px solid #38a169;
     box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
 }
 
-.deadline-status.active::after {
+.pvw-deadline.active::after {
     content: '⏳';
     margin-left: 0.5rem;
     animation: bounce 2s ease-in-out infinite;
 }
 
-.deadline-status.active:hover {
+.pvw-deadline.active:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(72, 187, 120, 0.4);
 }
 
-.deadline-status.passed {
+.pvw-deadline.passed {
     background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
     color: white;
     border: 2px solid #c53030;
     box-shadow: 0 4px 15px rgba(229, 62, 62, 0.3);
 }
 
-.deadline-status.passed::after {
+.pvw-deadline.passed::after {
     content: '❌';
     margin-left: 0.5rem;
     animation: shake 1s ease-in-out infinite;
 }
 
-.deadline-status.passed:hover {
+.pvw-deadline.passed:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(229, 62, 62, 0.4);
 }
@@ -745,12 +745,12 @@
     border-radius: 0 0 16px 16px;
 }
 
-.project-view-section-image:hover .project-view-image-caption {
+.pvw-section-image:hover .project-view-image-caption {
     transform: translateY(0);
 }
 
 /* Осигуряваме относителното позициониране */
-.project-view-section-image {
+.pvw-section-image {
     border-radius: 16px;
     overflow: hidden;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
@@ -760,7 +760,7 @@
 }
 
 /* Project Logo в badges секцията */
-.project-view-logo {
+.pvw-logo {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -776,7 +776,7 @@
     overflow: hidden;
 }
 
-.project-view-logo::before {
+.pvw-logo::before {
     content: '';
     position: absolute;
     top: 0;
@@ -790,17 +790,17 @@
     z-index: 1;
 }
 
-.project-view-logo:hover::before {
+.pvw-logo:hover::before {
     opacity: 0.1;
 }
 
-.project-view-logo:hover {
+.pvw-logo:hover {
     transform: translateY(-2px) scale(1.05);
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
     border-color: rgba(255, 255, 255, 0.6);
 }
 
-.project-view-logo img {
+.pvw-logo img {
     width: 36px;
     height: 36px;
     object-fit: contain;
@@ -811,13 +811,13 @@
     border-radius: 50%;
 }
 
-.project-view-logo:hover img {
+.pvw-logo:hover img {
     transform: scale(1.1);
     filter: brightness(1.2) contrast(1.2);
 }
 
 /* Подреждане на badges с логото */
-.project-view-badges {
+.pvw-badges {
     display: flex;
     gap: 1rem;
     margin-bottom: 1.5rem;
@@ -827,7 +827,7 @@
 }
 
 /* Анимация при появяване */
-.project-view-logo {
+.pvw-logo {
     animation: projectLogoFadeIn 0.8s ease forwards;
 }
 
@@ -844,15 +844,15 @@
 }
 
 /* Contact Section - Clean & Professional */
-.project-view-contact-section {
+.pvw-contact-section {
     margin: 4rem 0;
 }
 
-.project-view-contact-content {
+.pvw-contact-content {
     margin-top: 3rem;
 }
 
-.project-view-contact-card {
+.pvw-contact-card {
     background: white;
     border: 1px solid #e2e8f0;
     border-radius: 12px;
@@ -862,7 +862,7 @@
     margin: 0 auto;
 }
 
-.project-view-contact-person {
+.pvw-contact-person {
     display: flex;
     align-items: center;
     gap: 2rem;
@@ -871,7 +871,7 @@
     border-bottom: 1px solid #f1f5f9;
 }
 
-.project-view-contact-photo {
+.pvw-contact-photo {
     width: 80px;
     height: 80px;
     border-radius: 8px;
@@ -884,13 +884,13 @@
     flex-shrink: 0;
 }
 
-.project-view-contact-photo img {
+.pvw-contact-photo img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.project-view-contact-initials {
+.pvw-contact-initials {
     width: 100%;
     height: 100%;
     display: flex;
@@ -903,11 +903,11 @@
     text-transform: uppercase;
 }
 
-.project-view-contact-details {
+.pvw-contact-details {
     flex: 1;
 }
 
-.project-view-contact-name {
+.pvw-contact-name {
     font-size: 1.5rem;
     font-weight: 600;
     color: #1e293b;
@@ -915,14 +915,14 @@
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
 }
 
-.project-view-contact-role {
+.pvw-contact-role {
     font-size: 1rem;
     color: #64748b;
     margin: 0 0 0.8rem 0;
     font-weight: 500;
 }
 
-.project-view-contact-label {
+.pvw-contact-label {
     display: inline-block;
     padding: 0.3rem 0.8rem;
     background: #f1f5f9;
@@ -934,30 +934,30 @@
     letter-spacing: 0.5px;
 }
 
-.project-view-contact-info {
+.pvw-contact-info {
     display: grid;
     grid-template-rows: 1fr 1fr;
     gap: 2rem;
 }
 
-.project-view-contact-item {
+.pvw-contact-item {
     display: flex;
     flex-direction: column;
     gap: 0.8rem;
 }
 
-.contact-item-header {
+.pvw-ci-header {
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
-.contact-item-icon {
+.pvw-ci-icon {
     font-size: 1.1rem;
     color: #64748b;
 }
 
-.contact-item-label {
+.pvw-ci-label {
     font-size: 0.9rem;
     color: #64748b;
     font-weight: 500;
@@ -965,7 +965,7 @@
     letter-spacing: 0.5px;
 }
 
-.contact-item-value {
+.pvw-ci-value {
     font-size: 1.1rem;
     color: #1e293b;
     font-weight: 600;
@@ -977,7 +977,7 @@
     transition: all 0.2s ease;
 }
 
-.contact-item-value:hover {
+.pvw-ci-value:hover {
     background: #1B8B8A;
     color: white;
     border-color: #1B8B8A;
@@ -988,14 +988,14 @@
     margin: 4rem 0;
 }
 
-.project-view-download-grid {
+.pvw-download-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
     gap: 2rem;
     margin-top: 3rem;
 }
 
-.project-view-download-card {
+.pvw-download-card {
     background: white;
     border: 1px solid #e2e8f0;
     border-radius: 12px;
@@ -1004,12 +1004,12 @@
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.project-view-download-card:hover {
+.pvw-download-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
 }
 
-.download-card-preview {
+.pvw-dl-preview {
     position: relative;
     height: 200px;
     overflow: hidden;
@@ -1019,13 +1019,13 @@
     justify-content: center;
 }
 
-.download-preview-image {
+.pvw-dl-preview-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.download-preview-placeholder {
+.pvw-dl-preview-ph {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1033,17 +1033,17 @@
     color: #64748b;
 }
 
-.file-type-icon {
+.pvw-file-icon {
     font-size: 3rem;
 }
 
-.file-extension {
+.pvw-file-ext {
     font-size: 1.2rem;
     font-weight: 600;
     color: #475569;
 }
 
-.download-card-overlay {
+.pvw-dl-overlay {
     position: absolute;
     top: 0;
     left: 0;
@@ -1057,20 +1057,20 @@
     transition: opacity 0.2s ease;
 }
 
-.project-view-download-card:hover .download-card-overlay {
+.pvw-download-card:hover .pvw-dl-overlay {
     opacity: 1;
 }
 
-.download-overlay-icon {
+.pvw-dl-overlay-icon {
     font-size: 2.5rem;
     color: white;
 }
 
-.download-card-content {
+.pvw-dl-content {
     padding: 1.5rem;
 }
 
-.download-card-title {
+.pvw-dl-title {
     font-size: 1.2rem;
     font-weight: 600;
     color: #1e293b;
@@ -1079,14 +1079,14 @@
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
 }
 
-.download-card-description {
+.pvw-dl-desc {
     font-size: 0.9rem;
     color: #64748b;
     line-height: 1.5;
     margin: 0 0 1.5rem 0;
 }
 
-.download-card-meta {
+.pvw-dl-meta {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -1095,12 +1095,12 @@
     border-top: 1px solid #f1f5f9;
 }
 
-.download-meta-items {
+.pvw-dl-meta-items {
     display: flex;
     gap: 1rem;
 }
 
-.download-meta-item {
+.pvw-dl-meta-item {
     display: flex;
     align-items: center;
     gap: 0.4rem;
@@ -1108,15 +1108,15 @@
     color: #64748b;
 }
 
-.meta-icon {
+.pvw-meta-icon {
     font-size: 0.9rem;
 }
 
-.meta-value {
+.pvw-meta-val {
     font-weight: 500;
 }
 
-.download-card-button {
+.pvw-dl-btn {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
@@ -1131,165 +1131,165 @@
     white-space: nowrap;
 }
 
-.download-card-button:hover {
+.pvw-dl-btn:hover {
     background: #146b69;
 }
 
-.download-button-icon {
+.pvw-dl-btn-icon {
     font-size: 1rem;
 }
 
 
 /* Responsive Design */
 @media (max-width: 1440px) {
-    .project-view-hero-main {
+    .pvw-hero-main {
         gap: 4rem;
         grid-template-columns: 1fr 150px;
         margin: 0 auto;
     }
 
-    .project-view-meta {
+    .pvw-meta {
         grid-template-columns: repeat(3, 1fr);
         gap: 2rem;
     }
 
-    .project-view-hero-main {
+    .pvw-hero-main {
         max-width: 1600px;
     }
 }
 
 @media (max-width: 1024px) {
-    .project-view-hero {
+    .pvw-hero {
         height: auto;
         min-height: auto;
     }
 
-    .project-view-nav-links {
+    .pvw-nav-links {
         padding: 0 1.5rem;
         justify-content: flex-start;
     }
 
-    .project-view-hero-main {
+    .pvw-hero-main {
         grid-template-columns: 1fr;
         gap: 3rem;
         text-align: center;
     }
 
-    .project-view-hero-content {
+    .pvw-hero-content {
         padding: 2rem 0.6rem;
         grid-template-columns: 1fr;
         gap: 3rem;
         text-align: center;
     }
 
-    .project-view-stats-card {
+    .pvw-stats-card {
         margin: 0 auto;
         max-width: none;
         width: 100%;
     }
 
-    .project-view-meta {
+    .pvw-meta {
         grid-template-columns: 1fr;
         gap: 1rem;
     }
 
-    .project-view-meta-item {
+    .pvw-meta-item {
         flex-direction: row;
         justify-content: space-between;
         padding: 0.8rem 0;
         border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     }
 
-    .project-view-meta-item:last-child {
+    .pvw-meta-item:last-child {
         border-bottom: none;
     }
 
-    .project-view-section-content {
+    .pvw-section-content {
         grid-template-columns: 1fr;
         gap: 3rem;
     }
 
-    .project-view-section:nth-child(even) .project-view-section-text,
-    .project-view-section:nth-child(even) .project-view-section-image {
+    .pvw-section:nth-child(even) .pvw-section-text,
+    .pvw-section:nth-child(even) .pvw-section-image {
         order: unset;
     }
 
-    .project-view-content {
+    .pvw-content {
         padding: 3rem 1.5rem;
     }
 
-    .project-view-breadcrumb {
+    .pvw-breadcrumb {
         padding: 2rem 1.5rem 2rem 1.5rem;
     }
 
-    .project-view-logo {
+    .pvw-logo {
         width: 55px;
         height: 55px;
     }
 
-    .project-view-logo img {
+    .pvw-logo img {
         width: 32px;
         height: 32px;
     }
 }
 
 @media (max-width: 768px) {
-    .project-view-hero {
+    .pvw-hero {
         margin-top: 60px;
         max-height: initial;
     }
 
-    .project-view-deadline-info {
+    .pvw-deadline-info {
         justify-content: center;
         margin-top: 1.5rem;
     }
 
-    .deadline-status {
+    .pvw-deadline {
         font-size: 0.8rem;
         padding: 0.6rem 1rem;
         bottom: 0px;
         right: 10px;
     }
 
-    .project-view-hero-main {
+    .pvw-hero-main {
         padding: 0 1rem;
         gap: 2rem;
     }
 
-    .project-view-title {
+    .pvw-title {
         font-size: 2.2rem;
     }
 
-    .project-view-description {
+    .pvw-description {
         font-size: 1.1rem;
     }
 
-    .project-view-actions {
+    .pvw-actions {
         flex-direction: column;
         align-items: stretch;
         gap: 1rem;
     }
 
-    .project-view-btn-apply,
-    .project-view-btn-bookmark {
+    .pvw-btn-apply,
+    .pvw-btn-bookmark {
         justify-content: center;
         width: 100%;
     }
 
-    .project-view-stats-card {
+    .pvw-stats-card {
         padding: 1.5rem;
     }
 
-    .project-view-stats-number {
+    .pvw-stats-number {
         font-size: 2.2rem;
     }
 
-    .project-view-team-grid {
+    .pvw-team-grid {
         grid-template-columns: 1fr;
     }
 
-    .project-view-nav-links {
-        .project-view-nav-links {
+    .pvw-nav-links {
+        .pvw-nav-links {
             padding: 0 1rem;
             gap: 0.5rem;
             overflow-x: auto;
@@ -1298,27 +1298,27 @@
         }
     }
 
-    .project-view-nav-link {
+    .pvw-nav-link {
         padding: 1rem;
         font-size: 0.9rem;
     }
 
-    .project-view-section-title {
+    .pvw-section-title {
         font-size: 1.8rem;
     }
 
-    .project-view-content {
+    .pvw-content {
         padding: 2rem 1rem;
     }
 
-    .project-view-breadcrumb {
+    .pvw-breadcrumb {
         padding: 1.5rem 1rem 1.5rem 1rem;
         gap: 0.5rem;
         font-size: 0.9rem;
         flex-wrap: wrap;
     }
 
-    .project-view-badges {
+    .pvw-badges {
         justify-content: center;
     }
 
@@ -1335,85 +1335,85 @@
         font-size: 0.75rem;
     }
 
-    .project-view-badges {
+    .pvw-badges {
         justify-content: center;
         gap: 0.8rem;
     }
 
-    .project-view-logo {
+    .pvw-logo {
         width: 50px;
         height: 50px;
     }
 
-    .project-view-logo img {
+    .pvw-logo img {
         width: 28px;
         height: 28px;
     }
 
-    .project-view-contact-card {
+    .pvw-contact-card {
         padding: 2rem;
     }
 
-    .project-view-contact-person {
+    .pvw-contact-person {
         flex-direction: column;
         text-align: center;
         gap: 1.5rem;
     }
 
-    .project-view-contact-photo {
+    .pvw-contact-photo {
         width: 70px;
         height: 70px;
     }
 
-    .project-view-contact-info {
+    .pvw-contact-info {
         grid-template-columns: 1fr;
         gap: 1.5rem;
     }
 
-    .project-view-contact-name {
+    .pvw-contact-name {
         font-size: 1.3rem;
     }
 
-    .project-view-download-grid {
+    .pvw-download-grid {
         grid-template-columns: 1fr;
         gap: 1.5rem;
     }
 
-    .download-card-preview {
+    .pvw-dl-preview {
         height: 160px;
     }
 
-    .download-card-content {
+    .pvw-dl-content {
         padding: 1.2rem;
     }
 
-    .download-card-meta {
+    .pvw-dl-meta {
         flex-direction: column;
         align-items: stretch;
         gap: 1rem;
     }
 
-    .download-meta-items {
+    .pvw-dl-meta-items {
         justify-content: center;
     }
 
-    .download-card-button {
+    .pvw-dl-btn {
         justify-content: center;
     }
 }
 
 @media (max-width: 480px) {
-    .project-view-hero-main {
+    .pvw-hero-main {
         padding: 0 0.5rem;
         gap: 1.5rem;
     }
 
-    .project-view-section:nth-child(even) .project-view-section-content {
+    .pvw-section:nth-child(even) .pvw-section-content {
         display: flex;
         flex-direction: column;
     }
 
-    .deadline-status {
+    .pvw-deadline {
         font-size: 0.65rem;
         padding: 0.5rem 0.875rem;
         text-align: center;
@@ -1421,57 +1421,57 @@
         justify-content: center;
     }
 
-    .project-view-title {
+    .pvw-title {
         font-size: 1.8rem;
     }
 
-    .project-view-description {
+    .pvw-description {
         font-size: 1rem;
     }
 
-    .project-view-section-title {
+    .pvw-section-title {
         font-size: 1.5rem;
     }
 
-    .project-view-content {
+    .pvw-content {
         padding: 2rem 0.5rem;
     }
 
-    .project-view-section {
+    .pvw-section {
         margin-bottom: 4rem;
     }
 
-    .project-view-hero-content {
+    .pvw-hero-content {
         padding: 2rem 0.5rem 2rem 0.5rem;
     }
 
-    .project-view-breadcrumb {
+    .pvw-breadcrumb {
         padding: 1rem 0.5rem 1rem 0.5rem;
         gap: 0.4rem;
         font-size: 0.8rem;
     }
 
-    .project-view-stats-card {
+    .pvw-stats-card {
         padding: 1rem;
         min-width: auto;
     }
 
-    .project-view-stats-number {
+    .pvw-stats-number {
         font-size: 2rem;
     }
 
-    .project-view-team-member {
+    .pvw-team-member {
         padding: 0.5rem;
     }
 
-    .project-view-nav-links {
-        .project-view-nav-links {
+    .pvw-nav-links {
+        .pvw-nav-links {
             padding: 0 0.5rem;
             gap: 0.25rem;
         }
     }
 
-    .project-view-nav-link {
+    .pvw-nav-link {
         padding: 0.8rem 1rem;
         font-size: 0.8rem;
     }
@@ -1481,113 +1481,113 @@
         font-size: 0.75rem;
     }
 
-    .project-view-badges {
+    .pvw-badges {
         flex-direction: column;
         align-items: center;
         gap: 1rem;
     }
 
-    .project-view-logo {
+    .pvw-logo {
         width: 45px;
         height: 45px;
         margin-bottom: 0.5rem;
     }
 
-    .project-view-logo img {
+    .pvw-logo img {
         width: 26px;
         height: 26px;
     }
 
     /* На много малки екрани правим badges row отново но по-малки */
-    .project-view-badges {
+    .pvw-badges {
         flex-direction: row;
         justify-content: center;
         flex-wrap: wrap;
     }
 
-    .project-view-logo {
+    .pvw-logo {
         width: 40px;
         height: 40px;
     }
 
-    .project-view-logo img {
+    .pvw-logo img {
         width: 24px;
         height: 24px;
     }
 
-    .project-view-contact-card {
+    .pvw-contact-card {
         padding: 1.5rem;
     }
 
-    .project-view-contact-photo {
+    .pvw-contact-photo {
         width: 60px;
         height: 60px;
     }
 
-    .project-view-contact-initials {
+    .pvw-contact-initials {
         font-size: 1.4rem;
     }
 
-    .project-view-contact-name {
+    .pvw-contact-name {
         font-size: 1.2rem;
     }
 
-    .contact-item-value {
+    .pvw-ci-value {
         padding: 0.6rem 0.8rem;
         font-size: 1rem;
     }
 
-    .project-view-download-grid {
+    .pvw-download-grid {
         grid-template-columns: 1fr;
         gap: 1rem;
     }
 
-    .download-card-preview {
+    .pvw-dl-preview {
         height: 140px;
     }
 
-    .file-type-icon {
+    .pvw-file-icon {
         font-size: 2.5rem;
     }
 
-    .download-card-content {
+    .pvw-dl-content {
         padding: 1rem;
     }
 
-    .download-card-title {
+    .pvw-dl-title {
         font-size: 1.1rem;
     }
 
-    .download-card-description {
+    .pvw-dl-desc {
         font-size: 0.85rem;
     }
 }
 
 @media (max-width: 360px) {
-    .project-view-hero-main {
+    .pvw-hero-main {
         padding: 0 0.25rem;
     }
 
-    .project-view-title {
+    .pvw-title {
         font-size: 1.6rem;
     }
 
-    .project-view-breadcrumb {
+    .pvw-breadcrumb {
         padding: 0.8rem 0.25rem 0.8rem 0.25rem;
     }
 
-    .project-view-content {
+    .pvw-content {
         padding: 1.5rem 0.25rem;
     }
 
-    .project-view-nav-links {
+    .pvw-nav-links {
         padding: 0 0.25rem;
         gap: 0;
     }
 }
 
 /* Application Deadline Message */
-.application-deadline-message {
+.pvw-deadline-message {
     background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
     border: 2px solid #fc8181;
     border-radius: 16px;
@@ -1599,7 +1599,7 @@
     margin: 2rem 0;
 }
 
-.application-deadline-message::before {
+.pvw-deadline-message::before {
     content: '';
     position: absolute;
     top: 0;
@@ -1610,7 +1610,7 @@
     animation: shimmer 2s ease-in-out infinite;
 }
 
-.application-deadline-message::after {
+.pvw-deadline-message::after {
     content: '⏰';
     position: absolute;
     top: 1rem;
@@ -1620,7 +1620,7 @@
     animation: pulse 2s ease-in-out infinite;
 }
 
-.application-deadline-message h3 {
+.pvw-deadline-message h3 {
     color: #c53030;
     font-size: 1.75rem;
     font-weight: 700;
@@ -1631,12 +1631,12 @@
     gap: 0.75rem;
 }
 
-.application-deadline-message h3::before {
+.pvw-deadline-message h3::before {
     content: '🚫';
     font-size: 1.5rem;
 }
 
-.application-deadline-message p {
+.pvw-deadline-message p {
     color: #742a2a;
     font-size: 1.1rem;
     line-height: 1.6;
@@ -1672,21 +1672,21 @@
 }
 
 /* Timeline dates в meta секцията */
-.project-view-meta-timeline {
+.pvw-meta-timeline {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
 }
 
-.project-view-meta-timeline-dates {
+.pvw-meta-timeline-dates {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     flex-wrap: wrap;
 }
 
-.project-view-timeline-start,
-.project-view-timeline-end {
+.pvw-timeline-start,
+.pvw-timeline-end {
     display: inline-flex;
     align-items: center;
     gap: 0.3rem;
@@ -1703,27 +1703,27 @@
     overflow: hidden;
 }
 
-.project-view-timeline-start::before {
+.pvw-timeline-start::before {
     content: '▶️';
     font-size: 0.7rem;
     margin-right: 0.2rem;
 }
 
-.project-view-timeline-end::before {
+.pvw-timeline-end::before {
     content: '🏁';
     font-size: 0.7rem;
     margin-right: 0.2rem;
 }
 
-.project-view-timeline-start:hover,
-.project-view-timeline-end:hover {
+.pvw-timeline-start:hover,
+.pvw-timeline-end:hover {
     transform: translateY(-1px);
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
     border-color: rgba(255, 255, 255, 0.3);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.project-view-timeline-separator {
+.pvw-timeline-separator {
     color: rgba(255, 255, 255, 0.8);
     font-weight: 600;
     font-size: 1.1rem;
@@ -1732,7 +1732,7 @@
     align-items: center;
 }
 
-/* .project-view-timeline-separator::before {
+/* .pvw-timeline-separator::before {
     content: '';
     width: 20px;
     height: 2px;
@@ -1742,29 +1742,29 @@
 } */
 
 /* Специални стилове за различни състояния */
-.project-view-timeline-start.active {
+.pvw-timeline-start.active {
     background: linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(34, 197, 94, 0.1) 100%);
     border-color: rgba(34, 197, 94, 0.3);
 }
 
-.project-view-timeline-end.completed {
+.pvw-timeline-end.completed {
     background: linear-gradient(135deg, rgba(107, 114, 128, 0.2) 0%, rgba(107, 114, 128, 0.1) 100%);
     border-color: rgba(107, 114, 128, 0.3);
 }
 
-.project-view-timeline-end.upcoming {
+.pvw-timeline-end.upcoming {
     background: linear-gradient(135deg, rgba(251, 191, 36, 0.2) 0%, rgba(251, 191, 36, 0.1) 100%);
     border-color: rgba(251, 191, 36, 0.3);
 }
 
 /* Tooltip ефект */
-.project-view-timeline-start[data-tooltip],
-.project-view-timeline-end[data-tooltip] {
+.pvw-timeline-start[data-tooltip],
+.pvw-timeline-end[data-tooltip] {
     position: relative;
 }
 
-.project-view-timeline-start[data-tooltip]::after,
-.project-view-timeline-end[data-tooltip]::after {
+.pvw-timeline-start[data-tooltip]::after,
+.pvw-timeline-end[data-tooltip]::after {
     content: attr(data-tooltip);
     position: absolute;
     bottom: -30px;
@@ -1782,21 +1782,21 @@
     z-index: 10;
 }
 
-.project-view-timeline-start[data-tooltip]:hover::after,
-.project-view-timeline-end[data-tooltip]:hover::after {
+.pvw-timeline-start[data-tooltip]:hover::after,
+.pvw-timeline-end[data-tooltip]:hover::after {
     opacity: 1;
 }
 
-.project-view-timeline-start,
-.project-view-timeline-end {
+.pvw-timeline-start,
+.pvw-timeline-end {
     animation: timelineFadeIn 0.6s ease forwards;
 }
 
-.project-view-timeline-start {
+.pvw-timeline-start {
     animation-delay: 0.1s;
 }
 
-.project-view-timeline-end {
+.pvw-timeline-end {
     animation-delay: 0.2s;
 }
 
@@ -1815,20 +1815,20 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .application-deadline-message {
+    .pvw-deadline-message {
         padding: 2rem 1.5rem;
         margin: 1.5rem 0;
     }
 
-    .application-deadline-message h3 {
+    .pvw-deadline-message h3 {
         font-size: 1.5rem;
     }
 
-    .application-deadline-message p {
+    .pvw-deadline-message p {
         font-size: 1rem;
     }
 
-    .application-deadline-message::after {
+    .pvw-deadline-message::after {
         top: 0.75rem;
         right: 1rem;
         font-size: 1.5rem;
@@ -1836,23 +1836,23 @@
 }
 
 @media (max-width: 480px) {
-    .application-deadline-message {
+    .pvw-deadline-message {
         padding: 1.5rem 1rem;
     }
 
-    .application-deadline-message h3 {
+    .pvw-deadline-message h3 {
         font-size: 1.25rem;
         flex-direction: column;
         gap: 0.5rem;
     }
 
-    .application-deadline-message::after {
+    .pvw-deadline-message::after {
         display: none;
     }
 }
 
 /* Project Logo в badges секцията */
-.project-view-logo {
+.pvw-logo {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1868,7 +1868,7 @@
     overflow: hidden;
 }
 
-.project-view-logo::before {
+.pvw-logo::before {
     content: '';
     position: absolute;
     top: 0;
@@ -1882,17 +1882,17 @@
     z-index: 1;
 }
 
-.project-view-logo:hover::before {
+.pvw-logo:hover::before {
     opacity: 0.1;
 }
 
-.project-view-logo:hover {
+.pvw-logo:hover {
     transform: translateY(-2px) scale(1.05);
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
     border-color: rgba(255, 255, 255, 0.6);
 }
 
-.project-view-logo img {
+.pvw-logo img {
     width: 36px;
     height: 36px;
     object-fit: contain;
@@ -1903,13 +1903,13 @@
     border-radius: 50%;
 }
 
-.project-view-logo:hover img {
+.pvw-logo:hover img {
     transform: scale(1.1);
     filter: brightness(1.2) contrast(1.2);
 }
 
 /* Подреждане на badges с логото */
-.project-view-badges {
+.pvw-badges {
     display: flex;
     gap: 1rem;
     margin-bottom: 1.5rem;
@@ -1919,7 +1919,7 @@
 }
 
 /* Анимация при появяване */
-.project-view-logo {
+.pvw-logo {
     animation: projectLogoFadeIn 0.8s ease forwards;
 }
 
@@ -1937,54 +1937,54 @@
 
 /* Responsive Design */
 @media (max-width: 1024px) {
-    .project-view-logo {
+    .pvw-logo {
         width: 55px;
         height: 55px;
     }
 
-    .project-view-logo img {
+    .pvw-logo img {
         width: 32px;
         height: 32px;
     }
 }
 
 @media (max-width: 768px) {
-    .project-view-badges {
+    .pvw-badges {
         justify-content: center;
         gap: 0.8rem;
     }
 
-    .project-view-logo {
+    .pvw-logo {
         width: 50px;
         height: 50px;
     }
 
-    .project-view-logo img {
+    .pvw-logo img {
         width: 28px;
         height: 28px;
     }
 }
 
 @media (max-width: 480px) {
-    .project-view-badges {
+    .pvw-badges {
         flex-direction: column;
         align-items: center;
         gap: 1rem;
     }
 
-    .project-view-logo {
+    .pvw-logo {
         width: 45px;
         height: 45px;
         margin-bottom: 0.5rem;
     }
 
-    .project-view-logo img {
+    .pvw-logo img {
         width: 26px;
         height: 26px;
     }
 
     /* На много малки екрани правим badges row отново но по-малки */
-    .project-view-badges {
+    .pvw-badges {
         flex-direction: row;
         justify-content: center;
         flex-wrap: wrap;
@@ -1992,33 +1992,33 @@
 }
 
 @media (max-width: 360px) {
-    .project-view-logo {
+    .pvw-logo {
         width: 40px;
         height: 40px;
     }
 
-    .project-view-logo img {
+    .pvw-logo img {
         width: 24px;
         height: 24px;
     }
 }
 
 /* Специален ефект за висококачествени логота */
-.project-view-logo.high-quality {
+.pvw-logo.high-quality {
     background: linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.15) 100%);
     border: 2px solid rgba(255, 255, 255, 0.5);
 }
 
-.project-view-logo.high-quality::before {
+.pvw-logo.high-quality::before {
     background: linear-gradient(135deg, #1B8B8A 0%, #E26020 50%, #1B8B8A 100%);
 }
 
 /* Tooltip при hover (optional) */
-.project-view-logo[data-tooltip] {
+.pvw-logo[data-tooltip] {
     position: relative;
 }
 
-.project-view-logo[data-tooltip]::after {
+.pvw-logo[data-tooltip]::after {
     content: attr(data-tooltip);
     position: absolute;
     bottom: -35px;
@@ -2036,12 +2036,12 @@
     z-index: 10;
 }
 
-.project-view-logo[data-tooltip]:hover::after {
+.pvw-logo[data-tooltip]:hover::after {
     opacity: 1;
 }
 
 /* Loading skeleton за логото */
-.project-view-logo.loading {
+.pvw-logo.loading {
     background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 25%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.1) 75%);
     background-size: 200% 100%;
     animation: logoSkeleton 1.5s infinite;
@@ -2061,7 +2061,7 @@
    EMAIL MODAL STYLES
    =============================== */
 
-.email-modal-overlay {
+.pvw-email-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -2076,7 +2076,7 @@
     backdrop-filter: blur(4px);
 }
 
-.email-modal-container {
+.pvw-email-container {
     background: white;
     border-radius: 16px;
     max-width: 600px;
@@ -2099,7 +2099,7 @@
     }
 }
 
-.email-modal-header {
+.pvw-email-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -2107,14 +2107,14 @@
     border-bottom: 1px solid #e5e7eb;
 }
 
-.email-modal-header h3 {
+.pvw-email-header h3 {
     margin: 0;
     font-size: 1.5rem;
     font-weight: 600;
     color: #1f2937;
 }
 
-.email-modal-close {
+.pvw-email-close {
     background: none;
     border: none;
     font-size: 1.5rem;
@@ -2130,20 +2130,20 @@
     transition: all 0.2s;
 }
 
-.email-modal-close:hover {
+.pvw-email-close:hover {
     background: #f3f4f6;
     color: #1f2937;
 }
 
-.email-modal-form {
+.pvw-email-form {
     padding: 2rem;
 }
 
-.email-form-group {
+.pvw-email-group {
     margin-bottom: 1.5rem;
 }
 
-.email-form-group label {
+.pvw-email-group label {
     display: block;
     margin-bottom: 0.5rem;
     font-weight: 500;
@@ -2151,13 +2151,13 @@
     font-size: 0.875rem;
 }
 
-.email-form-group .required {
+.pvw-email-group .required {
     color: #ef4444;
     margin-left: 0.25rem;
 }
 
-.email-form-group input,
-.email-form-group textarea {
+.pvw-email-group input,
+.pvw-email-group textarea {
     width: 100%;
     padding: 0.75rem 1rem;
     border: 1px solid #d1d5db;
@@ -2167,32 +2167,32 @@
     transition: all 0.2s;
 }
 
-.email-form-group input:focus,
-.email-form-group textarea:focus {
+.pvw-email-group input:focus,
+.pvw-email-group textarea:focus {
     outline: none;
     border-color: #3b82f6;
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-.email-form-group textarea {
+.pvw-email-group textarea {
     resize: vertical;
     min-height: 120px;
 }
 
-.email-readonly {
+.pvw-email-readonly {
     background: #f9fafb;
     color: #6b7280;
     cursor: not-allowed;
 }
 
-.email-form-hint {
+.pvw-email-hint {
     display: block;
     margin-top: 0.5rem;
     font-size: 0.75rem;
     color: #ef4444;
 }
 
-.email-char-count {
+.pvw-email-char-count {
     display: block;
     margin-top: 0.5rem;
     font-size: 0.75rem;
@@ -2200,33 +2200,33 @@
     text-align: right;
 }
 
-.email-status-message {
+.pvw-email-status {
     padding: 0.75rem 1rem;
     border-radius: 8px;
     margin-bottom: 1.5rem;
     font-size: 0.875rem;
 }
 
-.email-status-message.success {
+.pvw-email-status.success {
     background: #d1fae5;
     color: #065f46;
     border: 1px solid #34d399;
 }
 
-.email-status-message.error {
+.pvw-email-status.error {
     background: #fee2e2;
     color: #991b1b;
     border: 1px solid #f87171;
 }
 
-.email-modal-actions {
+.pvw-email-actions {
     display: flex;
     gap: 1rem;
     justify-content: flex-end;
 }
 
-.email-btn-cancel,
-.email-btn-submit {
+.pvw-email-btn-cancel,
+.pvw-email-btn-submit {
     padding: 0.75rem 1.5rem;
     border-radius: 8px;
     font-weight: 500;
@@ -2236,34 +2236,34 @@
     border: none;
 }
 
-.email-btn-cancel {
+.pvw-email-btn-cancel {
     background: #f3f4f6;
     color: #374151;
 }
 
-.email-btn-cancel:hover:not(:disabled) {
+.pvw-email-btn-cancel:hover:not(:disabled) {
     background: #e5e7eb;
 }
 
-.email-btn-submit {
+.pvw-email-btn-submit {
     background: #3b82f6;
     color: white;
 }
 
-.email-btn-submit:hover:not(:disabled) {
+.pvw-email-btn-submit:hover:not(:disabled) {
     background: #2563eb;
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 
-.email-btn-cancel:disabled,
-.email-btn-submit:disabled {
+.pvw-email-btn-cancel:disabled,
+.pvw-email-btn-submit:disabled {
     opacity: 0.5;
     cursor: not-allowed;
 }
 
-.contact-item-button-project,
-.project-view-contact-button {
+.pvw-ci-btn,
+.pvw-contact-button {
     background: none;
     border: none;
     color: #3b82f6;
@@ -2274,11 +2274,11 @@
     transition: color 0.2s;
 }
 
-/* .contact-item-button-project:hover {
+/* .pvw-ci-btn:hover {
     color: #2563eb;
 } */
 
-.project-view-contact-button {
+.pvw-contact-button {
     margin-right: 1rem;
     display: inline-flex;
     align-items: center;
@@ -2286,24 +2286,24 @@
 }
 
 @media (max-width: 640px) {
-    .email-modal-container {
+    .pvw-email-container {
         max-height: 95vh;
     }
 
-    .email-modal-header {
+    .pvw-email-header {
         padding: 1rem 1.5rem;
     }
 
-    .email-modal-form {
+    .pvw-email-form {
         padding: 1.5rem;
     }
 
-    .email-modal-actions {
+    .pvw-email-actions {
         flex-direction: column-reverse;
     }
 
-    .email-btn-cancel,
-    .email-btn-submit {
+    .pvw-email-btn-cancel,
+    .pvw-email-btn-submit {
         width: 100%;
     }
 }
@@ -2313,14 +2313,14 @@
    =============================== */
 
 /* Team Section Contact Buttons */
-.project-view-member-contact {
+.pvw-member-contact {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
     margin-top: 1rem;
 }
 
-.project-view-contact-button {
+.pvw-contact-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -2340,22 +2340,22 @@
     text-align: left;
 }
 
-.project-view-contact-button::before {
+.pvw-contact-button::before {
     content: "✉";
     font-size: 1.125rem;
 }
 
-.project-view-contact-button:hover {
+.pvw-contact-button:hover {
     background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 
-.project-view-contact-button:active {
+.pvw-contact-button:active {
     transform: translateY(0);
 }
 
-.project-view-contact-link {
+.pvw-contact-link {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -2372,25 +2372,25 @@
     width: 100%;
 }
 
-.project-view-contact-link:hover {
+.pvw-contact-link:hover {
     background: linear-gradient(135deg, #059669 0%, #047857 100%);
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
 }
 
-.project-view-contact-link:active {
+.pvw-contact-link:active {
     transform: translateY(0);
 }
 
 /* Contact Section Styles */
-.project-view-contact-card {
+.pvw-contact-card {
     background: white;
     border-radius: 16px;
     padding: 2rem;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
-.project-view-contact-person {
+.pvw-contact-person {
     display: flex;
     align-items: center;
     gap: 1.5rem;
@@ -2399,19 +2399,19 @@
     border-bottom: 1px solid #e5e7eb;
 }
 
-.project-view-contact-info {
+.pvw-contact-info {
     display: flex;
     flex-direction: row;
     gap: 1.5rem;
 }
 
-.project-view-contact-item {
+.pvw-contact-item {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
 }
 
-.contact-item-header {
+.pvw-ci-header {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -2420,16 +2420,16 @@
     font-weight: 500;
 }
 
-.contact-item-icon {
+.pvw-ci-icon {
     font-size: 1.25rem;
 }
 
-.contact-item-label {
+.pvw-ci-label {
     text-transform: uppercase;
     letter-spacing: 0.05em;
 }
 
-.contact-item-button-project {
+.pvw-ci-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -2449,22 +2449,22 @@
     max-width: 300px;
 }
 
-.contact-item-button-project::before {
+.pvw-ci-btn::before {
     content: "✉";
     font-size: 1.25rem;
 }
 
-.contact-item-button-project:hover {
+.pvw-ci-btn:hover {
     background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
     transform: translateY(-2px);
     box-shadow: 0 4px 16px rgba(59, 130, 246, 0.35);
 }
 
-.contact-item-button-project:active {
+.pvw-ci-btn:active {
     transform: translateY(0);
 }
 
-.contact-item-value {
+.pvw-ci-value {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -2482,59 +2482,59 @@
     max-width: 300px;
 }
 
-.contact-item-value:hover {
+.pvw-ci-value:hover {
     background: linear-gradient(135deg, #059669 0%, #047857 100%);
     transform: translateY(-2px);
     box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35);
 }
 
-.contact-item-value:active {
+.pvw-ci-value:active {
     transform: translateY(0);
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-    .project-view-contact-person {
+    .pvw-contact-person {
         flex-direction: column;
         text-align: center;
     }
 
-    .project-view-contact-info {
+    .pvw-contact-info {
         flex-direction: column;
         align-items: center;
         gap: 0.5rem;
         justify-content: center;
     }
 
-    .project-view-member-contact {
+    .pvw-member-contact {
         width: 100%;
     }
 
-    .contact-item-button-project,
-    .contact-item-value {
+    .pvw-ci-btn,
+    .pvw-ci-value {
         max-width: 100%;
         font-size: 0.75rem;
     }
 
-    .contact-item-header {
+    .pvw-ci-header {
         justify-content: center;
     }
 
-    .project-view-contact-link {
+    .pvw-contact-link {
         font-size: 0.75rem;
     }
 
-    .project-view-contact-button {
+    .pvw-contact-button {
         width: 100%;
         font-size: 0.75rem;
     }
 
-    .project-view-section:nth-child(even) .project-view-section-content {
+    .pvw-section:nth-child(even) .pvw-section-content {
         display: flex;
         flex-direction: column;
     }
 
-    /* .project-view-section:nth-child(odd){
+    /* .pvw-section:nth-child(odd){
         grid-template-rows: 1fr;
     } */
 }
@@ -2543,7 +2543,7 @@
    EMAIL MODAL STYLES
    =============================== */
 
-.email-modal-overlay {
+.pvw-email-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -2558,7 +2558,7 @@
     backdrop-filter: blur(4px);
 }
 
-.email-modal-container {
+.pvw-email-container {
     background: white;
     border-radius: 16px;
     max-width: 600px;
@@ -2581,7 +2581,7 @@
     }
 }
 
-.email-modal-header {
+.pvw-email-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -2589,14 +2589,14 @@
     border-bottom: 1px solid #e5e7eb;
 }
 
-.email-modal-header h3 {
+.pvw-email-header h3 {
     margin: 0;
     font-size: 1.5rem;
     font-weight: 600;
     color: #1f2937;
 }
 
-.email-modal-close {
+.pvw-email-close {
     background: none;
     border: none;
     font-size: 1.5rem;
@@ -2612,20 +2612,20 @@
     transition: all 0.2s;
 }
 
-.email-modal-close:hover {
+.pvw-email-close:hover {
     background: #f3f4f6;
     color: #1f2937;
 }
 
-.email-modal-form {
+.pvw-email-form {
     padding: 2rem;
 }
 
-.email-form-group {
+.pvw-email-group {
     margin-bottom: 1.5rem;
 }
 
-.email-form-group label {
+.pvw-email-group label {
     display: block;
     margin-bottom: 0.5rem;
     font-weight: 500;
@@ -2633,13 +2633,13 @@
     font-size: 0.875rem;
 }
 
-.email-form-group .required {
+.pvw-email-group .required {
     color: #ef4444;
     margin-left: 0.25rem;
 }
 
-.email-form-group input,
-.email-form-group textarea {
+.pvw-email-group input,
+.pvw-email-group textarea {
     width: 100%;
     padding: 0.75rem 1rem;
     border: 1px solid #d1d5db;
@@ -2649,32 +2649,32 @@
     transition: all 0.2s;
 }
 
-.email-form-group input:focus,
-.email-form-group textarea:focus {
+.pvw-email-group input:focus,
+.pvw-email-group textarea:focus {
     outline: none;
     border-color: #3b82f6;
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-.email-form-group textarea {
+.pvw-email-group textarea {
     resize: vertical;
     min-height: 120px;
 }
 
-.email-readonly {
+.pvw-email-readonly {
     background: #f9fafb;
     color: #6b7280;
     cursor: not-allowed;
 }
 
-.email-form-hint {
+.pvw-email-hint {
     display: block;
     margin-top: 0.5rem;
     font-size: 0.75rem;
     color: #ef4444;
 }
 
-.email-char-count {
+.pvw-email-char-count {
     display: block;
     margin-top: 0.5rem;
     font-size: 0.75rem;
@@ -2682,33 +2682,33 @@
     text-align: right;
 }
 
-.email-status-message {
+.pvw-email-status {
     padding: 0.75rem 1rem;
     border-radius: 8px;
     margin-bottom: 1.5rem;
     font-size: 0.875rem;
 }
 
-.email-status-message.success {
+.pvw-email-status.success {
     background: #d1fae5;
     color: #065f46;
     border: 1px solid #34d399;
 }
 
-.email-status-message.error {
+.pvw-email-status.error {
     background: #fee2e2;
     color: #991b1b;
     border: 1px solid #f87171;
 }
 
-.email-modal-actions {
+.pvw-email-actions {
     display: flex;
     gap: 1rem;
     justify-content: flex-end;
 }
 
-.email-btn-cancel,
-.email-btn-submit {
+.pvw-email-btn-cancel,
+.pvw-email-btn-submit {
     padding: 0.75rem 1.5rem;
     border-radius: 8px;
     font-weight: 500;
@@ -2718,51 +2718,51 @@
     border: none;
 }
 
-.email-btn-cancel {
+.pvw-email-btn-cancel {
     background: #f3f4f6;
     color: #374151;
 }
 
-.email-btn-cancel:hover:not(:disabled) {
+.pvw-email-btn-cancel:hover:not(:disabled) {
     background: #e5e7eb;
 }
 
-.email-btn-submit {
+.pvw-email-btn-submit {
     background: #3b82f6;
     color: white;
 }
 
-.email-btn-submit:hover:not(:disabled) {
+.pvw-email-btn-submit:hover:not(:disabled) {
     background: #2563eb;
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 }
 
-.email-btn-cancel:disabled,
-.email-btn-submit:disabled {
+.pvw-email-btn-cancel:disabled,
+.pvw-email-btn-submit:disabled {
     opacity: 0.5;
     cursor: not-allowed;
 }
 
 @media (max-width: 640px) {
-    .email-modal-container {
+    .pvw-email-container {
         max-height: 95vh;
     }
 
-    .email-modal-header {
+    .pvw-email-header {
         padding: 1rem 1.5rem;
     }
 
-    .email-modal-form {
+    .pvw-email-form {
         padding: 1.5rem;
     }
 
-    .email-modal-actions {
+    .pvw-email-actions {
         flex-direction: column-reverse;
     }
 
-    .email-btn-cancel,
-    .email-btn-submit {
+    .pvw-email-btn-cancel,
+    .pvw-email-btn-submit {
         width: 100%;
     }
 }
