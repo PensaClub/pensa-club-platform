@@ -374,6 +374,7 @@
 
 .pvw-section {
     margin-bottom: 6rem;
+    padding: 0 10px;
     opacity: 0;
     animation: projectViewFadeInUp 0.8s ease forwards;
 }
