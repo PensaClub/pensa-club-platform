@@ -2,7 +2,36 @@
   position: fixed;
   z-index: 9999;
   font-family: inherit;
-  transition: all 0.3s ease;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+}
+
+/* Езиче/Tab за издърпване */
+.text-zoom-tab {
+  position: absolute;
+  top: 50%;
+  left: 100%;
+  transform: translateY(-50%);
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  padding: 12px 6px;
+  background: #3182ce;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  border-radius: 0 12px 12px 0;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 2px 0 8px rgba(0,0,0,0.15);
+  transition: background 0.2s ease, filter 0.2s ease;
+  z-index: 1;
+}
+.text-zoom-tab span {
+font-size: 0.75rem;
+  font-weight: 600;
+}
+.text-zoom-tab:hover {
+  filter: brightness(0.85);
 }
 
 /* Затворено състояние */
@@ -323,10 +352,15 @@
   .text-zoom-expanded {
     width: 250px;
   }
-  
+
   .text-zoom-collapsed {
     width: 40px;
     height: 250px;
+  }
+
+  .text-zoom-tab span {
+    padding: 10px 5px;
+    font-size: 0.7rem;
   }
 }
 
@@ -336,6 +370,13 @@
   }
   .collapsed-btn{
     display: none;
+  }
+  .pvw-section-description {
+     padding: 0 0 0 15px;
+
+  }
+  .pvw-section{
+    padding: 0 0 0 25px;
   }
   .collapsed-content{
     padding: 0.4rem 0.2rem;
@@ -350,5 +391,8 @@
   .text-zoom-collapsed {
     width: 25px;
   }
-
+  .text-zoom-tab span{
+    padding: 5px 2px;
+    font-size: 0.8rem;
+  }
 }
