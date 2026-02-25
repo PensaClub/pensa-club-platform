@@ -14966,9 +14966,7 @@
   "bosch": {
     "description": "An international foundation dedicated to healthcare, education, and civil society worldwide"
   },
-  "bosch": {
-    "description": "An international foundation dedicated to healthcare, education, and civil society worldwide"
-  },
+
   "softuniBuditel": {
     "description": "An educational programme for digital literacy in small communities across Bulgaria"
   },
@@ -15070,5 +15068,113 @@
     "saved": "Article limit settings saved!",
     "error": "Error saving settings"
   }
+},
+"lectureCreateForm": {
+  "loading": "Loading...",
+  "titleCreate": "Create a lecture",
+  "titleEdit": "Edit lecture",
+  "backToList": "Back to list",
+
+  "sections": {
+    "basicInfo": "Basic Information",
+    "dateLocation": "Date & Location",
+    "videoMedia": "Video & Media",
+    "mentor": "Lecturer",
+    "registration": "Registration Settings",
+    "credits": "Credits",
+    "course": "Connected Course"
+  },
+
+  "title": "Title",
+  "titlePlaceholder": "e.g. Introduction to the Internet",
+  "shortDescription": "Short Description",
+  "shortDescriptionPlaceholder": "Brief description of the lecture...",
+  "description": "Description",
+  "descriptionPlaceholder": "Detailed description...",
+  "category": "Category",
+  "categoryPlaceholder": "e.g. Digital Literacy",
+  "lectureType": "Type",
+  "tags": "Tags",
+  "tagsPlaceholder": "internet, safety, beginners",
+  "tagsHint": "Separated by commas",
+
+  "lectureTypes": {
+    "lecture": "Lecture",
+    "webinar": "Webinar",
+    "workshop": "Workshop",
+    "masterclass": "Masterclass"
+  },
+
+  "scheduledDate": "Start",
+  "scheduledEndDate": "End",
+  "durationMinutes": "Duration (min.)",
+  "timezone": "Timezone",
+  "online": "Online",
+  "offline": "On-site",
+"meetingLink": "Externer Meeting-Link",
+  "meetingPassword": "Password",
+  "meetingPasswordPlaceholder": "Optional",
+  "location": "Location",
+  "locationPlaceholder": "e.g. Community Center",
+  "address": "Address",
+  "addressPlaceholder": "1 Example St., Sofia",
+
+  "videoProvider": "Video Platform",
+  "selectProvider": "— Select —",
+  "videoUrl": "Video URL",
+  "thumbnailUrl": "Thumbnail (URL)",
+  "thumbnailPreview": "Preview",
+  "videoProviders": {
+    "youtube": "YouTube",
+    "vimeo": "Vimeo",
+    "zoom": "Zoom",
+    "meet": "Google Meet",
+    "teams": "Microsoft Teams",
+    "custom": "Other"
+  },
+
+  "mentorPlaceholder": "Search lecturer by name...",
+
+  "maxParticipants": "Max. Participants",
+  "unlimited": "Unlimited",
+  "requiresRegistration": "Requires Registration",
+  "isPublic": "Public",
+  "isFree": "Free",
+
+  "maxCredits": "Max. Credits",
+  "creditsForAttendance": "For Attendance",
+  "creditsForTest": "For Test",
+  "hasTest": "Has Test",
+  "testPassingScore": "Passing Score (%)",
+
+  "courseDesc": "If the lecture is part of a course, select it here. Otherwise leave empty.",
+  "courseId": "Course ID",
+  "courseIdPlaceholder": "Optional",
+
+  "cancel": "Cancel",
+  "saveDraft": "Save Draft",
+  "saving": "Saving...",
+  "publish": "Publish",
+
+  "loadFailed": "Failed to load lecture",
+  "draftSaved": "Draft saved",
+  "draftCreated": "Lecture created",
+  "saveFailed": "Failed to save",
+  "published": "Lecture published",
+  "publishFailed": "Failed to publish",
+  "validationFailed": "Please fill in all required fields",
+
+  "errors": {
+    "titleRequired": "Title is required",
+    "titleMinLength": "Minimum 3 characters",
+    "dateRequired": "Date is required",
+    "endBeforeStart": "End date must be after start date",
+    "invalidUrl": "Invalid URL"
+  },
+"courseSearchPlaceholder": "Search course by name...",
+"onlineHint": "Video is configured in the Video & Media section. If the lecture uses an external platform (Zoom, Meet), add the link below.",
+"meetingLinkPlaceholder": "Only if using Zoom/Meet/Teams (optional)",
+"meetingLinkHint": "Leave empty if the lecture is hosted on the platform"
 }
+
 }

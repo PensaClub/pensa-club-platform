@@ -1,0 +1,709 @@
+/* src/components/LectureCreateForm/lectureCreateForm.css */
+/* Prefix: lcf- */
+
+/* =========================================================
+   PAGE BACKGROUND
+   ========================================================= */
+
+.lcf-page-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(135deg, #0a0e1a 0%, #0d1525 50%, #0a1628 100%);
+    overflow: hidden;
+}
+
+.lcf-glow-orb {
+    position: absolute;
+    top: -20%;
+    right: -10%;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0, 210, 255, 0.08) 0%, transparent 70%);
+    filter: blur(80px);
+    pointer-events: none;
+}
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.lcf-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    gap: 16px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.lcf-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(0, 210, 255, 0.15);
+    border-top-color: #00d2ff;
+    border-radius: 50%;
+    animation: lcf-spin 0.8s linear infinite;
+}
+
+@keyframes lcf-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* =========================================================
+   CONTAINER
+   ========================================================= */
+
+.lcf-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 80px 24px 120px;
+    position: relative;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.lcf-header {
+    margin-bottom: 32px;
+}
+
+.lcf-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.85rem;
+    cursor: pointer;
+    padding: 4px 0;
+    margin-bottom: 12px;
+    transition: color 0.2s;
+}
+
+.lcf-back-btn:hover {
+    color: #00d2ff;
+}
+
+.lcf-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+}
+
+.lcf-title-accent {
+    background: linear-gradient(135deg, #00d2ff, #00f0ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.lcf-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* =========================================================
+   SECTION
+   ========================================================= */
+
+.lcf-section {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    padding: 24px;
+    /* backdrop-filter: blur(12px); */
+}
+
+.lcf-section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    color: #00d2ff;
+}
+
+.lcf-section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+}
+
+.lcf-section-desc {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.45);
+    margin: -8px 0 16px;
+    line-height: 1.5;
+}
+
+/* =========================================================
+   FIELDS
+   ========================================================= */
+
+.lcf-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+    position: relative;
+}
+
+.lcf-field:last-child {
+    margin-bottom: 0;
+}
+
+.lcf-field-inline {
+    max-width: 280px;
+}
+
+.lcf-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.lcf-required {
+    color: #ff6b6b;
+}
+
+.lcf-input,
+.lcf-select,
+.lcf-textarea {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.9rem;
+    color: #fff;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    font-family: inherit;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.lcf-input:focus,
+.lcf-select:focus,
+.lcf-textarea:focus {
+    border-color: rgba(0, 210, 255, 0.4);
+    box-shadow: 0 0 0 3px rgba(0, 210, 255, 0.08);
+}
+
+.lcf-input::placeholder,
+.lcf-textarea::placeholder {
+    color: rgba(255, 255, 255, 0.25);
+}
+
+.lcf-input-sm {
+    max-width: 200px;
+}
+
+.lcf-select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.4)' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+}
+
+.lcf-select option {
+    background: #1a1f2e;
+    color: #fff;
+}
+
+.lcf-textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.lcf-textarea-sm {
+    min-height: 60px;
+}
+
+.lcf-char-count {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.25);
+    text-align: right;
+}
+
+.lcf-hint {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+/* =========================================================
+   ERROR STATE
+   ========================================================= */
+
+.lcf-field-error .lcf-input,
+.lcf-field-error .lcf-select,
+.lcf-field-error .lcf-textarea {
+    border-color: rgba(255, 107, 107, 0.5);
+}
+
+.lcf-error-msg {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.8rem;
+    color: #ff6b6b;
+}
+
+/* =========================================================
+   ROW LAYOUTS
+   ========================================================= */
+
+.lcf-row {
+    display: flex;
+    gap: 16px;
+}
+
+.lcf-row>.lcf-field {
+    flex: 1;
+}
+
+.lcf-row-3 {
+    display: flex;
+    gap: 16px;
+}
+
+.lcf-row-3>.lcf-field {
+    flex: 1;
+}
+
+/* =========================================================
+   TOGGLES
+   ========================================================= */
+
+.lcf-toggles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 24px;
+    margin-top: 8px;
+}
+
+.lcf-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.lcf-toggle input[type="checkbox"] {
+    display: none;
+}
+
+.lcf-toggle-slider {
+    width: 40px;
+    height: 22px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 11px;
+    position: relative;
+    transition: background 0.25s;
+    flex-shrink: 0;
+}
+
+.lcf-toggle-slider::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 16px;
+    height: 16px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    transition: transform 0.25s, background 0.25s;
+}
+
+.lcf-toggle input:checked+.lcf-toggle-slider {
+    background: rgba(0, 210, 255, 0.3);
+}
+
+.lcf-toggle input:checked+.lcf-toggle-slider::after {
+    transform: translateX(18px);
+    background: #00d2ff;
+}
+
+.lcf-toggle-text {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* =========================================================
+   LOCATION TOGGLE (Online/Offline)
+   ========================================================= */
+
+.lcf-location-toggle {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.lcf-toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.lcf-toggle-btn:hover {
+    border-color: rgba(0, 210, 255, 0.3);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.lcf-toggle-active {
+    border-color: rgba(0, 210, 255, 0.5);
+    background: rgba(0, 210, 255, 0.08);
+    color: #00d2ff;
+}
+
+/* =========================================================
+   THUMBNAIL PREVIEW
+   ========================================================= */
+
+.lcf-preview {
+    margin-top: 8px;
+    border-radius: 10px;
+    overflow: hidden;
+    max-width: 320px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.lcf-preview-img {
+    width: 100%;
+    display: block;
+    object-fit: cover;
+    max-height: 180px;
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.lcf-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 24px;
+    background: rgba(10, 14, 26, 0.92);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.lcf-footer-right {
+    display: flex;
+    gap: 10px;
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.lcf-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.lcf-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.lcf-btn-cancel {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.lcf-btn-cancel:hover:not(:disabled) {
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.lcf-btn-draft {
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.lcf-btn-draft:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.lcf-btn-publish {
+    background: linear-gradient(135deg, #00d2ff, #00b4d8);
+    color: #000;
+    font-weight: 600;
+}
+
+.lcf-btn-publish:hover:not(:disabled) {
+    background: linear-gradient(135deg, #00e0ff, #00c4e8);
+    box-shadow: 0 4px 20px rgba(0, 210, 255, 0.25);
+}
+
+/* =========================================================
+   RESPONSIVE — Desktop-first
+   ========================================================= */
+
+/* Laptop */
+@media (max-width: 1279px) {
+    .lcf-container {
+        max-width: 800px;
+    }
+}
+
+/* Tablet */
+@media (max-width: 1023px) {
+    .lcf-container {
+        max-width: 100%;
+        padding: 24px 20px 120px;
+    }
+
+    .lcf-title {
+        font-size: 1.5rem;
+    }
+}
+
+/* Mobile Large */
+@media (max-width: 767px) {
+    .lcf-container {
+        padding: 16px 14px 130px;
+    }
+
+    .lcf-title {
+        font-size: 1.25rem;
+    }
+
+    .lcf-section {
+        padding: 16px;
+        border-radius: 12px;
+    }
+
+    .lcf-row,
+    .lcf-row-3 {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .lcf-location-toggle {
+        flex-direction: column;
+    }
+
+    .lcf-toggles {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .lcf-footer {
+        flex-direction: column;
+        gap: 10px;
+        padding: 12px 14px;
+    }
+
+    .lcf-footer-right {
+        width: 100%;
+    }
+
+    .lcf-btn {
+        flex: 1;
+        justify-content: center;
+        padding: 10px 14px;
+        font-size: 0.85rem;
+    }
+
+    .lcf-input-sm {
+        max-width: 100%;
+    }
+
+    .lcf-field-inline {
+        max-width: 100%;
+    }
+}
+
+/* Mobile Small */
+@media (max-width: 424px) {
+    .lcf-container {
+        padding: 12px 10px 140px;
+    }
+
+    .lcf-title {
+        font-size: 1.1rem;
+    }
+
+    .lcf-section {
+        padding: 12px;
+    }
+
+    .lcf-section-title {
+        font-size: 1rem;
+    }
+
+    .lcf-input,
+    .lcf-select,
+    .lcf-textarea {
+        font-size: 0.85rem;
+        padding: 9px 12px;
+    }
+
+    .lcf-btn {
+        font-size: 0.8rem;
+        padding: 9px 12px;
+    }
+
+    .lcf-footer-right {
+        flex-direction: column;
+        gap: 8px;
+    }
+}
+
+/* =========================================================
+   COURSE SELECTOR
+   ========================================================= */
+
+.lcf-course-selected {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background: rgba(0, 210, 255, 0.06);
+    border: 1px solid rgba(0, 210, 255, 0.2);
+    border-radius: 10px;
+}
+
+.lcf-course-selected-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #00d2ff;
+    font-size: 0.9rem;
+}
+
+.lcf-course-selected-name {
+    color: #fff;
+    font-weight: 500;
+}
+
+.lcf-course-clear-btn {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.lcf-course-clear-btn:hover {
+    color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.1);
+}
+
+.lcf-course-dropdown {
+    margin-top: 6px;
+    background: rgba(15, 20, 35, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.lcf-course-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 14px;
+    background: none;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    color: #fff;
+    font-size: 0.85rem;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s;
+}
+
+.lcf-course-option:last-child {
+    border-bottom: none;
+}
+
+.lcf-course-option:hover {
+    background: rgba(0, 210, 255, 0.08);
+}
+
+.lcf-course-option-name {
+    font-weight: 500;
+}
+
+.lcf-course-option-cat {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.35);
+}
+
+.lcf-test-fields {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+.lcf-online-hint {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 14px;
+  background: rgba(0, 210, 255, 0.04);
+  border: 1px solid rgba(0, 210, 255, 0.1);
+  border-radius: 8px;
+  margin-bottom: 12px;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+  line-height: 1.5;
+}
+
+.lcf-online-hint span{
+  font-size: 0.8rem;
+
+}
+.lcf-online-hint svg {
+  color: #00d2ff;
+  flex-shrink: 0;
+  margin-top: 2px;
+}

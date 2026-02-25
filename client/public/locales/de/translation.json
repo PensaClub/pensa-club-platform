@@ -14360,5 +14360,112 @@
       "saved": "Artikellimit-Einstellungen gespeichert!",
       "error": "Fehler beim Speichern"
     }
-  }
+  },
+  "lectureCreateForm": {
+  "loading": "Laden...",
+  "titleCreate": "Vortrag erstellen",
+  "titleEdit": "Vortrag bearbeiten",
+  "backToList": "Zur Liste",
+
+  "sections": {
+    "basicInfo": "Grundinformationen",
+    "dateLocation": "Datum & Ort",
+    "videoMedia": "Video & Medien",
+    "mentor": "Dozent",
+    "registration": "Anmeldeeinstellungen",
+    "credits": "Credits",
+    "course": "Verknüpfter Kurs"
+  },
+
+  "title": "Titel",
+  "titlePlaceholder": "z.B. Einführung ins Internet",
+  "shortDescription": "Kurzbeschreibung",
+  "shortDescriptionPlaceholder": "Kurze Beschreibung des Vortrags...",
+  "description": "Beschreibung",
+  "descriptionPlaceholder": "Ausführliche Beschreibung...",
+  "category": "Kategorie",
+  "categoryPlaceholder": "z.B. Digitale Kompetenz",
+  "lectureType": "Typ",
+  "tags": "Tags",
+  "tagsPlaceholder": "Internet, Sicherheit, Anfänger",
+  "tagsHint": "Durch Komma getrennt",
+
+  "lectureTypes": {
+    "lecture": "Vortrag",
+    "webinar": "Webinar",
+    "workshop": "Workshop",
+    "masterclass": "Meisterklasse"
+  },
+
+  "scheduledDate": "Beginn",
+  "scheduledEndDate": "Ende",
+  "durationMinutes": "Dauer (Min.)",
+  "timezone": "Zeitzone",
+  "online": "Online",
+  "offline": "Vor Ort",
+  "meetingLink": "External Meeting Link",
+  "meetingPassword": "Passwort",
+  "meetingPasswordPlaceholder": "Optional",
+  "location": "Ort",
+  "locationPlaceholder": "z.B. Gemeindezentrum",
+  "address": "Adresse",
+  "addressPlaceholder": "Beispielstr. 1, Sofia",
+
+  "videoProvider": "Videoplattform",
+  "selectProvider": "— Auswählen —",
+  "videoUrl": "Video-URL",
+  "thumbnailUrl": "Vorschaubild (URL)",
+  "thumbnailPreview": "Vorschau",
+  "videoProviders": {
+    "youtube": "YouTube",
+    "vimeo": "Vimeo",
+    "zoom": "Zoom",
+    "meet": "Google Meet",
+    "teams": "Microsoft Teams",
+    "custom": "Andere"
+  },
+
+  "mentorPlaceholder": "Dozent nach Name suchen...",
+
+  "maxParticipants": "Max. Teilnehmer",
+  "unlimited": "Unbegrenzt",
+  "requiresRegistration": "Anmeldung erforderlich",
+  "isPublic": "Öffentlich",
+  "isFree": "Kostenlos",
+
+  "maxCredits": "Max. Credits",
+  "creditsForAttendance": "Für Teilnahme",
+  "creditsForTest": "Für Test",
+  "hasTest": "Hat Test",
+  "testPassingScore": "Mindestergebnis (%)",
+
+  "courseDesc": "Falls der Vortrag zu einem Kurs gehört, wählen Sie ihn hier aus. Andernfalls leer lassen.",
+  "courseId": "Kurs-ID",
+  "courseIdPlaceholder": "Optional",
+
+  "cancel": "Abbrechen",
+  "saveDraft": "Entwurf speichern",
+  "saving": "Speichern...",
+  "publish": "Veröffentlichen",
+
+  "loadFailed": "Fehler beim Laden des Vortrags",
+  "draftSaved": "Entwurf gespeichert",
+  "draftCreated": "Vortrag erstellt",
+  "saveFailed": "Fehler beim Speichern",
+  "published": "Vortrag veröffentlicht",
+  "publishFailed": "Fehler beim Veröffentlichen",
+  "validationFailed": "Bitte füllen Sie alle Pflichtfelder aus",
+
+  "errors": {
+    "titleRequired": "Titel ist erforderlich",
+    "titleMinLength": "Mindestens 3 Zeichen",
+    "dateRequired": "Datum ist erforderlich",
+    "endBeforeStart": "Enddatum muss nach dem Startdatum liegen",
+    "invalidUrl": "Ungültige URL"
+  },
+"courseSearchPlaceholder": "Kurs nach Name suchen...",
+"onlineHint": "Das Video wird im Abschnitt Video und Medien eingerichtet. Falls der Vortrag auf einer externen Plattform (Zoom, Meet) stattfindet, den Link unten hinzufuegen.",
+"meetingLinkPlaceholder": "Nur bei Zoom/Meet/Teams (optional)",
+"meetingLinkHint": "Leer lassen wenn der Vortrag direkt auf der Plattform ist"
+}
 }
