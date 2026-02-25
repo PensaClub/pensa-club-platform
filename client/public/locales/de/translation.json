@@ -14467,5 +14467,107 @@
 "onlineHint": "Das Video wird im Abschnitt Video und Medien eingerichtet. Falls der Vortrag auf einer externen Plattform (Zoom, Meet) stattfindet, den Link unten hinzufuegen.",
 "meetingLinkPlaceholder": "Nur bei Zoom/Meet/Teams (optional)",
 "meetingLinkHint": "Leer lassen wenn der Vortrag direkt auf der Plattform ist"
+},
+"adminLectures": {
+  "title": "Verwaltung von",
+  "titleAccent": "Vortraegen",
+  "subtitle": "Erstellen, bearbeiten und verwalten Sie Vortraege in der Akademie",
+  "refresh": "Aktualisieren",
+  "createLecture": "Neuer Vortrag",
+  "searchPlaceholder": "Nach Titel suchen...",
+  "filters": "Filter",
+  "loading": "Vortraege werden geladen...",
+  "min": "Min.",
+
+  "stats": {
+    "total": "gesamt",
+    "published": "veroeffentlicht",
+    "live": "live",
+    "drafts": "Entwuerfe"
+  },
+
+  "status": "Status",
+  "type": "Typ",
+  "sortBy": "Sortieren nach",
+
+  "statusOptions": {
+    "all": "Alle",
+    "draft": "Entwuerfe",
+    "published": "Veroeffentlicht",
+    "scheduled": "Geplant",
+    "live": "Live",
+    "completed": "Abgeschlossen",
+    "cancelled": "Abgesagt"
+  },
+
+  "typeOptions": {
+    "all": "Alle",
+    "lecture": "Vortrag",
+    "webinar": "Webinar",
+    "workshop": "Workshop",
+    "masterclass": "Meisterklasse"
+  },
+
+  "sortOptions": {
+    "newest": "Neueste",
+    "oldest": "Aelteste",
+    "title": "Nach Titel",
+    "upcoming": "Bevorstehend",
+    "popular": "Beliebt"
+  },
+
+  "statuses": {
+    "draft": "Entwurf",
+    "published": "Veroeffentlicht",
+    "scheduled": "Geplant",
+    "live": "LIVE",
+    "completed": "Abgeschlossen",
+    "cancelled": "Abgesagt"
+  },
+
+  "types": {
+    "lecture": "Vortrag",
+    "webinar": "Webinar",
+    "workshop": "Workshop",
+    "masterclass": "Meisterklasse"
+  },
+
+  "cardStats": {
+    "date": "Datum",
+    "duration": "Dauer",
+    "registered": "Angemeldet"
+  },
+
+  "actions": {
+    "edit": "Bearbeiten",
+    "publish": "Veroeffentlichen",
+    "unpublish": "Verbergen",
+    "startLive": "LIVE starten",
+    "endLive": "LIVE beenden",
+    "cancel": "Absagen",
+    "delete": "Loeschen"
+  },
+
+  "empty": {
+    "title": "Keine Vortraege gefunden",
+    "description": "Erstellen Sie Ihren ersten Vortrag oder aendern Sie die Filter"
+  },
+
+  "deleteModal": {
+    "title": "Vortrag loeschen",
+    "text": "Sind Sie sicher, dass Sie loeschen moechten",
+    "warning": "Diese Aktion kann nicht rueckgaengig gemacht werden.",
+    "cancel": "Abbrechen",
+    "confirm": "Loeschen"
+  },
+
+  "cancelModal": {
+    "title": "Vortrag absagen",
+    "text": "Sie sagen ab",
+    "reasonLabel": "Sie koennen einen Grund angeben:",
+    "reasonPlaceholder": "Grund fuer die Absage (optional)",
+    "back": "Zurueck",
+    "confirm": "Vortrag absagen"
+  }
 }
 }

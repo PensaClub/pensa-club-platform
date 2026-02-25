@@ -446,6 +446,30 @@ export const AcademyCoursesProvider = ({ children }) => {
       setIsLoading(false);
     }
   }, []);
+// В AcademyCoursesProvider.jsx — добави ако липсва
+const unpublishLecture = useCallback(async (lectureId) => {
+    if (!isAdmin) return;
+    try {
+        const response = await coursesService.unpublishLecture(lectureId);
+        toast.success('Лекцията е скрита');
+        return response;
+    } catch (error) {
+        console.error('Error unpublishing lecture:', error);
+        toast.error('Грешка при скриване');
+        throw error;
+    }
+}, [coursesService, isAdmin]);
+
+
+const getLectureById = useCallback(async (id) => { // НОВО
+    try {
+      const data = await coursesService.getLectureById(id);
+      return data;
+    } catch (error) {
+      console.error('Error fetching lecture by id:', error);
+      throw error;
+    }
+  }, []);
 
   const getLectureBySlug = useCallback(async (slug) => {
     try {
@@ -1702,7 +1726,8 @@ const getMyMentor = useCallback(async () => {
     cancelLecture,
     startLecture,
     endLecture,
-
+    unpublishLecture,
+getLectureById,
     // Lecture Registration
     registerForLecture,
     unregisterFromLecture,

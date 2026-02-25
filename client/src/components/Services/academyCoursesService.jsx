@@ -195,7 +195,9 @@ export const academyCoursesServiceFactory = () => {
     publishLecture: async (lectureId) => {
       return requester.post(`${apiUrl}/academy/lectures/${lectureId}/publish`);
     },
-
+    getLectureById: async (id) => { 
+      return requester.get(`${apiUrl}/academy/lectures/id/${id}`);
+    },
     unpublishLecture: async (lectureId) => {
       return requester.post(`${apiUrl}/academy/lectures/${lectureId}/unpublish`);
     },

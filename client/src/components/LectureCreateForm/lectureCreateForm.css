@@ -707,3 +707,285 @@
   flex-shrink: 0;
   margin-top: 2px;
 }
+/* Unsaved indicator */
+.lcf-footer-left {
+    display: flex;
+    align-items: center;
+}
+
+.lcf-unsaved {
+    font-size: 0.8rem;
+    color: #fbbf24;
+    font-weight: 500;
+    animation: lcf-pulse 2s ease-in-out infinite;
+}
+
+@keyframes lcf-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+/* ===== LIGHT THEME ===== */
+
+/* --- Page Background --- */
+[data-theme="light"] .lcf-page-bg {
+    background: #f1f5f9;
+}
+[data-theme="light"] .lcf-unsaved {
+    color: #d97706;
+}
+[data-theme="light"] .lcf-glow-orb {
+    background: radial-gradient(circle, rgba(13, 148, 136, 0.06) 0%, transparent 70%);
+}
+
+/* --- Loading --- */
+[data-theme="light"] .lcf-loading {
+    color: #64748b;
+}
+
+[data-theme="light"] .lcf-spinner {
+    border-color: rgba(13, 148, 136, 0.15);
+    border-top-color: #0d9488;
+}
+
+/* --- Header --- */
+[data-theme="light"] .lcf-back-btn {
+    color: #64748b;
+}
+
+[data-theme="light"] .lcf-back-btn:hover {
+    color: #0d9488;
+}
+
+[data-theme="light"] .lcf-title {
+    color: #1e293b;
+}
+
+[data-theme="light"] .lcf-title-accent {
+    background: linear-gradient(135deg, #0d9488, #14b8a6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* --- Section --- */
+[data-theme="light"] .lcf-section {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+[data-theme="light"] .lcf-section-header {
+    color: #0d9488;
+}
+
+[data-theme="light"] .lcf-section-title {
+    color: #1e293b;
+}
+
+[data-theme="light"] .lcf-section-desc {
+    color: #64748b;
+}
+
+/* --- Fields --- */
+[data-theme="light"] .lcf-label {
+    color: #475569;
+}
+
+[data-theme="light"] .lcf-required {
+    color: #dc2626;
+}
+
+[data-theme="light"] .lcf-input,
+[data-theme="light"] .lcf-textarea {
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    color: #1e293b;
+}
+
+[data-theme="light"] .lcf-select {
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    color: #1e293b;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+}
+
+[data-theme="light"] .lcf-select option {
+    background: #ffffff;
+    color: #1e293b;
+}
+
+[data-theme="light"] .lcf-input:focus,
+[data-theme="light"] .lcf-select:focus,
+[data-theme="light"] .lcf-textarea:focus {
+    border-color: rgba(13, 148, 136, 0.4);
+    box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.12);
+}
+
+[data-theme="light"] .lcf-input::placeholder,
+[data-theme="light"] .lcf-textarea::placeholder {
+    color: #94a3b8;
+}
+
+[data-theme="light"] .lcf-char-count {
+    color: #94a3b8;
+}
+
+[data-theme="light"] .lcf-hint {
+    color: #94a3b8;
+}
+
+/* --- Error State --- */
+[data-theme="light"] .lcf-field-error .lcf-input,
+[data-theme="light"] .lcf-field-error .lcf-select,
+[data-theme="light"] .lcf-field-error .lcf-textarea {
+    border-color: rgba(220, 38, 38, 0.5);
+}
+
+[data-theme="light"] .lcf-error-msg {
+    color: #dc2626;
+}
+
+/* --- Toggles (checkbox switches) --- */
+[data-theme="light"] .lcf-toggle-slider {
+    background: #d1d5db;
+}
+
+[data-theme="light"] .lcf-toggle-slider::after {
+    background: #ffffff;
+}
+
+[data-theme="light"] .lcf-toggle input:checked + .lcf-toggle-slider {
+    background: rgba(13, 148, 136, 0.3);
+}
+
+[data-theme="light"] .lcf-toggle input:checked + .lcf-toggle-slider::after {
+    background: #0d9488;
+}
+
+[data-theme="light"] .lcf-toggle-text {
+    color: #475569;
+}
+
+/* --- Location Toggle (Online/Offline) --- */
+[data-theme="light"] .lcf-toggle-btn {
+    border: 1px solid #d1d5db;
+    background-color: #ffffff;
+    color: #64748b;
+}
+
+[data-theme="light"] .lcf-toggle-btn:hover {
+    border-color: rgba(13, 148, 136, 0.4);
+    color: #0d9488;
+}
+
+[data-theme="light"] .lcf-toggle-active {
+    border-color: rgba(13, 148, 136, 0.5);
+    background-color: rgba(13, 148, 136, 0.08);
+    color: #0d9488;
+}
+
+/* --- Thumbnail Preview --- */
+[data-theme="light"] .lcf-preview {
+    border-color: #e2e8f0;
+}
+
+/* --- Footer --- */
+[data-theme="light"] .lcf-footer {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid #e2e8f0;
+}
+
+/* --- Buttons --- */
+[data-theme="light"] .lcf-btn-cancel {
+    border: 1px solid #d1d5db;
+    color: #64748b;
+}
+
+[data-theme="light"] .lcf-btn-cancel:hover:not(:disabled) {
+    border-color: #94a3b8;
+    color: #1e293b;
+}
+
+[data-theme="light"] .lcf-btn-draft {
+    background-color: #f1f5f9;
+    color: #475569;
+}
+
+[data-theme="light"] .lcf-btn-draft:hover:not(:disabled) {
+    background-color: #e2e8f0;
+    color: #1e293b;
+}
+
+[data-theme="light"] .lcf-btn-publish {
+    background: linear-gradient(135deg, #0d9488, #059669);
+    color: #ffffff;
+}
+
+[data-theme="light"] .lcf-btn-publish:hover:not(:disabled) {
+    background: linear-gradient(135deg, #14b8a6, #0d9488);
+    box-shadow: 0 4px 20px rgba(13, 148, 136, 0.3);
+}
+
+/* --- Course Selector --- */
+[data-theme="light"] .lcf-course-selected {
+    background-color: rgba(13, 148, 136, 0.06);
+    border-color: rgba(13, 148, 136, 0.2);
+}
+
+[data-theme="light"] .lcf-course-selected-info {
+    color: #0d9488;
+}
+
+[data-theme="light"] .lcf-course-selected-name {
+    color: #1e293b;
+}
+
+[data-theme="light"] .lcf-course-clear-btn {
+    color: #94a3b8;
+}
+
+[data-theme="light"] .lcf-course-clear-btn:hover {
+    color: #dc2626;
+    background-color: rgba(220, 38, 38, 0.08);
+}
+
+[data-theme="light"] .lcf-course-dropdown {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+}
+
+[data-theme="light"] .lcf-course-option {
+    color: #1e293b;
+    border-bottom-color: #f1f5f9;
+}
+
+[data-theme="light"] .lcf-course-option:hover {
+    background-color: rgba(13, 148, 136, 0.06);
+}
+
+[data-theme="light"] .lcf-course-option-cat {
+    color: #94a3b8;
+}
+
+/* --- Test Fields --- */
+[data-theme="light"] .lcf-test-fields {
+    border-top-color: #e2e8f0;
+}
+
+/* --- Online Hint --- */
+[data-theme="light"] .lcf-online-hint {
+    background-color: rgba(13, 148, 136, 0.04);
+    border-color: rgba(13, 148, 136, 0.15);
+    color: #64748b;
+}
+
+[data-theme="light"] .lcf-online-hint svg {
+    color: #0d9488;
+}
+
+[data-theme="light"] .lcf-online-hint span {
+    color: #64748b;
+}

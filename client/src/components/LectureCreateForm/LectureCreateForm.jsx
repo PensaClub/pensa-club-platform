@@ -38,6 +38,7 @@ const LectureCreateForm = () => {
         isLoading,
         isSaving,
         errors,
+        hasChanges,
         updateField,
         setSelectedMentorObj,
         handleSaveDraft,
@@ -348,51 +349,88 @@ const LectureCreateForm = () => {
                         </div>
 
                         {/* Conditional fields */}
-                       {lectureData.isOnline ? (
-  <div className="lcf-online-hint">
-    <Info size={14} />
-    <span>{t('lectureCreateForm.onlineHint', 'Видеото се настройва в секция „Видео и медия". Ако лекцията е във външна платформа (Zoom, Meet), добавете линк по-долу.')}</span>
-  </div>
-) : null}
+                        {lectureData.isOnline ? (
+                            <div className="lcf-online-hint">
+                                <Info size={14} />
+                                <span>{t('lectureCreateForm.onlineHint', 'Видеото се настройва в секция „Видео и медия". Ако лекцията е във външна платформа (Zoom, Meet), добавете линк по-долу.')}</span>
+                            </div>
+                        ) : null}
 
-{lectureData.isOnline && (
-  <div className="lcf-row">
-    <div className={`lcf-field ${errors.meetingLink ? 'lcf-field-error' : ''}`}>
-      <label className="lcf-label" htmlFor="lcf-meeting-link">
-        <Globe size={14} />
-        {t('lectureCreateForm.meetingLink', 'Външен линк за среща')}
-      </label>
-      <input
-        id="lcf-meeting-link"
-        type="url"
-        name="meetingLink"
-        className="lcf-input"
-        placeholder={t('lectureCreateForm.meetingLinkPlaceholder', 'Само ако е в Zoom/Meet/Teams (незадължително)')}
-        value={lectureData.meetingLink}
-        onChange={handleChange}
-      />
-      <span className="lcf-hint">{t('lectureCreateForm.meetingLinkHint', 'Оставете празно ако лекцията е директно в платформата')}</span>
-      {renderError('meetingLink')}
-    </div>
+                        {lectureData.isOnline && (
+                            <div className="lcf-row">
+                                <div className={`lcf-field ${errors.meetingLink ? 'lcf-field-error' : ''}`}>
+                                    <label className="lcf-label" htmlFor="lcf-meeting-link">
+                                        <Globe size={14} />
+                                        {t('lectureCreateForm.meetingLink', 'Външен линк за среща')}
+                                    </label>
+                                    <input
+                                        id="lcf-meeting-link"
+                                        type="url"
+                                        name="meetingLink"
+                                        className="lcf-input"
+                                        placeholder={t('lectureCreateForm.meetingLinkPlaceholder', 'Само ако е в Zoom/Meet/Teams (незадължително)')}
+                                        value={lectureData.meetingLink}
+                                        onChange={handleChange}
+                                    />
+                                    <span className="lcf-hint">{t('lectureCreateForm.meetingLinkHint', 'Оставете празно ако лекцията е директно в платформата')}</span>
+                                    {renderError('meetingLink')}
+                                </div>
 
-    <div className={`lcf-field ${errors.meetingPassword ? 'lcf-field-error' : ''}`}>
-      <label className="lcf-label" htmlFor="lcf-meeting-pass">
-        {t('lectureCreateForm.meetingPassword', 'Парола')}
-      </label>
-      <input
-        id="lcf-meeting-pass"
-        type="text"
-        name="meetingPassword"
-        className="lcf-input"
-        placeholder={t('lectureCreateForm.meetingPasswordPlaceholder', 'Незадължително')}
-        value={lectureData.meetingPassword}
-        onChange={handleChange}
-        maxLength={100}
-      />
-      {renderError('meetingPassword')}
-    </div>
-  </div>
-)}
+                                <div className={`lcf-field ${errors.meetingPassword ? 'lcf-field-error' : ''}`}>
+                                    <label className="lcf-label" htmlFor="lcf-meeting-pass">
+                                        {t('lectureCreateForm.meetingPassword', 'Парола')}
+                                    </label>
+                                    <input
+                                        id="lcf-meeting-pass"
+                                        type="text"
+                                        name="meetingPassword"
+                                        className="lcf-input"
+                                        placeholder={t('lectureCreateForm.meetingPasswordPlaceholder', 'Незадължително')}
+                                        value={lectureData.meetingPassword}
+                                        onChange={handleChange}
+                                        maxLength={100}
+                                    />
+                                    {renderError('meetingPassword')}
+                                </div>
+                            </div>
+                        )}
+
+                        {!lectureData.isOnline && (
+                            <div className="lcf-row">
+                                <div className={`lcf-field ${errors.location ? 'lcf-field-error' : ''}`}>
+                                    <label className="lcf-label" htmlFor="lcf-location">
+                                        <MapPin size={14} />
+                                        {t('lectureCreateForm.location', 'Място')}
+                                    </label>
+                                    <input
+                                        id="lcf-location"
+                                        type="text"
+                                        name="location"
+                                        className="lcf-input"
+                                        placeholder={t('lectureCreateForm.locationPlaceholder', 'Напр. Пенсионерски клуб „Здраве"')}
+                                        value={lectureData.location}
+                                        onChange={handleChange}
+                                    />
+                                    {renderError('location')}
+                                </div>
+
+                                <div className={`lcf-field ${errors.address ? 'lcf-field-error' : ''}`}>
+                                    <label className="lcf-label" htmlFor="lcf-address">
+                                        {t('lectureCreateForm.address', 'Адрес')}
+                                    </label>
+                                    <input
+                                        id="lcf-address"
+                                        type="text"
+                                        name="address"
+                                        className="lcf-input"
+                                        placeholder={t('lectureCreateForm.addressPlaceholder', 'Пълен адрес')}
+                                        value={lectureData.address}
+                                        onChange={handleChange}
+                                    />
+                                    {renderError('address')}
+                                </div>
+                            </div>
+                        )}
                     </div>
 
                     {/* ============================================= */}
@@ -590,7 +628,7 @@ const LectureCreateForm = () => {
                             <div className="lcf-row lcf-test-fields">
                                 <div className={`lcf-field ${errors.creditsForTest ? 'lcf-field-error' : ''}`}>
                                     <label className="lcf-label" htmlFor="lcf-credits-test">
-                                        {t('lectureCreateForm.creditsForTest', 'За тест',)}
+                                        {t('lectureCreateForm.creditsForTest', 'За тест')}
                                     </label>
                                     <input
                                         id="lcf-credits-test"
@@ -689,10 +727,17 @@ const LectureCreateForm = () => {
                 {/* Footer Actions */}
                 {/* ============================================= */}
                 <div className="lcf-footer">
-                    <button className="lcf-btn lcf-btn-cancel" onClick={() => navigate('/academy/admin/lectures')}>
-                        {t('lectureCreateForm.cancel', 'Отказ')}
-                    </button>
+                    <div className="lcf-footer-left">
+                        {hasChanges && (
+                            <span className="lcf-unsaved">
+                                {t('lectureCreateForm.unsavedChanges', '● Незапазени промени')}
+                            </span>
+                        )}
+                    </div>
                     <div className="lcf-footer-right">
+                        <button className="lcf-btn lcf-btn-cancel" onClick={() => navigate('/academy/admin/lectures')}>
+                            {t('lectureCreateForm.cancel', 'Отказ')}
+                        </button>
                         <button className="lcf-btn lcf-btn-draft" onClick={handleSaveDraft} disabled={isSaving}>
                             <Save size={18} />
                             {isSaving ? t('lectureCreateForm.saving', 'Запазване...') : t('lectureCreateForm.saveDraft', 'Запази чернова')}

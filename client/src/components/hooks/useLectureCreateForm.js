@@ -10,6 +10,8 @@ import { useAcademyCourses } from '../contexts/AcademyCoursesProvider';
 //                    CONSTANTS
 // =========================================================
 
+const STORAGE_KEY = 'academy_lecture_draft_id';
+
 const INITIAL_LECTURE_DATA = {
     // Section 1 — Basic Info
     title: '',
@@ -77,6 +79,7 @@ const useLectureCreateForm = () => {
 
     const {
         getLectureBySlug,
+        getLectureById,
         createLecture,
         updateLecture,
         publishLecture,
@@ -88,22 +91,65 @@ const useLectureCreateForm = () => {
     // =========================================================
 
     const isEditMode = Boolean(slug);
+ const savedDraftId = !isEditMode ? sessionStorage.getItem(STORAGE_KEY) : null; 
+
 
     const [lectureData, setLectureData] = useState(INITIAL_LECTURE_DATA);
     const [lectureId, setLectureId] = useState(null);
+    const [lectureSlug, setLectureSlug] = useState(slug || null);
     const [selectedMentorObj, setSelectedMentorObj] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
+const [isLoading, setIsLoading] = useState(isEditMode || Boolean(savedDraftId)); 
     const [isSaving, setIsSaving] = useState(false);
     const [errors, setErrors] = useState({});
+    const [hasChanges, setHasChanges] = useState(false);
     const [availableCourses, setAvailableCourses] = useState([]);
     const [courseSearch, setCourseSearch] = useState('');
+
     // =========================================================
-    //                    LOAD DATA (Edit Mode)
+    //                    MAP SERVER DATA → FORM
     // =========================================================
 
-    useEffect(() => {
+    const mapLectureToForm = (lec) => ({
+        title: lec.title || '',
+        shortDescription: lec.shortDescription || '',
+        description: lec.description || '',
+        category: lec.category || '',
+        lectureType: lec.lectureType || 'lecture',
+        tags: lec.tags ? (Array.isArray(lec.tags) ? lec.tags.join(', ') : lec.tags) : '',
+        scheduledDate: formatDateTimeLocal(lec.scheduledDate),
+        scheduledEndDate: formatDateTimeLocal(lec.scheduledEndDate),
+        durationMinutes: lec.durationMinutes || 60,
+        timezone: lec.timezone || 'Europe/Sofia',
+        isOnline: lec.isOnline !== undefined ? lec.isOnline : true,
+        meetingLink: lec.meetingLink || '',
+        meetingPassword: lec.meetingPassword || '',
+        location: lec.location || '',
+        address: lec.address || '',
+        videoProvider: lec.videoProvider || '',
+        videoUrl: lec.videoUrl || '',
+        thumbnailUrl: lec.thumbnailUrl || '',
+        mentorId: lec.mentorId || null,
+        maxParticipants: lec.maxParticipants || '',
+        requiresRegistration: lec.requiresRegistration !== undefined ? lec.requiresRegistration : true,
+        isPublic: lec.isPublic !== undefined ? lec.isPublic : true,
+        isFree: lec.isFree !== undefined ? lec.isFree : true,
+        maxCredits: lec.maxCredits || 0,
+        creditsForAttendance: lec.creditsForAttendance || 0,
+        creditsForTest: lec.creditsForTest || 0,
+        hasTest: lec.hasTest || false,
+        testPassingScore: lec.testPassingScore || 70,
+        courseId: lec.courseId || null,
+    });
+
+    // =========================================================
+    //                    LOAD DATA
+    // =========================================================
+
+     useEffect(() => {
         if (isEditMode && slug) {
-            loadLectureData();
+            loadLectureBySlug(slug);
+        } else if (savedDraftId) { 
+            loadLectureByDraftId(savedDraftId); 
         }
     }, [slug]);
 
@@ -121,52 +167,58 @@ const useLectureCreateForm = () => {
         fetchCourses();
     }, [courseSearch]);
 
-    const loadLectureData = async () => {
+   const loadLectureBySlug = async (lectureSlugToLoad) => {
         try {
             setIsLoading(true);
-            const data = await getLectureBySlug(slug);
+            const data = await getLectureBySlug(lectureSlugToLoad);
             const lec = data.lecture || data;
 
-            setLectureData({
-                title: lec.title || '',
-                shortDescription: lec.shortDescription || '',
-                description: lec.description || '',
-                category: lec.category || '',
-                lectureType: lec.lectureType || 'lecture',
-                tags: lec.tags ? (Array.isArray(lec.tags) ? lec.tags.join(', ') : lec.tags) : '',
-                scheduledDate: formatDateTimeLocal(lec.scheduledDate),
-                scheduledEndDate: formatDateTimeLocal(lec.scheduledEndDate),
-                durationMinutes: lec.durationMinutes || 60,
-                timezone: lec.timezone || 'Europe/Sofia',
-                isOnline: lec.isOnline !== undefined ? lec.isOnline : true,
-                meetingLink: lec.meetingLink || '',
-                meetingPassword: lec.meetingPassword || '',
-                location: lec.location || '',
-                address: lec.address || '',
-                videoProvider: lec.videoProvider || '',
-                videoUrl: lec.videoUrl || '',
-                thumbnailUrl: lec.thumbnailUrl || '',
-                mentorId: lec.mentorId || null,
-                maxParticipants: lec.maxParticipants || '',
-                requiresRegistration: lec.requiresRegistration !== undefined ? lec.requiresRegistration : true,
-                isPublic: lec.isPublic !== undefined ? lec.isPublic : true,
-                isFree: lec.isFree !== undefined ? lec.isFree : true,
-                maxCredits: lec.maxCredits || 0,
-                creditsForAttendance: lec.creditsForAttendance || 0,
-                creditsForTest: lec.creditsForTest || 0,
-                hasTest: lec.hasTest || false,
-                testPassingScore: lec.testPassingScore || 70,
-                courseId: lec.courseId || null,
-            });
+            if (!lec || !lec.id) {
+                sessionStorage.removeItem(STORAGE_KEY);
+                return;
+            }
 
+            setLectureData(mapLectureToForm(lec));
             setLectureId(lec.id);
+            setLectureSlug(lec.slug);
 
             if (lec.lecturer) {
                 setSelectedMentorObj(lec.lecturer);
             }
+
+            toast.info(t('lectureCreateForm.draftLoaded', 'Заредена е запазена чернова'));
         } catch (error) {
             console.error('Error loading lecture:', error);
-            toast.error(t('lectureCreateForm.loadFailed', 'Грешка при зареждане'));
+            sessionStorage.removeItem(STORAGE_KEY);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    // НОВО — зарежда draft по ID (за create mode при refresh)
+    const loadLectureByDraftId = async (draftId) => {
+        try {
+            setIsLoading(true);
+            const data = await getLectureById(draftId);
+            const lec = data.lecture || data;
+
+            if (!lec || !lec.id) {
+                sessionStorage.removeItem(STORAGE_KEY);
+                return;
+            }
+
+            setLectureData(mapLectureToForm(lec));
+            setLectureId(lec.id);
+            setLectureSlug(lec.slug);
+
+            if (lec.lecturer) {
+                setSelectedMentorObj(lec.lecturer);
+            }
+
+            toast.info(t('lectureCreateForm.draftLoaded', 'Заредена е запазена чернова'));
+        } catch (error) {
+            console.error('Error loading draft lecture:', error);
+            sessionStorage.removeItem(STORAGE_KEY);
         } finally {
             setIsLoading(false);
         }
@@ -178,6 +230,8 @@ const useLectureCreateForm = () => {
 
     const updateField = useCallback((field, value) => {
         setLectureData((prev) => ({ ...prev, [field]: value }));
+        setHasChanges(true);
+
         if (errors[field]) {
             setErrors((prev) => {
                 const next = { ...prev };
@@ -308,16 +362,21 @@ const useLectureCreateForm = () => {
             const payload = preparePayload();
 
             if (lectureId) {
+                // Вече съществува — update
                 await updateLecture(lectureId, payload);
+                setHasChanges(false);
                 toast.success(t('lectureCreateForm.draftSaved', 'Черновата е запазена'));
             } else {
+                // Първо създаване — create + запази slug в sessionStorage
                 const result = await createLecture(payload);
                 const newLec = result?.lecture;
                 if (!newLec?.id) throw new Error('Failed to create lecture');
 
-                setLectureId(newLec.id);
+                  setLectureId(newLec.id);
+            setLectureSlug(newLec.slug);
+            sessionStorage.setItem(STORAGE_KEY, newLec.id);
+                setHasChanges(false);
                 toast.success(t('lectureCreateForm.draftCreated', 'Лекцията е създадена'));
-                navigate(`/academy/admin/edit-lecture/${newLec.slug}`, { replace: true });
             }
         } catch (err) {
             console.error('Error saving draft:', err);
@@ -325,7 +384,7 @@ const useLectureCreateForm = () => {
         } finally {
             setIsSaving(false);
         }
-    }, [lectureId, lectureData, preparePayload, createLecture, updateLecture, navigate, t, handleServerError]);
+    }, [lectureId, lectureData, preparePayload, createLecture, updateLecture, t, handleServerError]);
 
     // =========================================================
     //                    PUBLISH
@@ -352,6 +411,9 @@ const useLectureCreateForm = () => {
             }
 
             await publishLecture(id);
+            setHasChanges(false);
+            // Публикувана — изчисти draft от storage
+            sessionStorage.removeItem(STORAGE_KEY);
             toast.success(t('lectureCreateForm.published', 'Лекцията е публикувана'));
             navigate('/academy/admin/lectures');
         } catch (err) {
@@ -363,6 +425,20 @@ const useLectureCreateForm = () => {
     }, [lectureId, validate, preparePayload, createLecture, updateLecture, publishLecture, navigate, t, handleServerError]);
 
     // =========================================================
+    //                    CLEAR DRAFT (за ползване от компонента)
+    // =========================================================
+
+    const clearDraft = useCallback(() => {
+        sessionStorage.removeItem(STORAGE_KEY);
+        setLectureData(INITIAL_LECTURE_DATA);
+        setLectureId(null);
+        setLectureSlug(null);
+        setSelectedMentorObj(null);
+        setHasChanges(false);
+        setErrors({});
+    }, []);
+
+    // =========================================================
     //                    RETURN
     // =========================================================
 
@@ -370,15 +446,18 @@ const useLectureCreateForm = () => {
         isEditMode,
         lectureData,
         lectureId,
+        lectureSlug,
         selectedMentorObj,
         isLoading,
         isSaving,
         errors,
+        hasChanges,
         updateField,
         setSelectedMentorObj,
         validate,
         handleSaveDraft,
         handlePublish,
+        clearDraft,
         availableCourses,
         courseSearch,
         setCourseSearch,
