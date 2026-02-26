@@ -6,13 +6,18 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class lecture extends Model {
     static associate(models) {
-      // Belongs to course (optional - може да е самостоятелна)
+ 
       lecture.belongsTo(models.course, {
         foreignKey: 'courseId',
         targetKey: 'id',
         as: 'course',
       });
-
+     
+      lecture.belongsTo(models.course_module, {
+        foreignKey: 'moduleId',
+        targetKey: 'id',
+        as: 'module',
+      });
       // Belongs to mentor/lecturer
       lecture.belongsTo(models.mentor, {
         foreignKey: 'mentorId',
@@ -62,6 +67,16 @@ module.exports = (sequelize, DataTypes) => {
         field: 'course_id',
         references: {
           model: 'courses',
+          key: 'id',
+        },
+        onDelete: 'SET NULL',
+      },
+       moduleId: { 
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        field: 'module_id',
+        references: {
+          model: 'course_modules',
           key: 'id',
         },
         onDelete: 'SET NULL',
@@ -199,12 +214,12 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: true,
         field: 'is_public',
       },
-isFree: {
-  type: DataTypes.BOOLEAN,
-  allowNull: false,
-  defaultValue: false,
-  field: 'is_free',
-},
+      isFree: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+        field: 'is_free',
+      },
       // === КРЕДИТИ ===
       maxCredits: {
         type: DataTypes.INTEGER,

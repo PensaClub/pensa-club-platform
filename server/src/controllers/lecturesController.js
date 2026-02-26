@@ -9,6 +9,7 @@ const {
   student_lecture,
   course,
   mentor,
+  course_module,
   user_account,
   user_details,
   student,
@@ -286,6 +287,11 @@ lecturesController.get(
             as: 'lecturer',
             attributes: ['id', 'name', 'photoUrl'],
           },
+          { 
+            model: course_module,
+            as: 'module',
+            attributes: ['id', 'title'],
+          },
           {
             model: user_account,
             as: 'creator',
@@ -342,6 +348,11 @@ lecturesController.get('/:slug', async (req, res, next) => {
           model: course,
           as: 'course',
           attributes: ['id', 'name', 'slug', 'category'],
+        },
+        { 
+          model: course_module,
+          as: 'module',
+          attributes: ['id', 'title', 'sortOrder'],
         },
         {
           model: user_account,
@@ -400,6 +411,11 @@ lecturesController.get(
             model: course,
             as: 'course',
             attributes: ['id', 'name', 'slug'],
+          },
+          { 
+            model: course_module,
+            as: 'module',
+            attributes: ['id', 'title', 'sortOrder'],
           },
           {
             model: user_account,
@@ -476,6 +492,7 @@ lecturesController.post(
         category,
         courseId,
         mentorId,
+        moduleId,
         lectureType,
         isOnline,
         location,
@@ -506,6 +523,7 @@ lecturesController.post(
       const newLecture = await lecture.create({
         createdBy: userId,
         courseId: courseId || null,
+          moduleId: moduleId || null,
         mentorId: mentorId || null,
         slug,
         title,

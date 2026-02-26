@@ -1,0 +1,1275 @@
+/* src/components/AdminAcademyLecturesList/EditLecture/editLecture.css */
+/* Prefix: elec- */
+
+/* =========================================================
+                    PAGE BACKGROUND
+   ========================================================= */
+
+.elec-wrapper {
+    position: relative;
+    min-height: 100vh;
+    transition: background-color 0.3s ease, color 0.2s ease;
+}
+
+.elec-page-bg {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: #0c0e14;
+}
+
+.elec-page-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(56, 189, 248, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56, 189, 248, 0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+}
+
+.elec-page-bg::after {
+    content: '';
+    position: absolute;
+    top: -30%;
+    right: -15%;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.07) 0%, transparent 65%);
+    border-radius: 50%;
+}
+
+.elec-glow-orb {
+    position: absolute;
+    bottom: -25%;
+    left: -10%;
+    width: 550px;
+    height: 550px;
+    background: radial-gradient(circle, rgba(14, 165, 233, 0.05) 0%, transparent 65%);
+    border-radius: 50%;
+}
+
+/* =========================================================
+                    LOADING
+   ========================================================= */
+
+.elec-loading {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    gap: 16px;
+    color: #5a6478;
+}
+
+.elec-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(56, 189, 248, 0.15);
+    border-top-color: #0ea5e9;
+    border-radius: 50%;
+    animation: elec-spin 0.8s linear infinite;
+}
+
+@keyframes elec-spin {
+    to { transform: rotate(360deg); }
+}
+
+.elec-spin {
+    animation: elec-spin 1s linear infinite;
+}
+
+.elec-loading p {
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+/* =========================================================
+                    CONTAINER
+   ========================================================= */
+
+.elec-container {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 96px 32px 160px;
+}
+
+/* =========================================================
+                    HEADER
+   ========================================================= */
+
+.elec-header {
+    margin-bottom: 32px;
+}
+
+.elec-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    margin-bottom: 16px;
+    background: rgba(30, 35, 50, 0.5);
+    border: 1px solid rgba(56, 189, 248, 0.08);
+    border-radius: 8px;
+    color: #64748b;
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.elec-back-btn:hover {
+    background: rgba(30, 35, 50, 0.8);
+    border-color: rgba(56, 189, 248, 0.15);
+    color: #94a3b8;
+}
+
+.elec-title {
+    font-size: 1.85rem;
+    font-weight: 700;
+    color: #f0f4f8;
+    margin: 0 0 8px;
+    letter-spacing: -0.02em;
+}
+
+.elec-title-accent {
+    background: linear-gradient(135deg, #38bdf8, #818cf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.elec-subtitle-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.elec-subtitle {
+    font-size: 0.9rem;
+    color: #5a6478;
+    margin: 0;
+}
+
+.elec-status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.elec-status-draft { background: rgba(251, 191, 36, 0.15); color: #fbbf24; }
+.elec-status-scheduled { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
+.elec-status-live { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+.elec-status-completed { background: rgba(34, 197, 94, 0.15); color: #22c55e; }
+.elec-status-cancelled { background: rgba(107, 114, 128, 0.15); color: #6b7280; }
+.elec-status-published { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+
+/* =========================================================
+                    SECTIONS
+   ========================================================= */
+
+.elec-section {
+    margin-bottom: 24px;
+}
+
+.elec-section-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #94a3b8;
+    margin: 0 0 14px;
+    padding-left: 4px;
+    letter-spacing: 0.01em;
+}
+
+.elec-section-content {
+    background: rgba(15, 18, 28, 0.6);
+    border: 1px solid rgba(56, 189, 248, 0.08);
+    border-radius: 20px;
+    padding: 32px 28px;
+    backdrop-filter: blur(12px);
+    position: relative;
+    overflow: hidden;
+}
+
+.elec-section-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.2), rgba(99, 102, 241, 0.2), transparent);
+    pointer-events: none;
+}
+
+.elec-section-desc {
+    font-size: 0.84rem;
+    color: #64748b;
+    margin: 0 0 16px;
+    line-height: 1.5;
+}
+
+/* =========================================================
+                    FORM FIELDS
+   ========================================================= */
+
+.elec-field {
+    margin-bottom: 18px;
+    position: relative;
+}
+
+.elec-field:last-child {
+    margin-bottom: 0;
+}
+
+.elec-label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: #94a3b8;
+    margin-bottom: 6px;
+}
+
+.elec-required {
+    color: #f87171;
+}
+
+.elec-input,
+.elec-select,
+.elec-textarea {
+    width: 100%;
+    padding: 10px 14px;
+    background: rgba(15, 18, 28, 0.5);
+    border: 1px solid rgba(56, 189, 248, 0.1);
+    border-radius: 10px;
+    color: #e2e8f0;
+    font-size: 0.88rem;
+    font-family: inherit;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.elec-input:focus,
+.elec-select:focus,
+.elec-textarea:focus {
+    outline: none;
+    border-color: rgba(56, 189, 248, 0.35);
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.08);
+}
+
+.elec-input::placeholder,
+.elec-textarea::placeholder {
+    color: #475569;
+}
+
+.elec-input-sm {
+    max-width: 220px;
+}
+
+.elec-textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.elec-textarea-sm {
+    min-height: 70px;
+}
+
+.elec-select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 34px;
+}
+
+.elec-select option {
+    background: #1a1d2e;
+    color: #e2e8f0;
+}
+
+.elec-char-count {
+    display: block;
+    text-align: right;
+    font-size: 0.72rem;
+    color: #475569;
+    margin-top: 4px;
+}
+
+.elec-hint {
+    display: block;
+    font-size: 0.76rem;
+    color: #475569;
+    margin-top: 4px;
+}
+
+.elec-error-msg {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.78rem;
+    color: #f87171;
+    margin-top: 4px;
+}
+
+.elec-field-error .elec-input,
+.elec-field-error .elec-select,
+.elec-field-error .elec-textarea {
+    border-color: rgba(248, 113, 113, 0.4);
+}
+
+/* =========================================================
+                    ROW LAYOUT
+   ========================================================= */
+
+.elec-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.elec-row:last-child {
+    margin-bottom: 0;
+}
+
+.elec-test-fields {
+    margin-top: 14px;
+}
+
+/* =========================================================
+                    LOCATION TOGGLE
+   ========================================================= */
+
+.elec-location-toggle {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 18px;
+}
+
+.elec-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: rgba(30, 35, 50, 0.5);
+    border: 1px solid rgba(56, 189, 248, 0.1);
+    border-radius: 8px;
+    color: #64748b;
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.elec-toggle-btn:hover {
+    border-color: rgba(56, 189, 248, 0.2);
+    color: #94a3b8;
+}
+
+.elec-toggle-btn.elec-toggle-active {
+    background: rgba(56, 189, 248, 0.12);
+    border-color: rgba(56, 189, 248, 0.3);
+    color: #38bdf8;
+}
+
+/* =========================================================
+                    TOGGLES (CHECKBOXES)
+   ========================================================= */
+
+.elec-toggles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 12px;
+}
+
+.elec-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.elec-toggle input[type="checkbox"] {
+    display: none;
+}
+
+.elec-toggle-slider {
+    position: relative;
+    width: 38px;
+    height: 20px;
+    background: rgba(71, 85, 105, 0.4);
+    border-radius: 20px;
+    transition: all 0.25s ease;
+    flex-shrink: 0;
+}
+
+.elec-toggle-slider::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background: #94a3b8;
+    border-radius: 50%;
+    transition: all 0.25s ease;
+}
+
+.elec-toggle input:checked + .elec-toggle-slider {
+    background: rgba(56, 189, 248, 0.35);
+}
+
+.elec-toggle input:checked + .elec-toggle-slider::after {
+    transform: translateX(18px);
+    background: #38bdf8;
+}
+
+.elec-toggle-text {
+    font-size: 0.84rem;
+    color: #94a3b8;
+}
+
+/* =========================================================
+                    THUMBNAIL PREVIEW
+   ========================================================= */
+
+.elec-preview {
+    margin-top: 12px;
+    border-radius: 12px;
+    overflow: hidden;
+    max-width: 320px;
+    border: 1px solid rgba(56, 189, 248, 0.1);
+}
+
+.elec-preview-img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* =========================================================
+                    COURSE SELECTION
+   ========================================================= */
+
+.elec-course-selected {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background: rgba(56, 189, 248, 0.08);
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    border-radius: 10px;
+    margin-bottom: 14px;
+}
+
+.elec-course-selected-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #38bdf8;
+}
+
+.elec-course-selected-name {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: #e2e8f0;
+}
+
+.elec-course-clear-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 6px;
+    color: #f87171;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.elec-course-clear-btn:hover {
+    background: rgba(239, 68, 68, 0.2);
+}
+
+.elec-course-dropdown {
+    margin-top: 6px;
+    background: rgba(15, 18, 28, 0.95);
+    border: 1px solid rgba(56, 189, 248, 0.12);
+    border-radius: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.elec-course-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 14px;
+    background: none;
+    border: none;
+    border-bottom: 1px solid rgba(56, 189, 248, 0.05);
+    color: #e2e8f0;
+    font-size: 0.85rem;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s ease;
+}
+
+.elec-course-option:last-child {
+    border-bottom: none;
+}
+
+.elec-course-option:hover {
+    background: rgba(56, 189, 248, 0.08);
+}
+
+.elec-course-option-name {
+    font-weight: 500;
+}
+
+.elec-course-option-cat {
+    font-size: 0.76rem;
+    color: #64748b;
+}
+
+.elec-module-field {
+    margin-top: 14px;
+}
+
+/* =========================================================
+                    TEST EDITOR BUTTON
+   ========================================================= */
+
+.elec-btn-test-editor {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    margin-top: 12px;
+    background: rgba(99, 102, 241, 0.12);
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    border-radius: 10px;
+    color: #a78bfa;
+    font-size: 0.84rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.elec-btn-test-editor:hover {
+    background: rgba(99, 102, 241, 0.2);
+    border-color: rgba(99, 102, 241, 0.4);
+    box-shadow: 0 0 16px rgba(99, 102, 241, 0.15);
+}
+
+/* =========================================================
+                    FOOTER
+   ========================================================= */
+
+.elec-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 32px;
+    background: rgba(12, 14, 20, 0.92);
+    backdrop-filter: blur(16px);
+    border-top: 1px solid rgba(56, 189, 248, 0.08);
+    z-index: 100;
+}
+
+.elec-footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.15), rgba(99, 102, 241, 0.15), transparent);
+    pointer-events: none;
+}
+
+.elec-footer-left,
+.elec-footer-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.elec-unsaved {
+    font-size: 0.8rem;
+    color: #fbbf24;
+    font-weight: 500;
+    animation: elec-pulse 2s ease-in-out infinite;
+}
+
+@keyframes elec-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* =========================================================
+                    BUTTONS
+   ========================================================= */
+
+.elec-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 16px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    white-space: nowrap;
+}
+
+.elec-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.elec-btn-cancel {
+    background: rgba(30, 35, 50, 0.6);
+    border-color: rgba(56, 189, 248, 0.1);
+    color: #94a3b8;
+}
+
+.elec-btn-cancel:hover:not(:disabled) {
+    background: rgba(30, 35, 50, 0.9);
+    border-color: rgba(56, 189, 248, 0.2);
+    color: #e2e8f0;
+}
+
+.elec-btn-discard {
+    background: rgba(251, 191, 36, 0.08);
+    border-color: rgba(251, 191, 36, 0.2);
+    color: #fbbf24;
+}
+
+.elec-btn-discard:hover:not(:disabled) {
+    background: rgba(251, 191, 36, 0.15);
+    border-color: rgba(251, 191, 36, 0.35);
+}
+
+.elec-btn-delete {
+    background: rgba(239, 68, 68, 0.08);
+    border-color: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+}
+
+.elec-btn-delete:hover:not(:disabled) {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.35);
+}
+
+.elec-btn-unpublish {
+    background: rgba(107, 114, 128, 0.1);
+    border-color: rgba(107, 114, 128, 0.2);
+    color: #9ca3af;
+}
+
+.elec-btn-unpublish:hover:not(:disabled) {
+    background: rgba(107, 114, 128, 0.2);
+    border-color: rgba(107, 114, 128, 0.35);
+}
+
+.elec-btn-save-stay {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    border: none;
+}
+
+.elec-btn-save-stay:hover:not(:disabled) {
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+    transform: translateY(-1px);
+}
+
+.elec-btn-save-back {
+    background: linear-gradient(135deg, #0ea5e9, #0284c7);
+    color: #fff;
+    border: none;
+}
+
+.elec-btn-save-back:hover:not(:disabled) {
+    box-shadow: 0 0 20px rgba(14, 165, 233, 0.3);
+    transform: translateY(-1px);
+}
+
+.elec-btn-publish {
+    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    color: #fff;
+    border: none;
+}
+
+.elec-btn-publish:hover:not(:disabled) {
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+    transform: translateY(-1px);
+}
+
+/* =========================================================
+                    DELETE MODAL
+   ========================================================= */
+
+.elec-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+}
+
+.elec-modal {
+    background: rgba(20, 24, 36, 0.98);
+    border: 1px solid rgba(239, 68, 68, 0.15);
+    border-radius: 20px;
+    padding: 36px 32px;
+    max-width: 420px;
+    width: 90%;
+    text-align: center;
+}
+
+.elec-modal-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    background: rgba(239, 68, 68, 0.1);
+    border-radius: 50%;
+    color: #f87171;
+    margin-bottom: 16px;
+}
+
+.elec-modal-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #f0f4f8;
+    margin: 0 0 10px;
+}
+
+.elec-modal-text {
+    font-size: 0.88rem;
+    color: #64748b;
+    margin: 0 0 24px;
+    line-height: 1.5;
+}
+
+.elec-modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.elec-btn-delete-confirm {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: #fff;
+    border: none;
+}
+
+.elec-btn-delete-confirm:hover:not(:disabled) {
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+    transform: translateY(-1px);
+}
+
+/* =========================================================
+                    RESPONSIVE — TABLET
+   ========================================================= */
+
+@media (max-width: 1024px) {
+    .elec-container {
+        padding: 88px 24px 160px;
+    }
+
+    .elec-footer-right {
+        gap: 8px;
+    }
+
+    .elec-btn {
+        padding: 8px 12px;
+        font-size: 0.78rem;
+    }
+}
+
+/* =========================================================
+                    RESPONSIVE — MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+    .elec-container {
+        padding: 80px 16px 180px;
+    }
+
+    .elec-title {
+        font-size: 1.35rem;
+    }
+
+    .elec-section-content {
+        padding: 22px 16px;
+        border-radius: 14px;
+    }
+
+    .elec-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+    .elec-location-toggle {
+        flex-direction: column;
+    }
+
+    .elec-toggles {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .elec-footer {
+        padding: 12px 16px;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .elec-footer-left {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .elec-footer-right {
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 6px;
+    }
+
+    .elec-btn-label-desktop {
+        display: none;
+    }
+
+    .elec-btn {
+        padding: 8px 10px;
+        font-size: 0;
+    }
+
+    .elec-btn svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .elec-modal {
+        padding: 28px 20px;
+        margin: 0 16px;
+    }
+}
+
+/* =========================================================
+                    RESPONSIVE — SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 480px) {
+    .elec-container {
+        padding: 72px 12px 200px;
+    }
+
+    .elec-title {
+        font-size: 1.15rem;
+    }
+
+    .elec-subtitle {
+        font-size: 0.8rem;
+    }
+
+    .elec-section-content {
+        padding: 18px 14px;
+    }
+
+    .elec-input,
+    .elec-select,
+    .elec-textarea {
+        padding: 9px 12px;
+        font-size: 0.84rem;
+    }
+
+    .elec-input-sm {
+        max-width: 100%;
+    }
+
+    .elec-preview {
+        max-width: 100%;
+    }
+}
+
+/* =========================================================
+                    LIGHT THEME — Background
+   ========================================================= */
+
+[data-theme="light"] .elec-page-bg {
+    background: #f1f5f9;
+}
+
+[data-theme="light"] .elec-page-bg::before {
+    background-image:
+        linear-gradient(rgba(226, 96, 32, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(226, 96, 32, 0.07) 1px, transparent 1px);
+}
+
+[data-theme="light"] .elec-page-bg::after {
+    background: radial-gradient(circle, rgba(226, 96, 32, 0.08) 0%, transparent 65%);
+}
+
+[data-theme="light"] .elec-glow-orb {
+    background: radial-gradient(circle, rgba(251, 146, 60, 0.07) 0%, transparent 65%);
+}
+
+/* =========================================================
+                    LIGHT THEME — Loading
+   ========================================================= */
+
+[data-theme="light"] .elec-loading {
+    color: #64748b;
+}
+
+[data-theme="light"] .elec-spinner {
+    border: 3px solid rgba(226, 96, 32, 0.15);
+    border-top-color: #E26020;
+}
+
+/* =========================================================
+                    LIGHT THEME — Header
+   ========================================================= */
+
+[data-theme="light"] .elec-back-btn {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    color: #64748b;
+}
+
+[data-theme="light"] .elec-back-btn:hover {
+    background: rgba(226, 96, 32, 0.06);
+    border-color: rgba(226, 96, 32, 0.15);
+    color: #E26020;
+}
+
+[data-theme="light"] .elec-title {
+    color: #1e293b;
+}
+
+[data-theme="light"] .elec-title-accent {
+    background: linear-gradient(135deg, #E26020, #d97706);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+[data-theme="light"] .elec-subtitle {
+    color: #64748b;
+}
+
+[data-theme="light"] .elec-status-draft { background: rgba(251, 191, 36, 0.12); color: #b45309; }
+[data-theme="light"] .elec-status-scheduled { background: rgba(14, 165, 233, 0.1); color: #0369a1; }
+[data-theme="light"] .elec-status-live { background: rgba(239, 68, 68, 0.1); color: #dc2626; }
+[data-theme="light"] .elec-status-completed { background: rgba(34, 197, 94, 0.1); color: #15803d; }
+[data-theme="light"] .elec-status-cancelled { background: rgba(107, 114, 128, 0.1); color: #4b5563; }
+[data-theme="light"] .elec-status-published { background: rgba(16, 185, 129, 0.1); color: #047857; }
+
+/* =========================================================
+                    LIGHT THEME — Sections
+   ========================================================= */
+
+[data-theme="light"] .elec-section-title {
+    color: #475569;
+}
+
+[data-theme="light"] .elec-section-content {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    backdrop-filter: none;
+}
+
+[data-theme="light"] .elec-section-content::before {
+    background: linear-gradient(90deg, transparent, rgba(226, 96, 32, 0.1), rgba(226, 96, 32, 0.06), transparent);
+}
+
+[data-theme="light"] .elec-section-desc {
+    color: #64748b;
+}
+
+/* =========================================================
+                    LIGHT THEME — Form Fields
+   ========================================================= */
+
+[data-theme="light"] .elec-label {
+    color: #475569;
+}
+
+[data-theme="light"] .elec-input,
+[data-theme="light"] .elec-select,
+[data-theme="light"] .elec-textarea {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    color: #1e293b;
+}
+
+[data-theme="light"] .elec-input:focus,
+[data-theme="light"] .elec-select:focus,
+[data-theme="light"] .elec-textarea:focus {
+    border-color: rgba(226, 96, 32, 0.4);
+    box-shadow: 0 0 0 3px rgba(226, 96, 32, 0.08);
+}
+
+[data-theme="light"] .elec-input::placeholder,
+[data-theme="light"] .elec-textarea::placeholder {
+    color: #94a3b8;
+}
+
+[data-theme="light"] .elec-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+}
+
+[data-theme="light"] .elec-select option {
+    background: #ffffff;
+    color: #1e293b;
+}
+
+[data-theme="light"] .elec-char-count,
+[data-theme="light"] .elec-hint {
+    color: #94a3b8;
+}
+
+[data-theme="light"] .elec-field-error .elec-input,
+[data-theme="light"] .elec-field-error .elec-select,
+[data-theme="light"] .elec-field-error .elec-textarea {
+    border-color: rgba(239, 68, 68, 0.4);
+}
+
+/* =========================================================
+                    LIGHT THEME — Location Toggle
+   ========================================================= */
+
+[data-theme="light"] .elec-toggle-btn {
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    color: #64748b;
+}
+
+[data-theme="light"] .elec-toggle-btn:hover {
+    border-color: rgba(226, 96, 32, 0.2);
+    color: #475569;
+}
+
+[data-theme="light"] .elec-toggle-btn.elec-toggle-active {
+    background: rgba(226, 96, 32, 0.08);
+    border-color: rgba(226, 96, 32, 0.3);
+    color: #E26020;
+}
+
+/* =========================================================
+                    LIGHT THEME — Toggles
+   ========================================================= */
+
+[data-theme="light"] .elec-toggle-slider {
+    background: #cbd5e1;
+}
+
+[data-theme="light"] .elec-toggle-slider::after {
+    background: #ffffff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .elec-toggle input:checked + .elec-toggle-slider {
+    background: rgba(226, 96, 32, 0.5);
+}
+
+[data-theme="light"] .elec-toggle input:checked + .elec-toggle-slider::after {
+    background: #E26020;
+}
+
+[data-theme="light"] .elec-toggle-text {
+    color: #475569;
+}
+
+/* =========================================================
+                    LIGHT THEME — Preview
+   ========================================================= */
+
+[data-theme="light"] .elec-preview {
+    border: 1px solid #e2e8f0;
+}
+
+/* =========================================================
+                    LIGHT THEME — Course Selection
+   ========================================================= */
+
+[data-theme="light"] .elec-course-selected {
+    background: rgba(226, 96, 32, 0.06);
+    border: 1px solid rgba(226, 96, 32, 0.2);
+}
+
+[data-theme="light"] .elec-course-selected-info {
+    color: #E26020;
+}
+
+[data-theme="light"] .elec-course-selected-name {
+    color: #1e293b;
+}
+
+[data-theme="light"] .elec-course-clear-btn {
+    background: rgba(239, 68, 68, 0.06);
+    border-color: rgba(239, 68, 68, 0.15);
+}
+
+[data-theme="light"] .elec-course-dropdown {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .elec-course-option {
+    color: #1e293b;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+[data-theme="light"] .elec-course-option:hover {
+    background: rgba(226, 96, 32, 0.06);
+}
+
+[data-theme="light"] .elec-course-option-cat {
+    color: #94a3b8;
+}
+
+/* =========================================================
+                    LIGHT THEME — Test Button
+   ========================================================= */
+
+[data-theme="light"] .elec-btn-test-editor {
+    background: rgba(99, 102, 241, 0.08);
+    border-color: rgba(99, 102, 241, 0.2);
+    color: #7c3aed;
+}
+
+[data-theme="light"] .elec-btn-test-editor:hover {
+    background: rgba(99, 102, 241, 0.14);
+    border-color: rgba(99, 102, 241, 0.35);
+}
+
+/* =========================================================
+                    LIGHT THEME — Footer
+   ========================================================= */
+
+[data-theme="light"] .elec-footer {
+    background: rgba(255, 255, 255, 0.95);
+    border-top: 1px solid #e2e8f0;
+    box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .elec-footer::before {
+    background: linear-gradient(90deg, transparent, rgba(226, 96, 32, 0.1), rgba(226, 96, 32, 0.06), transparent);
+}
+
+[data-theme="light"] .elec-unsaved {
+    color: #d97706;
+}
+
+/* =========================================================
+                    LIGHT THEME — Buttons
+   ========================================================= */
+
+[data-theme="light"] .elec-btn-cancel {
+    background: #f1f5f9;
+    border-color: rgba(0, 0, 0, 0.08);
+    color: #475569;
+}
+
+[data-theme="light"] .elec-btn-cancel:hover:not(:disabled) {
+    background: #e2e8f0;
+    color: #1e293b;
+}
+
+[data-theme="light"] .elec-btn-discard {
+    background: rgba(245, 158, 11, 0.08);
+    border-color: rgba(245, 158, 11, 0.2);
+    color: #d97706;
+}
+
+[data-theme="light"] .elec-btn-discard:hover:not(:disabled) {
+    background: rgba(245, 158, 11, 0.15);
+}
+
+[data-theme="light"] .elec-btn-delete {
+    background: rgba(239, 68, 68, 0.06);
+    border-color: rgba(239, 68, 68, 0.15);
+    color: #dc2626;
+}
+
+[data-theme="light"] .elec-btn-delete:hover:not(:disabled) {
+    background: rgba(239, 68, 68, 0.12);
+}
+
+[data-theme="light"] .elec-btn-unpublish {
+    background: rgba(107, 114, 128, 0.08);
+    border-color: rgba(107, 114, 128, 0.15);
+    color: #6b7280;
+}
+
+[data-theme="light"] .elec-btn-unpublish:hover:not(:disabled) {
+    background: rgba(107, 114, 128, 0.15);
+}
+
+/* =========================================================
+                    LIGHT THEME — Modal
+   ========================================================= */
+
+[data-theme="light"] .elec-modal-overlay {
+    background: rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="light"] .elec-modal {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .elec-modal-icon {
+    background: rgba(239, 68, 68, 0.08);
+    color: #dc2626;
+}
+
+[data-theme="light"] .elec-modal-title {
+    color: #1e293b;
+}
+
+[data-theme="light"] .elec-modal-text {
+    color: #64748b;
+}

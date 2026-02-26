@@ -97,6 +97,7 @@ import SiteSettingsAdmin from './components/SiteSettingsAdmin/SiteSettingsAdmin'
 import ChristmasGreetingModal from './components/ChristmasGreetingModal/ChristmasGreetingModal';
 import LectureCreateForm from './components/LectureCreateForm/LectureCreateForm.jsx';
 import AdminAcademyLecturesList from './components/AdminAcademyLecturesList/AdminAcademyLecturesList.jsx';
+import EditLecture from './components/AdminAcademyLecturesList/EditLecture/EditLecture.jsx';
 
 // ✅ LAZY LOADING КОМПОНЕНТИ
 const ArticlesList = lazy(() => import('./components/Articles/ArticlesList/ArticlesList.jsx'));
@@ -281,6 +282,7 @@ function App() {
                                             <Route path="/academy/admin/lectures" element={<AdminGuard><AdminAcademyLecturesList /></AdminGuard>} />
                                             
                                             <Route path="/academy/admin/edit-course/:slug" element={<AdminGuard><EditCourseBasicInfo /></AdminGuard>} />
+                                            <Route path="/academy/admin/edit-lecture/:slug" element={<AdminGuard><EditLecture /></AdminGuard>} />
                                             {/* <Route path="/academy/admin/edit-lecture/:slug" element={<AdminGuard><EditLectureBasicInfo /></AdminGuard>} /> */}
 
                                             <Route path="/academy/admin/course/:slug/content" element={<AdminGuard><CourseContentManager /></AdminGuard>} />

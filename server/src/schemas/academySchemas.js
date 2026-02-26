@@ -122,6 +122,7 @@ const lectureCreateSchema = z.object({
   description: z.string().optional(),
   category: z.string().max(100).optional(),
   courseId: z.coerce.number().int().positive().optional().nullable(),
+  moduleId: z.coerce.number().int().positive().optional().nullable(),
   mentorId: z.coerce.number().int().positive().optional().nullable(),
   lectureType: z.enum(['lecture', 'webinar', 'workshop', 'masterclass']).default('lecture'),
   isOnline: z.boolean().default(true),

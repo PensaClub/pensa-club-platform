@@ -1,6 +1,6 @@
 // src/components/hooks/useEditLecture.js
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAcademyCourses } from '../contexts/AcademyCoursesProvider';
 import { toast } from 'react-toastify';
@@ -40,6 +40,7 @@ const INITIAL_STATE = {
     hasTest: false,
     testPassingScore: 70,
     courseId: null,
+    moduleId: null,
 };
 
 // =========================================================
@@ -69,6 +70,7 @@ const useEditLecture = () => {
         unpublishLecture,
         deleteLecture,
         getAdminCourses,
+         getCourseModules,
     } = useAcademyCourses();
 
     // =========================================================
@@ -86,7 +88,10 @@ const useEditLecture = () => {
     const [hasChanges, setHasChanges] = useState(false);
     const [availableCourses, setAvailableCourses] = useState([]);
     const [courseSearch, setCourseSearch] = useState('');
+    const [availableModules, setAvailableModules] = useState([]);
+    const [showTestEditor, setShowTestEditor] = useState(false);
 
+    const originalDataRef = useRef(null);
     // =========================================================
     //                    LOAD LECTURE DATA
     // =========================================================
@@ -109,7 +114,25 @@ const useEditLecture = () => {
         fetchCourses();
     }, [courseSearch]);
 
-    const loadLecture = async () => {
+    // Fetch модули при избран курс
+    useEffect(() => {
+        const fetchModules = async () => {
+            if (!lectureData.courseId) {
+                setAvailableModules([]);
+                return;
+            }
+            try {
+                const mods = await getCourseModules(lectureData.courseId);
+                setAvailableModules(mods || []);
+            } catch (err) {
+                console.error('Error fetching modules:', err);
+                setAvailableModules([]);
+            }
+        };
+        fetchModules();
+    }, [lectureData.courseId]);
+
+   const loadLecture = async () => {
         try {
             setIsLoading(true);
             const data = await getLectureBySlug(slug);
@@ -125,7 +148,7 @@ const useEditLecture = () => {
             setLectureStatus(lec.status || null);
             setIsPublished(lec.isPublished || false);
 
-            setLectureData({
+            const mapped = { // ПРОМЕНЕНО — извлечено в променлива
                 title: lec.title || '',
                 shortDescription: lec.shortDescription || '',
                 description: lec.description || '',
@@ -155,7 +178,11 @@ const useEditLecture = () => {
                 hasTest: lec.hasTest || false,
                 testPassingScore: lec.testPassingScore || 70,
                 courseId: lec.courseId || null,
-            });
+                moduleId: lec.moduleId || null, // НОВО
+            };
+
+            setLectureData(mapped); // ПРОМЕНЕНО
+            originalDataRef.current = mapped; // НОВО
 
             if (lec.lecturer) {
                 setSelectedMentorObj(lec.lecturer);
@@ -256,6 +283,7 @@ const useEditLecture = () => {
             creditsForTest: lectureData.hasTest ? Number(lectureData.creditsForTest) || 0 : 0,
             hasTest: lectureData.hasTest,
             courseId: lectureData.courseId || null,
+            moduleId: lectureData.courseId ? (lectureData.moduleId || null) : null,
         };
 
         const vp = (lectureData.videoProvider || '').trim();
@@ -272,7 +300,40 @@ const useEditLecture = () => {
     //                    SAVE
     // =========================================================
 
-    const handleSave = async () => {
+    // =========================================================
+    //                    SAVE & STAY
+    // =========================================================
+
+    // НОВО
+    const handleSaveAndStay = async () => {
+        const validationErrors = validate();
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+        }
+
+        try {
+            setIsSaving(true);
+            const payload = preparePayload();
+            await updateLecture(lectureId, payload);
+
+            setHasChanges(false);
+            originalDataRef.current = { ...lectureData };
+            toast.success(t('editLecture.saveSuccess', 'Лекцията е обновена успешно'));
+        } catch (err) {
+            console.error('Error saving lecture:', err);
+            handleServerError(err, 'editLecture.errors.saveFailed');
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    // =========================================================
+    //                    SAVE & BACK
+    // =========================================================
+
+    // НОВО
+    const handleSaveAndBack = async () => {
         const validationErrors = validate();
         if (Object.keys(validationErrors).length > 0) {
             setErrors(validationErrors);
@@ -289,21 +350,30 @@ const useEditLecture = () => {
             navigate('/academy/admin/lectures');
         } catch (err) {
             console.error('Error saving lecture:', err);
-            const serverErrors = err?.errors;
-            if (Array.isArray(serverErrors) && serverErrors.length > 0) {
-                const errMap = {};
-                serverErrors.forEach((e) => {
-                    if (e.field) errMap[e.field] = e.message;
-                });
-                setErrors(errMap);
-                toast.error(serverErrors[0].message || t('editLecture.errors.saveFailed', 'Грешка при запазване'));
-            } else {
-                toast.error(t('editLecture.errors.saveFailed', 'Грешка при запазване'));
-            }
+            handleServerError(err, 'editLecture.errors.saveFailed');
         } finally {
             setIsSaving(false);
         }
     };
+
+    // =========================================================
+    //                    SERVER ERROR HANDLER
+    // =========================================================
+
+    // НОВО
+    const handleServerError = useCallback((err, fallbackKey) => {
+        const serverErrors = err?.errors;
+        if (Array.isArray(serverErrors) && serverErrors.length > 0) {
+            const errMap = {};
+            serverErrors.forEach((e) => {
+                if (e.field) errMap[e.field] = e.message;
+            });
+            setErrors(errMap);
+            toast.error(serverErrors[0].message || t(fallbackKey, 'Грешка'));
+        } else {
+            toast.error(t(fallbackKey, 'Грешка'));
+        }
+    }, [t]);
 
     // =========================================================
     //                    PUBLISH / UNPUBLISH
@@ -329,17 +399,7 @@ const useEditLecture = () => {
             navigate('/academy/admin/lectures');
         } catch (err) {
             console.error('Error publishing:', err);
-            const serverErrors = err?.errors;
-            if (Array.isArray(serverErrors) && serverErrors.length > 0) {
-                const errMap = {};
-                serverErrors.forEach((e) => {
-                    if (e.field) errMap[e.field] = e.message;
-                });
-                setErrors(errMap);
-                toast.error(serverErrors[0].message || t('editLecture.errors.publishFailed', 'Грешка при публикуване'));
-            } else {
-                toast.error(t('editLecture.errors.publishFailed', 'Грешка при публикуване'));
-            }
+            handleServerError(err, 'editLecture.errors.publishFailed'); // ПРОМЕНЕНО
         } finally {
             setIsSaving(false);
         }
@@ -384,13 +444,19 @@ const useEditLecture = () => {
     const handleCancel = () => {
         navigate('/academy/admin/lectures');
     };
-
+    const handleDiscardChanges = useCallback(() => {
+        if (originalDataRef.current) {
+            setLectureData(originalDataRef.current);
+            setHasChanges(false);
+            setErrors({});
+        }
+    }, []);
     // =========================================================
     //                    RETURN
     // =========================================================
 
     return {
-        lectureData,
+            lectureData,
         lectureId,
         lectureStatus,
         isPublished,
@@ -402,14 +468,20 @@ const useEditLecture = () => {
         hasChanges,
         updateField,
         setSelectedMentorObj,
-        handleSave,
+        handleSaveAndStay, // НОВО (замества handleSave)
+        handleSaveAndBack, // НОВО
         handlePublish,
         handleUnpublish,
         handleDelete,
         handleCancel,
+        handleDiscardChanges, // НОВО
         availableCourses,
         courseSearch,
         setCourseSearch,
+        availableModules, // НОВО
+        showTestEditor, // НОВО
+        setShowTestEditor, // НОВО
+        reloadLecture: loadLecture, // НОВО
     };
 };
 
