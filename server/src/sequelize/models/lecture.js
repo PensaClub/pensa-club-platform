@@ -50,6 +50,12 @@ module.exports = (sequelize, DataTypes) => {
         sourceKey: 'id',
         as: 'test',
       });
+      
+      lecture.hasMany(models.mentor_lecture, {
+        foreignKey: 'lectureId',
+        sourceKey: 'id',
+        as: 'mentorAssignments',
+      });
     }
   }
 

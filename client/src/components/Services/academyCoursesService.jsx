@@ -180,6 +180,15 @@ export const academyCoursesServiceFactory = () => {
       return requester.get(`${apiUrl}/academy/lectures/${lectureId}/admin`);
     },
 
+    addLectureMentor: async (lectureId, data) => {
+      return requester.post(`${apiUrl}/academy/lectures/${lectureId}/mentors`, data);
+    },
+    updateLectureMentor: async (lectureId, mentorLectureId, data) => {
+      return requester.put(`${apiUrl}/academy/lectures/${lectureId}/mentors/${mentorLectureId}`, data);
+    },
+    removeLectureMentor: async (lectureId, mentorLectureId) => {
+      return requester.del(`${apiUrl}/academy/lectures/${lectureId}/mentors/${mentorLectureId}`);
+    },
     createLecture: async (lectureData) => {
       return requester.post(`${apiUrl}/academy/lectures`, lectureData);
     },

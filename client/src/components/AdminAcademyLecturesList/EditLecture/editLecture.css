@@ -1035,11 +1035,19 @@
 }
 
 [data-theme="light"] .elec-input,
-[data-theme="light"] .elec-select,
 [data-theme="light"] .elec-textarea {
-    background: #f8fafc;
+    background-color: #f8fafc;
     border: 1px solid #e2e8f0;
     color: #1e293b;
+}
+
+[data-theme="light"] .elec-select {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    color: #1e293b;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
 }
 
 [data-theme="light"] .elec-input:focus,
@@ -1052,10 +1060,6 @@
 [data-theme="light"] .elec-input::placeholder,
 [data-theme="light"] .elec-textarea::placeholder {
     color: #94a3b8;
-}
-
-[data-theme="light"] .elec-select {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
 }
 
 [data-theme="light"] .elec-select option {
