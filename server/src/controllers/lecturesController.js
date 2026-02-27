@@ -9,6 +9,8 @@ const {
   student_lecture,
   course,
   mentor,
+  course_module,
+  mentor_lecture,
   user_account,
   user_details,
   student,
@@ -281,10 +283,19 @@ lecturesController.get(
       const { count, rows: lectures } = await lecture.findAndCountAll({
         where,
         include: [
+           { // ПРОМЕНЕНО
+            model: mentor_lecture,
+            as: 'mentorAssignments',
+            include: [{
+              model: mentor,
+              as: 'mentor',
+              attributes: ['id', 'name', 'photoUrl'],
+            }],
+          },
           {
-            model: mentor,
-            as: 'lecturer',
-            attributes: ['id', 'name', 'photoUrl'],
+            model: course_module,
+            as: 'module',
+            attributes: ['id', 'title'],
           },
           {
             model: user_account,
@@ -334,14 +345,23 @@ lecturesController.get('/:slug', async (req, res, next) => {
       where,
       include: [
         {
-          model: mentor,
-          as: 'lecturer',
-          attributes: ['id', 'name', 'photoUrl', 'specialization', 'email'],
+          model: mentor_lecture,
+          as: 'mentorAssignments',
+          include: [{
+            model: mentor,
+            as: 'mentor',
+            attributes: ['id', 'name', 'photoUrl', 'specialization', 'email'],
+          }],
         },
         {
           model: course,
           as: 'course',
           attributes: ['id', 'name', 'slug', 'category'],
+        },
+        {
+          model: course_module,
+          as: 'module',
+          attributes: ['id', 'title', 'sortOrder'],
         },
         {
           model: user_account,
@@ -391,15 +411,24 @@ lecturesController.get(
 
       const lectureData = await lecture.findByPk(lectureId, {
         include: [
-          {
-            model: mentor,
-            as: 'lecturer',
-            attributes: ['id', 'name', 'photoUrl', 'specialization', 'email'],
+        { 
+            model: mentor_lecture,
+            as: 'mentorAssignments',
+            include: [{
+              model: mentor,
+              as: 'mentor',
+              attributes: ['id', 'name', 'photoUrl', 'specialization', 'email'],
+            }],
           },
           {
             model: course,
             as: 'course',
             attributes: ['id', 'name', 'slug'],
+          },
+          {
+            model: course_module,
+            as: 'module',
+            attributes: ['id', 'title', 'sortOrder'],
           },
           {
             model: user_account,
@@ -476,6 +505,7 @@ lecturesController.post(
         category,
         courseId,
         mentorId,
+        moduleId,
         lectureType,
         isOnline,
         location,
@@ -492,6 +522,7 @@ lecturesController.post(
         maxParticipants,
         requiresRegistration,
         isPublic,
+        isFree,
         maxCredits,
         creditsForAttendance,
         creditsForTest,
@@ -506,6 +537,7 @@ lecturesController.post(
       const newLecture = await lecture.create({
         createdBy: userId,
         courseId: courseId || null,
+        moduleId: moduleId || null,
         mentorId: mentorId || null,
         slug,
         title,
@@ -528,6 +560,7 @@ lecturesController.post(
         maxParticipants,
         requiresRegistration,
         isPublic,
+        isFree,
         maxCredits,
         creditsForAttendance,
         creditsForTest,
@@ -1309,6 +1342,138 @@ lecturesController.get(
       });
     } catch (err) {
       console.error('❌ [REGISTRATION STATUS] Error:', err);
+      next(err);
+    }
+  }
+);
+// ===============================
+// POST /api/academy/lectures/:id/mentors
+// Добавяне на ментор към лекция
+// ===============================
+lecturesController.post( // НОВО
+  '/:id/mentors',
+  isAuth,
+  rbac.checkPermission('lecture', 'update'),
+  async (req, res, next) => {
+    try {
+      const lectureId = parseInt(req.params.id);
+      const { mentorId, role, isLead } = req.body;
+
+      if (!mentorId) {
+        return res.status(400).json({ success: false, message: 'mentorId is required' });
+      }
+
+      const lectureData = await lecture.findByPk(lectureId);
+      if (!lectureData) {
+        return res.status(404).json({ success: false, message: 'Lecture not found' });
+      }
+
+      const existing = await mentor_lecture.findOne({ where: { lectureId, mentorId } });
+
+      if (isLead) {
+        await mentor_lecture.update({ isLead: false }, { where: { lectureId } });
+      }
+let record;
+      if (existing) {
+        // Вече е назначен — обнови го
+        await existing.update({
+          role: role || existing.role,
+          isLead: isLead !== undefined ? isLead : existing.isLead,
+        });
+        record = existing;
+      } else {
+        // Нов — създай
+        record = await mentor_lecture.create({
+          lectureId,
+          mentorId,
+          role: role || 'lecturer',
+          isLead: isLead || false,
+        });
+      }
+
+      const result = await mentor_lecture.findByPk(record.id, {
+        include: [{ model: mentor, as: 'mentor', attributes: ['id', 'name', 'photoUrl', 'specialization', 'email'] }],
+      });
+
+
+      res.status(existing ? 200 : 201).json({
+        success: true,
+        message: existing ? 'Mentor updated' : 'Mentor added to lecture',
+        mentorLecture: result,
+      });
+    } catch (err) {
+      console.error('❌ [ADD LECTURE MENTOR] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// PUT /api/academy/lectures/:id/mentors/:mentorLectureId
+// Обновяване на ментор в лекция
+// ===============================
+lecturesController.put( // НОВО
+  '/:id/mentors/:mentorLectureId',
+  isAuth,
+  rbac.checkPermission('lecture', 'update'),
+  async (req, res, next) => {
+    try {
+      const lectureId = parseInt(req.params.id);
+      const mentorLectureId = parseInt(req.params.mentorLectureId);
+      const { role, isLead } = req.body;
+
+      const record = await mentor_lecture.findOne({ where: { id: mentorLectureId, lectureId } });
+      if (!record) {
+        return res.status(404).json({ success: false, message: 'Mentor assignment not found' });
+      }
+
+      if (isLead) {
+        await mentor_lecture.update({ isLead: false }, { where: { lectureId, id: { [Op.ne]: mentorLectureId } } });
+      }
+
+      await record.update({ role: role ?? record.role, isLead: isLead ?? record.isLead });
+
+      const result = await mentor_lecture.findByPk(mentorLectureId, {
+        include: [{ model: mentor, as: 'mentor', attributes: ['id', 'name', 'photoUrl', 'specialization', 'email'] }],
+      });
+
+      res.status(200).json({ success: true, message: 'Mentor updated', mentorLecture: result });
+    } catch (err) {
+      console.error('❌ [UPDATE LECTURE MENTOR] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// DELETE /api/academy/lectures/:id/mentors/:mentorLectureId
+// Премахване на ментор от лекция
+// ===============================
+lecturesController.delete( // НОВО
+  '/:id/mentors/:mentorLectureId',
+  isAuth,
+  rbac.checkPermission('lecture', 'update'),
+  async (req, res, next) => {
+    try {
+      const lectureId = parseInt(req.params.id);
+      const mentorLectureId = parseInt(req.params.mentorLectureId);
+
+      const record = await mentor_lecture.findOne({ where: { id: mentorLectureId, lectureId } });
+      if (!record) {
+        return res.status(404).json({ success: false, message: 'Mentor assignment not found' });
+      }
+
+      const wasLead = record.isLead;
+      await record.destroy();
+
+      if (wasLead) {
+        const nextMentor = await mentor_lecture.findOne({ where: { lectureId }, order: [['createdAt', 'ASC']] });
+        if (nextMentor) await nextMentor.update({ isLead: true });
+      }
+
+      res.status(200).json({ success: true, message: 'Mentor removed from lecture' });
+    } catch (err) {
+      console.error('❌ [DELETE LECTURE MENTOR] Error:', err);
       next(err);
     }
   }
