@@ -25,14 +25,14 @@ const EditLecture = () => { // НОВО
         lectureId,
         lectureStatus,
         isPublished,
-        selectedMentorObj,
+        assignedMentors, 
+        setAssignedMentors, 
         slug,
         isLoading,
         isSaving,
         errors,
         hasChanges,
         updateField,
-        setSelectedMentorObj,
         handleSaveAndStay,
         handleSaveAndBack,
         handlePublish,
@@ -65,15 +65,15 @@ const EditLecture = () => { // НОВО
         }
     };
 
-    const handleMentorChange = (mentorData) => { // НОВО
-        if (mentorData) {
-            updateField('mentorId', mentorData.mentorId || mentorData.id);
-            setSelectedMentorObj(mentorData.mentor || mentorData);
-        } else {
-            updateField('mentorId', null);
-            setSelectedMentorObj(null);
-        }
-    };
+    // const handleMentorChange = (mentorData) => { // НОВО
+    //     if (mentorData) {
+    //         updateField('mentorId', mentorData.mentorId || mentorData.id);
+    //         setSelectedMentorObj(mentorData.mentor || mentorData);
+    //     } else {
+    //         updateField('mentorId', null);
+    //         setSelectedMentorObj(null);
+    //     }
+    // };
 
     const handleCourseSelect = (courseId) => { // НОВО
         updateField('courseId', courseId);
@@ -316,22 +316,26 @@ const EditLecture = () => { // НОВО
                         </div>
                     </div>
 
-                    {/* ============================================= */}
-                    {/* Section 4 — Mentor */}
+                   {/* ============================================= */}
+                    {/* Section 4 — Лектори */}
                     {/* ============================================= */}
                     <div className="elec-section">
-                        <h2 className="elec-section-title"><User size={18} /> {t('editLecture.sections.mentor', 'Лектор')}</h2>
+                        <h2 className="elec-section-title"><Users size={18} /> {t('editLecture.sections.mentors', 'Лектори')}</h2>
                         <div className="elec-section-content">
+                            <p className="elec-hint" style={{ marginBottom: 12 }}>
+                                {t('editLecture.mentorsDesc', 'Добавете един или повече лектори. Първият е водещ.')}
+                            </p>
                             <AcademyMentorPicker
-                                mode="single"
-                                selectedMentorId={lectureData.mentorId}
-                                selectedMentorObj={selectedMentorObj}
-                                onChange={handleMentorChange}
+                                mode="multi"
+                                selected={assignedMentors}
+                                onChange={(mentors) => {
+                                    setAssignedMentors(mentors);
+                                 
+                                }}
                                 placeholder={t('editLecture.mentorPlaceholder', 'Търси лектор по име...')}
                             />
                         </div>
                     </div>
-
                     {/* ============================================= */}
                     {/* Section 5 — Registration */}
                     {/* ============================================= */}

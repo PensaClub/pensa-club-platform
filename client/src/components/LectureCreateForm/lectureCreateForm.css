@@ -148,7 +148,11 @@
     margin: -8px 0 16px;
     line-height: 1.5;
 }
-
+.lcf-section:has(.amp-picker) {
+    position: relative;
+    z-index: 10;
+    overflow: visible;
+}
 /* =========================================================
    FIELDS
    ========================================================= */

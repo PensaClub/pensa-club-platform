@@ -140,6 +140,7 @@ const lectureCreateSchema = z.object({
   maxParticipants: z.coerce.number().int().positive().nullable().optional(),
   requiresRegistration: z.boolean().default(true),
   isPublic: z.boolean().default(true),
+  isFree: z.boolean().default(true),
   maxCredits: z.coerce.number().int().min(0).default(0),
   creditsForAttendance: z.coerce.number().int().min(0).default(0),
   creditsForTest: z.coerce.number().int().min(0).default(0),

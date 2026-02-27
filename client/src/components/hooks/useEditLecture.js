@@ -29,7 +29,7 @@ const INITIAL_STATE = {
     videoProvider: '',
     videoUrl: '',
     thumbnailUrl: '',
-    mentorId: null,
+    // mentorId: null,
     maxParticipants: '',
     requiresRegistration: true,
     isPublic: true,
@@ -70,7 +70,10 @@ const useEditLecture = () => {
         unpublishLecture,
         deleteLecture,
         getAdminCourses,
-         getCourseModules,
+        getCourseModules,
+        addLectureMentor,
+        updateLectureMentor,
+        removeLectureMentor,
     } = useAcademyCourses();
 
     // =========================================================
@@ -81,7 +84,7 @@ const useEditLecture = () => {
     const [lectureId, setLectureId] = useState(null);
     const [lectureStatus, setLectureStatus] = useState(null);
     const [isPublished, setIsPublished] = useState(false);
-    const [selectedMentorObj, setSelectedMentorObj] = useState(null);
+    const [assignedMentors, setAssignedMentors] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
     const [errors, setErrors] = useState({});
@@ -92,6 +95,7 @@ const useEditLecture = () => {
     const [showTestEditor, setShowTestEditor] = useState(false);
 
     const originalDataRef = useRef(null);
+    const originalMentorsRef = useRef([]);
     // =========================================================
     //                    LOAD LECTURE DATA
     // =========================================================
@@ -132,7 +136,7 @@ const useEditLecture = () => {
         fetchModules();
     }, [lectureData.courseId]);
 
-   const loadLecture = async () => {
+    const loadLecture = async () => {
         try {
             setIsLoading(true);
             const data = await getLectureBySlug(slug);
@@ -167,7 +171,7 @@ const useEditLecture = () => {
                 videoProvider: lec.videoProvider || '',
                 videoUrl: lec.videoUrl || '',
                 thumbnailUrl: lec.thumbnailUrl || '',
-                mentorId: lec.mentorId || null,
+                // mentorId: lec.mentorId || null,
                 maxParticipants: lec.maxParticipants || '',
                 requiresRegistration: lec.requiresRegistration !== undefined ? lec.requiresRegistration : true,
                 isPublic: lec.isPublic !== undefined ? lec.isPublic : true,
@@ -184,11 +188,17 @@ const useEditLecture = () => {
             setLectureData(mapped); // ПРОМЕНЕНО
             originalDataRef.current = mapped; // НОВО
 
-            if (lec.lecturer) {
-                setSelectedMentorObj(lec.lecturer);
-            } else if (lec.mentor) {
-                setSelectedMentorObj(lec.mentor);
-            }
+
+            const mentors = (lec.mentorAssignments || []).map(ma => ({
+                id: ma.id,
+                mentorId: ma.mentor?.id || ma.mentorId,
+                role: ma.role || 'lecturer',
+                isLead: ma.isLead || false,
+                mentor: ma.mentor || null,
+            }));
+            setAssignedMentors(mentors);
+            originalMentorsRef.current = JSON.parse(JSON.stringify(mentors));
+
         } catch (err) {
             console.error('Error loading lecture:', err);
             toast.error(t('editLecture.errors.loadFailed', 'Грешка при зареждане на лекцията'));
@@ -273,7 +283,6 @@ const useEditLecture = () => {
             address: !lectureData.isOnline ? (lectureData.address || '').trim() : '',
             videoUrl: (lectureData.videoUrl || '').trim() || '',
             thumbnailUrl: (lectureData.thumbnailUrl || '').trim() || '',
-            mentorId: lectureData.mentorId || null,
             maxParticipants: lectureData.maxParticipants ? Number(lectureData.maxParticipants) : null,
             requiresRegistration: lectureData.requiresRegistration,
             isPublic: lectureData.isPublic,
@@ -303,8 +312,47 @@ const useEditLecture = () => {
     // =========================================================
     //                    SAVE & STAY
     // =========================================================
+    // НОВО — синхронизация на менторите (add/update/remove)
+    const syncMentors = useCallback(async (lecId) => {
+        if (!lecId) return;
 
-    // НОВО
+        const original = originalMentorsRef.current || [];
+        const current = assignedMentors;
+
+        try {
+            // 1. Премахни тези, които вече ги няма
+            const currentMentorIds = current.map(m => m.mentorId);
+            for (const orig of original) {
+                if (!currentMentorIds.includes(orig.mentorId)) {
+                    await removeLectureMentor(lecId, orig.id);
+                }
+            }
+
+            // 2. Добави нови + обнови променени
+            for (const m of current) {
+                const orig = original.find(o => o.mentorId === m.mentorId);
+                if (!orig) {
+                    await addLectureMentor(lecId, {
+                        mentorId: m.mentorId,
+                        role: m.role,
+                        isLead: m.isLead,
+                    });
+                } else if (orig.role !== m.role || orig.isLead !== m.isLead) {
+                    await updateLectureMentor(lecId, orig.id, {
+                        role: m.role,
+                        isLead: m.isLead,
+                    });
+                }
+            }
+
+            // Обнови оригинала
+            originalMentorsRef.current = JSON.parse(JSON.stringify(current));
+        } catch (err) {
+            console.error('Error syncing mentors:', err);
+            toast.error(t('editLecture.mentorSyncFailed', 'Грешка при запис на лекторите'));
+        }
+    }, [assignedMentors, addLectureMentor, updateLectureMentor, removeLectureMentor, t]);
+
     const handleSaveAndStay = async () => {
         const validationErrors = validate();
         if (Object.keys(validationErrors).length > 0) {
@@ -316,7 +364,7 @@ const useEditLecture = () => {
             setIsSaving(true);
             const payload = preparePayload();
             await updateLecture(lectureId, payload);
-
+            await syncMentors(lectureId);
             setHasChanges(false);
             originalDataRef.current = { ...lectureData };
             toast.success(t('editLecture.saveSuccess', 'Лекцията е обновена успешно'));
@@ -344,6 +392,7 @@ const useEditLecture = () => {
             setIsSaving(true);
             const payload = preparePayload();
             await updateLecture(lectureId, payload);
+            await syncMentors(lectureId);
 
             setHasChanges(false);
             toast.success(t('editLecture.saveSuccess', 'Лекцията е обновена успешно'));
@@ -391,6 +440,7 @@ const useEditLecture = () => {
             setIsSaving(true);
             const payload = preparePayload();
             await updateLecture(lectureId, payload);
+            await syncMentors(lectureId); 
             await publishLecture(lectureId);
 
             setHasChanges(false);
@@ -447,41 +497,42 @@ const useEditLecture = () => {
     const handleDiscardChanges = useCallback(() => {
         if (originalDataRef.current) {
             setLectureData(originalDataRef.current);
+            setAssignedMentors(JSON.parse(JSON.stringify(originalMentorsRef.current || []))); // НОВО
             setHasChanges(false);
             setErrors({});
         }
-    }, []);
+    }, []);;
     // =========================================================
     //                    RETURN
     // =========================================================
 
     return {
-            lectureData,
+        lectureData,
         lectureId,
         lectureStatus,
         isPublished,
-        selectedMentorObj,
+        assignedMentors, 
+        setAssignedMentors, 
         slug,
         isLoading,
         isSaving,
         errors,
         hasChanges,
         updateField,
-        setSelectedMentorObj,
-        handleSaveAndStay, // НОВО (замества handleSave)
-        handleSaveAndBack, // НОВО
+        handleSaveAndStay, 
+        handleSaveAndBack,
         handlePublish,
         handleUnpublish,
         handleDelete,
         handleCancel,
-        handleDiscardChanges, // НОВО
+        handleDiscardChanges, 
         availableCourses,
         courseSearch,
         setCourseSearch,
-        availableModules, // НОВО
-        showTestEditor, // НОВО
-        setShowTestEditor, // НОВО
-        reloadLecture: loadLecture, // НОВО
+        availableModules, 
+        showTestEditor, 
+        setShowTestEditor, 
+        reloadLecture: loadLecture, 
     };
 };
 
