@@ -624,7 +624,8 @@
       "courses": "Курсове",
       "createCourse": "Създай курс",
       "createLecture": "Създай лекция",
-      "createSeminar": "Създай семинар"
+      "createSeminar": "Създай семинар",
+      "lectures": "Лекции"
     },
     "mentors": {
       "title": "Ментори",
@@ -15367,7 +15368,12 @@
     "titleCreate": "Създаване на лекция",
     "titleEdit": "Редактиране на лекция",
     "backToList": "Към списъка",
+    "mentorsDesc": "Добавете един или повече лектори. Първият добавен автоматично става водещ.",
+    "module": "Модул",
+    "noModule": "— Без модул —",
+    "mentorSyncFailed": "Грешка при запис на лекторите",
     "sections": {
+      "mentors": "Лектори",
       "basicInfo": "Основна информация",
       "dateLocation": "Дата и място",
       "videoMedia": "Видео и медия",
@@ -15458,108 +15464,96 @@
     "meetingLinkHint": "Оставете празно ако лекцията е директно в платформата"
   },
   "adminLectures": {
-  "title": "Управление на",
-  "titleAccent": "лекции",
-  "subtitle": "Създавайте, редактирайте и управлявайте лекциите в академията",
-  "refresh": "Обнови",
-  "createLecture": "Нова лекция",
-  "searchPlaceholder": "Търси по заглавие...",
-  "filters": "Филтри",
-  "loading": "Зареждане на лекции...",
-  "min": "мин.",
-
-  "stats": {
-    "total": "общо",
-    "published": "публикувани",
-    "live": "на живо",
-    "drafts": "чернови"
+    "title": "Управление на",
+    "titleAccent": "лекции",
+    "subtitle": "Създавайте, редактирайте и управлявайте лекциите в академията",
+    "refresh": "Обнови",
+    "createLecture": "Нова лекция",
+    "searchPlaceholder": "Търси по заглавие...",
+    "filters": "Филтри",
+    "loading": "Зареждане на лекции...",
+    "min": "мин.",
+    "stats": {
+      "total": "общо",
+      "published": "публикувани",
+      "live": "на живо",
+      "drafts": "чернови"
+    },
+    "status": "Статус",
+    "type": "Тип",
+    "sortBy": "Подреди по",
+    "statusOptions": {
+      "all": "Всички",
+      "draft": "Чернови",
+      "published": "Публикувани",
+      "scheduled": "Насрочени",
+      "live": "На живо",
+      "completed": "Завършени",
+      "cancelled": "Отменени"
+    },
+    "typeOptions": {
+      "all": "Всички",
+      "lecture": "Лекция",
+      "webinar": "Уебинар",
+      "workshop": "Работилница",
+      "masterclass": "Майсторски клас"
+    },
+    "sortOptions": {
+      "newest": "Най-нови",
+      "oldest": "Най-стари",
+      "title": "По заглавие",
+      "upcoming": "Предстоящи",
+      "popular": "Популярни"
+    },
+    "statuses": {
+      "draft": "Чернова",
+      "published": "Публикувана",
+      "scheduled": "Насрочена",
+      "live": "НА ЖИВО",
+      "completed": "Завършена",
+      "cancelled": "Отменена"
+    },
+    "types": {
+      "lecture": "Лекция",
+      "webinar": "Уебинар",
+      "workshop": "Работилница",
+      "masterclass": "Майсторски клас"
+    },
+    "cardStats": {
+      "date": "Дата",
+      "duration": "Продължителност",
+      "registered": "Записани"
+    },
+    "actions": {
+      "edit": "Редактирай",
+      "publish": "Публикувай",
+      "unpublish": "Скрий",
+      "startLive": "Стартирай LIVE",
+      "endLive": "Спри LIVE",
+      "cancel": "Отмени",
+      "delete": "Изтрий"
+    },
+    "empty": {
+      "title": "Няма намерени лекции",
+      "description": "Създайте първата си лекция или променете филтрите"
+    },
+    "deleteModal": {
+      "title": "Изтриване на лекция",
+      "text": "Сигурни ли сте, че искате да изтриете",
+      "warning": "Това действие е необратимо.",
+      "cancel": "Отказ",
+      "confirm": "Изтрий"
+    },
+    "cancelModal": {
+      "title": "Отмяна на лекция",
+      "text": "Отменяте",
+      "reasonLabel": "Можете да посочите причина:",
+      "reasonPlaceholder": "Причина за отмяна (незадължително)",
+      "back": "Назад",
+      "confirm": "Отмени лекцията"
+    }
   },
-
-  "status": "Статус",
-  "type": "Тип",
-  "sortBy": "Подреди по",
-
-  "statusOptions": {
-    "all": "Всички",
-    "draft": "Чернови",
-    "published": "Публикувани",
-    "scheduled": "Насрочени",
-    "live": "На живо",
-    "completed": "Завършени",
-    "cancelled": "Отменени"
-  },
-
-  "typeOptions": {
-    "all": "Всички",
-    "lecture": "Лекция",
-    "webinar": "Уебинар",
-    "workshop": "Работилница",
-    "masterclass": "Майсторски клас"
-  },
-
-  "sortOptions": {
-    "newest": "Най-нови",
-    "oldest": "Най-стари",
-    "title": "По заглавие",
-    "upcoming": "Предстоящи",
-    "popular": "Популярни"
-  },
-
-  "statuses": {
-    "draft": "Чернова",
-    "published": "Публикувана",
-    "scheduled": "Насрочена",
-    "live": "НА ЖИВО",
-    "completed": "Завършена",
-    "cancelled": "Отменена"
-  },
-
-  "types": {
-    "lecture": "Лекция",
-    "webinar": "Уебинар",
-    "workshop": "Работилница",
-    "masterclass": "Майсторски клас"
-  },
-
-  "cardStats": {
-    "date": "Дата",
-    "duration": "Продължителност",
-    "registered": "Записани"
-  },
-
-  "actions": {
-    "edit": "Редактирай",
-    "publish": "Публикувай",
-    "unpublish": "Скрий",
-    "startLive": "Стартирай LIVE",
-    "endLive": "Спри LIVE",
-    "cancel": "Отмени",
-    "delete": "Изтрий"
-  },
-
-  "empty": {
-    "title": "Няма намерени лекции",
-    "description": "Създайте първата си лекция или променете филтрите"
-  },
-
-  "deleteModal": {
-    "title": "Изтриване на лекция",
-    "text": "Сигурни ли сте, че искате да изтриете",
-    "warning": "Това действие е необратимо.",
-    "cancel": "Отказ",
-    "confirm": "Изтрий"
-  },
-
-  "cancelModal": {
-    "title": "Отмяна на лекция",
-    "text": "Отменяте",
-    "reasonLabel": "Можете да посочите причина:",
-    "reasonPlaceholder": "Причина за отмяна (незадължително)",
-    "back": "Назад",
-    "confirm": "Отмени лекцията"
-  }
-},
-"editLecture": {
+  "editLecture": {
     "loading": "Зареждане на лекцията...",
     "back": "Назад",
     "pageTitle": "Редактиране на",
@@ -15582,13 +15576,13 @@
     "deleted": "Лекцията е изтрита",
     "validationFailed": "Моля попълнете задължителните полета",
     "sections": {
-        "basicInfo": "Основна информация",
-        "dateLocation": "Дата и място",
-        "videoMedia": "Видео и медия",
-        "mentor": "Лектор",
-        "registration": "Записване",
-        "credits": "Кредити и тест",
-        "course": "Свързан курс"
+      "basicInfo": "Основна информация",
+      "dateLocation": "Дата и място",
+      "videoMedia": "Видео и медия",
+      "mentor": "Лектор",
+      "registration": "Записване",
+      "credits": "Кредити и тест",
+      "course": "Свързан курс"
     },
     "titleField": "Заглавие",
     "shortDescription": "Кратко описание",
@@ -15629,31 +15623,31 @@
     "noModule": "— Самостоятелна (без модул) —",
     "moduleHint": "Оставете празно ако лекцията е директно към курса",
     "lectureTypes": {
-        "lecture": "Лекция",
-        "webinar": "Уебинар",
-        "workshop": "Уъркшоп",
-        "masterclass": "Майсторски клас"
+      "lecture": "Лекция",
+      "webinar": "Уебинар",
+      "workshop": "Уъркшоп",
+      "masterclass": "Майсторски клас"
     },
     "statuses": {
-        "draft": "Чернова",
-        "scheduled": "Планирана",
-        "live": "На живо",
-        "completed": "Приключила",
-        "cancelled": "Отменена",
-        "published": "Публикувана"
+      "draft": "Чернова",
+      "scheduled": "Планирана",
+      "live": "На живо",
+      "completed": "Приключила",
+      "cancelled": "Отменена",
+      "published": "Публикувана"
     },
     "errors": {
-        "notFound": "Лекцията не е намерена",
-        "loadFailed": "Грешка при зареждане на лекцията",
-        "saveFailed": "Грешка при запазване",
-        "publishFailed": "Грешка при публикуване",
-        "unpublishFailed": "Грешка при скриване",
-        "deleteFailed": "Грешка при изтриване",
-        "titleRequired": "Заглавието е задължително",
-        "titleMinLength": "Минимум 3 символа",
-        "dateRequired": "Датата е задължителна",
-        "endBeforeStart": "Крайната дата трябва да е след началната",
-        "invalidUrl": "Невалиден URL"
+      "notFound": "Лекцията не е намерена",
+      "loadFailed": "Грешка при зареждане на лекцията",
+      "saveFailed": "Грешка при запазване",
+      "publishFailed": "Грешка при публикуване",
+      "unpublishFailed": "Грешка при скриване",
+      "deleteFailed": "Грешка при изтриване",
+      "titleRequired": "Заглавието е задължително",
+      "titleMinLength": "Минимум 3 символа",
+      "dateRequired": "Датата е задължителна",
+      "endBeforeStart": "Крайната дата трябва да е след началната",
+      "invalidUrl": "Невалиден URL"
     }
-}
+  }
 }

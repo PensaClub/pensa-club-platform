@@ -1367,26 +1367,38 @@ lecturesController.post( // НОВО
       }
 
       const existing = await mentor_lecture.findOne({ where: { lectureId, mentorId } });
-      if (existing) {
-        return res.status(400).json({ success: false, message: 'Mentor already assigned to this lecture' });
-      }
 
       if (isLead) {
         await mentor_lecture.update({ isLead: false }, { where: { lectureId } });
       }
-
-      const record = await mentor_lecture.create({
-        lectureId,
-        mentorId,
-        role: role || 'lecturer',
-        isLead: isLead || false,
-      });
+let record;
+      if (existing) {
+        // Вече е назначен — обнови го
+        await existing.update({
+          role: role || existing.role,
+          isLead: isLead !== undefined ? isLead : existing.isLead,
+        });
+        record = existing;
+      } else {
+        // Нов — създай
+        record = await mentor_lecture.create({
+          lectureId,
+          mentorId,
+          role: role || 'lecturer',
+          isLead: isLead || false,
+        });
+      }
 
       const result = await mentor_lecture.findByPk(record.id, {
         include: [{ model: mentor, as: 'mentor', attributes: ['id', 'name', 'photoUrl', 'specialization', 'email'] }],
       });
 
-      res.status(201).json({ success: true, message: 'Mentor added to lecture', mentorLecture: result });
+
+      res.status(existing ? 200 : 201).json({
+        success: true,
+        message: existing ? 'Mentor updated' : 'Mentor added to lecture',
+        mentorLecture: result,
+      });
     } catch (err) {
       console.error('❌ [ADD LECTURE MENTOR] Error:', err);
       next(err);

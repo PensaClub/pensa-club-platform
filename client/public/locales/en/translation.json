@@ -677,6 +677,7 @@
       "statistics": "Statistics"
     },
     "academy": {
+      "lectures": "Lectures",
       "title": "Academy",
       "courses": "Courses",
       "createCourse": "Create Course",
@@ -15073,7 +15074,12 @@
     "titleCreate": "Create a lecture",
     "titleEdit": "Edit lecture",
     "backToList": "Back to list",
+    "mentorsDesc": "Add one or more lecturers. The first one added automatically becomes the lead.",
+    "module": "Module",
+    "noModule": "— No module —",
+    "mentorSyncFailed": "Error saving lecturers",
     "sections": {
+      "mentors": "Lecturers",
       "basicInfo": "Basic Information",
       "dateLocation": "Date & Location",
       "videoMedia": "Video & Media",
@@ -15276,13 +15282,13 @@
     "deleted": "Lecture deleted",
     "validationFailed": "Please fill in the required fields",
     "sections": {
-        "basicInfo": "Basic information",
-        "dateLocation": "Date and location",
-        "videoMedia": "Video and media",
-        "mentor": "Lecturer",
-        "registration": "Registration",
-        "credits": "Credits and test",
-        "course": "Connected course"
+      "basicInfo": "Basic information",
+      "dateLocation": "Date and location",
+      "videoMedia": "Video and media",
+      "mentor": "Lecturer",
+      "registration": "Registration",
+      "credits": "Credits and test",
+      "course": "Connected course"
     },
     "titleField": "Title",
     "shortDescription": "Short description",
@@ -15323,31 +15329,31 @@
     "noModule": "— Standalone (no module) —",
     "moduleHint": "Leave empty if the lecture is directly under the course",
     "lectureTypes": {
-        "lecture": "Lecture",
-        "webinar": "Webinar",
-        "workshop": "Workshop",
-        "masterclass": "Masterclass"
+      "lecture": "Lecture",
+      "webinar": "Webinar",
+      "workshop": "Workshop",
+      "masterclass": "Masterclass"
     },
     "statuses": {
-        "draft": "Draft",
-        "scheduled": "Scheduled",
-        "live": "Live",
-        "completed": "Completed",
-        "cancelled": "Cancelled",
-        "published": "Published"
+      "draft": "Draft",
+      "scheduled": "Scheduled",
+      "live": "Live",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "published": "Published"
     },
     "errors": {
-        "notFound": "Lecture not found",
-        "loadFailed": "Error loading lecture",
-        "saveFailed": "Error saving",
-        "publishFailed": "Error publishing",
-        "unpublishFailed": "Error hiding",
-        "deleteFailed": "Error deleting",
-        "titleRequired": "Title is required",
-        "titleMinLength": "Minimum 3 characters",
-        "dateRequired": "Date is required",
-        "endBeforeStart": "End date must be after start date",
-        "invalidUrl": "Invalid URL"
+      "notFound": "Lecture not found",
+      "loadFailed": "Error loading lecture",
+      "saveFailed": "Error saving",
+      "publishFailed": "Error publishing",
+      "unpublishFailed": "Error hiding",
+      "deleteFailed": "Error deleting",
+      "titleRequired": "Title is required",
+      "titleMinLength": "Minimum 3 characters",
+      "dateRequired": "Date is required",
+      "endBeforeStart": "End date must be after start date",
+      "invalidUrl": "Invalid URL"
     }
-}
+  }
 }

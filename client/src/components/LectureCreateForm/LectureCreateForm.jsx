@@ -31,21 +31,22 @@ const LectureCreateForm = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
 
-    const {
+     const {
         isEditMode,
         lectureData,
-        selectedMentorObj,
+        assignedMentors, 
+        setAssignedMentors,
         isLoading,
         isSaving,
         errors,
         hasChanges,
         updateField,
-        setSelectedMentorObj,
         handleSaveDraft,
         handlePublish,
         availableCourses,
         courseSearch,
         setCourseSearch,
+        availableModules, 
     } = useLectureCreateForm();
 
     // =========================================================
@@ -63,15 +64,15 @@ const LectureCreateForm = () => {
         }
     };
 
-    const handleMentorChange = (mentorData) => {
-        if (mentorData) {
-            updateField('mentorId', mentorData.mentorId || mentorData.id);
-            setSelectedMentorObj(mentorData.mentor || mentorData);
-        } else {
-            updateField('mentorId', null);
-            setSelectedMentorObj(null);
-        }
-    };
+    // const handleMentorChange = (mentorData) => {
+    //     if (mentorData) {
+    //         updateField('mentorId', mentorData.mentorId || mentorData.id);
+    //         setSelectedMentorObj(mentorData.mentor || mentorData);
+    //     } else {
+    //         updateField('mentorId', null);
+    //         setSelectedMentorObj(null);
+    //     }
+    // };
 
     // =========================================================
     //                    RENDER FIELD HELPER
@@ -515,15 +516,19 @@ const LectureCreateForm = () => {
                     {/* ============================================= */}
                     <div className="lcf-section">
                         <div className="lcf-section-header">
-                            <User size={20} />
-                            <h2 className="lcf-section-title">{t('lectureCreateForm.sections.mentor', 'Лектор')}</h2>
+                            <Users size={20} /> 
+                            <h2 className="lcf-section-title">{t('lectureCreateForm.sections.mentors', 'Лектори')}</h2>
                         </div>
+                        <p className="lcf-section-desc">
+                            {t('lectureCreateForm.mentorsDesc', 'Добавете един или повече лектори. Първият добавен автоматично става водещ.')}
+                        </p>
 
                         <AcademyMentorPicker
-                            mode="single"
-                            selectedMentorId={lectureData.mentorId}
-                            selectedMentorObj={selectedMentorObj}
-                            onChange={handleMentorChange}
+                            mode="multi"
+                            selected={assignedMentors}
+                            onChange={(mentors) => {
+                                setAssignedMentors(mentors);
+                            }}
                             placeholder={t('lectureCreateForm.mentorPlaceholder', 'Търси лектор по име...')}
                         />
                     </div>
@@ -662,8 +667,8 @@ const LectureCreateForm = () => {
                         )}
                     </div>
 
-                    {/* ============================================= */}
-                    {/* Section 7 — Connected Course */}
+                   {/* ============================================= */}
+                    {/* Section 7 — Connected Course & Module */}
                     {/* ============================================= */}
                     <div className="lcf-section">
                         <div className="lcf-section-header">
@@ -686,7 +691,10 @@ const LectureCreateForm = () => {
                                 <button
                                     type="button"
                                     className="lcf-course-clear-btn"
-                                    onClick={() => updateField('courseId', null)}
+                                    onClick={() => {
+                                        updateField('courseId', null);
+                                        updateField('moduleId', null); 
+                                    }}
                                 >
                                     ✕
                                 </button>
@@ -709,6 +717,7 @@ const LectureCreateForm = () => {
                                                 className="lcf-course-option"
                                                 onClick={() => {
                                                     updateField('courseId', c.id);
+                                                    updateField('moduleId', null); 
                                                     setCourseSearch('');
                                                 }}
                                             >
@@ -719,6 +728,28 @@ const LectureCreateForm = () => {
                                     </div>
                                 )}
                             </>
+                        )}
+
+                        {/* Module dropdown (само ако има избран курс) */}
+                        {lectureData.courseId && availableModules.length > 0 && (
+                            <div className="lcf-field lcf-module-field">
+                                <label className="lcf-label" htmlFor="lcf-module">
+                                    {t('lectureCreateForm.module', 'Модул')}
+                                </label>
+                                <select
+                                    id="lcf-module"
+                                    className="lcf-select"
+                                    value={lectureData.moduleId || ''}
+                                    onChange={(e) => updateField('moduleId', e.target.value ? Number(e.target.value) : null)}
+                                >
+                                    <option value="">{t('lectureCreateForm.noModule', '— Без модул —')}</option>
+                                    {availableModules.map((m) => (
+                                        <option key={m.id} value={m.id}>
+                                            {m.title}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
                         )}
                     </div>
                 </div>

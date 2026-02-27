@@ -982,6 +982,12 @@ export const Profile = () => {
                               {t("admin.academy.createCourse")}
                             </NavLink>
                           </li>
+                          <li> {/* НОВО */}
+                            <NavLink to="/academy/admin/lectures" className={({ isActive }) => isActive ? 'active' : ''}>
+                              <span className="icon">📋</span>
+                              {t("admin.academy.lectures")}
+                            </NavLink>
+                            </li>
                           <li>
                             <NavLink to="/academy/admin/create-lecture" className={({ isActive }) => isActive ? 'active' : ''}>
                               <CircleIcon className="icon" />
