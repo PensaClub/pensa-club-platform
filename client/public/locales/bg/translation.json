@@ -15649,5 +15649,21 @@
       "endBeforeStart": "Крайната дата трябва да е след началната",
       "invalidUrl": "Невалиден URL"
     }
+  },
+  "academyLectureDetails": {
+  "lecturer": {
+    "title": "Лектор",
+    "titlePlural": "Лектори",
+    "alsoParticipate": "Също участват"
+  },
+  "roles": {
+    "lecturer": "Лектор",
+    "mentor": "Ментор",
+    "assistant": "Асистент",
+    "guest": "Гост"
+  },
+  "course": {
+    "module": "Модул"
   }
+}
 }

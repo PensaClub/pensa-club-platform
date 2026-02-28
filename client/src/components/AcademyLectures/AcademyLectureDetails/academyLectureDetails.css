@@ -1520,7 +1520,81 @@
   font-size: 0.85rem;
   color: var(--ald-text-muted);
 }
+/* НОВО — Останали ментори */
+.ald-mentors-others {
+  padding: 0.75rem 1.25rem 1.25rem;
+  border-top: 1px solid var(--ald-border);
+}
 
+.ald-mentors-others-label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ald-text-muted);
+  margin-bottom: 0.6rem;
+}
+
+.ald-mentor-mini {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0;
+}
+
+.ald-mentor-mini + .ald-mentor-mini {
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.ald-mentor-mini-avatar {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+}
+
+.ald-mentor-mini-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--ald-border);
+}
+
+.ald-mentor-mini-avatar span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: var(--ald-bg-tertiary);
+  border-radius: 50%;
+  font-size: 1rem;
+}
+
+.ald-mentor-mini-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.ald-mentor-mini-name {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--ald-text-primary);
+}
+
+.ald-mentor-mini-role {
+  font-size: 0.72rem;
+  color: var(--ald-text-muted);
+}
+
+/* НОВО — модул в course card */
+.ald-course-module {
+  font-size: 0.82rem;
+  color: var(--ald-text-muted);
+  margin: 0.4rem 0 0.6rem;
+}
 /* Course Card */
 .ald-course-card {
   background: var(--ald-bg-card);
@@ -2667,7 +2741,9 @@
 [data-theme="light"] .ald-hero span {
     font-size: 1.2rem;
 }
-
+[data-theme="light"] .ald-mentor-mini + .ald-mentor-mini {
+  border-top-color: rgba(0, 0, 0, 0.06);
+}
 /* ========================================
    LIGHT THEME — RESPONSIVE HERO
    ======================================== */

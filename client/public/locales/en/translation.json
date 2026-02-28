@@ -15355,5 +15355,21 @@
       "endBeforeStart": "End date must be after start date",
       "invalidUrl": "Invalid URL"
     }
+  },
+  "academyLectureDetails": {
+  "lecturer": {
+    "title": "Lecturer",
+    "titlePlural": "Lecturers",
+    "alsoParticipate": "Also participating"
+  },
+  "roles": {
+    "lecturer": "Lecturer",
+    "mentor": "Mentor",
+    "assistant": "Assistant",
+    "guest": "Guest"
+  },
+  "course": {
+    "module": "Module"
   }
+}
 }

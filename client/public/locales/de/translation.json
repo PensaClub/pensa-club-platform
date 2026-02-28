@@ -14648,5 +14648,21 @@
       "endBeforeStart": "Enddatum muss nach dem Startdatum liegen",
       "invalidUrl": "Ungültige URL"
     }
+  },
+  "academyLectureDetails": {
+  "lecturer": {
+    "title": "Dozent",
+    "titlePlural": "Dozenten",
+    "alsoParticipate": "Ebenfalls beteiligt"
+  },
+  "roles": {
+    "lecturer": "Dozent",
+    "mentor": "Mentor",
+    "assistant": "Assistent",
+    "guest": "Gast"
+  },
+  "course": {
+    "module": "Modul"
   }
+}
 }
