@@ -1,6 +1,6 @@
 // src/components/contexts/AcademyCoursesProvider.jsx
 
-import { createContext, useContext, useState, useCallback, useRef } from 'react';
+import { createContext, useContext, useState, useCallback, useRef, useMemo } from 'react';
 import { useAuthContext } from './UserContext';
 import { academyCoursesServiceFactory } from '../Services/academyCoursesService';
 import { toast } from 'react-toastify';
@@ -10,8 +10,8 @@ export const AcademyCoursesContext = createContext();
 
 export const AcademyCoursesProvider = ({ children }) => {
   const { isAdmin, token } = useAuthContext();
-  const coursesService = academyCoursesServiceFactory();
-  const academyService = academyServiceFactory(token);
+  const coursesService = useMemo(() => academyCoursesServiceFactory(), []);
+  const academyService = useMemo(() => academyServiceFactory(token), [token]);
   // State
   const [isLoading, setIsLoading] = useState(false);
   const [courses, setCourses] = useState([]);
@@ -1693,7 +1693,8 @@ export const AcademyCoursesProvider = ({ children }) => {
   //                    CONTEXT VALUE
   // =========================================================
 
-  const contextValue = {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const contextValue = useMemo(() => ({
     // State
     isLoading,
     courses,
@@ -1841,7 +1842,6 @@ export const AcademyCoursesProvider = ({ children }) => {
     getLectureAttempt,
     submitLectureAnswer,
     submitLectureTest,
-    clearTestCache,
     // Tests - Admin CRUD
     getTestById,
     updateTest,
@@ -1855,7 +1855,8 @@ export const AcademyCoursesProvider = ({ children }) => {
     updateQuestion,
     deleteQuestion,
     reorderQuestions,
-  };
+  }), [isLoading, courses, currentCourse, lectures, seminars, myDashboard,
+       currentLesson, lessonsProgress, enrollmentStats, currentTestData]);
 
   return (
     <AcademyCoursesContext.Provider value={contextValue}>
