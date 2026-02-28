@@ -63,10 +63,7 @@ import { AllClubs } from './components/Clubs/AllClubs/AllClubs.jsx';
 import { ClubProvider } from './components/contexts/ClubContext.jsx';
 import ClubView from './components/Clubs/ClubView/ClubView.jsx';
 import AboutPage from './components/AboutPage/AboutPage.jsx';
-import { DigiBridgeAcademy } from './components/DigiBridgeAcademy/DigiBridgeAcademy.jsx';
 import { AcademyProvider } from './components/contexts/AcademyProvider.jsx';
-import { DigiBridgeMentorsPage } from './components/DigiBridge/DigiBridgeMentorsPage/DigiBridgeMentorsPage.jsx';
-import { DigiBridgeBecomeMentor } from './components/DigiBridge/DigiBridgeBecomeMentor/DigiBridgeBecomeMentor.jsx';
 import { DigiBridgeChatButton } from './components/DigiBridge/DigiBridgeChatButton/DigiBridgeChatButton.jsx';
 import { DigiBridgeChatWindow } from './components/DigiBridge/DigiBridgeChatWindow/DigiBridgeChatWindow.jsx';
 import { MentorGuard } from './components/Guards/MentorGuard.jsx';
@@ -75,22 +72,9 @@ import { UserChatsPage } from './components/DigiBridge/UserChatsPage/UserChatsPa
 import { StudentDetails } from './components/DigiMentorPanel/StudentDetails/StudentDetails.jsx';
 import { DigiMentorReviews } from './components/DigiMentorPanel/DigiMentorReviews/DigiMentorReviews.jsx';
 import { AcademyCoursesProvider } from './components/contexts/AcademyCoursesProvider.jsx';
-import { AcademyCourses } from './components/AcademyCourses/AcademyCourses.jsx';
-import { AcademyCourseDetail } from './components/AcademyCourses/AcademyCourseDetail/AcademyCourseDetail.jsx';
-import AcademyLessonPlayer from './components/AcademyCourses/AcademyLessonPlayer/AcademyLessonPlayer.jsx';
-import AcademyTestPlayer from './components/AcademyCourses/AcademyTestPlayer/AcademyTestPlayer.jsx';
-import AcademyLectures from './components/AcademyLectures/AcademyLectures.jsx';
-import AcademyLectureDetails from './components/AcademyLectures/AcademyLectureDetails/AcademyLectureDetails.jsx';
-import AcademyLectureTest from './components/AcademyLectures/AcademyLectureDetails/AcademyLectureTest/AcademyLectureTest.jsx';
-import AcademyLectureWatch from './components/AcademyLectures/AcademyLectureWatch/AcademyLectureWatch.jsx';
 import GlobalSnowfall from './components/GlobalSnowfall/GlobalSnowfall.jsx';
 import DigiBridgeHeader from './components/DigiBridgeAcademy/DigiBridgeHeader/DigiBridgeHeader.jsx';
-import StudentDashboard from './components/StudentDashboard/StudentDashboard.jsx';
 import { AdminGuard } from './components/Guards/AdminGuard.jsx';
-import CourseAcademyCreateForm from './components/CourseAcademyCreateForm/CourseAcademyCreateForm.jsx';
-import AdminAcademyCoursesList from './components/AdminAcademyCoursesList/AdminAcademyCoursesList.jsx';
-import EditCourseBasicInfo from './components/AdminAcademyCoursesList/EditCourseBasicInfo/EditCourseBasicInfo.jsx';
-import CourseContentManager from './components/AdminAcademyCoursesList/CourseContentManager/CourseContentManager.jsx';
 import ThemeToggle from './components/ThemeToggle/ThemeToggle';
 import { SiteSettingsAdminProvider } from './components/contexts/SiteSettingsAdminContext';
 import SiteSettingsAdmin from './components/SiteSettingsAdmin/SiteSettingsAdmin';
@@ -104,6 +88,27 @@ const PublicationForm = lazy(() => import('./components/Initiatives/CreatePublic
 const StoryForm = lazy(() => import('./components/Initiatives/CreateStory/MainForm/MainFormStory'));
 const PublicationsList = lazy(() => import('./components/Initiatives/CreatePublication/PublicationStoriesList/PublicationStoriesList.jsx'));
 const StoriesList = lazy(() => import('./components/Initiatives/CreateStory/PublicationStoriesList/PublicationStoriesList.jsx'));
+
+// ✅ LAZY LOADING - ACADEMY КОМПОНЕНТИ
+const DigiBridgeAcademy = lazy(() => import('./components/DigiBridgeAcademy/DigiBridgeAcademy.jsx'));
+const AcademyCourses = lazy(() => import('./components/AcademyCourses/AcademyCourses.jsx'));
+const AcademyCourseDetail = lazy(() => import('./components/AcademyCourses/AcademyCourseDetail/AcademyCourseDetail.jsx'));
+const AcademyLessonPlayer = lazy(() => import('./components/AcademyCourses/AcademyLessonPlayer/AcademyLessonPlayer.jsx'));
+const AcademyTestPlayer = lazy(() => import('./components/AcademyCourses/AcademyTestPlayer/AcademyTestPlayer.jsx'));
+const AcademyLectures = lazy(() => import('./components/AcademyLectures/AcademyLectures.jsx'));
+const AcademyLectureDetails = lazy(() => import('./components/AcademyLectures/AcademyLectureDetails/AcademyLectureDetails.jsx'));
+const AcademyLectureTest = lazy(() => import('./components/AcademyLectures/AcademyLectureDetails/AcademyLectureTest/AcademyLectureTest.jsx'));
+const AcademyLectureWatch = lazy(() => import('./components/AcademyLectures/AcademyLectureWatch/AcademyLectureWatch.jsx'));
+const DigiBridgeMentorsPage = lazy(() => import('./components/DigiBridge/DigiBridgeMentorsPage/DigiBridgeMentorsPage.jsx'));
+const DigiBridgeBecomeMentor = lazy(() => import('./components/DigiBridge/DigiBridgeBecomeMentor/DigiBridgeBecomeMentor.jsx'));
+const StudentDashboard = lazy(() => import('./components/StudentDashboard/StudentDashboard.jsx'));
+const AdminAcademyCoursesList = lazy(() => import('./components/AdminAcademyCoursesList/AdminAcademyCoursesList.jsx'));
+const CourseAcademyCreateForm = lazy(() => import('./components/CourseAcademyCreateForm/CourseAcademyCreateForm.jsx'));
+const EditCourseBasicInfo = lazy(() => import('./components/AdminAcademyCoursesList/EditCourseBasicInfo/EditCourseBasicInfo.jsx'));
+const CourseContentManager = lazy(() => import('./components/AdminAcademyCoursesList/CourseContentManager/CourseContentManager.jsx'));
+const LectureCreateForm = lazy(() => import('./components/LectureCreateForm/LectureCreateForm.jsx'));
+const AdminAcademyLecturesList = lazy(() => import('./components/AdminAcademyLecturesList/AdminAcademyLecturesList.jsx'));
+const EditLecture = lazy(() => import('./components/AdminAcademyLecturesList/EditLecture/EditLecture.jsx'));
 
 // ✅ LOADING FALLBACK КОМПОНЕНТ
 const LazyLoadingFallback = ({ type = 'page' }) => {
@@ -187,10 +192,10 @@ function App() {
                                         {/* {isChatOpen && <DigiBridgeChatWindow onClose={() => setIsChatOpen(false)} />} */}
                                         <Routes>
                                           <Route path="/" element={<Home />} />
-                                          <Route path="/academy" element={<DigiBridgeAcademy />} />
-                                          <Route path="/academy/courses" element={<AcademyCourses />} />
-                                          <Route path="/academy/courses/:slug" element={<AcademyCourseDetail />} />
-                                          <Route path="/academy/mentors" element={<DigiBridgeMentorsPage />} />
+                                          <Route path="/academy" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><DigiBridgeAcademy /></Suspense>} />
+                                          <Route path="/academy/courses" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademyCourses /></Suspense>} />
+                                          <Route path="/academy/courses/:slug" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademyCourseDetail /></Suspense>} />
+                                          <Route path="/academy/mentors" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><DigiBridgeMentorsPage /></Suspense>} />
                                           <Route path="/contact" element={<ContactForm />} />
                                           <Route path="/about" element={<AboutPage />} />
                                           <Route path="/server-error" element={<ServerError />} />
@@ -252,31 +257,37 @@ function App() {
                                           <Route path="/stories/edit/:slug" element={<StoryForm isEditMode={true} />} />
 
                                           <Route element={<AuthGuard />}>
-                                            <Route path="/academy/become-mentor" element={<DigiBridgeBecomeMentor />} />
-                                            <Route path="/academy/my" element={<StudentDashboard />} />
+                                            <Route path="/academy/become-mentor" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><DigiBridgeBecomeMentor /></Suspense>} />
+                                            <Route path="/academy/my" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><StudentDashboard /></Suspense>} />
                                             <Route path="/initiative-preview" element={<InitiativePreviewPage />} />
                                             <Route
                                               path="/academy/courses/:courseSlug/lessons/:lessonSlug"
-                                              element={<AcademyLessonPlayer />}
+                                              element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademyLessonPlayer /></Suspense>}
                                             />
                                             <Route
                                               path="/academy/courses/:courseSlug/lessons/:lessonSlug/test"
-                                              element={<AcademyTestPlayer />}
+                                              element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademyTestPlayer /></Suspense>}
                                             />
 
-                                            <Route path="/academy/lectures" element={<AcademyLectures />} />
-                                            <Route path="/academy/lectures/:slug" element={<AcademyLectureDetails />} />
-                                            <Route path="/academy/lectures/:slug/watch" element={<AcademyLectureWatch />} />
-                                            <Route path="/academy/lectures/:slug/test" element={<AcademyLectureTest />} />
+                                            <Route path="/academy/lectures" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademyLectures /></Suspense>} />
+                                            <Route path="/academy/lectures/:slug" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademyLectureDetails /></Suspense>} />
+                                            <Route path="/academy/lectures/:slug/watch" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademyLectureWatch /></Suspense>} />
+                                            <Route path="/academy/lectures/:slug/test" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademyLectureTest /></Suspense>} />
                                             <Route
                                               path="/academy/courses/:courseSlug/test"
-                                              element={<AcademyTestPlayer />}
+                                              element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademyTestPlayer /></Suspense>}
                                             />
                                             <Route path="/admin/site-settings" element={<AdminGuard><SiteSettingsAdmin /></AdminGuard>} />
-                                            <Route path="/academy/admin/courses" element={<AdminGuard><AdminAcademyCoursesList /></AdminGuard>} />
-                                            <Route path="/academy/admin/create-course" element={<AdminGuard><CourseAcademyCreateForm /></AdminGuard>} />
-                                            <Route path="/academy/admin/edit-course/:slug" element={<AdminGuard><EditCourseBasicInfo /></AdminGuard>} />
-                                            <Route path="/academy/admin/course/:slug/content" element={<AdminGuard><CourseContentManager /></AdminGuard>} />
+                                            <Route path="/academy/admin/courses" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><AdminAcademyCoursesList /></Suspense></AdminGuard>} />
+                                            <Route path="/academy/admin/create-course" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><CourseAcademyCreateForm /></Suspense></AdminGuard>} />
+                                            <Route path="/academy/admin/create-lecture" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><LectureCreateForm /></Suspense></AdminGuard>} />
+                                            <Route path="/academy/admin/lectures" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><AdminAcademyLecturesList /></Suspense></AdminGuard>} />
+
+                                            <Route path="/academy/admin/edit-course/:slug" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><EditCourseBasicInfo /></Suspense></AdminGuard>} />
+                                            <Route path="/academy/admin/edit-lecture/:slug" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><EditLecture /></Suspense></AdminGuard>} />
+                                            {/* <Route path="/academy/admin/edit-lecture/:slug" element={<AdminGuard><EditLectureBasicInfo /></AdminGuard>} /> */}
+
+                                            <Route path="/academy/admin/course/:slug/content" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><CourseContentManager /></Suspense></AdminGuard>} />
                                             <Route path="/ad/details/:adId" element={<AdDetails />} />
                                             <Route path="/ad/edit/:adId" element={<EditAd />} />
                                             <Route path="/ad" element={<AdPage />} />

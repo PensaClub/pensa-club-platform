@@ -191,3 +191,5 @@ export const AcademyCourses = () => {
     </div>
   );
 };
+
+export default AcademyCourses;

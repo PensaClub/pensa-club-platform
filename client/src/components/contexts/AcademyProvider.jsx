@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback } from 'react';
+import { createContext, useContext, useState, useCallback, useMemo } from 'react';
 import { useAuthContext } from './UserContext';
 import academyServiceFactory from '../Services/academyServiceFactory';
 import clubServiceFactory from '../Services/clubServiceFactory';
@@ -9,8 +9,8 @@ export const AcademyContext = createContext();
 
 export const AcademyProvider = ({ children }) => {
   const { token, isAdmin, userEmail } = useAuthContext();
-  const academyService = academyServiceFactory(token);
-  const clubService = clubServiceFactory(token);
+  const academyService = useMemo(() => academyServiceFactory(token), [token]);
+  const clubService = useMemo(() => clubServiceFactory(token), [token]);
 
   // State САМО за landing page данни
   const [stats, setStats] = useState(null);
@@ -1515,7 +1515,8 @@ ${reason ? `Причина: ${reason}` : ''}
   // CONTEXT VALUE
   // ===============================
 
-  const contextValue = {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const contextValue = useMemo(() => ({
     // Data
     stats,
     featuredMentors,
@@ -1532,7 +1533,7 @@ ${reason ? `Причина: ${reason}` : ''}
 
     // Mentor Application
     applyAsMentor,
-    // Mentor Management 
+    // Mentor Management
     createMentor,
     getAllMentors,
     getMentorById,
@@ -1560,10 +1561,10 @@ ${reason ? `Причина: ${reason}` : ''}
     getMentorActivityTrend,
     getMentorDetailedStatistics,
     getAllMentorsWithStatsFiltered,
-    // Admin Applications 
+    // Admin Applications
     getPendingMentorApplications,
     rejectMentorApplication,
-    // Firebase Statistics 
+    // Firebase Statistics
     getAllMentorsWithStats,
     getMentorFirebaseStats,
     refreshMentorStats,
@@ -1648,7 +1649,7 @@ ${reason ? `Причина: ${reason}` : ''}
     rejectStudentApplicationByAdmin,
     deleteStudentApplicationByAdmin,
     reapproveStudentApplicationByAdmin,
-  };
+  }), [stats, featuredMentors, featuredTestimonials, isLoading]);
 
   return (
     <AcademyContext.Provider value={contextValue}>

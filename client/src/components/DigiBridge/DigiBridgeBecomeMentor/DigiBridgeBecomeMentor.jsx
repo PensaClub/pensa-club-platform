@@ -818,3 +818,5 @@ if (!formData.country) newErrors.country = t('digiBridge.becomeMentor.errors.cou
     </>
   );
 };
+
+export default DigiBridgeBecomeMentor;

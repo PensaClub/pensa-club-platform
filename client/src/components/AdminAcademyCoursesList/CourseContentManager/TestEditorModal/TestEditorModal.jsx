@@ -44,7 +44,7 @@ const EMPTY_QUESTION = {
     ],
 };
 
-const TestEditorModal = ({ isOpen, onClose, lessonId, courseId, entityTitle }) => {
+const TestEditorModal = ({ isOpen, onClose, lessonId, courseId, lectureId, entityTitle }) => {
     const { t } = useTranslation();
     const {
         getTests, getTestById, createTest, updateTest,
@@ -79,11 +79,11 @@ const TestEditorModal = ({ isOpen, onClose, lessonId, courseId, entityTitle }) =
     // =========================================================
 
     useEffect(() => {
-        if (isOpen && (lessonId || courseId)) {
+        if (isOpen && (lessonId || courseId || lectureId)) { 
             loadTest();
         }
         if (!isOpen) {
-            // Reset state on close
+          
             setActiveTab('settings');
             setTest(null);
             setQuestions([]);
@@ -94,14 +94,26 @@ const TestEditorModal = ({ isOpen, onClose, lessonId, courseId, entityTitle }) =
             setSettingsDirty(false);
             setFieldErrors({});
         }
-    }, [isOpen, lessonId, courseId]);
+    }, [isOpen, lessonId, courseId, lectureId]); 
 
     const loadTest = async () => {
         setLoading(true);
         try {
-            const entityType = courseId ? 'course' : 'lesson';
-            const entityId = courseId || lessonId;
-            const entityField = courseId ? 'courseId' : 'lessonId';
+            // ПРОМЕНЕНО — тройна логика за entity type
+            let entityType, entityId, entityField;
+            if (courseId) {
+                entityType = 'course';
+                entityId = courseId;
+                entityField = 'courseId';
+            } else if (lectureId) { 
+                entityType = 'lecture';
+                entityId = lectureId;
+                entityField = 'lectureId';
+            } else {
+                entityType = 'lesson';
+                entityId = lessonId;
+                entityField = 'lessonId';
+            }
 
             const data = await getTests({ entityType, limit: 100 });
             const existing = data.tests?.find(t => t[entityField] === entityId);
@@ -131,7 +143,9 @@ const TestEditorModal = ({ isOpen, onClose, lessonId, courseId, entityTitle }) =
                     title: `${t('testEditor.defaultTitle', 'Тест')}: ${entityTitle || t('testEditor.lesson', 'Урок')}`,
                     passingScore: 70,
                 };
+                // ПРОМЕНЕНО — тройно присвояване
                 if (courseId) createPayload.courseId = courseId;
+                else if (lectureId) createPayload.lectureId = lectureId; 
                 else createPayload.lessonId = lessonId;
 
                 const resp = await createTest(createPayload);

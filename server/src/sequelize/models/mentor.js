@@ -26,6 +26,13 @@ module.exports = (sequelize, DataTypes) => {
         sourceKey: 'id',
         as: 'courses',
       });
+   
+      // НОВО — Has many lecture assignments
+      mentor.hasMany(models.mentor_lecture, {
+        foreignKey: 'mentorId',
+        sourceKey: 'id',
+        as: 'lectureAssignments',
+      });
       // ✅ Has many students
       mentor.hasMany(models.student, {
         foreignKey: 'currentMentorId',

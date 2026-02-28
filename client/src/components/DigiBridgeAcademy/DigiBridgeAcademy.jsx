@@ -163,6 +163,49 @@ export const DigiBridgeAcademy = () => {
     };
   }, [metaData, stats, i18n.language]);
 
+  if (loading) {
+    return (
+      <div className="digibridge-academy-wrapper">
+        <SEOHead
+          title={metaData.title}
+          description={metaData.description}
+          keywords={metaData.keywords}
+          image={metaData.image}
+          type="website"
+          structuredData={structuredData}
+          canonical="https://pensa.club/academy"
+        />
+        <div className="dba-skeleton">
+          <div className="dba-skeleton-hero">
+            <div className="dba-skeleton-line dba-skeleton-title"></div>
+            <div className="dba-skeleton-line dba-skeleton-subtitle"></div>
+            <div className="dba-skeleton-line dba-skeleton-subtitle-sm"></div>
+            <div className="dba-skeleton-btn"></div>
+          </div>
+          <div className="dba-skeleton-stats">
+            <div className="dba-skeleton-stat-card"></div>
+            <div className="dba-skeleton-stat-card"></div>
+            <div className="dba-skeleton-stat-card"></div>
+            <div className="dba-skeleton-stat-card"></div>
+          </div>
+          <div className="dba-skeleton-content">
+            <div className="dba-skeleton-section">
+              <div className="dba-skeleton-line dba-skeleton-section-title"></div>
+              <div className="dba-skeleton-line dba-skeleton-text"></div>
+              <div className="dba-skeleton-line dba-skeleton-text"></div>
+              <div className="dba-skeleton-line dba-skeleton-text-short"></div>
+            </div>
+            <div className="dba-skeleton-cards">
+              <div className="dba-skeleton-card"></div>
+              <div className="dba-skeleton-card"></div>
+              <div className="dba-skeleton-card"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="digibridge-academy-wrapper">
       {/* ✅ SEO HEAD */}
@@ -191,3 +234,5 @@ export const DigiBridgeAcademy = () => {
     </div>
   );
 };
+
+export default DigiBridgeAcademy;

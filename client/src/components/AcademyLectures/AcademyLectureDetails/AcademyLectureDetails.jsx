@@ -218,7 +218,7 @@ export const AcademyLectureDetails = () => {
           promises.push(
             getLectureTestStatus(lectureData.id)
               .then(res => setTestStatus(res))
-              .catch(() => { }) // OK ако няма статус
+              .catch(() => setTestStatus(null))
           );
         }
 
@@ -272,7 +272,7 @@ export const AcademyLectureDetails = () => {
             const status = await getLectureTestStatus(lecture.id);
             setTestStatus(status);
           } catch (err) {
-            // OK
+            setTestStatus(null);
           }
         }
       } else {
@@ -296,7 +296,8 @@ export const AcademyLectureDetails = () => {
   const isYouTube = lecture?.videoProvider === 'youtube';
   const hasVideo = lecture?.videoUrl || (isYouTube && lecture?.meetingLink);
   const canWatch = (status === 'live' || status === 'recording') && hasVideo;
-  const canTakeTest = lecture?.hasTest && (lecture?.isFree || isRegistered);
+ const hasRealTest = lecture?.hasTest && testStatus?.test; 
+  const canTakeTest = hasRealTest && (lecture?.isFree || isRegistered); 
 
   // Handlers
   const handleRegister = useCallback(async () => {
@@ -671,7 +672,7 @@ export const AcademyLectureDetails = () => {
                 </>
               )}
 
-              {lecture.hasTest && (
+              {hasRealTest && (
                 <button
                   className="ald-action-btn-secondary ald-action-btn-test"
                   onClick={handleStartTest}
@@ -691,7 +692,7 @@ export const AcademyLectureDetails = () => {
               <span>{t('academyLectureDetails.credits.forAttendance', 'За присъствие')}</span>
               <span className="ald-credits-value">+{lecture.creditsForAttendance || 0} 🪙</span>
             </div>
-            {lecture.hasTest && (
+            {hasRealTest && (
               <div className="ald-credits-row">
                 <span>{t('academyLectureDetails.credits.forTest', 'За тест')}</span>
                 <span className="ald-credits-value">+{lecture.creditsForTest || 0} 🪙</span>
@@ -733,7 +734,7 @@ export const AcademyLectureDetails = () => {
                 </button>
               )}
 
-              {lecture.hasTest && (
+              {hasRealTest && (
                 <button
                   className={`ald-tab ${activeTab === 'test' ? 'is-active' : ''}`}
                   onClick={() => setActiveTab('test')}
@@ -901,7 +902,7 @@ export const AcademyLectureDetails = () => {
                 </div>
               )}
 
-              {activeTab === 'test' && lecture.hasTest && (
+              {activeTab === 'test' && hasRealTest && (
                 <div className="ald-test-section">
                   <div className="ald-test-card">
                     <div className="ald-test-header">
@@ -985,28 +986,69 @@ export const AcademyLectureDetails = () => {
 
           {/* SIDEBAR */}
           <aside className="ald-sidebar">
-            {lecture.lecturer && (
+            {/* ПРОМЕНЕНО — Lead лектор + останали ментори */}
+            {(lecture.lecturer || (lecture.mentorAssignments && lecture.mentorAssignments.length > 0)) && (
               <div className="ald-lecturer-card">
                 <div className="ald-lecturer-header">
-                  <h3 className="ald-lecturer-label">{t('academyLectureDetails.lecturer.title', 'Лектор')}</h3>
+                  <h3 className="ald-lecturer-label">
+                    {lecture.mentorAssignments?.length > 1
+                      ? t('academyLectureDetails.lecturer.titlePlural', 'Лектори')
+                      : t('academyLectureDetails.lecturer.title', 'Лектор')}
+                  </h3>
                 </div>
-                <div className="ald-lecturer-content">
-                  <div className="ald-lecturer-avatar">
-                    {lecture.lecturer.photoUrl ? (
-                      <img src={lecture.lecturer.photoUrl} alt={lecture.lecturer.name} />
-                    ) : (
-                      <div className="ald-lecturer-avatar-placeholder">👤</div>
+
+                {/* Lead лектор — голям avatar */}
+                {lecture.lecturer && (
+                  <div className="ald-lecturer-content">
+                    <div className="ald-lecturer-avatar">
+                      {lecture.lecturer.photoUrl ? (
+                        <img src={lecture.lecturer.photoUrl} alt={lecture.lecturer.name} />
+                      ) : (
+                        <div className="ald-lecturer-avatar-placeholder">👤</div>
+                      )}
+                      <div className="ald-lecturer-avatar-glow"></div>
+                    </div>
+                    <h4 className="ald-lecturer-name">{lecture.lecturer.name}</h4>
+                    {lecture.lecturer.specialization && (
+                      <p className="ald-lecturer-spec">{lecture.lecturer.specialization}</p>
                     )}
-                    <div className="ald-lecturer-avatar-glow"></div>
                   </div>
-                  <h4 className="ald-lecturer-name">{lecture.lecturer.name}</h4>
-                  {lecture.lecturer.specialization && (
-                    <p className="ald-lecturer-spec">{lecture.lecturer.specialization}</p>
-                  )}
-                </div>
+                )}
+
+                {/* НОВО — Останали ментори */}
+                {lecture.mentorAssignments?.filter(ma => !ma.isLead).length > 0 && (
+                  <div className="ald-mentors-others">
+                    <span className="ald-mentors-others-label">
+                      {t('academyLectureDetails.lecturer.alsoParticipate', 'Също участват')}
+                    </span>
+                    {lecture.mentorAssignments
+                      .filter(ma => !ma.isLead)
+                      .map(ma => (
+                        <div key={ma.id} className="ald-mentor-mini">
+                          <div className="ald-mentor-mini-avatar">
+                            {ma.mentor?.photoUrl ? (
+                              <img src={ma.mentor.photoUrl} alt={ma.mentor.name} />
+                            ) : (
+                              <span>👤</span>
+                            )}
+                          </div>
+                          <div className="ald-mentor-mini-info">
+                            <span className="ald-mentor-mini-name">{ma.mentor?.name}</span>
+                            <span className="ald-mentor-mini-role">
+                              {ma.role === 'lecturer' && t('academyLectureDetails.roles.lecturer', 'Лектор')}
+                              {ma.role === 'mentor' && t('academyLectureDetails.roles.mentor', 'Ментор')}
+                              {ma.role === 'assistant' && t('academyLectureDetails.roles.assistant', 'Асистент')}
+                              {ma.role === 'guest' && t('academyLectureDetails.roles.guest', 'Гост')}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                )}
               </div>
             )}
 
+            {/* Курс + модул */}
             {lecture.course && (
               <div className="ald-course-card">
                 <div className="ald-course-header">
@@ -1014,6 +1056,12 @@ export const AcademyLectureDetails = () => {
                 </div>
                 <div className="ald-course-content">
                   <h4 className="ald-course-title">{lecture.course.name}</h4>
+                  {/* НОВО — модул */}
+                  {lecture.module && (
+                    <p className="ald-course-module">
+                      📂 {t('academyLectureDetails.course.module', 'Модул')}: {lecture.module.title}
+                    </p>
+                  )}
                   <Link to={`/academy/courses/${lecture.course.slug}`} className="ald-course-link">
                     {t('academyLectureDetails.course.viewCourse', 'Виж курса')} →
                   </Link>

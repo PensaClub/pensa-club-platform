@@ -1411,3 +1411,5 @@ export const AcademyCourseDetail = () => {
     </div>
   );
 };
+
+export default AcademyCourseDetail;

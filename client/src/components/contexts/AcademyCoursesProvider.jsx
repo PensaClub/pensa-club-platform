@@ -1,6 +1,6 @@
 // src/components/contexts/AcademyCoursesProvider.jsx
 
-import { createContext, useContext, useState, useCallback, useRef } from 'react';
+import { createContext, useContext, useState, useCallback, useRef, useMemo } from 'react';
 import { useAuthContext } from './UserContext';
 import { academyCoursesServiceFactory } from '../Services/academyCoursesService';
 import { toast } from 'react-toastify';
@@ -10,8 +10,8 @@ export const AcademyCoursesContext = createContext();
 
 export const AcademyCoursesProvider = ({ children }) => {
   const { isAdmin, token } = useAuthContext();
-  const coursesService = academyCoursesServiceFactory();
-  const academyService = academyServiceFactory(token);
+  const coursesService = useMemo(() => academyCoursesServiceFactory(), []);
+  const academyService = useMemo(() => academyServiceFactory(token), [token]);
   // State
   const [isLoading, setIsLoading] = useState(false);
   const [courses, setCourses] = useState([]);
@@ -444,6 +444,58 @@ export const AcademyCoursesProvider = ({ children }) => {
       return { lectures: [], pagination: {} };
     } finally {
       setIsLoading(false);
+    }
+  }, []);
+  // В AcademyCoursesProvider.jsx — добави ако липсва
+  const unpublishLecture = useCallback(async (lectureId) => {
+    if (!isAdmin) return;
+    try {
+      const response = await coursesService.unpublishLecture(lectureId);
+      toast.success('Лекцията е скрита');
+      return response;
+    } catch (error) {
+      console.error('Error unpublishing lecture:', error);
+      toast.error('Грешка при скриване');
+      throw error;
+    }
+  }, [coursesService, isAdmin]);
+
+
+  const getLectureById = useCallback(async (id) => { // НОВО
+    try {
+      const data = await coursesService.getLectureById(id);
+      return data;
+    } catch (error) {
+      console.error('Error fetching lecture by id:', error);
+      throw error;
+    }
+  }, []);
+
+  // НОВО — Lecture mentors
+  const addLectureMentor = useCallback(async (lectureId, data) => {
+    try {
+      return await coursesService.addLectureMentor(lectureId, data);
+    } catch (error) {
+      console.error('Error adding lecture mentor:', error);
+      throw error;
+    }
+  }, []);
+
+  const updateLectureMentor = useCallback(async (lectureId, mentorLectureId, data) => {
+    try {
+      return await coursesService.updateLectureMentor(lectureId, mentorLectureId, data);
+    } catch (error) {
+      console.error('Error updating lecture mentor:', error);
+      throw error;
+    }
+  }, []);
+
+  const removeLectureMentor = useCallback(async (lectureId, mentorLectureId) => {
+    try {
+      return await coursesService.removeLectureMentor(lectureId, mentorLectureId);
+    } catch (error) {
+      console.error('Error removing lecture mentor:', error);
+      throw error;
     }
   }, []);
 
@@ -1094,14 +1146,14 @@ export const AcademyCoursesProvider = ({ children }) => {
   }, []);
 
   const getCourseTestStatus = useCallback(async (courseId) => {
-  try {
-    const data = await coursesService.getCourseTestStatus(courseId);
-    return data;
-  } catch (error) {
-    console.error('Error fetching course test status:', error);
-    return { hasTest: false };
-  }
-}, []);
+    try {
+      const data = await coursesService.getCourseTestStatus(courseId);
+      return data;
+    } catch (error) {
+      console.error('Error fetching course test status:', error);
+      return { hasTest: false };
+    }
+  }, []);
 
   // =========================================================
   //                    TEST QUESTIONS - ADMIN
@@ -1170,15 +1222,15 @@ export const AcademyCoursesProvider = ({ children }) => {
   }, []);
 
   const startTestById = useCallback(async (testId) => {
-  try {
-    const response = await coursesService.startTestById(testId);
-    return response;
-  } catch (error) {
-    console.error('Error starting test:', error);
-    toast.error('Грешка при стартиране на тест');
-    throw error;
-  }
-}, []);
+    try {
+      const response = await coursesService.startTestById(testId);
+      return response;
+    } catch (error) {
+      console.error('Error starting test:', error);
+      toast.error('Грешка при стартиране на тест');
+      throw error;
+    }
+  }, []);
 
   const submitAnswer = useCallback(async (testId, answerData) => {
     try {
@@ -1506,21 +1558,21 @@ export const AcademyCoursesProvider = ({ children }) => {
   }, [isAdmin]);
 
 
-const deleteLessonMaterial = useCallback(async (lessonId, materialId) => {
-  if (!isAdmin) {
-    toast.error('Нямате права за тази операция');
-    return { success: false };
-  }
-  try {
-    const response = await coursesService.deleteLessonMaterial(lessonId, materialId);
-    toast.success('Материалът е изтрит успешно');
-    return response;
-  } catch (error) {
-    console.error('Error deleting lesson material:', error);
-    toast.error('Грешка при изтриване на материал');
-    throw error;
-  }
-}, [isAdmin]);
+  const deleteLessonMaterial = useCallback(async (lessonId, materialId) => {
+    if (!isAdmin) {
+      toast.error('Нямате права за тази операция');
+      return { success: false };
+    }
+    try {
+      const response = await coursesService.deleteLessonMaterial(lessonId, materialId);
+      toast.success('Материалът е изтрит успешно');
+      return response;
+    } catch (error) {
+      console.error('Error deleting lesson material:', error);
+      toast.error('Грешка при изтриване на материал');
+      throw error;
+    }
+  }, [isAdmin]);
   // =========================================================
   //                    MY ACADEMY (Student Dashboard)
   // =========================================================
@@ -1628,20 +1680,21 @@ const deleteLessonMaterial = useCallback(async (lessonId, materialId) => {
       return [];
     }
   }, []);
-const getMyMentor = useCallback(async () => {
-  try {
-    const data = await academyService.getMyMentor();
-    return data;
-  } catch (error) {
-    console.error('Error fetching my mentor:', error);
-    return { mentor: null, assignedDate: null };
-  }
-}, []);
+  const getMyMentor = useCallback(async () => {
+    try {
+      const data = await academyService.getMyMentor();
+      return data;
+    } catch (error) {
+      console.error('Error fetching my mentor:', error);
+      return { mentor: null, assignedDate: null };
+    }
+  }, []);
   // =========================================================
   //                    CONTEXT VALUE
   // =========================================================
 
-  const contextValue = {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const contextValue = useMemo(() => ({
     // State
     isLoading,
     courses,
@@ -1666,7 +1719,7 @@ const getMyMentor = useCallback(async () => {
     unpublishCourse,
     duplicateCourse,
     getCourseStatistics,
-  // Course Mentors
+    // Course Mentors
     searchMentors,
     addCourseMentor,
     updateCourseMentor,
@@ -1702,7 +1755,11 @@ const getMyMentor = useCallback(async () => {
     cancelLecture,
     startLecture,
     endLecture,
-
+    unpublishLecture,
+    getLectureById,
+    addLectureMentor,
+    updateLectureMentor,
+    removeLectureMentor,
     // Lecture Registration
     registerForLecture,
     unregisterFromLecture,
@@ -1765,8 +1822,8 @@ const getMyMentor = useCallback(async () => {
     addLectureMaterial,
     getSeminarMaterials,
     addSeminarMaterial,
-deleteLessonMaterial,
-deleteCourseMaterial,
+    deleteLessonMaterial,
+    deleteCourseMaterial,
     // My Academy
     getMyDashboard,
     getMyCourses,
@@ -1785,7 +1842,6 @@ deleteCourseMaterial,
     getLectureAttempt,
     submitLectureAnswer,
     submitLectureTest,
-    clearTestCache,
     // Tests - Admin CRUD
     getTestById,
     updateTest,
@@ -1799,7 +1855,8 @@ deleteCourseMaterial,
     updateQuestion,
     deleteQuestion,
     reorderQuestions,
-  };
+  }), [isLoading, courses, currentCourse, lectures, seminars, myDashboard,
+       currentLesson, lessonsProgress, enrollmentStats, currentTestData]);
 
   return (
     <AcademyCoursesContext.Provider value={contextValue}>

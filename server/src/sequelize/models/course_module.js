@@ -19,6 +19,11 @@ module.exports = (sequelize, DataTypes) => {
         sourceKey: 'id',
         as: 'lessons',
       });
+      course_module.hasMany(models.lecture, {
+        foreignKey: 'moduleId',
+        sourceKey: 'id',
+        as: 'lectures',
+      });
        // Belongs to mentor (optional)
       course_module.belongsTo(models.mentor, {
         foreignKey: 'mentorId',

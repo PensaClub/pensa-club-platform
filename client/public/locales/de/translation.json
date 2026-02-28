@@ -605,7 +605,8 @@
       "createCourse": "Kurs erstellen",
       "courses": "Kurse",
       "createLecture": "Vorlesung erstellen",
-      "createSeminar": "Seminar erstellen"
+      "createSeminar": "Seminar erstellen",
+      "lectures": "Vorlesungen"
     },
     "students": {
       "title": "Studenten",
@@ -13215,9 +13216,9 @@
       "academy": "Akademie",
       "courses": "Kurse"
     },
-     "mentors": {
-    "students": "Studenten"
-  },
+    "mentors": {
+      "students": "Studenten"
+    },
     "levels": {
       "beginner": "Anfänger",
       "intermediate": "Fortgeschritten",
@@ -14360,5 +14361,308 @@
       "saved": "Artikellimit-Einstellungen gespeichert!",
       "error": "Fehler beim Speichern"
     }
+  },
+  "lectureCreateForm": {
+    "loading": "Laden...",
+    "titleCreate": "Vortrag erstellen",
+    "titleEdit": "Vortrag bearbeiten",
+    "backToList": "Zur Liste",
+    "mentorsDesc": "Fügen Sie einen oder mehrere Dozenten hinzu. Der erste wird automatisch als Hauptdozent festgelegt.",
+    "module": "Modul",
+    "noModule": "— Kein Modul —",
+    "mentorSyncFailed": "Fehler beim Speichern der Dozenten",
+    "sections": {
+      "basicInfo": "Grundinformationen",
+      "dateLocation": "Datum & Ort",
+      "videoMedia": "Video & Medien",
+      "mentor": "Dozent",
+      "registration": "Anmeldeeinstellungen",
+      "credits": "Credits",
+      "course": "Verknüpfter Kurs",
+      "mentors": "Dozenten"
+    },
+    "title": "Titel",
+    "titlePlaceholder": "z.B. Einführung ins Internet",
+    "shortDescription": "Kurzbeschreibung",
+    "shortDescriptionPlaceholder": "Kurze Beschreibung des Vortrags...",
+    "description": "Beschreibung",
+    "descriptionPlaceholder": "Ausführliche Beschreibung...",
+    "category": "Kategorie",
+    "categoryPlaceholder": "z.B. Digitale Kompetenz",
+    "lectureType": "Typ",
+    "tags": "Tags",
+    "tagsPlaceholder": "Internet, Sicherheit, Anfänger",
+    "tagsHint": "Durch Komma getrennt",
+    "lectureTypes": {
+      "lecture": "Vortrag",
+      "webinar": "Webinar",
+      "workshop": "Workshop",
+      "masterclass": "Meisterklasse"
+    },
+    "scheduledDate": "Beginn",
+    "scheduledEndDate": "Ende",
+    "durationMinutes": "Dauer (Min.)",
+    "timezone": "Zeitzone",
+    "online": "Online",
+    "offline": "Vor Ort",
+    "meetingLink": "External Meeting Link",
+    "meetingPassword": "Passwort",
+    "meetingPasswordPlaceholder": "Optional",
+    "location": "Ort",
+    "locationPlaceholder": "z.B. Gemeindezentrum",
+    "address": "Adresse",
+    "addressPlaceholder": "Beispielstr. 1, Sofia",
+    "videoProvider": "Videoplattform",
+    "selectProvider": "— Auswählen —",
+    "videoUrl": "Video-URL",
+    "thumbnailUrl": "Vorschaubild (URL)",
+    "thumbnailPreview": "Vorschau",
+    "videoProviders": {
+      "youtube": "YouTube",
+      "vimeo": "Vimeo",
+      "zoom": "Zoom",
+      "meet": "Google Meet",
+      "teams": "Microsoft Teams",
+      "custom": "Andere"
+    },
+    "mentorPlaceholder": "Dozent nach Name suchen...",
+    "maxParticipants": "Max. Teilnehmer",
+    "unlimited": "Unbegrenzt",
+    "requiresRegistration": "Anmeldung erforderlich",
+    "isPublic": "Öffentlich",
+    "isFree": "Kostenlos",
+    "maxCredits": "Max. Credits",
+    "creditsForAttendance": "Für Teilnahme",
+    "creditsForTest": "Für Test",
+    "hasTest": "Hat Test",
+    "testPassingScore": "Mindestergebnis (%)",
+    "courseDesc": "Falls der Vortrag zu einem Kurs gehört, wählen Sie ihn hier aus. Andernfalls leer lassen.",
+    "courseId": "Kurs-ID",
+    "courseIdPlaceholder": "Optional",
+    "cancel": "Abbrechen",
+    "saveDraft": "Entwurf speichern",
+    "saving": "Speichern...",
+    "publish": "Veröffentlichen",
+    "loadFailed": "Fehler beim Laden des Vortrags",
+    "draftSaved": "Entwurf gespeichert",
+    "draftCreated": "Vortrag erstellt",
+    "saveFailed": "Fehler beim Speichern",
+    "published": "Vortrag veröffentlicht",
+    "publishFailed": "Fehler beim Veröffentlichen",
+    "validationFailed": "Bitte füllen Sie alle Pflichtfelder aus",
+    "errors": {
+      "titleRequired": "Titel ist erforderlich",
+      "titleMinLength": "Mindestens 3 Zeichen",
+      "dateRequired": "Datum ist erforderlich",
+      "endBeforeStart": "Enddatum muss nach dem Startdatum liegen",
+      "invalidUrl": "Ungültige URL"
+    },
+    "courseSearchPlaceholder": "Kurs nach Name suchen...",
+    "onlineHint": "Das Video wird im Abschnitt Video und Medien eingerichtet. Falls der Vortrag auf einer externen Plattform (Zoom, Meet) stattfindet, den Link unten hinzufuegen.",
+    "meetingLinkPlaceholder": "Nur bei Zoom/Meet/Teams (optional)",
+    "meetingLinkHint": "Leer lassen wenn der Vortrag direkt auf der Plattform ist"
+  },
+  "adminLectures": {
+    "title": "Verwaltung von",
+    "titleAccent": "Vortraegen",
+    "subtitle": "Erstellen, bearbeiten und verwalten Sie Vortraege in der Akademie",
+    "refresh": "Aktualisieren",
+    "createLecture": "Neuer Vortrag",
+    "searchPlaceholder": "Nach Titel suchen...",
+    "filters": "Filter",
+    "loading": "Vortraege werden geladen...",
+    "min": "Min.",
+    "stats": {
+      "total": "gesamt",
+      "published": "veroeffentlicht",
+      "live": "live",
+      "drafts": "Entwuerfe"
+    },
+    "status": "Status",
+    "type": "Typ",
+    "sortBy": "Sortieren nach",
+    "statusOptions": {
+      "all": "Alle",
+      "draft": "Entwuerfe",
+      "published": "Veroeffentlicht",
+      "scheduled": "Geplant",
+      "live": "Live",
+      "completed": "Abgeschlossen",
+      "cancelled": "Abgesagt"
+    },
+    "typeOptions": {
+      "all": "Alle",
+      "lecture": "Vortrag",
+      "webinar": "Webinar",
+      "workshop": "Workshop",
+      "masterclass": "Meisterklasse"
+    },
+    "sortOptions": {
+      "newest": "Neueste",
+      "oldest": "Aelteste",
+      "title": "Nach Titel",
+      "upcoming": "Bevorstehend",
+      "popular": "Beliebt"
+    },
+    "statuses": {
+      "draft": "Entwurf",
+      "published": "Veroeffentlicht",
+      "scheduled": "Geplant",
+      "live": "LIVE",
+      "completed": "Abgeschlossen",
+      "cancelled": "Abgesagt"
+    },
+    "types": {
+      "lecture": "Vortrag",
+      "webinar": "Webinar",
+      "workshop": "Workshop",
+      "masterclass": "Meisterklasse"
+    },
+    "cardStats": {
+      "date": "Datum",
+      "duration": "Dauer",
+      "registered": "Angemeldet"
+    },
+    "actions": {
+      "edit": "Bearbeiten",
+      "publish": "Veroeffentlichen",
+      "unpublish": "Verbergen",
+      "startLive": "LIVE starten",
+      "endLive": "LIVE beenden",
+      "cancel": "Absagen",
+      "delete": "Loeschen"
+    },
+    "empty": {
+      "title": "Keine Vortraege gefunden",
+      "description": "Erstellen Sie Ihren ersten Vortrag oder aendern Sie die Filter"
+    },
+    "deleteModal": {
+      "title": "Vortrag loeschen",
+      "text": "Sind Sie sicher, dass Sie loeschen moechten",
+      "warning": "Diese Aktion kann nicht rueckgaengig gemacht werden.",
+      "cancel": "Abbrechen",
+      "confirm": "Loeschen"
+    },
+    "cancelModal": {
+      "title": "Vortrag absagen",
+      "text": "Sie sagen ab",
+      "reasonLabel": "Sie koennen einen Grund angeben:",
+      "reasonPlaceholder": "Grund fuer die Absage (optional)",
+      "back": "Zurueck",
+      "confirm": "Vortrag absagen"
+    }
+  },
+  "editLecture": {
+    "loading": "Vorlesung wird geladen...",
+    "back": "Zurück",
+    "pageTitle": "Bearbeitung von",
+    "subtitle": "Informationen und Einstellungen ändern",
+    "unsavedChanges": "● Nicht gespeicherte Änderungen",
+    "cancel": "Abbrechen",
+    "discard": "Verwerfen",
+    "delete": "Löschen",
+    "unpublish": "Ausblenden",
+    "saveAndStay": "Speichern",
+    "saveAndBack": "Speichern & zurück",
+    "publish": "Veröffentlichen",
+    "deleteTitle": "Vorlesung löschen",
+    "deleteConfirm": "Sind Sie sicher, dass Sie diese Vorlesung löschen möchten? Diese Aktion ist unwiderruflich.",
+    "cancelDelete": "Abbrechen",
+    "confirmDelete": "Löschen",
+    "saveSuccess": "Vorlesung erfolgreich aktualisiert",
+    "published": "Vorlesung veröffentlicht",
+    "unpublished": "Vorlesung ausgeblendet",
+    "deleted": "Vorlesung gelöscht",
+    "validationFailed": "Bitte füllen Sie die Pflichtfelder aus",
+    "sections": {
+      "basicInfo": "Grundinformationen",
+      "dateLocation": "Datum und Ort",
+      "videoMedia": "Video und Medien",
+      "mentor": "Dozent",
+      "registration": "Anmeldung",
+      "credits": "Credits und Test",
+      "course": "Verbundener Kurs"
+    },
+    "titleField": "Titel",
+    "shortDescription": "Kurzbeschreibung",
+    "description": "Beschreibung",
+    "category": "Kategorie",
+    "lectureType": "Typ",
+    "tags": "Tags",
+    "tagsHint": "Durch Kommas getrennt",
+    "scheduledDate": "Beginn",
+    "scheduledEndDate": "Ende",
+    "durationMinutes": "Dauer (Min.)",
+    "timezone": "Zeitzone",
+    "online": "Online",
+    "offline": "Vor Ort",
+    "meetingLink": "Meeting-Link",
+    "meetingPassword": "Passwort",
+    "location": "Ort",
+    "address": "Adresse",
+    "videoProvider": "Plattform",
+    "selectProvider": "Auswählen",
+    "videoUrl": "Video-URL",
+    "thumbnailUrl": "Vorschaubild (URL)",
+    "mentorPlaceholder": "Dozent nach Name suchen...",
+    "maxParticipants": "Max. Teilnehmer",
+    "unlimited": "Unbegrenzt",
+    "requiresRegistration": "Anmeldung erforderlich",
+    "isPublic": "Öffentlich",
+    "isFree": "Kostenlos",
+    "maxCredits": "Max. Credits",
+    "creditsForAttendance": "Für Teilnahme",
+    "hasTest": "Hat Test",
+    "creditsForTest": "Für Test",
+    "testPassingScore": "Mindestergebnis (%)",
+    "manageTest": "Test verwalten",
+    "courseDesc": "Wenn die Vorlesung Teil eines Kurses ist, wählen Sie ihn hier aus. Sie können sie auch einem bestimmten Modul zuordnen.",
+    "courseSearchPlaceholder": "Kurs nach Name suchen...",
+    "module": "Modul (optional)",
+    "noModule": "— Eigenständig (kein Modul) —",
+    "moduleHint": "Leer lassen, wenn die Vorlesung direkt zum Kurs gehört",
+    "lectureTypes": {
+      "lecture": "Vorlesung",
+      "webinar": "Webinar",
+      "workshop": "Workshop",
+      "masterclass": "Meisterkurs"
+    },
+    "statuses": {
+      "draft": "Entwurf",
+      "scheduled": "Geplant",
+      "live": "Live",
+      "completed": "Abgeschlossen",
+      "cancelled": "Abgesagt",
+      "published": "Veröffentlicht"
+    },
+    "errors": {
+      "notFound": "Vorlesung nicht gefunden",
+      "loadFailed": "Fehler beim Laden der Vorlesung",
+      "saveFailed": "Fehler beim Speichern",
+      "publishFailed": "Fehler beim Veröffentlichen",
+      "unpublishFailed": "Fehler beim Ausblenden",
+      "deleteFailed": "Fehler beim Löschen",
+      "titleRequired": "Titel ist erforderlich",
+      "titleMinLength": "Mindestens 3 Zeichen",
+      "dateRequired": "Datum ist erforderlich",
+      "endBeforeStart": "Enddatum muss nach dem Startdatum liegen",
+      "invalidUrl": "Ungültige URL"
+    }
+  },
+  "academyLectureDetails": {
+  "lecturer": {
+    "title": "Dozent",
+    "titlePlural": "Dozenten",
+    "alsoParticipate": "Ebenfalls beteiligt"
+  },
+  "roles": {
+    "lecturer": "Dozent",
+    "mentor": "Mentor",
+    "assistant": "Assistent",
+    "guest": "Gast"
+  },
+  "course": {
+    "module": "Modul"
   }
+}
 }
