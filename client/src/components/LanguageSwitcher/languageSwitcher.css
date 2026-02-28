@@ -121,18 +121,18 @@
 
 /* Mobile Language Switcher */
 .mobile-language-switcher-new {
-  padding: 10px 0;
-  /* border-top: 1px solid rgba(0, 0, 0, 0.1); */
-  margin-top: auto;
+  padding: 12px 0 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  margin-top: 20px;
 }
 
 .mobile-lang-header {
- display: flex;
+  display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 15px;
   padding: 0 20px 15px;
   color: var(--gray);
-  font-weight: 600;
+  font-weight: 500;
   font-size: 14px;
   background: none;
   border: none;
@@ -147,13 +147,12 @@
 }
 
 .mobile-lang-header svg:first-child {
-  width: 20px;
-  height: 20px;
-  color: var(--orange);
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
 }
 .mobile-current-lang {
-  font-size: 16px;
-  /* opacity: 0.7; */
+  font-size: 14px;
   font-weight: 500;
   color: var(--gray);
 }
@@ -169,7 +168,6 @@
 .mobile-lang-header svg {
   width: 16px;
   height: 16px;
-  color: var(--orange);
 }
 
 .mobile-lang-options {

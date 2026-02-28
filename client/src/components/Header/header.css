@@ -376,7 +376,7 @@ header.scrolled + .header-line {
   align-items: center;
   padding: 20px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  background: linear-gradient(135deg, var(--orange), var(--green));
+  background: linear-gradient(310deg, var(--orange), var(--green));
   color: white;
 }
 
@@ -412,6 +412,7 @@ header.scrolled + .header-line {
 .mobile-menu-links {
   display: flex;
   flex-direction: column;
+  flex: 1;
   padding: 25px;
   overflow-y: auto;
 }
