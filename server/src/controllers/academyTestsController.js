@@ -2291,14 +2291,19 @@ academyTestsController.get('/lecture/:lectureId/status', isAuth, async (req, res
     const userRole = req.user.role;
 
     // Намери теста за тази лекция
-    const testData = await lecture_test.findOne({
+    const testData = await test.findOne({
       where: { lectureId, isPublished: true },
     });
 
     if (!testData) {
-      return res.status(404).json({
-        success: false,
-        message: 'Test not found for this lecture',
+     
+      return res.status(200).json({
+        success: true,
+        hasTest: false,
+        test: null,
+        attempts: [],
+        bestAttempt: null,
+        lastAttempt: null,
       });
     }
 
@@ -2326,7 +2331,7 @@ academyTestsController.get('/lecture/:lectureId/status', isAuth, async (req, res
     // ✅ Вземи всички опити по lectureTestId
     const attempts = await test_attempt.findAll({
       where: {
-        lectureTestId: testData.id,  // ✅ ПОПРАВЕНО
+         testId: testData.id,  // ✅ ПОПРАВЕНО
         studentId: studentData.id,
       },
       include: [
@@ -2474,7 +2479,7 @@ academyTestsController.post('/lecture/:lectureId/start', isAuth, async (req, res
     const userRole = req.user.role;
 
     // Намери теста за тази лекция
-    const testData = await lecture_test.findOne({
+    const testData = await test.findOne({
       where: { lectureId, isPublished: true },
       include: [{
         model: lecture,
@@ -2538,7 +2543,7 @@ academyTestsController.post('/lecture/:lectureId/start', isAuth, async (req, res
     // ✅ Търси attempts по lectureTestId (НЕ testId!)
     const existingAttempts = await test_attempt.count({
       where: {
-        lectureTestId: testData.id,  // ✅ ПРОМЕНЕНО
+             testId: testData.id,   // ✅ ПРОМЕНЕНО
         studentId: studentData.id,
       },
     });
@@ -2553,7 +2558,7 @@ academyTestsController.post('/lecture/:lectureId/start', isAuth, async (req, res
     // ✅ Търси in_progress attempt по lectureTestId
     const inProgressAttempt = await test_attempt.findOne({
       where: {
-        lectureTestId: testData.id,  // ✅ ПРОМЕНЕНО
+             testId: testData.id,   // ✅ ПРОМЕНЕНО
         studentId: studentData.id,
         status: 'in_progress',
       },
@@ -2570,15 +2575,15 @@ academyTestsController.post('/lecture/:lectureId/start', isAuth, async (req, res
         // Създай нов attempt ако има още опити
         if (!testData.maxAttempts || existingAttempts + 1 < testData.maxAttempts) {
           const newAttempt = await test_attempt.create({
-            testId: null,                  // ✅ NULL за lecture tests
-            lectureTestId: testData.id,    // ✅ ID на lecture_test
+            testId: testData.id,           // ПРОМЕНЕНО — lesson_test ID
+            lectureTestId: null,   // ✅ ID на lecture_test
             studentId: studentData.id,
             status: 'in_progress',
             startedAt: new Date(),
             attemptNumber: existingAttempts + 2,
           });
 
-          const questions = await getQuestionsForAttempt(testData, newAttempt.id, true);
+          const questions = await getQuestionsForAttempt(testData, newAttempt.id); 
 
           return res.status(201).json({
             success: true,
@@ -2597,8 +2602,7 @@ academyTestsController.post('/lecture/:lectureId/start', isAuth, async (req, res
       }
 
       // Продължи съществуващия attempt
-      const questions = await getQuestionsForAttempt(testData, inProgressAttempt.id, true);
-
+      const questions = await getQuestionsForAttempt(testData, inProgressAttempt.id); // ПРОМЕНЕНО
       return res.status(200).json({
         success: true,
         message: 'Continuing existing attempt',
@@ -2611,15 +2615,15 @@ academyTestsController.post('/lecture/:lectureId/start', isAuth, async (req, res
 
     // ✅ Създай нов attempt с lectureTestId
     const attempt = await test_attempt.create({
-      testId: null,                  // ✅ NULL - няма lesson_test
-      lectureTestId: testData.id,    // ✅ ID на lecture_test
+      testId: testData.id,           // ПРОМЕНЕНО — lesson_test ID
+      lectureTestId: null,   // ✅ ID на lecture_test
       studentId: studentData.id,
       status: 'in_progress',
       startedAt: new Date(),
       attemptNumber: existingAttempts + 1,
     });
 
-    const questions = await getQuestionsForAttempt(testData, attempt.id, true);
+    const questions = await getQuestionsForAttempt(testData, attempt.id); 
 
     res.status(201).json({
       success: true,
@@ -2642,7 +2646,7 @@ academyTestsController.get('/lecture/:lectureId/attempt', isAuth, async (req, re
     const lectureId = parseInt(req.params.lectureId);
     const userId = req.user.userId;
 
-    const testData = await lecture_test.findOne({
+    const testData = await test.findOne({ 
       where: { lectureId, isPublished: true }
     });
 
@@ -2718,7 +2722,7 @@ academyTestsController.post(
       // ✅ Търси по lectureTestId
       const attempt = await test_attempt.findOne({
         where: {
-          lectureTestId: lectureTestId,  // ✅ ПРОМЕНЕНО
+           testId: lectureTestId,  
           studentId: studentData.id,
           status: 'in_progress',
         },
@@ -2732,7 +2736,7 @@ academyTestsController.post(
       }
 
       // Провери времето
-      const testData = await lecture_test.findByPk(lectureTestId);
+      const testData = await test.findByPk(lectureTestId);
       if (testData?.timeLimitMinutes) {
         const timeRemaining = calculateTimeRemaining(attempt, testData);
         if (timeRemaining <= 0) {
@@ -2799,7 +2803,7 @@ academyTestsController.post('/lecture/:lectureTestId/submit', isAuth, async (req
     // ✅ Търси по lectureTestId
     const attempt = await test_attempt.findOne({
       where: {
-        lectureTestId: lectureTestId,  // ✅ ПРОМЕНЕНО
+        testId: lectureTestId,  // ✅ ПРОМЕНЕНО
         studentId: studentData.id,
         status: 'in_progress',
       },
@@ -2812,7 +2816,7 @@ academyTestsController.post('/lecture/:lectureTestId/submit', isAuth, async (req
       });
     }
 
-    const testData = await lecture_test.findByPk(lectureTestId);
+    const testData = await test.findByPk(lectureTestId);
     const result = await submitLectureAttempt(attempt.id, testData);
 
     res.status(200).json({

@@ -218,7 +218,7 @@ export const AcademyLectureDetails = () => {
           promises.push(
             getLectureTestStatus(lectureData.id)
               .then(res => setTestStatus(res))
-              .catch(() => { }) // OK ако няма статус
+              .catch(() => setTestStatus(null))
           );
         }
 
@@ -272,7 +272,7 @@ export const AcademyLectureDetails = () => {
             const status = await getLectureTestStatus(lecture.id);
             setTestStatus(status);
           } catch (err) {
-            // OK
+            setTestStatus(null);
           }
         }
       } else {
@@ -296,7 +296,8 @@ export const AcademyLectureDetails = () => {
   const isYouTube = lecture?.videoProvider === 'youtube';
   const hasVideo = lecture?.videoUrl || (isYouTube && lecture?.meetingLink);
   const canWatch = (status === 'live' || status === 'recording') && hasVideo;
-  const canTakeTest = lecture?.hasTest && (lecture?.isFree || isRegistered);
+ const hasRealTest = lecture?.hasTest && testStatus?.test; 
+  const canTakeTest = hasRealTest && (lecture?.isFree || isRegistered); 
 
   // Handlers
   const handleRegister = useCallback(async () => {
@@ -671,7 +672,7 @@ export const AcademyLectureDetails = () => {
                 </>
               )}
 
-              {lecture.hasTest && (
+              {hasRealTest && (
                 <button
                   className="ald-action-btn-secondary ald-action-btn-test"
                   onClick={handleStartTest}
@@ -691,7 +692,7 @@ export const AcademyLectureDetails = () => {
               <span>{t('academyLectureDetails.credits.forAttendance', 'За присъствие')}</span>
               <span className="ald-credits-value">+{lecture.creditsForAttendance || 0} 🪙</span>
             </div>
-            {lecture.hasTest && (
+            {hasRealTest && (
               <div className="ald-credits-row">
                 <span>{t('academyLectureDetails.credits.forTest', 'За тест')}</span>
                 <span className="ald-credits-value">+{lecture.creditsForTest || 0} 🪙</span>
@@ -733,7 +734,7 @@ export const AcademyLectureDetails = () => {
                 </button>
               )}
 
-              {lecture.hasTest && (
+              {hasRealTest && (
                 <button
                   className={`ald-tab ${activeTab === 'test' ? 'is-active' : ''}`}
                   onClick={() => setActiveTab('test')}
@@ -901,7 +902,7 @@ export const AcademyLectureDetails = () => {
                 </div>
               )}
 
-              {activeTab === 'test' && lecture.hasTest && (
+              {activeTab === 'test' && hasRealTest && (
                 <div className="ald-test-section">
                   <div className="ald-test-card">
                     <div className="ald-test-header">
