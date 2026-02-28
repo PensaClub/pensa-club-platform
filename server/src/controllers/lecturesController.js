@@ -63,7 +63,16 @@ const generateUniqueSlug = async (title, existingId = null) => {
 
   return slug;
 };
-
+// ===============================  
+// HELPER: Backward compat — добавя виртуално `lecturer` поле от mentorAssignments
+// ===============================
+const addLecturerCompat = (lectureJSON) => {
+  if (!lectureJSON) return lectureJSON;
+  const assignments = lectureJSON.mentorAssignments || [];
+  const lead = assignments.find(ma => ma.isLead) || assignments[0] || null;
+  lectureJSON.lecturer = lead ? lead.mentor : null;
+  return lectureJSON;
+};
 // ===============================
 // GET /api/academy/lectures
 // Публичен списък с лекции
@@ -123,13 +132,17 @@ lecturesController.get('/', validateQuery(lectureQuerySchema), async (req, res, 
         break;
     }
 
-    const { count, rows: lectures } = await lecture.findAndCountAll({
+    const { count, rows: lectures } = await lecture.findAndCountAll({ // ПРОМЕНЕНО
       where,
       include: [
-        {
-          model: mentor,
-          as: 'lecturer',
-          attributes: ['id', 'name', 'photoUrl', 'specialization'],
+        { // ПРОМЕНЕНО — mentorAssignments вместо единичен lecturer
+          model: mentor_lecture,
+          as: 'mentorAssignments',
+          include: [{
+            model: mentor,
+            as: 'mentor',
+            attributes: ['id', 'name', 'photoUrl', 'specialization'],
+          }],
         },
         {
           model: course,
@@ -148,9 +161,11 @@ lecturesController.get('/', validateQuery(lectureQuerySchema), async (req, res, 
 
     const totalPages = Math.ceil(count / limit);
 
+    const lecturesWithCompat = lectures.map(l => addLecturerCompat(l.toJSON()));
+
     res.status(200).json({
       success: true,
-      lectures,
+      lectures: lecturesWithCompat, 
       pagination: {
         page,
         limit,
@@ -172,7 +187,7 @@ lecturesController.get('/upcoming', async (req, res, next) => {
   try {
     const { limit = 10 } = req.query;
 
-    const lectures = await lecture.findAll({
+     const lectures = await lecture.findAll({ 
       where: {
         isPublished: true,
         isPublic: true,
@@ -180,20 +195,26 @@ lecturesController.get('/upcoming', async (req, res, next) => {
         scheduledDate: { [Op.gte]: new Date() },
       },
       include: [
-        {
-          model: mentor,
-          as: 'lecturer',
-          attributes: ['id', 'name', 'photoUrl'],
+        { 
+          model: mentor_lecture,
+          as: 'mentorAssignments',
+          include: [{
+            model: mentor,
+            as: 'mentor',
+            attributes: ['id', 'name', 'photoUrl'],
+          }],
         },
       ],
       order: [['scheduledDate', 'ASC']],
       limit: parseInt(limit),
     });
 
+    const lecturesWithCompat = lectures.map(l => addLecturerCompat(l.toJSON()));
+
     res.status(200).json({
       success: true,
-      lectures,
-    });
+      lectures: lecturesWithCompat, 
+    })
   } catch (err) {
     console.error('❌ [GET UPCOMING LECTURES] Error:', err);
     next(err);
@@ -283,7 +304,7 @@ lecturesController.get(
       const { count, rows: lectures } = await lecture.findAndCountAll({
         where,
         include: [
-           { // ПРОМЕНЕНО
+          { // ПРОМЕНЕНО
             model: mentor_lecture,
             as: 'mentorAssignments',
             include: [{
@@ -387,9 +408,12 @@ lecturesController.get('/:slug', async (req, res, next) => {
     // Increment views
     await lectureData.increment('viewsCount');
 
+
+    const lectureJSON = addLecturerCompat(lectureData.toJSON());
+
     res.status(200).json({
       success: true,
-      lecture: lectureData,
+      lecture: lectureJSON, 
     });
   } catch (err) {
     console.error('❌ [GET LECTURE BY SLUG] Error:', err);
@@ -411,7 +435,7 @@ lecturesController.get(
 
       const lectureData = await lecture.findByPk(lectureId, {
         include: [
-        { 
+          {
             model: mentor_lecture,
             as: 'mentorAssignments',
             include: [{
@@ -1373,7 +1397,7 @@ lecturesController.post( // НОВО
       if (isLead) {
         await mentor_lecture.update({ isLead: false }, { where: { lectureId } });
       }
-let record;
+      let record;
       if (existing) {
         // Вече е назначен — обнови го
         await existing.update({

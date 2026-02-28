@@ -984,7 +984,7 @@ export const Profile = () => {
                           </li>
                           <li> {/* НОВО */}
                             <NavLink to="/academy/admin/lectures" className={({ isActive }) => isActive ? 'active' : ''}>
-                              <span className="icon">📋</span>
+                              <CircleIcon className="icon" />
                               {t("admin.academy.lectures")}
                             </NavLink>
                             </li>
