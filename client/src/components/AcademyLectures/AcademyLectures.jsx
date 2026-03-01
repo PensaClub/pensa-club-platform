@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { AcademyLectureTrailerModal } from './AcademyLectureTrailerModal/AcademyLectureTrailerModal';
+import AcademyLecturesSkeleton from './AcademyLecturesSkeleton/AcademyLecturesSkeleton';
 import './academyLectures.css';
 import { useAcademyCourses } from '../contexts/AcademyCoursesProvider';
 import { useAuthContext } from '../contexts/UserContext';
@@ -446,10 +447,7 @@ export const AcademyLectures = () => {
 
           {/* Content */}
           {isLoading ? (
-            <div className="al-loading">
-              <div className="al-loading-spinner"></div>
-              <p>{t('academyLectures.loading')}</p>
-            </div>
+            <AcademyLecturesSkeleton />
           ) : filteredLectures.length === 0 ? (
             <div className="al-empty">
               <div className="al-empty-icon">{hasActiveFilters ? '🔍' : '🎬'}</div>
