@@ -11809,6 +11809,21 @@
       "plural": "Projects"
     }
   },
+  "clubsShowcase": {
+    "badge": "Community",
+    "title": "Discover our",
+    "titleHighlight": "clubs",
+    "subtitle": "Join an active community of people who share your interests and passion for learning",
+    "explore": "Explore",
+    "viewAll": "View all clubs",
+    "categories": {
+      "cultural": "Cultural",
+      "sports": "Sports",
+      "social": "Social",
+      "educational": "Educational",
+      "general": "General"
+    }
+  },
   "digiBridge": {
     "meta": {
       "title": "DigiBridge Academy - Digital Skills for All Ages",

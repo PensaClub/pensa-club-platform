@@ -11102,6 +11102,21 @@
       "plural": "Projekte"
     }
   },
+  "clubsShowcase": {
+    "badge": "Gemeinschaft",
+    "title": "Entdecken Sie unsere",
+    "titleHighlight": "Klubs",
+    "subtitle": "Treten Sie einer aktiven Gemeinschaft von Menschen bei, die Ihre Interessen und Leidenschaft für das Lernen teilen",
+    "explore": "Entdecken",
+    "viewAll": "Alle Klubs anzeigen",
+    "categories": {
+      "cultural": "Kulturell",
+      "sports": "Sport",
+      "social": "Sozial",
+      "educational": "Bildung",
+      "general": "Allgemein"
+    }
+  },
   "digiBridge": {
     "meta": {
       "title": "DigiBridge Akademie - Digitale Kompetenzen für alle Altersgruppen",

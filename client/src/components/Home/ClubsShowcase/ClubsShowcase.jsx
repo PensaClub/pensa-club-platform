@@ -7,11 +7,11 @@ import { useClubContext } from '../../contexts/ClubContext';
 import './clubsShowcase.css';
 
 const CATEGORY_COLORS = {
-  cultural: { color: '#8B5CF6', label: 'Културен' },
-  sports: { color: '#10B981', label: 'Спортен' },
-  social: { color: '#F59E0B', label: 'Социален' },
-  educational: { color: '#3B82F6', label: 'Образователен' },
-  general: { color: '#EC4899', label: 'Общ' },
+  cultural: '#8B5CF6',
+  sports: '#10B981',
+  social: '#F59E0B',
+  educational: '#3B82F6',
+  general: '#EC4899',
 };
 
 export const ClubsShowcase = () => {
@@ -74,7 +74,10 @@ export const ClubsShowcase = () => {
   }, []);
 
   const getCategoryInfo = (category) => {
-    return CATEGORY_COLORS[category] || CATEGORY_COLORS.general;
+    const key = category || 'general';
+    const color = CATEGORY_COLORS[key] || CATEGORY_COLORS.general;
+    const label = t(`clubsShowcase.categories.${key}`, { defaultValue: key });
+    return { color, label };
   };
 
   // Render skeleton
