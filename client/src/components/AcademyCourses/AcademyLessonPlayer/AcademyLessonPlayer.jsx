@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuthContext } from '../../contexts/UserContext';
 import { useAcademyCourses } from '../../contexts/AcademyCoursesProvider';
 import './academyLessonPlayer.css';
+import AcademyLessonPlayerSkeleton from './AcademyLessonPlayerSkeleton/AcademyLessonPlayerSkeleton';
 
 const AcademyLessonPlayer = () => {
   const { t } = useTranslation();
@@ -590,14 +591,7 @@ const AcademyLessonPlayer = () => {
   // =========================================================
 
   if (isLoading && !lesson) {
-    return (
-      <div className="lp">
-        <div className="lp-state">
-          <div className="lp-state__spinner"></div>
-          <p>{t('academyLessonPlayer.loading', 'Зареждане...')}</p>
-        </div>
-      </div>
-    );
+    return <AcademyLessonPlayerSkeleton />;
   }
 
   if (error) {

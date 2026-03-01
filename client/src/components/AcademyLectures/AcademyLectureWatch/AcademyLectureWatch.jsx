@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuthContext } from '../../contexts/UserContext';
 import { useAcademyCourses } from '../../contexts/AcademyCoursesProvider';
 import './academyLectureWatch.css';
+import AcademyLectureWatchSkeleton from './AcademyLectureWatchSkeleton/AcademyLectureWatchSkeleton';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // HELPERS
@@ -141,12 +142,7 @@ export const AcademyLectureWatch = () => {
 
   // Loading
   if (isLoading && !lecture) {
-    return (
-      <div className="alw-loading">
-        <div className="alw-loading-spinner"></div>
-        <p>{t('academyLectureWatch.loading')}</p>
-      </div>
-    );
+    return <AcademyLectureWatchSkeleton />;
   }
 
   // Error

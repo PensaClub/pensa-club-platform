@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuthContext } from '../../contexts/UserContext';
 import { useAcademyCourses } from '../../contexts/AcademyCoursesProvider';
 import './academyLectureDetails.css';
+import AcademyLectureDetailsSkeleton from './AcademyLectureDetailsSkeleton/AcademyLectureDetailsSkeleton';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // HELPERS (същите като преди)
@@ -352,18 +353,7 @@ export const AcademyLectureDetails = () => {
 
   // Loading state
   if (isLoading && !lecture) {
-    return (
-      <div className="ald-loading">
-        <div className="ald-loading-content">
-          <div className="ald-loading-spinner">
-            <div className="ald-loading-ring"></div>
-            <div className="ald-loading-ring"></div>
-            <div className="ald-loading-ring"></div>
-          </div>
-          <p className="ald-loading-text">{t('academyLectureDetails.loading', 'Зареждане...')}</p>
-        </div>
-      </div>
-    );
+    return <AcademyLectureDetailsSkeleton />;
   }
 
   // Error state

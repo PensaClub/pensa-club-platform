@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuthContext } from '../../../contexts/UserContext';
 import { useAcademyCourses } from '../../../contexts/AcademyCoursesProvider';
 import './academyLectureTest.css';
+import AcademyLectureTestSkeleton from './AcademyLectureTestSkeleton/AcademyLectureTestSkeleton';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // HELPER FUNCTIONS
@@ -519,14 +520,7 @@ export const AcademyLectureTest = () => {
   }
 
   if (isLoadingTest || isLoading) {
-    return (
-      <div className="alt">
-        <div className="alt-loading">
-          <div className="alt-loading__spinner"></div>
-          <p>{t('academyLectureTest.loading')}</p>
-        </div>
-      </div>
-    );
+    return <AcademyLectureTestSkeleton />;
   }
 
   if (error) {
