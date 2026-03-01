@@ -16,6 +16,7 @@ import { TextZoom } from "../TextZoom/TextZoom";
 import { useTranslation } from 'react-i18next';
 import SEOHead from "../SEO/SEOHead";
 import { PartnersShowcase } from "./PartnersShowcase/PartnersShowcase";
+import { ClubsShowcase } from "./ClubsShowcase/ClubsShowcase";
 
 export const Home = () => {
 
@@ -190,6 +191,7 @@ export const Home = () => {
         <PlatformStats />
         <PartnersShowcase />
         <MottoSection />
+        <ClubsShowcase />
         <AboutSection />
         <ConstellationShowcase />
         <FeaturedArticles />

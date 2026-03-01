@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import "./featuredArticles.css";
 import { useArticleContext } from "../../contexts/ArticleContext";
@@ -7,25 +7,15 @@ import { useTranslation } from "react-i18next";
 
 export const FeaturedArticles = () => {
   const { t } = useTranslation();
-  const { articles, getAllArticles, articlesLoaded } = useArticleContext();
-  const [featuredArticles, setFeaturedArticles] = useState([]);
+  const { articles, articlesLoaded } = useArticleContext();
 
-  useEffect(() => {
-    if (!articlesLoaded) {
-      getAllArticles();
-    }
-  }, [articlesLoaded, getAllArticles]);
-
-  useEffect(() => {
-    if (articles && articles.length > 0) {
-
-      const filteredArticles = articles
-        .filter(article => article.mainImage)
-        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-        .slice(0, 3);
-
-      setFeaturedArticles(filteredArticles);
-    }
+  // Use articles from context (PlatformStats already loads them)
+  const featuredArticles = useMemo(() => {
+    if (!articles || articles.length === 0) return [];
+    return [...articles]
+      .filter(article => article.mainImage)
+      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+      .slice(0, 3);
   }, [articles]);
 
   // Функция за URL на изображение

@@ -1,0 +1,597 @@
+/* ============================================
+   ClubsShowcase — "Club Aurora" Design
+   Prefix: cshw-
+   ============================================ */
+
+/* === SECTION === */
+.cshw-section {
+  position: relative;
+  padding: 6rem 2rem;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* === AURORA BACKGROUND === */
+.cshw-aurora {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(ellipse 80% 60% at 10% 20%, rgba(139, 92, 246, 0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 50% at 90% 80%, rgba(16, 185, 129, 0.10) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 40% at 50% 10%, rgba(59, 130, 246, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 60% at 80% 30%, rgba(236, 72, 153, 0.07) 0%, transparent 50%),
+    radial-gradient(circle at 30% 70%, rgba(245, 158, 11, 0.06) 0%, transparent 40%);
+  background-color: #fafbff;
+  animation: cshw-aurora 12s ease-in-out infinite alternate;
+}
+
+@keyframes cshw-aurora {
+  0% {
+    background-position: 0% 0%, 100% 100%, 50% 0%, 80% 30%, 30% 70%;
+  }
+  50% {
+    background-position: 20% 30%, 70% 60%, 40% 20%, 60% 50%, 50% 50%;
+  }
+  100% {
+    background-position: 40% 60%, 50% 30%, 60% 40%, 40% 70%, 70% 30%;
+  }
+}
+
+/* Dot pattern overlay */
+.cshw-section::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    radial-gradient(circle, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+}
+
+/* === FLOATING BLOBS === */
+.cshw-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.25;
+  pointer-events: none;
+  z-index: -1;
+  animation: cshw-float 8s ease-in-out infinite alternate;
+}
+
+.cshw-blob--1 {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, #8B5CF6, transparent 70%);
+  top: 5%;
+  right: -5%;
+  animation-duration: 10s;
+}
+
+.cshw-blob--2 {
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, #10B981, transparent 70%);
+  bottom: 10%;
+  left: -3%;
+  animation-duration: 12s;
+  animation-delay: -3s;
+}
+
+.cshw-blob--3 {
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, #3B82F6, transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation-duration: 9s;
+  animation-delay: -5s;
+}
+
+@keyframes cshw-float {
+  0% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(15px, -20px) scale(1.05); }
+  66% { transform: translate(-10px, 15px) scale(0.95); }
+  100% { transform: translate(20px, -10px) scale(1.02); }
+}
+
+/* === CONTAINER === */
+.cshw-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* === HEADER === */
+.cshw-header {
+  text-align: center;
+  margin-bottom: 3.5rem;
+}
+
+.cshw-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 1rem;
+  background: rgba(139, 92, 246, 0.1);
+  color: #7C3AED;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  margin-bottom: 1rem;
+}
+
+.cshw-title {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #1e293b;
+  line-height: 1.2;
+  margin: 0 0 1rem;
+}
+
+.cshw-title-gradient {
+  background: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 40%, #10B981 70%, #EC4899 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.cshw-subtitle {
+  font-size: 1.1rem;
+  color: #64748b;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* === BENTO GRID === */
+.cshw-bento-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: auto auto;
+  gap: 1.25rem;
+}
+
+/* Hero card spans 2 columns x 2 rows */
+.cshw-card--hero {
+  grid-column: 1 / 3;
+  grid-row: 1 / 3;
+}
+
+/* === CARD BASE === */
+.cshw-card {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.4s ease;
+  outline: none;
+  min-height: 220px;
+}
+
+.cshw-card:focus-visible {
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.5);
+}
+
+/* Animated conic-gradient border */
+.cshw-card-border {
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  padding: 2px;
+  background: conic-gradient(
+    from var(--cshw-border-angle, 0deg),
+    rgba(139, 92, 246, 0.3),
+    rgba(59, 130, 246, 0.3),
+    rgba(16, 185, 129, 0.3),
+    rgba(245, 158, 11, 0.3),
+    rgba(236, 72, 153, 0.3),
+    rgba(139, 92, 246, 0.3)
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: cshw-border-spin 6s linear infinite;
+  opacity: 0.5;
+  transition: opacity 0.4s ease;
+  z-index: 2;
+  pointer-events: none;
+}
+
+@property --cshw-border-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes cshw-border-spin {
+  to { --cshw-border-angle: 360deg; }
+}
+
+.cshw-card:hover .cshw-card-border {
+  opacity: 1;
+}
+
+/* Glass surface */
+.cshw-card::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  z-index: 0;
+}
+
+.cshw-card:hover {
+  box-shadow:
+    0 20px 40px rgba(139, 92, 246, 0.12),
+    0 8px 16px rgba(0, 0, 0, 0.06);
+}
+
+/* === CARD IMAGE === */
+.cshw-card-image {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.cshw-card--hero .cshw-card-image {
+  height: 55%;
+}
+
+.cshw-card--regular .cshw-card-image {
+  height: 130px;
+}
+
+.cshw-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.cshw-card-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cshw-card:hover .cshw-card-image img {
+  transform: scale(1.06);
+}
+
+.cshw-card-image-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgba(0, 0, 0, 0.15) 100%);
+  pointer-events: none;
+}
+
+/* === CARD CONTENT === */
+.cshw-card-content {
+  position: relative;
+  z-index: 1;
+  padding: 1rem 1.2rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.cshw-card--hero .cshw-card-content {
+  padding: 1.2rem 1.5rem 1.5rem;
+  gap: 0.5rem;
+}
+
+/* Category badge */
+.cshw-card-category {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--cat-color, #8B5CF6);
+  background: color-mix(in srgb, var(--cat-color, #8B5CF6) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cat-color, #8B5CF6) 20%, transparent);
+}
+
+/* Club name */
+.cshw-card-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cshw-card--hero .cshw-card-name {
+  font-size: 1.35rem;
+}
+
+/* Description */
+.cshw-card-desc {
+  font-size: 0.88rem;
+  color: #64748b;
+  line-height: 1.5;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cshw-card--hero .cshw-card-desc {
+  -webkit-line-clamp: 3;
+}
+
+/* Meta row */
+.cshw-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.3rem;
+}
+
+.cshw-card-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.78rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.cshw-card-meta-item svg {
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.cshw-card-rating svg {
+  opacity: 1;
+}
+
+/* CTA link (hero card) */
+.cshw-card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--cat-color, #8B5CF6);
+  transition: gap 0.3s ease;
+}
+
+.cshw-card:hover .cshw-card-cta {
+  gap: 0.7rem;
+}
+
+/* === FOOTER === */
+.cshw-footer {
+  text-align: center;
+  margin-top: 3rem;
+}
+
+.cshw-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.9rem 2.2rem;
+  border: none;
+  border-radius: 999px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 50%, #10B981 100%);
+  background-size: 200% 200%;
+  cursor: pointer;
+  transition: background-position 0.5s ease, transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.25);
+}
+
+.cshw-cta-btn:hover {
+  background-position: 100% 100%;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(139, 92, 246, 0.35);
+}
+
+.cshw-cta-btn:active {
+  transform: translateY(0);
+}
+
+/* === ENTRANCE ANIMATIONS === */
+.cshw-animate {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s cubic-bezier(0.23, 1, 0.32, 1),
+              transform 0.7s cubic-bezier(0.23, 1, 0.32, 1);
+  transition-delay: var(--delay, 0s);
+}
+
+.cshw-visible .cshw-animate,
+.cshw-animate.cshw-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* === SKELETON === */
+.cshw-bone {
+  background: linear-gradient(90deg, #e8e8f0 25%, #d8d8e8 50%, #e8e8f0 75%);
+  background-size: 200% 100%;
+  animation: cshw-shimmer 1.5s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+@keyframes cshw-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.cshw-skeleton-card {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+.cshw-skeleton-card::before {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: none;
+}
+
+.cshw-skeleton-title {
+  width: 340px;
+  height: 36px;
+  margin: 0 auto 1rem;
+}
+
+.cshw-skeleton-subtitle {
+  width: 480px;
+  height: 18px;
+  margin: 0 auto;
+}
+
+.cshw-skeleton-image {
+  height: 130px;
+  border-radius: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.cshw-skeleton-card.cshw-card--hero .cshw-skeleton-image {
+  height: 55%;
+  min-height: 200px;
+}
+
+.cshw-skeleton-content {
+  position: relative;
+  z-index: 1;
+  padding: 1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.cshw-skeleton-badge {
+  width: 70px;
+  height: 22px;
+  border-radius: 999px;
+}
+
+.cshw-skeleton-name {
+  width: 80%;
+  height: 16px;
+}
+
+.cshw-skeleton-meta {
+  width: 50%;
+  height: 14px;
+}
+
+/* === RESPONSIVE === */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  .cshw-section {
+    padding: 4rem 1.5rem;
+  }
+
+  .cshw-title {
+    font-size: 2.2rem;
+  }
+
+  .cshw-bento-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
+  }
+
+  .cshw-card--hero {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+
+  .cshw-card--hero .cshw-card-image {
+    height: 220px;
+  }
+
+  .cshw-card--regular .cshw-card-image {
+    height: 120px;
+  }
+
+  .cshw-card {
+    min-height: 180px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .cshw-section {
+    padding: 3rem 1rem;
+  }
+
+  .cshw-title {
+    font-size: 1.8rem;
+  }
+
+  .cshw-subtitle {
+    font-size: 0.95rem;
+  }
+
+  .cshw-bento-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .cshw-card--hero {
+    grid-column: auto;
+  }
+
+  .cshw-card--hero .cshw-card-image,
+  .cshw-card--regular .cshw-card-image {
+    height: 180px;
+  }
+
+  .cshw-card {
+    min-height: auto;
+  }
+
+  .cshw-card--hero .cshw-card-name {
+    font-size: 1.15rem;
+  }
+
+  .cshw-blob {
+    display: none;
+  }
+
+  .cshw-skeleton-title {
+    width: 220px;
+    height: 28px;
+  }
+
+  .cshw-skeleton-subtitle {
+    width: 280px;
+    height: 16px;
+  }
+
+  .cshw-header {
+    margin-bottom: 2rem;
+  }
+
+  .cshw-footer {
+    margin-top: 2rem;
+  }
+}
