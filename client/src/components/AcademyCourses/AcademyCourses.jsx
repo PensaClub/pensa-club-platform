@@ -8,6 +8,7 @@ import { AcademyCoursesHero } from './AcademyCoursesHero/AcademyCoursesHero';
 import { AcademyProgramTracks } from './AcademyProgramTracks/AcademyProgramTracks';
 import { AcademyCoursesList } from './AcademyCoursesList/AcademyCoursesList';
 import './academyCourses.css';
+import AcademyCoursesSkeleton from './AcademyCoursesSkeleton/AcademyCoursesSkeleton';
 
 const PROGRAM_COLORS = {
   'Мобилни устройства': { primary: '#3b82f6', gradient: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)', icon: '📱' },
@@ -145,6 +146,10 @@ export const AcademyCourses = () => {
     if (!currentCategory) return null;
     return categories.find(c => c.name === currentCategory) || null;
   }, [currentCategory, categories]);
+
+  if (loading) {
+    return <AcademyCoursesSkeleton />;
+  }
 
   return (
     <div className="academyCourses">

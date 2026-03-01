@@ -1,0 +1,217 @@
+/* ================================= */
+/* ACADEMY COURSE DETAIL SKELETON    */
+/* ================================= */
+
+.acdsk {
+  width: 100%;
+  padding-top: 80px;
+  padding-bottom: 100px;
+}
+
+.acdsk-bone {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: acdsk-shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+@keyframes acdsk-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Top Bar */
+.acdsk-topbar {
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.acdsk-topbar-back { width: 160px; height: 36px; border-radius: 8px; }
+
+/* Hero */
+.acdsk-hero {
+  background: #1a1a2e;
+  padding: 2rem;
+}
+
+.acdsk-hero .acdsk-bone {
+  background: linear-gradient(90deg, rgba(255,255,255,0.06) 25%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.06) 75%);
+  background-size: 200% 100%;
+  animation: acdsk-shimmer 1.5s infinite;
+}
+
+.acdsk-hero-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.acdsk-breadcrumb { width: 350px; height: 16px; margin-bottom: 1.5rem; }
+
+.acdsk-hero-content {
+  display: flex;
+  gap: 2rem;
+}
+
+.acdsk-hero-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.acdsk-badges { display: flex; gap: 0.5rem; }
+.acdsk-badge { width: 120px; height: 28px; border-radius: 14px; }
+.acdsk-badge-sm { width: 90px; height: 28px; border-radius: 14px; }
+.acdsk-hero-title { width: 75%; height: 40px; }
+.acdsk-hero-desc { width: 100%; height: 16px; }
+.acdsk-hero-desc-short { width: 70%; height: 16px; }
+
+.acdsk-hero-stats {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.acdsk-hero-stat { width: 130px; height: 50px; border-radius: 10px; }
+
+.acdsk-hero-instructors {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.acdsk-instructor-avatar { width: 48px; height: 48px; border-radius: 50%; }
+.acdsk-instructor-info { display: flex; flex-direction: column; gap: 0.3rem; }
+.acdsk-instructor-label { width: 80px; height: 12px; }
+.acdsk-instructor-name { width: 120px; height: 16px; }
+
+/* Preview Card */
+.acdsk-hero-card {
+  width: 380px;
+  flex-shrink: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.05);
+}
+
+.acdsk-card-preview { width: 100%; height: 210px; border-radius: 0; }
+
+.acdsk-card-content {
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.acdsk-card-price { width: 80px; height: 28px; }
+.acdsk-card-cta { height: 48px; border-radius: 12px; }
+
+.acdsk-card-features {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.acdsk-card-feature { height: 20px; }
+.acdsk-card-guarantee { height: 20px; width: 80%; }
+
+/* Content */
+.acdsk-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Curriculum */
+.acdsk-curriculum {
+  margin-bottom: 3rem;
+}
+
+.acdsk-section-header {
+  margin-bottom: 1rem;
+}
+
+.acdsk-section-title { width: 250px; height: 28px; }
+
+.acdsk-curriculum-summary {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.acdsk-curriculum-tag { width: 120px; height: 30px; border-radius: 15px; }
+
+/* Modules */
+.acdsk-module {
+  border: 1px solid #f0f0f0;
+  border-radius: 12px;
+  margin-bottom: 0.75rem;
+  overflow: hidden;
+}
+
+.acdsk-module-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+}
+
+.acdsk-module-number { width: 36px; height: 36px; border-radius: 50%; }
+
+.acdsk-module-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.acdsk-module-title { width: 70%; height: 20px; }
+.acdsk-module-meta { width: 50%; height: 14px; }
+.acdsk-module-toggle { width: 24px; height: 24px; border-radius: 6px; }
+
+.acdsk-module-lessons {
+  padding: 0 1.25rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.acdsk-lesson { height: 56px; border-radius: 10px; }
+
+/* About Grid */
+.acdsk-about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.acdsk-about-card {
+  border: 1px solid #f0f0f0;
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.acdsk-about-title { width: 200px; height: 22px; }
+.acdsk-about-text { width: 100%; height: 14px; }
+.acdsk-about-text-short { width: 50%; height: 14px; }
+
+/* Responsive */
+@media (max-width: 992px) {
+  .acdsk-hero-content { flex-direction: column; }
+  .acdsk-hero-card { width: 100%; }
+  .acdsk-card-preview { height: 180px; }
+  .acdsk-about-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+  .acdsk-hero { padding: 1.5rem 1rem; }
+  .acdsk-hero-title { width: 100%; height: 32px; }
+  .acdsk-hero-stats { flex-wrap: wrap; gap: 0.75rem; }
+  .acdsk-hero-stat { width: 100px; height: 44px; }
+  .acdsk-content { padding: 1rem; }
+  .acdsk-curriculum-summary { flex-wrap: wrap; }
+}

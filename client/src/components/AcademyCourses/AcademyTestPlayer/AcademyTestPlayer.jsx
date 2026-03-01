@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useAuthContext } from '../../contexts/UserContext';
 import { useAcademyCourses } from '../../contexts/AcademyCoursesProvider';
 import './academyTestPlayer.css';
+import AcademyTestPlayerSkeleton from './AcademyTestPlayerSkeleton/AcademyTestPlayerSkeleton';
 
 const AcademyTestPlayer = () => {
   const { t } = useTranslation();
@@ -685,14 +686,7 @@ const handleNextLesson = () => {
   }
 
   if (isLoadingTest || isLoading) {
-    return (
-      <div className="atp">
-        <div className="atp-loading">
-          <div className="atp-loading__spinner"></div>
-          <p>{t('academyTestPlayer.loading', 'Зареждане на теста...')}</p>
-        </div>
-      </div>
-    );
+    return <AcademyTestPlayerSkeleton />;
   }
 
   if (error) {

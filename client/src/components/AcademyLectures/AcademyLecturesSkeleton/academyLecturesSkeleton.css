@@ -1,0 +1,264 @@
+/* ======================== */
+/* ACADEMY LECTURES SKELETON */
+/* ======================== */
+
+.alsk {
+  width: 100%;
+  padding-top: 80px;
+  padding-bottom: 100px;
+}
+
+/* Base Skeleton Animation */
+.alsk-bone {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: alsk-shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+@keyframes alsk-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Hero */
+.alsk-hero {
+  background: #1a1a2e;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.alsk-hero .alsk-bone {
+  background: linear-gradient(90deg, rgba(255,255,255,0.06) 25%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.06) 75%);
+  background-size: 200% 100%;
+  animation: alsk-shimmer 1.5s infinite;
+}
+
+.alsk-hero-content {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.alsk-hero-badge {
+  width: 180px;
+  height: 36px;
+  border-radius: 20px;
+}
+
+.alsk-hero-title {
+  width: 60%;
+  height: 48px;
+  border-radius: 8px;
+}
+
+.alsk-hero-subtitle {
+  width: 80%;
+  height: 20px;
+}
+
+.alsk-hero-stats {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.alsk-hero-stat {
+  width: 120px;
+  height: 80px;
+  border-radius: 12px;
+}
+
+/* Main */
+.alsk-main {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Filters */
+.alsk-filters {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.alsk-filters-tabs {
+  display: flex;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.alsk-filter-tab {
+  width: 110px;
+  height: 42px;
+  border-radius: 12px;
+}
+
+.alsk-filter-search {
+  width: 280px;
+  height: 42px;
+  border-radius: 12px;
+}
+
+.alsk-filter-sort {
+  width: 160px;
+  height: 42px;
+  border-radius: 8px;
+}
+
+/* Categories */
+.alsk-categories {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.alsk-category {
+  width: 150px;
+  height: 38px;
+  border-radius: 20px;
+}
+
+/* Grid */
+.alsk-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.alsk-card {
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #f0f0f0;
+  background: #fff;
+}
+
+.alsk-card-thumb {
+  width: 100%;
+  height: 200px;
+  border-radius: 0;
+}
+
+.alsk-card-body {
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.alsk-card-category {
+  width: 120px;
+  height: 16px;
+}
+
+.alsk-card-title {
+  width: 90%;
+  height: 22px;
+}
+
+.alsk-card-desc {
+  width: 100%;
+  height: 14px;
+}
+
+.alsk-card-desc-short {
+  width: 65%;
+  height: 14px;
+}
+
+.alsk-card-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.alsk-card-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.alsk-card-meta {
+  width: 120px;
+  height: 14px;
+}
+
+.alsk-card-btn {
+  width: 100%;
+  height: 40px;
+  border-radius: 10px;
+  margin-top: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .alsk-hero {
+    padding: 2rem 1rem;
+  }
+
+  .alsk-hero-title {
+    width: 90%;
+    height: 36px;
+  }
+
+  .alsk-hero-stats {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .alsk-hero-stat {
+    width: 100px;
+    height: 70px;
+  }
+
+  .alsk-main {
+    padding: 1rem;
+  }
+
+  .alsk-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .alsk-filters-tabs {
+    flex-wrap: wrap;
+  }
+
+  .alsk-filter-search,
+  .alsk-filter-sort {
+    width: 100%;
+  }
+
+  .alsk-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .alsk-hero-stats {
+    gap: 0.75rem;
+  }
+
+  .alsk-hero-stat {
+    width: 80px;
+    height: 60px;
+  }
+
+  .alsk-categories {
+    gap: 0.5rem;
+  }
+
+  .alsk-category {
+    width: 120px;
+    height: 34px;
+  }
+}

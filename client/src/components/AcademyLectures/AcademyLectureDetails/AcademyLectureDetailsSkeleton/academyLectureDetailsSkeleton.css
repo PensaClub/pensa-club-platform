@@ -1,0 +1,205 @@
+/* ================================ */
+/* ACADEMY LECTURE DETAILS SKELETON */
+/* ================================ */
+
+.aldsk {
+  width: 100%;
+  padding-top: 80px;
+  padding-bottom: 100px;
+}
+
+.aldsk-bone {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: aldsk-shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+@keyframes aldsk-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Hero */
+.aldsk-hero {
+  background: #1a1a2e;
+  padding: 3rem 2rem;
+  position: relative;
+  display: flex;
+  gap: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.aldsk-hero .aldsk-bone {
+  background: linear-gradient(90deg, rgba(255,255,255,0.06) 25%, rgba(255,255,255,0.12) 50%, rgba(255,255,255,0.06) 75%);
+  background-size: 200% 100%;
+  animation: aldsk-shimmer 1.5s infinite;
+}
+
+.aldsk-hero-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.aldsk-breadcrumb { width: 300px; height: 16px; }
+.aldsk-status { width: 120px; height: 32px; border-radius: 20px; }
+.aldsk-category { width: 160px; height: 20px; }
+.aldsk-title { width: 80%; height: 40px; }
+.aldsk-description { width: 100%; height: 16px; }
+.aldsk-description-short { width: 70%; height: 16px; }
+
+.aldsk-meta {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.aldsk-meta-item { width: 140px; height: 20px; }
+
+.aldsk-quick-stats {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.aldsk-quick-stat { width: 90px; height: 60px; border-radius: 12px; }
+
+/* Action Card */
+.aldsk-action-card {
+  width: 320px;
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.05);
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.aldsk-action-countdown { height: 80px; border-radius: 12px; }
+.aldsk-action-spots { height: 30px; }
+.aldsk-action-btn { height: 48px; border-radius: 12px; }
+.aldsk-action-secondary { height: 36px; border-radius: 8px; }
+
+.aldsk-action-credits {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.aldsk-credit-row { height: 20px; }
+.aldsk-action-share { height: 36px; border-radius: 8px; }
+
+/* Main Content */
+.aldsk-main {
+  padding: 2rem;
+}
+
+.aldsk-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  gap: 2rem;
+}
+
+.aldsk-content { flex: 1; }
+
+/* Tabs */
+.aldsk-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 0.75rem;
+}
+
+.aldsk-tab { width: 110px; height: 40px; border-radius: 8px; }
+
+/* Tab Content */
+.aldsk-tab-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.aldsk-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.aldsk-section-title { width: 200px; height: 24px; }
+.aldsk-text-line { width: 100%; height: 14px; }
+.aldsk-text-line-short { width: 60%; height: 14px; }
+
+.aldsk-learn-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.aldsk-learn-item { height: 40px; border-radius: 8px; }
+
+/* Sidebar */
+.aldsk-sidebar {
+  width: 320px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.aldsk-sidebar-card {
+  border: 1px solid #f0f0f0;
+  border-radius: 16px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.aldsk-sidebar-label { width: 80px; height: 16px; }
+.aldsk-sidebar-avatar { width: 80px; height: 80px; border-radius: 50%; }
+.aldsk-sidebar-name { width: 140px; height: 20px; }
+.aldsk-sidebar-spec { width: 180px; height: 14px; }
+.aldsk-info-row { width: 100%; height: 20px; }
+
+/* Responsive */
+@media (max-width: 992px) {
+  .aldsk-hero {
+    flex-direction: column;
+    padding: 2rem 1rem;
+  }
+
+  .aldsk-action-card {
+    width: 100%;
+  }
+
+  .aldsk-container {
+    flex-direction: column;
+  }
+
+  .aldsk-sidebar {
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .aldsk-sidebar-card {
+    flex: 1;
+    min-width: 250px;
+  }
+}
+
+@media (max-width: 768px) {
+  .aldsk-title { width: 100%; height: 32px; }
+  .aldsk-quick-stats { flex-wrap: wrap; }
+  .aldsk-meta { flex-direction: column; }
+  .aldsk-meta-item { width: 100%; }
+  .aldsk-learn-grid { grid-template-columns: 1fr; }
+}

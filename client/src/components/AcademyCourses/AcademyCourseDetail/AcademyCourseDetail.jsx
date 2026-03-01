@@ -7,6 +7,7 @@ import { useAcademyCourses } from '../../contexts/AcademyCoursesProvider';
 import { useAuthContext } from '../../contexts/UserContext';
 import { AcademyTrailerModal } from '../AcademyTrailerModal/AcademyTrailerModal';
 import './academyCourseDetail.css';
+import AcademyCourseDetailSkeleton from './AcademyCourseDetailSkeleton/AcademyCourseDetailSkeleton';
 
 // Level colors
 const LEVEL_CONFIG = {
@@ -625,18 +626,7 @@ export const AcademyCourseDetail = () => {
 
   // Loading state
   if (isLoading) {
-    return (
-      <div className="academyCourseDetail academyCourseDetail--loading">
-        <div className="academyCourseDetail-loader">
-          <div className="academyCourseDetail-loader-ring">
-            <div></div>
-            <div></div>
-            <div></div>
-          </div>
-          <p>{t('academyCourseDetail.loading')}</p>
-        </div>
-      </div>
-    );
+    return <AcademyCourseDetailSkeleton />;
   }
 
   // Error state
