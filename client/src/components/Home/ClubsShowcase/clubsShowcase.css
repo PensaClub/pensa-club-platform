@@ -112,7 +112,7 @@
   margin-bottom: 3.5rem;
 }
 
-.cshw-badge {
+.cshw-header span {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
@@ -120,7 +120,7 @@
   background: rgba(139, 92, 246, 0.1);
   color: #7C3AED;
   border-radius: 999px;
-  font-size: 0.85rem;
+  font-size: 1rem;
   font-weight: 600;
   letter-spacing: 0.03em;
   margin-bottom: 1rem;
@@ -134,7 +134,10 @@
   margin: 0 0 1rem;
 }
 
-.cshw-title-gradient {
+.cshw-title span  {
+  font-size: 2.8rem;
+  font-weight: 800;
+  line-height: 1.2;
   background: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 40%, #10B981 70%, #EC4899 100%);
   -webkit-background-clip: text;
   background-clip: text;
