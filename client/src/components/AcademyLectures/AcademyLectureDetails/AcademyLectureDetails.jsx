@@ -7,6 +7,7 @@ import { useAuthContext } from '../../contexts/UserContext';
 import { useAcademyCourses } from '../../contexts/AcademyCoursesProvider';
 import './academyLectureDetails.css';
 import AcademyLectureDetailsSkeleton from './AcademyLectureDetailsSkeleton/AcademyLectureDetailsSkeleton';
+import SEOHead from '../../SEO/SEOHead';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // HELPERS (същите като преди)
@@ -123,7 +124,7 @@ const CATEGORY_COLORS = {
 
 export const AcademyLectureDetails = () => {
   const { slug } = useParams();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { isAuthentication } = useAuthContext();
   const {
@@ -293,12 +294,108 @@ export const AcademyLectureDetails = () => {
     return CATEGORY_COLORS[lecture.category] || CATEGORY_COLORS.default;
   }, [lecture]);
 
+  // SEO meta data
+  const metaData = useMemo(() => {
+    if (!lecture) {
+      return {
+        title: t('academyLecturesSeo.loading', { defaultValue: 'Зареждане... | DigiBridge Academy' }),
+        description: 'Безплатна онлайн лекция в DigiBridge Academy',
+        keywords: 'лекция, DigiBridge Academy, дигитална грамотност, Pensa Club',
+        image: '/images/digibridge/hero-image.jpg'
+      };
+    }
+
+    const cleanDesc = (lecture.shortDescription || '')
+      .replace(/<[^>]*>/g, '')
+      .substring(0, 160);
+
+    return {
+      title: `${lecture.title} | DigiBridge Academy`,
+      description: cleanDesc || 'Безплатна онлайн лекция в DigiBridge Academy',
+      keywords: [
+        ...(lecture.tags || []),
+        lecture.category,
+        'лекция', 'DigiBridge Academy', 'дигитална грамотност', 'Pensa Club', 'безплатна лекция'
+      ].filter(Boolean).join(', '),
+      image: lecture.thumbnailUrl || '/images/digibridge/hero-image.jpg',
+      publishedTime: lecture.publishedAt || lecture.createdAt,
+      modifiedTime: lecture.updatedAt
+    };
+  }, [lecture, t]);
+
+  const structuredData = useMemo(() => {
+    if (!lecture) return null;
+
+    const schema = {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Course",
+          "name": lecture.title,
+          "description": lecture.shortDescription || lecture.description,
+          "url": window.location.href,
+          "provider": {
+            "@type": "Organization",
+            "name": "DigiBridge Academy",
+            "url": "https://pensa.club/academy",
+            "sameAs": ["https://www.facebook.com/profile.php?id=61578204366479"]
+          },
+          "isAccessibleForFree": lecture.isFree !== false,
+          "courseMode": "online",
+          "inLanguage": i18n.language,
+          "image": lecture.thumbnailUrl || 'https://pensa.club/images/digibridge/hero-image.jpg',
+          ...(lecture.durationMinutes && { "timeRequired": `PT${lecture.durationMinutes}M` }),
+          ...(lecture.lecturer?.name && {
+            "hasCourseInstance": {
+              "@type": "CourseInstance",
+              "courseMode": "online",
+              "instructor": {
+                "@type": "Person",
+                "name": lecture.lecturer.name
+              }
+            }
+          }),
+          ...(lecture.rating > 0 && {
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": lecture.rating,
+              "bestRating": 5,
+              "ratingCount": lecture.registeredCount || 1
+            }
+          }),
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "BGN",
+            "availability": "https://schema.org/InStock"
+          }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Начало", "item": "https://pensa.club" },
+            { "@type": "ListItem", "position": 2, "name": "DigiBridge Academy", "item": "https://pensa.club/academy" },
+            { "@type": "ListItem", "position": 3, "name": "Лекции", "item": "https://pensa.club/academy/lectures" },
+            { "@type": "ListItem", "position": 4, "name": lecture.title }
+          ]
+        }
+      ]
+    };
+
+    return schema;
+  }, [lecture, i18n.language]);
+
   // Computed values
   const isYouTube = lecture?.videoProvider === 'youtube';
   const hasVideo = lecture?.videoUrl || (isYouTube && lecture?.meetingLink);
   const canWatch = (status === 'live' || status === 'recording') && hasVideo;
- const hasRealTest = lecture?.hasTest && testStatus?.test; 
-  const canTakeTest = hasRealTest && (lecture?.isFree || isRegistered); 
+ // ПРОМЕНЕНО — ползва backend данни
+  const hasRealTest = lecture?.hasTest && testStatus?.hasTest && testStatus?.test;
+  const testPassed = testStatus?.hasPassedTest;
+  const testCompleted = testPassed || testStatus?.lastAttempt?.status === 'completed';
+  const testBestScore = testStatus?.bestAttempt?.score ?? null;
+  const testCanRetry = testStatus?.canStartNew && (testStatus?.remainingAttempts === null || testStatus?.remainingAttempts > 0);
+  const canTakeTest = hasRealTest && (testStatus?.testAccessible || testCompleted);
 
   // Handlers
   const handleRegister = useCallback(async () => {
@@ -394,6 +491,16 @@ export const AcademyLectureDetails = () => {
 
   return (
     <div className="ald" style={{ '--accent-color': categoryStyle.primary, '--accent-glow': categoryStyle.glow }}>
+      <SEOHead
+        title={metaData.title}
+        description={metaData.description}
+        keywords={metaData.keywords}
+        image={metaData.image}
+        type="article"
+        publishedTime={metaData.publishedTime}
+        modifiedTime={metaData.modifiedTime}
+        structuredData={structuredData}
+      />
 
       {/* HERO SECTION */}
       <section className="ald-hero">
@@ -662,16 +769,22 @@ export const AcademyLectureDetails = () => {
                 </>
               )}
 
+             {/* ПРОМЕНЕНО — показва резултат */}
               {hasRealTest && (
                 <button
-                  className="ald-action-btn-secondary ald-action-btn-test"
+                  className={`ald-action-btn-secondary ald-action-btn-test ${testPassed ? 'ald-test-passed' : ''}`}
                   onClick={handleStartTest}
-                  disabled={!canTakeTest}
+                  disabled={!canTakeTest && !testCompleted}
                 >
-                  <span>📝</span>
-                  {testStatus?.completed
-                    ? t('academyLectureDetails.test.viewResults', 'Виж резултата')
-                    : t('academyLectureDetails.test.takeTest', 'Реши теста')}
+                  <span>{testPassed ? '✅' : '📝'}</span>
+                  {testPassed
+                    ? `${t('academyLectureDetails.test.passed', 'Преминат')} ${Math.round(testBestScore)}%`
+                    : testCompleted
+                      ? t('academyLectureDetails.test.retake', 'Опитай отново')
+                      : t('academyLectureDetails.test.takeTest', 'Реши теста')}
+                  {!testCompleted && lecture.creditsForTest > 0 && (
+                    <span className="ald-test-credits-badge"> +{lecture.creditsForTest} 🪙</span>
+                  )}
                 </button>
               )}
             </>
@@ -896,9 +1009,9 @@ export const AcademyLectureDetails = () => {
                 <div className="ald-test-section">
                   <div className="ald-test-card">
                     <div className="ald-test-header">
-                      <div className="ald-test-icon">📝</div>
+                      <div className="ald-test-icon">{testPassed ? '🎉' : '📝'}</div>
                       <div className="ald-test-info">
-                        <h3>{t('academyLectureDetails.test.title', 'Тест към лекцията')}</h3>
+                        <h3>{testStatus?.test?.title || t('academyLectureDetails.test.title', 'Тест към лекцията')}</h3>
                         <p>{t('academyLectureDetails.test.description', 'Проверете знанията си и спечелете допълнителни кредити')}</p>
                       </div>
                     </div>
@@ -910,64 +1023,96 @@ export const AcademyLectureDetails = () => {
                       </div>
                       <div className="ald-test-detail">
                         <span className="ald-test-detail-label">{t('academyLectureDetails.test.passingScore', 'Минимум за преминаване')}</span>
-                        <span className="ald-test-detail-value">{lecture.testPassingScore || 70}%</span>
+                        <span className="ald-test-detail-value">{testStatus?.test?.passingScore || lecture.testPassingScore || 70}%</span>
                       </div>
-                      {lecture.testTimeLimit && (
+                      {testStatus?.test?.timeLimitMinutes && (
                         <div className="ald-test-detail">
                           <span className="ald-test-detail-label">{t('academyLectureDetails.test.timeLimit', 'Време')}</span>
-                          <span className="ald-test-detail-value">{lecture.testTimeLimit} {t('academyLectureDetails.meta.minutes', 'мин')}</span>
+                          <span className="ald-test-detail-value">{testStatus.test.timeLimitMinutes} {t('academyLectureDetails.meta.minutes', 'мин')}</span>
+                        </div>
+                      )}
+                      {testStatus?.test?.maxAttempts && (
+                        <div className="ald-test-detail">
+                          <span className="ald-test-detail-label">{t('academyLectureDetails.test.maxAttempts', 'Макс. опити')}</span>
+                          <span className="ald-test-detail-value">{testStatus.test.maxAttempts}</span>
                         </div>
                       )}
                     </div>
 
-                    {testStatus?.completed && (
-                      <div className={`ald-test-result ${testStatus.passed ? 'passed' : 'failed'}`}>
-                        <div className="ald-test-result-icon">
-                          {testStatus.passed ? '🎉' : '😔'}
+                    {/* Резултат */}
+                    {testCompleted && testBestScore !== null && (
+                      <div className={`ald-test-result ${testPassed ? 'passed' : 'failed'}`}>
+                        <div className="ald-test-result-score">
+                          <div className={`ald-test-result-circle ${testPassed ? 'passed' : 'failed'}`}>
+                            {Math.round(testBestScore)}%
+                          </div>
                         </div>
                         <div className="ald-test-result-info">
-                          <span className="ald-test-result-label">{t('academyLectureDetails.test.yourScore', 'Вашият резултат')}</span>
-                          <span className="ald-test-result-value">
-                            {testStatus.score}%
+                          <span className="ald-test-result-label">
+                            {testPassed
+                              ? t('academyLectureDetails.test.testPassed', 'Тестът е преминат!')
+                              : t('academyLectureDetails.test.testFailed', 'Тестът не е преминат')}
                           </span>
+                          <span className="ald-test-result-details">
+                            {testStatus.bestAttempt?.correctAnswers || 0}/{testStatus.bestAttempt?.totalQuestions || 0} {t('academyLectureDetails.test.correctAnswers', 'верни отговори')}
+                          </span>
+                          {testPassed && (testStatus.bestAttempt?.earnedCredits > 0) && (
+                            <span className="ald-test-result-credits">
+                              +{testStatus.bestAttempt.earnedCredits} 🪙 {t('academyLectureDetails.test.creditsEarned', 'спечелени')}
+                            </span>
+                          )}
                         </div>
-                        {testStatus.passed && (
-                          <div className="ald-test-result-credits">
-                            +{lecture.creditsForTest || 0} 🪙
-                          </div>
+                      </div>
+                    )}
+
+                    {/* Опити */}
+                    {testCompleted && (
+                      <div className="ald-test-attempts-info">
+                        <span>📊 {t('academyLectureDetails.test.attempts', 'Опити')}: {testStatus?.totalAttempts || 0}/{testStatus?.test?.maxAttempts || '∞'}</span>
+                        {testStatus?.remainingAttempts > 0 && (
+                          <span className="ald-test-attempts-remaining">
+                            • {t('academyLectureDetails.test.remaining', 'Оставащи')}: {testStatus.remainingAttempts}
+                          </span>
+                        )}
+                        {testStatus?.remainingAttempts === 0 && (
+                          <span className="ald-test-attempts-exhausted">
+                            • {t('academyLectureDetails.test.noMoreAttempts', 'Няма повече опити')}
+                          </span>
                         )}
                       </div>
                     )}
 
-                    <button
-                      className="ald-test-btn"
-                      disabled={!canTakeTest}
-                      onClick={handleStartTest}
-                    >
-                      {canTakeTest ? (
-                        testStatus?.completed ? (
-                          <>
-                            <span>🔄</span> {t('academyLectureDetails.test.retake', 'Опитай отново')}
-                          </>
-                        ) : (
-                          <>
-                            <span>🚀</span> {t('academyLectureDetails.test.start', 'Започни теста')}
-                          </>
-                        )
-                      ) : (
+                    {/* Бутони */}
+                    <div className="ald-test-actions">
+                      {canTakeTest && (testCanRetry || !testCompleted) && (
+                        <button className="ald-test-btn" onClick={handleStartTest}>
+                          <span>{testCompleted ? '🔄' : '🚀'}</span>
+                          {testCompleted
+                            ? t('academyLectureDetails.test.retake', 'Опитай отново')
+                            : t('academyLectureDetails.test.start', 'Започни теста')}
+                        </button>
+                      )}
+
+                      {testCompleted && (
+                        <button className="ald-test-btn ald-test-btn-secondary" onClick={handleStartTest}>
+                          <span>📋</span>
+                          {t('academyLectureDetails.test.viewResults', 'Преглед на резултата')}
+                        </button>
+                      )}
+
+                      {!canTakeTest && !testCompleted && (
                         <>
-                          <span>🔒</span> {t('academyLectureDetails.test.locked', 'Достъпен след лекцията')}
+                          <button className="ald-test-btn" disabled>
+                            <span>🔒</span> {t('academyLectureDetails.test.locked', 'Достъпен след лекцията')}
+                          </button>
+                          <p className="ald-test-hint">
+                            {lecture?.isFree
+                              ? t('academyLectureDetails.test.hintFree', 'Гледайте лекцията, за да отключите теста.')
+                              : t('academyLectureDetails.test.hintRegister', 'Запишете се за лекцията, за да получите достъп до теста.')}
+                          </p>
                         </>
                       )}
-                    </button>
-
-                    {!canTakeTest && (
-                      <p className="ald-test-hint">
-                        {lecture?.isFree
-                          ? t('academyLectureDetails.test.hintFree', 'Тестът ще бъде достъпен скоро.')
-                          : t('academyLectureDetails.test.hintRegister', 'Запишете се за лекцията, за да получите достъп до теста.')}
-                      </p>
-                    )}
+                    </div>
                   </div>
                 </div>
               )}

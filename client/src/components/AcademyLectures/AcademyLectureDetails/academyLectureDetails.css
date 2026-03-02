@@ -2998,4 +2998,122 @@
     [data-theme="light"] .ald-action-btn {
         padding: 0.75rem 0.875rem;
     }
+    [data-theme="light"] .ald-test-btn-secondary:hover {
+  background: rgba(0, 0, 0, 0.05) !important;
+}
+}
+/* НОВО — тест резултат */
+.ald-test-result {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  margin-top: 1rem;
+}
+
+.ald-test-result.passed {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.ald-test-result.failed {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.ald-test-result-circle {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.ald-test-result-circle.passed {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border: 2px solid #10b981;
+}
+
+.ald-test-result-circle.failed {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border: 2px solid #ef4444;
+}
+
+.ald-test-result-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.ald-test-result-label {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--ald-text-primary);
+}
+
+.ald-test-result-details {
+  font-size: 0.82rem;
+  color: var(--ald-text-muted);
+}
+
+.ald-test-result-credits {
+  font-size: 0.82rem;
+  color: #10b981;
+  font-weight: 500;
+}
+
+.ald-test-attempts-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  font-size: 0.82rem;
+  color: var(--ald-text-muted);
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--ald-border);
+  margin-top: 0.75rem;
+}
+
+.ald-test-attempts-remaining {
+  color: #f59e0b;
+}
+
+.ald-test-attempts-exhausted {
+  color: #ef4444;
+  font-weight: 500;
+}
+
+.ald-test-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.ald-test-btn-secondary {
+  background: transparent !important;
+  border: 1px solid var(--ald-border) !important;
+  color: var(--ald-text-primary) !important;
+}
+
+.ald-test-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.ald-test-passed {
+  border-color: rgba(16, 185, 129, 0.4) !important;
+  color: #10b981 !important;
+}
+
+.ald-test-credits-badge {
+  margin-left: 0.5rem;
+  font-size: 0.8rem;
+  opacity: 0.8;
 }

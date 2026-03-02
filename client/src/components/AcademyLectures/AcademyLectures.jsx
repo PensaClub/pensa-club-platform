@@ -9,6 +9,7 @@ import AcademyLecturesSkeleton from './AcademyLecturesSkeleton/AcademyLecturesSk
 import './academyLectures.css';
 import { useAcademyCourses } from '../contexts/AcademyCoursesProvider';
 import { useAuthContext } from '../contexts/UserContext';
+import SEOHead from '../SEO/SEOHead';
 
 // Цветова схема за категории
 const LECTURE_CATEGORY_COLORS = {
@@ -185,6 +186,52 @@ export const AcademyLectures = () => {
     return { total: lectures.length, live, upcoming, recordings, totalCredits };
   }, [lectures]);
 
+  // SEO meta data
+  const metaData = useMemo(() => {
+    const siteName = 'DigiBridge Academy';
+    let title, description;
+
+    if (searchQuery) {
+      title = t('academyLecturesSeo.searchTitle', { term: searchQuery, defaultValue: `Търсене: ${searchQuery} | Лекции | ${siteName}` });
+      description = t('academyLecturesSeo.searchDescription', { term: searchQuery, count: filteredLectures.length, defaultValue: `Намерени ${filteredLectures.length} лекции за "${searchQuery}" в ${siteName}.` });
+    } else if (selectedCategory) {
+      title = t('academyLecturesSeo.categoryTitle', { category: selectedCategory, defaultValue: `Лекции по ${selectedCategory} | ${siteName}` });
+      description = t('academyLecturesSeo.categoryDescription', { category: selectedCategory, defaultValue: `Безплатни онлайн лекции по ${selectedCategory} за дигитална грамотност. ${siteName} — обучение за възрастни хора 60+.` });
+    } else {
+      title = t('academyLecturesSeo.listTitle', { defaultValue: `Лекции за дигитална грамотност | ${siteName}` });
+      description = t('academyLecturesSeo.listDescription', { defaultValue: 'Безплатни онлайн лекции за дигитална грамотност, интернет сигурност и технологии. DigiBridge Academy — обучение за възрастни хора 60+ с квалифицирани лектори.' });
+    }
+
+    return {
+      title,
+      description,
+      keywords: 'лекции, дигитална грамотност, DigiBridge Academy, Pensa Club, безплатни лекции, обучение, пенсионери, 60+, интернет сигурност'
+    };
+  }, [searchQuery, selectedCategory, filteredLectures.length, t]);
+
+  const structuredData = useMemo(() => ({
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": metaData.title,
+    "description": metaData.description,
+    "url": window.location.href,
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "Pensa Club",
+      "url": "https://pensa.club"
+    },
+    "provider": {
+      "@type": "EducationalOrganization",
+      "name": "DigiBridge Academy",
+      "url": "https://pensa.club/academy",
+      "sameAs": ["https://www.facebook.com/profile.php?id=61578204366479"]
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": window.location.href
+    }
+  }), [metaData]);
+
   // Format date for schedule
   const formatScheduleDate = useCallback((dateStr) => {
     const date = new Date(dateStr);
@@ -248,6 +295,14 @@ export const AcademyLectures = () => {
 
   return (
     <div className="al">
+      <SEOHead
+        title={metaData.title}
+        description={metaData.description}
+        keywords={metaData.keywords}
+        image="/images/digibridge/hero-image.jpg"
+        type="website"
+        structuredData={structuredData}
+      />
       {/* ========== HERO SECTION ========== */}
       <section className="al-hero">
         <div className="al-hero-bg">

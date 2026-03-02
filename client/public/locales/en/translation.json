@@ -14123,13 +14123,24 @@
       "creditsEarned": "credits",
       "backToLesson": "Back to lesson",
       "tryAgain": "Try again",
-      "attemptInfo": "Attempt {{current}} of {{max}}"
+      "attemptInfo": "Attempt {{current}} of {{max}}",
+      "backToLecture": "Back to lecture"
     }
   },
   "results": {
     "wrong": "Wrong",
     "continueCourse": "Continue with course",
     "noMoreAttempts": "No more attempts"
+  },
+  "academyCoursesSeo": {
+    "listTitle": "Digital Literacy Courses | DigiBridge Academy",
+    "listDescription": "Free online courses on digital literacy, internet security, and technology. DigiBridge Academy — education for seniors 60+.",
+    "categoryTitle": "{{category}} Courses | DigiBridge Academy",
+    "categoryDescription": "Free online {{category}} courses for digital literacy. DigiBridge Academy — education for seniors 60+.",
+    "searchTitle": "Search: {{term}} | Courses | DigiBridge Academy",
+    "searchDescription": "Found {{count}} courses for \"{{term}}\" in DigiBridge Academy.",
+    "pageTitle": "Courses - Page {{page}} | DigiBridge Academy",
+    "loading": "Loading... | DigiBridge Academy"
   },
   "academyLectures": {
     "hero": {
@@ -14212,7 +14223,9 @@
       "minutes": "min"
     },
     "actions": {
-      "takeTest": "Take the test"
+      "takeTest": "Take the test",
+      "testPassed": "Passed",
+      "retakeTest": "Try again"
     },
     "chat": {
       "title": "Live chat",
@@ -15371,20 +15384,40 @@
       "invalidUrl": "Invalid URL"
     }
   },
+  "academyLecturesSeo": {
+    "listTitle": "Digital Literacy Lectures | DigiBridge Academy",
+    "listDescription": "Free online lectures on digital literacy, internet security, and technology. DigiBridge Academy — education for seniors 60+ with qualified lecturers.",
+    "categoryTitle": "{{category}} Lectures | DigiBridge Academy",
+    "categoryDescription": "Free online {{category}} lectures for digital literacy. DigiBridge Academy — education for seniors 60+.",
+    "searchTitle": "Search: {{term}} | Lectures | DigiBridge Academy",
+    "searchDescription": "Found {{count}} lectures for \"{{term}}\" in DigiBridge Academy.",
+    "loading": "Loading... | DigiBridge Academy"
+  },
   "academyLectureDetails": {
-  "lecturer": {
-    "title": "Lecturer",
-    "titlePlural": "Lecturers",
-    "alsoParticipate": "Also participating"
-  },
-  "roles": {
-    "lecturer": "Lecturer",
-    "mentor": "Mentor",
-    "assistant": "Assistant",
-    "guest": "Guest"
-  },
-  "course": {
-    "module": "Module"
+    "lecturer": {
+      "title": "Lecturer",
+      "titlePlural": "Lecturers",
+      "alsoParticipate": "Also participating"
+    },
+    "roles": {
+      "lecturer": "Lecturer",
+      "mentor": "Mentor",
+      "assistant": "Assistant",
+      "guest": "Guest"
+    },
+    "course": {
+      "module": "Module"
+    },
+    "test": {
+      "testPassed": "Test passed!",
+      "testFailed": "Test not passed",
+      "correctAnswers": "correct answers",
+      "creditsEarned": "earned",
+      "attempts": "Attempts",
+      "remaining": "Remaining",
+      "noMoreAttempts": "No more attempts",
+      "maxAttempts": "Max attempts",
+      "hintFree": "Watch the lecture to unlock the test."
+    }
   }
-}
 }

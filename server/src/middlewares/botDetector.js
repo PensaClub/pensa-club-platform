@@ -1,6 +1,6 @@
 // server/src/middleware/botDetector.js
 
-const { article, mainImage, project, initiative, Club, mentor, image, publication, story } = require('../sequelize/models');
+const { article, mainImage, project, initiative, Club, mentor, image, publication, story, course, lecture } = require('../sequelize/models');
 const generateArticleMetaHTML = require('../utils/metaGenerator');
 const generateProjectMetaHTML = require('../utils/projectMetaGenerator');
 const generateInitiativeMetaHTML = require('../utils/initiativeMetaGenerator');
@@ -10,6 +10,8 @@ const generateMentorMetaHTML = require('../utils/mentorMetaGenerator');
 const generateGamesMetaHTML = require('../utils/gamesMetaGenerator');
 const generatePublicationMetaHTML = require('../utils/publicationMetaGenerator');
 const generateStoryMetaHTML = require('../utils/storyMetaGenerator');
+const { generateCourseMetaHTML, generateCoursesListMetaHTML } = require('../utils/courseMetaGenerator');
+const { generateLectureMetaHTML, generateLecturesListMetaHTML } = require('../utils/lectureMetaGenerator');
 const geoip = require('geoip-lite');
 
 /**
@@ -168,6 +170,10 @@ async function botDetector(req, res, next) {
     const gamesMatch = req.path.match(/^\/games$/);
     const publicationMatch = req.path.match(/^\/publications\/([a-zA-Z0-9-]+)$/);
     const storyMatch = req.path.match(/^\/stories\/([a-zA-Z0-9-]+)$/);
+    const coursesListMatch = req.path.match(/^\/academy\/courses$/);
+    const courseMatch = req.path.match(/^\/academy\/courses\/([a-zA-Z0-9-]+)$/);
+    const lecturesListMatch = req.path.match(/^\/academy\/lectures$/);
+    const lectureMatch = req.path.match(/^\/academy\/lectures\/([a-zA-Z0-9-]+)$/);
 
     try {
         // ==================== ARTICLE ====================
@@ -417,6 +423,93 @@ if (storyMatch) {
 
             const html = generateMentorMetaHTML(foundMentor);
             console.log('📤 Sending mentor HTML to bot');
+            return res.send(html);
+        }
+
+        // ==================== COURSES LIST (СТАТИЧНА) ====================
+        if (coursesListMatch) {
+            console.log('📚 Processing COURSES LIST page');
+
+            await logBotRequest(botName, 'page', null, 'academy-courses', userAgent, clientIP);
+
+            const html = generateCoursesListMetaHTML();
+            console.log('📤 Sending courses list HTML to bot');
+            return res.send(html);
+        }
+
+        // ==================== COURSE DETAIL ====================
+        if (courseMatch) {
+            const slug = courseMatch[1];
+            console.log('📚 Processing COURSE:', slug);
+
+            const foundCourse = await course.findOne({
+                where: { slug },
+                attributes: [
+                    'id', 'name', 'slug', 'shortDescription', 'description',
+                    'category', 'tags', 'difficultyLevel', 'estimatedHours',
+                    'thumbnailUrl', 'enrolledCount', 'rating', 'maxCredits',
+                    'publishedAt', 'createdAt', 'updatedAt'
+                ]
+            });
+
+            if (!foundCourse) {
+                console.log('❌ Course not found:', slug);
+                return next();
+            }
+
+            console.log('✅ Course found:', foundCourse.name);
+
+            await logBotRequest(botName, 'course', foundCourse.id, foundCourse.slug, userAgent, clientIP);
+
+            const html = generateCourseMetaHTML(foundCourse);
+            console.log('📤 Sending course HTML to bot');
+            return res.send(html);
+        }
+
+        // ==================== LECTURES LIST (СТАТИЧНА) ====================
+        if (lecturesListMatch) {
+            console.log('🎤 Processing LECTURES LIST page');
+
+            await logBotRequest(botName, 'page', null, 'academy-lectures', userAgent, clientIP);
+
+            const html = generateLecturesListMetaHTML();
+            console.log('📤 Sending lectures list HTML to bot');
+            return res.send(html);
+        }
+
+        // ==================== LECTURE DETAIL ====================
+        if (lectureMatch) {
+            const slug = lectureMatch[1];
+            console.log('🎤 Processing LECTURE:', slug);
+
+            const foundLecture = await lecture.findOne({
+                where: { slug },
+                include: [
+                    {
+                        model: mentor,
+                        as: 'lecturer',
+                        attributes: ['id', 'name', 'photoUrl', 'specialization']
+                    }
+                ],
+                attributes: [
+                    'id', 'title', 'slug', 'shortDescription', 'description',
+                    'category', 'tags', 'thumbnailUrl', 'durationMinutes',
+                    'scheduledDate', 'isFree', 'rating', 'registeredCount',
+                    'publishedAt', 'createdAt', 'updatedAt'
+                ]
+            });
+
+            if (!foundLecture) {
+                console.log('❌ Lecture not found:', slug);
+                return next();
+            }
+
+            console.log('✅ Lecture found:', foundLecture.title);
+
+            await logBotRequest(botName, 'lecture', foundLecture.id, foundLecture.slug, userAgent, clientIP);
+
+            const html = generateLectureMetaHTML(foundLecture);
+            console.log('📤 Sending lecture HTML to bot');
             return res.send(html);
         }
 

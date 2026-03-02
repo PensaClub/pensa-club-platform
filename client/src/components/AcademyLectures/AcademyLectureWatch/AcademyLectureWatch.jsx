@@ -67,7 +67,7 @@ export const AcademyLectureWatch = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { isAuthentication, userData } = useAuthContext();
-  const { getLectureBySlug, isLoading } = useAcademyCourses();
+  const { getLectureBySlug, getLectureTestStatus, isLoading } = useAcademyCourses(); // ПРОМЕНЕНО
 
   // State
   const [lecture, setLecture] = useState(null);
@@ -75,6 +75,7 @@ export const AcademyLectureWatch = () => {
   const [isTheaterMode, setIsTheaterMode] = useState(false);
   const [chatMessages, setChatMessages] = useState([]);
   const [chatInput, setChatInput] = useState('');
+  const [testStatus, setTestStatus] = useState(null); // НОВО
 
   // Refs
   const loadingRef = useRef(false);
@@ -90,6 +91,16 @@ export const AcademyLectureWatch = () => {
         const response = await getLectureBySlug(slug);
         const lectureData = response.lecture || response;
         setLecture(lectureData);
+
+        // НОВО — зареди тест статус
+        if (lectureData.hasTest && isAuthentication) {
+          try {
+            const status = await getLectureTestStatus(lectureData.id);
+            setTestStatus(status);
+          } catch (err) {
+            setTestStatus(null);
+          }
+        }
       } catch (err) {
         console.error('Error loading lecture:', err);
         setError(err.message);
@@ -108,7 +119,12 @@ export const AcademyLectureWatch = () => {
   const videoUrl = lecture?.videoUrl || lecture?.meetingLink;
   const embedUrl = isYouTube ? getYouTubeEmbedUrl(videoUrl, true) : null;
   const hasVideo = !!embedUrl || !!videoUrl;
-  const canTakeTest = lecture?.hasTest && (status === 'recording' || status === 'completed');
+
+  // ПРОМЕНЕНО — ползва реален тест статус
+  const hasRealTest = lecture?.hasTest && testStatus?.hasTest && testStatus?.test;
+  const testPassed = testStatus?.hasPassedTest;
+  const testBestScore = testStatus?.bestAttempt?.score ?? null;
+  const canTakeTest = hasRealTest && (testStatus?.testAccessible || testStatus?.totalAttempts > 0);
 
   // Handlers
   const handleSendMessage = (e) => {
@@ -277,13 +293,20 @@ export const AcademyLectureWatch = () => {
               </div>
             </div>
 
-            {/* Actions */}
+            {/* Actions — ПРОМЕНЕНО */}
             <div className="alw-video-actions">
               {canTakeTest && (
-                <button className="alw-test-btn" onClick={handleGoToTest}>
-                  <span>📝</span>
-                  {t('academyLectureWatch.actions.takeTest')}
-                  {lecture.creditsForTest > 0 && (
+                <button
+                  className={`alw-test-btn ${testPassed ? 'alw-test-btn--passed' : ''}`}
+                  onClick={handleGoToTest}
+                >
+                  <span>{testPassed ? '✅' : '📝'}</span>
+                  {testPassed
+                    ? `${t('academyLectureWatch.actions.testPassed', 'Преминат')} ${Math.round(testBestScore)}%`
+                    : testStatus?.totalAttempts > 0
+                      ? t('academyLectureWatch.actions.retakeTest', 'Опитай отново')
+                      : t('academyLectureWatch.actions.takeTest', 'Реши теста')}
+                  {!testPassed && lecture.creditsForTest > 0 && (
                     <span className="alw-test-credits">+{lecture.creditsForTest} 🪙</span>
                   )}
                 </button>

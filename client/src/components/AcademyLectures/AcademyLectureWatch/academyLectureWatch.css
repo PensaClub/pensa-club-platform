@@ -832,3 +832,8 @@
 [data-theme="light"] .alw-error p {
     color: #475569;
 }
+.alw-test-btn--passed {
+  background: rgba(16, 185, 129, 0.15) !important;
+  border-color: rgba(16, 185, 129, 0.4) !important;
+  color: #10b981 !important;
+}
