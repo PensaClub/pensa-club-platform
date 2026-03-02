@@ -1,11 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
 import { Calendar, Clock, Video, Users, MapPin, ArrowRight } from 'lucide-react';
 import './studentUpcomingEvents.css';
 
 const StudentUpcomingEvents = ({ events = [] }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('student-dashboard');
 
   const getEventIcon = (type) => {
     switch (type) {

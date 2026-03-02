@@ -14712,5 +14712,9 @@
       "maxAttempts": "Max. Versuche",
       "hintFree": "Sehen Sie sich die Vorlesung an, um den Test freizuschalten."
     }
+  },
+  "chatWidget": {
+    "help": "Hilfe",
+    "ariaLabel": "Hilfe-Chat öffnen"
   }
 }

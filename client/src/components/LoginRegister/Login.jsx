@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { LocalizedLink as Link } from '../LocalizedLink/LocalizedLink';
 import { useAuthContext } from '../contexts/UserContext';
 import { useForm } from '../hooks/useForm';
 import { useTranslation } from 'react-i18next';
@@ -10,7 +10,7 @@ import './modernAuth.css';
 import { CustomGoogleButton } from './CustomGoogleButton';
 
 export const Login = ({ navToRegister }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('auth');
   const { onLoginSubmit } = useAuthContext();
   const { handleGoogleLogin, isProcessing } = useGoogleAuth();
   const [showPassword, setShowPassword] = useState(false);

@@ -10,7 +10,7 @@ export const What = ({ isOpen, onClose, setFilters, filters }) => {
   const [openCategories, setOpenCategories] = useState(false);
   const [searchType, setSearchType] = useState(filters.category);
   const { searchCriteria } = useCommunityContext();
-  const { t } = useTranslation();
+  const { t } = useTranslation(['community', 'auth']);
 
   const handleCategory = (category) => {
     setFilters((prev) => ({

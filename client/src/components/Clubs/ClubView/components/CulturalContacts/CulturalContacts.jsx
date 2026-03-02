@@ -29,7 +29,7 @@ import {
 import './culturalContacts.css';
 
 export const CulturalContacts = ({ club }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('clubs');
   const [contactForm, setContactForm] = useState({
     name: '',
     email: '',

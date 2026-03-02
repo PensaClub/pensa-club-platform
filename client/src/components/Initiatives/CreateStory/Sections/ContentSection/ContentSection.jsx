@@ -24,7 +24,7 @@ const ContentSection = ({
     updateSectionImageCaption,
     clearSectionImages,
 }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const sectionEditorsRef = useRef({});
     const sectionRefs = useRef({});
     const [lastSectionCount, setLastSectionCount] = useState(values.sections?.length || 0);

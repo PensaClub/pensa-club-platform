@@ -18,7 +18,7 @@ const LECTURE_TYPES = ['lecture', 'webinar', 'workshop', 'masterclass']; // НО
 const VIDEO_PROVIDERS = ['youtube', 'vimeo', 'zoom', 'meet', 'teams', 'custom']; // НОВО
 
 const EditLecture = () => { // НОВО
-    const { t } = useTranslation();
+    const { t } = useTranslation('academy-admin');
 
     const {
         lectureData,

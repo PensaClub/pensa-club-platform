@@ -20,7 +20,7 @@ const DEFAULTS = {
 const KEYS = Object.keys(DEFAULTS);
 
 const SnowfallConfig = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('admin');
     const { settings, updateSettings } = useSiteSettingsAdminContext();
     const [local, setLocal] = useState({});
     const [isSaving, setIsSaving] = useState(false);

@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import './mentorDetailModal.css';
 
 export const MentorDetailModal = ({ mentor, onClose }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation(['digibridge-mentor', 'digibridge']);
     const { getApprovedMentorReviews, getMentorReviewStats, applyForMentor } = useAcademy();
     const { isAuthentication, isMentor, isAdmin } = useAuthContext();
 

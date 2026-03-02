@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { LocalizedLink as Link } from '../LocalizedLink/LocalizedLink';
 import { ArrowLeft, Settings } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useSiteSettingsAdminContext } from '../contexts/SiteSettingsAdminContext';
@@ -12,7 +12,7 @@ import ScrollToTop from '../ScrollToTop/ScrollToTop';
 import './siteSettingsAdmin.css';
 
 const SiteSettingsAdmin = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('admin');
     const { settings, isLoading, loadingKeys, updateSetting } = useSiteSettingsAdminContext();
 
     const handleToggle = async (key, value) => {

@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../../LocalizedLink/LocalizedLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarAlt, faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 import './recentArticles.css';
@@ -8,7 +8,7 @@ import { filterArticles } from '../../articleUtils/search';
 import { useTranslation } from 'react-i18next';
 
 const RecentArticles = ({ currentArticleId }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
   const [recentArticles, setRecentArticles] = useState([]);
   const [filteredArticles, setFilteredArticles] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');

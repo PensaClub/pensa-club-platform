@@ -18,7 +18,7 @@ import ArticlesListSkeleton from './ArticlesListSkeleton/ArticlesListSkeleton';
 import { TextZoom } from '../../TextZoom/TextZoom';
 import SEOHead from '../../SEO/SEOHead';
 const ArticlesList = () => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('content');
   const [allArticles, setAllArticles] = useState([]);
   const [featuredArticle, setFeaturedArticle] = useState(null);
   const [sliderArticles, setSliderArticles] = useState([]);

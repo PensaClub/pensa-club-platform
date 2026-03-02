@@ -29,7 +29,7 @@ const MembershipManager = ({
   onMembershipChange, 
   disabled = false 
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('clubs');
   
   const [editingRole, setEditingRole] = useState(null);
   const [editingFee, setEditingFee] = useState(null);

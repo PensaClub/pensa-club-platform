@@ -54,7 +54,8 @@ import { notify } from '../../../../utils/notify.jsx';
 import { createSlateEditor, createSlateEditorState } from '../Utils/initiativeEditorUtils.jsx';
 import { calculateInitiativeProgress, getProgressBreakdown } from '../Utils/formProgressUtils';
 import { useInitiativeContext } from '../../../contexts/InitiativeProvider';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../../../hooks/useLocalizedNavigate';
 import { LocalStorageStatus } from '../LocalStorageStatus/LocalStorageStatus';
 import SlateErrorBoundary from '../SlateErrorBoundary/SlateErrorBoundary';
 import { getSlateTextLength } from '../Utils/slateUtils.js';
@@ -63,7 +64,7 @@ import { htmlToSlate, isHtmlContent } from '../Utils/htmlToSlate.js';
 
 const InitiativeCreateForm = ({ initialValues, onSubmitHandler }) => {
 
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     // 🎯 Hook
     const {
         values,
@@ -168,7 +169,7 @@ const InitiativeCreateForm = ({ initialValues, onSubmitHandler }) => {
     const [searchResults, setSearchResults] = useState([]);
     const [isSearching, setIsSearching] = useState(false);
     const { getAllInitiatives, clearLocalStorageDraft } = useInitiativeContext();
-    const navigate = useNavigate();
+    const navigate = useLocalizedNavigate();
     const location = useLocation();
     const [localStorageChecked, setLocalStorageChecked] = useState(false);
     const [showLocalStoragePrompt, setShowLocalStoragePrompt] = useState(false)

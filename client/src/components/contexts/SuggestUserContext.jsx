@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 import './error.css';
 import { Loader } from '../Loader/Loader';
 import { notify } from '../../utils/notify.jsx';
@@ -15,7 +15,7 @@ export const SuggestUserProvider = ({ children }) => {
 
   const suggestUserService = suggestUserServiceFactory();
 
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
 
   const showErrorAndSetTimeouts = (error) => {
     setErrorMessage(error);

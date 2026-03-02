@@ -9,7 +9,7 @@ export const SearchWhere = ({ isOpen, onClose, setFilters, filters }) => {
     const { fetchRegions, fetchSubregions, regions, subregions } = useCommunityContext();
     const [selectedRegion, setSelectedRegion] = useState('');
     const [selectedSubregion, setSelectedSubregion] = useState('');
-    const { t, i18n } = useTranslation();
+    const { t, i18n } = useTranslation('community');
     const currentLanguage = i18n.language;
 
     useEffect(() => {

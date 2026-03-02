@@ -15,7 +15,7 @@ import { ReviewDetailsModal } from './ReviewDetailsModal/ReviewDetailsModal';
 import { ReviewActionModal } from './ReviewActionModal/ReviewActionModal';
 
 export const ReviewsManagement = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('digibridge');
     const {
         getPendingReviews,
         approveReview,

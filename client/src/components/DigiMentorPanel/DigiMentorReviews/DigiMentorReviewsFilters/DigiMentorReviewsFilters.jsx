@@ -12,7 +12,7 @@ export const DigiMentorReviewsFilters = ({
   onSearchChange,
   totalResults
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-mentor');
 
   const ratingFilters = [
     { value: 'all', label: t('digiMentorReviewsFilters.allRatings'), icon: '⭐' },

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import './academyProgramTracks.css';
 
 export const AcademyProgramTracks = ({ programs = [], selectedProgram, onProgramSelect }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('academy');
 
   return (
     <div className="academyProgramTracks">

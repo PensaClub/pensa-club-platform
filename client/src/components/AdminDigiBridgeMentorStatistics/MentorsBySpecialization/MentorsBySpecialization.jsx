@@ -6,7 +6,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import './mentorsBySpecialization.css';
 
 export const MentorsBySpecialization = ({ data }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge');
 
   // ✅ ВЕЧЕ НЕ ПРАВИМ useMemo - ДАННИТЕ ИДВАТ ГОТОВИ
   const specializationData = data || [];

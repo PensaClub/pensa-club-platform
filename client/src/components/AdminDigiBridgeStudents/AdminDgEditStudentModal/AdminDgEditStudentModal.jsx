@@ -7,7 +7,7 @@ import './adminDgEditStudentModal.css';
 export const AdminDgEditStudentModal = ({ student, onClose, onSave }) => {
   if (!student) return null;
 
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-students');
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState({});
   const [formData, setFormData] = useState({

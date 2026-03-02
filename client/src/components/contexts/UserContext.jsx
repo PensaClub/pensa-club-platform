@@ -2,7 +2,8 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { userServiceFactory } from '../Services/userService';
 import { useLocalStorage } from '../hooks/useLocalStorage';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 import './error.css';
 import { Loader } from '../Loader/Loader';
 import { loadAddressData } from '../../utils/loadAddressData';
@@ -25,7 +26,7 @@ export const UserProvider = ({ children }) => {
   const userService = userServiceFactory(isAuth.token);
   const [redirectPath, setRedirectPath] = useLocalStorage('redirectPath', null);
   
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
   const location = useLocation();
   
   useEffect(() => {

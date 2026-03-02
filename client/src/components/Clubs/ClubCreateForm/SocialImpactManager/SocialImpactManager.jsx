@@ -31,7 +31,7 @@ const SocialImpactManager = ({
   onSocialImpactChange, 
   disabled = false 
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('clubs');
   
   const [activeTab, setActiveTab] = useState('volunteering');
   const [showAddVolunteeringForm, setShowAddVolunteeringForm] = useState(false);

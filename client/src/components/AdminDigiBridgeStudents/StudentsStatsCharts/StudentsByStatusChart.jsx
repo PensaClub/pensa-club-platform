@@ -12,7 +12,7 @@ const COLORS = {
 };
 
 export const StudentsByStatusChart = ({ data, loading }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-students');
 
   if (loading) {
     return (

@@ -1,11 +1,11 @@
 // components/ClubCardPromo/ClubCardPromo.jsx
 import React, { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../../LocalizedLink/LocalizedLink';
 import { useTranslation } from 'react-i18next';
 import './clubCardPromo.css';
 
 const ClubCardPromo = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
   const promoRef = useRef(null);
   const cardImageRef = useRef(null);
   const [isHovering, setIsHovering] = useState(false);

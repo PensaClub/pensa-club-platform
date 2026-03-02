@@ -7,7 +7,7 @@ import { partnersData } from '../../Home/PartnersShowcase/partnersData';
 import './aboutPartnersTimeline.css';
 
 export const AboutPartnersTimeline = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('home');
   const sectionRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
   const [visibleNodes, setVisibleNodes] = useState(new Set());

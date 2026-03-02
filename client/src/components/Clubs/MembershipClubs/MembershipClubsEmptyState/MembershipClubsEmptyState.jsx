@@ -17,7 +17,7 @@ const MembershipClubsEmptyState = ({
     onDiscoverClubs, 
     onClearFilters 
 }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('clubs');
 
     // Определи типа на празното състояние
     const getEmptyStateType = () => {

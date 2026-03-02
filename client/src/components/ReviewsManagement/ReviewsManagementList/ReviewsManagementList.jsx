@@ -12,7 +12,7 @@ export const ReviewsManagementList = ({
   onReject, 
   onDelete 
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge');
 
   const getStatusBadgeClass = (status) => {
     const baseClass = 'reviews-management-pensa-club-list-status-badge';

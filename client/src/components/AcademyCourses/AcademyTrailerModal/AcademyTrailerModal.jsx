@@ -29,7 +29,7 @@ export const AcademyTrailerModal = ({
   courseTitle,
   accentColor = '#ff6347'
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('academy');
 
   // Handle Escape key
   const handleKeyDown = useCallback((e) => {

@@ -1,10 +1,10 @@
 import { truncateText } from '../../../../utils/truncateText';
 import './projectCard.css';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../../LocalizedLink/LocalizedLink';
 
 export const ProjectCard = ({ project }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
 
   const getStatusColor = (status) => {
     switch (status) {

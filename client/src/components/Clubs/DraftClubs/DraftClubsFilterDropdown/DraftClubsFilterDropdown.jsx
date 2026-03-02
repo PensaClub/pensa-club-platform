@@ -10,7 +10,7 @@ import {
 import './draftClubsFilterDropdown.css';
 
 const DraftClubsFilterDropdown = ({ value, onChange, options = [] }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('clubs');
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
 

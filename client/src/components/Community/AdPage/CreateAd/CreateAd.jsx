@@ -10,14 +10,14 @@ import { useFormCreate } from "../../../hooks/useFormCreate";
 import { useTranslation } from "react-i18next";
 import { useAuthContext } from "../../../contexts/UserContext";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocalizedNavigate } from '../../../../hooks/useLocalizedNavigate';
 import DatePicker from "react-datepicker";
 import { v4 } from "uuid";
 import { TagInput } from "./TagInput";
 import { notify } from "../../../../utils/notify.jsx";
 
 export const CreateAd = () => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('community');
   const [fieldDefinitions, setFieldDefinitions] = useState({});
   // eslint-disable-next-line no-unused-vars
   const [towns, setTowns] = useState([]);
@@ -37,7 +37,7 @@ export const CreateAd = () => {
   } = useCommunityContext();
   const { isFinish, profileData } = useAuthContext();
   const currentLanguage = i18n.language;
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
   const getEmailPrefix = (email) => email.split("@")[0];
 
   const emailPrefix = getEmailPrefix(profileData.email);

@@ -9,7 +9,7 @@ import { useCommunityContext } from '../../contexts/CommunityContext';
 
 export const AdminSubscription = ({setAllSubscriptionEmails}) => {
   const { getSubscribeEmails, subscribeEmails } = useCommunityContext();
-  const { t } = useTranslation();
+  const { t } = useTranslation(['admin', 'auth']);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredEmails, setFilteredEmails] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);

@@ -39,7 +39,7 @@ import {
 import './socialContacts.css';
 
 export const SocialContacts = ({ club }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('clubs');
   const [showContactForm, setShowContactForm] = useState(false);
   const [expandedFaq, setExpandedFaq] = useState(null);
   const [contactForm, setContactForm] = useState({

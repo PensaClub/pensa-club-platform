@@ -60,7 +60,7 @@ const iconMap = {
 };
 
 export const CulturalAbout = ({ club }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('clubs');
   const [showJoinModal, setShowJoinModal] = useState(false);
   const [joinForm, setJoinForm] = useState({
     name: '',

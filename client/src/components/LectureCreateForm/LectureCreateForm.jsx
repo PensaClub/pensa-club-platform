@@ -21,15 +21,15 @@ import {
 } from 'lucide-react';
 import useLectureCreateForm from '../hooks/useLectureCreateForm';
 import { AcademyMentorPicker } from '../AcademyCourses/AcademyMentorPicker/AcademyMentorPicker';
-import { useNavigate } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 import './lectureCreateForm.css';
 
 const LECTURE_TYPES = ['lecture', 'webinar', 'workshop', 'masterclass'];
 const VIDEO_PROVIDERS = ['youtube', 'vimeo', 'zoom', 'meet', 'teams', 'custom'];
 
 const LectureCreateForm = () => {
-    const { t } = useTranslation();
-    const navigate = useNavigate();
+    const { t } = useTranslation('academy-admin');
+    const navigate = useLocalizedNavigate();
 
      const {
         isEditMode,

@@ -56,7 +56,7 @@ import {
 import './SportsHealthTracking.css';
 
 export const SportsHealthTracking = ({ club }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('clubs');
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedMetric, setSelectedMetric] = useState('heartRate');
   const [timeframe, setTimeframe] = useState('week');

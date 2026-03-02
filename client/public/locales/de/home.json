@@ -1,0 +1,352 @@
+{
+  "home": {
+    "our_latest_ads": "Unsere neuesten Anzeigen",
+    "see_more_ads": "Weitere Anzeigen ansehen",
+    "town": "Stadt",
+    "no_results": "Keine Ergebnisse gefunden",
+    "featuredArticles": {
+      "title": "Bereichern Sie Ihr Wissen mit unseren Artikeln",
+      "subtitle": "Interaktive Reise in die Welt der digitalen Kompetenz",
+      "readMore": "Mehr lesen",
+      "viewAllArticles": "Alle Artikel"
+    },
+    "showcase": {
+      "title": "Initiativen, Projekte und Geschichten",
+      "subtitle": "Entdecken Sie, wie wir durch innovative Projekte und inspirierende Geschichten Veränderungen in der Gemeinschaft schaffen",
+      "initiatives": "Initiativen",
+      "projects": "Projekte",
+      "stories": "Geschichten",
+      "initiative": "Initiative",
+      "project": "Projekt",
+      "story": "Geschichte",
+      "learnMore": "Mehr erfahren",
+      "viewAll": "Alle ansehen",
+      "noDescription": "Keine Beschreibung",
+      "noInitiatives": "Keine Initiativen verfügbar",
+      "noProjects": "Keine Projekte verfügbar",
+      "noStories": "Keine Geschichten verfügbar"
+    },
+    "constellation": {
+      "title": "Kosmos der Möglichkeiten",
+      "subtitle": "Erkunden Sie unsere Galaxie von Initiativen, Projekten und Geschichten",
+      "initiative": "Initiative",
+      "project": "Projekt",
+      "story": "Geschichte",
+      "clickToExplore": "Klicken Sie zum Erkunden",
+      "exploreUniverse": "Das ganze Universum erkunden",
+      "controls": {
+        "title": "Kosmos filtern",
+        "all": "Alle",
+        "initiatives": "Initiativen",
+        "projects": "Projekte",
+        "stories": "Geschichten",
+        "hint": "Bewegen Sie den Cursor über die Sterne für mehr Informationen"
+      },
+      "legend": {
+        "title": "Navigationskompass",
+        "initiative": "Zentrale Sterne - die Hauptinitiativen",
+        "project": "Planeten - verbundene Projekte",
+        "story": "Kometen - inspirierende Geschichten",
+        "note": "Klicken Sie auf jeden Stern, um seine Geschichte zu erkunden"
+      },
+      "types": {
+        "initiative": "Initiative",
+        "project": "Projekt",
+        "story": "Geschichte"
+      }
+    }
+  },
+  "hero": {
+    "title-part1": "WÜRDIGES LEBEN",
+    "title-part2": "IM DRITTEN LEBENSABSCHNITT",
+    "slide-info": "Die Website befindet sich in der Entwicklung. Sie wird von Schülern der 10. und 11. Klasse entwickelt, die eine 'Brücke zwischen den Generationen' bauen. Langsam, unsicher, mit vielen Wendungen... aber wir alle genießen den WEG, DEN WIR GEMEINSAM GEHEN!",
+    "short-desc": "Jeder verdient es",
+    "desc": "Eine innovative Plattform, die eine Gemeinschaft von Menschen gleichen Alters mit gemeinsamen Interessen, neuen Ideen und neuem Wissen schafft!",
+    "testimonials": {
+      "first-revolution-title": "Erste Industrielle Revolution",
+      "first-revolution-desc": "Sie zeichnet sich durch die Einführung der Dampfmaschine aus, die zur Mechanisierung der Produktion und zur Entwicklung des Eisenbahntransports führte.",
+      "second-revolution-title": "Zweite Industrielle Revolution",
+      "second-revolution-desc": "Sie war geprägt von der weitreichenden Verbreitung von Elektrizität und Stromleitungen, was die Produktionseffizienz steigerte und das industrielle Wachstum stimulierte.",
+      "third-revolution-title": "Dritte Industrielle Revolution",
+      "third-revolution-desc": "Auch als Digitale Revolution bezeichnet, war diese Ära geprägt von der Einführung von Computern, dem Internet und der Automatisierung, die die Art und Weise, wie Produktionsprozesse verwaltet und kontrolliert wurden, radikal veränderte.",
+      "forth-revolution-title": "Revolution 4.0",
+      "forth-revolution-desc": "Fokussiert auf intelligente Fabriken, die das Internet der Dinge (IoT), automatisierte Entscheidungsfindung und maschinelles Lernen nutzen, um die Fertigungseffizienz weiter zu steigern.",
+      "fifth-revolution-title": "Revolution 5.0",
+      "fifth-revolution-desc": "Dies ist die neueste Entwicklungsstufe, die den Einsatz künstlicher Intelligenz nicht nur für die Automatisierung, sondern auch für die Integration menschlicher kreativer und analytischer Potentiale vorsieht."
+    },
+    "join-the-club": "Dem Club beitreten",
+    "play-pause": "Abspielen/Pause",
+    "sound": "Ton",
+    "fullscreen": "Vollbild"
+  },
+  "motto": {
+    "title1": "Gemeinschaft",
+    "title2": "Geistige Aktivität",
+    "title3": "Gesundheit",
+    "desc1": "Knüpfen Sie neue Kontakte, treten Sie Gruppen bei und teilen Sie Interessen.",
+    "desc2": "Stimulieren Sie das Denken, verbessern Sie das Gedächtnis, während Sie sich amüsieren und lernen.",
+    "desc3": "Gesunde Praktiken, Tipps und Ressourcen, die Ihnen helfen, besser zu leben.",
+    "about-btn": "Dem Club beitreten",
+    "suggestion-btn": "Einen Freund einladen",
+    "learn-more-btn": "Mehr erfahren",
+    "join-us-btn": "Mitmachen",
+    "main-title": "Was wir Ihnen anbieten"
+  },
+  "about": {
+    "nonprofit-badge": "Gemeinnützige Stiftung",
+    "title": "Unsere Mission",
+    "desc": "Eine innovative Plattform zu schaffen, ein Werkzeug zum Aufbau einer Gemeinschaft. Wir vereinen Menschen gleichen Alters mit gemeinsamen Interessen, neuen Ideen und Wissen. Wir streben danach, eine Gemeinschaft aufzubauen, die auf Interaktion und gegenseitiger Hilfe basiert. Das erwartete Ergebnis ist die Verbesserung der Lebensqualität durch aktive Teilnahme an der Gegenwart, Unterstützung beim Erwerb neuer Fähigkeiten und Interessen sowie die Förderung eines gesunden, erfüllten und würdigen Lebens.",
+    "ourVision": "Unsere Vision",
+    "visionDesc": "Unsere Vision ist eine Welt, in der das Alter kein Hindernis für die digitale Teilhabe ist. Wir schaffen eine Brücke zwischen den Generationen, wo ältere Menschen zugängliche Unterstützung beim Einstieg in die Technologien erhalten. Wir glauben, dass wir durch gegenseitige Hilfe und geteilte Erfahrungen eine Gemeinschaft aufbauen können, in der sich jeder, unabhängig von seinem Alter, in der digitalen Welt sicher fühlt.",
+    "logo_alt": "Pensa Logo",
+    "about_image_alt": "Über Pensa",
+    "vision_image_alt": "Ältere Menschen in der digitalen Welt",
+    "overlay_pensa": "Pensa",
+    "overlay_vision": "Vision",
+    "hero": {
+      "badge": "Über uns",
+      "title": "Pensa Stiftung und Pensa.club",
+      "subtitle": "Eine innovative Plattform zur Verbesserung der Lebensqualität älterer Menschen durch digitale Inklusion und aktive Gemeinschaft",
+      "stats": {
+        "community": "Gemeinschaft",
+        "communityDesc": "Wir vereinen Menschen gleichen Alters mit gemeinsamen Interessen",
+        "innovation": "Innovation",
+        "innovationDesc": "Wir schaffen eine Brücke zwischen den Generationen mit Technologie",
+        "support": "Unterstützung",
+        "supportDesc": "Zugängliche Hilfe für den Einstieg in die digitale Welt"
+      }
+    },
+    "platform": {
+      "label": "Die Plattform",
+      "title": "Pensa.club - Digitale Gemeinschaft",
+      "description": "Eine innovative, digitale und interaktive Plattform zur Verbesserung der Lebensqualität älterer Menschen",
+      "featuresTitle": "Was wir anbieten",
+      "features": {
+        "interactiveMap": {
+          "title": "Interaktive Karte",
+          "description": "Sehen Sie alle registrierten Rentner und Clubs auf einer interaktiven Karte von Bulgarien"
+        },
+        "announcements": {
+          "title": "Ankündigungen",
+          "description": "Plattform zum Teilen von Ankündigungen, Nachrichten und aktuellen Ereignissen"
+        },
+        "articles": {
+          "title": "Artikel und Schulungen",
+          "description": "Bildungsartikel und Schulungsmaterialien zu verschiedenen Themen"
+        },
+        "clubsMap": {
+          "title": "Clubkarte",
+          "description": "Finden Sie Clubs in ganz Bulgarien und bewerben Sie sich direkt über die Plattform"
+        },
+        "games": {
+          "title": "Online-Spiele",
+          "description": "Spielen Sie Schach, Backgammon, Sudoku, Solitär und andere lustige Spiele"
+        },
+        "mentorship": {
+          "title": "Mentoring-Programm",
+          "description": "Online- und Offline-Schulungen für sichere Internetnutzung"
+        }
+      },
+      "mission": {
+        "title": "Mission",
+        "description": "Rentnern in Bulgarien zu helfen, ihre Nutzung der digitalen Welt zu verbessern. Wir schaffen ein Werkzeug zum Aufbau einer Gemeinschaft, die Menschen mit gemeinsamen Interessen, neuen Ideen und Wissen vereint."
+      },
+      "vision": {
+        "title": "Vision",
+        "description": "Eine Welt, in der das Alter kein Hindernis für die digitale Inklusion ist. Wir schaffen eine Brücke zwischen den Generationen, wo ältere Menschen zugängliche Unterstützung beim Einstieg in die Technologie erhalten."
+      },
+      "goal": {
+        "title": "Ziel",
+        "description": "Verbesserung der Lebensqualität durch aktive Einbeziehung in die Moderne, Unterstützung beim Erwerb neuer Fähigkeiten und Förderung eines gesunden, erfüllten und würdigen Lebens."
+      }
+    },
+    "foundation": {
+      "label": "Die Stiftung",
+      "title": "Pensa Stiftung",
+      "description": "Gegründet mit der Mission, die Lebensqualität älterer Menschen durch digitale Inklusion und aktive Gemeinschaft zu verbessern",
+      "legalStatus": "Gemeinnützige Organisation im öffentlichen Interesse",
+      "eik": "UIC",
+      "missionTitle": "Unsere Mission",
+      "missionText": "Eine Gemeinschaft aufzubauen, die auf Interaktion und gegenseitiger Hilfe basiert. Wir streben danach, Menschen gleichen Alters mit gemeinsamen Interessen, neuen Ideen und Wissen zu vereinen und die aktive Teilnahme an der modernen Gesellschaft zu fördern.",
+      "valuesTitle": "Unsere Werte",
+      "values": {
+        "community": {
+          "title": "Gemeinschaft",
+          "description": "Wir bauen eine Brücke zwischen den Generationen durch gegenseitige Hilfe und gemeinsame Erfahrung"
+        },
+        "quality": {
+          "title": "Qualität",
+          "description": "Wir bieten hochwertige Dienstleistungen und Bildungsmaterialien"
+        },
+        "trust": {
+          "title": "Vertrauen",
+          "description": "Wir arbeiten transparent und verantwortungsbewusst für das Vertrauen unserer Gemeinschaft"
+        },
+        "care": {
+          "title": "Fürsorge",
+          "description": "Wir kümmern uns um jedes Mitglied unserer Gemeinschaft"
+        }
+      }
+    },
+    "team": {
+      "label": "Unser Team",
+      "title": "Lernen Sie das Team kennen",
+      "description": "Menschen mit Erfahrung und Leidenschaft, die daran arbeiten, das Leben älterer Menschen zu verbessern",
+      "contactEmail": "E-Mail senden",
+      "contactPhone": "Anrufen",
+      "sendMessage": "Nachricht senden",
+      "modalTitle": "Nachricht an {{name}}",
+      "members": {
+        "borislav": {
+          "role": "IT-Spezialist",
+          "bio": "Abschluss in Software Engineering mit JavaScript an der SoftUni im Jahr 2023 als Jahrgangsbester. Leitender IT-Berater bei der PENSA Stiftung und direkt an der Erstellung der Plattform pensa.club beteiligt. Zeichnet sich durch Ausdauer, Disziplin und Beständigkeit im Arbeitsprozess aus."
+        },
+        "lubima": {
+          "role": "Technische Mitarbeiterin",
+          "bio": "Abschluss an der Technischen Universität Sofia und über 25 Jahre Erfahrung im Handels- und Vertriebsbereich. Durchlief die Rollen als Produkt- und Marketingspezialistin und anschließend Marketingmanagerin bei Robert Bosch EOOD."
+        },
+        "lena": {
+          "role": "Vorstandsmitglied",
+          "bio": "Wirtschaftsstudium in Deutschland, zahlreiche Spezialisierungen im Personal- und Finanzmanagement. 30 Jahre lang Geschäftsführerin und Prokuristin bei Robert Bosch EOOD - einem Unternehmen der Bosch-Gruppe in Bulgarien."
+        },
+        "elina": {
+          "role": "Vorstandsvorsitzende",
+          "bio": "Gründerin der PENSA Stiftung. Expertin und Beraterin mit langjähriger Erfahrung im Nichtregierungssektor und bei internationalen Projekten."
+        }
+      },
+      "form": {
+        "from": "Von (Ihre E-Mail)",
+        "fromPlaceholder": "ihre@email.com",
+        "to": "An",
+        "toPlaceholder": "empfaenger@email.com",
+        "subject": "Betreff",
+        "subjectPlaceholder": "Nachrichtenbetreff",
+        "message": "Nachricht",
+        "messagePlaceholder": "Schreiben Sie Ihre Nachricht hier...",
+        "sending": "Wird gesendet...",
+        "send": "Nachricht senden",
+        "note": "Die Nachricht wird direkt an die E-Mail-Adresse des ausgewählten Teammitglieds gesendet"
+      }
+    },
+    "contact": {
+      "label": "Kontaktieren Sie uns",
+      "title": "Haben Sie Fragen?",
+      "description": "Kontaktieren Sie uns und wir beantworten gerne alle Ihre Fragen",
+      "info": {
+        "email": "E-Mail",
+        "website": "Webseite"
+      },
+      "form": {
+        "fields": {
+          "name": "Name",
+          "email": "E-Mail",
+          "subject": "Betreff",
+          "message": "Nachricht"
+        },
+        "placeholders": {
+          "name": "Ihr Name",
+          "email": "ihre@email.com",
+          "subject": "Nachrichtenbetreff",
+          "message": "Schreiben Sie Ihre Nachricht hier..."
+        },
+        "validation": {
+          "required": "Bitte füllen Sie alle erforderlichen Felder aus",
+          "invalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein"
+        },
+        "messages": {
+          "success": "Nachricht erfolgreich gesendet! Wir werden uns bald bei Ihnen melden.",
+          "error": "Beim Senden ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut."
+        },
+        "submitting": "Wird gesendet...",
+        "submit": "Nachricht senden"
+      }
+    }
+  },
+  "news-subscribe": {
+    "title": "Bleiben Sie auf dem Laufenden mit",
+    "desc": "Registrieren Sie sich für die neuesten Nachrichten, Updates und Tipps.",
+    "name-placeholder": "Name*",
+    "email-placeholder": "E-Mail-Adresse*",
+    "subscribe-btn": "Registrieren",
+    "errors": {
+      "required-field": "Das Feld ist erforderlich!",
+      "invalid-email": "Ungültige E-Mail-Adresse!"
+    }
+  },
+  "clubsShowcase": {
+    "badge": "Gemeinschaft",
+    "title": "Entdecken Sie unsere",
+    "titleHighlight": "Klubs",
+    "subtitle": "Treten Sie einer aktiven Gemeinschaft von Menschen bei, die Ihre Interessen und Leidenschaft für das Lernen teilen",
+    "explore": "Entdecken",
+    "viewAll": "Alle Klubs anzeigen",
+    "categories": {
+      "cultural": "Kulturell",
+      "sports": "Sport",
+      "social": "Sozial",
+      "educational": "Bildung",
+      "general": "Allgemein"
+    }
+  },
+  "partners": {
+    "label": "Partner",
+    "title": "Unsere Partner",
+    "subtitle": "Gemeinsam bauen wir eine Brücke zwischen den Generationen in der digitalen Welt",
+    "aboutTitle": "Partner & Unterstützung",
+    "aboutSubtitle": "Die Organisationen, die an unsere Mission glauben und uns beim Aufbau einer digitalen Brücke zwischen den Generationen unterstützen",
+    "mainPartner": "Hauptpartner",
+    "visitSite": "Webseite besuchen",
+    "cif": {
+      "description": "EThe implementation of the project 'Bridging Digital Transformation and Civic Participation (BRIDGE)"
+    },
+    "bosch": {
+      "description": "Eine internationale Stiftung, die sich weltweit für Gesundheit, Bildung und Zivilgesellschaft einsetzt"
+    },
+    "softuniBuditel": {
+      "description": "Ein Bildungsprogramm für digitale Kompetenz in kleinen Gemeinden in ganz Bulgarien"
+    },
+    "softuni": {
+      "description": "Führende Software-Universität in Bulgarien mit der Mission für qualitativ hochwertige IT-Ausbildung"
+    },
+    "sofiaMunicipality": {
+      "description": "Gemeinde Sofia — ein strategischer Partner für städtische Initiativen und Sozialprojekte"
+    },
+    "bgFundWomen": {
+      "description": "Eine Stiftung zur Unterstützung der Rechte und Stärkung von Frauen in Bulgarien"
+    },
+    "kingBaudouin": {
+      "description": "Eine belgische Stiftung, die CIF und Bürgerbeteiligungsinitiativen in Europa unterstützt"
+    },
+    "austausch": {
+      "description": "Eine deutsche Organisation für internationalen Austausch und Bildungskooperation"
+    },
+    "costEffective": {
+      "description": "Ein Softwareunternehmen, das technologische Unterstützung für die Plattform bereitstellt"
+    },
+    "coalitionMediaLiteracy": {
+      "description": "Eine Koalition zur Förderung von Medienkompetenz und kritischem Denken in der Gesellschaft"
+    }
+  },
+  "platformStats": {
+    "clubs": {
+      "singular": "Klub",
+      "plural": "Klubs"
+    },
+    "articles": {
+      "singular": "Artikel",
+      "plural": "Artikel"
+    },
+    "initiatives": {
+      "singular": "Initiative",
+      "plural": "Initiativen"
+    },
+    "publications": {
+      "singular": "Publikation",
+      "plural": "Publikationen"
+    },
+    "projects": {
+      "singular": "Projekt",
+      "plural": "Projekte"
+    }
+  }
+}

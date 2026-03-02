@@ -7,7 +7,7 @@ import { SingleArticleCard } from './SingleArticleCard/SingleArticleCard';
 import { useTranslation } from 'react-i18next';
 
 export const AllArticles = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
   const { articles, getAllArticles, isLoading } = useArticleContext();
   const { loadArticleViewCounts } = useAnalytics();
   const [searchTerm, setSearchTerm] = useState('');

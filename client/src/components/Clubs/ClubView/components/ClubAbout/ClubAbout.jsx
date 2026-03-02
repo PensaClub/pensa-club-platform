@@ -34,7 +34,7 @@ import { useTranslation } from 'react-i18next';
 import './clubAbout.css';
 
 export const ClubAbout = ({ club }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('clubs');
   const [expandedSection, setExpandedSection] = useState('description');
 
   if (!club?.name || ( !club.shortDescription)) {
@@ -42,8 +42,18 @@ export const ClubAbout = ({ club }) => {
   }
 
   const getClubData = () => {
-    const achievements = club.achievements || { awards: [], recognitions: [], certificates: [] };
-    const socialImpact = club.socialImpact || { volunteering: [], communityProjects: [], partnerships: [] };
+    const achievements = {
+      awards: [],
+      recognitions: [],
+      certificates: [],
+      ...club.achievements,
+    };
+    const socialImpact = {
+      volunteering: [],
+      communityProjects: [],
+      partnerships: [],
+      ...club.socialImpact,
+    };
     const pensionersSpecific = club.pensionersSpecific || {
       healthServices: { regularCheckups: false, bloodPressureMonitoring: false, healthLectures: [] },
       supportServices: {},

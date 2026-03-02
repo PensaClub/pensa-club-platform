@@ -21,7 +21,7 @@ export const ProfileMessages = () => {
   const [userEmail, setUserEmail] = useState('');
   const messagesPerPage = 15;
   const totalPages = Math.ceil(messages.length / messagesPerPage);
-  const { t } = useTranslation();
+  const { t } = useTranslation('auth');
 
   useEffect(() => {
     const fetchMessages = async () => {

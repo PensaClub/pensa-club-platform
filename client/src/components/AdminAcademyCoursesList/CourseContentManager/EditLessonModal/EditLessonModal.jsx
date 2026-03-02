@@ -101,7 +101,7 @@ const detectMaterialType = (file) => {
 };
 
 const EditLessonModal = ({ lesson: basicLesson, courseSlug, courseMentors = [], onClose }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('academy-admin');
   const {
     getLessonBySlug,
     updateLesson,

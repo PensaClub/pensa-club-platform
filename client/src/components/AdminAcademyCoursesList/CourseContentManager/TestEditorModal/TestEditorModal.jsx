@@ -45,7 +45,7 @@ const EMPTY_QUESTION = {
 };
 
 const TestEditorModal = ({ isOpen, onClose, lessonId, courseId, lectureId, entityTitle }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('academy-admin');
     const {
         getTests, getTestById, createTest, updateTest,
         publishTest, unpublishTest,

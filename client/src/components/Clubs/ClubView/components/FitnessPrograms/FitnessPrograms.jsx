@@ -38,7 +38,7 @@ import {
 import './fitnessPrograms.css';
 
 export const FitnessPrograms = ({ club }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('clubs');
   const [activeFilter, setActiveFilter] = useState('all');
   const [selectedProgram, setSelectedProgram] = useState(null);
   const [showEnrollModal, setShowEnrollModal] = useState(false);

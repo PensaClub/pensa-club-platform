@@ -30,7 +30,7 @@ export const AcademyCoursesList = ({
   // Callback to update filters (updates URL in parent)
   onFilterChange
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('academy');
 
   // Local search input (debounced before sending to parent)
   const [searchInput, setSearchInput] = useState(search || '');

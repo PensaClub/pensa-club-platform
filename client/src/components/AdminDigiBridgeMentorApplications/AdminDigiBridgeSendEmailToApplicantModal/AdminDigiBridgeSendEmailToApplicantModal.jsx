@@ -10,7 +10,7 @@ export const AdminDigiBridgeSendEmailToApplicantModal = ({
   application, 
   onClose 
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge');
   const { sendPersonalEmail } = useAcademy();
 
   const [formData, setFormData] = useState({

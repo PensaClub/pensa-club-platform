@@ -9,7 +9,7 @@ import {
 import './searchDraftClubsBar.css';
 
 const SearchDraftClubsBar = ({ value, onChange, placeholder }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('clubs');
     const [isFocused, setIsFocused] = useState(false);
     const [localValue, setLocalValue] = useState(value || '');
 

@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import './adminDigiBridgeMentorEditModal.css';
 
 export const AdminDigiBridgeMentorEditModal = ({ mentor, onClose, onSave }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge');
 
   const STORAGE_KEY = `mentor_edit_draft_${mentor.id}`;
 

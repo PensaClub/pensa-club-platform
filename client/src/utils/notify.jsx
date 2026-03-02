@@ -147,7 +147,7 @@ export const notify = (key, error, customMessage = null) => {
     });
     break;
   case 'form_contains_errors':
-    toast.error(<Trans i18nKey="forms.form_contains_errors" />, {
+    toast.error(<Trans ns="auth" i18nKey="forms.form_contains_errors" />, {
       role: 'alert',
     });
     break;

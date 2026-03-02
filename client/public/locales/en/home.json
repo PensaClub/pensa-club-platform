@@ -1,0 +1,352 @@
+{
+  "home": {
+    "town": "Twn",
+    "our_latest_ads": "Latest ads ",
+    "see_more_ads": "See more ads",
+    "no_results": "No results found",
+    "featuredArticles": {
+      "title": "Enrich your knowledge with our articles",
+      "subtitle": "An interactive journey into the world of digital literacy",
+      "readMore": "Read more",
+      "viewAllArticles": "All articles"
+    },
+    "showcase": {
+      "title": "Initiatives, Projects & Stories",
+      "subtitle": "Discover how we create change in the community through innovative projects and inspiring stories",
+      "initiatives": "Initiatives",
+      "projects": "Projects",
+      "stories": "Stories",
+      "initiative": "Initiative",
+      "project": "Project",
+      "story": "Story",
+      "learnMore": "Learn more",
+      "viewAll": "View all",
+      "noDescription": "No description available",
+      "noInitiatives": "No initiatives available",
+      "noProjects": "No projects available",
+      "noStories": "No stories available"
+    },
+    "constellation": {
+      "title": "Universe of Possibilities",
+      "subtitle": "Explore our galaxy of initiatives, projects and stories",
+      "initiative": "Initiative",
+      "project": "Project",
+      "story": "Story",
+      "clickToExplore": "Click to explore",
+      "exploreUniverse": "Explore the entire universe",
+      "controls": {
+        "title": "Filter the cosmos",
+        "all": "All",
+        "initiatives": "Initiatives",
+        "projects": "Projects",
+        "stories": "Stories",
+        "hint": "Hover over stars for more information"
+      },
+      "legend": {
+        "title": "Navigation Compass",
+        "initiative": "Central stars - main initiatives",
+        "project": "Planets - connected projects",
+        "story": "Comets - inspiring stories",
+        "note": "Click on any star to explore its story"
+      },
+      "types": {
+        "initiative": "Initiative",
+        "project": "Project",
+        "story": "Story"
+      }
+    }
+  },
+  "hero": {
+    "title-part1": "DIGNIFIED<br/>LIFE",
+    "title-part2": "IN OLD AGE",
+    "slide-info": "The website is a work in progress, developed by high-school students, building a 'Bridge between generations'. It is unfolding slowly, with uncertainties and many twists and turns....but we all cherish the JOURNEY WE ARE TAKING TOGETHER!",
+    "short-desc": "Everyone deserves a",
+    "desc": "An innovative platform that creates a community of people of the same age, with shared interests, new ideas, and new knowledge!",
+    "testimonials": {
+      "first-revolution-title": "First Industrial Revolution",
+      "first-revolution-desc": "It is distinguished by the introduction of the steam engine, which led to the mechanization of production and the development of the railway transport.",
+      "second-revolution-title": "Second Industrial Revolution",
+      "second-revolution-desc": "It was characterized by the widespread spread of electricity and power lines, which increased production efficiency and stimulated industrial growth.",
+      "third-revolution-title": "Third Industrial Revolution",
+      "third-revolution-desc": "Also called the Digital Revolution, this era was marked by the introduction of computers, the Internet and automation, which radically changed the way production processes were managed and controlled.",
+      "forth-revolution-title": "Revolution 4.0",
+      "forth-revolution-desc": "Focused on smart factories that use the Internet of Things (IoT), automated decision making and machine learning to further increase manufacturing efficiency.",
+      "fifth-revolution-title": "Revolution 5.0",
+      "fifth-revolution-desc": "This is the latest stage in the development, which involves the use of artificial intelligence not only for automation, but also for the integration of human creative and analytical potential"
+    },
+    "join-the-club": "Join the club",
+    "play-pause": "Play/Pause",
+    "sound": "Sound",
+    "fullscreen": "Fullscreen"
+  },
+  "motto": {
+    "title1": "Social",
+    "title2": "Brain activity",
+    "title3": "Health care",
+    "desc1": "Create new connections, join groups, and share interests.",
+    "desc2": "Stimulate your thinking, improve your memory, while having fun and learning.",
+    "desc3": "Healthy practices, tips, and resources that will help you live better.",
+    "about-btn": "Join the club",
+    "suggestion-btn": "Invite a friend",
+    "learn-more-btn": "Learn more",
+    "join-us-btn": "Join us",
+    "main-title": "What we offer you"
+  },
+  "about": {
+    "nonprofit-badge": "Non-profit foundation for public benefit",
+    "title": "Our mission",
+    "desc": "To create an innovative platform, a tool for building community. We unite people of similar age with common interests, new ideas, and knowledge. We strive to build a community based on interaction and mutual support. The expected outcome is to improve quality of life through active engagement in modernity, support for acquiring new skills and interests, and encouraging a healthy, fulfilling, and dignified life.",
+    "ourVision": "Our vision",
+    "visionDesc": "Our vision is a world where age is no barrier to digital inclusion. We are creating a bridge between generations, where older people receive accessible support in navigating technology. We believe that through mutual support and shared experiences, we can build a community where everyone, regardless of age, feels confident in the digital world.",
+    "logo_alt": "Pensa logo",
+    "about_image_alt": "About Pensa",
+    "vision_image_alt": "Elderly people in the digital world",
+    "overlay_pensa": "Pensa",
+    "overlay_vision": "Vision",
+    "hero": {
+      "badge": "About Us",
+      "title": "Pensa Foundation and Pensa.club",
+      "subtitle": "An innovative platform for improving the quality of life of older adults through digital inclusion and active community",
+      "stats": {
+        "community": "Community",
+        "communityDesc": "We unite people of the same age with common interests",
+        "innovation": "Innovation",
+        "innovationDesc": "We create a bridge between generations with technology",
+        "support": "Support",
+        "supportDesc": "Accessible help for entering the digital world"
+      }
+    },
+    "platform": {
+      "label": "The Platform",
+      "title": "Pensa.club - Digital Community",
+      "description": "An innovative, digital and interactive platform aimed at improving the quality of life of older adults",
+      "featuresTitle": "What We Offer",
+      "features": {
+        "interactiveMap": {
+          "title": "Interactive Map",
+          "description": "See all registered pensioners and clubs on an interactive map of Bulgaria"
+        },
+        "announcements": {
+          "title": "Announcements",
+          "description": "Platform for sharing announcements, news and current events"
+        },
+        "articles": {
+          "title": "Articles and Training",
+          "description": "Educational articles and training materials on various topics"
+        },
+        "clubsMap": {
+          "title": "Clubs Map",
+          "description": "Find clubs across Bulgaria and apply directly through the platform"
+        },
+        "games": {
+          "title": "Online Games",
+          "description": "Play chess, backgammon, sudoku, solitaire and other fun games"
+        },
+        "mentorship": {
+          "title": "Mentorship Program",
+          "description": "Online and offline training for safe internet usage"
+        }
+      },
+      "mission": {
+        "title": "Mission",
+        "description": "To help pensioners in Bulgaria improve their use of the digital world. We create a tool for building a community that unites people with common interests, new ideas and knowledge."
+      },
+      "vision": {
+        "title": "Vision",
+        "description": "A world where age is not a barrier to digital inclusion. We create a bridge between generations, where older people receive accessible support when entering technology."
+      },
+      "goal": {
+        "title": "Goal",
+        "description": "Improving quality of life through active inclusion in modernity, support for acquiring new skills and promoting a healthy, fulfilling and dignified life."
+      }
+    },
+    "foundation": {
+      "label": "The Foundation",
+      "title": "Pensa Foundation",
+      "description": "Created with the mission to improve the quality of life of older adults through digital inclusion and active community",
+      "legalStatus": "Non-profit organization registered for public benefit",
+      "eik": "UIC",
+      "missionTitle": "Our Mission",
+      "missionText": "To build a community based on interaction and mutual assistance. We strive to unite people of the same age with common interests, new ideas and knowledge, encouraging active participation in modern society.",
+      "valuesTitle": "Our Values",
+      "values": {
+        "community": {
+          "title": "Community",
+          "description": "We build a bridge between generations through mutual help and shared experience"
+        },
+        "quality": {
+          "title": "Quality",
+          "description": "We offer high-quality services and educational materials"
+        },
+        "trust": {
+          "title": "Trust",
+          "description": "We work transparently and responsibly for the trust of our community"
+        },
+        "care": {
+          "title": "Care",
+          "description": "We care for every member of our community"
+        }
+      }
+    },
+    "team": {
+      "label": "Our Team",
+      "title": "Meet the Team",
+      "description": "People with experience and passion who work to improve the lives of older adults",
+      "contactEmail": "Send email",
+      "contactPhone": "Call",
+      "sendMessage": "Send message",
+      "modalTitle": "Message to {{name}}",
+      "members": {
+        "borislav": {
+          "role": "IT Specialist",
+          "bio": "Graduated in Software Engineering with JavaScript from SoftUni in 2023, ranking first in his class. Chief IT consultant at PENSA Foundation and directly involved in creating the pensa.club platform. Distinguished by persistence, discipline and consistency in the work process."
+        },
+        "lubima": {
+          "role": "Technical Associate",
+          "bio": "Graduated from the Technical University - Sofia and has over 25 years of experience in trade and distribution. Moved through the roles of product and marketing specialist, and subsequently - marketing manager at Robert Bosch EOOD."
+        },
+        "lena": {
+          "role": "Board Member",
+          "bio": "Graduated in economics in Germany, has numerous specializations in personnel and finance management. 30 years as executive director and attorney at Robert Bosch EOOD - a company of the Bosch group in Bulgaria."
+        },
+        "elina": {
+          "role": "Board Chairperson",
+          "bio": "Founder of PENSA Foundation. Expert and consultant with many years of experience in the non-governmental sector and international projects."
+        }
+      },
+      "form": {
+        "from": "From (your email)",
+        "fromPlaceholder": "your@email.com",
+        "to": "To",
+        "toPlaceholder": "recipient@email.com",
+        "subject": "Subject",
+        "subjectPlaceholder": "Message subject",
+        "message": "Message",
+        "messagePlaceholder": "Write your message here...",
+        "sending": "Sending...",
+        "send": "Send message",
+        "note": "The message will be sent directly to the email of the selected team member"
+      }
+    },
+    "contact": {
+      "label": "Contact Us",
+      "title": "Have Questions?",
+      "description": "Get in touch with us and we'll be happy to answer all your questions",
+      "info": {
+        "email": "Email",
+        "website": "Website"
+      },
+      "form": {
+        "fields": {
+          "name": "Name",
+          "email": "Email",
+          "subject": "Subject",
+          "message": "Message"
+        },
+        "placeholders": {
+          "name": "Your name",
+          "email": "your@email.com",
+          "subject": "Message subject",
+          "message": "Write your message here..."
+        },
+        "validation": {
+          "required": "Please fill in all required fields",
+          "invalidEmail": "Please enter a valid email address"
+        },
+        "messages": {
+          "success": "Message sent successfully! We will contact you soon.",
+          "error": "An error occurred while sending. Please try again."
+        },
+        "submitting": "Sending...",
+        "submit": "Send Message"
+      }
+    }
+  },
+  "news-subscribe": {
+    "title": "Stay up to date with",
+    "desc": "Sign up for the latest news, updates and tips.",
+    "name-placeholder": "Name*",
+    "email-placeholder": "Email*",
+    "subscribe-btn": "Register",
+    "errors": {
+      "required-field": "This field is required!",
+      "invalid-email": "Email is invalid!"
+    }
+  },
+  "clubsShowcase": {
+    "badge": "Community",
+    "title": "Discover our",
+    "titleHighlight": "clubs",
+    "subtitle": "Join an active community of people who share your interests and passion for learning",
+    "explore": "Explore",
+    "viewAll": "View all clubs",
+    "categories": {
+      "cultural": "Cultural",
+      "sports": "Sports",
+      "social": "Social",
+      "educational": "Educational",
+      "general": "General"
+    }
+  },
+  "partners": {
+    "label": "Partners",
+    "title": "Our Partners",
+    "subtitle": "Together we build a bridge between generations in the digital world",
+    "aboutTitle": "Partners & Support",
+    "aboutSubtitle": "The organizations that believe in our mission and support us in building a digital bridge between generations",
+    "mainPartner": "Main Partner",
+    "visitSite": "Visit website",
+    "cif": {
+      "description": "The implementation of the project 'Bridging Digital Transformation and Civic Participation (BRIDGE)"
+    },
+    "bosch": {
+      "description": "An international foundation dedicated to healthcare, education, and civil society worldwide"
+    },
+    "softuniBuditel": {
+      "description": "An educational programme for digital literacy in small communities across Bulgaria"
+    },
+    "softuni": {
+      "description": "Leading software university in Bulgaria with a mission for quality IT education"
+    },
+    "sofiaMunicipality": {
+      "description": "Sofia Municipality — a strategic partner for urban initiatives and social projects"
+    },
+    "bgFundWomen": {
+      "description": "A foundation supporting women's rights and empowerment in Bulgaria"
+    },
+    "kingBaudouin": {
+      "description": "A Belgian foundation supporting CIF and civic participation initiatives across Europe"
+    },
+    "austausch": {
+      "description": "A German organization for international exchange and educational cooperation"
+    },
+    "costEffective": {
+      "description": "A software company providing technological support for the platform"
+    },
+    "coalitionMediaLiteracy": {
+      "description": "A coalition for raising media literacy and critical thinking in society"
+    }
+  },
+  "platformStats": {
+    "clubs": {
+      "singular": "Club",
+      "plural": "Clubs"
+    },
+    "articles": {
+      "singular": "Article",
+      "plural": "Articles"
+    },
+    "initiatives": {
+      "singular": "Initiative",
+      "plural": "Initiatives"
+    },
+    "publications": {
+      "singular": "Publication",
+      "plural": "Publications"
+    },
+    "projects": {
+      "singular": "Project",
+      "plural": "Projects"
+    }
+  }
+}

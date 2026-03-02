@@ -31,7 +31,7 @@ import {
 import './traditionalPerformances.css';
 
 export const TraditionalPerformances = ({ club }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('clubs');
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [currentVideo, setCurrentVideo] = useState(null);
   const [isCalendarModalOpen, setIsCalendarModalOpen] = useState(false);

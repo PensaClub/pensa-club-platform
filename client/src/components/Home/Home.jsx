@@ -20,7 +20,7 @@ import { ClubsShowcase } from "./ClubsShowcase/ClubsShowcase";
 
 export const Home = () => {
 
-  const { t } = useTranslation();
+  const { t } = useTranslation('home');
 
   useEffect(() => {
     window.scrollTo({ top: 0 });

@@ -87,7 +87,7 @@ const MapController = ({ selectedClub, clubs }) => {
 
 // Popup компонент за клуб
 const ClubPopup = ({ club, onSelect, onViewDetails }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('clubs');
 
   const getCategoryLabel = (category) => {
     return t(`clubs.ClubsMap.categories.${category}`, { 
@@ -188,7 +188,7 @@ const ClubPopup = ({ club, onSelect, onViewDetails }) => {
 };
 
 export const ClubsMap = ({ clubs, selectedClub, onClubSelect }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('clubs');
   const [mapReady, setMapReady] = useState(false);
   const markerRefs = useRef({});
   const previousSelectedClubId = useRef(null);

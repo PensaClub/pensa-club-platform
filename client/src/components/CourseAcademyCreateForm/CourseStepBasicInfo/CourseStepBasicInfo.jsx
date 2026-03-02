@@ -7,7 +7,7 @@ import './courseStepBasicInfo.css';
 const DIFFICULTY_OPTIONS = ['beginner', 'intermediate', 'advanced'];
 
 const CourseStepBasicInfo = ({ courseData, updateField, errors = {} }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('academy-admin');
 
   const handleChange = (e) => {
     const { name, value } = e.target;

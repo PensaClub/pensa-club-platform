@@ -43,7 +43,7 @@ import SportsTemplate from '../../ClubView/templates/SportsTemplate';
 import GeneralTemplate from '../../ClubView/templates/GeneralTemplate';
 
 const ClubPreview = ({ formData, onClose, isPreviewMode = true }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('clubs');
     const [activeSection, setActiveSection] = useState('');
     const [showBackToTop, setShowBackToTop] = useState(false);
     const [navCollapsed, setNavCollapsed] = useState(true);

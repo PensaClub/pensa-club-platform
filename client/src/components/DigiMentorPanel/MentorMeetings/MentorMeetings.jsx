@@ -14,7 +14,7 @@ import { EditMeetingModal } from './EditMeetingModal';
 import { CompleteMeetingModal } from './CompleteMeetingModal';
 
 export const MentorMeetings = ({ meetings = [], onRefresh }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('digibridge-mentor');
   const [activeTab, setActiveTab] = useState('scheduled'); // scheduled | completed
   const [showAddModal, setShowAddModal] = useState(false);
   const [showCompleteModal, setShowCompleteModal] = useState(false);

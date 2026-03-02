@@ -14,7 +14,7 @@ import {
 import './aboutPlatform.css';
 
 export const AboutPlatform = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('home');
 
   const platformFeatures = [
     { icon: faMapMarkedAlt, key: 'interactiveMap', color: '#3b82f6' },

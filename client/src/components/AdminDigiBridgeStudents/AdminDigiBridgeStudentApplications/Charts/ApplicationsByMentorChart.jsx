@@ -18,7 +18,7 @@ const BAR_COLORS = [
 ];
 
 export const ApplicationsByMentorChart = ({ data, loading }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-students');
 
   if (loading) {
     return (

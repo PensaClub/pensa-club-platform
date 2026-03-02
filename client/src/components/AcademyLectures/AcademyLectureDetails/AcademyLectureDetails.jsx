@@ -1,7 +1,9 @@
 // src/components/AcademyLectures/AcademyLectureDetails/AcademyLectureDetails.jsx
 
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
+import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { useTranslation } from 'react-i18next';
 import { useAuthContext } from '../../contexts/UserContext';
 import { useAcademyCourses } from '../../contexts/AcademyCoursesProvider';
@@ -124,8 +126,8 @@ const CATEGORY_COLORS = {
 
 export const AcademyLectureDetails = () => {
   const { slug } = useParams();
-  const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
+  const { t, i18n } = useTranslation('academy');
+  const navigate = useLocalizedNavigate();
   const { isAuthentication } = useAuthContext();
   const {
     getLectureBySlug,

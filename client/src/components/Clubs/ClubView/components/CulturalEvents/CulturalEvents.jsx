@@ -31,7 +31,7 @@ import {
 import './culturalEvents.css';
 
 export const CulturalEvents = ({ club }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('clubs');
   const [activeFilter, setActiveFilter] = useState('upcoming');
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [showEventModal, setShowEventModal] = useState(false);

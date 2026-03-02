@@ -6,7 +6,7 @@ import './mapPage.css'
 import { useMappingContext } from '../contexts/MapContext';
 
 export const MapPage = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('community');
 
     const { onAllUsers, allUsers } = useMappingContext();
     // const isFetched = useRef(false); //  флаг за  да проверявам за заявка - пробно 

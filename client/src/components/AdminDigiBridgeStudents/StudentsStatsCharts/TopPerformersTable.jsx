@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import './topPerformersTable.css';
 
 export const TopPerformersTable = ({ students, loading, onViewDetails }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-students');
 
   if (loading) {
     return (

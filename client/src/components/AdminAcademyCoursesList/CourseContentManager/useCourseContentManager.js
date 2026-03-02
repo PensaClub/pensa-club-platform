@@ -1,15 +1,16 @@
 // src/components/AdminAcademyCoursesList/CourseContentManager/useCourseContentManager.js
 
 import { useState, useEffect, useCallback } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useAcademyCourses } from '../../contexts/AcademyCoursesProvider';
 
 const useCourseContentManager = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('academy-admin');
   const { slug } = useParams();
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
 
   const {
     getCourseBySlug,

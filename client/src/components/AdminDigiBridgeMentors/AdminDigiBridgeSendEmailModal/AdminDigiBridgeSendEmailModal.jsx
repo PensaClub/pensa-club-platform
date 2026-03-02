@@ -7,7 +7,7 @@ import './adminDigiBridgeSendEmailModal.css';
 import { useAcademy } from '../../contexts/AcademyProvider';
 
 export const AdminDigiBridgeSendEmailModal = ({ mentor, onClose }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge');
   const { sendPersonalEmail } = useAcademy();
   
   const [formData, setFormData] = useState({

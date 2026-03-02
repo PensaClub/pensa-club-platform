@@ -3,7 +3,7 @@ import './contactSection.css';
 import { useTranslation } from 'react-i18next';
 
 export const ContactSection = ({ contact, additionalContacts, openEmailModal }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
   
   const getFirstChar = (name) => {
     if (!name || typeof name !== 'string') return '?';

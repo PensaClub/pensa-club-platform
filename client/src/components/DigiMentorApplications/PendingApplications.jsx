@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import './pendingApplications.css';
 
 export const PendingApplications = ({ applications, onRefresh }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-mentor');
   const { approveStudentApplication, rejectStudentApplication } = useAcademy();
   
   const [selectedApp, setSelectedApp] = useState(null);

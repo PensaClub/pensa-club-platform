@@ -15,7 +15,7 @@ import { getAllTemplates, getTemplateById } from '../data/clubTemplates';
 import './templateSelector.css';
 
 const TemplateSelector = ({ selectedTemplate, onTemplateChange, disabled = false }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('clubs');
   const [previewTemplate, setPreviewTemplate] = useState(null);
   const [imageErrors, setImageErrors] = useState({});
   

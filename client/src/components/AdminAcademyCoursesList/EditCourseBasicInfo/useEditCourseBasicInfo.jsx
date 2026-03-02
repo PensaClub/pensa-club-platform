@@ -1,7 +1,8 @@
 // src/components/AdminAcademyCoursesList/EditCourseBasicInfo/useEditCourseBasicInfo.js
 
 import { useState, useEffect, useCallback } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { useAcademyCourses } from '../../contexts/AcademyCoursesProvider';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
@@ -37,9 +38,9 @@ const formatDateForInput = (dateStr) => {
 };
 
 const useEditCourseBasicInfo = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('academy-admin');
     const { slug } = useParams();
-    const navigate = useNavigate();
+    const navigate = useLocalizedNavigate();
     const {  getCourseBySlug, updateCourse, addCourseMentor, updateCourseMentor, removeCourseMentor } = useAcademyCourses();
 
     const [courseData, setCourseData] = useState(INITIAL_STATE);

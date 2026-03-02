@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import './requestCard.css';
 
 export const RequestCard = ({ request, onAccept, isAccepting }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge');
 
   // Форматиране на времето
   const formatTime = (timestamp) => {

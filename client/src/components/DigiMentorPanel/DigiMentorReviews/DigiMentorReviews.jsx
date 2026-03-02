@@ -15,7 +15,7 @@ import { DigiMentorReviewsFilters } from './DigiMentorReviewsFilters/DigiMentorR
 import { DigiMentorReviewCard } from './DigiMentorReviewCard/DigiMentorReviewCard';
 
 export const DigiMentorReviews = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-mentor');
   const { profileData } = useAuthContext();
   const { getMentorOwnReviews, getMentorOwnReviewStats } = useAcademy();
 

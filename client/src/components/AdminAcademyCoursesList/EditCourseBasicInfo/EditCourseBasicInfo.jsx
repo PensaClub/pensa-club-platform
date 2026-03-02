@@ -8,7 +8,7 @@ import CourseStepSettings from '../../CourseAcademyCreateForm/CourseStepSettings
 import './editCourseBasicInfo.css';
 
 const EditCourseBasicInfo = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('academy-admin');
   const {
     courseData,
     slug,

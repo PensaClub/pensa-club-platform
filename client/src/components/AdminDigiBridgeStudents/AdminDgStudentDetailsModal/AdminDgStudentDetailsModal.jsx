@@ -12,7 +12,7 @@ export const AdminDgStudentDetailsModal = ({
   onEdit,
   onOpenNotes  // ← NEW PROP
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-students');
 
   const formatDate = (dateString) => {
     if (!dateString) return t('notAvailable');

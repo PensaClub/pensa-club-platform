@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import './milestones.css';
 
 export const Milestones = ({ milestones = [] }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
 
     // Проверка дали има milestones
     if (!milestones || milestones.length === 0) {

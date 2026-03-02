@@ -1,6 +1,7 @@
 import { useEffect, useRef, Fragment, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../../LocalizedLink/LocalizedLink';
+import { useLocalizedNavigate } from '../../../../hooks/useLocalizedNavigate';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import './sidebar-details.css';
@@ -8,12 +9,12 @@ import '../../../MapPage/MapEditor/sidebar.css';
 import { useAuthContext } from '../../../contexts/UserContext';
 
 export const UserSidebar = ({ selectedUser, userAds, closeSidebar, setModalImage }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['community', 'auth']);
   const sidebarRef = useRef(null);
   const scrollContentRef = useRef(null);
   const [showScrollToTop, setShowScrollToTop] = useState(false);
   const { isAuthentication } = useAuthContext();
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {

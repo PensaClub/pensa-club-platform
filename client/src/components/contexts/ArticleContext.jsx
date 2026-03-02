@@ -1,7 +1,8 @@
 import { createContext, useContext, useState } from "react";
 import { Loader } from "../Loader/Loader";
 import { notify } from "../../utils/notify.jsx";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 import { useAuthContext } from "./UserContext";
 import { articleServiceFactory } from "../Services/articleServiceFactory";
 import { deleteFileFromStorage } from "../Articles/articleUtils/file-delete-utils";
@@ -14,7 +15,7 @@ export const ArticleProvider = ({ children }) => {
   const [articles, setArticles] = useState([]);
   const [articlesLoaded, setArticlesLoaded] = useState(false);
   const { isAdmin } = useAuthContext();
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
    const location = useLocation();
   const articleService = articleServiceFactory();
 

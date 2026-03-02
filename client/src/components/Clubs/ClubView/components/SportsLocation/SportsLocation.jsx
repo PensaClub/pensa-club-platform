@@ -60,7 +60,7 @@ const sportsClubIcon = new L.Icon({
 });
 
 export const SportsLocation = ({ club }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('clubs');
   const [activeTab, setActiveTab] = useState('map');
   const [selectedTransport, setSelectedTransport] = useState('running');
   const [mapLoaded, setMapLoaded] = useState(false);

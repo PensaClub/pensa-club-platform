@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 import './adminSuggestUsers.css';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRotateLeft } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
@@ -19,7 +19,7 @@ export const AdminSuggestUsers = ({ setAllSuggestedUsers }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchCriteria, setSearchCriteria] = useState('refferer_name');
   const [searchResults, setSearchResults] = useState([]);
-  const { t } = useTranslation();
+  const { t } = useTranslation(['auth', 'admin']);
   const { getAllSuggested, getDeleteSuggest, onSuggestResolve, onCreateComment } = useSuggestUserContext();
   const [modalContent, setModalContent] = useState('');
   const [isTextModalOpen, setIsTextModalOpen] = useState(false);

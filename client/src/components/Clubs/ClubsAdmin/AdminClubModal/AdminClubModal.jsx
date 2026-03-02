@@ -26,7 +26,7 @@ const AdminClubModal = ({
     onConfirm,
     isProcessing = false 
 }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('clubs');
     const [formData, setFormData] = useState({});
     const [errors, setErrors] = useState({});
 

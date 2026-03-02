@@ -1,9 +1,9 @@
-import { Link } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
 import { useTranslation } from 'react-i18next';
 import './digiBridgeMentors.css';
 
 export const DigiBridgeMentors = ({ stats, loading }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('digibridge');
 
     const mentorQualities = [
         {

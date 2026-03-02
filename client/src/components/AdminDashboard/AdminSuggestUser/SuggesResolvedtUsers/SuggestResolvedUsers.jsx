@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Link } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../../LocalizedLink/LocalizedLink';
 import './suggestResolvedUsers.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRotateLeft } from '@fortawesome/free-solid-svg-icons';
@@ -19,7 +19,7 @@ export const SuggestResolvedUsers = ({ setResolvedUsers }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchCriteria, setSearchCriteria] = useState('refferer_name');
     const [searchResults, setSearchResults] = useState([]);
-    const { t } = useTranslation();
+    const { t } = useTranslation(['auth', 'admin']);
     const { getAllResolve, getDeleteSuggest, onCreateComment } = useSuggestUserContext();
     const [modalContent, setModalContent] = useState('');
     const [isTextModalOpen, setIsTextModalOpen] = useState(false);

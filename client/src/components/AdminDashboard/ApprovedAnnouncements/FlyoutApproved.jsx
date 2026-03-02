@@ -9,10 +9,10 @@ export const FlyoutApproved = ({ isOpen, onClose, ad, handleDelete, handleReject
     const [regionName, setRegionName] = useState('');
     const [subregionName, setSubregionName] = useState('');
     const [townName, setTownName] = useState('');
-    const { t } = useTranslation();
+    const { t } = useTranslation(['admin', 'auth']);
 
     const { regions, fetchSubregions, subregions, fetchTowns } = useCommunityContext();
-    const { i18n } = useTranslation();
+    const { i18n } = useTranslation(['admin', 'auth']);
     const currentLanguage = i18n.language;
     useEffect(() => {
         if (ad && ad.images && ad.images.length > 0) {

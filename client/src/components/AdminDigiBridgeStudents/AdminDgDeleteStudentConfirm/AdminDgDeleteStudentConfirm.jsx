@@ -7,7 +7,7 @@ import './adminDgDeleteStudentConfirm.css';
 export const AdminDgDeleteStudentConfirm = ({ student, onClose, onConfirm }) => {
   if (!student) return null;
 
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-students');
   const [deleting, setDeleting] = useState(false);
 
   const handleBackdropClick = useCallback((e) => {

@@ -40,7 +40,7 @@ const ContactsManager = ({
   onContactsChange, 
   disabled = false 
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('clubs');
   
   const [activeSection, setActiveSection] = useState('basic');
   const [newContactPerson, setNewContactPerson] = useState({

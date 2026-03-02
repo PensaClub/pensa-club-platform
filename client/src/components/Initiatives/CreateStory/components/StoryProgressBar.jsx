@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { calculateStoryProgress, getStoryProgressBreakdown } from '../utils/storiesProgressUtils';
 
 const StoryProgressBar = ({ values }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
 
     const progress = calculateStoryProgress(values);
     const progressBreakdown = getStoryProgressBreakdown(values);

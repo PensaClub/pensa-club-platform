@@ -50,7 +50,7 @@ import {
 import './sportsEventsCalendar.css';
 
 export const SportsEventsCalendar = ({ club }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('clubs');
   const [currentDate, setCurrentDate] = useState(new Date());
   const [viewMode, setViewMode] = useState('timeline');
   const [activeFilter, setActiveFilter] = useState('all');

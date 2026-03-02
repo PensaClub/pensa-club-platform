@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
 import { useTranslation } from 'react-i18next';
 import './digiBridgeMentorsPage.css';
 import { useAcademy } from '../../contexts/AcademyProvider';
@@ -17,7 +17,7 @@ const THEMES = [
 ];
 
 export const DigiBridgeMentorsPage = () => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('digibridge');
   const { getAllMentors } = useAcademy();
 
   const [mentors, setMentors] = useState([]);

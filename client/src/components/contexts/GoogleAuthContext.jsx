@@ -2,7 +2,7 @@ import { createContext, useContext, useState } from 'react';
 import { googleAuthServiceFactory } from '../Services/googleAuthService';
 import { useAuthContext } from './UserContext';
 import { notify } from '../../utils/notify.jsx';
-import { useNavigate } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 import { useTranslation } from 'react-i18next';
 
 export const GoogleAuthContext = createContext();
@@ -13,7 +13,7 @@ export const GoogleAuthProvider = ({ children }) => {
 
   const { handleAuthChange, setProfileData } = useAuthContext();
   const googleAuthService = googleAuthServiceFactory();
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
   const { t } = useTranslation();
 
   const handleGoogleLogin = async (credential) => {

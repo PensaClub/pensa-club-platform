@@ -1,7 +1,8 @@
 // src/components/hooks/useEditLecture.js
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 import { useAcademyCourses } from '../contexts/AcademyCoursesProvider';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
@@ -60,9 +61,9 @@ const formatDateTimeLocal = (dateStr) => {
 // =========================================================
 
 const useEditLecture = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('academy-admin');
     const { slug } = useParams();
-    const navigate = useNavigate();
+    const navigate = useLocalizedNavigate();
     const {
         getLectureBySlug,
         updateLecture,

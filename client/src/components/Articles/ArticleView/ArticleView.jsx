@@ -1,6 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useEffect, useState, useMemo } from 'react';
-import { useParams, Link, useNavigate, useLocation } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
+import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCalendarAlt,
@@ -43,8 +45,8 @@ const ArticleView = () => {
   const sectionsPerPage = 3;
   const { setIsLoading } = useLoading();
   const { trackArticle, getViewCount } = useAnalytics();
-  const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
+  const { t, i18n } = useTranslation('content');
+  const navigate = useLocalizedNavigate();
   const location = useLocation();
   const { getAllArticles, articlesLoaded, getArticleById, articles } = useArticleContext();
   const [isModalOpen, setIsModalOpen] = useState(false);

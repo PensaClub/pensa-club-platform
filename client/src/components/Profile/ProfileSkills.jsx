@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 import './profile.css';
 import CustomSelect from './CustomSelect';
 import { resetFields, handleReset } from '../../utils/profile.jsx';
@@ -8,7 +8,7 @@ import { useMappingContext } from '../contexts/MapContext';
 
 export const ProfileSkills = () => {
     const { t } = useTranslation();  
-    const navigate = useNavigate();
+    const navigate = useLocalizedNavigate();
   const { onEditProfileDataSubmit, profileData } = useContext(UserContext);
 
   const initialFormState = {

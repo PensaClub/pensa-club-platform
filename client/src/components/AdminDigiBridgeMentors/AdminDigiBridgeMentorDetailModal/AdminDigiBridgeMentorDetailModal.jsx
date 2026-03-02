@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import './adminDigiBridgeMentorDetailModal.css';
 
 export const AdminDigiBridgeMentorDetailModal = ({ mentor, onClose, onSendEmail }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge');
   const [copiedField, setCopiedField] = useState(null);
 
   const formatDate = (dateString) => {

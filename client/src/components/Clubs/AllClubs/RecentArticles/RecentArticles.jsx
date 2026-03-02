@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../../../hooks/useLocalizedNavigate';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
@@ -12,8 +12,8 @@ import './recentArticles.css';
 import { useArticleContext } from '../../../contexts/ArticleContext';
 
 export const RecentArticles = () => {
-  const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
+  const { t, i18n } = useTranslation('clubs');
+  const navigate = useLocalizedNavigate();
   const { getAllArticles, articles, articlesLoaded } = useArticleContext();
   const [recentArticles, setRecentArticles] = useState([]);
   const [isLoading, setIsLoading] = useState(true);

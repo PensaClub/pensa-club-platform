@@ -1,6 +1,6 @@
 
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
 import { 
     Activity, 
     BookOpen, 
@@ -15,7 +15,7 @@ import {
 import './studentRecentActivity.css';
 
 const StudentRecentActivity = ({ activities = [] }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('student-dashboard');
 
     const getActivityIcon = (type) => {
         switch (type) {

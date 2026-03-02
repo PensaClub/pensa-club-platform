@@ -5,7 +5,7 @@ import { notify } from '../../utils/notify.jsx';
 import './professionalAvatarBuilder.css';
 
 export const ProfessionalAvatarBuilder = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('auth');
   const { onEditProfileDataSubmit, profileData } = useContext(UserContext);
   const [isSaving, setIsSaving] = useState(false);
 

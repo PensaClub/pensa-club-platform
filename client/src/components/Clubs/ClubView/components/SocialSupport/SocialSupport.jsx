@@ -41,7 +41,7 @@ import {
 import './socialSupport.css';
 
 export const SocialSupport = ({ club }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('clubs');
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [expandedService, setExpandedService] = useState(null);

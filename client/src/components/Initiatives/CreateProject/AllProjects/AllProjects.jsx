@@ -2,15 +2,16 @@
 import { useEffect, useState, useCallback } from 'react';
 import './allProjects.css';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../../../hooks/useLocalizedNavigate';
 import { useInitiativeContext } from '../../../contexts/InitiativeProvider';
 import { ProjectsSearchAdmin } from './ProjectsSearchAdmin/ProjectsSearchAdmin';
 import { ProjectsHeaderAdmin } from './ProjectsHeaderAdmin/ProjectsHeaderAdmin';
 import { notify } from '../../../../utils/notify.jsx';
 
 export const AllProjects = () => {
-    const { t } = useTranslation();
-    const navigate = useNavigate();
+    const { t } = useTranslation('content');
+    const navigate = useLocalizedNavigate();
     const {
         getAllProjects,
         getAllProjectDrafts,

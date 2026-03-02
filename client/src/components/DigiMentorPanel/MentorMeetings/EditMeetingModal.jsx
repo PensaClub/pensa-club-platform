@@ -6,7 +6,7 @@ import { useAcademy } from '../../contexts/AcademyProvider';
 import './editMeetingModal.css';
 
 export const EditMeetingModal = ({ meeting, onClose, onSuccess }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-mentor');
   const { updateMentorMeeting, getMentorStudents } = useAcademy();
   
   const [students, setStudents] = useState([]);

@@ -30,7 +30,7 @@ import './clubEvents.css';
 import { useClubContext } from '../../../../contexts/ClubContext';
 
 export const ClubEvents = ({ club }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('clubs');
   const { 
     registerForEvent,
     registerForCourse,

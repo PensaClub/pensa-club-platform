@@ -2,7 +2,8 @@
 // Prefix: aacl-
 
 import { useState, useEffect, useCallback } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { LocalizedLink as Link } from '../LocalizedLink/LocalizedLink';
+import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 import { useTranslation } from 'react-i18next';
 import { useAcademyCourses } from '../contexts/AcademyCoursesProvider';
 import {
@@ -32,8 +33,8 @@ const STATUS_OPTIONS = ['all', 'published', 'draft'];
 const SORT_OPTIONS = ['newest', 'oldest', 'name', 'popular'];
 
 const AdminAcademyCoursesList = () => {
-  const { t } = useTranslation();
-  const navigate = useNavigate();
+  const { t } = useTranslation('academy-admin');
+  const navigate = useLocalizedNavigate();
   const {
     getAdminCourses,
     deleteCourse,

@@ -21,7 +21,7 @@ const PartnersSponsorsSection = ({
     handleSponsorImageUpload,
     removeSponsorImage
 }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const [activeTab, setActiveTab] = useState('partners');
 
     // Handle partner field changes

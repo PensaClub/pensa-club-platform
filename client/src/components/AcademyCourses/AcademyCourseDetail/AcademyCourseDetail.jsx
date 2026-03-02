@@ -1,7 +1,9 @@
 // src/components/AcademyCourses/AcademyCourseDetail/AcademyCourseDetail.jsx
 
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
+import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { useTranslation } from 'react-i18next';
 import { useAcademyCourses } from '../../contexts/AcademyCoursesProvider';
 import { useAuthContext } from '../../contexts/UserContext';
@@ -457,9 +459,9 @@ const CourseMaterialItem = ({ material, index, t }) => {
 // ============================================
 
 export const AcademyCourseDetail = () => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('academy');
   const { slug } = useParams();
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
 
   const {
     getCourseBySlug,

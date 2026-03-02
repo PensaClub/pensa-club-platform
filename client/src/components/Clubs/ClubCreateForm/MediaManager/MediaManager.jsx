@@ -37,7 +37,7 @@ const MediaManager = ({
   onMediaChange, 
   disabled = false 
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('clubs');
   const { uploadFile, uploading: firebaseUploading } = useFirebaseUpload();
   
   const [activeTab, setActiveTab] = useState('logo');

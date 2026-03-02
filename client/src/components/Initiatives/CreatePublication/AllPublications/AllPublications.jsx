@@ -13,7 +13,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { transformPublicationForDisplay } from '../utils/dataTransformationUtils';
 
 export const AllPublications = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const {
         getAllPublications,
         publications = [],

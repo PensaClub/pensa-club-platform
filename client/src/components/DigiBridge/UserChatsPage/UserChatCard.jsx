@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import './userChatCard.css';
 
 export const UserChatCard = ({ conversation, isCompleted = false, onOpen }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge');
 
   // Форматиране на време
   const formatTime = (timestamp) => {

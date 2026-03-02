@@ -50,7 +50,7 @@ const clubIcon = new L.Icon({
 });
 
 export const TraditionalLocation = ({ club }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('clubs');
   const [activeTab, setActiveTab] = useState('map');
   const [selectedTransport, setSelectedTransport] = useState('walking');
   const [mapLoaded, setMapLoaded] = useState(false);

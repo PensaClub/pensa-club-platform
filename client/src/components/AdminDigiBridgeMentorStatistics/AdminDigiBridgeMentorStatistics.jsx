@@ -24,7 +24,7 @@ const ResponseTimeChart = lazy(() => import('./ResponseTimeChart/ResponseTimeCha
 const MentorsBySpecialization = lazy(() => import('./MentorsBySpecialization/MentorsBySpecialization').then(module => ({ default: module.MentorsBySpecialization })));
 
 export const AdminDigiBridgeMentorStatistics = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('digibridge');
     const { getMentorStatisticsOverview,
         getMentorsBySpecialization,
         getAllMentors,

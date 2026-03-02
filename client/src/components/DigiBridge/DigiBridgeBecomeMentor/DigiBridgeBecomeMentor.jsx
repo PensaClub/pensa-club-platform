@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { useTranslation } from 'react-i18next';
 import { UserContext } from '../../contexts/UserContext';
 import { useAcademy } from '../../contexts/AcademyProvider';
@@ -11,8 +11,8 @@ import { DigiBridgeHeader } from '../../DigiBridgeAcademy/DigiBridgeHeader/DigiB
 const FORM_STORAGE_KEY = 'digibridge_mentor_application_form';
 
 export const DigiBridgeBecomeMentor = () => {
-  const { t } = useTranslation();
-  const navigate = useNavigate();
+  const { t } = useTranslation('digibridge');
+  const navigate = useLocalizedNavigate();
   const { isAuthentication, profileData } = useContext(UserContext);
   const { applyAsMentor } = useAcademy();
 

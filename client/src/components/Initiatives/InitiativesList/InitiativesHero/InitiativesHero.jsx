@@ -5,7 +5,7 @@ import { useInitiativeContext } from '../../../contexts/InitiativeProvider';
 import { useEffect, useState } from 'react';
 
 export const InitiativesHero = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
   const { initiatives, getAllApplications } = useInitiativeContext();
   const [stats, setStats] = useState({
     totalInitiatives: 0,

@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import './videoThumbnailGenerator.css';
 
 const VideoThumbnailGenerator = ({ videoFile, onThumbnailGenerated }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const [currentTime, setCurrentTime] = useState(0);

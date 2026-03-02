@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import './projectBudget.css';
 
 export const ProjectBudget = ({ budget, currency = 'BGN' }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
 
     // Проверка дали има budget данни
     if (!budget || (!budget.goal && !budget.total && !budget.funded)) {

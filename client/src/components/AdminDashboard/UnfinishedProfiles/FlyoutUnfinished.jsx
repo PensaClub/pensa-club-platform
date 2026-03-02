@@ -8,7 +8,7 @@ export const FlyoutUnfinished = ({ isOpen, onClose, user, handleRoleChange, hand
     const [selectedImage, setSelectedImage] = useState(null);
     const [role, setRole] = useState('');
     const [originalRole, setOriginalRole] = useState('');
-    const { t } = useTranslation();
+    const { t } = useTranslation('admin');
 
     useEffect(() => {
         if (user && user.details && user.details.imageURL) {

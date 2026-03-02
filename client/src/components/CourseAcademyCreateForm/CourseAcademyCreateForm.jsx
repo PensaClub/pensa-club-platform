@@ -17,7 +17,7 @@ const STEPS = [
 ];
 
 const CourseAcademyCreateForm = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('academy-admin');
 
   const {
     isEditMode,

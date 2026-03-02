@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import './sponsorsPartners.css';
 
 export const SponsorsPartners = ({ sponsors = [], partners = [] }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
 
     // Проверка дали има данни
     const hasSponsors = sponsors && sponsors.length > 0 && sponsors.some(sponsor => sponsor.visible !== false);

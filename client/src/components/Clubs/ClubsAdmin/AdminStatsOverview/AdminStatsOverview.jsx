@@ -13,7 +13,7 @@ import {
 import './adminStatsOverview.css';
 
 const AdminStatsOverview = ({ stats }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('clubs');
 
     // Calculate percentages and trends
     const calculations = useMemo(() => {

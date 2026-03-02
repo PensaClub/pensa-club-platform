@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, useMemo } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../../LocalizedLink/LocalizedLink';
 import { useTranslation } from 'react-i18next';
 import './storyPubView.css';
 import { renderSlateContent } from '../../../../utils/slateRenderer.jsx';
@@ -17,7 +18,7 @@ import { TextZoom } from '../../../TextZoom/TextZoom.jsx';
 
 export const StoryPubView = ({ type, previewMode = false, previewData = null }) => {
     const { slug } = useParams();
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const [content, setContent] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [relatedContent, setRelatedContent] = useState([]);

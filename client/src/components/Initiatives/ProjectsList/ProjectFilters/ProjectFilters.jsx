@@ -8,7 +8,7 @@ const ProjectFilters = ({
     sortBy, 
     onSortChange 
 }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const [isExpanded, setIsExpanded] = useState(false);
     const [openDropdown, setOpenDropdown] = useState(null);
     const filtersRef = useRef(null);

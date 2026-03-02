@@ -11,7 +11,7 @@ export const AdminDigiBridgeApplicationDetailModal = ({
     onReject,
     onSendEmail
 }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('digibridge');
     const [showRejectForm, setShowRejectForm] = useState(false);
     const [rejectionReason, setRejectionReason] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);

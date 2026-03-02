@@ -10,7 +10,7 @@ export const AdminDigiBridgeMentorStats = ({
   totalStudents, 
   averageRating 
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge');
 
   const stats = [
     {

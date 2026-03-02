@@ -35,7 +35,7 @@ import {
 import './sportsHero.css';
 
 export const SportsHero = ({ club }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('clubs');
   const [activeVideo, setActiveVideo] = useState(null);
   const [showContactModal, setShowContactModal] = useState(false);
   const [showEnrollModal, setShowEnrollModal] = useState(false);

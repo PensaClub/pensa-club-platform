@@ -1,3 +1,5 @@
+const { generateHreflangTags } = require('./hreflangHelper');
+
 // server/src/utils/publicationMetaGenerator.js
 
 /**
@@ -88,6 +90,7 @@ function generatePublicationMetaHTML(publication) {
     <meta name="author" content="${publication.author || 'Pensa Club'}">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="${url}">
+    ${generateHreflangTags(url.replace('https://pensa.club', ''))}
     
     <!-- Open Graph -->
     <meta property="og:type" content="article">

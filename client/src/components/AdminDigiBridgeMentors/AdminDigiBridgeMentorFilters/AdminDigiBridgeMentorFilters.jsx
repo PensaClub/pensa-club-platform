@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import './adminDigiBridgeMentorFilters.css';
 
 export const AdminDigiBridgeMentorFilters = ({ filters, setFilters, mentorsCount }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge');
 
   const specializations = [
     { value: 'all', label: t('AdminDigiBridgeMentors.Filters.allSpecializations') },

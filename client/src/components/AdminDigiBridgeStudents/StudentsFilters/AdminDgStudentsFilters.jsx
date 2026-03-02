@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import './adminDgStudentsFilters.css';
 
 export const AdminDgStudentsFilters = ({ filters, onFilterChange, totalResults }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-students');
   const [showFilters, setShowFilters] = useState(false);
 
   const statusOptions = [

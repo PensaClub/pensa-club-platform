@@ -32,7 +32,7 @@ const RegionalInfoManager = ({
   onRegionalChange, 
   disabled = false 
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('clubs');
   
   const [showAddForm, setShowAddForm] = useState(false);
   const [newAffiliatedClub, setNewAffiliatedClub] = useState('');

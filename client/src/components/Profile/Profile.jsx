@@ -1,6 +1,8 @@
 /* eslint-disable no-unused-vars */
 import { useContext, useEffect, useRef, useState } from "react";
-import { Link, useLocation, useNavigate, NavLink, Routes, Route, Outlet } from "react-router-dom";
+import { useLocation, Routes, Route, Outlet } from 'react-router-dom';
+import { LocalizedLink as Link, LocalizedNavLink as NavLink } from '../LocalizedLink/LocalizedLink';
+import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 import { ProfileData } from "./ProfileData";
 import ProfileForm from "./ProfileForm";
 import ProfileAddress from "./ProfileAddress";
@@ -159,8 +161,8 @@ const AvatarIcon = () => (
 
 export const Profile = () => {
   const location = useLocation();
-  const navigate = useNavigate();
-  const { t, i18n } = useTranslation();
+  const navigate = useLocalizedNavigate();
+  const { t, i18n } = useTranslation(['admin', 'clubs']);
   const currentLanguage = i18n.language;
   const [menuOpen, setMenuOpen] = useState(false);
   const { isFinish, profileData, isAdmin, isModerator, addressId, isMentor } = useContext(UserContext);

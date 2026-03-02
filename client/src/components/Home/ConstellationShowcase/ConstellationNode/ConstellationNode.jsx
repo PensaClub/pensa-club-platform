@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import './constellationNode.css';
 
 export const ConstellationNode = ({ node, isHovered, onHover }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('home');
 
     const getNodeSize = () => {
         const width = window.innerWidth;

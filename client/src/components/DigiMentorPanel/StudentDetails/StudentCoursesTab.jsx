@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import './studentCoursesTab.css';
 
 export const StudentCoursesTab = ({ student }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-mentor');
   const [filterStatus, setFilterStatus] = useState('all');
 
   if (!student || !student.courses) return null;

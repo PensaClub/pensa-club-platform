@@ -1,15 +1,15 @@
 // client/src/components/DigiMentorPanel/DigiMentorStudentsList/DigiMentorStudentsList.jsx
 
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { useTranslation } from 'react-i18next';
 import { useAcademy } from '../../contexts/AcademyProvider';
 import { Loader } from '../../Loader/Loader';
 import './digiMentorStudentsList.css';
 
 export const DigiMentorStudentsList = () => {
-  const { t } = useTranslation();
-  const navigate = useNavigate();
+  const { t } = useTranslation('digibridge-mentor');
+  const navigate = useLocalizedNavigate();
   
   const { getMentorStudents } = useAcademy();
   

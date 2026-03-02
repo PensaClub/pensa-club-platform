@@ -5,7 +5,7 @@ import { Loader } from '../Loader/Loader';
 import './digiMentorProfile.css';
 
 export const DigiMentorProfile = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('digibridge-mentor');
     const { getMentorProfile, updateMentorProfile } = useAcademy();
 
     const [profile, setProfile] = useState(null);

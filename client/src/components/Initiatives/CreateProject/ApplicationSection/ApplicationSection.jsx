@@ -12,7 +12,7 @@ const ApplicationSection = ({
     addRequirement,
     removeRequirement
 }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
 
     return (
         <div className="project-form-section-card">

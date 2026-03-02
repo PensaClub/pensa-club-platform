@@ -15,7 +15,7 @@ export const SearchCommunityBar = ({
     creationDateLabel,
     showResetIcon
 }) => {
-    const { t, i18n } = useTranslation();
+    const { t, i18n } = useTranslation(['auth', 'community']);
     const currentLanguage = i18n.language;
     return (
         <div className="search-bar-commun-s">

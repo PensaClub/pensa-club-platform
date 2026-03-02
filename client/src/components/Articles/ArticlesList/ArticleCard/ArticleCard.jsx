@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Link } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../../LocalizedLink/LocalizedLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faImages, faPlayCircle, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
 import './articleCard.css';
@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 import { truncateText } from '../../../../utils/truncateText';
 
 export const ArticleCard = ({ article, featured = false }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
   const { getViewCount, loadArticleViewCounts } = useAnalytics();
 
   useEffect(() => {

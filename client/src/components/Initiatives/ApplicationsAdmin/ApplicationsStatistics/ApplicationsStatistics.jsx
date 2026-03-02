@@ -22,7 +22,7 @@ import './ApplicationsStatistics.css';
 import { ProjectDetailsModal } from './ProjectDetailsModal';
 
 export const ApplicationsStatistics = ({ applications }) => {
-    const { t, i18n } = useTranslation();
+    const { t, i18n } = useTranslation('content');
     const currentLocale = i18n.language === 'bg' ? bg : enUS;
   const [selectedProjectId, setSelectedProjectId] = useState(null);
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);

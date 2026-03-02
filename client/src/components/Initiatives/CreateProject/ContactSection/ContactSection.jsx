@@ -18,7 +18,7 @@ const ContactSection = ({
     handleContactImageUpload,
     removeContactImage
 }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const contactImageInputRef = useRef(null);
 
     // Handle contact image upload

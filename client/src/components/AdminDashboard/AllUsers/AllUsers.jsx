@@ -1,6 +1,6 @@
 import './allUsers.css';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
 import { useTranslation } from 'react-i18next';
 import { CommentModal } from '../PendingAnnouncements/CommentModal';
 import { useMappingContext } from '../../contexts/MapContext';
@@ -20,7 +20,7 @@ export const AllUsers = ({ setAllUsers }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [adminEmail, setAdminEmail] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  const { t } = useTranslation();
+  const { t } = useTranslation('admin');
   const { onAllUsers } = useMappingContext();
   const { onForgetPasswordSubmit, onChangeAdminRole, profileData } = useAuthContext();
   const [isFlyoutOpen, setIsFlyoutOpen] = useState(false);

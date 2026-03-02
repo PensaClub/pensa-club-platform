@@ -50,7 +50,7 @@ const ActivitiesManager = ({
   onActivitiesChange,
   disabled = false
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('clubs');
   const { uploadFile, uploadMultipleFiles, uploading, uploadProgress } = useFirebaseUpload();
 
   const [activeTab, setActiveTab] = useState('regular');

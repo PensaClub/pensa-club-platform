@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import './showcaseNavigation.css';
 
 export const ShowcaseNavigation = ({ activeTab, setActiveTab, featuredData, isVisible }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('home');
 
   const tabs = [
     { id: 'initiatives', icon: '🎯' },

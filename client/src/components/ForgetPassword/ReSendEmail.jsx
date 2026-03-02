@@ -1,4 +1,5 @@
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { LocalizedLink as Link } from '../LocalizedLink/LocalizedLink';
 import { useAuthContext } from '../contexts/UserContext';
 import { useState, useEffect } from 'react';
 import './forgetPassword.css';
@@ -6,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 export const ReSendEmail = () => {
     const location = useLocation();
-    const { t } = useTranslation();
+    const { t } = useTranslation('auth');
     const { email } = location.state || {};
     const { onForgetPasswordSubmit } = useAuthContext();
     const [attempts, setAttempts] = useState(() => Number(localStorage.getItem('attempts')) || 0);

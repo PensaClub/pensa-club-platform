@@ -6,7 +6,7 @@ import { useAcademy } from '../../contexts/AcademyProvider';
 import './adminDgStudentsFilters.css';
 
 export const AdminDgStudentsFilters = ({ filters, onFilterChange, totalResults }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-students');
   const { getApprovedMentors } = useAcademy();
 
   const [mentors, setMentors] = useState([]);

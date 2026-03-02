@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, Fragment } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
+import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { useAuthContext } from '../../contexts/UserContext';
@@ -8,12 +9,12 @@ import './sidebar.css';
 import { AdModalNotify } from '../../Community/AdsCard/AdModalNotify';
 
 export const MapSidebar = ({ selectedUser, userAds, closeSidebar, setModalImage }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation(['community', 'auth']);
     const sidebarRef = useRef(null);
     const scrollContentRef = useRef(null);
     const [showScrollToTop, setShowScrollToTop] = useState(false);
     const { isAuthentication } = useAuthContext();
-    const navigate = useNavigate();
+    const navigate = useLocalizedNavigate();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [showNotifyModal, setShowNotifyModal] = useState(false); 
 

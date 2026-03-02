@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { MottoCard } from "./MottoCard/mottoCard";
 
 export const MottoSection = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('home');
 
   return (
     <section className="motto-section-modern">

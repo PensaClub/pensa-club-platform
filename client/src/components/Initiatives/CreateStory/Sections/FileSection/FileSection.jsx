@@ -13,7 +13,7 @@ const FileSection = ({
     onBlurHandler,
     setValues
 }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const fileInputRef = useRef(null);
 
     const handleFileUpload = useCallback(async (e) => {

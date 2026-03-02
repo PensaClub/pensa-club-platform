@@ -16,7 +16,7 @@ export const AdminDgStudentsTable = ({
   onStatusChange,
   onOpenNotes  
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-students');
 
   if (loading) {
     return (

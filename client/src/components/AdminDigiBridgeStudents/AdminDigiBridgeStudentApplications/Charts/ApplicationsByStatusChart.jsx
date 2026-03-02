@@ -11,7 +11,7 @@ const STATUS_COLORS = {
 };
 
 export const ApplicationsByStatusChart = ({ data, loading }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-students');
 
   if (loading) {
     return (

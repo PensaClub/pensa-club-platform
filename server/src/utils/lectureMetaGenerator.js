@@ -3,6 +3,8 @@
  * @param {Object} lecture - Sequelize lecture обект
  * @returns {String} - HTML страница с meta tags
  */
+const { generateHreflangTags } = require('./hreflangHelper');
+
 function generateLectureMetaHTML(lecture) {
     const cleanDescription = lecture.shortDescription
         ? lecture.shortDescription.replace(/<[^>]*>/g, '').substring(0, 160)
@@ -116,6 +118,7 @@ function generateLectureMetaHTML(lecture) {
 
   <!-- Canonical URL -->
   <link rel="canonical" href="https://pensa.club/academy/lectures/${lecture.slug}" />
+  ${generateHreflangTags(`/academy/lectures/${lecture.slug}`)}
 
   <!-- Structured Data -->
   <script type="application/ld+json">
@@ -211,6 +214,7 @@ function generateLecturesListMetaHTML() {
   <meta name="twitter:description" content="${description}" />
   <meta name="twitter:image" content="${imageUrl}" />
   <link rel="canonical" href="https://pensa.club/academy/lectures" />
+  ${generateHreflangTags(`/academy/lectures`)}
   <script type="application/ld+json">${JSON.stringify(structuredData)}</script>
   <script>setTimeout(() => { window.location.href = '/academy/lectures'; }, 1000);</script>
   <style>

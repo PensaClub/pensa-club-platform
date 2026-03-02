@@ -19,7 +19,7 @@ import { ConversationCard } from './ConversationCard';
 import { Header } from '../../Header/Header';
 
 export const DigiBridgeMentorDashboard = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge');
   const { profileData } = useAuthContext();
   
   const [activeTab, setActiveTab] = useState('pending'); // 'pending' | 'active' | 'completed'

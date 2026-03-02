@@ -4,7 +4,7 @@ import './InitiativesSearchAdmin.css';
 import { useTranslation } from 'react-i18next';
 
 export const InitiativesSearchAdmin = ({ onSearch, onFilterChange, totalCount, viewMode, onViewModeChange }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState({
     status: 'all',

@@ -8,7 +8,7 @@ export const StoriesSearchAdmin = ({
     totalCount,
     viewMode
 }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const [searchTerm, setSearchTerm] = useState('');
     const [filters, setFilters] = useState({
         category: 'all',

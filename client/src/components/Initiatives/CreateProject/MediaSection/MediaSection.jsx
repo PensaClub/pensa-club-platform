@@ -23,7 +23,7 @@ const MediaSection = ({
     clearAllGallery,
     clearAllDocuments
 }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const [activeTab, setActiveTab] = useState('gallery');
     const [dragOver, setDragOver] = useState('');
     const galleryInputRef = useRef(null);

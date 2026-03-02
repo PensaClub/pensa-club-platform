@@ -13,7 +13,7 @@ import {
 import './membershipClubsCard.css';
 
 const MembershipClubsCard = ({ club, onView, isMember }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('clubs');
     const [imageError, setImageError] = useState(false);
 
     const handleImageError = (e) => {

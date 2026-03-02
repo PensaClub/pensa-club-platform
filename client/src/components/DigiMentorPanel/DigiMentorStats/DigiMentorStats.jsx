@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import './digiMentorStats.css';
 
 export const DigiMentorStats = ({ stats }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-mentor');
 
   const statCards = [
     {

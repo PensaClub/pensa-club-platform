@@ -18,7 +18,7 @@ export const CommentItem = ({
     likeCommentFunc,
     addCommentFunc
 }) => {
-    const { t, i18n } = useTranslation();
+    const { t, i18n } = useTranslation('content');
 
     const {
         isEditing,

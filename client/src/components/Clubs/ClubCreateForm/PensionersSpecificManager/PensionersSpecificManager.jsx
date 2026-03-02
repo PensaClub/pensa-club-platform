@@ -53,7 +53,7 @@ const PensionersSpecificManager = ({
   onPensionersChange, 
   disabled = false 
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('clubs');
   
   const [activeTab, setActiveTab] = useState('healthServices');
   
