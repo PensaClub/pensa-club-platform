@@ -87,7 +87,7 @@ export const ClubProvider = ({ children }) => {
   };
 
   // 📌 ЗАПАЗВАМЕ СТАРИТЕ МЕТОДИ (mock data)
-  const getAllClubs = async (forceRefresh = false, page = 1, limit = 12) => {
+  const getAllClubs = async (forceRefresh = false, page = 1, limit = 12, view) => {
     if (clubs.length > 0 && clubsLoaded && !forceRefresh) {
       return clubs;
     }
@@ -96,7 +96,7 @@ export const ClubProvider = ({ children }) => {
       setIsLoading(true);
 
       // 🌐 Използваме реалния API вместо mock data
-      const response = await clubService.getAllClubs(page, limit);
+      const response = await clubService.getAllClubs(page, limit, view);
 
       // Обработваме response-а правилно
       let fetchedClubs = [];

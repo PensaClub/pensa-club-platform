@@ -38,7 +38,7 @@ export const ClubActivities = ({ club }) => {
     registerForTrip,
     sendMembershipApplication
   } = useClubContext();
-  console.log('ClubActivities club:', club);
+
   const [showRegistrationModal, setShowRegistrationModal] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState(null);
   const [registrationForm, setRegistrationForm] = useState({
