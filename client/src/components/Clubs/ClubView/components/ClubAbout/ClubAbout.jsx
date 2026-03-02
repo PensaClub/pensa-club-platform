@@ -42,8 +42,18 @@ export const ClubAbout = ({ club }) => {
   }
 
   const getClubData = () => {
-    const achievements = club.achievements || { awards: [], recognitions: [], certificates: [] };
-    const socialImpact = club.socialImpact || { volunteering: [], communityProjects: [], partnerships: [] };
+    const achievements = {
+      awards: [],
+      recognitions: [],
+      certificates: [],
+      ...club.achievements,
+    };
+    const socialImpact = {
+      volunteering: [],
+      communityProjects: [],
+      partnerships: [],
+      ...club.socialImpact,
+    };
     const pensionersSpecific = club.pensionersSpecific || {
       healthServices: { regularCheckups: false, bloodPressureMonitoring: false, healthLectures: [] },
       supportServices: {},

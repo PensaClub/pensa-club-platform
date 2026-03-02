@@ -5,7 +5,7 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { AdsCardSkeleton } from "../AdsCardSkeleton/AdsCardSkeleton";
 import { useTranslation } from "react-i18next";
 import { useAuthContext } from "../../contexts/UserContext";
-import { useNavigate } from "react-router-dom";
+import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { AdModalNotify } from "./AdModalNotify";
 
 const ImageModal = ({ src, alt, onClose }) => (
@@ -25,7 +25,7 @@ export const AdsCard = ({ ads, isLoading }) => {
   const [modalImage, setModalImage] = useState(null);
   const [open, setOpen] = useState(false);
   const { t } = useTranslation(['community', 'auth']);
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
 
   const getProfileImage = (gender) => {
     switch (gender) {

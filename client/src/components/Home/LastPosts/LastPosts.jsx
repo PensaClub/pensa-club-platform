@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import "./lastPosts.css";
-import { Link, useNavigate } from "react-router-dom";
+import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
+import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { useEffect, useState } from "react";
 import { useCommunityContext } from "../../contexts/CommunityContext";
 import { useTranslation } from "react-i18next";
@@ -13,7 +14,7 @@ export const LastPosts = () => {
   const { t, i18n } = useTranslation('home');
   const [categories, setCategories] = useState([]);
   const [townNames, setTownNames] = useState({});
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
 
   useEffect(() => {
     window.scrollTo({ top: 0 });

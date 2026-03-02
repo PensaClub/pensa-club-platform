@@ -1,6 +1,7 @@
 // components/Projects/ProjectPreview/ProjectPreview.jsx
 import React, { useState, useEffect, useCallback } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../../../hooks/useLocalizedNavigate';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -23,7 +24,7 @@ import ScrollToTop from '../../../ScrollToTop/ScrollToTop';
 
 export const ProjectPreview = () => {
     const { t } = useTranslation('content');
-    const navigate = useNavigate();
+    const navigate = useLocalizedNavigate();
     const location = useLocation();
     const { toggleProjectDraftStatus, deleteDraftProject } = useInitiativeContext();
     const { isAuthentication } = useAuthContext();

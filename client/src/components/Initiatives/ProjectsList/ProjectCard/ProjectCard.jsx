@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../../LocalizedLink/LocalizedLink';
+import { useLocalizedNavigate } from '../../../../hooks/useLocalizedNavigate';
 import { useTranslation } from 'react-i18next';
 import { useInitiativeContext } from '../../../contexts/InitiativeProvider';
 import { getLocationFromCoordinates } from '../../../../utils/getLocationFromCoordinates';
@@ -10,7 +11,7 @@ const ProjectCard = ({ project, featured = false }) => {
     const { t } = useTranslation('content');
     const { toggleBookmarkProjects, isBookmarkedProject } = useInitiativeContext();
     const [locationText, setLocationText] = useState('');
-    const navigate = useNavigate();
+    const navigate = useLocalizedNavigate();
     const isBookmarked = isBookmarkedProject(project.id);
 
     const handleBookmark = (e) => {

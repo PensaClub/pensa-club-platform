@@ -15,7 +15,8 @@ import MarkerClusterGroup from "react-leaflet-cluster";
 import "./mapEditor.css";
 import "./scrollModal.css";
 import { t } from "i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
+import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { useTranslation } from "react-i18next";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
@@ -108,7 +109,7 @@ export const MapEditor = ({ filteredUsers }) => {
   const [modalImage, setModalImage] = useState(null);
   const [scrollPosition] = useState(0);
   const { isAuthentication } = useAuthContext();
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
   const { t } = useTranslation(['community', 'auth']);
 
   useEffect(() => {

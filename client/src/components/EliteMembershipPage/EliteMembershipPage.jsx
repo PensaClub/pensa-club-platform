@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet';
-import { Link } from 'react-router-dom';
+import { LocalizedLink as Link } from '../LocalizedLink/LocalizedLink';
 import './eliteMembershipPage.css';
 
 export const EliteMembershipPage = () => {

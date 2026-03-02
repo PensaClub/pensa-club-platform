@@ -1,11 +1,15 @@
-import i18next, { changeLanguage } from "i18next";
+import i18next from "i18next";
 import { useEffect, useRef, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { localePath, stripLangFromPath } from "../../utils/languageUtils";
 import "./languageSwitcher.css";
 
 export const LanguageSwitcher = ({ isMobile = false, onMobileMenuToggle }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isMobileOpen, setIsMobileOpen] = useState(false); // Ново състояние за мобилното меню
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const languages = [
     { code: 'bg', name: 'Български', flag: '🇧🇬' },
@@ -28,7 +32,9 @@ export const LanguageSwitcher = ({ isMobile = false, onMobileMenuToggle }) => {
   }, []);
 
   const handleLanguageChange = (langCode) => {
-    changeLanguage(langCode);
+    i18next.changeLanguage(langCode);
+    const cleanPath = stripLangFromPath(location.pathname);
+    navigate(localePath(cleanPath, langCode));
     setIsOpen(false);
     setIsMobileOpen(false);
     if (isMobile && onMobileMenuToggle) {

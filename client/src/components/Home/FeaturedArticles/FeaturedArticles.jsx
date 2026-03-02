@@ -1,6 +1,6 @@
 
 import { useMemo } from "react";
-import { Link } from "react-router-dom";
+import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
 import "./featuredArticles.css";
 import { useArticleContext } from "../../contexts/ArticleContext";
 import { useTranslation } from "react-i18next";

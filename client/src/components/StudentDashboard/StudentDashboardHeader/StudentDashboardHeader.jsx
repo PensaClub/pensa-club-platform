@@ -1,11 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import './studentDashboardHeader.css';
 
 const StudentDashboardHeader = ({ user, dashboardData }) => {
   const { t } = useTranslation('student-dashboard');
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
 
   // Извличане на данни
   const firstName = user?.details?.firstName || '';

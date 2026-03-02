@@ -3,7 +3,8 @@
 import React, { useEffect, useState } from "react";
 import "./profile.css";
 import { useTranslation } from "react-i18next";
-import { useNavigate, Link } from "react-router-dom";
+import { LocalizedLink as Link } from '../LocalizedLink/LocalizedLink';
+import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 import { useAuthContext } from "../contexts/UserContext";
 import { useCommunityContext } from "../contexts/CommunityContext";
 import { DeleteAd } from "../Community/AdPage/DeleteAd/DeleteAd";
@@ -39,7 +40,7 @@ const cutToFirstWord = (text) => {
 };
 
 export const ProfileAnnounced = () => {
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
   const { t, i18n } = useTranslation(['auth', 'community']);
   const currentLanguage = i18n.language;
   const { getMyAds, deleteAd, updateExpirationDate, fetchTowns, regions } =

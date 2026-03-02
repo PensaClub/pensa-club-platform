@@ -3,6 +3,8 @@
  * @param {Object} article - Sequelize article обект
  * @returns {String} - HTML страница с meta tags
  */
+const { generateHreflangTags } = require('./hreflangHelper');
+
 function generateArticleMetaHTML(article) {
     // Почистване на HTML tags от summary
     const cleanSummary = article.summary
@@ -69,6 +71,7 @@ function generateArticleMetaHTML(article) {
   
   <!-- Canonical URL -->
   <link rel="canonical" href="https://pensa.club/articles/${article.slug}" />
+  ${generateHreflangTags(`/articles/${article.slug}`)}
   
   <!-- Auto-redirect след 1 секунда (само за обикновени браузъри) -->
   <script>

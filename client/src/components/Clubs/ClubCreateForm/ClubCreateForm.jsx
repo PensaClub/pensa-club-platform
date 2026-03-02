@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faCheck,
@@ -43,7 +44,7 @@ import ClubPreviewModal from './ClubPreviewModal/ClubPreviewModal';
 
 const ClubCreateForm = () => {
     const { t } = useTranslation('clubs');
-    const navigate = useNavigate();
+    const navigate = useLocalizedNavigate();
     const [searchParams] = useSearchParams();
     const editId = searchParams.get('editId');
     const draftId = searchParams.get('draftId');

@@ -1,5 +1,6 @@
 import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import ArticlePreview from './ArticlePreview/ArticlePreview';
@@ -50,7 +51,7 @@ import { convertSlateToHtml } from '../../Initiatives/CreateIniciative/Utils/ini
 const ArticlePreviewPage = () => {
     const { t } = useTranslation('content');
     const location = useLocation();
-    const navigate = useNavigate();
+    const navigate = useLocalizedNavigate();
 
     const { previewData, mediaFiles } = location.state || {};
 

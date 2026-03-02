@@ -2,7 +2,8 @@
 // Prefix: aalc-
 
 import { useState, useEffect, useCallback } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { LocalizedLink as Link } from '../LocalizedLink/LocalizedLink';
+import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 import { useTranslation } from 'react-i18next';
 import { useAcademyCourses } from '../contexts/AcademyCoursesProvider';
 import {
@@ -35,7 +36,7 @@ const SORT_OPTIONS = ['newest', 'oldest', 'title', 'upcoming', 'popular'];
 
 const AdminAcademyLecturesList = () => {
   const { t } = useTranslation('academy-admin');
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
   const {
     getAdminLectures,
     deleteLecture,

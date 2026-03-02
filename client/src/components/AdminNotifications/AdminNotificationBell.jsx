@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAcademy } from '../contexts/AcademyProvider';
-import { useNavigate } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 import { toast } from 'react-toastify';
 import { getNotificationConfig } from '../../config/notificationConfig';
 import { NotificationItem } from './NotificationItem/NotificationItem';
@@ -11,7 +11,7 @@ import './adminNotificationBell.css';
 
 export const AdminNotificationBell = () => {
   const { t } = useTranslation('digibridge');
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
   const { getAdminNotifications, markNotificationAsRead,deleteNotification } = useAcademy();
   
   const [notifications, setNotifications] = useState([]);

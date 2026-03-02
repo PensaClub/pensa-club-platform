@@ -1,7 +1,9 @@
 // src/components/AcademyCourses/AcademyTestPlayer/AcademyTestPlayer.jsx
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
+import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { useTranslation } from 'react-i18next';
 import { useAuthContext } from '../../contexts/UserContext';
 import { useAcademyCourses } from '../../contexts/AcademyCoursesProvider';
@@ -11,7 +13,7 @@ import AcademyTestPlayerSkeleton from './AcademyTestPlayerSkeleton/AcademyTestPl
 const AcademyTestPlayer = () => {
   const { t } = useTranslation('academy');
   const { courseSlug, lessonSlug, slug } = useParams();
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
   const isLectureTest = !!slug && !courseSlug;
   const isCourseTest = !lessonSlug && !isLectureTest
 

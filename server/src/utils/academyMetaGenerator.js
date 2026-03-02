@@ -2,6 +2,8 @@
  * Генерира HTML с Open Graph meta tags за Academy главна страница
  * @returns {String} - HTML string с meta tags
  */
+const { generateHreflangTags } = require('./hreflangHelper');
+
 function generateAcademyMetaHTML() {
     const title = 'DigiBridge Academy - Дигитална грамотност за всички | Pensa Club';
     const description = 'Безплатна платформа за обучение по дигитална грамотност. Свържете се с ментор и започнете своето дигитално пътешествие днес. Част от европейския проект BRIDGE.';
@@ -78,6 +80,7 @@ function generateAcademyMetaHTML() {
     
     <!-- Canonical URL -->
     <link rel="canonical" href="${url}">
+    ${generateHreflangTags(url.replace('https://pensa.club', ''))}
     
     <!-- Redirect to React App -->
     <meta http-equiv="refresh" content="0; url=${url}">

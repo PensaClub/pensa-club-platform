@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
 import { useInitiativeContext } from '../../contexts/InitiativeProvider';
 import { useLoading } from '../../contexts/LoadingContext';
 import { getLocationFromCoordinates } from '../../../utils/getLocationFromCoordinates';

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import './hero.css';
 import { useTranslation, Trans } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
 
 export const Hero = () => {
   const { t } = useTranslation('home');

@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useContext } from "react";
 import "./header.css";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { useLocation } from 'react-router-dom';
+import { LocalizedLink as Link, LocalizedNavLink as NavLink } from '../LocalizedLink/LocalizedLink';
 import { UserContext } from "../contexts/UserContext";
 import { useTranslation } from "react-i18next";
 import AlertModal from "./AlertModal/AlertModal";

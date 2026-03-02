@@ -17,6 +17,11 @@ i18n
     fallbackNS: 'common',
     partialBundledLanguages: true,
 
+    detection: {
+      order: ['path', 'localStorage', 'navigator'],
+      lookupFromPathIndex: 0,
+    },
+
     backend: {
       loadPath: '/locales/{{lng}}/{{ns}}.json',
     },

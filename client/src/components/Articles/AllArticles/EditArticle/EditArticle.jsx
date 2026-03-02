@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../../../hooks/useLocalizedNavigate';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faSave, faTimes, faEdit, faCalendarAlt,
@@ -17,7 +18,7 @@ import { notify } from "../../../../utils/notify.jsx";
 import ArticleCreateForm from "../../ArticleCreateForm/ArticleCreateForm";
 function EditArticle() {
   const { id } = useParams();
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
   const { t } = useTranslation('content');
   const { getArticleById, updateArticle } = useArticleContext();
   const { getViewCount } = useAnalytics();

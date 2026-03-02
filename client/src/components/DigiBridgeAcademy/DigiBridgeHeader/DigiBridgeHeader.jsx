@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useContext, useCallback } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
 import { useTranslation } from 'react-i18next';
 import { UserContext } from '../../contexts/UserContext';
 import './digiBridgeHeader.css';

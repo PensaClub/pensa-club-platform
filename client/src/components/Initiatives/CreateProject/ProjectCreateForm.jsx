@@ -15,7 +15,7 @@ import {
     faProjectDiagram, faCalendarAlt, faUserCheck, faDollarSign
 } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
 
 // 🎨 Styles
 import './projectCreateForm.css';
@@ -38,7 +38,7 @@ import { LocalStorageStatus } from '../../Initiatives/CreateIniciative/LocalStor
 import { notify } from '../../../utils/notify.jsx';
 import { createSlateEditor } from '../../Initiatives/CreateIniciative/Utils/initiativeEditorUtils.jsx';
 import { useInitiativeContext } from '../../contexts/InitiativeProvider.jsx';
-import { useNavigate } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { handleCleanPaste } from '../../../utils/textPasteUtils.js';
 import { calculateProjectProgress, getProjectProgressBreakdown } from './utils/projectProgressUtils.js';
 import { getSlateTextLength } from '../../Initiatives/CreateIniciative/Utils/slateUtils.js';
@@ -52,7 +52,7 @@ import ContactSection from './ContactSection/ContactSection.jsx';
 
 const ProjectCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false }) => {
     const { t } = useTranslation('content');
-    const navigate = useNavigate();
+    const navigate = useLocalizedNavigate();
     const { getAllInitiatives, initiatives } = useInitiativeContext();
 
     // 🎯 Hook

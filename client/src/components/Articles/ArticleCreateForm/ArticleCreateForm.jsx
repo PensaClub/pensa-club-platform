@@ -26,7 +26,7 @@ import { convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import { generateSlug, isValidSlug, sanitizeSlug } from "../../../utils/slugUtils";
 
-import { useNavigate } from "react-router-dom";
+import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { notify } from "../../../utils/notify.jsx";
 
 // 🔧 HTML to Slate conversion
@@ -212,7 +212,7 @@ const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubm
     const summaryEditor = useMemo(() => createSlateEditor(), []);
     const mainImageAltEditor = useMemo(() => createSlateEditor(), []);
     const sectionEditorsRef = useRef({});
-    const navigate = useNavigate();
+    const navigate = useLocalizedNavigate();
     const getSectionEditor = useCallback((index, field) => {
         const key = `${index}-${field}`;
         if (!sectionEditorsRef.current[key]) {

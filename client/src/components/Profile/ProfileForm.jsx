@@ -8,7 +8,8 @@ import {
 } from "../../utils/profile.jsx";
 import CustomSelect from "./CustomSelect";
 import React, { useState, useEffect, useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { LocalizedLink as Link } from '../LocalizedLink/LocalizedLink';
+import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 import { UserContext } from "../contexts/UserContext";
 import { useTranslation } from "react-i18next";
 import { loadData } from "../../utils/loadData";
@@ -21,7 +22,7 @@ import { useLocalStorage } from "../hooks/useLocalStorage";
 const ProfileForm = () => {
   const { t, i18n } = useTranslation();
   const currentLanguage = i18n.language;
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
   const { onProfileDataSubmit } = useContext(UserContext);
   const { onAllUsers, allUsers, setAllUsers } = useMappingContext();
 

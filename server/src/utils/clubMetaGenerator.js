@@ -3,6 +3,8 @@
  * @param {Object} club - Club обект от базата данни
  * @returns {String} - HTML string с meta tags
  */
+const { generateHreflangTags } = require('./hreflangHelper');
+
 function generateClubMetaHTML(club) {
     // Извличане на description
     let description = '';
@@ -110,6 +112,7 @@ function generateClubMetaHTML(club) {
     
     <!-- Canonical URL -->
     <link rel="canonical" href="${url}">
+    ${generateHreflangTags(url.replace('https://pensa.club', ''))}
     
     <!-- Redirect to React App -->
     <meta http-equiv="refresh" content="0; url=${url}">

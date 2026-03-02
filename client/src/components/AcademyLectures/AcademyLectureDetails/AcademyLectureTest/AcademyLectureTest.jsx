@@ -1,7 +1,9 @@
 // src/components/AcademyLectures/AcademyLectureTest/AcademyLectureTest.jsx
 
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../../LocalizedLink/LocalizedLink';
+import { useLocalizedNavigate } from '../../../../hooks/useLocalizedNavigate';
 import { useTranslation } from 'react-i18next';
 import { useAuthContext } from '../../../contexts/UserContext';
 import { useAcademyCourses } from '../../../contexts/AcademyCoursesProvider';
@@ -42,7 +44,7 @@ const formatTime = (seconds) => {
 export const AcademyLectureTest = () => {
   const { slug } = useParams();
   const { t } = useTranslation('academy');
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
   const { isAuthentication } = useAuthContext();
   const {
     getLectureBySlug,

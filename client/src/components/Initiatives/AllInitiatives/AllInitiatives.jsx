@@ -3,13 +3,13 @@ import { useEffect, useState, useCallback } from 'react';
 import { InitiativesSearchAdmin } from './InitiativesSearchAdmin/InitiativesSearchAdmin';
 import './allInitiatives.css';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { useInitiativeContext } from '../../contexts/InitiativeProvider';
 import { notify } from '../../../utils/notify.jsx';
 
 export const AllInitiatives = () => {
   const { t } = useTranslation('content');
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
   const {
     getAllInitiatives,
     getAllDrafts,

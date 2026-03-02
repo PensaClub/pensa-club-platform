@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import "./about.css";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
 
 export const AboutSection = () => {
   const { t } = useTranslation('home');

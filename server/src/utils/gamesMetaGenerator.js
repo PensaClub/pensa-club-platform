@@ -2,6 +2,8 @@
  * Генерира HTML с Open Graph meta tags за Games страницата
  * @returns {String} - HTML string с meta tags
  */
+const { generateHreflangTags } = require('./hreflangHelper');
+
 function generateGamesMetaHTML() {
     const title = 'Игри за пенсионери | Pensa Club';
     const description = 'Безплатни онлайн игри за пенсионери - шах, судоку, пасианс, табла, тетрис, маджонг и други. Тренирайте ума си докато се забавлявате!';
@@ -85,6 +87,7 @@ function generateGamesMetaHTML() {
     
     <!-- Canonical URL -->
     <link rel="canonical" href="${url}">
+    ${generateHreflangTags(url.replace('https://pensa.club', ''))}
     
     <!-- Redirect to React App -->
     <meta http-equiv="refresh" content="0; url=${url}">

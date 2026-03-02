@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { useClubContext } from '../../contexts/ClubContext';
 import { useArticleContext } from '../../contexts/ArticleContext';
 import { useInitiativeContext } from '../../contexts/InitiativeProvider';
@@ -8,7 +8,7 @@ import './platformStats.css';
 
 export const PlatformStats = () => {
   const { t } = useTranslation('home');
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
   const { getAllClubs } = useClubContext();
   const { getAllArticles } = useArticleContext();
   const { 

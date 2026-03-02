@@ -8,7 +8,7 @@ import { useAuthContext } from '../../../contexts/UserContext';
 import { useInitiativeContext } from '../../../contexts/InitiativeProvider';
 import { CommentItem } from '../CommentItem/CommentItem';
 import { CommentForm } from '../CommentForm/CommentForm';
-import { Link } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../../LocalizedLink/LocalizedLink';
 
 export const Comments = ({
     initiativeId,

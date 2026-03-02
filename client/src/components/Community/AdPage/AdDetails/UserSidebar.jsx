@@ -1,6 +1,7 @@
 import { useEffect, useRef, Fragment, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../../LocalizedLink/LocalizedLink';
+import { useLocalizedNavigate } from '../../../../hooks/useLocalizedNavigate';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import './sidebar-details.css';
@@ -13,7 +14,7 @@ export const UserSidebar = ({ selectedUser, userAds, closeSidebar, setModalImage
   const scrollContentRef = useRef(null);
   const [showScrollToTop, setShowScrollToTop] = useState(false);
   const { isAuthentication } = useAuthContext();
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {

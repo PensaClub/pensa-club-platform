@@ -1,4 +1,5 @@
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { LocalizedLink as Link } from '../LocalizedLink/LocalizedLink';
 import { useAuthContext } from '../contexts/UserContext';
 import { useState, useEffect } from 'react';
 import './forgetPassword.css';

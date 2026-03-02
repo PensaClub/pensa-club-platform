@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { LocalizedLink as Link } from '../LocalizedLink/LocalizedLink';
 import { useAuthContext } from '../contexts/UserContext';
 import { Mail, MapPin, ChevronUp } from 'lucide-react';
 import { partnersData } from '../Home/PartnersShowcase/partnersData';

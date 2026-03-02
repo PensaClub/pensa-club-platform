@@ -14,7 +14,9 @@ import { ImageEnlarger } from "../../../ImageEnlarger/ImageEnlarger";
 import "./adDetails.css";
 import "./sidebar-details.css";
 import "./../../../MapPage/MapEditor/scrollModal.css";
-import { Link, useParams, useNavigate } from "react-router-dom";
+import { useParams } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../../LocalizedLink/LocalizedLink';
+import { useLocalizedNavigate } from '../../../../hooks/useLocalizedNavigate';
 import { SearchBar } from "../../SearchBar/SearchBar";
 import { CommunityContext } from "../../../contexts/CommunityContext";
 import { UserSidebar } from "./UserSidebar";
@@ -45,7 +47,7 @@ const ImageModal = ({ src, alt, onClose }) => (
 
 export const AdDetails = () => {
   const { t, i18n } = useTranslation(['community', 'auth']);
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
   const [ad, setAd] = useState({});
   const [userDetails, setUserDetails] = useState({});
   const [adTownName, setAdTownName] = useState("");

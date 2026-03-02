@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { LocalizedLink as Link } from '../LocalizedLink/LocalizedLink';
 import { useAuthContext } from '../contexts/UserContext';
 import { useForm } from '../hooks/useForm';
 import { useTranslation } from 'react-i18next';

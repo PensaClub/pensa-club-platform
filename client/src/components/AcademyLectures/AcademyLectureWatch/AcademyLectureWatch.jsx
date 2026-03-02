@@ -1,7 +1,9 @@
 // src/components/AcademyLectures/AcademyLectureWatch/AcademyLectureWatch.jsx
 
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
+import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { useTranslation } from 'react-i18next';
 import { useAuthContext } from '../../contexts/UserContext';
 import { useAcademyCourses } from '../../contexts/AcademyCoursesProvider';
@@ -65,7 +67,7 @@ const formatDuration = (minutes, t) => {
 export const AcademyLectureWatch = () => {
   const { slug } = useParams();
   const { t } = useTranslation('academy');
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
   const { isAuthentication, userData } = useAuthContext();
   const { getLectureBySlug, getLectureTestStatus, isLoading } = useAcademyCourses(); // ПРОМЕНЕНО
 

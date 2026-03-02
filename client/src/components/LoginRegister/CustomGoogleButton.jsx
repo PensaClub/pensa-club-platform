@@ -1,13 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 import { useGoogleAuth } from '../contexts/GoogleAuthContext';
-import { useNavigate } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 import { useTranslation } from 'react-i18next';
 
 export const CustomGoogleButton = ({ mode = 'login', onSwitchMode }) => {
   const {t} = useTranslation('auth');
   const { handleGoogleLogin, handleGoogleRegister } = useGoogleAuth();
   const buttonRef = useRef(null);
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
 
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "224833004247-o2q7ff1onln6j5pkhtqtnct74p0ehjj9.apps.googleusercontent.com";
 

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../../LocalizedLink/LocalizedLink';
 import './initiativeCard.css';
 import { useTranslation } from 'react-i18next';
 import { useAnalytics } from '../../../contexts/AnalyticsContext';

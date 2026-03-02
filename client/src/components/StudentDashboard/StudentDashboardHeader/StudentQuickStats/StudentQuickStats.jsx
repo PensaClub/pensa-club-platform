@@ -1,11 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../../../hooks/useLocalizedNavigate';
 import './studentQuickStats.css';
 
 const StudentQuickStats = ({ data }) => {
   const { t } = useTranslation('student-dashboard');
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
 
   // data е целият response, достъпваме през dashboard
   const dashboard = data?.dashboard;

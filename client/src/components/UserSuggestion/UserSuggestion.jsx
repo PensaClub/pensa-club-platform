@@ -4,7 +4,7 @@ import { trimObjectStrings, resetFields } from '../../utils/profile.jsx';
 
 import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 import { SuggestUserContext } from '../contexts/SuggestUserContext';
 import { UserContext } from '../contexts/UserContext';
 
@@ -13,7 +13,7 @@ const nameRegex = /^[a-zA-Zа-яА-Я0-9_\s]+(-[a-zA-Zа-яА-Я0-9_]+)*$/i;
 
 export const UserSuggestion = () => {
   const { t } = useTranslation('auth');
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
 
   const { onSuggestSubmit } = useContext(SuggestUserContext);
   const { profileData } = useContext(UserContext);

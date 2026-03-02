@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, useMemo } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../../LocalizedLink/LocalizedLink';
 import { useTranslation } from 'react-i18next';
 import './storyPubView.css';
 import { renderSlateContent } from '../../../../utils/slateRenderer.jsx';

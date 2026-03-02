@@ -3,11 +3,11 @@
 import React, { useState, useEffect } from 'react';
 import { useAuthContext } from '../../contexts/UserContext';
 import { getNotificationConfig,getNotificationRoute  } from '../../../config/notificationConfig';
-import { useNavigate } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import './notifications.css';
 
 export const Notifications = () => {
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
   const { 
     getUserNotifications, 
     markNotificationAsRead, 

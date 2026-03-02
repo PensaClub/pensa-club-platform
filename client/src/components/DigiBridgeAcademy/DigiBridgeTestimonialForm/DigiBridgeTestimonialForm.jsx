@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { toast } from 'react-toastify';
 import { useAuthContext } from '../../contexts/UserContext';
 import { useAcademy } from '../../contexts/AcademyProvider';
@@ -8,7 +8,7 @@ import './digiBridgeTestimonialForm.css';
 
 export const DigiBridgeTestimonialForm = () => {
     const { t } = useTranslation('digibridge');
-    const navigate = useNavigate();
+    const navigate = useLocalizedNavigate();
     const { isAuthentication, profileData, setRedirectAfterLogin } = useAuthContext();
     const { createAcademyReview, checkUserAcademyReviewStatus } = useAcademy();
     

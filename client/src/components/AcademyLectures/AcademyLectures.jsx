@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 
 import { AcademyLectureTrailerModal } from './AcademyLectureTrailerModal/AcademyLectureTrailerModal';
 import AcademyLecturesSkeleton from './AcademyLecturesSkeleton/AcademyLecturesSkeleton';
@@ -59,7 +59,7 @@ const getLectureStatus = (lecture) => {
 
 export const AcademyLectures = () => {
   const { t } = useTranslation('academy');
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
   const { isAuthentication } = useAuthContext();
   const {
     lectures = [],

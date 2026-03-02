@@ -1,6 +1,6 @@
 import './allUsers.css';
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
 import { useTranslation } from 'react-i18next';
 import { CommentModal } from '../PendingAnnouncements/CommentModal';
 import { useMappingContext } from '../../contexts/MapContext';

@@ -1,7 +1,8 @@
 // client/src/components/DigiMentorPanel/StudentDetails/StudentDetails.jsx
 
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { useTranslation } from 'react-i18next';
 import { useAcademy } from '../../contexts/AcademyProvider';
 import { Loader } from '../../Loader/Loader';
@@ -15,7 +16,7 @@ import './studentDetails.css';
 
 export const StudentDetails = () => {
   const { studentId } = useParams();
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
   const { t } = useTranslation('digibridge-mentor');
   
   const { getStudentDetails, isLoading: academyLoading } = useAcademy();

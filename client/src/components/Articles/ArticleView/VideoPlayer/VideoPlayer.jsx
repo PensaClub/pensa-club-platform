@@ -11,7 +11,7 @@ import {
   faDownload
 } from '@fortawesome/free-solid-svg-icons';
 import './videoPlayer.css';
-import { Link } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../../LocalizedLink/LocalizedLink';
 import { useTranslation } from 'react-i18next';
 
 const VideoPlayer = ({ src, thumbnail, alt, downloadUrl = null, allowDownload = false }) => {

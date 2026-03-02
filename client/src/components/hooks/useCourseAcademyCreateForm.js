@@ -1,7 +1,8 @@
 // src/components/hooks/useCourseAcademyCreateForm.js
 
 import { useState, useCallback, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useAcademyCourses } from '../contexts/AcademyCoursesProvider';
@@ -63,7 +64,7 @@ const createNewLesson = () => ({
 
 const useCourseAcademyCreateForm = () => {
     const { courseSlug } = useParams();
-    const navigate = useNavigate();
+    const navigate = useLocalizedNavigate();
     const { t } = useTranslation('academy-admin');
 
     // API функциите с prefix "api" за да няма конфликт с локалните state функции

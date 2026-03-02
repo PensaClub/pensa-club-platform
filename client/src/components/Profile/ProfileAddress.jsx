@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 import { useTranslation } from 'react-i18next';
 import { handleReset, validateField, trimObjectStrings } from '../../utils/profile.jsx';
 import { UserContext } from '../contexts/UserContext';
@@ -8,7 +8,7 @@ import { loadData } from '../../utils/loadData';
 import { useMappingContext } from '../contexts/MapContext';
 
 const ProfileAddress = () => {
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
   const { t, i18n } = useTranslation();
   const currentLanguage = i18n.language;
   const { profileData, onEditProfileDataSubmit, addressId } = useContext(UserContext);

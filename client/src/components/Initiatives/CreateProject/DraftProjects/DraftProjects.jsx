@@ -1,6 +1,6 @@
 // components/Projects/DraftProjects/DraftProjects.jsx
 import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../../../hooks/useLocalizedNavigate';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -16,7 +16,7 @@ import { notify } from '../../../../utils/notify.jsx';
 
 const DraftProjects = () => {
     const { t } = useTranslation('content');
-    const navigate = useNavigate();
+    const navigate = useLocalizedNavigate();
     
     const {
         getAllProjectDrafts,

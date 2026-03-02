@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 import { useAuthContext } from '../contexts/UserContext';
 import { useAcademy } from '../contexts/AcademyProvider';
 import { Loader } from '../Loader/Loader';
@@ -17,7 +17,7 @@ import './digiMentorPanel.css';
 
 export const DigiMentorPanel = () => {
     const { t } = useTranslation('digibridge-mentor');
-    const navigate = useNavigate();
+    const navigate = useLocalizedNavigate();
     const { 
         getMentorDashboardStats, 
         getMentorRecentActivity, 

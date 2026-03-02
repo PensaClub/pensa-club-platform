@@ -1,5 +1,5 @@
 import './errorPageBase.css'; 
-import { NavLink } from 'react-router-dom';
+import { LocalizedNavLink as NavLink } from '../../LocalizedLink/LocalizedLink';
 import { useTranslation } from "react-i18next";
 
 export const ErrorPageBase = ({ errorCode, errorDesc }) => {

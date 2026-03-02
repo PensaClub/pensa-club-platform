@@ -2,7 +2,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unused-vars */
 import { useState, useCallback, useRef, useMemo, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 
 // 🔥 Firebase imports
 import {
@@ -43,7 +44,7 @@ import { slateToHtml } from '../../utils/slateToHtml';
 import { useProjectRealTimeValidation } from './useProjectRealTimeValidation';
 
 const useCreateProject = (initialValues, onSubmitHandler) => {
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
   const { t } = useTranslation('content');
   const {
     createProject,

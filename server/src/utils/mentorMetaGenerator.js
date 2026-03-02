@@ -3,6 +3,8 @@
  * @param {Object} mentor - Mentor обект от базата данни
  * @returns {String} - HTML string с meta tags
  */
+const { generateHreflangTags } = require('./hreflangHelper');
+
 function generateMentorMetaHTML(mentor) {
     const title = `${mentor.name} - Ментор по ${mentor.specialization || 'дигитална грамотност'} | DigiBridge Academy`;
     
@@ -104,6 +106,7 @@ function generateMentorMetaHTML(mentor) {
     
     <!-- Canonical URL -->
     <link rel="canonical" href="${url}">
+    ${generateHreflangTags(url.replace('https://pensa.club', ''))}
     
     <!-- Redirect to React App -->
     <meta http-equiv="refresh" content="0; url=${url}">

@@ -3,14 +3,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAuthContext } from '../contexts/UserContext';
-import { useNavigate } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 import { getNotificationConfig, getNotificationRoute } from '../../config/notificationConfig';
 import { NotificationItem } from '../AdminNotifications/NotificationItem/NotificationItem';
 import '../AdminNotifications/adminNotificationBell.css';
 
 export const UserNotificationBell = () => {
   const { t } = useTranslation('digibridge');
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
   const { getUserNotifications, markNotificationAsRead, deleteNotification } = useAuthContext();
 
   const [notifications, setNotifications] = useState([]);
