@@ -31,10 +31,12 @@ export const LanguageSwitcher = ({ isMobile = false, onMobileMenuToggle }) => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleLanguageChange = (langCode) => {
-    i18next.changeLanguage(langCode);
-    const cleanPath = stripLangFromPath(location.pathname);
-    navigate(localePath(cleanPath, langCode));
+  const handleLanguageChange = async (langCode) => {
+    if (langCode === i18next.language) return;
+    const cleanPath = stripLangFromPath(window.location.pathname);
+    const targetPath = localePath(cleanPath, langCode);
+    await i18next.changeLanguage(langCode);
+    navigate(targetPath, { replace: true });
     setIsOpen(false);
     setIsMobileOpen(false);
     if (isMobile && onMobileMenuToggle) {
