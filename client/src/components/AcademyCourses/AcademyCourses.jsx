@@ -9,6 +9,7 @@ import { AcademyProgramTracks } from './AcademyProgramTracks/AcademyProgramTrack
 import { AcademyCoursesList } from './AcademyCoursesList/AcademyCoursesList';
 import './academyCourses.css';
 import AcademyCoursesSkeleton from './AcademyCoursesSkeleton/AcademyCoursesSkeleton';
+import SEOHead from '../SEO/SEOHead';
 
 const PROGRAM_COLORS = {
   'Мобилни устройства': { primary: '#3b82f6', gradient: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)', icon: '📱' },
@@ -147,12 +148,69 @@ export const AcademyCourses = () => {
     return categories.find(c => c.name === currentCategory) || null;
   }, [currentCategory, categories]);
 
+  // SEO meta data
+  const metaData = useMemo(() => {
+    const siteName = 'DigiBridge Academy';
+    let title, description;
+
+    if (currentSearch) {
+      title = t('academyCoursesSeo.searchTitle', { term: currentSearch, defaultValue: `Търсене: ${currentSearch} | Курсове | ${siteName}` });
+      description = t('academyCoursesSeo.searchDescription', { term: currentSearch, count: pagination.total || 0, defaultValue: `Намерени ${pagination.total || 0} курса за "${currentSearch}" в ${siteName}.` });
+    } else if (currentCategory) {
+      title = t('academyCoursesSeo.categoryTitle', { category: currentCategory, defaultValue: `Курсове по ${currentCategory} | ${siteName}` });
+      description = t('academyCoursesSeo.categoryDescription', { category: currentCategory, defaultValue: `Безплатни онлайн курсове по ${currentCategory} за дигитална грамотност. ${siteName} — обучение за възрастни хора 60+.` });
+    } else if (currentPage > 1) {
+      title = t('academyCoursesSeo.pageTitle', { page: currentPage, defaultValue: `Курсове - Страница ${currentPage} | ${siteName}` });
+      description = t('academyCoursesSeo.listDescription', { defaultValue: 'Безплатни онлайн курсове за дигитална грамотност, интернет сигурност и технологии. DigiBridge Academy — обучение за възрастни хора 60+.' });
+    } else {
+      title = t('academyCoursesSeo.listTitle', { defaultValue: `Курсове за дигитална грамотност | ${siteName}` });
+      description = t('academyCoursesSeo.listDescription', { defaultValue: 'Безплатни онлайн курсове за дигитална грамотност, интернет сигурност и технологии. DigiBridge Academy — обучение за възрастни хора 60+.' });
+    }
+
+    return {
+      title,
+      description,
+      keywords: 'курсове, дигитална грамотност, DigiBridge Academy, Pensa Club, безплатни курсове, обучение, пенсионери, 60+, интернет сигурност'
+    };
+  }, [currentSearch, currentCategory, currentPage, pagination.total, t]);
+
+  const structuredData = useMemo(() => ({
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": metaData.title,
+    "description": metaData.description,
+    "url": window.location.href,
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "Pensa Club",
+      "url": "https://pensa.club"
+    },
+    "provider": {
+      "@type": "EducationalOrganization",
+      "name": "DigiBridge Academy",
+      "url": "https://pensa.club/academy",
+      "sameAs": ["https://www.facebook.com/profile.php?id=61578204366479"]
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": window.location.href
+    }
+  }), [metaData]);
+
   if (loading) {
     return <AcademyCoursesSkeleton />;
   }
 
   return (
     <div className="academyCourses">
+      <SEOHead
+        title={metaData.title}
+        description={metaData.description}
+        keywords={metaData.keywords}
+        image="/images/digibridge/hero-image.jpg"
+        type="website"
+        structuredData={structuredData}
+      />
       <AcademyCoursesHero
         totalCourses={stats.totalCourses}
         totalPrograms={stats.totalPrograms}

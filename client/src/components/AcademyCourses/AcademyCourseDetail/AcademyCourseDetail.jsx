@@ -1,6 +1,6 @@
 // src/components/AcademyCourses/AcademyCourseDetail/AcademyCourseDetail.jsx
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAcademyCourses } from '../../contexts/AcademyCoursesProvider';
@@ -8,6 +8,7 @@ import { useAuthContext } from '../../contexts/UserContext';
 import { AcademyTrailerModal } from '../AcademyTrailerModal/AcademyTrailerModal';
 import './academyCourseDetail.css';
 import AcademyCourseDetailSkeleton from './AcademyCourseDetailSkeleton/AcademyCourseDetailSkeleton';
+import SEOHead from '../../SEO/SEOHead';
 
 // Level colors
 const LEVEL_CONFIG = {
@@ -456,7 +457,7 @@ const CourseMaterialItem = ({ material, index, t }) => {
 // ============================================
 
 export const AcademyCourseDetail = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { slug } = useParams();
   const navigate = useNavigate();
 
@@ -492,6 +493,103 @@ export const AcademyCourseDetail = () => {
 
   const hasPrivilegedAccess = isAdmin || isModerator || isMentor;
   const hasLessonAccess = isEnrolled || hasPrivilegedAccess;
+
+  // SEO meta data
+  const metaData = useMemo(() => {
+    if (!currentCourse) {
+      return {
+        title: t('academyCoursesSeo.loading', { defaultValue: 'Зареждане на курс... | DigiBridge Academy' }),
+        description: t('academyCoursesSeo.loadingDescription', { defaultValue: 'Безплатен онлайн курс в DigiBridge Academy' }),
+        keywords: 'курс, DigiBridge Academy, Pensa Club, дигитална грамотност',
+        image: 'https://pensa.club/images/digibridge/hero-image.jpg',
+        publishedTime: null,
+        modifiedTime: null
+      };
+    }
+
+    const description = (currentCourse.shortDescription || '').replace(/<[^>]*>/g, '').substring(0, 160);
+
+    return {
+      title: `${currentCourse.name} | DigiBridge Academy`,
+      description: description || 'Безплатен онлайн курс за дигитална грамотност',
+      keywords: [
+        ...(currentCourse.tags || []),
+        currentCourse.category,
+        'курс', 'DigiBridge Academy', 'дигитална грамотност', 'Pensa Club', 'безплатен курс'
+      ].filter(Boolean).join(', '),
+      image: currentCourse.thumbnailUrl || 'https://pensa.club/images/digibridge/hero-image.jpg',
+      publishedTime: currentCourse.publishedAt || currentCourse.createdAt,
+      modifiedTime: currentCourse.updatedAt
+    };
+  }, [currentCourse, t]);
+
+  const structuredData = useMemo(() => {
+    if (!currentCourse) return null;
+
+    const leadInst = currentCourse.instances?.find(i => i.isLead)?.mentor;
+
+    const courseSchema = {
+      "@type": "Course",
+      "name": currentCourse.name,
+      "description": (currentCourse.shortDescription || currentCourse.description || '').replace(/<[^>]*>/g, '').substring(0, 200),
+      "url": window.location.href,
+      "provider": {
+        "@type": "Organization",
+        "name": "DigiBridge Academy",
+        "url": "https://pensa.club/academy",
+        "sameAs": ["https://www.facebook.com/profile.php?id=61578204366479"]
+      },
+      "isAccessibleForFree": true,
+      "courseMode": "online",
+      "inLanguage": i18n.language,
+      "educationalLevel": currentCourse.difficultyLevel || "beginner",
+      "image": currentCourse.thumbnailUrl || 'https://pensa.club/images/digibridge/hero-image.jpg',
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "BGN",
+        "availability": "https://schema.org/InStock"
+      }
+    };
+
+    if (currentCourse.estimatedHours) {
+      courseSchema.timeRequired = `PT${currentCourse.estimatedHours}H`;
+    }
+    if (currentCourse.maxCredits) {
+      courseSchema.numberOfCredits = currentCourse.maxCredits;
+    }
+    if (leadInst) {
+      courseSchema.hasCourseInstance = {
+        "@type": "CourseInstance",
+        "courseMode": "online",
+        "instructor": { "@type": "Person", "name": leadInst.name }
+      };
+    }
+    if (currentCourse.rating > 0) {
+      courseSchema.aggregateRating = {
+        "@type": "AggregateRating",
+        "ratingValue": currentCourse.rating,
+        "bestRating": 5,
+        "ratingCount": currentCourse.enrolledCount || 1
+      };
+    }
+
+    return {
+      "@context": "https://schema.org",
+      "@graph": [
+        courseSchema,
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Начало", "item": "https://pensa.club" },
+            { "@type": "ListItem", "position": 2, "name": "DigiBridge Academy", "item": "https://pensa.club/academy" },
+            { "@type": "ListItem", "position": 3, "name": "Курсове", "item": "https://pensa.club/academy/courses" },
+            { "@type": "ListItem", "position": 4, "name": currentCourse.name }
+          ]
+        }
+      ]
+    };
+  }, [currentCourse, i18n.language]);
 
   // Load course
   useEffect(() => {
@@ -733,6 +831,16 @@ export const AcademyCourseDetail = () => {
 
   return (
     <div className="academyCourseDetail" style={{ '--accent-color': categoryColor }}>
+      <SEOHead
+        title={metaData.title}
+        description={metaData.description}
+        keywords={metaData.keywords}
+        image={metaData.image}
+        type="article"
+        publishedTime={metaData.publishedTime}
+        modifiedTime={metaData.modifiedTime}
+        structuredData={structuredData}
+      />
       {/* Background Effects */}
       <div className="academyCourseDetail-bgEffects">
         <div className="academyCourseDetail-bgGlow academyCourseDetail-bgGlow--1"></div>

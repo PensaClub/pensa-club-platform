@@ -47,6 +47,22 @@ module.exports = (sequelize, DataTypes) => {
                     as: 'story',
                 });
             }
+
+            // Course
+            if (models.course) {
+                BotLog.belongsTo(models.course, {
+                    foreignKey: 'courseId',
+                    as: 'course',
+                });
+            }
+
+            // Lecture
+            if (models.lecture) {
+                BotLog.belongsTo(models.lecture, {
+                    foreignKey: 'lectureId',
+                    as: 'lecture',
+                });
+            }
         }
     }
 
@@ -57,7 +73,7 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
             },
             contentType: {
-                type: DataTypes.ENUM('article', 'project', 'initiative', 'club', 'page', 'mentor', 'game', 'publication', 'story'),
+                type: DataTypes.ENUM('article', 'project', 'initiative', 'club', 'page', 'mentor', 'game', 'publication', 'story', 'course', 'lecture'),
                 allowNull: false,
                 defaultValue: 'article',
                 field: 'content_type',
@@ -137,6 +153,28 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
                 allowNull: true,
                 field: 'story_slug',
+            },
+            // COURSE
+            courseId: {
+                type: DataTypes.INTEGER,
+                allowNull: true,
+                field: 'course_id',
+            },
+            courseSlug: {
+                type: DataTypes.STRING,
+                allowNull: true,
+                field: 'course_slug',
+            },
+            // LECTURE
+            lectureId: {
+                type: DataTypes.INTEGER,
+                allowNull: true,
+                field: 'lecture_id',
+            },
+            lectureSlug: {
+                type: DataTypes.STRING,
+                allowNull: true,
+                field: 'lecture_slug',
             },
             // GEOGRAPHY
             country: {

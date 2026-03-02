@@ -14413,6 +14413,7 @@
       "yourScore": "Вашият резултат",
       "correct": "Верни",
       "total": "Общо",
+      "backToLecture": "Към лекцията",
       "passing": "Минимум",
       "creditsEarned": "кредита",
       "backToLesson": "Към урока",
@@ -14424,6 +14425,16 @@
     "wrong": "Грешни",
     "continueCourse": "Продължи с курса",
     "noMoreAttempts": "Няма повече опити"
+  },
+  "academyCoursesSeo": {
+    "listTitle": "Курсове за дигитална грамотност | DigiBridge Academy",
+    "listDescription": "Безплатни онлайн курсове за дигитална грамотност, интернет сигурност и технологии. DigiBridge Academy — обучение за възрастни хора 60+.",
+    "categoryTitle": "Курсове по {{category}} | DigiBridge Academy",
+    "categoryDescription": "Безплатни онлайн курсове по {{category}} за дигитална грамотност. DigiBridge Academy — обучение за възрастни хора 60+.",
+    "searchTitle": "Търсене: {{term}} | Курсове | DigiBridge Academy",
+    "searchDescription": "Намерени {{count}} курса за \"{{term}}\" в DigiBridge Academy.",
+    "pageTitle": "Курсове - Страница {{page}} | DigiBridge Academy",
+    "loading": "Зареждане... | DigiBridge Academy"
   },
   "academyLectures": {
     "hero": {
@@ -14506,7 +14517,9 @@
       "minutes": "мин"
     },
     "actions": {
-      "takeTest": "Реши теста"
+      "takeTest": "Реши теста",
+      "testPassed": "Преминат",
+      "retakeTest": "Опитай отново"
     },
     "chat": {
       "title": "Чат на живо",
@@ -15665,20 +15678,40 @@
       "invalidUrl": "Невалиден URL"
     }
   },
+  "academyLecturesSeo": {
+    "listTitle": "Лекции за дигитална грамотност | DigiBridge Academy",
+    "listDescription": "Безплатни онлайн лекции за дигитална грамотност, интернет сигурност и технологии. DigiBridge Academy — обучение за възрастни хора 60+ с квалифицирани лектори.",
+    "categoryTitle": "Лекции по {{category}} | DigiBridge Academy",
+    "categoryDescription": "Безплатни онлайн лекции по {{category}} за дигитална грамотност. DigiBridge Academy — обучение за възрастни хора 60+.",
+    "searchTitle": "Търсене: {{term}} | Лекции | DigiBridge Academy",
+    "searchDescription": "Намерени {{count}} лекции за \"{{term}}\" в DigiBridge Academy.",
+    "loading": "Зареждане... | DigiBridge Academy"
+  },
   "academyLectureDetails": {
-  "lecturer": {
-    "title": "Лектор",
-    "titlePlural": "Лектори",
-    "alsoParticipate": "Също участват"
-  },
-  "roles": {
-    "lecturer": "Лектор",
-    "mentor": "Ментор",
-    "assistant": "Асистент",
-    "guest": "Гост"
-  },
-  "course": {
-    "module": "Модул"
+    "lecturer": {
+      "title": "Лектор",
+      "titlePlural": "Лектори",
+      "alsoParticipate": "Също участват"
+    },
+    "roles": {
+      "lecturer": "Лектор",
+      "mentor": "Ментор",
+      "assistant": "Асистент",
+      "guest": "Гост"
+    },
+    "course": {
+      "module": "Модул"
+    },
+    "test": {
+      "testPassed": "Тестът е преминат!",
+      "testFailed": "Тестът не е преминат",
+      "correctAnswers": "верни отговори",
+      "creditsEarned": "спечелени",
+      "attempts": "Опити",
+      "remaining": "Оставащи",
+      "noMoreAttempts": "Няма повече опити",
+      "maxAttempts": "Макс. опити",
+      "hintFree": "Гледайте лекцията, за да отключите теста."
+    }
   }
-}
 }
