@@ -21,5 +21,5 @@ export function getLangFromPath(pathname) {
 // '/en/articles' → '/articles'
 // '/articles' → '/articles'
 export function stripLangFromPath(pathname) {
-  return pathname.replace(/^\/(en|de)(\/|$)/, '/$2') || '/';
+  return pathname.replace(/^\/(en|de)(\/|$)/, '$2') || '/';
 }
