@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import './searchCard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faSquarePollHorizontal } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
 
 const adsData = [
     {

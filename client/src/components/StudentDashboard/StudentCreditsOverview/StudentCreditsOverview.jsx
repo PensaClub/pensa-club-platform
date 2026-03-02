@@ -4,7 +4,7 @@ import { BookOpen, Video, Users, Presentation, TrendingUp } from 'lucide-react';
 import './studentCreditsOverview.css';
 
 const StudentCreditsOverview = ({ dashboardData = {} }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('student-dashboard');
  const dashboard = dashboardData?.dashboard || {};
     const {
         totalCreditsEarned = 0,

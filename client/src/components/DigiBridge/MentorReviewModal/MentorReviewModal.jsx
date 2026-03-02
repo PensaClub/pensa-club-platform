@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import './mentorReviewModal.css';
 
 export const MentorReviewModal = ({ mentor, onClose, onSuccess }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge');
   const { createMentorReview } = useAcademy();
   const { profileData } = useAuthContext();
   

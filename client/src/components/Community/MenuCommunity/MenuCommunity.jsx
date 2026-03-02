@@ -1,7 +1,8 @@
 import "./menuCommunity.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapLocation, faHouseUser, faUser, faBars, faCircleExclamation, faPlus, faUserGroup } from '@fortawesome/free-solid-svg-icons';
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { useAuthContext } from "../../contexts/UserContext";
 import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
@@ -14,7 +15,7 @@ export const MenuCommunity = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const { t, i18n } = useTranslation();
     const location = useLocation();
-    const navigate = useNavigate();
+    const navigate = useLocalizedNavigate();
     const dropdownRef = useRef(null);
 
     const handleNavigation = (path) => {

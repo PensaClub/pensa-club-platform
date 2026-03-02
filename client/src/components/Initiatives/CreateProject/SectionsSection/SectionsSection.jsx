@@ -24,7 +24,7 @@ const SectionsSection = ({
     clearSectionImages,
 
 }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const sectionEditorsRef = useRef({});
  // 🆕 State за URL inputs
     const [showUrlInputs, setShowUrlInputs] = useState({});

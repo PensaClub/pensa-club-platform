@@ -8,7 +8,7 @@ export const PublicationsHeaderAdmin = ({
   onViewModeChange,
   isLoading
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
 
   return (
     <div className="publications-header-admin-container">

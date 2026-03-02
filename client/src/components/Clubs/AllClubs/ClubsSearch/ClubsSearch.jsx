@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../../LocalizedLink/LocalizedLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faSearch, 
@@ -25,7 +25,7 @@ export const ClubsSearch = ({
   showMap,
   onToggleMap 
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('clubs');
   const { getAllPublications } = useInitiativeContext();
   
   const [searchTerm, setSearchTerm] = useState('');

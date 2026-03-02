@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet-async';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -60,8 +61,8 @@ import SEOHead from '../../SEO/SEOHead';
 
 export const ClubView = () => {
     const { slug } = useParams();
-    const navigate = useNavigate();
-    const { t } = useTranslation();
+    const navigate = useLocalizedNavigate();
+    const { t } = useTranslation('clubs');
     const {
         getClubBySlug,
         currentClub,

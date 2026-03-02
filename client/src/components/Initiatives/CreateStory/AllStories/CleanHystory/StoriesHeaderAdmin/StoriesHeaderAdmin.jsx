@@ -8,7 +8,7 @@ export const StoriesHeaderAdmin = ({
   onViewModeChange,
   isLoading
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
 
   return (
     <div className="stories-header-admin-container">

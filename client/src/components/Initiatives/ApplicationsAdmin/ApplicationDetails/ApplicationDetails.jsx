@@ -11,7 +11,7 @@ export const ApplicationDetails = ({
   onClose,
   onContact
 }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('content');
   const [applicationHistory, setApplicationHistory] = useState([]);
   const [isLoadingHistory, setIsLoadingHistory] = useState(false);
   const [userProfile, setUserProfile] = useState(null);

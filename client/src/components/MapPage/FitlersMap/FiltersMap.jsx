@@ -7,7 +7,7 @@ import { MapEditor } from '../MapEditor/MapEditor';
 import { useMappingContext } from '../../contexts/MapContext';
 
 const CustomSelect = ({ options, selectedValues, onChange, searchPlaceholder, icon }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('community');
     const [isOpen, setIsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const selectRef = useRef();
@@ -83,7 +83,7 @@ const CustomSelect = ({ options, selectedValues, onChange, searchPlaceholder, ic
 };
 
 const FilterSection = ({ title, options, selectedValues, onChange, icon }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('community');
 
     return (
         <div className="filter-section">
@@ -107,7 +107,7 @@ const FilterSection = ({ title, options, selectedValues, onChange, icon }) => {
 };
 
 export const FiltersMap = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('community');
     const { allUsers } = useMappingContext();
 
     const [optionData, setOptionData] = useState(null);

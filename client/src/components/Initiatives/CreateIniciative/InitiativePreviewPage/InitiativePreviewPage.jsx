@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../../../hooks/useLocalizedNavigate';
 import { useTranslation } from 'react-i18next';
 import { InitiativePreview } from '../InitiativePreview/InitiativePreview';
 import { notify } from '../../../../utils/notify.jsx';
@@ -8,7 +9,7 @@ import '../../InitiativeView/initiativeView.css'; // Нови стилове з�
 export const InitiativePreviewPage = () => {
     const { t } = useTranslation();
     const location = useLocation();
-    const navigate = useNavigate();
+    const navigate = useLocalizedNavigate();
     const [previewData, setPreviewData] = useState(null);
 
     useEffect(() => {

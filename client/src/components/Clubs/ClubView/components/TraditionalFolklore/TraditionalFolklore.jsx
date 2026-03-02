@@ -33,7 +33,7 @@ import {
 import './traditionalFolklore.css';
 
 export const TraditionalFolklore = ({ club }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('clubs');
   const [currentlyPlaying, setCurrentlyPlaying] = useState(null);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState(null);

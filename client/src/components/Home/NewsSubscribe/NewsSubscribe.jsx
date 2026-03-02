@@ -6,7 +6,7 @@ import { useCommunityContext } from '../../contexts/CommunityContext';
 import ReCAPTCHA from "react-google-recaptcha";
 
 export const NewsSubscribe = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('home');
     const { username: lsUsername, userEmail: lsEmail } = useAuthContext();
     const { subscribeNewUser } = useCommunityContext();
     const [userName, setUserName] = useState(lsUsername || "");

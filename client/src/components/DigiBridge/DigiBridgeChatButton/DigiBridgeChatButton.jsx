@@ -188,7 +188,7 @@ export const DigiBridgeChatButton = ({ onClick }) => {
         <button
           className="digibridge-chat-button"
           onClick={handleClick}
-          aria-label={isMentor ? 'Open chat hub' : t('digiBridge.chatButton.ariaLabel')}
+          aria-label={isMentor ? 'Open chat hub' : t('chatWidget.ariaLabel')}
         >
           {badgeCount > 0 && (
             <span className="digibridge-chat-button-badge">
@@ -211,7 +211,7 @@ export const DigiBridgeChatButton = ({ onClick }) => {
           </svg>
 
           <span className="digibridge-chat-button-text">
-            {isMentor ? '💬 Чат' : t('digiBridge.chatButton.help')}
+            {isMentor ? '💬 Чат' : t('chatWidget.help')}
           </span>
         </button>
 

@@ -31,7 +31,7 @@ import {
 import './traditionalTraditions.css';
 
 export const TraditionalTraditions = ({ club }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('clubs');
   const [isMembershipModalOpen, setIsMembershipModalOpen] = useState(false);
   const [membershipForm, setMembershipForm] = useState({
     name: '',

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import './approvedApplications.css';
 
 export const ApprovedApplications = ({ applications }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-mentor');
   
   const [selectedApp, setSelectedApp] = useState(null);
   const [showDetailsModal, setShowDetailsModal] = useState(false);

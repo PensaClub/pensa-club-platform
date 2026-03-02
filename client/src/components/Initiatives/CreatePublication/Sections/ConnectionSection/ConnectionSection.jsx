@@ -13,7 +13,7 @@ const ConnectionSection = ({
     onBlurHandler,
     setValues
 }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const { token } = useAuthContext();
     const [initiatives, setInitiatives] = useState([]);
     const [projects, setProjects] = useState([]);

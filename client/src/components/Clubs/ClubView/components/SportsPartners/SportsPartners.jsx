@@ -40,7 +40,7 @@ import {
 import './sportsPartners.css';
 
 export const SportsPartners = ({ club }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('clubs');
   const [activeCategory, setActiveCategory] = useState('all');
   const [selectedPartner, setSelectedPartner] = useState(null);
   const [showContactModal, setShowContactModal] = useState(false);

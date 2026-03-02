@@ -1,7 +1,7 @@
 // src/components/Home/ClubsShowcase/ClubsShowcase.jsx
 
 import { useMemo, useEffect, useRef, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { useTranslation } from 'react-i18next';
 import { useClubContext } from '../../contexts/ClubContext';
 import './clubsShowcase.css';
@@ -15,8 +15,8 @@ const CATEGORY_COLORS = {
 };
 
 export const ClubsShowcase = () => {
-  const { t } = useTranslation();
-  const navigate = useNavigate();
+  const { t } = useTranslation('home');
+  const navigate = useLocalizedNavigate();
   const { clubs: contextClubs, clubsLoaded } = useClubContext();
 
   // Use clubs from context (PlatformStats already loads them)

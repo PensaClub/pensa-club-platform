@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
 import { useTranslation } from 'react-i18next';
 import { useInitiativeContext } from '../../contexts/InitiativeProvider';
 import { useClubContext } from '../../contexts/ClubContext'; // Добави това
@@ -26,7 +26,7 @@ import ScrollToTop from '../../ScrollToTop/ScrollToTop';
 import { useAuthContext } from '../../contexts/UserContext';
 
 export const BookmarkedItems = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const {
         bookmarkedInitiatives,
         bookMarkedProjects,

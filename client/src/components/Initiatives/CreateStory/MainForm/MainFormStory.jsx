@@ -3,7 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle, faEdit, faFileAlt, faArrowLeft, faLink } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
 import { Element as SlateElement, Transforms, Editor } from 'slate';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../../../hooks/useLocalizedNavigate';
 
 import './mainFormStory.css';
 
@@ -30,10 +31,10 @@ const StoryForm = ({
     initialValues = null,
     onCancel = null
 }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const { userEmail, username } = useAuthContext();
     const { getStoryById, createStory, updateStory, initiatives, projects, stories } = useInitiativeContext();
-    const navigate = useNavigate();
+    const navigate = useLocalizedNavigate();
     const { slug } = useParams();
 
     const [story, setStory] = useState(null);

@@ -1,11 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
 import { Award, Download, Lock, ArrowRight, CheckCircle } from 'lucide-react';
 import './studentCertificates.css';
 
 const StudentCertificates = ({ certificates = [], availableCertificates = [] }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('student-dashboard');
 
     const formatDate = (dateString) => {
         if (!dateString) return '-';

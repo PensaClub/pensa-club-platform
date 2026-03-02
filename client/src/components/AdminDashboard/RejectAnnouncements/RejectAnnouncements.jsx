@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
 import './rejectAnnouncements.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRotateLeft } from '@fortawesome/free-solid-svg-icons';
@@ -24,7 +24,7 @@ export const RejectAnnouncements = ({ setRejectCount }) => {
     const [adminEmail, setAdminEmail] = useState('');
     const [isTextModalOpen, setIsTextModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState('');
-    const { t } = useTranslation();
+    const { t } = useTranslation(['admin', 'auth']);
     const { profileData } = useAuthContext();
     const { fetchRejectAds, updateAdStatus, deleteAd } = useAdminContext();
 

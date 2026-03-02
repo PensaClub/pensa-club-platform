@@ -14,7 +14,7 @@ import SEOHead from '../../SEO/SEOHead';
 import { matchesAddressSearch, matchesPostalCode } from '../../../utils/addressSearch';
 
 export const AllClubs = () => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('clubs');
 
   const { getAllClubs, isLoading } = useClubContext();
 

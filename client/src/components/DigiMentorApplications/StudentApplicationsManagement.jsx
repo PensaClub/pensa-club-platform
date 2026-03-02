@@ -8,7 +8,7 @@ import { RejectedApplications } from './RejectedApplications';
 import { ApprovedApplications } from './ApprovedApplications';
 
 export const StudentApplicationsManagement = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-mentor');
   const { getStudentApplications } = useAcademy();
   const [applications, setApplications] = useState([]);
   const [isLoading, setIsLoading] = useState(true);

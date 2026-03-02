@@ -105,7 +105,7 @@ const processEditorValue = (value) => {
 };
 
 export const ImageAltEditModal = ({ isOpen, onClose, image, onSave }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
 
     // Create Slate editors
     const altEditor = useMemo(() => withHistory(withReact(createEditor())), []);

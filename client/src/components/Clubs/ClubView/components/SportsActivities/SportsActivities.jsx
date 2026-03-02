@@ -41,7 +41,7 @@ import {
 import './sportsActivities.css';
 
 export const SportsActivities = ({ club }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('clubs');
   const [activeTab, setActiveTab] = useState('weekly');
   const [selectedDay, setSelectedDay] = useState(new Date().getDay());
   const [searchTerm, setSearchTerm] = useState('');

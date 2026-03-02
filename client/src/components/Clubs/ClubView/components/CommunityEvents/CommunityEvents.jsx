@@ -40,7 +40,7 @@ import {
 import './communityEvents.css';
 
 export const CommunityEvents = ({ club }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('clubs');
   const [activeFilter, setActiveFilter] = useState('all');
   const [viewMode, setViewMode] = useState('timeline');
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());

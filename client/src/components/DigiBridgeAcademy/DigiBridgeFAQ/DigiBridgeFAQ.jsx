@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { DigiBridgeContactModal } from './DigiBridgeContactModal';
 
 export const DigiBridgeFAQ = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('digibridge');
     const [openIndex, setOpenIndex] = useState(null);
     const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 

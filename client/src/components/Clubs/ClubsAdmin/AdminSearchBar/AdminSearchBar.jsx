@@ -13,7 +13,7 @@ import {
 import './adminSearchBar.css';
 
 const AdminSearchBar = ({ value, onChange, placeholder, onAdvancedSearch }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('clubs');
     const [isFocused, setIsFocused] = useState(false);
     const [isSearching, setIsSearching] = useState(false);
     const [searchHistory, setSearchHistory] = useState([]);

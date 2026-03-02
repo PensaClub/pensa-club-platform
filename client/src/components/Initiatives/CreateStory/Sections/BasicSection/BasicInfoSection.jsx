@@ -41,7 +41,7 @@ const BasicInfoSection = ({
     updateAuthorImageAlt,
     updateAuthorImageCaption
 }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const { userEmail, username } = useAuthContext();
 
     // Add state for main image URL input

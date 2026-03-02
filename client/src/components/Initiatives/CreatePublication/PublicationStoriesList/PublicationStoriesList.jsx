@@ -13,7 +13,7 @@ import { useAnalytics } from '../../../contexts/AnalyticsContext';
 import { ViewedPublicationsManager } from '../../../../utils/viewedPublications';
 
 const PublicationStoriesList = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
   const location = useLocation();
   const [filteredContent, setFilteredContent] = useState([]);
   const [isFiltering, setIsFiltering] = useState(false);

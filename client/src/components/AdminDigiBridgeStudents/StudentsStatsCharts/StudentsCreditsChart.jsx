@@ -5,7 +5,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import './studentsCreditsChart.css';
 
 export const StudentsCreditsChart = ({ data, loading }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-students');
 
   if (loading) {
     return (

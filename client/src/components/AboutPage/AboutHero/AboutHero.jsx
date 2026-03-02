@@ -4,7 +4,7 @@ import { faHeart, faUsers, faRocket } from '@fortawesome/free-solid-svg-icons';
 import './aboutHero.css';
 
 export const AboutHero = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('home');
 
   return (
     <section className="abouthero-section">

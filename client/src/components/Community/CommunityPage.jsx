@@ -4,7 +4,8 @@ import { FiltersCommunity } from "./FiltersCommunity/FiltersCommunity";
 import { AdsCard } from "./AdsCard/AdsCard";
 import { useEffect, useState, useCallback, useRef } from "react";
 import debounce from "lodash.debounce";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 
 import { What } from "./CommunityModals/What";
 import { SearchWhere } from "./CommunityModals/SearchWhere";
@@ -28,8 +29,8 @@ export const CommunityPage = () => {
   const [isResetFilters, setIsResetFilters] = useState(false);
 
   const location = useLocation();
-  const navigate = useNavigate();
-  const { t, i18n } = useTranslation();
+  const navigate = useLocalizedNavigate();
+  const { t, i18n } = useTranslation('community');
   const currentLanguage = i18n.language;
 
   const [filters, setFilters] = useState({

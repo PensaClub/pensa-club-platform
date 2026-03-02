@@ -8,7 +8,7 @@ import "./contactForm.css";
 import { useAuthContext } from "../contexts/UserContext";
 
 export const ContactForm = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('auth');
     const { userEmail, token, sendContactForm } = useAuthContext();
     const [formData, setFormData] = useState({
         name: "",

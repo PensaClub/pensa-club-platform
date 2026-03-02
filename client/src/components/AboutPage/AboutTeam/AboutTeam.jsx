@@ -18,7 +18,7 @@ import './aboutTeam.css';
 import { useClubContext } from '../../contexts/ClubContext';
 
 export const AboutTeam = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('home');
   const { sendPersonalEmail } = useClubContext();
 
   const [showEmailModal, setShowEmailModal] = useState(false);

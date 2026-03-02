@@ -6,7 +6,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import './responseTimeChart.css';
 
 export const ResponseTimeChart = ({ responseTimesData, limit = 10 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge');
 
   // ✅ Извлича всички ментори от ranges и сортира по response time
   const topMentors = useMemo(() => {

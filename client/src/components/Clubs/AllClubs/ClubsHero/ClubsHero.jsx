@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import './clubsHero.css';
 
 export const ClubsHero = ({ totalClubs }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('clubs');
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {

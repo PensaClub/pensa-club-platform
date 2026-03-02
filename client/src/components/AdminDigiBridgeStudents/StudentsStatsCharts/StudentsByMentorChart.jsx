@@ -7,7 +7,7 @@ import './studentsByMentorChart.css';
 const COLORS = ['#6366f1', '#8b5cf6', '#a78bfa', '#c4b5fd', '#ddd6fe', '#ede9fe'];
 
 export const StudentsByMentorChart = ({ data, loading }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-students');
 
   if (loading) {
     return (

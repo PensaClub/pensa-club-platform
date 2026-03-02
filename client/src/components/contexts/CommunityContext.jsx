@@ -4,7 +4,7 @@ import { Loader } from "../Loader/Loader";
 import "./error.css";
 import { communityServiceFactory } from "../Services/communityService";
 import { notify } from "../../utils/notify.jsx";
-import { useNavigate } from "react-router-dom";
+import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 import { toast } from "react-toastify";
 
 export const CommunityContext = createContext();
@@ -22,7 +22,7 @@ export const CommunityProvider = ({ children }) => {
     const [subscribeEmails, setSubscribeEmails] = useState([]); 
     const [ads, setAds] = useState({ result: [], page: 1, hasMore: true });
     const communityService = communityServiceFactory();
-    const navigate = useNavigate();
+    const navigate = useLocalizedNavigate();
 
     const showErrorAndSetTimeouts = (error) => {
         setErrorMessage(error);

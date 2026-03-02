@@ -7,7 +7,7 @@ import './adminDigiBridgeSendEmailToRejectedModal.css';
 import { useAcademy } from '../../contexts/AcademyProvider';
 
 export const AdminDigiBridgeSendEmailToRejectedModal = ({ application, onClose }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge');
   const { sendPersonalEmail } = useAcademy();
   
   const [formData, setFormData] = useState({

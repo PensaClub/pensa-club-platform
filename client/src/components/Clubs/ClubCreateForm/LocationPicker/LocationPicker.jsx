@@ -43,7 +43,7 @@ const LocationPicker = ({
   disabled = false,
   showVenueDetails = true 
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('clubs');
   const mapRef = useRef(null);
   
   const [isLoading, setIsLoading] = useState(false);

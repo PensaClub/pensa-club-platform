@@ -3,11 +3,11 @@ import './profile.css';
 import { validateField, resetFields, trimObjectStrings, handleReset } from '../../utils/profile.jsx';
 import { UserContext } from '../contexts/UserContext';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router';
+import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 
 export const ProfilePassword = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
   const { onPasswordReset, hasPassword, setProfileData } = useContext(UserContext);
 
   const initialFormState = {

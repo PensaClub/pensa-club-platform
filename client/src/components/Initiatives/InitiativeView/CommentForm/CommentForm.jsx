@@ -10,7 +10,7 @@ export const CommentForm = ({
     placeholder,
     isReply = false
 }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const { username, userEmail, profileData } = useAuthContext();
 
     const {

@@ -11,7 +11,7 @@ import {
 import './draftStatsOverview.css';
 
 const DraftStatsOverview = ({ stats }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('clubs');
 
     if (!stats) {
         return null;

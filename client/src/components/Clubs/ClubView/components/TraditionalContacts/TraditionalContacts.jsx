@@ -20,7 +20,7 @@ import {
 import './traditionalContacts.css';
 
 export const TraditionalContacts = ({ club }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('clubs');
   const [isContactFormOpen, setIsContactFormOpen] = useState(false);
   const [contactForm, setContactForm] = useState({
     name: '',

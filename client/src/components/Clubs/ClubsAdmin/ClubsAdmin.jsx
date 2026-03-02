@@ -24,7 +24,7 @@ import AdminStatsOverview from './AdminStatsOverview/AdminStatsOverview';
 import AdminSearchBar from './AdminSearchBar/AdminSearchBar';
 
 const ClubsAdmin = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('clubs');
     const { isAdmin, isAuthentication, isModerator } = useAuthContext();
 
     const {

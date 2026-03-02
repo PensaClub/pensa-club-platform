@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import './digiBridgePartners.css';
 
 export const DigiBridgePartners = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('digibridge');
 
     const partners = [
         {

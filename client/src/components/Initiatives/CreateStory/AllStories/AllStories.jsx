@@ -13,7 +13,7 @@ import { StoriesSearchAdmin } from './CleanHystory/StoriesSearchAdmin/StoriesSea
 import { StoriesHeaderAdmin } from './CleanHystory/StoriesHeaderAdmin/StoriesHeaderAdmin';
 
 export const AllStories = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const {
         getAllStories,
         stories = [],

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import '../InitiativesList/initiativesList.css';
 
 export const InitiativesSearch = ({ initiatives, onFilter, onMapToggle, showMap }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');

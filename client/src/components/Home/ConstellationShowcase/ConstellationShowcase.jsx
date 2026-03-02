@@ -9,7 +9,7 @@ import { ConstellationControls } from './ConstellationControls/ConstellationCont
 import { mockInitiatives } from './mockInitiatives'; // Импортираме mock данните
 
 export const ConstellationShowcase = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('home');
     const { initiatives, getAllInitiatives } = useInitiativeContext();
     const [constellationData, setConstellationData] = useState([]);
     const [activeFilter, setActiveFilter] = useState('all');

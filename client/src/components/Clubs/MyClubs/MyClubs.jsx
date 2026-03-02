@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -22,7 +22,7 @@ import StatsOverview from './StatsOverview/StatsOverview';
 
 const MyClubs = () => {
     const { t } = useTranslation();
-    const navigate = useNavigate();
+    const navigate = useLocalizedNavigate();
     const {
         isAuthentication,
         userEmail,

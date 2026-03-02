@@ -40,7 +40,7 @@ const FinancesManager = ({
   onFinancesChange, 
   disabled = false 
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('clubs');
   
   const [activeTab, setActiveTab] = useState('budget');
   const [showAddForm, setShowAddForm] = useState(false);

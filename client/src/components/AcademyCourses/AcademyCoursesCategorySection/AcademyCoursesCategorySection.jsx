@@ -54,7 +54,7 @@ const KNOWN_CATEGORIES = {
 };
 
 export const AcademyCoursesCategorySection = ({ category, courses = [] }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('academy');
   const [isExpanded, setIsExpanded] = useState(false);
 
   const INITIAL_SHOW = 4;

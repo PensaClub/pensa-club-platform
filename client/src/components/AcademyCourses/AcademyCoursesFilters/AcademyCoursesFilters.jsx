@@ -10,7 +10,7 @@ export const AcademyCoursesFilters = ({
   onFilterChange, 
   onSearch 
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('academy');
   const [searchValue, setSearchValue] = useState(filters.search || '');
 
   // Синхронизирай searchValue когато filters.search се промени отвън (напр. при clear)

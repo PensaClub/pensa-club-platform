@@ -12,7 +12,7 @@ import { SkeletonCardInitiative } from './SkeletonCardInitiative/SkeletonCardIni
 import SEOHead from '../../SEO/SEOHead';
 
 const InitiativesList = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
   const [filteredInitiatives, setFilteredInitiatives] = useState([]);
   const { toggleBookmark, bookmarkedInitiatives } = useInitiativeContext();
   const [isFiltering, setIsFiltering] = useState(false);

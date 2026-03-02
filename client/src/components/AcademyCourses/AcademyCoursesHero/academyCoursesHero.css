@@ -378,6 +378,9 @@
   .academyCoursesHero-scroll {
     display: none;
   }
+  .academyCoursesHero-title span {
+    font-size: 2rem;
+  }
 }
 
 /* ========================================

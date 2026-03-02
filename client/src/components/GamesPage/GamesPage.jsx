@@ -17,7 +17,7 @@ import './gamesPage.css';
 import SEOHead from '../SEO/SEOHead'; // ✅ Добави импорта
 
 const GamesPage = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('admin');
     const [selectedCategory, setSelectedCategory] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
     const [isFiltersStickyActive, setIsFiltersStickyActive] = useState(false);

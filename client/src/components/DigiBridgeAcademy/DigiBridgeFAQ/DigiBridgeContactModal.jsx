@@ -5,7 +5,7 @@ import './digiBridgeContactModal.css';
 import { useClubContext } from '../../contexts/ClubContext';
 
 export const DigiBridgeContactModal = ({ isOpen, onClose }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('digibridge');
     const { sendPersonalEmail } = useClubContext();
     
     const [formData, setFormData] = useState({

@@ -46,7 +46,7 @@ import {
 import './ClubPensionersSpecific.css';
 
 const ClubPensionersSpecific = ({ club }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('clubs');
   const [activeTab, setActiveTab] = useState('healthServices');
   const [expandedSections, setExpandedSections] = useState({});
 

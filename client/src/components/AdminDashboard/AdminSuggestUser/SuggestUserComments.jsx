@@ -2,7 +2,7 @@ import './suggestUserComments.css';
 import { useTranslation } from 'react-i18next';
 
 export const SuggestUserComments = ({ isOpen, onClose, onSubmit, comments, comment, setComment, error,setError }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('auth');
 
   if (!isOpen) return null;
   return (

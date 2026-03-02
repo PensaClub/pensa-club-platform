@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { getNotificationConfig } from '../../../config/notificationConfig';
-import { useNavigate } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import '../Notifications/notifications.css';
 import { useAcademy } from '../../contexts/AcademyProvider';
 
 export const AdminNotifications = () => {
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
   const { getAdminNotifications, markNotificationAsRead, deleteNotification } = useAcademy();
   
   const [notifications, setNotifications] = useState([]);

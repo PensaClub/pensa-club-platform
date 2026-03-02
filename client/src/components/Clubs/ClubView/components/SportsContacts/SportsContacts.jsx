@@ -36,7 +36,7 @@ import './sportsContacts.css';
 import { faFacebook, faInstagram, faTwitter, faYoutube } from '@fortawesome/free-brands-svg-icons';
 
 export const SportsContacts = ({ club }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('clubs');
   const [formData, setFormData] = useState({
     name: '',
     email: '',

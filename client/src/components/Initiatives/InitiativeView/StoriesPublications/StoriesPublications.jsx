@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { truncateText } from '../../../../utils/truncateText';
 
 export const StoriesPublications = ({ stories = [], publications = [], showInProjectView = false }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
   const [visibleCount, setVisibleCount] = useState(6);
 
   // Комбинирани stories и publications с тип

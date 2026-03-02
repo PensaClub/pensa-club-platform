@@ -14,7 +14,7 @@ const ConnectionSection = ({
     setValues,
     currentStoryId // Add this prop
 }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const { token } = useAuthContext();
     const [initiatives, setInitiatives] = useState([]);
     const [projects, setProjects] = useState([]);

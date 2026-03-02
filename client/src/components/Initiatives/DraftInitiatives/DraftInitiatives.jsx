@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 // DraftInitiatives/DraftInitiatives.jsx
 import { useState, useEffect, useMemo, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { useTranslation } from 'react-i18next';
 
 import DraftSearchBar from './DraftSearchBar/DraftSearchBar';
@@ -15,8 +15,8 @@ import { Loader } from '../../Loader/Loader';
 import Pagination from '../../Articles/Pagination/Pagination';
 
 const DraftInitiatives = () => {
-  const { t } = useTranslation();
-  const navigate = useNavigate();
+  const { t } = useTranslation('content');
+  const navigate = useLocalizedNavigate();
   const {
     getAllDrafts,
     deleteDraftInitiative,

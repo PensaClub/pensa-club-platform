@@ -36,7 +36,7 @@ import {
 import './wellnessServices.css';
 
 export const WellnessServices = ({ club }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('clubs');
   const [activeCategory, setActiveCategory] = useState('support');
 
   if (!club?.pensionersSpecific?.supportServices && 

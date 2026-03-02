@@ -19,7 +19,7 @@ const FloatingActions = ({
     isEditMode = false,
     isDraft = false
 }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
 
     // CREATE MODE
     if (!isEditMode) {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../../../LocalizedLink/LocalizedLink';
 import { useTranslation } from 'react-i18next';
 import './publicationStoriesCard.css';
 import { useAnalytics } from '../../../../contexts/AnalyticsContext';
@@ -12,7 +12,7 @@ export const PublicationStoriesCard = ({
   contentType = 'publications',
   index 
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
   const { 
     trackStoryOrPublication, 
     getPublicationViewCount, 

@@ -2,15 +2,15 @@
 
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { endConversation } from '../../firebase/firebaseChat';
 import { toast } from 'react-toastify';
 import './conversationCard.css';
 import { MentorChatWindow } from './MentorChatWindow';
 
 export const ConversationCard = ({ conversation, isCompleted = false }) => {
-    const { t } = useTranslation();
-    const navigate = useNavigate();
+    const { t } = useTranslation('digibridge');
+    const navigate = useLocalizedNavigate();
     const [isEnding, setIsEnding] = useState(false);
     const [isChatOpen, setIsChatOpen] = useState(false);
     // Форматиране на времето

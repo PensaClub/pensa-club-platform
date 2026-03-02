@@ -3,7 +3,7 @@ import './loginRegister.css';
 import { useTranslation } from 'react-i18next';
 
 export const Overlay = ({ handleSignInClick, handleSignUpClick }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('auth');
 
   return (
     <div className="container__overlay">

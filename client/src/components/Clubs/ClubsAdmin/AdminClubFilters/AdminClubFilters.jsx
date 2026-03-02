@@ -16,7 +16,7 @@ import {
 import './adminClubFilters.css';
 
 const AdminClubFilters = ({ value, onChange, stats }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('clubs');
     const [isOpen, setIsOpen] = useState(false);
 
     // Filter options with counts

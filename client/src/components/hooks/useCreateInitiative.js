@@ -2,7 +2,8 @@
 /* eslint-disable no-unused-vars */
 // hooks/useCreateInitiative.js
 import { useState, useCallback, useRef, useMemo, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 
 // 🔥 Firebase imports
 import {
@@ -43,7 +44,7 @@ import { validateInitiativeForm } from '../Initiatives/CreateIniciative/Utils/in
 import { htmlToSlate, isHtmlContent } from '../Initiatives/CreateIniciative/Utils/htmlToSlate';
 
 const useCreateInitiative = (initialValues, onSubmitHandler) => {
-    const navigate = useNavigate();
+    const navigate = useLocalizedNavigate();
     const { t } = useTranslation();
     const { createInitiative, saveDraftInitiative, updateDraftInitiative, getDraftById, toggleDraftStatus, updateInitiative, getInitiativeById } = useInitiativeContext();
     const { userEmail } = useAuthContext();

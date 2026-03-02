@@ -11,7 +11,7 @@ export const ReviewDetailsModal = ({
   onReject, 
   onDelete 
 }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('digibridge');
 
   if (!isOpen || !review) return null;
 

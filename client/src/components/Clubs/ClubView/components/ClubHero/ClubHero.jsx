@@ -36,7 +36,7 @@ import { useClubContext } from '../../../../contexts/ClubContext';
 import { useClubStatus } from './useClubStatus';
 
 export const ClubHero = ({ club }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('clubs');
   const { sendContactForm } = useClubContext();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showMembersModal, setShowMembersModal] = useState(false);

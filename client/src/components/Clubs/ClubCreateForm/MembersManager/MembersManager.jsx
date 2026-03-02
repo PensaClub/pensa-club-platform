@@ -41,7 +41,7 @@ const MembersManager = ({
   onMembersChange, 
   disabled = false 
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('clubs');
   const { uploadFile, uploading, uploadProgress } = useFirebaseUpload();
   
   const [activeTab, setActiveTab] = useState('members');

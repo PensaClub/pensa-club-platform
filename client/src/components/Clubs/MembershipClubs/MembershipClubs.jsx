@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { useTranslation } from 'react-i18next';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -21,8 +21,8 @@ import MembershipClubsEmptyState from './MembershipClubsEmptyState/MembershipClu
 import MembershipStatsOverview from './MembershipStatsOverview/MembershipStatsOverview';
 
 const MembershipClubs = () => {
-    const { t } = useTranslation();
-    const navigate = useNavigate();
+    const { t } = useTranslation('clubs');
+    const navigate = useLocalizedNavigate();
     const {
         isAuthentication,
         userEmail,

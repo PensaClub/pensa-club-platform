@@ -1,0 +1,162 @@
+{
+  "studentDashboard": {
+    "title": "My Academy",
+    "welcomeBack": "Welcome back",
+    "editProfile": "Edit profile",
+    "levelBeginner": "Beginner",
+    "levelIntermediate": "Intermediate",
+    "levelExpert": "Expert",
+    "levelMaster": "Master",
+    "enrolledCourses": "Enrolled courses",
+    "completedCourses": "Completed courses",
+    "upcomingLectures": "Upcoming lectures",
+    "certificates": "Certificates",
+    "totalCredits": "Total credits",
+    "creditsFromCourses": "From courses",
+    "creditsFromLectures": "From lectures",
+    "creditsFromSeminars": "From seminars",
+    "creditsFromPresentations": "From presentations",
+    "progressToNextLevel": "To next level",
+    "continueLearning": "Continue learning",
+    "continueButton": "Continue",
+    "noCoursesInProgress": "No courses in progress",
+    "browseCoursesButton": "Browse courses",
+    "completedLessons": "lessons completed",
+    "upcomingEvents": "Upcoming events",
+    "noUpcomingEvents": "No upcoming events",
+    "liveBadge": "LIVE",
+    "lectureBadge": "Lecture",
+    "seminarBadge": "Seminar",
+    "inDays": "in {{days}} days",
+    "today": "today",
+    "tomorrow": "tomorrow",
+    "viewAll": "View all",
+    "myMentor": "My mentor",
+    "noMentor": "No mentor assigned yet",
+    "findMentor": "Find a mentor",
+    "mentorSince": "Mentor since",
+    "contactMentor": "Contact",
+    "sendMessage": "Send message",
+    "myCertificates": "My certificates",
+    "availableCertificates": "Available certificates",
+    "noCertificates": "No certificates yet",
+    "earnedBadge": "Earned",
+    "download": "Download",
+    "creditsNeeded": "Credits needed",
+    "recentActivity": "Recent activity",
+    "noRecentActivity": "No recent activity",
+    "completedLesson": "Completed lesson",
+    "passedTest": "Passed test",
+    "earnedCredits": "Earned {{credits}} credits",
+    "loading": "Loading...",
+    "error": "Error loading data",
+    "retry": "Try again",
+    "loginRequired": "Login required",
+    "loginRequiredText": "Please log in to view your academy dashboard.",
+    "loginButton": "Log in"
+  },
+  "studentDashboardHeader": {
+    "student": "Student",
+    "levelBeginner": "Beginner",
+    "levelIntermediate": "Intermediate",
+    "levelExpert": "Expert",
+    "levelMaster": "Master",
+    "credits": "credits",
+    "totalCredits": "Total credits",
+    "progressToNextLevel": "To next level",
+    "editProfile": "Edit profile"
+  },
+  "studentQuickStats": {
+    "title": "Statistics",
+    "enrolledCourses": "Enrolled courses",
+    "completedCourses": "Completed courses",
+    "upcomingLectures": "Upcoming lectures",
+    "certificates": "Certificates"
+  },
+  "studentContinueLearning": {
+    "title": "Continue Learning",
+    "viewAll": "View all",
+    "lessons": "lessons",
+    "noCourses": "No courses in progress",
+    "browseMore": "Browse more courses"
+  },
+  "studentUpcomingEvents": {
+    "title": "Upcoming Events",
+    "viewAll": "View all",
+    "types": {
+      "lecture": "Lecture",
+      "seminar": "Seminar"
+    },
+    "started": "Started",
+    "soon": "Soon",
+    "hoursLeft": "in {{hours}}h",
+    "tomorrow": "Tomorrow",
+    "daysLeft": "in {{days}} days",
+    "noEvents": "No upcoming events",
+    "browseLectures": "Browse lectures"
+  },
+  "studentMentorCard": {
+    "title": "My Mentor",
+    "noMentor": "You don't have a mentor yet",
+    "findMentor": "Find a mentor",
+    "changeMentor": "Change mentor",
+    "allMentors": "All mentors",
+    "defaultSpecialization": "Mentor",
+    "sendEmail": "Send email",
+    "sendMessage": "Send message",
+    "online": "Online",
+    "offline": "Offline"
+  },
+  "studentCertificates": {
+    "title": "Certificates",
+    "viewAll": "View all",
+    "noCertificates": "You don't have any certificates yet",
+    "browseCourses": "Browse courses",
+    "earned": "Earned:",
+    "download": "Download",
+    "credits": "credits",
+    "certificate": "Certificate"
+  },
+  "studentCreditsOverview": {
+    "totalCredits": "Total Credits",
+    "toNextLevel": "{{credits}} to next level",
+    "levels": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "expert": "Expert",
+      "master": "Master"
+    },
+    "categories": {
+      "courses": "Courses",
+      "lectures": "Lectures",
+      "seminars": "Seminars",
+      "presentations": "Presentations"
+    }
+  },
+  "studentRecentActivity": {
+    "title": "Recent Activity",
+    "viewAll": "View all",
+    "credits": "credits",
+    "noActivity": "No recent activity",
+    "startLearning": "Start learning",
+    "types": {
+      "undefined": "Activity:",
+      "lesson_completed": "Completed lesson:",
+      "lesson_started": "Started lesson:",
+      "course_enrolled": "Enrolled in:",
+      "course_completed": "Completed course:",
+      "lecture_attended": "Attended lecture:",
+      "seminar_attended": "Attended seminar:",
+      "test_passed": "Passed test:",
+      "test_failed": "Failed test:",
+      "certificate_earned": "Earned certificate:"
+    },
+    "time": {
+      "justNow": "Just now",
+      "minutesAgo": "{{minutes}}m ago",
+      "hoursAgo": "{{hours}}h ago",
+      "yesterday": "Yesterday",
+      "daysAgo": "{{days}}d ago"
+    }
+  }
+}

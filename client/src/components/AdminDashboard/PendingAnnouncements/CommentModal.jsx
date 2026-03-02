@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import './commentModal.css';
 
 export const CommentModal = ({ isOpen, onClose, onSubmit, children }) => {
-  const {t} = useTranslation();
+  const {t} = useTranslation('admin');
   if (!isOpen) return null;
 
   return (

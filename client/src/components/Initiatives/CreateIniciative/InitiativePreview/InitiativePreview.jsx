@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../../../hooks/useLocalizedNavigate';
 import './initiativePreview.css';
 import '../../InitiativeView/initiativeView.css';
 import { useTranslation } from 'react-i18next';
@@ -17,8 +18,8 @@ import { getDescriptionParts, renderSlateContent } from '../../../../utils/slate
 import { truncateText } from '../../../../utils/truncateText';
 
 export const InitiativePreview = ({onBackToEdit}) => {
-    const { t } = useTranslation();
-    const navigate = useNavigate();
+    const { t } = useTranslation('content');
+    const navigate = useLocalizedNavigate();
     const location = useLocation();
     const values = location.state?.previewData || {};
     const [showMap, setShowMap] = useState(true);

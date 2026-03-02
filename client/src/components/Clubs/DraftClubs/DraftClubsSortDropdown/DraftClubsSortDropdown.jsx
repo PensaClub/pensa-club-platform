@@ -15,7 +15,7 @@ import {
 import './draftClubsSortDropdown.css';
 
 const DraftClubsSortDropdown = ({ value, onChange, options = [] }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('clubs');
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
 

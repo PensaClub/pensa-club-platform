@@ -17,7 +17,7 @@ import { useAcademy } from '../contexts/AcademyProvider';
 import SEOHead from '../SEO/SEOHead';
 
 export const DigiBridgeAcademy = () => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('digibridge');
   const location = useLocation();
   const { fetchStats } = useAcademy(); 
 

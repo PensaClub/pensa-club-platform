@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import './digiMentorQuickActions.css';
 
 export const DigiMentorQuickActions = ({ onAction }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-mentor');
 
   const actions = [
     {

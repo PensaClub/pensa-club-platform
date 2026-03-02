@@ -35,7 +35,7 @@ import {
 import './culturalGallery.css';
 
 export const CulturalGallery = ({ club }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('clubs');
   const [activeFilter, setActiveFilter] = useState('all');
   const [selectedMedia, setSelectedMedia] = useState(null);
   const [currentSlide, setCurrentSlide] = useState(0);

@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import './nodeTooltip.css';
 
 export const NodeTooltip = ({ node, mousePosition }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('home');
 
   if (!node || !mousePosition) return null;
 

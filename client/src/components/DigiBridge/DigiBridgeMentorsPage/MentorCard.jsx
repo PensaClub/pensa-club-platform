@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
 import './mentorCard.css';
 
 // Цветови теми за менторите
@@ -55,7 +55,7 @@ const colorThemes = [
 ];
 
 export const MentorCard = ({ mentor, index, onViewProfile }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('digibridge');
 
     const isImageRight = index % 2 !== 0;
     const isAvailable = mentor.isOnline;

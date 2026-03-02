@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { createContext, useContext, useState } from "react";
 import { adminServiceFactory } from "../Services/adminService";
-import { useNavigate } from "react-router-dom";
+import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 import { Loader } from "../Loader/Loader";
 import { notify } from '../../utils/notify.jsx';
 
@@ -11,7 +11,7 @@ export const AdminProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
     const adminService = adminServiceFactory()
-    const navigate = useNavigate();
+    const navigate = useLocalizedNavigate();
     const [pendingAds, setPendingAds] = useState([])
     const [approvedAds, setApprovedAds] = useState([])
     const [rejectAds,setRejectAds] = useState([])

@@ -15,7 +15,7 @@ import { AdminDigiBridgeMentorEditModal } from './AdminDigiBridgeMentorEditModal
 import { AdminDigiBridgeSendEmailToRejectedModal } from './AdminDigiBridgeSendEmailToRejectedModal/AdminDigiBridgeSendEmailToRejectedModal';
 
 export const AdminDigiBridgeMentors = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('digibridge');
     const {
         sendPersonalEmail,
         getAllMentors,

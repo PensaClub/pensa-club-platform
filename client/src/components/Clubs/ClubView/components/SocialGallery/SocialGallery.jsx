@@ -29,7 +29,7 @@ import {
 import './socialGallery.css';
 
 export const SocialGallery = ({ club }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('clubs');
   const [viewMode, setViewMode] = useState('grid');
   const [activeFilter, setActiveFilter] = useState('all');
   const [selectedImage, setSelectedImage] = useState(null);

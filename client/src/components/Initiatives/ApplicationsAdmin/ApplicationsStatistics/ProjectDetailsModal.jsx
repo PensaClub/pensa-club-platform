@@ -11,7 +11,7 @@ export const ProjectDetailsModal = ({
   onClose,
   applicationsCount = 0
 }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('content');
   const [project, setProject] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);

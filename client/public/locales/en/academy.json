@@ -1,0 +1,531 @@
+{
+  "academyCourses": {
+    "loading": "Loading courses...",
+    "noCourses": "No courses yet",
+    "checkBackLater": "We'll add new learning programs soon. Stay tuned!",
+    "programsTitle": "Learning Programs",
+    "programsSubtitle": "Choose a program based on your interests and experience level",
+    "popularCourses": "Popular Courses",
+    "popularCoursesSubtitle": "Most sought-after courses by our students",
+    "noResults": "No courses found",
+    "tryDifferentFilters": "Try different filters or search terms",
+    "searchResults": "Search Results",
+    "foundCourses": "Found {{count}} courses"
+  },
+  "academyCoursesHero": {
+    "titleLine1": "Discover your path in the ",
+    "titleLine2": "digital world",
+    "subtitle": "Free practical courses for all ages. Learn to use technology confidently with the support of our mentors.",
+    "scroll": "Scroll down",
+    "stats": {
+      "programs": "Programs",
+      "courses": "Courses",
+      "enrolled": "Enrolled",
+      "free": "Free"
+    }
+  },
+  "academyCoursesFilters": {
+    "searchPlaceholder": "Search courses...",
+    "clearSearch": "Clear search",
+    "categoryLabel": "Category",
+    "levelLabel": "Level",
+    "sortLabel": "Sort by",
+    "allCategories": "All categories",
+    "allLevels": "All levels",
+    "clearAll": "Clear",
+    "levels": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    },
+    "sort": {
+      "popular": "Most popular",
+      "newest": "Newest",
+      "alphabetical": "Alphabetical"
+    }
+  },
+  "academyCoursesCategorySection": {
+    "uncategorized": "Other courses",
+    "course": "course",
+    "courses": "courses",
+    "allLevels": "All levels",
+    "showAll": "View all ({{count}})",
+    "showLess": "Show less",
+    "loadMore": "Load {{remaining}} more"
+  },
+  "academyProgramTracks": {
+    "course": "course",
+    "courses": "courses"
+  },
+  "academyCoursesList": {
+    "course": "course",
+    "courses": "courses",
+    "close": "Close",
+    "searchPlaceholder": "Search courses...",
+    "noResults": "No courses found with this filter",
+    "resetFilter": "Show all",
+    "viewAllCourses": "View all courses",
+    "filters": {
+      "all": "All",
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    },
+    "sort": {
+      "popular": "Popular",
+      "newest": "Newest",
+      "alphabetical": "Alphabetical",
+      "rating": "By rating",
+      "duration": "By duration"
+    },
+    "resultSingle": "result",
+    "resultPlural": "results",
+    "clearAll": "Clear all",
+    "noResultsTitle": "No courses found",
+    "noResultsText": "Try different filters or search terms"
+  },
+  "academyCourseCard": {
+    "free": "Free",
+    "startLearning": "Start",
+    "lessons": "lessons",
+    "credits": "credits",
+    "watchTrailer": "Watch trailer",
+    "levels": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    }
+  },
+  "academyTrailerModal": {
+    "preview": "Preview",
+    "close": "Close",
+    "noVideo": "No video available for this course",
+    "hint": "Press ESC or click outside to close",
+    "viewCourse": "View Course"
+  },
+  "academyCourseDetail": {
+    "loading": "Loading course...",
+    "notFound": "Course not found",
+    "notFoundText": "The course you're looking for doesn't exist or has been removed.",
+    "backToCourses": "Back to courses",
+    "breadcrumb": {
+      "academy": "Academy",
+      "courses": "Courses"
+    },
+    "mentors": {
+      "students": "students"
+    },
+    "levels": {
+      "beginner": "Beginner",
+      "intermediate": "Intermediate",
+      "advanced": "Advanced"
+    },
+    "tabs": {
+      "overview": "Overview",
+      "content": "Content",
+      "instructor": "Instructor",
+      "reviews": "Reviews"
+    },
+    "finalTest": {
+      "title": "Final test",
+      "questions": "questions",
+      "minutes": "min",
+      "passingScore": "Min. score",
+      "maxAttempts": "Max. attempts",
+      "passed": "Test passed successfully!",
+      "bestScore": "Best score",
+      "locked": "Complete all lessons in the course to unlock the test.",
+      "startTest": "Start test",
+      "continueAttempt": "Continue attempt",
+      "noMoreAttempts": "All attempts exhausted.",
+      "remaining": "Remaining attempts"
+    },
+    "hero": {
+      "certificateBadge": "Certificate",
+      "ratings": "ratings",
+      "enrolled": "enrolled",
+      "duration": "hours",
+      "lessonsLabel": "lessons",
+      "createdBy": "Created by",
+      "youAreEnrolled": "You are enrolled",
+      "adminAccess": "Admin access",
+      "mentorAccess": "Mentor access",
+      "moderatorAccess": "Moderator access"
+    },
+    "card": {
+      "watchPreview": "Watch preview",
+      "watchTrailer": "Watch trailer",
+      "free": "Free",
+      "credits": "credits",
+      "enrollNow": "Enroll Now",
+      "lessons": "lessons",
+      "hours": "hours",
+      "weeks": "weeks",
+      "certificate": "Certificate on completion",
+      "creditsOnComplete": "credits on completion",
+      "guarantee": "Free access forever",
+      "startLearning": "Start Learning",
+      "checking": "Checking..."
+    },
+    "overview": {
+      "aboutCourse": "About this course",
+      "targetAudience": "Who is this for",
+      "whatYouLearn": "What you'll learn",
+      "learnItems": {
+        "item1": "Core skills for working with the topic",
+        "item2": "Practical experience through exercises",
+        "item3": "Understanding of key concepts",
+        "item4": "Confidence in applying what you've learned"
+      },
+      "stats": {
+        "totalEnrolled": "Total enrolled",
+        "completed": "Completed",
+        "rating": "Rating",
+        "maxCredits": "Max credits"
+      }
+    },
+    "content": {
+      "courseContent": "Course content",
+      "modules": "modules",
+      "lessonsTotal": "lessons",
+      "lessonsShort": "lessons",
+      "moduleLabel": "Module",
+      "hoursTotal": "hours",
+      "minutes": "min",
+      "freeLesson": "Free",
+      "hasTest": "Has test",
+      "noContent": "Course content will be added soon."
+    },
+    "instructor": {
+      "roles": {
+        "lecturer": "Lecturer",
+        "assistant": "Assistant",
+        "mentor": "Mentor"
+      },
+      "leadInstructor": "Lead",
+      "students": "Students",
+      "completedStudents": "Completed",
+      "instructorRating": "Rating",
+      "assistants": "Assistants",
+      "noInstructor": "Instructor information will be added soon."
+    },
+    "reviews": {
+      "studentReviews": "Student reviews",
+      "basedOn": "Based on",
+      "reviews": "reviews",
+      "noReviewsYet": "No reviews yet for this course.",
+      "beFirstReview": "Be the first to share your opinion!"
+    }
+  },
+  "academyLessonPlayer": {
+    "loading": "Loading...",
+    "error": "Error",
+    "backToCourse": "Back to course",
+    "loginRequired": "Sign in required",
+    "loginRequiredDesc": "You need to sign in to watch this lesson.",
+    "login": "Sign in",
+    "enrollRequired": "Enroll first",
+    "enrollRequiredDesc": "You need to be enrolled in this course.",
+    "goToCourse": "Go to course",
+    "notFound": "Lesson not found",
+    "unpublished": "Not published",
+    "unpublishedDesc": "This lesson is not available yet.",
+    "courseContent": "Content",
+    "fullscreen": "Fullscreen",
+    "exitFullscreen": "Exit",
+    "partOfModule": "Part of module",
+    "typeVideo": "Video",
+    "typeLive": "Live",
+    "typeText": "Text",
+    "typeQuiz": "Quiz",
+    "complete": "Complete lesson",
+    "startTest": "Start test",
+    "testAvailable": "Lesson test",
+    "passingScore": "Passing score",
+    "earnCredits": "Earn",
+    "materials": "Materials",
+    "live": "LIVE",
+    "upcoming": "Upcoming",
+    "liveScheduled": "Live lesson",
+    "startsIn": "Starts in",
+    "recordingProcessing": "Recording processing",
+    "recordingProcessingDesc": "Will be available soon.",
+    "textLesson": "Text lesson",
+    "readBelowDesc": "Read the content below",
+    "noVideo": "No video",
+    "days": "days",
+    "hours": "hours",
+    "minutes": "min",
+    "seconds": "sec"
+  },
+  "academyTestPlayer": {
+    "loading": "Loading test...",
+    "error": "Error",
+    "backToLesson": "Back to lesson",
+    "loginRequired": "Login required",
+    "loginRequiredDesc": "You need to log in to take this test.",
+    "login": "Login",
+    "notFound": "Test not found",
+    "questionOf": "Question {{current}} of {{total}}",
+    "questions": "Questions",
+    "answered": "Answered",
+    "unanswered": "Unanswered",
+    "current": "Current",
+    "question": "Question",
+    "point": "point",
+    "points": "points",
+    "typeSingle": "Single choice",
+    "typeMultiple": "Multiple choice",
+    "typeTrueFalse": "True/False",
+    "prev": "Previous",
+    "next": "Next",
+    "submit": "Submit test",
+    "submitting": "Submitting...",
+    "confirmSubmitUnanswered": "You have {{count}} unanswered questions. Are you sure you want to submit?",
+    "passingScore": "Passing",
+    "maxCredits": "Max credits",
+    "attempt": "Attempt",
+    "results": {
+      "passed": "Congratulations!",
+      "failed": "Try again",
+      "passedDesc": "You passed the test successfully!",
+      "failedDesc": "Unfortunately, you didn't reach the minimum score.",
+      "yourScore": "Your score",
+      "correct": "Correct",
+      "total": "Total",
+      "passing": "Passing",
+      "creditsEarned": "credits",
+      "backToLesson": "Back to lesson",
+      "tryAgain": "Try again",
+      "attemptInfo": "Attempt {{current}} of {{max}}",
+      "backToLecture": "Back to lecture"
+    }
+  },
+  "academyCoursesSeo": {
+    "listTitle": "Digital Literacy Courses | DigiBridge Academy",
+    "listDescription": "Free online courses on digital literacy, internet security, and technology. DigiBridge Academy — education for seniors 60+.",
+    "categoryTitle": "{{category}} Courses | DigiBridge Academy",
+    "categoryDescription": "Free online {{category}} courses for digital literacy. DigiBridge Academy — education for seniors 60+.",
+    "searchTitle": "Search: {{term}} | Courses | DigiBridge Academy",
+    "searchDescription": "Found {{count}} courses for \"{{term}}\" in DigiBridge Academy.",
+    "pageTitle": "Courses - Page {{page}} | DigiBridge Academy",
+    "loading": "Loading... | DigiBridge Academy"
+  },
+  "academyLectures": {
+    "hero": {
+      "badge": "Video Lectures",
+      "title": "Lectures",
+      "titleAccent": "Live & Recordings",
+      "subtitle": "Learn from experts in real-time or watch recordings whenever convenient. Completely free.",
+      "stats": {
+        "total": "Lectures",
+        "upcoming": "Upcoming",
+        "recordings": "Recordings",
+        "credits": "Credits"
+      }
+    },
+    "schedule": {
+      "title": "Upcoming Live",
+      "upcoming": "lectures",
+      "today": "Today",
+      "tomorrow": "Tomorrow"
+    },
+    "filters": {
+      "all": "All",
+      "live": "Live",
+      "upcoming": "Upcoming",
+      "recordings": "Recordings",
+      "searchPlaceholder": "Search lecture...",
+      "clearAll": "Clear"
+    },
+    "sort": {
+      "date": "By date",
+      "popular": "Popular",
+      "alphabetical": "A-Z"
+    },
+    "results": {
+      "found": "found"
+    },
+    "card": {
+      "upcoming": "Upcoming",
+      "recording": "Recording",
+      "speaker": "Speaker",
+      "hasTest": "With test",
+      "watchLive": "Watch Live",
+      "signUp": "Sign Up",
+      "watch": "Watch"
+    },
+    "loading": "Loading...",
+    "empty": {
+      "noLectures": "No lectures available",
+      "noResults": "No lectures found",
+      "checkBack": "Check back later for new lectures.",
+      "tryDifferent": "Try different filters."
+    }
+  },
+  "academyLectureWatch": {
+    "loading": "Loading lecture...",
+    "error": {
+      "title": "Error",
+      "backToList": "← Back to lectures"
+    },
+    "noVideo": {
+      "title": "Video not available",
+      "description": "The recording has not been published yet.",
+      "back": "← Back to lecture"
+    },
+    "header": {
+      "back": "Back",
+      "live": "LIVE",
+      "theaterMode": "Theater mode",
+      "exitTheater": "Exit theater mode",
+      "openYoutube": "Open in YouTube"
+    },
+    "video": {
+      "unsupportedProvider": "Video provider not supported",
+      "openExternal": "Open externally"
+    },
+    "meta": {
+      "views": "views",
+      "hours": "h",
+      "mins": "m",
+      "minutes": "min"
+    },
+    "actions": {
+      "takeTest": "Take the test",
+      "testPassed": "Passed",
+      "retakeTest": "Try again"
+    },
+    "chat": {
+      "title": "Live chat",
+      "watching": "watching",
+      "empty": "Be the first to write!",
+      "comingSoon": "Firebase integration coming soon",
+      "placeholder": "Write a message...",
+      "loginRequired": "Log in to write",
+      "anonymousUser": "User"
+    },
+    "description": {
+      "about": "About the lecture"
+    },
+    "course": {
+      "partOf": "Part of course",
+      "viewCourse": "View course"
+    }
+  },
+  "academyLectureTest": {
+    "loading": "Loading test...",
+    "error": "Error",
+    "notFound": "Test not found",
+    "backToLecture": "Back to lecture",
+    "loginRequired": "Login required",
+    "loginRequiredDesc": "Please sign in to take this test.",
+    "login": "Sign In",
+    "question": "Question",
+    "questionOf": "Question {{current}} of {{total}}",
+    "questions": "Questions",
+    "point": "point",
+    "points": "points",
+    "typeSingle": "Single choice",
+    "typeMultiple": "Multiple choice",
+    "typeTrueFalse": "True/False",
+    "answered": "Answered",
+    "unanswered": "Unanswered",
+    "current": "Current",
+    "prev": "Previous",
+    "next": "Next",
+    "submit": "Submit Test",
+    "submitting": "Submitting...",
+    "passingScore": "Passing score",
+    "maxCredits": "Max credits",
+    "attempt": "Attempt",
+    "confirmSubmitUnanswered": "You have {{count}} unanswered questions. Are you sure you want to submit?",
+    "errors": {
+      "lectureNotFound": "Lecture not found",
+      "noTest": "This lecture has no test",
+      "loadFailed": "Failed to load test",
+      "submitFailed": "Failed to submit test",
+      "retryFailed": "Failed to start new attempt"
+    },
+    "results": {
+      "passed": "Congratulations! 🎉",
+      "failed": "Not Passed",
+      "passedDesc": "You successfully completed the test!",
+      "failedDesc": "You didn't reach the minimum score. Try again!",
+      "yourScore": "Your Score",
+      "correct": "Correct",
+      "wrong": "Wrong",
+      "total": "Total",
+      "passing": "Passing",
+      "creditsEarned": "credits earned",
+      "backToLecture": "Back to Lecture",
+      "tryAgain": "Try Again",
+      "reviewAnswers": "Review Answers",
+      "correctLabel": "Correct",
+      "wrongLabel": "Wrong",
+      "yourAnswer": "Your answer",
+      "noAnswer": "No answer",
+      "attemptInfo": "Attempt {{current}} of {{max}}",
+      "remainingAttempts": "Remaining attempts: {{count}}",
+      "noMoreAttempts": "No more attempts",
+      "attemptHistory": "Attempt History",
+      "viewAnswers": "View answers",
+      "bestAttempt": "Best result",
+      "attempt": "Attempt"
+    },
+    "intro": {
+      "attemptsLeft": "Attempts left: {{count}}"
+    },
+    "footer": {
+      "attempt": "Attempt"
+    }
+  },
+  "academyLectureDetails": {
+    "lecturer": {
+      "title": "Lecturer",
+      "titlePlural": "Lecturers",
+      "alsoParticipate": "Also participating"
+    },
+    "roles": {
+      "lecturer": "Lecturer",
+      "mentor": "Mentor",
+      "assistant": "Assistant",
+      "guest": "Guest"
+    },
+    "course": {
+      "module": "Module"
+    },
+    "test": {
+      "testPassed": "Test passed!",
+      "testFailed": "Test not passed",
+      "correctAnswers": "correct answers",
+      "creditsEarned": "earned",
+      "attempts": "Attempts",
+      "remaining": "Remaining",
+      "noMoreAttempts": "No more attempts",
+      "maxAttempts": "Max attempts",
+      "hintFree": "Watch the lecture to unlock the test."
+    }
+  },
+  "academyLecturesSeo": {
+    "listTitle": "Digital Literacy Lectures | DigiBridge Academy",
+    "listDescription": "Free online lectures on digital literacy, internet security, and technology. DigiBridge Academy — education for seniors 60+ with qualified lecturers.",
+    "categoryTitle": "{{category}} Lectures | DigiBridge Academy",
+    "categoryDescription": "Free online {{category}} lectures for digital literacy. DigiBridge Academy — education for seniors 60+.",
+    "searchTitle": "Search: {{term}} | Lectures | DigiBridge Academy",
+    "searchDescription": "Found {{count}} lectures for \"{{term}}\" in DigiBridge Academy.",
+    "loading": "Loading... | DigiBridge Academy"
+  },
+  "academyMentorPicker": {
+    "searchPlaceholder": "Search mentor...",
+    "typeToSearch": "Type at least 1 character...",
+    "noResults": "No results",
+    "setAsLead": "Set as lead",
+    "roles": {
+      "lecturer": "Lecturer",
+      "mentor": "Mentor",
+      "assistant": "Assistant",
+      "guest": "Guest lecturer"
+    }
+  }
+}

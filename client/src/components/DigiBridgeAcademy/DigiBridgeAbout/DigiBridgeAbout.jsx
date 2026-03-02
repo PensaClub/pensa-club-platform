@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import './digiBridgeAbout.css';
 
 export const DigiBridgeAbout = ({ stats, loading }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('digibridge');
 
     return (
         <section className="dba-about">

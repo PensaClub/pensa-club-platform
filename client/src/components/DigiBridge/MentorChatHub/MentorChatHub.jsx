@@ -13,7 +13,7 @@ import { toast } from 'react-toastify';
 import './mentorChatHub.css';
 
 export const MentorChatHub = ({ onClose, onOpenChat }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge');
   const { profileData } = useAuthContext();
   
   const [conversations, setConversations] = useState([]);

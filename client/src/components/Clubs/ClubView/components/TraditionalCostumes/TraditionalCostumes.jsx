@@ -16,7 +16,7 @@ import {
 import './traditionalCostumes.css';
 
 export const TraditionalCostumes = ({ club }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('clubs');
   const [isGalleryModalOpen, setIsGalleryModalOpen] = useState(false);
   const [currentImage, setCurrentImage] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);

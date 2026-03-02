@@ -33,7 +33,7 @@ import './clubManagement.css';
 import { useClubContext } from '../../../../contexts/ClubContext';
 
 export const ClubManagement = ({ club }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('clubs');
   const { sendPersonalEmail } = useClubContext();
 
   const [showAllMembers, setShowAllMembers] = useState(false);

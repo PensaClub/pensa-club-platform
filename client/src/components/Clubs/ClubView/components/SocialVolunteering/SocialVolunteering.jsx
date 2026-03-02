@@ -28,7 +28,7 @@ import {
 import './socialVolunteering.css';
 
 export const SocialVolunteering = ({ club }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('clubs');
   const [activeTab, setActiveTab] = useState('programs');
   const [selectedVolunteer, setSelectedVolunteer] = useState(null);
   const [showRegistrationModal, setShowRegistrationModal] = useState(false);

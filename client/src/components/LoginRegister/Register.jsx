@@ -9,7 +9,7 @@ import './modernAuth.css';
 import { CustomGoogleButton } from './CustomGoogleButton';
 
 export const Register = ({ navToLogin }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('auth');
   const { onRegisterSubmit } = useContext(UserContext);
   const { handleGoogleRegister, isProcessing } = useGoogleAuth();
   const [showPassword, setShowPassword] = useState(false);

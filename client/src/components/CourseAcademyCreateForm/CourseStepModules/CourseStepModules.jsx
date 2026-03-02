@@ -29,7 +29,7 @@ const CourseStepModules = ({
   removeLesson,
   moveLesson,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('academy-admin');
 
   return (
     <div className="csmo-wrapper">

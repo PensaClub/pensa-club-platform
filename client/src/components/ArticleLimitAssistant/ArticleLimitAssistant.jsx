@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { LocalizedLink as Link } from '../LocalizedLink/LocalizedLink';
 import Lottie from 'lottie-react';
 import './articleLimitAssistant.css';
 import assistantAnimation from './animations.json'; 

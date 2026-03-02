@@ -18,7 +18,7 @@ import {
 import './draftClubsCard.css';
 
 const DraftClubsCard = ({ draft, onContinue, onView, onDelete }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('clubs');
     const [isDeleting, setIsDeleting] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 

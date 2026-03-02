@@ -23,7 +23,7 @@ export const DigiBridgeChatWindow = ({
   pendingRequest = null,
   onRequestCreated
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge');
   const { profileData } = useAuthContext();
   const [step, setStep] = useState('category');
   const [currentRequest, setCurrentRequest] = useState(pendingRequest);

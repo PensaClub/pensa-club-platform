@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 export const DeleteAd = ({ isOpen, onClose, onDelete, adName, adImage}) => {
 
-    const { t } = useTranslation();
+    const { t } = useTranslation('community');
 
     if (!isOpen) return null;
 

@@ -4,7 +4,7 @@ import { useAcademy } from '../../contexts/AcademyProvider';
 import './digiBridgeTestimonials.css';
 
 export const DigiBridgeTestimonials = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('digibridge');
     const { getApprovedAcademyReviews } = useAcademy();
     
     const [activeIndex, setActiveIndex] = useState(0);

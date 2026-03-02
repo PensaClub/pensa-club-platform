@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
 import './initiativeView.css';
 import { useTranslation } from 'react-i18next';
 import { useInitiativeContext } from '../../contexts/InitiativeProvider';
@@ -30,7 +31,7 @@ import SEOHead from '../../SEO/SEOHead.jsx';
 
 export const InitiativeView = () => {
     const { slug } = useParams();
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const { getInitiativeById } = useInitiativeContext();
     const { profileData, isAuthentication } = useAuthContext();
     const { sendPersonalEmail } = useClubContext();

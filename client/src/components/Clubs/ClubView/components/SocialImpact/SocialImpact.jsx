@@ -37,7 +37,7 @@ import {
 import './socialImpact.css';
 
 export const SocialImpact = ({ club }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('clubs');
   const [selectedMetric, setSelectedMetric] = useState(null);
   const [animatedNumbers, setAnimatedNumbers] = useState({});
   const [showJoinModal, setShowJoinModal] = useState(false);

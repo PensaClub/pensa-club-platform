@@ -6,7 +6,7 @@ import { useAuthContext } from '../../contexts/UserContext';
 import './sendEmailModal.css';
 
 const SendEmailModal = ({ isOpen, onClose, recipientEmail, recipientName }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-students');
   const { sendPersonalEmail } = useAcademy();
   const { profileData } = useAuthContext();
 

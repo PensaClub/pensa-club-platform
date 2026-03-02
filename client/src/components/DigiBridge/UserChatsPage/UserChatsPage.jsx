@@ -11,7 +11,7 @@ import { UserChatCard } from './UserChatCard';
 import { MentorReviewModal } from '../MentorReviewModal/MentorReviewModal';
 
 export const UserChatsPage = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge');
   const { profileData } = useAuthContext();
   const { checkUserMentorReviewStatus, getAllMentors } = useAcademy();
   

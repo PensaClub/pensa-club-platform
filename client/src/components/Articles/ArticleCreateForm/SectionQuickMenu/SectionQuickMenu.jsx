@@ -11,7 +11,7 @@ export const SectionQuickMenu = ({
   onMoveDown,
   onRemove
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
 
   return (
     <div className="sqm-bar">

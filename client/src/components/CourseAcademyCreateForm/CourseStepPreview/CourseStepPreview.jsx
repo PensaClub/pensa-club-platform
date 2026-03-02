@@ -17,7 +17,7 @@ const LESSON_TYPE_ICONS = {
 };
 
 const CourseStepPreview = ({ courseData, modules, goToStep }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('academy-admin');
 
   const totalLessons = modules.reduce((sum, m) => sum + m.lessons.length, 0);
   const totalDuration = modules.reduce(

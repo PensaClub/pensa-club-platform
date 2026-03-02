@@ -23,7 +23,7 @@ const AchievementsManager = ({
   onAchievementsChange, 
   disabled = false 
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('clubs');
   
   const [activeTab, setActiveTab] = useState('awards');
   const [showAddAwardForm, setShowAddAwardForm] = useState(false);

@@ -33,7 +33,7 @@ import {
 import './culturalManagement.css';
 
 export const CulturalManagement = ({ club }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('clubs');
   const [selectedMember, setSelectedMember] = useState(null);
   const [formStatus, setFormStatus] = useState(null);
   const [contactForm, setContactForm] = useState({

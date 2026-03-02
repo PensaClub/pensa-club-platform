@@ -12,12 +12,13 @@ import { useFormCreate } from "../../../hooks/useFormCreate";
 import { useTranslation } from "react-i18next";
 import { useAuthContext } from "../../../contexts/UserContext";
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../../../hooks/useLocalizedNavigate';
 import DatePicker from "react-datepicker";
 import { TagInput } from "../CreateAd/TagInput";
 
 export const EditAd = () => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('community');
   const [fieldDefinitions, setFieldDefinitions] = useState({});
   const [towns, setTowns] = useState([]);
   // eslint-disable-next-line no-unused-vars
@@ -44,7 +45,7 @@ export const EditAd = () => {
   const { adId } = useParams();
 
   const currentLanguage = i18n.language;
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
   const getEmailPrefix = (email) => email.split("@")[0];
 
   const emailPrefix = getEmailPrefix(profileData.email);

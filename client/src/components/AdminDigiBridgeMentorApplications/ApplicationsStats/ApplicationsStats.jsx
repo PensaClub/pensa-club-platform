@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import './applicationsStats.css';
 
 export const ApplicationsStats = ({ stats }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge');
 
   const statCards = [
     {

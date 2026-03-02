@@ -12,7 +12,7 @@ import { AdminDigiBridgeApplicationDetailModal } from './AdminDigiBridgeApplicat
 import { AdminDigiBridgeSendEmailToApplicantModal } from './AdminDigiBridgeSendEmailToApplicantModal/AdminDigiBridgeSendEmailToApplicantModal';
 
 export const AdminDigiBridgeMentorApplications = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('digibridge');
     const {
         sendPersonalEmail,
         approveMentor,

@@ -1,4 +1,6 @@
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { LocalizedLink as Link } from '../LocalizedLink/LocalizedLink';
+import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 import './forgetPassword.css';
 import { useAuthContext } from '../contexts/UserContext';
 import { useTranslation } from 'react-i18next';
@@ -6,11 +8,11 @@ import { useForm } from '../hooks/useForm';
 import { useState } from 'react';
 
 export const ResetPasswordPage = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('auth');
     const { onPasswordReset } = useAuthContext();
     const [showPassword, setShowPassword] = useState(false);
     const [showRePassword, setReShowPassword] = useState(false);
-    const navigate = useNavigate();
+    const navigate = useLocalizedNavigate();
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
     const token = queryParams.get('token');

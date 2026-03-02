@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 import { useAuthContext } from '../contexts/UserContext';
 import { useAcademyCourses } from '../contexts/AcademyCoursesProvider';
 import './studentDashboard.css';
@@ -15,8 +15,8 @@ import StudentRecentActivity from './StudentRecentActivity/StudentRecentActivity
 import SendEmailModal from './SendEmailModal/SendEmailModal';
 
 const StudentDashboard = () => {
-    const { t } = useTranslation();
-    const navigate = useNavigate();
+    const { t } = useTranslation('student-dashboard');
+    const navigate = useLocalizedNavigate();
     const { isAuthentication, profileData } = useAuthContext();
     const {
         getMyDashboard,

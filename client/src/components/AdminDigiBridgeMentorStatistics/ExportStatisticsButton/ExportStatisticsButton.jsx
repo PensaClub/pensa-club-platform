@@ -6,7 +6,7 @@ import { generatePDFReport } from './generatePDFReport';
 import './exportStatisticsButton.css';
 
 export const ExportStatisticsButton = ({ mentors, stats }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('digibridge');
   const [isOpen, setIsOpen] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
 

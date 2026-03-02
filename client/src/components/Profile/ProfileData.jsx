@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 import "./profile.css";
 import {
   validateField,
@@ -18,7 +18,7 @@ import CustomSelect from "./CustomSelect";
 
 export const ProfileData = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
 
   const { onEditProfileDataSubmit, onProfileDataSubmit, profileData } = useContext(UserContext);
 

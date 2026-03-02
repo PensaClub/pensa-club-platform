@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { LocalizedLink as Link } from '../../../LocalizedLink/LocalizedLink';
 import { useTranslation } from 'react-i18next';
 import './projectView.css';
 import { useInitiativeContext } from '../../../contexts/InitiativeProvider';
@@ -24,7 +25,7 @@ import SEOHead from '../../../SEO/SEOHead.jsx';
 
 export const ProjectView = () => {
     const { slug } = useParams();
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const {
         getProjectById,
         currentProject,

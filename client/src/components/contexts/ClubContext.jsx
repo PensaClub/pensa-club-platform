@@ -1,7 +1,8 @@
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
 import { Loader } from "../Loader/Loader";
 import { notify } from "../../utils/notify.jsx";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 import { useAuthContext } from "./UserContext";
 import { mockClubsData } from "../Clubs/data/mockClubsData.js";
 import clubServiceFactory from "../Services/clubServiceFactory.js";
@@ -31,7 +32,7 @@ export const ClubProvider = ({ children }) => {
   });
 
   const { isAdmin, user, isAuthentication, userEmail } = useAuthContext();
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
   const location = useLocation();
 
   // 🔧 Създаваме clubService инстанция

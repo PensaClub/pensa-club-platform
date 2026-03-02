@@ -33,7 +33,7 @@ const AdminClubCard = ({
     onReject, 
     onOpenModal 
 }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('clubs');
     const [isProcessing, setIsProcessing] = useState(false);
     const [showStatusMenu, setShowStatusMenu] = useState(false);
     const [showRejectModal, setShowRejectModal] = useState(false);

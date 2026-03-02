@@ -9,7 +9,7 @@ import { ApplicationsExport } from './ApplicationsExport/ApplicationsExport';
 import { ApplicationsCommunication } from './ApplicationsCommunication/ApplicationsCommunication';
 
 export const ApplicationsAdmin = ({ setApplicationsStats }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const [applications, setApplications] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [activeTab, setActiveTab] = useState('list');

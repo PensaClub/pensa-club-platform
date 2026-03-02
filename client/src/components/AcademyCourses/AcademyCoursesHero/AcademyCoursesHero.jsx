@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import './academyCoursesHero.css';
 
 export const AcademyCoursesHero = ({ totalCourses = 0, totalPrograms = 0, totalEnrolled = 0 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('academy');
 
   return (
     <section className="academyCoursesHero">

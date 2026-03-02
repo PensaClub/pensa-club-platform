@@ -16,7 +16,7 @@ export const AdminDigiBridgeMentorCard = ({
   isSelected,
   onToggleSelect
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge');
   const [showActions, setShowActions] = useState(false);
 
   const getPriorityContactIcon = (contact) => {

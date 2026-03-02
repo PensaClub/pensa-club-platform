@@ -17,7 +17,7 @@ const TeamSection = ({
     removeTeamImage,
     onChangeHandler
 }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
 
     // Handle team member field changes
     const handleTeamMemberChange = (index, field, value) => {

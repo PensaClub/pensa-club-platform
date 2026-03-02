@@ -1,0 +1,614 @@
+{
+  "digiMentorPanel": {
+    "title": "Ментор Табло",
+    "welcome": "Добре дошли",
+    "errorLoading": "Грешка при зареждане на данни",
+    "totalStudents": "Общо студенти",
+    "activeSessions": "Активни сесии",
+    "completedSessions": "Завършени сесии",
+    "onlineHours": "Онлайн часове",
+    "averageRating": "Средна оценка",
+    "reviews": "отзива",
+    "totalMessages": "Общо съобщения",
+    "responseTime": "Среден отговор",
+    "minutes": "мин",
+    "completionRate": "Процент завършване",
+    "quickActions": "Бързи действия",
+    "startSession": "Започни сесия",
+    "viewMessages": "Виж съобщения",
+    "myStudents": "Моите студенти",
+    "viewReviews": "Виж отзиви"
+  },
+  "digiMentorStats": {
+    "totalStudents": "Общо студенти",
+    "activeSessions": "Активни сесии",
+    "completedSessions": "Завършени сесии",
+    "onlineHours": "Онлайн часове",
+    "averageRating": "Средна оценка",
+    "reviews": "отзива",
+    "totalMessages": "Общо съобщения",
+    "responseTime": "Среден отговор",
+    "minutes": "мин",
+    "completionRate": "Процент завършване"
+  },
+  "digiMentorQuickActions": {
+    "title": "Бързи действия",
+    "startSession": "Започни сесия",
+    "viewMessages": "Виж съобщения",
+    "myStudents": "Моите студенти",
+    "viewReviews": "Виж отзиви"
+  },
+  "digiMentorRecentActivity": {
+    "title": "Последна активност",
+    "noActivity": "Все още няма активност",
+    "types": {
+      "session_started": "Започна сесия с {{student}}",
+      "session_completed": "Завърши сесия с {{student}}",
+      "message_received": "Ново съобщение от {{student}}",
+      "new_student": "Нов студент: {{student}}",
+      "review_received": "Нов отзив от {{student}} - {{rating}}⭐"
+    }
+  },
+  "digiMentorUpcomingSessions": {
+    "title": "Предстоящи сесии",
+    "sessionsCount": "сесии",
+    "noSessions": "Няма предстоящи сесии",
+    "noTopic": "Без тема",
+    "minutes": "мин",
+    "status": {
+      "confirmed": "Потвърдена",
+      "pending": "Изчакваща",
+      "cancelled": "Отказана",
+      "scheduled": "Планиран"
+    },
+    "joinSession": "Присъедини се",
+    "editSession": "Редактирай",
+    "cancelSession": "Откажи"
+  },
+  "digiMentorStudentsList": {
+    "title": "Моите студенти",
+    "registeredOn": "Записан на",
+    "loading": "Зареждане...",
+    "studentsCount": "студенти",
+    "noStudents": "Все още нямате студенти",
+    "noResults": "Няма намерени студенти",
+    "searchPlaceholder": "Търсене по име...",
+    "filters": {
+      "all": "Всички",
+      "active": "Активни",
+      "inactive": "Неактивни",
+      "completed": "Завършени"
+    },
+    "status": {
+      "active": "Активен",
+      "inactive": "Неактивен",
+      "completed": "Завършен",
+      "scheduled": "Планиран"
+    },
+    "sessions": "сесии",
+    "message": "Съобщение",
+    "viewProfile": "Профил"
+  },
+  "digiMentorPerformanceChart": {
+    "title": "Представяне и статистика",
+    "noData": "Все още няма данни за показване",
+    "comparisonTitle": "Сравнение по периоди",
+    "periods": {
+      "week": "Седмица",
+      "month": "Месец",
+      "year": "Година"
+    },
+    "chartTypes": {
+      "sessions": "Сесии",
+      "hours": "Часове",
+      "students": "Студенти"
+    },
+    "summary": {
+      "total": "Общо",
+      "average": "Средно",
+      "peak": "Максимум"
+    }
+  },
+  "mentorMeetings": {
+    "title": "Моите срещи",
+    "addMeeting": "Добави среща",
+    "noMeetings": "Все още нямате срещи",
+    "confirmCancel": "Сигурни ли сте, че искате да откажете тази среща?",
+    "errorCancel": "Грешка при отказване на срещата",
+    "tabs": {
+      "scheduled": "Предстоящи",
+      "completed": "Завършени"
+    },
+    "noResults": {
+      "scheduled": "Няма предстоящи срещи",
+      "completed": "Няма завършени срещи"
+    },
+    "types": {
+      "viber": "Viber",
+      "google_meet": "Google Meet",
+      "phone": "Телефонно обаждане",
+      "in_person": "На живо",
+      "other": "Друго"
+    },
+    "minutes": "мин",
+    "actual": "реално",
+    "markComplete": "Отбележи като завършена",
+    "edit": "Редактирай",
+    "cancel": "Откажи",
+    "completed": "Завършена",
+    "student": "Ученик",
+    "date": "Дата",
+    "time": "Час",
+    "duration": "Продължителност",
+    "notes": "Бележки"
+  },
+  "mentorProfileEdit": {
+    "title": "Редактиране на профил",
+    "subtitle": "Управлявайте информацията в профила си",
+    "errorFetch": "Грешка при зареждане на профила",
+    "errorSave": "Грешка при запазване на промените",
+    "successSave": "Промените са запазени успешно!",
+    "saving": "Запазване...",
+    "saveChanges": "Запази промените",
+    "readonlySection": {
+      "title": "Информация само за четене",
+      "description": "Тези данни се променят само от администратори"
+    },
+    "editableSection": {
+      "title": "Редактируема информация",
+      "description": "Можете да променяте следната информация"
+    },
+    "fields": {
+      "photo": "Снимка",
+      "name": "Име",
+      "email": "Имейл",
+      "phone": "Телефон",
+      "age": "Възраст",
+      "specialization": "Специализация",
+      "education": "Образование",
+      "experience": "Опит",
+      "motivation": "Мотивация",
+      "availability": "Наличност",
+      "languages": "Езици",
+      "viber": "Viber",
+      "facebook": "Facebook",
+      "linkedin": "LinkedIn",
+      "otherContact": "Друг контакт",
+      "priorityContact": "Предпочитан контакт"
+    },
+    "placeholders": {
+      "availability": "напр. Понеделник-Петък 18:00-21:00",
+      "languages": "напр. Български, Английски, Немски"
+    },
+    "priorityOptions": {
+      "email": "Имейл",
+      "viber": "Viber",
+      "phone": "Телефон"
+    }
+  },
+  "addMeetingModal": {
+    "title": "Добави среща",
+    "cancel": "Отказ",
+    "save": "Запази",
+    "saving": "Запазване...",
+    "loadingStudents": "Зареждане на студенти...",
+    "minutes": "мин",
+    "fields": {
+      "title": "Заглавие",
+      "meetingType": "Тип среща",
+      "student": "Студент",
+      "date": "Дата",
+      "time": "Час",
+      "duration": "Продължителност",
+      "notes": "Бележки"
+    },
+    "placeholders": {
+      "title": "напр. Урок по компютърна грамотност",
+      "student": "Избери студент (незадължително)",
+      "notes": "Допълнителна информация за срещата..."
+    },
+    "meetingTypes": {
+      "viber": "Viber",
+      "google_meet": "Google Meet",
+      "phone": "Телефонно обаждане",
+      "in_person": "На живо",
+      "other": "Друго"
+    },
+    "errors": {
+      "titleRequired": "Заглавието е задължително",
+      "dateRequired": "Датата е задължителна",
+      "timeRequired": "Часът е задължителен",
+      "saveFailed": "Грешка при запазване на срещата"
+    }
+  },
+  "editMeetingModal": {
+    "title": "Редактирай среща",
+    "cancel": "Отказ",
+    "save": "Запази промените",
+    "saving": "Запазване...",
+    "loadingStudents": "Зареждане на студенти...",
+    "minutes": "мин",
+    "fields": {
+      "title": "Заглавие",
+      "meetingType": "Тип среща",
+      "student": "Студент",
+      "date": "Дата",
+      "time": "Час",
+      "duration": "Продължителност",
+      "notes": "Бележки"
+    },
+    "placeholders": {
+      "title": "напр. Урок по компютърна грамотност",
+      "student": "Избери студент (незадължително)",
+      "notes": "Допълнителна информация за срещата..."
+    },
+    "meetingTypes": {
+      "viber": "Viber",
+      "google_meet": "Google Meet",
+      "phone": "Телефонно обаждане",
+      "in_person": "На живо",
+      "other": "Друго"
+    },
+    "errors": {
+      "titleRequired": "Заглавието е задължително",
+      "dateRequired": "Датата е задължителна",
+      "timeRequired": "Часът е задължителен",
+      "saveFailed": "Грешка при запазване на промените"
+    }
+  },
+  "completeMeetingModal": {
+    "title": "Завърши среща",
+    "cancel": "Отказ",
+    "complete": "Завърши срещата",
+    "saving": "Запазване...",
+    "minutes": "мин",
+    "meetingTitle": "Среща",
+    "student": "Студент",
+    "plannedDuration": "Планирана продължителност",
+    "fields": {
+      "actualDuration": "Реална продължителност",
+      "completionNotes": "Бележки от срещата"
+    },
+    "placeholders": {
+      "completionNotes": "Опишете какво беше обсъдено, какви теми бяха разгледани, напредък на студента..."
+    },
+    "hints": {
+      "actualDuration": "Въведете реалната продължителност на срещата в минути",
+      "completionNotes": "Тези бележки ще бъдат запазени за бъдещи справки и ще помогнат за проследяване на напредъка"
+    },
+    "errors": {
+      "durationRequired": "Продължителността е задължителна",
+      "saveFailed": "Грешка при завършване на срещата"
+    }
+  },
+  "studentDetails": {
+    "backToList": "Назад към студентите",
+    "notFound": "Студентът не е намерен",
+    "errorLoading": "Грешка при зареждане на данните",
+    "registeredSince": "Регистриран от",
+    "currentMentor": "Текущ ментор",
+    "totalCredits": "Общо кредити",
+    "activeCourses": "Активни курсове",
+    "completedCourses": "Завършени курсове",
+    "attendanceRate": "Присъственост",
+    "tabs": {
+      "overview": "Преглед",
+      "courses": "Курсове",
+      "activities": "Активности",
+      "attendance": "Присъственост",
+      "schedule": "График",
+      "notes": "Бележки"
+    },
+    "overview": {
+      "title": "Преглед",
+      "creditsBreakdown": "Разпределение на кредити",
+      "fromCourses": "От курсове",
+      "fromLectures": "От лекции",
+      "fromSeminars": "От семинари",
+      "fromPresentations": "От презентации",
+      "mentorInfo": "Информация за ментор",
+      "assignedDate": "Назначен на",
+      "progress": "Напредък",
+      "mentorHistory": "История на менторите",
+      "overallProgress": "Общ напредък",
+      "totalCourses": "Общо курсове"
+    },
+    "courses": {
+      "title": "Курсове",
+      "all": "Всички",
+      "inProgress": "В процес",
+      "completed": "Завършени",
+      "notStarted": "Непочнати",
+      "noCourses": "Няма намерени курсове",
+      "progress": "Напредък",
+      "lessons": "урока",
+      "credits": "кредита",
+      "startDate": "Начало",
+      "endDate": "Край"
+    },
+    "activities": {
+      "title": "Активности",
+      "all": "Всички",
+      "lectures": "Лекции",
+      "seminars": "Семинари",
+      "presentations": "Презентации",
+      "attended": "Присъствал",
+      "missed": "Пропуснал",
+      "scheduled": "Планирана",
+      "minutes": "мин",
+      "credits": "кредита",
+      "totalCredits": "Общо кредити",
+      "noActivities": "Няма намерени активности"
+    },
+    "attendance": {
+      "title": "Присъственост и помощ",
+      "overview": "Общ преглед",
+      "totalSessions": "Общо сесии",
+      "attended": "Присъствал",
+      "missed": "Пропуснал",
+      "rate": "Процент",
+      "mentorHelp": "Помощ от ментор",
+      "chatSessions": "Чат сесии",
+      "chatHours": "Часове онлайн",
+      "lastChat": "Последен чат",
+      "scheduledMeetings": "Планирани срещи",
+      "completedMeetings": "Завършени срещи",
+      "breakdown": "Разбивка",
+      "meetingCompletion": "Завършени срещи"
+    },
+    "schedule": {
+      "title": "График",
+      "all": "Всички",
+      "today": "Днес",
+      "meetings": "Срещи",
+      "lessons": "Уроци",
+      "lectures": "Лекции",
+      "addMeeting": "Добави среща",
+      "editMeeting": "Редактирай среща",
+      "loading": "Зареждане...",
+      "noEvents": "Няма предстоящи събития",
+      "minutes": "мин",
+      "edit": "Редактирай",
+      "cancel": "Отмени",
+      "delete": "Изтрий",
+      "confirmDelete": "Сигурни ли сте, че искате да изтриете тази среща?",
+      "confirmCancel": "Сигурни ли сте, че искате да отмените тази среща?",
+      "course_lesson": "Урок от курс",
+      "mentor_meeting": "Среща с ментор",
+      "lecture": "Лекция",
+      "seminar": "Семинар",
+      "close": "Затвори",
+      "presentation": "Презентация",
+      "status": {
+        "scheduled": "Планирана",
+        "completed": "Завършена",
+        "cancelled": "Отменена"
+      },
+      "form": {
+        "title": "Заглавие",
+        "titlePlaceholder": "Въведете заглавие на срещата",
+        "date": "Дата",
+        "time": "Час",
+        "duration": "Продължителност (мин)",
+        "type": "Тип",
+        "typeOnline": "Онлайн",
+        "typePhone": "Телефон",
+        "typeInPerson": "На живо",
+        "notes": "Бележки",
+        "notesPlaceholder": "Добавете бележки за срещата...",
+        "cancel": "Откажи",
+        "save": "Запази"
+      }
+    },
+    "notes": {
+      "title": "Лични бележки",
+      "notesCount": "бележки",
+      "addNote": "Добави бележка",
+      "addFirstNote": "Добави първа бележка",
+      "searchPlaceholder": "Търси в бележките...",
+      "loading": "Зареждане на бележки...",
+      "noNotes": "Все още няма бележки за този студент",
+      "noResults": "Няма резултати за това търсене",
+      "edit": "Редактирай",
+      "delete": "Изтрий",
+      "editNote": "Редактирай бележка",
+      "confirmDelete": "Сигурни ли сте, че искате да изтриете тази бележка?",
+      "form": {
+        "noteText": "Съдържание",
+        "notePlaceholder": "Напишете вашата бележка тук...",
+        "hint": "Тази бележка е лична и само вие ще я виждате",
+        "cancel": "Отказ",
+        "save": "Запази"
+      }
+    }
+  },
+  "digiMentorReviews": {
+    "pageTitle": "Моите отзиви",
+    "pageSubtitle": "Вижте какво споделят вашите студенти за вас",
+    "noReviewsTitle": "Все още нямате отзиви",
+    "noReviewsText": "Когато получите първия си отзив, той ще се покаже тук.",
+    "noResultsTitle": "Няма намерени резултати",
+    "noResultsText": "Опитайте да промените филтрите или търсенето.",
+    "loadMore": "Зареди още отзиви",
+    "showingCount": "Показани {{visible}} от {{total}} отзива"
+  },
+  "digiMentorReviewsHeader": {
+    "basedOn": "Базирано на {{count}} отзива",
+    "basedOn_one": "Базирано на {{count}} отзив",
+    "basedOn_other": "Базирано на {{count}} отзива",
+    "distributionTitle": "Разпределение на оценките"
+  },
+  "digiMentorReviewsFilters": {
+    "searchPlaceholder": "Търсене по име, текст или роля...",
+    "clearSearch": "Изчисти търсенето",
+    "filterByRating": "Филтрирай по оценка",
+    "allRatings": "Всички",
+    "fiveStars": "5 звезди",
+    "fourStars": "4 звезди",
+    "threeStars": "3 звезди",
+    "twoStars": "2 звезди",
+    "oneStar": "1 звезда",
+    "sortBy": "Сортирай по",
+    "sortNewest": "Най-нови първи",
+    "sortOldest": "Най-стари първи",
+    "sortHighest": "Най-висок рейтинг",
+    "sortLowest": "Най-нисък рейтинг",
+    "resultSingular": "резултат",
+    "resultPlural": "резултата"
+  },
+  "digiMentorReviewCard": {
+    "approved": "Одобрено",
+    "today": "Днес",
+    "yesterday": "Вчера",
+    "daysAgo": "Преди {{count}} дни",
+    "daysAgo_one": "Преди {{count}} ден",
+    "daysAgo_other": "Преди {{count}} дни",
+    "weeksAgo": "Преди {{count}} седмици",
+    "weeksAgo_one": "Преди {{count}} седмица",
+    "weeksAgo_other": "Преди {{count}} седмици",
+    "monthsAgo": "Преди {{count}} месеца",
+    "monthsAgo_one": "Преди {{count}} месец",
+    "monthsAgo_other": "Преди {{count}} месеца",
+    "showMore": "Покажи повече",
+    "showLess": "Покажи по-малко",
+    "thankYou": "Благодарим за отзива!"
+  },
+  "mentorProfile": {
+    "title": "Профил на ментор",
+    "edit": "Редактирай профил",
+    "save": "Запази промени",
+    "saving": "Записване...",
+    "cancel": "Отказ",
+    "errorLoading": "Грешка при зареждане на профил",
+    "name": "Име",
+    "email": "Имейл",
+    "age": "Възраст",
+    "phone": "Телефон",
+    "country": "Държава",
+    "priorityContact": "Приоритетен контакт",
+    "contactEmail": "Имейл",
+    "contactPhone": "Телефон",
+    "contactViber": "Viber",
+    "contactFacebook": "Facebook",
+    "contactLinkedIn": "LinkedIn",
+    "contactInfo": "Контактна информация",
+    "professionalInfo": "Професионална информация",
+    "socialContacts": "Социални мрежи и контакти",
+    "specialization": "Специализация",
+    "education": "Образование",
+    "experience": "Опит (години)",
+    "experiencePlaceholder": "Брой години",
+    "availability": "Наличност",
+    "languages": "Езици",
+    "motivation": "Мотивация",
+    "motivationPlaceholder": "Защо искате да бъдете ментор?",
+    "viber": "Viber",
+    "facebook": "Facebook",
+    "linkedin": "LinkedIn",
+    "otherContact": "Друг контакт",
+    "students": "Ученици",
+    "rating": "Рейтинг",
+    "reviews": "Отзиви",
+    "sessions": "Сесии",
+    "status": {
+      "active": "Активен ментор",
+      "inactive": "Неактивен",
+      "pending": "Чакащ одобрение"
+    },
+    "basicFieldsHelp": "За промяна на основните данни (име, имейл, възраст и снимка) моля свържете се с администратор."
+  },
+  "mentorModal": {
+    "applying": "Изпраща се...",
+    "about": "За мен",
+    "experience": "Опит и образование",
+    "education": "Образование",
+    "yearsExperience": "Години опит",
+    "availability": "Наличност",
+    "languages": "Езици",
+    "reviews": "Отзиви",
+    "rating": "Рейтинг",
+    "sessions": "Сесии",
+    "selectMentor": "Избери ментор",
+    "close": "Затвори",
+    "noLanguages": "Не са посочени езици",
+    "alreadyApplied": "Вече сте кандидатствали",
+    "applicationSuccess": "Заявката е изпратена успешно!",
+    "applicationError": "Грешка при изпращане на заявка",
+    "cannotApplyAsAdmin": "Администраторите не могат да кандидатстват",
+    "cannotApplyAsMentor": "Менторите не могат да кандидатстват"
+  },
+  "studentApplications": {
+    "title": "Заявки от студенти",
+    "subtitle": "Управлявайте заявките на студенти, които искат да учат с вас",
+    "tabs": {
+      "pending": "Чакащи",
+      "rejected": "Отхвърлени",
+      "approved": "Одобрени"
+    },
+    "loading": "Зареждане..."
+  },
+  "pendingApplications": {
+    "noApplications": "Няма чакащи заявки",
+    "noApplicationsDesc": "Когато студенти кандидатстват при вас, ще ги видите тук",
+    "appliedOn": "Кандидатствал на",
+    "approve": "Одобри",
+    "reject": "Отхвърли",
+    "confirmApprove": "Потвърждение за одобрение",
+    "approveConfirmText": "Сигурни ли сте, че искате да одобрите заявката на {{name}}? Този потребител ще стане ваш ученик.",
+    "confirmApproveBtn": "Одобри",
+    "confirmReject": "Потвърждение за отхвърляне",
+    "rejectConfirmText": "Сигурни ли сте, че искате да отхвърлите заявката на {{name}}?",
+    "rejectionReason": "Причина за отхвърляне",
+    "rejectionReasonPlaceholder": "Моля, обяснете защо отхвърляте тази заявка (минимум 10 символа)...",
+    "rejectionReasonRequired": "Моля, въведете причина за отхвърляне",
+    "rejectionReasonTooShort": "Причината трябва да е поне 10 символа",
+    "confirmRejectBtn": "Отхвърли",
+    "cancel": "Отказ",
+    "processing": "Обработва се..."
+  },
+  "rejectedApplications": {
+    "noApplications": "Няма отхвърлени заявки",
+    "noApplicationsDesc": "Отхвърлените заявки ще се показват тук",
+    "rejected": "Отхвърлен",
+    "appliedOn": "Кандидатствал на",
+    "rejectedOn": "Отхвърлен на",
+    "reason": "Причина",
+    "details": "Детайли",
+    "reapprove": "Одобри отново",
+    "delete": "Изтрий",
+    "applicationDetails": "Детайли на заявката",
+    "studentName": "Име на студента",
+    "email": "Имейл",
+    "phone": "Телефон",
+    "rejectionReason": "Причина за отхвърляне",
+    "close": "Затвори",
+    "confirmReapprove": "Потвърждение за одобрение",
+    "reapproveConfirmText": "Сигурни ли сте, че искате да одобрите отново заявката на {{name}}? Този потребител ще стане ваш ученик.",
+    "confirmReapproveBtn": "Одобри отново",
+    "confirmDelete": "Потвърждение за изтриване",
+    "deleteConfirmText": "Сигурни ли сте, че искате да изтриете заявката на {{name}}?",
+    "deleteWarning": "Това действие е необратимо. Заявката ще бъде изтрита завинаги.",
+    "confirmDeleteBtn": "Изтрий",
+    "cancel": "Отказ",
+    "processing": "Обработва се..."
+  },
+  "approvedApplications": {
+    "noApplications": "Няма одобрени студенти",
+    "noApplicationsDesc": "Одобрените студенти ще се показват тук",
+    "active": "Активен",
+    "approvedOn": "Одобрен на",
+    "studentSince": "Студент от",
+    "days": "дни",
+    "viewDetails": "Виж детайли",
+    "totalStudents": "Общо студенти",
+    "studentDetails": "Детайли за студента",
+    "activeStudent": "Активен студент",
+    "studentName": "Име на студента",
+    "email": "Имейл",
+    "phone": "Телефон",
+    "appliedOn": "Кандидатствал на",
+    "studentFor": "Студент вече",
+    "infoText": "Този студент е активен и учи с вас. Можете да виждате напредъка му в секцията за студенти.",
+    "close": "Затвори"
+  }
+}

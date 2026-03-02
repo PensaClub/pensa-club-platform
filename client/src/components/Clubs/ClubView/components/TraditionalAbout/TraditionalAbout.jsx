@@ -23,7 +23,7 @@ import {
 import './traditionalAbout.css';
 
 export const TraditionalAbout = ({ club }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('clubs');
 
   if (!club?.name) {
     return null;

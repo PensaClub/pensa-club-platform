@@ -4,7 +4,8 @@
 import { createContext, useContext, useState, useCallback, useEffect, useMemo } from "react";
 import { Loader } from "../Loader/Loader";
 import { notify } from "../../utils/notify.jsx";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from 'react-router-dom';
+import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 import { useAuthContext } from "./UserContext";
 import { initiativeServiceFactory } from "../Services/initiativeServiceFactory";
 import { initiativeServiceFactory as storyPubServiceFactory } from "../Services/StoryPubServiceFactory";
@@ -91,7 +92,7 @@ export const InitiativeProvider = ({ children }) => {
   const [draftsLoaded, setDraftsLoaded] = useState(false);
   const [draftsHasMore, setDraftsHasMore] = useState(true);
   const [draftsCurrentPage, setDraftsCurrentPage] = useState(1);
-  const navigate = useNavigate();
+  const navigate = useLocalizedNavigate();
   // Project Draft states
   const [projectDrafts, setProjectDrafts] = useState([]);
   const [projectDraftsLoaded, setProjectDraftsLoaded] = useState(false);

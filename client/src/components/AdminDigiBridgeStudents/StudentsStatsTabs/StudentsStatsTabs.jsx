@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import './studentsStatsTabs.css';
 
 export const StudentsStatsTabs = ({ activeTab, setActiveTab }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-students');
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 

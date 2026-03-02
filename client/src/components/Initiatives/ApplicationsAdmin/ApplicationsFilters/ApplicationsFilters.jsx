@@ -8,7 +8,7 @@ export const ApplicationsFilters = ({
   onFilteredData, 
   onFiltersChange 
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
   
   const [filters, setFilters] = useState({
     searchTerm: '',

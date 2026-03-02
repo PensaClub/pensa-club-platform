@@ -3,7 +3,7 @@ import './resolvedComments.css';
 import { useTranslation } from 'react-i18next';
 
 export const ResolvedComments = ({ isOpen, onClose, onSubmit, comments, comment, setComment, error,setError  }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('auth');
 
   if (!isOpen) return null;
   return (
