@@ -14,8 +14,9 @@ export const clubServiceFactory = (token) => {
       return requester.post(`${apiUrl}/clubs/create`, clubData);
     },
 
-    getAllClubs: async (page = 1, limit = 12) => {
-      return requester.get(`${apiUrl}/clubs/all?page=${page}&limit=${limit}`);
+    getAllClubs: async (page = 1, limit = 12, view) => {
+      const viewParam = view ? `&view=${view}` : '';
+      return requester.get(`${apiUrl}/clubs/all?page=${page}&limit=${limit}${viewParam}`);
     },
 
     getClubByIdentifier: async (identifier) => {

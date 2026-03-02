@@ -632,38 +632,70 @@ const createClub = async (clubData, req, res, next) => {
 
 const getClubsByDraftStatus = async (isDraft, req, res, next) => {
     try {
-        const { page = 1, limit = 12 } = req.query;
+        const { page = 1, limit = 12, view } = req.query;
         const offset = (page - 1) * limit;
+        const isListView = view === 'list';
 
         const totalCount = await club_Club.count({
             where: { isDraft },
         });
 
-        const clubs = await club_Club.findAll({
-            where: { isDraft },
-            limit: parseInt(limit),
-            offset: parseInt(offset),
-            include: [
+        // Lightweight includes for list view (no members, limited details)
+        const includes = isListView
+            ? [
+                {
+                    model: club_ClubDetails,
+                    as: 'details',
+                    attributes: ['contacts', 'management', 'regionalInfo'],
+                },
+                { model: club_ClubLocation, as: 'location' },
+                {
+                    model: club_ClubMembership,
+                    as: 'membership',
+                    attributes: ['totalMembers'],
+                },
+                { model: club_ClubActivity, as: 'activities' },
+            ]
+            : [
                 { model: club_ClubDetails, as: 'details' },
                 { model: club_ClubLocation, as: 'location' },
                 { model: club_ClubMembership, as: 'membership' },
                 { model: club_ClubMember, as: 'members' },
                 { model: club_ClubActivity, as: 'activities' },
-            ],
-            order: [['createdAt', 'DESC']],
-        });
+            ];
 
-        const clubsWithComments = await Promise.all(
-            clubs.map(async (club) => {
-                const comments = await comment.findAll(getCommentConfig(club.id, 'club'));
+        const queryOptions = {
+            where: { isDraft },
+            limit: parseInt(limit),
+            offset: parseInt(offset),
+            include: includes,
+            order: [['createdAt', 'DESC']],
+        };
+
+        const clubs = await club_Club.findAll(queryOptions);
+
+        let clubsData;
+        if (isListView) {
+            // List view: transform without fetching comments (not needed for card/map)
+            clubsData = clubs.map((club) => {
                 const transformed = transformClub(club);
-                transformed.comments = comments.map((comment) => transformComment(comment));
+                transformed.comments = [];
                 return transformed;
-            })
-        );
+            });
+        } else {
+            // Full view: fetch comments per club (existing behavior)
+            clubsData = await Promise.all(
+                clubs.map(async (club) => {
+                    const comments = await comment.findAll(getCommentConfig(club.id, 'club'));
+                    const transformed = transformClub(club);
+                    transformed.comments = comments.map((comment) => transformComment(comment));
+                    return transformed;
+                })
+            );
+        }
 
         return res.status(200).json({
-            clubs: clubsWithComments,
+            clubs: clubsData,
             pagination: {
                 currentPage: parseInt(page),
                 totalPages: Math.ceil(totalCount / limit),

@@ -29,37 +29,29 @@ export const AllClubs = () => {
     sortBy: 'name'
   });
   const mapRef = useRef(null);
+  const loadMoreRef = useRef(null);
+  const [displayCount, setDisplayCount] = useState(12);
 
   // ✅ Заменяме fetchClubs да използва ClubContext
   const fetchClubs = useCallback(async () => {
     try {
-
-      const response = await getAllClubs(false, 1, 500); // forceRefresh=false, page=1, limit=100
+      const response = await getAllClubs(false, 1, 500, 'list');
 
       // Обработваме response-а
       let clubsData = [];
       if (response?.clubs) {
-        // Ако response има clubs array (пагиниран отговор)
-        clubsData = response?.clubs;
+        clubsData = response.clubs;
       } else if (Array.isArray(response)) {
-        // Ако response е директно array
         clubsData = response;
       } else {
-        console.warn('Unexpected response format:', response);
         clubsData = [];
       }
 
       setClubs(clubsData);
       setFilteredClubs(clubsData);
 
-      // Показваме информация за fallback ако има
-      if (response?.isFromFallback) {
-        console.info('📋 Using fallback mock data due to API error');
-      }
-
     } catch (error) {
-      console.error('❌ Error fetching clubs:', error);
-      // В случай на грешка, се ползва fallback-ът от контекста
+      console.error('Error fetching clubs:', error);
       setClubs([]);
       setFilteredClubs([]);
     }
@@ -129,7 +121,32 @@ useEffect(() => {
     });
 
     setFilteredClubs(filtered);
+    setDisplayCount(12); // Reset при промяна на филтри
   }, [clubs]);
+
+  // Клубове за рендериране (на порции по 12)
+  const displayedClubs = useMemo(() => {
+    return filteredClubs.slice(0, displayCount);
+  }, [filteredClubs, displayCount]);
+
+  const hasMore = displayCount < filteredClubs.length;
+
+  // IntersectionObserver за infinite scroll
+  useEffect(() => {
+    if (!loadMoreRef.current) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setDisplayCount(prev => prev + 12);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(loadMoreRef.current);
+    return () => observer.disconnect();
+  }, [hasMore]);
 
   const handleClubSelect = useCallback((club) => {
     setSelectedClub(club);
@@ -465,22 +482,29 @@ const metaData = useMemo(() => {
                       <p>{t('clubs.AllClubs.noResults.subtitle')}</p>
                     </div>
                   ) : (
-                    <div className="all-clubs-grid">
-                      {filteredClubs.map((club, index) => (
-                        <div
-                          key={club.id}
-                          className="club-card-wrapper"
-                        >
-                          <ClubCard
-                            club={club}
-                            index={index}
-                            isSelected={selectedClub?.id === club.id}
-                            onSelect={() => handleClubSelect(club)}
-                            onSelectOnMap={() => handleClubSelectOnMap(club)}
-                          />
+                    <>
+                      <div className="all-clubs-grid">
+                        {displayedClubs.map((club, index) => (
+                          <div
+                            key={club.id}
+                            className="club-card-wrapper"
+                          >
+                            <ClubCard
+                              club={club}
+                              index={index}
+                              isSelected={selectedClub?.id === club.id}
+                              onSelect={() => handleClubSelect(club)}
+                              onSelectOnMap={() => handleClubSelectOnMap(club)}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                      {hasMore && (
+                        <div ref={loadMoreRef} style={{ height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <LoadingSpinner />
                         </div>
-                      ))}
-                    </div>
+                      )}
+                    </>
                   )}
                 </div>
               </main>
