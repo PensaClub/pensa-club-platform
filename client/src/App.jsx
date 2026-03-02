@@ -97,7 +97,7 @@ const AcademyLessonPlayer = lazy(() => import('./components/AcademyCourses/Acade
 const AcademyTestPlayer = lazy(() => import('./components/AcademyCourses/AcademyTestPlayer/AcademyTestPlayer.jsx'));
 const AcademyLectures = lazy(() => import('./components/AcademyLectures/AcademyLectures.jsx'));
 const AcademyLectureDetails = lazy(() => import('./components/AcademyLectures/AcademyLectureDetails/AcademyLectureDetails.jsx'));
-const AcademyLectureTest = lazy(() => import('./components/AcademyLectures/AcademyLectureDetails/AcademyLectureTest/AcademyLectureTest.jsx'));
+// const AcademyLectureTest = lazy(() => import('./components/AcademyLectures/AcademyLectureDetails/AcademyLectureTest/AcademyLectureTest.jsx'));
 const AcademyLectureWatch = lazy(() => import('./components/AcademyLectures/AcademyLectureWatch/AcademyLectureWatch.jsx'));
 const DigiBridgeMentorsPage = lazy(() => import('./components/DigiBridge/DigiBridgeMentorsPage/DigiBridgeMentorsPage.jsx'));
 const DigiBridgeBecomeMentor = lazy(() => import('./components/DigiBridge/DigiBridgeBecomeMentor/DigiBridgeBecomeMentor.jsx'));
@@ -272,7 +272,7 @@ function App() {
                                             <Route path="/academy/lectures" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademyLectures /></Suspense>} />
                                             <Route path="/academy/lectures/:slug" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademyLectureDetails /></Suspense>} />
                                             <Route path="/academy/lectures/:slug/watch" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademyLectureWatch /></Suspense>} />
-                                            <Route path="/academy/lectures/:slug/test" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademyLectureTest /></Suspense>} />
+                                            <Route path="/academy/lectures/:slug/test" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademyTestPlayer /></Suspense>} />
                                             <Route
                                               path="/academy/courses/:courseSlug/test"
                                               element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademyTestPlayer /></Suspense>}

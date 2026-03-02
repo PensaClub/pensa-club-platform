@@ -13416,13 +13416,24 @@
       "creditsEarned": "Credits",
       "backToLesson": "Zurück zur Lektion",
       "tryAgain": "Erneut versuchen",
-      "attemptInfo": "Versuch {{current}} von {{max}}"
+      "attemptInfo": "Versuch {{current}} von {{max}}",
+      "backToLecture": "Zurück zur Vorlesung"
     }
   },
   "results": {
     "wrong": "Falsch",
     "continueCourse": "Mit dem Kurs fortfahren",
     "noMoreAttempts": "Keine weiteren Versuche"
+  },
+  "academyCoursesSeo": {
+    "listTitle": "Kurse für digitale Kompetenz | DigiBridge Academy",
+    "listDescription": "Kostenlose Online-Kurse für digitale Kompetenz, Internetsicherheit und Technologie. DigiBridge Academy — Bildung für Senioren 60+.",
+    "categoryTitle": "Kurse zu {{category}} | DigiBridge Academy",
+    "categoryDescription": "Kostenlose Online-Kurse zu {{category}} für digitale Kompetenz. DigiBridge Academy — Bildung für Senioren 60+.",
+    "searchTitle": "Suche: {{term}} | Kurse | DigiBridge Academy",
+    "searchDescription": "{{count}} Kurse für \"{{term}}\" in DigiBridge Academy gefunden.",
+    "pageTitle": "Kurse - Seite {{page}} | DigiBridge Academy",
+    "loading": "Laden... | DigiBridge Academy"
   },
   "academyLectures": {
     "hero": {
@@ -13505,7 +13516,9 @@
       "minutes": "Min"
     },
     "actions": {
-      "takeTest": "Test machen"
+      "takeTest": "Test machen",
+      "testPassed": "Bestanden",
+      "retakeTest": "Erneut versuchen"
     },
     "chat": {
       "title": "Live-Chat",
@@ -14664,20 +14677,40 @@
       "invalidUrl": "Ungültige URL"
     }
   },
+  "academyLecturesSeo": {
+    "listTitle": "Vorlesungen zur digitalen Kompetenz | DigiBridge Academy",
+    "listDescription": "Kostenlose Online-Vorlesungen zu digitaler Kompetenz, Internetsicherheit und Technologie. DigiBridge Academy — Bildung für Senioren 60+ mit qualifizierten Dozenten.",
+    "categoryTitle": "Vorlesungen zu {{category}} | DigiBridge Academy",
+    "categoryDescription": "Kostenlose Online-Vorlesungen zu {{category}} für digitale Kompetenz. DigiBridge Academy — Bildung für Senioren 60+.",
+    "searchTitle": "Suche: {{term}} | Vorlesungen | DigiBridge Academy",
+    "searchDescription": "{{count}} Vorlesungen für \"{{term}}\" in DigiBridge Academy gefunden.",
+    "loading": "Laden... | DigiBridge Academy"
+  },
   "academyLectureDetails": {
-  "lecturer": {
-    "title": "Dozent",
-    "titlePlural": "Dozenten",
-    "alsoParticipate": "Ebenfalls beteiligt"
-  },
-  "roles": {
-    "lecturer": "Dozent",
-    "mentor": "Mentor",
-    "assistant": "Assistent",
-    "guest": "Gast"
-  },
-  "course": {
-    "module": "Modul"
+    "lecturer": {
+      "title": "Dozent",
+      "titlePlural": "Dozenten",
+      "alsoParticipate": "Ebenfalls beteiligt"
+    },
+    "roles": {
+      "lecturer": "Dozent",
+      "mentor": "Mentor",
+      "assistant": "Assistent",
+      "guest": "Gast"
+    },
+    "course": {
+      "module": "Modul"
+    },
+    "test": {
+      "testPassed": "Test bestanden!",
+      "testFailed": "Test nicht bestanden",
+      "correctAnswers": "richtige Antworten",
+      "creditsEarned": "verdient",
+      "attempts": "Versuche",
+      "remaining": "Verbleibend",
+      "noMoreAttempts": "Keine weiteren Versuche",
+      "maxAttempts": "Max. Versuche",
+      "hintFree": "Sehen Sie sich die Vorlesung an, um den Test freizuschalten."
+    }
   }
-}
 }

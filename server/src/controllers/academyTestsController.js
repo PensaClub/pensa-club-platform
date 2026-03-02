@@ -2296,7 +2296,6 @@ academyTestsController.get('/lecture/:lectureId/status', isAuth, async (req, res
     });
 
     if (!testData) {
-     
       return res.status(200).json({
         success: true,
         hasTest: false,
@@ -2312,26 +2311,56 @@ academyTestsController.get('/lecture/:lectureId/status', isAuth, async (req, res
 
     const studentData = await getStudentByUserId(userId);
 
+    // НОВО — проверка за достъпност
+    const lectureInfo = await lecture.findByPk(lectureId, {
+      attributes: ['id', 'isFree', 'requiresRegistration', 'courseId'],
+    });
+
+    // НОВО — testAccessible логика
+    let testAccessible = isPrivileged;
+    if (!testAccessible && lectureInfo) {
+      if (lectureInfo.isFree) {
+        testAccessible = true;
+      } else if (studentData) {
+        const registration = await student_lecture.findOne({
+          where: { studentId: studentData.id, lectureId },
+        });
+        if (registration) testAccessible = true;
+      }
+    }
+
     if (!studentData) {
       return res.status(200).json({
         success: true,
-        test: testData,
+        hasTest: true, // НОВО
+        test: { // ПРОМЕНЕНО — ограничени полета
+          id: testData.id,
+          title: testData.title,
+          description: testData.description,
+          passingScore: testData.passingScore,
+          timeLimitMinutes: testData.timeLimitMinutes,
+          maxAttempts: testData.maxAttempts,
+          questionsCount: testData.questionsCount,
+          maxCredits: testData.maxCredits,
+          showCorrectAnswers: testData.showCorrectAnswers,
+        },
+        testAccessible, // НОВО
         attempts: [],
         bestAttempt: null,
         lastAttempt: null,
         hasPassedTest: false,
         activeAttempt: null,
-        canStartNew: true,
+        canStartNew: testAccessible, // ПРОМЕНЕНО
         totalAttempts: 0,
         remainingAttempts: testData.maxAttempts || null,
         isPrivileged,
       });
     }
 
-    // ✅ Вземи всички опити по lectureTestId
+    // Вземи всички опити
     const attempts = await test_attempt.findAll({
       where: {
-         testId: testData.id,  // ✅ ПОПРАВЕНО
+        testId: testData.id,
         studentId: studentData.id,
       },
       include: [
@@ -2366,13 +2395,10 @@ academyTestsController.get('/lecture/:lectureId/status', isAuth, async (req, res
     const formattedAttempts = attempts.map(attempt => {
       const plain = attempt.get({ plain: true });
 
-      // Сортирай отговорите по sortOrder на въпроса
       const sortedAnswers = (plain.attemptAnswers || [])
         .sort((a, b) => (a.question?.sortOrder || 0) - (b.question?.sortOrder || 0));
 
-      // Форматирай questionsResult
       const answersDetails = sortedAnswers.map((aa, index) => {
-        // Намери верния отговор за въпроса
         const correctAnswer = aa.question?.answerOptions?.find(opt => opt.isCorrect);
 
         return {
@@ -2382,24 +2408,20 @@ academyTestsController.get('/lecture/:lectureId/status', isAuth, async (req, res
           questionType: aa.question?.questionType || 'single',
           isCorrect: aa.isCorrect ?? aa.selectedAnswer?.isCorrect ?? false,
           yourAnswer: aa.selectedAnswer?.answerText || aa.textAnswer || 'Без отговор',
-          // Добави верния отговор ако showCorrectAnswers е включено
           ...(testData.showCorrectAnswers && {
             correctAnswer: correctAnswer?.answerText || null,
           }),
         };
       });
 
-      // Изчисли статистика от отговорите
       const correctCount = answersDetails.filter(a => a.isCorrect === true).length;
       const wrongCount = answersDetails.filter(a => a.isCorrect === false).length;
       const totalCount = answersDetails.length;
 
-      // Изчисли score ако е null в базата
       const calculatedScore = totalCount > 0
         ? Math.round((correctCount / totalCount) * 100)
         : 0;
 
-      // Използвай стойността от базата или изчислената
       const score = plain.score !== null ? Number(plain.score) : calculatedScore;
       const passed = plain.isPassed !== null ? plain.isPassed : (score >= testData.passingScore);
 
@@ -2415,18 +2437,13 @@ academyTestsController.get('/lecture/:lectureId/status', isAuth, async (req, res
         totalQuestions: plain.totalQuestions ?? totalCount,
         passed: passed,
         earnedCredits: plain.earnedCredits || 0,
-        // Само за completed attempts връщай questionsResult
         questionsResult: plain.status === 'completed' ? answersDetails : null,
       };
     });
 
-    // Намери активен (in_progress) опит
     const activeAttempt = formattedAttempts.find(a => a.status === 'in_progress') || null;
-
-    // Филтрирай завършените опити
     const completedAttempts = formattedAttempts.filter(a => a.status === 'completed');
 
-    // Намери най-добър резултат (по score)
     let bestAttempt = null;
     if (completedAttempts.length > 0) {
       bestAttempt = completedAttempts.reduce((best, current) =>
@@ -2434,30 +2451,66 @@ academyTestsController.get('/lecture/:lectureId/status', isAuth, async (req, res
       );
     }
 
-    // Последен завършен опит (първият в списъка, защото е сортиран DESC)
     const lastAttempt = completedAttempts.length > 0 ? completedAttempts[0] : null;
-
-    // Дали е преминал някога
     const hasPassedTest = completedAttempts.some(a => a.passed === true);
 
-    // Може ли да започне нов опит
     const hasUnlimitedAttempts = !testData.maxAttempts || testData.maxAttempts === 0;
     const canStartNew = !activeAttempt && (hasUnlimitedAttempts || formattedAttempts.length < testData.maxAttempts);
 
-    // Оставащи опити
     const remainingAttempts = hasUnlimitedAttempts
       ? null
       : Math.max(0, testData.maxAttempts - formattedAttempts.length);
 
+    // НОВО — ако вече има опити, значи е имал достъп
+    if (formattedAttempts.length > 0) testAccessible = true;
+
     res.status(200).json({
       success: true,
-      test: testData,
-      attempts: formattedAttempts,
-      bestAttempt,
-      lastAttempt,
-      hasPassedTest,
+      hasTest: true, // НОВО
+      test: { // ПРОМЕНЕНО — ограничени полета
+        id: testData.id,
+        title: testData.title,
+        description: testData.description,
+        passingScore: testData.passingScore,
+        timeLimitMinutes: testData.timeLimitMinutes,
+        maxAttempts: testData.maxAttempts,
+        questionsCount: testData.questionsCount,
+        maxCredits: testData.maxCredits,
+        showCorrectAnswers: testData.showCorrectAnswers,
+      },
+      testAccessible, // НОВО
+      attempts: completedAttempts.map(a => ({ // ПРОМЕНЕНО — само completed
+        id: a.id,
+        attemptNumber: a.attemptNumber,
+        score: a.score,
+        passed: a.passed,
+        correctAnswers: a.correctAnswers,
+        wrongAnswers: a.wrongAnswers,
+        totalQuestions: a.totalQuestions,
+        earnedCredits: a.earnedCredits,
+        completedAt: a.completedAt,
+        questionsResult: a.questionsResult,
+      })),
+      bestAttempt: bestAttempt ? {
+        id: bestAttempt.id,
+        attemptNumber: bestAttempt.attemptNumber,
+        score: bestAttempt.score,
+        passed: bestAttempt.passed,
+        correctAnswers: bestAttempt.correctAnswers,
+        wrongAnswers: bestAttempt.wrongAnswers,
+        totalQuestions: bestAttempt.totalQuestions,
+        earnedCredits: bestAttempt.earnedCredits,
+        questionsResult: bestAttempt.questionsResult,
+      } : null,
+      lastAttempt: lastAttempt ? {
+        id: lastAttempt.id,
+        score: lastAttempt.score,
+        status: lastAttempt.status,
+        passed: lastAttempt.passed,
+      } : null,
       activeAttempt,
-      canStartNew,
+      hasPassedTest,
+      canStartNew: canStartNew && testAccessible, // ПРОМЕНЕНО
       totalAttempts: formattedAttempts.length,
       remainingAttempts,
       isPrivileged,
@@ -2803,7 +2856,7 @@ academyTestsController.post('/lecture/:lectureTestId/submit', isAuth, async (req
     // ✅ Търси по lectureTestId
     const attempt = await test_attempt.findOne({
       where: {
-        testId: lectureTestId,  // ✅ ПРОМЕНЕНО
+        testId: lectureTestId,  
         studentId: studentData.id,
         status: 'in_progress',
       },
