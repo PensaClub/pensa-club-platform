@@ -4,7 +4,7 @@ import { useAcademy } from '../contexts/AcademyProvider';
 import './rejectedApplications.css';
 
 export const RejectedApplications = ({ applications, onRefresh }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-mentor');
   const { reapproveStudentApplication, deleteStudentApplication } = useAcademy();
   
   const [selectedApp, setSelectedApp] = useState(null);

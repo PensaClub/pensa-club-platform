@@ -44,7 +44,7 @@ const ImageModal = ({ src, alt, onClose }) => (
 );
 
 export const AdDetails = () => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation(['community', 'auth']);
   const navigate = useNavigate();
   const [ad, setAd] = useState({});
   const [userDetails, setUserDetails] = useState({});

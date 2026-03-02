@@ -15,7 +15,7 @@ const CATEGORY_COLORS = {
 };
 
 export const ClubsShowcase = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('home');
   const navigate = useNavigate();
   const { clubs: contextClubs, clubsLoaded } = useClubContext();
 

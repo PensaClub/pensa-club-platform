@@ -13,7 +13,7 @@ export const ReviewActionModal = ({
   onCancel,
   isOpen
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge');
 
   if (!isOpen || !review) return null;
 

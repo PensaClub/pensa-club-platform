@@ -17,7 +17,7 @@ export const Comments = ({
     commentsEnabled = true,
     onCommentsChange
 }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const { isAuthentication } = useAuthContext();
     const {
         // Initiative functions

@@ -42,7 +42,7 @@ import './clubContact.css';
 import { useClubContext } from '../../../../contexts/ClubContext';
 
 export const ClubContact = ({ club }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('clubs');
   const { sendContactForm, sendPersonalEmail } = useClubContext();
 
   const [formData, setFormData] = useState({

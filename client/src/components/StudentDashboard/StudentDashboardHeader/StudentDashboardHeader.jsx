@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import './studentDashboardHeader.css';
 
 const StudentDashboardHeader = ({ user, dashboardData }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('student-dashboard');
   const navigate = useNavigate();
 
   // Извличане на данни

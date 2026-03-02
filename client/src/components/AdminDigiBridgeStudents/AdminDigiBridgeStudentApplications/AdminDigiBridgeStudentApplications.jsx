@@ -8,7 +8,7 @@ import { ApplicationsByMentorChart } from './Charts/ApplicationsByMentorChart';
 import './adminDigiBridgeStudentApplications.css';
 
 export const AdminDigiBridgeStudentApplications = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-students');
   const {
     getAllStudentApplications,
     approveStudentApplicationByAdmin,
@@ -601,7 +601,7 @@ export const AdminDigiBridgeStudentApplications = () => {
 };
 
 const RejectModal = ({ application, onClose, onReject }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-students');
   const [reason, setReason] = useState('');
   const [error, setError] = useState('');
 

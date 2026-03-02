@@ -8,7 +8,7 @@ export const ProjectsHeaderAdmin = ({
   onViewModeChange,
   isLoading 
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
 
   return (
     <div className="projects-header-admin-container">

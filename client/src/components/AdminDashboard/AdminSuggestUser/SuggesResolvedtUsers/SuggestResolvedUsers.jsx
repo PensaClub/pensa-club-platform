@@ -19,7 +19,7 @@ export const SuggestResolvedUsers = ({ setResolvedUsers }) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [searchCriteria, setSearchCriteria] = useState('refferer_name');
     const [searchResults, setSearchResults] = useState([]);
-    const { t } = useTranslation();
+    const { t } = useTranslation(['auth', 'admin']);
     const { getAllResolve, getDeleteSuggest, onCreateComment } = useSuggestUserContext();
     const [modalContent, setModalContent] = useState('');
     const [isTextModalOpen, setIsTextModalOpen] = useState(false);

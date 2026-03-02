@@ -17,7 +17,7 @@ import { TextZoom } from '../../../TextZoom/TextZoom.jsx';
 
 export const StoryPubView = ({ type, previewMode = false, previewData = null }) => {
     const { slug } = useParams();
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const [content, setContent] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [relatedContent, setRelatedContent] = useState([]);

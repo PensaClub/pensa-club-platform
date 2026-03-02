@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import { useAcademyCourses } from '../../contexts/AcademyCoursesProvider';
 
 const useCourseContentManager = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('academy-admin');
   const { slug } = useParams();
   const navigate = useNavigate();
 

@@ -22,7 +22,7 @@ import { notify } from '../../../../utils/notify.jsx';
 import ScrollToTop from '../../../ScrollToTop/ScrollToTop';
 
 export const ProjectPreview = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const navigate = useNavigate();
     const location = useLocation();
     const { toggleProjectDraftStatus, deleteDraftProject } = useInitiativeContext();

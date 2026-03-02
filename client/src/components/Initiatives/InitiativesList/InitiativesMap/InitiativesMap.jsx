@@ -14,7 +14,7 @@ L.Icon.Default.mergeOptions({
 });
 
 export const InitiativesMap = ({ initiatives, onHide }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
 
     // Премахваме grouping логиката - cluster ще се прави автоматично
     const markers = useMemo(() => {

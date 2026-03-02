@@ -9,7 +9,7 @@ import {
 import './projectGallery.css';
 
 export const ProjectGallery = ({ gallery = [], title }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [isLoading, setIsLoading] = useState(true);

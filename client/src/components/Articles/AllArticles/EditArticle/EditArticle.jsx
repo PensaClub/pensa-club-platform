@@ -18,7 +18,7 @@ import ArticleCreateForm from "../../ArticleCreateForm/ArticleCreateForm";
 function EditArticle() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
   const { getArticleById, updateArticle } = useArticleContext();
   const { getViewCount } = useAnalytics();
 

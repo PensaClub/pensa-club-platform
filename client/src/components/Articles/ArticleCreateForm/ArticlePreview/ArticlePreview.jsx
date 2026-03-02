@@ -15,7 +15,7 @@ import ImageSlider from "../../ArticleView/ImageSlider/ImageSlider";
 import { useTranslation } from 'react-i18next';
 
 const ArticlePreview = ({ article, onBack, mediaFiles, convertEditorToHtml }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
   const [activeSectionSlides, setActiveSectionSlides] = useState({});
 
   const tempUrlsRef = React.useRef({

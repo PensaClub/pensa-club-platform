@@ -24,7 +24,7 @@ import SEOHead from '../../../SEO/SEOHead.jsx';
 
 export const ProjectView = () => {
     const { slug } = useParams();
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const {
         getProjectById,
         currentProject,

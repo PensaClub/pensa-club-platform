@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import './studentOverviewTab.css';
 
 export const StudentOverviewTab = ({ student }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-mentor');
 
   if (!student) return null;
 

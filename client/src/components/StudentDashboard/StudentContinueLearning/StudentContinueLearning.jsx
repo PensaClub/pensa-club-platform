@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import './studentContinueLearning.css';
 
 const StudentContinueLearning = ({ courses = [] }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('student-dashboard');
   const navigate = useNavigate();
 
   return (

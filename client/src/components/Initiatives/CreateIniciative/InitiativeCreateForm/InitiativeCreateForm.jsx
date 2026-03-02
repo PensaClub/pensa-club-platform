@@ -63,7 +63,7 @@ import { htmlToSlate, isHtmlContent } from '../Utils/htmlToSlate.js';
 
 const InitiativeCreateForm = ({ initialValues, onSubmitHandler }) => {
 
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     // 🎯 Hook
     const {
         values,

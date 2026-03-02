@@ -7,7 +7,7 @@ import { useInitiativeContext } from '../../contexts/InitiativeProvider';
 import './platformStats.css';
 
 export const PlatformStats = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('home');
   const navigate = useNavigate();
   const { getAllClubs } = useClubContext();
   const { getAllArticles } = useArticleContext();

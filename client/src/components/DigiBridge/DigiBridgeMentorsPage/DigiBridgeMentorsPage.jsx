@@ -17,7 +17,7 @@ const THEMES = [
 ];
 
 export const DigiBridgeMentorsPage = () => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('digibridge');
   const { getAllMentors } = useAcademy();
 
   const [mentors, setMentors] = useState([]);

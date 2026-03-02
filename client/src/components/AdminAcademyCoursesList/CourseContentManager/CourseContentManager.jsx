@@ -50,7 +50,7 @@ const formatDateForInput = (dateStr) => {
 };
 
 const CourseContentManager = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('academy-admin');
   const {
     course,
     modules,
@@ -779,7 +779,7 @@ const CourseContentManager = () => {
 // =========================================================
 
 const ModuleEditInline = ({ module, onSave, onCancel, actionLoading, courseMentors = [] }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('academy-admin');
   const [form, setForm] = useState({
     title: module.title || '',
     startDate: formatDateForInput(module.startDate),

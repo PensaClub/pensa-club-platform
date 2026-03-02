@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import './detailedMentorsTable.css';
 
 export const DetailedMentorsTable = ({ mentors }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge');
   const [sortConfig, setSortConfig] = useState({ key: 'rating', direction: 'desc' });
 
   const sortedMentors = useMemo(() => {

@@ -10,7 +10,7 @@ import { NotificationItem } from './NotificationItem/NotificationItem';
 import './adminNotificationBell.css';
 
 export const AdminNotificationBell = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge');
   const navigate = useNavigate();
   const { getAdminNotifications, markNotificationAsRead,deleteNotification } = useAcademy();
   

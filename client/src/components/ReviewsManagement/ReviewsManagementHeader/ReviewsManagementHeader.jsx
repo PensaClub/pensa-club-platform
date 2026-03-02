@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import './reviewsManagementHeader.css';
 
 export const ReviewsManagementHeader = ({ filters, onFilterChange }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge');
 
   return (
     <div className="reviews-management-pensa-club-header">

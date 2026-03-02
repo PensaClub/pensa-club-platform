@@ -6,7 +6,7 @@ import { useArticleContext } from "../../contexts/ArticleContext";
 import { useTranslation } from "react-i18next";
 
 export const FeaturedArticles = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('home');
   const { articles, articlesLoaded } = useArticleContext();
 
   // Use articles from context (PlatformStats already loads them)

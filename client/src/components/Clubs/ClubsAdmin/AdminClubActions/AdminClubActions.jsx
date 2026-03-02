@@ -22,7 +22,7 @@ const AdminClubActions = ({
     onClearSelection,
     isProcessing = false 
 }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('clubs');
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [currentAction, setCurrentAction] = useState(null);
     const [showStatusDropdown, setShowStatusDropdown] = useState(false);

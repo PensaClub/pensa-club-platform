@@ -6,7 +6,7 @@ import { useAcademy } from '../../contexts/AcademyProvider';
 import './adminDgSendEmailModal.css';
 
 export const AdminDgSendEmailModal = ({ student, onClose, onSuccess }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-students');
   const { sendPersonalEmail } = useAcademy();
 
   const [formData, setFormData] = useState({

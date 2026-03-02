@@ -44,7 +44,7 @@ const darkenColor = (hex, amount = 80) => {
 };
 
 const GreetingConfig = () => {
-    const { t, i18n } = useTranslation();
+    const { t, i18n } = useTranslation('admin');
     const { settings, updateSettings } = useSiteSettingsAdminContext();
     const [local, setLocal] = useState({});
     const [isSaving, setIsSaving] = useState(false);

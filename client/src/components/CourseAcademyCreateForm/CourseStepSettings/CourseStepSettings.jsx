@@ -9,7 +9,7 @@ const COURSE_TYPE_OPTIONS = ['online', 'offline', 'hybrid'];
 const VIDEO_PROVIDER_OPTIONS = ['youtube', 'vimeo', 'custom', 'none'];
 
 const CourseStepSettings = ({ courseData, updateField, errors = {} }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('academy-admin');
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;

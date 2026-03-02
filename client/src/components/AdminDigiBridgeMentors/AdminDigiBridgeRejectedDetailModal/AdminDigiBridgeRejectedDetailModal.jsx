@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import './adminDigiBridgeRejectedDetailModal.css';
 
 export const AdminDigiBridgeRejectedDetailModal = ({ application, onClose, onApprove, onSendEmail }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge');
   const [copiedField, setCopiedField] = useState(null);
 
   // ЗАЩИТА

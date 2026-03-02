@@ -40,7 +40,7 @@ const cutToFirstWord = (text) => {
 
 export const ProfileAnnounced = () => {
   const navigate = useNavigate();
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation(['auth', 'community']);
   const currentLanguage = i18n.language;
   const { getMyAds, deleteAd, updateExpirationDate, fetchTowns, regions } =
     useCommunityContext();

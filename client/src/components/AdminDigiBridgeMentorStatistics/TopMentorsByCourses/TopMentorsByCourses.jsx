@@ -6,7 +6,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import './topMentorsByCourses.css';
 
 export const TopMentorsByCourses = ({ mentors, limit = 10 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge');
 
   const topMentors = useMemo(() => {
     return [...mentors]

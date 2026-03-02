@@ -7,7 +7,7 @@ import { truncateText } from '../../../../utils/truncateText';
 import './projectCard.css';
 
 const ProjectCard = ({ project, featured = false }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const { toggleBookmarkProjects, isBookmarkedProject } = useInitiativeContext();
     const [locationText, setLocationText] = useState('');
     const navigate = useNavigate();

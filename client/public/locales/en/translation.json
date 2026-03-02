@@ -11227,39 +11227,6 @@
     }
   },
   "clubsAdmin": {
-    "title": "Clubs Administration",
-    "subtitle": "Manage all clubs in the system",
-    "loading": "Loading clubs...",
-    "searchPlaceholder": "Search by name, description, owner, location...",
-    "selectAll": "Select all on this page",
-    "errors": {
-      "noAccess": "You don't have administrative rights to access this page",
-      "fetchFailed": "Failed to load clubs",
-      "title": "An error occurred"
-    },
-    "sort": {
-      "newest": "Newest first",
-      "oldest": "Oldest first",
-      "name": "By name (A-Z)",
-      "status": "By status",
-      "members": "By members",
-      "location": "By location"
-    },
-    "pagination": {
-      "previous": "Previous",
-      "next": "Next",
-      "info": "Page {{current}} of {{total}}"
-    },
-    "empty": {
-      "title": "No clubs found",
-      "message": "No clubs match your search criteria",
-      "clearFilters": "Clear filters"
-    },
-    "results": {
-      "showing": "Showing {{showing}} of {{total}} clubs (total {{allTotal}})"
-    }
-  },
-  "clubsAdmin": {
     "title": "Clubs-Verwaltung",
     "subtitle": "Verwalten Sie alle Clubs im System",
     "loading": "Clubs werden geladen...",
@@ -15419,5 +15386,9 @@
       "maxAttempts": "Max attempts",
       "hintFree": "Watch the lecture to unlock the test."
     }
+  },
+  "chatWidget": {
+    "help": "Help",
+    "ariaLabel": "Open help chat"
   }
 }

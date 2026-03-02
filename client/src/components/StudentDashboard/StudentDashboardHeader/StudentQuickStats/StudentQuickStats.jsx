@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import './studentQuickStats.css';
 
 const StudentQuickStats = ({ data }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('student-dashboard');
   const navigate = useNavigate();
 
   // data е целият response, достъпваме през dashboard

@@ -5,7 +5,7 @@ import { UserContext } from '../../contexts/UserContext';
 import './digiBridgeHeader.css';
 
 export const DigiBridgeHeader = () => {
-    const { t, i18n } = useTranslation();
+    const { t, i18n } = useTranslation('digibridge');
     const location = useLocation();
      const isTestPage = location.pathname.includes('/test');
     const { isAuthentication, isFinish, profileData, isAdmin, isModerator } = useContext(UserContext);

@@ -3,7 +3,7 @@ import { Check, X } from 'lucide-react';
 import './settingsAdminToggle.css';
 
 const SettingsAdminToggle = ({ settingKey, title, description, icon, value, onChange, isLoading }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('admin');
 
     const handleToggle = () => {
         if (!isLoading) {

@@ -20,7 +20,7 @@ export const SearchBar = ({ handleSearch }) => {
   const [isSearchWhenOpen, setIsSearchWhenOpen] = useState(false);
   const [creationDateLabel, setCreationDateLabel] = useState('');
 
-  const { t } = useTranslation();
+  const { t } = useTranslation(['community', 'auth']);
 
   const [filters, setFilters] = useState({
     tags: '',

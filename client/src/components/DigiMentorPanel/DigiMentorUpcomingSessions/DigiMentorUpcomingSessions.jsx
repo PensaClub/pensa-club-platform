@@ -6,7 +6,7 @@ import { bg, enUS, de } from 'date-fns/locale';
 import './digiMentorUpcomingSessions.css';
 
 export const DigiMentorUpcomingSessions = ({ sessions = [] }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('digibridge-mentor');
 
   const getLocale = () => {
     switch (i18n.language) {

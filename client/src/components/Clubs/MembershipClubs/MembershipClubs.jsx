@@ -21,7 +21,7 @@ import MembershipClubsEmptyState from './MembershipClubsEmptyState/MembershipClu
 import MembershipStatsOverview from './MembershipStatsOverview/MembershipStatsOverview';
 
 const MembershipClubs = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('clubs');
     const navigate = useNavigate();
     const {
         isAuthentication,

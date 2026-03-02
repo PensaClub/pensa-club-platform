@@ -15,7 +15,7 @@ import {
 import './studentRecentActivity.css';
 
 const StudentRecentActivity = ({ activities = [] }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('student-dashboard');
 
     const getActivityIcon = (type) => {
         switch (type) {

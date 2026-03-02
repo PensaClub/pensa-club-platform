@@ -7,7 +7,7 @@ import { useAcademy } from '../../contexts/AcademyProvider';
 import './digiBridgeTestimonialForm.css';
 
 export const DigiBridgeTestimonialForm = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('digibridge');
     const navigate = useNavigate();
     const { isAuthentication, profileData, setRedirectAfterLogin } = useAuthContext();
     const { createAcademyReview, checkUserAcademyReviewStatus } = useAcademy();

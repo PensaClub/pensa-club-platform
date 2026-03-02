@@ -24,7 +24,7 @@ export const AdsCard = ({ ads, isLoading }) => {
   const { isAuthentication } = useAuthContext();
   const [modalImage, setModalImage] = useState(null);
   const [open, setOpen] = useState(false);
-  const { t } = useTranslation();
+  const { t } = useTranslation(['community', 'auth']);
   const navigate = useNavigate();
 
   const getProfileImage = (gender) => {

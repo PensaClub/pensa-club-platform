@@ -11,7 +11,7 @@ import { DigiBridgeHeader } from '../../DigiBridgeAcademy/DigiBridgeHeader/DigiB
 const FORM_STORAGE_KEY = 'digibridge_mentor_application_form';
 
 export const DigiBridgeBecomeMentor = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge');
   const navigate = useNavigate();
   const { isAuthentication, profileData } = useContext(UserContext);
   const { applyAsMentor } = useAcademy();

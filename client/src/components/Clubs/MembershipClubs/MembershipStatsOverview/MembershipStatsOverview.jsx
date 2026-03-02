@@ -9,7 +9,7 @@ import {
 import './membershipStatsOverview.css';
 
 const MembershipStatsOverview = ({ stats }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('clubs');
 
     const statsData = [
         {

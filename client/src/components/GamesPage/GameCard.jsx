@@ -14,7 +14,7 @@ const GameCard = ({
     playerCount,
     icon 
 }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('admin');
 
     const handleGameClick = () => {
         window.open(url, '_blank', 'noopener,noreferrer');

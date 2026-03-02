@@ -8,7 +8,7 @@ import { useAnalytics } from '../../../contexts/AnalyticsContext';
 import { BookmarkIcon, ViewIcon } from '../../Icons/InitiativeIcons';
 
 export const InitiativeCard = ({ initiative, isBookmarked, onBookmarkToggle, index }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
   const { getViewCount, loadInitiativeViewCounts } = useAnalytics(); 
   useEffect(() => {
     if (initiative) {

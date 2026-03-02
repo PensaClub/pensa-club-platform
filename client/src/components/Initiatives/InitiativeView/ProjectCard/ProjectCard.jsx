@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 export const ProjectCard = ({ project }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
 
   const getStatusColor = (status) => {
     switch (status) {

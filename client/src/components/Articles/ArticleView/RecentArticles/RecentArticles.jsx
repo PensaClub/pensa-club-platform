@@ -8,7 +8,7 @@ import { filterArticles } from '../../articleUtils/search';
 import { useTranslation } from 'react-i18next';
 
 const RecentArticles = ({ currentArticleId }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
   const [recentArticles, setRecentArticles] = useState([]);
   const [filteredArticles, setFilteredArticles] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');

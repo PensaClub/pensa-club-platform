@@ -6,7 +6,7 @@ import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recha
 import './sessionQualityChart.css';
 
 export const SessionQualityChart = ({ qualityData }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge');
 
   // ✅ Изчислява pie chart data от aggregated stats
   const chartData = useMemo(() => {

@@ -17,7 +17,7 @@ import { toast } from 'react-toastify';
 import './miniChatWindow.css';
 import { useAcademy } from '../../contexts/AcademyProvider';  
 export const MiniChatWindow = ({ conversation, getPosition, onClose, isMobile }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge');
   const { profileData } = useAuthContext();
   const { syncSession } = useAcademy(); 
   const [messages, setMessages] = useState([]);

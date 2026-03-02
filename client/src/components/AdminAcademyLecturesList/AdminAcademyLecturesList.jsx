@@ -34,7 +34,7 @@ const TYPE_OPTIONS = ['all', 'lecture', 'webinar', 'workshop', 'masterclass'];
 const SORT_OPTIONS = ['newest', 'oldest', 'title', 'upcoming', 'popular'];
 
 const AdminAcademyLecturesList = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('academy-admin');
   const navigate = useNavigate();
   const {
     getAdminLectures,

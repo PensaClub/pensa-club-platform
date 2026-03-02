@@ -8,7 +8,7 @@ import { useInitiativeContext } from '../../contexts/InitiativeProvider';
 import { notify } from '../../../utils/notify.jsx';
 
 export const AllInitiatives = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
   const navigate = useNavigate();
   const {
     getAllInitiatives,

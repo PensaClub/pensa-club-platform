@@ -29,7 +29,7 @@ export const CommunityPage = () => {
 
   const location = useLocation();
   const navigate = useNavigate();
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('community');
   const currentLanguage = i18n.language;
 
   const [filters, setFilters] = useState({

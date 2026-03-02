@@ -30,7 +30,7 @@ import {
 import './culturalActivities.css';
 
 export const CulturalActivities = ({ club }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('clubs');
   const [activeTab, setActiveTab] = useState('regular');
   const [showJoinModal, setShowJoinModal] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);

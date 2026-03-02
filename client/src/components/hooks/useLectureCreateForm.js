@@ -76,7 +76,7 @@ const formatDateTimeLocal = (dateStr) => {
 const useLectureCreateForm = () => {
     const { slug } = useParams();
     const navigate = useNavigate();
-    const { t } = useTranslation();
+    const { t } = useTranslation('academy-admin');
 
     const {
         getLectureBySlug,

@@ -16,7 +16,7 @@ import './studentDetails.css';
 export const StudentDetails = () => {
   const { studentId } = useParams();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-mentor');
   
   const { getStudentDetails, isLoading: academyLoading } = useAcademy();
   

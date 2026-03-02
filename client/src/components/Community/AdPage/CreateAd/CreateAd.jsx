@@ -17,7 +17,7 @@ import { TagInput } from "./TagInput";
 import { notify } from "../../../../utils/notify.jsx";
 
 export const CreateAd = () => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('community');
   const [fieldDefinitions, setFieldDefinitions] = useState({});
   // eslint-disable-next-line no-unused-vars
   const [towns, setTowns] = useState([]);

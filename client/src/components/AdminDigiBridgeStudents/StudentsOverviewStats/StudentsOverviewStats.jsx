@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import './studentsOverviewStats.css';
 
 export const StudentsOverviewStats = ({ stats, loading }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-students');
 
   if (loading || !stats) {
     return (

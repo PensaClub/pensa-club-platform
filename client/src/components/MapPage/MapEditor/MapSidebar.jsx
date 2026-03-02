@@ -8,7 +8,7 @@ import './sidebar.css';
 import { AdModalNotify } from '../../Community/AdsCard/AdModalNotify';
 
 export const MapSidebar = ({ selectedUser, userAds, closeSidebar, setModalImage }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation(['community', 'auth']);
     const sidebarRef = useRef(null);
     const scrollContentRef = useRef(null);
     const [showScrollToTop, setShowScrollToTop] = useState(false);

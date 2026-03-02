@@ -14,7 +14,7 @@ import { ViewedPublicationsManager } from '../../../../utils/viewedPublications'
 import { ViewedStoriesManager } from '../../../../utils/viewedStories';
 
 const PublicationStoriesList = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
   const location = useLocation();
   const [filteredContent, setFilteredContent] = useState([]);
   const [isFiltering, setIsFiltering] = useState(false);

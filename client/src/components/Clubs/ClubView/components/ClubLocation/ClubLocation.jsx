@@ -75,7 +75,7 @@ const MapController = ({ center, zoom }) => {
 };
 
 export const ClubLocation = ({ club }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('clubs');
   const [mapExpanded, setMapExpanded] = useState(false);
   const [selectedTransport, setSelectedTransport] = useState('walking');
   const [showVenueModal, setShowVenueModal] = useState(false);

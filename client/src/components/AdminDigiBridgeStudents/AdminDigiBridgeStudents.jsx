@@ -24,7 +24,7 @@ import { TopPerformersTable } from './StudentsStatsCharts/TopPerformersTable';
 import { StudentsEngagementChart } from './StudentsStatsCharts/StudentsEngagementChart';
 
 export const AdminDigiBridgeStudents = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-students');
   const {
     getAllStudents,
     getStudentStatisticsOverview,

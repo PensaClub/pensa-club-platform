@@ -64,7 +64,7 @@ const formatDuration = (minutes, t) => {
 
 export const AcademyLectureWatch = () => {
   const { slug } = useParams();
-  const { t } = useTranslation();
+  const { t } = useTranslation('academy');
   const navigate = useNavigate();
   const { isAuthentication, userData } = useAuthContext();
   const { getLectureBySlug, getLectureTestStatus, isLoading } = useAcademyCourses(); // ПРОМЕНЕНО

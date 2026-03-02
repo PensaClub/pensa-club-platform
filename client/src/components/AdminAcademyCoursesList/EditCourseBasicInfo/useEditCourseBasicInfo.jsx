@@ -37,7 +37,7 @@ const formatDateForInput = (dateStr) => {
 };
 
 const useEditCourseBasicInfo = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('academy-admin');
     const { slug } = useParams();
     const navigate = useNavigate();
     const {  getCourseBySlug, updateCourse, addCourseMentor, updateCourseMentor, removeCourseMentor } = useAcademyCourses();

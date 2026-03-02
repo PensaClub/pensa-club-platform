@@ -60,7 +60,7 @@ const formatDateTimeLocal = (dateStr) => {
 // =========================================================
 
 const useEditLecture = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('academy-admin');
     const { slug } = useParams();
     const navigate = useNavigate();
     const {

@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import './constellationControls.css';
 
 export const ConstellationControls = ({ activeFilter, setActiveFilter, isVisible }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('home');
 
   const filters = [
     { id: 'all', icon: '🌌', label: t('home.constellation.controls.all') },

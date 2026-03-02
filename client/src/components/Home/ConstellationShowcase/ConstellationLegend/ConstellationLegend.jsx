@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import './constellationLegend.css';
 
 export const ConstellationLegend = ({ isVisible }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('home');
 
   const legendItems = [
     {

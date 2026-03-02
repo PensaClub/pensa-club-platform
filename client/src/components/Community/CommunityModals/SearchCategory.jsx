@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 export const SearchCategory = ({setFilters, filters, handleSearch}) => {
     const [searchQuery, setSearchQuery] = useState(filters.tags);
     const { searchCriteria } = useCommunityContext();
-    const { t } = useTranslation();
+    const { t } = useTranslation('community');
   
     const handleCategory = (category) => {
         setFilters(prev => ({ ...prev, tags: searchQuery, category: prev.category.includes(category) ? prev.category.filter(c => c !== category) : [...prev.category, category]  }));

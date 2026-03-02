@@ -14,7 +14,7 @@ const LEVEL_COLORS = {
 };
 
 export const AcademyCourseCard = ({ course, accentColor = '#ff6347', index = 0 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('academy');
   const [isTrailerOpen, setIsTrailerOpen] = useState(false);
   // Guard clause
   if (!course) {

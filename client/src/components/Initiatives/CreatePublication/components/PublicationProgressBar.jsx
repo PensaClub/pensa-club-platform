@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { calculatePublicationProgress, getPublicationProgressBreakdown } from '../utils/publicationProgressUtils';
 
 const PublicationProgressBar = ({ values }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
 
     const progress = calculatePublicationProgress(values);
     const progressBreakdown = getPublicationProgressBreakdown(values);

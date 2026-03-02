@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import './statisticsOverviewCards.css';
 
 export const StatisticsOverviewCards = ({ stats }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge');
 
   const cards = [
     {

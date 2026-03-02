@@ -5,7 +5,7 @@ import './projectsSlider.css';
 import { truncateText } from '../../../../utils/truncateText';
 
 const ProjectsSlider = ({ projects, onSlideClick }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const sliderRef = useRef(null);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isTransitioning, setIsTransitioning] = useState(false);

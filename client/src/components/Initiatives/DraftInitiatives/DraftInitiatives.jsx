@@ -15,7 +15,7 @@ import { Loader } from '../../Loader/Loader';
 import Pagination from '../../Articles/Pagination/Pagination';
 
 const DraftInitiatives = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
   const navigate = useNavigate();
   const {
     getAllDrafts,

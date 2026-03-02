@@ -18,7 +18,7 @@ export const UnfinishedProfiles = ({ setUnfinishedUsers }) => {
   const [searchResults, setSearchResults] = useState([]);
   const [adminEmail, setAdminEmail] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  const { t } = useTranslation();
+  const { t } = useTranslation('admin');
   const { onAllUsers } = useMappingContext();
   const { onForgetPasswordSubmit, onChangeAdminRole, profileData } = useAuthContext();
   const [isFlyoutOpen, setIsFlyoutOpen] = useState(false);

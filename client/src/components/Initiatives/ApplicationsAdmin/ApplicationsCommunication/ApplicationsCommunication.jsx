@@ -11,7 +11,7 @@ export const ApplicationsCommunication = ({
     filteredApplications = null,
     onRefresh
 }) => {
-    const { t, i18n } = useTranslation();
+    const { t, i18n } = useTranslation('content');
     const currentLocale = i18n.language === 'bg' ? bg : enUS;
     const { sendApplicationEmails, getAllProjects, projects } = useInitiativeContext();
     const [communicationMode, setCommunicationMode] = useState('individual'); // 'individual' or 'bulk'

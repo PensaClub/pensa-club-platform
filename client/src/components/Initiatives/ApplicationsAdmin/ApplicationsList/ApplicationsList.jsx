@@ -6,7 +6,7 @@ import './applicationsList.css';
 import { ApplicationDetails } from '../ApplicationDetails/ApplicationDetails';
 
 export const ApplicationsList = ({ applications, onRefresh, isLoading }) => {
-    const { t, i18n } = useTranslation();
+    const { t, i18n } = useTranslation('content');
     const [sortField, setSortField] = useState('appliedAt');
     const [sortDirection, setSortDirection] = useState('desc');
     const [viewMode, setViewMode] = useState('table'); // 'table' или 'cards'

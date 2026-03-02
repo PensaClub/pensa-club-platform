@@ -6,7 +6,7 @@ import { useAcademy } from '../../contexts/AcademyProvider';
 import './studentScheduleTab.css';
 
 export const StudentScheduleTab = ({ student }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('digibridge-mentor');
     const { 
       getMentorMeetings, 
       createMentorMeeting, 

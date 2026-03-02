@@ -25,7 +25,7 @@ export const ClubsSearch = ({
   showMap,
   onToggleMap 
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('clubs');
   const { getAllPublications } = useInitiativeContext();
   
   const [searchTerm, setSearchTerm] = useState('');

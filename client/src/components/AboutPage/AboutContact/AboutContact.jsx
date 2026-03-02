@@ -16,7 +16,7 @@ import './aboutContact.css';
 import { useClubContext } from '../../contexts/ClubContext';
 
 export const AboutContact = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('home');
   const { sendPersonalEmail } = useClubContext();
 
   const [formData, setFormData] = useState({

@@ -7,7 +7,7 @@ import { partnersData } from '../../Home/PartnersShowcase/partnersData';
 import './aboutPartners.css';
 
 export const AboutPartners = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('home');
   const sectionRef = useRef(null);
   const [isVisible, setIsVisible] = useState(false);
 

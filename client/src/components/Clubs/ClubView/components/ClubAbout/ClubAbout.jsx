@@ -34,7 +34,7 @@ import { useTranslation } from 'react-i18next';
 import './clubAbout.css';
 
 export const ClubAbout = ({ club }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('clubs');
   const [expandedSection, setExpandedSection] = useState('description');
 
   if (!club?.name || ( !club.shortDescription)) {

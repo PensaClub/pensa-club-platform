@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import './digiBridgeHero.css';
 
 export const DigiBridgeHero = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('digibridge');
     const [isVisible, setIsVisible] = useState(false);
 
     useEffect(() => {

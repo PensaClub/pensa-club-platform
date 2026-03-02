@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 export const AdModalNotify = ({onClose }) => {
-    const { t } = useTranslation()
+    const { t } = useTranslation('community')
     return (
         <div className="image-modal-overlay-ads" onClick={onClose}>
             <div className="image-modal-content-ads" onClick={(e) => e.stopPropagation()}>

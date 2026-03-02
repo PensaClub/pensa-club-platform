@@ -15,7 +15,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 const VideoPlayer = ({ src, thumbnail, alt, downloadUrl = null, allowDownload = false }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(1);
   const [isMuted, setIsMuted] = useState(false);

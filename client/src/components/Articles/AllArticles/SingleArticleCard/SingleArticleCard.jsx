@@ -18,7 +18,7 @@ import { useArticleContext } from '../../../contexts/ArticleContext';
 import { useTranslation } from 'react-i18next';
 
 export const SingleArticleCard = ({ article }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
   const { getViewCount } = useAnalytics();
   const { deleteArticle } = useArticleContext();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);

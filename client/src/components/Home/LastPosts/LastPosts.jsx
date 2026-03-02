@@ -10,7 +10,7 @@ export const LastPosts = () => {
   const { getLatestAds, fetchTowns } = useCommunityContext();
   const {isAuthentication} = useAuthContext();
   const [latestAds, setLatestAds] = useState([]);
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('home');
   const [categories, setCategories] = useState([]);
   const [townNames, setTownNames] = useState({});
   const navigate = useNavigate();

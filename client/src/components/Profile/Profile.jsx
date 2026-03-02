@@ -160,7 +160,7 @@ const AvatarIcon = () => (
 export const Profile = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation(['admin', 'clubs']);
   const currentLanguage = i18n.language;
   const [menuOpen, setMenuOpen] = useState(false);
   const { isFinish, profileData, isAdmin, isModerator, addressId, isMentor } = useContext(UserContext);

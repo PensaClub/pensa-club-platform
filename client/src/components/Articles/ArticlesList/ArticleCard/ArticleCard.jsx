@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 import { truncateText } from '../../../../utils/truncateText';
 
 export const ArticleCard = ({ article, featured = false }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
   const { getViewCount, loadArticleViewCounts } = useAnalytics();
 
   useEffect(() => {

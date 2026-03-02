@@ -25,7 +25,7 @@ export const ApprovedAnnouncements = ({ setApprovedCount }) => {
   const [isTextModalOpen, setIsTextModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState('');
 
-  const { t } = useTranslation();
+  const { t } = useTranslation(['admin', 'auth']);
   const { profileData } = useAuthContext();
 
   const { fetchApprovedAds, updateAdStatus, deleteAd } = useAdminContext();

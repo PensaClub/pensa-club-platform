@@ -12,7 +12,7 @@ export const PublicationStoriesCard = ({
   contentType = 'publications',
   index 
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
   const { 
     trackStoryOrPublication, 
     getPublicationViewCount, 

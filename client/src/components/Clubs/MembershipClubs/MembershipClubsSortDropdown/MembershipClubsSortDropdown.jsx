@@ -5,7 +5,7 @@ import { faSort, faChevronDown, faCheck } from '@fortawesome/free-solid-svg-icon
 import './membershipClubsSortDropdown.css';
 
 const MembershipClubsSortDropdown = ({ value, onChange, options }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('clubs');
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
 

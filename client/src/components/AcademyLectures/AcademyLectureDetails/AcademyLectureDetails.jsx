@@ -124,7 +124,7 @@ const CATEGORY_COLORS = {
 
 export const AcademyLectureDetails = () => {
   const { slug } = useParams();
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('academy');
   const navigate = useNavigate();
   const { isAuthentication } = useAuthContext();
   const {

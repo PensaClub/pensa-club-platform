@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import './articlesSlider.css';
 
 export const ArticlesSlider = ({ articles, onSlideClick }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
   const [currentSlide, setCurrentSlide] = useState(0);
   const sliderRef = useRef(null);
 

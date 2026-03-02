@@ -61,7 +61,7 @@ import SEOHead from '../../SEO/SEOHead';
 export const ClubView = () => {
     const { slug } = useParams();
     const navigate = useNavigate();
-    const { t } = useTranslation();
+    const { t } = useTranslation('clubs');
     const {
         getClubBySlug,
         currentClub,

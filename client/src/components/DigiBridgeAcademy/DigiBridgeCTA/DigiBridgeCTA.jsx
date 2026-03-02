@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import './digiBridgeCTA.css';
 
 export const DigiBridgeCTA = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('digibridge');
 
     return (
         <section className="dbc-section">

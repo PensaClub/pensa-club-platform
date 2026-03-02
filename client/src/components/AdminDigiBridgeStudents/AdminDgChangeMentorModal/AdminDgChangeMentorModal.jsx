@@ -6,7 +6,7 @@ import { useAcademy } from '../../contexts/AcademyProvider';
 import './adminDgChangeMentorModal.css';
 
 export const AdminDgChangeMentorModal = ({ student, onClose, onAssign }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-students');
   const { getAllMentors } = useAcademy();
 
   const [mentors, setMentors] = useState([]);

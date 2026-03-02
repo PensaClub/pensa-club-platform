@@ -8,7 +8,7 @@ import '../../../MapPage/MapEditor/sidebar.css';
 import { useAuthContext } from '../../../contexts/UserContext';
 
 export const UserSidebar = ({ selectedUser, userAds, closeSidebar, setModalImage }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['community', 'auth']);
   const sidebarRef = useRef(null);
   const scrollContentRef = useRef(null);
   const [showScrollToTop, setShowScrollToTop] = useState(false);

@@ -9,7 +9,7 @@ import { NotificationItem } from '../AdminNotifications/NotificationItem/Notific
 import '../AdminNotifications/adminNotificationBell.css';
 
 export const UserNotificationBell = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge');
   const navigate = useNavigate();
   const { getUserNotifications, markNotificationAsRead, deleteNotification } = useAuthContext();
 

@@ -48,7 +48,7 @@ import { convertSlateToHtml } from '../../Initiatives/CreateIniciative/Utils/ini
 //   }
 // };
 const ArticlePreviewPage = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const location = useLocation();
     const navigate = useNavigate();
 

@@ -13,7 +13,7 @@ import ReactGA from 'react-ga4';
 import { useTranslation } from "react-i18next";
 
 const AnalyticsPanel = ({ articleId, articleTitle }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
   const { getViewCount, loadArticleViewCounts, viewCounts } = useAnalytics();
   const [gaData, setGaData] = useState(null);
 

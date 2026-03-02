@@ -5,7 +5,7 @@ import { faSearch, faTimes } from '@fortawesome/free-solid-svg-icons';
 import './searchMembershipClubsBar.css';
 
 const SearchMembershipClubsBar = ({ value, onChange, placeholder }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('clubs');
     const [isFocused, setIsFocused] = useState(false);
 
     const handleClear = () => {

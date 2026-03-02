@@ -109,7 +109,7 @@ export const MapEditor = ({ filteredUsers }) => {
   const [scrollPosition] = useState(0);
   const { isAuthentication } = useAuthContext();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t } = useTranslation(['community', 'auth']);
 
   useEffect(() => {
 

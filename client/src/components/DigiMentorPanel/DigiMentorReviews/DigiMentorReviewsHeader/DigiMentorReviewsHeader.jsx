@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import './digiMentorReviewsHeader.css';
 
 export const DigiMentorReviewsHeader = ({ stats }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-mentor');
 
   if (!stats) return null;
 

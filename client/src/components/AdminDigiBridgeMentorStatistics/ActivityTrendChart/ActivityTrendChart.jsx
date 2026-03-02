@@ -6,7 +6,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import './activityTrendChart.css';
 
 export const ActivityTrendChart = ({ trendData }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge');
 
   // Форматира month labels
   const chartData = useMemo(() => {

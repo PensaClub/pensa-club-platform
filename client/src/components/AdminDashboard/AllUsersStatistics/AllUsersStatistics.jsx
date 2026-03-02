@@ -10,7 +10,7 @@ import {
 
 export const AllUsersStatistics = () => {
   const { onAllUsers, allUsers } = useMappingContext();
-  const { t } = useTranslation();
+  const { t } = useTranslation('admin');
   const [hiddenBar, setHiddenBar] = useState([]);
   const [hiddenLine, setHiddenLine] = useState([]);
   const [hiddenPie, setHiddenPie] = useState([]);

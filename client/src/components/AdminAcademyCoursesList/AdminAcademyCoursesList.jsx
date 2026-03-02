@@ -32,7 +32,7 @@ const STATUS_OPTIONS = ['all', 'published', 'draft'];
 const SORT_OPTIONS = ['newest', 'oldest', 'name', 'popular'];
 
 const AdminAcademyCoursesList = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('academy-admin');
   const navigate = useNavigate();
   const {
     getAdminCourses,

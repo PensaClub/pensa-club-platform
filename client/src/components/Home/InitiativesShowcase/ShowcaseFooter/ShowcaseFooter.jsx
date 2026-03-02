@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import './showcaseFooter.css';
 
 export const ShowcaseFooter = ({ isVisible }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('home');
 
   return (
     <div className={`showcase-footer ${isVisible ? 'visible' : ''}`}>

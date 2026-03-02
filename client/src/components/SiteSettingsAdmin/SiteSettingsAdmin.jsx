@@ -12,7 +12,7 @@ import ScrollToTop from '../ScrollToTop/ScrollToTop';
 import './siteSettingsAdmin.css';
 
 const SiteSettingsAdmin = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('admin');
     const { settings, isLoading, loadingKeys, updateSetting } = useSiteSettingsAdminContext();
 
     const handleToggle = async (key, value) => {

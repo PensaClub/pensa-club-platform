@@ -16,7 +16,7 @@ import './projectsList.css';
 import SEOHead from '../../SEO/SEOHead';
 
 const ProjectsList = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const location = useLocation();
     const { setIsLoading } = useLoading();
 

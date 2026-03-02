@@ -6,7 +6,7 @@ import { useAcademy } from '../../contexts/AcademyProvider';
 import './adminDgStudentNotesModal.css';
 
 export const AdminDgStudentNotesModal = ({ student, onClose }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-students');
   const {
     getAdminStudentNotes,
     createAdminStudentNote,

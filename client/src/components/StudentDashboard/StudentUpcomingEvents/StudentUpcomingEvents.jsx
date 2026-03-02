@@ -5,7 +5,7 @@ import { Calendar, Clock, Video, Users, MapPin, ArrowRight } from 'lucide-react'
 import './studentUpcomingEvents.css';
 
 const StudentUpcomingEvents = ({ events = [] }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('student-dashboard');
 
   const getEventIcon = (type) => {
     switch (type) {

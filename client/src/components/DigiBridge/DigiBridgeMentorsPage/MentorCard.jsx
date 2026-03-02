@@ -55,7 +55,7 @@ const colorThemes = [
 ];
 
 export const MentorCard = ({ mentor, index, onViewProfile }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('digibridge');
 
     const isImageRight = index % 2 !== 0;
     const isAvailable = mentor.isOnline;

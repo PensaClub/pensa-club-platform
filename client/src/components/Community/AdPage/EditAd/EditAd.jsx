@@ -17,7 +17,7 @@ import DatePicker from "react-datepicker";
 import { TagInput } from "../CreateAd/TagInput";
 
 export const EditAd = () => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('community');
   const [fieldDefinitions, setFieldDefinitions] = useState({});
   const [towns, setTowns] = useState([]);
   // eslint-disable-next-line no-unused-vars

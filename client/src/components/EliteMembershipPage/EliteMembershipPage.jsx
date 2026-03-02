@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import './eliteMembershipPage.css';
 
 export const EliteMembershipPage = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('auth');
 
   const benefits = [
     {

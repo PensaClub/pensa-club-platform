@@ -6,7 +6,7 @@ import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, L
 import './digiMentorPerformanceChart.css';
 
 export const DigiMentorPerformanceChart = ({ performanceData = {} }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-mentor');
   const [chartType, setChartType] = useState('sessions'); // sessions, hours, students
   const [viewPeriod, setViewPeriod] = useState('month'); // week, month, year
 

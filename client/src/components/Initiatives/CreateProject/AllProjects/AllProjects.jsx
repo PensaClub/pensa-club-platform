@@ -9,7 +9,7 @@ import { ProjectsHeaderAdmin } from './ProjectsHeaderAdmin/ProjectsHeaderAdmin';
 import { notify } from '../../../../utils/notify.jsx';
 
 export const AllProjects = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const navigate = useNavigate();
     const {
         getAllProjects,

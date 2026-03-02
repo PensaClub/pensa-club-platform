@@ -6,7 +6,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import './topMentorsByOnlineTime.css';
 
 export const TopMentorsByOnlineTime = ({ mentors, limit = 10 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge');
 
   // ✅ Функция за форматиране на часове
   const formatHours = (hours) => {

@@ -5,7 +5,7 @@ import { useInitiativeContext } from '../../../contexts/InitiativeProvider';
 import './applicationForm.css';
 
 export const ApplicationForm = ({ project, onSubmit }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
   const { profileData, isAuthentication } = useAuthContext();
   const { recentApplications } = useInitiativeContext();
   const [isLoading, setIsLoading] = useState(false);

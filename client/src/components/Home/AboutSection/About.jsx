@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 export const AboutSection = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('home');
   const sectionRef = useRef(null);
   const visionRef = useRef(null);
 

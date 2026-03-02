@@ -20,7 +20,7 @@ import './clubCard.css';
 import { useClubContext } from '../../../contexts/ClubContext';
 import { useAuthContext } from '../../../contexts/UserContext';
 export const ClubCard = ({ club, index, isSelected, onSelect, onSelectOnMap }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('clubs');
   const navigate = useNavigate();
   
   const [imageLoaded, setImageLoaded] = useState(false);

@@ -6,7 +6,7 @@ import { useForm } from '../hooks/useForm';
 import { useState } from 'react';
 
 export const ResetPasswordPage = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('auth');
     const { onPasswordReset } = useAuthContext();
     const [showPassword, setShowPassword] = useState(false);
     const [showRePassword, setReShowPassword] = useState(false);

@@ -28,7 +28,7 @@ const LECTURE_TYPES = ['lecture', 'webinar', 'workshop', 'masterclass'];
 const VIDEO_PROVIDERS = ['youtube', 'vimeo', 'zoom', 'meet', 'teams', 'custom'];
 
 const LectureCreateForm = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('academy-admin');
     const navigate = useNavigate();
 
      const {

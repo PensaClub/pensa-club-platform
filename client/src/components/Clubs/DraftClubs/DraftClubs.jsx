@@ -23,7 +23,7 @@ import DraftClubsCard from './DraftClubsCard/DraftClubsCard';
 import ClubPreviewModal from '../ClubCreateForm/ClubPreviewModal/ClubPreviewModal';
 
 const DraftClubs = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('clubs');
     const navigate = useNavigate();
     const {
         isAuthentication,

@@ -5,7 +5,7 @@ import { User, Mail, MessageCircle, ArrowRight, Star } from 'lucide-react';
 import './studentMentorCard.css';
 
 const StudentMentorCard = ({ mentor = null, onSendEmail }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('student-dashboard');
 
   const getInitials = (name) => {
     if (!name) return '?';

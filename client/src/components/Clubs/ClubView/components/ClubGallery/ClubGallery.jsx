@@ -28,7 +28,7 @@ import {
 import './clubGallery.css';
 
 export const ClubGallery = ({ club }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('clubs');
   const [filter, setFilter] = useState('all');
   const [viewMode, setViewMode] = useState('grid');
   const [showLightbox, setShowLightbox] = useState(false);

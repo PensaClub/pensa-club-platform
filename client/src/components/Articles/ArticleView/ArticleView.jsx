@@ -43,7 +43,7 @@ const ArticleView = () => {
   const sectionsPerPage = 3;
   const { setIsLoading } = useLoading();
   const { trackArticle, getViewCount } = useAnalytics();
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('content');
   const navigate = useNavigate();
   const location = useLocation();
   const { getAllArticles, articlesLoaded, getArticleById, articles } = useArticleContext();

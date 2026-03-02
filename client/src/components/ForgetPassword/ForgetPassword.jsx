@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 
 export const ForgetPassword = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('auth');
   const { onForgetPasswordSubmit } = useAuthContext();
   const navigate = useNavigate();
   const { onSubmit, values, onChangeHandler, onBlurHandler, errors } = useForm(

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import './applicationsFilters.css';
 
 export const ApplicationsFilters = ({ filters, onFilterChange }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge');
 
   const handleSearchChange = (e) => {
     onFilterChange({

@@ -3,7 +3,7 @@ import { ShowcaseCard } from '../ShowcaseCard/ShowcaseCard';
 import './showcaseGrid.css';
 
 export const ShowcaseGrid = ({ data, activeTab, isVisible }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('home');
 
   return (
     <div className={`showcase-grid ${isVisible ? 'visible' : ''}`}>

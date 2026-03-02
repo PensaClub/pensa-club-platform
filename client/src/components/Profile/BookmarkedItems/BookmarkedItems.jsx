@@ -26,7 +26,7 @@ import ScrollToTop from '../../ScrollToTop/ScrollToTop';
 import { useAuthContext } from '../../contexts/UserContext';
 
 export const BookmarkedItems = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const {
         bookmarkedInitiatives,
         bookMarkedProjects,

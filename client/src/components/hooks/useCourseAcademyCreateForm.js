@@ -64,7 +64,7 @@ const createNewLesson = () => ({
 const useCourseAcademyCreateForm = () => {
     const { courseSlug } = useParams();
     const navigate = useNavigate();
-    const { t } = useTranslation();
+    const { t } = useTranslation('academy-admin');
 
     // API функциите с prefix "api" за да няма конфликт с локалните state функции
     const {

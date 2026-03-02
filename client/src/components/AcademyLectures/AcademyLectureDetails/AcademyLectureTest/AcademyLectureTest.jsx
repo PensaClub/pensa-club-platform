@@ -41,7 +41,7 @@ const formatTime = (seconds) => {
 
 export const AcademyLectureTest = () => {
   const { slug } = useParams();
-  const { t } = useTranslation();
+  const { t } = useTranslation('academy');
   const navigate = useNavigate();
   const { isAuthentication } = useAuthContext();
   const {

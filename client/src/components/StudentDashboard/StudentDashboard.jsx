@@ -15,7 +15,7 @@ import StudentRecentActivity from './StudentRecentActivity/StudentRecentActivity
 import SendEmailModal from './SendEmailModal/SendEmailModal';
 
 const StudentDashboard = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('student-dashboard');
     const navigate = useNavigate();
     const { isAuthentication, profileData } = useAuthContext();
     const {

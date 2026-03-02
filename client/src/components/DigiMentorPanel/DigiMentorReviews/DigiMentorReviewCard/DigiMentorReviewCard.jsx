@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import './digiMentorReviewCard.css';
 
 export const DigiMentorReviewCard = ({ review }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-mentor');
   const [isExpanded, setIsExpanded] = useState(false);
 
   const TEXT_PREVIEW_LENGTH = 200;

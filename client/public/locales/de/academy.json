@@ -1,0 +1,531 @@
+{
+  "academyCourses": {
+    "loading": "Kurse werden geladen...",
+    "noCourses": "Noch keine Kurse",
+    "checkBackLater": "Wir werden bald neue Lernprogramme hinzufügen. Bleib dran!",
+    "programsTitle": "Lernprogramme",
+    "programsSubtitle": "Wähle ein Programm basierend auf deinen Interessen und Erfahrungen",
+    "popularCourses": "Beliebte Kurse",
+    "popularCoursesSubtitle": "Die meistgesuchten Kurse unserer Teilnehmer",
+    "noResults": "Keine Kurse gefunden",
+    "tryDifferentFilters": "Versuchen Sie es mit anderen Filtern oder einer anderen Suche",
+    "searchResults": "Suchergebnisse",
+    "foundCourses": "{{count}} Kurse gefunden"
+  },
+  "academyCoursesHero": {
+    "titleLine1": "Entdecke deinen Weg in die ",
+    "titleLine2": "digitale Welt",
+    "subtitle": "Kostenlose praktische Kurse für alle Altersgruppen. Lerne, Technologie sicher zu nutzen – mit der Unterstützung unserer Mentoren.",
+    "scroll": "Nach unten scrollen",
+    "stats": {
+      "programs": "Programme",
+      "courses": "Kurse",
+      "enrolled": "Eingeschrieben",
+      "free": "Kostenlos"
+    }
+  },
+  "academyCoursesFilters": {
+    "searchPlaceholder": "Kurse suchen...",
+    "clearSearch": "Suche löschen",
+    "categoryLabel": "Kategorie",
+    "levelLabel": "Stufe",
+    "sortLabel": "Sortieren",
+    "allCategories": "Alle Kategorien",
+    "allLevels": "Alle Stufen",
+    "clearAll": "Löschen",
+    "levels": {
+      "beginner": "Anfänger",
+      "intermediate": "Fortgeschritten",
+      "advanced": "Experte"
+    },
+    "sort": {
+      "popular": "Beliebteste",
+      "newest": "Neueste",
+      "alphabetical": "Alphabetisch"
+    }
+  },
+  "academyCoursesCategorySection": {
+    "uncategorized": "Andere Kurse",
+    "course": "Kurs",
+    "courses": "Kurse",
+    "allLevels": "Alle Stufen",
+    "showAll": "Alle anzeigen ({{count}})",
+    "showLess": "Weniger anzeigen",
+    "loadMore": "{{remaining}} weitere laden"
+  },
+  "academyProgramTracks": {
+    "course": "Kurs",
+    "courses": "Kurse"
+  },
+  "academyCoursesList": {
+    "course": "Kurs",
+    "courses": "Kurse",
+    "close": "Schließen",
+    "searchPlaceholder": "Kurse suchen...",
+    "noResults": "Keine Kurse mit diesem Filter gefunden",
+    "resetFilter": "Alle anzeigen",
+    "viewAllCourses": "Alle Kurse anzeigen",
+    "filters": {
+      "all": "Alle",
+      "beginner": "Anfänger",
+      "intermediate": "Fortgeschritten",
+      "advanced": "Experte"
+    },
+    "sort": {
+      "popular": "Beliebt",
+      "newest": "Neueste",
+      "alphabetical": "Alphabetisch",
+      "rating": "Nach Bewertung",
+      "duration": "Nach Dauer"
+    },
+    "resultSingle": "Ergebnis",
+    "resultPlural": "Ergebnisse",
+    "clearAll": "Alle löschen",
+    "noResultsTitle": "Keine Kurse gefunden",
+    "noResultsText": "Versuchen Sie andere Filter oder Suchbegriffe"
+  },
+  "academyCourseCard": {
+    "free": "Kostenlos",
+    "startLearning": "Starten",
+    "lessons": "Lektionen",
+    "credits": "Punkte",
+    "watchTrailer": "Trailer ansehen",
+    "levels": {
+      "beginner": "Anfänger",
+      "intermediate": "Fortgeschritten",
+      "advanced": "Experte"
+    }
+  },
+  "academyTrailerModal": {
+    "preview": "Vorschau",
+    "close": "Schließen",
+    "noVideo": "Kein Video für diesen Kurs verfügbar",
+    "hint": "ESC drücken oder außerhalb klicken zum Schließen",
+    "viewCourse": "Kurs ansehen"
+  },
+  "academyCourseDetail": {
+    "loading": "Kurs wird geladen...",
+    "notFound": "Kurs nicht gefunden",
+    "notFoundText": "Der gesuchte Kurs existiert nicht oder wurde entfernt.",
+    "backToCourses": "Zurück zu den Kursen",
+    "breadcrumb": {
+      "academy": "Akademie",
+      "courses": "Kurse"
+    },
+    "mentors": {
+      "students": "Studenten"
+    },
+    "levels": {
+      "beginner": "Anfänger",
+      "intermediate": "Fortgeschritten",
+      "advanced": "Experte"
+    },
+    "tabs": {
+      "overview": "Übersicht",
+      "content": "Inhalt",
+      "instructor": "Dozent",
+      "reviews": "Bewertungen"
+    },
+    "finalTest": {
+      "title": "Abschlusstest",
+      "questions": "Fragen",
+      "minutes": "Min",
+      "passingScore": "Min. Ergebnis",
+      "maxAttempts": "Max. Versuche",
+      "passed": "Test erfolgreich bestanden!",
+      "bestScore": "Bestes Ergebnis",
+      "locked": "Schließen Sie alle Lektionen im Kurs ab, um den Test freizuschalten.",
+      "startTest": "Test starten",
+      "continueAttempt": "Versuch fortsetzen",
+      "noMoreAttempts": "Alle Versuche aufgebraucht.",
+      "remaining": "Verbleibende Versuche"
+    },
+    "hero": {
+      "certificateBadge": "Zertifikat",
+      "ratings": "Bewertungen",
+      "enrolled": "eingeschrieben",
+      "duration": "Stunden",
+      "lessonsLabel": "Lektionen",
+      "createdBy": "Erstellt von",
+      "youAreEnrolled": "Sie sind eingeschrieben",
+      "adminAccess": "Admin-Zugang",
+      "mentorAccess": "Mentor-Zugang",
+      "moderatorAccess": "Moderator-Zugang"
+    },
+    "card": {
+      "watchPreview": "Vorschau ansehen",
+      "watchTrailer": "Trailer ansehen",
+      "free": "Kostenlos",
+      "credits": "Punkte",
+      "enrollNow": "Jetzt einschreiben",
+      "lessons": "Lektionen",
+      "hours": "Stunden",
+      "weeks": "Wochen",
+      "certificate": "Zertifikat bei Abschluss",
+      "creditsOnComplete": "Punkte bei Abschluss",
+      "guarantee": "Kostenloser Zugang für immer",
+      "startLearning": "Lernen starten",
+      "checking": "Prüfen..."
+    },
+    "overview": {
+      "aboutCourse": "Über diesen Kurs",
+      "targetAudience": "Für wen ist das geeignet",
+      "whatYouLearn": "Was du lernen wirst",
+      "learnItems": {
+        "item1": "Grundlegende Fähigkeiten zum Thema",
+        "item2": "Praktische Erfahrung durch Übungen",
+        "item3": "Verständnis der Schlüsselkonzepte",
+        "item4": "Selbstvertrauen bei der Anwendung des Gelernten"
+      },
+      "stats": {
+        "totalEnrolled": "Gesamt eingeschrieben",
+        "completed": "Abgeschlossen",
+        "rating": "Bewertung",
+        "maxCredits": "Max. Punkte"
+      }
+    },
+    "content": {
+      "courseContent": "Kursinhalt",
+      "modules": "Module",
+      "lessonsTotal": "Lektionen",
+      "lessonsShort": "Lektionen",
+      "hoursTotal": "Stunden",
+      "moduleLabel": "Modul",
+      "minutes": "Min",
+      "freeLesson": "Kostenlos",
+      "hasTest": "Mit Test",
+      "noContent": "Kursinhalt wird bald hinzugefügt."
+    },
+    "instructor": {
+      "roles": {
+        "lecturer": "Dozent",
+        "assistant": "Assistent",
+        "mentor": "Mentor"
+      },
+      "leadInstructor": "Hauptdozent",
+      "students": "Teilnehmer",
+      "completedStudents": "Abgeschlossen",
+      "instructorRating": "Bewertung",
+      "assistants": "Assistenten",
+      "noInstructor": "Dozent-Informationen werden bald hinzugefügt."
+    },
+    "reviews": {
+      "studentReviews": "Bewertungen von Teilnehmern",
+      "basedOn": "Basierend auf",
+      "reviews": "Bewertungen",
+      "noReviewsYet": "Noch keine Bewertungen für diesen Kurs.",
+      "beFirstReview": "Sei der Erste, der seine Meinung teilt!"
+    }
+  },
+  "academyLessonPlayer": {
+    "loading": "Laden...",
+    "error": "Fehler",
+    "backToCourse": "Zum Kurs",
+    "loginRequired": "Anmeldung erforderlich",
+    "loginRequiredDesc": "Sie müssen sich anmelden, um diese Lektion zu sehen.",
+    "login": "Anmelden",
+    "enrollRequired": "Zuerst einschreiben",
+    "enrollRequiredDesc": "Sie müssen in diesem Kurs eingeschrieben sein.",
+    "goToCourse": "Zum Kurs",
+    "notFound": "Lektion nicht gefunden",
+    "unpublished": "Nicht veröffentlicht",
+    "unpublishedDesc": "Diese Lektion ist noch nicht verfügbar.",
+    "courseContent": "Inhalt",
+    "fullscreen": "Vollbild",
+    "exitFullscreen": "Beenden",
+    "partOfModule": "Teil des Moduls",
+    "typeVideo": "Video",
+    "typeLive": "Live",
+    "typeText": "Text",
+    "typeQuiz": "Quiz",
+    "complete": "Lektion abschließen",
+    "startTest": "Test starten",
+    "testAvailable": "Lektionstest",
+    "passingScore": "Mindestpunktzahl",
+    "earnCredits": "Verdienen",
+    "materials": "Materialien",
+    "live": "LIVE",
+    "upcoming": "Bevorstehend",
+    "liveScheduled": "Live-Lektion",
+    "startsIn": "Beginnt in",
+    "recordingProcessing": "Aufnahme wird verarbeitet",
+    "recordingProcessingDesc": "Wird bald verfügbar sein.",
+    "textLesson": "Textlektion",
+    "readBelowDesc": "Lesen Sie den Inhalt unten",
+    "noVideo": "Kein Video",
+    "days": "Tage",
+    "hours": "Stunden",
+    "minutes": "Min",
+    "seconds": "Sek"
+  },
+  "academyTestPlayer": {
+    "loading": "Test wird geladen...",
+    "error": "Fehler",
+    "backToLesson": "Zurück zur Lektion",
+    "loginRequired": "Anmeldung erforderlich",
+    "loginRequiredDesc": "Sie müssen sich anmelden, um diesen Test zu machen.",
+    "login": "Anmelden",
+    "notFound": "Test nicht gefunden",
+    "questionOf": "Frage {{current}} von {{total}}",
+    "questions": "Fragen",
+    "answered": "Beantwortet",
+    "unanswered": "Unbeantwortet",
+    "current": "Aktuell",
+    "question": "Frage",
+    "point": "Punkt",
+    "points": "Punkte",
+    "typeSingle": "Einzelauswahl",
+    "typeMultiple": "Mehrfachauswahl",
+    "typeTrueFalse": "Richtig/Falsch",
+    "prev": "Vorherige",
+    "next": "Nächste",
+    "submit": "Test abgeben",
+    "submitting": "Wird abgegeben...",
+    "confirmSubmitUnanswered": "Sie haben {{count}} unbeantwortete Fragen. Möchten Sie den Test wirklich abgeben?",
+    "passingScore": "Bestehen",
+    "maxCredits": "Max. Credits",
+    "attempt": "Versuch",
+    "results": {
+      "passed": "Herzlichen Glückwunsch!",
+      "failed": "Versuchen Sie es erneut",
+      "passedDesc": "Sie haben den Test erfolgreich bestanden!",
+      "failedDesc": "Leider haben Sie die Mindestpunktzahl nicht erreicht.",
+      "yourScore": "Ihr Ergebnis",
+      "correct": "Richtig",
+      "total": "Gesamt",
+      "passing": "Bestehen",
+      "creditsEarned": "Credits",
+      "backToLesson": "Zurück zur Lektion",
+      "tryAgain": "Erneut versuchen",
+      "attemptInfo": "Versuch {{current}} von {{max}}",
+      "backToLecture": "Zurück zur Vorlesung"
+    }
+  },
+  "academyCoursesSeo": {
+    "listTitle": "Kurse für digitale Kompetenz | DigiBridge Academy",
+    "listDescription": "Kostenlose Online-Kurse für digitale Kompetenz, Internetsicherheit und Technologie. DigiBridge Academy — Bildung für Senioren 60+.",
+    "categoryTitle": "Kurse zu {{category}} | DigiBridge Academy",
+    "categoryDescription": "Kostenlose Online-Kurse zu {{category}} für digitale Kompetenz. DigiBridge Academy — Bildung für Senioren 60+.",
+    "searchTitle": "Suche: {{term}} | Kurse | DigiBridge Academy",
+    "searchDescription": "{{count}} Kurse für \"{{term}}\" in DigiBridge Academy gefunden.",
+    "pageTitle": "Kurse - Seite {{page}} | DigiBridge Academy",
+    "loading": "Laden... | DigiBridge Academy"
+  },
+  "academyLectures": {
+    "hero": {
+      "badge": "Videovorlesungen",
+      "title": "Vorlesungen",
+      "titleAccent": "Live & Aufzeichnungen",
+      "subtitle": "Lernen Sie von Experten in Echtzeit oder schauen Sie Aufzeichnungen wann immer es passt. Völlig kostenlos.",
+      "stats": {
+        "total": "Vorlesungen",
+        "upcoming": "Bevorstehend",
+        "recordings": "Aufzeichnungen",
+        "credits": "Credits"
+      }
+    },
+    "schedule": {
+      "title": "Kommende Live",
+      "upcoming": "Vorlesungen",
+      "today": "Heute",
+      "tomorrow": "Morgen"
+    },
+    "filters": {
+      "all": "Alle",
+      "live": "Live",
+      "upcoming": "Bevorstehend",
+      "recordings": "Aufzeichnungen",
+      "searchPlaceholder": "Vorlesung suchen...",
+      "clearAll": "Löschen"
+    },
+    "sort": {
+      "date": "Nach Datum",
+      "popular": "Beliebt",
+      "alphabetical": "A-Z"
+    },
+    "results": {
+      "found": "gefunden"
+    },
+    "card": {
+      "upcoming": "Bevorstehend",
+      "recording": "Aufzeichnung",
+      "speaker": "Referent",
+      "hasTest": "Mit Test",
+      "watchLive": "Live ansehen",
+      "signUp": "Anmelden",
+      "watch": "Ansehen"
+    },
+    "loading": "Laden...",
+    "empty": {
+      "noLectures": "Keine Vorlesungen verfügbar",
+      "noResults": "Keine Vorlesungen gefunden",
+      "checkBack": "Schauen Sie später nach neuen Vorlesungen.",
+      "tryDifferent": "Versuchen Sie andere Filter."
+    }
+  },
+  "academyLectureWatch": {
+    "loading": "Vorlesung wird geladen...",
+    "error": {
+      "title": "Fehler",
+      "backToList": "← Zu den Vorlesungen"
+    },
+    "noVideo": {
+      "title": "Video nicht verfügbar",
+      "description": "Die Aufzeichnung wurde noch nicht veröffentlicht.",
+      "back": "← Zurück zur Vorlesung"
+    },
+    "header": {
+      "back": "Zurück",
+      "live": "LIVE",
+      "theaterMode": "Theatermodus",
+      "exitTheater": "Theatermodus verlassen",
+      "openYoutube": "In YouTube öffnen"
+    },
+    "video": {
+      "unsupportedProvider": "Video-Anbieter nicht unterstützt",
+      "openExternal": "Extern öffnen"
+    },
+    "meta": {
+      "views": "Aufrufe",
+      "hours": "Std",
+      "mins": "Min",
+      "minutes": "Min"
+    },
+    "actions": {
+      "takeTest": "Test machen",
+      "testPassed": "Bestanden",
+      "retakeTest": "Erneut versuchen"
+    },
+    "chat": {
+      "title": "Live-Chat",
+      "watching": "schauen zu",
+      "empty": "Seien Sie der Erste, der schreibt!",
+      "comingSoon": "Firebase-Integration kommt bald",
+      "placeholder": "Nachricht schreiben...",
+      "loginRequired": "Anmelden zum Schreiben",
+      "anonymousUser": "Benutzer"
+    },
+    "description": {
+      "about": "Über die Vorlesung"
+    },
+    "course": {
+      "partOf": "Teil des Kurses",
+      "viewCourse": "Kurs ansehen"
+    }
+  },
+  "academyLectureTest": {
+    "loading": "Test wird geladen...",
+    "error": "Fehler",
+    "notFound": "Test nicht gefunden",
+    "backToLecture": "Zurück zur Vorlesung",
+    "loginRequired": "Anmeldung erforderlich",
+    "loginRequiredDesc": "Bitte melden Sie sich an, um den Test zu machen.",
+    "login": "Anmelden",
+    "question": "Frage",
+    "questionOf": "Frage {{current}} von {{total}}",
+    "questions": "Fragen",
+    "point": "Punkt",
+    "points": "Punkte",
+    "typeSingle": "Einzelauswahl",
+    "typeMultiple": "Mehrfachauswahl",
+    "typeTrueFalse": "Wahr/Falsch",
+    "answered": "Beantwortet",
+    "unanswered": "Unbeantwortet",
+    "current": "Aktuell",
+    "prev": "Zurück",
+    "next": "Weiter",
+    "submit": "Test abgeben",
+    "submitting": "Wird abgegeben...",
+    "passingScore": "Mindestpunktzahl",
+    "maxCredits": "Max. Credits",
+    "attempt": "Versuch",
+    "confirmSubmitUnanswered": "Sie haben {{count}} unbeantwortete Fragen. Möchten Sie wirklich abgeben?",
+    "errors": {
+      "lectureNotFound": "Vorlesung nicht gefunden",
+      "noTest": "Diese Vorlesung hat keinen Test",
+      "loadFailed": "Fehler beim Laden des Tests",
+      "submitFailed": "Fehler beim Abgeben des Tests",
+      "retryFailed": "Fehler beim Starten eines neuen Versuchs"
+    },
+    "results": {
+      "passed": "Herzlichen Glückwunsch! 🎉",
+      "failed": "Nicht bestanden",
+      "passedDesc": "Sie haben den Test erfolgreich abgeschlossen!",
+      "failedDesc": "Sie haben die Mindestpunktzahl nicht erreicht. Versuchen Sie es erneut!",
+      "yourScore": "Ihr Ergebnis",
+      "correct": "Richtig",
+      "wrong": "Falsch",
+      "total": "Gesamt",
+      "passing": "Mindest.",
+      "creditsEarned": "Credits verdient",
+      "backToLecture": "Zurück zur Vorlesung",
+      "tryAgain": "Erneut versuchen",
+      "reviewAnswers": "Antworten überprüfen",
+      "correctLabel": "Richtig",
+      "wrongLabel": "Falsch",
+      "yourAnswer": "Ihre Antwort",
+      "noAnswer": "Keine Antwort",
+      "attemptInfo": "Versuch {{current}} von {{max}}",
+      "remainingAttempts": "Verbleibende Versuche: {{count}}",
+      "noMoreAttempts": "Keine weiteren Versuche",
+      "attemptHistory": "Versuchshistorie",
+      "viewAnswers": "Antworten anzeigen",
+      "bestAttempt": "Bestes Ergebnis",
+      "attempt": "Versuch"
+    },
+    "intro": {
+      "attemptsLeft": "Verbleibende Versuche: {{count}}"
+    },
+    "footer": {
+      "attempt": "Versuch"
+    }
+  },
+  "academyLectureDetails": {
+    "lecturer": {
+      "title": "Dozent",
+      "titlePlural": "Dozenten",
+      "alsoParticipate": "Ebenfalls beteiligt"
+    },
+    "roles": {
+      "lecturer": "Dozent",
+      "mentor": "Mentor",
+      "assistant": "Assistent",
+      "guest": "Gast"
+    },
+    "course": {
+      "module": "Modul"
+    },
+    "test": {
+      "testPassed": "Test bestanden!",
+      "testFailed": "Test nicht bestanden",
+      "correctAnswers": "richtige Antworten",
+      "creditsEarned": "verdient",
+      "attempts": "Versuche",
+      "remaining": "Verbleibend",
+      "noMoreAttempts": "Keine weiteren Versuche",
+      "maxAttempts": "Max. Versuche",
+      "hintFree": "Sehen Sie sich die Vorlesung an, um den Test freizuschalten."
+    }
+  },
+  "academyLecturesSeo": {
+    "listTitle": "Vorlesungen zur digitalen Kompetenz | DigiBridge Academy",
+    "listDescription": "Kostenlose Online-Vorlesungen zu digitaler Kompetenz, Internetsicherheit und Technologie. DigiBridge Academy — Bildung für Senioren 60+ mit qualifizierten Dozenten.",
+    "categoryTitle": "Vorlesungen zu {{category}} | DigiBridge Academy",
+    "categoryDescription": "Kostenlose Online-Vorlesungen zu {{category}} für digitale Kompetenz. DigiBridge Academy — Bildung für Senioren 60+.",
+    "searchTitle": "Suche: {{term}} | Vorlesungen | DigiBridge Academy",
+    "searchDescription": "{{count}} Vorlesungen für \"{{term}}\" in DigiBridge Academy gefunden.",
+    "loading": "Laden... | DigiBridge Academy"
+  },
+  "academyMentorPicker": {
+    "searchPlaceholder": "Mentor suchen...",
+    "typeToSearch": "Mindestens 1 Zeichen eingeben...",
+    "noResults": "Keine Ergebnisse",
+    "setAsLead": "Als Leiter festlegen",
+    "roles": {
+      "lecturer": "Dozent",
+      "mentor": "Mentor",
+      "assistant": "Assistent",
+      "guest": "Gastdozent"
+    }
+  }
+}

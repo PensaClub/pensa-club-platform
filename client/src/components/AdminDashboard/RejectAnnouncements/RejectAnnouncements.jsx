@@ -24,7 +24,7 @@ export const RejectAnnouncements = ({ setRejectCount }) => {
     const [adminEmail, setAdminEmail] = useState('');
     const [isTextModalOpen, setIsTextModalOpen] = useState(false);
     const [modalContent, setModalContent] = useState('');
-    const { t } = useTranslation();
+    const { t } = useTranslation(['admin', 'auth']);
     const { profileData } = useAuthContext();
     const { fetchRejectAds, updateAdStatus, deleteAd } = useAdminContext();
 

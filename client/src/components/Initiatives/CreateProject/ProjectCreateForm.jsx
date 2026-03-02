@@ -51,7 +51,7 @@ import MediaSection from './MediaSection/MediaSection.jsx';
 import ContactSection from './ContactSection/ContactSection.jsx';
 
 const ProjectCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const navigate = useNavigate();
     const { getAllInitiatives, initiatives } = useInitiativeContext();
 

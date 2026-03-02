@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import './showcaseCard.css';
 
 export const ShowcaseCard = ({ item, type, index, isVisible }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(['home', 'content']);
   const cardDelay = index * 0.2;
 
   const getItemLink = (item, type) => {

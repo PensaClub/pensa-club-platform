@@ -9,7 +9,7 @@ import './academyLessonPlayer.css';
 import AcademyLessonPlayerSkeleton from './AcademyLessonPlayerSkeleton/AcademyLessonPlayerSkeleton';
 
 const AcademyLessonPlayer = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('academy');
   const { courseSlug, lessonSlug } = useParams();
   const navigate = useNavigate();
 

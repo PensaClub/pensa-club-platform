@@ -1,0 +1,603 @@
+{
+  "digiMentorPanel": {
+    "title": "Mentor Dashboard",
+    "welcome": "Welcome",
+    "errorLoading": "Error loading data",
+    "totalStudents": "Total Students",
+    "activeSessions": "Active Sessions",
+    "completedSessions": "Completed Sessions",
+    "onlineHours": "Online Hours",
+    "averageRating": "Average Rating",
+    "reviews": "reviews",
+    "totalMessages": "Total Messages",
+    "responseTime": "Avg Response",
+    "minutes": "min",
+    "completionRate": "Completion Rate",
+    "quickActions": "Quick Actions",
+    "startSession": "Start Session",
+    "viewMessages": "View Messages",
+    "myStudents": "My Students",
+    "viewReviews": "View Reviews"
+  },
+  "digiMentorStats": {
+    "totalStudents": "Total Students",
+    "activeSessions": "Active Sessions",
+    "completedSessions": "Completed Sessions",
+    "onlineHours": "Online Hours",
+    "averageRating": "Average Rating",
+    "reviews": "reviews",
+    "totalMessages": "Total Messages",
+    "responseTime": "Avg Response",
+    "minutes": "min",
+    "completionRate": "Completion Rate"
+  },
+  "digiMentorQuickActions": {
+    "title": "Quick Actions",
+    "startSession": "Start Session",
+    "viewMessages": "View Messages",
+    "myStudents": "My Students",
+    "viewReviews": "View Reviews"
+  },
+  "digiMentorRecentActivity": {
+    "title": "Recent Activity",
+    "noActivity": "No activity yet",
+    "types": {
+      "session_started": "Started session with {{student}}",
+      "session_completed": "Completed session with {{student}}",
+      "message_received": "New message from {{student}}",
+      "new_student": "New student: {{student}}",
+      "review_received": "New review from {{student}} - {{rating}}⭐"
+    }
+  },
+  "digiMentorUpcomingSessions": {
+    "title": "Upcoming Sessions",
+    "sessionsCount": "sessions",
+    "noSessions": "No upcoming sessions",
+    "noTopic": "No topic",
+    "minutes": "min",
+    "status": {
+      "confirmed": "Confirmed",
+      "pending": "Pending",
+      "cancelled": "Cancelled"
+    },
+    "joinSession": "Join Session",
+    "editSession": "Edit",
+    "cancelSession": "Cancel"
+  },
+  "digiMentorStudentsList": {
+    "registeredOn": "Registered On",
+    "loading": "Loading...",
+    "title": "My Students",
+    "studentsCount": "students",
+    "noStudents": "You don't have any students yet",
+    "noResults": "No students found",
+    "searchPlaceholder": "Search by name...",
+    "filters": {
+      "all": "All",
+      "active": "Active",
+      "inactive": "Inactive",
+      "completed": "Completed"
+    },
+    "status": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "completed": "Completed",
+      "scheduled": "Scheduled"
+    },
+    "sessions": "sessions",
+    "message": "Message",
+    "viewProfile": "Profile"
+  },
+  "digiMentorPerformanceChart": {
+    "title": "Performance & Statistics",
+    "noData": "No data available yet",
+    "comparisonTitle": "Period Comparison",
+    "periods": {
+      "week": "Week",
+      "month": "Month",
+      "year": "Year"
+    },
+    "chartTypes": {
+      "sessions": "Sessions",
+      "hours": "Hours",
+      "students": "Students"
+    },
+    "summary": {
+      "total": "Total",
+      "average": "Average",
+      "peak": "Peak"
+    }
+  },
+  "mentorMeetings": {
+    "title": "My Meetings",
+    "addMeeting": "Add Meeting",
+    "noMeetings": "You don't have any meetings yet",
+    "confirmCancel": "Are you sure you want to cancel this meeting?",
+    "errorCancel": "Error canceling meeting",
+    "tabs": {
+      "scheduled": "Scheduled",
+      "completed": "Completed"
+    },
+    "noResults": {
+      "scheduled": "No scheduled meetings",
+      "completed": "No completed meetings"
+    },
+    "types": {
+      "viber": "Viber",
+      "google_meet": "Google Meet",
+      "phone": "Phone Call",
+      "in_person": "In Person",
+      "other": "Other"
+    },
+    "minutes": "min",
+    "actual": "actual",
+    "markComplete": "Mark as Complete",
+    "edit": "Edit",
+    "cancel": "Cancel",
+    "completed": "Completed",
+    "student": "Student",
+    "date": "Date",
+    "time": "Time",
+    "duration": "Duration",
+    "notes": "Notes"
+  },
+  "mentorProfileEdit": {
+    "title": "Edit Profile",
+    "subtitle": "Manage your profile information",
+    "errorFetch": "Error loading profile",
+    "errorSave": "Error saving changes",
+    "successSave": "Changes saved successfully!",
+    "saving": "Saving...",
+    "saveChanges": "Save Changes",
+    "readonlySection": {
+      "title": "Read-only Information",
+      "description": "These fields can only be changed by administrators"
+    },
+    "editableSection": {
+      "title": "Editable Information",
+      "description": "You can modify the following information"
+    },
+    "fields": {
+      "photo": "Photo",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "age": "Age",
+      "specialization": "Specialization",
+      "education": "Education",
+      "experience": "Experience",
+      "motivation": "Motivation",
+      "availability": "Availability",
+      "languages": "Languages",
+      "viber": "Viber",
+      "facebook": "Facebook",
+      "linkedin": "LinkedIn",
+      "otherContact": "Other Contact",
+      "priorityContact": "Preferred Contact"
+    },
+    "placeholders": {
+      "availability": "e.g. Monday-Friday 6:00 PM - 9:00 PM",
+      "languages": "e.g. Bulgarian, English, German"
+    },
+    "priorityOptions": {
+      "email": "Email",
+      "viber": "Viber",
+      "phone": "Phone"
+    }
+  },
+  "addMeetingModal": {
+    "title": "Add Meeting",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saving": "Saving...",
+    "loadingStudents": "Loading students...",
+    "minutes": "min",
+    "fields": {
+      "title": "Title",
+      "meetingType": "Meeting Type",
+      "student": "Student",
+      "date": "Date",
+      "time": "Time",
+      "duration": "Duration",
+      "notes": "Notes"
+    },
+    "placeholders": {
+      "title": "e.g. Computer Literacy Lesson",
+      "student": "Select student (optional)",
+      "notes": "Additional information about the meeting..."
+    },
+    "meetingTypes": {
+      "viber": "Viber",
+      "google_meet": "Google Meet",
+      "phone": "Phone Call",
+      "in_person": "In Person",
+      "other": "Other"
+    },
+    "errors": {
+      "titleRequired": "Title is required",
+      "dateRequired": "Date is required",
+      "timeRequired": "Time is required",
+      "saveFailed": "Error saving meeting"
+    }
+  },
+  "editMeetingModal": {
+    "title": "Edit Meeting",
+    "cancel": "Cancel",
+    "save": "Save Changes",
+    "saving": "Saving...",
+    "loadingStudents": "Loading students...",
+    "minutes": "min",
+    "fields": {
+      "title": "Title",
+      "meetingType": "Meeting Type",
+      "student": "Student",
+      "date": "Date",
+      "time": "Time",
+      "duration": "Duration",
+      "notes": "Notes"
+    },
+    "placeholders": {
+      "title": "e.g. Computer Literacy Lesson",
+      "student": "Select student (optional)",
+      "notes": "Additional information about the meeting..."
+    },
+    "meetingTypes": {
+      "viber": "Viber",
+      "google_meet": "Google Meet",
+      "phone": "Phone Call",
+      "in_person": "In Person",
+      "other": "Other"
+    },
+    "errors": {
+      "titleRequired": "Title is required",
+      "dateRequired": "Date is required",
+      "timeRequired": "Time is required",
+      "saveFailed": "Error saving changes"
+    }
+  },
+  "completeMeetingModal": {
+    "title": "Complete Meeting",
+    "cancel": "Cancel",
+    "complete": "Complete Meeting",
+    "saving": "Saving...",
+    "minutes": "min",
+    "meetingTitle": "Meeting",
+    "student": "Student",
+    "plannedDuration": "Planned Duration",
+    "fields": {
+      "actualDuration": "Actual Duration",
+      "completionNotes": "Meeting Notes"
+    },
+    "placeholders": {
+      "completionNotes": "Describe what was discussed, topics covered, student progress..."
+    },
+    "hints": {
+      "actualDuration": "Enter the actual duration of the meeting in minutes",
+      "completionNotes": "These notes will be saved for future reference and help track progress"
+    },
+    "errors": {
+      "durationRequired": "Duration is required",
+      "saveFailed": "Error completing meeting"
+    }
+  },
+  "studentDetails": {
+    "backToList": "Back to Students",
+    "notFound": "Student not found",
+    "errorLoading": "Error loading data",
+    "registeredSince": "Registered since",
+    "currentMentor": "Current Mentor",
+    "totalCredits": "Total Credits",
+    "activeCourses": "Active Courses",
+    "completedCourses": "Completed Courses",
+    "attendanceRate": "Attendance Rate",
+    "tabs": {
+      "overview": "Overview",
+      "courses": "Courses",
+      "activities": "Activities",
+      "attendance": "Attendance",
+      "schedule": "Schedule",
+      "notes": "Notes"
+    },
+    "overview": {
+      "title": "Overview",
+      "creditsBreakdown": "Credits Breakdown",
+      "fromCourses": "From Courses",
+      "fromLectures": "From Lectures",
+      "fromSeminars": "From Seminars",
+      "fromPresentations": "From Presentations",
+      "mentorInfo": "Mentor Information",
+      "assignedDate": "Assigned on",
+      "progress": "Progress",
+      "mentorHistory": "Mentor History",
+      "overallProgress": "Overall Progress",
+      "totalCourses": "Total Courses"
+    },
+    "courses": {
+      "title": "Courses",
+      "all": "All",
+      "inProgress": "In Progress",
+      "completed": "Completed",
+      "notStarted": "Not Started",
+      "noCourses": "No courses found",
+      "progress": "Progress",
+      "lessons": "lessons",
+      "credits": "credits",
+      "startDate": "Start",
+      "endDate": "End"
+    },
+    "activities": {
+      "title": "Activities",
+      "all": "All",
+      "lectures": "Lectures",
+      "seminars": "Seminars",
+      "presentations": "Presentations",
+      "attended": "Attended",
+      "missed": "Missed",
+      "scheduled": "Scheduled",
+      "minutes": "min",
+      "credits": "credits",
+      "totalCredits": "Total Credits",
+      "noActivities": "No activities found"
+    },
+    "attendance": {
+      "title": "Attendance & Help",
+      "overview": "Overview",
+      "totalSessions": "Total Sessions",
+      "attended": "Attended",
+      "missed": "Missed",
+      "rate": "Rate",
+      "mentorHelp": "Mentor Help",
+      "chatSessions": "Chat Sessions",
+      "chatHours": "Online Hours",
+      "lastChat": "Last Chat",
+      "scheduledMeetings": "Scheduled Meetings",
+      "completedMeetings": "Completed Meetings",
+      "breakdown": "Breakdown",
+      "meetingCompletion": "Meeting Completion"
+    },
+    "schedule": {
+      "title": "Schedule",
+      "all": "All",
+      "today": "Today",
+      "close": "Close",
+      "meetings": "Meetings",
+      "lessons": "Lessons",
+      "lectures": "Lectures",
+      "addMeeting": "Add Meeting",
+      "editMeeting": "Edit Meeting",
+      "loading": "Loading...",
+      "noEvents": "No upcoming events",
+      "minutes": "min",
+      "edit": "Edit",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "confirmDelete": "Are you sure you want to delete this meeting?",
+      "confirmCancel": "Are you sure you want to cancel this meeting?",
+      "course_lesson": "Course Lesson",
+      "mentor_meeting": "Mentor Meeting",
+      "lecture": "Lecture",
+      "seminar": "Seminar",
+      "presentation": "Presentation",
+      "status": {
+        "scheduled": "Scheduled",
+        "completed": "Completed",
+        "cancelled": "Cancelled"
+      },
+      "form": {
+        "title": "Title",
+        "titlePlaceholder": "Enter meeting title",
+        "date": "Date",
+        "time": "Time",
+        "duration": "Duration (min)",
+        "type": "Type",
+        "typeOnline": "Online",
+        "typePhone": "Phone",
+        "typeInPerson": "In Person",
+        "notes": "Notes",
+        "notesPlaceholder": "Add notes for the meeting...",
+        "cancel": "Cancel",
+        "save": "Save"
+      }
+    },
+    "notes": {
+      "title": "Private Notes",
+      "subtitle": "Only you can see these notes",
+      "addNote": "Add Note",
+      "placeholder": "Write a note about the student...",
+      "save": "Save",
+      "saving": "Saving...",
+      "noNotes": "No notes yet",
+      "successSave": "Note saved successfully",
+      "errorSave": "Error saving note"
+    }
+  },
+  "digiMentorReviews": {
+    "pageTitle": "My Reviews",
+    "pageSubtitle": "See what your students are saying about you",
+    "noReviewsTitle": "You don't have any reviews yet",
+    "noReviewsText": "When you receive your first review, it will appear here.",
+    "noResultsTitle": "No results found",
+    "noResultsText": "Try changing the filters or search query.",
+    "loadMore": "Load more reviews",
+    "showingCount": "Showing {{visible}} of {{total}} reviews"
+  },
+  "digiMentorReviewsHeader": {
+    "basedOn": "Based on {{count}} reviews",
+    "basedOn_one": "Based on {{count}} review",
+    "basedOn_other": "Based on {{count}} reviews",
+    "distributionTitle": "Rating Distribution"
+  },
+  "digiMentorReviewsFilters": {
+    "searchPlaceholder": "Search by name, text or role...",
+    "clearSearch": "Clear search",
+    "filterByRating": "Filter by rating",
+    "allRatings": "All",
+    "fiveStars": "5 stars",
+    "fourStars": "4 stars",
+    "threeStars": "3 stars",
+    "twoStars": "2 stars",
+    "oneStar": "1 star",
+    "sortBy": "Sort by",
+    "sortNewest": "Newest first",
+    "sortOldest": "Oldest first",
+    "sortHighest": "Highest rating",
+    "sortLowest": "Lowest rating",
+    "resultSingular": "result",
+    "resultPlural": "results"
+  },
+  "digiMentorReviewCard": {
+    "approved": "Approved",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "daysAgo": "{{count}} days ago",
+    "daysAgo_one": "{{count}} day ago",
+    "daysAgo_other": "{{count}} days ago",
+    "weeksAgo": "{{count}} weeks ago",
+    "weeksAgo_one": "{{count}} week ago",
+    "weeksAgo_other": "{{count}} weeks ago",
+    "monthsAgo": "{{count}} months ago",
+    "monthsAgo_one": "{{count}} month ago",
+    "monthsAgo_other": "{{count}} months ago",
+    "showMore": "Show more",
+    "showLess": "Show less",
+    "thankYou": "Thank you for your review!"
+  },
+  "mentorProfile": {
+    "title": "Mentor Profile",
+    "edit": "Edit Profile",
+    "save": "Save Changes",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "errorLoading": "Error loading profile",
+    "name": "Name",
+    "email": "Email",
+    "age": "Age",
+    "phone": "Phone",
+    "country": "Country",
+    "priorityContact": "Priority Contact",
+    "contactEmail": "Email",
+    "contactPhone": "Phone",
+    "contactViber": "Viber",
+    "contactFacebook": "Facebook",
+    "contactLinkedIn": "LinkedIn",
+    "contactInfo": "Contact Information",
+    "professionalInfo": "Professional Information",
+    "socialContacts": "Social Media & Contacts",
+    "specialization": "Specialization",
+    "education": "Education",
+    "experience": "Experience (years)",
+    "experiencePlaceholder": "Number of years",
+    "availability": "Availability",
+    "languages": "Languages",
+    "motivation": "Motivation",
+    "motivationPlaceholder": "Why do you want to be a mentor?",
+    "viber": "Viber",
+    "facebook": "Facebook",
+    "linkedin": "LinkedIn",
+    "otherContact": "Other Contact",
+    "students": "Students",
+    "rating": "Rating",
+    "reviews": "Reviews",
+    "sessions": "Sessions",
+    "status": {
+      "active": "Active Mentor",
+      "inactive": "Inactive",
+      "pending": "Pending Approval"
+    },
+    "basicFieldsHelp": "To change basic information (name, email, age and photo), please contact an administrator."
+  },
+  "mentorModal": {
+    "applying": "Sending...",
+    "about": "About",
+    "experience": "Experience & Education",
+    "education": "Education",
+    "yearsExperience": "Years of experience",
+    "availability": "Availability",
+    "languages": "Languages",
+    "reviews": "Reviews",
+    "rating": "Rating",
+    "sessions": "Sessions",
+    "selectMentor": "Select Mentor",
+    "close": "Close",
+    "noLanguages": "No languages specified",
+    "alreadyApplied": "Already applied",
+    "applicationSuccess": "Application sent successfully!",
+    "applicationError": "Error sending application",
+    "cannotApplyAsAdmin": "Administrators cannot apply",
+    "cannotApplyAsMentor": "Mentors cannot apply"
+  },
+  "studentApplications": {
+    "title": "Student Applications",
+    "subtitle": "Manage applications from students who want to learn with you",
+    "tabs": {
+      "pending": "Pending",
+      "rejected": "Rejected",
+      "approved": "Approved"
+    },
+    "loading": "Loading..."
+  },
+  "pendingApplications": {
+    "noApplications": "No pending applications",
+    "noApplicationsDesc": "When students apply to learn with you, you'll see them here",
+    "appliedOn": "Applied on",
+    "approve": "Approve",
+    "reject": "Reject",
+    "confirmApprove": "Confirm Approval",
+    "approveConfirmText": "Are you sure you want to approve {{name}}'s application? This user will become your student.",
+    "confirmApproveBtn": "Approve",
+    "confirmReject": "Confirm Rejection",
+    "rejectConfirmText": "Are you sure you want to reject {{name}}'s application?",
+    "rejectionReason": "Rejection reason",
+    "rejectionReasonPlaceholder": "Please explain why you are rejecting this application (minimum 10 characters)...",
+    "rejectionReasonRequired": "Please enter a rejection reason",
+    "rejectionReasonTooShort": "Reason must be at least 10 characters",
+    "confirmRejectBtn": "Reject",
+    "cancel": "Cancel",
+    "processing": "Processing..."
+  },
+  "rejectedApplications": {
+    "noApplications": "No rejected applications",
+    "noApplicationsDesc": "Rejected applications will appear here",
+    "rejected": "Rejected",
+    "appliedOn": "Applied on",
+    "rejectedOn": "Rejected on",
+    "reason": "Reason",
+    "details": "Details",
+    "reapprove": "Re-approve",
+    "delete": "Delete",
+    "applicationDetails": "Application Details",
+    "studentName": "Student name",
+    "email": "Email",
+    "phone": "Phone",
+    "rejectionReason": "Rejection reason",
+    "close": "Close",
+    "confirmReapprove": "Confirm Re-approval",
+    "reapproveConfirmText": "Are you sure you want to re-approve {{name}}'s application? This user will become your student.",
+    "confirmReapproveBtn": "Re-approve",
+    "confirmDelete": "Confirm Deletion",
+    "deleteConfirmText": "Are you sure you want to delete {{name}}'s application?",
+    "deleteWarning": "This action is irreversible. The application will be permanently deleted.",
+    "confirmDeleteBtn": "Delete",
+    "cancel": "Cancel",
+    "processing": "Processing..."
+  },
+  "approvedApplications": {
+    "noApplications": "No approved students",
+    "noApplicationsDesc": "Approved students will appear here",
+    "active": "Active",
+    "approvedOn": "Approved on",
+    "studentSince": "Student since",
+    "days": "days",
+    "viewDetails": "View details",
+    "totalStudents": "Total students",
+    "studentDetails": "Student Details",
+    "activeStudent": "Active student",
+    "studentName": "Student name",
+    "email": "Email",
+    "phone": "Phone",
+    "appliedOn": "Applied on",
+    "studentFor": "Student for",
+    "infoText": "This student is active and learning with you. You can track their progress in the students section.",
+    "close": "Close"
+  }
+}

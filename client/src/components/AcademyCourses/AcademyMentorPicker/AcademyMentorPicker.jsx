@@ -22,7 +22,7 @@ export const AcademyMentorPicker = ({
   label,
   placeholder,
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('academy');
     const { searchMentors: searchMentorsApi } = useAcademyCourses();
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);

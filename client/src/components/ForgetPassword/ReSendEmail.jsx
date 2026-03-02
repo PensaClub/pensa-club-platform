@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 export const ReSendEmail = () => {
     const location = useLocation();
-    const { t } = useTranslation();
+    const { t } = useTranslation('auth');
     const { email } = location.state || {};
     const { onForgetPasswordSubmit } = useAuthContext();
     const [attempts, setAttempts] = useState(() => Number(localStorage.getItem('attempts')) || 0);

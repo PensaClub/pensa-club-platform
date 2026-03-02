@@ -1,0 +1,162 @@
+{
+  "studentDashboard": {
+    "title": "Моята академия",
+    "welcomeBack": "Добре дошъл отново",
+    "editProfile": "Редактирай профил",
+    "levelBeginner": "Начинаещ",
+    "levelIntermediate": "Напреднал",
+    "levelExpert": "Експерт",
+    "levelMaster": "Майстор",
+    "enrolledCourses": "Записани курсове",
+    "completedCourses": "Завършени курсове",
+    "upcomingLectures": "Предстоящи лекции",
+    "certificates": "Сертификати",
+    "totalCredits": "Общо кредити",
+    "creditsFromCourses": "От курсове",
+    "creditsFromLectures": "От лекции",
+    "creditsFromSeminars": "От семинари",
+    "creditsFromPresentations": "От презентации",
+    "progressToNextLevel": "До следващо ниво",
+    "continueLearning": "Продължи обучението",
+    "continueButton": "Продължи",
+    "noCoursesInProgress": "Нямаш започнати курсове",
+    "browseCoursesButton": "Разгледай курсове",
+    "completedLessons": "завършени урока",
+    "upcomingEvents": "Предстоящи събития",
+    "noUpcomingEvents": "Няма предстоящи събития",
+    "liveBadge": "НА ЖИВО",
+    "lectureBadge": "Лекция",
+    "seminarBadge": "Семинар",
+    "inDays": "след {{days}} дни",
+    "today": "днес",
+    "tomorrow": "утре",
+    "viewAll": "Виж всички",
+    "myMentor": "Моят ментор",
+    "noMentor": "Все още нямаш ментор",
+    "findMentor": "Намери ментор",
+    "mentorSince": "Ментор от",
+    "contactMentor": "Свържи се",
+    "sendMessage": "Изпрати съобщение",
+    "myCertificates": "Моите сертификати",
+    "availableCertificates": "Налични сертификати",
+    "noCertificates": "Все още нямаш сертификати",
+    "earnedBadge": "Получен",
+    "download": "Свали",
+    "creditsNeeded": "Нужни кредити",
+    "recentActivity": "Скорошна активност",
+    "noRecentActivity": "Няма скорошна активност",
+    "completedLesson": "Завърши урок",
+    "passedTest": "Издържа тест",
+    "earnedCredits": "Спечели {{credits}} кредита",
+    "loading": "Зареждане...",
+    "error": "Грешка при зареждане",
+    "retry": "Опитай отново",
+    "loginRequired": "Влез в профила си",
+    "loginRequiredText": "Трябва да влезеш в профила си, за да видиш своята академия.",
+    "loginButton": "Вход"
+  },
+  "studentDashboardHeader": {
+    "student": "Студент",
+    "levelBeginner": "Начинаещ",
+    "levelIntermediate": "Напреднал",
+    "levelExpert": "Експерт",
+    "levelMaster": "Майстор",
+    "credits": "кредити",
+    "totalCredits": "Общо кредити",
+    "progressToNextLevel": "До следващо ниво",
+    "editProfile": "Редактирай профил"
+  },
+  "studentQuickStats": {
+    "title": "Статистики",
+    "enrolledCourses": "Записани курсове",
+    "completedCourses": "Завършени курсове",
+    "upcomingLectures": "Предстоящи лекции",
+    "certificates": "Сертификати"
+  },
+  "studentContinueLearning": {
+    "title": "Продължи обучението",
+    "viewAll": "Виж всички",
+    "lessons": "урока",
+    "noCourses": "Нямаш започнати курсове",
+    "browseMore": "Разгледай други курсове"
+  },
+  "studentUpcomingEvents": {
+    "title": "Предстоящи събития",
+    "viewAll": "Виж всички",
+    "types": {
+      "lecture": "Лекция",
+      "seminar": "Семинар"
+    },
+    "started": "Започна",
+    "soon": "Скоро",
+    "hoursLeft": "след {{hours}}ч",
+    "tomorrow": "Утре",
+    "daysLeft": "след {{days}} дни",
+    "noEvents": "Нямаш предстоящи събития",
+    "browseLectures": "Разгледай лекции"
+  },
+  "studentMentorCard": {
+    "title": "Моят ментор",
+    "noMentor": "Все още нямаш ментор",
+    "findMentor": "Намери ментор",
+    "changeMentor": "Смени ментор",
+    "allMentors": "Всички ментори",
+    "defaultSpecialization": "Ментор",
+    "sendEmail": "Изпрати имейл",
+    "sendMessage": "Изпрати съобщение",
+    "online": "Онлайн",
+    "offline": "Офлайн"
+  },
+  "studentCertificates": {
+    "title": "Сертификати",
+    "viewAll": "Виж всички",
+    "noCertificates": "Все още нямаш сертификати",
+    "browseCourses": "Разгледай курсове",
+    "earned": "Получен:",
+    "download": "Изтегли",
+    "credits": "кредита",
+    "certificate": "Сертификат"
+  },
+  "studentCreditsOverview": {
+    "totalCredits": "Общо кредити",
+    "toNextLevel": "{{credits}} до следващо ниво",
+    "levels": {
+      "beginner": "Начинаещ",
+      "intermediate": "Напреднал",
+      "expert": "Експерт",
+      "master": "Майстор"
+    },
+    "categories": {
+      "courses": "Курсове",
+      "lectures": "Лекции",
+      "seminars": "Семинари",
+      "presentations": "Презентации"
+    }
+  },
+  "studentRecentActivity": {
+    "title": "Скорошна активност",
+    "viewAll": "Виж всички",
+    "credits": "кредита",
+    "noActivity": "Няма скорошна активност",
+    "startLearning": "Започни обучение",
+    "types": {
+      "undefined": "Активност:",
+      "lesson_completed": "Завърши урок:",
+      "lesson_started": "Започна урок:",
+      "course_enrolled": "Записа се за:",
+      "course_completed": "Завърши курс:",
+      "lecture_attended": "Присъства на лекция:",
+      "seminar_attended": "Присъства на семинар:",
+      "test_passed": "Издържа тест:",
+      "test_failed": "Неуспешен тест:",
+      "certificate_earned": "Получи сертификат:"
+    },
+    "time": {
+      "justNow": "Сега",
+      "minutesAgo": "преди {{minutes}} мин",
+      "hoursAgo": "преди {{hours}}ч",
+      "yesterday": "Вчера",
+      "daysAgo": "преди {{days}} дни"
+    }
+  }
+}

@@ -198,7 +198,7 @@ const normalizeSlateValue = (value) => {
 };
 
 const ArticleCreateForm = forwardRef(({ initialValues: propInitialValues, onSubmitHandler, isEditMode }, ref) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const { createArticle } = useArticleContext();
     const [isAltModalOpen, setIsAltModalOpen] = useState(false);
     const [activeSection, setActiveSection] = useState(null);

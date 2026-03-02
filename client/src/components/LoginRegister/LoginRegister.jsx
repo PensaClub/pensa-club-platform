@@ -7,7 +7,7 @@ import './modernAuth.css';
 import { useTranslation } from 'react-i18next';
 
 export const LoginRegister = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('auth');
   const location = useLocation();
   const [activeView, setActiveView] = useState(false);
 

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import './projectSearch.css';
 
 const ProjectSearch = ({ onSearch, placeholder }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const [searchTerm, setSearchTerm] = useState('');
     const [isFocused, setIsFocused] = useState(false);
 

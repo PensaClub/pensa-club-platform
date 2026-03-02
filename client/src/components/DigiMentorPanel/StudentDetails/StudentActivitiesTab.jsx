@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import './studentActivitiesTab.css';
 
 export const StudentActivitiesTab = ({ student }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-mentor');
   const [activeSection, setActiveSection] = useState('all');
 
   if (!student) return null;

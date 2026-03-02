@@ -32,7 +32,7 @@ const ContentSection = ({
     removeSectionVideo,
     videoUploadState,
 }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const sectionEditorsRef = useRef({});
     const sectionRefs = useRef({});
     const videoRefs = useRef({});

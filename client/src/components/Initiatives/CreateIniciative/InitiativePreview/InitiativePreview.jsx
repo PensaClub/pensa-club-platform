@@ -17,7 +17,7 @@ import { getDescriptionParts, renderSlateContent } from '../../../../utils/slate
 import { truncateText } from '../../../../utils/truncateText';
 
 export const InitiativePreview = ({onBackToEdit}) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const navigate = useNavigate();
     const location = useLocation();
     const values = location.state?.previewData || {};

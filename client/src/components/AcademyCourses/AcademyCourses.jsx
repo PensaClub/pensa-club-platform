@@ -22,7 +22,7 @@ const PROGRAM_COLORS = {
 };
 
 export const AcademyCourses = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('academy');
   const { getCourses, getCourseCategories } = useAcademyCourses();
   const [searchParams, setSearchParams] = useSearchParams();
 

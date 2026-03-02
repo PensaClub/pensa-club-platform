@@ -58,7 +58,7 @@ const getLectureStatus = (lecture) => {
 };
 
 export const AcademyLectures = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('academy');
   const navigate = useNavigate();
   const { isAuthentication } = useAuthContext();
   const {

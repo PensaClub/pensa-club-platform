@@ -9,7 +9,7 @@ import './academyTestPlayer.css';
 import AcademyTestPlayerSkeleton from './AcademyTestPlayerSkeleton/AcademyTestPlayerSkeleton';
 
 const AcademyTestPlayer = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('academy');
   const { courseSlug, lessonSlug, slug } = useParams();
   const navigate = useNavigate();
   const isLectureTest = !!slug && !courseSlug;

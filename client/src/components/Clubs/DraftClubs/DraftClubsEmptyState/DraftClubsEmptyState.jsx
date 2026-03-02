@@ -20,7 +20,7 @@ const DraftClubsEmptyState = ({
     onCreateNew, 
     onClearFilters 
 }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('clubs');
 
     // Determine which empty state to show
     const isFiltered = searchTerm || (filterBy && filterBy !== 'all');

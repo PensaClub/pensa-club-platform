@@ -42,7 +42,7 @@ import {
 import './sportEvents.css';
 
 export const SportEvents = ({ club }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('clubs');
   const [activeFilter, setActiveFilter] = useState('all');
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);

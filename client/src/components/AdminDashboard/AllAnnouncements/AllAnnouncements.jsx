@@ -9,7 +9,7 @@ import {
  
 export const AllAnnouncements = () => {
     const { fetchPendingAds, fetchApprovedAds, fetchRejectAds, pendingAds = [], approvedAds = [], rejectAds = [] } = useAdminContext();
-    const { t } = useTranslation();
+    const { t } = useTranslation('admin');
     const [hiddenBar, setHiddenBar] = useState([]);
     const [hiddenLine, setHiddenLine] = useState([]);
     const [hiddenPie, setHiddenPie] = useState([]);

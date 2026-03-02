@@ -28,7 +28,7 @@ import {
 import './socialAbout.css';
 
 export const SocialAbout = ({ club }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('clubs');
 
   if (!club?.name) {
     return null;

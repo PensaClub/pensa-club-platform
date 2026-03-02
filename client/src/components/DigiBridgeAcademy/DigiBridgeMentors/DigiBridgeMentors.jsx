@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import './digiBridgeMentors.css';
 
 export const DigiBridgeMentors = ({ stats, loading }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('digibridge');
 
     const mentorQualities = [
         {

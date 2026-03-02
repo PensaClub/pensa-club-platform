@@ -7,7 +7,7 @@ import './clubPreviewModal.css';
 import ClubPreview from '../ClubPreview/ClubPreview';
 
 const ClubPreviewModal = ({ isOpen, onClose, formData }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('clubs');
 
     useEffect(() => {
         if (isOpen) {

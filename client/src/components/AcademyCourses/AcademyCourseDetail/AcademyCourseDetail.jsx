@@ -457,7 +457,7 @@ const CourseMaterialItem = ({ material, index, t }) => {
 // ============================================
 
 export const AcademyCourseDetail = () => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('academy');
   const { slug } = useParams();
   const navigate = useNavigate();
 

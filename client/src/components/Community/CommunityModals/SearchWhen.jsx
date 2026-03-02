@@ -10,7 +10,7 @@ export const SearchWhen = ({ isOpen, onClose, setFilters, filters, setCreationDa
     const [searchPeriod, setSearchPeriod] = useState('');
     const [startDate, setStartDate] = useState(null);  
     const [endDate, setEndDate] = useState(null);
-    const { t } = useTranslation();
+    const { t } = useTranslation('community');
 
     const handleSearch = () => {
         if (searchPeriod === 'custom' && (!startDate || !endDate)) {

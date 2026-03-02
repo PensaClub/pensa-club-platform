@@ -44,7 +44,7 @@ import { useProjectRealTimeValidation } from './useProjectRealTimeValidation';
 
 const useCreateProject = (initialValues, onSubmitHandler) => {
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
   const {
     createProject,
     saveDraftProject,

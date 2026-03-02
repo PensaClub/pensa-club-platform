@@ -30,7 +30,7 @@ import SEOHead from '../../SEO/SEOHead.jsx';
 
 export const InitiativeView = () => {
     const { slug } = useParams();
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const { getInitiativeById } = useInitiativeContext();
     const { profileData, isAuthentication } = useAuthContext();
     const { sendPersonalEmail } = useClubContext();

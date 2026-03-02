@@ -16,7 +16,7 @@ import { MentorMeetings } from './MentorMeetings/MentorMeetings';
 import './digiMentorPanel.css';
 
 export const DigiMentorPanel = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('digibridge-mentor');
     const navigate = useNavigate();
     const { 
         getMentorDashboardStats, 

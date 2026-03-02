@@ -12,7 +12,7 @@ import './recentArticles.css';
 import { useArticleContext } from '../../../contexts/ArticleContext';
 
 export const RecentArticles = () => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('clubs');
   const navigate = useNavigate();
   const { getAllArticles, articles, articlesLoaded } = useArticleContext();
   const [recentArticles, setRecentArticles] = useState([]);

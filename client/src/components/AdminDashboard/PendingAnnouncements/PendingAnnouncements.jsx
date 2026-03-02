@@ -24,7 +24,7 @@ export const PendingAnnouncements = ({ setAdsCount }) => {
   const [adminEmail, setAdminEmail] = useState('')
   const [isTextModalOpen, setIsTextModalOpen] = useState(false);
   const [modalContent, setModalContent] = useState('');
-  const { t } = useTranslation();
+  const { t } = useTranslation(['admin', 'auth']);
   const { profileData } = useAuthContext();
   const { fetchPendingAds, updateAdStatus, deleteAd } = useAdminContext();
 

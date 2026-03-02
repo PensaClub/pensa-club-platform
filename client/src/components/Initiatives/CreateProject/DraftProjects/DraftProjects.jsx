@@ -15,7 +15,7 @@ import { useInitiativeContext } from '../../../contexts/InitiativeProvider';
 import { notify } from '../../../../utils/notify.jsx';
 
 const DraftProjects = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const navigate = useNavigate();
     
     const {

@@ -8,7 +8,7 @@ export const ProjectsSearchAdmin = ({
     totalCount,
     viewMode
 }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
     const [searchTerm, setSearchTerm] = useState('');
     const [filters, setFilters] = useState({
         status: 'all',

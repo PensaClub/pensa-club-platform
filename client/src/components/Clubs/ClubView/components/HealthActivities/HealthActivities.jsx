@@ -44,7 +44,7 @@ import {
 import './healthActivities.css';
 
 export const HealthActivities = ({ club }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('clubs');
   const [activeTab, setActiveTab] = useState('services');
   const [expandedService, setExpandedService] = useState(null);
   const [showScheduleModal, setShowScheduleModal] = useState(false);

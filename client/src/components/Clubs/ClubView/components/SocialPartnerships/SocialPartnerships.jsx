@@ -39,7 +39,7 @@ import {
 import './socialPartnerships.css';
 
 export const SocialPartnerships = ({ club }) => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('clubs');
   const [activeCategory, setActiveCategory] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
   const [expandedPartner, setExpandedPartner] = useState(null);

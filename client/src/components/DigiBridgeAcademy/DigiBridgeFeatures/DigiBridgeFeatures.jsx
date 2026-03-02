@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import './digiBridgeFeatures.css';
 
 export const DigiBridgeFeatures = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('digibridge');
 
     const features = [
         {

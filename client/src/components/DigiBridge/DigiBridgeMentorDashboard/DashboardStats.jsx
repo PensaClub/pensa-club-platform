@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import './dashboardStats.css';
 
 export const DashboardStats = ({ pendingCount, activeCount, completedCount }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge');
 
   const stats = [
     {

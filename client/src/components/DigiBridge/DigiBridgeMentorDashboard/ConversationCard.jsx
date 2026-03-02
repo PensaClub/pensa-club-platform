@@ -9,7 +9,7 @@ import './conversationCard.css';
 import { MentorChatWindow } from './MentorChatWindow';
 
 export const ConversationCard = ({ conversation, isCompleted = false }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('digibridge');
     const navigate = useNavigate();
     const [isEnding, setIsEnding] = useState(false);
     const [isChatOpen, setIsChatOpen] = useState(false);

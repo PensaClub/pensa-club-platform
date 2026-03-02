@@ -10,7 +10,7 @@ import {
 import './aboutFoundation.css';
 
 export const AboutFoundation = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('home');
 
   const foundationValues = [
     { icon: faHandshake, key: 'community' },

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import './publicationStoriesHero.css';
 
 export const PublicationStoriesHero = ({ contentType = 'stories' }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
 
   return (
     <div className="ps-hero-new">

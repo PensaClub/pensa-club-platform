@@ -5,7 +5,7 @@ import { faFilter, faChevronDown, faCheck } from '@fortawesome/free-solid-svg-ic
 import './membershipClubsFilterDropdown.css';
 
 const MembershipClubsFilterDropdown = ({ value, onChange, options }) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('clubs');
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
 

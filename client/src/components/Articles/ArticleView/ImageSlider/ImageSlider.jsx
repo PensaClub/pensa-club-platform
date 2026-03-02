@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import './imageSlider.css';
 
 const ImageSlider = ({ images, alt, onSlideChange, onImageClick, initialIndex = 0 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('content');
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
 
   // Известяваме родителския компонент при промяна на слайда

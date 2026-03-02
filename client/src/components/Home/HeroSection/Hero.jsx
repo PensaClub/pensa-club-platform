@@ -4,7 +4,7 @@ import { useTranslation, Trans } from 'react-i18next';
 import { Link } from 'react-router-dom';
 
 export const Hero = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('home');
   const bgRef = useRef(null);
   const [isYouTubeVideo, setIsYouTubeVideo] = useState(true);
   const videoUrl = 'https://www.youtube.com/embed/_Q-TeezmAkw';
@@ -35,12 +35,12 @@ export const Hero = () => {
         <div className='hero-text-container'>
           <div className='hero-subtitle'>{t('hero.short-desc')}</div>
           <h1 className='hero-title'>
-            <Trans i18nKey='hero.title-part1' />
+            <Trans ns="home" i18nKey="hero.title-part1" />
             <br />
             {t('hero.title-part2')}
           </h1>
           <div className='hero-description'>
-            <Trans i18nKey='hero.desc' components={{ span: <strong /> }} />
+            <Trans ns="home" i18nKey="hero.desc" components={{ span: <strong /> }} />
           </div>
           <Link to='/profile/data' className='hero-button'>
             <span>{t('hero.join-the-club')}</span>

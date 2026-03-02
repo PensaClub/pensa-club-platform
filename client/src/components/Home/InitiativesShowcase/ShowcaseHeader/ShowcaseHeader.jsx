@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import './showcaseHeader.css';
 
 export const ShowcaseHeader = ({ isVisible }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('home');
 
   return (
     <div className={`showcase-header ${isVisible ? 'visible' : ''}`}>

@@ -11,7 +11,7 @@ export const AdminDigiBridgeApplicationCard = ({
   onApprove, 
   onReject 
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge');
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [rejectionReason, setRejectionReason] = useState('');
 

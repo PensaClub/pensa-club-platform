@@ -8,7 +8,7 @@ import { Loader } from '../../Loader/Loader';
 import './digiMentorStudentsList.css';
 
 export const DigiMentorStudentsList = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('digibridge-mentor');
   const navigate = useNavigate();
   
   const { getMentorStudents } = useAcademy();

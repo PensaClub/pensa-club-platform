@@ -36,7 +36,7 @@ import {
 import './sportsAbout.css';
 
 export const SportsAbout = ({ club }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('clubs');
   const [activeSection, setActiveSection] = useState('mission');
   const [expandedFacility, setExpandedFacility] = useState(null);
 

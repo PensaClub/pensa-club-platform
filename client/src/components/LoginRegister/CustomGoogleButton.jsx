@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 export const CustomGoogleButton = ({ mode = 'login', onSwitchMode }) => {
-  const {t} = useTranslation();
+  const {t} = useTranslation('auth');
   const { handleGoogleLogin, handleGoogleRegister } = useGoogleAuth();
   const buttonRef = useRef(null);
   const navigate = useNavigate();

@@ -29,7 +29,7 @@ import {
 import './socialLocation.css';
 
 export const SocialLocation = ({ club }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('clubs');
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [activeInfoSection, setActiveInfoSection] = useState('address');
   const [copiedText, setCopiedText] = useState('');

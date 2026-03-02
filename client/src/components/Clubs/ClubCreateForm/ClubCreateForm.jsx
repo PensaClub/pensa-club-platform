@@ -42,7 +42,7 @@ import PensionersSpecificManager from './PensionersSpecificManager/PensionersSpe
 import ClubPreviewModal from './ClubPreviewModal/ClubPreviewModal';
 
 const ClubCreateForm = () => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('clubs');
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const editId = searchParams.get('editId');

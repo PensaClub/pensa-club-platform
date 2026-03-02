@@ -12,7 +12,7 @@ const phoneNumberRegex = /^(?:\+\d{7,15}|\d{10})$/;
 const nameRegex = /^[a-zA-Zа-яА-Я0-9_\s]+(-[a-zA-Zа-яА-Я0-9_]+)*$/i;
 
 export const UserSuggestion = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('auth');
   const navigate = useNavigate();
 
   const { onSuggestSubmit } = useContext(SuggestUserContext);
