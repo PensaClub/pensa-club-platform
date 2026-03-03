@@ -34,7 +34,10 @@ const UsefulLinksCard = ({ link }) => {
   };
 
   const title = getLocalizedField('title');
-  const description = getLocalizedField('description');
+  const rawDescription = getLocalizedField('description');
+  const description = rawDescription && rawDescription.length > 150
+    ? rawDescription.slice(0, 150).trimEnd() + '...'
+    : rawDescription;
   const categoryColor = CATEGORY_COLORS[link.category] || CATEGORY_COLORS.general;
   const categoryLabel = getCategoryLabel(link.category, t);
 
