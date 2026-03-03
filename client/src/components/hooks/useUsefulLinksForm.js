@@ -179,8 +179,17 @@ export const useUsefulLinksForm = () => {
 
     try {
       setIsSaving(true);
-      const slug = generateSlug(formData.title);
-      const submitData = { ...formData, slug };
+
+      const trimmedData = { ...formData };
+      const stringFields = ['title', 'titleEn', 'titleDe', 'description', 'descriptionEn', 'descriptionDe', 'url', 'imageUrl'];
+      stringFields.forEach((field) => {
+        if (typeof trimmedData[field] === 'string') {
+          trimmedData[field] = trimmedData[field].trim();
+        }
+      });
+
+      const slug = generateSlug(trimmedData.title);
+      const submitData = { ...trimmedData, slug };
 
       if (imageFile) {
         setIsUploading(true);
