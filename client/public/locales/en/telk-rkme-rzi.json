@@ -1,0 +1,40 @@
+{
+    "page": {
+        "title": "TELK, RKME and RZI in Bulgaria",
+        "subtitle": "Complete directory with contact information for medical commissions in all 28 regions of the country",
+        "searchPlaceholder": "Search by region...",
+        "noResults": "No results found for your search",
+        "downloadDocx": "Download DOCX",
+        "downloadPdf": "Download PDF",
+        "downloadSection": "Download the full directory",
+        "nelkTitle": "NELK — National Expert Medical Commission",
+        "regionsTitle": "Regional Commissions",
+        "totalRegions": "{{count}} regions",
+        "updatedDate": "Updated: March 2026",
+        "telkCount": "{{count}} TELK panels"
+    },
+    "labels": {
+        "rzi": "Regional Health Inspectorate (RZI)",
+        "rziShort": "RZI",
+        "rkme": "Regional Medical Expertise Registry (RKME)",
+        "rkmeShort": "RKME",
+        "telk": "Territorial Expert Medical Commission (TELK)",
+        "telkShort": "TELK",
+        "address": "Address",
+        "phone": "Phone",
+        "phones": "Phones",
+        "email": "Email",
+        "fax": "Fax",
+        "director": "Director",
+        "chairman": "Chairman",
+        "workingHours": "Working hours",
+        "website": "Website",
+        "hotlines": "Hotlines",
+        "consultations": "Consultations",
+        "receptionDay": "Reception day",
+        "note": "Note",
+        "source": "Source",
+        "additionalPhones": "Additional phones",
+        "contacts": "Contacts"
+    }
+}
