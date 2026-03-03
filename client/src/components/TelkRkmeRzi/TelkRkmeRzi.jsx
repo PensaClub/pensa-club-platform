@@ -26,6 +26,10 @@ const TelkRkmeRzi = () => {
     const [debouncedSearch, setDebouncedSearch] = useState('');
     const debounceTimer = useRef(null);
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
     const handleSearchChange = useCallback((e) => {
         const value = e.target.value;
         setSearchTerm(value);
