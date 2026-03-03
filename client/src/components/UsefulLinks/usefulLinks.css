@@ -84,10 +84,11 @@
   padding: 32px 40px 60px;
 }
 
-/* Masonry layout */
+/* Grid layout */
 .ul-masonry {
-  column-count: 3;
-  column-gap: 24px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
 }
 
 /* No results */
@@ -131,13 +132,13 @@
 /* Responsive */
 @media (max-width: 1200px) {
   .ul-masonry {
-    column-count: 2;
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (max-width: 768px) {
   .ul-masonry {
-    column-count: 1;
+    grid-template-columns: 1fr;
   }
 
   .ul-container {
