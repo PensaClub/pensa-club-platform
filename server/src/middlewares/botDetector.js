@@ -14,6 +14,7 @@ const { generateCourseMetaHTML, generateCoursesListMetaHTML } = require('../util
 const { generateLectureMetaHTML, generateLecturesListMetaHTML } = require('../utils/lectureMetaGenerator');
 const generateUsefulLinksMetaHTML = require('../utils/usefulLinksMetaGenerator');
 const generateTelkMetaHTML = require('../utils/telkMetaGenerator');
+const generateArticlesListMetaHTML = require('../utils/articlesListMetaGenerator');
 const geoip = require('geoip-lite');
 
 /**
@@ -163,6 +164,7 @@ async function botDetector(req, res, next) {
     });
 
     // URL Pattern Matching
+    const articlesListMatch = req.path.match(/^\/articles$/);
     const articleMatch = req.path.match(/^\/articles\/([a-zA-Z0-9-]+)$/);
     const projectMatch = req.path.match(/^\/projects\/([a-zA-Z0-9-]+)$/);
     const initiativeMatch = req.path.match(/^\/initiatives\/([a-zA-Z0-9-]+)$/);
@@ -180,6 +182,15 @@ async function botDetector(req, res, next) {
     const telkMatch = req.path.match(/^\/telk-rkme-rzi$/);
 
     try {
+        // ==================== ARTICLES LIST ====================
+        if (articlesListMatch) {
+            console.log('📋 Processing ARTICLES LIST page');
+            await logBotRequest(botName, 'page', null, 'articles-list', userAgent, clientIP);
+            const html = generateArticlesListMetaHTML();
+            console.log('📤 Sending articles list HTML to bot');
+            return res.send(html);
+        }
+
         // ==================== ARTICLE ====================
         if (articleMatch) {
             const slug = articleMatch[1];
