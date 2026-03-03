@@ -191,7 +191,8 @@ export const Profile = () => {
     applications: false,
     clubs: false,
     students: false,
-    academy: false
+    academy: false,
+    usefulLinks: false
   });
 
   const [applicationsStats, setApplicationsStats] = useState({
@@ -248,7 +249,9 @@ export const Profile = () => {
       "/profile/mentor-applications": t("profile.mentorApplications"),
       "/profile/students-overview": t("admin.students.overview"),
       "/profile/student-applications": t("admin.students.applications"),
-      "/profile/mentor-profile": t("profile.mentorProfile")
+      "/profile/mentor-profile": t("profile.mentorProfile"),
+      "/admin/useful-links/create": t("admin.usefulLinks.create"),
+      "/admin/useful-links": t("admin.usefulLinks.list")
 
     };
 
@@ -290,7 +293,8 @@ export const Profile = () => {
     "/profile/mentors-overview",
     "/profile/mentors-applications",
     "/profile/mentors-statistics",
-    "/profile/reviews-management"
+    "/profile/reviews-management",
+    "/admin/useful-links"
   ];
 
   const isAdminPanel = adminPaths.some(path => location.pathname.startsWith(path));
@@ -1000,6 +1004,37 @@ export const Profile = () => {
                             <NavLink to="/academy/admin/create-seminar" className={({ isActive }) => isActive ? 'active' : ''}>
                               <CircleIcon className="icon" />
                               {t("admin.academy.createSeminar")}
+                            </NavLink>
+                          </li>
+                        </ul>
+                      </li>
+                      {/* Useful Links */}
+                      <li>
+                        <NavLink
+                          onClick={(e) => {
+                            toggleSubMenu('usefulLinks');
+                          }}
+                          className="nav-link-button"
+                        >
+                          <span className="link-content">
+                            <ForumIcon className="icon" />
+                            {t("admin.usefulLinks.title")}
+                          </span>
+                          <span className={`arrow-icon ${subMenuStates.usefulLinks ? 'rotated' : ''}`}>
+                            {subMenuStates.usefulLinks ? <DownArrowIcon /> : <ArrowIcon />}
+                          </span>
+                        </NavLink>
+                        <ul className={`sub-menu ${subMenuStates.usefulLinks ? 'expanded' : ''}`}>
+                          <li>
+                            <NavLink to="/admin/useful-links" className={({ isActive }) => isActive ? 'active' : ''}>
+                              <CircleIcon className="icon" />
+                              {t("admin.usefulLinks.list")}
+                            </NavLink>
+                          </li>
+                          <li>
+                            <NavLink to="/admin/useful-links/create" className={({ isActive }) => isActive ? 'active' : ''}>
+                              <CircleIcon className="icon" />
+                              {t("admin.usefulLinks.create")}
                             </NavLink>
                           </li>
                         </ul>

@@ -80,6 +80,7 @@ export const Footer = ({ additionalClasses }) => {
               <Link to="/initiatives" className="pft-nav-link">{t('header.initiatives', { defaultValue: 'Инициативи' })}</Link>
               <Link to="/about" className="pft-nav-link">{t('header.about', { defaultValue: 'За нас' })}</Link>
               <Link to="/contact" className="pft-nav-link">{t('footer.contact', { defaultValue: 'Свържете се с нас' })}</Link>
+              <Link to="/useful-links" className="pft-nav-link">{t('footer.useful-links', { defaultValue: 'Полезни връзки' })}</Link>
               {/* {isAuthentication && (
                 <Link to="/ad/create" className="pft-nav-link">{t('footer.add-ad', { defaultValue: 'Добави обява' })}</Link>
               )} */}

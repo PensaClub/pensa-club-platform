@@ -1,0 +1,92 @@
+.ulh-hero {
+  position: relative;
+  padding: 100px 40px 40px;
+  text-align: center;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 50%, #0ea5e9 100%);
+  border-radius: 0 0 32px 32px;
+}
+
+.ulh-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.ulh-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  border-radius: 16px;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+.ulh-hero-title {
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 12px;
+  letter-spacing: -0.5px;
+}
+
+.ulh-hero-subtitle {
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+  line-height: 1.6;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.ulh-hero-decoration {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.ulh-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.3;
+}
+
+.ulh-blob-1 {
+  width: 300px;
+  height: 300px;
+  background: #10b981;
+  top: -80px;
+  right: -60px;
+}
+
+.ulh-blob-2 {
+  width: 250px;
+  height: 250px;
+  background: #0ea5e9;
+  bottom: -100px;
+  left: -50px;
+}
+
+@media (max-width: 768px) {
+  .ulh-hero {
+    padding: 90px 20px 30px;
+    border-radius: 0 0 20px 20px;
+  }
+
+  .ulh-hero-title {
+    font-size: 1.8rem;
+  }
+
+  .ulh-hero-subtitle {
+    font-size: 1rem;
+  }
+}

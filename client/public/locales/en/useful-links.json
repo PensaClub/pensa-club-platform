@@ -1,0 +1,87 @@
+{
+  "page": {
+    "title": "Useful Links",
+    "subtitle": "Curated websites and resources useful for people",
+    "searchPlaceholder": "Search by title or description...",
+    "noResults": "No results found for your search",
+    "viewCount": "{{count}} views",
+    "visitLink": "Visit Website",
+    "allCategories": "All"
+  },
+  "categories": {
+    "general": "General",
+    "health": "Health",
+    "finance": "Finance",
+    "government": "Government Services",
+    "education": "Education",
+    "entertainment": "Entertainment",
+    "technology": "Technology",
+    "social": "Social Services",
+    "transport": "Transport",
+    "communication": "Communication",
+    "other": "Other"
+  },
+  "admin": {
+    "title": "Manage Useful Links",
+    "createTitle": "New Useful Link",
+    "editTitle": "Edit Link",
+    "fields": {
+      "title": "Title (BG)",
+      "titleEn": "Title (EN)",
+      "titleDe": "Title (DE)",
+      "description": "Description (BG)",
+      "descriptionEn": "Description (EN)",
+      "descriptionDe": "Description (DE)",
+      "url": "URL",
+      "image": "Image",
+      "imageUrl": "Image URL",
+      "dropzoneText": "Drag an image here or click to select",
+      "maxSize": "max. 10MB",
+      "category": "Category",
+      "displayOrder": "Display Order",
+      "isActive": "Active",
+      "slug": "Slug",
+      "customCategoryPlaceholder": "Enter category name..."
+    },
+    "actions": {
+      "create": "Create",
+      "save": "Save",
+      "cancel": "Cancel",
+      "edit": "Edit",
+      "delete": "Delete",
+      "toggleActive": "Toggle Status",
+      "back": "Back",
+      "removeImage": "Remove image",
+      "changeImage": "Change image",
+      "uploading": "Uploading..."
+    },
+    "filters": {
+      "all": "All",
+      "active": "Active",
+      "inactive": "Inactive",
+      "newest": "Newest",
+      "oldest": "Oldest",
+      "name": "By Name",
+      "mostViewed": "Most Viewed",
+      "searchPlaceholder": "Search..."
+    },
+    "validation": {
+      "titleRequired": "Title is required",
+      "urlRequired": "URL is required",
+      "urlInvalid": "Invalid URL",
+      "categoryRequired": "Category is required",
+      "imageTypeInvalid": "Invalid format. Allowed: JPG, PNG, WebP",
+      "imageTooLarge": "File is too large (max. 10MB)"
+    },
+    "toast": {
+      "created": "Link created successfully",
+      "updated": "Link updated successfully",
+      "deleted": "Link deleted successfully",
+      "toggledActive": "Status changed successfully",
+      "error": "An error occurred",
+      "imageUploadError": "Failed to upload image"
+    },
+    "confirmDelete": "Are you sure you want to delete this link?",
+    "noLinks": "No useful links added yet"
+  }
+}

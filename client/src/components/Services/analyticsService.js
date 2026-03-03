@@ -145,6 +145,24 @@ export const trackShare = (contentId, contentTitle, contentType, shareMethod, us
   saveViewCounts();
 }
 
+// Проследяване на посещение на полезна връзка
+export const trackUsefulLinkView = async (linkId, linkTitle) => {
+  ReactGA.event({
+    category: 'UsefulLink',
+    action: 'View',
+    label: linkTitle,
+    value: 1,
+    link_id: linkId
+  });
+
+  updateLocalCache(`useful_link_${linkId}`);
+};
+
+// Получаване на view count за полезна връзка
+export const getUsefulLinkViewCount = (linkId) => {
+  return localViewCountCache[`useful_link_${linkId}`] || 0;
+};
+
 // Помощна функция за актуализация на локалния кеш
 const updateLocalCache = (key) => {
   if (localViewCountCache[key]) {
@@ -169,6 +187,9 @@ export const trackView = async (contentId, contentTitle, contentType = 'article'
       break;
     case 'publication':
       await trackPublicationView(contentId, contentTitle);
+      break;
+    case 'usefulLink':
+      await trackUsefulLinkView(contentId, contentTitle);
       break;
     default:
       console.warn(`Unknown content type: ${contentType}`);
