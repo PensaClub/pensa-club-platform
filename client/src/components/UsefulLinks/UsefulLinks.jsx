@@ -33,6 +33,10 @@ const UsefulLinks = () => {
   const loadMoreRef = useRef(null);
   const lang = i18n.language;
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   // Initial load + reload on filter change
   useEffect(() => {
     fetchPublicLinks(searchTerm, selectedCategory || '');
@@ -53,7 +57,7 @@ const UsefulLinks = () => {
 
     observer.observe(loadMoreRef.current);
     return () => observer.disconnect();
-  }, [hasMore, isLoadingMore, fetchMorePublicLinks]);
+  }, [hasMore, isLoadingMore, fetchMorePublicLinks, publicLinks.length]);
 
   const handleCategoryChange = useCallback((cat) => {
     setSelectedCategory(cat);

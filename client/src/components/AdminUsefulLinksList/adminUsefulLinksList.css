@@ -7,7 +7,7 @@
 .aull-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 32px 24px 60px;
+  padding: 130px 24px 60px;
 }
 
 /* Header */
@@ -450,7 +450,7 @@
 
 @media (max-width: 768px) {
   .aull-container {
-    padding: 20px 16px 40px;
+    padding: 100px 16px 40px;
   }
 
   .aull-header {
