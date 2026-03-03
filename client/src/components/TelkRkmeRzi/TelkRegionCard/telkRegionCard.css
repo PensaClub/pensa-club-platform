@@ -1,0 +1,356 @@
+/* ===== TelkRegionCard (prefix: trc-) ===== */
+
+.trc-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    margin-bottom: 16px;
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    border-left: 4px solid #01B8BF;
+}
+
+.trc-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(1, 184, 191, 0.12);
+}
+
+/* Header */
+.trc-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 24px;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.2s ease;
+}
+
+.trc-header:hover {
+    background-color: #f0f8ff;
+}
+
+.trc-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.trc-region-icon {
+    color: #01B8BF;
+    font-size: 1.1rem;
+}
+
+.trc-region-name {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1e3a5f;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.trc-telk-count {
+    font-size: 0.78rem;
+    color: #64748b;
+    background: #f0f7ff;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.trc-expand-icon {
+    color: #94a3b8;
+    font-size: 0.9rem;
+    transition: transform 0.3s ease;
+}
+
+.trc-card--expanded .trc-expand-icon {
+    color: #01B8BF;
+}
+
+/* Body */
+.trc-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.3s ease;
+    padding: 0 24px;
+}
+
+.trc-body--visible {
+    max-height: 5000px;
+    padding: 0 24px 24px;
+}
+
+/* Sections grid */
+.trc-sections {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+}
+
+/* Section */
+.trc-section {
+    background: #f8fafc;
+    border-radius: 10px;
+    padding: 16px;
+    border-top: 3px solid transparent;
+}
+
+.trc-section--rzi {
+    border-top-color: #01B8BF;
+}
+
+.trc-section--rkme {
+    border-top-color: #2563eb;
+}
+
+.trc-section--telk {
+    border-top-color: #1e3a5f;
+}
+
+.trc-section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+}
+
+.trc-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #ffffff;
+    white-space: nowrap;
+}
+
+.trc-badge--rzi {
+    background: #01B8BF;
+}
+
+.trc-badge--rkme {
+    background: #2563eb;
+}
+
+.trc-badge--telk {
+    background: #1e3a5f;
+}
+
+.trc-section-title {
+    font-size: 0.78rem;
+    color: #64748b;
+    font-weight: 500;
+    line-height: 1.3;
+}
+
+/* Fields */
+.trc-section-body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.trc-field {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.trc-field-icon {
+    color: #94a3b8;
+    font-size: 0.78rem;
+    margin-top: 3px;
+    min-width: 16px;
+    text-align: center;
+}
+
+.trc-field-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+}
+
+.trc-field-label {
+    font-size: 0.7rem;
+    color: #94a3b8;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.trc-field-value {
+    font-size: 0.85rem;
+    color: #334155;
+    line-height: 1.4;
+    word-break: break-word;
+}
+
+.trc-link {
+    color: #01B8BF;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.trc-link:hover {
+    color: #0e7490;
+    text-decoration: underline;
+}
+
+/* TELK items */
+.trc-telk-item {
+    padding: 12px 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.trc-telk-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.trc-telk-item:first-child {
+    padding-top: 0;
+}
+
+.trc-telk-name {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #1e3a5f;
+    margin: 0 0 8px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.4;
+}
+
+.trc-telk-icon {
+    color: #1e3a5f;
+    font-size: 0.75rem;
+    margin-top: 3px;
+    min-width: 14px;
+}
+
+.trc-telk-details {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-left: 22px;
+}
+
+/* Contacts list */
+.trc-contacts-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.trc-contacts-list li {
+    font-size: 0.82rem;
+    color: #334155;
+    line-height: 1.4;
+    padding-left: 12px;
+    position: relative;
+}
+
+.trc-contacts-list li::before {
+    content: '•';
+    position: absolute;
+    left: 0;
+    color: #01B8BF;
+    font-weight: bold;
+}
+
+/* Source */
+.trc-source {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px dashed #e2e8f0;
+    font-size: 0.75rem;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.trc-source-icon {
+    font-size: 0.7rem;
+}
+
+.trc-source a {
+    color: #01B8BF;
+    text-decoration: none;
+    word-break: break-all;
+}
+
+.trc-source a:hover {
+    text-decoration: underline;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 1024px) {
+    .trc-sections {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .trc-section--telk {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 768px) {
+    .trc-sections {
+        grid-template-columns: 1fr;
+    }
+
+    .trc-header {
+        padding: 14px 16px;
+    }
+
+    .trc-body--visible {
+        padding: 0 16px 16px;
+    }
+
+    .trc-region-name {
+        font-size: 1.05rem;
+    }
+
+    .trc-section {
+        padding: 12px;
+    }
+
+    .trc-section-title {
+        font-size: 0.72rem;
+    }
+
+    .trc-telk-details {
+        padding-left: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .trc-card {
+        margin-bottom: 12px;
+        border-radius: 8px;
+    }
+
+    .trc-header-left {
+        gap: 8px;
+    }
+
+    .trc-telk-name {
+        font-size: 0.78rem;
+    }
+
+    .trc-field-value {
+        font-size: 0.8rem;
+    }
+}

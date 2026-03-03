@@ -13,6 +13,7 @@ const generateStoryMetaHTML = require('../utils/storyMetaGenerator');
 const { generateCourseMetaHTML, generateCoursesListMetaHTML } = require('../utils/courseMetaGenerator');
 const { generateLectureMetaHTML, generateLecturesListMetaHTML } = require('../utils/lectureMetaGenerator');
 const generateUsefulLinksMetaHTML = require('../utils/usefulLinksMetaGenerator');
+const generateTelkMetaHTML = require('../utils/telkMetaGenerator');
 const geoip = require('geoip-lite');
 
 /**
@@ -176,6 +177,7 @@ async function botDetector(req, res, next) {
     const courseMatch = req.path.match(/^\/academy\/courses\/([a-zA-Z0-9-]+)$/);
     const lecturesListMatch = req.path.match(/^\/academy\/lectures$/);
     const lectureMatch = req.path.match(/^\/academy\/lectures\/([a-zA-Z0-9-]+)$/);
+    const telkMatch = req.path.match(/^\/telk-rkme-rzi$/);
 
     try {
         // ==================== ARTICLE ====================
@@ -408,6 +410,17 @@ if (storyMatch) {
 
             const html = generateUsefulLinksMetaHTML();
             console.log('📤 Sending useful links HTML to bot');
+            return res.send(html);
+        }
+
+        // ==================== TELK/RKME/RZI (СТАТИЧНА СТРАНИЦА) ====================
+        if (telkMatch) {
+            console.log('🏥 Processing TELK/RKME/RZI page');
+
+            await logBotRequest(botName, 'page', null, 'telk-rkme-rzi', userAgent, clientIP);
+
+            const html = generateTelkMetaHTML();
+            console.log('📤 Sending TELK HTML to bot');
             return res.send(html);
         }
 

@@ -112,6 +112,7 @@ const CourseContentManager = lazy(() => import('./components/AdminAcademyCourses
 const LectureCreateForm = lazy(() => import('./components/LectureCreateForm/LectureCreateForm.jsx'));
 const AdminAcademyLecturesList = lazy(() => import('./components/AdminAcademyLecturesList/AdminAcademyLecturesList.jsx'));
 const EditLecture = lazy(() => import('./components/AdminAcademyLecturesList/EditLecture/EditLecture.jsx'));
+const TelkRkmeRzi = lazy(() => import('./components/TelkRkmeRzi/TelkRkmeRzi.jsx'));
 
 // ✅ LAZY LOADING - USEFUL LINKS КОМПОНЕНТИ
 const UsefulLinks = lazy(() => import('./components/UsefulLinks/UsefulLinks.jsx'));
@@ -212,6 +213,7 @@ function AppRoutes() {
         <Route path="/sign-up" element={<LoginRegister />} />
       </Route>
 
+      <Route path="/telk-rkme-rzi" element={<Suspense fallback={<LazyLoadingFallback />}><TelkRkmeRzi /></Suspense>} />
       <Route path="/craigslist" element={<CommunityPage />} />
       <Route path="/useful-links" element={<Suspense fallback={<LazyLoadingFallback />}><UsefulLinks /></Suspense>} />
       <Route path="/clubs" element={<AllClubs />} />
