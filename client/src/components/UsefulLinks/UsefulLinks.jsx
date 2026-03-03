@@ -1,7 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import SEOHead from '../SEO/SEOHead';
 import { useUsefulLinksContext } from '../contexts/UsefulLinksContext';
+import { useAuthContext } from '../contexts/UserContext';
+import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 import UsefulLinksHero from './UsefulLinksHero/UsefulLinksHero';
 import UsefulLinksSearch from './UsefulLinksSearch/UsefulLinksSearch';
 import UsefulLinksCategory from './UsefulLinksCategory/UsefulLinksCategory';
@@ -11,6 +15,9 @@ import './usefulLinks.css';
 
 const UsefulLinks = () => {
   const { t, i18n } = useTranslation('useful-links');
+  const { isAdmin, isModerator } = useAuthContext();
+  const navigate = useLocalizedNavigate();
+  const isStaff = isAdmin || isModerator;
   const {
     publicLinks,
     allCategories,
@@ -93,6 +100,7 @@ const UsefulLinks = () => {
         </div>
 
         <UsefulLinksHero />
+
         <UsefulLinksSearch onSearch={setSearchTerm} />
         <UsefulLinksCategory
           selectedCategory={selectedCategory}
@@ -102,6 +110,14 @@ const UsefulLinks = () => {
         />
 
         <div className="ul-container">
+          {isStaff && (
+            <div className="ul-admin-bar">
+              <button className="ul-admin-add-btn" onClick={() => navigate('/admin/useful-links/create')}>
+                <FontAwesomeIcon icon={faPlus} />
+                {t('page.addLink', { defaultValue: 'Нова връзка' })}
+              </button>
+            </div>
+          )}
           {isLoading ? (
             <Loader />
           ) : publicLinks.length > 0 ? (

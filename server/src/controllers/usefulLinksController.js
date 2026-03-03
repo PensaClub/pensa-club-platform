@@ -3,7 +3,7 @@ const customError = require('../utils/customError');
 const { useful_link, user_account } = require('../sequelize/models');
 const isAuth = require('../middlewares/isAuth');
 const { checkPermission } = require('../middlewares/rbac');
-const { Op } = require('sequelize');
+const { Op, literal } = require('sequelize');
 const rateLimiter = require('../middlewares/rateLimiter');
 
 const linkAttributes = [
@@ -69,7 +69,11 @@ usefulLinksController.get('/all', isAuth.allowGuest, checkPermission('usefulLink
         const { count, rows } = await useful_link.findAndCountAll({
             where: whereClause,
             attributes: linkAttributes,
-            order: [['displayOrder', 'ASC'], ['createdAt', 'DESC']],
+            order: [
+                [literal('CASE WHEN "displayOrder" = 0 THEN 1 ELSE 0 END'), 'ASC'],
+                ['displayOrder', 'ASC'],
+                ['createdAt', 'DESC'],
+            ],
             limit: limitNum,
             offset,
         });
