@@ -22,6 +22,11 @@
     "reviews": {
       "management": "Bewertungen verwalten"
     },
+    "usefulLinks": {
+      "title": "Nützliche Links",
+      "list": "Alle Links",
+      "create": "Neuer Link"
+    },
     "pending_announcements": "Nicht genehmigte Anzeigen",
     "search": "Suchen",
     "name": "Name",

@@ -1,0 +1,87 @@
+{
+  "page": {
+    "title": "Nützliche Links",
+    "subtitle": "Ausgewählte Websites und Ressourcen für Menschen ",
+    "searchPlaceholder": "Nach Titel oder Beschreibung suchen...",
+    "noResults": "Keine Ergebnisse für Ihre Suche gefunden",
+    "viewCount": "{{count}} Aufrufe",
+    "visitLink": "Website besuchen",
+    "allCategories": "Alle"
+  },
+  "categories": {
+    "general": "Allgemein",
+    "health": "Gesundheit",
+    "finance": "Finanzen",
+    "government": "Behördendienste",
+    "education": "Bildung",
+    "entertainment": "Unterhaltung",
+    "technology": "Technologie",
+    "social": "Soziale Dienste",
+    "transport": "Verkehr",
+    "communication": "Kommunikation",
+    "other": "Sonstiges"
+  },
+  "admin": {
+    "title": "Nützliche Links verwalten",
+    "createTitle": "Neuer nützlicher Link",
+    "editTitle": "Link bearbeiten",
+    "fields": {
+      "title": "Titel (BG)",
+      "titleEn": "Titel (EN)",
+      "titleDe": "Titel (DE)",
+      "description": "Beschreibung (BG)",
+      "descriptionEn": "Beschreibung (EN)",
+      "descriptionDe": "Beschreibung (DE)",
+      "url": "URL",
+      "image": "Bild",
+      "imageUrl": "Bild-URL",
+      "dropzoneText": "Bild hierher ziehen oder klicken zum Auswählen",
+      "maxSize": "max. 10MB",
+      "category": "Kategorie",
+      "displayOrder": "Anzeigereihenfolge",
+      "isActive": "Aktiv",
+      "slug": "Slug",
+      "customCategoryPlaceholder": "Kategoriename eingeben..."
+    },
+    "actions": {
+      "create": "Erstellen",
+      "save": "Speichern",
+      "cancel": "Abbrechen",
+      "edit": "Bearbeiten",
+      "delete": "Löschen",
+      "toggleActive": "Status ändern",
+      "back": "Zurück",
+      "removeImage": "Bild entfernen",
+      "changeImage": "Bild ändern",
+      "uploading": "Hochladen..."
+    },
+    "filters": {
+      "all": "Alle",
+      "active": "Aktiv",
+      "inactive": "Inaktiv",
+      "newest": "Neueste",
+      "oldest": "Älteste",
+      "name": "Nach Name",
+      "mostViewed": "Meistgesehen",
+      "searchPlaceholder": "Suchen..."
+    },
+    "validation": {
+      "titleRequired": "Titel ist erforderlich",
+      "urlRequired": "URL ist erforderlich",
+      "urlInvalid": "Ungültige URL",
+      "categoryRequired": "Kategorie ist erforderlich",
+      "imageTypeInvalid": "Ungültiges Format. Erlaubt: JPG, PNG, WebP",
+      "imageTooLarge": "Datei ist zu groß (max. 10MB)"
+    },
+    "toast": {
+      "created": "Link erfolgreich erstellt",
+      "updated": "Link erfolgreich aktualisiert",
+      "deleted": "Link erfolgreich gelöscht",
+      "toggledActive": "Status erfolgreich geändert",
+      "error": "Ein Fehler ist aufgetreten",
+      "imageUploadError": "Fehler beim Hochladen des Bildes"
+    },
+    "confirmDelete": "Sind Sie sicher, dass Sie diesen Link löschen möchten?",
+    "noLinks": "Noch keine nützlichen Links hinzugefügt"
+  }
+}

@@ -22,6 +22,11 @@
     "reviews": {
       "management": "Управление на Ревюта"
     },
+    "usefulLinks": {
+      "title": "Полезни връзки",
+      "list": "Всички връзки",
+      "create": "Нова връзка"
+    },
     "pending_announcements": "Неодобрени обяви",
     "search": "Търси",
     "name": "Име",

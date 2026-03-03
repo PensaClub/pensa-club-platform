@@ -257,6 +257,13 @@ const permissions = {
         read: ROLES.PUBLIC_WITH_LIMITED,
         update: ['admin'],
     },
+    usefulLink: {
+        create: ROLES.STAFF,
+        read: ROLES.PUBLIC_WITH_LIMITED,
+        readAll: ROLES.STAFF,
+        update: ROLES.STAFF,
+        delete: ['admin'],
+    },
 };
 
 module.exports = permissions;
