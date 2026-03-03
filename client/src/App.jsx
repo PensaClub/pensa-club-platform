@@ -72,6 +72,7 @@ import { UserChatsPage } from './components/DigiBridge/UserChatsPage/UserChatsPa
 import { StudentDetails } from './components/DigiMentorPanel/StudentDetails/StudentDetails.jsx';
 import { DigiMentorReviews } from './components/DigiMentorPanel/DigiMentorReviews/DigiMentorReviews.jsx';
 import { AcademyCoursesProvider } from './components/contexts/AcademyCoursesProvider.jsx';
+import { UsefulLinksProvider } from './components/contexts/UsefulLinksContext.jsx';
 import GlobalSnowfall from './components/GlobalSnowfall/GlobalSnowfall.jsx';
 import DigiBridgeHeader from './components/DigiBridgeAcademy/DigiBridgeHeader/DigiBridgeHeader.jsx';
 import { AdminGuard } from './components/Guards/AdminGuard.jsx';
@@ -111,6 +112,11 @@ const CourseContentManager = lazy(() => import('./components/AdminAcademyCourses
 const LectureCreateForm = lazy(() => import('./components/LectureCreateForm/LectureCreateForm.jsx'));
 const AdminAcademyLecturesList = lazy(() => import('./components/AdminAcademyLecturesList/AdminAcademyLecturesList.jsx'));
 const EditLecture = lazy(() => import('./components/AdminAcademyLecturesList/EditLecture/EditLecture.jsx'));
+
+// ✅ LAZY LOADING - USEFUL LINKS КОМПОНЕНТИ
+const UsefulLinks = lazy(() => import('./components/UsefulLinks/UsefulLinks.jsx'));
+const AdminUsefulLinksList = lazy(() => import('./components/AdminUsefulLinksList/AdminUsefulLinksList.jsx'));
+const UsefulLinksCreateForm = lazy(() => import('./components/UsefulLinksCreateForm/UsefulLinksCreateForm.jsx'));
 
 // ✅ LOADING FALLBACK КОМПОНЕНТ
 const LazyLoadingFallback = ({ type = 'page' }) => {
@@ -173,6 +179,9 @@ function AppRoutes() {
         <Route path="/academy/lectures/:slug/test" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademyTestPlayer /></Suspense>} />
         <Route path="/academy/courses/:courseSlug/test" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademyTestPlayer /></Suspense>} />
         <Route path="/admin/site-settings" element={<AdminGuard><SiteSettingsAdmin /></AdminGuard>} />
+        <Route path="/admin/useful-links" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback />}><AdminUsefulLinksList /></Suspense></AdminGuard>} />
+        <Route path="/admin/useful-links/create" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback />}><UsefulLinksCreateForm /></Suspense></AdminGuard>} />
+        <Route path="/admin/useful-links/edit/:id" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback />}><UsefulLinksCreateForm /></Suspense></AdminGuard>} />
         <Route path="/academy/admin/courses" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><AdminAcademyCoursesList /></Suspense></AdminGuard>} />
         <Route path="/academy/admin/create-course" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><CourseAcademyCreateForm /></Suspense></AdminGuard>} />
         <Route path="/academy/admin/create-lecture" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><LectureCreateForm /></Suspense></AdminGuard>} />
@@ -204,6 +213,7 @@ function AppRoutes() {
       </Route>
 
       <Route path="/craigslist" element={<CommunityPage />} />
+      <Route path="/useful-links" element={<Suspense fallback={<LazyLoadingFallback />}><UsefulLinks /></Suspense>} />
       <Route path="/clubs" element={<AllClubs />} />
       <Route path="/clubs/:slug" element={<ClubView />} />
       <Route path="/privacy-policy" element={<PrivacyPolicy />} />
@@ -261,6 +271,7 @@ function App() {
                                 <AnalyticsProvider>
                                   <LoadingProvider>
                                     <ArticleLimitProvider>
+                                      <UsefulLinksProvider>
                                       <ClubProvider>
                                         {!isProfilePage && !isAcademyPage && <Header
                                           additionalClasses={isProfilePage ? 'hide-header' : ''}
@@ -294,6 +305,7 @@ function App() {
                                         )}
                                         {!isProfilePage && <MenuCommunity />}
                                       </ClubProvider>
+                                      </UsefulLinksProvider>
                                     </ArticleLimitProvider>
                                   </LoadingProvider>
                                 </AnalyticsProvider>

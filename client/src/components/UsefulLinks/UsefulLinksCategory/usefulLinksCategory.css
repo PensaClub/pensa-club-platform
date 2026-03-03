@@ -1,0 +1,92 @@
+.ulcat-wrapper {
+  padding: 28px 40px 0;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.ulcat-scroll {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.ulcat-scroll::-webkit-scrollbar {
+  height: 4px;
+}
+
+.ulcat-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ulcat-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.ulcat-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 18px;
+  border-radius: 24px;
+  border: 2px solid #e2e8f0;
+  background: #fff;
+  color: #475569;
+  font-size: 0.9rem;
+  font-weight: 500;
+  font-family: 'Montserrat', sans-serif;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.25s ease;
+}
+
+.ulcat-chip:hover {
+  border-color: #2563eb;
+  color: #2563eb;
+  background: #eff6ff;
+}
+
+.ulcat-chip-active {
+  background: #2563eb;
+  color: #fff;
+  border-color: #2563eb;
+}
+
+.ulcat-chip-active:hover {
+  background: #1d4ed8;
+  color: #fff;
+  border-color: #1d4ed8;
+}
+
+.ulcat-chip-health.ulcat-chip-active { background: #1B6D4D; border-color: #1B6D4D; }
+.ulcat-chip-finance.ulcat-chip-active { background: #d4a017; border-color: #d4a017; }
+.ulcat-chip-government.ulcat-chip-active { background: #2563eb; border-color: #2563eb; }
+.ulcat-chip-education.ulcat-chip-active { background: #059669; border-color: #059669; }
+.ulcat-chip-entertainment.ulcat-chip-active { background: #BB1D3D; border-color: #BB1D3D; }
+.ulcat-chip-technology.ulcat-chip-active { background: #0ea5e9; border-color: #0ea5e9; }
+.ulcat-chip-social.ulcat-chip-active { background: #7c3aed; border-color: #7c3aed; }
+.ulcat-chip-transport.ulcat-chip-active { background: #475569; border-color: #475569; }
+.ulcat-chip-communication.ulcat-chip-active { background: #0891b2; border-color: #0891b2; }
+
+.ulcat-chip-health:not(.ulcat-chip-active):hover { border-color: #1B6D4D; color: #1B6D4D; background: #f0fdf4; }
+.ulcat-chip-finance:not(.ulcat-chip-active):hover { border-color: #d4a017; color: #d4a017; background: #fefce8; }
+.ulcat-chip-government:not(.ulcat-chip-active):hover { border-color: #2563eb; color: #2563eb; background: #eff6ff; }
+.ulcat-chip-education:not(.ulcat-chip-active):hover { border-color: #059669; color: #059669; background: #ecfdf5; }
+.ulcat-chip-entertainment:not(.ulcat-chip-active):hover { border-color: #BB1D3D; color: #BB1D3D; background: #fef2f2; }
+.ulcat-chip-technology:not(.ulcat-chip-active):hover { border-color: #0ea5e9; color: #0ea5e9; background: #f0f9ff; }
+.ulcat-chip-social:not(.ulcat-chip-active):hover { border-color: #7c3aed; color: #7c3aed; background: #f5f3ff; }
+.ulcat-chip-transport:not(.ulcat-chip-active):hover { border-color: #475569; color: #475569; background: #f8fafc; }
+.ulcat-chip-communication:not(.ulcat-chip-active):hover { border-color: #0891b2; color: #0891b2; background: #ecfeff; }
+
+@media (max-width: 768px) {
+  .ulcat-wrapper {
+    padding: 20px 16px 0;
+  }
+
+  .ulcat-chip {
+    padding: 7px 14px;
+    font-size: 0.85rem;
+  }
+}

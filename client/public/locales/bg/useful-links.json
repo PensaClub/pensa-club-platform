@@ -1,0 +1,87 @@
+{
+  "page": {
+    "title": "Полезни връзки",
+    "subtitle": "Подбрани сайтове и ресурси, полезни за хората",
+    "searchPlaceholder": "Търсете по заглавие или описание...",
+    "noResults": "Няма намерени резултати за вашето търсене",
+    "viewCount": "{{count}} прегледа",
+    "visitLink": "Посети сайта",
+    "allCategories": "Всички"
+  },
+  "categories": {
+    "general": "Общи",
+    "health": "Здраве",
+    "finance": "Финанси",
+    "government": "Държавни услуги",
+    "education": "Образование",
+    "entertainment": "Забавление",
+    "technology": "Технологии",
+    "social": "Социални услуги",
+    "transport": "Транспорт",
+    "communication": "Комуникация",
+    "other": "Друго"
+  },
+  "admin": {
+    "title": "Управление на полезни връзки",
+    "createTitle": "Нова полезна връзка",
+    "editTitle": "Редактиране на връзка",
+    "fields": {
+      "title": "Заглавие (БГ)",
+      "titleEn": "Заглавие (EN)",
+      "titleDe": "Заглавие (DE)",
+      "description": "Описание (БГ)",
+      "descriptionEn": "Описание (EN)",
+      "descriptionDe": "Описание (DE)",
+      "url": "URL адрес",
+      "image": "Снимка",
+      "imageUrl": "URL на изображение",
+      "dropzoneText": "Плъзнете снимка тук или кликнете за избор",
+      "maxSize": "макс. 10MB",
+      "category": "Категория",
+      "displayOrder": "Ред на показване",
+      "isActive": "Активна",
+      "slug": "Slug",
+      "customCategoryPlaceholder": "Въведете име на категорията..."
+    },
+    "actions": {
+      "create": "Създай",
+      "save": "Запази",
+      "cancel": "Отказ",
+      "edit": "Редактирай",
+      "delete": "Изтрий",
+      "toggleActive": "Смени статус",
+      "back": "Назад",
+      "removeImage": "Премахни снимката",
+      "changeImage": "Смени снимката",
+      "uploading": "Качване..."
+    },
+    "filters": {
+      "all": "Всички",
+      "active": "Активни",
+      "inactive": "Неактивни",
+      "newest": "Най-нови",
+      "oldest": "Най-стари",
+      "name": "По име",
+      "mostViewed": "Най-гледани",
+      "searchPlaceholder": "Търсене..."
+    },
+    "validation": {
+      "titleRequired": "Заглавието е задължително",
+      "urlRequired": "URL адресът е задължителен",
+      "urlInvalid": "Невалиден URL адрес",
+      "categoryRequired": "Категорията е задължителна",
+      "imageTypeInvalid": "Невалиден формат. Позволени: JPG, PNG, WebP",
+      "imageTooLarge": "Файлът е твърде голям (макс. 10MB)"
+    },
+    "toast": {
+      "created": "Връзката е създадена успешно",
+      "updated": "Връзката е обновена успешно",
+      "deleted": "Връзката е изтрита успешно",
+      "toggledActive": "Статусът е променен успешно",
+      "error": "Възникна грешка",
+      "imageUploadError": "Грешка при качване на снимката"
+    },
+    "confirmDelete": "Сигурни ли сте, че искате да изтриете тази връзка?",
+    "noLinks": "Няма добавени полезни връзки"
+  }
+}

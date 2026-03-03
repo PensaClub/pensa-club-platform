@@ -22,6 +22,11 @@
     "reviews": {
       "management": "Manage Reviews"
     },
+    "usefulLinks": {
+      "title": "Useful Links",
+      "list": "All Links",
+      "create": "New Link"
+    },
     "pending_announcements": "Pending Announcements",
     "search": "Search",
     "name": "Name",

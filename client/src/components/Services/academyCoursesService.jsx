@@ -231,14 +231,6 @@ export const academyCoursesServiceFactory = () => {
     //                    LECTURE REGISTRATION
     // =========================================================
 
-    registerForLecture: async (lectureId) => {
-      return requester.post(`${apiUrl}/academy/lectures/${lectureId}/register`);
-    },
-
-    unregisterFromLecture: async (lectureId) => {
-      return requester.del(`${apiUrl}/academy/lectures/${lectureId}/register`);
-    },
-
     getLectureAttendees: async (lectureId) => {
       return requester.get(`${apiUrl}/academy/lectures/${lectureId}/attendees`);
     },
@@ -389,11 +381,6 @@ export const academyCoursesServiceFactory = () => {
     // =========================================================
     //                    ENROLLMENT - SLUG BASED (НОВИ)
     // =========================================================
-
-    // Маркира урок като започнат (по slug)
-    startLessonBySlug: async (lessonSlug) => {
-      return requester.post(`${apiUrl}/academy/enrollment/lessons/${lessonSlug}/start`);
-    },
 
     // Обновява прогрес по урок (по slug)
     updateLessonProgressBySlug: async (lessonSlug, progressData) => {
