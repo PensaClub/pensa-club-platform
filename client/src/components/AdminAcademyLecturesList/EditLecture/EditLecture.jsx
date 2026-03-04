@@ -202,6 +202,52 @@ const EditLecture = () => { // НОВО
                                 <span className="elec-hint">{t('editLecture.tagsHint', 'Разделени със запетая')}</span>
                                 {renderError('tags')}
                             </div>
+                            {/* Learning Points — НОВО */}
+                            <div className="elec-field">
+                                <label className="elec-label">
+                                    {t('editLecture.learningPoints', 'Какво ще научите')}
+                                </label>
+                                <div className="elec-learning-points">
+                                    {(lectureData.learningPoints || []).map((point, index) => (
+                                        <div key={index} className="elec-learning-point">
+                                            <span className="elec-learning-point-icon">✓</span>
+                                            <input
+                                                type="text"
+                                                className="elec-input elec-learning-point-input"
+                                                value={point}
+                                                placeholder={t('editLecture.learningPointPlaceholder', 'Напр. Основни понятия и концепции')}
+                                                onChange={(e) => {
+                                                    const updated = [...lectureData.learningPoints];
+                                                    updated[index] = e.target.value;
+                                                    updateField('learningPoints', updated);
+                                                }}
+                                            />
+                                            <button
+                                                type="button"
+                                                className="elec-learning-point-remove"
+                                                onClick={() => {
+                                                    const updated = lectureData.learningPoints.filter((_, i) => i !== index);
+                                                    updateField('learningPoints', updated);
+                                                }}
+                                            >
+                                                ✕
+                                            </button>
+                                        </div>
+                                    ))}
+                                    {(lectureData.learningPoints || []).length < 10 && (
+                                        <button
+                                            type="button"
+                                            className="elec-learning-point-add"
+                                            onClick={() => {
+                                                updateField('learningPoints', [...(lectureData.learningPoints || []), '']);
+                                            }}
+                                        >
+                                            + {t('editLecture.addLearningPoint', 'Добави точка')}
+                                        </button>
+                                    )}
+                                </div>
+                                <span className="elec-hint">{t('editLecture.learningPointsHint', 'До 10 точки')}</span>
+                            </div>
                         </div>
                     </div>
 

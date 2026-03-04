@@ -3043,6 +3043,7 @@
 
   .acd-bottom-grid {
     grid-template-columns: 1fr;
+    padding-bottom: 3rem;
   }
 }
 

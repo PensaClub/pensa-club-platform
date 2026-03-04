@@ -422,7 +422,8 @@
     "course": {
       "partOf": "Част от курс",
       "viewCourse": "Виж курса"
-    }
+    },
+    "backToLecture": "Обратно към лекцията"
   },
   "academyLectureTest": {
     "loading": "Зареждане на теста...",

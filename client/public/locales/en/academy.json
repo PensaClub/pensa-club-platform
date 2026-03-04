@@ -411,7 +411,8 @@
     "course": {
       "partOf": "Part of course",
       "viewCourse": "View course"
-    }
+    },
+    "backToLecture": "Back to lecture"
   },
   "academyLectureTest": {
     "loading": "Loading test...",

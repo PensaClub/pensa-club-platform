@@ -651,7 +651,7 @@
 }
 
 .dbh-mobile__section {
-    padding: 15px 20px;
+    padding: 10px 20px;
     border-bottom: 1px solid #f0f0f0;
 }
 
@@ -692,6 +692,11 @@
 
 .dbh-mobile__link-icon {
     font-size: 1.2rem;
+}
+
+.dbh-mobile__pensa-link {
+    color: var(--dbh-accent);
+    font-weight: 600;
 }
 
 /* ===== RESPONSIVE ===== */

@@ -318,6 +318,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true,
         defaultValue: [],
       },
+      learningPoints: { 
+      type: DataTypes.JSONB,
+      allowNull: true,
+      defaultValue: [],
+    },
     },
     {
       sequelize,

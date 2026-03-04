@@ -7,7 +7,7 @@ const { generateHreflangTags } = require('./hreflangHelper');
 function generateUsefulLinksMetaHTML() {
     const title = 'Полезни връзки за пенсионери | Pensa Club';
     const description = 'Подбрана колекция от полезни сайтове и онлайн ресурси за хора над 60 години — здраве, финанси, държавни услуги, образование, технологии и още.';
-    const imageUrl = 'https://pensa.club/images/pensa-club-card.png';
+    const imageUrl = 'https://pensa.club/images/pensa-club-card.png?v=2';
     const url = 'https://pensa.club/useful-links';
     const keywords = 'полезни връзки, сайтове за пенсионери, онлайн ресурси, здраве, финанси, държавни услуги, електронно управление, образование, технологии, Pensa Club';
 

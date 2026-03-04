@@ -491,6 +491,11 @@
     }
   },
   "lectureCreateForm": {
+    "learningPoints": "Was Sie lernen werden",
+    "learningPointPlaceholder": "Z.B. Grundlegende Konzepte",
+    "addLearningPoint": "Punkt hinzufügen",
+    "removeLearningPoint": "Entfernen",
+    "learningPointsHint": "Bis zu 10 Punkte, die beschreiben, was die Teilnehmer lernen",
     "loading": "Laden...",
     "titleCreate": "Vortrag erstellen",
     "titleEdit": "Vortrag bearbeiten",
@@ -681,6 +686,10 @@
     }
   },
   "editLecture": {
+     "learningPoints": "Was Sie lernen werden",
+  "learningPointPlaceholder": "Z.B. Grundlegende Konzepte",
+  "addLearningPoint": "Punkt hinzufügen",
+  "learningPointsHint": "Bis zu 10 Punkte",
     "loading": "Vorlesung wird geladen...",
     "back": "Zurück",
     "pageTitle": "Bearbeitung von",

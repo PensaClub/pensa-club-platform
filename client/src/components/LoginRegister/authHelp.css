@@ -1,0 +1,152 @@
+.ah-container {
+  margin-bottom: 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 122, 61, 0.25);
+  background: rgba(255, 122, 61, 0.06);
+  overflow: hidden;
+}
+
+.ah-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #E65A1F;
+  transition: background 0.2s;
+}
+
+.ah-toggle:hover {
+  background: rgba(255, 122, 61, 0.08);
+}
+
+.ah-toggle-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ah-toggle-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #FF7A3D;
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.ah-chevron {
+  display: flex;
+  align-items: center;
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+  color: #FF7A3D;
+}
+
+.ah-chevron--open {
+  transform: rotate(180deg);
+}
+
+.ah-content-wrapper {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+
+.ah-content-wrapper--open {
+  max-height: 800px;
+}
+
+.ah-content {
+  padding: 0 1rem 1.5rem;
+}
+
+.ah-intro {
+  font-size: 0.84rem;
+  color: #2A3B4C;
+  margin-bottom: 0.7rem;
+  line-height: 1.5;
+}
+
+.ah-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.ah-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  font-size: 0.84rem;
+  line-height: 1.5;
+  color: #2A3B4C;
+}
+
+.ah-step-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(255, 122, 61, 0.12);
+  color: #FF7A3D;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.ah-step-icon svg {
+  width: 13px;
+  height: 13px;
+}
+
+.ah-step-text {
+  flex: 1;
+  padding-top: 3px;
+}
+
+.ah-encouragement {
+  margin-top: 1rem;
+  margin-bottom: 0.25rem;
+  font-size: 0.84rem;
+  font-style: italic;
+  color: #E65A1F;
+  text-align: center;
+  line-height: 1.5;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+@media (max-width: 450px) {
+  .ah-container {
+    margin-bottom: 0.75rem;
+  }
+
+  .ah-toggle {
+    padding: 0.65rem 0.75rem;
+    font-size: 0.82rem;
+  }
+
+  .ah-content {
+    padding: 0 0.75rem 1rem;
+  }
+
+  .ah-step {
+    font-size: 0.8rem;
+  }
+}

@@ -385,6 +385,33 @@
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
+   BACK TO LECTURE LINK
+   ───────────────────────────────────────────────────────────────────────────── */
+.alw-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 0.875rem;
+  color: var(--alw-text-muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.alw-back-link:hover {
+  color: var(--alw-accent);
+}
+
+.alw-back-link-arrow {
+  font-size: 1.1rem;
+  transition: transform 0.2s;
+}
+
+.alw-back-link:hover .alw-back-link-arrow {
+  transform: translateX(-3px);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
    CHAT (LIVE MODE)
    ───────────────────────────────────────────────────────────────────────────── */
 .alw-chat {
@@ -560,6 +587,7 @@
   display: flex;
   gap: 2rem;
   padding: 2rem;
+  padding-bottom: 7rem;
   background: var(--alw-bg-secondary);
   border-top: 1px solid var(--alw-border);
 }
@@ -702,6 +730,7 @@
   
   .alw-description {
     padding: 1rem;
+    padding-bottom: 5rem;
   }
 }
 

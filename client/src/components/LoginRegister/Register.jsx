@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useGoogleAuth } from '../contexts/GoogleAuthContext';
 import './modernAuth.css';
 import { CustomGoogleButton } from './CustomGoogleButton';
+import { AuthHelp } from './AuthHelp';
 
 export const Register = ({ navToLogin }) => {
   const { t } = useTranslation('auth');
@@ -49,6 +50,7 @@ export const Register = ({ navToLogin }) => {
   return (
     <div className="form-slide register-slide">
       <div className="auth-form">
+        <AuthHelp mode="register" />
         <div className="form-header">
           <h2 className="form-title">{t('form.register')}</h2>
           <p className="form-subtitle">{t('form.welcome-new')}</p>

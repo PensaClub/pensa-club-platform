@@ -491,6 +491,11 @@
     }
   },
   "lectureCreateForm": {
+    "learningPoints": "Какво ще научите",
+    "learningPointPlaceholder": "Напр. Основни понятия и концепции",
+    "addLearningPoint": "Добави точка",
+    "removeLearningPoint": "Премахни",
+    "learningPointsHint": "До 10 точки, описващи какво ще научат участниците",
     "loading": "Зареждане...",
     "titleCreate": "Създаване на лекция",
     "titleEdit": "Редактиране на лекция",
@@ -681,6 +686,10 @@
     }
   },
   "editLecture": {
+    "learningPoints": "Какво ще научите",
+    "learningPointPlaceholder": "Напр. Основни понятия и концепции",
+    "addLearningPoint": "Добави точка",
+    "learningPointsHint": "До 10 точки",
     "loading": "Зареждане на лекцията...",
     "back": "Назад",
     "pageTitle": "Редактиране на",

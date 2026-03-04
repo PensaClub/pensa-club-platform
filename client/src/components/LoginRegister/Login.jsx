@@ -8,6 +8,7 @@ import { useGoogleAuth } from '../contexts/GoogleAuthContext';
 import ReCAPTCHA from "react-google-recaptcha";
 import './modernAuth.css';
 import { CustomGoogleButton } from './CustomGoogleButton';
+import { AuthHelp } from './AuthHelp';
 
 export const Login = ({ navToRegister }) => {
   const { t } = useTranslation('auth');
@@ -86,6 +87,7 @@ export const Login = ({ navToRegister }) => {
   return (
     <div className="form-slide login-slide">
       <div className="auth-form">
+        <AuthHelp mode="login" />
         <div className="form-header">
           <h2 className="form-title">{t('form.login')}</h2>
           <p className="form-subtitle">{t('form.welcome-back')}</p>
