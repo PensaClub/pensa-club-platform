@@ -18,6 +18,7 @@ const INITIAL_STATE = {
     category: '',
     lectureType: 'lecture',
     tags: '',
+    learningPoints: [],
     scheduledDate: '',
     scheduledEndDate: '',
     durationMinutes: 60,
@@ -153,13 +154,14 @@ const useEditLecture = () => {
             setLectureStatus(lec.status || null);
             setIsPublished(lec.isPublished || false);
 
-            const mapped = { // ПРОМЕНЕНО — извлечено в променлива
+            const mapped = { 
                 title: lec.title || '',
                 shortDescription: lec.shortDescription || '',
                 description: lec.description || '',
                 category: lec.category || '',
                 lectureType: lec.lectureType || 'lecture',
                 tags: lec.tags ? (Array.isArray(lec.tags) ? lec.tags.join(', ') : lec.tags) : '',
+                learningPoints: Array.isArray(lec.learningPoints) ? lec.learningPoints : [],
                 scheduledDate: formatDateTimeLocal(lec.scheduledDate),
                 scheduledEndDate: formatDateTimeLocal(lec.scheduledEndDate),
                 durationMinutes: lec.durationMinutes || 60,
@@ -273,6 +275,7 @@ const useEditLecture = () => {
             tags: lectureData.tags
                 ? String(lectureData.tags).split(',').map((t) => t.trim()).filter(Boolean)
                 : [],
+                learningPoints: (lectureData.learningPoints || []).filter(p => p.trim()),
             scheduledDate: lectureData.scheduledDate || null,
             scheduledEndDate: lectureData.scheduledEndDate || null,
             durationMinutes: lectureData.durationMinutes ? Number(lectureData.durationMinutes) : 60,

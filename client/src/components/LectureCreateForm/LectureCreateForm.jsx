@@ -251,6 +251,53 @@ const LectureCreateForm = () => {
                             <span className="lcf-hint">{t('lectureCreateForm.tagsHint', 'Разделени със запетая')}</span>
                             {renderError('tags')}
                         </div>
+                        {/* Learning Points — НОВО */}
+                        <div className="lcf-field">
+                            <label className="lcf-label">
+                                {t('lectureCreateForm.learningPoints', 'Какво ще научите')}
+                            </label>
+                            <div className="lcf-learning-points">
+                                {(lectureData.learningPoints || []).map((point, index) => (
+                                    <div key={index} className="lcf-learning-point">
+                                        <span className="lcf-learning-point-icon">✓</span>
+                                        <input
+                                            type="text"
+                                            className="lcf-input lcf-learning-point-input"
+                                            value={point}
+                                            placeholder={t('lectureCreateForm.learningPointPlaceholder', 'Напр. Основни понятия и концепции')}
+                                            onChange={(e) => {
+                                                const updated = [...lectureData.learningPoints];
+                                                updated[index] = e.target.value;
+                                                updateField('learningPoints', updated);
+                                            }}
+                                        />
+                                        <button
+                                            type="button"
+                                            className="lcf-learning-point-remove"
+                                            onClick={() => {
+                                                const updated = lectureData.learningPoints.filter((_, i) => i !== index);
+                                                updateField('learningPoints', updated);
+                                            }}
+                                            title={t('lectureCreateForm.removeLearningPoint', 'Премахни')}
+                                        >
+                                            ✕
+                                        </button>
+                                    </div>
+                                ))}
+                                {(lectureData.learningPoints || []).length < 10 && (
+                                    <button
+                                        type="button"
+                                        className="lcf-learning-point-add"
+                                        onClick={() => {
+                                            updateField('learningPoints', [...(lectureData.learningPoints || []), '']);
+                                        }}
+                                    >
+                                        + {t('lectureCreateForm.addLearningPoint', 'Добави точка')}
+                                    </button>
+                                )}
+                            </div>
+                            <span className="lcf-hint">{t('lectureCreateForm.learningPointsHint', 'До 10 точки, описващи какво ще научат участниците')}</span>
+                        </div>
                     </div>
 
                     {/* ============================================= */}

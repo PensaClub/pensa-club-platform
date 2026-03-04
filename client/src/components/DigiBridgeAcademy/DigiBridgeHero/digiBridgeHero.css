@@ -424,16 +424,16 @@
     }
     
     .dbh-hero-float-card--1 {
-        left: 10px;
-        top: 20px;
+        left: -82px;
+        top: -25px;
     }
     
     .dbh-hero-float-card--2 {
-        right: 10px;
+        right: -100px;
     }
     
     .dbh-hero-float-card--3 {
-        left: 20px;
+        left: -75px;
         bottom: 30px;
     }
 }
@@ -519,6 +519,7 @@
     }
     
     .dbh-hero-img {
+        width: 280px;
         height: 280px;
     }
     
@@ -528,9 +529,9 @@
     }
     
     .dbh-hero-float-card--1 {
-        left: 50%;
+        left: -16%;
         transform: translateX(-50%);
-        top: -20px;
+        top: -30px;
     }
 }
 

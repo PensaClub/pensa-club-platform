@@ -10,6 +10,7 @@ import { useAcademyCourses } from '../../contexts/AcademyCoursesProvider';
 import './academyLectureDetails.css';
 import AcademyLectureDetailsSkeleton from './AcademyLectureDetailsSkeleton/AcademyLectureDetailsSkeleton';
 import SEOHead from '../../SEO/SEOHead';
+import ScrollToTop from '../../ScrollToTop/ScrollToTop';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // HELPERS (същите като преди)
@@ -870,30 +871,23 @@ export const AcademyLectureDetails = () => {
                     </div>
                   </section>
 
-                  <section className="ald-section">
-                    <h2 className="ald-section-title">
-                      <span className="ald-section-icon">🎯</span>
-                      {t('academyLectureDetails.overview.whatYouLearn', 'Какво ще научите')}
-                    </h2>
-                    <div className="ald-learn-grid">
-                      <div className="ald-learn-item">
-                        <span className="ald-learn-icon">✓</span>
-                        <span>{t('academyLectureDetails.overview.learn1', 'Основни понятия и концепции')}</span>
+                 {/* ПРОМЕНЕНО — динамични learningPoints от базата */}
+                  {lecture.learningPoints && lecture.learningPoints.length > 0 && (
+                    <section className="ald-section">
+                      <h2 className="ald-section-title">
+                        <span className="ald-section-icon">🎯</span>
+                        {t('academyLectureDetails.overview.whatYouLearn', 'Какво ще научите')}
+                      </h2>
+                      <div className="ald-learn-grid">
+                        {lecture.learningPoints.map((point, index) => (
+                          <div key={index} className="ald-learn-item">
+                            <span className="ald-learn-icon">✓</span>
+                            <span>{point}</span>
+                          </div>
+                        ))}
                       </div>
-                      <div className="ald-learn-item">
-                        <span className="ald-learn-icon">✓</span>
-                        <span>{t('academyLectureDetails.overview.learn2', 'Практически примери и демонстрации')}</span>
-                      </div>
-                      <div className="ald-learn-item">
-                        <span className="ald-learn-icon">✓</span>
-                        <span>{t('academyLectureDetails.overview.learn3', 'Полезни съвети и трикове')}</span>
-                      </div>
-                      <div className="ald-learn-item">
-                        <span className="ald-learn-icon">✓</span>
-                        <span>{t('academyLectureDetails.overview.learn4', 'Отговори на често задавани въпроси')}</span>
-                      </div>
-                    </div>
-                  </section>
+                    </section>
+                  )}
 
                   {lecture.tags && lecture.tags.length > 0 && (
                     <section className="ald-section">
@@ -1258,7 +1252,8 @@ export const AcademyLectureDetails = () => {
       <button className="ald-back-btn" onClick={() => navigate('/academy/lectures')}>
         <span>←</span>
         <span>{t('academyLectureDetails.actions.backToLectures', 'Всички лекции')}</span>
-      </button>
+      </button>\
+      <ScrollToTop/>
     </div>
   );
 };

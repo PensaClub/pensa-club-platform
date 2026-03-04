@@ -27,16 +27,32 @@ const {
 
 const isAuth = require('../middlewares/isAuth.js');
 const rbac = require('../middlewares/rbac.js');
-
 // ===============================
 // HELPER: Generate slug from title
 // ===============================
+
+const bulgarianToLatin = {
+  'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ж': 'zh', 'з': 'z',
+  'и': 'i', 'й': 'y', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'о': 'o', 'п': 'p',
+  'р': 'r', 'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'h', 'ц': 'ts', 'ч': 'ch',
+  'ш': 'sh', 'щ': 'sht', 'ъ': 'a', 'ь': 'y', 'ю': 'yu', 'я': 'ya',
+};
+
+const transliterate = (text) => {
+  if (!text) return '';
+  return text.split('').map(char => bulgarianToLatin[char.toLowerCase()] || char).join('');
+};
+
 const generateSlug = (title) => {
-  return title
+  if (!title) return '';
+  return transliterate(title)
     .toLowerCase()
-    .replace(/[^a-z0-9а-яё\s-]/gi, '')
+    .trim()
     .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
+    .replace(/[^\w-]+/g, '')
+    .replace(/--+/g, '-')
+    .replace(/^-+/, '')
+    .replace(/-+$/, '')
     .substring(0, 100);
 };
 
@@ -553,6 +569,7 @@ lecturesController.post(
         hasTest,
         testPassingScore,
         tags,
+         learningPoints, 
       } = req.body;
 
       // Generate unique slug
@@ -591,6 +608,7 @@ lecturesController.post(
         hasTest,
         testPassingScore,
         tags,
+        learningPoints: learningPoints || [],
         status: 'scheduled',
         isPublished: false,
       });

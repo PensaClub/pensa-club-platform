@@ -994,3 +994,62 @@
 [data-theme="light"] .lcf-online-hint span {
     color: #64748b;
 }
+/* НОВО — Learning Points */
+.lcf-learning-points {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.lcf-learning-point {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.lcf-learning-point-icon {
+  color: #10b981;
+  font-weight: 700;
+  font-size: 1rem;
+  flex-shrink: 0;
+  width: 20px;
+  text-align: center;
+}
+
+.lcf-learning-point-input {
+  flex: 1;
+}
+
+.lcf-learning-point-remove {
+  background: none;
+  border: none;
+  color: #ef4444;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+
+.lcf-learning-point-remove:hover {
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.lcf-learning-point-add {
+  background: none;
+  border: 1px dashed var(--lcf-border, rgba(255, 255, 255, 0.15));
+  color: var(--lcf-text-muted, rgba(255, 255, 255, 0.5));
+  cursor: pointer;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.lcf-learning-point-add:hover {
+  border-color: #22d3ee;
+  color: #22d3ee;
+  background: rgba(34, 211, 238, 0.05);
+}

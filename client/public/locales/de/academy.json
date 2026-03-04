@@ -411,7 +411,8 @@
     "course": {
       "partOf": "Teil des Kurses",
       "viewCourse": "Kurs ansehen"
-    }
+    },
+    "backToLecture": "Zurück zur Vorlesung"
   },
   "academyLectureTest": {
     "loading": "Test wird geladen...",

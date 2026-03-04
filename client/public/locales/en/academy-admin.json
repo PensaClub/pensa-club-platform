@@ -491,6 +491,11 @@
     }
   },
   "lectureCreateForm": {
+    "learningPoints": "What you'll learn",
+    "learningPointPlaceholder": "E.g. Core concepts and principles",
+    "addLearningPoint": "Add point",
+    "removeLearningPoint": "Remove",
+    "learningPointsHint": "Up to 10 points describing what participants will learn",
     "loading": "Loading...",
     "titleCreate": "Create a lecture",
     "titleEdit": "Edit lecture",
@@ -681,6 +686,10 @@
     }
   },
   "editLecture": {
+    "learningPoints": "What you'll learn",
+    "learningPointPlaceholder": "E.g. Core concepts and principles",
+    "addLearningPoint": "Add point",
+    "learningPointsHint": "Up to 10 points",
     "loading": "Loading lecture...",
     "back": "Back",
     "pageTitle": "Editing",

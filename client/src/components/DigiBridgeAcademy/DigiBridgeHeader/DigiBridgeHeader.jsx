@@ -333,6 +333,13 @@ export const DigiBridgeHeader = () => {
                         </div>
                     )}
 
+                    <div className="dbh-mobile__section">
+                        <Link to="/" className="dbh-mobile__link dbh-mobile__pensa-link">
+                            <span className="dbh-mobile__link-icon">←</span>
+                            Pensa Club
+                        </Link>
+                    </div>
+
                 </nav>
             </div>
         </>

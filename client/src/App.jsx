@@ -298,7 +298,7 @@ function App() {
                                           <Route path="/*" element={<LanguageWrapper lang="bg"><AppRoutes /></LanguageWrapper>} />
                                         </Routes>
 
-                                        {!isProfilePage && !isAcademyPage && (
+                                        {!isProfilePage && (
                                           <FooterWithLoading
                                             additionalClasses={
                                               isCommunityPage ? 'hide-on-mobile position-fix' : ''
