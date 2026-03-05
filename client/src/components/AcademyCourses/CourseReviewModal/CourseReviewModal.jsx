@@ -15,6 +15,7 @@ export const CourseReviewModal = ({ isOpen, onClose, course, onSuccess }) => {
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
   const [text, setText] = useState('');
+  const [isAnonymous, setIsAnonymous] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const userName = profileData?.details?.username ||
@@ -36,11 +37,12 @@ export const CourseReviewModal = ({ isOpen, onClose, course, onSuccess }) => {
 
     try {
       const reviewData = {
-        name: userName,
+        name: isAnonymous ? t('courseReviewModal.anonymousName', 'Анонимен') : userName,
         email: userEmail,
         role: 'participant',
         rating: rating,
-        text: text.trim() || undefined
+        text: text.trim() || undefined,
+        isAnonymous
       };
 
       await createCourseReview(course.id, reviewData);
@@ -163,6 +165,25 @@ export const CourseReviewModal = ({ isOpen, onClose, course, onSuccess }) => {
               {text.length} / 1000
             </p>
           </div>
+
+          {/* Anonymous toggle */}
+          <label className="crm-anonymous">
+            <input
+              type="checkbox"
+              checked={isAnonymous}
+              onChange={(e) => setIsAnonymous(e.target.checked)}
+              className="crm-anonymous-checkbox"
+            />
+            <span className="crm-anonymous-label">
+              {t('courseReviewModal.anonymous', 'Анонимен отзив')}
+            </span>
+            <span className="crm-anonymous-hint">
+              {isAnonymous
+                ? t('courseReviewModal.anonymousHint', 'Името ви няма да бъде показано')
+                : t('courseReviewModal.publicHint', 'Ще бъде показано като: ') + userName
+              }
+            </span>
+          </label>
 
           {/* Buttons */}
           <div className="crm-buttons">

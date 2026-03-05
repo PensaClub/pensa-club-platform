@@ -330,7 +330,7 @@ export const AcademyLectureDetails = () => {
       if (isAuthentication) {
         try {
           const statusRes = await academyService.checkUserLectureReviewStatus(lecture.id);
-          setUserHasReviewed(statusRes?.hasReviewed || false);
+          setUserHasReviewed(statusRes?.hasReview || false);
         } catch (err) {
           console.error('Error checking user lecture review status:', err);
         }
@@ -1067,7 +1067,7 @@ export const AcademyLectureDetails = () => {
                                     </div>
                                     <div className="ald-review-card-info">
                                       <span className="ald-review-card-name">
-                                        {review.user?.name || review.reviewer?.name || review.reviewerName || t('academyLectureDetails.reviews.anonymous', 'Анонимен')}
+                                        {review.user?.name || review.name || review.reviewer?.name || review.reviewerName || t('academyLectureDetails.reviews.anonymous', 'Анонимен')}
                                       </span>
                                       <span className="ald-review-card-date">
                                         {review.createdAt && new Date(review.createdAt).toLocaleDateString('bg-BG', { day: 'numeric', month: 'long', year: 'numeric' })}

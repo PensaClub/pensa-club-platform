@@ -607,6 +607,10 @@
     "textLabel": "Коментар",
     "optional": "по избор",
     "textPlaceholder": "Споделете впечатленията си от курса...",
+    "anonymous": "Анонимен отзив",
+    "anonymousHint": "Името ви няма да бъде показано",
+    "publicHint": "Ще бъде показано като: ",
+    "anonymousName": "Анонимен",
     "skip": "Пропусни",
     "submit": "Изпрати",
     "submitting": "Изпращане..."
@@ -624,6 +628,10 @@
     "textLabel": "Коментар",
     "optional": "по избор",
     "textPlaceholder": "Споделете впечатленията си от лекцията...",
+    "anonymous": "Анонимен отзив",
+    "anonymousHint": "Името ви няма да бъде показано",
+    "publicHint": "Ще бъде показано като: ",
+    "anonymousName": "Анонимен",
     "skip": "Пропусни",
     "submit": "Изпрати",
     "submitting": "Изпращане..."

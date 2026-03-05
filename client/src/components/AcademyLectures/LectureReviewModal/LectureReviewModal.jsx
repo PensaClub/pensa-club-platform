@@ -15,6 +15,7 @@ export const LectureReviewModal = ({ isOpen, onClose, lecture, onSuccess }) => {
   const [rating, setRating] = useState(0);
   const [hoveredRating, setHoveredRating] = useState(0);
   const [text, setText] = useState('');
+  const [isAnonymous, setIsAnonymous] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const userName = profileData?.details?.username ||
@@ -36,11 +37,12 @@ export const LectureReviewModal = ({ isOpen, onClose, lecture, onSuccess }) => {
 
     try {
       const reviewData = {
-        name: userName,
+        name: isAnonymous ? t('lectureReviewModal.anonymousName', 'Анонимен') : userName,
         email: userEmail,
         role: 'participant',
         rating: rating,
-        text: text.trim() || undefined
+        text: text.trim() || undefined,
+        isAnonymous
       };
 
       await createLectureReview(lecture.id, reviewData);
@@ -163,6 +165,25 @@ export const LectureReviewModal = ({ isOpen, onClose, lecture, onSuccess }) => {
               {text.length} / 1000
             </p>
           </div>
+
+          {/* Anonymous toggle */}
+          <label className="lrm-anonymous">
+            <input
+              type="checkbox"
+              checked={isAnonymous}
+              onChange={(e) => setIsAnonymous(e.target.checked)}
+              className="lrm-anonymous-checkbox"
+            />
+            <span className="lrm-anonymous-label">
+              {t('lectureReviewModal.anonymous', 'Анонимен отзив')}
+            </span>
+            <span className="lrm-anonymous-hint">
+              {isAnonymous
+                ? t('lectureReviewModal.anonymousHint', 'Името ви няма да бъде показано')
+                : t('lectureReviewModal.publicHint', 'Ще бъде показано като: ') + userName
+              }
+            </span>
+          </label>
 
           {/* Buttons */}
           <div className="lrm-buttons">

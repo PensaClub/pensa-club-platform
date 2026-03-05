@@ -225,6 +225,7 @@ reviewsController.get('/mentor/:mentorId/approved', async (req, res, next) => {
         user: {
           id: reviewJson.user?.id,
           email: reviewJson.user?.email,
+          name: [reviewJson.user?.details?.firstName, reviewJson.user?.details?.lastName].filter(Boolean).join(' ') || reviewJson.user?.details?.username || reviewJson.name || null,
           username: reviewJson.user?.details?.username
         }
       };
@@ -473,6 +474,7 @@ reviewsController.get('/course/:courseId/approved', async (req, res, next) => {
         user: {
           id: reviewJson.user?.id,
           email: reviewJson.user?.email,
+          name: [reviewJson.user?.details?.firstName, reviewJson.user?.details?.lastName].filter(Boolean).join(' ') || reviewJson.user?.details?.username || reviewJson.name || null,
           username: reviewJson.user?.details?.username
         }
       };
@@ -724,6 +726,7 @@ reviewsController.get('/lecture/:lectureId/approved', async (req, res, next) => 
         user: {
           id: reviewJson.user?.id,
           email: reviewJson.user?.email,
+          name: [reviewJson.user?.details?.firstName, reviewJson.user?.details?.lastName].filter(Boolean).join(' ') || reviewJson.user?.details?.username || reviewJson.name || null,
           username: reviewJson.user?.details?.username
         }
       };

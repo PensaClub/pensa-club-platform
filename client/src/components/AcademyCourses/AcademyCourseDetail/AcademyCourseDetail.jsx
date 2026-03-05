@@ -727,7 +727,7 @@ export const AcademyCourseDetail = () => {
       if (isAuthentication) {
         try {
           const statusRes = await academyService.checkUserCourseReviewStatus(currentCourse.id);
-          setUserHasReviewed(statusRes?.hasReviewed || false);
+          setUserHasReviewed(statusRes?.hasReview || false);
         } catch (err) {
           console.error('Error checking user course review status:', err);
         }
@@ -1592,7 +1592,7 @@ export const AcademyCourseDetail = () => {
                             </div>
                             <div className="acd-review-card-info">
                               <span className="acd-review-card-name">
-                                {review.user?.name || review.reviewer?.name || review.reviewerName || t('academyCourseDetail.reviews.anonymous', 'Анонимен')}
+                                {review.user?.name || review.name || review.reviewer?.name || review.reviewerName || t('academyCourseDetail.reviews.anonymous', 'Анонимен')}
                               </span>
                               <span className="acd-review-card-date">
                                 {review.createdAt && new Date(review.createdAt).toLocaleDateString('bg-BG', { day: 'numeric', month: 'long', year: 'numeric' })}
