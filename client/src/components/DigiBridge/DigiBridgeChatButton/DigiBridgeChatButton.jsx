@@ -211,7 +211,7 @@ export const DigiBridgeChatButton = ({ onClick }) => {
           </svg>
 
           <span className="digibridge-chat-button-text">
-            {isMentor ? '💬 Чат' : t('chatWidget.help')}
+            {isMentor ? 'Чат' : t('chatWidget.help')}
           </span>
         </button>
 

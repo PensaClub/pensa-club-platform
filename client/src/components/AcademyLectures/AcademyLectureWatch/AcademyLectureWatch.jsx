@@ -275,7 +275,7 @@ export const AcademyLectureWatch = () => {
                   <span className="alw-lecturer-name">{lecture.lecturer.name}</span>
                 </div>
               )}
-              
+
               <div className="alw-meta-items">
                 {lecture.durationMinutes && (
                   <span className="alw-meta-item">
@@ -315,6 +315,11 @@ export const AcademyLectureWatch = () => {
               )}
             </div>
           </div>
+
+          <Link to={`/academy/lectures/${slug}`} className="alw-back-link">
+            <span className="alw-back-link-arrow">←</span>
+            {t('academyLectureWatch.backToLecture')}
+          </Link>
         </div>
 
         {/* Chat Section - Only for LIVE */}

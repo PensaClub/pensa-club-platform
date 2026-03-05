@@ -146,6 +146,7 @@ const lectureCreateSchema = z.object({
   creditsForTest: z.coerce.number().int().min(0).default(0),
   hasTest: z.boolean().default(false),
   testPassingScore: z.coerce.number().int().min(0).max(100).optional(),
+  learningPoints: z.array(z.string().max(200)).max(10).default([]),
   tags: z.array(z.string()).default([]),
 });
 

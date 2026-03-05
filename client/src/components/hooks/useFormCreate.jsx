@@ -3,7 +3,7 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { firebaseStorage } from "../../firebase";
 import imageCompression from "browser-image-compression";
 import { v4 } from "uuid";
-import { validateFieldCreateAd } from "../../utils/ad";
+import { validateFieldCreateAd } from "../../utils/adValidation";
 import { useTranslation } from "react-i18next";
 import { notify } from "../../utils/notify.jsx";
 // import defaultImage from 'public/images/community/no-image.png';

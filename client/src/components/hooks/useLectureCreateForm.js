@@ -21,7 +21,7 @@ const INITIAL_LECTURE_DATA = {
     category: '',
     lectureType: 'lecture',
     tags: '',
-
+    learningPoints: [],
     // Section 2 — Date & Location
     scheduledDate: '',
     scheduledEndDate: '',
@@ -86,7 +86,7 @@ const useLectureCreateForm = () => {
         updateLecture,
         publishLecture,
         getAdminCourses,
-         getCourseModules, 
+        getCourseModules,
         addLectureMentor,
     } = useAcademyCourses();
 
@@ -95,20 +95,20 @@ const useLectureCreateForm = () => {
     // =========================================================
 
     const isEditMode = Boolean(slug);
- const savedDraftId = !isEditMode ? sessionStorage.getItem(STORAGE_KEY) : null; 
+    const savedDraftId = !isEditMode ? sessionStorage.getItem(STORAGE_KEY) : null;
 
 
     const [lectureData, setLectureData] = useState(INITIAL_LECTURE_DATA);
     const [lectureId, setLectureId] = useState(null);
     const [lectureSlug, setLectureSlug] = useState(slug || null);
     const [assignedMentors, setAssignedMentors] = useState([]);
-const [isLoading, setIsLoading] = useState(isEditMode || Boolean(savedDraftId)); 
+    const [isLoading, setIsLoading] = useState(isEditMode || Boolean(savedDraftId));
     const [isSaving, setIsSaving] = useState(false);
     const [errors, setErrors] = useState({});
     const [hasChanges, setHasChanges] = useState(false);
     const [availableCourses, setAvailableCourses] = useState([]);
     const [courseSearch, setCourseSearch] = useState('');
-const [availableModules, setAvailableModules] = useState([]);
+    const [availableModules, setAvailableModules] = useState([]);
     // =========================================================
     //                    MAP SERVER DATA → FORM
     // =========================================================
@@ -120,6 +120,7 @@ const [availableModules, setAvailableModules] = useState([]);
         category: lec.category || '',
         lectureType: lec.lectureType || 'lecture',
         tags: lec.tags ? (Array.isArray(lec.tags) ? lec.tags.join(', ') : lec.tags) : '',
+         learningPoints: Array.isArray(lec.learningPoints) ? lec.learningPoints : [],
         scheduledDate: formatDateTimeLocal(lec.scheduledDate),
         scheduledEndDate: formatDateTimeLocal(lec.scheduledEndDate),
         durationMinutes: lec.durationMinutes || 60,
@@ -150,11 +151,11 @@ const [availableModules, setAvailableModules] = useState([]);
     //                    LOAD DATA
     // =========================================================
 
-     useEffect(() => {
+    useEffect(() => {
         if (isEditMode && slug) {
             loadLectureBySlug(slug);
-        } else if (savedDraftId) { 
-            loadLectureByDraftId(savedDraftId); 
+        } else if (savedDraftId) {
+            loadLectureByDraftId(savedDraftId);
         }
     }, [slug]);
 
@@ -171,8 +172,8 @@ const [availableModules, setAvailableModules] = useState([]);
         };
         fetchCourses();
     }, [courseSearch]);
-   
-    
+
+
     useEffect(() => {
         const fetchModules = async () => {
             if (!lectureData.courseId) {
@@ -190,7 +191,7 @@ const [availableModules, setAvailableModules] = useState([]);
         fetchModules();
     }, [lectureData.courseId]);
 
-   const loadLectureBySlug = async (lectureSlugToLoad) => {
+    const loadLectureBySlug = async (lectureSlugToLoad) => {
         try {
             setIsLoading(true);
             const data = await getLectureBySlug(lectureSlugToLoad);
@@ -225,8 +226,8 @@ const [availableModules, setAvailableModules] = useState([]);
         }
     };
 
-    
-  const loadLectureByDraftId = async (draftId) => {
+
+    const loadLectureByDraftId = async (draftId) => {
         try {
             setIsLoading(true);
             const data = await getLectureById(draftId);
@@ -292,6 +293,7 @@ const [availableModules, setAvailableModules] = useState([]);
             tags: lectureData.tags
                 ? String(lectureData.tags).split(',').map((t) => t.trim()).filter(Boolean)
                 : [],
+                  learningPoints: (lectureData.learningPoints || []).filter(p => p.trim()),
             scheduledDate: lectureData.scheduledDate || null,
             scheduledEndDate: lectureData.scheduledEndDate || null,
             durationMinutes: lectureData.durationMinutes ? Number(lectureData.durationMinutes) : 60,
@@ -400,7 +402,7 @@ const [availableModules, setAvailableModules] = useState([]);
             toast.error(t('lectureCreateForm.mentorSyncFailed', 'Грешка при запис на лекторите'));
         }
     }, [assignedMentors, addLectureMentor, t]);
-    
+
     // =========================================================
     //                    SAVE DRAFT
     // =========================================================
@@ -507,8 +509,8 @@ const [availableModules, setAvailableModules] = useState([]);
         lectureData,
         lectureId,
         lectureSlug,
-        assignedMentors, 
-        setAssignedMentors, 
+        assignedMentors,
+        setAssignedMentors,
         isLoading,
         isSaving,
         errors,
@@ -521,7 +523,7 @@ const [availableModules, setAvailableModules] = useState([]);
         availableCourses,
         courseSearch,
         setCourseSearch,
-        availableModules, 
+        availableModules,
     };
 };
 

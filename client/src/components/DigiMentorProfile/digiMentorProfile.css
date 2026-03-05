@@ -996,3 +996,145 @@
     font-size: 0.75rem;
   }
 }
+
+/* ===================================
+   REVIEWS SECTION
+   =================================== */
+
+.digi-mentor-profile-reviews {
+  margin-top: 2rem;
+}
+
+.digi-mentor-profile-reviews-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 1.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.digi-mentor-profile-reviews-count {
+  font-size: 1rem;
+  font-weight: 400;
+  color: #6b7280;
+}
+
+.digi-mentor-profile-reviews-empty {
+  text-align: center;
+  padding: 2rem;
+  background: #f9fafb;
+  border-radius: 12px;
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+.digi-mentor-profile-reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.25rem;
+}
+
+.digi-mentor-profile-review-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1.25rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.digi-mentor-profile-review-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.digi-mentor-profile-review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.digi-mentor-profile-review-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.digi-mentor-profile-review-rating {
+  display: flex;
+  gap: 2px;
+}
+
+.digi-mentor-profile-review-star {
+  font-size: 1.1rem;
+  color: #d1d5db;
+  line-height: 1;
+}
+
+.digi-mentor-profile-review-star.filled {
+  color: #fbbf24;
+}
+
+.digi-mentor-profile-review-text {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #4b5563;
+  margin: 0;
+}
+
+.digi-mentor-profile-review-date {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  margin-top: auto;
+}
+
+.digi-mentor-profile-reviews-see-all {
+  display: block;
+  margin: 1.5rem auto 0;
+  padding: 0.75rem 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.digi-mentor-profile-reviews-see-all:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+/* Responsive: Reviews */
+@media (max-width: 767px) {
+  .digi-mentor-profile-reviews-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .digi-mentor-profile-reviews-title {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 479px) {
+  .digi-mentor-profile-review-card {
+    padding: 1rem;
+  }
+
+  .digi-mentor-profile-review-name {
+    font-size: 0.9rem;
+  }
+
+  .digi-mentor-profile-review-text {
+    font-size: 0.85rem;
+  }
+}

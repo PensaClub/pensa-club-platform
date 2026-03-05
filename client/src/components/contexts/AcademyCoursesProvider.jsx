@@ -1690,6 +1690,98 @@ export const AcademyCoursesProvider = ({ children }) => {
     }
   }, []);
   // =========================================================
+  //                    COURSE REVIEWS
+  // =========================================================
+
+  const createCourseReview = useCallback(async (courseId, reviewData) => {
+    try {
+      const response = await academyService.createCourseReview(courseId, reviewData);
+      toast.success('Ревюто е изпратено успешно');
+      return response;
+    } catch (error) {
+      console.error('Error creating course review:', error);
+      toast.error('Грешка при изпращане на ревю');
+      throw error;
+    }
+  }, []);
+
+  const getApprovedCourseReviews = useCallback(async (courseId, limit = 10) => {
+    try {
+      const data = await academyService.getApprovedCourseReviews(courseId, limit);
+      return data;
+    } catch (error) {
+      console.error('Error fetching approved course reviews:', error);
+      return { reviews: [], pagination: {} };
+    }
+  }, []);
+
+  const getCourseReviewStats = useCallback(async (courseId) => {
+    try {
+      const data = await academyService.getCourseReviewStats(courseId);
+      return data;
+    } catch (error) {
+      console.error('Error fetching course review stats:', error);
+      return { averageRating: 0, totalReviews: 0 };
+    }
+  }, []);
+
+  const checkUserCourseReviewStatus = useCallback(async (courseId) => {
+    try {
+      const data = await academyService.checkUserCourseReviewStatus(courseId);
+      return data;
+    } catch (error) {
+      console.error('Error checking course review status:', error);
+      return { hasReviewed: false };
+    }
+  }, []);
+
+  // =========================================================
+  //                    LECTURE REVIEWS
+  // =========================================================
+
+  const createLectureReview = useCallback(async (lectureId, reviewData) => {
+    try {
+      const response = await academyService.createLectureReview(lectureId, reviewData);
+      toast.success('Ревюто е изпратено успешно');
+      return response;
+    } catch (error) {
+      console.error('Error creating lecture review:', error);
+      toast.error('Грешка при изпращане на ревю');
+      throw error;
+    }
+  }, []);
+
+  const getApprovedLectureReviews = useCallback(async (lectureId, limit = 10) => {
+    try {
+      const data = await academyService.getApprovedLectureReviews(lectureId, limit);
+      return data;
+    } catch (error) {
+      console.error('Error fetching approved lecture reviews:', error);
+      return { reviews: [], pagination: {} };
+    }
+  }, []);
+
+  const getLectureReviewStats = useCallback(async (lectureId) => {
+    try {
+      const data = await academyService.getLectureReviewStats(lectureId);
+      return data;
+    } catch (error) {
+      console.error('Error fetching lecture review stats:', error);
+      return { averageRating: 0, totalReviews: 0 };
+    }
+  }, []);
+
+  const checkUserLectureReviewStatus = useCallback(async (lectureId) => {
+    try {
+      const data = await academyService.checkUserLectureReviewStatus(lectureId);
+      return data;
+    } catch (error) {
+      console.error('Error checking lecture review status:', error);
+      return { hasReviewed: false };
+    }
+  }, []);
+
+  // =========================================================
   //                    CONTEXT VALUE
   // =========================================================
 
@@ -1855,6 +1947,18 @@ export const AcademyCoursesProvider = ({ children }) => {
     updateQuestion,
     deleteQuestion,
     reorderQuestions,
+
+    // Course Reviews
+    createCourseReview,
+    getApprovedCourseReviews,
+    getCourseReviewStats,
+    checkUserCourseReviewStatus,
+
+    // Lecture Reviews
+    createLectureReview,
+    getApprovedLectureReviews,
+    getLectureReviewStats,
+    checkUserLectureReviewStatus,
   }), [isLoading, courses, currentCourse, lectures, seminars, myDashboard,
        currentLesson, lessonsProgress, enrollmentStats, currentTestData]);
 

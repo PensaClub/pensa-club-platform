@@ -10,6 +10,7 @@ import { AcademyCoursesList } from './AcademyCoursesList/AcademyCoursesList';
 import './academyCourses.css';
 import AcademyCoursesSkeleton from './AcademyCoursesSkeleton/AcademyCoursesSkeleton';
 import SEOHead from '../SEO/SEOHead';
+import ScrollToTop from '../ScrollToTop/ScrollToTop';
 
 const PROGRAM_COLORS = {
   'Мобилни устройства': { primary: '#3b82f6', gradient: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)', icon: '📱' },
@@ -251,6 +252,8 @@ export const AcademyCourses = () => {
           />
         </section>
       </div>
+      <ScrollToTop/>
+
     </div>
   );
 };

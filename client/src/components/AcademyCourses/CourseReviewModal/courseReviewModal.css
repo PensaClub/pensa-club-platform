@@ -1,0 +1,871 @@
+/* src/components/AcademyCourses/CourseReviewModal/courseReviewModal.css */
+
+/* ===============================
+   BASE STYLES
+   =============================== */
+
+.crm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 1rem;
+  animation: crm-fadeIn 0.3s ease;
+}
+
+.crm-content {
+  background: white;
+  border-radius: 16px;
+  max-width: 540px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: crm-slideUp 0.3s ease;
+  position: relative;
+}
+
+/* ===============================
+   HEADER
+   =============================== */
+
+.crm-header {
+  text-align: center;
+  padding: 2rem 2rem 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  position: relative;
+}
+
+.crm-icon {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+
+.crm-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+
+.crm-subtitle {
+  font-size: 0.95rem;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+.crm-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s;
+  color: #6b7280;
+}
+
+.crm-close:hover {
+  background: #f3f4f6;
+  color: #1f2937;
+}
+
+.crm-close svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ===============================
+   COURSE INFO
+   =============================== */
+
+.crm-course-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+}
+
+.crm-course-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 3px solid white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.crm-course-image-placeholder {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  border: 3px solid white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.crm-course-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.crm-course-name {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 0.25rem;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.crm-course-category {
+  font-size: 0.875rem;
+  color: #6b7280;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ===============================
+   FORM
+   =============================== */
+
+.crm-form {
+  padding: 2rem;
+}
+
+.crm-field {
+  margin-bottom: 1.5rem;
+}
+
+.crm-label {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
+}
+
+.crm-optional {
+  font-weight: 400;
+  color: #9ca3af;
+}
+
+/* ===============================
+   STARS
+   =============================== */
+
+.crm-stars {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.crm-star {
+  background: none;
+  border: none;
+  font-size: 2.5rem;
+  cursor: pointer;
+  color: #d1d5db;
+  transition: all 0.2s;
+  padding: 0;
+  line-height: 1;
+}
+
+.crm-star.filled {
+  color: #f59e0b;
+  transform: scale(1.1);
+}
+
+.crm-star:hover {
+  transform: scale(1.15);
+}
+
+.crm-rating-text {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-style: italic;
+  margin-top: 0.5rem;
+  line-height: 1.4;
+}
+
+/* ===============================
+   TEXTAREA
+   =============================== */
+
+.crm-textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  resize: vertical;
+  transition: all 0.2s;
+  line-height: 1.5;
+}
+
+.crm-textarea:focus {
+  outline: none;
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.crm-char-count {
+  text-align: right;
+  font-size: 0.8rem;
+  color: #9ca3af;
+  margin-top: 0.5rem;
+}
+
+/* ===============================
+   ANONYMOUS TOGGLE
+   =============================== */
+
+.crm-anonymous {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 0.5rem;
+  transition: all 0.2s;
+}
+
+.crm-anonymous:hover {
+  background: #f3f4f6;
+}
+
+.crm-anonymous-checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: #8b5cf6;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.crm-anonymous-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.crm-anonymous-hint {
+  width: 100%;
+  font-size: 0.8rem;
+  color: #9ca3af;
+  padding-left: 2.1rem;
+  line-height: 1.3;
+}
+
+/* ===============================
+   BUTTONS
+   =============================== */
+
+.crm-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.crm-btn {
+  flex: 1;
+  padding: 0.875rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.crm-btn-skip {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.crm-btn-skip:hover {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.crm-btn-submit {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  color: white;
+}
+
+.crm-btn-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);
+}
+
+.crm-btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.crm-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: crm-spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+
+/* ===============================
+   ANIMATIONS
+   =============================== */
+
+@keyframes crm-fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes crm-slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes crm-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===============================
+   RESPONSIVE - ГОЛЕМИ ЕКРАНИ (1920px+)
+   =============================== */
+
+@media (min-width: 1920px) {
+  .crm-content {
+    max-width: 600px;
+  }
+
+  .crm-title {
+    font-size: 1.75rem;
+  }
+
+  .crm-subtitle {
+    font-size: 1rem;
+  }
+
+  .crm-course-image,
+  .crm-course-image-placeholder {
+    width: 70px;
+    height: 70px;
+  }
+
+  .crm-course-name {
+    font-size: 1.25rem;
+  }
+
+  .crm-star {
+    font-size: 3rem;
+  }
+}
+
+/* ===============================
+   RESPONSIVE - СРЕДНИ ЛАПТОПИ (1280px - 1919px)
+   =============================== */
+
+@media (min-width: 1280px) and (max-width: 1919px) {
+  .crm-content {
+    max-width: 540px;
+  }
+}
+
+/* ===============================
+   RESPONSIVE - МАЛКИ ЛАПТОПИ (1024px - 1279px)
+   =============================== */
+
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .crm-content {
+    max-width: 500px;
+  }
+
+  .crm-header {
+    padding: 1.75rem 1.75rem 1rem;
+  }
+
+  .crm-form {
+    padding: 1.75rem;
+  }
+
+  .crm-title {
+    font-size: 1.4rem;
+  }
+}
+
+/* ===============================
+   RESPONSIVE - ТАБЛЕТИ (768px - 1023px)
+   =============================== */
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .crm-content {
+    max-width: 480px;
+  }
+
+  .crm-header {
+    padding: 1.5rem 1.5rem 1rem;
+  }
+
+  .crm-icon {
+    font-size: 2.5rem;
+  }
+
+  .crm-title {
+    font-size: 1.3rem;
+  }
+
+  .crm-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .crm-course-info {
+    padding: 1.25rem 1.5rem;
+  }
+
+  .crm-course-image,
+  .crm-course-image-placeholder {
+    width: 56px;
+    height: 56px;
+  }
+
+  .crm-course-name {
+    font-size: 1.05rem;
+  }
+
+  .crm-course-category {
+    font-size: 0.85rem;
+  }
+
+  .crm-form {
+    padding: 1.5rem;
+  }
+
+  .crm-star {
+    font-size: 2.2rem;
+  }
+
+  .crm-btn {
+    padding: 0.8rem 1.25rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* ===============================
+   RESPONSIVE - ГОЛЕМИ ТЕЛЕФОНИ (480px - 767px)
+   =============================== */
+
+@media (min-width: 480px) and (max-width: 767px) {
+  .crm-overlay {
+    padding: 0.75rem;
+  }
+
+  .crm-content {
+    max-width: 100%;
+    max-height: calc(100vh - 1.5rem);
+    border-radius: 12px;
+  }
+
+  .crm-header {
+    padding: 1.25rem 1.25rem 1rem;
+  }
+
+  .crm-icon {
+    font-size: 2.25rem;
+  }
+
+  .crm-title {
+    font-size: 1.2rem;
+  }
+
+  .crm-subtitle {
+    font-size: 0.875rem;
+  }
+
+  .crm-close {
+    width: 28px;
+    height: 28px;
+    top: 0.75rem;
+    right: 0.75rem;
+  }
+
+  .crm-close svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .crm-course-info {
+    padding: 1rem 1.25rem;
+    gap: 0.875rem;
+  }
+
+  .crm-course-image,
+  .crm-course-image-placeholder {
+    width: 50px;
+    height: 50px;
+    font-size: 1.25rem;
+  }
+
+  .crm-course-name {
+    font-size: 1rem;
+  }
+
+  .crm-course-category {
+    font-size: 0.8rem;
+  }
+
+  .crm-form {
+    padding: 1.25rem;
+  }
+
+  .crm-field {
+    margin-bottom: 1.25rem;
+  }
+
+  .crm-label {
+    font-size: 0.9rem;
+    margin-bottom: 0.625rem;
+  }
+
+  .crm-stars {
+    gap: 0.375rem;
+  }
+
+  .crm-star {
+    font-size: 2rem;
+  }
+
+  .crm-rating-text {
+    font-size: 0.825rem;
+  }
+
+  .crm-textarea {
+    padding: 0.625rem;
+    font-size: 0.9rem;
+  }
+
+  .crm-buttons {
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  .crm-btn {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* ===============================
+   RESPONSIVE - МАЛКИ ТЕЛЕФОНИ (до 479px)
+   =============================== */
+
+@media (max-width: 479px) {
+  .crm-overlay {
+    padding: 0.5rem;
+  }
+
+  .crm-content {
+    max-width: 100%;
+    max-height: calc(100vh - 1rem);
+    border-radius: 10px;
+  }
+
+  .crm-header {
+    padding: 1rem 1rem 0.75rem;
+  }
+
+  .crm-icon {
+    font-size: 2rem;
+  }
+
+  .crm-title {
+    font-size: 1.1rem;
+  }
+
+  .crm-subtitle {
+    font-size: 0.825rem;
+  }
+
+  .crm-close {
+    width: 26px;
+    height: 26px;
+    top: 0.625rem;
+    right: 0.625rem;
+  }
+
+  .crm-close svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .crm-course-info {
+    padding: 0.875rem 1rem;
+    gap: 0.75rem;
+  }
+
+  .crm-course-image,
+  .crm-course-image-placeholder {
+    width: 44px;
+    height: 44px;
+    font-size: 1.125rem;
+    border: 2px solid white;
+  }
+
+  .crm-course-name {
+    font-size: 0.95rem;
+  }
+
+  .crm-course-category {
+    font-size: 0.75rem;
+  }
+
+  .crm-form {
+    padding: 1rem;
+  }
+
+  .crm-field {
+    margin-bottom: 1rem;
+  }
+
+  .crm-label {
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .crm-stars {
+    gap: 0.25rem;
+    justify-content: center;
+  }
+
+  .crm-star {
+    font-size: 1.75rem;
+  }
+
+  .crm-rating-text {
+    font-size: 0.8rem;
+    text-align: center;
+  }
+
+  .crm-textarea {
+    padding: 0.625rem;
+    font-size: 0.875rem;
+    min-height: 80px;
+  }
+
+  .crm-char-count {
+    font-size: 0.75rem;
+  }
+
+  .crm-buttons {
+    flex-direction: column;
+    gap: 0.625rem;
+    margin-top: 1.25rem;
+  }
+
+  .crm-btn {
+    padding: 0.7rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .crm-spinner {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+/* ===============================
+   МНОГО МАЛКИ ТЕЛЕФОНИ (до 360px)
+   =============================== */
+
+@media (max-width: 360px) {
+  .crm-overlay {
+    padding: 0.25rem;
+  }
+
+  .crm-content {
+    border-radius: 8px;
+  }
+
+  .crm-header {
+    padding: 0.875rem 0.875rem 0.625rem;
+  }
+
+  .crm-title {
+    font-size: 1rem;
+  }
+
+  .crm-subtitle {
+    font-size: 0.8rem;
+  }
+
+  .crm-course-info {
+    padding: 0.75rem 0.875rem;
+  }
+
+  .crm-form {
+    padding: 0.875rem;
+  }
+
+  .crm-star {
+    font-size: 1.5rem;
+  }
+}
+
+/* ========================================
+   DARK THEME OVERRIDES — Course Review Modal
+   ======================================== */
+[data-theme="dark"] .crm-content {
+    background: #1e293b;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+[data-theme="dark"] .crm-header {
+    border-bottom-color: #334155;
+}
+[data-theme="dark"] .crm-title {
+    color: #f1f5f9;
+}
+[data-theme="dark"] .crm-subtitle {
+    color: #94a3b8;
+}
+[data-theme="dark"] .crm-close {
+    color: #94a3b8;
+}
+[data-theme="dark"] .crm-close:hover {
+    background: #334155;
+    color: #f1f5f9;
+}
+[data-theme="dark"] .crm-course-info {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+}
+[data-theme="dark"] .crm-course-image {
+    border-color: #334155;
+}
+[data-theme="dark"] .crm-course-image-placeholder {
+    border-color: #334155;
+}
+[data-theme="dark"] .crm-course-name {
+    color: #f1f5f9;
+}
+[data-theme="dark"] .crm-course-category {
+    color: #94a3b8;
+}
+[data-theme="dark"] .crm-label {
+    color: #e2e8f0;
+}
+[data-theme="dark"] .crm-optional {
+    color: #64748b;
+}
+[data-theme="dark"] .crm-star {
+    color: #475569;
+}
+[data-theme="dark"] .crm-star.filled {
+    color: #f59e0b;
+}
+[data-theme="dark"] .crm-rating-text {
+    color: #94a3b8;
+}
+[data-theme="dark"] .crm-textarea {
+    background: #0f172a;
+    border-color: #334155;
+    color: #f1f5f9;
+}
+[data-theme="dark"] .crm-textarea:focus {
+    border-color: #8b5cf6;
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+    background: #1e293b;
+}
+[data-theme="dark"] .crm-textarea::placeholder {
+    color: #64748b;
+}
+[data-theme="dark"] .crm-char-count {
+    color: #64748b;
+}
+[data-theme="dark"] .crm-btn-skip {
+    background: #334155;
+    color: #94a3b8;
+}
+[data-theme="dark"] .crm-btn-skip:hover {
+    background: #475569;
+    color: #e2e8f0;
+}
+[data-theme="dark"] .crm-btn-submit:hover:not(:disabled) {
+    box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4);
+}
+[data-theme="dark"] .crm-anonymous {
+    background: #0f172a;
+    border-color: #334155;
+}
+[data-theme="dark"] .crm-anonymous:hover {
+    background: #1e293b;
+}
+[data-theme="dark"] .crm-anonymous-label {
+    color: #e2e8f0;
+}
+[data-theme="dark"] .crm-anonymous-hint {
+    color: #64748b;
+}
+
+/* ========================================
+   LIGHT THEME OVERRIDES — Course Review Modal
+   ======================================== */
+[data-theme="light"] .crm-course-image-placeholder {
+    background: linear-gradient(135deg, #E26020 0%, #f97316 100%);
+}
+[data-theme="light"] .crm-textarea:focus {
+    border-color: #E26020;
+    box-shadow: 0 0 0 3px rgba(226, 96, 32, 0.12);
+}
+[data-theme="light"] .crm-btn-submit {
+    background: linear-gradient(135deg, #E26020 0%, #f97316 100%);
+}
+[data-theme="light"] .crm-btn-submit:hover:not(:disabled) {
+    box-shadow: 0 8px 20px rgba(226, 96, 32, 0.3);
+}

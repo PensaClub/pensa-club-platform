@@ -7,9 +7,12 @@ import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { useTranslation } from 'react-i18next';
 import { useAuthContext } from '../../contexts/UserContext';
 import { useAcademyCourses } from '../../contexts/AcademyCoursesProvider';
+import { LectureReviewModal } from '../../AcademyLectures/LectureReviewModal/LectureReviewModal';
+import academyServiceFactory from '../../Services/academyServiceFactory';
 import './academyLectureDetails.css';
 import AcademyLectureDetailsSkeleton from './AcademyLectureDetailsSkeleton/AcademyLectureDetailsSkeleton';
 import SEOHead from '../../SEO/SEOHead';
+import ScrollToTop from '../../ScrollToTop/ScrollToTop';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // HELPERS (същите като преди)
@@ -149,12 +152,21 @@ export const AcademyLectureDetails = () => {
   const [testStatus, setTestStatus] = useState(null);
   const [dataLoaded, setDataLoaded] = useState(false);
 
+  // Review state
+  const [reviewStats, setReviewStats] = useState(null);
+  const [reviews, setReviews] = useState([]);
+  const [userHasReviewed, setUserHasReviewed] = useState(false);
+  const [showReviewModal, setShowReviewModal] = useState(false);
+
   // ═══════════════════════════════════════════════════════════════════════════
   // REFS за предотвратяване на дублирани заявки
   // ═══════════════════════════════════════════════════════════════════════════
   const loadingRef = useRef(false);
   const lastSlugRef = useRef(null);
   const abortControllerRef = useRef(null);
+  const reviewsLoadedRef = useRef(null);
+
+  const academyService = useMemo(() => academyServiceFactory(), []);
 
   // Countdown за upcoming лекции
   const countdown = useCountdown(lecture?.scheduledDate);
@@ -288,6 +300,67 @@ export const AcademyLectureDetails = () => {
 
     updateAuthData();
   }, [isAuthentication, lecture?.id]); // Зависи от auth и lecture.id
+
+  // Load lecture reviews
+  useEffect(() => {
+    const loadReviews = async () => {
+      if (!lecture?.id) return;
+      if (reviewsLoadedRef.current === lecture.id) return;
+
+      reviewsLoadedRef.current = lecture.id;
+
+      try {
+        const [statsRes, reviewsRes] = await Promise.allSettled([
+          academyService.getLectureReviewStats(lecture.id),
+          academyService.getApprovedLectureReviews(lecture.id)
+        ]);
+
+        if (statsRes.status === 'fulfilled') {
+          setReviewStats(statsRes.value);
+        }
+        if (reviewsRes.status === 'fulfilled') {
+          const data = reviewsRes.value?.reviews || reviewsRes.value || [];
+          setReviews(Array.isArray(data) ? data : []);
+        }
+      } catch (err) {
+        console.error('Error loading lecture reviews:', err);
+      }
+
+      // Check user review status (only if authenticated)
+      if (isAuthentication) {
+        try {
+          const statusRes = await academyService.checkUserLectureReviewStatus(lecture.id);
+          setUserHasReviewed(statusRes?.hasReview || false);
+        } catch (err) {
+          console.error('Error checking user lecture review status:', err);
+        }
+      }
+    };
+
+    loadReviews();
+  }, [lecture?.id, isAuthentication, academyService]);
+
+  // Refetch reviews helper
+  const refetchLectureReviews = useCallback(async () => {
+    if (!lecture?.id) return;
+    reviewsLoadedRef.current = null;
+    try {
+      const [statsRes, reviewsRes] = await Promise.allSettled([
+        academyService.getLectureReviewStats(lecture.id),
+        academyService.getApprovedLectureReviews(lecture.id)
+      ]);
+
+      if (statsRes.status === 'fulfilled') {
+        setReviewStats(statsRes.value);
+      }
+      if (reviewsRes.status === 'fulfilled') {
+        const data = reviewsRes.value?.reviews || reviewsRes.value || [];
+        setReviews(Array.isArray(data) ? data : []);
+      }
+    } catch (err) {
+      console.error('Error refetching lecture reviews:', err);
+    }
+  }, [lecture?.id, academyService]);
 
   // Status и category
   const status = useMemo(() => getLectureStatus(lecture), [lecture]);
@@ -601,9 +674,9 @@ export const AcademyLectureDetails = () => {
                 <span className="ald-quick-stat-label">👁️ {t('academyLectureDetails.stats.views', 'Гледания')}</span>
               </div>
             )}
-            {lecture.rating && (
+            {(reviewStats?.avgRating || reviewStats?.averageRating || lecture.rating) && (
               <div className="ald-quick-stat">
-                <span className="ald-quick-stat-value">{parseFloat(lecture.rating).toFixed(1)}</span>
+                <span className="ald-quick-stat-value">{parseFloat(reviewStats?.avgRating || reviewStats?.averageRating || lecture.rating || 0).toFixed(1)}</span>
                 <span className="ald-quick-stat-label">⭐ {t('academyLectureDetails.stats.rating', 'Рейтинг')}</span>
               </div>
             )}
@@ -870,30 +943,23 @@ export const AcademyLectureDetails = () => {
                     </div>
                   </section>
 
-                  <section className="ald-section">
-                    <h2 className="ald-section-title">
-                      <span className="ald-section-icon">🎯</span>
-                      {t('academyLectureDetails.overview.whatYouLearn', 'Какво ще научите')}
-                    </h2>
-                    <div className="ald-learn-grid">
-                      <div className="ald-learn-item">
-                        <span className="ald-learn-icon">✓</span>
-                        <span>{t('academyLectureDetails.overview.learn1', 'Основни понятия и концепции')}</span>
+                 {/* ПРОМЕНЕНО — динамични learningPoints от базата */}
+                  {lecture.learningPoints && lecture.learningPoints.length > 0 && (
+                    <section className="ald-section">
+                      <h2 className="ald-section-title">
+                        <span className="ald-section-icon">🎯</span>
+                        {t('academyLectureDetails.overview.whatYouLearn', 'Какво ще научите')}
+                      </h2>
+                      <div className="ald-learn-grid">
+                        {lecture.learningPoints.map((point, index) => (
+                          <div key={index} className="ald-learn-item">
+                            <span className="ald-learn-icon">✓</span>
+                            <span>{point}</span>
+                          </div>
+                        ))}
                       </div>
-                      <div className="ald-learn-item">
-                        <span className="ald-learn-icon">✓</span>
-                        <span>{t('academyLectureDetails.overview.learn2', 'Практически примери и демонстрации')}</span>
-                      </div>
-                      <div className="ald-learn-item">
-                        <span className="ald-learn-icon">✓</span>
-                        <span>{t('academyLectureDetails.overview.learn3', 'Полезни съвети и трикове')}</span>
-                      </div>
-                      <div className="ald-learn-item">
-                        <span className="ald-learn-icon">✓</span>
-                        <span>{t('academyLectureDetails.overview.learn4', 'Отговори на често задавани въпроси')}</span>
-                      </div>
-                    </div>
-                  </section>
+                    </section>
+                  )}
 
                   {lecture.tags && lecture.tags.length > 0 && (
                     <section className="ald-section">
@@ -939,6 +1005,106 @@ export const AcademyLectureDetails = () => {
                       </div>
                     </section>
                   )}
+
+                  {/* Reviews Section */}
+                  <section className="ald-section ald-reviews">
+                    <h2 className="ald-section-title">
+                      <span className="ald-section-icon">⭐</span>
+                      {t('academyLectureDetails.reviews.title', 'Отзиви')}
+                    </h2>
+
+                    {(() => {
+                      const avgRating = reviewStats?.avgRating || reviewStats?.averageRating || (lecture.rating ? parseFloat(lecture.rating) : 0);
+                      const totalCount = reviewStats?.totalCount || reviewStats?.totalReviews || 0;
+                      const distribution = reviewStats?.distribution || {};
+                      return (
+                        <>
+                          <div className="ald-review-summary">
+                            <span className="ald-review-big">{parseFloat(avgRating).toFixed(1)}</span>
+                            <div className="ald-review-stars">
+                              {[1, 2, 3, 4, 5].map(s => (
+                                <svg key={s} width="18" height="18" viewBox="0 0 24 24"
+                                  fill={s <= Math.round(avgRating) ? 'currentColor' : 'none'}
+                                  stroke="currentColor" strokeWidth="2"
+                                >
+                                  <polygon points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9" />
+                                </svg>
+                              ))}
+                            </div>
+                            <span className="ald-review-count">
+                              {totalCount} {t('academyLectureDetails.reviews.reviews', 'отзива')}
+                            </span>
+                          </div>
+
+                          <div className="ald-review-bars">
+                            {[5, 4, 3, 2, 1].map(stars => {
+                              const count = distribution[stars] || 0;
+                              const pct = totalCount > 0 ? Math.round((count / totalCount) * 100) : 0;
+                              return (
+                                <div key={stars} className="ald-review-bar">
+                                  <span className="ald-review-bar-label">{stars}★</span>
+                                  <div className="ald-review-bar-track">
+                                    <div className="ald-review-bar-fill" style={{ width: `${pct}%` }}></div>
+                                  </div>
+                                  <span className="ald-review-bar-pct">{pct}%</span>
+                                </div>
+                              );
+                            })}
+                          </div>
+
+                          {/* Review cards list */}
+                          {reviews.length > 0 && (
+                            <div className="ald-review-list">
+                              {reviews.map((review) => (
+                                <div key={review.id} className="ald-review-card">
+                                  <div className="ald-review-card-header">
+                                    <div className="ald-review-card-avatar">
+                                      {review.user?.photoUrl || review.reviewer?.photoUrl ? (
+                                        <img src={review.user?.photoUrl || review.reviewer?.photoUrl} alt="" />
+                                      ) : (
+                                        <span>👤</span>
+                                      )}
+                                    </div>
+                                    <div className="ald-review-card-info">
+                                      <span className="ald-review-card-name">
+                                        {review.user?.name || review.name || review.reviewer?.name || review.reviewerName || t('academyLectureDetails.reviews.anonymous', 'Анонимен')}
+                                      </span>
+                                      <span className="ald-review-card-date">
+                                        {review.createdAt && new Date(review.createdAt).toLocaleDateString('bg-BG', { day: 'numeric', month: 'long', year: 'numeric' })}
+                                      </span>
+                                    </div>
+                                    <div className="ald-review-card-stars">
+                                      {[1, 2, 3, 4, 5].map(s => (
+                                        <svg key={s} width="14" height="14" viewBox="0 0 24 24"
+                                          fill={s <= (review.rating || 0) ? 'currentColor' : 'none'}
+                                          stroke="currentColor" strokeWidth="2"
+                                        >
+                                          <polygon points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9" />
+                                        </svg>
+                                      ))}
+                                    </div>
+                                  </div>
+                                  {(review.comment || review.text || review.content) && (
+                                    <p className="ald-review-card-text">{review.comment || review.text || review.content}</p>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+                          )}
+
+                          {/* Rate this lecture button */}
+                          {isAuthentication && !userHasReviewed && (
+                            <button
+                              className="ald-review-btn"
+                              onClick={() => setShowReviewModal(true)}
+                            >
+                              ⭐ {t('academyLectureDetails.reviews.rateLecture', 'Оцени лекцията')}
+                            </button>
+                          )}
+                        </>
+                      );
+                    })()}
+                  </section>
                 </div>
               )}
 
@@ -1259,6 +1425,21 @@ export const AcademyLectureDetails = () => {
         <span>←</span>
         <span>{t('academyLectureDetails.actions.backToLectures', 'Всички лекции')}</span>
       </button>
+      <ScrollToTop/>
+
+      {/* Lecture Review Modal */}
+      {showReviewModal && (
+        <LectureReviewModal
+          isOpen={showReviewModal}
+          onClose={() => setShowReviewModal(false)}
+          lecture={lecture}
+          onSuccess={() => {
+            setShowReviewModal(false);
+            setUserHasReviewed(true);
+            refetchLectureReviews();
+          }}
+        />
+      )}
     </div>
   );
 };

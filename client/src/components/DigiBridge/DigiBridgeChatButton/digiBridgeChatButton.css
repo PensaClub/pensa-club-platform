@@ -173,8 +173,8 @@
   /* Направи бутона кръгъл на mobile */
   .digibridge-chat-button {
     border-radius: 50%;
-    width: 56px;
-    height: 56px;
+    width: 45px;
+    height: 45px;
     padding: 0;
     justify-content: center;
   }

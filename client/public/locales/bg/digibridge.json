@@ -1011,6 +1011,7 @@
     "academyReviews": "Академия",
     "mentorReviews": "Ментори",
     "courseReviews": "Курсове",
+    "lectureReviews": "Лекции",
     "clearFilters": "Изчисти Филтрите"
   },
   "listReviewsManagement": {
@@ -1023,6 +1024,7 @@
     "typeAcademy": "Академия",
     "typeMentor": "Ментор",
     "typeCourse": "Курс",
+    "typeLecture": "Лекция",
     "role": "Роля",
     "roleParticipant": "Участник",
     "roleMentor": "Ментор",
@@ -1057,6 +1059,8 @@
     "typeAcademy": "Академия",
     "typeMentor": "Ментор",
     "typeCourse": "Курс",
+    "typeLecture": "Лекция",
+    "targetName": "Предмет на ревюто",
     "roleParticipant": "Участник",
     "roleMentor": "Ментор"
   },
@@ -1074,6 +1078,21 @@
     "rejectionReasonLabel": "Причина за Отхвърляне",
     "rejectionReasonPlaceholder": "Въведете причина за отхвърляне...",
     "rejectionReasonHint": "Моля, посочете причина за отхвърляне"
+  },
+  "profileReviews": {
+    "title": "Моите отзиви",
+    "loading": "Зареждане на отзиви...",
+    "noReviews": "Все още нямате отзиви.",
+    "noReviewsDesc": "Когато оставите отзив за курс, лекция, ментор или академията, той ще се появи тук.",
+    "typeAcademy": "Академия",
+    "typeMentor": "Ментор",
+    "typeCourse": "Курс",
+    "typeLecture": "Лекция",
+    "statusPending": "Чакащо",
+    "statusApproved": "Одобрено",
+    "statusRejected": "Отхвърлено",
+    "submittedOn": "Подадено на",
+    "rejectionReason": "Причина за отхвърляне"
   },
   "mentorReviewModal": {
     "title": "Как беше сесията?",

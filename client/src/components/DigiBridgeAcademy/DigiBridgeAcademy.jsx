@@ -15,6 +15,7 @@ import { DigiBridgeFAQ } from './DigiBridgeFAQ/DigiBridgeFAQ';
 import { DigiBridgeTestimonialForm } from './DigiBridgeTestimonialForm/DigiBridgeTestimonialForm';
 import { useAcademy } from '../contexts/AcademyProvider';
 import SEOHead from '../SEO/SEOHead';
+import ScrollToTop from '../ScrollToTop/ScrollToTop';
 
 export const DigiBridgeAcademy = () => {
   const { t, i18n } = useTranslation('digibridge');
@@ -231,6 +232,8 @@ export const DigiBridgeAcademy = () => {
       <DigiBridgePartners />
       <DigiBridgeFAQ />
       <DigiBridgeTestimonialForm />
+      <ScrollToTop/>
+
     </div>
   );
 };

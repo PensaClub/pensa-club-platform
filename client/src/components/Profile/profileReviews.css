@@ -1,0 +1,339 @@
+/* ===================================
+   PROFILE REVIEWS (pr- prefix)
+   =================================== */
+
+.pr-container {
+  max-width: 100%;
+}
+
+.pr-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 1.5rem 0;
+}
+
+/* ===================================
+   LOADING
+   =================================== */
+
+.pr-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  gap: 16px;
+}
+
+.pr-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(102, 126, 234, 0.2);
+  border-top-color: #667eea;
+  border-radius: 50%;
+  animation: pr-spin 0.8s linear infinite;
+}
+
+@keyframes pr-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.pr-loading p {
+  font-size: 0.95rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* ===================================
+   EMPTY STATE
+   =================================== */
+
+.pr-empty {
+  text-align: center;
+  padding: 60px 20px;
+  background: #f9fafb;
+  border-radius: 16px;
+  border: 2px dashed #e5e7eb;
+}
+
+.pr-empty-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 16px;
+}
+
+.pr-empty-icon svg {
+  width: 100%;
+  height: 100%;
+  color: #d1d5db;
+}
+
+.pr-empty h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 8px 0;
+}
+
+.pr-empty p {
+  font-size: 0.95rem;
+  color: #6b7280;
+  margin: 0;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.5;
+}
+
+/* ===================================
+   REVIEW LIST
+   =================================== */
+
+.pr-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ===================================
+   REVIEW CARD
+   =================================== */
+
+.pr-card {
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e5e7eb;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pr-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* ===================================
+   CARD HEADER
+   =================================== */
+
+.pr-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pr-badges {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ===================================
+   TYPE BADGES
+   =================================== */
+
+.pr-type-badge {
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.pr-type-badge-academy {
+  background: rgba(102, 126, 234, 0.15);
+  color: #667eea;
+}
+
+.pr-type-badge-mentor {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+}
+
+.pr-type-badge-course {
+  background: rgba(59, 130, 246, 0.15);
+  color: #3b82f6;
+}
+
+.pr-type-badge-lecture {
+  background: rgba(139, 92, 246, 0.15);
+  color: #8b5cf6;
+}
+
+/* ===================================
+   STATUS BADGES
+   =================================== */
+
+.pr-status-badge {
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.pr-status-badge-pending {
+  background: rgba(255, 193, 7, 0.15);
+  color: #f59e0b;
+}
+
+.pr-status-badge-approved {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+}
+
+.pr-status-badge-rejected {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+/* ===================================
+   TARGET NAME
+   =================================== */
+
+.pr-target-name {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #1f2937;
+  padding: 0;
+}
+
+/* ===================================
+   RATING
+   =================================== */
+
+.pr-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pr-star {
+  font-size: 1.2rem;
+  color: #d1d5db;
+  line-height: 1;
+}
+
+.pr-star-filled {
+  color: #fbbf24;
+}
+
+.pr-rating-text {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #6b7280;
+  margin-left: 6px;
+}
+
+/* ===================================
+   REVIEW TEXT
+   =================================== */
+
+.pr-text {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #4b5563;
+  margin: 0;
+  padding: 12px;
+  background: #f9fafb;
+  border-radius: 8px;
+  border-left: 3px solid #667eea;
+}
+
+/* ===================================
+   REJECTION REASON
+   =================================== */
+
+.pr-rejection {
+  padding: 12px;
+  background: rgba(239, 68, 68, 0.08);
+  border-radius: 8px;
+  border-left: 3px solid #ef4444;
+}
+
+.pr-rejection strong {
+  display: block;
+  color: #dc2626;
+  font-size: 0.85rem;
+  margin-bottom: 4px;
+}
+
+.pr-rejection p {
+  color: #4b5563;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ===================================
+   DATE
+   =================================== */
+
+.pr-date {
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+/* ===================================
+   RESPONSIVE - TABLET
+   =================================== */
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .pr-card {
+    padding: 18px;
+  }
+}
+
+/* ===================================
+   RESPONSIVE - MOBILE
+   =================================== */
+
+@media (max-width: 767px) {
+  .pr-title {
+    font-size: 1.25rem;
+  }
+
+  .pr-card {
+    padding: 16px;
+  }
+
+  .pr-type-badge,
+  .pr-status-badge {
+    font-size: 0.75rem;
+    padding: 3px 10px;
+  }
+}
+
+/* ===================================
+   RESPONSIVE - SMALL MOBILE
+   =================================== */
+
+@media (max-width: 479px) {
+  .pr-card {
+    padding: 14px;
+    gap: 10px;
+  }
+
+  .pr-target-name {
+    font-size: 0.95rem;
+  }
+
+  .pr-text {
+    padding: 10px;
+    font-size: 0.85rem;
+  }
+
+  .pr-empty {
+    padding: 40px 16px;
+  }
+}

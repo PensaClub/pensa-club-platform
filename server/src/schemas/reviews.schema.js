@@ -22,6 +22,26 @@ const createMentorReviewSchema = z.object({
   text: z.string().max(1000).optional() 
 });
 
+const createCourseReviewSchema = z.object({
+  name: z.string().min(2, 'Name must be at least 2 characters').max(255),
+  email: z.string().email('Invalid email address'),
+  role: z.enum(['participant', 'mentor'], {
+    errorMap: () => ({ message: 'Role must be participant or mentor' })
+  }).default('participant'),
+  rating: z.number().int().min(1).max(5, 'Rating must be between 1 and 5'),
+  text: z.string().max(1000).optional()
+});
+
+const createLectureReviewSchema = z.object({
+  name: z.string().min(2, 'Name must be at least 2 characters').max(255),
+  email: z.string().email('Invalid email address'),
+  role: z.enum(['participant', 'mentor'], {
+    errorMap: () => ({ message: 'Role must be participant or mentor' })
+  }).default('participant'),
+  rating: z.number().int().min(1).max(5, 'Rating must be between 1 and 5'),
+  text: z.string().max(1000).optional()
+});
+
 const approveReviewSchema = z.object({
   reviewId: z.number().int().positive()
 });
@@ -34,6 +54,8 @@ const rejectReviewSchema = z.object({
 module.exports = {
   createAcademyReviewSchema,
   createMentorReviewSchema,
+  createCourseReviewSchema,
+  createLectureReviewSchema,
   approveReviewSchema,
   rejectReviewSchema
 };

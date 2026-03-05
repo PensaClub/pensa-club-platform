@@ -10,6 +10,7 @@ import './academyLectures.css';
 import { useAcademyCourses } from '../contexts/AcademyCoursesProvider';
 import { useAuthContext } from '../contexts/UserContext';
 import SEOHead from '../SEO/SEOHead';
+import ScrollToTop from '../ScrollToTop/ScrollToTop';
 
 // Цветова схема за категории
 const LECTURE_CATEGORY_COLORS = {
@@ -700,6 +701,7 @@ export const AcademyLectures = () => {
         accentColor={trailerLecture ? getCategoryColor(trailerLecture).primary : '#ff6347'}
         onViewLecture={handleViewLecture}
       />
+      <ScrollToTop />
     </div>
   );
 };
