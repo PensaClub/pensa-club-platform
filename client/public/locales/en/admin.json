@@ -20,7 +20,18 @@
       "applications": "Applications"
     },
     "reviews": {
-      "management": "Manage Reviews"
+      "management": "Manage Reviews",
+      "types": {
+        "course": "Course",
+        "lecture": "Lecture",
+        "mentor": "Mentor",
+        "academy": "Academy"
+      },
+      "status": {
+        "pending": "Pending approval",
+        "approved": "Approved",
+        "rejected": "Rejected"
+      }
     },
     "usefulLinks": {
       "title": "Useful Links",

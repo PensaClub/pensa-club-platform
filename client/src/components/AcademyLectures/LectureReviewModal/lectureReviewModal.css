@@ -1,0 +1,871 @@
+/* src/components/AcademyLectures/LectureReviewModal/lectureReviewModal.css */
+
+/* ===============================
+   BASE STYLES
+   =============================== */
+
+.lrm-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 1rem;
+  animation: lrm-fadeIn 0.3s ease;
+}
+
+.lrm-content {
+  background: white;
+  border-radius: 16px;
+  max-width: 540px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: lrm-slideUp 0.3s ease;
+  position: relative;
+}
+
+/* ===============================
+   HEADER
+   =============================== */
+
+.lrm-header {
+  text-align: center;
+  padding: 2rem 2rem 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  position: relative;
+}
+
+.lrm-icon {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  line-height: 1;
+}
+
+.lrm-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+
+.lrm-subtitle {
+  font-size: 0.95rem;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+.lrm-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s;
+  color: #6b7280;
+}
+
+.lrm-close:hover {
+  background: #f3f4f6;
+  color: #1f2937;
+}
+
+.lrm-close svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ===============================
+   LECTURE INFO
+   =============================== */
+
+.lrm-lecture-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+}
+
+.lrm-lecture-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 3px solid white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.lrm-lecture-image-placeholder {
+  width: 60px;
+  height: 60px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  border: 3px solid white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.lrm-lecture-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.lrm-lecture-name {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 0.25rem;
+  line-height: 1.3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.lrm-lecture-category {
+  font-size: 0.875rem;
+  color: #6b7280;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ===============================
+   FORM
+   =============================== */
+
+.lrm-form {
+  padding: 2rem;
+}
+
+.lrm-field {
+  margin-bottom: 1.5rem;
+}
+
+.lrm-label {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
+}
+
+.lrm-optional {
+  font-weight: 400;
+  color: #9ca3af;
+}
+
+/* ===============================
+   STARS
+   =============================== */
+
+.lrm-stars {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.lrm-star {
+  background: none;
+  border: none;
+  font-size: 2.5rem;
+  cursor: pointer;
+  color: #d1d5db;
+  transition: all 0.2s;
+  padding: 0;
+  line-height: 1;
+}
+
+.lrm-star.filled {
+  color: #f59e0b;
+  transform: scale(1.1);
+}
+
+.lrm-star:hover {
+  transform: scale(1.15);
+}
+
+.lrm-rating-text {
+  font-size: 0.875rem;
+  color: #6b7280;
+  font-style: italic;
+  margin-top: 0.5rem;
+  line-height: 1.4;
+}
+
+/* ===============================
+   TEXTAREA
+   =============================== */
+
+.lrm-textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  resize: vertical;
+  transition: all 0.2s;
+  line-height: 1.5;
+}
+
+.lrm-textarea:focus {
+  outline: none;
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.lrm-char-count {
+  text-align: right;
+  font-size: 0.8rem;
+  color: #9ca3af;
+  margin-top: 0.5rem;
+}
+
+/* ===============================
+   ANONYMOUS TOGGLE
+   =============================== */
+
+.lrm-anonymous {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 0.5rem;
+  transition: all 0.2s;
+}
+
+.lrm-anonymous:hover {
+  background: #f3f4f6;
+}
+
+.lrm-anonymous-checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: #8b5cf6;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.lrm-anonymous-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.lrm-anonymous-hint {
+  width: 100%;
+  font-size: 0.8rem;
+  color: #9ca3af;
+  padding-left: 2.1rem;
+  line-height: 1.3;
+}
+
+/* ===============================
+   BUTTONS
+   =============================== */
+
+.lrm-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.lrm-btn {
+  flex: 1;
+  padding: 0.875rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.lrm-btn-skip {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.lrm-btn-skip:hover {
+  background: #e5e7eb;
+  color: #374151;
+}
+
+.lrm-btn-submit {
+  background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  color: white;
+}
+
+.lrm-btn-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);
+}
+
+.lrm-btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.lrm-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: lrm-spin 0.8s linear infinite;
+  flex-shrink: 0;
+}
+
+/* ===============================
+   ANIMATIONS
+   =============================== */
+
+@keyframes lrm-fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes lrm-slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes lrm-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===============================
+   RESPONSIVE - ГОЛЕМИ ЕКРАНИ (1920px+)
+   =============================== */
+
+@media (min-width: 1920px) {
+  .lrm-content {
+    max-width: 600px;
+  }
+
+  .lrm-title {
+    font-size: 1.75rem;
+  }
+
+  .lrm-subtitle {
+    font-size: 1rem;
+  }
+
+  .lrm-lecture-image,
+  .lrm-lecture-image-placeholder {
+    width: 70px;
+    height: 70px;
+  }
+
+  .lrm-lecture-name {
+    font-size: 1.25rem;
+  }
+
+  .lrm-star {
+    font-size: 3rem;
+  }
+}
+
+/* ===============================
+   RESPONSIVE - СРЕДНИ ЛАПТОПИ (1280px - 1919px)
+   =============================== */
+
+@media (min-width: 1280px) and (max-width: 1919px) {
+  .lrm-content {
+    max-width: 540px;
+  }
+}
+
+/* ===============================
+   RESPONSIVE - МАЛКИ ЛАПТОПИ (1024px - 1279px)
+   =============================== */
+
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .lrm-content {
+    max-width: 500px;
+  }
+
+  .lrm-header {
+    padding: 1.75rem 1.75rem 1rem;
+  }
+
+  .lrm-form {
+    padding: 1.75rem;
+  }
+
+  .lrm-title {
+    font-size: 1.4rem;
+  }
+}
+
+/* ===============================
+   RESPONSIVE - ТАБЛЕТИ (768px - 1023px)
+   =============================== */
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .lrm-content {
+    max-width: 480px;
+  }
+
+  .lrm-header {
+    padding: 1.5rem 1.5rem 1rem;
+  }
+
+  .lrm-icon {
+    font-size: 2.5rem;
+  }
+
+  .lrm-title {
+    font-size: 1.3rem;
+  }
+
+  .lrm-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .lrm-lecture-info {
+    padding: 1.25rem 1.5rem;
+  }
+
+  .lrm-lecture-image,
+  .lrm-lecture-image-placeholder {
+    width: 56px;
+    height: 56px;
+  }
+
+  .lrm-lecture-name {
+    font-size: 1.05rem;
+  }
+
+  .lrm-lecture-category {
+    font-size: 0.85rem;
+  }
+
+  .lrm-form {
+    padding: 1.5rem;
+  }
+
+  .lrm-star {
+    font-size: 2.2rem;
+  }
+
+  .lrm-btn {
+    padding: 0.8rem 1.25rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* ===============================
+   RESPONSIVE - ГОЛЕМИ ТЕЛЕФОНИ (480px - 767px)
+   =============================== */
+
+@media (min-width: 480px) and (max-width: 767px) {
+  .lrm-overlay {
+    padding: 0.75rem;
+  }
+
+  .lrm-content {
+    max-width: 100%;
+    max-height: calc(100vh - 1.5rem);
+    border-radius: 12px;
+  }
+
+  .lrm-header {
+    padding: 1.25rem 1.25rem 1rem;
+  }
+
+  .lrm-icon {
+    font-size: 2.25rem;
+  }
+
+  .lrm-title {
+    font-size: 1.2rem;
+  }
+
+  .lrm-subtitle {
+    font-size: 0.875rem;
+  }
+
+  .lrm-close {
+    width: 28px;
+    height: 28px;
+    top: 0.75rem;
+    right: 0.75rem;
+  }
+
+  .lrm-close svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .lrm-lecture-info {
+    padding: 1rem 1.25rem;
+    gap: 0.875rem;
+  }
+
+  .lrm-lecture-image,
+  .lrm-lecture-image-placeholder {
+    width: 50px;
+    height: 50px;
+    font-size: 1.25rem;
+  }
+
+  .lrm-lecture-name {
+    font-size: 1rem;
+  }
+
+  .lrm-lecture-category {
+    font-size: 0.8rem;
+  }
+
+  .lrm-form {
+    padding: 1.25rem;
+  }
+
+  .lrm-field {
+    margin-bottom: 1.25rem;
+  }
+
+  .lrm-label {
+    font-size: 0.9rem;
+    margin-bottom: 0.625rem;
+  }
+
+  .lrm-stars {
+    gap: 0.375rem;
+  }
+
+  .lrm-star {
+    font-size: 2rem;
+  }
+
+  .lrm-rating-text {
+    font-size: 0.825rem;
+  }
+
+  .lrm-textarea {
+    padding: 0.625rem;
+    font-size: 0.9rem;
+  }
+
+  .lrm-buttons {
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  .lrm-btn {
+    padding: 0.75rem 1rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* ===============================
+   RESPONSIVE - МАЛКИ ТЕЛЕФОНИ (до 479px)
+   =============================== */
+
+@media (max-width: 479px) {
+  .lrm-overlay {
+    padding: 0.5rem;
+  }
+
+  .lrm-content {
+    max-width: 100%;
+    max-height: calc(100vh - 1rem);
+    border-radius: 10px;
+  }
+
+  .lrm-header {
+    padding: 1rem 1rem 0.75rem;
+  }
+
+  .lrm-icon {
+    font-size: 2rem;
+  }
+
+  .lrm-title {
+    font-size: 1.1rem;
+  }
+
+  .lrm-subtitle {
+    font-size: 0.825rem;
+  }
+
+  .lrm-close {
+    width: 26px;
+    height: 26px;
+    top: 0.625rem;
+    right: 0.625rem;
+  }
+
+  .lrm-close svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .lrm-lecture-info {
+    padding: 0.875rem 1rem;
+    gap: 0.75rem;
+  }
+
+  .lrm-lecture-image,
+  .lrm-lecture-image-placeholder {
+    width: 44px;
+    height: 44px;
+    font-size: 1.125rem;
+    border: 2px solid white;
+  }
+
+  .lrm-lecture-name {
+    font-size: 0.95rem;
+  }
+
+  .lrm-lecture-category {
+    font-size: 0.75rem;
+  }
+
+  .lrm-form {
+    padding: 1rem;
+  }
+
+  .lrm-field {
+    margin-bottom: 1rem;
+  }
+
+  .lrm-label {
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .lrm-stars {
+    gap: 0.25rem;
+    justify-content: center;
+  }
+
+  .lrm-star {
+    font-size: 1.75rem;
+  }
+
+  .lrm-rating-text {
+    font-size: 0.8rem;
+    text-align: center;
+  }
+
+  .lrm-textarea {
+    padding: 0.625rem;
+    font-size: 0.875rem;
+    min-height: 80px;
+  }
+
+  .lrm-char-count {
+    font-size: 0.75rem;
+  }
+
+  .lrm-buttons {
+    flex-direction: column;
+    gap: 0.625rem;
+    margin-top: 1.25rem;
+  }
+
+  .lrm-btn {
+    padding: 0.7rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .lrm-spinner {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+/* ===============================
+   МНОГО МАЛКИ ТЕЛЕФОНИ (до 360px)
+   =============================== */
+
+@media (max-width: 360px) {
+  .lrm-overlay {
+    padding: 0.25rem;
+  }
+
+  .lrm-content {
+    border-radius: 8px;
+  }
+
+  .lrm-header {
+    padding: 0.875rem 0.875rem 0.625rem;
+  }
+
+  .lrm-title {
+    font-size: 1rem;
+  }
+
+  .lrm-subtitle {
+    font-size: 0.8rem;
+  }
+
+  .lrm-lecture-info {
+    padding: 0.75rem 0.875rem;
+  }
+
+  .lrm-form {
+    padding: 0.875rem;
+  }
+
+  .lrm-star {
+    font-size: 1.5rem;
+  }
+}
+
+/* ========================================
+   DARK THEME OVERRIDES — Lecture Review Modal
+   ======================================== */
+[data-theme="dark"] .lrm-content {
+    background: #1e293b;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+[data-theme="dark"] .lrm-header {
+    border-bottom-color: #334155;
+}
+[data-theme="dark"] .lrm-title {
+    color: #f1f5f9;
+}
+[data-theme="dark"] .lrm-subtitle {
+    color: #94a3b8;
+}
+[data-theme="dark"] .lrm-close {
+    color: #94a3b8;
+}
+[data-theme="dark"] .lrm-close:hover {
+    background: #334155;
+    color: #f1f5f9;
+}
+[data-theme="dark"] .lrm-lecture-info {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+}
+[data-theme="dark"] .lrm-lecture-image {
+    border-color: #334155;
+}
+[data-theme="dark"] .lrm-lecture-image-placeholder {
+    border-color: #334155;
+}
+[data-theme="dark"] .lrm-lecture-name {
+    color: #f1f5f9;
+}
+[data-theme="dark"] .lrm-lecture-category {
+    color: #94a3b8;
+}
+[data-theme="dark"] .lrm-label {
+    color: #e2e8f0;
+}
+[data-theme="dark"] .lrm-optional {
+    color: #64748b;
+}
+[data-theme="dark"] .lrm-star {
+    color: #475569;
+}
+[data-theme="dark"] .lrm-star.filled {
+    color: #f59e0b;
+}
+[data-theme="dark"] .lrm-rating-text {
+    color: #94a3b8;
+}
+[data-theme="dark"] .lrm-textarea {
+    background: #0f172a;
+    border-color: #334155;
+    color: #f1f5f9;
+}
+[data-theme="dark"] .lrm-textarea:focus {
+    border-color: #8b5cf6;
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+    background: #1e293b;
+}
+[data-theme="dark"] .lrm-textarea::placeholder {
+    color: #64748b;
+}
+[data-theme="dark"] .lrm-char-count {
+    color: #64748b;
+}
+[data-theme="dark"] .lrm-btn-skip {
+    background: #334155;
+    color: #94a3b8;
+}
+[data-theme="dark"] .lrm-btn-skip:hover {
+    background: #475569;
+    color: #e2e8f0;
+}
+[data-theme="dark"] .lrm-btn-submit:hover:not(:disabled) {
+    box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4);
+}
+[data-theme="dark"] .lrm-anonymous {
+    background: #0f172a;
+    border-color: #334155;
+}
+[data-theme="dark"] .lrm-anonymous:hover {
+    background: #1e293b;
+}
+[data-theme="dark"] .lrm-anonymous-label {
+    color: #e2e8f0;
+}
+[data-theme="dark"] .lrm-anonymous-hint {
+    color: #64748b;
+}
+
+/* ========================================
+   LIGHT THEME OVERRIDES — Lecture Review Modal
+   ======================================== */
+[data-theme="light"] .lrm-lecture-image-placeholder {
+    background: linear-gradient(135deg, #E26020 0%, #f97316 100%);
+}
+[data-theme="light"] .lrm-textarea:focus {
+    border-color: #E26020;
+    box-shadow: 0 0 0 3px rgba(226, 96, 32, 0.12);
+}
+[data-theme="light"] .lrm-btn-submit {
+    background: linear-gradient(135deg, #E26020 0%, #f97316 100%);
+}
+[data-theme="light"] .lrm-btn-submit:hover:not(:disabled) {
+    box-shadow: 0 8px 20px rgba(226, 96, 32, 0.3);
+}

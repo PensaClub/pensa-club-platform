@@ -74,6 +74,7 @@ export const ReviewsManagementHeader = ({ filters, onFilterChange }) => {
               <option value="academy">{t('headerReviewsManagement.academyReviews')}</option>
               <option value="mentor">{t('headerReviewsManagement.mentorReviews')}</option>
               <option value="course">{t('headerReviewsManagement.courseReviews')}</option>
+              <option value="lecture">{t('headerReviewsManagement.lectureReviews')}</option>
             </select>
           </div>
 

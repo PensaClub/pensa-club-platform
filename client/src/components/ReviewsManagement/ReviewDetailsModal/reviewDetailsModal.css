@@ -237,6 +237,22 @@
   color: #667eea;
 }
 
+.review-details-pensa-club-modal-target-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: #f0f4ff;
+  border-radius: 10px;
+  border-left: 4px solid #667eea;
+}
+
+.review-details-pensa-club-modal-target-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
 .review-details-pensa-club-modal-role-badge {
   background: rgba(139, 92, 246, 0.15);
   color: #8b5cf6;

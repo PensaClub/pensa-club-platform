@@ -673,6 +673,16 @@ export const AcademyProvider = ({ children }) => {
     }
   }, []);
 
+  const getUserReviews = useCallback(async () => {
+    try {
+      const data = await academyService.getUserReviews();
+      return data;
+    } catch (error) {
+      console.error('Error fetching user reviews:', error);
+      return { reviews: [] };
+    }
+  }, []);
+
   const approveReview = useCallback(async (reviewId) => {
     try {
       const response = await academyService.approveReview(reviewId);
@@ -1584,6 +1594,7 @@ ${reason ? `Причина: ${reason}` : ''}
     getApprovedAcademyReviews,
     checkUserAcademyReviewStatus,
     getPendingReviews,
+    getUserReviews,
     approveReview,
     rejectReview,
     deleteReview,

@@ -20,7 +20,18 @@
       "applications": "Bewerbungen"
     },
     "reviews": {
-      "management": "Bewertungen verwalten"
+      "management": "Bewertungen verwalten",
+      "types": {
+        "course": "Kurs",
+        "lecture": "Vorlesung",
+        "mentor": "Mentor",
+        "academy": "Akademie"
+      },
+      "status": {
+        "pending": "Wartet auf Genehmigung",
+        "approved": "Genehmigt",
+        "rejected": "Abgelehnt"
+      }
     },
     "usefulLinks": {
       "title": "Nützliche Links",

@@ -504,7 +504,11 @@
       "inactive": "Inactive",
       "pending": "Pending Approval"
     },
-    "basicFieldsHelp": "To change basic information (name, email, age and photo), please contact an administrator."
+    "basicFieldsHelp": "To change basic information (name, email, age and photo), please contact an administrator.",
+    "reviewsSection": "Reviews",
+    "noReviews": "No reviews yet.",
+    "seeAllReviews": "See all reviews",
+    "reviewDate": "Submitted on"
   },
   "mentorModal": {
     "applying": "Sending...",

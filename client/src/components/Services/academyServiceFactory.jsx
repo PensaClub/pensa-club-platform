@@ -240,7 +240,47 @@ export const academyServiceFactory = () => {
     checkUserAcademyReviewStatus: async () => {
       return requester.get(`${apiUrl}/reviews/academy/user-status`);
     },
-    // MENTOR REVIEWS 
+
+    // COURSE REVIEWS
+    createCourseReview: async (courseId, reviewData) => {
+      return requester.post(`${apiUrl}/reviews/course/${courseId}`, reviewData);
+    },
+
+    getApprovedCourseReviews: async (courseId, limit = 20) => {
+      return requester.get(`${apiUrl}/reviews/course/${courseId}/approved?limit=${limit}`);
+    },
+
+    getCourseReviewStats: async (courseId) => {
+      return requester.get(`${apiUrl}/reviews/course/${courseId}/stats`);
+    },
+
+    checkUserCourseReviewStatus: async (courseId) => {
+      return requester.get(`${apiUrl}/reviews/course/${courseId}/user-status`);
+    },
+
+    // USER'S OWN REVIEWS
+    getUserReviews: async () => {
+      return requester.get(`${apiUrl}/reviews/my`);
+    },
+
+    // LECTURE REVIEWS
+    createLectureReview: async (lectureId, reviewData) => {
+      return requester.post(`${apiUrl}/reviews/lecture/${lectureId}`, reviewData);
+    },
+
+    getApprovedLectureReviews: async (lectureId, limit = 20) => {
+      return requester.get(`${apiUrl}/reviews/lecture/${lectureId}/approved?limit=${limit}`);
+    },
+
+    getLectureReviewStats: async (lectureId) => {
+      return requester.get(`${apiUrl}/reviews/lecture/${lectureId}/stats`);
+    },
+
+    checkUserLectureReviewStatus: async (lectureId) => {
+      return requester.get(`${apiUrl}/reviews/lecture/${lectureId}/user-status`);
+    },
+
+    // MENTOR REVIEWS
 
     createMentorReview: async (mentorId, reviewData) => {
       return requester.post(`${apiUrl}/reviews/mentor/${mentorId}`, reviewData);
