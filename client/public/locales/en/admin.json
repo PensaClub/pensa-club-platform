@@ -280,5 +280,26 @@
       "description": "Try different search criteria or select another category.",
       "resetButton": "Clear filters"
     }
+  },
+  "header": {
+    "home": "Home",
+    "articles": "Articles",
+    "craigslist": "Community",
+    "initiatives": "Initiatives",
+    "projects": "Projects",
+    "publications": "Publications",
+    "stories": "Stories",
+    "map": "Map",
+    "clubs": "Clubs",
+    "games": "Games",
+    "ad-create": "Create ad",
+    "about": "About us",
+    "logout": "Logout",
+    "academy": "Academy",
+    "academy-home": "Home",
+    "academy-courses": "Courses",
+    "academy-lectures": "Lectures",
+    "academy-mentors": "Mentors",
+    "language": "Language"
   }
 }

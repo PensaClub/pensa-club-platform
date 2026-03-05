@@ -18,7 +18,15 @@
     "bookmarks": "Bookmarks",
     "publications": "Publications",
     "stories": "Stories",
-    "about": "About us"
+    "about": "About us",
+    "academy": "Academy",
+    "academy-courses": "Courses",
+    "academy-courses-desc": "Browse our courses",
+    "academy-lectures": "Lectures",
+    "academy-lectures-desc": "Watch video lectures",
+    "academy-mentors": "Mentors",
+    "academy-mentors-desc": "Find your mentor",
+    "academy-cta": "Enter the Academy"
   },
   "footer": {
     "site-map": "Site Map",

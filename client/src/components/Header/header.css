@@ -647,6 +647,173 @@ header.scrolled + .header-line {
   }
 }
 /* ===================================
+   ACADEMY MEGA DROPDOWN (acd-)
+   =================================== */
+
+/* Desktop nav trigger — откроява се с orange */
+.academy-nav-trigger {
+  color: var(--orange) !important;
+  font-weight: 700 !important;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.academy-nav-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.academy-nav-trigger::after {
+  background: var(--orange) !important;
+}
+
+/* Mega dropdown */
+.acd-mega {
+  position: absolute;
+  top: calc(100% + 15px);
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  width: 320px;
+  background: white;
+  border-radius: 14px;
+  padding: 0;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s ease;
+  overflow: hidden;
+  z-index: 100;
+}
+
+.academy-nav-item:hover .acd-mega {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(10px);
+  transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s ease;
+}
+
+/* Arrow pointing up */
+.acd-mega::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 16px;
+  height: 16px;
+  background: var(--orange);
+  z-index: 1;
+}
+
+.acd-header {
+  background: linear-gradient(135deg, var(--orange), #ff7043);
+  padding: 14px 20px;
+  color: white;
+}
+
+.acd-title {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.acd-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 20px;
+  text-decoration: none;
+  color: #333;
+  transition: background 0.2s;
+  border-bottom: 1px solid #f3f3f3;
+}
+
+.acd-item:last-of-type {
+  border-bottom: none;
+}
+
+.acd-item:hover {
+  background: rgba(226, 96, 32, 0.06);
+}
+
+.acd-item svg {
+  width: 24px;
+  height: 24px;
+  color: var(--orange);
+  flex-shrink: 0;
+}
+
+.acd-item-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.acd-item-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: block;
+}
+
+.acd-item-desc {
+  font-size: 0.78rem;
+  color: #888;
+  display: block;
+  margin-top: 2px;
+}
+
+.acd-cta {
+  display: block;
+  padding: 12px 20px;
+  background: rgba(226, 96, 32, 0.06);
+  color: var(--orange);
+  font-weight: 700;
+  font-size: 0.88rem;
+  text-decoration: none;
+  text-align: center;
+  transition: background 0.2s, color 0.2s;
+}
+
+.acd-cta:hover {
+  background: var(--orange);
+  color: white;
+}
+
+/* Mobile academy section */
+.mobile-academy-section {
+  margin: 8px 0;
+  padding: 8px 0;
+  border-top: 2px solid rgba(226, 96, 32, 0.2);
+  border-bottom: 2px solid rgba(226, 96, 32, 0.2);
+}
+
+.mobile-academy-label {
+  padding: 8px 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--orange);
+}
+
+.mobile-academy-item.active {
+  background: var(--orange);
+  color: white;
+}
+
+.mobile-academy-item:hover {
+  background: rgba(226, 96, 32, 0.1);
+  color: var(--orange);
+}
+
+.mobile-academy-item svg {
+  color: var(--orange);
+}
+
+.mobile-academy-item.active svg {
+  color: white;
+}
+
+/* ===================================
    NAV BADGES
    =================================== */
 

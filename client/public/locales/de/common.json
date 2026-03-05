@@ -17,7 +17,15 @@
     "bookmarks": "Lesezeichen",
     "publications": "Veröffentlichungen",
     "stories": "Geschichten",
-    "about": "Über uns"
+    "about": "Über uns",
+    "academy": "Akademie",
+    "academy-courses": "Kurse",
+    "academy-courses-desc": "Entdecke unsere Kurse",
+    "academy-lectures": "Vorlesungen",
+    "academy-lectures-desc": "Videovorlesungen ansehen",
+    "academy-mentors": "Mentoren",
+    "academy-mentors-desc": "Finde deinen Mentor",
+    "academy-cta": "Zur Akademie"
   },
   "footer": {
     "site-map": "Sitemap",

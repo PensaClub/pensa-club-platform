@@ -289,5 +289,26 @@
       "description": "Versuchen Sie andere Suchkriterien oder wählen Sie eine andere Kategorie.",
       "resetButton": "Filter zurücksetzen"
     }
+  },
+  "header": {
+    "home": "Startseite",
+    "articles": "Artikel",
+    "craigslist": "Gemeinschaft",
+    "initiatives": "Initiativen",
+    "projects": "Projekte",
+    "publications": "Veröffentlichungen",
+    "stories": "Geschichten",
+    "map": "Karte",
+    "clubs": "Clubs",
+    "games": "Spiele",
+    "ad-create": "Anzeige erstellen",
+    "about": "Über uns",
+    "logout": "Abmelden",
+    "academy": "Akademie",
+    "academy-home": "Startseite",
+    "academy-courses": "Kurse",
+    "academy-lectures": "Vorlesungen",
+    "academy-mentors": "Mentoren",
+    "language": "Sprache"
   }
 }
