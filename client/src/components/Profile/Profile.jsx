@@ -89,6 +89,7 @@ import { DigiMentorProfile } from "../DigiMentorProfile/DigiMentorProfile";
 import { StudentApplicationsManagement } from "../DigiMentorApplications/StudentApplicationsManagement";
 import { SEOStatisticAdmin } from "../SEOStatisticAdmin/SEOStatisticAdmin";
 import { AdminDigiBridgeStudentApplications } from "../AdminDigiBridgeStudents/AdminDigiBridgeStudentApplications/AdminDigiBridgeStudentApplications";
+import { ProfileReviews } from "./ProfileReviews";
 
 // 🎨 НОВИ ИКОНКИ КОМПОНЕНТИ
 const HomeIcon = () => (
@@ -250,6 +251,7 @@ export const Profile = () => {
       "/profile/students-overview": t("admin.students.overview"),
       "/profile/student-applications": t("admin.students.applications"),
       "/profile/mentor-profile": t("profile.mentorProfile"),
+      "/profile/my-reviews": t("profile.myReviews"),
       "/admin/useful-links/create": t("admin.usefulLinks.create"),
       "/admin/useful-links": t("admin.usefulLinks.list")
 
@@ -703,6 +705,18 @@ export const Profile = () => {
                     <span className="link-content">
                       <BookmarkIcon />
                       {t("profile.bookmarks")}
+                    </span>
+                    <ArrowIcon className="icon-arrow" />
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="my-reviews"
+                    className={({ isActive }) => isActive ? 'active' : ''}
+                  >
+                    <span className="link-content">
+                      <StoriesIcon />
+                      {t("profile.myReviews")}
                     </span>
                     <ArrowIcon className="icon-arrow" />
                   </NavLink>
@@ -1294,6 +1308,7 @@ export const Profile = () => {
             <Route path="clubs" element={<MyClubs />} />
             <Route path="club-create" element={<ClubCreateForm />} />
             <Route path="club-drafts" element={<DraftClubs />} />
+            <Route path="my-reviews" element={<ProfileReviews />} />
             <Route path="mentor-profile" element={<DigiMentorProfile />} />
             <Route path="mentor-dashboard" element={<DigiMentorPanel />} />
             <Route path="mentor-applications" element={<StudentApplicationsManagement />} />

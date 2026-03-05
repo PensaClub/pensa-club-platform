@@ -50,6 +50,8 @@ export const ReviewDetailsModal = ({
         return t('modalReviewDetails.typeMentor');
       case 'course':
         return t('modalReviewDetails.typeCourse');
+      case 'lecture':
+        return t('modalReviewDetails.typeLecture');
       default:
         return type;
     }
@@ -159,6 +161,20 @@ export const ReviewDetailsModal = ({
               </div>
             </div>
           </div>
+
+          {/* Target Name (for course/lecture/mentor reviews) */}
+          {review.targetId && (review.reviewType === 'course' || review.reviewType === 'lecture' || review.reviewType === 'mentor') && (
+            <div className="review-details-pensa-club-modal-section">
+              <div className="review-details-pensa-club-modal-target-info">
+                <span className="review-details-pensa-club-modal-badge-label">
+                  {t('modalReviewDetails.targetName')}:
+                </span>
+                <span className="review-details-pensa-club-modal-target-name">
+                  {review.targetName || `${getTypeText(review.reviewType)} #${review.targetId}`}
+                </span>
+              </div>
+            </div>
+          )}
 
           {/* Rating Section */}
           <div className="review-details-pensa-club-modal-section">

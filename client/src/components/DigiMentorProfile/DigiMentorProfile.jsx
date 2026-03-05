@@ -4,15 +4,19 @@ import { useAcademy } from '../contexts/AcademyProvider';
 import { Loader } from '../Loader/Loader';
 import './digiMentorProfile.css';
 
+const REVIEWS_DISPLAY_LIMIT = 6;
+
 export const DigiMentorProfile = () => {
-    const { t } = useTranslation('digibridge-mentor');
-    const { getMentorProfile, updateMentorProfile } = useAcademy();
+    const { t, i18n } = useTranslation('digibridge-mentor');
+    const { getMentorProfile, updateMentorProfile, getApprovedMentorReviews } = useAcademy();
 
     const [profile, setProfile] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [isSaving, setIsSaving] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({});
+    const [reviews, setReviews] = useState([]);
+    const [showAllReviews, setShowAllReviews] = useState(false);
 
     useEffect(() => {
         fetchProfile();
@@ -40,6 +44,16 @@ export const DigiMentorProfile = () => {
                     otherContact: result.mentor.otherContact || '',
                     priorityContact: result.mentor.priorityContact || 'email'
                 });
+
+                // Fetch mentor reviews
+                if (result.mentor.id) {
+                    try {
+                        const reviewsResult = await getApprovedMentorReviews(result.mentor.id, 20);
+                        setReviews(reviewsResult?.reviews || []);
+                    } catch (err) {
+                        console.error('Error fetching mentor reviews:', err);
+                    }
+                }
             }
         } catch (error) {
             console.error('Error fetching profile:', error);
@@ -430,6 +444,64 @@ export const DigiMentorProfile = () => {
                         </div>
                     </div>
                 </div>
+            </div>
+
+            {/* REVIEWS SECTION */}
+            <div className="digi-mentor-profile-reviews">
+                <h2 className="digi-mentor-profile-reviews-title">
+                    {t('mentorProfile.reviewsSection')}
+                    {reviews.length > 0 && (
+                        <span className="digi-mentor-profile-reviews-count">({reviews.length})</span>
+                    )}
+                </h2>
+
+                {reviews.length === 0 ? (
+                    <div className="digi-mentor-profile-reviews-empty">
+                        <p>{t('mentorProfile.noReviews')}</p>
+                    </div>
+                ) : (
+                    <>
+                        <div className="digi-mentor-profile-reviews-grid">
+                            {(showAllReviews ? reviews : reviews.slice(0, REVIEWS_DISPLAY_LIMIT)).map((rev) => (
+                                <div key={rev.id} className="digi-mentor-profile-review-card">
+                                    <div className="digi-mentor-profile-review-header">
+                                        <span className="digi-mentor-profile-review-name">{rev.name}</span>
+                                        <div className="digi-mentor-profile-review-rating">
+                                            {[...Array(5)].map((_, i) => (
+                                                <span
+                                                    key={i}
+                                                    className={`digi-mentor-profile-review-star ${i < rev.rating ? 'filled' : ''}`}
+                                                >
+                                                    ★
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    {rev.text && (
+                                        <p className="digi-mentor-profile-review-text">
+                                            {rev.text.length > 150 ? `${rev.text.substring(0, 150)}...` : rev.text}
+                                        </p>
+                                    )}
+                                    <span className="digi-mentor-profile-review-date">
+                                        {new Date(rev.createdAt || rev.created_at).toLocaleDateString(
+                                            i18n.language === 'bg' ? 'bg-BG' : i18n.language === 'de' ? 'de-DE' : 'en-GB',
+                                            { day: '2-digit', month: 'short', year: 'numeric' }
+                                        )}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+
+                        {reviews.length > REVIEWS_DISPLAY_LIMIT && !showAllReviews && (
+                            <button
+                                className="digi-mentor-profile-reviews-see-all"
+                                onClick={() => setShowAllReviews(true)}
+                            >
+                                {t('mentorProfile.seeAllReviews')}
+                            </button>
+                        )}
+                    </>
+                )}
             </div>
         </div>
     );

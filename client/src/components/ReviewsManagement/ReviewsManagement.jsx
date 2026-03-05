@@ -27,7 +27,7 @@ export const ReviewsManagement = () => {
     const [loading, setLoading] = useState(true);
     const [filters, setFilters] = useState({
         status: 'all', // all, pending, approved, rejected
-        type: 'all',   // all, academy, mentor, course
+        type: 'all',   // all, academy, mentor, course, lecture
         search: ''
     });
 

@@ -504,7 +504,11 @@
       "inactive": "Inaktiv",
       "pending": "Ausstehende Genehmigung"
     },
-    "basicFieldsHelp": "Um grundlegende Informationen (Name, E-Mail, Alter und Foto) zu ändern, wenden Sie sich bitte an einen Administrator."
+    "basicFieldsHelp": "Um grundlegende Informationen (Name, E-Mail, Alter und Foto) zu ändern, wenden Sie sich bitte an einen Administrator.",
+    "reviewsSection": "Bewertungen",
+    "noReviews": "Noch keine Bewertungen.",
+    "seeAllReviews": "Alle Bewertungen ansehen",
+    "reviewDate": "Eingereicht am"
   },
   "mentorModal": {
     "applying": "Wird gesendet...",

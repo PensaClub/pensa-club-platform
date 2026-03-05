@@ -20,7 +20,18 @@
       "statistics": "Статистики"
     },
     "reviews": {
-      "management": "Управление на Ревюта"
+      "management": "Управление на Ревюта",
+      "types": {
+        "course": "Курс",
+        "lecture": "Лекция",
+        "mentor": "Ментор",
+        "academy": "Академия"
+      },
+      "status": {
+        "pending": "Изчаква одобрение",
+        "approved": "Одобрен",
+        "rejected": "Отхвърлен"
+      }
     },
     "usefulLinks": {
       "title": "Полезни връзки",

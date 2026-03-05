@@ -1,6 +1,6 @@
 // src/components/AcademyCourses/AcademyCourseDetail/AcademyCourseDetail.jsx
 
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
 import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
@@ -8,6 +8,8 @@ import { useTranslation } from 'react-i18next';
 import { useAcademyCourses } from '../../contexts/AcademyCoursesProvider';
 import { useAuthContext } from '../../contexts/UserContext';
 import { AcademyTrailerModal } from '../AcademyTrailerModal/AcademyTrailerModal';
+import { CourseReviewModal } from '../CourseReviewModal/CourseReviewModal';
+import academyServiceFactory from '../../Services/academyServiceFactory';
 import './academyCourseDetail.css';
 import AcademyCourseDetailSkeleton from './AcademyCourseDetailSkeleton/AcademyCourseDetailSkeleton';
 import SEOHead from '../../SEO/SEOHead';
@@ -488,10 +490,19 @@ export const AcademyCourseDetail = () => {
   const [courseTestData, setCourseTestData] = useState(null);
   const [isLoadingCourseTest, setIsLoadingCourseTest] = useState(false);
 
+  // Review state
+  const [reviewStats, setReviewStats] = useState(null);
+  const [reviews, setReviews] = useState([]);
+  const [userHasReviewed, setUserHasReviewed] = useState(false);
+  const [showReviewModal, setShowReviewModal] = useState(false);
+
   const fetchedSlugRef = useRef(null);
   const enrollmentCheckedRef = useRef(null);
   const materialsLoadedRef = useRef(null);
   const courseTestLoadedRef = useRef(null);
+  const reviewsLoadedRef = useRef(null);
+
+  const academyService = useMemo(() => academyServiceFactory(), []);
 
   const hasPrivilegedAccess = isAdmin || isModerator || isMentor;
   const hasLessonAccess = isEnrolled || hasPrivilegedAccess;
@@ -686,6 +697,67 @@ export const AcademyCourseDetail = () => {
 
     loadCourseTest();
   }, [currentCourse?.id, isAuthentication, getCourseTestStatus]);
+
+  // Load course reviews
+  useEffect(() => {
+    const loadReviews = async () => {
+      if (!currentCourse?.id) return;
+      if (reviewsLoadedRef.current === currentCourse.id) return;
+
+      reviewsLoadedRef.current = currentCourse.id;
+
+      try {
+        const [statsRes, reviewsRes] = await Promise.allSettled([
+          academyService.getCourseReviewStats(currentCourse.id),
+          academyService.getApprovedCourseReviews(currentCourse.id)
+        ]);
+
+        if (statsRes.status === 'fulfilled') {
+          setReviewStats(statsRes.value);
+        }
+        if (reviewsRes.status === 'fulfilled') {
+          const data = reviewsRes.value?.reviews || reviewsRes.value || [];
+          setReviews(Array.isArray(data) ? data : []);
+        }
+      } catch (err) {
+        console.error('Error loading course reviews:', err);
+      }
+
+      // Check user review status (only if authenticated)
+      if (isAuthentication) {
+        try {
+          const statusRes = await academyService.checkUserCourseReviewStatus(currentCourse.id);
+          setUserHasReviewed(statusRes?.hasReviewed || false);
+        } catch (err) {
+          console.error('Error checking user course review status:', err);
+        }
+      }
+    };
+
+    loadReviews();
+  }, [currentCourse?.id, isAuthentication, academyService]);
+
+  // Refetch reviews helper
+  const refetchReviews = useCallback(async () => {
+    if (!currentCourse?.id) return;
+    reviewsLoadedRef.current = null;
+    try {
+      const [statsRes, reviewsRes] = await Promise.allSettled([
+        academyService.getCourseReviewStats(currentCourse.id),
+        academyService.getApprovedCourseReviews(currentCourse.id)
+      ]);
+
+      if (statsRes.status === 'fulfilled') {
+        setReviewStats(statsRes.value);
+      }
+      if (reviewsRes.status === 'fulfilled') {
+        const data = reviewsRes.value?.reviews || reviewsRes.value || [];
+        setReviews(Array.isArray(data) ? data : []);
+      }
+    } catch (err) {
+      console.error('Error refetching course reviews:', err);
+    }
+  }, [currentCourse?.id, academyService]);
 
   const course = currentCourse;
 
@@ -932,7 +1004,7 @@ export const AcademyCourseDetail = () => {
 
               {/* Meta Stats */}
               <div className="academyCourseDetail-hero-meta">
-                {rating > 0 && (
+                {(reviewStats?.avgRating || reviewStats?.averageRating || rating) > 0 && (
                   <div className="academyCourseDetail-hero-stat academyCourseDetail-hero-stat--rating">
                     <div className="academyCourseDetail-hero-stat-icon">
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -940,8 +1012,8 @@ export const AcademyCourseDetail = () => {
                       </svg>
                     </div>
                     <div className="academyCourseDetail-hero-stat-info">
-                      <span className="academyCourseDetail-hero-stat-value">{rating.toFixed(1)}</span>
-                      <span className="academyCourseDetail-hero-stat-label">({enrolledCount} {t('academyCourseDetail.hero.ratings')})</span>
+                      <span className="academyCourseDetail-hero-stat-value">{parseFloat(reviewStats?.avgRating || reviewStats?.averageRating || rating || 0).toFixed(1)}</span>
+                      <span className="academyCourseDetail-hero-stat-label">({reviewStats?.totalCount || reviewStats?.totalReviews || enrolledCount} {t('academyCourseDetail.hero.ratings')})</span>
                     </div>
                   </div>
                 )}
@@ -1383,7 +1455,7 @@ export const AcademyCourseDetail = () => {
                 <span className="acd-stat-mini-lbl">{t('academyCourseDetail.overview.stats.completed', 'завършили')}</span>
               </div>
               <div className="acd-stat-mini">
-                <span className="acd-stat-mini-val">⭐ {rating.toFixed(1)}</span>
+                <span className="acd-stat-mini-val">⭐ {parseFloat(reviewStats?.avgRating || reviewStats?.averageRating || rating || 0).toFixed(1)}</span>
                 <span className="acd-stat-mini-lbl">{t('academyCourseDetail.overview.stats.rating', 'рейтинг')}</span>
               </div>
               <div className="acd-stat-mini">
@@ -1467,34 +1539,96 @@ export const AcademyCourseDetail = () => {
           {/* Отзиви */}
           <div className="acd-bottom-card">
             <h3 className="acd-bottom-card-title">⭐ {t('academyCourseDetail.reviews.studentReviews', 'Отзиви')}</h3>
-            <div className="acd-review-header">
-              <span className="acd-review-big">{rating.toFixed(1)}</span>
-              <div className="acd-review-stars">
-                {[1, 2, 3, 4, 5].map(s => (
-                  <svg key={s} width="18" height="18" viewBox="0 0 24 24"
-                    fill={s <= Math.round(rating) ? 'currentColor' : 'none'}
-                    stroke="currentColor" strokeWidth="2"
-                  >
-                    <polygon points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9" />
-                  </svg>
-                ))}
-              </div>
-              <span className="acd-review-count">{enrolledCount} {t('academyCourseDetail.reviews.reviews', 'отзива')}</span>
-            </div>
-            <div className="acd-review-bars">
-              {[5, 4, 3, 2, 1].map(stars => {
-                const pct = stars === 5 ? 75 : stars === 4 ? 18 : stars === 3 ? 5 : stars === 2 ? 1 : 1;
-                return (
-                  <div key={stars} className="acd-review-bar">
-                    <span className="acd-review-bar-label">{stars}★</span>
-                    <div className="acd-review-bar-track">
-                      <div className="acd-review-bar-fill" style={{ width: `${pct}%` }}></div>
+            {(() => {
+              const avgRating = reviewStats?.avgRating || reviewStats?.averageRating || rating || 0;
+              const totalCount = reviewStats?.totalCount || reviewStats?.totalReviews || 0;
+              const distribution = reviewStats?.distribution || {};
+              return (
+                <>
+                  <div className="acd-review-header">
+                    <span className="acd-review-big">{parseFloat(avgRating).toFixed(1)}</span>
+                    <div className="acd-review-stars">
+                      {[1, 2, 3, 4, 5].map(s => (
+                        <svg key={s} width="18" height="18" viewBox="0 0 24 24"
+                          fill={s <= Math.round(avgRating) ? 'currentColor' : 'none'}
+                          stroke="currentColor" strokeWidth="2"
+                        >
+                          <polygon points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9" />
+                        </svg>
+                      ))}
                     </div>
-                    <span className="acd-review-bar-pct">{pct}%</span>
+                    <span className="acd-review-count">
+                      {totalCount} {t('academyCourseDetail.reviews.reviews', 'отзива')}
+                    </span>
                   </div>
-                );
-              })}
-            </div>
+                  <div className="acd-review-bars">
+                    {[5, 4, 3, 2, 1].map(stars => {
+                      const count = distribution[stars] || 0;
+                      const pct = totalCount > 0 ? Math.round((count / totalCount) * 100) : 0;
+                      return (
+                        <div key={stars} className="acd-review-bar">
+                          <span className="acd-review-bar-label">{stars}★</span>
+                          <div className="acd-review-bar-track">
+                            <div className="acd-review-bar-fill" style={{ width: `${pct}%` }}></div>
+                          </div>
+                          <span className="acd-review-bar-pct">{pct}%</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Review list */}
+                  {reviews.length > 0 && (
+                    <div className="acd-review-list">
+                      {reviews.map((review) => (
+                        <div key={review.id} className="acd-review-card">
+                          <div className="acd-review-card-header">
+                            <div className="acd-review-card-avatar">
+                              {review.user?.photoUrl || review.reviewer?.photoUrl ? (
+                                <img src={review.user?.photoUrl || review.reviewer?.photoUrl} alt="" />
+                              ) : (
+                                <span>👤</span>
+                              )}
+                            </div>
+                            <div className="acd-review-card-info">
+                              <span className="acd-review-card-name">
+                                {review.user?.name || review.reviewer?.name || review.reviewerName || t('academyCourseDetail.reviews.anonymous', 'Анонимен')}
+                              </span>
+                              <span className="acd-review-card-date">
+                                {review.createdAt && new Date(review.createdAt).toLocaleDateString('bg-BG', { day: 'numeric', month: 'long', year: 'numeric' })}
+                              </span>
+                            </div>
+                            <div className="acd-review-card-stars">
+                              {[1, 2, 3, 4, 5].map(s => (
+                                <svg key={s} width="14" height="14" viewBox="0 0 24 24"
+                                  fill={s <= (review.rating || 0) ? 'currentColor' : 'none'}
+                                  stroke="currentColor" strokeWidth="2"
+                                >
+                                  <polygon points="12,2 15,9 22,9 17,14 19,21 12,17 5,21 7,14 2,9 9,9" />
+                                </svg>
+                              ))}
+                            </div>
+                          </div>
+                          {(review.comment || review.text || review.content) && (
+                            <p className="acd-review-card-text">{review.comment || review.text || review.content}</p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Rate this course button */}
+                  {isAuthentication && !userHasReviewed && (
+                    <button
+                      className="acd-review-btn"
+                      onClick={() => setShowReviewModal(true)}
+                    >
+                      ⭐ {t('academyCourseDetail.reviews.rateCourse', 'Оцени курса')}
+                    </button>
+                  )}
+                </>
+              );
+            })()}
           </div>
         </div>
 
@@ -1508,6 +1642,20 @@ export const AcademyCourseDetail = () => {
         courseTitle={title}
         accentColor={categoryColor}
       />
+
+      {/* Course Review Modal */}
+      {showReviewModal && (
+        <CourseReviewModal
+          isOpen={showReviewModal}
+          onClose={() => setShowReviewModal(false)}
+          course={course}
+          onSuccess={() => {
+            setShowReviewModal(false);
+            setUserHasReviewed(true);
+            refetchReviews();
+          }}
+        />
+      )}
     </div>
   );
 };

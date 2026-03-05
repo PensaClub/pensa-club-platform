@@ -3117,3 +3117,217 @@
   font-size: 0.8rem;
   opacity: 0.8;
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   REVIEWS SECTION
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.ald-reviews {
+  margin-top: 1rem;
+}
+
+/* Review Summary */
+.ald-review-summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.ald-review-big {
+  font-family: var(--ald-font-display);
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #fbbf24;
+  line-height: 1;
+}
+
+.ald-review-stars {
+  display: flex;
+  gap: 2px;
+  color: #fbbf24;
+}
+
+.ald-review-count {
+  font-size: 0.8125rem;
+  color: var(--ald-text-muted);
+}
+
+/* Distribution Bars */
+.ald-review-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 1.5rem;
+}
+
+.ald-review-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ald-review-bar-label {
+  width: 30px;
+  text-align: right;
+  font-size: 0.78rem;
+  color: var(--ald-text-muted);
+  flex-shrink: 0;
+}
+
+.ald-review-bar-track {
+  flex: 1;
+  height: 6px;
+  background: var(--ald-bg-glass);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.ald-review-bar-fill {
+  height: 100%;
+  background: #fbbf24;
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.ald-review-bar-pct {
+  width: 32px;
+  font-size: 0.75rem;
+  color: var(--ald-text-muted);
+  flex-shrink: 0;
+}
+
+/* Review Cards List */
+.ald-review-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 420px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.ald-review-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.ald-review-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.ald-review-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+}
+
+.ald-review-card {
+  padding: 14px;
+  background: var(--ald-bg-glass);
+  border: 1px solid var(--ald-border);
+  border-radius: 12px;
+  transition: var(--ald-transition);
+}
+
+.ald-review-card:hover {
+  background: var(--ald-bg-glass-hover);
+  border-color: var(--ald-border-hover);
+}
+
+.ald-review-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.ald-review-card-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--ald-bg-tertiary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 0.875rem;
+}
+
+.ald-review-card-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ald-review-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.ald-review-card-name {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--ald-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ald-review-card-date {
+  display: block;
+  font-size: 0.6875rem;
+  color: var(--ald-text-muted);
+}
+
+.ald-review-card-stars {
+  display: flex;
+  gap: 1px;
+  color: #fbbf24;
+  flex-shrink: 0;
+}
+
+.ald-review-card-text {
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  color: var(--ald-text-secondary);
+  margin: 0;
+}
+
+/* Rate Button */
+.ald-review-btn {
+  width: 100%;
+  margin-top: 16px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(245, 158, 11, 0.1));
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.25);
+  border-radius: 12px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--ald-transition);
+}
+
+.ald-review-btn:hover {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.25), rgba(245, 158, 11, 0.2));
+  border-color: rgba(251, 191, 36, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(251, 191, 36, 0.15);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .ald-review-summary {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .ald-review-big {
+    font-size: 1.75rem;
+  }
+
+  .ald-review-list {
+    max-height: 300px;
+  }
+}

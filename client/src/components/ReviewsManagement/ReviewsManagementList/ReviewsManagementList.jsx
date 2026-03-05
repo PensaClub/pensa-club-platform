@@ -49,8 +49,22 @@ export const ReviewsManagementList = ({
         return t('listReviewsManagement.typeMentor');
       case 'course':
         return t('listReviewsManagement.typeCourse');
+      case 'lecture':
+        return t('listReviewsManagement.typeLecture');
       default:
         return type;
+    }
+  };
+
+  const getTypeBadgeClass = (type) => {
+    const baseClass = 'reviews-management-pensa-club-list-type-badge';
+    switch (type) {
+      case 'course':
+        return `${baseClass} ${baseClass}-course`;
+      case 'lecture':
+        return `${baseClass} ${baseClass}-lecture`;
+      default:
+        return baseClass;
     }
   };
 
@@ -119,7 +133,7 @@ export const ReviewsManagementList = ({
                 <span className={getStatusBadgeClass(review.status)}>
                   {getStatusText(review.status)}
                 </span>
-                <span className="reviews-management-pensa-club-list-type-badge">
+                <span className={getTypeBadgeClass(review.reviewType)}>
                   {getTypeText(review.reviewType)}
                 </span>
               </div>

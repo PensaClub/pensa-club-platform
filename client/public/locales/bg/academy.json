@@ -225,7 +225,26 @@
       "basedOn": "Базирано на",
       "reviews": "отзива",
       "noReviewsYet": "Все още няма отзиви за този курс.",
-      "beFirstReview": "Бъди първият, който ще сподели мнение!"
+      "beFirstReview": "Бъди първият, който ще сподели мнение!",
+      "title": "Отзиви",
+      "writeReview": "Напишете отзив",
+      "rateThisCourse": "Оценете този курс",
+      "avgRating": "Средна оценка",
+      "totalReviews": "отзива",
+      "noReviews": "Все още няма отзиви. Бъдете първият!",
+      "yourReview": "Вашият отзив",
+      "reviewPlaceholder": "Споделете вашето мнение за този курс (по избор)...",
+      "submitReview": "Изпрати отзив",
+      "submitting": "Изпращане...",
+      "thankYou": "Благодарим за вашия отзив!",
+      "pendingApproval": "Вашият отзив ще бъде видим след одобрение.",
+      "alreadyReviewed": "Вие вече оценихте този курс.",
+      "loginToReview": "Влезте, за да оставите отзив.",
+      "stars": "звезди",
+      "star": "звезда",
+      "reviewedOn": "Оценено на",
+      "showMore": "Покажи още отзиви",
+      "ratingDistribution": "Разпределение на оценките"
     }
   },
   "academyLessonPlayer": {
@@ -517,6 +536,27 @@
       "noMoreAttempts": "Няма повече опити",
       "maxAttempts": "Макс. опити",
       "hintFree": "Гледайте лекцията, за да отключите теста."
+    },
+    "reviews": {
+      "title": "Отзиви",
+      "writeReview": "Напишете отзив",
+      "rateThisCourse": "Оценете тази лекция",
+      "avgRating": "Средна оценка",
+      "totalReviews": "отзива",
+      "noReviews": "Все още няма отзиви. Бъдете първият!",
+      "yourReview": "Вашият отзив",
+      "reviewPlaceholder": "Споделете вашето мнение за тази лекция (по избор)...",
+      "submitReview": "Изпрати отзив",
+      "submitting": "Изпращане...",
+      "thankYou": "Благодарим за вашия отзив!",
+      "pendingApproval": "Вашият отзив ще бъде видим след одобрение.",
+      "alreadyReviewed": "Вие вече оценихте тази лекция.",
+      "loginToReview": "Влезте, за да оставите отзив.",
+      "stars": "звезди",
+      "star": "звезда",
+      "reviewedOn": "Оценено на",
+      "showMore": "Покажи още отзиви",
+      "ratingDistribution": "Разпределение на оценките"
     }
   },
   "academyLecturesSeo": {
@@ -539,5 +579,53 @@
       "assistant": "Асистент",
       "guest": "Гост-лектор"
     }
+  },
+  "reviewModal": {
+    "courseTitle": "Оценете курса",
+    "lectureTitle": "Оценете лекцията",
+    "ratingLabel": "Вашата оценка",
+    "textLabel": "Коментар (по избор)",
+    "textPlaceholder": "Споделете впечатленията си...",
+    "charCount": "символа",
+    "cancel": "Отказ",
+    "submit": "Изпрати",
+    "submitting": "Изпращане...",
+    "success": "Благодарим! Вашият отзив е изпратен за одобрение.",
+    "error": "Възникна грешка. Моля, опитайте отново.",
+    "ratingRequired": "Моля, изберете оценка."
+  },
+  "courseReviewModal": {
+    "title": "Оценете курса",
+    "subtitle": "Вашето мнение ни помага да подобрим съдържанието",
+    "ratingLabel": "Вашата оценка",
+    "ratingRequired": "Моля, изберете оценка.",
+    "rating1": "Слабо",
+    "rating2": "Задоволително",
+    "rating3": "Добре",
+    "rating4": "Много добре",
+    "rating5": "Отлично",
+    "textLabel": "Коментар",
+    "optional": "по избор",
+    "textPlaceholder": "Споделете впечатленията си от курса...",
+    "skip": "Пропусни",
+    "submit": "Изпрати",
+    "submitting": "Изпращане..."
+  },
+  "lectureReviewModal": {
+    "title": "Оценете лекцията",
+    "subtitle": "Вашето мнение ни помага да подобрим лекциите",
+    "ratingLabel": "Вашата оценка",
+    "ratingRequired": "Моля, изберете оценка.",
+    "rating1": "Слабо",
+    "rating2": "Задоволително",
+    "rating3": "Добре",
+    "rating4": "Много добре",
+    "rating5": "Отлично",
+    "textLabel": "Коментар",
+    "optional": "по избор",
+    "textPlaceholder": "Споделете впечатленията си от лекцията...",
+    "skip": "Пропусни",
+    "submit": "Изпрати",
+    "submitting": "Изпращане..."
   }
 }

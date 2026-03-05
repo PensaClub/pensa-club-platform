@@ -3,17 +3,21 @@
 const reviewsController = require('express').Router();
 const { Op } = require('sequelize');
 
-const { review, user_account, mentor, sequelize, user_details, user_notification, admin_notification } = require('../sequelize/models/index');
+const { review, user_account, mentor, course, lecture, sequelize, user_details, user_notification, admin_notification } = require('../sequelize/models/index');
 const isAuth = require('../middlewares/isAuth.js');
 const rbac = require('../middlewares/rbac.js');
-const { 
+const {
   createAcademyReviewSchema,
   createMentorReviewSchema,
+  createCourseReviewSchema,
+  createLectureReviewSchema,
   rejectReviewSchema
 } = require('../schemas/reviews.schema');
 
-// ✅ IMPORT SERVICE
+// ✅ IMPORT SERVICES
 const { calculateAndUpdateMentorRating } = require('../services/mentorReviewService');
+const { calculateAndUpdateCourseRating } = require('../services/courseReviewService');
+const { calculateAndUpdateLectureRating } = require('../services/lectureReviewService');
 
 // ===============================
 // POST /api/reviews/academy
@@ -333,6 +337,508 @@ reviewsController.get('/mentor/:mentorId/user-status', isAuth, async (req, res, 
 });
 
 // ===============================
+// POST /api/reviews/course/:courseId
+// Създаване на review за курс
+// ===============================
+reviewsController.post('/course/:courseId', isAuth, async (req, res, next) => {
+  try {
+    const courseId = parseInt(req.params.courseId);
+    const userId = req.user.userId;
+
+    // ✅ ВАЛИДАЦИЯ
+    const validationResult = createCourseReviewSchema.safeParse(req.body);
+
+    if (!validationResult.success) {
+      return res.status(400).json({
+        success: false,
+        message: 'Validation failed',
+        errors: validationResult.error.errors
+      });
+    }
+
+    // ✅ ПРОВЕРИ ДАЛИ КУРСЪТ СЪЩЕСТВУВА
+    const courseData = await course.findByPk(courseId);
+
+    if (!courseData) {
+      return res.status(404).json({
+        success: false,
+        message: 'Course not found'
+      });
+    }
+
+    // ✅ ПРОВЕРИ ДАЛИ USER ВЕЧЕ ИМА REVIEW ЗА ТОЗИ КУРС
+    const existingReview = await review.findOne({
+      where: {
+        userId,
+        reviewType: 'course',
+        targetId: courseId
+      }
+    });
+
+    if (existingReview) {
+      return res.status(400).json({
+        success: false,
+        message: 'You have already submitted a review for this course.'
+      });
+    }
+
+    // ✅ СЪЗДАЙ REVIEW
+    const reviewData = {
+      userId,
+      reviewType: 'course',
+      targetId: courseId,
+      ...validationResult.data,
+      status: 'pending'
+    };
+
+    const newReview = await review.create(reviewData);
+
+    // ✅ СЪЗДАЙ ADMIN NOTIFICATION
+    await admin_notification.create({
+      type: 'course_review',
+      title: 'Ново ревю за курс',
+      message: `${reviewData.name} остави ревю за курс "${courseData.name}" с ${reviewData.rating} ${reviewData.rating === 1 ? 'звезда' : 'звезди'}`,
+      data: {
+        reviewId: newReview.id,
+        courseId: courseId,
+        courseName: courseData.name,
+        reviewerName: reviewData.name,
+        reviewerEmail: reviewData.email,
+        rating: reviewData.rating,
+        role: reviewData.role
+      },
+      read: false
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'Review submitted successfully! It will be reviewed by our team.',
+      review: newReview
+    });
+
+  } catch (err) {
+    console.error('❌ [CREATE COURSE REVIEW] Error:', err);
+    next(err);
+  }
+});
+
+// ===============================
+// GET /api/reviews/course/:courseId/approved
+// Вземи одобрени reviews за курс
+// ===============================
+reviewsController.get('/course/:courseId/approved', async (req, res, next) => {
+  try {
+    const courseId = parseInt(req.params.courseId);
+    const { limit = 10 } = req.query;
+
+    const reviews = await review.findAll({
+      where: {
+        reviewType: 'course',
+        targetId: courseId,
+        status: 'approved'
+      },
+      include: [
+        {
+          model: user_account,
+          as: 'user',
+          attributes: ['id', 'email'],
+          include: [
+            {
+              model: user_details,
+              as: 'details',
+              attributes: ['imageURL', 'firstName', 'lastName', 'username']
+            }
+          ]
+        }
+      ],
+      order: [['approved_at', 'DESC']],
+      limit: parseInt(limit)
+    });
+
+    const reviewsWithImages = reviews.map(r => {
+      const reviewJson = r.get({ plain: true });
+
+      return {
+        id: reviewJson.id,
+        userId: reviewJson.userId,
+        name: reviewJson.name,
+        email: reviewJson.email,
+        role: reviewJson.role,
+        rating: reviewJson.rating,
+        text: reviewJson.text,
+        status: reviewJson.status,
+        approvedAt: reviewJson.approvedAt,
+        createdAt: reviewJson.created_at,
+        imageUrl: reviewJson.user?.details?.imageURL || null,
+        user: {
+          id: reviewJson.user?.id,
+          email: reviewJson.user?.email,
+          username: reviewJson.user?.details?.username
+        }
+      };
+    });
+
+    res.status(200).json({
+      success: true,
+      reviews: reviewsWithImages,
+      total: reviewsWithImages.length
+    });
+
+  } catch (err) {
+    console.error('❌ [GET COURSE APPROVED REVIEWS] Error:', err);
+    next(err);
+  }
+});
+
+// ===============================
+// GET /api/reviews/course/:courseId/stats
+// Вземи rating статистики за курс
+// ===============================
+reviewsController.get('/course/:courseId/stats', async (req, res, next) => {
+  try {
+    const courseId = parseInt(req.params.courseId);
+
+    // ✅ ВЗЕМИ COURSE DATA
+    const courseData = await course.findByPk(courseId, {
+      attributes: ['id', 'name', 'rating']
+    });
+
+    if (!courseData) {
+      return res.status(404).json({
+        success: false,
+        message: 'Course not found'
+      });
+    }
+
+    // ✅ ВЗЕМИ RATING DISTRIBUTION
+    const ratingDistribution = await review.findAll({
+      where: {
+        reviewType: 'course',
+        targetId: courseId,
+        status: 'approved'
+      },
+      attributes: [
+        'rating',
+        [sequelize.fn('COUNT', sequelize.col('id')), 'count']
+      ],
+      group: ['rating'],
+      order: [['rating', 'DESC']],
+      raw: true
+    });
+
+    // ✅ FORMAT DISTRIBUTION
+    const distribution = {
+      5: 0,
+      4: 0,
+      3: 0,
+      2: 0,
+      1: 0
+    };
+
+    let totalReviews = 0;
+    ratingDistribution.forEach(item => {
+      distribution[item.rating] = parseInt(item.count);
+      totalReviews += parseInt(item.count);
+    });
+
+    res.status(200).json({
+      success: true,
+      stats: {
+        courseId: courseData.id,
+        courseName: courseData.name,
+        totalReviews,
+        averageRating: courseData.rating ? parseFloat(courseData.rating) : 0,
+        ratingDistribution: distribution
+      }
+    });
+
+  } catch (err) {
+    console.error('❌ [GET COURSE STATS] Error:', err);
+    next(err);
+  }
+});
+
+// ===============================
+// GET /api/reviews/course/:courseId/user-status
+// Провери дали user има review за този курс
+// ===============================
+reviewsController.get('/course/:courseId/user-status', isAuth, async (req, res, next) => {
+  try {
+    const courseId = parseInt(req.params.courseId);
+    const userId = req.user.userId;
+
+    const existingReview = await review.findOne({
+      where: {
+        userId,
+        reviewType: 'course',
+        targetId: courseId
+      }
+    });
+
+    res.status(200).json({
+      success: true,
+      hasReview: !!existingReview,
+      review: existingReview || null
+    });
+
+  } catch (err) {
+    console.error('❌ [CHECK USER COURSE REVIEW STATUS] Error:', err);
+    next(err);
+  }
+});
+
+// ===============================
+// POST /api/reviews/lecture/:lectureId
+// Създаване на review за лекция
+// ===============================
+reviewsController.post('/lecture/:lectureId', isAuth, async (req, res, next) => {
+  try {
+    const lectureId = parseInt(req.params.lectureId);
+    const userId = req.user.userId;
+
+    // ✅ ВАЛИДАЦИЯ
+    const validationResult = createLectureReviewSchema.safeParse(req.body);
+
+    if (!validationResult.success) {
+      return res.status(400).json({
+        success: false,
+        message: 'Validation failed',
+        errors: validationResult.error.errors
+      });
+    }
+
+    // ✅ ПРОВЕРИ ДАЛИ ЛЕКЦИЯТА СЪЩЕСТВУВА
+    const lectureData = await lecture.findByPk(lectureId);
+
+    if (!lectureData) {
+      return res.status(404).json({
+        success: false,
+        message: 'Lecture not found'
+      });
+    }
+
+    // ✅ ПРОВЕРИ ДАЛИ USER ВЕЧЕ ИМА REVIEW ЗА ТАЗИ ЛЕКЦИЯ
+    const existingReview = await review.findOne({
+      where: {
+        userId,
+        reviewType: 'lecture',
+        targetId: lectureId
+      }
+    });
+
+    if (existingReview) {
+      return res.status(400).json({
+        success: false,
+        message: 'You have already submitted a review for this lecture.'
+      });
+    }
+
+    // ✅ СЪЗДАЙ REVIEW
+    const reviewData = {
+      userId,
+      reviewType: 'lecture',
+      targetId: lectureId,
+      ...validationResult.data,
+      status: 'pending'
+    };
+
+    const newReview = await review.create(reviewData);
+
+    // ✅ СЪЗДАЙ ADMIN NOTIFICATION
+    await admin_notification.create({
+      type: 'lecture_review',
+      title: 'Ново ревю за лекция',
+      message: `${reviewData.name} остави ревю за лекция "${lectureData.title}" с ${reviewData.rating} ${reviewData.rating === 1 ? 'звезда' : 'звезди'}`,
+      data: {
+        reviewId: newReview.id,
+        lectureId: lectureId,
+        lectureTitle: lectureData.title,
+        reviewerName: reviewData.name,
+        reviewerEmail: reviewData.email,
+        rating: reviewData.rating,
+        role: reviewData.role
+      },
+      read: false
+    });
+
+    res.status(201).json({
+      success: true,
+      message: 'Review submitted successfully! It will be reviewed by our team.',
+      review: newReview
+    });
+
+  } catch (err) {
+    console.error('❌ [CREATE LECTURE REVIEW] Error:', err);
+    next(err);
+  }
+});
+
+// ===============================
+// GET /api/reviews/lecture/:lectureId/approved
+// Вземи одобрени reviews за лекция
+// ===============================
+reviewsController.get('/lecture/:lectureId/approved', async (req, res, next) => {
+  try {
+    const lectureId = parseInt(req.params.lectureId);
+    const { limit = 10 } = req.query;
+
+    const reviews = await review.findAll({
+      where: {
+        reviewType: 'lecture',
+        targetId: lectureId,
+        status: 'approved'
+      },
+      include: [
+        {
+          model: user_account,
+          as: 'user',
+          attributes: ['id', 'email'],
+          include: [
+            {
+              model: user_details,
+              as: 'details',
+              attributes: ['imageURL', 'firstName', 'lastName', 'username']
+            }
+          ]
+        }
+      ],
+      order: [['approved_at', 'DESC']],
+      limit: parseInt(limit)
+    });
+
+    const reviewsWithImages = reviews.map(r => {
+      const reviewJson = r.get({ plain: true });
+
+      return {
+        id: reviewJson.id,
+        userId: reviewJson.userId,
+        name: reviewJson.name,
+        email: reviewJson.email,
+        role: reviewJson.role,
+        rating: reviewJson.rating,
+        text: reviewJson.text,
+        status: reviewJson.status,
+        approvedAt: reviewJson.approvedAt,
+        createdAt: reviewJson.created_at,
+        imageUrl: reviewJson.user?.details?.imageURL || null,
+        user: {
+          id: reviewJson.user?.id,
+          email: reviewJson.user?.email,
+          username: reviewJson.user?.details?.username
+        }
+      };
+    });
+
+    res.status(200).json({
+      success: true,
+      reviews: reviewsWithImages,
+      total: reviewsWithImages.length
+    });
+
+  } catch (err) {
+    console.error('❌ [GET LECTURE APPROVED REVIEWS] Error:', err);
+    next(err);
+  }
+});
+
+// ===============================
+// GET /api/reviews/lecture/:lectureId/stats
+// Вземи rating статистики за лекция
+// ===============================
+reviewsController.get('/lecture/:lectureId/stats', async (req, res, next) => {
+  try {
+    const lectureId = parseInt(req.params.lectureId);
+
+    // ✅ ВЗЕМИ LECTURE DATA
+    const lectureData = await lecture.findByPk(lectureId, {
+      attributes: ['id', 'title', 'rating']
+    });
+
+    if (!lectureData) {
+      return res.status(404).json({
+        success: false,
+        message: 'Lecture not found'
+      });
+    }
+
+    // ✅ ВЗЕМИ RATING DISTRIBUTION
+    const ratingDistribution = await review.findAll({
+      where: {
+        reviewType: 'lecture',
+        targetId: lectureId,
+        status: 'approved'
+      },
+      attributes: [
+        'rating',
+        [sequelize.fn('COUNT', sequelize.col('id')), 'count']
+      ],
+      group: ['rating'],
+      order: [['rating', 'DESC']],
+      raw: true
+    });
+
+    // ✅ FORMAT DISTRIBUTION
+    const distribution = {
+      5: 0,
+      4: 0,
+      3: 0,
+      2: 0,
+      1: 0
+    };
+
+    let totalReviews = 0;
+    ratingDistribution.forEach(item => {
+      distribution[item.rating] = parseInt(item.count);
+      totalReviews += parseInt(item.count);
+    });
+
+    res.status(200).json({
+      success: true,
+      stats: {
+        lectureId: lectureData.id,
+        lectureTitle: lectureData.title,
+        totalReviews,
+        averageRating: lectureData.rating ? parseFloat(lectureData.rating) : 0,
+        ratingDistribution: distribution
+      }
+    });
+
+  } catch (err) {
+    console.error('❌ [GET LECTURE STATS] Error:', err);
+    next(err);
+  }
+});
+
+// ===============================
+// GET /api/reviews/lecture/:lectureId/user-status
+// Провери дали user има review за тази лекция
+// ===============================
+reviewsController.get('/lecture/:lectureId/user-status', isAuth, async (req, res, next) => {
+  try {
+    const lectureId = parseInt(req.params.lectureId);
+    const userId = req.user.userId;
+
+    const existingReview = await review.findOne({
+      where: {
+        userId,
+        reviewType: 'lecture',
+        targetId: lectureId
+      }
+    });
+
+    res.status(200).json({
+      success: true,
+      hasReview: !!existingReview,
+      review: existingReview || null
+    });
+
+  } catch (err) {
+    console.error('❌ [CHECK USER LECTURE REVIEW STATUS] Error:', err);
+    next(err);
+  }
+});
+
+// ===============================
 // GET /api/reviews/academy/approved
 // Вземи одобрени reviews за академията
 // ===============================
@@ -435,6 +941,68 @@ reviewsController.get('/academy/user-status', isAuth, async (req, res, next) => 
 });
 
 // ===============================
+// GET /api/reviews/my
+// Вземи всички reviews на текущия потребител
+// ===============================
+reviewsController.get('/my', isAuth, async (req, res, next) => {
+  try {
+    const userId = req.user.userId;
+
+    const reviews = await review.findAll({
+      where: { userId },
+      order: [['created_at', 'DESC']],
+      limit: 50
+    });
+
+    const enrichedReviews = await Promise.all(reviews.map(async (r) => {
+      const reviewJson = r.get({ plain: true });
+      let targetName = null;
+
+      if (reviewJson.targetId) {
+        if (reviewJson.reviewType === 'course') {
+          const courseData = await course.findByPk(reviewJson.targetId, { attributes: ['id', 'title'] });
+          targetName = courseData?.title || null;
+        } else if (reviewJson.reviewType === 'lecture') {
+          const lectureData = await lecture.findByPk(reviewJson.targetId, { attributes: ['id', 'title'] });
+          targetName = lectureData?.title || null;
+        } else if (reviewJson.reviewType === 'mentor') {
+          const mentorData = await mentor.findByPk(reviewJson.targetId, {
+            attributes: ['id', 'name']
+          });
+          targetName = mentorData?.name || null;
+        }
+      }
+
+      return {
+        id: reviewJson.id,
+        reviewType: reviewJson.reviewType,
+        targetId: reviewJson.targetId,
+        targetName,
+        name: reviewJson.name,
+        email: reviewJson.email,
+        role: reviewJson.role,
+        rating: reviewJson.rating,
+        text: reviewJson.text,
+        status: reviewJson.status,
+        rejectionReason: reviewJson.rejectionReason,
+        createdAt: reviewJson.created_at,
+        updatedAt: reviewJson.updated_at
+      };
+    }));
+
+    res.status(200).json({
+      success: true,
+      reviews: enrichedReviews,
+      total: enrichedReviews.length
+    });
+
+  } catch (err) {
+    console.error('[GET MY REVIEWS] Error:', err);
+    next(err);
+  }
+});
+
+// ===============================
 // GET /api/reviews/admin/all
 // Вземи всички reviews с филтри (ADMIN/MODERATOR)
 // ===============================
@@ -490,14 +1058,29 @@ reviewsController.get('/admin/all', isAuth, rbac.checkPermission('review', 'read
       limit: parseInt(limit)
     });
 
-    const reviewsWithImages = reviews.map(r => {
+    const reviewsWithImages = await Promise.all(reviews.map(async (r) => {
       const reviewJson = r.get({ plain: true });
-      
+
+      let targetName = null;
+      if (reviewJson.targetId) {
+        if (reviewJson.reviewType === 'course') {
+          const courseData = await course.findByPk(reviewJson.targetId, { attributes: ['id', 'title'] });
+          targetName = courseData?.title || null;
+        } else if (reviewJson.reviewType === 'lecture') {
+          const lectureData = await lecture.findByPk(reviewJson.targetId, { attributes: ['id', 'title'] });
+          targetName = lectureData?.title || null;
+        } else if (reviewJson.reviewType === 'mentor') {
+          const mentorData = await mentor.findByPk(reviewJson.targetId, { attributes: ['id', 'name'] });
+          targetName = mentorData?.name || null;
+        }
+      }
+
       return {
         id: reviewJson.id,
         userId: reviewJson.userId,
         reviewType: reviewJson.reviewType,
         targetId: reviewJson.targetId,
+        targetName,
         name: reviewJson.name,
         email: reviewJson.email,
         role: reviewJson.role,
@@ -530,7 +1113,7 @@ reviewsController.get('/admin/all', isAuth, rbac.checkPermission('review', 'read
             : reviewJson.rejecter.details?.username || reviewJson.rejecter.email
         } : null
       };
-    });
+    }));
 
     res.status(200).json({
       success: true,
@@ -690,11 +1273,18 @@ reviewsController.patch('/:id/approve', isAuth, rbac.checkPermission('review', '
     });
 
     // ✅ ИЗПРАТИ USER NOTIFICATION
+    const reviewTypeLabels = {
+      academy: 'академията',
+      mentor: 'ментор',
+      course: 'курс',
+      lecture: 'лекция'
+    };
+
     await user_notification.create({
       userId: reviewData.userId,
       type: 'review_approved',
       title: 'Вашето ревю беше одобрено! ✅',
-      message: `Вашето ревю за ${reviewData.reviewType === 'academy' ? 'академията' : 'ментор'} беше одобрено и вече е публично видимо. Благодарим ви за отзива!`,
+      message: `Вашето ревю за ${reviewTypeLabels[reviewData.reviewType] || reviewData.reviewType} беше одобрено и вече е публично видимо. Благодарим ви за отзива!`,
       data: {
         reviewId: reviewData.id,
         reviewType: reviewData.reviewType,
@@ -704,12 +1294,18 @@ reviewsController.patch('/:id/approve', isAuth, rbac.checkPermission('review', '
       read: false
     });
 
-    // ✅ АКО Е MENTOR REVIEW → RECALCULATE RATING
-    if (reviewData.reviewType === 'mentor' && reviewData.targetId) {
+    // ✅ RECALCULATE RATING BASED ON REVIEW TYPE
+    if (reviewData.targetId) {
       try {
-        await calculateAndUpdateMentorRating(reviewData.targetId);
+        if (reviewData.reviewType === 'mentor') {
+          await calculateAndUpdateMentorRating(reviewData.targetId);
+        } else if (reviewData.reviewType === 'course') {
+          await calculateAndUpdateCourseRating(reviewData.targetId);
+        } else if (reviewData.reviewType === 'lecture') {
+          await calculateAndUpdateLectureRating(reviewData.targetId);
+        }
       } catch (error) {
-        console.error('❌ Error updating mentor rating:', error);
+        console.error(`❌ Error updating ${reviewData.reviewType} rating:`, error);
         // Не спираме процеса, само логваме грешката
       }
     }
@@ -762,11 +1358,18 @@ reviewsController.patch('/:id/reject', isAuth, rbac.checkPermission('review', 'r
     });
 
     // ✅ ИЗПРАТИ USER NOTIFICATION С ПРИЧИНА
+    const rejectTypeLabels = {
+      academy: 'академията',
+      mentor: 'ментор',
+      course: 'курс',
+      lecture: 'лекция'
+    };
+
     await user_notification.create({
       userId: reviewData.userId,
       type: 'review_rejected',
       title: 'Вашето ревю беше отхвърлено ❌',
-      message: `Вашето ревю за ${reviewData.reviewType === 'academy' ? 'академията' : 'ментор'} беше отхвърлено.`,
+      message: `Вашето ревю за ${rejectTypeLabels[reviewData.reviewType] || reviewData.reviewType} беше отхвърлено.`,
       data: {
         reviewId: reviewData.id,
         reviewType: reviewData.reviewType,
@@ -813,11 +1416,18 @@ reviewsController.delete('/:id', isAuth, rbac.checkPermission('review', 'delete'
     const wasApproved = reviewData.status === 'approved';
 
     // ✅ ИЗПРАТИ USER NOTIFICATION ПРЕДИ ИЗТРИВАНЕ
+    const deleteTypeLabels = {
+      academy: 'академията',
+      mentor: 'ментор',
+      course: 'курс',
+      lecture: 'лекция'
+    };
+
     await user_notification.create({
       userId: userId,
       type: 'review_deleted',
       title: 'Вашето ревю беше изтрито 🗑️',
-      message: `Вашето ревю за ${reviewType === 'academy' ? 'академията' : 'ментор'} беше изтрито от администратор.`,
+      message: `Вашето ревю за ${deleteTypeLabels[reviewType] || reviewType} беше изтрито от администратор.`,
       data: {
         reviewId: reviewId,
         reviewType: reviewType,
@@ -829,12 +1439,18 @@ reviewsController.delete('/:id', isAuth, rbac.checkPermission('review', 'delete'
 
     await reviewData.destroy();
 
-    // ✅ АКО Е APPROVED MENTOR REVIEW → RECALCULATE RATING
-    if (reviewType === 'mentor' && targetId && wasApproved) {
+    // ✅ АКО Е APPROVED REVIEW → RECALCULATE RATING
+    if (targetId && wasApproved) {
       try {
-        await calculateAndUpdateMentorRating(targetId);
+        if (reviewType === 'mentor') {
+          await calculateAndUpdateMentorRating(targetId);
+        } else if (reviewType === 'course') {
+          await calculateAndUpdateCourseRating(targetId);
+        } else if (reviewType === 'lecture') {
+          await calculateAndUpdateLectureRating(targetId);
+        }
       } catch (error) {
-        console.error('❌ Error updating mentor rating after deletion:', error);
+        console.error(`❌ Error updating ${reviewType} rating after deletion:`, error);
       }
     }
 
