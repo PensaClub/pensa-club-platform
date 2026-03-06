@@ -26,7 +26,8 @@ const mentorApplicationSchema = z.object({
     ),
   country: z
     .string()
-    .length(2, { message: 'Country must be a 2-letter code (e.g., BG, DE, AT).' })
+    .min(2, { message: 'Country code must be at least 2 characters.' })
+    .max(5, { message: 'Country code must be at most 5 characters.' })
     .optional()
     .default('BG'),
     

@@ -14,6 +14,8 @@ export const NOTIFICATION_TYPES = {
   ARTICLE_PENDING: 'article_pending',
   ACADEMY_REVIEW: 'academy_review',
   MENTOR_REVIEW: 'mentor_review',
+  COURSE_REVIEW: 'course_review',
+  LECTURE_REVIEW: 'lecture_review',
 
   // Student Applications (Admin)
   STUDENT_APPLICATION: 'student_application',
@@ -104,6 +106,18 @@ export const notificationConfig = {
     priority: 'medium'
   },
   [NOTIFICATION_TYPES.MENTOR_REVIEW]: {
+    icon: '⭐',
+    color: '#ffa500',
+    route: '/profile/reviews-management',
+    priority: 'medium'
+  },
+  [NOTIFICATION_TYPES.COURSE_REVIEW]: {
+    icon: '⭐',
+    color: '#ffa500',
+    route: '/profile/reviews-management',
+    priority: 'medium'
+  },
+  [NOTIFICATION_TYPES.LECTURE_REVIEW]: {
     icon: '⭐',
     color: '#ffa500',
     route: '/profile/reviews-management',

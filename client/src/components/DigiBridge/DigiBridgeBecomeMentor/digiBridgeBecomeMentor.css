@@ -509,6 +509,12 @@ section.become-mentor-form-section::before {
   box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.1);
 }
 
+.become-mentor-form-field select option {
+  color: #1e293b;
+  background: #ffffff;
+  padding: 8px 12px;
+}
+
 .become-mentor-input-error {
   border-color: #ef4444 !important;
   background: rgba(239, 68, 68, 0.06) !important;
