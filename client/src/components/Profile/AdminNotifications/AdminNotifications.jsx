@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { getNotificationConfig } from '../../../config/notificationConfig';
 import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import '../Notifications/notifications.css';

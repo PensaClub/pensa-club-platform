@@ -191,18 +191,18 @@ export const Header = ({ additionalClasses }) => {
             </NavLink>
             <div className="has-dropdown">
               <span className="nav-item dropdown-trigger">
-                {t("header.craigslist")}
+                {t("header.community")}
                 <svg className="dropdown-arrow" width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M1 1L6 5L11 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </span>
 
               <div className="community-dropdown">
-                <Link to="/craigslist?reset=true" className="dropdown-link">
+                <Link to="/community?reset=true" className="dropdown-link">
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 12.75C13.63 12.75 15.07 13.14 16.24 13.65C17.32 14.13 18 15.21 18 16.38V18H6V16.39C6 15.21 6.68 14.13 7.76 13.66C8.93 13.14 10.37 12.75 12 12.75ZM4 13H8V11H4V13ZM16 13H20V11H16V13ZM12 10.5C10.34 10.5 9 9.16 9 7.5C9 5.84 10.34 4.5 12 4.5C13.66 4.5 15 5.84 15 7.5C15 9.16 13.66 10.5 12 10.5ZM21 9.75C21 11.16 19.16 12 18 12C18.84 12 20 10.84 20 9.75C20 8.66 18.84 7.5 18 7.5C19.16 7.5 21 8.36 21 9.75ZM3 9.75C3 8.36 4.84 7.5 6 7.5C5.16 7.5 4 8.66 4 9.75C4 10.84 5.16 12 6 12C4.84 12 3 11.16 3 9.75Z" fill="currentColor" />
                   </svg>
-                  {t("header.craigslist")}
+                  {t("header.community")}
                 </Link>
 
                 {/* НОВА ИКОНКА - Initiatives (лампичка) */}
@@ -520,7 +520,7 @@ export const Header = ({ additionalClasses }) => {
                   <path d="M18 20C18 18.4087 17.3679 16.8826 16.2426 15.7574C15.1174 14.6321 13.5913 14 12 14C10.4087 14 8.88258 14.6321 7.75736 15.7574C6.63214 16.8826 6 18.4087 6 20M12 11C13.6569 11 15 9.65685 15 8C15 6.34315 13.6569 5 12 5C10.3431 5 9 6.34315 9 8C9 9.65685 10.3431 11 12 11Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   <path d="M22 20C22 18.6044 21.2672 17.2078 20 16.2M16 11C17.6569 11 19 9.65685 19 8C19 6.34315 17.6569 5 16 5M2 20C2 18.6044 2.73276 17.2078 4 16.2M8 11C6.34315 11 5 9.65685 5 8C5 6.34315 6.34315 5 8 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
-                {t("header.craigslist")}
+                {t("header.community")}
                 <svg
                   className={`mobile-dropdown-arrow ${mobileCommunityOpen ? 'rotated' : ''}`}
                   width="12"
@@ -535,14 +535,14 @@ export const Header = ({ additionalClasses }) => {
 
               <div className={`mobile-dropdown-content ${mobileCommunityOpen ? 'active' : ''}`}>
                 <NavLink
-                  to="/craigslist?reset=true"
+                  to="/community?reset=true"
                   className={({ isActive }) => `mobile-dropdown-item ${isActive ? "active" : ""}`}
                   onClick={toggleMobileMenu}
                 >
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M9.5 2C13.0899 2 16 4.91015 16 8.5C16 10.0993 15.4102 11.5582 14.4274 12.6822L21.2929 19.5477L19.8787 20.9619L13.0132 14.0964C11.8891 15.0793 10.4303 15.6691 8.83105 15.6691C5.24119 15.6691 2.33105 12.7589 2.33105 9.16907C2.33105 5.57921 5.24119 2.66907 8.83105 2.66907" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
-                  {t("header.craigslist")}
+                  {t("header.community")}
                 </NavLink>
 
                 <NavLink

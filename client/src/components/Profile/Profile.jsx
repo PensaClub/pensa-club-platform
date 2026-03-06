@@ -488,7 +488,7 @@ export const Profile = () => {
 
                   {/* Общност dropdown */}
                   <button className="pd-link pd-submenu-toggle" onClick={toggleProfileCommunity}>
-                    <UsersIcon /> {t("header.craigslist")}
+                    <UsersIcon /> {t("header.community")}
                     <svg
                       className={`pd-submenu-arrow ${profileCommunityOpen ? 'rotated' : ''}`}
                       width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg"
@@ -497,8 +497,8 @@ export const Profile = () => {
                     </svg>
                   </button>
                   <div className={`pd-submenu ${profileCommunityOpen ? 'open' : ''}`}>
-                    <NavLink to="/craigslist?reset=true" className="pd-submenu-item" onClick={() => { setProfileMenuOpen(false); setProfileCommunityOpen(false); }}>
-                      <UsersIcon /> {t("header.craigslist")}
+                    <NavLink to="/community?reset=true" className="pd-submenu-item" onClick={() => { setProfileMenuOpen(false); setProfileCommunityOpen(false); }}>
+                      <UsersIcon /> {t("header.community")}
                     </NavLink>
                     <NavLink to="/initiatives" className="pd-submenu-item" onClick={() => { setProfileMenuOpen(false); setProfileCommunityOpen(false); }}>
                       <InitiativesIcon /> {t("header.initiatives")}

@@ -25,7 +25,10 @@
     "no_ads_found": "Keine Anzeigen gefunden",
     "no_ads_message": "Es scheint, dass es keine Anzeigen gibt, die Ihren angegebenen Kriterien entsprechen.",
     "clear_filters": "Filter löschen",
+    "select_date_range": "Bitte wählen Sie ein Start- und Enddatum.",
     "tag_search": "Stichwort eingeben",
+    "from_date": "von",
+    "to_date": "bis",
     "login_to_view": "Bitte",
     "login": "melden Sie sich in Ihrem Profil an",
     "to_see_details": "um Details zu sehen"
@@ -80,6 +83,7 @@
     "call": "Anrufen",
     "send-message": "Nachricht senden",
     "share": "Teilen",
+    "street_abbrev": "Str.",
     "all-user-ads": "Alle Anzeigen des Benutzers anzeigen",
     "price_lv": "BGN",
     "refresh": "Die Anzeige läuft ab, wenn Sie den Zeitraum verlängern möchten, drücken Sie",
@@ -116,5 +120,18 @@
     "and": "Und",
     "more": "Mehr",
     "zoom_instructions": "Halten Sie die Strg-Taste gedrückt, während Sie scrollen, um die Karte zu zoomen"
+  },
+  "search-criteria": {
+    "recommend": "Empfehle",
+    "donate": "Spende",
+    "sell": "Verkaufe",
+    "work": "Arbeit",
+    "courses": "Schulungen / Kurse",
+    "health": "Gesundheit",
+    "initiatives_projects": "Initiativen / Projekte",
+    "tours": "Ausflüge / Touren",
+    "games": "Spiele",
+    "arbitration": "Schiedsverfahren",
+    "all_menu": "Alle"
   }
 }

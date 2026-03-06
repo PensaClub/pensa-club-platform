@@ -9,19 +9,19 @@ export const adminServiceFactory = (token) => {
     return {
 
         pendingAds: async () => {
-            return requester.get(`${apiUrl}/ads/pending-ads`)
+            return requester.get(`${apiUrl}/listings/pending-ads`)
         },
         approvedAds: async () => {
-            return requester.get(`${apiUrl}/ads/approved-ads`)
+            return requester.get(`${apiUrl}/listings/approved-ads`)
         },
         rejectAds: async () => {
-            return requester.get(`${apiUrl}/ads/denied-ads`)
+            return requester.get(`${apiUrl}/listings/denied-ads`)
         },
         updateAdStatus: async (adId, newStatus, adminComment) => {
-            return requester.post(`${apiUrl}/ads/ad-update-status`, { adId, newStatus, adminComment });
+            return requester.post(`${apiUrl}/listings/ad-update-status`, { adId, newStatus, adminComment });
         },
         deleteAd: async (adId) => {
-            return requester.del(`${apiUrl}/ads/ad-delete/${adId}`);
+            return requester.del(`${apiUrl}/listings/ad-delete/${adId}`);
         },
         deleteUserData: (email) => {
             return requester.del(`${apiUrl}/admin/delete-account/${email}`);

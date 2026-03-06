@@ -214,7 +214,7 @@ function AppRoutes() {
       </Route>
 
       <Route path="/telk-rkme-rzi" element={<Suspense fallback={<LazyLoadingFallback />}><TelkRkmeRzi /></Suspense>} />
-      <Route path="/craigslist" element={<CommunityPage />} />
+      <Route path="/community" element={<CommunityPage />} />
       <Route path="/useful-links" element={<Suspense fallback={<LazyLoadingFallback />}><UsefulLinks /></Suspense>} />
       <Route path="/clubs" element={<AllClubs />} />
       <Route path="/clubs/:slug" element={<ClubView />} />
@@ -234,7 +234,7 @@ function App() {
   const location = useLocation();
   const cleanPathname = stripLangFromPath(location.pathname);
   const isCommunityPage =
-    cleanPathname === '/craigslist' || cleanPathname.startsWith('/ad');
+    cleanPathname === '/community' || cleanPathname.startsWith('/ad');
   const [cookies] = useCookies(["cookieConsent"]);
   const navigate = useNavigate();
   const isAcademyPage = cleanPathname.startsWith('/academy');

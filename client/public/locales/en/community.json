@@ -25,7 +25,10 @@
     "no_ads_found": "No ads found",
     "no_ads_message": "It looks like there are no ads that match your criteria.",
     "clear_filters": "Clear Filters",
+    "select_date_range": "Please select a start and end date.",
     "tag_search": "Enter keyword",
+    "from_date": "from",
+    "to_date": "to",
     "login_to_view": "Please,",
     "login": "log in",
     "to_see_details": "to see details"
@@ -80,6 +83,7 @@
     "call": "Call",
     "send-message": "Message",
     "share": "Share",
+    "street_abbrev": "St.",
     "all-user-ads": "See all ads from this user",
     "price_lv": "lv.",
     "refresh": "The ad expires, if you want to renew the period, click ",
@@ -116,5 +120,18 @@
     "and": "and",
     "more": "more",
     "zoom_instructions": "Hold down the Ctrl key while scrolling to zoom the map"
+  },
+  "search-criteria": {
+    "recommend": "Recommend",
+    "donate": "Donate",
+    "sell": "Sell",
+    "work": "Work",
+    "courses": "Training/Courses",
+    "health": "Health",
+    "initiatives_projects": "Initiatives / Projects",
+    "tours": "Tours",
+    "games": "Games",
+    "arbitration": "Arbitration",
+    "all_menu": "All"
   }
 }

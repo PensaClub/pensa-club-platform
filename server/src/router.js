@@ -32,7 +32,7 @@ const usefulLinksController = require('./controllers/usefulLinksController');
 
 router.use('/auth', authController);
 router.use('/user', userController);
-router.use('/ads', adsController);
+router.use('/listings', adsController);
 router.use('/suggest', suggestUserController);
 router.use('/admin', adminController);
 router.use('/subscribe', subscriberController);

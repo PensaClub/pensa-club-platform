@@ -68,7 +68,7 @@ export const CommunityPage = () => {
     //бутона от менюто за навигация слага кеури ресет=true ао го има ресетва филтрите
     if (query.get("reset") === "true") {
       resetFilters();
-      navigate("/craigslist", { replace: true });
+      navigate("/community", { replace: true });
     } else if (Object.keys(filtersFromQuery).length > 0) {
       handleSearch(filtersFromQuery, 1);
     }
