@@ -41,11 +41,11 @@ export const AcademyCourses = () => {
   const currentDifficulty = searchParams.get('difficulty') || '';
   const currentSearch = searchParams.get('search') || '';
   const currentSort = searchParams.get('sortBy') || '';
- const { location } = useLocation();
+  const location = useLocation();
 
-    useEffect(() => {
-      window.scrollTo(0, 0);
-    }, [location.pathname]);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
   // Update URL params
   const updateParams = useCallback((updates) => {
     setSearchParams(prev => {
@@ -256,7 +256,7 @@ export const AcademyCourses = () => {
           />
         </section>
       </div>
-      <ScrollToTop/>
+      <ScrollToTop />
 
     </div>
   );

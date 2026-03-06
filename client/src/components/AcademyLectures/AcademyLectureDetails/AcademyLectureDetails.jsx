@@ -1,7 +1,7 @@
 // src/components/AcademyLectures/AcademyLectureDetails/AcademyLectureDetails.jsx
 
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
 import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { useTranslation } from 'react-i18next';
@@ -170,7 +170,7 @@ export const AcademyLectureDetails = () => {
 
   // Countdown за upcoming лекции
   const countdown = useCountdown(lecture?.scheduledDate);
- const { location } = useLocation();
+ const location = useLocation();
 
     useEffect(() => {
       window.scrollTo(0, 0);

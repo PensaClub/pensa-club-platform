@@ -16,7 +16,7 @@ export const DigiBridgeBecomeMentor = () => {
   const navigate = useLocalizedNavigate();
   const { isAuthentication, profileData } = useContext(UserContext);
   const { applyAsMentor } = useAcademy();
-  const { location } = useLocation();
+  const location  = useLocation();
   
   useEffect(() => {
     window.scrollTo(0, 0);
