@@ -1110,5 +1110,11 @@
     "skip": "Later",
     "submit": "Submit review",
     "submitting": "Submitting..."
+  },
+  "comingSoon": {
+    "title": "Coming Soon",
+    "subtitle": "We're working hard to bring you this feature. It will be available soon!",
+    "backToAcademy": "Back to Academy",
+    "stayTuned": "Stay tuned"
   }
 }

@@ -8,6 +8,7 @@ import './digiBridgeBecomeMentor.css';
 import { toast } from 'react-toastify';
 import { uploadMentorPhoto, uploadMentorCV } from '../../firebase/firebaseMentorStorage';
 import { DigiBridgeHeader } from '../../DigiBridgeAcademy/DigiBridgeHeader/DigiBridgeHeader';
+import { useLocation } from 'react-router-dom';
 const FORM_STORAGE_KEY = 'digibridge_mentor_application_form';
 
 export const DigiBridgeBecomeMentor = () => {
@@ -15,6 +16,11 @@ export const DigiBridgeBecomeMentor = () => {
   const navigate = useLocalizedNavigate();
   const { isAuthentication, profileData } = useContext(UserContext);
   const { applyAsMentor } = useAcademy();
+  const { location } = useLocation();
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   const loadSavedData = () => {
     try {

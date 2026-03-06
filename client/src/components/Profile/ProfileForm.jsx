@@ -20,7 +20,7 @@ import { useImageUpload } from "../hooks/useImageUpload";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
 const ProfileForm = () => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('profile');
   const currentLanguage = i18n.language;
   const navigate = useLocalizedNavigate();
   const { onProfileDataSubmit } = useContext(UserContext);

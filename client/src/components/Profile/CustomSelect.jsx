@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 const CustomSelect = ({ options, selectedOptions, onSelect }) => {
     const [isOpen, setIsOpen] = useState(false);
     const dropdownRef = useRef(null);
-    const { t } = useTranslation();
+    const { t } = useTranslation('profile');
 
     useEffect(() => {
         const handleClickOutside = (event) => {

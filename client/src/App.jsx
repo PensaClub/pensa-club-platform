@@ -113,6 +113,7 @@ const LectureCreateForm = lazy(() => import('./components/LectureCreateForm/Lect
 const AdminAcademyLecturesList = lazy(() => import('./components/AdminAcademyLecturesList/AdminAcademyLecturesList.jsx'));
 const EditLecture = lazy(() => import('./components/AdminAcademyLecturesList/EditLecture/EditLecture.jsx'));
 const TelkRkmeRzi = lazy(() => import('./components/TelkRkmeRzi/TelkRkmeRzi.jsx'));
+const ComingSoon = lazy(() => import('./components/DigiBridgeAcademy/ComingSoon/ComingSoon.jsx'));
 
 // ✅ LAZY LOADING - USEFUL LINKS КОМПОНЕНТИ
 const UsefulLinks = lazy(() => import('./components/UsefulLinks/UsefulLinks.jsx'));
@@ -147,6 +148,11 @@ function AppRoutes() {
       <Route path="/academy/courses" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademyCourses /></Suspense>} />
       <Route path="/academy/courses/:slug" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademyCourseDetail /></Suspense>} />
       <Route path="/academy/mentors" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><DigiBridgeMentorsPage /></Suspense>} />
+      {/* TODO: Тези страници са временно Coming Soon — достъпът ще се определи по-късно */}
+      <Route path="/academy/events" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><ComingSoon pageKey="events" /></Suspense>} />
+      <Route path="/academy/library" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><ComingSoon pageKey="library" /></Suspense>} />
+      <Route path="/academy/community" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><ComingSoon pageKey="community" /></Suspense>} />
+      <Route path="/academy/about" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><ComingSoon pageKey="about" /></Suspense>} />
       <Route path="/contact" element={<ContactForm />} />
       <Route path="/about" element={<AboutPage />} />
       <Route path="/server-error" element={<ServerError />} />
@@ -214,7 +220,7 @@ function AppRoutes() {
       </Route>
 
       <Route path="/telk-rkme-rzi" element={<Suspense fallback={<LazyLoadingFallback />}><TelkRkmeRzi /></Suspense>} />
-      <Route path="/craigslist" element={<CommunityPage />} />
+      <Route path="/community" element={<CommunityPage />} />
       <Route path="/useful-links" element={<Suspense fallback={<LazyLoadingFallback />}><UsefulLinks /></Suspense>} />
       <Route path="/clubs" element={<AllClubs />} />
       <Route path="/clubs/:slug" element={<ClubView />} />
@@ -234,7 +240,7 @@ function App() {
   const location = useLocation();
   const cleanPathname = stripLangFromPath(location.pathname);
   const isCommunityPage =
-    cleanPathname === '/craigslist' || cleanPathname.startsWith('/ad');
+    cleanPathname === '/community' || cleanPathname.startsWith('/ad');
   const [cookies] = useCookies(["cookieConsent"]);
   const navigate = useNavigate();
   const isAcademyPage = cleanPathname.startsWith('/academy');

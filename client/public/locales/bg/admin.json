@@ -299,5 +299,26 @@
       "description": "Опитайте с различни критерии за търсене или изберете друга категория.",
       "resetButton": "Изчисти филтрите"
     }
+  },
+  "header": {
+    "home": "Начало",
+    "articles": "Статии",
+    "community": "Общност",
+    "initiatives": "Инициативи",
+    "projects": "Проекти",
+    "publications": "Публикации",
+    "stories": "Истории",
+    "map": "Карта",
+    "clubs": "Клубове",
+    "games": "Игри",
+    "ad-create": "Добави обява",
+    "about": "За нас",
+    "logout": "Излез от профила",
+    "academy": "Академия",
+    "academy-home": "Начало",
+    "academy-courses": "Курсове",
+    "academy-lectures": "Лекции",
+    "academy-mentors": "Ментори",
+    "language": "Език"
   }
 }

@@ -2,7 +2,7 @@
   "header": {
     "map": "Карта",
     "chats": "Чат",
-    "craigslist": "Общност",
+    "community": "Общност",
     "login": "Вход",
     "register": "Регистрация",
     "profile": "Профил",
@@ -18,7 +18,15 @@
     "bookmarks": "За четене",
     "publications": "Публикации",
     "stories": "Истории",
-    "about": "За нас"
+    "about": "За нас",
+    "academy": "Академия",
+    "academy-courses": "Курсове",
+    "academy-courses-desc": "Разгледай нашите курсове",
+    "academy-lectures": "Лекции",
+    "academy-lectures-desc": "Гледай видео лекции",
+    "academy-mentors": "Ментори",
+    "academy-mentors-desc": "Намери своя ментор",
+    "academy-cta": "Влез в Академията"
   },
   "footer": {
     "site-map": "Карта на сайта",
@@ -26,7 +34,7 @@
     "map": "Карта",
     "contact": "Свържете се с нас",
     "useful-links": "Полезни връзки",
-    "craigslist": "Общност",
+    "community": "Общност",
     "partners": "Партньори",
     "softuni_buditel": "СофтУни Будител",
     "country-city": "България, София",
@@ -127,7 +135,7 @@
     "error": "Грешка",
     "home": "Начало",
     "map": "Карта",
-    "craigslist": "Общност",
+    "community": "Общност",
     "404-desc": "Не съществува такава страница",
     "500-desc": "Сървърът не може да изпълни заявката",
     "404-title": "Страницата не е намерена",

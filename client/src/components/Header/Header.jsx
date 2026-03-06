@@ -129,6 +129,60 @@ export const Header = ({ additionalClasses }) => {
         <div className="navy">
           {/* Десктоп навигация */}
           <nav className="navbar desktop-nav">
+            {/* DigiBridge Academy — mega dropdown */}
+            <div className="has-dropdown academy-nav-item">
+              <NavLink
+                to="/academy"
+                className={({ isActive }) =>
+                  `nav-item academy-nav-trigger ${isActive || location.pathname.startsWith('/academy') ? "active" : ""}`
+                }
+              >
+                <svg className="academy-nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 3L1 9L5 11.18V17.18L12 21L19 17.18V11.18L21 10.09V17H23V9L12 3ZM18.82 9L12 12.72L5.18 9L12 5.28L18.82 9ZM17 15.99L12 18.72L7 15.99V12.27L12 15L17 12.27V15.99Z" fill="currentColor" />
+                </svg>
+                {t("header.academy")}
+                <svg className="dropdown-arrow" width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M1 1L6 5L11 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </NavLink>
+
+              <div className="acd-mega">
+                <div className="acd-header">
+                  <span className="acd-title">DigiBridge Academy</span>
+                </div>
+                <Link to="/academy/courses" className="acd-item">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 5C19.89 4.65 18.67 4.5 17.5 4.5C15.55 4.5 13.45 4.9 12 6C10.55 4.9 8.45 4.5 6.5 4.5C4.55 4.5 2.45 4.9 1 6V20.65C1 20.9 1.25 21.15 1.5 21.15C1.6 21.15 1.65 21.1 1.75 21.1C3.1 20.45 5.05 20 6.5 20C8.45 20 10.55 20.4 12 21.5C13.35 20.65 15.8 20 17.5 20C19.15 20 20.85 20.3 22.25 21.05C22.35 21.1 22.4 21.1 22.5 21.1C22.75 21.1 23 20.85 23 20.6V6C22.4 5.55 21.75 5.25 21 5ZM21 18.5C19.9 18.15 18.7 18 17.5 18C15.8 18 13.35 18.65 12 19.5V8C13.35 7.15 15.8 6.5 17.5 6.5C18.7 6.5 19.9 6.65 21 7V18.5Z" fill="currentColor" />
+                  </svg>
+                  <div className="acd-item-text">
+                    <span className="acd-item-title">{t("header.academy-courses")}</span>
+                    <span className="acd-item-desc">{t("header.academy-courses-desc")}</span>
+                  </div>
+                </Link>
+                <Link to="/academy/lectures" className="acd-item">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 3H3C1.89 3 1 3.89 1 5V17C1 18.1 1.89 19 3 19H8V21H16V19H21C22.1 19 22.99 18.1 22.99 17L23 5C23 3.89 22.1 3 21 3ZM21 17H3V5H21V17ZM16 11L10 14.5V7.5L16 11Z" fill="currentColor" />
+                  </svg>
+                  <div className="acd-item-text">
+                    <span className="acd-item-title">{t("header.academy-lectures")}</span>
+                    <span className="acd-item-desc">{t("header.academy-lectures-desc")}</span>
+                  </div>
+                </Link>
+                <Link to="/academy/mentors" className="acd-item">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14ZM21.12 6.46L19.44 8.14C20.07 9.26 20.07 10.74 19.44 11.86L21.12 13.54C22.56 11.5 22.56 8.5 21.12 6.46ZM17.76 9.82L16.08 8.14C16.69 9.26 16.69 10.74 16.08 11.86L17.76 13.54C19.2 11.5 19.2 8.5 17.76 9.82Z" fill="currentColor" />
+                  </svg>
+                  <div className="acd-item-text">
+                    <span className="acd-item-title">{t("header.academy-mentors")}</span>
+                    <span className="acd-item-desc">{t("header.academy-mentors-desc")}</span>
+                  </div>
+                </Link>
+                <Link to="/academy" className="acd-cta">
+                  {t("header.academy-cta")} →
+                </Link>
+              </div>
+            </div>
+
             <NavLink
               to="/articles"
               className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
@@ -137,18 +191,18 @@ export const Header = ({ additionalClasses }) => {
             </NavLink>
             <div className="has-dropdown">
               <span className="nav-item dropdown-trigger">
-                {t("header.craigslist")}
+                {t("header.community")}
                 <svg className="dropdown-arrow" width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M1 1L6 5L11 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </span>
 
               <div className="community-dropdown">
-                <Link to="/craigslist?reset=true" className="dropdown-link">
+                <Link to="/community?reset=true" className="dropdown-link">
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 12.75C13.63 12.75 15.07 13.14 16.24 13.65C17.32 14.13 18 15.21 18 16.38V18H6V16.39C6 15.21 6.68 14.13 7.76 13.66C8.93 13.14 10.37 12.75 12 12.75ZM4 13H8V11H4V13ZM16 13H20V11H16V13ZM12 10.5C10.34 10.5 9 9.16 9 7.5C9 5.84 10.34 4.5 12 4.5C13.66 4.5 15 5.84 15 7.5C15 9.16 13.66 10.5 12 10.5ZM21 9.75C21 11.16 19.16 12 18 12C18.84 12 20 10.84 20 9.75C20 8.66 18.84 7.5 18 7.5C19.16 7.5 21 8.36 21 9.75ZM3 9.75C3 8.36 4.84 7.5 6 7.5C5.16 7.5 4 8.66 4 9.75C4 10.84 5.16 12 6 12C4.84 12 3 11.16 3 9.75Z" fill="currentColor" />
                   </svg>
-                  {t("header.craigslist")}
+                  {t("header.community")}
                 </Link>
 
                 {/* НОВА ИКОНКА - Initiatives (лампичка) */}
@@ -207,6 +261,7 @@ export const Header = ({ additionalClasses }) => {
             >
               {t("header.clubs")}
             </NavLink>
+
             {/* ЧАТ ЛИНК */}
             {isAuthentication && (
               <>
@@ -409,6 +464,41 @@ export const Header = ({ additionalClasses }) => {
               </NavLink>
             )}
 
+            {/* DigiBridge Academy — мобилна секция */}
+            <div className="mobile-academy-section">
+              <div className="mobile-academy-label">DigiBridge Academy</div>
+              <NavLink
+                to="/academy/courses"
+                className={({ isActive }) => `mobile-nav-item mobile-academy-item ${isActive ? "active" : ""}`}
+                onClick={toggleMobileMenu}
+              >
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M21 5C19.89 4.65 18.67 4.5 17.5 4.5C15.55 4.5 13.45 4.9 12 6C10.55 4.9 8.45 4.5 6.5 4.5C4.55 4.5 2.45 4.9 1 6V20.65C1 20.9 1.25 21.15 1.5 21.15C1.6 21.15 1.65 21.1 1.75 21.1C3.1 20.45 5.05 20 6.5 20C8.45 20 10.55 20.4 12 21.5C13.35 20.65 15.8 20 17.5 20C19.15 20 20.85 20.3 22.25 21.05C22.35 21.1 22.4 21.1 22.5 21.1C22.75 21.1 23 20.85 23 20.6V6C22.4 5.55 21.75 5.25 21 5ZM21 18.5C19.9 18.15 18.7 18 17.5 18C15.8 18 13.35 18.65 12 19.5V8C13.35 7.15 15.8 6.5 17.5 6.5C18.7 6.5 19.9 6.65 21 7V18.5Z" fill="currentColor" />
+                </svg>
+                {t("header.academy-courses")}
+              </NavLink>
+              <NavLink
+                to="/academy/lectures"
+                className={({ isActive }) => `mobile-nav-item mobile-academy-item ${isActive ? "active" : ""}`}
+                onClick={toggleMobileMenu}
+              >
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M21 3H3C1.89 3 1 3.89 1 5V17C1 18.1 1.89 19 3 19H8V21H16V19H21C22.1 19 22.99 18.1 22.99 17L23 5C23 3.89 22.1 3 21 3ZM21 17H3V5H21V17ZM16 11L10 14.5V7.5L16 11Z" fill="currentColor" />
+                </svg>
+                {t("header.academy-lectures")}
+              </NavLink>
+              <NavLink
+                to="/academy/mentors"
+                className={({ isActive }) => `mobile-nav-item mobile-academy-item ${isActive ? "active" : ""}`}
+                onClick={toggleMobileMenu}
+              >
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14ZM21.12 6.46L19.44 8.14C20.07 9.26 20.07 10.74 19.44 11.86L21.12 13.54C22.56 11.5 22.56 8.5 21.12 6.46ZM17.76 9.82L16.08 8.14C16.69 9.26 16.69 10.74 16.08 11.86L17.76 13.54C19.2 11.5 19.2 8.5 17.76 9.82Z" fill="currentColor" />
+                </svg>
+                {t("header.academy-mentors")}
+              </NavLink>
+            </div>
+
             <NavLink
               to="/articles"
               className={({ isActive }) => `mobile-nav-item ${isActive ? "active" : ""}`}
@@ -430,7 +520,7 @@ export const Header = ({ additionalClasses }) => {
                   <path d="M18 20C18 18.4087 17.3679 16.8826 16.2426 15.7574C15.1174 14.6321 13.5913 14 12 14C10.4087 14 8.88258 14.6321 7.75736 15.7574C6.63214 16.8826 6 18.4087 6 20M12 11C13.6569 11 15 9.65685 15 8C15 6.34315 13.6569 5 12 5C10.3431 5 9 6.34315 9 8C9 9.65685 10.3431 11 12 11Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   <path d="M22 20C22 18.6044 21.2672 17.2078 20 16.2M16 11C17.6569 11 19 9.65685 19 8C19 6.34315 17.6569 5 16 5M2 20C2 18.6044 2.73276 17.2078 4 16.2M8 11C6.34315 11 5 9.65685 5 8C5 6.34315 6.34315 5 8 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
-                {t("header.craigslist")}
+                {t("header.community")}
                 <svg
                   className={`mobile-dropdown-arrow ${mobileCommunityOpen ? 'rotated' : ''}`}
                   width="12"
@@ -445,14 +535,14 @@ export const Header = ({ additionalClasses }) => {
 
               <div className={`mobile-dropdown-content ${mobileCommunityOpen ? 'active' : ''}`}>
                 <NavLink
-                  to="/craigslist?reset=true"
+                  to="/community?reset=true"
                   className={({ isActive }) => `mobile-dropdown-item ${isActive ? "active" : ""}`}
                   onClick={toggleMobileMenu}
                 >
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M9.5 2C13.0899 2 16 4.91015 16 8.5C16 10.0993 15.4102 11.5582 14.4274 12.6822L21.2929 19.5477L19.8787 20.9619L13.0132 14.0964C11.8891 15.0793 10.4303 15.6691 8.83105 15.6691C5.24119 15.6691 2.33105 12.7589 2.33105 9.16907C2.33105 5.57921 5.24119 2.66907 8.83105 2.66907" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
-                  {t("header.craigslist")}
+                  {t("header.community")}
                 </NavLink>
 
                 <NavLink

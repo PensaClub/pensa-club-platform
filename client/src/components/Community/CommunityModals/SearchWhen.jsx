@@ -14,7 +14,7 @@ export const SearchWhen = ({ isOpen, onClose, setFilters, filters, setCreationDa
 
     const handleSearch = () => {
         if (searchPeriod === 'custom' && (!startDate || !endDate)) {
-            alert('Моля, изберете начален и краен период.');
+            alert(t('community.select_date_range'));
             return;
         }
     

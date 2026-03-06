@@ -7,7 +7,7 @@ import { MapEditor } from '../MapEditor/MapEditor';
 import { useMappingContext } from '../../contexts/MapContext';
 
 const CustomSelect = ({ options, selectedValues, onChange, searchPlaceholder, icon }) => {
-    const { t } = useTranslation('community');
+    const { t } = useTranslation(['community', 'auth']);
     const [isOpen, setIsOpen] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const selectRef = useRef();
@@ -83,7 +83,7 @@ const CustomSelect = ({ options, selectedValues, onChange, searchPlaceholder, ic
 };
 
 const FilterSection = ({ title, options, selectedValues, onChange, icon }) => {
-    const { t } = useTranslation('community');
+    const { t } = useTranslation(['community', 'auth']);
 
     return (
         <div className="filter-section">
@@ -107,7 +107,7 @@ const FilterSection = ({ title, options, selectedValues, onChange, icon }) => {
 };
 
 export const FiltersMap = () => {
-    const { t } = useTranslation('community');
+    const { t } = useTranslation(['community', 'auth']);
     const { allUsers } = useMappingContext();
 
     const [optionData, setOptionData] = useState(null);
@@ -204,7 +204,7 @@ export const FiltersMap = () => {
                                 searchPlaceholder={t('map.skills-placeholder')}
                             />
                         ) : (
-                            <div>Loading...</div>
+                            <div>{t('map.loading')}</div>
                         )}
                     </div>
                     <div className="filter-main">
@@ -218,7 +218,7 @@ export const FiltersMap = () => {
                                 searchPlaceholder={t('map.job-placeholder')}
                             />
                         ) : (
-                            <div>Loading...</div>
+                            <div>{t('map.loading')}</div>
                         )}
                     </div>
                     <div className="filter-main">
@@ -232,7 +232,7 @@ export const FiltersMap = () => {
                                 searchPlaceholder={t('map.interests-placeholder')}
                             />
                         ) : (
-                            <div>Loading...</div>
+                            <div>{t('map.loading')}</div>
                         )}
                     </div>
                     <button className="clear-filters" onClick={clearAllFilters}>{t('map.clear-filters')}</button>
@@ -266,7 +266,7 @@ export const FiltersMap = () => {
                                 <button className="clear-filters-hamburger" onClick={clearAllFilters}>{t('map.clear-filters')}</button>
                             </>
                         ) : (
-                            <div>Loading...</div>
+                            <div>{t('map.loading')}</div>
                         )}
                     </div>
                 </div>

@@ -153,6 +153,37 @@ const ClubsIcon = () => (
   </svg>
 );
 
+const AcademyIcon = () => (
+  <svg className="menu-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M12 3L1 9L5 11.18V17.18L12 21L19 17.18V11.18L21 10.09V17H23V9L12 3ZM18.82 9L12 12.72L5.18 9L12 5.28L18.82 9ZM17 15.99L12 18.72L7 15.99V12.27L12 15L17 12.27V15.99Z" fill="currentColor" />
+  </svg>
+);
+
+const CoursesIcon = () => (
+  <svg className="menu-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M4 19.5C4 18.1193 5.11929 17 6.5 17H20M4 19.5C4 20.8807 5.11929 22 6.5 22H20V2H6.5C5.11929 2 4 3.11929 4 4.5V19.5Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const LecturesIcon = () => (
+  <svg className="menu-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M15 10L19.553 7.724C20.198 7.401 21 7.874 21 8.618V15.382C21 16.126 20.198 16.599 19.553 16.276L15 14M5 18H13C14.1046 18 15 17.1046 15 16V8C15 6.89543 14.1046 6 13 6H5C3.89543 6 3 6.89543 3 8V16C3 17.1046 3.89543 18 5 18Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const MentorsIcon = () => (
+  <svg className="menu-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M16 21V19C16 16.7909 14.2091 15 12 15H5C2.79086 15 1 16.7909 1 19V21M20 8V14M23 11H17M12.5 7C12.5 9.20914 10.7091 11 8.5 11C6.29086 11 4.5 9.20914 4.5 7C4.5 4.79086 6.29086 3 8.5 3C10.7091 3 12.5 4.79086 12.5 7Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
+const LanguageIcon = () => (
+  <svg className="menu-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5" />
+    <path d="M2 12H22M12 2C14.5013 4.73835 15.9228 8.29203 16 12C15.9228 15.708 14.5013 19.2616 12 22C9.49872 19.2616 8.07725 15.708 8 12C8.07725 8.29203 9.49872 4.73835 12 2Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
 const AvatarIcon = () => (
   <svg className="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="1.5" />
@@ -429,186 +460,114 @@ export const Profile = () => {
               {profileData?.details?.username || profileData?.email?.split('@')[0] || profileData?.email}
             </span>
 
-            {/* 🎨 ОПРАВЕНО ПАДАЩО МЕНЮ */}
             {profileMenuOpen && (
-              <div className="profile-dropdown-new">
-                <div className="dropdown-header">
+              <div className="pd-dropdown">
+                {/* Header */}
+                <div className="pd-header">
                   <img
                     src={profileData?.details?.imageURL || "/images/homePage/user-it.png"}
                     alt="User"
-                    className="dropdown-profile-image"
-                    onError={(e) => {
-                      e.target.src = "/images/homePage/user-it.png";
-                    }}
+                    className="pd-avatar"
+                    onError={(e) => { e.target.src = "/images/homePage/user-it.png"; }}
                   />
-                  <div className="dropdown-username">
-                    {profileData?.details?.username || profileData?.email}
+                  <div className="pd-user-info">
+                    <div className="pd-username">{profileData?.details?.username || profileData?.email?.split('@')[0]}</div>
+                    <div className="pd-email">{profileData?.email}</div>
                   </div>
                 </div>
-                <div className="dropdown-links">
-                  {/* ✅ НАЧАЛО */}
-                  <NavLink to="/" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
-                    <span className="link-content">
-                      <HomeIcon />
-                      {t("header.home")}
-                    </span>
+
+                {/* Pensa Club */}
+                <div className="pd-section">
+                  <div className="pd-section-label">Pensa Club</div>
+                  <NavLink to="/" className="pd-link" onClick={() => setProfileMenuOpen(false)}>
+                    <HomeIcon /> {t("header.home")}
+                  </NavLink>
+                  <NavLink to="/articles" className="pd-link" onClick={() => setProfileMenuOpen(false)}>
+                    <ForumIcon /> {t("header.articles")}
                   </NavLink>
 
-                  {/* ✅ СТАТИИ */}
-                  <NavLink to="/articles" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
-                    <span className="link-content">
-                      <ForumIcon className="menu-icon" />
-                      {t("header.articles")}
-                    </span>
-                  </NavLink>
-
-                  {/* ✅ ОБЩНОСТ DROPDOWN */}
-                  <div className="profile-dropdown-container">
-                    <button
-                      className={`dropdown-item-new-profile profile-dropdown-toggle ${profileCommunityOpen ? 'active' : ''}`}
-                      onClick={toggleProfileCommunity}
+                  {/* Общност dropdown */}
+                  <button className="pd-link pd-submenu-toggle" onClick={toggleProfileCommunity}>
+                    <UsersIcon /> {t("header.community")}
+                    <svg
+                      className={`pd-submenu-arrow ${profileCommunityOpen ? 'rotated' : ''}`}
+                      width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg"
                     >
-                      <span className="link-content">
-                        <UsersIcon className="menu-icon" />
-                        {t("header.craigslist")}
-                        <svg
-                          className={`profile-dropdown-arrow ${profileCommunityOpen ? 'rotated' : ''}`}
-                          width="12"
-                          height="6"
-                          viewBox="0 0 12 6"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path d="M1 1L6 5L11 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                      </span>
-                    </button>
-
-                    <div className={`profile-dropdown-content ${profileCommunityOpen ? 'active' : ''}`}>
-                      {/* Craigslist */}
-                      <NavLink
-                        to="/craigslist?reset=true"
-                        className="profile-dropdown-item-new-profile"
-                        onClick={() => {
-                          setProfileMenuOpen(false);
-                          setProfileCommunityOpen(false);
-                        }}
-                      >
-                        <UsersIcon className="menu-icon" />
-                        {t("header.craigslist")}
-                      </NavLink>
-
-                      {/* ✅ Инициативи */}
-                      <NavLink
-                        to="/initiatives"
-                        className="profile-dropdown-item-new-profile"
-                        onClick={() => {
-                          setProfileMenuOpen(false);
-                          setProfileCommunityOpen(false);
-                        }}
-                      >
-                        <InitiativesIcon className="menu-icon" />
-                        {t("header.initiatives")}
-                      </NavLink>
-
-                      {/* ✅ Проекти */}
-                      <NavLink
-                        to="/projects"
-                        className="profile-dropdown-item-new-profile"
-                        onClick={() => {
-                          setProfileMenuOpen(false);
-                          setProfileCommunityOpen(false);
-                        }}
-                      >
-                        <ProjectsIcon className="menu-icon" />
-                        {t("header.projects")}
-                      </NavLink>
-
-                      {/* ✅ ПУБЛИКАЦИИ */}
-                      <NavLink
-                        to="/publications"
-                        className="profile-dropdown-item-new-profile"
-                        onClick={() => {
-                          setProfileMenuOpen(false);
-                          setProfileCommunityOpen(false);
-                        }}
-                      >
-                        <PublicationsIcon className="menu-icon" />
-                        {t("header.publications")}
-                      </NavLink>
-
-                      {/* ✅ ИСТОРИИ */}
-                      <NavLink
-                        to="/stories"
-                        className="profile-dropdown-item-new-profile"
-                        onClick={() => {
-                          setProfileMenuOpen(false);
-                          setProfileCommunityOpen(false);
-                        }}
-                      >
-                        <StoriesIcon className="menu-icon" />
-                        {t("header.stories")}
-                      </NavLink>
-
-                      {/* ✅ Карта */}
-                      <NavLink
-                        to="/map"
-                        className="profile-dropdown-item-new-profile"
-                        onClick={() => {
-                          setProfileMenuOpen(false);
-                          setProfileCommunityOpen(false);
-                        }}
-                      >
-                        <MapIcon className="menu-icon" />
-                        {t("header.map")}
-                      </NavLink>
-                    </div>
+                      <path d="M1 1L6 5L11 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </button>
+                  <div className={`pd-submenu ${profileCommunityOpen ? 'open' : ''}`}>
+                    <NavLink to="/community?reset=true" className="pd-submenu-item" onClick={() => { setProfileMenuOpen(false); setProfileCommunityOpen(false); }}>
+                      <UsersIcon /> {t("header.community")}
+                    </NavLink>
+                    <NavLink to="/initiatives" className="pd-submenu-item" onClick={() => { setProfileMenuOpen(false); setProfileCommunityOpen(false); }}>
+                      <InitiativesIcon /> {t("header.initiatives")}
+                    </NavLink>
+                    <NavLink to="/projects" className="pd-submenu-item" onClick={() => { setProfileMenuOpen(false); setProfileCommunityOpen(false); }}>
+                      <ProjectsIcon /> {t("header.projects")}
+                    </NavLink>
+                    <NavLink to="/publications" className="pd-submenu-item" onClick={() => { setProfileMenuOpen(false); setProfileCommunityOpen(false); }}>
+                      <PublicationsIcon /> {t("header.publications")}
+                    </NavLink>
+                    <NavLink to="/stories" className="pd-submenu-item" onClick={() => { setProfileMenuOpen(false); setProfileCommunityOpen(false); }}>
+                      <StoriesIcon /> {t("header.stories")}
+                    </NavLink>
+                    <NavLink to="/map" className="pd-submenu-item" onClick={() => { setProfileMenuOpen(false); setProfileCommunityOpen(false); }}>
+                      <MapIcon /> {t("header.map")}
+                    </NavLink>
                   </div>
 
-                  {/* ✅ КЛУБОВЕ */}
-                  <NavLink to="/clubs" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
-                    <span className="link-content">
-                      <ClubsIcon className="menu-icon" />
-                      {t("header.clubs")}
-                    </span>
+                  <NavLink to="/clubs" className="pd-link" onClick={() => setProfileMenuOpen(false)}>
+                    <ClubsIcon /> {t("header.clubs")}
                   </NavLink>
-
-                  {/* ✅ ИГРИ */}
-                  <NavLink to="/games" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
-                    <span className="link-content">
-                      <GamesIcon className="menu-icon" />
-                      {t("header.games")}
-                    </span>
+                  <NavLink to="/games" className="pd-link" onClick={() => setProfileMenuOpen(false)}>
+                    <GamesIcon /> {t("header.games")}
                   </NavLink>
-
-                  {/* ✅ СЪЗДАЙ ОБЯВА */}
-                  <NavLink to="/ad/create" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
-                    <span className="link-content">
-                      <JobsAdsIcon className="menu-icon" />
-                      {t("header.ad-create")}
-                    </span>
+                  <NavLink to="/ad/create" className="pd-link" onClick={() => setProfileMenuOpen(false)}>
+                    <JobsAdsIcon /> {t("header.ad-create")}
                   </NavLink>
-
-                  {/* ✅ ЗА НАС */}
-                  <NavLink to="/about" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
-                    <span className="link-content">
-                      <AboutIcon className="menu-icon" />
-                      {t("header.about")}
-                    </span>
+                  <NavLink to="/about" className="pd-link" onClick={() => setProfileMenuOpen(false)}>
+                    <AboutIcon /> {t("header.about")}
                   </NavLink>
+                </div>
 
-                  {/* Език суич */}
-                  <LanguageSwitcherAdmin isMobile={true} onClick={() => {
-                    setProfileMenuOpen(false);
-                    setProfileCommunityOpen(false);
-                  }} />
+                {/* Академия */}
+                <div className="pd-section">
+                  <div className="pd-section-label pd-academy-label">{t("header.academy")}</div>
+                  <NavLink to="/academy" className="pd-link pd-academy-link" onClick={() => setProfileMenuOpen(false)}>
+                    <AcademyIcon /> {t("header.academy-home")}
+                  </NavLink>
+                  <NavLink to="/academy/courses" className="pd-link pd-academy-link" onClick={() => setProfileMenuOpen(false)}>
+                    <CoursesIcon /> {t("header.academy-courses")}
+                  </NavLink>
+                  <NavLink to="/academy/lectures" className="pd-link pd-academy-link" onClick={() => setProfileMenuOpen(false)}>
+                    <LecturesIcon /> {t("header.academy-lectures")}
+                  </NavLink>
+                  <NavLink to="/academy/mentors" className="pd-link pd-academy-link" onClick={() => setProfileMenuOpen(false)}>
+                    <MentorsIcon /> {t("header.academy-mentors")}
+                  </NavLink>
+                </div>
 
-                  {/* Logout */}
-                  <NavLink to="/logout" className="dropdown-item-new-profile" onClick={() => setProfileMenuOpen(false)}>
-                    <span className="link-content">
-                      <LogoutIcon className="menu-icon" />
-                      {t("header.logout")}
-                    </span>
+                {/* Език */}
+                <div className="pd-section">
+                  <div className="pd-section-label"><LanguageIcon /> {t("header.language")}</div>
+                  <div className="pd-lang-pills">
+                    {['bg', 'en', 'de'].map((lang) => (
+                      <button
+                        key={lang}
+                        className={`pd-lang-pill ${currentLanguage === lang ? 'active' : ''}`}
+                        onClick={() => { changeLanguage(lang); setProfileMenuOpen(false); }}
+                      >
+                        {lang.toUpperCase()}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Изход */}
+                <div className="pd-section">
+                  <NavLink to="/logout" className="pd-link pd-logout" onClick={() => setProfileMenuOpen(false)}>
+                    <LogoutIcon /> {t("header.logout")}
                   </NavLink>
                 </div>
               </div>

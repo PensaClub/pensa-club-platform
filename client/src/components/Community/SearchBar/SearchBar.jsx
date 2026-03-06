@@ -20,7 +20,7 @@ export const SearchBar = ({ handleSearch }) => {
   const [isSearchWhenOpen, setIsSearchWhenOpen] = useState(false);
   const [creationDateLabel, setCreationDateLabel] = useState('');
 
-  const { t } = useTranslation(['community', 'auth']);
+  const { t, i18n } = useTranslation(['community', 'auth']);
 
   const [filters, setFilters] = useState({
     tags: '',
@@ -87,10 +87,10 @@ export const SearchBar = ({ handleSearch }) => {
               ? creationDateLabel === t('community.specific_period') &&
                 filters.startDate &&
                 filters.endDate
-                ? `от ${new Date(filters.startDate).toLocaleDateString(
-                    'bg-BG'
-                  )} до ${new Date(filters.endDate).toLocaleDateString(
-                    'bg-BG'
+                ? `${t('community.from_date')} ${new Date(filters.startDate).toLocaleDateString(
+                    i18n.language
+                  )} ${t('community.to_date')} ${new Date(filters.endDate).toLocaleDateString(
+                    i18n.language
                   )}`
                 : `${creationDateLabel}`
               : t('community.when_search') + '?'}
