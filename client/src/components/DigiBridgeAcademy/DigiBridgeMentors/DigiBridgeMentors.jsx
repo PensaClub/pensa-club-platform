@@ -1,9 +1,11 @@
 import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
 import { useTranslation } from 'react-i18next';
 import './digiBridgeMentors.css';
+import { useLocation } from 'react-router-dom';
 
 export const DigiBridgeMentors = ({ stats, loading }) => {
     const { t } = useTranslation('digibridge');
+    const location = useLocation();
 
     const mentorQualities = [
         {
@@ -53,6 +55,10 @@ export const DigiBridgeMentors = ({ stats, loading }) => {
         },
     ];
 
+   useEffect(() => {
+      window.scrollTo(0, 0);
+    }, [location.pathname]);
+    
     return (
         <section className="dbm-section">
             {/* Background */}

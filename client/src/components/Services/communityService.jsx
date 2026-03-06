@@ -38,32 +38,32 @@ export const communityServiceFactory = (token) => {
       return response.json();
     },
     createAd: async (adData) => {
-      return requester.post(`${apiUrl}/ads/ad-create`, adData);
+      return requester.post(`${apiUrl}/listings/ad-create`, adData);
 
     },
     getMyAds: async (email) => {
 
-      return requester.get(`${apiUrl}/ads/ads-user/${ email }`);
+      return requester.get(`${apiUrl}/listings/ads-user/${ email }`);
     },
      deleteAd: async (id) => {
-      return requester.del(`${apiUrl}/ads/ad-delete/${ id }`);
+      return requester.del(`${apiUrl}/listings/ad-delete/${ id }`);
     },
     editAd: async (adData) => {
-      return requester.patch(`${apiUrl}/ads/ad-edit`, adData);
+      return requester.patch(`${apiUrl}/listings/ad-edit`, adData);
     },
     searchAds: async (filters, page, limit = 25, order = "desc") => {
       const query = new URLSearchParams({ ...filters, page, limit, order }).toString();
-      return requester.get(`${apiUrl}/ads/ads-search?${query}`);
+      return requester.get(`${apiUrl}/listings/ads-search?${query}`);
     },
     getAdById: async (id) => {
-      return requester.get(`${apiUrl}/ads/adById/${id}`);
+      return requester.get(`${apiUrl}/listings/adById/${id}`);
     },
     updateExpirationDate: async (adId) => {
-      return requester.patch(`${apiUrl}/ads/update-expiration-date/${adId}`, { adId })
+      return requester.patch(`${apiUrl}/listings/update-expiration-date/${adId}`, { adId })
     },
     getLatestAds: async (count) => {
       return requester.get(
-        `${apiUrl}/ads/ads-search?status=approved&order=DESC&limit=${count}`
+        `${apiUrl}/listings/ads-search?status=approved&order=DESC&limit=${count}`
       );
     },
     subscribeNewUser: async (username,email) => {

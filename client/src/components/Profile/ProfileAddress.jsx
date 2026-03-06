@@ -9,7 +9,7 @@ import { useMappingContext } from '../contexts/MapContext';
 
 const ProfileAddress = () => {
   const navigate = useLocalizedNavigate();
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('profile');
   const currentLanguage = i18n.language;
   const { profileData, onEditProfileDataSubmit, addressId } = useContext(UserContext);
 

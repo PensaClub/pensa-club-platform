@@ -14,7 +14,6 @@ import L, { DivIcon, point } from "leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 import "./mapEditor.css";
 import "./scrollModal.css";
-import { t } from "i18next";
 import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
 import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { useTranslation } from "react-i18next";
@@ -47,6 +46,7 @@ const createCustomClusterIcon = (cluster) => {
 L.Marker.prototype.options.icon = DefaultIcon;
 
 const MapWithZoomControl = () => {
+  const { t } = useTranslation(['community', 'auth']);
   const map = useMap();
   const [showModal, setShowModal] = useState(false);
   useEffect(() => {

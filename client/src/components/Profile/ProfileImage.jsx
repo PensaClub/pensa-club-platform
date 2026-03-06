@@ -7,7 +7,7 @@ import { UserContext } from "../contexts/UserContext";
 import { useMappingContext } from "../contexts/MapContext";
 
 export const ProfileImage = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('profile');
 
   const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
 

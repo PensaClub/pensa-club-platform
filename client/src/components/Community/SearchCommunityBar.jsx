@@ -15,7 +15,7 @@ export const SearchCommunityBar = ({
     creationDateLabel,
     showResetIcon
 }) => {
-    const { t, i18n } = useTranslation(['auth', 'community']);
+    const { t, i18n } = useTranslation(['community', 'auth']);
     const currentLanguage = i18n.language;
     return (
         <div className="search-bar-commun-s">
@@ -40,7 +40,7 @@ export const SearchCommunityBar = ({
                 <p>
                     {creationDateLabel ? (
                         creationDateLabel === t('community.specific_period') && filters.startDate && filters.endDate ? (
-                            `от ${new Date(filters.startDate).toLocaleDateString('bg-BG')} до ${new Date(filters.endDate).toLocaleDateString('bg-BG')}`
+                            `${t('community.from_date')} ${new Date(filters.startDate).toLocaleDateString(i18n.language)} ${t('community.to_date')} ${new Date(filters.endDate).toLocaleDateString(i18n.language)}`
                         ) : (
                             `${creationDateLabel}`
                         )

@@ -2,7 +2,7 @@
   "header": {
     "map": "Map",
     "chats": "Chats",
-    "craigslist": "Community",
+    "community": "Community",
     "login": "Login",
     "register": "Register",
     "profile": "Profile",
@@ -18,7 +18,15 @@
     "bookmarks": "Bookmarks",
     "publications": "Publications",
     "stories": "Stories",
-    "about": "About us"
+    "about": "About us",
+    "academy": "Academy",
+    "academy-courses": "Courses",
+    "academy-courses-desc": "Browse our courses",
+    "academy-lectures": "Lectures",
+    "academy-lectures-desc": "Watch video lectures",
+    "academy-mentors": "Mentors",
+    "academy-mentors-desc": "Find your mentor",
+    "academy-cta": "Enter the Academy"
   },
   "footer": {
     "site-map": "Site Map",
@@ -26,7 +34,7 @@
     "contact": "Contact",
     "useful-links": "Useful Links",
     "map": "Map",
-    "craigslist": "Community",
+    "community": "Community",
     "partners": "Partners",
     "softuni_buditel": "SoftUni Buditel",
     "country-city": "Bulgaria, Sofia",
@@ -128,7 +136,7 @@
     "error": "Error",
     "home": "Home",
     "map": "Map",
-    "craigslist": "Community",
+    "community": "Community",
     "404-desc": "This page does not exist",
     "500-desc": "The server cannot process the request",
     "404-title": "Page not found",

@@ -132,7 +132,7 @@ export const LastPosts = () => {
           <h2>{t('home.no_results')}</h2>
         )}
         <div>
-          <Link to="/craigslist" className="btn-general btn-orange" id="more-btn">
+          <Link to="/community" className="btn-general btn-orange" id="more-btn">
             {t('home.see_more_ads')}
           </Link>
         </div>

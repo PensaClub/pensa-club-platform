@@ -88,7 +88,7 @@ export const AdDetails = () => {
 
   const handleSearchRedirect = (filters) => {
     const searchParams = new URLSearchParams(filters).toString();
-    navigate(`/craigslist?${searchParams}`);
+    navigate(`/community?${searchParams}`);
   };
 
   const handleReadMoreClick = async (e) => {
@@ -185,13 +185,13 @@ export const AdDetails = () => {
             <div className="hero-section-details">
               <div className="ad-details-back-phone">
                 <p>
-                  <Link to="/craigslist">
+                  <Link to="/community">
                     <FontAwesomeIcon icon={faCaretLeft} />{" "}
                   </Link>
                 </p>{" "}
               </div>
               <h2 className="ads-details-back">
-                <Link to="/craigslist">
+                <Link to="/community">
                   <FontAwesomeIcon icon={faChevronLeft} />{" "}
                   <strong>{t("ads.all-ads")}</strong>
                 </Link>
@@ -219,7 +219,7 @@ export const AdDetails = () => {
                         <div className="subinfo-ads-details">
                           <p>
                           <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="location-dot" className="svg-inline--fa fa-location-dot icon" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="currentColor" d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"></path></svg>
-                          { adTownName && (adTownName + ", ")}{ad?.street && ("ул. " + ad?.street)}
+                          { adTownName && (adTownName + ", ")}{ad?.street && (t("ads.street_abbrev") + " " + ad?.street)}
                           </p>
                           {ad?.extraFields?.price && (
                             <p className="elipse price">

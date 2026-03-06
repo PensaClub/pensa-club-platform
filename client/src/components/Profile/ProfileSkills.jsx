@@ -7,7 +7,7 @@ import { UserContext } from '../contexts/UserContext';import { useTranslation } 
 import { useMappingContext } from '../contexts/MapContext';
 
 export const ProfileSkills = () => {
-    const { t } = useTranslation();  
+    const { t } = useTranslation('profile');
     const navigate = useLocalizedNavigate();
   const { onEditProfileDataSubmit, profileData } = useContext(UserContext);
 

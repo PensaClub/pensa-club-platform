@@ -31,7 +31,7 @@ export const MenuCommunity = () => {
     };
 
     const handleReloadPage = () => {
-        navigate('/craigslist?reset=true');
+        navigate('/community?reset=true');
     };
 
     const getLocation = (path) => {
@@ -66,7 +66,7 @@ export const MenuCommunity = () => {
         <>
             <nav className="menu-community">
                 <FontAwesomeIcon icon={faHouseUser} className={getLocation('/')} onClick={() => handleNavigation('/')} />
-                <FontAwesomeIcon icon={faUserGroup} className={getLocation('/craigslist')} onClick={handleReloadPage} />
+                <FontAwesomeIcon icon={faUserGroup} className={getLocation('/community')} onClick={handleReloadPage} />
                 <FontAwesomeIcon icon={faPlus} className={getLocation('/ad/create')} onClick={() => handleNavigation('/ad/create')}/>
                 <FontAwesomeIcon icon={faMapLocation} className={getLocation('/map')} onClick={() => handleNavigation('/map')} />
                 {/* <div className="profile-container" ref={dropdownRef}>

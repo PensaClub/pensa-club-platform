@@ -57,7 +57,7 @@ export const CreateAd = () => {
     adTown: profileData.details?.settlement
       ? getAdTownValue(currentLanguage, profileData.details.settlement)
       : "",
-    street: `${profileData.details?.settlement}, ул. ${profileData.details?.street}${profileData.details?.streetNumber ? ", " + profileData.details?.streetNumber : ""}`,
+    street: `${profileData.details?.settlement}, ${t("ads.street_abbrev")} ${profileData.details?.street}${profileData.details?.streetNumber ? ", " + profileData.details?.streetNumber : ""}`,
 
     useOtherCity: false,
 
@@ -169,7 +169,7 @@ export const CreateAd = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFinish, selectedSubregion, selectedRegion]);
 
-  const handleNavigate = () => navigate("/craigslist");
+  const handleNavigate = () => navigate("/community");
 
   const formatDateToYYYYMMDD = (date) => {
     if (!date) {

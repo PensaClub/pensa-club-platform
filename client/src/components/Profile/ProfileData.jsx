@@ -17,7 +17,7 @@ import { toast } from "react-toastify";
 import CustomSelect from "./CustomSelect";
 
 export const ProfileData = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('profile');
   const navigate = useLocalizedNavigate();
 
   const { onEditProfileDataSubmit, onProfileDataSubmit, profileData } = useContext(UserContext);

@@ -11,7 +11,7 @@ export const TagInput = ({ tags, setTags, t }) => {
                 setTags([...tags, inputValue]);
                 setInputValue('');
             } else {
-                alert('You can only add up to 5 tags.');// notifi
+                alert(t('ads.max_tags'));
             }
         }
     };

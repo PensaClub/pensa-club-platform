@@ -41,7 +41,7 @@ const cutToFirstWord = (text) => {
 
 export const ProfileAnnounced = () => {
   const navigate = useLocalizedNavigate();
-  const { t, i18n } = useTranslation(['auth', 'community']);
+  const { t, i18n } = useTranslation(['community', 'auth']);
   const currentLanguage = i18n.language;
   const { getMyAds, deleteAd, updateExpirationDate, fetchTowns, regions } =
     useCommunityContext();
