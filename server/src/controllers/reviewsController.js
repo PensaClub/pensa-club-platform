@@ -963,8 +963,8 @@ reviewsController.get('/my', isAuth, async (req, res, next) => {
 
       if (reviewJson.targetId) {
         if (reviewJson.reviewType === 'course') {
-          const courseData = await course.findByPk(reviewJson.targetId, { attributes: ['id', 'title'] });
-          targetName = courseData?.title || null;
+          const courseData = await course.findByPk(reviewJson.targetId, { attributes: ['id', 'name'] });
+          targetName = courseData?.name || null;
         } else if (reviewJson.reviewType === 'lecture') {
           const lectureData = await lecture.findByPk(reviewJson.targetId, { attributes: ['id', 'title'] });
           targetName = lectureData?.title || null;
@@ -1067,8 +1067,8 @@ reviewsController.get('/admin/all', isAuth, rbac.checkPermission('review', 'read
       let targetName = null;
       if (reviewJson.targetId) {
         if (reviewJson.reviewType === 'course') {
-          const courseData = await course.findByPk(reviewJson.targetId, { attributes: ['id', 'title'] });
-          targetName = courseData?.title || null;
+          const courseData = await course.findByPk(reviewJson.targetId, { attributes: ['id', 'name'] });
+          targetName = courseData?.name || null;
         } else if (reviewJson.reviewType === 'lecture') {
           const lectureData = await lecture.findByPk(reviewJson.targetId, { attributes: ['id', 'title'] });
           targetName = lectureData?.title || null;

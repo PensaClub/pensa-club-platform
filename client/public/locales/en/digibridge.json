@@ -297,7 +297,52 @@
         "otherPlaceholder": "E.g. Telegram, WhatsApp, Skype..."
       },
       "specialization": {
+        "other": "Other",
+        "customPlaceholder": "Enter your specialization"
+      },
+      "specializations": {
+        "digitalSecurity": "Digital Security",
+        "mediaLiteracy": "Media Literacy",
+        "onlineBanking": "Online Banking",
+        "socialMedia": "Social Media",
+        "emailCommunication": "Email & Communication",
+        "eGovernment": "E-Government Services",
         "other": "Other"
+      },
+      "availabilityOptions": {
+        "flexible": "Flexible",
+        "weekdays": "Weekdays",
+        "weekends": "Weekends",
+        "evenings": "Evenings"
+      },
+      "countries": {
+        "BG": "Bulgaria",
+        "DE": "Germany",
+        "AT": "Austria",
+        "GR": "Greece",
+        "RO": "Romania",
+        "RS": "Serbia",
+        "MK": "North Macedonia",
+        "TR": "Turkey",
+        "IT": "Italy",
+        "FR": "France",
+        "ES": "Spain",
+        "PT": "Portugal",
+        "NL": "Netherlands",
+        "BE": "Belgium",
+        "PL": "Poland",
+        "CZ": "Czech Republic",
+        "SK": "Slovakia",
+        "HU": "Hungary",
+        "HR": "Croatia",
+        "SI": "Slovenia",
+        "CY": "Cyprus",
+        "CH": "Switzerland",
+        "GB": "United Kingdom",
+        "US": "United States",
+        "UA": "Ukraine",
+        "MD": "Moldova",
+        "OTHER": "Other"
       },
       "cv": {
         "label": "CV (Resume)",

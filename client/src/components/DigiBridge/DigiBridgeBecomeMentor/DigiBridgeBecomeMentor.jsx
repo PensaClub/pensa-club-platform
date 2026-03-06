@@ -73,31 +73,34 @@ export const DigiBridgeBecomeMentor = () => {
   const [cvError, setCvError] = useState('');
 
   const specializations = [
-    'Digital Security',
-    'Media Literacy',
-    'Online Banking',
-    'Social Media',
-    'Email & Communication',
-    'E-Government Services',
-    t('digiBridge.becomeMentor.specialization.other')
+    { key: 'digitalSecurity', value: 'Digital Security' },
+    { key: 'mediaLiteracy', value: 'Media Literacy' },
+    { key: 'onlineBanking', value: 'Online Banking' },
+    { key: 'socialMedia', value: 'Social Media' },
+    { key: 'emailCommunication', value: 'Email & Communication' },
+    { key: 'eGovernment', value: 'E-Government Services' },
+    { key: 'other', value: 'other' },
   ];
-  const countryOptions = [
-    { code: 'BG', name: '🇧🇬 България', flag: '🇧🇬' },
-    { code: 'DE', name: '🇩🇪 Германия', flag: '🇩🇪' },
-    { code: 'AT', name: '🇦🇹 Австрия', flag: '🇦🇹' },
-    { code: 'GR', name: '🇬🇷 Гърция', flag: '🇬🇷' },
-    { code: 'RO', name: '🇷🇴 Румъния', flag: '🇷🇴' },
-    { code: 'RS', name: '🇷🇸 Сърбия', flag: '🇷🇸' },
-    { code: 'MK', name: '🇲🇰 Северна Македония', flag: '🇲🇰' },
-    { code: 'TR', name: '🇹🇷 Турция', flag: '🇹🇷' },
-    { code: 'OTHER', name: '🌍 Друга', flag: '🌍' },
+
+  const countryCodes = [
+    'BG', 'DE', 'AT', 'GR', 'RO', 'RS', 'MK', 'TR',
+    'IT', 'FR', 'ES', 'NL', 'PL', 'GB', 'US', 'CH',
+    'OTHER',
   ];
+
+  const getFlagEmoji = (code) => {
+    if (code === 'OTHER') return '🌍';
+    return String.fromCodePoint(...code.toUpperCase().split('').map(c => 127397 + c.charCodeAt()));
+  };
+
   const availabilityOptions = [
-    'Flexible',
-    'Weekdays',
-    'Weekends',
-    'Evenings'
+    { key: 'flexible', value: 'Flexible' },
+    { key: 'weekdays', value: 'Weekdays' },
+    { key: 'weekends', value: 'Weekends' },
+    { key: 'evenings', value: 'Evenings' },
   ];
+
+  const [customSpecialization, setCustomSpecialization] = useState('');
 
   const languageOptions = [
     { code: 'bg', name: 'Български' },
@@ -255,6 +258,9 @@ if (!formData.country) newErrors.country = t('digiBridge.becomeMentor.errors.cou
     try {
       const applicationData = {
         ...formData,
+        specialization: formData.specialization === 'other' && customSpecialization.trim()
+          ? customSpecialization.trim()
+          : formData.specialization,
         photoUrl: photoUrl || null,
         cvUrl: cvUrl || null,
         cvOriginalName: cvOriginalName || null,
@@ -498,9 +504,9 @@ if (!formData.country) newErrors.country = t('digiBridge.becomeMentor.errors.cou
                       onChange={handleInputChange}
                       className={errors.country ? 'become-mentor-input-error' : ''}
                     >
-                      {countryOptions.map(country => (
-                        <option key={country.code} value={country.code}>
-                          {country.name}
+                      {countryCodes.map(code => (
+                        <option key={code} value={code}>
+                          {getFlagEmoji(code)} {t(`digiBridge.becomeMentor.countries.${code}`)}
                         </option>
                       ))}
                     </select>
@@ -623,13 +629,29 @@ if (!formData.country) newErrors.country = t('digiBridge.becomeMentor.errors.cou
                     <select
                       name="specialization"
                       value={formData.specialization}
-                      onChange={handleInputChange}
+                      onChange={(e) => {
+                        handleInputChange(e);
+                        if (e.target.value !== 'other') {
+                          setCustomSpecialization('');
+                        }
+                      }}
                     >
                       <option value="">{t('digiBridge.becomeMentor.form.specializationPlaceholder')}</option>
                       {specializations.map(spec => (
-                        <option key={spec} value={spec}>{spec}</option>
+                        <option key={spec.key} value={spec.value}>
+                          {t(`digiBridge.becomeMentor.specializations.${spec.key}`)}
+                        </option>
                       ))}
                     </select>
+                    {formData.specialization === 'other' && (
+                      <input
+                        type="text"
+                        value={customSpecialization}
+                        onChange={(e) => setCustomSpecialization(e.target.value)}
+                        placeholder={t('digiBridge.becomeMentor.specialization.customPlaceholder')}
+                        style={{ marginTop: '0.5rem' }}
+                      />
+                    )}
                   </div>
 
                   <div className="become-mentor-form-field">
@@ -677,8 +699,10 @@ if (!formData.country) newErrors.country = t('digiBridge.becomeMentor.errors.cou
                       onChange={handleInputChange}
                     >
                       <option value="">{t('digiBridge.becomeMentor.form.schedulePlaceholder')}</option>
-                      {availabilityOptions.map(option => (
-                        <option key={option} value={option}>{option}</option>
+                      {availabilityOptions.map(opt => (
+                        <option key={opt.key} value={opt.value}>
+                          {t(`digiBridge.becomeMentor.availabilityOptions.${opt.key}`)}
+                        </option>
                       ))}
                     </select>
                     <p className="become-mentor-field-helper">
