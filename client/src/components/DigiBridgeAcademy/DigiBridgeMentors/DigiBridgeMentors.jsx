@@ -2,6 +2,7 @@ import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
 import { useTranslation } from 'react-i18next';
 import './digiBridgeMentors.css';
 import { useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
 
 export const DigiBridgeMentors = ({ stats, loading }) => {
     const { t } = useTranslation('digibridge');
