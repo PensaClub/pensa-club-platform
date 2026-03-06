@@ -6,10 +6,13 @@ const localViewCountCache = {};
 
 // Инициализиране на Google Analytics
 export const initGA = (trackingId) => {
-  if (trackingId) {
-    ReactGA.initialize(trackingId);
-    // console.log('Google Analytics initialized');
-    return true;
+  try {
+    if (trackingId) {
+      ReactGA.initialize(trackingId);
+      return true;
+    }
+  } catch (error) {
+    console.warn('Google Analytics initialization failed (likely blocked by ad blocker)');
   }
   return false;
 };

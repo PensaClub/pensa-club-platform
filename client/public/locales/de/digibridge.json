@@ -377,7 +377,52 @@
         "otherPlaceholder": "Z.B. Telegram, WhatsApp, Skype..."
       },
       "specialization": {
+        "other": "Andere",
+        "customPlaceholder": "Geben Sie Ihre Spezialisierung ein"
+      },
+      "specializations": {
+        "digitalSecurity": "Digitale Sicherheit",
+        "mediaLiteracy": "Medienkompetenz",
+        "onlineBanking": "Online-Banking",
+        "socialMedia": "Soziale Medien",
+        "emailCommunication": "E-Mail & Kommunikation",
+        "eGovernment": "E-Government-Dienste",
         "other": "Andere"
+      },
+      "availabilityOptions": {
+        "flexible": "Flexibel",
+        "weekdays": "Wochentags",
+        "weekends": "Wochenenden",
+        "evenings": "Abends"
+      },
+      "countries": {
+        "BG": "Bulgarien",
+        "DE": "Deutschland",
+        "AT": "Österreich",
+        "GR": "Griechenland",
+        "RO": "Rumänien",
+        "RS": "Serbien",
+        "MK": "Nordmazedonien",
+        "TR": "Türkei",
+        "IT": "Italien",
+        "FR": "Frankreich",
+        "ES": "Spanien",
+        "PT": "Portugal",
+        "NL": "Niederlande",
+        "BE": "Belgien",
+        "PL": "Polen",
+        "CZ": "Tschechien",
+        "SK": "Slowakei",
+        "HU": "Ungarn",
+        "HR": "Kroatien",
+        "SI": "Slowenien",
+        "CY": "Zypern",
+        "CH": "Schweiz",
+        "GB": "Vereinigtes Königreich",
+        "US": "Vereinigte Staaten",
+        "UA": "Ukraine",
+        "MD": "Moldawien",
+        "OTHER": "Andere"
       },
       "cv": {
         "label": "Lebenslauf",
