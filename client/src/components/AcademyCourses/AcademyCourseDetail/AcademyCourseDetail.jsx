@@ -506,7 +506,7 @@ export const AcademyCourseDetail = () => {
 
   const hasPrivilegedAccess = isAdmin || isModerator || isMentor;
   const hasLessonAccess = isEnrolled || hasPrivilegedAccess;
- const { location } = useLocation();
+ const location  = useLocation();
 
   // SEO meta data
   const metaData = useMemo(() => {

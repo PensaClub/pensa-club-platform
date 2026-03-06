@@ -84,7 +84,7 @@ export const AcademyLectures = () => {
   // Trailer modal state
   const [trailerLecture, setTrailerLecture] = useState(null);
   const [isTrailerOpen, setIsTrailerOpen] = useState(false);
-   const { location } = useLocation();
+   const location = useLocation();
 
     useEffect(() => {
       window.scrollTo(0, 0);
