@@ -10,7 +10,7 @@ import { ProfileSkills } from './ProfileSkills';
 
 export const ProfileInterests = () => {
     const { onEditProfileDataSubmit, profileData } = useContext(UserContext);    
-    const { t } = useTranslation();
+    const { t } = useTranslation('profile');
     const navigate = useLocalizedNavigate();
     
     const initialFormState = {

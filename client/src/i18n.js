@@ -28,6 +28,7 @@ i18n
       'student-dashboard',
       'useful-links',
       'telk-rkme-rzi',
+      'profile',
     ],
     defaultNS: 'common',
     fallbackNS: 'common',

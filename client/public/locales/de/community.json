@@ -119,7 +119,58 @@
     "close": "Schließen",
     "and": "Und",
     "more": "Mehr",
-    "zoom_instructions": "Halten Sie die Strg-Taste gedrückt, während Sie scrollen, um die Karte zu zoomen"
+    "zoom_instructions": "Halten Sie die Strg-Taste gedrückt, während Sie scrollen, um die Karte zu zoomen",
+    "loading": "Laden...",
+    "search_results": "Suchergebnisse",
+    "no_results": "Keine Ergebnisse gefunden",
+    "search_placeholder": "Suche..."
+  },
+  "options": {
+    "skills": {
+      "communication_skills": "Kommunikationsfähigkeiten",
+      "technical_skills": "Technische Fähigkeiten",
+      "agricultural_skills": "Landwirtschaftliche Fähigkeiten",
+      "cooking_skills": "Kochfähigkeiten",
+      "financial_skills": "Finanzielle Fähigkeiten",
+      "language_skills": "Sprachkenntnisse",
+      "musical_skills": "Musikalische Fähigkeiten",
+      "first_aid_skills": "Erste-Hilfe-Fähigkeiten",
+      "spiritual_practices": "Spirituelle Praktiken",
+      "meditation_skills": "Meditation",
+      "fashion_design": "Mode und Schneiderei",
+      "interior_design": "Design, Innenarchitektur",
+      "video_filming": "Videoaufnahme"
+    },
+    "work-options": {
+      "architecture_construction": "Architektur und Bauwesen",
+      "medicine_healthcare": "Medizin und Gesundheitswesen",
+      "journalism": "Journalismus",
+      "teaching": "Lehrer, Pädagoge",
+      "public_administration": "Öffentliche Verwaltung",
+      "security": "Sicherheit",
+      "social_tourism": "Sozialarbeit und Tourismus",
+      "agriculture": "Landwirtschaft, Agrarwesen",
+      "manufacturing_and_trade": "Produktion und Handel",
+      "technology": "Technik und Technologie",
+      "transport": "Transport",
+      "law_accounting": "Rechtliche und Buchhalterische Tätigkeiten"
+    },
+    "interestOptions": {
+      "volunteering": "Freiwilligenarbeit",
+      "spiritual_practices": "Spirituelle Praktiken und Meditation",
+      "new_knowledge": "Neues Wissen",
+      "board_games": "Brettspiele",
+      "agriculture_gardening": "Landwirtschaft, Gärtnerei",
+      "movies": "Filme",
+      "photography": "Fotografie",
+      "sports": "Sport",
+      "reading": "Lesen",
+      "cooking": "Kochen",
+      "travel_tourism": "Reisen und Tourismus",
+      "music": "Musik",
+      "drawing_arts": "Zeichnen und Künste",
+      "sewing": "Nähen und Schneidern"
+    }
   },
   "search-criteria": {
     "recommend": "Empfehle",

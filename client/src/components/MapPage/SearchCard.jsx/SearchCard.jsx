@@ -3,6 +3,7 @@ import './searchCard.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass, faSquarePollHorizontal } from '@fortawesome/free-solid-svg-icons';
 import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
+import { useTranslation } from 'react-i18next';
 
 const adsData = [
     {
@@ -49,6 +50,7 @@ const adsData = [
 ];
 
 const SearchCard = ({ ads = adsData }) => {
+    const { t } = useTranslation('community');
     const [searchTerm, setSearchTerm] = useState('');
     const [isOpen, setIsOpen] = useState(true);
     const containerRef = useRef(null);
@@ -66,7 +68,7 @@ const SearchCard = ({ ads = adsData }) => {
         <div className="search-carts-container" ref={containerRef}>
             <div className="selected-option-search" onClick={handleToggle}>
                 <FontAwesomeIcon icon={faSquarePollHorizontal} style={{ marginRight: '8px' }} />
-                {ads.length > 0 ? <span>{ads.length} - Резултатa от търсенето...</span> : <span> Няма намерени ресултати ...</span>}
+                {ads.length > 0 ? <span>{ads.length} - {t('map.search_results')}...</span> : <span> {t('map.no_results')} ...</span>}
                 <span className={`arrow ${isOpen ? 'open' : ''}`}></span>
             </div>
             {isOpen && (
@@ -78,7 +80,7 @@ const SearchCard = ({ ads = adsData }) => {
                             className="search-input"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            placeholder="Търсене..."
+                            placeholder={t('map.search_placeholder')}
                         />
                     </div>
                     <div className="ads-container">
@@ -90,7 +92,7 @@ const SearchCard = ({ ads = adsData }) => {
                                     <div className="ad-details">
                                         <h3 className="ad-name">{ad.name}</h3>
                                         <p className="ad-description">{ad.description}</p>
-                                        <Link to="#" className="read-more">Прочети повече</Link>
+                                        <Link to="#" className="read-more">{t('map.read_more')}</Link>
                                     </div>
 
                                 </div>

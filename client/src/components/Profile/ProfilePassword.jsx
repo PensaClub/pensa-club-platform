@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 
 export const ProfilePassword = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('profile');
   const navigate = useLocalizedNavigate();
   const { onPasswordReset, hasPassword, setProfileData } = useContext(UserContext);
 

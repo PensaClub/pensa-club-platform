@@ -119,7 +119,58 @@
     "close": "Close",
     "and": "and",
     "more": "more",
-    "zoom_instructions": "Hold down the Ctrl key while scrolling to zoom the map"
+    "zoom_instructions": "Hold down the Ctrl key while scrolling to zoom the map",
+    "loading": "Loading...",
+    "search_results": "Search results",
+    "no_results": "No results found",
+    "search_placeholder": "Search..."
+  },
+  "options": {
+    "skills": {
+      "communication_skills": "Communication Skills",
+      "technical_skills": "Technical Skills",
+      "agricultural_skills": "Agricultural Skills",
+      "cooking_skills": "Cooking Skills",
+      "financial_skills": "Financial Skills",
+      "language_skills": "Language skills",
+      "musical_skills": "Musical Skills",
+      "first_aid_skills": "First Aid Skills",
+      "spiritual_practices": "Spiritual Practices",
+      "meditation_skills": "Meditation Skills",
+      "fashion_design": "Fashion Design",
+      "interior_design": "Interior Design",
+      "video_filming": "Video Filming"
+    },
+    "work-options": {
+      "architecture_construction": "Architecture and Construction",
+      "medicine_healthcare": "Medicine and Healthcare",
+      "journalism": "Journalism",
+      "teaching": "Teaching",
+      "public_administration": "Public Administration",
+      "security": "Security",
+      "social_tourism": "Social and Tourism",
+      "agriculture": "Agriculture",
+      "manufacturing_and_trade": "Manufacturing and Trade",
+      "technology": "Technology",
+      "transport": "Transport",
+      "law_accounting": "Law and Accounting"
+    },
+    "interestOptions": {
+      "volunteering": "Volunteering",
+      "spiritual_practices": "Spiritual Practices",
+      "new_knowledge": "New Knowledge",
+      "board_games": "Board Games",
+      "agriculture_gardening": "Agriculture and Gardening",
+      "movies": "Movies",
+      "photography": "Photography",
+      "sports": "Sports",
+      "reading": "Reading",
+      "cooking": "Cooking",
+      "travel_tourism": "Travel and Tourism",
+      "music": "Music",
+      "drawing_arts": "Drawing and Art",
+      "sewing": "Sewing"
+    }
   },
   "search-criteria": {
     "recommend": "Recommend",

@@ -119,7 +119,58 @@
     "close": "Затвори",
     "and": "И",
     "more": "Още",
-    "zoom_instructions": "Задръжте бутона Ctrl натиснат, докато превъртате, за да промените мащаба на картата"
+    "zoom_instructions": "Задръжте бутона Ctrl натиснат, докато превъртате, за да промените мащаба на картата",
+    "loading": "Зареждане...",
+    "search_results": "Резултата от търсенето",
+    "no_results": "Няма намерени резултати",
+    "search_placeholder": "Търсене..."
+  },
+  "options": {
+    "skills": {
+      "communication_skills": "Комуникационни умения",
+      "technical_skills": "Технически умения",
+      "agricultural_skills": "Земеделски умения",
+      "cooking_skills": "Готварски умения",
+      "financial_skills": "Финансови умения",
+      "language_skills": "Езикови умения",
+      "musical_skills": "Музикални умения",
+      "first_aid_skills": "Умения за Първа Помощ",
+      "spiritual_practices": "Духовни Практики",
+      "meditation_skills": "Медитиране",
+      "fashion_design": "Мода и шев",
+      "interior_design": "Дизайн, интериор",
+      "video_filming": "Видео заснемане"
+    },
+    "work-options": {
+      "architecture_construction": "Архитектура и Строителство",
+      "medicine_healthcare": "Медицина и Здравеопазване",
+      "journalism": "Журналистика",
+      "teaching": "Преподавател, учител",
+      "public_administration": "Публична администрация",
+      "security": "Сигурност",
+      "social_tourism": "Социална дейност и туризъм",
+      "agriculture": "Селско стопанство, земеделие",
+      "manufacturing_and_trade": "Производство и Търговия",
+      "technology": "Техника и Технологии",
+      "transport": "Транспорт",
+      "law_accounting": "Юридически и Счетоводни дейности"
+    },
+    "interestOptions": {
+      "volunteering": "Доброволчество",
+      "spiritual_practices": "Духовни практики и Медитация",
+      "new_knowledge": "Нови Знания",
+      "board_games": "Настолни игри",
+      "agriculture_gardening": "Земеделие, Градинарство",
+      "movies": "Филми",
+      "photography": "Фотография",
+      "sports": "Спорт",
+      "reading": "Четене",
+      "cooking": "Готвене",
+      "travel_tourism": "Пътувания и Туризъм",
+      "music": "Музика",
+      "drawing_arts": "Рисуване и Изкуства",
+      "sewing": "Шев и кройка"
+    }
   },
   "search-criteria": {
     "recommend": "Препоръчвам",
