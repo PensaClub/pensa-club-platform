@@ -1,7 +1,7 @@
 // src/components/AcademyCourses/AcademyCourseDetail/AcademyCourseDetail.jsx
 
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
 import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { useTranslation } from 'react-i18next';
@@ -506,6 +506,7 @@ export const AcademyCourseDetail = () => {
 
   const hasPrivilegedAccess = isAdmin || isModerator || isMentor;
   const hasLessonAccess = isEnrolled || hasPrivilegedAccess;
+ const { location } = useLocation();
 
   // SEO meta data
   const metaData = useMemo(() => {
@@ -604,6 +605,9 @@ export const AcademyCourseDetail = () => {
     };
   }, [currentCourse, i18n.language]);
 
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, [location.pathname]);
   // Load course
   useEffect(() => {
     if (!slug || fetchedSlugRef.current === slug) return;

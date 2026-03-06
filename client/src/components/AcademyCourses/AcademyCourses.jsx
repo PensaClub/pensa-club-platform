@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSearchParams } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import { useAcademyCourses } from '../contexts/AcademyCoursesProvider';
 import { AcademyCoursesHero } from './AcademyCoursesHero/AcademyCoursesHero';
 import { AcademyProgramTracks } from './AcademyProgramTracks/AcademyProgramTracks';
@@ -41,7 +41,11 @@ export const AcademyCourses = () => {
   const currentDifficulty = searchParams.get('difficulty') || '';
   const currentSearch = searchParams.get('search') || '';
   const currentSort = searchParams.get('sortBy') || '';
+ const { location } = useLocation();
 
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, [location.pathname]);
   // Update URL params
   const updateParams = useCallback((updates) => {
     setSearchParams(prev => {

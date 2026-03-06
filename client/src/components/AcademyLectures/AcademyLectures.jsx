@@ -11,6 +11,7 @@ import { useAcademyCourses } from '../contexts/AcademyCoursesProvider';
 import { useAuthContext } from '../contexts/UserContext';
 import SEOHead from '../SEO/SEOHead';
 import ScrollToTop from '../ScrollToTop/ScrollToTop';
+import { useLocation } from 'react-router-dom';
 
 // Цветова схема за категории
 const LECTURE_CATEGORY_COLORS = {
@@ -83,6 +84,11 @@ export const AcademyLectures = () => {
   // Trailer modal state
   const [trailerLecture, setTrailerLecture] = useState(null);
   const [isTrailerOpen, setIsTrailerOpen] = useState(false);
+   const { location } = useLocation();
+
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, [location.pathname]);
 
   // Initial data load
   useEffect(() => {

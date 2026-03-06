@@ -170,7 +170,11 @@ export const AcademyLectureDetails = () => {
 
   // Countdown за upcoming лекции
   const countdown = useCountdown(lecture?.scheduledDate);
+ const { location } = useLocation();
 
+    useEffect(() => {
+      window.scrollTo(0, 0);
+    }, [location.pathname]);
   // ═══════════════════════════════════════════════════════════════════════════
   // ОПТИМИЗИРАН useEffect - само slug като dependency
   // ═══════════════════════════════════════════════════════════════════════════

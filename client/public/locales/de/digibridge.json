@@ -1110,5 +1110,11 @@
     "skip": "Später",
     "submit": "Bewertung senden",
     "submitting": "Wird gesendet..."
+  },
+  "comingSoon": {
+    "title": "Demnächst verfügbar",
+    "subtitle": "Wir arbeiten intensiv daran, Ihnen diese Funktion bereitzustellen. Sie wird bald verfügbar sein!",
+    "backToAcademy": "Zurück zur Akademie",
+    "stayTuned": "Bleiben Sie dran"
   }
 }
