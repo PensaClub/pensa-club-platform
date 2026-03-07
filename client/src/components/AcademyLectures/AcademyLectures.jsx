@@ -11,6 +11,7 @@ import { useAcademyCourses } from '../contexts/AcademyCoursesProvider';
 import { useAuthContext } from '../contexts/UserContext';
 import SEOHead from '../SEO/SEOHead';
 import ScrollToTop from '../ScrollToTop/ScrollToTop';
+import { TextZoom } from '../TextZoom/TextZoom';
 import { useLocation } from 'react-router-dom';
 
 // Цветова схема за категории
@@ -302,6 +303,7 @@ export const AcademyLectures = () => {
 
   return (
     <div className="al">
+      <TextZoom />
       <SEOHead
         title={metaData.title}
         description={metaData.description}

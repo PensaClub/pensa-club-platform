@@ -12,6 +12,7 @@ import {
 // import { RequestCard } from './RequestCard';
 // import { ConversationCard } from './ConversationCard';
 import { toast } from 'react-toastify';
+import { TextZoom } from '../../TextZoom/TextZoom';
 import './digiBridgeMentorDashboard.css';
 import { RequestCard } from './RequestCard';
 import { DashboardStats } from './DashboardStats';
@@ -131,6 +132,7 @@ export const DigiBridgeMentorDashboard = () => {
       {/* HEADER */}
       <div className="digibridge-dashboard-header">
         <Header />
+        <TextZoom />
         <div className="digibridge-dashboard-title">
           <h1>{t('digiBridge.dashboard.title')}</h1>
           {isAdmin && (

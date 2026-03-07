@@ -9,6 +9,7 @@ import { useAuthContext } from '../../contexts/UserContext';
 import { useAcademyCourses } from '../../contexts/AcademyCoursesProvider';
 import './academyLessonPlayer.css';
 import AcademyLessonPlayerSkeleton from './AcademyLessonPlayerSkeleton/AcademyLessonPlayerSkeleton';
+import { TextZoom } from '../../TextZoom/TextZoom';
 
 const AcademyLessonPlayer = () => {
   const { t } = useTranslation('academy');
@@ -685,6 +686,8 @@ const AcademyLessonPlayer = () => {
   // =========================================================
 
   return (
+    <>
+    <TextZoom />
     <div className="lp">
       {/* Background */}
       <div className="lp-bg">
@@ -1350,6 +1353,7 @@ const AcademyLessonPlayer = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

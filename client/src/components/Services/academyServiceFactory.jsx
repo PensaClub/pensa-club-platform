@@ -75,8 +75,11 @@ export const academyServiceFactory = () => {
     // ===============================
     // MENTOR APPLICATIONS - ГОТОВИ ✅
     // ===============================
-    applyAsMentor: async (applicationData) => {
+    getMentorApplicationStatus: async () => {
+      return requester.get(`${apiUrl}/academy/mentors/apply/status`);
+    },
 
+    applyAsMentor: async (applicationData) => {
       return requester.post(`${apiUrl}/academy/mentors/apply`, applicationData);
     },
 

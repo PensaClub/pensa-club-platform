@@ -8,6 +8,7 @@ import './digiBridgeBecomeMentor.css';
 import { toast } from 'react-toastify';
 import { uploadMentorPhoto, uploadMentorCV } from '../../firebase/firebaseMentorStorage';
 import { DigiBridgeHeader } from '../../DigiBridgeAcademy/DigiBridgeHeader/DigiBridgeHeader';
+import { TextZoom } from '../../TextZoom/TextZoom';
 import { useLocation } from 'react-router-dom';
 const FORM_STORAGE_KEY = 'digibridge_mentor_application_form';
 
@@ -15,12 +16,20 @@ export const DigiBridgeBecomeMentor = () => {
   const { t } = useTranslation('digibridge');
   const navigate = useLocalizedNavigate();
   const { isAuthentication, profileData } = useContext(UserContext);
-  const { applyAsMentor } = useAcademy();
+  const { applyAsMentor, checkMentorApplicationStatus } = useAcademy();
   const location  = useLocation();
-  
+
+  const [applicationStatus, setApplicationStatus] = useState(null);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (isAuthentication) {
+      checkMentorApplicationStatus().then(setApplicationStatus);
+    }
+  }, [isAuthentication]);
 
   const loadSavedData = () => {
     try {
@@ -267,12 +276,15 @@ if (!formData.country) newErrors.country = t('digiBridge.becomeMentor.errors.cou
         cvStoragePath: cvStoragePath || null,
       };
 
-      await applyAsMentor(applicationData);
+      const result = await applyAsMentor(applicationData);
 
       localStorage.removeItem(FORM_STORAGE_KEY);
 
-      toast.success(t('digiBridge.becomeMentor.success'));
-      navigate('/academy');
+      setApplicationStatus({
+        canApply: false,
+        reason: 'cooldown',
+        canReapplyAt: result.canReapplyAt
+      });
 
     } catch (error) {
       console.error('Error submitting application:', error);
@@ -286,6 +298,7 @@ if (!formData.country) newErrors.country = t('digiBridge.becomeMentor.errors.cou
     return (
       <>
         <DigiBridgeHeader />
+        <TextZoom />
         <div className="become-mentor-page">
           <div className="become-mentor-auth-required">
             <div className="become-mentor-auth-card">
@@ -313,9 +326,96 @@ if (!formData.country) newErrors.country = t('digiBridge.becomeMentor.errors.cou
     );
   }
 
+  // Форматиране на дата спрямо езика
+  const formatReapplyDate = (isoDate) => {
+    if (!isoDate) return '';
+    const date = new Date(isoDate);
+    const lang = t('lang', { defaultValue: 'bg' }) === 'bg' ? 'bg-BG' : t('lang', { defaultValue: 'bg' }) === 'de' ? 'de-DE' : 'en-GB';
+    const dateStr = date.toLocaleDateString(lang, { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const timeStr = date.toLocaleTimeString(lang, { hour: '2-digit', minute: '2-digit' });
+    return `${dateStr}, ${timeStr}`;
+  };
+
+  // Cooldown / Pending / Approved екран
+  if (applicationStatus && !applicationStatus.canApply) {
+    const { reason, canReapplyAt } = applicationStatus;
+
+    return (
+      <>
+        <DigiBridgeHeader />
+        <TextZoom />
+        <div className="become-mentor-page">
+          <div className="become-mentor-status-screen">
+            {/* Технологична решетка + glows */}
+            <div className="bms-grid"></div>
+            <div className="bms-glow bms-glow--1"></div>
+            <div className="bms-glow bms-glow--2"></div>
+
+            <div className="become-mentor-status-card">
+              {/* Анимиран часовник */}
+              <div className="bms-clock">
+                <svg className="bms-clock-svg" viewBox="0 0 80 80" fill="none">
+                  <circle className="bms-clock-ring" cx="40" cy="40" r="36" strokeWidth="3" />
+                  <circle className="bms-clock-dot" cx="40" cy="40" r="3" />
+                  <line className="bms-clock-hand bms-clock-hand--hour" x1="40" y1="40" x2="40" y2="22" strokeWidth="3" strokeLinecap="round" />
+                  <line className="bms-clock-hand bms-clock-hand--minute" x1="40" y1="40" x2="40" y2="16" strokeWidth="2" strokeLinecap="round" />
+                  {[...Array(12)].map((_, i) => {
+                    const angle = (i * 30) * Math.PI / 180;
+                    const x1 = 40 + 30 * Math.sin(angle);
+                    const y1 = 40 - 30 * Math.cos(angle);
+                    const x2 = 40 + 33 * Math.sin(angle);
+                    const y2 = 40 - 33 * Math.cos(angle);
+                    return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} className="bms-clock-tick" strokeWidth={i % 3 === 0 ? 2 : 1} strokeLinecap="round" />;
+                  })}
+                </svg>
+              </div>
+
+              {/* Статус badge */}
+              <div className={`bms-badge bms-badge--${reason}`}>
+                <span>
+                  {reason === 'cooldown'
+                    ? t('digiBridge.becomeMentor.submitted.title')
+                    : reason === 'pending'
+                      ? t('digiBridge.becomeMentor.submitted.alreadyPending')
+                      : t('digiBridge.becomeMentor.submitted.alreadyApproved')
+                  }
+                </span>
+              </div>
+
+              {reason === 'cooldown' && (
+                <>
+                  <p className="bms-description">
+                    {t('digiBridge.becomeMentor.submitted.description')}
+                  </p>
+                  <div className="bms-date-card">
+                    <div className="bms-date-label">{t('digiBridge.becomeMentor.submitted.canReapplyAt')}</div>
+                    <div className="bms-date-value">{formatReapplyDate(canReapplyAt)}</div>
+                    <div className="bms-date-pulse"></div>
+                  </div>
+                </>
+              )}
+
+              <button
+                className="become-mentor-status-btn"
+                onClick={() => navigate('/academy')}
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="18" height="18">
+                  <line x1="19" y1="12" x2="5" y2="12" />
+                  <polyline points="12 19 5 12 12 5" />
+                </svg>
+                {t('digiBridge.becomeMentor.submitted.backToAcademy')}
+              </button>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
+
   return (
     <>
       <DigiBridgeHeader />
+      <TextZoom />
 
       <div className="become-mentor-page">
 

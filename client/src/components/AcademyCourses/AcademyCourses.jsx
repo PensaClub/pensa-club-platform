@@ -11,6 +11,7 @@ import './academyCourses.css';
 import AcademyCoursesSkeleton from './AcademyCoursesSkeleton/AcademyCoursesSkeleton';
 import SEOHead from '../SEO/SEOHead';
 import ScrollToTop from '../ScrollToTop/ScrollToTop';
+import { TextZoom } from '../TextZoom/TextZoom';
 
 const PROGRAM_COLORS = {
   'Мобилни устройства': { primary: '#3b82f6', gradient: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)', icon: '📱' },
@@ -208,6 +209,7 @@ export const AcademyCourses = () => {
 
   return (
     <div className="academyCourses">
+      <TextZoom />
       <SEOHead
         title={metaData.title}
         description={metaData.description}

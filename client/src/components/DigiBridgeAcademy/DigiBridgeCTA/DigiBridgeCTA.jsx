@@ -2,7 +2,7 @@ import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
 import { useTranslation } from 'react-i18next';
 import './digiBridgeCTA.css';
 
-export const DigiBridgeCTA = () => {
+export const DigiBridgeCTA = ({ stats, loading }) => {
     const { t } = useTranslation('digibridge');
 
     return (
@@ -103,17 +103,23 @@ export const DigiBridgeCTA = () => {
                     {/* Stats Row */}
                     <div className="dbc-stats">
                         <div className="dbc-stat">
-                            <span className="dbc-stat-number">500+</span>
+                            <span className="dbc-stat-number">
+                                {loading ? '...' : `${stats?.totalStudents || 0}+`}
+                            </span>
                             <span className="dbc-stat-label">{t('digiBridge.cta.stat1', 'Участници')}</span>
                         </div>
                         <div className="dbc-stat-divider"></div>
                         <div className="dbc-stat">
-                            <span className="dbc-stat-number">50+</span>
+                            <span className="dbc-stat-number">
+                                {loading ? '...' : `${stats?.activeMentors || 0}+`}
+                            </span>
                             <span className="dbc-stat-label">{t('digiBridge.cta.stat2', 'Ментори')}</span>
                         </div>
                         <div className="dbc-stat-divider"></div>
                         <div className="dbc-stat">
-                            <span className="dbc-stat-number">3</span>
+                            <span className="dbc-stat-number">
+                                {loading ? '...' : (stats?.countries || 0)}
+                            </span>
                             <span className="dbc-stat-label">{t('digiBridge.cta.stat3', 'Държави')}</span>
                         </div>
                     </div>
