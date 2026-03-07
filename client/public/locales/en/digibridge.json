@@ -374,7 +374,15 @@
         "submitError": "Error submitting application. Please try again.",
         "countryRequired": "Country is required"
       },
-      "success": "Application submitted successfully! We will contact you soon."
+      "success": "Application submitted successfully! We will contact you soon.",
+      "submitted": {
+        "title": "Application Submitted!",
+        "description": "We will review your application and notify you of the result.",
+        "canReapplyAt": "You can reapply on:",
+        "alreadyPending": "You have a pending application under review.",
+        "alreadyApproved": "You are already an approved mentor.",
+        "backToAcademy": "Back to Academy"
+      }
     },
     "testimonialForm": {
       "title": "Share Your Story",

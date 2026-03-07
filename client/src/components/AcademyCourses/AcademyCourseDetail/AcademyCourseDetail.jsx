@@ -13,6 +13,7 @@ import academyServiceFactory from '../../Services/academyServiceFactory';
 import './academyCourseDetail.css';
 import AcademyCourseDetailSkeleton from './AcademyCourseDetailSkeleton/AcademyCourseDetailSkeleton';
 import SEOHead from '../../SEO/SEOHead';
+import { TextZoom } from '../../TextZoom/TextZoom';
 
 // Level colors
 const LEVEL_CONFIG = {
@@ -909,6 +910,7 @@ export const AcademyCourseDetail = () => {
 
   return (
     <div className="academyCourseDetail" style={{ '--accent-color': categoryColor }}>
+      <TextZoom />
       <SEOHead
         title={metaData.title}
         description={metaData.description}

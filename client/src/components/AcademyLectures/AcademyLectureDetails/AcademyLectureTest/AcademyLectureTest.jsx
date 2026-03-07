@@ -9,6 +9,7 @@ import { useAuthContext } from '../../../contexts/UserContext';
 import { useAcademyCourses } from '../../../contexts/AcademyCoursesProvider';
 import './academyLectureTest.css';
 import AcademyLectureTestSkeleton from './AcademyLectureTestSkeleton/AcademyLectureTestSkeleton';
+import { TextZoom } from '../../../TextZoom/TextZoom';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // HELPER FUNCTIONS
@@ -839,6 +840,8 @@ export const AcademyLectureTest = () => {
   // ═══════════════════════════════════════════════════════════════════════════
 
   return (
+    <>
+    <TextZoom />
     <div className="alt">
       {/* Header */}
       <header className="alt-header">
@@ -1065,6 +1068,7 @@ export const AcademyLectureTest = () => {
         </div>
       </footer>
     </div>
+    </>
   );
 };
 

@@ -9,6 +9,7 @@ import { useAuthContext } from '../../contexts/UserContext';
 import { useAcademyCourses } from '../../contexts/AcademyCoursesProvider';
 import './academyTestPlayer.css';
 import AcademyTestPlayerSkeleton from './AcademyTestPlayerSkeleton/AcademyTestPlayerSkeleton';
+import { TextZoom } from '../../TextZoom/TextZoom';
 
 const AcademyTestPlayer = () => {
   const { t } = useTranslation('academy');
@@ -1228,6 +1229,7 @@ const AcademyTestPlayer = () => {
 
   return (
     <div className="atp">
+      <TextZoom />
       {/* Header */}
       <header className="atp-header">
         <div className="atp-header__left">

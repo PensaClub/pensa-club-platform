@@ -9,6 +9,7 @@ import { useAuthContext } from '../../contexts/UserContext';
 import { useAcademyCourses } from '../../contexts/AcademyCoursesProvider';
 import './academyLectureWatch.css';
 import AcademyLectureWatchSkeleton from './AcademyLectureWatchSkeleton/AcademyLectureWatchSkeleton';
+import { TextZoom } from '../../TextZoom/TextZoom';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // HELPERS
@@ -192,8 +193,10 @@ export const AcademyLectureWatch = () => {
   }
 
   return (
+    <>
+    <TextZoom />
     <div className={`alw ${isTheaterMode ? 'alw--theater' : ''} ${isLive ? 'alw--live' : ''}`}>
-      
+
       {/* Header */}
       <header className="alw-header">
         <div className="alw-header-left">
@@ -417,6 +420,7 @@ export const AcademyLectureWatch = () => {
         </div>
       )}
     </div>
+    </>
   );
 };
 

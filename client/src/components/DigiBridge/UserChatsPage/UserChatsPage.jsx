@@ -9,6 +9,7 @@ import './userChatsPage.css';
 import { DigiBridgeChatWindow } from '../DigiBridgeChatWindow/DigiBridgeChatWindow';
 import { UserChatCard } from './UserChatCard';
 import { MentorReviewModal } from '../MentorReviewModal/MentorReviewModal';
+import { TextZoom } from '../../TextZoom/TextZoom';
 
 export const UserChatsPage = () => {
   const { t } = useTranslation('digibridge');
@@ -95,6 +96,7 @@ export const UserChatsPage = () => {
 
   return (
     <>
+      <TextZoom />
       <div className="user-chats-page">
         
         <div className="user-chats-header">

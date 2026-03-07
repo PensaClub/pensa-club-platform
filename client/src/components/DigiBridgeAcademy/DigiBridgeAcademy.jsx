@@ -16,6 +16,7 @@ import { DigiBridgeTestimonialForm } from './DigiBridgeTestimonialForm/DigiBridg
 import { useAcademy } from '../contexts/AcademyProvider';
 import SEOHead from '../SEO/SEOHead';
 import ScrollToTop from '../ScrollToTop/ScrollToTop';
+import { TextZoom } from '../TextZoom/TextZoom';
 
 export const DigiBridgeAcademy = () => {
   const { t, i18n } = useTranslation('digibridge');
@@ -209,6 +210,7 @@ export const DigiBridgeAcademy = () => {
 
   return (
     <div className="digibridge-academy-wrapper">
+      <TextZoom />
       {/* ✅ SEO HEAD */}
       <SEOHead
         title={metaData.title}

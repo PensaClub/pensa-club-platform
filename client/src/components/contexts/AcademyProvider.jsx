@@ -84,6 +84,15 @@ export const AcademyProvider = ({ children }) => {
   // MENTOR APPLICATION
   // ===============================
 
+  const checkMentorApplicationStatus = useCallback(async () => {
+    try {
+      return await academyService.getMentorApplicationStatus();
+    } catch (error) {
+      console.error('Error checking mentor application status:', error);
+      return { canApply: true };
+    }
+  }, []);
+
   const applyAsMentor = useCallback(async (applicationData) => {
     setIsLoading(true);
     try {
@@ -1542,6 +1551,7 @@ ${reason ? `Причина: ${reason}` : ''}
     sendPersonalEmail,
 
     // Mentor Application
+    checkMentorApplicationStatus,
     applyAsMentor,
     // Mentor Management
     createMentor,
