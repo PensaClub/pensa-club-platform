@@ -230,7 +230,7 @@ export const DigiBridgeAcademy = () => {
       <DigiBridgeFeatures />
       <DigiBridgeMentors stats={stats} loading={loading} />
       <DigiBridgeTestimonials />
-      <DigiBridgeCTA />
+      <DigiBridgeCTA stats={stats} loading={loading} />
       <DigiBridgePartners />
       <DigiBridgeFAQ />
       <DigiBridgeTestimonialForm />
