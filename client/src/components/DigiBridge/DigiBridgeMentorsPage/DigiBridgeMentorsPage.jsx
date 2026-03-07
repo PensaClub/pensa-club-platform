@@ -7,6 +7,7 @@ import { Loader } from '../../Loader/Loader';
 import { MentorDetailModal } from './MentorDetailModal';
 import SEOHead from '../../SEO/SEOHead';
 import ScrollToTop from '../../ScrollToTop/ScrollToTop';
+import { TextZoom } from '../../TextZoom/TextZoom';
 
 const THEMES = [
   { primary: '#6366f1', gradient: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%)', light: '#eef2ff' },
@@ -116,6 +117,7 @@ export const DigiBridgeMentorsPage = () => {
 
   return (
     <>
+      <TextZoom />
       <SEOHead
         title={metaData.title}
         description={metaData.description}

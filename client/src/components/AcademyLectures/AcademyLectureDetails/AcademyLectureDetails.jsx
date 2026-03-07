@@ -13,6 +13,7 @@ import './academyLectureDetails.css';
 import AcademyLectureDetailsSkeleton from './AcademyLectureDetailsSkeleton/AcademyLectureDetailsSkeleton';
 import SEOHead from '../../SEO/SEOHead';
 import ScrollToTop from '../../ScrollToTop/ScrollToTop';
+import { TextZoom } from '../../TextZoom/TextZoom';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // HELPERS (същите като преди)
@@ -570,6 +571,7 @@ export const AcademyLectureDetails = () => {
 
   return (
     <div className="ald" style={{ '--accent-color': categoryStyle.primary, '--accent-glow': categoryStyle.glow }}>
+      <TextZoom />
       <SEOHead
         title={metaData.title}
         description={metaData.description}

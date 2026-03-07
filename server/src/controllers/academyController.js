@@ -325,10 +325,51 @@ academyController.delete('/mentors/:id', isAuth, rbac.checkPermission('mentor', 
   }
 });
 // ===============================
+// GET /api/academy/mentors/apply/status
+// Проверка дали потребителят може да кандидатства (cooldown 7 дни)
+// ===============================
+
+academyController.get('/mentors/apply/status', isAuth, async (req, res, next) => {
+  try {
+    const userId = req.user.userId;
+
+    const approved = await mentor_application.findOne({
+      where: { userId, status: 'approved' }
+    });
+    if (approved) {
+      return res.json({ canApply: false, reason: 'approved' });
+    }
+
+    const pending = await mentor_application.findOne({
+      where: { userId, status: 'pending' }
+    });
+    if (pending) {
+      return res.json({ canApply: false, reason: 'pending' });
+    }
+
+    const recentApplication = await mentor_application.findOne({
+      where: {
+        userId,
+        createdAt: { [Op.gte]: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) }
+      },
+      order: [['createdAt', 'DESC']]
+    });
+
+    if (recentApplication) {
+      const canReapplyAt = new Date(recentApplication.createdAt.getTime() + 7 * 24 * 60 * 60 * 1000);
+      return res.json({ canApply: false, reason: 'cooldown', canReapplyAt: canReapplyAt.toISOString() });
+    }
+
+    return res.json({ canApply: true });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// ===============================
 // POST /api/academy/mentors/apply
 // Кандидатстване за ментор
 // ===============================
-// server/controllers/academyController.js
 
 academyController.post('/mentors/apply', isAuth, async (req, res, next) => {
   try {
@@ -358,18 +399,38 @@ academyController.post('/mentors/apply', isAuth, async (req, res, next) => {
       });
     }
 
+    // Cooldown проверка — 7 дни между кандидатурите
+    const recentApplication = await mentor_application.findOne({
+      where: {
+        userId,
+        createdAt: { [Op.gte]: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) }
+      },
+      order: [['createdAt', 'DESC']]
+    });
+
+    if (recentApplication) {
+      const canReapplyAt = new Date(recentApplication.createdAt.getTime() + 7 * 24 * 60 * 60 * 1000);
+      return res.status(429).json({
+        message: 'cooldown',
+        canReapplyAt: canReapplyAt.toISOString()
+      });
+    }
+
     const applicationData = {
       userId,
       ...validationResult.data,
-      country: validationResult.data.country || 'BG', // ✅ ДОБАВЕНО
+      country: validationResult.data.country || 'BG',
     };
 
     const application = await mentor_application.create(applicationData);
 
+    const canReapplyAt = new Date(application.createdAt.getTime() + 7 * 24 * 60 * 60 * 1000);
+
     res.status(201).json({
       message: 'Mentor application submitted successfully!',
       applicationId: application.id,
-      status: 'pending'
+      status: 'pending',
+      canReapplyAt: canReapplyAt.toISOString()
     });
 
   } catch (err) {

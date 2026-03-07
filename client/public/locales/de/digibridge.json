@@ -454,7 +454,15 @@
         "submitError": "Fehler beim Absenden der Bewerbung. Bitte versuchen Sie es erneut.",
         "countryRequired": "Land ist erforderlich"
       },
-      "success": "Bewerbung erfolgreich abgeschickt! Wir werden uns bald bei Ihnen melden."
+      "success": "Bewerbung erfolgreich abgeschickt! Wir werden uns bald bei Ihnen melden.",
+      "submitted": {
+        "title": "Bewerbung eingereicht!",
+        "description": "Wir werden Ihre Bewerbung prüfen und Sie über das Ergebnis informieren.",
+        "canReapplyAt": "Sie können sich erneut bewerben am:",
+        "alreadyPending": "Sie haben eine laufende Bewerbung, die geprüft wird.",
+        "alreadyApproved": "Sie sind bereits ein genehmigter Mentor.",
+        "backToAcademy": "Zurück zur Akademie"
+      }
     },
     "chatButton": {
       "help": "Hilfe",

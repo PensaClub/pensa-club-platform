@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
+import { TextZoom } from '../../TextZoom/TextZoom';
 import './comingSoon.css';
 
 const ComingSoon = ({ pageKey }) => {
@@ -9,6 +10,7 @@ const ComingSoon = ({ pageKey }) => {
 
     return (
         <div className="dbcs-wrapper">
+            <TextZoom />
             <div className="dbcs-grid-pattern" />
             <div className="dbcs-glow dbcs-glow--1" />
             <div className="dbcs-glow dbcs-glow--2" />
