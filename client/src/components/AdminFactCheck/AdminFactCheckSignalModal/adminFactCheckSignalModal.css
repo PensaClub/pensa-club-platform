@@ -113,6 +113,253 @@
   margin: 0;
 }
 
+.afcsm-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.afcsm-tech-toggle {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.05);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.afcsm-tech-toggle svg {
+  width: 18px;
+  height: 18px;
+  color: #9ca3af;
+}
+
+.afcsm-tech-toggle:hover {
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.afcsm-tech-toggle:hover svg {
+  color: #3b82f6;
+}
+
+.afcsm-tech-toggle--active {
+  background: rgba(59, 130, 246, 0.15);
+}
+
+.afcsm-tech-toggle--active svg {
+  color: #3b82f6;
+}
+
+.afcsm-tech-panel {
+  margin-top: 10px;
+  padding: 12px 14px;
+  background: #f0f4ff;
+  border-radius: 10px;
+  border: 1px solid #dbeafe;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  animation: afcsm-fade-in 0.2s ease;
+}
+
+.afcsm-tech-row {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}
+
+.afcsm-tech-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+.afcsm-tech-value {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #1f2937;
+  font-family: 'Courier New', monospace;
+}
+
+.afcsm-tech-value--ua {
+  font-size: 0.72rem;
+  font-weight: 500;
+  word-break: break-all;
+  line-height: 1.4;
+}
+
+/* IP ACTION BUTTONS */
+.afcsm-ip-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: 1.5px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 0;
+  background: transparent;
+  flex-shrink: 0;
+  margin-left: 4px;
+}
+
+.afcsm-ip-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.afcsm-ip-btn--block {
+  background: #fef2f2;
+  color: #dc2626;
+  border-color: #fecaca;
+}
+
+.afcsm-ip-btn--block:hover:not(:disabled) {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+.afcsm-ip-btn--unblock {
+  background: #f0fdf4;
+  color: #16a34a;
+  border-color: #bbf7d0;
+}
+
+.afcsm-ip-btn--unblock:hover:not(:disabled) {
+  background: #16a34a;
+  color: #ffffff;
+}
+
+.afcsm-ip-blocked-badge {
+  font-size: 0.68rem;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: #fecaca;
+  color: #dc2626;
+  font-weight: 700;
+  margin-left: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.afcsm-ip-btn--confirm {
+  background: #16a34a;
+  color: #ffffff;
+  border-color: #16a34a;
+}
+
+.afcsm-ip-btn--confirm:hover:not(:disabled) {
+  background: #15803d;
+}
+
+.afcsm-ip-btn--cancel {
+  background: #e5e7eb;
+  color: #6b7280;
+  border-color: #d1d5db;
+}
+
+.afcsm-ip-btn--cancel:hover {
+  background: #d1d5db;
+  color: #374151;
+}
+
+.afcsm-ip-action-form {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  animation: afcsm-fade-in 0.2s ease;
+}
+
+.afcsm-ip-password-input {
+  padding: 5px 10px;
+  border: 1.5px solid #f59e0b;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.8rem;
+  width: 150px;
+  background: #fffbeb;
+}
+
+.afcsm-ip-password-input:focus {
+  outline: none;
+  border-color: #d97706;
+}
+
+[data-theme="dark"] .afcsm-ip-password-input {
+  background: #1c1917;
+  border-color: #92400e;
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .afcsm-ip-btn--confirm {
+  background: #16a34a;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .afcsm-ip-btn--cancel {
+  background: #374151;
+  color: #9ca3af;
+  border-color: #4b5563;
+}
+
+[data-theme="dark"] .afcsm-ip-btn--block {
+  background: #2d1515;
+  color: #ef4444;
+  border-color: #7f1d1d;
+}
+
+[data-theme="dark"] .afcsm-ip-btn--block:hover:not(:disabled) {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .afcsm-ip-btn--unblock {
+  background: #052e16;
+  color: #4ade80;
+  border-color: #14532d;
+}
+
+[data-theme="dark"] .afcsm-ip-btn--unblock:hover:not(:disabled) {
+  background: #16a34a;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .afcsm-ip-blocked-badge {
+  background: #7f1d1d;
+  color: #fca5a5;
+}
+
+[data-theme="dark"] .afcsm-tech-toggle {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .afcsm-tech-toggle:hover {
+  background: rgba(59, 130, 246, 0.2);
+}
+
+[data-theme="dark"] .afcsm-tech-toggle--active {
+  background: rgba(59, 130, 246, 0.2);
+}
+
+[data-theme="dark"] .afcsm-tech-panel {
+  background: #172033;
+  border-color: #1e3a5f;
+}
+
+[data-theme="dark"] .afcsm-tech-value {
+  color: #d1d5db;
+}
+
 .afcsm-date {
   font-size: 0.85rem;
   color: #9ca3af;

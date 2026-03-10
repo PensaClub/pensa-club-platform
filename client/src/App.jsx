@@ -121,6 +121,7 @@ const ComingSoon = lazy(() => import('./components/DigiBridgeAcademy/ComingSoon/
 const FactCheck = lazy(() => import('./components/FactCheck/FactCheck.jsx'));
 const FactCheckDetail = lazy(() => import('./components/FactCheck/FactCheckDetail/FactCheckDetail.jsx'));
 const AdminFactCheck = lazy(() => import('./components/AdminFactCheck/AdminFactCheck.jsx').then(m => ({ default: m.AdminFactCheck })));
+import { IpManagementProvider } from './components/contexts/IpManagementContext';
 
 // ✅ LAZY LOADING - USEFUL LINKS КОМПОНЕНТИ
 const UsefulLinks = lazy(() => import('./components/UsefulLinks/UsefulLinks.jsx'));
@@ -196,7 +197,7 @@ function AppRoutes() {
         <Route path="/academy/lectures/:slug/test" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademyTestPlayer /></Suspense>} />
         <Route path="/academy/courses/:courseSlug/test" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademyTestPlayer /></Suspense>} />
         <Route path="/admin/site-settings" element={<AdminGuard><SiteSettingsAdmin /></AdminGuard>} />
-        <Route path="/admin/fact-check" element={<ManagementGuard><Suspense fallback={<LazyLoadingFallback />}><AdminFactCheck /></Suspense></ManagementGuard>} />
+        <Route path="/admin/fact-check" element={<ManagementGuard><IpManagementProvider><Suspense fallback={<LazyLoadingFallback />}><AdminFactCheck /></Suspense></IpManagementProvider></ManagementGuard>} />
         <Route path="/admin/useful-links" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback />}><AdminUsefulLinksList /></Suspense></AdminGuard>} />
         <Route path="/admin/useful-links/create" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback />}><UsefulLinksCreateForm /></Suspense></AdminGuard>} />
         <Route path="/admin/useful-links/edit/:id" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback />}><UsefulLinksCreateForm /></Suspense></AdminGuard>} />

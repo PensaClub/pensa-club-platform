@@ -11,7 +11,8 @@
       "Bash(grep:*)",
       "Bash(\"/c/Program Files/Google/Chrome/Application/chrome.exe\":*)",
       "Bash(identify:*)",
-      "Bash(cd C:/Users/User/Documents/GitHub/Digital-Literacy-Wellbeing-60-plus/client && npx react-scripts build 2>&1 | tail -20)"
+      "Bash(cd C:/Users/User/Documents/GitHub/Digital-Literacy-Wellbeing-60-plus/client && npx react-scripts build 2>&1 | tail -20)",
+      "Bash(find \"C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\Digital-Literacy-Wellbeing-60-plus\\\\client\\\\src\\\\components\" -name \"*.jsx\" -type f 2>/dev/null | head -20)"
     ]
   }
 }

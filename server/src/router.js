@@ -30,6 +30,7 @@ const academyMyController = require('./controllers/academyMyController');
 const siteSettingsController = require('./controllers/siteSettingsController');
 const usefulLinksController = require('./controllers/usefulLinksController');
 const factCheckController = require('./controllers/factCheckController');
+const ipManagementController = require('./controllers/ipManagementController');
 
 router.use('/auth', authController);
 router.use('/user', userController);
@@ -60,6 +61,7 @@ router.use('/academy/certificates', certificatesController);
 router.use('/academy/materials', academyMaterialsController);
 router.use('/academy/my', academyMyController);
 router.use('/admin/site-settings', siteSettingsController);
+router.use('/admin/ip-management', ipManagementController);
 router.use('/useful-links', usefulLinksController);
 router.use('/fact-check', factCheckController);
 

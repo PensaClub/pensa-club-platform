@@ -323,7 +323,11 @@ factCheckController.post('/signals', signalRateLimiter, async (req, res, next) =
     if (validated.city === '') validated.city = null;
     if (validated.notes === '') validated.notes = null;
 
-    const signal = await fact_check_signal.create(validated);
+    const signal = await fact_check_signal.create({
+      ...validated,
+      ipAddress: req.ip || req.headers['x-forwarded-for']?.split(',')[0]?.trim() || null,
+      userAgent: req.headers['user-agent'] || null,
+    });
 
     // Create admin notification
     try {
