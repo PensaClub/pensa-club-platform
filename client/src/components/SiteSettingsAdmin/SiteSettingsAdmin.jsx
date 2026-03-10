@@ -1,6 +1,7 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LocalizedLink as Link } from '../LocalizedLink/LocalizedLink';
-import { ArrowLeft, Settings } from 'lucide-react';
+import { ArrowLeft, Settings, Snowflake, BookOpen, Gift, Shield } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useSiteSettingsAdminContext } from '../contexts/SiteSettingsAdminContext';
 import SettingsAdminSection from './SettingsAdminSection/SettingsAdminSection';
@@ -16,6 +17,7 @@ import './siteSettingsAdmin.css';
 const SiteSettingsAdmin = () => {
     const { t } = useTranslation('admin');
     const { settings, isLoading, loadingKeys, updateSetting } = useSiteSettingsAdminContext();
+    const [openCard, setOpenCard] = useState(null);
 
     const handleToggle = async (key, value) => {
         const result = await updateSetting(key, value);
@@ -24,6 +26,10 @@ const SiteSettingsAdmin = () => {
         } else {
             toast.error(t('siteSettingsAdmin.saveError'));
         }
+    };
+
+    const toggleCard = (cardId) => {
+        setOpenCard((prev) => (prev === cardId ? null : cardId));
     };
 
     if (isLoading) {
@@ -42,9 +48,9 @@ const SiteSettingsAdmin = () => {
     return (
         <div className="ssa-page">
             {/* Background pattern */}
-            <div className="ssa-bg-pattern" />
-            <div className="ssa-bg-corner ssa-bg-corner--tl" />
-            <div className="ssa-bg-corner ssa-bg-corner--br" />
+            <div className="ssa-bg-grid" />
+            <div className="ssa-bg-glow ssa-bg-glow--tl" />
+            <div className="ssa-bg-glow ssa-bg-glow--br" />
 
             <div className="ssa-container">
                 {/* Back link */}
@@ -64,13 +70,17 @@ const SiteSettingsAdmin = () => {
                     </div>
                 </div>
 
-                {/* Settings sections */}
-                <div className="ssa-sections">
-                    {/* Snowfall Section */}
+                {/* Settings grid */}
+                <div className="ssa-grid">
+                    {/* Snowfall */}
                     <SettingsAdminSection
+                        id="snowfall"
                         title={t('siteSettingsAdmin.snowfall')}
-                        icon="❄️"
                         description={t('siteSettingsAdmin.snowfallDesc')}
+                        icon={<Snowflake size={24} />}
+                        color="#38bdf8"
+                        isOpen={openCard === 'snowfall'}
+                        onToggle={() => toggleCard('snowfall')}
                     >
                         <SettingsAdminToggle
                             settingKey="snowfall_enabled"
@@ -84,11 +94,15 @@ const SiteSettingsAdmin = () => {
                         {settings.snowfall_enabled && <SnowfallConfig />}
                     </SettingsAdminSection>
 
-                    {/* Article Limit Section */}
+                    {/* Article Limit */}
                     <SettingsAdminSection
+                        id="articleLimit"
                         title={t('siteSettingsAdmin.articleLimit')}
-                        icon="📖"
                         description={t('siteSettingsAdmin.articleLimitDesc')}
+                        icon={<BookOpen size={24} />}
+                        color="#f59e0b"
+                        isOpen={openCard === 'articleLimit'}
+                        onToggle={() => toggleCard('articleLimit')}
                     >
                         <SettingsAdminToggle
                             settingKey="article_limit_enabled"
@@ -102,11 +116,15 @@ const SiteSettingsAdmin = () => {
                         {settings.article_limit_enabled && <ArticleLimitConfig />}
                     </SettingsAdminSection>
 
-                    {/* Christmas Greeting Section */}
+                    {/* Christmas Greeting */}
                     <SettingsAdminSection
+                        id="christmasGreeting"
                         title={t('siteSettingsAdmin.christmasGreeting')}
-                        icon="🎅"
                         description={t('siteSettingsAdmin.christmasGreetingDesc')}
+                        icon={<Gift size={24} />}
+                        color="#ef4444"
+                        isOpen={openCard === 'christmasGreeting'}
+                        onToggle={() => toggleCard('christmasGreeting')}
                     >
                         <SettingsAdminToggle
                             settingKey="christmas_greeting_enabled"
@@ -120,11 +138,15 @@ const SiteSettingsAdmin = () => {
                         {settings.christmas_greeting_enabled && <GreetingConfig />}
                     </SettingsAdminSection>
 
-                    {/* IP Management Section */}
+                    {/* IP Management */}
                     <SettingsAdminSection
+                        id="ipManagement"
                         title={t('siteSettingsAdmin.ipManagement.title')}
-                        icon="🛡️"
                         description={t('siteSettingsAdmin.ipManagement.description')}
+                        icon={<Shield size={24} />}
+                        color="#8b5cf6"
+                        isOpen={openCard === 'ipManagement'}
+                        onToggle={() => toggleCard('ipManagement')}
                     >
                         <IpManagementProvider>
                             <IpManagementConfig />

@@ -30,15 +30,90 @@ const verifyAdminPassword = async (req, res) => {
 };
 
 // ═══════════════════════════════════════════════════════════════════════════
-// GET /admin/ip-management/visits — List IP visits (paginated)
+// Helper — get date cutoff for period filter
+// ═══════════════════════════════════════════════════════════════════════════
+
+const getPeriodCutoff = (period) => {
+  const now = new Date();
+  switch (period) {
+    case 'today': {
+      const start = new Date(now);
+      start.setHours(0, 0, 0, 0);
+      return start;
+    }
+    case 'week': {
+      const start = new Date(now);
+      start.setDate(start.getDate() - 7);
+      return start;
+    }
+    case 'month': {
+      const start = new Date(now);
+      start.setDate(start.getDate() - 30);
+      return start;
+    }
+    default:
+      return null;
+  }
+};
+
+// ═══════════════════════════════════════════════════════════════════════════
+// GET /admin/ip-management/stats — IP visit statistics
+// ═══════════════════════════════════════════════════════════════════════════
+
+ipManagementController.get('/stats', isAuth, rbac.checkPermission('siteSettings', 'update'), async (req, res, next) => {
+  try {
+    const now = new Date();
+
+    const todayStart = new Date(now);
+    todayStart.setHours(0, 0, 0, 0);
+
+    const weekStart = new Date(now);
+    weekStart.setDate(weekStart.getDate() - 7);
+
+    const monthStart = new Date(now);
+    monthStart.setDate(monthStart.getDate() - 30);
+
+    const [todayCount, weekCount, monthCount, totalCount, todayVisits, weekVisits, monthVisits] = await Promise.all([
+      ip_visit.count({ where: { lastVisitedAt: { [Op.gte]: todayStart } } }),
+      ip_visit.count({ where: { lastVisitedAt: { [Op.gte]: weekStart } } }),
+      ip_visit.count({ where: { lastVisitedAt: { [Op.gte]: monthStart } } }),
+      ip_visit.count(),
+      ip_visit.sum('visitCount', { where: { lastVisitedAt: { [Op.gte]: todayStart } } }),
+      ip_visit.sum('visitCount', { where: { lastVisitedAt: { [Op.gte]: weekStart } } }),
+      ip_visit.sum('visitCount', { where: { lastVisitedAt: { [Op.gte]: monthStart } } }),
+    ]);
+
+    return res.json({
+      success: true,
+      stats: {
+        today: { uniqueIps: todayCount, totalVisits: todayVisits || 0 },
+        week: { uniqueIps: weekCount, totalVisits: weekVisits || 0 },
+        month: { uniqueIps: monthCount, totalVisits: monthVisits || 0 },
+        total: totalCount,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// GET /admin/ip-management/visits — List IP visits (paginated + period filter)
 // ═══════════════════════════════════════════════════════════════════════════
 
 ipManagementController.get('/visits', isAuth, rbac.checkPermission('siteSettings', 'update'), async (req, res, next) => {
   try {
-    const { page = 1, limit = 50, search } = req.query;
+    const { page = 1, limit = 50, search, period } = req.query;
     const offset = (parseInt(page) - 1) * parseInt(limit);
 
     const where = {};
+
+    // Period filter
+    const cutoff = getPeriodCutoff(period);
+    if (cutoff) {
+      where.lastVisitedAt = { [Op.gte]: cutoff };
+    }
+
     if (search) {
       where[Op.or] = [
         { ipAddress: { [Op.iLike]: `%${search}%` } },
@@ -218,7 +293,7 @@ ipManagementController.post('/whitelist', isAuth, rbac.checkPermission('siteSett
       ipAddress: trimmedIp,
       label: label || null,
       isSystem: false,
-      addedBy: req.user?.id || null,
+      addedBy: req.user?.userId || null,
     });
 
     // If this IP was blocked, remove it from blocklist
@@ -298,7 +373,7 @@ ipManagementController.post('/whitelist/:id/block', isAuth, rbac.checkPermission
       await blocked_ip.create({
         ipAddress: ip,
         reason: reason || null,
-        blockedBy: req.user?.id || null,
+        blockedBy: req.user?.userId || null,
         blockedAt: new Date(),
       });
       invalidateBlockedIpsCache();

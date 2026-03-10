@@ -270,7 +270,16 @@
       "systemIpError": "System-IPs können nicht entfernt werden.",
       "noVisits": "Noch keine Besuche aufgezeichnet.",
       "noBlocked": "Keine blockierten IP-Adressen.",
-      "noWhitelist": "Keine IP-Adressen auf der Whitelist."
+      "noWhitelist": "Keine IP-Adressen auf der Whitelist.",
+      "statsToday": "Einzigartige IPs heute",
+      "statsWeek": "Einzigartige IPs diese Woche",
+      "statsMonth": "Einzigartige IPs diesen Monat",
+      "statsVisits": "Besuche",
+      "periodToday": "Heute",
+      "periodWeek": "Woche",
+      "periodMonth": "Monat",
+      "periodAll": "Alle",
+      "totalRecords": "Einträge"
     },
     "articleLimit": "Artikellimit",
     "articleLimitDesc": "Begrenzt die Anzahl der Artikel, die nicht registrierte Benutzer lesen können",
