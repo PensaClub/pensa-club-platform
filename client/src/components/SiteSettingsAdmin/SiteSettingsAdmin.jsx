@@ -8,6 +8,8 @@ import SettingsAdminToggle from './SettingsAdminToggle/SettingsAdminToggle';
 import SnowfallConfig from './SnowfallConfig/SnowfallConfig';
 import GreetingConfig from './GreetingConfig/GreetingConfig';
 import ArticleLimitConfig from './ArticleLimitConfig/ArticleLimitConfig';
+import IpManagementConfig from './IpManagementConfig/IpManagementConfig';
+import { IpManagementProvider } from '../contexts/IpManagementContext';
 import ScrollToTop from '../ScrollToTop/ScrollToTop';
 import './siteSettingsAdmin.css';
 
@@ -116,6 +118,17 @@ const SiteSettingsAdmin = () => {
                             isLoading={loadingKeys.christmas_greeting_enabled || false}
                         />
                         {settings.christmas_greeting_enabled && <GreetingConfig />}
+                    </SettingsAdminSection>
+
+                    {/* IP Management Section */}
+                    <SettingsAdminSection
+                        title={t('siteSettingsAdmin.ipManagement.title')}
+                        icon="🛡️"
+                        description={t('siteSettingsAdmin.ipManagement.description')}
+                    >
+                        <IpManagementProvider>
+                            <IpManagementConfig />
+                        </IpManagementProvider>
                     </SettingsAdminSection>
                 </div>
             </div>
