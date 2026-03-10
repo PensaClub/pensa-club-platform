@@ -9,7 +9,8 @@
       "Bash(npx vite:*)",
       "Bash(python:*)",
       "Bash(grep:*)",
-      "Bash(\"/c/Program Files/Google/Chrome/Application/chrome.exe\":*)"
+      "Bash(\"/c/Program Files/Google/Chrome/Application/chrome.exe\":*)",
+      "Bash(identify:*)"
     ]
   }
 }

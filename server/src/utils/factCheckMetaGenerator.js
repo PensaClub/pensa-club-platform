@@ -113,6 +113,7 @@ function generateFactCheckListMetaHTML() {
  */
 function generateFactCheckDetailMetaHTML(module) {
     const verdictMap = {
+        'true': 'Вярно',
         'false': 'Невярно',
         'misleading': 'Подвеждащо',
         'partially_true': 'Частично вярно',
@@ -178,7 +179,7 @@ function generateFactCheckDetailMetaHTML(module) {
         },
         "reviewRating": {
             "@type": "Rating",
-            "ratingValue": "${module.verdict === 'false' ? '1' : module.verdict === 'misleading' ? '2' : '3'}",
+            "ratingValue": "${module.verdict === 'false' ? '1' : module.verdict === 'misleading' ? '2' : module.verdict === 'partially_true' ? '3' : '5'}",
             "bestRating": "5",
             "alternateName": "${verdictLabel}"
         },
