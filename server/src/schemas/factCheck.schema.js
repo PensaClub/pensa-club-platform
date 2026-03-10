@@ -21,6 +21,11 @@ const createSignalSchema = z.object({
     .optional()
     .or(z.literal('')),
   isConfidential: z.boolean().default(false),
+  notes: z
+    .string()
+    .max(1000, { message: 'Notes must be less than 1000 characters.' })
+    .optional()
+    .or(z.literal('')),
 });
 
 // Admin: create a fact-check module

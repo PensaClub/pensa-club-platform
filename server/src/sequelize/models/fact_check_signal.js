@@ -75,6 +75,23 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
+      notes: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+        defaultValue: null,
+      },
+      ipAddress: {
+        type: DataTypes.STRING(45),
+        allowNull: true,
+        defaultValue: null,
+        field: 'ip_address',
+      },
+      userAgent: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+        defaultValue: null,
+        field: 'user_agent',
+      },
       adminNotes: {
         type: DataTypes.TEXT,
         allowNull: true,

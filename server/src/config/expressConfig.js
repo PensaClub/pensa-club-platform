@@ -9,6 +9,8 @@ const { startMentorActivityCron } = require('../cron/mentorActivityCron');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const dataTrimmer = require('../middlewares/dataTrimmer');
+const { ipBlocker } = require('../middlewares/ipBlocker');
+const { ipLogger } = require('../middlewares/ipLogger');
 
 const corsOptions = {
     origin: ['https://pensa.club', 'https://www.pensa.club', 'http://localhost:3000'],
@@ -21,11 +23,14 @@ const corsOptions = {
 };
 
 module.exports = function expressConfig(app) {
+    app.set('trust proxy', 1);
     app.use(express.json());
     app.use(express.urlencoded({ extended: true }));
     app.use(dataTrimmer);
     app.use(cors(corsOptions));
     app.use(cookieParser());
+    app.use(ipBlocker);
+    app.use(ipLogger);
     app.listen(port, async () => {
         await testDatabaseConnection();
         console.log(`Server is listening on port: ${port}`);

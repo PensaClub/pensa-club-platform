@@ -65,6 +65,9 @@
     "cityPlaceholder": "напр. София",
     "emailLabel": "Вашият имейл (по желание)",
     "emailPlaceholder": "За обратна връзка от нас",
+    "notesLabel": "Забележки (по желание)",
+    "notesPlaceholder": "Напр. искам лично да ми се отговори / вече проверих в...",
+    "notesCharCount": "{{count}} / {{max}}",
     "confidentialLabel": "Поверително",
     "confidentialDesc": "Не публикувайте моя сигнал публично",
     "submit": "Изпрати сигнал",
@@ -141,12 +144,27 @@
       "status": "Статус",
       "adminNotes": "Бележки",
       "adminNotesPlaceholder": "Вътрешни бележки за екипа...",
+      "reporterNotes": "Забележки от подателя",
+      "technicalInfo": "Техническа информация",
+      "ipAddress": "IP адрес",
+      "userAgent": "Браузър / Устройство",
+      "noData": "Няма данни",
+      "sendEmail": "Изпрати имейл",
       "relatedModule": "Свързана проверка",
       "createResponse": "Създай отговор",
       "none": "Няма",
       "save": "Запази",
       "delete": "Изтрий",
-      "confirmDelete": "Сигурни ли сте, че искате да изтриете този сигнал?"
+      "confirmDelete": "Сигурни ли сте, че искате да изтриете този сигнал?",
+      "blockIp": "Блокирай IP",
+      "unblockIp": "Отблокирай IP",
+      "blocked": "Блокиран",
+      "confirmBlockIp": "Блокиране на IP {{ip}}?",
+      "confirmUnblockIp": "Отблокиране на IP {{ip}}?",
+      "blockedFromSignal": "Блокиран от сигнал за факти",
+      "passwordPlaceholder": "Парола...",
+      "confirm": "Потвърди",
+      "cancel": "Отказ"
     },
     "modules": {
       "title": "Проверки",
@@ -204,6 +222,18 @@
       "publishedModules": "Публикувани",
       "totalSignals": "Сигнали",
       "newSignals": "Нови сигнали"
+    },
+    "personalEmailModal": {
+      "title": "Изпрати имейл",
+      "to": "До",
+      "subject": "Тема",
+      "subjectDefault": "Относно вашия сигнал — ПроВерка / ПЕНСА",
+      "message": "Съобщение",
+      "messagePlaceholder": "Напишете съобщението...",
+      "send": "Изпрати",
+      "sending": "Изпращане...",
+      "success": "Имейлът е изпратен успешно.",
+      "error": "Грешка при изпращане на имейла."
     }
   }
 }

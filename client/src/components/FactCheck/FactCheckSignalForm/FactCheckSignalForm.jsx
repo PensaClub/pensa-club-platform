@@ -41,6 +41,7 @@ const FactCheckSignalForm = () => {
     sourceType: '',
     city: '',
     reporterEmail: '',
+    notes: '',
     isConfidential: false,
   });
   const [honeypot, setHoneypot] = useState('');
@@ -136,6 +137,7 @@ const FactCheckSignalForm = () => {
           sourceType: 'sourceType',
           reporterEmail: 'reporterEmail',
           city: 'city',
+          notes: 'notes',
         };
         err.details.forEach((d) => {
           const key = fieldMap[d.field];
@@ -152,7 +154,7 @@ const FactCheckSignalForm = () => {
   };
 
   const handleReset = () => {
-    setFormData({ claimText: '', sourceType: '', city: '', reporterEmail: '', isConfidential: false });
+    setFormData({ claimText: '', sourceType: '', city: '', reporterEmail: '', notes: '', isConfidential: false });
     setHoneypot('');
     formRenderedAt.current = Date.now();
     setSubmitted(false);
@@ -259,6 +261,23 @@ const FactCheckSignalForm = () => {
               />
               {fieldErrors.reporterEmail && <span className="fcsf-field-error">{fieldErrors.reporterEmail}</span>}
             </div>
+          </div>
+
+          {/* Notes */}
+          <div className="fcsf-field">
+            <label className="fcsf-label">{t('signalForm.notesLabel')}</label>
+            <textarea
+              name="notes"
+              className="fcsf-textarea fcsf-textarea--notes"
+              placeholder={t('signalForm.notesPlaceholder')}
+              value={formData.notes}
+              onChange={handleChange}
+              rows={3}
+              maxLength={1000}
+            />
+            <span className="fcsf-char-count">
+              {t('signalForm.notesCharCount', { count: formData.notes.length, max: 1000 })}
+            </span>
           </div>
 
           {/* Confidential */}

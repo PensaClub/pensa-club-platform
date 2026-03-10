@@ -65,6 +65,9 @@
     "cityPlaceholder": "z.B. Sofia",
     "emailLabel": "Ihre E-Mail (optional)",
     "emailPlaceholder": "Für Rückmeldung von uns",
+    "notesLabel": "Anmerkungen (optional)",
+    "notesPlaceholder": "Z.B. Ich möchte eine persönliche Antwort / Ich habe bereits geprüft bei...",
+    "notesCharCount": "{{count}} / {{max}}",
     "confidentialLabel": "Vertraulich",
     "confidentialDesc": "Meine Meldung nicht öffentlich veröffentlichen",
     "submit": "Meldung absenden",
@@ -141,12 +144,27 @@
       "status": "Status",
       "adminNotes": "Notizen",
       "adminNotesPlaceholder": "Interne Notizen für das Team...",
+      "reporterNotes": "Anmerkungen des Meldenden",
+      "technicalInfo": "Technische Informationen",
+      "ipAddress": "IP-Adresse",
+      "userAgent": "Browser / Gerät",
+      "noData": "Keine Daten",
+      "sendEmail": "E-Mail senden",
       "relatedModule": "Zugehörige Überprüfung",
       "createResponse": "Antwort erstellen",
       "none": "Keines",
       "save": "Speichern",
       "delete": "Löschen",
-      "confirmDelete": "Sind Sie sicher, dass Sie diese Meldung löschen möchten?"
+      "confirmDelete": "Sind Sie sicher, dass Sie diese Meldung löschen möchten?",
+      "blockIp": "IP blockieren",
+      "unblockIp": "IP freigeben",
+      "blocked": "Blockiert",
+      "confirmBlockIp": "IP {{ip}} blockieren?",
+      "confirmUnblockIp": "IP {{ip}} freigeben?",
+      "blockedFromSignal": "Blockiert von Faktencheck-Meldung",
+      "passwordPlaceholder": "Passwort...",
+      "confirm": "Bestätigen",
+      "cancel": "Abbrechen"
     },
     "modules": {
       "title": "Überprüfungen",
@@ -204,6 +222,18 @@
       "publishedModules": "Veröffentlicht",
       "totalSignals": "Meldungen",
       "newSignals": "Neue Meldungen"
+    },
+    "personalEmailModal": {
+      "title": "E-Mail senden",
+      "to": "An",
+      "subject": "Betreff",
+      "subjectDefault": "Bezüglich Ihrer Meldung — FaktenCheck / PENSA",
+      "message": "Nachricht",
+      "messagePlaceholder": "Schreiben Sie Ihre Nachricht...",
+      "send": "Senden",
+      "sending": "Wird gesendet...",
+      "success": "E-Mail erfolgreich gesendet.",
+      "error": "Fehler beim Senden der E-Mail."
     }
   }
 }
