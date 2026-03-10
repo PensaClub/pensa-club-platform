@@ -1,0 +1,128 @@
+/* ===================================
+   HOW IT WORKS — prefix: fchiw-
+   =================================== */
+
+.fchiw {
+  padding: 80px 20px;
+  background: #FCE0A5;
+  position: relative;
+  z-index: 2;
+  border-radius: 50% 50% 0 0 / 50px 50px 0 0;
+  margin-top: -25px;
+}
+
+.fchiw-container {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.fchiw-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1f2937;
+  margin: 0 0 48px;
+}
+
+.fchiw-steps {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  position: relative;
+}
+
+.fchiw-step {
+  flex: 1;
+  max-width: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+}
+
+.fchiw-step-number {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f78da7, #dc2626);
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fchiw-step-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(180, 140, 120, 0.12);
+}
+
+.fchiw-step-icon svg {
+  width: 28px;
+  height: 28px;
+  color: #f78da7;
+}
+
+.fchiw-step-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
+}
+
+.fchiw-step-desc {
+  font-size: 0.9rem;
+  color: #6b7280;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.fchiw-connector {
+  display: none;
+}
+
+/* Dark theme */
+[data-theme="dark"] .fchiw {
+  background: #1f1218;
+}
+
+[data-theme="dark"] .fchiw-title {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .fchiw-step-icon {
+  background: #1f2937;
+}
+
+[data-theme="dark"] .fchiw-step-title {
+  color: #e5e7eb;
+}
+
+[data-theme="dark"] .fchiw-step-desc {
+  color: #9ca3af;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .fchiw-steps {
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .fchiw-step {
+    max-width: 100%;
+  }
+
+  .fchiw {
+    padding: 48px 16px;
+  }
+}

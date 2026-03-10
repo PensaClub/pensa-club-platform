@@ -253,6 +253,20 @@ const permissions = {
         delete: ROLES.ACADEMY_CREATORS,
         download: ROLES.ACADEMY,
     },
+    // Fact-check permissions
+    factCheckModule: {
+        read: ROLES.PUBLIC,
+        create: ROLES.STAFF,
+        update: ROLES.STAFF,
+        delete: ROLES.STAFF,
+        publish: ROLES.STAFF,
+    },
+    factCheckSignal: {
+        create: ROLES.PUBLIC,
+        read: ROLES.STAFF,
+        update: ROLES.STAFF,
+        delete: ROLES.STAFF,
+    },
     siteSettings: {
         read: ROLES.PUBLIC_WITH_LIMITED,
         update: ['admin'],

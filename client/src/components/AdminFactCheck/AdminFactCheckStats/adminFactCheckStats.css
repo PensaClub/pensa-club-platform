@@ -1,0 +1,413 @@
+/* ===================================
+   ADMIN FACT CHECK STATS — prefix: afcst-
+   =================================== */
+
+.afcst {
+  padding: 30px 40px;
+  background: #ffffff;
+}
+
+.afcst-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+/* ===================================
+   STAT CARD
+   =================================== */
+
+.afcst-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 28px 24px;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 2px solid #f3f4f6;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  cursor: default;
+}
+
+.afcst-card:hover {
+  border-color: transparent;
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+
+.afcst-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--afcst-card-gradient);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+
+.afcst-card:hover::before {
+  transform: scaleX(1);
+}
+
+/* ===================================
+   ICON WRAPPER
+   =================================== */
+
+.afcst-card-icon-wrapper {
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.afcst-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  color: #ffffff;
+}
+
+.afcst-card-icon svg {
+  width: 28px;
+  height: 28px;
+}
+
+.afcst-card:hover .afcst-card-icon {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+}
+
+/* ===================================
+   CONTENT
+   =================================== */
+
+.afcst-card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+  z-index: 2;
+}
+
+.afcst-card-label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #6b7280;
+  margin: 0;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+}
+
+.afcst-card:hover .afcst-card-label {
+  color: #374151;
+}
+
+.afcst-card-value {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #1f2937;
+  margin: 0;
+  line-height: 1;
+  transition: transform 0.3s ease;
+}
+
+.afcst-card:hover .afcst-card-value {
+  transform: scale(1.05);
+}
+
+/* ===================================
+   ANIMATED GLOW
+   =================================== */
+
+.afcst-card-glow {
+  position: absolute;
+  bottom: -50%;
+  right: -50%;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  opacity: 0;
+  filter: blur(40px);
+  transition: opacity 0.5s ease;
+  z-index: 1;
+}
+
+.afcst-card:hover .afcst-card-glow {
+  opacity: 0.15;
+  animation: afcst-glow-pulse 3s ease-in-out infinite;
+}
+
+@keyframes afcst-glow-pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.15;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.25;
+  }
+}
+
+/* ===================================
+   DARK THEME
+   =================================== */
+
+[data-theme="dark"] .afcst {
+  background: #1f2937;
+}
+
+[data-theme="dark"] .afcst-card {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+[data-theme="dark"] .afcst-card:hover {
+  border-color: transparent;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .afcst-card-label {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .afcst-card:hover .afcst-card-label {
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .afcst-card-value {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .afcst-card-glow {
+  opacity: 0;
+}
+
+[data-theme="dark"] .afcst-card:hover .afcst-card-glow {
+  opacity: 0.1;
+}
+
+/* ===================================
+   RESPONSIVE DESIGN
+   =================================== */
+
+/* Large Desktops (1440px+) */
+@media (min-width: 1440px) {
+  .afcst {
+    padding: 40px 50px;
+  }
+
+  .afcst-grid {
+    gap: 28px;
+  }
+
+  .afcst-card {
+    padding: 32px 28px;
+  }
+
+  .afcst-card-icon {
+    width: 66px;
+    height: 66px;
+  }
+
+  .afcst-card-icon svg {
+    width: 30px;
+    height: 30px;
+  }
+
+  .afcst-card-value {
+    font-size: 2.75rem;
+  }
+}
+
+/* Standard Desktops (1024px - 1439px) */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .afcst {
+    padding: 28px 35px;
+  }
+
+  .afcst-grid {
+    gap: 20px;
+  }
+
+  .afcst-card {
+    padding: 24px 20px;
+    gap: 16px;
+  }
+
+  .afcst-card-icon {
+    width: 56px;
+    height: 56px;
+  }
+
+  .afcst-card-icon svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .afcst-card-value {
+    font-size: 2.2rem;
+  }
+
+  .afcst-card-label {
+    font-size: 0.82rem;
+  }
+}
+
+/* Tablets (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .afcst {
+    padding: 25px;
+  }
+
+  .afcst-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+
+  .afcst-card {
+    padding: 22px 18px;
+    gap: 16px;
+  }
+
+  .afcst-card-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+  }
+
+  .afcst-card-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .afcst-card-label {
+    font-size: 0.85rem;
+  }
+
+  .afcst-card-value {
+    font-size: 2rem;
+  }
+}
+
+/* Small Tablets / Large Phones (576px - 767px) */
+@media (min-width: 576px) and (max-width: 767px) {
+  .afcst {
+    padding: 20px;
+  }
+
+  .afcst-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .afcst-card {
+    padding: 20px 16px;
+    gap: 14px;
+  }
+
+  .afcst-card-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+  }
+
+  .afcst-card-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .afcst-card-label {
+    font-size: 0.82rem;
+  }
+
+  .afcst-card-value {
+    font-size: 1.85rem;
+  }
+}
+
+/* Phones (480px - 575px) */
+@media (min-width: 480px) and (max-width: 575px) {
+  .afcst {
+    padding: 18px;
+  }
+
+  .afcst-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .afcst-card {
+    padding: 18px 16px;
+    gap: 16px;
+  }
+
+  .afcst-card-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+  }
+
+  .afcst-card-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .afcst-card-label {
+    font-size: 0.85rem;
+  }
+
+  .afcst-card-value {
+    font-size: 2rem;
+  }
+}
+
+/* Small Phones (320px - 479px) */
+@media (max-width: 479px) {
+  .afcst {
+    padding: 15px;
+  }
+
+  .afcst-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .afcst-card {
+    padding: 16px 14px;
+    gap: 14px;
+  }
+
+  .afcst-card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+  }
+
+  .afcst-card-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .afcst-card-label {
+    font-size: 0.82rem;
+  }
+
+  .afcst-card-value {
+    font-size: 1.85rem;
+  }
+
+  .afcst-card:hover {
+    transform: translateY(-2px);
+  }
+}

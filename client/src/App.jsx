@@ -64,6 +64,7 @@ import { ClubProvider } from './components/contexts/ClubContext.jsx';
 import ClubView from './components/Clubs/ClubView/ClubView.jsx';
 import AboutPage from './components/AboutPage/AboutPage.jsx';
 import { AcademyProvider } from './components/contexts/AcademyProvider.jsx';
+import { FactCheckProvider } from './components/contexts/FactCheckProvider.jsx';
 import { DigiBridgeChatButton } from './components/DigiBridge/DigiBridgeChatButton/DigiBridgeChatButton.jsx';
 import { DigiBridgeChatWindow } from './components/DigiBridge/DigiBridgeChatWindow/DigiBridgeChatWindow.jsx';
 import { MentorGuard } from './components/Guards/MentorGuard.jsx';
@@ -76,6 +77,7 @@ import { UsefulLinksProvider } from './components/contexts/UsefulLinksContext.js
 import GlobalSnowfall from './components/GlobalSnowfall/GlobalSnowfall.jsx';
 import DigiBridgeHeader from './components/DigiBridgeAcademy/DigiBridgeHeader/DigiBridgeHeader.jsx';
 import { AdminGuard } from './components/Guards/AdminGuard.jsx';
+import { ManagementGuard } from './components/Guards/ManagementGuard.jsx';
 import ThemeToggle from './components/ThemeToggle/ThemeToggle';
 import { SiteSettingsAdminProvider } from './components/contexts/SiteSettingsAdminContext';
 import SiteSettingsAdmin from './components/SiteSettingsAdmin/SiteSettingsAdmin';
@@ -114,6 +116,11 @@ const AdminAcademyLecturesList = lazy(() => import('./components/AdminAcademyLec
 const EditLecture = lazy(() => import('./components/AdminAcademyLecturesList/EditLecture/EditLecture.jsx'));
 const TelkRkmeRzi = lazy(() => import('./components/TelkRkmeRzi/TelkRkmeRzi.jsx'));
 const ComingSoon = lazy(() => import('./components/DigiBridgeAcademy/ComingSoon/ComingSoon.jsx'));
+
+// ✅ LAZY LOADING - FACT CHECK КОМПОНЕНТИ
+const FactCheck = lazy(() => import('./components/FactCheck/FactCheck.jsx'));
+const FactCheckDetail = lazy(() => import('./components/FactCheck/FactCheckDetail/FactCheckDetail.jsx'));
+const AdminFactCheck = lazy(() => import('./components/AdminFactCheck/AdminFactCheck.jsx').then(m => ({ default: m.AdminFactCheck })));
 
 // ✅ LAZY LOADING - USEFUL LINKS КОМПОНЕНТИ
 const UsefulLinks = lazy(() => import('./components/UsefulLinks/UsefulLinks.jsx'));
@@ -160,6 +167,9 @@ function AppRoutes() {
       <Route path="/resend-email" element={<ReSendEmail />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
 
+      <Route path="/fact-check" element={<Suspense fallback={<LazyLoadingFallback />}><FactCheck /></Suspense>} />
+      <Route path="/fact-check/:slug" element={<Suspense fallback={<LazyLoadingFallback />}><FactCheckDetail /></Suspense>} />
+
       <Route path="/articles" element={<Suspense fallback={<LazyLoadingFallback type="articles" />}><ArticlesList /></Suspense>} />
       <Route path="/initiatives" element={<Suspense fallback={<LazyLoadingFallback type="initiatives" />}><InitiativesList /></Suspense>} />
       <Route path="/projects" element={<Suspense fallback={<LazyLoadingFallback type="projects" />}><ProjectsList /></Suspense>} />
@@ -186,6 +196,7 @@ function AppRoutes() {
         <Route path="/academy/lectures/:slug/test" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademyTestPlayer /></Suspense>} />
         <Route path="/academy/courses/:courseSlug/test" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademyTestPlayer /></Suspense>} />
         <Route path="/admin/site-settings" element={<AdminGuard><SiteSettingsAdmin /></AdminGuard>} />
+        <Route path="/admin/fact-check" element={<ManagementGuard><Suspense fallback={<LazyLoadingFallback />}><AdminFactCheck /></Suspense></ManagementGuard>} />
         <Route path="/admin/useful-links" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback />}><AdminUsefulLinksList /></Suspense></AdminGuard>} />
         <Route path="/admin/useful-links/create" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback />}><UsefulLinksCreateForm /></Suspense></AdminGuard>} />
         <Route path="/admin/useful-links/edit/:id" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback />}><UsefulLinksCreateForm /></Suspense></AdminGuard>} />
@@ -281,6 +292,7 @@ function App() {
                                     <ArticleLimitProvider>
                                       <UsefulLinksProvider>
                                       <ClubProvider>
+                                      <FactCheckProvider>
                                         {!isProfilePage && !isAcademyPage && <Header
                                           additionalClasses={isProfilePage ? 'hide-header' : ''}
                                         />}
@@ -312,6 +324,7 @@ function App() {
                                           />
                                         )}
                                         {!isProfilePage && <MenuCommunity />}
+                                      </FactCheckProvider>
                                       </ClubProvider>
                                       </UsefulLinksProvider>
                                     </ArticleLimitProvider>

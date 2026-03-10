@@ -4,6 +4,10 @@ const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
     const [theme, setTheme] = useState(() => {
+        // If refreshing on a fact-check page that forces light theme, start light
+        if (localStorage.getItem('fc-page-active') === 'true') {
+            return localStorage.getItem('fc-theme') || 'light';
+        }
         return localStorage.getItem('academy-theme') || 'dark';
     });
 

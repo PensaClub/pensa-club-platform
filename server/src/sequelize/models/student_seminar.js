@@ -63,11 +63,29 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: null,
       },
       status: {
-  type: DataTypes.STRING,
-  allowNull: false,
-  defaultValue: 'registered',
-  // registered, approved, pending, rejected, cancelled
-},
+        type: DataTypes.STRING,
+        allowNull: false,
+        defaultValue: 'registered',
+        // registered, approved, pending, rejected, cancelled
+      },
+      participationLevel: { // НОВО
+        type: DataTypes.STRING(20),
+        allowNull: true,
+        defaultValue: null,
+        field: 'participation_level',
+      },
+      approvedBy: { // НОВО
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        defaultValue: null,
+        field: 'approved_by',
+      },
+      approvedAt: { // НОВО
+        type: DataTypes.DATE,
+        allowNull: true,
+        defaultValue: null,
+        field: 'approved_at',
+      },
     },
     {
       sequelize,

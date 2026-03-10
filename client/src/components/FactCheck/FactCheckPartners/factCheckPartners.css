@@ -1,0 +1,93 @@
+/* ===================================
+   PARTNERS — prefix: fcp-
+   =================================== */
+
+.fcp {
+  padding: 60px 20px;
+  background: #ebd0d6;
+  text-align: center;
+}
+
+.fcp-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.fcp-logos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  margin-bottom: 16px;
+}
+
+.fcp-logo-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.fcp-logo {
+  height: 52px;
+  width: auto;
+  object-fit: contain;
+}
+
+.fcp-logo-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.fcp-divider {
+  width: 1px;
+  height: 48px;
+  background: rgba(180, 140, 120, 0.25);
+}
+
+.fcp-text {
+  font-size: 0.9rem;
+  color: #374151;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.fcp-disclaimer {
+  font-size: 0.75rem;
+  color: #374151;
+  line-height: 1.5;
+  margin: 20px auto 0;
+  max-width: 520px;
+  border-top: 1px solid rgba(180, 140, 160, 0.2);
+  padding-top: 16px;
+}
+
+/* Dark theme */
+[data-theme="dark"] .fcp {
+  background: #1f1218;
+}
+
+[data-theme="dark"] .fcp-logo-label {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .fcp-text {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .fcp-disclaimer {
+  color: #6b7280;
+  border-color: rgba(180, 140, 160, 0.15);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .fcp-logos {
+    gap: 20px;
+  }
+
+  .fcp-logo {
+    height: 40px;
+  }
+}
