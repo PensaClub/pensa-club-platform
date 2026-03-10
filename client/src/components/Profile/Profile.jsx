@@ -91,6 +91,7 @@ import { SEOStatisticAdmin } from "../SEOStatisticAdmin/SEOStatisticAdmin";
 import { AdminDigiBridgeStudentApplications } from "../AdminDigiBridgeStudents/AdminDigiBridgeStudentApplications/AdminDigiBridgeStudentApplications";
 import { ProfileReviews } from "./ProfileReviews";
 
+
 // 🎨 НОВИ ИКОНКИ КОМПОНЕНТИ
 const HomeIcon = () => (
   <svg className="menu-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -284,7 +285,8 @@ export const Profile = () => {
       "/profile/mentor-profile": t("profile.mentorProfile"),
       "/profile/my-reviews": t("profile.myReviews"),
       "/admin/useful-links/create": t("admin.usefulLinks.create"),
-      "/admin/useful-links": t("admin.usefulLinks.list")
+      "/admin/useful-links": t("admin.usefulLinks.list"),
+      "/admin/fact-check": t("admin.factCheck.title")
 
     };
 
@@ -327,6 +329,7 @@ export const Profile = () => {
     "/profile/mentors-applications",
     "/profile/mentors-statistics",
     "/profile/reviews-management",
+    "/admin/fact-check",
     "/admin/useful-links"
   ];
 
@@ -519,6 +522,12 @@ export const Profile = () => {
 
                   <NavLink to="/clubs" className="pd-link" onClick={() => setProfileMenuOpen(false)}>
                     <ClubsIcon /> {t("header.clubs")}
+                  </NavLink>
+                  <NavLink to="/fact-check" className="pd-link" onClick={() => setProfileMenuOpen(false)}>
+                    <svg className="menu-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9 12L11 14L15 10M12 3L4 7V12C4 16.4183 7.58172 21 12 21C16.4183 21 20 16.4183 20 12V7L12 3Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    {t("header.factcheck")}
                   </NavLink>
                   <NavLink to="/games" className="pd-link" onClick={() => setProfileMenuOpen(false)}>
                     <GamesIcon /> {t("header.games")}
@@ -797,6 +806,15 @@ export const Profile = () => {
                       </span>
                       <ArrowIcon className="icon-arrow" />
                     </NavLink>
+                  </li>
+                  <li>
+                    <Link to="/admin/fact-check">
+                      <span className="link-content">
+                        <SearchIconProfile className="icon" />
+                        {t("admin.factCheck.title")}
+                      </span>
+                      <ArrowIcon className="icon-arrow" />
+                    </Link>
                   </li>
                   <li>
                     <NavLink

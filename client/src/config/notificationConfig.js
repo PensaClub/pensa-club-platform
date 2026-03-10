@@ -25,6 +25,9 @@ export const NOTIFICATION_TYPES = {
   STUDENT_APPLICATION_REJECTED_BY_ADMIN: 'student_application_rejected_by_admin',
   STUDENT_APPLICATION_REAPPROVED: 'student_application_reapproved',
 
+  // Fact Check (Admin)
+  FACT_CHECK_SIGNAL: 'fact_check_signal',
+
   // Student Management (Admin)
   STUDENT_UPDATED: 'student_updated',
   STUDENT_DELETED: 'student_deleted',
@@ -122,6 +125,16 @@ export const notificationConfig = {
     color: '#ffa500',
     route: '/profile/reviews-management',
     priority: 'medium'
+  },
+
+  // ===============================
+  // FACT CHECK (Admin)
+  // ===============================
+  [NOTIFICATION_TYPES.FACT_CHECK_SIGNAL]: {
+    icon: '🔍',
+    color: '#f78da7',
+    route: '/admin/fact-check',
+    priority: 'high'
   },
 
   // ===============================

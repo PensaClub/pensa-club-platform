@@ -1,0 +1,574 @@
+/* ===================================
+   ADMIN FACT CHECK SIGNALS — prefix: afcs-
+   =================================== */
+
+.afcs {
+  width: 100%;
+}
+
+/* ===================================
+   HEADER
+   =================================== */
+
+.afcs-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.afcs-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #1f2937;
+  margin: 0;
+}
+
+/* ===================================
+   FILTER BAR
+   =================================== */
+
+.afcs-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.afcs-filter-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #6b7280;
+  background: #ffffff;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.afcs-filter-btn:hover {
+  border-color: #d1d5db;
+  color: #374151;
+  background: #f9fafb;
+  transform: translateY(-1px);
+}
+
+.afcs-filter-btn--active {
+  color: var(--afcs-filter-color, #dc2626);
+  border-color: var(--afcs-filter-color, #dc2626);
+  background: rgba(220, 38, 38, 0.05);
+}
+
+.afcs-filter-btn--active:hover {
+  border-color: var(--afcs-filter-color, #dc2626);
+  color: var(--afcs-filter-color, #dc2626);
+  background: rgba(220, 38, 38, 0.08);
+}
+
+.afcs-filter-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.afcs-filter-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: #f3f4f6;
+  color: #6b7280;
+  border-radius: 11px;
+  line-height: 1;
+}
+
+.afcs-filter-btn--active .afcs-filter-count {
+  background: var(--afcs-filter-color, #dc2626);
+  color: #ffffff;
+}
+
+/* ===================================
+   TABLE
+   =================================== */
+
+.afcs-table-wrapper {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 2px solid #f3f4f6;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.afcs-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: inherit;
+}
+
+.afcs-table thead {
+  background: #f9fafb;
+}
+
+.afcs-table th {
+  padding: 14px 18px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: left;
+  border-bottom: 2px solid #f3f4f6;
+}
+
+.afcs-table td {
+  padding: 16px 18px;
+  font-size: 0.92rem;
+  color: #374151;
+  border-bottom: 1px solid #f3f4f6;
+  vertical-align: middle;
+}
+
+/* ===================================
+   TABLE ROWS
+   =================================== */
+
+.afcs-row {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.afcs-row:hover {
+  background: rgba(247, 141, 167, 0.04);
+}
+
+.afcs-row:last-child td {
+  border-bottom: none;
+}
+
+.afcs-cell-claim {
+  font-weight: 600;
+  color: #1f2937;
+  max-width: 320px;
+}
+
+.afcs-cell-source {
+  color: #6b7280;
+  font-size: 0.88rem;
+}
+
+.afcs-cell-city {
+  color: #6b7280;
+  font-size: 0.88rem;
+}
+
+.afcs-cell-date {
+  color: #9ca3af;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+/* ===================================
+   STATUS BADGE
+   =================================== */
+
+.afcs-status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 14px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border-radius: 20px;
+  border: 1.5px solid;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+}
+
+/* ===================================
+   EMPTY STATE
+   =================================== */
+
+.afcs-empty {
+  text-align: center;
+  padding: 80px 20px;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 2px solid #f3f4f6;
+}
+
+.afcs-empty-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 20px;
+  color: #d1d5db;
+}
+
+.afcs-empty-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.afcs-empty h3 {
+  font-size: 1.2rem;
+  color: #6b7280;
+  margin: 0;
+  font-weight: 600;
+}
+
+/* ===================================
+   DARK THEME
+   =================================== */
+
+[data-theme="dark"] .afcs-title {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .afcs-filter-btn {
+  background: #1f2937;
+  border-color: #374151;
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .afcs-filter-btn:hover {
+  background: #374151;
+  border-color: #4b5563;
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .afcs-filter-btn--active {
+  background: rgba(247, 141, 167, 0.1);
+  border-color: var(--afcs-filter-color, #f78da7);
+  color: var(--afcs-filter-color, #f78da7);
+}
+
+[data-theme="dark"] .afcs-filter-count {
+  background: #374151;
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .afcs-filter-btn--active .afcs-filter-count {
+  background: var(--afcs-filter-color, #f78da7);
+  color: #ffffff;
+}
+
+[data-theme="dark"] .afcs-table-wrapper {
+  background: #1f2937;
+  border-color: #374151;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .afcs-table thead {
+  background: #111827;
+}
+
+[data-theme="dark"] .afcs-table th {
+  color: #9ca3af;
+  border-bottom-color: #374151;
+}
+
+[data-theme="dark"] .afcs-table td {
+  color: #d1d5db;
+  border-bottom-color: #374151;
+}
+
+[data-theme="dark"] .afcs-cell-claim {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .afcs-cell-source,
+[data-theme="dark"] .afcs-cell-city {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .afcs-cell-date {
+  color: #6b7280;
+}
+
+[data-theme="dark"] .afcs-row:hover {
+  background: rgba(247, 141, 167, 0.06);
+}
+
+[data-theme="dark"] .afcs-empty {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+[data-theme="dark"] .afcs-empty-icon {
+  color: #4b5563;
+}
+
+[data-theme="dark"] .afcs-empty h3 {
+  color: #9ca3af;
+}
+
+/* ===================================
+   RESPONSIVE DESIGN
+   =================================== */
+
+/* Tablets (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .afcs-title {
+    font-size: 1.35rem;
+  }
+
+  .afcs-filter-btn {
+    padding: 8px 14px;
+    font-size: 0.85rem;
+  }
+
+  .afcs-table th {
+    padding: 12px 14px;
+    font-size: 0.78rem;
+  }
+
+  .afcs-table td {
+    padding: 14px;
+    font-size: 0.88rem;
+  }
+
+  .afcs-cell-claim {
+    max-width: 240px;
+  }
+}
+
+/* Small Tablets / Large Phones (576px - 767px) */
+@media (min-width: 576px) and (max-width: 767px) {
+  .afcs-title {
+    font-size: 1.25rem;
+  }
+
+  .afcs-filters {
+    gap: 8px;
+  }
+
+  .afcs-filter-btn {
+    padding: 7px 12px;
+    font-size: 0.82rem;
+    gap: 6px;
+  }
+
+  .afcs-filter-dot {
+    width: 6px;
+    height: 6px;
+  }
+
+  .afcs-filter-count {
+    min-width: 20px;
+    height: 20px;
+    font-size: 0.7rem;
+  }
+
+  /* Convert table to card layout */
+  .afcs-table-wrapper {
+    border: none;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .afcs-table,
+  .afcs-table thead,
+  .afcs-table tbody,
+  .afcs-table th,
+  .afcs-table td,
+  .afcs-table tr {
+    display: block;
+  }
+
+  .afcs-table thead {
+    display: none;
+  }
+
+  .afcs-row {
+    background: #ffffff;
+    border-radius: 12px;
+    border: 2px solid #f3f4f6;
+    margin-bottom: 12px;
+    padding: 16px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  }
+
+  [data-theme="dark"] .afcs-row {
+    background: #1f2937;
+    border-color: #374151;
+  }
+
+  .afcs-table td {
+    padding: 4px 0;
+    border-bottom: none;
+    font-size: 0.88rem;
+  }
+
+  .afcs-cell-claim {
+    max-width: 100%;
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+  }
+}
+
+/* Phones (480px - 575px) */
+@media (min-width: 480px) and (max-width: 575px) {
+  .afcs-title {
+    font-size: 1.2rem;
+  }
+
+  .afcs-filters {
+    gap: 6px;
+  }
+
+  .afcs-filter-btn {
+    padding: 6px 10px;
+    font-size: 0.78rem;
+    gap: 5px;
+    border-radius: 10px;
+  }
+
+  /* Card layout */
+  .afcs-table-wrapper {
+    border: none;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .afcs-table,
+  .afcs-table thead,
+  .afcs-table tbody,
+  .afcs-table th,
+  .afcs-table td,
+  .afcs-table tr {
+    display: block;
+  }
+
+  .afcs-table thead {
+    display: none;
+  }
+
+  .afcs-row {
+    background: #ffffff;
+    border-radius: 12px;
+    border: 2px solid #f3f4f6;
+    margin-bottom: 10px;
+    padding: 14px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  }
+
+  [data-theme="dark"] .afcs-row {
+    background: #1f2937;
+    border-color: #374151;
+  }
+
+  .afcs-table td {
+    padding: 3px 0;
+    border-bottom: none;
+    font-size: 0.85rem;
+  }
+
+  .afcs-cell-claim {
+    max-width: 100%;
+    font-size: 0.92rem;
+    margin-bottom: 6px;
+  }
+
+  .afcs-empty {
+    padding: 60px 18px;
+  }
+}
+
+/* Small Phones (320px - 479px) */
+@media (max-width: 479px) {
+  .afcs-title {
+    font-size: 1.1rem;
+  }
+
+  .afcs-filters {
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+
+  .afcs-filter-btn {
+    padding: 6px 9px;
+    font-size: 0.75rem;
+    gap: 4px;
+    border-radius: 8px;
+    border-width: 1.5px;
+  }
+
+  .afcs-filter-dot {
+    width: 5px;
+    height: 5px;
+  }
+
+  .afcs-filter-count {
+    min-width: 18px;
+    height: 18px;
+    font-size: 0.68rem;
+    padding: 0 4px;
+  }
+
+  /* Card layout */
+  .afcs-table-wrapper {
+    border: none;
+    background: transparent;
+    box-shadow: none;
+  }
+
+  .afcs-table,
+  .afcs-table thead,
+  .afcs-table tbody,
+  .afcs-table th,
+  .afcs-table td,
+  .afcs-table tr {
+    display: block;
+  }
+
+  .afcs-table thead {
+    display: none;
+  }
+
+  .afcs-row {
+    background: #ffffff;
+    border-radius: 10px;
+    border: 1.5px solid #f3f4f6;
+    margin-bottom: 8px;
+    padding: 12px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  }
+
+  [data-theme="dark"] .afcs-row {
+    background: #1f2937;
+    border-color: #374151;
+  }
+
+  .afcs-table td {
+    padding: 3px 0;
+    border-bottom: none;
+    font-size: 0.82rem;
+  }
+
+  .afcs-cell-claim {
+    max-width: 100%;
+    font-size: 0.88rem;
+    margin-bottom: 6px;
+  }
+
+  .afcs-empty {
+    padding: 50px 15px;
+  }
+
+  .afcs-empty-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .afcs-empty h3 {
+    font-size: 1.05rem;
+  }
+}

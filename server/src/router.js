@@ -29,6 +29,7 @@ const academyMaterialsController = require('./controllers/academyMaterialsContro
 const academyMyController = require('./controllers/academyMyController');
 const siteSettingsController = require('./controllers/siteSettingsController');
 const usefulLinksController = require('./controllers/usefulLinksController');
+const factCheckController = require('./controllers/factCheckController');
 
 router.use('/auth', authController);
 router.use('/user', userController);
@@ -60,6 +61,7 @@ router.use('/academy/materials', academyMaterialsController);
 router.use('/academy/my', academyMyController);
 router.use('/admin/site-settings', siteSettingsController);
 router.use('/useful-links', usefulLinksController);
+router.use('/fact-check', factCheckController);
 
 router.use((err, req, res, next) => {
     errorHandler(err, req, res, err.statusCode || 500);

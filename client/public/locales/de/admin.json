@@ -1,5 +1,8 @@
 {
   "admin": {
+    "factCheck": {
+      "title": "Faktencheck"
+    },
     "mentors": {
       "title": "Mentoren",
       "overview": "Mentoren-Übersicht",
@@ -309,6 +312,7 @@
     "academy-courses": "Kurse",
     "academy-lectures": "Vorlesungen",
     "academy-mentors": "Mentoren",
-    "language": "Sprache"
+    "language": "Sprache",
+    "factcheck": "FaktenCheck"
   }
 }

@@ -42,9 +42,8 @@ const requester = async (method, url, data) => {
   if (response.status === 429) {
     return {
       error: true,
-      type: 'ARTICLE_LIMIT_REACHED',
       status: 429,
-      message: 'Достигнат лимит на статии'
+      ...result,
     };
   }
   

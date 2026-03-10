@@ -1,0 +1,209 @@
+{
+  "hero": {
+    "title": "FaktenCheck",
+    "subtitle": "Geprüfte Informationen",
+    "description": "Glauben Sie keinen Gerüchten — prüfen Sie die Fakten. Eine Plattform zur Bekämpfung von Desinformation, die sich an ältere Menschen in Bulgarien richtet.",
+    "searchPlaceholder": "Nach Stichwort suchen...",
+    "submitSignal": "Meldung einreichen",
+    "browseAll": "Alle ansehen",
+    "programLabel": "ReAktion-Programm — Bulgarischer Frauenfonds",
+    "statChecked": "Geprüfte Behauptungen",
+    "statResolved": "Meldungen von Bürgern"
+  },
+  "filters": {
+    "all": "Alle",
+    "allCategories": "Alle Kategorien",
+    "searchPlaceholder": "Suchen...",
+    "sortNewest": "Neueste",
+    "sortViews": "Meistgelesen",
+    "resultsCount": "{{count}} Ergebnisse",
+    "noResults": "Keine Ergebnisse gefunden",
+    "noResultsDesc": "Versuchen Sie andere Stichwörter oder Kategorien.",
+    "clearFilters": "Filter löschen",
+    "type_all": "Alle",
+    "type_modules": "Geprüft",
+    "type_signals": "Bürgermeldungen"
+  },
+  "card": {
+    "readMore": "Mehr lesen",
+    "views": "Aufrufe"
+  },
+  "verdicts": {
+    "true": "Wahr",
+    "false": "Falsch",
+    "misleading": "Irreführend",
+    "partially_true": "Teilweise wahr"
+  },
+  "sourceTypes": {
+    "website": "Webseite / Internet",
+    "internet": "Soziale Medien",
+    "newspapers": "Zeitungen",
+    "news_tv": "TV-Nachrichten",
+    "friends": "Freunde / Bekannte",
+    "email": "E-Mail",
+    "phone": "Telefonanruf",
+    "anonymous_call": "Anonymer Anruf",
+    "other": "Sonstiges"
+  },
+  "howItWorks": {
+    "title": "Wie funktioniert es?",
+    "step1Title": "Meldung einreichen",
+    "step1Desc": "Haben Sie etwas Verdächtiges gehört? Erzählen Sie uns, was und wo.",
+    "step2Title": "Wir überprüfen",
+    "step2Desc": "Das PENSA-Team überprüft die Behauptung mit Hilfe von Experten.",
+    "step3Title": "Wir veröffentlichen die Antwort",
+    "step3Desc": "Innerhalb von 72 Stunden veröffentlichen wir die geprüfte Antwort."
+  },
+  "signalForm": {
+    "title": "Etwas Verdächtiges gehört?",
+    "subtitle": "Melden Sie es und wir überprüfen es.",
+    "claimLabel": "Welche Behauptung haben Sie gehört?",
+    "claimPlaceholder": "Beschreiben Sie die Behauptung genau so, wie Sie sie gehört haben...",
+    "sourceLabel": "Wo haben Sie es gehört?",
+    "sourcePlaceholder": "Quelle auswählen",
+    "cityLabel": "In welcher Stadt?",
+    "cityPlaceholder": "z.B. Sofia",
+    "emailLabel": "Ihre E-Mail (optional)",
+    "emailPlaceholder": "Für Rückmeldung von uns",
+    "confidentialLabel": "Vertraulich",
+    "confidentialDesc": "Meine Meldung nicht öffentlich veröffentlichen",
+    "submit": "Meldung absenden",
+    "submitting": "Wird gesendet...",
+    "successTitle": "Vielen Dank!",
+    "successDesc": "Ihre Meldung wurde empfangen. Wir antworten innerhalb von 72 Stunden.",
+    "sendAnother": "Neue Meldung einreichen",
+    "error": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+    "errors": {
+      "claimRequired": "Bitte beschreiben Sie die Behauptung, die Sie gehört haben.",
+      "claimTooShort": "Die Beschreibung muss mindestens {{min}} Zeichen lang sein.",
+      "sourceRequired": "Bitte wählen Sie aus, wo Sie die Behauptung gehört haben.",
+      "invalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+      "tooManyRequests": "Sie können eine neue Meldung in {{minutes}} Min. einreichen.",
+      "generic": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut."
+    }
+  },
+  "signal": {
+    "statusResolved": "Geprüft",
+    "statusPending": "Wartet auf Überprüfung",
+    "readAnswer": "Antwort ansehen"
+  },
+  "partners": {
+    "title": "Partner",
+    "bfjLabel": "Bulgarischer Frauenfonds",
+    "pensaLabel": "PENSA-Stiftung",
+    "programText": "Das ReAktion-Programm ist ein Programm der PENSA-Stiftung mit finanzieller Unterstützung des Bulgarischen Frauenfonds.",
+    "disclaimer": "Diese Plattform dient der Überprüfung öffentlich verbreiteter Behauptungen. Bitte reichen Sie Meldungen nur in gutem Glauben ein — nur für Informationen, an deren Richtigkeit Sie zweifeln. Der Missbrauch der Plattform für persönliche Streitigkeiten, Verleumdungen oder falsche Beschwerden ist unzulässig."
+  },
+  "detail": {
+    "backToList": "Zurück zu den Überprüfungen",
+    "claimLabel": "Signal",
+    "verificationLabel": "Antwort",
+    "section1Title": "Was wird behauptet?",
+    "section2Title": "Was sagen die Fakten?",
+    "section3Title": "Warum verbreitet es sich?",
+    "section4Title": "Was sollten Sie tun?",
+    "source": "Quelle",
+    "downloadPdf": "PDF zum Drucken herunterladen",
+    "shareOnFacebook": "Auf Facebook teilen",
+    "copyLink": "Link kopieren",
+    "linkCopied": "Link kopiert!",
+    "checkedOn": "Überprüft am",
+    "views": "Aufrufe"
+  },
+  "admin": {
+    "title": "Faktencheck-Verwaltung",
+    "tabSignals": "Meldungen",
+    "tabModules": "Überprüfungen",
+    "signals": {
+      "title": "Eingegangene Meldungen",
+      "empty": "Keine Meldungen eingegangen.",
+      "filterAll": "Alle",
+      "filterNew": "Neu",
+      "filterInReview": "In Bearbeitung",
+      "filterResolved": "Beantwortet",
+      "filterDismissed": "Abgelehnt"
+    },
+    "signalStatuses": {
+      "new": "Neu",
+      "in_review": "In Bearbeitung",
+      "resolved": "Beantwortet",
+      "dismissed": "Abgelehnt"
+    },
+    "signalModal": {
+      "title": "Meldungsdetails",
+      "claim": "Behauptung",
+      "source": "Quelle",
+      "city": "Stadt",
+      "email": "E-Mail",
+      "confidential": "Vertraulich",
+      "yes": "Ja",
+      "no": "Nein",
+      "status": "Status",
+      "adminNotes": "Notizen",
+      "adminNotesPlaceholder": "Interne Notizen für das Team...",
+      "relatedModule": "Zugehörige Überprüfung",
+      "createResponse": "Antwort erstellen",
+      "none": "Keines",
+      "save": "Speichern",
+      "delete": "Löschen",
+      "confirmDelete": "Sind Sie sicher, dass Sie diese Meldung löschen möchten?"
+    },
+    "modules": {
+      "title": "Überprüfungen",
+      "empty": "Keine Überprüfungen erstellt.",
+      "createNew": "Überprüfung erstellen",
+      "filterAll": "Alle",
+      "filterDraft": "Entwürfe",
+      "filterPublished": "Veröffentlicht",
+      "filterHidden": "Versteckt"
+    },
+    "moduleStatuses": {
+      "draft": "Entwurf",
+      "published": "Veröffentlicht",
+      "hidden": "Versteckt"
+    },
+    "moduleModal": {
+      "createTitle": "Neue Überprüfung",
+      "editTitle": "Überprüfung bearbeiten",
+      "verdict": "Urteil",
+      "category": "Kategorie",
+      "categoryPlaceholder": "z.B. Renten, Euro, Gesundheit...",
+      "claimText": "Behauptung (genaues Zitat)",
+      "claimPlaceholder": "Der genaue Text der Behauptung...",
+      "verification": "Überprüfung (faktische Antwort)",
+      "verificationPlaceholder": "Was die Fakten sagen...",
+      "sourceUrl": "Link zur offiziellen Quelle",
+      "sourceName": "Quellenname",
+      "sourceNamePlaceholder": "z.B. NSI, Finanzministerium...",
+      "whySpreads": "Warum es sich verbreitet",
+      "whySpreadsPlaceholder": "Welche Ängste es ausnutzt...",
+      "howToReact": "Wie reagieren",
+      "howToReactPlaceholder": "2-3 einfache Sätze für ein Klubgespräch...",
+      "pdfUrl": "PDF-Datei URL",
+      "status": "Status",
+      "save": "Speichern",
+      "create": "Erstellen",
+      "cancel": "Abbrechen",
+      "delete": "Löschen",
+      "publish": "Veröffentlichen",
+      "hide": "Verstecken",
+      "confirmDelete": "Sind Sie sicher, dass Sie diese Überprüfung löschen möchten?",
+      "fieldErrors": {
+        "category": "Kategorie muss mindestens 2 Zeichen lang sein.",
+        "claimText": "Behauptungstext muss mindestens 10 Zeichen lang sein.",
+        "verification": "Überprüfung muss mindestens 10 Zeichen lang sein.",
+        "whySpreads": "Dieses Feld muss mindestens 10 Zeichen lang sein.",
+        "howToReact": "Dieses Feld muss mindestens 10 Zeichen lang sein.",
+        "sourceUrl": "Bitte geben Sie eine gültige URL ein.",
+        "sourceName": "Quellenname ist zu lang.",
+        "pdfUrl": "Bitte geben Sie eine gültige URL ein."
+      }
+    },
+    "stats": {
+      "totalModules": "Überprüfungen",
+      "publishedModules": "Veröffentlicht",
+      "totalSignals": "Meldungen",
+      "newSignals": "Neue Meldungen"
+    }
+  }
+}
