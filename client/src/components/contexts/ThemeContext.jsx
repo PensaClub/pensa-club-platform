@@ -4,10 +4,19 @@ const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
     const [theme, setTheme] = useState(() => {
-        // If refreshing on a fact-check page that forces light theme, start light
-        if (localStorage.getItem('fc-page-active') === 'true') {
+        const path = window.location.pathname;
+        const isFactCheckPage = path.includes('/fact-check');
+
+        // Only use fc-theme if actually ON a fact-check page right now
+        if (isFactCheckPage && localStorage.getItem('fc-page-active') === 'true') {
             return localStorage.getItem('fc-theme') || 'light';
         }
+
+        // Clean up stale fc-page-active flag if not on fact-check page
+        if (!isFactCheckPage) {
+            localStorage.removeItem('fc-page-active');
+        }
+
         return localStorage.getItem('academy-theme') || 'dark';
     });
 

@@ -13,6 +13,8 @@ export const IpManagementProvider = ({ children }) => {
     const ipService = useMemo(() => ipManagementServiceFactory(token), [token]);
 
     const [visits, setVisits] = useState([]);
+    const [visitsPagination, setVisitsPagination] = useState({ total: 0, page: 1, limit: 50, totalPages: 0 });
+    const [stats, setStats] = useState(null);
     const [blockedIps, setBlockedIps] = useState([]);
     const [whitelist, setWhitelist] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -21,13 +23,24 @@ export const IpManagementProvider = ({ children }) => {
     // VISITS
     // ===================================
 
-    const fetchVisits = useCallback(async (search = '') => {
+    const fetchStats = useCallback(async () => {
+        try {
+            const result = await ipService.getStats();
+            setStats(result?.stats || null);
+        } catch (err) {
+            console.error('Failed to fetch IP stats:', err);
+        }
+    }, [ipService]);
+
+    const fetchVisits = useCallback(async (search = '', period = '', page = 1) => {
         setIsLoading(true);
         try {
-            const params = { limit: 100 };
+            const params = { limit: 50, page };
             if (search) params.search = search;
+            if (period && period !== 'all') params.period = period;
             const result = await ipService.getVisits(params);
             setVisits(result?.visits || []);
+            setVisitsPagination(result?.pagination || { total: 0, page: 1, limit: 50, totalPages: 0 });
         } catch (err) {
             console.error('Failed to fetch IP visits:', err);
         } finally {
@@ -56,7 +69,7 @@ export const IpManagementProvider = ({ children }) => {
         try {
             await ipService.blockIp(ipAddress, reason || null, password || null);
             toast.success(t('siteSettingsAdmin.ipManagement.blocked'));
-            await Promise.all([fetchVisits(), fetchBlockedIps(), fetchWhitelist()]);
+            await Promise.all([fetchVisits(), fetchBlockedIps(), fetchWhitelist(), fetchStats()]);
             return { success: true };
         } catch (err) {
             const msg = err?.message || '';
@@ -74,13 +87,13 @@ export const IpManagementProvider = ({ children }) => {
             }
             return { success: false };
         }
-    }, [isAdmin, ipService, fetchVisits, fetchBlockedIps, t]);
+    }, [isAdmin, ipService, fetchVisits, fetchBlockedIps, fetchStats, t]);
 
     const unblockIp = useCallback(async (id, password) => {
         try {
             await ipService.unblockIp(id, password || null);
             toast.success(t('siteSettingsAdmin.ipManagement.unblocked'));
-            await Promise.all([fetchBlockedIps(), fetchVisits()]);
+            await Promise.all([fetchBlockedIps(), fetchVisits(), fetchStats()]);
             return true;
         } catch (err) {
             const msg = err?.message || '';
@@ -91,7 +104,7 @@ export const IpManagementProvider = ({ children }) => {
             }
             return false;
         }
-    }, [ipService, fetchBlockedIps, fetchVisits, t]);
+    }, [ipService, fetchBlockedIps, fetchVisits, fetchStats, t]);
 
     // ===================================
     // WHITELIST
@@ -114,7 +127,7 @@ export const IpManagementProvider = ({ children }) => {
         try {
             await ipService.addToWhitelist(ipAddress, label || null);
             toast.success(t('siteSettingsAdmin.ipManagement.whitelistAdded'));
-            await Promise.all([fetchWhitelist(), fetchBlockedIps(), fetchVisits()]);
+            await Promise.all([fetchWhitelist(), fetchBlockedIps(), fetchVisits(), fetchStats()]);
             return true;
         } catch (err) {
             const msg = err?.message || '';
@@ -127,7 +140,7 @@ export const IpManagementProvider = ({ children }) => {
             }
             return false;
         }
-    }, [isAdmin, ipService, fetchWhitelist, fetchBlockedIps, fetchVisits, t]);
+    }, [isAdmin, ipService, fetchWhitelist, fetchBlockedIps, fetchVisits, fetchStats, t]);
 
     const removeFromWhitelist = useCallback(async (id, password) => {
         try {
@@ -157,7 +170,7 @@ export const IpManagementProvider = ({ children }) => {
         try {
             await ipService.blockFromWhitelist(id, reason || null, password || null);
             toast.success(t('siteSettingsAdmin.ipManagement.whitelistBlockedSuccess'));
-            await Promise.all([fetchWhitelist(), fetchBlockedIps(), fetchVisits()]);
+            await Promise.all([fetchWhitelist(), fetchBlockedIps(), fetchVisits(), fetchStats()]);
             return { success: true };
         } catch (err) {
             const msg = err?.message || '';
@@ -171,7 +184,7 @@ export const IpManagementProvider = ({ children }) => {
                 return { success: false };
             }
         }
-    }, [isAdmin, ipService, fetchWhitelist, fetchBlockedIps, fetchVisits, t]);
+    }, [isAdmin, ipService, fetchWhitelist, fetchBlockedIps, fetchVisits, fetchStats, t]);
 
     // ===================================
     // HELPERS
@@ -187,9 +200,12 @@ export const IpManagementProvider = ({ children }) => {
 
     const contextValue = useMemo(() => ({
         visits,
+        visitsPagination,
+        stats,
         blockedIps,
         whitelist,
         isLoading,
+        fetchStats,
         fetchVisits,
         fetchBlockedIps,
         fetchWhitelist,
@@ -199,7 +215,7 @@ export const IpManagementProvider = ({ children }) => {
         removeFromWhitelist,
         blockFromWhitelist,
         isBlocked,
-    }), [visits, blockedIps, whitelist, isLoading, fetchVisits, fetchBlockedIps, fetchWhitelist, blockIp, unblockIp, addToWhitelist, removeFromWhitelist, blockFromWhitelist, isBlocked]);
+    }), [visits, visitsPagination, stats, blockedIps, whitelist, isLoading, fetchStats, fetchVisits, fetchBlockedIps, fetchWhitelist, blockIp, unblockIp, addToWhitelist, removeFromWhitelist, blockFromWhitelist, isBlocked]);
 
     return (
         <IpManagementContext.Provider value={contextValue}>
