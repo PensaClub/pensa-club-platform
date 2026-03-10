@@ -2,49 +2,85 @@
 /* Prefix: sas- */
 
 .sas-card {
+    --sas-color: #8b5cf6;
     display: flex;
     flex-direction: column;
     border-radius: 20px;
-    background: rgba(12, 18, 34, 0.65);
-    border: 1px solid rgba(245, 158, 11, 0.06);
-    backdrop-filter: blur(12px);
+    background: rgba(15, 23, 42, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     overflow: hidden;
-    transition: all 0.35s ease;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2), 0 1px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow:
+        0 4px 24px rgba(0, 0, 0, 0.2),
+        0 1px 4px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 .sas-card:hover {
-    border-color: rgba(245, 158, 11, 0.12);
-    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-color: color-mix(in srgb, var(--sas-color) 25%, transparent);
+    box-shadow:
+        0 8px 40px rgba(0, 0, 0, 0.25),
+        0 0 30px color-mix(in srgb, var(--sas-color) 8%, transparent);
+    transform: translateY(-2px);
+}
+
+.sas-card--open {
+    border-color: color-mix(in srgb, var(--sas-color) 30%, transparent);
+    box-shadow:
+        0 12px 48px rgba(0, 0, 0, 0.3),
+        0 0 40px color-mix(in srgb, var(--sas-color) 10%, transparent);
+    grid-column: 1 / -1;
 }
 
 /* =========================================================
-                    HEADER
+                    HEADER (clickable)
    ========================================================= */
 
 .sas-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 28px 32px 20px;
+    padding: 28px 28px;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    width: 100%;
+    text-align: left;
+    font-family: inherit;
+    transition: background-color 0.2s ease;
+    gap: 16px;
+}
+
+.sas-header:hover {
+    background: rgba(255, 255, 255, 0.02);
 }
 
 .sas-header-left {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 16px;
+    min-width: 0;
 }
 
-.sas-icon {
-    font-size: 1.6rem;
+.sas-icon-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--sas-color) 12%, transparent);
+    color: var(--sas-color);
     flex-shrink: 0;
-    margin-top: 1px;
-    line-height: 1;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    border: 1px solid color-mix(in srgb, var(--sas-color) 20%, transparent);
+    transition: all 0.3s ease;
 }
 
-.sas-icon svg {
-    color: #f59e0b;
+.sas-card:hover .sas-icon-box {
+    background: color-mix(in srgb, var(--sas-color) 18%, transparent);
+    box-shadow: 0 0 20px color-mix(in srgb, var(--sas-color) 15%, transparent);
 }
 
 .sas-header-text {
@@ -55,7 +91,7 @@
 }
 
 .sas-title {
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: #f1f5f9;
     margin: 0;
@@ -63,37 +99,59 @@
 }
 
 .sas-desc {
-    font-size: 0.84rem;
+    font-size: 0.82rem;
     color: #64748b;
     margin: 0;
     line-height: 1.5;
 }
 
-/* =========================================================
-                    DIVIDER
-   ========================================================= */
+.sas-chevron {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    color: #64748b;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    flex-shrink: 0;
+}
 
-.sas-divider {
-    height: 1px;
-    margin: 0 32px;
-    background: linear-gradient(
-        90deg,
-        transparent 0%,
-        rgba(245, 158, 11, 0.1) 30%,
-        rgba(245, 158, 11, 0.1) 70%,
-        transparent 100%
-    );
+.sas-chevron--open {
+    transform: rotate(180deg);
+    color: var(--sas-color);
 }
 
 /* =========================================================
-                    CONTENT
+                    COLLAPSIBLE CONTENT
    ========================================================= */
+
+.sas-collapse {
+    height: 0;
+    overflow: hidden;
+    transition: height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
 .sas-content {
     display: flex;
     flex-direction: column;
     gap: 2px;
-    padding: 8px 12px 12px;
+    padding: 0 28px 28px;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.sas-content::before {
+    content: '';
+    display: block;
+    height: 1px;
+    margin: 0 0 12px;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        color-mix(in srgb, var(--sas-color) 15%, transparent) 30%,
+        color-mix(in srgb, var(--sas-color) 15%, transparent) 70%,
+        transparent 100%
+    );
 }
 
 /* =========================================================
@@ -102,15 +160,22 @@
 
 @media (max-width: 1023px) {
     .sas-header {
-        padding: 24px 26px 18px;
-    }
-
-    .sas-divider {
-        margin: 0 26px;
+        padding: 24px 22px;
     }
 
     .sas-content {
-        padding: 6px 10px 10px;
+        padding: 0 22px 22px;
+    }
+
+    .sas-icon-box {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+    }
+
+    .sas-icon-box svg {
+        width: 20px;
+        height: 20px;
     }
 }
 
@@ -124,31 +189,35 @@
     }
 
     .sas-header {
-        padding: 20px 20px 16px;
+        padding: 20px 18px;
+        gap: 12px;
     }
 
     .sas-header-left {
         gap: 12px;
     }
 
-    .sas-divider {
-        margin: 0 20px;
+    .sas-icon-box {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+    }
+
+    .sas-icon-box svg {
+        width: 18px;
+        height: 18px;
     }
 
     .sas-content {
-        padding: 4px 6px 6px;
+        padding: 0 18px 18px;
     }
 
     .sas-title {
-        font-size: 1.05rem;
+        font-size: 1rem;
     }
 
     .sas-desc {
-        font-size: 0.8rem;
-    }
-
-    .sas-icon {
-        font-size: 1.4rem;
+        font-size: 0.78rem;
     }
 }
 
@@ -162,23 +231,20 @@
     }
 
     .sas-header {
-        padding: 16px 16px 14px;
+        padding: 16px 14px;
     }
 
-    .sas-divider {
-        margin: 0 16px;
+    .sas-icon-box {
+        width: 36px;
+        height: 36px;
     }
 
     .sas-content {
-        padding: 4px 4px 4px;
+        padding: 0 14px 14px;
     }
 
     .sas-title {
-        font-size: 0.95rem;
-    }
-
-    .sas-icon {
-        font-size: 1.2rem;
+        font-size: 0.92rem;
     }
 }
 
@@ -187,42 +253,50 @@
    ========================================================= */
 
 [data-theme="light"] .sas-card {
-    background: #ffffff;
-    border: 2px solid #d1d5db;
-    border-left: 4px solid #dc2626;
-    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.08), 0 1px 4px rgba(0, 0, 0, 0.1);
-    backdrop-filter: none;
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(12px);
+    box-shadow:
+        0 2px 12px rgba(0, 0, 0, 0.06),
+        0 1px 4px rgba(0, 0, 0, 0.04);
 }
 
 [data-theme="light"] .sas-card:hover {
-    border-color: #9ca3af;
-    border-left-color: #b91c1c;
-    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.12), 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-color: color-mix(in srgb, var(--sas-color) 35%, transparent);
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.08),
+        0 0 24px color-mix(in srgb, var(--sas-color) 10%, transparent);
+}
+
+[data-theme="light"] .sas-card--open {
+    border-color: color-mix(in srgb, var(--sas-color) 40%, transparent);
+}
+
+[data-theme="light"] .sas-header:hover {
+    background: rgba(0, 0, 0, 0.02);
 }
 
 [data-theme="light"] .sas-title {
     color: #0f172a;
-    font-weight: 700;
 }
 
 [data-theme="light"] .sas-desc {
     color: #475569;
 }
 
-[data-theme="light"] .sas-icon {
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.12));
+[data-theme="light"] .sas-chevron {
+    color: #94a3b8;
 }
 
-[data-theme="light"] .sas-icon svg {
-    color: #ea580c;
+[data-theme="light"] .sas-chevron--open {
+    color: var(--sas-color);
 }
 
-[data-theme="light"] .sas-divider {
-    background: linear-gradient(
-        90deg,
-        transparent 0%,
-        #d1d5db 30%,
-        #d1d5db 70%,
-        transparent 100%
-    );
+[data-theme="light"] .sas-content {
+    border-top-color: rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .sas-icon-box {
+    background: color-mix(in srgb, var(--sas-color) 10%, transparent);
+    border-color: color-mix(in srgb, var(--sas-color) 15%, transparent);
 }

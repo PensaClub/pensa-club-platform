@@ -4,58 +4,65 @@
 .ssa-page {
     position: relative;
     min-height: 100vh;
-    background: #0c1222;
+    background: #0a0f1e;
     padding: 110px 40px 100px;
     overflow: hidden;
     transition: background-color 0.3s ease, color 0.2s ease;
 }
 
 /* =========================================================
-                    BACKGROUND — subtle dot grid
+                    BACKGROUND — Technical Blueprint Grid
    ========================================================= */
 
-.ssa-bg-pattern {
+.ssa-bg-grid {
     position: absolute;
     inset: 0;
     z-index: 0;
     pointer-events: none;
-    opacity: 0.35;
+    opacity: 0.3;
     background-image:
-        radial-gradient(circle, rgba(139, 92, 246, 0.15) 1px, transparent 1px);
-    background-size: 28px 28px;
+        linear-gradient(rgba(139, 92, 246, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(139, 92, 246, 0.08) 1px, transparent 1px),
+        linear-gradient(rgba(139, 92, 246, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(139, 92, 246, 0.04) 1px, transparent 1px);
+    background-size:
+        100px 100px,
+        100px 100px,
+        20px 20px,
+        20px 20px;
 }
 
-/* Diagonal gradient corners — warm purple-to-amber */
-.ssa-bg-corner {
+/* Ambient glow spots */
+.ssa-bg-glow {
     position: absolute;
-    width: 420px;
-    height: 420px;
+    width: 500px;
+    height: 500px;
     border-radius: 50%;
-    filter: blur(100px);
+    filter: blur(120px);
     pointer-events: none;
     z-index: 0;
 }
 
-.ssa-bg-corner--tl {
-    top: -120px;
-    left: -80px;
-    background: radial-gradient(circle, rgba(139, 92, 246, 0.14) 0%, transparent 70%);
+.ssa-bg-glow--tl {
+    top: -150px;
+    left: -100px;
+    background: radial-gradient(circle, rgba(139, 92, 246, 0.12) 0%, transparent 70%);
 }
 
-.ssa-bg-corner--br {
-    bottom: -120px;
-    right: -80px;
-    background: radial-gradient(circle, rgba(245, 158, 11, 0.08) 0%, transparent 70%);
+.ssa-bg-glow--br {
+    bottom: -150px;
+    right: -100px;
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.08) 0%, transparent 70%);
 }
 
 /* =========================================================
-                    CONTAINER
+                    CONTAINER — Full Width
    ========================================================= */
 
 .ssa-container {
     position: relative;
     z-index: 1;
-    max-width: 1100px;
+    max-width: 1400px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -102,11 +109,11 @@
     width: 60px;
     height: 60px;
     border-radius: 18px;
-    background: linear-gradient(145deg, rgba(245, 158, 11, 0.12), rgba(139, 92, 246, 0.12));
-    color: #f59e0b;
+    background: linear-gradient(145deg, rgba(139, 92, 246, 0.15), rgba(56, 189, 248, 0.1));
+    color: #a78bfa;
     flex-shrink: 0;
-    border: 1px solid rgba(245, 158, 11, 0.15);
-    box-shadow: 0 4px 20px rgba(245, 158, 11, 0.12), 0 2px 8px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+    box-shadow: 0 4px 20px rgba(139, 92, 246, 0.15), 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .ssa-header-text {
@@ -133,13 +140,13 @@
 }
 
 /* =========================================================
-                    SECTIONS
+                    GRID LAYOUT — 3 columns
    ========================================================= */
 
-.ssa-sections {
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
+.ssa-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
 }
 
 /* =========================================================
@@ -158,8 +165,8 @@
 .ssa-loading-spinner {
     width: 44px;
     height: 44px;
-    border: 3px solid rgba(245, 158, 11, 0.12);
-    border-top-color: #f59e0b;
+    border: 3px solid rgba(139, 92, 246, 0.12);
+    border-top-color: #a78bfa;
     border-radius: 50%;
     animation: ssa-spin 0.8s linear infinite;
 }
@@ -177,6 +184,16 @@
 }
 
 /* =========================================================
+                    RESPONSIVE - Tablet (<=1200px) — 2 columns
+   ========================================================= */
+
+@media (max-width: 1200px) {
+    .ssa-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* =========================================================
                     RESPONSIVE - Tablet (<=1023px)
    ========================================================= */
 
@@ -189,14 +206,14 @@
         gap: 28px;
     }
 
-    .ssa-bg-corner {
-        width: 300px;
-        height: 300px;
+    .ssa-bg-glow {
+        width: 350px;
+        height: 350px;
     }
 }
 
 /* =========================================================
-                    RESPONSIVE - Mobile (<=767px)
+                    RESPONSIVE - Mobile (<=767px) — 1 column
    ========================================================= */
 
 @media (max-width: 767px) {
@@ -206,6 +223,10 @@
 
     .ssa-container {
         gap: 22px;
+    }
+
+    .ssa-grid {
+        grid-template-columns: 1fr;
     }
 
     .ssa-header {
@@ -232,13 +253,9 @@
         font-size: 0.84rem;
     }
 
-    .ssa-bg-corner {
-        width: 220px;
-        height: 220px;
-    }
-
-    .ssa-bg-pattern {
-        background-size: 22px 22px;
+    .ssa-bg-glow {
+        width: 250px;
+        height: 250px;
     }
 }
 
@@ -275,9 +292,9 @@
         font-size: 0.8rem;
     }
 
-    .ssa-bg-corner {
-        width: 160px;
-        height: 160px;
+    .ssa-bg-glow {
+        width: 180px;
+        height: 180px;
     }
 }
 
@@ -286,21 +303,29 @@
    ========================================================= */
 
 [data-theme="light"] .ssa-page {
-    background: #f8fafc;
+    background: #f1f5f9;
 }
 
-[data-theme="light"] .ssa-bg-pattern {
-    opacity: 0.6;
+[data-theme="light"] .ssa-bg-grid {
+    opacity: 0.4;
     background-image:
-        radial-gradient(circle, rgba(30, 41, 59, 0.18) 1px, transparent 1px);
+        linear-gradient(rgba(99, 102, 241, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99, 102, 241, 0.06) 1px, transparent 1px),
+        linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
+    background-size:
+        100px 100px,
+        100px 100px,
+        20px 20px,
+        20px 20px;
 }
 
-[data-theme="light"] .ssa-bg-corner--tl {
-    background: radial-gradient(circle, rgba(14, 165, 233, 0.08) 0%, transparent 70%);
+[data-theme="light"] .ssa-bg-glow--tl {
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.06) 0%, transparent 70%);
 }
 
-[data-theme="light"] .ssa-bg-corner--br {
-    background: radial-gradient(circle, rgba(234, 88, 12, 0.06) 0%, transparent 70%);
+[data-theme="light"] .ssa-bg-glow--br {
+    background: radial-gradient(circle, rgba(14, 165, 233, 0.05) 0%, transparent 70%);
 }
 
 [data-theme="light"] .ssa-back-link {
@@ -308,19 +333,18 @@
 }
 
 [data-theme="light"] .ssa-back-link:hover {
-    color: #0ea5e9;
+    color: #6366f1;
 }
 
 [data-theme="light"] .ssa-header {
-    border-bottom: 2px solid #cbd5e1;
-    box-shadow: 0 2px 8px rgba(100, 116, 139, 0.08);
+    border-bottom-color: rgba(99, 102, 241, 0.12);
 }
 
 [data-theme="light"] .ssa-header-icon {
-    background: linear-gradient(145deg, rgba(14, 165, 233, 0.12), rgba(59, 130, 246, 0.15));
-    color: #0284c7;
-    border: 2px solid rgba(14, 165, 233, 0.25);
-    box-shadow: 0 4px 16px rgba(99, 102, 241, 0.1), 0 2px 6px rgba(0, 0, 0, 0.08);
+    background: linear-gradient(145deg, rgba(99, 102, 241, 0.12), rgba(14, 165, 233, 0.1));
+    color: #6366f1;
+    border-color: rgba(99, 102, 241, 0.2);
+    box-shadow: 0 4px 16px rgba(99, 102, 241, 0.1), 0 2px 6px rgba(0, 0, 0, 0.06);
 }
 
 [data-theme="light"] .ssa-title {
@@ -332,8 +356,8 @@
 }
 
 [data-theme="light"] .ssa-loading-spinner {
-    border-color: rgba(14, 165, 233, 0.15);
-    border-top-color: #0ea5e9;
+    border-color: rgba(99, 102, 241, 0.12);
+    border-top-color: #6366f1;
 }
 
 [data-theme="light"] .ssa-loading-text {

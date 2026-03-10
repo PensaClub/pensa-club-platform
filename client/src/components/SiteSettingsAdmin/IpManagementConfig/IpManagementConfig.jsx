@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Ban, ShieldOff, ShieldCheck, Trash2, Plus, Search, Check, X, Lock, LockOpen } from 'lucide-react';
+import { Ban, ShieldOff, ShieldCheck, Trash2, Plus, Search, Check, X, Lock, LockOpen, ChevronLeft, ChevronRight, Eye, Globe, Calendar } from 'lucide-react';
 import { useIpManagement } from '../../contexts/IpManagementContext';
 import './ipManagementConfig.css';
 
@@ -8,9 +8,12 @@ const IpManagementConfig = () => {
     const { t } = useTranslation('admin');
     const {
         visits,
+        visitsPagination,
+        stats,
         blockedIps,
         whitelist,
         isLoading,
+        fetchStats,
         fetchVisits,
         fetchBlockedIps,
         fetchWhitelist,
@@ -24,6 +27,7 @@ const IpManagementConfig = () => {
 
     const [activeTab, setActiveTab] = useState('visits');
     const [search, setSearch] = useState('');
+    const [period, setPeriod] = useState('all');
 
     // Visits tab — inline block form
     const [blockingIp, setBlockingIp] = useState(null);
@@ -38,7 +42,7 @@ const IpManagementConfig = () => {
     const [manualWhitelistLabel, setManualWhitelistLabel] = useState('');
 
     // Whitelist tab — action forms (remove / block) — always require password
-    const [whitelistAction, setWhitelistAction] = useState(null); // { id, type: 'remove' | 'block' }
+    const [whitelistAction, setWhitelistAction] = useState(null);
     const [whitelistActionReason, setWhitelistActionReason] = useState('');
     const [whitelistActionPassword, setWhitelistActionPassword] = useState('');
 
@@ -47,10 +51,11 @@ const IpManagementConfig = () => {
     // ===================================
 
     useEffect(() => {
-        fetchVisits();
+        fetchStats();
+        fetchVisits('', '', 1);
         fetchBlockedIps();
         fetchWhitelist();
-    }, [fetchVisits, fetchBlockedIps, fetchWhitelist]);
+    }, [fetchStats, fetchVisits, fetchBlockedIps, fetchWhitelist]);
 
     // ===================================
     // HANDLERS — VISITS TAB
@@ -67,7 +72,17 @@ const IpManagementConfig = () => {
 
     const handleSearch = (e) => {
         e.preventDefault();
-        fetchVisits(search);
+        fetchVisits(search, period, 1);
+    };
+
+    const handlePeriodChange = (newPeriod) => {
+        setPeriod(newPeriod);
+        fetchVisits(search, newPeriod, 1);
+    };
+
+    const handlePageChange = (newPage) => {
+        if (newPage < 1 || newPage > visitsPagination.totalPages) return;
+        fetchVisits(search, period, newPage);
     };
 
     // ===================================
@@ -160,12 +175,55 @@ const IpManagementConfig = () => {
         return ua.length > max ? ua.substring(0, max) + '...' : ua;
     };
 
+    const periods = [
+        { key: 'today', label: t('siteSettingsAdmin.ipManagement.periodToday') },
+        { key: 'week', label: t('siteSettingsAdmin.ipManagement.periodWeek') },
+        { key: 'month', label: t('siteSettingsAdmin.ipManagement.periodMonth') },
+        { key: 'all', label: t('siteSettingsAdmin.ipManagement.periodAll') },
+    ];
+
     // ===================================
     // RENDER
     // ===================================
 
     return (
         <div className="imc">
+            {/* STATS CARDS */}
+            {stats && (
+                <div className="imc-stats">
+                    <div className="imc-stat-card imc-stat-card--today">
+                        <div className="imc-stat-icon">
+                            <Eye size={18} />
+                        </div>
+                        <div className="imc-stat-data">
+                            <span className="imc-stat-value">{stats.today?.uniqueIps ?? 0}</span>
+                            <span className="imc-stat-label">{t('siteSettingsAdmin.ipManagement.statsToday')}</span>
+                        </div>
+                        <div className="imc-stat-visits">{stats.today?.totalVisits ?? 0} {t('siteSettingsAdmin.ipManagement.statsVisits')}</div>
+                    </div>
+                    <div className="imc-stat-card imc-stat-card--week">
+                        <div className="imc-stat-icon">
+                            <Calendar size={18} />
+                        </div>
+                        <div className="imc-stat-data">
+                            <span className="imc-stat-value">{stats.week?.uniqueIps ?? 0}</span>
+                            <span className="imc-stat-label">{t('siteSettingsAdmin.ipManagement.statsWeek')}</span>
+                        </div>
+                        <div className="imc-stat-visits">{stats.week?.totalVisits ?? 0} {t('siteSettingsAdmin.ipManagement.statsVisits')}</div>
+                    </div>
+                    <div className="imc-stat-card imc-stat-card--month">
+                        <div className="imc-stat-icon">
+                            <Globe size={18} />
+                        </div>
+                        <div className="imc-stat-data">
+                            <span className="imc-stat-value">{stats.month?.uniqueIps ?? 0}</span>
+                            <span className="imc-stat-label">{t('siteSettingsAdmin.ipManagement.statsMonth')}</span>
+                        </div>
+                        <div className="imc-stat-visits">{stats.month?.totalVisits ?? 0} {t('siteSettingsAdmin.ipManagement.statsVisits')}</div>
+                    </div>
+                </div>
+            )}
+
             {/* TABS */}
             <div className="imc-tabs">
                 <button
@@ -173,7 +231,7 @@ const IpManagementConfig = () => {
                     onClick={() => setActiveTab('visits')}
                 >
                     {t('siteSettingsAdmin.ipManagement.tabVisits')}
-                    <span className="imc-tab-badge">{visits.length}</span>
+                    <span className="imc-tab-badge">{visitsPagination.total || visits.length}</span>
                 </button>
                 <button
                     className={`imc-tab ${activeTab === 'blocked' ? 'imc-tab--active' : ''}`}
@@ -196,6 +254,19 @@ const IpManagementConfig = () => {
             {/* ═══════════════════════════════════ */}
             {activeTab === 'visits' && (
                 <div className="imc-panel">
+                    {/* Period filter */}
+                    <div className="imc-filters">
+                        {periods.map((p) => (
+                            <button
+                                key={p.key}
+                                className={`imc-filter-btn ${period === p.key ? 'imc-filter-btn--active' : ''}`}
+                                onClick={() => handlePeriodChange(p.key)}
+                            >
+                                {p.label}
+                            </button>
+                        ))}
+                    </div>
+
                     <form className="imc-search" onSubmit={handleSearch}>
                         <input
                             type="text"
@@ -212,66 +283,94 @@ const IpManagementConfig = () => {
                     {isLoading ? (
                         <div className="imc-loading">{t('siteSettingsAdmin.loading')}</div>
                     ) : visits.length > 0 ? (
-                        <div className="imc-table-wrapper">
-                            <table className="imc-table">
-                                <thead>
-                                    <tr>
-                                        <th>{t('siteSettingsAdmin.ipManagement.ip')}</th>
-                                        <th>{t('siteSettingsAdmin.ipManagement.visits')}</th>
-                                        <th>{t('siteSettingsAdmin.ipManagement.lastVisit')}</th>
-                                        <th>{t('siteSettingsAdmin.ipManagement.browser')}</th>
-                                        <th>{t('siteSettingsAdmin.ipManagement.actions')}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {visits.map((visit) => (
-                                        <tr key={visit.id} className={visit.isWhitelisted ? 'imc-row--whitelisted' : ''}>
-                                            <td className="imc-cell-ip">
-                                                <span className="imc-ip">{visit.ipAddress}</span>
-                                                {visit.isWhitelisted && (
-                                                    <span className="imc-shield" title={t('siteSettingsAdmin.ipManagement.whitelisted')}>
-                                                        <ShieldCheck size={16} />
-                                                    </span>
-                                                )}
-                                                {isBlocked(visit.ipAddress) && (
-                                                    <span className="imc-blocked-badge">{t('siteSettingsAdmin.ipManagement.statusBlocked')}</span>
-                                                )}
-                                            </td>
-                                            <td className="imc-cell-count">{visit.visitCount}</td>
-                                            <td className="imc-cell-date">{formatDate(visit.lastVisitedAt)}</td>
-                                            <td className="imc-cell-ua" title={visit.userAgent || ''}>
-                                                {truncateUA(visit.userAgent)}
-                                            </td>
-                                            <td className="imc-cell-actions">
-                                                {isBlocked(visit.ipAddress) ? (
-                                                    <span className="imc-already-blocked">{t('siteSettingsAdmin.ipManagement.statusBlocked')}</span>
-                                                ) : blockingIp === visit.ipAddress ? (
-                                                    <div className="imc-block-form">
-                                                        <input
-                                                            type="text"
-                                                            className="imc-reason-input"
-                                                            placeholder={t('siteSettingsAdmin.ipManagement.reasonPlaceholder')}
-                                                            value={blockReason}
-                                                            onChange={(e) => setBlockReason(e.target.value)}
-                                                        />
-                                                        <button className="imc-icon-btn imc-icon-btn--confirm" onClick={() => handleBlock(visit.ipAddress, blockReason)} title={t('siteSettingsAdmin.ipManagement.confirm')}>
-                                                            <Check size={15} />
-                                                        </button>
-                                                        <button className="imc-icon-btn imc-icon-btn--cancel" onClick={() => { setBlockingIp(null); setBlockReason(''); }} title={t('admin.cancel')}>
-                                                            <X size={15} />
-                                                        </button>
-                                                    </div>
-                                                ) : (
-                                                    <button className="imc-icon-btn imc-icon-btn--block" onClick={() => setBlockingIp(visit.ipAddress)} title={t('siteSettingsAdmin.ipManagement.block')}>
-                                                        <Ban size={15} />
-                                                    </button>
-                                                )}
-                                            </td>
+                        <>
+                            <div className="imc-table-wrapper">
+                                <table className="imc-table">
+                                    <thead>
+                                        <tr>
+                                            <th>{t('siteSettingsAdmin.ipManagement.ip')}</th>
+                                            <th>{t('siteSettingsAdmin.ipManagement.visits')}</th>
+                                            <th>{t('siteSettingsAdmin.ipManagement.lastVisit')}</th>
+                                            <th>{t('siteSettingsAdmin.ipManagement.browser')}</th>
+                                            <th>{t('siteSettingsAdmin.ipManagement.actions')}</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
+                                    </thead>
+                                    <tbody>
+                                        {visits.map((visit) => (
+                                            <tr key={visit.id} className={visit.isWhitelisted ? 'imc-row--whitelisted' : ''}>
+                                                <td className="imc-cell-ip">
+                                                    <span className="imc-ip">{visit.ipAddress}</span>
+                                                    {visit.isWhitelisted && (
+                                                        <span className="imc-shield" title={t('siteSettingsAdmin.ipManagement.whitelisted')}>
+                                                            <ShieldCheck size={16} />
+                                                        </span>
+                                                    )}
+                                                    {isBlocked(visit.ipAddress) && (
+                                                        <span className="imc-blocked-badge">{t('siteSettingsAdmin.ipManagement.statusBlocked')}</span>
+                                                    )}
+                                                </td>
+                                                <td className="imc-cell-count">{visit.visitCount}</td>
+                                                <td className="imc-cell-date">{formatDate(visit.lastVisitedAt)}</td>
+                                                <td className="imc-cell-ua" title={visit.userAgent || ''}>
+                                                    {truncateUA(visit.userAgent)}
+                                                </td>
+                                                <td className="imc-cell-actions">
+                                                    {isBlocked(visit.ipAddress) ? (
+                                                        <span className="imc-already-blocked">{t('siteSettingsAdmin.ipManagement.statusBlocked')}</span>
+                                                    ) : blockingIp === visit.ipAddress ? (
+                                                        <div className="imc-block-form">
+                                                            <input
+                                                                type="text"
+                                                                className="imc-reason-input"
+                                                                placeholder={t('siteSettingsAdmin.ipManagement.reasonPlaceholder')}
+                                                                value={blockReason}
+                                                                onChange={(e) => setBlockReason(e.target.value)}
+                                                            />
+                                                            <button className="imc-icon-btn imc-icon-btn--confirm" onClick={() => handleBlock(visit.ipAddress, blockReason)} title={t('siteSettingsAdmin.ipManagement.confirm')}>
+                                                                <Check size={15} />
+                                                            </button>
+                                                            <button className="imc-icon-btn imc-icon-btn--cancel" onClick={() => { setBlockingIp(null); setBlockReason(''); }} title={t('admin.cancel')}>
+                                                                <X size={15} />
+                                                            </button>
+                                                        </div>
+                                                    ) : (
+                                                        <button className="imc-icon-btn imc-icon-btn--block" onClick={() => setBlockingIp(visit.ipAddress)} title={t('siteSettingsAdmin.ipManagement.block')}>
+                                                            <Ban size={15} />
+                                                        </button>
+                                                    )}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            {/* Pagination */}
+                            {visitsPagination.totalPages > 1 && (
+                                <div className="imc-pagination">
+                                    <button
+                                        className="imc-page-btn"
+                                        onClick={() => handlePageChange(visitsPagination.page - 1)}
+                                        disabled={visitsPagination.page <= 1}
+                                    >
+                                        <ChevronLeft size={16} />
+                                    </button>
+                                    <span className="imc-page-info">
+                                        {visitsPagination.page} / {visitsPagination.totalPages}
+                                    </span>
+                                    <button
+                                        className="imc-page-btn"
+                                        onClick={() => handlePageChange(visitsPagination.page + 1)}
+                                        disabled={visitsPagination.page >= visitsPagination.totalPages}
+                                    >
+                                        <ChevronRight size={16} />
+                                    </button>
+                                    <span className="imc-page-total">
+                                        ({visitsPagination.total} {t('siteSettingsAdmin.ipManagement.totalRecords')})
+                                    </span>
+                                </div>
+                            )}
+                        </>
                     ) : (
                         <div className="imc-empty">{t('siteSettingsAdmin.ipManagement.noVisits')}</div>
                     )}

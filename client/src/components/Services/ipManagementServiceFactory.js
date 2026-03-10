@@ -6,6 +6,11 @@ export const ipManagementServiceFactory = (token) => {
     const requester = requestFactory(token);
 
     return {
+        // Stats
+        getStats: async () => {
+            return requester.get(`${apiUrl}/admin/ip-management/stats`);
+        },
+
         // Visits
         getVisits: async (params = {}) => {
             const queryString = new URLSearchParams(params).toString();

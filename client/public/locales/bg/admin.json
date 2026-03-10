@@ -270,7 +270,16 @@
       "systemIpError": "Системните IP адреси не могат да бъдат премахнати.",
       "noVisits": "Все още няма записани посещения.",
       "noBlocked": "Няма блокирани IP адреси.",
-      "noWhitelist": "Няма IP адреси в whitelist."
+      "noWhitelist": "Няма IP адреси в whitelist.",
+      "statsToday": "Уникални IP днес",
+      "statsWeek": "Уникални IP за седмицата",
+      "statsMonth": "Уникални IP за месеца",
+      "statsVisits": "посещения",
+      "periodToday": "Днес",
+      "periodWeek": "Седмица",
+      "periodMonth": "Месец",
+      "periodAll": "Всички",
+      "totalRecords": "записа"
     },
     "articleLimit": "Лимит за статии",
     "articleLimitDesc": "Ограничава броя статии, които нерегистрирани потребители могат да четат",
