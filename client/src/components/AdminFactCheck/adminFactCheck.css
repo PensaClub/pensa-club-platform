@@ -15,7 +15,7 @@
 
 .afc-hero {
   background: linear-gradient(135deg, #f78da7 0%, #dc2626 100%);
-  padding: 60px 40px;
+  padding: 125px 40px;
   box-shadow: 0 4px 20px rgba(220, 38, 38, 0.2);
 }
 
@@ -189,7 +189,7 @@
 /* Large Desktops (1440px+) */
 @media (min-width: 1440px) {
   .afc-hero {
-    padding: 70px 50px;
+    padding: 125px 50px;
   }
 
   .afc-hero-content h1 {
@@ -208,7 +208,7 @@
 /* Standard Desktops (1024px - 1439px) */
 @media (min-width: 1024px) and (max-width: 1439px) {
   .afc-hero {
-    padding: 55px 35px;
+    padding: 125px 35px;
   }
 
   .afc-hero-content h1 {
@@ -227,7 +227,7 @@
 /* Tablets (768px - 1023px) */
 @media (min-width: 768px) and (max-width: 1023px) {
   .afc-hero {
-    padding: 45px 25px;
+    padding: 125px 25px;
   }
 
   .afc-hero-content h1 {
@@ -255,7 +255,7 @@
 /* Small Tablets / Large Phones (576px - 767px) */
 @media (min-width: 576px) and (max-width: 767px) {
   .afc-hero {
-    padding: 40px 20px;
+    padding: 120px 20px;
   }
 
   .afc-hero-content h1 {
@@ -289,7 +289,7 @@
 /* Phones (480px - 575px) */
 @media (min-width: 480px) and (max-width: 575px) {
   .afc-hero {
-    padding: 35px 18px;
+    padding: 125px 18px;
   }
 
   .afc-hero-content h1 {
@@ -330,7 +330,7 @@
 /* Small Phones (320px - 479px) */
 @media (max-width: 479px) {
   .afc-hero {
-    padding: 30px 15px;
+    padding: 110px 15px;
   }
 
   .afc-hero-content h1 {

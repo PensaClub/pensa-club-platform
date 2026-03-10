@@ -249,7 +249,7 @@
   .fcf-categories {
     overflow-x: auto;
     flex-wrap: nowrap;
-    padding-bottom: 4px;
+    padding-bottom: 15px;
     -webkit-overflow-scrolling: touch;
   }
 
@@ -261,6 +261,7 @@
   .fcf-types {
     overflow-x: auto;
     flex-wrap: nowrap;
+    padding-bottom: 15px;
     -webkit-overflow-scrolling: touch;
   }
 
@@ -272,5 +273,23 @@
   .fcf-controls {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .fcf-verdict-group {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+}
+
+@media (max-width: 480px) {
+  .fcf-verdict-group {
+    width: 100%;
+  }
+
+  .fcf-verdict {
+    flex: 1 1 auto;
+    text-align: center;
+    padding: 6px 10px;
+    font-size: 0.75rem;
   }
 }
