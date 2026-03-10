@@ -1,0 +1,8 @@
+.fc {
+  min-height: 100vh;
+  background: #ffffff;
+}
+
+[data-theme="dark"] .fc {
+  background: #151c28;
+}

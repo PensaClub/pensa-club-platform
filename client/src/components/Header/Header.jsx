@@ -262,6 +262,13 @@ export const Header = ({ additionalClasses }) => {
               {t("header.clubs")}
             </NavLink>
 
+            <NavLink
+              to="/fact-check"
+              className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
+            >
+              {t("header.factcheck")}
+            </NavLink>
+
             {/* ЧАТ ЛИНК */}
             {isAuthentication && (
               <>
@@ -613,6 +620,17 @@ export const Header = ({ additionalClasses }) => {
                 <path d="M17 20C17 18.3431 14.7614 17 12 17C9.23858 17 7 18.3431 7 20M21 17C21 15.7635 19.7085 14.7012 18 14.25M3 17C3 15.7635 4.29153 14.7012 6 14.25M18 10.5C19.1046 10.5 20 9.60457 20 8.5C20 7.39543 19.1046 6.5 18 6.5M6 10.5C4.89543 10.5 4 9.60457 4 8.5C4 7.39543 4.89543 6.5 6 6.5M12 14C10.3431 14 9 12.6569 9 11C9 9.34315 10.3431 8 12 8C13.6569 8 15 9.34315 15 11C15 12.6569 13.6569 14 12 14Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
               {t("header.clubs")}
+            </NavLink>
+
+            <NavLink
+              to="/fact-check"
+              className={({ isActive }) => `mobile-nav-item ${isActive ? "active" : ""}`}
+              onClick={toggleMobileMenu}
+            >
+              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 12L11 14L15 10M12 3L4 7V12C4 16.4183 7.58172 21 12 21C16.4183 21 20 16.4183 20 12V7L12 3Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+              {t("header.factcheck")}
             </NavLink>
 
             {/* ✅ ЧАТ ЛИНК MOBILE */}

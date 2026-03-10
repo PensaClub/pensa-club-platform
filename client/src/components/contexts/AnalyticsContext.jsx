@@ -90,6 +90,25 @@ export const AnalyticsProvider = ({ children }) => {
     }
   };
 
+  // Проследяване на fact-check модул
+  const trackFactCheck = async (moduleId, moduleTitle) => {
+    try {
+      await trackView(moduleId, moduleTitle, 'factCheck');
+
+      const key = `factcheck_${moduleId}`;
+      setViewCounts(prev => ({
+        ...prev,
+        [key]: (prev[key] || 0) + 1
+      }));
+    } catch (error) {
+      console.error('Error tracking fact-check:', error);
+    }
+  };
+
+  const getFactCheckViewCount = (moduleId) => {
+    return getViewCount(moduleId, 'factcheck');
+  };
+
   // Track download
   const trackContentDownload = async (contentId, contentTitle, contentType, fileType, fileSize) => {
     try {
@@ -297,6 +316,10 @@ export const AnalyticsProvider = ({ children }) => {
       trackInitiative,
       loadInitiativeViewCounts,
       getInitiativeViewCount,
+
+      // Функции за fact-check
+      trackFactCheck,
+      getFactCheckViewCount,
 
       // Функции за stories и publications
       trackStoryOrPublication,

@@ -1,0 +1,208 @@
+/* ===================================
+   FACT CHECK SIGNAL CARD — prefix: fcsc-
+   =================================== */
+
+.fcsc {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 24px;
+  background: #ffffff;
+  border-radius: 16px;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+}
+
+/* Pending — amber dashed */
+.fcsc--pending {
+  border: 2px dashed rgba(217, 119, 6, 0.35);
+  box-shadow: 0 4px 16px rgba(217, 119, 6, 0.06);
+}
+
+/* Resolved — solid border matching verdict color, clickable */
+.fcsc--resolved {
+  border: 1.5px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+}
+
+.fcsc--verdict-false {
+  border-color: rgba(220, 38, 38, 0.25);
+  box-shadow: 0 4px 16px rgba(220, 38, 38, 0.08);
+}
+
+.fcsc--verdict-misleading {
+  border-color: rgba(234, 88, 12, 0.25);
+  box-shadow: 0 4px 16px rgba(234, 88, 12, 0.08);
+}
+
+.fcsc--verdict-partially_true {
+  border-color: rgba(22, 163, 74, 0.25);
+  box-shadow: 0 4px 16px rgba(22, 163, 74, 0.08);
+}
+
+.fcsc--verdict-true {
+  border-color: rgba(37, 99, 235, 0.25);
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.08);
+}
+
+.fcsc--resolved:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Top row */
+.fcsc-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Verdict badge (same style as module cards) */
+.fcsc-verdict {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.fcsc-verdict--false {
+  background: rgba(220, 38, 38, 0.1);
+  color: #dc2626;
+}
+
+.fcsc-verdict--misleading {
+  background: rgba(234, 88, 12, 0.1);
+  color: #ea580c;
+}
+
+.fcsc-verdict--partially_true {
+  background: rgba(22, 163, 74, 0.1);
+  color: #16a34a;
+}
+
+.fcsc-verdict--true {
+  background: rgba(37, 99, 235, 0.1);
+  color: #2563eb;
+}
+
+.fcsc-status {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.fcsc-status--pending {
+  background: rgba(217, 119, 6, 0.1);
+  color: #d97706;
+}
+
+.fcsc-source {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: rgba(59, 130, 246, 0.08);
+  color: #3b82f6;
+}
+
+/* Claim blockquote */
+.fcsc-claim {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1f2937;
+  line-height: 1.5;
+  font-style: italic;
+  border-left: 3px solid #d97706;
+  padding-left: 12px;
+}
+
+.fcsc--verdict-false .fcsc-claim { border-left-color: #dc2626; }
+.fcsc--verdict-misleading .fcsc-claim { border-left-color: #ea580c; }
+.fcsc--verdict-partially_true .fcsc-claim { border-left-color: #16a34a; }
+.fcsc--verdict-true .fcsc-claim { border-left-color: #2563eb; }
+
+/* City */
+.fcsc-city {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.fcsc-city-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+/* Footer */
+.fcsc-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+}
+
+.fcsc-date {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.fcsc-read-answer {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #f78da7;
+  transition: color 0.2s;
+}
+
+.fcsc--resolved:hover .fcsc-read-answer {
+  color: #dc2626;
+}
+
+/* ===================================
+   DARK THEME
+   =================================== */
+
+[data-theme="dark"] .fcsc {
+  background: #1f2937;
+}
+
+[data-theme="dark"] .fcsc--pending {
+  border-color: rgba(217, 119, 6, 0.25);
+}
+
+[data-theme="dark"] .fcsc--resolved {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .fcsc--verdict-false { border-color: rgba(220, 38, 38, 0.2); }
+[data-theme="dark"] .fcsc--verdict-misleading { border-color: rgba(234, 88, 12, 0.2); }
+[data-theme="dark"] .fcsc--verdict-partially_true { border-color: rgba(22, 163, 74, 0.2); }
+[data-theme="dark"] .fcsc--verdict-true { border-color: rgba(37, 99, 235, 0.2); }
+
+[data-theme="dark"] .fcsc--resolved:hover {
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="dark"] .fcsc-claim {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .fcsc-city {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .fcsc-date {
+  color: #6b7280;
+}

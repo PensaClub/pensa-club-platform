@@ -61,15 +61,18 @@ header > a:nth-child(1):hover {
 
 .navbar {
   display: flex;
-  gap: 2em;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 1.4em;
 }
 
 .nav-item {
   position: relative;
   color: var(--gray);
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 600;
   text-decoration: none;
+  white-space: nowrap;
   padding: 8px 0;
   transition: var(--link-transition);
   display: flex;
@@ -606,6 +609,49 @@ header.scrolled + .header-line {
 .mobile-nav-item svg[viewBox="0 0 24 24"]:has(path[d*="M19 21L12 16L5 21V5"]) {
   color: #dc2626;
 }
+/* Compact nav — medium screens */
+@media (max-width: 1400px) and (min-width: 993px) {
+  header {
+    padding: 0 1.5% 0 2%;
+  }
+
+  header > a:nth-child(1) {
+    font-size: 0.85rem;
+  }
+
+  .logo {
+    width: 1.8em;
+    margin-right: 6px;
+  }
+
+  .navbar {
+    gap: 0.6em;
+  }
+
+  .nav-item {
+    font-size: 0.78rem;
+    padding: 6px 0;
+  }
+
+  .academy-nav-icon {
+    width: 14px;
+    height: 14px;
+  }
+
+  .dropdown-arrow {
+    width: 10px;
+  }
+
+  .profile-image-header {
+    width: 34px;
+    height: 34px;
+  }
+
+  .navy {
+    gap: 0.3rem;
+  }
+}
+
 @media (max-width: 992px) {
   .desktop-nav {
     display: none;

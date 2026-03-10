@@ -1,5 +1,8 @@
 {
   "admin": {
+    "factCheck": {
+      "title": "Проверка на факти"
+    },
     "students": {
       "title": "Студенти",
       "overview": "Преглед на студенти",
@@ -319,6 +322,7 @@
     "academy-courses": "Курсове",
     "academy-lectures": "Лекции",
     "academy-mentors": "Ментори",
-    "language": "Език"
+    "language": "Език",
+    "factcheck": "ФактЧек"
   }
 }

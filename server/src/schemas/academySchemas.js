@@ -201,6 +201,7 @@ const seminarCreateSchema = z.object({
   testPassingScore: z.coerce.number().int().min(0).max(100).optional(),
   hasAssignment: z.boolean().default(false),
   assignmentDescription: z.string().optional(),
+  learningPoints: z.array(z.string().max(200)).max(10).default([]), 
   tags: z.array(z.string()).default([]),
   prerequisites: z.string().optional(),
   whatToBring: z.string().optional(),

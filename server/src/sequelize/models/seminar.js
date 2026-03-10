@@ -33,7 +33,11 @@ module.exports = (sequelize, DataTypes) => {
         sourceKey: 'id',
         as: 'materials',
       });
-
+      seminar.hasMany(models.seminar_guest_attendance, {
+        foreignKey: 'seminarId',
+        sourceKey: 'id',
+        as: 'guestAttendances',
+      });
       // Belongs to creator
       seminar.belongsTo(models.user_account, {
         foreignKey: 'createdBy',
@@ -325,6 +329,12 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.TEXT,
         allowNull: true,
         field: 'what_to_bring',
+      },
+      learningPoints: { // НОВО
+        type: DataTypes.JSONB,
+        allowNull: true,
+        defaultValue: [],
+        field: 'learning_points',
       },
     },
     {

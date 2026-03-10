@@ -1,0 +1,209 @@
+{
+  "hero": {
+    "title": "FactCheck",
+    "subtitle": "Verified information",
+    "description": "Don't believe rumors — check the facts. A platform to combat disinformation targeting elderly people in Bulgaria.",
+    "searchPlaceholder": "Search by keyword...",
+    "submitSignal": "Report a claim",
+    "browseAll": "Browse all",
+    "programLabel": "ReAction Program — Bulgarian Fund for Women",
+    "statChecked": "Verified claims",
+    "statResolved": "Reports from citizens"
+  },
+  "filters": {
+    "all": "All",
+    "allCategories": "All categories",
+    "searchPlaceholder": "Search...",
+    "sortNewest": "Newest",
+    "sortViews": "Most viewed",
+    "resultsCount": "{{count}} results",
+    "noResults": "No results found",
+    "noResultsDesc": "Try different keywords or category.",
+    "clearFilters": "Clear filters",
+    "type_all": "All",
+    "type_modules": "Verified",
+    "type_signals": "Citizen reports"
+  },
+  "card": {
+    "readMore": "Read more",
+    "views": "views"
+  },
+  "verdicts": {
+    "true": "True",
+    "false": "False",
+    "misleading": "Misleading",
+    "partially_true": "Partially true"
+  },
+  "sourceTypes": {
+    "website": "Website / Internet",
+    "internet": "Social media",
+    "newspapers": "Newspapers",
+    "news_tv": "TV news",
+    "friends": "Friends / Acquaintances",
+    "email": "Email",
+    "phone": "Phone call",
+    "anonymous_call": "Anonymous call",
+    "other": "Other"
+  },
+  "howItWorks": {
+    "title": "How does it work?",
+    "step1Title": "Report a claim",
+    "step1Desc": "Heard something suspicious? Tell us what and where.",
+    "step2Title": "We verify",
+    "step2Desc": "The PENSA team checks the claim with the help of experts.",
+    "step3Title": "We publish the answer",
+    "step3Desc": "Within 72 hours we publish the verified answer."
+  },
+  "signalForm": {
+    "title": "Heard something suspicious?",
+    "subtitle": "Report it and we will check.",
+    "claimLabel": "What claim did you hear?",
+    "claimPlaceholder": "Describe the claim exactly as you heard it...",
+    "sourceLabel": "Where did you hear it?",
+    "sourcePlaceholder": "Select source",
+    "cityLabel": "In which city?",
+    "cityPlaceholder": "e.g. Sofia",
+    "emailLabel": "Your email (optional)",
+    "emailPlaceholder": "For feedback from us",
+    "confidentialLabel": "Confidential",
+    "confidentialDesc": "Do not publish my report publicly",
+    "submit": "Submit report",
+    "submitting": "Submitting...",
+    "successTitle": "Thank you!",
+    "successDesc": "Your report has been received. We will respond within 72 hours.",
+    "sendAnother": "Submit another report",
+    "error": "An error occurred. Please try again.",
+    "errors": {
+      "claimRequired": "Please describe the claim you heard.",
+      "claimTooShort": "The description must be at least {{min}} characters.",
+      "sourceRequired": "Please select where you heard the claim.",
+      "invalidEmail": "Please enter a valid email address.",
+      "tooManyRequests": "You can submit a new report in {{minutes}} min.",
+      "generic": "An error occurred. Please try again."
+    }
+  },
+  "signal": {
+    "statusResolved": "Verified",
+    "statusPending": "Awaiting verification",
+    "readAnswer": "See answer"
+  },
+  "partners": {
+    "title": "Partners",
+    "bfjLabel": "Bulgarian Fund for Women",
+    "pensaLabel": "PENSA Foundation",
+    "programText": "The ReAction Program is by the PENSA Foundation with the financial support of the Bulgarian Fund for Women.",
+    "disclaimer": "This platform is for verifying publicly circulated claims. Please submit reports in good faith — only for information whose accuracy you doubt. Misuse of the platform for personal disputes, defamation, or false complaints is not acceptable."
+  },
+  "detail": {
+    "backToList": "Back to fact-checks",
+    "claimLabel": "Signal",
+    "verificationLabel": "Answer",
+    "section1Title": "What is being claimed?",
+    "section2Title": "What do the facts say?",
+    "section3Title": "Why does it spread?",
+    "section4Title": "What should you do?",
+    "source": "Source",
+    "downloadPdf": "Download PDF for print",
+    "shareOnFacebook": "Share on Facebook",
+    "copyLink": "Copy link",
+    "linkCopied": "Link copied!",
+    "checkedOn": "Checked on",
+    "views": "views"
+  },
+  "admin": {
+    "title": "Fact-check management",
+    "tabSignals": "Signals",
+    "tabModules": "Verifications",
+    "signals": {
+      "title": "Received signals",
+      "empty": "No signals received.",
+      "filterAll": "All",
+      "filterNew": "New",
+      "filterInReview": "In review",
+      "filterResolved": "Resolved",
+      "filterDismissed": "Dismissed"
+    },
+    "signalStatuses": {
+      "new": "New",
+      "in_review": "In review",
+      "resolved": "Resolved",
+      "dismissed": "Dismissed"
+    },
+    "signalModal": {
+      "title": "Signal details",
+      "claim": "Claim",
+      "source": "Source",
+      "city": "City",
+      "email": "Email",
+      "confidential": "Confidential",
+      "yes": "Yes",
+      "no": "No",
+      "status": "Status",
+      "adminNotes": "Notes",
+      "adminNotesPlaceholder": "Internal notes for the team...",
+      "relatedModule": "Related verification",
+      "createResponse": "Create response",
+      "none": "None",
+      "save": "Save",
+      "delete": "Delete",
+      "confirmDelete": "Are you sure you want to delete this signal?"
+    },
+    "modules": {
+      "title": "Verifications",
+      "empty": "No verifications created.",
+      "createNew": "Create verification",
+      "filterAll": "All",
+      "filterDraft": "Drafts",
+      "filterPublished": "Published",
+      "filterHidden": "Hidden"
+    },
+    "moduleStatuses": {
+      "draft": "Draft",
+      "published": "Published",
+      "hidden": "Hidden"
+    },
+    "moduleModal": {
+      "createTitle": "New verification",
+      "editTitle": "Edit verification",
+      "verdict": "Verdict",
+      "category": "Category",
+      "categoryPlaceholder": "e.g. Pensions, Euro, Health...",
+      "claimText": "Claim (exact quote)",
+      "claimPlaceholder": "The exact text of the claim...",
+      "verification": "Verification (factual answer)",
+      "verificationPlaceholder": "What the facts say...",
+      "sourceUrl": "Link to official source",
+      "sourceName": "Source name",
+      "sourceNamePlaceholder": "e.g. NSI, Ministry of Finance...",
+      "whySpreads": "Why it spreads",
+      "whySpreadsPlaceholder": "What fears it exploits...",
+      "howToReact": "How to react",
+      "howToReactPlaceholder": "2-3 simple sentences for a club conversation...",
+      "pdfUrl": "PDF file URL",
+      "status": "Status",
+      "save": "Save",
+      "create": "Create",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "publish": "Publish",
+      "hide": "Hide",
+      "confirmDelete": "Are you sure you want to delete this verification?",
+      "fieldErrors": {
+        "category": "Category must be at least 2 characters.",
+        "claimText": "Claim text must be at least 10 characters.",
+        "verification": "Verification must be at least 10 characters.",
+        "whySpreads": "This field must be at least 10 characters.",
+        "howToReact": "This field must be at least 10 characters.",
+        "sourceUrl": "Please enter a valid URL.",
+        "sourceName": "Source name is too long.",
+        "pdfUrl": "Please enter a valid URL."
+      }
+    },
+    "stats": {
+      "totalModules": "Verifications",
+      "publishedModules": "Published",
+      "totalSignals": "Signals",
+      "newSignals": "New signals"
+    }
+  }
+}

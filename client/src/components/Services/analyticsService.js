@@ -148,6 +148,24 @@ export const trackShare = (contentId, contentTitle, contentType, shareMethod, us
   saveViewCounts();
 }
 
+// Проследяване на посещение на fact-check модул
+export const trackFactCheckView = async (moduleId, moduleTitle) => {
+  ReactGA.event({
+    category: 'FactCheck',
+    action: 'View',
+    label: moduleTitle,
+    value: 1,
+    module_id: moduleId
+  });
+
+  updateLocalCache(`factcheck_${moduleId}`);
+};
+
+// Получаване на view count за fact-check модул
+export const getFactCheckViewCount = (moduleId) => {
+  return localViewCountCache[`factcheck_${moduleId}`] || 0;
+};
+
 // Проследяване на посещение на полезна връзка
 export const trackUsefulLinkView = async (linkId, linkTitle) => {
   ReactGA.event({
@@ -193,6 +211,9 @@ export const trackView = async (contentId, contentTitle, contentType = 'article'
       break;
     case 'usefulLink':
       await trackUsefulLinkView(contentId, contentTitle);
+      break;
+    case 'factCheck':
+      await trackFactCheckView(contentId, contentTitle);
       break;
     default:
       console.warn(`Unknown content type: ${contentType}`);

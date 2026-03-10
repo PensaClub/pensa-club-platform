@@ -1,6 +1,6 @@
 // server/src/middleware/botDetector.js
 
-const { article, mainImage, project, initiative, Club, mentor, image, publication, story, course, lecture } = require('../sequelize/models');
+const { article, mainImage, project, initiative, Club, mentor, image, publication, story, course, lecture, fact_check_module } = require('../sequelize/models');
 const generateArticleMetaHTML = require('../utils/metaGenerator');
 const generateProjectMetaHTML = require('../utils/projectMetaGenerator');
 const generateInitiativeMetaHTML = require('../utils/initiativeMetaGenerator');
@@ -15,6 +15,7 @@ const { generateLectureMetaHTML, generateLecturesListMetaHTML } = require('../ut
 const generateUsefulLinksMetaHTML = require('../utils/usefulLinksMetaGenerator');
 const generateTelkMetaHTML = require('../utils/telkMetaGenerator');
 const generateArticlesListMetaHTML = require('../utils/articlesListMetaGenerator');
+const { generateFactCheckListMetaHTML, generateFactCheckDetailMetaHTML } = require('../utils/factCheckMetaGenerator');
 const geoip = require('geoip-lite');
 
 /**
@@ -180,6 +181,8 @@ async function botDetector(req, res, next) {
     const lecturesListMatch = req.path.match(/^\/academy\/lectures$/);
     const lectureMatch = req.path.match(/^\/academy\/lectures\/([a-zA-Z0-9-]+)$/);
     const telkMatch = req.path.match(/^\/telk-rkme-rzi$/);
+    const factCheckListMatch = req.path.match(/^\/fact-check$/);
+    const factCheckDetailMatch = req.path.match(/^\/fact-check\/([a-zA-Z0-9-]+)$/);
 
     try {
         // ==================== ARTICLES LIST ====================
@@ -433,6 +436,37 @@ if (storyMatch) {
             const html = generateTelkMetaHTML();
             console.log('📤 Sending TELK HTML to bot');
             return res.send(html);
+        }
+
+        // ==================== FACT CHECK LIST (СТАТИЧНА СТРАНИЦА) ====================
+        if (factCheckListMatch) {
+            console.log('🔍 Processing FACT CHECK LIST page');
+
+            await logBotRequest(botName, 'page', null, 'fact-check', userAgent, clientIP);
+
+            const html = generateFactCheckListMetaHTML();
+            console.log('📤 Sending fact-check list HTML to bot');
+            return res.send(html);
+        }
+
+        // ==================== FACT CHECK DETAIL (ДИНАМИЧНА СТРАНИЦА) ====================
+        if (factCheckDetailMatch) {
+            const slug = factCheckDetailMatch[1];
+            console.log('🔍 Processing FACT CHECK DETAIL:', slug);
+
+            const foundModule = await fact_check_module.findOne({
+                where: { slug, status: 'published' },
+                raw: true,
+            });
+
+            if (foundModule) {
+                await logBotRequest(botName, 'fact-check', foundModule.id, slug, userAgent, clientIP);
+                const html = generateFactCheckDetailMetaHTML(foundModule);
+                console.log('📤 Sending fact-check detail HTML to bot');
+                return res.send(html);
+            }
+
+            console.log('⚠️ Fact-check module not found:', slug);
         }
 
         // ==================== MENTOR ====================

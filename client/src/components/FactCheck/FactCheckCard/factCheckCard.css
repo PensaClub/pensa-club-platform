@@ -1,0 +1,134 @@
+/* ===================================
+   FACT CHECK CARD — prefix: fccard-
+   =================================== */
+
+.fccard {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 24px;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1.5px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+  cursor: pointer;
+}
+
+.fccard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  border-color: rgba(0, 0, 0, 0.12);
+}
+
+.fccard-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.fccard-verdict {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.fccard-verdict--false {
+  background: rgba(220, 38, 38, 0.1);
+  color: #dc2626;
+}
+
+.fccard-verdict--misleading {
+  background: rgba(234, 88, 12, 0.1);
+  color: #ea580c;
+}
+
+.fccard-verdict--partially_true {
+  background: rgba(22, 163, 74, 0.1);
+  color: #16a34a;
+}
+
+.fccard-verdict--true {
+  background: rgba(37, 99, 235, 0.1);
+  color: #2563eb;
+}
+
+.fccard-category {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: rgba(247, 141, 167, 0.08);
+  color: #f78da7;
+}
+
+.fccard-claim {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1f2937;
+  line-height: 1.5;
+  font-style: italic;
+  border-left: 3px solid #f78da7;
+  padding-left: 12px;
+}
+
+.fccard-preview {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #4b5563;
+  line-height: 1.5;
+}
+
+.fccard-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+}
+
+.fccard-date,
+.fccard-views {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.fccard-read-more {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #f78da7;
+  transition: color 0.2s;
+}
+
+.fccard:hover .fccard-read-more {
+  color: #dc2626;
+}
+
+/* Dark theme */
+[data-theme="dark"] .fccard {
+  background: #1f2937;
+  border-color: rgba(247, 141, 167, 0.08);
+}
+
+[data-theme="dark"] .fccard:hover {
+  border-color: rgba(247, 141, 167, 0.2);
+}
+
+[data-theme="dark"] .fccard-claim {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .fccard-preview {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .fccard-date,
+[data-theme="dark"] .fccard-views {
+  color: #6b7280;
+}
