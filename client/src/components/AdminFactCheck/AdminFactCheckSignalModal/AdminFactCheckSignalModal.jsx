@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import './adminFactCheckSignalModal.css';
 
-export const AdminFactCheckSignalModal = ({ signal, modules, onClose, onSave, onDelete, onCreateResponse }) => {
+export const AdminFactCheckSignalModal = ({ signal, modules, onClose, onSave, onDelete, onCreateResponse, onSendEmail }) => {
     const { t } = useTranslation('factcheck');
 
     const [status, setStatus] = useState(signal.status || 'new');
@@ -129,6 +129,14 @@ export const AdminFactCheckSignalModal = ({ signal, modules, onClose, onSave, on
                         </div>
                     </div>
 
+                    {/* REPORTER NOTES */}
+                    {signal.notes && (
+                        <div className="afcsm-section">
+                            <label className="afcsm-label">{t('admin.signalModal.reporterNotes')}</label>
+                            <div className="afcsm-reporter-notes">{signal.notes}</div>
+                        </div>
+                    )}
+
                     {/* EDITABLE FIELDS */}
                     <div className="afcsm-divider"></div>
 
@@ -196,6 +204,19 @@ export const AdminFactCheckSignalModal = ({ signal, modules, onClose, onSave, on
                         </svg>
                         {t('admin.signalModal.delete')}
                     </button>
+
+                    {signal.reporterEmail && (
+                        <button
+                            className="afcsm-btn afcsm-btn--email"
+                            onClick={() => onSendEmail(signal)}
+                        >
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                                <polyline points="22,6 12,13 2,6" />
+                            </svg>
+                            {t('admin.signalModal.sendEmail')}
+                        </button>
+                    )}
 
                     <button
                         className="afcsm-btn afcsm-btn--create-response"

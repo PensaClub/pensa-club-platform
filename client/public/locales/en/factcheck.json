@@ -65,6 +65,9 @@
     "cityPlaceholder": "e.g. Sofia",
     "emailLabel": "Your email (optional)",
     "emailPlaceholder": "For feedback from us",
+    "notesLabel": "Notes (optional)",
+    "notesPlaceholder": "E.g. I would like a personal reply / I already checked at...",
+    "notesCharCount": "{{count}} / {{max}}",
     "confidentialLabel": "Confidential",
     "confidentialDesc": "Do not publish my report publicly",
     "submit": "Submit report",
@@ -141,6 +144,8 @@
       "status": "Status",
       "adminNotes": "Notes",
       "adminNotesPlaceholder": "Internal notes for the team...",
+      "reporterNotes": "Notes from reporter",
+      "sendEmail": "Send email",
       "relatedModule": "Related verification",
       "createResponse": "Create response",
       "none": "None",
@@ -204,6 +209,18 @@
       "publishedModules": "Published",
       "totalSignals": "Signals",
       "newSignals": "New signals"
+    },
+    "personalEmailModal": {
+      "title": "Send email",
+      "to": "To",
+      "subject": "Subject",
+      "subjectDefault": "Regarding your report — FactCheck / PENSA",
+      "message": "Message",
+      "messagePlaceholder": "Write your message...",
+      "send": "Send",
+      "sending": "Sending...",
+      "success": "Email sent successfully.",
+      "error": "Error sending email."
     }
   }
 }

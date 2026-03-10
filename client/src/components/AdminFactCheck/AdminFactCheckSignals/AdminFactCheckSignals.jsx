@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import './adminFactCheckSignals.css';
 import { useFactCheck } from '../../contexts/FactCheckProvider';
 import { AdminFactCheckSignalModal } from '../AdminFactCheckSignalModal/AdminFactCheckSignalModal';
+import { AdminFactCheckPersonalEmailModal } from '../AdminFactCheckPersonalEmailModal/AdminFactCheckPersonalEmailModal';
 
 export const AdminFactCheckSignals = ({ signals, modules, onRefresh, onCreateResponse }) => {
     const { t } = useTranslation('factcheck');
@@ -13,6 +14,7 @@ export const AdminFactCheckSignals = ({ signals, modules, onRefresh, onCreateRes
     const [activeFilter, setActiveFilter] = useState('all');
     const [selectedSignal, setSelectedSignal] = useState(null);
     const [modalOpen, setModalOpen] = useState(false);
+    const [emailModalSignal, setEmailModalSignal] = useState(null);
 
     // ===================================
     // STATUS FILTERS
@@ -164,7 +166,22 @@ export const AdminFactCheckSignals = ({ signals, modules, onRefresh, onCreateRes
                                     onClick={() => handleSignalClick(signal)}
                                 >
                                     <td className="afcs-cell-claim">
-                                        {truncate(signal.claimText)}
+                                        <span>{truncate(signal.claimText)}</span>
+                                        {signal.notes && (
+                                            <span className="afcs-indicator afcs-indicator--notes" title="Има забележки">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                                                </svg>
+                                            </span>
+                                        )}
+                                        {signal.reporterEmail && (
+                                            <span className="afcs-indicator afcs-indicator--email" title={signal.reporterEmail}>
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                                                    <polyline points="22,6 12,13 2,6" />
+                                                </svg>
+                                            </span>
+                                        )}
                                     </td>
                                     <td className="afcs-cell-source">
                                         {t(`sourceTypes.${signal.sourceType}`, signal.sourceType)}
@@ -219,6 +236,17 @@ export const AdminFactCheckSignals = ({ signals, modules, onRefresh, onCreateRes
                         setSelectedSignal(null);
                         onCreateResponse(signal);
                     }}
+                    onSendEmail={(signal) => {
+                        setEmailModalSignal(signal);
+                    }}
+                />
+            )}
+
+            {/* EMAIL MODAL */}
+            {emailModalSignal && (
+                <AdminFactCheckPersonalEmailModal
+                    signal={emailModalSignal}
+                    onClose={() => setEmailModalSignal(null)}
                 />
             )}
         </div>

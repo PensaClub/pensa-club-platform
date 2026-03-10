@@ -10,7 +10,8 @@
       "Bash(python:*)",
       "Bash(grep:*)",
       "Bash(\"/c/Program Files/Google/Chrome/Application/chrome.exe\":*)",
-      "Bash(identify:*)"
+      "Bash(identify:*)",
+      "Bash(cd C:/Users/User/Documents/GitHub/Digital-Literacy-Wellbeing-60-plus/client && npx react-scripts build 2>&1 | tail -20)"
     ]
   }
 }

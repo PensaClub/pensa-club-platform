@@ -321,6 +321,7 @@ factCheckController.post('/signals', signalRateLimiter, async (req, res, next) =
     // Clean empty strings to null
     if (validated.reporterEmail === '') validated.reporterEmail = null;
     if (validated.city === '') validated.city = null;
+    if (validated.notes === '') validated.notes = null;
 
     const signal = await fact_check_signal.create(validated);
 
@@ -341,16 +342,30 @@ factCheckController.post('/signals', signalRateLimiter, async (req, res, next) =
       console.error('Failed to create admin notification:', notifError);
     }
 
-    // Send email notification
+    // Send email notification to admin
     try {
       await handlePersonalEmail({
         from: validated.reporterEmail || 'noreply@pensa.club',
         to: 'pensa.club@gmail.com',
         subject: '📋 Нов сигнал за проверка на факти',
-        message: `Нов сигнал за проверка на факти:\n\nТвърдение: ${validated.claimText}\n\nИзточник: ${validated.sourceType}\nГрад: ${validated.city || 'Не е посочен'}\nИмейл: ${validated.reporterEmail || 'Не е посочен'}\nПоверително: ${validated.isConfidential ? 'Да' : 'Не'}`,
+        message: `Нов сигнал за проверка на факти:\n\nТвърдение: ${validated.claimText}\n\nИзточник: ${validated.sourceType}\nГрад: ${validated.city || 'Не е посочен'}\nИмейл: ${validated.reporterEmail || 'Не е посочен'}\nПоверително: ${validated.isConfidential ? 'Да' : 'Не'}${validated.notes ? `\nЗабележки: ${validated.notes}` : ''}`,
       });
     } catch (emailError) {
-      console.error('Failed to send email notification:', emailError);
+      console.error('Failed to send admin email notification:', emailError);
+    }
+
+    // Send confirmation email to reporter (if email provided)
+    if (validated.reporterEmail) {
+      try {
+        await handlePersonalEmail({
+          from: 'noreply@pensa.club',
+          to: validated.reporterEmail,
+          subject: '✅ Вашият сигнал е приет — ПроВерка / ПЕНСА',
+          message: `Здравейте,\n\nБлагодарим Ви, че подадохте сигнал до платформата ПроВерка на Фондация ПЕНСА.\n\nВашият сигнал е приет и ще бъде разгледан от нашия екип в рамките на 72 часа.\n\nТвърдение: "${validated.claimText.substring(0, 200)}${validated.claimText.length > 200 ? '...' : ''}"\n\nАко имате допълнителни въпроси, можете да се свържете с нас на pensa.club@gmail.com.\n\nС уважение,\nЕкипът на ПЕНСА\nhttps://pensa.club/fact-check`,
+        });
+      } catch (emailError) {
+        console.error('Failed to send reporter confirmation email:', emailError);
+      }
     }
 
     return res.status(201).json({
@@ -559,6 +574,36 @@ factCheckController.patch('/admin/modules/:id/publish', isAuth, rbac.checkPermis
     if (!module) return res.status(404).json({ message: 'Module not found.' });
 
     await module.update({ status: 'published' });
+
+    // Notify reporters of linked signals
+    try {
+      const linkedSignals = await fact_check_signal.findAll({
+        where: { relatedModuleId: module.id },
+        attributes: ['reporterEmail'],
+      });
+
+      const verdictLabels = {
+        'true': 'Вярно',
+        'false': 'Невярно',
+        'misleading': 'Подвеждащо',
+        'partially_true': 'Частично вярно',
+      };
+
+      const detailUrl = `https://pensa.club/fact-check/${module.slug}`;
+
+      for (const signal of linkedSignals) {
+        if (signal.reporterEmail) {
+          await handlePersonalEmail({
+            from: 'noreply@pensa.club',
+            to: signal.reporterEmail,
+            subject: '📢 Проверката на вашия сигнал е публикувана — ПроВерка / ПЕНСА',
+            message: `Здравейте,\n\nЕкипът на ПроВерка приключи проверката по вашия сигнал.\n\nТвърдение: "${module.claimText.substring(0, 200)}${module.claimText.length > 200 ? '...' : ''}"\n\nВердикт: ${verdictLabels[module.verdict] || module.verdict}\n\nМожете да видите пълните детайли тук:\n${detailUrl}\n\nС уважение,\nЕкипът на ПЕНСА\nhttps://pensa.club/fact-check`,
+          });
+        }
+      }
+    } catch (emailError) {
+      console.error('Failed to notify reporters on publish:', emailError);
+    }
 
     return res.json({ success: true, module });
   } catch (error) {
