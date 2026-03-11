@@ -22,7 +22,8 @@
       "Bash(npx sequelize-cli:*)",
       "Bash(find \"C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\Digital-Literacy-Wellbeing-60-plus\\\\client\\\\src\\\\components\" -type f -name \"*Project*\" 2>/dev/null | head -20)",
       "Bash(npm run:*)",
-      "Bash(cd \"/c/Users/User/Documents/GitHub/Digital-Literacy-Wellbeing-60-plus/client/public/locales\" && grep -n \"\\\\\"validation\\\\\":\" bg/content.json en/content.json de/content.json)"
+      "Bash(cd \"/c/Users/User/Documents/GitHub/Digital-Literacy-Wellbeing-60-plus/client/public/locales\" && grep -n \"\\\\\"validation\\\\\":\" bg/content.json en/content.json de/content.json)",
+      "Bash(find /c/Users/User/Documents/GitHub/Digital-Literacy-Wellbeing-60-plus -type f -name \"*handle*error*\" 2>/dev/null | head -20)"
     ]
   }
 }

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LocalizedLink as Link } from '../LocalizedLink/LocalizedLink';
-import { ArrowLeft, Settings, Snowflake, BookOpen, Gift, Shield } from 'lucide-react';
+import { ArrowLeft, Settings, Snowflake, BookOpen, Gift, Shield, Bug } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useSiteSettingsAdminContext } from '../contexts/SiteSettingsAdminContext';
 import SettingsAdminSection from './SettingsAdminSection/SettingsAdminSection';
@@ -11,6 +11,7 @@ import GreetingConfig from './GreetingConfig/GreetingConfig';
 import ArticleLimitConfig from './ArticleLimitConfig/ArticleLimitConfig';
 import IpManagementConfig from './IpManagementConfig/IpManagementConfig';
 import { IpManagementProvider } from '../contexts/IpManagementContext';
+import ErrorLogsConfig from './ErrorLogsConfig/ErrorLogsConfig';
 import ScrollToTop from '../ScrollToTop/ScrollToTop';
 import './siteSettingsAdmin.css';
 
@@ -151,6 +152,19 @@ const SiteSettingsAdmin = () => {
                         <IpManagementProvider>
                             <IpManagementConfig />
                         </IpManagementProvider>
+                    </SettingsAdminSection>
+
+                    {/* Error Logs */}
+                    <SettingsAdminSection
+                        id="errorLogs"
+                        title={t('siteSettingsAdmin.errorLogs.title')}
+                        description={t('siteSettingsAdmin.errorLogs.description')}
+                        icon={<Bug size={24} />}
+                        color="#ef4444"
+                        isOpen={openCard === 'errorLogs'}
+                        onToggle={() => toggleCard('errorLogs')}
+                    >
+                        <ErrorLogsConfig />
                     </SettingsAdminSection>
                 </div>
             </div>
