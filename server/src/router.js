@@ -31,6 +31,7 @@ const siteSettingsController = require('./controllers/siteSettingsController');
 const usefulLinksController = require('./controllers/usefulLinksController');
 const factCheckController = require('./controllers/factCheckController');
 const ipManagementController = require('./controllers/ipManagementController');
+const errorLoggingController = require('./controllers/errorLoggingController');
 
 router.use('/auth', authController);
 router.use('/user', userController);
@@ -64,6 +65,7 @@ router.use('/admin/site-settings', siteSettingsController);
 router.use('/admin/ip-management', ipManagementController);
 router.use('/useful-links', usefulLinksController);
 router.use('/fact-check', factCheckController);
+router.use('/error-logging', errorLoggingController);
 
 router.use((err, req, res, next) => {
     errorHandler(err, req, res, err.statusCode || 500);
