@@ -167,8 +167,10 @@ export const ProjectView = () => {
         const loadLocation = async () => {
             if (currentProject?.location?.[0]?.coordinates) {
                 const coords = currentProject.location[0].coordinates;
-                const location = await getLocationFromCoordinates(coords.lat, coords.lng);
-                setLocationText(location);
+                if (coords.lat != null && coords.lng != null) {
+                    const location = await getLocationFromCoordinates(coords.lat, coords.lng);
+                    setLocationText(location);
+                }
             }
         };
 
@@ -749,6 +751,14 @@ export const ProjectView = () => {
                                     {t('projectView.navigation.contact')}
                                 </button>
                             )}
+                            {currentProject.usefulLinks?.length > 0 && (
+                                <button
+                                    className={`pvw-nav-link ${activeSection === 'useful-links' ? 'active' : ''}`}
+                                    onClick={() => scrollToSection('useful-links')}
+                                >
+                                    {t('projectView.navigation.usefulLinks')}
+                                </button>
+                            )}
                             {isAuthentication && (
                                 <button
                                     className={`pvw-nav-link ${activeSection === 'application-form' ? 'active' : ''}`}
@@ -1028,6 +1038,26 @@ export const ProjectView = () => {
                                             )}
                                         </div>
                                     </div>
+                                </div>
+                            </section>
+                        )}
+                        {/* Useful Links Section */}
+                        {currentProject.usefulLinks?.length > 0 && (
+                            <section id="useful-links" className="pvw-section pvw-useful-links-section">
+                                <h2 className="pvw-section-title">{t('projectView.sections.usefulLinks')}</h2>
+                                <div className="pvw-useful-links-grid">
+                                    {currentProject.usefulLinks.map((link, index) => (
+                                        <a
+                                            key={index}
+                                            href={link.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="pvw-useful-link-card"
+                                        >
+                                            <span className="pvw-useful-link-label">{link.label}</span>
+                                            <span className="pvw-useful-link-url">{link.url}</span>
+                                        </a>
+                                    ))}
                                 </div>
                             </section>
                         )}

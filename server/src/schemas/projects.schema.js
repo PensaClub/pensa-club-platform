@@ -59,6 +59,12 @@ const TimelineSchema = z
         }
     );
 
+// Useful link schema
+const UsefulLinkSchema = z.object({
+    url: z.string().url().max(2048),
+    label: z.string().min(1).max(200),
+});
+
 // Individual beneficiary schema
 const BeneficiaryItemSchema = z.object({
     id: z.string().min(1, 'Beneficiary ID is required').optional(),
@@ -175,6 +181,9 @@ const BaseProjectSchema = z
 
         // Social media and content
         socialMedia: SocialMediaSchema.nullable().optional(),
+
+        // Useful links
+        usefulLinks: z.array(UsefulLinkSchema).max(20).nullable().optional(),
 
         // Beneficiaries
         beneficiaries: BeneficiariesSchema.nullable().optional(),

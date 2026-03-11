@@ -49,6 +49,7 @@ import TeamSection from './TeamSection/TeamSection.jsx';
 import PartnersSponsorsSection from './PartnersSponsorsSection/PartnersSponsorsSection.jsx';
 import MediaSection from './MediaSection/MediaSection.jsx';
 import ContactSection from './ContactSection/ContactSection.jsx';
+import UsefulLinksSection from './UsefulLinksSection/UsefulLinksSection.jsx';
 
 const ProjectCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false }) => {
     const { t } = useTranslation('content');
@@ -454,7 +455,8 @@ const ProjectCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false 
         { id: 'team', label: t('projects.create.team'), icon: faUsers },
         { id: 'partners-sponsors', label: t('projects.create.partnersSponsors'), icon: faHandshake },
         { id: 'media', label: t('projects.create.media'), icon: faImage },
-        { id: 'contact', label: t('projects.create.contact'), icon: faAddressCard }
+        { id: 'contact', label: t('projects.create.contact'), icon: faAddressCard },
+        { id: 'useful-links', label: t('projects.create.usefulLinks'), icon: faLink }
     ];
 
     // 📊 Calculate form progress
@@ -518,7 +520,7 @@ const ProjectCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false 
         if (confirmed) {
             clearLocalStorage();
             setShowLocalStoragePrompt(false);
-            navigate('/profile/project-create');
+            navigate('/projects-create');
         }
     };
 
@@ -535,7 +537,7 @@ const ProjectCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false 
   // 🔧 ЗАПАЗВАМЕ В localStorage ПРЕДИ PREVIEW
   saveToLocalStorage(values);
 
-  navigate('/profile/project-preview', {
+  navigate('/project-preview', {
     state: { 
       previewData: {
         ...values,
@@ -1152,6 +1154,14 @@ const ProjectCreateForm = ({ initialValues, onSubmitHandler, isEditMode = false 
                                 removeContactImage={removeContactImage}
                             />
                         )}
+                        {/* 🔗 SECTION 10: Useful Links */}
+                        {activeSection === 'useful-links' && (
+                            <UsefulLinksSection
+                                values={values}
+                                setValues={setValues}
+                            />
+                        )}
+
                         {/* Navigation buttons */}
                         <div className="project-form-navigation">
                             <button

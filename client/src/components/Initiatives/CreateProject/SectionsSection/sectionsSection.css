@@ -2,6 +2,13 @@
 /* SECTIONS SECTION */
 /* ======================= */
 
+/* Active section highlight (from ProjectSectionQuickMenu) */
+.project-sections-item.psqm-active {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+}
+
+
 /* Sections Help */
 .project-sections-help {
     background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
