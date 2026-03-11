@@ -123,6 +123,7 @@ ipManagementController.get('/visits', isAuth, rbac.checkPermission('siteSettings
 
     // Sort order
     const orderMap = {
+      'recent': [['lastVisitedAt', 'DESC']],
       'visits-desc': [['visitCount', 'DESC']],
       'visits-asc': [['visitCount', 'ASC']],
     };

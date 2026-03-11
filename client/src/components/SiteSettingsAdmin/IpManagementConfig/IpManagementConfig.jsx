@@ -314,6 +314,14 @@ const IpManagementConfig = () => {
                         </div>
                         <div className="imc-sort">
                             <button
+                                className={`imc-sort-btn ${sort === '' || sort === 'recent' ? 'imc-sort-btn--active' : ''}`}
+                                onClick={() => handleSortChange('recent')}
+                                title={t('siteSettingsAdmin.ipManagement.sortRecent')}
+                            >
+                                <Calendar size={14} />
+                                {t('siteSettingsAdmin.ipManagement.sortRecent')}
+                            </button>
+                            <button
                                 className={`imc-sort-btn ${sort === 'visits-desc' ? 'imc-sort-btn--active' : ''}`}
                                 onClick={() => handleSortChange('visits-desc')}
                                 title={t('siteSettingsAdmin.ipManagement.sortMost')}

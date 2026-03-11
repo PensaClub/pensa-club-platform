@@ -282,8 +282,9 @@
       "periodAll": "All",
       "totalRecords": "records",
       "refresh": "Refresh",
-      "sortMost": "Most visits",
-      "sortLeast": "Least visits"
+      "sortRecent": "Recent",
+      "sortMost": "Most",
+      "sortLeast": "Least"
     },
     "articleLimit": "Article Limit",
     "articleLimitDesc": "Limits the number of articles unregistered users can read",
