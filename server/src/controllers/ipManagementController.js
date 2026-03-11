@@ -103,7 +103,7 @@ ipManagementController.get('/stats', isAuth, rbac.checkPermission('siteSettings'
 
 ipManagementController.get('/visits', isAuth, rbac.checkPermission('siteSettings', 'update'), async (req, res, next) => {
   try {
-    const { page = 1, limit = 50, search, period } = req.query;
+    const { page = 1, limit = 50, search, period, sort } = req.query;
     const offset = (parseInt(page) - 1) * parseInt(limit);
 
     const where = {};
@@ -121,9 +121,16 @@ ipManagementController.get('/visits', isAuth, rbac.checkPermission('siteSettings
       ];
     }
 
+    // Sort order
+    const orderMap = {
+      'visits-desc': [['visitCount', 'DESC']],
+      'visits-asc': [['visitCount', 'ASC']],
+    };
+    const order = orderMap[sort] || [['lastVisitedAt', 'DESC']];
+
     const { count, rows: visits } = await ip_visit.findAndCountAll({
       where,
-      order: [['lastVisitedAt', 'DESC']],
+      order,
       limit: parseInt(limit),
       offset,
     });

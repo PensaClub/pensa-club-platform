@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Ban, ShieldOff, ShieldCheck, Trash2, Plus, Search, Check, X, Lock, LockOpen, ChevronLeft, ChevronRight, Eye, Globe, Calendar } from 'lucide-react';
+import { Ban, ShieldOff, ShieldCheck, Trash2, Plus, Search, Check, X, Lock, LockOpen, ChevronLeft, ChevronRight, Eye, Globe, Calendar, RefreshCw, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { useIpManagement } from '../../contexts/IpManagementContext';
 import './ipManagementConfig.css';
 
@@ -28,10 +28,15 @@ const IpManagementConfig = () => {
     const [activeTab, setActiveTab] = useState('visits');
     const [search, setSearch] = useState('');
     const [period, setPeriod] = useState('all');
+    const [sort, setSort] = useState('');
+    const [whitelistSort, setWhitelistSort] = useState('');
 
     // Visits tab — inline block form
     const [blockingIp, setBlockingIp] = useState(null);
     const [blockReason, setBlockReason] = useState('');
+    const [blockPassword, setBlockPassword] = useState('');
+    const [needsPassword, setNeedsPassword] = useState(false);
+    const [isRefreshing, setIsRefreshing] = useState(false);
 
     // Blocked tab — manual block form
     const [manualBlockIp, setManualBlockIp] = useState('');
@@ -61,28 +66,44 @@ const IpManagementConfig = () => {
     // HANDLERS — VISITS TAB
     // ===================================
 
-    const handleBlock = async (ipAddress, reason) => {
-        if (!window.confirm(t('siteSettingsAdmin.ipManagement.confirmBlock', { ip: ipAddress }))) return;
-        const result = await blockIp(ipAddress, reason);
+    const handleBlock = async (ipAddress, reason, password) => {
+        if (!needsPassword && !window.confirm(t('siteSettingsAdmin.ipManagement.confirmBlock', { ip: ipAddress }))) return;
+        const result = await blockIp(ipAddress, reason, password);
         if (result.success) {
             setBlockingIp(null);
             setBlockReason('');
+            setBlockPassword('');
+            setNeedsPassword(false);
+        } else if (result.requiresPassword) {
+            setNeedsPassword(true);
         }
+    };
+
+    const handleRefresh = async () => {
+        setIsRefreshing(true);
+        await Promise.all([fetchStats(), fetchVisits(search, period, visitsPagination.page, sort), fetchBlockedIps(), fetchWhitelist()]);
+        setIsRefreshing(false);
     };
 
     const handleSearch = (e) => {
         e.preventDefault();
-        fetchVisits(search, period, 1);
+        fetchVisits(search, period, 1, sort);
     };
 
     const handlePeriodChange = (newPeriod) => {
         setPeriod(newPeriod);
-        fetchVisits(search, newPeriod, 1);
+        fetchVisits(search, newPeriod, 1, sort);
+    };
+
+    const handleSortChange = (newSort) => {
+        const nextSort = sort === newSort ? '' : newSort;
+        setSort(nextSort);
+        fetchVisits(search, period, 1, nextSort);
     };
 
     const handlePageChange = (newPage) => {
         if (newPage < 1 || newPage > visitsPagination.totalPages) return;
-        fetchVisits(search, period, newPage);
+        fetchVisits(search, period, newPage, sort);
     };
 
     // ===================================
@@ -182,6 +203,20 @@ const IpManagementConfig = () => {
         { key: 'all', label: t('siteSettingsAdmin.ipManagement.periodAll') },
     ];
 
+    const handleWhitelistSortChange = (newSort) => {
+        setWhitelistSort((prev) => (prev === newSort ? '' : newSort));
+    };
+
+    const sortedWhitelist = [...whitelist].sort((a, b) => {
+        if (whitelistSort === 'ip-asc') return a.ipAddress.localeCompare(b.ipAddress);
+        if (whitelistSort === 'ip-desc') return b.ipAddress.localeCompare(a.ipAddress);
+        if (whitelistSort === 'label-asc') return (a.label || '').localeCompare(b.label || '');
+        if (whitelistSort === 'label-desc') return (b.label || '').localeCompare(a.label || '');
+        if (whitelistSort === 'system') return (b.isSystem ? 1 : 0) - (a.isSystem ? 1 : 0);
+        if (whitelistSort === 'custom') return (a.isSystem ? 1 : 0) - (b.isSystem ? 1 : 0);
+        return 0;
+    });
+
     // ===================================
     // RENDER
     // ===================================
@@ -225,27 +260,37 @@ const IpManagementConfig = () => {
             )}
 
             {/* TABS */}
-            <div className="imc-tabs">
+            <div className="imc-tabs-row">
+                <div className="imc-tabs">
+                    <button
+                        className={`imc-tab ${activeTab === 'visits' ? 'imc-tab--active' : ''}`}
+                        onClick={() => setActiveTab('visits')}
+                    >
+                        {t('siteSettingsAdmin.ipManagement.tabVisits')}
+                        <span className="imc-tab-badge">{visitsPagination.total || visits.length}</span>
+                    </button>
+                    <button
+                        className={`imc-tab ${activeTab === 'blocked' ? 'imc-tab--active' : ''}`}
+                        onClick={() => setActiveTab('blocked')}
+                    >
+                        {t('siteSettingsAdmin.ipManagement.tabBlocked')}
+                        {blockedIps.length > 0 && <span className="imc-tab-badge imc-tab-badge--red">{blockedIps.length}</span>}
+                    </button>
+                    <button
+                        className={`imc-tab ${activeTab === 'whitelist' ? 'imc-tab--active' : ''}`}
+                        onClick={() => setActiveTab('whitelist')}
+                    >
+                        {t('siteSettingsAdmin.ipManagement.tabWhitelist')}
+                        <span className="imc-tab-badge imc-tab-badge--green">{whitelist.length}</span>
+                    </button>
+                </div>
                 <button
-                    className={`imc-tab ${activeTab === 'visits' ? 'imc-tab--active' : ''}`}
-                    onClick={() => setActiveTab('visits')}
+                    className={`imc-refresh-btn ${isRefreshing ? 'imc-refresh-btn--spinning' : ''}`}
+                    onClick={handleRefresh}
+                    disabled={isRefreshing}
+                    title={t('siteSettingsAdmin.ipManagement.refresh')}
                 >
-                    {t('siteSettingsAdmin.ipManagement.tabVisits')}
-                    <span className="imc-tab-badge">{visitsPagination.total || visits.length}</span>
-                </button>
-                <button
-                    className={`imc-tab ${activeTab === 'blocked' ? 'imc-tab--active' : ''}`}
-                    onClick={() => setActiveTab('blocked')}
-                >
-                    {t('siteSettingsAdmin.ipManagement.tabBlocked')}
-                    {blockedIps.length > 0 && <span className="imc-tab-badge imc-tab-badge--red">{blockedIps.length}</span>}
-                </button>
-                <button
-                    className={`imc-tab ${activeTab === 'whitelist' ? 'imc-tab--active' : ''}`}
-                    onClick={() => setActiveTab('whitelist')}
-                >
-                    {t('siteSettingsAdmin.ipManagement.tabWhitelist')}
-                    <span className="imc-tab-badge imc-tab-badge--green">{whitelist.length}</span>
+                    <RefreshCw size={16} />
                 </button>
             </div>
 
@@ -254,17 +299,37 @@ const IpManagementConfig = () => {
             {/* ═══════════════════════════════════ */}
             {activeTab === 'visits' && (
                 <div className="imc-panel">
-                    {/* Period filter */}
-                    <div className="imc-filters">
-                        {periods.map((p) => (
+                    {/* Period filter + Sort */}
+                    <div className="imc-toolbar">
+                        <div className="imc-filters">
+                            {periods.map((p) => (
+                                <button
+                                    key={p.key}
+                                    className={`imc-filter-btn ${period === p.key ? 'imc-filter-btn--active' : ''}`}
+                                    onClick={() => handlePeriodChange(p.key)}
+                                >
+                                    {p.label}
+                                </button>
+                            ))}
+                        </div>
+                        <div className="imc-sort">
                             <button
-                                key={p.key}
-                                className={`imc-filter-btn ${period === p.key ? 'imc-filter-btn--active' : ''}`}
-                                onClick={() => handlePeriodChange(p.key)}
+                                className={`imc-sort-btn ${sort === 'visits-desc' ? 'imc-sort-btn--active' : ''}`}
+                                onClick={() => handleSortChange('visits-desc')}
+                                title={t('siteSettingsAdmin.ipManagement.sortMost')}
                             >
-                                {p.label}
+                                <ArrowDown size={14} />
+                                {t('siteSettingsAdmin.ipManagement.visits')}
                             </button>
-                        ))}
+                            <button
+                                className={`imc-sort-btn ${sort === 'visits-asc' ? 'imc-sort-btn--active' : ''}`}
+                                onClick={() => handleSortChange('visits-asc')}
+                                title={t('siteSettingsAdmin.ipManagement.sortLeast')}
+                            >
+                                <ArrowUp size={14} />
+                                {t('siteSettingsAdmin.ipManagement.visits')}
+                            </button>
+                        </div>
                     </div>
 
                     <form className="imc-search" onSubmit={handleSearch}>
@@ -326,10 +391,20 @@ const IpManagementConfig = () => {
                                                                 value={blockReason}
                                                                 onChange={(e) => setBlockReason(e.target.value)}
                                                             />
-                                                            <button className="imc-icon-btn imc-icon-btn--confirm" onClick={() => handleBlock(visit.ipAddress, blockReason)} title={t('siteSettingsAdmin.ipManagement.confirm')}>
+                                                            {needsPassword && (
+                                                                <input
+                                                                    type="password"
+                                                                    className="imc-password-input"
+                                                                    placeholder={t('siteSettingsAdmin.ipManagement.passwordPlaceholder')}
+                                                                    value={blockPassword}
+                                                                    onChange={(e) => setBlockPassword(e.target.value)}
+                                                                    autoComplete="off"
+                                                                />
+                                                            )}
+                                                            <button className="imc-icon-btn imc-icon-btn--confirm" onClick={() => handleBlock(visit.ipAddress, blockReason, blockPassword)} disabled={needsPassword && !blockPassword.trim()} title={t('siteSettingsAdmin.ipManagement.confirm')}>
                                                                 <Check size={15} />
                                                             </button>
-                                                            <button className="imc-icon-btn imc-icon-btn--cancel" onClick={() => { setBlockingIp(null); setBlockReason(''); }} title={t('admin.cancel')}>
+                                                            <button className="imc-icon-btn imc-icon-btn--cancel" onClick={() => { setBlockingIp(null); setBlockReason(''); setBlockPassword(''); setNeedsPassword(false); }} title={t('admin.cancel')}>
                                                                 <X size={15} />
                                                             </button>
                                                         </div>
@@ -476,6 +551,37 @@ const IpManagementConfig = () => {
                     </form>
 
                     {whitelist.length > 0 ? (
+                        <>
+                        <div className="imc-sort">
+                            <button
+                                className={`imc-sort-btn ${whitelistSort === 'ip-asc' ? 'imc-sort-btn--active' : ''}`}
+                                onClick={() => handleWhitelistSortChange('ip-asc')}
+                                title="IP A→Z"
+                            >
+                                <ArrowUp size={14} /> IP
+                            </button>
+                            <button
+                                className={`imc-sort-btn ${whitelistSort === 'ip-desc' ? 'imc-sort-btn--active' : ''}`}
+                                onClick={() => handleWhitelistSortChange('ip-desc')}
+                                title="IP Z→A"
+                            >
+                                <ArrowDown size={14} /> IP
+                            </button>
+                            <button
+                                className={`imc-sort-btn ${whitelistSort === 'label-asc' ? 'imc-sort-btn--active' : ''}`}
+                                onClick={() => handleWhitelistSortChange('label-asc')}
+                                title={t('siteSettingsAdmin.ipManagement.label') + ' A→Z'}
+                            >
+                                <ArrowUp size={14} /> {t('siteSettingsAdmin.ipManagement.label')}
+                            </button>
+                            <button
+                                className={`imc-sort-btn ${whitelistSort === 'system' ? 'imc-sort-btn--active' : ''}`}
+                                onClick={() => handleWhitelistSortChange('system')}
+                                title={t('siteSettingsAdmin.ipManagement.system')}
+                            >
+                                <ShieldCheck size={14} /> {t('siteSettingsAdmin.ipManagement.system')}
+                            </button>
+                        </div>
                         <div className="imc-table-wrapper">
                             <table className="imc-table">
                                 <thead>
@@ -487,7 +593,7 @@ const IpManagementConfig = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {whitelist.map((entry) => (
+                                    {sortedWhitelist.map((entry) => (
                                         <tr key={entry.id} className={entry.isSystem ? 'imc-row--system' : ''}>
                                             <td className="imc-cell-ip">
                                                 <span className="imc-ip">{entry.ipAddress}</span>
@@ -553,6 +659,7 @@ const IpManagementConfig = () => {
                                 </tbody>
                             </table>
                         </div>
+                        </>
                     ) : (
                         <div className="imc-empty">{t('siteSettingsAdmin.ipManagement.noWhitelist')}</div>
                     )}
