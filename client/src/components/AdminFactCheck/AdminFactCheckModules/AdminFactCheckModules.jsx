@@ -65,6 +65,7 @@ export const AdminFactCheckModules = ({ modules, onRefresh, pendingSignalData, o
             case 'false': return '#dc2626';
             case 'misleading': return '#ea580c';
             case 'partially_true': return '#16a34a';
+            case 'unconfirmed': return '#eab308';
             default: return '#6b7280';
         }
     };

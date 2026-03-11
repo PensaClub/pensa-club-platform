@@ -81,6 +81,11 @@
   color: #ffffff;
 }
 
+.fcd-verdict--unconfirmed {
+  background: #eab308;
+  color: #ffffff;
+}
+
 .fcd-category {
   padding: 6px 14px;
   border-radius: 8px;

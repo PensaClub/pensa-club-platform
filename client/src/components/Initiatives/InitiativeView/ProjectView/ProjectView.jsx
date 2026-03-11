@@ -245,22 +245,6 @@ export const ProjectView = () => {
         return [...currentProject.sections].sort((a, b) => a.id - b.id);
     }, [currentProject?.sections]);
 
-    const loadCommentsCount = async () => {
-        if (currentProject?.id) {
-            try {
-                const projectComments = await getProjectComments(currentProject.id || currentProject.slug);
-                setCommentsCount(projectComments.length);
-            } catch (error) {
-                console.error('Error loading comments count:', error);
-                setCommentsCount(0);
-            }
-        }
-    };
-
-    const handleCommentsChange = (newCount) => {
-        setCommentsCount(newCount);
-    };
-
     const handleApplicationSubmit = async (applicationData) => {
         try {
             const result = await applyToProject(currentProject.id, applicationData);
@@ -1070,7 +1054,6 @@ export const ProjectView = () => {
                                 entityId={currentProject.id || currentProject.slug}
                                 entityType="project"
                                 commentsEnabled={currentProject.commentsEnabled}
-                                onCommentsChange={handleCommentsChange}
                             />
                         </section>
                     </div>

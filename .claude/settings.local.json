@@ -13,7 +13,13 @@
       "Bash(identify:*)",
       "Bash(cd C:/Users/User/Documents/GitHub/Digital-Literacy-Wellbeing-60-plus/client && npx react-scripts build 2>&1 | tail -20)",
       "Bash(find \"C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\Digital-Literacy-Wellbeing-60-plus\\\\client\\\\src\\\\components\" -name \"*.jsx\" -type f 2>/dev/null | head -20)",
-      "Bash(npx -y acorn-jsx --ecma2020 client/src/components/SiteSettingsAdmin/IpManagementConfig/IpManagementConfig.jsx 2>&1 | tail -5)"
+      "Bash(npx -y acorn-jsx --ecma2020 client/src/components/SiteSettingsAdmin/IpManagementConfig/IpManagementConfig.jsx 2>&1 | tail -5)",
+      "Bash(cd C:/Users/User/Documents/GitHub/Digital-Literacy-Wellbeing-60-plus && npx sequelize-cli db:migrate 2>&1)",
+      "Bash(cd C:/Users/User/Documents/GitHub/Digital-Literacy-Wellbeing-60-plus/server && npx sequelize-cli db:migrate 2>&1)",
+      "Bash(cd C:/Users/User/Documents/GitHub/Digital-Literacy-Wellbeing-60-plus/server && npx sequelize-cli db:migrate --name 20260311120000-add-unconfirmed-verdict.js 2>&1)",
+      "Bash(cd C:/Users/User/Documents/GitHub/Digital-Literacy-Wellbeing-60-plus/server && npx sequelize-cli db:migrate:status 2>&1 | tail -5)",
+      "Bash(find /c/Users/User/Documents/GitHub/Digital-Literacy-Wellbeing-60-plus -name \".env*\" -type f 2>/dev/null | head -5)",
+      "Bash(npx sequelize-cli:*)"
     ]
   }
 }

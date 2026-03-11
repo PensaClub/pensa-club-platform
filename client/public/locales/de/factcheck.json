@@ -32,7 +32,8 @@
     "true": "Wahr",
     "false": "Falsch",
     "misleading": "Irreführend",
-    "partially_true": "Teilweise wahr"
+    "partially_true": "Teilweise wahr",
+    "unconfirmed": "Unbestätigt"
   },
   "sourceTypes": {
     "website": "Webseite / Internet",
