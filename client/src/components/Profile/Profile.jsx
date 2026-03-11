@@ -61,9 +61,7 @@ import DraftInitiatives from "../Initiatives/DraftInitiatives/DraftInitiatives";
 import { AllInitiatives } from "../Initiatives/AllInitiatives/AllInitiatives";
 import { BookmarkedItems } from "./BookmarkedItems/BookmarkedItems";
 import { ApplicationsAdmin } from "../Initiatives/ApplicationsAdmin/ApplicationsAdmin";
-import ProjectCreateForm from "../Initiatives/CreateProject/ProjectCreateForm";
 import { AllProjects } from "../Initiatives/CreateProject/AllProjects/AllProjects";
-import ProjectPreview from "../Initiatives/CreateProject/ProjectPreview/ProjectPreview";
 import DraftProjects from "../Initiatives/CreateProject/DraftProjects/DraftProjects";
 import { LanguageSwitcherAdmin } from "../LanguageSwitcher/LanguageSwitcherAdmin";
 import { ProfessionalAvatarBuilder } from "../AvatarDemo/ProfessionalAvatarBuilder";
@@ -265,8 +263,8 @@ export const Profile = () => {
       "/profile/applications-admin": t("profile.applications"),
       "/profile/initiative-preview": t("profile.initiativePreview"),
       "/profile/projects": t("profile.projects"),
-      "/profile/project-create": t("profile.projectCreate"),
-      "/profile/project-preview": t("profile.projectPreview"),
+      "/projects-create": t("profile.projectCreate"),
+      "/project-preview": t("profile.projectPreview"),
       "/profile/publications": t("profile.publications"),
       "/profile/stories": t("profile.stories"),
       "/profile/publication-create": t("profile.publicationCreate"),
@@ -313,8 +311,8 @@ export const Profile = () => {
     "/profile/applications-admin",
     "/profile/initiative-preview",
     "/profile/projects",
-    "/profile/project-create",
-    "/profile/project-preview",
+    "/projects-create",
+    "/project-preview",
     "/profile/article-preview",
     "/profile/publications",
     "/profile/stories",
@@ -1171,7 +1169,13 @@ export const Profile = () => {
                     </NavLink>
                     <ul className={`sub-menu ${subMenuStates.projects ? 'expanded' : ''}`}>
                       <li>
-                        <NavLink to="projects-create" className={({ isActive }) => isActive ? 'active' : ''}>
+                        <NavLink to="projects" end className={({ isActive }) => isActive ? 'active' : ''}>
+                          <CircleIcon className="icon" />
+                          {t("profile.allProjects")}
+                        </NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="/projects-create" className={({ isActive }) => isActive ? 'active' : ''}>
                           <CircleIcon className="icon" />
                           {t("profile.newProject")}
                         </NavLink>
@@ -1299,8 +1303,6 @@ export const Profile = () => {
             <Route path="projects-drafts" element={<ManagementGuard><DraftProjects /></ManagementGuard>} />
             <Route path="initiatives" element={<ManagementGuard><AllInitiatives /></ManagementGuard>} />
             <Route path="initiative-create" element={<ManagementGuard><InitiativeCreateForm /></ManagementGuard>} />
-            <Route path="projects-create" element={<ManagementGuard><ProjectCreateForm /></ManagementGuard>} />
-            <Route path="project-preview" element={<ManagementGuard><ProjectPreview /></ManagementGuard>} />
             <Route path="article-preview" element={<ManagementGuard><ArticlePreviewPage /></ManagementGuard>} />
             <Route path="publications" element={<ManagementGuard><AllPublications /></ManagementGuard>} />
             <Route path="stories" element={<ManagementGuard><AllStories /></ManagementGuard>} />

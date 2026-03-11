@@ -117,6 +117,8 @@ const AdminAcademyLecturesList = lazyWithRetry(() => import('./components/AdminA
 const EditLecture = lazyWithRetry(() => import('./components/AdminAcademyLecturesList/EditLecture/EditLecture.jsx'));
 const TelkRkmeRzi = lazyWithRetry(() => import('./components/TelkRkmeRzi/TelkRkmeRzi.jsx'));
 const ComingSoon = lazyWithRetry(() => import('./components/DigiBridgeAcademy/ComingSoon/ComingSoon.jsx'));
+const ProjectCreateForm = lazyWithRetry(() => import('./components/Initiatives/CreateProject/ProjectCreateForm'));
+const ProjectPreview = lazyWithRetry(() => import('./components/Initiatives/CreateProject/ProjectPreview/ProjectPreview'));
 
 // ✅ LAZY LOADING - FACT CHECK КОМПОНЕНТИ
 const FactCheck = lazyWithRetry(() => import('./components/FactCheck/FactCheck.jsx'));
@@ -190,6 +192,8 @@ function AppRoutes() {
         <Route path="/academy/become-mentor" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><DigiBridgeBecomeMentor /></Suspense>} />
         <Route path="/academy/my" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><StudentDashboard /></Suspense>} />
         <Route path="/initiative-preview" element={<InitiativePreviewPage />} />
+        <Route path="/projects-create" element={<ManagementGuard><Suspense fallback={<LazyLoadingFallback />}><ProjectCreateForm /></Suspense></ManagementGuard>} />
+        <Route path="/project-preview" element={<ManagementGuard><Suspense fallback={<LazyLoadingFallback />}><ProjectPreview /></Suspense></ManagementGuard>} />
         <Route path="/academy/courses/:courseSlug/lessons/:lessonSlug" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademyLessonPlayer /></Suspense>} />
         <Route path="/academy/courses/:courseSlug/lessons/:lessonSlug/test" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademyTestPlayer /></Suspense>} />
         <Route path="/academy/lectures" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademyLectures /></Suspense>} />

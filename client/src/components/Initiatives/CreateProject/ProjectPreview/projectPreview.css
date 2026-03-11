@@ -1,18 +1,19 @@
-/* components/Projects/ProjectPreview/projectPreview.css */
+/* ========================================= */
+/* ProjectPreview - Self-contained CSS (pp-) */
+/* ========================================= */
 
 /* ======================= */
-/* PREVIEW CONTAINER */
+/* CONTAINER               */
 /* ======================= */
-.project-preview-container {
+.pp-container {
     min-height: 100vh;
     background: #ffffff;
-    margin-top: 80px;
 }
 
 /* ======================= */
-/* PREVIEW HEADER */
+/* PREVIEW HEADER (sticky) */
 /* ======================= */
-.project-preview-header {
+.pp-header {
     background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
     color: white;
     padding: 1.5rem 0;
@@ -23,20 +24,23 @@
     border-bottom: 3px solid #f59e0b;
 }
 
-.project-preview-header-content {
+.pp-header-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: 2rem;
 }
 
-.project-preview-header-left {
+.pp-header-left {
     display: flex;
     align-items: center;
     gap: 1.5rem;
 }
 
-.project-preview-back-btn {
+.pp-back-btn {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -52,18 +56,18 @@
     backdrop-filter: blur(10px);
 }
 
-.project-preview-back-btn:hover {
+.pp-back-btn:hover {
     background: rgba(255, 255, 255, 0.2);
     border-color: rgba(255, 255, 255, 0.4);
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-.project-preview-header-info {
+.pp-header-info {
     flex: 1;
 }
 
-.project-preview-header-title {
+.pp-header-title {
     font-size: 1.5rem;
     font-weight: 700;
     margin: 0 0 0.5rem 0;
@@ -73,23 +77,23 @@
     color: #f59e0b;
 }
 
-.project-preview-header-title svg {
+.pp-header-title svg {
     color: #f59e0b;
 }
 
-.project-preview-header-subtitle {
+.pp-header-subtitle {
     font-size: 0.95rem;
     color: rgba(255, 255, 255, 0.8);
     margin: 0;
     line-height: 1.4;
 }
 
-.project-preview-header-actions {
+.pp-header-actions {
     display: flex;
     gap: 1rem;
 }
 
-.project-preview-action-btn {
+.pp-action-btn {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -103,74 +107,1104 @@
     white-space: nowrap;
 }
 
-.project-preview-action-btn.edit {
+.pp-action-btn.edit {
     background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
     color: white;
 }
 
-.project-preview-action-btn.edit:hover {
+.pp-action-btn.edit:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
 }
 
-.project-preview-action-btn.publish {
+.pp-action-btn.publish {
     background: linear-gradient(135deg, #10b981 0%, #059669 100%);
     color: white;
 }
 
-.project-preview-action-btn.publish:hover {
+.pp-action-btn.publish:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
 }
 
 /* ======================= */
-/* PREVIEW BANNER */
+/* HERO SECTION            */
 /* ======================= */
-.project-preview-banner {
-    background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
-    color: #1f2937;
-    padding: 1rem 0;
-    text-align: center;
-    font-weight: 600;
-    border-bottom: 1px solid #d97706;
+.pp-hero {
+    position: relative;
+    max-height: 85vh;
+    min-height: 700px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
-.project-preview-banner-content {
+.pp-hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.pp-hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.7) saturate(1.1);
+}
+
+.pp-hero-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%);
+}
+
+.pp-hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg,
+            rgba(30, 41, 59, 0.6) 0%,
+            rgba(51, 65, 85, 0.4) 50%,
+            rgba(71, 85, 105, 0.3) 100%);
+    z-index: 2;
+}
+
+.pp-hero-content {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 2rem 2rem 2rem;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 4rem;
+    align-items: start;
+    flex: 1;
+}
+
+.pp-breadcrumb {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: 1em;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1rem 2rem 1rem 2rem;
+    width: 100%;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.pp-breadcrumb-current {
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 600;
+    font-size: 1em;
+}
+
+.pp-hero-main {
+    max-width: 1800px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    margin: 0 auto;
+    align-items: center;
+    padding: 0 2rem;
+    justify-content: center;
+}
+
+.pp-hero-text {
+    color: white;
+}
+
+/* Badges (status, priority, logo) */
+.pp-badges {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.pp-logo {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.75rem;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
+    backdrop-filter: blur(20px);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
 
-.project-preview-banner svg {
-    color: #92400e;
+.pp-logo::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.pp-logo:hover::before {
+    opacity: 0.1;
+}
+
+.pp-logo:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+.pp-logo img {
+    width: 80px;
+    height: 80px;
+    min-width: 80px;
+    min-height: 80px;
+    object-fit: contain;
+    filter: brightness(1.1) contrast(1.1);
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 2;
+    border-radius: 50%;
+}
+
+.pp-logo:hover img {
+    transform: scale(1.1);
+    filter: brightness(1.2) contrast(1.2);
+}
+
+.pp-status {
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.pp-status.active {
+    background: rgba(34, 197, 94, 0.9);
+    color: white;
+}
+
+.pp-status.planned {
+    background: rgba(251, 191, 36, 0.9);
+    color: #1f2937;
+}
+
+.pp-status.in-progress {
+    background: rgba(0, 123, 255, 0.9);
+    color: white;
+}
+
+.pp-status.completed {
+    background: rgba(107, 114, 128, 0.9);
+    color: white;
+}
+
+.pp-priority {
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+/* Title & Description */
+.pp-title {
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1.1;
+    margin: 0 0 1.5rem 0;
+    color: white;
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+}
+
+.pp-description {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin: 0 0 2rem 0;
+    color: white;
+    opacity: 0.95;
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Meta Info */
+.pp-meta {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.pp-meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.pp-meta-label {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    font-weight: 500;
+    color: white;
+}
+
+.pp-meta-value {
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+}
+
+/* Timeline */
+.pp-meta-timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.pp-meta-timeline-dates {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.pp-timeline-start,
+.pp-timeline-end {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: white;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.pp-timeline-start::before {
+    content: '\25b6\fe0f';
+    font-size: 0.7rem;
+    margin-right: 0.2rem;
+}
+
+.pp-timeline-end::before {
+    content: '\1f3c1';
+    font-size: 0.7rem;
+    margin-right: 0.2rem;
+}
+
+.pp-timeline-start:hover,
+.pp-timeline-end:hover {
+    transform: translateY(-1px);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.pp-timeline-separator {
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin: 0 0.2rem;
+    display: flex;
+    align-items: center;
 }
 
 /* ======================= */
-/* PREVIEW DISABLED ELEMENTS */
+/* STATS CARD              */
 /* ======================= */
-.download-card-button.preview-disabled {
+.pp-stats-card {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 20px 60px rgba(148, 163, 184, 0.25);
+    border: 1px solid rgba(203, 213, 225, 0.5);
+    min-width: 280px;
+    max-width: 320px;
+    align-self: start;
+}
+
+.pp-stats-item {
+    text-align: center;
+    padding: 1rem 0;
+    position: relative;
+}
+
+.pp-stats-item:not(:last-child) {
+    border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.pp-stats-item:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 2px;
+    background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+    border-radius: 1px;
+}
+
+.pp-stats-number {
+    font-size: 2.8rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8, #1e40af);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+}
+
+.pp-stats-label {
+    font-size: 0.9rem;
+    color: #64748b;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ======================= */
+/* NAVIGATION (sticky)     */
+/* ======================= */
+.pp-nav {
+    background: white;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    position: sticky;
+    top: 148px;
+    z-index: 100;
+    border-bottom: 3px solid #3b82f6;
+}
+
+.pp-nav-links {
+    max-width: 1800px;
+    margin: 0 auto;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 0 2rem;
+}
+
+.pp-nav-links::-webkit-scrollbar {
+    display: none;
+}
+
+.pp-nav-link {
+    background: none;
+    border: none;
+    padding: 1.2rem 1.5rem;
+    font-weight: 600;
+    color: #64748b;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    position: relative;
+    border-bottom: 3px solid transparent;
+}
+
+.pp-nav-link:hover {
+    color: #3b82f6;
+    background: rgba(59, 130, 246, 0.05);
+}
+
+.pp-nav-link.active {
+    color: #3b82f6;
+    border-bottom-color: #3b82f6;
+    background: rgba(59, 130, 246, 0.1);
+}
+
+/* ======================= */
+/* CONTENT SECTIONS        */
+/* ======================= */
+.pp-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+}
+
+.pp-section {
+    margin-bottom: 6rem;
+    padding: 0 10px;
+    opacity: 0;
+    animation: ppFadeInUp 0.8s ease forwards;
+}
+
+.pp-section:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.pp-section:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.pp-section:nth-child(4) {
+    animation-delay: 0.3s;
+}
+
+@keyframes ppFadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.pp-section-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    padding: 2rem 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.pp-section-content:last-child {
+    border-bottom: none;
+}
+
+.pp-section-left .pp-section-text {
+    order: 1;
+}
+
+.pp-section-left .pp-section-image {
+    order: 2;
+}
+
+.pp-section-right .pp-section-text {
+    order: 2;
+}
+
+.pp-section-right .pp-section-image {
+    order: 1;
+}
+
+.pp-section-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.pp-section-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 2.5rem 0;
+    text-align: center;
+    position: relative;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+}
+
+.pp-section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    border-radius: 2px;
+}
+
+.pp-section-description {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: #475569;
+    margin: 0;
+}
+
+.pp-section-image {
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    position: relative;
+}
+
+.pp-section-image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(29, 78, 216, 0.1));
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.pp-section-image:hover::before {
+    opacity: 1;
+}
+
+.pp-section-image:hover {
+    transform: translateY(-8px);
+}
+
+.pp-section-image img {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+}
+
+.pp-image-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    color: white;
+    padding: 2rem 1.5rem 1rem 1.5rem;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    font-weight: 500;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+    border-radius: 0 0 16px 16px;
+}
+
+.pp-section-image:hover .pp-image-caption {
+    transform: translateY(0);
+}
+
+/* ======================= */
+/* DOWNLOAD MATERIALS      */
+/* ======================= */
+.pp-download-section {
+    margin: 4rem 0;
+}
+
+.pp-download-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.pp-download-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.pp-download-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+.pp-download-card-preview {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pp-download-preview-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.pp-download-preview-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    color: #64748b;
+}
+
+.pp-file-type-icon {
+    font-size: 3rem;
+}
+
+.pp-file-extension {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #475569;
+}
+
+.pp-download-card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(59, 130, 246, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.pp-download-card:hover .pp-download-card-overlay {
+    opacity: 1;
+}
+
+.pp-download-overlay-icon {
+    font-size: 2.5rem;
+    color: white;
+}
+
+.pp-download-card-content {
+    padding: 1.5rem;
+}
+
+.pp-download-card-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 0.8rem 0;
+    line-height: 1.4;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+}
+
+.pp-download-card-description {
+    font-size: 0.9rem;
+    color: #64748b;
+    line-height: 1.5;
+    margin: 0 0 1.5rem 0;
+}
+
+.pp-download-card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #f1f5f9;
+}
+
+.pp-download-meta-items {
+    display: flex;
+    gap: 1rem;
+}
+
+.pp-download-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    color: #64748b;
+}
+
+.pp-meta-icon {
+    font-size: 0.9rem;
+}
+
+.pp-meta-value-dl {
+    font-weight: 500;
+}
+
+.pp-download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    background: #3b82f6;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+    white-space: nowrap;
+    border: none;
+    cursor: pointer;
+}
+
+.pp-download-btn:hover {
+    background: #2563eb;
+}
+
+.pp-download-btn-icon {
+    font-size: 1rem;
+}
+
+/* Preview disabled download button */
+.pp-download-btn.preview-disabled {
     background: #9ca3af;
     color: #6b7280;
     cursor: not-allowed;
     opacity: 0.7;
 }
 
-.download-card-button.preview-disabled:hover {
+.pp-download-btn.preview-disabled:hover {
     background: #9ca3af;
     transform: none;
 }
 
-.project-view-contact-link {
-    color: #64748b;
-    text-decoration: none;
-    pointer-events: none;
+/* ======================= */
+/* BUDGET SECTION          */
+/* ======================= */
+.pp-budget-section {
+    margin: 4rem 0;
 }
 
 /* ======================= */
-/* LOADING STATE */
+/* SPONSORS / PARTNERS     */
 /* ======================= */
-.project-preview-loading {
+.pp-sponsors-section {
+    margin: 4rem 0;
+}
+
+/* ======================= */
+/* MILESTONES SECTION      */
+/* ======================= */
+.pp-milestones-section {
+    margin: 4rem 0;
+}
+
+/* ======================= */
+/* USEFUL LINKS SECTION    */
+/* ======================= */
+.pp-useful-links-section {
+    margin: 4rem 0;
+}
+
+.pp-useful-links-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+    margin-top: 3rem;
+}
+
+.pp-useful-link-card {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1.25rem 1.5rem;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.pp-useful-link-card:hover {
+    border-color: #3b82f6;
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
+    transform: translateY(-2px);
+}
+
+.pp-useful-link-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    color: #3b82f6;
+    font-size: 1.3rem;
+    transition: all 0.3s ease;
+}
+
+.pp-useful-link-card:hover .pp-useful-link-icon {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    color: white;
+}
+
+.pp-useful-link-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.pp-useful-link-label {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 0.25rem 0;
+    line-height: 1.3;
+}
+
+.pp-useful-link-url {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.4;
+}
+
+.pp-useful-link-card:hover .pp-useful-link-url {
+    color: #3b82f6;
+}
+
+/* ======================= */
+/* TEAM SECTION            */
+/* ======================= */
+.pp-team-section {
+    margin: 4rem 0;
+}
+
+.pp-team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2.5rem;
+    margin-top: 3rem;
+}
+
+.pp-team-member {
+    background: white;
+    border-radius: 16px;
+    padding: 2.5rem;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #f1f5f9;
+    position: relative;
+    overflow: hidden;
+}
+
+.pp-team-member::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+}
+
+.pp-team-member:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+}
+
+.pp-member-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 1.5rem;
+    border: 4px solid #3b82f6;
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+}
+
+.pp-member-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.pp-member-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.pp-member-name {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+}
+
+.pp-member-position {
+    color: #3b82f6;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.pp-member-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+/* ======================= */
+/* CONTACT SECTION         */
+/* ======================= */
+.pp-contact-section {
+    margin: 4rem 0;
+}
+
+.pp-contact-content {
+    margin-top: 3rem;
+}
+
+.pp-contact-card {
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 3rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.pp-contact-person {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.pp-contact-photo {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.pp-contact-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.pp-contact-details {
+    flex: 1;
+}
+
+.pp-contact-name {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 0.5rem 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+}
+
+.pp-contact-role {
+    font-size: 1rem;
+    color: #64748b;
+    margin: 0 0 0.8rem 0;
+    font-weight: 500;
+}
+
+.pp-contact-label {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    background: #f1f5f9;
+    color: #475569;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.pp-contact-info {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    gap: 2rem;
+}
+
+.pp-contact-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+}
+
+.pp-contact-item-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.pp-contact-item-icon {
+    font-size: 1.1rem;
+    color: #64748b;
+}
+
+.pp-contact-item-label {
+    font-size: 0.9rem;
+    color: #64748b;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.pp-contact-item-value {
+    font-size: 1.1rem;
+    color: #1e293b;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 0.8rem 1rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.pp-contact-item-value:hover {
+    background: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+}
+
+.pp-contact-link {
+    color: #64748b;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+    pointer-events: none;
+}
+
+.pp-contact-link:hover {
+    color: #3b82f6;
+}
+
+/* ======================= */
+/* LOADING STATE           */
+/* ======================= */
+.pp-loading {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -180,137 +1214,533 @@
     text-align: center;
 }
 
-.project-preview-loading svg {
+.pp-loading svg {
     color: #f59e0b;
     margin-bottom: 1rem;
 }
 
-.project-preview-loading p {
+.pp-loading p {
     font-size: 1.1rem;
     margin: 0;
 }
 
 /* ======================= */
-/* RESPONSIVE DESIGN */
+/* ANIMATIONS              */
 /* ======================= */
+@keyframes ppLogoFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8) translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.pp-logo {
+    animation: ppLogoFadeIn 0.8s ease forwards;
+}
+
+/* ======================= */
+/* ACCESSIBILITY           */
+/* ======================= */
+@media (prefers-reduced-motion: reduce) {
+    .pp-action-btn,
+    .pp-back-btn,
+    .pp-section,
+    .pp-logo,
+    .pp-section-image,
+    .pp-download-card,
+    .pp-team-member,
+    .pp-useful-link-card {
+        transition: none;
+        animation: none;
+        opacity: 1;
+    }
+}
+
+/* =========================================== */
+/* RESPONSIVE: max-width 1440px                */
+/* =========================================== */
+@media (max-width: 1440px) {
+    .pp-hero-main {
+        gap: 4rem;
+        grid-template-columns: 1fr 150px;
+        margin: 0 auto;
+        max-width: 1600px;
+    }
+
+    .pp-meta {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+    }
+}
+
+/* =========================================== */
+/* RESPONSIVE: max-width 1024px                */
+/* =========================================== */
 @media (max-width: 1024px) {
-    .project-preview-header-content {
+    .pp-header-content {
         flex-direction: column;
         align-items: stretch;
         gap: 1.5rem;
     }
 
-    .project-preview-header-left {
+    .pp-header-left {
         flex-direction: column;
         gap: 1rem;
     }
 
-    .project-preview-header-actions {
+    .pp-header-actions {
         justify-content: center;
+    }
+
+    .pp-hero {
+        height: auto;
+        min-height: auto;
+    }
+
+    .pp-hero-main {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+        text-align: center;
+    }
+
+    .pp-hero-content {
+        padding: 2rem 0.6rem;
+        grid-template-columns: 1fr;
+        gap: 3rem;
+        text-align: center;
+    }
+
+    .pp-stats-card {
+        margin: 0 auto;
+        max-width: none;
+        width: 100%;
+    }
+
+    .pp-meta {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .pp-meta-item {
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 0.8rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .pp-meta-item:last-child {
+        border-bottom: none;
+    }
+
+    .pp-section-content {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+
+    .pp-section-right .pp-section-text,
+    .pp-section-right .pp-section-image {
+        order: unset;
+    }
+
+    .pp-content {
+        padding: 3rem 1.5rem;
+    }
+
+    .pp-breadcrumb {
+        padding: 2rem 1.5rem;
+    }
+
+    .pp-nav-links {
+        padding: 0 1.5rem;
+        justify-content: flex-start;
+    }
+
+    .pp-logo {
+        width: 55px;
+        height: 55px;
+    }
+
+    .pp-logo img {
+        width: 70px;
+        height: 70px;
+        min-width: 70px;
+        min-height: 70px;
+    }
+
+    .pp-useful-links-grid {
+        grid-template-columns: 1fr;
     }
 }
 
+/* =========================================== */
+/* RESPONSIVE: max-width 768px                 */
+/* =========================================== */
 @media (max-width: 768px) {
-    .project-preview-header {
+    .pp-header {
         padding: 1rem 0;
     }
 
-    .project-preview-header-content {
+    .pp-header-content {
         gap: 1rem;
     }
 
-    .project-preview-header-left {
+    .pp-header-left {
         gap: 0.75rem;
     }
 
-    .project-preview-back-btn {
+    .pp-back-btn {
         padding: 0.6rem 1.25rem;
         font-size: 0.9rem;
     }
 
-    .project-preview-header-title {
+    .pp-header-title {
         font-size: 1.25rem;
     }
 
-    .project-preview-header-subtitle {
+    .pp-header-subtitle {
         font-size: 0.875rem;
     }
 
-    .project-preview-action-btn {
+    .pp-action-btn {
         padding: 0.6rem 1.25rem;
         font-size: 0.9rem;
     }
 
-    .project-preview-header-actions {
+    .pp-header-actions {
         flex-direction: column;
         gap: 0.75rem;
     }
+
+    .pp-hero {
+        max-height: initial;
+    }
+
+    .pp-hero-main {
+        padding: 0 1rem;
+        gap: 2rem;
+    }
+
+    .pp-title {
+        font-size: 2.2rem;
+    }
+
+    .pp-description {
+        font-size: 1.1rem;
+    }
+
+    .pp-stats-card {
+        padding: 1.5rem;
+    }
+
+    .pp-stats-number {
+        font-size: 2.2rem;
+    }
+
+    .pp-team-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .pp-nav-links {
+        padding: 0 1rem;
+        gap: 0.5rem;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+    }
+
+    .pp-nav-link {
+        padding: 1rem;
+        font-size: 0.9rem;
+    }
+
+    .pp-section-title {
+        font-size: 1.8rem;
+    }
+
+    .pp-content {
+        padding: 2rem 1rem;
+    }
+
+    .pp-breadcrumb {
+        padding: 1.5rem 1rem;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+        flex-wrap: wrap;
+    }
+
+    .pp-badges {
+        justify-content: center;
+        gap: 0.8rem;
+    }
+
+    .pp-image-caption {
+        padding: 1.5rem 1rem 0.8rem 1rem;
+        font-size: 0.8rem;
+        transform: translateY(0);
+    }
+
+    .pp-logo {
+        width: 50px;
+        height: 50px;
+    }
+
+    .pp-logo img {
+        width: 65px;
+        height: 65px;
+        min-width: 65px;
+        min-height: 65px;
+    }
+
+    .pp-contact-card {
+        padding: 2rem;
+    }
+
+    .pp-contact-person {
+        flex-direction: column;
+        text-align: center;
+        gap: 1.5rem;
+    }
+
+    .pp-contact-photo {
+        width: 70px;
+        height: 70px;
+    }
+
+    .pp-contact-info {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .pp-contact-name {
+        font-size: 1.3rem;
+    }
+
+    .pp-download-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .pp-download-card-preview {
+        height: 160px;
+    }
+
+    .pp-download-card-content {
+        padding: 1.2rem;
+    }
+
+    .pp-download-card-meta {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+    }
+
+    .pp-download-meta-items {
+        justify-content: center;
+    }
+
+    .pp-download-btn {
+        justify-content: center;
+    }
+
+    .pp-useful-links-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .pp-useful-link-card {
+        padding: 1rem 1.25rem;
+    }
+
+    .pp-useful-link-icon {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        font-size: 1.1rem;
+    }
 }
 
+/* =========================================== */
+/* RESPONSIVE: max-width 480px                 */
+/* =========================================== */
 @media (max-width: 480px) {
-    .project-preview-header {
+    .pp-header {
         padding: 0.75rem 0;
     }
 
-    .project-preview-header-content {
+    .pp-header-content {
         padding: 0 1rem;
     }
 
-    .project-preview-back-btn {
+    .pp-back-btn {
         padding: 0.5rem 1rem;
         font-size: 0.85rem;
     }
 
-    .project-preview-header-title {
+    .pp-header-title {
         font-size: 1.1rem;
         gap: 0.5rem;
     }
 
-    .project-preview-header-subtitle {
+    .pp-header-subtitle {
         font-size: 0.8rem;
     }
 
-    .project-preview-action-btn {
+    .pp-action-btn {
         padding: 0.5rem 1rem;
         font-size: 0.85rem;
     }
-}
 
-/* ======================= */
-/* PREVIEW SPECIFIC STYLES */
-/* ======================= */
-.project-preview-container .project-view-hero {
-    margin-top: 0;
-}
+    .pp-hero-main {
+        padding: 0 0.5rem;
+        gap: 1.5rem;
+    }
 
-.project-preview-container .project-view-nav {
-    top: 140px;
-}
+    .pp-hero-content {
+        padding: 2rem 0.5rem;
+    }
 
-/* Hide interactive elements in preview */
-.project-preview-container .project-view-btn-apply,
-.project-preview-container .project-view-btn-bookmark {
-    display: none;
-}
+    .pp-title {
+        font-size: 1.8rem;
+    }
 
-/* Style preview watermark */
-.project-preview-watermark {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(-45deg);
-    font-size: 8rem;
-    font-weight: 800;
-    color: rgba(245, 158, 11, 0.1);
-    pointer-events: none;
-    z-index: 5;
-    user-select: none;
-}
+    .pp-description {
+        font-size: 1rem;
+    }
 
-/* Accessibility improvements */
-@media (prefers-reduced-motion: reduce) {
-    .project-preview-action-btn,
-    .project-preview-back-btn {
-        transition: none;
+    .pp-section-title {
+        font-size: 1.5rem;
+    }
+
+    .pp-content {
+        padding: 2rem 0.5rem;
+    }
+
+    .pp-section {
+        margin-bottom: 4rem;
+    }
+
+    .pp-section-content {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .pp-breadcrumb {
+        padding: 1rem 0.5rem;
+        gap: 0.4rem;
+        font-size: 0.8rem;
+    }
+
+    .pp-stats-card {
+        padding: 1rem;
+        min-width: auto;
+    }
+
+    .pp-stats-number {
+        font-size: 2rem;
+    }
+
+    .pp-team-member {
+        padding: 1.5rem;
+    }
+
+    .pp-nav-links {
+        padding: 0 0.5rem;
+        gap: 0.25rem;
+    }
+
+    .pp-nav-link {
+        padding: 0.8rem 1rem;
+        font-size: 0.8rem;
+    }
+
+    .pp-badges {
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .pp-logo {
+        width: 40px;
+        height: 40px;
+    }
+
+    .pp-logo img {
+        width: 55px;
+        height: 55px;
+        min-width: 55px;
+        min-height: 55px;
+    }
+
+    .pp-image-caption {
+        padding: 1rem 0.8rem 0.6rem 0.8rem;
+        font-size: 0.75rem;
+    }
+
+    .pp-contact-card {
+        padding: 1.5rem;
+    }
+
+    .pp-contact-photo {
+        width: 60px;
+        height: 60px;
+    }
+
+    .pp-contact-name {
+        font-size: 1.2rem;
+    }
+
+    .pp-contact-item-value {
+        padding: 0.6rem 0.8rem;
+        font-size: 1rem;
+    }
+
+    .pp-download-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .pp-download-card-preview {
+        height: 140px;
+    }
+
+    .pp-file-type-icon {
+        font-size: 2.5rem;
+    }
+
+    .pp-download-card-content {
+        padding: 1rem;
+    }
+
+    .pp-download-card-title {
+        font-size: 1.1rem;
+    }
+
+    .pp-download-card-description {
+        font-size: 0.85rem;
+    }
+
+    .pp-useful-link-card {
+        padding: 0.875rem 1rem;
+        gap: 1rem;
+    }
+
+    .pp-useful-link-icon {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        font-size: 1rem;
+        border-radius: 8px;
+    }
+
+    .pp-useful-link-label {
+        font-size: 0.9rem;
+    }
+
+    .pp-useful-link-url {
+        font-size: 0.8rem;
     }
 }

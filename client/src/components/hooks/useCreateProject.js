@@ -154,6 +154,9 @@ const useCreateProject = (initialValues, onSubmitHandler) => {
     initiativeId: '',
     initiativeSlug: '',
 
+    // Useful links
+    usefulLinks: [],
+
     // Other
     tags: [],
     commentsEnabled: true,
@@ -577,8 +580,7 @@ const useCreateProject = (initialValues, onSubmitHandler) => {
     }
     autoSaveRef.current = setTimeout(async () => {
       const currentPath = window.location.pathname;
-      const isInProjectForm = currentPath.includes('/profile/project-create') ||
-        currentPath.includes('/profile/projects-create');
+      const isInProjectForm = currentPath.includes('/projects-create');
 
       if (!isInProjectForm) {
         return;
@@ -2660,13 +2662,8 @@ const useCreateProject = (initialValues, onSubmitHandler) => {
         // Не спираме процеса ако refresh-ът се провали
       }
 
-      // 🔧 КЛЮЧОВА ПРОМЯНА - изтриваме черновата след публикуване
-      try {
-        await deleteDraftProject(actualDraftId);
-      } catch (deleteError) {
-        console.warn('⚠️ Could not delete draft, but project was published:', deleteError);
-        // Не спираме процеса ако изтриването се провали
-      }
+      // Черновата вече е публикувана чрез toggleProjectDraftStatus,
+      // не е нужно да я изтриваме отделно
 
       clearLocalStorage();
 
@@ -2804,7 +2801,7 @@ const useCreateProject = (initialValues, onSubmitHandler) => {
         setErrors({});
 
         notify('success', 'Проектът е обновен успешно!');
-        window.history.replaceState({}, '', '/profile/projects-create');
+        window.history.replaceState({}, '', '/projects-create');
         navigate(`/projects/${submissionData.slug || editIdFromUrl}`);
       } else {
         // CREATE NEW PROJECT MODE
@@ -2828,12 +2825,12 @@ const useCreateProject = (initialValues, onSubmitHandler) => {
           }
         }
 
-        // 🔧 ИЗТРИВАМЕ ЧЕРНОВАТА СЛЕД СЪЗДАВАНЕ
+        // Изтриваме черновата след създаване (ако има)
         if (draftId) {
           try {
             await deleteDraftProject(draftId);
-          } catch (deleteError) {
-            console.warn('⚠️ Could not delete draft, but project was created:', deleteError);
+          } catch {
+            // Draft може вече да е изтрит — игнорираме
           }
         }
 

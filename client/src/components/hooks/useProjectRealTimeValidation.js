@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { validateProjectForm } from '../Initiatives/CreateProject/utils/validateProjectForm';
 
 export const useProjectRealTimeValidation = (values, setErrors) => {
-    const { t } = useTranslation();
+    const { t } = useTranslation('content');
 
     useEffect(() => {
         const timeoutId = setTimeout(() => {

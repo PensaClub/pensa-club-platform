@@ -44,7 +44,7 @@ const DraftProjects = () => {
 
     // Handle draft actions
     const handleEdit = useCallback((draft) => {
-        navigate('/profile/projects-create', {
+        navigate('/projects-create', {
             state: {
                 editMode: true,
                 draftData: draft
@@ -53,7 +53,7 @@ const DraftProjects = () => {
     }, [navigate]);
 
     const handlePreview = useCallback((draft) => {
-        navigate('/profile/project-preview', {
+        navigate('/project-preview', {
             state: {
                 previewData: draft
             }
@@ -92,7 +92,7 @@ const DraftProjects = () => {
     }, [toggleProjectDraftStatus, t]);
 
     const handleNewProject = useCallback(() => {
-        navigate('/profile/project-create');
+        navigate('/projects-create');
     }, [navigate]);
 
     const handleLoadMore = useCallback(async () => {
