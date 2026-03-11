@@ -30,7 +30,7 @@ export const ProjectView = () => {
         getProjectById,
         currentProject,
         isLoading,
-        getProjectComments,
+        comments,
         getProjectApplications,
         applyToProject,
         isBookmarkedProject,
@@ -43,7 +43,7 @@ export const ProjectView = () => {
     const { sendPersonalEmail } = useClubContext();
 
     const [activeSection, setActiveSection] = useState('overview');
-    const [commentsCount, setCommentsCount] = useState(0);
+    const commentsCount = (comments[`project-${currentProject?.id}`] || []).length;
     const applicationsLoadedRef = useRef(false);
     const [locationText, setLocationText] = useState('');
 
@@ -182,12 +182,6 @@ export const ProjectView = () => {
             getProjectById(slug);
         }
     }, [slug]);
-
-    useEffect(() => {
-        if (currentProject?.id && commentsCount === 0) {
-            loadCommentsCount();
-        }
-    }, [currentProject?.id]);
 
     useEffect(() => {
         if (currentProject?.id && !applicationsLoadedRef.current) {
