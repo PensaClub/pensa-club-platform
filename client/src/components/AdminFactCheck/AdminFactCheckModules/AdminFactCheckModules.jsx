@@ -6,7 +6,7 @@ import './adminFactCheckModules.css';
 import { useFactCheck } from '../../contexts/FactCheckProvider';
 import { AdminFactCheckModuleModal } from '../AdminFactCheckModuleModal/AdminFactCheckModuleModal';
 
-export const AdminFactCheckModules = ({ modules, onRefresh, pendingSignalData, onSignalResponseCreated }) => {
+export const AdminFactCheckModules = ({ modules, onRefresh, pendingSignalData, pendingEditModule, onPendingSignalHandled, onPendingEditModuleHandled, onSignalResponseCreated }) => {
     const { t } = useTranslation('factcheck');
     const { createModule, updateModule, deleteModule, publishModule, hideModule } = useFactCheck();
 
@@ -15,16 +15,30 @@ export const AdminFactCheckModules = ({ modules, onRefresh, pendingSignalData, o
     const [modalOpen, setModalOpen] = useState(false);
     const [isCreateMode, setIsCreateMode] = useState(false);
     const [createInitialData, setCreateInitialData] = useState(null);
+    const [linkedSignalData, setLinkedSignalData] = useState(null);
 
     // Auto-open modal when signal data comes in
     useEffect(() => {
         if (pendingSignalData) {
+            setLinkedSignalData(pendingSignalData);
             setSelectedModule(null);
             setIsCreateMode(true);
             setCreateInitialData({ claimText: pendingSignalData.claimText });
             setModalOpen(true);
+            onPendingSignalHandled();
         }
-    }, [pendingSignalData]);
+    }, [pendingSignalData, onPendingSignalHandled]);
+
+    // Auto-open modal when edit module comes in
+    useEffect(() => {
+        if (pendingEditModule) {
+            setSelectedModule(pendingEditModule);
+            setIsCreateMode(false);
+            setCreateInitialData(null);
+            setModalOpen(true);
+            onPendingEditModuleHandled();
+        }
+    }, [pendingEditModule, onPendingEditModuleHandled]);
 
     // ===================================
     // STATUS FILTERS
@@ -115,8 +129,8 @@ export const AdminFactCheckModules = ({ modules, onRefresh, pendingSignalData, o
         if (isCreateMode) {
             const result = await createModule(moduleData);
             // Auto-link signal if this was created from a signal
-            if (pendingSignalData && result?.module?.id) {
-                onSignalResponseCreated(pendingSignalData.id, result.module.id);
+            if (linkedSignalData && result?.module?.id) {
+                onSignalResponseCreated(linkedSignalData.id, result.module.id);
             }
         } else {
             await updateModule(selectedModule.id, moduleData);
@@ -124,6 +138,7 @@ export const AdminFactCheckModules = ({ modules, onRefresh, pendingSignalData, o
         setModalOpen(false);
         setSelectedModule(null);
         setCreateInitialData(null);
+        setLinkedSignalData(null);
         onRefresh();
     };
 
@@ -328,6 +343,7 @@ export const AdminFactCheckModules = ({ modules, onRefresh, pendingSignalData, o
                         setModalOpen(false);
                         setSelectedModule(null);
                         setCreateInitialData(null);
+                        setLinkedSignalData(null);
                     }}
                     onSave={handleSave}
                     onDelete={handleDelete}

@@ -24,6 +24,7 @@ export const AdminFactCheck = () => {
     const [modules, setModules] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [pendingSignalData, setPendingSignalData] = useState(null);
+    const [pendingEditModule, setPendingEditModule] = useState(null);
 
     // ===================================
     // FETCH DATA
@@ -55,6 +56,13 @@ export const AdminFactCheck = () => {
 
     const handleCreateResponse = (signal) => {
         setPendingSignalData(signal);
+        setPendingEditModule(null);
+        setActiveTab('modules');
+    };
+
+    const handleEditResponse = (module) => {
+        setPendingEditModule(module);
+        setPendingSignalData(null);
         setActiveTab('modules');
     };
 
@@ -138,6 +146,7 @@ export const AdminFactCheck = () => {
                                 modules={modules}
                                 onRefresh={fetchData}
                                 onCreateResponse={handleCreateResponse}
+                                onEditResponse={handleEditResponse}
                             />
                         )}
                         {activeTab === 'modules' && (
@@ -145,6 +154,9 @@ export const AdminFactCheck = () => {
                                 modules={modules}
                                 onRefresh={fetchData}
                                 pendingSignalData={pendingSignalData}
+                                pendingEditModule={pendingEditModule}
+                                onPendingSignalHandled={() => setPendingSignalData(null)}
+                                onPendingEditModuleHandled={() => setPendingEditModule(null)}
                                 onSignalResponseCreated={handleSignalResponseCreated}
                             />
                         )}

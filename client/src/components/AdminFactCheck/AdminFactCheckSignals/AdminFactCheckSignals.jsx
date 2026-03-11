@@ -7,7 +7,7 @@ import { useFactCheck } from '../../contexts/FactCheckProvider';
 import { AdminFactCheckSignalModal } from '../AdminFactCheckSignalModal/AdminFactCheckSignalModal';
 import { AdminFactCheckPersonalEmailModal } from '../AdminFactCheckPersonalEmailModal/AdminFactCheckPersonalEmailModal';
 
-export const AdminFactCheckSignals = ({ signals, modules, onRefresh, onCreateResponse }) => {
+export const AdminFactCheckSignals = ({ signals, modules, onRefresh, onCreateResponse, onEditResponse }) => {
     const { t } = useTranslation('factcheck');
     const { updateSignal, deleteSignal } = useFactCheck();
 
@@ -235,6 +235,11 @@ export const AdminFactCheckSignals = ({ signals, modules, onRefresh, onCreateRes
                         setModalOpen(false);
                         setSelectedSignal(null);
                         onCreateResponse(signal);
+                    }}
+                    onEditResponse={(module) => {
+                        setModalOpen(false);
+                        setSelectedSignal(null);
+                        onEditResponse(module);
                     }}
                     onSendEmail={(signal) => {
                         setEmailModalSignal(signal);
