@@ -584,7 +584,7 @@ const useCreateProject = (initialValues, onSubmitHandler) => {
         return;
       }
 
-      if (!values.title?.trim()) {
+      if (!values.title?.trim() || !values.slug?.trim()) {
         return;
       }
 
@@ -1921,6 +1921,11 @@ const useCreateProject = (initialValues, onSubmitHandler) => {
   const saveDraft = useCallback(async () => {
     try {
       saveToLocalStorage(values);
+
+      if (!values.title?.trim() || !values.slug?.trim()) {
+        notify('warning', 'Моля, въведете заглавие за проекта');
+        return;
+      }
 
       if (userEmail) {
         let convertedData;

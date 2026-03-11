@@ -32,7 +32,8 @@
     "true": "Вярно",
     "false": "Невярно",
     "misleading": "Подвеждащо",
-    "partially_true": "Частично вярно"
+    "partially_true": "Частично вярно",
+    "unconfirmed": "Непотвърдено"
   },
   "sourceTypes": {
     "website": "Уебсайт / Интернет",

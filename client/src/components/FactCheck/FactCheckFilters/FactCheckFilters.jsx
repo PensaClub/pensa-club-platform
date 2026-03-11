@@ -12,7 +12,7 @@ const FactCheckFilters = ({
   const { t } = useTranslation('factcheck');
 
   const types = ['all', 'modules', 'signals'];
-  const verdicts = ['true', 'false', 'misleading', 'partially_true'];
+  const verdicts = ['true', 'false', 'misleading', 'partially_true', 'unconfirmed'];
   const hasActiveFilters = search || selectedCategory || selectedVerdict || (selectedType && selectedType !== 'all');
 
   return (

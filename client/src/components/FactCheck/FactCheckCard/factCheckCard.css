@@ -59,6 +59,11 @@
   color: #2563eb;
 }
 
+.fccard-verdict--unconfirmed {
+  background: rgba(234, 179, 8, 0.1);
+  color: #eab308;
+}
+
 .fccard-category {
   padding: 4px 10px;
   border-radius: 6px;

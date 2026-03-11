@@ -30,8 +30,8 @@ const createSignalSchema = z.object({
 
 // Admin: create a fact-check module
 const createModuleSchema = z.object({
-  verdict: z.enum(['false', 'misleading', 'partially_true', 'true'], {
-    message: 'Verdict must be one of: false, misleading, partially_true, true',
+  verdict: z.enum(['false', 'misleading', 'partially_true', 'true', 'unconfirmed'], {
+    message: 'Verdict must be one of: false, misleading, partially_true, true, unconfirmed',
   }),
   category: z
     .string()

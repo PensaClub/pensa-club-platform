@@ -591,6 +591,7 @@ factCheckController.patch('/admin/modules/:id/publish', isAuth, rbac.checkPermis
         'false': 'Невярно',
         'misleading': 'Подвеждащо',
         'partially_true': 'Частично вярно',
+        'unconfirmed': 'Непотвърдено',
       };
 
       const detailUrl = `https://pensa.club/fact-check/${module.slug}`;

@@ -47,6 +47,11 @@
   box-shadow: 0 4px 16px rgba(37, 99, 235, 0.08);
 }
 
+.fcsc--verdict-unconfirmed {
+  border-color: rgba(234, 179, 8, 0.25);
+  box-shadow: 0 4px 16px rgba(234, 179, 8, 0.08);
+}
+
 .fcsc--resolved:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
@@ -90,6 +95,11 @@
   color: #2563eb;
 }
 
+.fcsc-verdict--unconfirmed {
+  background: rgba(234, 179, 8, 0.1);
+  color: #eab308;
+}
+
 .fcsc-status {
   padding: 4px 10px;
   border-radius: 6px;
@@ -129,6 +139,7 @@
 .fcsc--verdict-misleading .fcsc-claim { border-left-color: #ea580c; }
 .fcsc--verdict-partially_true .fcsc-claim { border-left-color: #16a34a; }
 .fcsc--verdict-true .fcsc-claim { border-left-color: #2563eb; }
+.fcsc--verdict-unconfirmed .fcsc-claim { border-left-color: #eab308; }
 
 /* City */
 .fcsc-city {
@@ -190,6 +201,7 @@
 [data-theme="dark"] .fcsc--verdict-misleading { border-color: rgba(234, 88, 12, 0.2); }
 [data-theme="dark"] .fcsc--verdict-partially_true { border-color: rgba(22, 163, 74, 0.2); }
 [data-theme="dark"] .fcsc--verdict-true { border-color: rgba(37, 99, 235, 0.2); }
+[data-theme="dark"] .fcsc--verdict-unconfirmed { border-color: rgba(234, 179, 8, 0.2); }
 
 [data-theme="dark"] .fcsc--resolved:hover {
   border-color: rgba(255, 255, 255, 0.15);
