@@ -279,7 +279,10 @@
       "periodWeek": "Woche",
       "periodMonth": "Monat",
       "periodAll": "Alle",
-      "totalRecords": "Einträge"
+      "totalRecords": "Einträge",
+      "refresh": "Aktualisieren",
+      "sortMost": "Meiste Besuche",
+      "sortLeast": "Wenigste Besuche"
     },
     "articleLimit": "Artikellimit",
     "articleLimitDesc": "Begrenzt die Anzahl der Artikel, die nicht registrierte Benutzer lesen können",

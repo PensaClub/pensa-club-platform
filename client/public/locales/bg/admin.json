@@ -279,7 +279,10 @@
       "periodWeek": "Седмица",
       "periodMonth": "Месец",
       "periodAll": "Всички",
-      "totalRecords": "записа"
+      "totalRecords": "записа",
+      "refresh": "Обнови",
+      "sortMost": "Най-много посещения",
+      "sortLeast": "Най-малко посещения"
     },
     "articleLimit": "Лимит за статии",
     "articleLimitDesc": "Ограничава броя статии, които нерегистрирани потребители могат да четат",

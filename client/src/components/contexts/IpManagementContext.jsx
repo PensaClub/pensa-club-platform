@@ -32,12 +32,13 @@ export const IpManagementProvider = ({ children }) => {
         }
     }, [ipService]);
 
-    const fetchVisits = useCallback(async (search = '', period = '', page = 1) => {
+    const fetchVisits = useCallback(async (search = '', period = '', page = 1, sort = '') => {
         setIsLoading(true);
         try {
             const params = { limit: 50, page };
             if (search) params.search = search;
             if (period && period !== 'all') params.period = period;
+            if (sort) params.sort = sort;
             const result = await ipService.getVisits(params);
             setVisits(result?.visits || []);
             setVisitsPagination(result?.pagination || { total: 0, page: 1, limit: 50, totalPages: 0 });
