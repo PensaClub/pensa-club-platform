@@ -19,7 +19,10 @@
       "Bash(cd C:/Users/User/Documents/GitHub/Digital-Literacy-Wellbeing-60-plus/server && npx sequelize-cli db:migrate --name 20260311120000-add-unconfirmed-verdict.js 2>&1)",
       "Bash(cd C:/Users/User/Documents/GitHub/Digital-Literacy-Wellbeing-60-plus/server && npx sequelize-cli db:migrate:status 2>&1 | tail -5)",
       "Bash(find /c/Users/User/Documents/GitHub/Digital-Literacy-Wellbeing-60-plus -name \".env*\" -type f 2>/dev/null | head -5)",
-      "Bash(npx sequelize-cli:*)"
+      "Bash(npx sequelize-cli:*)",
+      "Bash(find \"C:\\\\Users\\\\User\\\\Documents\\\\GitHub\\\\Digital-Literacy-Wellbeing-60-plus\\\\client\\\\src\\\\components\" -type f -name \"*Project*\" 2>/dev/null | head -20)",
+      "Bash(npm run:*)",
+      "Bash(cd \"/c/Users/User/Documents/GitHub/Digital-Literacy-Wellbeing-60-plus/client/public/locales\" && grep -n \"\\\\\"validation\\\\\":\" bg/content.json en/content.json de/content.json)"
     ]
   }
 }

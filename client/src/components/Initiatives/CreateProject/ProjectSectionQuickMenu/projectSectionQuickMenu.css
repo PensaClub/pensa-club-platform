@@ -1,0 +1,198 @@
+/* ======================= */
+/* PROJECT SECTION QUICK MENU */
+/* Prefix: psqm-            */
+/* ======================= */
+
+/* =========================================================
+                    CONTAINER - vertical pill bar
+   ========================================================= */
+
+.psqm-bar {
+    position: fixed;
+    z-index: 9999;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 6px;
+
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 2px solid #93c5fd;
+    border-radius: 14px;
+    box-shadow:
+        0 4px 20px rgba(59, 130, 246, 0.08),
+        0 2px 8px rgba(0, 0, 0, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+
+    transition: top 0.25s ease, left 0.25s ease, opacity 0.2s ease;
+}
+
+/* =========================================================
+                    SECTION BADGE
+   ========================================================= */
+
+.psqm-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    font-family: inherit;
+    color: #ffffff;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+    flex-shrink: 0;
+    letter-spacing: 0.02em;
+    user-select: none;
+}
+
+/* =========================================================
+                    DIVIDER
+   ========================================================= */
+
+.psqm-divider {
+    width: 18px;
+    height: 1px;
+    background: #bfdbfe;
+    flex-shrink: 0;
+}
+
+/* =========================================================
+                    BUTTONS - compact icon squares
+   ========================================================= */
+
+.psqm-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+    border: 1px solid rgba(59, 130, 246, 0.1);
+    background: rgba(59, 130, 246, 0.06);
+    color: #64748b;
+    font-size: 0.72rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    padding: 0;
+    font-family: inherit;
+}
+
+.psqm-btn:hover:not(:disabled) {
+    background: rgba(59, 130, 246, 0.12);
+    color: #1e293b;
+    transform: scale(1.08);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
+}
+
+.psqm-btn:active:not(:disabled) {
+    transform: scale(0.95);
+}
+
+.psqm-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+/* ---- Add ---- */
+.psqm-btn--add {
+    color: #059669;
+    background: rgba(5, 150, 105, 0.06);
+    border-color: rgba(5, 150, 105, 0.12);
+}
+
+.psqm-btn--add:hover:not(:disabled) {
+    color: #047857;
+    background: rgba(5, 150, 105, 0.12);
+    border-color: rgba(5, 150, 105, 0.25);
+    box-shadow: 0 2px 10px rgba(5, 150, 105, 0.15);
+}
+
+/* ---- Move Up / Down ---- */
+.psqm-btn--up,
+.psqm-btn--down {
+    color: #2563eb;
+    background: rgba(37, 99, 235, 0.05);
+    border-color: rgba(37, 99, 235, 0.1);
+}
+
+.psqm-btn--up:hover:not(:disabled),
+.psqm-btn--down:hover:not(:disabled) {
+    color: #1d4ed8;
+    background: rgba(37, 99, 235, 0.1);
+    border-color: rgba(37, 99, 235, 0.2);
+    box-shadow: 0 2px 10px rgba(37, 99, 235, 0.12);
+}
+
+/* ---- Delete ---- */
+.psqm-btn--delete {
+    color: #dc2626;
+    background: rgba(220, 38, 38, 0.05);
+    border-color: rgba(220, 38, 38, 0.1);
+}
+
+.psqm-btn--delete:hover:not(:disabled) {
+    color: #b91c1c;
+    background: rgba(220, 38, 38, 0.1);
+    border-color: rgba(220, 38, 38, 0.25);
+    box-shadow: 0 2px 10px rgba(220, 38, 38, 0.15);
+}
+
+/* =========================================================
+                    RESPONSIVE
+   ========================================================= */
+
+@media screen and (max-width: 768px) {
+    .psqm-bar {
+        /* On mobile, JS still positions it but we add row layout */
+        flex-direction: row;
+        padding: 6px 10px;
+        gap: 6px;
+        border-radius: 12px;
+    }
+
+    .psqm-divider {
+        width: 1px;
+        height: 18px;
+    }
+
+    .psqm-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 0.68rem;
+        border-radius: 7px;
+    }
+
+    .psqm-badge {
+        width: 24px;
+        height: 24px;
+        font-size: 0.68rem;
+        border-radius: 6px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .psqm-bar {
+        padding: 5px 8px;
+        gap: 4px;
+    }
+
+    .psqm-btn {
+        width: 26px;
+        height: 26px;
+        font-size: 0.65rem;
+    }
+
+    .psqm-badge {
+        width: 22px;
+        height: 22px;
+        font-size: 0.65rem;
+    }
+}

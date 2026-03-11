@@ -949,7 +949,8 @@
       "projects": "Projekte",
       "loading": "Laden...",
       "noItemsFound": "Keine Elemente gefunden",
-      "tryChangingCriteria": "Versuchen Sie, die Suchkriterien zu ändern"
+      "tryChangingCriteria": "Versuchen Sie, die Suchkriterien zu ändern",
+      "projectDeletedSuccess": "Projekt erfolgreich gelöscht!"
     },
     "create": {
       "participantsAndBeneficiaries": "Participants & Beneficiaries",
@@ -1233,7 +1234,23 @@
       "short-description-help": "Kurze Beschreibung für Projektlisten",
       "full-description-help": "Detaillierte Beschreibung mit Formatierung",
       "location-help": "Wählen Sie den Standort des Projekts",
-      "selectedInitiative": "Ausgewählte Initiative"
+      "selectedInitiative": "Ausgewählte Initiative",
+      "usefulLinks": "Nützliche Links",
+      "usefulLinksDescription": "Fügen Sie nützliche Links zum Projekt hinzu — Formulare, Informationen, Partnerseiten usw.",
+      "addLink": "Link hinzufügen",
+      "linkUrl": "URL",
+      "linkUrlPlaceholder": "https://example.com",
+      "linkLabel": "Linkbeschreibung",
+      "linkLabelPlaceholder": "Beschreibung des Links eingeben...",
+      "removeLink": "Entfernen",
+      "noLinks": "Keine Links hinzugefügt",
+      "noLinksDescription": "Fügen Sie nützliche Links für Ihr Projekt hinzu — Bewerbungsformulare, Informationsseiten usw.",
+      "addFirstLink": "Ersten Link hinzufügen",
+      "linkNumber": "Link {{number}}",
+      "linksSummary": "Linkübersicht",
+      "totalLinks": "Links gesamt",
+      "updateDraft": "Entwurf aktualisieren",
+      "milestoneStatus": "Status"
     },
     "categories": {
       "digitalization": "Digitalisierung",
@@ -1258,6 +1275,7 @@
       "title-required": "Titel ist erforderlich",
       "title-min-length": "Titel muss mindestens 3 Zeichen haben",
       "title-max-length": "Titel darf 200 Zeichen nicht überschreiten",
+      "short-description-required": "Kurzbeschreibung ist erforderlich",
       "slug-required": "URL-Adresse (Slug) ist erforderlich",
       "slug-min-length": "URL-Adresse muss mindestens 3 Zeichen haben",
       "slug-max-length": "URL-Adresse darf 100 Zeichen nicht überschreiten",
@@ -1383,7 +1401,8 @@
       "budget": "Budget",
       "sponsorsPartners": "Partner",
       "milestones": "Meilensteine",
-      "gallery": "Galerie"
+      "gallery": "Galerie",
+      "usefulLinks": "Nützliche Links"
     },
     "sections": {
       "publications": "Publikationen",
@@ -1393,7 +1412,8 @@
       "budget": "Budget",
       "sponsorsPartners": "Sponsoren und Partner",
       "milestones": "Projektmeilensteine",
-      "gallery": "Galerie"
+      "gallery": "Galerie",
+      "usefulLinks": "Nützliche Links"
     },
     "messages": {
       "loginRequired": "Bitte melden Sie sich an, um sich für dieses Projekt zu bewerben."
@@ -1894,5 +1914,8 @@
     "readMore": "Mehr lesen",
     "unbookmark": "Aus Lesezeichen entfernen",
     "bookmarkedOn": "Hinzugefügt"
+  },
+  "location": {
+    "loading": "Laden..."
   }
 }

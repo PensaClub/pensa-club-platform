@@ -171,7 +171,7 @@ export const AllProjects = () => {
                     if (viewMode === 'projects') {
                         navigate(`/projects/${identifier}`);
                     } else {
-                        navigate(`/profile/project-create?draftId=${identifier}`);
+                        navigate(`/projects-create?draftId=${identifier}`);
                     }
                     break;
 
@@ -184,9 +184,9 @@ export const AllProjects = () => {
                             invalidateProjectDraftsCache();
                         }
 
-                        navigate(`/profile/projects-create?draftId=${identifier}`);
+                        navigate(`/projects-create?draftId=${identifier}`);
                     } else {
-                        navigate(`/profile/projects-create?editId=${identifier}&mode=edit`);
+                        navigate(`/projects-create?editId=${identifier}&mode=edit`);
                     }
                     break;
 

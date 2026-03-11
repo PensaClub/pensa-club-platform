@@ -223,6 +223,20 @@ module.exports = (sequelize, DataTypes) => {
                 defaultValue: [],
             },
 
+            // Useful links - JSONB structure:
+            // [
+            //   {
+            //     url: string,
+            //     label: string
+            //   }
+            // ]
+            usefulLinks: {
+                type: DataTypes.JSONB,
+                allowNull: true,
+                defaultValue: [],
+                field: 'useful_links',
+            },
+
             // Application fields
             applicationStatus: {
                 type: DataTypes.ENUM('open', 'closed'),

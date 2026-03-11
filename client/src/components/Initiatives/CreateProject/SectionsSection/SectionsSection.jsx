@@ -5,6 +5,7 @@ import { faPlus, faTrash, faEdit, faChevronUp, faChevronDown, faImage, faUpload,
 import { useTranslation } from 'react-i18next';
 import { Slate, Editable } from 'slate-react';
 import { createSlateEditor, createSlateEditorState } from '../../../Initiatives/CreateIniciative/Utils/initiativeEditorUtils.jsx';
+import { ProjectSectionQuickMenu } from '../ProjectSectionQuickMenu/ProjectSectionQuickMenu.jsx';
 import './sectionsSection.css';
 const SectionsSection = ({
     values,
@@ -26,6 +27,7 @@ const SectionsSection = ({
 }) => {
     const { t } = useTranslation('content');
     const sectionEditorsRef = useRef({});
+    const [activeSectionIndex, setActiveSectionIndex] = useState(0);
  // 🆕 State за URL inputs
     const [showUrlInputs, setShowUrlInputs] = useState({});
     const [imageUrls, setImageUrls] = useState({});
@@ -273,8 +275,38 @@ const SectionsSection = ({
         return <span {...props.attributes}>{children}</span>;
     };
 
+    const handleMoveSectionUp = (index) => {
+        handleMoveSection(index, 'up');
+        setActiveSectionIndex(Math.max(0, index - 1));
+    };
+
+    const handleMoveSectionDown = (index) => {
+        handleMoveSection(index, 'down');
+        setActiveSectionIndex(Math.min(values.sections.length - 1, index + 1));
+    };
+
+    const handleRemoveSection = (index) => {
+        removeSection(index);
+        setActiveSectionIndex(Math.max(0, index - 1));
+    };
+
+    const handleAddSectionFromMenu = () => {
+        addSection();
+        setActiveSectionIndex(values.sections.length);
+    };
+
     return (
         <div className="project-form-section-card">
+            {values.sections?.length > 0 && (
+                <ProjectSectionQuickMenu
+                    sectionIndex={activeSectionIndex}
+                    totalSections={values.sections.length}
+                    onAddSection={handleAddSectionFromMenu}
+                    onMoveUp={handleMoveSectionUp}
+                    onMoveDown={handleMoveSectionDown}
+                    onRemove={handleRemoveSection}
+                />
+            )}
             <div className="project-sections-section-header">
                 <h2 className="project-sections-section-title">
                     📝 {t('projects.create.sections')}
@@ -313,7 +345,7 @@ const SectionsSection = ({
                 ) : (
                     <div className="project-sections-list">
                         {values.sections.map((section, index) => (
-                            <div key={index} className="project-sections-item">
+                            <div key={index} className={`project-sections-item ${activeSectionIndex === index ? 'psqm-active' : ''}`} onClick={() => setActiveSectionIndex(index)}>
                                 <div className="project-sections-item-header">
                                     <div className="project-sections-item-title">
                                         <h4>

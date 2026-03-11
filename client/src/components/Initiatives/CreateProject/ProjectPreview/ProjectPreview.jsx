@@ -5,9 +5,9 @@ import { useLocalizedNavigate } from '../../../../hooks/useLocalizedNavigate';
 import { useTranslation } from 'react-i18next';
 import { Helmet } from 'react-helmet';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { 
+import {
     faArrowLeft, faEdit, faImage, faEye, faExclamationTriangle,
-    faSave, faShare, faCheckCircle
+    faSave, faShare, faCheckCircle, faLink, faExternalLinkAlt
 } from '@fortawesome/free-solid-svg-icons';
 
 // Styles
@@ -26,7 +26,7 @@ export const ProjectPreview = () => {
     const { t } = useTranslation('content');
     const navigate = useLocalizedNavigate();
     const location = useLocation();
-    const { toggleProjectDraftStatus, deleteDraftProject } = useInitiativeContext();
+    const { toggleProjectDraftStatus } = useInitiativeContext();
     const { isAuthentication } = useAuthContext();
 
     // Get preview data from navigation state
@@ -38,7 +38,7 @@ export const ProjectPreview = () => {
     useEffect(() => {
         if (!previewData) {
             notify('error', t('projects.preview.noDataError'));
-            navigate('/profile/project-create');
+            navigate('/projects-create');
         }
     }, [previewData, navigate, t]);
 
@@ -47,8 +47,10 @@ export const ProjectPreview = () => {
         const loadLocation = async () => {
             if (previewData?.location?.[0]?.coordinates) {
                 const coords = previewData.location[0].coordinates;
-                const location = await getLocationFromCoordinates(coords.lat, coords.lng);
-                setLocationText(location);
+                if (coords.lat != null && coords.lng != null) {
+                    const location = await getLocationFromCoordinates(coords.lat, coords.lng);
+                    setLocationText(location);
+                }
             }
         };
 
@@ -74,8 +76,8 @@ export const ProjectPreview = () => {
         // Връщаме се към формата
         const editIdParam = previewData?.editId ? `?editId=${previewData.editId}&mode=edit` : '';
         const draftIdParam = previewData?.draftId && !previewData?.editId ? `?draftId=${previewData.draftId}` : '';
-        
-        navigate(`/profile/projects-create${editIdParam || draftIdParam}`, {
+
+        navigate(`/projects-create${editIdParam || draftIdParam}`, {
             state: { formData: previewData }
         });
     };
@@ -89,13 +91,6 @@ export const ProjectPreview = () => {
 
         try {
             const result = await toggleProjectDraftStatus(previewData.draftId);
-            
-            // Delete draft after publishing
-            try {
-                await deleteDraftProject(previewData.draftId);
-            } catch (deleteError) {
-                console.warn('Could not delete draft:', deleteError);
-            }
 
             notify('success', t('projects.preview.publishedSuccessfully'));
             navigate('/projects');
@@ -171,13 +166,13 @@ export const ProjectPreview = () => {
 
     // Проверка дали да се показва секцията с участници
     const shouldShowParticipants = (project) => {
-        return (project.currentParticipants && project.currentParticipants > 0) || 
+        return (project.currentParticipants && project.currentParticipants > 0) ||
                (project.maxParticipants && project.maxParticipants > 0);
     };
 
     if (!previewData) {
         return (
-            <div className="project-preview-loading">
+            <div className="pp-loading">
                 <FontAwesomeIcon icon={faExclamationTriangle} size="3x" />
                 <p>{t('projects.preview.noDataError')}</p>
             </div>
@@ -192,34 +187,34 @@ export const ProjectPreview = () => {
                 <meta name="robots" content="noindex, nofollow" />
             </Helmet>
 
-            <div className="project-preview-container">
+            <div className="pp-container">
                 {/* Preview Header */}
-                <div className="project-preview-header">
+                <div className="pp-header">
                     <div className="container">
-                        <div className="project-preview-header-content">
-                            <div className="project-preview-header-left">
+                        <div className="pp-header-content">
+                            <div className="pp-header-left">
                                 <button
-                                    className="project-preview-back-btn"
+                                    className="pp-back-btn"
                                     onClick={handleBackToForm}
                                 >
                                     <FontAwesomeIcon icon={faArrowLeft} />
                                     {t('projects.preview.backToForm')}
                                 </button>
-                                
-                                <div className="project-preview-header-info">
-                                    <h1 className="project-preview-header-title">
+
+                                <div className="pp-header-info">
+                                    <h1 className="pp-header-title">
                                         <FontAwesomeIcon icon={faEye} />
                                         {t('projects.preview.previewMode')}
                                     </h1>
-                                    <p className="project-preview-header-subtitle">
+                                    <p className="pp-header-subtitle">
                                         {t('projects.preview.previewDescription')}
                                     </p>
                                 </div>
                             </div>
 
-                            <div className="project-preview-header-actions">
+                            <div className="pp-header-actions">
                                 <button
-                                    className="project-preview-action-btn edit"
+                                    className="pp-action-btn edit"
                                     onClick={handleBackToForm}
                                 >
                                     <FontAwesomeIcon icon={faEdit} />
@@ -228,7 +223,7 @@ export const ProjectPreview = () => {
 
                                 {previewData.draftId && (
                                     <button
-                                        className="project-preview-action-btn publish"
+                                        className="pp-action-btn publish"
                                         onClick={handlePublishDraft}
                                     >
                                         <FontAwesomeIcon icon={faShare} />
@@ -241,74 +236,74 @@ export const ProjectPreview = () => {
                 </div>
 
                 {/* Hero Section - Same as ProjectView */}
-                <section className="project-view-hero">
-                    <div className="project-view-hero-background">
+                <section className="pp-hero">
+                    <div className="pp-hero-background">
                         {previewData.mainImage?.src ? (
                             <img
                                 src={previewData.mainImage.src}
                                 alt={previewData.mainImage.alt || previewData.title}
-                                className="project-view-hero-image"
+                                className="pp-hero-image"
                             />
                         ) : (
-                            <div className="project-view-hero-placeholder">
+                            <div className="pp-hero-placeholder">
                                 <FontAwesomeIcon icon={faImage} size="4x" />
                                 <p>Няма главно изображение</p>
                             </div>
                         )}
-                        <div className="project-view-hero-overlay"></div>
+                        <div className="pp-hero-overlay"></div>
                     </div>
 
-                    <div className="project-view-hero-content">
+                    <div className="pp-hero-content">
                         <div className="container">
-                            <div className="project-view-breadcrumb">
-                                <span className="project-view-breadcrumb-current">
+                            <div className="pp-breadcrumb">
+                                <span className="pp-breadcrumb-current">
                                     {t('projects.preview.previewMode')} - {previewData.title}
                                 </span>
                             </div>
 
-                            <div className="project-view-hero-main">
-                                <div className="project-view-hero-text">
-                                    <div className="project-view-badges">
+                            <div className="pp-hero-main">
+                                <div className="pp-hero-text">
+                                    <div className="pp-badges">
                                         {previewData.logo && (
-                                            <div className="project-view-logo">
+                                            <div className="pp-logo">
                                                 <img src={previewData.logo} alt={`${previewData.title} logo`} />
                                             </div>
                                         )}
                                         {previewData.status && (
-                                            <span className={`project-view-status ${previewData.status}`}>
+                                            <span className={`pp-status ${previewData.status}`}>
                                                 {t(`projectView.status.${previewData.status}`)}
                                             </span>
                                         )}
                                         {previewData.priority && (
-                                            <span className={`project-view-priority ${previewData.priority}`}>
+                                            <span className={`pp-priority ${previewData.priority}`}>
                                                 {t(`projectView.priority.${previewData.priority}`)} {t('projectView.priorityLabel')}
                                             </span>
                                         )}
                                     </div>
 
-                                    <h1 className="project-view-title">{previewData.title}</h1>
+                                    <h1 className="pp-title">{previewData.title}</h1>
 
                                     {(previewData.fullDescription || previewData.shortDescription) && (
-                                        <div className="project-view-description">
+                                        <div className="pp-description">
                                             {renderContent(previewData.fullDescription || previewData.shortDescription)}
                                         </div>
                                     )}
 
-                                    <div className="project-view-meta">
+                                    <div className="pp-meta">
                                         {(previewData.timeline?.startDate || previewData.timeline?.endDate) && (
-                                            <div className="project-view-meta-item project-view-meta-timeline">
-                                                <span className="project-view-meta-label">{t('projectView.meta.timeline')}:</span>
-                                                <div className="project-view-meta-timeline-dates">
+                                            <div className="pp-meta-item pp-meta-timeline">
+                                                <span className="pp-meta-label">{t('projectView.meta.timeline')}:</span>
+                                                <div className="pp-meta-timeline-dates">
                                                     {previewData.timeline?.startDate && (
-                                                        <span className="project-view-timeline-start">
+                                                        <span className="pp-timeline-start">
                                                             {new Date(previewData.timeline.startDate).toLocaleDateString('bg-BG')}
                                                         </span>
                                                     )}
                                                     {previewData.timeline?.startDate && previewData.timeline?.endDate && (
-                                                        <span className="project-view-timeline-separator">-</span>
+                                                        <span className="pp-timeline-separator">-</span>
                                                     )}
                                                     {previewData.timeline?.endDate && (
-                                                        <span className="project-view-timeline-end">
+                                                        <span className="pp-timeline-end">
                                                             {new Date(previewData.timeline.endDate).toLocaleDateString('bg-BG')}
                                                         </span>
                                                     )}
@@ -317,25 +312,25 @@ export const ProjectPreview = () => {
                                         )}
 
                                         {previewData.category && (
-                                            <div className="project-view-meta-item">
-                                                <span className="project-view-meta-label">{t('projectView.meta.category')}:</span>
-                                                <span className="project-view-meta-value">{previewData.category}</span>
+                                            <div className="pp-meta-item">
+                                                <span className="pp-meta-label">{t('projectView.meta.category')}:</span>
+                                                <span className="pp-meta-value">{previewData.category}</span>
                                             </div>
                                         )}
 
                                         {previewData.location && (
-                                            <div className="project-view-meta-item">
-                                                <span className="project-view-meta-label">{t('projectView.meta.location')}:</span>
-                                                <span className="project-view-meta-value">
+                                            <div className="pp-meta-item">
+                                                <span className="pp-meta-label">{t('projectView.meta.location')}:</span>
+                                                <span className="pp-meta-value">
                                                     {locationText || t('location.loading')}
                                                 </span>
                                             </div>
                                         )}
 
                                         {shouldShowParticipants(previewData) && (
-                                            <div className="project-view-meta-item">
-                                                <span className="project-view-meta-label">{t('projectView.meta.participants')}:</span>
-                                                <span className="project-view-meta-value">
+                                            <div className="pp-meta-item">
+                                                <span className="pp-meta-label">{t('projectView.meta.participants')}:</span>
+                                                <span className="pp-meta-value">
                                                     {previewData.currentParticipants || 0} / {previewData.maxParticipants || '∞'}
                                                 </span>
                                             </div>
@@ -345,27 +340,27 @@ export const ProjectPreview = () => {
 
                                 {/* Stats Card */}
                                 {(previewData.budget || previewData.timeline || previewData.team) && (
-                                    <div className="project-view-stats-card">
+                                    <div className="pp-stats-card">
                                         {previewData.budget?.funded && previewData.budget?.total && (
-                                            <div className="project-view-stats-item">
-                                                <div className="project-view-stats-number">
+                                            <div className="pp-stats-item">
+                                                <div className="pp-stats-number">
                                                     {Math.round((previewData.budget.funded / previewData.budget.total) * 100)}%
                                                 </div>
-                                                <div className="project-view-stats-label">{t('projectView.stats.funded')}</div>
+                                                <div className="pp-stats-label">{t('projectView.stats.funded')}</div>
                                             </div>
                                         )}
 
                                         {previewData.timeline?.estimatedDuration && (
-                                            <div className="project-view-stats-item">
-                                                <div className="project-view-stats-number">{previewData.timeline.estimatedDuration}</div>
-                                                <div className="project-view-stats-label">{t('projectView.stats.duration')}</div>
+                                            <div className="pp-stats-item">
+                                                <div className="pp-stats-number">{previewData.timeline.estimatedDuration}</div>
+                                                <div className="pp-stats-label">{t('projectView.stats.duration')}</div>
                                             </div>
                                         )}
 
                                         {previewData.team?.length && (
-                                            <div className="project-view-stats-item">
-                                                <div className="project-view-stats-number">{previewData.team.length}</div>
-                                                <div className="project-view-stats-label">{t('projectView.stats.team')}</div>
+                                            <div className="pp-stats-item">
+                                                <div className="pp-stats-number">{previewData.team.length}</div>
+                                                <div className="pp-stats-label">{t('projectView.stats.team')}</div>
                                             </div>
                                         )}
                                     </div>
@@ -376,13 +371,13 @@ export const ProjectPreview = () => {
                 </section>
 
                 {/* Navigation */}
-                <nav className="project-view-nav">
+                <nav className="pp-nav">
                     <div className="container">
-                        <div className="project-view-nav-links">
+                        <div className="pp-nav-links">
                             {previewData.sections?.map((section, index) => (
                                 <button
-                                    key={section.titleSlug || `section-${index}`}  
-                                    className={`project-view-nav-link ${activeSection === (section.titleSlug || `section-${index}`) ? 'active' : ''}`}
+                                    key={section.titleSlug || `section-${index}`}
+                                    className={`pp-nav-link ${activeSection === (section.titleSlug || `section-${index}`) ? 'active' : ''}`}
                                     onClick={() => scrollToSection(section.titleSlug || `section-${index}`)}
                                 >
                                     {section.title}
@@ -392,7 +387,7 @@ export const ProjectPreview = () => {
                             {previewData.downloadMaterials?.length > 0 && (
                                 <button
                                     key="download-materials"
-                                    className={`project-view-nav-link ${activeSection === 'download-materials' ? 'active' : ''}`}
+                                    className={`pp-nav-link ${activeSection === 'download-materials' ? 'active' : ''}`}
                                     onClick={() => scrollToSection('download-materials')}
                                 >
                                     {t('projectView.navigation.downloadMaterials')}
@@ -401,8 +396,8 @@ export const ProjectPreview = () => {
 
                             {(previewData.budget?.goal || previewData.budget?.total || previewData.budget?.funded) && (
                                 <button
-                                    key="budget" 
-                                    className={`project-view-nav-link ${activeSection === 'budget' ? 'active' : ''}`}
+                                    key="budget"
+                                    className={`pp-nav-link ${activeSection === 'budget' ? 'active' : ''}`}
                                     onClick={() => scrollToSection('budget')}
                                 >
                                     {t('projectView.navigation.budget')}
@@ -413,17 +408,37 @@ export const ProjectPreview = () => {
                                 (previewData.partners && previewData.partners.length > 0)) && (
                                     <button
                                         key="sponsors-partners"
-                                        className={`project-view-nav-link ${activeSection === 'sponsors-partners' ? 'active' : ''}`}
+                                        className={`pp-nav-link ${activeSection === 'sponsors-partners' ? 'active' : ''}`}
                                         onClick={() => scrollToSection('sponsors-partners')}
                                     >
                                         {t('projectView.navigation.sponsorsPartners')}
                                     </button>
                                 )}
 
+                            {previewData.milestones?.length > 0 && (
+                                <button
+                                    key="milestones"
+                                    className={`pp-nav-link ${activeSection === 'milestones' ? 'active' : ''}`}
+                                    onClick={() => scrollToSection('milestones')}
+                                >
+                                    {t('projectView.navigation.milestones')}
+                                </button>
+                            )}
+
+                            {previewData.usefulLinks?.length > 0 && (
+                                <button
+                                    key="useful-links"
+                                    className={`pp-nav-link ${activeSection === 'useful-links' ? 'active' : ''}`}
+                                    onClick={() => scrollToSection('useful-links')}
+                                >
+                                    {t('projectView.navigation.usefulLinks')}
+                                </button>
+                            )}
+
                             {previewData.team?.length > 0 && (
                                 <button
-                                    key="team"  
-                                    className={`project-view-nav-link ${activeSection === 'team' ? 'active' : ''}`}
+                                    key="team"
+                                    className={`pp-nav-link ${activeSection === 'team' ? 'active' : ''}`}
                                     onClick={() => scrollToSection('team')}
                                 >
                                     {t('projectView.navigation.team')}
@@ -432,8 +447,8 @@ export const ProjectPreview = () => {
 
                             {previewData.contact?.name && (
                                 <button
-                                    key="contact"  
-                                    className={`project-view-nav-link ${activeSection === 'contact' ? 'active' : ''}`}
+                                    key="contact"
+                                    className={`pp-nav-link ${activeSection === 'contact' ? 'active' : ''}`}
                                     onClick={() => scrollToSection('contact')}
                                 >
                                     {t('projectView.navigation.contact')}
@@ -444,31 +459,31 @@ export const ProjectPreview = () => {
                 </nav>
 
                 {/* Content Sections */}
-                <div className="project-view-content">
+                <div className="pp-content">
                     <div className="container">
                         {/* Project Sections */}
                         {previewData.sections?.map((section, index) => (
                             <section
                                 key={section.titleSlug || `section-${index}`}
                                 id={section.titleSlug || `section-${index}`}
-                                className={`project-view-section ${index % 2 === 0 ? 'project-view-section-left' : 'project-view-section-right'}`}
+                                className={`pp-section ${index % 2 === 0 ? 'pp-section-left' : 'pp-section-right'}`}
                             >
-                                <div className="project-view-section-content">
-                                    <div className="project-view-section-text">
-                                        <h2 className="project-view-section-title">{section.title}</h2>
-                                        <div className="project-view-section-description slate-content" data-editor="slate">
+                                <div className="pp-section-content">
+                                    <div className="pp-section-text">
+                                        <h2 className="pp-section-title">{section.title}</h2>
+                                        <div className="pp-section-description slate-content" data-editor="slate">
                                             {renderContent(section.content)}
                                         </div>
                                     </div>
 
                                     {(section.image?.src || (section.images && section.images.length > 0)) && (
-                                        <div className="project-view-section-image">
+                                        <div className="pp-section-image">
                                             <img
                                                 src={section.image?.src || section.images[0]?.src}
                                                 alt={section.image?.alt || section.images[0]?.alt || section.title}
                                             />
                                             {(section.image?.caption || section.images?.[0]?.caption) && (
-                                                <div className="project-view-image-caption">
+                                                <div className="pp-image-caption">
                                                     {section.image?.caption || section.images[0]?.caption}
                                                 </div>
                                             )}
@@ -480,59 +495,59 @@ export const ProjectPreview = () => {
 
                         {/* Download Materials Section */}
                         {previewData.downloadMaterials?.length > 0 && (
-                            <section id="download-materials" className="project-view-section project-view-download-section">
-                                <h2 className="project-view-section-title">{t('projectView.sections.downloadMaterials')}</h2>
+                            <section id="download-materials" className="pp-section pp-download-section">
+                                <h2 className="pp-section-title">{t('projectView.sections.downloadMaterials')}</h2>
 
-                                <div className="project-view-download-grid">
+                                <div className="pp-download-grid">
                                     {previewData.downloadMaterials.map((material, index) => (
-                                        <div key={index} className="project-view-download-card">
-                                            <div className="download-card-preview">
+                                        <div key={index} className="pp-download-card">
+                                            <div className="pp-download-card-preview">
                                                 {material.image ? (
                                                     <img
                                                         src={material.image.src}
                                                         alt={material.image.alt || material.title}
-                                                        className="download-preview-image"
+                                                        className="pp-download-preview-image"
                                                     />
                                                 ) : (
-                                                    <div className="download-preview-placeholder">
-                                                        <span className="file-type-icon">
+                                                    <div className="pp-download-preview-placeholder">
+                                                        <span className="pp-file-type-icon">
                                                             {getFileTypeIcon(material.fileType)}
                                                         </span>
-                                                        <span className="file-extension">{material.fileType?.toUpperCase()}</span>
+                                                        <span className="pp-file-extension">{material.fileType?.toUpperCase()}</span>
                                                     </div>
                                                 )}
 
-                                                <div className="download-card-overlay">
-                                                    <span className="download-overlay-icon">⬇</span>
+                                                <div className="pp-download-card-overlay">
+                                                    <span className="pp-download-overlay-icon">⬇</span>
                                                 </div>
                                             </div>
 
-                                            <div className="download-card-content">
-                                                <h3 className="download-card-title">{material.title}</h3>
+                                            <div className="pp-download-card-content">
+                                                <h3 className="pp-download-card-title">{material.title}</h3>
 
                                                 {material.description && (
-                                                    <p className="download-card-description">
+                                                    <p className="pp-download-card-description">
                                                         {material.description}
                                                     </p>
                                                 )}
 
-                                                <div className="download-card-meta">
-                                                    <div className="download-meta-items">
-                                                        <span className="download-meta-item">
-                                                            <span className="meta-icon">📄</span>
-                                                            <span className="meta-value">{material.fileType?.toUpperCase()}</span>
+                                                <div className="pp-download-card-meta">
+                                                    <div className="pp-download-meta-items">
+                                                        <span className="pp-download-meta-item">
+                                                            <span className="pp-meta-icon">📄</span>
+                                                            <span className="pp-meta-value-dl">{material.fileType?.toUpperCase()}</span>
                                                         </span>
 
                                                         {material.fileSize && (
-                                                            <span className="download-meta-item">
-                                                                <span className="meta-icon">💾</span>
-                                                                <span className="meta-value">{material.fileSize} MB</span>
+                                                            <span className="pp-download-meta-item">
+                                                                <span className="pp-meta-icon">💾</span>
+                                                                <span className="pp-meta-value-dl">{material.fileSize} MB</span>
                                                             </span>
                                                         )}
                                                     </div>
 
-                                                    <div className="download-card-button preview-disabled">
-                                                        <span className="download-button-icon">⬇</span>
+                                                    <div className="pp-download-btn preview-disabled">
+                                                        <span className="pp-download-btn-icon">⬇</span>
                                                         {t('projectView.downloadMaterials.download')}
                                                     </div>
                                                 </div>
@@ -545,8 +560,8 @@ export const ProjectPreview = () => {
 
                         {/* Budget Section */}
                         {(previewData.budget?.goal || previewData.budget?.total || previewData.budget?.funded) && (
-                            <section id="budget" className="project-view-section project-view-budget-section">
-                                <h2 className="project-view-section-title">{t('projectView.sections.budget')}</h2>
+                            <section id="budget" className="pp-section pp-budget-section">
+                                <h2 className="pp-section-title">{t('projectView.sections.budget')}</h2>
                                 <ProjectBudget
                                     budget={previewData.budget}
                                     currency={previewData.budget?.currency || 'BGN'}
@@ -557,8 +572,8 @@ export const ProjectPreview = () => {
                         {/* Sponsors and Partners Section */}
                         {((previewData.sponsors && previewData.sponsors.length > 0) ||
                             (previewData.partners && previewData.partners.length > 0)) && (
-                                <section id="sponsors-partners" className="project-view-section project-view-sponsors-partners-section">
-                                    <h2 className="project-view-section-title">{t('projectView.sections.sponsorsPartners')}</h2>
+                                <section id="sponsors-partners" className="pp-section pp-sponsors-section">
+                                    <h2 className="pp-section-title">{t('projectView.sections.sponsorsPartners')}</h2>
                                     <SponsorsPartners
                                         sponsors={previewData.sponsors}
                                         partners={previewData.partners}
@@ -568,37 +583,57 @@ export const ProjectPreview = () => {
 
                         {/* Milestones Section */}
                         {previewData.milestones?.length > 0 && (
-                            <section id="milestones" className="project-view-section project-view-milestones-section">
-                                <h2 className="project-view-section-title">{t('projectView.sections.milestones')}</h2>
+                            <section id="milestones" className="pp-section pp-milestones-section">
+                                <h2 className="pp-section-title">{t('projectView.sections.milestones')}</h2>
                                 <Milestones milestones={previewData.milestones} />
+                            </section>
+                        )}
+
+                        {/* Useful Links Section */}
+                        {previewData.usefulLinks?.length > 0 && (
+                            <section id="useful-links" className="pp-section pp-useful-links-section">
+                                <h2 className="pp-section-title">{t('projectView.sections.usefulLinks')}</h2>
+                                <div className="pp-useful-links-grid">
+                                    {previewData.usefulLinks.map((link, index) => (
+                                        <a key={index} href={link.url} target="_blank" rel="noopener noreferrer" className="pp-useful-link-card">
+                                            <div className="pp-useful-link-icon">
+                                                <FontAwesomeIcon icon={faExternalLinkAlt} />
+                                            </div>
+                                            <div className="pp-useful-link-info">
+                                                <span className="pp-useful-link-label">{link.label || link.url}</span>
+                                                <span className="pp-useful-link-url">{link.url}</span>
+                                            </div>
+                                        </a>
+                                    ))}
+                                </div>
                             </section>
                         )}
 
                         {/* Team Section */}
                         {previewData.team?.length > 0 && (
-                            <section id="team" className="project-view-section project-view-team-section">
-                                <h2 className="project-view-section-title">{t('projectView.sections.team')}</h2>
-                                <div className="project-view-team-grid">
+                            <section id="team" className="pp-section pp-team-section">
+                                <h2 className="pp-section-title">{t('projectView.sections.team')}</h2>
+                                <div className="pp-team-grid">
                                     {previewData.team.map((member, index) => (
-                                        <div key={index} className="project-view-team-member">
+                                        <div key={index} className="pp-team-member">
                                             {member.image && (
-                                                <div className="project-view-member-image">
+                                                <div className="pp-member-image">
                                                     <img src={member.image} alt={member.name} />
                                                 </div>
                                             )}
-                                            <div className="project-view-member-info">
-                                                <h3 className="project-view-member-name">{member.name}</h3>
+                                            <div className="pp-member-info">
+                                                <h3 className="pp-member-name">{member.name}</h3>
                                                 {member.role && (
-                                                    <p className="project-view-member-position">{member.role}</p>
+                                                    <p className="pp-member-position">{member.role}</p>
                                                 )}
-                                                <div className="project-view-member-contact">
+                                                <div className="pp-member-contact">
                                                     {member.email && (
-                                                        <span className="project-view-contact-link">
+                                                        <span className="pp-contact-link">
                                                             {member.email}
                                                         </span>
                                                     )}
                                                     {member.phone && (
-                                                        <span className="project-view-contact-link">
+                                                        <span className="pp-contact-link">
                                                             {member.phone}
                                                         </span>
                                                     )}
@@ -612,14 +647,14 @@ export const ProjectPreview = () => {
 
                         {/* Contact Section */}
                         {previewData.contact?.name && (
-                            <section id="contact" className="project-view-section project-view-contact-section">
-                                <h2 className="project-view-section-title">{t('projectView.sections.contact')}</h2>
+                            <section id="contact" className="pp-section pp-contact-section">
+                                <h2 className="pp-section-title">{t('projectView.sections.contact')}</h2>
 
-                                <div className="project-view-contact-content">
-                                    <div className="project-view-contact-card">
-                                        <div className="project-view-contact-person">
+                                <div className="pp-contact-content">
+                                    <div className="pp-contact-card">
+                                        <div className="pp-contact-person">
                                             {previewData.contact.image && (
-                                                <div className="project-view-contact-photo">
+                                                <div className="pp-contact-photo">
                                                     <img
                                                         src={previewData.contact.image}
                                                         alt={previewData.contact.name}
@@ -627,35 +662,35 @@ export const ProjectPreview = () => {
                                                 </div>
                                             )}
 
-                                            <div className="project-view-contact-details">
-                                                <h3 className="project-view-contact-name">{previewData.contact.name}</h3>
+                                            <div className="pp-contact-details">
+                                                <h3 className="pp-contact-name">{previewData.contact.name}</h3>
                                                 {previewData.contact.role && (
-                                                    <p className="project-view-contact-role">{previewData.contact.role}</p>
+                                                    <p className="pp-contact-role">{previewData.contact.role}</p>
                                                 )}
-                                                <span className="project-view-contact-label">{t('projectView.contact.projectContact')}</span>
+                                                <span className="pp-contact-label">{t('projectView.contact.projectContact')}</span>
                                             </div>
                                         </div>
 
-                                        <div className="project-view-contact-info">
+                                        <div className="pp-contact-info">
                                             {previewData.contact.email && (
-                                                <div className="project-view-contact-item">
-                                                    <div className="contact-item-header">
-                                                        <span className="contact-item-icon">✉</span>
-                                                        <span className="contact-item-label">{t('projectView.contact.email')}</span>
+                                                <div className="pp-contact-item">
+                                                    <div className="pp-contact-item-header">
+                                                        <span className="pp-contact-item-icon">✉</span>
+                                                        <span className="pp-contact-item-label">{t('projectView.contact.email')}</span>
                                                     </div>
-                                                    <span className="contact-item-value">
+                                                    <span className="pp-contact-item-value">
                                                         {previewData.contact.email}
                                                     </span>
                                                 </div>
                                             )}
 
                                             {previewData.contact.phone && (
-                                                <div className="project-view-contact-item">
-                                                    <div className="contact-item-header">
-                                                        <span className="contact-item-icon">📞</span>
-                                                        <span className="contact-item-label">{t('projectView.contact.phone')}</span>
+                                                <div className="pp-contact-item">
+                                                    <div className="pp-contact-item-header">
+                                                        <span className="pp-contact-item-icon">📞</span>
+                                                        <span className="pp-contact-item-label">{t('projectView.contact.phone')}</span>
                                                     </div>
-                                                    <span className="contact-item-value">
+                                                    <span className="pp-contact-item-value">
                                                         {previewData.contact.phone}
                                                     </span>
                                                 </div>

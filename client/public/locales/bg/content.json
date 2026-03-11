@@ -949,7 +949,8 @@
       "projects": "проекти",
       "loading": "Зареждане...",
       "noItemsFound": "Не са намерени",
-      "tryChangingCriteria": "Опитайте да промените критериите за търсене"
+      "tryChangingCriteria": "Опитайте да промените критериите за търсене",
+      "projectDeletedSuccess": "Проектът е изтрит успешно!"
     },
     "create": {
       "participantsAndBeneficiaries": "Участници и Бенефициенти",
@@ -1258,7 +1259,22 @@
         "doc": "Word документ",
         "txt": "Текстов файл",
         "epub": "EPUB книга"
-      }
+      },
+      "usefulLinks": "Полезни връзки",
+      "usefulLinksDescription": "Добавете полезни връзки свързани с проекта — формуляри, информация, партньорски сайтове и др.",
+      "addLink": "Добави връзка",
+      "linkUrl": "Адрес (URL)",
+      "linkUrlPlaceholder": "https://example.com",
+      "linkLabel": "Описание на връзката",
+      "linkLabelPlaceholder": "Въведете описание на връзката...",
+      "removeLink": "Премахни",
+      "noLinks": "Няма добавени връзки",
+      "noLinksDescription": "Добавете полезни връзки за вашия проект — формуляри за кандидатстване, информационни страници и др.",
+      "addFirstLink": "Добави първа връзка",
+      "linkNumber": "Връзка {{number}}",
+      "linksSummary": "Обобщение на връзките",
+      "totalLinks": "Общо връзки",
+      "updateDraft": "Обнови чернова"
     },
     "categories": {
       "digitalization": "Дигитализация",
@@ -1283,6 +1299,7 @@
       "title-required": "Заглавието е задължително",
       "title-min-length": "Заглавието трябва да има поне 3 символа",
       "title-max-length": "Заглавието не може да надвишава 200 символа",
+      "short-description-required": "Краткото описание е задължително",
       "slug-required": "URL адресът (slug) е задължителен",
       "slug-min-length": "URL адресът трябва да има поне 3 символа",
       "slug-max-length": "URL адресът не може да надвишава 100 символа",
@@ -2128,7 +2145,8 @@
       "budget": "Бюджет",
       "sponsorsPartners": "Пaртньори",
       "milestones": "Етапи",
-      "gallery": "Галерия"
+      "gallery": "Галерия",
+      "usefulLinks": "Полезни връзки"
     },
     "sections": {
       "publications": "Публикации",
@@ -2138,7 +2156,8 @@
       "budget": "Бюджет",
       "sponsorsPartners": "Спонсори и партньори",
       "milestones": "Етапи на проекта",
-      "gallery": "Галерия"
+      "gallery": "Галерия",
+      "usefulLinks": "Полезни връзки"
     },
     "messages": {
       "loginRequired": "Моля влезте в профила си за да кандидатствате за този проект."
@@ -2640,5 +2659,8 @@
     "readMore": "Прочетете повече",
     "unbookmark": "Премахни от отметки",
     "bookmarkedOn": "Добавено"
+  },
+  "location": {
+    "loading": "Зареждане..."
   }
 }

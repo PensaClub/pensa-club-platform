@@ -2767,3 +2767,51 @@
         width: 100%;
     }
 }
+/* ======================= */
+/* USEFUL LINKS SECTION    */
+/* ======================= */
+.pvw-useful-links-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+}
+
+.pvw-useful-link-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.25rem;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    color: inherit;
+}
+
+.pvw-useful-link-card:hover {
+    border-color: #3b82f6;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.15);
+}
+
+.pvw-useful-link-label {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #1e293b;
+}
+
+.pvw-useful-link-url {
+    font-size: 0.85rem;
+    color: #3b82f6;
+    word-break: break-all;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+    .pvw-useful-links-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -762,6 +762,7 @@
       "active": "Active",
       "planned": "Planned",
       "in-progress": "In Progress",
+      "inProgress": "In Progress",
       "completed": "Completed"
     },
     "loadMore": {
@@ -931,7 +932,8 @@
       "projects": "projects",
       "loading": "Loading...",
       "noItemsFound": "No items found",
-      "tryChangingCriteria": "Try changing the search criteria"
+      "tryChangingCriteria": "Try changing the search criteria",
+      "projectDeletedSuccess": "Project deleted successfully!"
     },
     "create": {
       "participantsAndBeneficiaries": "Teilnehmer & Begünstigte",
@@ -1215,7 +1217,23 @@
       "short-description-help": "Short description for project listings",
       "full-description-help": "Detailed description with formatting",
       "location-help": "Choose the project location",
-      "selectedInitiative": "Selected Initiative"
+      "selectedInitiative": "Selected Initiative",
+      "usefulLinks": "Useful Links",
+      "usefulLinksDescription": "Add useful links related to the project — forms, information, partner websites, etc.",
+      "addLink": "Add Link",
+      "linkUrl": "URL",
+      "linkUrlPlaceholder": "https://example.com",
+      "linkLabel": "Link Description",
+      "linkLabelPlaceholder": "Enter link description...",
+      "removeLink": "Remove",
+      "noLinks": "No links added",
+      "noLinksDescription": "Add useful links for your project — application forms, information pages, etc.",
+      "addFirstLink": "Add first link",
+      "linkNumber": "Link {{number}}",
+      "linksSummary": "Links Summary",
+      "totalLinks": "Total links",
+      "updateDraft": "Update Draft",
+      "milestoneStatus": "Status"
     },
     "categories": {
       "digitalization": "Digitalization",
@@ -1240,6 +1258,7 @@
       "title-required": "Title is required",
       "title-min-length": "Title must be at least 3 characters",
       "title-max-length": "Title cannot exceed 200 characters",
+      "short-description-required": "Short description is required",
       "slug-required": "URL slug is required",
       "slug-min-length": "URL slug must be at least 3 characters",
       "slug-max-length": "URL slug cannot exceed 100 characters",
@@ -1307,6 +1326,40 @@
       "contact-role-max-length": "Role cannot exceed 100 characters",
       "contact-additional-info-max-length": "Additional information cannot exceed 1000 characters",
       "contact-image-size-too-large": "Image is too large (maximum 2MB)"
+    },
+    "drafts": {
+      "title": "Project Drafts",
+      "subtitle": "Manage and edit your project drafts",
+      "newProject": "New Project",
+      "refresh": "Refresh",
+      "totalDrafts": "Total Drafts",
+      "readyToPublish": "Ready to Publish",
+      "oldDrafts": "Old Drafts",
+      "loading": "Loading drafts...",
+      "noDrafts": "No Drafts",
+      "noDraftsDescription": "You don't have any project drafts yet",
+      "createFirst": "Create your first project",
+      "completion": "Completion",
+      "edit": "Edit",
+      "preview": "Preview",
+      "delete": "Delete",
+      "publish": "Publish",
+      "confirmDelete": "Confirm Deletion",
+      "completeMore": "Complete more to publish",
+      "loadMore": "Load More",
+      "untitled": "Untitled",
+      "deleteSuccess": "Draft deleted successfully",
+      "deleteError": "Error deleting draft",
+      "publishSuccess": "Project published successfully",
+      "publishError": "Error publishing project"
+    },
+    "milestones": {
+      "status": {
+        "pending": "Pending",
+        "inProgress": "In Progress",
+        "completed": "Completed",
+        "cancelled": "Cancelled"
+      }
     }
   },
   "stories": {
@@ -2055,7 +2108,8 @@
       "downloadMaterials": "Files",
       "budget": "Budget",
       "sponsorsPartners": "Partners",
-      "gallery": "Gallery"
+      "gallery": "Gallery",
+      "usefulLinks": "Useful Links"
     },
     "sections": {
       "publications": "Publications",
@@ -2064,7 +2118,9 @@
       "downloadMaterials": "Download Materials",
       "budget": "Budget & Funding",
       "sponsorsPartners": "Sponsors & Partners",
-      "gallery": "Gallery"
+      "gallery": "Gallery",
+      "usefulLinks": "Useful Links",
+      "milestones": "Project Milestones"
     },
     "messages": {
       "loginRequired": "Please log in to apply for this project."
@@ -2554,5 +2610,8 @@
       "grid": "Grid view",
       "list": "List view"
     }
+  },
+  "location": {
+    "loading": "Loading..."
   }
 }
