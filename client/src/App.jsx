@@ -38,7 +38,8 @@ import { CookieConsent } from './components/CookieConsent/CookieConsent.jsx';
 import { useCookies } from 'react-cookie';
 import { PrivacyPolicy } from './components/PrivacyPolicy/PrivacyPolicy.jsx';
 import { setNavigator } from './utils/handle401Error.jsx';
-import { useEffect, Suspense, lazy, useState } from 'react'; // ✅ Добави Suspense
+import { useEffect, Suspense, useState } from 'react';
+import lazyWithRetry from './utils/lazyWithRetry.js';
 import ArticleView from './components/Articles/ArticleView/ArticleView.jsx';
 import FooterWithLoading from './FooterWithLoading/FooterWithLoading.jsx';
 import { LoadingProvider } from './components/contexts/LoadingContext.jsx';
@@ -86,47 +87,47 @@ import { LanguageWrapper } from './components/LanguageWrapper/LanguageWrapper.js
 import { stripLangFromPath } from './utils/languageUtils.js';
 
 // ✅ LAZY LOADING КОМПОНЕНТИ
-const ArticlesList = lazy(() => import('./components/Articles/ArticlesList/ArticlesList.jsx'));
-const InitiativesList = lazy(() => import('./components/Initiatives/InitiativesList/InitiativesList.jsx'));
-const ProjectsList = lazy(() => import('./components/Initiatives/ProjectsList/ProjectsList.jsx'));
-const PublicationForm = lazy(() => import('./components/Initiatives/CreatePublication/MainForm/MainFormPublication'));
-const StoryForm = lazy(() => import('./components/Initiatives/CreateStory/MainForm/MainFormStory'));
-const PublicationsList = lazy(() => import('./components/Initiatives/CreatePublication/PublicationStoriesList/PublicationStoriesList.jsx'));
-const StoriesList = lazy(() => import('./components/Initiatives/CreateStory/PublicationStoriesList/PublicationStoriesList.jsx'));
+const ArticlesList = lazyWithRetry(() => import('./components/Articles/ArticlesList/ArticlesList.jsx'));
+const InitiativesList = lazyWithRetry(() => import('./components/Initiatives/InitiativesList/InitiativesList.jsx'));
+const ProjectsList = lazyWithRetry(() => import('./components/Initiatives/ProjectsList/ProjectsList.jsx'));
+const PublicationForm = lazyWithRetry(() => import('./components/Initiatives/CreatePublication/MainForm/MainFormPublication'));
+const StoryForm = lazyWithRetry(() => import('./components/Initiatives/CreateStory/MainForm/MainFormStory'));
+const PublicationsList = lazyWithRetry(() => import('./components/Initiatives/CreatePublication/PublicationStoriesList/PublicationStoriesList.jsx'));
+const StoriesList = lazyWithRetry(() => import('./components/Initiatives/CreateStory/PublicationStoriesList/PublicationStoriesList.jsx'));
 
 // ✅ LAZY LOADING - ACADEMY КОМПОНЕНТИ
-const DigiBridgeAcademy = lazy(() => import('./components/DigiBridgeAcademy/DigiBridgeAcademy.jsx'));
-const AcademyCourses = lazy(() => import('./components/AcademyCourses/AcademyCourses.jsx'));
-const AcademyCourseDetail = lazy(() => import('./components/AcademyCourses/AcademyCourseDetail/AcademyCourseDetail.jsx'));
-const AcademyLessonPlayer = lazy(() => import('./components/AcademyCourses/AcademyLessonPlayer/AcademyLessonPlayer.jsx'));
-const AcademyTestPlayer = lazy(() => import('./components/AcademyCourses/AcademyTestPlayer/AcademyTestPlayer.jsx'));
-const AcademyLectures = lazy(() => import('./components/AcademyLectures/AcademyLectures.jsx'));
-const AcademyLectureDetails = lazy(() => import('./components/AcademyLectures/AcademyLectureDetails/AcademyLectureDetails.jsx'));
-// const AcademyLectureTest = lazy(() => import('./components/AcademyLectures/AcademyLectureDetails/AcademyLectureTest/AcademyLectureTest.jsx'));
-const AcademyLectureWatch = lazy(() => import('./components/AcademyLectures/AcademyLectureWatch/AcademyLectureWatch.jsx'));
-const DigiBridgeMentorsPage = lazy(() => import('./components/DigiBridge/DigiBridgeMentorsPage/DigiBridgeMentorsPage.jsx'));
-const DigiBridgeBecomeMentor = lazy(() => import('./components/DigiBridge/DigiBridgeBecomeMentor/DigiBridgeBecomeMentor.jsx'));
-const StudentDashboard = lazy(() => import('./components/StudentDashboard/StudentDashboard.jsx'));
-const AdminAcademyCoursesList = lazy(() => import('./components/AdminAcademyCoursesList/AdminAcademyCoursesList.jsx'));
-const CourseAcademyCreateForm = lazy(() => import('./components/CourseAcademyCreateForm/CourseAcademyCreateForm.jsx'));
-const EditCourseBasicInfo = lazy(() => import('./components/AdminAcademyCoursesList/EditCourseBasicInfo/EditCourseBasicInfo.jsx'));
-const CourseContentManager = lazy(() => import('./components/AdminAcademyCoursesList/CourseContentManager/CourseContentManager.jsx'));
-const LectureCreateForm = lazy(() => import('./components/LectureCreateForm/LectureCreateForm.jsx'));
-const AdminAcademyLecturesList = lazy(() => import('./components/AdminAcademyLecturesList/AdminAcademyLecturesList.jsx'));
-const EditLecture = lazy(() => import('./components/AdminAcademyLecturesList/EditLecture/EditLecture.jsx'));
-const TelkRkmeRzi = lazy(() => import('./components/TelkRkmeRzi/TelkRkmeRzi.jsx'));
-const ComingSoon = lazy(() => import('./components/DigiBridgeAcademy/ComingSoon/ComingSoon.jsx'));
+const DigiBridgeAcademy = lazyWithRetry(() => import('./components/DigiBridgeAcademy/DigiBridgeAcademy.jsx'));
+const AcademyCourses = lazyWithRetry(() => import('./components/AcademyCourses/AcademyCourses.jsx'));
+const AcademyCourseDetail = lazyWithRetry(() => import('./components/AcademyCourses/AcademyCourseDetail/AcademyCourseDetail.jsx'));
+const AcademyLessonPlayer = lazyWithRetry(() => import('./components/AcademyCourses/AcademyLessonPlayer/AcademyLessonPlayer.jsx'));
+const AcademyTestPlayer = lazyWithRetry(() => import('./components/AcademyCourses/AcademyTestPlayer/AcademyTestPlayer.jsx'));
+const AcademyLectures = lazyWithRetry(() => import('./components/AcademyLectures/AcademyLectures.jsx'));
+const AcademyLectureDetails = lazyWithRetry(() => import('./components/AcademyLectures/AcademyLectureDetails/AcademyLectureDetails.jsx'));
+// const AcademyLectureTest = lazyWithRetry(() => import('./components/AcademyLectures/AcademyLectureDetails/AcademyLectureTest/AcademyLectureTest.jsx'));
+const AcademyLectureWatch = lazyWithRetry(() => import('./components/AcademyLectures/AcademyLectureWatch/AcademyLectureWatch.jsx'));
+const DigiBridgeMentorsPage = lazyWithRetry(() => import('./components/DigiBridge/DigiBridgeMentorsPage/DigiBridgeMentorsPage.jsx'));
+const DigiBridgeBecomeMentor = lazyWithRetry(() => import('./components/DigiBridge/DigiBridgeBecomeMentor/DigiBridgeBecomeMentor.jsx'));
+const StudentDashboard = lazyWithRetry(() => import('./components/StudentDashboard/StudentDashboard.jsx'));
+const AdminAcademyCoursesList = lazyWithRetry(() => import('./components/AdminAcademyCoursesList/AdminAcademyCoursesList.jsx'));
+const CourseAcademyCreateForm = lazyWithRetry(() => import('./components/CourseAcademyCreateForm/CourseAcademyCreateForm.jsx'));
+const EditCourseBasicInfo = lazyWithRetry(() => import('./components/AdminAcademyCoursesList/EditCourseBasicInfo/EditCourseBasicInfo.jsx'));
+const CourseContentManager = lazyWithRetry(() => import('./components/AdminAcademyCoursesList/CourseContentManager/CourseContentManager.jsx'));
+const LectureCreateForm = lazyWithRetry(() => import('./components/LectureCreateForm/LectureCreateForm.jsx'));
+const AdminAcademyLecturesList = lazyWithRetry(() => import('./components/AdminAcademyLecturesList/AdminAcademyLecturesList.jsx'));
+const EditLecture = lazyWithRetry(() => import('./components/AdminAcademyLecturesList/EditLecture/EditLecture.jsx'));
+const TelkRkmeRzi = lazyWithRetry(() => import('./components/TelkRkmeRzi/TelkRkmeRzi.jsx'));
+const ComingSoon = lazyWithRetry(() => import('./components/DigiBridgeAcademy/ComingSoon/ComingSoon.jsx'));
 
 // ✅ LAZY LOADING - FACT CHECK КОМПОНЕНТИ
-const FactCheck = lazy(() => import('./components/FactCheck/FactCheck.jsx'));
-const FactCheckDetail = lazy(() => import('./components/FactCheck/FactCheckDetail/FactCheckDetail.jsx'));
-const AdminFactCheck = lazy(() => import('./components/AdminFactCheck/AdminFactCheck.jsx').then(m => ({ default: m.AdminFactCheck })));
+const FactCheck = lazyWithRetry(() => import('./components/FactCheck/FactCheck.jsx'));
+const FactCheckDetail = lazyWithRetry(() => import('./components/FactCheck/FactCheckDetail/FactCheckDetail.jsx'));
+const AdminFactCheck = lazyWithRetry(() => import('./components/AdminFactCheck/AdminFactCheck.jsx').then(m => ({ default: m.AdminFactCheck })));
 import { IpManagementProvider } from './components/contexts/IpManagementContext';
 
 // ✅ LAZY LOADING - USEFUL LINKS КОМПОНЕНТИ
-const UsefulLinks = lazy(() => import('./components/UsefulLinks/UsefulLinks.jsx'));
-const AdminUsefulLinksList = lazy(() => import('./components/AdminUsefulLinksList/AdminUsefulLinksList.jsx'));
-const UsefulLinksCreateForm = lazy(() => import('./components/UsefulLinksCreateForm/UsefulLinksCreateForm.jsx'));
+const UsefulLinks = lazyWithRetry(() => import('./components/UsefulLinks/UsefulLinks.jsx'));
+const AdminUsefulLinksList = lazyWithRetry(() => import('./components/AdminUsefulLinksList/AdminUsefulLinksList.jsx'));
+const UsefulLinksCreateForm = lazyWithRetry(() => import('./components/UsefulLinksCreateForm/UsefulLinksCreateForm.jsx'));
 
 // ✅ LOADING FALLBACK КОМПОНЕНТ
 const LazyLoadingFallback = ({ type = 'page' }) => {

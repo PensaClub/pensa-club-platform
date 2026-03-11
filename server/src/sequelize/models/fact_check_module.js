@@ -29,11 +29,11 @@ module.exports = (sequelize, DataTypes) => {
         },
       },
       verdict: {
-        type: DataTypes.ENUM('false', 'misleading', 'partially_true', 'true'),
+        type: DataTypes.ENUM('false', 'misleading', 'partially_true', 'true', 'unconfirmed'),
         allowNull: false,
         validate: {
           isIn: {
-            args: [['false', 'misleading', 'partially_true', 'true']],
+            args: [['false', 'misleading', 'partially_true', 'true', 'unconfirmed']],
             msg: 'Verdict must be one of: false, misleading, partially_true, true',
           },
         },
