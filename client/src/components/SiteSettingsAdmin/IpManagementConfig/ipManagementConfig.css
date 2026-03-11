@@ -909,10 +909,6 @@
     font-size: 0.8rem;
   }
 
-  .imc-cell-ua {
-    display: none;
-  }
-
   .imc-reason-input {
     width: 100px;
   }
@@ -939,10 +935,6 @@
   .imc-table th,
   .imc-table td {
     padding: 8px 10px;
-  }
-
-  .imc-cell-date {
-    display: none;
   }
 
   .imc-manual-form-row {
