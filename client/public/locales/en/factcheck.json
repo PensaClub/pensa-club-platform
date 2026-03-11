@@ -153,6 +153,7 @@
       "sendEmail": "Send email",
       "relatedModule": "Related verification",
       "createResponse": "Create response",
+      "editResponse": "Edit response",
       "none": "None",
       "save": "Save",
       "delete": "Delete",
