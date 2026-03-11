@@ -334,9 +334,16 @@ const IpManagementConfig = () => {
                                                             </button>
                                                         </div>
                                                     ) : (
-                                                        <button className="imc-icon-btn imc-icon-btn--block" onClick={() => setBlockingIp(visit.ipAddress)} title={t('siteSettingsAdmin.ipManagement.block')}>
-                                                            <Ban size={15} />
-                                                        </button>
+                                                        <div className="imc-actions-group">
+                                                            {!visit.isWhitelisted && (
+                                                                <button className="imc-icon-btn imc-icon-btn--whitelist" onClick={() => addToWhitelist(visit.ipAddress)} title={t('siteSettingsAdmin.ipManagement.addToWhitelist')}>
+                                                                    <ShieldCheck size={15} />
+                                                                </button>
+                                                            )}
+                                                            <button className="imc-icon-btn imc-icon-btn--block" onClick={() => setBlockingIp(visit.ipAddress)} title={t('siteSettingsAdmin.ipManagement.block')}>
+                                                                <Ban size={15} />
+                                                            </button>
+                                                        </div>
                                                     )}
                                                 </td>
                                             </tr>

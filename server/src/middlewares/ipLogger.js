@@ -10,11 +10,8 @@
 
 const { Op } = require('sequelize');
 
-// In-memory buffer: Map<ipAddress, { userAgent, path, lastSeen }>
+// In-memory buffer: Map<ipAddress, { userAgent, path, lastSeen, requestCount }>
 const visitBuffer = new Map();
-// Track which IPs we've already seen today (avoid duplicate DB upserts)
-const seenToday = new Set();
-let lastDayReset = new Date().toDateString();
 
 const FLUSH_INTERVAL = 30 * 1000; // 30 seconds
 const CLEANUP_INTERVAL = 6 * 60 * 60 * 1000; // 6 hours
@@ -25,21 +22,14 @@ const ipLogger = (req, res, next) => {
     const ip = req.ip || req.headers['x-forwarded-for']?.split(',')[0]?.trim();
     if (!ip) return next();
 
-    // Reset daily tracking at midnight
-    const today = new Date().toDateString();
-    if (today !== lastDayReset) {
-      seenToday.clear();
-      lastDayReset = today;
-    }
-
-    // Buffer the visit (overwrite with latest data)
+    // Buffer the visit (accumulate request count)
+    const existing = visitBuffer.get(ip);
     visitBuffer.set(ip, {
       userAgent: req.headers['user-agent'] || null,
       path: req.originalUrl?.substring(0, 500) || null,
       lastSeen: new Date(),
-      isNew: !seenToday.has(ip),
+      requestCount: (existing?.requestCount || 0) + 1,
     });
-    seenToday.add(ip);
   } catch (error) {
     // Never block requests due to logging errors
   }
@@ -64,7 +54,7 @@ const flushBuffer = async () => {
           await existing.update({
             userAgent: data.userAgent,
             path: data.path,
-            visitCount: existing.visitCount + (data.isNew ? 1 : 0),
+            visitCount: existing.visitCount + data.requestCount,
             lastVisitedAt: data.lastSeen,
           });
         } else {
@@ -72,7 +62,7 @@ const flushBuffer = async () => {
             ipAddress,
             userAgent: data.userAgent,
             path: data.path,
-            visitCount: 1,
+            visitCount: data.requestCount,
             lastVisitedAt: data.lastSeen,
           });
         }
