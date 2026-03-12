@@ -12,6 +12,8 @@
   text-decoration: none;
   color: inherit;
   transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+  min-width: 0;
+  overflow: hidden;
 }
 
 /* Pending — amber dashed */
@@ -133,6 +135,7 @@
   font-style: italic;
   border-left: 3px solid #d97706;
   padding-left: 12px;
+  overflow-wrap: anywhere;
 }
 
 .fcsc--verdict-false .fcsc-claim { border-left-color: #dc2626; }
