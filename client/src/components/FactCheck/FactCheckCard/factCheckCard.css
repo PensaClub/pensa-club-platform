@@ -15,6 +15,8 @@
   color: inherit;
   transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
   cursor: pointer;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .fccard:hover {
@@ -82,6 +84,7 @@
   font-style: italic;
   border-left: 3px solid #f78da7;
   padding-left: 12px;
+  overflow-wrap: anywhere;
 }
 
 .fccard-preview {
@@ -89,6 +92,7 @@
   font-size: 0.9rem;
   color: #4b5563;
   line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
 .fccard-footer {

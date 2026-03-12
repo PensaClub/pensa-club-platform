@@ -6,6 +6,7 @@
   min-height: 100vh;
   padding: 0;
   background: #ffffff;
+  overflow-x: hidden;
 }
 
 /* Hero band — warm gradient top */
@@ -120,6 +121,7 @@
   margin-bottom: 24px;
   border-left: 6px solid;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
 }
 
 .fcd-section--claim {
@@ -185,6 +187,7 @@
   color: #374151;
   line-height: 1.7;
   white-space: pre-line;
+  overflow-wrap: anywhere;
 }
 
 .fcd-claim-quote {
@@ -194,6 +197,7 @@
   font-weight: 600;
   color: #1f2937;
   line-height: 1.6;
+  overflow-wrap: anywhere;
 }
 
 .fcd-source-link {
@@ -204,6 +208,7 @@
   color: #15803d;
   text-decoration: none;
   transition: color 0.2s;
+  overflow-wrap: anywhere;
 }
 
 .fcd-source-link:hover {

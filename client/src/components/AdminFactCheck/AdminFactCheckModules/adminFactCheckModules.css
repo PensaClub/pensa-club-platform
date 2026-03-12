@@ -147,6 +147,7 @@
   width: 100%;
   border-collapse: collapse;
   font-family: inherit;
+  table-layout: fixed;
 }
 
 .afcm-table thead {
@@ -170,6 +171,7 @@
   color: #374151;
   border-bottom: 1px solid #f3f4f6;
   vertical-align: middle;
+  overflow-wrap: anywhere;
 }
 
 /* ===================================
@@ -193,6 +195,7 @@
   font-weight: 600;
   color: #1f2937;
   max-width: 280px;
+  overflow-wrap: anywhere;
 }
 
 .afcm-cell-category {
