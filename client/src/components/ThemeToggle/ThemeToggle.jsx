@@ -7,7 +7,7 @@ const ThemeToggle = () => {
     const { theme, toggleTheme } = useTheme();
     const location = useLocation();
 
-    if (!location.pathname.startsWith('/academy') && !location.pathname.startsWith('/admin') && !location.pathname.startsWith('/fact-check')) return null;
+    if (!location.pathname.startsWith('/academy') && !location.pathname.startsWith('/admin') && !location.pathname.startsWith('/fact-check') && !location.pathname.startsWith('/reaction')) return null;
 
     return (
         <div className="tt-wrapper">

@@ -1,0 +1,266 @@
+/* ===================================
+   MENTOR REACTION FEEDBACK FORM — prefix: mraff-
+   =================================== */
+
+.mraff {
+  max-width: 680px;
+  margin: 0 auto;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 32px;
+}
+
+.mraff-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 28px 0;
+  overflow-wrap: anywhere;
+}
+
+/* ===================================
+   FIELDS
+   =================================== */
+
+.mraff-field {
+  margin-bottom: 22px;
+}
+
+.mraff-label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 8px;
+}
+
+.mraff-input {
+  width: 100%;
+  padding: 12px 16px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+  background: #ffffff;
+  color: #1f2937;
+}
+
+.mraff-input:focus {
+  outline: none;
+  border-color: #4f46e5;
+}
+
+.mraff-textarea {
+  width: 100%;
+  padding: 12px 16px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  resize: vertical;
+  min-height: 80px;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+  background: #ffffff;
+  color: #1f2937;
+}
+
+.mraff-textarea:focus {
+  outline: none;
+  border-color: #4f46e5;
+}
+
+/* ===================================
+   STAR RATING
+   =================================== */
+
+.mraff-stars {
+  display: flex;
+  gap: 6px;
+}
+
+.mraff-star-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  transition: transform 0.15s ease;
+}
+
+.mraff-star-btn:hover {
+  transform: scale(1.15);
+}
+
+.mraff-star-btn svg {
+  width: 32px;
+  height: 32px;
+}
+
+/* ===================================
+   ERROR
+   =================================== */
+
+.mraff-error {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #dc2626;
+  background: #fef2f2;
+  padding: 10px 16px;
+  border-radius: 8px;
+  margin: 0 0 16px 0;
+  overflow-wrap: anywhere;
+}
+
+/* ===================================
+   SUBMIT BUTTON
+   =================================== */
+
+.mraff-submit {
+  width: 100%;
+  padding: 14px 24px;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+  background: #4f46e5;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mraff-submit:hover:not(:disabled) {
+  background: #4338ca;
+}
+
+.mraff-submit:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* ===================================
+   SUCCESS STATE
+   =================================== */
+
+.mraff-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  gap: 16px;
+  text-align: center;
+}
+
+.mraff-success svg {
+  width: 56px;
+  height: 56px;
+}
+
+.mraff-success h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #059669;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.mraff-success p {
+  font-size: 0.95rem;
+  color: #6b7280;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+/* ===================================
+   DARK THEME
+   =================================== */
+
+[data-theme="dark"] .mraff {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+[data-theme="dark"] .mraff-title {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .mraff-label {
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .mraff-input,
+[data-theme="dark"] .mraff-textarea {
+  background: #111827;
+  border-color: #374151;
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .mraff-input:focus,
+[data-theme="dark"] .mraff-textarea:focus {
+  border-color: #818cf8;
+}
+
+[data-theme="dark"] .mraff-input::placeholder,
+[data-theme="dark"] .mraff-textarea::placeholder {
+  color: #6b7280;
+}
+
+[data-theme="dark"] .mraff-star-btn svg[fill="none"] {
+  stroke: #4b5563;
+}
+
+[data-theme="dark"] .mraff-error {
+  background: #7f1d1d;
+  color: #fca5a5;
+}
+
+[data-theme="dark"] .mraff-success h3 {
+  color: #6ee7b7;
+}
+
+[data-theme="dark"] .mraff-success p {
+  color: #9ca3af;
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+@media (max-width: 767px) {
+  .mraff {
+    padding: 24px 20px;
+  }
+
+  .mraff-title {
+    font-size: 1.15rem;
+  }
+
+  .mraff-star-btn svg {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+@media (max-width: 479px) {
+  .mraff {
+    padding: 20px 16px;
+    border-radius: 12px;
+  }
+
+  .mraff-title {
+    font-size: 1.05rem;
+  }
+
+  .mraff-star-btn svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .mraff-star-btn {
+    padding: 2px;
+  }
+}

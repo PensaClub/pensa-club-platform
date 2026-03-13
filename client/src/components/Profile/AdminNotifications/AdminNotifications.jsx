@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getNotificationConfig } from '../../../config/notificationConfig';
+import { getNotificationConfig, getNotificationRoute } from '../../../config/notificationConfig';
 import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import '../Notifications/notifications.css';
 import { useAcademy } from '../../contexts/AcademyProvider';
@@ -39,8 +39,8 @@ export const AdminNotifications = () => {
         setUnreadCount(prev => Math.max(0, prev - 1));
         setNotifications(prev => prev.map(n => n.id === notification.id ? { ...n, read: true } : n));
       }
-      const config = getNotificationConfig(notification.type);
-      navigate(config.route);
+      const route = getNotificationRoute(notification);
+      navigate(route);
     } catch (error) {
       console.error('Error:', error);
     }

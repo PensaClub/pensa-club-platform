@@ -223,7 +223,8 @@ export const Profile = () => {
     clubs: false,
     students: false,
     academy: false,
-    usefulLinks: false
+    usefulLinks: false,
+    reaction: false
   });
 
   const [applicationsStats, setApplicationsStats] = useState({
@@ -284,7 +285,9 @@ export const Profile = () => {
       "/profile/my-reviews": t("profile.myReviews"),
       "/admin/useful-links/create": t("admin.usefulLinks.create"),
       "/admin/useful-links": t("admin.usefulLinks.list"),
-      "/admin/fact-check": t("admin.factCheck.title")
+      "/admin/fact-check": t("admin.factCheck.title"),
+      "/admin/reaction": t("admin.reaction.title"),
+      "/mentor/reaction": t("profile.mentorReaction")
 
     };
 
@@ -328,7 +331,9 @@ export const Profile = () => {
     "/profile/mentors-statistics",
     "/profile/reviews-management",
     "/admin/fact-check",
-    "/admin/useful-links"
+    "/admin/useful-links",
+    "/admin/reaction",
+    "/mentor/reaction"
   ];
 
   const isAdminPanel = adminPaths.some(path => location.pathname.startsWith(path));
@@ -774,6 +779,16 @@ export const Profile = () => {
                       </span>
                     </NavLink>
                   </li>
+                  <li>
+                    <Link to="/mentor/reaction">
+                      <span className="link-content">
+                        <svg className="menu-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                        {t("profile.mentorReaction")}
+                      </span>
+                    </Link>
+                  </li>
                 </ul>
               </div>
             )}
@@ -806,13 +821,37 @@ export const Profile = () => {
                     </NavLink>
                   </li>
                   <li>
-                    <Link to="/admin/fact-check">
+                    <NavLink
+                      onClick={(e) => {
+                        toggleSubMenu('reaction');
+                      }}
+                      className="nav-link-button"
+                    >
                       <span className="link-content">
-                        <SearchIconProfile className="icon" />
-                        {t("admin.factCheck.title")}
+                        <svg className="menu-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                        {t("admin.reaction.title")}
                       </span>
-                      <ArrowIcon className="icon-arrow" />
-                    </Link>
+                      <span className={`arrow-icon ${subMenuStates.reaction ? 'rotated' : ''}`}>
+                        {subMenuStates.reaction ? <DownArrowIcon /> : <ArrowIcon />}
+                      </span>
+                    </NavLink>
+                    <ul className={`sub-menu ${subMenuStates.reaction ? 'expanded' : ''}`}>
+                      <li>
+                        <NavLink to="/admin/fact-check" className={({ isActive }) => isActive ? 'active' : ''}>
+                          <CircleIcon className="icon" />
+                          {t("admin.reaction.factCheck")}
+                        </NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="/admin/reaction" className={({ isActive }) => isActive ? 'active' : ''}>
+                          <CircleIcon className="icon" />
+                          {t("admin.reaction.manage")}
+                        </NavLink>
+                      </li>
+                    </ul>
                   </li>
                   <li>
                     <NavLink

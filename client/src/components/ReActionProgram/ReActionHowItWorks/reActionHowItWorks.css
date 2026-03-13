@@ -1,0 +1,148 @@
+/* ===================================
+   HOW IT WORKS — prefix: rahiw-
+   =================================== */
+
+.rahiw {
+  padding: 80px 20px;
+  background: #FCE0A5;
+  position: relative;
+  z-index: 2;
+}
+
+.rahiw-container {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.rahiw-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #1f2937;
+  margin: 0 0 48px;
+}
+
+.rahiw-steps {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  position: relative;
+}
+
+.rahiw-step {
+  flex: 1;
+  max-width: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+}
+
+.rahiw-step-number {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f78da7, #dc2626);
+  color: #ffffff;
+  font-size: 0.85rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rahiw-step-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(180, 140, 120, 0.12);
+}
+
+.rahiw-step-icon svg {
+  width: 28px;
+  height: 28px;
+  color: #f78da7;
+}
+
+.rahiw-step-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0;
+}
+
+.rahiw-step-desc {
+  font-size: 0.9rem;
+  color: #6b7280;
+  line-height: 1.5;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+/* Dark theme */
+[data-theme="dark"] .rahiw {
+  background: #1f1218;
+}
+
+[data-theme="dark"] .rahiw-title {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .rahiw-step-icon {
+  background: #1f2937;
+}
+
+[data-theme="dark"] .rahiw-step-title {
+  color: #e5e7eb;
+}
+
+[data-theme="dark"] .rahiw-step-desc {
+  color: #9ca3af;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .rahiw {
+    padding: 64px 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .rahiw-steps {
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .rahiw-step {
+    max-width: 100%;
+  }
+
+  .rahiw {
+    padding: 48px 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  .rahiw-title {
+    font-size: 1.7rem;
+    margin-bottom: 32px;
+  }
+}
+
+@media (max-width: 480px) {
+  .rahiw-title {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .rahiw {
+    padding: 40px 12px;
+  }
+}

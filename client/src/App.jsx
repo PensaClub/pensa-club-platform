@@ -66,6 +66,7 @@ import ClubView from './components/Clubs/ClubView/ClubView.jsx';
 import AboutPage from './components/AboutPage/AboutPage.jsx';
 import { AcademyProvider } from './components/contexts/AcademyProvider.jsx';
 import { FactCheckProvider } from './components/contexts/FactCheckProvider.jsx';
+import { ReActionProvider } from './components/contexts/ReActionProvider.jsx';
 import { DigiBridgeChatButton } from './components/DigiBridge/DigiBridgeChatButton/DigiBridgeChatButton.jsx';
 import { DigiBridgeChatWindow } from './components/DigiBridge/DigiBridgeChatWindow/DigiBridgeChatWindow.jsx';
 import { MentorGuard } from './components/Guards/MentorGuard.jsx';
@@ -124,6 +125,13 @@ const ProjectPreview = lazyWithRetry(() => import('./components/Initiatives/Crea
 const FactCheck = lazyWithRetry(() => import('./components/FactCheck/FactCheck.jsx'));
 const FactCheckDetail = lazyWithRetry(() => import('./components/FactCheck/FactCheckDetail/FactCheckDetail.jsx'));
 const AdminFactCheck = lazyWithRetry(() => import('./components/AdminFactCheck/AdminFactCheck.jsx').then(m => ({ default: m.AdminFactCheck })));
+
+// ✅ LAZY LOADING - REACTION КОМПОНЕНТИ
+const ReActionProgram = lazyWithRetry(() => import('./components/ReActionProgram/ReActionProgram.jsx'));
+const ReActionTrack = lazyWithRetry(() => import('./components/ReActionTrack/ReActionTrack.jsx'));
+const AdminReAction = lazyWithRetry(() => import('./components/AdminReAction/AdminReAction.jsx'));
+const MentorReAction = lazyWithRetry(() => import('./components/MentorReAction/MentorReAction.jsx'));
+const ReActionMy = lazyWithRetry(() => import('./components/ReActionMy/ReActionMy.jsx'));
 import { IpManagementProvider } from './components/contexts/IpManagementContext';
 
 // ✅ LAZY LOADING - USEFUL LINKS КОМПОНЕНТИ
@@ -174,6 +182,9 @@ function AppRoutes() {
       <Route path="/fact-check" element={<Suspense fallback={<LazyLoadingFallback />}><FactCheck /></Suspense>} />
       <Route path="/fact-check/:slug" element={<Suspense fallback={<LazyLoadingFallback />}><FactCheckDetail /></Suspense>} />
 
+      <Route path="/reaction" element={<Suspense fallback={<LazyLoadingFallback />}><ReActionProgram /></Suspense>} />
+      <Route path="/reaction/track/:code?" element={<Suspense fallback={<LazyLoadingFallback />}><ReActionTrack /></Suspense>} />
+
       <Route path="/articles" element={<Suspense fallback={<LazyLoadingFallback type="articles" />}><ArticlesList /></Suspense>} />
       <Route path="/initiatives" element={<Suspense fallback={<LazyLoadingFallback type="initiatives" />}><InitiativesList /></Suspense>} />
       <Route path="/projects" element={<Suspense fallback={<LazyLoadingFallback type="projects" />}><ProjectsList /></Suspense>} />
@@ -203,6 +214,8 @@ function AppRoutes() {
         <Route path="/academy/courses/:courseSlug/test" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademyTestPlayer /></Suspense>} />
         <Route path="/admin/site-settings" element={<AdminGuard><SiteSettingsAdmin /></AdminGuard>} />
         <Route path="/admin/fact-check" element={<ManagementGuard><IpManagementProvider><Suspense fallback={<LazyLoadingFallback />}><AdminFactCheck /></Suspense></IpManagementProvider></ManagementGuard>} />
+        <Route path="/reaction/my" element={<Suspense fallback={<LazyLoadingFallback />}><ReActionMy /></Suspense>} />
+        <Route path="/admin/reaction" element={<ManagementGuard><Suspense fallback={<LazyLoadingFallback />}><AdminReAction /></Suspense></ManagementGuard>} />
         <Route path="/admin/useful-links" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback />}><AdminUsefulLinksList /></Suspense></AdminGuard>} />
         <Route path="/admin/useful-links/create" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback />}><UsefulLinksCreateForm /></Suspense></AdminGuard>} />
         <Route path="/admin/useful-links/edit/:id" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback />}><UsefulLinksCreateForm /></Suspense></AdminGuard>} />
@@ -230,6 +243,7 @@ function AppRoutes() {
       <Route path="/mentor" element={<MentorGuard />}>
         <Route path="students/:studentId/details" element={<StudentDetails />} />
         <Route path="reviews" element={<DigiMentorReviews />} />
+        <Route path="reaction" element={<Suspense fallback={<LazyLoadingFallback />}><MentorReAction /></Suspense>} />
       </Route>
 
       <Route element={<PublicGuard />}>
@@ -299,6 +313,7 @@ function App() {
                                       <UsefulLinksProvider>
                                       <ClubProvider>
                                       <FactCheckProvider>
+                                      <ReActionProvider>
                                         {!isProfilePage && !isAcademyPage && <Header
                                           additionalClasses={isProfilePage ? 'hide-header' : ''}
                                         />}
@@ -330,6 +345,7 @@ function App() {
                                           />
                                         )}
                                         {!isProfilePage && <MenuCommunity />}
+                                      </ReActionProvider>
                                       </FactCheckProvider>
                                       </ClubProvider>
                                       </UsefulLinksProvider>

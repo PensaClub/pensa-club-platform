@@ -28,6 +28,11 @@ export const NOTIFICATION_TYPES = {
   // Fact Check (Admin)
   FACT_CHECK_SIGNAL: 'fact_check_signal',
 
+  // ReAction (Admin)
+  REACTION_VISIT_REQUEST: 'reaction_visit_request',
+  REACTION_REQUEST_CANCELLED: 'reaction_request_cancelled',
+  REACTION_PROBLEM: 'reaction_problem',
+
   // Student Management (Admin)
   STUDENT_UPDATED: 'student_updated',
   STUDENT_DELETED: 'student_deleted',
@@ -48,6 +53,12 @@ export const NOTIFICATION_TYPES = {
   MENTOR_ASSIGNED: 'mentor_assigned',
   STATUS_CHANGED: 'status_changed',
   APPLICATION_REAPPROVED: 'application_reapproved',
+
+  // ReAction notifications (User)
+  REACTION_REQUEST_STATUS_CHANGED: 'reaction_request_status_changed',
+  REACTION_MENTOR_ASSIGNED: 'reaction_mentor_assigned',
+  REACTION_VISIT_CONFIRMED: 'reaction_visit_confirmed',
+  REACTION_VISIT_REMINDER: 'reaction_visit_reminder',
 };
 
 export const notificationConfig = {
@@ -134,6 +145,28 @@ export const notificationConfig = {
     icon: '🔍',
     color: '#f78da7',
     route: '/admin/fact-check',
+    priority: 'high'
+  },
+
+  // ===============================
+  // REACTION (Admin)
+  // ===============================
+  [NOTIFICATION_TYPES.REACTION_VISIT_REQUEST]: {
+    icon: '📋',
+    color: '#f78da7',
+    route: '/admin/reaction',
+    priority: 'high'
+  },
+  [NOTIFICATION_TYPES.REACTION_REQUEST_CANCELLED]: {
+    icon: '❌',
+    color: '#dc2626',
+    route: '/admin/reaction',
+    priority: 'medium'
+  },
+  [NOTIFICATION_TYPES.REACTION_PROBLEM]: {
+    icon: '🚨',
+    color: '#dc2626',
+    route: '/admin/reaction',
     priority: 'high'
   },
 
@@ -266,6 +299,34 @@ export const notificationConfig = {
     route: '/student-panel',
     priority: 'high'
   },
+
+  // ===============================
+  // REACTION NOTIFICATIONS (User)
+  // ===============================
+  [NOTIFICATION_TYPES.REACTION_REQUEST_STATUS_CHANGED]: {
+    icon: '🔄',
+    color: '#f59e0b',
+    route: '/reaction/my',
+    priority: 'medium'
+  },
+  [NOTIFICATION_TYPES.REACTION_MENTOR_ASSIGNED]: {
+    icon: '🤝',
+    color: '#8b5cf6',
+    route: '/reaction/my',
+    priority: 'high'
+  },
+  [NOTIFICATION_TYPES.REACTION_VISIT_CONFIRMED]: {
+    icon: '✅',
+    color: '#10b981',
+    route: '/reaction/my',
+    priority: 'high'
+  },
+  [NOTIFICATION_TYPES.REACTION_VISIT_REMINDER]: {
+    icon: '⏰',
+    color: '#3b82f6',
+    route: '/reaction/my',
+    priority: 'high'
+  },
 };
 
 export const getNotificationConfig = (type) => {
@@ -304,6 +365,29 @@ export const getNotificationRoute = (notification) => {
     if (notification.userId) {
       return '/student-panel';
     }
+  }
+
+  // ✅ ReAction notifications (User) - винаги към /reaction/my
+  if (
+    notification.type === NOTIFICATION_TYPES.REACTION_REQUEST_STATUS_CHANGED ||
+    notification.type === NOTIFICATION_TYPES.REACTION_MENTOR_ASSIGNED ||
+    notification.type === NOTIFICATION_TYPES.REACTION_VISIT_CONFIRMED ||
+    notification.type === NOTIFICATION_TYPES.REACTION_VISIT_REMINDER
+  ) {
+    return '/reaction/my';
+  }
+
+  // ✅ ReAction admin notifications - директно към заявката
+  if (
+    notification.type === NOTIFICATION_TYPES.REACTION_VISIT_REQUEST ||
+    notification.type === NOTIFICATION_TYPES.REACTION_REQUEST_CANCELLED ||
+    notification.type === NOTIFICATION_TYPES.REACTION_PROBLEM
+  ) {
+    const requestId = notification.data?.requestId;
+    if (requestId) {
+      return `/admin/reaction?requestId=${requestId}`;
+    }
+    return '/admin/reaction';
   }
 
   return config.route;
