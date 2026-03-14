@@ -633,7 +633,8 @@ header.scrolled + .header-line {
     padding: 6px 0;
   }
 
-  .academy-nav-icon {
+  .academy-nav-icon,
+  .rxd-nav-icon {
     width: 14px;
     height: 14px;
   }
@@ -856,6 +857,170 @@ header.scrolled + .header-line {
 }
 
 .mobile-academy-item.active svg {
+  color: white;
+}
+
+/* ===================================
+   REACTION MEGA DROPDOWN (rxd-)
+   =================================== */
+
+.rxd-nav-trigger {
+  color: #dc2626 !important;
+  font-weight: 700 !important;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rxd-nav-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.rxd-nav-trigger::after {
+  background: linear-gradient(90deg, #dc2626, #f78da7) !important;
+}
+
+.rxd-mega {
+  position: absolute;
+  top: calc(100% + 15px);
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  width: 320px;
+  background: white;
+  border-radius: 14px;
+  padding: 0;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s ease;
+  overflow: hidden;
+  z-index: 100;
+}
+
+.rxd-nav-item:hover .rxd-mega {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(10px);
+  transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s ease;
+}
+
+.rxd-mega::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 16px;
+  height: 16px;
+  background: #dc2626;
+  z-index: 1;
+}
+
+.rxd-header {
+  background: linear-gradient(135deg, #dc2626, #f78da7);
+  padding: 14px 20px;
+  color: white;
+}
+
+.rxd-title {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.rxd-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 20px;
+  text-decoration: none;
+  color: #333;
+  transition: background 0.2s;
+  border-bottom: 1px solid #f3f3f3;
+}
+
+.rxd-item:last-of-type {
+  border-bottom: none;
+}
+
+.rxd-item:hover {
+  background: rgba(220, 38, 38, 0.06);
+}
+
+.rxd-item svg {
+  width: 24px;
+  height: 24px;
+  color: #dc2626;
+  flex-shrink: 0;
+}
+
+.rxd-item-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.rxd-item-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: block;
+}
+
+.rxd-item-desc {
+  font-size: 0.78rem;
+  color: #888;
+  display: block;
+  margin-top: 2px;
+}
+
+.rxd-cta {
+  display: block;
+  padding: 12px 20px;
+  background: rgba(220, 38, 38, 0.06);
+  color: #dc2626;
+  font-weight: 700;
+  font-size: 0.88rem;
+  text-decoration: none;
+  text-align: center;
+  transition: background 0.2s, color 0.2s;
+}
+
+.rxd-cta:hover {
+  background: #dc2626;
+  color: white;
+}
+
+/* Mobile reaction section */
+.mobile-reaction-section {
+  margin: 8px 0;
+  padding: 8px 0;
+  border-top: 2px solid rgba(220, 38, 38, 0.2);
+  border-bottom: 2px solid rgba(220, 38, 38, 0.2);
+}
+
+.mobile-reaction-label {
+  padding: 8px 20px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #dc2626;
+}
+
+.mobile-reaction-item.active {
+  background: #dc2626;
+  color: white;
+}
+
+.mobile-reaction-item:hover {
+  background: rgba(220, 38, 38, 0.1);
+  color: #dc2626;
+}
+
+.mobile-reaction-item svg {
+  color: #dc2626;
+}
+
+.mobile-reaction-item.active svg {
   color: white;
 }
 

@@ -21,6 +21,7 @@ export const Header = ({ additionalClasses }) => {
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [isModalOpen, setModalOpen] = useState(false);
   const [mobileCommunityOpen, setMobileCommunityOpen] = useState(false);
+  const [mobileReactionOpen, setMobileReactionOpen] = useState(false);
   const profileRef = useRef(null);
   const mobileMenuRef = useRef(null);
   const location = useLocation();
@@ -63,6 +64,7 @@ export const Header = ({ additionalClasses }) => {
     setProfileOpen(false);
     setMobileMenuOpen(false);
     setMobileCommunityOpen(false);
+    setMobileReactionOpen(false);
   }, [location.pathname]);
 
   useEffect(() => {
@@ -83,6 +85,10 @@ export const Header = ({ additionalClasses }) => {
 
   const toggleMobileCommunity = () => {
     setMobileCommunityOpen(!mobileCommunityOpen);
+  };
+
+  const toggleMobileReaction = () => {
+    setMobileReactionOpen(!mobileReactionOpen);
   };
 
   const toggleMobileMenu = () => {
@@ -262,12 +268,73 @@ export const Header = ({ additionalClasses }) => {
               {t("header.clubs")}
             </NavLink>
 
-            <NavLink
-              to="/fact-check"
-              className={({ isActive }) => `nav-item ${isActive ? "active" : ""}`}
-            >
-              {t("header.factcheck")}
-            </NavLink>
+            {/* Програма ReАкция — mega dropdown */}
+            <div className="has-dropdown rxd-nav-item">
+              <NavLink
+                to="/reaction"
+                className={({ isActive }) =>
+                  `nav-item rxd-nav-trigger ${isActive || location.pathname.startsWith('/reaction') || location.pathname.startsWith('/fact-check') ? "active" : ""}`
+                }
+              >
+                <svg className="rxd-nav-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 12L11 14L15 10M12 3L4 7V12C4 16.4183 7.58172 21 12 21C16.4183 21 20 16.4183 20 12V7L12 3Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                {t("header.reaction-program")}
+                <svg className="dropdown-arrow" width="12" height="6" viewBox="0 0 12 6" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M1 1L6 5L11 1" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </NavLink>
+
+              <div className="rxd-mega">
+                <div className="rxd-header">
+                  <span className="rxd-title">{t("header.reaction-program")}</span>
+                </div>
+                <Link to="/reaction" className="rxd-item">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M9 22V12H15V22" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  <div className="rxd-item-text">
+                    <span className="rxd-item-title">{t("header.reaction-landing")}</span>
+                    <span className="rxd-item-desc">{t("header.reaction-landing-desc")}</span>
+                  </div>
+                </Link>
+                <Link to="/reaction/book" className="rxd-item">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke="currentColor" strokeWidth="1.5" />
+                    <line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                    <line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                    <line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" strokeWidth="1.5" />
+                  </svg>
+                  <div className="rxd-item-text">
+                    <span className="rxd-item-title">{t("header.reaction-book")}</span>
+                    <span className="rxd-item-desc">{t("header.reaction-book-desc")}</span>
+                  </div>
+                </Link>
+                <Link to="/fact-check" className="rxd-item">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 12L11 14L15 10M12 3L4 7V12C4 16.4183 7.58172 21 12 21C16.4183 21 20 16.4183 20 12V7L12 3Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  <div className="rxd-item-text">
+                    <span className="rxd-item-title">{t("header.reaction-factcheck")}</span>
+                    <span className="rxd-item-desc">{t("header.reaction-factcheck-desc")}</span>
+                  </div>
+                </Link>
+                <Link to="/reaction/track" className="rxd-item">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="1.5" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                  </svg>
+                  <div className="rxd-item-text">
+                    <span className="rxd-item-title">{t("header.reaction-track")}</span>
+                    <span className="rxd-item-desc">{t("header.reaction-track-desc")}</span>
+                  </div>
+                </Link>
+                <Link to="/reaction" className="rxd-cta">
+                  {t("header.reaction-cta")} →
+                </Link>
+              </div>
+            </div>
 
             {/* ЧАТ ЛИНК */}
             {isAuthentication && (
@@ -622,16 +689,55 @@ export const Header = ({ additionalClasses }) => {
               {t("header.clubs")}
             </NavLink>
 
-            <NavLink
-              to="/fact-check"
-              className={({ isActive }) => `mobile-nav-item ${isActive ? "active" : ""}`}
-              onClick={toggleMobileMenu}
-            >
-              <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M9 12L11 14L15 10M12 3L4 7V12C4 16.4183 7.58172 21 12 21C16.4183 21 20 16.4183 20 12V7L12 3Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-              {t("header.factcheck")}
-            </NavLink>
+            {/* Програма ReАкция — мобилна секция */}
+            <div className="mobile-reaction-section">
+              <div className="mobile-reaction-label">{t("header.reaction-program")}</div>
+              <NavLink
+                to="/reaction"
+                className={({ isActive }) => `mobile-nav-item mobile-reaction-item ${isActive ? "active" : ""}`}
+                onClick={toggleMobileMenu}
+              >
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M9 22V12H15V22" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                {t("header.reaction-landing")}
+              </NavLink>
+              <NavLink
+                to="/reaction/book"
+                className={({ isActive }) => `mobile-nav-item mobile-reaction-item ${isActive ? "active" : ""}`}
+                onClick={toggleMobileMenu}
+              >
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke="currentColor" strokeWidth="1.5" />
+                  <line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                  <line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                  <line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" strokeWidth="1.5" />
+                </svg>
+                {t("header.reaction-book")}
+              </NavLink>
+              <NavLink
+                to="/fact-check"
+                className={({ isActive }) => `mobile-nav-item mobile-reaction-item ${isActive ? "active" : ""}`}
+                onClick={toggleMobileMenu}
+              >
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M9 12L11 14L15 10M12 3L4 7V12C4 16.4183 7.58172 21 12 21C16.4183 21 20 16.4183 20 12V7L12 3Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                {t("header.reaction-factcheck")}
+              </NavLink>
+              <NavLink
+                to="/reaction/track"
+                className={({ isActive }) => `mobile-nav-item mobile-reaction-item ${isActive ? "active" : ""}`}
+                onClick={toggleMobileMenu}
+              >
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="1.5" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                </svg>
+                {t("header.reaction-track")}
+              </NavLink>
+            </div>
 
             {/* ✅ ЧАТ ЛИНК MOBILE */}
             {isAuthentication && (

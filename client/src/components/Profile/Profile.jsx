@@ -223,7 +223,8 @@ export const Profile = () => {
     clubs: false,
     students: false,
     academy: false,
-    usefulLinks: false
+    usefulLinks: false,
+    reaction: false
   });
 
   const [applicationsStats, setApplicationsStats] = useState({
@@ -284,7 +285,9 @@ export const Profile = () => {
       "/profile/my-reviews": t("profile.myReviews"),
       "/admin/useful-links/create": t("admin.usefulLinks.create"),
       "/admin/useful-links": t("admin.usefulLinks.list"),
-      "/admin/fact-check": t("admin.factCheck.title")
+      "/admin/fact-check": t("admin.factCheck.title"),
+      "/admin/reaction": t("admin.reaction.title"),
+      "/mentor/reaction": t("profile.mentorReaction")
 
     };
 
@@ -328,7 +331,9 @@ export const Profile = () => {
     "/profile/mentors-statistics",
     "/profile/reviews-management",
     "/admin/fact-check",
-    "/admin/useful-links"
+    "/admin/useful-links",
+    "/admin/reaction",
+    "/mentor/reaction"
   ];
 
   const isAdminPanel = adminPaths.some(path => location.pathname.startsWith(path));
@@ -521,12 +526,6 @@ export const Profile = () => {
                   <NavLink to="/clubs" className="pd-link" onClick={() => setProfileMenuOpen(false)}>
                     <ClubsIcon /> {t("header.clubs")}
                   </NavLink>
-                  <NavLink to="/fact-check" className="pd-link" onClick={() => setProfileMenuOpen(false)}>
-                    <svg className="menu-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M9 12L11 14L15 10M12 3L4 7V12C4 16.4183 7.58172 21 12 21C16.4183 21 20 16.4183 20 12V7L12 3Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                    {t("header.factcheck")}
-                  </NavLink>
                   <NavLink to="/games" className="pd-link" onClick={() => setProfileMenuOpen(false)}>
                     <GamesIcon /> {t("header.games")}
                   </NavLink>
@@ -535,6 +534,40 @@ export const Profile = () => {
                   </NavLink>
                   <NavLink to="/about" className="pd-link" onClick={() => setProfileMenuOpen(false)}>
                     <AboutIcon /> {t("header.about")}
+                  </NavLink>
+                </div>
+
+                {/* Програма */}
+                <div className="pd-section">
+                  <div className="pd-section-label pd-program-label">{t("header.reaction-program")}</div>
+                  <NavLink to="/reaction" className="pd-link pd-program-link" onClick={() => setProfileMenuOpen(false)}>
+                    <svg className="menu-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M9 22V12H15V22" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    {t("header.reaction-landing")}
+                  </NavLink>
+                  <NavLink to="/reaction/book" className="pd-link pd-program-link" onClick={() => setProfileMenuOpen(false)}>
+                    <svg className="menu-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2" stroke="currentColor" strokeWidth="1.5" />
+                      <line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                      <line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                      <line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" strokeWidth="1.5" />
+                    </svg>
+                    {t("header.reaction-book")}
+                  </NavLink>
+                  <NavLink to="/fact-check" className="pd-link pd-program-link" onClick={() => setProfileMenuOpen(false)}>
+                    <svg className="menu-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M9 12L11 14L15 10M12 3L4 7V12C4 16.4183 7.58172 21 12 21C16.4183 21 20 16.4183 20 12V7L12 3Z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    {t("header.reaction-factcheck")}
+                  </NavLink>
+                  <NavLink to="/reaction/track" className="pd-link pd-program-link" onClick={() => setProfileMenuOpen(false)}>
+                    <svg className="menu-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="1.5" />
+                      <line x1="21" y1="21" x2="16.65" y2="16.65" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+                    </svg>
+                    {t("header.reaction-track")}
                   </NavLink>
                 </div>
 
@@ -774,6 +807,16 @@ export const Profile = () => {
                       </span>
                     </NavLink>
                   </li>
+                  <li>
+                    <Link to="/mentor/reaction">
+                      <span className="link-content">
+                        <svg className="menu-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                        {t("profile.mentorReaction")}
+                      </span>
+                    </Link>
+                  </li>
                 </ul>
               </div>
             )}
@@ -806,13 +849,37 @@ export const Profile = () => {
                     </NavLink>
                   </li>
                   <li>
-                    <Link to="/admin/fact-check">
+                    <NavLink
+                      onClick={(e) => {
+                        toggleSubMenu('reaction');
+                      }}
+                      className="nav-link-button"
+                    >
                       <span className="link-content">
-                        <SearchIconProfile className="icon" />
-                        {t("admin.factCheck.title")}
+                        <svg className="menu-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                        {t("admin.reaction.title")}
                       </span>
-                      <ArrowIcon className="icon-arrow" />
-                    </Link>
+                      <span className={`arrow-icon ${subMenuStates.reaction ? 'rotated' : ''}`}>
+                        {subMenuStates.reaction ? <DownArrowIcon /> : <ArrowIcon />}
+                      </span>
+                    </NavLink>
+                    <ul className={`sub-menu ${subMenuStates.reaction ? 'expanded' : ''}`}>
+                      <li>
+                        <NavLink to="/admin/fact-check" className={({ isActive }) => isActive ? 'active' : ''}>
+                          <CircleIcon className="icon" />
+                          {t("admin.reaction.factCheck")}
+                        </NavLink>
+                      </li>
+                      <li>
+                        <NavLink to="/admin/reaction" className={({ isActive }) => isActive ? 'active' : ''}>
+                          <CircleIcon className="icon" />
+                          {t("admin.reaction.manage")}
+                        </NavLink>
+                      </li>
+                    </ul>
                   </li>
                   <li>
                     <NavLink

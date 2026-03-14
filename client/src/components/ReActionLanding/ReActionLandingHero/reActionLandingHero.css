@@ -1,0 +1,376 @@
+/* ===================================
+   LANDING HERO — prefix: ralh-
+   =================================== */
+
+.ralh {
+  position: relative;
+  min-height: 520px;
+  overflow: visible;
+  z-index: 2;
+}
+
+/* Background photo collage */
+.ralh-photos {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.ralh-photo {
+  position: absolute;
+  background-size: cover;
+  background-position: center;
+  border-radius: 6px;
+}
+
+.ralh-photo--1 {
+  top: 0;
+  left: 0;
+  width: 55%;
+  height: 100%;
+}
+
+.ralh-photo--2 {
+  top: 0;
+  right: 0;
+  width: 48%;
+  height: 60%;
+}
+
+.ralh-photo--3 {
+  bottom: 0;
+  right: 0;
+  width: 48%;
+  height: 45%;
+}
+
+.ralh-photo--4 {
+  top: 10%;
+  left: 52%;
+  width: 20%;
+  height: 30%;
+  opacity: 0.6;
+}
+
+.ralh-photo--5 {
+  bottom: 5%;
+  left: 30%;
+  width: 25%;
+  height: 25%;
+  opacity: 0.5;
+}
+
+.ralh-photo--fallback {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Gradient overlay for readability */
+.ralh-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    135deg,
+    rgba(120, 20, 20, 0.88) 0%,
+    rgba(80, 15, 30, 0.82) 40%,
+    rgba(40, 10, 20, 0.75) 100%
+  );
+}
+
+/* Content */
+.ralh-content {
+  position: relative;
+  z-index: 3;
+  max-width: 800px;
+  padding: 130px 50px 100px;
+}
+
+.ralh-logos {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+
+.ralh-logo {
+  height: 44px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  opacity: 0.85;
+}
+
+.ralh-logos-divider {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 300;
+}
+
+.ralh-title {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 16px 0;
+  line-height: 1.15;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+.ralh-subtitle {
+  font-size: 1.15rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+  font-weight: 500;
+  line-height: 1.6;
+  max-width: 600px;
+}
+
+/* Stats */
+.ralh-stats {
+  display: flex;
+  gap: 32px;
+  margin-top: 36px;
+}
+
+.ralh-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ralh-stat-number {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1;
+}
+
+.ralh-stat-label {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Overflow photos — "leak" below the hero */
+.ralh-overflow-photos {
+  position: absolute;
+  bottom: -60px;
+  right: 40px;
+  z-index: 4;
+  display: flex;
+  gap: 16px;
+  pointer-events: none;
+}
+
+.ralh-overflow-photo {
+  width: 160px;
+  height: 120px;
+  border: 5px solid #ffffff;
+  border-radius: 4px;
+  box-shadow: 4px 6px 20px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  pointer-events: auto;
+}
+
+.ralh-overflow-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ralh-overflow-photo--1 {
+  transform: rotate(-4deg);
+}
+
+.ralh-overflow-photo--2 {
+  transform: rotate(2deg) translateY(-10px);
+}
+
+.ralh-overflow-photo--3 {
+  transform: rotate(-1deg) translateY(5px);
+}
+
+/* ===================================
+   DARK THEME
+   =================================== */
+
+[data-theme="dark"] .ralh-overlay {
+  background: linear-gradient(
+    135deg,
+    rgba(30, 10, 20, 0.92) 0%,
+    rgba(20, 8, 15, 0.88) 40%,
+    rgba(15, 5, 10, 0.85) 100%
+  );
+}
+
+[data-theme="dark"] .ralh-overflow-photo {
+  border-color: #2a2030;
+  box-shadow: 4px 6px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+@media (min-width: 1440px) {
+  .ralh-content {
+    padding: 140px 60px 110px;
+  }
+
+  .ralh-title {
+    font-size: 3.2rem;
+  }
+
+  .ralh-overflow-photo {
+    width: 180px;
+    height: 135px;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .ralh-content {
+    padding: 120px 40px 90px;
+  }
+
+  .ralh-title {
+    font-size: 2.6rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .ralh {
+    min-height: 440px;
+  }
+
+  .ralh-content {
+    padding: 110px 30px 80px;
+  }
+
+  .ralh-title {
+    font-size: 2.2rem;
+  }
+
+  .ralh-subtitle {
+    font-size: 1.05rem;
+  }
+
+  .ralh-overflow-photos {
+    right: 20px;
+    bottom: -40px;
+  }
+
+  .ralh-overflow-photo {
+    width: 130px;
+    height: 100px;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 767px) {
+  .ralh {
+    min-height: 400px;
+  }
+
+  .ralh-content {
+    padding: 100px 24px 70px;
+  }
+
+  .ralh-title {
+    font-size: 1.9rem;
+  }
+
+  .ralh-subtitle {
+    font-size: 1rem;
+  }
+
+  .ralh-stats {
+    gap: 24px;
+  }
+
+  .ralh-stat-number {
+    font-size: 1.6rem;
+  }
+
+  .ralh-overflow-photos {
+    right: 15px;
+    bottom: -30px;
+    gap: 10px;
+  }
+
+  .ralh-overflow-photo {
+    width: 110px;
+    height: 85px;
+    border-width: 4px;
+  }
+}
+
+@media (min-width: 480px) and (max-width: 575px) {
+  .ralh {
+    min-height: 360px;
+  }
+
+  .ralh-content {
+    padding: 90px 20px 60px;
+  }
+
+  .ralh-title {
+    font-size: 1.7rem;
+  }
+
+  .ralh-logo {
+    height: 34px;
+  }
+
+  .ralh-overflow-photos {
+    display: none;
+  }
+}
+
+@media (max-width: 479px) {
+  .ralh {
+    min-height: 320px;
+  }
+
+  .ralh-content {
+    padding: 80px 16px 50px;
+  }
+
+  .ralh-title {
+    font-size: 1.5rem;
+    line-height: 1.25;
+  }
+
+  .ralh-subtitle {
+    font-size: 0.92rem;
+  }
+
+  .ralh-logo {
+    height: 30px;
+  }
+
+  .ralh-logos {
+    gap: 10px;
+    margin-bottom: 20px;
+    margin-top: 2rem;
+  }
+
+  .ralh-stats {
+    gap: 18px;
+    margin-top: 24px;
+  }
+
+  .ralh-stat-number {
+    font-size: 1.4rem;
+  }
+
+  .ralh-stat-label {
+    font-size: 0.75rem;
+  }
+
+  .ralh-overflow-photos {
+    display: none;
+  }
+}

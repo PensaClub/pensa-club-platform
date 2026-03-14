@@ -1,0 +1,830 @@
+/* ===================================
+   ADMIN REACTION TESTIMONIALS — prefix: arat-
+   =================================== */
+
+.arat {
+  width: 100%;
+}
+
+/* ===================================
+   HEADER
+   =================================== */
+
+.arat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.arat-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #1f2937;
+  margin: 0;
+}
+
+.arat-add-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #ffffff;
+  background: linear-gradient(135deg, #f78da7 0%, #dc2626 100%);
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.arat-add-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.arat-add-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(220, 38, 38, 0.4);
+}
+
+/* ===================================
+   LOADING
+   =================================== */
+
+.arat-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+}
+
+.arat-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid #e5e7eb;
+  border-top-color: #dc2626;
+  border-radius: 50%;
+  animation: arat-spin 0.8s linear infinite;
+}
+
+@keyframes arat-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===================================
+   FORM
+   =================================== */
+
+.arat-form {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 2px solid #f3f4f6;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  animation: arat-fade-in 0.2s ease;
+}
+
+@keyframes arat-fade-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.arat-form-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #1f2937;
+  margin: 0 0 20px 0;
+}
+
+.arat-form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.arat-form-field {
+  margin-bottom: 14px;
+}
+
+.arat-form-field--inline {
+  margin-bottom: 18px;
+}
+
+.arat-form-label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.arat-form-input {
+  width: 100%;
+  padding: 10px 14px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #1f2937;
+  background: #ffffff;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.arat-form-input:focus {
+  outline: none;
+  border-color: #f78da7;
+  box-shadow: 0 0 0 3px rgba(247, 141, 167, 0.15);
+}
+
+.arat-form-input::placeholder {
+  color: #9ca3af;
+}
+
+.arat-form-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  color: #1f2937;
+  background: #ffffff;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  resize: vertical;
+  min-height: 100px;
+  line-height: 1.5;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.arat-form-textarea:focus {
+  outline: none;
+  border-color: #f78da7;
+  box-shadow: 0 0 0 3px rgba(247, 141, 167, 0.15);
+}
+
+.arat-form-textarea::placeholder {
+  color: #9ca3af;
+}
+
+.arat-form-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+}
+
+.arat-form-checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: #dc2626;
+  cursor: pointer;
+}
+
+.arat-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.arat-form-cancel {
+  padding: 10px 20px;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #6b7280;
+  background: #ffffff;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.arat-form-cancel:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.arat-form-save {
+  padding: 10px 24px;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #ffffff;
+  background: linear-gradient(135deg, #f78da7 0%, #dc2626 100%);
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+
+.arat-form-save:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(220, 38, 38, 0.4);
+}
+
+.arat-form-save:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ===================================
+   TABLE
+   =================================== */
+
+.arat-table-wrapper {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 2px solid #f3f4f6;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.arat-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: inherit;
+  table-layout: fixed;
+}
+
+.arat-table thead {
+  background: #f9fafb;
+}
+
+.arat-table th {
+  padding: 14px 18px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: left;
+  border-bottom: 2px solid #f3f4f6;
+}
+
+.arat-table td {
+  padding: 16px 18px;
+  font-size: 0.92rem;
+  color: #374151;
+  border-bottom: 1px solid #f3f4f6;
+  vertical-align: middle;
+  overflow-wrap: anywhere;
+}
+
+.arat-row:last-child td {
+  border-bottom: none;
+}
+
+.arat-cell-club {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.arat-cell-city {
+  color: #6b7280;
+  font-size: 0.88rem;
+}
+
+.arat-cell-quote {
+  color: #374151;
+  font-style: italic;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.arat-cell-author {
+  color: #6b7280;
+  font-size: 0.88rem;
+}
+
+.arat-cell-actions {
+  display: flex;
+  gap: 6px;
+  width: 120px;
+}
+
+/* ===================================
+   APPROVAL BADGE
+   =================================== */
+
+.arat-approval-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  border-radius: 16px;
+  border: 1.5px solid;
+  white-space: nowrap;
+}
+
+.arat-approval-badge--approved {
+  background: rgba(22, 163, 74, 0.1);
+  color: #16a34a;
+  border-color: rgba(22, 163, 74, 0.3);
+}
+
+.arat-approval-badge--pending {
+  background: rgba(217, 119, 6, 0.1);
+  color: #d97706;
+  border-color: rgba(217, 119, 6, 0.3);
+}
+
+/* ===================================
+   ACTION BUTTONS
+   =================================== */
+
+.arat-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: rgba(0, 0, 0, 0.04);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.arat-action-btn svg {
+  width: 16px;
+  height: 16px;
+  color: #6b7280;
+}
+
+.arat-action-btn--approve:hover {
+  background: rgba(22, 163, 74, 0.1);
+}
+
+.arat-action-btn--approve:hover svg {
+  color: #16a34a;
+}
+
+.arat-action-btn--reject:hover {
+  background: rgba(217, 119, 6, 0.1);
+}
+
+.arat-action-btn--reject:hover svg {
+  color: #d97706;
+}
+
+.arat-action-btn--edit:hover {
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.arat-action-btn--edit:hover svg {
+  color: #3b82f6;
+}
+
+.arat-action-btn--delete:hover {
+  background: rgba(220, 38, 38, 0.1);
+}
+
+.arat-action-btn--delete:hover svg {
+  color: #dc2626;
+}
+
+/* ===================================
+   MOBILE CARDS
+   =================================== */
+
+.arat-cards {
+  display: none;
+}
+
+.arat-card {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 2px solid #f3f4f6;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.arat-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  gap: 8px;
+}
+
+.arat-card-club {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.arat-card-city {
+  font-size: 0.82rem;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+.arat-card-quote {
+  font-size: 0.9rem;
+  color: #374151;
+  font-style: italic;
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+
+.arat-card-author {
+  font-size: 0.85rem;
+  color: #6b7280;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.arat-card-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* ===================================
+   EMPTY STATE
+   =================================== */
+
+.arat-empty {
+  text-align: center;
+  padding: 80px 20px;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 2px solid #f3f4f6;
+}
+
+.arat-empty-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 20px;
+  color: #d1d5db;
+}
+
+.arat-empty-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.arat-empty h3 {
+  font-size: 1.2rem;
+  color: #6b7280;
+  margin: 0;
+  font-weight: 600;
+}
+
+/* ===================================
+   DARK THEME
+   =================================== */
+
+[data-theme="dark"] .arat-title {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .arat-spinner {
+  border-color: #374151;
+  border-top-color: #f78da7;
+}
+
+[data-theme="dark"] .arat-form {
+  background: #1f2937;
+  border-color: #374151;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .arat-form-title {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .arat-form-label {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .arat-form-input {
+  background: #111827;
+  border-color: #374151;
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .arat-form-input:focus {
+  border-color: #f78da7;
+  box-shadow: 0 0 0 3px rgba(247, 141, 167, 0.1);
+}
+
+[data-theme="dark"] .arat-form-input::placeholder {
+  color: #6b7280;
+}
+
+[data-theme="dark"] .arat-form-textarea {
+  background: #111827;
+  border-color: #374151;
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .arat-form-textarea:focus {
+  border-color: #f78da7;
+  box-shadow: 0 0 0 3px rgba(247, 141, 167, 0.1);
+}
+
+[data-theme="dark"] .arat-form-textarea::placeholder {
+  color: #6b7280;
+}
+
+[data-theme="dark"] .arat-form-checkbox-label {
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .arat-form-cancel {
+  background: #1f2937;
+  border-color: #374151;
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .arat-form-cancel:hover {
+  background: #374151;
+  border-color: #6b7280;
+}
+
+[data-theme="dark"] .arat-table-wrapper {
+  background: #1f2937;
+  border-color: #374151;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .arat-table thead {
+  background: #111827;
+}
+
+[data-theme="dark"] .arat-table th {
+  color: #9ca3af;
+  border-bottom-color: #374151;
+}
+
+[data-theme="dark"] .arat-table td {
+  color: #d1d5db;
+  border-bottom-color: #374151;
+}
+
+[data-theme="dark"] .arat-cell-club {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .arat-cell-city,
+[data-theme="dark"] .arat-cell-author {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .arat-cell-quote {
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .arat-action-btn {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+[data-theme="dark"] .arat-action-btn svg {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .arat-card {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+[data-theme="dark"] .arat-card-club {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .arat-card-city {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .arat-card-quote {
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .arat-card-author {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .arat-empty {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+[data-theme="dark"] .arat-empty-icon {
+  color: #4b5563;
+}
+
+[data-theme="dark"] .arat-empty h3 {
+  color: #9ca3af;
+}
+
+/* ===================================
+   RESPONSIVE DESIGN
+   =================================== */
+
+/* Tablets (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .arat-title {
+    font-size: 1.35rem;
+  }
+
+  .arat-form-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .arat-table th {
+    padding: 12px 14px;
+    font-size: 0.78rem;
+  }
+
+  .arat-table td {
+    padding: 14px;
+    font-size: 0.88rem;
+  }
+}
+
+/* Small Tablets / Large Phones (576px - 767px) */
+@media (min-width: 576px) and (max-width: 767px) {
+  .arat-title {
+    font-size: 1.25rem;
+  }
+
+  .arat-add-btn {
+    padding: 8px 16px;
+    font-size: 0.82rem;
+  }
+
+  .arat-form-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .arat-form {
+    padding: 20px;
+  }
+
+  /* Hide table, show cards */
+  .arat-table-wrapper {
+    display: none;
+  }
+
+  .arat-cards {
+    display: block;
+  }
+}
+
+/* Phones (480px - 575px) */
+@media (min-width: 480px) and (max-width: 575px) {
+  .arat-title {
+    font-size: 1.2rem;
+  }
+
+  .arat-add-btn {
+    padding: 7px 14px;
+    font-size: 0.8rem;
+  }
+
+  .arat-form-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .arat-form {
+    padding: 18px;
+  }
+
+  .arat-form-title {
+    font-size: 1rem;
+  }
+
+  /* Hide table, show cards */
+  .arat-table-wrapper {
+    display: none;
+  }
+
+  .arat-cards {
+    display: block;
+  }
+
+  .arat-card {
+    padding: 14px;
+    margin-bottom: 10px;
+  }
+
+  .arat-empty {
+    padding: 60px 18px;
+  }
+}
+
+/* Small Phones (320px - 479px) */
+@media (max-width: 479px) {
+  .arat-title {
+    font-size: 1.1rem;
+  }
+
+  .arat-add-btn {
+    padding: 6px 12px;
+    font-size: 0.78rem;
+    border-radius: 10px;
+  }
+
+  .arat-add-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .arat-form {
+    padding: 14px;
+    border-radius: 12px;
+  }
+
+  .arat-form-title {
+    font-size: 0.95rem;
+    margin-bottom: 14px;
+  }
+
+  .arat-form-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .arat-form-input {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    border-radius: 8px;
+  }
+
+  .arat-form-textarea {
+    padding: 10px 12px;
+    font-size: 0.85rem;
+    border-radius: 8px;
+    min-height: 80px;
+  }
+
+  .arat-form-actions {
+    flex-direction: column;
+  }
+
+  .arat-form-cancel,
+  .arat-form-save {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* Hide table, show cards */
+  .arat-table-wrapper {
+    display: none;
+  }
+
+  .arat-cards {
+    display: block;
+  }
+
+  .arat-card {
+    padding: 12px;
+    margin-bottom: 8px;
+    border-radius: 10px;
+    border-width: 1.5px;
+  }
+
+  .arat-card-club {
+    font-size: 0.88rem;
+  }
+
+  .arat-card-quote {
+    font-size: 0.85rem;
+  }
+
+  .arat-empty {
+    padding: 50px 15px;
+  }
+
+  .arat-empty-icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .arat-empty h3 {
+    font-size: 1.05rem;
+  }
+}

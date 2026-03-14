@@ -1,0 +1,309 @@
+/* ===================================
+   MENTOR REACTION RESOURCES — prefix: mrar-
+   =================================== */
+
+.mrar {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* ===================================
+   SECTIONS
+   =================================== */
+
+.mrar-section {
+  margin-bottom: 40px;
+}
+
+.mrar-section:last-child {
+  margin-bottom: 0;
+}
+
+.mrar-section-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 20px 0;
+  overflow-wrap: anywhere;
+}
+
+.mrar-section-title svg {
+  width: 24px;
+  height: 24px;
+  color: #4f46e5;
+  flex-shrink: 0;
+}
+
+/* ===================================
+   TOPIC CARDS
+   =================================== */
+
+.mrar-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+}
+
+.mrar-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 24px;
+  transition: box-shadow 0.2s ease;
+}
+
+.mrar-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.mrar-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  background: #eef2ff;
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.mrar-card-icon svg {
+  width: 24px;
+  height: 24px;
+  color: #4f46e5;
+}
+
+.mrar-card-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 8px 0;
+  overflow-wrap: anywhere;
+}
+
+.mrar-card-desc {
+  font-size: 0.88rem;
+  color: #6b7280;
+  line-height: 1.6;
+  margin: 0 0 16px 0;
+  overflow-wrap: anywhere;
+}
+
+.mrar-card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #4f46e5;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.mrar-card-link:hover {
+  color: #4338ca;
+}
+
+.mrar-card-link svg {
+  width: 16px;
+  height: 16px;
+}
+
+.mrar-card-coming-soon {
+  display: inline-block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #9ca3af;
+  font-style: italic;
+}
+
+/* ===================================
+   MENTOR GUIDE
+   =================================== */
+
+.mrar-guide {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+}
+
+.mrar-guide-item {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 22px;
+  border-left: 4px solid #4f46e5;
+}
+
+.mrar-guide-item h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 10px 0;
+  overflow-wrap: anywhere;
+}
+
+.mrar-guide-item p {
+  font-size: 0.88rem;
+  color: #6b7280;
+  line-height: 1.6;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+/* ===================================
+   CONTACT CARD
+   =================================== */
+
+.mrar-contact-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 24px;
+}
+
+.mrar-contact-desc {
+  font-size: 0.92rem;
+  color: #6b7280;
+  margin: 0 0 18px 0;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.mrar-contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mrar-contact-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #4f46e5;
+  text-decoration: none;
+  transition: color 0.2s;
+  overflow-wrap: anywhere;
+}
+
+.mrar-contact-link:hover {
+  color: #4338ca;
+}
+
+.mrar-contact-link svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+/* ===================================
+   DARK THEME
+   =================================== */
+
+[data-theme="dark"] .mrar-section-title {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .mrar-section-title svg {
+  color: #818cf8;
+}
+
+[data-theme="dark"] .mrar-card {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+[data-theme="dark"] .mrar-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .mrar-card-icon {
+  background: #312e81;
+}
+
+[data-theme="dark"] .mrar-card-icon svg {
+  color: #a5b4fc;
+}
+
+[data-theme="dark"] .mrar-card-title {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .mrar-card-desc {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .mrar-card-link {
+  color: #818cf8;
+}
+
+[data-theme="dark"] .mrar-card-link:hover {
+  color: #a5b4fc;
+}
+
+[data-theme="dark"] .mrar-card-coming-soon {
+  color: #6b7280;
+}
+
+[data-theme="dark"] .mrar-guide-item {
+  background: #1f2937;
+  border-color: #374151;
+  border-left-color: #818cf8;
+}
+
+[data-theme="dark"] .mrar-guide-item h4 {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .mrar-guide-item p {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .mrar-contact-card {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+[data-theme="dark"] .mrar-contact-desc {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .mrar-contact-link {
+  color: #818cf8;
+}
+
+[data-theme="dark"] .mrar-contact-link:hover {
+  color: #a5b4fc;
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+@media (max-width: 767px) {
+  .mrar-cards,
+  .mrar-guide {
+    grid-template-columns: 1fr;
+  }
+
+  .mrar-section-title {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 479px) {
+  .mrar-card,
+  .mrar-guide-item,
+  .mrar-contact-card {
+    padding: 18px;
+  }
+
+  .mrar-section-title {
+    font-size: 1rem;
+  }
+}

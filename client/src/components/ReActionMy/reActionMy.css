@@ -1,0 +1,458 @@
+/* ===================================
+   REACTION MY REQUESTS — prefix: ram-
+   =================================== */
+
+.ram {
+  padding: 130px 20px 80px;
+  min-height: 100vh;
+  background: #f9fafb;
+}
+
+.ram-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Header */
+.ram-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.ram-title {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #1f2937;
+  margin: 0 0 8px;
+}
+
+.ram-subtitle {
+  font-size: 1rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Loading */
+.ram-loading {
+  text-align: center;
+  padding: 60px 20px;
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+/* Stats */
+.ram-stats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 20px 32px;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 32px;
+}
+
+.ram-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.ram-stat-number {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #1f2937;
+}
+
+.ram-stat-number--active {
+  color: #3b82f6;
+}
+
+.ram-stat-number--completed {
+  color: #16a34a;
+}
+
+.ram-stat-number--cancelled {
+  color: #dc2626;
+}
+
+.ram-stat-label {
+  font-size: 0.8rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.ram-stat-divider {
+  width: 1px;
+  height: 32px;
+  background: #e5e7eb;
+}
+
+/* Empty state */
+.ram-empty {
+  text-align: center;
+  padding: 60px 20px;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
+}
+
+.ram-empty-icon {
+  width: 48px;
+  height: 48px;
+  color: #9ca3af;
+  margin-bottom: 16px;
+}
+
+.ram-empty-text {
+  font-size: 1rem;
+  color: #6b7280;
+  margin: 0 0 20px;
+}
+
+/* Section */
+.ram-section {
+  margin-bottom: 32px;
+}
+
+.ram-section-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #374151;
+  margin: 0 0 16px;
+}
+
+/* Cards */
+.ram-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ram-card {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 20px;
+  border: 1px solid #e5e7eb;
+  transition: box-shadow 0.2s;
+}
+
+.ram-card:hover {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.ram-card--upcoming {
+  border-left: 4px solid #16a34a;
+}
+
+.ram-card--history {
+  opacity: 0.75;
+}
+
+.ram-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.ram-card-status {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.ram-card-code {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #9ca3af;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.1em;
+}
+
+.ram-card-club {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 6px;
+}
+
+.ram-card-details {
+  display: flex;
+  gap: 16px;
+  font-size: 0.88rem;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+.ram-card-mentor {
+  font-size: 0.85rem;
+  color: #7c3aed;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.ram-card-cancel-reason {
+  font-size: 0.82rem;
+  color: #dc2626;
+  margin-top: 4px;
+  font-style: italic;
+}
+
+/* Buttons */
+.ram-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+
+.ram-btn--primary {
+  background: linear-gradient(135deg, #f78da7, #dc2626);
+  color: #ffffff;
+}
+
+.ram-btn--primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(247, 141, 167, 0.3);
+}
+
+.ram-btn--secondary {
+  background: transparent;
+  color: #6b7280;
+  border: 1.5px solid #d1d5db;
+}
+
+.ram-btn--secondary:hover {
+  border-color: #9ca3af;
+  color: #374151;
+}
+
+.ram-btn--cancel {
+  background: transparent;
+  color: #dc2626;
+  border: 1.5px solid rgba(220, 38, 38, 0.3);
+  font-size: 0.82rem;
+  padding: 6px 14px;
+}
+
+.ram-btn--cancel:hover {
+  background: rgba(220, 38, 38, 0.05);
+}
+
+.ram-btn--danger {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+.ram-btn--danger:hover {
+  background: #b91c1c;
+}
+
+.ram-btn--danger:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Actions */
+.ram-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+/* Cancel Modal */
+.ram-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.ram-modal {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 28px;
+  max-width: 440px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+.ram-modal-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #1f2937;
+  margin: 0 0 8px;
+}
+
+.ram-modal-text {
+  font-size: 0.92rem;
+  color: #6b7280;
+  margin: 0 0 16px;
+}
+
+.ram-modal-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 60px;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+}
+
+.ram-modal-textarea:focus {
+  outline: none;
+  border-color: #f78da7;
+  box-shadow: 0 0 0 3px rgba(247, 141, 167, 0.1);
+}
+
+.ram-modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+/* Dark theme */
+[data-theme="dark"] .ram {
+  background: #0f1520;
+}
+
+[data-theme="dark"] .ram-title {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .ram-subtitle {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .ram-stats {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+[data-theme="dark"] .ram-stat-number {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .ram-stat-divider {
+  background: #374151;
+}
+
+[data-theme="dark"] .ram-stat-label {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .ram-empty {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+[data-theme="dark"] .ram-card {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+[data-theme="dark"] .ram-card-club {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .ram-card-details {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .ram-section-title {
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .ram-modal {
+  background: #1f2937;
+}
+
+[data-theme="dark"] .ram-modal-title {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .ram-modal-text {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .ram-modal-textarea {
+  background: #111827;
+  color: #f3f4f6;
+  border-color: #374151;
+}
+
+[data-theme="dark"] .ram-btn--secondary {
+  color: #9ca3af;
+  border-color: #4b5563;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .ram {
+    padding: 130px 16px 60px;
+  }
+
+  .ram-stats {
+    gap: 16px;
+    padding: 16px 20px;
+  }
+
+  .ram-stat-number {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .ram-title {
+    font-size: 1.5rem;
+  }
+
+  .ram-stats {
+    gap: 12px;
+    padding: 14px 16px;
+    flex-wrap: wrap;
+  }
+
+  .ram-stat-number {
+    font-size: 1.2rem;
+  }
+
+  .ram-stat-label {
+    font-size: 0.72rem;
+  }
+
+  .ram-actions {
+    flex-direction: column;
+  }
+
+  .ram-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

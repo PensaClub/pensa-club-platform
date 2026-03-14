@@ -1,0 +1,9 @@
+.rap {
+  min-height: 100vh;
+  background: #ffffff;
+  overflow-x: hidden;
+}
+
+[data-theme="dark"] .rap {
+  background: #151c28;
+}

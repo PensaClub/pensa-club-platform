@@ -1,0 +1,231 @@
+/* ===================================
+   LANDING ABOUT — prefix: rala-
+   =================================== */
+
+.rala {
+  position: relative;
+  z-index: 1;
+  padding: 100px 50px 70px;
+  background: #faf7f5;
+}
+
+.rala-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 60px;
+}
+
+.rala-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.rala-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #7B1818;
+  margin: 0 0 20px 0;
+  line-height: 1.2;
+}
+
+.rala-description {
+  font-size: 1.08rem;
+  color: #4a3030;
+  line-height: 1.75;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Tilted image with photo-album frame */
+.rala-image-link {
+  flex-shrink: 0;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.rala-image-frame {
+  position: relative;
+  width: 280px;
+  background: #ffffff;
+  padding: 10px 10px 30px;
+  border-radius: 3px;
+  box-shadow: 6px 8px 25px rgba(0, 0, 0, 0.2);
+  transform: perspective(800px) rotateY(-5deg) rotate(2deg);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.rala-image-link:hover .rala-image-frame {
+  transform: perspective(800px) rotateY(-2deg) rotate(1deg) translateY(-4px);
+  box-shadow: 8px 12px 30px rgba(0, 0, 0, 0.28);
+}
+
+.rala-image {
+  width: 100%;
+  display: block;
+  border-radius: 2px;
+}
+
+/* Decorative tape strips */
+.rala-image-tape {
+  position: absolute;
+  width: 60px;
+  height: 20px;
+  background: rgba(255, 230, 150, 0.7);
+  border-radius: 2px;
+}
+
+.rala-image-tape--top {
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+}
+
+.rala-image-tape--bottom {
+  bottom: 12px;
+  right: -10px;
+  transform: rotate(5deg);
+}
+
+.rala-image-caption {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #7B1818;
+  transition: color 0.2s;
+}
+
+.rala-image-link:hover .rala-image-caption {
+  color: #a02020;
+}
+
+/* ===================================
+   DARK THEME
+   =================================== */
+
+[data-theme="dark"] .rala {
+  background: #1a1520;
+}
+
+[data-theme="dark"] .rala-title {
+  color: #f0a0a0;
+}
+
+[data-theme="dark"] .rala-description {
+  color: #c8b8b8;
+}
+
+[data-theme="dark"] .rala-image-frame {
+  background: #2a2030;
+  box-shadow: 6px 8px 25px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .rala-image-tape {
+  background: rgba(200, 180, 100, 0.4);
+}
+
+[data-theme="dark"] .rala-image-caption {
+  color: #f0a0a0;
+}
+
+[data-theme="dark"] .rala-image-link:hover .rala-image-caption {
+  color: #ffbbbb;
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+@media (min-width: 1440px) {
+  .rala {
+    padding: 110px 60px 80px;
+  }
+
+  .rala-image-frame {
+    width: 320px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .rala {
+    padding: 80px 30px 60px;
+  }
+
+  .rala-container {
+    gap: 40px;
+  }
+
+  .rala-title {
+    font-size: 1.75rem;
+  }
+
+  .rala-image-frame {
+    width: 240px;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 767px) {
+  .rala {
+    padding: 70px 24px 50px;
+  }
+
+  .rala-container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .rala-title {
+    font-size: 1.6rem;
+  }
+
+  .rala-image-frame {
+    width: 260px;
+  }
+}
+
+@media (min-width: 480px) and (max-width: 575px) {
+  .rala {
+    padding: 60px 20px 40px;
+  }
+
+  .rala-container {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .rala-title {
+    font-size: 1.45rem;
+  }
+
+  .rala-image-frame {
+    width: 240px;
+  }
+}
+
+@media (max-width: 479px) {
+  .rala {
+    padding: 50px 16px 35px;
+  }
+
+  .rala-container {
+    flex-direction: column;
+    text-align: center;
+    gap: 30px;
+  }
+
+  .rala-title {
+    font-size: 1.35rem;
+  }
+
+  .rala-description {
+    font-size: 0.95rem;
+  }
+
+  .rala-image-frame {
+    width: 220px;
+    transform: perspective(800px) rotateY(-3deg) rotate(1.5deg);
+  }
+}
