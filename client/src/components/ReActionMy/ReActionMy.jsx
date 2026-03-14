@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useReAction } from '../contexts/ReActionProvider';
+import { useTheme } from '../contexts/ThemeContext';
 import './reActionMy.css';
 
 const statusColors = {
@@ -16,6 +17,40 @@ const statusColors = {
 const ReActionMy = () => {
     const { t } = useTranslation('reaction');
     const { getMyRequests, cancelMyRequest } = useReAction();
+    const { theme, toggleTheme } = useTheme();
+
+    // Default to light theme, shared across all ReAction pages (ra- prefix)
+    useEffect(() => {
+        const isRefresh = localStorage.getItem('ra-page-active') === 'true';
+
+        if (!isRefresh) {
+            localStorage.setItem('ra-prev-theme', theme);
+            const savedTheme = localStorage.getItem('ra-theme') || 'light';
+            localStorage.setItem('ra-theme', savedTheme);
+            if (theme !== savedTheme) {
+                toggleTheme();
+            }
+        }
+        localStorage.setItem('ra-page-active', 'true');
+
+        return () => {
+            localStorage.removeItem('ra-page-active');
+            const prevTheme = localStorage.getItem('ra-prev-theme');
+            if (prevTheme) {
+                localStorage.removeItem('ra-prev-theme');
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                if (currentTheme !== prevTheme) {
+                    toggleTheme();
+                }
+            }
+        };
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+    useEffect(() => {
+        if (localStorage.getItem('ra-page-active') === 'true') {
+            localStorage.setItem('ra-theme', theme);
+        }
+    }, [theme]);
 
     const [requests, setRequests] = useState([]);
     const [stats, setStats] = useState({ total: 0, completed: 0, cancelled: 0, active: 0 });
