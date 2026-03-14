@@ -3,9 +3,11 @@
    =================================== */
 
 .rat {
-  padding: 80px 20px;
+  padding: 110px 20px 80px;
   background: #ebd0d6;
   position: relative;
+  margin-top: -60px;
+  border-radius: 0 0 50% 50% / 0 0 60px 60px;
 }
 
 .rat-container {
@@ -144,11 +146,13 @@
   .rat-title {
     font-size: 1.7rem;
     margin-bottom: 32px;
+    margin-top: 2.5rem;
   }
 
   .rat-grid {
     grid-template-columns: 1fr;
   }
+
 }
 
 @media (max-width: 640px) {

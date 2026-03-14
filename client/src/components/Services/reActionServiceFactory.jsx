@@ -26,8 +26,16 @@ export const reActionServiceFactory = (token) => {
       return requester.get(`${apiUrl}/reaction/testimonials`);
     },
 
+    submitTestimonial: async (data) => {
+      return requester.post(`${apiUrl}/reaction/testimonials`, data);
+    },
+
     getPublicStats: async () => {
       return requester.get(`${apiUrl}/reaction/stats`);
+    },
+
+    getGallery: async () => {
+      return requester.get(`${apiUrl}/reaction/gallery`);
     },
 
     // ===============================
@@ -86,6 +94,26 @@ export const reActionServiceFactory = (token) => {
 
     sendEmail: async (data) => {
       return requester.post(`${apiUrl}/reaction/admin/send-email`, data);
+    },
+
+    getAdminGallery: async () => {
+      return requester.get(`${apiUrl}/reaction/admin/gallery`);
+    },
+
+    createGalleryItem: async (data) => {
+      return requester.post(`${apiUrl}/reaction/admin/gallery`, data);
+    },
+
+    updateGalleryItem: async (id, data) => {
+      return requester.patch(`${apiUrl}/reaction/admin/gallery/${id}`, data);
+    },
+
+    reorderGallery: async (items) => {
+      return requester.patch(`${apiUrl}/reaction/admin/gallery/reorder`, { items });
+    },
+
+    deleteGalleryItem: async (id) => {
+      return requester.del(`${apiUrl}/reaction/admin/gallery/${id}`);
     },
 
     // ===============================

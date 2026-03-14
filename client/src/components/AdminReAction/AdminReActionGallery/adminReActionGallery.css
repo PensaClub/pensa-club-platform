@@ -1,0 +1,616 @@
+/* ===================================
+   ADMIN GALLERY — prefix: arag-
+   =================================== */
+
+.arag-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 24px 0;
+}
+
+/* Upload zone */
+.arag-upload {
+  border: 2px dashed #d1d5db;
+  border-radius: 12px;
+  padding: 32px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.arag-upload:hover {
+  border-color: #dc2626;
+  background: rgba(220, 38, 38, 0.03);
+}
+
+.arag-upload-input {
+  display: none;
+}
+
+.arag-upload-icon {
+  width: 36px;
+  height: 36px;
+  color: #9ca3af;
+}
+
+.arag-upload:hover .arag-upload-icon {
+  color: #dc2626;
+}
+
+.arag-upload-text {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.arag-upload-hint {
+  font-size: 0.82rem;
+  color: #9ca3af;
+}
+
+/* Progress */
+.arag-upload-progress {
+  width: 100%;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.arag-progress-bar {
+  width: 100%;
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.arag-progress-fill {
+  height: 100%;
+  background: #dc2626;
+  border-radius: 4px;
+  transition: width 0.3s;
+}
+
+.arag-progress-text {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #dc2626;
+}
+
+/* URL add section */
+.arag-url-section {
+  margin-bottom: 24px;
+}
+
+.arag-url-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: #f3f4f6;
+  border: 2px dashed #d1d5db;
+  border-radius: 10px;
+  color: #374151;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.arag-url-toggle svg {
+  width: 18px;
+  height: 18px;
+  color: #dc2626;
+}
+
+.arag-url-toggle:hover {
+  border-color: #dc2626;
+  background: rgba(220, 38, 38, 0.03);
+  color: #dc2626;
+}
+
+.arag-url-form {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.arag-url-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.arag-url-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.arag-url-input {
+  padding: 10px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  color: #1f2937;
+  transition: border-color 0.2s;
+}
+
+.arag-url-input:focus {
+  outline: none;
+  border-color: #dc2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+}
+
+.arag-url-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+/* Stats bar + Filters */
+.arag-stats-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 14px 18px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+}
+
+.arag-stats {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.arag-stat {
+  font-size: 0.88rem;
+  color: #6b7280;
+}
+
+.arag-stat strong {
+  color: #1f2937;
+  font-weight: 700;
+}
+
+.arag-stat--published strong {
+  color: #16a34a;
+}
+
+.arag-stat--hidden strong {
+  color: #dc2626;
+}
+
+.arag-filters {
+  display: flex;
+  gap: 6px;
+}
+
+.arag-filter {
+  padding: 6px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 20px;
+  background: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-family: inherit;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.arag-filter:hover {
+  border-color: #dc2626;
+  color: #dc2626;
+}
+
+.arag-filter--active {
+  background: #dc2626;
+  border-color: #dc2626;
+  color: #ffffff;
+}
+
+.arag-filter--active:hover {
+  background: #b91c1c;
+  color: #ffffff;
+}
+
+/* Drag hint */
+.arag-drag-hint {
+  font-size: 0.82rem;
+  color: #9ca3af;
+  margin: 0 0 12px 0;
+  font-style: italic;
+}
+
+/* Grid */
+.arag-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.arag-item {
+  background: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  cursor: grab;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+}
+
+.arag-item:active {
+  cursor: grabbing;
+}
+
+.arag-item--drag-over {
+  border-color: #dc2626;
+  box-shadow: 0 4px 16px rgba(220, 38, 38, 0.2);
+}
+
+.arag-item--unpublished {
+  opacity: 0.55;
+}
+
+.arag-item-media {
+  position: relative;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+}
+
+.arag-item-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.arag-item-type {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  font-size: 0.85rem;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 6px;
+  padding: 2px 6px;
+  line-height: 1;
+}
+
+/* Actions */
+.arag-item-actions {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px;
+}
+
+.arag-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.arag-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.arag-btn--publish {
+  background: #f3f4f6;
+  color: #9ca3af;
+}
+
+.arag-btn--publish.arag-btn--active {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.arag-btn--publish:hover {
+  background: #e5e7eb;
+}
+
+.arag-btn--delete {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.arag-btn--delete:hover {
+  background: #fee2e2;
+}
+
+/* Loading / Empty */
+.arag-loading {
+  display: flex;
+  justify-content: center;
+  padding: 60px 0;
+}
+
+.arag-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e5e7eb;
+  border-top-color: #dc2626;
+  border-radius: 50%;
+  animation: arag-spin 0.8s linear infinite;
+}
+
+@keyframes arag-spin {
+  to { transform: rotate(360deg); }
+}
+
+.arag-empty {
+  text-align: center;
+  color: #9ca3af;
+  font-size: 0.95rem;
+  padding: 40px 0;
+}
+
+/* Delete confirmation modal */
+.arag-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.arag-modal {
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 28px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+.arag-modal-text {
+  font-size: 1rem;
+  color: #374151;
+  margin: 0 0 20px 0;
+  line-height: 1.5;
+}
+
+.arag-modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.arag-modal-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.arag-modal-btn--cancel {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.arag-modal-btn--cancel:hover {
+  background: #e5e7eb;
+}
+
+.arag-modal-btn--danger {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+.arag-modal-btn--danger:hover {
+  background: #b91c1c;
+}
+
+/* ===================================
+   DARK THEME
+   =================================== */
+
+[data-theme="dark"] .arag-title {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .arag-upload {
+  border-color: #4b5563;
+}
+
+[data-theme="dark"] .arag-upload:hover {
+  border-color: #f78da7;
+  background: rgba(247, 141, 167, 0.05);
+}
+
+[data-theme="dark"] .arag-upload-text {
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .arag-upload-icon {
+  color: #6b7280;
+}
+
+[data-theme="dark"] .arag-upload:hover .arag-upload-icon {
+  color: #f78da7;
+}
+
+[data-theme="dark"] .arag-progress-bar {
+  background: #374151;
+}
+
+[data-theme="dark"] .arag-progress-fill {
+  background: #f78da7;
+}
+
+[data-theme="dark"] .arag-drag-hint {
+  color: #6b7280;
+}
+
+[data-theme="dark"] .arag-item {
+  background: #1f2937;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="dark"] .arag-item--drag-over {
+  border-color: #f78da7;
+}
+
+[data-theme="dark"] .arag-btn--publish {
+  background: #374151;
+  color: #6b7280;
+}
+
+[data-theme="dark"] .arag-btn--publish.arag-btn--active {
+  background: #064e3b;
+  color: #34d399;
+}
+
+[data-theme="dark"] .arag-btn--delete {
+  background: #451a1a;
+  color: #f87171;
+}
+
+[data-theme="dark"] .arag-spinner {
+  border-color: #374151;
+  border-top-color: #f78da7;
+}
+
+[data-theme="dark"] .arag-empty {
+  color: #6b7280;
+}
+
+[data-theme="dark"] .arag-modal {
+  background: #1f2937;
+}
+
+[data-theme="dark"] .arag-modal-text {
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .arag-modal-btn--cancel {
+  background: #374151;
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .arag-url-toggle {
+  background: #1f2937;
+  border-color: #4b5563;
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .arag-url-toggle:hover {
+  border-color: #f78da7;
+  background: rgba(247, 141, 167, 0.05);
+  color: #f78da7;
+}
+
+[data-theme="dark"] .arag-url-form {
+  background: #111827;
+  border-color: #374151;
+}
+
+[data-theme="dark"] .arag-url-label {
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .arag-url-input {
+  background: #1f2937;
+  border-color: #4b5563;
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .arag-url-input:focus {
+  border-color: #f78da7;
+  box-shadow: 0 0 0 3px rgba(247, 141, 167, 0.15);
+}
+
+[data-theme="dark"] .arag-stats-bar {
+  background: #111827;
+  border-color: #374151;
+}
+
+[data-theme="dark"] .arag-stat {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .arag-stat strong {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .arag-filter {
+  background: #1f2937;
+  border-color: #4b5563;
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .arag-filter:hover {
+  border-color: #f78da7;
+  color: #f78da7;
+}
+
+[data-theme="dark"] .arag-filter--active {
+  background: #f78da7;
+  border-color: #f78da7;
+  color: #1f2937;
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+@media (max-width: 767px) {
+  .arag-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+  }
+
+  .arag-upload {
+    padding: 24px 16px;
+  }
+}
+
+@media (max-width: 479px) {
+  .arag-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .arag-btn {
+    width: 30px;
+    height: 30px;
+  }
+
+  .arag-btn svg {
+    width: 14px;
+    height: 14px;
+  }
+}

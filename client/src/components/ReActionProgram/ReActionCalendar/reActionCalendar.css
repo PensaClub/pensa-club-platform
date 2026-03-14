@@ -261,29 +261,8 @@
 /* Responsive */
 @media (max-width: 480px) {
   .rac {
-    padding: 14px;
-  }
-
-  .rac-cell {
-    height: 36px;
-    font-size: 0.82rem;
-    border-radius: 8px;
-  }
-
-  .rac-legend {
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  .rac-legend-item {
-    font-size: 0.7rem;
-  }
-}
-
-@media (max-width: 380px) {
-  .rac-cell {
-    height: 32px;
-    font-size: 0.78rem;
+    padding: 10px;
+    overflow-x: hidden;
   }
 
   .rac-grid {
@@ -292,5 +271,67 @@
 
   .rac-weekdays {
     gap: 2px;
+  }
+
+  .rac-cell {
+    height: 32px;
+    font-size: 0.75rem;
+    border-radius: 6px;
+    min-width: 0;
+  }
+
+  .rac-weekday {
+    font-size: 0.65rem;
+  }
+
+  .rac-month-label {
+    font-size: 0.9rem;
+  }
+
+  .rac-nav {
+    width: 30px;
+    height: 30px;
+  }
+
+  .rac-nav svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .rac-slots {
+    font-size: 0.45rem;
+  }
+
+  .rac-legend {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .rac-legend-item {
+    font-size: 0.65rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .rac {
+    padding: 8px;
+  }
+
+  .rac-cell {
+    height: 28px;
+    font-size: 0.7rem;
+    border-radius: 5px;
+  }
+
+  .rac-grid {
+    gap: 1px;
+  }
+
+  .rac-weekdays {
+    gap: 1px;
+  }
+
+  .rac-weekday {
+    font-size: 0.6rem;
   }
 }

@@ -5,7 +5,7 @@
 .ara {
   width: 100%;
   min-height: 100vh;
-  background: #f8f9fa;
+  background: #eef0f4;
   padding: 0;
   overflow-x: hidden;
 }
@@ -68,7 +68,8 @@
   gap: 0;
   padding: 0 40px;
   background: #ffffff;
-  border-bottom: 2px solid #f3f4f6;
+  border-bottom: 2px solid #e2e5ea;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
@@ -86,7 +87,7 @@
   font-family: inherit;
   font-size: 1rem;
   font-weight: 600;
-  color: #6b7280;
+  color: #4b5563;
   background: none;
   border: none;
   border-bottom: 3px solid transparent;

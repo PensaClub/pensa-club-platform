@@ -23,7 +23,7 @@ export const ReActionProvider = ({ children }) => {
       console.error('Error fetching availability:', error);
       return { success: false, availability: [] };
     }
-  }, []);
+  }, [reActionService]);
 
   const submitRequest = useCallback(async (data) => {
     setIsLoading(true);
@@ -36,7 +36,7 @@ export const ReActionProvider = ({ children }) => {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [reActionService]);
 
   const trackRequest = useCallback(async (code) => {
     try {
@@ -45,7 +45,7 @@ export const ReActionProvider = ({ children }) => {
       console.error('Error tracking request:', error);
       throw error;
     }
-  }, []);
+  }, [reActionService]);
 
   const getTestimonials = useCallback(async () => {
     try {
@@ -55,7 +55,29 @@ export const ReActionProvider = ({ children }) => {
       console.error('Error fetching testimonials:', error);
       return [];
     }
-  }, []);
+  }, [reActionService]);
+
+  const submitTestimonial = useCallback(async (data) => {
+    try {
+      const response = await reActionService.submitTestimonial(data);
+      toast.success('Благодарим за отзива! Ще бъде публикуван след одобрение.');
+      return response;
+    } catch (error) {
+      console.error('Error submitting testimonial:', error);
+      const code = error?.response?.data?.code || error?.code;
+      const message = error?.response?.data?.message;
+      if (code === 'ALREADY_SUBMITTED') {
+        toast.error(message || 'Вече сте изпратили отзив.');
+      } else if (code === 'TOO_FAST') {
+        toast.error(message || 'Моля, попълнете формата внимателно.');
+      } else if (code === 'RATE_LIMITED' || error?.response?.status === 429) {
+        toast.error(message || 'Твърде много опити. Моля, опитайте по-късно.');
+      } else {
+        toast.error('Грешка при изпращане на отзива');
+      }
+      throw error;
+    }
+  }, [reActionService]);
 
   const getPublicStats = useCallback(async () => {
     try {
@@ -65,7 +87,17 @@ export const ReActionProvider = ({ children }) => {
       console.error('Error fetching stats:', error);
       return { visitsCompleted: 0, clubsReached: 0, citiesCovered: 0 };
     }
-  }, []);
+  }, [reActionService]);
+
+  const getGallery = useCallback(async () => {
+    try {
+      const response = await reActionService.getGallery();
+      return response?.items || [];
+    } catch (error) {
+      console.error('Error fetching gallery:', error);
+      return [];
+    }
+  }, [reActionService]);
 
   // ===============================
   // ADMIN
@@ -83,7 +115,7 @@ export const ReActionProvider = ({ children }) => {
       toast.error('Грешка при зареждане на заявките');
       return { success: false, requests: [], pagination: {} };
     }
-  }, [isAdmin, isModerator]);
+  }, [isAdmin, isModerator, reActionService]);
 
   const getAdminRequestById = useCallback(async (id) => {
     try {
@@ -92,7 +124,7 @@ export const ReActionProvider = ({ children }) => {
       console.error('Error fetching request:', error);
       throw error;
     }
-  }, []);
+  }, [reActionService]);
 
   const updateRequest = useCallback(async (id, data) => {
     try {
@@ -104,7 +136,7 @@ export const ReActionProvider = ({ children }) => {
       toast.error('Грешка при обновяване на заявката');
       throw error;
     }
-  }, []);
+  }, [reActionService]);
 
   const deleteRequest = useCallback(async (id) => {
     try {
@@ -116,7 +148,7 @@ export const ReActionProvider = ({ children }) => {
       toast.error('Грешка при изтриване на заявката');
       throw error;
     }
-  }, []);
+  }, [reActionService]);
 
   const getCalendar = useCallback(async (params = {}) => {
     try {
@@ -125,7 +157,7 @@ export const ReActionProvider = ({ children }) => {
       console.error('Error fetching calendar:', error);
       return { success: false, calendar: [] };
     }
-  }, []);
+  }, [reActionService]);
 
   const getMentorsForDate = useCallback(async (date) => {
     try {
@@ -134,7 +166,7 @@ export const ReActionProvider = ({ children }) => {
       console.error('Error fetching mentors for date:', error);
       return { success: false, mentors: [] };
     }
-  }, []);
+  }, [reActionService]);
 
   const getAdminStats = useCallback(async () => {
     try {
@@ -143,7 +175,7 @@ export const ReActionProvider = ({ children }) => {
       console.error('Error fetching admin stats:', error);
       return { success: false };
     }
-  }, []);
+  }, [reActionService]);
 
   const exportCSV = useCallback(async (params = {}) => {
     try {
@@ -153,7 +185,7 @@ export const ReActionProvider = ({ children }) => {
       toast.error('Грешка при експортиране');
       throw error;
     }
-  }, []);
+  }, [reActionService]);
 
   const getAdminTestimonials = useCallback(async () => {
     try {
@@ -162,7 +194,7 @@ export const ReActionProvider = ({ children }) => {
       console.error('Error fetching admin testimonials:', error);
       return { success: false, testimonials: [] };
     }
-  }, []);
+  }, [reActionService]);
 
   const createTestimonial = useCallback(async (data) => {
     try {
@@ -174,7 +206,7 @@ export const ReActionProvider = ({ children }) => {
       toast.error('Грешка при създаване на отзива');
       throw error;
     }
-  }, []);
+  }, [reActionService]);
 
   const updateTestimonial = useCallback(async (id, data) => {
     try {
@@ -186,7 +218,7 @@ export const ReActionProvider = ({ children }) => {
       toast.error('Грешка при обновяване на отзива');
       throw error;
     }
-  }, []);
+  }, [reActionService]);
 
   const deleteTestimonial = useCallback(async (id) => {
     try {
@@ -198,7 +230,7 @@ export const ReActionProvider = ({ children }) => {
       toast.error('Грешка при изтриване на отзива');
       throw error;
     }
-  }, []);
+  }, [reActionService]);
 
   const sendEmail = useCallback(async (data) => {
     try {
@@ -210,7 +242,61 @@ export const ReActionProvider = ({ children }) => {
       toast.error('Грешка при изпращане на имейла');
       throw error;
     }
-  }, []);
+  }, [reActionService]);
+
+  const getAdminGallery = useCallback(async () => {
+    try {
+      return await reActionService.getAdminGallery();
+    } catch (error) {
+      console.error('Error fetching admin gallery:', error);
+      return { success: false, items: [] };
+    }
+  }, [reActionService]);
+
+  const createGalleryItem = useCallback(async (data) => {
+    try {
+      const response = await reActionService.createGalleryItem(data);
+      toast.success('Медията е качена');
+      return response;
+    } catch (error) {
+      console.error('Error creating gallery item:', error);
+      toast.error('Грешка при качване на медията');
+      throw error;
+    }
+  }, [reActionService]);
+
+  const updateGalleryItem = useCallback(async (id, data) => {
+    try {
+      const response = await reActionService.updateGalleryItem(id, data);
+      return response;
+    } catch (error) {
+      console.error('Error updating gallery item:', error);
+      toast.error('Грешка при обновяване');
+      throw error;
+    }
+  }, [reActionService]);
+
+  const reorderGallery = useCallback(async (items) => {
+    try {
+      return await reActionService.reorderGallery(items);
+    } catch (error) {
+      console.error('Error reordering gallery:', error);
+      toast.error('Грешка при пренареждане');
+      throw error;
+    }
+  }, [reActionService]);
+
+  const deleteGalleryItem = useCallback(async (id) => {
+    try {
+      const response = await reActionService.deleteGalleryItem(id);
+      toast.success('Елементът е изтрит');
+      return response;
+    } catch (error) {
+      console.error('Error deleting gallery item:', error);
+      toast.error('Грешка при изтриване');
+      throw error;
+    }
+  }, [reActionService]);
 
   // ===============================
   // MENTOR
@@ -223,7 +309,7 @@ export const ReActionProvider = ({ children }) => {
       console.error('Error fetching mentor availability:', error);
       return { success: false, availability: [] };
     }
-  }, []);
+  }, [reActionService]);
 
   const setMentorAvailability = useCallback(async (data) => {
     try {
@@ -235,7 +321,7 @@ export const ReActionProvider = ({ children }) => {
       toast.error('Грешка при обновяване на наличността');
       throw error;
     }
-  }, []);
+  }, [reActionService]);
 
   const getMentorAssignments = useCallback(async () => {
     try {
@@ -244,7 +330,7 @@ export const ReActionProvider = ({ children }) => {
       console.error('Error fetching mentor assignments:', error);
       return { success: false, assignments: [] };
     }
-  }, []);
+  }, [reActionService]);
 
   const confirmAssignment = useCallback(async (id) => {
     try {
@@ -256,7 +342,7 @@ export const ReActionProvider = ({ children }) => {
       toast.error('Грешка при потвърждаване на назначението');
       throw error;
     }
-  }, []);
+  }, [reActionService]);
 
   const reportProblem = useCallback(async (id, data) => {
     try {
@@ -268,7 +354,7 @@ export const ReActionProvider = ({ children }) => {
       toast.error('Грешка при докладване на проблема');
       throw error;
     }
-  }, []);
+  }, [reActionService]);
 
   const getMentorHistory = useCallback(async () => {
     try {
@@ -277,7 +363,7 @@ export const ReActionProvider = ({ children }) => {
       console.error('Error fetching mentor history:', error);
       return { success: false, history: [] };
     }
-  }, []);
+  }, [reActionService]);
 
   const submitFeedback = useCallback(async (data) => {
     try {
@@ -289,7 +375,7 @@ export const ReActionProvider = ({ children }) => {
       toast.error('Грешка при изпращане на обратната връзка');
       throw error;
     }
-  }, []);
+  }, [reActionService]);
 
   const cancelByCode = useCallback(async (code, data = {}) => {
     try {
@@ -301,7 +387,7 @@ export const ReActionProvider = ({ children }) => {
       toast.error('Грешка при отмяна на заявката');
       throw error;
     }
-  }, []);
+  }, [reActionService]);
 
   // ===============================
   // USER (My Requests)
@@ -314,7 +400,7 @@ export const ReActionProvider = ({ children }) => {
       console.error('Error fetching my requests:', error);
       return { success: false, requests: [], stats: {} };
     }
-  }, []);
+  }, [reActionService]);
 
   const cancelMyRequest = useCallback(async (id, data = {}) => {
     try {
@@ -326,7 +412,7 @@ export const ReActionProvider = ({ children }) => {
       toast.error('Грешка при отмяна на заявката');
       throw error;
     }
-  }, []);
+  }, [reActionService]);
 
   // ===============================
   // CONTEXT VALUE
@@ -339,7 +425,9 @@ export const ReActionProvider = ({ children }) => {
     submitRequest,
     trackRequest,
     getTestimonials,
+    submitTestimonial,
     getPublicStats,
+    getGallery,
     // Admin
     getAdminRequests,
     getAdminRequestById,
@@ -354,6 +442,11 @@ export const ReActionProvider = ({ children }) => {
     updateTestimonial,
     deleteTestimonial,
     sendEmail,
+    getAdminGallery,
+    createGalleryItem,
+    updateGalleryItem,
+    reorderGallery,
+    deleteGalleryItem,
     // Mentor
     getMentorAvailability,
     setMentorAvailability,
@@ -366,7 +459,15 @@ export const ReActionProvider = ({ children }) => {
     // User
     getMyRequests,
     cancelMyRequest,
-  }), [isLoading]);
+  }), [
+    isLoading, reActionService,
+    getAvailability, submitRequest, trackRequest, getTestimonials, submitTestimonial, getPublicStats, getGallery,
+    getAdminRequests, getAdminRequestById, updateRequest, deleteRequest, getCalendar, getMentorsForDate, getAdminStats,
+    exportCSV, getAdminTestimonials, createTestimonial, updateTestimonial, deleteTestimonial, sendEmail,
+    getAdminGallery, createGalleryItem, updateGalleryItem, reorderGallery, deleteGalleryItem,
+    getMentorAvailability, setMentorAvailability, getMentorAssignments, confirmAssignment, reportProblem,
+    getMentorHistory, submitFeedback, cancelByCode, getMyRequests, cancelMyRequest,
+  ]);
 
   return (
     <ReActionContext.Provider value={contextValue}>

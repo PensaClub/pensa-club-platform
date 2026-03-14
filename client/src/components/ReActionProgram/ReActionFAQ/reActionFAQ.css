@@ -3,9 +3,12 @@
    =================================== */
 
 .rafaq {
-  padding: 80px 20px;
+  padding: 110px 20px 80px;
   background: #d8c8eb;
   position: relative;
+  margin-top: -60px;
+  border-radius: 0 0 50% 50% / 0 0 60px 60px;
+  z-index: 4;
 }
 
 .rafaq-container {
@@ -143,7 +146,12 @@
   .rafaq {
     padding: 48px 16px;
   }
-
+  .rafaq-list{
+    margin-bottom: 3rem;
+  }
+ .rafaq-title {
+    margin-top: 2.5rem;
+  }
   .rafaq-title {
     font-size: 1.7rem;
     margin-bottom: 32px;
@@ -163,6 +171,7 @@
 @media (max-width: 480px) {
   .rafaq-title {
     font-size: 1.5rem;
+    margin-top: 2rem;
   }
 
   .rafaq-question-text {

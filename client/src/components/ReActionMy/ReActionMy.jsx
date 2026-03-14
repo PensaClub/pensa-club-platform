@@ -119,7 +119,7 @@ const ReActionMy = () => {
                             <rect x="9" y="3" width="6" height="4" rx="1" />
                         </svg>
                         <p className="ram-empty-text">{t('my.empty')}</p>
-                        <Link to="/reaction" className="ram-btn ram-btn--primary">
+                        <Link to="/reaction/book" className="ram-btn ram-btn--primary">
                             {t('my.submitRequest')}
                         </Link>
                     </div>
@@ -225,7 +225,7 @@ const ReActionMy = () => {
 
                 {/* ACTIONS */}
                 <div className="ram-actions">
-                    <Link to="/reaction" className="ram-btn ram-btn--primary">
+                    <Link to="/reaction/book" className="ram-btn ram-btn--primary">
                         {t('my.submitRequest')}
                     </Link>
                     <Link to="/profile" className="ram-btn ram-btn--secondary">

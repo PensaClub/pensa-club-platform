@@ -3,9 +3,11 @@
    =================================== */
 
 .rabf {
-  padding: 80px 20px;
+  padding: 110px 20px 80px;
   background: #c8dcc8;
   position: relative;
+  margin-top: -60px;
+  border-radius: 0 0 50% 50% / 0 0 60px 60px;
 }
 
 .rabf-container {
@@ -384,6 +386,12 @@
   .rabf {
     padding: 48px 16px;
   }
+  .rabf-title{
+    margin-top: 2.5rem;
+  }
+  .rabf-btn {
+      margin-bottom: 2rem;
+    }
 }
 
 @media (max-width: 640px) {
@@ -394,11 +402,45 @@
   .rabf {
     padding: 40px 16px;
   }
+
+  .rabf-btn {
+    margin-bottom: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .rabf {
+    padding: 35px 12px;
+  }
+
+  .rabf-form {
+    max-width: 100%;
+  }
+
+  .rabf-input,
+  .rabf-select,
+  .rabf-textarea {
+    padding: 10px 12px;
+    font-size: 0.88rem;
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .rabf-title {
+    font-size: 1.5rem;
+  }
+
+  .rabf-subtitle {
+    font-size: 0.88rem;
+  }
 }
 
 @media (max-width: 480px) {
   .rabf-title {
     font-size: 1.5rem;
+    margin: 2rem 0 8px;
+
   }
 
   .rabf-tracking-code {
@@ -410,5 +452,6 @@
   .rabf-btn {
     padding: 12px 20px;
     font-size: 0.92rem;
+    margin-bottom: 2rem;
   }
 }

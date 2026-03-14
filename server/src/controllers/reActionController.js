@@ -6,6 +6,7 @@ const {
   mentor_availability,
   visit_feedback,
   visit_testimonial,
+  reaction_gallery_item,
   mentor,
   user_account,
   admin_notification,
@@ -20,6 +21,10 @@ const {
   setAvailabilitySchema,
   createFeedbackSchema,
   createTestimonialSchema,
+  submitTestimonialSchema,
+  createGalleryItemSchema,
+  updateGalleryItemSchema,
+  reorderGallerySchema,
 } = require('../schemas/reAction.schema');
 const { handlePersonalEmail } = require('../utils/clubUtils');
 
@@ -69,6 +74,26 @@ const recordSuccessfulRequest = (ip) => {
     record.count++;
   }
 };
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ANTI-SPAM — testimonial submissions
+// ═══════════════════════════════════════════════════════════════════════════
+
+// 1 testimonial per IP per 24 hours
+const testimonialIpStore = new Map();
+// 1 testimonial per registered user (by userId) — persistent in memory
+const testimonialUserStore = new Set();
+const TESTIMONIAL_RATE_WINDOW = 24 * 60 * 60 * 1000; // 24 hours
+const TESTIMONIAL_MIN_FILL_TIME = 3000; // 3 seconds minimum to fill the form
+
+setInterval(() => {
+  const now = Date.now();
+  for (const [ip, timestamp] of testimonialIpStore) {
+    if (now - timestamp > TESTIMONIAL_RATE_WINDOW) {
+      testimonialIpStore.delete(ip);
+    }
+  }
+}, 10 * 60 * 1000);
 
 // ═══════════════════════════════════════════════════════════════════════════
 // HELPERS
@@ -437,6 +462,72 @@ reActionController.get('/testimonials', async (req, res, next) => {
     });
 
     return res.json({ success: true, testimonials });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// POST /api/reaction/testimonials — public submit testimonial (always unapproved)
+reActionController.post('/testimonials', isAuth.allowGuest, async (req, res, next) => {
+  try {
+    const ip = req.headers['x-forwarded-for']?.split(',')[0]?.trim() || req.ip;
+    const userId = req.user?.userId || null;
+
+    // Anti-bot: minimum fill time check (3 seconds)
+    const { formOpenedAt } = req.body;
+    if (formOpenedAt) {
+      const elapsed = Date.now() - formOpenedAt;
+      if (elapsed < TESTIMONIAL_MIN_FILL_TIME) {
+        return res.status(429).json({
+          message: 'Моля, попълнете формата внимателно.',
+          code: 'TOO_FAST',
+        });
+      }
+    }
+
+    if (userId) {
+      // Registered user: only 1 testimonial allowed (by userId, NOT IP)
+      if (testimonialUserStore.has(userId)) {
+        return res.status(429).json({
+          message: 'Вече сте изпратили отзив. Можете да изпратите само един.',
+          code: 'ALREADY_SUBMITTED',
+        });
+      }
+    } else {
+      // Guest user: IP rate limit — 1 per 24 hours
+      const lastSubmission = testimonialIpStore.get(ip);
+      if (lastSubmission && (Date.now() - lastSubmission) < TESTIMONIAL_RATE_WINDOW) {
+        const remainingMs = TESTIMONIAL_RATE_WINDOW - (Date.now() - lastSubmission);
+        const remainingHours = Math.ceil(remainingMs / (60 * 60 * 1000));
+        return res.status(429).json({
+          message: `Можете да изпратите нов отзив след ${remainingHours} ч.`,
+          code: 'RATE_LIMITED',
+          remainingHours,
+        });
+      }
+    }
+
+    const validated = submitTestimonialSchema.parse(req.body);
+    const { formOpenedAt: _discard, ...testimonialData } = validated;
+
+    // Sanitize authorName empty string to null
+    if (testimonialData.authorName === '') {
+      testimonialData.authorName = null;
+    }
+
+    const testimonial = await visit_testimonial.create({
+      ...testimonialData,
+      isApproved: false,
+    });
+
+    // Record submission
+    if (userId) {
+      testimonialUserStore.add(userId);
+    } else {
+      testimonialIpStore.set(ip, Date.now());
+    }
+
+    return res.status(201).json({ success: true, testimonial });
   } catch (error) {
     next(error);
   }
@@ -1461,6 +1552,122 @@ reActionController.patch('/my/:id/cancel', isAuth, async (req, res, next) => {
     }
 
     return res.json({ success: true, request });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// GALLERY — PUBLIC
+// ═══════════════════════════════════════════════════════════════════════════
+
+reActionController.get('/gallery', async (req, res, next) => {
+  try {
+    const items = await reaction_gallery_item.findAll({
+      where: { isPublished: true },
+      order: [['sortOrder', 'ASC'], ['createdAt', 'DESC']],
+      attributes: ['id', 'mediaType', 'mediaUrl', 'thumbnailUrl', 'title', 'description'],
+    });
+
+    return res.json({ success: true, items });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// ═══════════════════════════════════════════════════════════════════════════
+// GALLERY — ADMIN
+// ═══════════════════════════════════════════════════════════════════════════
+
+reActionController.get('/admin/gallery', isAuth, rbac.checkPermission('reactionRequest', 'read'), async (req, res, next) => {
+  try {
+    const items = await reaction_gallery_item.findAll({
+      order: [['sortOrder', 'ASC'], ['createdAt', 'DESC']],
+      include: [
+        {
+          model: user_account,
+          as: 'uploader',
+          attributes: ['id', 'email'],
+        },
+      ],
+    });
+
+    return res.json({ success: true, items });
+  } catch (error) {
+    next(error);
+  }
+});
+
+reActionController.post('/admin/gallery', isAuth, rbac.checkPermission('reactionRequest', 'update'), async (req, res, next) => {
+  try {
+    const parsed = createGalleryItemSchema.parse(req.body);
+
+    const maxOrder = await reaction_gallery_item.max('sortOrder') || 0;
+
+    const item = await reaction_gallery_item.create({
+      ...parsed,
+      sortOrder: maxOrder + 1,
+      uploadedBy: req.user.userId,
+    });
+
+    return res.status(201).json({ success: true, item });
+  } catch (error) {
+    if (error.name === 'ZodError') {
+      return res.status(400).json({ success: false, errors: error.errors });
+    }
+    next(error);
+  }
+});
+
+reActionController.patch('/admin/gallery/reorder', isAuth, rbac.checkPermission('reactionRequest', 'update'), async (req, res, next) => {
+  try {
+    const { items } = reorderGallerySchema.parse(req.body);
+
+    await sequelize.transaction(async (t) => {
+      for (const { id, sortOrder } of items) {
+        await reaction_gallery_item.update({ sortOrder }, { where: { id }, transaction: t });
+      }
+    });
+
+    return res.json({ success: true });
+  } catch (error) {
+    if (error.name === 'ZodError') {
+      return res.status(400).json({ success: false, errors: error.errors });
+    }
+    next(error);
+  }
+});
+
+reActionController.patch('/admin/gallery/:id', isAuth, rbac.checkPermission('reactionRequest', 'update'), async (req, res, next) => {
+  try {
+    const item = await reaction_gallery_item.findByPk(req.params.id);
+    if (!item) {
+      return res.status(404).json({ success: false, error: 'Елементът не е намерен.' });
+    }
+
+    const parsed = updateGalleryItemSchema.parse(req.body);
+    await item.update(parsed);
+
+    return res.json({ success: true, item });
+  } catch (error) {
+    if (error.name === 'ZodError') {
+      return res.status(400).json({ success: false, errors: error.errors });
+    }
+    next(error);
+  }
+});
+
+reActionController.delete('/admin/gallery/:id', isAuth, rbac.checkPermission('reactionRequest', 'delete'), async (req, res, next) => {
+  try {
+    const item = await reaction_gallery_item.findByPk(req.params.id);
+    if (!item) {
+      return res.status(404).json({ success: false, error: 'Елементът не е намерен.' });
+    }
+
+    const { mediaUrl, thumbnailUrl } = item;
+    await item.destroy();
+
+    return res.json({ success: true, mediaUrl, thumbnailUrl });
   } catch (error) {
     next(error);
   }

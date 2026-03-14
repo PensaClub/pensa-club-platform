@@ -1,4 +1,63 @@
 {
+  "hub": {
+    "hero": {
+      "title": "Programm ReAktion",
+      "subtitle": "Kostenlose Mentorenbesuche fur Medienkompetenz in Seniorenclubs"
+    },
+    "about": {
+      "title": "Uber das Programm",
+      "text": "ReAktion ist eine Initiative des Bulgarischen Frauenfonds und der Pensa-Stiftung. Geschulte Mentoren besuchen Seniorenclubs, um uber das Erkennen von Falschinformationen, Wahlrechte und digitale Kompetenz zu sprechen.",
+      "linkText": "Zum Projekt →"
+    },
+    "links": {
+      "title": "Schnelllinks",
+      "book": {
+        "title": "Besuch anfordern",
+        "description": "Formular ausfullen und wir kontaktieren Sie"
+      },
+      "factCheck": {
+        "title": "FactCheck",
+        "description": "Informationen uberprufen und Signal melden"
+      },
+      "track": {
+        "title": "Anfrage verfolgen",
+        "description": "Status Ihrer Anfrage uberprufen"
+      }
+    },
+    "gallery": {
+      "title": "Galerie",
+      "empty": "Fotos folgen in Kurze",
+      "videoPlay": "Video abspielen",
+      "loadMore": "Mehr anzeigen"
+    },
+    "testimonials": {
+      "title": "Was die Clubs sagen",
+      "writeReview": "Bewertung schreiben",
+      "formTitle": "Ihre Bewertung",
+      "clubName": "Clubname",
+      "clubNamePlaceholder": "Clubname",
+      "city": "Stadt",
+      "cityPlaceholder": "Stadt",
+      "authorName": "Ihr Name",
+      "authorNamePlaceholder": "Name",
+      "optional": "optional",
+      "quote": "Ihre Bewertung",
+      "quotePlaceholder": "Ihr Eindruck...",
+      "submit": "Bewertung absenden",
+      "submitting": "Wird gesendet...",
+      "cancel": "Abbrechen",
+      "successMessage": "Vielen Dank für Ihre Bewertung! Sie wird nach Genehmigung durch das Team veröffentlicht.",
+      "ok": "OK",
+      "errors": {
+        "clubName": "Bitte geben Sie den Clubnamen ein (mindestens 2 Zeichen).",
+        "city": "Bitte geben Sie die Stadt ein (mindestens 2 Zeichen).",
+        "quote": "Die Bewertung muss mindestens 10 Zeichen lang sein."
+      }
+    },
+    "partners": {
+      "title": "Partner"
+    }
+  },
   "hero": {
     "title": "Programm ReAktion",
     "subtitle": "Kostenlose Mentorenbesuche in Seniorenclubs",
@@ -163,8 +222,29 @@
     "tabRequests": "Anfragen",
     "tabStats": "Statistik",
     "tabTestimonials": "Erfahrungsberichte",
+    "tabGallery": "Galerie",
     "backToProfile": "Zurück zum Profil",
     "loading": "Laden...",
+    "gallery": {
+      "title": "Galerie",
+      "upload": "Fotos oder Videos hochladen",
+      "uploadHint": "Klicken oder Dateien hierher ziehen",
+      "published": "Veröffentlicht",
+      "unpublished": "Versteckt",
+      "deleteConfirm": "Sind Sie sicher, dass Sie dieses Element löschen möchten?",
+      "noItems": "Keine hochgeladenen Elemente",
+      "dragToReorder": "Zum Neuordnen ziehen",
+      "addByUrl": "Video per URL hinzufügen",
+      "videoUrl": "Video-URL",
+      "thumbnailUrl": "Thumbnail-URL (optional)",
+      "videoTitle": "Titel (optional)",
+      "cancel": "Abbrechen",
+      "addVideo": "Hinzufügen",
+      "total": "Gesamt",
+      "filterAll": "Alle",
+      "filterPublished": "Sichtbar",
+      "filterHidden": "Versteckt"
+    },
     "requests": {
       "title": "Besuchsanfragen",
       "allStatuses": "Alle Status",

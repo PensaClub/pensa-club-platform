@@ -79,7 +79,7 @@
 .arac-nav-btn svg {
   width: 20px;
   height: 20px;
-  color: #6b7280;
+  color: #4b5563;
 }
 
 .arac-nav-btn:hover {
@@ -117,7 +117,7 @@
   gap: 6px;
   font-size: 0.82rem;
   font-weight: 600;
-  color: #6b7280;
+  color: #4b5563;
 }
 
 .arac-legend-swatch {
@@ -127,18 +127,18 @@
 }
 
 .arac-legend-swatch--available {
-  background: rgba(22, 163, 74, 0.15);
-  border: 1.5px solid #16a34a;
+  background: rgba(22, 163, 74, 0.25);
+  border: 2px solid #16a34a;
 }
 
 .arac-legend-swatch--partial {
-  background: rgba(234, 179, 8, 0.15);
-  border: 1.5px solid #eab308;
+  background: rgba(234, 179, 8, 0.25);
+  border: 2px solid #eab308;
 }
 
 .arac-legend-swatch--full {
-  background: rgba(220, 38, 38, 0.15);
-  border: 1.5px solid #dc2626;
+  background: rgba(220, 38, 38, 0.25);
+  border: 2px solid #dc2626;
 }
 
 /* ===================================
@@ -148,9 +148,9 @@
 .arac-grid-wrapper {
   background: #ffffff;
   border-radius: 16px;
-  border: 2px solid #f3f4f6;
+  border: 2px solid #e2e5ea;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
   margin-bottom: 24px;
 }
 
@@ -163,12 +163,12 @@
   padding: 14px 8px;
   font-size: 0.82rem;
   font-weight: 700;
-  color: #6b7280;
+  color: #4b5563;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   text-align: center;
-  background: #f9fafb;
-  border-bottom: 2px solid #f3f4f6;
+  background: #f3f4f6;
+  border-bottom: 2px solid #e2e5ea;
 }
 
 /* ===================================
@@ -178,8 +178,8 @@
 .arac-day {
   min-height: 100px;
   padding: 8px;
-  border-right: 1px solid #f3f4f6;
-  border-bottom: 1px solid #f3f4f6;
+  border-right: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
   cursor: pointer;
   transition: all 0.2s ease;
   position: relative;
@@ -197,12 +197,12 @@
 }
 
 .arac-day--outside {
-  background: #fafafa;
+  background: #f0f1f3;
   cursor: default;
 }
 
 .arac-day--outside:hover {
-  background: #fafafa;
+  background: #f0f1f3;
 }
 
 .arac-day--selected {
@@ -211,21 +211,24 @@
 }
 
 .arac-day--available {
-  background: rgba(22, 163, 74, 0.04);
+  background: rgba(22, 163, 74, 0.12);
+  border-left: 3px solid #16a34a;
 }
 
 .arac-day--partial {
-  background: rgba(234, 179, 8, 0.04);
+  background: rgba(234, 179, 8, 0.12);
+  border-left: 3px solid #eab308;
 }
 
 .arac-day--full {
-  background: rgba(220, 38, 38, 0.04);
+  background: rgba(220, 38, 38, 0.12);
+  border-left: 3px solid #dc2626;
 }
 
 .arac-day-number {
   font-size: 0.9rem;
   font-weight: 700;
-  color: #374151;
+  color: #1f2937;
 }
 
 .arac-day-dots {
@@ -276,11 +279,12 @@
 .arac-mobile-day {
   background: #ffffff;
   border-radius: 12px;
-  border: 2px solid #f3f4f6;
+  border: 2px solid #e2e5ea;
   margin-bottom: 10px;
   overflow: hidden;
   cursor: pointer;
   transition: all 0.2s ease;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
 }
 
 .arac-mobile-day:hover {
@@ -362,9 +366,9 @@
 .arac-details {
   background: #ffffff;
   border-radius: 16px;
-  border: 2px solid #f3f4f6;
+  border: 2px solid #e2e5ea;
   padding: 24px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
   animation: arac-fade-in 0.2s ease;
 }
 
@@ -403,9 +407,9 @@
   align-items: center;
   gap: 12px;
   padding: 12px 16px;
-  background: #f9fafb;
+  background: #f3f4f6;
   border-radius: 10px;
-  border: 1px solid #f3f4f6;
+  border: 1px solid #e2e5ea;
 }
 
 .arac-details-status-dot {

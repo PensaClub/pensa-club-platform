@@ -95,10 +95,81 @@ const createTestimonialSchema = z.object({
   isApproved: z.boolean().default(false),
 });
 
+// Public: submit a testimonial (no auth, always isApproved: false)
+const submitTestimonialSchema = z.object({
+  clubName: z
+    .string({ required_error: 'Името на клуба е задължително.' })
+    .min(2, { message: 'Името на клуба трябва да е поне 2 символа.' })
+    .max(200, { message: 'Името на клуба трябва да е до 200 символа.' }),
+  city: z
+    .string({ required_error: 'Градът е задължителен.' })
+    .min(2, { message: 'Градът трябва да е поне 2 символа.' })
+    .max(100, { message: 'Градът трябва да е до 100 символа.' }),
+  quote: z
+    .string({ required_error: 'Отзивът е задължителен.' })
+    .min(10, { message: 'Отзивът трябва да е поне 10 символа.' })
+    .max(2000, { message: 'Отзивът трябва да е до 2000 символа.' }),
+  authorName: z
+    .string()
+    .max(200, { message: 'Името на автора трябва да е до 200 символа.' })
+    .optional()
+    .or(z.literal('')),
+  formOpenedAt: z.number().optional(),
+});
+
+// Admin: create gallery item
+const createGalleryItemSchema = z.object({
+  mediaType: z.enum(['image', 'video'], {
+    message: 'Типът медия трябва да е image или video.',
+  }),
+  mediaUrl: z
+    .string({ required_error: 'URL на медията е задължителен.' })
+    .url({ message: 'Невалиден URL формат.' })
+    .max(2048),
+  thumbnailUrl: z
+    .string()
+    .url({ message: 'Невалиден URL формат.' })
+    .max(2048)
+    .nullable()
+    .optional(),
+  title: z
+    .string()
+    .max(200, { message: 'Заглавието трябва да е до 200 символа.' })
+    .optional()
+    .or(z.literal('')),
+  description: z
+    .string()
+    .max(2000, { message: 'Описанието трябва да е до 2000 символа.' })
+    .optional()
+    .or(z.literal('')),
+});
+
+// Admin: update gallery item
+const updateGalleryItemSchema = z.object({
+  title: z.string().max(200).optional().or(z.literal('')),
+  description: z.string().max(2000).optional().or(z.literal('')),
+  thumbnailUrl: z.string().url().max(2048).nullable().optional(),
+  isPublished: z.boolean().optional(),
+});
+
+// Admin: reorder gallery items
+const reorderGallerySchema = z.object({
+  items: z.array(
+    z.object({
+      id: z.coerce.number().int().positive(),
+      sortOrder: z.coerce.number().int().min(0),
+    })
+  ).min(1, { message: 'Поне един елемент е задължителен.' }),
+});
+
 module.exports = {
   createVisitRequestSchema,
   updateVisitRequestSchema,
   setAvailabilitySchema,
   createFeedbackSchema,
   createTestimonialSchema,
+  submitTestimonialSchema,
+  createGalleryItemSchema,
+  updateGalleryItemSchema,
+  reorderGallerySchema,
 };

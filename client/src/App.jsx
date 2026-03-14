@@ -127,6 +127,7 @@ const FactCheckDetail = lazyWithRetry(() => import('./components/FactCheck/FactC
 const AdminFactCheck = lazyWithRetry(() => import('./components/AdminFactCheck/AdminFactCheck.jsx').then(m => ({ default: m.AdminFactCheck })));
 
 // ✅ LAZY LOADING - REACTION КОМПОНЕНТИ
+const ReActionLanding = lazyWithRetry(() => import('./components/ReActionLanding/ReActionLanding.jsx'));
 const ReActionProgram = lazyWithRetry(() => import('./components/ReActionProgram/ReActionProgram.jsx'));
 const ReActionTrack = lazyWithRetry(() => import('./components/ReActionTrack/ReActionTrack.jsx'));
 const AdminReAction = lazyWithRetry(() => import('./components/AdminReAction/AdminReAction.jsx'));
@@ -182,7 +183,8 @@ function AppRoutes() {
       <Route path="/fact-check" element={<Suspense fallback={<LazyLoadingFallback />}><FactCheck /></Suspense>} />
       <Route path="/fact-check/:slug" element={<Suspense fallback={<LazyLoadingFallback />}><FactCheckDetail /></Suspense>} />
 
-      <Route path="/reaction" element={<Suspense fallback={<LazyLoadingFallback />}><ReActionProgram /></Suspense>} />
+      <Route path="/reaction" element={<Suspense fallback={<LazyLoadingFallback />}><ReActionLanding /></Suspense>} />
+      <Route path="/reaction/book" element={<Suspense fallback={<LazyLoadingFallback />}><ReActionProgram /></Suspense>} />
       <Route path="/reaction/track/:code?" element={<Suspense fallback={<LazyLoadingFallback />}><ReActionTrack /></Suspense>} />
 
       <Route path="/articles" element={<Suspense fallback={<LazyLoadingFallback type="articles" />}><ArticlesList /></Suspense>} />

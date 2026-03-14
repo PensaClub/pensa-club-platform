@@ -3,10 +3,12 @@
    =================================== */
 
 .rahiw {
-  padding: 80px 20px;
+  padding: 110px 20px 80px;
   background: #FCE0A5;
   position: relative;
   z-index: 2;
+  margin-top: -60px;
+  border-radius: 0 0 50% 50% / 0 0 60px 60px;
 }
 
 .rahiw-container {
@@ -117,6 +119,7 @@
     flex-direction: column;
     align-items: center;
     gap: 32px;
+    margin-bottom: 2.5rem;
   }
 
   .rahiw-step {

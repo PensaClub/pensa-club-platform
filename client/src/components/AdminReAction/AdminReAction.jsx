@@ -10,6 +10,7 @@ import { AdminReActionCalendar } from './AdminReActionCalendar/AdminReActionCale
 import { AdminReActionRequests } from './AdminReActionRequests/AdminReActionRequests';
 import { AdminReActionStats } from './AdminReActionStats/AdminReActionStats';
 import { AdminReActionTestimonials } from './AdminReActionTestimonials/AdminReActionTestimonials';
+import { AdminReActionGallery } from './AdminReActionGallery/AdminReActionGallery';
 import { AdminReActionRequestModal } from './AdminReActionRequestModal/AdminReActionRequestModal';
 import { AdminReActionEmailModal } from './AdminReActionEmailModal/AdminReActionEmailModal';
 
@@ -150,6 +151,17 @@ const AdminReAction = () => {
                     </svg>
                     {t('admin.tabTestimonials')}
                 </button>
+                <button
+                    className={`ara-tab ${activeTab === 'gallery' ? 'ara-tab--active' : ''}`}
+                    onClick={() => setActiveTab('gallery')}
+                >
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                        <circle cx="8.5" cy="8.5" r="1.5" />
+                        <polyline points="21 15 16 10 5 21" />
+                    </svg>
+                    {t('admin.tabGallery')}
+                </button>
             </div>
 
             {/* TAB CONTENT */}
@@ -172,6 +184,9 @@ const AdminReAction = () => {
                         )}
                         {activeTab === 'testimonials' && (
                             <AdminReActionTestimonials onRefresh={fetchData} />
+                        )}
+                        {activeTab === 'gallery' && (
+                            <AdminReActionGallery />
                         )}
                     </>
                 )}
