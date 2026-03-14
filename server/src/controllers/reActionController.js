@@ -27,6 +27,25 @@ const {
   reorderGallerySchema,
 } = require('../schemas/reAction.schema');
 const { handlePersonalEmail } = require('../utils/clubUtils');
+const { forwardEmailsViaZoho } = require('../utils/zohoEmails');
+const emailTemplates = require('../utils/reActionEmailTemplates');
+
+// Branded ReAction email sender (uses HTML templates with logos)
+const sendReActionEmail = async (to, template) => {
+  try {
+    await forwardEmailsViaZoho({
+      userEmail: 'info@pensa.club',
+      subject: template.subject,
+      body: '',
+      toAddresses: to,
+      formattedBody: template.html,
+    });
+    return { emailSent: true };
+  } catch (error) {
+    console.error(`Failed to send ReAction email to ${to}:`, error);
+    return { emailSent: false };
+  }
+};
 
 // ═══════════════════════════════════════════════════════════════════════════
 // ANTI-SPAM — visit request submissions
@@ -309,28 +328,18 @@ reActionController.post('/requests', isAuth.allowGuest, async (req, res, next) =
     }
 
     // Send confirmation email to club contact
-    try {
-      await handlePersonalEmail({
-        from: 'noreply@pensa.club',
-        to: validated.contactEmail,
-        subject: 'Вашата заявка е приета — Програма ReАкция / ПЕНСА',
-        message: `Здравейте, ${validated.contactName},\n\nБлагодарим Ви, че подадохте заявка за посещение на ментор от Програма ReАкция на Фондация ПЕНСА.\n\nВашата заявка е приета и ще бъде разгледана от нашия екип.\n\nКлуб: ${validated.clubName}\nГрад: ${validated.city}\nТема: ${topicLabels[validated.topic] || validated.topic}${validated.topicOther ? ` (${validated.topicOther})` : ''}\nПредпочитана дата: ${validated.preferredDate}\nКод за проследяване: ${trackingCode}\n\nМожете да проследите статуса на заявката си на:\nhttps://pensa.club/reaction/track/${trackingCode}\n\nС уважение,\nЕкипът на ПЕНСА`,
-      });
-    } catch (emailError) {
-      console.error('Failed to send club confirmation email:', emailError);
-    }
+    await sendReActionEmail(validated.contactEmail, emailTemplates.requestConfirmation({
+      contactName: validated.contactName, clubName: validated.clubName, city: validated.city,
+      topic: validated.topic, topicOther: validated.topicOther, preferredDate: validated.preferredDate, trackingCode,
+    }));
 
     // Send notification email to admin
-    try {
-      await handlePersonalEmail({
-        from: 'noreply@pensa.club',
-        to: 'pensa.club@gmail.com',
-        subject: 'Нова заявка за посещение — Програма ReАкция',
-        message: `Нова заявка за посещение на ментор:\n\nКлуб: ${validated.clubName}\nГрад: ${validated.city}\nБрой участници: ${validated.participantsCount}\nТема: ${topicLabels[validated.topic] || validated.topic}${validated.topicOther ? ` (${validated.topicOther})` : ''}\nПредпочитана дата: ${validated.preferredDate}\nКонтакт: ${validated.contactName}\nТелефон: ${validated.contactPhone}\nИмейл: ${validated.contactEmail}${validated.notes ? `\nЗабележки: ${validated.notes}` : ''}\n\nКод за проследяване: ${trackingCode}`,
-      });
-    } catch (emailError) {
-      console.error('Failed to send admin email notification:', emailError);
-    }
+    await sendReActionEmail('pensa.club@gmail.com', emailTemplates.requestAdminNotification({
+      clubName: validated.clubName, city: validated.city, participantsCount: validated.participantsCount,
+      topic: validated.topic, topicOther: validated.topicOther, preferredDate: validated.preferredDate,
+      contactName: validated.contactName, contactPhone: validated.contactPhone, contactEmail: validated.contactEmail,
+      notes: validated.notes, trackingCode,
+    }));
 
     return res.status(201).json({
       success: true,
@@ -421,29 +430,17 @@ reActionController.patch('/track/:code/cancel', async (req, res, next) => {
     }
 
     // Email to contact
-    try {
-      await handlePersonalEmail({
-        from: 'noreply@pensa.club',
-        to: request.contactEmail,
-        subject: 'Заявката ви е отменена — Програма ReАкция',
-        message: `Здравейте,\n\nЗаявката ви за менторско посещение беше отменена.\n\nКлуб: ${request.clubName}\nГрад: ${request.city}\nДата: ${request.preferredDate}${cancelReason ? `\nПричина: ${cancelReason}` : ''}\n\nАко имате въпроси, свържете се с нас.\n\nС уважение,\nЕкипът на ПЕНСА`,
-      });
-    } catch (emailError) {
-      console.error('Failed to send cancellation email to contact:', emailError);
-    }
+    await sendReActionEmail(request.contactEmail, emailTemplates.userCancelledClub({
+      contactName: request.contactName, clubName: request.clubName, city: request.city,
+      preferredDate: request.preferredDate, cancelReason,
+    }));
 
     // Email to mentor if assigned
     if (request.assignedMentor) {
-      try {
-        await handlePersonalEmail({
-          from: 'noreply@pensa.club',
-          to: request.assignedMentor.email,
-          subject: 'Отказано посещение — Програма ReАкция',
-          message: `Здравейте, ${request.assignedMentor.name},\n\nПотребителят отмени заявката за посещение.\n\nКлуб: ${request.clubName}\nГрад: ${request.city}\nДата: ${request.preferredDate}${cancelReason ? `\nПричина: ${cancelReason}` : ''}\n\nС уважение,\nЕкипът на ПЕНСА`,
-        });
-      } catch (emailError) {
-        console.error('Failed to send cancellation email to mentor:', emailError);
-      }
+      await sendReActionEmail(request.assignedMentor.email, emailTemplates.visitCancelledMentor({
+        mentorName: request.assignedMentor.name, clubName: request.clubName, city: request.city,
+        preferredDate: request.preferredDate, cancelReason, cancelledByUser: true,
+      }));
     }
 
     return res.json({ success: true });
@@ -718,16 +715,9 @@ reActionController.patch('/admin/requests/:id', isAuth, rbac.checkPermission('re
         attributes: ['id', 'name', 'email'],
       });
       if (oldMentor) {
-        try {
-          await handlePersonalEmail({
-            from: 'noreply@pensa.club',
-            to: oldMentor.email,
-            subject: 'Промяна в назначение — Програма ReАкция',
-            message: `Здравейте, ${oldMentor.name},\n\nИнформираме Ви, че назначението Ви за следното посещение е преразпределено на друг ментор.\n\nКлуб: ${request.clubName}\nГрад: ${request.city}\nДата: ${request.preferredDate}\n\nБлагодарим за разбирането!\n\nС уважение,\nЕкипът на ПЕНСА`,
-          });
-        } catch (emailError) {
-          console.error('Failed to send removal email to old mentor:', emailError);
-        }
+        await sendReActionEmail(oldMentor.email, emailTemplates.mentorReassigned({
+          mentorName: oldMentor.name, clubName: request.clubName, city: request.city, preferredDate: request.preferredDate,
+        }));
       }
     }
 
@@ -739,71 +729,40 @@ reActionController.patch('/admin/requests/:id', isAuth, rbac.checkPermission('re
 
       if (assignedMentor) {
         // Email to mentor
-        try {
-          await handlePersonalEmail({
-            from: 'noreply@pensa.club',
-            to: assignedMentor.email,
-            subject: 'Назначено посещение — Програма ReАкция',
-            message: `Здравейте, ${assignedMentor.name},\n\nНазначено Ви е посещение по Програма ReАкция.\n\nКлуб: ${request.clubName}\nГрад: ${request.city}\nДата: ${request.preferredDate}\nТема: ${topicLabels[request.topic] || request.topic}${request.topicOther ? ` (${request.topicOther})` : ''}\nБрой участници: ${request.participantsCount}\nКонтакт: ${request.contactName}, ${request.contactPhone}\n\nМоля, потвърдете участието си чрез менторския панел.\n\nС уважение,\nЕкипът на ПЕНСА`,
-          });
-        } catch (emailError) {
-          console.error('Failed to send mentor assignment email:', emailError);
-        }
+        await sendReActionEmail(assignedMentor.email, emailTemplates.mentorAssigned({
+          mentorName: assignedMentor.name, clubName: request.clubName, city: request.city,
+          preferredDate: request.preferredDate, topic: request.topic, topicOther: request.topicOther,
+          participantsCount: request.participantsCount, contactName: request.contactName, contactPhone: request.contactPhone,
+        }));
 
         // Email to club
-        try {
-          await handlePersonalEmail({
-            from: 'noreply@pensa.club',
-            to: request.contactEmail,
-            subject: 'Назначен ментор за вашата заявка — Програма ReАкция',
-            message: `Здравейте, ${request.contactName},\n\nРадваме се да Ви съобщим, че ментор е назначен за Вашата заявка за посещение.\n\nМентор: ${assignedMentor.name}\nДата: ${request.preferredDate}\n\nОчаквайте потвърждение от ментора.\n\nКод за проследяване: ${request.trackingCode}\nhttps://pensa.club/reaction/track/${request.trackingCode}\n\nС уважение,\nЕкипът на ПЕНСА`,
-          });
-        } catch (emailError) {
-          console.error('Failed to send club mentor-assigned email:', emailError);
-        }
+        await sendReActionEmail(request.contactEmail, emailTemplates.mentorAssignedClub({
+          contactName: request.contactName, clubName: request.clubName,
+          mentorName: assignedMentor.name, preferredDate: request.preferredDate, trackingCode: request.trackingCode,
+        }));
       }
     }
 
     // Email: confirmed
     if (validated.status === 'confirmed' && oldStatus !== 'confirmed') {
-      try {
-        await handlePersonalEmail({
-          from: 'noreply@pensa.club',
-          to: request.contactEmail,
-          subject: 'Потвърдено посещение — Програма ReАкция',
-          message: `Здравейте, ${request.contactName},\n\nВашата заявка за посещение е потвърдена!\n\nКлуб: ${request.clubName}\nДата: ${request.preferredDate}\nТема: ${topicLabels[request.topic] || request.topic}\n\nОчакваме ви!\n\nС уважение,\nЕкипът на ПЕНСА`,
-        });
-      } catch (emailError) {
-        console.error('Failed to send confirmation email:', emailError);
-      }
+      await sendReActionEmail(request.contactEmail, emailTemplates.visitConfirmed({
+        contactName: request.contactName, clubName: request.clubName,
+        preferredDate: request.preferredDate, topic: request.topic, topicOther: request.topicOther,
+      }));
     }
 
     // Email: cancelled
     if (validated.status === 'cancelled' && oldStatus !== 'cancelled') {
-      // Email to club
-      try {
-        await handlePersonalEmail({
-          from: 'noreply@pensa.club',
-          to: request.contactEmail,
-          subject: 'Отказана заявка — Програма ReАкция',
-          message: `Здравейте, ${request.contactName},\n\nЗа съжаление, Вашата заявка за посещение беше отказана.\n\nКлуб: ${request.clubName}\nДата: ${request.preferredDate}${validated.cancelReason ? `\nПричина: ${validated.cancelReason}` : ''}\n\nАко имате въпроси, моля свържете се с нас на pensa.club@gmail.com.\n\nС уважение,\nЕкипът на ПЕНСА`,
-        });
-      } catch (emailError) {
-        console.error('Failed to send cancellation email to club:', emailError);
-      }
+      await sendReActionEmail(request.contactEmail, emailTemplates.visitCancelledClub({
+        contactName: request.contactName, clubName: request.clubName,
+        preferredDate: request.preferredDate, cancelReason: validated.cancelReason,
+      }));
 
-      // Email to mentor if assigned
       if (request.assignedMentor) {
-        try {
-          await handlePersonalEmail({
-            from: 'noreply@pensa.club',
-            to: request.assignedMentor.email,
-            subject: 'Отказано посещение — Програма ReАкция',
-            message: `Здравейте, ${request.assignedMentor.name},\n\nПосещението, за което бяхте назначени, беше отказано.\n\nКлуб: ${request.clubName}\nГрад: ${request.city}\nДата: ${request.preferredDate}${validated.cancelReason ? `\nПричина: ${validated.cancelReason}` : ''}\n\nС уважение,\nЕкипът на ПЕНСА`,
-          });
-        } catch (emailError) {
-          console.error('Failed to send cancellation email to mentor:', emailError);
-        }
+        await sendReActionEmail(request.assignedMentor.email, emailTemplates.visitCancelledMentor({
+          mentorName: request.assignedMentor.name, clubName: request.clubName, city: request.city,
+          preferredDate: request.preferredDate, cancelReason: validated.cancelReason,
+        }));
       }
     }
 
@@ -1172,12 +1131,7 @@ reActionController.post('/admin/send-email', isAuth, rbac.checkPermission('react
       return res.status(400).json({ message: 'to, subject, and message are required.' });
     }
 
-    await handlePersonalEmail({
-      from: 'noreply@pensa.club',
-      to,
-      subject,
-      message,
-    });
+    await sendReActionEmail(to, emailTemplates.customEmail({ subject, message }));
 
     return res.json({ success: true, message: 'Email sent successfully.' });
   } catch (error) {
@@ -1287,16 +1241,10 @@ reActionController.patch('/mentor/assignments/:id/confirm', isAuth, rbac.checkPe
     });
 
     // Email to club
-    try {
-      await handlePersonalEmail({
-        from: 'noreply@pensa.club',
-        to: request.contactEmail,
-        subject: 'Потвърдено посещение — Програма ReАкция',
-        message: `Здравейте, ${request.contactName},\n\nРадваме се да Ви съобщим, че менторът потвърди посещението на Вашия клуб.\n\nКлуб: ${request.clubName}\nДата: ${request.preferredDate}\nТема: ${topicLabels[request.topic] || request.topic}\n\nОчакваме ви!\n\nС уважение,\nЕкипът на ПЕНСА`,
-      });
-    } catch (emailError) {
-      console.error('Failed to send confirmation email to club:', emailError);
-    }
+    await sendReActionEmail(request.contactEmail, emailTemplates.visitConfirmed({
+      contactName: request.contactName, clubName: request.clubName,
+      preferredDate: request.preferredDate, topic: request.topic, topicOther: request.topicOther,
+    }));
 
     // User notification (if request has userId)
     if (request.userId) {
@@ -1366,16 +1314,10 @@ reActionController.patch('/mentor/assignments/:id/report-problem', isAuth, rbac.
     }
 
     // Email admin
-    try {
-      await handlePersonalEmail({
-        from: 'noreply@pensa.club',
-        to: 'pensa.club@gmail.com',
-        subject: 'Проблем с посещение — Програма ReАкция',
-        message: `Ментор ${mentorRecord.name} (${mentorRecord.email}) докладва проблем:\n\nКлуб: ${request.clubName}\nГрад: ${request.city}\nДата: ${request.preferredDate}\n\nСъобщение: ${problemMessage}`,
-      });
-    } catch (emailError) {
-      console.error('Failed to send problem notification email:', emailError);
-    }
+    await sendReActionEmail('pensa.club@gmail.com', emailTemplates.problemReport({
+      mentorName: mentorRecord.name, mentorEmail: mentorRecord.email,
+      clubName: request.clubName, city: request.city, preferredDate: request.preferredDate, problemMessage,
+    }));
 
     return res.json({ success: true, message: 'Problem reported successfully.' });
   } catch (error) {
@@ -1539,16 +1481,10 @@ reActionController.patch('/my/:id/cancel', isAuth, async (req, res, next) => {
 
     // Email to mentor if assigned
     if (request.assignedMentor) {
-      try {
-        await handlePersonalEmail({
-          from: 'noreply@pensa.club',
-          to: request.assignedMentor.email,
-          subject: 'Отказано посещение от потребител — Програма ReАкция',
-          message: `Здравейте, ${request.assignedMentor.name},\n\nПотребителят отмени заявката за посещение.\n\nКлуб: ${request.clubName}\nГрад: ${request.city}\nДата: ${request.preferredDate}${cancelReason ? `\nПричина: ${cancelReason}` : ''}\n\nС уважение,\nЕкипът на ПЕНСА`,
-        });
-      } catch (emailError) {
-        console.error('Failed to send cancellation email to mentor:', emailError);
-      }
+      await sendReActionEmail(request.assignedMentor.email, emailTemplates.visitCancelledMentor({
+        mentorName: request.assignedMentor.name, clubName: request.clubName, city: request.city,
+        preferredDate: request.preferredDate, cancelReason, cancelledByUser: true,
+      }));
     }
 
     return res.json({ success: true, request });
