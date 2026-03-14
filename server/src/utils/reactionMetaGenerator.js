@@ -6,7 +6,7 @@ const { generateHreflangTags } = require('./hreflangHelper');
 function generateReactionLandingMetaHTML() {
     const title = 'Програма ReАкция — Медийна грамотност за възрастни | Pensa Club';
     const description = 'Безплатни менторски посещения за медийна грамотност в пенсионерски клубове. Програма ReАкция е инициатива на Български фонд за жените и Фондация ПЕНСА.';
-    const imageUrl = 'https://pensa.club/images/reaction/reaction.jpg';
+    const imageUrl = 'https://pensa.club/images/reaction/reaction-og.jpg';
     const url = 'https://pensa.club/reaction';
     const keywords = 'Програма ReАкция, медийна грамотност, дигитална грамотност, пенсионери, възрастни хора, менторски посещения, пенсионерски клубове, дезинформация, фалшиви новини, Български фонд за жените, Фондация ПЕНСА, Pensa Club';
 
@@ -115,7 +115,7 @@ function generateReactionLandingMetaHTML() {
 function generateReactionBookMetaHTML() {
     const title = 'Заяви менторско посещение — Програма ReАкция | Pensa Club';
     const description = 'Заявете безплатно менторско посещение за вашия пенсионерски клуб. Обучени ментори ще проведат разговор за медийна грамотност, разпознаване на дезинформация и дигитални умения.';
-    const imageUrl = 'https://pensa.club/images/reaction/reaction.jpg';
+    const imageUrl = 'https://pensa.club/images/reaction/reaction-og.jpg';
     const url = 'https://pensa.club/reaction/book';
     const keywords = 'заяви посещение, менторско посещение, пенсионерски клуб, медийна грамотност, дигитална грамотност, дезинформация, фалшиви новини, безплатно обучение, възрастни хора, Програма ReАкция, Български фонд за жените, Фондация ПЕНСА';
 

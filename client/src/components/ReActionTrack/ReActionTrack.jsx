@@ -22,25 +22,25 @@ const ReActionTrack = () => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
-  // Default to light theme
+  // Default to light theme, shared across all ReAction pages (ra- prefix)
   useEffect(() => {
-    const isRefresh = localStorage.getItem('ratr-page-active') === 'true';
+    const isRefresh = localStorage.getItem('ra-page-active') === 'true';
 
     if (!isRefresh) {
-      localStorage.setItem('ratr-prev-theme', theme);
-      const savedTheme = localStorage.getItem('ratr-theme') || 'light';
-      localStorage.setItem('ratr-theme', savedTheme);
+      localStorage.setItem('ra-prev-theme', theme);
+      const savedTheme = localStorage.getItem('ra-theme') || 'light';
+      localStorage.setItem('ra-theme', savedTheme);
       if (theme !== savedTheme) {
         toggleTheme();
       }
     }
-    localStorage.setItem('ratr-page-active', 'true');
+    localStorage.setItem('ra-page-active', 'true');
 
     return () => {
-      localStorage.removeItem('ratr-page-active');
-      const prevTheme = localStorage.getItem('ratr-prev-theme');
+      localStorage.removeItem('ra-page-active');
+      const prevTheme = localStorage.getItem('ra-prev-theme');
       if (prevTheme) {
-        localStorage.removeItem('ratr-prev-theme');
+        localStorage.removeItem('ra-prev-theme');
         const currentTheme = document.documentElement.getAttribute('data-theme');
         if (currentTheme !== prevTheme) {
           toggleTheme();
@@ -50,8 +50,8 @@ const ReActionTrack = () => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (localStorage.getItem('ratr-page-active') === 'true') {
-      localStorage.setItem('ratr-theme', theme);
+    if (localStorage.getItem('ra-page-active') === 'true') {
+      localStorage.setItem('ra-theme', theme);
     }
   }, [theme]);
 

@@ -5,6 +5,7 @@ import { useLocation, useSearchParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import './adminReAction.css';
 import { useReAction } from '../contexts/ReActionProvider';
+import { useTheme } from '../contexts/ThemeContext';
 import SEOHead from '../SEO/SEOHead';
 import { AdminReActionCalendar } from './AdminReActionCalendar/AdminReActionCalendar';
 import { AdminReActionRequests } from './AdminReActionRequests/AdminReActionRequests';
@@ -19,10 +20,44 @@ const AdminReAction = () => {
     const location = useLocation();
     const [searchParams, setSearchParams] = useSearchParams();
     const { getAdminRequests, getAdminStats, getAdminRequestById, updateRequest } = useReAction();
+    const { theme, toggleTheme } = useTheme();
 
     useEffect(() => {
         window.scrollTo(0, 0);
     }, [location.pathname]);
+
+    // Default to light theme, shared across all ReAction pages (ra- prefix)
+    useEffect(() => {
+        const isRefresh = localStorage.getItem('ra-page-active') === 'true';
+
+        if (!isRefresh) {
+            localStorage.setItem('ra-prev-theme', theme);
+            const savedTheme = localStorage.getItem('ra-theme') || 'light';
+            localStorage.setItem('ra-theme', savedTheme);
+            if (theme !== savedTheme) {
+                toggleTheme();
+            }
+        }
+        localStorage.setItem('ra-page-active', 'true');
+
+        return () => {
+            localStorage.removeItem('ra-page-active');
+            const prevTheme = localStorage.getItem('ra-prev-theme');
+            if (prevTheme) {
+                localStorage.removeItem('ra-prev-theme');
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                if (currentTheme !== prevTheme) {
+                    toggleTheme();
+                }
+            }
+        };
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+    useEffect(() => {
+        if (localStorage.getItem('ra-page-active') === 'true') {
+            localStorage.setItem('ra-theme', theme);
+        }
+    }, [theme]);
 
     const [activeTab, setActiveTab] = useState('calendar');
     const [stats, setStats] = useState(null);
