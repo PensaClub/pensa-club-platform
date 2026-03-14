@@ -1,5 +1,9 @@
 {
   "hub": {
+    "seo": {
+      "description": "Kostenlose Mentorenbesuche fur Medienkompetenz in Seniorenclubs. ReAktion ist eine Initiative des Bulgarischen Frauenfonds und der Pensa-Stiftung.",
+      "keywords": "Programm ReAktion, Medienkompetenz, digitale Kompetenz, Senioren, altere Menschen, Mentorenbesuche, Seniorenclubs, Falschinformationen, Fake News, Bulgarischer Frauenfonds, Pensa-Stiftung"
+    },
     "hero": {
       "title": "Programm ReAktion",
       "subtitle": "Kostenlose Mentorenbesuche fur Medienkompetenz in Seniorenclubs"

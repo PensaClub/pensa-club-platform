@@ -1,5 +1,9 @@
 {
   "hub": {
+    "seo": {
+      "description": "Free mentor visits for media literacy in senior clubs. ReAction is an initiative of the Bulgarian Fund for Women and Pensa Foundation.",
+      "keywords": "ReAction Program, media literacy, digital literacy, seniors, elderly, mentor visits, senior clubs, misinformation, fake news, Bulgarian Fund for Women, Pensa Foundation"
+    },
     "hero": {
       "title": "ReAction Program",
       "subtitle": "Free mentor visits for media literacy in senior clubs"

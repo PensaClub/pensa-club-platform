@@ -16,6 +16,7 @@ const generateUsefulLinksMetaHTML = require('../utils/usefulLinksMetaGenerator')
 const generateTelkMetaHTML = require('../utils/telkMetaGenerator');
 const generateArticlesListMetaHTML = require('../utils/articlesListMetaGenerator');
 const { generateFactCheckListMetaHTML, generateFactCheckDetailMetaHTML } = require('../utils/factCheckMetaGenerator');
+const { generateReactionLandingMetaHTML, generateReactionBookMetaHTML } = require('../utils/reactionMetaGenerator');
 const geoip = require('geoip-lite');
 
 /**
@@ -183,6 +184,8 @@ async function botDetector(req, res, next) {
     const telkMatch = req.path.match(/^\/telk-rkme-rzi$/);
     const factCheckListMatch = req.path.match(/^\/fact-check$/);
     const factCheckDetailMatch = req.path.match(/^\/fact-check\/([a-zA-Z0-9-]+)$/);
+    const reactionLandingMatch = req.path.match(/^\/reaction$/);
+    const reactionBookMatch = req.path.match(/^\/reaction\/book$/);
 
     try {
         // ==================== ARTICLES LIST ====================
@@ -467,6 +470,28 @@ if (storyMatch) {
             }
 
             console.log('⚠️ Fact-check module not found:', slug);
+        }
+
+        // ==================== REACTION LANDING (СТАТИЧНА СТРАНИЦА) ====================
+        if (reactionLandingMatch) {
+            console.log('🎯 Processing REACTION LANDING page');
+
+            await logBotRequest(botName, 'page', null, 'reaction', userAgent, clientIP);
+
+            const html = generateReactionLandingMetaHTML();
+            console.log('📤 Sending reaction landing HTML to bot');
+            return res.send(html);
+        }
+
+        // ==================== REACTION BOOK (СТАТИЧНА СТРАНИЦА) ====================
+        if (reactionBookMatch) {
+            console.log('📋 Processing REACTION BOOK page');
+
+            await logBotRequest(botName, 'page', null, 'reaction-book', userAgent, clientIP);
+
+            const html = generateReactionBookMetaHTML();
+            console.log('📤 Sending reaction book HTML to bot');
+            return res.send(html);
         }
 
         // ==================== MENTOR ====================
