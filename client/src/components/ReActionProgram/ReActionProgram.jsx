@@ -76,10 +76,18 @@ const ReActionProgram = () => {
   return (
     <div className="rap">
       <SEOHead
-        title={t('seo.title')}
-        description={t('seo.description')}
-        keywords={t('seo.keywords')}
-        image="/images/partners/BFFW-20Logo-Prink2.svg"
+        title={t('seo.title', 'Заяви менторско посещение — Програма ReАкция | Pensa Club')}
+        description={t('seo.description', 'Заявете безплатно менторско посещение за вашия пенсионерски клуб. Обучени ментори ще проведат разговор за медийна грамотност и дигитални умения.')}
+        keywords={t('seo.keywords', 'заяви посещение, менторско посещение, пенсионерски клуб, медийна грамотност, дигитална грамотност, дезинформация, безплатно обучение, Програма ReАкция')}
+        image="/images/reaction/reaction.jpg"
+        structuredData={{
+          '@context': 'https://schema.org',
+          '@type': 'WebPage',
+          name: t('seo.title', 'Заяви менторско посещение — Програма ReАкция'),
+          description: t('seo.description', 'Заявете безплатно менторско посещение за вашия пенсионерски клуб.'),
+          url: 'https://pensa.club/reaction/book',
+          image: 'https://pensa.club/images/reaction/reaction.jpg',
+        }}
       />
       <TextZoom />
       <ReActionHero stats={stats} />

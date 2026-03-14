@@ -80,7 +80,17 @@ const ReActionLanding = () => {
         <div className="ral">
             <SEOHead
                 title={`${t('hub.hero.title', 'Програма ReАкция')} | Pensa Club`}
-                description={t('hub.hero.subtitle', 'Безплатни менторски посещения за медийна грамотност')}
+                description={t('hub.seo.description', 'Безплатни менторски посещения за медийна грамотност в пенсионерски клубове. Програма ReАкция е инициатива на Български фонд за жените и Фондация ПЕНСА.')}
+                keywords={t('hub.seo.keywords', 'Програма ReАкция, медийна грамотност, дигитална грамотност, пенсионери, възрастни хора, менторски посещения, пенсионерски клубове, дезинформация, фалшиви новини, Български фонд за жените, Фондация ПЕНСА')}
+                image="/images/reaction/reaction.jpg"
+                structuredData={{
+                    '@context': 'https://schema.org',
+                    '@type': 'WebPage',
+                    name: t('hub.hero.title', 'Програма ReАкция'),
+                    description: t('hub.seo.description', 'Безплатни менторски посещения за медийна грамотност в пенсионерски клубове.'),
+                    url: 'https://pensa.club/reaction',
+                    image: 'https://pensa.club/images/reaction/reaction.jpg',
+                }}
             />
 
             <ReActionLandingHero stats={stats} galleryItems={galleryItems} />
