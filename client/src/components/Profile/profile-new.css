@@ -707,6 +707,20 @@
   flex-shrink: 0;
 }
 
+/* Програма линкове — dark red hover */
+.pd-section-label.pd-program-label {
+  color: #7B1818;
+}
+
+.pd-program-link:hover {
+  background: rgba(123, 24, 24, 0.06);
+  color: #7B1818;
+}
+
+.pd-program-link:hover svg {
+  color: #7B1818;
+}
+
 /* Академия линкове — orange hover */
 .pd-academy-link:hover {
   background: rgba(226, 96, 32, 0.06);
