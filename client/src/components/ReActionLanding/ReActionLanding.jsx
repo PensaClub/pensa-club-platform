@@ -28,25 +28,25 @@ const ReActionLanding = () => {
         window.scrollTo(0, 0);
     }, [location.pathname]);
 
-    // Theme management — default to light
+    // Theme management — default to light, shared across all ReAction pages (ra- prefix)
     useEffect(() => {
-        const isRefresh = localStorage.getItem('ral-page-active') === 'true';
+        const isRefresh = localStorage.getItem('ra-page-active') === 'true';
 
         if (!isRefresh) {
-            localStorage.setItem('ral-prev-theme', theme);
-            const savedTheme = localStorage.getItem('ral-theme') || 'light';
-            localStorage.setItem('ral-theme', savedTheme);
+            localStorage.setItem('ra-prev-theme', theme);
+            const savedTheme = localStorage.getItem('ra-theme') || 'light';
+            localStorage.setItem('ra-theme', savedTheme);
             if (theme !== savedTheme) {
                 toggleTheme();
             }
         }
-        localStorage.setItem('ral-page-active', 'true');
+        localStorage.setItem('ra-page-active', 'true');
 
         return () => {
-            localStorage.removeItem('ral-page-active');
-            const prevTheme = localStorage.getItem('ral-prev-theme');
+            localStorage.removeItem('ra-page-active');
+            const prevTheme = localStorage.getItem('ra-prev-theme');
             if (prevTheme) {
-                localStorage.removeItem('ral-prev-theme');
+                localStorage.removeItem('ra-prev-theme');
                 const currentTheme = document.documentElement.getAttribute('data-theme');
                 if (currentTheme !== prevTheme) {
                     toggleTheme();
@@ -56,8 +56,8 @@ const ReActionLanding = () => {
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
-        if (localStorage.getItem('ral-page-active') === 'true') {
-            localStorage.setItem('ral-theme', theme);
+        if (localStorage.getItem('ra-page-active') === 'true') {
+            localStorage.setItem('ra-theme', theme);
         }
     }, [theme]);
 
@@ -82,14 +82,14 @@ const ReActionLanding = () => {
                 title={`${t('hub.hero.title', 'Програма ReАкция')} | Pensa Club`}
                 description={t('hub.seo.description', 'Безплатни менторски посещения за медийна грамотност в пенсионерски клубове. Програма ReАкция е инициатива на Български фонд за жените и Фондация ПЕНСА.')}
                 keywords={t('hub.seo.keywords', 'Програма ReАкция, медийна грамотност, дигитална грамотност, пенсионери, възрастни хора, менторски посещения, пенсионерски клубове, дезинформация, фалшиви новини, Български фонд за жените, Фондация ПЕНСА')}
-                image="/images/reaction/reaction.jpg"
+                image="/images/reaction/reaction-og.jpg"
                 structuredData={{
                     '@context': 'https://schema.org',
                     '@type': 'WebPage',
                     name: t('hub.hero.title', 'Програма ReАкция'),
                     description: t('hub.seo.description', 'Безплатни менторски посещения за медийна грамотност в пенсионерски клубове.'),
                     url: 'https://pensa.club/reaction',
-                    image: 'https://pensa.club/images/reaction/reaction.jpg',
+                    image: 'https://pensa.club/images/reaction/reaction-og.jpg',
                 }}
             />
 
