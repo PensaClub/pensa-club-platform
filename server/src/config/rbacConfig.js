@@ -267,6 +267,24 @@ const permissions = {
         update: ROLES.STAFF,
         delete: ROLES.STAFF,
     },
+    // ReAction permissions
+    reactionRequest: {
+        create: ['admin', 'mentor', 'user'],
+        read: ['admin'],
+        update: ['admin'],
+        delete: ['admin'],
+        export: ['admin'],
+    },
+    reactionMentor: {
+        readOwn: ['admin', 'mentor'],
+        updateOwn: ['admin', 'mentor'],
+    },
+    reactionTestimonial: {
+        read: ['admin', 'mentor', 'user'],
+        create: ['admin'],
+        update: ['admin'],
+        delete: ['admin'],
+    },
     siteSettings: {
         read: ROLES.PUBLIC_WITH_LIMITED,
         update: ['admin'],

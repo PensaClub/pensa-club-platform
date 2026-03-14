@@ -175,12 +175,17 @@
 @media (max-width: 1024px) {
   .fcl-grid {
     grid-template-columns: repeat(2, 1fr);
+    margin-top: 2.5rem;
+
   }
 }
 
 @media (max-width: 640px) {
   .fcl-grid {
     grid-template-columns: 1fr;
+  }
+  .fcl-grid{
+    margin-top: 2.5rem;
   }
 
   .fcl {

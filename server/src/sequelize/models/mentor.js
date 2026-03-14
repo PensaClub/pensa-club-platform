@@ -46,6 +46,27 @@ module.exports = (sequelize, DataTypes) => {
         sourceKey: 'id',
         as: 'meetings',
       });
+
+      // ReAction — mentor availabilities
+      mentor.hasMany(models.mentor_availability, {
+        foreignKey: 'mentorId',
+        sourceKey: 'id',
+        as: 'availabilities',
+      });
+
+      // ReAction — visit assignments
+      mentor.hasMany(models.club_visit_request, {
+        foreignKey: 'assignedMentorId',
+        sourceKey: 'id',
+        as: 'visitAssignments',
+      });
+
+      // ReAction — visit feedbacks
+      mentor.hasMany(models.visit_feedback, {
+        foreignKey: 'mentorId',
+        sourceKey: 'id',
+        as: 'visitFeedbacks',
+      });
     }
   }
 

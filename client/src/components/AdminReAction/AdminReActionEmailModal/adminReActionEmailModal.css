@@ -1,0 +1,424 @@
+/* ===================================
+   ADMIN REACTION EMAIL MODAL — prefix: araem-
+   =================================== */
+
+/* ===================================
+   OVERLAY
+   =================================== */
+
+.araem-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+  padding: 20px;
+  animation: araem-fade-in 0.2s ease;
+}
+
+@keyframes araem-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ===================================
+   MODAL
+   =================================== */
+
+.araem-modal {
+  position: relative;
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  animation: araem-slide-up 0.3s ease;
+  overflow: hidden;
+}
+
+@keyframes araem-slide-up {
+  from { opacity: 0; transform: translateY(30px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ===================================
+   CLOSE BUTTON
+   =================================== */
+
+.araem-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.05);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10;
+  padding: 0;
+}
+
+.araem-close svg {
+  width: 20px;
+  height: 20px;
+  color: #6b7280;
+}
+
+.araem-close:hover {
+  background: rgba(220, 38, 38, 0.1);
+}
+
+.araem-close:hover svg {
+  color: #dc2626;
+}
+
+/* ===================================
+   HEADER
+   =================================== */
+
+.araem-header {
+  padding: 28px 28px 0;
+}
+
+.araem-title {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: #1f2937;
+  margin: 0;
+}
+
+/* ===================================
+   CONTENT
+   =================================== */
+
+.araem-content {
+  padding: 24px 28px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.araem-field {
+  margin-bottom: 18px;
+}
+
+.araem-label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.araem-input {
+  width: 100%;
+  padding: 12px 16px;
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #1f2937;
+  background: #ffffff;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.araem-input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.araem-input--readonly {
+  background: #f9fafb;
+  color: #6b7280;
+  cursor: default;
+}
+
+.araem-textarea {
+  width: 100%;
+  padding: 14px 16px;
+  font-family: inherit;
+  font-size: 0.92rem;
+  color: #1f2937;
+  background: #ffffff;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  resize: vertical;
+  transition: all 0.2s ease;
+  min-height: 140px;
+  line-height: 1.5;
+  box-sizing: border-box;
+}
+
+.araem-textarea:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.araem-textarea::placeholder {
+  color: #9ca3af;
+}
+
+/* ===================================
+   RESULT
+   =================================== */
+
+.araem-result {
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.araem-result--success {
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+}
+
+.araem-result--error {
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+}
+
+/* ===================================
+   ACTIONS
+   =================================== */
+
+.araem-actions {
+  padding: 20px 28px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  border-top: 1px solid #f3f4f6;
+  background: #f9fafb;
+}
+
+.araem-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.araem-btn svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.araem-btn--cancel {
+  background: #ffffff;
+  color: #6b7280;
+  border: 2px solid #e5e7eb;
+}
+
+.araem-btn--cancel:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.araem-btn--send {
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.araem-btn--send:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.4);
+}
+
+.araem-btn--send:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ===================================
+   DARK THEME
+   =================================== */
+
+[data-theme="dark"] .araem-overlay {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+[data-theme="dark"] .araem-modal {
+  background: #1f2937;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="dark"] .araem-close {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .araem-close svg {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .araem-close:hover {
+  background: rgba(220, 38, 38, 0.2);
+}
+
+[data-theme="dark"] .araem-title {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .araem-label {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .araem-input {
+  background: #111827;
+  border-color: #374151;
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .araem-input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+[data-theme="dark"] .araem-input--readonly {
+  background: #111827;
+  color: #6b7280;
+}
+
+[data-theme="dark"] .araem-textarea {
+  background: #111827;
+  border-color: #374151;
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .araem-textarea:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+[data-theme="dark"] .araem-textarea::placeholder {
+  color: #6b7280;
+}
+
+[data-theme="dark"] .araem-result--success {
+  background: #052e16;
+  color: #4ade80;
+  border-color: #14532d;
+}
+
+[data-theme="dark"] .araem-result--error {
+  background: #450a0a;
+  color: #fca5a5;
+  border-color: #7f1d1d;
+}
+
+[data-theme="dark"] .araem-actions {
+  background: #111827;
+  border-top-color: #374151;
+}
+
+[data-theme="dark"] .araem-btn--cancel {
+  background: #1f2937;
+  color: #9ca3af;
+  border-color: #374151;
+}
+
+[data-theme="dark"] .araem-btn--cancel:hover {
+  background: #374151;
+  border-color: #6b7280;
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+@media (min-width: 480px) and (max-width: 767px) {
+  .araem-modal {
+    max-width: 100%;
+  }
+
+  .araem-header {
+    padding: 22px 22px 0;
+  }
+
+  .araem-content {
+    padding: 20px 22px;
+  }
+
+  .araem-actions {
+    padding: 16px 22px;
+  }
+}
+
+@media (max-width: 479px) {
+  .araem-overlay {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .araem-modal {
+    max-width: 100%;
+    max-height: 95vh;
+    border-radius: 16px 16px 0 0;
+  }
+
+  .araem-header {
+    padding: 18px 16px 0;
+  }
+
+  .araem-title {
+    font-size: 1.1rem;
+    padding-right: 40px;
+  }
+
+  .araem-content {
+    padding: 14px 16px;
+  }
+
+  .araem-close {
+    width: 34px;
+    height: 34px;
+    top: 12px;
+    right: 12px;
+  }
+
+  .araem-close svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .araem-actions {
+    padding: 12px 16px;
+    flex-direction: column;
+  }
+
+  .araem-btn {
+    justify-content: center;
+    width: 100%;
+  }
+}

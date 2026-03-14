@@ -1,0 +1,703 @@
+/* ===================================
+   ADMIN REACTION STATS — prefix: aras-
+   =================================== */
+
+.aras {
+  width: 100%;
+}
+
+/* ===================================
+   TOP STAT CARDS
+   =================================== */
+
+.aras-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-bottom: 36px;
+}
+
+.aras-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 28px 24px;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 2px solid #f3f4f6;
+  overflow: hidden;
+  transition: all 0.4s ease;
+  cursor: default;
+}
+
+.aras-card:hover {
+  border-color: transparent;
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+
+.aras-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--aras-card-gradient);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+
+.aras-card:hover::before {
+  transform: scaleX(1);
+}
+
+.aras-card-icon-wrapper {
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.aras-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  color: #ffffff;
+}
+
+.aras-card-icon svg {
+  width: 28px;
+  height: 28px;
+}
+
+.aras-card:hover .aras-card-icon {
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+}
+
+.aras-card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+  z-index: 2;
+}
+
+.aras-card-label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #6b7280;
+  margin: 0;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+}
+
+.aras-card:hover .aras-card-label {
+  color: #374151;
+}
+
+.aras-card-value {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #1f2937;
+  margin: 0;
+  line-height: 1;
+  transition: transform 0.3s ease;
+}
+
+.aras-card:hover .aras-card-value {
+  transform: scale(1.05);
+}
+
+.aras-card-glow {
+  position: absolute;
+  bottom: -50%;
+  right: -50%;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  opacity: 0;
+  filter: blur(40px);
+  transition: opacity 0.5s ease;
+  z-index: 1;
+}
+
+.aras-card:hover .aras-card-glow {
+  opacity: 0.15;
+  animation: aras-glow-pulse 3s ease-in-out infinite;
+}
+
+@keyframes aras-glow-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.15; }
+  50% { transform: scale(1.2); opacity: 0.25; }
+}
+
+/* ===================================
+   BREAKDOWN SECTIONS
+   =================================== */
+
+.aras-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.aras-section {
+  background: #ffffff;
+  border-radius: 16px;
+  border: 2px solid #f3f4f6;
+  padding: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.aras-section-title {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #1f2937;
+  margin: 0 0 20px 0;
+}
+
+/* ===================================
+   BY STATUS
+   =================================== */
+
+.aras-status-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.aras-status-item {
+  display: grid;
+  grid-template-columns: 12px 140px 50px 1fr;
+  align-items: center;
+  gap: 12px;
+}
+
+.aras-status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.aras-status-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #374151;
+}
+
+.aras-status-count {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #1f2937;
+  text-align: right;
+}
+
+.aras-status-bar {
+  height: 8px;
+  background: #f3f4f6;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.aras-status-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.6s ease;
+}
+
+/* ===================================
+   BY MONTH
+   =================================== */
+
+.aras-month-table {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.aras-month-row {
+  display: grid;
+  grid-template-columns: 100px 1fr 50px;
+  align-items: center;
+  gap: 14px;
+}
+
+.aras-month-label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.aras-month-bar {
+  height: 10px;
+  background: #f3f4f6;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.aras-month-bar-fill {
+  height: 100%;
+  background: linear-gradient(135deg, #f78da7 0%, #dc2626 100%);
+  border-radius: 5px;
+  transition: width 0.6s ease;
+}
+
+.aras-month-count {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #1f2937;
+  text-align: right;
+}
+
+/* ===================================
+   COLUMNS (Cities + Topics)
+   =================================== */
+
+.aras-columns {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+/* ===================================
+   LIST (Cities / Topics)
+   =================================== */
+
+.aras-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.aras-list-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: #f9fafb;
+  border-radius: 10px;
+  border: 1px solid #f3f4f6;
+}
+
+.aras-list-rank {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #6b7280;
+  background: #e5e7eb;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.aras-list-name {
+  flex: 1;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #374151;
+  overflow-wrap: anywhere;
+}
+
+.aras-list-count {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #1f2937;
+}
+
+/* ===================================
+   DARK THEME
+   =================================== */
+
+[data-theme="dark"] .aras-card {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+[data-theme="dark"] .aras-card:hover {
+  border-color: transparent;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="dark"] .aras-card-label {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .aras-card:hover .aras-card-label {
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .aras-card-value {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .aras-card-glow {
+  opacity: 0;
+}
+
+[data-theme="dark"] .aras-card:hover .aras-card-glow {
+  opacity: 0.1;
+}
+
+[data-theme="dark"] .aras-section {
+  background: #1f2937;
+  border-color: #374151;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="dark"] .aras-section-title {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .aras-status-label {
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .aras-status-count {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .aras-status-bar {
+  background: #374151;
+}
+
+[data-theme="dark"] .aras-month-label {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .aras-month-bar {
+  background: #374151;
+}
+
+[data-theme="dark"] .aras-month-count {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .aras-list-item {
+  background: #111827;
+  border-color: #374151;
+}
+
+[data-theme="dark"] .aras-list-rank {
+  background: #374151;
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .aras-list-name {
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .aras-list-count {
+  color: #f3f4f6;
+}
+
+/* ===================================
+   RESPONSIVE DESIGN
+   =================================== */
+
+/* Large Desktops (1440px+) */
+@media (min-width: 1440px) {
+  .aras-cards {
+    gap: 28px;
+  }
+
+  .aras-card {
+    padding: 32px 28px;
+  }
+
+  .aras-card-icon {
+    width: 66px;
+    height: 66px;
+  }
+
+  .aras-card-icon svg {
+    width: 30px;
+    height: 30px;
+  }
+
+  .aras-card-value {
+    font-size: 2.75rem;
+  }
+}
+
+/* Standard Desktops (1024px - 1439px) */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .aras-cards {
+    gap: 20px;
+  }
+
+  .aras-card {
+    padding: 24px 20px;
+    gap: 16px;
+  }
+
+  .aras-card-icon {
+    width: 56px;
+    height: 56px;
+  }
+
+  .aras-card-icon svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .aras-card-value {
+    font-size: 2.2rem;
+  }
+
+  .aras-card-label {
+    font-size: 0.82rem;
+  }
+}
+
+/* Tablets (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .aras-cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+
+  .aras-card {
+    padding: 22px 18px;
+    gap: 16px;
+  }
+
+  .aras-card-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+  }
+
+  .aras-card-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .aras-card-label {
+    font-size: 0.85rem;
+  }
+
+  .aras-card-value {
+    font-size: 2rem;
+  }
+
+  .aras-columns {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .aras-status-item {
+    grid-template-columns: 12px 120px 40px 1fr;
+    gap: 10px;
+  }
+}
+
+/* Small Tablets / Large Phones (576px - 767px) */
+@media (min-width: 576px) and (max-width: 767px) {
+  .aras-cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .aras-card {
+    padding: 20px 16px;
+    gap: 14px;
+  }
+
+  .aras-card-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+  }
+
+  .aras-card-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .aras-card-label {
+    font-size: 0.82rem;
+  }
+
+  .aras-card-value {
+    font-size: 1.85rem;
+  }
+
+  .aras-columns {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .aras-section {
+    padding: 20px;
+  }
+
+  .aras-status-item {
+    grid-template-columns: 10px 110px 40px 1fr;
+    gap: 8px;
+  }
+
+  .aras-month-row {
+    grid-template-columns: 80px 1fr 40px;
+    gap: 10px;
+  }
+}
+
+/* Phones (480px - 575px) */
+@media (min-width: 480px) and (max-width: 575px) {
+  .aras-cards {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .aras-card {
+    padding: 18px 16px;
+    gap: 16px;
+  }
+
+  .aras-card-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+  }
+
+  .aras-card-icon svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .aras-card-label {
+    font-size: 0.85rem;
+  }
+
+  .aras-card-value {
+    font-size: 2rem;
+  }
+
+  .aras-columns {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .aras-section {
+    padding: 18px;
+  }
+
+  .aras-status-item {
+    grid-template-columns: 10px 1fr 40px;
+    gap: 8px;
+  }
+
+  .aras-status-bar {
+    display: none;
+  }
+
+  .aras-month-row {
+    grid-template-columns: 70px 1fr 40px;
+    gap: 8px;
+  }
+}
+
+/* Small Phones (320px - 479px) */
+@media (max-width: 479px) {
+  .aras-cards {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+
+  .aras-card {
+    padding: 16px 14px;
+    gap: 14px;
+  }
+
+  .aras-card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+  }
+
+  .aras-card-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .aras-card-label {
+    font-size: 0.82rem;
+  }
+
+  .aras-card-value {
+    font-size: 1.85rem;
+  }
+
+  .aras-card:hover {
+    transform: translateY(-2px);
+  }
+
+  .aras-sections {
+    gap: 18px;
+  }
+
+  .aras-columns {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .aras-section {
+    padding: 16px;
+  }
+
+  .aras-section-title {
+    font-size: 1rem;
+    margin-bottom: 16px;
+  }
+
+  .aras-status-item {
+    grid-template-columns: 10px 1fr 36px;
+    gap: 6px;
+  }
+
+  .aras-status-label {
+    font-size: 0.85rem;
+  }
+
+  .aras-status-bar {
+    display: none;
+  }
+
+  .aras-month-row {
+    grid-template-columns: 60px 1fr 36px;
+    gap: 6px;
+  }
+
+  .aras-month-label {
+    font-size: 0.82rem;
+  }
+
+  .aras-list-item {
+    padding: 8px 12px;
+  }
+
+  .aras-list-rank {
+    width: 24px;
+    height: 24px;
+    font-size: 0.72rem;
+  }
+
+  .aras-list-name {
+    font-size: 0.85rem;
+  }
+}

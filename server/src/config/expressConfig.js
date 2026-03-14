@@ -5,6 +5,7 @@ const { port, frontend_server } = require('./envConfig');
 const testDatabaseConnection = require('../sequelize/testDatabaseConnection');
 const scheduleArticleCleanup = require('../cron/articleCleanup');
 const { startMentorActivityCron } = require('../cron/mentorActivityCron');
+const { startVisitReminderCron } = require('../cron/visitReminderCron');
 
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
@@ -36,5 +37,6 @@ module.exports = function expressConfig(app) {
         console.log(`Server is listening on port: ${port}`);
         scheduleArticleCleanup();
          startMentorActivityCron();
+        startVisitReminderCron();
     });
 };

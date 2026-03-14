@@ -1,0 +1,433 @@
+/* ===================================
+   MENTOR REACTION HISTORY — prefix: mrah-
+   =================================== */
+
+.mrah {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* ===================================
+   BACK BUTTON
+   =================================== */
+
+.mrah-back-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #4f46e5;
+  background: #eef2ff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 24px;
+}
+
+.mrah-back-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.mrah-back-btn:hover {
+  background: #e0e7ff;
+}
+
+/* ===================================
+   TABLE
+   =================================== */
+
+.mrah-table-wrapper {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+}
+
+.mrah-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px;
+}
+
+.mrah-table thead th {
+  text-align: left;
+  padding: 14px 16px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: #f9fafb;
+  border-bottom: 2px solid #e5e7eb;
+  white-space: nowrap;
+}
+
+.mrah-table tbody td {
+  padding: 14px 16px;
+  font-size: 0.9rem;
+  color: #374151;
+  border-bottom: 1px solid #f3f4f6;
+  overflow-wrap: anywhere;
+}
+
+.mrah-row:hover {
+  background: #f9fafb;
+}
+
+.mrah-td-date {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.mrah-td-club {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.mrah-topic-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #4f46e5;
+  background: #eef2ff;
+  border-radius: 6px;
+  overflow-wrap: anywhere;
+}
+
+/* Stars */
+.mrah-stars {
+  display: flex;
+  gap: 2px;
+}
+
+.mrah-star {
+  width: 18px;
+  height: 18px;
+}
+
+.mrah-stars--small .mrah-star {
+  width: 14px;
+  height: 14px;
+}
+
+.mrah-no-rating {
+  color: #d1d5db;
+  font-weight: 600;
+}
+
+/* Feedback Buttons */
+.mrah-feedback-toggle {
+  padding: 6px 14px;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #4f46e5;
+  background: #eef2ff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.mrah-feedback-toggle:hover {
+  background: #e0e7ff;
+}
+
+.mrah-add-feedback-btn {
+  padding: 6px 14px;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #059669;
+  background: #ecfdf5;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.mrah-add-feedback-btn:hover {
+  background: #d1fae5;
+}
+
+/* Expanded Feedback */
+.mrah-expanded-row td {
+  padding: 0 16px 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.mrah-feedback-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  padding: 16px;
+  background: #f9fafb;
+  border-radius: 10px;
+  margin-top: 4px;
+}
+
+.mrah-feedback-field strong {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #6b7280;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.mrah-feedback-field p {
+  font-size: 0.88rem;
+  color: #374151;
+  margin: 0;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+/* ===================================
+   MOBILE CARDS (shown on small screens)
+   =================================== */
+
+.mrah-mobile-cards {
+  display: none;
+}
+
+.mrah-mobile-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 18px;
+  margin-bottom: 14px;
+}
+
+.mrah-mobile-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  gap: 8px;
+}
+
+.mrah-mobile-date {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #4f46e5;
+}
+
+.mrah-mobile-club {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 4px 0;
+  overflow-wrap: anywhere;
+}
+
+.mrah-mobile-city {
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin: 0 0 10px 0;
+  overflow-wrap: anywhere;
+}
+
+.mrah-mobile-participants {
+  font-size: 0.85rem;
+  color: #374151;
+  margin: 8px 0;
+  overflow-wrap: anywhere;
+}
+
+/* ===================================
+   EMPTY / LOADING
+   =================================== */
+
+.mrah-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  gap: 16px;
+}
+
+.mrah-empty svg {
+  width: 56px;
+  height: 56px;
+  color: #d1d5db;
+}
+
+.mrah-empty p {
+  font-size: 1rem;
+  color: #9ca3af;
+  font-weight: 600;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.mrah-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  gap: 20px;
+}
+
+.mrah-spinner {
+  width: 44px;
+  height: 44px;
+  border: 4px solid #e5e7eb;
+  border-top-color: #4f46e5;
+  border-radius: 50%;
+  animation: mrah-spin 0.8s linear infinite;
+}
+
+@keyframes mrah-spin {
+  to { transform: rotate(360deg); }
+}
+
+.mrah-loading p {
+  font-size: 0.95rem;
+  color: #6b7280;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* ===================================
+   DARK THEME
+   =================================== */
+
+[data-theme="dark"] .mrah-back-btn {
+  background: #312e81;
+  color: #a5b4fc;
+}
+
+[data-theme="dark"] .mrah-back-btn:hover {
+  background: #3730a3;
+}
+
+[data-theme="dark"] .mrah-table-wrapper {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+[data-theme="dark"] .mrah-table thead th {
+  background: #111827;
+  color: #9ca3af;
+  border-bottom-color: #374151;
+}
+
+[data-theme="dark"] .mrah-table tbody td {
+  color: #d1d5db;
+  border-bottom-color: #374151;
+}
+
+[data-theme="dark"] .mrah-row:hover {
+  background: #374151;
+}
+
+[data-theme="dark"] .mrah-td-club {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .mrah-topic-badge {
+  background: #312e81;
+  color: #a5b4fc;
+}
+
+[data-theme="dark"] .mrah-star--empty {
+  stroke: #4b5563;
+}
+
+[data-theme="dark"] .mrah-no-rating {
+  color: #4b5563;
+}
+
+[data-theme="dark"] .mrah-feedback-toggle {
+  background: #312e81;
+  color: #a5b4fc;
+}
+
+[data-theme="dark"] .mrah-feedback-toggle:hover {
+  background: #3730a3;
+}
+
+[data-theme="dark"] .mrah-add-feedback-btn {
+  background: #064e3b;
+  color: #6ee7b7;
+}
+
+[data-theme="dark"] .mrah-add-feedback-btn:hover {
+  background: #065f46;
+}
+
+[data-theme="dark"] .mrah-feedback-details {
+  background: #111827;
+}
+
+[data-theme="dark"] .mrah-feedback-field strong {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .mrah-feedback-field p {
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .mrah-mobile-card {
+  background: #1f2937;
+  border-color: #374151;
+}
+
+[data-theme="dark"] .mrah-mobile-date {
+  color: #818cf8;
+}
+
+[data-theme="dark"] .mrah-mobile-club {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .mrah-mobile-city {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .mrah-mobile-participants {
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .mrah-empty svg {
+  color: #4b5563;
+}
+
+[data-theme="dark"] .mrah-empty p {
+  color: #6b7280;
+}
+
+[data-theme="dark"] .mrah-spinner {
+  border-color: #374151;
+  border-top-color: #818cf8;
+}
+
+[data-theme="dark"] .mrah-loading p {
+  color: #9ca3af;
+}
+
+/* ===================================
+   RESPONSIVE
+   =================================== */
+
+@media (max-width: 767px) {
+  .mrah-table-wrapper {
+    display: none;
+  }
+
+  .mrah-mobile-cards {
+    display: block;
+  }
+}

@@ -1,0 +1,14 @@
+/* ===================================
+   REACTION LANDING — prefix: ral-
+   =================================== */
+
+.ral {
+  width: 100%;
+  min-height: 100vh;
+  background: #faf7f5;
+  overflow-x: hidden;
+}
+
+[data-theme="dark"] .ral {
+  background: #1a1520;
+}

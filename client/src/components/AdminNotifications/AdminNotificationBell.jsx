@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useAcademy } from '../contexts/AcademyProvider';
 import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 import { toast } from 'react-toastify';
-import { getNotificationConfig } from '../../config/notificationConfig';
+import { getNotificationConfig, getNotificationRoute } from '../../config/notificationConfig';
 import { NotificationItem } from './NotificationItem/NotificationItem';
 import './adminNotificationBell.css';
 
@@ -87,8 +87,8 @@ export const AdminNotificationBell = () => {
       await markNotificationAsRead(notification.id);
       setUnreadCount(prev => Math.max(0, prev - 1));
       
-      const config = getNotificationConfig(notification.type);
-      navigate(config.route);
+      const route = getNotificationRoute(notification);
+      navigate(route);
       
       setIsOpen(false);
       fetchNotifications();

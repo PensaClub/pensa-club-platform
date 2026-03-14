@@ -27,7 +27,17 @@
     "academy-mentors": "Mentors",
     "academy-mentors-desc": "Find your mentor",
     "academy-cta": "Enter the Academy",
-    "factcheck": "FactCheck"
+    "factcheck": "FactCheck",
+    "reaction-program": "ReAction Program",
+    "reaction-landing": "About the program",
+    "reaction-landing-desc": "Learn more about the program",
+    "reaction-book": "Request a visit",
+    "reaction-book-desc": "Fill in the request form",
+    "reaction-factcheck": "FactCheck",
+    "reaction-factcheck-desc": "Verify information online",
+    "reaction-track": "Track request",
+    "reaction-track-desc": "Check the status of your request",
+    "reaction-cta": "Go to the program"
   },
   "footer": {
     "site-map": "Site Map",
@@ -273,6 +283,7 @@
     "clubMembership": "Club Membership",
     "mentorApplications": "Student Applications",
     "mentorProfile": "Profile",
+    "mentorReaction": "ReAction Program",
     "clubs": {
       "title": "My Clubs",
       "subtitle": "Manage and view all clubs you have created",

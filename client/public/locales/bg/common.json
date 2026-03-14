@@ -27,7 +27,17 @@
     "academy-mentors": "Ментори",
     "academy-mentors-desc": "Намери своя ментор",
     "academy-cta": "Влез в Академията",
-    "factcheck": "ФактЧек"
+    "factcheck": "ФактЧек",
+    "reaction-program": "Програма ReАкция",
+    "reaction-landing": "За програмата",
+    "reaction-landing-desc": "Научи повече за програмата",
+    "reaction-book": "Заяви посещение",
+    "reaction-book-desc": "Попълни формата за заявка",
+    "reaction-factcheck": "ФактЧек",
+    "reaction-factcheck-desc": "Провери информация онлайн",
+    "reaction-track": "Проследи заявка",
+    "reaction-track-desc": "Виж статуса на твоята заявка",
+    "reaction-cta": "Към програмата"
   },
   "footer": {
     "site-map": "Карта на сайта",
@@ -276,6 +286,7 @@
     "mentorDashboard": "Ментор Панел",
     "mentorOverview": "Преглед",
     "mentorProfile": "Профил",
+    "mentorReaction": "Програма ReАкция",
     "clubs": {
       "title": "Моите Клубове",
       "subtitle": "Управлявайте и прегледайте всички клубове, които сте създали",

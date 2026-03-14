@@ -3,6 +3,11 @@
     "factCheck": {
       "title": "Faktencheck"
     },
+    "reaction": {
+      "title": "Programm ReAktion",
+      "factCheck": "Faktencheck",
+      "manage": "Anfragen verwalten"
+    },
     "mentors": {
       "title": "Mentoren",
       "overview": "Mentoren-Übersicht",

@@ -1,0 +1,457 @@
+/* ===================================
+   BOOKING FORM — prefix: rabf-
+   =================================== */
+
+.rabf {
+  padding: 110px 20px 80px;
+  background: #c8dcc8;
+  position: relative;
+  margin-top: -60px;
+  border-radius: 0 0 50% 50% / 0 0 60px 60px;
+}
+
+.rabf-container {
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.rabf-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.rabf-title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #1f2937;
+  margin: 0 0 8px;
+}
+
+.rabf-subtitle {
+  font-size: 1rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Form */
+.rabf-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.rabf-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.rabf-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #374151;
+}
+
+.rabf-input,
+.rabf-select,
+.rabf-textarea {
+  padding: 12px 16px;
+  border: 1.5px solid rgba(180, 140, 120, 0.2);
+  border-radius: 12px;
+  font-size: 0.95rem;
+  color: #1f2937;
+  background: #ffffff;
+  font-family: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.rabf-input:focus,
+.rabf-select:focus,
+.rabf-textarea:focus {
+  outline: none;
+  border-color: #f78da7;
+  box-shadow: 0 0 0 3px rgba(247, 141, 167, 0.1);
+}
+
+.rabf-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.rabf-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* Buttons */
+.rabf-btn {
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.3s;
+}
+
+.rabf-btn--primary {
+  background: linear-gradient(135deg, #f78da7, #dc2626);
+  color: #ffffff;
+  box-shadow: 0 4px 16px rgba(247, 141, 167, 0.3);
+}
+
+.rabf-btn--primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(247, 141, 167, 0.4);
+}
+
+.rabf-btn--primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.rabf-btn--secondary {
+  background: transparent;
+  color: #f78da7;
+  border: 2px solid #f78da7;
+}
+
+.rabf-btn--secondary:hover {
+  background: rgba(247, 141, 167, 0.08);
+}
+
+.rabf-success-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+.rabf-success-actions .rabf-btn--primary {
+  text-decoration: none;
+}
+
+/* Success */
+.rabf-success {
+  text-align: center;
+  padding: 40px;
+}
+
+.rabf-success-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 16px;
+  color: #16a34a;
+}
+
+.rabf-success-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.rabf-success h3 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #16a34a;
+  margin: 0 0 8px;
+}
+
+.rabf-success p {
+  font-size: 1rem;
+  color: #6b7280;
+  margin: 0 0 24px;
+}
+
+/* Tracking code */
+.rabf-tracking {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 2px dashed rgba(247, 141, 167, 0.4);
+}
+
+.rabf-tracking-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.rabf-tracking-code {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #dc2626;
+  letter-spacing: 0.15em;
+  font-family: 'Courier New', monospace;
+}
+
+.rabf-tracking-hint {
+  font-size: 0.82rem;
+  color: #9ca3af;
+}
+
+/* Honeypot */
+.rabf-hp {
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+  opacity: 0;
+  height: 0;
+  width: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Duplicate request banner */
+.rabf-duplicate {
+  padding: 16px 20px;
+  background: #fef3c7;
+  border: 1.5px solid #f59e0b;
+  border-radius: 12px;
+}
+
+.rabf-duplicate-text {
+  font-size: 0.9rem;
+  color: #92400e;
+  font-weight: 600;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+.rabf-duplicate-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.rabf-duplicate-link {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #7c3aed;
+  text-decoration: none;
+  padding: 6px 14px;
+  border: 1.5px solid rgba(124, 58, 237, 0.3);
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.rabf-duplicate-link:hover {
+  background: rgba(124, 58, 237, 0.08);
+  border-color: rgba(124, 58, 237, 0.5);
+}
+
+[data-theme="dark"] .rabf-duplicate {
+  background: rgba(245, 158, 11, 0.12);
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+[data-theme="dark"] .rabf-duplicate-text {
+  color: #fbbf24;
+}
+
+[data-theme="dark"] .rabf-duplicate-link {
+  color: #a78bfa;
+  border-color: rgba(167, 139, 250, 0.3);
+}
+
+/* Field hint */
+.rabf-field-hint {
+  font-size: 0.82rem;
+  color: #6b7280;
+  margin-top: 2px;
+}
+
+[data-theme="dark"] .rabf-field-hint {
+  color: #9ca3af;
+}
+
+/* Field error state */
+.rabf-input--error {
+  border-color: #dc2626 !important;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.08) !important;
+}
+
+.rabf-field-error {
+  font-size: 0.82rem;
+  color: #dc2626;
+  margin-top: 2px;
+}
+
+/* Toast notification */
+.rabf-toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: #1f2937;
+  color: #ffffff;
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s, transform 0.35s;
+  max-width: 90vw;
+  overflow-wrap: anywhere;
+}
+
+.rabf-toast--visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+.rabf-toast--hidden {
+  opacity: 0;
+  transform: translateX(-50%) translateY(20px);
+}
+
+.rabf-toast-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  color: #fbbf24;
+}
+
+/* Dark theme */
+[data-theme="dark"] .rabf {
+  background: #151c28;
+}
+
+[data-theme="dark"] .rabf-title {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .rabf-subtitle {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .rabf-label {
+  color: #d1d5db;
+}
+
+[data-theme="dark"] .rabf-input,
+[data-theme="dark"] .rabf-select,
+[data-theme="dark"] .rabf-textarea {
+  background: #1f2937;
+  color: #f3f4f6;
+  border-color: rgba(247, 141, 167, 0.15);
+}
+
+[data-theme="dark"] .rabf-success h3 {
+  color: #4ade80;
+}
+
+[data-theme="dark"] .rabf-success p {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .rabf-tracking {
+  background: #1f2937;
+  border-color: rgba(247, 141, 167, 0.3);
+}
+
+[data-theme="dark"] .rabf-tracking-label {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .rabf-tracking-hint {
+  color: #6b7280;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .rabf {
+    padding: 64px 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .rabf {
+    padding: 48px 16px;
+  }
+  .rabf-title{
+    margin-top: 2.5rem;
+  }
+  .rabf-btn {
+      margin-bottom: 2rem;
+    }
+}
+
+@media (max-width: 640px) {
+  .rabf-row {
+    grid-template-columns: 1fr;
+  }
+
+  .rabf {
+    padding: 40px 16px;
+  }
+
+  .rabf-btn {
+    margin-bottom: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .rabf {
+    padding: 35px 12px;
+  }
+
+  .rabf-form {
+    max-width: 100%;
+  }
+
+  .rabf-input,
+  .rabf-select,
+  .rabf-textarea {
+    padding: 10px 12px;
+    font-size: 0.88rem;
+    min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .rabf-title {
+    font-size: 1.5rem;
+  }
+
+  .rabf-subtitle {
+    font-size: 0.88rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .rabf-title {
+    font-size: 1.5rem;
+    margin: 2rem 0 8px;
+
+  }
+
+  .rabf-tracking-code {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .rabf-btn {
+    padding: 12px 20px;
+    font-size: 0.92rem;
+    margin-bottom: 2rem;
+  }
+}
