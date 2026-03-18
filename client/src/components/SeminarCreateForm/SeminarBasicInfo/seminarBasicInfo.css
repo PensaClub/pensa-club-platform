@@ -1,0 +1,255 @@
+/* src/components/SeminarCreateForm/SeminarBasicInfo/seminarBasicInfo.css */
+/* Prefix: scfb- */
+
+/* =========================================================
+   SECTION
+   ========================================================= */
+
+.scfb-section {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    padding: 24px;
+}
+
+.scfb-section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    color: #00d2ff;
+}
+
+.scfb-section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+}
+
+/* =========================================================
+   FIELDS
+   ========================================================= */
+
+.scfb-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+    position: relative;
+}
+
+.scfb-field:last-child {
+    margin-bottom: 0;
+}
+
+.scfb-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.scfb-required {
+    color: #ff6b6b;
+}
+
+.scfb-input,
+.scfb-select,
+.scfb-textarea {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.9rem;
+    color: #fff;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    font-family: inherit;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.scfb-input:focus,
+.scfb-select:focus,
+.scfb-textarea:focus {
+    border-color: rgba(0, 210, 255, 0.4);
+    box-shadow: 0 0 0 3px rgba(0, 210, 255, 0.08);
+}
+
+.scfb-input::placeholder,
+.scfb-textarea::placeholder {
+    color: rgba(255, 255, 255, 0.25);
+}
+
+.scfb-select {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.4)' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+}
+
+.scfb-select option {
+    background: #1a1f2e;
+    color: #fff;
+}
+
+.scfb-textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.scfb-textarea-sm {
+    min-height: 60px;
+}
+
+.scfb-char-count {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.25);
+    text-align: right;
+}
+
+.scfb-hint {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+.scfb-field-error .scfb-input,
+.scfb-field-error .scfb-select,
+.scfb-field-error .scfb-textarea {
+    border-color: rgba(255, 107, 107, 0.5);
+}
+
+.scfb-error-msg {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.8rem;
+    color: #ff6b6b;
+}
+
+/* =========================================================
+   ROW
+   ========================================================= */
+
+.scfb-row {
+    display: flex;
+    gap: 16px;
+}
+
+.scfb-row > .scfb-field {
+    flex: 1;
+}
+
+/* =========================================================
+   LEARNING POINTS
+   ========================================================= */
+
+.scfb-learning-points {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.scfb-learning-point {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.scfb-learning-point-icon {
+    color: #10b981;
+    font-weight: 700;
+    font-size: 1rem;
+    flex-shrink: 0;
+    width: 20px;
+    text-align: center;
+}
+
+.scfb-learning-point-input {
+    flex: 1;
+}
+
+.scfb-learning-point-remove {
+    background: none;
+    border: none;
+    color: #ef4444;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    flex-shrink: 0;
+    transition: background 0.2s;
+}
+
+.scfb-learning-point-remove:hover {
+    background: rgba(239, 68, 68, 0.1);
+}
+
+.scfb-learning-point-add {
+    background: none;
+    border: 1px dashed rgba(255, 255, 255, 0.15);
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    padding: 0.6rem 1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+    text-align: left;
+}
+
+.scfb-learning-point-add:hover {
+    border-color: #22d3ee;
+    color: #22d3ee;
+    background: rgba(34, 211, 238, 0.05);
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 767px) {
+    .scfb-section { padding: 16px; border-radius: 12px; }
+    .scfb-row { flex-direction: column; gap: 0; }
+}
+
+@media (max-width: 424px) {
+    .scfb-section { padding: 12px; }
+    .scfb-section-title { font-size: 1rem; }
+    .scfb-input, .scfb-select, .scfb-textarea { font-size: 0.85rem; padding: 9px 12px; }
+}
+
+/* =========================================================
+   LIGHT THEME
+   ========================================================= */
+
+[data-theme="light"] .scfb-section { background-color: #ffffff; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02); }
+[data-theme="light"] .scfb-section-header { color: #0d9488; }
+[data-theme="light"] .scfb-section-title { color: #1e293b; }
+[data-theme="light"] .scfb-label { color: #475569; }
+[data-theme="light"] .scfb-required { color: #dc2626; }
+[data-theme="light"] .scfb-input,
+[data-theme="light"] .scfb-textarea { background-color: #ffffff; border: 1px solid #d1d5db; color: #1e293b; }
+[data-theme="light"] .scfb-select { background-color: #ffffff; border: 1px solid #d1d5db; color: #1e293b; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); }
+[data-theme="light"] .scfb-select option { background: #ffffff; color: #1e293b; }
+[data-theme="light"] .scfb-input:focus,
+[data-theme="light"] .scfb-select:focus,
+[data-theme="light"] .scfb-textarea:focus { border-color: rgba(13, 148, 136, 0.4); box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.12); }
+[data-theme="light"] .scfb-input::placeholder,
+[data-theme="light"] .scfb-textarea::placeholder { color: #94a3b8; }
+[data-theme="light"] .scfb-char-count { color: #94a3b8; }
+[data-theme="light"] .scfb-hint { color: #94a3b8; }
+[data-theme="light"] .scfb-field-error .scfb-input,
+[data-theme="light"] .scfb-field-error .scfb-select,
+[data-theme="light"] .scfb-field-error .scfb-textarea { border-color: rgba(220, 38, 38, 0.5); }
+[data-theme="light"] .scfb-error-msg { color: #dc2626; }
+[data-theme="light"] .scfb-learning-point-add { border-color: #d1d5db; color: #64748b; }
+[data-theme="light"] .scfb-learning-point-add:hover { border-color: #0d9488; color: #0d9488; background: rgba(13, 148, 136, 0.05); }

@@ -19,7 +19,8 @@
       "createCourse": "Създай курс",
       "createLecture": "Създай лекция",
       "createSeminar": "Създай семинар",
-      "lectures": "Лекции"
+      "lectures": "Лекции",
+      "seminars": "Семинари"
     },
     "mentors": {
       "title": "Ментори",

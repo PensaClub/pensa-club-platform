@@ -116,6 +116,9 @@ const CourseContentManager = lazyWithRetry(() => import('./components/AdminAcade
 const LectureCreateForm = lazyWithRetry(() => import('./components/LectureCreateForm/LectureCreateForm.jsx'));
 const AdminAcademyLecturesList = lazyWithRetry(() => import('./components/AdminAcademyLecturesList/AdminAcademyLecturesList.jsx'));
 const EditLecture = lazyWithRetry(() => import('./components/AdminAcademyLecturesList/EditLecture/EditLecture.jsx'));
+const SeminarCreateForm = lazyWithRetry(() => import('./components/SeminarCreateForm/SeminarCreateForm.jsx')); 
+// const AdminAcademySeminarsList = lazyWithRetry(() => import('./components/AdminAcademySeminarsList/AdminAcademySeminarsList.jsx')); // НОВО
+// const EditSeminar = lazyWithRetry(() => import('./components/AdminAcademySeminarsList/EditSeminar/EditSeminar.jsx')); // НОВО
 const TelkRkmeRzi = lazyWithRetry(() => import('./components/TelkRkmeRzi/TelkRkmeRzi.jsx'));
 const ComingSoon = lazyWithRetry(() => import('./components/DigiBridgeAcademy/ComingSoon/ComingSoon.jsx'));
 const ProjectCreateForm = lazyWithRetry(() => import('./components/Initiatives/CreateProject/ProjectCreateForm'));
@@ -227,6 +230,9 @@ function AppRoutes() {
         <Route path="/academy/admin/lectures" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><AdminAcademyLecturesList /></Suspense></AdminGuard>} />
         <Route path="/academy/admin/edit-course/:slug" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><EditCourseBasicInfo /></Suspense></AdminGuard>} />
         <Route path="/academy/admin/edit-lecture/:slug" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><EditLecture /></Suspense></AdminGuard>} />
+        {/* <Route path="/academy/admin/seminars" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><AdminAcademySeminarsList /></Suspense></AdminGuard>} /> */}
+        <Route path="/academy/admin/create-seminar" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><SeminarCreateForm /></Suspense></AdminGuard>} />
+        {/* <Route path="/academy/admin/edit-seminar/:slug" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><EditSeminar /></Suspense></AdminGuard>} /> */}
         <Route path="/academy/admin/course/:slug/content" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><CourseContentManager /></Suspense></AdminGuard>} />
         <Route path="/ad/details/:adId" element={<AdDetails />} />
         <Route path="/ad/edit/:adId" element={<EditAd />} />

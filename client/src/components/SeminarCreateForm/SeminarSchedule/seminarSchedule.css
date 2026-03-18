@@ -1,0 +1,335 @@
+/* src/components/SeminarCreateForm/SeminarSchedule/seminarSchedule.css */
+/* Prefix: scfs- */
+
+/* =========================================================
+   SECTION
+   ========================================================= */
+
+.scfs-section {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    padding: 24px;
+}
+
+.scfs-section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    color: #00d2ff;
+}
+
+.scfs-section-header svg {
+    flex-shrink: 0;
+}
+
+.scfs-section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+}
+
+/* =========================================================
+   FIELDS
+   ========================================================= */
+
+.scfs-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+    position: relative;
+}
+
+.scfs-field:last-child {
+    margin-bottom: 0;
+}
+
+.scfs-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.scfs-label svg {
+    flex-shrink: 0;
+}
+
+.scfs-required {
+    color: #ff6b6b;
+    font-size: 0.85rem;
+}
+
+.scfs-input {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.9rem;
+    color: #fff;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    font-family: inherit;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.scfs-input:focus {
+    border-color: rgba(0, 210, 255, 0.4);
+    box-shadow: 0 0 0 3px rgba(0, 210, 255, 0.08);
+}
+
+.scfs-input::placeholder {
+    color: rgba(255, 255, 255, 0.25);
+}
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+.scfs-field-error .scfs-input {
+    border-color: rgba(255, 107, 107, 0.5);
+}
+
+.scfs-error-msg {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.8rem;
+    color: #ff6b6b;
+}
+
+.scfs-error-msg svg {
+    flex-shrink: 0;
+}
+
+/* =========================================================
+   ROW
+   ========================================================= */
+
+.scfs-row {
+    display: flex;
+    gap: 16px;
+}
+
+.scfs-row > .scfs-field {
+    flex: 1;
+}
+
+/* =========================================================
+   LOCATION TOGGLE
+   ========================================================= */
+
+.scfs-location-toggle {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.scfs-toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.scfs-toggle-btn svg {
+    flex-shrink: 0;
+}
+
+.scfs-toggle-btn:hover {
+    border-color: rgba(0, 210, 255, 0.3);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.scfs-toggle-active {
+    border-color: rgba(0, 210, 255, 0.5);
+    background: rgba(0, 210, 255, 0.08);
+    color: #00d2ff;
+}
+
+/* =========================================================
+   UPLOAD ZONE
+   ========================================================= */
+
+.scfs-upload-zone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 32px 16px;
+    border: 2px dashed rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.scfs-upload-zone:hover {
+    border-color: rgba(0, 210, 255, 0.4);
+    color: rgba(0, 210, 255, 0.7);
+    background: rgba(0, 210, 255, 0.03);
+}
+
+.scfs-upload-zone-active {
+    border-color: rgba(0, 210, 255, 0.6);
+    background: rgba(0, 210, 255, 0.06);
+    color: #00d2ff;
+}
+
+.scfs-upload-zone-uploading {
+    pointer-events: none;
+    cursor: default;
+}
+
+.scfs-upload-input {
+    display: none;
+}
+
+.scfs-upload-text {
+    font-size: 0.85rem;
+}
+
+.scfs-upload-progress {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 60%;
+}
+
+.scfs-upload-progress-bar {
+    flex: 1;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.scfs-upload-progress-fill {
+    height: 100%;
+    background: #00d2ff;
+    border-radius: 3px;
+    transition: width 0.2s;
+}
+
+.scfs-upload-progress-text {
+    font-size: 0.8rem;
+    color: #00d2ff;
+    min-width: 36px;
+}
+
+.scfs-url-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    padding: 0;
+    border: none;
+    background: none;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.scfs-url-toggle:hover {
+    color: rgba(0, 210, 255, 0.8);
+}
+
+/* =========================================================
+   THUMBNAIL PREVIEW
+   ========================================================= */
+
+.scfs-preview {
+    margin-top: 8px;
+    border-radius: 10px;
+    overflow: hidden;
+    max-width: 320px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    position: relative;
+}
+
+.scfs-preview-img {
+    width: 100%;
+    display: block;
+    object-fit: cover;
+    max-height: 180px;
+}
+
+.scfs-preview-remove {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+}
+
+.scfs-preview-remove:hover {
+    background: rgba(220, 38, 38, 0.8);
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 767px) {
+    .scfs-section { padding: 16px; border-radius: 12px; }
+    .scfs-row { flex-direction: column; gap: 0; }
+    .scfs-location-toggle { flex-direction: column; }
+}
+
+@media (max-width: 424px) {
+    .scfs-section { padding: 12px; }
+    .scfs-section-title { font-size: 1rem; }
+    .scfs-input { font-size: 0.85rem; padding: 9px 12px; }
+}
+
+/* =========================================================
+   LIGHT THEME
+   ========================================================= */
+
+[data-theme="light"] .scfs-section { background-color: #ffffff; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02); }
+[data-theme="light"] .scfs-section-header { color: #0d9488; }
+[data-theme="light"] .scfs-section-title { color: #1e293b; }
+[data-theme="light"] .scfs-label { color: #475569; }
+[data-theme="light"] .scfs-required { color: #dc2626; }
+[data-theme="light"] .scfs-input { background-color: #ffffff; border: 1px solid #d1d5db; color: #1e293b; }
+[data-theme="light"] .scfs-input:focus { border-color: rgba(13, 148, 136, 0.4); box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.12); }
+[data-theme="light"] .scfs-input::placeholder { color: #94a3b8; }
+[data-theme="light"] .scfs-field-error .scfs-input { border-color: rgba(220, 38, 38, 0.5); }
+[data-theme="light"] .scfs-error-msg { color: #dc2626; }
+[data-theme="light"] .scfs-toggle-btn { border: 1px solid #d1d5db; background-color: #ffffff; color: #64748b; }
+[data-theme="light"] .scfs-toggle-btn:hover { border-color: rgba(13, 148, 136, 0.4); color: #0d9488; }
+[data-theme="light"] .scfs-toggle-active { border-color: rgba(13, 148, 136, 0.5); background-color: rgba(13, 148, 136, 0.08); color: #0d9488; }
+[data-theme="light"] .scfs-upload-zone { border-color: #d1d5db; color: #94a3b8; }
+[data-theme="light"] .scfs-upload-zone:hover { border-color: rgba(13, 148, 136, 0.4); color: #0d9488; background: rgba(13, 148, 136, 0.03); }
+[data-theme="light"] .scfs-upload-zone-active { border-color: rgba(13, 148, 136, 0.6); background: rgba(13, 148, 136, 0.06); color: #0d9488; }
+[data-theme="light"] .scfs-upload-progress-bar { background: #e2e8f0; }
+[data-theme="light"] .scfs-upload-progress-fill { background: #0d9488; }
+[data-theme="light"] .scfs-upload-progress-text { color: #0d9488; }
+[data-theme="light"] .scfs-url-toggle { color: #94a3b8; }
+[data-theme="light"] .scfs-url-toggle:hover { color: #0d9488; }
+[data-theme="light"] .scfs-preview { border-color: #e2e8f0; }
+[data-theme="light"] .scfs-preview-remove { background: rgba(0, 0, 0, 0.5); }

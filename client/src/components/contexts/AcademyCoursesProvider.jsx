@@ -850,6 +850,31 @@ export const AcademyCoursesProvider = ({ children }) => {
     }
   }, [isAdmin]);
 
+  // НОВО — publish/unpublish seminar
+  const publishSeminar = useCallback(async (seminarId) => {
+    try {
+      const response = await coursesService.publishSeminar(seminarId);
+      toast.success('Семинарът е публикуван');
+      return response;
+    } catch (error) {
+      console.error('Error publishing seminar:', error);
+      toast.error(error?.errors?.[0] || 'Грешка при публикуване');
+      throw error;
+    }
+  }, []);
+
+  const unpublishSeminar = useCallback(async (seminarId) => {
+    try {
+      const response = await coursesService.unpublishSeminar(seminarId);
+      toast.success('Семинарът е скрит');
+      return response;
+    } catch (error) {
+      console.error('Error unpublishing seminar:', error);
+      toast.error(error?.errors?.[0] || 'Грешка при скриване');
+      throw error;
+    }
+  }, []);
+
   const cancelSeminar = useCallback(async (seminarId, reason = null) => {
     if (!isAdmin) {
       toast.error('Нямате права за тази операция');
@@ -1869,6 +1894,8 @@ export const AcademyCoursesProvider = ({ children }) => {
     createSeminar,
     updateSeminar,
     deleteSeminar,
+     publishSeminar, 
+    unpublishSeminar,
     cancelSeminar,
 
     // Seminar Registration

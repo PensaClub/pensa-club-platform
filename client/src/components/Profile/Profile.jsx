@@ -1056,6 +1056,12 @@ export const Profile = () => {
                               {t("admin.academy.createLecture")}
                             </NavLink>
                           </li>
+                             <li> {/* НОВО */}
+                            <NavLink to="/academy/admin/seminars" className={({ isActive }) => isActive ? 'active' : ''}>
+                              <CircleIcon className="icon" />
+                              {t("admin.academy.seminars")}
+                            </NavLink>
+                          </li>
                           <li>
                             <NavLink to="/academy/admin/create-seminar" className={({ isActive }) => isActive ? 'active' : ''}>
                               <CircleIcon className="icon" />

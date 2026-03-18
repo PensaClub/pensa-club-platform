@@ -1,0 +1,328 @@
+/* src/components/SeminarCreateForm/SeminarAdditional/seminarAdditional.css */
+/* Prefix: scfa- */
+
+/* =========================================================
+   SECTION
+   ========================================================= */
+
+.scfa-section {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    padding: 24px;
+}
+
+.scfa-section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    color: #00d2ff;
+}
+
+.scfa-section-header svg {
+    flex-shrink: 0;
+}
+
+.scfa-section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+}
+
+.scfa-section-desc {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.45);
+    margin: -8px 0 16px;
+    line-height: 1.5;
+}
+
+/* =========================================================
+   FIELDS
+   ========================================================= */
+
+.scfa-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+    position: relative;
+}
+
+.scfa-field:last-child {
+    margin-bottom: 0;
+}
+
+.scfa-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.scfa-input,
+.scfa-textarea {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.9rem;
+    color: #fff;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    font-family: inherit;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.scfa-input:focus,
+.scfa-textarea:focus {
+    border-color: rgba(0, 210, 255, 0.4);
+    box-shadow: 0 0 0 3px rgba(0, 210, 255, 0.08);
+}
+
+.scfa-input::placeholder,
+.scfa-textarea::placeholder {
+    color: rgba(255, 255, 255, 0.25);
+}
+
+.scfa-textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.scfa-textarea-sm {
+    min-height: 60px;
+}
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+.scfa-field-error .scfa-input,
+.scfa-field-error .scfa-textarea {
+    border-color: rgba(255, 107, 107, 0.5);
+}
+
+.scfa-error-msg {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.8rem;
+    color: #ff6b6b;
+}
+
+.scfa-error-msg svg {
+    flex-shrink: 0;
+}
+
+/* =========================================================
+   TOGGLES
+   ========================================================= */
+
+.scfa-toggles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 24px;
+    margin-top: 8px;
+    margin-bottom: 12px;
+}
+
+.scfa-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.scfa-toggle input[type="checkbox"] {
+    display: none;
+}
+
+.scfa-toggle-slider {
+    width: 40px;
+    height: 22px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 11px;
+    position: relative;
+    transition: background 0.25s;
+    flex-shrink: 0;
+}
+
+.scfa-toggle-slider::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 16px;
+    height: 16px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    transition: transform 0.25s, background 0.25s;
+}
+
+.scfa-toggle input:checked + .scfa-toggle-slider {
+    background: rgba(0, 210, 255, 0.3);
+}
+
+.scfa-toggle input:checked + .scfa-toggle-slider::after {
+    transform: translateX(18px);
+    background: #00d2ff;
+}
+
+.scfa-toggle-text {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* =========================================================
+   ASSIGNMENT FIELD
+   ========================================================= */
+
+.scfa-assignment-field {
+    margin-top: 4px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* =========================================================
+   COURSE SELECTOR
+   ========================================================= */
+
+.scfa-course-selected {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background: rgba(0, 210, 255, 0.06);
+    border: 1px solid rgba(0, 210, 255, 0.2);
+    border-radius: 10px;
+}
+
+.scfa-course-selected-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #00d2ff;
+    font-size: 0.9rem;
+}
+
+.scfa-course-selected-info svg {
+    flex-shrink: 0;
+}
+
+.scfa-course-selected-name {
+    color: #fff;
+    font-weight: 500;
+}
+
+.scfa-course-clear-btn {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 6px;
+    transition: all 0.2s;
+}
+
+.scfa-course-clear-btn:hover {
+    color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.1);
+}
+
+.scfa-course-dropdown {
+    margin-top: 6px;
+    background: rgba(15, 20, 35, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.scfa-course-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px 14px;
+    background: none;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    color: #fff;
+    font-size: 0.85rem;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s;
+}
+
+.scfa-course-option:last-child {
+    border-bottom: none;
+}
+
+.scfa-course-option:hover {
+    background: rgba(0, 210, 255, 0.08);
+}
+
+.scfa-course-option-name {
+    font-weight: 500;
+}
+
+.scfa-course-option-cat {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.35);
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 767px) {
+    .scfa-section { padding: 16px; border-radius: 12px; }
+    .scfa-toggles { flex-direction: column; gap: 12px; }
+}
+
+@media (max-width: 424px) {
+    .scfa-section { padding: 12px; }
+    .scfa-section-title { font-size: 1rem; }
+    .scfa-input, .scfa-textarea { font-size: 0.85rem; padding: 9px 12px; }
+}
+
+/* =========================================================
+   LIGHT THEME
+   ========================================================= */
+
+[data-theme="light"] .scfa-section { background-color: #ffffff; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02); }
+[data-theme="light"] .scfa-section-header { color: #0d9488; }
+[data-theme="light"] .scfa-section-title { color: #1e293b; }
+[data-theme="light"] .scfa-section-desc { color: #64748b; }
+[data-theme="light"] .scfa-label { color: #475569; }
+[data-theme="light"] .scfa-input,
+[data-theme="light"] .scfa-textarea { background-color: #ffffff; border: 1px solid #d1d5db; color: #1e293b; }
+[data-theme="light"] .scfa-input:focus,
+[data-theme="light"] .scfa-textarea:focus { border-color: rgba(13, 148, 136, 0.4); box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.12); }
+[data-theme="light"] .scfa-input::placeholder,
+[data-theme="light"] .scfa-textarea::placeholder { color: #94a3b8; }
+[data-theme="light"] .scfa-field-error .scfa-input,
+[data-theme="light"] .scfa-field-error .scfa-textarea { border-color: rgba(220, 38, 38, 0.5); }
+[data-theme="light"] .scfa-error-msg { color: #dc2626; }
+[data-theme="light"] .scfa-toggle-slider { background: #d1d5db; }
+[data-theme="light"] .scfa-toggle-slider::after { background: #ffffff; }
+[data-theme="light"] .scfa-toggle input:checked + .scfa-toggle-slider { background: rgba(13, 148, 136, 0.3); }
+[data-theme="light"] .scfa-toggle input:checked + .scfa-toggle-slider::after { background: #0d9488; }
+[data-theme="light"] .scfa-toggle-text { color: #475569; }
+[data-theme="light"] .scfa-assignment-field { border-top-color: #e2e8f0; }
+[data-theme="light"] .scfa-course-selected { background-color: rgba(13, 148, 136, 0.06); border-color: rgba(13, 148, 136, 0.2); }
+[data-theme="light"] .scfa-course-selected-info { color: #0d9488; }
+[data-theme="light"] .scfa-course-selected-name { color: #1e293b; }
+[data-theme="light"] .scfa-course-clear-btn { color: #94a3b8; }
+[data-theme="light"] .scfa-course-clear-btn:hover { color: #dc2626; background-color: rgba(220, 38, 38, 0.08); }
+[data-theme="light"] .scfa-course-dropdown { background-color: #ffffff; border: 1px solid #e2e8f0; }
+[data-theme="light"] .scfa-course-option { color: #1e293b; border-bottom-color: #f1f5f9; }
+[data-theme="light"] .scfa-course-option:hover { background-color: rgba(13, 148, 136, 0.06); }
+[data-theme="light"] .scfa-course-option-cat { color: #94a3b8; }

@@ -20,7 +20,8 @@
       "courses": "Courses",
       "createCourse": "Create Course",
       "createLecture": "Create Lecture",
-      "createSeminar": "Create Seminar"
+      "createSeminar": "Create Seminar",
+      "seminars": "Seminars"
     },
     "students": {
       "title": "Students",

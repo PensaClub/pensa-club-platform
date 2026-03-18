@@ -15,6 +15,8 @@ const {
   seminar,
   course,
   student,
+    student_seminar, // НОВО
+  student_lecture,
   student_lesson,
   course_enrollment,
   user_account,
@@ -3038,5 +3040,390 @@ academyTestsController.get('/course/:courseId/status', isAuth, async (req, res, 
     next(err);
   }
 });
+// ===============================
+// GET /api/academy/tests/seminar/:seminarId/status
+// Статус на тест за семинар
+// ===============================
+academyTestsController.get('/seminar/:seminarId/status', isAuth, async (req, res, next) => {
+  try {
+    const seminarId = parseInt(req.params.seminarId);
+    const userId = req.user.userId;
+    const userRole = req.user.role;
 
+    const testData = await test.findOne({
+      where: { seminarId, isPublished: true },
+    });
+
+    if (!testData) {
+      return res.status(200).json({
+        success: true,
+        hasTest: false,
+        test: null,
+      });
+    }
+
+    const privilegedRoles = ['admin', 'moderator', 'mentor'];
+    const isPrivileged = privilegedRoles.includes(userRole);
+
+    const studentData = await getStudentByUserId(userId);
+
+    // Проверка за присъствие
+    let testAccessible = isPrivileged;
+    if (!testAccessible && studentData) {
+      const attendance = await student_seminar.findOne({
+        where: { studentId: studentData.id, seminarId, attended: true },
+      });
+      if (attendance) testAccessible = true;
+    }
+
+    // Проверка за завършване на курс (ако семинарът е свързан с курс)
+    let courseCompleted = false;
+    const seminarData = await seminar.findByPk(seminarId, { attributes: ['id', 'courseId'] });
+    if (seminarData?.courseId && studentData) {
+      const enrollment = await course_enrollment.findOne({
+        where: { studentId: studentData.id, courseId: seminarData.courseId, status: 'active' },
+      });
+      if (enrollment) {
+        courseCompleted = enrollment.completedLessons > 0
+          && enrollment.completedLessons >= enrollment.totalLessons;
+      }
+    }
+
+    if (testData.requireCourseCompletion && !courseCompleted && !isPrivileged) {
+      testAccessible = false;
+    }
+
+    if (!studentData) {
+      return res.status(200).json({
+        success: true,
+        hasTest: true,
+        test: {
+          id: testData.id,
+          title: testData.title,
+          description: testData.description,
+          passingScore: testData.passingScore,
+          timeLimitMinutes: testData.timeLimitMinutes,
+          maxAttempts: testData.maxAttempts,
+          questionsCount: testData.questionsCount,
+          maxCredits: testData.maxCredits,
+          showCorrectAnswers: testData.showCorrectAnswers,
+          requireCourseCompletion: testData.requireCourseCompletion,
+        },
+        courseCompleted,
+        testAccessible,
+        attempts: [],
+        bestAttempt: null,
+        lastAttempt: null,
+        hasPassedTest: false,
+        activeAttempt: null,
+        canStartNew: testAccessible,
+        totalAttempts: 0,
+        remainingAttempts: testData.maxAttempts || null,
+        isPrivileged,
+      });
+    }
+
+    const attempts = await test_attempt.findAll({
+      where: { testId: testData.id, studentId: studentData.id },
+      include: [{
+        model: test_attempt_answer,
+        as: 'attemptAnswers',
+        include: [
+          { model: test_question, as: 'question', attributes: ['id', 'questionText', 'questionType', 'points', 'sortOrder'],
+            include: [{ model: test_answer, as: 'answerOptions', attributes: ['id', 'answerText', 'isCorrect'] }] },
+          { model: test_answer, as: 'selectedAnswer', attributes: ['id', 'answerText', 'isCorrect'] },
+        ],
+      }],
+      order: [['attemptNumber', 'DESC']],
+    });
+
+    const formattedAttempts = attempts.map(attempt => {
+      const plain = attempt.get({ plain: true });
+      const sortedAnswers = (plain.attemptAnswers || [])
+        .sort((a, b) => (a.question?.sortOrder || 0) - (b.question?.sortOrder || 0));
+
+      const answersDetails = sortedAnswers.map((aa, index) => {
+        const correctAnswer = aa.question?.answerOptions?.find(opt => opt.isCorrect);
+        return {
+          questionNumber: index + 1,
+          questionId: aa.questionId,
+          questionText: aa.question?.questionText || '',
+          questionType: aa.question?.questionType || 'single',
+          isCorrect: aa.isCorrect ?? aa.selectedAnswer?.isCorrect ?? false,
+          yourAnswer: aa.selectedAnswer?.answerText || aa.textAnswer || 'Без отговор',
+          ...(testData.showCorrectAnswers && { correctAnswer: correctAnswer?.answerText || null }),
+        };
+      });
+
+      const correctCount = answersDetails.filter(a => a.isCorrect === true).length;
+      const wrongCount = answersDetails.filter(a => a.isCorrect === false).length;
+      const totalCount = answersDetails.length;
+      const calculatedScore = totalCount > 0 ? Math.round((correctCount / totalCount) * 100) : 0;
+      const score = plain.score !== null ? Number(plain.score) : calculatedScore;
+      const passed = plain.isPassed !== null ? plain.isPassed : (score >= testData.passingScore);
+
+      return {
+        id: plain.id,
+        attemptNumber: plain.attemptNumber,
+        status: plain.status,
+        startedAt: plain.startedAt,
+        completedAt: plain.completedAt,
+        score,
+        correctAnswers: plain.correctAnswers ?? correctCount,
+        wrongAnswers: wrongCount,
+        totalQuestions: plain.totalQuestions ?? totalCount,
+        passed,
+        earnedCredits: plain.earnedCredits || 0,
+        questionsResult: plain.status === 'completed' ? answersDetails : null,
+      };
+    });
+
+    const activeAttempt = formattedAttempts.find(a => a.status === 'in_progress') || null;
+    const completedAttempts = formattedAttempts.filter(a => a.status === 'completed');
+    let bestAttempt = completedAttempts.length > 0
+      ? completedAttempts.reduce((best, c) => (c.score > best.score) ? c : best)
+      : null;
+    const lastAttempt = completedAttempts.length > 0 ? completedAttempts[0] : null;
+    const hasPassedTest = completedAttempts.some(a => a.passed === true);
+    const hasUnlimitedAttempts = !testData.maxAttempts || testData.maxAttempts === 0;
+    const canStartNew = !activeAttempt && (hasUnlimitedAttempts || formattedAttempts.length < testData.maxAttempts);
+    const remainingAttempts = hasUnlimitedAttempts ? null : Math.max(0, testData.maxAttempts - formattedAttempts.length);
+
+    if (formattedAttempts.length > 0) testAccessible = true;
+
+    res.status(200).json({
+      success: true,
+      hasTest: true,
+      test: {
+        id: testData.id,
+        title: testData.title,
+        description: testData.description,
+        passingScore: testData.passingScore,
+        timeLimitMinutes: testData.timeLimitMinutes,
+        maxAttempts: testData.maxAttempts,
+        questionsCount: testData.questionsCount,
+        maxCredits: testData.maxCredits,
+        showCorrectAnswers: testData.showCorrectAnswers,
+        requireCourseCompletion: testData.requireCourseCompletion,
+      },
+      courseCompleted,
+      testAccessible,
+      attempts: completedAttempts.map(a => ({
+        id: a.id, attemptNumber: a.attemptNumber, score: a.score, passed: a.passed,
+        correctAnswers: a.correctAnswers, wrongAnswers: a.wrongAnswers,
+        totalQuestions: a.totalQuestions, earnedCredits: a.earnedCredits,
+        completedAt: a.completedAt, questionsResult: a.questionsResult,
+      })),
+      bestAttempt: bestAttempt ? {
+        id: bestAttempt.id, attemptNumber: bestAttempt.attemptNumber, score: bestAttempt.score,
+        passed: bestAttempt.passed, correctAnswers: bestAttempt.correctAnswers,
+        wrongAnswers: bestAttempt.wrongAnswers, totalQuestions: bestAttempt.totalQuestions,
+        earnedCredits: bestAttempt.earnedCredits, questionsResult: bestAttempt.questionsResult,
+      } : null,
+      lastAttempt: lastAttempt ? {
+        id: lastAttempt.id, score: lastAttempt.score, status: lastAttempt.status, passed: lastAttempt.passed,
+      } : null,
+      activeAttempt,
+      hasPassedTest,
+      canStartNew: canStartNew && testAccessible,
+      totalAttempts: formattedAttempts.length,
+      remainingAttempts,
+      isPrivileged,
+    });
+  } catch (err) {
+    console.error('❌ [GET SEMINAR TEST STATUS] Error:', err);
+    next(err);
+  }
+});
+
+// ===============================
+// POST /api/academy/tests/seminar/:seminarId/start
+// Започване на тест за семинар
+// ===============================
+academyTestsController.post('/seminar/:seminarId/start', isAuth, async (req, res, next) => {
+  try {
+    const seminarId = parseInt(req.params.seminarId);
+    const userId = req.user.userId;
+    const userRole = req.user.role;
+
+    const testData = await test.findOne({
+      where: { seminarId, isPublished: true },
+    });
+
+    if (!testData) {
+      return res.status(404).json({ success: false, message: 'Test not found for this seminar' });
+    }
+
+    const privilegedRoles = ['admin', 'moderator', 'mentor'];
+    const isPrivileged = privilegedRoles.includes(userRole);
+
+    let studentData = await getStudentByUserId(userId);
+
+    if (isPrivileged && !studentData) {
+      studentData = await student.create({ userId, status: 'active' });
+    }
+
+    // Проверка за присъствие
+    if (!isPrivileged) {
+      if (!studentData) {
+        return res.status(403).json({ success: false, message: 'Трябва да присъствате на семинара, за да решите теста' });
+      }
+      const attendance = await student_seminar.findOne({
+        where: { studentId: studentData.id, seminarId, attended: true },
+      });
+      if (!attendance) {
+        return res.status(403).json({ success: false, message: 'Тестът е достъпен само след присъствие на семинара' });
+      }
+    }
+
+    if (!studentData) {
+      studentData = await student.create({ userId, status: 'active' });
+    }
+
+    const existingAttempts = await test_attempt.count({
+      where: { testId: testData.id, studentId: studentData.id },
+    });
+
+    if (testData.maxAttempts && existingAttempts >= testData.maxAttempts) {
+      return res.status(400).json({ success: false, message: 'Maximum attempts reached' });
+    }
+
+    const inProgressAttempt = await test_attempt.findOne({
+      where: { testId: testData.id, studentId: studentData.id, status: 'in_progress' },
+    });
+
+    if (inProgressAttempt) {
+      const timeRemaining = calculateTimeRemaining(inProgressAttempt, testData);
+
+      if (timeRemaining !== null && timeRemaining <= 0) {
+        await submitLectureAttempt(inProgressAttempt.id, testData);
+
+        if (!testData.maxAttempts || existingAttempts + 1 < testData.maxAttempts) {
+          const newAttempt = await test_attempt.create({
+            testId: testData.id,
+            lectureTestId: null,
+            studentId: studentData.id,
+            status: 'in_progress',
+            startedAt: new Date(),
+            attemptNumber: existingAttempts + 2,
+          });
+          const questions = await getQuestionsForAttempt(testData, newAttempt.id);
+          return res.status(201).json({
+            success: true, message: 'Previous attempt timed out. New test started.',
+            attempt: newAttempt, test: testData, questions, timeLimit: testData.timeLimitMinutes,
+          });
+        } else {
+          return res.status(400).json({ success: false, message: 'Previous attempt timed out. Maximum attempts reached.' });
+        }
+      }
+
+      const questions = await getQuestionsForAttempt(testData, inProgressAttempt.id);
+      return res.status(200).json({
+        success: true, message: 'Continuing existing attempt',
+        attempt: inProgressAttempt, test: testData, questions, timeRemaining,
+      });
+    }
+
+    const attempt = await test_attempt.create({
+      testId: testData.id,
+      lectureTestId: null,
+      studentId: studentData.id,
+      status: 'in_progress',
+      startedAt: new Date(),
+      attemptNumber: existingAttempts + 1,
+    });
+
+    const questions = await getQuestionsForAttempt(testData, attempt.id);
+
+    res.status(201).json({
+      success: true, message: 'Test started',
+      attempt, test: testData, questions, timeLimit: testData.timeLimitMinutes,
+    });
+  } catch (err) {
+    console.error('❌ [START SEMINAR TEST] Error:', err);
+    next(err);
+  }
+});
+
+// ===============================
+// POST /api/academy/tests/seminar/:seminarTestId/answer
+// Запис на отговор за семинарен тест
+// ===============================
+academyTestsController.post('/seminar/:seminarTestId/answer', isAuth, async (req, res, next) => {
+  try {
+    const seminarTestId = parseInt(req.params.seminarTestId);
+    const userId = req.user.userId;
+    const { questionId, answerId, answer, textAnswer } = req.body;
+    const finalAnswerId = answerId || answer;
+
+    const studentData = await getStudentByUserId(userId);
+    if (!studentData) {
+      return res.status(404).json({ success: false, message: 'Student profile not found' });
+    }
+
+    const attempt = await test_attempt.findOne({
+      where: { testId: seminarTestId, studentId: studentData.id, status: 'in_progress' },
+    });
+
+    if (!attempt) {
+      return res.status(400).json({ success: false, message: 'No active test attempt found' });
+    }
+
+    const testData = await test.findByPk(seminarTestId);
+    if (testData?.timeLimitMinutes) {
+      const timeRemaining = calculateTimeRemaining(attempt, testData);
+      if (timeRemaining <= 0) {
+        await submitLectureAttempt(attempt.id, testData);
+        return res.status(400).json({ success: false, message: 'Time limit exceeded. Test has been submitted.' });
+      }
+    }
+
+    const existingAnswer = await test_attempt_answer.findOne({
+      where: { attemptId: attempt.id, questionId },
+    });
+
+    if (existingAnswer) {
+      await existingAnswer.update({ answerId: finalAnswerId || null, textAnswer: textAnswer || null, answeredAt: new Date() });
+    } else {
+      await test_attempt_answer.create({ attemptId: attempt.id, questionId, answerId: finalAnswerId || null, textAnswer: textAnswer || null, answeredAt: new Date() });
+    }
+
+    res.status(200).json({ success: true, message: 'Answer saved' });
+  } catch (err) {
+    console.error('❌ [SEMINAR SAVE ANSWER] Error:', err);
+    next(err);
+  }
+});
+
+// ===============================
+// POST /api/academy/tests/seminar/:seminarTestId/submit
+// Предаване на семинарен тест
+// ===============================
+academyTestsController.post('/seminar/:seminarTestId/submit', isAuth, async (req, res, next) => {
+  try {
+    const seminarTestId = parseInt(req.params.seminarTestId);
+    const userId = req.user.userId;
+
+    const studentData = await getStudentByUserId(userId);
+    if (!studentData) {
+      return res.status(404).json({ success: false, message: 'Student profile not found' });
+    }
+
+    const attempt = await test_attempt.findOne({
+      where: { testId: seminarTestId, studentId: studentData.id, status: 'in_progress' },
+    });
+
+    if (!attempt) {
+      return res.status(400).json({ success: false, message: 'No active test attempt found' });
+    }
+
+    const testData = await test.findByPk(seminarTestId);
+    const result = await submitLectureAttempt(attempt.id, testData);
+
+    res.status(200).json({ success: true, message: 'Test submitted successfully', result });
+  } catch (err) {
+    console.error('❌ [SEMINAR SUBMIT TEST] Error:', err);
+    next(err);
+  }
+});
 module.exports = academyTestsController;
