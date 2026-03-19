@@ -1440,7 +1440,7 @@ seminarsController.get(
 
       const searchTerm = `%${q.trim()}%`;
 
-      // Търси в user_details и user_account
+      // Търси първо по имейл, после по username
       const results = await student.findAll({
         attributes: ['id', 'avatar', 'userId'],
         include: [
@@ -1448,11 +1448,17 @@ seminarsController.get(
             model: user_account,
             as: 'user',
             attributes: ['id', 'email'],
+            where: {
+              [Op.or]: [
+                { email: { [Op.iLike]: searchTerm } },
+              ],
+            },
+            required: false,
             include: [
               {
                 model: user_details,
                 as: 'details',
-                attributes: ['username', 'firstName', 'lastName', 'imageURL', 'phone'],
+                attributes: ['username', 'imageURL'],
               },
             ],
           },
@@ -1460,17 +1466,14 @@ seminarsController.get(
         where: {
           [Op.or]: [
             { '$user.email$': { [Op.iLike]: searchTerm } },
-            { '$user.details.firstName$': { [Op.iLike]: searchTerm } },
-            { '$user.details.lastName$': { [Op.iLike]: searchTerm } },
             { '$user.details.username$': { [Op.iLike]: searchTerm } },
-            { '$user.details.phone$': { [Op.iLike]: searchTerm } },
           ],
         },
         limit: 15,
         subQuery: false,
       });
 
-      // Провери кои вече са записани/присъствали за този семинар
+      // Провери кои вече са записани/присъствали
       const studentIds = results.map(r => r.id);
       const existingAttendances = await student_seminar.findAll({
         where: { seminarId, studentId: studentIds },
@@ -1487,9 +1490,8 @@ seminarsController.get(
         return {
           studentId: data.id,
           userId: data.userId,
-          name: `${details.firstName || ''} ${details.lastName || ''}`.trim() || details.username || data.user?.email?.split('@')[0] || 'Unknown',
+          name: details.username || data.user?.email?.split('@')[0] || 'Unknown',
           email: data.user?.email,
-          phone: details.phone || null,
           avatar: data.avatar || details.imageURL,
           seminarStatus: attendanceMap[data.id]?.status || null,
           alreadyAttended: attendanceMap[data.id]?.attended || false,
@@ -1527,20 +1529,34 @@ seminarsController.post(
       let guestCount = 0;
 
       // Платформени потребители
+     // Платформени потребители
       if (Array.isArray(platformAttendees) && platformAttendees.length > 0) {
         for (const att of platformAttendees) {
           const { studentId, participationLevel } = att;
 
+          let attendance = await student_seminar.findOne({
+            where: { seminarId, studentId },
+          });
+
+          // Ако вече е присъствал — записваме пак за отчетност но БЕЗ нови кредити
+          if (attendance && attendance.attended) {
+            // Обновяваме само participationLevel ако е подаден, кредити НЕ се дават повторно
+            if (participationLevel && participationLevel !== attendance.participationLevel) {
+              await attendance.update({
+                participationLevel,
+              });
+            }
+            markedCount++;
+            continue;
+          }
+
+          // Първо присъствие — изчисли кредити
           let earnedCredits = seminarData.creditsForAttendance || 0;
           if (participationLevel === 'active') {
             earnedCredits += seminarData.creditsForParticipation || 0;
           } else if (participationLevel === 'moderate') {
             earnedCredits += Math.floor((seminarData.creditsForParticipation || 0) / 2);
           }
-
-          let attendance = await student_seminar.findOne({
-            where: { seminarId, studentId },
-          });
 
           if (!attendance) {
             await student_seminar.create({
@@ -1555,10 +1571,11 @@ seminarsController.post(
               approvedAt: new Date(),
             });
           } else {
+            // Записан е (registered) но не е присъствал — маркираме
             await attendance.update({
               attended: true,
               attendedAt: new Date(),
-              participationLevel: participationLevel || attendance.participationLevel || 'passive',
+              participationLevel: participationLevel || 'passive',
               earnedCredits,
             });
           }
@@ -1571,18 +1588,39 @@ seminarsController.post(
         const { seminar_guest_attendance } = require('../sequelize/models/index');
 
         for (const guest of guests) {
+          // Проверка дали гост с това име вече е бил записан
+          const existingGuest = await seminar_guest_attendance.findOne({
+            where: {
+              seminarId,
+              guestFirstName: guest.firstName,
+              guestLastName: guest.lastName,
+            },
+          });
+
+          if (existingGuest) {
+            // Вече е присъствал — записваме за отчетност но без кредити
+            // Обновяваме само participationLevel ако е подаден
+            if (guest.participationLevel && guest.participationLevel !== existingGuest.participationLevel) {
+              await existingGuest.update({
+                participationLevel: guest.participationLevel,
+              });
+            }
+            guestCount++;
+            continue;
+          }
+
           await seminar_guest_attendance.create({
             seminarId,
             guestFirstName: guest.firstName,
             guestLastName: guest.lastName,
             guestPhone: guest.phone || null,
+            guestEmail: guest.email || null,
             participationLevel: guest.participationLevel || 'passive',
             markedBy: userId,
           });
           guestCount++;
         }
       }
-
       // Обнови статистиките
       const attendedCount = await student_seminar.count({
         where: { seminarId, attended: true },
@@ -1634,7 +1672,7 @@ seminarsController.get(
             include: [{
               model: user_details,
               as: 'details',
-              attributes: ['username', 'firstName', 'lastName', 'imageURL', 'phone'],
+              attributes: ['username', 'imageURL'], // ПРОМЕНЕНО — махнати firstName, lastName, phone
             }],
           }],
         }],
@@ -1648,9 +1686,8 @@ seminarsController.get(
           type: 'platform',
           id: data.id,
           studentId: data.studentId,
-          name: `${details.firstName || ''} ${details.lastName || ''}`.trim() || details.username || 'Unknown',
+          name: details.username || data.student?.user?.email?.split('@')[0] || 'Unknown', // ПРОМЕНЕНО
           email: data.student?.user?.email,
-          phone: details.phone || null,
           avatar: data.student?.avatar || details.imageURL,
           participationLevel: data.participationLevel,
           earnedCredits: data.earnedCredits,
@@ -1671,6 +1708,7 @@ seminarsController.get(
           type: 'guest',
           id: data.id,
           name: `${data.guestFirstName} ${data.guestLastName}`,
+          email: data.guestEmail || null, // НОВО
           phone: data.guestPhone,
           participationLevel: data.participationLevel,
           attendedAt: data.createdAt,

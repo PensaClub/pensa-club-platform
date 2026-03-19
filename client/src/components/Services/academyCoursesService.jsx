@@ -333,7 +333,17 @@ export const academyCoursesServiceFactory = () => {
     getSeminarAttendees: async (seminarId) => {
       return requester.get(`${apiUrl}/academy/seminars/${seminarId}/attendees`);
     },
+searchSeminarStudents: async (seminarId, query) => {
+      return requester.get(`${apiUrl}/academy/seminars/${seminarId}/search-students?q=${encodeURIComponent(query)}`);
+    },
 
+    bulkMixedAttendance: async (seminarId, data) => {
+      return requester.post(`${apiUrl}/academy/seminars/${seminarId}/attendance/bulk-mixed`, data);
+    },
+
+    getFullAttendance: async (seminarId) => {
+      return requester.get(`${apiUrl}/academy/seminars/${seminarId}/attendance/full`);
+    },
     approveSeminarAttendee: async (seminarId, attendeeId) => {
       return requester.post(`${apiUrl}/academy/seminars/${seminarId}/attendees/${attendeeId}/approve`);
     },

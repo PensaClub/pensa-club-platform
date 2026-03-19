@@ -20,7 +20,8 @@
       "createLecture": "Създай лекция",
       "createSeminar": "Създай семинар",
       "lectures": "Лекции",
-      "seminars": "Семинари"
+      "seminars": "Семинари",
+      "seminarAttendance": "Присъствие на семинари"
     },
     "mentors": {
       "title": "Ментори",

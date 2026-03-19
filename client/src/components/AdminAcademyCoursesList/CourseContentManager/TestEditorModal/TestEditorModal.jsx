@@ -44,7 +44,7 @@ const EMPTY_QUESTION = {
     ],
 };
 
-const TestEditorModal = ({ isOpen, onClose, lessonId, courseId, lectureId, entityTitle }) => {
+const TestEditorModal = ({ isOpen, onClose, lessonId, courseId, lectureId,seminarId, entityTitle }) => {
     const { t } = useTranslation('academy-admin');
     const {
         getTests, getTestById, createTest, updateTest,
@@ -79,7 +79,7 @@ const TestEditorModal = ({ isOpen, onClose, lessonId, courseId, lectureId, entit
     // =========================================================
 
     useEffect(() => {
-        if (isOpen && (lessonId || courseId || lectureId)) { 
+        if (isOpen && (lessonId || courseId || lectureId || seminarId)) { 
             loadTest();
         }
         if (!isOpen) {
@@ -94,7 +94,7 @@ const TestEditorModal = ({ isOpen, onClose, lessonId, courseId, lectureId, entit
             setSettingsDirty(false);
             setFieldErrors({});
         }
-    }, [isOpen, lessonId, courseId, lectureId]); 
+    }, [isOpen, lessonId, courseId, lectureId, seminarId]); 
 
     const loadTest = async () => {
         setLoading(true);
@@ -109,6 +109,12 @@ const TestEditorModal = ({ isOpen, onClose, lessonId, courseId, lectureId, entit
                 entityType = 'lecture';
                 entityId = lectureId;
                 entityField = 'lectureId';
+                
+            } else if (seminarId) {
+                entityType = 'seminar';
+                entityId = seminarId;
+                entityField = 'seminarId';
+
             } else {
                 entityType = 'lesson';
                 entityId = lessonId;
@@ -146,6 +152,7 @@ const TestEditorModal = ({ isOpen, onClose, lessonId, courseId, lectureId, entit
                 // ПРОМЕНЕНО — тройно присвояване
                 if (courseId) createPayload.courseId = courseId;
                 else if (lectureId) createPayload.lectureId = lectureId; 
+                else if (seminarId) createPayload.seminarId = seminarId; 
                 else createPayload.lessonId = lessonId;
 
                 const resp = await createTest(createPayload);

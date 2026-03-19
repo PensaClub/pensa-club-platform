@@ -1044,19 +1044,19 @@ export const Profile = () => {
                               {t("admin.academy.createCourse")}
                             </NavLink>
                           </li>
-                          <li> {/* НОВО */}
+                          <li>
                             <NavLink to="/academy/admin/lectures" className={({ isActive }) => isActive ? 'active' : ''}>
                               <CircleIcon className="icon" />
                               {t("admin.academy.lectures")}
                             </NavLink>
-                            </li>
+                          </li>
                           <li>
                             <NavLink to="/academy/admin/create-lecture" className={({ isActive }) => isActive ? 'active' : ''}>
                               <CircleIcon className="icon" />
                               {t("admin.academy.createLecture")}
                             </NavLink>
                           </li>
-                             <li> {/* НОВО */}
+                          <li>
                             <NavLink to="/academy/admin/seminars" className={({ isActive }) => isActive ? 'active' : ''}>
                               <CircleIcon className="icon" />
                               {t("admin.academy.seminars")}
@@ -1066,6 +1066,12 @@ export const Profile = () => {
                             <NavLink to="/academy/admin/create-seminar" className={({ isActive }) => isActive ? 'active' : ''}>
                               <CircleIcon className="icon" />
                               {t("admin.academy.createSeminar")}
+                            </NavLink>
+                          </li>
+                          <li>
+                            <NavLink to="/academy/admin/seminar-attendance" className={({ isActive }) => isActive ? 'active' : ''}>
+                              <CircleIcon className="icon" />
+                              {t("admin.academy.seminarAttendance")}
                             </NavLink>
                           </li>
                         </ul>

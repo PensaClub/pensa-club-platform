@@ -859,7 +859,8 @@
     "creditsForTest": "Credits for test",
     "participationHint": "active = 100%, moderate = 50%, passive = 0%",
     "hasTest": "Has test",
-    "testPassingScore": "Passing score (%)"
+    "testPassingScore": "Passing score (%)",
+    "manageTest": "Manage test"
   },
   "seminarAdditional": {
     "title": "Additional Settings",
@@ -873,5 +874,189 @@
     "courseTitle": "Linked Course",
     "courseDesc": "If the seminar is part of a course, select it here. Otherwise leave empty.",
     "courseSearchPlaceholder": "Search course by name..."
+  },
+  "adminSeminars": {
+    "title": "Manage",
+    "titleAccent": "Seminars",
+    "subtitle": "Create, edit and manage seminars in the academy",
+    "refresh": "Refresh",
+    "createSeminar": "New Seminar",
+    "loading": "Loading seminars...",
+    "stats": {
+      "total": "total",
+      "published": "published",
+      "scheduled": "scheduled",
+      "drafts": "drafts"
+    },
+    "empty": {
+      "title": "No seminars found",
+      "description": "Create your first seminar or change filters"
+    }
+  },
+  "seminarCard": {
+    "statuses": {
+      "cancelled": "Cancelled",
+      "live": "IN PROGRESS",
+      "completed": "Completed",
+      "scheduled": "Scheduled",
+      "draft": "Draft",
+      "published": "Published"
+    },
+    "types": {
+      "workshop": "Workshop",
+      "discussion": "Discussion",
+      "hands_on": "Hands-on",
+      "q_and_a": "Q&A"
+    },
+    "date": "Date",
+    "duration": "Duration",
+    "min": "min.",
+    "registered": "Registered",
+    "location": "Location",
+    "requiresApproval": "Requires approval",
+    "actions": {
+      "edit": "Edit",
+      "publish": "Publish",
+      "unpublish": "Unpublish",
+      "cancel": "Cancel",
+      "delete": "Delete"
+    }
+  },
+  "seminarFilters": {
+    "searchPlaceholder": "Search by title...",
+    "filters": "Filters",
+    "status": "Status",
+    "type": "Type",
+    "sortBy": "Sort by",
+    "statusOptions": {
+      "all": "All",
+      "draft": "Drafts",
+      "published": "Published",
+      "scheduled": "Scheduled",
+      "live": "In progress",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    },
+    "typeOptions": {
+      "all": "All",
+      "workshop": "Workshop",
+      "discussion": "Discussion",
+      "hands_on": "Hands-on",
+      "q_and_a": "Q&A"
+    },
+    "sortOptions": {
+      "newest": "Newest",
+      "oldest": "Oldest",
+      "title": "Title",
+      "upcoming": "Upcoming",
+      "popular": "Popular"
+    }
+  },
+  "seminarModals": {
+    "delete": {
+      "title": "Delete Seminar",
+      "text": "Are you sure you want to delete",
+      "warning": "This action is irreversible.",
+      "cancel": "Cancel",
+      "confirm": "Delete"
+    },
+    "cancel": {
+      "title": "Cancel Seminar",
+      "text": "Cancelling",
+      "reasonLabel": "You can specify a reason:",
+      "reasonPlaceholder": "Reason for cancellation (optional)",
+      "back": "Back",
+      "confirm": "Cancel seminar"
+    }
+  },
+  "editSeminar": {
+    "loading": "Loading seminar...",
+    "backToList": "Back to list",
+    "title": "Edit",
+    "titleAccent": "Seminar",
+    "published": "Published",
+    "draft": "Draft",
+    "unpublished": "Seminar hidden",
+    "unsavedChanges": "● Unsaved changes",
+    "discard": "Discard",
+    "save": "Save",
+    "saveAndBack": "Save & back",
+    "publish": "Publish",
+    "unpublish": "Unpublish",
+    "cancelSeminar": "Cancel",
+    "saved": "Changes saved",
+    "deleted": "Seminar deleted",
+    "cancelled": "Seminar cancelled",
+    "statuses": {
+      "scheduled": "Scheduled",
+      "live": "In progress",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    },
+    "errors": {
+      "notFound": "Seminar not found",
+      "loadFailed": "Error loading seminar",
+      "saveFailed": "Error saving",
+      "publishFailed": "Error publishing",
+      "unpublishFailed": "Error",
+      "deleteFailed": "Error deleting",
+      "cancelFailed": "Error cancelling",
+      "titleRequired": "Title is required",
+      "titleMin": "Minimum 3 characters",
+      "dateRequired": "Date is required",
+      "locationRequired": "Location is required for in-person seminars"
+    },
+    "deleteModal": {
+      "title": "Delete Seminar",
+      "text": "Are you sure? This action is irreversible.",
+      "cancel": "Cancel",
+      "confirm": "Delete"
+    },
+    "cancelModal": {
+      "title": "Cancel Seminar",
+      "placeholder": "Reason for cancellation (optional)",
+      "back": "Back",
+      "confirm": "Cancel seminar"
+    }
+  },
+  "seminarAttendance": {
+    "backToList": "Back to seminars",
+    "title": "Attendance for",
+    "titleAccent": "Seminars",
+    "subtitle": "Mark attendees — platform users and guests",
+    "selectSeminar": "Select seminar",
+    "chooseSeminar": "— Select a seminar —",
+    "noSeminars": "No seminars"
+  },
+ "attendanceForm": {
+    "totalParticipants": "participants",
+    "searchTitle": "Add platform user",
+    "searchPlaceholder": "Search by email or username...",
+    "noResults": "No users found",
+    "alreadyInList": "In list",
+    "addNow": "Add",
+    "guestTitle": "Add guest without profile",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "Email (optional)",
+    "phone": "Phone (optional)",
+    "addGuest": "Add guest",
+    "listTitle": "Seminar participants",
+    "noParticipants": "No participants yet",
+    "typeOnline": "Online",
+    "typePlatform": "Platform",
+    "typeGuest": "Guest",
+     "attendedTitle": "Already attended",
+    "attendedHint": "No new credits are given for repeat attendance.",
+    "levels": {
+      "active": "Active",
+      "moderate": "Moderate",
+      "passive": "Passive"
+    },
+    "levelsShort": {
+      "active": "A",
+      "moderate": "M",
+      "passive": "P"
+    }
   }
 }

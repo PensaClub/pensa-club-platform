@@ -931,7 +931,36 @@ export const AcademyCoursesProvider = ({ children }) => {
       return [];
     }
   }, []);
+const searchSeminarStudents = useCallback(async (seminarId, query) => {
+    try {
+      return await coursesService.searchSeminarStudents(seminarId, query);
+    } catch (error) {
+      console.error('Error searching students:', error);
+      return { students: [] };
+    }
+  }, []);
 
+  const bulkMixedAttendance = useCallback(async (seminarId, data) => {
+    try {
+      const response = await coursesService.bulkMixedAttendance(seminarId, data);
+      toast.success(response.message || 'Присъствието е записано');
+      return response;
+    } catch (error) {
+      console.error('Error saving attendance:', error);
+      toast.error(error?.errors?.[0] || 'Грешка при записване на присъствие');
+      throw error;
+    }
+  }, []);
+
+  const getFullAttendance = useCallback(async (seminarId) => {
+    try {
+      return await coursesService.getFullAttendance(seminarId);
+    } catch (error) {
+      console.error('Error fetching full attendance:', error);
+      return { attendees: [], stats: {} };
+    }
+  }, []);
+  
   // =========================================================
   //                    ENROLLMENT
   // =========================================================
@@ -1902,7 +1931,9 @@ export const AcademyCoursesProvider = ({ children }) => {
     registerForSeminar,
     unregisterFromSeminar,
     getSeminarAttendees,
-
+    searchSeminarStudents, 
+    bulkMixedAttendance, 
+    getFullAttendance, 
     // Enrollment
     getMyEnrollments,
     enrollInCourse,

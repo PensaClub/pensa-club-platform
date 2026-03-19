@@ -2,11 +2,11 @@
 // Prefix: scft-
 
 import { useTranslation } from 'react-i18next';
-import { Users, Award, AlertCircle } from 'lucide-react';
+import { Users, Award, AlertCircle, FileText } from 'lucide-react';
 import { AcademyMentorPicker } from '../../AcademyCourses/AcademyMentorPicker/AcademyMentorPicker';
 import './seminarSettings.css';
 
-const SeminarSettings = ({ seminarData, errors, handleChange, updateField, assignedMentors, setAssignedMentors }) => {
+const SeminarSettings = ({ seminarData, errors, handleChange, updateField, assignedMentors, setAssignedMentors, seminarId, onOpenTestEditor }) => {
     const { t } = useTranslation('academy-admin');
 
     const renderError = (field) =>
@@ -160,6 +160,16 @@ const SeminarSettings = ({ seminarData, errors, handleChange, updateField, assig
                             {renderError('testPassingScore')}
                         </div>
                     </div>
+                )}
+                {seminarData.hasTest && seminarId && onOpenTestEditor && (
+                    <button
+                        type="button"
+                        className="scft-btn-test-editor"
+                        onClick={onOpenTestEditor}
+                    >
+                        <FileText size={16} />
+                        {t('seminarSettings.manageTest', 'Управлявай тест')}
+                    </button>
                 )}
             </div>
         </>

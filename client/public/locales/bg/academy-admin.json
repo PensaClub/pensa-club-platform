@@ -859,7 +859,8 @@
     "creditsForTest": "Кредити за тест",
     "participationHint": "active = 100%, moderate = 50%, passive = 0%",
     "hasTest": "Има тест",
-    "testPassingScore": "Минимален резултат (%)"
+    "testPassingScore": "Минимален резултат (%)",
+    "manageTest": "Управлявай тест"
   },
   "seminarAdditional": {
     "title": "Допълнителни настройки",
@@ -873,5 +874,194 @@
     "courseTitle": "Свързан курс",
     "courseDesc": "Ако семинарът е част от курс, изберете го тук. Иначе оставете празно.",
     "courseSearchPlaceholder": "Търси курс по име..."
+  },
+  "adminSeminars": {
+    "title": "Управление на",
+    "titleAccent": "семинари",
+    "subtitle": "Създавайте, редактирайте и управлявайте семинарите в академията",
+    "refresh": "Обнови",
+    "createSeminar": "Нов семинар",
+    "loading": "Зареждане на семинари...",
+    "stats": {
+      "total": "общо",
+      "published": "публикувани",
+      "scheduled": "насрочени",
+      "drafts": "чернови"
+    },
+    "empty": {
+      "title": "Няма намерени семинари",
+      "description": "Създайте първия си семинар или променете филтрите"
+    }
+  },
+  "seminarCard": {
+    "statuses": {
+      "cancelled": "Отменен",
+      "live": "В МОМЕНТА",
+      "completed": "Приключил",
+      "scheduled": "Насрочен",
+      "draft": "Чернова",
+      "published": "Публикуван"
+    },
+    "types": {
+      "workshop": "Практическо занятие",
+      "discussion": "Дискусия",
+      "hands_on": "Практически упражнения",
+      "q_and_a": "Въпроси и отговори"
+    },
+    "date": "Дата",
+    "duration": "Продължителност",
+    "min": "мин.",
+    "registered": "Записани",
+    "location": "Място",
+    "requiresApproval": "Изисква одобрение",
+    "actions": {
+      "edit": "Редактирай",
+      "publish": "Публикувай",
+      "unpublish": "Скрий",
+      "cancel": "Отмени",
+      "delete": "Изтрий"
+    }
+  },
+  "seminarFilters": {
+    "searchPlaceholder": "Търси по заглавие...",
+    "filters": "Филтри",
+    "status": "Статус",
+    "type": "Тип",
+    "sortBy": "Подреди по",
+    "statusOptions": {
+      "all": "Всички",
+      "draft": "Чернови",
+      "published": "Публикувани",
+      "scheduled": "Насрочени",
+      "live": "В момента",
+      "completed": "Приключили",
+      "cancelled": "Отменени"
+    },
+    "typeOptions": {
+      "all": "Всички",
+      "workshop": "Практическо занятие",
+      "discussion": "Дискусия",
+      "hands_on": "Практически упражнения",
+      "q_and_a": "Въпроси и отговори"
+    },
+    "sortOptions": {
+      "newest": "Най-нови",
+      "oldest": "Най-стари",
+      "title": "Заглавие",
+      "upcoming": "Предстоящи",
+      "popular": "Популярни"
+    }
+  },
+  "seminarModals": {
+    "delete": {
+      "title": "Изтриване на семинар",
+      "text": "Сигурни ли сте, че искате да изтриете",
+      "warning": "Това действие е необратимо.",
+      "cancel": "Отказ",
+      "confirm": "Изтрий"
+    },
+    "cancel": {
+      "title": "Отмяна на семинар",
+      "text": "Отменяте",
+      "reasonLabel": "Можете да посочите причина:",
+      "reasonPlaceholder": "Причина за отмяна (незадължително)",
+      "back": "Назад",
+      "confirm": "Отмени семинара"
+    }
+  },
+  "editSeminar": {
+    "loading": "Зареждане на семинар...",
+    "backToList": "Към списъка",
+    "title": "Редактиране на",
+    "titleAccent": "семинар",
+    "published": "Публикуван",
+    "draft": "Чернова",
+    "unpublished": "Семинарът е скрит",
+    "unsavedChanges": "● Незапазени промени",
+    "discard": "Отхвърли",
+    "save": "Запази",
+    "saveAndBack": "Запази и назад",
+    "publish": "Публикувай",
+    "unpublish": "Скрий",
+    "cancelSeminar": "Отмени",
+    "saved": "Промените са запазени",
+    "deleted": "Семинарът е изтрит",
+    "cancelled": "Семинарът е отменен",
+    "statuses": {
+      "scheduled": "Насрочен",
+      "live": "В момента",
+      "completed": "Приключил",
+      "cancelled": "Отменен"
+    },
+    "errors": {
+      "notFound": "Семинарът не е намерен",
+      "loadFailed": "Грешка при зареждане",
+      "saveFailed": "Грешка при запазване",
+      "publishFailed": "Грешка при публикуване",
+      "unpublishFailed": "Грешка",
+      "deleteFailed": "Грешка при изтриване",
+      "cancelFailed": "Грешка при отмяна",
+      "titleRequired": "Заглавието е задължително",
+      "titleMin": "Минимум 3 символа",
+      "dateRequired": "Датата е задължителна",
+      "locationRequired": "Мястото е задължително за присъствени семинари"
+    },
+    "deleteModal": {
+      "title": "Изтриване на семинар",
+      "text": "Сигурни ли сте? Това действие е необратимо.",
+      "cancel": "Отказ",
+      "confirm": "Изтрий"
+    },
+    "cancelModal": {
+      "title": "Отмяна на семинар",
+      "placeholder": "Причина за отмяна (незадължително)",
+      "back": "Назад",
+      "confirm": "Отмени семинара"
+    }
+  },
+  "seminarAttendance": {
+    "backToList": "Към семинари",
+    "title": "Присъствие на",
+    "titleAccent": "семинари",
+    "subtitle": "Маркирайте присъстващи — потребители от платформата и гости",
+    "selectSeminar": "Изберете семинар",
+    "chooseSeminar": "— Изберете семинар —",
+    "noSeminars": "Няма семинари"
+  },
+  "attendanceForm": {
+    "alreadyMarked": "записани",
+    "noResults": "Няма намерени потребители",
+    "alreadyAttended": "Вече присъствал",
+    "added": "Добавен",
+    "add": "Добави",
+    "guestTitle": "Гост без профил",
+    "firstName": "Име",
+    "lastName": "Фамилия",
+    "phone": "Телефон (незадължителен)",
+    "email": "Имейл (незадължителен)",
+    "addGuest": "Добави гост",
+    "platformUser": "Платформа",
+    "guest": "Гост",
+    "registered": "регистрирани",
+    "attended": "присъствали",
+    "registeredTitle": "Регистрирани за семинара",
+    "noRegistered": "Няма регистрирани потребители",
+    "markAttended": "Маркирай",
+    "searchTitle": "Добави от платформата",
+    "searchPlaceholder": "Търси по имейл или потребителско име...",
+    "pendingTitle": "За маркиране на присъствие",
+    "pendingEmpty": "Маркирайте регистрирани потребители или добавете нови от ляво",
+    "participationLevel": "Ниво на участие:",
+    "noAttendees": "Все още няма маркирани присъстващи",
+    "credits": "кр.",
+     "attendedTitle": "Вече присъствали",
+    "attendedHint": "При повторно записване не се дават нови кредити.",
+    "levels": {
+      "active": "Активно",
+      "moderate": "Умерено",
+      "passive": "Пасивно"
+    },
+    "save": "Запази присъствие",
+    "savedTitle": "Вече присъствали"
   }
 }

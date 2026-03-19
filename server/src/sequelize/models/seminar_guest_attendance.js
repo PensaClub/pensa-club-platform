@@ -41,6 +41,11 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         field: 'guest_last_name',
       },
+      guestEmail: {
+        type: DataTypes.STRING(255),
+        allowNull: true,
+        field: 'guest_email',
+      },
       guestPhone: {
         type: DataTypes.STRING(20),
         allowNull: true,

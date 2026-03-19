@@ -21,7 +21,8 @@
       "createLecture": "Vorlesung erstellen",
       "createSeminar": "Seminar erstellen",
       "lectures": "Vorlesungen",
-      "seminars": "Seminare"
+      "seminars": "Seminare",
+      "seminarAttendance": "Seminar-Anwesenheit"
 
     },
     "students": {
