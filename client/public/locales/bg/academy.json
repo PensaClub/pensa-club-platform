@@ -635,5 +635,59 @@
     "skip": "Пропусни",
     "submit": "Изпрати",
     "submitting": "Изпращане..."
-  }
+  },
+  "academySeminars": {
+    "loading": "Зареждане на семинари...",
+    "results": "семинара",
+    "loadMore": "Зареди още",
+    "of": "от",
+    "empty": {
+      "title": "Няма намерени семинари",
+      "description": "Променете филтрите или търсенето",
+      "clearFilters": "Изчисти филтрите"
+    }
+  },
+  "seminarsHero": {
+    "badge": "Присъствени обучения",
+    "title": "Семинари за",
+    "titleAccent": "дигитална грамотност",
+    "subtitle": "Практически занятия на място в пенсионерските клубове с квалифицирани ментори",
+    "stats": {
+      "total": "семинара",
+      "upcoming": "предстоящи",
+      "completed": "проведени",
+      "credits": "кредити"
+    }
+  },
+  "seminarsFilters": {
+  "tabs": {
+    "all": "Всички",
+    "upcoming": "Предстоящи",
+    "completed": "Проведени"
+  },
+  "searchPlaceholder": "Търси семинар...",
+  "sort": {
+    "date": "По дата",
+    "popular": "Популярни",
+    "title": "По заглавие"
+  },
+  "clearAll": "Изчисти филтрите"
+},
+"seminarCard": {
+  "statusLive": "В МОМЕНТА",
+  "statusUpcoming": "Предстои",
+  "statusCompleted": "Приключил",
+  "statusCancelled": "Отменен",
+  "btnLive": "Виж повече",
+  "btnUpcoming": "Запиши се",
+  "btnCompleted": "Детайли",
+  "btnCancelled": "Преглед",
+  "btnDefault": "Виж",
+  "min": "мин",
+  "online": "Онлайн",
+  "inPerson": "Присъствено",
+  "uncategorized": "Семинар",
+  "mentor": "Ментор",
+  "hasTest": "Тест"
+}
 }

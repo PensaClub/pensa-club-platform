@@ -624,5 +624,59 @@
     "skip": "Skip",
     "submit": "Submit",
     "submitting": "Submitting..."
+  },
+  "academySeminars": {
+  "loading": "Loading seminars...",
+  "results": "seminars",
+  "loadMore": "Load more",
+  "of": "of",
+  "empty": {
+    "title": "No seminars found",
+    "description": "Change filters or search",
+    "clearFilters": "Clear filters"
   }
+},
+"seminarsHero": {
+  "badge": "In-person Training",
+  "title": "Seminars for",
+  "titleAccent": "Digital Literacy",
+  "subtitle": "Hands-on workshops at retirement clubs with qualified mentors",
+  "stats": {
+    "total": "seminars",
+    "upcoming": "upcoming",
+    "completed": "completed",
+    "credits": "credits"
+  }
+},
+"seminarsFilters": {
+  "tabs": {
+    "all": "All",
+    "upcoming": "Upcoming",
+    "completed": "Completed"
+  },
+  "searchPlaceholder": "Search seminar...",
+  "sort": {
+    "date": "By date",
+    "popular": "Popular",
+    "title": "By title"
+  },
+  "clearAll": "Clear filters"
+},
+"seminarCard": {
+  "statusLive": "LIVE NOW",
+  "statusUpcoming": "Upcoming",
+  "statusCompleted": "Completed",
+  "statusCancelled": "Cancelled",
+  "btnLive": "View more",
+  "btnUpcoming": "Sign up",
+  "btnCompleted": "Details",
+  "btnCancelled": "View",
+  "btnDefault": "View",
+  "min": "min",
+  "online": "Online",
+  "inPerson": "In person",
+  "uncategorized": "Seminar",
+  "mentor": "Mentor",
+  "hasTest": "Test"
+}
 }

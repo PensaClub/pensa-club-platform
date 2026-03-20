@@ -624,5 +624,59 @@
     "skip": "Überspringen",
     "submit": "Absenden",
     "submitting": "Wird gesendet..."
+  },
+  "academySeminars": {
+  "loading": "Seminare werden geladen...",
+  "results": "Seminare",
+  "loadMore": "Mehr laden",
+  "of": "von",
+  "empty": {
+    "title": "Keine Seminare gefunden",
+    "description": "Ändern Sie Filter oder Suche",
+    "clearFilters": "Filter löschen"
   }
+},
+"seminarsHero": {
+  "badge": "Präsenzschulung",
+  "title": "Seminare für",
+  "titleAccent": "digitale Kompetenz",
+  "subtitle": "Praxisnahe Workshops in Seniorenclubs mit qualifizierten Mentoren",
+  "stats": {
+    "total": "Seminare",
+    "upcoming": "kommende",
+    "completed": "durchgeführt",
+    "credits": "Credits"
+  }
+},
+"seminarsFilters": {
+  "tabs": {
+    "all": "Alle",
+    "upcoming": "Kommende",
+    "completed": "Durchgeführt"
+  },
+  "searchPlaceholder": "Seminar suchen...",
+  "sort": {
+    "date": "Nach Datum",
+    "popular": "Beliebt",
+    "title": "Nach Titel"
+  },
+  "clearAll": "Filter löschen"
+},
+"seminarCard": {
+  "statusLive": "JETZT LIVE",
+  "statusUpcoming": "Bevorstehend",
+  "statusCompleted": "Abgeschlossen",
+  "statusCancelled": "Abgesagt",
+  "btnLive": "Mehr sehen",
+  "btnUpcoming": "Anmelden",
+  "btnCompleted": "Details",
+  "btnCancelled": "Ansehen",
+  "btnDefault": "Ansehen",
+  "min": "Min",
+  "online": "Online",
+  "inPerson": "Vor Ort",
+  "uncategorized": "Seminar",
+  "mentor": "Mentor",
+  "hasTest": "Test"
+}
 }

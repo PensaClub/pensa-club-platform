@@ -213,7 +213,7 @@ const seminarQuerySchema = paginationSchema.extend({
   search: z.string().optional(),
   category: z.string().optional(),
   type: z.string().optional(),
-  status: z.enum(['draft', 'published', 'scheduled', 'live', 'completed', 'cancelled', 'all']).optional(),
+  status: z.enum(['draft', 'published', 'scheduled', 'live', 'completed', 'cancelled', 'upcoming', 'all']).optional(),
   sortBy: z.enum(['newest', 'oldest', 'title', 'rating', 'popular', 'upcoming']).default('newest'),
 });
 

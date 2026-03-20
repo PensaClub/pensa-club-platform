@@ -94,9 +94,14 @@ seminarsController.get('/', validateQuery(seminarQuerySchema), async (req, res, 
     const where = {};
 
     // По подразбиране показваме само публикувани
-    if (status === 'published' || !status) {
-      where.isPublished = true;
-      where.isPublic = true;
+    where.isPublished = true;
+    where.isPublic = true;
+
+    // Time filter — upcoming / completed // НОВО
+    if (status === 'upcoming') {
+      where.scheduledDate = { [Op.gte]: new Date() };
+    } else if (status === 'completed') {
+      where.scheduledDate = { [Op.lt]: new Date() };
     }
 
     // Filter by category
