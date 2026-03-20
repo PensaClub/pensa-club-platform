@@ -238,6 +238,9 @@
     transition: all 0.25s;
     backdrop-filter: blur(4px);
 }
+.asmfl-categories span {
+    font-size: 0.82rem;
+}
 
 .asmfl-category:hover {
     border-color: var(--cat-color, rgba(0, 210, 255, 0.4));

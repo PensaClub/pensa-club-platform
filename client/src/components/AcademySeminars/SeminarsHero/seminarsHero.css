@@ -201,7 +201,7 @@
 
 @media (max-width: 767px) {
     .asmh-hero { min-height: 340px; }
-    .asmh-hero-content { padding: 48px 16px 36px; }
+    .asmh-hero-content { padding: 110px 16px 36px; }
     .asmh-hero-title { font-size: 1.6rem; }
     .asmh-hero-title-glow { font-size: 1.6rem; }
     .asmh-hero-subtitle { font-size: 0.9rem; }
@@ -212,7 +212,7 @@
 
 @media (max-width: 424px) {
     .asmh-hero { min-height: 300px; }
-    .asmh-hero-content { padding: 40px 12px 30px; }
+    .asmh-hero-content { padding: 110px 12px 30px; }
     .asmh-hero-title { font-size: 1.35rem; }
     .asmh-hero-title-glow { font-size: 1.35rem; }
     .asmh-hero-subtitle { font-size: 0.82rem; }

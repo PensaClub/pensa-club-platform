@@ -204,7 +204,7 @@ export const academyCoursesServiceFactory = () => {
     publishLecture: async (lectureId) => {
       return requester.post(`${apiUrl}/academy/lectures/${lectureId}/publish`);
     },
-    getLectureById: async (id) => { 
+    getLectureById: async (id) => {
       return requester.get(`${apiUrl}/academy/lectures/id/${id}`);
     },
     unpublishLecture: async (lectureId) => {
@@ -323,17 +323,19 @@ export const academyCoursesServiceFactory = () => {
     // =========================================================
 
     registerForSeminar: async (seminarId) => {
-      return requester.post(`${apiUrl}/academy/seminars/${seminarId}/register`);
+      return requester.post(`${apiUrl}/academy/enrollment/seminars/${seminarId}/register`);
     },
 
     unregisterFromSeminar: async (seminarId) => {
-      return requester.del(`${apiUrl}/academy/seminars/${seminarId}/register`);
+      return requester.post(`${apiUrl}/academy/enrollment/seminars/${seminarId}/unregister`);
     },
-
+checkSeminarRegistration: async (seminarId) => { // НОВО
+      return requester.get(`${apiUrl}/academy/enrollment/seminars/${seminarId}/check`);
+    },
     getSeminarAttendees: async (seminarId) => {
       return requester.get(`${apiUrl}/academy/seminars/${seminarId}/attendees`);
     },
-searchSeminarStudents: async (seminarId, query) => {
+    searchSeminarStudents: async (seminarId, query) => {
       return requester.get(`${apiUrl}/academy/seminars/${seminarId}/search-students?q=${encodeURIComponent(query)}`);
     },
 

@@ -149,7 +149,9 @@
     font-weight: 700;
     z-index: 2;
 }
-
+.ascc-credits span {
+    font-size: 0.7rem;
+}
 /* =========================================================
    DURATION
    ========================================================= */
@@ -169,7 +171,9 @@
     font-size: 0.7rem;
     z-index: 2;
 }
-
+.ascc-duration span {
+    font-size: 0.65rem;
+}
 .ascc-duration svg {
     flex-shrink: 0;
 }
@@ -192,7 +196,9 @@
     z-index: 2;
     backdrop-filter: blur(6px);
 }
-
+.ascc-location-badge span {
+    font-size: 0.7rem;
+}
 .ascc-location-badge svg {
     flex-shrink: 0;
 }
@@ -232,7 +238,9 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
-
+.ascc-category span{
+    font-size: 0.75rem;
+}
 /* =========================================================
    TITLE + DESCRIPTION
    ========================================================= */

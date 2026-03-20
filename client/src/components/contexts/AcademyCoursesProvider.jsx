@@ -922,6 +922,16 @@ export const AcademyCoursesProvider = ({ children }) => {
     }
   }, []);
 
+  const checkSeminarRegistration = useCallback(async (seminarId) => { // НОВО
+    try {
+      const result = await coursesService.checkSeminarRegistration(seminarId);
+      return result;
+    } catch (error) {
+      console.error('Error checking seminar registration:', error);
+      return { isRegistered: false };
+    }
+  }, []);
+
   const getSeminarAttendees = useCallback(async (seminarId) => {
     try {
       const data = await coursesService.getSeminarAttendees(seminarId);
@@ -931,7 +941,7 @@ export const AcademyCoursesProvider = ({ children }) => {
       return [];
     }
   }, []);
-const searchSeminarStudents = useCallback(async (seminarId, query) => {
+  const searchSeminarStudents = useCallback(async (seminarId, query) => {
     try {
       return await coursesService.searchSeminarStudents(seminarId, query);
     } catch (error) {
@@ -960,7 +970,7 @@ const searchSeminarStudents = useCallback(async (seminarId, query) => {
       return { attendees: [], stats: {} };
     }
   }, []);
-  
+
   // =========================================================
   //                    ENROLLMENT
   // =========================================================
@@ -1923,17 +1933,18 @@ const searchSeminarStudents = useCallback(async (seminarId, query) => {
     createSeminar,
     updateSeminar,
     deleteSeminar,
-     publishSeminar, 
+    publishSeminar,
     unpublishSeminar,
     cancelSeminar,
 
     // Seminar Registration
     registerForSeminar,
     unregisterFromSeminar,
+    checkSeminarRegistration,
     getSeminarAttendees,
-    searchSeminarStudents, 
-    bulkMixedAttendance, 
-    getFullAttendance, 
+    searchSeminarStudents,
+    bulkMixedAttendance,
+    getFullAttendance,
     // Enrollment
     getMyEnrollments,
     enrollInCourse,
@@ -2018,7 +2029,7 @@ const searchSeminarStudents = useCallback(async (seminarId, query) => {
     getLectureReviewStats,
     checkUserLectureReviewStatus,
   }), [isLoading, courses, currentCourse, lectures, seminars, myDashboard,
-       currentLesson, lessonsProgress, enrollmentStats, currentTestData]);
+    currentLesson, lessonsProgress, enrollmentStats, currentTestData]);
 
   return (
     <AcademyCoursesContext.Provider value={contextValue}>

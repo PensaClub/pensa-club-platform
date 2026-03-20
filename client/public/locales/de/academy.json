@@ -626,57 +626,113 @@
     "submitting": "Wird gesendet..."
   },
   "academySeminars": {
-  "loading": "Seminare werden geladen...",
-  "results": "Seminare",
-  "loadMore": "Mehr laden",
-  "of": "von",
-  "empty": {
-    "title": "Keine Seminare gefunden",
-    "description": "Ändern Sie Filter oder Suche",
-    "clearFilters": "Filter löschen"
-  }
-},
-"seminarsHero": {
-  "badge": "Präsenzschulung",
-  "title": "Seminare für",
-  "titleAccent": "digitale Kompetenz",
-  "subtitle": "Praxisnahe Workshops in Seniorenclubs mit qualifizierten Mentoren",
-  "stats": {
-    "total": "Seminare",
-    "upcoming": "kommende",
-    "completed": "durchgeführt",
-    "credits": "Credits"
-  }
-},
-"seminarsFilters": {
-  "tabs": {
-    "all": "Alle",
-    "upcoming": "Kommende",
-    "completed": "Durchgeführt"
+    "loading": "Seminare werden geladen...",
+    "results": "Seminare",
+    "loadMore": "Mehr laden",
+    "of": "von",
+    "empty": {
+      "title": "Keine Seminare gefunden",
+      "description": "Ändern Sie Filter oder Suche",
+      "clearFilters": "Filter löschen"
+    }
   },
-  "searchPlaceholder": "Seminar suchen...",
-  "sort": {
-    "date": "Nach Datum",
-    "popular": "Beliebt",
-    "title": "Nach Titel"
+  "seminarsHero": {
+    "badge": "Präsenzschulung",
+    "title": "Seminare für",
+    "titleAccent": "digitale Kompetenz",
+    "subtitle": "Praxisnahe Workshops in Seniorenclubs mit qualifizierten Mentoren",
+    "stats": {
+      "total": "Seminare",
+      "upcoming": "kommende",
+      "completed": "durchgeführt",
+      "credits": "Credits"
+    }
   },
-  "clearAll": "Filter löschen"
-},
-"seminarCard": {
-  "statusLive": "JETZT LIVE",
-  "statusUpcoming": "Bevorstehend",
-  "statusCompleted": "Abgeschlossen",
-  "statusCancelled": "Abgesagt",
-  "btnLive": "Mehr sehen",
-  "btnUpcoming": "Anmelden",
-  "btnCompleted": "Details",
-  "btnCancelled": "Ansehen",
-  "btnDefault": "Ansehen",
-  "min": "Min",
-  "online": "Online",
-  "inPerson": "Vor Ort",
-  "uncategorized": "Seminar",
-  "mentor": "Mentor",
-  "hasTest": "Test"
-}
+  "seminarsFilters": {
+    "tabs": {
+      "all": "Alle",
+      "upcoming": "Kommende",
+      "completed": "Durchgeführt"
+    },
+    "searchPlaceholder": "Seminar suchen...",
+    "sort": {
+      "date": "Nach Datum",
+      "popular": "Beliebt",
+      "title": "Nach Titel"
+    },
+    "clearAll": "Filter löschen"
+  },
+  "seminarCard": {
+    "statusLive": "JETZT LIVE",
+    "statusUpcoming": "Bevorstehend",
+    "statusCompleted": "Abgeschlossen",
+    "statusCancelled": "Abgesagt",
+    "btnLive": "Mehr sehen",
+    "btnUpcoming": "Anmelden",
+    "btnCompleted": "Details",
+    "btnCancelled": "Ansehen",
+    "btnDefault": "Ansehen",
+    "min": "Min",
+    "online": "Online",
+    "inPerson": "Vor Ort",
+    "uncategorized": "Seminar",
+    "mentor": "Mentor",
+    "hasTest": "Test"
+  },
+  "seminarDetail": {
+    "loading": "Laden...",
+    "error": {
+      "notFound": "Seminar nicht gefunden",
+      "title": "Ladefehler",
+      "back": "Zu Seminaren"
+    },
+    "breadcrumb": {
+      "academy": "Akademie",
+      "seminars": "Seminare"
+    },
+    "status": {
+      "live": "JETZT LIVE",
+      "upcoming": "BEVORSTEHEND",
+      "completed": "ABGESCHLOSSEN",
+      "cancelled": "ABGESAGT"
+    },
+    "min": "Min",
+    "online": "Online",
+    "inPerson": "Vor Ort",
+    "stats": {
+      "credits": "Credits",
+      "registered": "Angemeldet",
+      "attended": "Teilgenommen"
+    },
+    "countdown": "Beginnt in",
+    "days": "Tage",
+    "hours": "Std",
+    "mins": "Min",
+    "secs": "Sek",
+    "register": "Anmelden",
+    "unregister": "Abmelden",
+    "spotsLeft": "freie Plätze",
+    "completedInfo": "Seminar ist beendet",
+    "takeTest": "Test ablegen",
+    "share": "Teilen",
+    "credits": {
+      "attendance": "Für Anwesenheit",
+      "participation": "Für Teilnahme",
+      "test": "Für Test",
+      "total": "Gesamt"
+    },
+    "tabs": {
+      "overview": "Übersicht",
+      "materials": "Materialien"
+    },
+    "overview": {
+      "description": "Beschreibung",
+      "learningPoints": "Was Sie lernen",
+      "location": "Veranstaltungsort",
+      "prerequisites": "Voraussetzungen",
+      "whatToBring": "Was mitbringen",
+      "mentor": "Mentor"
+    },
+    "registrationClosed": "Anmeldung geschlossen"
+  }
 }

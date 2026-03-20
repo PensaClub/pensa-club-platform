@@ -678,5 +678,61 @@
   "uncategorized": "Seminar",
   "mentor": "Mentor",
   "hasTest": "Test"
+},
+"seminarDetail": {
+  "loading": "Loading...",
+  "registrationClosed": "Registration is closed",
+  "error": {
+    "notFound": "Seminar not found",
+    "title": "Loading error",
+    "back": "Back to seminars"
+  },
+  "breadcrumb": {
+    "academy": "Academy",
+    "seminars": "Seminars"
+  },
+  "status": {
+    "live": "LIVE NOW",
+    "upcoming": "UPCOMING",
+    "completed": "COMPLETED",
+    "cancelled": "CANCELLED"
+  },
+  "min": "min",
+  "online": "Online",
+  "inPerson": "In person",
+  "stats": {
+    "credits": "Credits",
+    "registered": "Registered",
+    "attended": "Attended"
+  },
+  "countdown": "Starts in",
+  "days": "days",
+  "hours": "h",
+  "mins": "min",
+  "secs": "sec",
+  "register": "Sign up",
+  "unregister": "Unsubscribe",
+  "spotsLeft": "spots left",
+  "completedInfo": "Seminar has ended",
+  "takeTest": "Take the test",
+  "share": "Share",
+  "credits": {
+    "attendance": "For attendance",
+    "participation": "For participation",
+    "test": "For test",
+    "total": "Total"
+  },
+  "tabs": {
+    "overview": "Overview",
+    "materials": "Materials"
+  },
+  "overview": {
+    "description": "Description",
+    "learningPoints": "What you'll learn",
+    "location": "Venue",
+    "prerequisites": "Requirements",
+    "whatToBring": "What to bring",
+    "mentor": "Mentor"
+  }
 }
 }
