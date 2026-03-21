@@ -269,9 +269,17 @@ export const academyCoursesServiceFactory = () => {
       return requester.get(`${apiUrl}/academy/seminars/meta/categories`);
     },
 
+    checkinSeminar: async (seminarId) => {
+      return requester.post(`${apiUrl}/academy/seminars/checkin/${seminarId}`);
+    },
+
     // =========================================================
     //                    SEMINARS - ADMIN
     // =========================================================
+
+    getMentorSeminars: async () => {
+      return requester.get(`${apiUrl}/academy/seminars/mentor/my`);
+    },
 
     getAdminSeminars: async (params = {}) => {
       const queryString = toQueryString(params);
@@ -360,6 +368,29 @@ checkSeminarRegistration: async (seminarId) => { // НОВО
 
     markAllSeminarAttended: async (seminarId, studentIds, participationLevel = 'passive') => {
       return requester.post(`${apiUrl}/academy/seminars/${seminarId}/attendees/mark-all`, { studentIds, participationLevel });
+    },
+
+    // =========================================================
+    //                    SEMINAR REVIEWS
+    // =========================================================
+
+    getSeminarReviews: async (seminarId) => {
+      return requester.get(`${apiUrl}/academy/seminars/${seminarId}/reviews`);
+    },
+
+    addSeminarReview: async (seminarId, reviewData) => {
+      return requester.post(`${apiUrl}/academy/seminars/${seminarId}/reviews`, reviewData);
+    },
+
+    getAdminSeminarReviews: async (status) => {
+      const params = status ? `?status=${status}` : '';
+      return requester.get(`${apiUrl}/academy/seminars/reviews/admin${params}`);
+    },
+    approveSeminarReview: async (reviewId) => {
+      return requester.post(`${apiUrl}/academy/seminars/reviews/${reviewId}/approve`);
+    },
+    deleteSeminarReview: async (reviewId) => {
+      return requester.del(`${apiUrl}/academy/seminars/reviews/${reviewId}`);
     },
 
     // =========================================================

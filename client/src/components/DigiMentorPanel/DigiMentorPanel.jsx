@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 import { useAuthContext } from '../contexts/UserContext';
 import { useAcademy } from '../contexts/AcademyProvider';
+import { useAcademyCourses } from '../contexts/AcademyCoursesProvider';
 import { Loader } from '../Loader/Loader';
 import { DigiMentorStats } from './DigiMentorStats/DigiMentorStats';
 import { DigiMentorQuickActions } from './DigiMentorQuickActions/DigiMentorQuickActions';
@@ -12,7 +13,8 @@ import { DigiMentorRecentActivity } from './DigiMentorRecentActivity/DigiMentorR
 import { DigiMentorUpcomingSessions } from './DigiMentorUpcomingSessions/DigiMentorUpcomingSessions';
 import { DigiMentorStudentsList } from './DigiMentorStudentsList/DigiMentorStudentsList';
 import { DigiMentorPerformanceChart } from './DigiMentorPerformanceChart/DigiMentorPerformanceChart';
-import { MentorMeetings } from './MentorMeetings/MentorMeetings'; 
+import { MentorMeetings } from './MentorMeetings/MentorMeetings';
+import DigiMentorSeminars from './DigiMentorSeminars/DigiMentorSeminars';
 import './digiMentorPanel.css';
 
 export const DigiMentorPanel = () => {
@@ -28,6 +30,7 @@ export const DigiMentorPanel = () => {
         isLoading 
     } = useAcademy();
     const { profileData } = useAuthContext();
+    const { getMentorSeminars } = useAcademyCourses();
 
     const [stats, setStats] = useState({
         totalStudents: 0,
@@ -45,7 +48,8 @@ export const DigiMentorPanel = () => {
     const [upcomingSessions, setUpcomingSessions] = useState([]);
     const [students, setStudents] = useState([]);
     const [performanceData, setPerformanceData] = useState({});
-    const [meetings, setMeetings] = useState([]); 
+    const [meetings, setMeetings] = useState([]);
+    const [mentorSeminars, setMentorSeminars] = useState([]);
 
     useEffect(() => {
         fetchDashboardData();
@@ -54,40 +58,31 @@ export const DigiMentorPanel = () => {
     const fetchDashboardData = async () => {
         try {
             const [statsData, activityData, sessionsData, studentsData, performanceData, meetingsData] = await Promise.all([
-                getMentorDashboardStats(),
-                getMentorRecentActivity(),
-                getMentorUpcomingSessions(),
-                getMentorStudents(),
-                getMentorPerformanceData(),
-                getMentorMeetings() 
+                getMentorDashboardStats().catch(() => null),
+                getMentorRecentActivity().catch(() => null),
+                getMentorUpcomingSessions().catch(() => null),
+                getMentorStudents().catch(() => null),
+                getMentorPerformanceData().catch(() => null),
+                getMentorMeetings().catch(() => null)
             ]);
 
-            if (statsData && statsData.success) {
-                setStats(statsData.stats);
-            }
-
-            if (activityData && activityData.success) {
-                setActivities(activityData.activities);
-            }
-
-            if (sessionsData && sessionsData.success) {
-                setUpcomingSessions(sessionsData.sessions);
-            }
-
-            if (studentsData && studentsData.success) {
-                setStudents(studentsData.students);
-            }
-
-            if (performanceData && performanceData.success) {
-                setPerformanceData(performanceData.data);
-            }
-
-            if (meetingsData && meetingsData.success) {
-                setMeetings(meetingsData.meetings);
-            }
+            if (statsData?.success) setStats(statsData.stats);
+            if (activityData?.success) setActivities(activityData.activities);
+            if (sessionsData?.success) setUpcomingSessions(sessionsData.sessions);
+            if (studentsData?.success) setStudents(studentsData.students);
+            if (performanceData?.success) setPerformanceData(performanceData.data);
+            if (meetingsData?.success) setMeetings(meetingsData.meetings);
         } catch (err) {
             console.error('Error fetching mentor dashboard:', err);
             setError(t('digiMentorPanel.errorLoading'));
+        }
+
+        // Load seminars independently
+        try {
+            const semData = await getMentorSeminars();
+            setMentorSeminars(semData?.seminars || []);
+        } catch (err) {
+            console.error('Error loading mentor seminars:', err);
         }
     };
 
@@ -138,6 +133,9 @@ export const DigiMentorPanel = () => {
 
             {/* QUICK ACTIONS COMPONENT */}
             <DigiMentorQuickActions onAction={handleQuickAction} />
+
+            {/* MENTOR SEMINARS */}
+            <DigiMentorSeminars seminars={mentorSeminars} />
 
             {/* UPCOMING SESSIONS */}
             <DigiMentorUpcomingSessions sessions={upcomingSessions} />

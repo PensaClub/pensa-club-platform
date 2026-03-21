@@ -596,6 +596,26 @@
     "cancel": "Отказ",
     "processing": "Обработва се..."
   },
+  "mentorSeminars": {
+    "title": "Моите семинари",
+    "noSeminars": "Нямате назначени семинари.",
+    "markAttendance": "Запиши присъствие",
+    "statusLive": "На живо",
+    "statusUpcoming": "Предстои",
+    "statusCompleted": "Приключил",
+    "statusCancelled": "Отменен",
+    "statusScheduled": "Насрочен",
+    "online": "Онлайн",
+    "registered": "Записани",
+    "attended": "Присъствали",
+    "attendedList": "Присъствали",
+    "registeredList": "Записани (не присъствали)",
+    "notAttended": "Не е присъствал",
+    "noAttendees": "Все още няма записани участници.",
+    "levelActive": "Активно",
+    "levelModerate": "Умерено",
+    "levelPassive": "Пасивно"
+  },
   "approvedApplications": {
     "noApplications": "Няма одобрени студенти",
     "noApplicationsDesc": "Одобрените студенти ще се показват тук",

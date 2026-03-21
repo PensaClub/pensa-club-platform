@@ -585,6 +585,26 @@
     "cancel": "Cancel",
     "processing": "Processing..."
   },
+  "mentorSeminars": {
+    "title": "My Seminars",
+    "noSeminars": "You have no assigned seminars.",
+    "markAttendance": "Mark Attendance",
+    "statusLive": "Live",
+    "statusUpcoming": "Upcoming",
+    "statusCompleted": "Completed",
+    "statusCancelled": "Cancelled",
+    "statusScheduled": "Scheduled",
+    "online": "Online",
+    "registered": "Registered",
+    "attended": "Attended",
+    "attendedList": "Attended",
+    "registeredList": "Registered (not attended)",
+    "notAttended": "Not attended",
+    "noAttendees": "No participants yet.",
+    "levelActive": "Active",
+    "levelModerate": "Moderate",
+    "levelPassive": "Passive"
+  },
   "approvedApplications": {
     "noApplications": "No approved students",
     "noApplicationsDesc": "Approved students will appear here",

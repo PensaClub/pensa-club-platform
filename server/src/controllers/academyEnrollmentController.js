@@ -20,7 +20,8 @@ const {
   certificate,
   sequelize,
   student_test_attempt,
-  lesson_test
+  lesson_test,
+  user_notification
 } = require('../sequelize/models/index');
 
 const { validateBody, validateQuery } = require('../middlewares/validateRequest');
@@ -1689,6 +1690,37 @@ academyEnrollmentController.post(
 
       if (initialStatus === 'approved') {
         await seminarData.increment('registeredCount');
+      }
+
+      // Create user notification
+      try {
+        await user_notification.create({
+          userId: req.user.userId,
+          type: 'seminar_registered',
+          title: 'Записахте се за семинар',
+          message: `Успешно се записахте за семинар "${seminarData.title}"`,
+          data: { seminarId: seminarData.id, slug: seminarData.slug }
+        });
+      } catch (notifErr) {
+        console.error('Failed to create user notification:', notifErr);
+      }
+
+      // Notify mentor
+      if (seminarData.mentorId) {
+        try {
+          const mentorRecord = await mentor.findByPk(seminarData.mentorId, { attributes: ['userId'] });
+          if (mentorRecord?.userId) {
+            await user_notification.create({
+              userId: mentorRecord.userId,
+              type: 'seminar_new_registration',
+              title: 'Нов записан за семинар',
+              message: `Нов участник се записа за "${seminarData.title}"`,
+              data: { seminarId: seminarData.id, slug: seminarData.slug, url: '/academy/admin/seminar-attendance' }
+            });
+          }
+        } catch (notifErr) {
+          console.error('Failed to create mentor notification:', notifErr);
+        }
       }
 
       res.status(201).json({

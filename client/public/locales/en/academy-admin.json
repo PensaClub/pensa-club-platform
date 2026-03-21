@@ -1082,7 +1082,11 @@
     "subtitle": "Mark attendees — platform users and guests",
     "selectSeminar": "Select seminar",
     "chooseSeminar": "— Select a seminar —",
-    "noSeminars": "No seminars"
+    "noSeminars": "No seminars",
+    "showQR": "Show QR",
+    "qrTitle": "QR Code for Attendance",
+    "qrHint": "Participants scan with their phone for quick attendance check-in",
+    "close": "Close"
   },
  "attendanceForm": {
     "totalParticipants": "participants",

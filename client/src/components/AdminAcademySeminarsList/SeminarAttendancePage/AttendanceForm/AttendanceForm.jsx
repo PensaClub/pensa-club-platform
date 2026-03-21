@@ -18,6 +18,7 @@ const AttendanceForm = ({ seminar }) => {
     const {
         searchSeminarStudents,
         bulkMixedAttendance,
+        markSeminarAttended,
         getFullAttendance,
     } = useAcademyCourses();
 
@@ -34,8 +35,9 @@ const AttendanceForm = ({ seminar }) => {
     const [guestEmail, setGuestEmail] = useState('');
     const [isAddingGuest, setIsAddingGuest] = useState(false);
 
-    // All participants — single list
-    const [participants, setParticipants] = useState([]);
+    // Separate lists: registered (not attended) and attended
+    const [participants, setParticipants] = useState([]); // registered, not yet attended
+    const [attendedList, setAttendedList] = useState([]); // already attended
     const [isLoading, setIsLoading] = useState(true);
 
     // Participation level saving
@@ -48,7 +50,8 @@ const AttendanceForm = ({ seminar }) => {
     const loadParticipants = useCallback(async () => {
         try {
             const data = await getFullAttendance(seminar.id);
-            setParticipants(data.attendees || []);
+            setParticipants(data.registered || []);
+            setAttendedList(data.attended || []);
         } catch (err) {
             console.error('Error loading participants:', err);
         }
@@ -154,10 +157,7 @@ const AttendanceForm = ({ seminar }) => {
         setSavingLevelId(key);
         try {
             if (participant.type === 'platform') {
-                await bulkMixedAttendance(seminar.id, {
-                    platformAttendees: [{ studentId: participant.studentId, participationLevel: newLevel }],
-                    guests: [],
-                });
+                await markSeminarAttended(seminar.id, participant.studentId, { participationLevel: newLevel });
             }
             // За гости — TODO: отделен endpoint за update на guest participation
             await loadParticipants();
@@ -413,9 +413,9 @@ const AttendanceForm = ({ seminar }) => {
                                                 )}
                                             </div>
 
-                                            {/* Credits — already earned, shown as info only */}
+                                            {/* Credits */}
                                             {p.earnedCredits > 0 && (
-                                                <span className="satf-attended-credits">{p.earnedCredits} 🪙</span>
+                                                <span className="satf-participant-credits">+{p.earnedCredits}</span>
                                             )}
                                         </div>
                                     );
@@ -424,18 +424,18 @@ const AttendanceForm = ({ seminar }) => {
                         )}
                     </div>
                      {/* Already attended — info for mentor */}
-                    {participants.length > 0 && (
+                    {attendedList.length > 0 && (
                         <div className="satf-section satf-section-attended">
                             <h4 className="satf-section-title">
                                 <CheckCircle size={16} />
                                 {t('attendanceForm.attendedTitle', 'Вече присъствали')}
-                                <span className="satf-count-badge satf-count-attended">{participants.length}</span>
+                                <span className="satf-count-badge satf-count-attended">{attendedList.length}</span>
                             </h4>
                             <p className="satf-attended-hint">
                                 {t('attendanceForm.attendedHint', 'При повторно записване не се дават нови кредити.')}
                             </p>
                             <div className="satf-attended-list">
-                                {participants.map((p, i) => (
+                                {attendedList.map((p, i) => (
                                     <div key={`att-${p.type}-${p.id}-${i}`} className="satf-attended-row">
                                         <div className="satf-participant-avatar">
                                             {p.avatar ? (

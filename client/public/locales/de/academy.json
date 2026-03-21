@@ -714,6 +714,7 @@
     "spotsLeft": "freie Plätze",
     "completedInfo": "Seminar ist beendet",
     "takeTest": "Test ablegen",
+    "addToCalendar": "Zum Kalender hinzufügen",
     "share": "Teilen",
     "credits": {
       "attendance": "Für Anwesenheit",
@@ -734,6 +735,14 @@
       "whatToBring": "Was mitbringen",
       "mentor": "Mentor",
       "linkedCourse": "Verknüpfter Kurs"
+    },
+    "reviews": {
+      "title": "Bewertungen",
+      "placeholder": "Teilen Sie Ihre Meinung (optional)...",
+      "submit": "Bewertung abgeben",
+      "submitting": "Wird gesendet...",
+      "submitted": "Vielen Dank! Ihre Bewertung wird von einem Administrator überprüft.",
+      "noReviews": "Noch keine Bewertungen für dieses Seminar."
     },
     "registrationClosed": "Anmeldung geschlossen"
   }

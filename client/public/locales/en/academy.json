@@ -715,6 +715,7 @@
   "spotsLeft": "spots left",
   "completedInfo": "Seminar has ended",
   "takeTest": "Take the test",
+  "addToCalendar": "Add to Calendar",
   "share": "Share",
   "credits": {
     "attendance": "For attendance",
@@ -735,6 +736,14 @@
     "whatToBring": "What to bring",
     "mentor": "Mentor",
     "linkedCourse": "Linked Course"
+  },
+  "reviews": {
+    "title": "Reviews",
+    "placeholder": "Share your opinion (optional)...",
+    "submit": "Submit review",
+    "submitting": "Submitting...",
+    "submitted": "Thank you! Your review will be reviewed by an administrator.",
+    "noReviews": "No reviews for this seminar yet."
   }
 }
 }

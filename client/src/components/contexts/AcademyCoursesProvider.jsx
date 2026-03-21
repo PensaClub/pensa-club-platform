@@ -9,7 +9,8 @@ import academyServiceFactory from '../Services/academyServiceFactory';
 export const AcademyCoursesContext = createContext();
 
 export const AcademyCoursesProvider = ({ children }) => {
-  const { isAdmin, token } = useAuthContext();
+  const { isAdmin, token, profileData } = useAuthContext();
+  const isMentor = profileData?.isMentor === true;
   const coursesService = useMemo(() => academyCoursesServiceFactory(), []);
   const academyService = useMemo(() => academyServiceFactory(token), [token]);
   // State
@@ -775,12 +776,30 @@ export const AcademyCoursesProvider = ({ children }) => {
     }
   }, []);
 
+  const checkinSeminar = useCallback(async (seminarId) => {
+    try {
+      return await coursesService.checkinSeminar(seminarId);
+    } catch (error) {
+      console.error('Error checking in:', error);
+      throw error;
+    }
+  }, []);
+
   // =========================================================
   //                    SEMINARS - ADMIN
   // =========================================================
 
+  const getMentorSeminars = useCallback(async () => {
+    try {
+      return await coursesService.getMentorSeminars();
+    } catch (error) {
+      console.error('Error fetching mentor seminars:', error);
+      return { seminars: [] };
+    }
+  }, []);
+
   const getAdminSeminars = useCallback(async (params = {}) => {
-    if (!isAdmin) {
+    if (!isAdmin && !isMentor) {
       toast.error('Нямате права за тази операция');
       return { seminars: [], pagination: {} };
     }
@@ -958,6 +977,15 @@ export const AcademyCoursesProvider = ({ children }) => {
     } catch (error) {
       console.error('Error saving attendance:', error);
       toast.error(error?.errors?.[0] || 'Грешка при записване на присъствие');
+      throw error;
+    }
+  }, []);
+
+  const markSeminarAttended = useCallback(async (seminarId, studentId, data = {}) => {
+    try {
+      return await coursesService.markSeminarAttended(seminarId, studentId, data.participationLevel || 'passive');
+    } catch (error) {
+      console.error('Error marking attendance:', error);
       throw error;
     }
   }, []);
@@ -1671,6 +1699,58 @@ export const AcademyCoursesProvider = ({ children }) => {
     }
   }, []);
 
+  // Seminar reviews
+  const getSeminarReviews = useCallback(async (seminarId) => {
+    try {
+      return await coursesService.getSeminarReviews(seminarId);
+    } catch (error) {
+      console.error('Error fetching seminar reviews:', error);
+      return { reviews: [], avgRating: null };
+    }
+  }, []);
+
+  const addSeminarReview = useCallback(async (seminarId, reviewData) => {
+    try {
+      return await coursesService.addSeminarReview(seminarId, reviewData);
+    } catch (error) {
+      console.error('Error adding seminar review:', error);
+      throw error;
+    }
+  }, []);
+
+  const getAdminSeminarReviews = useCallback(async (status) => {
+    try {
+      return await coursesService.getAdminSeminarReviews(status);
+    } catch (error) {
+      console.error('Error fetching admin seminar reviews:', error);
+      return { reviews: [] };
+    }
+  }, [isAdmin]);
+
+  const approveSeminarReview = useCallback(async (reviewId) => {
+    try {
+      const result = await coursesService.approveSeminarReview(reviewId);
+      toast.success('Ревюто е одобрено');
+      return result;
+    } catch (error) {
+      console.error('Error approving seminar review:', error);
+      toast.error('Грешка при одобряване на ревю');
+      throw error;
+    }
+  }, [isAdmin]);
+
+  const deleteSeminarReview = useCallback(async (reviewId) => {
+    try {
+      const result = await coursesService.deleteSeminarReview(reviewId);
+      toast.success('Ревюто е изтрито');
+      return result;
+    } catch (error) {
+      console.error('Error deleting seminar review:', error);
+      toast.error('Грешка при изтриване на ревю');
+      throw error;
+    }
+  }, [isAdmin]);
+
   // Seminar videos
   const getSeminarVideos = useCallback(async (seminarId) => {
     try {
@@ -2035,6 +2115,9 @@ export const AcademyCoursesProvider = ({ children }) => {
     getSeminarBySlug,
     getSeminarCategories,
 
+    // Seminars - Mentor
+    getMentorSeminars,
+
     // Seminars - Admin
     getAdminSeminars,
     createSeminar,
@@ -2051,6 +2134,7 @@ export const AcademyCoursesProvider = ({ children }) => {
     getSeminarAttendees,
     searchSeminarStudents,
     bulkMixedAttendance,
+    markSeminarAttended,
     getFullAttendance,
     // Enrollment
     getMyEnrollments,
@@ -2091,6 +2175,11 @@ export const AcademyCoursesProvider = ({ children }) => {
     getSeminarMaterials,
     addSeminarMaterial,
     deleteSeminarMaterial,
+    getSeminarReviews,
+    addSeminarReview,
+    getAdminSeminarReviews,
+    approveSeminarReview,
+    deleteSeminarReview,
     getSeminarVideos,
     addSeminarVideo,
     deleteSeminarVideo,
@@ -2145,6 +2234,7 @@ export const AcademyCoursesProvider = ({ children }) => {
     getApprovedLectureReviews,
     getLectureReviewStats,
     checkUserLectureReviewStatus,
+    checkinSeminar,
   }), [isLoading, courses, currentCourse, lectures, seminars, myDashboard,
     currentLesson, lessonsProgress, enrollmentStats, currentTestData]);
 

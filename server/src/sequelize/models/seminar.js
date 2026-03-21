@@ -45,6 +45,12 @@ module.exports = (sequelize, DataTypes) => {
         sourceKey: 'id',
         as: 'videos',
       });
+
+      // Has many reviews
+      seminar.hasMany(models.seminar_review, {
+        foreignKey: 'seminar_id',
+        as: 'reviews',
+      });
       // Belongs to creator
       seminar.belongsTo(models.user_account, {
         foreignKey: 'createdBy',

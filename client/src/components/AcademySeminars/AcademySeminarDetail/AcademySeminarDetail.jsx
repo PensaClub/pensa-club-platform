@@ -126,6 +126,8 @@ const AcademySeminarDetail = () => { // НОВО
         registerForSeminar,
         unregisterFromSeminar,
         checkSeminarRegistration,
+        getSeminarReviews,
+        addSeminarReview,
     } = useAcademyCourses();
 
     const [seminar, setSeminar] = useState(null);
@@ -136,6 +138,12 @@ const AcademySeminarDetail = () => { // НОВО
     const [activeTab, setActiveTab] = useState('overview');
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
+    const [reviews, setReviews] = useState([]);
+    const [avgRating, setAvgRating] = useState(null);
+    const [myReview, setMyReview] = useState({ rating: 0, comment: '' });
+    const [submittingReview, setSubmittingReview] = useState(false);
+    const reviewStorageKey = `seminar-review-${slug}`;
+    const [reviewSubmitted, setReviewSubmitted] = useState(() => localStorage.getItem(reviewStorageKey) === 'true');
 
     const loadingRef = useRef(false);
     const lastSlugRef = useRef(null);
@@ -183,6 +191,21 @@ const AcademySeminarDetail = () => { // НОВО
 
         loadData();
     }, [slug]);
+
+    // Load reviews
+    useEffect(() => {
+        if (!seminar?.id) return;
+        const loadReviews = async () => {
+            try {
+                const data = await getSeminarReviews(seminar.id);
+                setReviews(data?.reviews || []);
+                setAvgRating(data?.avgRating || null);
+            } catch (err) {
+                console.error('Failed to load reviews:', err);
+            }
+        };
+        loadReviews();
+    }, [seminar?.id]);
 
     // Load seminar videos
     useEffect(() => {
@@ -233,6 +256,55 @@ const AcademySeminarDetail = () => { // НОВО
             setRegistering(false);
         }
     }, [seminar, isRegistered, isAuthentication, slug]);
+
+    const handleAddToCalendar = () => {
+        if (!seminar) return;
+        const start = new Date(seminar.scheduledDate);
+        const end = seminar.scheduledEndDate
+            ? new Date(seminar.scheduledEndDate)
+            : new Date(start.getTime() + (seminar.durationMinutes || 90) * 60 * 1000);
+
+        const formatGCalDate = (d) => d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+
+        const location = seminar.isOnline
+            ? (seminar.meetingLink || 'Online')
+            : [seminar.location, seminar.address].filter(Boolean).join(', ');
+
+        const details = [
+            seminar.shortDescription || '',
+            '',
+            `Повече: https://pensa.club/academy/seminars/${seminar.slug}`
+        ].join('\n');
+
+        const params = new URLSearchParams({
+            action: 'TEMPLATE',
+            text: seminar.title,
+            dates: `${formatGCalDate(start)}/${formatGCalDate(end)}`,
+            details,
+            location,
+            sf: 'true',
+        });
+
+        window.open(`https://calendar.google.com/calendar/render?${params.toString()}`, '_blank');
+    };
+
+    const handleSubmitReview = async () => {
+        if (!myReview.rating || myReview.rating < 1) return;
+        setSubmittingReview(true);
+        try {
+            await addSeminarReview(seminar.id, myReview);
+            setReviewSubmitted(true);
+            localStorage.setItem(reviewStorageKey, 'true');
+            // Reload reviews
+            const data = await getSeminarReviews(seminar.id);
+            setReviews(data?.reviews || []);
+            setAvgRating(data?.avgRating || null);
+        } catch (err) {
+            console.error('Error submitting review:', err);
+        } finally {
+            setSubmittingReview(false);
+        }
+    };
 
     const handleShare = useCallback(async () => { // НОВО
         try {
@@ -531,6 +603,10 @@ const AcademySeminarDetail = () => { // НОВО
                         </div>
                     </div>
 
+                    <button className="asd-calendar-btn" onClick={handleAddToCalendar}>
+                        <Calendar size={16} />
+                        {t('seminarDetail.addToCalendar', 'Добави в календар')}
+                    </button>
                     <button className="asd-share-btn" onClick={handleShare}>
                         <Share2 size={16} />
                         {t('seminarDetail.share', 'Сподели')}
@@ -749,6 +825,86 @@ const AcademySeminarDetail = () => { // НОВО
                     </div>
                 </div>
             </main>
+
+            {/* Reviews section */}
+            {seminar && new Date(seminar.scheduledDate) <= new Date() && (
+                <section className="asd-reviews-section">
+                    <div className="asd-container">
+                        <h2 className="asd-section-title">
+                            <span>⭐</span>
+                            {t('seminarDetail.reviews.title', 'Отзиви')}
+                            {avgRating && <span className="asd-avg-rating">{avgRating} / 5</span>}
+                            {reviews.length > 0 && <span className="asd-reviews-count">({reviews.length})</span>}
+                        </h2>
+
+                        {/* Write review — only for authenticated users who attended */}
+                        {isAuthentication && !reviewSubmitted && (
+                            <div className="asd-review-form">
+                                <div className="asd-stars-input">
+                                    {[1, 2, 3, 4, 5].map(star => (
+                                        <button
+                                            key={star}
+                                            className={`asd-star-btn ${myReview.rating >= star ? 'asd-star-active' : ''}`}
+                                            onClick={() => setMyReview(prev => ({ ...prev, rating: star }))}
+                                        >
+                                            ★
+                                        </button>
+                                    ))}
+                                </div>
+                                <textarea
+                                    className="asd-review-textarea"
+                                    placeholder={t('seminarDetail.reviews.placeholder', 'Споделете вашето мнение (незадължително)...')}
+                                    value={myReview.comment}
+                                    onChange={(e) => setMyReview(prev => ({ ...prev, comment: e.target.value }))}
+                                    rows={3}
+                                    maxLength={1000}
+                                />
+                                <button
+                                    className="asd-review-submit"
+                                    onClick={handleSubmitReview}
+                                    disabled={!myReview.rating || submittingReview}
+                                >
+                                    {submittingReview ? t('seminarDetail.reviews.submitting', 'Изпращане...') : t('seminarDetail.reviews.submit', 'Изпрати отзив')}
+                                </button>
+                            </div>
+                        )}
+
+                        {reviewSubmitted && (
+                            <div className="asd-review-success">
+                                <CheckCircle size={18} />
+                                <span>{t('seminarDetail.reviews.submitted', 'Благодарим! Отзивът ви ще бъде прегледан от администратор.')}</span>
+                            </div>
+                        )}
+
+                        {/* Reviews list */}
+                        {reviews.length > 0 ? (
+                            <div className="asd-reviews-list">
+                                {reviews.map(r => (
+                                    <div key={r.id} className="asd-review-card">
+                                        <div className="asd-review-header">
+                                            <div className="asd-review-author">
+                                                {r.author?.avatar ? (
+                                                    <img src={r.author.avatar} alt="" className="asd-review-avatar" />
+                                                ) : (
+                                                    <div className="asd-review-avatar-placeholder">{(r.author?.name || '?')[0]}</div>
+                                                )}
+                                                <span className="asd-review-name">{r.author?.name || 'Анонимен'}</span>
+                                            </div>
+                                            <div className="asd-review-stars">
+                                                {'★'.repeat(r.rating)}{'☆'.repeat(5 - r.rating)}
+                                            </div>
+                                        </div>
+                                        {r.comment && <p className="asd-review-comment">{r.comment}</p>}
+                                        <span className="asd-review-date">{new Date(r.createdAt).toLocaleDateString('bg-BG')}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : !reviewSubmitted && (
+                            <p className="asd-no-reviews">{t('seminarDetail.reviews.noReviews', 'Все още няма отзиви за този семинар.')}</p>
+                        )}
+                    </div>
+                </section>
+            )}
 
             <ScrollToTop />
         </div>

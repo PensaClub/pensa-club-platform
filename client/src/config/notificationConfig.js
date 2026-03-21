@@ -54,6 +54,14 @@ export const NOTIFICATION_TYPES = {
   STATUS_CHANGED: 'status_changed',
   APPLICATION_REAPPROVED: 'application_reapproved',
 
+  // Seminar notifications
+  SEMINAR_REGISTERED: 'seminar_registered',
+  SEMINAR_NEW_REGISTRATION: 'seminar_new_registration',
+  SEMINAR_ATTENDED: 'seminar_attended',
+  SEMINAR_ATTENDANCE_RECORDED: 'seminar_attendance_recorded',
+  SEMINAR_NEW_REVIEW: 'seminar_new_review',
+  SEMINAR_REVIEW_APPROVED: 'seminar_review_approved',
+
   // ReAction notifications (User)
   REACTION_REQUEST_STATUS_CHANGED: 'reaction_request_status_changed',
   REACTION_MENTOR_ASSIGNED: 'reaction_mentor_assigned',
@@ -130,6 +138,42 @@ export const notificationConfig = {
     color: '#ffa500',
     route: '/profile/reviews-management',
     priority: 'medium'
+  },
+  [NOTIFICATION_TYPES.SEMINAR_NEW_REVIEW]: {
+    icon: '⭐',
+    color: '#f59e0b',
+    route: '/academy/admin/seminar-reviews',
+    priority: 'medium'
+  },
+  [NOTIFICATION_TYPES.SEMINAR_NEW_REGISTRATION]: {
+    icon: '👤',
+    color: '#3b82f6',
+    route: '/academy/admin/seminar-attendance',
+    priority: 'medium'
+  },
+  [NOTIFICATION_TYPES.SEMINAR_REGISTERED]: {
+    icon: '📋',
+    color: '#10b981',
+    route: '/academy/seminars',
+    priority: 'low'
+  },
+  [NOTIFICATION_TYPES.SEMINAR_ATTENDED]: {
+    icon: '✅',
+    color: '#10b981',
+    route: '/academy/seminars',
+    priority: 'low'
+  },
+  [NOTIFICATION_TYPES.SEMINAR_ATTENDANCE_RECORDED]: {
+    icon: '📝',
+    color: '#00d2ff',
+    route: '/academy/admin/seminar-attendance',
+    priority: 'medium'
+  },
+  [NOTIFICATION_TYPES.SEMINAR_REVIEW_APPROVED]: {
+    icon: '⭐',
+    color: '#10b981',
+    route: '/academy/seminars',
+    priority: 'low'
   },
   [NOTIFICATION_TYPES.LECTURE_REVIEW]: {
     icon: '⭐',
@@ -388,6 +432,15 @@ export const getNotificationRoute = (notification) => {
       return `/admin/reaction?requestId=${requestId}`;
     }
     return '/admin/reaction';
+  }
+
+  // Seminar notifications
+  if (notification.data?.url) {
+    return notification.data.url;
+  }
+
+  if (notification.data?.slug) {
+    return `/academy/seminars/${notification.data.slug}`;
   }
 
   return config.route;

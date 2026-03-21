@@ -7,13 +7,16 @@ const {
   seminar,
   seminar_material,
   seminar_video,
+  seminar_review,
   student_seminar,
   course,
   mentor,
   user_account,
   user_details,
   student,
-  sequelize
+  sequelize,
+  user_notification,
+  admin_notification
 } = require('../sequelize/models/index');
 
 const { validateBody, validateQuery } = require('../middlewares/validateRequest');
@@ -28,6 +31,8 @@ const {
 
 const isAuth = require('../middlewares/isAuth.js');
 const rbac = require('../middlewares/rbac.js');
+const { forwardEmailsViaZoho } = require('../utils/zohoEmails');
+const seminarEmailTemplates = require('../utils/seminarEmailTemplates');
 
 // ===============================
 // HELPER: Generate slug from title
@@ -364,6 +369,297 @@ seminarsController.get(
       });
     } catch (err) {
       console.error('❌ [GET ADMIN SEMINARS] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// GET /api/academy/seminars/mentor/my
+// Семинари на текущия ментор
+// ===============================
+seminarsController.get(
+  '/mentor/my',
+  isAuth,
+  async (req, res, next) => {
+    try {
+      const userId = parseInt(req.user.userId);
+
+      // Find the mentor record for this user
+      const mentorRecord = await mentor.findOne({ where: { userId } });
+      if (!mentorRecord) {
+        return res.status(200).json({ success: true, seminars: [] });
+      }
+
+      const now = new Date();
+      const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+
+      const seminars = await seminar.findAll({
+        where: {
+          mentorId: mentorRecord.id,
+          [Op.or]: [
+            { scheduledDate: { [Op.gte]: thirtyDaysAgo } },
+            { status: 'live' }
+          ]
+        },
+        include: [
+          {
+            model: student_seminar,
+            as: 'attendances',
+            attributes: ['id', 'studentId', 'attended', 'participationLevel', 'earnedCredits', 'attendedAt', 'status'],
+            required: false,
+            include: [{
+              model: student,
+              as: 'student',
+              attributes: ['id', 'avatar'],
+              include: [{
+                model: user_account,
+                as: 'user',
+                attributes: ['id', 'email'],
+                include: [{
+                  model: user_details,
+                  as: 'details',
+                  attributes: ['username', 'imageURL'],
+                }]
+              }]
+            }]
+          }
+        ],
+        order: [['scheduledDate', 'ASC']],
+      });
+
+      // Format attendances with names
+      const formatted = seminars.map(s => {
+        const plain = s.get({ plain: true });
+        plain.attendances = (plain.attendances || []).map(a => ({
+          id: a.id,
+          studentId: a.studentId,
+          attended: a.attended,
+          participationLevel: a.participationLevel,
+          earnedCredits: a.earnedCredits,
+          attendedAt: a.attendedAt,
+          status: a.status,
+          name: a.student?.user?.details?.username || a.student?.user?.email?.split('@')[0] || `Студент #${a.studentId}`,
+          avatar: a.student?.user?.details?.imageURL || a.student?.avatar || null,
+          email: a.student?.user?.email || null,
+        }));
+        return plain;
+      });
+
+      res.json({ success: true, seminars: formatted });
+    } catch (err) {
+      console.error('❌ [GET MENTOR SEMINARS] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// POST /api/academy/seminars/checkin/:seminarId
+// Quick check-in via QR code
+// ===============================
+seminarsController.post('/checkin/:seminarId', isAuth, async (req, res, next) => {
+    try {
+        const seminarId = parseInt(req.params.seminarId);
+        const userId = req.user.userId;
+
+        const seminarData = await seminar.findByPk(seminarId);
+        if (!seminarData) {
+            return res.status(404).json({ success: false, message: 'Seminar not found' });
+        }
+
+        // Find student record
+        const studentRecord = await student.findOne({ where: { userId } });
+        if (!studentRecord) {
+            return res.status(403).json({ success: false, message: 'Student record not found' });
+        }
+
+        // Check if already attended
+        let attendance = await student_seminar.findOne({
+            where: { seminarId, studentId: studentRecord.id }
+        });
+
+        if (attendance && attendance.attended) {
+            return res.json({ success: true, message: 'Already checked in', alreadyAttended: true });
+        }
+
+        // Calculate credits
+        let earnedCredits = seminarData.creditsForAttendance || 0;
+
+        if (!attendance) {
+            attendance = await student_seminar.create({
+                seminarId,
+                studentId: studentRecord.id,
+                status: 'approved',
+                attended: true,
+                attendedAt: new Date(),
+                participationLevel: 'passive',
+                earnedCredits,
+            });
+        } else {
+            await attendance.update({
+                attended: true,
+                attendedAt: new Date(),
+                participationLevel: attendance.participationLevel || 'passive',
+                earnedCredits,
+            });
+        }
+
+        // Update count
+        const attendedCount = await student_seminar.count({
+            where: { seminarId, attended: true },
+        });
+        await seminarData.update({ attendedCount });
+
+        res.json({ success: true, message: 'Checked in successfully', earnedCredits });
+    } catch (err) {
+        console.error('❌ [QR CHECKIN] Error:', err);
+        next(err);
+    }
+});
+
+// ===============================
+// ADMIN REVIEW MANAGEMENT
+// ===============================
+
+// GET /api/academy/seminars/reviews/admin
+// Admin: get all reviews (filterable by status)
+seminarsController.get(
+  '/reviews/admin',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { status: filterStatus } = req.query;
+      const whereClause = {};
+      if (filterStatus) whereClause.status = filterStatus;
+
+      const reviews = await seminar_review.findAll({
+        where: whereClause,
+        include: [
+          {
+            model: seminar,
+            as: 'seminar',
+            attributes: ['id', 'title', 'slug']
+          },
+          {
+            model: student,
+            as: 'student',
+            attributes: ['id'],
+            include: [{
+              model: user_account,
+              as: 'user',
+              attributes: ['id', 'email'],
+              include: [{
+                model: user_details,
+                as: 'details',
+                attributes: ['username', 'imageURL']
+              }]
+            }]
+          }
+        ],
+        order: [['createdAt', 'DESC']]
+      });
+
+      const formatted = reviews.map(r => ({
+        id: r.id,
+        seminarId: r.seminarId,
+        seminarTitle: r.seminar?.title || '',
+        seminarSlug: r.seminar?.slug || '',
+        rating: r.rating,
+        comment: r.comment,
+        status: r.status,
+        createdAt: r.createdAt,
+        author: {
+          name: r.student?.user?.details?.username || r.student?.user?.email?.split('@')[0] || 'Unknown',
+          avatar: r.student?.user?.details?.imageURL || null,
+          email: r.student?.user?.email || ''
+        }
+      }));
+
+      res.json({ success: true, reviews: formatted });
+    } catch (err) {
+      console.error('Error fetching admin reviews:', err);
+      next(err);
+    }
+  }
+);
+
+// POST /api/academy/seminars/reviews/:reviewId/approve
+seminarsController.post(
+  '/reviews/:reviewId/approve',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const review = await seminar_review.findByPk(req.params.reviewId);
+      if (!review) return res.status(404).json({ success: false, message: 'Review not found' });
+
+      await review.update({ status: 'approved' });
+
+      // Recalculate avg rating with only approved reviews
+      const approvedReviews = await seminar_review.findAll({
+        where: { seminarId: review.seminarId, status: 'approved' },
+        attributes: ['rating']
+      });
+      const avg = approvedReviews.length > 0
+        ? Math.round((approvedReviews.reduce((sum, r) => sum + r.rating, 0) / approvedReviews.length) * 10) / 10
+        : null;
+      await seminar.update({ rating: avg }, { where: { id: review.seminarId } });
+
+      // Notify user that review was approved
+      try {
+        const studentRecord = await student.findByPk(review.studentId, {
+            include: [{ model: user_account, as: 'user', attributes: ['id'] }]
+        });
+        const seminarData = await seminar.findByPk(review.seminarId, { attributes: ['title', 'slug'] });
+        if (studentRecord?.user?.id) {
+            await user_notification.create({
+                userId: studentRecord.user.id,
+                type: 'seminar_review_approved',
+                title: 'Отзивът ви е одобрен',
+                message: `Вашият отзив за "${seminarData?.title || 'семинар'}" беше одобрен и е публикуван.`,
+                data: { seminarId: review.seminarId, slug: seminarData?.slug }
+            });
+        }
+      } catch (notifErr) {
+        console.error('Failed to create review approval notification:', notifErr);
+      }
+
+      res.json({ success: true, message: 'Review approved' });
+    } catch (err) {
+      console.error('Error approving review:', err);
+      next(err);
+    }
+  }
+);
+
+// DELETE /api/academy/seminars/reviews/:reviewId
+seminarsController.delete(
+  '/reviews/:reviewId',
+  isAuth,
+  rbac.checkPermission('seminar', 'delete'),
+  async (req, res, next) => {
+    try {
+      const review = await seminar_review.findByPk(req.params.reviewId);
+      if (!review) return res.status(404).json({ success: false, message: 'Review not found' });
+
+      const seminarId = review.seminarId;
+      await review.destroy();
+
+      // Recalculate avg rating
+      const approvedReviews = await seminar_review.findAll({
+        where: { seminarId, status: 'approved' },
+        attributes: ['rating']
+      });
+      const avg = approvedReviews.length > 0
+        ? Math.round((approvedReviews.reduce((sum, r) => sum + r.rating, 0) / approvedReviews.length) * 10) / 10
+        : null;
+      await seminar.update({ rating: avg }, { where: { id: seminarId } });
+
+      res.json({ success: true, message: 'Review deleted' });
+    } catch (err) {
+      console.error('Error deleting review:', err);
       next(err);
     }
   }
@@ -1169,6 +1465,45 @@ seminarsController.post(
 
       await seminarData.update({ registeredCount });
 
+      // Send registration confirmation email
+      try {
+        const studentData = await student.findByPk(attendance.studentId, {
+          include: [{
+            model: user_account,
+            as: 'user',
+            attributes: ['email'],
+            include: [{
+              model: user_details,
+              as: 'details',
+              attributes: ['username'],
+            }],
+          }],
+        });
+
+        if (studentData?.user?.email) {
+          const template = seminarEmailTemplates.registrationConfirmation({
+            userName: studentData.user.details?.username || studentData.user.email.split('@')[0],
+            seminarTitle: seminarData.title,
+            scheduledDate: seminarData.scheduledDate,
+            location: seminarData.location,
+            isOnline: seminarData.isOnline,
+            meetingLink: seminarData.meetingLink,
+            mentorName: null,
+            slug: seminarData.slug,
+          });
+
+          await forwardEmailsViaZoho({
+            userEmail: 'info@pensa.club',
+            subject: template.subject,
+            body: '',
+            toAddresses: studentData.user.email,
+            formattedBody: template.html,
+          });
+        }
+      } catch (emailErr) {
+        console.error('Failed to send seminar registration email:', emailErr);
+      }
+
       res.status(200).json({
         success: true,
         message: 'Registration approved',
@@ -1269,10 +1604,24 @@ seminarsController.post(
           earnedCredits,
         });
       } else if (attendance.attended) {
-        // Already attended — only update participationLevel, do NOT re-award credits
-        await attendance.update({
-          participationLevel: participationLevel || attendance.participationLevel || 'passive',
-        });
+        // Already attended — recalculate credits based on new participation level
+        // but only if attendedAt is today (same-day adjustments allowed)
+        const attendedDate = new Date(attendance.attendedAt);
+        const today = new Date();
+        const isSameDay = attendedDate.toDateString() === today.toDateString();
+
+        if (isSameDay && participationLevel) {
+          // Recalculate credits with new level
+          await attendance.update({
+            participationLevel,
+            earnedCredits,
+          });
+        } else {
+          // Different day — only update level, no credit changes
+          await attendance.update({
+            participationLevel: participationLevel || attendance.participationLevel || 'passive',
+          });
+        }
       } else {
         // First time marking as attended — award credits
         await attendance.update({
@@ -1288,6 +1637,24 @@ seminarsController.post(
       });
 
       await seminarData.update({ attendedCount });
+
+      // Notify user about attendance
+      try {
+        const studentRecord = await student.findByPk(studentId, {
+          include: [{ model: user_account, as: 'user', attributes: ['id'] }]
+        });
+        if (studentRecord?.user?.id) {
+          await user_notification.create({
+            userId: studentRecord.user.id,
+            type: 'seminar_attended',
+            title: 'Присъствие записано',
+            message: `Присъствието ви на "${seminarData.title}" е записано. ${earnedCredits > 0 ? `Получихте ${earnedCredits} кредити.` : ''}`,
+            data: { seminarId, earnedCredits, slug: seminarData.slug }
+          });
+        }
+      } catch (notifErr) {
+        console.error('Failed to create attendance notification:', notifErr);
+      }
 
       res.status(200).json({
         success: true,
@@ -1630,6 +1997,32 @@ seminarsController.post(
             participationLevel: guest.participationLevel || 'passive',
             markedBy: userId,
           });
+
+          // Send email to guest if email provided
+          if (guest.email) {
+            try {
+              const template = seminarEmailTemplates.guestNotification({
+                guestName: `${guest.firstName} ${guest.lastName}`,
+                seminarTitle: seminarData.title,
+                scheduledDate: seminarData.scheduledDate,
+                location: seminarData.location,
+                isOnline: seminarData.isOnline,
+                mentorName: null,
+                slug: seminarData.slug,
+              });
+
+              await forwardEmailsViaZoho({
+                userEmail: 'info@pensa.club',
+                subject: template.subject,
+                body: '',
+                toAddresses: guest.email,
+                formattedBody: template.html,
+              });
+            } catch (emailErr) {
+              console.error('Failed to send guest email:', emailErr);
+            }
+          }
+
           guestCount++;
         }
       }
@@ -1641,6 +2034,18 @@ seminarsController.post(
       const guestTotal = await sgaModel.count({ where: { seminarId } });
 
       await seminarData.update({ attendedCount: attendedCount + guestTotal });
+
+      // Admin notification
+      try {
+        await admin_notification.create({
+          type: 'seminar_attendance_recorded',
+          title: 'Присъствие записано',
+          message: `Записано присъствие за семинар "${seminarData.title}": ${markedCount} от платформата, ${guestCount} гости`,
+          data: { seminarId, platformCount: markedCount, guestCount }
+        });
+      } catch (notifErr) {
+        console.error('Failed to create admin notification:', notifErr);
+      }
 
       res.status(200).json({
         success: true,
@@ -1660,7 +2065,7 @@ seminarsController.post(
 
 // ===============================
 // GET /api/academy/seminars/:id/attendance/full
-// Пълен списък присъстващи (платформени + гости)
+// Пълен списък: записани + присъствали (платформени + гости)
 // ===============================
 seminarsController.get(
   '/:id/attendance/full',
@@ -1670,9 +2075,9 @@ seminarsController.get(
     try {
       const seminarId = parseInt(req.params.id);
 
-      // Платформени
+      // ALL platform registrations (both attended and not)
       const platformAttendees = await student_seminar.findAll({
-        where: { seminarId, attended: true },
+        where: { seminarId },
         include: [{
           model: student,
           as: 'student',
@@ -1698,12 +2103,14 @@ seminarsController.get(
           type: 'platform',
           id: data.id,
           studentId: data.studentId,
-          name: details.username || data.student?.user?.email?.split('@')[0] || 'Unknown', // ПРОМЕНЕНО
+          name: details.username || data.student?.user?.email?.split('@')[0] || 'Unknown',
           email: data.student?.user?.email,
           avatar: data.student?.avatar || details.imageURL,
           participationLevel: data.participationLevel,
           earnedCredits: data.earnedCredits,
           attendedAt: data.attendedAt,
+          attended: data.attended,
+          status: data.status,
         };
       });
 
@@ -1727,11 +2134,34 @@ seminarsController.get(
         };
       });
 
+      // Split: "attended today" stay in participants list, "attended before today" go to attended list
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const isAttendedBeforeToday = (a) => {
+        if (!a.attended || !a.attendedAt) return false;
+        const attendedDate = new Date(a.attendedAt);
+        attendedDate.setHours(0, 0, 0, 0);
+        return attendedDate < today;
+      };
+
+      // Participants = all registered + attended today (still active for today's session)
+      const registered = formattedPlatform.filter(a => !isAttendedBeforeToday(a));
+      // Attended = attended before today (previous days)
+      const attended = [...formattedPlatform.filter(a => isAttendedBeforeToday(a)), ...formattedGuests.filter(g => {
+        const gDate = new Date(g.attendedAt);
+        gDate.setHours(0, 0, 0, 0);
+        return gDate < today;
+      })];
+
       res.status(200).json({
         success: true,
-        attendees: [...formattedPlatform, ...formattedGuests],
+        attendees: [...formattedPlatform, ...formattedGuests], // backwards compat
+        registered,
+        attended,
         stats: {
-          platform: formattedPlatform.length,
+          registered: registered.length,
+          attended: attended.length,
           guests: formattedGuests.length,
           total: formattedPlatform.length + formattedGuests.length,
         },
@@ -1742,6 +2172,108 @@ seminarsController.get(
     }
   }
 );
+// ===============================
+// REVIEWS
+// ===============================
+
+// GET /api/academy/seminars/:id/reviews
+seminarsController.get('/:id/reviews', async (req, res, next) => {
+    try {
+        const reviews = await seminar_review.findAll({
+            where: { seminarId: req.params.id, status: 'approved' },
+            include: [{
+                model: student,
+                as: 'student',
+                attributes: ['id'],
+                include: [{
+                    model: user_account,
+                    as: 'user',
+                    attributes: ['id'],
+                    include: [{
+                        model: user_details,
+                        as: 'details',
+                        attributes: ['username', 'imageURL']
+                    }]
+                }]
+            }],
+            order: [['createdAt', 'DESC']]
+        });
+
+        const formatted = reviews.map(r => ({
+            id: r.id,
+            rating: r.rating,
+            comment: r.comment,
+            createdAt: r.createdAt,
+            author: {
+                name: r.student?.user?.details?.username || 'Анонимен',
+                avatar: r.student?.user?.details?.imageURL || null
+            }
+        }));
+
+        const avgRating = reviews.length > 0
+            ? Math.round((reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length) * 10) / 10
+            : null;
+
+        res.json({ success: true, reviews: formatted, avgRating, totalReviews: reviews.length });
+    } catch (err) {
+        console.error('Error fetching reviews:', err);
+        next(err);
+    }
+});
+
+// POST /api/academy/seminars/:id/reviews
+seminarsController.post('/:id/reviews', isAuth, async (req, res, next) => {
+    try {
+        const seminarId = parseInt(req.params.id);
+        const { rating, comment } = req.body;
+
+        if (!rating || rating < 1 || rating > 5) {
+            return res.status(400).json({ success: false, message: 'Rating must be between 1 and 5' });
+        }
+
+        const studentRecord = await student.findOne({ where: { userId: req.user.userId } });
+        if (!studentRecord) {
+            return res.status(403).json({ success: false, message: 'Student record not found' });
+        }
+
+        // Check if already reviewed
+        const existing = await seminar_review.findOne({
+            where: { seminarId, studentId: studentRecord.id }
+        });
+
+        if (existing) {
+            await existing.update({ rating, comment: comment || null, status: 'pending' });
+            return res.json({ success: true, message: 'Review updated (pending approval)', review: existing });
+        }
+
+        const review = await seminar_review.create({
+            seminarId,
+            studentId: studentRecord.id,
+            rating,
+            comment: comment || null,
+            status: 'pending'
+        });
+
+        // Notify admin about new review
+        try {
+            const seminarData = await seminar.findByPk(seminarId, { attributes: ['title', 'slug'] });
+            await admin_notification.create({
+                type: 'seminar_new_review',
+                title: 'Нов отзив за семинар',
+                message: `Нов отзив (${rating}/5) за "${seminarData?.title || 'семинар'}" чака одобрение.`,
+                data: { seminarId, reviewId: review.id, rating, url: '/academy/admin/seminar-reviews' }
+            });
+        } catch (notifErr) {
+            console.error('Failed to create admin notification for review:', notifErr);
+        }
+
+        res.status(201).json({ success: true, message: 'Review created (pending approval)', review });
+    } catch (err) {
+        console.error('Error creating review:', err);
+        next(err);
+    }
+});
+
 // ===============================
 // VIDEO MANAGEMENT
 // ===============================

@@ -1,0 +1,238 @@
+/* DigiMentorSeminars */
+/* Prefix: dms- */
+/* NOTE: Mentor panel is always light theme — no data-theme switching */
+
+.dms-section {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+
+.dms-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.dms-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0;
+}
+
+.dms-title svg { color: #0d9488; flex-shrink: 0; }
+
+.dms-count {
+    background: rgba(13, 148, 136, 0.1);
+    color: #0d9488;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+.dms-attendance-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 10px;
+    border: 1px solid rgba(13, 148, 136, 0.3);
+    background: rgba(13, 148, 136, 0.06);
+    color: #0d9488;
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+.dms-attendance-btn:hover {
+    background: rgba(13, 148, 136, 0.12);
+    border-color: rgba(13, 148, 136, 0.5);
+}
+
+.dms-attendance-btn svg { flex-shrink: 0; }
+
+.dms-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 40px 0;
+    color: #94a3b8;
+    text-align: center;
+}
+
+.dms-empty p { font-size: 0.85rem; margin: 0; }
+
+.dms-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.dms-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.dms-card:hover { border-color: #cbd5e1; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.dms-card-expanded { border-color: rgba(13, 148, 136, 0.3); }
+
+.dms-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    cursor: pointer;
+    background: #f8fafc;
+    transition: background 0.15s;
+}
+
+.dms-card-header:hover { background: #f1f5f9; }
+
+.dms-card-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+
+.dms-card-title-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.dms-card-title { font-size: 0.9rem; font-weight: 600; color: #1e293b; }
+
+.dms-status {
+    font-size: 0.62rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.dms-status-upcoming { background: rgba(59, 130, 246, 0.1); color: #2563eb; }
+.dms-status-live { background: rgba(239, 68, 68, 0.1); color: #dc2626; }
+.dms-status-completed { background: rgba(107, 114, 128, 0.1); color: #6b7280; }
+.dms-status-cancelled { background: rgba(239, 68, 68, 0.08); color: #dc2626; text-decoration: line-through; }
+.dms-status-scheduled { background: rgba(16, 185, 129, 0.1); color: #059669; }
+
+.dms-card-meta {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.dms-card-date, .dms-card-location {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.75rem;
+    color: #64748b;
+}
+
+.dms-card-date svg, .dms-card-location svg { flex-shrink: 0; color: #94a3b8; }
+
+.dms-card-stats {
+    display: flex;
+    gap: 14px;
+}
+
+.dms-stat {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.72rem;
+    color: #64748b;
+}
+
+.dms-stat svg { flex-shrink: 0; }
+.dms-stat-attended { color: #059669; }
+.dms-stat-attended svg { color: #059669; }
+
+.dms-card-toggle {
+    flex-shrink: 0;
+    color: #94a3b8;
+}
+
+/* Expanded body */
+.dms-card-body {
+    padding: 0 16px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.dms-attendees { display: flex; flex-direction: column; gap: 6px; }
+
+.dms-attendees-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #475569;
+    margin: 10px 0 0;
+}
+
+.dms-attendees-count {
+    font-size: 0.65rem;
+    background: #f1f5f9;
+    padding: 1px 6px;
+    border-radius: 8px;
+    color: #64748b;
+}
+
+.dms-attendees-list {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.dms-attendee-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: #f8fafc;
+}
+
+.dms-attendee-row:hover { background: #f1f5f9; }
+
+.dms-attendee-pending { opacity: 0.6; }
+
+.dms-attendee-avatar { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+.dms-attendee-info { flex: 1; display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.dms-attendee-name { font-size: 0.78rem; font-weight: 500; color: #1e293b; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dms-attendee-email { font-size: 0.65rem; color: #94a3b8; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dms-attendee-level { font-size: 0.68rem; color: #0d9488; flex-shrink: 0; }
+.dms-attendee-credits { font-size: 0.68rem; color: #94a3b8; flex-shrink: 0; }
+.dms-attendee-status { font-size: 0.68rem; color: #94a3b8; flex-shrink: 0; font-style: italic; }
+
+.dms-no-attendees { font-size: 0.8rem; color: #94a3b8; text-align: center; padding: 16px 0; margin: 0; }
+
+/* Responsive */
+@media (max-width: 767px) {
+    .dms-section { padding: 16px; }
+    .dms-header { flex-direction: column; align-items: flex-start; }
+    .dms-attendance-btn { width: 100%; justify-content: center; }
+    .dms-card-meta { flex-direction: column; gap: 4px; }
+    .dms-card-stats { flex-direction: column; gap: 4px; }
+}
+
+@media (max-width: 480px) {
+    .dms-section { padding: 12px; }
+    .dms-card-header { padding: 10px 12px; }
+    .dms-card-title { font-size: 0.85rem; }
+    .dms-title { font-size: 0.95rem; }
+}

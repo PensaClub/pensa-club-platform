@@ -4,8 +4,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAcademyCourses } from '../../contexts/AcademyCoursesProvider';
-import { ArrowLeft, BookOpen, Users, ChevronDown } from 'lucide-react';
+import { ArrowLeft, BookOpen, Users, ChevronDown, QrCode } from 'lucide-react';
 import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
+import { QRCodeSVG } from 'qrcode.react';
 import AttendanceForm from './AttendanceForm/AttendanceForm';
 import './seminarAttendancePage.css';
 
@@ -18,6 +19,7 @@ const SeminarAttendancePage = () => {
     const [selectedSeminar, setSelectedSeminar] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [showDropdown, setShowDropdown] = useState(false);
+    const [showQR, setShowQR] = useState(false);
 
     useEffect(() => {
         const load = async () => {
@@ -125,11 +127,40 @@ const SeminarAttendancePage = () => {
                     )}
                 </div>
 
-                {/* Attendance form */}
+                {/* QR + Attendance form */}
+                {selectedSeminar && (
+                    <button className="satp-qr-btn" onClick={() => setShowQR(true)}>
+                        <QrCode size={16} />
+                        {t('seminarAttendance.showQR', 'Покажи QR')}
+                    </button>
+                )}
+
                 {selectedSeminar && (
                     <AttendanceForm seminar={selectedSeminar} />
                 )}
             </div>
+
+            {showQR && selectedSeminar && (
+                <div className="satp-qr-overlay" onClick={() => setShowQR(false)}>
+                    <div className="satp-qr-modal" onClick={(e) => e.stopPropagation()}>
+                        <h3 className="satp-qr-title">{t('seminarAttendance.qrTitle', 'QR код за присъствие')}</h3>
+                        <p className="satp-qr-subtitle">{selectedSeminar.title}</p>
+                        <div className="satp-qr-code">
+                            <QRCodeSVG
+                                value={`https://pensa.club/academy/seminars/${selectedSeminar.id}/checkin`}
+                                size={280}
+                                bgColor="transparent"
+                                fgColor="#ffffff"
+                                level="M"
+                            />
+                        </div>
+                        <p className="satp-qr-hint">{t('seminarAttendance.qrHint', 'Участниците сканират с телефон за бързо записване на присъствие')}</p>
+                        <button className="satp-qr-close" onClick={() => setShowQR(false)}>
+                            {t('seminarAttendance.close', 'Затвори')}
+                        </button>
+                    </div>
+                </div>
+            )}
         </>
     );
 };

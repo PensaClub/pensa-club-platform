@@ -5,14 +5,20 @@ exports.checkPermission = (resource, action, subAction = null) => {
     return (req, res, next) => {
         const userRole = req.user ? req.user.role : 'guest';
 
+        // Mentors have isMentor flag but role='user' — treat as 'mentor' for RBAC
+        const effectiveRoles = [userRole];
+        if (req.user?.isMentor && userRole !== 'mentor') {
+            effectiveRoles.push('mentor');
+        }
+
         // Handle nested permissions (e.g., initiative.draft.read)
         if (subAction) {
-            if (permissions[resource]?.[action]?.[subAction]?.includes(userRole)) {
+            if (effectiveRoles.some(role => permissions[resource]?.[action]?.[subAction]?.includes(role))) {
                 return next();
             }
         } else {
             // Handle regular permissions (e.g., article.read)
-            if (permissions[resource]?.[action]?.includes(userRole)) {
+            if (effectiveRoles.some(role => permissions[resource]?.[action]?.includes(role))) {
                 return next();
             }
         }

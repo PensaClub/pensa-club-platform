@@ -70,6 +70,7 @@ import { ReActionProvider } from './components/contexts/ReActionProvider.jsx';
 import { DigiBridgeChatButton } from './components/DigiBridge/DigiBridgeChatButton/DigiBridgeChatButton.jsx';
 import { DigiBridgeChatWindow } from './components/DigiBridge/DigiBridgeChatWindow/DigiBridgeChatWindow.jsx';
 import { MentorGuard } from './components/Guards/MentorGuard.jsx';
+import { AcademyStaffGuard } from './components/Guards/AcademyStaffGuard.jsx';
 import { DigiBridgeMentorDashboard } from './components/DigiBridge/DigiBridgeMentorDashboard/DigiBridgeMentorDashboard.jsx';
 import { UserChatsPage } from './components/DigiBridge/UserChatsPage/UserChatsPage.jsx';
 import { StudentDetails } from './components/DigiMentorPanel/StudentDetails/StudentDetails.jsx';
@@ -122,6 +123,8 @@ const AcademySeminars = lazyWithRetry(() => import('./components/AcademySeminars
 const AcademySeminarDetail = lazyWithRetry(() => import('./components/AcademySeminars/AcademySeminarDetail/AcademySeminarDetail.jsx'));
 const SeminarAttendancePage = lazyWithRetry(() => import('./components/AdminAcademySeminarsList/SeminarAttendancePage/SeminarAttendancePage.jsx'));
 const EditSeminar = lazyWithRetry(() => import('./components/AdminAcademySeminarsList/EditSeminar/EditSeminar.jsx'));
+const SeminarReviewsAdmin = lazyWithRetry(() => import('./components/AdminAcademySeminarsList/SeminarReviewsAdmin/SeminarReviewsAdmin'));
+const SeminarCheckin = lazyWithRetry(() => import('./components/AcademySeminars/SeminarCheckin/SeminarCheckin'));
 const TelkRkmeRzi = lazyWithRetry(() => import('./components/TelkRkmeRzi/TelkRkmeRzi.jsx'));
 const ComingSoon = lazyWithRetry(() => import('./components/DigiBridgeAcademy/ComingSoon/ComingSoon.jsx'));
 const ProjectCreateForm = lazyWithRetry(() => import('./components/Initiatives/CreateProject/ProjectCreateForm'));
@@ -235,8 +238,10 @@ function AppRoutes() {
         <Route path="/academy/admin/edit-lecture/:slug" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><EditLecture /></Suspense></AdminGuard>} />
         <Route path="/academy/admin/seminars" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><AdminAcademySeminarsList /></Suspense></AdminGuard>} />
         <Route path="/academy/admin/create-seminar" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><SeminarCreateForm /></Suspense></AdminGuard>} />
-        <Route path="/academy/admin/seminar-attendance" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><SeminarAttendancePage /></Suspense></AdminGuard>} />
+        <Route path="/academy/admin/seminar-attendance" element={<AcademyStaffGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><SeminarAttendancePage /></Suspense></AcademyStaffGuard>} />
+        <Route path="/academy/admin/seminar-reviews" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><SeminarReviewsAdmin /></Suspense></AdminGuard>} />
         <Route path="/academy/seminars" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademySeminars /></Suspense>} />
+        <Route path="/academy/seminars/:seminarId/checkin" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><SeminarCheckin /></Suspense>} />
         <Route path="/academy/seminars/:slug" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademySeminarDetail /></Suspense>} />
         <Route path="/academy/seminars/:slug/test" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademyTestPlayer /></Suspense>} />
         <Route path="/academy/admin/edit-seminar/:slug" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><EditSeminar /></Suspense></AdminGuard>} /> 

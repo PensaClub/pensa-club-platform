@@ -585,6 +585,26 @@
     "cancel": "Abbrechen",
     "processing": "Wird verarbeitet..."
   },
+  "mentorSeminars": {
+    "title": "Meine Seminare",
+    "noSeminars": "Sie haben keine zugewiesenen Seminare.",
+    "markAttendance": "Anwesenheit erfassen",
+    "statusLive": "Live",
+    "statusUpcoming": "Bevorstehend",
+    "statusCompleted": "Abgeschlossen",
+    "statusCancelled": "Abgesagt",
+    "statusScheduled": "Geplant",
+    "online": "Online",
+    "registered": "Registriert",
+    "attended": "Anwesend",
+    "attendedList": "Anwesend",
+    "registeredList": "Registriert (nicht anwesend)",
+    "notAttended": "Nicht anwesend",
+    "noAttendees": "Noch keine Teilnehmer.",
+    "levelActive": "Aktiv",
+    "levelModerate": "Moderat",
+    "levelPassive": "Passiv"
+  },
   "approvedApplications": {
     "noApplications": "Keine genehmigten Studenten",
     "noApplicationsDesc": "Genehmigte Studenten werden hier angezeigt",

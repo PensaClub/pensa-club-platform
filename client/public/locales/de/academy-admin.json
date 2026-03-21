@@ -1082,7 +1082,11 @@
     "subtitle": "Markieren Sie Teilnehmer — Plattformbenutzer und Gäste",
     "selectSeminar": "Seminar auswählen",
     "chooseSeminar": "— Seminar auswählen —",
-    "noSeminars": "Keine Seminare"
+    "noSeminars": "Keine Seminare",
+    "showQR": "QR anzeigen",
+    "qrTitle": "QR-Code für Anwesenheit",
+    "qrHint": "Teilnehmer scannen mit dem Handy für schnelle Anwesenheitserfassung",
+    "close": "Schließen"
   },
   "attendanceForm": {
     "totalParticipants": "Teilnehmer",

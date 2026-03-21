@@ -88,6 +88,7 @@ import { StudentApplicationsManagement } from "../DigiMentorApplications/Student
 import { SEOStatisticAdmin } from "../SEOStatisticAdmin/SEOStatisticAdmin";
 import { AdminDigiBridgeStudentApplications } from "../AdminDigiBridgeStudents/AdminDigiBridgeStudentApplications/AdminDigiBridgeStudentApplications";
 import { ProfileReviews } from "./ProfileReviews";
+import { TextZoom } from "../TextZoom/TextZoom";
 
 
 // 🎨 НОВИ ИКОНКИ КОМПОНЕНТИ
@@ -645,7 +646,6 @@ export const Profile = () => {
                       <UsersIcon className="icon" />
                       {t("profile.personal_data")}
                     </span>
-                    <ArrowIcon className="icon-arrow" />
                   </NavLink>
                 </li>
                 <li>
@@ -657,7 +657,6 @@ export const Profile = () => {
                       <HomeIcon />
                       {t("profile.address")}
                     </span>
-                    <ArrowIcon className="icon-arrow" />
                   </NavLink>
                 </li>
                 <li>
@@ -669,7 +668,6 @@ export const Profile = () => {
                       <BillingIcon className="icon" />
                       {t("profile.password")}
                     </span>
-                    <ArrowIcon className="icon-arrow" />
                   </NavLink>
                 </li>
                 <li>
@@ -681,7 +679,6 @@ export const Profile = () => {
                       <ForumIcon className="icon" />
                       {t("profile.announced")}
                     </span>
-                    <ArrowIcon className="icon-arrow" />
                   </NavLink>
                 </li>
                 <li>
@@ -693,7 +690,6 @@ export const Profile = () => {
                       <ChatIcon className="icon" />
                       {t("profile.messages")}
                     </span>
-                    <ArrowIcon className="icon-arrow" />
                   </NavLink>
                 </li>
                 <li>
@@ -705,7 +701,6 @@ export const Profile = () => {
                       <BookmarkIcon />
                       {t("profile.bookmarks")}
                     </span>
-                    <ArrowIcon className="icon-arrow" />
                   </NavLink>
                 </li>
                 <li>
@@ -717,7 +712,6 @@ export const Profile = () => {
                       <StoriesIcon />
                       {t("profile.myReviews")}
                     </span>
-                    <ArrowIcon className="icon-arrow" />
                   </NavLink>
                 </li>
                 <li>
@@ -727,9 +721,8 @@ export const Profile = () => {
                   >
                     <span className="link-content">
                       <AvatarIcon />
-                      Аватар
+                      {t("profile.avatar", "Аватар")}
                     </span>
-                    <ArrowIcon className="icon-arrow" />
                   </NavLink>
                 </li>
                 <li>
@@ -817,6 +810,17 @@ export const Profile = () => {
                       </span>
                     </Link>
                   </li>
+                  <li>
+                    <NavLink to="/academy/admin/seminar-attendance" className={({ isActive }) => isActive ? 'active' : ''}>
+                      <span className="link-content">
+                        <svg className="menu-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M9 11l3 3L22 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                        {t("profile.seminarAttendance", "Присъствие на семинари")}
+                      </span>
+                    </NavLink>
+                  </li>
                 </ul>
               </div>
             )}
@@ -833,7 +837,6 @@ export const Profile = () => {
                         <ClubsIcon />
                         {t("profile.clubsAdmin")}
                       </span>
-                      <ArrowIcon className="icon-arrow" />
                     </NavLink>
                   </li>
                   <li>
@@ -845,7 +848,6 @@ export const Profile = () => {
                         <StoriesIcon />
                         {t("admin.reviews.management")}
                       </span>
-                      <ArrowIcon className="icon-arrow" />
                     </NavLink>
                   </li>
                   <li>
@@ -883,9 +885,8 @@ export const Profile = () => {
                   </li>
                   <li>
                     <NavLink
-                      to="ads-admin"
                       onClick={() => toggleSubMenu('ads')}
-                      className={({ isActive }) => isActive ? 'active' : ''}
+                      className="nav-link-button"
                     >
                       <span className="link-content">
                         <JobsAdsIcon className="icon" />
@@ -925,7 +926,6 @@ export const Profile = () => {
                             <DashboardIcon className="icon" />
                             {t("profile.siteSettingsAdmin")}
                           </span>
-                          <ArrowIcon className="icon-arrow" />
                         </Link>
                       </li>
                       <li>
@@ -935,15 +935,14 @@ export const Profile = () => {
                         >
                           <span className="link-content">
                             <AnalyticsIcon className="icon" />
-                            SEO Логове
+                            {t("admin.seoLogs", "SEO Логове")}
                           </span>
                         </NavLink>
                       </li>
                       <li>
                         <NavLink
-                          to="users-statistic"
                           onClick={() => toggleSubMenu('users')}
-                          className={({ isActive }) => isActive ? 'active' : ''}
+                          className="nav-link-button"
                         >
                           <span className="link-content">
                             <AnalyticsIcon className="icon" />
@@ -977,14 +976,12 @@ export const Profile = () => {
                             <UsersIcon className="icon" />
                             {t("profile.applications")} {applicationsStats.total > 0 && <>- {applicationsStats.total}</>}
                           </span>
-                          <ArrowIcon className="icon-arrow" />
                         </NavLink>
                       </li>
                       <li>
                         <NavLink
-                          to="mentors-overview"
                           onClick={() => toggleSubMenu('mentors')}
-                          className={({ isActive }) => isActive ? 'active' : ''}
+                          className="nav-link-button"
                         >
                           <span className="link-content">
                             <UsersIcon className="icon" />
@@ -1074,6 +1071,12 @@ export const Profile = () => {
                               {t("admin.academy.seminarAttendance")}
                             </NavLink>
                           </li>
+                          <li>
+                            <NavLink to="/academy/admin/seminar-reviews" className={({ isActive }) => isActive ? 'active' : ''}>
+                              <CircleIcon className="icon" />
+                              {t("admin.academy.seminarReviews", "Отзиви")}
+                            </NavLink>
+                          </li>
                         </ul>
                       </li>
                       {/* Useful Links */}
@@ -1143,9 +1146,8 @@ export const Profile = () => {
 
                   <li>
                     <NavLink
-                      to="admin-suggest-users"
                       onClick={() => toggleSubMenu('suggest')}
-                      className={({ isActive }) => isActive ? 'active' : ''}
+                      className="nav-link-button"
                     >
                       <span className="link-content">
                         <UsersIcon className="icon" />
@@ -1174,15 +1176,13 @@ export const Profile = () => {
                         <EducationIcon className="icon" />
                         {t("admin.ads_subscription")} {allSubscriptionEmails >= 1 && <>- {allSubscriptionEmails}</>}
                       </span>
-                      <ArrowIcon className="icon-arrow" />
                     </NavLink>
                   </li>
 
                   <li>
                     <NavLink
-                      to="articles"
                       onClick={() => toggleSubMenu('articles')}
-                      className={({ isActive }) => isActive ? 'active' : ''}
+                      className="nav-link-button"
                     >
                       <span className="link-content">
                         <ForumIcon className="icon" />
@@ -1204,9 +1204,8 @@ export const Profile = () => {
 
                   <li>
                     <NavLink
-                      to="initiatives"
                       onClick={() => toggleSubMenu('initiatives')}
-                      className={({ isActive }) => isActive ? 'active' : ''}
+                      className="nav-link-button"
                     >
                       <span className="link-content">
                         <InitiativesIcon />
@@ -1234,9 +1233,8 @@ export const Profile = () => {
 
                   <li>
                     <NavLink
-                      to="projects"
                       onClick={() => toggleSubMenu('projects')}
-                      className={({ isActive }) => isActive ? 'active' : ''}
+                      className="nav-link-button"
                     >
                       <span className="link-content">
                         <ProjectsIcon />
@@ -1271,13 +1269,13 @@ export const Profile = () => {
                   <li>
                     <NavLink
                       to="publications"
+                      end
                       className={({ isActive }) => isActive ? 'active' : ''}
                     >
                       <span className="link-content">
                         <PublicationsIcon />
                         {t("profile.publications")}
                       </span>
-                      <ArrowIcon className="icon-arrow" />
                     </NavLink>
                   </li>
 
@@ -1290,7 +1288,6 @@ export const Profile = () => {
                         <StoriesIcon />
                         {t("profile.stories")}
                       </span>
-                      <ArrowIcon className="icon-arrow" />
                     </NavLink>
                   </li>
                 </ul>
@@ -1412,6 +1409,8 @@ export const Profile = () => {
           </Routes>
         </main>
       </div>
+      <TextZoom/>
     </div>
+
   );
 };
