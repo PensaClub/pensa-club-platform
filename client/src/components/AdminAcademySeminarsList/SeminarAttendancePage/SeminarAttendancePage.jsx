@@ -15,6 +15,8 @@ const SeminarAttendancePage = () => {
     const navigate = useLocalizedNavigate();
     const { getAdminSeminars } = useAcademyCourses();
 
+    useEffect(() => { window.scrollTo(0, 0); }, []);
+
     const [seminars, setSeminars] = useState([]);
     const [selectedSeminar, setSelectedSeminar] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
