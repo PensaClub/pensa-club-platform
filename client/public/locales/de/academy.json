@@ -626,6 +626,11 @@
     "submitting": "Wird gesendet..."
   },
   "academySeminars": {
+    "seo": {
+      "title": "Seminare | DigiBridge Academy",
+      "description": "Kostenlose Seminare zur digitalen Kompetenz. Praktische Workshops, Diskussionen und Schulungen mit qualifizierten Mentoren in Seniorenclubs.",
+      "keywords": "Seminare, digitale Kompetenz, Schulung, kostenlos, Senioren, Präsenzveranstaltungen, DigiBridge Academy"
+    },
     "loading": "Seminare werden geladen...",
     "results": "Seminare",
     "loadMore": "Mehr laden",

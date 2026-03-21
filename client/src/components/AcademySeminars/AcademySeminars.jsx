@@ -9,6 +9,7 @@ import { useAuthContext } from '../contexts/UserContext'; // НОВО
 import { useLocation } from 'react-router-dom'; // НОВО
 import ScrollToTop from '../ScrollToTop/ScrollToTop'; // НОВО
 import { TextZoom } from '../TextZoom/TextZoom'; // НОВО
+import SEOHead from '../SEO/SEOHead'; // НОВО
 import SeminarsHero from './SeminarsHero/SeminarsHero'; // НОВО
 import SeminarsFilters from './SeminarsFilters/SeminarsFilters'; // НОВО
 import SeminarCatalogCard from './SeminarCatalogCard/SeminarCatalogCard'; // НОВО
@@ -224,6 +225,12 @@ const AcademySeminars = () => { // НОВО
 
     return (
         <div className="asem">
+            <SEOHead
+                title={t('academySeminars.seo.title', 'Семинари | DigiBridge Academy')}
+                description={t('academySeminars.seo.description', 'Безплатни семинари за дигитална грамотност. Практически занятия, дискусии и работилници за всички възрасти.')}
+                keywords={t('academySeminars.seo.keywords', 'семинари, дигитална грамотност, обучение, безплатно, пенсионери')}
+                image="/images/academy/academy-seminars-og.jpg"
+            />
             <TextZoom />
 
             <SeminarsHero stats={stats} />

@@ -14,6 +14,7 @@ import {
     ArrowLeft, Loader2, AlertCircle, Award, Video, Film,
 } from 'lucide-react'; // НОВО
 import ScrollToTop from '../../ScrollToTop/ScrollToTop'; // НОВО
+import SEOHead from '../../SEO/SEOHead'; // НОВО
 import { TextZoom } from '../../TextZoom/TextZoom'; // НОВО
 import './academySeminarDetail.css'; // НОВО
 
@@ -358,6 +359,16 @@ const AcademySeminarDetail = () => { // НОВО
     return (
         <div className="asd" style={{ '--accent': catStyle.primary }}>
             <TextZoom />
+            {seminar && (
+                <SEOHead
+                    title={`${seminar.title} | DigiBridge Academy`}
+                    description={seminar.shortDescription || seminar.description?.substring(0, 160) || ''}
+                    keywords={seminar.tags?.join(', ') || seminar.category || ''}
+                    image={seminar.thumbnailUrl || '/images/academy/academy-seminars-og.jpg'}
+                    type="article"
+                    publishedTime={seminar.publishedAt}
+                />
+            )}
 
             {/* ========== HERO ========== */}
             <section className="asd-hero">

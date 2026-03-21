@@ -626,6 +626,11 @@
     "submitting": "Submitting..."
   },
   "academySeminars": {
+  "seo": {
+    "title": "Seminars | DigiBridge Academy",
+    "description": "Free digital literacy seminars. Hands-on workshops, discussions and practical sessions with qualified mentors at senior clubs.",
+    "keywords": "seminars, digital literacy, training, free, seniors, in-person workshops, DigiBridge Academy"
+  },
   "loading": "Loading seminars...",
   "results": "seminars",
   "loadMore": "Load more",
