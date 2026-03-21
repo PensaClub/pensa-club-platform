@@ -3,7 +3,18 @@ import { useTranslation } from 'react-i18next';
 import './reActionHero.css';
 
 const ReActionHero = ({ stats }) => {
-  const { t } = useTranslation('reaction');
+  const { t, i18n } = useTranslation('reaction');
+  const lang = i18n.language;
+
+  const bfwLogo = lang === 'bg'
+      ? '/images/BFW%20LOGO/BG-FULL%20LOGO/BFFW-FullLogo-Prink.png'
+      : '/images/BFW%20LOGO/ENG-FULL%20LOGO/BFFW-FullLogo-Pink-ENG.png';
+
+  const euLogoH = lang === 'bg'
+      ? '/images/EU%20LOGO/co-funded_BG/horizontal/BG_Co-fundedbytheEU_RGB_POS.png'
+      : '/images/EU%20LOGO/co-funded_EN/horizontal/EN_Co-fundedbytheEU_RGB_POS.png';
+
+  const euLogoV = euLogoH;
 
   const scrollToBookingForm = () => {
     document.getElementById('booking-form')?.scrollIntoView({ behavior: 'smooth' });
@@ -20,7 +31,12 @@ const ReActionHero = ({ stats }) => {
       <div className="rah-container">
         {/* Logos */}
         <div className="rah-logos">
-          <img src="/images/partners/BFFW-20Logo-Prink2.svg" alt="Bulgarian Fund for Women" className="rah-logo" />
+          <img src={bfwLogo} alt="Bulgarian Fund for Women" className="rah-logo" />
+          <span className="rah-logos-divider"></span>
+          <picture>
+            <source media="(max-width: 480px)" srcSet={euLogoV} />
+            <img src={euLogoH} alt="Co-funded by the European Union" className="rah-logo" />
+          </picture>
           <span className="rah-logos-divider"></span>
           <img src="/images/homePage/logo.png" alt="Pensa Club" className="rah-logo" />
         </div>
