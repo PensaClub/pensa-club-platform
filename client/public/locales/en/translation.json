@@ -453,6 +453,7 @@
     "clubMembership": "Club Membership",
     "mentorApplications": "Student Applications",
     "mentorProfile": "Profile",
+    "seminarAttendance": "Seminar Attendance",
     "myReviews": "My Reviews",
     "clubs": {
       "title": "My Clubs",
@@ -3266,7 +3267,8 @@
     "articles": "Loading articles...",
     "initiatives": "Loading initiatives...",
     "projects": "Loading projects...",
-    "page": "Loading..."
+    "page": "Loading...",
+    "academy": "Loading academy..."
   },
   "avatar": {
     "title": "Create Your Avatar",

@@ -1,0 +1,315 @@
+/* src/components/AcademySeminars/academySeminars.css */
+/* Prefix: asem- */
+
+.asem {
+    min-height: 100vh;
+}
+
+/* =========================================================
+   MAIN — background blends with hero
+   ========================================================= */
+
+.asem-main {
+    padding: 0 0 60px;
+    position: relative;
+    background: #0c0e14;
+}
+
+.asem-main::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image:
+        linear-gradient(rgba(0, 210, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 210, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(45deg, transparent 48%, rgba(139, 92, 246, 0.012) 49%, rgba(139, 92, 246, 0.012) 51%, transparent 52%);
+    background-size: 48px 48px, 48px 48px, 96px 96px;
+    mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black 30%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 40%, black 30%, transparent 80%);
+}
+
+.asem-main::after {
+    content: '';
+    position: fixed;
+    top: -20%;
+    right: -10%;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.04) 0%, transparent 60%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* =========================================================
+   CONTAINER
+   ========================================================= */
+
+.asem-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 1;
+}
+
+/* =========================================================
+   LOADING + EMPTY
+   ========================================================= */
+
+.asem-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    gap: 16px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.asem-loading p {
+    font-size: 0.9rem;
+}
+
+.asem-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(0, 210, 255, 0.15);
+    border-top-color: #00d2ff;
+    border-radius: 50%;
+    animation: asem-spin 0.8s linear infinite;
+}
+
+@keyframes asem-spin {
+    to { transform: rotate(360deg); }
+}
+
+.asem-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    gap: 12px;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.asem-empty-icon {
+    font-size: 3rem;
+}
+
+.asem-empty h3 {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.asem-empty p {
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+.asem-empty-btn {
+    margin-top: 8px;
+    padding: 8px 20px;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 210, 255, 0.3);
+    background: rgba(0, 210, 255, 0.08);
+    color: #00d2ff;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.asem-empty-btn:hover {
+    background: rgba(0, 210, 255, 0.15);
+}
+
+/* =========================================================
+   RESULTS INFO
+   ========================================================= */
+
+.asem-results-info {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 16px;
+}
+
+/* =========================================================
+   GRID
+   ========================================================= */
+
+.asem-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+/* =========================================================
+   LOAD MORE
+   ========================================================= */
+
+.asem-load-more {
+    display: flex;
+    justify-content: center;
+    margin-top: 32px;
+}
+
+.asem-load-more-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 32px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.asem-load-more-btn:hover {
+    background: rgba(0, 210, 255, 0.08);
+    border-color: rgba(0, 210, 255, 0.25);
+    color: #00d2ff;
+}
+
+.asem-load-more-count {
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 8px;
+    background: rgba(0, 210, 255, 0.15);
+    color: #00d2ff;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1023px) {
+    .asem-container { padding: 0 20px; }
+}
+
+@media (max-width: 767px) {
+    .asem-container { padding: 0 14px; }
+    .asem-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 424px) {
+    .asem-container { padding: 0 10px; }
+}
+
+/* =========================================================
+   LIGHT THEME
+   ========================================================= */
+
+[data-theme="light"] .asem-main {
+    background: #f1f5f9;
+}
+
+[data-theme="light"] .asem-main::before {
+    background-image:
+        linear-gradient(rgba(153, 27, 27, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(153, 27, 27, 0.06) 1px, transparent 1px),
+        linear-gradient(45deg, transparent 48%, rgba(153, 27, 27, 0.035) 49%, rgba(153, 27, 27, 0.035) 51%, transparent 52%);
+    mask-image: radial-gradient(ellipse 90% 80% at 50% 40%, black 40%, transparent 85%);
+    -webkit-mask-image: radial-gradient(ellipse 90% 80% at 50% 40%, black 40%, transparent 85%);
+}
+
+[data-theme="light"] .asem-main::after {
+    background: radial-gradient(circle, rgba(153, 27, 27, 0.06) 0%, transparent 60%);
+}
+
+[data-theme="light"] .asem-loading { color: #64748b; }
+[data-theme="light"] .asem-spinner { border-color: rgba(13, 148, 136, 0.15); border-top-color: #0d9488; }
+[data-theme="light"] .asem-empty { color: #94a3b8; }
+[data-theme="light"] .asem-empty h3 { color: #475569; }
+[data-theme="light"] .asem-empty-btn { border-color: rgba(13, 148, 136, 0.3); background: rgba(13, 148, 136, 0.06); color: #0d9488; }
+[data-theme="light"] .asem-empty-btn:hover { background: rgba(13, 148, 136, 0.12); }
+[data-theme="light"] .asem-results-info { color: #64748b; }
+[data-theme="light"] .asem-load-more-btn { border-color: #d1d5db; background: #fff; color: #475569; }
+[data-theme="light"] .asem-load-more-btn:hover { background: rgba(13, 148, 136, 0.06); border-color: rgba(13, 148, 136, 0.3); color: #0d9488; }
+[data-theme="light"] .asem-load-more-count { background: rgba(13, 148, 136, 0.1); color: #0d9488; }
+/* =========================================================
+   LOAD MORE — progress bar + spinner
+   ========================================================= */
+
+.asem-load-more {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-top: 32px;
+}
+
+.asem-load-more-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 32px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.asem-load-more-btn:hover:not(:disabled) {
+    background: rgba(0, 210, 255, 0.08);
+    border-color: rgba(0, 210, 255, 0.25);
+    color: #00d2ff;
+}
+
+.asem-load-more-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.asem-load-more-count {
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 8px;
+    background: rgba(0, 210, 255, 0.15);
+    color: #00d2ff;
+}
+
+.asem-load-more-progress {
+    width: 200px;
+    height: 3px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.06);
+    overflow: hidden;
+}
+
+.asem-load-more-progress-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: #00d2ff;
+    transition: width 0.4s;
+}
+
+.asem-load-more-info {
+    font-size: 0.72rem;
+    color: rgba(255, 255, 255, 0.35);
+}
+
+.asem-spinner-small {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(0, 210, 255, 0.15);
+    border-top-color: #00d2ff;
+    border-radius: 50%;
+    animation: asem-spin 0.8s linear infinite;
+}
+
+/* Light theme additions */
+[data-theme="light"] .asem-load-more-progress { background: #e2e8f0; }
+[data-theme="light"] .asem-load-more-progress-fill { background: #0d9488; }
+[data-theme="light"] .asem-load-more-info { color: #94a3b8; }
+[data-theme="light"] .asem-spinner-small { border-color: rgba(13, 148, 136, 0.15); border-top-color: #0d9488; }

@@ -261,7 +261,16 @@
   border-radius: 5px;
   transition: all 0.3s ease;
   text-indent: initial;
+  font-weight: 400;
+  text-transform: none;
+}
 
+.side-menu a span,
+.side-menu a .link-content {
+  font-size: 16px;
+  color: inherit;
+  font-weight: inherit;
+  text-transform: none;
 }
 
 .side-menu a:hover {
@@ -290,16 +299,7 @@
   opacity: 1;
 }
 
-.side-menu a.active {
-  color: var(--orange);
-  font-weight: bold;
-}
-
-.side-menu a.active svg {
-  fill: var(--orange);
-  stroke: var(--orange);
-  color: var(--orange);
-}
+/* active state removed — links should not appear active by default */
 
 
 .sub-menu {

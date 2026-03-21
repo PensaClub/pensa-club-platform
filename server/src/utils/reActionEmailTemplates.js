@@ -354,6 +354,15 @@ const userCancelledClub = ({ contactName, clubName, city, preferredDate, cancelR
 });
 
 module.exports = {
+  // Helpers (reusable by other template files)
+  wrapTemplate,
+  paragraph,
+  ctaButton,
+  greeting,
+  infoTable,
+  infoRow,
+  signature,
+  // Templates
   requestConfirmation,
   requestAdminNotification,
   mentorAssigned,

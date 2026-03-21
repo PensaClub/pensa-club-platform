@@ -99,14 +99,13 @@
 .change-avatar-link {
   font-size: var(--xs-font-size);
   text-transform: uppercase;
-  font-weight: 550;
+  font-weight: 500;
   display: block;
   margin-top: 1rem;
   padding-left: 5vw;
   margin-bottom: 0.5rem;
-  color: var(--orange);
+  color: #475569;
   text-decoration: none;
-
 }
 
 .change-avatar-link {
@@ -117,15 +116,12 @@
   text-decoration: underline;
 }
 
-.account-menu a.active {
-  color: var(--green-cm-light);
-
+.account-menu .nav-link-button {
+  color: #1e293b;
+  font-weight: 600;
+  cursor: pointer;
 }
 
-.account-menu a.active svg:not(:root).svg-inline--fa,
-svg:not(:host).svg-inline--fa {
-  color: var(--green-cm-light);
-}
 
 .account-menu-mobile a.active svg:not(:root).svg-inline--fa,
 svg:not(:host).svg-inline--fa {

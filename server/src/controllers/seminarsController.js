@@ -6,13 +6,17 @@ const { Op } = require('sequelize');
 const {
   seminar,
   seminar_material,
+  seminar_video,
+  seminar_review,
   student_seminar,
   course,
   mentor,
   user_account,
   user_details,
   student,
-  sequelize
+  sequelize,
+  user_notification,
+  admin_notification
 } = require('../sequelize/models/index');
 
 const { validateBody, validateQuery } = require('../middlewares/validateRequest');
@@ -27,6 +31,8 @@ const {
 
 const isAuth = require('../middlewares/isAuth.js');
 const rbac = require('../middlewares/rbac.js');
+const { forwardEmailsViaZoho } = require('../utils/zohoEmails');
+const seminarEmailTemplates = require('../utils/seminarEmailTemplates');
 
 // ===============================
 // HELPER: Generate slug from title
@@ -94,9 +100,14 @@ seminarsController.get('/', validateQuery(seminarQuerySchema), async (req, res, 
     const where = {};
 
     // По подразбиране показваме само публикувани
-    if (status === 'published' || !status) {
-      where.isPublished = true;
-      where.isPublic = true;
+    where.isPublished = true;
+    where.isPublic = true;
+
+    // Time filter — upcoming / completed // НОВО
+    if (status === 'upcoming') {
+      where.scheduledDate = { [Op.gte]: new Date() };
+    } else if (status === 'completed') {
+      where.scheduledDate = { [Op.lt]: new Date() };
     }
 
     // Filter by category
@@ -358,6 +369,297 @@ seminarsController.get(
       });
     } catch (err) {
       console.error('❌ [GET ADMIN SEMINARS] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// GET /api/academy/seminars/mentor/my
+// Семинари на текущия ментор
+// ===============================
+seminarsController.get(
+  '/mentor/my',
+  isAuth,
+  async (req, res, next) => {
+    try {
+      const userId = parseInt(req.user.userId);
+
+      // Find the mentor record for this user
+      const mentorRecord = await mentor.findOne({ where: { userId } });
+      if (!mentorRecord) {
+        return res.status(200).json({ success: true, seminars: [] });
+      }
+
+      const now = new Date();
+      const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+
+      const seminars = await seminar.findAll({
+        where: {
+          mentorId: mentorRecord.id,
+          [Op.or]: [
+            { scheduledDate: { [Op.gte]: thirtyDaysAgo } },
+            { status: 'live' }
+          ]
+        },
+        include: [
+          {
+            model: student_seminar,
+            as: 'attendances',
+            attributes: ['id', 'studentId', 'attended', 'participationLevel', 'earnedCredits', 'attendedAt', 'status'],
+            required: false,
+            include: [{
+              model: student,
+              as: 'student',
+              attributes: ['id', 'avatar'],
+              include: [{
+                model: user_account,
+                as: 'user',
+                attributes: ['id', 'email'],
+                include: [{
+                  model: user_details,
+                  as: 'details',
+                  attributes: ['username', 'imageURL'],
+                }]
+              }]
+            }]
+          }
+        ],
+        order: [['scheduledDate', 'ASC']],
+      });
+
+      // Format attendances with names
+      const formatted = seminars.map(s => {
+        const plain = s.get({ plain: true });
+        plain.attendances = (plain.attendances || []).map(a => ({
+          id: a.id,
+          studentId: a.studentId,
+          attended: a.attended,
+          participationLevel: a.participationLevel,
+          earnedCredits: a.earnedCredits,
+          attendedAt: a.attendedAt,
+          status: a.status,
+          name: a.student?.user?.details?.username || a.student?.user?.email?.split('@')[0] || `Студент #${a.studentId}`,
+          avatar: a.student?.user?.details?.imageURL || a.student?.avatar || null,
+          email: a.student?.user?.email || null,
+        }));
+        return plain;
+      });
+
+      res.json({ success: true, seminars: formatted });
+    } catch (err) {
+      console.error('❌ [GET MENTOR SEMINARS] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// POST /api/academy/seminars/checkin/:seminarId
+// Quick check-in via QR code
+// ===============================
+seminarsController.post('/checkin/:seminarId', isAuth, async (req, res, next) => {
+    try {
+        const seminarId = parseInt(req.params.seminarId);
+        const userId = req.user.userId;
+
+        const seminarData = await seminar.findByPk(seminarId);
+        if (!seminarData) {
+            return res.status(404).json({ success: false, message: 'Seminar not found' });
+        }
+
+        // Find student record
+        const studentRecord = await student.findOne({ where: { userId } });
+        if (!studentRecord) {
+            return res.status(403).json({ success: false, message: 'Student record not found' });
+        }
+
+        // Check if already attended
+        let attendance = await student_seminar.findOne({
+            where: { seminarId, studentId: studentRecord.id }
+        });
+
+        if (attendance && attendance.attended) {
+            return res.json({ success: true, message: 'Already checked in', alreadyAttended: true });
+        }
+
+        // Calculate credits
+        let earnedCredits = seminarData.creditsForAttendance || 0;
+
+        if (!attendance) {
+            attendance = await student_seminar.create({
+                seminarId,
+                studentId: studentRecord.id,
+                status: 'approved',
+                attended: true,
+                attendedAt: new Date(),
+                participationLevel: 'passive',
+                earnedCredits,
+            });
+        } else {
+            await attendance.update({
+                attended: true,
+                attendedAt: new Date(),
+                participationLevel: attendance.participationLevel || 'passive',
+                earnedCredits,
+            });
+        }
+
+        // Update count
+        const attendedCount = await student_seminar.count({
+            where: { seminarId, attended: true },
+        });
+        await seminarData.update({ attendedCount });
+
+        res.json({ success: true, message: 'Checked in successfully', earnedCredits });
+    } catch (err) {
+        console.error('❌ [QR CHECKIN] Error:', err);
+        next(err);
+    }
+});
+
+// ===============================
+// ADMIN REVIEW MANAGEMENT
+// ===============================
+
+// GET /api/academy/seminars/reviews/admin
+// Admin: get all reviews (filterable by status)
+seminarsController.get(
+  '/reviews/admin',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { status: filterStatus } = req.query;
+      const whereClause = {};
+      if (filterStatus) whereClause.status = filterStatus;
+
+      const reviews = await seminar_review.findAll({
+        where: whereClause,
+        include: [
+          {
+            model: seminar,
+            as: 'seminar',
+            attributes: ['id', 'title', 'slug']
+          },
+          {
+            model: student,
+            as: 'student',
+            attributes: ['id'],
+            include: [{
+              model: user_account,
+              as: 'user',
+              attributes: ['id', 'email'],
+              include: [{
+                model: user_details,
+                as: 'details',
+                attributes: ['username', 'imageURL']
+              }]
+            }]
+          }
+        ],
+        order: [['createdAt', 'DESC']]
+      });
+
+      const formatted = reviews.map(r => ({
+        id: r.id,
+        seminarId: r.seminarId,
+        seminarTitle: r.seminar?.title || '',
+        seminarSlug: r.seminar?.slug || '',
+        rating: r.rating,
+        comment: r.comment,
+        status: r.status,
+        createdAt: r.createdAt,
+        author: {
+          name: r.student?.user?.details?.username || r.student?.user?.email?.split('@')[0] || 'Unknown',
+          avatar: r.student?.user?.details?.imageURL || null,
+          email: r.student?.user?.email || ''
+        }
+      }));
+
+      res.json({ success: true, reviews: formatted });
+    } catch (err) {
+      console.error('Error fetching admin reviews:', err);
+      next(err);
+    }
+  }
+);
+
+// POST /api/academy/seminars/reviews/:reviewId/approve
+seminarsController.post(
+  '/reviews/:reviewId/approve',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const review = await seminar_review.findByPk(req.params.reviewId);
+      if (!review) return res.status(404).json({ success: false, message: 'Review not found' });
+
+      await review.update({ status: 'approved' });
+
+      // Recalculate avg rating with only approved reviews
+      const approvedReviews = await seminar_review.findAll({
+        where: { seminarId: review.seminarId, status: 'approved' },
+        attributes: ['rating']
+      });
+      const avg = approvedReviews.length > 0
+        ? Math.round((approvedReviews.reduce((sum, r) => sum + r.rating, 0) / approvedReviews.length) * 10) / 10
+        : null;
+      await seminar.update({ rating: avg }, { where: { id: review.seminarId } });
+
+      // Notify user that review was approved
+      try {
+        const studentRecord = await student.findByPk(review.studentId, {
+            include: [{ model: user_account, as: 'user', attributes: ['id'] }]
+        });
+        const seminarData = await seminar.findByPk(review.seminarId, { attributes: ['title', 'slug'] });
+        if (studentRecord?.user?.id) {
+            await user_notification.create({
+                userId: studentRecord.user.id,
+                type: 'seminar_review_approved',
+                title: 'Отзивът ви е одобрен',
+                message: `Вашият отзив за "${seminarData?.title || 'семинар'}" беше одобрен и е публикуван.`,
+                data: { seminarId: review.seminarId, slug: seminarData?.slug }
+            });
+        }
+      } catch (notifErr) {
+        console.error('Failed to create review approval notification:', notifErr);
+      }
+
+      res.json({ success: true, message: 'Review approved' });
+    } catch (err) {
+      console.error('Error approving review:', err);
+      next(err);
+    }
+  }
+);
+
+// DELETE /api/academy/seminars/reviews/:reviewId
+seminarsController.delete(
+  '/reviews/:reviewId',
+  isAuth,
+  rbac.checkPermission('seminar', 'delete'),
+  async (req, res, next) => {
+    try {
+      const review = await seminar_review.findByPk(req.params.reviewId);
+      if (!review) return res.status(404).json({ success: false, message: 'Review not found' });
+
+      const seminarId = review.seminarId;
+      await review.destroy();
+
+      // Recalculate avg rating
+      const approvedReviews = await seminar_review.findAll({
+        where: { seminarId, status: 'approved' },
+        attributes: ['rating']
+      });
+      const avg = approvedReviews.length > 0
+        ? Math.round((approvedReviews.reduce((sum, r) => sum + r.rating, 0) / approvedReviews.length) * 10) / 10
+        : null;
+      await seminar.update({ rating: avg }, { where: { id: seminarId } });
+
+      res.json({ success: true, message: 'Review deleted' });
+    } catch (err) {
+      console.error('Error deleting review:', err);
       next(err);
     }
   }
@@ -1151,8 +1453,10 @@ seminarsController.post(
         }
       }
 
-      await attendance.update({
+       await attendance.update({
         status: 'approved',
+        approvedBy: req.user.userId,
+        approvedAt: new Date(), 
       });
 
       const registeredCount = await student_seminar.count({
@@ -1160,6 +1464,45 @@ seminarsController.post(
       });
 
       await seminarData.update({ registeredCount });
+
+      // Send registration confirmation email
+      try {
+        const studentData = await student.findByPk(attendance.studentId, {
+          include: [{
+            model: user_account,
+            as: 'user',
+            attributes: ['email'],
+            include: [{
+              model: user_details,
+              as: 'details',
+              attributes: ['username'],
+            }],
+          }],
+        });
+
+        if (studentData?.user?.email) {
+          const template = seminarEmailTemplates.registrationConfirmation({
+            userName: studentData.user.details?.username || studentData.user.email.split('@')[0],
+            seminarTitle: seminarData.title,
+            scheduledDate: seminarData.scheduledDate,
+            location: seminarData.location,
+            isOnline: seminarData.isOnline,
+            meetingLink: seminarData.meetingLink,
+            mentorName: null,
+            slug: seminarData.slug,
+          });
+
+          await forwardEmailsViaZoho({
+            userEmail: 'info@pensa.club',
+            subject: template.subject,
+            body: '',
+            toAddresses: studentData.user.email,
+            formattedBody: template.html,
+          });
+        }
+      } catch (emailErr) {
+        console.error('Failed to send seminar registration email:', emailErr);
+      }
 
       res.status(200).json({
         success: true,
@@ -1260,7 +1603,27 @@ seminarsController.post(
           participationLevel: participationLevel || 'passive',
           earnedCredits,
         });
+      } else if (attendance.attended) {
+        // Already attended — recalculate credits based on new participation level
+        // but only if attendedAt is today (same-day adjustments allowed)
+        const attendedDate = new Date(attendance.attendedAt);
+        const today = new Date();
+        const isSameDay = attendedDate.toDateString() === today.toDateString();
+
+        if (isSameDay && participationLevel) {
+          // Recalculate credits with new level
+          await attendance.update({
+            participationLevel,
+            earnedCredits,
+          });
+        } else {
+          // Different day — only update level, no credit changes
+          await attendance.update({
+            participationLevel: participationLevel || attendance.participationLevel || 'passive',
+          });
+        }
       } else {
+        // First time marking as attended — award credits
         await attendance.update({
           attended: true,
           attendedAt: new Date(),
@@ -1274,6 +1637,24 @@ seminarsController.post(
       });
 
       await seminarData.update({ attendedCount });
+
+      // Notify user about attendance
+      try {
+        const studentRecord = await student.findByPk(studentId, {
+          include: [{ model: user_account, as: 'user', attributes: ['id'] }]
+        });
+        if (studentRecord?.user?.id) {
+          await user_notification.create({
+            userId: studentRecord.user.id,
+            type: 'seminar_attended',
+            title: 'Присъствие записано',
+            message: `Присъствието ви на "${seminarData.title}" е записано. ${earnedCredits > 0 ? `Получихте ${earnedCredits} кредити.` : ''}`,
+            data: { seminarId, earnedCredits, slug: seminarData.slug }
+          });
+        }
+      } catch (notifErr) {
+        console.error('Failed to create attendance notification:', notifErr);
+      }
 
       res.status(200).json({
         success: true,
@@ -1344,6 +1725,658 @@ seminarsController.post(
       });
     } catch (err) {
       console.error('❌ [MARK ALL ATTENDED] Error:', err);
+      next(err);
+    }
+  }
+);
+// ===============================
+// POST /api/academy/seminars/:id/attendees/bulk-approve
+// Масово одобрение на регистрации
+// ===============================
+seminarsController.post(
+  '/:id/attendees/bulk-approve',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const seminarId = parseInt(req.params.id);
+      const { attendeeIds } = req.body;
+
+      if (!Array.isArray(attendeeIds) || attendeeIds.length === 0) {
+        return res.status(400).json({
+          success: false,
+          message: 'attendeeIds must be a non-empty array',
+        });
+      }
+
+      const seminarData = await seminar.findByPk(seminarId);
+      if (!seminarData) {
+        return res.status(404).json({ success: false, message: 'Seminar not found' });
+      }
+
+      // Провери за свободни места
+      if (seminarData.maxParticipants) {
+        const approvedCount = await student_seminar.count({
+          where: { seminarId, status: 'approved' },
+        });
+        const spotsLeft = seminarData.maxParticipants - approvedCount;
+        if (attendeeIds.length > spotsLeft) {
+          return res.status(400).json({
+            success: false,
+            message: `Only ${spotsLeft} spots left, cannot approve ${attendeeIds.length} registrations`,
+          });
+        }
+      }
+
+      await student_seminar.update(
+        {
+          status: 'approved',
+          approvedBy: req.user.userId,
+          approvedAt: new Date(),
+        },
+        {
+          where: {
+            id: attendeeIds,
+            seminarId,
+            status: 'pending',
+          },
+        }
+      );
+
+      const registeredCount = await student_seminar.count({
+        where: { seminarId, status: 'approved' },
+      });
+      await seminarData.update({ registeredCount });
+
+      res.status(200).json({
+        success: true,
+        message: `Approved ${attendeeIds.length} registrations`,
+        registeredCount,
+      });
+    } catch (err) {
+      console.error('❌ [BULK APPROVE] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// GET /api/academy/seminars/:id/search-students
+// Търсене на потребители за attendance UI
+// ===============================
+seminarsController.get(
+  '/:id/search-students',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const seminarId = parseInt(req.params.id);
+      const { q } = req.query;
+
+      if (!q || q.trim().length < 2) {
+        return res.status(200).json({ success: true, students: [] });
+      }
+
+      const searchTerm = `%${q.trim()}%`;
+
+      // Търси първо по имейл, после по username
+      const results = await student.findAll({
+        attributes: ['id', 'avatar', 'userId'],
+        include: [
+          {
+            model: user_account,
+            as: 'user',
+            attributes: ['id', 'email'],
+            where: {
+              [Op.or]: [
+                { email: { [Op.iLike]: searchTerm } },
+              ],
+            },
+            required: false,
+            include: [
+              {
+                model: user_details,
+                as: 'details',
+                attributes: ['username', 'imageURL'],
+              },
+            ],
+          },
+        ],
+        where: {
+          [Op.or]: [
+            { '$user.email$': { [Op.iLike]: searchTerm } },
+            { '$user.details.username$': { [Op.iLike]: searchTerm } },
+          ],
+        },
+        limit: 15,
+        subQuery: false,
+      });
+
+      // Провери кои вече са записани/присъствали
+      const studentIds = results.map(r => r.id);
+      const existingAttendances = await student_seminar.findAll({
+        where: { seminarId, studentId: studentIds },
+        attributes: ['studentId', 'status', 'attended'],
+      });
+      const attendanceMap = {};
+      existingAttendances.forEach(a => {
+        attendanceMap[a.studentId] = { status: a.status, attended: a.attended };
+      });
+
+      const students = results.map(r => {
+        const data = r.get({ plain: true });
+        const details = data.user?.details || {};
+        return {
+          studentId: data.id,
+          userId: data.userId,
+          name: details.username || data.user?.email?.split('@')[0] || 'Unknown',
+          email: data.user?.email,
+          avatar: data.avatar || details.imageURL,
+          seminarStatus: attendanceMap[data.id]?.status || null,
+          alreadyAttended: attendanceMap[data.id]?.attended || false,
+        };
+      });
+
+      res.status(200).json({ success: true, students });
+    } catch (err) {
+      console.error('❌ [SEARCH STUDENTS] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// POST /api/academy/seminars/:id/attendance/bulk-mixed
+// Записване на присъствие: платформени потребители + гости
+// ===============================
+seminarsController.post(
+  '/:id/attendance/bulk-mixed',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const seminarId = parseInt(req.params.id);
+      const userId = req.user.userId;
+      const { platformAttendees, guests } = req.body;
+
+      const seminarData = await seminar.findByPk(seminarId);
+      if (!seminarData) {
+        return res.status(404).json({ success: false, message: 'Seminar not found' });
+      }
+
+      let markedCount = 0;
+      let guestCount = 0;
+
+      // Платформени потребители
+     // Платформени потребители
+      if (Array.isArray(platformAttendees) && platformAttendees.length > 0) {
+        for (const att of platformAttendees) {
+          const { studentId, participationLevel } = att;
+
+          let attendance = await student_seminar.findOne({
+            where: { seminarId, studentId },
+          });
+
+          // Ако вече е присъствал — записваме пак за отчетност но БЕЗ нови кредити
+          if (attendance && attendance.attended) {
+            // Обновяваме само participationLevel ако е подаден, кредити НЕ се дават повторно
+            if (participationLevel && participationLevel !== attendance.participationLevel) {
+              await attendance.update({
+                participationLevel,
+              });
+            }
+            markedCount++;
+            continue;
+          }
+
+          // Първо присъствие — изчисли кредити
+          let earnedCredits = seminarData.creditsForAttendance || 0;
+          if (participationLevel === 'active') {
+            earnedCredits += seminarData.creditsForParticipation || 0;
+          } else if (participationLevel === 'moderate') {
+            earnedCredits += Math.floor((seminarData.creditsForParticipation || 0) / 2);
+          }
+
+          if (!attendance) {
+            await student_seminar.create({
+              seminarId,
+              studentId,
+              status: 'approved',
+              attended: true,
+              attendedAt: new Date(),
+              participationLevel: participationLevel || 'passive',
+              earnedCredits,
+              approvedBy: userId,
+              approvedAt: new Date(),
+            });
+          } else {
+            // Записан е (registered) но не е присъствал — маркираме
+            await attendance.update({
+              attended: true,
+              attendedAt: new Date(),
+              participationLevel: participationLevel || 'passive',
+              earnedCredits,
+            });
+          }
+          markedCount++;
+        }
+      }
+
+      // Гости без профил
+      if (Array.isArray(guests) && guests.length > 0) {
+        const { seminar_guest_attendance } = require('../sequelize/models/index');
+
+        for (const guest of guests) {
+          // Проверка дали гост с това име вече е бил записан
+          const existingGuest = await seminar_guest_attendance.findOne({
+            where: {
+              seminarId,
+              guestFirstName: guest.firstName,
+              guestLastName: guest.lastName,
+            },
+          });
+
+          if (existingGuest) {
+            // Вече е присъствал — записваме за отчетност но без кредити
+            // Обновяваме само participationLevel ако е подаден
+            if (guest.participationLevel && guest.participationLevel !== existingGuest.participationLevel) {
+              await existingGuest.update({
+                participationLevel: guest.participationLevel,
+              });
+            }
+            guestCount++;
+            continue;
+          }
+
+          await seminar_guest_attendance.create({
+            seminarId,
+            guestFirstName: guest.firstName,
+            guestLastName: guest.lastName,
+            guestPhone: guest.phone || null,
+            guestEmail: guest.email || null,
+            participationLevel: guest.participationLevel || 'passive',
+            markedBy: userId,
+          });
+
+          // Send email to guest if email provided
+          if (guest.email) {
+            try {
+              const template = seminarEmailTemplates.guestNotification({
+                guestName: `${guest.firstName} ${guest.lastName}`,
+                seminarTitle: seminarData.title,
+                scheduledDate: seminarData.scheduledDate,
+                location: seminarData.location,
+                isOnline: seminarData.isOnline,
+                mentorName: null,
+                slug: seminarData.slug,
+              });
+
+              await forwardEmailsViaZoho({
+                userEmail: 'info@pensa.club',
+                subject: template.subject,
+                body: '',
+                toAddresses: guest.email,
+                formattedBody: template.html,
+              });
+            } catch (emailErr) {
+              console.error('Failed to send guest email:', emailErr);
+            }
+          }
+
+          guestCount++;
+        }
+      }
+      // Обнови статистиките
+      const attendedCount = await student_seminar.count({
+        where: { seminarId, attended: true },
+      });
+      const { seminar_guest_attendance: sgaModel } = require('../sequelize/models/index');
+      const guestTotal = await sgaModel.count({ where: { seminarId } });
+
+      await seminarData.update({ attendedCount: attendedCount + guestTotal });
+
+      // Admin notification
+      try {
+        await admin_notification.create({
+          type: 'seminar_attendance_recorded',
+          title: 'Присъствие записано',
+          message: `Записано присъствие за семинар "${seminarData.title}": ${markedCount} от платформата, ${guestCount} гости`,
+          data: { seminarId, platformCount: markedCount, guestCount }
+        });
+      } catch (notifErr) {
+        console.error('Failed to create admin notification:', notifErr);
+      }
+
+      res.status(200).json({
+        success: true,
+        message: `Marked ${markedCount} platform users and ${guestCount} guests`,
+        stats: {
+          platformAttended: markedCount,
+          guestsAdded: guestCount,
+          totalAttended: attendedCount + guestTotal,
+        },
+      });
+    } catch (err) {
+      console.error('❌ [BULK MIXED ATTENDANCE] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// GET /api/academy/seminars/:id/attendance/full
+// Пълен списък: записани + присъствали (платформени + гости)
+// ===============================
+seminarsController.get(
+  '/:id/attendance/full',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const seminarId = parseInt(req.params.id);
+
+      // ALL platform registrations (both attended and not)
+      const platformAttendees = await student_seminar.findAll({
+        where: { seminarId },
+        include: [{
+          model: student,
+          as: 'student',
+          attributes: ['id', 'avatar', 'userId'],
+          include: [{
+            model: user_account,
+            as: 'user',
+            attributes: ['email'],
+            include: [{
+              model: user_details,
+              as: 'details',
+              attributes: ['username', 'imageURL'], // ПРОМЕНЕНО — махнати firstName, lastName, phone
+            }],
+          }],
+        }],
+        order: [['attendedAt', 'DESC']],
+      });
+
+      const formattedPlatform = platformAttendees.map(a => {
+        const data = a.get({ plain: true });
+        const details = data.student?.user?.details || {};
+        return {
+          type: 'platform',
+          id: data.id,
+          studentId: data.studentId,
+          name: details.username || data.student?.user?.email?.split('@')[0] || 'Unknown',
+          email: data.student?.user?.email,
+          avatar: data.student?.avatar || details.imageURL,
+          participationLevel: data.participationLevel,
+          earnedCredits: data.earnedCredits,
+          attendedAt: data.attendedAt,
+          attended: data.attended,
+          status: data.status,
+        };
+      });
+
+      // Гости
+      const { seminar_guest_attendance } = require('../sequelize/models/index');
+      const guestAttendees = await seminar_guest_attendance.findAll({
+        where: { seminarId },
+        order: [['createdAt', 'DESC']],
+      });
+
+      const formattedGuests = guestAttendees.map(g => {
+        const data = g.get({ plain: true });
+        return {
+          type: 'guest',
+          id: data.id,
+          name: `${data.guestFirstName} ${data.guestLastName}`,
+          email: data.guestEmail || null, // НОВО
+          phone: data.guestPhone,
+          participationLevel: data.participationLevel,
+          attendedAt: data.createdAt,
+        };
+      });
+
+      // Split: "attended today" stay in participants list, "attended before today" go to attended list
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const isAttendedBeforeToday = (a) => {
+        if (!a.attended || !a.attendedAt) return false;
+        const attendedDate = new Date(a.attendedAt);
+        attendedDate.setHours(0, 0, 0, 0);
+        return attendedDate < today;
+      };
+
+      // Participants = all registered + attended today (still active for today's session)
+      const registered = formattedPlatform.filter(a => !isAttendedBeforeToday(a));
+      // Attended = attended before today (previous days)
+      const attended = [...formattedPlatform.filter(a => isAttendedBeforeToday(a)), ...formattedGuests.filter(g => {
+        const gDate = new Date(g.attendedAt);
+        gDate.setHours(0, 0, 0, 0);
+        return gDate < today;
+      })];
+
+      res.status(200).json({
+        success: true,
+        attendees: [...formattedPlatform, ...formattedGuests], // backwards compat
+        registered,
+        attended,
+        stats: {
+          registered: registered.length,
+          attended: attended.length,
+          guests: formattedGuests.length,
+          total: formattedPlatform.length + formattedGuests.length,
+        },
+      });
+    } catch (err) {
+      console.error('❌ [FULL ATTENDANCE] Error:', err);
+      next(err);
+    }
+  }
+);
+// ===============================
+// REVIEWS
+// ===============================
+
+// GET /api/academy/seminars/:id/reviews
+seminarsController.get('/:id/reviews', async (req, res, next) => {
+    try {
+        const reviews = await seminar_review.findAll({
+            where: { seminarId: req.params.id, status: 'approved' },
+            include: [{
+                model: student,
+                as: 'student',
+                attributes: ['id'],
+                include: [{
+                    model: user_account,
+                    as: 'user',
+                    attributes: ['id'],
+                    include: [{
+                        model: user_details,
+                        as: 'details',
+                        attributes: ['username', 'imageURL']
+                    }]
+                }]
+            }],
+            order: [['createdAt', 'DESC']]
+        });
+
+        const formatted = reviews.map(r => ({
+            id: r.id,
+            rating: r.rating,
+            comment: r.comment,
+            createdAt: r.createdAt,
+            author: {
+                name: r.student?.user?.details?.username || 'Анонимен',
+                avatar: r.student?.user?.details?.imageURL || null
+            }
+        }));
+
+        const avgRating = reviews.length > 0
+            ? Math.round((reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length) * 10) / 10
+            : null;
+
+        res.json({ success: true, reviews: formatted, avgRating, totalReviews: reviews.length });
+    } catch (err) {
+        console.error('Error fetching reviews:', err);
+        next(err);
+    }
+});
+
+// POST /api/academy/seminars/:id/reviews
+seminarsController.post('/:id/reviews', isAuth, async (req, res, next) => {
+    try {
+        const seminarId = parseInt(req.params.id);
+        const { rating, comment } = req.body;
+
+        if (!rating || rating < 1 || rating > 5) {
+            return res.status(400).json({ success: false, message: 'Rating must be between 1 and 5' });
+        }
+
+        const studentRecord = await student.findOne({ where: { userId: req.user.userId } });
+        if (!studentRecord) {
+            return res.status(403).json({ success: false, message: 'Student record not found' });
+        }
+
+        // Check if already reviewed
+        const existing = await seminar_review.findOne({
+            where: { seminarId, studentId: studentRecord.id }
+        });
+
+        if (existing) {
+            await existing.update({ rating, comment: comment || null, status: 'pending' });
+            return res.json({ success: true, message: 'Review updated (pending approval)', review: existing });
+        }
+
+        const review = await seminar_review.create({
+            seminarId,
+            studentId: studentRecord.id,
+            rating,
+            comment: comment || null,
+            status: 'pending'
+        });
+
+        // Notify admin about new review
+        try {
+            const seminarData = await seminar.findByPk(seminarId, { attributes: ['title', 'slug'] });
+            await admin_notification.create({
+                type: 'seminar_new_review',
+                title: 'Нов отзив за семинар',
+                message: `Нов отзив (${rating}/5) за "${seminarData?.title || 'семинар'}" чака одобрение.`,
+                data: { seminarId, reviewId: review.id, rating, url: '/academy/admin/seminar-reviews' }
+            });
+        } catch (notifErr) {
+            console.error('Failed to create admin notification for review:', notifErr);
+        }
+
+        res.status(201).json({ success: true, message: 'Review created (pending approval)', review });
+    } catch (err) {
+        console.error('Error creating review:', err);
+        next(err);
+    }
+});
+
+// ===============================
+// VIDEO MANAGEMENT
+// ===============================
+
+// GET /api/academy/seminars/:id/videos
+seminarsController.get(
+  '/:id/videos',
+  async (req, res, next) => {
+    try {
+      const videos = await seminar_video.findAll({
+        where: { seminarId: req.params.id },
+        order: [['sortOrder', 'ASC'], ['createdAt', 'ASC']],
+      });
+      res.json({ success: true, videos });
+    } catch (err) {
+      console.error('❌ [GET SEMINAR VIDEOS] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// POST /api/academy/seminars/:id/videos
+seminarsController.post(
+  '/:id/videos',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const sem = await seminar.findByPk(req.params.id);
+      if (!sem) {
+        return res.status(404).json({ success: false, message: 'Seminar not found' });
+      }
+
+      const { title, videoUrl, videoProvider, thumbnailUrl, durationMinutes } = req.body;
+      if (!videoUrl) {
+        return res.status(400).json({ success: false, message: 'videoUrl is required' });
+      }
+
+      const maxOrder = await seminar_video.max('sortOrder', { where: { seminarId: sem.id } });
+
+      const video = await seminar_video.create({
+        seminarId: sem.id,
+        title: title || null,
+        videoUrl,
+        videoProvider: videoProvider || 'custom',
+        thumbnailUrl: thumbnailUrl || null,
+        durationMinutes: durationMinutes || null,
+        sortOrder: (maxOrder || 0) + 1,
+      });
+
+      res.status(201).json({ success: true, video });
+    } catch (err) {
+      console.error('❌ [ADD SEMINAR VIDEO] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// DELETE /api/academy/seminars/:id/videos/:videoId
+seminarsController.delete(
+  '/:id/videos/:videoId',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const video = await seminar_video.findOne({
+        where: { id: req.params.videoId, seminarId: req.params.id },
+      });
+      if (!video) {
+        return res.status(404).json({ success: false, message: 'Video not found' });
+      }
+
+      await video.destroy();
+      res.json({ success: true, message: 'Video deleted' });
+    } catch (err) {
+      console.error('❌ [DELETE SEMINAR VIDEO] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// PUT /api/academy/seminars/:id/videos/reorder
+seminarsController.put(
+  '/:id/videos/reorder',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { videoIds } = req.body;
+      if (!Array.isArray(videoIds)) {
+        return res.status(400).json({ success: false, message: 'videoIds must be an array' });
+      }
+
+      for (let i = 0; i < videoIds.length; i++) {
+        await seminar_video.update(
+          { sortOrder: i },
+          { where: { id: videoIds[i], seminarId: req.params.id } }
+        );
+      }
+
+      res.json({ success: true, message: 'Videos reordered' });
+    } catch (err) {
+      console.error('❌ [REORDER SEMINAR VIDEOS] Error:', err);
       next(err);
     }
   }

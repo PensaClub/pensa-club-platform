@@ -189,7 +189,7 @@ const seminarCreateSchema = z.object({
   durationMinutes: z.coerce.number().int().positive().default(90),
   timezone: z.string().default('Europe/Sofia'),
   maxParticipants: z.coerce.number().int().positive().nullable().optional(),
-  minParticipants: z.coerce.number().int().positive().optional(),
+  minParticipants: z.coerce.number().int().min(0).nullable().optional(),
   requiresRegistration: z.boolean().default(true),
   requiresApproval: z.boolean().default(false),
   isPublic: z.boolean().default(true),
@@ -213,7 +213,7 @@ const seminarQuerySchema = paginationSchema.extend({
   search: z.string().optional(),
   category: z.string().optional(),
   type: z.string().optional(),
-  status: z.enum(['draft', 'published', 'scheduled', 'live', 'completed', 'cancelled', 'all']).optional(),
+  status: z.enum(['draft', 'published', 'scheduled', 'live', 'completed', 'cancelled', 'upcoming', 'all']).optional(),
   sortBy: z.enum(['newest', 'oldest', 'title', 'rating', 'popular', 'upcoming']).default('newest'),
 });
 

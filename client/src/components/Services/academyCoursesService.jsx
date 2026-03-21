@@ -204,7 +204,7 @@ export const academyCoursesServiceFactory = () => {
     publishLecture: async (lectureId) => {
       return requester.post(`${apiUrl}/academy/lectures/${lectureId}/publish`);
     },
-    getLectureById: async (id) => { 
+    getLectureById: async (id) => {
       return requester.get(`${apiUrl}/academy/lectures/id/${id}`);
     },
     unpublishLecture: async (lectureId) => {
@@ -269,9 +269,17 @@ export const academyCoursesServiceFactory = () => {
       return requester.get(`${apiUrl}/academy/seminars/meta/categories`);
     },
 
+    checkinSeminar: async (seminarId) => {
+      return requester.post(`${apiUrl}/academy/seminars/checkin/${seminarId}`);
+    },
+
     // =========================================================
     //                    SEMINARS - ADMIN
     // =========================================================
+
+    getMentorSeminars: async () => {
+      return requester.get(`${apiUrl}/academy/seminars/mentor/my`);
+    },
 
     getAdminSeminars: async (params = {}) => {
       const queryString = toQueryString(params);
@@ -323,17 +331,29 @@ export const academyCoursesServiceFactory = () => {
     // =========================================================
 
     registerForSeminar: async (seminarId) => {
-      return requester.post(`${apiUrl}/academy/seminars/${seminarId}/register`);
+      return requester.post(`${apiUrl}/academy/enrollment/seminars/${seminarId}/register`);
     },
 
     unregisterFromSeminar: async (seminarId) => {
-      return requester.del(`${apiUrl}/academy/seminars/${seminarId}/register`);
+      return requester.post(`${apiUrl}/academy/enrollment/seminars/${seminarId}/unregister`);
     },
-
+checkSeminarRegistration: async (seminarId) => { // НОВО
+      return requester.get(`${apiUrl}/academy/enrollment/seminars/${seminarId}/check`);
+    },
     getSeminarAttendees: async (seminarId) => {
       return requester.get(`${apiUrl}/academy/seminars/${seminarId}/attendees`);
     },
+    searchSeminarStudents: async (seminarId, query) => {
+      return requester.get(`${apiUrl}/academy/seminars/${seminarId}/search-students?q=${encodeURIComponent(query)}`);
+    },
 
+    bulkMixedAttendance: async (seminarId, data) => {
+      return requester.post(`${apiUrl}/academy/seminars/${seminarId}/attendance/bulk-mixed`, data);
+    },
+
+    getFullAttendance: async (seminarId) => {
+      return requester.get(`${apiUrl}/academy/seminars/${seminarId}/attendance/full`);
+    },
     approveSeminarAttendee: async (seminarId, attendeeId) => {
       return requester.post(`${apiUrl}/academy/seminars/${seminarId}/attendees/${attendeeId}/approve`);
     },
@@ -348,6 +368,49 @@ export const academyCoursesServiceFactory = () => {
 
     markAllSeminarAttended: async (seminarId, studentIds, participationLevel = 'passive') => {
       return requester.post(`${apiUrl}/academy/seminars/${seminarId}/attendees/mark-all`, { studentIds, participationLevel });
+    },
+
+    // =========================================================
+    //                    SEMINAR REVIEWS
+    // =========================================================
+
+    getSeminarReviews: async (seminarId) => {
+      return requester.get(`${apiUrl}/academy/seminars/${seminarId}/reviews`);
+    },
+
+    addSeminarReview: async (seminarId, reviewData) => {
+      return requester.post(`${apiUrl}/academy/seminars/${seminarId}/reviews`, reviewData);
+    },
+
+    getAdminSeminarReviews: async (status) => {
+      const params = status ? `?status=${status}` : '';
+      return requester.get(`${apiUrl}/academy/seminars/reviews/admin${params}`);
+    },
+    approveSeminarReview: async (reviewId) => {
+      return requester.post(`${apiUrl}/academy/seminars/reviews/${reviewId}/approve`);
+    },
+    deleteSeminarReview: async (reviewId) => {
+      return requester.del(`${apiUrl}/academy/seminars/reviews/${reviewId}`);
+    },
+
+    // =========================================================
+    //                    SEMINAR VIDEOS
+    // =========================================================
+
+    getSeminarVideos: async (seminarId) => {
+      return requester.get(`${apiUrl}/academy/seminars/${seminarId}/videos`);
+    },
+
+    addSeminarVideo: async (seminarId, videoData) => {
+      return requester.post(`${apiUrl}/academy/seminars/${seminarId}/videos`, videoData);
+    },
+
+    deleteSeminarVideo: async (seminarId, videoId) => {
+      return requester.del(`${apiUrl}/academy/seminars/${seminarId}/videos/${videoId}`);
+    },
+
+    reorderSeminarVideos: async (seminarId, videoIds) => {
+      return requester.put(`${apiUrl}/academy/seminars/${seminarId}/videos/reorder`, { videoIds });
     },
 
     // =========================================================
@@ -521,6 +584,24 @@ export const academyCoursesServiceFactory = () => {
     submitLectureTest: async (lectureTestId) => {
       return requester.post(`${apiUrl}/academy/tests/lecture/${lectureTestId}/submit`);
     },
+
+    // ============ SEMINAR TESTS ============
+    getSeminarTestStatus: async (seminarId) => {
+      return requester.get(`${apiUrl}/academy/tests/seminar/${seminarId}/status`);
+    },
+
+    startSeminarTest: async (seminarId) => {
+      return requester.post(`${apiUrl}/academy/tests/seminar/${seminarId}/start`);
+    },
+
+    submitSeminarAnswer: async (testId, answerData) => {
+      return requester.post(`${apiUrl}/academy/tests/seminar/${testId}/answer`, answerData);
+    },
+
+    submitSeminarTest: async (testId) => {
+      return requester.post(`${apiUrl}/academy/tests/seminar/${testId}/submit`);
+    },
+
     // =========================================================
     //                    CERTIFICATES
     // =========================================================

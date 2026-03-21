@@ -1,0 +1,336 @@
+/* src/components/AdminAcademySeminarsList/SeminarCard/seminarCard.css */
+/* Prefix: asmc- */
+
+/* =========================================================
+   CARD
+   ========================================================= */
+
+.asmc-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.asmc-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(0, 210, 255, 0.15);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.asmc-card-draft {
+  opacity: 0.75;
+}
+
+.asmc-card-draft:hover {
+  opacity: 1;
+}
+
+/* =========================================================
+   THUMBNAIL
+   ========================================================= */
+
+.asmc-card-thumb {
+  position: relative;
+  height: 160px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.asmc-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.asmc-card-img-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(0, 210, 255, 0.05) 0%, rgba(99, 102, 241, 0.05) 100%);
+  color: rgba(255, 255, 255, 0.2);
+}
+
+/* =========================================================
+   BADGES
+   ========================================================= */
+
+.asmc-badge {
+  position: absolute;
+  top: 10px;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.asmc-badge:first-of-type {
+  left: 10px;
+}
+
+.asmc-badge-type {
+  right: 10px;
+  left: auto;
+  background: rgba(0, 0, 0, 0.5);
+  color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(4px);
+  font-size: 0.65rem;
+}
+
+.asmc-badge-draft { background: rgba(100, 116, 139, 0.85); color: #fff; }
+.asmc-badge-published { background: rgba(16, 185, 129, 0.85); color: #fff; }
+.asmc-badge-scheduled { background: rgba(59, 130, 246, 0.85); color: #fff; }
+.asmc-badge-live { background: rgba(239, 68, 68, 0.9); color: #fff; }
+.asmc-badge-completed { background: rgba(107, 114, 128, 0.85); color: #fff; }
+.asmc-badge-cancelled { background: rgba(239, 68, 68, 0.7); color: #fff; text-decoration: line-through; }
+
+.asmc-live-dot {
+  width: 6px;
+  height: 6px;
+  background: #fff;
+  border-radius: 50%;
+  animation: asmc-blink 1.2s ease-in-out infinite;
+}
+
+@keyframes asmc-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* =========================================================
+   BODY
+   ========================================================= */
+
+.asmc-card-body {
+  padding: 16px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.asmc-card-category {
+  font-size: 0.7rem;
+  color: #00d2ff;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.asmc-card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 0 6px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.asmc-card-desc {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0 0 10px;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* =========================================================
+   FACILITATOR
+   ========================================================= */
+
+.asmc-card-facilitator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.asmc-facilitator-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.asmc-facilitator-avatar-placeholder {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(0, 210, 255, 0.15);
+  color: #00d2ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.asmc-facilitator-name {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* =========================================================
+   STATS
+   ========================================================= */
+
+.asmc-card-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.asmc-card-stat {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.asmc-card-stat span {
+  font-size: 0.75rem;
+}
+
+.asmc-card-stat svg {
+  color: rgba(255, 255, 255, 0.3);
+  flex-shrink: 0;
+}
+
+.asmc-card-stat-location {
+  flex-basis: 100%;
+}
+
+.asmc-card-stat-location span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px;
+}
+
+/* =========================================================
+   APPROVAL BADGE
+   ========================================================= */
+
+.asmc-card-approval {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #f59e0b;
+  margin-top: 8px;
+  padding: 4px 8px;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: 6px;
+  width: fit-content;
+}
+
+.asmc-card-approval span {
+  font-size: 0.72rem;
+}
+
+.asmc-card-approval svg {
+  flex-shrink: 0;
+}
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.asmc-card-actions {
+  display: flex;
+  gap: 2px;
+  padding: 0 12px 12px;
+}
+
+.asmc-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  border: none;
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.asmc-action-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+}
+
+.asmc-action-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.asmc-action-btn svg {
+  flex-shrink: 0;
+}
+
+.asmc-action-edit:hover:not(:disabled) { color: #00d2ff; background: rgba(0, 210, 255, 0.1); }
+.asmc-action-publish:hover:not(:disabled) { color: #10b981; background: rgba(16, 185, 129, 0.1); }
+.asmc-action-unpublish:hover:not(:disabled) { color: #f59e0b; background: rgba(245, 158, 11, 0.1); }
+.asmc-action-cancel:hover:not(:disabled) { color: #f59e0b; background: rgba(245, 158, 11, 0.1); }
+.asmc-action-delete:hover:not(:disabled) { color: #ef4444; background: rgba(239, 68, 68, 0.1); }
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 767px) {
+  .asmc-card-thumb { height: 140px; }
+  .asmc-card-body { padding: 12px; }
+  .asmc-card-title { font-size: 0.95rem; }
+}
+
+@media (max-width: 424px) {
+  .asmc-card-thumb { height: 120px; }
+  .asmc-card-body { padding: 10px; }
+  .asmc-card-actions { padding: 0 10px 10px; }
+}
+
+/* =========================================================
+   LIGHT THEME
+   ========================================================= */
+
+[data-theme="light"] .asmc-card { background: #ffffff; border-color: #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+[data-theme="light"] .asmc-card:hover { border-color: rgba(13, 148, 136, 0.3); box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
+[data-theme="light"] .asmc-card-img-placeholder { background: linear-gradient(135deg, rgba(13, 148, 136, 0.05), rgba(99, 102, 241, 0.05)); color: #94a3b8; }
+[data-theme="light"] .asmc-card-category { color: #0d9488; }
+[data-theme="light"] .asmc-card-title { color: #1e293b; }
+[data-theme="light"] .asmc-card-desc { color: #64748b; }
+[data-theme="light"] .asmc-facilitator-avatar-placeholder { background: rgba(13, 148, 136, 0.1); color: #0d9488; }
+[data-theme="light"] .asmc-facilitator-name { color: #475569; }
+[data-theme="light"] .asmc-card-stats { border-top-color: #e2e8f0; }
+[data-theme="light"] .asmc-card-stat { color: #64748b; }
+[data-theme="light"] .asmc-card-stat svg { color: #94a3b8; }
+[data-theme="light"] .asmc-card-approval { color: #d97706; background: rgba(245, 158, 11, 0.06); border-color: rgba(245, 158, 11, 0.15); }
+[data-theme="light"] .asmc-action-btn { background: #f1f5f9; color: #64748b; }
+[data-theme="light"] .asmc-action-btn:hover:not(:disabled) { background: #e2e8f0; color: #1e293b; }
+[data-theme="light"] .asmc-action-edit:hover:not(:disabled) { color: #0d9488; background: rgba(13, 148, 136, 0.08); }
+[data-theme="light"] .asmc-action-publish:hover:not(:disabled) { color: #059669; background: rgba(5, 150, 105, 0.08); }
+[data-theme="light"] .asmc-action-unpublish:hover:not(:disabled) { color: #d97706; background: rgba(217, 119, 6, 0.08); }
+[data-theme="light"] .asmc-action-cancel:hover:not(:disabled) { color: #d97706; background: rgba(217, 119, 6, 0.08); }
+[data-theme="light"] .asmc-action-delete:hover:not(:disabled) { color: #dc2626; background: rgba(220, 38, 38, 0.08); }

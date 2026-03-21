@@ -381,6 +381,7 @@
   "profile": {
     "mentorApplications": "Studentenbewerbungen",
     "mentorProfile": "Profil",
+    "seminarAttendance": "Seminar-Anwesenheit",
     "myReviews": "Meine Bewertungen",
     "clubMembership": "Clubmitgliedschaft",
     "clubs": {
@@ -3270,7 +3271,8 @@
     "articles": "Artikel werden geladen...",
     "initiatives": "Initiativen werden geladen...",
     "projects": "Projekte werden geladen...",
-    "page": "Wird geladen..."
+    "page": "Wird geladen...",
+    "academy": "Akademie wird geladen..."
   },
   "avatar": {
     "title": "Erstelle deinen Avatar",

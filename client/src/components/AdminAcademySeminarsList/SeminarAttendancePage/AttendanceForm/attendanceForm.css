@@ -1,0 +1,458 @@
+/* src/components/AdminAcademySeminarsList/SeminarAttendancePage/AttendanceForm/attendanceForm.css */
+/* Prefix: satf- */
+
+/* =========================================================
+   WRAPPER
+   ========================================================= */
+
+.satf-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+.satf-wrapper *,
+.satf-wrapper *::before,
+.satf-wrapper *::after {
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   INFO BAR
+   ========================================================= */
+
+.satf-info-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: rgba(0, 210, 255, 0.04);
+    border: 1px solid rgba(0, 210, 255, 0.12);
+    border-radius: 12px;
+}
+
+.satf-info-title { font-size: 1rem; font-weight: 600; color: #fff; margin: 0; }
+.satf-info-meta { font-size: 0.78rem; color: rgba(255, 255, 255, 0.4); }
+.satf-info-right { flex-shrink: 0; }
+.satf-info-stat { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; color: #00d2ff; }
+.satf-info-stat svg { flex-shrink: 0; }
+.satf-info-stat span{font-size: 0.85rem;}
+/* =========================================================
+   COLUMNS
+   ========================================================= */
+
+.satf-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; width: 100%; }
+
+/* =========================================================
+   SECTION
+   ========================================================= */
+
+.satf-section {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    padding: 18px;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.satf-section:last-child { margin-bottom: 0; }
+
+.satf-section-title { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; font-weight: 600; color: #fff; margin: 0 0 14px; }
+.satf-section-title svg { color: #00d2ff; flex-shrink: 0; }
+
+.satf-count-badge {
+    background: rgba(0, 210, 255, 0.15);
+    color: #00d2ff;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-left: 4px;
+}
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+.satf-search-box {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px; padding: 0 12px;
+    margin-bottom: 10px; transition: border-color 0.2s;
+}
+
+.satf-search-box:focus-within { border-color: rgba(0, 210, 255, 0.3); }
+.satf-search-box svg { color: rgba(255, 255, 255, 0.35); flex-shrink: 0; }
+
+.satf-search-input {
+    flex: 1; background: none; border: none; outline: none;
+    color: #fff; font-size: 0.85rem; padding: 10px 0; font-family: inherit;
+}
+
+.satf-search-input::placeholder { color: rgba(255, 255, 255, 0.3); }
+
+.satf-spin { animation: satf-spin 1s linear infinite; }
+@keyframes satf-spin { to { transform: rotate(360deg); } }
+
+/* =========================================================
+   SEARCH RESULTS
+   ========================================================= */
+
+.satf-results { display: flex; flex-direction: column; gap: 4px; max-height: 240px; overflow-y: auto; }
+
+.satf-result-row { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 8px; transition: background 0.15s; }
+.satf-result-row:hover { background: rgba(255, 255, 255, 0.04); }
+.satf-result-saved { opacity: 0.5; }
+.satf-result-avatar { flex-shrink: 0; }
+
+.satf-avatar-img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
+.satf-avatar-placeholder { width: 32px; height: 32px; border-radius: 50%; background: rgba(0, 210, 255, 0.12); color: #00d2ff; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 600; }
+.satf-avatar-guest { background: rgba(245, 158, 11, 0.12); color: #f59e0b; }
+
+.satf-result-info { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+.satf-result-name { font-size: 0.85rem; font-weight: 500; color: #fff; }
+.satf-result-email { font-size: 0.72rem; color: rgba(255, 255, 255, 0.4); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.satf-btn-add { display: flex; align-items: center; gap: 4px; padding: 5px 12px; border-radius: 8px; border: none; background: rgba(0, 210, 255, 0.1); color: #00d2ff; font-size: 0.78rem; font-weight: 500; cursor: pointer; transition: all 0.2s; flex-shrink: 0; }
+.satf-btn-add svg { flex-shrink: 0; }
+.satf-btn-add:hover:not(:disabled) { background: rgba(0, 210, 255, 0.18); }
+.satf-btn-add:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.satf-result-badge-saved { display: flex; align-items: center; gap: 4px; font-size: 0.72rem; font-weight: 500; color: #10b981; flex-shrink: 0; }
+.satf-result-badge-saved svg { flex-shrink: 0; }
+
+.satf-no-results { font-size: 0.82rem; color: rgba(255, 255, 255, 0.35); text-align: center; padding: 12px 0; margin: 0; }
+
+/* =========================================================
+   GUEST FORM
+   ========================================================= */
+
+.satf-guest-form { display: flex; flex-direction: column; gap: 8px; }
+.satf-guest-row { display: flex; gap: 8px; }
+
+.satf-guest-input {
+    flex: 1; min-width: 0; width: 100%;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px;
+    padding: 9px 12px; font-size: 0.85rem; color: #fff;
+    outline: none; font-family: inherit; transition: border-color 0.2s;
+}
+
+.satf-guest-input:focus { border-color: rgba(0, 210, 255, 0.3); }
+.satf-guest-input::placeholder { color: rgba(255, 255, 255, 0.25); }
+
+.satf-btn-add-guest {
+    display: flex; align-items: center; gap: 6px;
+    padding: 9px 16px; border-radius: 8px;
+    border: 1px solid rgba(245, 158, 11, 0.25);
+    background: rgba(245, 158, 11, 0.08); color: #f59e0b;
+    font-size: 0.82rem; font-weight: 500; cursor: pointer;
+    transition: all 0.2s; flex-shrink: 0; white-space: nowrap;
+}
+
+.satf-btn-add-guest svg { flex-shrink: 0; }
+.satf-btn-add-guest:hover:not(:disabled) { background: rgba(245, 158, 11, 0.15); }
+.satf-btn-add-guest:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* =========================================================
+   PARTICIPANTS LIST
+   ========================================================= */
+
+.satf-list-empty {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 8px; padding: 32px 0; color: rgba(255, 255, 255, 0.3); text-align: center;
+}
+
+.satf-list-empty p { font-size: 0.82rem; margin: 0; }
+
+.satf-participants-list { display: flex; flex-direction: column; gap: 6px; max-height: 500px; overflow-y: auto; }
+
+.satf-participant-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: 10px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    transition: background 0.15s;
+}
+
+.satf-participant-row:hover { background: rgba(255, 255, 255, 0.04); }
+
+.satf-participant-avatar { flex-shrink: 0; }
+
+.satf-participant-info { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+
+.satf-participant-name-row { display: flex; align-items: center; gap: 8px; }
+
+.satf-participant-name { font-size: 0.85rem; font-weight: 500; color: #fff; }
+
+.satf-participant-meta {
+    font-size: 0.72rem; color: rgba(255, 255, 255, 0.35);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* =========================================================
+   TYPE BADGES
+   ========================================================= */
+
+.satf-type-badge {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 2px 8px; border-radius: 6px;
+    font-size: 0.65rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.3px;
+    flex-shrink: 0;
+}
+
+.satf-type-badge svg { flex-shrink: 0; }
+
+.satf-type-online { background: rgba(59, 130, 246, 0.12); color: #3b82f6; }
+.satf-type-platform { background: rgba(0, 210, 255, 0.12); color: #00d2ff; }
+.satf-type-guest { background: rgba(245, 158, 11, 0.12); color: #f59e0b; }
+
+/* =========================================================
+   PARTICIPATION LEVEL PILLS
+   ========================================================= */
+
+.satf-participant-level { flex-shrink: 0; }
+
+.satf-level-pills { display: flex; gap: 3px; }
+
+.satf-level-pill {
+    padding: 3px 8px; border-radius: 6px; border: none;
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.68rem; font-weight: 500; cursor: pointer;
+    transition: all 0.2s;
+}
+
+.satf-level-pill:hover { background: rgba(255, 255, 255, 0.08); color: rgba(255, 255, 255, 0.7); }
+
+.satf-level-pill-active { background: rgba(0, 210, 255, 0.15); color: #00d2ff; }
+
+/* =========================================================
+   CREDITS
+   ========================================================= */
+
+.satf-participant-credits {
+    font-size: 0.75rem; font-weight: 600; color: #10b981;
+    flex-shrink: 0; padding: 2px 6px;
+    background: rgba(16, 185, 129, 0.1); border-radius: 6px;
+}
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.satf-loading-small { display: flex; justify-content: center; padding: 24px; }
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1023px) {
+    .satf-columns { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 767px) {
+    .satf-info-bar { flex-direction: column; gap: 8px; align-items: flex-start; padding: 14px 16px; }
+    .satf-info-right { width: 100%; justify-content: flex-start; }
+    .satf-guest-row { flex-direction: column; gap: 8px; }
+    .satf-guest-input { width: 100%; }
+    .satf-btn-add-guest { width: 100%; justify-content: center; }
+    .satf-participant-row { flex-wrap: wrap; gap: 6px; padding: 8px 10px; }
+    .satf-participant-info { min-width: 0; flex-basis: calc(100% - 50px); }
+    .satf-participant-level { width: 100%; order: 3; }
+    .satf-level-pills { justify-content: flex-start; }
+    .satf-attended-credits { order: 4; }
+    .satf-attended-row { flex-wrap: wrap; gap: 6px; }
+    .satf-attended-info { min-width: 0; flex-basis: calc(100% - 50px); }
+}
+
+@media (max-width: 480px) {
+    .satf-section { padding: 10px; border-radius: 10px; }
+    .satf-section-title { font-size: 0.8rem; gap: 6px; margin-bottom: 10px; }
+    .satf-section-title svg { width: 16px; height: 16px; }
+    .satf-count-badge { font-size: 0.62rem; padding: 1px 6px; }
+
+    .satf-search-input { font-size: 0.8rem; padding: 8px 0; }
+    .satf-search-box { padding: 0 10px; }
+
+    .satf-participant-row {
+        flex-wrap: wrap;
+        padding: 8px 10px;
+        gap: 6px;
+    }
+
+    .satf-participant-avatar { display: none; }
+
+    .satf-participant-info { width: 100%; flex-basis: 100%; }
+    .satf-participant-name { font-size: 0.8rem; }
+    .satf-participant-meta { font-size: 0.68rem; }
+    .satf-participant-name-row { flex-wrap: wrap; gap: 4px; }
+    .satf-type-badge { font-size: 0.58rem; padding: 1px 5px; }
+
+    .satf-participant-level { flex: 1; min-width: 0; }
+    .satf-level-pills { width: 100%; }
+    .satf-level-pill { flex: 1; text-align: center; padding: 4px 2px; font-size: 0.65rem; }
+
+    .satf-attended-credits { flex-shrink: 0; }
+
+    .satf-guest-row { flex-direction: column; }
+    .satf-guest-input { font-size: 0.8rem; padding: 8px 10px; width: 100%; box-sizing: border-box; }
+    .satf-btn-add-guest { width: 100%; justify-content: center; font-size: 0.78rem; padding: 9px 12px; box-sizing: border-box; }
+    .satf-btn-add { font-size: 0.72rem; padding: 4px 10px; }
+
+    .satf-result-row { gap: 6px; padding: 6px 8px; }
+    .satf-result-name { font-size: 0.78rem; }
+    .satf-result-email { font-size: 0.65rem; }
+
+    .satf-attended-row { padding: 8px 10px; gap: 8px; }
+    .satf-attended-row .satf-avatar-placeholder,
+    .satf-attended-row .satf-avatar-img { width: 24px; height: 24px; }
+    .satf-attended-info { flex: 1; min-width: 0; }
+    .satf-attended-name { font-size: 0.78rem; }
+    .satf-attended-meta { font-size: 0.65rem; }
+    .satf-attended-credits { font-size: 0.65rem; flex-shrink: 0; }
+
+    .satf-attended-hint { font-size: 0.68rem; }
+    .satf-info-title { font-size: 0.88rem; }
+    .satf-info-meta { font-size: 0.7rem; }
+    .satf-info-stat { font-size: 0.75rem; }
+}
+
+@media (max-width: 374px) {
+    .satf-section { padding: 8px; }
+    .satf-section-title { font-size: 0.75rem; }
+    .satf-level-pill { font-size: 0.6rem; padding: 3px 2px; }
+    .satf-guest-input { font-size: 0.75rem; padding: 7px 8px; }
+    .satf-participant-name { font-size: 0.75rem; }
+    .satf-participant-meta { font-size: 0.65rem; }
+}
+
+/* =========================================================
+   LIGHT THEME
+   ========================================================= */
+
+[data-theme="light"] .satf-info-bar { background: rgba(13, 148, 136, 0.04); border-color: rgba(13, 148, 136, 0.15); }
+[data-theme="light"] .satf-info-title { color: #1e293b; }
+[data-theme="light"] .satf-info-meta { color: #64748b; }
+[data-theme="light"] .satf-info-stat { color: #0d9488; }
+[data-theme="light"] .satf-section { background: #fff; border-color: #e2e8f0; }
+[data-theme="light"] .satf-section-title { color: #1e293b; }
+[data-theme="light"] .satf-section-title svg { color: #0d9488; }
+[data-theme="light"] .satf-count-badge { background: rgba(13, 148, 136, 0.1); color: #0d9488; }
+[data-theme="light"] .satf-search-box { background: #fff; border-color: #d1d5db; }
+[data-theme="light"] .satf-search-box:focus-within { border-color: rgba(13, 148, 136, 0.4); }
+[data-theme="light"] .satf-search-box svg { color: #94a3b8; }
+[data-theme="light"] .satf-search-input { color: #1e293b; }
+[data-theme="light"] .satf-search-input::placeholder { color: #94a3b8; }
+[data-theme="light"] .satf-result-row:hover { background: #f8fafc; }
+[data-theme="light"] .satf-result-name { color: #1e293b; }
+[data-theme="light"] .satf-result-email { color: #64748b; }
+[data-theme="light"] .satf-avatar-placeholder { background: rgba(13, 148, 136, 0.1); color: #0d9488; }
+[data-theme="light"] .satf-avatar-guest { background: rgba(217, 119, 6, 0.1); color: #d97706; }
+[data-theme="light"] .satf-btn-add { background: rgba(13, 148, 136, 0.08); color: #0d9488; }
+[data-theme="light"] .satf-btn-add:hover:not(:disabled) { background: rgba(13, 148, 136, 0.15); }
+[data-theme="light"] .satf-result-badge-saved { color: #059669; }
+[data-theme="light"] .satf-no-results { color: #94a3b8; }
+[data-theme="light"] .satf-guest-input { background: #fff; border-color: #d1d5db; color: #1e293b; }
+[data-theme="light"] .satf-guest-input:focus { border-color: rgba(13, 148, 136, 0.4); }
+[data-theme="light"] .satf-guest-input::placeholder { color: #94a3b8; }
+[data-theme="light"] .satf-btn-add-guest { border-color: rgba(217, 119, 6, 0.2); background: rgba(217, 119, 6, 0.06); color: #d97706; }
+[data-theme="light"] .satf-btn-add-guest:hover:not(:disabled) { background: rgba(217, 119, 6, 0.12); }
+[data-theme="light"] .satf-list-empty { color: #94a3b8; }
+[data-theme="light"] .satf-participant-row { background: #f8fafc; border-color: #e2e8f0; }
+[data-theme="light"] .satf-participant-row:hover { background: #f1f5f9; }
+[data-theme="light"] .satf-participant-name { color: #1e293b; }
+[data-theme="light"] .satf-participant-meta { color: #64748b; }
+[data-theme="light"] .satf-type-online { background: rgba(59, 130, 246, 0.08); color: #2563eb; }
+[data-theme="light"] .satf-type-platform { background: rgba(13, 148, 136, 0.08); color: #0d9488; }
+[data-theme="light"] .satf-type-guest { background: rgba(217, 119, 6, 0.08); color: #d97706; }
+[data-theme="light"] .satf-level-pill { background: #f1f5f9; color: #64748b; }
+[data-theme="light"] .satf-level-pill:hover { background: #e2e8f0; color: #1e293b; }
+[data-theme="light"] .satf-level-pill-active { background: rgba(13, 148, 136, 0.12); color: #0d9488; }
+[data-theme="light"] .satf-participant-credits { color: #059669; background: rgba(5, 150, 105, 0.08); }
+[data-theme="light"] .satf-attended-credits { color: #94a3b8; }
+/* =========================================================
+   ATTENDED LIST (second list — already attended)
+   ========================================================= */
+
+.satf-section-attended {
+    border-color: rgba(16, 185, 129, 0.12);
+}
+
+.satf-section-attended .satf-section-title svg {
+    color: #10b981;
+}
+
+.satf-count-attended {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+}
+
+.satf-attended-hint {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.35);
+    margin: -8px 0 12px;
+    font-style: italic;
+}
+
+.satf-attended-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.satf-attended-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: rgba(16, 185, 129, 0.02);
+    border: 1px solid rgba(16, 185, 129, 0.06);
+}
+
+.satf-attended-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+}
+
+.satf-attended-name {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.satf-attended-credits {
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.35);
+    flex-shrink: 0;
+}
+
+.satf-attended-meta {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.35);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Light theme */
+[data-theme="light"] .satf-section-attended { border-color: rgba(5, 150, 105, 0.15); }
+[data-theme="light"] .satf-section-attended .satf-section-title svg { color: #059669; }
+[data-theme="light"] .satf-count-attended { background: rgba(5, 150, 105, 0.1); color: #059669; }
+[data-theme="light"] .satf-attended-hint { color: #94a3b8; }
+[data-theme="light"] .satf-attended-row { background: rgba(5, 150, 105, 0.02); border-color: rgba(5, 150, 105, 0.08); }
+[data-theme="light"] .satf-attended-name { color: #475569; }
+[data-theme="light"] .satf-attended-meta { color: #94a3b8; }
+[data-theme="light"] .satf-attended-credits { color: #94a3b8; }

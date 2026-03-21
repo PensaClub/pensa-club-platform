@@ -1,0 +1,478 @@
+/* src/components/AdminAcademySeminarsList/EditSeminar/editSeminar.css */
+/* Prefix: esem- */
+
+/* =========================================================
+   PAGE BACKGROUND
+   ========================================================= */
+
+.esem-page-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: #0c0e14;
+    overflow: hidden;
+}
+
+.esem-page-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(56, 189, 248, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56, 189, 248, 0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+}
+
+.esem-page-bg::after {
+    content: '';
+    position: absolute;
+    top: -30%;
+    right: -15%;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.07) 0%, transparent 65%);
+    border-radius: 50%;
+}
+
+.esem-glow-orb {
+    position: absolute;
+    bottom: -25%;
+    left: -10%;
+    width: 550px;
+    height: 550px;
+    background: radial-gradient(circle, rgba(14, 165, 233, 0.05) 0%, transparent 65%);
+    border-radius: 50%;
+}
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.esem-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    gap: 16px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.esem-loading p { font-size: 0.9rem; }
+
+.esem-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(0, 210, 255, 0.15);
+    border-top-color: #00d2ff;
+    border-radius: 50%;
+    animation: esem-spin 0.8s linear infinite;
+}
+
+@keyframes esem-spin { to { transform: rotate(360deg); } }
+
+.esem-spin { animation: esem-spin 1s linear infinite; }
+
+/* =========================================================
+   CONTAINER + HEADER
+   ========================================================= */
+
+.esem-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 80px 24px 120px;
+    position: relative;
+    z-index: 100;
+    min-height: 100vh;
+}
+
+.esem-header { margin-bottom: 32px; }
+
+.esem-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.85rem;
+    cursor: pointer;
+    padding: 4px 0;
+    margin-bottom: 12px;
+    transition: color 0.2s;
+}
+
+.esem-back-btn svg { flex-shrink: 0; }
+.esem-back-btn:hover { color: #00d2ff; }
+
+.esem-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.esem-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+}
+
+.esem-title span {
+    background: linear-gradient(135deg, #00d2ff, #00f0ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 1.75rem;
+}
+
+.esem-header-badges {
+    display: flex;
+    gap: 8px;
+}
+
+.esem-status-badge {
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.esem-status-scheduled { background: rgba(59, 130, 246, 0.15); color: #3b82f6; }
+.esem-status-live { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+.esem-status-completed { background: rgba(107, 114, 128, 0.15); color: #9ca3af; }
+.esem-status-cancelled { background: rgba(239, 68, 68, 0.1); color: #ef4444; text-decoration: line-through; }
+
+.esem-pub-badge {
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.esem-pub-yes { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+.esem-pub-no { background: rgba(100, 116, 139, 0.15); color: #94a3b8; }
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.esem-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.esem-form *,
+.esem-form *::before,
+.esem-form *::after {
+    box-sizing: border-box;
+}
+
+.esem-form input,
+/* .esem-form select, */
+.esem-form textarea {
+    width: 100%;
+    max-width: 100%;
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.esem-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center ;
+    padding: 12px 24px;
+    background: #0a0e1a;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.esem-footer-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.esem-unsaved {
+    font-size: 0.8rem;
+    color: #fbbf24;
+    font-weight: 500;
+    animation: esem-pulse 2s ease-in-out infinite;
+}
+
+@keyframes esem-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.esem-footer-right {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.esem-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 9px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.esem-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.esem-btn svg { flex-shrink: 0; }
+
+.esem-btn-discard {
+    background: none;
+    color: rgba(255, 255, 255, 0.5);
+    padding: 6px 10px;
+    font-size: 0.78rem;
+}
+
+.esem-btn-discard:hover:not(:disabled) { color: #fff; }
+
+.esem-btn-save {
+    background: linear-gradient(135deg, #00d2ff, #00b4d8);
+    color: #000;
+    font-weight: 600;
+}
+
+.esem-btn-save:hover:not(:disabled) {
+    background: linear-gradient(135deg, #00e0ff, #00c4e8);
+    box-shadow: 0 4px 20px rgba(0, 210, 255, 0.25);
+}
+
+.esem-btn-save-back {
+    background: rgba(0, 210, 255, 0.1);
+    color: #00d2ff;
+}
+
+.esem-btn-save-back:hover:not(:disabled) { background: rgba(0, 210, 255, 0.18); }
+
+.esem-btn-publish {
+    background: rgba(16, 185, 129, 0.12);
+    color: #10b981;
+}
+
+.esem-btn-publish:hover:not(:disabled) { background: rgba(16, 185, 129, 0.2); }
+
+.esem-btn-unpublish {
+    background: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+}
+
+.esem-btn-unpublish:hover:not(:disabled) { background: rgba(245, 158, 11, 0.18); }
+
+.esem-btn-cancel-sem {
+    background: rgba(245, 158, 11, 0.08);
+    color: #f59e0b;
+}
+
+.esem-btn-cancel-sem:hover:not(:disabled) { background: rgba(245, 158, 11, 0.15); }
+
+.esem-btn-delete {
+    background: rgba(239, 68, 68, 0.08);
+    color: #ef4444;
+    padding: 8px 10px;
+}
+
+.esem-btn-delete:hover:not(:disabled) { background: rgba(239, 68, 68, 0.15); }
+
+/* =========================================================
+   MODALS
+   ========================================================= */
+
+.esem-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.esem-modal {
+    background: #1a1f2e;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 32px;
+    max-width: 440px;
+    width: 100%;
+    text-align: center;
+    animation: esem-fadeIn 0.2s ease-out;
+}
+
+@keyframes esem-fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.esem-modal-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    margin: 0 auto 16px;
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+.esem-modal-icon-cancel {
+    background: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+}
+
+.esem-modal-icon svg { flex-shrink: 0; }
+
+.esem-modal-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 0 0 10px;
+}
+
+.esem-modal-text {
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.55);
+    line-height: 1.5;
+    margin: 0 0 20px;
+}
+
+.esem-modal-reason {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    color: #fff;
+    outline: none;
+    resize: vertical;
+    min-height: 70px;
+    font-family: inherit;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+}
+
+.esem-modal-reason:focus { border-color: rgba(0, 210, 255, 0.4); }
+.esem-modal-reason::placeholder { color: rgba(255, 255, 255, 0.25); }
+
+.esem-modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.esem-btn-modal-back {
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.esem-btn-modal-back:hover:not(:disabled) { background: rgba(255, 255, 255, 0.1); color: #fff; }
+
+.esem-btn-modal-delete {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
+
+.esem-btn-modal-delete:hover:not(:disabled) { background: rgba(239, 68, 68, 0.25); }
+
+.esem-btn-modal-cancel {
+    background: rgba(245, 158, 11, 0.15);
+    color: #f59e0b;
+}
+
+.esem-btn-modal-cancel:hover:not(:disabled) { background: rgba(245, 158, 11, 0.25); }
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1279px) { .esem-container { max-width: 800px; } }
+
+@media (max-width: 1023px) {
+    .esem-container { max-width: 100%; padding: 24px 20px 120px; }
+    .esem-title { font-size: 1.5rem; }
+    .esem-title span { font-size: 1.5rem; }
+}
+
+@media (max-width: 767px) {
+    .esem-container { padding: 110px 14px 140px; }
+    .esem-title { font-size: 1.25rem; }
+    .esem-title span { font-size: 1.25rem; }
+    .esem-header-row { flex-direction: column; align-items: flex-start; }
+    .esem-footer { flex-direction: column; gap: 10px; padding: 10px 14px; }
+    .esem-footer-left { width: 100%; justify-content: center; }
+    .esem-footer-right { width: 100%; flex-wrap: wrap; justify-content: center; }
+    .esem-btn { padding: 8px 12px; font-size: 0.78rem; }
+    .esem-modal { padding: 24px 20px; }
+    .esem-modal-actions { flex-direction: column; }
+}
+
+@media (max-width: 424px) {
+    .esem-container { padding: 110px 10px 150px; }
+    .esem-title { font-size: 1.1rem; }
+    .esem-title span { font-size: 1.1rem; }
+    .esem-btn { font-size: 0.75rem; padding: 7px 10px; }
+    .esem-modal { padding: 20px 16px; }
+}
+
+/* =========================================================
+   LIGHT THEME
+   ========================================================= */
+
+[data-theme="light"] .esem-page-bg { background: #f1f5f9; }
+[data-theme="light"] .esem-page-bg::before { background-image: linear-gradient(rgba(13, 148, 136, 0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(13, 148, 136, 0.07) 1px, transparent 1px); }
+[data-theme="light"] .esem-page-bg::after { background: radial-gradient(circle, rgba(13, 148, 136, 0.08) 0%, transparent 65%); }
+[data-theme="light"] .esem-glow-orb { background: radial-gradient(circle, rgba(20, 184, 166, 0.07) 0%, transparent 65%); }
+[data-theme="light"] .esem-loading { color: #64748b; }
+[data-theme="light"] .esem-spinner { border-color: rgba(13, 148, 136, 0.15); border-top-color: #0d9488; }
+[data-theme="light"] .esem-back-btn { color: #64748b; }
+[data-theme="light"] .esem-back-btn:hover { color: #0d9488; }
+[data-theme="light"] .esem-title { color: #1e293b; }
+[data-theme="light"] .esem-title span { background: linear-gradient(135deg, #0d9488, #14b8a6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+[data-theme="light"] .esem-footer { background: #ffffff; border-top: 1px solid #e2e8f0; }
+[data-theme="light"] .esem-unsaved { color: #d97706; }
+[data-theme="light"] .esem-btn-discard { color: #64748b; }
+[data-theme="light"] .esem-btn-discard:hover:not(:disabled) { color: #1e293b; }
+[data-theme="light"] .esem-btn-save { background: linear-gradient(135deg, #0d9488, #059669); color: #fff; }
+[data-theme="light"] .esem-btn-save:hover:not(:disabled) { box-shadow: 0 4px 20px rgba(13, 148, 136, 0.3); }
+[data-theme="light"] .esem-btn-save-back { background: rgba(13, 148, 136, 0.08); color: #0d9488; }
+[data-theme="light"] .esem-btn-save-back:hover:not(:disabled) { background: rgba(13, 148, 136, 0.15); }
+[data-theme="light"] .esem-btn-publish { background: rgba(5, 150, 105, 0.08); color: #059669; }
+[data-theme="light"] .esem-btn-unpublish { background: rgba(217, 119, 6, 0.08); color: #d97706; }
+[data-theme="light"] .esem-btn-cancel-sem { background: rgba(217, 119, 6, 0.06); color: #d97706; }
+[data-theme="light"] .esem-btn-delete { background: rgba(220, 38, 38, 0.06); color: #dc2626; }
+[data-theme="light"] .esem-modal-overlay { background: rgba(0, 0, 0, 0.35); }
+[data-theme="light"] .esem-modal { background: #fff; border-color: #e2e8f0; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15); }
+[data-theme="light"] .esem-modal-title { color: #1e293b; }
+[data-theme="light"] .esem-modal-text { color: #64748b; }
+[data-theme="light"] .esem-modal-reason { background: #fff; border-color: #d1d5db; color: #1e293b; }
+[data-theme="light"] .esem-modal-reason::placeholder { color: #94a3b8; }
+[data-theme="light"] .esem-btn-modal-back { background: #f1f5f9; color: #475569; }
+[data-theme="light"] .esem-btn-modal-back:hover:not(:disabled) { background: #e2e8f0; color: #1e293b; }

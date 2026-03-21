@@ -1,0 +1,183 @@
+/* src/components/AdminAcademySeminarsList/SeminarFilters/seminarFilters.css */
+/* Prefix: asmf- */
+
+/* =========================================================
+   WRAPPER
+   ========================================================= */
+
+.asmf-wrapper {
+    margin-bottom: 4px;
+}
+
+/* =========================================================
+   TOOLBAR
+   ========================================================= */
+
+.asmf-toolbar {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.asmf-search-box {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 0 14px;
+    transition: border-color 0.2s;
+}
+
+.asmf-search-box:focus-within {
+    border-color: rgba(0, 210, 255, 0.3);
+}
+
+.asmf-search-box svg {
+    color: rgba(255, 255, 255, 0.35);
+    flex-shrink: 0;
+}
+
+.asmf-search-input {
+    flex: 1;
+    background: none;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-size: 0.85rem;
+    padding: 10px 0;
+    font-family: inherit;
+}
+
+.asmf-search-input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.asmf-btn-filter {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 16px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.asmf-btn-filter svg {
+    flex-shrink: 0;
+}
+
+.asmf-btn-filter:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+}
+
+.asmf-filter-dot {
+    width: 6px;
+    height: 6px;
+    background: #00d2ff;
+    border-radius: 50%;
+    position: absolute;
+    top: 6px;
+    right: 6px;
+}
+
+/* =========================================================
+   PANEL
+   ========================================================= */
+
+.asmf-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 12px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+}
+
+.asmf-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.asmf-group-label {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.45);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.asmf-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.asmf-chip {
+    padding: 5px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.asmf-chip:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.asmf-chip-active {
+    background: rgba(0, 210, 255, 0.12);
+    border-color: rgba(0, 210, 255, 0.3);
+    color: #00d2ff;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 767px) {
+    .asmf-toolbar { flex-direction: column; }
+    .asmf-search-box { width: 100%; }
+    .asmf-btn-filter { width: 100%; justify-content: center; }
+    .asmf-panel { padding: 12px; }
+    .asmf-chips { gap: 5px; }
+    .asmf-chip { padding: 4px 10px; font-size: 0.75rem; }
+}
+
+@media (max-width: 424px) {
+    .asmf-chip { padding: 4px 8px; font-size: 0.72rem; }
+}
+
+/* =========================================================
+   LIGHT THEME
+   ========================================================= */
+
+[data-theme="light"] .asmf-search-box { background: #ffffff; border-color: #d1d5db; }
+[data-theme="light"] .asmf-search-box:focus-within { border-color: rgba(13, 148, 136, 0.4); }
+[data-theme="light"] .asmf-search-box svg { color: #94a3b8; }
+[data-theme="light"] .asmf-search-input { color: #1e293b; }
+[data-theme="light"] .asmf-search-input::placeholder { color: #94a3b8; }
+[data-theme="light"] .asmf-btn-filter { border-color: #d1d5db; background: #ffffff; color: #64748b; }
+[data-theme="light"] .asmf-btn-filter:hover { background: #f1f5f9; color: #1e293b; }
+[data-theme="light"] .asmf-filter-dot { background: #0d9488; }
+[data-theme="light"] .asmf-panel { background: #ffffff; border-color: #e2e8f0; }
+[data-theme="light"] .asmf-group-label { color: #64748b; }
+[data-theme="light"] .asmf-chip { border-color: #d1d5db; background: #ffffff; color: #64748b; }
+[data-theme="light"] .asmf-chip:hover { background: #f1f5f9; color: #1e293b; }
+[data-theme="light"] .asmf-chip-active { background: rgba(13, 148, 136, 0.08); border-color: rgba(13, 148, 136, 0.3); color: #0d9488; }
