@@ -183,6 +183,15 @@ export const Header = ({ additionalClasses }) => {
                     <span className="acd-item-desc">{t("header.academy-mentors-desc")}</span>
                   </div>
                 </Link>
+                <Link to="/academy/seminars" className="acd-item">
+                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3ZM19 19H5V5H19V19ZM17 12H12V17H17V12ZM7 7H12V9H7V7ZM7 11H10V13H7V11Z" fill="currentColor" />
+                  </svg>
+                  <div className="acd-item-text">
+                    <span className="acd-item-title">{t("header.academy-seminars", "Семинари")}</span>
+                    <span className="acd-item-desc">{t("header.academy-seminars-desc", "Практически занятия и дискусии")}</span>
+                  </div>
+                </Link>
                 <Link to="/academy" className="acd-cta">
                   {t("header.academy-cta")} →
                 </Link>
@@ -570,6 +579,16 @@ export const Header = ({ additionalClasses }) => {
                   <path d="M12 12C14.21 12 16 10.21 16 8C16 5.79 14.21 4 12 4C9.79 4 8 5.79 8 8C8 10.21 9.79 12 12 12ZM12 14C9.33 14 4 15.34 4 18V20H20V18C20 15.34 14.67 14 12 14ZM21.12 6.46L19.44 8.14C20.07 9.26 20.07 10.74 19.44 11.86L21.12 13.54C22.56 11.5 22.56 8.5 21.12 6.46ZM17.76 9.82L16.08 8.14C16.69 9.26 16.69 10.74 16.08 11.86L17.76 13.54C19.2 11.5 19.2 8.5 17.76 9.82Z" fill="currentColor" />
                 </svg>
                 {t("header.academy-mentors")}
+              </NavLink>
+              <NavLink
+                to="/academy/seminars"
+                className={({ isActive }) => `mobile-nav-item mobile-academy-item ${isActive ? "active" : ""}`}
+                onClick={toggleMobileMenu}
+              >
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M19 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3ZM19 19H5V5H19V19ZM17 12H12V17H17V12ZM7 7H12V9H7V7ZM7 11H10V13H7V11Z" fill="currentColor" />
+                </svg>
+                {t("header.academy-seminars", "Семинари")}
               </NavLink>
             </div>
 
