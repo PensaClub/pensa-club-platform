@@ -276,7 +276,6 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 0.78rem;
     color: rgba(255, 255, 255, 0.55);
 }
 
@@ -286,10 +285,12 @@
 }
 
 .ascc-date {
+    font-size: 0.78rem;
     font-weight: 500;
 }
 
 .ascc-time {
+    font-size: 0.78rem;
     color: rgba(255, 255, 255, 0.4);
 }
 
@@ -306,8 +307,11 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    font-size: 0.75rem;
     color: rgba(255, 255, 255, 0.45);
+}
+
+.ascc-location-row span {
+    font-size: 0.75rem;
 }
 
 .ascc-location-row svg {

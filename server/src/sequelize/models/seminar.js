@@ -38,6 +38,13 @@ module.exports = (sequelize, DataTypes) => {
         sourceKey: 'id',
         as: 'guestAttendances',
       });
+
+      // Has many videos
+      seminar.hasMany(models.seminar_video, {
+        foreignKey: 'seminarId',
+        sourceKey: 'id',
+        as: 'videos',
+      });
       // Belongs to creator
       seminar.belongsTo(models.user_account, {
         foreignKey: 'createdBy',

@@ -12,7 +12,7 @@
 .asem-main {
     padding: 0 0 60px;
     position: relative;
-    background: linear-gradient(180deg, transparent 0%, #0c0e14 120px);
+    background: #0c0e14;
 }
 
 .asem-main::before {
@@ -208,7 +208,7 @@
    ========================================================= */
 
 [data-theme="light"] .asem-main {
-    background: linear-gradient(180deg, transparent 0%, #f1f5f9 120px);
+    background: #f1f5f9;
 }
 
 [data-theme="light"] .asem-main::before {

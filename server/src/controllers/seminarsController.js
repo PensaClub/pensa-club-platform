@@ -6,6 +6,7 @@ const { Op } = require('sequelize');
 const {
   seminar,
   seminar_material,
+  seminar_video,
   student_seminar,
   course,
   mentor,
@@ -1267,7 +1268,13 @@ seminarsController.post(
           participationLevel: participationLevel || 'passive',
           earnedCredits,
         });
+      } else if (attendance.attended) {
+        // Already attended — only update participationLevel, do NOT re-award credits
+        await attendance.update({
+          participationLevel: participationLevel || attendance.participationLevel || 'passive',
+        });
       } else {
+        // First time marking as attended — award credits
         await attendance.update({
           attended: true,
           attendedAt: new Date(),
@@ -1735,4 +1742,112 @@ seminarsController.get(
     }
   }
 );
+// ===============================
+// VIDEO MANAGEMENT
+// ===============================
+
+// GET /api/academy/seminars/:id/videos
+seminarsController.get(
+  '/:id/videos',
+  async (req, res, next) => {
+    try {
+      const videos = await seminar_video.findAll({
+        where: { seminarId: req.params.id },
+        order: [['sortOrder', 'ASC'], ['createdAt', 'ASC']],
+      });
+      res.json({ success: true, videos });
+    } catch (err) {
+      console.error('❌ [GET SEMINAR VIDEOS] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// POST /api/academy/seminars/:id/videos
+seminarsController.post(
+  '/:id/videos',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const sem = await seminar.findByPk(req.params.id);
+      if (!sem) {
+        return res.status(404).json({ success: false, message: 'Seminar not found' });
+      }
+
+      const { title, videoUrl, videoProvider, thumbnailUrl, durationMinutes } = req.body;
+      if (!videoUrl) {
+        return res.status(400).json({ success: false, message: 'videoUrl is required' });
+      }
+
+      const maxOrder = await seminar_video.max('sortOrder', { where: { seminarId: sem.id } });
+
+      const video = await seminar_video.create({
+        seminarId: sem.id,
+        title: title || null,
+        videoUrl,
+        videoProvider: videoProvider || 'custom',
+        thumbnailUrl: thumbnailUrl || null,
+        durationMinutes: durationMinutes || null,
+        sortOrder: (maxOrder || 0) + 1,
+      });
+
+      res.status(201).json({ success: true, video });
+    } catch (err) {
+      console.error('❌ [ADD SEMINAR VIDEO] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// DELETE /api/academy/seminars/:id/videos/:videoId
+seminarsController.delete(
+  '/:id/videos/:videoId',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const video = await seminar_video.findOne({
+        where: { id: req.params.videoId, seminarId: req.params.id },
+      });
+      if (!video) {
+        return res.status(404).json({ success: false, message: 'Video not found' });
+      }
+
+      await video.destroy();
+      res.json({ success: true, message: 'Video deleted' });
+    } catch (err) {
+      console.error('❌ [DELETE SEMINAR VIDEO] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// PUT /api/academy/seminars/:id/videos/reorder
+seminarsController.put(
+  '/:id/videos/reorder',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { videoIds } = req.body;
+      if (!Array.isArray(videoIds)) {
+        return res.status(400).json({ success: false, message: 'videoIds must be an array' });
+      }
+
+      for (let i = 0; i < videoIds.length; i++) {
+        await seminar_video.update(
+          { sortOrder: i },
+          { where: { id: videoIds[i], seminarId: req.params.id } }
+        );
+      }
+
+      res.json({ success: true, message: 'Videos reordered' });
+    } catch (err) {
+      console.error('❌ [REORDER SEMINAR VIDEOS] Error:', err);
+      next(err);
+    }
+  }
+);
+
 module.exports = seminarsController;

@@ -1,7 +1,7 @@
 // src/components/AcademyCourses/AcademyTestPlayer/AcademyTestPlayer.jsx
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
 import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { useTranslation } from 'react-i18next';
@@ -15,8 +15,10 @@ const AcademyTestPlayer = () => {
   const { t } = useTranslation('academy');
   const { courseSlug, lessonSlug, slug } = useParams();
   const navigate = useLocalizedNavigate();
-  const isLectureTest = !!slug && !courseSlug;
-  const isCourseTest = !lessonSlug && !isLectureTest
+  const location = useLocation();
+  const isSeminarTest = !!slug && location.pathname.includes('/seminars/');
+  const isLectureTest = !!slug && !courseSlug && !isSeminarTest;
+  const isCourseTest = !lessonSlug && !isLectureTest && !isSeminarTest;
 
   const { isAuthentication } = useAuthContext();
   const {
@@ -35,6 +37,11 @@ const AcademyTestPlayer = () => {
     getLectureTestStatus,
     submitLectureAnswer,
     submitLectureTest,
+    getSeminarTestStatus,
+    startSeminarTest,
+    submitSeminarAnswer,
+    submitSeminarTest,
+    getSeminarBySlug,
   } = useAcademyCourses();
 
   // State
@@ -53,6 +60,7 @@ const AcademyTestPlayer = () => {
   const [isLoadingTest, setIsLoadingTest] = useState(true);
   const [nextLesson, setNextLesson] = useState(null);
   const [lecture, setLecture] = useState(null);
+  const [seminar, setSeminar] = useState(null);
 
   // History & Results state
   const [previousAttempts, setPreviousAttempts] = useState([]);
@@ -87,6 +95,185 @@ const AcademyTestPlayer = () => {
 
   useEffect(() => {
     const fetchTestData = async () => {
+
+      // ========== SEMINAR TEST MODE ==========
+      if (isSeminarTest) {
+        if (!slug) return;
+
+        const cacheKey = `seminar-${slug}`;
+        if (fetchedRef.current === cacheKey && testData) return;
+
+        try {
+          fetchedRef.current = cacheKey;
+          setError(null);
+          setIsLoadingTest(true);
+
+          // 1. Get seminar info
+          const seminarResponse = await getSeminarBySlug(slug);
+          const seminarInfo = seminarResponse?.seminar || seminarResponse;
+          setSeminar(seminarInfo);
+
+          setLesson({
+            id: seminarInfo.id,
+            title: seminarInfo.title,
+            slug: slug
+          });
+
+          if (!seminarInfo || !seminarInfo.id) {
+            throw new Error('Семинарът не е намерен');
+          }
+
+          if (!seminarInfo.hasTest) {
+            throw new Error('Този семинар няма тест');
+          }
+
+          // 2. Get test status
+          let statusData = null;
+          try {
+            statusData = await getSeminarTestStatus(seminarInfo.id);
+            setTestStatus(statusData);
+
+            if (statusData?.hasTest === false) {
+              throw new Error('Тестът не е наличен');
+            }
+
+            if (statusData?.attempts) setPreviousAttempts(statusData.attempts);
+            if (statusData?.bestAttempt) setBestAttempt(statusData.bestAttempt);
+            setCanStartNewAttempt(statusData?.canStartNew ?? true);
+            setRemainingAttempts(statusData?.remainingAttempts ?? 0);
+            setHasPassedTest(statusData?.hasPassedTest ?? false);
+
+            // No more attempts — show last result
+            if (statusData?.remainingAttempts === 0 && !statusData?.activeAttempt) {
+              const displayAttempt = statusData.bestAttempt || statusData.lastAttempt;
+              if (displayAttempt) {
+                const scorePercent = displayAttempt.score ?? calculateScorePercentage(displayAttempt.correctAnswers, displayAttempt.totalQuestions);
+                const isPassed = scorePercent >= (statusData?.test?.passingScore || 70);
+
+                setShowResults(true);
+                setResults({
+                  scorePercentage: scorePercent,
+                  correctAnswers: displayAttempt.correctAnswers || 0,
+                  wrongAnswers: displayAttempt.wrongAnswers || ((displayAttempt.totalQuestions || 0) - (displayAttempt.correctAnswers || 0)),
+                  totalQuestions: displayAttempt.totalQuestions || 0,
+                  passed: isPassed,
+                  earnedCredits: displayAttempt.earnedCredits || 0,
+                  attemptId: displayAttempt.id,
+                  attemptNumber: displayAttempt.attemptNumber || 1
+                });
+
+                if (displayAttempt.questionsResult) setQuestionsResult(displayAttempt.questionsResult);
+                setTestData({ test: statusData.test, attempt: displayAttempt });
+                return;
+              }
+            }
+
+            // If passed — show best attempt
+            if (statusData?.hasPassedTest && statusData?.bestAttempt) {
+              const best = statusData.bestAttempt;
+              const scorePercent = best.score ?? calculateScorePercentage(best.correctAnswers, best.totalQuestions);
+
+              setShowResults(true);
+              setResults({
+                scorePercentage: scorePercent,
+                correctAnswers: best.correctAnswers || 0,
+                wrongAnswers: best.wrongAnswers || 0,
+                totalQuestions: best.totalQuestions || 0,
+                passed: true,
+                earnedCredits: best.earnedCredits || 0,
+                attemptId: best.id,
+                attemptNumber: best.attemptNumber || 1
+              });
+
+              if (best.questionsResult) setQuestionsResult(best.questionsResult);
+              setTestData({ test: statusData.test, attempt: best });
+              return;
+            }
+
+            // Completed last attempt (not passed)
+            const lastAttempt = statusData?.lastAttempt;
+            if (lastAttempt?.status === 'completed' && !statusData?.activeAttempt) {
+              const scorePercent = lastAttempt.score ?? calculateScorePercentage(lastAttempt.correctAnswers, lastAttempt.totalQuestions);
+              const isPassed = scorePercent >= (statusData?.test?.passingScore || 70);
+
+              setShowResults(true);
+              setResults({
+                scorePercentage: scorePercent,
+                correctAnswers: lastAttempt.correctAnswers || 0,
+                wrongAnswers: lastAttempt.wrongAnswers || ((lastAttempt.totalQuestions || 0) - (lastAttempt.correctAnswers || 0)),
+                totalQuestions: lastAttempt.totalQuestions || 0,
+                passed: isPassed,
+                earnedCredits: lastAttempt.earnedCredits || 0,
+                attemptId: lastAttempt.id,
+                attemptNumber: lastAttempt.attemptNumber || 1
+              });
+
+              if (lastAttempt.questionsResult) setQuestionsResult(lastAttempt.questionsResult);
+              setTestData({ test: statusData.test, attempt: lastAttempt });
+              return;
+            }
+
+            // Active attempt or start new
+            if (statusData?.activeAttempt || statusData?.canStartNew) {
+              const data = await startSeminarTest(seminarInfo.id);
+              if (data) {
+                setTestData(data);
+                setQuestions(data.questions || []);
+
+                if (data.attempt?.answers && typeof data.attempt.answers === 'object') {
+                  setAnswers(data.attempt.answers);
+                }
+
+                if (data.timeRemaining !== undefined && data.timeRemaining > 0) {
+                  setTimeRemaining(data.timeRemaining);
+                } else if (data.test?.timeLimitMinutes) {
+                  setTimeRemaining(data.test.timeLimitMinutes * 60);
+                }
+
+                if (data.attempt?.status === 'completed') {
+                  const scorePercent = data.attempt.score ?? calculateScorePercentage(data.attempt.correctAnswers, data.attempt.totalQuestions);
+                  const isPassed = scorePercent >= (data.test?.passingScore || 70);
+
+                  setShowResults(true);
+                  setResults({
+                    scorePercentage: scorePercent,
+                    correctAnswers: data.attempt.correctAnswers || 0,
+                    wrongAnswers: data.attempt.wrongAnswers || ((data.attempt.totalQuestions || data.questions?.length || 0) - (data.attempt.correctAnswers || 0)),
+                    totalQuestions: data.attempt.totalQuestions || data.questions?.length || 0,
+                    passed: isPassed,
+                    earnedCredits: data.attempt.earnedCredits || 0,
+                    attemptId: data.attempt.id,
+                    attemptNumber: data.attempt.attemptNumber || 1
+                  });
+
+                  if (data.attempt.questionsResult) setQuestionsResult(data.attempt.questionsResult);
+                }
+              }
+            }
+
+          } catch (err) {
+            console.warn('Could not get seminar test status:', err);
+          }
+
+          if (!statusData) {
+            const data = await startSeminarTest(seminarInfo.id);
+            if (data) {
+              setTestData(data);
+              setQuestions(data.questions || []);
+              if (data.test?.timeLimitMinutes) {
+                setTimeRemaining(data.test.timeLimitMinutes * 60);
+              }
+            }
+          }
+
+        } catch (err) {
+          console.error('Error fetching seminar test:', err);
+          setError(err.message || 'Грешка при зареждане на теста');
+        } finally {
+          setIsLoadingTest(false);
+        }
+        return;
+      }
 
       // ========== LECTURE TEST MODE ========== // НОВО
       if (isLectureTest) {
@@ -580,7 +767,7 @@ const AcademyTestPlayer = () => {
     if (isAuthentication) {
       fetchTestData();
     }
-  }, [courseSlug, lessonSlug, slug, isCourseTest, isLectureTest, isAuthentication, getLessonBySlug, getTestStatus, startTest, startTestById, getCourseTestStatus, getCourseBySlug, getLectureBySlug, startLectureTest, getLectureTestStatus]);
+  }, [courseSlug, lessonSlug, slug, isCourseTest, isLectureTest, isSeminarTest, isAuthentication, getLessonBySlug, getTestStatus, startTest, startTestById, getCourseTestStatus, getCourseBySlug, getLectureBySlug, startLectureTest, getLectureTestStatus, getSeminarBySlug, startSeminarTest, getSeminarTestStatus]);
 
   // =========================================================
   //                    TIMER
@@ -645,8 +832,10 @@ const AcademyTestPlayer = () => {
         answerDebounceRef.current = setTimeout(async () => {
           setIsSavingAnswer(true);
           try {
-            // ПРОМЕНЕНО — lecture mode ползва различен API
-            if (isLectureTest) {
+            // ПРОМЕНЕНО — seminar/lecture mode ползва различен API
+            if (isSeminarTest) {
+              await submitSeminarAnswer(testData.test.id, { questionId, answerId: newAnswerValue });
+            } else if (isLectureTest) {
               await submitLectureAnswer(testData.test.id, { questionId, answerId: newAnswerValue });
             } else {
               await submitAnswer(testData.test.id, { questionId, answerId: newAnswerValue });
@@ -661,8 +850,10 @@ const AcademyTestPlayer = () => {
         // Single choice / true_false — веднага
         setIsSavingAnswer(true);
         try {
-          // ПРОМЕНЕНО — lecture mode
-          if (isLectureTest) {
+          // ПРОМЕНЕНО — seminar/lecture mode
+          if (isSeminarTest) {
+            await submitSeminarAnswer(testData.test.id, { questionId, answerId: answerId });
+          } else if (isLectureTest) {
             await submitLectureAnswer(testData.test.id, { questionId, answerId: answerId });
           } else {
             await submitAnswer(testData.test.id, { questionId, answerId: answerId });
@@ -711,7 +902,9 @@ const AcademyTestPlayer = () => {
 
     setIsSubmitting(true);
     try {
-         const response = isLectureTest
+         const response = isSeminarTest
+        ? await submitSeminarTest(testData.test.id)
+        : isLectureTest
         ? await submitLectureTest(testData.test.id)
         : await submitTest(testData.test.id);
 
@@ -765,8 +958,10 @@ const AcademyTestPlayer = () => {
   };
 
  const handleBackToLesson = () => {
-    if (isLectureTest) {
-      navigate(`/academy/lectures/${slug}`); // НОВО
+    if (isSeminarTest) {
+      navigate(`/academy/seminars/${slug}`);
+    } else if (isLectureTest) {
+      navigate(`/academy/lectures/${slug}`);
     } else if (isCourseTest) {
       navigate(`/academy/courses/${courseSlug}`);
     } else {
@@ -775,7 +970,9 @@ const AcademyTestPlayer = () => {
   };
 
   const handleContinueCourse = () => {
-    if (isLectureTest && lecture?.course?.slug) {
+    if (isSeminarTest) {
+      navigate(`/academy/seminars/${slug}`);
+    } else if (isLectureTest && lecture?.course?.slug) {
       navigate(`/academy/courses/${lecture.course.slug}`);
     } else {
       navigate(`/academy/courses/${courseSlug}`);
@@ -804,9 +1001,11 @@ const AcademyTestPlayer = () => {
     setIsLoadingTest(true);
 
     try {
-      // ПРОМЕНЕНО — lecture mode
+      // ПРОМЕНЕНО — seminar/lecture mode
       let data;
-      if (isLectureTest) {
+      if (isSeminarTest) {
+        data = await startSeminarTest(seminar.id);
+      } else if (isLectureTest) {
         data = await startLectureTest(lecture.id);
       } else if (isCourseTest) {
         data = await startTestById(testStatus?.test?.id || testData?.test?.id);

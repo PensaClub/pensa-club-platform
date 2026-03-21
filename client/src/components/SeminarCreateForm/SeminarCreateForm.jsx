@@ -8,6 +8,8 @@ import SeminarBasicInfo from './SeminarBasicInfo/SeminarBasicInfo';
 import SeminarSchedule from './SeminarSchedule/SeminarSchedule';
 import SeminarSettings from './SeminarSettings/SeminarSettings';
 import SeminarAdditional from './SeminarAdditional/SeminarAdditional';
+import SeminarMaterialsSection from './SeminarMaterialsSection/SeminarMaterialsSection';
+import SeminarVideosSection from './SeminarVideosSection/SeminarVideosSection';
 import './seminarCreateForm.css';
 import useSeminarCreateForm from '../hooks/useSeminarCreateForm';
 import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
@@ -19,6 +21,8 @@ const SeminarCreateForm = () => {
 
     const {
         isEditMode,
+        seminarId,
+        seminarSlug,
         seminarData,
         assignedMentors,
         setAssignedMentors,
@@ -111,6 +115,16 @@ const SeminarCreateForm = () => {
                         availableCourses={availableCourses}
                         courseSearch={courseSearch}
                         setCourseSearch={setCourseSearch}
+                    />
+
+                    <SeminarMaterialsSection
+                        seminarId={seminarId}
+                        seminarSlug={seminarSlug}
+                    />
+
+                    <SeminarVideosSection
+                        seminarId={seminarId}
+                        seminarSlug={seminarSlug}
                     />
                 </div>
 

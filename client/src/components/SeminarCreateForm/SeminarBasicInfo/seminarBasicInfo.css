@@ -218,13 +218,16 @@
 
 @media (max-width: 767px) {
     .scfb-section { padding: 16px; border-radius: 12px; }
-    .scfb-row { flex-direction: column; gap: 0; }
+    .scfb-row { flex-direction: column; }
+    .scfb-field { margin-bottom: 14px; }
+    .scfb-field:last-child { margin-bottom: 0; }
 }
 
 @media (max-width: 424px) {
     .scfb-section { padding: 12px; }
     .scfb-section-title { font-size: 1rem; }
     .scfb-input, .scfb-select, .scfb-textarea { font-size: 0.85rem; padding: 9px 12px; }
+    .scfb-select{margin-bottom: 14px;}
 }
 
 /* =========================================================

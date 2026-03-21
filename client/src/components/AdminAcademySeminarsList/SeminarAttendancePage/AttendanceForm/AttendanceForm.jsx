@@ -413,9 +413,9 @@ const AttendanceForm = ({ seminar }) => {
                                                 )}
                                             </div>
 
-                                            {/* Credits */}
+                                            {/* Credits — already earned, shown as info only */}
                                             {p.earnedCredits > 0 && (
-                                                <span className="satf-participant-credits">+{p.earnedCredits}</span>
+                                                <span className="satf-attended-credits">{p.earnedCredits} 🪙</span>
                                             )}
                                         </div>
                                     );
@@ -455,7 +455,7 @@ const AttendanceForm = ({ seminar }) => {
                                             </span>
                                         </div>
                                         {p.earnedCredits > 0 && (
-                                            <span className="satf-participant-credits">+{p.earnedCredits}</span>
+                                            <span className="satf-attended-credits">{p.earnedCredits} 🪙</span>
                                         )}
                                     </div>
                                 ))}

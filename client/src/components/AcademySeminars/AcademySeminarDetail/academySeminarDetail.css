@@ -517,6 +517,76 @@
     flex-shrink: 0;
 }
 
+.asd-completed-info span {
+    font-size: 0.85rem;
+}
+
+.asd-completed-closed {
+    font-size: 0.78rem;
+    display: block;
+    margin-top: 2px;
+}
+
+.asd-completed-attended {
+    font-size: 0.75rem;
+    display: block;
+    margin-top: 2px;
+    opacity: 0.7;
+}
+
+/* =========================================================
+   CANCELLED INFO
+   ========================================================= */
+
+.asd-cancelled-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px;
+    border-radius: 10px;
+    background: rgba(239, 68, 68, 0.08);
+    color: #ef4444;
+    font-size: 0.85rem;
+}
+
+.asd-cancelled-info svg {
+    flex-shrink: 0;
+}
+
+.asd-cancelled-info span {
+    font-size: 0.85rem;
+}
+
+.asd-cancel-reason {
+    font-size: 0.78rem;
+    display: block;
+    margin-top: 4px;
+    font-style: italic;
+    opacity: 0.7;
+}
+
+/* =========================================================
+   APPROVAL NOTE
+   ========================================================= */
+
+.asd-approval-note {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.45);
+    margin: 0;
+}
+
+.asd-approval-note span {
+    font-size: 0.78rem;
+}
+
+.asd-approval-note svg {
+    flex-shrink: 0;
+}
+
 /* =========================================================
    CREDITS INFO
    ========================================================= */
@@ -534,11 +604,17 @@
 .asd-credits-row {
     display: flex;
     justify-content: space-between;
-    font-size: 0.78rem;
+    align-items: center;
+    font-size: 0.8rem;
     color: rgba(255, 255, 255, 0.45);
 }
 
+.asd-credits-row span:first-child {
+    font-size: 0.8rem;
+}
+
 .asd-credits-row span:last-child {
+    font-size: 0.8rem;
     font-weight: 600;
     color: rgba(255, 255, 255, 0.65);
 }
@@ -614,7 +690,7 @@
 .asd-main {
     position: relative;
     padding: 32px 0 60px;
-    background: linear-gradient(180deg, transparent 0%, #0c0e14 80px);
+    background: #0c0e14;
 }
 
 .asd-main::before {
@@ -856,6 +932,41 @@
 }
 
 /* =========================================================
+   COURSE LINK
+   ========================================================= */
+
+.asd-course-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    color: #00d2ff;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.asd-course-link:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(0, 210, 255, 0.15);
+}
+
+.asd-course-link svg {
+    flex-shrink: 0;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.asd-course-link-cat {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.35);
+    margin-left: auto;
+}
+
+/* =========================================================
    MATERIALS
    ========================================================= */
 
@@ -912,6 +1023,59 @@
 .asd-material-download {
     font-size: 1.1rem;
     flex-shrink: 0;
+}
+
+/* =========================================================
+   VIDEOS TAB
+   ========================================================= */
+
+.asd-videos {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.asd-video-item {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.asd-video-title {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+}
+
+.asd-video-link-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    color: #00d2ff;
+    text-decoration: none;
+    font-size: 0.88rem;
+    transition: all 0.2s;
+}
+
+.asd-video-link-row:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(0, 210, 255, 0.15);
+}
+
+.asd-video-link-row svg {
+    flex-shrink: 0;
+}
+
+.asd-video-native {
+    width: 100%;
+    border-radius: 12px;
+    background: #000;
+    max-height: 450px;
 }
 
 /* =========================================================
@@ -1224,7 +1388,7 @@
 }
 
 [data-theme="light"] .asd-main {
-    background: linear-gradient(180deg, transparent 0%, #f1f5f9 80px);
+    background: #f1f5f9;
 }
 
 [data-theme="light"] .asd-main::before {
@@ -1330,6 +1494,17 @@
 [data-theme="light"] .asd-material-size {
     color: #94a3b8;
 }
+
+[data-theme="light"] .asd-video-title { color: #1e293b; }
+[data-theme="light"] .asd-video-link-row { background: rgba(0, 0, 0, 0.02); border-color: #e2e8f0; color: #0d9488; }
+[data-theme="light"] .asd-video-link-row:hover { background: rgba(0, 0, 0, 0.04); border-color: rgba(13, 148, 136, 0.2); }
+[data-theme="light"] .asd-video-native { background: #1e293b; }
+[data-theme="light"] .asd-course-link { background: rgba(0, 0, 0, 0.02); border-color: #e2e8f0; color: #0d9488; }
+[data-theme="light"] .asd-course-link:hover { background: rgba(0, 0, 0, 0.04); border-color: rgba(13, 148, 136, 0.2); }
+[data-theme="light"] .asd-course-link svg { color: #64748b; }
+[data-theme="light"] .asd-course-link-cat { color: #94a3b8; }
+[data-theme="light"] .asd-cancelled-info { background: rgba(220, 38, 38, 0.06); color: #dc2626; }
+[data-theme="light"] .asd-approval-note { color: #64748b; }
 .asd-completed-closed {
     font-size: 0.78rem;
     color: #f59e0b;

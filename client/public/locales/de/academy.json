@@ -723,7 +723,8 @@
     },
     "tabs": {
       "overview": "Übersicht",
-      "materials": "Materialien"
+      "materials": "Materialien",
+      "videos": "Videos"
     },
     "overview": {
       "description": "Beschreibung",
@@ -731,7 +732,8 @@
       "location": "Veranstaltungsort",
       "prerequisites": "Voraussetzungen",
       "whatToBring": "Was mitbringen",
-      "mentor": "Mentor"
+      "mentor": "Mentor",
+      "linkedCourse": "Verknüpfter Kurs"
     },
     "registrationClosed": "Anmeldung geschlossen"
   }

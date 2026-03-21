@@ -153,7 +153,8 @@
     transition: border-color 0.2s;
     text-align: left;
 }
-
+.satp-dropdown-trigger span{font-size: 0.9rem;
+}
 .satp-dropdown-trigger:hover {
     border-color: rgba(0, 210, 255, 0.3);
 }
@@ -264,13 +265,13 @@
 }
 
 @media (max-width: 767px) {
-    .satp-container { padding: 16px 14px 40px; }
+    .satp-container { padding: 120px 14px 40px; }
     .satp-title { font-size: 1.15rem; }
     .satp-title span { font-size: 1.15rem; }
 }
 
 @media (max-width: 424px) {
-    .satp-container { padding: 12px 10px 40px; }
+    .satp-container { padding: 120px 10px 40px; }
     .satp-title { font-size: 1rem; }
     .satp-title span { font-size: 1rem; }
 }

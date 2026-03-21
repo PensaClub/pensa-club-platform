@@ -11,7 +11,7 @@ import { useAcademyCourses } from '../../contexts/AcademyCoursesProvider'; // Н
 import {
     MapPin, Wifi, Clock, Users, Calendar, Share2,
     ChevronRight, FileText, BookOpen, CheckCircle,
-    ArrowLeft, Loader2, AlertCircle, Award,
+    ArrowLeft, Loader2, AlertCircle, Award, Video, Film,
 } from 'lucide-react'; // НОВО
 import ScrollToTop from '../../ScrollToTop/ScrollToTop'; // НОВО
 import { TextZoom } from '../../TextZoom/TextZoom'; // НОВО
@@ -122,6 +122,7 @@ const AcademySeminarDetail = () => { // НОВО
     const {
         getSeminarBySlug,
         getSeminarMaterials,
+        getSeminarVideos,
         registerForSeminar,
         unregisterFromSeminar,
         checkSeminarRegistration,
@@ -129,6 +130,7 @@ const AcademySeminarDetail = () => { // НОВО
 
     const [seminar, setSeminar] = useState(null);
     const [materials, setMaterials] = useState([]);
+    const [videos, setVideos] = useState([]);
     const [isRegistered, setIsRegistered] = useState(false);
     const [registering, setRegistering] = useState(false);
     const [activeTab, setActiveTab] = useState('overview');
@@ -167,10 +169,8 @@ const AcademySeminarDetail = () => { // НОВО
                     }
                 }
 
-                try {
-                    const matData = await getSeminarMaterials(slug);
-                    setMaterials(matData.materials || []);
-                } catch { setMaterials([]); }
+                // Materials come included in the seminar response
+                setMaterials(sem.materials || []);
 
             } catch (err) {
                 console.error('Error loading seminar:', err);
@@ -183,6 +183,21 @@ const AcademySeminarDetail = () => { // НОВО
 
         loadData();
     }, [slug]);
+
+    // Load seminar videos
+    useEffect(() => {
+        if (!seminar?.id) return;
+        if (!getSeminarVideos) return;
+        const loadVideos = async () => {
+            try {
+                const data = await getSeminarVideos(seminar.id);
+                setVideos(data?.videos || data || []);
+            } catch (err) {
+                console.error('Failed to load seminar videos:', err);
+            }
+        };
+        loadVideos();
+    }, [seminar?.id]);
 
     // Computed // НОВО
     const status = useMemo(() => getSeminarStatus(seminar), [seminar]);
@@ -539,6 +554,13 @@ const AcademySeminarDetail = () => { // НОВО
                                 <span className="asd-tab-badge">{materials.length}</span>
                             </button>
                         )}
+                        {videos.length > 0 && (
+                            <button className={`asd-tab ${activeTab === 'videos' ? 'asd-tab-active' : ''}`} onClick={() => setActiveTab('videos')}>
+                                <Film size={16} />
+                                <span>{t('seminarDetail.tabs.videos', 'Видеа')}</span>
+                                <span className="asd-tab-badge">{videos.length}</span>
+                            </button>
+                        )}
                     </div>
 
                     {/* Tab content */}
@@ -639,6 +661,23 @@ const AcademySeminarDetail = () => { // НОВО
                                     </section>
                                 )}
 
+                                {/* Linked course */}
+                                {seminar.course && (
+                                    <section className="asd-section">
+                                        <h2 className="asd-section-title">
+                                            <span>📚</span>
+                                            {t('seminarDetail.overview.linkedCourse', 'Свързан курс')}
+                                        </h2>
+                                        <Link to={`/academy/courses/${seminar.course.slug}`} className="asd-course-link">
+                                            <BookOpen size={18} />
+                                            <span>{seminar.course.name}</span>
+                                            {seminar.course.category && (
+                                                <span className="asd-course-link-cat">{seminar.course.category}</span>
+                                            )}
+                                        </Link>
+                                    </section>
+                                )}
+
                                 {/* Tags */}
                                 {seminar.tags?.length > 0 && (
                                     <div className="asd-tags">
@@ -653,7 +692,7 @@ const AcademySeminarDetail = () => { // НОВО
                         {activeTab === 'materials' && (
                             <div className="asd-materials">
                                 {materials.map((mat, i) => (
-                                    
+
                                      <a key={mat.id || i}
                                         href={mat.fileUrl || mat.externalUrl}
                                         target="_blank"
@@ -668,6 +707,43 @@ const AcademySeminarDetail = () => { // НОВО
                                         <span className="asd-material-download">⬇️</span>
                                     </a>
                                 ))}
+                            </div>
+                        )}
+
+                        {activeTab === 'videos' && (
+                            <div className="asd-videos">
+                                {videos.map((vid) => {
+                                    const embedUrl = getEmbedUrl(vid.videoUrl);
+                                    return (
+                                        <div key={vid.id} className="asd-video-item">
+                                            {vid.title && <h3 className="asd-video-title">{vid.title}</h3>}
+                                            {embedUrl ? (
+                                                <div className="asd-video-player">
+                                                    <iframe
+                                                        src={embedUrl}
+                                                        title={vid.title || 'Video'}
+                                                        className="asd-video-iframe"
+                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                        allowFullScreen
+                                                    />
+                                                </div>
+                                            ) : vid.videoProvider === 'file' || vid.videoUrl?.match(/\.(mp4|webm|mov)(\?|$)/i) ? (
+                                                <video
+                                                    controls
+                                                    className="asd-video-native"
+                                                    preload="metadata"
+                                                >
+                                                    <source src={vid.videoUrl} />
+                                                </video>
+                                            ) : (
+                                                <a href={vid.videoUrl} target="_blank" rel="noopener noreferrer" className="asd-video-link-row">
+                                                    <Film size={18} />
+                                                    <span>{vid.title || vid.videoUrl}</span>
+                                                </a>
+                                            )}
+                                        </div>
+                                    );
+                                })}
                             </div>
                         )}
                     </div>

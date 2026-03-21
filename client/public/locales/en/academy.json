@@ -724,7 +724,8 @@
   },
   "tabs": {
     "overview": "Overview",
-    "materials": "Materials"
+    "materials": "Materials",
+    "videos": "Videos"
   },
   "overview": {
     "description": "Description",
@@ -732,7 +733,8 @@
     "location": "Venue",
     "prerequisites": "Requirements",
     "whatToBring": "What to bring",
-    "mentor": "Mentor"
+    "mentor": "Mentor",
+    "linkedCourse": "Linked Course"
   }
 }
 }

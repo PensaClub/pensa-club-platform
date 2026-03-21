@@ -84,6 +84,7 @@
   background: rgba(0, 0, 0, 0.5);
   color: rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(4px);
+  font-size: 0.65rem;
 }
 
 .asmc-badge-draft { background: rgba(100, 116, 139, 0.85); color: #fff; }
@@ -202,8 +203,11 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  font-size: 0.75rem;
   color: rgba(255, 255, 255, 0.45);
+}
+
+.asmc-card-stat span {
+  font-size: 0.75rem;
 }
 
 .asmc-card-stat svg {
@@ -230,7 +234,6 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  font-size: 0.72rem;
   color: #f59e0b;
   margin-top: 8px;
   padding: 4px 8px;
@@ -238,6 +241,10 @@
   border: 1px solid rgba(245, 158, 11, 0.2);
   border-radius: 6px;
   width: fit-content;
+}
+
+.asmc-card-approval span {
+  font-size: 0.72rem;
 }
 
 .asmc-card-approval svg {

@@ -13,6 +13,7 @@ const SeminarSchedule = ({ seminarData, errors, handleChange, updateField }) => 
     const fileInputRef = useRef(null);
     const [showUrlInput, setShowUrlInput] = useState(false);
     const [dragOver, setDragOver] = useState(false);
+    const [urlWarning, setUrlWarning] = useState('');
 
     const handleFileSelect = async (file) => {
         if (!file || !file.type.startsWith('image/')) return;
@@ -29,6 +30,16 @@ const SeminarSchedule = ({ seminarData, errors, handleChange, updateField }) => 
         setDragOver(false);
         const file = e.dataTransfer.files[0];
         handleFileSelect(file);
+    };
+
+    const handleThumbnailUrlChange = (e) => {
+        const url = e.target.value;
+        handleChange(e);
+        if (/youtube\.com|youtu\.be|vimeo\.com/i.test(url)) {
+            setUrlWarning(t('seminarSchedule.videoUrlWarning', 'Това изглежда като видео линк. Тук се добавя само снимка за обложката. Видеата ще могат да се добавят в секция „Видеа".'));
+        } else {
+            setUrlWarning('');
+        }
     };
 
     const handleRemoveImage = () => {
@@ -149,8 +160,9 @@ const SeminarSchedule = ({ seminarData, errors, handleChange, updateField }) => 
             <div className="scfs-section">
                 <div className="scfs-section-header">
                     <Image size={20} />
-                    <h2 className="scfs-section-title">{t('seminarSchedule.mediaTitle', 'Медия')}</h2>
+                    <h2 className="scfs-section-title">{t('seminarSchedule.thumbnailTitle', 'Обложка')}</h2>
                 </div>
+                <p className="scfs-section-desc">{t('seminarSchedule.thumbnailDesc', 'Снимка за картата на семинара в каталога. Използвайте изображение, не видео линк.')}</p>
 
                 {seminarData.thumbnailUrl ? (
                     <div className="scfs-preview">
@@ -190,6 +202,8 @@ const SeminarSchedule = ({ seminarData, errors, handleChange, updateField }) => 
                             )}
                         </div>
 
+                        <span className="scfs-upload-hint">{t('seminarSchedule.thumbnailFormats', 'Поддържани формати: JPG, PNG, GIF, WebP')}</span>
+
                         <button type="button" className="scfs-url-toggle" onClick={() => setShowUrlInput(!showUrlInput)}>
                             <Link size={14} />
                             {t('seminarSchedule.orPasteUrl', 'Или добави чрез URL')}
@@ -197,8 +211,14 @@ const SeminarSchedule = ({ seminarData, errors, handleChange, updateField }) => 
 
                         {showUrlInput && (
                             <div className={`scfs-field ${errors.thumbnailUrl ? 'scfs-field-error' : ''}`}>
-                                <input id="scfs-thumbnail" type="url" name="thumbnailUrl" className="scfs-input" placeholder="https://..." value={seminarData.thumbnailUrl} onChange={handleChange} />
+                                <input id="scfs-thumbnail" type="url" name="thumbnailUrl" className="scfs-input" placeholder="https://..." value={seminarData.thumbnailUrl} onChange={handleThumbnailUrlChange} />
                                 {renderError('thumbnailUrl')}
+                                {urlWarning && (
+                                    <span className="scfs-warning-msg">
+                                        <AlertCircle size={14} />
+                                        {urlWarning}
+                                    </span>
+                                )}
                             </div>
                         )}
                     </>

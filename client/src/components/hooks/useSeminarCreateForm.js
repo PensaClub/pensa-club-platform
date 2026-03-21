@@ -78,6 +78,7 @@ const useSeminarCreateForm = () => {
 
     const [seminarData, setSeminarData] = useState(INITIAL_DATA);
     const [seminarId, setSeminarId] = useState(savedDraftId ? parseInt(savedDraftId) : null);
+    const [seminarSlug, setSeminarSlug] = useState(null);
     const [assignedMentors, setAssignedMentors] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
@@ -149,6 +150,7 @@ const useSeminarCreateForm = () => {
             }
 
             setSeminarId(sem.id);
+            setSeminarSlug(sem.slug);
             setSeminarData(mapSeminarToForm(sem));
 
             if (sem.mentorAssignments?.length > 0 || sem.facilitator) {
@@ -280,8 +282,10 @@ const useSeminarCreateForm = () => {
             } else {
                 const response = await createSeminar(payload);
                 const newId = response?.seminar?.id || response?.id;
+                const newSlug = response?.seminar?.slug || response?.slug;
                 if (newId) {
                     setSeminarId(newId);
+                    setSeminarSlug(newSlug || null);
                     sessionStorage.setItem(STORAGE_KEY, String(newId));
                 }
                 toast.success(t('seminarCreateForm.created', 'Семинарът е създаден'));
@@ -331,6 +335,8 @@ const useSeminarCreateForm = () => {
 
     return {
         isEditMode,
+        seminarId,
+        seminarSlug,
         seminarData,
         assignedMentors,
         setAssignedMentors,

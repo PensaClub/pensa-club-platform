@@ -1446,6 +1446,46 @@ export const AcademyCoursesProvider = ({ children }) => {
   }, []);
 
   // =========================================================
+  //                    SEMINAR TESTS
+  // =========================================================
+
+  const getSeminarTestStatus = useCallback(async (seminarId) => {
+    try {
+      return await coursesService.getSeminarTestStatus(seminarId);
+    } catch (error) {
+      console.error('Error getting seminar test status:', error);
+      throw error;
+    }
+  }, []);
+
+  const startSeminarTest = useCallback(async (seminarId) => {
+    try {
+      return await coursesService.startSeminarTest(seminarId);
+    } catch (error) {
+      console.error('Error starting seminar test:', error);
+      throw error;
+    }
+  }, []);
+
+  const submitSeminarAnswer = useCallback(async (testId, answerData) => {
+    try {
+      return await coursesService.submitSeminarAnswer(testId, answerData);
+    } catch (error) {
+      console.error('Error submitting seminar answer:', error);
+      throw error;
+    }
+  }, []);
+
+  const submitSeminarTest = useCallback(async (testId) => {
+    try {
+      return await coursesService.submitSeminarTest(testId);
+    } catch (error) {
+      console.error('Error submitting seminar test:', error);
+      throw error;
+    }
+  }, []);
+
+  // =========================================================
   //                    CERTIFICATES
   // =========================================================
 
@@ -1621,6 +1661,73 @@ export const AcademyCoursesProvider = ({ children }) => {
     }
   }, [isAdmin]);
 
+  const deleteSeminarMaterial = useCallback(async (entityType, entityId, materialId) => {
+    try {
+      const response = await coursesService.deleteMaterial(entityType, entityId, materialId);
+      return response;
+    } catch (error) {
+      console.error('Error deleting material:', error);
+      throw error;
+    }
+  }, []);
+
+  // Seminar videos
+  const getSeminarVideos = useCallback(async (seminarId) => {
+    try {
+      const data = await coursesService.getSeminarVideos(seminarId);
+      return data.videos || [];
+    } catch (error) {
+      console.error('Error fetching seminar videos:', error);
+      return [];
+    }
+  }, []);
+
+  const addSeminarVideo = useCallback(async (seminarId, videoData) => {
+    if (!isAdmin) {
+      toast.error('Нямате права за тази операция');
+      return { success: false };
+    }
+    try {
+      const response = await coursesService.addSeminarVideo(seminarId, videoData);
+      toast.success('Видеото е добавено успешно');
+      return response;
+    } catch (error) {
+      console.error('Error adding seminar video:', error);
+      toast.error('Грешка при добавяне на видео');
+      throw error;
+    }
+  }, [isAdmin]);
+
+  const deleteSeminarVideo = useCallback(async (seminarId, videoId) => {
+    if (!isAdmin) {
+      toast.error('Нямате права за тази операция');
+      return { success: false };
+    }
+    try {
+      const response = await coursesService.deleteSeminarVideo(seminarId, videoId);
+      toast.success('Видеото е изтрито успешно');
+      return response;
+    } catch (error) {
+      console.error('Error deleting seminar video:', error);
+      toast.error('Грешка при изтриване на видео');
+      throw error;
+    }
+  }, [isAdmin]);
+
+  const reorderSeminarVideos = useCallback(async (seminarId, videoIds) => {
+    if (!isAdmin) {
+      toast.error('Нямате права за тази операция');
+      return { success: false };
+    }
+    try {
+      const response = await coursesService.reorderSeminarVideos(seminarId, videoIds);
+      return response;
+    } catch (error) {
+      console.error('Error reordering seminar videos:', error);
+      toast.error('Грешка при пренареждане на видеа');
+      throw error;
+    }
+  }, [isAdmin]);
 
   const deleteLessonMaterial = useCallback(async (lessonId, materialId) => {
     if (!isAdmin) {
@@ -1983,6 +2090,16 @@ export const AcademyCoursesProvider = ({ children }) => {
     addLectureMaterial,
     getSeminarMaterials,
     addSeminarMaterial,
+    deleteSeminarMaterial,
+    getSeminarVideos,
+    addSeminarVideo,
+    deleteSeminarVideo,
+    reorderSeminarVideos,
+    // Seminar Tests
+    getSeminarTestStatus,
+    startSeminarTest,
+    submitSeminarAnswer,
+    submitSeminarTest,
     deleteLessonMaterial,
     deleteCourseMaterial,
     // My Academy

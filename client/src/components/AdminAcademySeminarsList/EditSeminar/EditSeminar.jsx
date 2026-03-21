@@ -1,7 +1,7 @@
 // src/components/AdminAcademySeminarsList/EditSeminar/EditSeminar.jsx
 // Prefix: esem-
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
     ArrowLeft, Save, Send, EyeOff, Trash2,
@@ -12,6 +12,8 @@ import SeminarBasicInfo from '../../SeminarCreateForm/SeminarBasicInfo/SeminarBa
 import SeminarSchedule from '../../SeminarCreateForm/SeminarSchedule/SeminarSchedule';
 import SeminarSettings from '../../SeminarCreateForm/SeminarSettings/SeminarSettings';
 import SeminarAdditional from '../../SeminarCreateForm/SeminarAdditional/SeminarAdditional';
+import SeminarMaterialsSection from '../../SeminarCreateForm/SeminarMaterialsSection/SeminarMaterialsSection';
+import SeminarVideosSection from '../../SeminarCreateForm/SeminarVideosSection/SeminarVideosSection';
 import TestEditorModal from '../../AdminAcademyCoursesList/CourseContentManager/TestEditorModal/TestEditorModal';
 import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import './editSeminar.css';
@@ -46,6 +48,8 @@ const EditSeminar = () => {
         showTestEditor,
         setShowTestEditor,
     } = useEditSeminar();
+
+    useEffect(() => { window.scrollTo(0, 0); }, []);
 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [showCancelModal, setShowCancelModal] = useState(false);
@@ -141,6 +145,16 @@ const EditSeminar = () => {
                         availableCourses={availableCourses}
                         courseSearch={courseSearch}
                         setCourseSearch={setCourseSearch}
+                    />
+
+                    <SeminarMaterialsSection
+                        seminarId={seminarId}
+                        seminarSlug={slug}
+                    />
+
+                    <SeminarVideosSection
+                        seminarId={seminarId}
+                        seminarSlug={slug}
                     />
                 </div>
 
@@ -258,7 +272,6 @@ const EditSeminar = () => {
                 />
             )}
 
-4. SeminarSettin
         </>
     );
 };

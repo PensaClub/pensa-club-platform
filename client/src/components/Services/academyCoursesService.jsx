@@ -363,6 +363,26 @@ checkSeminarRegistration: async (seminarId) => { // НОВО
     },
 
     // =========================================================
+    //                    SEMINAR VIDEOS
+    // =========================================================
+
+    getSeminarVideos: async (seminarId) => {
+      return requester.get(`${apiUrl}/academy/seminars/${seminarId}/videos`);
+    },
+
+    addSeminarVideo: async (seminarId, videoData) => {
+      return requester.post(`${apiUrl}/academy/seminars/${seminarId}/videos`, videoData);
+    },
+
+    deleteSeminarVideo: async (seminarId, videoId) => {
+      return requester.del(`${apiUrl}/academy/seminars/${seminarId}/videos/${videoId}`);
+    },
+
+    reorderSeminarVideos: async (seminarId, videoIds) => {
+      return requester.put(`${apiUrl}/academy/seminars/${seminarId}/videos/reorder`, { videoIds });
+    },
+
+    // =========================================================
     //                    ENROLLMENT
     // =========================================================
 
@@ -533,6 +553,24 @@ checkSeminarRegistration: async (seminarId) => { // НОВО
     submitLectureTest: async (lectureTestId) => {
       return requester.post(`${apiUrl}/academy/tests/lecture/${lectureTestId}/submit`);
     },
+
+    // ============ SEMINAR TESTS ============
+    getSeminarTestStatus: async (seminarId) => {
+      return requester.get(`${apiUrl}/academy/tests/seminar/${seminarId}/status`);
+    },
+
+    startSeminarTest: async (seminarId) => {
+      return requester.post(`${apiUrl}/academy/tests/seminar/${seminarId}/start`);
+    },
+
+    submitSeminarAnswer: async (testId, answerData) => {
+      return requester.post(`${apiUrl}/academy/tests/seminar/${testId}/answer`, answerData);
+    },
+
+    submitSeminarTest: async (testId) => {
+      return requester.post(`${apiUrl}/academy/tests/seminar/${testId}/submit`);
+    },
+
     // =========================================================
     //                    CERTIFICATES
     // =========================================================

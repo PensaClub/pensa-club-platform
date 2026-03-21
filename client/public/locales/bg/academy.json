@@ -735,7 +735,8 @@
     },
     "tabs": {
       "overview": "Преглед",
-      "materials": "Материали"
+      "materials": "Материали",
+      "videos": "Видеа"
     },
     "overview": {
       "description": "Описание",
@@ -743,7 +744,8 @@
       "location": "Място на провеждане",
       "prerequisites": "Изисквания",
       "whatToBring": "Какво да носите",
-      "mentor": "Ментор"
+      "mentor": "Ментор",
+      "linkedCourse": "Свързан курс"
     }
   }
 }
