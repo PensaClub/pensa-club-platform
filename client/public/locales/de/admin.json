@@ -20,7 +20,10 @@
       "courses": "Kurse",
       "createLecture": "Vorlesung erstellen",
       "createSeminar": "Seminar erstellen",
-      "lectures": "Vorlesungen"
+      "lectures": "Vorlesungen",
+      "seminars": "Seminare",
+      "seminarAttendance": "Seminar-Anwesenheit"
+
     },
     "students": {
       "title": "Studenten",
@@ -34,6 +37,7 @@
         "lecture": "Vorlesung",
         "mentor": "Mentor",
         "academy": "Akademie"
+        
       },
       "status": {
         "pending": "Wartet auf Genehmigung",

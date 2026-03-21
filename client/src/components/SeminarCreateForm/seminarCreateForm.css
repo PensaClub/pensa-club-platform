@@ -1,0 +1,308 @@
+/* src/components/SeminarCreateForm/seminarCreateForm.css */
+/* Prefix: scf- — LAYOUT ONLY */
+
+/* =========================================================
+   PAGE BACKGROUND + TECH GRID
+   ========================================================= */
+
+.scf-page-bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: #0c0e14;
+    overflow: hidden;
+}
+
+.scf-page-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(56, 189, 248, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(56, 189, 248, 0.04) 1px, transparent 1px);
+    background-size: 48px 48px;
+}
+
+.scf-page-bg::after {
+    content: '';
+    position: absolute;
+    top: -30%;
+    right: -15%;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.07) 0%, transparent 65%);
+    border-radius: 50%;
+}
+
+.scf-glow-orb {
+    position: absolute;
+    bottom: -25%;
+    left: -10%;
+    width: 550px;
+    height: 550px;
+    background: radial-gradient(circle, rgba(14, 165, 233, 0.05) 0%, transparent 65%);
+    border-radius: 50%;
+}
+
+/* =========================================================
+   LOADING
+   ========================================================= */
+
+.scf-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+    gap: 16px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.scf-loading p {
+    font-size: 0.9rem;
+}
+
+.scf-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(0, 210, 255, 0.15);
+    border-top-color: #00d2ff;
+    border-radius: 50%;
+    animation: scf-spin 0.8s linear infinite;
+}
+
+@keyframes scf-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* =========================================================
+   CONTAINER + HEADER
+   ========================================================= */
+
+.scf-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 80px 24px 120px;
+    position: relative;
+    z-index: 100;
+    min-height: 100vh;
+}
+
+.scf-header {
+    margin-bottom: 32px;
+}
+
+.scf-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.85rem;
+    cursor: pointer;
+    padding: 4px 0;
+    margin-bottom: 12px;
+    transition: color 0.2s;
+}
+
+.scf-back-btn svg {
+    flex-shrink: 0;
+}
+
+.scf-back-btn:hover {
+    color: #00d2ff;
+}
+
+.scf-title {
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+    font-size: 1.75rem;
+
+}
+
+.scf-title span {
+    background: linear-gradient(135deg, #00d2ff, #00f0ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 1.75rem;
+
+}
+
+/* =========================================================
+   FORM LAYOUT
+   ========================================================= */
+
+.scf-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.scf-form *,
+.scf-form *::before,
+.scf-form *::after {
+    box-sizing: border-box;
+}
+
+.scf-form input,
+.scf-form select,
+.scf-form textarea {
+    width: 100%;
+    max-width: 100%;
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.scf-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 24px;
+    background: #0a0e1a;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.scf-footer-left {
+    display: flex;
+    align-items: center;
+}
+
+.scf-footer-left span {
+    font-size: 0.8rem;
+    color: #fbbf24;
+    font-weight: 500;
+    animation: scf-pulse 2s ease-in-out infinite;
+}
+
+.scf-footer-right {
+    display: flex;
+    gap: 10px;
+}
+
+.scf-footer-right button svg {
+    flex-shrink: 0;
+}
+
+@keyframes scf-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.scf-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.scf-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.scf-btn-cancel {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.scf-btn-cancel:hover:not(:disabled) {
+    border-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.scf-btn-draft {
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.scf-btn-draft:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.scf-btn-publish {
+    background: linear-gradient(135deg, #00d2ff, #00b4d8);
+    color: #000;
+    font-weight: 600;
+}
+
+.scf-btn-publish:hover:not(:disabled) {
+    background: linear-gradient(135deg, #00e0ff, #00c4e8);
+    box-shadow: 0 4px 20px rgba(0, 210, 255, 0.25);
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1279px) {
+    .scf-container { max-width: 800px; }
+}
+
+@media (max-width: 1023px) {
+    .scf-container { max-width: 100%; padding: 24px 20px 120px; }
+    .scf-title { font-size: 1.5rem; }
+}
+
+@media (max-width: 767px) {
+    .scf-container { padding: 16px 14px 130px; }
+    .scf-title { font-size: 1.25rem; }
+    .scf-footer { flex-direction: column; gap: 10px; padding: 12px 14px; }
+    .scf-footer-right { width: 100%; flex-direction: column; }
+    .scf-btn { flex: 1; justify-content: center; padding: 10px 14px; font-size: 0.85rem; }
+}
+
+@media (max-width: 424px) {
+    .scf-container { padding: 12px 10px 140px; }
+    .scf-title { font-size: 1.1rem; }
+    .scf-btn { font-size: 0.8rem; padding: 9px 12px; }
+    .scf-footer-right { flex-direction: column; gap: 8px; }
+}
+
+/* =========================================================
+   LIGHT THEME
+   ========================================================= */
+
+[data-theme="light"] .scf-page-bg { background: #f1f5f9; }
+[data-theme="light"] .scf-page-bg::before {
+    background-image:
+        linear-gradient(rgba(13, 148, 136, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(13, 148, 136, 0.07) 1px, transparent 1px);
+}
+[data-theme="light"] .scf-page-bg::after { background: radial-gradient(circle, rgba(13, 148, 136, 0.08) 0%, transparent 65%); }
+[data-theme="light"] .scf-glow-orb { background: radial-gradient(circle, rgba(20, 184, 166, 0.07) 0%, transparent 65%); }
+[data-theme="light"] .scf-loading { color: #64748b; }
+[data-theme="light"] .scf-spinner { border-color: rgba(13, 148, 136, 0.15); border-top-color: #0d9488; }
+[data-theme="light"] .scf-back-btn { color: #64748b; }
+[data-theme="light"] .scf-back-btn:hover { color: #0d9488; }
+[data-theme="light"] .scf-title { color: #1e293b; }
+[data-theme="light"] .scf-title span { background: linear-gradient(135deg, #0d9488, #14b8a6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+[data-theme="light"] .scf-footer { background: #ffffff; border-top: 1px solid #e2e8f0; }
+[data-theme="light"] .scf-footer-left span { color: #d97706; }
+[data-theme="light"] .scf-btn-cancel { border: 1px solid #d1d5db; color: #64748b; }
+[data-theme="light"] .scf-btn-cancel:hover:not(:disabled) { border-color: #94a3b8; color: #1e293b; }
+[data-theme="light"] .scf-btn-draft { background-color: #f1f5f9; color: #475569; }
+[data-theme="light"] .scf-btn-draft:hover:not(:disabled) { background-color: #e2e8f0; color: #1e293b; }
+[data-theme="light"] .scf-btn-publish { background: linear-gradient(135deg, #0d9488, #059669); color: #ffffff; }
+[data-theme="light"] .scf-btn-publish:hover:not(:disabled) { background: linear-gradient(135deg, #14b8a6, #0d9488); box-shadow: 0 4px 20px rgba(13, 148, 136, 0.3); }

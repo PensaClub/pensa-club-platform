@@ -1,0 +1,214 @@
+/* src/components/AdminAcademySeminarsList/SeminarModals/seminarModals.css */
+/* Prefix: asmm- */
+
+/* =========================================================
+   OVERLAY
+   ========================================================= */
+
+.asmm-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+.asmm-modal {
+    background: #1a1f2e;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 32px;
+    max-width: 440px;
+    width: 100%;
+    text-align: center;
+    animation: asmm-fadeIn 0.2s ease-out;
+}
+
+@keyframes asmm-fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* =========================================================
+   ICON
+   ========================================================= */
+
+.asmm-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    margin: 0 auto 16px;
+}
+
+.asmm-icon svg {
+    flex-shrink: 0;
+}
+
+.asmm-icon-delete {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+.asmm-icon-cancel {
+    background: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+}
+
+/* =========================================================
+   CONTENT
+   ========================================================= */
+
+.asmm-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 0 0 10px;
+}
+
+.asmm-text {
+    font-size: 0.88rem;
+    color: rgba(255, 255, 255, 0.55);
+    line-height: 1.5;
+    margin: 0 0 20px;
+}
+
+.asmm-text strong {
+    color: #fff;
+}
+
+/* =========================================================
+   REASON TEXTAREA
+   ========================================================= */
+
+.asmm-reason {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    color: #fff;
+    outline: none;
+    resize: vertical;
+    min-height: 70px;
+    font-family: inherit;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    transition: border-color 0.2s;
+}
+
+.asmm-reason:focus {
+    border-color: rgba(0, 210, 255, 0.4);
+}
+
+.asmm-reason::placeholder {
+    color: rgba(255, 255, 255, 0.25);
+}
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.asmm-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.asmm-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 20px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.asmm-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.asmm-btn svg {
+    flex-shrink: 0;
+}
+
+.asmm-btn-back {
+    background: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.asmm-btn-back:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.asmm-btn-delete {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
+
+.asmm-btn-delete:hover:not(:disabled) {
+    background: rgba(239, 68, 68, 0.25);
+}
+
+.asmm-btn-cancel-confirm {
+    background: rgba(245, 158, 11, 0.15);
+    color: #f59e0b;
+}
+
+.asmm-btn-cancel-confirm:hover:not(:disabled) {
+    background: rgba(245, 158, 11, 0.25);
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 767px) {
+    .asmm-modal { padding: 24px 20px; margin: 0 10px; }
+    .asmm-actions { flex-direction: column; }
+    .asmm-btn { justify-content: center; }
+}
+
+@media (max-width: 424px) {
+    .asmm-modal { padding: 20px 16px; }
+    .asmm-title { font-size: 1.05rem; }
+    .asmm-text { font-size: 0.82rem; }
+}
+
+/* =========================================================
+   LIGHT THEME
+   ========================================================= */
+
+[data-theme="light"] .asmm-overlay { background: rgba(0, 0, 0, 0.35); }
+[data-theme="light"] .asmm-modal { background: #ffffff; border-color: #e2e8f0; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15); }
+[data-theme="light"] .asmm-icon-delete { background: rgba(239, 68, 68, 0.08); color: #dc2626; }
+[data-theme="light"] .asmm-icon-cancel { background: rgba(245, 158, 11, 0.08); color: #d97706; }
+[data-theme="light"] .asmm-title { color: #1e293b; }
+[data-theme="light"] .asmm-text { color: #64748b; }
+[data-theme="light"] .asmm-text strong { color: #1e293b; }
+[data-theme="light"] .asmm-reason { background: #ffffff; border-color: #d1d5db; color: #1e293b; }
+[data-theme="light"] .asmm-reason:focus { border-color: rgba(13, 148, 136, 0.4); }
+[data-theme="light"] .asmm-reason::placeholder { color: #94a3b8; }
+[data-theme="light"] .asmm-btn-back { background: #f1f5f9; color: #475569; }
+[data-theme="light"] .asmm-btn-back:hover:not(:disabled) { background: #e2e8f0; color: #1e293b; }
+[data-theme="light"] .asmm-btn-delete { background: rgba(220, 38, 38, 0.08); color: #dc2626; }
+[data-theme="light"] .asmm-btn-delete:hover:not(:disabled) { background: rgba(220, 38, 38, 0.15); }
+[data-theme="light"] .asmm-btn-cancel-confirm { background: rgba(217, 119, 6, 0.08); color: #d97706; }
+[data-theme="light"] .asmm-btn-cancel-confirm:hover:not(:disabled) { background: rgba(217, 119, 6, 0.15); }

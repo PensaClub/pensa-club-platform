@@ -70,6 +70,7 @@ import { ReActionProvider } from './components/contexts/ReActionProvider.jsx';
 import { DigiBridgeChatButton } from './components/DigiBridge/DigiBridgeChatButton/DigiBridgeChatButton.jsx';
 import { DigiBridgeChatWindow } from './components/DigiBridge/DigiBridgeChatWindow/DigiBridgeChatWindow.jsx';
 import { MentorGuard } from './components/Guards/MentorGuard.jsx';
+import { AcademyStaffGuard } from './components/Guards/AcademyStaffGuard.jsx';
 import { DigiBridgeMentorDashboard } from './components/DigiBridge/DigiBridgeMentorDashboard/DigiBridgeMentorDashboard.jsx';
 import { UserChatsPage } from './components/DigiBridge/UserChatsPage/UserChatsPage.jsx';
 import { StudentDetails } from './components/DigiMentorPanel/StudentDetails/StudentDetails.jsx';
@@ -116,6 +117,14 @@ const CourseContentManager = lazyWithRetry(() => import('./components/AdminAcade
 const LectureCreateForm = lazyWithRetry(() => import('./components/LectureCreateForm/LectureCreateForm.jsx'));
 const AdminAcademyLecturesList = lazyWithRetry(() => import('./components/AdminAcademyLecturesList/AdminAcademyLecturesList.jsx'));
 const EditLecture = lazyWithRetry(() => import('./components/AdminAcademyLecturesList/EditLecture/EditLecture.jsx'));
+const SeminarCreateForm = lazyWithRetry(() => import('./components/SeminarCreateForm/SeminarCreateForm.jsx'));
+const AdminAcademySeminarsList = lazyWithRetry(() => import('./components/AdminAcademySeminarsList/AdminAcademySeminarsList.jsx'));
+const AcademySeminars = lazyWithRetry(() => import('./components/AcademySeminars/AcademySeminars.jsx'));
+const AcademySeminarDetail = lazyWithRetry(() => import('./components/AcademySeminars/AcademySeminarDetail/AcademySeminarDetail.jsx'));
+const SeminarAttendancePage = lazyWithRetry(() => import('./components/AdminAcademySeminarsList/SeminarAttendancePage/SeminarAttendancePage.jsx'));
+const EditSeminar = lazyWithRetry(() => import('./components/AdminAcademySeminarsList/EditSeminar/EditSeminar.jsx'));
+const SeminarReviewsAdmin = lazyWithRetry(() => import('./components/AdminAcademySeminarsList/SeminarReviewsAdmin/SeminarReviewsAdmin'));
+const SeminarCheckin = lazyWithRetry(() => import('./components/AcademySeminars/SeminarCheckin/SeminarCheckin'));
 const TelkRkmeRzi = lazyWithRetry(() => import('./components/TelkRkmeRzi/TelkRkmeRzi.jsx'));
 const ComingSoon = lazyWithRetry(() => import('./components/DigiBridgeAcademy/ComingSoon/ComingSoon.jsx'));
 const ProjectCreateForm = lazyWithRetry(() => import('./components/Initiatives/CreateProject/ProjectCreateForm'));
@@ -227,6 +236,15 @@ function AppRoutes() {
         <Route path="/academy/admin/lectures" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><AdminAcademyLecturesList /></Suspense></AdminGuard>} />
         <Route path="/academy/admin/edit-course/:slug" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><EditCourseBasicInfo /></Suspense></AdminGuard>} />
         <Route path="/academy/admin/edit-lecture/:slug" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><EditLecture /></Suspense></AdminGuard>} />
+        <Route path="/academy/admin/seminars" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><AdminAcademySeminarsList /></Suspense></AdminGuard>} />
+        <Route path="/academy/admin/create-seminar" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><SeminarCreateForm /></Suspense></AdminGuard>} />
+        <Route path="/academy/admin/seminar-attendance" element={<AcademyStaffGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><SeminarAttendancePage /></Suspense></AcademyStaffGuard>} />
+        <Route path="/academy/admin/seminar-reviews" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><SeminarReviewsAdmin /></Suspense></AdminGuard>} />
+        <Route path="/academy/seminars" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademySeminars /></Suspense>} />
+        <Route path="/academy/seminars/:seminarId/checkin" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><SeminarCheckin /></Suspense>} />
+        <Route path="/academy/seminars/:slug" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademySeminarDetail /></Suspense>} />
+        <Route path="/academy/seminars/:slug/test" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademyTestPlayer /></Suspense>} />
+        <Route path="/academy/admin/edit-seminar/:slug" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><EditSeminar /></Suspense></AdminGuard>} /> 
         <Route path="/academy/admin/course/:slug/content" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><CourseContentManager /></Suspense></AdminGuard>} />
         <Route path="/ad/details/:adId" element={<AdDetails />} />
         <Route path="/ad/edit/:adId" element={<EditAd />} />
@@ -293,80 +311,80 @@ function App() {
     <>
       <HelmetProvider>
         <ThemeProvider>
-        <SiteSettingsAdminProvider>
-        <ThemeToggle />
-        <ErrorBoundary>
-          <GlobalSnowfall count={50} />
-          <ChristmasGreetingModal />
-          <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
-            <UserProvider>
-              <GoogleAuthProvider>
-                <MapProvider>
-                  <CommunityProvider>
-                    <SuggestUserProvider>
-                      <AdminProvider>
-                        <AcademyProvider>
-                          <AcademyCoursesProvider>
-                            <ArticleProvider>
-                              <InitiativeProvider>
-                                <AnalyticsProvider>
-                                  <LoadingProvider>
-                                    <ArticleLimitProvider>
-                                      <UsefulLinksProvider>
-                                      <ClubProvider>
-                                      <FactCheckProvider>
-                                      <ReActionProvider>
-                                        {!isProfilePage && !isAcademyPage && <Header
-                                          additionalClasses={isProfilePage ? 'hide-header' : ''}
-                                        />}
+          <SiteSettingsAdminProvider>
+            <ThemeToggle />
+            <ErrorBoundary>
+              <GlobalSnowfall count={50} />
+              <ChristmasGreetingModal />
+              <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+                <UserProvider>
+                  <GoogleAuthProvider>
+                    <MapProvider>
+                      <CommunityProvider>
+                        <SuggestUserProvider>
+                          <AdminProvider>
+                            <AcademyProvider>
+                              <AcademyCoursesProvider>
+                                <ArticleProvider>
+                                  <InitiativeProvider>
+                                    <AnalyticsProvider>
+                                      <LoadingProvider>
+                                        <ArticleLimitProvider>
+                                          <UsefulLinksProvider>
+                                            <ClubProvider>
+                                              <FactCheckProvider>
+                                                <ReActionProvider>
+                                                  {!isProfilePage && !isAcademyPage && <Header
+                                                    additionalClasses={isProfilePage ? 'hide-header' : ''}
+                                                  />}
 
-                                        {!cookies.cookieConsent && <CookieConsent />}
-                                        <HeaderCommunity />
-                                        {isAcademyPage && <DigiBridgeHeader />}
-                                        <ToastContainer
-                                          role="alert"
-                                          className={'notification'}
-                                          limit={3}
-                                          position="bottom-right"
-                                        />
-                                        <DigiBridgeChatButton onClick={() => setIsChatOpen(true)} />
-                                        {/* ✅ Chat Window */}
-                                        {isChatOpen && <DigiBridgeChatWindow onClose={() => setIsChatOpen(false)} />}
-                                        {/* {isChatOpen && <DigiBridgeChatWindow onClose={() => setIsChatOpen(false)} />} */}
-                                        <Routes>
-                                          <Route path="/en/*" element={<LanguageWrapper lang="en"><AppRoutes /></LanguageWrapper>} />
-                                          <Route path="/de/*" element={<LanguageWrapper lang="de"><AppRoutes /></LanguageWrapper>} />
-                                          <Route path="/*" element={<LanguageWrapper lang="bg"><AppRoutes /></LanguageWrapper>} />
-                                        </Routes>
+                                                  {!cookies.cookieConsent && <CookieConsent />}
+                                                  <HeaderCommunity />
+                                                  {isAcademyPage && <DigiBridgeHeader />}
+                                                  <ToastContainer
+                                                    role="alert"
+                                                    className={'notification'}
+                                                    limit={3}
+                                                    position="bottom-right"
+                                                  />
+                                                  <DigiBridgeChatButton onClick={() => setIsChatOpen(true)} />
+                                                  {/* ✅ Chat Window */}
+                                                  {isChatOpen && <DigiBridgeChatWindow onClose={() => setIsChatOpen(false)} />}
+                                                  {/* {isChatOpen && <DigiBridgeChatWindow onClose={() => setIsChatOpen(false)} />} */}
+                                                  <Routes>
+                                                    <Route path="/en/*" element={<LanguageWrapper lang="en"><AppRoutes /></LanguageWrapper>} />
+                                                    <Route path="/de/*" element={<LanguageWrapper lang="de"><AppRoutes /></LanguageWrapper>} />
+                                                    <Route path="/*" element={<LanguageWrapper lang="bg"><AppRoutes /></LanguageWrapper>} />
+                                                  </Routes>
 
-                                        {!isProfilePage && (
-                                          <FooterWithLoading
-                                            additionalClasses={
-                                              isCommunityPage ? 'hide-on-mobile position-fix' : ''
-                                            }
-                                          />
-                                        )}
-                                        {!isProfilePage && <MenuCommunity />}
-                                      </ReActionProvider>
-                                      </FactCheckProvider>
-                                      </ClubProvider>
-                                      </UsefulLinksProvider>
-                                    </ArticleLimitProvider>
-                                  </LoadingProvider>
-                                </AnalyticsProvider>
-                              </InitiativeProvider>
-                            </ArticleProvider>
-                          </AcademyCoursesProvider>
-                        </AcademyProvider>
-                      </AdminProvider>
-                    </SuggestUserProvider>
-                  </CommunityProvider>
-                </MapProvider>
-              </GoogleAuthProvider>
-            </UserProvider>
-          </GoogleOAuthProvider>
-        </ErrorBoundary>
-        </SiteSettingsAdminProvider>
+                                                  {!isProfilePage && (
+                                                    <FooterWithLoading
+                                                      additionalClasses={
+                                                        isCommunityPage ? 'hide-on-mobile position-fix' : ''
+                                                      }
+                                                    />
+                                                  )}
+                                                  {!isProfilePage && <MenuCommunity />}
+                                                </ReActionProvider>
+                                              </FactCheckProvider>
+                                            </ClubProvider>
+                                          </UsefulLinksProvider>
+                                        </ArticleLimitProvider>
+                                      </LoadingProvider>
+                                    </AnalyticsProvider>
+                                  </InitiativeProvider>
+                                </ArticleProvider>
+                              </AcademyCoursesProvider>
+                            </AcademyProvider>
+                          </AdminProvider>
+                        </SuggestUserProvider>
+                      </CommunityProvider>
+                    </MapProvider>
+                  </GoogleAuthProvider>
+                </UserProvider>
+              </GoogleOAuthProvider>
+            </ErrorBoundary>
+          </SiteSettingsAdminProvider>
         </ThemeProvider>
       </HelmetProvider>
     </>

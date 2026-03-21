@@ -1,0 +1,281 @@
+/* src/components/SeminarCreateForm/SeminarSettings/seminarSettings.css */
+/* Prefix: scft- */
+
+/* =========================================================
+   SECTION
+   ========================================================= */
+
+.scft-section {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    padding: 24px;
+}
+
+.scft-section-mentor {
+    position: relative;
+    z-index: 10;
+    overflow: visible;
+}
+
+.scft-section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    color: #00d2ff;
+}
+
+.scft-section-header svg {
+    flex-shrink: 0;
+}
+
+.scft-section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+}
+
+.scft-section-desc {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.45);
+    margin: -8px 0 16px;
+    line-height: 1.5;
+}
+
+/* =========================================================
+   FIELDS
+   ========================================================= */
+
+.scft-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+    position: relative;
+}
+
+.scft-field:last-child {
+    margin-bottom: 0;
+}
+
+.scft-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.scft-input {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.9rem;
+    color: #fff;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    font-family: inherit;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.scft-input:focus {
+    border-color: rgba(0, 210, 255, 0.4);
+    box-shadow: 0 0 0 3px rgba(0, 210, 255, 0.08);
+}
+
+.scft-input::placeholder {
+    color: rgba(255, 255, 255, 0.25);
+}
+
+.scft-input-sm {
+    max-width: 200px;
+}
+
+.scft-hint {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+/* =========================================================
+   ERROR
+   ========================================================= */
+
+.scft-field-error .scft-input {
+    border-color: rgba(255, 107, 107, 0.5);
+}
+
+.scft-error-msg {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.8rem;
+    color: #ff6b6b;
+}
+
+.scft-error-msg svg {
+    flex-shrink: 0;
+}
+
+/* =========================================================
+   ROW
+   ========================================================= */
+
+.scft-row {
+    display: flex;
+    gap: 16px;
+}
+
+.scft-row > .scft-field {
+    flex: 1;
+}
+
+/* =========================================================
+   TOGGLES
+   ========================================================= */
+
+.scft-toggles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 24px;
+    margin-top: 8px;
+}
+
+.scft-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.scft-toggle input[type="checkbox"] {
+    display: none;
+}
+
+.scft-toggle-slider {
+    width: 40px;
+    height: 22px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 11px;
+    position: relative;
+    transition: background 0.25s;
+    flex-shrink: 0;
+}
+
+.scft-toggle-slider::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 16px;
+    height: 16px;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    transition: transform 0.25s, background 0.25s;
+}
+
+.scft-toggle input:checked + .scft-toggle-slider {
+    background: rgba(0, 210, 255, 0.3);
+}
+
+.scft-toggle input:checked + .scft-toggle-slider::after {
+    transform: translateX(18px);
+    background: #00d2ff;
+}
+
+.scft-toggle-text {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+/* =========================================================
+   TEST FIELDS
+   ========================================================= */
+
+.scft-test-fields {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 767px) {
+    .scft-section { padding: 16px; border-radius: 12px; }
+    .scft-row { flex-direction: column; }
+    .scft-field { margin-bottom: 14px; }
+    .scft-field:last-child { margin-bottom: 0; }
+    .scft-toggles { flex-direction: column; gap: 12px; }
+    .scft-input-sm { max-width: 100%; }
+}
+
+@media (max-width: 424px) {
+    .scft-section { padding: 12px; }
+    .scft-section-title { font-size: 1rem; }
+    .scft-input { font-size: 0.85rem; padding: 9px 12px; }
+}
+
+/* =========================================================
+   LIGHT THEME
+   ========================================================= */
+
+[data-theme="light"] .scft-section { background-color: #ffffff; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02); }
+[data-theme="light"] .scft-section-header { color: #0d9488; }
+[data-theme="light"] .scft-section-title { color: #1e293b; }
+[data-theme="light"] .scft-section-desc { color: #64748b; }
+[data-theme="light"] .scft-label { color: #475569; }
+[data-theme="light"] .scft-input { background-color: #ffffff; border: 1px solid #d1d5db; color: #1e293b; }
+[data-theme="light"] .scft-input:focus { border-color: rgba(13, 148, 136, 0.4); box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.12); }
+[data-theme="light"] .scft-input::placeholder { color: #94a3b8; }
+[data-theme="light"] .scft-hint { color: #94a3b8; }
+[data-theme="light"] .scft-field-error .scft-input { border-color: rgba(220, 38, 38, 0.5); }
+[data-theme="light"] .scft-error-msg { color: #dc2626; }
+[data-theme="light"] .scft-toggle-slider { background: #d1d5db; }
+[data-theme="light"] .scft-toggle-slider::after { background: #ffffff; }
+[data-theme="light"] .scft-toggle input:checked + .scft-toggle-slider { background: rgba(13, 148, 136, 0.3); }
+[data-theme="light"] .scft-toggle input:checked + .scft-toggle-slider::after { background: #0d9488; }
+[data-theme="light"] .scft-toggle-text { color: #475569; }
+[data-theme="light"] .scft-test-fields { border-top-color: #e2e8f0; }
+/* Test editor button */
+.scft-btn-test-editor {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    padding: 10px 18px;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 210, 255, 0.2);
+    background: rgba(0, 210, 255, 0.06);
+    color: #00d2ff;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.scft-btn-test-editor svg {
+    flex-shrink: 0;
+}
+
+.scft-btn-test-editor:hover {
+    background: rgba(0, 210, 255, 0.12);
+    border-color: rgba(0, 210, 255, 0.35);
+}
+
+[data-theme="light"] .scft-btn-test-editor {
+    border-color: rgba(13, 148, 136, 0.25);
+    background: rgba(13, 148, 136, 0.06);
+    color: #0d9488;
+}
+
+[data-theme="light"] .scft-btn-test-editor:hover {
+    background: rgba(13, 148, 136, 0.12);
+    border-color: rgba(13, 148, 136, 0.4);
+}

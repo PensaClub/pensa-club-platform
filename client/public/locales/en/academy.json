@@ -624,5 +624,131 @@
     "skip": "Skip",
     "submit": "Submit",
     "submitting": "Submitting..."
+  },
+  "academySeminars": {
+  "seo": {
+    "title": "Seminars | DigiBridge Academy",
+    "description": "Free digital literacy seminars. Hands-on workshops, discussions and practical sessions with qualified mentors at senior clubs.",
+    "keywords": "seminars, digital literacy, training, free, seniors, in-person workshops, DigiBridge Academy"
+  },
+  "loading": "Loading seminars...",
+  "results": "seminars",
+  "loadMore": "Load more",
+  "of": "of",
+  "empty": {
+    "title": "No seminars found",
+    "description": "Change filters or search",
+    "clearFilters": "Clear filters"
   }
+},
+"seminarsHero": {
+  "badge": "In-person Training",
+  "title": "Seminars for",
+  "titleAccent": "Digital Literacy",
+  "subtitle": "Hands-on workshops at retirement clubs with qualified mentors",
+  "stats": {
+    "total": "seminars",
+    "upcoming": "upcoming",
+    "completed": "completed",
+    "credits": "credits"
+  }
+},
+"seminarsFilters": {
+  "tabs": {
+    "all": "All",
+    "upcoming": "Upcoming",
+    "completed": "Completed"
+  },
+  "searchPlaceholder": "Search seminar...",
+  "sort": {
+    "date": "By date",
+    "popular": "Popular",
+    "title": "By title"
+  },
+  "clearAll": "Clear filters"
+},
+"seminarCard": {
+  "statusLive": "LIVE NOW",
+  "statusUpcoming": "Upcoming",
+  "statusCompleted": "Completed",
+  "statusCancelled": "Cancelled",
+  "btnLive": "View more",
+  "btnUpcoming": "Sign up",
+  "btnCompleted": "Details",
+  "btnCancelled": "View",
+  "btnDefault": "View",
+  "min": "min",
+  "online": "Online",
+  "inPerson": "In person",
+  "uncategorized": "Seminar",
+  "mentor": "Mentor",
+  "hasTest": "Test"
+},
+"seminarDetail": {
+  "loading": "Loading...",
+  "registrationClosed": "Registration is closed",
+  "error": {
+    "notFound": "Seminar not found",
+    "title": "Loading error",
+    "back": "Back to seminars"
+  },
+  "breadcrumb": {
+    "academy": "Academy",
+    "seminars": "Seminars"
+  },
+  "status": {
+    "live": "LIVE NOW",
+    "upcoming": "UPCOMING",
+    "completed": "COMPLETED",
+    "cancelled": "CANCELLED"
+  },
+  "min": "min",
+  "online": "Online",
+  "inPerson": "In person",
+  "stats": {
+    "credits": "Credits",
+    "registered": "Registered",
+    "attended": "Attended"
+  },
+  "countdown": "Starts in",
+  "days": "days",
+  "hours": "h",
+  "mins": "min",
+  "secs": "sec",
+  "register": "Sign up",
+  "unregister": "Unsubscribe",
+  "spotsLeft": "spots left",
+  "completedInfo": "Seminar has ended",
+  "takeTest": "Take the test",
+  "addToCalendar": "Add to Calendar",
+  "share": "Share",
+  "credits": {
+    "attendance": "For attendance",
+    "participation": "For participation",
+    "test": "For test",
+    "total": "Total"
+  },
+  "tabs": {
+    "overview": "Overview",
+    "materials": "Materials",
+    "videos": "Videos"
+  },
+  "overview": {
+    "description": "Description",
+    "learningPoints": "What you'll learn",
+    "location": "Venue",
+    "prerequisites": "Requirements",
+    "whatToBring": "What to bring",
+    "mentor": "Mentor",
+    "linkedCourse": "Linked Course"
+  },
+  "reviews": {
+    "title": "Reviews",
+    "placeholder": "Share your opinion (optional)...",
+    "submit": "Submit review",
+    "submitting": "Submitting...",
+    "submitted": "Thank you! Your review will be reviewed by an administrator.",
+    "noReviews": "No reviews for this seminar yet."
+  }
+}
 }

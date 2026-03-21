@@ -3,7 +3,7 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuthContext } from '../contexts/UserContext';
 
-export const MentorGuard = () => {
+export const MentorGuard = ({ children }) => {
   const { isAuthentication, profileData } = useAuthContext();
 
   // Проверка дали е logged in
@@ -21,5 +21,5 @@ export const MentorGuard = () => {
     return <Navigate to="/" replace />;
   }
 
-  return <Outlet />;
+  return children ? children : <Outlet />;
 };

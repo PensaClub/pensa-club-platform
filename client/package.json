@@ -29,6 +29,7 @@
     "lottie-react": "^2.4.1",
     "lucide-react": "^0.562.0",
     "masonry-layout": "^4.2.2",
+    "qrcode.react": "^4.2.0",
     "react": "^18.3.1",
     "react-awesome-reveal": "^4.2.10",
     "react-cookie": "^7.2.0",

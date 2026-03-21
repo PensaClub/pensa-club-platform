@@ -1,0 +1,218 @@
+/* SeminarReviewsAdmin - prefix sra- */
+
+/* =========================================================
+   PAGE BACKGROUND
+   ========================================================= */
+
+.sra-page {
+    position: relative;
+    min-height: 100vh;
+    background: #0c0e14;
+}
+
+.sra-page::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image:
+        linear-gradient(rgba(0, 210, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 210, 255, 0.02) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse 70% 50% at 50% 50%, black 20%, transparent 70%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 50% at 50% 50%, black 20%, transparent 70%);
+}
+
+/* =========================================================
+   CONTAINER
+   ========================================================= */
+
+.sra-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 110px 24px 40px;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.sra-header { margin-bottom: 28px; }
+
+.sra-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.85rem;
+    cursor: pointer;
+    padding: 0;
+    margin-bottom: 16px;
+    font-family: inherit;
+}
+
+.sra-back:hover { color: #00d2ff; }
+.sra-back svg { flex-shrink: 0; }
+
+.sra-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+}
+
+.sra-title span { color: #00d2ff; }
+
+/* =========================================================
+   FILTERS
+   ========================================================= */
+
+.sra-filters { display: flex; gap: 6px; margin-bottom: 24px; }
+
+.sra-filter-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+.sra-filter-btn:hover { border-color: rgba(0, 210, 255, 0.3); color: rgba(255, 255, 255, 0.8); }
+
+.sra-filter-active {
+    border-color: rgba(0, 210, 255, 0.5);
+    background: rgba(0, 210, 255, 0.08);
+    color: #00d2ff;
+}
+
+.sra-filter-badge {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+    font-size: 0.68rem;
+    padding: 1px 6px;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+/* =========================================================
+   LOADING / EMPTY
+   ========================================================= */
+
+.sra-loading, .sra-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 60px 0;
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 0.9rem;
+}
+
+/* =========================================================
+   LIST & CARDS
+   ========================================================= */
+
+.sra-list { display: flex; flex-direction: column; gap: 12px; }
+
+.sra-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    padding: 18px;
+}
+
+.sra-card-pending { border-left: 3px solid #f59e0b; }
+.sra-card-approved { border-left: 3px solid #10b981; }
+
+.sra-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.sra-card-author { display: flex; align-items: center; gap: 10px; }
+.sra-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
+.sra-avatar-placeholder { width: 36px; height: 36px; border-radius: 50%; background: rgba(0, 210, 255, 0.12); color: #00d2ff; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 600; }
+.sra-author-info { display: flex; flex-direction: column; gap: 1px; }
+.sra-author-name { font-size: 0.85rem; font-weight: 500; color: #fff; }
+.sra-author-email { font-size: 0.7rem; color: rgba(255, 255, 255, 0.35); }
+.sra-card-stars { font-size: 1rem; color: #fbbf24; letter-spacing: 1px; }
+
+.sra-card-seminar { font-size: 0.78rem; color: rgba(255, 255, 255, 0.5); margin-bottom: 8px; }
+.sra-card-seminar strong { color: rgba(255, 255, 255, 0.8); }
+
+.sra-card-comment { font-size: 0.85rem; color: rgba(255, 255, 255, 0.6); line-height: 1.5; margin: 0 0 10px; }
+
+.sra-card-footer { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.sra-card-date { font-size: 0.7rem; color: rgba(255, 255, 255, 0.3); }
+
+.sra-status-badge { font-size: 0.65rem; font-weight: 600; padding: 2px 8px; border-radius: 6px; text-transform: uppercase; }
+.sra-status-pending { background: rgba(245, 158, 11, 0.12); color: #f59e0b; }
+.sra-status-approved { background: rgba(16, 185, 129, 0.12); color: #10b981; }
+
+.sra-card-actions { display: flex; gap: 4px; margin-left: auto; }
+
+.sra-btn { display: flex; align-items: center; justify-content: center; width: 34px; height: 34px; border-radius: 8px; border: none; cursor: pointer; transition: all 0.2s; }
+.sra-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.sra-btn svg { flex-shrink: 0; }
+.sra-btn-approve { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+.sra-btn-approve:hover:not(:disabled) { background: rgba(16, 185, 129, 0.2); }
+.sra-btn-delete { background: rgba(239, 68, 68, 0.08); color: rgba(239, 68, 68, 0.6); }
+.sra-btn-delete:hover:not(:disabled) { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 767px) {
+    .sra-container { padding: 110px 14px 40px; }
+    .sra-title { font-size: 1.2rem; }
+    .sra-filters { flex-wrap: wrap; }
+}
+
+@media (max-width: 480px) {
+    .sra-container { padding: 110px 10px 40px; }
+    .sra-card { padding: 14px; }
+    .sra-card-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
+
+/* =========================================================
+   LIGHT THEME
+   ========================================================= */
+
+[data-theme="light"] .sra-page { background: #f1f5f9; }
+[data-theme="light"] .sra-page::before {
+    background-image:
+        linear-gradient(rgba(13, 148, 136, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(13, 148, 136, 0.04) 1px, transparent 1px);
+}
+[data-theme="light"] .sra-back { color: #64748b; }
+[data-theme="light"] .sra-back:hover { color: #0d9488; }
+[data-theme="light"] .sra-title { color: #1e293b; }
+[data-theme="light"] .sra-title span { color: #0d9488; }
+[data-theme="light"] .sra-filter-btn { border-color: #e2e8f0; background: #fff; color: #64748b; }
+[data-theme="light"] .sra-filter-btn:hover { border-color: rgba(13, 148, 136, 0.3); color: #1e293b; }
+[data-theme="light"] .sra-filter-active { border-color: rgba(13, 148, 136, 0.5); background: rgba(13, 148, 136, 0.06); color: #0d9488; }
+[data-theme="light"] .sra-loading, [data-theme="light"] .sra-empty { color: #94a3b8; }
+[data-theme="light"] .sra-card { background: #fff; border-color: #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+[data-theme="light"] .sra-author-name { color: #1e293b; }
+[data-theme="light"] .sra-author-email { color: #94a3b8; }
+[data-theme="light"] .sra-card-seminar { color: #64748b; }
+[data-theme="light"] .sra-card-seminar strong { color: #1e293b; }
+[data-theme="light"] .sra-card-comment { color: #475569; }
+[data-theme="light"] .sra-card-date { color: #94a3b8; }
+[data-theme="light"] .sra-avatar-placeholder { background: rgba(13, 148, 136, 0.1); color: #0d9488; }
+[data-theme="light"] .sra-status-pending { background: rgba(245, 158, 11, 0.08); color: #d97706; }
+[data-theme="light"] .sra-status-approved { background: rgba(5, 150, 105, 0.06); color: #059669; }
+[data-theme="light"] .sra-btn-approve { background: rgba(5, 150, 105, 0.06); color: #059669; }
+[data-theme="light"] .sra-btn-approve:hover:not(:disabled) { background: rgba(5, 150, 105, 0.12); }
+[data-theme="light"] .sra-btn-delete { background: rgba(220, 38, 38, 0.04); color: #dc2626; }
+[data-theme="light"] .sra-btn-delete:hover:not(:disabled) { background: rgba(220, 38, 38, 0.1); }

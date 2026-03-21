@@ -1,6 +1,6 @@
 // server/src/middleware/botDetector.js
 
-const { article, mainImage, project, initiative, Club, mentor, image, publication, story, course, lecture, fact_check_module } = require('../sequelize/models');
+const { article, mainImage, project, initiative, Club, mentor, image, publication, story, course, lecture, fact_check_module, seminar } = require('../sequelize/models');
 const generateArticleMetaHTML = require('../utils/metaGenerator');
 const generateProjectMetaHTML = require('../utils/projectMetaGenerator');
 const generateInitiativeMetaHTML = require('../utils/initiativeMetaGenerator');
@@ -17,6 +17,7 @@ const generateTelkMetaHTML = require('../utils/telkMetaGenerator');
 const generateArticlesListMetaHTML = require('../utils/articlesListMetaGenerator');
 const { generateFactCheckListMetaHTML, generateFactCheckDetailMetaHTML } = require('../utils/factCheckMetaGenerator');
 const { generateReactionLandingMetaHTML, generateReactionBookMetaHTML } = require('../utils/reactionMetaGenerator');
+const { generateSeminarsListMetaHTML, generateSeminarDetailMetaHTML } = require('../utils/seminarsMetaGenerator');
 const geoip = require('geoip-lite');
 
 /**
@@ -181,6 +182,8 @@ async function botDetector(req, res, next) {
     const courseMatch = req.path.match(/^\/academy\/courses\/([a-zA-Z0-9-]+)$/);
     const lecturesListMatch = req.path.match(/^\/academy\/lectures$/);
     const lectureMatch = req.path.match(/^\/academy\/lectures\/([a-zA-Z0-9-]+)$/);
+    const seminarsListMatch = req.path.match(/^\/academy\/seminars$/);
+    const seminarDetailMatch = req.path.match(/^\/academy\/seminars\/([a-zA-Z0-9-]+)$/);
     const telkMatch = req.path.match(/^\/telk-rkme-rzi$/);
     const factCheckListMatch = req.path.match(/^\/fact-check$/);
     const factCheckDetailMatch = req.path.match(/^\/fact-check\/([a-zA-Z0-9-]+)$/);
@@ -530,6 +533,55 @@ if (storyMatch) {
 
             const html = generateCoursesListMetaHTML();
             console.log('📤 Sending courses list HTML to bot');
+            return res.send(html);
+        }
+
+        // ==================== SEMINARS LIST (СТАТИЧНА) ====================
+        if (seminarsListMatch) {
+            console.log('🎓 Processing SEMINARS LIST page');
+
+            await logBotRequest(botName, 'page', null, 'academy-seminars', userAgent, clientIP);
+
+            const html = generateSeminarsListMetaHTML();
+            console.log('📤 Sending seminars list HTML to bot');
+            return res.send(html);
+        }
+
+        // ==================== SEMINAR DETAIL ====================
+        if (seminarDetailMatch) {
+            const slug = seminarDetailMatch[1];
+            console.log('🎓 Processing SEMINAR:', slug);
+
+            const foundSeminar = await seminar.findOne({
+                where: { slug, isPublished: true },
+                include: [
+                    {
+                        model: mentor,
+                        as: 'facilitator',
+                        attributes: ['id', 'name', 'photoUrl', 'specialization']
+                    }
+                ],
+                attributes: [
+                    'id', 'title', 'slug', 'shortDescription', 'description',
+                    'category', 'tags', 'thumbnailUrl', 'seminarType',
+                    'isOnline', 'location', 'address', 'meetingLink',
+                    'scheduledDate', 'scheduledEndDate', 'durationMinutes',
+                    'maxParticipants', 'registeredCount', 'status',
+                    'publishedAt', 'createdAt', 'updatedAt'
+                ]
+            });
+
+            if (!foundSeminar) {
+                console.log('❌ Seminar not found:', slug);
+                return next();
+            }
+
+            console.log('✅ Seminar found:', foundSeminar.title);
+
+            await logBotRequest(botName, 'page', foundSeminar.id, foundSeminar.slug, userAgent, clientIP);
+
+            const html = generateSeminarDetailMetaHTML(foundSeminar);
+            console.log('📤 Sending seminar HTML to bot');
             return res.send(html);
         }
 

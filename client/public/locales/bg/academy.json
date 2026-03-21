@@ -635,5 +635,131 @@
     "skip": "Пропусни",
     "submit": "Изпрати",
     "submitting": "Изпращане..."
+  },
+  "academySeminars": {
+    "seo": {
+      "title": "Семинари | DigiBridge Academy",
+      "description": "Безплатни семинари за дигитална грамотност. Практически занятия, дискусии и работилници с квалифицирани ментори в пенсионерските клубове.",
+      "keywords": "семинари, дигитална грамотност, обучение, безплатно, пенсионери, присъствени обучения, DigiBridge Academy"
+    },
+    "loading": "Зареждане на семинари...",
+    "results": "семинара",
+    "loadMore": "Зареди още",
+    "of": "от",
+    "empty": {
+      "title": "Няма намерени семинари",
+      "description": "Променете филтрите или търсенето",
+      "clearFilters": "Изчисти филтрите"
+    }
+  },
+  "seminarsHero": {
+    "badge": "Присъствени обучения",
+    "title": "Семинари за",
+    "titleAccent": "дигитална грамотност",
+    "subtitle": "Практически занятия на място в пенсионерските клубове с квалифицирани ментори",
+    "stats": {
+      "total": "семинара",
+      "upcoming": "предстоящи",
+      "completed": "проведени",
+      "credits": "кредити"
+    }
+  },
+  "seminarsFilters": {
+    "tabs": {
+      "all": "Всички",
+      "upcoming": "Предстоящи",
+      "completed": "Проведени"
+    },
+    "searchPlaceholder": "Търси семинар...",
+    "sort": {
+      "date": "По дата",
+      "popular": "Популярни",
+      "title": "По заглавие"
+    },
+    "clearAll": "Изчисти филтрите"
+  },
+  "seminarCard": {
+    "statusLive": "В МОМЕНТА",
+    "statusUpcoming": "Предстои",
+    "statusCompleted": "Приключил",
+    "statusCancelled": "Отменен",
+    "btnLive": "Виж повече",
+    "btnUpcoming": "Запиши се",
+    "btnCompleted": "Детайли",
+    "btnCancelled": "Преглед",
+    "btnDefault": "Виж",
+    "min": "мин",
+    "online": "Онлайн",
+    "inPerson": "Присъствено",
+    "uncategorized": "Семинар",
+    "mentor": "Ментор",
+    "hasTest": "Тест"
+  },
+  "seminarDetail": {
+    "loading": "Зареждане...",
+    "registrationClosed": "Записването е затворено",
+    "error": {
+      "notFound": "Семинарът не е намерен",
+      "title": "Грешка при зареждане",
+      "back": "Към семинарите"
+    },
+    "breadcrumb": {
+      "academy": "Академия",
+      "seminars": "Семинари"
+    },
+    "status": {
+      "live": "В МОМЕНТА",
+      "upcoming": "ПРЕДСТОИ",
+      "completed": "ПРИКЛЮЧИЛ",
+      "cancelled": "ОТМЕНЕН"
+    },
+    "min": "мин",
+    "online": "Онлайн",
+    "inPerson": "Присъствено",
+    "stats": {
+      "credits": "Кредити",
+      "registered": "Записани",
+      "attended": "Присъствали"
+    },
+    "countdown": "Започва след",
+    "days": "дни",
+    "hours": "ч",
+    "mins": "мин",
+    "secs": "сек",
+    "register": "Запиши се",
+    "unregister": "Отпиши се",
+    "spotsLeft": "свободни места",
+    "completedInfo": "Семинарът е приключил",
+    "takeTest": "Реши теста",
+    "addToCalendar": "Добави в календар",
+    "share": "Сподели",
+    "credits": {
+      "attendance": "За присъствие",
+      "participation": "За участие",
+      "test": "За тест",
+      "total": "Общо"
+    },
+    "tabs": {
+      "overview": "Преглед",
+      "materials": "Материали",
+      "videos": "Видеа"
+    },
+    "overview": {
+      "description": "Описание",
+      "learningPoints": "Какво ще научите",
+      "location": "Място на провеждане",
+      "prerequisites": "Изисквания",
+      "whatToBring": "Какво да носите",
+      "mentor": "Ментор",
+      "linkedCourse": "Свързан курс"
+    },
+    "reviews": {
+      "title": "Отзиви",
+      "placeholder": "Споделете вашето мнение (незадължително)...",
+      "submit": "Изпрати отзив",
+      "submitting": "Изпращане...",
+      "submitted": "Благодарим! Отзивът ви ще бъде прегледан от администратор.",
+      "noReviews": "Все още няма отзиви за този семинар."
+    }
   }
 }

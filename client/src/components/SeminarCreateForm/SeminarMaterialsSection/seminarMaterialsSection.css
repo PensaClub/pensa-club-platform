@@ -1,0 +1,399 @@
+/* src/components/SeminarCreateForm/SeminarMaterialsSection/seminarMaterialsSection.css */
+/* Prefix: scfm- */
+
+/* =========================================================
+   SECTION
+   ========================================================= */
+
+.scfm-section {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    padding: 24px;
+}
+
+.scfm-section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    color: #00d2ff;
+}
+
+.scfm-section-header svg {
+    flex-shrink: 0;
+}
+
+.scfm-section-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 0;
+}
+
+.scfm-section-desc {
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.45);
+    margin: -12px 0 16px 30px;
+    line-height: 1.4;
+}
+
+/* =========================================================
+   SAVE FIRST INFO BOX
+   ========================================================= */
+
+.scfm-save-first {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    line-height: 1.4;
+}
+
+.scfm-save-first svg {
+    flex-shrink: 0;
+    color: rgba(255, 255, 255, 0.35);
+}
+
+.scfm-save-first span {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.55);
+}
+
+/* =========================================================
+   MATERIALS LIST
+   ========================================================= */
+
+.scfm-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+}
+
+.scfm-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    transition: background 0.2s;
+}
+
+.scfm-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+.scfm-item-icon {
+    flex-shrink: 0;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.scfm-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+}
+
+.scfm-item-name {
+    font-size: 0.85rem;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.scfm-item-meta {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.35);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.scfm-item-pending {
+    border-style: dashed;
+    opacity: 0.75;
+}
+
+.scfm-item-pending-badge {
+    color: #f59e0b;
+    margin-left: 6px;
+    font-size: 0.7rem;
+}
+
+.scfm-item-delete {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    border: none;
+    background: rgba(255, 107, 107, 0.08);
+    color: rgba(255, 107, 107, 0.6);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.scfm-item-delete:hover {
+    background: rgba(255, 107, 107, 0.18);
+    color: #ff6b6b;
+}
+
+/* =========================================================
+   UPLOAD ZONE
+   ========================================================= */
+
+.scfm-upload-zone {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 32px 16px;
+    border: 2px dashed rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.scfm-upload-zone:hover {
+    border-color: rgba(0, 210, 255, 0.4);
+    color: rgba(0, 210, 255, 0.7);
+    background: rgba(0, 210, 255, 0.03);
+}
+
+.scfm-upload-zone-active {
+    border-color: rgba(0, 210, 255, 0.6);
+    background: rgba(0, 210, 255, 0.06);
+    color: #00d2ff;
+}
+
+.scfm-upload-zone-uploading {
+    pointer-events: none;
+    cursor: default;
+}
+
+.scfm-upload-input {
+    display: none;
+}
+
+.scfm-upload-text {
+    font-size: 0.85rem;
+}
+
+.scfm-upload-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: 1px solid rgba(0, 210, 255, 0.3);
+    background: rgba(0, 210, 255, 0.08);
+    color: #00d2ff;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+.scfm-upload-btn:hover {
+    background: rgba(0, 210, 255, 0.15);
+    border-color: rgba(0, 210, 255, 0.5);
+}
+
+.scfm-upload-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.scfm-upload-hint {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.35);
+    margin-top: 6px;
+}
+
+/* =========================================================
+   UPLOAD PROGRESS
+   ========================================================= */
+
+.scfm-upload-progress {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 60%;
+}
+
+.scfm-upload-progress-bar {
+    flex: 1;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.scfm-upload-progress-fill {
+    height: 100%;
+    background: #00d2ff;
+    border-radius: 3px;
+    transition: width 0.2s;
+}
+
+.scfm-upload-progress-text {
+    font-size: 0.8rem;
+    color: #00d2ff;
+    min-width: 36px;
+}
+
+/* =========================================================
+   URL TOGGLE & FORM
+   ========================================================= */
+
+.scfm-url-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    padding: 0;
+    border: none;
+    background: none;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: color 0.2s;
+    font-family: inherit;
+}
+
+.scfm-url-toggle:hover {
+    color: rgba(0, 210, 255, 0.8);
+}
+
+.scfm-url-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.scfm-url-input {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.9rem;
+    color: #fff;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    font-family: inherit;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.scfm-url-input:focus {
+    border-color: rgba(0, 210, 255, 0.4);
+    box-shadow: 0 0 0 3px rgba(0, 210, 255, 0.08);
+}
+
+.scfm-url-input::placeholder {
+    color: rgba(255, 255, 255, 0.25);
+}
+
+.scfm-url-btn {
+    align-self: flex-start;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 20px;
+    border-radius: 10px;
+    border: none;
+    background: rgba(0, 210, 255, 0.12);
+    color: #00d2ff;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+.scfm-url-btn:hover {
+    background: rgba(0, 210, 255, 0.2);
+}
+
+.scfm-url-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 767px) {
+    .scfm-section {
+        padding: 16px;
+        border-radius: 12px;
+    }
+
+    .scfm-upload-progress {
+        width: 80%;
+    }
+}
+
+@media (max-width: 480px) {
+    .scfm-section { padding: 12px; }
+    .scfm-section-title { font-size: 0.95rem; }
+    .scfm-url-input { font-size: 0.82rem; padding: 9px 12px; }
+    .scfm-url-btn { width: 100%; justify-content: center; }
+    .scfm-upload-btn { width: 100%; justify-content: center; }
+    .scfm-upload-progress { width: 90%; }
+    .scfm-item-name { font-size: 0.78rem; }
+    .scfm-upload-zone { padding: 24px 12px; }
+}
+
+/* =========================================================
+   LIGHT THEME
+   ========================================================= */
+
+[data-theme="light"] .scfm-section { background-color: #ffffff; border: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02); }
+[data-theme="light"] .scfm-section-header { color: #0d9488; }
+[data-theme="light"] .scfm-section-title { color: #1e293b; }
+[data-theme="light"] .scfm-section-desc { color: #64748b; }
+[data-theme="light"] .scfm-save-first { background: rgba(0, 0, 0, 0.02); border-color: #e2e8f0; }
+[data-theme="light"] .scfm-save-first svg { color: #94a3b8; }
+[data-theme="light"] .scfm-save-first span { color: #64748b; }
+[data-theme="light"] .scfm-item { background: rgba(0, 0, 0, 0.02); border-color: #e2e8f0; }
+[data-theme="light"] .scfm-item:hover { background: rgba(0, 0, 0, 0.04); }
+[data-theme="light"] .scfm-item-pending-badge { color: #d97706; }
+[data-theme="light"] .scfm-item-icon { color: #64748b; }
+[data-theme="light"] .scfm-item-name { color: #1e293b; }
+[data-theme="light"] .scfm-item-meta { color: #94a3b8; }
+[data-theme="light"] .scfm-item-delete { background: rgba(220, 38, 38, 0.06); color: rgba(220, 38, 38, 0.5); }
+[data-theme="light"] .scfm-item-delete:hover { background: rgba(220, 38, 38, 0.12); color: #dc2626; }
+[data-theme="light"] .scfm-upload-zone { border-color: #d1d5db; color: #94a3b8; }
+[data-theme="light"] .scfm-upload-zone:hover { border-color: rgba(13, 148, 136, 0.4); color: #0d9488; background: rgba(13, 148, 136, 0.03); }
+[data-theme="light"] .scfm-upload-zone-active { border-color: rgba(13, 148, 136, 0.6); background: rgba(13, 148, 136, 0.06); color: #0d9488; }
+[data-theme="light"] .scfm-upload-hint { color: #94a3b8; }
+[data-theme="light"] .scfm-upload-progress-bar { background: #e2e8f0; }
+[data-theme="light"] .scfm-upload-progress-fill { background: #0d9488; }
+[data-theme="light"] .scfm-upload-progress-text { color: #0d9488; }
+[data-theme="light"] .scfm-url-toggle { color: #94a3b8; }
+[data-theme="light"] .scfm-url-toggle:hover { color: #0d9488; }
+[data-theme="light"] .scfm-url-input { background-color: #ffffff; border: 1px solid #d1d5db; color: #1e293b; }
+[data-theme="light"] .scfm-url-input:focus { border-color: rgba(13, 148, 136, 0.4); box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.12); }
+[data-theme="light"] .scfm-url-input::placeholder { color: #94a3b8; }
+[data-theme="light"] .scfm-upload-btn { border-color: rgba(13, 148, 136, 0.3); background: rgba(13, 148, 136, 0.08); color: #0d9488; }
+[data-theme="light"] .scfm-upload-btn:hover { background: rgba(13, 148, 136, 0.15); border-color: rgba(13, 148, 136, 0.5); }
+[data-theme="light"] .scfm-url-btn { background: rgba(13, 148, 136, 0.1); color: #0d9488; }
+[data-theme="light"] .scfm-url-btn:hover { background: rgba(13, 148, 136, 0.18); }
