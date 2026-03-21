@@ -94,9 +94,11 @@
   "partners": {
     "title": "Partners",
     "bfjLabel": "Bulgarian Fund for Women",
+    "bfwLabel": "Bulgarian Fund for Women",
+    "euLabel": "Co-funded by the EU",
     "pensaLabel": "PENSA Foundation",
-    "programText": "The ReAction Program is by the PENSA Foundation with the financial support of the Bulgarian Fund for Women.",
-    "disclaimer": "This platform is for verifying publicly circulated claims. Please submit reports in good faith — only for information whose accuracy you doubt. Misuse of the platform for personal disputes, defamation, or false complaints is not acceptable."
+    "disclaimer": "With the financial support of the Bulgarian Fund for Women and the European Union. Views and opinions expressed are those of the author(s) only and do not necessarily reflect those of the Bulgarian Fund for Women, the European Union or the European Education and Culture Executive Agency. Neither BFW, nor the EU or EACEA can be held responsible for them.",
+    "euDisclaimer": "This platform is for verifying publicly circulated claims. Please submit reports in good faith — only for information whose accuracy you doubt. Misuse of the platform for personal disputes, defamation, or false complaints is not acceptable."
   },
   "detail": {
     "backToList": "Back to fact-checks",

@@ -41,6 +41,15 @@
   font-weight: 600;
 }
 
+.ralp-disclaimer {
+  max-width: 800px;
+  margin: 24px auto 0;
+  font-size: 0.72rem;
+  line-height: 1.5;
+  color: #8a7070;
+  text-align: center;
+}
+
 /* ===================================
    DARK THEME
    =================================== */
@@ -61,6 +70,10 @@
   filter: brightness(0.9);
 }
 
+[data-theme="dark"] .ralp-disclaimer {
+  color: rgba(255, 255, 255, 0.4);
+}
+
 /* ===================================
    RESPONSIVE
    =================================== */
@@ -71,10 +84,11 @@
   }
 
   .ralp-logos {
-    gap: 30px;
+    flex-direction: column;
+    gap: 24px;
   }
 
   .ralp-logo {
-    height: 40px;
+    height: 50px;
   }
 }

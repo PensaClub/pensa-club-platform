@@ -3,8 +3,17 @@ import { useTranslation } from 'react-i18next';
 import './factCheckHero.css';
 
 const FactCheckHero = ({ stats, onSearch }) => {
-  const { t } = useTranslation('factcheck');
+  const { t, i18n } = useTranslation('factcheck');
+  const lang = i18n.language;
   const [searchValue, setSearchValue] = useState('');
+
+  const bfwLogo = lang === 'bg'
+      ? '/images/BFW%20LOGO/BG-FULL%20LOGO/BFFW-FullLogo-Prink.png'
+      : '/images/BFW%20LOGO/ENG-FULL%20LOGO/BFFW-FullLogo-Pink-ENG.png';
+
+  const euLogo = lang === 'bg'
+      ? '/images/EU%20LOGO/co-funded_BG/horizontal/BG_Co-fundedbytheEU_RGB_POS.png'
+      : '/images/EU%20LOGO/co-funded_EN/horizontal/EN_Co-fundedbytheEU_RGB_POS.png';
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -26,7 +35,9 @@ const FactCheckHero = ({ stats, onSearch }) => {
       <div className="fch-container">
         {/* Logos */}
         <div className="fch-logos">
-          <img src="/images/partners/BFFW-20Logo-Prink2.svg" alt="Bulgarian Fund for Women" className="fch-logo" />
+          <img src={bfwLogo} alt="Bulgarian Fund for Women" className="fch-logo" />
+          <span className="fch-logos-divider"></span>
+          <img src={euLogo} alt="Co-funded by the European Union" className="fch-logo" />
           <span className="fch-logos-divider"></span>
           <img src="/images/homePage/logo.png" alt="Pensa Club" className="fch-logo" />
         </div>

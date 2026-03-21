@@ -323,11 +323,17 @@
   }
 
   .fch-logos {
-    gap: 12px;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .fch-logos-divider {
+    width: 40px;
+    height: 1px;
   }
 
   .fch-logo {
-    height: 32px;
+    height: 44px;
   }
 
   .fch-stats {

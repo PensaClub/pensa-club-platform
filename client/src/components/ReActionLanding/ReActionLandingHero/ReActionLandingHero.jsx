@@ -2,7 +2,16 @@ import { useTranslation } from 'react-i18next';
 import './reActionLandingHero.css';
 
 const ReActionLandingHero = ({ stats, galleryItems = [] }) => {
-    const { t } = useTranslation('reaction');
+    const { t, i18n } = useTranslation('reaction');
+    const lang = i18n.language;
+
+    const bfwLogo = lang === 'bg'
+        ? '/images/BFW%20LOGO/BG-FULL%20LOGO/BFFW-FullLogo-White.png'
+        : '/images/BFW%20LOGO/ENG-FULL%20LOGO/BFFW-FullLogo-White-ENG.png';
+
+    const euLogo = lang === 'bg'
+        ? '/images/EU%20LOGO/co-funded_BG/horizontal/BG_Co-fundedbytheEU_RGB_WHITE.png'
+        : '/images/EU%20LOGO/co-funded_EN/horizontal/EN_Co-fundedbytheEU_RGB_WHITE.png';
 
     // Pick up to 5 images for the hero background collage
     const heroImages = galleryItems
@@ -35,8 +44,14 @@ const ReActionLandingHero = ({ stats, galleryItems = [] }) => {
             <div className="ralh-content">
                 <div className="ralh-logos">
                     <img
-                        src="/images/partners/BFFW-20Logo-Prink2.svg"
+                        src={bfwLogo}
                         alt="Bulgarian Fund for Women"
+                        className="ralh-logo"
+                    />
+                    <span className="ralh-logos-divider">×</span>
+                    <img
+                        src={euLogo}
+                        alt="Co-funded by the European Union"
                         className="ralh-logo"
                     />
                     <span className="ralh-logos-divider">×</span>
