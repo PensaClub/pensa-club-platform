@@ -96,11 +96,17 @@
 
 @media (max-width: 480px) {
   .rapart-logos {
+    flex-direction: column;
     gap: 20px;
   }
 
+  .rapart-divider {
+    width: 40px;
+    height: 1px;
+  }
+
   .rapart-logo {
-    height: 40px;
+    height: 50px;
   }
 }
 

@@ -348,13 +348,18 @@
   }
 
   .ralh-logo {
-    height: 30px;
+    height: 38px;
   }
 
   .ralh-logos {
-    gap: 10px;
+    flex-direction: column;
+    gap: 14px;
     margin-bottom: 20px;
     margin-top: 2rem;
+  }
+
+  .ralh-logos-divider {
+    display: none;
   }
 
   .ralh-stats {

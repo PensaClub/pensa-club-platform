@@ -185,10 +185,13 @@
   },
   "partners": {
     "title": "Partner",
+    "bfwLabel": "Bulgarischer Frauenfonds",
+    "euLabel": "Kofinanziert von der EU",
+    "pensaLabel": "Stiftung PENSA",
     "bfjLabel": "Bulgarischer Frauenfonds",
-    "pensaLabel": "PENSA-Stiftung",
     "programText": "Das Programm ReAktion wird von der PENSA-Stiftung mit Unterstutzung des Bulgarischen Frauenfonds durchgefuhrt.",
-    "disclaimer": "Diese Plattform dient der Organisation kostenloser Mentorenbesuche in Seniorenclubs. Bitte reichen Sie Anfragen in gutem Glauben ein — nur fur reale Veranstaltungen mit Teilnehmerprasenz."
+    "disclaimer": "Diese Plattform dient der Organisation kostenloser Mentorenbesuche in Seniorenclubs. Bitte reichen Sie Anfragen in gutem Glauben ein — nur fur reale Veranstaltungen mit Teilnehmerprasenz.",
+    "euDisclaimer": "Mit finanzieller Unterstützung des Bulgarischen Frauenfonds und der Europäischen Union. Die geäußerten Ansichten und Meinungen sind ausschließlich die des/der Autors/Autoren und spiegeln nicht unbedingt die des Bulgarischen Frauenfonds, der Europäischen Union oder der Europäischen Exekutivagentur für Bildung und Kultur wider. Weder BFW noch die EU oder EACEA können dafür verantwortlich gemacht werden."
   },
   "track": {
     "title": "Anfrage verfolgen",

@@ -185,10 +185,13 @@
   },
   "partners": {
     "title": "Partners",
-    "bfjLabel": "Bulgarian Fund for Women",
+    "bfwLabel": "Bulgarian Fund for Women",
+    "euLabel": "Co-funded by the EU",
     "pensaLabel": "PENSA Foundation",
+    "bfjLabel": "Bulgarian Fund for Women",
     "programText": "The ReAction Program is implemented by the PENSA Foundation with the support of the Bulgarian Fund for Women.",
-    "disclaimer": "This platform is used to organize free mentor visits to senior clubs. Please submit requests in good faith — only for real events with participant attendance."
+    "disclaimer": "This platform is used to organize free mentor visits to senior clubs. Please submit requests in good faith — only for real events with participant attendance.",
+    "euDisclaimer": "With the financial support of the Bulgarian Fund for Women and the European Union. Views and opinions expressed are those of the author(s) only and do not necessarily reflect those of the Bulgarian Fund for Women, the European Union or the European Education and Culture Executive Agency. Neither BFW, nor the EU or EACEA can be held responsible for them."
   },
   "track": {
     "title": "Track your request",

@@ -94,9 +94,11 @@
   "partners": {
     "title": "Partner",
     "bfjLabel": "Bulgarischer Frauenfonds",
-    "pensaLabel": "PENSA-Stiftung",
-    "programText": "Das ReAktion-Programm ist ein Programm der PENSA-Stiftung mit finanzieller Unterstützung des Bulgarischen Frauenfonds.",
-    "disclaimer": "Diese Plattform dient der Überprüfung öffentlich verbreiteter Behauptungen. Bitte reichen Sie Meldungen nur in gutem Glauben ein — nur für Informationen, an deren Richtigkeit Sie zweifeln. Der Missbrauch der Plattform für persönliche Streitigkeiten, Verleumdungen oder falsche Beschwerden ist unzulässig."
+    "bfwLabel": "Bulgarischer Frauenfonds",
+    "euLabel": "Kofinanziert von der EU",
+    "pensaLabel": "Stiftung PENSA",
+    "disclaimer": "Mit finanzieller Unterstützung des Bulgarischen Frauenfonds und der Europäischen Union. Die geäußerten Ansichten und Meinungen sind ausschließlich die des/der Autors/Autoren und spiegeln nicht unbedingt die des Bulgarischen Frauenfonds, der Europäischen Union oder der Europäischen Exekutivagentur für Bildung und Kultur wider. Weder BFW noch die EU oder EACEA können dafür verantwortlich gemacht werden.",
+    "euDisclaimer": "Diese Plattform dient der Überprüfung öffentlich verbreiteter Behauptungen. Bitte reichen Sie Meldungen nur in gutem Glauben ein — nur für Informationen, an deren Richtigkeit Sie zweifeln. Der Missbrauch der Plattform für persönliche Streitigkeiten, Verleumdungen oder falsche Beschwerden ist unzulässig."
   },
   "detail": {
     "backToList": "Zurück zu den Überprüfungen",

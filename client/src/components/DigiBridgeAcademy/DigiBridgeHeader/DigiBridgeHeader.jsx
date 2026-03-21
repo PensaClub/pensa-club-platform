@@ -28,6 +28,7 @@ export const DigiBridgeHeader = () => {
         { key: 'courses', label: t('digiBridge.header.nav.courses', 'Курсове'), path: '/academy/courses' },
         { key: 'lectures', label: t('digiBridge.header.nav.lectures', 'Лекции'), path: '/academy/lectures' },
         { key: 'mentors', label: t('digiBridge.header.nav.mentors', 'Ментори'), path: '/academy/mentors' },
+        { key: 'seminars', label: t('digiBridge.header.nav.seminars', 'Семинари'), path: '/academy/seminars' },
     ];
 
     const moreNavItems = [
