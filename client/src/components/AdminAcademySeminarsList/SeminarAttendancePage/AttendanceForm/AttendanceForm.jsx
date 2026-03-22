@@ -98,14 +98,15 @@ const AttendanceForm = ({ seminar }) => {
     // =========================================================
 
     const handleAddPlatformUser = async (student) => {
-        if (participants.some(p => p.type === 'platform' && p.studentId === student.studentId)) {
+        const id = student.studentId || student.userId;
+        if (participants.some(p => p.type === 'platform' && (p.studentId === student.studentId || p.userId === student.userId))) {
             toast.info(t('attendanceForm.alreadyInList', 'Вече е в списъка'));
             return;
         }
-        setAddingStudentId(student.studentId);
+        setAddingStudentId(id);
         try {
             await bulkMixedAttendance(seminar.id, {
-                platformAttendees: [{ studentId: student.studentId, participationLevel: 'passive' }],
+                platformAttendees: [{ studentId: student.studentId, userId: student.userId, participationLevel: 'passive' }],
                 guests: [],
             });
             await loadParticipants();
@@ -239,11 +240,13 @@ const AttendanceForm = ({ seminar }) => {
                         {searchResults.length > 0 && (
                             <div className="satf-results">
                                 {searchResults.map((student) => {
-                                    const alreadyIn = participants.some(p => p.type === 'platform' && p.studentId === student.studentId);
-                                    const isAdding = addingStudentId === student.studentId;
+                                    const uid = student.studentId || student.userId;
+                                    const alreadyIn = student.alreadyAttended || student.seminarStatus === 'approved' ||
+                                        participants.some(p => p.type === 'platform' && p.studentId && student.studentId && p.studentId === student.studentId);
+                                    const isAdding = addingStudentId === uid;
 
                                     return (
-                                        <div key={student.studentId} className={`satf-result-row ${alreadyIn ? 'satf-result-saved' : ''}`}>
+                                        <div key={uid} className={`satf-result-row ${alreadyIn ? 'satf-result-saved' : ''}`}>
                                             <div className="satf-result-avatar">
                                                 {student.avatar ? (
                                                     <img src={student.avatar} alt="" className="satf-avatar-img" />

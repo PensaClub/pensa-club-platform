@@ -4,6 +4,7 @@
  */
 
 const BFW_LOGO = 'https://pensa.club/images/partners/BFFW-20Logo-Prink2.svg';
+const EU_LOGO = 'https://pensa.club/images/EU%20LOGO/co-funded_BG/horizontal/BG_Co-fundedbytheEU_RGB_POS.png';
 const PENSA_LOGO = 'https://pensa.club/images/homePage/logo.png';
 
 // ─── Base wrapper ───────────────────────────────────────────────────────
@@ -24,12 +25,16 @@ const wrapTemplate = (title, bodyHtml, footerNote = '') => `
                 <td align="center" style="padding-bottom:16px;">
                   <table cellpadding="0" cellspacing="0">
                     <tr>
-                      <td style="padding-right:20px;">
-                        <img src="${BFW_LOGO}" alt="БФЖ" height="50" style="display:block;height:50px;width:auto;" />
+                      <td style="padding-right:14px;">
+                        <img src="${BFW_LOGO}" alt="БФЖ" height="44" style="display:block;height:44px;width:auto;" />
                       </td>
-                      <td style="color:rgba(255,255,255,0.5);font-size:16px;font-weight:400;padding:0 8px;">|</td>
-                      <td style="padding-left:20px;">
-                        <img src="${PENSA_LOGO}" alt="ПЕНСА" height="50" style="display:block;height:50px;width:auto;" />
+                      <td style="color:rgba(255,255,255,0.5);font-size:16px;font-weight:400;padding:0 6px;">|</td>
+                      <td style="padding:0 14px;">
+                        <img src="${EU_LOGO}" alt="Co-funded by the EU" height="44" style="display:block;height:44px;width:auto;" />
+                      </td>
+                      <td style="color:rgba(255,255,255,0.5);font-size:16px;font-weight:400;padding:0 6px;">|</td>
+                      <td style="padding-left:14px;">
+                        <img src="${PENSA_LOGO}" alt="ПЕНСА" height="44" style="display:block;height:44px;width:auto;" />
                       </td>
                     </tr>
                   </table>
@@ -64,7 +69,7 @@ const wrapTemplate = (title, bodyHtml, footerNote = '') => `
               <tr>
                 <td style="color:#6b7280;font-size:12px;line-height:1.6;">
                   <strong style="color:#7B1818;">Програма ReАкция</strong><br>
-                  Българска фондация за жените × Фондация ПЕНСА<br>
+                  Българска фондация за жените × Европейски съюз × Фондация ПЕНСА<br>
                   <a href="https://pensa.club/reaction" style="color:#7B1818;text-decoration:none;">pensa.club/reaction</a> ·
                   <a href="mailto:pensa.club@gmail.com" style="color:#7B1818;text-decoration:none;">pensa.club@gmail.com</a>
                 </td>
