@@ -4,17 +4,30 @@
  */
 
 const { wrapTemplate, paragraph, ctaButton, greeting, infoTable, infoRow, signature } = require('./reActionEmailTemplates');
+const qrBlock = (linkUrl, linkText = 'Линк към семинара') => {
+  const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=${encodeURIComponent(linkUrl)}&color=7B1818`;
+  return `
+    <div style="text-align: center; margin: 20px 0 10px;">
+      <img src="${qrImageUrl}" alt="QR код" style="width: 140px; height: 140px;" />
+      <p style="margin: 8px 0 0; font-size: 12px; color: #6b7280;">
+        <a href="${linkUrl}" style="color: #7B1818; text-decoration: underline;">${linkText}</a>
+      </p>
+    </div>
+  `;
+};
 
 const seminarEmailTemplates = {
 
   // 1. Registration confirmation for platform users
-  registrationConfirmation: ({ userName, seminarTitle, scheduledDate, location, isOnline, meetingLink, mentorName, slug }) => {
+  registrationConfirmation: async ({ userName, seminarTitle, scheduledDate, location, isOnline, meetingLink, meetingPassword, mentorName, slug }) => {
     const dateStr = new Date(scheduledDate).toLocaleDateString('bg-BG', {
       day: '2-digit', month: 'long', year: 'numeric',
       hour: '2-digit', minute: '2-digit',
     });
 
     const locationText = isOnline ? 'Онлайн' : (location || 'Уточнява се');
+    const seminarUrl = `https://pensa.club/academy/seminars/${slug}`;
+
 
     const body =
       greeting(userName) +
@@ -26,10 +39,14 @@ const seminarEmailTemplates = {
         (mentorName ? infoRow('Ментор', mentorName) : '') +
         (isOnline && meetingLink
           ? infoRow('Линк за среща', `<a href="${meetingLink}" style="color: #7B1818;">${meetingLink}</a>`)
+          : '') +
+        (isOnline && meetingPassword
+          ? infoRow('Парола', meetingPassword)
           : '')
       ) +
       paragraph('Очакваме ви! Можете да видите детайлите на семинара от бутона по-долу.') +
-      ctaButton(`https://pensa.club/academy/seminars/${slug}`, 'Виж семинара') +
+      ctaButton(seminarUrl, 'Виж семинара') +
+      qrBlock(seminarUrl, 'Линк към семинара') +
       signature();
 
     return {
@@ -39,13 +56,15 @@ const seminarEmailTemplates = {
   },
 
   // 2. Guest notification email
-  guestNotification: ({ guestName, seminarTitle, scheduledDate, location, isOnline, mentorName, slug }) => {
+  guestNotification: async ({ guestName, seminarTitle, scheduledDate, location, isOnline, meetingLink, meetingPassword, mentorName, slug }) => {
     const dateStr = new Date(scheduledDate).toLocaleDateString('bg-BG', {
       day: '2-digit', month: 'long', year: 'numeric',
       hour: '2-digit', minute: '2-digit',
     });
 
     const locationText = isOnline ? 'Онлайн' : (location || 'Уточнява се');
+    const seminarUrl = `https://pensa.club/academy/seminars/${slug}`;
+
 
     const body =
       greeting(guestName) +
@@ -54,11 +73,17 @@ const seminarEmailTemplates = {
         infoRow('Семинар', seminarTitle) +
         infoRow('Дата', dateStr) +
         infoRow('Място', locationText) +
-        (mentorName ? infoRow('Ментор', mentorName) : '')
+        (mentorName ? infoRow('Ментор', mentorName) : '') +
+        (isOnline && meetingLink
+          ? infoRow('Линк за среща', `<a href="${meetingLink}" style="color: #7B1818;">${meetingLink}</a>`)
+          : '') +
+        (isOnline && meetingPassword
+          ? infoRow('Парола', meetingPassword)
+          : '')
       ) +
       paragraph('Регистрирайте се в DigiBridge, за да получите кредити и достъп до повече ресурси.') +
       ctaButton('https://pensa.club/sign-up', 'Регистрирай се') +
-      paragraph(`Или вижте детайлите на семинара <a href="https://pensa.club/academy/seminars/${slug}" style="color: #7B1818;">тук</a>.`) +
+      qrBlock(seminarUrl, 'Линк към семинара') +
       signature();
 
     return {
@@ -68,7 +93,7 @@ const seminarEmailTemplates = {
   },
 
   // 3. Attendance confirmation (after mentor marks attendance)
-  attendanceConfirmation: ({ userName, seminarTitle, earnedCredits, participationLevel, slug }) => {
+  attendanceConfirmation: async ({ userName, seminarTitle, earnedCredits, participationLevel, slug }) => {
     const levelLabels = { active: 'Активно', moderate: 'Умерено', passive: 'Пасивно' };
 
     const body =
@@ -90,7 +115,7 @@ const seminarEmailTemplates = {
   },
 
   // 4. Mentor notification — new registration
-  mentorNewRegistration: ({ mentorName, studentName, seminarTitle, registeredCount, maxParticipants }) => {
+  mentorNewRegistration: async ({ mentorName, studentName, seminarTitle, registeredCount, maxParticipants }) => {
     const spotsInfo = maxParticipants ? `${registeredCount}/${maxParticipants}` : `${registeredCount}`;
 
     const body =
