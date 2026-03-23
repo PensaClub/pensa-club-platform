@@ -894,6 +894,46 @@ export const AcademyCoursesProvider = ({ children }) => {
     }
   }, []);
 
+  const startSeminar = useCallback(async (seminarId) => {
+    if (!isAdmin) {
+      toast.error('Нямате права за тази операция');
+      return { success: false };
+    }
+    try {
+      const response = await coursesService.startSeminar(seminarId);
+      toast.success('Семинарът е на живо');
+      return response;
+    } catch (error) {
+      console.error('Error starting seminar:', error);
+      toast.error('Грешка при стартиране');
+      throw error;
+    }
+  }, [isAdmin]);
+
+  const completeSeminar = useCallback(async (seminarId) => {
+    try {
+      const response = await coursesService.completeSeminar(seminarId);
+      toast.success('Семинарът е завършен');
+      return response;
+    } catch (error) {
+      console.error('Error completing seminar:', error);
+      toast.error('Грешка при завършване');
+      throw error;
+    }
+  }, []);
+
+  const stopSeminar = useCallback(async (seminarId) => {
+    try {
+      const response = await coursesService.stopSeminar(seminarId);
+      toast.success('Излъчването е спряно');
+      return response;
+    } catch (error) {
+      console.error('Error stopping seminar:', error);
+      toast.error('Грешка при спиране');
+      throw error;
+    }
+  }, []);
+
   const cancelSeminar = useCallback(async (seminarId, reason = null) => {
     if (!isAdmin) {
       toast.error('Нямате права за тази операция');
@@ -2126,6 +2166,9 @@ export const AcademyCoursesProvider = ({ children }) => {
     publishSeminar,
     unpublishSeminar,
     cancelSeminar,
+    startSeminar,
+    stopSeminar,
+    completeSeminar,
 
     // Seminar Registration
     registerForSeminar,

@@ -318,8 +318,12 @@ export const academyCoursesServiceFactory = () => {
       return requester.post(`${apiUrl}/academy/seminars/${seminarId}/start`);
     },
 
-    endSeminar: async (seminarId) => {
-      return requester.post(`${apiUrl}/academy/seminars/${seminarId}/end`);
+    completeSeminar: async (seminarId) => {
+      return requester.post(`${apiUrl}/academy/seminars/${seminarId}/complete`);
+    },
+
+    stopSeminar: async (seminarId) => {
+      return requester.post(`${apiUrl}/academy/seminars/${seminarId}/stop`);
     },
 
     getSeminarStatistics: async (seminarId) => {

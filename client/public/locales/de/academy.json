@@ -749,6 +749,8 @@
       "submitted": "Vielen Dank! Ihre Bewertung wird von einem Administrator überprüft.",
       "noReviews": "Noch keine Bewertungen für dieses Seminar."
     },
+    "liveNow": "Live",
+    "joinLive": "Live beitreten",
     "registrationClosed": "Anmeldung geschlossen"
   }
 }

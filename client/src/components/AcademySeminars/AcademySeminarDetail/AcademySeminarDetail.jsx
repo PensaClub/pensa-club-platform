@@ -12,6 +12,7 @@ import {
     MapPin, Wifi, Clock, Users, Calendar, Share2,
     ChevronRight, FileText, BookOpen, CheckCircle,
     ArrowLeft, Loader2, AlertCircle, Award, Video, Film,
+    Settings, Radio, Pencil, X,
 } from 'lucide-react'; // НОВО
 import ScrollToTop from '../../ScrollToTop/ScrollToTop'; // НОВО
 import SEOHead from '../../SEO/SEOHead'; // НОВО
@@ -25,16 +26,12 @@ import './academySeminarDetail.css'; // НОВО
 const getSeminarStatus = (seminar) => { // НОВО
     if (!seminar) return 'unknown';
     if (seminar.status === 'cancelled') return 'cancelled';
+    if (seminar.status === 'live') return 'live';
+    if (seminar.status === 'completed') return 'completed';
     const now = new Date();
     const start = seminar.scheduledDate ? new Date(seminar.scheduledDate) : null;
-    const end = seminar.scheduledEndDate ? new Date(seminar.scheduledEndDate) : null;
-    if (start && end && now >= start && now <= end) return 'live';
-    if (start && !end) {
-        const est = new Date(start.getTime() + (seminar.durationMinutes || 90) * 60 * 1000);
-        if (now >= start && now <= est) return 'live';
-    }
     if (start && now < start) return 'upcoming';
-    return 'completed';
+    return 'scheduled';
 };
 const getEmbedUrl = (url) => { // НОВО
     if (!url) return null;
@@ -117,7 +114,8 @@ const AcademySeminarDetail = () => { // НОВО
     const { slug } = useParams();
     const { t } = useTranslation('academy');
     const navigate = useLocalizedNavigate();
-    const { isAuthentication } = useAuthContext();
+    const { isAuthentication, isAdmin, profileData } = useAuthContext();
+    const isMentorOrAdmin = isAdmin || profileData?.isMentor;
     const location = useLocation();
 
     const {
@@ -129,6 +127,8 @@ const AcademySeminarDetail = () => { // НОВО
         checkSeminarRegistration,
         getSeminarReviews,
         addSeminarReview,
+        startSeminar,
+        stopSeminar,
     } = useAcademyCourses();
 
     const [seminar, setSeminar] = useState(null);
@@ -145,6 +145,8 @@ const AcademySeminarDetail = () => { // НОВО
     const [submittingReview, setSubmittingReview] = useState(false);
     const reviewStorageKey = `seminar-review-${slug}`;
     const [reviewSubmitted, setReviewSubmitted] = useState(() => localStorage.getItem(reviewStorageKey) === 'true');
+    const [adminPanelOpen, setAdminPanelOpen] = useState(false);
+    const [adminActionLoading, setAdminActionLoading] = useState(false);
 
     const loadingRef = useRef(false);
     const lastSlugRef = useRef(null);
@@ -287,6 +289,33 @@ const AcademySeminarDetail = () => { // НОВО
         });
 
         window.open(`https://calendar.google.com/calendar/render?${params.toString()}`, '_blank');
+    };
+
+    // Admin controls
+    const handleAdminStartLive = async () => {
+        if (!seminar?.id) return;
+        setAdminActionLoading(true);
+        try {
+            await startSeminar(seminar.id);
+            setSeminar(prev => ({ ...prev, status: 'live' }));
+        } catch (err) {
+            console.error('Error starting live:', err);
+        } finally {
+            setAdminActionLoading(false);
+        }
+    };
+
+    const handleAdminStopLive = async () => {
+        if (!seminar?.id) return;
+        setAdminActionLoading(true);
+        try {
+            await stopSeminar(seminar.id);
+            setSeminar(prev => ({ ...prev, status: 'scheduled' }));
+        } catch (err) {
+            console.error('Error stopping live:', err);
+        } finally {
+            setAdminActionLoading(false);
+        }
     };
 
     const handleSubmitReview = async () => {
@@ -625,6 +654,41 @@ const AcademySeminarDetail = () => { // НОВО
                 </div>
             </section>
 
+            {/* ========== LIVE STREAM ========== */}
+            {status === 'live' && seminar.meetingLink && (
+                <section className="asd-live-section">
+                    <div className="asd-container">
+                        <div className="asd-live-header">
+                            <span className="asd-live-indicator">
+                                <span className="asd-live-dot" />
+                                {t('seminarDetail.liveNow', 'На живо')}
+                            </span>
+                            <a href={seminar.meetingLink} target="_blank" rel="noopener noreferrer" className="asd-live-join-btn">
+                                <Wifi size={16} />
+                                {t('seminarDetail.joinLive', 'Присъедини се')}
+                            </a>
+                        </div>
+                        {(() => {
+                            const embedUrl = getEmbedUrl(seminar.meetingLink);
+                            if (embedUrl) {
+                                return (
+                                    <div className="asd-video-player">
+                                        <iframe
+                                            src={embedUrl}
+                                            title={seminar.title}
+                                            className="asd-video-iframe"
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                            allowFullScreen
+                                        />
+                                    </div>
+                                );
+                            }
+                            return null;
+                        })()}
+                    </div>
+                </section>
+            )}
+
             {/* ========== MAIN ========== */}
             <main className="asd-main">
                 <div className="asd-container">
@@ -915,6 +979,63 @@ const AcademySeminarDetail = () => { // НОВО
                         )}
                     </div>
                 </section>
+            )}
+
+            {/* Admin floating panel */}
+            {isMentorOrAdmin && seminar && (
+                <>
+                    <button
+                        className={`asd-admin-toggle ${adminPanelOpen ? 'asd-admin-toggle-open' : ''}`}
+                        onClick={() => setAdminPanelOpen(!adminPanelOpen)}
+                        title="Admin"
+                    >
+                        {adminPanelOpen ? <X size={18} /> : <Settings size={18} />}
+                    </button>
+
+                    {adminPanelOpen && (
+                        <div className="asd-admin-panel">
+                            <div className="asd-admin-panel-title">Управление</div>
+
+                            <button
+                                className="asd-admin-btn"
+                                onClick={() => navigate(`/academy/admin/edit-seminar/${seminar.slug}`)}
+                            >
+                                <Pencil size={15} />
+                                Редактирай
+                            </button>
+
+                            {status !== 'live' && status !== 'cancelled' && (
+                                <button
+                                    className="asd-admin-btn asd-admin-btn-live"
+                                    onClick={handleAdminStartLive}
+                                    disabled={adminActionLoading}
+                                >
+                                    <Radio size={15} />
+                                    На живо
+                                </button>
+                            )}
+
+                            {status === 'live' && (
+                                <button
+                                    className="asd-admin-btn asd-admin-btn-stop"
+                                    onClick={handleAdminStopLive}
+                                    disabled={adminActionLoading}
+                                >
+                                    <Radio size={15} />
+                                    Спри на живо
+                                </button>
+                            )}
+
+                            <button
+                                className="asd-admin-btn"
+                                onClick={() => navigate('/academy/admin/seminar-attendance')}
+                            >
+                                <Users size={15} />
+                                Присъствие
+                            </button>
+                        </div>
+                    )}
+                </>
             )}
 
             <ScrollToTop />

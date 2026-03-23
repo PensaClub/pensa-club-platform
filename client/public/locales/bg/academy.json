@@ -697,6 +697,8 @@
   },
   "seminarDetail": {
     "loading": "Зареждане...",
+    "liveNow": "На живо",
+    "joinLive": "Присъедини се",
     "registrationClosed": "Записването е затворено",
     "error": {
       "notFound": "Семинарът не е намерен",

@@ -1040,6 +1040,8 @@
     "publish": "Publish",
     "unpublish": "Unpublish",
     "cancelSeminar": "Cancel",
+    "startLive": "Start Live",
+    "stopLive": "Stop Live",
     "saved": "Changes saved",
     "deleted": "Seminar deleted",
     "cancelled": "Seminar cancelled",

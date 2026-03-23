@@ -686,6 +686,8 @@
 },
 "seminarDetail": {
   "loading": "Loading...",
+  "liveNow": "Live Now",
+  "joinLive": "Join Live",
   "registrationClosed": "Registration is closed",
   "error": {
     "notFound": "Seminar not found",

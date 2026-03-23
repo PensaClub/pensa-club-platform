@@ -1040,6 +1040,8 @@
     "publish": "Veröffentlichen",
     "unpublish": "Verbergen",
     "cancelSeminar": "Absagen",
+    "startLive": "Live starten",
+    "stopLive": "Live beenden",
     "saved": "Änderungen gespeichert",
     "deleted": "Seminar gelöscht",
     "cancelled": "Seminar abgesagt",

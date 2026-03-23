@@ -1217,10 +1217,10 @@ seminarsController.post(
         });
       }
 
-      if (seminarData.status !== 'scheduled') {
+      if (seminarData.status === 'cancelled') {
         return res.status(400).json({
           success: false,
-          message: `Cannot start seminar with status: ${seminarData.status}`,
+          message: 'Cannot start a cancelled seminar',
         });
       }
 
@@ -1235,6 +1235,32 @@ seminarsController.post(
       });
     } catch (err) {
       console.error('❌ [START SEMINAR] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// POST /api/academy/seminars/:id/stop
+// Спиране на live → връща на scheduled
+// ===============================
+seminarsController.post(
+  '/:id/stop',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const seminarId = parseInt(req.params.id);
+      const seminarData = await seminar.findByPk(seminarId);
+
+      if (!seminarData) {
+        return res.status(404).json({ success: false, message: 'Seminar not found' });
+      }
+
+      await seminarData.update({ status: 'scheduled' });
+
+      res.status(200).json({ success: true, message: 'Seminar stopped', seminar: seminarData });
+    } catch (err) {
+      console.error('❌ [STOP SEMINAR] Error:', err);
       next(err);
     }
   }

@@ -298,6 +298,26 @@
 
 .esem-btn-delete:hover:not(:disabled) { background: rgba(239, 68, 68, 0.15); }
 
+.esem-btn-live {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: #fff;
+    border: none;
+}
+
+.esem-btn-live:hover:not(:disabled) {
+    box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
+}
+
+.esem-btn-stop-live {
+    background: rgba(239, 68, 68, 0.12);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+.esem-btn-stop-live:hover:not(:disabled) {
+    background: rgba(239, 68, 68, 0.2);
+}
+
 /* =========================================================
    MODALS
    ========================================================= */
@@ -468,6 +488,8 @@
 [data-theme="light"] .esem-btn-unpublish { background: rgba(217, 119, 6, 0.08); color: #d97706; }
 [data-theme="light"] .esem-btn-cancel-sem { background: rgba(217, 119, 6, 0.06); color: #d97706; }
 [data-theme="light"] .esem-btn-delete { background: rgba(220, 38, 38, 0.06); color: #dc2626; }
+[data-theme="light"] .esem-btn-live { background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; }
+[data-theme="light"] .esem-btn-live:hover:not(:disabled) { box-shadow: 0 4px 16px rgba(239, 68, 68, 0.35); }
 [data-theme="light"] .esem-modal-overlay { background: rgba(0, 0, 0, 0.35); }
 [data-theme="light"] .esem-modal { background: #fff; border-color: #e2e8f0; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15); }
 [data-theme="light"] .esem-modal-title { color: #1e293b; }
