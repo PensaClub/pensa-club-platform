@@ -18,10 +18,16 @@ import {
     BookOpen,
     Wifi,
     Building,
+    Upload,
+    X,
 } from 'lucide-react';
+import { useState, useRef } from 'react';
 import useLectureCreateForm from '../hooks/useLectureCreateForm';
 import { AcademyMentorPicker } from '../AcademyCourses/AcademyMentorPicker/AcademyMentorPicker';
 import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
+import { useFirebaseUpload } from '../hooks/useFirebaseUpload';
+import { useAcademyCourses } from '../contexts/AcademyCoursesProvider';
+import { toast } from 'react-toastify';
 import './lectureCreateForm.css';
 
 const LECTURE_TYPES = ['lecture', 'webinar', 'workshop', 'masterclass'];
@@ -30,6 +36,11 @@ const VIDEO_PROVIDERS = ['youtube', 'vimeo', 'zoom', 'meet', 'teams', 'custom'];
 const LectureCreateForm = () => {
     const { t } = useTranslation('academy-admin');
     const navigate = useLocalizedNavigate();
+    const { uploadFile, uploading: firebaseUploading, uploadProgress: fbUploadProgress } = useFirebaseUpload();
+    const { uploadToYouTube, deleteFromYouTube } = useAcademyCourses();
+    const firebaseVideoRef = useRef(null);
+    const ytInputRef = useRef(null);
+    const [youtubeUploading, setYoutubeUploading] = useState(false);
 
      const {
         isEditMode,
@@ -62,6 +73,63 @@ const LectureCreateForm = () => {
         } else {
             updateField(name, value);
         }
+    };
+
+    const handleFirebaseVideoUpload = async (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        e.target.value = '';
+        try {
+            const result = await uploadFile(file, 'academy/videos/lectures');
+            updateField('videoUrl', result.url);
+            updateField('videoProvider', 'custom');
+            toast.success('Видеото е качено');
+        } catch (err) {
+            toast.error('Грешка при качване');
+        }
+    };
+
+    const handleYouTubeUpload = async (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        e.target.value = '';
+        setYoutubeUploading(true);
+        try {
+            const formData = new FormData();
+            formData.append('video', file);
+            formData.append('title', file.name.replace(/\.[^/.]+$/, ''));
+            formData.append('privacyStatus', 'unlisted');
+            const result = await uploadToYouTube(formData);
+            if (result?.success && result?.videoUrl) {
+                updateField('videoUrl', result.videoUrl);
+                updateField('videoProvider', 'youtube');
+                updateField('thumbnailUrl', `https://img.youtube.com/vi/${result.videoId}/mqdefault.jpg`);
+                toast.success('Видеото е качено в YouTube');
+            } else {
+                toast.error(result?.message || 'Грешка при качване');
+            }
+        } catch (err) {
+            toast.error('Грешка при качване в YouTube');
+        } finally {
+            setYoutubeUploading(false);
+        }
+    };
+
+    const handleRemoveVideo = async () => {
+        if (lectureData.videoProvider === 'youtube' && lectureData.videoUrl) {
+            try {
+                const match = lectureData.videoUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/);
+                if (match) await deleteFromYouTube(match[1]);
+            } catch (err) { console.error('YT delete error:', err); }
+        } else if (lectureData.videoUrl?.includes('firebasestorage.googleapis.com')) {
+            try {
+                const { deleteFileFromStorage } = await import('../Articles/articleUtils/file-delete-utils');
+                await deleteFileFromStorage(lectureData.videoUrl);
+            } catch (err) { console.error('Firebase delete error:', err); }
+        }
+        updateField('videoUrl', '');
+        updateField('videoProvider', '');
+        updateField('thumbnailUrl', '');
     };
 
     // const handleMentorChange = (mentorData) => {
@@ -527,6 +595,31 @@ const LectureCreateForm = () => {
                                 />
                                 {renderError('videoUrl')}
                             </div>
+                        </div>
+
+                        {/* Video preview + remove */}
+                        {lectureData.videoUrl && (
+                            <div className="lcf-video-preview">
+                                <span className="lcf-video-preview-url">{lectureData.videoUrl}</span>
+                                <button type="button" className="lcf-video-remove" onClick={handleRemoveVideo}>
+                                    <X size={14} /> Премахни
+                                </button>
+                            </div>
+                        )}
+
+                        {/* Upload buttons */}
+                        <div className="lcf-upload-buttons">
+                            <button type="button" className="lcf-upload-btn" onClick={() => firebaseVideoRef.current?.click()} disabled={firebaseUploading || youtubeUploading}>
+                                <Upload size={16} />
+                                {firebaseUploading ? `Качване... ${Math.round(Object.values(fbUploadProgress || {})[0] || 0)}%` : 'Качи видео файл'}
+                            </button>
+                            <input ref={firebaseVideoRef} type="file" accept=".mp4,.webm,.mov" style={{ display: 'none' }} onChange={handleFirebaseVideoUpload} />
+
+                            <button type="button" className="lcf-youtube-btn" onClick={() => ytInputRef.current?.click()} disabled={youtubeUploading || firebaseUploading}>
+                                <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                                {youtubeUploading ? 'Качване...' : 'Качи в YouTube'}
+                            </button>
+                            <input ref={ytInputRef} type="file" accept=".mp4,.webm,.mov" style={{ display: 'none' }} onChange={handleYouTubeUpload} />
                         </div>
 
                         {/* Thumbnail */}
