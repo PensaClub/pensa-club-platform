@@ -430,6 +430,30 @@ export const AcademyCoursesProvider = ({ children }) => {
     }
   }, [isAdmin]);
 
+  const startLesson = useCallback(async (courseSlug, lessonSlug) => {
+    try {
+      const response = await coursesService.startLesson(courseSlug, lessonSlug);
+      toast.success('Урокът е на живо');
+      return response;
+    } catch (error) {
+      console.error('Error starting lesson:', error);
+      toast.error('Грешка при стартиране');
+      throw error;
+    }
+  }, []);
+
+  const stopLesson = useCallback(async (courseSlug, lessonSlug) => {
+    try {
+      const response = await coursesService.stopLesson(courseSlug, lessonSlug);
+      toast.success('Излъчването е спряно');
+      return response;
+    } catch (error) {
+      console.error('Error stopping lesson:', error);
+      toast.error('Грешка при спиране');
+      throw error;
+    }
+  }, []);
+
   // =========================================================
   //                    LECTURES - PUBLIC
   // =========================================================
@@ -661,6 +685,18 @@ export const AcademyCoursesProvider = ({ children }) => {
       throw error;
     }
   }, [isAdmin]);
+
+  const stopLecture = useCallback(async (lectureId) => {
+    try {
+      const response = await coursesService.stopLecture(lectureId);
+      toast.success('Излъчването е спряно');
+      return response;
+    } catch (error) {
+      console.error('Error stopping lecture:', error);
+      toast.error('Грешка при спиране');
+      throw error;
+    }
+  }, []);
 
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -2123,6 +2159,8 @@ export const AcademyCoursesProvider = ({ children }) => {
     reorderLessons,
     publishLesson,
     unpublishLesson,
+    startLesson,
+    stopLesson,
 
     // Lectures - Public
     getLectures,
@@ -2138,6 +2176,7 @@ export const AcademyCoursesProvider = ({ children }) => {
     cancelLecture,
     startLecture,
     endLecture,
+    stopLecture,
     unpublishLecture,
     getLectureById,
     addLectureMentor,

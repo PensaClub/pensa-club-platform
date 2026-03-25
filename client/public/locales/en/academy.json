@@ -548,6 +548,15 @@
       "ratingDistribution": "Rating distribution"
     }
   },
+  "lectureDetail": {
+    "liveNow": "Live Now",
+    "joinLive": "Join Live",
+    "admin": "Management",
+    "edit": "Edit",
+    "goLive": "Go Live",
+    "stopLive": "Stop Live",
+    "attendance": "Attendance"
+  },
   "academyLecturesSeo": {
     "listTitle": "Digital Literacy Lectures | DigiBridge Academy",
     "listDescription": "Free online lectures on digital literacy, internet security, and technology. DigiBridge Academy — education for seniors 60+ with qualified lecturers.",

@@ -16,7 +16,20 @@ const LessonVideoPlayer = ({ lesson, t }) => {
   // =========================================================
 
   useEffect(() => {
-    if (!lesson || lesson.lessonType !== 'live' || !lesson.scheduledDate) {
+    if (!lesson || lesson.lessonType !== 'live') {
+      setLiveStatus(null);
+      setCountdown(null);
+      return;
+    }
+
+    // Manual override: if DB status is 'live', force live regardless of dates
+    if (lesson.status === 'live') {
+      setLiveStatus('live');
+      setCountdown(null);
+      return;
+    }
+
+    if (!lesson.scheduledDate) {
       setLiveStatus(null);
       setCountdown(null);
       return;

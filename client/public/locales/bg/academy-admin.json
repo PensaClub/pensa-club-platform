@@ -752,6 +752,8 @@
     "hasTest": "Има тест",
     "creditsForTest": "За тест",
     "testPassingScore": "Минимален резултат (%)",
+    "startLive": "На живо",
+    "stopLive": "Спри на живо",
     "manageTest": "Управлявай тест",
     "courseDesc": "Ако лекцията е част от курс, изберете го тук. Може да я закачите и към конкретен модул.",
     "courseSearchPlaceholder": "Търси курс по име...",
@@ -783,7 +785,9 @@
       "titleMinLength": "Минимум 3 символа",
       "dateRequired": "Датата е задължителна",
       "endBeforeStart": "Крайната дата трябва да е след началната",
-      "invalidUrl": "Невалиден URL"
+      "invalidUrl": "Невалиден URL",
+      "startLiveFailed": "Грешка при стартиране на живо",
+      "stopLiveFailed": "Грешка при спиране на живо"
     }
   },
   "seminarCreateForm": {

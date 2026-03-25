@@ -108,6 +108,8 @@ const EditLessonModal = ({ lesson: basicLesson, courseSlug, courseMentors = [], 
     getLessonMaterials,
     addLessonMaterial,
     deleteLessonMaterial,
+    startLesson: startLessonLive,
+    stopLesson: stopLessonLive,
   } = useAcademyCourses();
   const { uploadFile, uploading, uploadProgress } = useFirebaseUpload();
   const fileInputRef = useRef(null);
@@ -117,6 +119,7 @@ const EditLessonModal = ({ lesson: basicLesson, courseSlug, courseMentors = [], 
   const [hasChanges, setHasChanges] = useState(false);
   const [errors, setErrors] = useState({});
   const [lessonId, setLessonId] = useState(null);
+  const [lessonStatus, setLessonStatus] = useState(null);
   const [form, setForm] = useState({
     title: '',
     description: '',
@@ -176,6 +179,7 @@ const [initialMentor, setInitialMentor] = useState(null);
         const les = data.lesson || data;
 
         setLessonId(les.id);
+        setLessonStatus(les.status || null);
 
         setForm({
           title: les.title || '',
@@ -297,6 +301,28 @@ if (les.mentor) {
       }
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  // =========================================================
+  //                    LIVE START / STOP
+  // =========================================================
+
+  const handleStartLive = async () => {
+    try {
+      await startLessonLive(courseSlug, basicLesson.slug);
+      setLessonStatus('live');
+    } catch (err) {
+      console.error('Error starting lesson live:', err);
+    }
+  };
+
+  const handleStopLive = async () => {
+    try {
+      await stopLessonLive(courseSlug, basicLesson.slug);
+      setLessonStatus('active');
+    } catch (err) {
+      console.error('Error stopping lesson live:', err);
     }
   };
 
@@ -875,6 +901,16 @@ if (les.mentor) {
             <div className="elm-footer">
               <div className="elm-footer-left">
                 {hasChanges && <span className="elm-unsaved">{t('editLesson.unsavedChanges')}</span>}
+                {form.lessonType === 'live' && form.isPublished && lessonStatus !== 'live' && (
+                  <button className="elm-btn elm-btn-live" onClick={handleStartLive} disabled={isSaving}>
+                    <Radio size={16} /> На живо
+                  </button>
+                )}
+                {lessonStatus === 'live' && (
+                  <button className="elm-btn elm-btn-stop-live" onClick={handleStopLive} disabled={isSaving}>
+                    <Radio size={16} /> Спри на живо
+                  </button>
+                )}
               </div>
               <div className="elm-footer-right">
                 <button className="elm-btn elm-btn-cancel" onClick={onClose}>{t('editLesson.cancel')}</button>

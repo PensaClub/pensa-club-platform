@@ -150,6 +150,14 @@ export const academyCoursesServiceFactory = () => {
       return requester.post(`${apiUrl}/academy/courses/${courseSlug}/lessons/${lessonSlug}/unpublish`);
     },
 
+    startLesson: async (courseSlug, lessonSlug) => {
+      return requester.post(`${apiUrl}/academy/courses/${courseSlug}/lessons/${lessonSlug}/start`);
+    },
+
+    stopLesson: async (courseSlug, lessonSlug) => {
+      return requester.post(`${apiUrl}/academy/courses/${courseSlug}/lessons/${lessonSlug}/stop`);
+    },
+
     // =========================================================
     //                    LECTURES - PUBLIC
     // =========================================================
@@ -221,6 +229,10 @@ export const academyCoursesServiceFactory = () => {
 
     endLecture: async (lectureId) => {
       return requester.post(`${apiUrl}/academy/lectures/${lectureId}/end`);
+    },
+
+    stopLecture: async (lectureId) => {
+      return requester.post(`${apiUrl}/academy/lectures/${lectureId}/stop`);
     },
 
     getLectureStatistics: async (lectureId) => {

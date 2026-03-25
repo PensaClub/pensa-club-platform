@@ -736,6 +736,27 @@
     transform: translateY(-1px);
 }
 
+.elec-btn-live {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: #fff;
+    border: none;
+}
+
+.elec-btn-live:hover:not(:disabled) {
+    box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
+    transform: translateY(-1px);
+}
+
+.elec-btn-stop-live {
+    background: rgba(239, 68, 68, 0.12);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+.elec-btn-stop-live:hover:not(:disabled) {
+    background: rgba(239, 68, 68, 0.2);
+}
+
 /* =========================================================
                     DELETE MODAL
    ========================================================= */

@@ -548,6 +548,15 @@
       "ratingDistribution": "Bewertungsverteilung"
     }
   },
+  "lectureDetail": {
+    "liveNow": "Live",
+    "joinLive": "Live beitreten",
+    "admin": "Verwaltung",
+    "edit": "Bearbeiten",
+    "goLive": "Live starten",
+    "stopLive": "Live stoppen",
+    "attendance": "Anwesenheit"
+  },
   "academyLecturesSeo": {
     "listTitle": "Vorlesungen zur digitalen Kompetenz | DigiBridge Academy",
     "listDescription": "Kostenlose Online-Vorlesungen zu digitaler Kompetenz, Internetsicherheit und Technologie. DigiBridge Academy — Bildung für Senioren 60+ mit qualifizierten Dozenten.",

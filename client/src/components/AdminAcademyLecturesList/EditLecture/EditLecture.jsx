@@ -7,7 +7,7 @@ import {
     ArrowLeft, Save, Loader2, Send, EyeOff, Trash2,
     AlertCircle, Info, Video, Calendar, Globe, User,
     Users, Award, BookOpen, Wifi, Building, MapPin,
-    RotateCcw, X, HelpCircle, FileText,
+    RotateCcw, X, HelpCircle, FileText, Radio,
 } from 'lucide-react'; // НОВО
 import useEditLecture from '../../hooks/useEditLecture'; // НОВО
 import { AcademyMentorPicker } from '../../AcademyCourses/AcademyMentorPicker/AcademyMentorPicker'; // НОВО
@@ -37,6 +37,8 @@ const EditLecture = () => { // НОВО
         handleSaveAndBack,
         handlePublish,
         handleUnpublish,
+        handleStartLive,
+        handleStopLive,
         handleDelete,
         handleCancel,
         handleDiscardChanges,
@@ -562,6 +564,20 @@ const EditLecture = () => { // НОВО
                         <button className="elec-btn elec-btn-cancel" onClick={handleCancel} disabled={isSaving}>
                             {t('editLecture.cancel', 'Отказ')}
                         </button>
+
+                        {/* Start / Stop Live */}
+                        {lectureStatus !== 'live' && lectureStatus !== 'cancelled' && isPublished && (
+                            <button className="elec-btn elec-btn-live" onClick={handleStartLive} disabled={isSaving}>
+                                <Radio size={16} />
+                                <span className="elec-btn-label-desktop">{t('editLecture.startLive', 'На живо')}</span>
+                            </button>
+                        )}
+                        {lectureStatus === 'live' && (
+                            <button className="elec-btn elec-btn-stop-live" onClick={handleStopLive} disabled={isSaving}>
+                                <Radio size={16} />
+                                <span className="elec-btn-label-desktop">{t('editLecture.stopLive', 'Спри на живо')}</span>
+                            </button>
+                        )}
 
                         <button className="elec-btn elec-btn-delete" onClick={() => setShowDeleteModal(true)} disabled={isSaving}>
                             <Trash2 size={16} />
