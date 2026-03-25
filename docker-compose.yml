@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.8' 
 
 services:
   client:
@@ -14,10 +14,19 @@ services:
         - VITE_FIREBASE_appId=${VITE_FIREBASE_appId}
         - VITE_FIREBASE_measurementId=${VITE_FIREBASE_measurementId}
         - VITE_RECAPTCHA_SITE_KEY=${VITE_RECAPTCHA_SITE_KEY}
-    ports:
-      - "80:80"
+        - VITE_GA_TRACKING_ID=${VITE_GA_TRACKING_ID}
+        - VITE_GOOGLE_CLIENT_ID=${VITE_GOOGLE_CLIENT_ID}
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+    expose:
+      - "3000"
     depends_on:
       - server
+    networks:
+      - default
+      - nginx-proxy
 
   server:
     build:
@@ -28,6 +37,9 @@ services:
       - youtube_tokens:/app/youtube-tokens
     depends_on:
       - db
+    networks:
+      - default
+      - nginx-proxy
 
   db:
     image: postgres:16
@@ -39,3 +51,7 @@ services:
 volumes:
   postgres_data:
   youtube_tokens:
+
+networks:
+  nginx-proxy:
+    external: true
