@@ -807,6 +807,30 @@ checkSeminarRegistration: async (seminarId) => { // НОВО
     getMySchedule: async (days = 30) => {
       return requester.get(`${apiUrl}/academy/my/schedule?days=${days}`);
     },
+
+    // =========================================================
+    //                    YOUTUBE
+    // =========================================================
+
+    getYouTubeAuthUrl: async () => {
+      return requester.get(`${apiUrl}/youtube/auth`);
+    },
+
+    getYouTubeStatus: async () => {
+      return requester.get(`${apiUrl}/youtube/status`);
+    },
+
+    uploadToYouTube: async (formData, onProgress) => {
+      const token = localStorage.getItem('auth') ? JSON.parse(localStorage.getItem('auth')).token : null;
+      const response = await fetch(`${apiUrl}/youtube/upload`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        body: formData,
+      });
+      return response.json();
+    },
   };
 };
 

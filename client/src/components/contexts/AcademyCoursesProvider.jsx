@@ -1885,6 +1885,37 @@ export const AcademyCoursesProvider = ({ children }) => {
     }
   }, [isAdmin]);
 
+  // =========================================================
+  //                    YOUTUBE
+  // =========================================================
+
+  const getYouTubeStatus = useCallback(async () => {
+    try {
+      return await coursesService.getYouTubeStatus();
+    } catch (error) {
+      console.error('Error checking YouTube status:', error);
+      return { connected: false };
+    }
+  }, []);
+
+  const getYouTubeAuthUrl = useCallback(async () => {
+    try {
+      return await coursesService.getYouTubeAuthUrl();
+    } catch (error) {
+      console.error('Error getting YouTube auth URL:', error);
+      throw error;
+    }
+  }, []);
+
+  const uploadToYouTube = useCallback(async (formData) => {
+    try {
+      return await coursesService.uploadToYouTube(formData);
+    } catch (error) {
+      console.error('Error uploading to YouTube:', error);
+      throw error;
+    }
+  }, []);
+
   const deleteLessonMaterial = useCallback(async (lessonId, materialId) => {
     if (!isAdmin) {
       toast.error('Нямате права за тази операция');
@@ -2317,6 +2348,10 @@ export const AcademyCoursesProvider = ({ children }) => {
     getLectureReviewStats,
     checkUserLectureReviewStatus,
     checkinSeminar,
+    // YouTube
+    getYouTubeStatus,
+    getYouTubeAuthUrl,
+    uploadToYouTube,
   }), [isLoading, courses, currentCourse, lectures, seminars, myDashboard,
     currentLesson, lessonsProgress, enrollmentStats, currentTestData]);
 

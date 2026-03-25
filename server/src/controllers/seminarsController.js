@@ -2425,6 +2425,27 @@ seminarsController.delete(
         return res.status(404).json({ success: false, message: 'Video not found' });
       }
 
+      // If YouTube video, also delete from YouTube
+      if (video.videoUrl && (video.videoProvider === 'youtube' || video.videoUrl.includes('youtube.com') || video.videoUrl.includes('youtu.be'))) {
+        try {
+          const { extractVideoId, deleteVideo, setCredentials } = require('../utils/youtubeService');
+          const fs = require('fs');
+          const path = require('path');
+          const tokensFile = path.join(__dirname, '../../youtube-tokens.json');
+          if (fs.existsSync(tokensFile)) {
+            const tokens = JSON.parse(fs.readFileSync(tokensFile, 'utf8'));
+            setCredentials(tokens);
+            const ytVideoId = extractVideoId(video.videoUrl);
+            if (ytVideoId) {
+              await deleteVideo(ytVideoId);
+              console.log(`✅ Deleted YouTube video: ${ytVideoId}`);
+            }
+          }
+        } catch (ytErr) {
+          console.error('Failed to delete from YouTube (continuing):', ytErr.message);
+        }
+      }
+
       await video.destroy();
       res.json({ success: true, message: 'Video deleted' });
     } catch (err) {
