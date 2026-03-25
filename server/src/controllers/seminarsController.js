@@ -1217,10 +1217,10 @@ seminarsController.post(
         });
       }
 
-      if (seminarData.status !== 'scheduled') {
+      if (seminarData.status === 'cancelled') {
         return res.status(400).json({
           success: false,
-          message: `Cannot start seminar with status: ${seminarData.status}`,
+          message: 'Cannot start a cancelled seminar',
         });
       }
 
@@ -1235,6 +1235,32 @@ seminarsController.post(
       });
     } catch (err) {
       console.error('❌ [START SEMINAR] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// POST /api/academy/seminars/:id/stop
+// Спиране на live → връща на scheduled
+// ===============================
+seminarsController.post(
+  '/:id/stop',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const seminarId = parseInt(req.params.id);
+      const seminarData = await seminar.findByPk(seminarId);
+
+      if (!seminarData) {
+        return res.status(404).json({ success: false, message: 'Seminar not found' });
+      }
+
+      await seminarData.update({ status: 'scheduled' });
+
+      res.status(200).json({ success: true, message: 'Seminar stopped', seminar: seminarData });
+    } catch (err) {
+      console.error('❌ [STOP SEMINAR] Error:', err);
       next(err);
     }
   }
@@ -1481,13 +1507,14 @@ seminarsController.post(
         });
 
         if (studentData?.user?.email) {
-          const template = seminarEmailTemplates.registrationConfirmation({
+          const template = await seminarEmailTemplates.registrationConfirmation({
             userName: studentData.user.details?.username || studentData.user.email.split('@')[0],
             seminarTitle: seminarData.title,
             scheduledDate: seminarData.scheduledDate,
             location: seminarData.location,
             isOnline: seminarData.isOnline,
             meetingLink: seminarData.meetingLink,
+            meetingPassword: seminarData.meetingPassword,
             mentorName: null,
             slug: seminarData.slug,
           });
@@ -1819,41 +1846,38 @@ seminarsController.get(
 
       const searchTerm = `%${q.trim()}%`;
 
-      // Търси първо по имейл, после по username
-      const results = await student.findAll({
-        attributes: ['id', 'avatar', 'userId'],
-        include: [
-          {
-            model: user_account,
-            as: 'user',
-            attributes: ['id', 'email'],
-            where: {
-              [Op.or]: [
-                { email: { [Op.iLike]: searchTerm } },
-              ],
-            },
-            required: false,
-            include: [
-              {
-                model: user_details,
-                as: 'details',
-                attributes: ['username', 'imageURL'],
-              },
-            ],
-          },
-        ],
+      // Search ALL users by email or username (not just students)
+      const results = await user_account.findAll({
+        attributes: ['id', 'email'],
         where: {
           [Op.or]: [
-            { '$user.email$': { [Op.iLike]: searchTerm } },
-            { '$user.details.username$': { [Op.iLike]: searchTerm } },
+            { email: { [Op.iLike]: searchTerm } },
+            { '$details.username$': { [Op.iLike]: searchTerm } },
           ],
         },
+        include: [
+          {
+            model: user_details,
+            as: 'details',
+            attributes: ['username', 'imageURL'],
+            required: false,
+          },
+        ],
         limit: 15,
         subQuery: false,
       });
 
-      // Провери кои вече са записани/присъствали
-      const studentIds = results.map(r => r.id);
+      // Find or note student records for each user
+      const userIds = results.map(r => r.id);
+      const studentRecords = await student.findAll({
+        where: { userId: userIds },
+        attributes: ['id', 'userId', 'avatar'],
+      });
+      const studentMap = {};
+      studentRecords.forEach(s => { studentMap[s.userId] = s; });
+
+      // Check existing attendance
+      const studentIds = studentRecords.map(s => s.id);
       const existingAttendances = await student_seminar.findAll({
         where: { seminarId, studentId: studentIds },
         attributes: ['studentId', 'status', 'attended'],
@@ -1865,15 +1889,18 @@ seminarsController.get(
 
       const students = results.map(r => {
         const data = r.get({ plain: true });
-        const details = data.user?.details || {};
+        const details = data.details || {};
+        const studentRecord = studentMap[data.id];
+        const sId = studentRecord?.id || null;
         return {
-          studentId: data.id,
-          userId: data.userId,
-          name: details.username || data.user?.email?.split('@')[0] || 'Unknown',
-          email: data.user?.email,
-          avatar: data.avatar || details.imageURL,
-          seminarStatus: attendanceMap[data.id]?.status || null,
-          alreadyAttended: attendanceMap[data.id]?.attended || false,
+          studentId: sId,
+          userId: data.id,
+          name: details.username || data.email?.split('@')[0] || 'Unknown',
+          email: data.email,
+          avatar: studentRecord?.avatar || details.imageURL,
+          hasStudentRecord: !!studentRecord,
+          seminarStatus: sId ? (attendanceMap[sId]?.status || null) : null,
+          alreadyAttended: sId ? (attendanceMap[sId]?.attended || false) : false,
         };
       });
 
@@ -1911,7 +1938,26 @@ seminarsController.post(
      // Платформени потребители
       if (Array.isArray(platformAttendees) && platformAttendees.length > 0) {
         for (const att of platformAttendees) {
-          const { studentId, participationLevel } = att;
+          let { studentId, userId: attUserId, participationLevel } = att;
+
+          // If no studentId, find or create student record by userId
+          if (!studentId && attUserId) {
+            let studentRecord = await student.findOne({ where: { userId: attUserId } });
+            if (!studentRecord) {
+              studentRecord = await student.create({ userId: attUserId, status: 'active' });
+            }
+            studentId = studentRecord.id;
+
+            // Upgrade role to student if not privileged
+            const userAcc = await user_account.findByPk(attUserId, { attributes: ['id', 'role'] });
+            if (userAcc && ['user', 'guest'].includes(userAcc.role)) {
+              await userAcc.update({ role: 'student' });
+            }
+          }
+
+          if (!studentId) {
+            continue; // Skip if we still can't determine studentId
+          }
 
           let attendance = await student_seminar.findOne({
             where: { seminarId, studentId },
@@ -1958,6 +2004,37 @@ seminarsController.post(
               earnedCredits,
             });
           }
+          // Send email to platform user
+          try {
+            const userAcc = await user_account.findOne({
+              where: { id: attUserId || (await student.findByPk(studentId, { attributes: ['userId'] }))?.userId },
+              attributes: ['email'],
+              include: [{ model: user_details, as: 'details', attributes: ['username'] }]
+            });
+            if (userAcc?.email) {
+              const template = await seminarEmailTemplates.registrationConfirmation({
+                userName: userAcc.details?.username || userAcc.email.split('@')[0],
+                seminarTitle: seminarData.title,
+                scheduledDate: seminarData.scheduledDate,
+                location: seminarData.location,
+                isOnline: seminarData.isOnline,
+                meetingLink: seminarData.meetingLink,
+            meetingPassword: seminarData.meetingPassword,
+                mentorName: null,
+                slug: seminarData.slug
+              });
+              await forwardEmailsViaZoho({
+                userEmail: 'info@pensa.club',
+                subject: template.subject,
+                body: '',
+                toAddresses: userAcc.email,
+                formattedBody: template.html,
+              });
+            }
+          } catch (emailErr) {
+            console.error('Failed to send registration email from bulk-mixed:', emailErr);
+          }
+
           markedCount++;
         }
       }
@@ -2001,12 +2078,14 @@ seminarsController.post(
           // Send email to guest if email provided
           if (guest.email) {
             try {
-              const template = seminarEmailTemplates.guestNotification({
+              const template = await seminarEmailTemplates.guestNotification({
                 guestName: `${guest.firstName} ${guest.lastName}`,
                 seminarTitle: seminarData.title,
                 scheduledDate: seminarData.scheduledDate,
                 location: seminarData.location,
                 isOnline: seminarData.isOnline,
+                meetingLink: seminarData.meetingLink,
+                meetingPassword: seminarData.meetingPassword,
                 mentorName: null,
                 slug: seminarData.slug,
               });
@@ -2344,6 +2423,27 @@ seminarsController.delete(
       });
       if (!video) {
         return res.status(404).json({ success: false, message: 'Video not found' });
+      }
+
+      // If YouTube video, also delete from YouTube
+      if (video.videoUrl && (video.videoProvider === 'youtube' || video.videoUrl.includes('youtube.com') || video.videoUrl.includes('youtu.be'))) {
+        try {
+          const { extractVideoId, deleteVideo, setCredentials } = require('../utils/youtubeService');
+          const fs = require('fs');
+          const path = require('path');
+          const tokensFile = path.join(__dirname, '../../youtube-tokens.json');
+          if (fs.existsSync(tokensFile)) {
+            const tokens = JSON.parse(fs.readFileSync(tokensFile, 'utf8'));
+            setCredentials(tokens);
+            const ytVideoId = extractVideoId(video.videoUrl);
+            if (ytVideoId) {
+              await deleteVideo(ytVideoId);
+              console.log(`✅ Deleted YouTube video: ${ytVideoId}`);
+            }
+          }
+        } catch (ytErr) {
+          console.error('Failed to delete from YouTube (continuing):', ytErr.message);
+        }
       }
 
       await video.destroy();

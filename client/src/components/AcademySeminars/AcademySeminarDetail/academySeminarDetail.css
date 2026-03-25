@@ -713,6 +713,70 @@
 }
 
 /* =========================================================
+   LIVE STREAM
+   ========================================================= */
+
+.asd-live-section {
+    background: #0c0e14;
+    padding: 24px 0 32px;
+    border-bottom: 2px solid rgba(239, 68, 68, 0.3);
+}
+
+.asd-live-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.asd-live-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #ef4444;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.asd-live-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #ef4444;
+    animation: asd-live-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes asd-live-pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+    50% { opacity: 0.7; box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+}
+
+.asd-live-join-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 24px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.asd-live-join-btn:hover {
+    box-shadow: 0 4px 20px rgba(239, 68, 68, 0.3);
+    transform: translateY(-1px);
+}
+
+.asd-live-join-btn svg { flex-shrink: 0; }
+
+/* =========================================================
    MAIN
    ========================================================= */
 
@@ -1108,6 +1172,113 @@
 }
 
 /* =========================================================
+   ADMIN FLOATING PANEL
+   ========================================================= */
+
+.asd-admin-toggle {
+    position: fixed;
+    right: 35px;
+    bottom: 170px;
+    z-index: 900;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0, 210, 255, 0.15);
+    color: #00d2ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.asd-admin-toggle:hover { background: rgba(0, 210, 255, 0.25); }
+.asd-admin-toggle-open { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+.asd-admin-toggle-open:hover { background: rgba(239, 68, 68, 0.25); }
+
+.asd-admin-panel {
+    position: fixed;
+    right: 35px;
+    bottom: 224px;
+    z-index: 900;
+    background: #1a1f2e;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 180px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    animation: asd-panel-in 0.15s ease-out;
+}
+
+@keyframes asd-panel-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.asd-admin-panel-title {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.35);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 0 8px 6px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    margin-bottom: 4px;
+}
+
+.asd-admin-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: none;
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: inherit;
+    width: 100%;
+    text-align: left;
+}
+
+.asd-admin-btn:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
+.asd-admin-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.asd-admin-btn svg { flex-shrink: 0; }
+
+.asd-admin-btn-live { color: #ef4444; }
+.asd-admin-btn-live:hover { background: rgba(239, 68, 68, 0.1); color: #f87171; }
+
+.asd-admin-btn-stop { color: #f59e0b; }
+.asd-admin-btn-stop:hover { background: rgba(245, 158, 11, 0.1); color: #fbbf24; }
+
+/* Light theme */
+[data-theme="light"] .asd-admin-toggle { background: rgba(13, 148, 136, 0.1); color: #0d9488; box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+[data-theme="light"] .asd-admin-toggle:hover { background: rgba(13, 148, 136, 0.18); }
+[data-theme="light"] .asd-admin-toggle-open { background: rgba(220, 38, 38, 0.1); color: #dc2626; }
+[data-theme="light"] .asd-admin-panel { background: #fff; border-color: #e2e8f0; box-shadow: 0 8px 32px rgba(0,0,0,0.12); }
+[data-theme="light"] .asd-admin-panel-title { color: #94a3b8; border-bottom-color: #e2e8f0; }
+[data-theme="light"] .asd-admin-btn { background: #f8fafc; color: #475569; }
+[data-theme="light"] .asd-admin-btn:hover { background: #f1f5f9; color: #1e293b; }
+[data-theme="light"] .asd-admin-btn-live { color: #dc2626; }
+[data-theme="light"] .asd-admin-btn-live:hover { background: rgba(220,38,38,0.06); }
+[data-theme="light"] .asd-admin-btn-stop { color: #d97706; }
+[data-theme="light"] .asd-admin-btn-stop:hover { background: rgba(217,119,6,0.06); }
+
+@media (max-width: 480px) {
+    .asd-admin-toggle { right: 18px; bottom: 130px; width: 40px; height: 40px; }
+    .asd-admin-panel { right: 18px; bottom: 180px; min-width: 160px; padding: 12px; }
+    .asd-admin-btn { font-size: 0.78rem; padding: 7px 10px; }
+}
+
+/* =========================================================
    REVIEWS
    ========================================================= */
 
@@ -1312,7 +1483,7 @@
 
     .asd-hero-content {
         max-width: 100%;
-        padding: 0 20px;
+        padding: 50px 20px;
     }
 
     .asd-action-card {
@@ -1339,7 +1510,7 @@
     }
 
     .asd-hero-content {
-        padding: 0 14px;
+        padding: 50px 14px;
     }
 
     .asd-title {
@@ -1398,7 +1569,7 @@
     }
 
     .asd-hero-content {
-        padding: 0 10px;
+        padding: 50px 10px;
     }
 
     .asd-title {
@@ -1609,6 +1780,9 @@
     background: #e2e8f0;
     color: #1e293b;
 }
+
+[data-theme="light"] .asd-live-section { background: #fef2f2; border-bottom-color: rgba(239, 68, 68, 0.2); }
+[data-theme="light"] .asd-live-join-btn { background: linear-gradient(135deg, #dc2626, #b91c1c); }
 
 [data-theme="light"] .asd-main {
     background: #f1f5f9;

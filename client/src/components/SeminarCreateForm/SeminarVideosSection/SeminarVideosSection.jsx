@@ -30,7 +30,7 @@ const formatFileSize = (bytes) => {
 
 export default function SeminarVideosSection({ seminarId, seminarSlug }) {
     const { t } = useTranslation('academy-admin');
-    const { getSeminarVideos, addSeminarVideo, deleteSeminarVideo } = useAcademyCourses();
+    const { getSeminarVideos, addSeminarVideo, deleteSeminarVideo, uploadToYouTube } = useAcademyCourses();
     const { uploadMultipleFiles, uploading, uploadProgress } = useFirebaseUpload();
 
     const [videos, setVideos] = useState([]);              // saved in DB
@@ -38,7 +38,9 @@ export default function SeminarVideosSection({ seminarId, seminarSlug }) {
     const [urlInput, setUrlInput] = useState('');
     const [urlTitle, setUrlTitle] = useState('');
     const [dragActive, setDragActive] = useState(false);
+    const [youtubeUploading, setYoutubeUploading] = useState(false);
     const fileInputRef = useRef(null);
+    const youtubeInputRef = useRef(null);
     const flushedRef = useRef(false);
 
     // Load saved videos when seminarId is available (edit mode)
@@ -129,9 +131,25 @@ export default function SeminarVideosSection({ seminarId, seminarSlug }) {
         }
     }, [seminarId, deleteSeminarVideo, t]);
 
-    const handleDeletePending = useCallback((index) => {
+    const handleDeletePending = useCallback(async (index) => {
+        const video = pendingVideos[index];
+        // If YouTube video, delete from YouTube too
+        if (video?.videoProvider === 'youtube' && video?.videoUrl) {
+            try {
+                const ytId = extractYouTubeId(video.videoUrl);
+                if (ytId) {
+                    const token = localStorage.getItem('auth') ? JSON.parse(localStorage.getItem('auth')).token : null;
+                    await fetch(`${window.location.protocol}//${window.location.hostname}:8080/youtube/delete/${ytId}`, {
+                        method: 'DELETE',
+                        headers: { 'Authorization': `Bearer ${token}` },
+                    });
+                }
+            } catch (err) {
+                console.error('Failed to delete from YouTube:', err);
+            }
+        }
         setPendingVideos(prev => prev.filter((_, i) => i !== index));
-    }, []);
+    }, [pendingVideos]);
 
     const handleAddUrl = useCallback(async () => {
         if (!urlInput.trim()) return;
@@ -165,6 +183,48 @@ export default function SeminarVideosSection({ seminarId, seminarSlug }) {
         setUrlInput('');
         setUrlTitle('');
     }, [urlInput, urlTitle, seminarSlug, seminarId, addSeminarVideo, t]);
+
+    const handleYouTubeUpload = async (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        e.target.value = '';
+
+        setYoutubeUploading(true);
+        try {
+            const formData = new FormData();
+            formData.append('video', file);
+            formData.append('title', file.name.replace(/\.[^/.]+$/, ''));
+            formData.append('description', `Семинар видео - ${file.name}`);
+            formData.append('privacyStatus', 'unlisted');
+
+            const result = await uploadToYouTube(formData);
+
+            if (result?.success && result?.videoUrl) {
+                const videoData = {
+                    title: result.title || file.name,
+                    videoProvider: 'youtube',
+                    videoUrl: result.videoUrl,
+                    thumbnailUrl: `https://img.youtube.com/vi/${result.videoId}/mqdefault.jpg`,
+                };
+
+                if (seminarSlug && addSeminarVideo) {
+                    const resp = await addSeminarVideo(seminarId, videoData);
+                    const saved = resp?.video || resp;
+                    if (saved?.id) setVideos(prev => [...prev, saved]);
+                } else {
+                    setPendingVideos(prev => [...prev, videoData]);
+                }
+                toast.success('Видеото е качено в YouTube');
+            } else {
+                toast.error(result?.message || 'Грешка при качване в YouTube');
+            }
+        } catch (err) {
+            console.error('YouTube upload error:', err);
+            toast.error('Грешка при качване в YouTube');
+        } finally {
+            setYoutubeUploading(false);
+        }
+    };
 
     const handleDrag = useCallback((e) => {
         e.preventDefault();
@@ -333,10 +393,30 @@ export default function SeminarVideosSection({ seminarId, seminarSlug }) {
                 type="button"
                 className="scfv-upload-btn"
                 onClick={() => fileInputRef.current?.click()}
-                disabled={uploading}
+                disabled={uploading || youtubeUploading}
             >
                 <Upload size={16} />
                 {t('seminarVideos.uploadBtn', 'Качи видео файл')}
+            </button>
+
+            {/* YouTube upload */}
+            <input
+                ref={youtubeInputRef}
+                type="file"
+                accept=".mp4,.webm,.mov"
+                className="scfv-upload-input"
+                onChange={handleYouTubeUpload}
+            />
+            <button
+                type="button"
+                className="scfv-youtube-btn"
+                onClick={() => youtubeInputRef.current?.click()}
+                disabled={youtubeUploading || uploading}
+            >
+                <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                </svg>
+                {youtubeUploading ? 'Качване в YouTube...' : 'Качи в YouTube'}
             </button>
 
             <span className="scfv-upload-hint">

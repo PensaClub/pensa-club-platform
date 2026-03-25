@@ -1705,6 +1705,42 @@ academyEnrollmentController.post(
         console.error('Failed to create user notification:', notifErr);
       }
 
+      // Send registration email
+      try {
+        const { forwardEmailsViaZoho } = require('../utils/zohoEmails');
+        const seminarEmailTemplates = require('../utils/seminarEmailTemplates');
+        const userAccount = await user_account.findByPk(req.user.userId, { attributes: ['email'] });
+        const userDets = await user_details.findOne({ where: { userId: req.user.userId }, attributes: ['username'] });
+
+        if (userAccount?.email) {
+          const facilitator = seminarData.mentorId
+            ? await mentor.findByPk(seminarData.mentorId, { attributes: ['name'] })
+            : null;
+
+          const template = await seminarEmailTemplates.registrationConfirmation({
+            userName: userDets?.username || userAccount.email.split('@')[0],
+            seminarTitle: seminarData.title,
+            scheduledDate: seminarData.scheduledDate,
+            location: seminarData.location,
+            isOnline: seminarData.isOnline,
+            meetingLink: seminarData.meetingLink,
+            meetingPassword: seminarData.meetingPassword,
+            mentorName: facilitator?.name || null,
+            slug: seminarData.slug
+          });
+
+          await forwardEmailsViaZoho({
+            userEmail: 'info@pensa.club',
+            subject: template.subject,
+            body: '',
+            toAddresses: userAccount.email,
+            formattedBody: template.html,
+          });
+        }
+      } catch (emailErr) {
+        console.error('Failed to send seminar registration email:', emailErr);
+      }
+
       // Notify mentor
       if (seminarData.mentorId) {
         try {

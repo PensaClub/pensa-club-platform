@@ -14,6 +14,7 @@ import AcademyLectureDetailsSkeleton from './AcademyLectureDetailsSkeleton/Acade
 import SEOHead from '../../SEO/SEOHead';
 import ScrollToTop from '../../ScrollToTop/ScrollToTop';
 import { TextZoom } from '../../TextZoom/TextZoom';
+import { Wifi, Settings, Radio, Pencil, X, Users } from 'lucide-react';
 
 // ═══════════════════════════════════════════════════════════════════════════
 // HELPERS (същите като преди)
@@ -22,24 +23,21 @@ import { TextZoom } from '../../TextZoom/TextZoom';
 const getLectureStatus = (lecture) => {
   if (!lecture) return 'unknown';
   if (lecture.status === 'cancelled') return 'cancelled';
-
+  if (lecture.status === 'live') return 'live';
+  if (lecture.status === 'completed') return 'completed';
   const now = new Date();
-  const startTime = lecture.scheduledDate ? new Date(lecture.scheduledDate) : null;
-  const endTime = lecture.scheduledEndDate ? new Date(lecture.scheduledEndDate) : null;
+  const start = lecture.scheduledDate ? new Date(lecture.scheduledDate) : null;
+  if (start && now < start) return 'upcoming';
+  return 'scheduled';
+};
 
-  if (startTime && endTime && now >= startTime && now <= endTime) return 'live';
-
-  if (startTime && !endTime && lecture.durationMinutes) {
-    const estimatedEnd = new Date(startTime.getTime() + lecture.durationMinutes * 60 * 1000);
-    if (now >= startTime && now <= estimatedEnd) return 'live';
-  }
-
-  if (startTime && now < startTime) return 'upcoming';
-
-  if (lecture.status === 'completed') return 'recording';
-  if (lecture.status === 'scheduled' && startTime && now > startTime) return 'recording';
-
-  return 'recording';
+const getEmbedUrl = (url) => {
+  if (!url) return null;
+  const ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&?/]+)/);
+  if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}`;
+  const vimeoMatch = url.match(/vimeo\.com\/(\d+)/);
+  if (vimeoMatch) return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
+  return null;
 };
 
 const formatDate = (dateStr, locale = 'bg-BG') => {
@@ -132,7 +130,8 @@ export const AcademyLectureDetails = () => {
   const { slug } = useParams();
   const { t, i18n } = useTranslation('academy');
   const navigate = useLocalizedNavigate();
-  const { isAuthentication } = useAuthContext();
+  const { isAuthentication, isAdmin, profileData } = useAuthContext();
+  const isMentorOrAdmin = isAdmin || profileData?.isMentor;
   const {
     getLectureBySlug,
     getLectureMaterials,
@@ -140,6 +139,8 @@ export const AcademyLectureDetails = () => {
     unregisterFromLecture,
     checkLectureRegistration,
     getLectureTestStatus,
+    startLecture,
+    stopLecture,
     isLoading
   } = useAcademyCourses();
 
@@ -158,6 +159,10 @@ export const AcademyLectureDetails = () => {
   const [reviews, setReviews] = useState([]);
   const [userHasReviewed, setUserHasReviewed] = useState(false);
   const [showReviewModal, setShowReviewModal] = useState(false);
+
+  // Admin state
+  const [adminPanelOpen, setAdminPanelOpen] = useState(false);
+  const [adminActionLoading, setAdminActionLoading] = useState(false);
 
   // ═══════════════════════════════════════════════════════════════════════════
   // REFS за предотвратяване на дублирани заявки
@@ -468,7 +473,7 @@ export const AcademyLectureDetails = () => {
   // Computed values
   const isYouTube = lecture?.videoProvider === 'youtube';
   const hasVideo = lecture?.videoUrl || (isYouTube && lecture?.meetingLink);
-  const canWatch = (status === 'live' || status === 'recording') && hasVideo;
+  const canWatch = (status === 'live' || status === 'completed' || status === 'scheduled') && hasVideo;
  // ПРОМЕНЕНО — ползва backend данни
   const hasRealTest = lecture?.hasTest && testStatus?.hasTest && testStatus?.test;
   const testPassed = testStatus?.hasPassedTest;
@@ -527,6 +532,33 @@ export const AcademyLectureDetails = () => {
   const handleStartTest = useCallback(() => {
     navigate(`/academy/lectures/${slug}/test`);
   }, [navigate, slug]);
+
+  // Admin controls
+  const handleAdminStartLive = async () => {
+    if (!lecture?.id) return;
+    setAdminActionLoading(true);
+    try {
+      await startLecture(lecture.id);
+      setLecture(prev => ({ ...prev, status: 'live' }));
+    } catch (err) {
+      console.error('Error starting live:', err);
+    } finally {
+      setAdminActionLoading(false);
+    }
+  };
+
+  const handleAdminStopLive = async () => {
+    if (!lecture?.id) return;
+    setAdminActionLoading(true);
+    try {
+      await stopLecture(lecture.id);
+      setLecture(prev => ({ ...prev, status: 'scheduled' }));
+    } catch (err) {
+      console.error('Error stopping live:', err);
+    } finally {
+      setAdminActionLoading(false);
+    }
+  };
 
   // Loading state
   if (isLoading && !lecture) {
@@ -623,10 +655,16 @@ export const AcademyLectureDetails = () => {
                 <span className="ald-status-text">{t('academyLectureDetails.status.upcoming', 'ПРЕДСТОЯЩА')}</span>
               </>
             )}
-            {status === 'recording' && (
+            {status === 'completed' && (
               <>
                 <span className="ald-status-icon">📹</span>
                 <span className="ald-status-text">{t('academyLectureDetails.status.recording', 'ЗАПИС')}</span>
+              </>
+            )}
+            {status === 'scheduled' && (
+              <>
+                <span className="ald-status-icon">📋</span>
+                <span className="ald-status-text">{t('academyLectureDetails.status.scheduled', 'ПЛАНИРАНА')}</span>
               </>
             )}
             {status === 'cancelled' && (
@@ -816,7 +854,7 @@ export const AcademyLectureDetails = () => {
             </>
           )}
 
-          {status === 'recording' && (
+          {(status === 'completed' || (status === 'scheduled' && hasVideo)) && (
             <>
               <div className="ald-recording-info">
                 <span className="ald-recording-icon">📹</span>
@@ -893,6 +931,41 @@ export const AcademyLectureDetails = () => {
           </button>
         </div>
       </section>
+
+      {/* ========== LIVE STREAM ========== */}
+      {status === 'live' && lecture.meetingLink && (
+        <section className="ald-live-stream-section">
+          <div className="ald-container">
+            <div className="ald-live-stream-header">
+              <span className="ald-live-stream-indicator">
+                <span className="ald-live-stream-dot" />
+                {t('lectureDetail.liveNow', 'На живо')}
+              </span>
+              <a href={lecture.meetingLink} target="_blank" rel="noopener noreferrer" className="ald-live-stream-join-btn">
+                <Wifi size={16} />
+                {t('lectureDetail.joinLive', 'Присъедини се')}
+              </a>
+            </div>
+            {(() => {
+              const embedUrl = getEmbedUrl(lecture.meetingLink);
+              if (embedUrl) {
+                return (
+                  <div className="ald-video-player">
+                    <iframe
+                      src={embedUrl}
+                      title={lecture.title}
+                      className="ald-video-iframe"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+                );
+              }
+              return null;
+            })()}
+          </div>
+        </section>
+      )}
 
       {/* MAIN CONTENT */}
       <main className="ald-main">
@@ -1431,6 +1504,64 @@ export const AcademyLectureDetails = () => {
         <span>←</span>
         <span>{t('academyLectureDetails.actions.backToLectures', 'Всички лекции')}</span>
       </button>
+
+      {/* Admin floating panel */}
+      {isMentorOrAdmin && lecture && (
+        <>
+          <button
+            className={`ald-admin-toggle ${adminPanelOpen ? 'ald-admin-toggle-open' : ''}`}
+            onClick={() => setAdminPanelOpen(!adminPanelOpen)}
+            title="Admin"
+          >
+            {adminPanelOpen ? <X size={18} /> : <Settings size={18} />}
+          </button>
+
+          {adminPanelOpen && (
+            <div className="ald-admin-panel">
+              <div className="ald-admin-panel-title">{t('lectureDetail.admin', 'Управление')}</div>
+
+              <button
+                className="ald-admin-btn"
+                onClick={() => navigate(`/academy/admin/edit-lecture/${lecture.slug}`)}
+              >
+                <Pencil size={15} />
+                {t('lectureDetail.edit', 'Редактирай')}
+              </button>
+
+              {status !== 'live' && status !== 'cancelled' && (
+                <button
+                  className="ald-admin-btn ald-admin-btn-live"
+                  onClick={handleAdminStartLive}
+                  disabled={adminActionLoading}
+                >
+                  <Radio size={15} />
+                  {t('lectureDetail.goLive', 'На живо')}
+                </button>
+              )}
+
+              {status === 'live' && (
+                <button
+                  className="ald-admin-btn ald-admin-btn-stop"
+                  onClick={handleAdminStopLive}
+                  disabled={adminActionLoading}
+                >
+                  <Radio size={15} />
+                  {t('lectureDetail.stopLive', 'Спри на живо')}
+                </button>
+              )}
+
+              <button
+                className="ald-admin-btn"
+                onClick={() => navigate('/academy/admin/lecture-attendance')}
+              >
+                <Users size={15} />
+                {t('lectureDetail.attendance', 'Присъствие')}
+              </button>
+            </div>
+          )}
+        </>
+      )}
+
       <ScrollToTop/>
 
       {/* Lecture Review Modal */}

@@ -71,6 +71,8 @@ const useEditLecture = () => {
         publishLecture,
         unpublishLecture,
         deleteLecture,
+        startLecture,
+        endLecture,
         getAdminCourses,
         getCourseModules,
         addLectureMentor,
@@ -474,6 +476,36 @@ const useEditLecture = () => {
     };
 
     // =========================================================
+    //                    START / STOP LIVE
+    // =========================================================
+
+    const handleStartLive = async () => {
+        try {
+            setIsSaving(true);
+            await startLecture(lectureId);
+            setLectureStatus('live');
+        } catch (err) {
+            console.error('Error starting live:', err);
+            toast.error(t('editLecture.errors.startLiveFailed', 'Грешка при стартиране на живо'));
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    const handleStopLive = async () => {
+        try {
+            setIsSaving(true);
+            await endLecture(lectureId);
+            setLectureStatus('scheduled');
+        } catch (err) {
+            console.error('Error stopping live:', err);
+            toast.error(t('editLecture.errors.stopLiveFailed', 'Грешка при спиране на живо'));
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    // =========================================================
     //                    DELETE
     // =========================================================
 
@@ -527,6 +559,8 @@ const useEditLecture = () => {
         handleSaveAndBack,
         handlePublish,
         handleUnpublish,
+        handleStartLive,
+        handleStopLive,
         handleDelete,
         handleCancel,
         handleDiscardChanges, 

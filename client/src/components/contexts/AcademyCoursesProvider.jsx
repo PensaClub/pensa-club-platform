@@ -430,6 +430,30 @@ export const AcademyCoursesProvider = ({ children }) => {
     }
   }, [isAdmin]);
 
+  const startLesson = useCallback(async (courseSlug, lessonSlug) => {
+    try {
+      const response = await coursesService.startLesson(courseSlug, lessonSlug);
+      toast.success('Урокът е на живо');
+      return response;
+    } catch (error) {
+      console.error('Error starting lesson:', error);
+      toast.error('Грешка при стартиране');
+      throw error;
+    }
+  }, []);
+
+  const stopLesson = useCallback(async (courseSlug, lessonSlug) => {
+    try {
+      const response = await coursesService.stopLesson(courseSlug, lessonSlug);
+      toast.success('Излъчването е спряно');
+      return response;
+    } catch (error) {
+      console.error('Error stopping lesson:', error);
+      toast.error('Грешка при спиране');
+      throw error;
+    }
+  }, []);
+
   // =========================================================
   //                    LECTURES - PUBLIC
   // =========================================================
@@ -662,6 +686,18 @@ export const AcademyCoursesProvider = ({ children }) => {
     }
   }, [isAdmin]);
 
+  const stopLecture = useCallback(async (lectureId) => {
+    try {
+      const response = await coursesService.stopLecture(lectureId);
+      toast.success('Излъчването е спряно');
+      return response;
+    } catch (error) {
+      console.error('Error stopping lecture:', error);
+      toast.error('Грешка при спиране');
+      throw error;
+    }
+  }, []);
+
 
   // ═══════════════════════════════════════════════════════════════════════════
 
@@ -890,6 +926,46 @@ export const AcademyCoursesProvider = ({ children }) => {
     } catch (error) {
       console.error('Error unpublishing seminar:', error);
       toast.error(error?.errors?.[0] || 'Грешка при скриване');
+      throw error;
+    }
+  }, []);
+
+  const startSeminar = useCallback(async (seminarId) => {
+    if (!isAdmin) {
+      toast.error('Нямате права за тази операция');
+      return { success: false };
+    }
+    try {
+      const response = await coursesService.startSeminar(seminarId);
+      toast.success('Семинарът е на живо');
+      return response;
+    } catch (error) {
+      console.error('Error starting seminar:', error);
+      toast.error('Грешка при стартиране');
+      throw error;
+    }
+  }, [isAdmin]);
+
+  const completeSeminar = useCallback(async (seminarId) => {
+    try {
+      const response = await coursesService.completeSeminar(seminarId);
+      toast.success('Семинарът е завършен');
+      return response;
+    } catch (error) {
+      console.error('Error completing seminar:', error);
+      toast.error('Грешка при завършване');
+      throw error;
+    }
+  }, []);
+
+  const stopSeminar = useCallback(async (seminarId) => {
+    try {
+      const response = await coursesService.stopSeminar(seminarId);
+      toast.success('Излъчването е спряно');
+      return response;
+    } catch (error) {
+      console.error('Error stopping seminar:', error);
+      toast.error('Грешка при спиране');
       throw error;
     }
   }, []);
@@ -1809,6 +1885,37 @@ export const AcademyCoursesProvider = ({ children }) => {
     }
   }, [isAdmin]);
 
+  // =========================================================
+  //                    YOUTUBE
+  // =========================================================
+
+  const getYouTubeStatus = useCallback(async () => {
+    try {
+      return await coursesService.getYouTubeStatus();
+    } catch (error) {
+      console.error('Error checking YouTube status:', error);
+      return { connected: false };
+    }
+  }, []);
+
+  const getYouTubeAuthUrl = useCallback(async () => {
+    try {
+      return await coursesService.getYouTubeAuthUrl();
+    } catch (error) {
+      console.error('Error getting YouTube auth URL:', error);
+      throw error;
+    }
+  }, []);
+
+  const uploadToYouTube = useCallback(async (formData) => {
+    try {
+      return await coursesService.uploadToYouTube(formData);
+    } catch (error) {
+      console.error('Error uploading to YouTube:', error);
+      throw error;
+    }
+  }, []);
+
   const deleteLessonMaterial = useCallback(async (lessonId, materialId) => {
     if (!isAdmin) {
       toast.error('Нямате права за тази операция');
@@ -2083,6 +2190,8 @@ export const AcademyCoursesProvider = ({ children }) => {
     reorderLessons,
     publishLesson,
     unpublishLesson,
+    startLesson,
+    stopLesson,
 
     // Lectures - Public
     getLectures,
@@ -2098,6 +2207,7 @@ export const AcademyCoursesProvider = ({ children }) => {
     cancelLecture,
     startLecture,
     endLecture,
+    stopLecture,
     unpublishLecture,
     getLectureById,
     addLectureMentor,
@@ -2126,6 +2236,9 @@ export const AcademyCoursesProvider = ({ children }) => {
     publishSeminar,
     unpublishSeminar,
     cancelSeminar,
+    startSeminar,
+    stopSeminar,
+    completeSeminar,
 
     // Seminar Registration
     registerForSeminar,
@@ -2235,6 +2348,10 @@ export const AcademyCoursesProvider = ({ children }) => {
     getLectureReviewStats,
     checkUserLectureReviewStatus,
     checkinSeminar,
+    // YouTube
+    getYouTubeStatus,
+    getYouTubeAuthUrl,
+    uploadToYouTube,
   }), [isLoading, courses, currentCourse, lectures, seminars, myDashboard,
     currentLesson, lessonsProgress, enrollmentStats, currentTestData]);
 

@@ -2584,3 +2584,149 @@
     background: linear-gradient(135deg, #fef3c7, #fde68a);
     color: #92400e;
 }
+
+/* =========================================================
+   ADMIN LIVE CONTROLS
+   ========================================================= */
+
+.lp-admin-toggle {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 1000;
+}
+
+.lp-admin-toggle__btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(30, 30, 30, 0.9);
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s ease;
+}
+
+.lp-admin-toggle__btn:hover {
+    background: rgba(50, 50, 50, 0.95);
+    transform: scale(1.05);
+}
+
+.lp-admin-toggle__btn--active {
+    background: var(--primary-color, #4f46e5);
+}
+
+.lp-admin-panel {
+    position: absolute;
+    bottom: 60px;
+    right: 0;
+    width: 260px;
+    background: rgba(20, 20, 20, 0.95);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+    backdrop-filter: blur(12px);
+}
+
+.lp-admin-panel__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.lp-admin-panel__header button {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    padding: 2px;
+}
+
+.lp-admin-panel__header button:hover {
+    color: #fff;
+}
+
+.lp-admin-panel__body {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.lp-admin-panel__status {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.8rem;
+    margin: 0;
+}
+
+.lp-admin-panel__status strong {
+    color: #fff;
+}
+
+.lp-admin-panel__btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+    justify-content: center;
+}
+
+.lp-admin-panel__btn--start {
+    background: #ef4444;
+    color: #fff;
+}
+
+.lp-admin-panel__btn--start:hover {
+    background: #dc2626;
+}
+
+.lp-admin-panel__btn--stop {
+    background: #6b7280;
+    color: #fff;
+}
+
+.lp-admin-panel__btn--stop:hover {
+    background: #4b5563;
+}
+
+[data-theme="light"] .lp-admin-panel {
+    background: rgba(255, 255, 255, 0.97);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .lp-admin-panel__header {
+    color: #111;
+    border-bottom-color: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .lp-admin-panel__header button {
+    color: rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="light"] .lp-admin-panel__header button:hover {
+    color: #111;
+}
+
+[data-theme="light"] .lp-admin-panel__status {
+    color: rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="light"] .lp-admin-panel__status strong {
+    color: #111;
+}

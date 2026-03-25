@@ -752,6 +752,8 @@
     "hasTest": "Has test",
     "creditsForTest": "For test",
     "testPassingScore": "Minimum score (%)",
+    "startLive": "Start Live",
+    "stopLive": "Stop Live",
     "manageTest": "Manage test",
     "courseDesc": "If the lecture is part of a course, select it here. You can also assign it to a specific module.",
     "courseSearchPlaceholder": "Search course by name...",
@@ -783,7 +785,9 @@
       "titleMinLength": "Minimum 3 characters",
       "dateRequired": "Date is required",
       "endBeforeStart": "End date must be after start date",
-      "invalidUrl": "Invalid URL"
+      "invalidUrl": "Invalid URL",
+      "startLiveFailed": "Error starting live",
+      "stopLiveFailed": "Error stopping live"
     }
   },
   "seminarCreateForm": {
@@ -1040,6 +1044,8 @@
     "publish": "Publish",
     "unpublish": "Unpublish",
     "cancelSeminar": "Cancel",
+    "startLive": "Start Live",
+    "stopLive": "Stop Live",
     "saved": "Changes saved",
     "deleted": "Seminar deleted",
     "cancelled": "Seminar cancelled",

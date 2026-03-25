@@ -1549,3 +1549,30 @@
   border-color: rgba(226, 96, 32, 0.35);
   box-shadow: 0 0 15px rgba(226, 96, 32, 0.12);
 }
+
+/* --- Live Start/Stop Buttons --- */
+.elm-btn-live {
+  background: #ef4444;
+  color: #fff;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.elm-btn-live:hover {
+  background: #dc2626;
+}
+
+.elm-btn-stop-live {
+  background: #6b7280;
+  color: #fff;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.elm-btn-stop-live:hover {
+  background: #4b5563;
+}

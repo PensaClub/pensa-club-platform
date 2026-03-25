@@ -62,6 +62,9 @@ const useEditSeminar = () => {
         publishSeminar,
         unpublishSeminar,
         cancelSeminar,
+        startSeminar,
+        stopSeminar,
+        completeSeminar,
         getAdminCourses,
     } = useAcademyCourses();
 
@@ -346,6 +349,32 @@ const [showTestEditor, setShowTestEditor] = useState(false);
         }
     }, [seminarId, cancelSeminar, t]);
 
+    // Start Live
+    const handleStartLive = useCallback(async () => {
+        setIsSaving(true);
+        try {
+            await startSeminar(seminarId);
+            setSeminarStatus('live');
+        } catch (err) {
+            console.error('Error starting live:', err);
+        } finally {
+            setIsSaving(false);
+        }
+    }, [seminarId, startSeminar]);
+
+    const handleStopLive = useCallback(async () => {
+        setIsSaving(true);
+        try {
+            // Use unpublish+republish pattern: set status back to scheduled
+            await stopSeminar(seminarId);
+            setSeminarStatus('scheduled');
+        } catch (err) {
+            console.error('Error stopping live:', err);
+        } finally {
+            setIsSaving(false);
+        }
+    }, [seminarId, stopSeminar]);
+
     // Discard changes
     const handleDiscardChanges = useCallback(() => {
         if (slug) loadSeminar(slug);
@@ -371,6 +400,8 @@ const [showTestEditor, setShowTestEditor] = useState(false);
         handleUnpublish,
         handleDelete,
         handleCancel,
+        handleStartLive,
+        handleStopLive,
         handleDiscardChanges,
         availableCourses,
         courseSearch,

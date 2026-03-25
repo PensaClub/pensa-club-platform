@@ -37,22 +37,15 @@ const FILTER_TABS = [ // НОВО
 
 const ITEMS_PER_PAGE = 3; // НОВО
 
-const getSeminarStatus = (seminar) => { // НОВО
+const getSeminarStatus = (seminar) => {
     if (!seminar) return 'unknown';
     if (seminar.status === 'cancelled') return 'cancelled';
-
+    if (seminar.status === 'live') return 'live';
+    if (seminar.status === 'completed') return 'completed';
     const now = new Date();
     const startTime = seminar.scheduledDate ? new Date(seminar.scheduledDate) : null;
-    const endTime = seminar.scheduledEndDate ? new Date(seminar.scheduledEndDate) : null;
-
-    if (startTime && endTime && now >= startTime && now <= endTime) return 'live';
-    if (startTime && !endTime) {
-        const duration = seminar.durationMinutes || 90;
-        const estimatedEnd = new Date(startTime.getTime() + duration * 60 * 1000);
-        if (now >= startTime && now <= estimatedEnd) return 'live';
-    }
     if (startTime && now < startTime) return 'upcoming';
-    return 'completed';
+    return 'scheduled';
 };
 
 const AcademySeminars = () => { // НОВО

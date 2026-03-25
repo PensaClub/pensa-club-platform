@@ -150,6 +150,14 @@ export const academyCoursesServiceFactory = () => {
       return requester.post(`${apiUrl}/academy/courses/${courseSlug}/lessons/${lessonSlug}/unpublish`);
     },
 
+    startLesson: async (courseSlug, lessonSlug) => {
+      return requester.post(`${apiUrl}/academy/courses/${courseSlug}/lessons/${lessonSlug}/start`);
+    },
+
+    stopLesson: async (courseSlug, lessonSlug) => {
+      return requester.post(`${apiUrl}/academy/courses/${courseSlug}/lessons/${lessonSlug}/stop`);
+    },
+
     // =========================================================
     //                    LECTURES - PUBLIC
     // =========================================================
@@ -221,6 +229,10 @@ export const academyCoursesServiceFactory = () => {
 
     endLecture: async (lectureId) => {
       return requester.post(`${apiUrl}/academy/lectures/${lectureId}/end`);
+    },
+
+    stopLecture: async (lectureId) => {
+      return requester.post(`${apiUrl}/academy/lectures/${lectureId}/stop`);
     },
 
     getLectureStatistics: async (lectureId) => {
@@ -318,8 +330,12 @@ export const academyCoursesServiceFactory = () => {
       return requester.post(`${apiUrl}/academy/seminars/${seminarId}/start`);
     },
 
-    endSeminar: async (seminarId) => {
-      return requester.post(`${apiUrl}/academy/seminars/${seminarId}/end`);
+    completeSeminar: async (seminarId) => {
+      return requester.post(`${apiUrl}/academy/seminars/${seminarId}/complete`);
+    },
+
+    stopSeminar: async (seminarId) => {
+      return requester.post(`${apiUrl}/academy/seminars/${seminarId}/stop`);
     },
 
     getSeminarStatistics: async (seminarId) => {
@@ -790,6 +806,30 @@ checkSeminarRegistration: async (seminarId) => { // НОВО
 
     getMySchedule: async (days = 30) => {
       return requester.get(`${apiUrl}/academy/my/schedule?days=${days}`);
+    },
+
+    // =========================================================
+    //                    YOUTUBE
+    // =========================================================
+
+    getYouTubeAuthUrl: async () => {
+      return requester.get(`${apiUrl}/youtube/auth`);
+    },
+
+    getYouTubeStatus: async () => {
+      return requester.get(`${apiUrl}/youtube/status`);
+    },
+
+    uploadToYouTube: async (formData, onProgress) => {
+      const token = localStorage.getItem('auth') ? JSON.parse(localStorage.getItem('auth')).token : null;
+      const response = await fetch(`${apiUrl}/youtube/upload`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+        body: formData,
+      });
+      return response.json();
     },
   };
 };

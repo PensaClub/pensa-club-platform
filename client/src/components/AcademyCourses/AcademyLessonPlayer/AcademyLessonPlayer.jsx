@@ -7,6 +7,7 @@ import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { useTranslation } from 'react-i18next';
 import { useAuthContext } from '../../contexts/UserContext';
 import { useAcademyCourses } from '../../contexts/AcademyCoursesProvider';
+import { Settings, Radio, X } from 'lucide-react';
 import './academyLessonPlayer.css';
 import AcademyLessonPlayerSkeleton from './AcademyLessonPlayerSkeleton/AcademyLessonPlayerSkeleton';
 import { TextZoom } from '../../TextZoom/TextZoom';
@@ -16,7 +17,7 @@ const AcademyLessonPlayer = () => {
   const { courseSlug, lessonSlug } = useParams();
   const navigate = useLocalizedNavigate();
 
-  const { isAuthentication, isAdmin, isModerator, isMentor } = useAuthContext();
+  const { isAuthentication, isAdmin, isModerator, isMentor, profileData } = useAuthContext();
   const {
     getLessonBySlug,
     getCourseBySlug,
@@ -25,6 +26,8 @@ const AcademyLessonPlayer = () => {
     startLessonBySlug,
     updateLessonProgressBySlug,
     completeLessonBySlug,
+    startLesson: startLessonLive,
+    stopLesson: stopLessonLive,
     isLoading
   } = useAcademyCourses();
 
@@ -54,6 +57,8 @@ const AcademyLessonPlayer = () => {
   const [controlsVisible, setControlsVisible] = useState(true);
   const [lessonStarted, setLessonStarted] = useState(false);
   const [watchedSeconds, setWatchedSeconds] = useState(0);
+
+  const [showAdminPanel, setShowAdminPanel] = useState(false);
 
   const fetchedRef = useRef(null);
   const countdownIntervalRef = useRef(null);
@@ -229,7 +234,20 @@ const AcademyLessonPlayer = () => {
   // =========================================================
 
   useEffect(() => {
-    if (!lesson || lesson.lessonType !== 'live' || !lesson.scheduledDate) {
+    if (!lesson || lesson.lessonType !== 'live') {
+      setLiveStatus(null);
+      setCountdown(null);
+      return;
+    }
+
+    // Manual override: if DB status is 'live', force live regardless of dates
+    if (lesson.status === 'live') {
+      setLiveStatus('live');
+      setCountdown(null);
+      return;
+    }
+
+    if (!lesson.scheduledDate) {
       setLiveStatus(null);
       setCountdown(null);
       return;
@@ -524,6 +542,24 @@ const AcademyLessonPlayer = () => {
     }
   };
 
+  const handleStartLive = async () => {
+    try {
+      await startLessonLive(courseSlug, lessonSlug);
+      setLesson(prev => ({ ...prev, status: 'live' }));
+    } catch (err) {
+      console.error('Error starting lesson live:', err);
+    }
+  };
+
+  const handleStopLive = async () => {
+    try {
+      await stopLessonLive(courseSlug, lessonSlug);
+      setLesson(prev => ({ ...prev, status: 'active' }));
+    } catch (err) {
+      console.error('Error stopping lesson live:', err);
+    }
+  };
+
   const handleStartTest = async () => {
     if (!lesson?.id || isStartingTest || !lesson?.hasTest) return;
     navigate(`/academy/courses/${courseSlug}/lessons/${lessonSlug}/test`);
@@ -688,6 +724,41 @@ const AcademyLessonPlayer = () => {
   return (
     <>
     <TextZoom />
+    {/* Admin Live Controls */}
+    {isAdmin && lesson?.lessonType === 'live' && (
+      <div className="lp-admin-toggle">
+        <button
+          className={`lp-admin-toggle__btn ${showAdminPanel ? 'lp-admin-toggle__btn--active' : ''}`}
+          onClick={() => setShowAdminPanel(!showAdminPanel)}
+          title="Admin controls"
+        >
+          <Settings size={18} />
+        </button>
+        {showAdminPanel && (
+          <div className="lp-admin-panel">
+            <div className="lp-admin-panel__header">
+              <span>Admin Controls</span>
+              <button onClick={() => setShowAdminPanel(false)}><X size={16} /></button>
+            </div>
+            <div className="lp-admin-panel__body">
+              <p className="lp-admin-panel__status">
+                Статус: <strong>{lesson.status === 'live' ? 'На живо' : lesson.status}</strong>
+              </p>
+              {lesson.status !== 'live' && (
+                <button className="lp-admin-panel__btn lp-admin-panel__btn--start" onClick={handleStartLive}>
+                  <Radio size={16} /> Пусни на живо
+                </button>
+              )}
+              {lesson.status === 'live' && (
+                <button className="lp-admin-panel__btn lp-admin-panel__btn--stop" onClick={handleStopLive}>
+                  <Radio size={16} /> Спри на живо
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    )}
     <div className="lp">
       {/* Background */}
       <div className="lp-bg">
