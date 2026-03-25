@@ -137,6 +137,13 @@ export default function SeminarMaterialsSection({ seminarId, seminarSlug }) {
 
     const handleDeleteSaved = useCallback(async (materialId) => {
         try {
+            const material = materials.find(m => m.id === materialId);
+            if (material?.fileUrl?.includes('firebasestorage.googleapis.com')) {
+                try {
+                    const { deleteFileFromStorage } = await import('../../Articles/articleUtils/file-delete-utils');
+                    await deleteFileFromStorage(material.fileUrl);
+                } catch (err) { console.error('Firebase delete error:', err); }
+            }
             await deleteSeminarMaterial('seminar', seminarId, materialId);
             setMaterials(prev => prev.filter(m => m.id !== materialId));
             toast.success(t('seminarMaterials.deleteSuccess', 'Материалът е изтрит'));
@@ -144,9 +151,16 @@ export default function SeminarMaterialsSection({ seminarId, seminarSlug }) {
             console.error('Failed to delete material:', err);
             toast.error(t('seminarMaterials.deleteError', 'Грешка при изтриване'));
         }
-    }, [seminarId, deleteSeminarMaterial, t]);
+    }, [seminarId, deleteSeminarMaterial, materials, t]);
 
-    const handleDeletePending = useCallback((index) => {
+    const handleDeletePending = useCallback(async (index) => {
+        const material = pendingMaterials[index];
+        if (material?.fileUrl?.includes('firebasestorage.googleapis.com')) {
+            try {
+                const { deleteFileFromStorage } = await import('../../Articles/articleUtils/file-delete-utils');
+                await deleteFileFromStorage(material.fileUrl);
+            } catch (err) { console.error('Firebase delete error:', err); }
+        }
         setPendingMaterials(prev => prev.filter((_, i) => i !== index));
     }, []);
 
