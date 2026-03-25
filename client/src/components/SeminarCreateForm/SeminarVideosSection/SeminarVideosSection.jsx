@@ -30,7 +30,7 @@ const formatFileSize = (bytes) => {
 
 export default function SeminarVideosSection({ seminarId, seminarSlug }) {
     const { t } = useTranslation('academy-admin');
-    const { getSeminarVideos, addSeminarVideo, deleteSeminarVideo, uploadToYouTube } = useAcademyCourses();
+    const { getSeminarVideos, addSeminarVideo, deleteSeminarVideo, uploadToYouTube, deleteFromYouTube } = useAcademyCourses();
     const { uploadMultipleFiles, uploading, uploadProgress } = useFirebaseUpload();
 
     const [videos, setVideos] = useState([]);              // saved in DB
@@ -133,23 +133,16 @@ export default function SeminarVideosSection({ seminarId, seminarSlug }) {
 
     const handleDeletePending = useCallback(async (index) => {
         const video = pendingVideos[index];
-        // If YouTube video, delete from YouTube too
         if (video?.videoProvider === 'youtube' && video?.videoUrl) {
             try {
                 const ytId = extractYouTubeId(video.videoUrl);
-                if (ytId) {
-                    const token = localStorage.getItem('auth') ? JSON.parse(localStorage.getItem('auth')).token : null;
-                    await fetch(`${window.location.protocol}//${window.location.hostname}:8080/youtube/delete/${ytId}`, {
-                        method: 'DELETE',
-                        headers: { 'Authorization': `Bearer ${token}` },
-                    });
-                }
+                if (ytId) await deleteFromYouTube(ytId);
             } catch (err) {
                 console.error('Failed to delete from YouTube:', err);
             }
         }
         setPendingVideos(prev => prev.filter((_, i) => i !== index));
-    }, [pendingVideos]);
+    }, [pendingVideos, deleteFromYouTube]);
 
     const handleAddUrl = useCallback(async () => {
         if (!urlInput.trim()) return;

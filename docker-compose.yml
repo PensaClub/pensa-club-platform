@@ -33,6 +33,8 @@ services:
       context: ./server
     env_file:
       - ./.env
+    volumes:
+      - youtube_tokens:/app/youtube-tokens
     depends_on:
       - db
     networks:
@@ -48,6 +50,7 @@ services:
 
 volumes:
   postgres_data:
+  youtube_tokens:
 
 networks:
   nginx-proxy:

@@ -831,6 +831,10 @@ checkSeminarRegistration: async (seminarId) => { // НОВО
       });
       return response.json();
     },
+
+    deleteFromYouTube: async (videoId) => {
+      return requester.del(`${apiUrl}/youtube/delete/${videoId}`);
+    },
   };
 };
 
