@@ -936,7 +936,7 @@ lecturesController.post(
         });
       }
 
-      if (lectureData.status !== 'scheduled') {
+      if (lectureData.status !== 'scheduled' && lectureData.status !== 'completed') {
         return res.status(400).json({
           success: false,
           message: `Cannot start lecture with status: ${lectureData.status}`,
@@ -954,6 +954,39 @@ lecturesController.post(
       });
     } catch (err) {
       console.error('❌ [START LECTURE] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// POST /api/academy/lectures/:id/stop
+// Спиране на live → връща на scheduled
+// ===============================
+lecturesController.post(
+  '/:id/stop',
+  isAuth,
+  rbac.checkPermission('lecture', 'update'),
+  async (req, res, next) => {
+    try {
+      const lectureData = await lecture.findByPk(req.params.id);
+
+      if (!lectureData) {
+        return res.status(404).json({
+          success: false,
+          message: 'Lecture not found',
+        });
+      }
+
+      await lectureData.update({ status: 'scheduled' });
+
+      res.json({
+        success: true,
+        message: 'Lecture stopped',
+        lecture: lectureData,
+      });
+    } catch (err) {
+      console.error('Error stopping lecture:', err);
       next(err);
     }
   }

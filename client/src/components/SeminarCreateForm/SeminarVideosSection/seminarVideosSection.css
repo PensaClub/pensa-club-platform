@@ -356,10 +356,48 @@
     .scfv-url-input { font-size: 0.82rem; padding: 9px 12px; }
     .scfv-url-btn { width: 100%; justify-content: center; }
     .scfv-upload-btn { width: 100%; justify-content: center; }
+    .scfv-youtube-btn { width: 100%; justify-content: center; }
     .scfv-upload-progress { width: 90%; }
     .scfv-item-thumb { width: 48px; height: 32px; }
     .scfv-item-name { font-size: 0.78rem; }
     .scfv-upload-zone { padding: 24px 12px; }
+}
+
+/* =========================================================
+   YOUTUBE UPLOAD BUTTON
+   ========================================================= */
+
+.scfv-youtube-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 0, 0, 0.3);
+    background: rgba(255, 0, 0, 0.08);
+    color: #ff4444;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+}
+
+.scfv-youtube-btn:hover:not(:disabled) {
+    background: rgba(255, 0, 0, 0.15);
+    border-color: rgba(255, 0, 0, 0.5);
+}
+
+.scfv-youtube-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.scfv-youtube-btn svg {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
 }
 
 /* =========================================================
@@ -394,3 +432,5 @@
 [data-theme="light"] .scfv-upload-progress-bar { background: #e2e8f0; }
 [data-theme="light"] .scfv-upload-progress-fill { background: #0d9488; }
 [data-theme="light"] .scfv-upload-progress-text { color: #0d9488; }
+[data-theme="light"] .scfv-youtube-btn { border-color: rgba(220, 38, 38, 0.3); background: rgba(220, 38, 38, 0.06); color: #dc2626; }
+[data-theme="light"] .scfv-youtube-btn:hover:not(:disabled) { background: rgba(220, 38, 38, 0.12); }

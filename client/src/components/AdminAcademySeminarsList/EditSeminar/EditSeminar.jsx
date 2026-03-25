@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
     ArrowLeft, Save, Send, EyeOff, Trash2,
-    AlertTriangle, RotateCcw, XCircle, Loader2,
+    AlertTriangle, RotateCcw, XCircle, Loader2, Radio,
 } from 'lucide-react';
 import useEditSeminar from '../../hooks/useEditSeminar';
 import SeminarBasicInfo from '../../SeminarCreateForm/SeminarBasicInfo/SeminarBasicInfo';
@@ -41,6 +41,8 @@ const EditSeminar = () => {
         handleUnpublish,
         handleDelete,
         handleCancel,
+        handleStartLive,
+        handleStopLive,
         handleDiscardChanges,
         availableCourses,
         courseSearch,
@@ -184,6 +186,20 @@ const EditSeminar = () => {
                         <button className="esem-btn esem-btn-delete" onClick={() => setShowDeleteModal(true)} disabled={isSaving}>
                             <Trash2 size={16} />
                         </button>
+
+                        {/* Start / Stop Live */}
+                        {seminarStatus !== 'live' && seminarStatus !== 'cancelled' && isPublished && (
+                            <button className="esem-btn esem-btn-live" onClick={handleStartLive} disabled={isSaving}>
+                                <Radio size={16} />
+                                {t('editSeminar.startLive', 'На живо')}
+                            </button>
+                        )}
+                        {seminarStatus === 'live' && (
+                            <button className="esem-btn esem-btn-stop-live" onClick={handleStopLive} disabled={isSaving}>
+                                <Radio size={16} />
+                                {t('editSeminar.stopLive', 'Спри на живо')}
+                            </button>
+                        )}
 
                         {/* Publish/Unpublish */}
                         {isPublished ? (

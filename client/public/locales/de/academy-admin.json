@@ -752,6 +752,8 @@
     "hasTest": "Hat Test",
     "creditsForTest": "Für Test",
     "testPassingScore": "Mindestergebnis (%)",
+    "startLive": "Live starten",
+    "stopLive": "Live beenden",
     "manageTest": "Test verwalten",
     "courseDesc": "Wenn die Vorlesung Teil eines Kurses ist, wählen Sie ihn hier aus. Sie können sie auch einem bestimmten Modul zuordnen.",
     "courseSearchPlaceholder": "Kurs nach Name suchen...",
@@ -783,7 +785,9 @@
       "titleMinLength": "Mindestens 3 Zeichen",
       "dateRequired": "Datum ist erforderlich",
       "endBeforeStart": "Enddatum muss nach dem Startdatum liegen",
-      "invalidUrl": "Ungültige URL"
+      "invalidUrl": "Ungültige URL",
+      "startLiveFailed": "Fehler beim Starten von Live",
+      "stopLiveFailed": "Fehler beim Beenden von Live"
     }
   },
   "seminarCreateForm": {
@@ -1040,6 +1044,8 @@
     "publish": "Veröffentlichen",
     "unpublish": "Verbergen",
     "cancelSeminar": "Absagen",
+    "startLive": "Live starten",
+    "stopLive": "Live beenden",
     "saved": "Änderungen gespeichert",
     "deleted": "Seminar gelöscht",
     "cancelled": "Seminar abgesagt",

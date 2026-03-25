@@ -1451,6 +1451,76 @@ coursesController.post(
 );
 
 // ===============================
+// POST /api/academy/courses/:courseSlug/lessons/:lessonSlug/start
+// ===============================
+coursesController.post(
+  '/:courseSlug/lessons/:lessonSlug/start',
+  isAuth,
+  rbac.checkPermission('lesson', 'update'),
+  async (req, res, next) => {
+    try {
+      const { courseSlug, lessonSlug } = req.params;
+
+      const courseData = await findCourseBySlugOrId(courseSlug);
+
+      if (!courseData) {
+        return res.status(404).json({ success: false, message: 'Course not found' });
+      }
+
+      const lessonData = await findLessonBySlugOrId(lessonSlug, courseData.id);
+
+      if (!lessonData) {
+        return res.status(404).json({ success: false, message: 'Lesson not found' });
+      }
+
+      if (lessonData.status === 'cancelled') {
+        return res.status(400).json({ success: false, message: 'Cannot start cancelled lesson' });
+      }
+
+      await lessonData.update({ status: 'live' });
+
+      res.status(200).json({ success: true, message: 'Lesson started', lesson: lessonData });
+    } catch (err) {
+      console.error('❌ [START LESSON] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// POST /api/academy/courses/:courseSlug/lessons/:lessonSlug/stop
+// ===============================
+coursesController.post(
+  '/:courseSlug/lessons/:lessonSlug/stop',
+  isAuth,
+  rbac.checkPermission('lesson', 'update'),
+  async (req, res, next) => {
+    try {
+      const { courseSlug, lessonSlug } = req.params;
+
+      const courseData = await findCourseBySlugOrId(courseSlug);
+
+      if (!courseData) {
+        return res.status(404).json({ success: false, message: 'Course not found' });
+      }
+
+      const lessonData = await findLessonBySlugOrId(lessonSlug, courseData.id);
+
+      if (!lessonData) {
+        return res.status(404).json({ success: false, message: 'Lesson not found' });
+      }
+
+      await lessonData.update({ status: 'active' });
+
+      res.status(200).json({ success: true, message: 'Lesson stopped', lesson: lessonData });
+    } catch (err) {
+      console.error('❌ [STOP LESSON] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
 // ============ COURSE MENTORS ============
 // ===============================
 

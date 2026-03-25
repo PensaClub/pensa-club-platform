@@ -33,6 +33,7 @@ const factCheckController = require('./controllers/factCheckController');
 const ipManagementController = require('./controllers/ipManagementController');
 const errorLoggingController = require('./controllers/errorLoggingController');
 const reActionController = require('./controllers/reActionController');
+const youtubeController = require('./controllers/youtubeController');
 
 router.use('/auth', authController);
 router.use('/user', userController);
@@ -68,6 +69,7 @@ router.use('/useful-links', usefulLinksController);
 router.use('/fact-check', factCheckController);
 router.use('/error-logging', errorLoggingController);
 router.use('/reaction', reActionController);
+router.use('/youtube', youtubeController);
 
 router.use((err, req, res, next) => {
     errorHandler(err, req, res, err.statusCode || 500);
