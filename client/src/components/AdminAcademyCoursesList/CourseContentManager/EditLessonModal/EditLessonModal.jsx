@@ -110,6 +110,8 @@ const EditLessonModal = ({ lesson: basicLesson, courseSlug, courseMentors = [], 
     deleteLessonMaterial,
     startLesson: startLessonLive,
     stopLesson: stopLessonLive,
+    uploadToYouTube,
+    deleteFromYouTube,
   } = useAcademyCourses();
   const { uploadFile, uploading, uploadProgress } = useFirebaseUpload();
   const fileInputRef = useRef(null);
@@ -166,6 +168,9 @@ const [initialMentor, setInitialMentor] = useState(null);
   });
   const [linkErrors, setLinkErrors] = useState({});
   const [addingLink, setAddingLink] = useState(false);
+  const [youtubeUploading, setYoutubeUploading] = useState(false);
+  const ytInputRef = useRef(null);
+  const firebaseVideoRef = useRef(null);
 
   // =========================================================
   //                    LOAD LESSON + MATERIALS
@@ -323,6 +328,55 @@ if (les.mentor) {
       setLessonStatus('active');
     } catch (err) {
       console.error('Error stopping lesson live:', err);
+    }
+  };
+
+  // =========================================================
+  //                    FIREBASE VIDEO UPLOAD
+  // =========================================================
+
+  const handleFirebaseVideoUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    e.target.value = '';
+    try {
+      const result = await uploadFile(file, 'academy/videos/lessons');
+      setForm(prev => ({ ...prev, videoUrl: result.url, videoProvider: 'custom' }));
+      setHasChanges(true);
+      toast.success('Видеото е качено');
+    } catch (err) {
+      console.error('Firebase upload error:', err);
+      toast.error('Грешка при качване');
+    }
+  };
+
+  // =========================================================
+  //                    YOUTUBE UPLOAD
+  // =========================================================
+
+  const handleYouTubeUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    e.target.value = '';
+    setYoutubeUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('video', file);
+      formData.append('title', form.title || file.name);
+      formData.append('privacyStatus', 'unlisted');
+      const result = await uploadToYouTube(formData);
+      if (result?.success && result?.videoUrl) {
+        updateField('videoUrl', result.videoUrl);
+        updateField('videoProvider', 'youtube');
+        updateField('thumbnailUrl', `https://img.youtube.com/vi/${result.videoId}/mqdefault.jpg`);
+        toast.success('Видеото е качено в YouTube');
+      } else {
+        toast.error(result?.message || 'Грешка при качване');
+      }
+    } catch (err) {
+      toast.error('Грешка при качване в YouTube');
+    } finally {
+      setYoutubeUploading(false);
     }
   };
 
@@ -570,6 +624,44 @@ if (les.mentor) {
                       {errors.liveStreamUrl && <span className="elm-error-msg">{errors.liveStreamUrl}</span>}
                     </div>
                   )}
+
+                  {/* Video preview + remove */}
+                  {form.videoUrl && (
+                    <div className="elm-video-preview">
+                      <span className="elm-video-preview-url">{form.videoUrl}</span>
+                      <button type="button" className="elm-video-remove" onClick={async () => {
+                        if (form.videoProvider === 'youtube' && form.videoUrl) {
+                          try {
+                            const match = form.videoUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/);
+                            if (match && deleteFromYouTube) await deleteFromYouTube(match[1]);
+                          } catch (err) { console.error('YT delete error:', err); }
+                        } else if (form.videoUrl?.includes('firebasestorage.googleapis.com')) {
+                          try {
+                            const { deleteFileFromStorage } = await import('../../../Articles/articleUtils/file-delete-utils');
+                            await deleteFileFromStorage(form.videoUrl);
+                          } catch (err) { console.error('Firebase delete error:', err); }
+                        }
+                        setForm(prev => ({ ...prev, videoUrl: '', videoProvider: '', thumbnailUrl: '' }));
+                      }}>
+                        <X size={14} /> Премахни
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Firebase upload */}
+                  <button type="button" className="elm-upload-btn" onClick={() => firebaseVideoRef.current?.click()} disabled={uploading}>
+                    <Upload size={16} />
+                    {uploading ? 'Качване...' : 'Качи видео файл'}
+                  </button>
+                  <input ref={firebaseVideoRef} type="file" accept=".mp4,.webm,.mov" style={{ display: 'none' }} onChange={handleFirebaseVideoUpload} />
+
+                  <button type="button" className="elm-youtube-upload-btn" onClick={() => ytInputRef.current?.click()} disabled={youtubeUploading}>
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                    </svg>
+                    {youtubeUploading ? 'Качване...' : 'Качи в YouTube'}
+                  </button>
+                  <input ref={ytInputRef} type="file" accept=".mp4,.webm,.mov" style={{ display: 'none' }} onChange={handleYouTubeUpload} />
                 </div>
               )}
 

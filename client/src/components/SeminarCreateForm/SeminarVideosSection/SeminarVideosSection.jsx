@@ -122,6 +122,14 @@ export default function SeminarVideosSection({ seminarId, seminarSlug }) {
     const handleDeleteSaved = useCallback(async (videoId) => {
         if (!deleteSeminarVideo) return;
         try {
+            // Delete from Firebase if it's a Firebase URL
+            const video = videos.find(v => v.id === videoId);
+            if (video?.videoUrl?.includes('firebasestorage.googleapis.com')) {
+                try {
+                    const { deleteFileFromStorage } = await import('../../Articles/articleUtils/file-delete-utils');
+                    await deleteFileFromStorage(video.videoUrl);
+                } catch (err) { console.error('Firebase delete error:', err); }
+            }
             await deleteSeminarVideo(seminarId, videoId);
             setVideos(prev => prev.filter(v => v.id !== videoId));
             toast.success(t('seminarVideos.deleteSuccess', 'Видеото е изтрито'));
@@ -129,7 +137,7 @@ export default function SeminarVideosSection({ seminarId, seminarSlug }) {
             console.error('Failed to delete video:', err);
             toast.error(t('seminarVideos.deleteError', 'Грешка при изтриване'));
         }
-    }, [seminarId, deleteSeminarVideo, t]);
+    }, [seminarId, deleteSeminarVideo, videos, t]);
 
     const handleDeletePending = useCallback(async (index) => {
         const video = pendingVideos[index];
@@ -139,6 +147,13 @@ export default function SeminarVideosSection({ seminarId, seminarSlug }) {
                 if (ytId) await deleteFromYouTube(ytId);
             } catch (err) {
                 console.error('Failed to delete from YouTube:', err);
+            }
+        } else if (video?.videoUrl?.includes('firebasestorage.googleapis.com')) {
+            try {
+                const { deleteFileFromStorage } = await import('../../Articles/articleUtils/file-delete-utils');
+                await deleteFileFromStorage(video.videoUrl);
+            } catch (err) {
+                console.error('Failed to delete from Firebase:', err);
             }
         }
         setPendingVideos(prev => prev.filter((_, i) => i !== index));

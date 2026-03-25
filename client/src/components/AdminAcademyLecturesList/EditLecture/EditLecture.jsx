@@ -1,15 +1,18 @@
 // src/components/AdminAcademyLecturesList/EditLecture/EditLecture.jsx
 // Prefix: elec-
 
-import { useState } from 'react'; // НОВО
+import { useState, useRef } from 'react'; // НОВО
 import { useTranslation } from 'react-i18next'; // НОВО
 import {
     ArrowLeft, Save, Loader2, Send, EyeOff, Trash2,
     AlertCircle, Info, Video, Calendar, Globe, User,
     Users, Award, BookOpen, Wifi, Building, MapPin,
-    RotateCcw, X, HelpCircle, FileText, Radio,
+    RotateCcw, X, HelpCircle, FileText, Radio, Upload,
 } from 'lucide-react'; // НОВО
 import useEditLecture from '../../hooks/useEditLecture'; // НОВО
+import { useFirebaseUpload } from '../../hooks/useFirebaseUpload';
+import { useAcademyCourses } from '../../contexts/AcademyCoursesProvider';
+import { toast } from 'react-toastify';
 import { AcademyMentorPicker } from '../../AcademyCourses/AcademyMentorPicker/AcademyMentorPicker'; // НОВО
 import './editLecture.css'; // НОВО
 import TestEditorModal from '../../AdminAcademyCoursesList/CourseContentManager/TestEditorModal/TestEditorModal';
@@ -51,10 +54,56 @@ const EditLecture = () => { // НОВО
     } = useEditLecture();
 
     const [showDeleteModal, setShowDeleteModal] = useState(false); // НОВО
+    const [youtubeUploading, setYoutubeUploading] = useState(false);
+    const ytInputRef = useRef(null);
+    const firebaseVideoRef = useRef(null);
+    const { uploadToYouTube, deleteFromYouTube } = useAcademyCourses();
+    const { uploadFile, uploading: firebaseUploading, uploadProgress: fbUploadProgress } = useFirebaseUpload();
 
     // =========================================================
     //                    HANDLERS
     // =========================================================
+
+    const handleFirebaseVideoUpload = async (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        e.target.value = '';
+        try {
+            const result = await uploadFile(file, 'academy/videos/lectures');
+            updateField('videoUrl', result.url);
+            updateField('videoProvider', 'custom');
+            toast.success('Видеото е качено');
+        } catch (err) {
+            console.error('Firebase upload error:', err);
+            toast.error('Грешка при качване');
+        }
+    };
+
+    const handleYouTubeUpload = async (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        e.target.value = '';
+        setYoutubeUploading(true);
+        try {
+            const formData = new FormData();
+            formData.append('video', file);
+            formData.append('title', lectureData.title || file.name);
+            formData.append('privacyStatus', 'unlisted');
+            const result = await uploadToYouTube(formData);
+            if (result?.success && result?.videoUrl) {
+                updateField('videoUrl', result.videoUrl);
+                updateField('videoProvider', 'youtube');
+                updateField('thumbnailUrl', `https://img.youtube.com/vi/${result.videoId}/mqdefault.jpg`);
+                toast.success('Видеото е качено в YouTube');
+            } else {
+                toast.error(result?.message || 'Грешка при качване');
+            }
+        } catch (err) {
+            toast.error('Грешка при качване в YouTube');
+        } finally {
+            setYoutubeUploading(false);
+        }
+    };
 
     const handleChange = (e) => { // НОВО
         const { name, value, type, checked } = e.target;
@@ -361,6 +410,46 @@ const EditLecture = () => { // НОВО
                                     <img src={lectureData.thumbnailUrl} alt="" className="elec-preview-img" onError={(e) => { e.target.style.display = 'none'; }} />
                                 </div>
                             )}
+
+                            {/* Video preview + remove */}
+                            {lectureData.videoUrl && (
+                                <div className="elec-video-preview">
+                                    <span className="elec-video-preview-url">{lectureData.videoUrl}</span>
+                                    <button type="button" className="elec-video-remove" onClick={async () => {
+                                        if (lectureData.videoProvider === 'youtube' && lectureData.videoUrl) {
+                                            try {
+                                                const match = lectureData.videoUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/);
+                                                if (match) await deleteFromYouTube(match[1]);
+                                            } catch (err) { console.error('YT delete error:', err); }
+                                        } else if (lectureData.videoUrl?.includes('firebasestorage.googleapis.com')) {
+                                            try {
+                                                const { deleteFileFromStorage } = await import('../../Articles/articleUtils/file-delete-utils');
+                                                await deleteFileFromStorage(lectureData.videoUrl);
+                                            } catch (err) { console.error('Firebase delete error:', err); }
+                                        }
+                                        updateField('videoUrl', '');
+                                        updateField('videoProvider', '');
+                                        updateField('thumbnailUrl', '');
+                                    }}>
+                                        <X size={14} /> Премахни видео
+                                    </button>
+                                </div>
+                            )}
+
+                            {/* Firebase upload */}
+                            <button type="button" className="elec-upload-btn" onClick={() => firebaseVideoRef.current?.click()} disabled={firebaseUploading}>
+                                <Upload size={16} />
+                                {firebaseUploading ? `Качване... ${Math.round(Object.values(fbUploadProgress || {})[0] || 0)}%` : 'Качи видео файл'}
+                            </button>
+                            <input ref={firebaseVideoRef} type="file" accept=".mp4,.webm,.mov" style={{ display: 'none' }} onChange={handleFirebaseVideoUpload} />
+
+                            <button type="button" className="elec-youtube-upload-btn" onClick={() => ytInputRef.current?.click()} disabled={youtubeUploading}>
+                                <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                                </svg>
+                                {youtubeUploading ? 'Качване...' : 'Качи в YouTube'}
+                            </button>
+                            <input ref={ytInputRef} type="file" accept=".mp4,.webm,.mov" style={{ display: 'none' }} onChange={handleYouTubeUpload} />
                         </div>
                     </div>
 
