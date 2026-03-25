@@ -24,6 +24,8 @@ services:
       context: ./server
     env_file:
       - ./.env
+    volumes:
+      - youtube_tokens:/app/youtube-tokens
     depends_on:
       - db
 
@@ -36,3 +38,4 @@ services:
 
 volumes:
   postgres_data:
+  youtube_tokens:

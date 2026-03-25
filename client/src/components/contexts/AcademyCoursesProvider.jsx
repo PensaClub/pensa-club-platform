@@ -1916,6 +1916,15 @@ export const AcademyCoursesProvider = ({ children }) => {
     }
   }, []);
 
+  const deleteFromYouTube = useCallback(async (videoId) => {
+    try {
+      return await coursesService.deleteFromYouTube(videoId);
+    } catch (error) {
+      console.error('Error deleting from YouTube:', error);
+      throw error;
+    }
+  }, []);
+
   const deleteLessonMaterial = useCallback(async (lessonId, materialId) => {
     if (!isAdmin) {
       toast.error('Нямате права за тази операция');
@@ -2352,6 +2361,7 @@ export const AcademyCoursesProvider = ({ children }) => {
     getYouTubeStatus,
     getYouTubeAuthUrl,
     uploadToYouTube,
+    deleteFromYouTube,
   }), [isLoading, courses, currentCourse, lectures, seminars, myDashboard,
     currentLesson, lessonsProgress, enrollmentStats, currentTestData]);
 

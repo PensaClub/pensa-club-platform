@@ -6,8 +6,11 @@ const rbac = require('../middlewares/rbac');
 const fs = require('fs');
 const path = require('path');
 
-// Store tokens in a file (simple persistence)
-const TOKENS_FILE = path.join(__dirname, '../../youtube-tokens.json');
+// Store tokens in a persistent volume (Docker) or local file (dev)
+const TOKENS_DIR = path.join(__dirname, '../../youtube-tokens');
+const TOKENS_FILE = fs.existsSync(TOKENS_DIR) && fs.statSync(TOKENS_DIR).isDirectory()
+    ? path.join(TOKENS_DIR, 'tokens.json')
+    : path.join(__dirname, '../../youtube-tokens.json');
 
 const loadTokens = () => {
     try {
