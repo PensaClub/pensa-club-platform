@@ -6,6 +6,7 @@ const testDatabaseConnection = require('../sequelize/testDatabaseConnection');
 const scheduleArticleCleanup = require('../cron/articleCleanup');
 const { startMentorActivityCron } = require('../cron/mentorActivityCron');
 const { startVisitReminderCron } = require('../cron/visitReminderCron');
+const { startSeminarReminderCron } = require('../cron/seminarReminderCron');
 
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
@@ -38,5 +39,6 @@ module.exports = function expressConfig(app) {
         scheduleArticleCleanup();
          startMentorActivityCron();
         startVisitReminderCron();
+        startSeminarReminderCron();
     });
 };
