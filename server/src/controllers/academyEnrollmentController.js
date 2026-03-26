@@ -1741,6 +1741,23 @@ academyEnrollmentController.post(
         console.error('Failed to send seminar registration email:', emailErr);
       }
 
+      // Send SMS if user has phone number and sms_on_registration is enabled
+      try {
+        const { sendRegistrationSms, getSmsSettings } = require('../utils/smsService');
+        const smsSettings = await getSmsSettings();
+        if (smsSettings.sms_enabled !== 'false' && smsSettings.sms_on_registration !== 'false') {
+          const userDetsForSms = await user_details.findOne({ where: { userId: req.user.userId }, attributes: ['phone'] });
+          if (userDetsForSms?.phone && userDetsForSms.phone.length >= 8) {
+            await sendRegistrationSms(
+              userDetsForSms.phone, seminarData.title, seminarData.scheduledDate,
+              seminarData.location, seminarData.isOnline, smsSettings.sms_registration_template
+            );
+          }
+        }
+      } catch (smsErr) {
+        console.error('Failed to send registration SMS:', smsErr);
+      }
+
       // Notify mentor
       if (seminarData.mentorId) {
         try {

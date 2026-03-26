@@ -1,0 +1,30 @@
+.smsc-container { padding: 20px 0; }
+.smsc-title { font-size: 1.1rem; font-weight: 600; color: #1e293b; margin: 0 0 4px; }
+.smsc-desc { font-size: 0.82rem; color: #64748b; margin: 0 0 20px; }
+
+.smsc-toggles { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+
+.smsc-toggle { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+.smsc-toggle input { display: none; }
+.smsc-toggle-slider { width: 40px; height: 22px; border-radius: 11px; background: #d1d5db; position: relative; transition: background 0.2s; flex-shrink: 0; }
+.smsc-toggle-slider::after { content: ''; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 50%; background: #fff; transition: transform 0.2s; }
+.smsc-toggle input:checked + .smsc-toggle-slider { background: #0d9488; }
+.smsc-toggle input:checked + .smsc-toggle-slider::after { transform: translateX(18px); }
+.smsc-toggle input:disabled + .smsc-toggle-slider { opacity: 0.4; }
+.smsc-toggle-label { font-size: 0.85rem; color: #475569; }
+
+.smsc-templates { display: flex; flex-direction: column; gap: 16px; margin-bottom: 20px; }
+.smsc-field { display: flex; flex-direction: column; gap: 6px; }
+.smsc-field-label { font-size: 0.82rem; font-weight: 500; color: #475569; }
+.smsc-textarea { background: #fff; border: 1px solid #d1d5db; border-radius: 8px; padding: 10px 12px; font-size: 0.85rem; color: #1e293b; font-family: inherit; resize: vertical; min-height: 60px; }
+.smsc-textarea:focus { border-color: #0d9488; outline: none; }
+.smsc-textarea:disabled { opacity: 0.5; background: #f8fafc; }
+.smsc-hint { font-size: 0.72rem; color: #94a3b8; }
+
+.smsc-actions { display: flex; gap: 10px; justify-content: flex-end; }
+.smsc-btn { padding: 8px 20px; border-radius: 8px; font-size: 0.85rem; font-weight: 500; cursor: pointer; transition: all 0.2s; font-family: inherit; border: none; }
+.smsc-btn-reset { background: #f1f5f9; color: #475569; }
+.smsc-btn-reset:hover { background: #e2e8f0; }
+.smsc-btn-save { background: #0d9488; color: #fff; }
+.smsc-btn-save:hover { background: #0f766e; }
+.smsc-btn:disabled { opacity: 0.5; cursor: not-allowed; }

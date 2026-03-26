@@ -405,6 +405,30 @@
     max-height: 180px;
 }
 
+.lcf-video-preview { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; margin-bottom: 10px; }
+.lcf-video-preview-url { flex: 1; font-size: 0.78rem; color: rgba(255,255,255,0.5); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.lcf-video-remove { display: flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 6px; border: none; background: rgba(239,68,68,0.1); color: #ef4444; font-size: 0.75rem; cursor: pointer; transition: all 0.2s; font-family: inherit; }
+.lcf-video-remove:hover { background: rgba(239,68,68,0.2); }
+.lcf-video-remove svg { flex-shrink: 0; }
+
+.lcf-upload-buttons { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+
+.lcf-upload-btn { display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(0,210,255,0.3); background: rgba(0,210,255,0.08); color: #00d2ff; font-size: 0.82rem; font-weight: 500; cursor: pointer; transition: all 0.2s; font-family: inherit; }
+.lcf-upload-btn:hover:not(:disabled) { background: rgba(0,210,255,0.15); }
+.lcf-upload-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.lcf-upload-btn svg { flex-shrink: 0; }
+
+.lcf-youtube-btn { display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 8px; border: 1px solid rgba(255,0,0,0.3); background: rgba(255,0,0,0.08); color: #ff4444; font-size: 0.82rem; font-weight: 500; cursor: pointer; transition: all 0.2s; font-family: inherit; }
+.lcf-youtube-btn:hover:not(:disabled) { background: rgba(255,0,0,0.15); }
+.lcf-youtube-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.lcf-youtube-btn svg { flex-shrink: 0; width: 16px; height: 16px; }
+
+[data-theme="light"] .lcf-video-preview { background: #f8fafc; border-color: #e2e8f0; }
+[data-theme="light"] .lcf-video-preview-url { color: #64748b; }
+[data-theme="light"] .lcf-video-remove { background: rgba(220,38,38,0.06); color: #dc2626; }
+[data-theme="light"] .lcf-upload-btn { border-color: rgba(13,148,136,0.3); background: rgba(13,148,136,0.06); color: #0d9488; }
+[data-theme="light"] .lcf-youtube-btn { border-color: rgba(220,38,38,0.3); background: rgba(220,38,38,0.06); color: #dc2626; }
+
 /* =========================================================
    FOOTER
    ========================================================= */
