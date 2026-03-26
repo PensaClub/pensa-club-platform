@@ -323,6 +323,19 @@
       "sortNewest": "Newest",
       "sortOldest": "Oldest"
     },
+    "smsConfig": {
+      "title": "SMS Settings",
+      "desc": "Manage SMS reminders for seminars",
+      "enabled": "SMS notifications active",
+      "reminder24h": "Reminder 24 hours before seminar",
+      "reminder1h": "Reminder 1 hour before seminar",
+      "onRegistration": "SMS on seminar registration",
+      "reminderTemplate": "Reminder template",
+      "registrationTemplate": "Registration template",
+      "templateHint": "Variables: {title}, {date}, {location}, {timeLabel}",
+      "saved": "SMS settings saved",
+      "error": "Error saving settings"
+    },
     "articleLimit": "Article Limit",
     "articleLimitDesc": "Limits the number of articles unregistered users can read",
     "articleLimitConfig": {

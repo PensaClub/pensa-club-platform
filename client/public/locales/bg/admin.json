@@ -322,6 +322,19 @@
       "sortNewest": "Най-нови",
       "sortOldest": "Най-стари"
     },
+    "smsConfig": {
+      "title": "SMS Настройки",
+      "desc": "Управление на SMS напомняния за семинари",
+      "enabled": "SMS известия активни",
+      "reminder24h": "Напомняне 24 часа преди семинар",
+      "reminder1h": "Напомняне 1 час преди семинар",
+      "onRegistration": "SMS при записване за семинар",
+      "reminderTemplate": "Шаблон за напомняне",
+      "registrationTemplate": "Шаблон при записване",
+      "templateHint": "Променливи: {title}, {date}, {location}, {timeLabel}",
+      "saved": "SMS настройките са запазени",
+      "error": "Грешка при запазване"
+    },
     "articleLimit": "Лимит за статии",
     "articleLimitDesc": "Ограничава броя статии, които нерегистрирани потребители могат да четат",
     "articleLimitConfig": {

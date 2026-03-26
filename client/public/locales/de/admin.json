@@ -324,6 +324,19 @@
       "sortNewest": "Neueste",
       "sortOldest": "Älteste"
     },
+    "smsConfig": {
+      "title": "SMS-Einstellungen",
+      "desc": "SMS-Erinnerungen für Seminare verwalten",
+      "enabled": "SMS-Benachrichtigungen aktiv",
+      "reminder24h": "Erinnerung 24 Stunden vor dem Seminar",
+      "reminder1h": "Erinnerung 1 Stunde vor dem Seminar",
+      "onRegistration": "SMS bei Seminar-Anmeldung",
+      "reminderTemplate": "Erinnerungsvorlage",
+      "registrationTemplate": "Anmeldevorlage",
+      "templateHint": "Variablen: {title}, {date}, {location}, {timeLabel}",
+      "saved": "SMS-Einstellungen gespeichert",
+      "error": "Fehler beim Speichern"
+    },
     "articleLimit": "Artikellimit",
     "articleLimitDesc": "Begrenzt die Anzahl der Artikel, die nicht registrierte Benutzer lesen können",
     "articleLimitConfig": {

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LocalizedLink as Link } from '../LocalizedLink/LocalizedLink';
-import { ArrowLeft, Settings, Snowflake, BookOpen, Gift, Shield, Bug } from 'lucide-react';
+import { ArrowLeft, Settings, Snowflake, BookOpen, Gift, Shield, Bug, MessageSquare } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useSiteSettingsAdminContext } from '../contexts/SiteSettingsAdminContext';
 import SettingsAdminSection from './SettingsAdminSection/SettingsAdminSection';
@@ -9,6 +9,7 @@ import SettingsAdminToggle from './SettingsAdminToggle/SettingsAdminToggle';
 import SnowfallConfig from './SnowfallConfig/SnowfallConfig';
 import GreetingConfig from './GreetingConfig/GreetingConfig';
 import ArticleLimitConfig from './ArticleLimitConfig/ArticleLimitConfig';
+import SmsConfig from './SmsConfig/SmsConfig';
 import IpManagementConfig from './IpManagementConfig/IpManagementConfig';
 import { IpManagementProvider } from '../contexts/IpManagementContext';
 import ErrorLogsConfig from './ErrorLogsConfig/ErrorLogsConfig';
@@ -137,6 +138,19 @@ const SiteSettingsAdmin = () => {
                             isLoading={loadingKeys.christmas_greeting_enabled || false}
                         />
                         {settings.christmas_greeting_enabled && <GreetingConfig />}
+                    </SettingsAdminSection>
+
+                    {/* SMS Settings */}
+                    <SettingsAdminSection
+                        id="smsSettings"
+                        title={t('siteSettingsAdmin.smsConfig.title')}
+                        description={t('siteSettingsAdmin.smsConfig.desc')}
+                        icon={<MessageSquare size={24} />}
+                        color="#0d9488"
+                        isOpen={openCard === 'smsSettings'}
+                        onToggle={() => toggleCard('smsSettings')}
+                    >
+                        <SmsConfig />
                     </SettingsAdminSection>
 
                     {/* IP Management */}

@@ -1931,11 +1931,14 @@ seminarsController.post(
         return res.status(404).json({ success: false, message: 'Seminar not found' });
       }
 
+      // Load SMS settings once for the whole handler
+      const { sendRegistrationSms, getSmsSettings } = require('../utils/smsService');
+      const smsSettings = await getSmsSettings();
+
       let markedCount = 0;
       let guestCount = 0;
 
       // Платформени потребители
-     // Платформени потребители
       if (Array.isArray(platformAttendees) && platformAttendees.length > 0) {
         for (const att of platformAttendees) {
           let { studentId, userId: attUserId, participationLevel } = att;
@@ -2035,6 +2038,21 @@ seminarsController.post(
             console.error('Failed to send registration email from bulk-mixed:', emailErr);
           }
 
+          // Send SMS if user has phone and sms_on_registration is enabled
+          try {
+            if (smsSettings.sms_enabled !== 'false' && smsSettings.sms_on_registration !== 'false') {
+              const userDetsForSms = await user_details.findOne({ where: { userId: userAcc.id }, attributes: ['phone'] });
+              if (userDetsForSms?.phone && userDetsForSms.phone.length >= 8) {
+                await sendRegistrationSms(
+                  userDetsForSms.phone, seminarData.title, seminarData.scheduledDate,
+                  seminarData.location, seminarData.isOnline, smsSettings.sms_registration_template
+                );
+              }
+            }
+          } catch (smsErr) {
+            console.error('SMS send failed:', smsErr);
+          }
+
           markedCount++;
         }
       }
@@ -2099,6 +2117,18 @@ seminarsController.post(
               });
             } catch (emailErr) {
               console.error('Failed to send guest email:', emailErr);
+            }
+          }
+
+          // Send SMS to guest if phone provided and sms_on_registration is enabled
+          if (guest.phone && guest.phone.length >= 8 && smsSettings.sms_enabled !== 'false' && smsSettings.sms_on_registration !== 'false') {
+            try {
+              await sendRegistrationSms(
+                guest.phone, seminarData.title, seminarData.scheduledDate,
+                seminarData.location, seminarData.isOnline, smsSettings.sms_registration_template
+              );
+            } catch (smsErr) {
+              console.error('Guest SMS failed:', smsErr);
             }
           }
 
