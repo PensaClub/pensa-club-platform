@@ -1,0 +1,97 @@
+{
+  "forumCommunity": {
+    "seo": {
+      "title": "Gemeinschaft | DigiBridge Academy",
+      "description": "Diskutieren Sie, teilen Sie Erfahrungen und vernetzen Sie sich mit anderen Teilnehmern der DigiBridge-Gemeinschaft."
+    },
+    "hero": {
+      "title": "Gemeinschaft",
+      "subtitle": "Teilen, diskutieren und gemeinsam lernen"
+    },
+    "feed": {
+      "title": "Beiträge",
+      "empty": "Noch keine Beiträge",
+      "sortRecent": "Letzte Aktivität",
+      "sortPopular": "Beliebt",
+      "sortNewest": "Neueste",
+      "loadMore": "Mehr laden",
+      "newPost": "Neuer Beitrag",
+      "pending": "Wartet auf Genehmigung"
+    },
+    "spaces": {
+      "title": "Bereiche",
+      "join": "Beitreten",
+      "leave": "Verlassen",
+      "members": "Mitglieder",
+      "posts": "Beiträge",
+      "suggest": "Bereich vorschlagen",
+      "allPosts": "Alle Beiträge"
+    },
+    "stats": {
+      "activeUsers": "Aktive Benutzer",
+      "posts": "Beiträge",
+      "comments": "Kommentare",
+      "spaces": "Bereiche"
+    },
+    "sidebar": {
+      "latestArticles": "Neueste Artikel",
+      "recommendedCourses": "Empfohlene Kurse",
+      "trendingTags": "Beliebte Tags",
+      "onlineNow": "Jetzt online",
+      "upcomingSeminars": "Kommende Seminare",
+      "postOfWeek": "Beitrag der Woche"
+    },
+    "rules": {
+      "title": "Gemeinschaftsregeln",
+      "accept": "Ich akzeptiere die Regeln",
+      "mustAccept": "Sie müssen die Regeln akzeptieren, um teilzunehmen"
+    },
+    "banned": {
+      "title": "Ihr Zugang ist eingeschränkt",
+      "muted": "Sie können vorübergehend nicht posten",
+      "restricted": "Ihre Beiträge erfordern eine Genehmigung",
+      "banned": "Ihr Forumzugang wurde gesperrt",
+      "expires": "Läuft ab am"
+    },
+    "post": {
+      "views": "Aufrufe",
+      "comments": "Kommentare",
+      "shares": "Geteilt",
+      "bookmark": "Speichern",
+      "bookmarked": "Gespeichert",
+      "share": "Teilen",
+      "report": "Melden",
+      "edit": "Bearbeiten",
+      "delete": "Löschen",
+      "pinned": "Angeheftet",
+      "locked": "Gesperrt",
+      "edited": "bearbeitet"
+    },
+    "comment": {
+      "reply": "Antworten",
+      "quote": "Zitieren",
+      "edit": "Bearbeiten",
+      "delete": "Löschen",
+      "deleted": "Gelöschter Kommentar",
+      "edited": "bearbeitet",
+      "writeComment": "Kommentar schreiben..."
+    },
+    "createPost": {
+      "title": "Neuer Beitrag",
+      "titlePlaceholder": "Titel",
+      "contentPlaceholder": "Was möchten Sie teilen?",
+      "selectSpace": "Bereich wählen (optional)",
+      "selectType": "Beitragstyp",
+      "addTags": "Tags hinzufügen",
+      "publish": "Veröffentlichen",
+      "discussion": "Diskussion",
+      "article": "Artikel",
+      "question": "Frage",
+      "poll": "Umfrage"
+    },
+    "vip": {
+      "badge": "VIP",
+      "autoPublish": "Ihre Beiträge werden automatisch veröffentlicht"
+    }
+  }
+}

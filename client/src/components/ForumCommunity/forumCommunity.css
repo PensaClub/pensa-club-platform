@@ -1,0 +1,224 @@
+/* ============ Forum Design System ============ */
+/* Prefix: fmc- (ForumCommunity) */
+
+.fmc-wrapper {
+  /* Forum-specific CSS variables */
+  --forum-bg: #0f1419;
+  --forum-bg-secondary: #15202b;
+  --forum-bg-tertiary: #1e2d3d;
+  --forum-bg-card: #192734;
+  --forum-bg-hover: #22303c;
+  --forum-border: #2f3e4e;
+  --forum-text: #e7e9ea;
+  --forum-text-secondary: #8b98a5;
+  --forum-accent: #14b8a6;
+  --forum-accent-hover: #0d9488;
+  --forum-accent-light: rgba(20, 184, 166, 0.12);
+  --forum-danger: #f43f5e;
+  --forum-warning: #f59e0b;
+  --forum-success: #10b981;
+  --forum-info: #3b82f6;
+  --forum-radius: 8px;
+  --forum-radius-sm: 4px;
+  --forum-radius-lg: 12px;
+
+  min-height: 100vh;
+  background: var(--forum-bg);
+  color: var(--forum-text);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+}
+
+[data-theme="light"] .fmc-wrapper {
+  --forum-bg: #f8fafc;
+  --forum-bg-secondary: #ffffff;
+  --forum-bg-tertiary: #f1f5f9;
+  --forum-bg-card: #ffffff;
+  --forum-bg-hover: #f1f5f9;
+  --forum-border: #e2e8f0;
+  --forum-text: #0f172a;
+  --forum-text-secondary: #64748b;
+  --forum-accent: #0d9488;
+  --forum-accent-hover: #0f766e;
+  --forum-accent-light: rgba(13, 148, 136, 0.08);
+}
+
+/* ============ Layout: 3-column ============ */
+
+.fmc-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr 300px;
+  gap: 24px;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 24px 32px;
+  width: 100%;
+}
+
+.fmc-left {
+  position: sticky;
+  top: 90px;
+  height: fit-content;
+  max-height: calc(100vh - 110px);
+  overflow-y: auto;
+}
+
+.fmc-center {
+  min-width: 0;
+}
+
+.fmc-right {
+  position: sticky;
+  top: 90px;
+  height: fit-content;
+  max-height: calc(100vh - 110px);
+  overflow-y: auto;
+}
+
+/* Scrollbar styling for sidebar columns */
+.fmc-left::-webkit-scrollbar,
+.fmc-right::-webkit-scrollbar {
+  width: 4px;
+}
+
+.fmc-left::-webkit-scrollbar-thumb,
+.fmc-right::-webkit-scrollbar-thumb {
+  background: var(--forum-border);
+  border-radius: 2px;
+}
+
+/* ============ Placeholder sections ============ */
+
+.fmc-placeholder {
+  background: var(--forum-bg-card);
+  border: 1px solid var(--forum-border);
+  border-radius: var(--forum-radius);
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.fmc-placeholder-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.fmc-placeholder-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--forum-text);
+  margin-bottom: 8px;
+}
+
+.fmc-placeholder-text {
+  font-size: 14px;
+  color: var(--forum-text-secondary);
+  line-height: 1.6;
+}
+
+/* ============ Header bar ============ */
+
+.fmc-header {
+  background: var(--forum-bg-secondary);
+  border-bottom: 1px solid var(--forum-border);
+  padding: 16px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.fmc-header-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--forum-text);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.fmc-header-title span {
+  color: var(--forum-accent);
+}
+
+.fmc-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ============ Section card ============ */
+
+.fmc-section {
+  background: var(--forum-bg-card);
+  border: 1px solid var(--forum-border);
+  border-radius: var(--forum-radius);
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.fmc-section-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--forum-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 16px;
+}
+
+/* ============ Coming soon badge for unbuilt sections ============ */
+
+.fmc-coming-soon {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--forum-accent);
+  background: var(--forum-accent-light);
+  padding: 3px 8px;
+  border-radius: var(--forum-radius-sm);
+  margin-left: 8px;
+}
+
+/* ============ Responsive ============ */
+
+/* Tablet: 2-column (hide right sidebar) */
+@media (max-width: 1100px) {
+  .fmc-layout {
+    grid-template-columns: 240px 1fr;
+    padding: 16px 20px;
+  }
+
+  .fmc-right {
+    display: none;
+  }
+}
+
+/* Mobile: 1-column */
+@media (max-width: 767px) {
+  .fmc-layout {
+    grid-template-columns: 1fr;
+    padding: 12px 16px;
+    gap: 16px;
+  }
+
+  .fmc-left {
+    position: static;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .fmc-header {
+    padding: 12px 16px;
+    flex-wrap: wrap;
+  }
+
+  .fmc-header-title {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 424px) {
+  .fmc-layout {
+    padding: 8px 12px;
+  }
+}

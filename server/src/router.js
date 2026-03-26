@@ -34,6 +34,8 @@ const ipManagementController = require('./controllers/ipManagementController');
 const errorLoggingController = require('./controllers/errorLoggingController');
 const reActionController = require('./controllers/reActionController');
 const youtubeController = require('./controllers/youtubeController');
+const forumController = require('./controllers/forumController');
+const forumAdminController = require('./controllers/forumAdminController');
 
 router.use('/auth', authController);
 router.use('/user', userController);
@@ -70,6 +72,8 @@ router.use('/fact-check', factCheckController);
 router.use('/error-logging', errorLoggingController);
 router.use('/reaction', reActionController);
 router.use('/youtube', youtubeController);
+router.use('/forum', forumController);
+router.use('/forum/admin', forumAdminController);
 
 
 router.use((err, req, res, next) => {

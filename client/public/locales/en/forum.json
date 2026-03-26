@@ -1,0 +1,97 @@
+{
+  "forumCommunity": {
+    "seo": {
+      "title": "Community | DigiBridge Academy",
+      "description": "Discuss, share experiences and connect with other participants in the DigiBridge community."
+    },
+    "hero": {
+      "title": "Community",
+      "subtitle": "Share, discuss and learn together"
+    },
+    "feed": {
+      "title": "Posts",
+      "empty": "No posts yet",
+      "sortRecent": "Recent activity",
+      "sortPopular": "Popular",
+      "sortNewest": "Newest",
+      "loadMore": "Load more",
+      "newPost": "New post",
+      "pending": "Pending approval"
+    },
+    "spaces": {
+      "title": "Spaces",
+      "join": "Join",
+      "leave": "Leave",
+      "members": "members",
+      "posts": "posts",
+      "suggest": "Suggest a space",
+      "allPosts": "All posts"
+    },
+    "stats": {
+      "activeUsers": "Active users",
+      "posts": "Posts",
+      "comments": "Comments",
+      "spaces": "Spaces"
+    },
+    "sidebar": {
+      "latestArticles": "Latest articles",
+      "recommendedCourses": "Recommended courses",
+      "trendingTags": "Trending tags",
+      "onlineNow": "Online now",
+      "upcomingSeminars": "Upcoming seminars",
+      "postOfWeek": "Post of the week"
+    },
+    "rules": {
+      "title": "Community Rules",
+      "accept": "I accept the rules",
+      "mustAccept": "You must accept the rules to participate"
+    },
+    "banned": {
+      "title": "Your access is restricted",
+      "muted": "You cannot post temporarily",
+      "restricted": "Your posts require approval",
+      "banned": "Your forum access has been suspended",
+      "expires": "Expires on"
+    },
+    "post": {
+      "views": "views",
+      "comments": "comments",
+      "shares": "shares",
+      "bookmark": "Save",
+      "bookmarked": "Saved",
+      "share": "Share",
+      "report": "Report",
+      "edit": "Edit",
+      "delete": "Delete",
+      "pinned": "Pinned",
+      "locked": "Locked",
+      "edited": "edited"
+    },
+    "comment": {
+      "reply": "Reply",
+      "quote": "Quote",
+      "edit": "Edit",
+      "delete": "Delete",
+      "deleted": "Deleted comment",
+      "edited": "edited",
+      "writeComment": "Write a comment..."
+    },
+    "createPost": {
+      "title": "New post",
+      "titlePlaceholder": "Title",
+      "contentPlaceholder": "What would you like to share?",
+      "selectSpace": "Select space (optional)",
+      "selectType": "Post type",
+      "addTags": "Add tags",
+      "publish": "Publish",
+      "discussion": "Discussion",
+      "article": "Article",
+      "question": "Question",
+      "poll": "Poll"
+    },
+    "vip": {
+      "badge": "VIP",
+      "autoPublish": "Your posts are published automatically"
+    }
+  }
+}
