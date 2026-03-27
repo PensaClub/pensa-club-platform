@@ -1,0 +1,181 @@
+/* Prefix: fh- (ForumHero) — Full viewport landing */
+
+.fh-landing {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background:
+    linear-gradient(160deg, rgba(17, 11, 14, 0.85) 0%, rgba(26, 12, 20, 0.75) 50%, rgba(14, 10, 12, 0.88) 100%),
+    url('/images/academy/community-bg.jpg') center / cover no-repeat;
+  animation: fh-appear 0.6s ease-out;
+}
+
+[data-theme="light"] .fh-landing {
+  background:
+    linear-gradient(160deg, rgba(247, 246, 244, 0.88) 0%, rgba(240, 238, 236, 0.82) 50%, rgba(235, 233, 230, 0.90) 100%),
+    url('/images/academy/community-bg.jpg') center / cover no-repeat;
+}
+
+.fh-landing-exit {
+  animation: fh-leave 0.7s ease-in forwards;
+}
+
+@keyframes fh-appear {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fh-leave {
+  to { opacity: 0; transform: scale(1.02); }
+}
+
+/* Subtle decorative lines */
+.fh-lines {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.fh-line {
+  position: absolute;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(to bottom, transparent, rgba(139, 32, 64, 0.08), transparent);
+}
+
+.fh-line:nth-child(1) { left: 20%; }
+.fh-line:nth-child(2) { left: 40%; }
+.fh-line:nth-child(3) { left: 60%; }
+.fh-line:nth-child(4) { left: 80%; }
+
+/* Small floating blobs */
+.fh-deco {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+  filter: blur(40px);
+}
+
+.fh-deco-1 {
+  width: 160px;
+  height: 160px;
+  background: rgba(139, 32, 64, 0.12);
+  top: 15%;
+  right: 12%;
+  animation: fh-drift 16s ease-in-out infinite;
+}
+
+.fh-deco-2 {
+  width: 100px;
+  height: 100px;
+  background: rgba(184, 176, 168, 0.06);
+  bottom: 20%;
+  left: 10%;
+  animation: fh-drift 12s ease-in-out infinite reverse;
+}
+
+@keyframes fh-drift {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(12px, -10px); }
+}
+
+/* Content */
+.fh-content {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  padding: 0 24px;
+  max-width: 600px;
+}
+
+.fh-eyebrow {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--fm-wine-soft, #a63055);
+  margin-bottom: 24px;
+  animation: fh-up 0.5s ease-out 0.1s both;
+}
+
+.fh-title {
+  font-size: clamp(40px, 8vw, 80px);
+  font-weight: 200;
+  letter-spacing: -2px;
+  color: var(--fm-text, #e4ddd6);
+  margin: 0 0 20px;
+  line-height: 1;
+  animation: fh-up 0.5s ease-out 0.25s both;
+}
+
+[data-theme="light"] .fh-title {
+  color: #1c1614;
+}
+
+.fh-subtitle {
+  font-size: 15px;
+  font-weight: 300;
+  color: var(--fm-text-secondary, #8a7f78);
+  margin: 0 0 44px;
+  line-height: 1.7;
+  animation: fh-up 0.5s ease-out 0.4s both;
+}
+
+@keyframes fh-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Enter button */
+.fh-enter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 36px;
+  border: 1px solid var(--fm-wine-border, rgba(139, 32, 64, 0.25));
+  border-radius: var(--fm-radius, 6px);
+  background: transparent;
+  color: var(--fm-text, #e4ddd6);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.3s, border-color 0.3s, transform 0.2s;
+  animation: fh-up 0.5s ease-out 0.6s both;
+}
+
+.fh-enter-btn:hover {
+  background: var(--fm-wine-glow, rgba(139, 32, 64, 0.12));
+  border-color: var(--fm-wine, #8b2040);
+  transform: translateY(-1px);
+}
+
+.fh-enter-arrow {
+  animation: fh-arrow-pulse 2.5s ease-in-out infinite;
+}
+
+@keyframes fh-arrow-pulse {
+  0%, 100% { transform: translateY(0); opacity: 0.6; }
+  50% { transform: translateY(4px); opacity: 1; }
+}
+
+/* Responsive */
+@media (max-width: 767px) {
+  .fh-line:nth-child(2),
+  .fh-line:nth-child(3) { display: none; }
+
+  .fh-deco-1 { width: 100px; height: 100px; }
+  .fh-deco-2 { display: none; }
+
+  .fh-enter-btn {
+    padding: 12px 28px;
+    font-size: 11px;
+  }
+}

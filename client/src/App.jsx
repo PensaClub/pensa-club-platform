@@ -67,6 +67,7 @@ import AboutPage from './components/AboutPage/AboutPage.jsx';
 import { AcademyProvider } from './components/contexts/AcademyProvider.jsx';
 import { FactCheckProvider } from './components/contexts/FactCheckProvider.jsx';
 import { ReActionProvider } from './components/contexts/ReActionProvider.jsx';
+import { ForumProvider } from './components/contexts/ForumProvider.jsx';
 import { DigiBridgeChatButton } from './components/DigiBridge/DigiBridgeChatButton/DigiBridgeChatButton.jsx';
 import { DigiBridgeChatWindow } from './components/DigiBridge/DigiBridgeChatWindow/DigiBridgeChatWindow.jsx';
 import { MentorGuard } from './components/Guards/MentorGuard.jsx';
@@ -125,6 +126,8 @@ const SeminarAttendancePage = lazyWithRetry(() => import('./components/AdminAcad
 const EditSeminar = lazyWithRetry(() => import('./components/AdminAcademySeminarsList/EditSeminar/EditSeminar.jsx'));
 const SeminarReviewsAdmin = lazyWithRetry(() => import('./components/AdminAcademySeminarsList/SeminarReviewsAdmin/SeminarReviewsAdmin'));
 const SeminarCheckin = lazyWithRetry(() => import('./components/AcademySeminars/SeminarCheckin/SeminarCheckin'));
+const ForumCommunity = lazyWithRetry(() => import('./components/ForumCommunity/ForumCommunity.jsx'));
+const ForumPostDetailPage = lazyWithRetry(() => import('./components/ForumCommunity/ForumPostDetail/ForumPostDetail.jsx'));
 const TelkRkmeRzi = lazyWithRetry(() => import('./components/TelkRkmeRzi/TelkRkmeRzi.jsx'));
 const ComingSoon = lazyWithRetry(() => import('./components/DigiBridgeAcademy/ComingSoon/ComingSoon.jsx'));
 const ProjectCreateForm = lazyWithRetry(() => import('./components/Initiatives/CreateProject/ProjectCreateForm'));
@@ -180,7 +183,8 @@ function AppRoutes() {
       {/* TODO: Тези страници са временно Coming Soon — достъпът ще се определи по-късно */}
       <Route path="/academy/events" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><ComingSoon pageKey="events" /></Suspense>} />
       <Route path="/academy/library" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><ComingSoon pageKey="library" /></Suspense>} />
-      <Route path="/academy/community" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><ComingSoon pageKey="community" /></Suspense>} />
+      <Route path="/academy/community" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><ForumProvider><ForumCommunity /></ForumProvider></Suspense>} />
+      <Route path="/academy/community/post/:slug" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><ForumProvider><ForumPostDetailPage /></ForumProvider></Suspense>} />
       <Route path="/academy/about" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><ComingSoon pageKey="about" /></Suspense>} />
       <Route path="/contact" element={<ContactForm />} />
       <Route path="/about" element={<AboutPage />} />

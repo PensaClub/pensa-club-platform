@@ -1,0 +1,72 @@
+/* Prefix: fst- (ForumStats) */
+
+.fst-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--fm-border-subtle);
+  border-radius: var(--fm-radius);
+  overflow: hidden;
+}
+
+.fst-item {
+  background: var(--fm-bg-card);
+  padding: 22px 16px;
+  text-align: center;
+  transition: background 0.2s;
+
+  &:hover { background: var(--fm-bg-card-hover); }
+}
+
+.fst-item .fst-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  margin-bottom: 10px;
+  border-radius: var(--fm-radius-sm);
+}
+
+.fst-item .fst-value {
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 1;
+  margin-bottom: 6px;
+  font-variant-numeric: tabular-nums;
+}
+
+.fst-item .fst-label {
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Color variants — using parent class + child */
+.fst-color-teal .fst-icon { color: var(--fm-teal); background: rgba(44, 181, 160, 0.14); }
+.fst-color-teal .fst-value { color: var(--fm-teal); }
+.fst-color-teal .fst-label { color: var(--fm-teal); }
+
+.fst-color-amber .fst-icon { color: var(--fm-amber); background: rgba(212, 148, 60, 0.14); }
+.fst-color-amber .fst-value { color: var(--fm-amber); }
+.fst-color-amber .fst-label { color: var(--fm-amber); }
+
+.fst-color-violet .fst-icon { color: var(--fm-violet); background: rgba(139, 108, 193, 0.14); }
+.fst-color-violet .fst-value { color: var(--fm-violet); }
+.fst-color-violet .fst-label { color: var(--fm-violet); }
+
+.fst-color-emerald .fst-icon { color: var(--fm-emerald); background: rgba(58, 171, 106, 0.14); }
+.fst-color-emerald .fst-value { color: var(--fm-emerald); }
+.fst-color-emerald .fst-label { color: var(--fm-emerald); }
+
+@media (max-width: 767px) {
+  .fst-container { grid-template-columns: repeat(2, 1fr); }
+  .fst-item .fst-value { font-size: 20px; }
+  .fst-item { padding: 16px 12px; }
+}
+
+@media (max-width: 424px) {
+  .fst-item .fst-value { font-size: 18px; }
+  .fst-item .fst-label { font-size: 8px; }
+}

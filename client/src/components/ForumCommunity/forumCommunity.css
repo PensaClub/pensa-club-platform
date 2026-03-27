@@ -1,0 +1,253 @@
+/* ============ Forum Design System — v4 ============ */
+/* Prefix: fmc- */
+/* Variables defined in forumVariables.css (shared with all forum pages) */
+@import './forumVariables.css';
+
+.fmc-wrapper {
+  min-height: 100vh;
+  background:
+    url('/images/academy/community-bg.jpg') center / cover no-repeat;
+  background-attachment: fixed;
+  color: var(--fm-text);
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
+  overflow-x: clip;
+}
+
+[data-theme="light"] .fmc-wrapper {
+  background:
+    linear-gradient(180deg, rgba(250, 248, 245, 0.72) 0%, rgba(247, 245, 242, 0.78) 100%),
+    url('/images/academy/community-bg.jpg') center / cover no-repeat;
+  background-attachment: fixed;
+}
+
+/* Mobile: disable fixed background (causes overflow on iOS/Android) */
+@media (max-width: 767px) {
+  .fmc-wrapper,
+  [data-theme="light"] .fmc-wrapper {
+    background-attachment: scroll;
+  }
+}
+
+/* ============ Content wrapper ============ */
+
+.fmc-content {
+  position: relative;
+  padding-top: 100px;
+}
+
+/* ============ SVG Wave dividers ============ */
+
+.fmc-wave {
+  display: block;
+  width: 100%;
+  height: 60px;
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.fmc-wave-flip {
+  transform: scaleY(-1);
+}
+
+/* ============ Sections — semi-transparent over background image ============ */
+
+.fmc-spaces-section {
+  background: rgba(18, 18, 20, 0.75);
+  padding: 28px 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+[data-theme="light"] .fmc-spaces-section {
+  background: rgba(245, 243, 240, 0.75);
+}
+
+.fmc-stats-section {
+  background: rgba(14, 14, 16, 0.80);
+  padding: 32px 40px;
+  position: relative;
+}
+
+[data-theme="light"] .fmc-stats-section {
+  background: rgba(255, 255, 255, 0.70);
+}
+
+.fmc-main-section {
+  background: rgba(18, 18, 20, 0.78);
+  padding: 0 40px 60px;
+  position: relative;
+}
+
+[data-theme="light"] .fmc-main-section {
+  background: rgba(245, 243, 240, 0.72);
+}
+
+/* ============ Main grid ============ */
+
+.fmc-grid {
+  display: grid;
+  grid-template-columns: 1fr 330px;
+  gap: 32px;
+  align-items: start;
+  padding: 0 40px 0 50px;
+}
+
+.fmc-feed-col {
+  min-width: 0;
+}
+
+.fmc-sidebar-col {
+  position: sticky;
+  top: 100px;
+  align-self: start;
+  max-height: calc(100vh - 110px);
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  &::-webkit-scrollbar { width: 3px; }
+  &::-webkit-scrollbar-thumb { background: var(--fm-border); border-radius: 2px; }
+}
+
+/* ============ Section card ============ */
+
+.fmc-section {
+  background: var(--fm-bg-card);
+  border: 1px solid var(--fm-border);
+  border-radius: var(--fm-radius);
+  padding: 18px;
+  margin-bottom: 14px;
+}
+
+[data-theme="light"] .fmc-section {
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+}
+
+.fmc-section .fmc-section-title {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--fm-silver-dim);
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  margin-bottom: 12px;
+}
+
+.fmc-section .fmc-placeholder-text {
+  font-size: 12px;
+  color: var(--fm-text-muted);
+}
+
+/* ============ Decorative blobs (small, subtle) ============ */
+
+.fmc-blob {
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.4;
+}
+
+.fmc-blob-1 {
+  top: 200px;
+  right: -40px;
+  width: 120px;
+  height: 120px;
+  background: rgba(139, 32, 64, 0.06);
+  border-radius: 58% 42% 48% 52% / 45% 55% 50% 50%;
+  animation: fmc-morph 18s ease-in-out infinite;
+}
+
+.fmc-blob-2 {
+  top: 600px;
+  left: -30px;
+  width: 90px;
+  height: 90px;
+  background: rgba(44, 181, 160, 0.04);
+  border-radius: 45% 55% 52% 48% / 55% 40% 60% 45%;
+  animation: fmc-morph 14s ease-in-out infinite reverse;
+}
+
+@keyframes fmc-morph {
+  0%, 100% { border-radius: 58% 42% 48% 52% / 45% 55% 50% 50%; transform: translate(0, 0); }
+  33% { border-radius: 42% 58% 55% 45% / 52% 48% 46% 54%; transform: translate(8px, -6px); }
+  66% { border-radius: 50% 50% 42% 58% / 58% 42% 55% 45%; transform: translate(-5px, 4px); }
+}
+
+/* ============ FAB ============ */
+
+.fmc-fab {
+  position: fixed;
+  bottom: 32px;
+  left: 32px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: var(--fm-radius);
+  background: var(--fm-wine);
+  color: #f0e8e2;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(139, 32, 64, 0.35);
+  transition: background 0.2s, transform 0.15s;
+
+  &:hover {
+    background: var(--fm-wine-soft);
+    transform: translateY(-2px);
+  }
+}
+
+/* ============ Responsive ============ */
+
+@media (max-width: 1100px) {
+  .fmc-grid {
+    grid-template-columns: 1fr 260px;
+    gap: 20px;
+    padding: 4px 4px ;
+  }
+}
+
+@media (max-width: 767px) {
+  .fmc-grid { grid-template-columns: 1fr; }
+
+  .fmc-sidebar-col {
+    position: static;
+    max-height: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+  }
+}
+
+@media (max-width: 767px) {
+  .fmc-spaces-section,
+  .fmc-stats-section,
+  .fmc-main-section {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .fmc-fab {
+    bottom: 20px;
+    left: 16px;
+    padding: 10px 18px;
+    font-size: 12px;
+  }
+
+  .fmc-wave { height: 36px; }
+
+  .fmc-blob { display: none; }
+}
+
+@media (max-width: 424px) {
+  .fmc-spaces-section,
+  .fmc-stats-section,
+  .fmc-main-section {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}

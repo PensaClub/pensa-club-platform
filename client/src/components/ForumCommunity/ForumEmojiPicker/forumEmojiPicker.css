@@ -1,0 +1,75 @@
+/* Prefix: fep- (ForumEmojiPicker) */
+
+.fep-container {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  margin-bottom: 6px;
+  background: var(--fm-bg-elevated);
+  border: 1px solid var(--fm-border);
+  border-radius: var(--fm-radius);
+  padding: 8px;
+  width: 280px;
+  z-index: 50;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+.fep-categories {
+  display: flex;
+  gap: 2px;
+  padding-bottom: 6px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid var(--fm-border-subtle);
+}
+
+.fep-categories .fep-cat-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: var(--fm-radius-sm);
+  background: transparent;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.fep-categories .fep-cat-btn:hover {
+  background: var(--fm-bg-card-hover);
+}
+
+.fep-categories .fep-cat-active {
+  background: var(--fm-wine-glow);
+}
+
+.fep-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 2px;
+}
+
+.fep-grid .fep-emoji-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: var(--fm-radius-sm);
+  background: transparent;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background 0.1s, transform 0.1s;
+}
+
+.fep-grid .fep-emoji-btn:hover {
+  background: var(--fm-bg-card-hover);
+  transform: scale(1.15);
+}
+
+@media (max-width: 424px) {
+  .fep-container { width: 240px; }
+  .fep-grid { grid-template-columns: repeat(6, 1fr); }
+}

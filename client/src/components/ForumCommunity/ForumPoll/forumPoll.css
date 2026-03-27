@@ -1,0 +1,178 @@
+/* Prefix: fpol- (ForumPoll) */
+@import '../forumVariables.css';
+
+.fpol-container {
+  background: var(--fm-bg-card);
+  border: 1px solid var(--fm-border);
+  border-radius: var(--fm-radius);
+  padding: 18px;
+  margin: 16px 0;
+}
+
+.fpol-container .fpol-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.fpol-container .fpol-header .fpol-header-icon { color: var(--fm-amber); }
+
+.fpol-container .fpol-header .fpol-question {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--fm-text);
+  flex: 1;
+}
+
+.fpol-container .fpol-header .fpol-multi-badge {
+  font-size: 9px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 2px 8px;
+  border-radius: var(--fm-radius-sm);
+  background: rgba(139, 108, 193, 0.10);
+  color: var(--fm-violet);
+  flex-shrink: 0;
+}
+
+/* Options */
+.fpol-container .fpol-options {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.fpol-container .fpol-options .fpol-option {
+  position: relative;
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 10px 14px;
+  border: 1px solid var(--fm-border);
+  border-radius: var(--fm-radius);
+  background: transparent;
+  font-family: 'Montserrat', sans-serif;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  overflow: hidden;
+}
+
+.fpol-container .fpol-options .fpol-option:hover:not(:disabled) {
+  border-color: var(--fm-wine-border);
+  background: var(--fm-bg-card-hover);
+}
+
+.fpol-container .fpol-options .fpol-option-selected {
+  border-color: var(--fm-wine);
+  background: var(--fm-wine-glow);
+}
+
+.fpol-container .fpol-options .fpol-option-results {
+  cursor: default;
+}
+
+.fpol-container .fpol-options .fpol-option .fpol-option-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.fpol-container .fpol-options .fpol-option .fpol-option-content .fpol-radio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--fm-border);
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.fpol-container .fpol-options .fpol-option .fpol-option-content .fpol-radio-checked {
+  border-color: var(--fm-wine);
+  background: var(--fm-wine);
+  color: #fff;
+}
+
+.fpol-container .fpol-options .fpol-option .fpol-option-content .fpol-option-text {
+  font-size: 13px;
+  color: var(--fm-text);
+  flex: 1;
+}
+
+.fpol-container .fpol-options .fpol-option .fpol-option-content .fpol-option-percent {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--fm-text);
+  flex-shrink: 0;
+}
+
+/* Progress bar */
+.fpol-container .fpol-options .fpol-option .fpol-bar-bg {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.fpol-container .fpol-options .fpol-option .fpol-bar-bg .fpol-bar-fill {
+  height: 100%;
+  background: rgba(138, 132, 128, 0.08);
+  border-radius: var(--fm-radius);
+  transition: width 0.8s ease-out;
+}
+
+.fpol-container .fpol-options .fpol-option .fpol-bar-bg .fpol-bar-selected {
+  background: var(--fm-wine-glow);
+}
+
+/* Footer */
+.fpol-container .fpol-footer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--fm-text-secondary);
+}
+
+.fpol-container .fpol-footer .fpol-votes-count {
+  font-weight: 500;
+}
+
+.fpol-container .fpol-footer .fpol-expired {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--fm-text-muted);
+}
+
+.fpol-container .fpol-footer .fpol-expires {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.fpol-container .fpol-footer .fpol-vote-btn {
+  margin-left: auto;
+  padding: 6px 18px;
+  border: none;
+  border-radius: var(--fm-radius);
+  background: var(--fm-wine);
+  color: #f0e8e2;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.fpol-container .fpol-footer .fpol-vote-btn:hover { background: var(--fm-wine-soft); }
+.fpol-container .fpol-footer .fpol-vote-btn:disabled { opacity: 0.4; cursor: default; }

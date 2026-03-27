@@ -1,16 +1,16 @@
- // Skeleton loader component
 import './bookmarkedItems.css';
+
 export const SkeletonCard = ({ viewMode = 'grid' }) => (
-    <div className={`bookmarked-card skeleton ${viewMode}`}>
-        {viewMode === 'list' && <div className="skeleton-image"></div>}
-        <div className="bookmarked-card-content-wrapper">
-            <div className="bookmarked-card-header">
-                <div className="skeleton-badge"></div>
+    <div className={`bki-card bki-skeleton bki-card-${viewMode}`}>
+        {viewMode === 'list' && <div className="bki-skel-image" />}
+        <div className="bki-card-body">
+            <div className="bki-card-top">
+                <div className="bki-skel-badge" />
             </div>
-            <div className="bookmarked-card-content">
-                <div className="skeleton-title"></div>
-                <div className="skeleton-description"></div>
-                <div className="skeleton-meta"></div>
+            <div className="bki-card-info">
+                <div className="bki-skel-title" />
+                <div className="bki-skel-desc" />
+                <div className="bki-skel-meta" />
             </div>
         </div>
     </div>

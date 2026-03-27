@@ -1,0 +1,100 @@
+/* Prefix: ff- (ForumFeed) */
+
+.ff-container { min-height: 200px; }
+
+.ff-sort-bar {
+  display: flex;
+  gap: 2px;
+  padding: 3px;
+  background: var(--fm-bg-card);
+  border: 1px solid var(--fm-border);
+  border-radius: var(--fm-radius);
+  margin-bottom: 14px;
+}
+
+.ff-sort-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 7px 14px;
+  border: none;
+  border-radius: var(--fm-radius-sm);
+  background: transparent;
+  color: var(--fm-text-secondary);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  flex: 1;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s;
+
+  &:hover { background: var(--fm-bg-card-hover); color: var(--fm-text); }
+}
+
+.ff-sort-btn-active {
+  background: rgba(138, 132, 128, 0.08);
+  color: var(--fm-text);
+  font-weight: 600;
+}
+
+.ff-loading {
+  display: flex;
+  justify-content: center;
+  padding: 60px 0;
+}
+
+.ff-spinner {
+  animation: ff-spin 0.8s linear infinite;
+  color: var(--fm-wine-soft);
+}
+
+@keyframes ff-spin { to { transform: rotate(360deg); } }
+
+.ff-empty {
+  text-align: center;
+  padding: 60px 20px;
+  background: var(--fm-bg-card);
+  border: 1px solid var(--fm-border);
+  border-radius: var(--fm-radius);
+}
+
+.ff-empty-icon {
+  font-size: 40px;
+  display: block;
+  margin-bottom: 10px;
+  opacity: 0.3;
+}
+
+.ff-empty p {
+  font-size: 13px;
+  color: var(--fm-text-secondary);
+  margin: 0;
+}
+
+.ff-load-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px;
+  margin-top: 8px;
+  border: 1px solid var(--fm-border);
+  border-radius: var(--fm-radius);
+  background: var(--fm-bg-card);
+  color: var(--fm-wine-soft);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+
+  &:hover { background: var(--fm-wine-glow); border-color: var(--fm-wine-border); }
+  &:disabled { opacity: 0.5; cursor: default; }
+}
+
+@media (max-width: 767px) {
+  .ff-sort-btn { padding: 6px 8px; font-size: 10px; gap: 3px; }
+}

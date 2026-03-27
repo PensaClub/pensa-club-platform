@@ -1,0 +1,67 @@
+/* Prefix: fcpr- (ForumCoursesPromo) */
+@import '../forumVariables.css';
+
+.fcpr-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.fcpr-list .fcpr-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 6px;
+  border: none;
+  border-radius: var(--fm-radius-sm);
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  font-family: 'Montserrat', sans-serif;
+  transition: background 0.12s;
+  width: 100%;
+}
+
+.fcpr-list .fcpr-item:hover { background: var(--fm-bg-card-hover); }
+
+.fcpr-list .fcpr-item .fcpr-thumb {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: var(--fm-radius-sm);
+  flex-shrink: 0;
+}
+
+.fcpr-list .fcpr-item .fcpr-thumb-placeholder {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--fm-radius-sm);
+  background: var(--fm-bg-elevated);
+  color: var(--fm-emerald);
+  flex-shrink: 0;
+}
+
+.fcpr-list .fcpr-item .fcpr-info { flex: 1; min-width: 0; }
+
+.fcpr-list .fcpr-item .fcpr-info .fcpr-title {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--fm-text);
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.fcpr-list .fcpr-item .fcpr-info .fcpr-desc {
+  display: block;
+  font-size: 10px;
+  color: var(--fm-text-secondary);
+  margin-top: 2px;
+  line-height: 1.3;
+}

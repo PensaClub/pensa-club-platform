@@ -970,16 +970,18 @@ seminarsController.delete(
         });
       }
 
-      const registrations = await student_seminar.count({
-        where: { seminarId },
-      });
+      // Delete all registrations, guest attendances, and related data first
+      await student_seminar.destroy({ where: { seminarId } });
 
-      if (registrations > 0) {
-        return res.status(400).json({
-          success: false,
-          message: `Cannot delete seminar with ${registrations} registered students. Please remove registrations first or cancel the seminar.`,
-        });
-      }
+      try {
+        const { seminar_guest_attendance } = require('../sequelize/models/index');
+        await seminar_guest_attendance.destroy({ where: { seminarId } });
+      } catch (e) {}
+
+      try {
+        const { seminar_review } = require('../sequelize/models/index');
+        await seminar_review.destroy({ where: { seminar_id: seminarId } });
+      } catch (e) {}
 
       await seminarData.destroy();
 
