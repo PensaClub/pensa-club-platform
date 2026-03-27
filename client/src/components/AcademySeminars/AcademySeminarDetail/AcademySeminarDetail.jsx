@@ -36,7 +36,7 @@ const getSeminarStatus = (seminar) => { // НОВО
 const getEmbedUrl = (url) => { // НОВО
     if (!url) return null;
     // YouTube
-    const ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&?/]+)/);
+    const ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/live\/)([^&?/]+)/);
     if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}`;
     // Vimeo
     const vimeoMatch = url.match(/vimeo\.com\/(\d+)/);

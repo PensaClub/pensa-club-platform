@@ -1894,12 +1894,14 @@
       "all": "Alle",
       "initiatives": "Initiativen",
       "projects": "Projekte",
-      "clubs": "Clubs"
+      "clubs": "Clubs",
+      "forum": "Forum"
     },
     "type": {
       "initiative": "Initiative",
       "project": "Projekt",
-      "club": "Club"
+      "club": "Club",
+      "forum": "Forum"
     },
     "empty": {
       "title": "Sie haben keine Lesezeichen",

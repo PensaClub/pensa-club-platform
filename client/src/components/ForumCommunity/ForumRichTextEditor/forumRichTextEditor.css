@@ -1,0 +1,157 @@
+/* Prefix: frte- (ForumRichTextEditor) */
+@import '../forumVariables.css';
+
+.frte-container {
+  border: 1px solid #3a3a40;
+  border-radius: var(--fm-radius);
+  overflow: hidden;
+  background: #28282e;
+}
+
+[data-theme="light"] .frte-container {
+  border-color: #aaa;
+  background: #f8f7f5;
+}
+
+/* Toolbar */
+.frte-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 6px 8px;
+  background: #222226;
+  border-bottom: 1px solid #3a3a40;
+  flex-wrap: wrap;
+}
+
+[data-theme="light"] .frte-toolbar {
+  background: #e8e5e0;
+  border-color: #aaa;
+}
+
+.frte-toolbar .frte-group { display: flex; gap: 1px; }
+
+.frte-toolbar .frte-divider {
+  width: 1px;
+  height: 20px;
+  background: #3a3a40;
+  margin: 0 4px;
+}
+
+[data-theme="light"] .frte-toolbar .frte-divider { background: #ccc; }
+
+.frte-toolbar .frte-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: var(--fm-radius-sm);
+  background: transparent;
+  color: #888;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+}
+
+[data-theme="light"] .frte-toolbar .frte-btn { color: #444; }
+
+.frte-toolbar .frte-btn:hover {
+  background: #333;
+  color: #ddd;
+}
+
+[data-theme="light"] .frte-toolbar .frte-btn:hover {
+  background: #ddd;
+  color: #333;
+}
+
+.frte-toolbar .frte-btn-active {
+  background: rgba(139, 32, 64, 0.15);
+  color: #e8a0b5;
+}
+
+[data-theme="light"] .frte-toolbar .frte-btn-active {
+  background: rgba(139, 32, 64, 0.10);
+  color: var(--fm-wine);
+}
+
+/* Editor content */
+.frte-editor {
+  min-height: 180px;
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+.frte-editor .tiptap {
+  padding: 14px;
+  min-height: 180px;
+  outline: none;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #e0dcd8;
+}
+
+[data-theme="light"] .frte-editor .tiptap { color: #1a1a1a; }
+
+.frte-editor .tiptap p { margin: 0 0 8px; }
+
+.frte-editor .tiptap p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: #666;
+  pointer-events: none;
+  float: left;
+  height: 0;
+}
+
+[data-theme="light"] .frte-editor .tiptap p.is-editor-empty:first-child::before { color: #666; }
+
+.frte-editor .tiptap h2 { font-size: 18px; font-weight: 600; margin: 14px 0 6px; }
+.frte-editor .tiptap h3 { font-size: 15px; font-weight: 600; margin: 10px 0 4px; }
+.frte-editor .tiptap ul, .frte-editor .tiptap ol { padding-left: 22px; margin: 6px 0; }
+
+.frte-editor .tiptap blockquote {
+  border-left: 2px solid var(--fm-wine);
+  padding-left: 14px;
+  margin: 10px 0;
+  color: #999;
+  font-style: italic;
+}
+
+[data-theme="light"] .frte-editor .tiptap blockquote { color: #777; }
+
+.frte-editor .tiptap code {
+  background: #333;
+  color: var(--fm-amber);
+  padding: 1px 5px;
+  border-radius: 2px;
+  font-size: 12px;
+}
+
+[data-theme="light"] .frte-editor .tiptap code { background: #e8e4e0; }
+
+.frte-editor .tiptap pre {
+  background: #222;
+  border-radius: var(--fm-radius-sm);
+  padding: 10px 14px;
+  margin: 10px 0;
+  overflow-x: auto;
+}
+
+[data-theme="light"] .frte-editor .tiptap pre { background: #e8e4e0; }
+
+.frte-editor .tiptap pre code { background: transparent; padding: 0; }
+.frte-editor .tiptap a { color: var(--fm-teal); text-decoration: underline; }
+.frte-editor .tiptap img { max-width: 100%; border-radius: var(--fm-radius-sm); margin: 6px 0; }
+.frte-editor .tiptap hr { border: none; border-top: 1px solid #444; margin: 14px 0; }
+
+[data-theme="light"] .frte-editor .tiptap hr { border-color: #ddd; }
+
+.frte-editor .tiptap div[data-youtube-video] { margin: 10px 0; }
+.frte-editor .tiptap div[data-youtube-video] iframe { border-radius: var(--fm-radius); }
+
+@media (max-width: 767px) {
+  .frte-toolbar { padding: 4px 6px; gap: 2px; }
+  .frte-toolbar .frte-btn { width: 26px; height: 26px; }
+  .frte-editor .tiptap { padding: 10px; min-height: 140px; }
+}
