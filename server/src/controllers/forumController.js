@@ -817,7 +817,7 @@ forumController.get('/bookmarks', isAuth, async (req, res, next) => {
     const { count, rows } = await forum_bookmark.findAndCountAll({
       where: { userId: req.user.userId },
       include: [{ model: forum_post, as: 'post', include: [authorInclude] }],
-      order: [['createdAt', 'DESC']],
+      order: [['created_at', 'DESC']],
       limit,
       offset,
     });

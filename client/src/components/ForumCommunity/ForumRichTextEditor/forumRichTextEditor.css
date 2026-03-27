@@ -9,8 +9,8 @@
 }
 
 [data-theme="light"] .frte-container {
-  border-color: #d0ccc8;
-  background: #f5f4f2;
+  border-color: #aaa;
+  background: #f8f7f5;
 }
 
 /* Toolbar */
@@ -25,8 +25,8 @@
 }
 
 [data-theme="light"] .frte-toolbar {
-  background: #ebe8e4;
-  border-color: #d0ccc8;
+  background: #e8e5e0;
+  border-color: #aaa;
 }
 
 .frte-toolbar .frte-group { display: flex; gap: 1px; }
@@ -54,7 +54,7 @@
   transition: background 0.12s, color 0.12s;
 }
 
-[data-theme="light"] .frte-toolbar .frte-btn { color: #777; }
+[data-theme="light"] .frte-toolbar .frte-btn { color: #444; }
 
 .frte-toolbar .frte-btn:hover {
   background: #333;
@@ -104,7 +104,7 @@
   height: 0;
 }
 
-[data-theme="light"] .frte-editor .tiptap p.is-editor-empty:first-child::before { color: #999; }
+[data-theme="light"] .frte-editor .tiptap p.is-editor-empty:first-child::before { color: #666; }
 
 .frte-editor .tiptap h2 { font-size: 18px; font-weight: 600; margin: 14px 0 6px; }
 .frte-editor .tiptap h3 { font-size: 15px; font-weight: 600; margin: 10px 0 4px; }

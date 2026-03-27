@@ -11,6 +11,7 @@ const POST_TYPES = [
   { key: 'discussion', emoji: '💬' },
   { key: 'article', emoji: '📝' },
   { key: 'question', emoji: '❓' },
+  { key: 'poll', emoji: '📊' },
 ];
 
 const MAX_IMAGES = 10;
@@ -29,7 +30,10 @@ const ForumCreatePost = ({ onClose, onCreated }) => {
   const [images, setImages] = useState([]);
   const [coverImage, setCoverImage] = useState(null);
   const [videos, setVideos] = useState([]);
+  const [pollOptions, setPollOptions] = useState(['', '']);
+  const [pollMultiple, setPollMultiple] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [errors, setErrors] = useState({});
   const [showSuggestSpace, setShowSuggestSpace] = useState(false);
   const [newSpaceName, setNewSpaceName] = useState('');
 
@@ -134,13 +138,24 @@ const ForumCreatePost = ({ onClose, onCreated }) => {
     }
   };
 
+  const validate = () => {
+    const e = {};
+    if (!title.trim()) e.title = 'Заглавието е задължително';
+    if (!content.trim() || content === '<p></p>') e.content = 'Съдържанието е задължително';
+    if (type === 'poll') {
+      const valid = pollOptions.filter(o => o.trim());
+      if (valid.length < 2) e.poll = 'Анкетата трябва да има поне 2 опции';
+    }
+    setErrors(e);
+    return Object.keys(e).length === 0;
+  };
+
   const handleSubmit = async () => {
-    if (!title.trim()) return toast.error('Моля, въведете заглавие');
-    if (!content.trim() || content === '<p></p>') return toast.error('Моля, въведете съдържание');
+    if (!validate()) return;
 
     setSaving(true);
     try {
-      await createPost({
+      const postData = {
         title: title.trim(),
         content,
         type,
@@ -149,7 +164,19 @@ const ForumCreatePost = ({ onClose, onCreated }) => {
         images,
         videos,
         coverImage,
-      });
+      };
+
+      if (type === 'poll') {
+        const validOptions = pollOptions.filter(o => o.trim());
+        if (validOptions.length < 2) return toast.error('Анкетата трябва да има поне 2 опции');
+        postData.poll = {
+          question: title.trim(),
+          options: validOptions.map((text, i) => ({ id: `opt_${i}`, text: text.trim() })),
+          isMultipleChoice: pollMultiple,
+        };
+      }
+
+      await createPost(postData);
       toast.success('Публикацията е създадена');
       onCreated?.();
       onClose();
@@ -180,7 +207,8 @@ const ForumCreatePost = ({ onClose, onCreated }) => {
         </div>
 
         {/* Title */}
-        <input className="fcp-input" type="text" placeholder={t('forumCommunity.createPost.titlePlaceholder', 'Заглавие')} value={title} onChange={(e) => setTitle(e.target.value)} maxLength={300} />
+        <input className={`fcp-input ${errors.title ? 'fcp-input-error' : ''}`} type="text" placeholder={t('forumCommunity.createPost.titlePlaceholder', 'Заглавие')} value={title} onChange={(e) => { setTitle(e.target.value); setErrors(prev => ({ ...prev, title: '' })); }} maxLength={300} />
+        {errors.title && <span className="fcp-error-msg">{errors.title}</span>}
 
         {/* Space */}
         <select className="fcp-select" value={spaceId} onChange={(e) => handleSpaceChange(e.target.value)}>
@@ -256,11 +284,52 @@ const ForumCreatePost = ({ onClose, onCreated }) => {
         )}
 
         {/* Editor */}
-        <ForumRichTextEditor
-          content={content}
-          onChange={setContent}
-          placeholder={t('forumCommunity.createPost.contentPlaceholder', 'Какво искате да споделите?')}
-        />
+        <div className={errors.content ? 'fcp-editor-error' : ''}>
+          <ForumRichTextEditor
+            content={content}
+            onChange={(val) => { setContent(val); setErrors(prev => ({ ...prev, content: '' })); }}
+            placeholder={t('forumCommunity.createPost.contentPlaceholder', 'Какво искате да споделите?')}
+          />
+        </div>
+        {errors.content && <span className="fcp-error-msg">{errors.content}</span>}
+
+        {/* Poll options */}
+        {type === 'poll' && (
+          <div className="fcp-poll-section">
+            <h4 className="fcp-poll-title">Опции за анкетата</h4>
+            {pollOptions.map((opt, i) => (
+              <div key={i} className="fcp-poll-option-row">
+                <input
+                  className="fcp-input"
+                  type="text"
+                  placeholder={`Опция ${i + 1}`}
+                  value={opt}
+                  onChange={(e) => {
+                    const updated = [...pollOptions];
+                    updated[i] = e.target.value;
+                    setPollOptions(updated);
+                  }}
+                  maxLength={200}
+                />
+                {pollOptions.length > 2 && (
+                  <button className="fcp-poll-remove" onClick={() => setPollOptions(prev => prev.filter((_, idx) => idx !== i))}>
+                    <X size={14} />
+                  </button>
+                )}
+              </div>
+            ))}
+            {pollOptions.length < 10 && (
+              <button className="fcp-poll-add" onClick={() => setPollOptions(prev => [...prev, ''])}>
+                + Добави опция
+              </button>
+            )}
+            {errors.poll && <span className="fcp-error-msg">{errors.poll}</span>}
+            <label className="fcp-poll-multi">
+              <input type="checkbox" checked={pollMultiple} onChange={(e) => setPollMultiple(e.target.checked)} />
+              Множествен избор (повече от 1 отговор)
+            </label>
+          </div>
+        )}
 
         {/* Tags */}
         <div className="fcp-tags-section">

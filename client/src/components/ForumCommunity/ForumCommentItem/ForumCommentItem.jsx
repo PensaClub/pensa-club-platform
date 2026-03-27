@@ -4,7 +4,8 @@ import { useAuthContext } from '../../contexts/UserContext';
 import { useForum } from '../../contexts/ForumProvider';
 import ForumReactions from '../ForumReactions/ForumReactions';
 import ForumImageLightbox from '../ForumImageLightbox/ForumImageLightbox';
-import { Reply, Quote, Pencil, Trash2, Clock, ChevronDown, ChevronUp } from 'lucide-react';
+import ForumReportModal from '../ForumReportModal/ForumReportModal';
+import { Reply, Quote, Pencil, Trash2, Clock, ChevronDown, ChevronUp, Flag } from 'lucide-react';
 import './forumCommentItem.css';
 
 const parseUserId = (token) => {
@@ -24,6 +25,7 @@ const ForumCommentItem = ({ comment, depth = 0, onReply, onQuote, onRefresh, onU
   const [editContent, setEditContent] = useState(comment.content);
   const [showReplies, setShowReplies] = useState(depth < 2);
   const [lightboxIndex, setLightboxIndex] = useState(null);
+  const [showReport, setShowReport] = useState(false);
 
   const currentUserId = parseUserId(token);
   const author = comment.author;
@@ -145,6 +147,11 @@ const ForumCommentItem = ({ comment, depth = 0, onReply, onQuote, onRefresh, onU
             <button className="fci-action-btn" onClick={() => onQuote?.(comment)}>
               <Quote size={12} /> {t('forumCommunity.comment.quote')}
             </button>
+            {!isOwn && currentUserId && (
+              <button className="fci-action-btn fci-action-report" onClick={() => setShowReport(true)}>
+                <Flag size={12} /> Докладвай
+              </button>
+            )}
             {isOwn && (
               <button className="fci-action-btn" onClick={() => setEditing(true)}>
                 <Pencil size={12} /> {t('forumCommunity.comment.edit')}
@@ -181,6 +188,11 @@ const ForumCommentItem = ({ comment, depth = 0, onReply, onQuote, onRefresh, onU
             />
           ))}
         </div>
+      )}
+
+      {/* Report modal */}
+      {showReport && (
+        <ForumReportModal targetType="comment" targetId={comment.id} onClose={() => setShowReport(false)} />
       )}
 
       {/* Lightbox */}

@@ -2590,12 +2590,14 @@
       "all": "All",
       "initiatives": "Initiatives",
       "projects": "Projects",
-      "clubs": "Clubs"
+      "clubs": "Clubs",
+      "forum": "Forum"
     },
     "type": {
       "initiative": "Initiative",
       "project": "Project",
-      "club": "Club"
+      "club": "Club",
+      "forum": "Forum"
     },
     "empty": {
       "title": "No bookmarks yet",

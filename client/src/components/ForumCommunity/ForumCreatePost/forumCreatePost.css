@@ -92,8 +92,8 @@
 }
 
 [data-theme="light"] .fcp-types .fcp-type-btn {
-  border-color: #ccc;
-  color: #666;
+  border-color: #aaa;
+  color: #333;
 }
 
 .fcp-types .fcp-type-btn:hover {
@@ -134,13 +134,13 @@
 
 [data-theme="light"] .fcp-input,
 [data-theme="light"] .fcp-select {
-  background: #f5f4f2;
-  border-color: #d0ccc8;
+  background: #f8f7f5;
+  border-color: #aaa;
   color: #1a1a1a;
 }
 
-.fcp-input::placeholder { color: #666; }
-[data-theme="light"] .fcp-input::placeholder { color: #999; }
+.fcp-input::placeholder { color: #777; }
+[data-theme="light"] .fcp-input::placeholder { color: #666; }
 
 .fcp-input:focus,
 .fcp-select:focus { border-color: var(--fm-wine); }
@@ -158,6 +158,24 @@
 [data-theme="light"] .fcp-select option {
   background: #fff;
   color: #1a1a1a;
+}
+
+/* Error states */
+.fcp-input-error {
+  border-color: #dc3545 !important;
+}
+
+.fcp-editor-error {
+  border: 1px solid #dc3545;
+  border-radius: var(--fm-radius);
+}
+
+.fcp-error-msg {
+  display: block;
+  font-size: 11px;
+  color: #dc3545;
+  margin: -8px 0 10px;
+  font-weight: 500;
 }
 
 /* Suggest space inline */
@@ -205,8 +223,8 @@
 }
 
 [data-theme="light"] .fcp-media-section .fcp-media-btn {
-  border-color: #ccc;
-  color: #777;
+  border-color: #aaa;
+  color: #444;
 }
 
 .fcp-media-section .fcp-media-btn:hover {
@@ -340,9 +358,9 @@
 }
 
 [data-theme="light"] .fcp-tags-input-wrap {
-  background: #f5f4f2;
-  border-color: #d0ccc8;
-  color: #999;
+  background: #f0eeeb;
+  border-color: #aaa;
+  color: #555;
 }
 
 .fcp-tags-input-wrap .fcp-tags-input {
@@ -358,7 +376,7 @@
 [data-theme="light"] .fcp-tags-input-wrap .fcp-tags-input { color: #1a1a1a; }
 
 .fcp-tags-input-wrap .fcp-tags-input::placeholder { color: #666; }
-[data-theme="light"] .fcp-tags-input-wrap .fcp-tags-input::placeholder { color: #999; }
+[data-theme="light"] .fcp-tags-input-wrap .fcp-tags-input::placeholder { color: #666; }
 
 .fcp-tags-list {
   display: flex;
@@ -392,6 +410,84 @@
 
 .fcp-tags-list .fcp-tag .fcp-tag-remove:hover { opacity: 1; }
 
+/* Poll section */
+.fcp-poll-section {
+  margin-bottom: 14px;
+  padding: 14px;
+  border: 1px solid #3a3a40;
+  border-radius: var(--fm-radius);
+  background: #222226;
+}
+
+[data-theme="light"] .fcp-poll-section {
+  background: #f0eeeb;
+  border-color: #bbb;
+}
+
+.fcp-poll-section .fcp-poll-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--fm-amber);
+  margin: 0 0 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.fcp-poll-section .fcp-poll-option-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.fcp-poll-section .fcp-poll-option-row .fcp-input {
+  margin-bottom: 6px;
+}
+
+.fcp-poll-section .fcp-poll-remove {
+  display: flex;
+  padding: 4px;
+  border: none;
+  background: transparent;
+  color: #dc3545;
+  cursor: pointer;
+  border-radius: var(--fm-radius-sm);
+  margin-bottom: 6px;
+}
+
+.fcp-poll-section .fcp-poll-remove:hover { background: rgba(220, 53, 69, 0.08); }
+
+.fcp-poll-section .fcp-poll-add {
+  width: 100%;
+  padding: 8px;
+  border: 1px dashed #444;
+  border-radius: var(--fm-radius);
+  background: transparent;
+  color: var(--fm-teal);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 10px;
+  transition: border-color 0.15s;
+}
+
+[data-theme="light"] .fcp-poll-section .fcp-poll-add { border-color: #999; color: #1a9a88; }
+
+.fcp-poll-section .fcp-poll-add:hover { border-color: var(--fm-teal); }
+
+.fcp-poll-section .fcp-poll-multi {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--fm-text-secondary);
+  cursor: pointer;
+}
+
+.fcp-poll-section .fcp-poll-multi input[type="checkbox"] {
+  accent-color: var(--fm-wine);
+}
+
 /* VIP notice */
 .fcp-vip-notice {
   margin-top: 12px;
@@ -413,7 +509,7 @@
   border-top: 1px solid #333;
 }
 
-[data-theme="light"] .fcp-footer { border-color: #e0e0e0; }
+[data-theme="light"] .fcp-footer { border-color: #bbb; }
 
 .fcp-footer .fcp-cancel {
   padding: 9px 20px;
@@ -428,8 +524,8 @@
 }
 
 [data-theme="light"] .fcp-footer .fcp-cancel {
-  border-color: #ccc;
-  color: #666;
+  border-color: #999;
+  color: #333;
 }
 
 .fcp-footer .fcp-cancel:hover { background: #2a2a30; }

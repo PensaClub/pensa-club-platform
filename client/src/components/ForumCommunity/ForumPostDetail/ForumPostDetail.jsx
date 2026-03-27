@@ -9,6 +9,7 @@ import { TextZoom } from '../../TextZoom/TextZoom';
 import SEOHead from '../../SEO/SEOHead';
 import ForumComments from '../ForumComments/ForumComments';
 import ForumReactions from '../ForumReactions/ForumReactions';
+import ForumPoll from '../ForumPoll/ForumPoll';
 import ForumImageLightbox from '../ForumImageLightbox/ForumImageLightbox';
 import ForumTrendingTags from '../ForumTrendingTags/ForumTrendingTags';
 import ForumArticlesCarousel from '../ForumArticlesCarousel/ForumArticlesCarousel';
@@ -196,6 +197,15 @@ const ForumPostDetail = () => {
 
                 {/* Content */}
                 <div className="fpd-content" dangerouslySetInnerHTML={{ __html: post.content }} />
+
+                {/* Poll */}
+                {post.poll && (
+                  <ForumPoll
+                    poll={post.poll}
+                    userVotes={post.userPollVotes || []}
+                    onVote={() => getPost(slug)}
+                  />
+                )}
 
                 {/* Tags */}
                 {post.tags?.length > 0 && (
