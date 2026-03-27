@@ -6,7 +6,8 @@
     },
     "hero": {
       "title": "Community",
-      "subtitle": "Share, discuss and learn together"
+      "subtitle": "Share, discuss and learn together",
+      "enter": "Enter the community"
     },
     "feed": {
       "title": "Posts",
@@ -65,7 +66,9 @@
       "delete": "Delete",
       "pinned": "Pinned",
       "locked": "Locked",
-      "edited": "edited"
+      "edited": "edited",
+      "notFound": "Post not found",
+      "backToForum": "Back to community"
     },
     "comment": {
       "reply": "Reply",

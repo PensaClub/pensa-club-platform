@@ -1,0 +1,57 @@
+/* ============ Forum Shared CSS Variables ============ */
+/* Import this in any forum component that needs theme vars */
+/* Works on any element with class .fm-themed or descendants of .fmc-wrapper / .fpd-wrapper */
+
+.fmc-wrapper,
+.fpd-wrapper {
+  --fm-bg: #121214;
+  --fm-bg-warm: #18181b;
+  --fm-bg-card: rgba(24, 24, 28, 0.85);
+  --fm-bg-card-hover: rgba(30, 30, 35, 0.90);
+  --fm-bg-elevated: #2a2a2e;
+  --fm-border: rgba(50, 50, 56, 0.60);
+  --fm-border-subtle: rgba(40, 40, 46, 0.50);
+  --fm-wine: #8b2040;
+  --fm-wine-soft: #a63055;
+  --fm-wine-glow: rgba(139, 32, 64, 0.10);
+  --fm-wine-border: rgba(139, 32, 64, 0.20);
+  --fm-silver: #b0aaa4;
+  --fm-silver-soft: #8a8480;
+  --fm-silver-dim: #605c58;
+  --fm-gold: #c9a84c;
+  --fm-gold-glow: rgba(201, 168, 76, 0.08);
+  --fm-teal: #2cb5a0;
+  --fm-amber: #d4943c;
+  --fm-violet: #8b6cc1;
+  --fm-emerald: #3aab6a;
+  --fm-text: #ddd8d2;
+  --fm-text-secondary: #8a8580;
+  --fm-text-muted: #5a5755;
+  --fm-radius: 6px;
+  --fm-radius-sm: 3px;
+}
+
+[data-theme="light"] .fmc-wrapper,
+[data-theme="light"] .fpd-wrapper {
+  --fm-bg: #f7f6f4;
+  --fm-bg-warm: #efeeec;
+  --fm-bg-card: rgba(255, 255, 255, 0.82);
+  --fm-bg-card-hover: rgba(255, 255, 255, 0.90);
+  --fm-bg-elevated: #eaeae8;
+  --fm-border: rgba(200, 195, 188, 0.70);
+  --fm-border-subtle: rgba(210, 205, 198, 0.50);
+  --fm-wine: #8b1838;
+  --fm-wine-soft: #a82050;
+  --fm-wine-glow: rgba(139, 24, 56, 0.08);
+  --fm-wine-border: rgba(139, 24, 56, 0.18);
+  --fm-silver: #4a4844;
+  --fm-silver-soft: #6a6864;
+  --fm-silver-dim: #8a8884;
+  --fm-teal: #18907c;
+  --fm-amber: #b87520;
+  --fm-violet: #6840a8;
+  --fm-emerald: #228a50;
+  --fm-text: #111111;
+  --fm-text-secondary: #3d3b38;
+  --fm-text-muted: #6a6866;
+}

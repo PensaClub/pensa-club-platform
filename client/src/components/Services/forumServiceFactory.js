@@ -44,8 +44,12 @@ export const forumServiceFactory = () => {
     // Polls
     votePoll: (pollId, data) => requester.post(`${apiUrl}/forum/polls/${pollId}/vote`, data),
 
-    // Tags & Search & Stats
+    // Tags & Search & Stats & Widgets
     getTags: () => requester.get(`${apiUrl}/forum/tags`),
+    getTrendingTags: () => requester.get(`${apiUrl}/forum/trending-tags`),
+    getRecentArticles: () => requester.get(`${apiUrl}/forum/recent-articles`),
+    getUpcomingSeminars: () => requester.get(`${apiUrl}/forum/upcoming-seminars`),
+    getRecommendedCourses: () => requester.get(`${apiUrl}/forum/recommended-courses`),
     search: (params = {}) => requester.get(`${apiUrl}/forum/search?${toQueryString(params)}`),
     getStats: () => requester.get(`${apiUrl}/forum/stats`),
 

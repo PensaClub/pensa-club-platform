@@ -6,7 +6,8 @@
     },
     "hero": {
       "title": "Gemeinschaft",
-      "subtitle": "Teilen, diskutieren und gemeinsam lernen"
+      "subtitle": "Teilen, diskutieren und gemeinsam lernen",
+      "enter": "Zur Gemeinschaft"
     },
     "feed": {
       "title": "Beiträge",
@@ -65,7 +66,9 @@
       "delete": "Löschen",
       "pinned": "Angeheftet",
       "locked": "Gesperrt",
-      "edited": "bearbeitet"
+      "edited": "bearbeitet",
+      "notFound": "Beitrag nicht gefunden",
+      "backToForum": "Zurück zur Gemeinschaft"
     },
     "comment": {
       "reply": "Antworten",

@@ -94,7 +94,7 @@ const authorInclude = {
   include: [{
     model: user_details,
     as: 'details',
-    attributes: ['firstName', 'lastName', 'profilePicture'],
+    attributes: ['firstName', 'lastName', 'imageURL'],
   }],
 };
 
@@ -220,8 +220,7 @@ forumController.get('/posts/:slug', isAuth.allowGuest, async (req, res, next) =>
         {
           model: forum_comment,
           as: 'quotedComment',
-          attributes: ['id', 'content'],
-          include: [{ ...authorInclude }],
+          attributes: ['id', 'content', 'authorId'],
         },
       ],
       order: [['createdAt', 'ASC']],
@@ -387,6 +386,92 @@ forumController.get('/stats', isAuth.allowGuest, async (req, res, next) => {
   }
 });
 
+// GET /forum/trending-tags
+forumController.get('/trending-tags', isAuth.allowGuest, async (req, res, next) => {
+  try {
+    const tags = await forum_tag.findAll({
+      order: [['usageCount', 'DESC']],
+      limit: 20,
+      attributes: ['id', 'name', 'slug', 'usageCount'],
+    });
+    res.json({ tags });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// GET /forum/recent-articles — last 5 published articles
+forumController.get('/recent-articles', isAuth.allowGuest, async (req, res, next) => {
+  try {
+    const { article, mainImage } = require('../sequelize/models/index');
+    const articles = await article.findAll({
+      order: [['createdAt', 'DESC']],
+      limit: 5,
+      attributes: ['id', 'title', 'slug', 'summary', 'createdAt'],
+      include: [{
+        model: mainImage,
+        as: 'mainImage',
+        attributes: ['thumbnail', 'sources'],
+      }],
+    });
+    const mapped = articles.map(a => ({
+      id: a.id,
+      title: a.title,
+      slug: a.slug,
+      imageUrl: a.mainImage?.thumbnail || (Array.isArray(a.mainImage?.sources) ? a.mainImage.sources[0] : null),
+      createdAt: a.createdAt,
+    }));
+    res.json({ articles: mapped });
+  } catch (err) {
+    console.error('Recent articles error:', err.message);
+    res.json({ articles: [] });
+  }
+});
+
+// GET /forum/upcoming-seminars — next 3 seminars
+forumController.get('/upcoming-seminars', isAuth.allowGuest, async (req, res, next) => {
+  try {
+    const { seminar } = require('../sequelize/models/index');
+    const seminars = await seminar.findAll({
+      where: {
+        isPublished: true,
+        status: { [Op.in]: ['scheduled', 'live'] },
+        scheduledDate: { [Op.gte]: new Date() },
+      },
+      order: [['scheduledDate', 'ASC']],
+      limit: 3,
+      attributes: ['id', 'title', 'slug', 'scheduledDate', 'location', 'isOnline', 'thumbnailUrl'],
+    });
+    res.json({ seminars });
+  } catch (err) {
+    res.json({ seminars: [] });
+  }
+});
+
+// GET /forum/recommended-courses — 3 published courses
+forumController.get('/recommended-courses', isAuth.allowGuest, async (req, res, next) => {
+  try {
+    const { course } = require('../sequelize/models/index');
+    const courses = await course.findAll({
+      where: { status: 'active' },
+      order: [sequelize.fn('RANDOM')],
+      limit: 3,
+      attributes: ['id', 'name', 'slug', 'thumbnailUrl', 'shortDescription'],
+    });
+    const mapped = courses.map(c => ({
+      id: c.id,
+      title: c.name,
+      slug: c.slug,
+      thumbnailUrl: c.thumbnailUrl,
+      shortDescription: c.shortDescription,
+    }));
+    res.json({ courses: mapped });
+  } catch (err) {
+    console.error('Courses error:', err.message);
+    res.json({ courses: [] });
+  }
+});
+
 // GET /forum/search
 forumController.get('/search', isAuth.allowGuest, async (req, res, next) => {
   try {
@@ -448,16 +533,21 @@ forumController.post('/posts', isAuth, validateBody(forumPostCreateSchema), asyn
     const access = await checkForumAccess(req.user.userId, 'post');
     if (!access.allowed) return res.status(403).json({ message: access.reason });
 
-    // Check rules accepted
-    if (!access.status?.rulesAcceptedAt) {
-      return res.status(403).json({ message: 'rules_not_accepted' });
-    }
+    // Rules acceptance check will be enforced via ForumRulesModal (Phase 6)
 
-    const { title, content, type, spaceId, tags, images, coverImage, poll } = req.body;
+    const { title, content, type, spaceId, tags, images, coverImage, videos, poll } = req.body;
 
-    // Determine status
+    // Status logic: admin/mentor → published, VIP → published (except article), others → pending
     let postStatus = 'pending';
-    if (access.status?.role === 'vip' && !access.restricted && type !== 'article') {
+
+    // Check if user is admin or mentor
+    const { user_account: userModel, mentor } = require('../sequelize/models/index');
+    const userRecord = await userModel.findByPk(req.user.userId, { attributes: ['role'] });
+    const isMentor = await mentor.findOne({ where: { userId: req.user.userId, status: 'active' }, attributes: ['id'] });
+
+    if (userRecord?.role === 'admin' || userRecord?.role === 'moderator' || isMentor) {
+      postStatus = 'published';
+    } else if (access.status?.role === 'vip' && !access.restricted && type !== 'article') {
       postStatus = 'published';
     }
 
@@ -471,6 +561,7 @@ forumController.post('/posts', isAuth, validateBody(forumPostCreateSchema), asyn
       spaceId: spaceId || null,
       type, status: postStatus,
       images: images || [],
+      videos: videos || [],
       coverImage: coverImage || null,
       lastActivityAt: now,
       publishedAt: postStatus === 'published' ? now : null,
@@ -516,7 +607,7 @@ forumController.put('/posts/:id', isAuth, validateBody(forumPostUpdateSchema), a
   try {
     const post = await forum_post.findByPk(req.params.id);
     if (!post) return res.status(404).json({ message: 'Post not found' });
-    if (post.authorId !== req.user.userId) return res.status(403).json({ message: 'Not your post' });
+    if (Number(post.authorId) !== Number(req.user.userId)) return res.status(403).json({ message: 'Not your post' });
 
     const { title, content, tags, images, coverImage, spaceId } = req.body;
     const updates = { editedAt: new Date() };
@@ -552,7 +643,7 @@ forumController.delete('/posts/:id', isAuth, async (req, res, next) => {
   try {
     const post = await forum_post.findByPk(req.params.id);
     if (!post) return res.status(404).json({ message: 'Post not found' });
-    if (post.authorId !== req.user.userId) return res.status(403).json({ message: 'Not your post' });
+    if (Number(post.authorId) !== Number(req.user.userId)) return res.status(403).json({ message: 'Not your post' });
 
     await post.destroy();
     res.json({ success: true });
@@ -566,13 +657,18 @@ forumController.post('/posts/:id/comments', isAuth, validateBody(forumCommentCre
   try {
     const access = await checkForumAccess(req.user.userId, 'comment');
     if (!access.allowed) return res.status(403).json({ message: access.reason });
-    if (!access.status?.rulesAcceptedAt) return res.status(403).json({ message: 'rules_not_accepted' });
+    // Rules acceptance check will be enforced via ForumRulesModal (Phase 6)
 
     const post = await forum_post.findByPk(req.params.id);
     if (!post) return res.status(404).json({ message: 'Post not found' });
     if (post.isLocked) return res.status(403).json({ message: 'post_locked' });
 
     const { content, parentId, images, mentionedUsers, quotedCommentId } = req.body;
+
+    // Must have content or images
+    if (!content?.trim() && (!images || images.length === 0)) {
+      return res.status(400).json({ message: 'Comment must have text or images' });
+    }
 
     const comment = await forum_comment.create({
       postId: post.id,
@@ -617,7 +713,9 @@ forumController.put('/comments/:id', isAuth, validateBody(forumCommentUpdateSche
   try {
     const comment = await forum_comment.findByPk(req.params.id);
     if (!comment) return res.status(404).json({ message: 'Comment not found' });
-    if (comment.authorId !== req.user.userId) return res.status(403).json({ message: 'Not your comment' });
+    if (Number(comment.authorId) !== Number(req.user.userId)) {
+      return res.status(403).json({ message: 'Not your comment' });
+    }
 
     await comment.update({ content: req.body.content, isEdited: true });
     res.json({ comment });
@@ -631,7 +729,16 @@ forumController.delete('/comments/:id', isAuth, async (req, res, next) => {
   try {
     const comment = await forum_comment.findByPk(req.params.id);
     if (!comment) return res.status(404).json({ message: 'Comment not found' });
-    if (comment.authorId !== req.user.userId) return res.status(403).json({ message: 'Not your comment' });
+
+    // Owner or admin can delete
+    const { user_account: userModel } = require('../sequelize/models/index');
+    const reqUser = await userModel.findByPk(req.user.userId, { attributes: ['role'] });
+    const isOwner = Number(comment.authorId) === Number(req.user.userId);
+    const isAdminUser = reqUser?.role === 'admin' || reqUser?.role === 'moderator';
+
+    if (!isOwner && !isAdminUser) {
+      return res.status(403).json({ message: 'Not your comment' });
+    }
 
     const post = await forum_post.findByPk(comment.postId);
     await comment.update({ status: 'deleted', content: '[Изтрит коментар]' });

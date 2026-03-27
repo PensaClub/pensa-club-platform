@@ -1,0 +1,225 @@
+/* Prefix: fpc- (ForumPostCard) */
+
+.fpc-card {
+  background: var(--fm-bg-card);
+  border: 1px solid var(--fm-border);
+  border-radius: var(--fm-radius);
+  padding: 18px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.15s;
+}
+
+.fpc-card:hover {
+  border-color: var(--fm-wine-border);
+  background: var(--fm-bg-card-hover);
+}
+
+/* Header */
+.fpc-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.fpc-header .fpc-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--fm-bg-elevated);
+}
+
+.fpc-header .fpc-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fpc-header .fpc-avatar span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--fm-wine-soft);
+  background: var(--fm-wine-glow);
+}
+
+.fpc-author-info .fpc-author-name {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--fm-text);
+}
+
+.fpc-author-info .fpc-meta {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  color: var(--fm-text-muted);
+  margin-top: 1px;
+}
+
+.fpc-author-info .fpc-meta .fpc-meta-dot { opacity: 0.3; }
+
+.fpc-author-info .fpc-meta .fpc-space-badge {
+  font-weight: 500;
+  color: var(--fm-teal);
+}
+
+.fpc-header .fpc-type-badge { font-size: 16px; flex-shrink: 0; }
+
+/* Badges */
+.fpc-badges {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+
+.fpc-badges:empty { display: none; }
+
+.fpc-badges .fpc-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 7px;
+  font-size: 9px;
+  font-weight: 600;
+  border-radius: var(--fm-radius-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.fpc-badges .fpc-badge-pinned { background: var(--fm-wine-glow); color: var(--fm-wine-soft); }
+.fpc-badges .fpc-badge-locked { background: rgba(138, 132, 128, 0.08); color: var(--fm-silver-soft); }
+.fpc-badges .fpc-badge-pending { background: var(--fm-gold-glow); color: var(--fm-gold); }
+
+/* Content */
+.fpc-card .fpc-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--fm-text);
+  margin: 0 0 5px;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.fpc-card .fpc-excerpt {
+  font-size: 12px;
+  color: var(--fm-text-secondary);
+  line-height: 1.6;
+  margin: 0 0 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.fpc-card .fpc-cover {
+  border-radius: var(--fm-radius-sm);
+  overflow: hidden;
+  margin-bottom: 10px;
+  max-height: 260px;
+}
+
+.fpc-card .fpc-cover { position: relative; }
+.fpc-card .fpc-cover img { width: 100%; height: 100%; object-fit: cover; }
+
+.fpc-card .fpc-cover .fpc-cover-count {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  padding: 3px 10px;
+  background: rgba(0, 0, 0, 0.65);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: var(--fm-radius-sm);
+}
+
+/* Tags */
+.fpc-tags {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+.fpc-tags .fpc-tag {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--fm-violet);
+  background: rgba(139, 108, 193, 0.10);
+  padding: 2px 7px;
+  border-radius: var(--fm-radius-sm);
+}
+
+/* Footer */
+.fpc-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 10px;
+  border-top: 1px solid var(--fm-border-subtle);
+}
+
+.fpc-footer .fpc-stats { display: flex; gap: 14px; }
+
+.fpc-footer .fpc-stats .fpc-stat {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  color: var(--fm-text-secondary);
+}
+
+.fpc-footer .fpc-bookmark {
+  display: flex;
+  padding: 3px;
+  border: none;
+  background: transparent;
+  color: var(--fm-text-muted);
+  cursor: pointer;
+  border-radius: var(--fm-radius-sm);
+  transition: color 0.15s, background 0.15s;
+}
+
+.fpc-footer .fpc-bookmark:hover { color: var(--fm-wine-soft); background: var(--fm-wine-glow); }
+.fpc-footer .fpc-bookmark-active { color: var(--fm-wine-soft); }
+
+/* Reactions summary */
+.fpc-reactions-summary {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-top: 8px;
+}
+
+.fpc-reactions-summary .fpc-reaction-emoji { font-size: 14px; }
+
+.fpc-reactions-summary .fpc-reaction-count {
+  font-size: 10px;
+  color: var(--fm-text-muted);
+  margin-left: 3px;
+}
+
+@media (max-width: 767px) {
+  .fpc-card { padding: 14px; }
+  .fpc-card .fpc-title { font-size: 14px; }
+  .fpc-card .fpc-excerpt { -webkit-line-clamp: 2; }
+}
+
+@media (max-width: 424px) {
+  .fpc-card { padding: 12px; }
+  .fpc-footer .fpc-stats { gap: 8px; }
+}

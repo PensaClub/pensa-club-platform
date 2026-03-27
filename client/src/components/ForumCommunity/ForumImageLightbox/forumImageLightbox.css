@@ -1,0 +1,120 @@
+/* Prefix: filb- (ForumImageLightbox) */
+
+.filb-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(0, 0, 0, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: filb-fade-in 0.2s ease-out;
+}
+
+@keyframes filb-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.filb-overlay .filb-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.10);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.filb-overlay .filb-close:hover { background: rgba(255, 255, 255, 0.20); }
+
+.filb-content {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 90vw;
+  max-height: 85vh;
+}
+
+.filb-content .filb-image {
+  max-width: 90vw;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: 6px;
+  animation: filb-zoom-in 0.25s ease-out;
+}
+
+@keyframes filb-zoom-in {
+  from { transform: scale(0.92); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Arrows */
+.filb-content .filb-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.10);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.filb-content .filb-arrow:hover { background: rgba(255, 255, 255, 0.25); }
+.filb-content .filb-arrow-left { left: -60px; }
+.filb-content .filb-arrow-right { right: -60px; }
+
+/* Dots */
+.filb-dots {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+}
+
+.filb-dots .filb-dot {
+  width: 8px;
+  height: 8px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.30);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.15s;
+}
+
+.filb-dots .filb-dot-active { background: #fff; }
+
+.filb-counter {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+  font-family: 'Montserrat', sans-serif;
+}
+
+@media (max-width: 767px) {
+  .filb-content .filb-arrow-left { left: 8px; }
+  .filb-content .filb-arrow-right { right: 8px; }
+  .filb-content .filb-arrow { width: 36px; height: 36px; }
+}

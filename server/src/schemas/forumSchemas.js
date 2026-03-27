@@ -9,6 +9,7 @@ const forumPostCreateSchema = z.object({
   tags: z.array(z.string().max(50)).max(10).optional().default([]),
   images: z.array(z.string().url()).max(10).optional().default([]),
   coverImage: z.string().url().nullable().optional(),
+  videos: z.array(z.string().url()).max(2).optional().default([]),
   // Poll data (only when type === 'poll')
   poll: z.object({
     question: z.string().min(3).max(500),
@@ -32,7 +33,7 @@ const forumPostUpdateSchema = z.object({
 
 // Comments
 const forumCommentCreateSchema = z.object({
-  content: z.string().min(1).max(5000),
+  content: z.string().max(5000).default(''),
   parentId: z.number().int().positive().nullable().optional(),
   images: z.array(z.string().url()).max(5).optional().default([]),
   mentionedUsers: z.array(z.number().int().positive()).optional().default([]),

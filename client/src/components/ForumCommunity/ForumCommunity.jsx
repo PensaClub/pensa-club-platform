@@ -1,16 +1,48 @@
-import { useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForum } from '../contexts/ForumProvider';
 import { useAuthContext } from '../contexts/UserContext';
 import ScrollToTop from '../ScrollToTop/ScrollToTop';
 import { TextZoom } from '../TextZoom/TextZoom';
 import SEOHead from '../SEO/SEOHead';
+import ForumHero from './ForumHero/ForumHero';
+import ForumStats from './ForumStats/ForumStats';
+import ForumSpaces from './ForumSpaces/ForumSpaces';
+import ForumFeed from './ForumFeed/ForumFeed';
+import ForumCreatePost from './ForumCreatePost/ForumCreatePost';
+import ForumSuggestSpace from './ForumSuggestSpace/ForumSuggestSpace';
+import ForumSearch from './ForumSearch/ForumSearch';
+import ForumTrendingTags from './ForumTrendingTags/ForumTrendingTags';
+import ForumArticlesCarousel from './ForumArticlesCarousel/ForumArticlesCarousel';
+import ForumUpcomingSeminars from './ForumUpcomingSeminars/ForumUpcomingSeminars';
+import ForumCoursesPromo from './ForumCoursesPromo/ForumCoursesPromo';
+import { Plus } from 'lucide-react';
 import './forumCommunity.css';
+
+/* SVG Wave component — reusable divider */
+const WaveDivider = ({ flip, fromColor, toColor }) => (
+  <svg
+    className={`fmc-wave ${flip ? 'fmc-wave-flip' : ''}`}
+    viewBox="0 0 1440 60"
+    preserveAspectRatio="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M0,20 C240,50 480,0 720,30 C960,60 1200,10 1440,35 L1440,60 L0,60 Z"
+      style={{ fill: flip ? 'var(--fm-bg)' : 'var(--fm-bg-warm)' }}
+    />
+  </svg>
+);
 
 const ForumCommunity = () => {
   const { t } = useTranslation('forum');
   const { isAuthentication } = useAuthContext();
-  const { getStats, getSpaces, stats, spaces, getMyStatus, myStatus } = useForum();
+  const { getStats, getSpaces, stats, getMyStatus } = useForum();
+
+  const [activeSpaceId, setActiveSpaceId] = useState(null);
+  const [showCreatePost, setShowCreatePost] = useState(false);
+  const [showSuggestSpace, setShowSuggestSpace] = useState(false);
+  const [feedKey, setFeedKey] = useState(0);
 
   useEffect(() => {
     getStats();
@@ -23,6 +55,11 @@ const ForumCommunity = () => {
     }
   }, [isAuthentication, getMyStatus]);
 
+  const handlePostCreated = useCallback(() => {
+    setFeedKey(prev => prev + 1);
+    getStats();
+  }, [getStats]);
+
   return (
     <div className="fmc-wrapper">
       <SEOHead
@@ -33,121 +70,98 @@ const ForumCommunity = () => {
       <ScrollToTop />
       <TextZoom />
 
-      {/* Header */}
-      <div className="fmc-header">
-        <h1 className="fmc-header-title">
-          <span>{'{ }'}</span> {t('forumCommunity.hero.title', 'Общност')}
-        </h1>
-        <div className="fmc-header-actions">
-          {/* ThemeToggle, search, new post button — Phase 2 */}
-        </div>
+      {/* Full-screen hero landing (once per session) */}
+      <ForumHero onEnter={() => {}} />
+
+      {/* Decorative blobs */}
+      <div className="fmc-blob fmc-blob-1" />
+      <div className="fmc-blob fmc-blob-2" />
+
+      {/* Content */}
+      <div className="fmc-content">
+
+        {/* Section 1: Spaces bar */}
+        <section className="fmc-spaces-section fmc-parallax-section">
+          <ForumSpaces
+            activeSpaceId={activeSpaceId}
+            onSelectSpace={setActiveSpaceId}
+            onSuggestSpace={() => setShowSuggestSpace(true)}
+          />
+        </section>
+
+        {/* Wave: warm → dark */}
+        <WaveDivider flip />
+
+        {/* Section 2: Stats */}
+        <section className="fmc-stats-section fmc-parallax-section">
+          <ForumStats stats={stats} />
+        </section>
+
+        {/* Wave: dark → warm */}
+        <WaveDivider />
+
+        {/* Section 3: Feed + Sidebar */}
+        <section className="fmc-main-section fmc-parallax-section">
+          <div className="fmc-grid">
+            <div className="fmc-feed-col">
+              <ForumFeed key={feedKey} spaceId={activeSpaceId} />
+            </div>
+
+            <aside className="fmc-sidebar-col">
+              <ForumSearch />
+
+              <div className="fmc-section">
+                <h2 className="fmc-section-title">
+                  {t('forumCommunity.sidebar.trendingTags', 'Популярни тагове')}
+                </h2>
+                <ForumTrendingTags onTagClick={() => {}} />
+              </div>
+
+              <div className="fmc-section">
+                <h2 className="fmc-section-title">
+                  {t('forumCommunity.sidebar.latestArticles', 'Последни статии')}
+                </h2>
+                <ForumArticlesCarousel />
+              </div>
+
+              <div className="fmc-section">
+                <h2 className="fmc-section-title">
+                  {t('forumCommunity.sidebar.upcomingSeminars', 'Предстоящи семинари')}
+                </h2>
+                <ForumUpcomingSeminars />
+              </div>
+
+              <div className="fmc-section">
+                <h2 className="fmc-section-title">
+                  {t('forumCommunity.sidebar.recommendedCourses', 'Препоръчани курсове')}
+                </h2>
+                <ForumCoursesPromo />
+              </div>
+            </aside>
+          </div>
+        </section>
       </div>
 
-      {/* 3-column layout */}
-      <div className="fmc-layout">
-        {/* Left: Spaces */}
-        <aside className="fmc-left">
-          <div className="fmc-section">
-            <h2 className="fmc-section-title">
-              {t('forumCommunity.spaces.title', 'Пространства')}
-              <span className="fmc-coming-soon">Phase 2</span>
-            </h2>
-            {spaces.length === 0 ? (
-              <p className="fmc-placeholder-text">
-                {t('forumCommunity.spaces.allPosts', 'Всички публикации')}
-              </p>
-            ) : (
-              spaces.map(space => (
-                <div key={space.id} style={{ padding: '8px 0', borderBottom: '1px solid var(--forum-border)' }}>
-                  <span>{space.icon} {space.name}</span>
-                  <span style={{ color: 'var(--forum-text-secondary)', fontSize: '12px', marginLeft: 8 }}>
-                    {space.postCount} {t('forumCommunity.spaces.posts', 'публикации')}
-                  </span>
-                </div>
-              ))
-            )}
-          </div>
-        </aside>
+      {/* FAB — New post button */}
+      {isAuthentication && (
+        <button className="fmc-fab" onClick={() => setShowCreatePost(true)}>
+          <Plus size={18} />
+          {t('forumCommunity.feed.newPost', 'Нова публикация')}
+        </button>
+      )}
 
-        {/* Center: Feed */}
-        <main className="fmc-center">
-          {/* Stats */}
-          <div className="fmc-section" style={{ display: 'flex', justifyContent: 'space-around', textAlign: 'center' }}>
-            <div>
-              <div style={{ fontSize: 28, fontWeight: 700, color: 'var(--forum-accent)' }}>
-                {stats?.activeUsers || 0}+
-              </div>
-              <div style={{ fontSize: 12, color: 'var(--forum-text-secondary)' }}>
-                {t('forumCommunity.stats.activeUsers', 'Активни потребители')}
-              </div>
-            </div>
-            <div>
-              <div style={{ fontSize: 28, fontWeight: 700, color: 'var(--forum-accent)' }}>
-                {stats?.posts || 0}+
-              </div>
-              <div style={{ fontSize: 12, color: 'var(--forum-text-secondary)' }}>
-                {t('forumCommunity.stats.posts', 'Публикации')}
-              </div>
-            </div>
-            <div>
-              <div style={{ fontSize: 28, fontWeight: 700, color: 'var(--forum-accent)' }}>
-                {stats?.comments || 0}+
-              </div>
-              <div style={{ fontSize: 12, color: 'var(--forum-text-secondary)' }}>
-                {t('forumCommunity.stats.comments', 'Коментари')}
-              </div>
-            </div>
-            <div>
-              <div style={{ fontSize: 28, fontWeight: 700, color: 'var(--forum-accent)' }}>
-                {stats?.spaces || 0}+
-              </div>
-              <div style={{ fontSize: 12, color: 'var(--forum-text-secondary)' }}>
-                {t('forumCommunity.stats.spaces', 'Пространства')}
-              </div>
-            </div>
-          </div>
-
-          {/* Feed placeholder */}
-          <div className="fmc-placeholder">
-            <div className="fmc-placeholder-icon">💬</div>
-            <div className="fmc-placeholder-title">
-              {t('forumCommunity.feed.title', 'Публикации')}
-            </div>
-            <div className="fmc-placeholder-text">
-              {t('forumCommunity.feed.empty', 'Няма публикации все още')}
-              <br />
-              <span className="fmc-coming-soon">Feed + Create Post — Phase 2</span>
-            </div>
-          </div>
-        </main>
-
-        {/* Right: Widgets */}
-        <aside className="fmc-right">
-          <div className="fmc-section">
-            <h2 className="fmc-section-title">
-              {t('forumCommunity.sidebar.latestArticles', 'Последни статии')}
-              <span className="fmc-coming-soon">Phase 4</span>
-            </h2>
-            <p className="fmc-placeholder-text">Carousel с последни 5 статии</p>
-          </div>
-
-          <div className="fmc-section">
-            <h2 className="fmc-section-title">
-              {t('forumCommunity.sidebar.trendingTags', 'Популярни тагове')}
-              <span className="fmc-coming-soon">Phase 4</span>
-            </h2>
-            <p className="fmc-placeholder-text">Tag cloud</p>
-          </div>
-
-          <div className="fmc-section">
-            <h2 className="fmc-section-title">
-              {t('forumCommunity.sidebar.upcomingSeminars', 'Предстоящи семинари')}
-              <span className="fmc-coming-soon">Phase 4</span>
-            </h2>
-            <p className="fmc-placeholder-text">Мини-карти за семинари</p>
-          </div>
-        </aside>
-      </div>
+      {/* Modals */}
+      {showCreatePost && (
+        <ForumCreatePost
+          onClose={() => setShowCreatePost(false)}
+          onCreated={handlePostCreated}
+        />
+      )}
+      {showSuggestSpace && (
+        <ForumSuggestSpace
+          onClose={() => setShowSuggestSpace(false)}
+        />
+      )}
     </div>
   );
 };

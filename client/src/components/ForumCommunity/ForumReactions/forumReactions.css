@@ -1,0 +1,114 @@
+/* Prefix: fr- (ForumReactions) */
+
+.fr-container {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.fr-container .fr-bubble {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border: 1px solid var(--fm-border);
+  border-radius: 20px;
+  background: transparent;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.fr-container .fr-bubble:hover {
+  border-color: var(--fm-wine-border);
+  background: var(--fm-wine-glow);
+}
+
+.fr-container .fr-bubble-active {
+  border-color: var(--fm-wine);
+  background: var(--fm-wine-glow);
+}
+
+.fr-container .fr-bubble .fr-bubble-emoji { font-size: 13px; }
+.fr-container .fr-bubble .fr-bubble-count { font-size: 10px; color: var(--fm-text-secondary); font-weight: 500; }
+
+.fr-add-wrap {
+  position: relative;
+}
+
+.fr-add-wrap .fr-add-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--fm-border);
+  border-radius: 50%;
+  background: var(--fm-bg-elevated);
+  color: var(--fm-text);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+  padding: 2px 4px;
+}
+
+.fr-add-wrap .fr-add-btn:hover {
+  color: var(--fm-amber);
+  border-color: var(--fm-amber);
+  background: var(--fm-bg-card-hover);
+}
+
+.fr-quick-picker {
+  position: absolute;
+  z-index: 200;
+  bottom: 110%;
+  right: 0;
+  display: flex;
+  gap: 4px;
+  padding: 6px 8px;
+  background: var(--fm-bg-elevated);
+  border: 1px solid var(--fm-border);
+  border-radius: var(--fm-radius);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.30);
+  white-space: nowrap;
+}
+
+@media (max-width: 767px) {
+  .fr-quick-picker {
+    right: auto;
+    left: 0;
+    padding: 4px 6px;
+    gap: 2px;
+  }
+
+  .fr-quick-picker .fr-quick-emoji {
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+  }
+}
+
+.fr-quick-picker-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 199;
+}
+
+.fr-quick-picker .fr-quick-emoji {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: var(--fm-radius-sm);
+  background: transparent;
+  font-size: 24px;
+  cursor: pointer;
+  transition: transform 0.1s, background 0.1s;
+}
+
+.fr-quick-picker .fr-quick-emoji:hover {
+  transform: scale(1.2);
+  background: var(--fm-bg-card-hover);
+}

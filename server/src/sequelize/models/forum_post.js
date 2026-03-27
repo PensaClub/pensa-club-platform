@@ -43,6 +43,7 @@ module.exports = (sequelize, DataTypes) => {
       shareCount: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0, field: 'share_count' },
       bookmarkCount: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0, field: 'bookmark_count' },
       images: { type: DataTypes.ARRAY(DataTypes.STRING), allowNull: false, defaultValue: [] },
+      videos: { type: DataTypes.ARRAY(DataTypes.STRING), allowNull: false, defaultValue: [] },
       coverImage: { type: DataTypes.STRING(500), allowNull: true, field: 'cover_image' },
       lastActivityAt: { type: DataTypes.DATE, allowNull: true, field: 'last_activity_at' },
       publishedAt: { type: DataTypes.DATE, allowNull: true, field: 'published_at' },
