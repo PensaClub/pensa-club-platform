@@ -23,12 +23,17 @@ const ForumPostDetail = () => {
   const { t } = useTranslation('forum');
   const navigate = useLocalizedNavigate();
   const { isAuthentication } = useAuthContext();
-  const { getPost, currentPost, currentComments, isLoading, toggleBookmark } = useForum();
+  const { getPost, currentPost, currentComments, isLoading, toggleBookmark, getMyStatus, getForumSettings, forumSettings } = useForum();
   const [lightboxIndex, setLightboxIndex] = useState(null);
 
   useEffect(() => {
     if (slug) getPost(slug);
   }, [slug, getPost]);
+
+  useEffect(() => {
+    if (isAuthentication) getMyStatus();
+    getForumSettings();
+  }, [isAuthentication, getMyStatus, getForumSettings]);
 
   const post = currentPost;
 
@@ -217,15 +222,17 @@ const ForumPostDetail = () => {
                 )}
 
                 {/* Reactions */}
-                <div className="fpd-reactions-row">
-                  <ForumReactions
-                    targetType="post"
-                    targetId={post.id}
-                    reactions={post.reactions || []}
-                    userReaction={post.userReaction}
-                    onReactionChange={() => getPost(slug)}
-                  />
-                </div>
+                {forumSettings?.enableReactions !== false && (
+                  <div className="fpd-reactions-row">
+                    <ForumReactions
+                      targetType="post"
+                      targetId={post.id}
+                      reactions={post.reactions || []}
+                      userReaction={post.userReaction}
+                      onReactionChange={() => getPost(slug)}
+                    />
+                  </div>
+                )}
 
                 {/* Stats bar */}
                 <div className="fpd-stats-bar">
@@ -234,7 +241,7 @@ const ForumPostDetail = () => {
                     <span className="fpd-stat"><MessageSquare size={14} /> {post.commentCount}</span>
                     <span className="fpd-stat"><Share2 size={14} /> {post.shareCount}</span>
                   </div>
-                  {isAuthentication && (
+                  {isAuthentication && forumSettings?.enableBookmarks !== false && (
                     <button
                       className={`fpd-bookmark-btn ${post.isBookmarked ? 'fpd-bookmark-active' : ''}`}
                       onClick={() => toggleBookmark(post.id)}

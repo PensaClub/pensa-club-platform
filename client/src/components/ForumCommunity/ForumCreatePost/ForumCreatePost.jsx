@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useForum } from '../../contexts/ForumProvider';
 import { useFirebaseUpload } from '../../hooks/useFirebaseUpload';
 import ForumRichTextEditor from '../ForumRichTextEditor/ForumRichTextEditor';
-import { X, Send, Loader2, Tag, ImagePlus, Film } from 'lucide-react';
+import { X, Send, Loader2, Tag, ImagePlus, Film, AlertTriangle } from 'lucide-react';
 import { toast } from 'react-toastify';
 import './forumCreatePost.css';
 
@@ -18,7 +18,7 @@ const MAX_IMAGES = 10;
 
 const ForumCreatePost = ({ onClose, onCreated }) => {
   const { t } = useTranslation('forum');
-  const { createPost, spaces, suggestSpace } = useForum();
+  const { createPost, spaces, suggestSpace, forumSettings } = useForum();
   const { uploadFile, uploading } = useFirebaseUpload();
 
   const [title, setTitle] = useState('');
@@ -36,6 +36,7 @@ const ForumCreatePost = ({ onClose, onCreated }) => {
   const [errors, setErrors] = useState({});
   const [showSuggestSpace, setShowSuggestSpace] = useState(false);
   const [newSpaceName, setNewSpaceName] = useState('');
+  const [limitInfo, setLimitInfo] = useState(null);
 
   const compressImage = (file, maxWidth = 1400, quality = 0.85) => {
     return new Promise((resolve) => {
@@ -71,6 +72,23 @@ const ForumCreatePost = ({ onClose, onCreated }) => {
     e.target.value = '';
   };
 
+  const checkPostFileSize = (file) => {
+    const maxMB = forumSettings?.maxFileSize || 0;
+    if (maxMB > 0) {
+      const maxBytes = maxMB * 1024 * 1024;
+      if (file.size > maxBytes) {
+        setLimitInfo({
+          isFileLimit: true,
+          max: maxMB,
+          fileName: file.name,
+          fileSize: (file.size / (1024 * 1024)).toFixed(1),
+        });
+        return false;
+      }
+    }
+    return true;
+  };
+
   const handleImagesUpload = async (e) => {
     const files = Array.from(e.target.files || []);
     if (!files.length) return;
@@ -78,6 +96,7 @@ const ForumCreatePost = ({ onClose, onCreated }) => {
     const toUpload = files.slice(0, remaining);
 
     for (const file of toUpload) {
+      if (!checkPostFileSize(file)) { e.target.value = ''; return; }
       try {
         const compressed = await compressImage(file);
         const result = await uploadFile(compressed, 'academy/forum/posts');
@@ -92,10 +111,7 @@ const ForumCreatePost = ({ onClose, onCreated }) => {
   const handleVideoUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file || videos.length >= 2) return;
-    if (file.size > 100 * 1024 * 1024) {
-      toast.error('Видеото е твърде голямо (макс 100MB)');
-      return;
-    }
+    if (!checkPostFileSize(file)) { e.target.value = ''; return; }
     try {
       const result = await uploadFile(file, 'academy/forum/videos');
       setVideos(prev => [...prev, result.url]);
@@ -150,8 +166,24 @@ const ForumCreatePost = ({ onClose, onCreated }) => {
     return Object.keys(e).length === 0;
   };
 
+  const countWords = (text) => {
+    const plain = text.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+    if (!plain) return 0;
+    return plain.split(/\s+/).length;
+  };
+
   const handleSubmit = async () => {
     if (!validate()) return;
+
+    // Word limit check
+    const maxWords = forumSettings?.maxPostLength || 0;
+    if (maxWords > 0) {
+      const wc = countWords(content);
+      if (wc > maxWords) {
+        setLimitInfo({ max: maxWords, original: wc });
+        return;
+      }
+    }
 
     setSaving(true);
     try {
@@ -197,7 +229,9 @@ const ForumCreatePost = ({ onClose, onCreated }) => {
 
         {/* Type */}
         <div className="fcp-types">
-          {POST_TYPES.map(pt => (
+          {POST_TYPES
+            .filter(pt => pt.key !== 'poll' || forumSettings?.allowPolls !== false)
+            .map(pt => (
             <button
               key={pt.key}
               className={`fcp-type-btn ${type === pt.key ? 'fcp-type-btn-active' : ''}`}
@@ -226,26 +260,28 @@ const ForumCreatePost = ({ onClose, onCreated }) => {
           </div>
         )}
 
-        {/* Cover image */}
-        <div className="fcp-media-section">
-          <label className="fcp-media-btn">
-            <ImagePlus size={16} />
-            {coverImage ? 'Смени обложка' : 'Добави обложка'}
-            <input type="file" accept="image/*" onChange={handleCoverUpload} hidden />
-          </label>
+        {/* Cover image & media */}
+        {forumSettings?.allowFileUploads !== false && (
+          <div className="fcp-media-section">
+            <label className="fcp-media-btn">
+              <ImagePlus size={16} />
+              {coverImage ? 'Смени обложка' : 'Добави обложка'}
+              <input type="file" accept="image/*" onChange={handleCoverUpload} hidden />
+            </label>
 
-          <label className={`fcp-media-btn ${images.length >= MAX_IMAGES ? 'fcp-media-disabled' : ''}`}>
-            <ImagePlus size={16} />
-            Снимки ({images.length}/{MAX_IMAGES})
-            <input type="file" accept="image/*" multiple onChange={handleImagesUpload} hidden disabled={images.length >= MAX_IMAGES} />
-          </label>
+            <label className={`fcp-media-btn ${images.length >= MAX_IMAGES ? 'fcp-media-disabled' : ''}`}>
+              <ImagePlus size={16} />
+              Снимки ({images.length}/{MAX_IMAGES})
+              <input type="file" accept="image/*" multiple onChange={handleImagesUpload} hidden disabled={images.length >= MAX_IMAGES} />
+            </label>
 
-          <label className={`fcp-media-btn ${videos.length >= 2 ? 'fcp-media-disabled' : ''}`}>
-            <Film size={16} />
-            Видео ({videos.length}/2)
-            <input type="file" accept="video/*" onChange={handleVideoUpload} hidden disabled={videos.length >= 2} />
-          </label>
-        </div>
+            <label className={`fcp-media-btn ${videos.length >= 2 ? 'fcp-media-disabled' : ''}`}>
+              <Film size={16} />
+              Видео ({videos.length}/2)
+              <input type="file" accept="video/*" onChange={handleVideoUpload} hidden disabled={videos.length >= 2} />
+            </label>
+          </div>
+        )}
 
         {/* Cover preview */}
         {coverImage && (
@@ -358,6 +394,37 @@ const ForumCreatePost = ({ onClose, onCreated }) => {
           </button>
         </div>
       </div>
+
+      {/* Limit info modal */}
+      {limitInfo && (
+        <div className="fcp-limit-overlay" onClick={() => setLimitInfo(null)}>
+          <div className="fcp-limit-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="fcp-limit-icon">
+              <AlertTriangle size={28} />
+            </div>
+            <h4 className="fcp-limit-title">
+              {limitInfo.isFileLimit
+                ? t('forumCommunity.createPost.fileLimitTitle', 'File too large')
+                : t('forumCommunity.createPost.wordLimitTitle', 'Word limit exceeded')}
+            </h4>
+            <p className="fcp-limit-text">
+              {limitInfo.isFileLimit
+                ? t('forumCommunity.createPost.fileLimitText', 'The file "{name}" ({size} MB) exceeds the limit of {max} MB.')
+                    .replace('{name}', limitInfo.fileName)
+                    .replace('{size}', limitInfo.fileSize)
+                    .replace('{max}', limitInfo.max)
+                : t('forumCommunity.createPost.wordLimitText', 'Your post has {original} words but the maximum is {max}. Please shorten it.')
+                    .replace('{max}', limitInfo.max)
+                    .replace('{original}', limitInfo.original)}
+            </p>
+            <div className="fcp-limit-actions">
+              <button className="fcp-limit-ok" onClick={() => setLimitInfo(null)}>
+                {t('forumCommunity.createPost.limitOk', 'OK, understood')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

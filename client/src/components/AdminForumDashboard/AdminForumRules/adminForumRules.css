@@ -1,0 +1,251 @@
+/* AdminForumRules — prefix: afrl- */
+
+.afrl-container {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.afrl-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.afrl-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #f0f0f0;
+}
+
+.afrl-header-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.afrl-save-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  background: #8b2040;
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.afrl-save-btn:hover {
+  background: #a12850;
+}
+
+.afrl-save-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.afrl-reset-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  background: #2a2a2e;
+  border: 1px solid #3a3a3e;
+  border-radius: 6px;
+  color: #ccc;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.afrl-reset-btn:hover {
+  background: #333;
+}
+
+.afrl-reset-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.afrl-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: rgba(234, 179, 8, 0.08);
+  border: 1px solid rgba(234, 179, 8, 0.15);
+  border-radius: 6px;
+  font-size: 0.82rem;
+  color: #d4a853;
+  margin-bottom: 16px;
+}
+
+/* ─── Language tabs ─── */
+.afrl-lang-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.afrl-lang-tab {
+  padding: 7px 18px;
+  background: #2a2a2e;
+  border: 1px solid #3a3a3e;
+  border-radius: 6px;
+  color: #999;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.afrl-lang-tab:hover {
+  border-color: #555;
+  color: #ccc;
+}
+
+.afrl-lang-tab-active {
+  background: rgba(139, 32, 64, 0.15);
+  border-color: rgba(139, 32, 64, 0.3);
+  color: #d4a853;
+}
+
+/* ─── Editor ─── */
+.afrl-editor {
+  margin-bottom: 8px;
+}
+
+.afrl-textarea {
+  width: 100%;
+  padding: 14px 16px;
+  background: #2a2a2e;
+  border: 1px solid #3a3a3e;
+  border-radius: 6px;
+  color: #e0e0e0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.88rem;
+  line-height: 1.6;
+  outline: none;
+  resize: vertical;
+  min-height: 300px;
+  transition: border-color 0.2s;
+}
+
+.afrl-textarea:focus {
+  border-color: #d4a853;
+}
+
+.afrl-textarea::placeholder {
+  color: #555;
+}
+
+.afrl-char-count {
+  text-align: right;
+  font-size: 0.75rem;
+  color: #666;
+}
+
+/* ─── Loading ─── */
+.afrl-loading {
+  display: flex;
+  justify-content: center;
+  padding: 60px 0;
+}
+
+.afrl-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #333;
+  border-top-color: #d4a853;
+  border-radius: 50%;
+  animation: afd-spin 0.7s linear infinite;
+}
+
+/* ═══ Light theme ═══ */
+[data-theme="light"] .afrl-title {
+  color: #1a1a1e;
+}
+
+[data-theme="light"] .afrl-reset-btn {
+  background: #f0eeea;
+  border-color: #d5d3cf;
+  color: #333;
+}
+
+[data-theme="light"] .afrl-reset-btn:hover {
+  background: #e5e2dc;
+}
+
+[data-theme="light"] .afrl-info {
+  background: rgba(202, 138, 4, 0.06);
+  border-color: rgba(202, 138, 4, 0.15);
+  color: #a16207;
+}
+
+[data-theme="light"] .afrl-lang-tab {
+  background: #f0eeea;
+  border-color: #d5d3cf;
+  color: #666;
+}
+
+[data-theme="light"] .afrl-lang-tab:hover {
+  border-color: #b0ada7;
+  color: #333;
+}
+
+[data-theme="light"] .afrl-lang-tab-active {
+  background: rgba(139, 32, 64, 0.08);
+  border-color: rgba(139, 32, 64, 0.2);
+  color: #8b2040;
+}
+
+[data-theme="light"] .afrl-textarea {
+  background: #ffffff;
+  border-color: #d5d3cf;
+  color: #1a1a1e;
+}
+
+[data-theme="light"] .afrl-textarea:focus {
+  border-color: #8b2040;
+}
+
+[data-theme="light"] .afrl-textarea::placeholder {
+  color: #999;
+}
+
+[data-theme="light"] .afrl-char-count {
+  color: #999;
+}
+
+[data-theme="light"] .afrl-spinner {
+  border-color: #d5d3cf;
+  border-top-color: #8b2040;
+}
+
+@media (max-width: 768px) {
+  .afrl-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .afrl-header-actions {
+    width: 100%;
+  }
+
+  .afrl-save-btn,
+  .afrl-reset-btn {
+    flex: 1;
+    justify-content: center;
+  }
+}

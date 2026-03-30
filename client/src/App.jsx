@@ -127,6 +127,7 @@ const EditSeminar = lazyWithRetry(() => import('./components/AdminAcademySeminar
 const SeminarReviewsAdmin = lazyWithRetry(() => import('./components/AdminAcademySeminarsList/SeminarReviewsAdmin/SeminarReviewsAdmin'));
 const SeminarCheckin = lazyWithRetry(() => import('./components/AcademySeminars/SeminarCheckin/SeminarCheckin'));
 const ForumCommunity = lazyWithRetry(() => import('./components/ForumCommunity/ForumCommunity.jsx'));
+const AdminForumDashboard = lazyWithRetry(() => import('./components/AdminForumDashboard/AdminForumDashboard.jsx'));
 const ForumPostDetailPage = lazyWithRetry(() => import('./components/ForumCommunity/ForumPostDetail/ForumPostDetail.jsx'));
 const TelkRkmeRzi = lazyWithRetry(() => import('./components/TelkRkmeRzi/TelkRkmeRzi.jsx'));
 const ComingSoon = lazyWithRetry(() => import('./components/DigiBridgeAcademy/ComingSoon/ComingSoon.jsx'));
@@ -248,8 +249,9 @@ function AppRoutes() {
         <Route path="/academy/seminars/:seminarId/checkin" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><SeminarCheckin /></Suspense>} />
         <Route path="/academy/seminars/:slug" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademySeminarDetail /></Suspense>} />
         <Route path="/academy/seminars/:slug/test" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademyTestPlayer /></Suspense>} />
-        <Route path="/academy/admin/edit-seminar/:slug" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><EditSeminar /></Suspense></AdminGuard>} /> 
+        <Route path="/academy/admin/edit-seminar/:slug" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><EditSeminar /></Suspense></AdminGuard>} />
         <Route path="/academy/admin/course/:slug/content" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><CourseContentManager /></Suspense></AdminGuard>} />
+        <Route path="/academy/admin/forum" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><AdminForumDashboard /></Suspense></AdminGuard>} />
         <Route path="/ad/details/:adId" element={<AdDetails />} />
         <Route path="/ad/edit/:adId" element={<EditAd />} />
         <Route path="/ad" element={<AdPage />} />

@@ -12,6 +12,7 @@ export const ForumProvider = ({ children }) => {
   const [tags, setTags] = useState([]);
   const [stats, setStats] = useState(null);
   const [myStatus, setMyStatus] = useState(null);
+  const [forumSettings, setForumSettings] = useState({ maxPostLength: 0, maxCommentLength: 0 });
   const [currentPost, setCurrentPost] = useState(null);
   const [currentComments, setCurrentComments] = useState([]);
   const [pagination, setPagination] = useState({ total: 0, page: 1, limit: 20, pages: 0 });
@@ -32,11 +33,20 @@ export const ForumProvider = ({ children }) => {
   const acceptRules = useCallback(async () => {
     try {
       await service.acceptRules();
-      setMyStatus(prev => prev ? { ...prev, rulesAcceptedAt: new Date().toISOString() } : prev);
+      setMyStatus(prev => ({ ...(prev || {}), rulesAcceptedAt: new Date().toISOString() }));
       return true;
     } catch (err) {
       console.error('Error accepting rules:', err);
       return false;
+    }
+  }, [service]);
+
+  const getForumSettings = useCallback(async () => {
+    try {
+      const data = await service.getSettings();
+      setForumSettings(data);
+    } catch (err) {
+      console.error('Error fetching forum settings:', err);
     }
   }, [service]);
 
@@ -294,8 +304,8 @@ export const ForumProvider = ({ children }) => {
 
   const contextValue = useMemo(() => ({
     isLoading, posts, spaces, tags, stats, myStatus, currentPost, currentComments, pagination,
-    isVip, isBanned, hasAcceptedRules,
-    getMyStatus, acceptRules,
+    isVip, isBanned, hasAcceptedRules, forumSettings,
+    getMyStatus, acceptRules, getForumSettings,
     getFeed,
     getPost, createPost, updatePost, deletePost,
     addComment, updateComment, deleteComment,
@@ -305,8 +315,8 @@ export const ForumProvider = ({ children }) => {
     getTags, getStats, searchPosts,
   }), [
     isLoading, posts, spaces, tags, stats, myStatus, currentPost, currentComments, pagination,
-    isVip, isBanned, hasAcceptedRules,
-    getMyStatus, acceptRules,
+    isVip, isBanned, hasAcceptedRules, forumSettings,
+    getMyStatus, acceptRules, getForumSettings,
     getFeed,
     getPost, createPost, updatePost, deletePost,
     addComment, updateComment, deleteComment,

@@ -77,7 +77,13 @@
       "delete": "Löschen",
       "deleted": "Gelöschter Kommentar",
       "edited": "bearbeitet",
-      "writeComment": "Kommentar schreiben..."
+      "writeComment": "Kommentar schreiben...",
+      "wordLimitTrimmed": "Kommentar wurde auf {max} Wörter gekürzt",
+      "wordLimitTitle": "Wortlimit erreicht",
+      "wordLimitText": "Das Maximum beträgt {max} Wörter. Ihr Kommentar ({original} Wörter) wurde automatisch gekürzt.",
+      "wordLimitOk": "OK, verstanden",
+      "fileLimitTitle": "Datei zu groß",
+      "fileLimitText": "Die Datei \"{name}\" ({size} MB) überschreitet das Limit von {max} MB."
     },
     "createPost": {
       "title": "Neuer Beitrag",
@@ -90,11 +96,28 @@
       "discussion": "Diskussion",
       "article": "Artikel",
       "question": "Frage",
-      "poll": "Umfrage"
+      "poll": "Umfrage",
+      "fileLimitTitle": "Datei zu groß",
+      "fileLimitText": "Die Datei \"{name}\" ({size} MB) überschreitet das Limit von {max} MB.",
+      "wordLimitTitle": "Wortlimit überschritten",
+      "wordLimitText": "Ihr Beitrag hat {original} Wörter, aber das Maximum ist {max}. Bitte kürzen Sie ihn.",
+      "limitOk": "OK, verstanden"
     },
     "vip": {
       "badge": "VIP",
       "autoPublish": "Ihre Beiträge werden automatisch veröffentlicht"
     }
+  },
+  "rulesModal": {
+    "title": "Gemeinschaftsregeln",
+    "subtitle": "Bitte lesen und akzeptieren Sie die Regeln, bevor Sie teilnehmen",
+    "scrollHint": "Scrollen Sie, um alle Regeln zu lesen",
+    "accept": "Ich akzeptiere die Regeln",
+    "accepting": "Wird akzeptiert...",
+    "decline": "Später",
+    "accepted": "Regeln akzeptiert",
+    "scrollFirst": "Lesen Sie zuerst alle Regeln",
+    "loadError": "Fehler beim Laden der Regeln",
+    "acceptError": "Fehler beim Akzeptieren der Regeln"
   }
 }

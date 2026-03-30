@@ -19,7 +19,7 @@ const parseUserId = (token) => {
 const ForumCommentItem = ({ comment, depth = 0, onReply, onQuote, onRefresh, onUpdate, onDelete }) => {
   const { t } = useTranslation('forum');
   const { token, isAdmin: isAdminCtx } = useAuthContext();
-  const { updateComment, deleteComment } = useForum();
+  const { updateComment, deleteComment, forumSettings } = useForum();
 
   const [editing, setEditing] = useState(false);
   const [editContent, setEditContent] = useState(comment.content);
@@ -147,7 +147,7 @@ const ForumCommentItem = ({ comment, depth = 0, onReply, onQuote, onRefresh, onU
             <button className="fci-action-btn" onClick={() => onQuote?.(comment)}>
               <Quote size={12} /> {t('forumCommunity.comment.quote')}
             </button>
-            {!isOwn && currentUserId && (
+            {!isOwn && currentUserId && forumSettings?.enableReports !== false && (
               <button className="fci-action-btn fci-action-report" onClick={() => setShowReport(true)}>
                 <Flag size={12} /> Докладвай
               </button>
@@ -164,13 +164,15 @@ const ForumCommentItem = ({ comment, depth = 0, onReply, onQuote, onRefresh, onU
             )}
           </div>
 
-          <ForumReactions
-            targetType="comment"
-            targetId={comment.id}
-            reactions={comment.reactions || []}
-            userReaction={comment.userReaction}
-            onReactionChange={onRefresh}
-          />
+          {forumSettings?.enableReactions !== false && (
+            <ForumReactions
+              targetType="comment"
+              targetId={comment.id}
+              reactions={comment.reactions || []}
+              userReaction={comment.userReaction}
+              onReactionChange={onRefresh}
+            />
+          )}
         </div>
       )}
 

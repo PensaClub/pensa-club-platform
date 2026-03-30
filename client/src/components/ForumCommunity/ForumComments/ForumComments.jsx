@@ -4,7 +4,9 @@ import { useForum } from '../../contexts/ForumProvider';
 import { useAuthContext } from '../../contexts/UserContext';
 import ForumCommentItem from '../ForumCommentItem/ForumCommentItem';
 import ForumEmojiPicker from '../ForumEmojiPicker/ForumEmojiPicker';
-import { Send, SmilePlus, X, ChevronDown, Image as ImageIcon } from 'lucide-react';
+import ForumRulesModal from '../ForumRulesModal/ForumRulesModal';
+import { Send, SmilePlus, X, ChevronDown, Image as ImageIcon, AlertTriangle } from 'lucide-react';
+import { toast } from 'react-toastify';
 import { useFirebaseUpload } from '../../hooks/useFirebaseUpload';
 import './forumComments.css';
 
@@ -12,7 +14,7 @@ const INITIAL_SHOW = 5;
 
 const ForumComments = ({ postId, comments, onRefresh }) => {
   const { t } = useTranslation('forum');
-  const { addComment } = useForum();
+  const { addComment, hasAcceptedRules, forumSettings } = useForum();
   const { isAuthentication } = useAuthContext();
   const { uploadFile, uploading } = useFirebaseUpload();
 
@@ -23,6 +25,8 @@ const ForumComments = ({ postId, comments, onRefresh }) => {
   const [sending, setSending] = useState(false);
   const [showAll, setShowAll] = useState(false);
   const [pendingImages, setPendingImages] = useState([]);
+  const [showRulesModal, setShowRulesModal] = useState(false);
+  const [wordLimitInfo, setWordLimitInfo] = useState(null);
   const inputRef = useRef(null);
   const scrollRef = useRef(null);
   const emojiRef = useRef(null);
@@ -107,6 +111,25 @@ const ForumComments = ({ postId, comments, onRefresh }) => {
   const handleImageUpload = async (e) => {
     const files = Array.from(e.target.files || []);
     if (!files.length) return;
+
+    // File size limit check
+    const maxMB = forumSettings?.maxCommentFileSize || 0;
+    if (maxMB > 0) {
+      const maxBytes = maxMB * 1024 * 1024;
+      const oversized = files.find(f => f.size > maxBytes);
+      if (oversized) {
+        const fileMB = (oversized.size / (1024 * 1024)).toFixed(1);
+        setWordLimitInfo({
+          isFileLimit: true,
+          max: maxMB,
+          fileName: oversized.name,
+          fileSize: fileMB,
+        });
+        e.target.value = '';
+        return;
+      }
+    }
+
     const remaining = 5 - pendingImages.length;
     const toUpload = files.slice(0, remaining);
 
@@ -128,10 +151,28 @@ const ForumComments = ({ postId, comments, onRefresh }) => {
 
   const handleSubmit = async () => {
     if ((!content.trim() && pendingImages.length === 0) || sending) return;
+    if (!hasAcceptedRules) {
+      setShowRulesModal(true);
+      return;
+    }
+
+    // Word limit check & trim
+    let finalContent = content.trim();
+    const maxWords = forumSettings?.maxCommentLength || 0;
+    if (maxWords > 0) {
+      const words = finalContent.split(/\s+/);
+      if (words.length > maxWords) {
+        finalContent = words.slice(0, maxWords).join(' ');
+        setContent(finalContent);
+        setWordLimitInfo({ max: maxWords, original: words.length });
+        return;
+      }
+    }
+
     setSending(true);
     try {
       await addComment(postId, {
-        content: content.trim(),
+        content: finalContent,
         parentId: replyTo?.id || null,
         quotedCommentId: quotedComment?.id || null,
         images: pendingImages,
@@ -243,10 +284,12 @@ const ForumComments = ({ postId, comments, onRefresh }) => {
                 )}
               </div>
 
-              <label className={`fcm-tool-btn ${pendingImages.length >= 5 ? 'fcm-tool-disabled' : ''}`} title="Добави снимки (до 5)">
-                <ImageIcon size={16} />
-                <input type="file" accept="image/*" multiple onChange={handleImageUpload} hidden disabled={pendingImages.length >= 5} />
-              </label>
+              {forumSettings?.allowFileUploads !== false && (
+                <label className={`fcm-tool-btn ${pendingImages.length >= 5 ? 'fcm-tool-disabled' : ''}`} title="Добави снимки (до 5)">
+                  <ImageIcon size={16} />
+                  <input type="file" accept="image/*" multiple onChange={handleImageUpload} hidden disabled={pendingImages.length >= 5} />
+                </label>
+              )}
             </div>
 
             <textarea
@@ -266,6 +309,41 @@ const ForumComments = ({ postId, comments, onRefresh }) => {
             >
               <Send size={16} />
             </button>
+          </div>
+        </div>
+      )}
+      {showRulesModal && (
+        <ForumRulesModal
+          onClose={() => setShowRulesModal(false)}
+          onAccepted={() => setShowRulesModal(false)}
+        />
+      )}
+      {wordLimitInfo && (
+        <div className="fcm-limit-overlay" onClick={() => setWordLimitInfo(null)}>
+          <div className="fcm-limit-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="fcm-limit-icon">
+              <AlertTriangle size={28} />
+            </div>
+            <h4 className="fcm-limit-title">
+              {wordLimitInfo.isFileLimit
+                ? t('forumCommunity.comment.fileLimitTitle', 'File too large')
+                : t('forumCommunity.comment.wordLimitTitle', 'Word limit reached')}
+            </h4>
+            <p className="fcm-limit-text">
+              {wordLimitInfo.isFileLimit
+                ? t('forumCommunity.comment.fileLimitText', 'The file "{name}" ({size} MB) exceeds the limit of {max} MB.')
+                    .replace('{name}', wordLimitInfo.fileName)
+                    .replace('{size}', wordLimitInfo.fileSize)
+                    .replace('{max}', wordLimitInfo.max)
+                : t('forumCommunity.comment.wordLimitText', 'The maximum is {max} words. Your comment ({original} words) has been trimmed.')
+                    .replace('{max}', wordLimitInfo.max)
+                    .replace('{original}', wordLimitInfo.original)}
+            </p>
+            <div className="fcm-limit-actions">
+              <button className="fcm-limit-ok" onClick={() => setWordLimitInfo(null)}>
+                {t('forumCommunity.comment.wordLimitOk', 'OK, understood')}
+              </button>
+            </div>
           </div>
         </div>
       )}

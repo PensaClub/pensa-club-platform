@@ -72,8 +72,8 @@ router.use('/fact-check', factCheckController);
 router.use('/error-logging', errorLoggingController);
 router.use('/reaction', reActionController);
 router.use('/youtube', youtubeController);
-router.use('/forum', forumController);
 router.use('/forum/admin', forumAdminController);
+router.use('/forum', forumController);
 
 
 router.use((err, req, res, next) => {

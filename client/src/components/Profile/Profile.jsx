@@ -1077,6 +1077,12 @@ export const Profile = () => {
                               {t("admin.academy.seminarReviews", "Отзиви")}
                             </NavLink>
                           </li>
+                          <li>
+                            <NavLink to="/academy/admin/forum" className={({ isActive }) => isActive ? 'active' : ''}>
+                              <CircleIcon className="icon" />
+                              {t("admin.academy.forum", "Форум")}
+                            </NavLink>
+                          </li>
                         </ul>
                       </li>
                       {/* Useful Links */}

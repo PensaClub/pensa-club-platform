@@ -10,6 +10,7 @@ import ForumStats from './ForumStats/ForumStats';
 import ForumSpaces from './ForumSpaces/ForumSpaces';
 import ForumFeed from './ForumFeed/ForumFeed';
 import ForumCreatePost from './ForumCreatePost/ForumCreatePost';
+import ForumRulesModal from './ForumRulesModal/ForumRulesModal';
 import ForumSuggestSpace from './ForumSuggestSpace/ForumSuggestSpace';
 import ForumSearch from './ForumSearch/ForumSearch';
 import ForumTrendingTags from './ForumTrendingTags/ForumTrendingTags';
@@ -37,17 +38,19 @@ const WaveDivider = ({ flip, fromColor, toColor }) => (
 const ForumCommunity = () => {
   const { t } = useTranslation('forum');
   const { isAuthentication } = useAuthContext();
-  const { getStats, getSpaces, stats, getMyStatus } = useForum();
+  const { getStats, getSpaces, stats, getMyStatus, hasAcceptedRules, getForumSettings, forumSettings } = useForum();
 
   const [activeSpaceId, setActiveSpaceId] = useState(null);
   const [showCreatePost, setShowCreatePost] = useState(false);
+  const [showRulesModal, setShowRulesModal] = useState(false);
   const [showSuggestSpace, setShowSuggestSpace] = useState(false);
   const [feedKey, setFeedKey] = useState(0);
 
   useEffect(() => {
     getStats();
     getSpaces();
-  }, [getStats, getSpaces]);
+    getForumSettings();
+  }, [getStats, getSpaces, getForumSettings]);
 
   useEffect(() => {
     if (isAuthentication) {
@@ -81,6 +84,7 @@ const ForumCommunity = () => {
       <div className="fmc-content">
 
         {/* Section 1: Spaces bar */}
+        {forumSettings?.enableSpaces !== false && (
         <section className="fmc-spaces-section fmc-parallax-section">
           <ForumSpaces
             activeSpaceId={activeSpaceId}
@@ -88,6 +92,7 @@ const ForumCommunity = () => {
             onSuggestSpace={() => setShowSuggestSpace(true)}
           />
         </section>
+        )}
 
         {/* Wave: warm → dark */}
         <WaveDivider flip />
@@ -144,13 +149,28 @@ const ForumCommunity = () => {
 
       {/* FAB — New post button */}
       {isAuthentication && (
-        <button className="fmc-fab" onClick={() => setShowCreatePost(true)}>
+        <button className="fmc-fab" onClick={() => {
+          if (!hasAcceptedRules) {
+            setShowRulesModal(true);
+          } else {
+            setShowCreatePost(true);
+          }
+        }}>
           <Plus size={18} />
           {t('forumCommunity.feed.newPost', 'Нова публикация')}
         </button>
       )}
 
       {/* Modals */}
+      {showRulesModal && (
+        <ForumRulesModal
+          onClose={() => setShowRulesModal(false)}
+          onAccepted={() => {
+            setShowRulesModal(false);
+            setShowCreatePost(true);
+          }}
+        />
+      )}
       {showCreatePost && (
         <ForumCreatePost
           onClose={() => setShowCreatePost(false)}
