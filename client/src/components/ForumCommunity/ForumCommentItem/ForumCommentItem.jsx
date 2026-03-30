@@ -6,6 +6,7 @@ import ForumReactions from '../ForumReactions/ForumReactions';
 import ForumImageLightbox from '../ForumImageLightbox/ForumImageLightbox';
 import ForumReportModal from '../ForumReportModal/ForumReportModal';
 import ForumUserBadges from '../ForumUserBadges/ForumUserBadges';
+import { useSocket } from '../../contexts/SocketProvider';
 import { Reply, Quote, Pencil, Trash2, Clock, ChevronDown, ChevronUp, Flag } from 'lucide-react';
 import './forumCommentItem.css';
 
@@ -21,6 +22,7 @@ const ForumCommentItem = ({ comment, depth = 0, onReply, onQuote, onRefresh, onU
   const { t } = useTranslation('forum');
   const { token, isAdmin: isAdminCtx } = useAuthContext();
   const { updateComment, deleteComment, forumSettings } = useForum();
+  const { onlineUserIds } = useSocket() || {};
 
   const [editing, setEditing] = useState(false);
   const [editContent, setEditContent] = useState(comment.content);
@@ -78,11 +80,14 @@ const ForumCommentItem = ({ comment, depth = 0, onReply, onQuote, onRefresh, onU
       )}
 
       <div className="fci-header">
-        <div className="fci-avatar">
-          {avatar
-            ? <img src={avatar} alt="" />
-            : <span>{authorName.charAt(0)}</span>
-          }
+        <div className="fci-avatar-wrap">
+          <div className="fci-avatar">
+            {avatar
+              ? <img src={avatar} alt="" />
+              : <span>{authorName.charAt(0)}</span>
+            }
+          </div>
+          {onlineUserIds?.has(String(comment.authorId)) && <span className="fci-online-dot" />}
         </div>
         <div className="fci-author-info">
           <span className="fci-author-name">{authorName}</span>

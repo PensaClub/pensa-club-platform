@@ -19,6 +19,7 @@ import ForumUpcomingSeminars from './ForumUpcomingSeminars/ForumUpcomingSeminars
 import ForumCoursesPromo from './ForumCoursesPromo/ForumCoursesPromo';
 import ForumPostOfWeek from './ForumPostOfWeek/ForumPostOfWeek';
 import ForumLeaderboard from './ForumLeaderboard/ForumLeaderboard';
+import { useSocket } from '../contexts/SocketProvider';
 import { Plus } from 'lucide-react';
 import './forumCommunity.css';
 
@@ -41,6 +42,7 @@ const ForumCommunity = () => {
   const { t } = useTranslation('forum');
   const { isAuthentication } = useAuthContext();
   const { getStats, getSpaces, stats, getMyStatus, hasAcceptedRules, getForumSettings, forumSettings } = useForum();
+  const { socket, onlineCount } = useSocket() || {};
 
   const [activeSpaceId, setActiveSpaceId] = useState(null);
   const [showCreatePost, setShowCreatePost] = useState(false);
@@ -59,6 +61,13 @@ const ForumCommunity = () => {
       getMyStatus();
     }
   }, [isAuthentication, getMyStatus]);
+
+  // Join/leave feed room for real-time post updates
+  useEffect(() => {
+    if (!socket) return;
+    socket.emit('forum:joinFeed');
+    return () => socket.emit('forum:leaveFeed');
+  }, [socket]);
 
   const handlePostCreated = useCallback(() => {
     setFeedKey(prev => prev + 1);
@@ -101,7 +110,7 @@ const ForumCommunity = () => {
 
         {/* Section 2: Stats */}
         <section className="fmc-stats-section fmc-parallax-section">
-          <ForumStats stats={stats} />
+          <ForumStats stats={stats} onlineCount={onlineCount} />
         </section>
 
         {/* Wave: dark → warm */}

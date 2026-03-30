@@ -32,7 +32,8 @@
       "activeUsers": "Active users",
       "posts": "Posts",
       "comments": "Comments",
-      "spaces": "Spaces"
+      "spaces": "Spaces",
+      "online": "Online"
     },
     "sidebar": {
       "latestArticles": "Latest articles",

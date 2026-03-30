@@ -458,7 +458,11 @@
         "reports": "Reports",
         "users": "Users",
         "rules": "Rules",
-        "settings": "Settings"
+        "settings": "Settings",
+        "analytics": "Analytics"
+      },
+      "analytics": {
+        "title": "Forum Analytics"
       }
     },
     "posts": {

@@ -103,5 +103,6 @@ export const forumServiceFactory = () => {
     adminGetSettings: () => requester.get(`${apiUrl}/forum/admin/settings`),
     adminUpdateSettings: (data) => requester.put(`${apiUrl}/forum/admin/settings`, data),
     adminExport: (type) => requester.get(`${apiUrl}/forum/admin/export/${type}`),
+    adminGetAnalytics: (params = {}) => requester.get(`${apiUrl}/forum/admin/analytics?${toQueryString(params)}`),
   };
 };

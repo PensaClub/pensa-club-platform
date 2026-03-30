@@ -33,6 +33,7 @@ const AdminForumReports = lazy(() => import('./AdminForumReports/AdminForumRepor
 const AdminForumUsers = lazy(() => import('./AdminForumUsers/AdminForumUsers'));
 const AdminForumRules = lazy(() => import('./AdminForumRules/AdminForumRules'));
 const AdminForumSettings = lazy(() => import('./AdminForumSettings/AdminForumSettings'));
+const AdminForumAnalytics = lazy(() => import('./AdminForumAnalytics/AdminForumAnalytics'));
 
 const TABS = [
   { key: 'overview', icon: LayoutDashboard },
@@ -43,6 +44,7 @@ const TABS = [
   { key: 'users', icon: Users },
   { key: 'rules', icon: BookOpen },
   { key: 'settings', icon: Settings },
+  { key: 'analytics', icon: TrendingUp },
 ];
 
 const AdminForumDashboard = () => {
@@ -134,6 +136,8 @@ const AdminForumDashboard = () => {
         return <Suspense fallback={fallback}><AdminForumRules /></Suspense>;
       case 'settings':
         return <Suspense fallback={fallback}><AdminForumSettings /></Suspense>;
+      case 'analytics':
+        return <Suspense fallback={fallback}><AdminForumAnalytics /></Suspense>;
       default:
         return renderOverview();
     }

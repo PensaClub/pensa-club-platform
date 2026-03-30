@@ -108,6 +108,35 @@ const forumEmailTemplates = {
       html: wrapTemplate('Публикация неодобрена', body),
     };
   },
+  // 6. Weekly digest — top posts of the week
+  weeklyDigest: ({ userName, topPosts, weekLabel }) => {
+    const postsHtml = topPosts.map((p, i) => `
+      <tr style="border-bottom:1px solid #e5e7eb;">
+        <td style="padding:12px 0;vertical-align:top;">
+          <span style="display:inline-block;width:24px;height:24px;border-radius:50%;background:${i < 3 ? '#d4a853' : '#9ca3af'};color:#fff;text-align:center;line-height:24px;font-size:12px;font-weight:700;">${i + 1}</span>
+        </td>
+        <td style="padding:12px 8px;">
+          <a href="https://pensa.club/academy/community/${p.slug}" style="color:#1f2937;font-size:14px;font-weight:600;text-decoration:none;">${p.title}</a>
+          <div style="color:#6b7280;font-size:12px;margin-top:4px;">
+            ${p.authorName || 'Потребител'} · ${p.commentCount || 0} коментара · ${p.reactionCount || 0} реакции
+          </div>
+        </td>
+      </tr>
+    `).join('');
+
+    const body =
+      greeting(userName) +
+      paragraph(`Ето най-интересните публикации в DigiBridge Общността за ${weekLabel || 'тази седмица'}:`) +
+      `<table cellpadding="0" cellspacing="0" style="width:100%;margin:16px 0;">${postsHtml}</table>` +
+      paragraph('Присъединете се към дискусията!') +
+      ctaButton('https://pensa.club/academy/community', 'Към общността') +
+      signature();
+
+    return {
+      subject: `Седмичен обзор — DigiBridge Общност`,
+      html: wrapTemplate('Седмичен обзор', body),
+    };
+  },
 };
 
 module.exports = forumEmailTemplates;

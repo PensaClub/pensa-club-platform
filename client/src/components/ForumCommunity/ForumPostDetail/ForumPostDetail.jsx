@@ -16,6 +16,7 @@ import ForumArticlesCarousel from '../ForumArticlesCarousel/ForumArticlesCarouse
 import ForumUpcomingSeminars from '../ForumUpcomingSeminars/ForumUpcomingSeminars';
 import ForumCoursesPromo from '../ForumCoursesPromo/ForumCoursesPromo';
 import ForumUserBadges from '../ForumUserBadges/ForumUserBadges';
+import { useSocket } from '../../contexts/SocketProvider';
 import { ArrowLeft, Eye, MessageSquare, Share2, Bookmark, BookmarkCheck, Pin, Lock, Clock, Loader2, ChevronRight, MessagesSquare } from 'lucide-react';
 import './forumPostDetail.css';
 
@@ -25,6 +26,7 @@ const ForumPostDetail = () => {
   const navigate = useLocalizedNavigate();
   const { isAuthentication } = useAuthContext();
   const { getPost, currentPost, currentComments, isLoading, toggleBookmark, getMyStatus, getForumSettings, forumSettings } = useForum();
+  const { socket, onlineUserIds } = useSocket() || {};
   const [lightboxIndex, setLightboxIndex] = useState(null);
 
   useEffect(() => {
@@ -35,6 +37,13 @@ const ForumPostDetail = () => {
     if (isAuthentication) getMyStatus();
     getForumSettings();
   }, [isAuthentication, getMyStatus, getForumSettings]);
+
+  // Join/leave post room for real-time comments
+  useEffect(() => {
+    if (!socket || !currentPost?.id) return;
+    socket.emit('forum:joinPost', currentPost.id);
+    return () => socket.emit('forum:leavePost', currentPost.id);
+  }, [socket, currentPost?.id]);
 
   const post = currentPost;
 
@@ -148,11 +157,14 @@ const ForumPostDetail = () => {
 
                 {/* Author */}
                 <div className="fpd-author-row">
-                  <div className="fpd-avatar">
-                    {avatar
-                      ? <img src={avatar} alt={authorName} />
-                      : <span>{authorName.charAt(0)}</span>
-                    }
+                  <div className="fpd-avatar-wrap">
+                    <div className="fpd-avatar">
+                      {avatar
+                        ? <img src={avatar} alt={authorName} />
+                        : <span>{authorName.charAt(0)}</span>
+                      }
+                    </div>
+                    {onlineUserIds?.has(String(post.authorId)) && <span className="fpd-online-dot" />}
                   </div>
                   <div className="fpd-author-info">
                     <span className="fpd-author-name">{authorName}</span>

@@ -1,4 +1,6 @@
 const express = require('express');
+const http = require('http');
+const { Server } = require('socket.io');
 
 const { port, frontend_server } = require('./envConfig');
 
@@ -7,6 +9,7 @@ const scheduleArticleCleanup = require('../cron/articleCleanup');
 const { startMentorActivityCron } = require('../cron/mentorActivityCron');
 const { startVisitReminderCron } = require('../cron/visitReminderCron');
 const { startSeminarReminderCron } = require('../cron/seminarReminderCron');
+const { startForumDigestCron } = require('../cron/forumDigestCron');
 
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
@@ -33,12 +36,29 @@ module.exports = function expressConfig(app) {
     app.use(cookieParser());
     app.use(ipBlocker);
     app.use(ipLogger);
-    app.listen(port, async () => {
+
+    // Create HTTP server and attach Socket.IO
+    const server = http.createServer(app);
+    const io = new Server(server, {
+        cors: corsOptions,
+        transports: ['websocket', 'polling'],
+        pingTimeout: 60000,
+        pingInterval: 25000,
+    });
+
+    // Make io accessible from controllers via req.app.get('io')
+    app.set('io', io);
+
+    // Socket.IO handlers
+    require('../sockets/socketHandler')(io);
+
+    server.listen(port, async () => {
         await testDatabaseConnection();
-        console.log(`Server is listening on port: ${port}`);
+        console.log(`Server is listening on port: ${port} (with Socket.IO)`);
         scheduleArticleCleanup();
-         startMentorActivityCron();
+        startMentorActivityCron();
         startVisitReminderCron();
         startSeminarReminderCron();
+        startForumDigestCron();
     });
 };

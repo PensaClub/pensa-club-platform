@@ -477,7 +477,11 @@
         "reports": "Сигнали",
         "users": "Потребители",
         "rules": "Правила",
-        "settings": "Настройки"
+        "settings": "Настройки",
+        "analytics": "Анализ"
+      },
+      "analytics": {
+        "title": "Анализ на форума"
       }
     },
     "posts": {

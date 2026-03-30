@@ -32,7 +32,8 @@
       "activeUsers": "Активни потребители",
       "posts": "Публикации",
       "comments": "Коментари",
-      "spaces": "Пространства"
+      "spaces": "Пространства",
+      "online": "Онлайн"
     },
     "sidebar": {
       "latestArticles": "Последни статии",

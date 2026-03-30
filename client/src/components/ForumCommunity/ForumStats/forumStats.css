@@ -60,6 +60,10 @@
 .fst-color-emerald .fst-value { color: var(--fm-emerald); }
 .fst-color-emerald .fst-label { color: var(--fm-emerald); }
 
+.fst-color-online .fst-icon { color: #22c55e; background: rgba(34, 197, 94, 0.14); }
+.fst-color-online .fst-value { color: #22c55e; }
+.fst-color-online .fst-label { color: #22c55e; }
+
 @media (max-width: 767px) {
   .fst-container { grid-template-columns: repeat(2, 1fr); }
   .fst-item .fst-value { font-size: 20px; }

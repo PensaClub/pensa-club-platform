@@ -1,5 +1,6 @@
-import { createContext, useContext, useState, useCallback, useMemo } from 'react';
+import { createContext, useContext, useState, useCallback, useMemo, useEffect } from 'react';
 import { forumServiceFactory } from '../Services/forumServiceFactory';
+import { useSocket } from './SocketProvider';
 import { toast } from 'react-toastify';
 
 const BADGE_EMOJIS = {
@@ -24,6 +25,7 @@ export const ForumContext = createContext();
 
 export const ForumProvider = ({ children }) => {
   const service = useMemo(() => forumServiceFactory(), []);
+  const { socket } = useSocket() || {};
 
   const [isLoading, setIsLoading] = useState(false);
   const [posts, setPosts] = useState([]);
@@ -140,7 +142,10 @@ export const ForumProvider = ({ children }) => {
     try {
       const result = await service.addComment(postId, data);
       if (result.comment) {
-        setCurrentComments(prev => [...prev, result.comment]);
+        setCurrentComments(prev => {
+          if (prev.find(c => c.id === result.comment.id)) return prev;
+          return [...prev, result.comment];
+        });
         setCurrentPost(prev => prev ? { ...prev, commentCount: (prev.commentCount || 0) + 1 } : prev);
       }
       showGamificationToasts(result);
@@ -316,6 +321,37 @@ export const ForumProvider = ({ children }) => {
       return { results: [] };
     }
   }, [service]);
+
+  // ============ Real-time Socket.IO ============
+
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleNewPost = ({ post }) => {
+      if (post) {
+        // Refresh feed to get full post data
+        getFeed().catch(() => {});
+      }
+    };
+
+    const handleNewComment = ({ comment, postId }) => {
+      if (comment && currentPost?.id === postId) {
+        setCurrentComments(prev => {
+          if (prev.find(c => c.id === comment.id)) return prev;
+          return [...prev, comment];
+        });
+        setCurrentPost(prev => prev ? { ...prev, commentCount: (prev.commentCount || 0) + 1 } : prev);
+      }
+    };
+
+    socket.on('forum:newPost', handleNewPost);
+    socket.on('forum:newComment', handleNewComment);
+
+    return () => {
+      socket.off('forum:newPost', handleNewPost);
+      socket.off('forum:newComment', handleNewComment);
+    };
+  }, [socket, currentPost?.id, getFeed]);
 
   // ============ Derived state ============
 

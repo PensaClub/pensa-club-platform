@@ -1363,4 +1363,222 @@ forumAdminController.get('/export/:type', ...adminAuth, async (req, res, next) =
   }
 });
 
+// ─── Analytics endpoint ──────────────────────────────────────────────────────
+forumAdminController.get('/analytics', ...adminAuth, async (req, res, next) => {
+  try {
+    const periodDays = parseInt(req.query.period) || 30;
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - periodDays);
+
+    const prevStartDate = new Date(startDate);
+    prevStartDate.setDate(prevStartDate.getDate() - periodDays);
+
+    // Posts per day
+    const postsPerDay = await forum_post.findAll({
+      where: { createdAt: { [Op.gte]: startDate }, status: 'published' },
+      attributes: [
+        [sequelize.fn('DATE', sequelize.col('created_at')), 'date'],
+        [sequelize.fn('COUNT', '*'), 'count'],
+      ],
+      group: [sequelize.fn('DATE', sequelize.col('created_at'))],
+      order: [[sequelize.fn('DATE', sequelize.col('created_at')), 'ASC']],
+      raw: true,
+    });
+
+    // Comments per day
+    const commentsPerDay = await forum_comment.findAll({
+      where: { createdAt: { [Op.gte]: startDate }, status: 'visible' },
+      attributes: [
+        [sequelize.fn('DATE', sequelize.col('created_at')), 'date'],
+        [sequelize.fn('COUNT', '*'), 'count'],
+      ],
+      group: [sequelize.fn('DATE', sequelize.col('created_at'))],
+      order: [[sequelize.fn('DATE', sequelize.col('created_at')), 'ASC']],
+      raw: true,
+    });
+
+    // Reactions per day
+    const reactionsPerDay = await forum_reaction.findAll({
+      where: sequelize.where(sequelize.col('created_at'), { [Op.gte]: startDate }),
+      attributes: [
+        [sequelize.fn('DATE', sequelize.col('created_at')), 'date'],
+        [sequelize.fn('COUNT', '*'), 'count'],
+      ],
+      group: [sequelize.fn('DATE', sequelize.col('created_at'))],
+      order: [[sequelize.fn('DATE', sequelize.col('created_at')), 'ASC']],
+      raw: true,
+    });
+
+    // Top 5 authors
+    const topAuthors = await forum_post.findAll({
+      where: { createdAt: { [Op.gte]: startDate }, status: 'published' },
+      attributes: [
+        'authorId',
+        [sequelize.fn('COUNT', sequelize.col('forum_post.id')), 'postCount'],
+        [sequelize.fn('SUM', sequelize.col('forum_post.reaction_count')), 'totalReactions'],
+        [sequelize.fn('SUM', sequelize.col('forum_post.view_count')), 'totalViews'],
+      ],
+      include: [{
+        model: user_account, as: 'author', attributes: ['id'],
+        include: [{ model: user_details, as: 'details', attributes: ['firstName', 'lastName', 'imageURL'] }],
+      }],
+      group: ['authorId', 'author.id', 'author.details.id'],
+      order: [[sequelize.fn('COUNT', sequelize.col('forum_post.id')), 'DESC']],
+      limit: 5,
+    });
+
+    // Top 5 posts
+    const topPosts = await forum_post.findAll({
+      where: { createdAt: { [Op.gte]: startDate }, status: 'published' },
+      attributes: ['id', 'title', 'slug', 'viewCount', 'commentCount', 'reactionCount', 'type'],
+      order: [['viewCount', 'DESC']],
+      limit: 5,
+    });
+
+    // Post types distribution
+    const postTypes = await forum_post.findAll({
+      where: { createdAt: { [Op.gte]: startDate }, status: 'published' },
+      attributes: [
+        'type',
+        [sequelize.fn('COUNT', '*'), 'count'],
+      ],
+      group: ['type'],
+      raw: true,
+    });
+
+    // Growth comparison
+    const [currentPosts, prevPosts, currentComments, prevComments, currentUsers, prevUsers] = await Promise.all([
+      forum_post.count({ where: { createdAt: { [Op.gte]: startDate }, status: 'published' } }),
+      forum_post.count({ where: { createdAt: { [Op.between]: [prevStartDate, startDate] }, status: 'published' } }),
+      forum_comment.count({ where: { createdAt: { [Op.gte]: startDate }, status: 'visible' } }),
+      forum_comment.count({ where: { createdAt: { [Op.between]: [prevStartDate, startDate] }, status: 'visible' } }),
+      forum_user_status.count({ where: { createdAt: { [Op.gte]: startDate } } }),
+      forum_user_status.count({ where: { createdAt: { [Op.between]: [prevStartDate, startDate] } } }),
+    ]);
+
+    res.json({
+      postsPerDay: postsPerDay.map(r => ({ date: r.date, count: parseInt(r.count) })),
+      commentsPerDay: commentsPerDay.map(r => ({ date: r.date, count: parseInt(r.count) })),
+      reactionsPerDay: reactionsPerDay.map(r => ({ date: r.date, count: parseInt(r.count) })),
+      topAuthors: topAuthors.map(a => ({
+        userId: a.authorId,
+        name: a.author?.details ? `${a.author.details.firstName || ''} ${a.author.details.lastName || ''}`.trim() : 'Потребител',
+        avatar: a.author?.details?.imageURL || null,
+        posts: parseInt(a.dataValues.postCount),
+        reactions: parseInt(a.dataValues.totalReactions) || 0,
+        views: parseInt(a.dataValues.totalViews) || 0,
+      })),
+      topPosts: topPosts.map(p => ({
+        id: p.id, title: p.title, slug: p.slug, type: p.type,
+        views: p.viewCount, comments: p.commentCount, reactions: p.reactionCount,
+      })),
+      postTypes: postTypes.map(t => ({ type: t.type, count: parseInt(t.count) })),
+      growth: {
+        posts: { current: currentPosts, previous: prevPosts },
+        comments: { current: currentComments, previous: prevComments },
+        users: { current: currentUsers, previous: prevUsers },
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// ─── Analytics PDF export ────────────────────────────────────────────────────
+forumAdminController.get('/analytics/export', ...adminAuth, async (req, res, next) => {
+  try {
+    const periodDays = parseInt(req.query.period) || 30;
+    const startDate = new Date();
+    startDate.setDate(startDate.getDate() - periodDays);
+
+    // Gather data
+    const postCount = await forum_post.count({ where: { createdAt: { [Op.gte]: startDate }, status: 'published' } });
+    const commentCount = await forum_comment.count({ where: { createdAt: { [Op.gte]: startDate }, status: 'visible' } });
+    const totalViews = await forum_post.sum('viewCount', { where: { createdAt: { [Op.gte]: startDate }, status: 'published' } }) || 0;
+    const totalReactions = await forum_post.sum('reactionCount', { where: { createdAt: { [Op.gte]: startDate }, status: 'published' } }) || 0;
+    const newUsers = await forum_user_status.count({ where: { createdAt: { [Op.gte]: startDate } } });
+
+    const topPosts = await forum_post.findAll({
+      where: { createdAt: { [Op.gte]: startDate }, status: 'published' },
+      attributes: ['title', 'viewCount', 'commentCount', 'reactionCount', 'type'],
+      order: [['viewCount', 'DESC']],
+      limit: 10,
+      include: [{
+        model: user_account, as: 'author', attributes: ['id'],
+        include: [{ model: user_details, as: 'details', attributes: ['firstName', 'lastName'] }],
+      }],
+    });
+
+    // Generate PDF
+    const PDFDocument = require('pdfkit');
+    const path = require('path');
+    const fs = require('fs');
+    const doc = new PDFDocument({ size: 'A4', margin: 40, bufferPages: true });
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename="forum-analytics-${periodDays}d-${new Date().toISOString().slice(0, 10)}.pdf"`);
+    doc.pipe(res);
+
+    // Font
+    const fontPath = path.join(__dirname, '..', 'fonts', 'DejaVuSans.ttf');
+    const hasFont = fs.existsSync(fontPath);
+    if (hasFont) doc.registerFont('CyrFont', fontPath);
+    const font = hasFont ? 'CyrFont' : 'Helvetica';
+
+    // Header
+    const logoPath = path.join(__dirname, '..', '..', '..', 'client', 'public', 'images', 'homePage', 'logo-2.png');
+    if (fs.existsSync(logoPath)) {
+      doc.image(logoPath, doc.page.width / 2 - 25, 30, { width: 50 });
+      doc.moveDown(3);
+    }
+    doc.font(font).fontSize(11).fillColor('#333').text('Pensa Foundation', { align: 'center' });
+    doc.moveDown(0.5);
+    doc.fontSize(16).fillColor('#8b2040').text(`Forum Analytics — ${periodDays} days`, { align: 'center' });
+    doc.fontSize(9).fillColor('#666').text(`Generated: ${new Date().toLocaleString('bg-BG')}`, { align: 'center' });
+    doc.moveDown(1.5);
+
+    // Stats summary
+    doc.fontSize(12).fillColor('#222').text('Overview', { underline: true });
+    doc.moveDown(0.5);
+    doc.fontSize(10).fillColor('#333');
+    doc.text(`Posts: ${postCount}     Comments: ${commentCount}     Views: ${totalViews}     Reactions: ${totalReactions}     New Users: ${newUsers}`);
+    doc.moveDown(1.5);
+
+    // Top posts table
+    doc.fontSize(12).fillColor('#222').text('Top Posts', { underline: true });
+    doc.moveDown(0.5);
+
+    const tableTop = doc.y;
+    const col = { title: 40, author: 280, type: 370, views: 420, comments: 470, reactions: 520 };
+
+    // Header row
+    doc.fontSize(8).fillColor('#888');
+    doc.text('Title', col.title, tableTop);
+    doc.text('Author', col.author, tableTop);
+    doc.text('Type', col.type, tableTop);
+    doc.text('Views', col.views, tableTop);
+    doc.text('Comments', col.comments, tableTop);
+    doc.text('Reactions', col.reactions, tableTop);
+    doc.moveTo(40, tableTop + 12).lineTo(560, tableTop + 12).strokeColor('#ddd').stroke();
+
+    let y = tableTop + 18;
+    topPosts.forEach((p, i) => {
+      if (y > 750) { doc.addPage(); y = 40; }
+      const authorName = p.author?.details ? `${p.author.details.firstName || ''} ${p.author.details.lastName || ''}`.trim() : '-';
+      doc.fontSize(8).fillColor(i % 2 === 0 ? '#222' : '#444');
+      doc.text((p.title || '').substring(0, 35), col.title, y, { width: 235 });
+      doc.text(authorName.substring(0, 15), col.author, y);
+      doc.text(p.type, col.type, y);
+      doc.text(String(p.viewCount || 0), col.views, y);
+      doc.text(String(p.commentCount || 0), col.comments, y);
+      doc.text(String(p.reactionCount || 0), col.reactions, y);
+      y += 16;
+    });
+
+    doc.end();
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = forumAdminController;

@@ -467,7 +467,11 @@
         "reports": "Meldungen",
         "users": "Benutzer",
         "rules": "Regeln",
-        "settings": "Einstellungen"
+        "settings": "Einstellungen",
+        "analytics": "Analyse"
+      },
+      "analytics": {
+        "title": "Forum-Analyse"
       }
     },
     "posts": {

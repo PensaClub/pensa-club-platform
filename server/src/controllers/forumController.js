@@ -829,6 +829,16 @@ forumController.post('/posts', isAuth, validateBody(forumPostCreateSchema), asyn
       } catch (e) { /* non-blocking */ }
     }
 
+    // Real-time: broadcast new post to feed
+    if (postStatus === 'published') {
+      const io = req.app.get('io');
+      if (io) {
+        io.to('forum:feed').emit('forum:newPost', {
+          post: { id: post.id, title: post.title, slug: post.slug, type: post.type, authorId: post.authorId },
+        });
+      }
+    }
+
     res.status(201).json({ post, newBadges, creditsEarned, message: postStatus === 'pending' ? 'post_pending_approval' : 'post_published' });
   } catch (err) {
     next(err);
@@ -927,14 +937,34 @@ forumController.post('/posts/:id/comments', isAuth, validateBody(forumCommentCre
     await post.update({ lastActivityAt: new Date() });
 
     // Notify post author about new comment
-    const { user_notification } = require('../sequelize/models/index');
+    const { user_notification, admin_notification, user_account: ua } = require('../sequelize/models/index');
+    const { sendPushToUser } = require('../utils/pushNotifications');
     if (post.authorId !== req.user.userId) {
-      await user_notification.create({
-        userId: post.authorId,
-        type: 'forum_comment',
-        title: 'Нов коментар на вашата публикация',
-        message: `Нов коментар на "${post.title}"`,
-        data: { postSlug: post.slug, commentId: comment.id },
+      // Check if author is admin/moderator
+      const authorAccount = await ua.findByPk(post.authorId, { attributes: ['role'] });
+      const isAdminAuthor = authorAccount?.role === 'admin' || authorAccount?.role === 'moderator';
+
+      if (isAdminAuthor) {
+        await admin_notification.create({
+          type: 'forum_comment',
+          title: 'Нов коментар на вашата публикация',
+          message: `Нов коментар на "${post.title}"`,
+          data: { postSlug: post.slug, commentId: comment.id },
+        }).catch(() => {});
+      } else {
+        await user_notification.create({
+          userId: post.authorId,
+          type: 'forum_comment',
+          title: 'Нов коментар на вашата публикация',
+          message: `Нов коментар на "${post.title}"`,
+          data: { postSlug: post.slug, commentId: comment.id },
+        }).catch(() => {});
+      }
+      // Push notification
+      sendPushToUser(post.authorId, {
+        title: 'Нов коментар',
+        body: `Нов коментар на "${post.title}"`,
+        url: `/academy/community/${post.slug}`,
       }).catch(() => {});
     }
 
@@ -1035,6 +1065,21 @@ forumController.post('/posts/:id/comments', isAuth, validateBody(forumCommentCre
 
     // Reload with author
     const full = await forum_comment.findByPk(comment.id, { include: [authorInclude] });
+
+    // Real-time: emit new comment to post room
+    const io = req.app.get('io');
+    if (io) {
+      io.to(`forum:post:${post.id}`).emit('forum:newComment', { comment: full, postId: post.id });
+      // Notify post author
+      if (post.authorId !== req.user.userId) {
+        io.to(`user:${post.authorId}`).emit('notification:new', {
+          type: 'forum_comment',
+          title: post.title,
+          postSlug: post.slug,
+        });
+      }
+    }
+
     res.status(201).json({ comment: full, newBadges, creditsEarned });
   } catch (err) {
     next(err);

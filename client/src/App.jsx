@@ -68,6 +68,7 @@ import { AcademyProvider } from './components/contexts/AcademyProvider.jsx';
 import { FactCheckProvider } from './components/contexts/FactCheckProvider.jsx';
 import { ReActionProvider } from './components/contexts/ReActionProvider.jsx';
 import { ForumProvider } from './components/contexts/ForumProvider.jsx';
+import { SocketProvider } from './components/contexts/SocketProvider.jsx';
 import { DigiBridgeChatButton } from './components/DigiBridge/DigiBridgeChatButton/DigiBridgeChatButton.jsx';
 import { DigiBridgeChatWindow } from './components/DigiBridge/DigiBridgeChatWindow/DigiBridgeChatWindow.jsx';
 import { MentorGuard } from './components/Guards/MentorGuard.jsx';
@@ -324,6 +325,7 @@ function App() {
               <ChristmasGreetingModal />
               <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
                 <UserProvider>
+                  <SocketProvider>
                   <GoogleAuthProvider>
                     <MapProvider>
                       <CommunityProvider>
@@ -387,6 +389,7 @@ function App() {
                       </CommunityProvider>
                     </MapProvider>
                   </GoogleAuthProvider>
+                  </SocketProvider>
                 </UserProvider>
               </GoogleOAuthProvider>
             </ErrorBoundary>

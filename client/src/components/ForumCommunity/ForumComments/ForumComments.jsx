@@ -8,6 +8,7 @@ import ForumRulesModal from '../ForumRulesModal/ForumRulesModal';
 import { Send, SmilePlus, X, ChevronDown, Image as ImageIcon, AlertTriangle } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useFirebaseUpload } from '../../hooks/useFirebaseUpload';
+import { useSocket } from '../../contexts/SocketProvider';
 import './forumComments.css';
 
 const INITIAL_SHOW = 5;
@@ -17,6 +18,7 @@ const ForumComments = ({ postId, comments, onRefresh }) => {
   const { addComment, hasAcceptedRules, forumSettings } = useForum();
   const { isAuthentication } = useAuthContext();
   const { uploadFile, uploading } = useFirebaseUpload();
+  const { socket } = useSocket() || {};
 
   const [content, setContent] = useState('');
   const [replyTo, setReplyTo] = useState(null);
@@ -25,11 +27,47 @@ const ForumComments = ({ postId, comments, onRefresh }) => {
   const [sending, setSending] = useState(false);
   const [showAll, setShowAll] = useState(false);
   const [pendingImages, setPendingImages] = useState([]);
+  const [typingUsers, setTypingUsers] = useState([]);
   const [showRulesModal, setShowRulesModal] = useState(false);
   const [wordLimitInfo, setWordLimitInfo] = useState(null);
   const inputRef = useRef(null);
   const scrollRef = useRef(null);
   const emojiRef = useRef(null);
+
+  // Typing indicator via Socket.IO
+  const typingTimeoutRef = useRef(null);
+
+  useEffect(() => {
+    if (!socket || !postId) return;
+
+    const handleTyping = ({ userId, name }) => {
+      setTypingUsers(prev => {
+        if (prev.find(t => t.userId === userId)) return prev;
+        return [...prev, { userId, name }];
+      });
+    };
+
+    const handleStopTyping = ({ userId }) => {
+      setTypingUsers(prev => prev.filter(t => t.userId !== userId));
+    };
+
+    socket.on('forum:typing', handleTyping);
+    socket.on('forum:stopTyping', handleStopTyping);
+
+    return () => {
+      socket.off('forum:typing', handleTyping);
+      socket.off('forum:stopTyping', handleStopTyping);
+    };
+  }, [socket, postId]);
+
+  const emitTyping = useCallback(() => {
+    if (!socket || !postId) return;
+    socket.emit('forum:typing', postId);
+    clearTimeout(typingTimeoutRef.current);
+    typingTimeoutRef.current = setTimeout(() => {
+      socket.emit('forum:stopTyping', postId);
+    }, 2000);
+  }, [socket, postId]);
 
   // Close emoji picker on outside click
   useEffect(() => {
@@ -242,6 +280,14 @@ const ForumComments = ({ postId, comments, onRefresh }) => {
       </div>
 
       {/* Fixed input at bottom */}
+      {/* Typing indicator */}
+      {typingUsers.length > 0 && (
+        <div className="fcm-typing">
+          <span className="fcm-typing-dots"><span /><span /><span /></span>
+          {typingUsers.map(t => t.name).join(', ')} {typingUsers.length === 1 ? 'пише' : 'пишат'}...
+        </div>
+      )}
+
       {isAuthentication && (
         <div className="fcm-input-area">
           {/* Reply/quote indicator */}
@@ -297,7 +343,7 @@ const ForumComments = ({ postId, comments, onRefresh }) => {
               className="fcm-input"
               placeholder={t('forumCommunity.comment.writeComment', 'Напишете коментар...')}
               value={content}
-              onChange={(e) => setContent(e.target.value)}
+              onChange={(e) => { setContent(e.target.value); emitTyping(); }}
               onKeyDown={handleKeyDown}
               rows={1}
             />
