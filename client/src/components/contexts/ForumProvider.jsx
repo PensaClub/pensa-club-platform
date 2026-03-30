@@ -1,5 +1,24 @@
 import { createContext, useContext, useState, useCallback, useMemo } from 'react';
 import { forumServiceFactory } from '../Services/forumServiceFactory';
+import { toast } from 'react-toastify';
+
+const BADGE_EMOJIS = {
+  first_post: '📝', first_comment: '💬', contributor_10: '⭐',
+  helper_25: '🤝', veteran_50: '🏆', popular_post: '🔥',
+  conversation_starter: '💡', post_of_week: '👑', reactor_100: '⚡', bookmarked_10: '📌',
+};
+
+const showGamificationToasts = (result) => {
+  if (result?.newBadges?.length) {
+    result.newBadges.forEach(badge => {
+      const emoji = BADGE_EMOJIS[badge] || '🏅';
+      toast.success(`${emoji} Нов бадж: ${badge.replace(/_/g, ' ')}!`, { autoClose: 5000 });
+    });
+  }
+  if (result?.creditsEarned > 0) {
+    toast.info(`+${result.creditsEarned} кредита!`, { autoClose: 3000 });
+  }
+};
 
 export const ForumContext = createContext();
 
@@ -87,6 +106,7 @@ export const ForumProvider = ({ children }) => {
   const createPost = useCallback(async (data) => {
     try {
       const result = await service.createPost(data);
+      showGamificationToasts(result);
       return result;
     } catch (err) {
       console.error('Error creating post:', err);
@@ -123,6 +143,7 @@ export const ForumProvider = ({ children }) => {
         setCurrentComments(prev => [...prev, result.comment]);
         setCurrentPost(prev => prev ? { ...prev, commentCount: (prev.commentCount || 0) + 1 } : prev);
       }
+      showGamificationToasts(result);
       return result;
     } catch (err) {
       console.error('Error adding comment:', err);

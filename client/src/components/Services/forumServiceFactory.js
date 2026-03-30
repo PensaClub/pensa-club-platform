@@ -54,6 +54,11 @@ export const forumServiceFactory = () => {
     getStats: () => requester.get(`${apiUrl}/forum/stats`),
     getSettings: () => requester.get(`${apiUrl}/forum/settings`),
 
+    // Gamification
+    getLeaderboard: (params = {}) => requester.get(`${apiUrl}/forum/leaderboard?${toQueryString(params)}`),
+    getPostOfWeek: () => requester.get(`${apiUrl}/forum/post-of-week`),
+    getUserBadges: (userId) => requester.get(`${apiUrl}/forum/badges/${userId}`),
+
     // My stuff
     getMyStatus: () => requester.get(`${apiUrl}/forum/my/status`),
     getRules: () => requester.get(`${apiUrl}/forum/rules`),

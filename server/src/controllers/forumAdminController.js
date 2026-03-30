@@ -176,6 +176,16 @@ forumAdminController.put('/posts/:id/status', ...adminAuth, validateBody(forumPo
     }
     await post.save();
 
+    // Gamification: award credits on approval
+    if (req.body.status === 'published' && wasNotPublished) {
+      try {
+        const { checkAndAwardBadges, awardForumCredits, recalculateReputation } = require('../utils/forumGamification');
+        await checkAndAwardBadges(post.authorId);
+        await awardForumCredits(post.authorId, 'forum_post', post.id, post.title);
+        await recalculateReputation(post.authorId);
+      } catch (e) { /* non-blocking */ }
+    }
+
     res.json({ message: 'Post status updated', post });
   } catch (err) {
     next(err);
@@ -240,6 +250,17 @@ forumAdminController.post('/posts/:id/post-of-week', ...adminAuth, async (req, r
       setting.value = String(post.id);
       await setting.save();
     }
+
+    // Gamification: award badge + credits to post author
+    try {
+      const { checkAndAwardBadges, awardForumCredits, recalculateReputation } = require('../utils/forumGamification');
+      await forum_user_badge.findOrCreate({
+        where: { userId: post.authorId, badge: 'post_of_week' },
+        defaults: { userId: post.authorId, badge: 'post_of_week', awardedAt: new Date() },
+      });
+      await awardForumCredits(post.authorId, 'forum_post_of_week', post.id, post.title);
+      await recalculateReputation(post.authorId);
+    } catch (e) { /* non-blocking */ }
 
     res.json({ message: 'Post of the week set', postId: post.id });
   } catch (err) {

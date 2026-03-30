@@ -119,5 +119,31 @@
     "scrollFirst": "Read all rules first",
     "loadError": "Error loading rules",
     "acceptError": "Error accepting rules"
+  },
+  "gamification": {
+    "badges": {
+      "first_post": "First Post",
+      "first_comment": "First Comment",
+      "contributor_10": "Active Contributor",
+      "helper_25": "Community Helper",
+      "veteran_50": "Veteran Author",
+      "popular_post": "Popular Post",
+      "conversation_starter": "Conversation Starter",
+      "post_of_week": "Post of the Week",
+      "reactor_100": "Active Reactor",
+      "bookmarked_10": "Valuable Content"
+    },
+    "leaderboard": {
+      "title": "Top Contributors",
+      "weekly": "Week",
+      "monthly": "Month",
+      "allTime": "All Time",
+      "score": "pts",
+      "empty": "No data yet"
+    },
+    "postOfWeek": {
+      "title": "Post of the Week",
+      "by": "by"
+    }
   }
 }

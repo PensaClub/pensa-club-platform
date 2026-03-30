@@ -9,6 +9,7 @@ const {
 const isAuth = require('../middlewares/isAuth');
 const forumEmailTemplates = require('../utils/forumEmailTemplates');
 const { forwardEmailsViaZoho } = require('../utils/zohoEmails');
+const { checkAndAwardBadges, awardForumCredits, recalculateReputation } = require('../utils/forumGamification');
 const { validateBody, validateQuery } = require('../middlewares/validateRequest');
 const {
   forumPostCreateSchema, forumPostUpdateSchema,
@@ -110,11 +111,10 @@ const authorInclude = {
   model: user_account,
   as: 'author',
   attributes: ['id', 'email'],
-  include: [{
-    model: user_details,
-    as: 'details',
-    attributes: ['firstName', 'lastName', 'imageURL'],
-  }],
+  include: [
+    { model: user_details, as: 'details', attributes: ['firstName', 'lastName', 'imageURL'] },
+    { model: forum_user_badge, as: 'forumBadges', attributes: ['badge', 'awardedAt'] },
+  ],
 };
 
 // ============ PUBLIC ENDPOINTS ============
@@ -527,6 +527,144 @@ forumController.get('/search', isAuth.allowGuest, async (req, res, next) => {
   }
 });
 
+// ============ GAMIFICATION ENDPOINTS ============
+
+// GET /forum/leaderboard?period=weekly|monthly|all
+forumController.get('/leaderboard', async (req, res, next) => {
+  try {
+    const period = req.query.period || 'all';
+    let dateFilter = {};
+
+    if (period === 'weekly') {
+      const weekAgo = new Date();
+      weekAgo.setDate(weekAgo.getDate() - 7);
+      dateFilter = { createdAt: { [Op.gte]: weekAgo } };
+    } else if (period === 'monthly') {
+      const monthAgo = new Date();
+      monthAgo.setMonth(monthAgo.getMonth() - 1);
+      dateFilter = { createdAt: { [Op.gte]: monthAgo } };
+    }
+
+    let leaders;
+
+    if (period === 'all') {
+      leaders = await forum_user_status.findAll({
+        where: { reputationScore: { [Op.gt]: 0 } },
+        order: [['reputationScore', 'DESC']],
+        limit: 10,
+        include: [{
+          model: user_account,
+          as: 'user',
+          attributes: ['id', 'email'],
+          include: [
+            { model: user_details, as: 'details', attributes: ['firstName', 'lastName', 'imageURL'] },
+            { model: forum_user_badge, as: 'forumBadges', attributes: ['badge', 'awardedAt'] },
+          ],
+        }],
+      });
+
+      leaders = leaders.map((s, i) => ({
+        rank: i + 1,
+        userId: s.userId,
+        name: s.user?.details ? `${s.user.details.firstName || ''} ${s.user.details.lastName || ''}`.trim() : 'Потребител',
+        avatar: s.user?.details?.imageURL || null,
+        score: s.reputationScore,
+        badges: (s.user?.forumBadges || []).map(b => b.badge),
+      }));
+    } else {
+      // Period-based: aggregate from credits history
+      const { user_credits_history } = require('../sequelize/models/index');
+      const results = await user_credits_history.findAll({
+        where: { sourceType: { [Op.like]: 'forum_%' }, ...dateFilter },
+        attributes: [
+          'userId',
+          [sequelize.fn('SUM', sequelize.col('credits_amount')), 'periodScore'],
+        ],
+        group: ['userId'],
+        order: [[sequelize.fn('SUM', sequelize.col('credits_amount')), 'DESC']],
+        limit: 10,
+        raw: true,
+      });
+
+      const userIds = results.map(r => r.userId);
+      const users = await user_account.findAll({
+        where: { id: userIds },
+        attributes: ['id'],
+        include: [
+          { model: user_details, as: 'details', attributes: ['firstName', 'lastName', 'imageURL'] },
+          { model: forum_user_badge, as: 'forumBadges', attributes: ['badge'] },
+        ],
+      });
+
+      const userMap = {};
+      users.forEach(u => { userMap[u.id] = u; });
+
+      leaders = results.map((r, i) => {
+        const u = userMap[r.userId];
+        return {
+          rank: i + 1,
+          userId: r.userId,
+          name: u?.details ? `${u.details.firstName || ''} ${u.details.lastName || ''}`.trim() : 'Потребител',
+          avatar: u?.details?.imageURL || null,
+          score: parseInt(r.periodScore, 10) || 0,
+          badges: (u?.forumBadges || []).map(b => b.badge),
+        };
+      });
+    }
+
+    res.json({ leaders, period });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// GET /forum/post-of-week
+forumController.get('/post-of-week', async (req, res, next) => {
+  try {
+    const { site_setting } = require('../sequelize/models/index');
+    const setting = await site_setting.findOne({ where: { key: 'forum_post_of_week' } });
+    if (!setting || !setting.value) return res.json({ post: null });
+
+    const postId = parseInt(setting.value, 10);
+    if (!postId) return res.json({ post: null });
+
+    const post = await forum_post.findOne({
+      where: { id: postId, status: 'published' },
+      attributes: ['id', 'title', 'slug', 'excerpt', 'coverImage', 'viewCount', 'commentCount', 'reactionCount', 'createdAt'],
+      include: [{
+        model: user_account,
+        as: 'author',
+        attributes: ['id'],
+        include: [{ model: user_details, as: 'details', attributes: ['firstName', 'lastName', 'imageURL'] }],
+      }],
+    });
+
+    res.json({ post: post || null });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// GET /forum/badges/:userId
+forumController.get('/badges/:userId', async (req, res, next) => {
+  try {
+    const badges = await forum_user_badge.findAll({
+      where: { userId: req.params.userId },
+      attributes: ['badge', 'awardedAt'],
+      order: [['awardedAt', 'DESC']],
+    });
+    const { BADGE_DEFINITIONS } = require('../utils/forumGamification');
+    const enriched = badges.map(b => ({
+      badge: b.badge,
+      emoji: BADGE_DEFINITIONS[b.badge]?.emoji || '🏅',
+      awardedAt: b.awardedAt,
+    }));
+    res.json({ badges: enriched });
+  } catch (err) {
+    next(err);
+  }
+});
+
 // ============ AUTHENTICATED ENDPOINTS ============
 
 // GET /forum/settings (public limits)
@@ -680,7 +818,18 @@ forumController.post('/posts', isAuth, validateBody(forumPostCreateSchema), asyn
       await forum_space.increment('postCount', { where: { id: spaceId } });
     }
 
-    res.status(201).json({ post, message: postStatus === 'pending' ? 'post_pending_approval' : 'post_published' });
+    // Gamification (async, non-blocking)
+    let newBadges = [];
+    let creditsEarned = 0;
+    if (postStatus === 'published') {
+      try {
+        newBadges = await checkAndAwardBadges(req.user.userId);
+        creditsEarned = await awardForumCredits(req.user.userId, 'forum_post', post.id, post.title);
+        recalculateReputation(req.user.userId).catch(() => {});
+      } catch (e) { /* non-blocking */ }
+    }
+
+    res.status(201).json({ post, newBadges, creditsEarned, message: postStatus === 'pending' ? 'post_pending_approval' : 'post_published' });
   } catch (err) {
     next(err);
   }
@@ -875,9 +1024,18 @@ forumController.post('/posts/:id/comments', isAuth, validateBody(forumCommentCre
       }
     }
 
+    // Gamification
+    let newBadges = [];
+    let creditsEarned = 0;
+    try {
+      newBadges = await checkAndAwardBadges(req.user.userId);
+      creditsEarned = await awardForumCredits(req.user.userId, 'forum_comment', comment.id, post.title);
+      recalculateReputation(req.user.userId).catch(() => {});
+    } catch (e) { /* non-blocking */ }
+
     // Reload with author
     const full = await forum_comment.findByPk(comment.id, { include: [authorInclude] });
-    res.status(201).json({ comment: full });
+    res.status(201).json({ comment: full, newBadges, creditsEarned });
   } catch (err) {
     next(err);
   }
@@ -960,6 +1118,18 @@ forumController.post('/reactions', isAuth, validateBody(forumReactionSchema), as
     await forum_reaction.create({ userId: req.user.userId, targetType, targetId, emoji });
     if (targetType === 'post') await forum_post.increment('reactionCount', { where: { id: targetId } });
     else await forum_comment.increment('reactionCount', { where: { id: targetId } });
+
+    // Gamification: check badges for reactor + content author
+    try {
+      checkAndAwardBadges(req.user.userId).catch(() => {});
+      const target = targetType === 'post'
+        ? await forum_post.findByPk(targetId, { attributes: ['authorId'] })
+        : await forum_comment.findByPk(targetId, { attributes: ['authorId'] });
+      if (target && target.authorId !== req.user.userId) {
+        checkAndAwardBadges(target.authorId).catch(() => {});
+        recalculateReputation(target.authorId).catch(() => {});
+      }
+    } catch (e) { /* non-blocking */ }
 
     res.json({ action: 'added', emoji });
   } catch (err) {

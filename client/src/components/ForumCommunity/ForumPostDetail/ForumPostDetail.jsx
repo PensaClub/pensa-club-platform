@@ -15,6 +15,7 @@ import ForumTrendingTags from '../ForumTrendingTags/ForumTrendingTags';
 import ForumArticlesCarousel from '../ForumArticlesCarousel/ForumArticlesCarousel';
 import ForumUpcomingSeminars from '../ForumUpcomingSeminars/ForumUpcomingSeminars';
 import ForumCoursesPromo from '../ForumCoursesPromo/ForumCoursesPromo';
+import ForumUserBadges from '../ForumUserBadges/ForumUserBadges';
 import { ArrowLeft, Eye, MessageSquare, Share2, Bookmark, BookmarkCheck, Pin, Lock, Clock, Loader2, ChevronRight, MessagesSquare } from 'lucide-react';
 import './forumPostDetail.css';
 
@@ -155,6 +156,7 @@ const ForumPostDetail = () => {
                   </div>
                   <div className="fpd-author-info">
                     <span className="fpd-author-name">{authorName}</span>
+                    <ForumUserBadges badges={post.author?.forumBadges} />
                     <span className="fpd-date">
                       <Clock size={11} /> {timeAgo(post.createdAt)}
                       {post.editedAt && <em className="fpd-edited"> · {t('forumCommunity.post.edited')}</em>}

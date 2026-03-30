@@ -17,6 +17,8 @@ import ForumTrendingTags from './ForumTrendingTags/ForumTrendingTags';
 import ForumArticlesCarousel from './ForumArticlesCarousel/ForumArticlesCarousel';
 import ForumUpcomingSeminars from './ForumUpcomingSeminars/ForumUpcomingSeminars';
 import ForumCoursesPromo from './ForumCoursesPromo/ForumCoursesPromo';
+import ForumPostOfWeek from './ForumPostOfWeek/ForumPostOfWeek';
+import ForumLeaderboard from './ForumLeaderboard/ForumLeaderboard';
 import { Plus } from 'lucide-react';
 import './forumCommunity.css';
 
@@ -114,6 +116,9 @@ const ForumCommunity = () => {
 
             <aside className="fmc-sidebar-col">
               <ForumSearch />
+
+              <ForumPostOfWeek />
+              <ForumLeaderboard />
 
               <div className="fmc-section">
                 <h2 className="fmc-section-title">

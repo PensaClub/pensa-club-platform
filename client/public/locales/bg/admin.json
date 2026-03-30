@@ -437,6 +437,7 @@
     "about": "За нас",
     "logout": "Излез от профила",
     "academy": "Академия",
+    "academy-my": "Моята академия",
     "academy-home": "Начало",
     "academy-courses": "Курсове",
     "academy-lectures": "Лекции",
@@ -713,7 +714,20 @@
       "maxCommentFileSize": "Макс. файл за коментар (MB)",
       "postsPerPage": "Публикации на страница",
       "cooldownSeconds": "Пауза между публикации (секунди)",
-      "maxReportsBeforeHide": "Макс. сигнали преди скриване"
+      "maxReportsBeforeHide": "Макс. сигнали преди скриване",
+      "credits": "Кредити за активност",
+      "creditsForPost": "Кредити за публикация",
+      "creditsForComment": "Кредити за коментар",
+      "creditsForPostOfWeek": "Кредити за публикация на седмицата",
+      "creditsForPopularPost": "Кредити за популярна публикация",
+      "badgeMilestones": "Бъджове — прагове",
+      "badgePostsForContributor": "⭐ Активен автор (брой постове)",
+      "badgeCommentsForHelper": "🤝 Помощник (брой коментари)",
+      "badgePostsForVeteran": "🏆 Ветеран (брой постове)",
+      "badgeReactionsForPopular": "🔥 Популярна публикация (реакции на пост)",
+      "badgeCommentsForConversation": "💡 Инициатор (коментари на пост)",
+      "badgeReactionsGivenForReactor": "⚡ Активен реактор (дадени реакции)",
+      "badgeBookmarksForValuable": "📌 Ценно съдържание (получени bookmarks)"
     }
   }
 }

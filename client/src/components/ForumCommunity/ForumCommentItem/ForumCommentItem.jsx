@@ -5,6 +5,7 @@ import { useForum } from '../../contexts/ForumProvider';
 import ForumReactions from '../ForumReactions/ForumReactions';
 import ForumImageLightbox from '../ForumImageLightbox/ForumImageLightbox';
 import ForumReportModal from '../ForumReportModal/ForumReportModal';
+import ForumUserBadges from '../ForumUserBadges/ForumUserBadges';
 import { Reply, Quote, Pencil, Trash2, Clock, ChevronDown, ChevronUp, Flag } from 'lucide-react';
 import './forumCommentItem.css';
 
@@ -85,6 +86,7 @@ const ForumCommentItem = ({ comment, depth = 0, onReply, onQuote, onRefresh, onU
         </div>
         <div className="fci-author-info">
           <span className="fci-author-name">{authorName}</span>
+          <ForumUserBadges badges={comment.author?.forumBadges} />
           <span className="fci-time">
             <Clock size={10} /> {timeAgo(comment.createdAt)}
             {comment.isEdited && <em className="fci-edited"> · {t('forumCommunity.comment.edited')}</em>}

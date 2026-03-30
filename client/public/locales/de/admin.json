@@ -427,6 +427,7 @@
     "about": "Über uns",
     "logout": "Abmelden",
     "academy": "Akademie",
+    "academy-my": "Meine Akademie",
     "academy-home": "Startseite",
     "academy-courses": "Kurse",
     "academy-lectures": "Vorlesungen",
@@ -703,7 +704,20 @@
       "maxCommentFileSize": "Max. Dateigröße Kommentar (MB)",
       "postsPerPage": "Beiträge pro Seite",
       "cooldownSeconds": "Pause zwischen Beiträgen (Sekunden)",
-      "maxReportsBeforeHide": "Max. Meldungen vor Auto-Verbergen"
+      "maxReportsBeforeHide": "Max. Meldungen vor Auto-Verbergen",
+      "credits": "Credits für Aktivität",
+      "creditsForPost": "Credits pro Beitrag",
+      "creditsForComment": "Credits pro Kommentar",
+      "creditsForPostOfWeek": "Credits für Beitrag der Woche",
+      "creditsForPopularPost": "Credits für beliebten Beitrag",
+      "badgeMilestones": "Badge-Meilensteine",
+      "badgePostsForContributor": "⭐ Aktiver Autor (Beiträge)",
+      "badgeCommentsForHelper": "🤝 Gemeinschaftshelfer (Kommentare)",
+      "badgePostsForVeteran": "🏆 Veteran (Beiträge)",
+      "badgeReactionsForPopular": "🔥 Beliebter Beitrag (Reaktionen)",
+      "badgeCommentsForConversation": "💡 Diskussionsstarter (Kommentare auf Beitrag)",
+      "badgeReactionsGivenForReactor": "⚡ Aktiver Reaktor (gegebene Reaktionen)",
+      "badgeBookmarksForValuable": "📌 Wertvoller Inhalt (erhaltene Lesezeichen)"
     }
   }
 }

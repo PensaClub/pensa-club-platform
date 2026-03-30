@@ -36,6 +36,23 @@ const NUMBER_SETTINGS = [
   { key: 'maxReportsBeforeHide', label: 'maxReportsBeforeHide', min: 0, max: 50 },
 ];
 
+const CREDIT_SETTINGS = [
+  { key: 'creditsForPost', label: 'creditsForPost', min: 0, max: 100 },
+  { key: 'creditsForComment', label: 'creditsForComment', min: 0, max: 50 },
+  { key: 'creditsForPostOfWeek', label: 'creditsForPostOfWeek', min: 0, max: 200 },
+  { key: 'creditsForPopularPost', label: 'creditsForPopularPost', min: 0, max: 100 },
+];
+
+const BADGE_SETTINGS = [
+  { key: 'badgePostsForContributor', label: 'badgePostsForContributor', min: 0, max: 500 },
+  { key: 'badgeCommentsForHelper', label: 'badgeCommentsForHelper', min: 0, max: 500 },
+  { key: 'badgePostsForVeteran', label: 'badgePostsForVeteran', min: 0, max: 1000 },
+  { key: 'badgeReactionsForPopular', label: 'badgeReactionsForPopular', min: 0, max: 500 },
+  { key: 'badgeCommentsForConversation', label: 'badgeCommentsForConversation', min: 0, max: 200 },
+  { key: 'badgeReactionsGivenForReactor', label: 'badgeReactionsGivenForReactor', min: 0, max: 1000 },
+  { key: 'badgeBookmarksForValuable', label: 'badgeBookmarksForValuable', min: 0, max: 200 },
+];
+
 const AdminForumSettings = () => {
   const { t } = useTranslation('admin');
   const forumService = forumServiceFactory();
@@ -163,6 +180,50 @@ const AdminForumSettings = () => {
                 type="number"
                 className="afst-number-input"
                 value={settings[key] || 0}
+                onChange={(e) => handleNumberChange(key, e.target.value)}
+                min={min}
+                max={max}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Credit settings */}
+      <div className="afst-section">
+        <h4 className="afst-section-title">{t('forum.settings.credits', 'Credits for Activity')}</h4>
+        <div className="afst-numbers">
+          {CREDIT_SETTINGS.map(({ key, label, min, max }) => (
+            <div key={key} className="afst-number-row">
+              <label className="afst-number-label">
+                {t(`forum.settings.${label}`, label)}
+              </label>
+              <input
+                type="number"
+                className="afst-number-input"
+                value={settings[key] ?? ''}
+                onChange={(e) => handleNumberChange(key, e.target.value)}
+                min={min}
+                max={max}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Badge settings */}
+      <div className="afst-section">
+        <h4 className="afst-section-title">{t('forum.settings.badgeMilestones', 'Badge Milestones')}</h4>
+        <div className="afst-numbers">
+          {BADGE_SETTINGS.map(({ key, label, min, max }) => (
+            <div key={key} className="afst-number-row">
+              <label className="afst-number-label">
+                {t(`forum.settings.${label}`, label)}
+              </label>
+              <input
+                type="number"
+                className="afst-number-input"
+                value={settings[key] ?? ''}
                 onChange={(e) => handleNumberChange(key, e.target.value)}
                 min={min}
                 max={max}

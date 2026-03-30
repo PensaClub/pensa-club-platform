@@ -1,0 +1,80 @@
+/* Prefix: fpw- (ForumPostOfWeek) */
+@import '../forumVariables.css';
+
+.fpw-container {
+  background: linear-gradient(135deg, rgba(201, 168, 76, 0.08), rgba(139, 32, 64, 0.06));
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  border-radius: var(--fm-radius);
+  padding: 16px;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.2s;
+  margin-bottom: 16px;
+}
+
+.fpw-container:hover {
+  border-color: var(--fm-gold);
+  transform: translateY(-1px);
+}
+
+.fpw-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.fpw-trophy { color: var(--fm-gold); }
+
+.fpw-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--fm-gold);
+}
+
+.fpw-cover {
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 10px;
+  max-height: 120px;
+}
+
+.fpw-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fpw-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--fm-text);
+  margin: 0 0 6px;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.fpw-author {
+  font-size: 12px;
+  color: var(--fm-text-secondary);
+  margin: 0 0 8px;
+}
+
+.fpw-author strong { color: var(--fm-text); }
+
+.fpw-stats {
+  display: flex;
+  gap: 12px;
+  font-size: 11px;
+  color: var(--fm-text-muted);
+}
+
+.fpw-stats span {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}

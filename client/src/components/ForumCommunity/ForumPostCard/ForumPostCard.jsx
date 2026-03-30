@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { Eye, MessageSquare, Share2, Bookmark, BookmarkCheck, Pin, Lock, Clock } from 'lucide-react';
+import ForumUserBadges from '../ForumUserBadges/ForumUserBadges';
 import './forumPostCard.css';
 
 const TYPE_ICONS = {
@@ -44,6 +45,7 @@ const ForumPostCard = ({ post, onReaction, onBookmark, forumSettings }) => {
         </div>
         <div className="fpc-author-info">
           <span className="fpc-author-name">{authorName}</span>
+          <ForumUserBadges badges={post.author?.forumBadges} />
           <span className="fpc-meta">
             <Clock size={11} />
             {timeAgo(post.lastActivityAt || post.createdAt)}

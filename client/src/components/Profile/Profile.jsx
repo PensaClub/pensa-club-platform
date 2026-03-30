@@ -575,6 +575,9 @@ export const Profile = () => {
                 {/* Академия */}
                 <div className="pd-section">
                   <div className="pd-section-label pd-academy-label">{t("header.academy")}</div>
+                  <NavLink to="/academy/my" className="pd-link pd-academy-link" onClick={() => setProfileMenuOpen(false)}>
+                    <AcademyIcon /> {t("header.academy-my", "Моята академия")}
+                  </NavLink>
                   <NavLink to="/academy" className="pd-link pd-academy-link" onClick={() => setProfileMenuOpen(false)}>
                     <AcademyIcon /> {t("header.academy-home")}
                   </NavLink>

@@ -16,6 +16,12 @@ module.exports = (sequelize, DataTypes) => {
                 as: 'ads',
             });
 
+            user_account.hasMany(models.forum_user_badge, {
+                foreignKey: 'userId',
+                sourceKey: 'id',
+                as: 'forumBadges',
+            });
+
             user_account.hasMany(models.refreshToken, {
                 foreignKey: 'userId',
                 sourceKey: 'id',

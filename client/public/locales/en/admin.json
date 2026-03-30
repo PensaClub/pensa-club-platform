@@ -418,6 +418,7 @@
     "about": "About us",
     "logout": "Logout",
     "academy": "Academy",
+    "academy-my": "My Academy",
     "academy-home": "Home",
     "academy-courses": "Courses",
     "academy-lectures": "Lectures",
@@ -694,7 +695,20 @@
       "maxCommentFileSize": "Max Comment File Size (MB)",
       "postsPerPage": "Posts Per Page",
       "cooldownSeconds": "Cooldown Between Posts (seconds)",
-      "maxReportsBeforeHide": "Max Reports Before Auto-Hide"
+      "maxReportsBeforeHide": "Max Reports Before Auto-Hide",
+      "credits": "Credits for Activity",
+      "creditsForPost": "Credits per Post",
+      "creditsForComment": "Credits per Comment",
+      "creditsForPostOfWeek": "Credits for Post of Week",
+      "creditsForPopularPost": "Credits for Popular Post",
+      "badgeMilestones": "Badge Milestones",
+      "badgePostsForContributor": "⭐ Active Contributor (posts)",
+      "badgeCommentsForHelper": "🤝 Community Helper (comments)",
+      "badgePostsForVeteran": "🏆 Veteran Author (posts)",
+      "badgeReactionsForPopular": "🔥 Popular Post (reactions on post)",
+      "badgeCommentsForConversation": "💡 Conversation Starter (comments on post)",
+      "badgeReactionsGivenForReactor": "⚡ Active Reactor (reactions given)",
+      "badgeBookmarksForValuable": "📌 Valuable Content (bookmarks received)"
     }
   }
 }

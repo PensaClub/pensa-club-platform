@@ -119,5 +119,31 @@
     "scrollFirst": "Lesen Sie zuerst alle Regeln",
     "loadError": "Fehler beim Laden der Regeln",
     "acceptError": "Fehler beim Akzeptieren der Regeln"
+  },
+  "gamification": {
+    "badges": {
+      "first_post": "Erster Beitrag",
+      "first_comment": "Erster Kommentar",
+      "contributor_10": "Aktiver Autor",
+      "helper_25": "Gemeinschaftshelfer",
+      "veteran_50": "Veteran",
+      "popular_post": "Beliebter Beitrag",
+      "conversation_starter": "Diskussionsstarter",
+      "post_of_week": "Beitrag der Woche",
+      "reactor_100": "Aktiver Reaktor",
+      "bookmarked_10": "Wertvoller Inhalt"
+    },
+    "leaderboard": {
+      "title": "Top-Mitwirkende",
+      "weekly": "Woche",
+      "monthly": "Monat",
+      "allTime": "Gesamt",
+      "score": "Pkt",
+      "empty": "Noch keine Daten"
+    },
+    "postOfWeek": {
+      "title": "Beitrag der Woche",
+      "by": "von"
+    }
   }
 }
