@@ -17,6 +17,7 @@ const generateTelkMetaHTML = require('../utils/telkMetaGenerator');
 const generateArticlesListMetaHTML = require('../utils/articlesListMetaGenerator');
 const { generateFactCheckListMetaHTML, generateFactCheckDetailMetaHTML } = require('../utils/factCheckMetaGenerator');
 const { generateReactionLandingMetaHTML, generateReactionBookMetaHTML } = require('../utils/reactionMetaGenerator');
+const { generateForumCommunityMetaHTML } = require('../utils/forumMetaGenerator');
 const { generateSeminarsListMetaHTML, generateSeminarDetailMetaHTML } = require('../utils/seminarsMetaGenerator');
 const geoip = require('geoip-lite');
 
@@ -189,6 +190,7 @@ async function botDetector(req, res, next) {
     const factCheckDetailMatch = req.path.match(/^\/fact-check\/([a-zA-Z0-9-]+)$/);
     const reactionLandingMatch = req.path.match(/^\/reaction$/);
     const reactionBookMatch = req.path.match(/^\/reaction\/book$/);
+    const forumCommunityMatch = req.path.match(/^\/academy\/community$/);
 
     try {
         // ==================== ARTICLES LIST ====================
@@ -494,6 +496,17 @@ if (storyMatch) {
 
             const html = generateReactionBookMetaHTML();
             console.log('📤 Sending reaction book HTML to bot');
+            return res.send(html);
+        }
+
+        // ==================== FORUM COMMUNITY (СТАТИЧНА СТРАНИЦА) ====================
+        if (forumCommunityMatch) {
+            console.log('💬 Processing FORUM COMMUNITY page');
+
+            await logBotRequest(botName, 'page', null, 'forum-community', userAgent, clientIP);
+
+            const html = generateForumCommunityMetaHTML();
+            console.log('📤 Sending forum community HTML to bot');
             return res.send(html);
         }
 

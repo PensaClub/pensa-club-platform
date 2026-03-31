@@ -556,7 +556,7 @@
 
 @media (max-width: 424px) {
   .fpd-breadcrumb { padding: 0 12px; font-size: 11px; }
-  .fpd-layout { padding: 0 12px 32px; }
+  .fpd-layout { padding: 0 20px 32px 20px }
   .fpd-article-body { padding: 14px; }
   .fpd-article-body .fpd-title { font-size: 18px; }
 }

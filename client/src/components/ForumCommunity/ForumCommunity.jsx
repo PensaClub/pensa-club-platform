@@ -81,9 +81,10 @@ const ForumCommunity = () => {
   return (
     <div className="fmc-wrapper">
       <SEOHead
-        title={t('forumCommunity.seo.title', 'Общност | DigiBridge Academy')}
-        description={t('forumCommunity.seo.description', 'Дискутирайте, споделяйте опит и се свързвайте с други участници.')}
-        image="/images/academy/academy-community-og.jpg"
+        title={t('forumCommunity.seo.title', 'DigiBridge Общност — Дискусии, споделяне и учене заедно | Pensa Club')}
+        description={t('forumCommunity.seo.description', 'Присъединете се към DigiBridge Общност — платформа за дискусии, споделяне на опит и взаимопомощ между възрастни хора.')}
+        keywords="DigiBridge общност, форум за пенсионери, дискусии, споделяне на опит, дигитална грамотност, пенсионери, Pensa Club"
+        image="/images/forum/networking_people.jpg"
       />
       <ScrollToTop />
       <TextZoom />
