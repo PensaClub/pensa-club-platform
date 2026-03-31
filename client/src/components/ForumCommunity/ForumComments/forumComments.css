@@ -241,7 +241,7 @@
 @media (max-width: 767px) {
   .fcm-scroll-area { max-height: 500px; padding: 4px 12px; }
   .fcm-input-row { padding: 8px 12px; gap: 6px; flex-wrap: wrap; }
-  .fcm-input-row .fcm-input { min-height: 46px; font-size: 14px !important; }
+  .fcm-input-row .fcm-input { min-height: 46px; font-size: 12px; }
   .fcm-container .fcm-title { padding: 12px; }
 }
 
