@@ -130,6 +130,7 @@ const SeminarCheckin = lazyWithRetry(() => import('./components/AcademySeminars/
 const ForumCommunity = lazyWithRetry(() => import('./components/ForumCommunity/ForumCommunity.jsx'));
 const AdminForumDashboard = lazyWithRetry(() => import('./components/AdminForumDashboard/AdminForumDashboard.jsx'));
 const ForumPostDetailPage = lazyWithRetry(() => import('./components/ForumCommunity/ForumPostDetail/ForumPostDetail.jsx'));
+const ForumMyPanel = lazyWithRetry(() => import('./components/ForumCommunity/ForumMyPanel/ForumMyPanel.jsx'));
 const TelkRkmeRzi = lazyWithRetry(() => import('./components/TelkRkmeRzi/TelkRkmeRzi.jsx'));
 const ComingSoon = lazyWithRetry(() => import('./components/DigiBridgeAcademy/ComingSoon/ComingSoon.jsx'));
 const ProjectCreateForm = lazyWithRetry(() => import('./components/Initiatives/CreateProject/ProjectCreateForm'));
@@ -187,6 +188,7 @@ function AppRoutes() {
       <Route path="/academy/library" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><ComingSoon pageKey="library" /></Suspense>} />
       <Route path="/academy/community" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><ForumProvider><ForumCommunity /></ForumProvider></Suspense>} />
       <Route path="/academy/community/post/:slug" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><ForumProvider><ForumPostDetailPage /></ForumProvider></Suspense>} />
+      <Route path="/academy/community/my" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><ForumProvider><ForumMyPanel /></ForumProvider></Suspense>} />
       <Route path="/academy/about" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><ComingSoon pageKey="about" /></Suspense>} />
       <Route path="/contact" element={<ContactForm />} />
       <Route path="/about" element={<AboutPage />} />

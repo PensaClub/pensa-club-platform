@@ -109,16 +109,10 @@ const ForumCommunity = () => {
         </section>
         )}
 
-        {/* Wave: warm → dark */}
-        <WaveDivider flip />
-
         {/* Section 2: Stats */}
         <section className="fmc-stats-section fmc-parallax-section">
           <ForumStats stats={stats} onlineCount={onlineCount} />
         </section>
-
-        {/* Wave: dark → warm */}
-        <WaveDivider />
 
         {/* Section 3: Feed + Sidebar */}
         <section className="fmc-main-section fmc-parallax-section">

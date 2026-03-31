@@ -4,7 +4,7 @@
    ======================================== */
 
 .sue-container {
-  background: rgba(15, 23, 42, 0.6);
+  background: var(--sdb-bg-secondary);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(99, 102, 241, 0.15);
   border-radius: 16px;
@@ -24,7 +24,7 @@
   gap: 10px;
   font-size: 18px;
   font-weight: 600;
-  color: #f1f5f9;
+  color: var(--sdb-text-primary);
   margin: 0;
 }
 
@@ -67,7 +67,7 @@
 .sue-event {
   position: relative;
   display: block;
-  background: rgba(30, 41, 59, 0.5);
+  background: var(--sdb-bg-card);
   border: 1px solid rgba(99, 102, 241, 0.1);
   border-radius: 12px;
   padding: 16px;
@@ -76,7 +76,7 @@
 }
 
 .sue-event:hover {
-  background: rgba(30, 41, 59, 0.8);
+  background: var(--sdb-bg-card-hover);
   border-color: rgba(99, 102, 241, 0.3);
   transform: translateX(4px);
 }
@@ -152,7 +152,7 @@
 .sue-event-title {
   font-size: 15px;
   font-weight: 600;
-  color: #f1f5f9;
+  color: var(--sdb-text-primary);
   margin: 0 0 12px 0;
   line-height: 1.4;
 }
@@ -171,13 +171,13 @@
   align-items: center;
   gap: 5px;
   font-size: 13px;
-  color: #94a3b8;
+  color: var(--sdb-text-secondary);
 }
 
 .sue-meta-icon {
   width: 14px;
   height: 14px;
-  color: #64748b;
+  color: var(--sdb-text-muted);
 }
 
 .sue-event-countdown {
@@ -217,7 +217,7 @@
 
 .sue-empty-text {
   font-size: 14px;
-  color: #64748b;
+  color: var(--sdb-text-muted);
   margin: 0 0 16px 0;
 }
 

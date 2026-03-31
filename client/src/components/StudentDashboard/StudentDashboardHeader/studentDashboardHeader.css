@@ -9,7 +9,7 @@
   gap: 32px;
   padding: 32px;
   background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
-  border: 1px solid rgba(148, 163, 184, 0.1);
+  border: 1px solid var(--sdb-border);
   border-radius: 16px;
   backdrop-filter: blur(10px);
 }
@@ -34,9 +34,9 @@
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  border: 3px solid #64748b;
+  border: 3px solid var(--sdb-text-muted);
   overflow: hidden;
-  background: rgba(30, 41, 59, 0.8);
+  background: var(--sdb-bg-card);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -51,7 +51,7 @@
 .sdbh-avatar-placeholder {
   width: 50px;
   height: 50px;
-  color: #64748b;
+  color: var(--sdb-text-muted);
 }
 
 .sdbh-avatar-placeholder svg {
@@ -70,7 +70,7 @@
   align-items: center;
   justify-content: center;
   font-size: 16px;
-  border: 2px solid #0f172a;
+  border: 2px solid var(--sdb-bg-primary);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
@@ -84,14 +84,14 @@
   margin: 0 0 4px 0;
   font-size: 28px;
   font-weight: 700;
-  color: #f1f5f9;
+  color: var(--sdb-text-primary);
   line-height: 1.2;
 }
 
 .sdbh-email {
   margin: 0 0 16px 0;
   font-size: 14px;
-  color: #94a3b8;
+  color: var(--sdb-text-secondary);
 }
 
 /* Level */
@@ -113,7 +113,7 @@
 
 .sdbh-level-progress-text {
   font-size: 13px;
-  color: #64748b;
+  color: var(--sdb-text-muted);
 }
 
 .sdbh-progress-bar {
@@ -133,7 +133,7 @@
 .sdbh-next-level {
   margin: 8px 0 0 0;
   font-size: 12px;
-  color: #64748b;
+  color: var(--sdb-text-muted);
 }
 
 /* ========================================
@@ -192,9 +192,9 @@
   gap: 8px;
   padding: 10px 20px;
   background: transparent;
-  border: 1px solid rgba(148, 163, 184, 0.2);
+  border: 1px solid var(--sdb-border-hover);
   border-radius: 8px;
-  color: #94a3b8;
+  color: var(--sdb-text-secondary);
   font-size: 14px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -206,9 +206,9 @@
 }
 
 .sdbh-edit-button:hover {
-  background: rgba(148, 163, 184, 0.1);
+  background: var(--sdb-border);
   border-color: rgba(148, 163, 184, 0.3);
-  color: #f1f5f9;
+  color: var(--sdb-text-primary);
 }
 
 /* ========================================

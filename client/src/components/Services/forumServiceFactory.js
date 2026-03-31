@@ -66,6 +66,7 @@ export const forumServiceFactory = () => {
     getMyPosts: (params = {}) => requester.get(`${apiUrl}/forum/my/posts?${toQueryString(params)}`),
     getMyComments: (params = {}) => requester.get(`${apiUrl}/forum/my/comments?${toQueryString(params)}`),
     getMySpaces: () => requester.get(`${apiUrl}/forum/my/spaces`),
+    getMyCredits: () => requester.get(`${apiUrl}/forum/my/credits`),
 
     // Admin
     adminGetDashboard: () => requester.get(`${apiUrl}/forum/admin/dashboard`),

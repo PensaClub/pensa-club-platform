@@ -483,8 +483,10 @@ seminarsController.post('/checkin/:seminarId', isAuth, async (req, res, next) =>
             return res.json({ success: true, message: 'Already checked in', alreadyAttended: true });
         }
 
-        // Calculate credits
-        let earnedCredits = seminarData.creditsForAttendance || 0;
+        // Calculate credits (admins and mentors don't earn credits)
+        const userRole = req.user.role;
+        const isAdminOrMentor = userRole === 'admin' || (req.user.isMentor === true);
+        let earnedCredits = isAdminOrMentor ? 0 : (seminarData.creditsForAttendance || 0);
 
         if (!attendance) {
             attendance = await student_seminar.create({
@@ -1615,11 +1617,25 @@ seminarsController.post(
         where: { seminarId, studentId },
       });
 
-      let earnedCredits = seminarData.creditsForAttendance || 0;
-      if (participationLevel === 'active') {
-        earnedCredits += seminarData.creditsForParticipation || 0;
-      } else if (participationLevel === 'moderate') {
-        earnedCredits += Math.floor((seminarData.creditsForParticipation || 0) / 2);
+      // Check if student is admin or mentor (they don't earn credits)
+      const attendeeStudent = await student.findByPk(studentId, { attributes: ['userId'] });
+      let isAttendeePrivileged = false;
+      if (attendeeStudent) {
+        const attendeeUser = await user_account.findByPk(attendeeStudent.userId, { attributes: ['role'] });
+        if (attendeeUser?.role === 'admin') isAttendeePrivileged = true;
+        else {
+          const isMentorRecord = await mentor.findOne({ where: { userId: attendeeStudent.userId, status: 'active' }, attributes: ['id'] });
+          if (isMentorRecord) isAttendeePrivileged = true;
+        }
+      }
+
+      let earnedCredits = isAttendeePrivileged ? 0 : (seminarData.creditsForAttendance || 0);
+      if (!isAttendeePrivileged) {
+        if (participationLevel === 'active') {
+          earnedCredits += seminarData.creditsForParticipation || 0;
+        } else if (participationLevel === 'moderate') {
+          earnedCredits += Math.floor((seminarData.creditsForParticipation || 0) / 2);
+        }
       }
 
       if (!attendance) {
@@ -1740,6 +1756,22 @@ seminarsController.post(
           },
         }
       );
+
+      // Zero out credits for admin/mentor students
+      const privilegedStudents = await student.findAll({
+        where: { id: studentIds },
+        attributes: ['id', 'userId'],
+        include: [{ model: user_account, as: 'user', attributes: ['role'] }],
+      });
+      const privilegedIds = [];
+      for (const s of privilegedStudents) {
+        if (s.user?.role === 'admin') { privilegedIds.push(s.id); continue; }
+        const isMentorRec = await mentor.findOne({ where: { userId: s.userId, status: 'active' }, attributes: ['id'] });
+        if (isMentorRec) privilegedIds.push(s.id);
+      }
+      if (privilegedIds.length > 0) {
+        await student_seminar.update({ earnedCredits: 0 }, { where: { seminarId, studentId: privilegedIds } });
+      }
 
       const attendedCount = await student_seminar.count({
         where: { seminarId, attended: true },
@@ -1980,12 +2012,26 @@ seminarsController.post(
             continue;
           }
 
+          // Check if this user is admin/mentor (no credits)
+          let isAttPrivileged = false;
+          const attStudentRec = await student.findByPk(studentId, { attributes: ['userId'] });
+          if (attStudentRec) {
+            const attUser = await user_account.findByPk(attStudentRec.userId, { attributes: ['role'] });
+            if (attUser?.role === 'admin') isAttPrivileged = true;
+            else {
+              const attMentor = await mentor.findOne({ where: { userId: attStudentRec.userId, status: 'active' }, attributes: ['id'] });
+              if (attMentor) isAttPrivileged = true;
+            }
+          }
+
           // Първо присъствие — изчисли кредити
-          let earnedCredits = seminarData.creditsForAttendance || 0;
-          if (participationLevel === 'active') {
-            earnedCredits += seminarData.creditsForParticipation || 0;
-          } else if (participationLevel === 'moderate') {
-            earnedCredits += Math.floor((seminarData.creditsForParticipation || 0) / 2);
+          let earnedCredits = isAttPrivileged ? 0 : (seminarData.creditsForAttendance || 0);
+          if (!isAttPrivileged) {
+            if (participationLevel === 'active') {
+              earnedCredits += seminarData.creditsForParticipation || 0;
+            } else if (participationLevel === 'moderate') {
+              earnedCredits += Math.floor((seminarData.creditsForParticipation || 0) / 2);
+            }
           }
 
           if (!attendance) {

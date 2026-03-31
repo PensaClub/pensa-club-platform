@@ -1430,4 +1430,26 @@ forumController.get('/my/spaces', isAuth, async (req, res, next) => {
   }
 });
 
+// GET /forum/my/credits
+forumController.get('/my/credits', isAuth, async (req, res, next) => {
+  try {
+    const { user_credits, user_credits_history } = require('../sequelize/models/index');
+
+    const credits = await user_credits.findOne({ where: { userId: req.user.userId } });
+    const history = await user_credits_history.findAll({
+      where: { userId: req.user.userId, sourceType: { [Op.like]: 'forum_%' } },
+      order: [['createdAt', 'DESC']],
+      limit: 20,
+      attributes: ['creditsAmount', 'sourceType', 'sourceTitle', 'description', 'createdAt'],
+    });
+
+    res.json({
+      totalForumCredits: credits?.totalCredits || 0,
+      history,
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = forumController;
