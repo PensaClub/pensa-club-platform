@@ -6,17 +6,20 @@
 .fmc-wrapper {
   min-height: 100vh;
   background:
+   linear-gradient(180deg, rgba(61, 61, 61, 0.72) 0%, rgba(151, 151, 151, 0.68) 100%),
     url('/images/academy/community-bg.jpg') center / cover no-repeat;
+    
   background-attachment: fixed;
   color: var(--fm-text);
   font-family: 'Montserrat', sans-serif;
   font-weight: 400;
   overflow-x: clip;
+  
 }
 
 [data-theme="light"] .fmc-wrapper {
   background:
-    linear-gradient(180deg, rgba(250, 248, 245, 0.72) 0%, rgba(247, 245, 242, 0.78) 100%),
+    linear-gradient(180deg, rgba(250, 248, 245, 0.62) 0%, rgba(247, 245, 242, 0.58) 100%),
     url('/images/academy/community-bg.jpg') center / cover no-repeat;
   background-attachment: fixed;
 }
@@ -116,6 +119,7 @@
 
 [data-theme="light"] .fmc-section {
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+  padding: 18px 10px;
 }
 
 .fmc-section .fmc-section-title {
@@ -222,8 +226,8 @@
   .fmc-spaces-section,
   .fmc-stats-section,
   .fmc-main-section {
-    padding-left: 16px;
-    padding-right: 16px;
+    padding-left: 14px;
+    padding-right: 14px;
   }
 
   .fmc-fab {
@@ -245,6 +249,6 @@
   .fmc-main-section {
     padding-left: 8px;
     padding-right: 8px;
-    margin: 0 16px;
+    margin: 0 10px;
   }
 }

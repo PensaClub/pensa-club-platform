@@ -151,7 +151,7 @@
 .frte-editor .tiptap div[data-youtube-video] iframe { border-radius: var(--fm-radius); }
 
 @media (max-width: 767px) {
-  .frte-toolbar { padding: 4px 6px; gap: 2px; }
-  .frte-toolbar .frte-btn { width: 26px; height: 26px; }
+  .frte-toolbar { padding: 4px 3px; gap: 1px; }
+  .frte-toolbar .frte-btn { width: 35px; height: 35px; }
   .frte-editor .tiptap { padding: 10px; min-height: 140px; }
 }

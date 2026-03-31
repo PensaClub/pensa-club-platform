@@ -70,7 +70,7 @@
   display: flex;
   gap: 12px;
   font-size: 11px;
-  color: var(--fm-text-muted);
+  color:#0f0f0e;
 }
 
 .fpw-stats span {
