@@ -30,6 +30,10 @@ const ForumPostDetail = () => {
   const [lightboxIndex, setLightboxIndex] = useState(null);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
     if (slug) getPost(slug);
   }, [slug, getPost]);
 

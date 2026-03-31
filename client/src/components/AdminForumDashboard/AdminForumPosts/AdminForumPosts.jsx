@@ -310,7 +310,7 @@ const AdminForumPosts = () => {
                     {post.isLocked && <span className="afp-lock-badge"><Lock size={12} /></span>}
                   </td>
                   <td className="afp-td-author">
-                    <span className="afp-author-name">{post.author?.firstName} {post.author?.lastName}</span>
+                    <span className="afp-author-name">{post.author?.details?.firstName && post.author?.details?.lastName ? `${post.author.details.firstName} ${post.author.details.lastName}` : post.author?.details?.username || post.author?.email?.split('@')[0] || '-'}</span>
                   </td>
                   <td className="afp-td-space">
                     <span className="afp-space-name">{post.space?.name || '-'}</span>

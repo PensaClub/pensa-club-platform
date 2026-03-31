@@ -169,7 +169,7 @@ const AdminForumComments = () => {
                   </td>
                   <td className="afcm-td-author">
                     <span className="afcm-author-name">
-                      {comment.author?.firstName} {comment.author?.lastName}
+                      {comment.author?.details?.firstName && comment.author?.details?.lastName ? `${comment.author.details.firstName} ${comment.author.details.lastName}` : comment.author?.details?.username || comment.author?.email?.split('@')[0] || '-'}
                     </span>
                   </td>
                   <td className="afcm-td-post">

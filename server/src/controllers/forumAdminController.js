@@ -37,7 +37,7 @@ const userInclude = {
   model: user_account,
   as: 'author',
   attributes: ['id', 'email', 'role'],
-  include: [{ model: user_details, as: 'details', attributes: ['firstName', 'lastName', 'imageURL'] }],
+  include: [{ model: user_details, as: 'details', attributes: ['firstName', 'lastName', 'username', 'imageURL'] }],
 };
 
 // ─── 1. GET /forum/admin/dashboard ──────────────────────────────────────────────

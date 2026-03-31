@@ -51,6 +51,10 @@ const ForumCommunity = () => {
   const [feedKey, setFeedKey] = useState(0);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
     getStats();
     getSpaces();
     getForumSettings();

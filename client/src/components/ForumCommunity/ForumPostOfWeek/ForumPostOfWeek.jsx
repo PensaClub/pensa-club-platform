@@ -27,7 +27,7 @@ const ForumPostOfWeek = () => {
     : '';
 
   return (
-    <div className="fpw-container" onClick={() => navigate(`/academy/community/${post.slug}`)}>
+    <div className="fpw-container" onClick={() => navigate(`/academy/community/post/${post.slug}`)}>
       <div className="fpw-header">
         <Trophy size={16} className="fpw-trophy" />
         <span className="fpw-label">{t('gamification.postOfWeek.title', 'Post of the Week')}</span>
