@@ -45,7 +45,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 20px 24px;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+  border-bottom: 1px solid var(--sdb-border);
 }
 
 .sem-header-title {
@@ -64,7 +64,7 @@
   margin: 0;
   font-size: 18px;
   font-weight: 600;
-  color: #f1f5f9;
+  color: var(--sdb-text-primary);
 }
 
 .sem-close-btn {
@@ -76,7 +76,7 @@
   background: rgba(100, 116, 139, 0.1);
   border: none;
   border-radius: 8px;
-  color: #94a3b8;
+  color: var(--sdb-text-secondary);
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -117,12 +117,12 @@
 .sem-recipient-label {
   font-size: 14px;
   font-weight: 500;
-  color: #94a3b8;
+  color: var(--sdb-text-secondary);
 }
 
 .sem-recipient-value {
   font-size: 14px;
-  color: #f1f5f9;
+  color: var(--sdb-text-primary);
 }
 
 /* Field */
@@ -142,10 +142,10 @@
 .sem-field textarea {
   width: 100%;
   padding: 12px 16px;
-  background: rgba(15, 23, 42, 0.6);
-  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: var(--sdb-bg-secondary);
+  border: 1px solid var(--sdb-border-hover);
   border-radius: 8px;
-  color: #f1f5f9;
+  color: var(--sdb-text-primary);
   font-size: 14px;
   font-family: inherit;
   transition: all 0.2s ease;
@@ -160,7 +160,7 @@
 
 .sem-field input::placeholder,
 .sem-field textarea::placeholder {
-  color: #64748b;
+  color: var(--sdb-text-muted);
 }
 
 .sem-field input:disabled,
@@ -199,7 +199,7 @@
 .sem-cancel-btn {
   background: transparent;
   border: 1px solid rgba(148, 163, 184, 0.3);
-  color: #94a3b8;
+  color: var(--sdb-text-secondary);
 }
 
 .sem-cancel-btn:hover:not(:disabled) {

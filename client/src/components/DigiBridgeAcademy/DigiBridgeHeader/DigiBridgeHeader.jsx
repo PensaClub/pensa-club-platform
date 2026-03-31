@@ -35,6 +35,8 @@ export const DigiBridgeHeader = () => {
         { key: 'events', label: t('digiBridge.header.nav.events', 'Събития'), path: '/academy/events', icon: '📅' },
         { key: 'library', label: t('digiBridge.header.nav.library', 'Библиотека'), path: '/academy/library', icon: '📚' },
         { key: 'community', label: t('digiBridge.header.nav.community', 'Общност'), path: '/academy/community', icon: '👥' },
+        { key: 'myAcademy', label: t('digiBridge.header.nav.myAcademy', 'Моята академия'), path: '/academy/my', icon: '🎓' },
+        { key: 'myForum', label: t('digiBridge.header.nav.myForum', 'Моят форум'), path: '/academy/community/my', icon: '💬' },
         { key: 'about', label: t('digiBridge.header.nav.about', 'За нас'), path: '/academy/about', icon: 'ℹ️' },
     ];
 

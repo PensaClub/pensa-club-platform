@@ -191,8 +191,13 @@ academyMyController.get('/dashboard', isAuth, async (req, res, next) => {
       where: { studentId },
     });
 
+    // Forum credits (from user_credits table)
+    const { user_credits } = require('../sequelize/models/index');
+    const forumCreditsRecord = await user_credits.findOne({ where: { userId } });
+    const forumCredits = forumCreditsRecord?.totalCredits || 0;
+
     const totalCredits =
-      (courseCredits || 0) + (lectureCredits || 0) + (seminarCredits || 0);
+      (courseCredits || 0) + (lectureCredits || 0) + (seminarCredits || 0) + forumCredits;
 
     res.status(200).json({
   success: true,
@@ -219,6 +224,7 @@ academyMyController.get('/dashboard', isAuth, async (req, res, next) => {
     creditsFromCourses: courseCredits || 0,
     creditsFromLectures: lectureCredits || 0,
     creditsFromSeminars: seminarCredits || 0,
+    creditsFromForum: forumCredits,
     creditsFromPresentations: 0, // TODO: добави когато имаш student_presentation credits
   },
 });

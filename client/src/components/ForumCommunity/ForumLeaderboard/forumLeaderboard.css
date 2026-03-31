@@ -1,0 +1,150 @@
+/* Prefix: flb- (ForumLeaderboard) */
+@import '../forumVariables.css';
+
+.flb-container {
+  background: var(--fm-bg-card);
+  border: 1px solid var(--fm-border);
+  border-radius: var(--fm-radius);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.flb-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.flb-icon { color: var(--fm-gold); }
+
+.flb-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--fm-text);
+}
+
+/* Tabs */
+.flb-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.flb-tab {
+  flex: 1;
+  padding: 5px 0;
+  border: none;
+  border-radius: var(--fm-radius-sm);
+  background: transparent;
+  color: var(--fm-text-muted);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.flb-tab:hover { color: var(--fm-text-secondary); }
+
+.flb-tab-active {
+  background: rgba(201, 168, 76, 0.12);
+  color: var(--fm-gold);
+}
+
+/* List */
+.flb-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.flb-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: var(--fm-radius-sm);
+  transition: background 0.15s;
+}
+
+.flb-item:hover { background: var(--fm-bg-card-hover); }
+
+.flb-top { background: rgba(201, 168, 76, 0.04); }
+
+.flb-rank {
+  width: 24px;
+  text-align: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.flb-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--fm-bg-elevated);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flb-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+.flb-avatar span {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--fm-text-secondary);
+}
+
+.flb-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  flex: 1;
+}
+
+.flb-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--fm-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.flb-score {
+  font-size: 10px;
+  color: var(--fm-text-muted);
+}
+
+/* Loading / Empty */
+.flb-loading {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.flb-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--fm-border);
+  border-top-color: var(--fm-gold);
+  border-radius: 50%;
+  animation: flb-spin 0.7s linear infinite;
+}
+
+@keyframes flb-spin { to { transform: rotate(360deg); } }
+
+.flb-empty {
+  text-align: center;
+  font-size: 12px;
+  color: var(--fm-text-muted);
+  padding: 16px 0;
+  margin: 0;
+}

@@ -1,0 +1,223 @@
+/* AdminForumAnalytics — prefix: afa- */
+
+.afa-container { font-family: 'Montserrat', sans-serif; }
+
+.afa-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.afa-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #f0f0f0;
+}
+
+.afa-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.afa-periods { display: flex; gap: 4px; }
+
+.afa-export-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 14px;
+  border: 1px solid #3a3a3e;
+  border-radius: 6px;
+  background: #2a2a2e;
+  color: #aaa;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.afa-export-btn:hover {
+  border-color: #8b2040;
+  color: #ddd;
+}
+
+[data-theme="light"] .afa-export-btn {
+  background: #f0eeea;
+  border-color: #d5d3cf;
+  color: #555;
+}
+
+[data-theme="light"] .afa-export-btn:hover {
+  border-color: #8b2040;
+  color: #333;
+}
+
+.afa-period-btn {
+  padding: 6px 14px;
+  border: 1px solid #3a3a3e;
+  border-radius: 6px;
+  background: #2a2a2e;
+  color: #aaa;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.afa-period-btn:hover { border-color: #555; color: #ddd; }
+
+.afa-period-active {
+  background: rgba(139, 32, 64, 0.15);
+  border-color: #8b2040;
+  color: #d4a853;
+}
+
+/* Growth cards */
+.afa-growth-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.afa-growth-card {
+  background: #222226;
+  border: 1px solid #2e2e32;
+  border-radius: 6px;
+  padding: 16px;
+  text-align: center;
+}
+
+.afa-growth-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #f0f0f0;
+}
+
+.afa-growth-label {
+  font-size: 0.78rem;
+  color: #888;
+  margin-bottom: 6px;
+}
+
+.afa-growth-diff {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+
+.afa-up { color: #4ade80; }
+.afa-down { color: #f87171; }
+.afa-neutral { color: #888; }
+
+/* Chart cards */
+.afa-chart-card {
+  background: #222226;
+  border: 1px solid #2e2e32;
+  border-radius: 6px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.afa-chart-title {
+  margin: 0 0 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #d0d0d0;
+}
+
+.afa-charts-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.afa-chart-half { margin-bottom: 0; }
+
+/* Table */
+.afa-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.afa-table th {
+  padding: 8px 10px;
+  text-align: left;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  border-bottom: 1px solid #333;
+}
+
+.afa-table td {
+  padding: 8px 10px;
+  font-size: 0.8rem;
+  color: #d0d0d0;
+  border-bottom: 1px solid #2a2a2e;
+}
+
+.afa-post-title {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Loading */
+.afa-loading {
+  display: flex;
+  justify-content: center;
+  padding: 60px 0;
+}
+
+.afa-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #333;
+  border-top-color: #d4a853;
+  border-radius: 50%;
+  animation: afa-spin 0.7s linear infinite;
+}
+
+@keyframes afa-spin { to { transform: rotate(360deg); } }
+
+.afa-empty {
+  text-align: center;
+  color: #666;
+  padding: 60px 0;
+  font-size: 0.9rem;
+}
+
+/* Light theme */
+[data-theme="light"] .afa-title { color: #1a1a1e; }
+[data-theme="light"] .afa-period-btn { background: #f0eeea; border-color: #d5d3cf; color: #555; }
+[data-theme="light"] .afa-period-btn:hover { border-color: #aaa; color: #333; }
+[data-theme="light"] .afa-period-active { background: rgba(139, 32, 64, 0.08); border-color: #8b2040; color: #8b2040; }
+[data-theme="light"] .afa-growth-card { background: #fff; border-color: #d5d3cf; }
+[data-theme="light"] .afa-growth-value { color: #1a1a1e; }
+[data-theme="light"] .afa-growth-label { color: #555; }
+[data-theme="light"] .afa-chart-card { background: #fff; border-color: #d5d3cf; }
+[data-theme="light"] .afa-chart-title { color: #1a1a1e; }
+[data-theme="light"] .afa-table th { color: #555; border-bottom-color: #d5d3cf; }
+[data-theme="light"] .afa-table td { color: #1a1a1e; border-bottom-color: #e5e2dc; }
+
+@media (max-width: 768px) {
+  .afa-growth-grid { grid-template-columns: 1fr; }
+  .afa-charts-row { grid-template-columns: 1fr; }
+  .afa-header { flex-direction: column; align-items: flex-start; }
+}

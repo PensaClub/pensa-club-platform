@@ -19,7 +19,7 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    background: rgba(15, 23, 42, 0.6);
+    background: var(--sdb-bg-secondary);
     backdrop-filter: blur(12px);
     border: 1px solid rgba(99, 102, 241, 0.15);
     border-radius: 16px;
@@ -47,14 +47,14 @@
 
 .sdco-total-label {
     font-size: 13px;
-    color: #94a3b8;
+    color: var(--sdb-text-secondary);
     margin-bottom: 4px;
 }
 
 .sdco-total-value {
     font-size: 42px;
     font-weight: 700;
-    color: #f1f5f9;
+    color: var(--sdb-text-primary);
     line-height: 1;
     margin-bottom: 4px;
 }
@@ -80,7 +80,7 @@
     justify-content: center;
     gap: 6px;
     font-size: 12px;
-    color: #64748b;
+    color: var(--sdb-text-muted);
     margin-bottom: 8px;
 }
 
@@ -119,7 +119,7 @@
     flex-direction: column;
     align-items: center;
     text-align: center;
-    background: rgba(15, 23, 42, 0.6);
+    background: var(--sdb-bg-secondary);
     backdrop-filter: blur(12px);
     border: 1px solid rgba(99, 102, 241, 0.15);
     border-radius: 12px;
@@ -128,7 +128,7 @@
 }
 
 .sdco-category-card:hover {
-    background: rgba(30, 41, 59, 0.8);
+    background: var(--sdb-bg-card-hover);
     border-color: rgba(99, 102, 241, 0.3);
     transform: translateY(-2px);
 }
@@ -152,14 +152,14 @@
 .sdco-category-value {
     font-size: 28px;
     font-weight: 700;
-    color: #f1f5f9;
+    color: var(--sdb-text-primary);
     line-height: 1;
     margin-bottom: 4px;
 }
 
 .sdco-category-label {
     font-size: 12px;
-    color: #94a3b8;
+    color: var(--sdb-text-secondary);
     font-weight: 500;
 }
 

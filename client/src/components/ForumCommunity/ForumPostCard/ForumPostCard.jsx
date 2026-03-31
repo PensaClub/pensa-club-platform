@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { Eye, MessageSquare, Share2, Bookmark, BookmarkCheck, Pin, Lock, Clock } from 'lucide-react';
+import ForumUserBadges from '../ForumUserBadges/ForumUserBadges';
 import './forumPostCard.css';
 
 const TYPE_ICONS = {
@@ -10,7 +11,7 @@ const TYPE_ICONS = {
   question: '❓',
 };
 
-const ForumPostCard = ({ post, onReaction, onBookmark }) => {
+const ForumPostCard = ({ post, onReaction, onBookmark, forumSettings }) => {
   const { t } = useTranslation('forum');
   const navigate = useLocalizedNavigate();
 
@@ -44,6 +45,7 @@ const ForumPostCard = ({ post, onReaction, onBookmark }) => {
         </div>
         <div className="fpc-author-info">
           <span className="fpc-author-name">{authorName}</span>
+          <ForumUserBadges badges={post.author?.forumBadges} />
           <span className="fpc-meta">
             <Clock size={11} />
             {timeAgo(post.lastActivityAt || post.createdAt)}
@@ -108,17 +110,19 @@ const ForumPostCard = ({ post, onReaction, onBookmark }) => {
           <span className="fpc-stat"><MessageSquare size={14} /> {post.commentCount || 0}</span>
           <span className="fpc-stat"><Share2 size={14} /> {post.shareCount || 0}</span>
         </div>
-        <button
-          className={`fpc-bookmark ${post.isBookmarked ? 'fpc-bookmark-active' : ''}`}
-          onClick={(e) => { e.stopPropagation(); onBookmark?.(post.id); }}
-          title={post.isBookmarked ? t('forumCommunity.post.bookmarked') : t('forumCommunity.post.bookmark')}
-        >
-          {post.isBookmarked ? <BookmarkCheck size={16} /> : <Bookmark size={16} />}
-        </button>
+        {forumSettings?.enableBookmarks !== false && (
+          <button
+            className={`fpc-bookmark ${post.isBookmarked ? 'fpc-bookmark-active' : ''}`}
+            onClick={(e) => { e.stopPropagation(); onBookmark?.(post.id); }}
+            title={post.isBookmarked ? t('forumCommunity.post.bookmarked') : t('forumCommunity.post.bookmark')}
+          >
+            {post.isBookmarked ? <BookmarkCheck size={16} /> : <Bookmark size={16} />}
+          </button>
+        )}
       </div>
 
       {/* Reactions summary */}
-      {post.reactionCount > 0 && (
+      {forumSettings?.enableReactions !== false && post.reactionCount > 0 && (
         <div className="fpc-reactions-summary">
           {post.reactions?.slice(0, 5).map((r, i) => (
             <span key={i} className="fpc-reaction-emoji">{r.emoji}</span>

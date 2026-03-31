@@ -4,7 +4,7 @@
    ======================================== */
 
 .sdra-container {
-    background: rgba(15, 23, 42, 0.6);
+    background: var(--sdb-bg-secondary);
     backdrop-filter: blur(12px);
     border: 1px solid rgba(99, 102, 241, 0.15);
     border-radius: 16px;
@@ -24,7 +24,7 @@
     gap: 10px;
     font-size: 18px;
     font-weight: 600;
-    color: #f1f5f9;
+    color: var(--sdb-text-primary);
     margin: 0;
 }
 
@@ -69,7 +69,7 @@
     align-items: center;
     gap: 12px;
     padding: 12px 14px;
-    background: rgba(30, 41, 59, 0.4);
+    background: var(--sdb-bg-card);
     border: 1px solid rgba(99, 102, 241, 0.08);
     border-radius: 10px;
     transition: all 0.2s ease;
@@ -81,7 +81,7 @@
 }
 
 .sdra-activity-link:hover {
-    background: rgba(30, 41, 59, 0.7);
+    background: var(--sdb-bg-card-hover);
     border-color: rgba(99, 102, 241, 0.2);
     transform: translateX(4px);
 }
@@ -135,7 +135,7 @@
 }
 
 .sdra-icon-default {
-    color: #94a3b8;
+    color: var(--sdb-text-secondary);
 }
 
 /* ========================================
@@ -154,7 +154,7 @@
 .sdra-activity-text {
     margin: 0;
     font-size: 14px;
-    color: #f1f5f9;
+    color: var(--sdb-text-primary);
     display: flex;
     align-items: center;
     gap: 6px;
@@ -162,12 +162,12 @@
 }
 
 .sdra-activity-type {
-    color: #94a3b8;
+    color: var(--sdb-text-secondary);
 }
 
 .sdra-activity-title {
     font-weight: 500;
-    color: #f1f5f9;
+    color: var(--sdb-text-primary);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -191,7 +191,7 @@
 .sdra-activity-time {
     flex-shrink: 0;
     font-size: 12px;
-    color: #64748b;
+    color: var(--sdb-text-muted);
     white-space: nowrap;
 }
 
@@ -217,7 +217,7 @@
 
 .sdra-empty-text {
     font-size: 14px;
-    color: #64748b;
+    color: var(--sdb-text-muted);
     margin: 0 0 16px 0;
 }
 

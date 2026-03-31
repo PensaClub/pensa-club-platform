@@ -23,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       rulesAcceptedAt: { type: DataTypes.DATE, allowNull: true, field: 'rules_accepted_at' },
       vipGrantedAt: { type: DataTypes.DATE, allowNull: true, field: 'vip_granted_at' },
       vipGrantedBy: { type: DataTypes.ENUM('auto', 'admin'), allowNull: true, field: 'vip_granted_by' },
+      reputationScore: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0, field: 'reputation_score' },
     },
     {
       sequelize,

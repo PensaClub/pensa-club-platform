@@ -7,6 +7,9 @@ const {
   forum_user_status, user_account, user_details, sequelize,
 } = require('../sequelize/models/index');
 const isAuth = require('../middlewares/isAuth');
+const forumEmailTemplates = require('../utils/forumEmailTemplates');
+const { forwardEmailsViaZoho } = require('../utils/zohoEmails');
+const { checkAndAwardBadges, awardForumCredits, recalculateReputation } = require('../utils/forumGamification');
 const { validateBody, validateQuery } = require('../middlewares/validateRequest');
 const {
   forumPostCreateSchema, forumPostUpdateSchema,
@@ -45,6 +48,23 @@ const generateUniqueSlug = async (title, existingId = null) => {
 const generateExcerpt = (html) => {
   const text = html.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
   return text.substring(0, 490) + (text.length > 490 ? '...' : '');
+};
+
+const getForumSetting = async (key, defaultValue = null) => {
+  const { site_setting } = require('../sequelize/models/index');
+  const setting = await site_setting.findOne({ where: { key: `forum_${key}` } });
+  return setting ? setting.value : defaultValue;
+};
+
+const isForumFeatureEnabled = async (feature) => {
+  const val = await getForumSetting(feature, 'true');
+  return val === 'true' || val === true;
+};
+
+const countWords = (text) => {
+  const plain = text.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+  if (!plain) return 0;
+  return plain.split(/\s+/).length;
 };
 
 const getOrCreateForumStatus = async (userId) => {
@@ -91,11 +111,10 @@ const authorInclude = {
   model: user_account,
   as: 'author',
   attributes: ['id', 'email'],
-  include: [{
-    model: user_details,
-    as: 'details',
-    attributes: ['firstName', 'lastName', 'imageURL'],
-  }],
+  include: [
+    { model: user_details, as: 'details', attributes: ['firstName', 'lastName', 'imageURL'] },
+    { model: forum_user_badge, as: 'forumBadges', attributes: ['badge', 'awardedAt'] },
+  ],
 };
 
 // ============ PUBLIC ENDPOINTS ============
@@ -103,7 +122,12 @@ const authorInclude = {
 // GET /forum/feed
 forumController.get('/feed', isAuth.allowGuest, validateQuery(forumFeedQuerySchema), async (req, res, next) => {
   try {
-    const { page, limit, sort, spaceId, tag, type, search } = req.query;
+    let { page, limit, sort, spaceId, tag, type, search } = req.query;
+
+    // Override limit with postsPerPage setting
+    const ppp = parseInt(await getForumSetting('postsPerPage', '0'), 10);
+    if (ppp > 0) limit = ppp;
+
     const offset = (page - 1) * limit;
 
     const where = { status: 'published' };
@@ -503,7 +527,170 @@ forumController.get('/search', isAuth.allowGuest, async (req, res, next) => {
   }
 });
 
+// ============ GAMIFICATION ENDPOINTS ============
+
+// GET /forum/leaderboard?period=weekly|monthly|all
+forumController.get('/leaderboard', async (req, res, next) => {
+  try {
+    const period = req.query.period || 'all';
+    let dateFilter = {};
+
+    if (period === 'weekly') {
+      const weekAgo = new Date();
+      weekAgo.setDate(weekAgo.getDate() - 7);
+      dateFilter = { createdAt: { [Op.gte]: weekAgo } };
+    } else if (period === 'monthly') {
+      const monthAgo = new Date();
+      monthAgo.setMonth(monthAgo.getMonth() - 1);
+      dateFilter = { createdAt: { [Op.gte]: monthAgo } };
+    }
+
+    let leaders;
+
+    if (period === 'all') {
+      leaders = await forum_user_status.findAll({
+        where: { reputationScore: { [Op.gt]: 0 } },
+        order: [['reputationScore', 'DESC']],
+        limit: 10,
+        include: [{
+          model: user_account,
+          as: 'user',
+          attributes: ['id', 'email'],
+          include: [
+            { model: user_details, as: 'details', attributes: ['firstName', 'lastName', 'imageURL'] },
+            { model: forum_user_badge, as: 'forumBadges', attributes: ['badge', 'awardedAt'] },
+          ],
+        }],
+      });
+
+      leaders = leaders.map((s, i) => ({
+        rank: i + 1,
+        userId: s.userId,
+        name: s.user?.details ? `${s.user.details.firstName || ''} ${s.user.details.lastName || ''}`.trim() : 'Потребител',
+        avatar: s.user?.details?.imageURL || null,
+        score: s.reputationScore,
+        badges: (s.user?.forumBadges || []).map(b => b.badge),
+      }));
+    } else {
+      // Period-based: aggregate from credits history
+      const { user_credits_history } = require('../sequelize/models/index');
+      const results = await user_credits_history.findAll({
+        where: { sourceType: { [Op.like]: 'forum_%' }, ...dateFilter },
+        attributes: [
+          'userId',
+          [sequelize.fn('SUM', sequelize.col('credits_amount')), 'periodScore'],
+        ],
+        group: ['userId'],
+        order: [[sequelize.fn('SUM', sequelize.col('credits_amount')), 'DESC']],
+        limit: 10,
+        raw: true,
+      });
+
+      const userIds = results.map(r => r.userId);
+      const users = await user_account.findAll({
+        where: { id: userIds },
+        attributes: ['id'],
+        include: [
+          { model: user_details, as: 'details', attributes: ['firstName', 'lastName', 'imageURL'] },
+          { model: forum_user_badge, as: 'forumBadges', attributes: ['badge'] },
+        ],
+      });
+
+      const userMap = {};
+      users.forEach(u => { userMap[u.id] = u; });
+
+      leaders = results.map((r, i) => {
+        const u = userMap[r.userId];
+        return {
+          rank: i + 1,
+          userId: r.userId,
+          name: u?.details ? `${u.details.firstName || ''} ${u.details.lastName || ''}`.trim() : 'Потребител',
+          avatar: u?.details?.imageURL || null,
+          score: parseInt(r.periodScore, 10) || 0,
+          badges: (u?.forumBadges || []).map(b => b.badge),
+        };
+      });
+    }
+
+    res.json({ leaders, period });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// GET /forum/post-of-week
+forumController.get('/post-of-week', async (req, res, next) => {
+  try {
+    const { site_setting } = require('../sequelize/models/index');
+    const setting = await site_setting.findOne({ where: { key: 'forum_post_of_week' } });
+    if (!setting || !setting.value) return res.json({ post: null });
+
+    const postId = parseInt(setting.value, 10);
+    if (!postId) return res.json({ post: null });
+
+    const post = await forum_post.findOne({
+      where: { id: postId, status: 'published' },
+      attributes: ['id', 'title', 'slug', 'excerpt', 'coverImage', 'viewCount', 'commentCount', 'reactionCount', 'createdAt'],
+      include: [{
+        model: user_account,
+        as: 'author',
+        attributes: ['id'],
+        include: [{ model: user_details, as: 'details', attributes: ['firstName', 'lastName', 'imageURL'] }],
+      }],
+    });
+
+    res.json({ post: post || null });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// GET /forum/badges/:userId
+forumController.get('/badges/:userId', async (req, res, next) => {
+  try {
+    const badges = await forum_user_badge.findAll({
+      where: { userId: req.params.userId },
+      attributes: ['badge', 'awardedAt'],
+      order: [['awardedAt', 'DESC']],
+    });
+    const { BADGE_DEFINITIONS } = require('../utils/forumGamification');
+    const enriched = badges.map(b => ({
+      badge: b.badge,
+      emoji: BADGE_DEFINITIONS[b.badge]?.emoji || '🏅',
+      awardedAt: b.awardedAt,
+    }));
+    res.json({ badges: enriched });
+  } catch (err) {
+    next(err);
+  }
+});
+
 // ============ AUTHENTICATED ENDPOINTS ============
+
+// GET /forum/settings (public limits)
+forumController.get('/settings', async (req, res, next) => {
+  try {
+    const { site_setting } = require('../sequelize/models/index');
+    const numKeys = ['forum_maxPostLength', 'forum_maxCommentLength', 'forum_maxFileSize', 'forum_maxCommentFileSize', 'forum_cooldownSeconds'];
+    const toggleKeys = ['forum_allowPolls', 'forum_allowFileUploads', 'forum_enableSpaces', 'forum_enableReactions', 'forum_enableBookmarks', 'forum_enableReports'];
+    const allKeys = [...numKeys, ...toggleKeys];
+    const settings = await site_setting.findAll({ where: { key: allKeys } });
+
+    const result = {};
+    for (const s of settings) {
+      const k = s.key.replace('forum_', '');
+      if (toggleKeys.includes(s.key)) {
+        result[k] = s.value === 'true' || s.value === true;
+      } else {
+        result[k] = parseInt(s.value, 10) || 0;
+      }
+    }
+
+    res.json(result);
+  } catch (err) {
+    next(err);
+  }
+});
 
 // GET /forum/my/status
 forumController.get('/my/status', isAuth, async (req, res, next) => {
@@ -511,6 +698,24 @@ forumController.get('/my/status', isAuth, async (req, res, next) => {
     const status = await getOrCreateForumStatus(req.user.userId);
     const badges = await forum_user_badge.findAll({ where: { userId: req.user.userId } });
     res.json({ status, badges });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// GET /forum/rules
+forumController.get('/rules', isAuth, async (req, res, next) => {
+  try {
+    const { site_setting } = require('../sequelize/models/index');
+    const ruleKeys = ['forum_rules_bg', 'forum_rules_en', 'forum_rules_de'];
+    const settings = await site_setting.findAll({ where: { key: ruleKeys } });
+
+    const rules = {};
+    for (const s of settings) {
+      rules[s.key.replace('forum_rules_', '')] = s.value;
+    }
+
+    res.json({ bg: rules.bg || '', en: rules.en || '', de: rules.de || '' });
   } catch (err) {
     next(err);
   }
@@ -533,19 +738,36 @@ forumController.post('/posts', isAuth, validateBody(forumPostCreateSchema), asyn
     const access = await checkForumAccess(req.user.userId, 'post');
     if (!access.allowed) return res.status(403).json({ message: access.reason });
 
-    // Rules acceptance check will be enforced via ForumRulesModal (Phase 6)
-
     const { title, content, type, spaceId, tags, images, coverImage, videos, poll } = req.body;
 
-    // Status logic: admin/mentor → published, VIP → published (except article), others → pending
+    // Feature checks
+    if (type === 'poll' && !(await isForumFeatureEnabled('allowPolls'))) {
+      return res.status(403).json({ message: 'polls_disabled' });
+    }
+    if ((images?.length || videos?.length || coverImage) && !(await isForumFeatureEnabled('allowFileUploads'))) {
+      return res.status(403).json({ message: 'file_uploads_disabled' });
+    }
+
+    // Word limit check
+    const maxPostWords = parseInt(await getForumSetting('maxPostLength', '0'), 10);
+    if (maxPostWords > 0 && countWords(content) > maxPostWords) {
+      return res.status(400).json({ message: 'post_too_long', maxWords: maxPostWords });
+    }
+
+    // Status logic
     let postStatus = 'pending';
 
-    // Check if user is admin or mentor
     const { user_account: userModel, mentor } = require('../sequelize/models/index');
     const userRecord = await userModel.findByPk(req.user.userId, { attributes: ['role'] });
     const isMentor = await mentor.findOne({ where: { userId: req.user.userId, status: 'active' }, attributes: ['id'] });
+    const isAdminOrMod = userRecord?.role === 'admin' || userRecord?.role === 'moderator' || !!isMentor;
 
-    if (userRecord?.role === 'admin' || userRecord?.role === 'moderator' || isMentor) {
+    // autoPublish setting overrides requireApproval for non-admin users
+    const autoPublish = await isForumFeatureEnabled('autoPublish');
+
+    if (isAdminOrMod) {
+      postStatus = 'published';
+    } else if (autoPublish) {
       postStatus = 'published';
     } else if (access.status?.role === 'vip' && !access.restricted && type !== 'article') {
       postStatus = 'published';
@@ -596,7 +818,28 @@ forumController.post('/posts', isAuth, validateBody(forumPostCreateSchema), asyn
       await forum_space.increment('postCount', { where: { id: spaceId } });
     }
 
-    res.status(201).json({ post, message: postStatus === 'pending' ? 'post_pending_approval' : 'post_published' });
+    // Gamification (async, non-blocking)
+    let newBadges = [];
+    let creditsEarned = 0;
+    if (postStatus === 'published') {
+      try {
+        newBadges = await checkAndAwardBadges(req.user.userId);
+        creditsEarned = await awardForumCredits(req.user.userId, 'forum_post', post.id, post.title);
+        recalculateReputation(req.user.userId).catch(() => {});
+      } catch (e) { /* non-blocking */ }
+    }
+
+    // Real-time: broadcast new post to feed
+    if (postStatus === 'published') {
+      const io = req.app.get('io');
+      if (io) {
+        io.to('forum:feed').emit('forum:newPost', {
+          post: { id: post.id, title: post.title, slug: post.slug, type: post.type, authorId: post.authorId },
+        });
+      }
+    }
+
+    res.status(201).json({ post, newBadges, creditsEarned, message: postStatus === 'pending' ? 'post_pending_approval' : 'post_published' });
   } catch (err) {
     next(err);
   }
@@ -657,13 +900,22 @@ forumController.post('/posts/:id/comments', isAuth, validateBody(forumCommentCre
   try {
     const access = await checkForumAccess(req.user.userId, 'comment');
     if (!access.allowed) return res.status(403).json({ message: access.reason });
-    // Rules acceptance check will be enforced via ForumRulesModal (Phase 6)
-
     const post = await forum_post.findByPk(req.params.id);
     if (!post) return res.status(404).json({ message: 'Post not found' });
     if (post.isLocked) return res.status(403).json({ message: 'post_locked' });
 
     const { content, parentId, images, mentionedUsers, quotedCommentId } = req.body;
+
+    // Feature check: file uploads
+    if (images?.length && !(await isForumFeatureEnabled('allowFileUploads'))) {
+      return res.status(403).json({ message: 'file_uploads_disabled' });
+    }
+
+    // Word limit check
+    const maxCommentWords = parseInt(await getForumSetting('maxCommentLength', '0'), 10);
+    if (maxCommentWords > 0 && content && countWords(content) > maxCommentWords) {
+      return res.status(400).json({ message: 'comment_too_long', maxWords: maxCommentWords });
+    }
 
     // Must have content or images
     if (!content?.trim() && (!images || images.length === 0)) {
@@ -684,25 +936,151 @@ forumController.post('/posts/:id/comments', isAuth, validateBody(forumCommentCre
     await post.increment('commentCount');
     await post.update({ lastActivityAt: new Date() });
 
+    // Notify post author about new comment
+    const { user_notification, admin_notification, user_account: ua } = require('../sequelize/models/index');
+    const { sendPushToUser } = require('../utils/pushNotifications');
+    if (post.authorId !== req.user.userId) {
+      // Check if author is admin/moderator
+      const authorAccount = await ua.findByPk(post.authorId, { attributes: ['role'] });
+      const isAdminAuthor = authorAccount?.role === 'admin' || authorAccount?.role === 'moderator';
+
+      if (isAdminAuthor) {
+        await admin_notification.create({
+          type: 'forum_comment',
+          title: 'Нов коментар на вашата публикация',
+          message: `Нов коментар на "${post.title}"`,
+          data: { postSlug: post.slug, commentId: comment.id },
+        }).catch(() => {});
+      } else {
+        await user_notification.create({
+          userId: post.authorId,
+          type: 'forum_comment',
+          title: 'Нов коментар на вашата публикация',
+          message: `Нов коментар на "${post.title}"`,
+          data: { postSlug: post.slug, commentId: comment.id },
+        }).catch(() => {});
+      }
+      // Push notification
+      sendPushToUser(post.authorId, {
+        title: 'Нов коментар',
+        body: `Нов коментар на "${post.title}"`,
+        url: `/academy/community/${post.slug}`,
+      }).catch(() => {});
+    }
+
+    // Notify parent comment author about reply
+    if (parentId) {
+      const parentComment = await forum_comment.findByPk(parentId, { attributes: ['authorId'] });
+      if (parentComment && parentComment.authorId !== req.user.userId && parentComment.authorId !== post.authorId) {
+        await user_notification.create({
+          userId: parentComment.authorId,
+          type: 'forum_reply',
+          title: 'Нов отговор на вашия коментар',
+          message: `Отговориха на коментара ви в "${post.title}"`,
+          data: { postSlug: post.slug, commentId: comment.id },
+        }).catch(() => {});
+      }
+    }
+
     // Send notifications for @mentions
     if (mentionedUsers && mentionedUsers.length > 0) {
-      const { user_notification } = require('../sequelize/models/index');
       for (const mentionedUserId of mentionedUsers) {
-        if (mentionedUserId !== req.user.userId) {
+        if (mentionedUserId !== req.user.userId && mentionedUserId !== post.authorId) {
           await user_notification.create({
             userId: mentionedUserId,
             type: 'forum_mention',
             title: 'Споменаха ви във форума',
             message: `Споменаха ви в коментар на "${post.title}"`,
             data: { postSlug: post.slug, commentId: comment.id },
-          }).catch(() => {}); // Ignore if notification model doesn't support this type
+          }).catch(() => {});
         }
       }
     }
 
+    // Email notifications (async, non-blocking)
+    if (await isForumFeatureEnabled('emailNotifications')) {
+      const commenter = await user_account.findByPk(req.user.userId, {
+        include: [{ model: user_details, as: 'details', attributes: ['firstName', 'lastName'] }],
+        attributes: ['id', 'email'],
+      });
+      const commenterName = commenter?.details
+        ? `${commenter.details.firstName || ''} ${commenter.details.lastName || ''}`.trim() || 'Потребител'
+        : 'Потребител';
+      const plainContent = (content || '').replace(/<[^>]+>/g, '').trim();
+
+      // Email to post author
+      if (post.authorId !== req.user.userId) {
+        const postAuthor = await user_account.findByPk(post.authorId, {
+          include: [{ model: user_details, as: 'details', attributes: ['firstName', 'lastName'] }],
+          attributes: ['id', 'email'],
+        });
+        if (postAuthor?.email) {
+          const authorName = postAuthor.details
+            ? `${postAuthor.details.firstName || ''} ${postAuthor.details.lastName || ''}`.trim()
+            : '';
+          const template = forumEmailTemplates.newComment({
+            userName: authorName, commenterName, postTitle: post.title,
+            commentPreview: plainContent, postSlug: post.slug,
+          });
+          forwardEmailsViaZoho({
+            userEmail: 'info@pensa.club', subject: template.subject,
+            body: '', toAddresses: postAuthor.email, formattedBody: template.html,
+          }).catch(err => console.error('Forum email error:', err.message));
+        }
+      }
+
+      // Email to parent comment author (reply)
+      if (parentId) {
+        const parentComment = await forum_comment.findByPk(parentId, { attributes: ['authorId'] });
+        if (parentComment && parentComment.authorId !== req.user.userId && parentComment.authorId !== post.authorId) {
+          const parentAuthor = await user_account.findByPk(parentComment.authorId, {
+            include: [{ model: user_details, as: 'details', attributes: ['firstName', 'lastName'] }],
+            attributes: ['id', 'email'],
+          });
+          if (parentAuthor?.email) {
+            const parentName = parentAuthor.details
+              ? `${parentAuthor.details.firstName || ''} ${parentAuthor.details.lastName || ''}`.trim()
+              : '';
+            const template = forumEmailTemplates.newReply({
+              userName: parentName, replierName: commenterName, postTitle: post.title,
+              replyPreview: plainContent, postSlug: post.slug,
+            });
+            forwardEmailsViaZoho({
+              userEmail: 'info@pensa.club', subject: template.subject,
+              body: '', toAddresses: parentAuthor.email, formattedBody: template.html,
+            }).catch(err => console.error('Forum email error:', err.message));
+          }
+        }
+      }
+    }
+
+    // Gamification
+    let newBadges = [];
+    let creditsEarned = 0;
+    try {
+      newBadges = await checkAndAwardBadges(req.user.userId);
+      creditsEarned = await awardForumCredits(req.user.userId, 'forum_comment', comment.id, post.title);
+      recalculateReputation(req.user.userId).catch(() => {});
+    } catch (e) { /* non-blocking */ }
+
     // Reload with author
     const full = await forum_comment.findByPk(comment.id, { include: [authorInclude] });
-    res.status(201).json({ comment: full });
+
+    // Real-time: emit new comment to post room
+    const io = req.app.get('io');
+    if (io) {
+      io.to(`forum:post:${post.id}`).emit('forum:newComment', { comment: full, postId: post.id });
+      // Notify post author
+      if (post.authorId !== req.user.userId) {
+        io.to(`user:${post.authorId}`).emit('notification:new', {
+          type: 'forum_comment',
+          title: post.title,
+          postSlug: post.slug,
+        });
+      }
+    }
+
+    res.status(201).json({ comment: full, newBadges, creditsEarned });
   } catch (err) {
     next(err);
   }
@@ -753,6 +1131,10 @@ forumController.delete('/comments/:id', isAuth, async (req, res, next) => {
 // POST /forum/reactions
 forumController.post('/reactions', isAuth, validateBody(forumReactionSchema), async (req, res, next) => {
   try {
+    if (!(await isForumFeatureEnabled('enableReactions'))) {
+      return res.status(403).json({ message: 'reactions_disabled' });
+    }
+
     const { targetType, targetId, emoji } = req.body;
 
     // Check restricted
@@ -782,6 +1164,18 @@ forumController.post('/reactions', isAuth, validateBody(forumReactionSchema), as
     if (targetType === 'post') await forum_post.increment('reactionCount', { where: { id: targetId } });
     else await forum_comment.increment('reactionCount', { where: { id: targetId } });
 
+    // Gamification: check badges for reactor + content author
+    try {
+      checkAndAwardBadges(req.user.userId).catch(() => {});
+      const target = targetType === 'post'
+        ? await forum_post.findByPk(targetId, { attributes: ['authorId'] })
+        : await forum_comment.findByPk(targetId, { attributes: ['authorId'] });
+      if (target && target.authorId !== req.user.userId) {
+        checkAndAwardBadges(target.authorId).catch(() => {});
+        recalculateReputation(target.authorId).catch(() => {});
+      }
+    } catch (e) { /* non-blocking */ }
+
     res.json({ action: 'added', emoji });
   } catch (err) {
     next(err);
@@ -791,6 +1185,10 @@ forumController.post('/reactions', isAuth, validateBody(forumReactionSchema), as
 // POST /forum/bookmarks/:postId
 forumController.post('/bookmarks/:postId', isAuth, async (req, res, next) => {
   try {
+    if (!(await isForumFeatureEnabled('enableBookmarks'))) {
+      return res.status(403).json({ message: 'bookmarks_disabled' });
+    }
+
     const postId = parseInt(req.params.postId);
     const existing = await forum_bookmark.findOne({ where: { userId: req.user.userId, postId } });
 
@@ -844,6 +1242,10 @@ forumController.post('/posts/:id/share', isAuth, async (req, res, next) => {
 // POST /forum/reports
 forumController.post('/reports', isAuth, validateBody(forumReportSchema), async (req, res, next) => {
   try {
+    if (!(await isForumFeatureEnabled('enableReports'))) {
+      return res.status(403).json({ message: 'reports_disabled' });
+    }
+
     const { targetType, targetId, reason, description } = req.body;
 
     // Prevent duplicate reports
@@ -863,7 +1265,7 @@ forumController.post('/reports', isAuth, validateBody(forumReportSchema), async 
     const { site_setting } = require('../sequelize/models/index');
     let threshold = 3;
     try {
-      const setting = await site_setting.findOne({ where: { key: 'forum_reports_to_auto_hide' } });
+      const setting = await site_setting.findOne({ where: { key: { [Op.in]: ['forum_maxReportsBeforeHide', 'forum_reports_to_auto_hide'] } }, order: [['key', 'DESC']] });
       if (setting) threshold = parseInt(setting.value) || 3;
     } catch (e) {}
 
@@ -884,6 +1286,10 @@ forumController.post('/reports', isAuth, validateBody(forumReportSchema), async 
 // POST /forum/spaces/suggest
 forumController.post('/spaces/suggest', isAuth, validateBody(forumSpaceSuggestSchema), async (req, res, next) => {
   try {
+    if (!(await isForumFeatureEnabled('enableSpaces'))) {
+      return res.status(403).json({ message: 'spaces_disabled' });
+    }
+
     const { name, description, icon } = req.body;
     const slug = generateSlug(name) || name.toLowerCase().replace(/\s+/g, '-');
 
@@ -1019,6 +1425,28 @@ forumController.get('/my/spaces', isAuth, async (req, res, next) => {
     });
 
     res.json({ spaces: memberships.map(m => ({ ...m.space.toJSON(), role: m.role })) });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// GET /forum/my/credits
+forumController.get('/my/credits', isAuth, async (req, res, next) => {
+  try {
+    const { user_credits, user_credits_history } = require('../sequelize/models/index');
+
+    const credits = await user_credits.findOne({ where: { userId: req.user.userId } });
+    const history = await user_credits_history.findAll({
+      where: { userId: req.user.userId, sourceType: { [Op.like]: 'forum_%' } },
+      order: [['createdAt', 'DESC']],
+      limit: 20,
+      attributes: ['creditsAmount', 'sourceType', 'sourceTitle', 'description', 'createdAt'],
+    });
+
+    res.json({
+      totalForumCredits: credits?.totalCredits || 0,
+      history,
+    });
   } catch (err) {
     next(err);
   }

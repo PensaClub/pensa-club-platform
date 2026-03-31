@@ -5,6 +5,8 @@ import { useForum } from '../../contexts/ForumProvider';
 import ForumReactions from '../ForumReactions/ForumReactions';
 import ForumImageLightbox from '../ForumImageLightbox/ForumImageLightbox';
 import ForumReportModal from '../ForumReportModal/ForumReportModal';
+import ForumUserBadges from '../ForumUserBadges/ForumUserBadges';
+import { useSocket } from '../../contexts/SocketProvider';
 import { Reply, Quote, Pencil, Trash2, Clock, ChevronDown, ChevronUp, Flag } from 'lucide-react';
 import './forumCommentItem.css';
 
@@ -19,7 +21,8 @@ const parseUserId = (token) => {
 const ForumCommentItem = ({ comment, depth = 0, onReply, onQuote, onRefresh, onUpdate, onDelete }) => {
   const { t } = useTranslation('forum');
   const { token, isAdmin: isAdminCtx } = useAuthContext();
-  const { updateComment, deleteComment } = useForum();
+  const { updateComment, deleteComment, forumSettings } = useForum();
+  const { onlineUserIds } = useSocket() || {};
 
   const [editing, setEditing] = useState(false);
   const [editContent, setEditContent] = useState(comment.content);
@@ -77,14 +80,18 @@ const ForumCommentItem = ({ comment, depth = 0, onReply, onQuote, onRefresh, onU
       )}
 
       <div className="fci-header">
-        <div className="fci-avatar">
-          {avatar
-            ? <img src={avatar} alt="" />
-            : <span>{authorName.charAt(0)}</span>
-          }
+        <div className="fci-avatar-wrap">
+          <div className="fci-avatar">
+            {avatar
+              ? <img src={avatar} alt="" />
+              : <span>{authorName.charAt(0)}</span>
+            }
+          </div>
+          {onlineUserIds?.has(String(comment.authorId)) && <span className="fci-online-dot" />}
         </div>
         <div className="fci-author-info">
           <span className="fci-author-name">{authorName}</span>
+          <ForumUserBadges badges={comment.author?.forumBadges} />
           <span className="fci-time">
             <Clock size={10} /> {timeAgo(comment.createdAt)}
             {comment.isEdited && <em className="fci-edited"> · {t('forumCommunity.comment.edited')}</em>}
@@ -147,7 +154,7 @@ const ForumCommentItem = ({ comment, depth = 0, onReply, onQuote, onRefresh, onU
             <button className="fci-action-btn" onClick={() => onQuote?.(comment)}>
               <Quote size={12} /> {t('forumCommunity.comment.quote')}
             </button>
-            {!isOwn && currentUserId && (
+            {!isOwn && currentUserId && forumSettings?.enableReports !== false && (
               <button className="fci-action-btn fci-action-report" onClick={() => setShowReport(true)}>
                 <Flag size={12} /> Докладвай
               </button>
@@ -164,13 +171,15 @@ const ForumCommentItem = ({ comment, depth = 0, onReply, onQuote, onRefresh, onU
             )}
           </div>
 
-          <ForumReactions
-            targetType="comment"
-            targetId={comment.id}
-            reactions={comment.reactions || []}
-            userReaction={comment.userReaction}
-            onReactionChange={onRefresh}
-          />
+          {forumSettings?.enableReactions !== false && (
+            <ForumReactions
+              targetType="comment"
+              targetId={comment.id}
+              reactions={comment.reactions || []}
+              userReaction={comment.userReaction}
+              onReactionChange={onRefresh}
+            />
+          )}
         </div>
       )}
 
