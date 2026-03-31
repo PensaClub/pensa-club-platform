@@ -68,6 +68,7 @@ import { AcademyProvider } from './components/contexts/AcademyProvider.jsx';
 import { FactCheckProvider } from './components/contexts/FactCheckProvider.jsx';
 import { ReActionProvider } from './components/contexts/ReActionProvider.jsx';
 import { ForumProvider } from './components/contexts/ForumProvider.jsx';
+import { SocketProvider } from './components/contexts/SocketProvider.jsx';
 import { DigiBridgeChatButton } from './components/DigiBridge/DigiBridgeChatButton/DigiBridgeChatButton.jsx';
 import { DigiBridgeChatWindow } from './components/DigiBridge/DigiBridgeChatWindow/DigiBridgeChatWindow.jsx';
 import { MentorGuard } from './components/Guards/MentorGuard.jsx';
@@ -127,7 +128,9 @@ const EditSeminar = lazyWithRetry(() => import('./components/AdminAcademySeminar
 const SeminarReviewsAdmin = lazyWithRetry(() => import('./components/AdminAcademySeminarsList/SeminarReviewsAdmin/SeminarReviewsAdmin'));
 const SeminarCheckin = lazyWithRetry(() => import('./components/AcademySeminars/SeminarCheckin/SeminarCheckin'));
 const ForumCommunity = lazyWithRetry(() => import('./components/ForumCommunity/ForumCommunity.jsx'));
+const AdminForumDashboard = lazyWithRetry(() => import('./components/AdminForumDashboard/AdminForumDashboard.jsx'));
 const ForumPostDetailPage = lazyWithRetry(() => import('./components/ForumCommunity/ForumPostDetail/ForumPostDetail.jsx'));
+const ForumMyPanel = lazyWithRetry(() => import('./components/ForumCommunity/ForumMyPanel/ForumMyPanel.jsx'));
 const TelkRkmeRzi = lazyWithRetry(() => import('./components/TelkRkmeRzi/TelkRkmeRzi.jsx'));
 const ComingSoon = lazyWithRetry(() => import('./components/DigiBridgeAcademy/ComingSoon/ComingSoon.jsx'));
 const ProjectCreateForm = lazyWithRetry(() => import('./components/Initiatives/CreateProject/ProjectCreateForm'));
@@ -185,6 +188,7 @@ function AppRoutes() {
       <Route path="/academy/library" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><ComingSoon pageKey="library" /></Suspense>} />
       <Route path="/academy/community" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><ForumProvider><ForumCommunity /></ForumProvider></Suspense>} />
       <Route path="/academy/community/post/:slug" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><ForumProvider><ForumPostDetailPage /></ForumProvider></Suspense>} />
+      <Route path="/academy/community/my" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><ForumProvider><ForumMyPanel /></ForumProvider></Suspense>} />
       <Route path="/academy/about" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><ComingSoon pageKey="about" /></Suspense>} />
       <Route path="/contact" element={<ContactForm />} />
       <Route path="/about" element={<AboutPage />} />
@@ -248,8 +252,9 @@ function AppRoutes() {
         <Route path="/academy/seminars/:seminarId/checkin" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><SeminarCheckin /></Suspense>} />
         <Route path="/academy/seminars/:slug" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademySeminarDetail /></Suspense>} />
         <Route path="/academy/seminars/:slug/test" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademyTestPlayer /></Suspense>} />
-        <Route path="/academy/admin/edit-seminar/:slug" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><EditSeminar /></Suspense></AdminGuard>} /> 
+        <Route path="/academy/admin/edit-seminar/:slug" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><EditSeminar /></Suspense></AdminGuard>} />
         <Route path="/academy/admin/course/:slug/content" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><CourseContentManager /></Suspense></AdminGuard>} />
+        <Route path="/academy/admin/forum" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><AdminForumDashboard /></Suspense></AdminGuard>} />
         <Route path="/ad/details/:adId" element={<AdDetails />} />
         <Route path="/ad/edit/:adId" element={<EditAd />} />
         <Route path="/ad" element={<AdPage />} />
@@ -322,6 +327,7 @@ function App() {
               <ChristmasGreetingModal />
               <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
                 <UserProvider>
+                  <SocketProvider>
                   <GoogleAuthProvider>
                     <MapProvider>
                       <CommunityProvider>
@@ -385,6 +391,7 @@ function App() {
                       </CommunityProvider>
                     </MapProvider>
                   </GoogleAuthProvider>
+                  </SocketProvider>
                 </UserProvider>
               </GoogleOAuthProvider>
             </ErrorBoundary>

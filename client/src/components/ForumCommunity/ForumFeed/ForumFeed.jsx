@@ -13,7 +13,7 @@ const SORT_OPTIONS = [
 
 const ForumFeed = ({ spaceId }) => {
   const { t } = useTranslation('forum');
-  const { getFeed, posts, pagination, isLoading, toggleBookmark } = useForum();
+  const { getFeed, posts, pagination, isLoading, toggleBookmark, forumSettings } = useForum();
   const [sort, setSort] = useState('recent');
   const [page, setPage] = useState(1);
 
@@ -72,6 +72,7 @@ const ForumFeed = ({ spaceId }) => {
               key={post.id}
               post={post}
               onBookmark={handleBookmark}
+              forumSettings={forumSettings}
             />
           ))}
 

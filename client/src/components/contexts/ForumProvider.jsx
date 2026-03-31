@@ -1,10 +1,31 @@
-import { createContext, useContext, useState, useCallback, useMemo } from 'react';
+import { createContext, useContext, useState, useCallback, useMemo, useEffect } from 'react';
 import { forumServiceFactory } from '../Services/forumServiceFactory';
+import { useSocket } from './SocketProvider';
+import { toast } from 'react-toastify';
+
+const BADGE_EMOJIS = {
+  first_post: '📝', first_comment: '💬', contributor_10: '⭐',
+  helper_25: '🤝', veteran_50: '🏆', popular_post: '🔥',
+  conversation_starter: '💡', post_of_week: '👑', reactor_100: '⚡', bookmarked_10: '📌',
+};
+
+const showGamificationToasts = (result) => {
+  if (result?.newBadges?.length) {
+    result.newBadges.forEach(badge => {
+      const emoji = BADGE_EMOJIS[badge] || '🏅';
+      toast.success(`${emoji} Нов бадж: ${badge.replace(/_/g, ' ')}!`, { autoClose: 5000 });
+    });
+  }
+  if (result?.creditsEarned > 0) {
+    toast.info(`+${result.creditsEarned} кредита!`, { autoClose: 3000 });
+  }
+};
 
 export const ForumContext = createContext();
 
 export const ForumProvider = ({ children }) => {
   const service = useMemo(() => forumServiceFactory(), []);
+  const { socket } = useSocket() || {};
 
   const [isLoading, setIsLoading] = useState(false);
   const [posts, setPosts] = useState([]);
@@ -12,6 +33,7 @@ export const ForumProvider = ({ children }) => {
   const [tags, setTags] = useState([]);
   const [stats, setStats] = useState(null);
   const [myStatus, setMyStatus] = useState(null);
+  const [forumSettings, setForumSettings] = useState({ maxPostLength: 0, maxCommentLength: 0 });
   const [currentPost, setCurrentPost] = useState(null);
   const [currentComments, setCurrentComments] = useState([]);
   const [pagination, setPagination] = useState({ total: 0, page: 1, limit: 20, pages: 0 });
@@ -32,11 +54,20 @@ export const ForumProvider = ({ children }) => {
   const acceptRules = useCallback(async () => {
     try {
       await service.acceptRules();
-      setMyStatus(prev => prev ? { ...prev, rulesAcceptedAt: new Date().toISOString() } : prev);
+      setMyStatus(prev => ({ ...(prev || {}), rulesAcceptedAt: new Date().toISOString() }));
       return true;
     } catch (err) {
       console.error('Error accepting rules:', err);
       return false;
+    }
+  }, [service]);
+
+  const getForumSettings = useCallback(async () => {
+    try {
+      const data = await service.getSettings();
+      setForumSettings(data);
+    } catch (err) {
+      console.error('Error fetching forum settings:', err);
     }
   }, [service]);
 
@@ -77,6 +108,7 @@ export const ForumProvider = ({ children }) => {
   const createPost = useCallback(async (data) => {
     try {
       const result = await service.createPost(data);
+      showGamificationToasts(result);
       return result;
     } catch (err) {
       console.error('Error creating post:', err);
@@ -110,9 +142,13 @@ export const ForumProvider = ({ children }) => {
     try {
       const result = await service.addComment(postId, data);
       if (result.comment) {
-        setCurrentComments(prev => [...prev, result.comment]);
+        setCurrentComments(prev => {
+          if (prev.find(c => c.id === result.comment.id)) return prev;
+          return [...prev, result.comment];
+        });
         setCurrentPost(prev => prev ? { ...prev, commentCount: (prev.commentCount || 0) + 1 } : prev);
       }
+      showGamificationToasts(result);
       return result;
     } catch (err) {
       console.error('Error adding comment:', err);
@@ -286,6 +322,37 @@ export const ForumProvider = ({ children }) => {
     }
   }, [service]);
 
+  // ============ Real-time Socket.IO ============
+
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleNewPost = ({ post }) => {
+      if (post) {
+        // Refresh feed to get full post data
+        getFeed().catch(() => {});
+      }
+    };
+
+    const handleNewComment = ({ comment, postId }) => {
+      if (comment && currentPost?.id === postId) {
+        setCurrentComments(prev => {
+          if (prev.find(c => c.id === comment.id)) return prev;
+          return [...prev, comment];
+        });
+        setCurrentPost(prev => prev ? { ...prev, commentCount: (prev.commentCount || 0) + 1 } : prev);
+      }
+    };
+
+    socket.on('forum:newPost', handleNewPost);
+    socket.on('forum:newComment', handleNewComment);
+
+    return () => {
+      socket.off('forum:newPost', handleNewPost);
+      socket.off('forum:newComment', handleNewComment);
+    };
+  }, [socket, currentPost?.id, getFeed]);
+
   // ============ Derived state ============
 
   const isVip = myStatus?.role === 'vip';
@@ -294,8 +361,8 @@ export const ForumProvider = ({ children }) => {
 
   const contextValue = useMemo(() => ({
     isLoading, posts, spaces, tags, stats, myStatus, currentPost, currentComments, pagination,
-    isVip, isBanned, hasAcceptedRules,
-    getMyStatus, acceptRules,
+    isVip, isBanned, hasAcceptedRules, forumSettings,
+    getMyStatus, acceptRules, getForumSettings,
     getFeed,
     getPost, createPost, updatePost, deletePost,
     addComment, updateComment, deleteComment,
@@ -305,8 +372,8 @@ export const ForumProvider = ({ children }) => {
     getTags, getStats, searchPosts,
   }), [
     isLoading, posts, spaces, tags, stats, myStatus, currentPost, currentComments, pagination,
-    isVip, isBanned, hasAcceptedRules,
-    getMyStatus, acceptRules,
+    isVip, isBanned, hasAcceptedRules, forumSettings,
+    getMyStatus, acceptRules, getForumSettings,
     getFeed,
     getPost, createPost, updatePost, deletePost,
     addComment, updateComment, deleteComment,

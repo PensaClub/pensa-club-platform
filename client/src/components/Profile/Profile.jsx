@@ -575,6 +575,12 @@ export const Profile = () => {
                 {/* Академия */}
                 <div className="pd-section">
                   <div className="pd-section-label pd-academy-label">{t("header.academy")}</div>
+                  <NavLink to="/academy/my" className="pd-link pd-academy-link" onClick={() => setProfileMenuOpen(false)}>
+                    <AcademyIcon /> {t("header.academy-my", "Моята академия")}
+                  </NavLink>
+                  <NavLink to="/academy/community/my" className="pd-link pd-academy-link" onClick={() => setProfileMenuOpen(false)}>
+                    <AcademyIcon /> {t("header.academy-forum", "Моят форум")}
+                  </NavLink>
                   <NavLink to="/academy" className="pd-link pd-academy-link" onClick={() => setProfileMenuOpen(false)}>
                     <AcademyIcon /> {t("header.academy-home")}
                   </NavLink>
@@ -702,6 +708,17 @@ export const Profile = () => {
                       {t("profile.bookmarks")}
                     </span>
                   </NavLink>
+                </li>
+                <li>
+                  <a
+                    href="/academy/community/my"
+                    className=""
+                  >
+                    <span className="link-content">
+                      <AcademyIcon />
+                      {t("profile.myForum", "Моят форум")}
+                    </span>
+                  </a>
                 </li>
                 <li>
                   <NavLink
@@ -1075,6 +1092,12 @@ export const Profile = () => {
                             <NavLink to="/academy/admin/seminar-reviews" className={({ isActive }) => isActive ? 'active' : ''}>
                               <CircleIcon className="icon" />
                               {t("admin.academy.seminarReviews", "Отзиви")}
+                            </NavLink>
+                          </li>
+                          <li>
+                            <NavLink to="/academy/admin/forum" className={({ isActive }) => isActive ? 'active' : ''}>
+                              <CircleIcon className="icon" />
+                              {t("admin.academy.forum", "Форум")}
                             </NavLink>
                           </li>
                         </ul>

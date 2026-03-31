@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Users, MessageSquare, MessagesSquare, Layers } from 'lucide-react';
+import { Users, MessageSquare, MessagesSquare, Layers, Wifi } from 'lucide-react';
 import './forumStats.css';
 
 const STATS_CONFIG = [
@@ -40,7 +40,7 @@ const AnimatedCounter = ({ target, duration = 1500, delay = 0, started }) => {
   return <>{value}+</>;
 };
 
-const ForumStats = ({ stats }) => {
+const ForumStats = ({ stats, onlineCount }) => {
   const { t } = useTranslation('forum');
   const [started, setStarted] = useState(false);
   const ref = useRef(null);
@@ -64,6 +64,13 @@ const ForumStats = ({ stats }) => {
 
   return (
     <div className="fst-container" ref={ref}>
+      {onlineCount > 0 && (
+        <div className="fst-item fst-color-online">
+          <div className="fst-icon"><Wifi size={18} /></div>
+          <div className="fst-value">{onlineCount}</div>
+          <div className="fst-label">{t('forumCommunity.stats.online', 'Онлайн')}</div>
+        </div>
+      )}
       {STATS_CONFIG.map((stat, i) => {
         const Icon = stat.icon;
         return (

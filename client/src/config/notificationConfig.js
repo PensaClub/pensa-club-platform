@@ -67,6 +67,11 @@ export const NOTIFICATION_TYPES = {
   REACTION_MENTOR_ASSIGNED: 'reaction_mentor_assigned',
   REACTION_VISIT_CONFIRMED: 'reaction_visit_confirmed',
   REACTION_VISIT_REMINDER: 'reaction_visit_reminder',
+
+  // Forum notifications
+  FORUM_COMMENT: 'forum_comment',
+  FORUM_REPLY: 'forum_reply',
+  FORUM_MENTION: 'forum_mention',
 };
 
 export const notificationConfig = {
@@ -371,6 +376,26 @@ export const notificationConfig = {
     route: '/reaction/my',
     priority: 'high'
   },
+
+  // Forum
+  [NOTIFICATION_TYPES.FORUM_COMMENT]: {
+    icon: '💬',
+    color: '#8b2040',
+    route: '/academy/community',
+    priority: 'medium'
+  },
+  [NOTIFICATION_TYPES.FORUM_REPLY]: {
+    icon: '↩️',
+    color: '#8b2040',
+    route: '/academy/community',
+    priority: 'medium'
+  },
+  [NOTIFICATION_TYPES.FORUM_MENTION]: {
+    icon: '@',
+    color: '#d4a853',
+    route: '/academy/community',
+    priority: 'high'
+  },
 };
 
 export const getNotificationConfig = (type) => {
@@ -432,6 +457,17 @@ export const getNotificationRoute = (notification) => {
       return `/admin/reaction?requestId=${requestId}`;
     }
     return '/admin/reaction';
+  }
+
+  // Forum notifications — link to post
+  if (
+    notification.type === NOTIFICATION_TYPES.FORUM_COMMENT ||
+    notification.type === NOTIFICATION_TYPES.FORUM_REPLY ||
+    notification.type === NOTIFICATION_TYPES.FORUM_MENTION
+  ) {
+    const postSlug = notification.data?.postSlug;
+    if (postSlug) return `/academy/community/post/${postSlug}`;
+    return '/academy/community';
   }
 
   // Seminar notifications

@@ -26,7 +26,9 @@
         "community": "Community",
         "about": "About",
         "lectures": "Live Events",
-        "more": "More"
+        "more": "More",
+        "myAcademy": "My Academy",
+        "myForum": "My Forum"
       },
       "dropdown": {
         "dashboard": "My Progress",

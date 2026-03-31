@@ -244,6 +244,10 @@
         transform var(--dbh-transition),
         color var(--dbh-transition);
 }
+.dbh-mega__item span{
+    font-size: 0.9rem;
+    text-decoration: none;
+}
 
 .dbh-mega__item:hover {
     background: rgba(255, 107, 74, 0.08);

@@ -32,7 +32,8 @@
       "activeUsers": "Active users",
       "posts": "Posts",
       "comments": "Comments",
-      "spaces": "Spaces"
+      "spaces": "Spaces",
+      "online": "Online"
     },
     "sidebar": {
       "latestArticles": "Latest articles",
@@ -77,7 +78,13 @@
       "delete": "Delete",
       "deleted": "Deleted comment",
       "edited": "edited",
-      "writeComment": "Write a comment..."
+      "writeComment": "Write a comment...",
+      "wordLimitTrimmed": "Comment was trimmed to {max} words",
+      "wordLimitTitle": "Word limit reached",
+      "wordLimitText": "The maximum is {max} words. Your comment ({original} words) has been trimmed automatically.",
+      "wordLimitOk": "OK, understood",
+      "fileLimitTitle": "File too large",
+      "fileLimitText": "The file \"{name}\" ({size} MB) exceeds the limit of {max} MB."
     },
     "createPost": {
       "title": "New post",
@@ -90,11 +97,54 @@
       "discussion": "Discussion",
       "article": "Article",
       "question": "Question",
-      "poll": "Poll"
+      "poll": "Poll",
+      "fileLimitTitle": "File too large",
+      "fileLimitText": "The file \"{name}\" ({size} MB) exceeds the limit of {max} MB.",
+      "wordLimitTitle": "Word limit exceeded",
+      "wordLimitText": "Your post has {original} words but the maximum is {max}. Please shorten it.",
+      "limitOk": "OK, understood"
     },
     "vip": {
       "badge": "VIP",
       "autoPublish": "Your posts are published automatically"
+    }
+  },
+  "rulesModal": {
+    "title": "Community Rules",
+    "subtitle": "Please read and accept before participating",
+    "scrollHint": "Scroll to read all rules",
+    "accept": "I accept the rules",
+    "accepting": "Accepting...",
+    "decline": "Later",
+    "accepted": "Rules accepted",
+    "scrollFirst": "Read all rules first",
+    "loadError": "Error loading rules",
+    "acceptError": "Error accepting rules"
+  },
+  "gamification": {
+    "badges": {
+      "first_post": "First Post",
+      "first_comment": "First Comment",
+      "contributor_10": "Active Contributor",
+      "helper_25": "Community Helper",
+      "veteran_50": "Veteran Author",
+      "popular_post": "Popular Post",
+      "conversation_starter": "Conversation Starter",
+      "post_of_week": "Post of the Week",
+      "reactor_100": "Active Reactor",
+      "bookmarked_10": "Valuable Content"
+    },
+    "leaderboard": {
+      "title": "Top Contributors",
+      "weekly": "Week",
+      "monthly": "Month",
+      "allTime": "All Time",
+      "score": "pts",
+      "empty": "No data yet"
+    },
+    "postOfWeek": {
+      "title": "Post of the Week",
+      "by": "by"
     }
   }
 }

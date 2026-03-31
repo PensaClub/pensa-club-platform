@@ -32,7 +32,8 @@
       "activeUsers": "Aktive Benutzer",
       "posts": "Beiträge",
       "comments": "Kommentare",
-      "spaces": "Bereiche"
+      "spaces": "Bereiche",
+      "online": "Online"
     },
     "sidebar": {
       "latestArticles": "Neueste Artikel",
@@ -77,7 +78,13 @@
       "delete": "Löschen",
       "deleted": "Gelöschter Kommentar",
       "edited": "bearbeitet",
-      "writeComment": "Kommentar schreiben..."
+      "writeComment": "Kommentar schreiben...",
+      "wordLimitTrimmed": "Kommentar wurde auf {max} Wörter gekürzt",
+      "wordLimitTitle": "Wortlimit erreicht",
+      "wordLimitText": "Das Maximum beträgt {max} Wörter. Ihr Kommentar ({original} Wörter) wurde automatisch gekürzt.",
+      "wordLimitOk": "OK, verstanden",
+      "fileLimitTitle": "Datei zu groß",
+      "fileLimitText": "Die Datei \"{name}\" ({size} MB) überschreitet das Limit von {max} MB."
     },
     "createPost": {
       "title": "Neuer Beitrag",
@@ -90,11 +97,54 @@
       "discussion": "Diskussion",
       "article": "Artikel",
       "question": "Frage",
-      "poll": "Umfrage"
+      "poll": "Umfrage",
+      "fileLimitTitle": "Datei zu groß",
+      "fileLimitText": "Die Datei \"{name}\" ({size} MB) überschreitet das Limit von {max} MB.",
+      "wordLimitTitle": "Wortlimit überschritten",
+      "wordLimitText": "Ihr Beitrag hat {original} Wörter, aber das Maximum ist {max}. Bitte kürzen Sie ihn.",
+      "limitOk": "OK, verstanden"
     },
     "vip": {
       "badge": "VIP",
       "autoPublish": "Ihre Beiträge werden automatisch veröffentlicht"
+    }
+  },
+  "rulesModal": {
+    "title": "Gemeinschaftsregeln",
+    "subtitle": "Bitte lesen und akzeptieren Sie die Regeln, bevor Sie teilnehmen",
+    "scrollHint": "Scrollen Sie, um alle Regeln zu lesen",
+    "accept": "Ich akzeptiere die Regeln",
+    "accepting": "Wird akzeptiert...",
+    "decline": "Später",
+    "accepted": "Regeln akzeptiert",
+    "scrollFirst": "Lesen Sie zuerst alle Regeln",
+    "loadError": "Fehler beim Laden der Regeln",
+    "acceptError": "Fehler beim Akzeptieren der Regeln"
+  },
+  "gamification": {
+    "badges": {
+      "first_post": "Erster Beitrag",
+      "first_comment": "Erster Kommentar",
+      "contributor_10": "Aktiver Autor",
+      "helper_25": "Gemeinschaftshelfer",
+      "veteran_50": "Veteran",
+      "popular_post": "Beliebter Beitrag",
+      "conversation_starter": "Diskussionsstarter",
+      "post_of_week": "Beitrag der Woche",
+      "reactor_100": "Aktiver Reaktor",
+      "bookmarked_10": "Wertvoller Inhalt"
+    },
+    "leaderboard": {
+      "title": "Top-Mitwirkende",
+      "weekly": "Woche",
+      "monthly": "Monat",
+      "allTime": "Gesamt",
+      "score": "Pkt",
+      "empty": "Noch keine Daten"
+    },
+    "postOfWeek": {
+      "title": "Beitrag der Woche",
+      "by": "von"
     }
   }
 }

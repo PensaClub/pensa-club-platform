@@ -17,7 +17,7 @@
   margin: 0;
   font-size: 18px;
   font-weight: 600;
-  color: #f1f5f9;
+  color: var(--sdb-text-primary);
 }
 
 .sdcl-view-all {
@@ -58,8 +58,8 @@
 /* Card */
 .sdcl-card {
   position: relative;
-  background: rgba(30, 41, 59, 0.8);
-  border: 1px solid rgba(148, 163, 184, 0.1);
+  background: var(--sdb-bg-card);
+  border: 1px solid var(--sdb-border);
   border-radius: 12px;
   overflow: hidden;
   cursor: pointer;
@@ -67,7 +67,7 @@
 }
 
 .sdcl-card:hover {
-  background: rgba(30, 41, 59, 0.95);
+  background: var(--sdb-bg-card-hover);
   border-color: rgba(59, 130, 246, 0.3);
   transform: translateY(-4px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
@@ -98,7 +98,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(15, 23, 42, 0.8);
+  background: var(--sdb-bg-secondary);
   color: #475569;
 }
 
@@ -159,7 +159,7 @@
   margin: 0 0 8px 0;
   font-size: 15px;
   font-weight: 600;
-  color: #f1f5f9;
+  color: var(--sdb-text-primary);
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -170,7 +170,7 @@
 .sdcl-card-lessons {
   margin: 0 0 12px 0;
   font-size: 13px;
-  color: #94a3b8;
+  color: var(--sdb-text-secondary);
 }
 
 /* Progress Bar */
@@ -192,8 +192,8 @@
 /* Empty State - Inline */
 .sdcl-empty-inline {
   padding: 32px 20px;
-  background: rgba(30, 41, 59, 0.4);
-  border: 1px dashed rgba(148, 163, 184, 0.2);
+  background: var(--sdb-bg-card);
+  border: 1px dashed var(--sdb-border-hover);
   border-radius: 12px;
   text-align: center;
   margin-bottom: 20px;
@@ -202,7 +202,7 @@
 .sdcl-empty-inline p {
   margin: 0;
   font-size: 14px;
-  color: #94a3b8;
+  color: var(--sdb-text-secondary);
 }
 
 /* Footer */

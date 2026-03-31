@@ -15,6 +15,8 @@ import ForumTrendingTags from '../ForumTrendingTags/ForumTrendingTags';
 import ForumArticlesCarousel from '../ForumArticlesCarousel/ForumArticlesCarousel';
 import ForumUpcomingSeminars from '../ForumUpcomingSeminars/ForumUpcomingSeminars';
 import ForumCoursesPromo from '../ForumCoursesPromo/ForumCoursesPromo';
+import ForumUserBadges from '../ForumUserBadges/ForumUserBadges';
+import { useSocket } from '../../contexts/SocketProvider';
 import { ArrowLeft, Eye, MessageSquare, Share2, Bookmark, BookmarkCheck, Pin, Lock, Clock, Loader2, ChevronRight, MessagesSquare } from 'lucide-react';
 import './forumPostDetail.css';
 
@@ -23,12 +25,29 @@ const ForumPostDetail = () => {
   const { t } = useTranslation('forum');
   const navigate = useLocalizedNavigate();
   const { isAuthentication } = useAuthContext();
-  const { getPost, currentPost, currentComments, isLoading, toggleBookmark } = useForum();
+  const { getPost, currentPost, currentComments, isLoading, toggleBookmark, getMyStatus, getForumSettings, forumSettings } = useForum();
+  const { socket, onlineUserIds } = useSocket() || {};
   const [lightboxIndex, setLightboxIndex] = useState(null);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     if (slug) getPost(slug);
   }, [slug, getPost]);
+
+  useEffect(() => {
+    if (isAuthentication) getMyStatus();
+    getForumSettings();
+  }, [isAuthentication, getMyStatus, getForumSettings]);
+
+  // Join/leave post room for real-time comments
+  useEffect(() => {
+    if (!socket || !currentPost?.id) return;
+    socket.emit('forum:joinPost', currentPost.id);
+    return () => socket.emit('forum:leavePost', currentPost.id);
+  }, [socket, currentPost?.id]);
 
   const post = currentPost;
 
@@ -142,14 +161,18 @@ const ForumPostDetail = () => {
 
                 {/* Author */}
                 <div className="fpd-author-row">
-                  <div className="fpd-avatar">
-                    {avatar
-                      ? <img src={avatar} alt={authorName} />
-                      : <span>{authorName.charAt(0)}</span>
-                    }
+                  <div className="fpd-avatar-wrap">
+                    <div className="fpd-avatar">
+                      {avatar
+                        ? <img src={avatar} alt={authorName} />
+                        : <span>{authorName.charAt(0)}</span>
+                      }
+                    </div>
+                    {onlineUserIds?.has(String(post.authorId)) && <span className="fpd-online-dot" />}
                   </div>
                   <div className="fpd-author-info">
                     <span className="fpd-author-name">{authorName}</span>
+                    <ForumUserBadges badges={post.author?.forumBadges} />
                     <span className="fpd-date">
                       <Clock size={11} /> {timeAgo(post.createdAt)}
                       {post.editedAt && <em className="fpd-edited"> · {t('forumCommunity.post.edited')}</em>}
@@ -217,15 +240,17 @@ const ForumPostDetail = () => {
                 )}
 
                 {/* Reactions */}
-                <div className="fpd-reactions-row">
-                  <ForumReactions
-                    targetType="post"
-                    targetId={post.id}
-                    reactions={post.reactions || []}
-                    userReaction={post.userReaction}
-                    onReactionChange={() => getPost(slug)}
-                  />
-                </div>
+                {forumSettings?.enableReactions !== false && (
+                  <div className="fpd-reactions-row">
+                    <ForumReactions
+                      targetType="post"
+                      targetId={post.id}
+                      reactions={post.reactions || []}
+                      userReaction={post.userReaction}
+                      onReactionChange={() => getPost(slug)}
+                    />
+                  </div>
+                )}
 
                 {/* Stats bar */}
                 <div className="fpd-stats-bar">
@@ -234,7 +259,7 @@ const ForumPostDetail = () => {
                     <span className="fpd-stat"><MessageSquare size={14} /> {post.commentCount}</span>
                     <span className="fpd-stat"><Share2 size={14} /> {post.shareCount}</span>
                   </div>
-                  {isAuthentication && (
+                  {isAuthentication && forumSettings?.enableBookmarks !== false && (
                     <button
                       className={`fpd-bookmark-btn ${post.isBookmarked ? 'fpd-bookmark-active' : ''}`}
                       onClick={() => toggleBookmark(post.id)}

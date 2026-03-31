@@ -1,0 +1,280 @@
+/* AdminForumSettings — prefix: afst- */
+
+.afst-container {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.afst-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.afst-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #f0f0f0;
+}
+
+.afst-save-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 18px;
+  background: #8b2040;
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.afst-save-btn:hover {
+  background: #a12850;
+}
+
+.afst-save-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ─── Sections ─── */
+.afst-section {
+  margin-bottom: 32px;
+}
+
+.afst-section-title {
+  margin: 0 0 14px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #bbb;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ─── Toggle rows ─── */
+.afst-toggles {
+  background: #222226;
+  border: 1px solid #2e2e32;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.afst-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 18px;
+  border-bottom: 1px solid #2e2e32;
+  transition: background 0.15s;
+}
+
+.afst-toggle-row:last-child {
+  border-bottom: none;
+}
+
+.afst-toggle-row:hover {
+  background: #28282c;
+}
+
+.afst-toggle-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+  padding-right: 12px;
+}
+
+.afst-toggle-info .afst-toggle-label {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #e0e0e0;
+}
+
+.afst-toggle-info .afst-toggle-desc {
+  font-size: 0.78rem;
+  color: #777;
+}
+
+.afst-toggle-btn {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: color 0.2s;
+}
+
+.afst-toggle-on {
+  color: #4ade80;
+}
+
+.afst-toggle-off {
+  color: #555;
+}
+
+/* ─── Number rows ─── */
+.afst-numbers {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+.afst-number-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  background: #222226;
+  border: 1px solid #2e2e32;
+  border-radius: 6px;
+}
+
+.afst-number-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #d0d0d0;
+  flex: 1;
+}
+
+.afst-number-input {
+  width: 100px;
+  padding: 7px 10px;
+  background: #2a2a2e;
+  border: 1px solid #3a3a3e;
+  border-radius: 6px;
+  color: #e0e0e0;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  text-align: center;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.afst-number-input:focus {
+  border-color: #d4a853;
+}
+
+/* ─── Loading ─── */
+.afst-loading {
+  display: flex;
+  justify-content: center;
+  padding: 60px 0;
+}
+
+.afst-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #333;
+  border-top-color: #d4a853;
+  border-radius: 50%;
+  animation: afd-spin 0.7s linear infinite;
+}
+
+/* ═══ Light theme ═══ */
+[data-theme="light"] .afst-title {
+  color: #1a1a1e;
+}
+
+[data-theme="light"] .afst-section-title {
+  color: #555;
+}
+
+[data-theme="light"] .afst-toggles {
+  background: #ffffff;
+  border-color: #d5d3cf;
+}
+
+[data-theme="light"] .afst-toggle-row {
+  border-bottom-color: #e5e2dc;
+}
+
+[data-theme="light"] .afst-toggle-row:hover {
+  background: #f8f7f5;
+}
+
+[data-theme="light"] .afst-toggle-info .afst-toggle-label {
+  color: #1a1a1e;
+}
+
+[data-theme="light"] .afst-toggle-info .afst-toggle-desc {
+  color: #666;
+}
+
+[data-theme="light"] .afst-toggle-on {
+  color: #15803d;
+}
+
+[data-theme="light"] .afst-toggle-off {
+  color: #b0ada7;
+}
+
+[data-theme="light"] .afst-number-row {
+  background: #ffffff;
+  border-color: #d5d3cf;
+}
+
+[data-theme="light"] .afst-number-label {
+  color: #1a1a1e;
+}
+
+[data-theme="light"] .afst-number-input {
+  background: #f8f7f5;
+  border-color: #d5d3cf;
+  color: #1a1a1e;
+}
+
+[data-theme="light"] .afst-number-input:focus {
+  border-color: #8b2040;
+}
+
+[data-theme="light"] .afst-spinner {
+  border-color: #d5d3cf;
+  border-top-color: #8b2040;
+}
+
+.afst-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 20px;
+  border-top: 1px solid #2e2e32;
+  margin-top: 8px;
+}
+
+[data-theme="light"] .afst-footer {
+  border-top-color: #e5e2dc;
+}
+
+@media (max-width: 768px) {
+  .afst-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .afst-save-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .afst-numbers {
+    grid-template-columns: 1fr;
+  }
+
+  .afst-number-input {
+    width: 80px;
+  }
+}
