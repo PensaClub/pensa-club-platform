@@ -153,6 +153,12 @@ module.exports = (sequelize, DataTypes) => {
         field: 'meeting_password',
       },
 
+      secondaryLink: {
+        type: DataTypes.STRING(2048),
+        allowNull: true,
+        field: 'secondary_link',
+      },
+
       // === ВИДЕО (за записани семинари) ===
       videoProvider: {
         type: DataTypes.STRING,

@@ -212,8 +212,6 @@ const AcademySeminars = () => { // НОВО
         setSortBy('date');
     }, []);
 
-    if (!isAuthentication) return null;
-
     const hasActiveFilters = activeFilter !== 'all' || selectedCategory || searchQuery.trim();
 
     return (
