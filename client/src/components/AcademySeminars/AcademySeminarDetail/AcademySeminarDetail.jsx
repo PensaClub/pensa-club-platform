@@ -161,6 +161,7 @@ const AcademySeminarDetail = () => { // НОВО
     const [passwordInput, setPasswordInput] = useState('');
     const [passwordUnlocked, setPasswordUnlocked] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
+    const [showAuthModal, setShowAuthModal] = useState(false);
 
     const needsPassword = seminar?.meetingPassword && seminar.meetingPassword.trim() !== '';
     const isLiveAccessAllowed = !needsPassword || passwordUnlocked || isMentorOrAdmin;
@@ -265,7 +266,7 @@ const AcademySeminarDetail = () => { // НОВО
     // Handlers // НОВО
     const handleRegister = useCallback(async () => {
         if (!seminar) return;
-        if (!isAuthentication) { navigate('/sign-up?view=login'); return; }
+        if (!isAuthentication) { setShowAuthModal(true); return; }
         setRegistering(true);
         try {
             if (isRegistered) {
@@ -606,6 +607,12 @@ const AcademySeminarDetail = () => { // НОВО
                                 <Video size={18} />
                                 {t('seminarDetail.watchOn', 'Гледай на')} {getPlatformName(seminar.meetingLink)}
                             </a>
+                            {seminar.secondaryLink && (
+                                <a href={seminar.secondaryLink} target="_blank" rel="noopener noreferrer" className="asd-action-btn asd-action-btn--secondary">
+                                    <Film size={18} />
+                                    {t('seminarDetail.watchOn', 'Гледай на')} {getPlatformName(seminar.secondaryLink)}
+                                </a>
+                            )}
                             {getEmbedUrl(seminar.meetingLink) && (
                                 <button className="asd-action-btn asd-action-btn--live" onClick={() => setActiveTab('live')}>
                                     <Wifi size={18} />
@@ -724,6 +731,12 @@ const AcademySeminarDetail = () => { // НОВО
                                     <Video size={16} />
                                     {t('seminarDetail.watchOn', 'Гледай на')} {getPlatformName(seminar.meetingLink)}
                                 </a>
+                                {seminar.secondaryLink && (
+                                    <a href={seminar.secondaryLink} target="_blank" rel="noopener noreferrer" className="asd-live-external-btn asd-live-secondary-btn">
+                                        <Film size={16} />
+                                        {t('seminarDetail.watchOn', 'Гледай на')} {getPlatformName(seminar.secondaryLink)}
+                                    </a>
+                                )}
                             </div>
                         </div>
                         {(() => {
@@ -1097,6 +1110,28 @@ const AcademySeminarDetail = () => { // НОВО
             )}
 
             <ScrollToTop />
+
+            {/* Auth modal for unregistered users */}
+            {showAuthModal && (
+                <div className="asd-auth-overlay" onClick={() => setShowAuthModal(false)}>
+                    <div className="asd-auth-modal" onClick={e => e.stopPropagation()}>
+                        <button className="asd-auth-close" onClick={() => setShowAuthModal(false)}>
+                            <X size={18} />
+                        </button>
+                        <div className="asd-auth-icon">🎓</div>
+                        <h3 className="asd-auth-title">{t('seminarDetail.authRequired', 'Влезте в акаунта си')}</h3>
+                        <p className="asd-auth-text">{t('seminarDetail.authText', 'За да се запишете за семинар, трябва да имате акаунт в платформата.')}</p>
+                        <div className="asd-auth-buttons">
+                            <a href={`/sign-up?view=login&redirect=${encodeURIComponent(location.pathname)}`} className="asd-auth-btn asd-auth-btn-login">
+                                {t('seminarDetail.login', 'Вход')}
+                            </a>
+                            <a href={`/sign-up?redirect=${encodeURIComponent(location.pathname)}`} className="asd-auth-btn asd-auth-btn-register">
+                                {t('seminarDetail.register', 'Регистрация')}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

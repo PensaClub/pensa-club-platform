@@ -3,7 +3,7 @@
 
 import { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Calendar, MapPin, Globe, Wifi, Building, Image, AlertCircle, Upload, X, Link, Mail, Send } from 'lucide-react';
+import { Calendar, MapPin, Globe, Wifi, Building, Image, AlertCircle, Upload, X, Link, Mail, Send, Video } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useFirebaseUpload } from '../../hooks/useFirebaseUpload';
 import './seminarSchedule.css';
@@ -183,6 +183,14 @@ const SeminarSchedule = ({ seminarData, errors, handleChange, updateField }) => 
                             </label>
                             <input id="scfs-meeting-pass" type="text" name="meetingPassword" className="scfs-input" value={seminarData.meetingPassword} onChange={handleChange} maxLength={100} />
                             {renderError('meetingPassword')}
+                        </div>
+
+                        <div className="scfs-field">
+                            <label className="scfs-label" htmlFor="scfs-secondary-link">
+                                <Video size={14} />
+                                {t('seminarSchedule.secondaryLink', 'Допълнителен линк (YouTube Live)')}
+                            </label>
+                            <input id="scfs-secondary-link" type="url" name="secondaryLink" className="scfs-input" placeholder="https://youtube.com/live/..." value={seminarData.secondaryLink || ''} onChange={handleChange} />
                         </div>
 
                         {/* Invite by email button */}

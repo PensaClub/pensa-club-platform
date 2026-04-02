@@ -169,7 +169,7 @@ async function botDetector(req, res, next) {
 
     // URL Pattern Matching
     const articlesListMatch = req.path.match(/^\/articles$/);
-    const articleMatch = req.path.match(/^\/articles\/([a-zA-Z0-9-]+)$/);
+    const articleMatch = req.path.match(/^\/articles\/([a-zA-Z0-9-]+)$/) || req.path.match(/^\/articles\/single\/(\d+)$/);
     const projectMatch = req.path.match(/^\/projects\/([a-zA-Z0-9-]+)$/);
     const initiativeMatch = req.path.match(/^\/initiatives\/([a-zA-Z0-9-]+)$/);
     const clubMatch = req.path.match(/^\/clubs\/([a-zA-Z0-9-]+)$/);
@@ -204,11 +204,12 @@ async function botDetector(req, res, next) {
 
         // ==================== ARTICLE ====================
         if (articleMatch) {
-            const slug = articleMatch[1];
-            console.log('📄 Processing ARTICLE:', slug);
+            const slugOrId = articleMatch[1];
+            console.log('📄 Processing ARTICLE:', slugOrId);
 
+            const isNumericId = /^\d+$/.test(slugOrId);
             const foundArticle = await article.findOne({
-                where: { slug },
+                where: isNumericId ? { id: parseInt(slugOrId) } : { slug: slugOrId },
                 include: [
                     {
                         model: mainImage,
