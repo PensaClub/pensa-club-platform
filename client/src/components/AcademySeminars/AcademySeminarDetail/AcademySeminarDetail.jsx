@@ -70,6 +70,17 @@ const formatFileSize = (bytes) => { // НОВО
     return `${(bytes / 1048576).toFixed(1)} MB`;
 };
 
+const getPlatformName = (url) => {
+    if (!url) return 'линка';
+    if (url.includes('youtube.com') || url.includes('youtu.be')) return 'YouTube';
+    if (url.includes('meet.google')) return 'Google Meet';
+    if (url.includes('zoom.us') || url.includes('zoom.com')) return 'Zoom';
+    if (url.includes('teams.microsoft') || url.includes('teams.live')) return 'Microsoft Teams';
+    if (url.includes('webex')) return 'Webex';
+    if (url.includes('discord')) return 'Discord';
+    return 'линка';
+};
+
 const CATEGORY_COLORS = { // НОВО
     'Интернет сигурност': { primary: '#ef4444', icon: '🔒' },
     'Мобилни устройства': { primary: '#3b82f6', icon: '📱' },
@@ -147,6 +158,21 @@ const AcademySeminarDetail = () => { // НОВО
     const [reviewSubmitted, setReviewSubmitted] = useState(() => localStorage.getItem(reviewStorageKey) === 'true');
     const [adminPanelOpen, setAdminPanelOpen] = useState(false);
     const [adminActionLoading, setAdminActionLoading] = useState(false);
+    const [passwordInput, setPasswordInput] = useState('');
+    const [passwordUnlocked, setPasswordUnlocked] = useState(false);
+    const [passwordError, setPasswordError] = useState(false);
+
+    const needsPassword = seminar?.meetingPassword && seminar.meetingPassword.trim() !== '';
+    const isLiveAccessAllowed = !needsPassword || passwordUnlocked || isMentorOrAdmin;
+
+    const handlePasswordCheck = () => {
+        if (passwordInput === seminar.meetingPassword) {
+            setPasswordUnlocked(true);
+            setPasswordError(false);
+        } else {
+            setPasswordError(true);
+        }
+    };
 
     const loadingRef = useRef(false);
     const lastSlugRef = useRef(null);
@@ -574,11 +600,41 @@ const AcademySeminarDetail = () => { // НОВО
                     )}
 
                     {/* Meeting link — live + online */}
-                    {status === 'live' && seminar.isOnline && seminar.meetingLink && (
-                        <a href={seminar.meetingLink} target="_blank" rel="noopener noreferrer" className="asd-action-btn asd-action-btn--live">
-                            <Wifi size={18} />
-                            {t('seminarDetail.joinNow', 'Присъедини се')}
-                        </a>
+                    {status === 'live' && seminar.isOnline && seminar.meetingLink && isLiveAccessAllowed && (
+                        <div className="asd-live-buttons">
+                            <a href={seminar.meetingLink} target="_blank" rel="noopener noreferrer" className="asd-action-btn asd-action-btn--external">
+                                <Video size={18} />
+                                {t('seminarDetail.watchOn', 'Гледай на')} {getPlatformName(seminar.meetingLink)}
+                            </a>
+                            {getEmbedUrl(seminar.meetingLink) && (
+                                <button className="asd-action-btn asd-action-btn--live" onClick={() => setActiveTab('live')}>
+                                    <Wifi size={18} />
+                                    {t('seminarDetail.joinNow', 'Присъедини се')}
+                                </button>
+                            )}
+                        </div>
+                    )}
+
+                    {/* Password gate — live + online + has password + registered */}
+                    {status === 'live' && seminar.isOnline && seminar.meetingLink && needsPassword && !isLiveAccessAllowed && isRegistered && (
+                        <div className="asd-password-gate">
+                            <div className="asd-password-gate-icon">🔒</div>
+                            <p className="asd-password-gate-text">{t('seminarDetail.passwordRequired', 'Този семинар изисква парола за достъп')}</p>
+                            <div className="asd-password-gate-input">
+                                <input
+                                    type="password"
+                                    value={passwordInput}
+                                    onChange={(e) => { setPasswordInput(e.target.value); setPasswordError(false); }}
+                                    placeholder={t('seminarDetail.enterPassword', 'Въведете парола...')}
+                                    className={passwordError ? 'asd-input-error' : ''}
+                                    onKeyDown={(e) => e.key === 'Enter' && handlePasswordCheck()}
+                                />
+                                <button onClick={handlePasswordCheck}>
+                                    {t('seminarDetail.unlock', 'Отключи')}
+                                </button>
+                            </div>
+                            {passwordError && <span className="asd-password-error">{t('seminarDetail.wrongPassword', 'Грешна парола')}</span>}
+                        </div>
                     )}
 
                     {/* Video */ // НОВО
@@ -655,7 +711,7 @@ const AcademySeminarDetail = () => { // НОВО
             </section>
 
             {/* ========== LIVE STREAM ========== */}
-            {status === 'live' && seminar.meetingLink && (
+            {status === 'live' && seminar.meetingLink && isLiveAccessAllowed && (
                 <section className="asd-live-section">
                     <div className="asd-container">
                         <div className="asd-live-header">
@@ -663,10 +719,12 @@ const AcademySeminarDetail = () => { // НОВО
                                 <span className="asd-live-dot" />
                                 {t('seminarDetail.liveNow', 'На живо')}
                             </span>
-                            <a href={seminar.meetingLink} target="_blank" rel="noopener noreferrer" className="asd-live-join-btn">
-                                <Wifi size={16} />
-                                {t('seminarDetail.joinLive', 'Присъедини се')}
-                            </a>
+                            <div className="asd-live-buttons-header">
+                                <a href={seminar.meetingLink} target="_blank" rel="noopener noreferrer" className="asd-live-external-btn">
+                                    <Video size={16} />
+                                    {t('seminarDetail.watchOn', 'Гледай на')} {getPlatformName(seminar.meetingLink)}
+                                </a>
+                            </div>
                         </div>
                         {(() => {
                             const embedUrl = getEmbedUrl(seminar.meetingLink);

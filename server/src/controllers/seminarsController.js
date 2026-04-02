@@ -2560,4 +2560,45 @@ seminarsController.put(
   }
 );
 
+// ===============================
+// POST /api/academy/seminars/invite
+// Изпращане на покани по имейл
+// ===============================
+seminarsController.post('/invite', isAuth, rbac.checkPermission('seminar', 'update'), async (req, res, next) => {
+  try {
+    const { emails, seminarTitle, meetingLink, meetingPassword, scheduledDate } = req.body;
+
+    if (!emails || !Array.isArray(emails) || emails.length === 0) {
+      return res.status(400).json({ message: 'emails array is required' });
+    }
+
+    const { forwardEmailsViaZoho } = require('../utils/zohoEmails');
+    const seminarEmailTemplates = require('../utils/seminarEmailTemplates');
+
+    let sent = 0;
+    for (const email of emails) {
+      try {
+        const template = seminarEmailTemplates.seminarInvite({
+          seminarTitle, scheduledDate, meetingLink, meetingPassword,
+        });
+
+        await forwardEmailsViaZoho({
+          userEmail: 'info@pensa.club',
+          subject: template.subject,
+          body: '',
+          toAddresses: email,
+          formattedBody: template.html,
+        });
+        sent++;
+      } catch (err) {
+        console.error(`Error sending invite to ${email}:`, err.message);
+      }
+    }
+
+    res.json({ success: true, sent, total: emails.length });
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = seminarsController;

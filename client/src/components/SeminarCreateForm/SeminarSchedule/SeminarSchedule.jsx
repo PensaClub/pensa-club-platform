@@ -3,7 +3,8 @@
 
 import { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Calendar, MapPin, Globe, Wifi, Building, Image, AlertCircle, Upload, X, Link } from 'lucide-react';
+import { Calendar, MapPin, Globe, Wifi, Building, Image, AlertCircle, Upload, X, Link, Mail, Send } from 'lucide-react';
+import { toast } from 'react-toastify';
 import { useFirebaseUpload } from '../../hooks/useFirebaseUpload';
 import './seminarSchedule.css';
 
@@ -13,6 +14,39 @@ const SeminarSchedule = ({ seminarData, errors, handleChange, updateField }) => 
     const fileInputRef = useRef(null);
     const [showUrlInput, setShowUrlInput] = useState(false);
     const [dragOver, setDragOver] = useState(false);
+    const [showInviteModal, setShowInviteModal] = useState(false);
+    const [inviteEmails, setInviteEmails] = useState('');
+    const [sendingInvites, setSendingInvites] = useState(false);
+
+    const handleSendInvites = async () => {
+        const emails = inviteEmails.split(/[,;\n]/).map(e => e.trim()).filter(e => e && e.includes('@'));
+        if (emails.length === 0) { toast.error('Въведете поне един валиден имейл'); return; }
+        setSendingInvites(true);
+        try {
+            const apiUrl = import.meta.env.VITE_API_URL;
+            const auth = JSON.parse(localStorage.getItem('auth') || '{}');
+            const res = await fetch(`${apiUrl}/academy/seminars/invite`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${auth.token}` },
+                credentials: 'include',
+                body: JSON.stringify({
+                    emails,
+                    seminarTitle: seminarData.title,
+                    meetingLink: seminarData.meetingLink,
+                    meetingPassword: seminarData.meetingPassword,
+                    scheduledDate: seminarData.scheduledDate,
+                }),
+            });
+            if (res.ok) {
+                toast.success(`Поканите са изпратени до ${emails.length} имейл(а)`);
+                setShowInviteModal(false);
+                setInviteEmails('');
+            } else {
+                toast.error('Грешка при изпращане');
+            }
+        } catch { toast.error('Грешка при изпращане'); }
+        finally { setSendingInvites(false); }
+    };
     const [urlWarning, setUrlWarning] = useState('');
 
     const handleFileSelect = async (file) => {
@@ -150,9 +184,46 @@ const SeminarSchedule = ({ seminarData, errors, handleChange, updateField }) => 
                             <input id="scfs-meeting-pass" type="text" name="meetingPassword" className="scfs-input" value={seminarData.meetingPassword} onChange={handleChange} maxLength={100} />
                             {renderError('meetingPassword')}
                         </div>
+
+                        {/* Invite by email button */}
+                        {seminarData.meetingPassword && (
+                            <div className="scfs-field">
+                                <label className="scfs-label">&nbsp;</label>
+                                <button type="button" className="scfs-invite-btn" onClick={() => setShowInviteModal(true)}>
+                                    <Mail size={16} /> Покани по имейл
+                                </button>
+                            </div>
+                        )}
                     </div>
                 )}
+
             </div>
+
+            {/* Invite modal */}
+            {showInviteModal && (
+                <div className="scfs-invite-overlay" onClick={() => setShowInviteModal(false)}>
+                    <div className="scfs-invite-modal" onClick={e => e.stopPropagation()}>
+                        <div className="scfs-invite-header">
+                            <h3><Mail size={18} /> Покани участници</h3>
+                            <button className="scfs-invite-close" onClick={() => setShowInviteModal(false)}><X size={16} /></button>
+                        </div>
+                        <p className="scfs-invite-desc">Въведете имейл адреси, разделени със запетая. Ще получат линк и парола за семинара.</p>
+                        <textarea
+                            className="scfs-invite-textarea"
+                            value={inviteEmails}
+                            onChange={e => setInviteEmails(e.target.value)}
+                            placeholder="ivan@example.com, maria@example.com"
+                            rows={4}
+                        />
+                        <div className="scfs-invite-footer">
+                            <button className="scfs-invite-cancel" onClick={() => setShowInviteModal(false)}>Отказ</button>
+                            <button className="scfs-invite-send" onClick={handleSendInvites} disabled={sendingInvites}>
+                                <Send size={14} /> {sendingInvites ? 'Изпращане...' : 'Изпрати покани'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {/* ============================================= */}
             {/* Image */}

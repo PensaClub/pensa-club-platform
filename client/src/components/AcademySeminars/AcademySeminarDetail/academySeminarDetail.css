@@ -1953,3 +1953,136 @@
 [data-theme="light"] .asd-review-date { color: #94a3b8; }
 [data-theme="light"] .asd-no-reviews { color: #94a3b8; }
 [data-theme="light"] .asd-review-avatar-placeholder { background: rgba(13, 148, 136, 0.1); color: #0d9488; }
+
+/* ── Password Gate ── */
+.asd-password-gate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 28px 24px;
+  background: rgba(30, 41, 59, 0.6);
+  border: 2px solid #ef4444;
+  border-radius: 12px;
+  text-align: center;
+  margin-top: 16px;
+  animation: asd-pw-pulse 2s ease-in-out infinite;
+}
+
+@keyframes asd-pw-pulse {
+  0%, 100% { border-color: #ef4444; box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+  50% { border-color: #f87171; box-shadow: 0 0 16px rgba(239, 68, 68, 0.25); }
+}
+
+[data-theme="light"] .asd-password-gate {
+  background: rgba(254, 242, 242, 0.9);
+  border-color: #ef4444;
+}
+
+.asd-password-gate-icon { font-size: 28px; }
+
+.asd-password-gate-text {
+  font-size: 14px;
+  color: #cbd5e1;
+  margin: 0;
+  font-weight: 500;
+}
+
+[data-theme="light"] .asd-password-gate-text { color: #475569; }
+
+.asd-password-gate-input {
+  display: flex;
+  gap: 0;
+  width: 100%;
+  max-width: 320px;
+}
+
+.asd-password-gate-input input {
+  flex: 1;
+  padding: 11px 14px;
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  border-right: none;
+  border-radius: 8px 0 0 8px;
+  background: rgba(15, 23, 42, 0.5);
+  color: #f1f5f9;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  outline: none;
+}
+
+[data-theme="light"] .asd-password-gate-input input {
+  background: #fff;
+  border-color: #d1d5db;
+  color: #1e293b;
+}
+
+.asd-password-gate-input input:focus { border-color: #0d9488; }
+.asd-password-gate-input input.asd-input-error { border-color: #ef4444; }
+
+.asd-password-gate-input button {
+  padding: 11px 18px;
+  border: none;
+  border-radius: 0 8px 8px 0;
+  background: linear-gradient(135deg, #0d9488, #059669);
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+  white-space: nowrap;
+}
+
+.asd-password-gate-input button:hover { opacity: 0.9; }
+
+.asd-password-error {
+  font-size: 12px;
+  color: #ef4444;
+  font-weight: 500;
+}
+
+@media (max-width: 480px) {
+  .asd-password-gate { padding: 20px 16px; }
+  .asd-password-gate-input { max-width: 100%; flex-direction: column; gap: 8px; }
+  .asd-password-gate-input input { border-right: 1px solid rgba(148, 163, 184, 0.25); border-radius: 8px; font-size: 13px; padding: 12px 14px; }
+  .asd-password-gate-input button { border-radius: 8px; font-size: 13px; padding: 12px 14px; }
+}
+
+/* ── Live Buttons ── */
+.asd-live-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.asd-action-btn--external {
+  background: linear-gradient(135deg, #3b82f6, #2563eb) !important;
+}
+
+.asd-action-btn--external:hover { opacity: 0.9; }
+
+.asd-live-buttons-header {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.asd-live-external-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.asd-live-external-btn:hover { opacity: 0.9; }
