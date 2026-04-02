@@ -1828,10 +1828,10 @@ academyEnrollmentController.post(
 
       const seminarData = await seminar.findByPk(seminarId);
 
-      if (seminarData.status === 'live' || seminarData.status === 'completed') {
+      if (seminarData.status === 'completed') {
         return res.status(400).json({
           success: false,
-          message: 'Cannot unregister from a seminar that has started or ended',
+          message: 'Cannot unregister from a completed seminar',
         });
       }
 

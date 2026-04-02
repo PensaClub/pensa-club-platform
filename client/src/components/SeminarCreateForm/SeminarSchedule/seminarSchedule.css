@@ -367,3 +367,142 @@
 [data-theme="light"] .scfs-upload-hint { color: #94a3b8; }
 [data-theme="light"] .scfs-warning-msg { color: #d97706; }
 [data-theme="light"] .scfs-preview-remove { background: rgba(0, 0, 0, 0.5); }
+
+/* ── Invite button ── */
+.scfs-invite-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 16px;
+  border: 1px solid rgba(13, 148, 136, 0.3);
+  border-radius: 8px;
+  background: rgba(13, 148, 136, 0.1);
+  color: #0d9488;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  margin-top: 24px;
+}
+
+.scfs-invite-btn:hover { background: rgba(13, 148, 136, 0.2); }
+
+/* ── Invite modal ── */
+.scfs-invite-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.scfs-invite-modal {
+  background: #1e293b;
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 480px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+}
+
+[data-theme="light"] .scfs-invite-modal {
+  background: #fff;
+  border-color: #e2e8f0;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+}
+
+.scfs-invite-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.scfs-invite-header h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 16px;
+  color: #f1f5f9;
+}
+
+[data-theme="light"] .scfs-invite-header h3 { color: #1e293b; }
+
+.scfs-invite-close {
+  border: none;
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.scfs-invite-desc {
+  font-size: 13px;
+  color: #94a3b8;
+  margin: 0 0 14px;
+}
+
+[data-theme="light"] .scfs-invite-desc { color: #64748b; }
+
+.scfs-invite-textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.5);
+  color: #f1f5f9;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  resize: vertical;
+  outline: none;
+  margin-bottom: 14px;
+}
+
+[data-theme="light"] .scfs-invite-textarea {
+  background: #f8fafc;
+  border-color: #d1d5db;
+  color: #1e293b;
+}
+
+.scfs-invite-textarea:focus { border-color: #0d9488; }
+
+.scfs-invite-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.scfs-invite-cancel {
+  padding: 8px 16px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 6px;
+  background: transparent;
+  color: #94a3b8;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.scfs-invite-send {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #0d9488, #059669);
+  color: #fff;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.scfs-invite-send:disabled { opacity: 0.5; cursor: default; }
+.scfs-invite-send:hover:not(:disabled) { opacity: 0.9; }

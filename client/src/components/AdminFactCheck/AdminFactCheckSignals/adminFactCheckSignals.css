@@ -139,7 +139,8 @@
   vertical-align: middle;
   overflow-wrap: anywhere;
 }
-
+.afcs-table td span{
+  font-size: 0.9rem;}
 /* ===================================
    TABLE ROWS
    =================================== */
