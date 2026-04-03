@@ -16,7 +16,9 @@ const {
   student,
   sequelize,
   user_notification,
-  admin_notification
+  admin_notification,
+  seminar_session,
+  session_attendance,
 } = require('../sequelize/models/index');
 
 const { validateBody, validateQuery } = require('../middlewares/validateRequest');
@@ -2598,6 +2600,109 @@ seminarsController.post('/invite', isAuth, rbac.checkPermission('seminar', 'upda
     }
 
     res.json({ success: true, sent, total: emails.length });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// ===============================
+// SEMINAR SESSIONS — CRUD
+// ===============================
+
+// GET /api/academy/seminars/:id/sessions
+seminarsController.get('/:id/sessions', async (req, res, next) => {
+  try {
+    const seminarId = parseInt(req.params.id);
+    const sessions = await seminar_session.findAll({
+      where: { seminarId },
+      order: [['date', 'ASC'], ['startTime', 'ASC']],
+      include: [{
+        model: session_attendance,
+        as: 'attendances',
+        attributes: ['id', 'studentId', 'guestAttendanceId', 'registered', 'attended'],
+      }],
+    });
+
+    const enriched = sessions.map(s => ({
+      ...s.toJSON(),
+      registeredCount: s.attendances?.filter(a => a.registered).length || 0,
+      attendedCount: s.attendances?.filter(a => a.attended).length || 0,
+    }));
+
+    res.json({ sessions: enriched });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// POST /api/academy/seminars/:id/sessions — create sessions (bulk)
+seminarsController.post('/:id/sessions', isAuth, rbac.checkPermission('seminar', 'update'), async (req, res, next) => {
+  try {
+    const seminarId = parseInt(req.params.id);
+    const { sessions: sessionsData } = req.body;
+
+    if (!Array.isArray(sessionsData) || sessionsData.length === 0) {
+      return res.status(400).json({ success: false, message: 'sessions array is required' });
+    }
+
+    const seminarData = await seminar.findByPk(seminarId);
+    if (!seminarData) {
+      return res.status(404).json({ success: false, message: 'Seminar not found' });
+    }
+
+    const created = [];
+    for (const s of sessionsData) {
+      if (!s.date || !s.startTime) continue;
+      const session = await seminar_session.create({
+        seminarId,
+        date: s.date,
+        startTime: s.startTime,
+        endTime: s.endTime || null,
+        location: s.location || seminarData.location || null,
+        maxParticipants: s.maxParticipants || null,
+        notes: s.notes || null,
+      });
+      created.push(session);
+    }
+
+    res.status(201).json({ success: true, sessions: created });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// PUT /api/academy/seminars/:id/sessions/:sessionId
+seminarsController.put('/:id/sessions/:sessionId', isAuth, rbac.checkPermission('seminar', 'update'), async (req, res, next) => {
+  try {
+    const session = await seminar_session.findByPk(req.params.sessionId);
+    if (!session || session.seminarId !== parseInt(req.params.id)) {
+      return res.status(404).json({ success: false, message: 'Session not found' });
+    }
+
+    const { date, startTime, endTime, location, maxParticipants, notes } = req.body;
+    if (date) session.date = date;
+    if (startTime) session.startTime = startTime;
+    if (endTime !== undefined) session.endTime = endTime;
+    if (location !== undefined) session.location = location;
+    if (maxParticipants !== undefined) session.maxParticipants = maxParticipants;
+    if (notes !== undefined) session.notes = notes;
+    await session.save();
+
+    res.json({ success: true, session });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// DELETE /api/academy/seminars/:id/sessions/:sessionId
+seminarsController.delete('/:id/sessions/:sessionId', isAuth, rbac.checkPermission('seminar', 'update'), async (req, res, next) => {
+  try {
+    const session = await seminar_session.findByPk(req.params.sessionId);
+    if (!session || session.seminarId !== parseInt(req.params.id)) {
+      return res.status(404).json({ success: false, message: 'Session not found' });
+    }
+    await session.destroy();
+    res.json({ success: true });
   } catch (err) {
     next(err);
   }

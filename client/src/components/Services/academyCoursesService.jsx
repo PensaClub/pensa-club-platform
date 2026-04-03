@@ -413,6 +413,20 @@ checkSeminarRegistration: async (seminarId) => { // НОВО
     //                    SEMINAR VIDEOS
     // =========================================================
 
+    // Sessions
+    getSeminarSessions: async (seminarId) => {
+      return requester.get(`${apiUrl}/academy/seminars/${seminarId}/sessions`);
+    },
+    createSeminarSessions: async (seminarId, sessions) => {
+      return requester.post(`${apiUrl}/academy/seminars/${seminarId}/sessions`, { sessions });
+    },
+    updateSeminarSession: async (seminarId, sessionId, data) => {
+      return requester.put(`${apiUrl}/academy/seminars/${seminarId}/sessions/${sessionId}`, data);
+    },
+    deleteSeminarSession: async (seminarId, sessionId) => {
+      return requester.del(`${apiUrl}/academy/seminars/${seminarId}/sessions/${sessionId}`);
+    },
+
     getSeminarVideos: async (seminarId) => {
       return requester.get(`${apiUrl}/academy/seminars/${seminarId}/videos`);
     },

@@ -1828,6 +1828,34 @@ export const AcademyCoursesProvider = ({ children }) => {
   }, [isAdmin]);
 
   // Seminar videos
+  const getSeminarSessions = useCallback(async (seminarId) => {
+    try {
+      const data = await coursesService.getSeminarSessions(seminarId);
+      return data.sessions || [];
+    } catch (error) {
+      console.error('Error fetching seminar sessions:', error);
+      return [];
+    }
+  }, []);
+
+  const createSeminarSessions = useCallback(async (seminarId, sessions) => {
+    try {
+      return await coursesService.createSeminarSessions(seminarId, sessions);
+    } catch (error) {
+      console.error('Error creating seminar sessions:', error);
+      throw error;
+    }
+  }, []);
+
+  const deleteSeminarSession = useCallback(async (seminarId, sessionId) => {
+    try {
+      return await coursesService.deleteSeminarSession(seminarId, sessionId);
+    } catch (error) {
+      console.error('Error deleting seminar session:', error);
+      throw error;
+    }
+  }, []);
+
   const getSeminarVideos = useCallback(async (seminarId) => {
     try {
       const data = await coursesService.getSeminarVideos(seminarId);
@@ -2294,6 +2322,9 @@ export const AcademyCoursesProvider = ({ children }) => {
     addLessonMaterial,
     getLectureMaterials,
     addLectureMaterial,
+    getSeminarSessions,
+    createSeminarSessions,
+    deleteSeminarSession,
     getSeminarMaterials,
     addSeminarMaterial,
     deleteSeminarMaterial,

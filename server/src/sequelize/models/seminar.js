@@ -27,6 +27,13 @@ module.exports = (sequelize, DataTypes) => {
         as: 'attendances',
       });
 
+      // Has many sessions
+      seminar.hasMany(models.seminar_session, {
+        foreignKey: 'seminarId',
+        sourceKey: 'id',
+        as: 'sessions',
+      });
+
       // Has many materials
       seminar.hasMany(models.seminar_material, {
         foreignKey: 'seminarId',
