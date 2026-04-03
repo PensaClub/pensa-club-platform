@@ -47,11 +47,11 @@ const seminarEmailTemplates = {
       paragraph('Очакваме ви! Можете да видите детайлите на семинара от бутона по-долу.') +
       ctaButton(seminarUrl, 'Виж семинара') +
       qrBlock(seminarUrl, 'Линк към семинара') +
-      signature();
+      `<p style="color:#374151;font-size:15px;line-height:1.7;margin:16px 0 0;">С уважение,<br><strong style="color:#0d9488;">Екипът на DigiBridge Academy</strong></p>`;
 
     return {
       subject: `Записахте се за семинар: ${seminarTitle}`,
-      html: wrapTemplate('Записване за семинар', body),
+      html: wrapAcademyTemplate('Записване за семинар', body),
     };
   },
 
@@ -84,11 +84,11 @@ const seminarEmailTemplates = {
       paragraph('Регистрирайте се в DigiBridge, за да получите кредити и достъп до повече ресурси.') +
       ctaButton('https://pensa.club/sign-up', 'Регистрирай се') +
       qrBlock(seminarUrl, 'Линк към семинара') +
-      signature();
+      `<p style="color:#374151;font-size:15px;line-height:1.7;margin:16px 0 0;">С уважение,<br><strong style="color:#0d9488;">Екипът на DigiBridge Academy</strong></p>`;
 
     return {
       subject: `Записани сте за семинар: ${seminarTitle}`,
-      html: wrapTemplate('Записване за семинар', body),
+      html: wrapAcademyTemplate('Записване за семинар', body),
     };
   },
 
@@ -106,11 +106,11 @@ const seminarEmailTemplates = {
       ) +
       paragraph('Благодарим ви за участието!') +
       ctaButton(`https://pensa.club/academy/seminars/${slug}`, 'Виж семинара') +
-      signature();
+      `<p style="color:#374151;font-size:15px;line-height:1.7;margin:16px 0 0;">С уважение,<br><strong style="color:#0d9488;">Екипът на DigiBridge Academy</strong></p>`;
 
     return {
       subject: `Присъствие записано: ${seminarTitle}`,
-      html: wrapTemplate('Присъствие на семинар', body),
+      html: wrapAcademyTemplate('Присъствие на семинар', body),
     };
   },
 
@@ -126,16 +126,18 @@ const seminarEmailTemplates = {
         infoRow('Участник', studentName) +
         infoRow('Записани', spotsInfo)
       ) +
-      signature();
+      `<p style="color:#374151;font-size:15px;line-height:1.7;margin:16px 0 0;">С уважение,<br><strong style="color:#0d9488;">Екипът на DigiBridge Academy</strong></p>`;
 
     return {
       subject: `Нов записан за: ${seminarTitle}`,
-      html: wrapTemplate('Ново записване за семинар', body),
+      html: wrapAcademyTemplate('Ново записване за семинар', body),
     };
   },
 };
 
 const ACADEMY_LOGO = 'https://pensa.club/images/homePage/logo.png';
+const CIF_LOGO = 'https://pensa.club/images/partners/CIF_logo_white_rgb.png';
+const EU_LOGO = 'https://pensa.club/images/EU%20LOGO/co-funded_BG/horizontal/BG_Co-fundedbytheEU_RGB_POS.png';
 
 const wrapAcademyTemplate = (title, bodyHtml) => `
 <!DOCTYPE html>
@@ -146,8 +148,16 @@ const wrapAcademyTemplate = (title, bodyHtml) => `
     <tr><td align="center">
       <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 2px 16px rgba(0,0,0,0.08);">
         <tr>
-          <td style="background:linear-gradient(135deg,#0d9488 0%,#059669 100%);padding:28px 32px 20px;text-align:center;">
-            <img src="${ACADEMY_LOGO}" alt="DigiBridge Academy" height="48" style="display:inline-block;height:48px;margin-bottom:12px;" />
+          <td style="background:linear-gradient(135deg,#1f2937 0%,#2d3a4a 50%,#374151 100%);padding:28px 32px 20px;text-align:center;">
+            <table cellpadding="0" cellspacing="0" style="margin:0 auto 14px;">
+              <tr>
+                <td style="padding-right:12px;"><img src="${CIF_LOGO}" alt="CIF" height="40" style="display:block;height:40px;width:auto;" /></td>
+                <td style="color:rgba(255,255,255,0.4);font-size:14px;padding:0 6px;">|</td>
+                <td style="padding:0 12px;"><img src="${EU_LOGO}" alt="EU" height="40" style="display:block;height:40px;width:auto;" /></td>
+                <td style="color:rgba(255,255,255,0.4);font-size:14px;padding:0 6px;">|</td>
+                <td style="padding-left:12px;"><img src="${ACADEMY_LOGO}" alt="ПЕНСА" height="40" style="display:block;height:40px;width:auto;" /></td>
+              </tr>
+            </table>
             <div style="color:#ffffff;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">DigiBridge Academy</div>
             <div style="color:#ffffff;font-size:22px;font-weight:700;line-height:1.3;">${title}</div>
           </td>
