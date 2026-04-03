@@ -59,8 +59,13 @@ module.exports = (sequelize, DataTypes) => {
       },
       markedBy: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         field: 'marked_by',
+      },
+      convertedToUserId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        field: 'converted_to_user_id',
       },
     },
     {

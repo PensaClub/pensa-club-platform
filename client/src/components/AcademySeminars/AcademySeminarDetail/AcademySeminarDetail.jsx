@@ -30,7 +30,15 @@ const getSeminarStatus = (seminar) => { // НОВО
     if (seminar.status === 'completed') return 'completed';
     const now = new Date();
     const start = seminar.scheduledDate ? new Date(seminar.scheduledDate) : null;
+    const end = seminar.scheduledEndDate ? new Date(seminar.scheduledEndDate) : null;
+    // If end date exists and hasn't passed, it's still upcoming/active
+    if (end && now < end) return 'upcoming';
     if (start && now < start) return 'upcoming';
+    // Start passed but no end date — check if within duration
+    if (start && !end) {
+        const duration = (seminar.durationMinutes || 90) * 60 * 1000;
+        if (now < new Date(start.getTime() + duration)) return 'upcoming';
+    }
     return 'scheduled';
 };
 const getEmbedUrl = (url) => { // НОВО
@@ -162,6 +170,33 @@ const AcademySeminarDetail = () => { // НОВО
     const [passwordUnlocked, setPasswordUnlocked] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
     const [showAuthModal, setShowAuthModal] = useState(false);
+    const [showGuestForm, setShowGuestForm] = useState(false);
+    const [guestData, setGuestData] = useState({ firstName: '', lastName: '', email: '', phone: '' });
+    const [guestRegistering, setGuestRegistering] = useState(false);
+    const [guestRegistered, setGuestRegistered] = useState(false);
+
+    const handleGuestRegister = async () => {
+        if (!guestData.firstName.trim() || !guestData.lastName.trim()) return;
+        setGuestRegistering(true);
+        try {
+            const apiUrl = import.meta.env.VITE_API_URL;
+            const res = await fetch(`${apiUrl}/academy/seminars/${seminar.id}/guest-register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(guestData),
+            });
+            const data = await res.json();
+            if (data.success) {
+                setGuestRegistered(true);
+            } else {
+                alert(data.message || 'Грешка при записване');
+            }
+        } catch {
+            alert('Грешка при записване');
+        } finally {
+            setGuestRegistering(false);
+        }
+    };
 
     const needsPassword = seminar?.meetingPassword && seminar.meetingPassword.trim() !== '';
     const isLiveAccessAllowed = !needsPassword || passwordUnlocked || isMentorOrAdmin;
@@ -1113,22 +1148,98 @@ const AcademySeminarDetail = () => { // НОВО
 
             {/* Auth modal for unregistered users */}
             {showAuthModal && (
-                <div className="asd-auth-overlay" onClick={() => setShowAuthModal(false)}>
+                <div className="asd-auth-overlay" onClick={() => { setShowAuthModal(false); setShowGuestForm(false); setGuestRegistered(false); }}>
                     <div className="asd-auth-modal" onClick={e => e.stopPropagation()}>
-                        <button className="asd-auth-close" onClick={() => setShowAuthModal(false)}>
+                        <button className="asd-auth-close" onClick={() => { setShowAuthModal(false); setShowGuestForm(false); setGuestRegistered(false); }}>
                             <X size={18} />
                         </button>
-                        <div className="asd-auth-icon">🎓</div>
-                        <h3 className="asd-auth-title">{t('seminarDetail.authRequired', 'Влезте в акаунта си')}</h3>
-                        <p className="asd-auth-text">{t('seminarDetail.authText', 'За да се запишете за семинар, трябва да имате акаунт в платформата.')}</p>
-                        <div className="asd-auth-buttons">
-                            <a href={`/sign-up?view=login&redirect=${encodeURIComponent(location.pathname)}`} className="asd-auth-btn asd-auth-btn-login">
-                                {t('seminarDetail.login', 'Вход')}
-                            </a>
-                            <a href={`/sign-up?redirect=${encodeURIComponent(location.pathname)}`} className="asd-auth-btn asd-auth-btn-register">
-                                {t('seminarDetail.register', 'Регистрация')}
-                            </a>
-                        </div>
+
+                        {guestRegistered ? (
+                            /* Success state */
+                            <>
+                                <div className="asd-auth-icon">✅</div>
+                                <h3 className="asd-auth-title">Записахте се успешно!</h3>
+                                <p className="asd-auth-text">Ще получите потвърждение по имейл (ако сте го посочили). Регистрирайте се в платформата за кредити!</p>
+                                <div className="asd-auth-buttons">
+                                    <a href={`/sign-up?redirect=${encodeURIComponent(location.pathname)}`} className="asd-auth-btn asd-auth-btn-login">
+                                        🏆 Регистрирай се за кредити
+                                    </a>
+                                    <button className="asd-auth-btn asd-auth-btn-register" onClick={() => { setShowAuthModal(false); setGuestRegistered(false); setShowGuestForm(false); }}>
+                                        Затвори
+                                    </button>
+                                </div>
+                            </>
+                        ) : showGuestForm ? (
+                            /* Guest form */
+                            <>
+                                <div className="asd-auth-icon">📝</div>
+                                <h3 className="asd-auth-title">Запишете се като гост</h3>
+                                <div className="asd-guest-form">
+                                    <input
+                                        className="asd-guest-input"
+                                        type="text"
+                                        placeholder="Име *"
+                                        value={guestData.firstName}
+                                        onChange={e => setGuestData(prev => ({ ...prev, firstName: e.target.value }))}
+                                    />
+                                    <input
+                                        className="asd-guest-input"
+                                        type="text"
+                                        placeholder="Фамилия *"
+                                        value={guestData.lastName}
+                                        onChange={e => setGuestData(prev => ({ ...prev, lastName: e.target.value }))}
+                                    />
+                                    <input
+                                        className="asd-guest-input"
+                                        type="email"
+                                        placeholder="Имейл (за потвърждение)"
+                                        value={guestData.email}
+                                        onChange={e => setGuestData(prev => ({ ...prev, email: e.target.value }))}
+                                    />
+                                    <span className="asd-guest-hint">Ще получите имейл потвърждение</span>
+                                    <input
+                                        className="asd-guest-input"
+                                        type="tel"
+                                        placeholder="Телефон (за SMS напомняне)"
+                                        value={guestData.phone}
+                                        onChange={e => setGuestData(prev => ({ ...prev, phone: e.target.value }))}
+                                    />
+                                    <span className="asd-guest-hint">За SMS напомняне преди семинара</span>
+                                    <div className="asd-auth-buttons" style={{ marginTop: 16 }}>
+                                        <button
+                                            className="asd-auth-btn asd-auth-btn-login"
+                                            onClick={handleGuestRegister}
+                                            disabled={guestRegistering || !guestData.firstName.trim() || !guestData.lastName.trim()}
+                                        >
+                                            {guestRegistering ? 'Записване...' : 'Запиши се'}
+                                        </button>
+                                        <button className="asd-auth-btn asd-auth-btn-register" onClick={() => setShowGuestForm(false)}>
+                                            ← Назад
+                                        </button>
+                                    </div>
+                                </div>
+                            </>
+                        ) : (
+                            /* Choice: register or guest */
+                            <>
+                                <div className="asd-auth-icon">🎓</div>
+                                <h3 className="asd-auth-title">Запишете се за семинара</h3>
+                                <div className="asd-auth-credits-badge">
+                                    🏆 Като регистриран потребител получавате кредити за всеки посетен семинар!
+                                </div>
+                                <div className="asd-auth-buttons-stack">
+                                    <a href={`/sign-up?redirect=${encodeURIComponent(location.pathname)}`} className="asd-auth-btn asd-auth-btn-login">
+                                        🏆 Регистрирай се и спечели кредити
+                                    </a>
+                                    <button className="asd-auth-btn asd-auth-btn-register" onClick={() => setShowGuestForm(true)}>
+                                        📝 Продължи като гост
+                                    </button>
+                                    <a href={`/sign-up?view=login&redirect=${encodeURIComponent(location.pathname)}`} className="asd-auth-link">
+                                        Вече имате акаунт? Вход
+                                    </a>
+                                </div>
+                            </>
+                        )}
                     </div>
                 </div>
             )}

@@ -8,11 +8,11 @@ const StudentCreditsOverview = ({ dashboardData = {} }) => {
  const dashboard = dashboardData?.dashboard || {};
     const {
         totalCreditsEarned = 0,
-        creditsFromCourses = 0,
-        creditsFromLectures = 0,
-        creditsFromSeminars = 0,
-        creditsFromPresentations = 0
     } = dashboard;
+    const creditsFromCourses = dashboard?.courses?.enrolled || 0;
+    const creditsFromLectures = dashboard?.lectures?.registered || 0;
+    const creditsFromSeminars = dashboard?.seminars?.attended || dashboard?.seminars?.registered || 0;
+    const creditsFromPresentations = 0;
 
     const getLevelInfo = (credits) => {
         if (credits >= 301) {

@@ -2603,4 +2603,142 @@ seminarsController.post('/invite', isAuth, rbac.checkPermission('seminar', 'upda
   }
 });
 
+// ===============================
+// POST /api/academy/seminars/:id/guest-register
+// Публично записване като гост (без auth)
+// ===============================
+seminarsController.post('/:id/guest-register', async (req, res, next) => {
+  try {
+    const { seminar_guest_attendance } = require('../sequelize/models/index');
+    const seminarId = parseInt(req.params.id);
+    const { firstName, lastName, email, phone } = req.body;
+
+    // Validation
+    if (!firstName || !lastName || firstName.trim().length < 2 || lastName.trim().length < 2) {
+      return res.status(400).json({ success: false, message: 'Име и фамилия са задължителни (мин. 2 символа)' });
+    }
+
+    const seminarData = await seminar.findByPk(seminarId);
+    if (!seminarData) {
+      return res.status(404).json({ success: false, message: 'Семинарът не е намерен' });
+    }
+
+    if (!seminarData.isPublished || !seminarData.isPublic) {
+      return res.status(400).json({ success: false, message: 'Семинарът не е достъпен за записване' });
+    }
+
+    if (seminarData.status === 'cancelled') {
+      return res.status(400).json({ success: false, message: 'Семинарът е отменен' });
+    }
+
+    if (seminarData.status === 'completed') {
+      return res.status(400).json({ success: false, message: 'Семинарът вече е приключил' });
+    }
+
+    // Check capacity
+    if (seminarData.maxParticipants) {
+      const { student_seminar: ss } = require('../sequelize/models/index');
+      const registered = await ss.count({ where: { seminarId, status: { [Op.in]: ['pending', 'approved'] } } });
+      const guests = await seminar_guest_attendance.count({ where: { seminarId } });
+      if (registered + guests >= seminarData.maxParticipants) {
+        return res.status(400).json({ success: false, message: 'Семинарът е пълен' });
+      }
+    }
+
+    // Check duplicate guest (by name OR by email)
+    const duplicateWhere = {
+      seminarId,
+      [Op.or]: [
+        { guestFirstName: firstName.trim(), guestLastName: lastName.trim() },
+        ...(email?.trim() ? [{ guestEmail: email.trim() }] : []),
+      ],
+    };
+    const existing = await seminar_guest_attendance.findOne({ where: duplicateWhere });
+
+    if (existing) {
+      return res.status(400).json({ success: false, message: 'Вече сте записани за този семинар' });
+    }
+
+    // Check if already registered as platform user (by email)
+    if (email?.trim()) {
+      const { student_seminar: ss, student: studentModel } = require('../sequelize/models/index');
+      const existingUser = await user_account.findOne({ where: { email: email.trim() }, attributes: ['id'] });
+      if (existingUser) {
+        const existingStudent = await studentModel.findOne({ where: { userId: existingUser.id }, attributes: ['id'] });
+        if (existingStudent) {
+          const existingReg = await ss.findOne({ where: { studentId: existingStudent.id, seminarId } });
+          if (existingReg) {
+            return res.status(400).json({ success: false, message: 'Вече сте записани с този имейл. Влезте в акаунта си.' });
+          }
+        }
+      }
+    }
+
+    // Create guest attendance record
+    await seminar_guest_attendance.create({
+      seminarId,
+      guestFirstName: firstName.trim(),
+      guestLastName: lastName.trim(),
+      guestEmail: email?.trim() || null,
+      guestPhone: phone?.trim() || null,
+      participationLevel: 'passive',
+      markedBy: null,
+    });
+
+    // Increment registered count
+    await seminarData.increment('registeredCount');
+
+    // Send email notification (if email provided)
+    if (email?.trim()) {
+      try {
+        const { forwardEmailsViaZoho } = require('../utils/zohoEmails');
+        const seminarEmailTemplates = require('../utils/seminarEmailTemplates');
+
+        const template = await seminarEmailTemplates.guestNotification({
+          guestName: `${firstName.trim()} ${lastName.trim()}`,
+          seminarTitle: seminarData.title,
+          scheduledDate: seminarData.scheduledDate,
+          location: seminarData.location,
+          isOnline: seminarData.isOnline,
+          meetingLink: seminarData.meetingLink,
+          meetingPassword: seminarData.meetingPassword,
+          mentorName: null,
+          slug: seminarData.slug,
+        });
+
+        await forwardEmailsViaZoho({
+          userEmail: 'info@pensa.club',
+          subject: template.subject,
+          body: '',
+          toAddresses: email.trim(),
+          formattedBody: template.html,
+        });
+      } catch (emailErr) {
+        console.error('Guest email error:', emailErr.message);
+      }
+    }
+
+    // Send SMS (if phone provided and SMS enabled)
+    if (phone?.trim() && phone.trim().length >= 8) {
+      try {
+        const { sendRegistrationSms, getSmsSettings } = require('../utils/smsService');
+        const smsSettings = await getSmsSettings();
+        if (smsSettings.sms_enabled !== 'false' && smsSettings.sms_on_registration !== 'false') {
+          await sendRegistrationSms(
+            phone.trim(), seminarData.title, seminarData.scheduledDate,
+            seminarData.location, seminarData.isOnline, smsSettings.sms_registration_template
+          );
+        }
+      } catch (smsErr) {
+        console.error('Guest SMS error:', smsErr.message);
+      }
+    }
+
+    res.status(201).json({ success: true, message: 'Записахте се успешно!' });
+  } catch (err) {
+    console.error('❌ [GUEST REGISTER] Error:', err);
+    next(err);
+  }
+});
+
 module.exports = seminarsController;

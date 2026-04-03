@@ -2193,3 +2193,68 @@
 }
 
 [data-theme="light"] .asd-auth-btn-register { color: #059669; border-color: #059669; }
+
+/* Auth modal — credits badge */
+.asd-auth-credits-badge {
+  padding: 12px 16px;
+  background: rgba(13, 148, 136, 0.1);
+  border: 1px solid rgba(13, 148, 136, 0.2);
+  border-radius: 8px;
+  font-size: 13px;
+  color: #0d9488;
+  font-weight: 500;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+[data-theme="light"] .asd-auth-credits-badge { background: rgba(13, 148, 136, 0.06); }
+
+.asd-auth-buttons-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.asd-auth-link {
+  text-align: center;
+  font-size: 12px;
+  color: #94a3b8;
+  text-decoration: none;
+  margin-top: 4px;
+}
+
+.asd-auth-link:hover { color: #0d9488; text-decoration: underline; }
+[data-theme="light"] .asd-auth-link { color: #64748b; }
+
+/* Guest form */
+.asd-guest-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  margin-top: 12px;
+}
+
+.asd-guest-input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.5);
+  color: #f1f5f9;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  outline: none;
+}
+
+[data-theme="light"] .asd-guest-input { background: #f8fafc; border-color: #d1d5db; color: #1e293b; }
+
+.asd-guest-input:focus { border-color: #0d9488; }
+
+.asd-guest-hint {
+  font-size: 11px;
+  color: #64748b;
+  margin-top: -4px;
+  padding-left: 4px;
+}
