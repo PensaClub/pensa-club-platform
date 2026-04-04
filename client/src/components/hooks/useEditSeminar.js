@@ -157,6 +157,8 @@ const [showTestEditor, setShowTestEditor] = useState(false);
                         startTime: s.startTime,
                         endTime: s.endTime || '',
                         location: s.location || '',
+                        cancelled: s.cancelled || false,
+                        cancelReason: s.cancelReason || '',
                     }));
                 }
             } catch { /* no sessions */ }
