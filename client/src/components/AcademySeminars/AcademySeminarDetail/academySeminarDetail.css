@@ -2227,6 +2227,122 @@
 .asd-auth-link:hover { color: #0d9488; text-decoration: underline; }
 [data-theme="light"] .asd-auth-link { color: #64748b; }
 
+/* ── Sessions Schedule ── */
+.asd-sessions-section {
+  margin: 16px 0;
+}
+
+.asd-sessions-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--sdb-text-primary, #f1f5f9);
+  margin: 0 0 10px;
+}
+
+[data-theme="light"] .asd-sessions-title { color: #1e293b; }
+
+.asd-sessions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.asd-session-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+[data-theme="light"] .asd-session-card {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+
+.asd-session-card:hover { border-color: #0d9488; }
+
+.asd-session-selected {
+  border-color: #0d9488;
+  background: rgba(13, 148, 136, 0.08);
+}
+
+[data-theme="light"] .asd-session-selected {
+  background: rgba(13, 148, 136, 0.06);
+}
+
+.asd-session-check {
+  width: 16px;
+  height: 16px;
+  accent-color: #0d9488;
+  flex-shrink: 0;
+}
+
+.asd-session-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  flex: 1;
+  align-items: center;
+}
+
+.asd-session-date {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--sdb-text-primary, #f1f5f9);
+}
+
+[data-theme="light"] .asd-session-date { color: #1e293b; }
+
+.asd-session-time {
+  font-size: 12px;
+  color: var(--sdb-text-secondary, #94a3b8);
+}
+
+.asd-session-location {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  color: var(--sdb-text-muted, #64748b);
+}
+
+.asd-session-spots {
+  font-size: 11px;
+  font-weight: 600;
+  color: #0d9488;
+  flex-shrink: 0;
+}
+
+.asd-spots-full { color: #ef4444; }
+
+.asd-session-cancelled {
+  opacity: 0.5;
+  cursor: default;
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.asd-session-badge-cancelled {
+  font-size: 11px;
+  font-weight: 700;
+  color: #ef4444;
+  flex-shrink: 0;
+}
+
+.asd-session-badge-registered {
+  font-size: 11px;
+  font-weight: 600;
+  color: #10b981;
+  flex-shrink: 0;
+}
+
 /* Guest form */
 .asd-guest-form {
   display: flex;

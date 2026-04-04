@@ -25,6 +25,10 @@ module.exports = (sequelize, DataTypes) => {
       location: { type: DataTypes.STRING(500), allowNull: true },
       maxParticipants: { type: DataTypes.INTEGER, allowNull: true, field: 'max_participants' },
       notes: { type: DataTypes.TEXT, allowNull: true },
+      cancelled: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
+      cancelReason: { type: DataTypes.TEXT, allowNull: true, field: 'cancel_reason' },
+      cancelledBy: { type: DataTypes.INTEGER, allowNull: true, field: 'cancelled_by' },
+      cancelledAt: { type: DataTypes.DATE, allowNull: true, field: 'cancelled_at' },
     },
     {
       sequelize,

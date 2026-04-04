@@ -148,10 +148,13 @@ const AcademySeminarDetail = () => { // НОВО
         addSeminarReview,
         startSeminar,
         stopSeminar,
+        getSeminarSessions,
     } = useAcademyCourses();
 
     const [seminar, setSeminar] = useState(null);
     const [materials, setMaterials] = useState([]);
+    const [sessions, setSessions] = useState([]);
+    const [selectedSessionIds, setSelectedSessionIds] = useState([]);
     const [videos, setVideos] = useState([]);
     const [isRegistered, setIsRegistered] = useState(false);
     const [registering, setRegistering] = useState(false);
@@ -170,6 +173,7 @@ const AcademySeminarDetail = () => { // НОВО
     const [passwordUnlocked, setPasswordUnlocked] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
     const [showAuthModal, setShowAuthModal] = useState(false);
+    const [showSessionPrompt, setShowSessionPrompt] = useState(false);
     const [showGuestForm, setShowGuestForm] = useState(false);
     const [guestData, setGuestData] = useState({ firstName: '', lastName: '', email: '', phone: '' });
     const [guestRegistering, setGuestRegistering] = useState(false);
@@ -177,13 +181,19 @@ const AcademySeminarDetail = () => { // НОВО
 
     const handleGuestRegister = async () => {
         if (!guestData.firstName.trim() || !guestData.lastName.trim()) return;
+        const activeSessionsGuest = sessions.filter(s => !s.cancelled);
+        if (activeSessionsGuest.length > 0 && selectedSessionIds.length === 0) {
+            setShowSessionPrompt(true);
+            setShowAuthModal(false);
+            return;
+        }
         setGuestRegistering(true);
         try {
             const apiUrl = import.meta.env.VITE_API_URL;
             const res = await fetch(`${apiUrl}/academy/seminars/${seminar.id}/guest-register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(guestData),
+                body: JSON.stringify({ ...guestData, sessionIds: selectedSessionIds.length > 0 ? selectedSessionIds : undefined }),
             });
             const data = await res.json();
             if (data.success) {
@@ -245,6 +255,12 @@ const AcademySeminarDetail = () => { // НОВО
                 // Materials come included in the seminar response
                 setMaterials(sem.materials || []);
 
+                // Load sessions
+                try {
+                    const sessData = await getSeminarSessions(sem.id);
+                    setSessions(sessData || []);
+                } catch { setSessions([]); }
+
             } catch (err) {
                 console.error('Error loading seminar:', err);
                 setError('load_failed');
@@ -302,13 +318,22 @@ const AcademySeminarDetail = () => { // НОВО
     const handleRegister = useCallback(async () => {
         if (!seminar) return;
         if (!isAuthentication) { setShowAuthModal(true); return; }
+
+        // If active sessions exist and none selected — prompt to select
+        const activeSessions = sessions.filter(s => !s.cancelled);
+        if (!isRegistered && activeSessions.length > 0 && selectedSessionIds.length === 0) {
+            setShowSessionPrompt(true);
+            return;
+        }
+
         setRegistering(true);
         try {
             if (isRegistered) {
                 await unregisterFromSeminar(seminar.id);
                 setIsRegistered(false);
+                setSelectedSessionIds([]);
             } else {
-                await registerForSeminar(seminar.id);
+                await registerForSeminar(seminar.id, { sessionIds: selectedSessionIds.length > 0 ? selectedSessionIds : undefined });
                 setIsRegistered(true);
             }
             // Презареди семинара за актуален registeredCount // НОВО
@@ -320,7 +345,7 @@ const AcademySeminarDetail = () => { // НОВО
         } finally {
             setRegistering(false);
         }
-    }, [seminar, isRegistered, isAuthentication, slug]);
+    }, [seminar, isRegistered, isAuthentication, slug, selectedSessionIds, sessions]);
 
     const handleAddToCalendar = () => {
         if (!seminar) return;
@@ -561,6 +586,65 @@ const AcademySeminarDetail = () => { // НОВО
                                     <span>{countdown.seconds}</span>
                                     <small>{t('seminarDetail.secs', 'сек')}</small>
                                 </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Sessions schedule */}
+                    {sessions.length > 0 && (
+                        <div className="asd-sessions-section">
+                            <h3 className="asd-sessions-title">
+                                <Calendar size={16} />
+                                {t('seminarDetail.schedule', 'График')}
+                            </h3>
+                            <div className="asd-sessions-list">
+                                {sessions.map(session => {
+                                    const isSelected = selectedSessionIds.includes(session.id);
+                                    const dateStr = new Date(session.date).toLocaleDateString('bg-BG', { weekday: 'short', day: 'numeric', month: 'short' });
+                                    const spotsLeft = session.maxParticipants ? session.maxParticipants - (session.registeredCount || 0) : null;
+                                    if (session.cancelled) {
+                                        return (
+                                            <div key={session.id} className="asd-session-card asd-session-cancelled">
+                                                <div className="asd-session-info">
+                                                    <span className="asd-session-date" style={{ textDecoration: 'line-through' }}>{dateStr}</span>
+                                                    <span className="asd-session-time" style={{ textDecoration: 'line-through' }}>{session.startTime}{session.endTime ? ` — ${session.endTime}` : ''}</span>
+                                                </div>
+                                                <span className="asd-session-badge-cancelled">Отменен</span>
+                                            </div>
+                                        );
+                                    }
+                                    return (
+                                        <label key={session.id} className={`asd-session-card ${isSelected ? 'asd-session-selected' : ''}`}>
+                                            {!isRegistered && (status === 'upcoming' || status === 'live') && (
+                                                <input
+                                                    type="checkbox"
+                                                    className="asd-session-check"
+                                                    checked={isSelected}
+                                                    onChange={() => {
+                                                        setSelectedSessionIds(prev =>
+                                                            prev.includes(session.id)
+                                                                ? prev.filter(id => id !== session.id)
+                                                                : [...prev, session.id]
+                                                        );
+                                                    }}
+                                                />
+                                            )}
+                                            <div className="asd-session-info">
+                                                <span className="asd-session-date">{dateStr}</span>
+                                                <span className="asd-session-time">{session.startTime}{session.endTime ? ` — ${session.endTime}` : ''}</span>
+                                                {session.location && <span className="asd-session-location"><MapPin size={11} /> {session.location}</span>}
+                                            </div>
+                                            {isSelected && isRegistered && (
+                                                <span className="asd-session-badge-registered">✓ Записан</span>
+                                            )}
+                                            {spotsLeft !== null && !isSelected && (
+                                                <span className={`asd-session-spots ${spotsLeft <= 0 ? 'asd-spots-full' : ''}`}>
+                                                    {spotsLeft > 0 ? `${spotsLeft} места` : 'Пълен'}
+                                                </span>
+                                            )}
+                                        </label>
+                                    );
+                                })}
                             </div>
                         </div>
                     )}
@@ -1147,6 +1231,26 @@ const AcademySeminarDetail = () => { // НОВО
             <ScrollToTop />
 
             {/* Auth modal for unregistered users */}
+            {showSessionPrompt && (
+                <div className="asd-auth-overlay" onClick={() => setShowSessionPrompt(false)}>
+                    <div className="asd-auth-modal" onClick={e => e.stopPropagation()}>
+                        <button className="asd-auth-close" onClick={() => setShowSessionPrompt(false)}>
+                            <X size={18} />
+                        </button>
+                        <div className="asd-auth-icon">📅</div>
+                        <h3 className="asd-auth-title">Изберете ден</h3>
+                        <p className="asd-auth-text">Моля, изберете поне един ден от графика, в който искате да присъствате.</p>
+                        <button
+                            className="asd-auth-btn asd-auth-btn-login"
+                            onClick={() => setShowSessionPrompt(false)}
+                            style={{ width: '100%' }}
+                        >
+                            Разбрах
+                        </button>
+                    </div>
+                </div>
+            )}
+
             {showAuthModal && (
                 <div className="asd-auth-overlay" onClick={() => { setShowAuthModal(false); setShowGuestForm(false); setGuestRegistered(false); }}>
                     <div className="asd-auth-modal" onClick={e => e.stopPropagation()}>

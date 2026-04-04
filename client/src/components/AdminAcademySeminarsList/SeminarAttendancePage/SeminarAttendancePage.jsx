@@ -13,7 +13,7 @@ import './seminarAttendancePage.css';
 const SeminarAttendancePage = () => {
     const { t } = useTranslation('academy-admin');
     const navigate = useLocalizedNavigate();
-    const { getAdminSeminars } = useAcademyCourses();
+    const { getAdminSeminars, getSeminarSessions } = useAcademyCourses();
 
     useEffect(() => { window.scrollTo(0, 0); }, []);
 
@@ -22,6 +22,8 @@ const SeminarAttendancePage = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [showDropdown, setShowDropdown] = useState(false);
     const [showQR, setShowQR] = useState(false);
+    const [sessions, setSessions] = useState([]);
+    const [selectedSession, setSelectedSession] = useState(null);
 
     useEffect(() => {
         const load = async () => {
@@ -108,7 +110,15 @@ const SeminarAttendancePage = () => {
                                             <button
                                                 key={sem.id}
                                                 className={`satp-dropdown-item ${selectedSeminar?.id === sem.id ? 'satp-dropdown-item-active' : ''}`}
-                                                onClick={() => { setSelectedSeminar(sem); setShowDropdown(false); }}
+                                                onClick={async () => {
+                                                    setSelectedSeminar(sem);
+                                                    setShowDropdown(false);
+                                                    setSelectedSession(null);
+                                                    try {
+                                                        const sessData = await getSeminarSessions(sem.id);
+                                                        setSessions(sessData || []);
+                                                    } catch { setSessions([]); }
+                                                }}
                                             >
                                                 <div className="satp-dropdown-item-info">
                                                     <span className="satp-dropdown-item-title">{sem.title}</span>
@@ -137,8 +147,35 @@ const SeminarAttendancePage = () => {
                     </button>
                 )}
 
+                {/* Session selector */}
+                {selectedSeminar && sessions.length > 0 && (
+                    <div className="satp-session-selector">
+                        <label className="satp-selector-label">
+                            {t('seminarAttendance.selectSession', 'Изберете ден')}
+                        </label>
+                        <div className="satp-session-tabs">
+                            <button
+                                className={`satp-session-tab ${!selectedSession ? 'satp-session-tab-active' : ''}`}
+                                onClick={() => setSelectedSession(null)}
+                            >
+                                Всички дни
+                            </button>
+                            {sessions.map(s => (
+                                <button
+                                    key={s.id}
+                                    className={`satp-session-tab ${selectedSession?.id === s.id ? 'satp-session-tab-active' : ''}`}
+                                    onClick={() => setSelectedSession(s)}
+                                >
+                                    {new Date(s.date).toLocaleDateString('bg-BG', { day: 'numeric', month: 'short' })}
+                                    <span className="satp-session-tab-time">{s.startTime}</span>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
                 {selectedSeminar && (
-                    <AttendanceForm seminar={selectedSeminar} />
+                    <AttendanceForm seminar={selectedSeminar} session={selectedSession} />
                 )}
             </div>
 

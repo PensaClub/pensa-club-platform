@@ -346,8 +346,8 @@ export const academyCoursesServiceFactory = () => {
     //                    SEMINAR REGISTRATION
     // =========================================================
 
-    registerForSeminar: async (seminarId) => {
-      return requester.post(`${apiUrl}/academy/enrollment/seminars/${seminarId}/register`);
+    registerForSeminar: async (seminarId, data = {}) => {
+      return requester.post(`${apiUrl}/academy/enrollment/seminars/${seminarId}/register`, data);
     },
 
     unregisterFromSeminar: async (seminarId) => {

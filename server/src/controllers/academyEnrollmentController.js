@@ -1722,6 +1722,21 @@ academyEnrollmentController.post(
         await seminarData.increment('registeredCount');
       }
 
+      // Register for specific sessions if sessionIds provided
+      const { sessionIds } = req.body;
+      if (Array.isArray(sessionIds) && sessionIds.length > 0) {
+        const { session_attendance, seminar_session } = require('../sequelize/models/index');
+        for (const sessionId of sessionIds) {
+          const session = await seminar_session.findByPk(sessionId);
+          if (session && session.seminarId === seminarId) {
+            await session_attendance.findOrCreate({
+              where: { sessionId, studentId: studentData.id },
+              defaults: { sessionId, studentId: studentData.id, registered: true, attended: false },
+            });
+          }
+        }
+      }
+
       // Create user notification
       try {
         await user_notification.create({

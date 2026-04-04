@@ -125,6 +125,7 @@ const EditSeminar = () => {
                     />
                     <SeminarSchedule
                         seminarData={seminarData}
+                        seminarId={seminarId}
                         errors={errors}
                         handleChange={handleChange}
                         updateField={updateField}

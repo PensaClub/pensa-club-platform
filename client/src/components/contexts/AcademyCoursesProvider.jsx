@@ -990,10 +990,10 @@ export const AcademyCoursesProvider = ({ children }) => {
   //                    SEMINAR REGISTRATION
   // =========================================================
 
-  const registerForSeminar = useCallback(async (seminarId) => {
+  const registerForSeminar = useCallback(async (seminarId, data = {}) => {
     try {
       setIsLoading(true);
-      const response = await coursesService.registerForSeminar(seminarId);
+      const response = await coursesService.registerForSeminar(seminarId, data);
       toast.success('Регистрацията е успешна');
       return response;
     } catch (error) {

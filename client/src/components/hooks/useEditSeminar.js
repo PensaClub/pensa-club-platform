@@ -66,6 +66,7 @@ const useEditSeminar = () => {
         stopSeminar,
         completeSeminar,
         getAdminCourses,
+        getSeminarSessions,
     } = useAcademyCourses();
 
     const [seminarData, setSeminarData] = useState(INITIAL_DATA);
@@ -145,6 +146,20 @@ const [showTestEditor, setShowTestEditor] = useState(false);
                 whatToBring: sem.whatToBring || '',
                 courseId: sem.courseId || null,
             };
+
+            // Load sessions
+            try {
+                const sessData = await getSeminarSessions(sem.id);
+                if (sessData?.length > 0) {
+                    mapped.sessions = sessData.map(s => ({
+                        id: s.id,
+                        date: s.date,
+                        startTime: s.startTime,
+                        endTime: s.endTime || '',
+                        location: s.location || '',
+                    }));
+                }
+            } catch { /* no sessions */ }
 
             setSeminarData(mapped);
 
@@ -260,11 +275,44 @@ const [showTestEditor, setShowTestEditor] = useState(false);
     }, [seminarData, t]);
 
     // Save and stay
+    const { createSeminarSessions } = useAcademyCourses();
+
+    const saveSessions = useCallback(async () => {
+        if (!seminarData.sessions?.length || !seminarId) return;
+
+        // Cancel sessions that were marked as cancelled
+        const toCancel = seminarData.sessions.filter(s => s.id && s.cancelled && !s._alreadyCancelled);
+        for (const s of toCancel) {
+            try {
+                const auth = JSON.parse(localStorage.getItem('auth') || '{}');
+                await fetch(`${import.meta.env.VITE_API_URL}/academy/seminars/${seminarId}/sessions/${s.id}/cancel`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${auth.token}` },
+                    credentials: 'include',
+                    body: JSON.stringify({ reason: s.cancelReason || '' }),
+                });
+            } catch (err) {
+                console.error('Error cancelling session:', err);
+            }
+        }
+
+        // Save non-cancelled sessions
+        const validSessions = seminarData.sessions.filter(s => s.date && s.startTime && !s.cancelled);
+        if (validSessions.length > 0) {
+            try {
+                await createSeminarSessions(seminarId, validSessions);
+            } catch (err) {
+                console.error('Error saving sessions:', err);
+            }
+        }
+    }, [seminarData.sessions, seminarId, createSeminarSessions]);
+
     const handleSaveAndStay = useCallback(async () => {
         if (!validate()) return;
         setIsSaving(true);
         try {
             await updateSeminar(seminarId, preparePayload());
+            await saveSessions();
             toast.success(t('editSeminar.saved', 'Промените са запазени'));
             setHasChanges(false);
         } catch (err) {
@@ -272,7 +320,7 @@ const [showTestEditor, setShowTestEditor] = useState(false);
         } finally {
             setIsSaving(false);
         }
-    }, [seminarId, preparePayload, validate, updateSeminar, t]);
+    }, [seminarId, preparePayload, validate, updateSeminar, saveSessions, t]);
 
     // Save and back
     const handleSaveAndBack = useCallback(async () => {
@@ -280,6 +328,7 @@ const [showTestEditor, setShowTestEditor] = useState(false);
         setIsSaving(true);
         try {
             await updateSeminar(seminarId, preparePayload());
+            await saveSessions();
             toast.success(t('editSeminar.saved', 'Промените са запазени'));
             setHasChanges(false);
             navigate('/academy/admin/seminars');

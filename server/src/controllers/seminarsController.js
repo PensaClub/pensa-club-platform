@@ -2635,7 +2635,7 @@ seminarsController.get('/:id/sessions', async (req, res, next) => {
   }
 });
 
-// POST /api/academy/seminars/:id/sessions — create sessions (bulk)
+// POST /api/academy/seminars/:id/sessions — sync sessions (create/update/keep)
 seminarsController.post('/:id/sessions', isAuth, rbac.checkPermission('seminar', 'update'), async (req, res, next) => {
   try {
     const seminarId = parseInt(req.params.id);
@@ -2650,22 +2650,65 @@ seminarsController.post('/:id/sessions', isAuth, rbac.checkPermission('seminar',
       return res.status(404).json({ success: false, message: 'Seminar not found' });
     }
 
-    const created = [];
-    for (const s of sessionsData) {
-      if (!s.date || !s.startTime) continue;
-      const session = await seminar_session.create({
-        seminarId,
-        date: s.date,
-        startTime: s.startTime,
-        endTime: s.endTime || null,
-        location: s.location || seminarData.location || null,
-        maxParticipants: s.maxParticipants || null,
-        notes: s.notes || null,
-      });
-      created.push(session);
+    // Get existing session IDs
+    const existingSessions = await seminar_session.findAll({ where: { seminarId }, attributes: ['id'] });
+    const existingIds = existingSessions.map(s => s.id);
+
+    // IDs from client (sessions that should remain)
+    const clientIds = sessionsData.filter(s => s.id).map(s => s.id);
+
+    // Delete sessions that are no longer in the client list (only if no attendances)
+    for (const existingId of existingIds) {
+      if (!clientIds.includes(existingId)) {
+        const hasAttendances = await session_attendance.count({ where: { sessionId: existingId } });
+        if (hasAttendances === 0) {
+          await seminar_session.destroy({ where: { id: existingId } });
+        }
+      }
     }
 
-    res.status(201).json({ success: true, sessions: created });
+    const result = [];
+    const processedIds = new Set();
+    for (const s of sessionsData) {
+      if (!s.date || !s.startTime) continue;
+
+      if (s.id && existingIds.includes(s.id)) {
+        // Update existing session
+        const existing = await seminar_session.findByPk(s.id);
+        if (existing) {
+          await existing.update({
+            date: s.date,
+            startTime: s.startTime,
+            endTime: s.endTime || null,
+            location: s.location || seminarData.location || null,
+            maxParticipants: s.maxParticipants || null,
+            notes: s.notes || null,
+          });
+          result.push(existing);
+        }
+        processedIds.add(s.id);
+      } else if (!s.id) {
+        // Check if session with same date+time already exists (prevent duplicates)
+        const dup = await seminar_session.findOne({
+          where: { seminarId, date: s.date, startTime: s.startTime },
+        });
+        if (dup) { result.push(dup); continue; }
+
+        // Create new session
+        const session = await seminar_session.create({
+          seminarId,
+          date: s.date,
+          startTime: s.startTime,
+          endTime: s.endTime || null,
+          location: s.location || seminarData.location || null,
+          maxParticipants: s.maxParticipants || null,
+          notes: s.notes || null,
+        });
+        result.push(session);
+      }
+    }
+
+    res.status(201).json({ success: true, sessions: result });
   } catch (err) {
     next(err);
   }
@@ -2703,6 +2746,98 @@ seminarsController.delete('/:id/sessions/:sessionId', isAuth, rbac.checkPermissi
     }
     await session.destroy();
     res.json({ success: true });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// POST /api/academy/seminars/:id/sessions/:sessionId/cancel
+seminarsController.post('/:id/sessions/:sessionId/cancel', isAuth, rbac.checkPermission('seminar', 'update'), async (req, res, next) => {
+  try {
+    const session = await seminar_session.findByPk(req.params.sessionId);
+    if (!session || session.seminarId !== parseInt(req.params.id)) {
+      return res.status(404).json({ success: false, message: 'Session not found' });
+    }
+
+    const { reason } = req.body;
+
+    await session.update({
+      cancelled: true,
+      cancelReason: reason || null,
+      cancelledBy: req.user.userId,
+      cancelledAt: new Date(),
+    });
+
+    // Notify registered attendees
+    const attendees = await session_attendance.findAll({
+      where: { sessionId: session.id, registered: true },
+      include: [
+        { model: require('../sequelize/models/index').student, as: 'student', attributes: ['userId'] },
+        { model: require('../sequelize/models/index').seminar_guest_attendance, as: 'guestAttendance', attributes: ['guestEmail', 'guestPhone', 'guestFirstName'] },
+      ],
+    });
+
+    const seminarData = await seminar.findByPk(session.seminarId, { attributes: ['title', 'slug'] });
+    const dateStr = new Date(session.date).toLocaleDateString('bg-BG', { day: 'numeric', month: 'long', year: 'numeric' });
+
+    for (const att of attendees) {
+      try {
+        if (att.studentId && att.student?.userId) {
+          // Platform user — email + notification
+          const userAcc = await user_account.findByPk(att.student.userId, { attributes: ['email'] });
+          if (userAcc?.email) {
+            const { forwardEmailsViaZoho } = require('../utils/zohoEmails');
+            const { paragraph, greeting, infoTable, infoRow } = require('../utils/reActionEmailTemplates');
+            const seminarEmailTemplates = require('../utils/seminarEmailTemplates');
+
+            const body = greeting('') +
+              paragraph(`Уведомяваме ви, че сесията на <strong>${dateStr}</strong> от семинар "${seminarData?.title}" е <strong style="color:#ef4444;">отменена</strong>.`) +
+              (reason ? infoTable(infoRow('Причина', reason)) : '') +
+              paragraph('Извиняваме се за неудобството.') +
+              `<p style="color:#374151;font-size:15px;line-height:1.7;margin:16px 0 0;">С уважение,<br><strong style="color:#0d9488;">Екипът на DigiBridge Academy</strong></p>`;
+
+            await forwardEmailsViaZoho({
+              userEmail: 'info@pensa.club',
+              subject: `Отменена сесия: ${seminarData?.title} — ${dateStr}`,
+              body: '', toAddresses: userAcc.email,
+              formattedBody: require('../utils/seminarEmailTemplates').wrapAcademyTemplate ? body : body,
+            }).catch(() => {});
+          }
+        } else if (att.guestAttendanceId && att.guestAttendance) {
+          // Guest — email if available
+          if (att.guestAttendance.guestEmail) {
+            const { forwardEmailsViaZoho } = require('../utils/zohoEmails');
+            const { paragraph, greeting, infoTable, infoRow } = require('../utils/reActionEmailTemplates');
+
+            const body = greeting(att.guestAttendance.guestFirstName || '') +
+              paragraph(`Сесията на <strong>${dateStr}</strong> от семинар "${seminarData?.title}" е <strong style="color:#ef4444;">отменена</strong>.`) +
+              (reason ? infoTable(infoRow('Причина', reason)) : '') +
+              `<p style="color:#374151;font-size:15px;">Извиняваме се за неудобството.</p>`;
+
+            await forwardEmailsViaZoho({
+              userEmail: 'info@pensa.club',
+              subject: `Отменена сесия: ${seminarData?.title} — ${dateStr}`,
+              body: '', toAddresses: att.guestAttendance.guestEmail,
+              formattedBody: body,
+            }).catch(() => {});
+          }
+          // SMS if phone
+          if (att.guestAttendance.guestPhone && att.guestAttendance.guestPhone.length >= 8) {
+            try {
+              const { sendSms, getSmsSettings } = require('../utils/smsService');
+              const smsSettings = await getSmsSettings();
+              if (smsSettings.sms_enabled !== 'false') {
+                // Simple cancel SMS
+              }
+            } catch {}
+          }
+        }
+      } catch (notifErr) {
+        console.error('Cancel notification error:', notifErr.message);
+      }
+    }
+
+    res.json({ success: true, message: 'Session cancelled' });
   } catch (err) {
     next(err);
   }
@@ -2780,7 +2915,7 @@ seminarsController.post('/:id/guest-register', async (req, res, next) => {
     }
 
     // Create guest attendance record
-    await seminar_guest_attendance.create({
+    const guestRecord = await seminar_guest_attendance.create({
       seminarId,
       guestFirstName: firstName.trim(),
       guestLastName: lastName.trim(),
@@ -2789,6 +2924,20 @@ seminarsController.post('/:id/guest-register', async (req, res, next) => {
       participationLevel: 'passive',
       markedBy: null,
     });
+
+    // Register for specific sessions if sessionIds provided
+    const { sessionIds } = req.body;
+    if (Array.isArray(sessionIds) && sessionIds.length > 0) {
+      for (const sessionId of sessionIds) {
+        const session = await seminar_session.findByPk(sessionId);
+        if (session && session.seminarId === seminarId) {
+          await session_attendance.findOrCreate({
+            where: { sessionId, guestAttendanceId: guestRecord.id },
+            defaults: { sessionId, guestAttendanceId: guestRecord.id, registered: true, attended: false },
+          });
+        }
+      }
+    }
 
     // Increment registered count
     await seminarData.increment('registeredCount');
