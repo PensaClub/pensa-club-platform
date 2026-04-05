@@ -612,6 +612,175 @@ seminarsController.get(
 
 // ===============================
 // ===============================
+// GET /api/academy/seminars/admin/search-attendee
+// Глобално търсене на участник по име/имейл през всички семинари
+// ===============================
+seminarsController.get(
+  '/admin/search-attendee',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { seminar_guest_attendance } = require('../sequelize/models/index');
+      const { q } = req.query;
+
+      if (!q || q.trim().length < 2) {
+        return res.status(200).json({ success: true, results: [] });
+      }
+
+      const search = q.trim();
+      const likeSearch = `%${search}%`;
+
+      // Search registered attendees
+      const registeredResults = await student_seminar.findAll({
+        include: [
+          {
+            model: student,
+            as: 'student',
+            attributes: ['id'],
+            include: [{
+              model: user_account,
+              as: 'user',
+              attributes: ['id', 'email'],
+              where: {
+                [Op.or]: [
+                  { email: { [Op.iLike]: likeSearch } },
+                ],
+              },
+              include: [{
+                model: user_details,
+                as: 'details',
+                attributes: ['firstName', 'lastName', 'phoneNumber'],
+                required: false,
+              }],
+            }],
+            required: true,
+          },
+          {
+            model: seminar,
+            as: 'seminar',
+            attributes: ['id', 'title', 'scheduledDate', 'isOnline', 'location'],
+          },
+        ],
+        attributes: ['id', 'attended', 'earnedCredits', 'status', 'participationLevel', 'createdAt'],
+      });
+
+      // Also search by name in user_details
+      const registeredByName = await student_seminar.findAll({
+        include: [
+          {
+            model: student,
+            as: 'student',
+            attributes: ['id'],
+            include: [{
+              model: user_account,
+              as: 'user',
+              attributes: ['id', 'email'],
+              include: [{
+                model: user_details,
+                as: 'details',
+                attributes: ['firstName', 'lastName', 'phoneNumber'],
+                where: {
+                  [Op.or]: [
+                    { firstName: { [Op.iLike]: likeSearch } },
+                    { lastName: { [Op.iLike]: likeSearch } },
+                  ],
+                },
+                required: true,
+              }],
+            }],
+            required: true,
+          },
+          {
+            model: seminar,
+            as: 'seminar',
+            attributes: ['id', 'title', 'scheduledDate', 'isOnline', 'location'],
+          },
+        ],
+        attributes: ['id', 'attended', 'earnedCredits', 'status', 'participationLevel', 'createdAt'],
+      });
+
+      // Search guest attendees
+      const guestResults = await seminar_guest_attendance.findAll({
+        where: {
+          [Op.or]: [
+            { guestFirstName: { [Op.iLike]: likeSearch } },
+            { guestLastName: { [Op.iLike]: likeSearch } },
+            { guestEmail: { [Op.iLike]: likeSearch } },
+          ],
+        },
+        include: [{
+          model: seminar,
+          as: 'seminar',
+          attributes: ['id', 'title', 'scheduledDate', 'isOnline', 'location'],
+        }],
+        attributes: ['id', 'guestFirstName', 'guestLastName', 'guestEmail', 'guestPhone', 'participationLevel', 'createdAt'],
+      });
+
+      // Merge and deduplicate registered results
+      const seenRegIds = new Set();
+      const allRegistered = [...registeredResults, ...registeredByName].filter(r => {
+        if (seenRegIds.has(r.id)) return false;
+        seenRegIds.add(r.id);
+        return true;
+      });
+
+      // Format results
+      const results = [];
+
+      allRegistered.forEach(r => {
+        const plain = r.get({ plain: true });
+        const user = plain.student?.user;
+        results.push({
+          type: 'registered',
+          firstName: user?.details?.firstName || '',
+          lastName: user?.details?.lastName || '',
+          email: user?.email || '',
+          phone: user?.details?.phoneNumber || '',
+          seminarId: plain.seminar?.id,
+          seminarTitle: plain.seminar?.title,
+          seminarDate: plain.seminar?.scheduledDate,
+          seminarIsOnline: plain.seminar?.isOnline,
+          seminarLocation: plain.seminar?.location,
+          attended: plain.attended,
+          earnedCredits: plain.earnedCredits || 0,
+          status: plain.status,
+          participationLevel: plain.participationLevel,
+          registeredAt: plain.createdAt,
+        });
+      });
+
+      guestResults.forEach(g => {
+        const plain = g.get({ plain: true });
+        results.push({
+          type: 'guest',
+          firstName: plain.guestFirstName,
+          lastName: plain.guestLastName,
+          email: plain.guestEmail || '',
+          phone: plain.guestPhone || '',
+          seminarId: plain.seminar?.id,
+          seminarTitle: plain.seminar?.title,
+          seminarDate: plain.seminar?.scheduledDate,
+          seminarIsOnline: plain.seminar?.isOnline,
+          seminarLocation: plain.seminar?.location,
+          attended: true,
+          participationLevel: plain.participationLevel,
+          registeredAt: plain.createdAt,
+        });
+      });
+
+      // Sort by date descending
+      results.sort((a, b) => new Date(b.seminarDate || 0) - new Date(a.seminarDate || 0));
+
+      res.status(200).json({ success: true, results, total: results.length });
+    } catch (err) {
+      console.error('❌ [SEARCH ATTENDEE] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
 // POST /api/academy/seminars/admin/send-email
 // Изпращане на лично съобщение до участник в семинар
 // ===============================

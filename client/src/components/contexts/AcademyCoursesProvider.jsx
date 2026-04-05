@@ -999,6 +999,16 @@ export const AcademyCoursesProvider = ({ children }) => {
     }
   }, [isAdmin, isMentor]);
 
+  const searchSeminarAttendee = useCallback(async (query) => {
+    if (!isAdmin && !isMentor) return { results: [] };
+    try {
+      return await coursesService.searchSeminarAttendee(query);
+    } catch (error) {
+      console.error('Error searching attendee:', error);
+      return { results: [] };
+    }
+  }, [isAdmin, isMentor]);
+
   const sendSeminarEmail = useCallback(async (data) => {
     if (!isAdmin && !isMentor) {
       toast.error('Нямате права за тази операция');
@@ -2322,6 +2332,7 @@ export const AcademyCoursesProvider = ({ children }) => {
     completeSeminar,
     getAdminSeminarStatistics,
     getSeminarAttendanceDetail,
+    searchSeminarAttendee,
     sendSeminarEmail,
 
     // Seminar Registration

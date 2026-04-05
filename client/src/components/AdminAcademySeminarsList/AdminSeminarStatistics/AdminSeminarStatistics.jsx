@@ -66,7 +66,7 @@ const CHART_COLORS = {
 
 const AdminSeminarStatistics = () => {
   const { t } = useTranslation('academy-admin');
-  const { getAdminSeminarStatistics, getSeminarAttendanceDetail } = useAcademyCourses();
+  const { getAdminSeminarStatistics, getSeminarAttendanceDetail, searchSeminarAttendee } = useAcademyCourses();
   const { theme } = useTheme();
   const colors = CHART_COLORS[theme] || CHART_COLORS.dark;
 
@@ -91,6 +91,11 @@ const AdminSeminarStatistics = () => {
   // Email modal
   const [emailTarget, setEmailTarget] = useState(null);
 
+  // Global attendee search
+  const [attendeeQuery, setAttendeeQuery] = useState('');
+  const [attendeeResults, setAttendeeResults] = useState(null);
+  const [attendeeSearchLoading, setAttendeeSearchLoading] = useState(false);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -112,6 +117,26 @@ const AdminSeminarStatistics = () => {
   useEffect(() => {
     fetchStats();
   }, [fetchStats]);
+
+  // Debounced global attendee search
+  useEffect(() => {
+    if (!attendeeQuery.trim() || attendeeQuery.trim().length < 2) {
+      setAttendeeResults(null);
+      return;
+    }
+    const timeout = setTimeout(async () => {
+      setAttendeeSearchLoading(true);
+      try {
+        const res = await searchSeminarAttendee(attendeeQuery.trim());
+        setAttendeeResults(res?.results || []);
+      } catch {
+        setAttendeeResults([]);
+      } finally {
+        setAttendeeSearchLoading(false);
+      }
+    }, 400);
+    return () => clearTimeout(timeout);
+  }, [attendeeQuery]);
 
   const handleExpandRow = async (seminarId) => {
     if (expandedId === seminarId) {
@@ -158,11 +183,21 @@ const AdminSeminarStatistics = () => {
 
   const { overview, monthlyData, seminars, mentors } = data;
 
+  const formatDate = (dateStr) => {
+    if (!dateStr) return '—';
+    return new Date(dateStr).toLocaleDateString('bg-BG', {
+      day: '2-digit', month: '2-digit', year: 'numeric',
+    });
+  };
+
   // Filter & sort seminars table
   let filteredSeminars = [...(seminars || [])];
   if (search.trim()) {
     const q = search.toLowerCase();
-    filteredSeminars = filteredSeminars.filter(s => s.title?.toLowerCase().includes(q));
+    filteredSeminars = filteredSeminars.filter(s =>
+      s.title?.toLowerCase().includes(q) ||
+      formatDate(s.scheduledDate).includes(q)
+    );
   }
   if (mentorFilter !== 'all') {
     filteredSeminars = filteredSeminars.filter(s => String(s.facilitatorId) === mentorFilter);
@@ -190,13 +225,6 @@ const AdminSeminarStatistics = () => {
       )}
     </th>
   );
-
-  const formatDate = (dateStr) => {
-    if (!dateStr) return '—';
-    return new Date(dateStr).toLocaleDateString('bg-BG', {
-      day: '2-digit', month: '2-digit', year: 'numeric',
-    });
-  };
 
   const statusSeminarLabel = (st) => {
     const labels = { scheduled: 'Насрочен', live: 'На живо', completed: 'Приключил', cancelled: 'Отменен' };
@@ -341,6 +369,95 @@ const AdminSeminarStatistics = () => {
         </div>
       )}
 
+      {/* Global Attendee Search */}
+      <div className="asst-chart-card">
+        <div className="asst-table-header">
+          <h4 className="asst-chart-title">{t('seminarStats.searchParticipant', 'Търсене на участник')}</h4>
+          <div className="asst-search-wrap asst-search-wide">
+            <Search size={14} />
+            <input
+              type="text"
+              className="asst-search-input"
+              placeholder={t('seminarStats.searchAttendeeGlobal', 'Въведете име или имейл на участник...')}
+              value={attendeeQuery}
+              onChange={e => setAttendeeQuery(e.target.value)}
+            />
+            {attendeeQuery && (
+              <button className="asst-search-clear" onClick={() => setAttendeeQuery('')}>&times;</button>
+            )}
+          </div>
+        </div>
+
+        {attendeeSearchLoading && (
+          <div className="asst-detail-loading"><div className="asst-spinner-sm" /></div>
+        )}
+
+        {attendeeResults && !attendeeSearchLoading && (
+          attendeeResults.length === 0 ? (
+            <div className="asst-detail-empty">{t('seminarStats.noResults', 'Няма намерени резултати')}</div>
+          ) : (
+            <div className="asst-table-wrap">
+              <div className="asst-search-results-count">
+                {t('seminarStats.foundResults', 'Намерени')}: <strong>{attendeeResults.length}</strong>
+              </div>
+              <table className="asst-detail-table">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>{t('seminarStats.col.name', 'Име')}</th>
+                    <th>{t('seminarStats.col.email', 'Имейл')}</th>
+                    <th>{t('seminarStats.col.phone', 'Телефон')}</th>
+                    <th>{t('seminarStats.col.typeUser', 'Тип')}</th>
+                    <th>{t('seminarStats.col.title', 'Семинар')}</th>
+                    <th>{t('seminarStats.col.date', 'Дата')}</th>
+                    <th>{t('seminarStats.col.participation', 'Участие')}</th>
+                    <th>{t('seminarStats.col.earnedCredits', 'Кредити')}</th>
+                    <th>{t('seminarStats.col.status', 'Статус')}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {attendeeResults.map((r, idx) => (
+                    <tr key={`sr-${idx}`}>
+                      <td className="asst-cell-action">
+                        {r.email && (
+                          <button
+                            className="asst-email-btn"
+                            onClick={() => setEmailTarget({ name: `${r.firstName} ${r.lastName}`.trim(), email: r.email })}
+                            title={t('seminarStats.sendEmail', 'Изпрати имейл')}
+                          >
+                            <Mail size={14} />
+                          </button>
+                        )}
+                      </td>
+                      <td>{`${r.firstName} ${r.lastName}`.trim() || '—'}</td>
+                      <td>
+                        {r.email ? (
+                          <span
+                            className="asst-email-link"
+                            onClick={() => setEmailTarget({ name: `${r.firstName} ${r.lastName}`.trim(), email: r.email })}
+                          >{r.email}</span>
+                        ) : '—'}
+                      </td>
+                      <td>{r.phone || '—'}</td>
+                      <td>
+                        <span className={`asst-type-badge ${r.type === 'registered' ? 'asst-type-reg' : 'asst-type-guest'}`}>
+                          {r.type === 'registered' ? t('seminarStats.platform', 'Платформа') : t('seminarStats.guest', 'Гост')}
+                        </span>
+                      </td>
+                      <td className="asst-cell-title">{r.seminarTitle || '—'}</td>
+                      <td>{formatDate(r.seminarDate)}</td>
+                      <td>{participationLabel(r.participationLevel)}</td>
+                      <td className="asst-cell-num">{r.earnedCredits || 0}</td>
+                      <td>{statusLabel(r.status)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )
+        )}
+      </div>
+
       {/* Seminars Table */}
       <div className="asst-chart-card">
         <div className="asst-table-header">
@@ -351,7 +468,7 @@ const AdminSeminarStatistics = () => {
               <input
                 type="text"
                 className="asst-search-input"
-                placeholder={t('seminarStats.searchTitle', 'Търсене по заглавие...')}
+                placeholder={t('seminarStats.searchTitle', 'Заглавие или дата...')}
                 value={search}
                 onChange={e => setSearch(e.target.value)}
               />
@@ -418,33 +535,35 @@ const AdminSeminarStatistics = () => {
                     <td className="asst-cell-num asst-cell-bold">{sem.attendedTotal}</td>
                     <td className="asst-cell-num">{sem.earnedCredits}</td>
                   </tr>
-                  {expandedId === sem.id && (
-                    <tr key={`${sem.id}-detail`} className="asst-detail-row">
-                      <td colSpan={11}>
-                        {attendanceLoading === sem.id ? (
-                          <div className="asst-detail-loading"><div className="asst-spinner-sm" /></div>
-                        ) : !attendanceData[sem.id] ? (
-                          <div className="asst-detail-empty">{t('seminarStats.noAttendance', 'Няма данни')}</div>
-                        ) : (
-                          <AttendanceDetail
-                            data={attendanceData[sem.id]}
-                            activeTab={attendanceTab}
-                            setActiveTab={setAttendanceTab}
-                            formatDate={formatDate}
-                            participationLabel={participationLabel}
-                            statusLabel={statusLabel}
-                            onSendEmail={setEmailTarget}
-                            t={t}
-                          />
-                        )}
-                      </td>
-                    </tr>
-                  )}
                 </React.Fragment>
               ))}
             </tbody>
           </table>
         </div>
+
+        {expandedId && (
+          <div className="asst-detail-section">
+            <div className="asst-detail-section-title">
+              {filteredSeminars.find(s => s.id === expandedId)?.title}
+            </div>
+            {attendanceLoading === expandedId ? (
+              <div className="asst-detail-loading"><div className="asst-spinner-sm" /></div>
+            ) : !attendanceData[expandedId] ? (
+              <div className="asst-detail-empty">{t('seminarStats.noAttendance', 'Няма данни')}</div>
+            ) : (
+              <AttendanceDetail
+                data={attendanceData[expandedId]}
+                activeTab={attendanceTab}
+                setActiveTab={setAttendanceTab}
+                formatDate={formatDate}
+                participationLabel={participationLabel}
+                statusLabel={statusLabel}
+                onSendEmail={setEmailTarget}
+                t={t}
+              />
+            )}
+          </div>
+        )}
       </div>
 
       <ScrollToTop />
@@ -472,6 +591,7 @@ const OverviewCard = ({ icon, value, label, sub, colorClass }) => (
 // Attendance Detail (2C)
 const AttendanceDetail = ({ data, activeTab, setActiveTab, formatDate, participationLabel, statusLabel, onSendEmail, t }) => {
   const { all, registered, guests, counts } = data;
+  const [attendeeSearch, setAttendeeSearch] = useState('');
 
   const TABS = [
     { key: 'all', label: t('seminarStats.tabAll', 'Всички'), count: counts.all },
@@ -479,22 +599,44 @@ const AttendanceDetail = ({ data, activeTab, setActiveTab, formatDate, participa
     { key: 'guests', label: t('seminarStats.tabGuests', 'Гости'), count: counts.guests },
   ];
 
-  const currentList = activeTab === 'all' ? all : activeTab === 'registered' ? registered : guests;
+  const rawList = activeTab === 'all' ? all : activeTab === 'registered' ? registered : guests;
+
+  let currentList = rawList;
+  if (attendeeSearch.trim()) {
+    const q = attendeeSearch.toLowerCase();
+    currentList = rawList.filter(p =>
+      `${p.firstName} ${p.lastName}`.toLowerCase().includes(q) ||
+      (p.email && p.email.toLowerCase().includes(q))
+    );
+  }
+
   const showRegisteredCols = activeTab === 'all' || activeTab === 'registered';
   const showGuestCols = activeTab === 'all' || activeTab === 'guests';
 
   return (
     <div className="asst-detail-content">
-      <div className="asst-detail-tabs">
-        {TABS.map(tab => (
-          <button
-            key={tab.key}
-            className={`asst-detail-tab ${activeTab === tab.key ? 'asst-detail-tab-active' : ''}`}
-            onClick={e => { e.stopPropagation(); setActiveTab(tab.key); }}
-          >
-            {tab.label} <span className="asst-detail-tab-count">({tab.count})</span>
-          </button>
-        ))}
+      <div className="asst-detail-header">
+        <div className="asst-detail-tabs">
+          {TABS.map(tab => (
+            <button
+              key={tab.key}
+              className={`asst-detail-tab ${activeTab === tab.key ? 'asst-detail-tab-active' : ''}`}
+              onClick={e => { e.stopPropagation(); setActiveTab(tab.key); }}
+            >
+              {tab.label} <span className="asst-detail-tab-count">({tab.count})</span>
+            </button>
+          ))}
+        </div>
+        <div className="asst-detail-search" onClick={e => e.stopPropagation()}>
+          <Search size={13} />
+          <input
+            type="text"
+            className="asst-detail-search-input"
+            placeholder={t('seminarStats.searchAttendee', 'Име или имейл...')}
+            value={attendeeSearch}
+            onChange={e => setAttendeeSearch(e.target.value)}
+          />
+        </div>
       </div>
 
       {currentList.length === 0 ? (

@@ -351,6 +351,10 @@ export const academyCoursesServiceFactory = () => {
       return requester.get(`${apiUrl}/academy/seminars/admin/attendance-detail/${seminarId}`);
     },
 
+    searchSeminarAttendee: async (query) => {
+      return requester.get(`${apiUrl}/academy/seminars/admin/search-attendee?q=${encodeURIComponent(query)}`);
+    },
+
     sendSeminarEmail: async (data) => {
       return requester.post(`${apiUrl}/academy/seminars/admin/send-email`, data);
     },

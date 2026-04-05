@@ -183,6 +183,37 @@
   color: #666;
 }
 
+.asst-search-wide {
+  flex: 1;
+  max-width: 350px;
+}
+
+.asst-search-wide .asst-search-input {
+  width: 100%;
+}
+
+.asst-search-clear {
+  border: none;
+  background: transparent;
+  color: #888;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0 2px;
+  line-height: 1;
+}
+
+.asst-search-clear:hover { color: #eee; }
+
+.asst-search-results-count {
+  font-size: 0.78rem;
+  color: #999;
+  margin-bottom: 8px;
+}
+
+.asst-search-results-count strong {
+  color: #d4a853;
+}
+
 .asst-mentor-select {
   padding: 6px 12px;
   background: #1a1a1e;
@@ -200,7 +231,27 @@
 
 .asst-table-wrap {
   overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #444 transparent;
 }
+
+.asst-table-wrap::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.asst-table-wrap::-webkit-scrollbar-track { background: transparent; }
+
+.asst-table-wrap::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 4px;
+}
+
+.asst-table-wrap::-webkit-scrollbar-thumb:hover { background: #666; }
+
+[data-theme="light"] .asst-table-wrap { scrollbar-color: #ccc transparent; }
+[data-theme="light"] .asst-table-wrap::-webkit-scrollbar-thumb { background: #ccc; }
+[data-theme="light"] .asst-table-wrap::-webkit-scrollbar-thumb:hover { background: #aaa; }
 
 .asst-table {
   width: 100%;
@@ -336,17 +387,22 @@
 }
 
 /* =========================================================
-   DETAIL ROW (EXPANDED)
+   DETAIL SECTION (EXPANDED)
    ========================================================= */
 
-.asst-detail-row td {
-  padding: 0 !important;
-  border-bottom: 2px solid #333;
-}
-
-.asst-detail-content {
+.asst-detail-section {
+  margin-top: 16px;
   padding: 16px;
   background: #1a1a1e;
+  border: 1px solid #2e2e32;
+  border-radius: 8px;
+}
+
+.asst-detail-section-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #d4a853;
+  margin-bottom: 12px;
 }
 
 .asst-detail-loading {
@@ -362,11 +418,43 @@
   font-size: 0.85rem;
 }
 
+/* Detail header */
+.asst-detail-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.asst-detail-search {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  background: #262630;
+  border: 1px solid #3a3a3e;
+  border-radius: 6px;
+  color: #888;
+  width: 240px;
+  margin: 0 auto;
+}
+
+.asst-detail-search-input {
+  border: none;
+  background: transparent;
+  outline: none;
+  color: #eee;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  width: 100%;
+}
+
+.asst-detail-search-input::placeholder { color: #666; }
+
 /* Detail tabs */
 .asst-detail-tabs {
   display: flex;
   gap: 4px;
-  margin-bottom: 12px;
 }
 
 .asst-detail-tab {
@@ -409,6 +497,40 @@ asst-detail-tab {
 /* Detail table */
 .asst-detail-table-wrap {
   overflow-x: auto;
+  max-height: 400px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #444 transparent;
+}
+
+.asst-detail-table-wrap::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.asst-detail-table-wrap::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.asst-detail-table-wrap::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 4px;
+}
+
+.asst-detail-table-wrap::-webkit-scrollbar-thumb:hover {
+  background: #666;
+}
+
+[data-theme="light"] .asst-detail-table-wrap {
+  scrollbar-color: #ccc transparent;
+}
+
+[data-theme="light"] .asst-detail-table-wrap::-webkit-scrollbar-thumb {
+  background: #ccc;
+}
+
+[data-theme="light"] .asst-detail-table-wrap::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
 }
 
 .asst-detail-table {
@@ -432,6 +554,21 @@ asst-detail-tab {
   font-size: 0.78rem;
   color: #ccc;
   border-bottom: 1px solid #2a2a2e;
+}
+
+.asst-detail-table tbody tr {
+  transition: background 0.12s;
+}
+
+.asst-detail-table tbody tr:hover {
+  background: rgba(212, 168, 83, 0.08);
+}
+
+.asst-detail-table thead th {
+  position: sticky;
+  top: 0;
+  background: #1a1a1e;
+  z-index: 1;
 }
 
 .asst-type-badge {
@@ -819,6 +956,10 @@ asst-detail-tab {
 [data-theme="light"] .asst-search-wrap { background: #f5f5f3; border-color: #d5d3cf; color: #555; }
 [data-theme="light"] .asst-search-input { color: #1a1a1e; }
 [data-theme="light"] .asst-search-input::placeholder { color: #888; }
+[data-theme="light"] .asst-search-clear { color: #999; }
+[data-theme="light"] .asst-search-clear:hover { color: #1a1a1e; }
+[data-theme="light"] .asst-search-results-count { color: #555; }
+[data-theme="light"] .asst-search-results-count strong { color: #8b2040; }
 [data-theme="light"] .asst-mentor-select { background: #f5f5f3; border-color: #d5d3cf; color: #333; }
 
 [data-theme="light"] .asst-table thead th { color: #555; border-bottom-color: #d5d3cf; }
@@ -836,13 +977,18 @@ asst-detail-tab {
 [data-theme="light"] .asst-status-completed { background: rgba(107, 76, 154, 0.1); color: #6b4c9a; }
 [data-theme="light"] .asst-status-cancelled { background: rgba(220, 38, 38, 0.1); color: #dc2626; }
 
-[data-theme="light"] .asst-detail-content { background: #f9f8f6; }
-[data-theme="light"] .asst-detail-row td { border-bottom-color: #d5d3cf; }
+[data-theme="light"] .asst-detail-search { background: #f5f5f3; border-color: #d5d3cf; }
+[data-theme="light"] .asst-detail-search-input { color: #1a1a1e; }
+[data-theme="light"] .asst-detail-search-input::placeholder { color: #888; }
+[data-theme="light"] .asst-detail-section { background: #f9f8f6; border-color: #e0ddd8; }
+[data-theme="light"] .asst-detail-section-title { color: #8b2040; }
 [data-theme="light"] .asst-detail-tab { background: #f0eeea; border-color: #d5d3cf; color: #555; }
 [data-theme="light"] .asst-detail-tab:hover { border-color: #aaa; color: #1a1a1e; }
 [data-theme="light"] .asst-detail-tab-active { background: rgba(139, 32, 64, 0.08); border-color: #8b2040; color: #8b2040; }
 [data-theme="light"] .asst-detail-table th { color: #555; border-bottom-color: #d5d3cf; }
+[data-theme="light"] .asst-detail-table thead th { background: #f9f8f6; }
 [data-theme="light"] .asst-detail-table td { color: #1a1a1e; border-bottom-color: #eae7e2; }
+[data-theme="light"] .asst-detail-table tbody tr:hover { background: rgba(139, 32, 64, 0.05); }
 [data-theme="light"] .asst-type-reg { background: rgba(13, 115, 119, 0.1); color: #0d7377; }
 [data-theme="light"] .asst-type-guest { background: rgba(184, 134, 11, 0.1); color: #8b6914; }
 [data-theme="light"] .asst-email-btn { background: rgba(139, 32, 64, 0.08); color: #8b2040; }
