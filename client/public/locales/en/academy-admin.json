@@ -1094,11 +1094,24 @@
     "chooseSeminar": "— Select a seminar —",
     "noSeminars": "No seminars",
     "showQR": "Show QR",
+    "downloadList": "Download list",
     "qrTitle": "QR Code for Attendance",
     "qrHint": "Participants scan with their phone for quick attendance check-in",
     "close": "Close"
   },
- "attendanceForm": {
+  "attendanceList": {
+    "title": "Physical attendance lists",
+    "notesPlaceholder": "Note (optional)...",
+    "invalidType": "Allowed formats: JPG, PNG, WebP, PDF",
+    "tooLarge": "Maximum size: 10MB",
+    "uploading": "Uploading...",
+    "dropHint": "Drop file here or click",
+    "formats": "JPG, PNG, WebP, PDF — up to 10MB",
+    "noFiles": "No uploaded lists",
+    "delete": "Delete",
+    "confirmDelete": "Are you sure you want to delete this file?"
+  },
+  "attendanceForm": {
     "totalParticipants": "participants",
     "searchTitle": "Add platform user",
     "searchPlaceholder": "Search by email or username...",
@@ -1154,6 +1167,8 @@
     "searchAttendeeGlobal": "Enter participant name or email...",
     "noResults": "No results found",
     "foundResults": "Found",
+    "exportReport": "Download report",
+    "exportAttendees": "Download list",
     "allMentors": "All mentors",
     "online": "Online",
     "inperson": "In-person",

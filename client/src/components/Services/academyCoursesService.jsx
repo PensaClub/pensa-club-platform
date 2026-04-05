@@ -351,6 +351,27 @@ export const academyCoursesServiceFactory = () => {
       return requester.get(`${apiUrl}/academy/seminars/admin/attendance-detail/${seminarId}`);
     },
 
+    exportSeminarReport: (params = {}) => {
+      const queryString = toQueryString(params);
+      return `${apiUrl}/academy/seminars/admin/export-report?${queryString}`;
+    },
+
+    exportSeminarAttendees: (seminarId) => {
+      return `${apiUrl}/academy/seminars/admin/export-attendees/${seminarId}`;
+    },
+
+    getAttendanceLists: async (seminarId) => {
+      return requester.get(`${apiUrl}/academy/seminars/${seminarId}/attendance-lists`);
+    },
+
+    uploadAttendanceList: async (seminarId, data) => {
+      return requester.post(`${apiUrl}/academy/seminars/${seminarId}/attendance-list`, data);
+    },
+
+    deleteAttendanceList: async (seminarId, listId) => {
+      return requester.del(`${apiUrl}/academy/seminars/${seminarId}/attendance-list/${listId}`);
+    },
+
     searchSeminarAttendee: async (query) => {
       return requester.get(`${apiUrl}/academy/seminars/admin/search-attendee?q=${encodeURIComponent(query)}`);
     },

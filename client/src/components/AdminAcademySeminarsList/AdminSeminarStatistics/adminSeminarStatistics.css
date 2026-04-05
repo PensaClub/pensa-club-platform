@@ -51,6 +51,41 @@
   color: #eee;
 }
 
+.asst-export-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 14px;
+  border: 1px solid #8b2040;
+  border-radius: 6px;
+  background: rgba(139, 32, 64, 0.12);
+  color: #d4a853;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  margin-left: auto;
+}
+
+.asst-export-btn:hover {
+  background: rgba(139, 32, 64, 0.25);
+  color: #f0c060;
+}
+
+.asst-export-btn-sm {
+  padding: 4px 10px;
+  font-size: 0.72rem;
+}
+
+.asst-detail-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
 .asst-period-active {
   background: rgba(139, 32, 64, 0.15);
   border-color: #8b2040;
@@ -943,6 +978,8 @@ asst-detail-tab {
 [data-theme="light"] .asst-period-btn { background: #f0eeea; border-color: #d5d3cf; color: #555; }
 [data-theme="light"] .asst-period-btn:hover { border-color: #aaa; color: #1a1a1e; }
 [data-theme="light"] .asst-period-active { background: rgba(139, 32, 64, 0.08); border-color: #8b2040; color: #8b2040; }
+[data-theme="light"] .asst-export-btn { background: rgba(139, 32, 64, 0.06); border-color: #8b2040; color: #8b2040; }
+[data-theme="light"] .asst-export-btn:hover { background: rgba(139, 32, 64, 0.12); color: #6b1030; }
 
 [data-theme="light"] .asst-overview-card { background: #fff; border-color: #e0ddd8; }
 [data-theme="light"] .asst-overview-card:hover { border-color: #bbb; }

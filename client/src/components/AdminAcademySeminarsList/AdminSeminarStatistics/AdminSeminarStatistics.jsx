@@ -10,7 +10,7 @@ import {
 } from 'recharts';
 import {
   TrendingUp, TrendingDown, Minus, Users, Monitor, MapPin,
-  Award, ChevronDown, ChevronUp, Search, XCircle, CheckCircle, Mail,
+  Award, ChevronDown, ChevronUp, Search, XCircle, CheckCircle, Mail, Download,
 } from 'lucide-react';
 import { useTheme } from '../../contexts/ThemeContext';
 import ScrollToTop from '../../ScrollToTop/ScrollToTop';
@@ -62,6 +62,25 @@ const CHART_COLORS = {
     tooltipBorder: '#d5d3cf',
     tooltipText: '#1a1a1e',
   },
+};
+
+const apiUrl = import.meta.env.VITE_API_URL;
+
+const downloadPdf = async (url, filename) => {
+  try {
+    const auth = JSON.parse(localStorage.getItem('auth') || '{}');
+    const res = await fetch(url, {
+      headers: { Authorization: `Bearer ${auth.token}` },
+      credentials: 'include',
+    });
+    const blob = await res.blob();
+    const link = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = link;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(link);
+  } catch { /* ignore */ }
 };
 
 const AdminSeminarStatistics = () => {
@@ -281,6 +300,21 @@ const AdminSeminarStatistics = () => {
             ))}
           </div>
         </div>
+        <button
+          className="asst-export-btn"
+          onClick={() => {
+            const params = new URLSearchParams();
+            if (period !== 'all') params.set('period', period);
+            if (typeFilter !== 'all') params.set('type', typeFilter);
+            if (statusFilter !== 'all') params.set('status', statusFilter);
+            downloadPdf(
+              `${apiUrl}/academy/seminars/admin/export-report?${params.toString()}`,
+              `seminar-report-${new Date().toISOString().slice(0, 10)}.pdf`
+            );
+          }}
+        >
+          <Download size={14} /> {t('seminarStats.exportReport', 'Свали доклад')}
+        </button>
       </div>
 
       {/* Overview Cards */}
@@ -543,8 +577,19 @@ const AdminSeminarStatistics = () => {
 
         {expandedId && (
           <div className="asst-detail-section">
-            <div className="asst-detail-section-title">
-              {filteredSeminars.find(s => s.id === expandedId)?.title}
+            <div className="asst-detail-section-header">
+              <div className="asst-detail-section-title">
+                {filteredSeminars.find(s => s.id === expandedId)?.title}
+              </div>
+              <button
+                className="asst-export-btn asst-export-btn-sm"
+                onClick={() => downloadPdf(
+                  `${apiUrl}/academy/seminars/admin/export-attendees/${expandedId}`,
+                  `attendees-${expandedId}-${new Date().toISOString().slice(0, 10)}.pdf`
+                )}
+              >
+                <Download size={13} /> {t('seminarStats.exportAttendees', 'Свали списък')}
+              </button>
             </div>
             {attendanceLoading === expandedId ? (
               <div className="asst-detail-loading"><div className="asst-spinner-sm" /></div>

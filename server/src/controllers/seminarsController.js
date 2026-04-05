@@ -830,6 +830,432 @@ seminarsController.post(
 );
 
 // ===============================
+// GET /api/academy/seminars/admin/export-report
+// PDF доклад за семинари
+// ===============================
+seminarsController.get(
+  '/admin/export-report',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { seminar_guest_attendance } = require('../sequelize/models/index');
+      const PDFDocument = require('pdfkit');
+      const path = require('path');
+      const fs = require('fs');
+      const { period = 'all', type = 'all', status: statusParam = 'all' } = req.query;
+
+      // Build where (same as statistics endpoint)
+      let dateFilter = {};
+      const now = new Date();
+      if (period !== 'all') {
+        const days = { '7': 7, '30': 30, '180': 180, '365': 365 };
+        const d = days[period];
+        if (d) {
+          const from = new Date(now);
+          from.setDate(from.getDate() - d);
+          dateFilter = { scheduledDate: { [Op.gte]: from } };
+        }
+      }
+      let typeFilter = {};
+      if (type === 'online') typeFilter = { isOnline: true };
+      else if (type === 'inperson') typeFilter = { isOnline: false };
+      let statusFilter = {};
+      if (statusParam !== 'all' && ['scheduled', 'completed', 'cancelled', 'live'].includes(statusParam)) {
+        statusFilter = { status: statusParam };
+      }
+      const where = { ...dateFilter, ...typeFilter, ...statusFilter };
+
+      // Fetch seminars
+      const seminarsData = await seminar.findAll({
+        where,
+        include: [
+          { model: mentor, as: 'facilitator', attributes: ['id', 'name'] },
+          { model: student_seminar, as: 'attendances', attributes: ['id', 'attended', 'earnedCredits'] },
+          { model: seminar_guest_attendance, as: 'guestAttendances', attributes: ['id'] },
+        ],
+        attributes: ['id', 'title', 'isOnline', 'location', 'scheduledDate', 'registeredCount', 'status'],
+        order: [['scheduledDate', 'DESC']],
+      });
+
+      const rows = seminarsData.map(s => {
+        const plain = s.get({ plain: true });
+        const regAtt = (plain.attendances || []).filter(a => a.attended).length;
+        const guestAtt = (plain.guestAttendances || []).length;
+        const credits = (plain.attendances || []).reduce((sum, a) => sum + (a.earnedCredits || 0), 0);
+        return {
+          date: plain.scheduledDate ? new Date(plain.scheduledDate).toLocaleDateString('bg-BG') : '—',
+          title: plain.title || '',
+          location: plain.isOnline ? 'Онлайн' : (plain.location || '—'),
+          facilitator: plain.facilitator?.name || '—',
+          registered: plain.registeredCount || 0,
+          regAttended: regAtt,
+          guestAttended: guestAtt,
+          total: regAtt + guestAtt,
+          credits,
+          status: plain.status,
+        };
+      });
+
+      // Overview
+      const totalSeminars = rows.length;
+      const totalAttended = rows.reduce((s, r) => s + r.total, 0);
+      const totalCredits = rows.reduce((s, r) => s + r.credits, 0);
+
+      // Period label
+      const periodLabels = { '7': '7 дни', '30': '30 дни', '180': '6 месеца', '365': '1 година', 'all': 'Всички' };
+      const typeLabels = { 'all': 'Всички', 'online': 'Онлайн', 'inperson': 'Присъствени' };
+
+      // Generate PDF
+      const doc = new PDFDocument({ size: 'A4', margin: 40, bufferPages: true });
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename="seminar-report-${new Date().toISOString().slice(0, 10)}.pdf"`);
+      doc.pipe(res);
+
+      // Font
+      const fontPath = path.join(__dirname, '..', 'fonts', 'DejaVuSans.ttf');
+      const hasFont = fs.existsSync(fontPath);
+      if (hasFont) doc.registerFont('CyrFont', fontPath);
+      const font = hasFont ? 'CyrFont' : 'Helvetica';
+
+      // Header with logos
+      const cifLogoPath = path.join(__dirname, '..', '..', '..', 'client', 'public', 'images', 'partners', 'CIF_logo_black_rgb.png');
+      const pensaLogoPath = path.join(__dirname, '..', '..', '..', 'client', 'public', 'images', 'homePage', 'logo-2.png');
+      const headerY = 30;
+      const pageW = doc.page.width;
+
+      if (fs.existsSync(cifLogoPath)) {
+        doc.image(cifLogoPath, 40, headerY, { height: 40 });
+      }
+      doc.font(font).fontSize(13).fillColor('#1f2937');
+      doc.text('DigiBridge Academy', 0, headerY + 5, { align: 'center', width: pageW });
+      doc.font(font).fontSize(8).fillColor('#6b7280');
+      doc.text('Фондация ПЕНСА', 0, headerY + 22, { align: 'center', width: pageW });
+      if (fs.existsSync(pensaLogoPath)) {
+        doc.image(pensaLogoPath, pageW - 40 - 40, headerY, { height: 40 });
+      }
+
+      doc.y = headerY + 50;
+      doc.moveDown(0.5);
+      doc.font(font).fontSize(12).fillColor('#8b2040').text('Доклад за семинари', { align: 'center' });
+      doc.font(font).fontSize(8).fillColor('#6b7280').text(`Генериран: ${new Date().toLocaleString('bg-BG')}`, { align: 'center' });
+      doc.moveDown(1);
+
+      // Overview box
+      doc.font(font).fontSize(9).fillColor('#374151');
+      doc.text(`Период: ${periodLabels[period] || period}    |    Тип: ${typeLabels[type] || type}    |    Семинари: ${totalSeminars}    |    Присъствали: ${totalAttended}    |    Кредити: ${totalCredits}`, { align: 'center' });
+      doc.moveDown(1);
+
+      // Table
+      const headers = ['Дата', 'Заглавие', 'Място', 'Лектор', 'Записани', 'Рег.', 'Гости', 'Общо', 'Кредити'];
+      const colWidths = [55, 120, 70, 75, 40, 35, 35, 35, 45];
+      const pageWidth = doc.page.width - 80;
+      const totalW = colWidths.reduce((a, b) => a + b, 0);
+      const scale = pageWidth / totalW;
+      const sw = colWidths.map(w => Math.floor(w * scale));
+      const startX = 40;
+      let y = doc.y + 5;
+      const rh = 18;
+
+      // Header row
+      doc.fontSize(7).font(font);
+      let x = startX;
+      headers.forEach((h, i) => {
+        doc.rect(x, y, sw[i], rh).fillAndStroke('#8b2040', '#8b2040');
+        doc.fillColor('#fff').text(h, x + 3, y + 4, { width: sw[i] - 6, height: rh - 4, ellipsis: true });
+        x += sw[i];
+      });
+      y += rh;
+
+      // Data rows
+      doc.font(font).fontSize(6.5);
+      rows.forEach((row, ri) => {
+        if (y + rh > doc.page.height - 40) {
+          doc.addPage({ size: 'A4', margin: 40 });
+          y = 40;
+        }
+        const bg = ri % 2 === 0 ? '#ffffff' : '#f5f3f0';
+        const vals = [row.date, row.title, row.location, row.facilitator, row.registered, row.regAttended, row.guestAttended, row.total, row.credits];
+        x = startX;
+        vals.forEach((v, ci) => {
+          doc.rect(x, y, sw[ci], rh).fillAndStroke(bg, '#ddd');
+          doc.fillColor('#222').text(String(v), x + 3, y + 4, { width: sw[ci] - 6, height: rh - 4, ellipsis: true });
+          x += sw[ci];
+        });
+        y += rh;
+      });
+
+      doc.end();
+    } catch (err) {
+      console.error('❌ [EXPORT REPORT] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// GET /api/academy/seminars/admin/export-attendees/:id
+// PDF списък присъстващи за конкретен семинар
+// ===============================
+seminarsController.get(
+  '/admin/export-attendees/:id',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { seminar_guest_attendance } = require('../sequelize/models/index');
+      const PDFDocument = require('pdfkit');
+      const path = require('path');
+      const fs = require('fs');
+      const seminarId = parseInt(req.params.id);
+
+      const seminarData = await seminar.findByPk(seminarId, {
+        attributes: ['id', 'title', 'scheduledDate', 'location', 'isOnline'],
+        include: [{ model: mentor, as: 'facilitator', attributes: ['name'] }],
+      });
+
+      if (!seminarData) {
+        return res.status(404).json({ success: false, message: 'Seminar not found' });
+      }
+
+      // Registered
+      const registered = await student_seminar.findAll({
+        where: { seminarId },
+        include: [{
+          model: student, as: 'student', attributes: ['id'],
+          include: [{
+            model: user_account, as: 'user', attributes: ['email'],
+            include: [{ model: user_details, as: 'details', attributes: ['firstName', 'lastName', 'phoneNumber'] }],
+          }],
+        }],
+        attributes: ['id', 'status', 'attended'],
+      });
+
+      // Guests
+      const guests = await seminar_guest_attendance.findAll({
+        where: { seminarId },
+        attributes: ['id', 'guestFirstName', 'guestLastName', 'guestEmail', 'guestPhone'],
+      });
+
+      // Build rows
+      const allRows = [];
+      registered.forEach(r => {
+        const p = r.get({ plain: true });
+        const u = p.student?.user;
+        allRows.push({
+          name: `${u?.details?.firstName || ''} ${u?.details?.lastName || ''}`.trim() || '—',
+          email: u?.email || '—',
+          phone: u?.details?.phoneNumber || '—',
+          type: 'Платформа',
+        });
+      });
+      guests.forEach(g => {
+        const p = g.get({ plain: true });
+        allRows.push({
+          name: `${p.guestFirstName || ''} ${p.guestLastName || ''}`.trim() || '—',
+          email: p.guestEmail || '—',
+          phone: p.guestPhone || '—',
+          type: 'Гост',
+        });
+      });
+
+      const dateStr = seminarData.scheduledDate
+        ? new Date(seminarData.scheduledDate).toLocaleDateString('bg-BG', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+        : '';
+
+      // Generate PDF
+      const doc = new PDFDocument({ size: 'A4', margin: 40, bufferPages: true });
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename="attendees-${seminarId}-${new Date().toISOString().slice(0, 10)}.pdf"`);
+      doc.pipe(res);
+
+      const fontPath = path.join(__dirname, '..', 'fonts', 'DejaVuSans.ttf');
+      const hasFont = fs.existsSync(fontPath);
+      if (hasFont) doc.registerFont('CyrFont', fontPath);
+      const font = hasFont ? 'CyrFont' : 'Helvetica';
+
+      // Header with logos
+      const cifLogoPath = path.join(__dirname, '..', '..', '..', 'client', 'public', 'images', 'partners', 'CIF_logo_black_rgb.png');
+      const pensaLogoPath = path.join(__dirname, '..', '..', '..', 'client', 'public', 'images', 'homePage', 'logo-2.png');
+      const headerY = 30;
+      const pageW = doc.page.width;
+
+      if (fs.existsSync(cifLogoPath)) {
+        doc.image(cifLogoPath, 40, headerY, { height: 40 });
+      }
+      doc.font(font).fontSize(13).fillColor('#1f2937');
+      doc.text('DigiBridge Academy', 0, headerY + 5, { align: 'center', width: pageW });
+      doc.font(font).fontSize(8).fillColor('#6b7280');
+      doc.text('Фондация ПЕНСА', 0, headerY + 22, { align: 'center', width: pageW });
+      if (fs.existsSync(pensaLogoPath)) {
+        doc.image(pensaLogoPath, pageW - 40 - 40, headerY, { height: 40 });
+      }
+
+      doc.y = headerY + 50;
+      doc.moveDown(0.5);
+      doc.font(font).fontSize(12).fillColor('#8b2040').text('Списък на участници', { align: 'center' });
+      doc.moveDown(0.5);
+
+      // Seminar info
+      doc.font(font).fontSize(10).fillColor('#374151').text(seminarData.title, { align: 'center' });
+      doc.font(font).fontSize(8).fillColor('#6b7280');
+      doc.text(`Дата: ${dateStr}    |    Място: ${seminarData.isOnline ? 'Онлайн' : (seminarData.location || '—')}    |    Лектор: ${seminarData.facilitator?.name || '—'}`, { align: 'center' });
+      doc.text(`Общо участници: ${allRows.length} (${registered.length} регистрирани + ${guests.length} гости)`, { align: 'center' });
+      doc.moveDown(1);
+
+      // Table
+      const headers = ['№', 'Име', 'Имейл', 'Телефон', 'Тип'];
+      const colWidths = [25, 140, 160, 90, 60];
+      const pageWidth = doc.page.width - 80;
+      const totalW = colWidths.reduce((a, b) => a + b, 0);
+      const scale = pageWidth / totalW;
+      const sw = colWidths.map(w => Math.floor(w * scale));
+      const startX = 40;
+      let y = doc.y + 5;
+      const rh = 18;
+
+      // Header
+      doc.fontSize(7).font(font);
+      let x = startX;
+      headers.forEach((h, i) => {
+        doc.rect(x, y, sw[i], rh).fillAndStroke('#8b2040', '#8b2040');
+        doc.fillColor('#fff').text(h, x + 3, y + 4, { width: sw[i] - 6, height: rh - 4, ellipsis: true });
+        x += sw[i];
+      });
+      y += rh;
+
+      // Data
+      doc.font(font).fontSize(7);
+      allRows.forEach((row, ri) => {
+        if (y + rh > doc.page.height - 40) {
+          doc.addPage({ size: 'A4', margin: 40 });
+          y = 40;
+        }
+        const bg = ri % 2 === 0 ? '#ffffff' : '#f5f3f0';
+        const vals = [ri + 1, row.name, row.email, row.phone, row.type];
+        x = startX;
+        vals.forEach((v, ci) => {
+          doc.rect(x, y, sw[ci], rh).fillAndStroke(bg, '#ddd');
+          doc.fillColor('#222').text(String(v), x + 3, y + 4, { width: sw[ci] - 6, height: rh - 4, ellipsis: true });
+          x += sw[ci];
+        });
+        y += rh;
+      });
+
+      doc.end();
+    } catch (err) {
+      console.error('❌ [EXPORT ATTENDEES] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// POST /api/academy/seminars/:id/attendance-list
+// Качване на физически списък
+// ===============================
+seminarsController.post(
+  '/:id/attendance-list',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { seminar_attendance_list } = require('../sequelize/models/index');
+      const seminarId = parseInt(req.params.id);
+      const { fileUrl, fileName, fileType, fileSize, notes } = req.body;
+
+      if (!fileUrl || !fileName) {
+        return res.status(400).json({ success: false, message: 'fileUrl and fileName are required' });
+      }
+
+      const record = await seminar_attendance_list.create({
+        seminarId,
+        uploadedBy: req.user.userId,
+        fileUrl,
+        fileName,
+        fileType: fileType || null,
+        fileSize: fileSize || null,
+        notes: notes || null,
+      });
+
+      res.status(201).json({ success: true, record });
+    } catch (err) {
+      console.error('❌ [CREATE ATTENDANCE LIST] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// GET /api/academy/seminars/:id/attendance-lists
+// Списък качени физически списъци
+// ===============================
+seminarsController.get(
+  '/:id/attendance-lists',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { seminar_attendance_list } = require('../sequelize/models/index');
+      const seminarId = parseInt(req.params.id);
+
+      const lists = await seminar_attendance_list.findAll({
+        where: { seminarId },
+        include: [{
+          model: user_account,
+          as: 'uploader',
+          attributes: ['id', 'email'],
+          include: [{ model: user_details, as: 'details', attributes: ['firstName', 'lastName'] }],
+        }],
+        order: [['createdAt', 'DESC']],
+      });
+
+      const data = lists.map(l => {
+        const plain = l.get({ plain: true });
+        return {
+          ...plain,
+          uploaderName: plain.uploader?.details
+            ? `${plain.uploader.details.firstName || ''} ${plain.uploader.details.lastName || ''}`.trim()
+            : plain.uploader?.email || '—',
+        };
+      });
+
+      res.status(200).json({ success: true, lists: data });
+    } catch (err) {
+      console.error('❌ [GET ATTENDANCE LISTS] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// DELETE /api/academy/seminars/:id/attendance-list/:listId
+// Изтриване на физически списък
+// ===============================
+seminarsController.delete(
+  '/:id/attendance-list/:listId',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { seminar_attendance_list } = require('../sequelize/models/index');
+      const listId = parseInt(req.params.listId);
+
+      const record = await seminar_attendance_list.findByPk(listId);
+      if (!record) {
+        return res.status(404).json({ success: false, message: 'Record not found' });
+      }
+
+      await record.destroy();
+      res.status(200).json({ success: true, message: 'Deleted' });
+    } catch (err) {
+      console.error('❌ [DELETE ATTENDANCE LIST] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
 // GET /api/academy/seminars/admin/attendance-detail/:id
 // Детайлен списък присъстващи за конкретен семинар
 // ===============================

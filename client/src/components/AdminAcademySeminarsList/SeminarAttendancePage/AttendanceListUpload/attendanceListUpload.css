@@ -1,0 +1,189 @@
+/* AttendanceListUpload — prefix: alu- */
+
+.alu-container {
+  margin-top: 24px;
+  padding: 16px;
+  background: #222226;
+  border: 1px solid #2e2e32;
+  border-radius: 8px;
+}
+
+.alu-title {
+  margin: 0 0 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #d0d0d0;
+}
+
+.alu-notes-input {
+  width: 100%;
+  padding: 7px 12px;
+  border: 1px solid #3a3a3e;
+  border-radius: 6px;
+  background: #1a1a1e;
+  color: #eee;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.78rem;
+  margin-bottom: 10px;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.alu-notes-input:focus { border-color: #8b2040; }
+.alu-notes-input::placeholder { color: #666; }
+
+.alu-dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 24px;
+  border: 2px dashed #3a3a3e;
+  border-radius: 8px;
+  color: #888;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 12px;
+}
+
+.alu-dropzone:hover {
+  border-color: #8b2040;
+  color: #bbb;
+}
+
+.alu-dropzone-active {
+  border-color: #d4a853;
+  background: rgba(212, 168, 83, 0.06);
+  color: #d4a853;
+}
+
+.alu-dropzone-uploading {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.alu-dropzone-sub {
+  font-size: 0.7rem;
+  color: #666;
+}
+
+.alu-uploading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.alu-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #333;
+  border-top-color: #d4a853;
+  border-radius: 50%;
+  animation: alu-spin 0.7s linear infinite;
+}
+
+@keyframes alu-spin { to { transform: rotate(360deg); } }
+
+.alu-loading {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.alu-empty {
+  text-align: center;
+  color: #666;
+  font-size: 0.82rem;
+  padding: 16px;
+}
+
+.alu-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.alu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  background: #1a1a1e;
+  border: 1px solid #2e2e32;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+
+.alu-item:hover { background: #262630; }
+
+.alu-item-icon { color: #d4a853; flex-shrink: 0; }
+
+.alu-item-info { flex: 1; min-width: 0; }
+
+.alu-item-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #d4a853;
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.alu-item-name:hover { text-decoration: underline; }
+
+.alu-item-meta {
+  font-size: 0.7rem;
+  color: #888;
+  margin-top: 2px;
+}
+
+.alu-item-notes { color: #aaa; }
+
+.alu-item-download {
+  border: none;
+  background: transparent;
+  color: #888;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.alu-item-download:hover { color: #d4a853; background: rgba(212, 168, 83, 0.1); }
+
+.alu-item-delete {
+  border: none;
+  background: transparent;
+  color: #666;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.alu-item-delete:hover { color: #ef4444; background: rgba(239, 68, 68, 0.1); }
+
+/* Light theme */
+[data-theme="light"] .alu-container { background: #fff; border-color: #e0ddd8; }
+[data-theme="light"] .alu-title { color: #1a1a1e; }
+[data-theme="light"] .alu-notes-input { background: #f9f8f6; border-color: #d5d3cf; color: #1a1a1e; }
+[data-theme="light"] .alu-notes-input::placeholder { color: #999; }
+[data-theme="light"] .alu-dropzone { border-color: #d5d3cf; color: #888; }
+[data-theme="light"] .alu-dropzone:hover { border-color: #8b2040; color: #555; }
+[data-theme="light"] .alu-dropzone-active { border-color: #8b2040; background: rgba(139, 32, 64, 0.04); color: #8b2040; }
+[data-theme="light"] .alu-dropzone-sub { color: #999; }
+[data-theme="light"] .alu-item { background: #f9f8f6; border-color: #e0ddd8; }
+[data-theme="light"] .alu-item:hover { background: #f0eeea; }
+[data-theme="light"] .alu-item-icon { color: #8b2040; }
+[data-theme="light"] .alu-item-name { color: #8b2040; }
+[data-theme="light"] .alu-item-meta { color: #666; }
+[data-theme="light"] .alu-item-notes { color: #555; }
+[data-theme="light"] .alu-item-download { color: #999; }
+[data-theme="light"] .alu-item-download:hover { color: #8b2040; background: rgba(139, 32, 64, 0.08); }
+[data-theme="light"] .alu-empty { color: #888; }
+[data-theme="light"] .alu-spinner { border-color: #ddd; border-top-color: #8b2040; }

@@ -999,6 +999,39 @@ export const AcademyCoursesProvider = ({ children }) => {
     }
   }, [isAdmin, isMentor]);
 
+  const getAttendanceLists = useCallback(async (seminarId) => {
+    try {
+      return await coursesService.getAttendanceLists(seminarId);
+    } catch (error) {
+      console.error('Error fetching attendance lists:', error);
+      return { lists: [] };
+    }
+  }, []);
+
+  const uploadAttendanceList = useCallback(async (seminarId, data) => {
+    try {
+      const result = await coursesService.uploadAttendanceList(seminarId, data);
+      if (result?.success) toast.success('Списъкът е качен успешно');
+      return result;
+    } catch (error) {
+      console.error('Error uploading attendance list:', error);
+      toast.error('Грешка при качване');
+      throw error;
+    }
+  }, []);
+
+  const deleteAttendanceList = useCallback(async (seminarId, listId) => {
+    try {
+      const result = await coursesService.deleteAttendanceList(seminarId, listId);
+      if (result?.success) toast.success('Списъкът е изтрит');
+      return result;
+    } catch (error) {
+      console.error('Error deleting attendance list:', error);
+      toast.error('Грешка при изтриване');
+      throw error;
+    }
+  }, []);
+
   const searchSeminarAttendee = useCallback(async (query) => {
     if (!isAdmin && !isMentor) return { results: [] };
     try {
@@ -2334,6 +2367,9 @@ export const AcademyCoursesProvider = ({ children }) => {
     getSeminarAttendanceDetail,
     searchSeminarAttendee,
     sendSeminarEmail,
+    getAttendanceLists,
+    uploadAttendanceList,
+    deleteAttendanceList,
 
     // Seminar Registration
     registerForSeminar,

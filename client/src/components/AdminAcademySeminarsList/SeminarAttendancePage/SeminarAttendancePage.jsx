@@ -4,10 +4,11 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAcademyCourses } from '../../contexts/AcademyCoursesProvider';
-import { ArrowLeft, BookOpen, Users, ChevronDown, QrCode } from 'lucide-react';
+import { ArrowLeft, BookOpen, Users, ChevronDown, QrCode, Download } from 'lucide-react';
 import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { QRCodeSVG } from 'qrcode.react';
 import AttendanceForm from './AttendanceForm/AttendanceForm';
+import AttendanceListUpload from './AttendanceListUpload/AttendanceListUpload';
 import './seminarAttendancePage.css';
 
 const SeminarAttendancePage = () => {
@@ -141,10 +142,34 @@ const SeminarAttendancePage = () => {
 
                 {/* QR + Attendance form */}
                 {selectedSeminar && (
-                    <button className="satp-qr-btn" onClick={() => setShowQR(true)}>
-                        <QrCode size={16} />
-                        {t('seminarAttendance.showQR', 'Покажи QR')}
-                    </button>
+                    <div className="satp-actions-row">
+                        <button className="satp-qr-btn" onClick={() => setShowQR(true)}>
+                            <QrCode size={16} />
+                            {t('seminarAttendance.showQR', 'Покажи QR')}
+                        </button>
+                        <button
+                            className="satp-download-btn"
+                            onClick={async () => {
+                                try {
+                                    const auth = JSON.parse(localStorage.getItem('auth') || '{}');
+                                    const res = await fetch(`${import.meta.env.VITE_API_URL}/academy/seminars/admin/export-attendees/${selectedSeminar.id}`, {
+                                        headers: { Authorization: `Bearer ${auth.token}` },
+                                        credentials: 'include',
+                                    });
+                                    const blob = await res.blob();
+                                    const url = URL.createObjectURL(blob);
+                                    const a = document.createElement('a');
+                                    a.href = url;
+                                    a.download = `attendees-${selectedSeminar.id}.pdf`;
+                                    a.click();
+                                    URL.revokeObjectURL(url);
+                                } catch { /* ignore */ }
+                            }}
+                        >
+                            <Download size={16} />
+                            {t('seminarAttendance.downloadList', 'Свали списък')}
+                        </button>
+                    </div>
                 )}
 
                 {/* Session selector */}
@@ -176,6 +201,10 @@ const SeminarAttendancePage = () => {
 
                 {selectedSeminar && (
                     <AttendanceForm seminar={selectedSeminar} session={selectedSession} />
+                )}
+
+                {selectedSeminar && (
+                    <AttendanceListUpload seminarId={selectedSeminar.id} />
                 )}
             </div>
 

@@ -1094,9 +1094,22 @@
     "chooseSeminar": "— Seminar auswählen —",
     "noSeminars": "Keine Seminare",
     "showQR": "QR anzeigen",
+    "downloadList": "Liste herunterladen",
     "qrTitle": "QR-Code für Anwesenheit",
     "qrHint": "Teilnehmer scannen mit dem Handy für schnelle Anwesenheitserfassung",
     "close": "Schließen"
+  },
+  "attendanceList": {
+    "title": "Physische Anwesenheitslisten",
+    "notesPlaceholder": "Notiz (optional)...",
+    "invalidType": "Erlaubte Formate: JPG, PNG, WebP, PDF",
+    "tooLarge": "Maximale Größe: 10MB",
+    "uploading": "Hochladen...",
+    "dropHint": "Datei hierher ziehen oder klicken",
+    "formats": "JPG, PNG, WebP, PDF — bis 10MB",
+    "noFiles": "Keine hochgeladenen Listen",
+    "delete": "Löschen",
+    "confirmDelete": "Sind Sie sicher, dass Sie diese Datei löschen möchten?"
   },
   "attendanceForm": {
     "totalParticipants": "Teilnehmer",
@@ -1154,6 +1167,8 @@
     "searchAttendeeGlobal": "Name oder E-Mail des Teilnehmers eingeben...",
     "noResults": "Keine Ergebnisse gefunden",
     "foundResults": "Gefunden",
+    "exportReport": "Bericht herunterladen",
+    "exportAttendees": "Liste herunterladen",
     "allMentors": "Alle Mentoren",
     "online": "Online",
     "inperson": "Vor Ort",

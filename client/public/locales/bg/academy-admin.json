@@ -1094,9 +1094,22 @@
     "chooseSeminar": "— Изберете семинар —",
     "noSeminars": "Няма семинари",
     "showQR": "Покажи QR",
+    "downloadList": "Свали списък",
     "qrTitle": "QR код за присъствие",
     "qrHint": "Участниците сканират с телефон за бързо записване на присъствие",
     "close": "Затвори"
+  },
+  "attendanceList": {
+    "title": "Физически списъци",
+    "notesPlaceholder": "Бележка (незадължително)...",
+    "invalidType": "Позволени формати: JPG, PNG, WebP, PDF",
+    "tooLarge": "Максимален размер: 10MB",
+    "uploading": "Качване...",
+    "dropHint": "Плъзнете файл тук или кликнете",
+    "formats": "JPG, PNG, WebP, PDF — до 10MB",
+    "noFiles": "Няма качени списъци",
+    "delete": "Изтрий",
+    "confirmDelete": "Сигурни ли сте, че искате да изтриете този файл?"
   },
   "attendanceForm": {
     "alreadyMarked": "записани",
@@ -1159,6 +1172,8 @@
     "searchAttendeeGlobal": "Въведете име или имейл на участник...",
     "noResults": "Няма намерени резултати",
     "foundResults": "Намерени",
+    "exportReport": "Свали доклад",
+    "exportAttendees": "Свали списък",
     "allMentors": "Всички ментори",
     "online": "Онлайн",
     "inperson": "Присъствен",
