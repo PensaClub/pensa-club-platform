@@ -208,4 +208,19 @@ seminarEmailTemplates.seminarInvite = ({ seminarTitle, scheduledDate, meetingLin
   };
 };
 
+// Personal message from admin/mentor to seminar participant
+seminarEmailTemplates.personalMessage = ({ recipientName, subject, message, senderName }) => {
+  const messageHtml = message.replace(/\n/g, '<br>');
+
+  const body =
+    greeting(recipientName || '') +
+    paragraph(messageHtml) +
+    `<p style="color:#374151;font-size:15px;line-height:1.7;margin:24px 0 0;">С уважение,<br><strong style="color:#0d9488;">${senderName || 'Екипът на DigiBridge Academy'}</strong></p>`;
+
+  return {
+    subject: subject,
+    html: wrapAcademyTemplate('Лично съобщение', body),
+  };
+};
+
 module.exports = seminarEmailTemplates;

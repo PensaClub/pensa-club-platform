@@ -171,6 +171,52 @@
 }
 
 /* =========================================================
+   TABS
+   ========================================================= */
+
+.aalcs-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.aalcs-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.aalcs-tab:hover {
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.aalcs-tab-active {
+  background: rgba(0, 210, 255, 0.12);
+  color: #00d2ff;
+  font-weight: 600;
+}
+
+.aalcs-tab-active:hover {
+  background: rgba(0, 210, 255, 0.15);
+  color: #00d2ff;
+}
+
+/* =========================================================
    STATS BAR
    ========================================================= */
 
@@ -345,6 +391,11 @@
    LIGHT THEME
    ========================================================= */
 
+[data-theme="light"] .aalcs-tabs { background: #ffffff; border-color: #e2e8f0; }
+[data-theme="light"] .aalcs-tab { color: #64748b; }
+[data-theme="light"] .aalcs-tab:hover { color: #1e293b; background: #f1f5f9; }
+[data-theme="light"] .aalcs-tab-active { background: rgba(13, 148, 136, 0.1); color: #0d9488; }
+[data-theme="light"] .aalcs-tab-active:hover { background: rgba(13, 148, 136, 0.12); color: #0d9488; }
 [data-theme="light"] .aalcs-page-bg { background: #f1f5f9; }
 [data-theme="light"] .aalcs-page-bg::before { background-image: linear-gradient(rgba(13, 148, 136, 0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(13, 148, 136, 0.07) 1px, transparent 1px); }
 [data-theme="light"] .aalcs-page-bg::after { background: radial-gradient(circle, rgba(13, 148, 136, 0.08) 0%, transparent 65%); }

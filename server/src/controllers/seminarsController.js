@@ -377,6 +377,433 @@ seminarsController.get(
 );
 
 // ===============================
+// GET /api/academy/seminars/admin/statistics
+// Агрегирана статистика за всички семинари
+// ===============================
+seminarsController.get(
+  '/admin/statistics',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { seminar_guest_attendance } = require('../sequelize/models/index');
+      const { period = 'all', type = 'all', status: statusParam = 'all' } = req.query;
+
+      // Period filter
+      let dateFilter = {};
+      const now = new Date();
+      if (period !== 'all') {
+        const days = { '7': 7, '30': 30, '180': 180, '365': 365 };
+        const d = days[period];
+        if (d) {
+          const from = new Date(now);
+          from.setDate(from.getDate() - d);
+          dateFilter = { scheduledDate: { [Op.gte]: from } };
+        }
+      }
+
+      // Type filter
+      let typeFilter = {};
+      if (type === 'online') typeFilter = { isOnline: true };
+      else if (type === 'inperson') typeFilter = { isOnline: false };
+
+      // Status filter
+      let statusFilter = {};
+      if (statusParam !== 'all' && ['scheduled', 'completed', 'cancelled', 'live'].includes(statusParam)) {
+        statusFilter = { status: statusParam };
+      }
+
+      const where = { ...dateFilter, ...typeFilter, ...statusFilter };
+
+      // 1) Overview cards
+      const allSeminars = await seminar.findAll({
+        where,
+        attributes: ['id', 'isOnline', 'registeredCount', 'attendedCount', 'scheduledDate', 'status'],
+      });
+
+      const totalSeminars = allSeminars.length;
+      const onlineCount = allSeminars.filter(s => s.isOnline).length;
+      const inpersonCount = totalSeminars - onlineCount;
+      const cancelledCount = allSeminars.filter(s => s.status === 'cancelled').length;
+      const completedCount = allSeminars.filter(s => s.status === 'completed').length;
+
+      // Registered attendees
+      const seminarIds = allSeminars.map(s => s.id);
+
+      const registeredAttended = seminarIds.length > 0
+        ? await student_seminar.count({ where: { seminarId: { [Op.in]: seminarIds }, attended: true } })
+        : 0;
+
+      const guestAttended = seminarIds.length > 0
+        ? await seminar_guest_attendance.count({ where: { seminarId: { [Op.in]: seminarIds } } })
+        : 0;
+
+      const totalAttended = registeredAttended + guestAttended;
+      const avgAttendance = totalSeminars > 0 ? Math.round(totalAttended / totalSeminars * 10) / 10 : 0;
+
+      // Total credits
+      const creditsResult = seminarIds.length > 0
+        ? await student_seminar.findOne({
+            where: { seminarId: { [Op.in]: seminarIds } },
+            attributes: [[sequelize.fn('SUM', sequelize.col('earned_credits')), 'total']],
+            raw: true,
+          })
+        : { total: 0 };
+      const totalCredits = parseInt(creditsResult?.total) || 0;
+
+      // 2) Monthly chart data
+      const monthlyRaw = await seminar.findAll({
+        where,
+        attributes: [
+          [sequelize.fn('DATE_TRUNC', 'month', sequelize.col('scheduled_date')), 'month'],
+          [sequelize.fn('COUNT', sequelize.col('seminar.id')), 'count'],
+        ],
+        group: [sequelize.fn('DATE_TRUNC', 'month', sequelize.col('scheduled_date'))],
+        order: [[sequelize.fn('DATE_TRUNC', 'month', sequelize.col('scheduled_date')), 'ASC']],
+        raw: true,
+      });
+
+      // Monthly attendance (registered)
+      const monthlyRegAttendance = seminarIds.length > 0
+        ? await student_seminar.findAll({
+            where: { seminarId: { [Op.in]: seminarIds }, attended: true },
+            include: [{
+              model: seminar,
+              as: 'seminar',
+              attributes: [],
+              where,
+            }],
+            attributes: [
+              [sequelize.fn('DATE_TRUNC', 'month', sequelize.col('seminar.scheduled_date')), 'month'],
+              [sequelize.fn('COUNT', sequelize.col('student_seminar.id')), 'count'],
+            ],
+            group: [sequelize.fn('DATE_TRUNC', 'month', sequelize.col('seminar.scheduled_date'))],
+            raw: true,
+          })
+        : [];
+
+      // Monthly attendance (guests)
+      const monthlyGuestAttendance = seminarIds.length > 0
+        ? await seminar_guest_attendance.findAll({
+            include: [{
+              model: seminar,
+              as: 'seminar',
+              attributes: [],
+              where,
+            }],
+            where: { seminarId: { [Op.in]: seminarIds } },
+            attributes: [
+              [sequelize.fn('DATE_TRUNC', 'month', sequelize.col('seminar.scheduled_date')), 'month'],
+              [sequelize.fn('COUNT', sequelize.col('seminar_guest_attendance.id')), 'count'],
+            ],
+            group: [sequelize.fn('DATE_TRUNC', 'month', sequelize.col('seminar.scheduled_date'))],
+            raw: true,
+          })
+        : [];
+
+      // Merge monthly data
+      const monthMap = {};
+      monthlyRaw.forEach(r => {
+        const key = r.month;
+        if (!monthMap[key]) monthMap[key] = { month: key, seminars: 0, registered: 0, guests: 0 };
+        monthMap[key].seminars = parseInt(r.count) || 0;
+      });
+      monthlyRegAttendance.forEach(r => {
+        const key = r.month;
+        if (!monthMap[key]) monthMap[key] = { month: key, seminars: 0, registered: 0, guests: 0 };
+        monthMap[key].registered = parseInt(r.count) || 0;
+      });
+      monthlyGuestAttendance.forEach(r => {
+        const key = r.month;
+        if (!monthMap[key]) monthMap[key] = { month: key, seminars: 0, registered: 0, guests: 0 };
+        monthMap[key].guests = parseInt(r.count) || 0;
+      });
+      const monthlyData = Object.values(monthMap)
+        .sort((a, b) => new Date(a.month) - new Date(b.month))
+        .map(m => ({
+          ...m,
+          total: m.registered + m.guests,
+          label: new Date(m.month).toLocaleDateString('bg-BG', { month: 'short', year: '2-digit' }),
+        }));
+
+      // 3) Seminars table data
+      const seminarsTable = await seminar.findAll({
+        where,
+        include: [
+          {
+            model: mentor,
+            as: 'facilitator',
+            attributes: ['id', 'name'],
+          },
+          {
+            model: student_seminar,
+            as: 'attendances',
+            attributes: ['id', 'attended', 'earnedCredits'],
+          },
+          {
+            model: seminar_guest_attendance,
+            as: 'guestAttendances',
+            attributes: ['id'],
+          },
+        ],
+        attributes: [
+          'id', 'title', 'slug', 'isOnline', 'location', 'address',
+          'scheduledDate', 'registeredCount', 'attendedCount', 'status',
+        ],
+        order: [['scheduledDate', 'DESC']],
+      });
+
+      const seminarsData = seminarsTable.map(s => {
+        const plain = s.get({ plain: true });
+        const regAttended = (plain.attendances || []).filter(a => a.attended).length;
+        const guestCount = (plain.guestAttendances || []).length;
+        const earnedCredits = (plain.attendances || []).reduce((sum, a) => sum + (a.earnedCredits || 0), 0);
+
+        return {
+          id: plain.id,
+          title: plain.title,
+          slug: plain.slug,
+          isOnline: plain.isOnline,
+          location: plain.location,
+          address: plain.address,
+          scheduledDate: plain.scheduledDate,
+          status: plain.status,
+          facilitator: plain.facilitator?.name || null,
+          facilitatorId: plain.facilitator?.id || null,
+          registeredCount: plain.registeredCount || 0,
+          attendedRegistered: regAttended,
+          attendedGuests: guestCount,
+          attendedTotal: regAttended + guestCount,
+          earnedCredits,
+        };
+      });
+
+      // Unique mentors for filter
+      const mentors = [...new Map(
+        seminarsData
+          .filter(s => s.facilitatorId)
+          .map(s => [s.facilitatorId, { id: s.facilitatorId, name: s.facilitator }])
+      ).values()];
+
+      res.status(200).json({
+        success: true,
+        overview: {
+          totalSeminars,
+          onlineCount,
+          inpersonCount,
+          totalAttended,
+          registeredAttended,
+          guestAttended,
+          avgAttendance,
+          totalCredits,
+          cancelledCount,
+          completedCount,
+        },
+        monthlyData,
+        seminars: seminarsData,
+        mentors,
+      });
+    } catch (err) {
+      console.error('❌ [GET ADMIN SEMINAR STATISTICS] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// ===============================
+// POST /api/academy/seminars/admin/send-email
+// Изпращане на лично съобщение до участник в семинар
+// ===============================
+seminarsController.post(
+  '/admin/send-email',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { to, recipientName, subject, message } = req.body;
+
+      if (!to || !subject || !message) {
+        return res.status(400).json({
+          success: false,
+          message: 'Missing required fields: to, subject, message',
+        });
+      }
+
+      // Get sender name
+      const sender = await user_account.findByPk(req.user.userId, {
+        include: [{ model: user_details, as: 'details', attributes: ['firstName', 'lastName'] }],
+      });
+      const senderName = sender?.details
+        ? `${sender.details.firstName || ''} ${sender.details.lastName || ''}`.trim()
+        : 'Екипът на DigiBridge Academy';
+
+      const emailData = seminarEmailTemplates.personalMessage({
+        recipientName: recipientName || '',
+        subject,
+        message,
+        senderName,
+      });
+
+      await forwardEmailsViaZoho({
+        userEmail: sender?.email,
+        subject: emailData.subject,
+        toAddresses: to,
+        formattedBody: emailData.html,
+      });
+
+      res.status(200).json({ success: true, message: 'Email sent successfully' });
+    } catch (err) {
+      console.error('❌ [SEND SEMINAR EMAIL] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// GET /api/academy/seminars/admin/attendance-detail/:id
+// Детайлен списък присъстващи за конкретен семинар
+// ===============================
+seminarsController.get(
+  '/admin/attendance-detail/:id',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { seminar_guest_attendance } = require('../sequelize/models/index');
+      const seminarId = parseInt(req.params.id);
+
+      const seminarData = await seminar.findByPk(seminarId, {
+        attributes: ['id', 'title'],
+      });
+
+      if (!seminarData) {
+        return res.status(404).json({ success: false, message: 'Seminar not found' });
+      }
+
+      // Registered attendees
+      const registered = await student_seminar.findAll({
+        where: { seminarId },
+        include: [
+          {
+            model: student,
+            as: 'student',
+            attributes: ['id'],
+            include: [{
+              model: user_account,
+              as: 'user',
+              attributes: ['id', 'email'],
+              include: [{
+                model: user_details,
+                as: 'details',
+                attributes: ['firstName', 'lastName', 'phoneNumber'],
+              }],
+            }],
+          },
+        ],
+        attributes: [
+          'id', 'attended', 'attendedAt', 'earnedCredits', 'status',
+          'participationLevel', 'notes', 'createdAt',
+        ],
+        order: [['createdAt', 'DESC']],
+      });
+
+      const registeredData = registered.map(r => {
+        const plain = r.get({ plain: true });
+        const user = plain.student?.user;
+        return {
+          id: plain.id,
+          type: 'registered',
+          firstName: user?.details?.firstName || '',
+          lastName: user?.details?.lastName || '',
+          email: user?.email || '',
+          phone: user?.details?.phoneNumber || '',
+          attended: plain.attended,
+          attendedAt: plain.attendedAt,
+          earnedCredits: plain.earnedCredits || 0,
+          status: plain.status,
+          participationLevel: plain.participationLevel,
+          notes: plain.notes,
+          registeredAt: plain.createdAt,
+        };
+      });
+
+      // Guest attendees
+      const guests = await seminar_guest_attendance.findAll({
+        where: { seminarId },
+        include: [
+          {
+            model: user_account,
+            as: 'markedByUser',
+            attributes: ['id', 'email'],
+            required: false,
+            include: [{
+              model: user_details,
+              as: 'details',
+              attributes: ['firstName', 'lastName'],
+            }],
+          },
+          {
+            model: user_account,
+            as: 'convertedUser',
+            attributes: ['id', 'email'],
+            required: false,
+          },
+        ],
+        attributes: [
+          'id', 'guestFirstName', 'guestLastName', 'guestEmail', 'guestPhone',
+          'participationLevel', 'markedBy', 'convertedToUserId', 'createdAt',
+        ],
+        order: [['createdAt', 'DESC']],
+      });
+
+      const guestsData = guests.map(g => {
+        const plain = g.get({ plain: true });
+        const markerName = plain.markedByUser?.details
+          ? `${plain.markedByUser.details.firstName || ''} ${plain.markedByUser.details.lastName || ''}`.trim()
+          : plain.markedByUser?.email || null;
+
+        return {
+          id: plain.id,
+          type: 'guest',
+          firstName: plain.guestFirstName,
+          lastName: plain.guestLastName,
+          email: plain.guestEmail || '',
+          phone: plain.guestPhone || '',
+          participationLevel: plain.participationLevel,
+          markedByName: markerName,
+          convertedToUserId: plain.convertedToUserId,
+          convertedEmail: plain.convertedUser?.email || null,
+          registeredAt: plain.createdAt,
+        };
+      });
+
+      // Combined "all" list
+      const allAttendees = [
+        ...registeredData,
+        ...guestsData,
+      ].sort((a, b) => new Date(b.registeredAt) - new Date(a.registeredAt));
+
+      res.status(200).json({
+        success: true,
+        seminar: { id: seminarData.id, title: seminarData.title },
+        all: allAttendees,
+        registered: registeredData,
+        guests: guestsData,
+        counts: {
+          all: allAttendees.length,
+          registered: registeredData.length,
+          guests: guestsData.length,
+        },
+      });
+    } catch (err) {
+      console.error('❌ [GET ATTENDANCE DETAIL] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
 // GET /api/academy/seminars/mentor/my
 // Семинари на текущия ментор
 // ===============================

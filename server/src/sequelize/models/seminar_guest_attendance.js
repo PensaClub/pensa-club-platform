@@ -15,6 +15,11 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: 'id',
         as: 'markedByUser',
       });
+      seminar_guest_attendance.belongsTo(models.user_account, {
+        foreignKey: 'convertedToUserId',
+        targetKey: 'id',
+        as: 'convertedUser',
+      });
     }
   }
 

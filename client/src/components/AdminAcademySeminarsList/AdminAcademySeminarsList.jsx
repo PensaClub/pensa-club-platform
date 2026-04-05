@@ -1,15 +1,22 @@
 // src/components/AdminAcademySeminarsList/AdminAcademySeminarsList.jsx
 // Prefix: aalcs-
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, lazy, Suspense } from 'react';
 import { LocalizedLink as Link } from '../LocalizedLink/LocalizedLink';
 import { useTranslation } from 'react-i18next';
 import { useAcademyCourses } from '../contexts/AcademyCoursesProvider';
-import { Plus, BookOpen, RefreshCw, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Plus, BookOpen, RefreshCw, ChevronLeft, ChevronRight, BarChart3 } from 'lucide-react';
 import SeminarCard from './SeminarCard/SeminarCard';
 import SeminarFilters from './SeminarFilters/SeminarFilters';
 import SeminarModals from './SeminarModals/SeminarModals';
 import './adminAcademySeminarsList.css';
+
+const AdminSeminarStatistics = lazy(() => import('./AdminSeminarStatistics/AdminSeminarStatistics'));
+
+const TABS = [
+  { key: 'seminars', icon: BookOpen },
+  { key: 'statistics', icon: BarChart3 },
+];
 
 const AdminAcademySeminarsList = () => {
   const { t } = useTranslation('academy-admin');
@@ -20,6 +27,15 @@ const AdminAcademySeminarsList = () => {
     unpublishSeminar,
     cancelSeminar,
   } = useAcademyCourses();
+
+  // Hash-based tab routing
+  const initialTab = window.location.hash?.replace('#', '') || 'seminars';
+  const [activeTab, setActiveTab] = useState(TABS.some(tab => tab.key === initialTab) ? initialTab : 'seminars');
+
+  const handleTabChange = (key) => {
+    setActiveTab(key);
+    window.location.hash = key;
+  };
 
   const [seminars, setSeminars] = useState([]);
   const [pagination, setPagination] = useState({ page: 1, totalPages: 1, total: 0 });
@@ -61,8 +77,10 @@ const AdminAcademySeminarsList = () => {
   }, [search]);
 
   useEffect(() => {
-    fetchSeminars(1);
-  }, [debouncedSearch, status, type, sortBy]);
+    if (activeTab === 'seminars') {
+      fetchSeminars(1);
+    }
+  }, [debouncedSearch, status, type, sortBy, activeTab]);
 
   // =========================================================
   //                    ACTIONS
@@ -142,93 +160,122 @@ const AdminAcademySeminarsList = () => {
               </p>
             </div>
             <div className="aalcs-header-actions">
-              <button className="aalcs-btn aalcs-btn-refresh" onClick={() => fetchSeminars(pagination.page)} title={t('adminSeminars.refresh', 'Обнови')}>
-                <RefreshCw size={16} className={isLoading ? 'aalcs-spin' : ''} />
-              </button>
-              <Link to="/academy/admin/create-seminar" className="aalcs-btn aalcs-btn-create">
-                <Plus size={18} />
-                {t('adminSeminars.createSeminar', 'Нов семинар')}
-              </Link>
+              {activeTab === 'seminars' && (
+                <>
+                  <button className="aalcs-btn aalcs-btn-refresh" onClick={() => fetchSeminars(pagination.page)} title={t('adminSeminars.refresh', 'Обнови')}>
+                    <RefreshCw size={16} className={isLoading ? 'aalcs-spin' : ''} />
+                  </button>
+                  <Link to="/academy/admin/create-seminar" className="aalcs-btn aalcs-btn-create">
+                    <Plus size={18} />
+                    {t('adminSeminars.createSeminar', 'Нов семинар')}
+                  </Link>
+                </>
+              )}
             </div>
           </div>
 
-          {/* Stats bar */}
-          <div className="aalcs-stats-bar">
-            <div className="aalcs-stat">
-              <BookOpen size={16} />
-              <span className="aalcs-stat-value">{pagination.total || 0}</span>
-              <span className="aalcs-stat-label">{t('adminSeminars.stats.total', 'общо')}</span>
-            </div>
-            <div className="aalcs-stat">
-              <span className="aalcs-stat-value">{seminars.filter(s => s.isPublished).length}</span>
-              <span className="aalcs-stat-label">{t('adminSeminars.stats.published', 'публикувани')}</span>
-            </div>
-            <div className="aalcs-stat">
-              <span className="aalcs-stat-value">{seminars.filter(s => s.status === 'scheduled').length}</span>
-              <span className="aalcs-stat-label">{t('adminSeminars.stats.scheduled', 'насрочени')}</span>
-            </div>
-            <div className="aalcs-stat">
-              <span className="aalcs-stat-value">{seminars.filter(s => !s.isPublished).length}</span>
-              <span className="aalcs-stat-label">{t('adminSeminars.stats.drafts', 'чернови')}</span>
-            </div>
-          </div>
+          {/* Tabs */}
+          <nav className="aalcs-tabs">
+            {TABS.map(({ key, icon: Icon }) => (
+              <button
+                key={key}
+                className={`aalcs-tab ${activeTab === key ? 'aalcs-tab-active' : ''}`}
+                onClick={() => handleTabChange(key)}
+              >
+                <Icon size={18} />
+                <span>{t(`adminSeminars.tabs.${key}`, key === 'seminars' ? 'Семинари' : 'Статистика')}</span>
+              </button>
+            ))}
+          </nav>
         </div>
 
-        {/* Filters */}
-        <SeminarFilters
-          search={search}
-          setSearch={setSearch}
-          status={status}
-          setStatus={setStatus}
-          type={type}
-          setType={setType}
-          sortBy={sortBy}
-          setSortBy={setSortBy}
-        />
-
-        {/* Grid */}
-        {isLoading && seminars.length === 0 ? (
-          <div className="aalcs-loading">
-            <div className="aalcs-spinner" />
-            <p>{t('adminSeminars.loading', 'Зареждане на семинари...')}</p>
-          </div>
-        ) : seminars.length === 0 ? (
-          <div className="aalcs-empty">
-            <BookOpen size={48} strokeWidth={1} />
-            <h3>{t('adminSeminars.empty.title', 'Няма намерени семинари')}</h3>
-            <p>{t('adminSeminars.empty.description', 'Създайте първия си семинар или променете филтрите')}</p>
-            <Link to="/academy/admin/create-seminar" className="aalcs-btn aalcs-btn-create">
-              <Plus size={18} />
-              {t('adminSeminars.createSeminar', 'Нов семинар')}
-            </Link>
-          </div>
-        ) : (
+        {/* Tab Content */}
+        {activeTab === 'seminars' && (
           <>
-            <div className="aalcs-grid">
-              {seminars.map((sem) => (
-                <SeminarCard
-                  key={sem.id}
-                  seminar={sem}
-                  actionLoading={actionLoading}
-                  onPublishToggle={handlePublishToggle}
-                  onDelete={setDeleteModal}
-                  onCancel={setCancelModal}
-                />
-              ))}
+            {/* Stats bar */}
+            <div className="aalcs-stats-bar">
+              <div className="aalcs-stat">
+                <BookOpen size={16} />
+                <span className="aalcs-stat-value">{pagination.total || 0}</span>
+                <span className="aalcs-stat-label">{t('adminSeminars.stats.total', 'общо')}</span>
+              </div>
+              <div className="aalcs-stat">
+                <span className="aalcs-stat-value">{seminars.filter(s => s.isPublished).length}</span>
+                <span className="aalcs-stat-label">{t('adminSeminars.stats.published', 'публикувани')}</span>
+              </div>
+              <div className="aalcs-stat">
+                <span className="aalcs-stat-value">{seminars.filter(s => s.status === 'scheduled').length}</span>
+                <span className="aalcs-stat-label">{t('adminSeminars.stats.scheduled', 'насрочени')}</span>
+              </div>
+              <div className="aalcs-stat">
+                <span className="aalcs-stat-value">{seminars.filter(s => !s.isPublished).length}</span>
+                <span className="aalcs-stat-label">{t('adminSeminars.stats.drafts', 'чернови')}</span>
+              </div>
             </div>
 
-            {pagination.totalPages > 1 && (
-              <div className="aalcs-pagination">
-                <button className="aalcs-page-btn" onClick={() => handlePageChange(pagination.page - 1)} disabled={pagination.page <= 1}>
-                  <ChevronLeft size={16} />
-                </button>
-                <span className="aalcs-page-info">{pagination.page} / {pagination.totalPages}</span>
-                <button className="aalcs-page-btn" onClick={() => handlePageChange(pagination.page + 1)} disabled={pagination.page >= pagination.totalPages}>
-                  <ChevronRight size={16} />
-                </button>
+            {/* Filters */}
+            <SeminarFilters
+              search={search}
+              setSearch={setSearch}
+              status={status}
+              setStatus={setStatus}
+              type={type}
+              setType={setType}
+              sortBy={sortBy}
+              setSortBy={setSortBy}
+            />
+
+            {/* Grid */}
+            {isLoading && seminars.length === 0 ? (
+              <div className="aalcs-loading">
+                <div className="aalcs-spinner" />
+                <p>{t('adminSeminars.loading', 'Зареждане на семинари...')}</p>
               </div>
+            ) : seminars.length === 0 ? (
+              <div className="aalcs-empty">
+                <BookOpen size={48} strokeWidth={1} />
+                <h3>{t('adminSeminars.empty.title', 'Няма намерени семинари')}</h3>
+                <p>{t('adminSeminars.empty.description', 'Създайте първия си семинар или променете филтрите')}</p>
+                <Link to="/academy/admin/create-seminar" className="aalcs-btn aalcs-btn-create">
+                  <Plus size={18} />
+                  {t('adminSeminars.createSeminar', 'Нов семинар')}
+                </Link>
+              </div>
+            ) : (
+              <>
+                <div className="aalcs-grid">
+                  {seminars.map((sem) => (
+                    <SeminarCard
+                      key={sem.id}
+                      seminar={sem}
+                      actionLoading={actionLoading}
+                      onPublishToggle={handlePublishToggle}
+                      onDelete={setDeleteModal}
+                      onCancel={setCancelModal}
+                    />
+                  ))}
+                </div>
+
+                {pagination.totalPages > 1 && (
+                  <div className="aalcs-pagination">
+                    <button className="aalcs-page-btn" onClick={() => handlePageChange(pagination.page - 1)} disabled={pagination.page <= 1}>
+                      <ChevronLeft size={16} />
+                    </button>
+                    <span className="aalcs-page-info">{pagination.page} / {pagination.totalPages}</span>
+                    <button className="aalcs-page-btn" onClick={() => handlePageChange(pagination.page + 1)} disabled={pagination.page >= pagination.totalPages}>
+                      <ChevronRight size={16} />
+                    </button>
+                  </div>
+                )}
+              </>
             )}
           </>
+        )}
+
+        {activeTab === 'statistics' && (
+          <Suspense fallback={<div className="aalcs-loading"><div className="aalcs-spinner" /></div>}>
+            <AdminSeminarStatistics />
+          </Suspense>
         )}
       </div>
 

@@ -342,6 +342,19 @@ export const academyCoursesServiceFactory = () => {
       return requester.get(`${apiUrl}/academy/seminars/${seminarId}/statistics`);
     },
 
+    getAdminSeminarStatistics: async (params = {}) => {
+      const queryString = toQueryString(params);
+      return requester.get(`${apiUrl}/academy/seminars/admin/statistics?${queryString}`);
+    },
+
+    getSeminarAttendanceDetail: async (seminarId) => {
+      return requester.get(`${apiUrl}/academy/seminars/admin/attendance-detail/${seminarId}`);
+    },
+
+    sendSeminarEmail: async (data) => {
+      return requester.post(`${apiUrl}/academy/seminars/admin/send-email`, data);
+    },
+
     // =========================================================
     //                    SEMINAR REGISTRATION
     // =========================================================

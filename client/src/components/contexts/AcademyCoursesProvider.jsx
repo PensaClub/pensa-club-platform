@@ -986,6 +986,50 @@ export const AcademyCoursesProvider = ({ children }) => {
     }
   }, [isAdmin]);
 
+  const getAdminSeminarStatistics = useCallback(async (params = {}) => {
+    if (!isAdmin && !isMentor) {
+      toast.error('Нямате права за тази операция');
+      return null;
+    }
+    try {
+      return await coursesService.getAdminSeminarStatistics(params);
+    } catch (error) {
+      console.error('Error fetching seminar statistics:', error);
+      throw error;
+    }
+  }, [isAdmin, isMentor]);
+
+  const sendSeminarEmail = useCallback(async (data) => {
+    if (!isAdmin && !isMentor) {
+      toast.error('Нямате права за тази операция');
+      return null;
+    }
+    try {
+      const result = await coursesService.sendSeminarEmail(data);
+      if (result?.success) {
+        toast.success('Имейлът е изпратен успешно');
+      }
+      return result;
+    } catch (error) {
+      console.error('Error sending seminar email:', error);
+      toast.error('Грешка при изпращане на имейл');
+      throw error;
+    }
+  }, [isAdmin, isMentor]);
+
+  const getSeminarAttendanceDetail = useCallback(async (seminarId) => {
+    if (!isAdmin && !isMentor) {
+      toast.error('Нямате права за тази операция');
+      return null;
+    }
+    try {
+      return await coursesService.getSeminarAttendanceDetail(seminarId);
+    } catch (error) {
+      console.error('Error fetching attendance detail:', error);
+      throw error;
+    }
+  }, [isAdmin, isMentor]);
+
   // =========================================================
   //                    SEMINAR REGISTRATION
   // =========================================================
@@ -2276,6 +2320,9 @@ export const AcademyCoursesProvider = ({ children }) => {
     startSeminar,
     stopSeminar,
     completeSeminar,
+    getAdminSeminarStatistics,
+    getSeminarAttendanceDetail,
+    sendSeminarEmail,
 
     // Seminar Registration
     registerForSeminar,
