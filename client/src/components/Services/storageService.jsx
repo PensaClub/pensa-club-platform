@@ -64,5 +64,13 @@ export const storageServiceFactory = () => {
     getSyncStatus: async () => {
       return requester.get(`${apiUrl}/admin/storage/sync-status`);
     },
+
+    initializeStructure: async () => {
+      return requester.post(`${apiUrl}/admin/storage/initialize-structure`);
+    },
+
+    createProject: async (name) => {
+      return requester.post(`${apiUrl}/admin/storage/create-project`, { name });
+    },
   };
 };

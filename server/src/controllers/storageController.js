@@ -58,7 +58,9 @@ const PROTECTED_ROOT_FOLDERS = [
     'publications/',
     'stories/',
     'clubs/',
-    'profiles/'
+    'profiles/',
+    'pensa-foundation/',
+    'courses/'
 ];
 
 const isProtectedPath = (filePath) => {
@@ -188,6 +190,41 @@ storageController.post(
                     url
                 }
             });
+
+            // Send branded email notification for foundation uploads
+            if (fullPath.startsWith('pensa-foundation/')) {
+                try {
+                    const { forwardEmailsViaZoho } = require('../utils/zohoEmails');
+                    const foundationEmails = require('../utils/foundationEmailTemplates');
+                    const { user_account, user_details } = require('../sequelize/models/index');
+
+                    const uploader = await user_account.findByPk(req.user.userId, {
+                        include: [{ model: user_details, as: 'details', attributes: ['firstName', 'lastName'] }],
+                    });
+                    const uploaderName = uploader?.details
+                        ? `${uploader.details.firstName || ''} ${uploader.details.lastName || ''}`.trim()
+                        : uploader?.email || 'Потребител';
+
+                    let context = 'документ';
+                    if (fullPath.includes('/financial-reports/')) context = 'финансов отчет';
+                    else if (fullPath.includes('/contracts/')) context = 'договор';
+                    else if (fullPath.includes('/meetings/')) context = 'протокол от среща';
+                    else if (fullPath.includes('/press-releases/')) context = 'прес съобщение';
+                    else if (fullPath.includes('/logos/') || fullPath.includes('/templates/')) context = 'брандинг материал';
+
+                    const folderPath = fullPath.substring(0, fullPath.lastIndexOf('/') + 1);
+                    const emailData = foundationEmails.fileUploaded({ uploaderName, fileName: sanitizedName, folderPath, context });
+
+                    await forwardEmailsViaZoho({
+                        userEmail: uploader?.email,
+                        subject: emailData.subject,
+                        toAddresses: 'pensa.club@gmail.com',
+                        formattedBody: emailData.html,
+                    });
+                } catch (emailErr) {
+                    console.error('Email notification failed:', emailErr);
+                }
+            }
         } catch (err) {
             next(err);
         }
@@ -257,6 +294,33 @@ storageController.delete(
             await file.delete();
 
             res.json({ success: true, deleted: filePath });
+
+            // Email notification for foundation file deletion
+            if (filePath.startsWith('pensa-foundation/')) {
+                try {
+                    const { forwardEmailsViaZoho } = require('../utils/zohoEmails');
+                    const foundationEmails = require('../utils/foundationEmailTemplates');
+                    const { user_account, user_details } = require('../sequelize/models/index');
+
+                    const deleter = await user_account.findByPk(req.user.userId, {
+                        include: [{ model: user_details, as: 'details', attributes: ['firstName', 'lastName'] }],
+                    });
+                    const deleterName = deleter?.details
+                        ? `${deleter.details.firstName || ''} ${deleter.details.lastName || ''}`.trim()
+                        : 'Потребител';
+                    const fileName = filePath.split('/').pop();
+
+                    const emailData = foundationEmails.fileDeleted({ deleterName, fileName, filePath });
+                    await forwardEmailsViaZoho({
+                        userEmail: deleter?.email,
+                        subject: emailData.subject,
+                        toAddresses: 'pensa.club@gmail.com',
+                        formattedBody: emailData.html,
+                    });
+                } catch (emailErr) {
+                    console.error('Delete email notification failed:', emailErr);
+                }
+            }
         } catch (err) {
             next(err);
         }
@@ -810,5 +874,149 @@ function getNextHourlyCron() {
     }
     return next.toISOString();
 }
+
+// ─── 13. INITIALIZE FOUNDATION STRUCTURE ─────────────────────────────────────
+storageController.post(
+    '/initialize-structure',
+    isAuth,
+    rbac.checkPermission('admin', 'update'),
+    async (req, res, next) => {
+        try {
+            const FOUNDATION_STRUCTURE = [
+                'pensa-foundation/',
+                'pensa-foundation/administration/',
+                'pensa-foundation/administration/contracts/',
+                'pensa-foundation/administration/financial-reports/',
+                'pensa-foundation/administration/hr/',
+                'pensa-foundation/projects/',
+                'pensa-foundation/projects/project-reaction/',
+                'pensa-foundation/projects/project-reaction/documents/',
+                'pensa-foundation/projects/project-reaction/reports/',
+                'pensa-foundation/projects/project-reaction/media/',
+                'pensa-foundation/projects/digibridge-academy/',
+                'pensa-foundation/projects/digibridge-academy/documents/',
+                'pensa-foundation/projects/digibridge-academy/reports/',
+                'pensa-foundation/communications/',
+                'pensa-foundation/communications/branding/',
+                'pensa-foundation/communications/branding/logos/',
+                'pensa-foundation/communications/branding/templates/',
+                'pensa-foundation/communications/press-releases/',
+                'pensa-foundation/meetings/',
+                'pensa-foundation/meetings/2026/',
+                'courses/',
+            ];
+
+            let created = 0;
+            let existing = 0;
+
+            for (const folderPath of FOUNDATION_STRUCTURE) {
+                const file = bucket.file(folderPath);
+                const [exists] = await file.exists();
+
+                if (exists) {
+                    existing++;
+                } else {
+                    await file.save('', {
+                        metadata: {
+                            contentType: 'application/x-directory',
+                            metadata: {
+                                createdBy: req.user.userId,
+                                createdAt: new Date().toISOString()
+                            }
+                        },
+                        resumable: false
+                    });
+                    created++;
+                }
+            }
+
+            res.json({ success: true, created, existing });
+        } catch (err) {
+            next(err);
+        }
+    }
+);
+
+// ─── 14. CREATE PROJECT ──────────────────────────────────────────────────────
+storageController.post(
+    '/create-project',
+    isAuth,
+    rbac.checkPermission('admin', 'update'),
+    async (req, res, next) => {
+        try {
+            const { name } = req.body;
+
+            if (!name || !name.trim()) {
+                return res.status(400).json({ error: 'Project name is required' });
+            }
+
+            // Sanitize: lowercase, replace spaces with hyphens, remove non-alphanumeric except hyphens
+            const sanitized = name.trim().toLowerCase()
+                .replace(/\s+/g, '-')
+                .replace(/[^a-z0-9\-\u00C0-\u024F\u0400-\u04FF]/g, '')
+                .replace(/-+/g, '-')
+                .replace(/^-|-$/g, '');
+
+            if (!sanitized) {
+                return res.status(400).json({ error: 'Invalid project name' });
+            }
+
+            const basePath = `pensa-foundation/projects/${sanitized}/`;
+            const subfolders = [
+                basePath,
+                `${basePath}documents/`,
+                `${basePath}reports/`,
+                `${basePath}media/`,
+            ];
+
+            for (const folderPath of subfolders) {
+                const file = bucket.file(folderPath);
+                const [exists] = await file.exists();
+
+                if (!exists) {
+                    await file.save('', {
+                        metadata: {
+                            contentType: 'application/x-directory',
+                            metadata: {
+                                createdBy: req.user.userId,
+                                createdAt: new Date().toISOString()
+                            }
+                        },
+                        resumable: false
+                    });
+                }
+            }
+
+            res.json({ success: true, projectPath: basePath });
+
+            // Send branded email notification for new project
+            try {
+                const { forwardEmailsViaZoho } = require('../utils/zohoEmails');
+                const foundationEmails = require('../utils/foundationEmailTemplates');
+                const { user_account, user_details } = require('../sequelize/models/index');
+
+                const creator = await user_account.findByPk(req.user.userId, {
+                    include: [{ model: user_details, as: 'details', attributes: ['firstName', 'lastName'] }],
+                });
+                const creatorName = creator?.details
+                    ? `${creator.details.firstName || ''} ${creator.details.lastName || ''}`.trim()
+                    : creator?.email || 'Потребител';
+
+                const emailData = foundationEmails.projectCreated({ creatorName, projectName: name, projectPath: basePath });
+
+                await forwardEmailsViaZoho({
+                    userEmail: creator?.email,
+                    subject: emailData.subject,
+                    toAddresses: 'pensa.club@gmail.com',
+                    formattedBody: emailData.html,
+                });
+            } catch (emailErr) {
+                console.error('Email notification failed:', emailErr);
+            }
+        } catch (err) {
+            next(err);
+        }
+    }
+);
 
 module.exports = storageController;

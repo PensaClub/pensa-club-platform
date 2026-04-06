@@ -74,7 +74,7 @@
 
 .csm-breadcrumb-item--active {
     color: #d4a853;
-    font-weight: 600;
+    font-weight: 500;
 }
 
 /* =========================================================
@@ -308,6 +308,161 @@
 }
 
 /* =========================================================
+                    QUICK LINKS
+   ========================================================= */
+
+.csm-quick-links {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px 8px 4px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    margin-bottom: 4px;
+}
+
+.csm-quick-links-title {
+    font-size: 0.72rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #4a5568;
+    padding: 0 4px 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.csm-quick-links-title span {
+    font-size: revert;
+}
+
+.csm-quick-links-add {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    border: 1px solid rgba(212, 168, 83, 0.25);
+    background: rgba(212, 168, 83, 0.1);
+    color: #d4a853;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    transition: background 0.15s, color 0.15s;
+    font-family: inherit;
+}
+
+.csm-quick-links-add:hover {
+    background: rgba(212, 168, 83, 0.2);
+    color: #e4bd6a;
+}
+
+.csm-quick-links-form {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px;
+}
+
+.csm-quick-links-form input {
+    flex: 1;
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(212, 168, 83, 0.2);
+    background: rgba(0, 0, 0, 0.2);
+    color: #f1f5f9;
+    font-size: 0.74rem;
+    outline: none;
+    font-family: inherit;
+    min-width: 0;
+}
+
+.csm-quick-links-form input:focus {
+    border-color: rgba(212, 168, 83, 0.4);
+}
+
+.csm-quick-links-divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.06);
+    margin: 4px 4px;
+}
+
+.csm-quick-link-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.csm-quick-link-wrapper .csm-quick-link {
+    flex: 1;
+    min-width: 0;
+}
+
+.csm-quick-link-remove {
+    position: absolute;
+    right: 4px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+    border: none;
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 0;
+    line-height: 1;
+    transition: background 0.15s;
+    font-family: inherit;
+}
+
+.csm-quick-link-wrapper:hover .csm-quick-link-remove {
+    display: inline-flex;
+}
+
+.csm-quick-link-remove:hover {
+    background: rgba(239, 68, 68, 0.3);
+}
+
+.csm-quick-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 8px;
+    border-radius: 5px;
+    border: none;
+    background: none;
+    color: #94a3b8;
+    font-size: 0.78rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: color 0.15s, background 0.15s;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.csm-quick-link span {
+    font-size: revert;
+}
+
+.csm-quick-link:hover {
+    color: #d4a853;
+    background: rgba(212, 168, 83, 0.08);
+}
+
+.csm-quick-link--active {
+    color: #d4a853;
+    background: rgba(212, 168, 83, 0.12);
+    font-weight: 500;
+}
+
+/* =========================================================
                     MAIN: SIDEBAR + CONTENT
    ========================================================= */
 
@@ -345,7 +500,7 @@
 
 .csm-sidebar-title {
     font-size: 0.72rem;
-    font-weight: 700;
+    font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.06em;
     color: #4a5568;
@@ -376,7 +531,7 @@
 
 .csm-tree-item--active .csm-tree-label {
     color: #d4a853;
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .csm-tree-toggle {
@@ -598,7 +753,7 @@
 .csm-list-table thead th {
     text-align: left;
     padding: 8px 10px;
-    font-weight: 600;
+    font-weight: 500;
     font-size: 0.72rem;
     text-transform: uppercase;
     letter-spacing: 0.04em;
@@ -835,7 +990,7 @@
     border-radius: 8px;
     color: #d4a853;
     font-size: 0.95rem;
-    font-weight: 600;
+    font-weight: 500;
     z-index: 10;
     pointer-events: none;
 }
@@ -1145,6 +1300,61 @@
 
 [data-theme="light"] .csm-sidebar-title {
     color: #94a3b8;
+}
+
+[data-theme="light"] .csm-quick-links {
+    border-bottom-color: rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .csm-quick-links-title {
+    color: #94a3b8;
+}
+
+[data-theme="light"] .csm-quick-link {
+    color: #475569;
+}
+
+[data-theme="light"] .csm-quick-link:hover {
+    color: #8b2040;
+    background: rgba(139, 32, 64, 0.06);
+}
+
+[data-theme="light"] .csm-quick-link--active {
+    color: #8b2040;
+    background: rgba(139, 32, 64, 0.08);
+}
+
+[data-theme="light"] .csm-quick-links-add {
+    border-color: rgba(139, 32, 64, 0.2);
+    background: rgba(139, 32, 64, 0.08);
+    color: #8b2040;
+}
+
+[data-theme="light"] .csm-quick-links-add:hover {
+    background: rgba(139, 32, 64, 0.15);
+}
+
+[data-theme="light"] .csm-quick-links-form input {
+    background: #fff;
+    border-color: rgba(139, 32, 64, 0.15);
+    color: #1e293b;
+}
+
+[data-theme="light"] .csm-quick-links-form input:focus {
+    border-color: rgba(139, 32, 64, 0.3);
+}
+
+[data-theme="light"] .csm-quick-links-divider {
+    background: rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .csm-quick-link-remove {
+    background: rgba(220, 38, 38, 0.1);
+    color: #dc2626;
+}
+
+[data-theme="light"] .csm-quick-link-remove:hover {
+    background: rgba(220, 38, 38, 0.2);
 }
 
 [data-theme="light"] .csm-tree-toggle {

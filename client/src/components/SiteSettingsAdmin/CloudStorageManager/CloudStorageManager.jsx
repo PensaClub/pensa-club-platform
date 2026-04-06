@@ -11,6 +11,14 @@ import './cloudStorageManager.css';
 
 const storageService = storageServiceFactory();
 
+const DEFAULT_QUICK_LINKS = [
+    { id: 'seminars', label: 'Семинари', emoji: '📚', path: 'seminars/' },
+    { id: 'projects', label: 'Проекти', emoji: '📁', path: 'pensa-foundation/projects/' },
+    { id: 'admin', label: 'Администрация', emoji: '🏢', path: 'pensa-foundation/administration/' },
+    { id: 'comms', label: 'Комуникации', emoji: '📢', path: 'pensa-foundation/communications/' },
+    { id: 'meetings', label: 'Срещи', emoji: '📋', path: 'pensa-foundation/meetings/' },
+];
+
 const formatSize = (bytes) => {
     if (!bytes) return '\u2014';
     if (bytes < 1024) return `${bytes} B`;
@@ -60,6 +68,17 @@ const CloudStorageManager = () => {
     const [deleteConfirm, setDeleteConfirm] = useState(null);
     const [syncing, setSyncing] = useState(false);
     const [syncResult, setSyncResult] = useState(null);
+    const [initializing, setInitializing] = useState(false);
+    const [showCreateProject, setShowCreateProject] = useState(false);
+    const [newProjectName, setNewProjectName] = useState('');
+    const [bulkDeleteConfirm, setBulkDeleteConfirm] = useState(false);
+    const [removeLinkConfirm, setRemoveLinkConfirm] = useState(null);
+    const [customLinks, setCustomLinks] = useState(() => {
+        try { return JSON.parse(localStorage.getItem('csm-custom-quick-links') || '[]'); }
+        catch { return []; }
+    });
+    const [showAddLink, setShowAddLink] = useState(false);
+    const [newLinkLabel, setNewLinkLabel] = useState('');
 
     // Load files for current path
     const loadFiles = useCallback(async (path = currentPath) => {
@@ -263,6 +282,62 @@ const CloudStorageManager = () => {
         }
     };
 
+    // Initialize foundation structure
+    const handleInitialize = async () => {
+        setInitializing(true);
+        try {
+            const result = await storageService.initializeStructure();
+            toast.success(`Създадени ${result.created} нови папки`);
+            loadFiles();
+            loadFolderTree('');
+        } catch {
+            toast.error('Грешка при инициализация');
+        } finally {
+            setInitializing(false);
+        }
+    };
+
+    // Create project
+    const handleCreateProject = async () => {
+        if (!newProjectName.trim()) return;
+        try {
+            const result = await storageService.createProject(newProjectName.trim());
+            toast.success(`Проект създаден: ${result.projectPath}`);
+            setShowCreateProject(false);
+            setNewProjectName('');
+            navigateTo(result.projectPath);
+            loadFolderTree('');
+        } catch {
+            toast.error('Грешка при създаване на проект');
+        }
+    };
+
+    // Add custom quick link
+    const handleAddQuickLink = () => {
+        if (!newLinkLabel.trim() || !currentPath) return;
+        const newLink = {
+            id: `custom-${Date.now()}`,
+            label: newLinkLabel.trim(),
+            emoji: '📌',
+            path: currentPath,
+        };
+        const updated = [...customLinks, newLink];
+        setCustomLinks(updated);
+        localStorage.setItem('csm-custom-quick-links', JSON.stringify(updated));
+        setShowAddLink(false);
+        setNewLinkLabel('');
+        toast.success('Бърза връзка добавена');
+    };
+
+    // Remove custom quick link
+    const handleRemoveQuickLink = (linkId) => {
+        const updated = customLinks.filter(l => l.id !== linkId);
+        setCustomLinks(updated);
+        localStorage.setItem('csm-custom-quick-links', JSON.stringify(updated));
+        setRemoveLinkConfirm(null);
+        toast.success('Бърза връзка премахната');
+    };
+
     // Bulk delete
     const handleBulkDelete = async () => {
         const items = Array.from(selectedItems);
@@ -286,6 +361,7 @@ const CloudStorageManager = () => {
         if (successCount > 0) toast.success(t('cloudStorage.bulkDeleteSuccess', { count: successCount }));
         if (failCount > 0) toast.error(t('cloudStorage.bulkDeleteError', { count: failCount }));
         setSelectedItems(new Set());
+        setBulkDeleteConfirm(false);
         loadFiles();
         loadStorageUsage();
         loadFolderTree(currentPath);
@@ -719,6 +795,26 @@ const CloudStorageManager = () => {
                         style={{ display: 'none' }}
                         onChange={(e) => { handleUpload(e.target.files); e.target.value = ''; }}
                     />
+                    {!currentPath && (
+                        <button
+                            className="csm-btn csm-btn--sync"
+                            onClick={handleInitialize}
+                            disabled={initializing}
+                            title="Инициализирай структурата на фондацията"
+                        >
+                            {initializing ? <RefreshCw size={16} className="csm-spin" /> : <FolderPlus size={16} />}
+                            <span>Инициализирай</span>
+                        </button>
+                    )}
+                    {currentPath === 'pensa-foundation/projects/' && (
+                        <button
+                            className="csm-btn csm-btn--primary"
+                            onClick={() => setShowCreateProject(true)}
+                        >
+                            <FolderPlus size={16} />
+                            <span>Нов проект</span>
+                        </button>
+                    )}
                 </div>
                 <div className="csm-toolbar-right">
                     <div className="csm-view-toggle">
@@ -801,10 +897,97 @@ const CloudStorageManager = () => {
                 </div>
             )}
 
+            {/* Create Project inline form */}
+            {showCreateProject && (
+                <div className="csm-new-folder">
+                    <FolderPlus size={16} />
+                    <input
+                        type="text"
+                        placeholder="Име на проекта (напр. erasmus-plus)"
+                        value={newProjectName}
+                        onChange={(e) => setNewProjectName(e.target.value)}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') handleCreateProject();
+                            if (e.key === 'Escape') { setShowCreateProject(false); setNewProjectName(''); }
+                        }}
+                        autoFocus
+                    />
+                    <button className="csm-btn csm-btn--small csm-btn--primary" onClick={handleCreateProject}>
+                        Създай
+                    </button>
+                    <button className="csm-btn csm-btn--small" onClick={() => { setShowCreateProject(false); setNewProjectName(''); }}>
+                        {t('cloudStorage.cancel')}
+                    </button>
+                </div>
+            )}
+
             {/* Main content area */}
             <div className="csm-main">
                 {/* Sidebar folder tree */}
                 <div className="csm-sidebar">
+                    <div className="csm-quick-links">
+                        <div className="csm-quick-links-title">
+                            <span>Бързи връзки</span>
+                            {currentPath && (
+                                <button
+                                    className="csm-quick-links-add"
+                                    onClick={() => { setShowAddLink(!showAddLink); setNewLinkLabel(''); }}
+                                    title="Добави бърза връзка за текущата папка"
+                                >
+                                    +
+                                </button>
+                            )}
+                        </div>
+                        {showAddLink && (
+                            <div className="csm-quick-links-form">
+                                <input
+                                    type="text"
+                                    placeholder="Име на връзката"
+                                    value={newLinkLabel}
+                                    onChange={(e) => setNewLinkLabel(e.target.value)}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') handleAddQuickLink();
+                                        if (e.key === 'Escape') { setShowAddLink(false); setNewLinkLabel(''); }
+                                    }}
+                                    autoFocus
+                                />
+                                <button className="csm-btn csm-btn--small csm-btn--primary" onClick={handleAddQuickLink}>
+                                    Добави
+                                </button>
+                            </div>
+                        )}
+                        {DEFAULT_QUICK_LINKS.map(link => (
+                            <button
+                                key={link.id}
+                                className={`csm-quick-link ${currentPath.startsWith(link.path) ? 'csm-quick-link--active' : ''}`}
+                                onClick={() => navigateTo(link.path)}
+                            >
+                                <span>{link.emoji}</span> <span>{link.label}</span>
+                            </button>
+                        ))}
+                        {customLinks.length > 0 && (
+                            <>
+                                <div className="csm-quick-links-divider" />
+                                {customLinks.map(link => (
+                                    <div key={link.id} className="csm-quick-link-wrapper">
+                                        <button
+                                            className={`csm-quick-link ${currentPath === link.path ? 'csm-quick-link--active' : ''}`}
+                                            onClick={() => navigateTo(link.path)}
+                                        >
+                                            <span>{link.emoji}</span> <span>{link.label}</span>
+                                        </button>
+                                        <button
+                                            className="csm-quick-link-remove"
+                                            onClick={() => setRemoveLinkConfirm(link)}
+                                            title="Премахни бърза връзка"
+                                        >
+                                            &times;
+                                        </button>
+                                    </div>
+                                ))}
+                            </>
+                        )}
+                    </div>
                     <div className="csm-sidebar-title">{t('cloudStorage.folders')}</div>
                     <div className="csm-tree">
                         {renderTreeNode('')}
@@ -875,7 +1058,7 @@ const CloudStorageManager = () => {
             {selectedItems.size > 0 && (
                 <div className="csm-bulk-bar">
                     <span>{t('cloudStorage.selectedCount', { count: selectedItems.size })}</span>
-                    <button className="csm-btn csm-btn--danger" onClick={handleBulkDelete}>
+                    <button className="csm-btn csm-btn--danger" onClick={() => setBulkDeleteConfirm(true)}>
                         <Trash2 size={16} />
                         <span>{t('cloudStorage.deleteSelected')}</span>
                     </button>
@@ -901,6 +1084,48 @@ const CloudStorageManager = () => {
                             </button>
                             <button className="csm-btn" onClick={() => setDeleteConfirm(null)}>
                                 {t('cloudStorage.cancel')}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Bulk delete confirm modal */}
+            {bulkDeleteConfirm && (
+                <div className="csm-modal-overlay" onClick={() => setBulkDeleteConfirm(false)}>
+                    <div className="csm-modal" onClick={(e) => e.stopPropagation()}>
+                        <h4>{t('cloudStorage.confirmDelete')}</h4>
+                        <p>Сигурни ли сте, че искате да изтриете {selectedItems.size} файла?</p>
+                        <div className="csm-modal-actions">
+                            <button
+                                className="csm-btn csm-btn--danger"
+                                onClick={handleBulkDelete}
+                            >
+                                Да, изтрий
+                            </button>
+                            <button className="csm-btn" onClick={() => setBulkDeleteConfirm(false)}>
+                                {t('cloudStorage.cancel')}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Remove quick link confirm modal */}
+            {removeLinkConfirm && (
+                <div className="csm-modal-overlay" onClick={() => setRemoveLinkConfirm(null)}>
+                    <div className="csm-modal" onClick={(e) => e.stopPropagation()}>
+                        <h4>Премахване на бърза връзка</h4>
+                        <p>Сигурни ли сте, че искате да премахнете тази бърза връзка?</p>
+                        <div className="csm-modal-actions">
+                            <button
+                                className="csm-btn csm-btn--danger"
+                                onClick={() => handleRemoveQuickLink(removeLinkConfirm.id)}
+                            >
+                                Да, премахни
+                            </button>
+                            <button className="csm-btn" onClick={() => setRemoveLinkConfirm(null)}>
+                                Отказ
                             </button>
                         </div>
                     </div>
