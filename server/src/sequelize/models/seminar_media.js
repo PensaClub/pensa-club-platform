@@ -32,7 +32,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       uploadedBy: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         field: 'uploaded_by',
       },
       mediaType: {
