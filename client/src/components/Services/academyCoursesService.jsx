@@ -342,12 +342,86 @@ export const academyCoursesServiceFactory = () => {
       return requester.get(`${apiUrl}/academy/seminars/${seminarId}/statistics`);
     },
 
+    getAdminSeminarStatistics: async (params = {}) => {
+      const queryString = toQueryString(params);
+      return requester.get(`${apiUrl}/academy/seminars/admin/statistics?${queryString}`);
+    },
+
+    getSeminarAttendanceDetail: async (seminarId) => {
+      return requester.get(`${apiUrl}/academy/seminars/admin/attendance-detail/${seminarId}`);
+    },
+
+    exportSeminarReport: (params = {}) => {
+      const queryString = toQueryString(params);
+      return `${apiUrl}/academy/seminars/admin/export-report?${queryString}`;
+    },
+
+    exportSeminarAttendees: (seminarId) => {
+      return `${apiUrl}/academy/seminars/admin/export-attendees/${seminarId}`;
+    },
+
+    getAttendanceLists: async (seminarId) => {
+      return requester.get(`${apiUrl}/academy/seminars/${seminarId}/attendance-lists`);
+    },
+
+    uploadAttendanceList: async (seminarId, data) => {
+      return requester.post(`${apiUrl}/academy/seminars/${seminarId}/attendance-list`, data);
+    },
+
+    deleteAttendanceList: async (seminarId, listId) => {
+      return requester.del(`${apiUrl}/academy/seminars/${seminarId}/attendance-list/${listId}`);
+    },
+
+    // SEMINAR LIBRARY & MEDIA
+    getLibrarySeminars: async (params = {}) => {
+      const queryString = toQueryString(params);
+      return requester.get(`${apiUrl}/academy/seminars/admin/library/seminars?${queryString}`);
+    },
+
+    getSeminarMedia: async (seminarId, type = 'all') => {
+      const params = type !== 'all' ? `?type=${type}` : '';
+      return requester.get(`${apiUrl}/academy/seminars/${seminarId}/media${params}`);
+    },
+
+    addSeminarMedia: async (seminarId, data) => {
+      return requester.post(`${apiUrl}/academy/seminars/${seminarId}/media`, data);
+    },
+
+    deleteSeminarMedia: async (seminarId, mediaId) => {
+      return requester.del(`${apiUrl}/academy/seminars/${seminarId}/media/${mediaId}`);
+    },
+
+    getMonthlyReports: async (params = {}) => {
+      const queryString = toQueryString(params);
+      return requester.get(`${apiUrl}/academy/seminars/admin/reports?${queryString}`);
+    },
+
+    createMonthlyReport: async (data) => {
+      return requester.post(`${apiUrl}/academy/seminars/admin/reports/generate`, data);
+    },
+
+    autoGenerateReports: async () => {
+      return requester.post(`${apiUrl}/academy/seminars/admin/reports/auto-generate`);
+    },
+
+    deleteMonthlyReport: async (reportId) => {
+      return requester.del(`${apiUrl}/academy/seminars/admin/reports/${reportId}`);
+    },
+
+    searchSeminarAttendee: async (query) => {
+      return requester.get(`${apiUrl}/academy/seminars/admin/search-attendee?q=${encodeURIComponent(query)}`);
+    },
+
+    sendSeminarEmail: async (data) => {
+      return requester.post(`${apiUrl}/academy/seminars/admin/send-email`, data);
+    },
+
     // =========================================================
     //                    SEMINAR REGISTRATION
     // =========================================================
 
-    registerForSeminar: async (seminarId) => {
-      return requester.post(`${apiUrl}/academy/enrollment/seminars/${seminarId}/register`);
+    registerForSeminar: async (seminarId, data = {}) => {
+      return requester.post(`${apiUrl}/academy/enrollment/seminars/${seminarId}/register`, data);
     },
 
     unregisterFromSeminar: async (seminarId) => {
@@ -412,6 +486,20 @@ checkSeminarRegistration: async (seminarId) => { // НОВО
     // =========================================================
     //                    SEMINAR VIDEOS
     // =========================================================
+
+    // Sessions
+    getSeminarSessions: async (seminarId) => {
+      return requester.get(`${apiUrl}/academy/seminars/${seminarId}/sessions`);
+    },
+    createSeminarSessions: async (seminarId, sessions) => {
+      return requester.post(`${apiUrl}/academy/seminars/${seminarId}/sessions`, { sessions });
+    },
+    updateSeminarSession: async (seminarId, sessionId, data) => {
+      return requester.put(`${apiUrl}/academy/seminars/${seminarId}/sessions/${sessionId}`, data);
+    },
+    deleteSeminarSession: async (seminarId, sessionId) => {
+      return requester.del(`${apiUrl}/academy/seminars/${seminarId}/sessions/${sessionId}`);
+    },
 
     getSeminarVideos: async (seminarId) => {
       return requester.get(`${apiUrl}/academy/seminars/${seminarId}/videos`);

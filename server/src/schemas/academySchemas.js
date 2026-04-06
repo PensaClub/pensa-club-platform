@@ -161,7 +161,7 @@ const lectureQuerySchema = paginationSchema.extend({
 });
 
 const lectureCancelSchema = z.object({
-  reason: z.string().max(500).optional(),
+  reason: z.string().max(500).optional().nullable(),
 });
 
 // =========================================================

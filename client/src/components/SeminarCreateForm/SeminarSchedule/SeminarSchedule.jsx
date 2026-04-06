@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 import { useFirebaseUpload } from '../../hooks/useFirebaseUpload';
 import './seminarSchedule.css';
 
-const SeminarSchedule = ({ seminarData, errors, handleChange, updateField }) => {
+const SeminarSchedule = ({ seminarData, seminarId, errors, handleChange, updateField }) => {
     const { t } = useTranslation('academy-admin');
     const { uploadFile, uploading, uploadProgress } = useFirebaseUpload();
     const fileInputRef = useRef(null);
@@ -232,6 +232,135 @@ const SeminarSchedule = ({ seminarData, errors, handleChange, updateField }) => 
                     </div>
                 </div>
             )}
+
+            {/* ============================================= */}
+            {/* Sessions / Schedule */}
+            {/* ============================================= */}
+            <div className="scfs-section">
+                <div className="scfs-section-header">
+                    <Calendar size={20} />
+                    <h2 className="scfs-section-title">{t('seminarSchedule.sessionsTitle', 'График по дни')}</h2>
+                </div>
+                <p className="scfs-section-desc">{t('seminarSchedule.sessionsDesc', 'Добавете конкретните дни, в които ще се проведе семинарът. Потребителите ще могат да изберат кои дни да присъстват.')}</p>
+
+                {/* Sessions list */}
+                {(seminarData.sessions || []).map((session, idx) => (
+                    <div key={idx} className="scfs-session-row">
+                        <div className="scfs-session-fields">
+                            <div className="scfs-session-field">
+                                <label className="scfs-label">Дата *</label>
+                                <input
+                                    type="date"
+                                    className="scfs-input"
+                                    value={session.date || ''}
+                                    onChange={(e) => {
+                                        const updated = [...(seminarData.sessions || [])];
+                                        updated[idx] = { ...updated[idx], date: e.target.value };
+                                        updateField('sessions', updated);
+                                    }}
+                                />
+                            </div>
+                            <div className="scfs-session-field">
+                                <label className="scfs-label">Начало *</label>
+                                <input
+                                    type="time"
+                                    className="scfs-input"
+                                    value={session.startTime || ''}
+                                    onChange={(e) => {
+                                        const updated = [...(seminarData.sessions || [])];
+                                        updated[idx] = { ...updated[idx], startTime: e.target.value };
+                                        updateField('sessions', updated);
+                                    }}
+                                />
+                            </div>
+                            <div className="scfs-session-field">
+                                <label className="scfs-label">Край</label>
+                                <input
+                                    type="time"
+                                    className="scfs-input"
+                                    value={session.endTime || ''}
+                                    onChange={(e) => {
+                                        const updated = [...(seminarData.sessions || [])];
+                                        updated[idx] = { ...updated[idx], endTime: e.target.value };
+                                        updateField('sessions', updated);
+                                    }}
+                                />
+                            </div>
+                            <div className="scfs-session-field scfs-session-field-wide">
+                                <label className="scfs-label">Място (ако е различно)</label>
+                                <input
+                                    type="text"
+                                    className="scfs-input"
+                                    placeholder={seminarData.location || 'Същото като основното'}
+                                    value={session.location || ''}
+                                    onChange={(e) => {
+                                        const updated = [...(seminarData.sessions || [])];
+                                        updated[idx] = { ...updated[idx], location: e.target.value };
+                                        updateField('sessions', updated);
+                                    }}
+                                />
+                            </div>
+                        </div>
+                        {session.cancelled ? (
+                            <span className="scfs-session-cancelled-badge">Отменен</span>
+                        ) : session.id ? (
+                            <button
+                                type="button"
+                                className="scfs-session-cancel-btn"
+                                onClick={async () => {
+                                    const reason = prompt('Причина за отмяна:');
+                                    if (reason === null) return;
+                                    try {
+                                        const sid = seminarId || seminarData.id;
+                                        const auth = JSON.parse(localStorage.getItem('auth') || '{}');
+                                        const apiUrl = import.meta.env.VITE_API_URL;
+                                        const res = await fetch(`${apiUrl}/academy/seminars/${sid}/sessions/${session.id}/cancel`, {
+                                            method: 'POST',
+                                            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${auth.token}` },
+                                            credentials: 'include',
+                                            body: JSON.stringify({ reason }),
+                                        });
+                                        if (res.ok) {
+                                            const updated = [...(seminarData.sessions || [])];
+                                            updated[idx] = { ...updated[idx], cancelled: true, cancelReason: reason };
+                                            updateField('sessions', updated);
+                                            toast.success('Сесията е отменена');
+                                        } else {
+                                            toast.error('Грешка при отмяна');
+                                        }
+                                    } catch { toast.error('Грешка при отмяна'); }
+                                }}
+                                title="Отмени тази сесия"
+                            >
+                                Отмени
+                            </button>
+                        ) : (
+                            <button
+                                type="button"
+                                className="scfs-session-remove"
+                                onClick={() => {
+                                    const updated = (seminarData.sessions || []).filter((_, i) => i !== idx);
+                                    updateField('sessions', updated);
+                                }}
+                            >
+                                <X size={16} />
+                            </button>
+                        )}
+                    </div>
+                ))}
+
+                <button
+                    type="button"
+                    className="scfs-session-add"
+                    onClick={() => {
+                        const sessions = [...(seminarData.sessions || [])];
+                        sessions.push({ date: '', startTime: '', endTime: '', location: '' });
+                        updateField('sessions', sessions);
+                    }}
+                >
+                    + {t('seminarSchedule.addSession', 'Добави ден')}
+                </button>
+            </div>
 
             {/* ============================================= */}
             {/* Image */}

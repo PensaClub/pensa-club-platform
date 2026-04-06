@@ -16,7 +16,9 @@ const {
   student,
   sequelize,
   user_notification,
-  admin_notification
+  admin_notification,
+  seminar_session,
+  session_attendance,
 } = require('../sequelize/models/index');
 
 const { validateBody, validateQuery } = require('../middlewares/validateRequest');
@@ -369,6 +371,1754 @@ seminarsController.get(
       });
     } catch (err) {
       console.error('❌ [GET ADMIN SEMINARS] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// GET /api/academy/seminars/admin/statistics
+// Агрегирана статистика за всички семинари
+// ===============================
+seminarsController.get(
+  '/admin/statistics',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { seminar_guest_attendance } = require('../sequelize/models/index');
+      const { period = 'all', type = 'all', status: statusParam = 'all' } = req.query;
+
+      // Period filter
+      let dateFilter = {};
+      const now = new Date();
+      if (period !== 'all') {
+        const days = { '7': 7, '30': 30, '180': 180, '365': 365 };
+        const d = days[period];
+        if (d) {
+          const from = new Date(now);
+          from.setDate(from.getDate() - d);
+          dateFilter = { scheduledDate: { [Op.gte]: from } };
+        }
+      }
+
+      // Type filter
+      let typeFilter = {};
+      if (type === 'online') typeFilter = { isOnline: true };
+      else if (type === 'inperson') typeFilter = { isOnline: false };
+
+      // Status filter
+      let statusFilter = {};
+      if (statusParam !== 'all' && ['scheduled', 'completed', 'cancelled', 'live'].includes(statusParam)) {
+        statusFilter = { status: statusParam };
+      }
+
+      const where = { ...dateFilter, ...typeFilter, ...statusFilter };
+
+      // 1) Overview cards
+      const allSeminars = await seminar.findAll({
+        where,
+        attributes: ['id', 'isOnline', 'registeredCount', 'attendedCount', 'scheduledDate', 'status'],
+      });
+
+      const totalSeminars = allSeminars.length;
+      const onlineCount = allSeminars.filter(s => s.isOnline).length;
+      const inpersonCount = totalSeminars - onlineCount;
+      const cancelledCount = allSeminars.filter(s => s.status === 'cancelled').length;
+      const completedCount = allSeminars.filter(s => s.status === 'completed').length;
+
+      // Registered attendees
+      const seminarIds = allSeminars.map(s => s.id);
+
+      const registeredAttended = seminarIds.length > 0
+        ? await student_seminar.count({ where: { seminarId: { [Op.in]: seminarIds }, attended: true } })
+        : 0;
+
+      const guestAttended = seminarIds.length > 0
+        ? await seminar_guest_attendance.count({ where: { seminarId: { [Op.in]: seminarIds } } })
+        : 0;
+
+      const totalAttended = registeredAttended + guestAttended;
+      const avgAttendance = totalSeminars > 0 ? Math.round(totalAttended / totalSeminars * 10) / 10 : 0;
+
+      // Total credits
+      const creditsResult = seminarIds.length > 0
+        ? await student_seminar.findOne({
+            where: { seminarId: { [Op.in]: seminarIds } },
+            attributes: [[sequelize.fn('SUM', sequelize.col('earned_credits')), 'total']],
+            raw: true,
+          })
+        : { total: 0 };
+      const totalCredits = parseInt(creditsResult?.total) || 0;
+
+      // 2) Monthly chart data
+      const monthlyRaw = await seminar.findAll({
+        where,
+        attributes: [
+          [sequelize.fn('DATE_TRUNC', 'month', sequelize.col('scheduled_date')), 'month'],
+          [sequelize.fn('COUNT', sequelize.col('seminar.id')), 'count'],
+        ],
+        group: [sequelize.fn('DATE_TRUNC', 'month', sequelize.col('scheduled_date'))],
+        order: [[sequelize.fn('DATE_TRUNC', 'month', sequelize.col('scheduled_date')), 'ASC']],
+        raw: true,
+      });
+
+      // Monthly attendance (registered)
+      const monthlyRegAttendance = seminarIds.length > 0
+        ? await student_seminar.findAll({
+            where: { seminarId: { [Op.in]: seminarIds }, attended: true },
+            include: [{
+              model: seminar,
+              as: 'seminar',
+              attributes: [],
+              where,
+            }],
+            attributes: [
+              [sequelize.fn('DATE_TRUNC', 'month', sequelize.col('seminar.scheduled_date')), 'month'],
+              [sequelize.fn('COUNT', sequelize.col('student_seminar.id')), 'count'],
+            ],
+            group: [sequelize.fn('DATE_TRUNC', 'month', sequelize.col('seminar.scheduled_date'))],
+            raw: true,
+          })
+        : [];
+
+      // Monthly attendance (guests)
+      const monthlyGuestAttendance = seminarIds.length > 0
+        ? await seminar_guest_attendance.findAll({
+            include: [{
+              model: seminar,
+              as: 'seminar',
+              attributes: [],
+              where,
+            }],
+            where: { seminarId: { [Op.in]: seminarIds } },
+            attributes: [
+              [sequelize.fn('DATE_TRUNC', 'month', sequelize.col('seminar.scheduled_date')), 'month'],
+              [sequelize.fn('COUNT', sequelize.col('seminar_guest_attendance.id')), 'count'],
+            ],
+            group: [sequelize.fn('DATE_TRUNC', 'month', sequelize.col('seminar.scheduled_date'))],
+            raw: true,
+          })
+        : [];
+
+      // Merge monthly data
+      const monthMap = {};
+      monthlyRaw.forEach(r => {
+        const key = r.month;
+        if (!monthMap[key]) monthMap[key] = { month: key, seminars: 0, registered: 0, guests: 0 };
+        monthMap[key].seminars = parseInt(r.count) || 0;
+      });
+      monthlyRegAttendance.forEach(r => {
+        const key = r.month;
+        if (!monthMap[key]) monthMap[key] = { month: key, seminars: 0, registered: 0, guests: 0 };
+        monthMap[key].registered = parseInt(r.count) || 0;
+      });
+      monthlyGuestAttendance.forEach(r => {
+        const key = r.month;
+        if (!monthMap[key]) monthMap[key] = { month: key, seminars: 0, registered: 0, guests: 0 };
+        monthMap[key].guests = parseInt(r.count) || 0;
+      });
+      const monthlyData = Object.values(monthMap)
+        .sort((a, b) => new Date(a.month) - new Date(b.month))
+        .map(m => ({
+          ...m,
+          total: m.registered + m.guests,
+          label: new Date(m.month).toLocaleDateString('bg-BG', { month: 'short', year: '2-digit' }),
+        }));
+
+      // 3) Seminars table data
+      const seminarsTable = await seminar.findAll({
+        where,
+        include: [
+          {
+            model: mentor,
+            as: 'facilitator',
+            attributes: ['id', 'name'],
+          },
+          {
+            model: student_seminar,
+            as: 'attendances',
+            attributes: ['id', 'attended', 'earnedCredits'],
+          },
+          {
+            model: seminar_guest_attendance,
+            as: 'guestAttendances',
+            attributes: ['id'],
+          },
+        ],
+        attributes: [
+          'id', 'title', 'slug', 'isOnline', 'location', 'address',
+          'scheduledDate', 'registeredCount', 'attendedCount', 'status',
+        ],
+        order: [['scheduledDate', 'DESC']],
+      });
+
+      const seminarsData = seminarsTable.map(s => {
+        const plain = s.get({ plain: true });
+        const regAttended = (plain.attendances || []).filter(a => a.attended).length;
+        const guestCount = (plain.guestAttendances || []).length;
+        const earnedCredits = (plain.attendances || []).reduce((sum, a) => sum + (a.earnedCredits || 0), 0);
+
+        return {
+          id: plain.id,
+          title: plain.title,
+          slug: plain.slug,
+          isOnline: plain.isOnline,
+          location: plain.location,
+          address: plain.address,
+          scheduledDate: plain.scheduledDate,
+          status: plain.status,
+          facilitator: plain.facilitator?.name || null,
+          facilitatorId: plain.facilitator?.id || null,
+          registeredCount: plain.registeredCount || 0,
+          attendedRegistered: regAttended,
+          attendedGuests: guestCount,
+          attendedTotal: regAttended + guestCount,
+          earnedCredits,
+        };
+      });
+
+      // Unique mentors for filter
+      const mentors = [...new Map(
+        seminarsData
+          .filter(s => s.facilitatorId)
+          .map(s => [s.facilitatorId, { id: s.facilitatorId, name: s.facilitator }])
+      ).values()];
+
+      res.status(200).json({
+        success: true,
+        overview: {
+          totalSeminars,
+          onlineCount,
+          inpersonCount,
+          totalAttended,
+          registeredAttended,
+          guestAttended,
+          avgAttendance,
+          totalCredits,
+          cancelledCount,
+          completedCount,
+        },
+        monthlyData,
+        seminars: seminarsData,
+        mentors,
+      });
+    } catch (err) {
+      console.error('❌ [GET ADMIN SEMINAR STATISTICS] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// ===============================
+// GET /api/academy/seminars/admin/search-attendee
+// Глобално търсене на участник по име/имейл през всички семинари
+// ===============================
+seminarsController.get(
+  '/admin/search-attendee',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { seminar_guest_attendance } = require('../sequelize/models/index');
+      const { q } = req.query;
+
+      if (!q || q.trim().length < 2) {
+        return res.status(200).json({ success: true, results: [] });
+      }
+
+      const search = q.trim();
+      const likeSearch = `%${search}%`;
+
+      // Search registered attendees
+      const registeredResults = await student_seminar.findAll({
+        include: [
+          {
+            model: student,
+            as: 'student',
+            attributes: ['id'],
+            include: [{
+              model: user_account,
+              as: 'user',
+              attributes: ['id', 'email'],
+              where: {
+                [Op.or]: [
+                  { email: { [Op.iLike]: likeSearch } },
+                ],
+              },
+              include: [{
+                model: user_details,
+                as: 'details',
+                attributes: ['firstName', 'lastName', 'phoneNumber'],
+                required: false,
+              }],
+            }],
+            required: true,
+          },
+          {
+            model: seminar,
+            as: 'seminar',
+            attributes: ['id', 'title', 'scheduledDate', 'isOnline', 'location'],
+          },
+        ],
+        attributes: ['id', 'attended', 'earnedCredits', 'status', 'participationLevel', 'createdAt'],
+      });
+
+      // Also search by name in user_details
+      const registeredByName = await student_seminar.findAll({
+        include: [
+          {
+            model: student,
+            as: 'student',
+            attributes: ['id'],
+            include: [{
+              model: user_account,
+              as: 'user',
+              attributes: ['id', 'email'],
+              include: [{
+                model: user_details,
+                as: 'details',
+                attributes: ['firstName', 'lastName', 'phoneNumber'],
+                where: {
+                  [Op.or]: [
+                    { firstName: { [Op.iLike]: likeSearch } },
+                    { lastName: { [Op.iLike]: likeSearch } },
+                  ],
+                },
+                required: true,
+              }],
+            }],
+            required: true,
+          },
+          {
+            model: seminar,
+            as: 'seminar',
+            attributes: ['id', 'title', 'scheduledDate', 'isOnline', 'location'],
+          },
+        ],
+        attributes: ['id', 'attended', 'earnedCredits', 'status', 'participationLevel', 'createdAt'],
+      });
+
+      // Search guest attendees
+      const guestResults = await seminar_guest_attendance.findAll({
+        where: {
+          [Op.or]: [
+            { guestFirstName: { [Op.iLike]: likeSearch } },
+            { guestLastName: { [Op.iLike]: likeSearch } },
+            { guestEmail: { [Op.iLike]: likeSearch } },
+          ],
+        },
+        include: [{
+          model: seminar,
+          as: 'seminar',
+          attributes: ['id', 'title', 'scheduledDate', 'isOnline', 'location'],
+        }],
+        attributes: ['id', 'guestFirstName', 'guestLastName', 'guestEmail', 'guestPhone', 'participationLevel', 'createdAt'],
+      });
+
+      // Merge and deduplicate registered results
+      const seenRegIds = new Set();
+      const allRegistered = [...registeredResults, ...registeredByName].filter(r => {
+        if (seenRegIds.has(r.id)) return false;
+        seenRegIds.add(r.id);
+        return true;
+      });
+
+      // Format results
+      const results = [];
+
+      allRegistered.forEach(r => {
+        const plain = r.get({ plain: true });
+        const user = plain.student?.user;
+        results.push({
+          type: 'registered',
+          firstName: user?.details?.firstName || '',
+          lastName: user?.details?.lastName || '',
+          email: user?.email || '',
+          phone: user?.details?.phoneNumber || '',
+          seminarId: plain.seminar?.id,
+          seminarTitle: plain.seminar?.title,
+          seminarDate: plain.seminar?.scheduledDate,
+          seminarIsOnline: plain.seminar?.isOnline,
+          seminarLocation: plain.seminar?.location,
+          attended: plain.attended,
+          earnedCredits: plain.earnedCredits || 0,
+          status: plain.status,
+          participationLevel: plain.participationLevel,
+          registeredAt: plain.createdAt,
+        });
+      });
+
+      guestResults.forEach(g => {
+        const plain = g.get({ plain: true });
+        results.push({
+          type: 'guest',
+          firstName: plain.guestFirstName,
+          lastName: plain.guestLastName,
+          email: plain.guestEmail || '',
+          phone: plain.guestPhone || '',
+          seminarId: plain.seminar?.id,
+          seminarTitle: plain.seminar?.title,
+          seminarDate: plain.seminar?.scheduledDate,
+          seminarIsOnline: plain.seminar?.isOnline,
+          seminarLocation: plain.seminar?.location,
+          attended: true,
+          participationLevel: plain.participationLevel,
+          registeredAt: plain.createdAt,
+        });
+      });
+
+      // Sort by date descending
+      results.sort((a, b) => new Date(b.seminarDate || 0) - new Date(a.seminarDate || 0));
+
+      res.status(200).json({ success: true, results, total: results.length });
+    } catch (err) {
+      console.error('❌ [SEARCH ATTENDEE] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// POST /api/academy/seminars/admin/send-email
+// Изпращане на лично съобщение до участник в семинар
+// ===============================
+seminarsController.post(
+  '/admin/send-email',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { to, recipientName, subject, message } = req.body;
+
+      if (!to || !subject || !message) {
+        return res.status(400).json({
+          success: false,
+          message: 'Missing required fields: to, subject, message',
+        });
+      }
+
+      // Get sender name
+      const sender = await user_account.findByPk(req.user.userId, {
+        include: [{ model: user_details, as: 'details', attributes: ['firstName', 'lastName'] }],
+      });
+      const senderName = sender?.details
+        ? `${sender.details.firstName || ''} ${sender.details.lastName || ''}`.trim()
+        : 'Екипът на DigiBridge Academy';
+
+      const emailData = seminarEmailTemplates.personalMessage({
+        recipientName: recipientName || '',
+        subject,
+        message,
+        senderName,
+      });
+
+      await forwardEmailsViaZoho({
+        userEmail: sender?.email,
+        subject: emailData.subject,
+        toAddresses: to,
+        formattedBody: emailData.html,
+      });
+
+      res.status(200).json({ success: true, message: 'Email sent successfully' });
+    } catch (err) {
+      console.error('❌ [SEND SEMINAR EMAIL] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// GET /api/academy/seminars/admin/export-report
+// PDF доклад за семинари
+// ===============================
+seminarsController.get(
+  '/admin/export-report',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { seminar_guest_attendance } = require('../sequelize/models/index');
+      const PDFDocument = require('pdfkit');
+      const path = require('path');
+      const fs = require('fs');
+      const { period = 'all', type = 'all', status: statusParam = 'all', month: qMonth, year: qYear } = req.query;
+
+      // Build where (same as statistics endpoint)
+      let dateFilter = {};
+      const now = new Date();
+      if (qMonth && qYear) {
+        // Specific month/year filter (for monthly reports)
+        const m = parseInt(qMonth);
+        const y = parseInt(qYear);
+        if (m >= 1 && m <= 12 && y >= 2020) {
+          const startDate = new Date(y, m - 1, 1);
+          const endDate = new Date(y, m, 0, 23, 59, 59);
+          dateFilter = { scheduledDate: { [Op.between]: [startDate, endDate] } };
+        }
+      } else if (period !== 'all') {
+        const days = { '7': 7, '30': 30, '180': 180, '365': 365 };
+        const d = days[period];
+        if (d) {
+          const from = new Date(now);
+          from.setDate(from.getDate() - d);
+          dateFilter = { scheduledDate: { [Op.gte]: from } };
+        }
+      }
+      let typeFilter = {};
+      if (type === 'online') typeFilter = { isOnline: true };
+      else if (type === 'inperson') typeFilter = { isOnline: false };
+      let statusFilter = {};
+      if (statusParam !== 'all' && ['scheduled', 'completed', 'cancelled', 'live'].includes(statusParam)) {
+        statusFilter = { status: statusParam };
+      }
+      const where = { ...dateFilter, ...typeFilter, ...statusFilter };
+
+      // Fetch seminars
+      const seminarsData = await seminar.findAll({
+        where,
+        include: [
+          { model: mentor, as: 'facilitator', attributes: ['id', 'name'] },
+          { model: student_seminar, as: 'attendances', attributes: ['id', 'attended', 'earnedCredits'] },
+          { model: seminar_guest_attendance, as: 'guestAttendances', attributes: ['id'] },
+        ],
+        attributes: ['id', 'title', 'isOnline', 'location', 'scheduledDate', 'registeredCount', 'status'],
+        order: [['scheduledDate', 'DESC']],
+      });
+
+      const rows = seminarsData.map(s => {
+        const plain = s.get({ plain: true });
+        const regAtt = (plain.attendances || []).filter(a => a.attended).length;
+        const guestAtt = (plain.guestAttendances || []).length;
+        const credits = (plain.attendances || []).reduce((sum, a) => sum + (a.earnedCredits || 0), 0);
+        return {
+          date: plain.scheduledDate ? new Date(plain.scheduledDate).toLocaleDateString('bg-BG') : '—',
+          title: plain.title || '',
+          location: plain.isOnline ? 'Онлайн' : (plain.location || '—'),
+          facilitator: plain.facilitator?.name || '—',
+          registered: plain.registeredCount || 0,
+          regAttended: regAtt,
+          guestAttended: guestAtt,
+          total: regAtt + guestAtt,
+          credits,
+          status: plain.status,
+        };
+      });
+
+      // Overview
+      const totalSeminars = rows.length;
+      const totalAttended = rows.reduce((s, r) => s + r.total, 0);
+      const totalCredits = rows.reduce((s, r) => s + r.credits, 0);
+
+      // Period label
+      const periodLabels = { '7': '7 дни', '30': '30 дни', '180': '6 месеца', '365': '1 година', 'all': 'Всички' };
+      const typeLabels = { 'all': 'Всички', 'online': 'Онлайн', 'inperson': 'Присъствени' };
+
+      // Generate PDF
+      const doc = new PDFDocument({ size: 'A4', margin: 40, bufferPages: true });
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename="seminar-report-${new Date().toISOString().slice(0, 10)}.pdf"`);
+      doc.pipe(res);
+
+      // Font
+      const fontPath = path.join(__dirname, '..', 'fonts', 'DejaVuSans.ttf');
+      const hasFont = fs.existsSync(fontPath);
+      if (hasFont) doc.registerFont('CyrFont', fontPath);
+      const font = hasFont ? 'CyrFont' : 'Helvetica';
+
+      // Header with logos
+      const cifLogoPath = path.join(__dirname, '..', '..', '..', 'client', 'public', 'images', 'partners', 'CIF_logo_black_rgb.png');
+      const pensaLogoPath = path.join(__dirname, '..', '..', '..', 'client', 'public', 'images', 'homePage', 'logo-2.png');
+      const headerY = 30;
+      const pageW = doc.page.width;
+
+      if (fs.existsSync(cifLogoPath)) {
+        doc.image(cifLogoPath, 40, headerY, { height: 40 });
+      }
+      doc.font(font).fontSize(13).fillColor('#1f2937');
+      doc.text('DigiBridge Academy', 0, headerY + 5, { align: 'center', width: pageW });
+      doc.font(font).fontSize(8).fillColor('#6b7280');
+      doc.text('Фондация ПЕНСА', 0, headerY + 22, { align: 'center', width: pageW });
+      if (fs.existsSync(pensaLogoPath)) {
+        doc.image(pensaLogoPath, pageW - 40 - 40, headerY, { height: 40 });
+      }
+
+      doc.y = headerY + 50;
+      doc.moveDown(0.5);
+      doc.font(font).fontSize(12).fillColor('#8b2040').text('Доклад за семинари', { align: 'center' });
+      doc.font(font).fontSize(8).fillColor('#6b7280').text(`Генериран: ${new Date().toLocaleString('bg-BG')}`, { align: 'center' });
+      doc.moveDown(1);
+
+      // Overview box
+      doc.font(font).fontSize(9).fillColor('#374151');
+      doc.text(`Период: ${periodLabels[period] || period}    |    Тип: ${typeLabels[type] || type}    |    Семинари: ${totalSeminars}    |    Присъствали: ${totalAttended}    |    Кредити: ${totalCredits}`, { align: 'center' });
+      doc.moveDown(1);
+
+      // Table
+      const headers = ['Дата', 'Заглавие', 'Място', 'Лектор', 'Записани', 'Рег.', 'Гости', 'Общо', 'Кредити'];
+      const colWidths = [55, 120, 70, 75, 40, 35, 35, 35, 45];
+      const pageWidth = doc.page.width - 80;
+      const totalW = colWidths.reduce((a, b) => a + b, 0);
+      const scale = pageWidth / totalW;
+      const sw = colWidths.map(w => Math.floor(w * scale));
+      const startX = 40;
+      let y = doc.y + 5;
+      const rh = 18;
+
+      // Header row
+      doc.fontSize(7).font(font);
+      let x = startX;
+      headers.forEach((h, i) => {
+        doc.rect(x, y, sw[i], rh).fillAndStroke('#8b2040', '#8b2040');
+        doc.fillColor('#fff').text(h, x + 3, y + 4, { width: sw[i] - 6, height: rh - 4, ellipsis: true });
+        x += sw[i];
+      });
+      y += rh;
+
+      // Data rows
+      doc.font(font).fontSize(6.5);
+      rows.forEach((row, ri) => {
+        if (y + rh > doc.page.height - 40) {
+          doc.addPage({ size: 'A4', margin: 40 });
+          y = 40;
+        }
+        const bg = ri % 2 === 0 ? '#ffffff' : '#f5f3f0';
+        const vals = [row.date, row.title, row.location, row.facilitator, row.registered, row.regAttended, row.guestAttended, row.total, row.credits];
+        x = startX;
+        vals.forEach((v, ci) => {
+          doc.rect(x, y, sw[ci], rh).fillAndStroke(bg, '#ddd');
+          doc.fillColor('#222').text(String(v), x + 3, y + 4, { width: sw[ci] - 6, height: rh - 4, ellipsis: true });
+          x += sw[ci];
+        });
+        y += rh;
+      });
+
+      doc.end();
+    } catch (err) {
+      console.error('❌ [EXPORT REPORT] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// GET /api/academy/seminars/admin/export-attendees/:id
+// PDF списък присъстващи за конкретен семинар
+// ===============================
+seminarsController.get(
+  '/admin/export-attendees/:id',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { seminar_guest_attendance } = require('../sequelize/models/index');
+      const PDFDocument = require('pdfkit');
+      const path = require('path');
+      const fs = require('fs');
+      const seminarId = parseInt(req.params.id);
+
+      const seminarData = await seminar.findByPk(seminarId, {
+        attributes: ['id', 'title', 'scheduledDate', 'location', 'isOnline'],
+        include: [{ model: mentor, as: 'facilitator', attributes: ['name'] }],
+      });
+
+      if (!seminarData) {
+        return res.status(404).json({ success: false, message: 'Seminar not found' });
+      }
+
+      // Registered
+      const registered = await student_seminar.findAll({
+        where: { seminarId },
+        include: [{
+          model: student, as: 'student', attributes: ['id'],
+          include: [{
+            model: user_account, as: 'user', attributes: ['email'],
+            include: [{ model: user_details, as: 'details', attributes: ['firstName', 'lastName', 'phoneNumber'] }],
+          }],
+        }],
+        attributes: ['id', 'status', 'attended'],
+      });
+
+      // Guests
+      const guests = await seminar_guest_attendance.findAll({
+        where: { seminarId },
+        attributes: ['id', 'guestFirstName', 'guestLastName', 'guestEmail', 'guestPhone'],
+      });
+
+      // Build rows
+      const allRows = [];
+      registered.forEach(r => {
+        const p = r.get({ plain: true });
+        const u = p.student?.user;
+        allRows.push({
+          name: `${u?.details?.firstName || ''} ${u?.details?.lastName || ''}`.trim() || '—',
+          email: u?.email || '—',
+          phone: u?.details?.phoneNumber || '—',
+          type: 'Платформа',
+        });
+      });
+      guests.forEach(g => {
+        const p = g.get({ plain: true });
+        allRows.push({
+          name: `${p.guestFirstName || ''} ${p.guestLastName || ''}`.trim() || '—',
+          email: p.guestEmail || '—',
+          phone: p.guestPhone || '—',
+          type: 'Гост',
+        });
+      });
+
+      const dateStr = seminarData.scheduledDate
+        ? new Date(seminarData.scheduledDate).toLocaleDateString('bg-BG', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+        : '';
+
+      // Generate PDF
+      const doc = new PDFDocument({ size: 'A4', margin: 40, bufferPages: true });
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', `attachment; filename="attendees-${seminarId}-${new Date().toISOString().slice(0, 10)}.pdf"`);
+      doc.pipe(res);
+
+      const fontPath = path.join(__dirname, '..', 'fonts', 'DejaVuSans.ttf');
+      const hasFont = fs.existsSync(fontPath);
+      if (hasFont) doc.registerFont('CyrFont', fontPath);
+      const font = hasFont ? 'CyrFont' : 'Helvetica';
+
+      // Header with logos
+      const cifLogoPath = path.join(__dirname, '..', '..', '..', 'client', 'public', 'images', 'partners', 'CIF_logo_black_rgb.png');
+      const pensaLogoPath = path.join(__dirname, '..', '..', '..', 'client', 'public', 'images', 'homePage', 'logo-2.png');
+      const headerY = 30;
+      const pageW = doc.page.width;
+
+      if (fs.existsSync(cifLogoPath)) {
+        doc.image(cifLogoPath, 40, headerY, { height: 40 });
+      }
+      doc.font(font).fontSize(13).fillColor('#1f2937');
+      doc.text('DigiBridge Academy', 0, headerY + 5, { align: 'center', width: pageW });
+      doc.font(font).fontSize(8).fillColor('#6b7280');
+      doc.text('Фондация ПЕНСА', 0, headerY + 22, { align: 'center', width: pageW });
+      if (fs.existsSync(pensaLogoPath)) {
+        doc.image(pensaLogoPath, pageW - 40 - 40, headerY, { height: 40 });
+      }
+
+      doc.y = headerY + 50;
+      doc.moveDown(0.5);
+      doc.font(font).fontSize(12).fillColor('#8b2040').text('Списък на участници', { align: 'center' });
+      doc.moveDown(0.5);
+
+      // Seminar info
+      doc.font(font).fontSize(10).fillColor('#374151').text(seminarData.title, { align: 'center' });
+      doc.font(font).fontSize(8).fillColor('#6b7280');
+      doc.text(`Дата: ${dateStr}    |    Място: ${seminarData.isOnline ? 'Онлайн' : (seminarData.location || '—')}    |    Лектор: ${seminarData.facilitator?.name || '—'}`, { align: 'center' });
+      doc.text(`Общо участници: ${allRows.length} (${registered.length} регистрирани + ${guests.length} гости)`, { align: 'center' });
+      doc.moveDown(1);
+
+      // Table
+      const headers = ['№', 'Име', 'Имейл', 'Телефон', 'Тип'];
+      const colWidths = [25, 140, 160, 90, 60];
+      const pageWidth = doc.page.width - 80;
+      const totalW = colWidths.reduce((a, b) => a + b, 0);
+      const scale = pageWidth / totalW;
+      const sw = colWidths.map(w => Math.floor(w * scale));
+      const startX = 40;
+      let y = doc.y + 5;
+      const rh = 18;
+
+      // Header
+      doc.fontSize(7).font(font);
+      let x = startX;
+      headers.forEach((h, i) => {
+        doc.rect(x, y, sw[i], rh).fillAndStroke('#8b2040', '#8b2040');
+        doc.fillColor('#fff').text(h, x + 3, y + 4, { width: sw[i] - 6, height: rh - 4, ellipsis: true });
+        x += sw[i];
+      });
+      y += rh;
+
+      // Data
+      doc.font(font).fontSize(7);
+      allRows.forEach((row, ri) => {
+        if (y + rh > doc.page.height - 40) {
+          doc.addPage({ size: 'A4', margin: 40 });
+          y = 40;
+        }
+        const bg = ri % 2 === 0 ? '#ffffff' : '#f5f3f0';
+        const vals = [ri + 1, row.name, row.email, row.phone, row.type];
+        x = startX;
+        vals.forEach((v, ci) => {
+          doc.rect(x, y, sw[ci], rh).fillAndStroke(bg, '#ddd');
+          doc.fillColor('#222').text(String(v), x + 3, y + 4, { width: sw[ci] - 6, height: rh - 4, ellipsis: true });
+          x += sw[ci];
+        });
+        y += rh;
+      });
+
+      doc.end();
+    } catch (err) {
+      console.error('❌ [EXPORT ATTENDEES] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// POST /api/academy/seminars/:id/attendance-list
+// Качване на физически списък
+// ===============================
+seminarsController.post(
+  '/:id/attendance-list',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { seminar_attendance_list } = require('../sequelize/models/index');
+      const seminarId = parseInt(req.params.id);
+      const { fileUrl, fileName, fileType, fileSize, notes } = req.body;
+
+      if (!fileUrl || !fileName) {
+        return res.status(400).json({ success: false, message: 'fileUrl and fileName are required' });
+      }
+
+      const record = await seminar_attendance_list.create({
+        seminarId,
+        uploadedBy: req.user.userId,
+        fileUrl,
+        fileName,
+        fileType: fileType || null,
+        fileSize: fileSize || null,
+        notes: notes || null,
+      });
+
+      // Admin notification
+      try {
+        const seminarData = await seminar.findByPk(seminarId, { attributes: ['title'] });
+        const uploader = await user_account.findByPk(req.user.userId, {
+          include: [{ model: user_details, as: 'details', attributes: ['firstName', 'lastName'] }],
+        });
+        const uploaderName = uploader?.details
+          ? `${uploader.details.firstName || ''} ${uploader.details.lastName || ''}`.trim()
+          : 'Потребител';
+
+        await admin_notification.create({
+          type: 'seminar_media_uploaded',
+          title: 'Нов физически списък',
+          message: `${uploaderName} качи списък "${fileName}" към "${seminarData?.title || 'семинар'}"`,
+          data: { seminarId, mediaType: 'attendance_list', listId: record.id, uploaderName },
+        });
+      } catch (notifErr) {
+        console.error('Failed to create list notification:', notifErr);
+      }
+
+      res.status(201).json({ success: true, record });
+    } catch (err) {
+      console.error('❌ [CREATE ATTENDANCE LIST] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// GET /api/academy/seminars/:id/attendance-lists
+// Списък качени физически списъци
+// ===============================
+seminarsController.get(
+  '/:id/attendance-lists',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { seminar_attendance_list } = require('../sequelize/models/index');
+      const seminarId = parseInt(req.params.id);
+
+      const lists = await seminar_attendance_list.findAll({
+        where: { seminarId },
+        include: [{
+          model: user_account,
+          as: 'uploader',
+          attributes: ['id', 'email'],
+          include: [{ model: user_details, as: 'details', attributes: ['firstName', 'lastName'] }],
+        }],
+        order: [['createdAt', 'DESC']],
+      });
+
+      const data = lists.map(l => {
+        const plain = l.get({ plain: true });
+        return {
+          ...plain,
+          uploaderName: plain.uploader?.details
+            ? `${plain.uploader.details.firstName || ''} ${plain.uploader.details.lastName || ''}`.trim()
+            : plain.uploader?.email || '—',
+        };
+      });
+
+      res.status(200).json({ success: true, lists: data });
+    } catch (err) {
+      console.error('❌ [GET ATTENDANCE LISTS] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// DELETE /api/academy/seminars/:id/attendance-list/:listId
+// Изтриване на физически списък
+// ===============================
+seminarsController.delete(
+  '/:id/attendance-list/:listId',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { seminar_attendance_list } = require('../sequelize/models/index');
+      const listId = parseInt(req.params.listId);
+
+      const record = await seminar_attendance_list.findByPk(listId);
+      if (!record) {
+        return res.status(404).json({ success: false, message: 'Record not found' });
+      }
+
+      await record.destroy();
+      res.status(200).json({ success: true, message: 'Deleted' });
+    } catch (err) {
+      console.error('❌ [DELETE ATTENDANCE LIST] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// GET /api/academy/seminars/admin/library/seminars
+// Paginated seminars list with media counts per type
+// ===============================
+seminarsController.get(
+  '/admin/library/seminars',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { seminar_media } = require('../sequelize/models/index');
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 15;
+      const offset = (page - 1) * limit;
+      const { search, mentorId } = req.query;
+
+      const where = {};
+      if (search) {
+        where.title = { [Op.iLike]: `%${search}%` };
+      }
+      if (mentorId) {
+        where.facilitatorId = parseInt(mentorId);
+      }
+
+      const { count, rows } = await seminar.findAndCountAll({
+        where,
+        attributes: ['id', 'title', 'slug', 'scheduledDate', 'isOnline', 'location', 'status'],
+        include: [
+          { model: mentor, as: 'facilitator', attributes: ['id', 'name'], required: false },
+        ],
+        order: [['scheduledDate', 'DESC']],
+        limit,
+        offset,
+        distinct: true,
+      });
+
+      const seminarIds = rows.map(s => s.id);
+
+      // Get media counts per type for all seminars in one query
+      let mediaCounts = {};
+      if (seminarIds.length > 0) {
+        const counts = await seminar_media.findAll({
+          where: { seminarId: { [Op.in]: seminarIds } },
+          attributes: [
+            'seminarId',
+            'mediaType',
+            [sequelize.fn('COUNT', sequelize.col('id')), 'count'],
+          ],
+          group: ['seminarId', 'mediaType'],
+          raw: true,
+        });
+
+        for (const row of counts) {
+          if (!mediaCounts[row.seminarId]) {
+            mediaCounts[row.seminarId] = { photos: 0, videos: 0, documents: 0, presentations: 0 };
+          }
+          const type = row.mediaType;
+          if (type === 'photo') mediaCounts[row.seminarId].photos = parseInt(row.count);
+          else if (type === 'video') mediaCounts[row.seminarId].videos = parseInt(row.count);
+          else if (type === 'document') mediaCounts[row.seminarId].documents = parseInt(row.count);
+          else if (type === 'presentation') mediaCounts[row.seminarId].presentations = parseInt(row.count);
+        }
+      }
+
+      // Get attendance list counts
+      let attendanceListCounts = {};
+      if (seminarIds.length > 0) {
+        const { seminar_attendance_list } = require('../sequelize/models/index');
+        if (seminar_attendance_list) {
+          const alCounts = await seminar_attendance_list.findAll({
+            where: { seminarId: { [Op.in]: seminarIds } },
+            attributes: [
+              'seminarId',
+              [sequelize.fn('COUNT', sequelize.col('id')), 'count'],
+            ],
+            group: ['seminarId'],
+            raw: true,
+          });
+          for (const row of alCounts) {
+            attendanceListCounts[row.seminarId] = parseInt(row.count);
+          }
+        }
+      }
+
+      const seminars = rows.map(s => {
+        const plain = s.get({ plain: true });
+        const counts = mediaCounts[plain.id] || { photos: 0, videos: 0, documents: 0, presentations: 0 };
+        counts.attendanceLists = attendanceListCounts[plain.id] || 0;
+        return {
+          id: plain.id,
+          title: plain.title,
+          slug: plain.slug,
+          scheduledDate: plain.scheduledDate,
+          isOnline: plain.isOnline,
+          location: plain.location,
+          facilitator: plain.facilitator?.name || null,
+          status: plain.status,
+          mediaCounts: counts,
+        };
+      });
+
+      res.status(200).json({
+        success: true,
+        seminars,
+        pagination: {
+          total: count,
+          page,
+          totalPages: Math.ceil(count / limit),
+        },
+      });
+    } catch (err) {
+      console.error('❌ [GET LIBRARY SEMINARS] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// GET /api/academy/seminars/:id/media
+// All media for a seminar, optionally filtered by type
+// ===============================
+seminarsController.get(
+  '/:id/media',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { seminar_media } = require('../sequelize/models/index');
+      const seminarId = parseInt(req.params.id);
+
+      const seminarRecord = await seminar.findByPk(seminarId);
+      if (!seminarRecord) {
+        return res.status(404).json({ success: false, message: 'Seminar not found' });
+      }
+
+      const { type } = req.query;
+      const where = { seminarId };
+      const validTypes = ['photo', 'video', 'document', 'presentation'];
+      if (type && type !== 'all' && validTypes.includes(type)) {
+        where.mediaType = type;
+      }
+
+      const media = await seminar_media.findAll({
+        where,
+        include: [
+          {
+            model: user_account,
+            as: 'uploader',
+            attributes: ['id'],
+            include: [
+              {
+                model: user_details,
+                as: 'details',
+                attributes: ['firstName', 'lastName'],
+                required: false,
+              },
+            ],
+            required: false,
+          },
+        ],
+        order: [['createdAt', 'DESC']],
+      });
+
+      const result = media.map(m => {
+        const plain = m.get({ plain: true });
+        const uploaderDetail = plain.uploader?.details;
+        return {
+          ...plain,
+          uploaderName: uploaderDetail
+            ? `${uploaderDetail.firstName || ''} ${uploaderDetail.lastName || ''}`.trim()
+            : null,
+        };
+      });
+
+      res.status(200).json({ success: true, media: result });
+    } catch (err) {
+      console.error('❌ [GET SEMINAR MEDIA] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// POST /api/academy/seminars/:id/media
+// Upload media record for a seminar
+// ===============================
+seminarsController.post(
+  '/:id/media',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { seminar_media } = require('../sequelize/models/index');
+      const seminarId = parseInt(req.params.id);
+
+      const seminarRecord = await seminar.findByPk(seminarId);
+      if (!seminarRecord) {
+        return res.status(404).json({ success: false, message: 'Seminar not found' });
+      }
+
+      const { mediaType, fileUrl, fileName, fileType, fileSize, thumbnailUrl, youtubeVideoId, notes } = req.body;
+
+      // Validate mediaType
+      const validTypes = ['photo', 'video', 'document', 'presentation'];
+      if (!mediaType || !validTypes.includes(mediaType)) {
+        return res.status(400).json({ success: false, message: 'Invalid mediaType. Must be one of: photo, video, document, presentation' });
+      }
+
+      // Validate required fields
+      if (!fileUrl) {
+        return res.status(400).json({ success: false, message: 'fileUrl is required' });
+      }
+      if (!fileName) {
+        return res.status(400).json({ success: false, message: 'fileName is required' });
+      }
+
+      const record = await seminar_media.create({
+        seminarId,
+        uploadedBy: req.user.userId,
+        mediaType,
+        fileUrl,
+        fileName,
+        fileType: fileType || null,
+        fileSize: fileSize ? parseInt(fileSize) : null,
+        thumbnailUrl: thumbnailUrl || null,
+        youtubeVideoId: youtubeVideoId || null,
+        notes: notes || null,
+      });
+
+      // Admin notification
+      const typeLabels = { photo: 'снимка', video: 'видео', document: 'документ', presentation: 'презентация' };
+      try {
+        const uploader = await user_account.findByPk(req.user.userId, {
+          include: [{ model: user_details, as: 'details', attributes: ['firstName', 'lastName'] }],
+        });
+        const uploaderName = uploader?.details
+          ? `${uploader.details.firstName || ''} ${uploader.details.lastName || ''}`.trim()
+          : uploader?.email || 'Потребител';
+
+        await admin_notification.create({
+          type: 'seminar_media_uploaded',
+          title: `Нов файл към семинар`,
+          message: `${uploaderName} качи ${typeLabels[mediaType] || mediaType} "${fileName}" към "${seminarRecord.title}"`,
+          data: { seminarId, mediaType, mediaId: record.id, uploaderName },
+        });
+      } catch (notifErr) {
+        console.error('Failed to create media notification:', notifErr);
+      }
+
+      res.status(201).json({ success: true, data: record });
+    } catch (err) {
+      console.error('❌ [POST SEMINAR MEDIA] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// DELETE /api/academy/seminars/:id/media/:mediaId
+// Delete a media record from a seminar
+// ===============================
+seminarsController.delete(
+  '/:id/media/:mediaId',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { seminar_media } = require('../sequelize/models/index');
+      const seminarId = parseInt(req.params.id);
+      const mediaId = parseInt(req.params.mediaId);
+
+      const record = await seminar_media.findByPk(mediaId);
+      if (!record) {
+        return res.status(404).json({ success: false, message: 'Media record not found' });
+      }
+
+      // Verify media belongs to the correct seminar
+      if (record.seminarId !== seminarId) {
+        return res.status(400).json({ success: false, message: 'Media does not belong to this seminar' });
+      }
+
+      // If video with YouTube ID, try to delete from YouTube (fire-and-forget)
+      if (record.mediaType === 'video' && record.youtubeVideoId) {
+        (async () => {
+          try {
+            const { deleteVideo, setCredentials } = require('../utils/youtubeService');
+            const p = require('path');
+            const f = require('fs');
+            const tDir = p.join(__dirname, '../../youtube-tokens');
+            const tFile = f.existsSync(tDir) && f.statSync(tDir).isDirectory()
+              ? p.join(tDir, 'tokens.json') : p.join(__dirname, '../../youtube-tokens.json');
+            if (f.existsSync(tFile)) {
+              setCredentials(JSON.parse(f.readFileSync(tFile, 'utf8')));
+              await deleteVideo(record.youtubeVideoId);
+            }
+          } catch (e) { console.error('YT delete skip:', e?.message); }
+        })();
+      }
+
+      await record.destroy();
+      res.status(200).json({ success: true, message: 'Media deleted successfully' });
+    } catch (err) {
+      console.error('❌ [DELETE SEMINAR MEDIA] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// GET /api/academy/seminars/admin/reports
+// Paginated monthly reports
+// ===============================
+seminarsController.get(
+  '/admin/reports',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { seminar_monthly_report } = require('../sequelize/models/index');
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 12;
+      const offset = (page - 1) * limit;
+
+      const where = {};
+      if (req.query.year) {
+        where.year = parseInt(req.query.year);
+      }
+
+      const { count, rows } = await seminar_monthly_report.findAndCountAll({
+        where,
+        include: [
+          {
+            model: user_account,
+            as: 'generator',
+            attributes: ['id'],
+            include: [
+              {
+                model: user_details,
+                as: 'details',
+                attributes: ['firstName', 'lastName'],
+                required: false,
+              },
+            ],
+            required: false,
+          },
+        ],
+        order: [['year', 'DESC'], ['month', 'DESC']],
+        limit,
+        offset,
+      });
+
+      const reports = rows.map(r => {
+        const plain = r.get({ plain: true });
+        const generatorDetail = plain.generator?.details;
+        return {
+          ...plain,
+          generatorName: generatorDetail
+            ? `${generatorDetail.firstName || ''} ${generatorDetail.lastName || ''}`.trim()
+            : null,
+        };
+      });
+
+      res.status(200).json({
+        success: true,
+        reports,
+        pagination: {
+          total: count,
+          page,
+          totalPages: Math.ceil(count / limit),
+        },
+      });
+    } catch (err) {
+      console.error('❌ [GET REPORTS] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// POST /api/academy/seminars/admin/reports/generate
+// Генерира месечен доклад — изчислява stats за месеца и записва metadata
+// ===============================
+seminarsController.post(
+  '/admin/reports/generate',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { seminar_monthly_report, seminar_guest_attendance } = require('../sequelize/models/index');
+      const { month, year } = req.body;
+
+      const parsedMonth = parseInt(month);
+      if (!parsedMonth || parsedMonth < 1 || parsedMonth > 12) {
+        return res.status(400).json({ success: false, message: 'Month must be between 1 and 12' });
+      }
+
+      const parsedYear = parseInt(year);
+      if (!parsedYear || parsedYear < 2020 || parsedYear > 2100) {
+        return res.status(400).json({ success: false, message: 'Year must be between 2020 and 2100' });
+      }
+
+      // Check duplicate
+      const existing = await seminar_monthly_report.findOne({
+        where: { month: parsedMonth, year: parsedYear },
+      });
+      if (existing) {
+        return res.status(409).json({ success: false, message: 'Report for this month/year already exists' });
+      }
+
+      // Calculate stats for the month
+      const startDate = new Date(parsedYear, parsedMonth - 1, 1);
+      const endDate = new Date(parsedYear, parsedMonth, 0, 23, 59, 59);
+
+      const monthSeminars = await seminar.findAll({
+        where: { scheduledDate: { [Op.between]: [startDate, endDate] } },
+        attributes: ['id'],
+      });
+      const seminarIds = monthSeminars.map(s => s.id);
+
+      let attendeesCount = 0;
+      let creditsCount = 0;
+      if (seminarIds.length > 0) {
+        const regAttended = await student_seminar.count({ where: { seminarId: { [Op.in]: seminarIds }, attended: true } });
+        const guestAttended = await seminar_guest_attendance.count({ where: { seminarId: { [Op.in]: seminarIds } } });
+        attendeesCount = regAttended + guestAttended;
+
+        const creditsResult = await student_seminar.findOne({
+          where: { seminarId: { [Op.in]: seminarIds } },
+          attributes: [[sequelize.fn('SUM', sequelize.col('earned_credits')), 'total']],
+          raw: true,
+        });
+        creditsCount = parseInt(creditsResult?.total) || 0;
+      }
+
+      const record = await seminar_monthly_report.create({
+        month: parsedMonth,
+        year: parsedYear,
+        fileUrl: '',
+        generatedBy: req.user.userId,
+        seminarsCount: seminarIds.length,
+        attendeesCount,
+        creditsCount,
+      });
+
+      res.status(201).json({ success: true, data: record });
+    } catch (err) {
+      console.error('❌ [POST GENERATE REPORT] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// POST /api/academy/seminars/admin/reports/auto-generate
+// Автоматично генерира доклади за всички минали месеци без запис
+// ===============================
+seminarsController.post(
+  '/admin/reports/auto-generate',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { seminar_monthly_report, seminar_guest_attendance } = require('../sequelize/models/index');
+
+      // Find earliest seminar date
+      const earliest = await seminar.findOne({
+        attributes: ['scheduledDate'],
+        order: [['scheduledDate', 'ASC']],
+        where: { scheduledDate: { [Op.ne]: null } },
+      });
+
+      if (!earliest) {
+        return res.status(200).json({ success: true, generated: 0, message: 'No seminars found' });
+      }
+
+      const startDate = new Date(earliest.scheduledDate);
+      const now = new Date();
+      const currentMonth = now.getMonth() + 1;
+      const currentYear = now.getFullYear();
+
+      // Generate for each month from earliest to last completed month
+      let generated = 0;
+      let checkYear = startDate.getFullYear();
+      let checkMonth = startDate.getMonth() + 1;
+
+      while (checkYear < currentYear || (checkYear === currentYear && checkMonth < currentMonth)) {
+        // Check if already exists
+        const exists = await seminar_monthly_report.findOne({
+          where: { month: checkMonth, year: checkYear },
+        });
+
+        if (!exists) {
+          const mStart = new Date(checkYear, checkMonth - 1, 1);
+          const mEnd = new Date(checkYear, checkMonth, 0, 23, 59, 59);
+
+          const monthSeminars = await seminar.findAll({
+            where: { scheduledDate: { [Op.between]: [mStart, mEnd] } },
+            attributes: ['id'],
+          });
+          const ids = monthSeminars.map(s => s.id);
+
+          if (ids.length > 0) {
+            const regAtt = await student_seminar.count({ where: { seminarId: { [Op.in]: ids }, attended: true } });
+            const guestAtt = await seminar_guest_attendance.count({ where: { seminarId: { [Op.in]: ids } } });
+
+            const creditsRes = await student_seminar.findOne({
+              where: { seminarId: { [Op.in]: ids } },
+              attributes: [[sequelize.fn('SUM', sequelize.col('earned_credits')), 'total']],
+              raw: true,
+            });
+
+            await seminar_monthly_report.create({
+              month: checkMonth,
+              year: checkYear,
+              fileUrl: '',
+              generatedBy: null,
+              seminarsCount: ids.length,
+              attendeesCount: regAtt + guestAtt,
+              creditsCount: parseInt(creditsRes?.total) || 0,
+            });
+            generated++;
+          }
+        }
+
+        // Next month
+        checkMonth++;
+        if (checkMonth > 12) { checkMonth = 1; checkYear++; }
+      }
+
+      res.status(200).json({ success: true, generated });
+    } catch (err) {
+      console.error('❌ [AUTO GENERATE REPORTS] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// DELETE /api/academy/seminars/admin/reports/:reportId
+// Delete a monthly report
+// ===============================
+seminarsController.delete(
+  '/admin/reports/:reportId',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { seminar_monthly_report } = require('../sequelize/models/index');
+      const reportId = parseInt(req.params.reportId);
+
+      const record = await seminar_monthly_report.findByPk(reportId);
+      if (!record) {
+        return res.status(404).json({ success: false, message: 'Report not found' });
+      }
+
+      await record.destroy();
+      res.status(200).json({ success: true, message: 'Report deleted successfully' });
+    } catch (err) {
+      console.error('❌ [DELETE REPORT] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// GET /api/academy/seminars/:id/download-all
+// Изтегляне на всички файлове като ZIP архив
+// ===============================
+seminarsController.get(
+  '/:id/download-all',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const archiver = require('archiver');
+      const { seminar_attendance_list, seminar_media } = require('../sequelize/models/index');
+      const seminarId = parseInt(req.params.id);
+
+      // Fetch the seminar to get its title for the ZIP filename
+      const seminarRecord = await seminar.findByPk(seminarId, { attributes: ['id', 'title'] });
+      if (!seminarRecord) {
+        return res.status(404).json({ success: false, message: 'Seminar not found' });
+      }
+
+      // Fetch attendance lists and media (excluding videos)
+      const [attendanceLists, mediaRecords] = await Promise.all([
+        seminar_attendance_list.findAll({
+          where: { seminarId },
+          attributes: ['id', 'fileUrl', 'fileName'],
+        }),
+        seminar_media.findAll({
+          where: {
+            seminarId,
+            mediaType: { [Op.ne]: 'video' },
+          },
+          attributes: ['id', 'fileUrl', 'fileName', 'mediaType'],
+        }),
+      ]);
+
+      // Build a list of files to include
+      const files = [];
+
+      for (const list of attendanceLists) {
+        if (list.fileUrl) {
+          files.push({
+            url: list.fileUrl,
+            folder: 'lists',
+            name: list.fileName || `list-${list.id}`,
+          });
+        }
+      }
+
+      for (const media of mediaRecords) {
+        if (media.fileUrl) {
+          const folderMap = {
+            photo: 'photos',
+            document: 'presentations',
+            presentation: 'presentations',
+          };
+          files.push({
+            url: media.fileUrl,
+            folder: folderMap[media.mediaType] || 'other',
+            name: media.fileName || `file-${media.id}`,
+          });
+        }
+      }
+
+      if (files.length === 0) {
+        return res.status(404).json({ success: false, message: 'No files to download' });
+      }
+
+      // Set response headers for ZIP download
+      const safeTitle = (seminarRecord.title || 'seminar')
+        .replace(/[^a-zA-Z0-9а-яА-ЯёЁ\s_-]/g, '')
+        .replace(/\s+/g, '_')
+        .substring(0, 50);
+      res.setHeader('Content-Type', 'application/zip');
+      res.setHeader('Content-Disposition', `attachment; filename="seminar-${seminarId}-${safeTitle}.zip"`);
+
+      // Create ZIP archive and pipe to response
+      const archive = archiver('zip', { zlib: { level: 5 } });
+
+      archive.on('error', (err) => {
+        console.error('❌ [DOWNLOAD-ALL] Archive error:', err);
+        if (!res.headersSent) {
+          res.status(500).json({ success: false, message: 'Archive creation failed' });
+        }
+      });
+
+      archive.pipe(res);
+
+      // Track used filenames per folder to avoid duplicates
+      const usedNames = {};
+
+      for (const file of files) {
+        try {
+          const response = await fetch(file.url);
+          if (!response.ok) {
+            console.warn(`⚠️ [DOWNLOAD-ALL] Failed to fetch ${file.url}: ${response.status}`);
+            continue;
+          }
+
+          // Ensure unique filename within folder
+          if (!usedNames[file.folder]) usedNames[file.folder] = new Set();
+          let fileName = file.name;
+          let counter = 1;
+          while (usedNames[file.folder].has(fileName)) {
+            const dotIndex = file.name.lastIndexOf('.');
+            if (dotIndex > 0) {
+              fileName = `${file.name.substring(0, dotIndex)}-${counter}${file.name.substring(dotIndex)}`;
+            } else {
+              fileName = `${file.name}-${counter}`;
+            }
+            counter++;
+          }
+          usedNames[file.folder].add(fileName);
+
+          // Stream the response body into the archive
+          const { Readable } = require('stream');
+          const readable = Readable.fromWeb(response.body);
+          archive.append(readable, { name: `${file.folder}/${fileName}` });
+        } catch (fetchErr) {
+          console.warn(`⚠️ [DOWNLOAD-ALL] Skipping file ${file.url}:`, fetchErr.message);
+          continue;
+        }
+      }
+
+      await archive.finalize();
+    } catch (err) {
+      console.error('❌ [DOWNLOAD-ALL] Error:', err);
+      if (!res.headersSent) {
+        next(err);
+      }
+    }
+  }
+);
+
+// ===============================
+// GET /api/academy/seminars/admin/attendance-detail/:id
+// Детайлен списък присъстващи за конкретен семинар
+// ===============================
+seminarsController.get(
+  '/admin/attendance-detail/:id',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { seminar_guest_attendance } = require('../sequelize/models/index');
+      const seminarId = parseInt(req.params.id);
+
+      const seminarData = await seminar.findByPk(seminarId, {
+        attributes: ['id', 'title'],
+      });
+
+      if (!seminarData) {
+        return res.status(404).json({ success: false, message: 'Seminar not found' });
+      }
+
+      // Registered attendees
+      const registered = await student_seminar.findAll({
+        where: { seminarId },
+        include: [
+          {
+            model: student,
+            as: 'student',
+            attributes: ['id'],
+            include: [{
+              model: user_account,
+              as: 'user',
+              attributes: ['id', 'email'],
+              include: [{
+                model: user_details,
+                as: 'details',
+                attributes: ['firstName', 'lastName', 'phoneNumber'],
+              }],
+            }],
+          },
+        ],
+        attributes: [
+          'id', 'attended', 'attendedAt', 'earnedCredits', 'status',
+          'participationLevel', 'notes', 'createdAt',
+        ],
+        order: [['createdAt', 'DESC']],
+      });
+
+      const registeredData = registered.map(r => {
+        const plain = r.get({ plain: true });
+        const user = plain.student?.user;
+        return {
+          id: plain.id,
+          type: 'registered',
+          firstName: user?.details?.firstName || '',
+          lastName: user?.details?.lastName || '',
+          email: user?.email || '',
+          phone: user?.details?.phoneNumber || '',
+          attended: plain.attended,
+          attendedAt: plain.attendedAt,
+          earnedCredits: plain.earnedCredits || 0,
+          status: plain.status,
+          participationLevel: plain.participationLevel,
+          notes: plain.notes,
+          registeredAt: plain.createdAt,
+        };
+      });
+
+      // Guest attendees
+      const guests = await seminar_guest_attendance.findAll({
+        where: { seminarId },
+        include: [
+          {
+            model: user_account,
+            as: 'markedByUser',
+            attributes: ['id', 'email'],
+            required: false,
+            include: [{
+              model: user_details,
+              as: 'details',
+              attributes: ['firstName', 'lastName'],
+            }],
+          },
+          {
+            model: user_account,
+            as: 'convertedUser',
+            attributes: ['id', 'email'],
+            required: false,
+          },
+        ],
+        attributes: [
+          'id', 'guestFirstName', 'guestLastName', 'guestEmail', 'guestPhone',
+          'participationLevel', 'markedBy', 'convertedToUserId', 'createdAt',
+        ],
+        order: [['createdAt', 'DESC']],
+      });
+
+      const guestsData = guests.map(g => {
+        const plain = g.get({ plain: true });
+        const markerName = plain.markedByUser?.details
+          ? `${plain.markedByUser.details.firstName || ''} ${plain.markedByUser.details.lastName || ''}`.trim()
+          : plain.markedByUser?.email || null;
+
+        return {
+          id: plain.id,
+          type: 'guest',
+          firstName: plain.guestFirstName,
+          lastName: plain.guestLastName,
+          email: plain.guestEmail || '',
+          phone: plain.guestPhone || '',
+          participationLevel: plain.participationLevel,
+          markedByName: markerName,
+          convertedToUserId: plain.convertedToUserId,
+          convertedEmail: plain.convertedUser?.email || null,
+          registeredAt: plain.createdAt,
+        };
+      });
+
+      // Combined "all" list
+      const allAttendees = [
+        ...registeredData,
+        ...guestsData,
+      ].sort((a, b) => new Date(b.registeredAt) - new Date(a.registeredAt));
+
+      res.status(200).json({
+        success: true,
+        seminar: { id: seminarData.id, title: seminarData.title },
+        all: allAttendees,
+        registered: registeredData,
+        guests: guestsData,
+        counts: {
+          all: allAttendees.length,
+          registered: registeredData.length,
+          guests: guestsData.length,
+        },
+      });
+    } catch (err) {
+      console.error('❌ [GET ATTENDANCE DETAIL] Error:', err);
       next(err);
     }
   }
@@ -2599,6 +4349,396 @@ seminarsController.post('/invite', isAuth, rbac.checkPermission('seminar', 'upda
 
     res.json({ success: true, sent, total: emails.length });
   } catch (err) {
+    next(err);
+  }
+});
+
+// ===============================
+// SEMINAR SESSIONS — CRUD
+// ===============================
+
+// GET /api/academy/seminars/:id/sessions
+seminarsController.get('/:id/sessions', async (req, res, next) => {
+  try {
+    const seminarId = parseInt(req.params.id);
+    const sessions = await seminar_session.findAll({
+      where: { seminarId },
+      order: [['date', 'ASC'], ['startTime', 'ASC']],
+      include: [{
+        model: session_attendance,
+        as: 'attendances',
+        attributes: ['id', 'studentId', 'guestAttendanceId', 'registered', 'attended'],
+      }],
+    });
+
+    const enriched = sessions.map(s => ({
+      ...s.toJSON(),
+      registeredCount: s.attendances?.filter(a => a.registered).length || 0,
+      attendedCount: s.attendances?.filter(a => a.attended).length || 0,
+    }));
+
+    res.json({ sessions: enriched });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// POST /api/academy/seminars/:id/sessions — sync sessions (create/update/keep)
+seminarsController.post('/:id/sessions', isAuth, rbac.checkPermission('seminar', 'update'), async (req, res, next) => {
+  try {
+    const seminarId = parseInt(req.params.id);
+    const { sessions: sessionsData } = req.body;
+
+    if (!Array.isArray(sessionsData) || sessionsData.length === 0) {
+      return res.status(400).json({ success: false, message: 'sessions array is required' });
+    }
+
+    const seminarData = await seminar.findByPk(seminarId);
+    if (!seminarData) {
+      return res.status(404).json({ success: false, message: 'Seminar not found' });
+    }
+
+    // Get existing session IDs
+    const existingSessions = await seminar_session.findAll({ where: { seminarId }, attributes: ['id'] });
+    const existingIds = existingSessions.map(s => s.id);
+
+    // IDs from client (sessions that should remain)
+    const clientIds = sessionsData.filter(s => s.id).map(s => s.id);
+
+    // Delete sessions that are no longer in the client list (only if no attendances)
+    for (const existingId of existingIds) {
+      if (!clientIds.includes(existingId)) {
+        const hasAttendances = await session_attendance.count({ where: { sessionId: existingId } });
+        if (hasAttendances === 0) {
+          await seminar_session.destroy({ where: { id: existingId } });
+        }
+      }
+    }
+
+    const result = [];
+    const processedIds = new Set();
+    for (const s of sessionsData) {
+      if (!s.date || !s.startTime) continue;
+
+      if (s.id && existingIds.includes(s.id)) {
+        // Update existing session
+        const existing = await seminar_session.findByPk(s.id);
+        if (existing) {
+          await existing.update({
+            date: s.date,
+            startTime: s.startTime,
+            endTime: s.endTime || null,
+            location: s.location || seminarData.location || null,
+            maxParticipants: s.maxParticipants || null,
+            notes: s.notes || null,
+          });
+          result.push(existing);
+        }
+        processedIds.add(s.id);
+      } else if (!s.id) {
+        // Check if session with same date+time already exists (prevent duplicates)
+        const dup = await seminar_session.findOne({
+          where: { seminarId, date: s.date, startTime: s.startTime },
+        });
+        if (dup) { result.push(dup); continue; }
+
+        // Create new session
+        const session = await seminar_session.create({
+          seminarId,
+          date: s.date,
+          startTime: s.startTime,
+          endTime: s.endTime || null,
+          location: s.location || seminarData.location || null,
+          maxParticipants: s.maxParticipants || null,
+          notes: s.notes || null,
+        });
+        result.push(session);
+      }
+    }
+
+    res.status(201).json({ success: true, sessions: result });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// PUT /api/academy/seminars/:id/sessions/:sessionId
+seminarsController.put('/:id/sessions/:sessionId', isAuth, rbac.checkPermission('seminar', 'update'), async (req, res, next) => {
+  try {
+    const session = await seminar_session.findByPk(req.params.sessionId);
+    if (!session || session.seminarId !== parseInt(req.params.id)) {
+      return res.status(404).json({ success: false, message: 'Session not found' });
+    }
+
+    const { date, startTime, endTime, location, maxParticipants, notes } = req.body;
+    if (date) session.date = date;
+    if (startTime) session.startTime = startTime;
+    if (endTime !== undefined) session.endTime = endTime;
+    if (location !== undefined) session.location = location;
+    if (maxParticipants !== undefined) session.maxParticipants = maxParticipants;
+    if (notes !== undefined) session.notes = notes;
+    await session.save();
+
+    res.json({ success: true, session });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// DELETE /api/academy/seminars/:id/sessions/:sessionId
+seminarsController.delete('/:id/sessions/:sessionId', isAuth, rbac.checkPermission('seminar', 'update'), async (req, res, next) => {
+  try {
+    const session = await seminar_session.findByPk(req.params.sessionId);
+    if (!session || session.seminarId !== parseInt(req.params.id)) {
+      return res.status(404).json({ success: false, message: 'Session not found' });
+    }
+    await session.destroy();
+    res.json({ success: true });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// POST /api/academy/seminars/:id/sessions/:sessionId/cancel
+seminarsController.post('/:id/sessions/:sessionId/cancel', isAuth, rbac.checkPermission('seminar', 'update'), async (req, res, next) => {
+  try {
+    const session = await seminar_session.findByPk(req.params.sessionId);
+    if (!session || session.seminarId !== parseInt(req.params.id)) {
+      return res.status(404).json({ success: false, message: 'Session not found' });
+    }
+
+    const { reason } = req.body;
+
+    await session.update({
+      cancelled: true,
+      cancelReason: reason || null,
+      cancelledBy: req.user.userId,
+      cancelledAt: new Date(),
+    });
+
+    // Notify registered attendees
+    const attendees = await session_attendance.findAll({
+      where: { sessionId: session.id, registered: true },
+      include: [
+        { model: require('../sequelize/models/index').student, as: 'student', attributes: ['userId'] },
+        { model: require('../sequelize/models/index').seminar_guest_attendance, as: 'guestAttendance', attributes: ['guestEmail', 'guestPhone', 'guestFirstName'] },
+      ],
+    });
+
+    const seminarData = await seminar.findByPk(session.seminarId, { attributes: ['title', 'slug'] });
+    const dateStr = new Date(session.date).toLocaleDateString('bg-BG', { day: 'numeric', month: 'long', year: 'numeric' });
+
+    for (const att of attendees) {
+      try {
+        if (att.studentId && att.student?.userId) {
+          // Platform user — email + notification
+          const userAcc = await user_account.findByPk(att.student.userId, { attributes: ['email'] });
+          if (userAcc?.email) {
+            const { forwardEmailsViaZoho } = require('../utils/zohoEmails');
+            const { paragraph, greeting, infoTable, infoRow } = require('../utils/reActionEmailTemplates');
+            const seminarEmailTemplates = require('../utils/seminarEmailTemplates');
+
+            const body = greeting('') +
+              paragraph(`Уведомяваме ви, че сесията на <strong>${dateStr}</strong> от семинар "${seminarData?.title}" е <strong style="color:#ef4444;">отменена</strong>.`) +
+              (reason ? infoTable(infoRow('Причина', reason)) : '') +
+              paragraph('Извиняваме се за неудобството.') +
+              `<p style="color:#374151;font-size:15px;line-height:1.7;margin:16px 0 0;">С уважение,<br><strong style="color:#0d9488;">Екипът на DigiBridge Academy</strong></p>`;
+
+            await forwardEmailsViaZoho({
+              userEmail: 'info@pensa.club',
+              subject: `Отменена сесия: ${seminarData?.title} — ${dateStr}`,
+              body: '', toAddresses: userAcc.email,
+              formattedBody: require('../utils/seminarEmailTemplates').wrapAcademyTemplate ? body : body,
+            }).catch(() => {});
+          }
+        } else if (att.guestAttendanceId && att.guestAttendance) {
+          // Guest — email if available
+          if (att.guestAttendance.guestEmail) {
+            const { forwardEmailsViaZoho } = require('../utils/zohoEmails');
+            const { paragraph, greeting, infoTable, infoRow } = require('../utils/reActionEmailTemplates');
+
+            const body = greeting(att.guestAttendance.guestFirstName || '') +
+              paragraph(`Сесията на <strong>${dateStr}</strong> от семинар "${seminarData?.title}" е <strong style="color:#ef4444;">отменена</strong>.`) +
+              (reason ? infoTable(infoRow('Причина', reason)) : '') +
+              `<p style="color:#374151;font-size:15px;">Извиняваме се за неудобството.</p>`;
+
+            await forwardEmailsViaZoho({
+              userEmail: 'info@pensa.club',
+              subject: `Отменена сесия: ${seminarData?.title} — ${dateStr}`,
+              body: '', toAddresses: att.guestAttendance.guestEmail,
+              formattedBody: body,
+            }).catch(() => {});
+          }
+          // SMS if phone
+          if (att.guestAttendance.guestPhone && att.guestAttendance.guestPhone.length >= 8) {
+            try {
+              const { sendSms, getSmsSettings } = require('../utils/smsService');
+              const smsSettings = await getSmsSettings();
+              if (smsSettings.sms_enabled !== 'false') {
+                // Simple cancel SMS
+              }
+            } catch {}
+          }
+        }
+      } catch (notifErr) {
+        console.error('Cancel notification error:', notifErr.message);
+      }
+    }
+
+    res.json({ success: true, message: 'Session cancelled' });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// ===============================
+// POST /api/academy/seminars/:id/guest-register
+// Публично записване като гост (без auth)
+// ===============================
+seminarsController.post('/:id/guest-register', async (req, res, next) => {
+  try {
+    const { seminar_guest_attendance } = require('../sequelize/models/index');
+    const seminarId = parseInt(req.params.id);
+    const { firstName, lastName, email, phone } = req.body;
+
+    // Validation
+    if (!firstName || !lastName || firstName.trim().length < 2 || lastName.trim().length < 2) {
+      return res.status(400).json({ success: false, message: 'Име и фамилия са задължителни (мин. 2 символа)' });
+    }
+
+    const seminarData = await seminar.findByPk(seminarId);
+    if (!seminarData) {
+      return res.status(404).json({ success: false, message: 'Семинарът не е намерен' });
+    }
+
+    if (!seminarData.isPublished || !seminarData.isPublic) {
+      return res.status(400).json({ success: false, message: 'Семинарът не е достъпен за записване' });
+    }
+
+    if (seminarData.status === 'cancelled') {
+      return res.status(400).json({ success: false, message: 'Семинарът е отменен' });
+    }
+
+    if (seminarData.status === 'completed') {
+      return res.status(400).json({ success: false, message: 'Семинарът вече е приключил' });
+    }
+
+    // Check capacity
+    if (seminarData.maxParticipants) {
+      const { student_seminar: ss } = require('../sequelize/models/index');
+      const registered = await ss.count({ where: { seminarId, status: { [Op.in]: ['pending', 'approved'] } } });
+      const guests = await seminar_guest_attendance.count({ where: { seminarId } });
+      if (registered + guests >= seminarData.maxParticipants) {
+        return res.status(400).json({ success: false, message: 'Семинарът е пълен' });
+      }
+    }
+
+    // Check duplicate guest (by name OR by email)
+    const duplicateWhere = {
+      seminarId,
+      [Op.or]: [
+        { guestFirstName: firstName.trim(), guestLastName: lastName.trim() },
+        ...(email?.trim() ? [{ guestEmail: email.trim() }] : []),
+      ],
+    };
+    const existing = await seminar_guest_attendance.findOne({ where: duplicateWhere });
+
+    if (existing) {
+      return res.status(400).json({ success: false, message: 'Вече сте записани за този семинар' });
+    }
+
+    // Check if already registered as platform user (by email)
+    if (email?.trim()) {
+      const { student_seminar: ss, student: studentModel } = require('../sequelize/models/index');
+      const existingUser = await user_account.findOne({ where: { email: email.trim() }, attributes: ['id'] });
+      if (existingUser) {
+        const existingStudent = await studentModel.findOne({ where: { userId: existingUser.id }, attributes: ['id'] });
+        if (existingStudent) {
+          const existingReg = await ss.findOne({ where: { studentId: existingStudent.id, seminarId } });
+          if (existingReg) {
+            return res.status(400).json({ success: false, message: 'Вече сте записани с този имейл. Влезте в акаунта си.' });
+          }
+        }
+      }
+    }
+
+    // Create guest attendance record
+    const guestRecord = await seminar_guest_attendance.create({
+      seminarId,
+      guestFirstName: firstName.trim(),
+      guestLastName: lastName.trim(),
+      guestEmail: email?.trim() || null,
+      guestPhone: phone?.trim() || null,
+      participationLevel: 'passive',
+      markedBy: null,
+    });
+
+    // Register for specific sessions if sessionIds provided
+    const { sessionIds } = req.body;
+    if (Array.isArray(sessionIds) && sessionIds.length > 0) {
+      for (const sessionId of sessionIds) {
+        const session = await seminar_session.findByPk(sessionId);
+        if (session && session.seminarId === seminarId) {
+          await session_attendance.findOrCreate({
+            where: { sessionId, guestAttendanceId: guestRecord.id },
+            defaults: { sessionId, guestAttendanceId: guestRecord.id, registered: true, attended: false },
+          });
+        }
+      }
+    }
+
+    // Increment registered count
+    await seminarData.increment('registeredCount');
+
+    // Send email notification (if email provided)
+    if (email?.trim()) {
+      try {
+        const { forwardEmailsViaZoho } = require('../utils/zohoEmails');
+        const seminarEmailTemplates = require('../utils/seminarEmailTemplates');
+
+        const template = await seminarEmailTemplates.guestNotification({
+          guestName: `${firstName.trim()} ${lastName.trim()}`,
+          seminarTitle: seminarData.title,
+          scheduledDate: seminarData.scheduledDate,
+          location: seminarData.location,
+          isOnline: seminarData.isOnline,
+          meetingLink: seminarData.meetingLink,
+          meetingPassword: seminarData.meetingPassword,
+          mentorName: null,
+          slug: seminarData.slug,
+        });
+
+        await forwardEmailsViaZoho({
+          userEmail: 'info@pensa.club',
+          subject: template.subject,
+          body: '',
+          toAddresses: email.trim(),
+          formattedBody: template.html,
+        });
+      } catch (emailErr) {
+        console.error('Guest email error:', emailErr.message);
+      }
+    }
+
+    // Send SMS (if phone provided and SMS enabled)
+    if (phone?.trim() && phone.trim().length >= 8) {
+      try {
+        const { sendRegistrationSms, getSmsSettings } = require('../utils/smsService');
+        const smsSettings = await getSmsSettings();
+        if (smsSettings.sms_enabled !== 'false' && smsSettings.sms_on_registration !== 'false') {
+          await sendRegistrationSms(
+            phone.trim(), seminarData.title, seminarData.scheduledDate,
+            seminarData.location, seminarData.isOnline, smsSettings.sms_registration_template
+          );
+        }
+      } catch (smsErr) {
+        console.error('Guest SMS error:', smsErr.message);
+      }
+    }
+
+    res.status(201).json({ success: true, message: 'Записахте се успешно!' });
+  } catch (err) {
+    console.error('❌ [GUEST REGISTER] Error:', err);
     next(err);
   }
 });

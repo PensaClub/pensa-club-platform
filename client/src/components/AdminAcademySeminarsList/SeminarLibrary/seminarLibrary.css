@@ -1,0 +1,1552 @@
+/* SeminarLibrary — prefix: slib- */
+
+.slib-container {
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* =========================================================
+   SUBTABS
+   ========================================================= */
+
+.slib-subtabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 20px;
+  padding: 4px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  width: fit-content;
+}
+
+.slib-subtab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.slib-subtab:hover {
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.slib-subtab-active {
+  background: rgba(212, 168, 83, 0.12);
+  color: #d4a853;
+  font-weight: 600;
+}
+
+.slib-subtab-active:hover {
+  background: rgba(212, 168, 83, 0.15);
+  color: #d4a853;
+}
+
+/* =========================================================
+   TOOLBAR
+   ========================================================= */
+
+.slib-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.slib-toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.slib-filters {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* =========================================================
+   COMMON ELEMENTS
+   ========================================================= */
+
+.slib-select {
+  padding: 7px 12px;
+  border: 1px solid #3a3a3e;
+  border-radius: 6px;
+  background: #2a2a2e;
+  color: #ccc;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.slib-select:focus {
+  border-color: #d4a853;
+}
+
+.slib-input {
+  width: 100%;
+  padding: 7px 12px;
+  border: 1px solid #3a3a3e;
+  border-radius: 6px;
+  background: #1e1e22;
+  color: #ddd;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.slib-input:focus {
+  border-color: #d4a853;
+}
+
+.slib-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.slib-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.slib-btn-group {
+  display: flex;
+  gap: 8px;
+}
+
+.slib-btn-primary {
+  background: rgba(212, 168, 83, 0.15);
+  color: #d4a853;
+  border: 1px solid rgba(212, 168, 83, 0.3);
+}
+
+.slib-btn-primary:hover:not(:disabled) {
+  background: rgba(212, 168, 83, 0.25);
+}
+
+.slib-btn-secondary {
+  background: #2a2a2e;
+  color: #aaa;
+  border: 1px solid #3a3a3e;
+}
+
+.slib-btn-secondary:hover:not(:disabled) {
+  background: #333;
+  color: #ddd;
+}
+
+.slib-btn-sm {
+  padding: 6px 12px;
+  font-size: 0.78rem;
+}
+
+/* =========================================================
+   LOADING & EMPTY
+   ========================================================= */
+
+.slib-loading {
+  display: flex;
+  justify-content: center;
+  padding: 40px 0;
+}
+
+.slib-spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid #333;
+  border-top-color: #d4a853;
+  border-radius: 50%;
+  animation: slib-spin 0.8s linear infinite;
+}
+
+.slib-spinner-sm {
+  width: 16px;
+  height: 16px;
+  border-width: 2px;
+}
+
+@keyframes slib-spin {
+  to { transform: rotate(360deg); }
+}
+
+.slib-empty {
+  text-align: center;
+  padding: 40px 20px;
+  color: #777;
+  font-size: 0.85rem;
+}
+
+/* =========================================================
+   REPORT FORM OVERLAY
+   ========================================================= */
+
+.slib-report-form-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.slib-report-form {
+  background: #222226;
+  border: 1px solid #3a3a3e;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  overflow: hidden;
+}
+
+.slib-report-form-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid #2e2e32;
+}
+
+.slib-report-form-header h3 {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #ddd;
+}
+
+.slib-close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #888;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.slib-close-btn:hover {
+  background: #333;
+  color: #ddd;
+}
+
+.slib-report-form-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.slib-form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.slib-form-row label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #aaa;
+}
+
+.slib-form-error {
+  font-size: 0.78rem;
+  color: #e74c3c;
+  background: rgba(231, 76, 60, 0.1);
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(231, 76, 60, 0.2);
+}
+
+.slib-report-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 16px 20px;
+  border-top: 1px solid #2e2e32;
+}
+
+/* =========================================================
+   TABLES (Reports & Seminars)
+   ========================================================= */
+
+.slib-reports-table,
+.slib-seminars-table {
+  border: 1px solid #2e2e32;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.slib-table-header {
+  display: grid;
+  padding: 10px 16px;
+  background: #1a1a1e;
+  border-bottom: 1px solid #2e2e32;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Reports table grid */
+.slib-reports-table .slib-table-header,
+.slib-reports-table .slib-table-row {
+  grid-template-columns: 1.5fr 0.8fr 0.8fr 0.8fr 1fr 1fr;
+  gap: 8px;
+  align-items: center;
+}
+
+/* Seminars table grid */
+.slib-seminars-table .slib-table-header,
+.slib-seminars-table .slib-table-row {
+  grid-template-columns: 0.8fr 2fr 0.8fr 1.2fr 1.2fr 40px;
+  gap: 8px;
+  align-items: center;
+}
+
+.slib-table-row {
+  display: grid;
+  padding: 12px 16px;
+  border-bottom: 1px solid #2a2a2e;
+  font-size: 0.82rem;
+  color: #ccc;
+  transition: background 0.15s;
+}
+
+.slib-table-row:last-child {
+  border-bottom: none;
+}
+
+.slib-table-row:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.slib-seminar-row {
+  cursor: pointer;
+}
+
+.slib-seminar-row:hover {
+  background: rgba(212, 168, 83, 0.04);
+}
+
+.slib-row-expanded {
+  background: rgba(212, 168, 83, 0.06);
+  border-bottom-color: transparent;
+}
+
+.slib-row-empty {
+  opacity: 0.6;
+}
+
+.slib-td {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.slib-container span,
+.slib-container label,
+.slib-container p {
+  font-size: inherit;
+}
+
+.slib-td-period svg {
+  color: #d4a853;
+  flex-shrink: 0;
+}
+
+.slib-td-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.slib-no-seminars {
+  font-size: 0.72rem;
+  color: #777;
+  font-style: italic;
+}
+
+.slib-seminar-row-wrapper {
+  border-bottom: 1px solid #2a2a2e;
+}
+
+.slib-seminar-row-wrapper:last-child {
+  border-bottom: none;
+}
+
+.slib-seminar-row-wrapper .slib-table-row {
+  border-bottom: none;
+}
+
+/* =========================================================
+   ACTION BUTTONS
+   ========================================================= */
+
+.slib-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.slib-action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.slib-action-download {
+  color: #d4a853;
+}
+
+.slib-action-download:hover:not(:disabled) {
+  background: rgba(212, 168, 83, 0.12);
+}
+
+.slib-action-delete {
+  color: #888;
+}
+
+.slib-action-delete:hover {
+  color: #e74c3c;
+  background: rgba(231, 76, 60, 0.1);
+}
+
+/* =========================================================
+   TYPE BADGES
+   ========================================================= */
+
+.slib-type-badge {
+  display: inline-flex;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.slib-type-inperson {
+  background: rgba(44, 181, 160, 0.12);
+  color: #2cb5a0;
+}
+
+.slib-type-online {
+  background: rgba(139, 32, 64, 0.12);
+  color: #d4758a;
+}
+
+.slib-type-hybrid {
+  background: rgba(139, 108, 193, 0.12);
+  color: #a88cd4;
+}
+
+/* =========================================================
+   MEDIA COUNTS
+   ========================================================= */
+
+.slib-media-counts {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.slib-media-counts > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.75rem;
+  color: #999;
+}
+
+.slib-media-counts svg {
+  flex-shrink: 0;
+}
+
+.slib-no-media {
+  color: #555;
+}
+
+/* =========================================================
+   SEARCH
+   ========================================================= */
+
+.slib-search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  background: #1e1e22;
+  border: 1px solid #3a3a3e;
+  border-radius: 8px;
+  flex: 1;
+  max-width: 400px;
+  transition: border-color 0.2s;
+}
+
+.slib-search-box:focus-within {
+  border-color: #d4a853;
+}
+
+.slib-search-box svg {
+  color: #666;
+  flex-shrink: 0;
+}
+
+.slib-search-input {
+  flex: 1;
+  padding: 8px 0;
+  border: none;
+  background: transparent;
+  color: #ddd;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.82rem;
+  outline: none;
+}
+
+.slib-search-input::placeholder {
+  color: #666;
+}
+
+.slib-search-clear {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.slib-search-clear:hover {
+  color: #ccc;
+  background: #333;
+}
+
+/* =========================================================
+   PAGINATION
+   ========================================================= */
+
+.slib-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.slib-page-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid #3a3a3e;
+  border-radius: 6px;
+  background: #2a2a2e;
+  color: #ccc;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.slib-page-btn:hover:not(:disabled) {
+  border-color: #555;
+  color: #fff;
+}
+
+.slib-page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.slib-page-info {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+/* =========================================================
+   MEDIA SECTION (expanded seminar)
+   ========================================================= */
+
+.slib-media-section {
+  padding: 0 16px 16px;
+  background: rgba(26, 26, 30, 0.6);
+  border-top: 1px solid #2a2a2e;
+}
+
+.slib-media-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 12px 0 0;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #2e2e32;
+}
+
+.slib-media-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 12px;
+  border: none;
+  background: transparent;
+  color: #888;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all 0.2s;
+}
+
+.slib-media-tab:hover {
+  color: #bbb;
+}
+
+.slib-media-tab-active {
+  color: #d4a853;
+  border-bottom-color: #d4a853;
+}
+
+.slib-media-tab-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 9px;
+  background: #333;
+  color: #aaa;
+  font-size: 0.65rem;
+  font-weight: 600;
+}
+
+.slib-media-tab-active .slib-media-tab-count {
+  background: rgba(212, 168, 83, 0.15);
+  color: #d4a853;
+}
+
+.slib-media-content {
+  min-height: 60px;
+}
+
+/* =========================================================
+   DROPZONE
+   ========================================================= */
+
+.slib-dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 20px;
+  border: 2px dashed #3a3a3e;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #888;
+  font-size: 0.82rem;
+  margin-bottom: 12px;
+}
+
+.slib-dropzone:hover {
+  border-color: #555;
+  color: #bbb;
+}
+
+.slib-dropzone-active {
+  border-color: #d4a853;
+  background: rgba(212, 168, 83, 0.05);
+  color: #d4a853;
+}
+
+.slib-dropzone-uploading {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.slib-dropzone-sub {
+  font-size: 0.7rem;
+  color: #666;
+}
+
+.slib-uploading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* =========================================================
+   VIDEO FORM
+   ========================================================= */
+
+.slib-video-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 12px;
+  background: #1e1e22;
+  border: 1px solid #2e2e32;
+  border-radius: 8px;
+}
+
+/* =========================================================
+   PHOTO GRID
+   ========================================================= */
+
+.slib-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 8px;
+}
+
+.slib-photo-card {
+  position: relative;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #1a1a1e;
+  border: 1px solid #2e2e32;
+}
+
+.slib-photo-thumb {
+  display: block;
+  aspect-ratio: 1;
+}
+
+.slib-photo-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.slib-photo-actions {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  padding: 4px;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.slib-photo-actions .slib-action-btn {
+  width: 24px;
+  height: 24px;
+}
+
+/* =========================================================
+   VIDEO LIST
+   ========================================================= */
+
+.slib-video-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.slib-video-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  background: #1e1e22;
+  border: 1px solid #2e2e32;
+  border-radius: 6px;
+}
+
+.slib-video-thumb {
+  position: relative;
+  width: 120px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.slib-video-thumb img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+}
+
+.slib-video-play {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.35);
+  font-size: 1.4rem;
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.slib-video-thumb:hover .slib-video-play {
+  opacity: 1;
+}
+
+.slib-video-info {
+  flex: 1;
+  min-width: 0;
+}
+
+/* =========================================================
+   FILE LIST (lists & presentations)
+   ========================================================= */
+
+.slib-file-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.slib-file-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  background: #1e1e22;
+  border: 1px solid #2e2e32;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+
+.slib-file-item:hover {
+  background: #252528;
+}
+
+.slib-file-icon {
+  color: #d4a853;
+  flex-shrink: 0;
+}
+
+.slib-file-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.slib-item-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #ddd;
+  font-size: 0.8rem;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.slib-item-name:hover {
+  color: #d4a853;
+}
+
+.slib-item-meta {
+  font-size: 0.72rem;
+  color: #777;
+  margin-top: 2px;
+}
+
+/* =========================================================
+   MEDIA TABS ROW (tabs + download all)
+   ========================================================= */
+
+.slib-media-tabs-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0 0;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #2e2e32;
+}
+
+.slib-media-tabs-row .slib-media-tabs {
+  padding: 0;
+  margin-bottom: 0;
+  border-bottom: none;
+}
+
+.slib-download-all-btn {
+  margin-bottom: 4px;
+  flex-shrink: 0;
+}
+
+/* =========================================================
+   CHECKBOXES
+   ========================================================= */
+
+.slib-checkbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  color: #666;
+  flex-shrink: 0;
+  transition: color 0.15s;
+}
+
+.slib-checkbox:hover {
+  color: #aaa;
+}
+
+.slib-checkbox-checked {
+  color: #d4a853;
+}
+
+.slib-checkbox-checked:hover {
+  color: #e0b963;
+}
+
+.slib-select-all-row {
+  display: flex;
+  align-items: center;
+  padding: 6px 10px;
+  margin-bottom: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid #2e2e32;
+  border-radius: 6px;
+}
+
+.slib-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 0.78rem;
+  color: #aaa;
+  user-select: none;
+}
+
+.slib-checkbox-label:hover {
+  color: #ddd;
+}
+
+/* Photo card checkbox */
+.slib-photo-checkbox {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.5);
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+  transition: color 0.15s;
+}
+
+.slib-photo-checkbox:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.slib-photo-checkbox.slib-checkbox-checked {
+  color: #d4a853;
+}
+
+.slib-photo-card-selected {
+  border-color: #d4a853;
+  box-shadow: 0 0 0 1px rgba(212, 168, 83, 0.3);
+}
+
+.slib-file-item-selected {
+  border-color: #d4a853;
+  background: rgba(212, 168, 83, 0.06);
+}
+
+/* =========================================================
+   BULK ACTION BAR
+   ========================================================= */
+
+.slib-bulk-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 12px 20px;
+  background: #1a1a1e;
+  border-top: 1px solid #3a3a3e;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.slib-bulk-bar-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.slib-bulk-count {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #d4a853;
+}
+
+.slib-bulk-delete-btn {
+  background: rgba(231, 76, 60, 0.15);
+  color: #e74c3c;
+  border: 1px solid rgba(231, 76, 60, 0.3);
+}
+
+.slib-bulk-delete-btn:hover:not(:disabled) {
+  background: rgba(231, 76, 60, 0.25);
+}
+
+/* =========================================================
+   MEDIA COUNTS SUMMARY
+   ========================================================= */
+
+.slib-media-counts-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.slib-media-summary {
+  font-size: 0.68rem;
+  color: #777;
+}
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+.slib-container ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.slib-container ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.slib-container ::-webkit-scrollbar-thumb {
+  background: #444;
+  border-radius: 3px;
+}
+
+.slib-container ::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* =========================================================
+   LIGHT THEME
+   ========================================================= */
+
+[data-theme="light"] .slib-subtabs {
+  background: #ffffff;
+  border-color: #e2e8f0;
+}
+
+[data-theme="light"] .slib-subtab {
+  color: #64748b;
+}
+
+[data-theme="light"] .slib-subtab:hover {
+  color: #1e293b;
+  background: #f1f5f9;
+}
+
+[data-theme="light"] .slib-subtab-active {
+  background: rgba(139, 32, 64, 0.08);
+  color: #8b2040;
+}
+
+[data-theme="light"] .slib-subtab-active:hover {
+  background: rgba(139, 32, 64, 0.1);
+  color: #8b2040;
+}
+
+[data-theme="light"] .slib-select {
+  background: #fff;
+  border-color: #d1d5db;
+  color: #374151;
+}
+
+[data-theme="light"] .slib-select:focus {
+  border-color: #8b2040;
+}
+
+[data-theme="light"] .slib-input {
+  background: #fff;
+  border-color: #d1d5db;
+  color: #374151;
+}
+
+[data-theme="light"] .slib-input:focus {
+  border-color: #8b2040;
+}
+
+[data-theme="light"] .slib-btn-primary {
+  background: rgba(139, 32, 64, 0.08);
+  color: #8b2040;
+  border-color: rgba(139, 32, 64, 0.2);
+}
+
+[data-theme="light"] .slib-btn-primary:hover:not(:disabled) {
+  background: rgba(139, 32, 64, 0.15);
+}
+
+[data-theme="light"] .slib-btn-secondary {
+  background: #f1f5f9;
+  color: #64748b;
+  border-color: #e2e8f0;
+}
+
+[data-theme="light"] .slib-btn-secondary:hover:not(:disabled) {
+  background: #e2e8f0;
+  color: #374151;
+}
+
+[data-theme="light"] .slib-reports-table,
+[data-theme="light"] .slib-seminars-table {
+  border-color: #e2e8f0;
+}
+
+[data-theme="light"] .slib-table-header {
+  background: #f9f8f6;
+  border-bottom-color: #e2e8f0;
+  color: #64748b;
+}
+
+[data-theme="light"] .slib-table-row {
+  border-bottom-color: #f1f5f9;
+  color: #374151;
+}
+
+[data-theme="light"] .slib-table-row:hover {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+[data-theme="light"] .slib-seminar-row:hover {
+  background: rgba(139, 32, 64, 0.03);
+}
+
+[data-theme="light"] .slib-row-expanded {
+  background: rgba(139, 32, 64, 0.04);
+}
+
+[data-theme="light"] .slib-td-period svg {
+  color: #8b2040;
+}
+
+[data-theme="light"] .slib-action-download {
+  color: #8b2040;
+}
+
+[data-theme="light"] .slib-action-download:hover:not(:disabled) {
+  background: rgba(139, 32, 64, 0.08);
+}
+
+[data-theme="light"] .slib-report-form {
+  background: #fff;
+  border-color: #e2e8f0;
+}
+
+[data-theme="light"] .slib-report-form-header {
+  border-bottom-color: #e2e8f0;
+}
+
+[data-theme="light"] .slib-report-form-header h3 {
+  color: #1e293b;
+}
+
+[data-theme="light"] .slib-close-btn {
+  color: #94a3b8;
+}
+
+[data-theme="light"] .slib-close-btn:hover {
+  background: #f1f5f9;
+  color: #374151;
+}
+
+[data-theme="light"] .slib-form-row label {
+  color: #64748b;
+}
+
+[data-theme="light"] .slib-report-form-actions {
+  border-top-color: #e2e8f0;
+}
+
+[data-theme="light"] .slib-report-form-overlay {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+[data-theme="light"] .slib-search-box {
+  background: #fff;
+  border-color: #d1d5db;
+}
+
+[data-theme="light"] .slib-search-box:focus-within {
+  border-color: #8b2040;
+}
+
+[data-theme="light"] .slib-search-box svg {
+  color: #94a3b8;
+}
+
+[data-theme="light"] .slib-search-input {
+  color: #374151;
+}
+
+[data-theme="light"] .slib-search-input::placeholder {
+  color: #94a3b8;
+}
+
+[data-theme="light"] .slib-page-btn {
+  background: #fff;
+  border-color: #d1d5db;
+  color: #374151;
+}
+
+[data-theme="light"] .slib-page-btn:hover:not(:disabled) {
+  border-color: #8b2040;
+  color: #8b2040;
+}
+
+[data-theme="light"] .slib-page-info {
+  color: #64748b;
+}
+
+[data-theme="light"] .slib-media-section {
+  background: rgba(249, 248, 246, 0.6);
+  border-top-color: #e2e8f0;
+}
+
+[data-theme="light"] .slib-media-tabs {
+  border-bottom-color: #e2e8f0;
+}
+
+[data-theme="light"] .slib-media-tab {
+  color: #94a3b8;
+}
+
+[data-theme="light"] .slib-media-tab:hover {
+  color: #374151;
+}
+
+[data-theme="light"] .slib-media-tab-active {
+  color: #8b2040;
+  border-bottom-color: #8b2040;
+}
+
+[data-theme="light"] .slib-media-tab-count {
+  background: #e2e8f0;
+  color: #64748b;
+}
+
+[data-theme="light"] .slib-media-tab-active .slib-media-tab-count {
+  background: rgba(139, 32, 64, 0.1);
+  color: #8b2040;
+}
+
+[data-theme="light"] .slib-dropzone {
+  border-color: #d1d5db;
+  color: #94a3b8;
+}
+
+[data-theme="light"] .slib-dropzone:hover {
+  border-color: #8b2040;
+  color: #64748b;
+}
+
+[data-theme="light"] .slib-dropzone-active {
+  border-color: #8b2040;
+  background: rgba(139, 32, 64, 0.03);
+  color: #8b2040;
+}
+
+[data-theme="light"] .slib-dropzone-sub {
+  color: #94a3b8;
+}
+
+[data-theme="light"] .slib-video-form {
+  background: #f9f8f6;
+  border-color: #e2e8f0;
+}
+
+[data-theme="light"] .slib-photo-card {
+  background: #fff;
+  border-color: #e2e8f0;
+}
+
+[data-theme="light"] .slib-photo-actions {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .slib-video-card {
+  background: #fff;
+  border-color: #e2e8f0;
+}
+
+[data-theme="light"] .slib-file-item {
+  background: #fff;
+  border-color: #e2e8f0;
+}
+
+[data-theme="light"] .slib-file-item:hover {
+  background: #f9f8f6;
+}
+
+[data-theme="light"] .slib-file-icon {
+  color: #8b2040;
+}
+
+[data-theme="light"] .slib-item-name {
+  color: #374151;
+}
+
+[data-theme="light"] .slib-item-name:hover {
+  color: #8b2040;
+}
+
+[data-theme="light"] .slib-item-meta {
+  color: #94a3b8;
+}
+
+[data-theme="light"] .slib-empty {
+  color: #94a3b8;
+}
+
+[data-theme="light"] .slib-spinner {
+  border-color: #e2e8f0;
+  border-top-color: #8b2040;
+}
+
+[data-theme="light"] .slib-type-inperson {
+  background: rgba(13, 148, 136, 0.08);
+  color: #0d7377;
+}
+
+[data-theme="light"] .slib-type-online {
+  background: rgba(139, 32, 64, 0.08);
+  color: #8b2040;
+}
+
+[data-theme="light"] .slib-type-hybrid {
+  background: rgba(107, 76, 154, 0.08);
+  color: #6b4c9a;
+}
+
+[data-theme="light"] .slib-no-seminars {
+  color: #94a3b8;
+}
+
+[data-theme="light"] .slib-seminar-row-wrapper {
+  border-bottom-color: #f1f5f9;
+}
+
+/* Light theme: tabs row */
+[data-theme="light"] .slib-media-tabs-row {
+  border-bottom-color: #e2e8f0;
+}
+
+/* Light theme: checkboxes */
+[data-theme="light"] .slib-checkbox {
+  color: #94a3b8;
+}
+
+[data-theme="light"] .slib-checkbox:hover {
+  color: #64748b;
+}
+
+[data-theme="light"] .slib-checkbox-checked {
+  color: #8b2040;
+}
+
+[data-theme="light"] .slib-checkbox-checked:hover {
+  color: #a02850;
+}
+
+[data-theme="light"] .slib-select-all-row {
+  background: #f9f8f6;
+  border-color: #e2e8f0;
+}
+
+[data-theme="light"] .slib-checkbox-label {
+  color: #64748b;
+}
+
+[data-theme="light"] .slib-checkbox-label:hover {
+  color: #374151;
+}
+
+[data-theme="light"] .slib-photo-checkbox {
+  color: rgba(0, 0, 0, 0.4);
+  filter: drop-shadow(0 1px 2px rgba(255, 255, 255, 0.5));
+}
+
+[data-theme="light"] .slib-photo-checkbox:hover {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+[data-theme="light"] .slib-photo-checkbox.slib-checkbox-checked {
+  color: #8b2040;
+}
+
+[data-theme="light"] .slib-photo-card-selected {
+  border-color: #8b2040;
+  box-shadow: 0 0 0 1px rgba(139, 32, 64, 0.2);
+}
+
+[data-theme="light"] .slib-file-item-selected {
+  border-color: #8b2040;
+  background: rgba(139, 32, 64, 0.04);
+}
+
+/* Light theme: bulk action bar */
+[data-theme="light"] .slib-bulk-bar {
+  background: #fff;
+  border-top-color: #e2e8f0;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="light"] .slib-bulk-count {
+  color: #8b2040;
+}
+
+[data-theme="light"] .slib-bulk-delete-btn {
+  background: rgba(231, 76, 60, 0.08);
+  border-color: rgba(231, 76, 60, 0.2);
+}
+
+[data-theme="light"] .slib-bulk-delete-btn:hover:not(:disabled) {
+  background: rgba(231, 76, 60, 0.15);
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .slib-media-tabs-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .slib-download-all-btn {
+    align-self: flex-start;
+    margin-bottom: 8px;
+  }
+
+  .slib-bulk-bar-content {
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .slib-reports-table .slib-table-header,
+  .slib-reports-table .slib-table-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+
+  .slib-th-credits,
+  .slib-td-credits,
+  .slib-th-date,
+  .slib-reports-table .slib-td-date {
+    display: none;
+  }
+
+  .slib-seminars-table .slib-table-header,
+  .slib-seminars-table .slib-table-row {
+    grid-template-columns: 1fr 2fr 40px;
+    gap: 6px;
+  }
+
+  .slib-th-type,
+  .slib-td-type,
+  .slib-th-facilitator,
+  .slib-td-facilitator,
+  .slib-th-media,
+  .slib-td-media {
+    display: none;
+  }
+
+  .slib-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .slib-search-box {
+    max-width: none;
+  }
+
+  .slib-video-thumb {
+    width: 80px;
+  }
+
+  .slib-photo-grid {
+    grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .slib-subtabs {
+    width: 100%;
+  }
+
+  .slib-subtab {
+    flex: 1;
+    justify-content: center;
+    padding: 8px 12px;
+    font-size: 0.78rem;
+  }
+
+  .slib-report-form {
+    width: 95%;
+  }
+}

@@ -1661,6 +1661,36 @@ academyEnrollmentController.post(
         });
       }
 
+      // Check if already registered as guest (by email)
+      const userEmail = userAccount.email;
+      if (userEmail) {
+        const { seminar_guest_attendance } = require('../sequelize/models/index');
+        const guestReg = await seminar_guest_attendance.findOne({
+          where: { seminarId, guestEmail: userEmail },
+        });
+        if (guestReg) {
+          // Convert guest to platform registration instead of blocking
+          const credits = seminarData.creditsForAttendance > 0 ? seminarData.creditsForAttendance : 0;
+          const registration = await student_seminar.create({
+            studentId: studentData.id,
+            seminarId,
+            status: 'approved',
+            attended: guestReg.participationLevel !== 'passive',
+            attendedAt: guestReg.createdAt,
+            participationLevel: guestReg.participationLevel || 'passive',
+            earnedCredits: (userAccount.role === 'admin' || userAccount.role === 'mentor') ? 0 : credits,
+          });
+          await guestReg.update({ convertedToUserId: userId });
+          await seminarData.increment('registeredCount');
+          return res.status(201).json({
+            success: true,
+            message: 'Записването ви като гост е обновено. Вече сте регистриран участник.',
+            registration,
+            convertedFromGuest: true,
+          });
+        }
+      }
+
       if (seminarData.maxParticipants) {
         const currentRegistrations = await student_seminar.count({
           where: {
@@ -1692,6 +1722,21 @@ academyEnrollmentController.post(
         await seminarData.increment('registeredCount');
       }
 
+      // Register for specific sessions if sessionIds provided
+      const { sessionIds } = req.body;
+      if (Array.isArray(sessionIds) && sessionIds.length > 0) {
+        const { session_attendance, seminar_session } = require('../sequelize/models/index');
+        for (const sessionId of sessionIds) {
+          const session = await seminar_session.findByPk(sessionId);
+          if (session && session.seminarId === seminarId) {
+            await session_attendance.findOrCreate({
+              where: { sessionId, studentId: studentData.id },
+              defaults: { sessionId, studentId: studentData.id, registered: true, attended: false },
+            });
+          }
+        }
+      }
+
       // Create user notification
       try {
         await user_notification.create({
@@ -1710,7 +1755,7 @@ academyEnrollmentController.post(
         const { forwardEmailsViaZoho } = require('../utils/zohoEmails');
         const seminarEmailTemplates = require('../utils/seminarEmailTemplates');
         const userAccount = await user_account.findByPk(req.user.userId, { attributes: ['email'] });
-        const userDets = await user_details.findOne({ where: { userId: req.user.userId }, attributes: ['username'] });
+        const userDets = await user_details.findOne({ where: { userAccountsId: req.user.userId }, attributes: ['username'] });
 
         if (userAccount?.email) {
           const facilitator = seminarData.mentorId
@@ -1746,10 +1791,10 @@ academyEnrollmentController.post(
         const { sendRegistrationSms, getSmsSettings } = require('../utils/smsService');
         const smsSettings = await getSmsSettings();
         if (smsSettings.sms_enabled !== 'false' && smsSettings.sms_on_registration !== 'false') {
-          const userDetsForSms = await user_details.findOne({ where: { userId: req.user.userId }, attributes: ['phone'] });
-          if (userDetsForSms?.phone && userDetsForSms.phone.length >= 8) {
+          const userDetsForSms = await user_details.findOne({ where: { userAccountsId: req.user.userId }, attributes: ['phoneNumber'] });
+          if (userDetsForSms?.phoneNumber && userDetsForSms.phoneNumber.length >= 8) {
             await sendRegistrationSms(
-              userDetsForSms.phone, seminarData.title, seminarData.scheduledDate,
+              userDetsForSms.phoneNumber, seminarData.title, seminarData.scheduledDate,
               seminarData.location, seminarData.isOnline, smsSettings.sms_registration_template
             );
           }

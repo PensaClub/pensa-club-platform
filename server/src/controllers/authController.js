@@ -14,6 +14,97 @@ const ageCalculate = require('../utils/ageCalculate');
 const { OAuth2Client } = require('google-auth-library');
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
+// Helper: Convert guest seminar attendance to student credits upon registration
+const convertGuestAttendance = async (userId, email) => {
+    try {
+        const { seminar_guest_attendance, seminar: seminarModel, student, student_seminar, user_credits, user_credits_history } = require('../sequelize/models/index');
+
+        const guestRecords = await seminar_guest_attendance.findAll({
+            where: { guestEmail: email, convertedToUserId: null },
+        });
+
+        if (guestRecords.length === 0) return;
+
+        const userAccount = await user_account.findByPk(userId);
+        const privilegedRoles = ['admin', 'moderator', 'mentor'];
+        if (privilegedRoles.includes(userAccount?.role)) return;
+
+        // Change role to student
+        if (['user', 'guest'].includes(userAccount?.role)) {
+            await userAccount.update({ role: 'student' });
+        }
+
+        // Create student record
+        const [studentRecord] = await student.findOrCreate({
+            where: { userId },
+            defaults: { userId, status: 'active' },
+        });
+
+        let totalCreditsAwarded = 0;
+
+        for (const guestRec of guestRecords) {
+            const sem = await seminarModel.findByPk(guestRec.seminarId, {
+                attributes: ['id', 'title', 'creditsForAttendance'],
+            });
+            if (!sem) continue;
+
+            const existing = await student_seminar.findOne({
+                where: { studentId: studentRecord.id, seminarId: sem.id },
+            });
+            if (existing) {
+                await guestRec.update({ convertedToUserId: userId });
+                continue;
+            }
+
+            const credits = sem.creditsForAttendance > 0 ? sem.creditsForAttendance : 0;
+
+            await student_seminar.create({
+                studentId: studentRecord.id,
+                seminarId: sem.id,
+                status: 'approved',
+                attended: true,
+                attendedAt: guestRec.createdAt,
+                participationLevel: guestRec.participationLevel || 'passive',
+                earnedCredits: credits,
+            });
+
+            totalCreditsAwarded += credits;
+            await guestRec.update({ convertedToUserId: userId });
+        }
+
+        if (totalCreditsAwarded > 0) {
+            const [creditsRecord] = await user_credits.findOrCreate({
+                where: { userId },
+                defaults: { userId, totalCredits: 0 },
+            });
+
+            const before = creditsRecord.totalCredits;
+            creditsRecord.totalCredits += totalCreditsAwarded;
+            if (creditsRecord.totalCredits > 300) creditsRecord.level = 'master';
+            else if (creditsRecord.totalCredits > 150) creditsRecord.level = 'advanced';
+            else if (creditsRecord.totalCredits > 50) creditsRecord.level = 'intermediate';
+            else creditsRecord.level = 'beginner';
+            await creditsRecord.save();
+
+            await user_credits_history.create({
+                userId,
+                creditsAmount: totalCreditsAwarded,
+                creditsBefore: before,
+                creditsAfter: creditsRecord.totalCredits,
+                sourceType: 'seminar_guest_conversion',
+                sourceId: null,
+                sourceTitle: `Конвертиране от гост — ${guestRecords.length} семинар(а)`,
+                category: 'Семинари',
+                description: `Кредити за ${guestRecords.length} посетени семинара като гост`,
+            });
+        }
+
+        console.log(`[Guest Conversion] User ${userId} (${email}): ${guestRecords.length} seminars, ${totalCreditsAwarded} credits`);
+    } catch (err) {
+        console.error('Guest conversion error (non-blocking):', err.message);
+    }
+};
+
 const { loginSchema, registerSchema, googleAuthSchema, resetRequestSchema, resetPasswordSchema } = require('../schemas/userAccount.schema');
 
 const userInclude = [
@@ -59,6 +150,9 @@ authController.post('/register', async (req, res, next) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const user = await user_account.create({ email, password: hashedPassword });
+
+        // Check if this email was a guest at seminars → convert to student + award credits
+        await convertGuestAttendance(user.id, email);
 
         const { token } = tokenGenerator('access', user);
         const { token: refreshJwtToken, refreshTokenId, expiryDate } = tokenGenerator('refresh', user);
@@ -267,6 +361,9 @@ authController.post('/google-register', async (req, res, next) => {
             skills: [],
             interestOptions: [],
         });
+
+        // Check if this email was a guest at seminars → convert to student + award credits
+        await convertGuestAttendance(user.id, email);
 
         const { token } = tokenGenerator('access', user);
         const { token: refreshJwtToken, refreshTokenId, expiryDate } = tokenGenerator('refresh', user);

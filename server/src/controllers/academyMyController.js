@@ -191,10 +191,12 @@ academyMyController.get('/dashboard', isAuth, async (req, res, next) => {
       where: { studentId },
     });
 
-    // Forum credits (from user_credits table)
-    const { user_credits } = require('../sequelize/models/index');
-    const forumCreditsRecord = await user_credits.findOne({ where: { userId } });
-    const forumCredits = forumCreditsRecord?.totalCredits || 0;
+    // Forum credits (only forum-specific, not seminar conversion)
+    const { user_credits_history } = require('../sequelize/models/index');
+    const forumCreditsResult = await user_credits_history.sum('creditsAmount', {
+      where: { userId, sourceType: { [Op.like]: 'forum_%' } },
+    });
+    const forumCredits = forumCreditsResult || 0;
 
     const totalCredits =
       (courseCredits || 0) + (lectureCredits || 0) + (seminarCredits || 0) + forumCredits;
