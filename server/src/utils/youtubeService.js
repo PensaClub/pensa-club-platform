@@ -34,7 +34,10 @@ oauth2Client.on('tokens', (tokens) => {
 const getAuthUrl = () => {
     return oauth2Client.generateAuthUrl({
         access_type: 'offline',
-        scope: ['https://www.googleapis.com/auth/youtube'],
+        scope: [
+            'https://www.googleapis.com/auth/youtube.upload',
+            'https://www.googleapis.com/auth/youtube',
+        ],
         prompt: 'consent',
     });
 };

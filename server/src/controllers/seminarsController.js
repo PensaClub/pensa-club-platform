@@ -1187,6 +1187,26 @@ seminarsController.post(
         notes: notes || null,
       });
 
+      // Admin notification
+      try {
+        const seminarData = await seminar.findByPk(seminarId, { attributes: ['title'] });
+        const uploader = await user_account.findByPk(req.user.userId, {
+          include: [{ model: user_details, as: 'details', attributes: ['firstName', 'lastName'] }],
+        });
+        const uploaderName = uploader?.details
+          ? `${uploader.details.firstName || ''} ${uploader.details.lastName || ''}`.trim()
+          : 'Потребител';
+
+        await admin_notification.create({
+          type: 'seminar_media_uploaded',
+          title: 'Нов физически списък',
+          message: `${uploaderName} качи списък "${fileName}" към "${seminarData?.title || 'семинар'}"`,
+          data: { seminarId, mediaType: 'attendance_list', listId: record.id, uploaderName },
+        });
+      } catch (notifErr) {
+        console.error('Failed to create list notification:', notifErr);
+      }
+
       res.status(201).json({ success: true, record });
     } catch (err) {
       console.error('❌ [CREATE ATTENDANCE LIST] Error:', err);
@@ -1492,6 +1512,26 @@ seminarsController.post(
         youtubeVideoId: youtubeVideoId || null,
         notes: notes || null,
       });
+
+      // Admin notification
+      const typeLabels = { photo: 'снимка', video: 'видео', document: 'документ', presentation: 'презентация' };
+      try {
+        const uploader = await user_account.findByPk(req.user.userId, {
+          include: [{ model: user_details, as: 'details', attributes: ['firstName', 'lastName'] }],
+        });
+        const uploaderName = uploader?.details
+          ? `${uploader.details.firstName || ''} ${uploader.details.lastName || ''}`.trim()
+          : uploader?.email || 'Потребител';
+
+        await admin_notification.create({
+          type: 'seminar_media_uploaded',
+          title: `Нов файл към семинар`,
+          message: `${uploaderName} качи ${typeLabels[mediaType] || mediaType} "${fileName}" към "${seminarRecord.title}"`,
+          data: { seminarId, mediaType, mediaId: record.id, uploaderName },
+        });
+      } catch (notifErr) {
+        console.error('Failed to create media notification:', notifErr);
+      }
 
       res.status(201).json({ success: true, data: record });
     } catch (err) {
@@ -1804,6 +1844,139 @@ seminarsController.delete(
     } catch (err) {
       console.error('❌ [DELETE REPORT] Error:', err);
       next(err);
+    }
+  }
+);
+
+// ===============================
+// GET /api/academy/seminars/:id/download-all
+// Изтегляне на всички файлове като ZIP архив
+// ===============================
+seminarsController.get(
+  '/:id/download-all',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const archiver = require('archiver');
+      const { seminar_attendance_list, seminar_media } = require('../sequelize/models/index');
+      const seminarId = parseInt(req.params.id);
+
+      // Fetch the seminar to get its title for the ZIP filename
+      const seminarRecord = await seminar.findByPk(seminarId, { attributes: ['id', 'title'] });
+      if (!seminarRecord) {
+        return res.status(404).json({ success: false, message: 'Seminar not found' });
+      }
+
+      // Fetch attendance lists and media (excluding videos)
+      const [attendanceLists, mediaRecords] = await Promise.all([
+        seminar_attendance_list.findAll({
+          where: { seminarId },
+          attributes: ['id', 'fileUrl', 'fileName'],
+        }),
+        seminar_media.findAll({
+          where: {
+            seminarId,
+            mediaType: { [Op.ne]: 'video' },
+          },
+          attributes: ['id', 'fileUrl', 'fileName', 'mediaType'],
+        }),
+      ]);
+
+      // Build a list of files to include
+      const files = [];
+
+      for (const list of attendanceLists) {
+        if (list.fileUrl) {
+          files.push({
+            url: list.fileUrl,
+            folder: 'lists',
+            name: list.fileName || `list-${list.id}`,
+          });
+        }
+      }
+
+      for (const media of mediaRecords) {
+        if (media.fileUrl) {
+          const folderMap = {
+            photo: 'photos',
+            document: 'presentations',
+            presentation: 'presentations',
+          };
+          files.push({
+            url: media.fileUrl,
+            folder: folderMap[media.mediaType] || 'other',
+            name: media.fileName || `file-${media.id}`,
+          });
+        }
+      }
+
+      if (files.length === 0) {
+        return res.status(404).json({ success: false, message: 'No files to download' });
+      }
+
+      // Set response headers for ZIP download
+      const safeTitle = (seminarRecord.title || 'seminar')
+        .replace(/[^a-zA-Z0-9а-яА-ЯёЁ\s_-]/g, '')
+        .replace(/\s+/g, '_')
+        .substring(0, 50);
+      res.setHeader('Content-Type', 'application/zip');
+      res.setHeader('Content-Disposition', `attachment; filename="seminar-${seminarId}-${safeTitle}.zip"`);
+
+      // Create ZIP archive and pipe to response
+      const archive = archiver('zip', { zlib: { level: 5 } });
+
+      archive.on('error', (err) => {
+        console.error('❌ [DOWNLOAD-ALL] Archive error:', err);
+        if (!res.headersSent) {
+          res.status(500).json({ success: false, message: 'Archive creation failed' });
+        }
+      });
+
+      archive.pipe(res);
+
+      // Track used filenames per folder to avoid duplicates
+      const usedNames = {};
+
+      for (const file of files) {
+        try {
+          const response = await fetch(file.url);
+          if (!response.ok) {
+            console.warn(`⚠️ [DOWNLOAD-ALL] Failed to fetch ${file.url}: ${response.status}`);
+            continue;
+          }
+
+          // Ensure unique filename within folder
+          if (!usedNames[file.folder]) usedNames[file.folder] = new Set();
+          let fileName = file.name;
+          let counter = 1;
+          while (usedNames[file.folder].has(fileName)) {
+            const dotIndex = file.name.lastIndexOf('.');
+            if (dotIndex > 0) {
+              fileName = `${file.name.substring(0, dotIndex)}-${counter}${file.name.substring(dotIndex)}`;
+            } else {
+              fileName = `${file.name}-${counter}`;
+            }
+            counter++;
+          }
+          usedNames[file.folder].add(fileName);
+
+          // Stream the response body into the archive
+          const { Readable } = require('stream');
+          const readable = Readable.fromWeb(response.body);
+          archive.append(readable, { name: `${file.folder}/${fileName}` });
+        } catch (fetchErr) {
+          console.warn(`⚠️ [DOWNLOAD-ALL] Skipping file ${file.url}:`, fetchErr.message);
+          continue;
+        }
+      }
+
+      await archive.finalize();
+    } catch (err) {
+      console.error('❌ [DOWNLOAD-ALL] Error:', err);
+      if (!res.headersSent) {
+        next(err);
+      }
     }
   }
 );

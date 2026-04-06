@@ -356,8 +356,19 @@
   aspect-ratio: 16/9;
   border-radius: 4px;
   overflow: hidden;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: #2a2a2e;
+}
+
+.alu-video-thumb-fallback {
+  background: linear-gradient(135deg, #2a2a2e, #333);
+}
+
+.alu-video-thumb-fallback .alu-video-play {
+  opacity: 1;
+  font-size: 1.5rem;
 }
 
 .alu-video-thumb img {

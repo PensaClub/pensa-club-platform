@@ -11,6 +11,7 @@ import {
   FileText, Download, Trash2, ChevronLeft, ChevronRight, Search,
   Calendar, Upload, Image, ExternalLink, Video, Presentation,
   Plus, FileBarChart, X, ChevronDown, ChevronUp, Link,
+  CheckSquare, Square, Archive,
 } from 'lucide-react';
 import './seminarLibrary.css';
 
@@ -85,7 +86,9 @@ const SeminarLibrary = () => {
     getSeminarMedia,
     addSeminarMedia,
     deleteSeminarMedia,
+    deleteAttendanceList,
     getAttendanceLists,
+    uploadAttendanceList,
     getMonthlyReports,
     createMonthlyReport,
     autoGenerateReports,
@@ -130,6 +133,11 @@ const SeminarLibrary = () => {
   const [mediaLoading, setMediaLoading] = useState(false);
   const [mediaUploading, setMediaUploading] = useState(false);
   const [mediaDragOver, setMediaDragOver] = useState(false);
+
+  // Bulk selection state
+  const [selectedItems, setSelectedItems] = useState(new Set());
+  const [bulkDeleting, setBulkDeleting] = useState(false);
+  const [zipDownloading, setZipDownloading] = useState(false);
 
   // Video form
   const [videoUrl, setVideoUrl] = useState('');
@@ -283,6 +291,7 @@ const SeminarLibrary = () => {
   }, [getSeminarMedia, getAttendanceLists]);
 
   const handleExpandSeminar = (seminarId) => {
+    setSelectedItems(new Set());
     if (expandedSeminar === seminarId) {
       setExpandedSeminar(null);
       return;
@@ -290,6 +299,87 @@ const SeminarLibrary = () => {
     setExpandedSeminar(seminarId);
     setActiveMediaTab('lists');
     fetchMedia(seminarId);
+  };
+
+  const handleMediaTabChange = (tab) => {
+    setSelectedItems(new Set());
+    setActiveMediaTab(tab);
+  };
+
+  // ─── Bulk selection helpers ─────────────────────────────────
+  const getItemKey = (tab, id) => `${tab === 'lists' ? 'list' : tab === 'photos' ? 'photo' : 'pres'}-${id}`;
+
+  const toggleSelectItem = (key) => {
+    setSelectedItems(prev => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+  };
+
+  const toggleSelectAll = () => {
+    if (activeMediaTab === 'videos') return;
+    const items = mediaItems[activeMediaTab] || [];
+    const allKeys = items.map(item => getItemKey(activeMediaTab, item.id));
+    const allSelected = allKeys.length > 0 && allKeys.every(k => selectedItems.has(k));
+    if (allSelected) {
+      setSelectedItems(new Set());
+    } else {
+      setSelectedItems(new Set(allKeys));
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedItems.size === 0 || !expandedSeminar) return;
+    if (!confirm(`Сигурни ли сте, че искате да изтриете ${selectedItems.size} файла?`)) return;
+    setBulkDeleting(true);
+    try {
+      const promises = [];
+      for (const key of selectedItems) {
+        const [type, id] = key.split('-');
+        const numId = Number(id);
+        if (type === 'list') {
+          promises.push(deleteAttendanceList(expandedSeminar, numId));
+        } else {
+          promises.push(deleteSeminarMedia(expandedSeminar, numId));
+        }
+      }
+      await Promise.all(promises);
+      setSelectedItems(new Set());
+      await fetchMedia(expandedSeminar);
+    } catch (err) {
+      console.error('Bulk delete error:', err);
+    } finally {
+      setBulkDeleting(false);
+    }
+  };
+
+  const handleDownloadAllZip = async (seminarId) => {
+    setZipDownloading(true);
+    try {
+      const auth = JSON.parse(localStorage.getItem('auth') || '{}');
+      const baseUrl = import.meta.env.VITE_API_URL || '';
+      const url = `${baseUrl}/academy/seminars/${seminarId}/download-all`;
+      const res = await fetch(url, {
+        headers: { Authorization: `Bearer ${auth.token}` },
+        credentials: 'include',
+      });
+      if (!res.ok) throw new Error('Download failed');
+      const blob = await res.blob();
+      const sem = seminars.find(s => s.id === seminarId);
+      const fileName = `${(sem?.title || 'seminar').replace(/[^a-zA-Z0-9а-яА-Я\s-]/g, '').trim()}-files.zip`;
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = fileName;
+      a.click();
+      URL.revokeObjectURL(blobUrl);
+    } catch (err) {
+      console.error('Error downloading ZIP:', err);
+    } finally {
+      setZipDownloading(false);
+    }
   };
 
   const uploadToFirebase = async (file, folder, seminarId) => {
@@ -319,7 +409,7 @@ const SeminarLibrary = () => {
       mediaType = 'list';
       maxSize = MAX_LIST_SIZE;
       allowedTypes = LIST_TYPES;
-      folder = 'lists';
+      folder = null;
     } else if (activeMediaTab === 'photos') {
       mediaType = 'photo';
       maxSize = MAX_PHOTO_SIZE;
@@ -343,10 +433,22 @@ const SeminarLibrary = () => {
 
     setMediaUploading(true);
     try {
-      const fileUrl = await uploadToFirebase(file, folder, expandedSeminar);
-      await addSeminarMedia(expandedSeminar, {
-        mediaType, fileUrl, fileName: file.name, fileType: file.type, fileSize: file.size,
-      });
+      let fileUrl;
+      if (activeMediaTab === 'lists') {
+        const fileName = `${Date.now()}_${file.name}`;
+        const storageRef = ref(firebaseStorage, `seminar-attendance-lists/${expandedSeminar}/${fileName}`);
+        const metadata = file.type === 'text/plain' ? { contentType: 'text/plain; charset=utf-8' } : { contentType: file.type };
+        await uploadBytes(storageRef, file, metadata);
+        fileUrl = await getDownloadURL(storageRef);
+        await uploadAttendanceList(expandedSeminar, {
+          fileUrl, fileName: file.name, fileType: file.type, fileSize: file.size,
+        });
+      } else {
+        fileUrl = await uploadToFirebase(file, folder, expandedSeminar);
+        await addSeminarMedia(expandedSeminar, {
+          mediaType, fileUrl, fileName: file.name, fileType: file.type, fileSize: file.size,
+        });
+      }
       await fetchMedia(expandedSeminar);
     } catch (err) {
       console.error('Upload error:', err);
@@ -386,7 +488,7 @@ const SeminarLibrary = () => {
           mediaType: 'video',
           fileUrl: result.videoUrl,
           fileName: finalTitle,
-          thumbnailUrl: `https://img.youtube.com/vi/${result.videoId}/mqdefault.jpg`,
+          thumbnailUrl: null,
           youtubeVideoId: result.videoId,
         });
         setVideoTitle('');
@@ -674,26 +776,53 @@ const SeminarLibrary = () => {
       videos: mediaItems.videos.length,
       presentations: mediaItems.presentations.length,
     };
+    const hasDownloadableFiles = mediaCounts.lists + mediaCounts.photos + mediaCounts.presentations > 0;
+    const isSelectableTab = activeMediaTab !== 'videos';
+    const currentKeys = isSelectableTab ? items.map(item => getItemKey(activeMediaTab, item.id)) : [];
+    const allSelected = currentKeys.length > 0 && currentKeys.every(k => selectedItems.has(k));
 
     return (
       <div className="slib-media-section">
-        {/* Media subtabs */}
-        <div className="slib-media-tabs">
-          {MEDIA_TABS.map(({ key, label, icon: Icon }) => (
-            <button
-              key={key}
-              className={`slib-media-tab ${activeMediaTab === key ? 'slib-media-tab-active' : ''}`}
-              onClick={() => setActiveMediaTab(key)}
-            >
-              <Icon size={14} />
-              {t(`seminarLibrary.mediaTab_${key}`, label)}
-              {mediaCounts[key] > 0 && <span className="slib-media-tab-count">{mediaCounts[key]}</span>}
-            </button>
-          ))}
+        {/* Media subtabs + download all */}
+        <div className="slib-media-tabs-row">
+          <div className="slib-media-tabs">
+            {MEDIA_TABS.map(({ key, label, icon: Icon }) => (
+              <button
+                key={key}
+                className={`slib-media-tab ${activeMediaTab === key ? 'slib-media-tab-active' : ''}`}
+                onClick={() => handleMediaTabChange(key)}
+              >
+                <Icon size={14} />
+                {t(`seminarLibrary.mediaTab_${key}`, label)}
+                {mediaCounts[key] > 0 && <span className="slib-media-tab-count">{mediaCounts[key]}</span>}
+              </button>
+            ))}
+          </div>
+          <button
+            className="slib-btn slib-btn-primary slib-btn-sm slib-download-all-btn"
+            onClick={() => handleDownloadAllZip(seminarId)}
+            disabled={!hasDownloadableFiles || zipDownloading}
+            title={!hasDownloadableFiles ? 'Няма файлове за сваляне' : 'Свали всички файлове като ZIP'}
+          >
+            {zipDownloading ? <div className="slib-spinner slib-spinner-sm" /> : <Archive size={14} />}
+            Свали всички (ZIP)
+          </button>
         </div>
 
         {mediaLoading ? renderSpinner() : (
           <div className="slib-media-content">
+            {/* Select all checkbox (not for videos) */}
+            {isSelectableTab && items.length > 0 && (
+              <div className="slib-select-all-row">
+                <label className="slib-checkbox-label" onClick={toggleSelectAll}>
+                  <span className={`slib-checkbox ${allSelected ? 'slib-checkbox-checked' : ''}`}>
+                    {allSelected ? <CheckSquare size={16} /> : <Square size={16} />}
+                  </span>
+                  <span>Избери всички ({items.length})</span>
+                </label>
+              </div>
+            )}
+
             {/* Upload area (not for videos) */}
             {activeMediaTab !== 'videos' && (
               <div
@@ -786,32 +915,40 @@ const SeminarLibrary = () => {
               renderEmpty(t('seminarLibrary.noFiles', 'Няма файлове'))
             ) : activeMediaTab === 'photos' ? (
               <div className="slib-photo-grid">
-                {items.map((item) => (
-                  <div key={item.id} className="slib-photo-card">
-                    <a href={item.fileUrl} target="_blank" rel="noopener noreferrer" className="slib-photo-thumb">
-                      <img src={item.fileUrl} alt={item.fileName} />
-                    </a>
-                    <div className="slib-photo-actions">
-                      <button className="slib-action-btn slib-action-download" onClick={() => downloadFile(item.fileUrl, item.fileName)} title={t('seminarLibrary.download', 'Свали')}>
-                        <Download size={12} />
-                      </button>
-                      <button className="slib-action-btn slib-action-delete" onClick={() => handleMediaDelete(item.id)} title={t('seminarLibrary.delete', 'Изтрий')}>
-                        <Trash2 size={12} />
-                      </button>
+                {items.map((item) => {
+                  const itemKey = getItemKey('photos', item.id);
+                  const isChecked = selectedItems.has(itemKey);
+                  return (
+                    <div key={item.id} className={`slib-photo-card ${isChecked ? 'slib-photo-card-selected' : ''}`}>
+                      <div
+                        className={`slib-photo-checkbox ${isChecked ? 'slib-checkbox-checked' : ''}`}
+                        onClick={(e) => { e.stopPropagation(); toggleSelectItem(itemKey); }}
+                      >
+                        {isChecked ? <CheckSquare size={16} /> : <Square size={16} />}
+                      </div>
+                      <a href={item.fileUrl} target="_blank" rel="noopener noreferrer" className="slib-photo-thumb">
+                        <img src={item.fileUrl} alt={item.fileName} />
+                      </a>
+                      <div className="slib-photo-actions">
+                        <button className="slib-action-btn slib-action-download" onClick={() => downloadFile(item.fileUrl, item.fileName)} title={t('seminarLibrary.download', 'Свали')}>
+                          <Download size={12} />
+                        </button>
+                        <button className="slib-action-btn slib-action-delete" onClick={() => handleMediaDelete(item.id)} title={t('seminarLibrary.delete', 'Изтрий')}>
+                          <Trash2 size={12} />
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             ) : activeMediaTab === 'videos' ? (
               <div className="slib-video-list">
                 {items.map((item) => (
                   <div key={item.id} className="slib-video-card">
                     <a href={item.fileUrl} target="_blank" rel="noopener noreferrer" className="slib-video-thumb">
-                      <img
-                        src={item.thumbnailUrl || `https://img.youtube.com/vi/${item.youtubeVideoId}/mqdefault.jpg`}
-                        alt={item.fileName}
-                        onError={e => { e.target.style.display = 'none'; }}
-                      />
+                      {item.thumbnailUrl ? (
+                        <img src={item.thumbnailUrl} alt={item.fileName} />
+                      ) : null}
                       <div className="slib-video-play">▶</div>
                     </a>
                     <div className="slib-video-info">
@@ -832,30 +969,64 @@ const SeminarLibrary = () => {
               </div>
             ) : (
               <div className="slib-file-list">
-                {items.map((item) => (
-                  <div key={item.id} className="slib-file-item">
-                    <div className="slib-file-icon">
-                      {item.fileType?.startsWith('image/') ? <Image size={16} /> : <FileText size={16} />}
-                    </div>
-                    <div className="slib-file-info">
-                      <a href={item.fileUrl} target="_blank" rel="noopener noreferrer" className="slib-item-name">
-                        {item.fileName}
-                        <ExternalLink size={11} />
-                      </a>
-                      <div className="slib-item-meta">
-                        {formatSize(item.fileSize)} · {item.uploaderName || '—'} · {new Date(item.createdAt).toLocaleDateString('bg-BG')}
+                {items.map((item) => {
+                  const itemKey = getItemKey(activeMediaTab, item.id);
+                  const isChecked = selectedItems.has(itemKey);
+                  return (
+                    <div key={item.id} className={`slib-file-item ${isChecked ? 'slib-file-item-selected' : ''}`}>
+                      <div
+                        className={`slib-checkbox ${isChecked ? 'slib-checkbox-checked' : ''}`}
+                        onClick={() => toggleSelectItem(itemKey)}
+                      >
+                        {isChecked ? <CheckSquare size={16} /> : <Square size={16} />}
                       </div>
+                      <div className="slib-file-icon">
+                        {item.fileType?.startsWith('image/') ? <Image size={16} /> : <FileText size={16} />}
+                      </div>
+                      <div className="slib-file-info">
+                        <a href={item.fileUrl} target="_blank" rel="noopener noreferrer" className="slib-item-name">
+                          {item.fileName}
+                          <ExternalLink size={11} />
+                        </a>
+                        <div className="slib-item-meta">
+                          {formatSize(item.fileSize)} · {item.uploaderName || '—'} · {new Date(item.createdAt).toLocaleDateString('bg-BG')}
+                        </div>
+                      </div>
+                      <button className="slib-action-btn slib-action-download" onClick={() => downloadFile(item.fileUrl, item.fileName)} title={t('seminarLibrary.download', 'Свали')}>
+                        <Download size={14} />
+                      </button>
+                      <button className="slib-action-btn slib-action-delete" onClick={() => handleMediaDelete(item.id)} title={t('seminarLibrary.delete', 'Изтрий')}>
+                        <Trash2 size={14} />
+                      </button>
                     </div>
-                    <button className="slib-action-btn slib-action-download" onClick={() => downloadFile(item.fileUrl, item.fileName)} title={t('seminarLibrary.download', 'Свали')}>
-                      <Download size={14} />
-                    </button>
-                    <button className="slib-action-btn slib-action-delete" onClick={() => handleMediaDelete(item.id)} title={t('seminarLibrary.delete', 'Изтрий')}>
-                      <Trash2 size={14} />
-                    </button>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
+          </div>
+        )}
+
+        {/* Floating action bar for bulk selection */}
+        {selectedItems.size > 0 && (
+          <div className="slib-bulk-bar">
+            <div className="slib-bulk-bar-content">
+              <span className="slib-bulk-count">{selectedItems.size} избрани</span>
+              <button
+                className="slib-btn slib-btn-sm slib-bulk-delete-btn"
+                onClick={handleBulkDelete}
+                disabled={bulkDeleting}
+              >
+                {bulkDeleting ? <div className="slib-spinner slib-spinner-sm" /> : <Trash2 size={14} />}
+                Изтрий избраните
+              </button>
+              <button
+                className="slib-btn slib-btn-secondary slib-btn-sm"
+                onClick={() => setSelectedItems(new Set())}
+                disabled={bulkDeleting}
+              >
+                Отмени
+              </button>
+            </div>
           </div>
         )}
       </div>
@@ -964,13 +1135,23 @@ const SeminarLibrary = () => {
                   </span>
                   <span className="slib-td slib-td-facilitator">{sem.facilitator || '—'}</span>
                   <span className="slib-td slib-td-media">
-                    <span className="slib-media-counts">
-                      {(sem.mediaCounts?.attendanceLists || 0) > 0 && <span title={t('seminarLibrary.lists', 'Списъци')}><FileText size={12} /> {sem.mediaCounts.attendanceLists}</span>}
-                      {(sem.mediaCounts?.photos || 0) > 0 && <span title={t('seminarLibrary.photos', 'Снимки')}><Image size={12} /> {sem.mediaCounts.photos}</span>}
-                      {(sem.mediaCounts?.videos || 0) > 0 && <span title={t('seminarLibrary.videos', 'Видеа')}><Video size={12} /> {sem.mediaCounts.videos}</span>}
-                      {(sem.mediaCounts?.presentations || 0) > 0 && <span title={t('seminarLibrary.presentations', 'Презентации')}><Presentation size={12} /> {sem.mediaCounts.presentations}</span>}
-                      {!(sem.mediaCounts?.attendanceLists || sem.mediaCounts?.photos || sem.mediaCounts?.videos || sem.mediaCounts?.presentations) && <span className="slib-no-media">—</span>}
-                    </span>
+                    {(() => {
+                      const mc = sem.mediaCounts || {};
+                      const totalFiles = (mc.attendanceLists || 0) + (mc.photos || 0) + (mc.videos || 0) + (mc.presentations || 0);
+                      return totalFiles > 0 ? (
+                        <span className="slib-media-counts-wrap">
+                          <span className="slib-media-counts">
+                            {(mc.attendanceLists || 0) > 0 && <span title={t('seminarLibrary.lists', 'Списъци')}><FileText size={12} /> {mc.attendanceLists}</span>}
+                            {(mc.photos || 0) > 0 && <span title={t('seminarLibrary.photos', 'Снимки')}><Image size={12} /> {mc.photos}</span>}
+                            {(mc.videos || 0) > 0 && <span title={t('seminarLibrary.videos', 'Видеа')}><Video size={12} /> {mc.videos}</span>}
+                            {(mc.presentations || 0) > 0 && <span title={t('seminarLibrary.presentations', 'Презентации')}><Presentation size={12} /> {mc.presentations}</span>}
+                          </span>
+                          <span className="slib-media-summary">{totalFiles} {totalFiles === 1 ? 'файл' : 'файла'}</span>
+                        </span>
+                      ) : (
+                        <span className="slib-no-media">—</span>
+                      );
+                    })()}
                   </span>
                   <span className="slib-td slib-td-expand">
                     {expandedSeminar === sem.id ? <ChevronUp size={16} /> : <ChevronDown size={16} />}

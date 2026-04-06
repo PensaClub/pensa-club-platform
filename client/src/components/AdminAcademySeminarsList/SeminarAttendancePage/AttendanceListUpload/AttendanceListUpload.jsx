@@ -448,7 +448,7 @@ const AttendanceListUpload = ({ seminarId, seminarTitle = '' }) => {
           mediaType: 'video',
           fileUrl: result.videoUrl,
           fileName: finalTitle,
-          thumbnailUrl: `https://img.youtube.com/vi/${result.videoId}/mqdefault.jpg`,
+          thumbnailUrl: null,
           youtubeVideoId: result.videoId,
         });
         setVideoTitle('');
@@ -535,11 +535,9 @@ const AttendanceListUpload = ({ seminarId, seminarTitle = '' }) => {
                   rel="noopener noreferrer"
                   className="alu-video-thumb"
                 >
-                  <img
-                    src={item.thumbnailUrl || `https://img.youtube.com/vi/${item.youtubeVideoId}/mqdefault.jpg`}
-                    alt={item.fileName}
-                    onError={e => { e.target.style.display = 'none'; }}
-                  />
+                  {item.thumbnailUrl ? (
+                    <img src={item.thumbnailUrl} alt={item.fileName} />
+                  ) : null}
                   <div className="alu-video-play">▶</div>
                 </a>
                 <div className="alu-video-info">

@@ -143,6 +143,14 @@ youtubeController.post('/upload', isAuth, rbac.checkPermission('seminar', 'updat
         res.json({ success: true, ...result });
     } catch (err) {
         console.error('YouTube upload error:', err);
+
+        if (err.message?.includes('exceeded the number of videos') || err.message?.includes('uploadLimitExceeded')) {
+            return res.status(429).json({
+                success: false,
+                message: 'Дневният лимит за качване на видеа в YouTube е достигнат. Опитайте отново утре.',
+            });
+        }
+
         res.status(500).json({ success: false, message: 'Upload failed', error: err.message });
     }
 });
