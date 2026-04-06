@@ -29,7 +29,8 @@ jobs:
           echo "Backup created"
           
           git pull origin main
-          docker compose up --build -d --force-recreate
+          docker compose down
+          docker compose up --build -d
           
           sleep 10
           docker compose ps
