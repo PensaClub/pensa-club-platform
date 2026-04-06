@@ -4,16 +4,17 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAcademyCourses } from '../../contexts/AcademyCoursesProvider';
-import { ArrowLeft, BookOpen, Users, ChevronDown, QrCode } from 'lucide-react';
+import { ArrowLeft, BookOpen, Users, ChevronDown, QrCode, Download } from 'lucide-react';
 import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { QRCodeSVG } from 'qrcode.react';
 import AttendanceForm from './AttendanceForm/AttendanceForm';
+import AttendanceListUpload from './AttendanceListUpload/AttendanceListUpload';
 import './seminarAttendancePage.css';
 
 const SeminarAttendancePage = () => {
     const { t } = useTranslation('academy-admin');
     const navigate = useLocalizedNavigate();
-    const { getAdminSeminars } = useAcademyCourses();
+    const { getAdminSeminars, getSeminarSessions } = useAcademyCourses();
 
     useEffect(() => { window.scrollTo(0, 0); }, []);
 
@@ -22,6 +23,8 @@ const SeminarAttendancePage = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [showDropdown, setShowDropdown] = useState(false);
     const [showQR, setShowQR] = useState(false);
+    const [sessions, setSessions] = useState([]);
+    const [selectedSession, setSelectedSession] = useState(null);
 
     useEffect(() => {
         const load = async () => {
@@ -108,7 +111,15 @@ const SeminarAttendancePage = () => {
                                             <button
                                                 key={sem.id}
                                                 className={`satp-dropdown-item ${selectedSeminar?.id === sem.id ? 'satp-dropdown-item-active' : ''}`}
-                                                onClick={() => { setSelectedSeminar(sem); setShowDropdown(false); }}
+                                                onClick={async () => {
+                                                    setSelectedSeminar(sem);
+                                                    setShowDropdown(false);
+                                                    setSelectedSession(null);
+                                                    try {
+                                                        const sessData = await getSeminarSessions(sem.id);
+                                                        setSessions(sessData || []);
+                                                    } catch { setSessions([]); }
+                                                }}
                                             >
                                                 <div className="satp-dropdown-item-info">
                                                     <span className="satp-dropdown-item-title">{sem.title}</span>
@@ -131,14 +142,69 @@ const SeminarAttendancePage = () => {
 
                 {/* QR + Attendance form */}
                 {selectedSeminar && (
-                    <button className="satp-qr-btn" onClick={() => setShowQR(true)}>
-                        <QrCode size={16} />
-                        {t('seminarAttendance.showQR', 'Покажи QR')}
-                    </button>
+                    <div className="satp-actions-row">
+                        <button className="satp-qr-btn" onClick={() => setShowQR(true)}>
+                            <QrCode size={16} />
+                            {t('seminarAttendance.showQR', 'Покажи QR')}
+                        </button>
+                        <button
+                            className="satp-download-btn"
+                            onClick={async () => {
+                                try {
+                                    const auth = JSON.parse(localStorage.getItem('auth') || '{}');
+                                    const res = await fetch(`${import.meta.env.VITE_API_URL}/academy/seminars/admin/export-attendees/${selectedSeminar.id}`, {
+                                        headers: { Authorization: `Bearer ${auth.token}` },
+                                        credentials: 'include',
+                                    });
+                                    const blob = await res.blob();
+                                    const url = URL.createObjectURL(blob);
+                                    const a = document.createElement('a');
+                                    a.href = url;
+                                    a.download = `attendees-${selectedSeminar.id}.pdf`;
+                                    a.click();
+                                    URL.revokeObjectURL(url);
+                                } catch { /* ignore */ }
+                            }}
+                        >
+                            <Download size={16} />
+                            {t('seminarAttendance.downloadList', 'Свали списък')}
+                        </button>
+                    </div>
+                )}
+
+                {/* Session selector */}
+                {selectedSeminar && sessions.length > 0 && (
+                    <div className="satp-session-selector">
+                        <label className="satp-selector-label">
+                            {t('seminarAttendance.selectSession', 'Изберете ден')}
+                        </label>
+                        <div className="satp-session-tabs">
+                            <button
+                                className={`satp-session-tab ${!selectedSession ? 'satp-session-tab-active' : ''}`}
+                                onClick={() => setSelectedSession(null)}
+                            >
+                                Всички дни
+                            </button>
+                            {sessions.map(s => (
+                                <button
+                                    key={s.id}
+                                    className={`satp-session-tab ${selectedSession?.id === s.id ? 'satp-session-tab-active' : ''}`}
+                                    onClick={() => setSelectedSession(s)}
+                                >
+                                    {new Date(s.date).toLocaleDateString('bg-BG', { day: 'numeric', month: 'short' })}
+                                    <span className="satp-session-tab-time">{s.startTime}</span>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
                 )}
 
                 {selectedSeminar && (
-                    <AttendanceForm seminar={selectedSeminar} />
+                    <AttendanceForm seminar={selectedSeminar} session={selectedSession} />
+                )}
+
+                {selectedSeminar && (
+                    <AttendanceListUpload seminarId={selectedSeminar.id} seminarTitle={selectedSeminar.title} seminarSlug={selectedSeminar.slug} />
                 )}
             </div>
 

@@ -15,6 +15,11 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: 'id',
         as: 'markedByUser',
       });
+      seminar_guest_attendance.belongsTo(models.user_account, {
+        foreignKey: 'convertedToUserId',
+        targetKey: 'id',
+        as: 'convertedUser',
+      });
     }
   }
 
@@ -59,8 +64,13 @@ module.exports = (sequelize, DataTypes) => {
       },
       markedBy: {
         type: DataTypes.INTEGER,
-        allowNull: false,
+        allowNull: true,
         field: 'marked_by',
+      },
+      convertedToUserId: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        field: 'converted_to_user_id',
       },
     },
     {

@@ -368,6 +368,116 @@
 [data-theme="light"] .scfs-warning-msg { color: #d97706; }
 [data-theme="light"] .scfs-preview-remove { background: rgba(0, 0, 0, 0.5); }
 
+/* ── Sessions / Schedule ── */
+.scfs-session-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px 16px;
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+[data-theme="light"] .scfs-session-row {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+
+.scfs-session-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 2fr;
+  gap: 8px;
+  flex: 1;
+}
+
+.scfs-session-field { display: flex; flex-direction: column; gap: 4px; }
+.scfs-session-field .scfs-label { font-size: 10px; }
+.scfs-session-field-wide { grid-column: span 1; }
+
+.scfs-session-remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+
+.scfs-session-remove:hover { background: rgba(239, 68, 68, 0.2); }
+
+.scfs-session-cancel-btn {
+  padding: 4px 10px;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 6px;
+  background: rgba(239, 68, 68, 0.08);
+  color: #ef4444;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 20px;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.scfs-session-cancel-btn:hover { background: rgba(239, 68, 68, 0.15); }
+
+.scfs-session-cancelled-badge {
+  padding: 4px 10px;
+  border-radius: 6px;
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+  font-size: 11px;
+  font-weight: 700;
+  margin-top: 20px;
+  flex-shrink: 0;
+}
+
+.scfs-session-add {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 10px;
+  border: 1px dashed rgba(148, 163, 184, 0.25);
+  border-radius: 8px;
+  background: transparent;
+  color: #0d9488;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+  margin-top: 4px;
+}
+
+.scfs-session-add:hover {
+  background: rgba(13, 148, 136, 0.06);
+  border-color: #0d9488;
+}
+
+[data-theme="light"] .scfs-session-add:hover { background: rgba(13, 148, 136, 0.04); }
+
+@media (max-width: 768px) {
+  .scfs-session-fields { grid-template-columns: 1fr 1fr; }
+  .scfs-session-field-wide { grid-column: span 2; }
+}
+
+@media (max-width: 480px) {
+  .scfs-session-fields { grid-template-columns: 1fr; }
+  .scfs-session-field-wide { grid-column: span 1; }
+}
+
 /* ── Invite button ── */
 .scfs-invite-btn {
   display: flex;

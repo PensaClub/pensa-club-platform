@@ -93,7 +93,7 @@ const upload = multer({
 // POST /api/youtube/upload — Upload video to YouTube
 youtubeController.post('/upload', isAuth, rbac.checkPermission('seminar', 'update'), upload.single('video'), async (req, res) => {
     try {
-        const tokens = loadTokens();
+        let tokens = loadTokens();
         if (!tokens) {
             return res.status(401).json({ success: false, message: 'YouTube not connected. Admin must authorize first.' });
         }
@@ -105,19 +105,50 @@ youtubeController.post('/upload', isAuth, rbac.checkPermission('seminar', 'updat
 
         const { title, description, tags, privacyStatus } = req.body;
 
-        const result = await uploadVideoFromBuffer(req.file.buffer, {
-            title: title || req.file.originalname,
-            description: description || '',
-            tags: tags ? (typeof tags === 'string' ? tags.split(',').map(t => t.trim()) : tags) : [],
-            privacyStatus: privacyStatus || 'unlisted',
-        });
+        const doUpload = async () => {
+            return uploadVideoFromBuffer(req.file.buffer, {
+                title: title || req.file.originalname,
+                description: description || '',
+                tags: tags ? (typeof tags === 'string' ? tags.split(',').map(t => t.trim()) : tags) : [],
+                privacyStatus: privacyStatus || 'unlisted',
+            });
+        };
+
+        let result;
+        try {
+            result = await doUpload();
+        } catch (uploadErr) {
+            // If token expired, try forcing a refresh
+            if (uploadErr.message?.includes('invalid_grant') || uploadErr.message?.includes('Token has been expired') || uploadErr.code === 401) {
+                console.log('🔄 YouTube token expired, attempting refresh...');
+                try {
+                    const { oauth2Client } = require('../utils/youtubeService');
+                    const { credentials } = await oauth2Client.refreshAccessToken();
+                    const merged = { ...tokens, ...credentials };
+                    saveTokens(merged);
+                    setCredentials(merged);
+                    result = await doUpload();
+                } catch (refreshErr) {
+                    console.error('YouTube refresh failed:', refreshErr);
+                    return res.status(401).json({
+                        success: false,
+                        message: 'YouTube токенът е изтекъл. Моля, помолете администратор да свърже отново YouTube акаунта.',
+                    });
+                }
+            } else {
+                throw uploadErr;
+            }
+        }
 
         res.json({ success: true, ...result });
     } catch (err) {
         console.error('YouTube upload error:', err);
 
-        if (err.message?.includes('invalid_grant') || err.message?.includes('Token has been expired')) {
-            return res.status(401).json({ success: false, message: 'YouTube authorization expired. Admin must re-authorize.' });
+        if (err.message?.includes('exceeded the number of videos') || err.message?.includes('uploadLimitExceeded')) {
+            return res.status(429).json({
+                success: false,
+                message: 'Дневният лимит за качване на видеа в YouTube е достигнат. Опитайте отново утре.',
+            });
         }
 
         res.status(500).json({ success: false, message: 'Upload failed', error: err.message });
@@ -127,14 +158,27 @@ youtubeController.post('/upload', isAuth, rbac.checkPermission('seminar', 'updat
 // DELETE /youtube/delete/:videoId — Delete video from YouTube
 youtubeController.delete('/delete/:videoId', isAuth, rbac.checkPermission('seminar', 'update'), async (req, res) => {
     try {
-        const tokens = loadTokens();
+        let tokens = loadTokens();
         if (!tokens) {
             return res.status(401).json({ success: false, message: 'YouTube not connected' });
         }
         setCredentials(tokens);
 
-        const { deleteVideo } = require('../utils/youtubeService');
-        await deleteVideo(req.params.videoId);
+        const { deleteVideo, oauth2Client } = require('../utils/youtubeService');
+
+        try {
+            await deleteVideo(req.params.videoId);
+        } catch (delErr) {
+            if (delErr.message?.includes('invalid_grant') || delErr.message?.includes('Token has been expired') || delErr.code === 401) {
+                const { credentials } = await oauth2Client.refreshAccessToken();
+                const merged = { ...tokens, ...credentials };
+                saveTokens(merged);
+                setCredentials(merged);
+                await deleteVideo(req.params.videoId);
+            } else {
+                throw delErr;
+            }
+        }
 
         res.json({ success: true, message: 'Video deleted from YouTube' });
     } catch (err) {

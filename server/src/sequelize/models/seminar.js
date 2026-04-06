@@ -27,6 +27,13 @@ module.exports = (sequelize, DataTypes) => {
         as: 'attendances',
       });
 
+      // Has many sessions
+      seminar.hasMany(models.seminar_session, {
+        foreignKey: 'seminarId',
+        sourceKey: 'id',
+        as: 'sessions',
+      });
+
       // Has many materials
       seminar.hasMany(models.seminar_material, {
         foreignKey: 'seminarId',
@@ -51,6 +58,20 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'seminar_id',
         as: 'reviews',
       });
+      // Has many attendance lists (physical)
+      seminar.hasMany(models.seminar_attendance_list, {
+        foreignKey: 'seminarId',
+        sourceKey: 'id',
+        as: 'attendanceLists',
+      });
+
+      // Has many media (photos, videos, documents, presentations)
+      seminar.hasMany(models.seminar_media, {
+        foreignKey: 'seminarId',
+        sourceKey: 'id',
+        as: 'media',
+      });
+
       // Belongs to creator
       seminar.belongsTo(models.user_account, {
         foreignKey: 'createdBy',
@@ -151,6 +172,12 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: true,
         field: 'meeting_password',
+      },
+
+      secondaryLink: {
+        type: DataTypes.STRING(2048),
+        allowNull: true,
+        field: 'secondary_link',
       },
 
       // === ВИДЕО (за записани семинари) ===

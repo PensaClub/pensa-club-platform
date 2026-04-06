@@ -20,7 +20,8 @@ const StudentDashboardHeader = ({ user, dashboardData }) => {
     : username || email?.split('@')[0] || t('studentDashboardHeader.student');
 
   // Кредити
-  const totalCredits = dashboardData?.totalCredits || dashboardData?.totalCreditsEarned || 0;
+  const dashboard = dashboardData?.dashboard || dashboardData || {};
+  const totalCredits = dashboard?.totalCredits || dashboard?.totalCreditsEarned || 0;
   
   // Изчисляване на ниво
   const getLevelInfo = (credits) => {

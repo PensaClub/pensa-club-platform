@@ -59,6 +59,7 @@ export const NOTIFICATION_TYPES = {
   SEMINAR_NEW_REGISTRATION: 'seminar_new_registration',
   SEMINAR_ATTENDED: 'seminar_attended',
   SEMINAR_ATTENDANCE_RECORDED: 'seminar_attendance_recorded',
+  SEMINAR_MEDIA_UPLOADED: 'seminar_media_uploaded',
   SEMINAR_NEW_REVIEW: 'seminar_new_review',
   SEMINAR_REVIEW_APPROVED: 'seminar_review_approved',
 
@@ -173,6 +174,12 @@ export const notificationConfig = {
     color: '#00d2ff',
     route: '/academy/admin/seminar-attendance',
     priority: 'medium'
+  },
+  [NOTIFICATION_TYPES.SEMINAR_MEDIA_UPLOADED]: {
+    icon: '📎',
+    color: '#d4a853',
+    route: '/academy/admin/seminars#library',
+    priority: 'low'
   },
   [NOTIFICATION_TYPES.SEMINAR_REVIEW_APPROVED]: {
     icon: '⭐',

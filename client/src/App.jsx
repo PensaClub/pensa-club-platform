@@ -218,6 +218,10 @@ function AppRoutes() {
       <Route path="/stories" element={<Suspense fallback={<LazyLoadingFallback type="stories" />}><StoriesList /></Suspense>} />
       <Route path="/stories/edit/:slug" element={<StoryForm isEditMode={true} />} />
 
+      {/* Public seminar routes — accessible without login */}
+      <Route path="/academy/seminars" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademySeminars /></Suspense>} />
+      <Route path="/academy/seminars/:slug" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademySeminarDetail /></Suspense>} />
+
       <Route element={<AuthGuard />}>
         <Route path="/academy/become-mentor" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><DigiBridgeBecomeMentor /></Suspense>} />
         <Route path="/academy/my" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><StudentDashboard /></Suspense>} />
@@ -248,9 +252,7 @@ function AppRoutes() {
         <Route path="/academy/admin/create-seminar" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><SeminarCreateForm /></Suspense></AdminGuard>} />
         <Route path="/academy/admin/seminar-attendance" element={<AcademyStaffGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><SeminarAttendancePage /></Suspense></AcademyStaffGuard>} />
         <Route path="/academy/admin/seminar-reviews" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><SeminarReviewsAdmin /></Suspense></AdminGuard>} />
-        <Route path="/academy/seminars" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademySeminars /></Suspense>} />
         <Route path="/academy/seminars/:seminarId/checkin" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><SeminarCheckin /></Suspense>} />
-        <Route path="/academy/seminars/:slug" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademySeminarDetail /></Suspense>} />
         <Route path="/academy/seminars/:slug/test" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademyTestPlayer /></Suspense>} />
         <Route path="/academy/admin/edit-seminar/:slug" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><EditSeminar /></Suspense></AdminGuard>} />
         <Route path="/academy/admin/course/:slug/content" element={<AdminGuard><Suspense fallback={<LazyLoadingFallback type="academy" />}><CourseContentManager /></Suspense></AdminGuard>} />
