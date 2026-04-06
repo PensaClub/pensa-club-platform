@@ -372,6 +372,42 @@ export const academyCoursesServiceFactory = () => {
       return requester.del(`${apiUrl}/academy/seminars/${seminarId}/attendance-list/${listId}`);
     },
 
+    // SEMINAR LIBRARY & MEDIA
+    getLibrarySeminars: async (params = {}) => {
+      const queryString = toQueryString(params);
+      return requester.get(`${apiUrl}/academy/seminars/admin/library/seminars?${queryString}`);
+    },
+
+    getSeminarMedia: async (seminarId, type = 'all') => {
+      const params = type !== 'all' ? `?type=${type}` : '';
+      return requester.get(`${apiUrl}/academy/seminars/${seminarId}/media${params}`);
+    },
+
+    addSeminarMedia: async (seminarId, data) => {
+      return requester.post(`${apiUrl}/academy/seminars/${seminarId}/media`, data);
+    },
+
+    deleteSeminarMedia: async (seminarId, mediaId) => {
+      return requester.del(`${apiUrl}/academy/seminars/${seminarId}/media/${mediaId}`);
+    },
+
+    getMonthlyReports: async (params = {}) => {
+      const queryString = toQueryString(params);
+      return requester.get(`${apiUrl}/academy/seminars/admin/reports?${queryString}`);
+    },
+
+    createMonthlyReport: async (data) => {
+      return requester.post(`${apiUrl}/academy/seminars/admin/reports/generate`, data);
+    },
+
+    autoGenerateReports: async () => {
+      return requester.post(`${apiUrl}/academy/seminars/admin/reports/auto-generate`);
+    },
+
+    deleteMonthlyReport: async (reportId) => {
+      return requester.del(`${apiUrl}/academy/seminars/admin/reports/${reportId}`);
+    },
+
     searchSeminarAttendee: async (query) => {
       return requester.get(`${apiUrl}/academy/seminars/admin/search-attendee?q=${encodeURIComponent(query)}`);
     },

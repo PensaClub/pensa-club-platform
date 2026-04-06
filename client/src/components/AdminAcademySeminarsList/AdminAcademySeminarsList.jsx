@@ -5,17 +5,19 @@ import { useState, useEffect, useCallback, lazy, Suspense } from 'react';
 import { LocalizedLink as Link } from '../LocalizedLink/LocalizedLink';
 import { useTranslation } from 'react-i18next';
 import { useAcademyCourses } from '../contexts/AcademyCoursesProvider';
-import { Plus, BookOpen, RefreshCw, ChevronLeft, ChevronRight, BarChart3 } from 'lucide-react';
+import { Plus, BookOpen, RefreshCw, ChevronLeft, ChevronRight, BarChart3, Archive } from 'lucide-react';
 import SeminarCard from './SeminarCard/SeminarCard';
 import SeminarFilters from './SeminarFilters/SeminarFilters';
 import SeminarModals from './SeminarModals/SeminarModals';
 import './adminAcademySeminarsList.css';
 
 const AdminSeminarStatistics = lazy(() => import('./AdminSeminarStatistics/AdminSeminarStatistics'));
+const SeminarLibrary = lazy(() => import('./SeminarLibrary/SeminarLibrary'));
 
 const TABS = [
   { key: 'seminars', icon: BookOpen },
   { key: 'statistics', icon: BarChart3 },
+  { key: 'library', icon: Archive },
 ];
 
 const AdminAcademySeminarsList = () => {
@@ -183,7 +185,7 @@ const AdminAcademySeminarsList = () => {
                 onClick={() => handleTabChange(key)}
               >
                 <Icon size={18} />
-                <span>{t(`adminSeminars.tabs.${key}`, key === 'seminars' ? 'Семинари' : 'Статистика')}</span>
+                <span>{t(`adminSeminars.tabs.${key}`, key === 'seminars' ? 'Семинари' : key === 'statistics' ? 'Статистика' : 'Библиотека')}</span>
               </button>
             ))}
           </nav>
@@ -275,6 +277,12 @@ const AdminAcademySeminarsList = () => {
         {activeTab === 'statistics' && (
           <Suspense fallback={<div className="aalcs-loading"><div className="aalcs-spinner" /></div>}>
             <AdminSeminarStatistics />
+          </Suspense>
+        )}
+
+        {activeTab === 'library' && (
+          <Suspense fallback={<div className="aalcs-loading"><div className="aalcs-spinner" /></div>}>
+            <SeminarLibrary />
           </Suspense>
         )}
       </div>

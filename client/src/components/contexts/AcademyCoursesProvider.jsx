@@ -1032,6 +1032,101 @@ export const AcademyCoursesProvider = ({ children }) => {
     }
   }, []);
 
+  const getLibrarySeminars = useCallback(async (params = {}) => {
+    if (!isAdmin && !isMentor) return { seminars: [], pagination: {} };
+    try {
+      return await coursesService.getLibrarySeminars(params);
+    } catch (error) {
+      console.error('Error fetching library seminars:', error);
+      return { seminars: [], pagination: {} };
+    }
+  }, [isAdmin, isMentor]);
+
+  const getSeminarMedia = useCallback(async (seminarId, type) => {
+    try {
+      return await coursesService.getSeminarMedia(seminarId, type);
+    } catch (error) {
+      console.error('Error fetching seminar media:', error);
+      return { media: [] };
+    }
+  }, []);
+
+  const addSeminarMedia = useCallback(async (seminarId, data) => {
+    try {
+      const result = await coursesService.addSeminarMedia(seminarId, data);
+      if (result?.success) toast.success('Файлът е качен успешно');
+      return result;
+    } catch (error) {
+      console.error('Error adding media:', error);
+      toast.error('Грешка при качване');
+      throw error;
+    }
+  }, []);
+
+  const deleteSeminarMedia = useCallback(async (seminarId, mediaId) => {
+    try {
+      const result = await coursesService.deleteSeminarMedia(seminarId, mediaId);
+      if (result?.success) toast.success('Файлът е изтрит');
+      return result;
+    } catch (error) {
+      console.error('Error deleting media:', error);
+      toast.error('Грешка при изтриване');
+      throw error;
+    }
+  }, []);
+
+  const getMonthlyReports = useCallback(async (params = {}) => {
+    if (!isAdmin && !isMentor) return { reports: [], pagination: {} };
+    try {
+      return await coursesService.getMonthlyReports(params);
+    } catch (error) {
+      console.error('Error fetching reports:', error);
+      return { reports: [], pagination: {} };
+    }
+  }, [isAdmin, isMentor]);
+
+  const createMonthlyReport = useCallback(async (data) => {
+    if (!isAdmin) { toast.error('Нямате права'); return null; }
+    try {
+      const result = await coursesService.createMonthlyReport(data);
+      if (result?.success) toast.success('Докладът е създаден');
+      return result;
+    } catch (error) {
+      console.error('Error creating report:', error);
+      toast.error('Грешка при създаване на доклад');
+      throw error;
+    }
+  }, [isAdmin]);
+
+  const autoGenerateReports = useCallback(async () => {
+    if (!isAdmin) { toast.error('Нямате права'); return null; }
+    try {
+      const result = await coursesService.autoGenerateReports();
+      if (result?.success) {
+        if (result.generated > 0) toast.success(`Генерирани ${result.generated} доклада`);
+        else toast.info('Всички доклади са вече генерирани');
+      }
+      return result;
+    } catch (error) {
+      console.error('Error auto-generating reports:', error);
+      toast.error('Грешка при автоматично генериране');
+      throw error;
+    }
+  }, [isAdmin]);
+
+  const deleteMonthlyReport = useCallback(async (reportId) => {
+    if (!isAdmin) { toast.error('Нямате права'); return null; }
+    try {
+      const result = await coursesService.deleteMonthlyReport(reportId);
+      if (result?.success) toast.success('Докладът е изтрит');
+      return result;
+    } catch (error) {
+      console.error('Error deleting report:', error);
+      toast.error('Грешка при изтриване');
+      throw error;
+    }
+  }, [isAdmin]);
+
   const searchSeminarAttendee = useCallback(async (query) => {
     if (!isAdmin && !isMentor) return { results: [] };
     try {
@@ -2370,6 +2465,14 @@ export const AcademyCoursesProvider = ({ children }) => {
     getAttendanceLists,
     uploadAttendanceList,
     deleteAttendanceList,
+    getLibrarySeminars,
+    getSeminarMedia,
+    addSeminarMedia,
+    deleteSeminarMedia,
+    getMonthlyReports,
+    createMonthlyReport,
+    autoGenerateReports,
+    deleteMonthlyReport,
 
     // Seminar Registration
     registerForSeminar,

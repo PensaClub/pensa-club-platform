@@ -65,6 +65,13 @@ module.exports = (sequelize, DataTypes) => {
         as: 'attendanceLists',
       });
 
+      // Has many media (photos, videos, documents, presentations)
+      seminar.hasMany(models.seminar_media, {
+        foreignKey: 'seminarId',
+        sourceKey: 'id',
+        as: 'media',
+      });
+
       // Belongs to creator
       seminar.belongsTo(models.user_account, {
         foreignKey: 'createdBy',

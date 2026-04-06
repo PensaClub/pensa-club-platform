@@ -843,12 +843,21 @@ seminarsController.get(
       const PDFDocument = require('pdfkit');
       const path = require('path');
       const fs = require('fs');
-      const { period = 'all', type = 'all', status: statusParam = 'all' } = req.query;
+      const { period = 'all', type = 'all', status: statusParam = 'all', month: qMonth, year: qYear } = req.query;
 
       // Build where (same as statistics endpoint)
       let dateFilter = {};
       const now = new Date();
-      if (period !== 'all') {
+      if (qMonth && qYear) {
+        // Specific month/year filter (for monthly reports)
+        const m = parseInt(qMonth);
+        const y = parseInt(qYear);
+        if (m >= 1 && m <= 12 && y >= 2020) {
+          const startDate = new Date(y, m - 1, 1);
+          const endDate = new Date(y, m, 0, 23, 59, 59);
+          dateFilter = { scheduledDate: { [Op.between]: [startDate, endDate] } };
+        }
+      } else if (period !== 'all') {
         const days = { '7': 7, '30': 30, '180': 180, '365': 365 };
         const d = days[period];
         if (d) {
@@ -1250,6 +1259,550 @@ seminarsController.delete(
       res.status(200).json({ success: true, message: 'Deleted' });
     } catch (err) {
       console.error('❌ [DELETE ATTENDANCE LIST] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// GET /api/academy/seminars/admin/library/seminars
+// Paginated seminars list with media counts per type
+// ===============================
+seminarsController.get(
+  '/admin/library/seminars',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { seminar_media } = require('../sequelize/models/index');
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 15;
+      const offset = (page - 1) * limit;
+      const { search, mentorId } = req.query;
+
+      const where = {};
+      if (search) {
+        where.title = { [Op.iLike]: `%${search}%` };
+      }
+      if (mentorId) {
+        where.facilitatorId = parseInt(mentorId);
+      }
+
+      const { count, rows } = await seminar.findAndCountAll({
+        where,
+        attributes: ['id', 'title', 'slug', 'scheduledDate', 'isOnline', 'location', 'status'],
+        include: [
+          { model: mentor, as: 'facilitator', attributes: ['id', 'name'], required: false },
+        ],
+        order: [['scheduledDate', 'DESC']],
+        limit,
+        offset,
+        distinct: true,
+      });
+
+      const seminarIds = rows.map(s => s.id);
+
+      // Get media counts per type for all seminars in one query
+      let mediaCounts = {};
+      if (seminarIds.length > 0) {
+        const counts = await seminar_media.findAll({
+          where: { seminarId: { [Op.in]: seminarIds } },
+          attributes: [
+            'seminarId',
+            'mediaType',
+            [sequelize.fn('COUNT', sequelize.col('id')), 'count'],
+          ],
+          group: ['seminarId', 'mediaType'],
+          raw: true,
+        });
+
+        for (const row of counts) {
+          if (!mediaCounts[row.seminarId]) {
+            mediaCounts[row.seminarId] = { photos: 0, videos: 0, documents: 0, presentations: 0 };
+          }
+          const type = row.mediaType;
+          if (type === 'photo') mediaCounts[row.seminarId].photos = parseInt(row.count);
+          else if (type === 'video') mediaCounts[row.seminarId].videos = parseInt(row.count);
+          else if (type === 'document') mediaCounts[row.seminarId].documents = parseInt(row.count);
+          else if (type === 'presentation') mediaCounts[row.seminarId].presentations = parseInt(row.count);
+        }
+      }
+
+      // Get attendance list counts
+      let attendanceListCounts = {};
+      if (seminarIds.length > 0) {
+        const { seminar_attendance_list } = require('../sequelize/models/index');
+        if (seminar_attendance_list) {
+          const alCounts = await seminar_attendance_list.findAll({
+            where: { seminarId: { [Op.in]: seminarIds } },
+            attributes: [
+              'seminarId',
+              [sequelize.fn('COUNT', sequelize.col('id')), 'count'],
+            ],
+            group: ['seminarId'],
+            raw: true,
+          });
+          for (const row of alCounts) {
+            attendanceListCounts[row.seminarId] = parseInt(row.count);
+          }
+        }
+      }
+
+      const seminars = rows.map(s => {
+        const plain = s.get({ plain: true });
+        const counts = mediaCounts[plain.id] || { photos: 0, videos: 0, documents: 0, presentations: 0 };
+        counts.attendanceLists = attendanceListCounts[plain.id] || 0;
+        return {
+          id: plain.id,
+          title: plain.title,
+          slug: plain.slug,
+          scheduledDate: plain.scheduledDate,
+          isOnline: plain.isOnline,
+          location: plain.location,
+          facilitator: plain.facilitator?.name || null,
+          status: plain.status,
+          mediaCounts: counts,
+        };
+      });
+
+      res.status(200).json({
+        success: true,
+        seminars,
+        pagination: {
+          total: count,
+          page,
+          totalPages: Math.ceil(count / limit),
+        },
+      });
+    } catch (err) {
+      console.error('❌ [GET LIBRARY SEMINARS] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// GET /api/academy/seminars/:id/media
+// All media for a seminar, optionally filtered by type
+// ===============================
+seminarsController.get(
+  '/:id/media',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { seminar_media } = require('../sequelize/models/index');
+      const seminarId = parseInt(req.params.id);
+
+      const seminarRecord = await seminar.findByPk(seminarId);
+      if (!seminarRecord) {
+        return res.status(404).json({ success: false, message: 'Seminar not found' });
+      }
+
+      const { type } = req.query;
+      const where = { seminarId };
+      const validTypes = ['photo', 'video', 'document', 'presentation'];
+      if (type && type !== 'all' && validTypes.includes(type)) {
+        where.mediaType = type;
+      }
+
+      const media = await seminar_media.findAll({
+        where,
+        include: [
+          {
+            model: user_account,
+            as: 'uploader',
+            attributes: ['id'],
+            include: [
+              {
+                model: user_details,
+                as: 'details',
+                attributes: ['firstName', 'lastName'],
+                required: false,
+              },
+            ],
+            required: false,
+          },
+        ],
+        order: [['createdAt', 'DESC']],
+      });
+
+      const result = media.map(m => {
+        const plain = m.get({ plain: true });
+        const uploaderDetail = plain.uploader?.details;
+        return {
+          ...plain,
+          uploaderName: uploaderDetail
+            ? `${uploaderDetail.firstName || ''} ${uploaderDetail.lastName || ''}`.trim()
+            : null,
+        };
+      });
+
+      res.status(200).json({ success: true, media: result });
+    } catch (err) {
+      console.error('❌ [GET SEMINAR MEDIA] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// POST /api/academy/seminars/:id/media
+// Upload media record for a seminar
+// ===============================
+seminarsController.post(
+  '/:id/media',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { seminar_media } = require('../sequelize/models/index');
+      const seminarId = parseInt(req.params.id);
+
+      const seminarRecord = await seminar.findByPk(seminarId);
+      if (!seminarRecord) {
+        return res.status(404).json({ success: false, message: 'Seminar not found' });
+      }
+
+      const { mediaType, fileUrl, fileName, fileType, fileSize, thumbnailUrl, youtubeVideoId, notes } = req.body;
+
+      // Validate mediaType
+      const validTypes = ['photo', 'video', 'document', 'presentation'];
+      if (!mediaType || !validTypes.includes(mediaType)) {
+        return res.status(400).json({ success: false, message: 'Invalid mediaType. Must be one of: photo, video, document, presentation' });
+      }
+
+      // Validate required fields
+      if (!fileUrl) {
+        return res.status(400).json({ success: false, message: 'fileUrl is required' });
+      }
+      if (!fileName) {
+        return res.status(400).json({ success: false, message: 'fileName is required' });
+      }
+
+      const record = await seminar_media.create({
+        seminarId,
+        uploadedBy: req.user.userId,
+        mediaType,
+        fileUrl,
+        fileName,
+        fileType: fileType || null,
+        fileSize: fileSize ? parseInt(fileSize) : null,
+        thumbnailUrl: thumbnailUrl || null,
+        youtubeVideoId: youtubeVideoId || null,
+        notes: notes || null,
+      });
+
+      res.status(201).json({ success: true, data: record });
+    } catch (err) {
+      console.error('❌ [POST SEMINAR MEDIA] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// DELETE /api/academy/seminars/:id/media/:mediaId
+// Delete a media record from a seminar
+// ===============================
+seminarsController.delete(
+  '/:id/media/:mediaId',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { seminar_media } = require('../sequelize/models/index');
+      const seminarId = parseInt(req.params.id);
+      const mediaId = parseInt(req.params.mediaId);
+
+      const record = await seminar_media.findByPk(mediaId);
+      if (!record) {
+        return res.status(404).json({ success: false, message: 'Media record not found' });
+      }
+
+      // Verify media belongs to the correct seminar
+      if (record.seminarId !== seminarId) {
+        return res.status(400).json({ success: false, message: 'Media does not belong to this seminar' });
+      }
+
+      // If video with YouTube ID, try to delete from YouTube (fire-and-forget)
+      if (record.mediaType === 'video' && record.youtubeVideoId) {
+        (async () => {
+          try {
+            const { deleteVideo, setCredentials } = require('../utils/youtubeService');
+            const p = require('path');
+            const f = require('fs');
+            const tDir = p.join(__dirname, '../../youtube-tokens');
+            const tFile = f.existsSync(tDir) && f.statSync(tDir).isDirectory()
+              ? p.join(tDir, 'tokens.json') : p.join(__dirname, '../../youtube-tokens.json');
+            if (f.existsSync(tFile)) {
+              setCredentials(JSON.parse(f.readFileSync(tFile, 'utf8')));
+              await deleteVideo(record.youtubeVideoId);
+            }
+          } catch (e) { console.error('YT delete skip:', e?.message); }
+        })();
+      }
+
+      await record.destroy();
+      res.status(200).json({ success: true, message: 'Media deleted successfully' });
+    } catch (err) {
+      console.error('❌ [DELETE SEMINAR MEDIA] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// GET /api/academy/seminars/admin/reports
+// Paginated monthly reports
+// ===============================
+seminarsController.get(
+  '/admin/reports',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { seminar_monthly_report } = require('../sequelize/models/index');
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 12;
+      const offset = (page - 1) * limit;
+
+      const where = {};
+      if (req.query.year) {
+        where.year = parseInt(req.query.year);
+      }
+
+      const { count, rows } = await seminar_monthly_report.findAndCountAll({
+        where,
+        include: [
+          {
+            model: user_account,
+            as: 'generator',
+            attributes: ['id'],
+            include: [
+              {
+                model: user_details,
+                as: 'details',
+                attributes: ['firstName', 'lastName'],
+                required: false,
+              },
+            ],
+            required: false,
+          },
+        ],
+        order: [['year', 'DESC'], ['month', 'DESC']],
+        limit,
+        offset,
+      });
+
+      const reports = rows.map(r => {
+        const plain = r.get({ plain: true });
+        const generatorDetail = plain.generator?.details;
+        return {
+          ...plain,
+          generatorName: generatorDetail
+            ? `${generatorDetail.firstName || ''} ${generatorDetail.lastName || ''}`.trim()
+            : null,
+        };
+      });
+
+      res.status(200).json({
+        success: true,
+        reports,
+        pagination: {
+          total: count,
+          page,
+          totalPages: Math.ceil(count / limit),
+        },
+      });
+    } catch (err) {
+      console.error('❌ [GET REPORTS] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// POST /api/academy/seminars/admin/reports/generate
+// Генерира месечен доклад — изчислява stats за месеца и записва metadata
+// ===============================
+seminarsController.post(
+  '/admin/reports/generate',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { seminar_monthly_report, seminar_guest_attendance } = require('../sequelize/models/index');
+      const { month, year } = req.body;
+
+      const parsedMonth = parseInt(month);
+      if (!parsedMonth || parsedMonth < 1 || parsedMonth > 12) {
+        return res.status(400).json({ success: false, message: 'Month must be between 1 and 12' });
+      }
+
+      const parsedYear = parseInt(year);
+      if (!parsedYear || parsedYear < 2020 || parsedYear > 2100) {
+        return res.status(400).json({ success: false, message: 'Year must be between 2020 and 2100' });
+      }
+
+      // Check duplicate
+      const existing = await seminar_monthly_report.findOne({
+        where: { month: parsedMonth, year: parsedYear },
+      });
+      if (existing) {
+        return res.status(409).json({ success: false, message: 'Report for this month/year already exists' });
+      }
+
+      // Calculate stats for the month
+      const startDate = new Date(parsedYear, parsedMonth - 1, 1);
+      const endDate = new Date(parsedYear, parsedMonth, 0, 23, 59, 59);
+
+      const monthSeminars = await seminar.findAll({
+        where: { scheduledDate: { [Op.between]: [startDate, endDate] } },
+        attributes: ['id'],
+      });
+      const seminarIds = monthSeminars.map(s => s.id);
+
+      let attendeesCount = 0;
+      let creditsCount = 0;
+      if (seminarIds.length > 0) {
+        const regAttended = await student_seminar.count({ where: { seminarId: { [Op.in]: seminarIds }, attended: true } });
+        const guestAttended = await seminar_guest_attendance.count({ where: { seminarId: { [Op.in]: seminarIds } } });
+        attendeesCount = regAttended + guestAttended;
+
+        const creditsResult = await student_seminar.findOne({
+          where: { seminarId: { [Op.in]: seminarIds } },
+          attributes: [[sequelize.fn('SUM', sequelize.col('earned_credits')), 'total']],
+          raw: true,
+        });
+        creditsCount = parseInt(creditsResult?.total) || 0;
+      }
+
+      const record = await seminar_monthly_report.create({
+        month: parsedMonth,
+        year: parsedYear,
+        fileUrl: '',
+        generatedBy: req.user.userId,
+        seminarsCount: seminarIds.length,
+        attendeesCount,
+        creditsCount,
+      });
+
+      res.status(201).json({ success: true, data: record });
+    } catch (err) {
+      console.error('❌ [POST GENERATE REPORT] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// POST /api/academy/seminars/admin/reports/auto-generate
+// Автоматично генерира доклади за всички минали месеци без запис
+// ===============================
+seminarsController.post(
+  '/admin/reports/auto-generate',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { seminar_monthly_report, seminar_guest_attendance } = require('../sequelize/models/index');
+
+      // Find earliest seminar date
+      const earliest = await seminar.findOne({
+        attributes: ['scheduledDate'],
+        order: [['scheduledDate', 'ASC']],
+        where: { scheduledDate: { [Op.ne]: null } },
+      });
+
+      if (!earliest) {
+        return res.status(200).json({ success: true, generated: 0, message: 'No seminars found' });
+      }
+
+      const startDate = new Date(earliest.scheduledDate);
+      const now = new Date();
+      const currentMonth = now.getMonth() + 1;
+      const currentYear = now.getFullYear();
+
+      // Generate for each month from earliest to last completed month
+      let generated = 0;
+      let checkYear = startDate.getFullYear();
+      let checkMonth = startDate.getMonth() + 1;
+
+      while (checkYear < currentYear || (checkYear === currentYear && checkMonth < currentMonth)) {
+        // Check if already exists
+        const exists = await seminar_monthly_report.findOne({
+          where: { month: checkMonth, year: checkYear },
+        });
+
+        if (!exists) {
+          const mStart = new Date(checkYear, checkMonth - 1, 1);
+          const mEnd = new Date(checkYear, checkMonth, 0, 23, 59, 59);
+
+          const monthSeminars = await seminar.findAll({
+            where: { scheduledDate: { [Op.between]: [mStart, mEnd] } },
+            attributes: ['id'],
+          });
+          const ids = monthSeminars.map(s => s.id);
+
+          if (ids.length > 0) {
+            const regAtt = await student_seminar.count({ where: { seminarId: { [Op.in]: ids }, attended: true } });
+            const guestAtt = await seminar_guest_attendance.count({ where: { seminarId: { [Op.in]: ids } } });
+
+            const creditsRes = await student_seminar.findOne({
+              where: { seminarId: { [Op.in]: ids } },
+              attributes: [[sequelize.fn('SUM', sequelize.col('earned_credits')), 'total']],
+              raw: true,
+            });
+
+            await seminar_monthly_report.create({
+              month: checkMonth,
+              year: checkYear,
+              fileUrl: '',
+              generatedBy: null,
+              seminarsCount: ids.length,
+              attendeesCount: regAtt + guestAtt,
+              creditsCount: parseInt(creditsRes?.total) || 0,
+            });
+            generated++;
+          }
+        }
+
+        // Next month
+        checkMonth++;
+        if (checkMonth > 12) { checkMonth = 1; checkYear++; }
+      }
+
+      res.status(200).json({ success: true, generated });
+    } catch (err) {
+      console.error('❌ [AUTO GENERATE REPORTS] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
+// DELETE /api/academy/seminars/admin/reports/:reportId
+// Delete a monthly report
+// ===============================
+seminarsController.delete(
+  '/admin/reports/:reportId',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    try {
+      const { seminar_monthly_report } = require('../sequelize/models/index');
+      const reportId = parseInt(req.params.reportId);
+
+      const record = await seminar_monthly_report.findByPk(reportId);
+      if (!record) {
+        return res.status(404).json({ success: false, message: 'Report not found' });
+      }
+
+      await record.destroy();
+      res.status(200).json({ success: true, message: 'Report deleted successfully' });
+    } catch (err) {
+      console.error('❌ [DELETE REPORT] Error:', err);
       next(err);
     }
   }

@@ -199,7 +199,10 @@
   cursor: pointer;
   transition: all 0.2s;
 }
-
+.aalcs-tab span{
+   font-size: 0.85rem;
+  font-weight: 500;
+}
 .aalcs-tab:hover {
   color: rgba(255, 255, 255, 0.8);
   background: rgba(255, 255, 255, 0.05);

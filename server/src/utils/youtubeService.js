@@ -7,6 +7,29 @@ const oauth2Client = new google.auth.OAuth2(
     process.env.YOUTUBE_REDIRECT_URI
 );
 
+// Auto-refresh: when googleapis refreshes the access_token, save the new tokens
+oauth2Client.on('tokens', (tokens) => {
+    console.log('🔄 YouTube tokens refreshed automatically');
+    const fs = require('fs');
+    const path = require('path');
+    const TOKENS_DIR = path.join(__dirname, '../../youtube-tokens');
+    const TOKENS_FILE = fs.existsSync(TOKENS_DIR) && fs.statSync(TOKENS_DIR).isDirectory()
+        ? path.join(TOKENS_DIR, 'tokens.json')
+        : path.join(__dirname, '../../youtube-tokens.json');
+    try {
+        let existing = {};
+        if (fs.existsSync(TOKENS_FILE)) {
+            existing = JSON.parse(fs.readFileSync(TOKENS_FILE, 'utf8'));
+        }
+        // Merge — keep refresh_token if new tokens don't include one
+        const merged = { ...existing, ...tokens };
+        fs.writeFileSync(TOKENS_FILE, JSON.stringify(merged, null, 2));
+        oauth2Client.setCredentials(merged);
+    } catch (err) {
+        console.error('Error saving refreshed YouTube tokens:', err);
+    }
+});
+
 // Generate auth URL for admin to authorize
 const getAuthUrl = () => {
     return oauth2Client.generateAuthUrl({
