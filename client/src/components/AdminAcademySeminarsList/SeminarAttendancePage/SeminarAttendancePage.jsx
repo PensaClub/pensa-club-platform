@@ -204,7 +204,7 @@ const SeminarAttendancePage = () => {
                 )}
 
                 {selectedSeminar && (
-                    <AttendanceListUpload seminarId={selectedSeminar.id} seminarTitle={selectedSeminar.title} />
+                    <AttendanceListUpload seminarId={selectedSeminar.id} seminarTitle={selectedSeminar.title} seminarSlug={selectedSeminar.slug} />
                 )}
             </div>
 

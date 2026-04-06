@@ -382,9 +382,14 @@ const SeminarLibrary = () => {
     }
   };
 
+  const getStoragePath = (semId) => {
+    const sem = seminars.find(s => s.id === semId);
+    return sem?.slug || `id-${semId}`;
+  };
+
   const uploadToFirebase = async (file, folder, seminarId) => {
     const fileName = `${Date.now()}_${file.name}`;
-    const storageRef = ref(firebaseStorage, `seminars/${folder}/${seminarId}/${fileName}`);
+    const storageRef = ref(firebaseStorage, `seminars/${getStoragePath(seminarId)}/${folder}/${fileName}`);
     const metadata = file.type === 'text/plain'
       ? { contentType: 'text/plain; charset=utf-8' }
       : { contentType: file.type };
@@ -436,7 +441,7 @@ const SeminarLibrary = () => {
       let fileUrl;
       if (activeMediaTab === 'lists') {
         const fileName = `${Date.now()}_${file.name}`;
-        const storageRef = ref(firebaseStorage, `seminar-attendance-lists/${expandedSeminar}/${fileName}`);
+        const storageRef = ref(firebaseStorage, `seminars/${getStoragePath(expandedSeminar)}/lists/${fileName}`);
         const metadata = file.type === 'text/plain' ? { contentType: 'text/plain; charset=utf-8' } : { contentType: file.type };
         await uploadBytes(storageRef, file, metadata);
         fileUrl = await getDownloadURL(storageRef);

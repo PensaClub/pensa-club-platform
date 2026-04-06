@@ -61,7 +61,7 @@ const formatSize = (bytes) => {
 
 const isImage = (type) => type?.startsWith('image/');
 
-const AttendanceListUpload = ({ seminarId, seminarTitle = '' }) => {
+const AttendanceListUpload = ({ seminarId, seminarTitle = '', seminarSlug = '' }) => {
   const { t } = useTranslation('academy-admin');
   const {
     getAttendanceLists, uploadAttendanceList, deleteAttendanceList,
@@ -141,9 +141,11 @@ const AttendanceListUpload = ({ seminarId, seminarTitle = '' }) => {
   useEffect(() => { fetchLists(); fetchPhotos(); fetchVideos(); fetchPresentations(); }, [fetchLists, fetchPhotos, fetchVideos, fetchPresentations]);
 
   // Upload helpers
+  const storagePath = seminarSlug || `id-${seminarId}`;
+
   const uploadToFirebase = async (file, folder) => {
     const fileName = `${Date.now()}_${file.name}`;
-    const storageRef = ref(firebaseStorage, `seminars/${folder}/${seminarId}/${fileName}`);
+    const storageRef = ref(firebaseStorage, `seminars/${storagePath}/${folder}/${fileName}`);
     const metadata = file.type === 'text/plain'
       ? { contentType: 'text/plain; charset=utf-8' }
       : { contentType: file.type };
@@ -172,7 +174,7 @@ const AttendanceListUpload = ({ seminarId, seminarTitle = '' }) => {
     setListUploading(true);
     try {
       const fileName = `${Date.now()}_${file.name}`;
-      const storageRef = ref(firebaseStorage, `seminar-attendance-lists/${seminarId}/${fileName}`);
+      const storageRef = ref(firebaseStorage, `seminars/${storagePath}/lists/${fileName}`);
       const metadata = file.type === 'text/plain'
         ? { contentType: 'text/plain; charset=utf-8' }
         : { contentType: file.type };
