@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LocalizedLink as Link } from '../LocalizedLink/LocalizedLink';
-import { ArrowLeft, Settings, Snowflake, BookOpen, Gift, Shield, Bug, MessageSquare } from 'lucide-react';
+import { ArrowLeft, Settings, Snowflake, BookOpen, Gift, Shield, Bug, MessageSquare, HardDrive } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useSiteSettingsAdminContext } from '../contexts/SiteSettingsAdminContext';
 import SettingsAdminSection from './SettingsAdminSection/SettingsAdminSection';
@@ -15,6 +15,8 @@ import { IpManagementProvider } from '../contexts/IpManagementContext';
 import ErrorLogsConfig from './ErrorLogsConfig/ErrorLogsConfig';
 import ScrollToTop from '../ScrollToTop/ScrollToTop';
 import './siteSettingsAdmin.css';
+
+const CloudStorageManager = lazy(() => import('./CloudStorageManager/CloudStorageManager'));
 
 const SiteSettingsAdmin = () => {
     const { t } = useTranslation('admin');
@@ -74,6 +76,21 @@ const SiteSettingsAdmin = () => {
 
                 {/* Settings grid */}
                 <div className="ssa-grid">
+                    {/* Cloud Storage */}
+                    <SettingsAdminSection
+                        id="cloudStorage"
+                        title={t('cloudStorage.title')}
+                        description={t('cloudStorage.description')}
+                        icon={<HardDrive size={24} />}
+                        color="#d4a853"
+                        isOpen={openCard === 'cloudStorage'}
+                        onToggle={() => toggleCard('cloudStorage')}
+                    >
+                        <Suspense fallback={<div className="ssa-loading"><div className="ssa-loading-spinner" /></div>}>
+                            <CloudStorageManager />
+                        </Suspense>
+                    </SettingsAdminSection>
+
                     {/* Snowfall */}
                     <SettingsAdminSection
                         id="snowfall"
