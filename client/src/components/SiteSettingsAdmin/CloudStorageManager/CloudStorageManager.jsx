@@ -58,6 +58,8 @@ const CloudStorageManager = () => {
     const [folderTree, setFolderTree] = useState({});
     const [expandedTreeFolders, setExpandedTreeFolders] = useState(new Set());
     const [deleteConfirm, setDeleteConfirm] = useState(null);
+    const [syncing, setSyncing] = useState(false);
+    const [syncResult, setSyncResult] = useState(null);
 
     // Load files for current path
     const loadFiles = useCallback(async (path = currentPath) => {
@@ -241,6 +243,23 @@ const CloudStorageManager = () => {
             if (isFolder) loadFolderTree(currentPath);
         } catch {
             toast.error(t('cloudStorage.deleteError'));
+        }
+    };
+
+    // Sync storage with DB
+    const handleSync = async () => {
+        setSyncing(true);
+        setSyncResult(null);
+        try {
+            const result = await storageService.syncStorage();
+            setSyncResult(result);
+            toast.success(`Синхронизация: ${result.synced || 0} нови, ${result.orphans?.length || 0} осиротели`);
+            loadFiles();
+        } catch (err) {
+            toast.error('Грешка при синхронизация');
+            console.error('Sync error:', err);
+        } finally {
+            setSyncing(false);
         }
     };
 
@@ -735,6 +754,15 @@ const CloudStorageManager = () => {
                     </div>
                     <button className="csm-btn csm-btn--icon" onClick={() => loadFiles()} title={t('cloudStorage.refresh')}>
                         <RefreshCw size={16} className={loading ? 'csm-spin' : ''} />
+                    </button>
+                    <button
+                        className="csm-btn csm-btn--small csm-btn--sync"
+                        onClick={handleSync}
+                        disabled={syncing}
+                        title="Синхронизирай Storage ↔ DB"
+                    >
+                        {syncing ? <RefreshCw size={14} className="csm-spin" /> : <RefreshCw size={14} />}
+                        <span>Sync</span>
                     </button>
                     {storageUsage && (
                         <div className="csm-storage-bar" title={`${formatSize(storageUsage.usedBytes)} / ${formatSize(storageUsage.totalBytes || 5 * 1024 * 1024 * 1024)}`}>

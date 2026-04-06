@@ -91,6 +91,11 @@ const getMimeType = (filename) => {
     return mimeTypes[ext] || 'application/octet-stream';
 };
 
+// ─── Sync state ───────────────────────────────────────────────────────────────
+let syncLock = false;
+let lastSyncResult = null;
+let lastSyncTime = null;
+
 // ─── Usage cache ───────────────────────────────────────────────────────────────
 let usageCache = { value: null, timestamp: 0 };
 const USAGE_CACHE_TTL = 60 * 60 * 1000; // 1 hour
@@ -544,6 +549,266 @@ function formatBytes(bytes) {
     const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
+// ─── SYNC: Core logic ─────────────────────────────────────────────────────────
+
+/**
+ * Detects mediaType from the file path within a seminar folder.
+ * Returns { mediaType, table } or null to skip.
+ */
+function detectMediaType(filePath) {
+    const parts = filePath.split('/');
+    // Expected: seminars/{slug}/{subfolder}/...
+    if (parts.length < 4) return { mediaType: 'document', table: 'seminar_media' };
+
+    const subfolder = parts[2].toLowerCase();
+
+    if (subfolder === 'photos') return { mediaType: 'photo', table: 'seminar_media' };
+    if (subfolder === 'presentations') return { mediaType: 'presentation', table: 'seminar_media' };
+    if (subfolder === 'lists') return { mediaType: null, table: 'seminar_attendance_list' };
+    if (subfolder === 'videos') return null; // skip videos (YouTube)
+    return { mediaType: 'document', table: 'seminar_media' };
+}
+
+/**
+ * Runs the storage-to-DB sync. Shared between the endpoint and the cron job.
+ * Returns { synced, orphans, errors }.
+ */
+async function runStorageSync() {
+    const { seminar: Seminar, seminar_media, seminar_attendance_list } = require('../sequelize/models/index');
+
+    const synced = [];
+    const orphans = [];
+    const errors = [];
+
+    // 1. List all files under seminars/ prefix
+    const BATCH_SIZE = 500;
+    let pageToken;
+    const storageFiles = [];
+
+    do {
+        const [files, , apiResponse] = await bucket.getFiles({
+            prefix: 'seminars/',
+            maxResults: BATCH_SIZE,
+            pageToken,
+            autoPaginate: false,
+        });
+        storageFiles.push(...files);
+        pageToken = apiResponse.nextPageToken;
+    } while (pageToken);
+
+    // Filter out directory placeholders
+    const realFiles = storageFiles.filter(f => !f.name.endsWith('/'));
+
+    // Cache seminar lookups by slug
+    const seminarCache = {};
+
+    // 2. Process each storage file
+    for (const file of realFiles) {
+        try {
+            const parts = file.name.split('/');
+            // Expected: seminars/{slug}/...
+            if (parts.length < 3) {
+                continue; // not a proper seminar file path
+            }
+
+            const slug = parts[1];
+            if (!slug) continue;
+
+            // Skip old ID-based paths (seminars/photos/12/, seminars/lists/12/)
+            // and paths where slug is a media type folder name
+            const reservedNames = ['photos', 'lists', 'presentations', 'videos', 'documents'];
+            if (reservedNames.includes(slug) || /^\d+$/.test(slug)) continue;
+
+            const detection = detectMediaType(file.name);
+            if (!detection) continue; // skip (e.g. videos)
+
+            // Look up seminar by slug (cached)
+            if (!(slug in seminarCache)) {
+                seminarCache[slug] = await Seminar.findOne({ where: { slug } });
+            }
+            const foundSeminar = seminarCache[slug];
+
+            if (!foundSeminar) {
+                errors.push({ file: file.name, error: `Seminar not found for slug: ${slug}` });
+                continue;
+            }
+
+            const fileName = file.name.split('/').pop();
+            const fileUrl = `https://firebasestorage.googleapis.com/v0/b/${BUCKET_NAME}/o/${encodeURIComponent(file.name)}?alt=media`;
+
+            if (detection.table === 'seminar_attendance_list') {
+                // Check if already exists
+                const existing = await seminar_attendance_list.findOne({
+                    where: { seminarId: foundSeminar.id, fileName },
+                });
+                if (existing) continue;
+
+                await seminar_attendance_list.create({
+                    seminarId: foundSeminar.id,
+                    uploadedBy: null,
+                    fileUrl,
+                    fileName,
+                    fileType: file.metadata.contentType || 'application/octet-stream',
+                    fileSize: parseInt(file.metadata.size || 0),
+                });
+                synced.push({ file: file.name, table: 'seminar_attendance_list', seminarId: foundSeminar.id });
+            } else {
+                // seminar_media — check by fileName + seminarId or fileUrl
+                const existing = await seminar_media.findOne({
+                    where: { seminarId: foundSeminar.id, fileName },
+                });
+                if (existing) continue;
+
+                await seminar_media.create({
+                    seminarId: foundSeminar.id,
+                    uploadedBy: null,
+                    mediaType: detection.mediaType,
+                    fileUrl,
+                    fileName,
+                    fileType: file.metadata.contentType || 'application/octet-stream',
+                    fileSize: parseInt(file.metadata.size || 0),
+                });
+                synced.push({ file: file.name, table: 'seminar_media', mediaType: detection.mediaType, seminarId: foundSeminar.id });
+            }
+        } catch (err) {
+            errors.push({ file: file.name, error: err.message });
+        }
+    }
+
+    // 3. Find orphans: DB records whose files don't exist in Storage
+    // Build a Set of all storage file paths for quick lookup
+    const storageFileNames = new Set(realFiles.map(f => f.name));
+
+    // Check seminar_media records
+    const allMedia = await seminar_media.findAll({
+        attributes: ['id', 'seminarId', 'fileUrl', 'fileName', 'mediaType'],
+        include: [{ model: Seminar, as: 'seminar', attributes: ['slug'] }],
+    });
+
+    for (const record of allMedia) {
+        if (!record.seminar) continue; // seminar was deleted
+        // Try to reconstruct the expected storage path
+        const slug = record.seminar.slug;
+        let subfolder;
+        switch (record.mediaType) {
+            case 'photo': subfolder = 'photos'; break;
+            case 'presentation': subfolder = 'presentations'; break;
+            default: subfolder = 'documents'; break;
+        }
+        const expectedPath = `seminars/${slug}/${subfolder}/${record.fileName}`;
+
+        // Also check if the fileUrl decodes to a known storage file
+        let urlPath = null;
+        try {
+            const urlMatch = record.fileUrl.match(/\/o\/(.+?)\?/);
+            if (urlMatch) urlPath = decodeURIComponent(urlMatch[1]);
+        } catch (_) { /* ignore */ }
+
+        if (!storageFileNames.has(expectedPath) && (!urlPath || !storageFileNames.has(urlPath))) {
+            orphans.push({
+                table: 'seminar_media',
+                id: record.id,
+                seminarId: record.seminarId,
+                fileName: record.fileName,
+                expectedPath,
+            });
+        }
+    }
+
+    // Check seminar_attendance_list records
+    const allLists = await seminar_attendance_list.findAll({
+        attributes: ['id', 'seminarId', 'fileUrl', 'fileName'],
+        include: [{ model: Seminar, as: 'seminar', attributes: ['slug'] }],
+    });
+
+    for (const record of allLists) {
+        if (!record.seminar) continue;
+        const expectedPath = `seminars/${record.seminar.slug}/lists/${record.fileName}`;
+
+        let urlPath = null;
+        try {
+            const urlMatch = record.fileUrl.match(/\/o\/(.+?)\?/);
+            if (urlMatch) urlPath = decodeURIComponent(urlMatch[1]);
+        } catch (_) { /* ignore */ }
+
+        if (!storageFileNames.has(expectedPath) && (!urlPath || !storageFileNames.has(urlPath))) {
+            orphans.push({
+                table: 'seminar_attendance_list',
+                id: record.id,
+                seminarId: record.seminarId,
+                fileName: record.fileName,
+                expectedPath,
+            });
+        }
+    }
+
+    return { synced: synced.length, syncedDetails: synced, orphans, errors };
+}
+
+// Expose sync state for cron
+storageController.getSyncState = () => ({ syncLock, lastSyncResult, lastSyncTime });
+storageController.setSyncState = (state) => {
+    if ('syncLock' in state) syncLock = state.syncLock;
+    if ('lastSyncResult' in state) lastSyncResult = state.lastSyncResult;
+    if ('lastSyncTime' in state) lastSyncTime = state.lastSyncTime;
+};
+storageController.runStorageSync = runStorageSync;
+
+// ─── 11. SYNC: Manual trigger ────────────────────────────────────────────────
+storageController.post(
+    '/sync',
+    isAuth,
+    rbac.checkPermission('admin', 'update'),
+    async (req, res, next) => {
+        try {
+            if (syncLock) {
+                return res.status(409).json({ error: 'A sync is already in progress. Please wait.' });
+            }
+
+            syncLock = true;
+
+            try {
+                const result = await runStorageSync();
+                lastSyncResult = result;
+                lastSyncTime = new Date().toISOString();
+                res.json(result);
+            } finally {
+                syncLock = false;
+            }
+        } catch (err) {
+            syncLock = false;
+            next(err);
+        }
+    }
+);
+
+// ─── 12. SYNC STATUS ────────────────────────────────────────────────────────
+storageController.get(
+    '/sync-status',
+    isAuth,
+    rbac.checkPermission('admin', 'update'),
+    async (req, res) => {
+        res.json({
+            syncInProgress: syncLock,
+            lastSyncTime,
+            lastSyncResult: lastSyncResult
+                ? { synced: lastSyncResult.synced, orphans: lastSyncResult.orphans.length, errors: lastSyncResult.errors.length }
+                : null,
+            nextScheduledSync: getNextHourlyCron(),
+        });
+    }
+);
+
+function getNextHourlyCron() {
+    const now = new Date();
+    const next = new Date(now);
+    next.setMinutes(0, 0, 0);
+    if (next <= now) {
+        next.setHours(next.getHours() + 1);
+    }
+    return next.toISOString();
 }
 
 module.exports = storageController;

@@ -56,5 +56,13 @@ export const storageServiceFactory = () => {
     getDownloadUrl: (path) => {
       return `${apiUrl}/admin/storage/download?path=${encodeURIComponent(path)}`;
     },
+
+    syncStorage: async () => {
+      return requester.post(`${apiUrl}/admin/storage/sync`);
+    },
+
+    getSyncStatus: async () => {
+      return requester.get(`${apiUrl}/admin/storage/sync-status`);
+    },
   };
 };

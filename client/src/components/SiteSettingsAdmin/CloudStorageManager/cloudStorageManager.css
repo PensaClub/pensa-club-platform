@@ -141,6 +141,16 @@
     background: rgba(239, 68, 68, 0.2);
 }
 
+.csm-btn--sync {
+    background: rgba(44, 181, 160, 0.1);
+    border-color: rgba(44, 181, 160, 0.3);
+    color: #2cb5a0;
+}
+
+.csm-btn--sync:hover:not(:disabled) {
+    background: rgba(44, 181, 160, 0.2);
+}
+
 .csm-btn--small {
     padding: 5px 10px;
     font-size: 0.76rem;
