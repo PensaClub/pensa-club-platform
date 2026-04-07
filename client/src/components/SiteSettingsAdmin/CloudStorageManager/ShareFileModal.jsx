@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { X, Copy, Check, Link2 } from 'lucide-react';
 import { useStorage } from '../../contexts/StorageProvider';
+import './shareFileModal.css';
 
 const VALIDITY_OPTIONS = [
     { value: 1, labelKey: 'cloudStorage.1day' },

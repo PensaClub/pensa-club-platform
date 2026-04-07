@@ -1160,7 +1160,193 @@ storageController.delete(
     }
 );
 
-// ─── 19. SEARCH USERS (for share modal) ─────────────────────────────────────
+// ─── 19. SEARCH FILES (recursive) ─────────────────────────────────────────────
+storageController.get(
+    '/search',
+    isAuth,
+    rbac.checkPermission('admin', 'update'),
+    async (req, res, next) => {
+        try {
+            const q = (req.query.q || '').toLowerCase().trim();
+            const type = req.query.type || 'all';
+            const prefix = req.query.path || '';
+            const maxResults = parseInt(req.query.maxResults) || 50;
+
+            if (!q) {
+                return res.json({ files: [], query: q });
+            }
+
+            const [allFiles] = await bucket.getFiles({ prefix });
+
+            const docExtensions = ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'txt', 'csv'];
+            const presExtensions = ['ppt', 'pptx'];
+
+            const filtered = allFiles
+                .filter(f => !f.name.endsWith('/'))
+                .filter(f => {
+                    const name = f.name.toLowerCase();
+                    if (!name.includes(q)) return false;
+
+                    const contentType = f.metadata.contentType || '';
+                    if (type === 'image' && !contentType.startsWith('image/')) return false;
+                    if (type === 'video' && !contentType.startsWith('video/')) return false;
+                    if (type === 'document') {
+                        const ext = name.split('.').pop();
+                        if (!docExtensions.includes(ext)) return false;
+                    }
+                    if (type === 'presentation') {
+                        const ext = name.split('.').pop();
+                        if (!presExtensions.includes(ext)) return false;
+                    }
+                    return true;
+                })
+                .slice(0, maxResults)
+                .map(f => ({
+                    name: f.name.split('/').pop(),
+                    fullPath: f.name,
+                    size: parseInt(f.metadata.size || 0),
+                    contentType: f.metadata.contentType || 'application/octet-stream',
+                    updated: f.metadata.updated,
+                }));
+
+            res.json({ files: filtered, query: q, total: filtered.length });
+        } catch (err) {
+            next(err);
+        }
+    }
+);
+
+// ─── 20. ANALYTICS ───────────────────────────────────────────────────────────
+storageController.get(
+    '/analytics',
+    isAuth,
+    rbac.checkPermission('admin', 'update'),
+    async (req, res, next) => {
+        try {
+            // 1. Usage data (reuse cache logic)
+            const now = Date.now();
+            let usageData;
+
+            if (usageCache.value !== null && (now - usageCache.timestamp) < USAGE_CACHE_TTL) {
+                usageData = usageCache.value;
+            } else {
+                let totalSize = 0;
+                let totalFiles = 0;
+                const folderSizes = {};
+
+                const [files] = await bucket.getFiles();
+                for (const file of files) {
+                    const size = parseInt(file.metadata.size || 0);
+                    totalSize += size;
+                    totalFiles++;
+                    const topFolder = file.name.split('/')[0];
+                    if (topFolder) {
+                        if (!folderSizes[topFolder]) folderSizes[topFolder] = { size: 0, files: 0 };
+                        folderSizes[topFolder].size += size;
+                        folderSizes[topFolder].files++;
+                    }
+                }
+
+                usageData = {
+                    totalSize,
+                    totalSizeFormatted: formatBytes(totalSize),
+                    totalFiles,
+                    folderBreakdown: Object.entries(folderSizes)
+                        .sort((a, b) => b[1].size - a[1].size)
+                        .map(([folder, data]) => ({
+                            folder,
+                            size: data.size,
+                            sizeFormatted: formatBytes(data.size),
+                            files: data.files,
+                        })),
+                };
+                usageCache = { value: usageData, timestamp: now };
+            }
+
+            // 2. Recent files (last 20 by updated date)
+            const [allFiles] = await bucket.getFiles();
+            const recentFiles = allFiles
+                .filter(f => !f.name.endsWith('/'))
+                .sort((a, b) => new Date(b.metadata.updated) - new Date(a.metadata.updated))
+                .slice(0, 20)
+                .map(f => ({
+                    name: f.name.split('/').pop(),
+                    path: f.name,
+                    size: parseInt(f.metadata.size || 0),
+                    uploadedAt: f.metadata.updated,
+                    contentType: f.metadata.contentType || 'application/octet-stream',
+                }));
+
+            // 3. Activity log from DB (last 7 days)
+            const activityLog = [];
+            try {
+                const { Op } = require('sequelize');
+                const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+
+                const { file_share, seminar_media, user_account, user_details } = require('../sequelize/models/index');
+
+                // Recent file shares
+                if (file_share) {
+                    const recentShares = await file_share.findAll({
+                        where: { createdAt: { [Op.gte]: sevenDaysAgo } },
+                        include: [{
+                            model: user_account, as: 'sharer',
+                            attributes: ['id', 'email'],
+                            include: [{ model: user_details, as: 'details', attributes: ['firstName', 'lastName'] }],
+                        }],
+                        order: [['createdAt', 'DESC']],
+                        limit: 20,
+                    });
+
+                    for (const share of recentShares) {
+                        const userName = share.sharer?.details
+                            ? `${share.sharer.details.firstName || ''} ${share.sharer.details.lastName || ''}`.trim()
+                            : share.sharer?.email || 'Unknown';
+                        activityLog.push({
+                            action: 'share',
+                            fileName: share.fileName,
+                            userName,
+                            date: share.createdAt,
+                        });
+                    }
+                }
+
+                // Recent seminar media uploads
+                if (seminar_media) {
+                    const recentMedia = await seminar_media.findAll({
+                        where: { createdAt: { [Op.gte]: sevenDaysAgo } },
+                        order: [['createdAt', 'DESC']],
+                        limit: 20,
+                    });
+
+                    for (const media of recentMedia) {
+                        activityLog.push({
+                            action: 'upload',
+                            fileName: media.fileName,
+                            userName: 'System Sync',
+                            date: media.createdAt,
+                        });
+                    }
+                }
+            } catch (dbErr) {
+                console.error('Analytics activity log error:', dbErr.message);
+            }
+
+            // Sort activity log by date descending
+            activityLog.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            res.json({
+                usage: usageData,
+                recentFiles,
+                activityLog: activityLog.slice(0, 30),
+            });
+        } catch (err) {
+            next(err);
+        }
+    }
+);
+
+// ─── 21. SEARCH USERS (for share modal) ─────────────────────────────────────
 storageController.get(
     '/search-users',
     isAuth,

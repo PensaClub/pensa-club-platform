@@ -79,8 +79,8 @@ const StorageFilePicker = ({ onSelect, onClose }) => {
 
   const handleSelect = () => {
     if (!selectedFile) return;
-    const filePath = selectedFile.name;
-    const fileName = getFileName(filePath);
+    const filePath = selectedFile.fullPath || selectedFile.name;
+    const fileName = filePath.split('/').pop();
     const url = `https://firebasestorage.googleapis.com/v0/b/pensaclub-909e0.appspot.com/o/${encodeURIComponent(filePath)}?alt=media`;
     onSelect({ filePath, fileName, url });
   };

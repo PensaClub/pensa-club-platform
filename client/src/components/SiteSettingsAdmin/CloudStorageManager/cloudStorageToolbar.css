@@ -1,0 +1,229 @@
+/* CloudStorageToolbar — prefix: cst- */
+
+.cst-toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cst-toolbar span,
+.cst-toolbar label,
+.cst-toolbar input,
+.cst-toolbar button,
+.cst-toolbar select {
+    font-size: 0.8rem;
+}
+
+.cst-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+/* ── Buttons ── */
+
+.cst-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.15s;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.cst-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.cst-btn svg { flex-shrink: 0; }
+
+.cst-btn--primary {
+    background: rgba(212, 168, 83, 0.12);
+    border-color: rgba(212, 168, 83, 0.3);
+    color: #d4a853;
+}
+
+.cst-btn--primary:hover:not(:disabled) { background: rgba(212, 168, 83, 0.2); }
+
+.cst-btn--icon {
+    padding: 6px;
+    background: rgba(255, 255, 255, 0.04);
+    border-color: rgba(255, 255, 255, 0.08);
+    color: #999;
+}
+
+.cst-btn--icon:hover:not(:disabled) { background: rgba(255, 255, 255, 0.08); color: #ddd; }
+.cst-btn--icon.cst-active { background: rgba(212, 168, 83, 0.12); border-color: rgba(212, 168, 83, 0.3); color: #d4a853; }
+
+.cst-btn--sync {
+    background: rgba(44, 181, 160, 0.1);
+    border-color: rgba(44, 181, 160, 0.3);
+    color: #2cb5a0;
+}
+
+.cst-btn--sync:hover:not(:disabled) { background: rgba(44, 181, 160, 0.2); }
+
+.cst-btn--analytics {
+    background: rgba(139, 108, 193, 0.1);
+    border-color: rgba(139, 108, 193, 0.3);
+    color: #8b6cc1;
+}
+
+.cst-btn--analytics:hover:not(:disabled) { background: rgba(139, 108, 193, 0.2); }
+
+/* ── Search (цял ред) ── */
+
+.cst-search-full {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+.cst-search-full:focus-within {
+    border-color: rgba(212, 168, 83, 0.4);
+}
+
+.cst-search-full > svg { color: #888; flex-shrink: 0; }
+
+.cst-search-input {
+    border: none;
+    background: transparent;
+    outline: none;
+    color: #eee;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.cst-search-input::placeholder { color: #666; }
+
+.cst-search-clear {
+    padding: 2px;
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    display: flex;
+    flex-shrink: 0;
+}
+
+.cst-search-clear:hover { color: #eee; }
+
+.cst-search-mode {
+    padding: 4px;
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    border-radius: 4px;
+    display: flex;
+    flex-shrink: 0;
+}
+
+.cst-search-mode:hover { color: #d4a853; }
+.cst-search-mode.cst-active { color: #d4a853; }
+
+.cst-type-filter {
+    padding: 4px 8px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    color: #ccc;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    cursor: pointer;
+    outline: none;
+    flex-shrink: 0;
+}
+
+.cst-type-filter:focus { border-color: #d4a853; }
+
+/* ── Storage bar ── */
+
+.cst-storage {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.72rem;
+    color: #888;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-left: auto;
+}
+
+.cst-storage-track {
+    width: 60px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.cst-storage-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #d4a853, #e0b964);
+    border-radius: 2px;
+}
+
+/* ── Divider ── */
+
+.cst-divider {
+    width: 1px;
+    height: 20px;
+    background: rgba(255, 255, 255, 0.08);
+    flex-shrink: 0;
+}
+
+/* ── Spin ── */
+
+.cst-spin { animation: cst-spin 1s linear infinite; }
+@keyframes cst-spin { to { transform: rotate(360deg); } }
+
+/* ── Camera (hidden desktop) ── */
+
+.cst-camera-btn { display: none; }
+
+/* ── Mobile ── */
+
+@media (max-width: 768px) {
+    .cst-camera-btn { display: inline-flex; }
+    .cst-divider { display: none; }
+    .cst-btn { font-size: 0.72rem; padding: 5px 10px; }
+    .cst-storage { font-size: 0.65rem; }
+    .cst-storage-track { width: 40px; }
+}
+
+/* ── Light theme ── */
+
+[data-theme="light"] .cst-btn--primary { background: rgba(139, 32, 64, 0.06); border-color: rgba(139, 32, 64, 0.2); color: #8b2040; }
+[data-theme="light"] .cst-btn--primary:hover:not(:disabled) { background: rgba(139, 32, 64, 0.12); }
+[data-theme="light"] .cst-btn--icon { background: #f1f5f9; border-color: #e2e8f0; color: #666; }
+[data-theme="light"] .cst-btn--icon:hover:not(:disabled) { background: #e2e8f0; color: #333; }
+[data-theme="light"] .cst-btn--icon.cst-active { background: rgba(139, 32, 64, 0.08); border-color: rgba(139, 32, 64, 0.2); color: #8b2040; }
+[data-theme="light"] .cst-btn--sync { background: rgba(13, 148, 136, 0.06); border-color: rgba(13, 148, 136, 0.2); color: #0d9488; }
+[data-theme="light"] .cst-btn--analytics { background: rgba(107, 76, 154, 0.06); border-color: rgba(107, 76, 154, 0.2); color: #6b4c9a; }
+[data-theme="light"] .cst-search-full { background: #ffffff; border-color: #e2e8f0; }
+[data-theme="light"] .cst-search-full:focus-within { border-color: rgba(139, 32, 64, 0.4); }
+[data-theme="light"] .cst-search-full > svg { color: #999; }
+[data-theme="light"] .cst-search-input { color: #333; }
+[data-theme="light"] .cst-search-input::placeholder { color: #999; }
+[data-theme="light"] .cst-search-mode { color: #666; }
+[data-theme="light"] .cst-search-mode.cst-active { color: #8b2040; }
+[data-theme="light"] .cst-type-filter { background: #fff; border-color: #e2e8f0; color: #333; }
+[data-theme="light"] .cst-storage { color: #666; }
+[data-theme="light"] .cst-storage-track { background: #e2e8f0; }
+[data-theme="light"] .cst-storage-fill { background: linear-gradient(90deg, #8b2040, #a02850); }
+[data-theme="light"] .cst-divider { background: #e2e8f0; }
