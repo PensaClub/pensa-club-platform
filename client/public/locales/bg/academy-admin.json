@@ -1209,7 +1209,8 @@
       "tplThanksMsg": "Здравейте,\n\nБлагодарим ви за участието в семинара! Надяваме се, че беше полезен.\n\nОчакваме ви отново в DigiBridge Academy!",
       "tplInfo": "Информация",
       "tplInfoSubject": "Информация от DigiBridge Academy",
-      "tplInfoMsg": "Здравейте,\n\n"
+      "tplInfoMsg": "Здравейте,\n\n",
+      "attachFromStorage": "Прикачи от хранилището"
     },
     "platform": "Платформа",
     "guest": "Гост",

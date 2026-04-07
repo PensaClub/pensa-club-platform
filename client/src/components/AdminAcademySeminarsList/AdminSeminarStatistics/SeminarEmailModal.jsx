@@ -2,7 +2,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAcademyCourses } from '../../contexts/AcademyCoursesProvider';
-import { X, Send, Mail } from 'lucide-react';
+import { X, Send, Mail, Paperclip } from 'lucide-react';
+import StorageFilePicker from '../../SiteSettingsAdmin/CloudStorageManager/StorageFilePicker';
 
 const SeminarEmailModal = ({ recipient, onClose }) => {
   const { t } = useTranslation('academy-admin');
@@ -12,6 +13,8 @@ const SeminarEmailModal = ({ recipient, onClose }) => {
   const [message, setMessage] = useState('');
   const [sending, setSending] = useState(false);
   const [errors, setErrors] = useState({});
+  const [showFilePicker, setShowFilePicker] = useState(false);
+  const [attachedFiles, setAttachedFiles] = useState([]);
 
   const MAX_MESSAGE = 2000;
 
@@ -56,6 +59,20 @@ const SeminarEmailModal = ({ recipient, onClose }) => {
     } finally {
       setSending(false);
     }
+  };
+
+  const handleFileSelect = ({ filePath, fileName, url }) => {
+    setAttachedFiles(prev => [...prev, { filePath, fileName, url }]);
+    const link = `\n\n📎 Файл: ${fileName}\n${url}`;
+    setMessage(prev => prev + link);
+    setShowFilePicker(false);
+  };
+
+  const removeAttachedFile = (index) => {
+    const file = attachedFiles[index];
+    const link = `\n\n📎 Файл: ${file.fileName}\n${file.url}`;
+    setMessage(prev => prev.replace(link, ''));
+    setAttachedFiles(prev => prev.filter((_, i) => i !== index));
   };
 
   const templates = [
@@ -159,6 +176,37 @@ const SeminarEmailModal = ({ recipient, onClose }) => {
           </div>
         </div>
 
+        {/* Attach from storage */}
+        <div className="asst-email-attach-section">
+          <button
+            type="button"
+            className="asst-email-attach-btn"
+            onClick={() => setShowFilePicker(true)}
+            disabled={sending}
+          >
+            <Paperclip size={15} />
+            {t('seminarStats.email.attachFromStorage', 'Прикачи от хранилището')}
+          </button>
+          {attachedFiles.length > 0 && (
+            <div className="asst-email-attached-files">
+              {attachedFiles.map((file, i) => (
+                <div key={i} className="asst-email-file-chip">
+                  <Paperclip size={13} />
+                  <span className="asst-email-file-chip-name">{file.fileName}</span>
+                  <button
+                    type="button"
+                    className="asst-email-file-chip-remove"
+                    onClick={() => removeAttachedFile(i)}
+                    disabled={sending}
+                  >
+                    <X size={13} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
         {/* Note */}
         <div className="asst-email-note">
           {t('seminarStats.email.note', 'Съобщението ще бъде изпратено с брандирания шаблон на DigiBridge Academy.')}
@@ -182,6 +230,13 @@ const SeminarEmailModal = ({ recipient, onClose }) => {
           </button>
         </div>
       </div>
+
+      {showFilePicker && (
+        <StorageFilePicker
+          onSelect={handleFileSelect}
+          onClose={() => setShowFilePicker(false)}
+        />
+      )}
     </div>
   );
 };

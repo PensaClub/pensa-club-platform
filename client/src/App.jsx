@@ -133,6 +133,7 @@ const ForumPostDetailPage = lazyWithRetry(() => import('./components/ForumCommun
 const ForumMyPanel = lazyWithRetry(() => import('./components/ForumCommunity/ForumMyPanel/ForumMyPanel.jsx'));
 const TelkRkmeRzi = lazyWithRetry(() => import('./components/TelkRkmeRzi/TelkRkmeRzi.jsx'));
 const ComingSoon = lazyWithRetry(() => import('./components/DigiBridgeAcademy/ComingSoon/ComingSoon.jsx'));
+const SharedDownload = lazyWithRetry(() => import('./components/SharedDownload/SharedDownload.jsx'));
 const ProjectCreateForm = lazyWithRetry(() => import('./components/Initiatives/CreateProject/ProjectCreateForm'));
 const ProjectPreview = lazyWithRetry(() => import('./components/Initiatives/CreateProject/ProjectPreview/ProjectPreview'));
 
@@ -217,6 +218,9 @@ function AppRoutes() {
       <Route path="/elite-membership" element={<EliteMembershipPage />} />
       <Route path="/stories" element={<Suspense fallback={<LazyLoadingFallback type="stories" />}><StoriesList /></Suspense>} />
       <Route path="/stories/edit/:slug" element={<StoryForm isEditMode={true} />} />
+
+      {/* Public shared file download — no auth required */}
+      <Route path="/shared/:token" element={<Suspense fallback={<LazyLoadingFallback />}><SharedDownload /></Suspense>} />
 
       {/* Public seminar routes — accessible without login */}
       <Route path="/academy/seminars" element={<Suspense fallback={<LazyLoadingFallback type="academy" />}><AcademySeminars /></Suspense>} />
