@@ -38,8 +38,10 @@ const forumController = require('./controllers/forumController');
 const forumAdminController = require('./controllers/forumAdminController');
 const storageController = require('./controllers/storageController');
 const sharedLinksController = require('./controllers/sharedLinksController');
+const userSharedFilesController = require('./controllers/userSharedFilesController');
 
 router.use('/auth', authController);
+router.use('/user/shared-files', userSharedFilesController);
 router.use('/user', userController);
 router.use('/listings', adsController);
 router.use('/suggest', suggestUserController);
