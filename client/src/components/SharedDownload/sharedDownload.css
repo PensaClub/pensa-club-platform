@@ -1,0 +1,245 @@
+/* src/components/SharedDownload/sharedDownload.css */
+/* Prefix: sd- */
+
+.sd-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #0a0f1e 0%, #131929 50%, #0d1220 100%);
+    padding: 20px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.sd-card {
+    width: 100%;
+    max-width: 440px;
+    background: #1a1e2e;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 40px 32px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    text-align: center;
+}
+
+.sd-card span,
+.sd-card label,
+.sd-card p,
+.sd-card input,
+.sd-card button {
+    font-size: revert;
+}
+
+.sd-logo {
+    width: 80px;
+    height: auto;
+    margin-bottom: 8px;
+    border-radius: 8px;
+}
+
+.sd-brand {
+    font-size: 0.82rem;
+    color: #64748b;
+    margin: 0 0 28px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+}
+
+.sd-file-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 16px;
+    background: rgba(212, 168, 83, 0.1);
+    border-radius: 14px;
+    color: #d4a853;
+}
+
+.sd-file-name {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin: 0 0 6px;
+    word-break: break-all;
+    line-height: 1.4;
+}
+
+.sd-file-size {
+    font-size: 0.82rem;
+    color: #64748b;
+    margin: 0 0 24px;
+}
+
+.sd-password-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.sd-password-label {
+    display: block;
+    font-size: 0.82rem;
+    color: #94a3b8;
+    margin-bottom: 6px;
+    font-weight: 500;
+}
+
+.sd-password-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    color: #f1f5f9;
+    font-size: 0.9rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.15s;
+    box-sizing: border-box;
+}
+
+.sd-password-input:focus {
+    border-color: rgba(212, 168, 83, 0.4);
+}
+
+.sd-password-input::placeholder {
+    color: #4a5568;
+}
+
+.sd-download-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #d4a853, #c4983f);
+    color: #0a0f1e;
+    font-size: 0.95rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+}
+
+.sd-download-btn:hover:not(:disabled) {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+.sd-download-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.sd-download-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.sd-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    color: #f87171;
+}
+
+.sd-error-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    background: rgba(248, 113, 113, 0.1);
+    border-radius: 50%;
+    color: #f87171;
+}
+
+.sd-error-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin: 0;
+}
+
+.sd-error-message {
+    font-size: 0.88rem;
+    color: #94a3b8;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.sd-inline-error {
+    font-size: 0.82rem;
+    color: #f87171;
+    margin: 8px 0 0;
+    text-align: left;
+}
+
+.sd-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+}
+
+.sd-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(212, 168, 83, 0.2);
+    border-top-color: #d4a853;
+    border-radius: 50%;
+    animation: sd-spin 0.7s linear infinite;
+}
+
+@keyframes sd-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.sd-loading-text {
+    font-size: 0.88rem;
+    color: #94a3b8;
+    margin: 0;
+}
+
+.sd-success {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+    color: #22c55e;
+    font-size: 0.85rem;
+}
+
+.sd-downloads-info {
+    font-size: 0.76rem;
+    color: #4a5568;
+    margin: 12px 0 0;
+}
+
+/* ===== Mobile ===== */
+
+@media (max-width: 480px) {
+    .sd-card {
+        padding: 28px 20px;
+    }
+
+    .sd-logo {
+        width: 64px;
+    }
+
+    .sd-file-icon {
+        width: 52px;
+        height: 52px;
+    }
+
+    .sd-file-name {
+        font-size: 0.95rem;
+    }
+}

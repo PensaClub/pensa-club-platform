@@ -69,6 +69,9 @@ export const NOTIFICATION_TYPES = {
   REACTION_VISIT_CONFIRMED: 'reaction_visit_confirmed',
   REACTION_VISIT_REMINDER: 'reaction_visit_reminder',
 
+  // File sharing
+  FILE_SHARED: 'file_shared',
+
   // Forum notifications
   FORUM_COMMENT: 'forum_comment',
   FORUM_REPLY: 'forum_reply',
@@ -384,6 +387,14 @@ export const notificationConfig = {
     priority: 'high'
   },
 
+  // File sharing
+  [NOTIFICATION_TYPES.FILE_SHARED]: {
+    icon: '📂',
+    color: '#d4a853',
+    route: '/admin/site-settings',
+    priority: 'medium'
+  },
+
   // Forum
   [NOTIFICATION_TYPES.FORUM_COMMENT]: {
     icon: '💬',
@@ -464,6 +475,11 @@ export const getNotificationRoute = (notification) => {
       return `/admin/reaction?requestId=${requestId}`;
     }
     return '/admin/reaction';
+  }
+
+  // File shared notification
+  if (notification.type === NOTIFICATION_TYPES.FILE_SHARED) {
+    return '/admin/site-settings';
   }
 
   // Forum notifications — link to post

@@ -1204,7 +1204,8 @@
       "tplThanksMsg": "Hello,\n\nThank you for attending the seminar! We hope it was helpful.\n\nWe look forward to seeing you again at DigiBridge Academy!",
       "tplInfo": "Information",
       "tplInfoSubject": "Information from DigiBridge Academy",
-      "tplInfoMsg": "Hello,\n\n"
+      "tplInfoMsg": "Hello,\n\n",
+      "attachFromStorage": "Attach from storage"
     },
     "platform": "Platform",
     "guest": "Guest",

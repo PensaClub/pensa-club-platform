@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAcademy } from '../../contexts/AcademyProvider';
+import StorageFilePicker from '../../SiteSettingsAdmin/CloudStorageManager/StorageFilePicker';
 import './adminDgSendEmailModal.css';
 
 export const AdminDgSendEmailModal = ({ student, onClose, onSuccess }) => {
@@ -16,6 +17,8 @@ export const AdminDgSendEmailModal = ({ student, onClose, onSuccess }) => {
   const [errors, setErrors] = useState({});
   const [sending, setSending] = useState(false);
   const [charCount, setCharCount] = useState(0);
+  const [showFilePicker, setShowFilePicker] = useState(false);
+  const [attachedFiles, setAttachedFiles] = useState([]);
 
   const MAX_MESSAGE_LENGTH = 2000;
   const ACADEMY_EMAIL = 'academy@pensa.club'; // Официален имейл на академията
@@ -115,6 +118,21 @@ export const AdminDgSendEmailModal = ({ student, onClose, onSuccess }) => {
     } finally {
       setSending(false);
     }
+  };
+
+  // File attachment handlers
+  const handleFileSelect = ({ filePath, fileName, url }) => {
+    setAttachedFiles(prev => [...prev, { filePath, fileName, url }]);
+    const link = `\n\n📎 Файл: ${fileName}\n${url}`;
+    setFormData(prev => ({ ...prev, message: prev.message + link }));
+    setShowFilePicker(false);
+  };
+
+  const removeAttachedFile = (index) => {
+    const file = attachedFiles[index];
+    const link = `\n\n📎 Файл: ${file.fileName}\n${file.url}`;
+    setFormData(prev => ({ ...prev, message: prev.message.replace(link, '') }));
+    setAttachedFiles(prev => prev.filter((_, i) => i !== index));
   };
 
   // Email templates
@@ -264,6 +282,43 @@ export const AdminDgSendEmailModal = ({ student, onClose, onSuccess }) => {
             </div>
           </div>
 
+          {/* Attach from storage */}
+          <div className="adminDgSendEmailModal-attachSection">
+            <button
+              type="button"
+              className="adminDgSendEmailModal-attachBtn"
+              onClick={() => setShowFilePicker(true)}
+              disabled={sending}
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+              </svg>
+              {t('adminDgSendEmailModal.attachFromStorage')}
+            </button>
+            {attachedFiles.length > 0 && (
+              <div className="adminDgSendEmailModal-attachedFiles">
+                {attachedFiles.map((file, i) => (
+                  <div key={i} className="adminDgSendEmailModal-fileChip">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+                    </svg>
+                    <span className="adminDgSendEmailModal-fileChipName">{file.fileName}</span>
+                    <button
+                      type="button"
+                      className="adminDgSendEmailModal-fileChipRemove"
+                      onClick={() => removeAttachedFile(i)}
+                      disabled={sending}
+                    >
+                      <svg width="13" height="13" viewBox="0 0 24 24">
+                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="currentColor"/>
+                      </svg>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
           {/* Info Note */}
           <div className="adminDgSendEmailModal-note">
             <svg width="16" height="16" viewBox="0 0 16 16">
@@ -305,6 +360,13 @@ export const AdminDgSendEmailModal = ({ student, onClose, onSuccess }) => {
           </button>
         </div>
       </div>
+
+      {showFilePicker && (
+        <StorageFilePicker
+          onSelect={handleFileSelect}
+          onClose={() => setShowFilePicker(false)}
+        />
+      )}
     </div>
   );
 };

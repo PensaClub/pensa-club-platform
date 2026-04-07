@@ -1019,4 +1019,201 @@ storageController.post(
     }
 );
 
+// ─── 15. SHARE FILE WITH USER ───────────────────────────────────────────────
+storageController.post(
+    '/share',
+    isAuth,
+    rbac.checkPermission('admin', 'update'),
+    async (req, res, next) => {
+        try {
+            const { filePath, fileName, sharedWithUserId, message } = req.body;
+
+            if (!filePath || !fileName || !sharedWithUserId) {
+                return res.status(400).json({ error: 'filePath, fileName and sharedWithUserId are required' });
+            }
+
+            const { file_share, user_account, user_details, user_notification } = require('../sequelize/models/index');
+
+            // Verify recipient exists
+            const recipient = await user_account.findByPk(sharedWithUserId);
+            if (!recipient) {
+                return res.status(404).json({ error: 'User not found' });
+            }
+
+            // Get sharer name
+            const sharer = await user_account.findByPk(req.user.userId, {
+                include: [{ model: user_details, as: 'details', attributes: ['firstName', 'lastName'] }],
+            });
+            const sharerName = sharer?.details
+                ? `${sharer.details.firstName || ''} ${sharer.details.lastName || ''}`.trim()
+                : sharer?.email || 'Потребител';
+
+            // Create file share record
+            const share = await file_share.create({
+                filePath,
+                fileName,
+                sharedBy: req.user.userId,
+                sharedWith: sharedWithUserId,
+                message: message || null,
+            });
+
+            // Create notification for recipient
+            await user_notification.create({
+                userId: sharedWithUserId,
+                type: 'file_shared',
+                title: 'Споделен файл',
+                message: `${sharerName} сподели с вас файл: ${fileName}`,
+                data: {
+                    fileShareId: share.id,
+                    filePath,
+                    fileName,
+                },
+            });
+
+            res.json({ success: true, share });
+        } catch (err) {
+            next(err);
+        }
+    }
+);
+
+// ─── 16. GET FILES SHARED WITH ME ───────────────────────────────────────────
+storageController.get(
+    '/shared-with-me',
+    isAuth,
+    async (req, res, next) => {
+        try {
+            const { file_share, user_account, user_details } = require('../sequelize/models/index');
+
+            const shares = await file_share.findAll({
+                where: { sharedWith: req.user.userId },
+                include: [{
+                    model: user_account,
+                    as: 'sharer',
+                    attributes: ['id', 'email'],
+                    include: [{
+                        model: user_details,
+                        as: 'details',
+                        attributes: ['firstName', 'lastName', 'imageURL'],
+                    }],
+                }],
+                order: [['createdAt', 'DESC']],
+            });
+
+            res.json({ shares });
+        } catch (err) {
+            next(err);
+        }
+    }
+);
+
+// ─── 17. MARK SHARE AS READ ────────────────────────────────────────────────
+storageController.put(
+    '/shared-with-me/:id/read',
+    isAuth,
+    async (req, res, next) => {
+        try {
+            const { file_share } = require('../sequelize/models/index');
+
+            const share = await file_share.findOne({
+                where: { id: req.params.id, sharedWith: req.user.userId },
+            });
+
+            if (!share) {
+                return res.status(404).json({ error: 'Share not found' });
+            }
+
+            share.isRead = true;
+            await share.save();
+
+            res.json({ success: true });
+        } catch (err) {
+            next(err);
+        }
+    }
+);
+
+// ─── 18. DELETE SHARE ──────────────────────────────────────────────────────
+storageController.delete(
+    '/share/:id',
+    isAuth,
+    async (req, res, next) => {
+        try {
+            const { file_share, user_account } = require('../sequelize/models/index');
+
+            const share = await file_share.findByPk(req.params.id);
+            if (!share) {
+                return res.status(404).json({ error: 'Share not found' });
+            }
+
+            // Only sharer or admin can delete
+            const user = await user_account.findByPk(req.user.userId);
+            if (share.sharedBy !== req.user.userId && user?.role !== 'admin') {
+                return res.status(403).json({ error: 'Not authorized to delete this share' });
+            }
+
+            await share.destroy();
+            res.json({ success: true });
+        } catch (err) {
+            next(err);
+        }
+    }
+);
+
+// ─── 19. SEARCH USERS (for share modal) ─────────────────────────────────────
+storageController.get(
+    '/search-users',
+    isAuth,
+    rbac.checkPermission('admin', 'update'),
+    async (req, res, next) => {
+        try {
+            const { Op } = require('sequelize');
+            const { user_account, user_details } = require('../sequelize/models/index');
+
+            const q = (req.query.q || '').trim();
+            if (!q || q.length < 2) {
+                return res.json({ users: [] });
+            }
+
+            const users = await user_account.findAll({
+                include: [{
+                    model: user_details,
+                    as: 'details',
+                    attributes: ['firstName', 'lastName', 'imageURL'],
+                    where: {
+                        [Op.or]: [
+                            { firstName: { [Op.iLike]: `%${q}%` } },
+                            { lastName: { [Op.iLike]: `%${q}%` } },
+                        ],
+                    },
+                    required: false,
+                }],
+                where: {
+                    [Op.or]: [
+                        { email: { [Op.iLike]: `%${q}%` } },
+                        { '$details.first_name$': { [Op.iLike]: `%${q}%` } },
+                        { '$details.last_name$': { [Op.iLike]: `%${q}%` } },
+                    ],
+                },
+                attributes: ['id', 'email', 'role'],
+                limit: 10,
+                subQuery: false,
+            });
+
+            res.json({
+                users: users.map(u => ({
+                    id: u.id,
+                    email: u.email,
+                    role: u.role,
+                    firstName: u.details?.firstName || null,
+                    lastName: u.details?.lastName || null,
+                    imageURL: u.details?.imageURL || null,
+                })),
+            });
+        } catch (err) {
+            next(err);
+        }
+    }
+);
+
 module.exports = storageController;

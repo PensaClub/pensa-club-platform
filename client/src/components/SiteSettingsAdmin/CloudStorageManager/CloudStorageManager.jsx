@@ -3,10 +3,13 @@ import { useTranslation } from 'react-i18next';
 import {
     Home, ChevronRight, FolderPlus, Upload, LayoutGrid, List, Search, RefreshCw,
     Folder, FolderOpen, Image, FileText, Video, File, FileSpreadsheet, Presentation,
-    Download, Trash2, Pencil, X, Check, ChevronDown, ChevronRight as TreeArrow
+    Download, Trash2, Pencil, X, Check, ChevronDown, ChevronRight as TreeArrow, Share2,
+    Users, Inbox, Eye
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { storageServiceFactory } from '../../Services/storageService';
+import ShareFileModal from './ShareFileModal';
+import ShareWithUserModal from './ShareWithUserModal';
 import './cloudStorageManager.css';
 
 const storageService = storageServiceFactory();
@@ -79,6 +82,11 @@ const CloudStorageManager = () => {
     });
     const [showAddLink, setShowAddLink] = useState(false);
     const [newLinkLabel, setNewLinkLabel] = useState('');
+    const [shareModal, setShareModal] = useState(null);
+    const [shareWithUserModal, setShareWithUserModal] = useState(null);
+    const [sharedWithMeView, setSharedWithMeView] = useState(false);
+    const [sharedFiles, setSharedFiles] = useState([]);
+    const [loadingShared, setLoadingShared] = useState(false);
 
     // Load files for current path
     const loadFiles = useCallback(async (path = currentPath) => {
@@ -149,6 +157,7 @@ const CloudStorageManager = () => {
         setSelectedItems(new Set());
         setShowNewFolder(false);
         setRenamingItem(null);
+        setSharedWithMeView(false);
         loadFiles(path);
     }, [loadFiles]);
 
@@ -336,6 +345,47 @@ const CloudStorageManager = () => {
         localStorage.setItem('csm-custom-quick-links', JSON.stringify(updated));
         setRemoveLinkConfirm(null);
         toast.success('Бърза връзка премахната');
+    };
+
+    // Load shared with me files
+    const loadSharedWithMe = useCallback(async () => {
+        setLoadingShared(true);
+        try {
+            const data = await storageService.getSharedWithMe();
+            setSharedFiles(data.shares || []);
+        } catch {
+            toast.error('Грешка при зареждане на споделени файлове');
+        } finally {
+            setLoadingShared(false);
+        }
+    }, []);
+
+    const handleSharedWithMeClick = () => {
+        setSharedWithMeView(true);
+        loadSharedWithMe();
+    };
+
+    const handleBackToStorage = () => {
+        setSharedWithMeView(false);
+    };
+
+    const handleMarkShareAsRead = async (shareId) => {
+        try {
+            await storageService.markShareAsRead(shareId);
+            setSharedFiles(prev => prev.map(s =>
+                s.id === shareId ? { ...s, isRead: true } : s
+            ));
+        } catch {
+            // silent
+        }
+    };
+
+    const handleDownloadSharedFile = async (share) => {
+        // Mark as read when downloading
+        if (!share.isRead) {
+            handleMarkShareAsRead(share.id);
+        }
+        handleDownload(share.filePath);
     };
 
     // Bulk delete
@@ -668,6 +718,21 @@ const CloudStorageManager = () => {
                             <Download size={14} />
                         </button>
                         <button
+                            className="csm-action-btn"
+                            title={t('cloudStorage.shareFile', 'Сподели')}
+                            onClick={() => setShareModal({ filePath, fileName: displayName })}
+                        >
+                            <Share2 size={14} />
+                        </button>
+                        <button
+                            className="csm-action-btn"
+                            title={t('cloudStorage.shareWithUser', 'Сподели с потребител')}
+                            onClick={() => setShareWithUserModal({ filePath, fileName: displayName })}
+                        >
+                            <Users size={14} />
+                        </button>
+                        <button
+                            className="csm-action-btn"
                             title={t('cloudStorage.rename')}
                             onClick={() => { setRenamingItem(filePath); setRenameValue(displayName); }}
                         >
@@ -731,6 +796,18 @@ const CloudStorageManager = () => {
                 <td className="csm-list-actions">
                     <button title={t('cloudStorage.download')} onClick={() => handleDownload(filePath)}>
                         <Download size={14} />
+                    </button>
+                    <button
+                        title={t('cloudStorage.shareFile', 'Сподели')}
+                        onClick={() => setShareModal({ filePath, fileName: displayName })}
+                    >
+                        <Share2 size={14} />
+                    </button>
+                    <button
+                        title={t('cloudStorage.shareWithUser', 'Сподели с потребител')}
+                        onClick={() => setShareWithUserModal({ filePath, fileName: displayName })}
+                    >
+                        <Users size={14} />
                     </button>
                     <button
                         title={t('cloudStorage.rename')}
@@ -956,6 +1033,18 @@ const CloudStorageManager = () => {
                                 </button>
                             </div>
                         )}
+                        <button
+                            className={`csm-quick-link ${sharedWithMeView ? 'csm-quick-link--active' : ''}`}
+                            onClick={handleSharedWithMeClick}
+                        >
+                            <span><Inbox size={14} /></span> <span>{t('cloudStorage.sharedWithMe', 'Споделени с мен')}</span>
+                            {sharedFiles.filter(s => !s.isRead).length > 0 && (
+                                <span className="csm-share-user-badge">
+                                    {sharedFiles.filter(s => !s.isRead).length}
+                                </span>
+                            )}
+                        </button>
+                        <div className="csm-quick-links-divider" />
                         {DEFAULT_QUICK_LINKS.map(link => (
                             <button
                                 key={link.id}
@@ -995,6 +1084,95 @@ const CloudStorageManager = () => {
                 </div>
 
                 {/* File area */}
+                {sharedWithMeView ? (
+                    <div className="csm-content">
+                        <div className="csm-share-user-view-header">
+                            <button className="csm-btn csm-btn--small" onClick={handleBackToStorage}>
+                                <ChevronRight size={14} style={{ transform: 'rotate(180deg)' }} />
+                                <span>{t('cloudStorage.backToStorage', 'Назад')}</span>
+                            </button>
+                            <h3>{t('cloudStorage.sharedWithMe', 'Споделени с мен')}</h3>
+                            <button className="csm-btn csm-btn--small csm-btn--icon" onClick={loadSharedWithMe}>
+                                <RefreshCw size={14} className={loadingShared ? 'csm-spin' : ''} />
+                            </button>
+                        </div>
+
+                        {loadingShared ? (
+                            <div className="csm-loading">
+                                <RefreshCw size={24} className="csm-spin" />
+                                <span>{t('cloudStorage.loading')}</span>
+                            </div>
+                        ) : sharedFiles.length === 0 ? (
+                            <div className="csm-empty">
+                                <Inbox size={48} />
+                                <p>{t('cloudStorage.noSharedFiles', 'Няма споделени файлове')}</p>
+                            </div>
+                        ) : (
+                            <div className="csm-list-wrapper">
+                                <table className="csm-list-table">
+                                    <thead>
+                                        <tr>
+                                            <th className="csm-list-name">{t('cloudStorage.name')}</th>
+                                            <th className="csm-list-type">{t('cloudStorage.sharedBy', 'Споделен от')}</th>
+                                            <th className="csm-list-date">{t('cloudStorage.modified')}</th>
+                                            <th className="csm-list-actions">{t('cloudStorage.actions')}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {sharedFiles.map(share => {
+                                            const sharerName = share.sharer?.details
+                                                ? `${share.sharer.details.firstName || ''} ${share.sharer.details.lastName || ''}`.trim()
+                                                : share.sharer?.email || '—';
+                                            const dateStr = share.createdAt
+                                                ? new Date(share.createdAt).toLocaleDateString('bg-BG', {
+                                                    day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
+                                                })
+                                                : '—';
+                                            const FileIcon = getFileIcon(null, share.fileName);
+
+                                            return (
+                                                <tr
+                                                    key={share.id}
+                                                    className={`csm-list-row ${!share.isRead ? 'csm-list-row--unread' : ''}`}
+                                                >
+                                                    <td className="csm-list-name">
+                                                        <div className="csm-list-name-inner">
+                                                            <FileIcon size={18} className="csm-list-icon" />
+                                                            <div>
+                                                                <span className="csm-list-filename">{share.fileName}</span>
+                                                                {share.message && (
+                                                                    <span className="csm-share-user-msg">{share.message}</span>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td className="csm-list-type">{sharerName}</td>
+                                                    <td className="csm-list-date">{dateStr}</td>
+                                                    <td className="csm-list-actions">
+                                                        <button
+                                                            title={t('cloudStorage.download')}
+                                                            onClick={() => handleDownloadSharedFile(share)}
+                                                        >
+                                                            <Download size={14} />
+                                                        </button>
+                                                        {!share.isRead && (
+                                                            <button
+                                                                title={t('cloudStorage.markAsRead', 'Маркирай като прочетено')}
+                                                                onClick={() => handleMarkShareAsRead(share.id)}
+                                                            >
+                                                                <Eye size={14} />
+                                                            </button>
+                                                        )}
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })}
+                                    </tbody>
+                                </table>
+                            </div>
+                        )}
+                    </div>
+                ) : (
                 <div
                     className={`csm-content ${dragOver ? 'csm-content--dragover' : ''}`}
                     onDragOver={handleDragOver}
@@ -1052,6 +1230,7 @@ const CloudStorageManager = () => {
                         </div>
                     )}
                 </div>
+                )}
             </div>
 
             {/* Bulk actions bar */}
@@ -1130,6 +1309,24 @@ const CloudStorageManager = () => {
                         </div>
                     </div>
                 </div>
+            )}
+
+            {/* Share file modal (link) */}
+            {shareModal && (
+                <ShareFileModal
+                    filePath={shareModal.filePath}
+                    fileName={shareModal.fileName}
+                    onClose={() => setShareModal(null)}
+                />
+            )}
+
+            {/* Share with user modal */}
+            {shareWithUserModal && (
+                <ShareWithUserModal
+                    filePath={shareWithUserModal.filePath}
+                    fileName={shareWithUserModal.fileName}
+                    onClose={() => setShareWithUserModal(null)}
+                />
             )}
         </div>
     );
