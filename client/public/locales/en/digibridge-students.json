@@ -190,6 +190,7 @@
         "message": "Hello {{name}},\n\nWe noticed you haven't been active lately. We hope everything is okay.\n\nIf you need help or want to schedule a new session with a mentor, please contact us.\n\nBest regards,\nThe DigiBridge Academy Team"
       }
     },
+    "attachFromStorage": "Attach from storage",
     "errors": {
       "subjectRequired": "Subject is required",
       "subjectTooShort": "Subject must be at least 3 characters",

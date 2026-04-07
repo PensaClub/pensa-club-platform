@@ -58,7 +58,24 @@
     "generateLink": "Link generieren",
     "copyLink": "Link kopieren",
     "linkCopied": "Link kopiert",
-    "linkGenerated": "Link generiert"
+    "linkGenerated": "Link generiert",
+    "attachFromStorage": "Aus Speicher anhängen",
+    "selectFile": "Datei auswählen",
+    "fileAttached": "Datei angehängt",
+    "select": "Auswählen",
+    "shareWithUser": "Mit Benutzer teilen",
+    "searchUser": "Benutzer suchen...",
+    "selectUser": "Benutzer auswählen",
+    "optionalMessage": "Nachricht (optional)",
+    "shareSuccess": "Datei geteilt",
+    "shareWithUserError": "Fehler beim Teilen",
+    "sharedWithMe": "Mit mir geteilt",
+    "sharedBy": "Geteilt von",
+    "noSharedFiles": "Keine geteilten Dateien",
+    "markAsRead": "Als gelesen markieren",
+    "backToStorage": "Zurück zum Speicher",
+    "with": "mit",
+    "close": "Schließen"
   },
   "admin": {
     "factCheck": {

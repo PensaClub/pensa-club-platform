@@ -102,5 +102,26 @@ export const storageServiceFactory = () => {
       }
       return response.blob();
     },
+
+    // File sharing with users
+    shareWithUser: async (data) => {
+      return requester.post(`${apiUrl}/admin/storage/share`, data);
+    },
+
+    getSharedWithMe: async () => {
+      return requester.get(`${apiUrl}/admin/storage/shared-with-me`);
+    },
+
+    markShareAsRead: async (id) => {
+      return requester.put(`${apiUrl}/admin/storage/shared-with-me/${id}/read`);
+    },
+
+    deleteShare: async (id) => {
+      return requester.del(`${apiUrl}/admin/storage/share/${id}`);
+    },
+
+    searchUsers: async (q) => {
+      return requester.get(`${apiUrl}/admin/storage/search-users?q=${encodeURIComponent(q)}`);
+    },
   };
 };

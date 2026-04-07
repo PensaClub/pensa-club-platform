@@ -58,7 +58,24 @@
     "generateLink": "Генерирай линк",
     "copyLink": "Копирай линк",
     "linkCopied": "Линкът е копиран",
-    "linkGenerated": "Линкът е генериран"
+    "linkGenerated": "Линкът е генериран",
+    "attachFromStorage": "Прикачи от хранилището",
+    "selectFile": "Избери файл",
+    "fileAttached": "Файлът е прикачен",
+    "select": "Избери",
+    "shareWithUser": "Сподели с потребител",
+    "searchUser": "Търси потребител...",
+    "selectUser": "Избери потребител",
+    "optionalMessage": "Съобщение (незадължително)",
+    "shareSuccess": "Файлът е споделен",
+    "shareWithUserError": "Грешка при споделяне",
+    "sharedWithMe": "Споделени с мен",
+    "sharedBy": "Споделен от",
+    "noSharedFiles": "Няма споделени файлове",
+    "markAsRead": "Маркирай като прочетено",
+    "backToStorage": "Назад към хранилище",
+    "with": "с",
+    "close": "Затвори"
   },
   "admin": {
     "factCheck": {

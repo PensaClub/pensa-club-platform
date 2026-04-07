@@ -58,7 +58,24 @@
     "generateLink": "Generate link",
     "copyLink": "Copy link",
     "linkCopied": "Link copied",
-    "linkGenerated": "Link generated"
+    "linkGenerated": "Link generated",
+    "attachFromStorage": "Attach from storage",
+    "selectFile": "Select file",
+    "fileAttached": "File attached",
+    "select": "Select",
+    "shareWithUser": "Share with user",
+    "searchUser": "Search user...",
+    "selectUser": "Select user",
+    "optionalMessage": "Message (optional)",
+    "shareSuccess": "File shared",
+    "shareWithUserError": "Error sharing file",
+    "sharedWithMe": "Shared with me",
+    "sharedBy": "Shared by",
+    "noSharedFiles": "No shared files",
+    "markAsRead": "Mark as read",
+    "backToStorage": "Back to storage",
+    "with": "with",
+    "close": "Close"
   },
   "admin": {
     "factCheck": {
