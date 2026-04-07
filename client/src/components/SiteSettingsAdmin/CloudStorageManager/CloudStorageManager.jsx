@@ -7,12 +7,10 @@ import {
     Users, Inbox, Eye
 } from 'lucide-react';
 import { toast } from 'react-toastify';
-import { storageServiceFactory } from '../../Services/storageService';
+import { useStorage } from '../../contexts/StorageProvider';
 import ShareFileModal from './ShareFileModal';
 import ShareWithUserModal from './ShareWithUserModal';
 import './cloudStorageManager.css';
-
-const storageService = storageServiceFactory();
 
 const DEFAULT_QUICK_LINKS = [
     { id: 'seminars', label: 'Семинари', emoji: '📚', path: 'seminars/' },
@@ -48,6 +46,11 @@ const getFileName = (fullPath) => {
 
 const CloudStorageManager = () => {
     const { t } = useTranslation('admin');
+    const {
+        listFiles, uploadFile, createFolder, deleteFile, deleteFolder,
+        renameFile, getStorageUsage, getDownloadUrl, syncStorage,
+        initializeStructure, createProject, getSharedWithMe, markShareAsRead,
+    } = useStorage();
     const fileInputRef = useRef(null);
     const searchTimeoutRef = useRef(null);
 
@@ -92,7 +95,7 @@ const CloudStorageManager = () => {
     const loadFiles = useCallback(async (path = currentPath) => {
         setLoading(true);
         try {
-            const data = await storageService.listFiles(path);
+            const data = await listFiles(path);
             setFolders(data.folders || []);
             setFiles(data.files || []);
             setSelectedItems(new Set());
@@ -106,7 +109,7 @@ const CloudStorageManager = () => {
     // Load storage usage
     const loadStorageUsage = useCallback(async () => {
         try {
-            const data = await storageService.getStorageUsage();
+            const data = await getStorageUsage();
             setStorageUsage({
                 usedBytes: data.totalSize || 0,
                 totalBytes: 5 * 1024 * 1024 * 1024,
@@ -121,7 +124,7 @@ const CloudStorageManager = () => {
     // Load folder tree for sidebar
     const loadFolderTree = useCallback(async (path = '') => {
         try {
-            const data = await storageService.listFiles(path);
+            const data = await listFiles(path);
             setFolderTree(prev => ({
                 ...prev,
                 [path]: (data.folders || []).map(f => {
@@ -217,7 +220,7 @@ const CloudStorageManager = () => {
         const base = currentPath.endsWith('/') ? currentPath : (currentPath ? currentPath + '/' : '');
         const folderPath = `${base}${newFolderName.trim()}/`;
         try {
-            await storageService.createFolder(folderPath);
+            await createFolder(folderPath);
             toast.success(t('cloudStorage.folderCreated'));
             setShowNewFolder(false);
             setNewFolderName('');
@@ -238,7 +241,7 @@ const CloudStorageManager = () => {
         for (const file of fileList) {
             const uploadPath = currentPath || '';
             try {
-                await storageService.uploadFile(uploadPath, file);
+                await uploadFile(uploadPath, file);
                 successCount++;
             } catch {
                 failCount++;
@@ -260,9 +263,9 @@ const CloudStorageManager = () => {
     const handleDelete = async (path, isFolder) => {
         try {
             if (isFolder) {
-                await storageService.deleteFolder(path);
+                await deleteFolder(path);
             } else {
-                await storageService.deleteFile(path);
+                await deleteFile(path);
             }
             toast.success(t('cloudStorage.deleteSuccess'));
             setDeleteConfirm(null);
@@ -279,7 +282,7 @@ const CloudStorageManager = () => {
         setSyncing(true);
         setSyncResult(null);
         try {
-            const result = await storageService.syncStorage();
+            const result = await syncStorage();
             setSyncResult(result);
             toast.success(`Синхронизация: ${result.synced || 0} нови, ${result.orphans?.length || 0} осиротели`);
             loadFiles();
@@ -295,7 +298,7 @@ const CloudStorageManager = () => {
     const handleInitialize = async () => {
         setInitializing(true);
         try {
-            const result = await storageService.initializeStructure();
+            const result = await initializeStructure();
             toast.success(`Създадени ${result.created} нови папки`);
             loadFiles();
             loadFolderTree('');
@@ -310,7 +313,7 @@ const CloudStorageManager = () => {
     const handleCreateProject = async () => {
         if (!newProjectName.trim()) return;
         try {
-            const result = await storageService.createProject(newProjectName.trim());
+            const result = await createProject(newProjectName.trim());
             toast.success(`Проект създаден: ${result.projectPath}`);
             setShowCreateProject(false);
             setNewProjectName('');
@@ -351,7 +354,7 @@ const CloudStorageManager = () => {
     const loadSharedWithMe = useCallback(async () => {
         setLoadingShared(true);
         try {
-            const data = await storageService.getSharedWithMe();
+            const data = await getSharedWithMe();
             setSharedFiles(data.shares || []);
         } catch {
             toast.error('Грешка при зареждане на споделени файлове');
@@ -371,7 +374,7 @@ const CloudStorageManager = () => {
 
     const handleMarkShareAsRead = async (shareId) => {
         try {
-            await storageService.markShareAsRead(shareId);
+            await markShareAsRead(shareId);
             setSharedFiles(prev => prev.map(s =>
                 s.id === shareId ? { ...s, isRead: true } : s
             ));
@@ -398,9 +401,9 @@ const CloudStorageManager = () => {
             const isFolder = path.endsWith('/');
             try {
                 if (isFolder) {
-                    await storageService.deleteFolder(path);
+                    await deleteFolder(path);
                 } else {
-                    await storageService.deleteFile(path);
+                    await deleteFile(path);
                 }
                 successCount++;
             } catch {
@@ -430,7 +433,7 @@ const CloudStorageManager = () => {
             : `${parentPath}${renameValue.trim()}`;
 
         try {
-            await storageService.renameFile(oldPath, newPath);
+            await renameFile(oldPath, newPath);
             toast.success(t('cloudStorage.renameSuccess'));
             setRenamingItem(null);
             setRenameValue('');
@@ -444,7 +447,7 @@ const CloudStorageManager = () => {
     // Download
     const handleDownload = async (path) => {
         try {
-            const url = storageService.getDownloadUrl(path);
+            const url = getDownloadUrl(path);
             const auth = JSON.parse(localStorage.getItem('auth') || '{}');
             const response = await fetch(url, {
                 headers: { Authorization: `Bearer ${auth.token}` },

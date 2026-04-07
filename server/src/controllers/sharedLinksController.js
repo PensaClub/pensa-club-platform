@@ -217,7 +217,8 @@ sharedLinksController.post('/:token/download', async (req, res, next) => {
         let fileMetadata;
         try {
             const app = getFirebaseApp();
-            const bucket = admin.storage().bucket();
+            const bucketName = process.env.GCS_BUCKET || 'pensaclub-909e0.appspot.com';
+            const bucket = admin.storage().bucket(bucketName);
             const file = bucket.file(link.filePath);
 
             const [exists] = await file.exists();

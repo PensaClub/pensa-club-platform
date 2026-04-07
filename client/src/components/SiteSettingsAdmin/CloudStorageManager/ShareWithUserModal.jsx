@@ -1,12 +1,11 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { X, Search, Check, Send, User } from 'lucide-react';
-import { storageServiceFactory } from '../../Services/storageService';
-
-const storageService = storageServiceFactory();
+import { useStorage } from '../../contexts/StorageProvider';
 
 const ShareWithUserModal = ({ filePath, fileName, onClose }) => {
     const { t } = useTranslation('admin');
+    const { searchUsers, shareWithUser } = useStorage();
     const searchTimeoutRef = useRef(null);
 
     const [searchQuery, setSearchQuery] = useState('');
@@ -25,7 +24,7 @@ const ShareWithUserModal = ({ filePath, fileName, onClose }) => {
         }
         setSearching(true);
         try {
-            const data = await storageService.searchUsers(q);
+            const data = await searchUsers(q);
             setSearchResults(data.users || []);
         } catch {
             setSearchResults([]);
@@ -53,7 +52,7 @@ const ShareWithUserModal = ({ filePath, fileName, onClose }) => {
         setSharing(true);
         setError('');
         try {
-            await storageService.shareWithUser({
+            await shareWithUser({
                 filePath,
                 fileName,
                 sharedWithUserId: selectedUser.id,
