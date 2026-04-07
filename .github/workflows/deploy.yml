@@ -22,16 +22,30 @@ jobs:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSH_KEY }}
+        command_timeout: 45m
         script: |
           cd /root/Digital-Literacy-Wellbeing-60-plus
-          
+
+          # 1. Backup
           docker exec digital-literacy-wellbeing-60-plus-db-1 pg_dump -U postgres pensaclub_db | gzip > /root/backups/pensaclub_db_before_deploy_$(date +%Y%m%d_%H%M%S).sql.gz
           echo "Backup created"
-          
-          git pull origin main     
-          docker compose down
-          docker compose up --build -d
-          
-          sleep 10
+
+          # 2. Pull new code
+          git pull origin main
+
+          # 3. Build new images (сайтът работи докато build-ва)
+          docker compose build client server
+          echo "Build completed"
+
+          # 4. Restart with new images (downtime < 5 секунди)
+          docker compose up -d --no-build client server
+
+          # 5. Run migrations
+          sleep 5
+          docker exec digital-literacy-wellbeing-60-plus-server-1 npx sequelize-cli db:migrate || true
+
+          # 6. Cleanup old images
+          docker image prune -f
+
           docker compose ps
           echo "Deployment completed"
