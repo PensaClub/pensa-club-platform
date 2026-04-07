@@ -36,6 +36,7 @@ const reActionController = require('./controllers/reActionController');
 const youtubeController = require('./controllers/youtubeController');
 const forumController = require('./controllers/forumController');
 const forumAdminController = require('./controllers/forumAdminController');
+const storageController = require('./controllers/storageController');
 
 router.use('/auth', authController);
 router.use('/user', userController);
@@ -74,6 +75,7 @@ router.use('/reaction', reActionController);
 router.use('/youtube', youtubeController);
 router.use('/forum/admin', forumAdminController);
 router.use('/forum', forumController);
+router.use('/admin/storage', storageController);
 
 const pushController = require('./controllers/pushController');
 router.use('/push', pushController);
