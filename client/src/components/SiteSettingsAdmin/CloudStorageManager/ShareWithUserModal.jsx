@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { X, Search, Check, Send, User } from 'lucide-react';
 import { useStorage } from '../../contexts/StorageProvider';
+import './shareWithUserModal.css';
 
 const ShareWithUserModal = ({ filePath, fileName, onClose }) => {
     const { t } = useTranslation('admin');

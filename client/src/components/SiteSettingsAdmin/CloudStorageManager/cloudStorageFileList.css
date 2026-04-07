@@ -1,0 +1,614 @@
+/* src/components/SiteSettingsAdmin/CloudStorageManager/cloudStorageFileList.css */
+/* Prefix: csfl- */
+
+.csfl-content {
+    flex: 1;
+    min-width: 0;
+    position: relative;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(212, 168, 83, 0.15) transparent;
+    padding: 12px;
+}
+
+.csfl-content span,
+.csfl-content label,
+.csfl-content p,
+.csfl-content input,
+.csfl-content button {
+    font-size: revert;
+}
+
+.csfl-content::-webkit-scrollbar {
+    width: 5px;
+}
+
+.csfl-content::-webkit-scrollbar-thumb {
+    background: rgba(212, 168, 83, 0.15);
+    border-radius: 2px;
+}
+
+.csfl-content--dragover {
+    background: rgba(212, 168, 83, 0.04);
+}
+
+/* =========================================================
+                GRID VIEW
+   ========================================================= */
+
+.csfl-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+}
+
+.csfl-grid-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 14px 8px 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    background: rgba(255, 255, 255, 0.02);
+    position: relative;
+    cursor: default;
+    transition: border-color 0.15s, background 0.15s;
+}
+
+.csfl-grid-item:hover {
+    border-color: rgba(212, 168, 83, 0.15);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.csfl-grid-item--selected {
+    border-color: rgba(212, 168, 83, 0.3);
+    background: rgba(212, 168, 83, 0.06);
+}
+
+.csfl-grid-item--folder {
+    cursor: pointer;
+}
+
+.csfl-grid-item--folder .csfl-grid-icon {
+    color: #d4a853;
+}
+
+.csfl-grid-checkbox {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.csfl-grid-item:hover .csfl-grid-checkbox,
+.csfl-grid-item--selected .csfl-grid-checkbox {
+    opacity: 1;
+}
+
+.csfl-grid-checkbox input {
+    cursor: pointer;
+    accent-color: #d4a853;
+}
+
+.csfl-grid-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    color: #64748b;
+    cursor: pointer;
+}
+
+.csfl-grid-thumb {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.csfl-grid-name {
+    font-size: 0.76rem;
+    color: #cbd5e1;
+    text-align: center;
+    word-break: break-all;
+    line-height: 1.3;
+    max-height: 2.6em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    cursor: pointer;
+}
+
+.csfl-grid-size {
+    font-size: 0.68rem;
+    color: #4a5568;
+}
+
+.csfl-grid-actions {
+    display: flex;
+    gap: 2px;
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.csfl-grid-item:hover .csfl-grid-actions {
+    opacity: 1;
+}
+
+.csfl-grid-actions button {
+    background: none;
+    border: none;
+    color: #64748b;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    transition: color 0.15s, background 0.15s;
+}
+
+.csfl-grid-actions button:hover {
+    color: #d4a853;
+    background: rgba(212, 168, 83, 0.1);
+}
+
+/* =========================================================
+                LIST VIEW
+   ========================================================= */
+
+.csfl-list-wrapper {
+    overflow-x: auto;
+    scrollbar-width: thin;
+}
+
+.csfl-list-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+}
+
+.csfl-list-table thead th {
+    text-align: left;
+    padding: 8px 10px;
+    font-weight: 500;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #4a5568;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    white-space: nowrap;
+}
+
+.csfl-list-row {
+    transition: background 0.1s;
+}
+
+.csfl-list-row:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.csfl-list-row--selected {
+    background: rgba(212, 168, 83, 0.06);
+}
+
+.csfl-list-row td {
+    padding: 6px 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    vertical-align: middle;
+    color: #cbd5e1;
+}
+
+.csfl-list-check {
+    width: 36px;
+    text-align: center;
+}
+
+.csfl-list-check input {
+    cursor: pointer;
+    accent-color: #d4a853;
+}
+
+.csfl-list-name {
+    min-width: 200px;
+}
+
+.csfl-list-name-inner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.csfl-list-icon {
+    flex-shrink: 0;
+    color: #64748b;
+}
+
+.csfl-list-icon--folder {
+    color: #d4a853;
+}
+
+.csfl-list-thumb {
+    width: 24px;
+    height: 24px;
+    object-fit: cover;
+    border-radius: 3px;
+    flex-shrink: 0;
+}
+
+.csfl-list-link {
+    color: #d4a853;
+    cursor: pointer;
+    transition: color 0.15s;
+}
+
+.csfl-list-link:hover {
+    color: #e4bd6a;
+    text-decoration: underline;
+}
+
+.csfl-list-filename {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 300px;
+}
+
+.csfl-list-size {
+    width: 80px;
+    white-space: nowrap;
+    color: #64748b;
+    font-size: 0.76rem;
+}
+
+.csfl-list-type {
+    width: 140px;
+    white-space: nowrap;
+    color: #64748b;
+    font-size: 0.74rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 140px;
+}
+
+.csfl-list-date {
+    width: 140px;
+    white-space: nowrap;
+    color: #64748b;
+    font-size: 0.76rem;
+}
+
+.csfl-list-actions {
+    width: 100px;
+    white-space: nowrap;
+}
+
+.csfl-list-actions button {
+    background: none;
+    border: none;
+    color: #4a5568;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    transition: color 0.15s, background 0.15s;
+}
+
+.csfl-list-actions button:hover {
+    color: #d4a853;
+    background: rgba(212, 168, 83, 0.1);
+}
+
+/* =========================================================
+                RENAME INLINE
+   ========================================================= */
+
+.csfl-rename-inline {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.csfl-rename-inline input {
+    padding: 3px 6px;
+    border: 1px solid rgba(212, 168, 83, 0.3);
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.3);
+    color: #f1f5f9;
+    font-size: 0.78rem;
+    outline: none;
+    font-family: inherit;
+    width: 140px;
+}
+
+.csfl-rename-inline input:focus {
+    border-color: rgba(212, 168, 83, 0.5);
+}
+
+.csfl-rename-inline button {
+    background: none;
+    border: none;
+    color: #64748b;
+    cursor: pointer;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    transition: color 0.15s;
+}
+
+.csfl-rename-inline button:first-of-type:hover {
+    color: #22c55e;
+}
+
+.csfl-rename-inline button:last-of-type:hover {
+    color: #f87171;
+}
+
+/* =========================================================
+                LOADING / EMPTY
+   ========================================================= */
+
+.csfl-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 200px;
+    color: #64748b;
+    font-size: 0.85rem;
+}
+
+.csfl-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 200px;
+    color: #4a5568;
+}
+
+.csfl-empty p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.csfl-empty-hint {
+    font-size: 0.78rem !important;
+    color: #334155;
+}
+
+/* Spinner */
+.csfl-spin {
+    animation: csfl-spin 0.8s linear infinite;
+}
+
+@keyframes csfl-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* =========================================================
+                DROP OVERLAY
+   ========================================================= */
+
+.csfl-drop-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: rgba(212, 168, 83, 0.08);
+    border: 2px dashed rgba(212, 168, 83, 0.35);
+    border-radius: 8px;
+    color: #d4a853;
+    font-size: 0.95rem;
+    font-weight: 500;
+    z-index: 10;
+    pointer-events: none;
+}
+
+/* =========================================================
+                RESPONSIVE - Mobile
+   ========================================================= */
+
+@media (max-width: 767px) {
+    .csfl-grid {
+        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+        gap: 8px;
+    }
+
+    .csfl-list-type,
+    .csfl-list-date {
+        display: none;
+    }
+
+    .csfl-list-table thead th.csfl-list-type,
+    .csfl-list-table thead th.csfl-list-date {
+        display: none;
+    }
+
+    .csfl-list-actions button {
+        min-height: 40px;
+        min-width: 40px;
+        padding: 8px;
+    }
+    .csfl-grid-actions button {
+        min-height: 40px;
+        min-width: 40px;
+        padding: 8px;
+    }
+
+    .csfl-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .csfl-grid {
+        grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+    }
+
+    .csfl-grid-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .csfl-grid-thumb {
+        width: 40px;
+        height: 40px;
+    }
+
+    .csfl-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Tablet: 2 columns grid */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .csfl-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+}
+
+/* =========================================================
+                LIGHT THEME
+   ========================================================= */
+
+[data-theme="light"] .csfl-content--dragover {
+    background: rgba(139, 32, 64, 0.02);
+}
+
+[data-theme="light"] .csfl-content::-webkit-scrollbar-thumb {
+    background: rgba(139, 32, 64, 0.1);
+}
+
+[data-theme="light"] .csfl-grid-item {
+    border-color: rgba(0, 0, 0, 0.06);
+    background: #fff;
+}
+
+[data-theme="light"] .csfl-grid-item:hover {
+    border-color: rgba(139, 32, 64, 0.15);
+    background: #fafafa;
+}
+
+[data-theme="light"] .csfl-grid-item--selected {
+    border-color: rgba(139, 32, 64, 0.25);
+    background: rgba(139, 32, 64, 0.04);
+}
+
+[data-theme="light"] .csfl-grid-item--folder .csfl-grid-icon {
+    color: #8b2040;
+}
+
+[data-theme="light"] .csfl-grid-name {
+    color: #1e293b;
+}
+
+[data-theme="light"] .csfl-grid-size {
+    color: #94a3b8;
+}
+
+[data-theme="light"] .csfl-grid-actions button {
+    color: #94a3b8;
+}
+
+[data-theme="light"] .csfl-grid-actions button:hover {
+    color: #8b2040;
+    background: rgba(139, 32, 64, 0.06);
+}
+
+[data-theme="light"] .csfl-grid-checkbox input {
+    accent-color: #8b2040;
+}
+
+[data-theme="light"] .csfl-list-table thead th {
+    color: #94a3b8;
+    border-bottom-color: rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .csfl-list-row:hover {
+    background: #f8fafc;
+}
+
+[data-theme="light"] .csfl-list-row--selected {
+    background: rgba(139, 32, 64, 0.04);
+}
+
+[data-theme="light"] .csfl-list-row td {
+    color: #1e293b;
+    border-bottom-color: rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="light"] .csfl-list-icon {
+    color: #94a3b8;
+}
+
+[data-theme="light"] .csfl-list-icon--folder {
+    color: #8b2040;
+}
+
+[data-theme="light"] .csfl-list-link {
+    color: #8b2040;
+}
+
+[data-theme="light"] .csfl-list-link:hover {
+    color: #a73050;
+}
+
+[data-theme="light"] .csfl-list-size,
+[data-theme="light"] .csfl-list-type,
+[data-theme="light"] .csfl-list-date {
+    color: #64748b;
+}
+
+[data-theme="light"] .csfl-list-actions button {
+    color: #94a3b8;
+}
+
+[data-theme="light"] .csfl-list-actions button:hover {
+    color: #8b2040;
+    background: rgba(139, 32, 64, 0.06);
+}
+
+[data-theme="light"] .csfl-list-check input {
+    accent-color: #8b2040;
+}
+
+[data-theme="light"] .csfl-rename-inline input {
+    background: #fff;
+    border-color: rgba(139, 32, 64, 0.2);
+    color: #1e293b;
+}
+
+[data-theme="light"] .csfl-rename-inline input:focus {
+    border-color: rgba(139, 32, 64, 0.4);
+}
+
+[data-theme="light"] .csfl-loading {
+    color: #94a3b8;
+}
+
+[data-theme="light"] .csfl-empty {
+    color: #94a3b8;
+}
+
+[data-theme="light"] .csfl-empty-hint {
+    color: #b0b8c4;
+}
+
+[data-theme="light"] .csfl-drop-overlay {
+    background: rgba(139, 32, 64, 0.05);
+    border-color: rgba(139, 32, 64, 0.25);
+    color: #8b2040;
+}

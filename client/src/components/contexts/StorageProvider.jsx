@@ -107,6 +107,28 @@ export const StorageProvider = ({ children }) => {
   }, [storageService]);
 
   // =========================================================
+  //                    SEARCH & ANALYTICS
+  // =========================================================
+
+  const searchFiles = useCallback(async (params) => {
+    try {
+      return await storageService.searchFiles(params);
+    } catch (error) {
+      console.error('Error searching files:', error);
+      throw error;
+    }
+  }, [storageService]);
+
+  const getAnalytics = useCallback(async () => {
+    try {
+      return await storageService.getAnalytics();
+    } catch (error) {
+      console.error('Error getting analytics:', error);
+      throw error;
+    }
+  }, [storageService]);
+
+  // =========================================================
   //                    ADMIN OPERATIONS
   // =========================================================
 
@@ -306,6 +328,9 @@ export const StorageProvider = ({ children }) => {
     getFileInfo,
     getStorageUsage,
     getDownloadUrl,
+    // Search & Analytics
+    searchFiles,
+    getAnalytics,
     // Admin operations
     syncStorage,
     getSyncStatus,
@@ -329,7 +354,7 @@ export const StorageProvider = ({ children }) => {
     getSharedFileDownloadUrl,
   }), [
     listFiles, uploadFile, createFolder, deleteFile, deleteFolder, renameFile, moveFile,
-    getFileInfo, getStorageUsage, getDownloadUrl,
+    getFileInfo, getStorageUsage, getDownloadUrl, searchFiles, getAnalytics,
     syncStorage, getSyncStatus, initializeStructure, createProject,
     createShareLink, getShareLinks, deleteShareLink, getShareLinkInfo, downloadSharedFile,
     shareWithUser, getSharedWithMe, markShareAsRead, deleteShare, searchUsers,
