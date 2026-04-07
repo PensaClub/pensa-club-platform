@@ -3,10 +3,11 @@ import { useTranslation } from 'react-i18next';
 import {
     Home, ChevronRight, FolderPlus, Upload, LayoutGrid, List, Search, RefreshCw,
     Folder, FolderOpen, Image, FileText, Video, File, FileSpreadsheet, Presentation,
-    Download, Trash2, Pencil, X, Check, ChevronDown, ChevronRight as TreeArrow
+    Download, Trash2, Pencil, X, Check, ChevronDown, ChevronRight as TreeArrow, Share2
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { storageServiceFactory } from '../../Services/storageService';
+import ShareFileModal from './ShareFileModal';
 import './cloudStorageManager.css';
 
 const storageService = storageServiceFactory();
@@ -79,6 +80,7 @@ const CloudStorageManager = () => {
     });
     const [showAddLink, setShowAddLink] = useState(false);
     const [newLinkLabel, setNewLinkLabel] = useState('');
+    const [shareModal, setShareModal] = useState(null);
 
     // Load files for current path
     const loadFiles = useCallback(async (path = currentPath) => {
@@ -668,6 +670,14 @@ const CloudStorageManager = () => {
                             <Download size={14} />
                         </button>
                         <button
+                            className="csm-action-btn"
+                            title={t('cloudStorage.shareFile', 'Сподели')}
+                            onClick={() => setShareModal({ filePath, fileName: displayName })}
+                        >
+                            <Share2 size={14} />
+                        </button>
+                        <button
+                            className="csm-action-btn"
                             title={t('cloudStorage.rename')}
                             onClick={() => { setRenamingItem(filePath); setRenameValue(displayName); }}
                         >
@@ -731,6 +741,12 @@ const CloudStorageManager = () => {
                 <td className="csm-list-actions">
                     <button title={t('cloudStorage.download')} onClick={() => handleDownload(filePath)}>
                         <Download size={14} />
+                    </button>
+                    <button
+                        title={t('cloudStorage.shareFile', 'Сподели')}
+                        onClick={() => setShareModal({ filePath, fileName: displayName })}
+                    >
+                        <Share2 size={14} />
                     </button>
                     <button
                         title={t('cloudStorage.rename')}
@@ -1130,6 +1146,15 @@ const CloudStorageManager = () => {
                         </div>
                     </div>
                 </div>
+            )}
+
+            {/* Share file modal */}
+            {shareModal && (
+                <ShareFileModal
+                    filePath={shareModal.filePath}
+                    fileName={shareModal.fileName}
+                    onClose={() => setShareModal(null)}
+                />
             )}
         </div>
     );

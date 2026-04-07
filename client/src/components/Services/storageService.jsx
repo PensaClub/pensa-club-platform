@@ -1,4 +1,4 @@
-import { requestFactory } from "./requester";
+import { requestFactory } from './requester';
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -14,7 +14,6 @@ export const storageServiceFactory = () => {
       const formData = new FormData();
       formData.append('file', file);
       formData.append('path', path);
-      // For file upload we need raw fetch with auth
       const auth = JSON.parse(localStorage.getItem('auth') || '{}');
       const response = await fetch(`${apiUrl}/admin/storage/upload`, {
         method: 'POST',
@@ -71,6 +70,37 @@ export const storageServiceFactory = () => {
 
     createProject: async (name) => {
       return requester.post(`${apiUrl}/admin/storage/create-project`, { name });
+    },
+
+    // Shared Links
+    createShareLink: async (data) => {
+      return requester.post(`${apiUrl}/shared-links`, data);
+    },
+
+    getShareLinks: async () => {
+      return requester.get(`${apiUrl}/shared-links`);
+    },
+
+    deleteShareLink: async (id) => {
+      return requester.del(`${apiUrl}/shared-links/${id}`);
+    },
+
+    getShareLinkInfo: async (token) => {
+      const response = await fetch(`${apiUrl}/shared-links/${token}/info`);
+      return response.json();
+    },
+
+    downloadSharedFile: async (token, password) => {
+      const response = await fetch(`${apiUrl}/shared-links/${token}/download`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+      });
+      if (!response.ok) {
+        const err = await response.json();
+        throw err;
+      }
+      return response.blob();
     },
   };
 };

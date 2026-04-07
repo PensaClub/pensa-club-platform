@@ -296,6 +296,11 @@ const permissions = {
         update: ROLES.STAFF,
         delete: ['admin'],
     },
+    sharedLink: {
+        create: ['admin'],
+        readAll: ['admin'],
+        delete: ['admin'],
+    },
 };
 
 module.exports = permissions;
