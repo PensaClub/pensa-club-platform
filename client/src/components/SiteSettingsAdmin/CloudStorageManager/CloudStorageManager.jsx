@@ -1,24 +1,20 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-    Home, ChevronRight, FolderPlus, Upload, LayoutGrid, List, Search, RefreshCw,
-    Folder, FolderOpen, Image, FileText, Video, File, FileSpreadsheet, Presentation,
-    Download, Trash2, Pencil, X, Check, ChevronDown, ChevronRight as TreeArrow, Share2,
-    Users, Inbox, Eye
+    Home, ChevronRight, FolderPlus, RefreshCw, Search, Folder,
+    Image, FileText, Video, File, FileSpreadsheet, Presentation,
+    Download, Trash2, X, Eye, Inbox
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useStorage } from '../../contexts/StorageProvider';
 import ShareFileModal from './ShareFileModal';
 import ShareWithUserModal from './ShareWithUserModal';
+import CloudStorageToolbar from './CloudStorageToolbar';
+import CloudStorageBreadcrumb from './CloudStorageBreadcrumb';
+import CloudStorageSidebar from './CloudStorageSidebar';
+import CloudStorageFileList from './CloudStorageFileList';
+import CloudStorageAnalytics from './CloudStorageAnalytics';
 import './cloudStorageManager.css';
-
-const DEFAULT_QUICK_LINKS = [
-    { id: 'seminars', label: 'Семинари', emoji: '📚', path: 'seminars/' },
-    { id: 'projects', label: 'Проекти', emoji: '📁', path: 'pensa-foundation/projects/' },
-    { id: 'admin', label: 'Администрация', emoji: '🏢', path: 'pensa-foundation/administration/' },
-    { id: 'comms', label: 'Комуникации', emoji: '📢', path: 'pensa-foundation/communications/' },
-    { id: 'meetings', label: 'Срещи', emoji: '📋', path: 'pensa-foundation/meetings/' },
-];
 
 const formatSize = (bytes) => {
     if (!bytes) return '\u2014';
@@ -50,8 +46,10 @@ const CloudStorageManager = () => {
         listFiles, uploadFile, createFolder, deleteFile, deleteFolder,
         renameFile, getStorageUsage, getDownloadUrl, syncStorage,
         initializeStructure, createProject, getSharedWithMe, markShareAsRead,
+        searchFiles, getAnalytics,
     } = useStorage();
     const fileInputRef = useRef(null);
+    const cameraInputRef = useRef(null);
     const searchTimeoutRef = useRef(null);
 
     const [currentPath, setCurrentPath] = useState('');
@@ -73,7 +71,6 @@ const CloudStorageManager = () => {
     const [expandedTreeFolders, setExpandedTreeFolders] = useState(new Set());
     const [deleteConfirm, setDeleteConfirm] = useState(null);
     const [syncing, setSyncing] = useState(false);
-    const [syncResult, setSyncResult] = useState(null);
     const [initializing, setInitializing] = useState(false);
     const [showCreateProject, setShowCreateProject] = useState(false);
     const [newProjectName, setNewProjectName] = useState('');
@@ -90,6 +87,13 @@ const CloudStorageManager = () => {
     const [sharedWithMeView, setSharedWithMeView] = useState(false);
     const [sharedFiles, setSharedFiles] = useState([]);
     const [loadingShared, setLoadingShared] = useState(false);
+    const [searchMode, setSearchMode] = useState('local');
+    const [searchTypeFilter, setSearchTypeFilter] = useState('all');
+    const [globalSearchResults, setGlobalSearchResults] = useState(null);
+    const [globalSearching, setGlobalSearching] = useState(false);
+    const [showAnalytics, setShowAnalytics] = useState(false);
+    const [analyticsData, setAnalyticsData] = useState(null);
+    const [loadingAnalytics, setLoadingAnalytics] = useState(false);
 
     // Load files for current path
     const loadFiles = useCallback(async (path = currentPath) => {
@@ -106,7 +110,6 @@ const CloudStorageManager = () => {
         }
     }, [currentPath, t]);
 
-    // Load storage usage
     const loadStorageUsage = useCallback(async () => {
         try {
             const data = await getStorageUsage();
@@ -116,12 +119,9 @@ const CloudStorageManager = () => {
                 totalFiles: data.totalFiles || 0,
                 folderBreakdown: data.folderBreakdown || [],
             });
-        } catch {
-            // silent fail
-        }
+        } catch { /* silent */ }
     }, []);
 
-    // Load folder tree for sidebar
     const loadFolderTree = useCallback(async (path = '') => {
         try {
             const data = await listFiles(path);
@@ -132,9 +132,7 @@ const CloudStorageManager = () => {
                     return path ? `${path}${name}` : name;
                 })
             }));
-        } catch {
-            // silent
-        }
+        } catch { /* silent */ }
     }, []);
 
     useEffect(() => {
@@ -152,7 +150,44 @@ const CloudStorageManager = () => {
         return () => clearTimeout(searchTimeoutRef.current);
     }, [search]);
 
-    // Navigate to a path
+    // Global search effect
+    useEffect(() => {
+        if (searchMode !== 'global' || !debouncedSearch) {
+            setGlobalSearchResults(null);
+            return;
+        }
+        let cancelled = false;
+        const doSearch = async () => {
+            setGlobalSearching(true);
+            try {
+                const result = await searchFiles({
+                    q: debouncedSearch,
+                    type: searchTypeFilter !== 'all' ? searchTypeFilter : undefined,
+                    maxResults: 50,
+                });
+                if (!cancelled) setGlobalSearchResults(result.files || []);
+            } catch {
+                if (!cancelled) setGlobalSearchResults([]);
+            } finally {
+                if (!cancelled) setGlobalSearching(false);
+            }
+        };
+        doSearch();
+        return () => { cancelled = true; };
+    }, [debouncedSearch, searchMode, searchTypeFilter]); // eslint-disable-line react-hooks/exhaustive-deps
+
+    const loadAnalytics = useCallback(async () => {
+        setLoadingAnalytics(true);
+        try {
+            const data = await getAnalytics();
+            setAnalyticsData(data);
+        } catch {
+            toast.error('Error loading analytics');
+        } finally {
+            setLoadingAnalytics(false);
+        }
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
     const navigateTo = useCallback((path) => {
         setCurrentPath(path);
         setSearch('');
@@ -161,10 +196,11 @@ const CloudStorageManager = () => {
         setShowNewFolder(false);
         setRenamingItem(null);
         setSharedWithMeView(false);
+        setGlobalSearchResults(null);
+        setShowAnalytics(false);
         loadFiles(path);
     }, [loadFiles]);
 
-    // Breadcrumb segments
     const breadcrumbs = useMemo(() => {
         if (!currentPath) return [];
         const parts = currentPath.replace(/\/$/, '').split('/').filter(Boolean);
@@ -182,12 +218,25 @@ const CloudStorageManager = () => {
     }, [folders, debouncedSearch]);
 
     const filteredFiles = useMemo(() => {
-        if (!debouncedSearch) return files;
-        const q = debouncedSearch.toLowerCase();
-        return files.filter(f => getFileName(f.name || f.fullPath).toLowerCase().includes(q));
-    }, [files, debouncedSearch]);
+        let result = files;
+        if (debouncedSearch) {
+            const q = debouncedSearch.toLowerCase();
+            result = result.filter(f => getFileName(f.name || f.fullPath).toLowerCase().includes(q));
+        }
+        if (searchTypeFilter !== 'all') {
+            result = result.filter(f => {
+                const ct = f.contentType || '';
+                const name = (f.name || f.fullPath || '').toLowerCase();
+                if (searchTypeFilter === 'image') return ct.startsWith('image/');
+                if (searchTypeFilter === 'video') return ct.startsWith('video/');
+                if (searchTypeFilter === 'document') return ['pdf', 'doc', 'docx', 'xls', 'xlsx', 'txt', 'csv'].some(ext => name.endsWith('.' + ext));
+                if (searchTypeFilter === 'presentation') return ['ppt', 'pptx'].some(ext => name.endsWith('.' + ext));
+                return true;
+            });
+        }
+        return result;
+    }, [files, debouncedSearch, searchTypeFilter]);
 
-    // Selection helpers
     const allItems = useMemo(() => {
         const items = [];
         filteredFolders.forEach(f => items.push({ type: 'folder', id: f }));
@@ -214,7 +263,6 @@ const CloudStorageManager = () => {
         });
     };
 
-    // Create folder
     const handleCreateFolder = async () => {
         if (!newFolderName.trim()) return;
         const base = currentPath.endsWith('/') ? currentPath : (currentPath ? currentPath + '/' : '');
@@ -231,42 +279,28 @@ const CloudStorageManager = () => {
         }
     };
 
-    // Upload
     const handleUpload = async (fileList) => {
         if (!fileList || fileList.length === 0) return;
         setUploading(true);
         let successCount = 0;
         let failCount = 0;
-
         for (const file of fileList) {
-            const uploadPath = currentPath || '';
             try {
-                await uploadFile(uploadPath, file);
+                await uploadFile(currentPath || '', file);
                 successCount++;
-            } catch {
-                failCount++;
-            }
+            } catch { failCount++; }
         }
-
         setUploading(false);
-        if (successCount > 0) {
-            toast.success(t('cloudStorage.uploadSuccess', { count: successCount }));
-        }
-        if (failCount > 0) {
-            toast.error(t('cloudStorage.uploadError', { count: failCount }));
-        }
+        if (successCount > 0) toast.success(t('cloudStorage.uploadSuccess', { count: successCount }));
+        if (failCount > 0) toast.error(t('cloudStorage.uploadError', { count: failCount }));
         loadFiles();
         loadStorageUsage();
     };
 
-    // Delete single item
     const handleDelete = async (path, isFolder) => {
         try {
-            if (isFolder) {
-                await deleteFolder(path);
-            } else {
-                await deleteFile(path);
-            }
+            if (isFolder) await deleteFolder(path);
+            else await deleteFile(path);
             toast.success(t('cloudStorage.deleteSuccess'));
             setDeleteConfirm(null);
             loadFiles();
@@ -277,24 +311,19 @@ const CloudStorageManager = () => {
         }
     };
 
-    // Sync storage with DB
     const handleSync = async () => {
         setSyncing(true);
-        setSyncResult(null);
         try {
             const result = await syncStorage();
-            setSyncResult(result);
             toast.success(`Синхронизация: ${result.synced || 0} нови, ${result.orphans?.length || 0} осиротели`);
             loadFiles();
         } catch (err) {
             toast.error('Грешка при синхронизация');
-            console.error('Sync error:', err);
         } finally {
             setSyncing(false);
         }
     };
 
-    // Initialize foundation structure
     const handleInitialize = async () => {
         setInitializing(true);
         try {
@@ -309,7 +338,6 @@ const CloudStorageManager = () => {
         }
     };
 
-    // Create project
     const handleCreateProject = async () => {
         if (!newProjectName.trim()) return;
         try {
@@ -324,15 +352,9 @@ const CloudStorageManager = () => {
         }
     };
 
-    // Add custom quick link
     const handleAddQuickLink = () => {
         if (!newLinkLabel.trim() || !currentPath) return;
-        const newLink = {
-            id: `custom-${Date.now()}`,
-            label: newLinkLabel.trim(),
-            emoji: '📌',
-            path: currentPath,
-        };
+        const newLink = { id: `custom-${Date.now()}`, label: newLinkLabel.trim(), emoji: '📌', path: currentPath };
         const updated = [...customLinks, newLink];
         setCustomLinks(updated);
         localStorage.setItem('csm-custom-quick-links', JSON.stringify(updated));
@@ -341,7 +363,6 @@ const CloudStorageManager = () => {
         toast.success('Бърза връзка добавена');
     };
 
-    // Remove custom quick link
     const handleRemoveQuickLink = (linkId) => {
         const updated = customLinks.filter(l => l.id !== linkId);
         setCustomLinks(updated);
@@ -350,7 +371,6 @@ const CloudStorageManager = () => {
         toast.success('Бърза връзка премахната');
     };
 
-    // Load shared with me files
     const loadSharedWithMe = useCallback(async () => {
         setLoadingShared(true);
         try {
@@ -363,88 +383,13 @@ const CloudStorageManager = () => {
         }
     }, []);
 
-    const handleSharedWithMeClick = () => {
-        setSharedWithMeView(true);
-        loadSharedWithMe();
-    };
-
-    const handleBackToStorage = () => {
-        setSharedWithMeView(false);
-    };
-
     const handleMarkShareAsRead = async (shareId) => {
         try {
             await markShareAsRead(shareId);
-            setSharedFiles(prev => prev.map(s =>
-                s.id === shareId ? { ...s, isRead: true } : s
-            ));
-        } catch {
-            // silent
-        }
+            setSharedFiles(prev => prev.map(s => s.id === shareId ? { ...s, isRead: true } : s));
+        } catch { /* silent */ }
     };
 
-    const handleDownloadSharedFile = async (share) => {
-        // Mark as read when downloading
-        if (!share.isRead) {
-            handleMarkShareAsRead(share.id);
-        }
-        handleDownload(share.filePath);
-    };
-
-    // Bulk delete
-    const handleBulkDelete = async () => {
-        const items = Array.from(selectedItems);
-        let successCount = 0;
-        let failCount = 0;
-
-        for (const path of items) {
-            const isFolder = path.endsWith('/');
-            try {
-                if (isFolder) {
-                    await deleteFolder(path);
-                } else {
-                    await deleteFile(path);
-                }
-                successCount++;
-            } catch {
-                failCount++;
-            }
-        }
-
-        if (successCount > 0) toast.success(t('cloudStorage.bulkDeleteSuccess', { count: successCount }));
-        if (failCount > 0) toast.error(t('cloudStorage.bulkDeleteError', { count: failCount }));
-        setSelectedItems(new Set());
-        setBulkDeleteConfirm(false);
-        loadFiles();
-        loadStorageUsage();
-        loadFolderTree(currentPath);
-    };
-
-    // Rename
-    const handleRename = async (oldPath) => {
-        if (!renameValue.trim()) {
-            setRenamingItem(null);
-            return;
-        }
-        const isFolder = oldPath.endsWith('/');
-        const parentPath = oldPath.substring(0, oldPath.replace(/\/$/, '').lastIndexOf('/') + 1);
-        const newPath = isFolder
-            ? `${parentPath}${renameValue.trim()}/`
-            : `${parentPath}${renameValue.trim()}`;
-
-        try {
-            await renameFile(oldPath, newPath);
-            toast.success(t('cloudStorage.renameSuccess'));
-            setRenamingItem(null);
-            setRenameValue('');
-            loadFiles();
-            if (isFolder) loadFolderTree(currentPath);
-        } catch {
-            toast.error(t('cloudStorage.renameError'));
-        }
-    };
-
-    // Download
     const handleDownload = async (path) => {
         try {
             const url = getDownloadUrl(path);
@@ -467,494 +412,108 @@ const CloudStorageManager = () => {
         }
     };
 
-    // Drag & drop handlers
-    const handleDragOver = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        setDragOver(true);
+    const handleBulkDelete = async () => {
+        const items = Array.from(selectedItems);
+        let successCount = 0;
+        let failCount = 0;
+        for (const path of items) {
+            const isFolder = path.endsWith('/');
+            try {
+                if (isFolder) await deleteFolder(path);
+                else await deleteFile(path);
+                successCount++;
+            } catch { failCount++; }
+        }
+        if (successCount > 0) toast.success(t('cloudStorage.bulkDeleteSuccess', { count: successCount }));
+        if (failCount > 0) toast.error(t('cloudStorage.bulkDeleteError', { count: failCount }));
+        setSelectedItems(new Set());
+        setBulkDeleteConfirm(false);
+        loadFiles();
+        loadStorageUsage();
+        loadFolderTree(currentPath);
     };
 
-    const handleDragLeave = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        setDragOver(false);
-    };
-
-    const handleDrop = (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        setDragOver(false);
-        const droppedFiles = e.dataTransfer?.files;
-        if (droppedFiles && droppedFiles.length > 0) {
-            handleUpload(droppedFiles);
+    const handleRename = async (oldPath) => {
+        if (!renameValue.trim()) { setRenamingItem(null); return; }
+        const isFolder = oldPath.endsWith('/');
+        const parentPath = oldPath.substring(0, oldPath.replace(/\/$/, '').lastIndexOf('/') + 1);
+        const newPath = isFolder ? `${parentPath}${renameValue.trim()}/` : `${parentPath}${renameValue.trim()}`;
+        try {
+            await renameFile(oldPath, newPath);
+            toast.success(t('cloudStorage.renameSuccess'));
+            setRenamingItem(null);
+            setRenameValue('');
+            loadFiles();
+            if (isFolder) loadFolderTree(currentPath);
+        } catch {
+            toast.error(t('cloudStorage.renameError'));
         }
     };
 
-    // Toggle folder in tree
+    const handleDragOver = (e) => { e.preventDefault(); e.stopPropagation(); setDragOver(true); };
+    const handleDragLeave = (e) => { e.preventDefault(); e.stopPropagation(); setDragOver(false); };
+    const handleDrop = (e) => { e.preventDefault(); e.stopPropagation(); setDragOver(false); const f = e.dataTransfer?.files; if (f && f.length > 0) handleUpload(f); };
+
     const toggleTreeFolder = async (folderPath) => {
         const next = new Set(expandedTreeFolders);
         if (next.has(folderPath)) {
             next.delete(folderPath);
         } else {
             next.add(folderPath);
-            if (!folderTree[folderPath]) {
-                await loadFolderTree(folderPath);
-            }
+            if (!folderTree[folderPath]) await loadFolderTree(folderPath);
         }
         setExpandedTreeFolders(next);
     };
 
-    // Get thumbnail URL for images (Firebase Storage public URL format)
     const getThumbnailUrl = (file) => {
         if (!file.contentType?.startsWith('image/')) return null;
         const filePath = encodeURIComponent(file.fullPath || file.name);
         return `https://firebasestorage.googleapis.com/v0/b/${encodeURIComponent('pensaclub-909e0.appspot.com')}/o/${filePath}?alt=media`;
     };
 
-    // Render folder tree recursively
-    const renderTreeNode = (folderPath, depth = 0) => {
-        const children = folderTree[folderPath] || [];
-        const isExpanded = expandedTreeFolders.has(folderPath);
-        const folderName = getFileName(folderPath) || t('cloudStorage.root');
-        const isActive = currentPath === (folderPath ? folderPath + '/' : '') || currentPath === folderPath;
-
-        return (
-            <div key={folderPath || 'root'} className="csm-tree-node">
-                <div
-                    className={`csm-tree-item ${isActive ? 'csm-tree-item--active' : ''}`}
-                    style={{ paddingLeft: `${depth * 16 + 8}px` }}
-                >
-                    <button
-                        className="csm-tree-toggle"
-                        onClick={(e) => { e.stopPropagation(); toggleTreeFolder(folderPath); }}
-                    >
-                        {isExpanded ? <ChevronDown size={14} /> : <TreeArrow size={14} />}
-                    </button>
-                    <button
-                        className="csm-tree-label"
-                        onClick={() => navigateTo(folderPath ? folderPath + '/' : '')}
-                    >
-                        {isExpanded ? <FolderOpen size={16} /> : <Folder size={16} />}
-                        <span>{folderName}</span>
-                    </button>
-                </div>
-                {isExpanded && children.length > 0 && (
-                    <div className="csm-tree-children">
-                        {children.map(child => renderTreeNode(child, depth + 1))}
-                    </div>
-                )}
-            </div>
-        );
-    };
-
-    // Render file item for grid or list
-    const renderFolderItem = (folderName) => {
-        const fullPath = folderName;
-        const cleanName = folderName.replace(/\/$/, '');
-        const displayName = cleanName.split('/').filter(Boolean).pop() || cleanName;
-        const isRenaming = renamingItem === fullPath;
-        const isSelected = selectedItems.has(fullPath);
-
-        if (viewMode === 'grid') {
-            return (
-                <div
-                    key={fullPath}
-                    className={`csm-grid-item csm-grid-item--folder ${isSelected ? 'csm-grid-item--selected' : ''}`}
-                >
-                    <div className="csm-grid-checkbox">
-                        <input
-                            type="checkbox"
-                            checked={isSelected}
-                            onChange={() => toggleSelect(fullPath)}
-                        />
-                    </div>
-                    <div
-                        className="csm-grid-icon"
-                        onClick={() => !isRenaming && navigateTo(fullPath.endsWith('/') ? fullPath : fullPath + '/')}
-                    >
-                        <Folder size={40} />
-                    </div>
-                    {isRenaming ? (
-                        <div className="csm-rename-inline">
-                            <input
-                                type="text"
-                                value={renameValue}
-                                onChange={(e) => setRenameValue(e.target.value)}
-                                onKeyDown={(e) => { if (e.key === 'Enter') handleRename(fullPath); if (e.key === 'Escape') setRenamingItem(null); }}
-                                autoFocus
-                            />
-                            <button onClick={() => handleRename(fullPath)}><Check size={14} /></button>
-                            <button onClick={() => setRenamingItem(null)}><X size={14} /></button>
-                        </div>
-                    ) : (
-                        <span
-                            className="csm-grid-name"
-                            onClick={() => navigateTo(fullPath.endsWith('/') ? fullPath : fullPath + '/')}
-                        >
-                            {displayName}
-                        </span>
-                    )}
-                    <div className="csm-grid-actions">
-                        <button
-                            title={t('cloudStorage.rename')}
-                            onClick={() => { setRenamingItem(fullPath); setRenameValue(displayName); }}
-                        >
-                            <Pencil size={14} />
-                        </button>
-                        <button
-                            title={t('cloudStorage.delete')}
-                            onClick={() => setDeleteConfirm({ path: fullPath, isFolder: true, name: displayName })}
-                        >
-                            <Trash2 size={14} />
-                        </button>
-                    </div>
-                </div>
-            );
-        }
-
-        // List view
-        return (
-            <tr
-                key={fullPath}
-                className={`csm-list-row ${isSelected ? 'csm-list-row--selected' : ''}`}
-            >
-                <td className="csm-list-check">
-                    <input
-                        type="checkbox"
-                        checked={isSelected}
-                        onChange={() => toggleSelect(fullPath)}
-                    />
-                </td>
-                <td className="csm-list-name">
-                    <div className="csm-list-name-inner">
-                        <Folder size={18} className="csm-list-icon csm-list-icon--folder" />
-                        {isRenaming ? (
-                            <div className="csm-rename-inline">
-                                <input
-                                    type="text"
-                                    value={renameValue}
-                                    onChange={(e) => setRenameValue(e.target.value)}
-                                    onKeyDown={(e) => { if (e.key === 'Enter') handleRename(fullPath); if (e.key === 'Escape') setRenamingItem(null); }}
-                                    autoFocus
-                                />
-                                <button onClick={() => handleRename(fullPath)}><Check size={14} /></button>
-                                <button onClick={() => setRenamingItem(null)}><X size={14} /></button>
-                            </div>
-                        ) : (
-                            <span
-                                className="csm-list-link"
-                                onClick={() => navigateTo(fullPath.endsWith('/') ? fullPath : fullPath + '/')}
-                            >
-                                {displayName}
-                            </span>
-                        )}
-                    </div>
-                </td>
-                <td className="csm-list-size">{'\u2014'}</td>
-                <td className="csm-list-type">{t('cloudStorage.folder')}</td>
-                <td className="csm-list-date">{'\u2014'}</td>
-                <td className="csm-list-actions">
-                    <button
-                        title={t('cloudStorage.rename')}
-                        onClick={() => { setRenamingItem(fullPath); setRenameValue(displayName); }}
-                    >
-                        <Pencil size={14} />
-                    </button>
-                    <button
-                        title={t('cloudStorage.delete')}
-                        onClick={() => setDeleteConfirm({ path: fullPath, isFolder: true, name: displayName })}
-                    >
-                        <Trash2 size={14} />
-                    </button>
-                </td>
-            </tr>
-        );
-    };
-
-    const renderFileItem = (file) => {
-        const filePath = file.fullPath || file.name;
-        const displayName = getFileName(file.name || filePath);
-        const FileIcon = getFileIcon(file.contentType, displayName);
-        const isRenaming = renamingItem === filePath;
-        const isSelected = selectedItems.has(filePath);
-        const isImage = file.contentType?.startsWith('image/');
-        const thumbnailUrl = getThumbnailUrl(file);
-
-        if (viewMode === 'grid') {
-            return (
-                <div
-                    key={filePath}
-                    className={`csm-grid-item ${isSelected ? 'csm-grid-item--selected' : ''}`}
-                >
-                    <div className="csm-grid-checkbox">
-                        <input
-                            type="checkbox"
-                            checked={isSelected}
-                            onChange={() => toggleSelect(filePath)}
-                        />
-                    </div>
-                    <div className="csm-grid-icon">
-                        {isImage && thumbnailUrl ? (
-                            <img src={thumbnailUrl} alt={displayName} className="csm-grid-thumb" onError={e => { e.target.style.display = 'none'; }} />
-                        ) : (
-                            <FileIcon size={40} />
-                        )}
-                    </div>
-                    {isRenaming ? (
-                        <div className="csm-rename-inline">
-                            <input
-                                type="text"
-                                value={renameValue}
-                                onChange={(e) => setRenameValue(e.target.value)}
-                                onKeyDown={(e) => { if (e.key === 'Enter') handleRename(filePath); if (e.key === 'Escape') setRenamingItem(null); }}
-                                autoFocus
-                            />
-                            <button onClick={() => handleRename(filePath)}><Check size={14} /></button>
-                            <button onClick={() => setRenamingItem(null)}><X size={14} /></button>
-                        </div>
-                    ) : (
-                        <span className="csm-grid-name" title={displayName}>{displayName}</span>
-                    )}
-                    <span className="csm-grid-size">{formatSize(file.size)}</span>
-                    <div className="csm-grid-actions">
-                        <button title={t('cloudStorage.download')} onClick={() => handleDownload(filePath)}>
-                            <Download size={14} />
-                        </button>
-                        <button
-                            className="csm-action-btn"
-                            title={t('cloudStorage.shareFile', 'Сподели')}
-                            onClick={() => setShareModal({ filePath, fileName: displayName })}
-                        >
-                            <Share2 size={14} />
-                        </button>
-                        <button
-                            className="csm-action-btn"
-                            title={t('cloudStorage.shareWithUser', 'Сподели с потребител')}
-                            onClick={() => setShareWithUserModal({ filePath, fileName: displayName })}
-                        >
-                            <Users size={14} />
-                        </button>
-                        <button
-                            className="csm-action-btn"
-                            title={t('cloudStorage.rename')}
-                            onClick={() => { setRenamingItem(filePath); setRenameValue(displayName); }}
-                        >
-                            <Pencil size={14} />
-                        </button>
-                        <button
-                            title={t('cloudStorage.delete')}
-                            onClick={() => setDeleteConfirm({ path: filePath, isFolder: false, name: displayName })}
-                        >
-                            <Trash2 size={14} />
-                        </button>
-                    </div>
-                </div>
-            );
-        }
-
-        // List view
-        const dateStr = file.updated ? new Date(file.updated).toLocaleDateString('bg-BG', {
-            day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'
-        }) : '\u2014';
-
-        return (
-            <tr
-                key={filePath}
-                className={`csm-list-row ${isSelected ? 'csm-list-row--selected' : ''}`}
-            >
-                <td className="csm-list-check">
-                    <input
-                        type="checkbox"
-                        checked={isSelected}
-                        onChange={() => toggleSelect(filePath)}
-                    />
-                </td>
-                <td className="csm-list-name">
-                    <div className="csm-list-name-inner">
-                        {isImage && thumbnailUrl ? (
-                            <img src={thumbnailUrl} alt={displayName} className="csm-list-thumb" onError={e => { e.target.style.display = 'none'; }} />
-                        ) : (
-                            <FileIcon size={18} className="csm-list-icon" />
-                        )}
-                        {isRenaming ? (
-                            <div className="csm-rename-inline">
-                                <input
-                                    type="text"
-                                    value={renameValue}
-                                    onChange={(e) => setRenameValue(e.target.value)}
-                                    onKeyDown={(e) => { if (e.key === 'Enter') handleRename(filePath); if (e.key === 'Escape') setRenamingItem(null); }}
-                                    autoFocus
-                                />
-                                <button onClick={() => handleRename(filePath)}><Check size={14} /></button>
-                                <button onClick={() => setRenamingItem(null)}><X size={14} /></button>
-                            </div>
-                        ) : (
-                            <span className="csm-list-filename">{displayName}</span>
-                        )}
-                    </div>
-                </td>
-                <td className="csm-list-size">{formatSize(file.size)}</td>
-                <td className="csm-list-type">{file.contentType || '\u2014'}</td>
-                <td className="csm-list-date">{dateStr}</td>
-                <td className="csm-list-actions">
-                    <button title={t('cloudStorage.download')} onClick={() => handleDownload(filePath)}>
-                        <Download size={14} />
-                    </button>
-                    <button
-                        title={t('cloudStorage.shareFile', 'Сподели')}
-                        onClick={() => setShareModal({ filePath, fileName: displayName })}
-                    >
-                        <Share2 size={14} />
-                    </button>
-                    <button
-                        title={t('cloudStorage.shareWithUser', 'Сподели с потребител')}
-                        onClick={() => setShareWithUserModal({ filePath, fileName: displayName })}
-                    >
-                        <Users size={14} />
-                    </button>
-                    <button
-                        title={t('cloudStorage.rename')}
-                        onClick={() => { setRenamingItem(filePath); setRenameValue(displayName); }}
-                    >
-                        <Pencil size={14} />
-                    </button>
-                    <button
-                        title={t('cloudStorage.delete')}
-                        onClick={() => setDeleteConfirm({ path: filePath, isFolder: false, name: displayName })}
-                    >
-                        <Trash2 size={14} />
-                    </button>
-                </td>
-            </tr>
-        );
-    };
+    const unreadSharedCount = sharedFiles.filter(s => !s.isRead).length;
 
     return (
         <div className="csm-wrapper">
             {/* Breadcrumb */}
-            <div className="csm-breadcrumb">
-                <button
-                    className={`csm-breadcrumb-item ${!currentPath ? 'csm-breadcrumb-item--active' : ''}`}
-                    onClick={() => navigateTo('')}
-                >
-                    <Home size={14} />
-                    <span>{t('cloudStorage.root')}</span>
-                </button>
-                {breadcrumbs.map((crumb, i) => (
-                    <span key={crumb.path} className="csm-breadcrumb-segment">
-                        <ChevronRight size={14} className="csm-breadcrumb-sep" />
-                        <button
-                            className={`csm-breadcrumb-item ${i === breadcrumbs.length - 1 ? 'csm-breadcrumb-item--active' : ''}`}
-                            onClick={() => navigateTo(crumb.path)}
-                        >
-                            {crumb.name}
-                        </button>
-                    </span>
-                ))}
-            </div>
+            <CloudStorageBreadcrumb
+                currentPath={currentPath}
+                breadcrumbs={breadcrumbs}
+                onNavigate={navigateTo}
+            />
 
             {/* Toolbar */}
-            <div className="csm-toolbar">
-                <div className="csm-toolbar-left">
-                    <button className="csm-btn csm-btn--primary" onClick={() => setShowNewFolder(true)}>
-                        <FolderPlus size={16} />
-                        <span>{t('cloudStorage.newFolder')}</span>
-                    </button>
-                    <button
-                        className="csm-btn csm-btn--primary"
-                        onClick={() => fileInputRef.current?.click()}
-                        disabled={uploading}
-                    >
-                        <Upload size={16} />
-                        <span>{uploading ? t('cloudStorage.uploading') : t('cloudStorage.upload')}</span>
-                    </button>
-                    <input
-                        ref={fileInputRef}
-                        type="file"
-                        multiple
-                        style={{ display: 'none' }}
-                        onChange={(e) => { handleUpload(e.target.files); e.target.value = ''; }}
-                    />
-                    {!currentPath && (
-                        <button
-                            className="csm-btn csm-btn--sync"
-                            onClick={handleInitialize}
-                            disabled={initializing}
-                            title="Инициализирай структурата на фондацията"
-                        >
-                            {initializing ? <RefreshCw size={16} className="csm-spin" /> : <FolderPlus size={16} />}
-                            <span>Инициализирай</span>
-                        </button>
-                    )}
-                    {currentPath === 'pensa-foundation/projects/' && (
-                        <button
-                            className="csm-btn csm-btn--primary"
-                            onClick={() => setShowCreateProject(true)}
-                        >
-                            <FolderPlus size={16} />
-                            <span>Нов проект</span>
-                        </button>
-                    )}
-                </div>
-                <div className="csm-toolbar-right">
-                    <div className="csm-view-toggle">
-                        <button
-                            className={`csm-view-btn ${viewMode === 'grid' ? 'csm-view-btn--active' : ''}`}
-                            onClick={() => setViewMode('grid')}
-                            title={t('cloudStorage.gridView')}
-                        >
-                            <LayoutGrid size={16} />
-                        </button>
-                        <button
-                            className={`csm-view-btn ${viewMode === 'list' ? 'csm-view-btn--active' : ''}`}
-                            onClick={() => setViewMode('list')}
-                            title={t('cloudStorage.listView')}
-                        >
-                            <List size={16} />
-                        </button>
-                    </div>
-                    <div className="csm-search">
-                        <Search size={14} className="csm-search-icon" />
-                        <input
-                            type="text"
-                            placeholder={t('cloudStorage.searchPlaceholder')}
-                            value={search}
-                            onChange={(e) => setSearch(e.target.value)}
-                            className="csm-search-input"
-                        />
-                        {search && (
-                            <button className="csm-search-clear" onClick={() => { setSearch(''); setDebouncedSearch(''); }}>
-                                <X size={14} />
-                            </button>
-                        )}
-                    </div>
-                    <button className="csm-btn csm-btn--icon" onClick={() => loadFiles()} title={t('cloudStorage.refresh')}>
-                        <RefreshCw size={16} className={loading ? 'csm-spin' : ''} />
-                    </button>
-                    <button
-                        className="csm-btn csm-btn--small csm-btn--sync"
-                        onClick={handleSync}
-                        disabled={syncing}
-                        title="Синхронизирай Storage ↔ DB"
-                    >
-                        {syncing ? <RefreshCw size={14} className="csm-spin" /> : <RefreshCw size={14} />}
-                        <span>Sync</span>
-                    </button>
-                    {storageUsage && (
-                        <div className="csm-storage-bar" title={`${formatSize(storageUsage.usedBytes)} / ${formatSize(storageUsage.totalBytes || 5 * 1024 * 1024 * 1024)}`}>
-                            <div className="csm-storage-label">
-                                {formatSize(storageUsage.usedBytes)} / {formatSize(storageUsage.totalBytes || 5 * 1024 * 1024 * 1024)}
-                            </div>
-                            <div className="csm-storage-track">
-                                <div
-                                    className="csm-storage-fill"
-                                    style={{ width: `${Math.min(100, ((storageUsage.usedBytes || 0) / (storageUsage.totalBytes || 5 * 1024 * 1024 * 1024)) * 100)}%` }}
-                                />
-                            </div>
-                        </div>
-                    )}
-                </div>
-            </div>
+            <CloudStorageToolbar
+                currentPath={currentPath}
+                onNewFolder={() => setShowNewFolder(true)}
+                onUpload={handleUpload}
+                onCamera={() => cameraInputRef.current?.click()}
+                onInitialize={handleInitialize}
+                onCreateProject={() => setShowCreateProject(true)}
+                viewMode={viewMode}
+                onViewModeChange={setViewMode}
+                search={search}
+                onSearchChange={setSearch}
+                searchMode={searchMode}
+                onSearchModeChange={() => setSearchMode(prev => prev === 'local' ? 'global' : 'local')}
+                typeFilter={searchTypeFilter}
+                onTypeFilterChange={setSearchTypeFilter}
+                onRefresh={() => loadFiles()}
+                onSync={handleSync}
+                onAnalytics={() => { setShowAnalytics(true); loadAnalytics(); }}
+                loading={loading}
+                syncing={syncing}
+                storageUsage={storageUsage}
+                showCreateProject={showCreateProject}
+                showNewFolder={showNewFolder}
+                uploading={uploading}
+                initializing={initializing}
+                showAnalytics={showAnalytics}
+                onClearSearch={() => { setSearch(''); setDebouncedSearch(''); setGlobalSearchResults(null); }}
+                fileInputRef={fileInputRef}
+                cameraInputRef={cameraInputRef}
+                formatSize={formatSize}
+            />
 
             {/* New Folder inline form */}
             {showNewFolder && (
@@ -1003,94 +562,100 @@ const CloudStorageManager = () => {
 
             {/* Main content area */}
             <div className="csm-main">
-                {/* Sidebar folder tree */}
-                <div className="csm-sidebar">
-                    <div className="csm-quick-links">
-                        <div className="csm-quick-links-title">
-                            <span>Бързи връзки</span>
-                            {currentPath && (
-                                <button
-                                    className="csm-quick-links-add"
-                                    onClick={() => { setShowAddLink(!showAddLink); setNewLinkLabel(''); }}
-                                    title="Добави бърза връзка за текущата папка"
-                                >
-                                    +
-                                </button>
-                            )}
+                {/* Sidebar */}
+                <CloudStorageSidebar
+                    customLinks={customLinks}
+                    onNavigate={navigateTo}
+                    onAddLink={handleAddQuickLink}
+                    onRemoveLink={handleRemoveQuickLink}
+                    currentPath={currentPath}
+                    sharedWithMeView={sharedWithMeView}
+                    onSharedWithMe={() => { setSharedWithMeView(true); loadSharedWithMe(); }}
+                    sharedFilesCount={unreadSharedCount}
+                    folderTree={folderTree}
+                    expandedFolders={expandedTreeFolders}
+                    onToggleFolder={toggleTreeFolder}
+                    showAddLink={showAddLink}
+                    onToggleAddLink={() => { setShowAddLink(!showAddLink); setNewLinkLabel(''); }}
+                    newLinkLabel={newLinkLabel}
+                    onNewLinkLabelChange={setNewLinkLabel}
+                    onSubmitAddLink={handleAddQuickLink}
+                    onRemoveLinkConfirm={setRemoveLinkConfirm}
+                />
+
+                {/* File area - global search results */}
+                {searchMode === 'global' && debouncedSearch ? (
+                    <div className="csm-content">
+                        <div className="csm-search-results-header">
+                            <h3>{t('cloudStorage.searchResults')}: &quot;{debouncedSearch}&quot;</h3>
+                            <button className="csm-btn csm-btn--small" onClick={() => { setSearch(''); setDebouncedSearch(''); setGlobalSearchResults(null); setSearchMode('local'); }}>
+                                <X size={14} />
+                                <span>{t('cloudStorage.clearSelection')}</span>
+                            </button>
                         </div>
-                        {showAddLink && (
-                            <div className="csm-quick-links-form">
-                                <input
-                                    type="text"
-                                    placeholder="Име на връзката"
-                                    value={newLinkLabel}
-                                    onChange={(e) => setNewLinkLabel(e.target.value)}
-                                    onKeyDown={(e) => {
-                                        if (e.key === 'Enter') handleAddQuickLink();
-                                        if (e.key === 'Escape') { setShowAddLink(false); setNewLinkLabel(''); }
-                                    }}
-                                    autoFocus
-                                />
-                                <button className="csm-btn csm-btn--small csm-btn--primary" onClick={handleAddQuickLink}>
-                                    Добави
-                                </button>
+                        {globalSearching ? (
+                            <div className="csm-loading">
+                                <RefreshCw size={24} className="csm-spin" />
+                                <span>{t('cloudStorage.searching')}</span>
+                            </div>
+                        ) : !globalSearchResults || globalSearchResults.length === 0 ? (
+                            <div className="csm-empty">
+                                <Search size={48} />
+                                <p>{t('cloudStorage.noResults')}</p>
+                            </div>
+                        ) : (
+                            <div className="csm-list-wrapper">
+                                <table className="csm-list-table">
+                                    <thead>
+                                        <tr>
+                                            <th className="csm-list-name">{t('cloudStorage.name')}</th>
+                                            <th className="csm-list-size">{t('cloudStorage.size')}</th>
+                                            <th className="csm-list-type">{t('cloudStorage.type')}</th>
+                                            <th className="csm-list-actions">{t('cloudStorage.actions')}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {globalSearchResults.map(file => {
+                                            const filePath = file.fullPath;
+                                            const displayName = getFileName(file.name || filePath);
+                                            const FileIcon = getFileIcon(file.contentType, displayName);
+                                            const parentPath = filePath.substring(0, filePath.lastIndexOf('/') + 1);
+                                            return (
+                                                <tr key={filePath} className="csm-list-row">
+                                                    <td className="csm-list-name">
+                                                        <div className="csm-list-name-inner">
+                                                            <FileIcon size={18} className="csm-list-icon" />
+                                                            <div>
+                                                                <span className="csm-list-filename">{displayName}</span>
+                                                                <button
+                                                                    className="csm-search-result-path"
+                                                                    onClick={() => { setSearchMode('local'); setSearch(''); setDebouncedSearch(''); setGlobalSearchResults(null); navigateTo(parentPath); }}
+                                                                    title={parentPath}
+                                                                >
+                                                                    {parentPath || '/'}
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td className="csm-list-size">{formatSize(file.size)}</td>
+                                                    <td className="csm-list-type">{file.contentType || '\u2014'}</td>
+                                                    <td className="csm-list-actions">
+                                                        <button title={t('cloudStorage.download')} onClick={() => handleDownload(filePath)}>
+                                                            <Download size={14} />
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })}
+                                    </tbody>
+                                </table>
                             </div>
                         )}
-                        <button
-                            className={`csm-quick-link ${sharedWithMeView ? 'csm-quick-link--active' : ''}`}
-                            onClick={handleSharedWithMeClick}
-                        >
-                            <span><Inbox size={14} /></span> <span>{t('cloudStorage.sharedWithMe', 'Споделени с мен')}</span>
-                            {sharedFiles.filter(s => !s.isRead).length > 0 && (
-                                <span className="csm-share-user-badge">
-                                    {sharedFiles.filter(s => !s.isRead).length}
-                                </span>
-                            )}
-                        </button>
-                        <div className="csm-quick-links-divider" />
-                        {DEFAULT_QUICK_LINKS.map(link => (
-                            <button
-                                key={link.id}
-                                className={`csm-quick-link ${currentPath.startsWith(link.path) ? 'csm-quick-link--active' : ''}`}
-                                onClick={() => navigateTo(link.path)}
-                            >
-                                <span>{link.emoji}</span> <span>{link.label}</span>
-                            </button>
-                        ))}
-                        {customLinks.length > 0 && (
-                            <>
-                                <div className="csm-quick-links-divider" />
-                                {customLinks.map(link => (
-                                    <div key={link.id} className="csm-quick-link-wrapper">
-                                        <button
-                                            className={`csm-quick-link ${currentPath === link.path ? 'csm-quick-link--active' : ''}`}
-                                            onClick={() => navigateTo(link.path)}
-                                        >
-                                            <span>{link.emoji}</span> <span>{link.label}</span>
-                                        </button>
-                                        <button
-                                            className="csm-quick-link-remove"
-                                            onClick={() => setRemoveLinkConfirm(link)}
-                                            title="Премахни бърза връзка"
-                                        >
-                                            &times;
-                                        </button>
-                                    </div>
-                                ))}
-                            </>
-                        )}
                     </div>
-                    <div className="csm-sidebar-title">{t('cloudStorage.folders')}</div>
-                    <div className="csm-tree">
-                        {renderTreeNode('')}
-                    </div>
-                </div>
-
-                {/* File area */}
-                {sharedWithMeView ? (
+                ) : sharedWithMeView ? (
                     <div className="csm-content">
                         <div className="csm-share-user-view-header">
-                            <button className="csm-btn csm-btn--small" onClick={handleBackToStorage}>
+                            <button className="csm-btn csm-btn--small" onClick={() => setSharedWithMeView(false)}>
                                 <ChevronRight size={14} style={{ transform: 'rotate(180deg)' }} />
                                 <span>{t('cloudStorage.backToStorage', 'Назад')}</span>
                             </button>
@@ -1099,7 +664,6 @@ const CloudStorageManager = () => {
                                 <RefreshCw size={14} className={loadingShared ? 'csm-spin' : ''} />
                             </button>
                         </div>
-
                         {loadingShared ? (
                             <div className="csm-loading">
                                 <RefreshCw size={24} className="csm-spin" />
@@ -1132,37 +696,25 @@ const CloudStorageManager = () => {
                                                 })
                                                 : '—';
                                             const FileIcon = getFileIcon(null, share.fileName);
-
                                             return (
-                                                <tr
-                                                    key={share.id}
-                                                    className={`csm-list-row ${!share.isRead ? 'csm-list-row--unread' : ''}`}
-                                                >
+                                                <tr key={share.id} className={`csm-list-row ${!share.isRead ? 'csm-list-row--unread' : ''}`}>
                                                     <td className="csm-list-name">
                                                         <div className="csm-list-name-inner">
                                                             <FileIcon size={18} className="csm-list-icon" />
                                                             <div>
                                                                 <span className="csm-list-filename">{share.fileName}</span>
-                                                                {share.message && (
-                                                                    <span className="csm-share-user-msg">{share.message}</span>
-                                                                )}
+                                                                {share.message && <span className="csm-share-user-msg">{share.message}</span>}
                                                             </div>
                                                         </div>
                                                     </td>
                                                     <td className="csm-list-type">{sharerName}</td>
                                                     <td className="csm-list-date">{dateStr}</td>
                                                     <td className="csm-list-actions">
-                                                        <button
-                                                            title={t('cloudStorage.download')}
-                                                            onClick={() => handleDownloadSharedFile(share)}
-                                                        >
+                                                        <button title={t('cloudStorage.download')} onClick={() => { if (!share.isRead) handleMarkShareAsRead(share.id); handleDownload(share.filePath); }}>
                                                             <Download size={14} />
                                                         </button>
                                                         {!share.isRead && (
-                                                            <button
-                                                                title={t('cloudStorage.markAsRead', 'Маркирай като прочетено')}
-                                                                onClick={() => handleMarkShareAsRead(share.id)}
-                                                            >
+                                                            <button title={t('cloudStorage.markAsRead', 'Маркирай като прочетено')} onClick={() => handleMarkShareAsRead(share.id)}>
                                                                 <Eye size={14} />
                                                             </button>
                                                         )}
@@ -1176,63 +728,33 @@ const CloudStorageManager = () => {
                         )}
                     </div>
                 ) : (
-                <div
-                    className={`csm-content ${dragOver ? 'csm-content--dragover' : ''}`}
-                    onDragOver={handleDragOver}
-                    onDragLeave={handleDragLeave}
-                    onDrop={handleDrop}
-                >
-                    {loading ? (
-                        <div className="csm-loading">
-                            <RefreshCw size={24} className="csm-spin" />
-                            <span>{t('cloudStorage.loading')}</span>
-                        </div>
-                    ) : filteredFolders.length === 0 && filteredFiles.length === 0 ? (
-                        <div className="csm-empty">
-                            <Folder size={48} />
-                            <p>{t('cloudStorage.empty')}</p>
-                            <p className="csm-empty-hint">{t('cloudStorage.emptyHint')}</p>
-                        </div>
-                    ) : viewMode === 'grid' ? (
-                        <div className="csm-grid">
-                            {filteredFolders.map(f => renderFolderItem(f))}
-                            {filteredFiles.map(f => renderFileItem(f))}
-                        </div>
-                    ) : (
-                        <div className="csm-list-wrapper">
-                            <table className="csm-list-table">
-                                <thead>
-                                    <tr>
-                                        <th className="csm-list-check">
-                                            <input
-                                                type="checkbox"
-                                                checked={allSelected}
-                                                onChange={toggleSelectAll}
-                                            />
-                                        </th>
-                                        <th className="csm-list-name">{t('cloudStorage.name')}</th>
-                                        <th className="csm-list-size">{t('cloudStorage.size')}</th>
-                                        <th className="csm-list-type">{t('cloudStorage.type')}</th>
-                                        <th className="csm-list-date">{t('cloudStorage.modified')}</th>
-                                        <th className="csm-list-actions">{t('cloudStorage.actions')}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {filteredFolders.map(f => renderFolderItem(f))}
-                                    {filteredFiles.map(f => renderFileItem(f))}
-                                </tbody>
-                            </table>
-                        </div>
-                    )}
-
-                    {/* Drag overlay */}
-                    {dragOver && (
-                        <div className="csm-drop-overlay">
-                            <Upload size={48} />
-                            <p>{t('cloudStorage.dropHere')}</p>
-                        </div>
-                    )}
-                </div>
+                    <CloudStorageFileList
+                        viewMode={viewMode}
+                        folders={filteredFolders}
+                        files={filteredFiles}
+                        selectedItems={selectedItems}
+                        onToggleSelect={toggleSelect}
+                        onToggleSelectAll={toggleSelectAll}
+                        allSelected={allSelected}
+                        onNavigateFolder={navigateTo}
+                        onDownload={handleDownload}
+                        onShare={(filePath, fileName) => setShareModal({ filePath, fileName })}
+                        onShareWithUser={(filePath, fileName) => setShareWithUserModal({ filePath, fileName })}
+                        onRename={(path, displayName) => { setRenamingItem(path); setRenameValue(displayName); }}
+                        onDelete={(path, isFolder, name) => setDeleteConfirm({ path, isFolder, name })}
+                        renamingItem={renamingItem}
+                        renameValue={renameValue}
+                        onRenameChange={setRenameValue}
+                        onRenameSubmit={handleRename}
+                        onRenameCancel={() => setRenamingItem(null)}
+                        getThumbnailUrl={getThumbnailUrl}
+                        formatSize={formatSize}
+                        loading={loading}
+                        dragOver={dragOver}
+                        onDragOver={handleDragOver}
+                        onDragLeave={handleDragLeave}
+                        onDrop={handleDrop}
+                    />
                 )}
             </div>
 
@@ -1258,10 +780,7 @@ const CloudStorageManager = () => {
                         <h4>{t('cloudStorage.confirmDelete')}</h4>
                         <p>{t('cloudStorage.confirmDeleteText', { name: deleteConfirm.name })}</p>
                         <div className="csm-modal-actions">
-                            <button
-                                className="csm-btn csm-btn--danger"
-                                onClick={() => handleDelete(deleteConfirm.path, deleteConfirm.isFolder)}
-                            >
+                            <button className="csm-btn csm-btn--danger" onClick={() => handleDelete(deleteConfirm.path, deleteConfirm.isFolder)}>
                                 {t('cloudStorage.delete')}
                             </button>
                             <button className="csm-btn" onClick={() => setDeleteConfirm(null)}>
@@ -1279,15 +798,8 @@ const CloudStorageManager = () => {
                         <h4>{t('cloudStorage.confirmDelete')}</h4>
                         <p>Сигурни ли сте, че искате да изтриете {selectedItems.size} файла?</p>
                         <div className="csm-modal-actions">
-                            <button
-                                className="csm-btn csm-btn--danger"
-                                onClick={handleBulkDelete}
-                            >
-                                Да, изтрий
-                            </button>
-                            <button className="csm-btn" onClick={() => setBulkDeleteConfirm(false)}>
-                                {t('cloudStorage.cancel')}
-                            </button>
+                            <button className="csm-btn csm-btn--danger" onClick={handleBulkDelete}>Да, изтрий</button>
+                            <button className="csm-btn" onClick={() => setBulkDeleteConfirm(false)}>{t('cloudStorage.cancel')}</button>
                         </div>
                     </div>
                 </div>
@@ -1300,19 +812,21 @@ const CloudStorageManager = () => {
                         <h4>Премахване на бърза връзка</h4>
                         <p>Сигурни ли сте, че искате да премахнете тази бърза връзка?</p>
                         <div className="csm-modal-actions">
-                            <button
-                                className="csm-btn csm-btn--danger"
-                                onClick={() => handleRemoveQuickLink(removeLinkConfirm.id)}
-                            >
-                                Да, премахни
-                            </button>
-                            <button className="csm-btn" onClick={() => setRemoveLinkConfirm(null)}>
-                                Отказ
-                            </button>
+                            <button className="csm-btn csm-btn--danger" onClick={() => handleRemoveQuickLink(removeLinkConfirm.id)}>Да, премахни</button>
+                            <button className="csm-btn" onClick={() => setRemoveLinkConfirm(null)}>Отказ</button>
                         </div>
                     </div>
                 </div>
             )}
+
+            {/* Analytics panel */}
+            <CloudStorageAnalytics
+                open={showAnalytics}
+                onClose={() => setShowAnalytics(false)}
+                analytics={analyticsData}
+                loading={loadingAnalytics}
+                formatSize={formatSize}
+            />
 
             {/* Share file modal (link) */}
             {shareModal && (

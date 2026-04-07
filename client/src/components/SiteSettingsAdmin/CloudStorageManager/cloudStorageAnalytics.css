@@ -1,0 +1,493 @@
+/* src/components/SiteSettingsAdmin/CloudStorageManager/cloudStorageAnalytics.css */
+/* Prefix: csa- */
+
+.csa-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(2px);
+}
+
+.csa-modal-overlay span,
+.csa-modal-overlay p,
+.csa-modal-overlay button {
+    font-size: revert;
+}
+
+.csa-analytics-panel {
+    background: #1a1e2e;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 24px;
+    max-width: 700px;
+    width: 95%;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    scrollbar-width: thin;
+    scrollbar-color: rgba(212, 168, 83, 0.2) transparent;
+}
+
+.csa-analytics-panel span,
+.csa-analytics-panel p {
+    font-size: 0.8rem;
+}
+
+.csa-analytics-panel h3 {
+    font-size: 0.9rem;
+}
+
+.csa-analytics-panel h4 {
+    font-size: 0.82rem;
+}
+
+.csa-analytics-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.csa-analytics-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #d4a853;
+}
+
+.csa-analytics-body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.csa-analytics-section {
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.csa-analytics-section:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.csa-analytics-section h4 {
+    margin: 0 0 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #cbd5e1;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+/* Buttons */
+.csa-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.04);
+    color: #cbd5e1;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: inherit;
+    white-space: nowrap;
+}
+
+.csa-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #f1f5f9;
+}
+
+.csa-btn--small {
+    padding: 5px 10px;
+    font-size: 0.76rem;
+}
+
+.csa-btn--icon {
+    padding: 7px;
+}
+
+/* Usage stats */
+.csa-analytics-usage {
+    display: flex;
+    gap: 24px;
+}
+
+.csa-analytics-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.csa-analytics-stat-value {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #d4a853;
+}
+
+.csa-analytics-stat-label {
+    font-size: 0.75rem;
+    color: #64748b;
+}
+
+.csa-analytics-usage-label {
+    font-size: 0.72rem;
+    color: #64748b;
+    margin-top: 6px;
+    text-align: right;
+}
+
+/* Storage track */
+.csa-storage-track {
+    height: 4px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.csa-storage-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #d4a853, #e4bd6a);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+/* Top folders */
+.csa-analytics-folders {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.csa-analytics-folder-row {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.csa-analytics-folder-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.csa-analytics-folder-name {
+    font-size: 0.8rem;
+    color: #cbd5e1;
+    font-weight: 500;
+}
+
+.csa-analytics-folder-size {
+    font-size: 0.72rem;
+    color: #64748b;
+}
+
+.csa-analytics-folder-bar-track {
+    height: 6px;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.csa-analytics-folder-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #d4a853, #e4bd6a);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+/* Recent files */
+.csa-analytics-recent {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 240px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+
+.csa-analytics-recent-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 6px;
+    border-radius: 4px;
+    transition: background 0.1s;
+}
+
+.csa-analytics-recent-item:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.csa-analytics-recent-name {
+    flex: 1;
+    font-size: 0.78rem;
+    color: #cbd5e1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+}
+
+.csa-analytics-recent-size {
+    font-size: 0.72rem;
+    color: #64748b;
+    white-space: nowrap;
+}
+
+.csa-analytics-recent-date {
+    font-size: 0.72rem;
+    color: #4a5568;
+    white-space: nowrap;
+}
+
+.csa-list-icon {
+    flex-shrink: 0;
+    color: #64748b;
+}
+
+/* Activity log */
+.csa-analytics-activity {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 200px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+}
+
+.csa-analytics-activity-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 6px;
+    border-radius: 4px;
+}
+
+.csa-analytics-activity-badge {
+    display: inline-flex;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    flex-shrink: 0;
+}
+
+.csa-analytics-activity-badge--upload {
+    background: rgba(34, 197, 94, 0.15);
+    color: #22c55e;
+}
+
+.csa-analytics-activity-badge--delete {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+}
+
+.csa-analytics-activity-badge--share {
+    background: rgba(59, 130, 246, 0.15);
+    color: #60a5fa;
+}
+
+.csa-analytics-activity-file {
+    flex: 1;
+    font-size: 0.78rem;
+    color: #cbd5e1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+}
+
+.csa-analytics-activity-user {
+    font-size: 0.72rem;
+    color: #64748b;
+    white-space: nowrap;
+}
+
+.csa-analytics-activity-date {
+    font-size: 0.72rem;
+    color: #4a5568;
+    white-space: nowrap;
+}
+
+.csa-analytics-empty {
+    font-size: 0.82rem;
+    color: #4a5568;
+    margin: 0;
+    padding: 12px 0;
+}
+
+/* Loading / Spinner */
+.csa-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    min-height: 200px;
+    color: #64748b;
+    font-size: 0.85rem;
+}
+
+.csa-spin {
+    animation: csa-spin 0.8s linear infinite;
+}
+
+@keyframes csa-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* =========================================================
+                RESPONSIVE - Mobile
+   ========================================================= */
+
+@media (max-width: 767px) {
+    .csa-analytics-panel {
+        max-width: 100%;
+        width: 100%;
+        max-height: 90vh;
+        border-radius: 12px 12px 0 0;
+        margin-top: auto;
+    }
+    .csa-analytics-usage {
+        flex-wrap: wrap;
+        gap: 16px;
+    }
+    .csa-analytics-activity-item {
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+    .csa-analytics-recent-item {
+        flex-wrap: wrap;
+    }
+}
+
+/* =========================================================
+                LIGHT THEME
+   ========================================================= */
+
+[data-theme="light"] .csa-analytics-panel {
+    background: #fff;
+    border-color: rgba(0, 0, 0, 0.1);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .csa-analytics-header h3 {
+    color: #8b2040;
+}
+
+[data-theme="light"] .csa-analytics-section {
+    border-bottom-color: rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .csa-analytics-section h4 {
+    color: #1e293b;
+}
+
+[data-theme="light"] .csa-analytics-stat-value {
+    color: #8b2040;
+}
+
+[data-theme="light"] .csa-analytics-stat-label {
+    color: #64748b;
+}
+
+[data-theme="light"] .csa-analytics-usage-label {
+    color: #64748b;
+}
+
+[data-theme="light"] .csa-storage-track {
+    background: rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .csa-storage-fill {
+    background: linear-gradient(90deg, #8b2040, #a73050);
+}
+
+[data-theme="light"] .csa-analytics-folder-name {
+    color: #1e293b;
+}
+
+[data-theme="light"] .csa-analytics-folder-size {
+    color: #64748b;
+}
+
+[data-theme="light"] .csa-analytics-folder-bar-track {
+    background: rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .csa-analytics-folder-bar-fill {
+    background: linear-gradient(90deg, #8b2040, #a73050);
+}
+
+[data-theme="light"] .csa-analytics-recent-item:hover {
+    background: #f8fafc;
+}
+
+[data-theme="light"] .csa-analytics-recent-name {
+    color: #1e293b;
+}
+
+[data-theme="light"] .csa-analytics-recent-size {
+    color: #64748b;
+}
+
+[data-theme="light"] .csa-analytics-recent-date {
+    color: #94a3b8;
+}
+
+[data-theme="light"] .csa-list-icon {
+    color: #94a3b8;
+}
+
+[data-theme="light"] .csa-analytics-activity-file {
+    color: #1e293b;
+}
+
+[data-theme="light"] .csa-analytics-activity-user {
+    color: #64748b;
+}
+
+[data-theme="light"] .csa-analytics-activity-date {
+    color: #94a3b8;
+}
+
+[data-theme="light"] .csa-analytics-activity-badge--upload {
+    background: rgba(22, 163, 74, 0.1);
+    color: #16a34a;
+}
+
+[data-theme="light"] .csa-analytics-activity-badge--delete {
+    background: rgba(220, 38, 38, 0.1);
+    color: #dc2626;
+}
+
+[data-theme="light"] .csa-analytics-activity-badge--share {
+    background: rgba(37, 99, 235, 0.1);
+    color: #2563eb;
+}
+
+[data-theme="light"] .csa-analytics-empty {
+    color: #94a3b8;
+}
+
+[data-theme="light"] .csa-loading {
+    color: #94a3b8;
+}
+
+[data-theme="light"] .csa-modal-overlay {
+    background: rgba(0, 0, 0, 0.4);
+}

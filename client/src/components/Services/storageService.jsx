@@ -103,6 +103,22 @@ export const storageServiceFactory = () => {
       return response.blob();
     },
 
+    // Search files
+    searchFiles: async (params = {}) => {
+      const queryParts = [];
+      if (params.q) queryParts.push(`q=${encodeURIComponent(params.q)}`);
+      if (params.type) queryParts.push(`type=${encodeURIComponent(params.type)}`);
+      if (params.path) queryParts.push(`path=${encodeURIComponent(params.path)}`);
+      if (params.maxResults) queryParts.push(`maxResults=${params.maxResults}`);
+      const qs = queryParts.length ? `?${queryParts.join('&')}` : '';
+      return requester.get(`${apiUrl}/admin/storage/search${qs}`);
+    },
+
+    // Analytics
+    getAnalytics: async () => {
+      return requester.get(`${apiUrl}/admin/storage/analytics`);
+    },
+
     // File sharing with users
     shareWithUser: async (data) => {
       return requester.post(`${apiUrl}/admin/storage/share`, data);

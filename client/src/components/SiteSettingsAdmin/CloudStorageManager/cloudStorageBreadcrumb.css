@@ -1,0 +1,107 @@
+/* CloudStorageBreadcrumb — prefix: csnav- */
+
+.csnav-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 8px;
+}
+
+.csnav-container span,
+.csnav-container button {
+    font-size: 0.82rem;
+}
+
+.csnav-back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.04);
+    color: #d4a853;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.15s;
+}
+
+.csnav-back:hover {
+    background: rgba(212, 168, 83, 0.1);
+    border-color: rgba(212, 168, 83, 0.3);
+}
+
+.csnav-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    white-space: nowrap;
+}
+
+.csnav-breadcrumb::-webkit-scrollbar { display: none; }
+
+.csnav-segment {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.csnav-sep {
+    color: #555;
+    flex-shrink: 0;
+}
+
+.csnav-item {
+    border: none;
+    background: none;
+    color: #888;
+    cursor: pointer;
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.82rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: color 0.15s;
+}
+
+.csnav-item:hover { color: #d4a853; }
+
+.csnav-item--active {
+    color: #d4a853;
+    font-weight: 500;
+}
+
+/* Mobile: hide full breadcrumb, show only current folder */
+.csnav-mobile-path {
+    display: none;
+    color: #d4a853;
+    font-size: 0.85rem;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+    .csnav-breadcrumb { display: none; }
+    .csnav-mobile-path { display: block; flex: 1; }
+    .csnav-container { padding: 6px 10px; }
+}
+
+/* Light theme */
+[data-theme="light"] .csnav-container { background: #ffffff; border-color: #e2e8f0; }
+[data-theme="light"] .csnav-back { border-color: #d5d3cf; background: #f9f8f6; color: #8b2040; }
+[data-theme="light"] .csnav-back:hover { background: rgba(139, 32, 64, 0.08); border-color: rgba(139, 32, 64, 0.3); }
+[data-theme="light"] .csnav-item { color: #666; }
+[data-theme="light"] .csnav-item:hover { color: #8b2040; }
+[data-theme="light"] .csnav-item--active { color: #8b2040; }
+[data-theme="light"] .csnav-sep { color: #bbb; }
+[data-theme="light"] .csnav-mobile-path { color: #8b2040; }
