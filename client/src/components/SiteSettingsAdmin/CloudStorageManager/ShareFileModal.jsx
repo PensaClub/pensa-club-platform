@@ -1,9 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { X, Copy, Check, Link2 } from 'lucide-react';
-import { storageServiceFactory } from '../../Services/storageService';
-
-const storageService = storageServiceFactory();
+import { useStorage } from '../../contexts/StorageProvider';
 
 const VALIDITY_OPTIONS = [
     { value: 1, labelKey: 'cloudStorage.1day' },
@@ -14,6 +12,7 @@ const VALIDITY_OPTIONS = [
 
 const ShareFileModal = ({ filePath, fileName, onClose }) => {
     const { t } = useTranslation('admin');
+    const { createShareLink } = useStorage();
     const [expiresInDays, setExpiresInDays] = useState(7);
     const [usePassword, setUsePassword] = useState(false);
     const [password, setPassword] = useState('');
@@ -41,7 +40,7 @@ const ShareFileModal = ({ filePath, fileName, onClose }) => {
                 data.maxDownloads = maxDownloads;
             }
 
-            const result = await storageService.createShareLink(data);
+            const result = await createShareLink(data);
             const shareUrl = result.link?.url || `${window.location.origin}/shared/${result.link?.token || result.token}`;
             setShareResult(shareUrl);
         } catch (err) {

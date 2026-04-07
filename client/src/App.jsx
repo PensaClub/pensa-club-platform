@@ -67,6 +67,7 @@ import AboutPage from './components/AboutPage/AboutPage.jsx';
 import { AcademyProvider } from './components/contexts/AcademyProvider.jsx';
 import { FactCheckProvider } from './components/contexts/FactCheckProvider.jsx';
 import { ReActionProvider } from './components/contexts/ReActionProvider.jsx';
+import { StorageProvider } from './components/contexts/StorageProvider.jsx';
 import { ForumProvider } from './components/contexts/ForumProvider.jsx';
 import { SocketProvider } from './components/contexts/SocketProvider.jsx';
 import { DigiBridgeChatButton } from './components/DigiBridge/DigiBridgeChatButton/DigiBridgeChatButton.jsx';
@@ -350,6 +351,7 @@ function App() {
                                             <ClubProvider>
                                               <FactCheckProvider>
                                                 <ReActionProvider>
+                                                <StorageProvider>
                                                   {!isProfilePage && !isAcademyPage && <Header
                                                     additionalClasses={isProfilePage ? 'hide-header' : ''}
                                                   />}
@@ -381,6 +383,7 @@ function App() {
                                                     />
                                                   )}
                                                   {!isProfilePage && <MenuCommunity />}
+                                                </StorageProvider>
                                                 </ReActionProvider>
                                               </FactCheckProvider>
                                             </ClubProvider>

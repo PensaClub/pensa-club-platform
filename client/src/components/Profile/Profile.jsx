@@ -88,6 +88,7 @@ import { StudentApplicationsManagement } from "../DigiMentorApplications/Student
 import { SEOStatisticAdmin } from "../SEOStatisticAdmin/SEOStatisticAdmin";
 import { AdminDigiBridgeStudentApplications } from "../AdminDigiBridgeStudents/AdminDigiBridgeStudentApplications/AdminDigiBridgeStudentApplications";
 import { ProfileReviews } from "./ProfileReviews";
+import { SharedFiles } from "./SharedFiles/SharedFiles";
 import { TextZoom } from "../TextZoom/TextZoom";
 
 
@@ -262,6 +263,7 @@ export const Profile = () => {
       "/profile/initiative-create": t("profile.newInitiative"),
       "/profile/initiative": t("profile.initiatives"),
       "/profile/bookmarks": t("profile.bookmarks"),
+      "/profile/shared-files": t("profile.sharedFiles"),
       "/profile/applications-admin": t("profile.applications"),
       "/profile/initiative-preview": t("profile.initiativePreview"),
       "/profile/projects": t("profile.projects"),
@@ -706,6 +708,21 @@ export const Profile = () => {
                     <span className="link-content">
                       <BookmarkIcon />
                       {t("profile.bookmarks")}
+                    </span>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
+                    to="shared-files"
+                    className={({ isActive }) => isActive ? 'active' : ''}
+                  >
+                    <span className="link-content">
+                      <svg className="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 12V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        <polyline points="16 6 12 2 8 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                        <line x1="12" y1="2" x2="12" y2="15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                      {t("profile.sharedFiles")}
                     </span>
                   </NavLink>
                 </li>
@@ -1384,6 +1401,7 @@ export const Profile = () => {
             <Route path="messages" element={<ProfileMessages />} />
             <Route path="notifications" element={<Notifications />} />
             <Route path="bookmarks" element={<BookmarkedItems />} />
+            <Route path="shared-files" element={<SharedFiles />} />
             <Route path="avatars" element={<ProfessionalAvatarBuilder />} />
             <Route path="clubs" element={<MyClubs />} />
             <Route path="club-create" element={<ClubCreateForm />} />

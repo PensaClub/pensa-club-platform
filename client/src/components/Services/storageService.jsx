@@ -123,5 +123,18 @@ export const storageServiceFactory = () => {
     searchUsers: async (q) => {
       return requester.get(`${apiUrl}/admin/storage/search-users?q=${encodeURIComponent(q)}`);
     },
+
+    // Public user endpoints (no admin required)
+    getUserSharedFiles: async () => {
+      return requester.get(`${apiUrl}/user/shared-files`);
+    },
+
+    markUserShareAsRead: async (id) => {
+      return requester.put(`${apiUrl}/user/shared-files/${id}/read`);
+    },
+
+    getSharedFileDownloadUrl: (id) => {
+      return `${apiUrl}/user/shared-files/${id}/download`;
+    },
   };
 };

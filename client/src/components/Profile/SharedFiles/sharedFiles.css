@@ -1,0 +1,316 @@
+/* src/components/Profile/SharedFiles/sharedFiles.css */
+
+.sf-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px 20px;
+}
+
+.sf-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.sf-header h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text-color, #1f2937);
+  margin: 0;
+}
+
+.sf-refresh-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: 2px solid var(--border-color, #e5e7eb);
+  background: var(--card-bg, #fff);
+  color: var(--text-secondary, #6b7280);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sf-refresh-btn:hover {
+  border-color: var(--primary-color, #0ea5e9);
+  color: var(--primary-color, #0ea5e9);
+}
+
+/* Loading */
+.sf-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 60px 20px;
+  color: var(--text-secondary, #6b7280);
+}
+
+.sf-loading span {
+  font-size: revert;
+}
+
+.sf-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--border-color, #e5e7eb);
+  border-top-color: var(--primary-color, #0ea5e9);
+  border-radius: 50%;
+  animation: sf-spin 0.8s linear infinite;
+}
+
+@keyframes sf-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Empty state */
+.sf-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 80px 20px;
+  color: var(--text-secondary, #9ca3af);
+}
+
+.sf-empty p {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/* List */
+.sf-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sf-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 18px 20px;
+  background: var(--card-bg, #fff);
+  border: 1px solid var(--border-color, #e5e7eb);
+  border-radius: 14px;
+  transition: all 0.2s ease;
+}
+
+.sf-item:hover {
+  border-color: var(--primary-color, #0ea5e9);
+  box-shadow: 0 2px 12px rgba(14, 165, 233, 0.08);
+}
+
+.sf-item--unread {
+  background: var(--unread-bg, #f0f9ff);
+  border-color: var(--primary-color, #0ea5e9);
+  border-left: 4px solid var(--primary-color, #0ea5e9);
+}
+
+/* File icon */
+.sf-item-icon {
+  flex-shrink: 0;
+}
+
+.sf-file-icon {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.sf-icon-image { background: #fef3c7; color: #d97706; }
+.sf-icon-doc { background: #dbeafe; color: #2563eb; }
+.sf-icon-video { background: #fce7f3; color: #db2777; }
+.sf-icon-audio { background: #ede9fe; color: #7c3aed; }
+.sf-icon-archive { background: #d1fae5; color: #059669; }
+.sf-icon-file { background: #f3f4f6; color: #6b7280; }
+
+/* Item info */
+.sf-item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.sf-item-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.sf-item-name span:first-child {
+  font-size: revert;
+  font-weight: 700;
+  color: var(--text-color, #1f2937);
+  word-break: break-word;
+}
+
+.sf-unread-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--primary-color, #0ea5e9);
+  flex-shrink: 0;
+}
+
+.sf-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.sf-item-meta span {
+  font-size: revert;
+  color: var(--text-secondary, #6b7280);
+}
+
+.sf-item-sharer {
+  font-weight: 500;
+}
+
+.sf-item-date {
+  font-size: 0.8rem !important;
+  color: var(--text-muted, #9ca3af) !important;
+}
+
+.sf-item-message {
+  margin-top: 6px;
+  padding: 8px 12px;
+  background: var(--message-bg, #f9fafb);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: var(--text-secondary, #6b7280);
+  font-style: italic;
+  line-height: 1.4;
+}
+
+/* Actions */
+.sf-item-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+  align-self: center;
+}
+
+.sf-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color, #e5e7eb);
+  background: var(--card-bg, #fff);
+  color: var(--text-secondary, #6b7280);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sf-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.sf-btn-download:hover {
+  border-color: #10b981;
+  color: #10b981;
+  background: #f0fdf4;
+}
+
+.sf-btn-read:hover {
+  border-color: var(--primary-color, #0ea5e9);
+  color: var(--primary-color, #0ea5e9);
+  background: #f0f9ff;
+}
+
+/* ─── Dark theme ──────────────────────────────────────────────────────── */
+[data-theme="dark"] .sf-header h1 {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .sf-item {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+[data-theme="dark"] .sf-item--unread {
+  background: #1a2740;
+  border-color: #0ea5e9;
+}
+
+[data-theme="dark"] .sf-item-name span:first-child {
+  color: #f1f5f9;
+}
+
+[data-theme="dark"] .sf-item-meta span {
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .sf-item-message {
+  background: #0f172a;
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .sf-file-icon {
+  background: #334155;
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .sf-icon-image { background: #422006; color: #fbbf24; }
+[data-theme="dark"] .sf-icon-doc { background: #1e3a5f; color: #60a5fa; }
+[data-theme="dark"] .sf-icon-video { background: #4a1942; color: #f472b6; }
+[data-theme="dark"] .sf-icon-audio { background: #2e1065; color: #a78bfa; }
+[data-theme="dark"] .sf-icon-archive { background: #064e3b; color: #34d399; }
+
+[data-theme="dark"] .sf-btn {
+  background: #1e293b;
+  border-color: #334155;
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .sf-refresh-btn {
+  background: #1e293b;
+  border-color: #334155;
+  color: #94a3b8;
+}
+
+[data-theme="dark"] .sf-empty {
+  color: #64748b;
+}
+
+/* ─── Responsive ──────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .sf-wrapper {
+    padding: 20px 12px;
+  }
+
+  .sf-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .sf-item {
+    flex-direction: column;
+    gap: 12px;
+    padding: 14px 16px;
+  }
+
+  .sf-item-actions {
+    align-self: flex-end;
+  }
+
+  .sf-item-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}

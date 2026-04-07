@@ -5,10 +5,8 @@ import {
   Home, ChevronRight, Folder, Image, FileText, Video, File,
   FileSpreadsheet, Presentation, X, Check
 } from 'lucide-react';
-import { storageServiceFactory } from '../../Services/storageService';
+import { useStorage } from '../../contexts/StorageProvider';
 import './storageFilePicker.css';
-
-const storageService = storageServiceFactory();
 
 const getFileIcon = (contentType, name) => {
   if (contentType?.startsWith('image/')) return Image;
@@ -28,6 +26,7 @@ const getFileName = (fullPath) => {
 
 const StorageFilePicker = ({ onSelect, onClose }) => {
   const { t } = useTranslation('admin');
+  const { listFiles } = useStorage();
 
   const [currentPath, setCurrentPath] = useState('');
   const [folders, setFolders] = useState([]);
@@ -38,7 +37,7 @@ const StorageFilePicker = ({ onSelect, onClose }) => {
   const loadFiles = useCallback(async (path) => {
     setLoading(true);
     try {
-      const data = await storageService.listFiles(path);
+      const data = await listFiles(path);
       setFolders(data.folders || []);
       setFiles(data.files || []);
       setSelectedFile(null);

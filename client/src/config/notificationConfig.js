@@ -391,7 +391,7 @@ export const notificationConfig = {
   [NOTIFICATION_TYPES.FILE_SHARED]: {
     icon: '📂',
     color: '#d4a853',
-    route: '/admin/site-settings',
+    route: '/profile/shared-files',
     priority: 'medium'
   },
 
@@ -479,7 +479,7 @@ export const getNotificationRoute = (notification) => {
 
   // File shared notification
   if (notification.type === NOTIFICATION_TYPES.FILE_SHARED) {
-    return '/admin/site-settings';
+    return '/profile/shared-files';
   }
 
   // Forum notifications — link to post
