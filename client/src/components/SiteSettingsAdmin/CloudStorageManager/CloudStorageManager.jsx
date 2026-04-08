@@ -553,6 +553,17 @@ const CloudStorageManager = () => {
                 </div>
             )}
 
+            {/* Desktop breadcrumb — above csm-main, full width */}
+            {!(searchMode === 'global' && debouncedSearch) && !sharedWithMeView && (
+                <div className="csm-breadcrumb-desktop">
+                    <CloudStorageBreadcrumb
+                        currentPath={currentPath}
+                        breadcrumbs={breadcrumbs}
+                        onNavigate={navigateTo}
+                    />
+                </div>
+            )}
+
             {/* Main content area */}
             <div className="csm-main">
                 {/* Sidebar */}
@@ -721,12 +732,14 @@ const CloudStorageManager = () => {
                         )}
                     </div>
                 ) : (
-                    <>
-                    <CloudStorageBreadcrumb
-                        currentPath={currentPath}
-                        breadcrumbs={breadcrumbs}
-                        onNavigate={navigateTo}
-                    />
+                    <div className="csm-content">
+                    <div className="csm-breadcrumb-mobile">
+                        <CloudStorageBreadcrumb
+                            currentPath={currentPath}
+                            breadcrumbs={breadcrumbs}
+                            onNavigate={navigateTo}
+                        />
+                    </div>
                     <CloudStorageFileList
                         viewMode={viewMode}
                         folders={filteredFolders}
@@ -754,7 +767,7 @@ const CloudStorageManager = () => {
                         onDragLeave={handleDragLeave}
                         onDrop={handleDrop}
                     />
-                    </>
+                    </div>
                 )}
             </div>
 
