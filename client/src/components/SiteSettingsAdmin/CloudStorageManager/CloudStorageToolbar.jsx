@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import {
     FolderPlus, Upload, LayoutGrid, List, Search, RefreshCw,
-    Camera, BarChart3, Globe, FolderSearch, X
+    Camera, BarChart3, X
 } from 'lucide-react';
 import './cloudStorageToolbar.css';
 
@@ -15,8 +15,6 @@ const CloudStorageToolbar = ({
     onViewModeChange,
     search,
     onSearchChange,
-    searchMode,
-    onSearchModeChange,
     typeFilter,
     onTypeFilterChange,
     onRefresh,
@@ -35,94 +33,87 @@ const CloudStorageToolbar = ({
 
     return (
         <div className="cst-toolbar">
-            {/* Ред 1: Действия */}
-            <div className="cst-row">
-                <button className="cst-btn cst-btn--primary" onClick={onNewFolder}>
-                    <FolderPlus size={15} />
+            {/* Действия */}
+            <div className="cst-actions">
+                <button className="cst-action" onClick={onNewFolder}>
+                    <FolderPlus size={16} />
                     <span>{t('cloudStorage.newFolder')}</span>
                 </button>
-                <button className="cst-btn cst-btn--primary" onClick={() => fileInputRef.current?.click()} disabled={uploading}>
-                    <Upload size={15} />
-                    <span>{uploading ? t('cloudStorage.uploading') : t('cloudStorage.upload')}</span>
+                <button className="cst-action" onClick={() => fileInputRef.current?.click()} disabled={uploading}>
+                    <Upload size={16} />
+                    <span>{uploading ? '...' : t('cloudStorage.upload')}</span>
                 </button>
                 <input ref={fileInputRef} type="file" multiple style={{ display: 'none' }} onChange={(e) => { onUpload(e.target.files); e.target.value = ''; }} />
-                <button className="cst-btn cst-btn--primary cst-camera-btn" onClick={() => cameraInputRef.current?.click()} disabled={uploading}>
-                    <Camera size={15} />
+                <button className="cst-action cst-mobile-only" onClick={() => cameraInputRef.current?.click()} disabled={uploading}>
+                    <Camera size={16} />
                     <span>{t('cloudStorage.camera')}</span>
                 </button>
                 <input ref={cameraInputRef} type="file" accept="image/*" capture="environment" style={{ display: 'none' }} onChange={(e) => { onUpload(e.target.files); e.target.value = ''; }} />
                 {!currentPath && (
-                    <button className="cst-btn cst-btn--primary" onClick={onInitialize}>
-                        <FolderPlus size={15} />
+                    <button className="cst-action" onClick={onInitialize}>
+                        <FolderPlus size={16} />
                         <span>{t('cloudStorage.initialize', 'Инициализирай')}</span>
                     </button>
                 )}
                 {currentPath === 'pensa-foundation/projects/' && (
-                    <button className="cst-btn cst-btn--primary" onClick={onCreateProject}>
-                        <FolderPlus size={15} />
+                    <button className="cst-action" onClick={onCreateProject}>
+                        <FolderPlus size={16} />
                         <span>{t('cloudStorage.newProject', 'Нов проект')}</span>
                     </button>
                 )}
             </div>
 
-            {/* Ред 2: Търсене — цял ред */}
-            <div className="cst-row">
-                <div className="cst-search-full">
-                    <Search size={14} />
-                    <input
-                        type="text"
-                        className="cst-search-input"
-                        placeholder={t('cloudStorage.searchPlaceholder')}
-                        value={search}
-                        onChange={(e) => onSearchChange(e.target.value)}
-                    />
-                    {search && (
-                        <button className="cst-search-clear" onClick={onClearSearch}>
-                            <X size={13} />
-                        </button>
-                    )}
-                    <button
-                        className={`cst-search-mode ${searchMode === 'global' ? 'cst-active' : ''}`}
-                        onClick={() => onSearchModeChange(searchMode === 'local' ? 'global' : 'local')}
-                        title={searchMode === 'local' ? t('cloudStorage.searchEverywhere') : t('cloudStorage.searchInFolder')}
-                    >
-                        {searchMode === 'global' ? <Globe size={15} /> : <FolderSearch size={15} />}
+            {/* Търсене */}
+            <div className="cst-search">
+                <Search size={16} className="cst-search-icon" />
+                <input
+                    type="text"
+                    className="cst-search-field"
+                    placeholder={t('cloudStorage.searchPlaceholder')}
+                    value={search}
+                    onChange={(e) => onSearchChange(e.target.value)}
+                />
+                {search && (
+                    <button className="cst-search-x" onClick={onClearSearch}>
+                        <X size={14} />
                     </button>
-                    <select className="cst-type-filter" value={typeFilter} onChange={(e) => onTypeFilterChange(e.target.value)}>
-                        <option value="all">{t('cloudStorage.allTypes')}</option>
-                        <option value="image">{t('cloudStorage.images')}</option>
-                        <option value="document">{t('cloudStorage.documents')}</option>
-                        <option value="presentation">{t('cloudStorage.presentations')}</option>
-                    </select>
-                </div>
+                )}
             </div>
 
-            {/* Ред 3: Изглед + инструменти */}
-            <div className="cst-row">
-                <button className={`cst-btn cst-btn--icon ${viewMode === 'grid' ? 'cst-active' : ''}`} onClick={() => onViewModeChange('grid')}>
-                    <LayoutGrid size={15} />
-                </button>
-                <button className={`cst-btn cst-btn--icon ${viewMode === 'list' ? 'cst-active' : ''}`} onClick={() => onViewModeChange('list')}>
-                    <List size={15} />
-                </button>
-                <div className="cst-divider" />
-                <button className="cst-btn cst-btn--icon" onClick={onRefresh} title={t('cloudStorage.refresh')}>
+            {/* Филтър + инструменти */}
+            <div className="cst-controls">
+                <select className="cst-filter" value={typeFilter} onChange={(e) => onTypeFilterChange(e.target.value)}>
+                    <option value="all">{t('cloudStorage.allTypes', 'Всички')}</option>
+                    <option value="image">{t('cloudStorage.images', 'Снимки')}</option>
+                    <option value="document">{t('cloudStorage.documents', 'Документи')}</option>
+                    <option value="presentation">{t('cloudStorage.presentations', 'Презентации')}</option>
+                </select>
+
+                <div className="cst-view-toggle">
+                    <button className={viewMode === 'grid' ? 'cst-vt-active' : ''} onClick={() => onViewModeChange('grid')}>
+                        <LayoutGrid size={15} />
+                    </button>
+                    <button className={viewMode === 'list' ? 'cst-vt-active' : ''} onClick={() => onViewModeChange('list')}>
+                        <List size={15} />
+                    </button>
+                </div>
+
+                <button className="cst-icon-btn" onClick={onRefresh} title={t('cloudStorage.refresh')}>
                     <RefreshCw size={15} className={loading ? 'cst-spin' : ''} />
                 </button>
-                <button className="cst-btn cst-btn--sync" onClick={onSync} disabled={syncing}>
-                    <RefreshCw size={14} className={syncing ? 'cst-spin' : ''} />
-                    <span>Sync</span>
+                <button className="cst-icon-btn cst-icon-sync" onClick={onSync} disabled={syncing} title="Sync">
+                    <RefreshCw size={15} className={syncing ? 'cst-spin' : ''} />
                 </button>
-                <button className="cst-btn cst-btn--analytics" onClick={onAnalytics}>
-                    <BarChart3 size={14} />
-                    <span>{t('cloudStorage.analytics')}</span>
+                <button className="cst-icon-btn cst-icon-analytics" onClick={onAnalytics} title={t('cloudStorage.analytics')}>
+                    <BarChart3 size={15} />
                 </button>
+
                 {storageUsage && (
-                    <div className="cst-storage">
-                        <span>{formatSize(storageUsage.usedBytes)} / {formatSize(storageUsage.totalBytes)}</span>
-                        <div className="cst-storage-track">
-                            <div className="cst-storage-fill" style={{ width: `${Math.min(100, (storageUsage.usedBytes / storageUsage.totalBytes) * 100)}%` }} />
+                    <div className="cst-usage">
+                        <div className="cst-usage-bar">
+                            <div className="cst-usage-fill" style={{ width: `${Math.min(100, (storageUsage.usedBytes / storageUsage.totalBytes) * 100)}%` }} />
                         </div>
+                        <span className="cst-usage-text">{formatSize(storageUsage.usedBytes)} / {formatSize(storageUsage.totalBytes)}</span>
                     </div>
                 )}
             </div>

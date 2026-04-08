@@ -475,13 +475,6 @@ const CloudStorageManager = () => {
 
     return (
         <div className="csm-wrapper">
-            {/* Breadcrumb */}
-            <CloudStorageBreadcrumb
-                currentPath={currentPath}
-                breadcrumbs={breadcrumbs}
-                onNavigate={navigateTo}
-            />
-
             {/* Toolbar */}
             <CloudStorageToolbar
                 currentPath={currentPath}
@@ -728,6 +721,12 @@ const CloudStorageManager = () => {
                         )}
                     </div>
                 ) : (
+                    <>
+                    <CloudStorageBreadcrumb
+                        currentPath={currentPath}
+                        breadcrumbs={breadcrumbs}
+                        onNavigate={navigateTo}
+                    />
                     <CloudStorageFileList
                         viewMode={viewMode}
                         folders={filteredFolders}
@@ -755,6 +754,7 @@ const CloudStorageManager = () => {
                         onDragLeave={handleDragLeave}
                         onDrop={handleDrop}
                     />
+                    </>
                 )}
             </div>
 

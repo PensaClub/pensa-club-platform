@@ -66,7 +66,12 @@
       "Bash(npx web-push:*)",
       "Bash(find /c/Users/User/Documents/GitHub/Digital-Literacy-Wellbeing-60-plus/client -name *Forum* -o -name *forum*)",
       "Bash(find /c/Users/User/Documents/GitHub/Digital-Literacy-Wellbeing-60-plus/client/src -name *Forum* -o -name *forum*)",
-      "Bash(find C:/Users/User/Documents/GitHub/Digital-Literacy-Wellbeing-60-plus/client/src/components -iname *StudentDashboard* -type f)"
+      "Bash(find C:/Users/User/Documents/GitHub/Digital-Literacy-Wellbeing-60-plus/client/src/components -iname *StudentDashboard* -type f)",
+      "Bash(find client/src/components/SiteSettingsAdmin/CloudStorageManager/ -name \"*.css\" -exec sed -i 's/font-size: revert;/font-size: 0.82rem;/g' {} \\\\;)",
+      "Bash(find client/src/components/SiteSettingsAdmin/CloudStorageManager/ -name \"*.css\" -exec sed -i 's/#d4a853/#5b8def/g; s/rgba\\(212, 168, 83/rgba\\(91, 141, 239/g; s/#e0b964/#6b9df0/g; s/#c49a48/#4a7ddf/g' {} \\\\;)",
+      "Bash(find client/src/components/SiteSettingsAdmin/CloudStorageManager/ -name \"*.css\" -exec sed -i 's/#5b8def/#c9485b/g; s/rgba\\(91, 141, 239/rgba\\(201, 72, 91/g; s/#6b9df0/#d45868/g; s/#4a7ddf/#b83a4e/g' {} \\\\;)",
+      "Bash(find client/src/components/SiteSettingsAdmin/CloudStorageManager/ -name \"*.css\" -exec sed -i 's/#c9485b/#5b8def/g; s/rgba\\(201, 72, 91/rgba\\(91, 141, 239/g; s/#d45868/#6b9df0/g; s/#b83a4e/#4a7ddf/g' {} \\\\;)",
+      "Bash(wc -l *.jsx *.css)"
     ]
   }
 }

@@ -17,12 +17,12 @@
 .csm-wrapper p,
 .csm-wrapper input,
 .csm-wrapper button {
-    font-size: revert;
+    font-size: 0.82rem;
 }
 
 .csm-bulk-bar span,
 .csm-bulk-bar button {
-    font-size: revert;
+    font-size: 0.82rem;
 }
 
 /* =========================================================
@@ -37,7 +37,7 @@
     padding: 8px 12px;
     background: rgba(255, 255, 255, 0.03);
     border-radius: 8px;
-    border: 1px solid rgba(212, 168, 83, 0.1);
+    border: 1px solid rgba(91, 141, 239, 0.1);
     font-size: 0.82rem;
 }
 
@@ -68,12 +68,12 @@
 }
 
 .csm-breadcrumb-item:hover {
-    color: #d4a853;
-    background: rgba(212, 168, 83, 0.08);
+    color: #5b8def;
+    background: rgba(91, 141, 239, 0.08);
 }
 
 .csm-breadcrumb-item--active {
-    color: #d4a853;
+    color: #5b8def;
     font-weight: 500;
 }
 
@@ -104,13 +104,13 @@
 }
 
 .csm-btn--primary {
-    background: rgba(212, 168, 83, 0.12);
-    border-color: rgba(212, 168, 83, 0.25);
-    color: #d4a853;
+    background: rgba(91, 141, 239, 0.12);
+    border-color: rgba(91, 141, 239, 0.25);
+    color: #5b8def;
 }
 
 .csm-btn--primary:hover {
-    background: rgba(212, 168, 83, 0.2);
+    background: rgba(91, 141, 239, 0.2);
     color: #e4bd6a;
 }
 
@@ -147,17 +147,17 @@
     align-items: center;
     gap: 8px;
     padding: 8px 12px;
-    background: rgba(212, 168, 83, 0.06);
-    border: 1px dashed rgba(212, 168, 83, 0.2);
+    background: rgba(91, 141, 239, 0.06);
+    border: 1px dashed rgba(91, 141, 239, 0.2);
     border-radius: 8px;
-    color: #d4a853;
+    color: #5b8def;
 }
 
 .csm-new-folder input {
     flex: 1;
     padding: 6px 10px;
     border-radius: 4px;
-    border: 1px solid rgba(212, 168, 83, 0.2);
+    border: 1px solid rgba(91, 141, 239, 0.2);
     background: rgba(0, 0, 0, 0.2);
     color: #f1f5f9;
     font-size: 0.82rem;
@@ -167,7 +167,7 @@
 }
 
 .csm-new-folder input:focus {
-    border-color: rgba(212, 168, 83, 0.4);
+    border-color: rgba(91, 141, 239, 0.4);
 }
 
 /* =========================================================
@@ -194,7 +194,7 @@
     position: relative;
     overflow-y: auto;
     scrollbar-width: thin;
-    scrollbar-color: rgba(212, 168, 83, 0.15) transparent;
+    scrollbar-color: rgba(91, 141, 239, 0.15) transparent;
     padding: 12px;
 }
 
@@ -203,7 +203,7 @@
 }
 
 .csm-content::-webkit-scrollbar-thumb {
-    background: rgba(212, 168, 83, 0.15);
+    background: rgba(91, 141, 239, 0.15);
     border-radius: 2px;
 }
 
@@ -313,8 +313,8 @@
 }
 
 .csm-list-actions button:hover {
-    color: #d4a853;
-    background: rgba(212, 168, 83, 0.1);
+    color: #5b8def;
+    background: rgba(91, 141, 239, 0.1);
 }
 
 /* =========================================================
@@ -373,9 +373,9 @@
     gap: 12px;
     padding: 12px 24px;
     background: #1a1e2e;
-    border: 1px solid rgba(212, 168, 83, 0.3);
+    border: 1px solid rgba(91, 141, 239, 0.3);
     border-radius: 12px;
-    color: #d4a853;
+    color: #5b8def;
     font-size: 0.85rem;
     font-weight: 500;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
@@ -435,7 +435,7 @@
     align-items: center;
     gap: 12px;
     padding: 0 0 12px 0;
-    border-bottom: 1px solid rgba(212, 168, 83, 0.1);
+    border-bottom: 1px solid rgba(91, 141, 239, 0.1);
     margin-bottom: 12px;
 }
 
@@ -443,7 +443,7 @@
     margin: 0;
     font-size: 0.95rem;
     font-weight: 500;
-    color: #d4a853;
+    color: #5b8def;
     flex: 1;
 }
 
@@ -462,7 +462,7 @@
 }
 
 .csm-search-result-path:hover {
-    color: #d4a853;
+    color: #5b8def;
     text-decoration: underline;
 }
 
@@ -475,7 +475,7 @@
     align-items: center;
     gap: 12px;
     padding: 0 0 12px 0;
-    border-bottom: 1px solid rgba(212, 168, 83, 0.1);
+    border-bottom: 1px solid rgba(91, 141, 239, 0.1);
     margin-bottom: 12px;
 }
 
@@ -483,17 +483,17 @@
     margin: 0;
     font-size: 0.95rem;
     font-weight: 500;
-    color: #d4a853;
+    color: #5b8def;
     flex: 1;
 }
 
 /* Unread row highlight */
 .csm-list-row--unread {
-    background: rgba(212, 168, 83, 0.06) !important;
+    background: rgba(91, 141, 239, 0.06) !important;
 }
 
 .csm-list-row--unread td:first-child {
-    border-left: 3px solid #d4a853;
+    border-left: 3px solid #5b8def;
 }
 
 /* Shared file message */
@@ -789,14 +789,14 @@
 .csm-share-content button,
 .csm-share-content p,
 .csm-share-content h4 {
-    font-size: revert;
+    font-size: 0.82rem;
 }
 
 .csm-share-content h4 {
     margin: 0 0 12px;
     font-size: 1rem;
     font-weight: 500;
-    color: #d4a853;
+    color: #5b8def;
 }
 
 .csm-share-option {
@@ -812,7 +812,7 @@
 }
 
 .csm-share-radio--active {
-    color: #d4a853;
+    color: #5b8def;
 }
 
 .csm-share-input--number {
@@ -839,7 +839,7 @@
     background: #262a3a;
     border: 1px solid #3a3a3e;
     border-radius: 6px;
-    color: #d4a853;
+    color: #5b8def;
     font-size: 0.78rem;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -852,17 +852,17 @@
     align-items: center;
     gap: 4px;
     padding: 8px 14px;
-    border: 1px solid #d4a853;
+    border: 1px solid #5b8def;
     border-radius: 6px;
-    background: rgba(212, 168, 83, 0.1);
-    color: #d4a853;
+    background: rgba(91, 141, 239, 0.1);
+    color: #5b8def;
     font-family: 'Montserrat', sans-serif;
     font-size: 0.78rem;
     cursor: pointer;
     white-space: nowrap;
 }
 
-.csm-share-link-copy:hover { background: rgba(212, 168, 83, 0.2); }
+.csm-share-link-copy:hover { background: rgba(91, 141, 239, 0.2); }
 .csm-share-link-copy--copied { border-color: #4ade80; color: #4ade80; background: rgba(74, 222, 128, 0.1); }
 
 .csm-share-header {
@@ -876,7 +876,7 @@
     margin: 0;
     font-size: 1rem;
     font-weight: 500;
-    color: #d4a853;
+    color: #5b8def;
 }
 
 .csm-share-close {
@@ -928,7 +928,7 @@
 }
 
 .csm-share-radio input[type="radio"] {
-    accent-color: #d4a853;
+    accent-color: #5b8def;
 }
 
 .csm-share-checkbox {
@@ -942,7 +942,7 @@
 }
 
 .csm-share-checkbox input[type="checkbox"] {
-    accent-color: #d4a853;
+    accent-color: #5b8def;
 }
 
 .csm-share-input {
@@ -958,7 +958,7 @@
     box-sizing: border-box;
 }
 
-.csm-share-input:focus { border-color: #d4a853; }
+.csm-share-input:focus { border-color: #5b8def; }
 
 .csm-share-input-number {
     width: 100px;
@@ -990,7 +990,7 @@
     padding: 8px 20px;
     border: none;
     border-radius: 6px;
-    background: linear-gradient(135deg, #d4a853, #c49a48);
+    background: linear-gradient(135deg, #5b8def, #4a7ddf);
     color: #1a1e2e;
     font-family: 'Montserrat', sans-serif;
     font-size: 0.82rem;
@@ -998,14 +998,14 @@
     cursor: pointer;
 }
 
-.csm-share-btn-generate:hover { background: linear-gradient(135deg, #e0b964, #d4a853); }
+.csm-share-btn-generate:hover { background: linear-gradient(135deg, #6b9df0, #5b8def); }
 .csm-share-btn-generate:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .csm-share-result {
     margin-top: 16px;
     padding: 12px 14px;
-    background: rgba(212, 168, 83, 0.08);
-    border: 1px solid rgba(212, 168, 83, 0.2);
+    background: rgba(91, 141, 239, 0.08);
+    border: 1px solid rgba(91, 141, 239, 0.2);
     border-radius: 8px;
 }
 
@@ -1017,17 +1017,17 @@
 
 .csm-share-copy-btn {
     padding: 8px 14px;
-    border: 1px solid #d4a853;
+    border: 1px solid #5b8def;
     border-radius: 6px;
-    background: rgba(212, 168, 83, 0.1);
-    color: #d4a853;
+    background: rgba(91, 141, 239, 0.1);
+    color: #5b8def;
     font-family: 'Montserrat', sans-serif;
     font-size: 0.78rem;
     cursor: pointer;
     white-space: nowrap;
 }
 
-.csm-share-copy-btn:hover { background: rgba(212, 168, 83, 0.2); }
+.csm-share-copy-btn:hover { background: rgba(91, 141, 239, 0.2); }
 
 .csm-share-spinner {
     width: 16px;
@@ -1082,7 +1082,7 @@
 .csm-share-user-content button,
 .csm-share-user-content p,
 .csm-share-user-content h4 {
-    font-size: revert;
+    font-size: 0.82rem;
 }
 
 .csm-share-user-header {
@@ -1096,7 +1096,7 @@
     margin: 0;
     font-size: 1rem;
     font-weight: 500;
-    color: #d4a853;
+    color: #5b8def;
 }
 
 .csm-share-user-close {
@@ -1137,7 +1137,7 @@
     box-sizing: border-box;
 }
 
-.csm-share-user-search:focus { border-color: #d4a853; }
+.csm-share-user-search:focus { border-color: #5b8def; }
 
 .csm-share-user-searching {
     position: absolute;
@@ -1177,7 +1177,7 @@
     font-family: 'Montserrat', sans-serif;
 }
 
-.csm-share-user-option:hover { background: rgba(212, 168, 83, 0.1); }
+.csm-share-user-option:hover { background: rgba(91, 141, 239, 0.1); }
 
 .csm-share-user-avatar {
     width: 32px;
@@ -1191,11 +1191,11 @@
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background: rgba(212, 168, 83, 0.15);
+    background: rgba(91, 141, 239, 0.15);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #d4a853;
+    color: #5b8def;
     flex-shrink: 0;
 }
 
@@ -1229,8 +1229,8 @@
     align-items: center;
     gap: 8px;
     padding: 6px 10px 6px 6px;
-    background: rgba(212, 168, 83, 0.12);
-    border: 1px solid rgba(212, 168, 83, 0.25);
+    background: rgba(91, 141, 239, 0.12);
+    border: 1px solid rgba(91, 141, 239, 0.25);
     border-radius: 20px;
 }
 
@@ -1272,7 +1272,7 @@
     margin-bottom: 4px;
 }
 
-.csm-share-user-message:focus { border-color: #d4a853; }
+.csm-share-user-message:focus { border-color: #5b8def; }
 
 .csm-share-user-error {
     color: #f87171;
@@ -1296,7 +1296,7 @@
 }
 
 .csm-share-user-success strong {
-    color: #d4a853;
+    color: #5b8def;
 }
 
 .csm-share-user-badge {
@@ -1307,7 +1307,7 @@
     height: 18px;
     padding: 0 5px;
     border-radius: 9px;
-    background: #d4a853;
+    background: #5b8def;
     color: #1a1e2e;
     font-size: 0.7rem !important;
     font-weight: 600;
