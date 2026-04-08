@@ -31,14 +31,14 @@
 .csm-share-content button,
 .csm-share-content p,
 .csm-share-content h4 {
-    font-size: revert;
+    font-size: 0.82rem;
 }
 
 .csm-share-content h4 {
     margin: 0 0 12px;
     font-size: 1rem;
     font-weight: 500;
-    color: #d4a853;
+    color: #5b8def;
 }
 
 .csm-share-option {
@@ -54,7 +54,7 @@
 }
 
 .csm-share-radio--active {
-    color: #d4a853;
+    color: #5b8def;
 }
 
 .csm-share-input--number {
@@ -81,7 +81,7 @@
     background: #262a3a;
     border: 1px solid #3a3a3e;
     border-radius: 6px;
-    color: #d4a853;
+    color: #5b8def;
     font-size: 0.78rem;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -94,17 +94,17 @@
     align-items: center;
     gap: 4px;
     padding: 8px 14px;
-    border: 1px solid #d4a853;
+    border: 1px solid #5b8def;
     border-radius: 6px;
-    background: rgba(212, 168, 83, 0.1);
-    color: #d4a853;
+    background: rgba(91, 141, 239, 0.1);
+    color: #5b8def;
     font-family: 'Montserrat', sans-serif;
     font-size: 0.78rem;
     cursor: pointer;
     white-space: nowrap;
 }
 
-.csm-share-link-copy:hover { background: rgba(212, 168, 83, 0.2); }
+.csm-share-link-copy:hover { background: rgba(91, 141, 239, 0.2); }
 .csm-share-link-copy--copied { border-color: #4ade80; color: #4ade80; background: rgba(74, 222, 128, 0.1); }
 
 .csm-share-header {
@@ -118,7 +118,7 @@
     margin: 0;
     font-size: 1rem;
     font-weight: 500;
-    color: #d4a853;
+    color: #5b8def;
 }
 
 .csm-share-close {
@@ -170,7 +170,7 @@
 }
 
 .csm-share-radio input[type="radio"] {
-    accent-color: #d4a853;
+    accent-color: #5b8def;
 }
 
 .csm-share-checkbox {
@@ -184,7 +184,7 @@
 }
 
 .csm-share-checkbox input[type="checkbox"] {
-    accent-color: #d4a853;
+    accent-color: #5b8def;
 }
 
 .csm-share-input {
@@ -200,7 +200,7 @@
     box-sizing: border-box;
 }
 
-.csm-share-input:focus { border-color: #d4a853; }
+.csm-share-input:focus { border-color: #5b8def; }
 
 .csm-share-input-number {
     width: 100px;
@@ -232,7 +232,7 @@
     padding: 8px 20px;
     border: none;
     border-radius: 6px;
-    background: linear-gradient(135deg, #d4a853, #c49a48);
+    background: linear-gradient(135deg, #5b8def, #4a7ddf);
     color: #1a1e2e;
     font-family: 'Montserrat', sans-serif;
     font-size: 0.82rem;
@@ -240,14 +240,14 @@
     cursor: pointer;
 }
 
-.csm-share-btn-generate:hover { background: linear-gradient(135deg, #e0b964, #d4a853); }
+.csm-share-btn-generate:hover { background: linear-gradient(135deg, #6b9df0, #5b8def); }
 .csm-share-btn-generate:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .csm-share-result {
     margin-top: 16px;
     padding: 12px 14px;
-    background: rgba(212, 168, 83, 0.08);
-    border: 1px solid rgba(212, 168, 83, 0.2);
+    background: rgba(91, 141, 239, 0.08);
+    border: 1px solid rgba(91, 141, 239, 0.2);
     border-radius: 8px;
 }
 
@@ -259,17 +259,17 @@
 
 .csm-share-copy-btn {
     padding: 8px 14px;
-    border: 1px solid #d4a853;
+    border: 1px solid #5b8def;
     border-radius: 6px;
-    background: rgba(212, 168, 83, 0.1);
-    color: #d4a853;
+    background: rgba(91, 141, 239, 0.1);
+    color: #5b8def;
     font-family: 'Montserrat', sans-serif;
     font-size: 0.78rem;
     cursor: pointer;
     white-space: nowrap;
 }
 
-.csm-share-copy-btn:hover { background: rgba(212, 168, 83, 0.2); }
+.csm-share-copy-btn:hover { background: rgba(91, 141, 239, 0.2); }
 
 .csm-share-spinner {
     width: 16px;

@@ -21,7 +21,7 @@
 .csm-share-user-content button,
 .csm-share-user-content p,
 .csm-share-user-content h4 {
-    font-size: revert;
+    font-size: 0.82rem;
 }
 
 .csm-share-user-header {
@@ -35,7 +35,7 @@
     margin: 0;
     font-size: 1rem;
     font-weight: 500;
-    color: #d4a853;
+    color: #5b8def;
 }
 
 .csm-share-user-close {
@@ -77,7 +77,7 @@
     box-sizing: border-box;
 }
 
-.csm-share-user-search:focus { border-color: #d4a853; }
+.csm-share-user-search:focus { border-color: #5b8def; }
 
 .csm-share-user-searching {
     position: absolute;
@@ -118,7 +118,7 @@
     font-family: 'Montserrat', sans-serif;
 }
 
-.csm-share-user-option:hover { background: rgba(212, 168, 83, 0.1); }
+.csm-share-user-option:hover { background: rgba(91, 141, 239, 0.1); }
 
 .csm-share-user-avatar {
     width: 32px;
@@ -132,11 +132,11 @@
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background: rgba(212, 168, 83, 0.15);
+    background: rgba(91, 141, 239, 0.15);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #d4a853;
+    color: #5b8def;
     flex-shrink: 0;
 }
 
@@ -171,8 +171,8 @@
     align-items: center;
     gap: 8px;
     padding: 6px 10px 6px 6px;
-    background: rgba(212, 168, 83, 0.12);
-    border: 1px solid rgba(212, 168, 83, 0.25);
+    background: rgba(91, 141, 239, 0.12);
+    border: 1px solid rgba(91, 141, 239, 0.25);
     border-radius: 20px;
 }
 
@@ -215,7 +215,7 @@
     margin-bottom: 4px;
 }
 
-.csm-share-user-message:focus { border-color: #d4a853; }
+.csm-share-user-message:focus { border-color: #5b8def; }
 
 .csm-share-user-error {
     color: #f87171;
@@ -240,7 +240,7 @@
 }
 
 .csm-share-user-success strong {
-    color: #d4a853;
+    color: #5b8def;
 }
 
 /* Badge for unread count */
@@ -252,7 +252,7 @@
     height: 18px;
     padding: 0 5px;
     border-radius: 9px;
-    background: #d4a853;
+    background: #5b8def;
     color: #1a1e2e;
     font-size: 0.7rem !important;
     font-weight: 600;
@@ -265,7 +265,7 @@
     align-items: center;
     gap: 12px;
     padding: 0 0 12px 0;
-    border-bottom: 1px solid rgba(212, 168, 83, 0.1);
+    border-bottom: 1px solid rgba(91, 141, 239, 0.1);
     margin-bottom: 12px;
 }
 
@@ -273,17 +273,17 @@
     margin: 0;
     font-size: 0.95rem;
     font-weight: 500;
-    color: #d4a853;
+    color: #5b8def;
     flex: 1;
 }
 
 /* Unread row highlight */
 .csm-list-row--unread {
-    background: rgba(212, 168, 83, 0.06) !important;
+    background: rgba(91, 141, 239, 0.06) !important;
 }
 
 .csm-list-row--unread td:first-child {
-    border-left: 3px solid #d4a853;
+    border-left: 3px solid #5b8def;
 }
 
 /* Shared file message */
