@@ -375,17 +375,28 @@
 
 @media (max-width: 767px) {
   .aalcs-container { padding: 110px 14px 40px; }
-  .aalcs-title { font-size: 1.15rem; }
-  .aalcs-title span { font-size: 1.15rem; }
+  .aalcs-title { font-size: 1.3rem; }
+  .aalcs-title span { font-size: 1.3rem; }
   .aalcs-stats-bar { gap: 10px; }
   .aalcs-stat { padding: 5px 10px; }
   .aalcs-grid { grid-template-columns: 1fr; }
+
+  .aalcs-tabs {
+    flex-direction: column;
+    gap: 4px;
+    padding: 4px;
+  }
+  .aalcs-tab {
+    width: 100%;
+    justify-content: flex-start;
+    padding: 10px 14px;
+  }
 }
 
 @media (max-width: 424px) {
   .aalcs-container { padding: 110px 10px 40px; }
-  .aalcs-title { font-size: 1rem; }
-  .aalcs-title span { font-size: 1rem; }
+  .aalcs-title { font-size: 1.15rem; }
+  .aalcs-title span { font-size: 1.15rem; }
   .aalcs-header-actions { width: 100%; }
   .aalcs-btn-create { flex: 1; justify-content: center; }
 }

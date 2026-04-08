@@ -244,19 +244,26 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border: none;
-  border-radius: 6px;
-  background: transparent;
-  color: #888;
+  width: 36px;
+  height: 36px;
+  border: 1px solid #3a3a3e;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #bbb;
   cursor: pointer;
   transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.slib-close-btn svg {
+  width: 20px;
+  height: 20px;
 }
 
 .slib-close-btn:hover {
   background: #333;
-  color: #ddd;
+  border-color: #555;
+  color: #fff;
 }
 
 .slib-report-form-body {
@@ -1490,8 +1497,9 @@
 
   .slib-reports-table .slib-table-header,
   .slib-reports-table .slib-table-row {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1.4fr 0.7fr 0.7fr auto;
     gap: 6px;
+    padding: 10px 10px;
   }
 
   .slib-th-credits,
@@ -1519,6 +1527,33 @@
   .slib-toolbar {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .slib-btn-group {
+    width: 100%;
+    gap: 6px;
+  }
+
+  .slib-btn-group .slib-btn {
+    flex: 1;
+    justify-content: center;
+    padding: 9px 10px;
+    font-size: 0.78rem;
+    min-width: 0;
+  }
+
+  .slib-action-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .slib-action-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .slib-td-actions {
+    gap: 4px;
   }
 
   .slib-search-box {

@@ -1018,6 +1018,12 @@ seminarsController.get(
       const fs = require('fs');
       const seminarId = parseInt(req.params.id);
 
+      // Filter type: all | registered | guests
+      const allowedTypes = ['all', 'registered', 'guests'];
+      const typeFilter = allowedTypes.includes(req.query.type) ? req.query.type : 'all';
+      const includeRegistered = typeFilter === 'all' || typeFilter === 'registered';
+      const includeGuests = typeFilter === 'all' || typeFilter === 'guests';
+
       const seminarData = await seminar.findByPk(seminarId, {
         attributes: ['id', 'title', 'scheduledDate', 'location', 'isOnline'],
         include: [{ model: mentor, as: 'facilitator', attributes: ['name'] }],
@@ -1027,24 +1033,28 @@ seminarsController.get(
         return res.status(404).json({ success: false, message: 'Seminar not found' });
       }
 
-      // Registered
-      const registered = await student_seminar.findAll({
-        where: { seminarId },
-        include: [{
-          model: student, as: 'student', attributes: ['id'],
-          include: [{
-            model: user_account, as: 'user', attributes: ['email'],
-            include: [{ model: user_details, as: 'details', attributes: ['firstName', 'lastName', 'phoneNumber'] }],
-          }],
-        }],
-        attributes: ['id', 'status', 'attended'],
-      });
+      // Registered (conditionally)
+      const registered = includeRegistered
+        ? await student_seminar.findAll({
+            where: { seminarId },
+            include: [{
+              model: student, as: 'student', attributes: ['id'],
+              include: [{
+                model: user_account, as: 'user', attributes: ['email'],
+                include: [{ model: user_details, as: 'details', attributes: ['firstName', 'lastName', 'phoneNumber'] }],
+              }],
+            }],
+            attributes: ['id', 'status', 'attended'],
+          })
+        : [];
 
-      // Guests
-      const guests = await seminar_guest_attendance.findAll({
-        where: { seminarId },
-        attributes: ['id', 'guestFirstName', 'guestLastName', 'guestEmail', 'guestPhone'],
-      });
+      // Guests (conditionally)
+      const guests = includeGuests
+        ? await seminar_guest_attendance.findAll({
+            where: { seminarId },
+            attributes: ['id', 'guestFirstName', 'guestLastName', 'guestEmail', 'guestPhone'],
+          })
+        : [];
 
       // Build rows
       const allRows = [];
@@ -1068,6 +1078,9 @@ seminarsController.get(
         });
       });
 
+      const typeLabels = { all: 'Всички', registered: 'Регистрирани', guests: 'Гости' };
+      const typeLabel = typeLabels[typeFilter];
+
       const dateStr = seminarData.scheduledDate
         ? new Date(seminarData.scheduledDate).toLocaleDateString('bg-BG', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })
         : '';
@@ -1075,7 +1088,7 @@ seminarsController.get(
       // Generate PDF
       const doc = new PDFDocument({ size: 'A4', margin: 40, bufferPages: true });
       res.setHeader('Content-Type', 'application/pdf');
-      res.setHeader('Content-Disposition', `attachment; filename="attendees-${seminarId}-${new Date().toISOString().slice(0, 10)}.pdf"`);
+      res.setHeader('Content-Disposition', `attachment; filename="attendees-${seminarId}-${typeFilter}-${new Date().toISOString().slice(0, 10)}.pdf"`);
       doc.pipe(res);
 
       const fontPath = path.join(__dirname, '..', 'fonts', 'DejaVuSans.ttf');
@@ -1102,14 +1115,22 @@ seminarsController.get(
 
       doc.y = headerY + 50;
       doc.moveDown(0.5);
-      doc.font(font).fontSize(12).fillColor('#8b2040').text('Списък на участници', { align: 'center' });
+      const pdfTitle = typeFilter === 'all'
+        ? 'Списък на участници'
+        : `Списък на участници — ${typeLabel}`;
+      doc.font(font).fontSize(12).fillColor('#8b2040').text(pdfTitle, { align: 'center' });
       doc.moveDown(0.5);
 
       // Seminar info
       doc.font(font).fontSize(10).fillColor('#374151').text(seminarData.title, { align: 'center' });
       doc.font(font).fontSize(8).fillColor('#6b7280');
       doc.text(`Дата: ${dateStr}    |    Място: ${seminarData.isOnline ? 'Онлайн' : (seminarData.location || '—')}    |    Лектор: ${seminarData.facilitator?.name || '—'}`, { align: 'center' });
-      doc.text(`Общо участници: ${allRows.length} (${registered.length} регистрирани + ${guests.length} гости)`, { align: 'center' });
+      const summaryText = typeFilter === 'all'
+        ? `Общо участници: ${allRows.length} (${registered.length} регистрирани + ${guests.length} гости)`
+        : typeFilter === 'registered'
+          ? `Общо регистрирани: ${registered.length}`
+          : `Общо гости: ${guests.length}`;
+      doc.text(summaryText, { align: 'center' });
       doc.moveDown(1);
 
       // Table

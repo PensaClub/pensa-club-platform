@@ -30,9 +30,10 @@ const AdminAcademySeminarsList = () => {
     cancelSeminar,
   } = useAcademyCourses();
 
-  // Hash-based tab routing
-  const initialTab = window.location.hash?.replace('#', '') || 'seminars';
-  const [activeTab, setActiveTab] = useState(TABS.some(tab => tab.key === initialTab) ? initialTab : 'seminars');
+  // Hash-based tab routing (supports nested sub-tabs like #library/reports)
+  const rawHash = window.location.hash?.replace('#', '') || '';
+  const baseTab = rawHash.split('/')[0] || 'seminars';
+  const [activeTab, setActiveTab] = useState(TABS.some(tab => tab.key === baseTab) ? baseTab : 'seminars');
 
   const handleTabChange = (key) => {
     setActiveTab(key);
