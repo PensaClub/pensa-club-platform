@@ -475,13 +475,6 @@ const CloudStorageManager = () => {
 
     return (
         <div className="csm-wrapper">
-            {/* Breadcrumb */}
-            <CloudStorageBreadcrumb
-                currentPath={currentPath}
-                breadcrumbs={breadcrumbs}
-                onNavigate={navigateTo}
-            />
-
             {/* Toolbar */}
             <CloudStorageToolbar
                 currentPath={currentPath}
@@ -557,6 +550,17 @@ const CloudStorageManager = () => {
                     <button className="csm-btn csm-btn--small" onClick={() => { setShowCreateProject(false); setNewProjectName(''); }}>
                         {t('cloudStorage.cancel')}
                     </button>
+                </div>
+            )}
+
+            {/* Desktop breadcrumb — above csm-main, full width */}
+            {!(searchMode === 'global' && debouncedSearch) && !sharedWithMeView && (
+                <div className="csm-breadcrumb-desktop">
+                    <CloudStorageBreadcrumb
+                        currentPath={currentPath}
+                        breadcrumbs={breadcrumbs}
+                        onNavigate={navigateTo}
+                    />
                 </div>
             )}
 
@@ -728,6 +732,14 @@ const CloudStorageManager = () => {
                         )}
                     </div>
                 ) : (
+                    <div className="csm-content">
+                    <div className="csm-breadcrumb-mobile">
+                        <CloudStorageBreadcrumb
+                            currentPath={currentPath}
+                            breadcrumbs={breadcrumbs}
+                            onNavigate={navigateTo}
+                        />
+                    </div>
                     <CloudStorageFileList
                         viewMode={viewMode}
                         folders={filteredFolders}
@@ -755,6 +767,7 @@ const CloudStorageManager = () => {
                         onDragLeave={handleDragLeave}
                         onDrop={handleDrop}
                     />
+                    </div>
                 )}
             </div>
 
