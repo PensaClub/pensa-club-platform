@@ -96,7 +96,22 @@ const SeminarLibrary = () => {
     uploadToYouTube,
   } = useAcademyCourses();
 
-  const [activeSubtab, setActiveSubtab] = useState('reports');
+  // Hash-based sub-tab routing — format: #library/reports, #library/seminars
+  const getInitialSubtab = () => {
+    const hash = window.location.hash?.replace('#', '') || '';
+    const parts = hash.split('/');
+    if (parts[0] === 'library' && SUBTABS.some(t => t.key === parts[1])) {
+      return parts[1];
+    }
+    return 'reports';
+  };
+
+  const [activeSubtab, setActiveSubtab] = useState(getInitialSubtab);
+
+  const handleSubtabChange = (key) => {
+    setActiveSubtab(key);
+    window.location.hash = `library/${key}`;
+  };
 
   // ═══════════════════════════════════════════════════════════
   //                      REPORTS STATE
@@ -1206,7 +1221,7 @@ const SeminarLibrary = () => {
           <button
             key={key}
             className={`slib-subtab ${activeSubtab === key ? 'slib-subtab-active' : ''}`}
-            onClick={() => setActiveSubtab(key)}
+            onClick={() => handleSubtabChange(key)}
           >
             {key === 'reports' ? <FileBarChart size={16} /> : <Video size={16} />}
             <span>{t(`seminarLibrary.subtab_${key}`, label)}</span>

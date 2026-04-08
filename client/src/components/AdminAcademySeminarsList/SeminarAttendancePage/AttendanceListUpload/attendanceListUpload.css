@@ -195,6 +195,8 @@
   font-size: 0.8rem;
   font-weight: 500;
   text-decoration: none;
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }
 
 .alu-item-name:hover { text-decoration: underline; }
@@ -396,6 +398,41 @@
 .alu-video-info {
   flex: 1;
   min-width: 0;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width: 767px) {
+  .alu-tabs {
+    flex-wrap: wrap;
+    gap: 6px;
+    border-bottom: none;
+  }
+
+  .alu-tab {
+    flex: 1 1 calc(50% - 3px);
+    min-width: 0;
+    justify-content: center;
+    padding: 9px 10px;
+    font-size: 0.75rem;
+    border: 1px solid #2e2e32;
+    border-radius: 6px;
+    margin-bottom: 0;
+  }
+
+  .alu-tab-active {
+    background: rgba(212, 168, 83, 0.08);
+    border-color: #d4a853;
+  }
+
+  [data-theme="light"] .alu-tab {
+    border-color: #e0ddd8;
+  }
+  [data-theme="light"] .alu-tab-active {
+    background: rgba(139, 32, 64, 0.06);
+    border-color: #8b2040;
+  }
 }
 
 /* Light theme overrides */

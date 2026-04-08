@@ -3,6 +3,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import { useAcademyCourses } from '../../contexts/AcademyCoursesProvider';
 import {
   AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid,
@@ -70,17 +71,52 @@ const downloadPdf = async (url, filename) => {
   try {
     const auth = JSON.parse(localStorage.getItem('auth') || '{}');
     const res = await fetch(url, {
-      headers: { Authorization: `Bearer ${auth.token}` },
+      headers: {
+        Authorization: `Bearer ${auth.token}`,
+        Accept: 'application/pdf',
+      },
       credentials: 'include',
     });
-    const blob = await res.blob();
+
+    if (!res.ok) {
+      let errMsg = `HTTP ${res.status} ${res.statusText}`;
+      try {
+        const ct = res.headers.get('content-type') || '';
+        if (ct.includes('application/json')) {
+          const data = await res.json();
+          errMsg = data?.message || data?.error || errMsg;
+        } else {
+          const text = await res.text();
+          if (text) errMsg = text.slice(0, 200);
+        }
+      } catch { /* ignore parse errors */ }
+      console.error('❌ downloadPdf failed:', errMsg);
+      toast.error(`Грешка при сваляне: ${errMsg}`);
+      return;
+    }
+
+    const contentType = res.headers.get('content-type') || '';
+    if (!contentType.includes('application/pdf')) {
+      const text = await res.text();
+      console.error('❌ downloadPdf: unexpected content-type:', contentType, text.slice(0, 500));
+      toast.error(`Сървърът върна непознат формат: ${contentType || 'неизвестен'}`);
+      return;
+    }
+
+    const arrayBuffer = await res.arrayBuffer();
+    const blob = new Blob([arrayBuffer], { type: 'application/pdf' });
     const link = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = link;
     a.download = filename;
+    document.body.appendChild(a);
     a.click();
-    URL.revokeObjectURL(link);
-  } catch { /* ignore */ }
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(link), 1000);
+  } catch (err) {
+    console.error('❌ downloadPdf exception:', err);
+    toast.error(`Грешка при сваляне: ${err?.message || 'неизвестна грешка'}`);
+  }
 };
 
 const AdminSeminarStatistics = () => {
@@ -584,8 +620,8 @@ const AdminSeminarStatistics = () => {
               <button
                 className="asst-export-btn asst-export-btn-sm"
                 onClick={() => downloadPdf(
-                  `${apiUrl}/academy/seminars/admin/export-attendees/${expandedId}`,
-                  `attendees-${expandedId}-${new Date().toISOString().slice(0, 10)}.pdf`
+                  `${apiUrl}/academy/seminars/admin/export-attendees/${expandedId}?type=${attendanceTab}`,
+                  `attendees-${expandedId}-${attendanceTab}-${new Date().toISOString().slice(0, 10)}.pdf`
                 )}
               >
                 <Download size={13} /> {t('seminarStats.exportAttendees', 'Свали списък')}

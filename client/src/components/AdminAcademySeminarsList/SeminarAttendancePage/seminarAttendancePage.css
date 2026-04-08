@@ -224,7 +224,9 @@
     text-align: left;
     transition: background 0.15s;
 }
-
+.satp-dropdown-item span {
+    font-size: 0.85rem;
+}
 .satp-dropdown-item:last-child { border-bottom: none; }
 .satp-dropdown-item:hover { background: rgba(0, 210, 255, 0.06); }
 .satp-dropdown-item-active { background: rgba(0, 210, 255, 0.1); }
@@ -242,7 +244,7 @@
     color: rgba(255, 255, 255, 0.4);
 }
 
-.satp-dropdown-item-status {
+.satp-dropdown-item-status.satp-status-scheduled {
     font-size: 0.7rem;
     font-weight: 600;
     text-transform: uppercase;
