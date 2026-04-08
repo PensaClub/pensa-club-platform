@@ -210,6 +210,9 @@
     color: #00d2ff;
     font-size: 0.9rem;
 }
+.scfa-course-selected-info span{
+    font-size: 0.9rem;
+}
 
 .scfa-course-selected-info svg {
     flex-shrink: 0;

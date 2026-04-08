@@ -463,7 +463,9 @@
   color: #cbd5e1;
   font-size: 0.85rem;
 }
-
+.tem-toggle-info span {
+  font-size: 0.85rem;
+}
 .tem-toggle-info svg {
   color: #64748b;
   flex-shrink: 0;
@@ -1100,7 +1102,9 @@
   .tem-toggle-info {
     font-size: 0.8rem;
   }
-
+  .tem-toggle-info span{
+    font-size: 0.82rem;
+  }
   .tem-qtype-selector {
     flex-direction: column;
   }
