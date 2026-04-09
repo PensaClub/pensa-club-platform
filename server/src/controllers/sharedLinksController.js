@@ -188,93 +188,125 @@ sharedLinksController.get('/:token/info', async (req, res, next) => {
     }
 });
 
-// POST /shared-links/:token/download — Public download
-sharedLinksController.post('/:token/download', async (req, res, next) => {
+/**
+ * Helper: validate password against link's hash. Returns true if OK or no password required.
+ */
+async function checkLinkPassword(link, providedPassword) {
+    if (!link.passwordHash) return true;
+    if (!providedPassword) {
+        throw new customError({ message: 'Password is required', statusCode: 401 });
+    }
+    const isValid = await bcrypt.compare(providedPassword, link.passwordHash);
+    if (!isValid) {
+        throw new customError({ message: 'Invalid password', statusCode: 401 });
+    }
+    return true;
+}
+
+/**
+ * Helper: stream a shared file to the response with proper headers + download tracking
+ */
+async function streamSharedFile(link, req, res, next) {
+    let fileStream;
+    let fileMetadata;
     try {
-        const link = await validateSharedLink(req.params.token);
+        const app = getFirebaseApp();
+        const bucketName = process.env.GCS_BUCKET || 'pensaclub-909e0.appspot.com';
+        const bucket = admin.storage().bucket(bucketName);
+        const file = bucket.file(link.filePath);
 
-        // Check password if required
-        if (link.passwordHash) {
-            const { password } = req.body || {};
-            if (!password) {
-                throw new customError({
-                    message: 'Password is required',
-                    statusCode: 401,
-                });
-            }
-
-            const isValid = await bcrypt.compare(password, link.passwordHash);
-            if (!isValid) {
-                throw new customError({
-                    message: 'Invalid password',
-                    statusCode: 401,
-                });
-            }
-        }
-
-        // Get the file from Firebase Storage
-        let fileStream;
-        let fileMetadata;
-        try {
-            const app = getFirebaseApp();
-            const bucketName = process.env.GCS_BUCKET || 'pensaclub-909e0.appspot.com';
-            const bucket = admin.storage().bucket(bucketName);
-            const file = bucket.file(link.filePath);
-
-            const [exists] = await file.exists();
-            if (!exists) {
-                throw new customError({
-                    message: 'File not found in storage',
-                    statusCode: 404,
-                });
-            }
-
-            [fileMetadata] = await file.getMetadata();
-            fileStream = file.createReadStream();
-        } catch (err) {
-            if (err instanceof customError) throw err;
+        const [exists] = await file.exists();
+        if (!exists) {
             throw new customError({
                 message: 'File not found in storage',
                 statusCode: 404,
             });
         }
 
-        // Increment download count and create download record
-        await Promise.all([
-            link.increment('downloadCount'),
-            shared_link_download.create({
-                sharedLinkId: link.id,
-                ipAddress: req.ip || req.connection?.remoteAddress || null,
-                userAgent: req.headers['user-agent']
-                    ? req.headers['user-agent'].substring(0, 500)
-                    : null,
-            }),
-        ]);
-
-        // Set response headers
-        const contentType = fileMetadata?.contentType || 'application/octet-stream';
-        res.setHeader('Content-Type', contentType);
-        res.setHeader(
-            'Content-Disposition',
-            `attachment; filename="${encodeURIComponent(link.fileName)}"`
-        );
-        if (fileMetadata?.size) {
-            res.setHeader('Content-Length', fileMetadata.size);
-        }
-
-        // Stream file to response
-        fileStream.on('error', (err) => {
-            if (!res.headersSent) {
-                next(
-                    new customError({
-                        message: 'Error streaming file',
-                        statusCode: 500,
-                    })
-                );
-            }
+        [fileMetadata] = await file.getMetadata();
+        fileStream = file.createReadStream();
+    } catch (err) {
+        if (err instanceof customError) throw err;
+        throw new customError({
+            message: 'File not found in storage',
+            statusCode: 404,
         });
+    }
 
-        fileStream.pipe(res);
+    // Increment download count and create download record
+    await Promise.all([
+        link.increment('downloadCount'),
+        shared_link_download.create({
+            sharedLinkId: link.id,
+            ipAddress: req.ip || req.connection?.remoteAddress || null,
+            userAgent: req.headers['user-agent']
+                ? req.headers['user-agent'].substring(0, 500)
+                : null,
+        }),
+    ]);
+
+    // Set response headers
+    const contentType = fileMetadata?.contentType || 'application/octet-stream';
+    res.setHeader('Content-Type', contentType);
+    res.setHeader(
+        'Content-Disposition',
+        `attachment; filename="${encodeURIComponent(link.fileName)}"`
+    );
+    if (fileMetadata?.size) {
+        res.setHeader('Content-Length', fileMetadata.size);
+    }
+
+    // Stream file to response
+    fileStream.on('error', (err) => {
+        if (!res.headersSent) {
+            next(
+                new customError({
+                    message: 'Error streaming file',
+                    statusCode: 500,
+                })
+            );
+        }
+    });
+
+    fileStream.pipe(res);
+}
+
+// POST /shared-links/:token/verify-password — Validate password without downloading
+// Used by mobile-friendly download flow: client verifies password first, then triggers
+// native GET download to get proper browser download manager integration.
+sharedLinksController.post('/:token/verify-password', async (req, res, next) => {
+    try {
+        const link = await validateSharedLink(req.params.token);
+        const { password } = req.body || {};
+        await checkLinkPassword(link, password);
+        return res.status(200).json({ success: true, hasPassword: !!link.passwordHash });
+    } catch (err) {
+        next(err);
+    }
+});
+
+// GET /shared-links/:token/download — Public download (mobile-friendly, native browser)
+// For password-protected links, password comes via ?password= query param.
+// Browser handles Content-Disposition natively → works on mobile (notification + open file).
+sharedLinksController.get('/:token/download', async (req, res, next) => {
+    try {
+        const link = await validateSharedLink(req.params.token);
+        const password = req.query.password ? String(req.query.password) : undefined;
+        await checkLinkPassword(link, password);
+        await streamSharedFile(link, req, res, next);
+    } catch (err) {
+        next(err);
+    }
+});
+
+// POST /shared-links/:token/download — Public download (legacy, kept for backward compat)
+// Newer clients use GET /download for native browser download support.
+sharedLinksController.post('/:token/download', async (req, res, next) => {
+    try {
+        const link = await validateSharedLink(req.params.token);
+        const { password } = req.body || {};
+        await checkLinkPassword(link, password);
+        await streamSharedFile(link, req, res, next);
     } catch (err) {
         next(err);
     }

@@ -103,6 +103,27 @@ export const storageServiceFactory = () => {
       return response.blob();
     },
 
+    // Verify password without downloading — used by mobile-friendly flow
+    verifySharedLinkPassword: async (token, password) => {
+      const response = await fetch(`${apiUrl}/shared-links/${token}/verify-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password }),
+      });
+      if (!response.ok) {
+        const err = await response.json();
+        throw err;
+      }
+      return response.json();
+    },
+
+    // Build a direct download URL for native browser download
+    // Works for both passwordless and password-protected links
+    getSharedDownloadUrl: (token, password) => {
+      const base = `${apiUrl}/shared-links/${token}/download`;
+      return password ? `${base}?password=${encodeURIComponent(password)}` : base;
+    },
+
     // Search files
     searchFiles: async (params = {}) => {
       const queryParts = [];
