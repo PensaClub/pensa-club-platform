@@ -45,26 +45,43 @@ const SharedDownload = () => {
         setDownloading(true);
         setDownloadError('');
         try {
-            const blob = await storageService.downloadSharedFile(token, password || undefined);
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = linkInfo?.fileName || 'download';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+            // For password-protected links: verify password first to give the user
+            // immediate feedback if it's wrong, before triggering native download.
+            if (linkInfo?.hasPassword) {
+                if (!password) {
+                    setDownloadError('wrong_password');
+                    setDownloading(false);
+                    return;
+                }
+                try {
+                    await storageService.verifySharedLinkPassword(token, password);
+                } catch (err) {
+                    const status = err?.statusCode || err?.status;
+                    if (status === 401) {
+                        setDownloadError('wrong_password');
+                    } else if (status === 410) {
+                        setDownloadError('expired');
+                    } else if (status === 404) {
+                        setDownloadError('expired');
+                    } else {
+                        setDownloadError('general');
+                    }
+                    setDownloading(false);
+                    return;
+                }
+            }
+
+            // Trigger native browser download via GET with proper Content-Disposition.
+            // This works on ALL devices (mobile + desktop) — browser handles it natively
+            // and shows the system download notification + open file prompt.
+            const downloadUrl = storageService.getSharedDownloadUrl(
+                token,
+                password || undefined
+            );
+            window.location.href = downloadUrl;
             setDownloadSuccess(true);
         } catch (err) {
-            if (err.error === 'wrong_password') {
-                setDownloadError('wrong_password');
-            } else if (err.error === 'max_downloads_reached') {
-                setDownloadError('max_downloads');
-            } else if (err.error === 'expired') {
-                setDownloadError('expired');
-            } else {
-                setDownloadError('general');
-            }
+            setDownloadError('general');
         } finally {
             setDownloading(false);
         }
