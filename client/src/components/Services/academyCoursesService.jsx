@@ -444,6 +444,10 @@ checkSeminarRegistration: async (seminarId) => { // НОВО
     getFullAttendance: async (seminarId) => {
       return requester.get(`${apiUrl}/academy/seminars/${seminarId}/attendance/full`);
     },
+
+    inviteGuestToRegister: async (guestAttendanceId) => {
+      return requester.post(`${apiUrl}/academy/seminars/admin/guests/${guestAttendanceId}/invite`);
+    },
     approveSeminarAttendee: async (seminarId, attendeeId) => {
       return requester.post(`${apiUrl}/academy/seminars/${seminarId}/attendees/${attendeeId}/approve`);
     },

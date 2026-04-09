@@ -1,0 +1,45 @@
+{
+  "loading": "Verifying invitation...",
+  "header": {
+    "subtitle": "DigiBridge Academy"
+  },
+  "welcome": {
+    "hello": "Hello",
+    "thankYou": "Thank you for attending the seminar",
+    "instruction": "To complete your registration with Pensa Club, please choose a password:"
+  },
+  "form": {
+    "email": "Email",
+    "password": "Password",
+    "passwordPlaceholder": "Minimum 8 characters, letter + number",
+    "repeatPassword": "Repeat password",
+    "repeatPasswordPlaceholder": "Repeat the same password",
+    "agreeTerms1": "I agree to the",
+    "agreeTerms2": "and",
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy",
+    "submit": "Complete registration",
+    "validUntil": "Link is valid until:",
+    "success": "Registration successful! Welcome to Pensa Club."
+  },
+  "errors": {
+    "passwordTooShort": "Password must be at least 8 characters.",
+    "passwordWeak": "Password must contain at least one letter and one number.",
+    "passwordMismatch": "Passwords do not match.",
+    "termsRequired": "You must accept the terms of service.",
+    "generic": "Error accepting invitation."
+  },
+  "error": {
+    "expiredTitle": "This link is no longer valid",
+    "expiredText": "This registration link has expired. Please contact us to receive a new one.",
+    "missingTitle": "Registration link is missing",
+    "missingText": "The registration link is missing. Please use the link from the email you received.",
+    "invalidTitle": "Invalid link",
+    "invalidText": "This registration link is invalid or has already been used.",
+    "contactTitle": "Contact us:",
+    "backHome": "Back to home page"
+  },
+  "footer": {
+    "needHelp": "Need help?"
+  }
+}

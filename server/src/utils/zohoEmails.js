@@ -322,8 +322,182 @@ async function sendProjectEmail({
     }
 }
 
+async function sendGuestInvitationEmail({ email, firstName, lastName, seminarTitle, invitationToken, expiresAt }) {
+    const acceptLink = `${process.env.FRONTEND_SERVER}/accept-invitation?token=${invitationToken}`;
+    const fullName = `${firstName || ''} ${lastName || ''}`.trim() || 'участник';
+    const expiresStr = new Date(expiresAt).toLocaleDateString('bg-BG', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+    });
+
+    const formattedSubject = 'Добре дошли в Pensa Club — завършете регистрацията си';
+    const formattedBody = `
+        <html>
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            </head>
+            <body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; background: #f5f7fa; color: #222;">
+                <div style="max-width: 800px; margin: 0 auto; background: #ffffff;">
+                    <!-- Header -->
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background: linear-gradient(to right, #FF7A3D, #FF965B); border-radius: 32px 32px 0 0; padding-bottom: 16px;">
+                        <tr>
+                            <td align="center" style="padding: 24px 24px 0 24px;">
+                                <div style="
+                                    background: #fff;
+                                    border-radius: 50%;
+                                    width: 120px;
+                                    height: 120px;
+                                    margin-bottom: 12px;
+                                    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+                                    text-align: center;
+                                    line-height: 120px;
+                                ">
+                                    <img src="https://firebasestorage.googleapis.com/v0/b/pensaclub-909e0.appspot.com/o/email-logo%2Fpensa_logo_green.jpg?alt=media&token=36390c4b-0a60-4bc6-86e2-1405973b5395"
+                                         alt="Pensa Club Logo"
+                                         width="80"
+                                         height="80"
+                                         style="vertical-align: middle;" />
+                                </div>
+                                <div style="color: #fff; font-size: 28px; font-weight: 700; margin: 8px 0 4px 0; text-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center;">
+                                    Pensa Club
+                                </div>
+                                <div style="color: rgba(255,255,255,0.9); font-size: 16px; font-weight: 400; margin: 0 0 12px 0; text-align: center;">
+                                    Добре дошли!
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <!-- Content -->
+                    <div style="padding: 24px 24px 16px 24px;">
+                        <div style="
+                            background: #f8fafc;
+                            border-left: 4px solid #FF7A3D;
+                            padding: 14px 18px;
+                            border-radius: 8px;
+                            margin-bottom: 18px;
+                        ">
+                            <div style="
+                                color: #222;
+                                font-size: 20px;
+                                font-weight: 600;
+                                margin-bottom: 6px;
+                            ">
+                                Здравейте, ${fullName}!
+                            </div>
+                        </div>
+
+                        <div style="
+                            color: #222;
+                            font-size: 16px;
+                            line-height: 1.6;
+                            margin-bottom: 18px;
+                        ">
+                            Благодарим Ви за участието в семинар <strong>${seminarTitle || 'на Pensa Club'}</strong>.
+                            <br><br>
+                            Бяхте поканен да се регистрирате като пълноправен потребител в платформата <strong>Pensa Club</strong>.
+                            Чрез регистрацията ще получите достъп до всички курсове, семинари и материали на DigiBridge Academy,
+                            както и ще можете да следите своя прогрес и получените кредити.
+                        </div>
+
+                        <!-- Info box -->
+                        <div style="
+                            background: linear-gradient(135deg, #e6fffa 0%, #f0fff4 100%);
+                            border: 1px solid #9ae6b4;
+                            border-radius: 12px;
+                            padding: 14px 18px;
+                            margin-bottom: 18px;
+                        ">
+                            <h3 style="
+                                color: #222;
+                                font-size: 16px;
+                                font-weight: 600;
+                                margin: 0 0 8px 0;
+                            ">
+                                📋 Информация за поканата
+                            </h3>
+                            <p style="color: #222; font-size: 15px; margin: 0; line-height: 1.5;">
+                                <strong>Имейл за вход:</strong> ${email}<br>
+                                <strong>⏱ Валидност на линка:</strong> до ${expiresStr}<br>
+                                <strong>📚 Семинар:</strong> ${seminarTitle || '—'}
+                            </p>
+                        </div>
+
+                        <!-- CTA -->
+                        <div style="text-align: center; margin: 24px 0;">
+                            <a href="${acceptLink}" style="
+                                background: linear-gradient(to right, #FF7A3D, #FF965B);
+                                color: white;
+                                padding: 14px 32px;
+                                border-radius: 8px;
+                                text-decoration: none;
+                                font-weight: 600;
+                                font-size: 16px;
+                                display: inline-block;
+                                box-shadow: 0 4px 12px rgba(247, 154, 79, 0.3);
+                            ">
+                                ✅ Завършете регистрацията
+                            </a>
+                        </div>
+
+                        <div style="
+                            background: #fff8e1;
+                            border: 1px solid #ffe082;
+                            border-radius: 8px;
+                            padding: 12px 16px;
+                            margin-bottom: 16px;
+                        ">
+                            <p style="color: #6d4c00; font-size: 14px; margin: 0; line-height: 1.5;">
+                                ⚠️ <strong>Важно:</strong> Ако не желаете да се регистрирате в платформата,
+                                просто игнорирайте това съобщение. Линкът ще изтече автоматично след 7 дни.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Footer with contacts -->
+                    <div style="
+                        background: #f7fafc;
+                        padding: 20px 24px;
+                        text-align: center;
+                        border-top: 1px solid #e2e8f0;
+                        border-radius: 0 0 12px 12px;
+                        color: #222;
+                    ">
+                        <p style="color: #222; font-size: 14px; margin: 0 0 12px 0; font-weight: 600;">
+                            Имате въпроси? Свържете се с нас:
+                        </p>
+                        <p style="color: #222; font-size: 14px; margin: 0 0 6px 0;">
+                            📞 <a href="tel:+359895794214" style="color: #FF7A3D; text-decoration: none; font-weight: 500;">+359 89 579 4214</a>
+                        </p>
+                        <p style="color: #222; font-size: 14px; margin: 0 0 12px 0;">
+                            📧 <a href="mailto:pensa.club@gmail.com" style="color: #FF7A3D; text-decoration: none; font-weight: 500;">pensa.club@gmail.com</a>
+                        </p>
+                        <p style="color: #666; font-size: 12px; margin: 12px 0 0 0;">
+                            Това съобщение е изпратено чрез платформата <strong>Pensa Club</strong>.<br>
+                            Благодарим Ви, че сте част от нашата общност!
+                        </p>
+                    </div>
+                </div>
+            </body>
+        </html>
+    `;
+
+    const data = {
+        fromAddress: 'info@pensa.club',
+        toAddress: email,
+        subject: formattedSubject,
+        content: formattedBody,
+    };
+    return sendZohoEmailRaw(data);
+}
+
 module.exports = {
     sendResetEmail,
     forwardEmailsViaZoho,
     sendProjectEmail,
+    sendGuestInvitationEmail,
 };

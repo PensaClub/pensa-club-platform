@@ -1,0 +1,45 @@
+{
+  "loading": "Einladung wird überprüft...",
+  "header": {
+    "subtitle": "DigiBridge Academy"
+  },
+  "welcome": {
+    "hello": "Hallo",
+    "thankYou": "Vielen Dank für Ihre Teilnahme am Seminar",
+    "instruction": "Um Ihre Registrierung bei Pensa Club abzuschließen, wählen Sie bitte ein Passwort:"
+  },
+  "form": {
+    "email": "E-Mail",
+    "password": "Passwort",
+    "passwordPlaceholder": "Mindestens 8 Zeichen, Buchstabe + Zahl",
+    "repeatPassword": "Passwort wiederholen",
+    "repeatPasswordPlaceholder": "Gleiches Passwort wiederholen",
+    "agreeTerms1": "Ich stimme den",
+    "agreeTerms2": "und der",
+    "terms": "Nutzungsbedingungen",
+    "privacy": "Datenschutzerklärung",
+    "submit": "Registrierung abschließen",
+    "validUntil": "Link ist gültig bis:",
+    "success": "Registrierung erfolgreich! Willkommen bei Pensa Club."
+  },
+  "errors": {
+    "passwordTooShort": "Das Passwort muss mindestens 8 Zeichen lang sein.",
+    "passwordWeak": "Das Passwort muss mindestens einen Buchstaben und eine Zahl enthalten.",
+    "passwordMismatch": "Die Passwörter stimmen nicht überein.",
+    "termsRequired": "Sie müssen die Nutzungsbedingungen akzeptieren.",
+    "generic": "Fehler beim Annehmen der Einladung."
+  },
+  "error": {
+    "expiredTitle": "Dieser Link ist nicht mehr gültig",
+    "expiredText": "Dieser Registrierungslink ist abgelaufen. Bitte kontaktieren Sie uns, um einen neuen zu erhalten.",
+    "missingTitle": "Registrierungslink fehlt",
+    "missingText": "Der Registrierungslink fehlt. Bitte verwenden Sie den Link aus der erhaltenen E-Mail.",
+    "invalidTitle": "Ungültiger Link",
+    "invalidText": "Dieser Registrierungslink ist ungültig oder wurde bereits verwendet.",
+    "contactTitle": "Kontaktieren Sie uns:",
+    "backHome": "Zurück zur Startseite"
+  },
+  "footer": {
+    "needHelp": "Benötigen Sie Hilfe?"
+  }
+}

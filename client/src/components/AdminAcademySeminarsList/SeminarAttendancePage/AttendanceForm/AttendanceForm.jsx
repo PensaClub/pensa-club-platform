@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useAcademyCourses } from '../../../contexts/AcademyCoursesProvider';
 import {
     Search, UserPlus, Loader2, Users,
-    CheckCircle, Globe, User, AlertCircle,
+    CheckCircle, Globe, User, AlertCircle, Send, Info,
 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import './attendanceForm.css';
@@ -20,6 +20,7 @@ const AttendanceForm = ({ seminar }) => {
         bulkMixedAttendance,
         markSeminarAttended,
         getFullAttendance,
+        inviteGuestToRegister,
     } = useAcademyCourses();
 
     // Search
@@ -42,6 +43,14 @@ const AttendanceForm = ({ seminar }) => {
 
     // Participation level saving
     const [savingLevelId, setSavingLevelId] = useState(null);
+
+    // Guest invitation
+    const [invitingGuestId, setInvitingGuestId] = useState(null);
+    const [existingUserModal, setExistingUserModal] = useState(null);
+
+    // Guest email conflict (existing user found during add-guest)
+    const [guestConflictModal, setGuestConflictModal] = useState(null);
+    const [registeringExistingUser, setRegisteringExistingUser] = useState(false);
 
     // =========================================================
     //                    LOAD PARTICIPANTS
@@ -123,11 +132,18 @@ const AttendanceForm = ({ seminar }) => {
     //                    ADD GUEST — instant
     // =========================================================
 
+    const clearGuestForm = () => {
+        setGuestFirstName('');
+        setGuestLastName('');
+        setGuestPhone('');
+        setGuestEmail('');
+    };
+
     const handleAddGuest = async () => {
         if (!guestFirstName.trim() || !guestLastName.trim()) return;
         setIsAddingGuest(true);
         try {
-            await bulkMixedAttendance(seminar.id, {
+            const result = await bulkMixedAttendance(seminar.id, {
                 platformAttendees: [],
                 guests: [{
                     firstName: guestFirstName.trim(),
@@ -137,15 +153,43 @@ const AttendanceForm = ({ seminar }) => {
                     participationLevel: 'passive',
                 }],
             });
-            await loadParticipants();
-            setGuestFirstName('');
-            setGuestLastName('');
-            setGuestPhone('');
-            setGuestEmail('');
+
+            // If email matches an existing user → show modal instead of adding as guest
+            if (result?.existingUserConflicts && result.existingUserConflicts.length > 0) {
+                setGuestConflictModal(result.existingUserConflicts[0]);
+                // NOTE: do not clear form — admin may want to edit and retry
+            } else {
+                await loadParticipants();
+                clearGuestForm();
+            }
         } catch (err) {
             console.error('Error adding guest:', err);
         } finally {
             setIsAddingGuest(false);
+        }
+    };
+
+    // Admin confirmed: register the existing user as a platform attendee
+    const handleRegisterExistingUser = async () => {
+        if (!guestConflictModal) return;
+        setRegisteringExistingUser(true);
+        try {
+            await bulkMixedAttendance(seminar.id, {
+                platformAttendees: [{
+                    userId: guestConflictModal.userId,
+                    participationLevel: 'passive',
+                }],
+                guests: [],
+            });
+            await loadParticipants();
+            clearGuestForm();
+            setGuestConflictModal(null);
+            toast.success(t('attendanceForm.conflictRegisteredAsPlatform', 'Потребителят е добавен към регистрираните участници.'));
+        } catch (err) {
+            console.error('Error registering existing user:', err);
+            toast.error(t('attendanceForm.conflictRegisterError', 'Грешка при регистриране на потребителя.'));
+        } finally {
+            setRegisteringExistingUser(false);
         }
     };
 
@@ -189,6 +233,39 @@ const AttendanceForm = ({ seminar }) => {
         if (p.type === 'guest') return <UserPlus size={12} />;
         if (p.seminarStatus === 'registered' || p.seminarStatus === 'approved') return <Globe size={12} />;
         return <User size={12} />;
+    };
+
+    // =========================================================
+    //                    GUEST INVITATION
+    // =========================================================
+
+    const handleInviteGuest = async (guestAttendanceId) => {
+        setInvitingGuestId(guestAttendanceId);
+        try {
+            const result = await inviteGuestToRegister(guestAttendanceId);
+            if (result.scenario === 'existing_user') {
+                setExistingUserModal({
+                    email: result.existingUserEmail,
+                    roleUpgraded: result.roleUpgraded,
+                    alreadyAttended: false,
+                });
+            } else if (result.scenario === 'already_registered') {
+                setExistingUserModal({
+                    email: result.existingUserEmail,
+                    roleUpgraded: false,
+                    alreadyAttended: true,
+                });
+            } else if (result.scenario === 'new_user' && result.emailSent) {
+                toast.success(t('attendanceForm.inviteSent', 'Гостът е регистриран. Поканата е изпратена на имейла.'));
+            } else if (result.scenario === 'new_user' && !result.emailSent) {
+                toast.warning(t('attendanceForm.inviteNoEmail', 'Гостът е регистриран, но имейлът не се изпрати. Свържете се ръчно.'));
+            }
+            await loadParticipants();
+        } catch {
+            // toast вече е показан от provider-а
+        } finally {
+            setInvitingGuestId(null);
+        }
     };
 
     // =========================================================
@@ -420,6 +497,27 @@ const AttendanceForm = ({ seminar }) => {
                                             {p.earnedCredits > 0 && (
                                                 <span className="satf-participant-credits">+{p.earnedCredits}</span>
                                             )}
+
+                                            {/* Guest invitation button */}
+                                            {p.type === 'guest' && p.email && !p.convertedToUserId && (
+                                                <button
+                                                    className="satf-btn-invite-guest"
+                                                    onClick={() => handleInviteGuest(p.id)}
+                                                    disabled={invitingGuestId === p.id}
+                                                    title={t('attendanceForm.inviteGuest', 'Регистрирай гост')}
+                                                >
+                                                    {invitingGuestId === p.id
+                                                        ? <Loader2 size={14} className="satf-spin" />
+                                                        : <Send size={14} />}
+                                                    <span>{t('attendanceForm.inviteGuest', 'Регистрирай гост')}</span>
+                                                </button>
+                                            )}
+                                            {p.type === 'guest' && p.convertedToUserId && (
+                                                <span className="satf-badge-converted">
+                                                    <CheckCircle size={12} />
+                                                    {t('attendanceForm.alreadyRegistered', 'Регистриран')}
+                                                </span>
+                                            )}
                                         </div>
                                     );
                                 })}
@@ -460,6 +558,27 @@ const AttendanceForm = ({ seminar }) => {
                                         {p.earnedCredits > 0 && (
                                             <span className="satf-attended-credits">{p.earnedCredits} 🪙</span>
                                         )}
+
+                                        {/* Guest invitation button */}
+                                        {p.type === 'guest' && p.email && !p.convertedToUserId && (
+                                            <button
+                                                className="satf-btn-invite-guest"
+                                                onClick={() => handleInviteGuest(p.id)}
+                                                disabled={invitingGuestId === p.id}
+                                                title={t('attendanceForm.inviteGuest', 'Регистрирай гост')}
+                                            >
+                                                {invitingGuestId === p.id
+                                                    ? <Loader2 size={14} className="satf-spin" />
+                                                    : <Send size={14} />}
+                                                <span>{t('attendanceForm.inviteGuest', 'Регистрирай гост')}</span>
+                                            </button>
+                                        )}
+                                        {p.type === 'guest' && p.convertedToUserId && (
+                                            <span className="satf-badge-converted">
+                                                <CheckCircle size={12} />
+                                                {t('attendanceForm.alreadyRegistered', 'Регистриран')}
+                                            </span>
+                                        )}
                                     </div>
                                 ))}
                             </div>
@@ -468,6 +587,95 @@ const AttendanceForm = ({ seminar }) => {
                 </div>
                
             </div>
+
+            {/* Modal: Email entered for guest already belongs to a platform user */}
+            {guestConflictModal && (
+                <div className="satf-modal-overlay" onClick={() => !registeringExistingUser && setGuestConflictModal(null)}>
+                    <div className="satf-modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="satf-modal-icon">
+                            <Info size={32} />
+                        </div>
+                        <h3 className="satf-modal-title">
+                            {t('attendanceForm.conflictTitle', 'Този имейл вече има регистрация')}
+                        </h3>
+                        <p className="satf-modal-text">
+                            {t('attendanceForm.conflictText1', 'Имейлът')}{' '}
+                            <strong>{guestConflictModal.email}</strong>{' '}
+                            {t('attendanceForm.conflictText2', 'е регистриран в платформата Pensa Club като')}{' '}
+                            <strong>{`${guestConflictModal.firstName} ${guestConflictModal.lastName}`.trim()}</strong>.
+                        </p>
+                        <p className="satf-modal-text">
+                            {t('attendanceForm.conflictText3', 'Вместо да добавяте този участник като гост, можете да го запишете директно като пълноправен потребител на семинара.')}
+                        </p>
+                        <div className="satf-modal-actions">
+                            <button
+                                className="satf-modal-btn satf-modal-btn-secondary"
+                                onClick={() => setGuestConflictModal(null)}
+                                disabled={registeringExistingUser}
+                            >
+                                {t('attendanceForm.cancel', 'Отказ')}
+                            </button>
+                            <button
+                                className="satf-modal-btn"
+                                onClick={handleRegisterExistingUser}
+                                disabled={registeringExistingUser}
+                            >
+                                {registeringExistingUser
+                                    ? <Loader2 size={14} className="satf-spin" />
+                                    : <CheckCircle size={14} />}
+                                <span>{t('attendanceForm.conflictRegisterBtn', 'Регистрирай като потребител')}</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Modal: Guest already registered as platform user */}
+            {existingUserModal && (
+                <div className="satf-modal-overlay" onClick={() => setExistingUserModal(null)}>
+                    <div className="satf-modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="satf-modal-icon">
+                            <Info size={32} />
+                        </div>
+                        <h3 className="satf-modal-title">
+                            {existingUserModal.alreadyAttended
+                                ? t('attendanceForm.alreadyAttendedTitle', 'Участникът вече е в регистрираните')
+                                : t('attendanceForm.existingUserTitle', 'Потребителят вече е регистриран')}
+                        </h3>
+                        <p className="satf-modal-text">
+                            {t('attendanceForm.existingUserText1', 'Имейлът')}{' '}
+                            <strong>{existingUserModal.email}</strong>{' '}
+                            {t('attendanceForm.existingUserText2', 'вече съществува като регистриран потребител в Pensa Club.')}
+                        </p>
+                        {existingUserModal.alreadyAttended ? (
+                            <>
+                                <p className="satf-modal-text">
+                                    {t('attendanceForm.alreadyAttendedText', 'Този потребител вече е в списъка с регистрирани участници на семинара и е получил кредитите си. Дублиращият запис като гост беше изчистен.')}
+                                </p>
+                                <p className="satf-modal-text satf-modal-text-secondary">
+                                    {t('attendanceForm.alreadyAttendedNoAction', 'Не е необходимо допълнително действие.')}
+                                </p>
+                            </>
+                        ) : (
+                            <>
+                                <p className="satf-modal-text">
+                                    {t('attendanceForm.existingUserText3', 'Гостът беше автоматично преместен в списъка с регистрирани участници на семинара')}
+                                    {existingUserModal.roleUpgraded && (
+                                        <>{', '}{t('attendanceForm.existingUserRoleUpgraded', 'а ролята му беше обновена на student')}</>
+                                    )}
+                                    .
+                                </p>
+                                <p className="satf-modal-text satf-modal-text-secondary">
+                                    {t('attendanceForm.existingUserNoInvite', 'Няма нужда от покана — потребителят вече има достъп до платформата.')}
+                                </p>
+                            </>
+                        )}
+                        <button className="satf-modal-btn" onClick={() => setExistingUserModal(null)}>
+                            {t('attendanceForm.understood', 'Разбрах')}
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
