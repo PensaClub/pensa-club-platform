@@ -41,44 +41,63 @@ const SharedDownload = () => {
         return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
     };
 
+    // Trigger native browser download via a programmatic click on a real <a> link.
+    // Important: must use a REAL http URL (not blob:) and NOT set the `download`
+    // attribute — let the server's Content-Disposition header handle the filename.
+    // Mobile browsers (Android Chrome, Samsung Internet) treat this as a link click,
+    // NOT as JS navigation, so they DON'T show the "leave site?" prompt.
+    const triggerNativeDownload = (url) => {
+        const a = document.createElement('a');
+        a.href = url;
+        a.rel = 'noopener noreferrer';
+        // Intentionally no `download` attribute — server provides Content-Disposition
+        // Intentionally no `target` — same context, browser triggers download in place
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    };
+
     const handleDownload = async () => {
         setDownloading(true);
         setDownloadError('');
         try {
-            // For password-protected links: verify password first to give the user
-            // immediate feedback if it's wrong, before triggering native download.
-            if (linkInfo?.hasPassword) {
-                if (!password) {
-                    setDownloadError('wrong_password');
-                    setDownloading(false);
-                    return;
-                }
-                try {
-                    await storageService.verifySharedLinkPassword(token, password);
-                } catch (err) {
-                    const status = err?.statusCode || err?.status;
-                    if (status === 401) {
-                        setDownloadError('wrong_password');
-                    } else if (status === 410) {
-                        setDownloadError('expired');
-                    } else if (status === 404) {
-                        setDownloadError('expired');
-                    } else {
-                        setDownloadError('general');
-                    }
-                    setDownloading(false);
-                    return;
-                }
+            // Quick guard for password-protected links with empty password
+            if (linkInfo?.hasPassword && !password) {
+                setDownloadError('wrong_password');
+                setDownloading(false);
+                return;
             }
 
-            // Trigger native browser download via GET with proper Content-Disposition.
-            // This works on ALL devices (mobile + desktop) — browser handles it natively
-            // and shows the system download notification + open file prompt.
+            // ALWAYS pre-validate before triggering native download.
+            // This catches: max_downloads_reached, expired, not_found, wrong_password.
+            // Without this, the browser would navigate to the GET download URL and
+            // show raw JSON error in the address bar if validation fails server-side.
+            try {
+                await storageService.verifySharedLinkPassword(token, password);
+            } catch (err) {
+                const status = err?.statusCode || err?.status;
+                const msg = (err?.message || '').toLowerCase();
+                if (msg.includes('limit') || msg.includes('max')) {
+                    setDownloadError('max_downloads');
+                } else if (status === 401 || msg.includes('password')) {
+                    setDownloadError('wrong_password');
+                } else if (status === 410 || msg.includes('expired')) {
+                    setDownloadError('expired');
+                } else if (status === 404 || msg.includes('not found')) {
+                    setDownloadError('expired');
+                } else {
+                    setDownloadError('general');
+                }
+                setDownloading(false);
+                return;
+            }
+
+            // All good — trigger native browser download via real <a> click
             const downloadUrl = storageService.getSharedDownloadUrl(
                 token,
                 password || undefined
             );
-            window.location.href = downloadUrl;
+            triggerNativeDownload(downloadUrl);
             setDownloadSuccess(true);
         } catch (err) {
             setDownloadError('general');
