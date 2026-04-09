@@ -4359,12 +4359,13 @@ seminarsController.get(
 
       // Participants = all registered + attended today (still active for today's session)
       const registered = formattedPlatform.filter(a => !isAttendedBeforeToday(a));
-      // Attended = attended before today (previous days)
-      const attended = [...formattedPlatform.filter(a => isAttendedBeforeToday(a)), ...formattedGuests.filter(g => {
-        const gDate = new Date(g.attendedAt);
-        gDate.setHours(0, 0, 0, 0);
-        return gDate < today;
-      })];
+      // Attended = attended before today (previous days) + ALL guests (guests are always attended)
+      // Note: guests are excluded from `registered` list (which is platform-only),
+      // so we include them all here to make sure they appear in the UI.
+      const attended = [
+        ...formattedPlatform.filter(a => isAttendedBeforeToday(a)),
+        ...formattedGuests,
+      ];
 
       res.status(200).json({
         success: true,
