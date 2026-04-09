@@ -24,6 +24,12 @@ export const userServiceFactory = (token) => {
     forgetPassword: (data) => {
       return requester.post(`${apiUrl}/auth/request-reset-password`, data);
     },
+    acceptInvitation: (data) => {
+      return requester.post(`${apiUrl}/auth/accept-invitation`, data);
+    },
+    getInvitation: (token) => {
+      return requester.get(`${apiUrl}/auth/invitation/${token}`);
+    },
     setUserData: (data) => {
       return requester.post(`${apiUrl}/user/details`, data);
     },

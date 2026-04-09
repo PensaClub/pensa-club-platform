@@ -298,6 +298,37 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  // =========================================================
+  //                    GUEST INVITATION
+  // =========================================================
+
+  const getInvitation = async (token) => {
+    try {
+      const response = await userService.getInvitation(token);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const acceptInvitation = async (data) => {
+    setIsLoading(true);
+    try {
+      const response = await userService.acceptInvitation(data);
+      // Auto-login — same pattern as onLoginSubmit
+      handleAuthChange({ token: response.token, email: response.user.email, enabled: response.user.enabled });
+      setProfileData(response.user);
+      setIsAdmin(response.user.role === 'admin');
+      setIsModerator(response.user.role === 'moderator');
+      setIsMentor(response.user.isMentor === true);
+      return response;
+    } catch (error) {
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const onForgetPasswordSubmit = async (data) => {
     try {
       setIsLoading(true);
@@ -449,6 +480,8 @@ export const UserProvider = ({ children }) => {
     profileData,
     addressId,
     onForgetPasswordSubmit,
+    getInvitation,
+    acceptInvitation,
     onSuggestSubmit,
     isUserAdmin,
     isAdmin,

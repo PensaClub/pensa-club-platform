@@ -168,6 +168,8 @@ module.exports = (sequelize, DataTypes) => {
             },
             reset_token: DataTypes.STRING,
             token_expiration: DataTypes.DATE,
+            invitation_token: DataTypes.STRING,
+            invitation_expiration: DataTypes.DATE,
             role: {
                 type: DataTypes.STRING,
                 values: ['admin', 'moderator', 'user', 'guest', 'limited', 'mentor', 'student'],

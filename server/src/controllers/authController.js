@@ -106,6 +106,7 @@ const convertGuestAttendance = async (userId, email) => {
 };
 
 const { loginSchema, registerSchema, googleAuthSchema, resetRequestSchema, resetPasswordSchema } = require('../schemas/userAccount.schema');
+const { acceptInvitationSchema } = require('../schemas/invitation.schema');
 
 const userInclude = [
     {
@@ -327,6 +328,133 @@ authController.post('/reset-password', async (req, res, next) => {
         user.password = newHashedPassword;
         await user.save();
         return res.status(200).json({ message: 'Password reset was successful.' });
+    } catch (err) {
+        next(err);
+    }
+});
+
+// ===============================
+// GET /api/auth/invitation/:token
+// Validate invitation token and return guest info for the AcceptInvitation page
+// ===============================
+authController.get('/invitation/:token', async (req, res, next) => {
+    try {
+        const { token } = req.params;
+        if (!token) {
+            return res.status(400).json({ message: 'Token is required.' });
+        }
+
+        const user = await user_account.findOne({
+            where: { invitation_token: token },
+            include: [{ model: user_details, as: 'details', attributes: ['firstName', 'lastName'] }],
+        });
+
+        if (!user) {
+            return res.status(404).json({ message: 'Invalid or already used invitation.' });
+        }
+
+        if (!user.invitation_expiration || user.invitation_expiration.getTime() < Date.now()) {
+            return res.status(400).json({ message: 'Invitation has expired.' });
+        }
+
+        // Find the most recent seminar this user was registered for via the invitation flow
+        // We look for the latest student_seminar record for this user
+        const { student, student_seminar, seminar: seminarModel } = require('../sequelize/models/index');
+        let seminarTitle = null;
+        try {
+            const studentRec = await student.findOne({ where: { userId: user.id }, attributes: ['id'] });
+            if (studentRec) {
+                const latestReg = await student_seminar.findOne({
+                    where: { studentId: studentRec.id },
+                    order: [['createdAt', 'DESC']],
+                    include: [{ model: seminarModel, as: 'seminar', attributes: ['title'] }],
+                });
+                if (latestReg?.seminar?.title) {
+                    seminarTitle = latestReg.seminar.title;
+                }
+            }
+        } catch (e) {
+            console.error('Could not load seminar title for invitation:', e.message);
+        }
+
+        return res.status(200).json({
+            firstName: user.details?.firstName || '',
+            lastName: user.details?.lastName || '',
+            email: user.email,
+            expiresAt: user.invitation_expiration,
+            seminarTitle,
+        });
+    } catch (err) {
+        next(err);
+    }
+});
+
+// ===============================
+// POST /api/auth/accept-invitation
+// Set password for invited user and auto-login
+// ===============================
+authController.post('/accept-invitation', async (req, res, next) => {
+    try {
+        const { token, newPassword } = acceptInvitationSchema.parse(req.body);
+
+        const user = await user_account.findOne({
+            where: { invitation_token: token },
+            include: userInclude,
+        });
+
+        if (!user) {
+            return res.status(404).json({ message: 'Invalid or already used invitation.' });
+        }
+
+        if (!user.invitation_expiration || user.invitation_expiration.getTime() < Date.now()) {
+            return res.status(400).json({ message: 'Invitation has expired.' });
+        }
+
+        // Set password, clear invitation, mark as finished
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        user.password = hashedPassword;
+        user.invitation_token = null;
+        user.invitation_expiration = null;
+        user.finished = true;
+        await user.save();
+
+        // Build login response (same shape as /login)
+        const data = {
+            email: user.email,
+            role: user.role,
+            enabled: user.finished,
+            hasPassword: !!user.password,
+            roleChangeComment: user.roleChangeComment,
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt,
+            isGoogleUser: user.isGoogleUser,
+            isMentor: user.isMentor || false,
+            ads: user.ads,
+        };
+
+        if (user.dataValues.details) {
+            const details = user.dataValues.details.dataValues;
+            details.age = ageCalculate(details.birthDate);
+            data.details = details;
+        }
+
+        const { token: accessToken } = tokenGenerator('access', user);
+        const { token: refreshJwtToken, refreshTokenId, expiryDate } = tokenGenerator('refresh', user);
+
+        await refreshToken.create({ userId: user.dataValues.id, token: refreshTokenId, expiryDate });
+
+        res.cookie('refreshJwtToken', refreshJwtToken, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'strict',
+            maxAge: expiryDate - Date.now(),
+        });
+
+        return res.status(200).json({
+            message: 'Invitation accepted. You are now logged in.',
+            user: data,
+            token: accessToken,
+        });
     } catch (err) {
         next(err);
     }
