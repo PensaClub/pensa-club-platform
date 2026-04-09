@@ -1178,6 +1178,15 @@
     "alreadyAttendedTitle": "Participant is already registered",
     "alreadyAttendedText": "This user is already in the list of registered participants for this seminar and has received their credits. The duplicate guest record has been cleaned up.",
     "alreadyAttendedNoAction": "No further action required.",
+    "errors": {
+      "firstNameRequired": "First name is required.",
+      "firstNameMin": "First name must be at least 3 characters.",
+      "firstNameMax": "First name must be at most 20 characters.",
+      "lastNameRequired": "Last name is required.",
+      "lastNameMin": "Last name must be at least 3 characters.",
+      "lastNameMax": "Last name must be at most 20 characters.",
+      "emailInvalid": "Invalid email (missing @)."
+    },
     "conflictTitle": "This email already has an account",
     "conflictText1": "The email",
     "conflictText2": "is registered in Pensa Club as",

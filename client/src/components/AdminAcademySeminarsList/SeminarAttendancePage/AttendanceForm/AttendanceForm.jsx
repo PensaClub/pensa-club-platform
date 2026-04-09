@@ -35,6 +35,7 @@ const AttendanceForm = ({ seminar }) => {
     const [guestPhone, setGuestPhone] = useState('');
     const [guestEmail, setGuestEmail] = useState('');
     const [isAddingGuest, setIsAddingGuest] = useState(false);
+    const [guestErrors, setGuestErrors] = useState({ firstName: '', lastName: '', email: '' });
 
     // Separate lists: registered (not attended) and attended
     const [participants, setParticipants] = useState([]); // registered, not yet attended
@@ -137,10 +138,38 @@ const AttendanceForm = ({ seminar }) => {
         setGuestLastName('');
         setGuestPhone('');
         setGuestEmail('');
+        setGuestErrors({ firstName: '', lastName: '', email: '' });
+    };
+
+    const validateGuestForm = () => {
+        const errors = { firstName: '', lastName: '', email: '' };
+
+        if (!guestFirstName.trim()) {
+            errors.firstName = t('attendanceForm.errors.firstNameRequired', 'Името е задължително.');
+        } else if (guestFirstName.trim().length < 3) {
+            errors.firstName = t('attendanceForm.errors.firstNameMin', 'Името трябва да е поне 3 символа.');
+        } else if (guestFirstName.trim().length > 20) {
+            errors.firstName = t('attendanceForm.errors.firstNameMax', 'Името трябва да е до 20 символа.');
+        }
+
+        if (!guestLastName.trim()) {
+            errors.lastName = t('attendanceForm.errors.lastNameRequired', 'Фамилията е задължителна.');
+        } else if (guestLastName.trim().length < 3) {
+            errors.lastName = t('attendanceForm.errors.lastNameMin', 'Фамилията трябва да е поне 3 символа.');
+        } else if (guestLastName.trim().length > 20) {
+            errors.lastName = t('attendanceForm.errors.lastNameMax', 'Фамилията трябва да е до 20 символа.');
+        }
+
+        if (guestEmail.trim() && !guestEmail.includes('@')) {
+            errors.email = t('attendanceForm.errors.emailInvalid', 'Невалиден имейл (липсва @).');
+        }
+
+        setGuestErrors(errors);
+        return !errors.firstName && !errors.lastName && !errors.email;
     };
 
     const handleAddGuest = async () => {
-        if (!guestFirstName.trim() || !guestLastName.trim()) return;
+        if (!validateGuestForm()) return;
         setIsAddingGuest(true);
         try {
             const result = await bulkMixedAttendance(seminar.id, {
@@ -373,29 +402,63 @@ const AttendanceForm = ({ seminar }) => {
 
                         <div className="satf-guest-form">
                             <div className="satf-guest-row">
-                                <input
-                                    type="text"
-                                    value={guestFirstName}
-                                    onChange={(e) => setGuestFirstName(e.target.value)}
-                                    placeholder={t('attendanceForm.firstName', 'Име') + ' *'}
-                                    className="satf-guest-input"
-                                />
-                                <input
-                                    type="text"
-                                    value={guestLastName}
-                                    onChange={(e) => setGuestLastName(e.target.value)}
-                                    placeholder={t('attendanceForm.lastName', 'Фамилия') + ' *'}
-                                    className="satf-guest-input"
-                                />
+                                <div className="satf-guest-field">
+                                    <input
+                                        type="text"
+                                        value={guestFirstName}
+                                        onChange={(e) => {
+                                            setGuestFirstName(e.target.value);
+                                            if (guestErrors.firstName) setGuestErrors(prev => ({ ...prev, firstName: '' }));
+                                        }}
+                                        onBlur={() => {
+                                            const v = guestFirstName.trim();
+                                            if (!v) setGuestErrors(prev => ({ ...prev, firstName: t('attendanceForm.errors.firstNameRequired', 'Името е задължително.') }));
+                                            else if (v.length < 3) setGuestErrors(prev => ({ ...prev, firstName: t('attendanceForm.errors.firstNameMin', 'Името трябва да е поне 3 символа.') }));
+                                            else if (v.length > 20) setGuestErrors(prev => ({ ...prev, firstName: t('attendanceForm.errors.firstNameMax', 'Името трябва да е до 20 символа.') }));
+                                        }}
+                                        placeholder={t('attendanceForm.firstName', 'Име') + ' *'}
+                                        className={`satf-guest-input ${guestErrors.firstName ? 'satf-guest-input-error' : ''}`}
+                                    />
+                                    {guestErrors.firstName && <span className="satf-guest-error">{guestErrors.firstName}</span>}
+                                </div>
+                                <div className="satf-guest-field">
+                                    <input
+                                        type="text"
+                                        value={guestLastName}
+                                        onChange={(e) => {
+                                            setGuestLastName(e.target.value);
+                                            if (guestErrors.lastName) setGuestErrors(prev => ({ ...prev, lastName: '' }));
+                                        }}
+                                        onBlur={() => {
+                                            const v = guestLastName.trim();
+                                            if (!v) setGuestErrors(prev => ({ ...prev, lastName: t('attendanceForm.errors.lastNameRequired', 'Фамилията е задължителна.') }));
+                                            else if (v.length < 3) setGuestErrors(prev => ({ ...prev, lastName: t('attendanceForm.errors.lastNameMin', 'Фамилията трябва да е поне 3 символа.') }));
+                                            else if (v.length > 20) setGuestErrors(prev => ({ ...prev, lastName: t('attendanceForm.errors.lastNameMax', 'Фамилията трябва да е до 20 символа.') }));
+                                        }}
+                                        placeholder={t('attendanceForm.lastName', 'Фамилия') + ' *'}
+                                        className={`satf-guest-input ${guestErrors.lastName ? 'satf-guest-input-error' : ''}`}
+                                    />
+                                    {guestErrors.lastName && <span className="satf-guest-error">{guestErrors.lastName}</span>}
+                                </div>
                             </div>
                             <div className="satf-guest-row">
-                                <input
-                                    type="email"
-                                    value={guestEmail}
-                                    onChange={(e) => setGuestEmail(e.target.value)}
-                                    placeholder={t('attendanceForm.email', 'Имейл (незадължителен)')}
-                                    className="satf-guest-input"
-                                />
+                                <div className="satf-guest-field">
+                                    <input
+                                        type="email"
+                                        value={guestEmail}
+                                        onChange={(e) => {
+                                            setGuestEmail(e.target.value);
+                                            if (guestErrors.email) setGuestErrors(prev => ({ ...prev, email: '' }));
+                                        }}
+                                        onBlur={() => {
+                                            const v = guestEmail.trim();
+                                            if (v && !v.includes('@')) setGuestErrors(prev => ({ ...prev, email: t('attendanceForm.errors.emailInvalid', 'Невалиден имейл (липсва @).') }));
+                                        }}
+                                        placeholder={t('attendanceForm.email', 'Имейл (незадължителен)')}
+                                        className={`satf-guest-input ${guestErrors.email ? 'satf-guest-input-error' : ''}`}
+                                    />
+                                    {guestErrors.email && <span className="satf-guest-error">{guestErrors.email}</span>}
+                                </div>
                             </div>
                             <div className="satf-guest-row">
                                 <input
@@ -408,7 +471,7 @@ const AttendanceForm = ({ seminar }) => {
                                 <button
                                     className="satf-btn-add-guest"
                                     onClick={handleAddGuest}
-                                    disabled={!guestFirstName.trim() || !guestLastName.trim() || isAddingGuest}
+                                    disabled={isAddingGuest}
                                 >
                                     {isAddingGuest
                                         ? <Loader2 size={16} className="satf-spin" />

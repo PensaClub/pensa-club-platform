@@ -1178,6 +1178,15 @@
     "alreadyAttendedTitle": "Teilnehmer ist bereits registriert",
     "alreadyAttendedText": "Dieser Benutzer ist bereits in der Liste der registrierten Teilnehmer für dieses Seminar und hat seine Credits erhalten. Der doppelte Gast-Eintrag wurde entfernt.",
     "alreadyAttendedNoAction": "Keine weitere Aktion erforderlich.",
+    "errors": {
+      "firstNameRequired": "Vorname ist erforderlich.",
+      "firstNameMin": "Vorname muss mindestens 3 Zeichen lang sein.",
+      "firstNameMax": "Vorname darf maximal 20 Zeichen lang sein.",
+      "lastNameRequired": "Nachname ist erforderlich.",
+      "lastNameMin": "Nachname muss mindestens 3 Zeichen lang sein.",
+      "lastNameMax": "Nachname darf maximal 20 Zeichen lang sein.",
+      "emailInvalid": "Ungültige E-Mail (fehlendes @)."
+    },
     "conflictTitle": "Diese E-Mail ist bereits registriert",
     "conflictText1": "Die E-Mail",
     "conflictText2": "ist in Pensa Club registriert als",
