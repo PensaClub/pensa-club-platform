@@ -39,6 +39,7 @@ const forumAdminController = require('./controllers/forumAdminController');
 const storageController = require('./controllers/storageController');
 const sharedLinksController = require('./controllers/sharedLinksController');
 const userSharedFilesController = require('./controllers/userSharedFilesController');
+const userManagementController = require('./controllers/userManagementController');
 
 router.use('/auth', authController);
 router.use('/user/shared-files', userSharedFilesController);
@@ -71,6 +72,7 @@ router.use('/academy/materials', academyMaterialsController);
 router.use('/academy/my', academyMyController);
 router.use('/admin/site-settings', siteSettingsController);
 router.use('/admin/ip-management', ipManagementController);
+router.use('/admin', userManagementController);
 router.use('/useful-links', usefulLinksController);
 router.use('/fact-check', factCheckController);
 router.use('/error-logging', errorLoggingController);

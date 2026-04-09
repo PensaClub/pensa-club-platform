@@ -311,6 +311,15 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  const getResetTokenInfo = async (token) => {
+    try {
+      const response = await userService.getResetTokenInfo(token);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };
+
   const acceptInvitation = async (data) => {
     setIsLoading(true);
     try {
@@ -482,6 +491,7 @@ export const UserProvider = ({ children }) => {
     onForgetPasswordSubmit,
     getInvitation,
     acceptInvitation,
+    getResetTokenInfo,
     onSuggestSubmit,
     isUserAdmin,
     isAdmin,

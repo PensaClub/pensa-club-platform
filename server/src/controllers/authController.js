@@ -290,8 +290,11 @@ authController.post('/request-reset-password', async (req, res, next) => {
 
 authController.post('/reset-password', async (req, res, next) => {
     try {
-        const { oldPassword, newPassword, reNewPassword, tokenType, token } = resetPasswordSchema.parse(req.body);
+        const { oldPassword, newPassword, reNewPassword, tokenType, token, smsCode } = resetPasswordSchema.parse(req.body);
+        const { logAdminAction } = require('../utils/auditLog');
         let user;
+        // Captured BEFORE clearing reset_initiated_by_admin_id, so we can log success at the end
+        let resetInitiatedByAdminId = null;
 
         if (tokenType === 'reset') {
             user = await user_account.findOne({ where: { reset_token: token } });
@@ -301,8 +304,64 @@ authController.post('/reset-password', async (req, res, next) => {
             if (user.token_expiration.getTime() < Date.now()) {
                 return res.status(400).json({ message: 'Reset token has expired.' });
             }
+
+            // Determine if this reset was admin-initiated (for audit log decision)
+            const adminInitiatedById = user.reset_initiated_by_admin_id;
+            const isAdminInitiated = !!adminInitiatedById;
+            resetInitiatedByAdminId = adminInitiatedById;
+
+            // SMS code validation (admin-initiated reset only — has reset_sms_code_hash)
+            if (user.reset_sms_code_hash) {
+                if (!smsCode) {
+                    return res.status(400).json({ message: 'SMS code is required.' });
+                }
+                if ((user.reset_sms_attempts || 0) >= 5) {
+                    if (isAdminInitiated) {
+                        await logAdminAction({
+                            actionType: 'reset_failed',
+                            adminId: adminInitiatedById,
+                            targetUserId: user.id,
+                            targetEmail: user.email,
+                            req,
+                            details: { reason: 'too_many_sms_attempts' },
+                            success: false,
+                        });
+                    }
+                    return res.status(429).json({
+                        message: 'Too many invalid attempts. Please request a new reset link.',
+                    });
+                }
+                const smsValid = await bcrypt.compare(smsCode, user.reset_sms_code_hash);
+                if (!smsValid) {
+                    user.reset_sms_attempts = (user.reset_sms_attempts || 0) + 1;
+                    await user.save();
+                    if (isAdminInitiated) {
+                        await logAdminAction({
+                            actionType: 'reset_failed',
+                            adminId: adminInitiatedById,
+                            targetUserId: user.id,
+                            targetEmail: user.email,
+                            req,
+                            details: {
+                                reason: 'invalid_sms_code',
+                                attemptsUsed: user.reset_sms_attempts,
+                                attemptsLeft: Math.max(0, 5 - user.reset_sms_attempts),
+                            },
+                            success: false,
+                        });
+                    }
+                    return res.status(401).json({
+                        message: 'Invalid SMS code.',
+                        attemptsLeft: Math.max(0, 5 - user.reset_sms_attempts),
+                    });
+                }
+            }
+
             user.reset_token = null;
             user.token_expiration = null;
+            user.reset_sms_code_hash = null;
+            user.reset_sms_attempts = 0;
+            user.reset_initiated_by_admin_id = null; // clear after successful reset
         }
 
         if (tokenType === 'jwt') {
@@ -327,7 +386,58 @@ authController.post('/reset-password', async (req, res, next) => {
         const newHashedPassword = await bcrypt.hash(newPassword, 10);
         user.password = newHashedPassword;
         await user.save();
+
+        // Only log admin-initiated resets to the audit log.
+        // Self-initiated forgot-password resets do NOT pollute the audit log.
+        if (tokenType === 'reset' && resetInitiatedByAdminId) {
+            await logAdminAction({
+                actionType: 'reset_completed',
+                adminId: resetInitiatedByAdminId,
+                targetUserId: user.id,
+                targetEmail: user.email,
+                req,
+                success: true,
+            });
+        }
+
         return res.status(200).json({ message: 'Password reset was successful.' });
+    } catch (err) {
+        next(err);
+    }
+});
+
+// ===============================
+// GET /api/auth/reset-info/:token
+// Validate reset token and return info for the ResetPasswordPage UI
+// (used to decide whether to show SMS code field)
+// ===============================
+authController.get('/reset-info/:token', async (req, res, next) => {
+    try {
+        const { token } = req.params;
+        if (!token) {
+            return res.status(400).json({ message: 'Token is required.' });
+        }
+
+        const user = await user_account.findOne({
+            where: { reset_token: token },
+            attributes: ['id', 'email', 'token_expiration', 'reset_sms_code_hash', 'reset_sms_attempts'],
+        });
+
+        if (!user) {
+            return res.status(404).json({ message: 'Invalid or already used reset token.' });
+        }
+
+        if (!user.token_expiration || user.token_expiration.getTime() < Date.now()) {
+            return res.status(400).json({ message: 'Reset token has expired.' });
+        }
+
+        return res.status(200).json({
+            valid: true,
+            email: user.email,
+            requiresSms: !!user.reset_sms_code_hash,
+            attemptsLeft: Math.max(0, 5 - (user.reset_sms_attempts || 0)),
+            expiresAt: user.token_expiration,
+        });
     } catch (err) {
         next(err);
     }
