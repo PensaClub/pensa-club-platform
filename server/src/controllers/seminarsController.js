@@ -1181,6 +1181,260 @@ seminarsController.get(
 );
 
 // ===============================
+// POST /api/academy/seminars/admin/guests/:id/invite
+// Регистрирай гост — пълна конверсия от гост към student + invitation email
+// Вариант X: veднага създава student + student_seminar + трие guest_attendance
+// Сценарий A: нов user → създава user_account (role='student', invitation_token) + праща имейл
+// Сценарий B: съществуващ user → намира/създава student, upgrade role, създава student_seminar
+// ===============================
+seminarsController.post(
+  '/admin/guests/:id/invite',
+  isAuth,
+  rbac.checkPermission('seminar', 'update'),
+  async (req, res, next) => {
+    const uuid = require('uuid');
+    const { seminar_guest_attendance } = require('../sequelize/models/index');
+    const { sendGuestInvitationEmail } = require('../utils/zohoEmails');
+
+    const guestAttendanceId = parseInt(req.params.id);
+    if (Number.isNaN(guestAttendanceId)) {
+      return res.status(400).json({ success: false, message: 'Invalid guest attendance id' });
+    }
+
+    const transaction = await sequelize.transaction();
+
+    try {
+      // 1. Load guest attendance record
+      const guestRecord = await seminar_guest_attendance.findByPk(guestAttendanceId, { transaction });
+      if (!guestRecord) {
+        await transaction.rollback();
+        return res.status(404).json({ success: false, message: 'Guest attendance record not found' });
+      }
+
+      if (!guestRecord.guestEmail) {
+        await transaction.rollback();
+        return res.status(400).json({ success: false, message: 'Guest has no email — cannot register' });
+      }
+
+      // NOTE: No strict check on convertedToUserId here — we always do a fresh check
+      // against the current state of the database. This ensures fail-safe behavior
+      // for legacy guest records where convertedToUserId may have been set by other
+      // flows (e.g. self-registration via convertGuestAttendance helper).
+
+      // 2. Load seminar (for credits and title)
+      const seminarData = await seminar.findByPk(guestRecord.seminarId, {
+        attributes: ['id', 'title', 'creditsForAttendance', 'creditsForParticipation'],
+        transaction,
+      });
+      if (!seminarData) {
+        await transaction.rollback();
+        return res.status(404).json({ success: false, message: 'Seminar not found' });
+      }
+
+      // Calculate earned credits based on participationLevel
+      const participationLevel = guestRecord.participationLevel || 'passive';
+      const calculateCredits = (isPrivileged) => {
+        if (isPrivileged) return 0;
+        let credits = seminarData.creditsForAttendance || 0;
+        if (participationLevel === 'active') {
+          credits += seminarData.creditsForParticipation || 0;
+        } else if (participationLevel === 'moderate') {
+          credits += Math.floor((seminarData.creditsForParticipation || 0) / 2);
+        }
+        return credits;
+      };
+
+      // 3. Check if user with this email already exists
+      const existingUser = await user_account.findOne({
+        where: { email: guestRecord.guestEmail },
+        transaction,
+      });
+
+      let targetUserId;
+      let scenario;
+      let emailSent = false;
+      let roleUpgraded = false;
+
+      if (existingUser) {
+        // ───── Сценарий B: Съществуващ user ─────
+        targetUserId = existingUser.id;
+
+        // Check privilege
+        const privilegedRoles = ['admin', 'moderator', 'mentor'];
+        const isPrivileged = privilegedRoles.includes(existingUser.role);
+
+        // Find or create student record
+        let studentRecord = await student.findOne({ where: { userId: existingUser.id }, transaction });
+        if (!studentRecord) {
+          studentRecord = await student.create({ userId: existingUser.id, status: 'active' }, { transaction });
+        }
+
+        // Check for existing student_seminar for this seminar — BEFORE creating anything
+        const existingReg = await student_seminar.findOne({
+          where: { seminarId: seminarData.id, studentId: studentRecord.id },
+          transaction,
+        });
+
+        if (existingReg && existingReg.attended) {
+          // Вече е регистриран и присъствал → просто изтриваме дублиращия guest запис
+          // НЕ даваме нови кредити, НЕ пипаме role-а
+          scenario = 'already_registered';
+        } else {
+          scenario = 'existing_user';
+
+          // Upgrade role if 'user' or 'guest'
+          if (['user', 'guest'].includes(existingUser.role)) {
+            await existingUser.update({ role: 'student' }, { transaction });
+            roleUpgraded = true;
+          }
+
+          const earnedCredits = calculateCredits(isPrivileged);
+
+          if (!existingReg) {
+            await student_seminar.create(
+              {
+                seminarId: seminarData.id,
+                studentId: studentRecord.id,
+                status: 'approved',
+                attended: true,
+                attendedAt: new Date(),
+                participationLevel,
+                earnedCredits,
+                approvedBy: req.user.userId,
+                approvedAt: new Date(),
+              },
+              { transaction }
+            );
+          } else if (!existingReg.attended) {
+            // Registered but not yet attended — mark as attended + give credits
+            await existingReg.update(
+              {
+                attended: true,
+                attendedAt: new Date(),
+                participationLevel,
+                earnedCredits,
+              },
+              { transaction }
+            );
+          }
+        }
+      } else {
+        // ───── Сценарий A: Нов user ─────
+        scenario = 'new_user';
+
+        const invitationToken = uuid.v4();
+        const invitationExpiration = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days
+
+        const newUser = await user_account.create(
+          {
+            email: guestRecord.guestEmail,
+            password: null,
+            role: 'student',
+            finished: false,
+            invitation_token: invitationToken,
+            invitation_expiration: invitationExpiration,
+          },
+          { transaction }
+        );
+
+        // Create user_details — explicitly pass null for array fields
+        // because Sequelize validators treat undefined as "not array" and throw
+        await user_details.create(
+          {
+            userAccountsId: newUser.id,
+            firstName: guestRecord.guestFirstName || null,
+            lastName: guestRecord.guestLastName || null,
+            phoneNumber: guestRecord.guestPhone || null,
+            workOptions: null,
+            skills: null,
+            interestOptions: null,
+          },
+          { transaction }
+        );
+
+        // Create student record
+        const studentRecord = await student.create(
+          { userId: newUser.id, status: 'active' },
+          { transaction }
+        );
+
+        // Create student_seminar record
+        const earnedCredits = calculateCredits(false);
+        await student_seminar.create(
+          {
+            seminarId: seminarData.id,
+            studentId: studentRecord.id,
+            status: 'approved',
+            attended: true,
+            attendedAt: new Date(),
+            participationLevel,
+            earnedCredits,
+            approvedBy: req.user.userId,
+            approvedAt: new Date(),
+          },
+          { transaction }
+        );
+
+        targetUserId = newUser.id;
+
+        // Send invitation email AFTER commit (to avoid sending email if transaction fails)
+        // We'll set a flag and send after commit
+        res.locals.pendingInvitation = {
+          email: guestRecord.guestEmail,
+          firstName: guestRecord.guestFirstName || '',
+          lastName: guestRecord.guestLastName || '',
+          seminarTitle: seminarData.title,
+          invitationToken,
+          expiresAt: invitationExpiration,
+        };
+      }
+
+      // 4. Delete guest attendance record (no longer needed — user is now a proper student)
+      const previousEmail = guestRecord.guestEmail;
+      await guestRecord.destroy({ transaction });
+
+      // 5. Commit transaction
+      await transaction.commit();
+
+      // 6. Send invitation email (only for new user, after successful commit)
+      if (scenario === 'new_user' && res.locals.pendingInvitation) {
+        try {
+          await sendGuestInvitationEmail(res.locals.pendingInvitation);
+          emailSent = true;
+        } catch (emailErr) {
+          console.error('❌ [REGISTER GUEST] Failed to send invitation email:', emailErr.message);
+          emailSent = false;
+        }
+      }
+
+      // 7. Return success response
+      let message;
+      if (scenario === 'new_user') {
+        message = 'Guest successfully registered and invited';
+      } else if (scenario === 'existing_user') {
+        message = 'Existing user linked and registered as student';
+      } else if (scenario === 'already_registered') {
+        message = 'User was already registered for this seminar — guest record cleaned up';
+      }
+
+      return res.status(200).json({
+        success: true,
+        message,
+        scenario,
+        emailSent,
+        userId: targetUserId,
+        existingUserEmail: (scenario === 'existing_user' || scenario === 'already_registered') ? previousEmail : undefined,
+        roleUpgraded,
+      });
+    } catch (err) {
+      try { await transaction.rollback(); } catch { /* ignore */ }
+      console.error('❌ [REGISTER GUEST] Error:', err);
+      next(err);
+    }
+  }
+);
+
+// ===============================
 // POST /api/academy/seminars/:id/attendance-list
 // Качване на физически списък
 // ===============================
@@ -3744,6 +3998,7 @@ seminarsController.post(
 
       let markedCount = 0;
       let guestCount = 0;
+      const existingUserConflicts = [];
 
       // Платформени потребители
       if (Array.isArray(platformAttendees) && platformAttendees.length > 0) {
@@ -3883,6 +4138,31 @@ seminarsController.post(
         const { seminar_guest_attendance } = require('../sequelize/models/index');
 
         for (const guest of guests) {
+          // Проверка дали този имейл вече е регистриран потребител в платформата
+          if (guest.email && guest.email.trim()) {
+            const existingUser = await user_account.findOne({
+              where: { email: guest.email.trim() },
+              attributes: ['id', 'email'],
+              include: [{
+                model: user_details,
+                as: 'details',
+                attributes: ['firstName', 'lastName'],
+                required: false,
+              }],
+            });
+            if (existingUser) {
+              existingUserConflicts.push({
+                email: existingUser.email,
+                userId: existingUser.id,
+                firstName: existingUser.details?.firstName || guest.firstName,
+                lastName: existingUser.details?.lastName || guest.lastName,
+                attemptedFirstName: guest.firstName,
+                attemptedLastName: guest.lastName,
+              });
+              continue; // Skip creating guest record — admin will decide via modal
+            }
+          }
+
           // Проверка дали гост с това име вече е бил записан
           const existingGuest = await seminar_guest_attendance.findOne({
             where: {
@@ -3985,6 +4265,7 @@ seminarsController.post(
           guestsAdded: guestCount,
           totalAttended: attendedCount + guestTotal,
         },
+        existingUserConflicts,
       });
     } catch (err) {
       console.error('❌ [BULK MIXED ATTENDANCE] Error:', err);
@@ -4057,10 +4338,11 @@ seminarsController.get(
           type: 'guest',
           id: data.id,
           name: `${data.guestFirstName} ${data.guestLastName}`,
-          email: data.guestEmail || null, // НОВО
+          email: data.guestEmail || null,
           phone: data.guestPhone,
           participationLevel: data.participationLevel,
           attendedAt: data.createdAt,
+          convertedToUserId: data.convertedToUserId || null,
         };
       });
 

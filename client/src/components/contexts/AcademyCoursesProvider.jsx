@@ -1168,6 +1168,21 @@ export const AcademyCoursesProvider = ({ children }) => {
     }
   }, [isAdmin, isMentor]);
 
+  const inviteGuestToRegister = useCallback(async (guestAttendanceId) => {
+    if (!isAdmin && !isMentor) {
+      toast.error('Нямате права за тази операция');
+      return null;
+    }
+    try {
+      const result = await coursesService.inviteGuestToRegister(guestAttendanceId);
+      return result;
+    } catch (error) {
+      const msg = error?.response?.data?.message || 'Грешка при регистрация на гост';
+      toast.error(msg);
+      throw error;
+    }
+  }, [isAdmin, isMentor]);
+
   // =========================================================
   //                    SEMINAR REGISTRATION
   // =========================================================
@@ -2460,6 +2475,7 @@ export const AcademyCoursesProvider = ({ children }) => {
     completeSeminar,
     getAdminSeminarStatistics,
     getSeminarAttendanceDetail,
+    inviteGuestToRegister,
     searchSeminarAttendee,
     sendSeminarEmail,
     getAttendanceLists,

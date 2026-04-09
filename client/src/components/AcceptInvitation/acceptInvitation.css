@@ -1,0 +1,609 @@
+/* src/components/AcceptInvitation/acceptInvitation.css */
+/* Prefix: aci- */
+
+/* =========================================================
+   WRAPPER
+   ========================================================= */
+
+.aci-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+    background: linear-gradient(135deg, #1a1a1e 0%, #222226 100%);
+    font-family: 'Montserrat', sans-serif;
+}
+
+.aci-wrapper * {
+    box-sizing: border-box;
+}
+
+.aci-wrapper span,
+.aci-wrapper label,
+.aci-wrapper p,
+.aci-wrapper input {
+    font-size: inherit;
+}
+
+.aci-card {
+    width: 100%;
+    max-width: 460px;
+    background: #26262c;
+    border: 1px solid #3a3a3e;
+    border-radius: 16px;
+    padding: 32px 28px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+.aci-card-center {
+    text-align: center;
+}
+
+.aci-card-error {
+    text-align: center;
+}
+
+/* =========================================================
+   LOADING STATE
+   ========================================================= */
+
+.aci-loading-icon {
+    color: #FF7A3D;
+    margin-bottom: 16px;
+}
+
+.aci-loading-text {
+    color: #bbb;
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+.aci-spin {
+    animation: aci-spin 1s linear infinite;
+}
+
+@keyframes aci-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.aci-header {
+    text-align: center;
+    margin-bottom: 24px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.aci-logo {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 12px;
+    box-shadow: 0 4px 16px rgba(255, 122, 61, 0.25);
+    border: 2px solid rgba(255, 122, 61, 0.3);
+}
+
+.aci-brand {
+    margin: 0 0 4px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(135deg, #FF7A3D, #FF965B);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.aci-brand-subtitle {
+    margin: 0;
+    font-size: 0.8rem;
+    color: #888;
+    font-weight: 500;
+}
+
+/* =========================================================
+   WELCOME SECTION
+   ========================================================= */
+
+.aci-welcome {
+    margin-bottom: 20px;
+}
+
+.aci-title {
+    margin: 0 0 10px;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #eee;
+    line-height: 1.4;
+}
+
+.aci-seminar-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 10px 12px;
+    background: rgba(255, 122, 61, 0.08);
+    border-left: 3px solid #FF7A3D;
+    border-radius: 6px;
+    color: #ccc;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    margin: 0 0 12px;
+}
+
+.aci-seminar-info svg {
+    color: #FF7A3D;
+    flex-shrink: 0;
+    margin-top: 3px;
+}
+
+.aci-seminar-info strong {
+    color: #eee;
+    font-size: 0.82rem;
+}
+
+.aci-description {
+    color: #bbb;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.aci-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.aci-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.aci-label {
+    color: #ccc;
+    font-size: 0.78rem;
+    font-weight: 500;
+}
+
+.aci-input-wrap {
+    position: relative;
+}
+
+.aci-input {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1px solid #3a3a3e;
+    border-radius: 8px;
+    background: #1e1e22;
+    color: #eee;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.88rem;
+    outline: none;
+    transition: border-color 0.15s, background 0.15s;
+}
+
+.aci-input::placeholder {
+    color: #666;
+    font-size: 0.82rem;
+}
+
+.aci-input:focus {
+    border-color: #FF7A3D;
+    background: #222226;
+}
+
+.aci-input-readonly {
+    color: #888;
+    cursor: not-allowed;
+}
+
+.aci-input-wrap .aci-input {
+    padding-right: 40px;
+}
+
+.aci-toggle-pass {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: #888;
+    cursor: pointer;
+    transition: color 0.15s, background 0.15s;
+}
+
+.aci-toggle-pass:hover {
+    color: #FF7A3D;
+    background: rgba(255, 122, 61, 0.08);
+}
+
+/* =========================================================
+   TERMS
+   ========================================================= */
+
+.aci-terms {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    color: #aaa;
+    font-size: 0.78rem;
+    line-height: 1.5;
+    cursor: pointer;
+}
+
+.aci-terms input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    margin-top: 2px;
+    accent-color: #FF7A3D;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.aci-terms a {
+    color: #FF7A3D;
+    text-decoration: none;
+}
+
+.aci-terms a:hover {
+    text-decoration: underline;
+}
+
+/* =========================================================
+   ERROR MESSAGE
+   ========================================================= */
+
+.aci-form-error {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    border-radius: 8px;
+    color: #f87171;
+    font-size: 0.78rem;
+    line-height: 1.4;
+}
+
+.aci-form-error svg {
+    flex-shrink: 0;
+    color: #f87171;
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.aci-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    text-decoration: none;
+}
+
+.aci-btn span {
+    font-size: inherit;
+}
+
+.aci-btn-primary {
+    background: linear-gradient(135deg, #FF7A3D, #FF965B);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(255, 122, 61, 0.3);
+    margin-top: 4px;
+}
+
+.aci-btn-primary:hover:not(:disabled) {
+    background: linear-gradient(135deg, #FF6E2D, #FF8A4B);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(255, 122, 61, 0.4);
+}
+
+.aci-btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.aci-btn-secondary {
+    background: rgba(255, 255, 255, 0.06);
+    color: #ccc;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    margin-top: 16px;
+}
+
+.aci-btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+/* =========================================================
+   EXPIRY NOTICE
+   ========================================================= */
+
+.aci-expiry {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    color: #888;
+    font-size: 0.72rem;
+    font-style: italic;
+    margin: 4px 0 0;
+}
+
+.aci-expiry svg {
+    flex-shrink: 0;
+}
+
+/* =========================================================
+   ERROR STATE
+   ========================================================= */
+
+.aci-error-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: rgba(239, 68, 68, 0.12);
+    color: #f87171;
+    margin-bottom: 16px;
+}
+
+.aci-card-error .aci-title {
+    margin-bottom: 12px;
+}
+
+.aci-card-error .aci-description {
+    margin-bottom: 20px;
+    color: #aaa;
+}
+
+/* =========================================================
+   CONTACT BOX (error state)
+   ========================================================= */
+
+.aci-contact-box {
+    padding: 16px 20px;
+    background: rgba(255, 122, 61, 0.06);
+    border: 1px solid rgba(255, 122, 61, 0.2);
+    border-radius: 12px;
+    margin: 20px 0 0;
+    text-align: center;
+}
+
+.aci-contact-title {
+    margin: 0 0 12px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: #eee;
+}
+
+.aci-contact-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #FF7A3D;
+    text-decoration: none;
+    font-size: 0.85rem;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: background 0.15s;
+    margin: 0 4px;
+}
+
+.aci-contact-link:hover {
+    background: rgba(255, 122, 61, 0.1);
+}
+
+.aci-contact-link svg {
+    flex-shrink: 0;
+}
+
+/* =========================================================
+   FOOTER CONTACT (success state)
+   ========================================================= */
+
+.aci-footer-contact {
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    text-align: center;
+}
+
+.aci-footer-title {
+    margin: 0 0 10px;
+    color: #888;
+    font-size: 0.78rem;
+    font-weight: 500;
+}
+
+.aci-footer-contact .aci-contact-link {
+    font-size: 0.8rem;
+    padding: 4px 10px;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 480px) {
+    .aci-wrapper {
+        padding: 16px 12px;
+    }
+
+    .aci-card {
+        padding: 24px 20px;
+        border-radius: 12px;
+    }
+
+    .aci-brand {
+        font-size: 1.3rem;
+    }
+
+    .aci-title {
+        font-size: 1.05rem;
+    }
+
+    .aci-logo {
+        width: 60px;
+        height: 60px;
+    }
+
+    .aci-contact-box {
+        padding: 14px 12px;
+    }
+
+    .aci-contact-link {
+        display: flex;
+        justify-content: center;
+        margin: 4px auto;
+    }
+}
+
+/* =========================================================
+   LIGHT THEME
+   ========================================================= */
+
+[data-theme="light"] .aci-wrapper {
+    background: linear-gradient(135deg, #f5f3f0 0%, #faf9f6 100%);
+}
+
+[data-theme="light"] .aci-card {
+    background: #fff;
+    border-color: #e0ddd8;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+}
+
+[data-theme="light"] .aci-header {
+    border-bottom-color: #eae7e2;
+}
+
+[data-theme="light"] .aci-brand-subtitle {
+    color: #888;
+}
+
+[data-theme="light"] .aci-title {
+    color: #1a1a1e;
+}
+
+[data-theme="light"] .aci-seminar-info {
+    background: rgba(255, 122, 61, 0.06);
+    color: #555;
+}
+
+[data-theme="light"] .aci-seminar-info strong {
+    color: #1a1a1e;
+}
+
+[data-theme="light"] .aci-description {
+    color: #555;
+}
+
+[data-theme="light"] .aci-label {
+    color: #555;
+}
+
+[data-theme="light"] .aci-input {
+    background: #f9f8f6;
+    border-color: #d5d3cf;
+    color: #1a1a1e;
+}
+
+[data-theme="light"] .aci-input::placeholder {
+    color: #999;
+}
+
+[data-theme="light"] .aci-input:focus {
+    background: #fff;
+    border-color: #FF7A3D;
+}
+
+[data-theme="light"] .aci-input-readonly {
+    color: #888;
+}
+
+[data-theme="light"] .aci-toggle-pass {
+    color: #888;
+}
+
+[data-theme="light"] .aci-toggle-pass:hover {
+    color: #FF7A3D;
+    background: rgba(255, 122, 61, 0.06);
+}
+
+[data-theme="light"] .aci-terms {
+    color: #555;
+}
+
+[data-theme="light"] .aci-form-error {
+    background: rgba(239, 68, 68, 0.06);
+    border-color: rgba(239, 68, 68, 0.2);
+    color: #dc2626;
+}
+
+[data-theme="light"] .aci-form-error svg {
+    color: #dc2626;
+}
+
+[data-theme="light"] .aci-btn-secondary {
+    background: #f1f1ed;
+    color: #555;
+    border-color: #d5d3cf;
+}
+
+[data-theme="light"] .aci-btn-secondary:hover {
+    background: #e9e7e2;
+    color: #1a1a1e;
+}
+
+[data-theme="light"] .aci-expiry {
+    color: #999;
+}
+
+[data-theme="light"] .aci-footer-contact {
+    border-top-color: #eae7e2;
+}
+
+[data-theme="light"] .aci-footer-title {
+    color: #888;
+}
+
+[data-theme="light"] .aci-loading-text {
+    color: #555;
+}
+
+[data-theme="light"] .aci-error-icon {
+    background: rgba(239, 68, 68, 0.08);
+}

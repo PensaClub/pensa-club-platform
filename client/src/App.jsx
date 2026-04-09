@@ -28,6 +28,7 @@ import { CreateAd } from './components/Community/AdPage/CreateAd/CreateAd.jsx';
 import { ForgetPassword } from './components/ForgetPassword/ForgetPassword.jsx';
 import { ReSendEmail } from './components/ForgetPassword/ReSendEmail.jsx';
 import { ResetPasswordPage } from './components/ForgetPassword/ResetPasswordPage.jsx';
+import AcceptInvitation from './components/AcceptInvitation/AcceptInvitation.jsx';
 import { MenuCommunity } from './components/Community/MenuCommunity/MenuCommunity.jsx';
 import { HeaderCommunity } from './components/Community/HeaderCommunity/HeaderCommunity.jsx';
 import { SuggestUserProvider } from './components/contexts/SuggestUserContext.jsx';
@@ -198,6 +199,7 @@ function AppRoutes() {
       <Route path="/forget-password" element={<ForgetPassword />} />
       <Route path="/resend-email" element={<ReSendEmail />} />
       <Route path="/reset-password" element={<ResetPasswordPage />} />
+      <Route path="/accept-invitation" element={<AcceptInvitation />} />
 
       <Route path="/fact-check" element={<Suspense fallback={<LazyLoadingFallback />}><FactCheck /></Suspense>} />
       <Route path="/fact-check/:slug" element={<Suspense fallback={<LazyLoadingFallback />}><FactCheckDetail /></Suspense>} />
