@@ -259,15 +259,24 @@ export const UserProvider = ({ children }) => {
       if (error?.message === 'Old and new password are the same.') notify('password-change-same-passwords');
       else if (error?.message === 'Old password is invalid.') notify('password-change-old-invalid');
       else if (error?.message === 'Repeat password does not match.') notify('password-change-repeat-invalid');
+      // SMS-related errors are handled inline by the component (no toast)
+      else if (error?.message?.toLowerCase().includes('sms code') ||
+               error?.message?.toLowerCase().includes('too many')) {
+        // suppress toast — component shows inline message
+      }
       else notify('error', error);
 
-      showErrorAndSetTimeouts(error.message);
+      // Don't auto-set top error for SMS issues either
+      if (!error?.message?.toLowerCase().includes('sms') &&
+          !error?.message?.toLowerCase().includes('too many')) {
+        showErrorAndSetTimeouts(error.message);
+      }
       throw error;
     } finally {
       setIsLoading(false);
     }
   };
-  
+
   const onChangeAdminRole = async (mail, role, comment) => {
     setIsLoading(true);
     try {
@@ -305,6 +314,15 @@ export const UserProvider = ({ children }) => {
   const getInvitation = async (token) => {
     try {
       const response = await userService.getInvitation(token);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const getResetTokenInfo = async (token) => {
+    try {
+      const response = await userService.getResetTokenInfo(token);
       return response;
     } catch (error) {
       throw error;
@@ -482,6 +500,7 @@ export const UserProvider = ({ children }) => {
     onForgetPasswordSubmit,
     getInvitation,
     acceptInvitation,
+    getResetTokenInfo,
     onSuggestSubmit,
     isUserAdmin,
     isAdmin,

@@ -134,4 +134,14 @@ const sendRegistrationSms = async (phoneNumber, seminarTitle, scheduledDate, loc
     return sendSMS(phoneNumber, message);
 };
 
-module.exports = { sendSMS, sendSeminarReminder, sendRegistrationSms, getSmsSettings };
+/**
+ * Send password reset SMS code to user
+ * @param {string} phoneNumber
+ * @param {string} code - 6-digit code
+ */
+const sendPasswordResetSms = async (phoneNumber, code) => {
+    const message = `Pensa Club: Вашият код за смяна на парола е ${code}. Валиден 24 часа. Не споделяйте с никого.`;
+    return sendSMS(phoneNumber, message);
+};
+
+module.exports = { sendSMS, sendSeminarReminder, sendRegistrationSms, sendPasswordResetSms, getSmsSettings };

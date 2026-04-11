@@ -59,6 +59,7 @@ const resetPasswordSchema = z
         }),
         token: z.string().min(1, 'Token is required.'),
         oldPassword: z.string().optional().nullable(),
+        smsCode: z.string().regex(/^\d{6}$/, 'SMS code must be 6 digits.').optional().nullable(),
     })
     .refine((data) => data.newPassword === data.reNewPassword, {
         message: 'Repeat password does not match.',

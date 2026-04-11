@@ -30,6 +30,9 @@ export const userServiceFactory = (token) => {
     getInvitation: (token) => {
       return requester.get(`${apiUrl}/auth/invitation/${token}`);
     },
+    getResetTokenInfo: (token) => {
+      return requester.get(`${apiUrl}/auth/reset-info/${token}`);
+    },
     setUserData: (data) => {
       return requester.post(`${apiUrl}/user/details`, data);
     },

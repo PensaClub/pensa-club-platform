@@ -170,6 +170,16 @@ module.exports = (sequelize, DataTypes) => {
             token_expiration: DataTypes.DATE,
             invitation_token: DataTypes.STRING,
             invitation_expiration: DataTypes.DATE,
+            reset_sms_code_hash: DataTypes.STRING,
+            reset_sms_attempts: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                defaultValue: 0,
+            },
+            reset_initiated_by_admin_id: {
+                type: DataTypes.INTEGER,
+                allowNull: true,
+            },
             role: {
                 type: DataTypes.STRING,
                 values: ['admin', 'moderator', 'user', 'guest', 'limited', 'mentor', 'student'],

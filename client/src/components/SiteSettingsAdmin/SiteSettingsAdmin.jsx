@@ -1,7 +1,7 @@
 import { useState, lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LocalizedLink as Link } from '../LocalizedLink/LocalizedLink';
-import { ArrowLeft, Settings, Snowflake, BookOpen, Gift, Shield, Bug, MessageSquare, HardDrive } from 'lucide-react';
+import { ArrowLeft, Settings, Snowflake, BookOpen, Gift, Shield, Bug, MessageSquare, HardDrive, UserCog, ScrollText } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useSiteSettingsAdminContext } from '../contexts/SiteSettingsAdminContext';
 import SettingsAdminSection from './SettingsAdminSection/SettingsAdminSection';
@@ -17,6 +17,8 @@ import ScrollToTop from '../ScrollToTop/ScrollToTop';
 import './siteSettingsAdmin.css';
 
 const CloudStorageManager = lazy(() => import('./CloudStorageManager/CloudStorageManager'));
+const UserManagement = lazy(() => import('./UserManagement/UserManagement'));
+const AdminUserActionLogs = lazy(() => import('./AdminUserActionLogs/AdminUserActionLogs'));
 
 const SiteSettingsAdmin = () => {
     const { t } = useTranslation('admin');
@@ -183,6 +185,36 @@ const SiteSettingsAdmin = () => {
                         <IpManagementProvider>
                             <IpManagementConfig />
                         </IpManagementProvider>
+                    </SettingsAdminSection>
+
+                    {/* User Management */}
+                    <SettingsAdminSection
+                        id="userManagement"
+                        title={t('userManagement.title', 'Управление на потребители')}
+                        description={t('userManagement.description', 'Регистрирай нови потребители или изпращай линкове за смяна на парола')}
+                        icon={<UserCog size={24} />}
+                        color="#06b6d4"
+                        isOpen={openCard === 'userManagement'}
+                        onToggle={() => toggleCard('userManagement')}
+                    >
+                        <Suspense fallback={<div className="ssa-loading"><div className="ssa-loading-spinner" /></div>}>
+                            <UserManagement />
+                        </Suspense>
+                    </SettingsAdminSection>
+
+                    {/* Admin User Action Logs (audit log) */}
+                    <SettingsAdminSection
+                        id="adminUserActionLogs"
+                        title={t('adminUserActionLogs.title', 'Лог на админ действия')}
+                        description={t('adminUserActionLogs.description', 'Преглед на всички admin действия по потребителите (1 година retention)')}
+                        icon={<ScrollText size={24} />}
+                        color="#a855f7"
+                        isOpen={openCard === 'adminUserActionLogs'}
+                        onToggle={() => toggleCard('adminUserActionLogs')}
+                    >
+                        <Suspense fallback={<div className="ssa-loading"><div className="ssa-loading-spinner" /></div>}>
+                            <AdminUserActionLogs />
+                        </Suspense>
                     </SettingsAdminSection>
 
                     {/* Error Logs */}
