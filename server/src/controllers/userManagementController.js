@@ -31,6 +31,7 @@ const {
     adminInviteSchema,
     adminSendResetSchema,
     auditLogQuerySchema,
+    auditLogExportSchema,
 } = require('../schemas/adminUserManagement.schema');
 
 const { sendGuestInvitationEmail, sendAdminInitiatedResetEmail } = require('../utils/zohoEmails');
@@ -67,13 +68,16 @@ const adminUserMgmtLimiter = rateLimit({
 // =========================================================
 // GET /api/admin/users/lookup?email=xxx
 // Returns full profile if user exists, or { exists: false }
+// Email lookup is CASE-INSENSITIVE (emails are stored exactly as entered
+// at registration, but matched without case sensitivity for admin search)
 // =========================================================
 userManagementController.get('/users/lookup', adminOnly, adminUserMgmtLimiter, async (req, res, next) => {
     try {
         const { email } = adminLookupSchema.parse({ email: req.query.email });
+        const trimmedEmail = email.trim();
 
         const user = await user_account.findOne({
-            where: { email },
+            where: { email: { [Op.iLike]: trimmedEmail } },
             attributes: { exclude: ['password', 'reset_token', 'reset_sms_code_hash', 'invitation_token'] },
             include: [
                 {
@@ -140,7 +144,10 @@ userManagementController.post('/users/invite', adminOnly, adminUserMgmtLimiter, 
     try {
         const { email, firstName, lastName } = adminInviteSchema.parse(req.body);
 
-        const existing = await user_account.findOne({ where: { email } });
+        // Case-insensitive duplicate check (matches lookup behavior)
+        const existing = await user_account.findOne({
+            where: { email: { [Op.iLike]: email.trim() } },
+        });
         if (existing) {
             return res.status(409).json({
                 message: 'User with this email already exists.',
@@ -226,8 +233,9 @@ userManagementController.post('/users/send-reset', adminOnly, adminUserMgmtLimit
     try {
         const { email, phone, sendSms } = adminSendResetSchema.parse(req.body);
 
+        // Case-insensitive lookup
         const user = await user_account.findOne({
-            where: { email },
+            where: { email: { [Op.iLike]: email.trim() } },
             include: [{ model: user_details, as: 'details', attributes: ['firstName', 'lastName', 'phoneNumber'] }],
         });
 
@@ -392,7 +400,7 @@ userManagementController.get('/user-actions', adminOnly, async (req, res, next) 
 // =========================================================
 userManagementController.get('/user-actions/export', adminOnly, async (req, res, next) => {
     try {
-        const params = auditLogQuerySchema.parse({ ...req.query, page: 1, limit: 5000 });
+        const params = auditLogExportSchema.parse({ ...req.query, page: 1, limit: 5000 });
         const PDFDocument = require('pdfkit');
         const path = require('path');
         const fs = require('fs');
@@ -460,6 +468,15 @@ userManagementController.get('/user-actions/export', adminOnly, async (req, res,
         });
         y += rh;
 
+        // Map action_type ENUM to friendly Bulgarian labels
+        const actionTypeLabels = {
+            lookup_user: 'Търсене',
+            invite_user: 'Покана',
+            send_reset_link: 'Изпратен reset',
+            reset_completed: 'Успешен reset',
+            reset_failed: 'Неуспешен reset',
+        };
+
         // Data rows
         doc.font(font).fontSize(7);
         records.forEach((rec, ri) => {
@@ -473,7 +490,14 @@ userManagementController.get('/user-actions/export', adminOnly, async (req, res,
             });
             const adminEmail = r.admin?.email || '—';
             const bg = ri % 2 === 0 ? '#ffffff' : '#f5f3f0';
-            const vals = [dateStr, r.action_type, adminEmail, r.target_email, r.ip_address || '—', r.success ? 'OK' : 'FAIL'];
+            const vals = [
+                dateStr,
+                actionTypeLabels[r.actionType] || r.actionType || '—',
+                adminEmail,
+                r.targetEmail || '—',
+                r.ipAddress || '—',
+                r.success ? 'OK' : 'FAIL',
+            ];
             x = startX;
             vals.forEach((v, ci) => {
                 doc.rect(x, y, colWidths[ci], rh).fillAndStroke(bg, '#ddd');

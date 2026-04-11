@@ -195,9 +195,23 @@ export const AdminProvider = ({ children }) => {
         }
     }, []);
 
-    const getUserActionLogsExportUrl = useCallback((params = {}) => {
-        // Returns URL string (not async) — used for native browser download
-        return adminService.exportUserActionLogs(params);
+    const downloadUserActionLogsPdf = useCallback(async (params = {}) => {
+        try {
+            const blob = await adminService.exportUserActionLogs(params);
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `audit-log-${new Date().toISOString().slice(0, 10)}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+            return { success: true };
+        } catch (err) {
+            const msg = err?.message || 'Грешка при export на лога';
+            toast.error(msg);
+            throw err;
+        }
     }, []);
 
     const contextService = {
@@ -219,7 +233,7 @@ export const AdminProvider = ({ children }) => {
 
         // Audit log
         getUserActionLogs,
-        getUserActionLogsExportUrl,
+        downloadUserActionLogsPdf,
     }
 
     return (

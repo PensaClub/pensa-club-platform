@@ -31,9 +31,8 @@ const adminSendResetSchema = z.object({
     sendSms: z.boolean().default(true),
 });
 
-const auditLogQuerySchema = z.object({
-    page: z.coerce.number().int().min(1).default(1),
-    limit: z.coerce.number().int().min(1).max(100).default(20),
+// Shared base for filter fields (used by both list and export)
+const auditLogFiltersBase = {
     dateFrom: z.string().optional(),
     dateTo: z.string().optional(),
     adminId: z.coerce.number().int().optional(),
@@ -47,6 +46,21 @@ const auditLogQuerySchema = z.object({
         'reset_failed',
     ]).optional(),
     success: z.coerce.boolean().optional(),
+};
+
+// List endpoint — max 100 per page (for paginated UI)
+const auditLogQuerySchema = z.object({
+    page: z.coerce.number().int().min(1).default(1),
+    limit: z.coerce.number().int().min(1).max(100).default(20),
+    ...auditLogFiltersBase,
+});
+
+// Export endpoint — allows up to 5000 records in a single PDF
+const auditLogExportSchema = z.object({
+    page: z.coerce.number().int().min(1).default(1),
+    limit: z.coerce.number().int().min(1).max(5000).default(5000),
+    format: z.enum(['pdf']).optional(),
+    ...auditLogFiltersBase,
 });
 
 module.exports = {
@@ -54,4 +68,5 @@ module.exports = {
     adminInviteSchema,
     adminSendResetSchema,
     auditLogQuerySchema,
+    auditLogExportSchema,
 };
