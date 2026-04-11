@@ -243,9 +243,7 @@
     letter-spacing: 0.5px;
     margin-bottom: 10px;
 }
-.asd-category span{
-    font-size: 0.82rem;
-}
+
 /* =========================================================
    TITLE + SUBTITLE
    ========================================================= */
@@ -283,9 +281,7 @@
     font-size: 0.85rem;
     color: rgba(255, 255, 255, 0.6);
 }
-.asd-meta-item span {
-    font-size: 0.85rem;
-}
+
 .asd-meta-item svg {
     color: var(--accent, #00d2ff);
     flex-shrink: 0;
@@ -1532,10 +1528,7 @@
     .asd-meta-item {
         font-size: 0.8rem;
     }
-.asd-meta-item span{
-    font-size: 0.8rem;
-    
-}
+
     .asd-quick-stats {
         gap: 10px;
     }
@@ -1562,25 +1555,12 @@
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
     }
-    .asd-tabs span{
-        font-size: 0.82rem;
-    }
+
     .asd-tab {
         padding: 8px 14px;
         font-size: 0.82rem;
         white-space: nowrap;
     }
-    .asd-review-submit {
-        padding: 8px 20px;
-        font-size: 0.82rem;
-    }
-    .asd-star-btn {
-        font-size: 1.4rem;
-    }
-    .asd-action-btn {
-        padding: 10px 20px;
-        font-size: 0.88rem;
-
 }
 
 @media (max-width: 424px) {

@@ -11,6 +11,7 @@ const { startVisitReminderCron } = require('../cron/visitReminderCron');
 const { startSeminarReminderCron } = require('../cron/seminarReminderCron');
 const { startForumDigestCron } = require('../cron/forumDigestCron');
 const { startStorageSyncCron } = require('../cron/storageSyncCron');
+const scheduleAuditLogCleanup = require('../cron/auditLogCleanup');
 
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
@@ -62,5 +63,6 @@ module.exports = function expressConfig(app) {
         startSeminarReminderCron();
         startForumDigestCron();
         startStorageSyncCron();
+        scheduleAuditLogCleanup();
     });
 };

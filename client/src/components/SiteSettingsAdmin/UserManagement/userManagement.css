@@ -1,0 +1,780 @@
+/* src/components/SiteSettingsAdmin/UserManagement/userManagement.css */
+/* Prefix: umng- */
+
+.umng-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 8px 4px;
+}
+
+.umng-wrapper * {
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   TABS
+   ========================================================= */
+
+.umng-tabs {
+    display: flex;
+    gap: 4px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 4px;
+}
+
+.umng-tab {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border: none;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.55);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.umng-tab span {
+    font-size: 0.82rem;
+    font-weight: 500;
+}
+
+.umng-tab:hover {
+    color: rgba(255, 255, 255, 0.85);
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.umng-tab-active {
+    background: rgba(0, 210, 255, 0.12);
+    color: #00d2ff;
+    font-weight: 600;
+}
+
+/* =========================================================
+   SEARCH SECTION
+   ========================================================= */
+
+.umng-search-section {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    padding: 16px;
+}
+
+.umng-label {
+    color: #ccc;
+    font-size: 0.78rem;
+    font-weight: 500;
+}
+
+.umng-search-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 4px 4px 4px 12px;
+    transition: border-color 0.15s;
+}
+
+.umng-search-box:focus-within {
+    border-color: rgba(0, 210, 255, 0.4);
+}
+
+.umng-search-icon {
+    color: #888;
+    flex-shrink: 0;
+}
+
+.umng-search-input {
+    flex: 1;
+    min-width: 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #eee;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    padding: 8px 0;
+}
+
+.umng-search-input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+/* =========================================================
+   INPUTS
+   ========================================================= */
+
+.umng-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 9px 12px;
+    color: #eee;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    outline: none;
+    transition: border-color 0.15s;
+}
+
+.umng-input:focus {
+    border-color: rgba(0, 210, 255, 0.4);
+}
+
+.umng-input::placeholder {
+    color: rgba(255, 255, 255, 0.25);
+}
+
+.umng-input-error {
+    border-color: rgba(239, 68, 68, 0.5);
+    background: rgba(239, 68, 68, 0.05);
+}
+
+.umng-input-error:focus {
+    border-color: rgba(239, 68, 68, 0.7);
+}
+
+.umng-error-text {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: #f87171;
+    font-size: 0.72rem;
+    margin: 0;
+    padding-left: 4px;
+}
+
+.umng-hint {
+    color: #888;
+    font-size: 0.74rem;
+    margin: 4px 0 0;
+    font-style: italic;
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.umng-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+}
+
+.umng-btn span {
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.umng-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.umng-btn-primary {
+    background: rgba(0, 210, 255, 0.12);
+    border-color: rgba(0, 210, 255, 0.3);
+    color: #00d2ff;
+}
+
+.umng-btn-primary:hover:not(:disabled) {
+    background: rgba(0, 210, 255, 0.2);
+    border-color: rgba(0, 210, 255, 0.5);
+}
+
+.umng-btn-warning {
+    background: rgba(245, 158, 11, 0.12);
+    border-color: rgba(245, 158, 11, 0.3);
+    color: #f59e0b;
+}
+
+.umng-btn-warning:hover:not(:disabled) {
+    background: rgba(245, 158, 11, 0.2);
+    border-color: rgba(245, 158, 11, 0.5);
+}
+
+.umng-btn-secondary {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.12);
+    color: #ccc;
+}
+
+.umng-btn-secondary:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.umng-btn-full {
+    width: 100%;
+}
+
+.umng-btn-sm {
+    padding: 6px 12px;
+    font-size: 0.74rem;
+}
+
+/* =========================================================
+   PROFILE CARD
+   ========================================================= */
+
+.umng-profile-card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 18px;
+}
+
+.umng-profile-header {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+}
+
+.umng-profile-avatar {
+    flex-shrink: 0;
+}
+
+.umng-profile-avatar img {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(0, 210, 255, 0.3);
+}
+
+.umng-profile-avatar-placeholder {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 210, 255, 0.12);
+    color: #00d2ff;
+    font-size: 1.5rem;
+    font-weight: 700;
+    border: 2px solid rgba(0, 210, 255, 0.3);
+}
+
+.umng-profile-main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.umng-profile-name {
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    word-break: break-word;
+}
+
+.umng-no-name {
+    color: #888;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 0.85rem;
+}
+
+.umng-profile-email {
+    color: #aaa;
+    font-size: 0.82rem;
+    word-break: break-all;
+}
+
+.umng-profile-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 6px;
+}
+
+.umng-role-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.umng-role-admin {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.umng-role-moderator {
+    background: rgba(168, 85, 247, 0.15);
+    color: #c084fc;
+    border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+.umng-role-mentor {
+    background: rgba(34, 197, 94, 0.15);
+    color: #4ade80;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.umng-role-student {
+    background: rgba(59, 130, 246, 0.15);
+    color: #60a5fa;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.umng-role-user {
+    background: rgba(156, 163, 175, 0.15);
+    color: #9ca3af;
+    border: 1px solid rgba(156, 163, 175, 0.3);
+}
+
+.umng-role-guest {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.umng-role-limited {
+    background: rgba(75, 85, 99, 0.15);
+    color: #9ca3af;
+    border: 1px solid rgba(75, 85, 99, 0.3);
+}
+
+.umng-role-pending {
+    background: rgba(251, 191, 36, 0.15);
+    color: #fbbf24;
+    border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.umng-profile-details {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.umng-profile-detail {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #aaa;
+    font-size: 0.78rem;
+}
+
+.umng-profile-detail span {
+    font-size: 0.78rem;
+}
+
+.umng-profile-detail svg {
+    color: #666;
+    flex-shrink: 0;
+}
+
+/* =========================================================
+   SECTION TITLE
+   ========================================================= */
+
+.umng-section-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #ddd;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin: 0 0 12px;
+}
+
+.umng-section-title svg {
+    color: #00d2ff;
+}
+
+/* =========================================================
+   WARNING BOX
+   ========================================================= */
+
+.umng-warning-box {
+    display: flex;
+    gap: 10px;
+    padding: 14px 16px;
+    background: rgba(251, 191, 36, 0.08);
+    border: 1px solid rgba(251, 191, 36, 0.25);
+    border-radius: 10px;
+    color: #fbbf24;
+}
+
+.umng-warning-box svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.umng-warning-box strong {
+    display: block;
+    font-size: 0.85rem;
+    color: #fcd34d;
+    margin-bottom: 4px;
+}
+
+.umng-warning-box p {
+    font-size: 0.78rem;
+}
+
+.umng-warning-box p {
+    color: #d4a853;
+    font-size: 0.78rem;
+    line-height: 1.5;
+    margin: 0;
+}
+
+/* =========================================================
+   SUCCESS BOX
+   ========================================================= */
+
+.umng-success-box {
+    display: flex;
+    gap: 12px;
+    padding: 16px;
+    background: rgba(34, 197, 94, 0.08);
+    border: 1px solid rgba(34, 197, 94, 0.25);
+    border-radius: 10px;
+}
+
+.umng-success-box > svg {
+    flex-shrink: 0;
+    color: #4ade80;
+    margin-top: 2px;
+}
+
+.umng-success-box strong {
+    display: block;
+    font-size: 0.9rem;
+    color: #4ade80;
+    margin-bottom: 8px;
+}
+
+.umng-success-box ul {
+    margin: 0 0 12px;
+    padding: 0;
+    list-style: none;
+}
+
+.umng-success-box ul li {
+    color: #ccc;
+    font-size: 0.78rem;
+    line-height: 1.7;
+    word-break: break-word;
+}
+
+/* =========================================================
+   RESET FORM
+   ========================================================= */
+
+.umng-reset-form {
+    padding-top: 14px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.umng-form-row {
+    margin-bottom: 14px;
+}
+
+.umng-form-row-double {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.umng-form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.umng-checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    color: #ccc;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    cursor: pointer;
+    margin-bottom: 14px;
+}
+
+.umng-checkbox-label span {
+    font-size: 0.8rem;
+}
+
+.umng-checkbox-label input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    margin-top: 2px;
+    accent-color: #00d2ff;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.umng-checkbox-label small {
+    display: block;
+    color: #888;
+    font-size: 0.72rem;
+    margin-top: 2px;
+}
+
+/* =========================================================
+   REGISTER CARD
+   ========================================================= */
+
+.umng-register-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 18px;
+}
+
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
+
+.umng-spin {
+    animation: umng-spin 1s linear infinite;
+}
+
+@keyframes umng-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 767px) {
+    .umng-tabs {
+        flex-direction: column;
+        gap: 4px;
+    }
+
+    .umng-tab {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .umng-search-box {
+        flex-wrap: wrap;
+    }
+
+    .umng-search-input {
+        flex: 1 1 100%;
+    }
+
+    .umng-btn {
+        flex: 1;
+    }
+
+    .umng-form-row-double {
+        grid-template-columns: 1fr;
+    }
+
+    .umng-profile-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .umng-profile-badges {
+        justify-content: center;
+    }
+}
+
+/* =========================================================
+   LIGHT THEME
+   ========================================================= */
+
+[data-theme="light"] .umng-tabs {
+    background: #f5f3f0;
+    border-color: #e0ddd8;
+}
+
+[data-theme="light"] .umng-tab {
+    color: #6b7280;
+}
+
+[data-theme="light"] .umng-tab:hover {
+    background: rgba(0, 0, 0, 0.04);
+    color: #1f2937;
+}
+
+[data-theme="light"] .umng-tab-active {
+    background: rgba(13, 148, 136, 0.1);
+    color: #0d9488;
+}
+
+[data-theme="light"] .umng-search-section,
+[data-theme="light"] .umng-profile-card,
+[data-theme="light"] .umng-register-card {
+    background: #fafaf8;
+    border-color: #e0ddd8;
+}
+
+[data-theme="light"] .umng-label {
+    color: #4b5563;
+}
+
+[data-theme="light"] .umng-search-box,
+[data-theme="light"] .umng-input {
+    background: #fff;
+    border-color: #d1d5db;
+    color: #1f2937;
+}
+
+[data-theme="light"] .umng-search-input,
+[data-theme="light"] .umng-input {
+    color: #1f2937;
+}
+
+[data-theme="light"] .umng-search-input::placeholder,
+[data-theme="light"] .umng-input::placeholder {
+    color: #9ca3af;
+}
+
+[data-theme="light"] .umng-search-icon {
+    color: #6b7280;
+}
+
+[data-theme="light"] .umng-btn-primary {
+    background: rgba(13, 148, 136, 0.08);
+    border-color: rgba(13, 148, 136, 0.25);
+    color: #0d9488;
+}
+
+[data-theme="light"] .umng-btn-primary:hover:not(:disabled) {
+    background: rgba(13, 148, 136, 0.15);
+    border-color: rgba(13, 148, 136, 0.4);
+}
+
+[data-theme="light"] .umng-btn-warning {
+    background: rgba(217, 119, 6, 0.08);
+    border-color: rgba(217, 119, 6, 0.25);
+    color: #d97706;
+}
+
+[data-theme="light"] .umng-btn-secondary {
+    background: #f1f1ed;
+    border-color: #d5d3cf;
+    color: #4b5563;
+}
+
+[data-theme="light"] .umng-profile-name {
+    color: #1f2937;
+}
+
+[data-theme="light"] .umng-profile-email {
+    color: #6b7280;
+}
+
+[data-theme="light"] .umng-profile-detail {
+    color: #6b7280;
+}
+
+[data-theme="light"] .umng-profile-detail svg {
+    color: #9ca3af;
+}
+
+[data-theme="light"] .umng-profile-details {
+    border-top-color: #e5e7eb;
+}
+
+[data-theme="light"] .umng-section-title {
+    color: #1f2937;
+}
+
+[data-theme="light"] .umng-section-title svg {
+    color: #0d9488;
+}
+
+[data-theme="light"] .umng-hint {
+    color: #6b7280;
+}
+
+[data-theme="light"] .umng-checkbox-label {
+    color: #4b5563;
+}
+
+[data-theme="light"] .umng-checkbox-label small {
+    color: #9ca3af;
+}
+
+[data-theme="light"] .umng-warning-box {
+    background: rgba(217, 119, 6, 0.06);
+    border-color: rgba(217, 119, 6, 0.25);
+    color: #d97706;
+}
+
+[data-theme="light"] .umng-warning-box strong {
+    color: #92400e;
+}
+
+[data-theme="light"] .umng-warning-box p {
+    color: #b45309;
+}
+
+[data-theme="light"] .umng-success-box {
+    background: rgba(5, 150, 105, 0.06);
+    border-color: rgba(5, 150, 105, 0.25);
+}
+
+[data-theme="light"] .umng-success-box > svg {
+    color: #059669;
+}
+
+[data-theme="light"] .umng-success-box strong {
+    color: #059669;
+}
+
+[data-theme="light"] .umng-success-box ul li {
+    color: #4b5563;
+}
+
+[data-theme="light"] .umng-input-error {
+    border-color: rgba(220, 38, 38, 0.5);
+    background: rgba(254, 226, 226, 0.5);
+}
+
+[data-theme="light"] .umng-error-text {
+    color: #dc2626;
+}
