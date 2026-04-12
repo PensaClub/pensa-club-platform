@@ -1,0 +1,271 @@
+/* DriveShareModal — prefix: dsm- */
+
+.dsm-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 16px;
+}
+
+.dsm-modal {
+    background: #1e1e22;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 24px;
+    max-width: 500px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(66, 133, 244, 0.15) transparent;
+}
+
+.dsm-modal span,
+.dsm-modal label,
+.dsm-modal p,
+.dsm-modal input,
+.dsm-modal button,
+.dsm-modal select {
+    font-size: 0.82rem;
+}
+
+.dsm-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 4px;
+}
+
+.dsm-header svg { color: #4285f4; }
+.dsm-header h3 { flex: 1; color: #f1f5f9; margin: 0; font-size: 1rem; }
+
+.dsm-close {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    display: flex;
+}
+
+.dsm-close:hover { color: #f1f5f9; background: rgba(255, 255, 255, 0.06); }
+
+.dsm-file-name {
+    color: #94a3b8;
+    font-size: 0.8rem;
+    margin: 0 0 16px;
+    padding-left: 30px;
+    word-break: break-word;
+}
+
+/* ── Add section ── */
+
+.dsm-add-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    margin-bottom: 16px;
+}
+
+.dsm-input-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: #141416;
+    border: 1px solid #2e2e32;
+    border-radius: 8px;
+}
+
+.dsm-input-row:focus-within { border-color: #4285f4; }
+
+.dsm-input-icon { color: #666; flex-shrink: 0; }
+
+.dsm-email-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    outline: none;
+    color: #eee;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    min-width: 0;
+}
+
+.dsm-email-input::placeholder { color: #555; }
+
+.dsm-role-select {
+    padding: 4px 8px;
+    background: #1e1e22;
+    border: 1px solid rgba(66, 133, 244, 0.2);
+    border-radius: 6px;
+    color: #93b8f7;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.78rem;
+    cursor: pointer;
+    outline: none;
+}
+
+.dsm-role-select option {
+    background: #1e1e22;
+    color: #93b8f7;
+}
+
+.dsm-options-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.dsm-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #94a3b8;
+    cursor: pointer;
+}
+
+.dsm-checkbox-label input {
+    accent-color: #4285f4;
+    cursor: pointer;
+}
+
+.dsm-share-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 7px 16px;
+    border: 1px solid rgba(66, 133, 244, 0.3);
+    border-radius: 8px;
+    background: rgba(66, 133, 244, 0.12);
+    color: #93b8f7;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+}
+
+.dsm-share-btn:hover { background: rgba(66, 133, 244, 0.2); color: #b5cdf9; }
+.dsm-share-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── Permissions list ── */
+
+.dsm-permissions h4 {
+    color: #94a3b8;
+    font-size: 0.78rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin: 0 0 10px;
+}
+
+.dsm-loading,
+.dsm-no-perms {
+    color: #64748b;
+    font-size: 0.82rem;
+    margin: 0;
+}
+
+.dsm-perm-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.dsm-perm-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 10px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 6px;
+}
+
+.dsm-perm-item:hover { border-color: rgba(66, 133, 244, 0.1); }
+
+.dsm-perm-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.dsm-perm-email {
+    color: #cbd5e1;
+    font-size: 0.82rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dsm-perm-role {
+    color: #64748b;
+    font-size: 0.72rem;
+    text-transform: capitalize;
+}
+
+.dsm-perm-remove {
+    background: none;
+    border: none;
+    color: #64748b;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    display: flex;
+    flex-shrink: 0;
+    transition: color 0.15s, background 0.15s;
+}
+
+.dsm-perm-remove:hover { color: #f87171; background: rgba(239, 68, 68, 0.08); }
+
+/* ── Light theme ── */
+
+[data-theme="light"] .dsm-modal { background: #fff; border-color: #e8e6e0; }
+[data-theme="light"] .dsm-header svg { color: #1a73e8; }
+[data-theme="light"] .dsm-header h3 { color: #333; }
+[data-theme="light"] .dsm-close { color: #999; }
+[data-theme="light"] .dsm-close:hover { color: #333; background: rgba(0, 0, 0, 0.04); }
+[data-theme="light"] .dsm-file-name { color: #666; }
+[data-theme="light"] .dsm-add-section { border-color: #e8e6e0; }
+[data-theme="light"] .dsm-input-row { background: #f9f8f6; border-color: #e0ddd8; }
+[data-theme="light"] .dsm-input-row:focus-within { border-color: #1a73e8; }
+[data-theme="light"] .dsm-input-icon { color: #999; }
+[data-theme="light"] .dsm-email-input { color: #333; }
+[data-theme="light"] .dsm-email-input::placeholder { color: #999; }
+[data-theme="light"] .dsm-role-select { background: #f0eeea; border-color: #d5d3cf; color: #333; }
+[data-theme="light"] .dsm-checkbox-label { color: #666; }
+[data-theme="light"] .dsm-checkbox-label input { accent-color: #1a73e8; }
+[data-theme="light"] .dsm-share-btn { background: #e8f0fe; border-color: #c2d9fc; color: #1a73e8; }
+[data-theme="light"] .dsm-share-btn:hover { background: #d2e3fc; }
+[data-theme="light"] .dsm-permissions h4 { color: #888; }
+[data-theme="light"] .dsm-loading,
+[data-theme="light"] .dsm-no-perms { color: #999; }
+[data-theme="light"] .dsm-perm-item { background: #fafafa; border-color: #e8e6e0; }
+[data-theme="light"] .dsm-perm-item:hover { border-color: rgba(26, 115, 232, 0.2); }
+[data-theme="light"] .dsm-perm-email { color: #333; }
+[data-theme="light"] .dsm-perm-role { color: #888; }
+[data-theme="light"] .dsm-perm-remove { color: #999; }
+[data-theme="light"] .dsm-perm-remove:hover { color: #d93025; background: rgba(217, 48, 37, 0.06); }
+
+/* ── Mobile ── */
+
+@media (max-width: 768px) {
+    .dsm-modal { padding: 16px; }
+    .dsm-input-row { flex-wrap: wrap; }
+    .dsm-email-input { width: 100%; }
+    .dsm-role-select { width: 100%; }
+    .dsm-options-row { flex-direction: column; align-items: flex-start; }
+}

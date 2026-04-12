@@ -1,7 +1,7 @@
 import { useState, lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LocalizedLink as Link } from '../LocalizedLink/LocalizedLink';
-import { ArrowLeft, Settings, Snowflake, BookOpen, Gift, Shield, Bug, MessageSquare, HardDrive, UserCog, ScrollText } from 'lucide-react';
+import { ArrowLeft, Settings, Snowflake, BookOpen, Gift, Shield, Bug, MessageSquare, HardDrive, Cloud, UserCog, ScrollText } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { useSiteSettingsAdminContext } from '../contexts/SiteSettingsAdminContext';
 import SettingsAdminSection from './SettingsAdminSection/SettingsAdminSection';
@@ -17,6 +17,7 @@ import ScrollToTop from '../ScrollToTop/ScrollToTop';
 import './siteSettingsAdmin.css';
 
 const CloudStorageManager = lazy(() => import('./CloudStorageManager/CloudStorageManager'));
+const GoogleDriveManager = lazy(() => import('./GoogleDriveManager/GoogleDriveManager'));
 const UserManagement = lazy(() => import('./UserManagement/UserManagement'));
 const AdminUserActionLogs = lazy(() => import('./AdminUserActionLogs/AdminUserActionLogs'));
 
@@ -90,6 +91,21 @@ const SiteSettingsAdmin = () => {
                     >
                         <Suspense fallback={<div className="ssa-loading"><div className="ssa-loading-spinner" /></div>}>
                             <CloudStorageManager />
+                        </Suspense>
+                    </SettingsAdminSection>
+
+                    {/* Google Drive */}
+                    <SettingsAdminSection
+                        id="googleDrive"
+                        title={t('googleDrive.title')}
+                        description={t('googleDrive.description')}
+                        icon={<Cloud size={24} />}
+                        color="#4285f4"
+                        isOpen={openCard === 'googleDrive'}
+                        onToggle={() => toggleCard('googleDrive')}
+                    >
+                        <Suspense fallback={<div className="ssa-loading"><div className="ssa-loading-spinner" /></div>}>
+                            <GoogleDriveManager />
                         </Suspense>
                     </SettingsAdminSection>
 
