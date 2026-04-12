@@ -40,6 +40,7 @@ const storageController = require('./controllers/storageController');
 const sharedLinksController = require('./controllers/sharedLinksController');
 const userSharedFilesController = require('./controllers/userSharedFilesController');
 const userManagementController = require('./controllers/userManagementController');
+const driveController = require('./controllers/driveController');
 
 router.use('/auth', authController);
 router.use('/user/shared-files', userSharedFilesController);
@@ -81,6 +82,7 @@ router.use('/youtube', youtubeController);
 router.use('/forum/admin', forumAdminController);
 router.use('/forum', forumController);
 router.use('/admin/storage', storageController);
+router.use('/admin/drive', driveController);
 router.use('/shared-links', sharedLinksController);
 
 const pushController = require('./controllers/pushController');
