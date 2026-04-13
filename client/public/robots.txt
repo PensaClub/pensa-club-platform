@@ -1,3 +1,26 @@
 # https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Disallow: /admin/
+Disallow: /profile/
+Disallow: /my-chats
+Disallow: /academy/my
+Disallow: /academy/mentor-dashboard
+Disallow: /mentor/
+Disallow: /logout
+Disallow: /sign-up
+Disallow: /forget-password
+Disallow: /reset-password
+Disallow: /accept-invitation
+Disallow: /server-error
+Disallow: /errors/
+Disallow: /404/
+Disallow: /shared/
+Disallow: /reaction/track/
+Disallow: /reaction/my
+Disallow: /ad/
+Disallow: /initiative-preview
+Disallow: /projects-create
+Disallow: /project-preview
+
+# Sitemaps
+Sitemap: https://pensa.club/sitemap.xml

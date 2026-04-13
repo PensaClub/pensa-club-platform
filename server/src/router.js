@@ -41,6 +41,10 @@ const sharedLinksController = require('./controllers/sharedLinksController');
 const userSharedFilesController = require('./controllers/userSharedFilesController');
 const userManagementController = require('./controllers/userManagementController');
 const driveController = require('./controllers/driveController');
+const sitemapController = require('./controllers/sitemapController');
+
+// Sitemap routes — mounted on root (e.g., /sitemap.xml, /sitemap-articles.xml)
+router.use(sitemapController);
 
 router.use('/auth', authController);
 router.use('/user/shared-files', userSharedFilesController);
