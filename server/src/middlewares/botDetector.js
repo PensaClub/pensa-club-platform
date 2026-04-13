@@ -15,6 +15,13 @@ const { generateLectureMetaHTML, generateLecturesListMetaHTML } = require('../ut
 const generateUsefulLinksMetaHTML = require('../utils/usefulLinksMetaGenerator');
 const generateTelkMetaHTML = require('../utils/telkMetaGenerator');
 const generateArticlesListMetaHTML = require('../utils/articlesListMetaGenerator');
+const {
+    generateInitiativesListMetaHTML,
+    generateProjectsListMetaHTML,
+    generatePublicationsListMetaHTML,
+    generateStoriesListMetaHTML,
+    generateClubsListMetaHTML,
+} = require('../utils/listMetaGenerators');
 const { generateFactCheckListMetaHTML, generateFactCheckDetailMetaHTML } = require('../utils/factCheckMetaGenerator');
 const { generateReactionLandingMetaHTML, generateReactionBookMetaHTML } = require('../utils/reactionMetaGenerator');
 const { generateForumCommunityMetaHTML } = require('../utils/forumMetaGenerator');
@@ -170,14 +177,19 @@ async function botDetector(req, res, next) {
     // URL Pattern Matching
     const articlesListMatch = req.path.match(/^\/articles$/);
     const articleMatch = req.path.match(/^\/articles\/([a-zA-Z0-9-]+)$/) || req.path.match(/^\/articles\/single\/(\d+)$/);
-    const projectMatch = req.path.match(/^\/projects\/([a-zA-Z0-9-]+)$/);
+    const initiativesListMatch = req.path.match(/^\/initiatives$/);
     const initiativeMatch = req.path.match(/^\/initiatives\/([a-zA-Z0-9-]+)$/);
+    const projectsListMatch = req.path.match(/^\/projects$/);
+    const projectMatch = req.path.match(/^\/projects\/([a-zA-Z0-9-]+)$/);
+    const clubsListMatch = req.path.match(/^\/clubs$/);
     const clubMatch = req.path.match(/^\/clubs\/([a-zA-Z0-9-]+)$/);
     const academyMatch = req.path.match(/^\/academy$/);
     const mentorMatch = req.path.match(/^\/academy\/mentors\/(\d+)$/);
     const gamesMatch = req.path.match(/^\/games$/);
     const usefulLinksMatch = req.path.match(/^\/useful-links$/);
+    const publicationsListMatch = req.path.match(/^\/publications$/);
     const publicationMatch = req.path.match(/^\/publications\/([a-zA-Z0-9-]+)$/);
+    const storiesListMatch = req.path.match(/^\/stories$/);
     const storyMatch = req.path.match(/^\/stories\/([a-zA-Z0-9-]+)$/);
     const coursesListMatch = req.path.match(/^\/academy\/courses$/);
     const courseMatch = req.path.match(/^\/academy\/courses\/([a-zA-Z0-9-]+)$/);
@@ -199,6 +211,51 @@ async function botDetector(req, res, next) {
             await logBotRequest(botName, 'page', null, 'articles-list', userAgent, clientIP);
             const html = generateArticlesListMetaHTML();
             console.log('📤 Sending articles list HTML to bot');
+            return res.send(html);
+        }
+
+        // ==================== INITIATIVES LIST ====================
+        if (initiativesListMatch) {
+            console.log('📋 Processing INITIATIVES LIST page');
+            await logBotRequest(botName, 'page', null, 'initiatives-list', userAgent, clientIP);
+            const html = generateInitiativesListMetaHTML();
+            console.log('📤 Sending initiatives list HTML to bot');
+            return res.send(html);
+        }
+
+        // ==================== PROJECTS LIST ====================
+        if (projectsListMatch) {
+            console.log('📋 Processing PROJECTS LIST page');
+            await logBotRequest(botName, 'page', null, 'projects-list', userAgent, clientIP);
+            const html = generateProjectsListMetaHTML();
+            console.log('📤 Sending projects list HTML to bot');
+            return res.send(html);
+        }
+
+        // ==================== PUBLICATIONS LIST ====================
+        if (publicationsListMatch) {
+            console.log('📋 Processing PUBLICATIONS LIST page');
+            await logBotRequest(botName, 'page', null, 'publications-list', userAgent, clientIP);
+            const html = generatePublicationsListMetaHTML();
+            console.log('📤 Sending publications list HTML to bot');
+            return res.send(html);
+        }
+
+        // ==================== STORIES LIST ====================
+        if (storiesListMatch) {
+            console.log('📋 Processing STORIES LIST page');
+            await logBotRequest(botName, 'page', null, 'stories-list', userAgent, clientIP);
+            const html = generateStoriesListMetaHTML();
+            console.log('📤 Sending stories list HTML to bot');
+            return res.send(html);
+        }
+
+        // ==================== CLUBS LIST ====================
+        if (clubsListMatch) {
+            console.log('📋 Processing CLUBS LIST page');
+            await logBotRequest(botName, 'page', null, 'clubs-list', userAgent, clientIP);
+            const html = generateClubsListMetaHTML();
+            console.log('📤 Sending clubs list HTML to bot');
             return res.send(html);
         }
 
