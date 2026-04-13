@@ -20,6 +20,15 @@ const formatSize = (bytes) => {
     return `${(bytes / (1024 * 1024 * 1024)).toFixed(2)} GB`;
 };
 
+const NEW_BADGE_HOURS = 48;
+
+const isNewItem = (createdTime) => {
+    if (!createdTime) return false;
+    const created = new Date(createdTime).getTime();
+    const now = Date.now();
+    return (now - created) < NEW_BADGE_HOURS * 60 * 60 * 1000;
+};
+
 const getDriveFileIcon = (mimeType, name) => {
     if (!mimeType) return File;
     if (mimeType === 'application/vnd.google-apps.folder') return Folder;
@@ -674,6 +683,7 @@ const GoogleDriveManager = () => {
                                 <div className="gdm-grid-icon" onClick={() => navigateToFolder(folder)}>
                                     <Folder size={40} />
                                     {protectedFolders[folder.id] && <Lock size={14} className="gdm-lock-badge" />}
+                                    {isNewItem(folder.createdTime) && <span className="gdm-new-badge">NEW</span>}
                                 </div>
                                 {renamingItem === folder.id ? (
                                     <div className="gdm-rename-inline">
@@ -722,6 +732,7 @@ const GoogleDriveManager = () => {
                                         ) : (
                                             <FileIcon size={40} />
                                         )}
+                                        {isNewItem(file.createdTime) && <span className="gdm-new-badge">NEW</span>}
                                     </div>
                                     {renamingItem === file.id ? (
                                         <div className="gdm-rename-inline">
@@ -787,7 +798,10 @@ const GoogleDriveManager = () => {
                                                         <button onClick={() => setRenamingItem(null)}><X size={14} /></button>
                                                     </div>
                                                 ) : (
-                                                    <span className="gdm-list-link" onClick={() => navigateToFolder(folder)}>{folder.name}</span>
+                                                    <>
+                                                        <span className="gdm-list-link" onClick={() => navigateToFolder(folder)}>{folder.name}</span>
+                                                        {isNewItem(folder.createdTime) && <span className="gdm-new-badge gdm-new-badge--inline">NEW</span>}
+                                                    </>
                                                 )}
                                             </div>
                                         </td>
@@ -834,7 +848,10 @@ const GoogleDriveManager = () => {
                                                             <button onClick={() => setRenamingItem(null)}><X size={14} /></button>
                                                         </div>
                                                     ) : (
-                                                        <span className="gdm-list-filename">{file.name}</span>
+                                                        <>
+                                                            <span className="gdm-list-filename">{file.name}</span>
+                                                            {isNewItem(file.createdTime) && <span className="gdm-new-badge gdm-new-badge--inline">NEW</span>}
+                                                        </>
                                                     )}
                                                 </div>
                                             </td>
