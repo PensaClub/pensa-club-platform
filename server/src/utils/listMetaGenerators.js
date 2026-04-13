@@ -97,7 +97,7 @@ function generateInitiativesListMetaHTML() {
         title: 'Инициативи | Pensa Club',
         description: 'Социални инициативи и кампании на Фондация ПЕНСА за подпомагане на пенсионери. Разгледайте всички активни и приключили инициативи и се включете в каузите.',
         keywords: 'инициативи, пенсионери, социални каузи, доброволчество, Фондация ПЕНСА, Pensa Club, помощ за възрастни хора',
-        imageUrl: 'https://pensa.club/images/initiatives/initiatives_cover.png',
+        imageUrl: 'https://pensa.club/images/initiatives/initiatives_cover.jpg',
         url: 'https://pensa.club/initiatives',
         path: '/initiatives',
     });
@@ -109,7 +109,7 @@ function generateProjectsListMetaHTML() {
         title: 'Проекти | Pensa Club',
         description: 'Проекти на Фондация ПЕНСА за дигитална грамотност и благополучие на пенсионери в България. Образователни и социални проекти за хора над 60 години.',
         keywords: 'проекти, дигитална грамотност, пенсионери, образование, Фондация ПЕНСА, Pensa Club, проекти за възрастни',
-        imageUrl: 'https://pensa.club/images/projects/projects_cover.png',
+        imageUrl: 'https://pensa.club/images/projects/projects_cover.jpg',
         url: 'https://pensa.club/projects',
         path: '/projects',
     });
