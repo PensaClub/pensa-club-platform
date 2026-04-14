@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { X, Search, Check, Send, User } from 'lucide-react';
+import { X, Search, Check, Send, User, Folder, FileArchive } from 'lucide-react';
 import { useStorage } from '../../contexts/StorageProvider';
 import './shareWithUserModal.css';
 
@@ -8,6 +8,8 @@ const ShareWithUserModal = ({ filePath, fileName, onClose }) => {
     const { t } = useTranslation('admin');
     const { searchUsers, shareWithUser } = useStorage();
     const searchTimeoutRef = useRef(null);
+    // Detect folder by trailing slash
+    const isFolder = filePath?.endsWith('/');
 
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState([]);
@@ -82,13 +84,22 @@ const ShareWithUserModal = ({ filePath, fileName, onClose }) => {
         <div className="csm-share-modal" onClick={handleOverlayClick}>
             <div className="csm-share-user-content">
                 <div className="csm-share-user-header">
-                    <h4>{t('cloudStorage.shareWithUser', 'Сподели с потребител')}</h4>
+                    <h4>{isFolder ? t('cloudStorage.shareFolderWithUser', 'Сподели папка с потребител') : t('cloudStorage.shareWithUser', 'Сподели с потребител')}</h4>
                     <button className="csm-share-user-close" onClick={onClose}>
                         <X size={18} />
                     </button>
                 </div>
 
-                <p className="csm-share-filename">{fileName}</p>
+                <p className="csm-share-filename">
+                    {isFolder ? <Folder size={14} style={{ verticalAlign: 'middle', marginRight: 4 }} /> : null}
+                    {fileName}
+                </p>
+                {isFolder && (
+                    <div className="csm-share-folder-notice">
+                        <FileArchive size={14} />
+                        <span>{t('cloudStorage.folderZipNotice', 'Цялата папка ще бъде свалена като ZIP архив (включително всички файлове в подпапките)')}</span>
+                    </div>
+                )}
 
                 {!success ? (
                     <>
