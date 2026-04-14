@@ -87,7 +87,23 @@ export const storageServiceFactory = () => {
 
     getShareLinkInfo: async (token) => {
       const response = await fetch(`${apiUrl}/shared-links/${token}/info`);
-      return response.json();
+      const contentType = response.headers.get('content-type') || '';
+      // If we got HTML back (NPM fallback to React SPA), the route isn't
+      // hitting the backend — surface that as a clear "not found".
+      if (!contentType.includes('application/json')) {
+        const err = new Error('Backend route not reachable (got HTML instead of JSON)');
+        err.statusCode = 404;
+        err.routingIssue = true;
+        throw err;
+      }
+      const data = await response.json();
+      if (!response.ok) {
+        const err = new Error(data?.message || 'Request failed');
+        err.statusCode = response.status;
+        err.body = data;
+        throw err;
+      }
+      return data;
     },
 
     downloadSharedFile: async (token, password) => {

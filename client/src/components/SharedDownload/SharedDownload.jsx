@@ -21,12 +21,27 @@ const SharedDownload = () => {
             try {
                 const data = await storageService.getShareLinkInfo(token);
                 if (data.error) {
-                    setError(data.error);
-                } else {
+                    // Backend returned a JSON error
+                    if (data.statusCode === 404) setError('not_found');
+                    else if (data.statusCode === 410) setError('expired');
+                    else setError('general');
+                } else if (data && (data.fileName || data.hasPassword !== undefined)) {
+                    // Valid response with link info
                     setLinkInfo(data);
+                } else {
+                    // Got a response but it's not a link info object
+                    // (likely React SPA HTML returned by NPM fallback)
+                    setError('not_found');
                 }
-            } catch {
-                setError('expired');
+            } catch (err) {
+                // Network error, JSON parse error (HTML returned), etc.
+                if (err?.statusCode === 404 || err?.message?.toLowerCase?.().includes('not found')) {
+                    setError('not_found');
+                } else if (err?.statusCode === 410 || err?.message?.toLowerCase?.().includes('expired')) {
+                    setError('expired');
+                } else {
+                    setError('general');
+                }
             } finally {
                 setLoading(false);
             }

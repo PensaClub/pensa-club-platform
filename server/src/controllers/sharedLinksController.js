@@ -8,6 +8,16 @@ const isAuth = require('../middlewares/isAuth');
 const { checkPermission } = require('../middlewares/rbac');
 const { getFirebaseApp, admin } = require('../firebase/firebaseAdmin');
 
+// ─── Helper: RFC 5987 compliant Content-Disposition header ────────────────────
+// Properly encodes UTF-8 / Cyrillic filenames using both ASCII fallback
+// and filename* parameter (RFC 5987).
+function buildContentDisposition(filename) {
+    // eslint-disable-next-line no-control-regex
+    const asciiFallback = filename.replace(/[^\x20-\x7E]/g, '_').replace(/"/g, '\\"');
+    const utf8Encoded = encodeURIComponent(filename);
+    return `attachment; filename="${asciiFallback}"; filename*=UTF-8''${utf8Encoded}`;
+}
+
 /**
  * Helper: validate a shared link token and return the link or throw appropriate error
  */
@@ -101,7 +111,6 @@ sharedLinksController.post('/', isAuth, checkPermission('sharedLink', 'create'),
             passwordHash,
             expiresAt,
             maxDownloads: maxDownloads || null,
-            isFolder,
         });
 
         const clientUrl = process.env.CLIENT_URL || 'https://pensa.club';
@@ -142,7 +151,7 @@ sharedLinksController.get('/', isAuth, checkPermission('sharedLink', 'readAll'),
                 token: link.token,
                 fileName: link.fileName,
                 filePath: link.filePath,
-                isFolder: link.isFolder,
+                isFolder: link.filePath.endsWith('/'),
                 createdBy: link.creator
                     ? { id: link.creator.id, email: link.creator.email }
                     : null,
@@ -191,7 +200,7 @@ sharedLinksController.get('/:token/info', async (req, res, next) => {
             hasPassword: !!link.passwordHash,
             createdBy: link.creator ? link.creator.email : null,
             expiresAt: link.expiresAt,
-            isFolder: link.isFolder,
+            isFolder: link.filePath.endsWith('/'),
         });
     } catch (err) {
         next(err);
@@ -233,7 +242,7 @@ async function streamSharedFile(link, req, res, next) {
     ]);
 
     // ── FOLDER DOWNLOAD AS ZIP ──
-    if (link.isFolder) {
+    if (link.filePath.endsWith('/')) {
         const folderPrefix = link.filePath.endsWith('/') ? link.filePath : `${link.filePath}/`;
         const [files] = await bucket.getFiles({ prefix: folderPrefix });
         const realFiles = files.filter(f => !f.name.endsWith('/'));
@@ -247,7 +256,7 @@ async function streamSharedFile(link, req, res, next) {
 
         const zipName = link.fileName.endsWith('.zip') ? link.fileName : `${link.fileName}.zip`;
         res.setHeader('Content-Type', 'application/zip');
-        res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(zipName)}"`);
+        res.setHeader('Content-Disposition', buildContentDisposition(zipName));
 
         const archive = archiver('zip', { zlib: { level: 9 } });
         archive.on('error', (err) => {
@@ -296,10 +305,7 @@ async function streamSharedFile(link, req, res, next) {
     // Set response headers
     const contentType = fileMetadata?.contentType || 'application/octet-stream';
     res.setHeader('Content-Type', contentType);
-    res.setHeader(
-        'Content-Disposition',
-        `attachment; filename="${encodeURIComponent(link.fileName)}"`
-    );
+    res.setHeader('Content-Disposition', buildContentDisposition(link.fileName));
     if (fileMetadata?.size) {
         res.setHeader('Content-Length', fileMetadata.size);
     }

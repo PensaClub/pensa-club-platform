@@ -419,8 +419,19 @@ const GoogleDriveManager = () => {
                 const disposition = res.headers.get('Content-Disposition');
                 let filename = 'download';
                 if (disposition) {
-                    const match = disposition.match(/filename\*?=(?:UTF-8'')?["']?([^"';\n]+)/i);
-                    if (match) filename = decodeURIComponent(match[1]);
+                    // Prefer RFC 5987 filename*=UTF-8''... (proper UTF-8 / Cyrillic support)
+                    const utf8Match = disposition.match(/filename\*=UTF-8''([^;\n]+)/i);
+                    if (utf8Match) {
+                        try { filename = decodeURIComponent(utf8Match[1].trim()); }
+                        catch { filename = utf8Match[1].trim(); }
+                    } else {
+                        // Fallback to legacy filename="..." (ASCII or %-encoded)
+                        const asciiMatch = disposition.match(/filename=["']?([^"';\n]+)/i);
+                        if (asciiMatch) {
+                            try { filename = decodeURIComponent(asciiMatch[1].trim()); }
+                            catch { filename = asciiMatch[1].trim(); }
+                        }
+                    }
                 }
                 return res.blob().then(blob => ({ blob, filename }));
             })
