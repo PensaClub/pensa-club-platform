@@ -1139,7 +1139,6 @@ storageController.post(
                 sharedBy: req.user.userId,
                 sharedWith: sharedWithUserId,
                 message: message || null,
-                isFolder,
             });
 
             // Create notification for recipient

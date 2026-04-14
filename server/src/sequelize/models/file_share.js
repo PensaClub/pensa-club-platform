@@ -52,12 +52,6 @@ module.exports = (sequelize, DataTypes) => {
         defaultValue: false,
         field: 'is_read',
       },
-      isFolder: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
-        field: 'is_folder',
-      },
     },
     {
       sequelize,

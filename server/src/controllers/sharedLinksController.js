@@ -111,7 +111,6 @@ sharedLinksController.post('/', isAuth, checkPermission('sharedLink', 'create'),
             passwordHash,
             expiresAt,
             maxDownloads: maxDownloads || null,
-            isFolder,
         });
 
         const clientUrl = process.env.CLIENT_URL || 'https://pensa.club';
@@ -152,7 +151,7 @@ sharedLinksController.get('/', isAuth, checkPermission('sharedLink', 'readAll'),
                 token: link.token,
                 fileName: link.fileName,
                 filePath: link.filePath,
-                isFolder: link.isFolder,
+                isFolder: link.filePath.endsWith('/'),
                 createdBy: link.creator
                     ? { id: link.creator.id, email: link.creator.email }
                     : null,
@@ -201,7 +200,7 @@ sharedLinksController.get('/:token/info', async (req, res, next) => {
             hasPassword: !!link.passwordHash,
             createdBy: link.creator ? link.creator.email : null,
             expiresAt: link.expiresAt,
-            isFolder: link.isFolder,
+            isFolder: link.filePath.endsWith('/'),
         });
     } catch (err) {
         next(err);
@@ -243,7 +242,7 @@ async function streamSharedFile(link, req, res, next) {
     ]);
 
     // ── FOLDER DOWNLOAD AS ZIP ──
-    if (link.isFolder) {
+    if (link.filePath.endsWith('/')) {
         const folderPrefix = link.filePath.endsWith('/') ? link.filePath : `${link.filePath}/`;
         const [files] = await bucket.getFiles({ prefix: folderPrefix });
         const realFiles = files.filter(f => !f.name.endsWith('/'));
