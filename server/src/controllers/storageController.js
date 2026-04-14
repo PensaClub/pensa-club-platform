@@ -6,17 +6,7 @@ const archiver = require('archiver');
 const { Storage } = require('@google-cloud/storage');
 const isAuth = require('../middlewares/isAuth');
 const rbac = require('../middlewares/rbac');
-
-// ─── Helper: RFC 5987 compliant Content-Disposition header ────────────────────
-// Properly encodes UTF-8 / Cyrillic filenames using both ASCII fallback
-// and filename* parameter (RFC 5987).
-function buildContentDisposition(filename) {
-    // Strip any non-ASCII for the fallback
-    // eslint-disable-next-line no-control-regex
-    const asciiFallback = filename.replace(/[^\x20-\x7E]/g, '_').replace(/"/g, '\\"');
-    const utf8Encoded = encodeURIComponent(filename);
-    return `attachment; filename="${asciiFallback}"; filename*=UTF-8''${utf8Encoded}`;
-}
+const { buildContentDisposition, ensureExtension } = require('../utils/filenameHelpers');
 
 // ─── Google Cloud Storage Setup ────────────────────────────────────────────────
 // Firebase Storage IS Google Cloud Storage. We reuse the Firebase service account
@@ -515,7 +505,11 @@ storageController.get(
             }
 
             const [metadata] = await file.getMetadata();
-            const fileName = filePath.split('/').pop();
+            const rawFileName = filePath.split('/').pop();
+            // If the GCS object name lacks an extension (UUID-only uploads),
+            // derive one from the Content-Type so the browser saves it with
+            // the correct extension.
+            const fileName = ensureExtension(rawFileName, metadata.contentType);
 
             res.setHeader('Content-Type', metadata.contentType || 'application/octet-stream');
             res.setHeader('Content-Disposition', buildContentDisposition(fileName));
@@ -574,7 +568,14 @@ async function streamFolderAsZip(bucket, folderPrefix, res, next) {
             // Strip the folder prefix so files appear at the ZIP root with their relative path
             const relativeName = file.name.slice(folderPrefix.length);
             if (!relativeName) continue;
-            archive.append(file.createReadStream(), { name: relativeName });
+            // If a file has no extension in its GCS name (UUID-only uploads),
+            // derive one from its Content-Type so it's still openable after extraction.
+            let entryName = relativeName;
+            try {
+                const [meta] = await file.getMetadata();
+                entryName = ensureExtension(relativeName, meta?.contentType);
+            } catch (_) { /* ignore, fall back to raw name */ }
+            archive.append(file.createReadStream(), { name: entryName });
         }
 
         await archive.finalize();

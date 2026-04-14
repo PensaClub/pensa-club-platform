@@ -28,7 +28,9 @@
         "lectures": "Vorlesungen",
         "more": "Mehr",
         "myAcademy": "Meine Akademie",
-        "myForum": "Mein Forum"
+        "myForum": "Mein Forum",
+        "seminars": "Seminare",
+        "dashboard": "Dashboard"
       },
       "dropdown": {
         "dashboard": "Mein Fortschritt",
@@ -38,13 +40,29 @@
         "logout": "Abmelden",
         "myChats": "Chats",
         "mentorDashboard": "Chats"
-      }
+      },
+      "mobileNavSection": "Navigation",
+      "mobileAccountSection": "Konto",
+      "mentorDashboardLink": "Mentor-Dashboard",
+      "myChatsLink": "Meine Chats"
     },
     "hero": {
       "title": "DigiBridge Akademie",
       "subtitle": "Digitale Kompetenzen für alle Altersgruppen",
       "startLearning": "Lernen beginnen",
-      "becomeMentor": "Mentor werden"
+      "becomeMentor": "Mentor werden",
+      "badge": "Kostenlose Bildung",
+      "titlePart1": "Digitale Kompetenz",
+      "titlePart2": " für alle",
+      "trust1": "100% Kostenlos",
+      "trust2": "Geschulte Mentoren",
+      "trust3": "Sicher und einfach",
+      "floatCard1Title": "Mobilgeräte",
+      "floatCard1Sub": "Einfache Lektionen",
+      "floatCard2Title": "Online-Sicherheit",
+      "floatCard2Sub": "Schützen Sie sich",
+      "floatCard3Title": "Videoanrufe",
+      "floatCard3Sub": "Mit Angehörigen"
     },
     "about": {
       "label": "Über das Projekt",
@@ -52,7 +70,13 @@
       "description": "DigiBridge ist eine kostenlose Bildungsplattform, die Generationen durch digitales Lernen verbindet. Junge Mentoren helfen Senioren, Vertrauen im Umgang mit Technologie zu gewinnen und aktiv an der digitalen Gesellschaft teilzunehmen.",
       "stat1": "Kostenlose Kurse",
       "stat2": "Junge Mentoren",
-      "stat3": "Länder"
+      "stat3": "Länder",
+      "titlePart1": "Wir verbinden ",
+      "titlePart2": "Generationen",
+      "titlePart3": " durch Technologie",
+      "feature1": "Kostenlos für alle Teilnehmer",
+      "feature2": "Individueller Ansatz",
+      "feature3": "Von der EU finanziert"
     },
     "howItWorks": {
       "label": "Einfach und Zugänglich",
@@ -73,7 +97,12 @@
       "step4": {
         "title": "Holen Sie sich Hilfe",
         "description": "Ihr Mentor steht Ihnen immer für Fragen und Unterstützung zur Verfügung"
-      }
+      },
+      "titlePart1": "Wie es ",
+      "titlePart2": "funktioniert",
+      "titlePart3": "?",
+      "ctaText": "Bereit anzufangen?",
+      "ctaButton": "Jetzt starten"
     },
     "features": {
       "label": "Was Wir Anbieten",
@@ -94,7 +123,12 @@
       "library": {
         "title": "Bibliothek",
         "description": "Video-Tutorials, PDF-Anleitungen und Materialien immer verfügbar"
-      }
+      },
+      "titlePart1": "Was wir ",
+      "titlePart2": "anbieten",
+      "stat1": "Kostenlos",
+      "stat2": "Zugänglich",
+      "stat3": "Sprachen"
     },
     "mentors": {
       "label": "Unsere Mentoren",
@@ -119,7 +153,11 @@
       "findMentor": "Mentor Finden",
       "becomeMentor": "Mentor Werden",
       "activeMentors": "Aktive Mentoren",
-      "satisfaction": "Zufriedenheitsrate"
+      "satisfaction": "Zufriedenheitsrate",
+      "titlePart1": "Ausgebildete ",
+      "titlePart2": "junge Menschen",
+      "titlePart3": " bereit zu helfen",
+      "trained": "Professionell ausgebildet"
     },
     "testimonials": {
       "label": "Echte Geschichten",
@@ -139,7 +177,9 @@
         "name": "Elena Dimitrova",
         "role": "DigiBridge Mentorin",
         "text": "Mentoring bei DigiBridge hat auch mein Leben verändert! Ich habe gelernt, wie wertvoll generationsübergreifende Verbindungen sind. Die Arbeit mit Senioren lehrte mich Geduld und Verständnis. Ich empfehle es jedem jungen Menschen!"
-      }
+      },
+      "titlePart1": "Was ",
+      "titlePart2": "unsere Teilnehmer sagen"
     },
     "cta": {
       "badge": "Kostenlos für Alle",
@@ -149,7 +189,13 @@
       "becomeMentor": "Mentor Werden",
       "feature1": "100% Kostenlos",
       "feature2": "Persönliche Unterstützung",
-      "feature3": "In Ihrem Tempo Lernen"
+      "feature3": "In Ihrem Tempo Lernen",
+      "titlePart1": "Sind Sie bereit für ",
+      "titlePart2": "die digitale Zukunft",
+      "titlePart3": "?",
+      "stat1": "Teilnehmer",
+      "stat2": "Mentoren",
+      "stat3": "Länder"
     },
     "partners": {
       "label": "Partner",
@@ -172,7 +218,9 @@
       "euSupport": {
         "title": "Unterstützt von der Europäischen Union",
         "description": "Dieses Projekt wird mit Unterstützung des Civic Innovation Fund und europäischer Bürgerbildungsprogramme finanziert"
-      }
+      },
+      "titlePart1": "Unsere ",
+      "titlePart2": "Partner"
     },
     "faq": {
       "label": "Häufig Gestellte Fragen",
@@ -204,7 +252,9 @@
       },
       "stillHaveQuestions": "Haben Sie Noch Fragen?",
       "contactUs": "Kontaktieren Sie uns und wir antworten so schnell wie möglich",
-      "contactButton": "Kontaktieren Sie Uns"
+      "contactButton": "Kontaktieren Sie Uns",
+      "titlePart1": "Häufig gestellte ",
+      "titlePart2": "Fragen"
     },
     "contact": {
       "modalTitle": "Kontaktieren Sie Uns",
@@ -252,7 +302,9 @@
       "errorMessage": "Fehler beim Senden. Bitte versuchen Sie es erneut.",
       "checking": "Überprüfung läuft...",
       "alreadyReviewed": "Vielen Dank für Ihre Bewertung!",
-      "alreadyReviewedMessage": "Sie haben bereits eine Bewertung für die DigiBridge Academy abgegeben. Wir schätzen Ihr Feedback!"
+      "alreadyReviewedMessage": "Sie haben bereits eine Bewertung für die DigiBridge Academy abgegeben. Wir schätzen Ihr Feedback!",
+      "titlePart1": "Teilen Sie Ihre ",
+      "titlePart2": "Meinung"
     },
     "mentorsPage": {
       "meta": {
