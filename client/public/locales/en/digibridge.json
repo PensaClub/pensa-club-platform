@@ -28,7 +28,9 @@
         "lectures": "Live Events",
         "more": "More",
         "myAcademy": "My Academy",
-        "myForum": "My Forum"
+        "myForum": "My Forum",
+        "seminars": "Seminars",
+        "dashboard": "Dashboard"
       },
       "dropdown": {
         "dashboard": "My Progress",
@@ -38,13 +40,29 @@
         "logout": "Logout",
         "myChats": "My Chats",
         "mentorDashboard": "Chats"
-      }
+      },
+      "mobileNavSection": "Navigation",
+      "mobileAccountSection": "Account",
+      "mentorDashboardLink": "Mentor Dashboard",
+      "myChatsLink": "My Chats"
     },
     "hero": {
       "title": "DigiBridge Academy",
       "subtitle": "Empowering Seniors with Digital Skills",
       "startLearning": "Start Learning",
-      "becomeMentor": "Become a Mentor"
+      "becomeMentor": "Become a Mentor",
+      "badge": "Free Education",
+      "titlePart1": "Digital Literacy",
+      "titlePart2": " for Everyone",
+      "trust1": "100% Free",
+      "trust2": "Trained Mentors",
+      "trust3": "Safe and Easy",
+      "floatCard1Title": "Mobile Devices",
+      "floatCard1Sub": "Easy Lessons",
+      "floatCard2Title": "Online Security",
+      "floatCard2Sub": "Protect Yourself",
+      "floatCard3Title": "Video Calls",
+      "floatCard3Sub": "With Loved Ones"
     },
     "about": {
       "label": "About the Project",
@@ -52,7 +70,13 @@
       "description": "DigiBridge is a free educational platform that connects generations through digital learning. Young mentors help seniors gain confidence in using technology and participate actively in the digital society.",
       "stat1": "Free Courses",
       "stat2": "Young Mentors",
-      "stat3": "Countries"
+      "stat3": "Countries",
+      "titlePart1": "We connect ",
+      "titlePart2": "generations",
+      "titlePart3": " through technology",
+      "feature1": "Free for all participants",
+      "feature2": "Individual approach",
+      "feature3": "EU funded"
     },
     "howItWorks": {
       "label": "Easy and Accessible",
@@ -73,7 +97,12 @@
       "step4": {
         "title": "Get Help",
         "description": "Your mentor is always available for questions and support"
-      }
+      },
+      "titlePart1": "How it ",
+      "titlePart2": "works",
+      "titlePart3": "?",
+      "ctaText": "Ready to get started?",
+      "ctaButton": "Start Now"
     },
     "features": {
       "label": "What We Offer",
@@ -94,7 +123,12 @@
       "library": {
         "title": "Library",
         "description": "Video tutorials, PDF guides and materials always available"
-      }
+      },
+      "titlePart1": "What we ",
+      "titlePart2": "offer",
+      "stat1": "Free",
+      "stat2": "Accessible",
+      "stat3": "Languages"
     },
     "mentors": {
       "label": "Our Mentors",
@@ -119,7 +153,11 @@
       "findMentor": "Find a Mentor",
       "becomeMentor": "Become a Mentor",
       "activeMentors": "Active Mentors",
-      "satisfaction": "Satisfaction Rate"
+      "satisfaction": "Satisfaction Rate",
+      "titlePart1": "Trained ",
+      "titlePart2": "young people",
+      "titlePart3": " ready to help",
+      "trained": "Professionally Trained"
     },
     "testimonials": {
       "label": "Real Stories",
@@ -139,7 +177,9 @@
         "name": "Elena Dimitrova",
         "role": "DigiBridge Mentor",
         "text": "Mentoring at DigiBridge changed my life too! I learned how valuable intergenerational connections are. Working with seniors taught me patience and understanding. I recommend it to every young person!"
-      }
+      },
+      "titlePart1": "What ",
+      "titlePart2": "our participants say"
     },
     "cta": {
       "badge": "Free for Everyone",
@@ -149,7 +189,13 @@
       "becomeMentor": "Become a Mentor",
       "feature1": "100% Free",
       "feature2": "Personal Support",
-      "feature3": "Learn at Your Pace"
+      "feature3": "Learn at Your Pace",
+      "titlePart1": "Are you ready for ",
+      "titlePart2": "the digital future",
+      "titlePart3": "?",
+      "stat1": "Participants",
+      "stat2": "Mentors",
+      "stat3": "Countries"
     },
     "partners": {
       "label": "Partners",
@@ -172,7 +218,9 @@
       "euSupport": {
         "title": "Supported by the European Union",
         "description": "This project is funded with the support of Civic Innovation Fund and European civic education programs"
-      }
+      },
+      "titlePart1": "Our ",
+      "titlePart2": "partners"
     },
     "faq": {
       "label": "Frequently Asked Questions",
@@ -204,7 +252,9 @@
       },
       "stillHaveQuestions": "Still Have Questions?",
       "contactUs": "Contact us and we'll respond as soon as possible",
-      "contactButton": "Contact Us"
+      "contactButton": "Contact Us",
+      "titlePart1": "Frequently asked ",
+      "titlePart2": "questions"
     },
     "contact": {
       "modalTitle": "Contact Us",
@@ -413,7 +463,9 @@
       "checking": "Checking...",
       "alreadyReviewed": "Thank You for Your Review!",
       "alreadyReviewedMessage": "You have already submitted a review for DigiBridge Academy. We appreciate your feedback!",
-      "loginButton": "Log In"
+      "loginButton": "Log In",
+      "titlePart1": "Share your ",
+      "titlePart2": "feedback"
     },
     "mentorsPage": {
       "meta": {
