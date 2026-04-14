@@ -3,6 +3,8 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { useLocation, Routes, Route, Outlet } from 'react-router-dom';
 import { LocalizedLink as Link, LocalizedNavLink as NavLink } from '../LocalizedLink/LocalizedLink';
 import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
+import { useNavigate } from 'react-router-dom';
+import { localePath, stripLangFromPath } from '../../utils/languageUtils';
 import { ProfileData } from "./ProfileData";
 import ProfileForm from "./ProfileForm";
 import ProfileAddress from "./ProfileAddress";
@@ -55,7 +57,7 @@ import { AdminSubscription } from "../AdminDashboard/AdminSubscription/AdminSubs
 import ArticleCreateForm from "../Articles/ArticleCreateForm/ArticleCreateForm";
 import { AllArticles } from "../Articles/AllArticles/AllArticles";
 import EditArticle from "../Articles/AllArticles/EditArticle/EditArticle";
-import { changeLanguage } from "i18next";
+import i18next from "i18next";
 import InitiativeCreateForm from "../Initiatives/CreateIniciative/InitiativeCreateForm/InitiativeCreateForm";
 import DraftInitiatives from "../Initiatives/DraftInitiatives/DraftInitiatives";
 import { AllInitiatives } from "../Initiatives/AllInitiatives/AllInitiatives";
@@ -195,6 +197,16 @@ const AvatarIcon = () => (
 export const Profile = () => {
   const location = useLocation();
   const navigate = useLocalizedNavigate();
+  const rawNavigate = useNavigate();
+
+  // URL-prefix-based language change — navigate so the language persists on refresh.
+  const handleLanguageChange = async (lang) => {
+    if (lang === i18next.language) return;
+    const cleanPath = stripLangFromPath(window.location.pathname);
+    const targetPath = localePath(cleanPath, lang);
+    await i18next.changeLanguage(lang);
+    rawNavigate(targetPath, { replace: true });
+  };
   const { t, i18n } = useTranslation(['admin', 'clubs']);
   const currentLanguage = i18n.language;
   const [menuOpen, setMenuOpen] = useState(false);
@@ -605,7 +617,7 @@ export const Profile = () => {
                       <button
                         key={lang}
                         className={`pd-lang-pill ${currentLanguage === lang ? 'active' : ''}`}
-                        onClick={() => { changeLanguage(lang); setProfileMenuOpen(false); }}
+                        onClick={() => { handleLanguageChange(lang); setProfileMenuOpen(false); }}
                       >
                         {lang.toUpperCase()}
                       </button>

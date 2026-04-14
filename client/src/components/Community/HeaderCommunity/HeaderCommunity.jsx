@@ -1,17 +1,24 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useTranslation } from 'react-i18next';
+import { localePath, stripLangFromPath } from '../../../utils/languageUtils';
 import './headerCommunity.css';
 
 export const HeaderCommunity = () => {
     const { i18n } = useTranslation();
+    const navigate = useNavigate();
     const currentLanguage = i18n.language;
 
-    const changeLanguage = (lng) => {
-        i18n.changeLanguage(lng);
+    const changeLanguage = async (lng) => {
+        if (lng === i18n.language) return;
+        const cleanPath = stripLangFromPath(window.location.pathname);
+        const targetPath = localePath(cleanPath, lng);
+        await i18n.changeLanguage(lng);
+        navigate(targetPath, { replace: true });
     };
 
     return (

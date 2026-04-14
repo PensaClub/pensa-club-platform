@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useContext } from "react";
 import "./header.css";
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { LocalizedLink as Link, LocalizedNavLink as NavLink } from '../LocalizedLink/LocalizedLink';
 import { UserContext } from "../contexts/UserContext";
 import { useTranslation } from "react-i18next";
@@ -10,6 +10,7 @@ import { useClubContext } from "../contexts/ClubContext";
 import { BookmarkIcon, BookmarkIconHeader } from "../Initiatives/Icons/InitiativeIcons";
 import { LanguageSwitcher } from "../LanguageSwitcher/LanguageSwitcher";
 import { useActiveChatCount } from "../hooks/useActiveChatCount";
+import { localePath, stripLangFromPath } from "../../utils/languageUtils";
 export const Header = ({ additionalClasses }) => {
   const { t, i18n } = useTranslation();
   const [scrolled, setScrolled] = useState(false);
@@ -25,6 +26,7 @@ export const Header = ({ additionalClasses }) => {
   const profileRef = useRef(null);
   const mobileMenuRef = useRef(null);
   const location = useLocation();
+  const navigate = useNavigate();
   const [activeMobileSubmenu, setActiveMobileSubmenu] = useState(null);
   const userEmail = profileData?.email || '';
   const userId = userEmail.replace(/\./g, '_dot_').replace(/@/g, '_at_');
@@ -112,8 +114,14 @@ export const Header = ({ additionalClasses }) => {
     }
   };
 
-  const changeLanguage = (lng) => {
-    i18n.changeLanguage(lng);
+  const changeLanguage = async (lng) => {
+    if (lng === i18n.language) return;
+    // Navigate to the localized version of the current path so the language
+    // persists on refresh — the app uses URL-prefix-based language detection.
+    const cleanPath = stripLangFromPath(window.location.pathname);
+    const targetPath = localePath(cleanPath, lng);
+    await i18n.changeLanguage(lng);
+    navigate(targetPath, { replace: true });
   };
 
   const currentLanguage = i18n.language;

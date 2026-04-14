@@ -1,12 +1,13 @@
 import "./menuCommunity.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapLocation, faHouseUser, faUser, faBars, faCircleExclamation, faPlus, faUserGroup } from '@fortawesome/free-solid-svg-icons';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useLocalizedNavigate } from '../../../hooks/useLocalizedNavigate';
 import { useAuthContext } from "../../contexts/UserContext";
 import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import AlertModal from "../../Header/AlertModal/AlertModal";
+import { localePath, stripLangFromPath } from "../../../utils/languageUtils";
 
 export const MenuCommunity = () => {
     const { isAuthentication, isFinish, profileData } = useAuthContext();
@@ -16,6 +17,7 @@ export const MenuCommunity = () => {
     const { t, i18n } = useTranslation();
     const location = useLocation();
     const navigate = useLocalizedNavigate();
+    const rawNavigate = useNavigate();
     const dropdownRef = useRef(null);
 
     const handleNavigation = (path) => {
@@ -57,8 +59,12 @@ export const MenuCommunity = () => {
         };
     }, [isFinish]);
 
-    const changeLanguage = (lng) => {
-        i18n.changeLanguage(lng);
+    const changeLanguage = async (lng) => {
+        if (lng === i18n.language) return;
+        const cleanPath = stripLangFromPath(window.location.pathname);
+        const targetPath = localePath(cleanPath, lng);
+        await i18n.changeLanguage(lng);
+        rawNavigate(targetPath, { replace: true });
       };
       const currentLanguage = i18n.language;
 
