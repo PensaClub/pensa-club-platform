@@ -2,6 +2,35 @@
 /* Prefix: csm-share-user- */
 
 /* =========================================================
+            SHARED: folder notice (used in both share modals)
+   ========================================================= */
+
+.csm-share-folder-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 10px 12px;
+    margin-bottom: 14px;
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    border-radius: 6px;
+    color: #fbbf24;
+    font-size: 0.78rem;
+    line-height: 1.4;
+}
+
+.csm-share-folder-notice svg {
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+[data-theme="light"] .csm-share-folder-notice {
+    background: rgba(217, 119, 6, 0.08);
+    border-color: rgba(217, 119, 6, 0.25);
+    color: #b45309;
+}
+
+/* =========================================================
             SHARE WITH USER MODAL
    ========================================================= */
 

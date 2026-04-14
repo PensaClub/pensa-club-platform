@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { X, Copy, Check, Link2 } from 'lucide-react';
+import { X, Copy, Check, Link2, Folder, FileArchive } from 'lucide-react';
 import { useStorage } from '../../contexts/StorageProvider';
 import './shareFileModal.css';
 
@@ -14,6 +14,8 @@ const VALIDITY_OPTIONS = [
 const ShareFileModal = ({ filePath, fileName, onClose }) => {
     const { t } = useTranslation('admin');
     const { createShareLink } = useStorage();
+    // Detect folder by trailing slash
+    const isFolder = filePath?.endsWith('/');
     const [expiresInDays, setExpiresInDays] = useState(7);
     const [usePassword, setUsePassword] = useState(false);
     const [password, setPassword] = useState('');
@@ -76,8 +78,17 @@ const ShareFileModal = ({ filePath, fileName, onClose }) => {
     return (
         <div className="csm-share-modal" onClick={handleOverlayClick}>
             <div className="csm-share-content">
-                <h4>{t('cloudStorage.shareFile')}</h4>
-                <p className="csm-share-filename">{fileName}</p>
+                <h4>{isFolder ? t('cloudStorage.shareFolder', 'Споделяне на папка') : t('cloudStorage.shareFile')}</h4>
+                <p className="csm-share-filename">
+                    {isFolder ? <Folder size={14} style={{ verticalAlign: 'middle', marginRight: 4 }} /> : null}
+                    {fileName}
+                </p>
+                {isFolder && (
+                    <div className="csm-share-folder-notice">
+                        <FileArchive size={14} />
+                        <span>{t('cloudStorage.folderZipNotice', 'Цялата папка ще бъде свалена като ZIP архив (включително всички файлове в подпапките)')}</span>
+                    </div>
+                )}
 
                 {!shareResult ? (
                     <>

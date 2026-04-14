@@ -1,6 +1,7 @@
 const sharedLinksController = require('express').Router();
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
+const archiver = require('archiver');
 const customError = require('../utils/customError');
 const { shared_link, shared_link_download, user_account } = require('../sequelize/models');
 const isAuth = require('../middlewares/isAuth');
@@ -67,6 +68,8 @@ function parseExpiresIn(expiresIn) {
 }
 
 // POST /shared-links — Create a share link (admin)
+// Supports both files and folders. Folders are detected by trailing slash on filePath
+// and will be streamed as ZIP archives on download.
 sharedLinksController.post('/', isAuth, checkPermission('sharedLink', 'create'), async (req, res, next) => {
     try {
         const { filePath, fileName, password, expiresIn, maxDownloads } = req.body;
@@ -83,6 +86,9 @@ sharedLinksController.post('/', isAuth, checkPermission('sharedLink', 'create'),
             });
         }
 
+        // Detect folder by trailing slash
+        const isFolder = filePath.endsWith('/');
+
         const token = crypto.randomBytes(32).toString('hex');
         const passwordHash = password ? await bcrypt.hash(password, 10) : null;
         const expiresAt = parseExpiresIn(expiresIn);
@@ -95,6 +101,7 @@ sharedLinksController.post('/', isAuth, checkPermission('sharedLink', 'create'),
             passwordHash,
             expiresAt,
             maxDownloads: maxDownloads || null,
+            isFolder,
         });
 
         const clientUrl = process.env.CLIENT_URL || 'https://pensa.club';
@@ -107,6 +114,7 @@ sharedLinksController.post('/', isAuth, checkPermission('sharedLink', 'create'),
                 url: `${clientUrl}/shared/${link.token}`,
                 expiresAt: link.expiresAt,
                 hasPassword: !!passwordHash,
+                isFolder,
             },
         });
     } catch (err) {
@@ -134,6 +142,7 @@ sharedLinksController.get('/', isAuth, checkPermission('sharedLink', 'readAll'),
                 token: link.token,
                 fileName: link.fileName,
                 filePath: link.filePath,
+                isFolder: link.isFolder,
                 createdBy: link.creator
                     ? { id: link.creator.id, email: link.creator.email }
                     : null,
@@ -182,6 +191,7 @@ sharedLinksController.get('/:token/info', async (req, res, next) => {
             hasPassword: !!link.passwordHash,
             createdBy: link.creator ? link.creator.email : null,
             expiresAt: link.expiresAt,
+            isFolder: link.isFolder,
         });
     } catch (err) {
         next(err);
@@ -204,15 +214,65 @@ async function checkLinkPassword(link, providedPassword) {
 }
 
 /**
- * Helper: stream a shared file to the response with proper headers + download tracking
+ * Helper: stream a shared file (or folder as ZIP) to the response with download tracking
  */
 async function streamSharedFile(link, req, res, next) {
+    const bucketName = process.env.GCS_BUCKET || 'pensaclub-909e0.appspot.com';
+    const bucket = admin.storage().bucket(bucketName);
+
+    // Increment download count and create download record (regardless of file/folder)
+    await Promise.all([
+        link.increment('downloadCount'),
+        shared_link_download.create({
+            sharedLinkId: link.id,
+            ipAddress: req.ip || req.connection?.remoteAddress || null,
+            userAgent: req.headers['user-agent']
+                ? req.headers['user-agent'].substring(0, 500)
+                : null,
+        }),
+    ]);
+
+    // ── FOLDER DOWNLOAD AS ZIP ──
+    if (link.isFolder) {
+        const folderPrefix = link.filePath.endsWith('/') ? link.filePath : `${link.filePath}/`;
+        const [files] = await bucket.getFiles({ prefix: folderPrefix });
+        const realFiles = files.filter(f => !f.name.endsWith('/'));
+
+        if (realFiles.length === 0) {
+            throw new customError({
+                message: 'Folder is empty or does not exist',
+                statusCode: 404,
+            });
+        }
+
+        const zipName = link.fileName.endsWith('.zip') ? link.fileName : `${link.fileName}.zip`;
+        res.setHeader('Content-Type', 'application/zip');
+        res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(zipName)}"`);
+
+        const archive = archiver('zip', { zlib: { level: 9 } });
+        archive.on('error', (err) => {
+            if (!res.headersSent) {
+                next(new customError({ message: 'Error creating archive', statusCode: 500 }));
+            } else {
+                res.end();
+            }
+        });
+        archive.pipe(res);
+
+        for (const file of realFiles) {
+            const relativeName = file.name.slice(folderPrefix.length);
+            if (!relativeName) continue;
+            archive.append(file.createReadStream(), { name: relativeName });
+        }
+
+        await archive.finalize();
+        return;
+    }
+
+    // ── SINGLE FILE DOWNLOAD ──
     let fileStream;
     let fileMetadata;
     try {
-        const app = getFirebaseApp();
-        const bucketName = process.env.GCS_BUCKET || 'pensaclub-909e0.appspot.com';
-        const bucket = admin.storage().bucket(bucketName);
         const file = bucket.file(link.filePath);
 
         const [exists] = await file.exists();
@@ -232,18 +292,6 @@ async function streamSharedFile(link, req, res, next) {
             statusCode: 404,
         });
     }
-
-    // Increment download count and create download record
-    await Promise.all([
-        link.increment('downloadCount'),
-        shared_link_download.create({
-            sharedLinkId: link.id,
-            ipAddress: req.ip || req.connection?.remoteAddress || null,
-            userAgent: req.headers['user-agent']
-                ? req.headers['user-agent'].substring(0, 500)
-                : null,
-        }),
-    ]);
 
     // Set response headers
     const contentType = fileMetadata?.contentType || 'application/octet-stream';

@@ -105,9 +105,13 @@ youtubeController.post('/upload', isAuth, rbac.checkPermission('seminar', 'updat
 
         const { title, description, tags, privacyStatus } = req.body;
 
+        // Multer parses multipart form-data filenames as latin1 by default,
+        // which breaks Cyrillic / non-ASCII characters. Re-decode as UTF-8.
+        const utf8OriginalName = Buffer.from(req.file.originalname, 'latin1').toString('utf8');
+
         const doUpload = async () => {
             return uploadVideoFromBuffer(req.file.buffer, {
-                title: title || req.file.originalname,
+                title: title || utf8OriginalName,
                 description: description || '',
                 tags: tags ? (typeof tags === 'string' ? tags.split(',').map(t => t.trim()) : tags) : [],
                 privacyStatus: privacyStatus || 'unlisted',
