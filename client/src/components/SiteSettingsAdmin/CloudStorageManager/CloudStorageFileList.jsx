@@ -98,6 +98,20 @@ const CloudStorageFileList = ({
                     )}
                     <div className="csfl-grid-actions">
                         <button
+                            className="csfl-action-btn"
+                            title={t('cloudStorage.shareFile', 'Сподели')}
+                            onClick={() => onShare(fullPath, displayName)}
+                        >
+                            <Share2 size={14} />
+                        </button>
+                        <button
+                            className="csfl-action-btn"
+                            title={t('cloudStorage.shareWithUser', 'Сподели с потребител')}
+                            onClick={() => onShareWithUser(fullPath, displayName)}
+                        >
+                            <Users size={14} />
+                        </button>
+                        <button
                             title={t('cloudStorage.rename')}
                             onClick={() => onRename(fullPath, displayName)}
                         >
@@ -156,6 +170,18 @@ const CloudStorageFileList = ({
                 <td className="csfl-list-type">{t('cloudStorage.folder')}</td>
                 <td className="csfl-list-date">{'\u2014'}</td>
                 <td className="csfl-list-actions">
+                    <button
+                        title={t('cloudStorage.shareFile', 'Сподели')}
+                        onClick={() => onShare(fullPath, displayName)}
+                    >
+                        <Share2 size={14} />
+                    </button>
+                    <button
+                        title={t('cloudStorage.shareWithUser', 'Сподели с потребител')}
+                        onClick={() => onShareWithUser(fullPath, displayName)}
+                    >
+                        <Users size={14} />
+                    </button>
                     <button
                         title={t('cloudStorage.rename')}
                         onClick={() => onRename(fullPath, displayName)}

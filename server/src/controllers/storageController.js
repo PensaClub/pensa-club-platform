@@ -2,6 +2,7 @@ const storageController = require('express').Router();
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
+const archiver = require('archiver');
 const { Storage } = require('@google-cloud/storage');
 const isAuth = require('../middlewares/isAuth');
 const rbac = require('../middlewares/rbac');
@@ -159,7 +160,10 @@ storageController.post(
             }
 
             const destFolder = req.body.path || '';
-            const sanitizedName = sanitizeFileName(req.file.originalname);
+            // Multer parses multipart form-data filenames as latin1 by default,
+            // which breaks Cyrillic / non-ASCII characters. Re-decode as UTF-8.
+            const utf8Name = Buffer.from(req.file.originalname, 'latin1').toString('utf8');
+            const sanitizedName = sanitizeFileName(utf8Name);
             const fullPath = destFolder ? `${destFolder.replace(/\/$/, '')}/${sanitizedName}` : sanitizedName;
 
             const file = bucket.file(fullPath);
@@ -463,7 +467,9 @@ storageController.post(
     }
 );
 
-// ─── 8. DOWNLOAD file (stream) ────────────────────────────────────────────────
+// ─── 8. DOWNLOAD file or folder (stream / ZIP) ────────────────────────────────
+// Supports both single files and entire folders (zipped on the fly).
+// A folder path is detected by trailing slash or by querying GCS.
 storageController.get(
     '/download',
     isAuth,
@@ -476,9 +482,24 @@ storageController.get(
                 return res.status(400).json({ error: 'File path is required' });
             }
 
+            // Normalize: folder if path ends with '/' OR no file exists at the exact path
+            const isFolderPath = filePath.endsWith('/');
+            const folderPrefix = isFolderPath ? filePath : `${filePath}/`;
+
+            if (isFolderPath) {
+                // ── FOLDER DOWNLOAD AS ZIP ──
+                return await streamFolderAsZip(bucket, folderPrefix, res, next);
+            }
+
+            // ── SINGLE FILE DOWNLOAD ──
             const file = bucket.file(filePath);
             const [exists] = await file.exists();
             if (!exists) {
+                // Maybe user passed a folder path without trailing slash — try as folder
+                const [folderFiles] = await bucket.getFiles({ prefix: folderPrefix, maxResults: 1 });
+                if (folderFiles && folderFiles.length > 0) {
+                    return await streamFolderAsZip(bucket, folderPrefix, res, next);
+                }
                 return res.status(404).json({ error: 'File not found' });
             }
 
@@ -503,6 +524,52 @@ storageController.get(
         }
     }
 );
+
+// Helper: stream a folder as a ZIP archive
+async function streamFolderAsZip(bucket, folderPrefix, res, next) {
+    try {
+        const [files] = await bucket.getFiles({ prefix: folderPrefix });
+
+        // Filter out folder placeholder files (ending with '/')
+        const realFiles = files.filter(f => !f.name.endsWith('/'));
+
+        if (realFiles.length === 0) {
+            return res.status(404).json({ error: 'Folder is empty or does not exist' });
+        }
+
+        // Derive ZIP filename from the last folder segment
+        const folderName = folderPrefix.replace(/\/$/, '').split('/').pop() || 'folder';
+        const zipName = `${folderName}.zip`;
+
+        res.setHeader('Content-Type', 'application/zip');
+        res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(zipName)}"`);
+
+        const archive = archiver('zip', { zlib: { level: 9 } });
+
+        archive.on('error', (err) => {
+            if (!res.headersSent) {
+                next(err);
+            } else {
+                res.end();
+            }
+        });
+
+        archive.pipe(res);
+
+        for (const file of realFiles) {
+            // Strip the folder prefix so files appear at the ZIP root with their relative path
+            const relativeName = file.name.slice(folderPrefix.length);
+            if (!relativeName) continue;
+            archive.append(file.createReadStream(), { name: relativeName });
+        }
+
+        await archive.finalize();
+    } catch (err) {
+        if (!res.headersSent) {
+            next(err);
+        }
+    }
+}
 
 // ─── 9. FILE INFO (metadata) ──────────────────────────────────────────────────
 storageController.get(
@@ -1032,6 +1099,9 @@ storageController.post(
                 return res.status(400).json({ error: 'filePath, fileName and sharedWithUserId are required' });
             }
 
+            // Detect if path is a folder (ends with '/' or matches an existing folder prefix)
+            const isFolder = filePath.endsWith('/');
+
             const { file_share, user_account, user_details, user_notification } = require('../sequelize/models/index');
 
             // Verify recipient exists
@@ -1055,18 +1125,20 @@ storageController.post(
                 sharedBy: req.user.userId,
                 sharedWith: sharedWithUserId,
                 message: message || null,
+                isFolder,
             });
 
             // Create notification for recipient
             await user_notification.create({
                 userId: sharedWithUserId,
                 type: 'file_shared',
-                title: 'Споделен файл',
-                message: `${sharerName} сподели с вас файл: ${fileName}`,
+                title: isFolder ? 'Споделена папка' : 'Споделен файл',
+                message: `${sharerName} сподели с вас ${isFolder ? 'папка' : 'файл'}: ${fileName}`,
                 data: {
                     fileShareId: share.id,
                     filePath,
                     fileName,
+                    isFolder,
                 },
             });
 

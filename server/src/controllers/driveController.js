@@ -78,9 +78,12 @@ driveController.post(
             }
 
             const folderId = req.body.folderId || 'root';
+            // Multer parses multipart form-data filenames as latin1 by default,
+            // which breaks Cyrillic / non-ASCII characters. Re-decode as UTF-8.
+            const originalName = Buffer.from(req.file.originalname, 'latin1').toString('utf8');
             const result = await driveService.uploadFile(
                 req.file.buffer,
-                req.file.originalname,
+                originalName,
                 req.file.mimetype,
                 folderId
             );
