@@ -3,20 +3,11 @@ const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 const archiver = require('archiver');
 const customError = require('../utils/customError');
+const { buildContentDisposition, ensureExtension } = require('../utils/filenameHelpers');
 const { shared_link, shared_link_download, user_account } = require('../sequelize/models');
 const isAuth = require('../middlewares/isAuth');
 const { checkPermission } = require('../middlewares/rbac');
 const { getFirebaseApp, admin } = require('../firebase/firebaseAdmin');
-
-// ─── Helper: RFC 5987 compliant Content-Disposition header ────────────────────
-// Properly encodes UTF-8 / Cyrillic filenames using both ASCII fallback
-// and filename* parameter (RFC 5987).
-function buildContentDisposition(filename) {
-    // eslint-disable-next-line no-control-regex
-    const asciiFallback = filename.replace(/[^\x20-\x7E]/g, '_').replace(/"/g, '\\"');
-    const utf8Encoded = encodeURIComponent(filename);
-    return `attachment; filename="${asciiFallback}"; filename*=UTF-8''${utf8Encoded}`;
-}
 
 /**
  * Helper: validate a shared link token and return the link or throw appropriate error
@@ -268,10 +259,18 @@ async function streamSharedFile(link, req, res, next) {
         });
         archive.pipe(res);
 
+        // Append each file. If the GCS object has no extension in its name
+        // (common for UUID-named uploads), derive one from its Content-Type
+        // so that inside the ZIP the files are still openable.
         for (const file of realFiles) {
             const relativeName = file.name.slice(folderPrefix.length);
             if (!relativeName) continue;
-            archive.append(file.createReadStream(), { name: relativeName });
+            let entryName = relativeName;
+            try {
+                const [meta] = await file.getMetadata();
+                entryName = ensureExtension(relativeName, meta?.contentType);
+            } catch (_) { /* ignore metadata errors, fall back to raw name */ }
+            archive.append(file.createReadStream(), { name: entryName });
         }
 
         await archive.finalize();
@@ -305,7 +304,8 @@ async function streamSharedFile(link, req, res, next) {
     // Set response headers
     const contentType = fileMetadata?.contentType || 'application/octet-stream';
     res.setHeader('Content-Type', contentType);
-    res.setHeader('Content-Disposition', buildContentDisposition(link.fileName));
+    // If fileName has no extension (e.g. UUID-only upload), derive one from Content-Type.
+    res.setHeader('Content-Disposition', buildContentDisposition(ensureExtension(link.fileName, contentType)));
     if (fileMetadata?.size) {
         res.setHeader('Content-Length', fileMetadata.size);
     }

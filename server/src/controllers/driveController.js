@@ -5,22 +5,13 @@ const isAuth = require('../middlewares/isAuth');
 const rbac = require('../middlewares/rbac');
 const driveService = require('../utils/driveService');
 const { drive_folder_password } = require('../sequelize/models');
+const { buildContentDisposition } = require('../utils/filenameHelpers');
 
 // ─── Multer (memory storage, 500MB max) ────────────────────────────────────────
 const upload = multer({
     storage: multer.memoryStorage(),
     limits: { fileSize: 500 * 1024 * 1024 }
 });
-
-// ─── Helper: RFC 5987 compliant Content-Disposition header ────────────────────
-// Properly encodes UTF-8 / Cyrillic filenames using both ASCII fallback
-// and filename* parameter (RFC 5987).
-function buildContentDisposition(filename) {
-    // eslint-disable-next-line no-control-regex
-    const asciiFallback = filename.replace(/[^\x20-\x7E]/g, '_').replace(/"/g, '\\"');
-    const utf8Encoded = encodeURIComponent(filename);
-    return `attachment; filename="${asciiFallback}"; filename*=UTF-8''${utf8Encoded}`;
-}
 
 // ─── 1. STATUS — check if Drive is connected ──────────────────────────────────
 driveController.get(

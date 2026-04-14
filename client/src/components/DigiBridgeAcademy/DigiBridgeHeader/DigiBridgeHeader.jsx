@@ -292,12 +292,12 @@ export const DigiBridgeHeader = () => {
                 <div className="dbh-mobile__backdrop" onClick={() => setIsMobileMenuOpen(false)}></div>
                 <nav className="dbh-mobile__nav">
                     <div className="dbh-mobile__header">
-                        <span className="dbh-mobile__title">Меню</span>
+                        <span className="dbh-mobile__title">{t('digiBridge.header.mobileMenu', 'Меню')}</span>
                         <button className="dbh-mobile__close" onClick={() => setIsMobileMenuOpen(false)}>✕</button>
                     </div>
 
                     <div className="dbh-mobile__section">
-                        <span className="dbh-mobile__section-title">Навигация</span>
+                        <span className="dbh-mobile__section-title">{t('digiBridge.header.mobileNavSection', 'Навигация')}</span>
                         {mainNavItems.map((item) => (
                             <Link
                                 key={item.key}
@@ -310,7 +310,7 @@ export const DigiBridgeHeader = () => {
                     </div>
 
                     <div className="dbh-mobile__section">
-                        <span className="dbh-mobile__section-title">Още</span>
+                        <span className="dbh-mobile__section-title">{t('digiBridge.header.nav.more', 'Още')}</span>
                         {moreNavItems.map((item) => (
                             <Link
                                 key={item.key}
@@ -325,13 +325,15 @@ export const DigiBridgeHeader = () => {
 
                     {isAuthentication && (
                         <div className="dbh-mobile__section">
-                            <span className="dbh-mobile__section-title">Акаунт</span>
+                            <span className="dbh-mobile__section-title">{t('digiBridge.header.mobileAccountSection', 'Акаунт')}</span>
                             <Link
                                 to={isMentorOrAdmin ? '/academy/mentor-dashboard' : '/my-chats'}
                                 className="dbh-mobile__link"
                             >
                                 <span className="dbh-mobile__link-icon">💬</span>
-                                {isMentorOrAdmin ? 'Табло на ментора' : 'Моите чатове'}
+                                {isMentorOrAdmin
+                                    ? t('digiBridge.header.mentorDashboardLink', 'Табло на ментора')
+                                    : t('digiBridge.header.myChatsLink', 'Моите чатове')}
                             </Link>
                         </div>
                     )}

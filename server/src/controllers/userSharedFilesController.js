@@ -3,14 +3,7 @@ const path = require('path');
 const fs = require('fs');
 const { Storage } = require('@google-cloud/storage');
 const isAuth = require('../middlewares/isAuth');
-
-// ─── Helper: RFC 5987 compliant Content-Disposition header ────────────────────
-function buildContentDisposition(filename) {
-    // eslint-disable-next-line no-control-regex
-    const asciiFallback = filename.replace(/[^\x20-\x7E]/g, '_').replace(/"/g, '\\"');
-    const utf8Encoded = encodeURIComponent(filename);
-    return `attachment; filename="${asciiFallback}"; filename*=UTF-8''${utf8Encoded}`;
-}
+const { buildContentDisposition, ensureExtension } = require('../utils/filenameHelpers');
 
 // ─── Google Cloud Storage Setup (reuse same config as storageController) ─────
 let storage;
@@ -125,7 +118,8 @@ userSharedFilesController.get(
             const [metadata] = await file.getMetadata();
 
             res.setHeader('Content-Type', metadata.contentType || 'application/octet-stream');
-            res.setHeader('Content-Disposition', buildContentDisposition(share.fileName));
+            // If stored fileName has no extension (UUID-only upload), derive one from Content-Type.
+            res.setHeader('Content-Disposition', buildContentDisposition(ensureExtension(share.fileName, metadata.contentType)));
             if (metadata.size) {
                 res.setHeader('Content-Length', metadata.size);
             }

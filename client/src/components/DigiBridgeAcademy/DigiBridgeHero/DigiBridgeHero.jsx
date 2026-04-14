@@ -113,24 +113,24 @@ export const DigiBridgeHero = () => {
                         <div className="dbh-hero-float-card dbh-hero-float-card--1">
                             <div className="dbh-hero-float-icon">📱</div>
                             <div className="dbh-hero-float-text">
-                                <span className="dbh-hero-float-title">Мобилни устройства</span>
-                                <span className="dbh-hero-float-sub">Лесни уроци</span>
+                                <span className="dbh-hero-float-title">{t('digiBridge.hero.floatCard1Title', 'Мобилни устройства')}</span>
+                                <span className="dbh-hero-float-sub">{t('digiBridge.hero.floatCard1Sub', 'Лесни уроци')}</span>
                             </div>
                         </div>
-                        
+
                         <div className="dbh-hero-float-card dbh-hero-float-card--2">
                             <div className="dbh-hero-float-icon">🔒</div>
                             <div className="dbh-hero-float-text">
-                                <span className="dbh-hero-float-title">Онлайн сигурност</span>
-                                <span className="dbh-hero-float-sub">Защитете се</span>
+                                <span className="dbh-hero-float-title">{t('digiBridge.hero.floatCard2Title', 'Онлайн сигурност')}</span>
+                                <span className="dbh-hero-float-sub">{t('digiBridge.hero.floatCard2Sub', 'Защитете се')}</span>
                             </div>
                         </div>
-                        
+
                         <div className="dbh-hero-float-card dbh-hero-float-card--3">
                             <div className="dbh-hero-float-icon">💬</div>
                             <div className="dbh-hero-float-text">
-                                <span className="dbh-hero-float-title">Видео разговори</span>
-                                <span className="dbh-hero-float-sub">С близките</span>
+                                <span className="dbh-hero-float-title">{t('digiBridge.hero.floatCard3Title', 'Видео разговори')}</span>
+                                <span className="dbh-hero-float-sub">{t('digiBridge.hero.floatCard3Sub', 'С близките')}</span>
                             </div>
                         </div>
                     </div>
