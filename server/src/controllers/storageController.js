@@ -7,6 +7,17 @@ const { Storage } = require('@google-cloud/storage');
 const isAuth = require('../middlewares/isAuth');
 const rbac = require('../middlewares/rbac');
 
+// ─── Helper: RFC 5987 compliant Content-Disposition header ────────────────────
+// Properly encodes UTF-8 / Cyrillic filenames using both ASCII fallback
+// and filename* parameter (RFC 5987).
+function buildContentDisposition(filename) {
+    // Strip any non-ASCII for the fallback
+    // eslint-disable-next-line no-control-regex
+    const asciiFallback = filename.replace(/[^\x20-\x7E]/g, '_').replace(/"/g, '\\"');
+    const utf8Encoded = encodeURIComponent(filename);
+    return `attachment; filename="${asciiFallback}"; filename*=UTF-8''${utf8Encoded}`;
+}
+
 // ─── Google Cloud Storage Setup ────────────────────────────────────────────────
 // Firebase Storage IS Google Cloud Storage. We reuse the Firebase service account
 // credentials for authentication.
@@ -507,7 +518,7 @@ storageController.get(
             const fileName = filePath.split('/').pop();
 
             res.setHeader('Content-Type', metadata.contentType || 'application/octet-stream');
-            res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(fileName)}"`);
+            res.setHeader('Content-Disposition', buildContentDisposition(fileName));
             if (metadata.size) {
                 res.setHeader('Content-Length', metadata.size);
             }
@@ -542,8 +553,11 @@ async function streamFolderAsZip(bucket, folderPrefix, res, next) {
         const zipName = `${folderName}.zip`;
 
         res.setHeader('Content-Type', 'application/zip');
-        res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(zipName)}"`);
+        res.setHeader('Content-Disposition', buildContentDisposition(zipName));
 
+        // forceZip64 false + standard zlib. Archiver automatically sets the
+        // UTF-8 bit flag (0x800) on entries with non-ASCII names — Cyrillic
+        // file names inside the archive will be correctly extracted.
         const archive = archiver('zip', { zlib: { level: 9 } });
 
         archive.on('error', (err) => {
@@ -1125,7 +1139,6 @@ storageController.post(
                 sharedBy: req.user.userId,
                 sharedWith: sharedWithUserId,
                 message: message || null,
-                isFolder,
             });
 
             // Create notification for recipient
