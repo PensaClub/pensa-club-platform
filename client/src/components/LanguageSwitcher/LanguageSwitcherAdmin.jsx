@@ -1,11 +1,14 @@
-import i18next, { changeLanguage } from "i18next";
+import i18next from "i18next";
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { localePath, stripLangFromPath } from "../../utils/languageUtils";
 import "./languageSwitcherAdmin.css";
 
 export const LanguageSwitcherAdmin = ({ isMobile = false, onMobileMenuToggle }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const navigate = useNavigate();
 
   const languages = [
     { code: 'bg', name: 'Български', flag: '🇧🇬' },
@@ -27,8 +30,18 @@ export const LanguageSwitcherAdmin = ({ isMobile = false, onMobileMenuToggle }) 
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleLanguageChange = (langCode) => {
-    changeLanguage(langCode);
+  const handleLanguageChange = async (langCode) => {
+    if (langCode === i18next.language) {
+      setIsOpen(false);
+      setIsMobileOpen(false);
+      return;
+    }
+    // Navigate to the localized version of the current path so the language
+    // persists on refresh — the app uses URL-prefix-based language detection.
+    const cleanPath = stripLangFromPath(window.location.pathname);
+    const targetPath = localePath(cleanPath, langCode);
+    await i18next.changeLanguage(langCode);
+    navigate(targetPath, { replace: true });
     setIsOpen(false);
     setIsMobileOpen(false);
     if (isMobile && onMobileMenuToggle) {

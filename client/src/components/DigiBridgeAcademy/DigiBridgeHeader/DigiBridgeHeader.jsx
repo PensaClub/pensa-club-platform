@@ -1,13 +1,15 @@
 import React, { useState, useEffect, useRef, useContext, useCallback } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { LocalizedLink as Link } from '../../LocalizedLink/LocalizedLink';
 import { useTranslation } from 'react-i18next';
 import { UserContext } from '../../contexts/UserContext';
+import { localePath, stripLangFromPath } from '../../../utils/languageUtils';
 import './digiBridgeHeader.css';
 
 export const DigiBridgeHeader = () => {
     const { t, i18n } = useTranslation('digibridge');
     const location = useLocation();
+    const navigate = useNavigate();
      const isTestPage = location.pathname.includes('/test');
     const { isAuthentication, isFinish, profileData, isAdmin, isModerator } = useContext(UserContext);
     const [isScrolled, setIsScrolled] = useState(false);
@@ -82,8 +84,18 @@ export const DigiBridgeHeader = () => {
 
     const isActive = (path) => location.pathname === path;
 
-    const handleLanguageChange = (langCode) => {
-        i18n.changeLanguage(langCode);
+    const handleLanguageChange = async (langCode) => {
+        if (langCode === i18n.language) {
+            setIsLangMenuOpen(false);
+            return;
+        }
+        // Navigate to the localized version of the current path so the language
+        // persists on refresh — the app uses URL-prefix-based language detection
+        // (/en/*, /de/*, / = bg), not localStorage.
+        const cleanPath = stripLangFromPath(window.location.pathname);
+        const targetPath = localePath(cleanPath, langCode);
+        await i18n.changeLanguage(langCode);
+        navigate(targetPath, { replace: true });
         setIsLangMenuOpen(false);
     };
 
