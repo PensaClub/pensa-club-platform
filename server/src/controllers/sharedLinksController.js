@@ -8,6 +8,16 @@ const isAuth = require('../middlewares/isAuth');
 const { checkPermission } = require('../middlewares/rbac');
 const { getFirebaseApp, admin } = require('../firebase/firebaseAdmin');
 
+// ─── Helper: RFC 5987 compliant Content-Disposition header ────────────────────
+// Properly encodes UTF-8 / Cyrillic filenames using both ASCII fallback
+// and filename* parameter (RFC 5987).
+function buildContentDisposition(filename) {
+    // eslint-disable-next-line no-control-regex
+    const asciiFallback = filename.replace(/[^\x20-\x7E]/g, '_').replace(/"/g, '\\"');
+    const utf8Encoded = encodeURIComponent(filename);
+    return `attachment; filename="${asciiFallback}"; filename*=UTF-8''${utf8Encoded}`;
+}
+
 /**
  * Helper: validate a shared link token and return the link or throw appropriate error
  */
@@ -247,7 +257,7 @@ async function streamSharedFile(link, req, res, next) {
 
         const zipName = link.fileName.endsWith('.zip') ? link.fileName : `${link.fileName}.zip`;
         res.setHeader('Content-Type', 'application/zip');
-        res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(zipName)}"`);
+        res.setHeader('Content-Disposition', buildContentDisposition(zipName));
 
         const archive = archiver('zip', { zlib: { level: 9 } });
         archive.on('error', (err) => {
@@ -296,10 +306,7 @@ async function streamSharedFile(link, req, res, next) {
     // Set response headers
     const contentType = fileMetadata?.contentType || 'application/octet-stream';
     res.setHeader('Content-Type', contentType);
-    res.setHeader(
-        'Content-Disposition',
-        `attachment; filename="${encodeURIComponent(link.fileName)}"`
-    );
+    res.setHeader('Content-Disposition', buildContentDisposition(link.fileName));
     if (fileMetadata?.size) {
         res.setHeader('Content-Length', fileMetadata.size);
     }

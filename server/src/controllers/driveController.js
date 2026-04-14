@@ -12,6 +12,16 @@ const upload = multer({
     limits: { fileSize: 500 * 1024 * 1024 }
 });
 
+// ─── Helper: RFC 5987 compliant Content-Disposition header ────────────────────
+// Properly encodes UTF-8 / Cyrillic filenames using both ASCII fallback
+// and filename* parameter (RFC 5987).
+function buildContentDisposition(filename) {
+    // eslint-disable-next-line no-control-regex
+    const asciiFallback = filename.replace(/[^\x20-\x7E]/g, '_').replace(/"/g, '\\"');
+    const utf8Encoded = encodeURIComponent(filename);
+    return `attachment; filename="${asciiFallback}"; filename*=UTF-8''${utf8Encoded}`;
+}
+
 // ─── 1. STATUS — check if Drive is connected ──────────────────────────────────
 driveController.get(
     '/status',
@@ -195,7 +205,7 @@ driveController.get(
             const { stream, fileName, mimeType, size } = await driveService.downloadFile(id);
 
             res.setHeader('Content-Type', mimeType || 'application/octet-stream');
-            res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(fileName)}"`);
+            res.setHeader('Content-Disposition', buildContentDisposition(fileName));
             if (size) {
                 res.setHeader('Content-Length', size);
             }
