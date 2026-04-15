@@ -14,6 +14,7 @@ import CloudStorageBreadcrumb from './CloudStorageBreadcrumb';
 import CloudStorageSidebar from './CloudStorageSidebar';
 import CloudStorageFileList from './CloudStorageFileList';
 import CloudStorageAnalytics from './CloudStorageAnalytics';
+import SyncReportModal from './SyncReportModal';
 import './cloudStorageManager.css';
 
 const formatSize = (bytes) => {
@@ -71,6 +72,7 @@ const CloudStorageManager = () => {
     const [expandedTreeFolders, setExpandedTreeFolders] = useState(new Set());
     const [deleteConfirm, setDeleteConfirm] = useState(null);
     const [syncing, setSyncing] = useState(false);
+    const [showSyncReport, setShowSyncReport] = useState(false);
     const [initializing, setInitializing] = useState(false);
     const [showCreateProject, setShowCreateProject] = useState(false);
     const [newProjectName, setNewProjectName] = useState('');
@@ -315,8 +317,16 @@ const CloudStorageManager = () => {
         setSyncing(true);
         try {
             const result = await syncStorage();
-            toast.success(`Синхронизация: ${result.synced || 0} нови, ${result.orphans?.length || 0} осиротели`);
+            const hasIssues = (result.orphans?.length || 0) > 0 || (result.errors?.length || 0) > 0;
+            toast.success(
+                `Синхронизация: ${result.synced || 0} нови, ${result.orphans?.length || 0} осиротели, ${result.errors?.length || 0} грешки`
+            );
             loadFiles();
+            // Auto-open the report modal if there's anything worth reviewing,
+            // so the admin immediately sees the details instead of just counts.
+            if (hasIssues) {
+                setShowSyncReport(true);
+            }
         } catch (err) {
             toast.error('Грешка при синхронизация');
         } finally {
@@ -493,6 +503,7 @@ const CloudStorageManager = () => {
                 onTypeFilterChange={setSearchTypeFilter}
                 onRefresh={() => loadFiles()}
                 onSync={handleSync}
+                onShowSyncReport={() => setShowSyncReport(true)}
                 onAnalytics={() => { setShowAnalytics(true); loadAnalytics(); }}
                 loading={loading}
                 syncing={syncing}
@@ -857,6 +868,11 @@ const CloudStorageManager = () => {
                     fileName={shareWithUserModal.fileName}
                     onClose={() => setShareWithUserModal(null)}
                 />
+            )}
+
+            {/* Sync report modal — shows orphans/errors with cleanup */}
+            {showSyncReport && (
+                <SyncReportModal onClose={() => setShowSyncReport(false)} />
             )}
         </div>
     );
