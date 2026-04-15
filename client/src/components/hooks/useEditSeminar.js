@@ -73,7 +73,7 @@ const useEditSeminar = () => {
     const [seminarId, setSeminarId] = useState(null);
     const [seminarStatus, setSeminarStatus] = useState(null);
     const [isPublished, setIsPublished] = useState(false);
-    const [assignedMentors, setAssignedMentors] = useState([]);
+    const [facilitators, setFacilitators] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const [errors, setErrors] = useState({});
@@ -165,23 +165,40 @@ const [showTestEditor, setShowTestEditor] = useState(false);
 
             setSeminarData(mapped);
 
-            // Ментори
-            if (sem.mentorAssignments?.length > 0 || sem.facilitator) {
-                const mentors = sem.mentorAssignments?.map(ma => ({
-                    mentorId: ma.mentor?.id || ma.mentorId,
-                    role: ma.role || 'mentor',
-                    isLead: ma.isLead || false,
-                    mentor: ma.mentor,
-                })) || [];
-                if (mentors.length === 0 && sem.facilitator) {
-                    mentors.push({
-                        mentorId: sem.facilitator.id || sem.mentorId,
-                        role: 'mentor',
-                        isLead: true,
-                        mentor: sem.facilitator,
-                    });
-                }
-                setAssignedMentors(mentors);
+            // Multi-facilitator load (mentor / admin / external).
+            if (sem.facilitators?.length > 0) {
+                const loaded = sem.facilitators.map(f => ({
+                    type: f.type,
+                    mentorId: f.type === 'mentor' ? f.sourceId : null,
+                    adminUserId: f.type === 'admin' ? f.sourceId : null,
+                    externalLecturerId: f.type === 'external' ? f.sourceId : null,
+                    role: f.role || 'mentor',
+                    isLead: !!f.isLead,
+                    sortOrder: f.sortOrder || 0,
+                    name: f.name,
+                    email: f.email || null,
+                    phone: f.phone || null,
+                    photoUrl: f.photoUrl || null,
+                    specialization: f.specialization || null,
+                    organization: f.organization || null,
+                }));
+                setFacilitators(loaded);
+            } else if (sem.facilitator) {
+                setFacilitators([{
+                    type: 'mentor',
+                    mentorId: sem.facilitator.id || sem.mentorId,
+                    adminUserId: null,
+                    externalLecturerId: null,
+                    role: 'mentor',
+                    isLead: true,
+                    sortOrder: 0,
+                    name: sem.facilitator.name,
+                    email: sem.facilitator.email || null,
+                    phone: null,
+                    photoUrl: sem.facilitator.photoUrl || null,
+                    specialization: sem.facilitator.specialization || null,
+                    organization: null,
+                }]);
             }
         } catch (err) {
             console.error('Error loading seminar:', err);
@@ -207,6 +224,12 @@ const [showTestEditor, setShowTestEditor] = useState(false);
             });
         }
     }, [errors]);
+
+    // Wrapped setter so any change to facilitators flips hasChanges → enables Save.
+    const updateFacilitators = useCallback((next) => {
+        setFacilitators(next);
+        setHasChanges(true);
+    }, []);
 
     // Prepare payload
     const preparePayload = useCallback(() => {
@@ -251,12 +274,23 @@ const [showTestEditor, setShowTestEditor] = useState(false);
             payload.testPassingScore = Number(seminarData.testPassingScore) || 70;
         }
 
-        if (assignedMentors.length > 0) {
-            payload.mentorId = assignedMentors[0]?.mentorId || null;
-        }
+        payload.facilitators = facilitators.map((f, idx) => ({
+            type: f.type,
+            mentorId: f.type === 'mentor' ? f.mentorId : null,
+            adminUserId: f.type === 'admin' ? f.adminUserId : null,
+            externalLecturerId: f.type === 'external' ? f.externalLecturerId : null,
+            role: f.role || 'mentor',
+            isLead: !!f.isLead,
+            sortOrder: idx,
+        }));
+
+        // Backwards compat: keep top-level mentorId set to the lead mentor (if any).
+        const leadMentor = facilitators.find(f => f.isLead && f.type === 'mentor')
+            || facilitators.find(f => f.type === 'mentor');
+        payload.mentorId = leadMentor?.mentorId || null;
 
         return payload;
-    }, [seminarData, assignedMentors]);
+    }, [seminarData, facilitators]);
 
     // Validate
     const validate = useCallback(() => {
@@ -437,8 +471,8 @@ const [showTestEditor, setShowTestEditor] = useState(false);
         seminarId,
         seminarStatus,
         isPublished,
-        assignedMentors,
-        setAssignedMentors,
+        facilitators,
+        setFacilitators: updateFacilitators,
         slug,
         isLoading,
         isSaving,

@@ -702,6 +702,9 @@
     "inPerson": "Присъствено",
     "uncategorized": "Семинар",
     "mentor": "Ментор",
+    "admin": "Администратор",
+    "externalLecturer": "Външен лектор",
+    "plusMore": "+{{count}}",
     "hasTest": "Тест"
   },
   "seminarDetail": {
@@ -763,6 +766,22 @@
       "whatToBring": "Какво да носите",
       "mentor": "Ментор",
       "linkedCourse": "Свързан курс"
+    },
+    "facilitators": {
+      "titleSingle": "Водещ на семинара",
+      "titleMulti": "Водещи на семинара",
+      "leadLabel": "Главен водещ",
+      "typeMentor": "Ментор",
+      "typeAdmin": "Администратор",
+      "typeExternal": "Външен лектор",
+      "roles": {
+        "lecturer": "Лектор",
+        "mentor": "Ментор",
+        "assistant": "Асистент",
+        "guest": "Гост",
+        "admin": "Администратор",
+        "moderator": "Модератор"
+      }
     },
     "reviews": {
       "title": "Отзиви",

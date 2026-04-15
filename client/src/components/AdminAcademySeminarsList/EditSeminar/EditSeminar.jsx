@@ -27,8 +27,8 @@ const EditSeminar = () => {
         seminarId,
         seminarStatus,
         isPublished,
-        assignedMentors,
-        setAssignedMentors,
+        facilitators,
+        setFacilitators,
         slug,
         isLoading,
         isSaving,
@@ -135,8 +135,8 @@ const EditSeminar = () => {
                         errors={errors}
                         handleChange={handleChange}
                         updateField={updateField}
-                        assignedMentors={assignedMentors}
-                        setAssignedMentors={setAssignedMentors}
+                        facilitators={facilitators}
+                        setFacilitators={setFacilitators}
                         seminarId={seminarId}
                         onOpenTestEditor={() => setShowTestEditor(true)}
                     />

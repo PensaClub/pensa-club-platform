@@ -201,10 +201,24 @@ const seminarCreateSchema = z.object({
   testPassingScore: z.coerce.number().int().min(0).max(100).optional(),
   hasAssignment: z.boolean().default(false),
   assignmentDescription: z.string().optional(),
-  learningPoints: z.array(z.string().max(200)).max(10).default([]), 
+  learningPoints: z.array(z.string().max(200)).max(10).default([]),
   tags: z.array(z.string()).default([]),
   prerequisites: z.string().optional(),
   whatToBring: z.string().optional(),
+  // Multi-facilitator payload. Each entry must carry a type and the
+  // matching id field (mentorId / adminUserId / externalLecturerId).
+  // The legacy top-level `mentorId` above is still accepted for backwards compat.
+  facilitators: z.array(
+    z.object({
+      type: z.enum(['mentor', 'admin', 'external']),
+      mentorId: z.coerce.number().int().positive().optional().nullable(),
+      adminUserId: z.coerce.number().int().positive().optional().nullable(),
+      externalLecturerId: z.coerce.number().int().positive().optional().nullable(),
+      role: z.enum(['lecturer', 'mentor', 'assistant', 'guest', 'admin', 'moderator']).default('mentor'),
+      isLead: z.boolean().default(false),
+      sortOrder: z.coerce.number().int().min(0).default(0),
+    })
+  ).optional(),
 });
 
 const seminarUpdateSchema = seminarCreateSchema.partial();

@@ -1153,7 +1153,22 @@ const SeminarLibrary = () => {
                       {sem.isOnline ? TYPE_LABELS.online : TYPE_LABELS.inperson}
                     </span>
                   </span>
-                  <span className="slib-td slib-td-facilitator">{sem.facilitator || '—'}</span>
+                  <span className="slib-td slib-td-facilitator">
+                    {(() => {
+                      const facs = Array.isArray(sem.facilitators) && sem.facilitators.length > 0
+                        ? sem.facilitators
+                        : [];
+                      if (facs.length === 0) {
+                        if (sem.facilitator && typeof sem.facilitator === 'object' && sem.facilitator.name) {
+                          return sem.facilitator.name;
+                        }
+                        return '—';
+                      }
+                      const names = facs.map(f => f.name).filter(Boolean);
+                      if (names.length <= 2) return names.join(', ');
+                      return `${names[0]}, ${names[1]}, +${names.length - 2}`;
+                    })()}
+                  </span>
                   <span className="slib-td slib-td-media">
                     {(() => {
                       const mc = sem.mediaCounts || {};

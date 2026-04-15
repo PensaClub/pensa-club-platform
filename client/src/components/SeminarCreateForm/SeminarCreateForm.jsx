@@ -1,6 +1,7 @@
 // src/components/SeminarCreateForm/SeminarCreateForm.jsx
 // Prefix: scf-
 
+import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Save, Send, ArrowLeft } from 'lucide-react';
 
@@ -18,14 +19,15 @@ import { useLocalizedNavigate } from '../../hooks/useLocalizedNavigate';
 const SeminarCreateForm = () => {
     const { t } = useTranslation('academy-admin');
     const navigate = useLocalizedNavigate();
+    const materialsRef = useRef(null);
 
     const {
         isEditMode,
         seminarId,
         seminarSlug,
         seminarData,
-        assignedMentors,
-        setAssignedMentors,
+        facilitators,
+        setFacilitators,
         isLoading,
         isSaving,
         errors,
@@ -36,7 +38,7 @@ const SeminarCreateForm = () => {
         availableCourses,
         courseSearch,
         setCourseSearch,
-    } = useSeminarCreateForm();
+    } = useSeminarCreateForm({ materialsRef });
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -103,8 +105,8 @@ const SeminarCreateForm = () => {
                         errors={errors}
                         handleChange={handleChange}
                         updateField={updateField}
-                        assignedMentors={assignedMentors}
-                        setAssignedMentors={setAssignedMentors}
+                        facilitators={facilitators}
+                        setFacilitators={setFacilitators}
                     />
 
                     <SeminarAdditional
@@ -118,6 +120,7 @@ const SeminarCreateForm = () => {
                     />
 
                     <SeminarMaterialsSection
+                        ref={materialsRef}
                         seminarId={seminarId}
                         seminarSlug={seminarSlug}
                     />

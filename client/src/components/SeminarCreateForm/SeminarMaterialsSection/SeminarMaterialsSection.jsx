@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, forwardRef, useImperativeHandle } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import {
@@ -42,7 +42,7 @@ const formatFileSize = (bytes) => {
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 };
 
-export default function SeminarMaterialsSection({ seminarId, seminarSlug }) {
+const SeminarMaterialsSection = forwardRef(function SeminarMaterialsSection({ seminarId, seminarSlug }, ref) {
     const { t } = useTranslation('academy-admin');
     const { getSeminarMaterials, addSeminarMaterial, deleteSeminarMaterial } = useAcademyCourses();
     const { uploadMultipleFiles, uploading, uploadProgress } = useFirebaseUpload();
@@ -54,7 +54,13 @@ export default function SeminarMaterialsSection({ seminarId, seminarSlug }) {
     const [urlTitle, setUrlTitle] = useState('');
     const [dragActive, setDragActive] = useState(false);
     const fileInputRef = useRef(null);
-    const flushedRef = useRef(false);
+    // Mirror pendingMaterials into a ref so flushPendingTo can read the
+    // latest list without being a useCallback dependency. This breaks the
+    // create→publish race condition where imperative flush + useEffect flush
+    // fired in parallel and produced duplicate saves.
+    const pendingRef = useRef([]);
+    useEffect(() => { pendingRef.current = pendingMaterials; }, [pendingMaterials]);
+    const flushingRef = useRef(false);
 
     // Load saved materials when seminarSlug is available (edit mode)
     useEffect(() => {
@@ -70,26 +76,46 @@ export default function SeminarMaterialsSection({ seminarId, seminarSlug }) {
         loadMaterials();
     }, [seminarSlug]);
 
-    // Flush pending materials to backend when seminarSlug becomes available
-    useEffect(() => {
-        if (!seminarSlug || pendingMaterials.length === 0 || flushedRef.current) return;
-        flushedRef.current = true;
-
-        const flushPending = async () => {
-            for (const pending of pendingMaterials) {
+    // Core flush routine — idempotent and safe to call in parallel.
+    // Reads latest pending list from ref, claims an exclusive lock, clears
+    // the pending state BEFORE uploading so neither a concurrent effect run
+    // nor a follow-up call can process the same items twice.
+    const flushPendingTo = useCallback(async (slug) => {
+        if (!slug || flushingRef.current) return;
+        const items = pendingRef.current || [];
+        if (items.length === 0) return;
+        flushingRef.current = true;
+        // Clear immediately — removes the items from any other code path
+        // (useEffect, a second imperative call) before the network request.
+        pendingRef.current = [];
+        setPendingMaterials([]);
+        try {
+            for (const pending of items) {
                 try {
-                    const resp = await addSeminarMaterial(seminarSlug, pending);
+                    const resp = await addSeminarMaterial(slug, pending);
                     const saved = resp?.material || resp;
                     if (saved?.id) setMaterials(prev => [...prev, saved]);
                 } catch (err) {
                     console.error('Failed to save pending material:', err);
                 }
             }
-            setPendingMaterials([]);
-            flushedRef.current = false;
-        };
-        flushPending();
-    }, [seminarSlug, pendingMaterials]);
+        } finally {
+            flushingRef.current = false;
+        }
+    }, [addSeminarMaterial]);
+
+    // Flush pending materials to backend when seminarSlug becomes available
+    // (save-draft path). Publish path calls flushPendingTo imperatively.
+    useEffect(() => {
+        if (!seminarSlug || pendingMaterials.length === 0) return;
+        flushPendingTo(seminarSlug);
+    }, [seminarSlug, pendingMaterials, flushPendingTo]);
+
+    // Parent (useSeminarCreateForm.handlePublish) can call this synchronously
+    // after create to guarantee pending materials are flushed BEFORE navigate.
+    useImperativeHandle(ref, () => ({
+        flushPending: flushPendingTo,
+    }), [flushPendingTo]);
 
     const handleFiles = useCallback(async (files) => {
         if (!files?.length) return;
@@ -138,10 +164,11 @@ export default function SeminarMaterialsSection({ seminarId, seminarSlug }) {
     const handleDeleteSaved = useCallback(async (materialId) => {
         try {
             const material = materials.find(m => m.id === materialId);
-            if (material?.fileUrl?.includes('firebasestorage.googleapis.com')) {
+            const url = material?.fileUrl;
+            if (url) {
                 try {
                     const { deleteFileFromStorage } = await import('../../Articles/articleUtils/file-delete-utils');
-                    await deleteFileFromStorage(material.fileUrl);
+                    await deleteFileFromStorage(url);
                 } catch (err) { console.error('Firebase delete error:', err); }
             }
             await deleteSeminarMaterial('seminar', seminarId, materialId);
@@ -153,12 +180,17 @@ export default function SeminarMaterialsSection({ seminarId, seminarSlug }) {
         }
     }, [seminarId, deleteSeminarMaterial, materials, t]);
 
+    // Read pending item from ref, not from closure — otherwise useCallback
+    // with [] deps captures an empty array and pendingMaterials[index] is
+    // always undefined, silently skipping the Firebase delete.
     const handleDeletePending = useCallback(async (index) => {
-        const material = pendingMaterials[index];
-        if (material?.fileUrl?.includes('firebasestorage.googleapis.com')) {
+        const current = pendingRef.current || [];
+        const material = current[index];
+        const url = material?.fileUrl;
+        if (url) {
             try {
                 const { deleteFileFromStorage } = await import('../../Articles/articleUtils/file-delete-utils');
-                await deleteFileFromStorage(material.fileUrl);
+                await deleteFileFromStorage(url);
             } catch (err) { console.error('Firebase delete error:', err); }
         }
         setPendingMaterials(prev => prev.filter((_, i) => i !== index));
@@ -363,4 +395,6 @@ export default function SeminarMaterialsSection({ seminarId, seminarSlug }) {
             )}
         </div>
     );
-}
+});
+
+export default SeminarMaterialsSection;

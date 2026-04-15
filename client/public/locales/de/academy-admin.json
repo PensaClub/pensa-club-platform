@@ -851,10 +851,64 @@
     "thumbnailFormats": "Unterstützte Formate: JPG, PNG, GIF, WebP",
     "videoUrlWarning": "Das sieht nach einem Video-Link aus. Hier werden nur Bilder für das Titelbild akzeptiert. Videos können im Bereich Videos hinzugefügt werden."
   },
+  "facilitatorPicker": {
+    "searchPlaceholder": "Mentor, Admin oder externen Dozenten suchen...",
+    "typeToSearch": "Mindestens 1 Zeichen eingeben...",
+    "searching": "Suche läuft...",
+    "noResults": "Keine Ergebnisse",
+    "addExternal": "Externen Dozenten hinzufügen",
+    "setAsLead": "Als Hauptleiter festlegen",
+    "remove": "Entfernen",
+    "sections": {
+      "mentors": "Mentoren",
+      "admins": "Administratoren",
+      "externals": "Externe Dozenten"
+    },
+    "types": {
+      "mentor": "Mentor",
+      "admin": "Admin",
+      "external": "Extern"
+    },
+    "roles": {
+      "lecturer": "Dozent",
+      "mentor": "Mentor",
+      "assistant": "Assistent",
+      "guest": "Gast",
+      "admin": "Administrator",
+      "moderator": "Moderator"
+    }
+  },
+  "externalLecturerModal": {
+    "title": "Externer Dozent",
+    "subtitle": "Fügen Sie einen neuen externen Dozenten hinzu oder wählen Sie aus vorhandenen.",
+    "name": "Name",
+    "namePlaceholder": "Max Mustermann",
+    "email": "E-Mail",
+    "phone": "Telefon",
+    "organization": "Organisation",
+    "organizationPlaceholder": "Universität, Firma...",
+    "bio": "Kurze Biografie",
+    "bioPlaceholder": "Erfahrung, Spezialisierung, Erfolge...",
+    "existingMatches": "Vorhandene Dozenten:",
+    "timesUsed": "{{count}}× genutzt",
+    "save": "Speichern und hinzufügen",
+    "saving": "Speichern...",
+    "cancel": "Abbrechen",
+    "created": "Externer Dozent erstellt",
+    "errors": {
+      "nameRequired": "Name ist erforderlich",
+      "nameMin": "Mindestens 2 Zeichen",
+      "emailInvalid": "Ungültige E-Mail",
+      "createFailed": "Fehler beim Erstellen"
+    }
+  },
   "seminarSettings": {
     "mentorTitle": "Moderator / Mentor",
     "mentorDesc": "Fügen Sie einen Seminarleiter hinzu. Der erste wird automatisch Hauptleiter.",
     "mentorPlaceholder": "Mentor nach Name suchen...",
+    "facilitatorsTitle": "Seminarleiter",
+    "facilitatorsDesc": "Fügen Sie einen oder mehrere Leiter hinzu (Mentoren, Administratoren oder externe Dozenten). Der erste wird automatisch Hauptleiter.",
+    "facilitatorsPlaceholder": "Mentor, Admin oder externen Dozenten suchen...",
     "registrationTitle": "Anmeldung",
     "maxParticipants": "Max. Teilnehmer",
     "unlimited": "Unbegrenzt",
@@ -1223,6 +1277,10 @@
     "exportReport": "Bericht herunterladen",
     "exportAttendees": "Liste herunterladen",
     "allMentors": "Alle Mentoren",
+    "allFacilitators": "Alle Leiter",
+    "mentorsGroup": "Mentoren",
+    "adminsGroup": "Administratoren",
+    "externalsGroup": "Externe Dozenten",
     "online": "Online",
     "inperson": "Vor Ort",
     "noSeminars": "Keine Seminare gefunden",

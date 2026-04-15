@@ -851,10 +851,64 @@
     "thumbnailFormats": "Supported formats: JPG, PNG, GIF, WebP",
     "videoUrlWarning": "This looks like a video link. Only images are accepted here for the cover. Videos can be added in the \"Videos\" section."
   },
+  "facilitatorPicker": {
+    "searchPlaceholder": "Search mentor, admin or external lecturer...",
+    "typeToSearch": "Type at least 1 character...",
+    "searching": "Searching...",
+    "noResults": "No results",
+    "addExternal": "Add external lecturer",
+    "setAsLead": "Set as lead",
+    "remove": "Remove",
+    "sections": {
+      "mentors": "Mentors",
+      "admins": "Administrators",
+      "externals": "External lecturers"
+    },
+    "types": {
+      "mentor": "Mentor",
+      "admin": "Admin",
+      "external": "External"
+    },
+    "roles": {
+      "lecturer": "Lecturer",
+      "mentor": "Mentor",
+      "assistant": "Assistant",
+      "guest": "Guest",
+      "admin": "Administrator",
+      "moderator": "Moderator"
+    }
+  },
+  "externalLecturerModal": {
+    "title": "External lecturer",
+    "subtitle": "Add a new external lecturer or pick from existing ones.",
+    "name": "Name",
+    "namePlaceholder": "John Smith",
+    "email": "Email",
+    "phone": "Phone",
+    "organization": "Organization",
+    "organizationPlaceholder": "University, company...",
+    "bio": "Short bio",
+    "bioPlaceholder": "Experience, specialization, achievements...",
+    "existingMatches": "Existing lecturers:",
+    "timesUsed": "used {{count}}×",
+    "save": "Save and add",
+    "saving": "Saving...",
+    "cancel": "Cancel",
+    "created": "External lecturer created",
+    "errors": {
+      "nameRequired": "Name is required",
+      "nameMin": "At least 2 characters",
+      "emailInvalid": "Invalid email",
+      "createFailed": "Failed to create"
+    }
+  },
   "seminarSettings": {
     "mentorTitle": "Facilitator / Mentor",
     "mentorDesc": "Add a seminar facilitator. The first one added becomes the lead.",
     "mentorPlaceholder": "Search mentor by name...",
+    "facilitatorsTitle": "Seminar facilitators",
+    "facilitatorsDesc": "Add one or more facilitators (mentors, administrators or external lecturers). The first one added becomes the lead.",
+    "facilitatorsPlaceholder": "Search mentor, admin or external lecturer...",
     "registrationTitle": "Registration",
     "maxParticipants": "Max participants",
     "unlimited": "No limit",
@@ -1223,6 +1277,10 @@
     "exportReport": "Download report",
     "exportAttendees": "Download list",
     "allMentors": "All mentors",
+    "allFacilitators": "All facilitators",
+    "mentorsGroup": "Mentors",
+    "adminsGroup": "Administrators",
+    "externalsGroup": "External lecturers",
     "online": "Online",
     "inperson": "In-person",
     "noSeminars": "No seminars found",

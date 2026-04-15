@@ -236,7 +236,15 @@ const AdminSeminarStatistics = () => {
     return <div className="asst-empty">{t('seminarStats.noData', 'Няма данни за статистика')}</div>;
   }
 
-  const { overview, monthlyData, seminars, mentors } = data;
+  const { overview, monthlyData, seminars, mentors, facilitatorsFilter } = data;
+
+  // Group facilitators by type for the dropdown sections.
+  const facilitatorsByType = {
+    mentor: (facilitatorsFilter || []).filter(f => f.type === 'mentor'),
+    admin: (facilitatorsFilter || []).filter(f => f.type === 'admin'),
+    external: (facilitatorsFilter || []).filter(f => f.type === 'external'),
+  };
+  const hasAnyFacilitators = (facilitatorsFilter || []).length > 0;
 
   const formatDate = (dateStr) => {
     if (!dateStr) return '—';
@@ -255,7 +263,13 @@ const AdminSeminarStatistics = () => {
     );
   }
   if (mentorFilter !== 'all') {
-    filteredSeminars = filteredSeminars.filter(s => String(s.facilitatorId) === mentorFilter);
+    const [filterType, filterIdStr] = mentorFilter.split(':');
+    const filterId = parseInt(filterIdStr);
+    if (filterType && !isNaN(filterId)) {
+      filteredSeminars = filteredSeminars.filter(s =>
+        (s.facilitators || []).some(f => f.type === filterType && f.sourceId === filterId)
+      );
+    }
   }
 
   filteredSeminars.sort((a, b) => {
@@ -543,16 +557,34 @@ const AdminSeminarStatistics = () => {
                 onChange={e => setSearch(e.target.value)}
               />
             </div>
-            {mentors && mentors.length > 0 && (
+            {hasAnyFacilitators && (
               <select
                 className="asst-mentor-select"
                 value={mentorFilter}
                 onChange={e => setMentorFilter(e.target.value)}
               >
-                <option value="all">{t('seminarStats.allMentors', 'Всички ментори')}</option>
-                {mentors.map(m => (
-                  <option key={m.id} value={String(m.id)}>{m.name}</option>
-                ))}
+                <option value="all">{t('seminarStats.allFacilitators', 'Всички водещи')}</option>
+                {facilitatorsByType.mentor.length > 0 && (
+                  <optgroup label={t('seminarStats.mentorsGroup', 'Ментори')}>
+                    {facilitatorsByType.mentor.map(f => (
+                      <option key={`mentor:${f.id}`} value={`mentor:${f.id}`}>{f.name}</option>
+                    ))}
+                  </optgroup>
+                )}
+                {facilitatorsByType.admin.length > 0 && (
+                  <optgroup label={t('seminarStats.adminsGroup', 'Администратори')}>
+                    {facilitatorsByType.admin.map(f => (
+                      <option key={`admin:${f.id}`} value={`admin:${f.id}`}>{f.name}</option>
+                    ))}
+                  </optgroup>
+                )}
+                {facilitatorsByType.external.length > 0 && (
+                  <optgroup label={t('seminarStats.externalsGroup', 'Външни лектори')}>
+                    {facilitatorsByType.external.map(f => (
+                      <option key={`external:${f.id}`} value={`external:${f.id}`}>{f.name}</option>
+                    ))}
+                  </optgroup>
+                )}
               </select>
             )}
           </div>
@@ -598,7 +630,15 @@ const AdminSeminarStatistics = () => {
                       </span>
                     </td>
                     <td className="asst-cell-location">{sem.isOnline ? 'Онлайн' : (sem.location || sem.address || '—')}</td>
-                    <td>{sem.facilitator || '—'}</td>
+                    <td>
+                      {(() => {
+                        const facs = Array.isArray(sem.facilitators) ? sem.facilitators : [];
+                        if (facs.length === 0) return sem.facilitator || '—';
+                        const names = facs.map(f => f.name).filter(Boolean);
+                        if (names.length <= 2) return names.join(', ');
+                        return `${names[0]}, ${names[1]}, +${names.length - 2}`;
+                      })()}
+                    </td>
                     <td className="asst-cell-num">{sem.registeredCount}</td>
                     <td className="asst-cell-num">{sem.attendedRegistered}</td>
                     <td className="asst-cell-num">{sem.attendedGuests}</td>

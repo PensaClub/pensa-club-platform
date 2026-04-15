@@ -60,7 +60,7 @@ const formatDateTimeLocal = (dateStr) => {
     return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 };
 
-const useSeminarCreateForm = () => {
+const useSeminarCreateForm = ({ materialsRef } = {}) => {
     const { slug } = useParams();
     const navigate = useLocalizedNavigate();
     const { t } = useTranslation('academy-admin');
@@ -79,7 +79,7 @@ const useSeminarCreateForm = () => {
     const [seminarData, setSeminarData] = useState(INITIAL_DATA);
     const [seminarId, setSeminarId] = useState(savedDraftId ? parseInt(savedDraftId) : null);
     const [seminarSlug, setSeminarSlug] = useState(null);
-    const [assignedMentors, setAssignedMentors] = useState([]);
+    const [facilitators, setFacilitators] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const [errors, setErrors] = useState({});
@@ -153,22 +153,39 @@ const useSeminarCreateForm = () => {
             setSeminarSlug(sem.slug);
             setSeminarData(mapSeminarToForm(sem));
 
-            if (sem.mentorAssignments?.length > 0 || sem.facilitator) {
-                const mentors = sem.mentorAssignments?.map(ma => ({
-                    mentorId: ma.mentor?.id || ma.mentorId,
-                    role: ma.role || 'mentor',
-                    isLead: ma.isLead || false,
-                    mentor: ma.mentor,
-                })) || [];
-                if (mentors.length === 0 && sem.facilitator) {
-                    mentors.push({
-                        mentorId: sem.facilitator.id || sem.mentorId,
-                        role: 'mentor',
-                        isLead: true,
-                        mentor: sem.facilitator,
-                    });
-                }
-                setAssignedMentors(mentors);
+            if (sem.facilitators?.length > 0) {
+                const loaded = sem.facilitators.map(f => ({
+                    type: f.type,
+                    mentorId: f.type === 'mentor' ? f.sourceId : null,
+                    adminUserId: f.type === 'admin' ? f.sourceId : null,
+                    externalLecturerId: f.type === 'external' ? f.sourceId : null,
+                    role: f.role || 'mentor',
+                    isLead: !!f.isLead,
+                    sortOrder: f.sortOrder || 0,
+                    name: f.name,
+                    email: f.email || null,
+                    phone: f.phone || null,
+                    photoUrl: f.photoUrl || null,
+                    specialization: f.specialization || null,
+                    organization: f.organization || null,
+                }));
+                setFacilitators(loaded);
+            } else if (sem.facilitator) {
+                setFacilitators([{
+                    type: 'mentor',
+                    mentorId: sem.facilitator.id || sem.mentorId,
+                    adminUserId: null,
+                    externalLecturerId: null,
+                    role: 'mentor',
+                    isLead: true,
+                    sortOrder: 0,
+                    name: sem.facilitator.name,
+                    email: sem.facilitator.email || null,
+                    phone: null,
+                    photoUrl: sem.facilitator.photoUrl || null,
+                    specialization: sem.facilitator.specialization || null,
+                    organization: null,
+                }]);
             }
         } catch (err) {
             console.error('Error loading seminar:', err);
@@ -196,6 +213,12 @@ const useSeminarCreateForm = () => {
             });
         }
     }, [errors]);
+
+    // Wrapped setter so any change to facilitators flips hasChanges → enables Save.
+    const updateFacilitators = useCallback((next) => {
+        setFacilitators(next);
+        setHasChanges(true);
+    }, []);
 
     // Prepare payload
     const preparePayload = useCallback(() => {
@@ -240,12 +263,23 @@ const useSeminarCreateForm = () => {
             payload.testPassingScore = Number(seminarData.testPassingScore) || 70;
         }
 
-        if (assignedMentors.length > 0) {
-            payload.mentorId = assignedMentors[0]?.mentorId || null;
-        }
+        payload.facilitators = facilitators.map((f, idx) => ({
+            type: f.type,
+            mentorId: f.type === 'mentor' ? f.mentorId : null,
+            adminUserId: f.type === 'admin' ? f.adminUserId : null,
+            externalLecturerId: f.type === 'external' ? f.externalLecturerId : null,
+            role: f.role || 'mentor',
+            isLead: !!f.isLead,
+            sortOrder: idx,
+        }));
+
+        // Backwards compat: keep top-level mentorId set to the lead mentor (if any).
+        const leadMentor = facilitators.find(f => f.isLead && f.type === 'mentor')
+            || facilitators.find(f => f.type === 'mentor');
+        payload.mentorId = leadMentor?.mentorId || null;
 
         return payload;
-    }, [seminarData, assignedMentors]);
+    }, [seminarData, facilitators]);
 
     // Validate
     const validate = useCallback(() => {
@@ -307,14 +341,28 @@ const useSeminarCreateForm = () => {
             const payload = preparePayload();
 
             let id = seminarId;
+            let slugForFlush = seminarSlug;
             if (id) {
                 await updateSeminar(id, payload);
             } else {
                 const response = await createSeminar(payload);
                 id = response?.seminar?.id || response?.id;
+                const newSlug = response?.seminar?.slug || response?.slug;
                 if (id) {
                     setSeminarId(id);
+                    setSeminarSlug(newSlug || null);
+                    slugForFlush = newSlug || null;
                     sessionStorage.removeItem(STORAGE_KEY);
+                }
+            }
+
+            // Flush any pending materials (files queued before the seminar had
+            // a slug). Must run BEFORE navigate so the files aren't lost.
+            if (slugForFlush && materialsRef?.current?.flushPending) {
+                try {
+                    await materialsRef.current.flushPending(slugForFlush);
+                } catch (err) {
+                    console.error('Error flushing pending materials:', err);
                 }
             }
 
@@ -331,15 +379,15 @@ const useSeminarCreateForm = () => {
         } finally {
             setIsSaving(false);
         }
-    }, [seminarId, preparePayload, validate, createSeminar, updateSeminar, publishSeminar, navigate, t]);
+    }, [seminarId, seminarSlug, preparePayload, validate, createSeminar, updateSeminar, publishSeminar, navigate, t, materialsRef]);
 
     return {
         isEditMode,
         seminarId,
         seminarSlug,
         seminarData,
-        assignedMentors,
-        setAssignedMentors,
+        facilitators,
+        setFacilitators: updateFacilitators,
         isLoading,
         isSaving,
         errors,

@@ -73,19 +73,32 @@ const SeminarCard = ({ seminar, actionLoading, onPublishToggle, onDelete, onCanc
           <p className="asmc-card-desc">{seminar.shortDescription}</p>
         )}
 
-        {/* Facilitator */}
-        {seminar.facilitator && (
-          <div className="asmc-card-facilitator">
-            {seminar.facilitator.photoUrl ? (
-              <img src={seminar.facilitator.photoUrl} alt={seminar.facilitator.name} className="asmc-facilitator-avatar" />
-            ) : (
-              <div className="asmc-facilitator-avatar-placeholder">
-                {(seminar.facilitator.name || '?')[0]}
-              </div>
-            )}
-            <span className="asmc-facilitator-name">{seminar.facilitator.name}</span>
-          </div>
-        )}
+        {/* Facilitators — lead + count badge */}
+        {(() => {
+          const facs = Array.isArray(seminar.facilitators) && seminar.facilitators.length > 0
+            ? seminar.facilitators
+            : seminar.facilitator
+              ? [{ type: 'mentor', name: seminar.facilitator.name, photoUrl: seminar.facilitator.photoUrl, isLead: true }]
+              : [];
+          if (facs.length === 0) return null;
+          const lead = facs.find(f => f.isLead) || facs[0];
+          const extra = facs.length - 1;
+          return (
+            <div className="asmc-card-facilitator">
+              {lead.photoUrl ? (
+                <img src={lead.photoUrl} alt={lead.name} className="asmc-facilitator-avatar" />
+              ) : (
+                <div className="asmc-facilitator-avatar-placeholder">
+                  {(lead.name || '?')[0]}
+                </div>
+              )}
+              <span className="asmc-facilitator-name">
+                {lead.name}
+                {extra > 0 && <span className="asmc-facilitator-extra">+{extra}</span>}
+              </span>
+            </div>
+          );
+        })()}
 
         {/* Stats */}
         <div className="asmc-card-stats">

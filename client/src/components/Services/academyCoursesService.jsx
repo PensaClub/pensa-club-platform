@@ -78,6 +78,30 @@ export const academyCoursesServiceFactory = () => {
       return requester.get(`${apiUrl}/academy/mentors?search=${encodeURIComponent(query)}&limit=${limit}&status=active`);
     },
 
+    // Unified facilitator search — returns mentors + admins + external lecturers
+    // in a single response. Used by the seminar FacilitatorPicker.
+    searchFacilitators: async (query = '', limit = 8) => {
+      return requester.get(`${apiUrl}/academy/facilitators/search?q=${encodeURIComponent(query)}&limit=${limit}`);
+    },
+
+    // External lecturers CRUD
+    getExternalLecturers: async (query = '') => {
+      const q = query ? `?q=${encodeURIComponent(query)}` : '';
+      return requester.get(`${apiUrl}/academy/external-lecturers${q}`);
+    },
+
+    createExternalLecturer: async (data) => {
+      return requester.post(`${apiUrl}/academy/external-lecturers`, data);
+    },
+
+    updateExternalLecturer: async (id, data) => {
+      return requester.patch(`${apiUrl}/academy/external-lecturers/${id}`, data);
+    },
+
+    deleteExternalLecturer: async (id) => {
+      return requester.del(`${apiUrl}/academy/external-lecturers/${id}`);
+    },
+
     addCourseMentor: async (courseId, data) => {
       return requester.post(`${apiUrl}/academy/courses/${courseId}/mentors`, data);
     },

@@ -22,6 +22,7 @@ const mentorDashboardController = require('./controllers/mentorDashboardControll
 const coursesController = require('./controllers/coursesController');
 const lecturesController = require('./controllers/lecturesController');
 const seminarsController = require('./controllers/seminarsController');
+const facilitatorsController = require('./controllers/facilitatorsController');
 const academyEnrollmentController = require('./controllers/academyEnrollmentController');
 const academyTestsController = require('./controllers/academyTestsController');
 const certificatesController = require('./controllers/certificatesController');
@@ -70,6 +71,9 @@ router.use('/mentors/dashboard', mentorDashboardController);
 router.use('/academy/courses', coursesController);
 router.use('/academy/lectures', lecturesController);
 router.use('/academy/seminars', seminarsController);
+// Unified facilitators endpoint (search mentors + admins + externals in one call)
+// and external-lecturers CRUD — used by the seminar FacilitatorPicker.
+router.use('/academy', facilitatorsController);
 router.use('/academy/enrollment', academyEnrollmentController);
 router.use('/academy/tests', academyTestsController);
 router.use('/academy/certificates', certificatesController);

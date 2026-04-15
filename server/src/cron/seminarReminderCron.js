@@ -5,8 +5,19 @@ const startSeminarReminderCron = () => {
     // Run every hour at minute 0
     cron.schedule('0 * * * *', async () => {
         try {
-            const { seminar, student_seminar, student, user_account, user_details, seminar_guest_attendance } = require('../sequelize/models/index');
-            const { sendSeminarReminder, getSmsSettings } = require('../utils/smsService');
+            const {
+                seminar,
+                student_seminar,
+                student,
+                user_account,
+                user_details,
+                seminar_guest_attendance,
+                seminar_facilitator,
+                mentor,
+                external_lecturer,
+            } = require('../sequelize/models/index');
+            const { sendSeminarReminder, sendSeminarReminderToFacilitator, getSmsSettings } = require('../utils/smsService');
+            const { normalizeFacilitators, buildFacilitatorsInclude } = require('../utils/facilitatorHelpers');
 
             // Read all SMS settings from DB
             const smsSettings = await getSmsSettings();
@@ -30,7 +41,8 @@ const startSeminarReminderCron = () => {
             if (send24h) dateRanges.push({ [Op.between]: [in24h, in25h] });
             if (send1h) dateRanges.push({ [Op.between]: [in1h, in2h] });
 
-            // Find seminars starting in ~24h or ~1h
+            // Find seminars starting in ~24h or ~1h. Include the facilitators
+            // junction so we can notify mentors/admins/externals too.
             const upcomingSeminars = await seminar.findAll({
                 where: {
                     isPublished: true,
@@ -38,7 +50,16 @@ const startSeminarReminderCron = () => {
                     scheduledDate: {
                         [Op.or]: dateRanges,
                     }
-                }
+                },
+                include: [
+                    buildFacilitatorsInclude({
+                        seminar_facilitator,
+                        mentor,
+                        user_account,
+                        user_details,
+                        external_lecturer,
+                    }),
+                ],
             });
 
             if (upcomingSeminars.length === 0) return;
@@ -68,16 +89,20 @@ const startSeminarReminderCron = () => {
                             include: [{
                                 model: user_details,
                                 as: 'details',
-                                attributes: ['phone'],
+                                attributes: ['phoneNumber'],
                             }]
                         }]
                     }]
                 });
 
                 for (const att of attendees) {
-                    const phone = att.student?.user?.details?.phone;
+                    const phone = att.student?.user?.details?.phoneNumber;
                     if (phone && phone.length >= 8) {
-                        await sendSeminarReminder(phone, sem.title, sem.scheduledDate, sem.location, sem.isOnline, timeLabel, reminderTemplate);
+                        try {
+                            await sendSeminarReminder(phone, sem.title, sem.scheduledDate, sem.location, sem.isOnline, timeLabel, reminderTemplate);
+                        } catch (err) {
+                            console.error(`SMS reminder to attendee failed (seminar ${sem.id}):`, err?.message || err);
+                        }
                     }
                 }
 
@@ -89,11 +114,44 @@ const startSeminarReminderCron = () => {
 
                     for (const guest of guests) {
                         if (guest.guestPhone && guest.guestPhone.length >= 8) {
-                            await sendSeminarReminder(guest.guestPhone, sem.title, sem.scheduledDate, sem.location, sem.isOnline, timeLabel, reminderTemplate);
+                            try {
+                                await sendSeminarReminder(guest.guestPhone, sem.title, sem.scheduledDate, sem.location, sem.isOnline, timeLabel, reminderTemplate);
+                            } catch (err) {
+                                console.error(`SMS reminder to guest failed (seminar ${sem.id}):`, err?.message || err);
+                            }
                         }
                     }
                 } catch (e) {
                     // seminar_guest_attendance might not exist
+                }
+
+                // Facilitators (mentor / admin / external). One SMS each,
+                // with a phone guard so missing-phone facilitators are just
+                // skipped (logged), never crashing the whole batch.
+                try {
+                    const normalizedFacs = normalizeFacilitators(sem.facilitators || []);
+                    const facilitatorTemplate = smsSettings.sms_reminder_facilitator_template || null;
+                    for (const f of normalizedFacs) {
+                        if (!f.phone || String(f.phone).trim().length < 8) {
+                            console.warn(`[reminder] seminar ${sem.id}: facilitator ${f.type} "${f.name}" has no phone — skipping SMS`);
+                            continue;
+                        }
+                        try {
+                            await sendSeminarReminderToFacilitator(
+                                f.phone,
+                                sem.title,
+                                sem.scheduledDate,
+                                sem.location,
+                                sem.isOnline,
+                                timeLabel,
+                                facilitatorTemplate
+                            );
+                        } catch (err) {
+                            console.error(`SMS reminder to facilitator failed (seminar ${sem.id}, ${f.type} ${f.name}):`, err?.message || err);
+                        }
+                    }
+                } catch (err) {
+                    console.error(`Facilitator reminder loop failed (seminar ${sem.id}):`, err?.message || err);
                 }
             }
 
