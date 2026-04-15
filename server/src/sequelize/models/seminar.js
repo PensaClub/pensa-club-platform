@@ -13,11 +13,23 @@ module.exports = (sequelize, DataTypes) => {
         as: 'course',
       });
 
-      // Belongs to mentor/facilitator
+      // Belongs to mentor/facilitator (LEGACY — kept for backwards compat.
+      // The single-mentor association below still works for any caller that
+      // read `seminar.facilitator`, but new code should use `facilitators`
+      // (the seminar_facilitators junction) which supports multiple lecturers
+      // of 3 types: mentor / admin / external.
       seminar.belongsTo(models.mentor, {
         foreignKey: 'mentorId',
         targetKey: 'id',
         as: 'facilitator',
+      });
+
+      // NEW multi-facilitator association. Each row links to exactly one of
+      // mentor / admin user / external_lecturer and carries role + isLead.
+      seminar.hasMany(models.seminar_facilitator, {
+        foreignKey: 'seminarId',
+        sourceKey: 'id',
+        as: 'facilitators',
       });
 
       // Has many student_seminars

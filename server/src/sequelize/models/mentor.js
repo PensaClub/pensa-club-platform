@@ -67,6 +67,13 @@ module.exports = (sequelize, DataTypes) => {
         sourceKey: 'id',
         as: 'visitFeedbacks',
       });
+
+      // Seminars — multi-facilitator junction (this mentor as a seminar lecturer)
+      mentor.hasMany(models.seminar_facilitator, {
+        foreignKey: 'mentorId',
+        sourceKey: 'id',
+        as: 'seminarFacilitatorAssignments',
+      });
     }
   }
 
